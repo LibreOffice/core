@@ -133,7 +133,7 @@ inline bool ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
 
 // Item for preferences dialog - calculation
 
-class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem
+class SC_DLLPUBLIC ScTpCalcItem final : public SfxPoolItem
 {
 public:
                 ScTpCalcItem( sal_uInt16 nWhich,

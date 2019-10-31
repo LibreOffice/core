@@ -124,7 +124,7 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
 // RangePairList:
 //    aRange[0]: actual range,
 //    aRange[1]: data for that range, e.g. Rows belonging to a ColName
-class SC_DLLPUBLIC ScRangePairList : public SvRefBase
+class SC_DLLPUBLIC ScRangePairList final : public SvRefBase
 {
 public:
     virtual             ~ScRangePairList() override;

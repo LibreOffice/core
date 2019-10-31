@@ -400,7 +400,7 @@ public:
 //  ScChangeActionDel
 class SAL_DLLPUBLIC_RTTI ScChangeActionMove;
 
-class ScChangeActionDelMoveEntry : public ScChangeActionLinkEntry
+class ScChangeActionDelMoveEntry final : public ScChangeActionLinkEntry
 {
     friend class ScChangeActionDel;
     friend class ScChangeTrack;
@@ -760,7 +760,7 @@ public:
 };
 
 //  ScChangeActionReject
-class ScChangeActionReject : public ScChangeAction
+class ScChangeActionReject final : public ScChangeAction
 {
     friend class ScChangeTrack;
     friend class ScChangeActionContent;

@@ -180,7 +180,7 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
     return stream;
 }
 
-class ScFormulaListener : public SvtListener
+class ScFormulaListener final : public SvtListener
 {
 private:
     mutable bool mbDirty;
@@ -446,7 +446,7 @@ private:
 };
 
 //  single condition entry for conditional formatting
-class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
+class SC_DLLPUBLIC ScCondFormatEntry final : public ScConditionEntry
 {
     OUString aStyleName;
     Type eCondFormatType = Type::Condition;
@@ -476,7 +476,7 @@ public:
     virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
     virtual Type GetType() const override { return eCondFormatType; }
 
-protected:
+private:
     virtual void    DataChanged() const override;
 };
 
@@ -501,7 +501,7 @@ enum ScCondFormatDateType
 
 }
 
-class SC_DLLPUBLIC ScCondDateFormatEntry : public ScFormatEntry
+class SC_DLLPUBLIC ScCondDateFormatEntry final : public ScFormatEntry
 {
 public:
     ScCondDateFormatEntry(ScDocument* pDoc);

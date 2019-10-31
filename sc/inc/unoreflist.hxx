@@ -57,7 +57,7 @@ public:
 /** Hint to restore a UNO object to its old state (used during undo).
 */
 
-class ScUnoRefUndoHint : public SfxHint
+class ScUnoRefUndoHint final : public SfxHint
 {
     ScUnoRefEntry const   aEntry;
 

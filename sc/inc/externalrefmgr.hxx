@@ -52,7 +52,7 @@ class ColumnSpanSet;
 
 }
 
-class ScExternalRefLink : public ::sfx2::SvBaseLink
+class ScExternalRefLink final : public ::sfx2::SvBaseLink
 {
 public:
     ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId);
@@ -357,7 +357,7 @@ private:
     mutable DocDataType maDocs;
 };
 
-class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelper, public SfxListener
+class SC_DLLPUBLIC ScExternalRefManager final : public formula::ExternalReferenceHelper, public SfxListener
 {
 public:
 

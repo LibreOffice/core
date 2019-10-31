@@ -73,7 +73,7 @@ css::uno::Sequence< OUString >                                   \
     if (rType == cppu::UnoType<x>::get())  \
     { uno::Any aR; aR <<= uno::Reference<x>(static_cast<y*>(this)); return aR; }
 
-class ScIndexEnumeration : public cppu::WeakImplHelper<
+class ScIndexEnumeration final : public cppu::WeakImplHelper<
                                 css::container::XEnumeration,
                                 css::lang::XServiceInfo >
 {
@@ -98,7 +98,7 @@ public:
 };
 
 //  new (uno 3) variant
-class ScNameToIndexAccess : public cppu::WeakImplHelper<
+class ScNameToIndexAccess final : public cppu::WeakImplHelper<
                                 css::container::XIndexAccess,
                                 css::lang::XServiceInfo >
 {

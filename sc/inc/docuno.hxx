@@ -388,7 +388,7 @@ public:
     OUString getPostItsPos() override;
 };
 
-class ScDrawPagesObj : public cppu::WeakImplHelper<
+class ScDrawPagesObj final : public cppu::WeakImplHelper<
                                 css::drawing::XDrawPages,
                                 css::lang::XServiceInfo>,
                         public SfxListener
@@ -424,7 +424,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScTableSheetsObj : public cppu::WeakImplHelper<
+class ScTableSheetsObj final : public cppu::WeakImplHelper<
                                 css::sheet::XSpreadsheets2,
                                 css::sheet::XCellRangesAccess,
                                 css::container::XEnumerationAccess,
@@ -499,7 +499,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScTableColumnsObj : public cppu::WeakImplHelper<
+class ScTableColumnsObj final : public cppu::WeakImplHelper<
                                 css::table::XTableColumns,
                                 css::container::XEnumerationAccess,
                                 css::container::XNameAccess,
@@ -566,7 +566,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScTableRowsObj : public cppu::WeakImplHelper<
+class ScTableRowsObj final : public cppu::WeakImplHelper<
                                 css::table::XTableRows,
                                 css::container::XEnumerationAccess,
                                 css::beans::XPropertySet,
@@ -625,7 +625,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScSpreadsheetSettingsObj : public cppu::WeakImplHelper<
+class ScSpreadsheetSettingsObj final : public cppu::WeakImplHelper<
                                     css::beans::XPropertySet,
                                     css::lang::XServiceInfo>,
                                  public SfxListener
@@ -654,7 +654,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScAnnotationsObj : public cppu::WeakImplHelper<
+class ScAnnotationsObj final : public cppu::WeakImplHelper<
                                 css::sheet::XSheetAnnotations,
                                 css::container::XEnumerationAccess,
                                 css::lang::XServiceInfo>,
@@ -696,7 +696,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScScenariosObj : public cppu::WeakImplHelper<
+class ScScenariosObj final : public cppu::WeakImplHelper<
                                 css::sheet::XScenarios,
                                 css::container::XEnumerationAccess,
                                 css::container::XIndexAccess,

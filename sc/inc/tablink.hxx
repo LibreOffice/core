@@ -32,7 +32,7 @@ struct TableLink_Impl;
 
 namespace weld { class Window; }
 
-class ScTableLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
+class ScTableLink final : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
     std::unique_ptr<TableLink_Impl> pImpl;

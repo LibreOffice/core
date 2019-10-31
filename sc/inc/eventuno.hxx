@@ -29,7 +29,7 @@
 
 class ScDocShell;
 
-class ScSheetEventsObj : public cppu::WeakImplHelper<
+class ScSheetEventsObj final : public cppu::WeakImplHelper<
                                         css::container::XNameReplace,
                                         css::lang::XServiceInfo>,
                                     public SfxListener

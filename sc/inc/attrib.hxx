@@ -52,7 +52,7 @@ namespace editeng { class SvxBorderLine; }
 
 bool SC_DLLPUBLIC ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther );
 
-class SC_DLLPUBLIC ScMergeAttr: public SfxPoolItem
+class SC_DLLPUBLIC ScMergeAttr final : public SfxPoolItem
 {
     SCCOL       nColMerge;
     SCROW       nRowMerge;
@@ -80,7 +80,7 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-class SC_DLLPUBLIC ScMergeFlagAttr: public SfxInt16Item
+class SC_DLLPUBLIC ScMergeFlagAttr final : public SfxInt16Item
 {
 public:
             ScMergeFlagAttr();
@@ -110,7 +110,7 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
+class SC_DLLPUBLIC ScProtectionAttr final : public SfxPoolItem
 {
     bool        bProtection;    ///< protect cell
     bool        bHideFormula;   ///< hide formula
@@ -164,7 +164,7 @@ public:
 #define SC_HF_CENTERAREA 2
 #define SC_HF_RIGHTAREA  3
 
-class SC_DLLPUBLIC ScPageHFItem : public SfxPoolItem
+class SC_DLLPUBLIC ScPageHFItem final : public SfxPoolItem
 {
     std::unique_ptr<EditTextObject> pLeftArea;
     std::unique_ptr<EditTextObject> pCenterArea;
@@ -192,7 +192,7 @@ public:
 
 // page format item: contents of header and footer
 
-class SC_DLLPUBLIC ScViewObjectModeItem: public SfxEnumItem<ScVObjMode>
+class SC_DLLPUBLIC ScViewObjectModeItem final : public SfxEnumItem<ScVObjMode>
 {
 public:
                 ScViewObjectModeItem( sal_uInt16 nWhich );
@@ -219,7 +219,7 @@ const sal_uInt8 SC_MID_PAGE_SCALETO_WIDTH    = 1;
 const sal_uInt8 SC_MID_PAGE_SCALETO_HEIGHT   = 2;
 
 /** Contains the "scale to width/height" attribute in page styles. */
-class SC_DLLPUBLIC ScPageScaleToItem : public SfxPoolItem
+class SC_DLLPUBLIC ScPageScaleToItem final : public SfxPoolItem
 {
 public:
     /** Default c'tor sets the width and height to 0. */
@@ -261,7 +261,7 @@ private:
 
 typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
 
-class ScCondFormatItem : public SfxPoolItem
+class ScCondFormatItem final : public SfxPoolItem
 {
 public:
     explicit ScCondFormatItem();

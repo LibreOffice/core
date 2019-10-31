@@ -37,7 +37,7 @@ public:
 
 // item for the dialog / options page
 
-class SC_DLLPUBLIC ScTpDefaultsItem : public SfxPoolItem
+class SC_DLLPUBLIC ScTpDefaultsItem final : public SfxPoolItem
 {
 public:
     ScTpDefaultsItem( const ScDefaultsOptions& rOpt );
@@ -59,7 +59,7 @@ private:
 
 // config item
 
-class ScDefaultsCfg : public ScDefaultsOptions, public utl::ConfigItem
+class ScDefaultsCfg final : public ScDefaultsOptions, public utl::ConfigItem
 {
 private:
     static css::uno::Sequence<OUString> GetPropertyNames();

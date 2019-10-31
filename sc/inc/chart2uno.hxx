@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star { namespace chart2 { namespace da
 class ScDocument;
 
 // DataProvider
-class SC_DLLPUBLIC ScChart2DataProvider : public
+class SC_DLLPUBLIC ScChart2DataProvider final : public
                 ::cppu::WeakImplHelper<
                     css::chart2::data::XDataProvider,
                     css::chart2::data::XSheetDataProvider,
@@ -149,7 +149,7 @@ private:
 };
 
 // DataSource
-class ScChart2DataSource : public
+class ScChart2DataSource final : public
                 ::cppu::WeakImplHelper<
                     css::chart2::data::XDataSource,
                     css::lang::XServiceInfo>,
@@ -187,7 +187,7 @@ private:
 };
 
 // DataSequence
-class ScChart2DataSequence : public
+class ScChart2DataSequence final : public
                 ::cppu::WeakImplHelper<
                     css::chart2::data::XDataSequence,
                     css::chart2::data::XTextualDataSequence,
@@ -290,7 +290,7 @@ private:
     DECL_LINK( ValueListenerHdl, const SfxHint&, void );
 
 private:
-    class ExternalRefListener : public ScExternalRefManager::LinkListener
+    class ExternalRefListener final : public ScExternalRefManager::LinkListener
     {
     public:
         ExternalRefListener(ScChart2DataSequence& rParent, ScDocument* pDoc);
@@ -338,7 +338,7 @@ private:
         Item();
     };
 
-    class HiddenRangeListener : public ScChartHiddenRangeListener
+    class HiddenRangeListener final : public ScChartHiddenRangeListener
     {
     public:
         HiddenRangeListener(ScChart2DataSequence& rParent);

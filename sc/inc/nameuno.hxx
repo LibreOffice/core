@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star { namespace container { class XNa
 class ScDocShell;
 class ScNamedRangesObj;
 
-class SC_DLLPUBLIC ScNamedRangeObj : public ::cppu::WeakImplHelper<
+class SC_DLLPUBLIC ScNamedRangeObj final : public ::cppu::WeakImplHelper<
                             css::sheet::XNamedRange,
                             css::sheet::XFormulaTokens,
                             css::sheet::XCellRangeReferrer,
@@ -215,7 +215,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScGlobalNamedRangesObj: public ScNamedRangesObj
+class ScGlobalNamedRangesObj final : public ScNamedRangesObj
 {
 private:
 
@@ -230,7 +230,7 @@ public:
     virtual                 ~ScGlobalNamedRangesObj() override;
 };
 
-class ScLocalNamedRangesObj: public ScNamedRangesObj
+class ScLocalNamedRangesObj final : public ScNamedRangesObj
 {
 private:
 
@@ -246,7 +246,7 @@ public:
     virtual                 ~ScLocalNamedRangesObj() override;
 };
 
-class ScLabelRangeObj : public ::cppu::WeakImplHelper<
+class ScLabelRangeObj final : public ::cppu::WeakImplHelper<
                             css::sheet::XLabelRange,
                             css::lang::XServiceInfo >,
                         public SfxListener
@@ -278,7 +278,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScLabelRangesObj : public ::cppu::WeakImplHelper<
+class ScLabelRangesObj final : public ::cppu::WeakImplHelper<
                             css::sheet::XLabelRanges,
                             css::container::XEnumerationAccess,
                             css::lang::XServiceInfo >,

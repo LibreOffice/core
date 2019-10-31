@@ -25,7 +25,7 @@
 
 class ScDocShell;
 
-class ScDrawDefaultsObj : public SvxUnoDrawPool, public SfxListener
+class ScDrawDefaultsObj final : public SvxUnoDrawPool, public SfxListener
 {
 private:
     ScDocShell*             pDocShell;

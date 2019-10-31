@@ -29,7 +29,7 @@
 
 class ScDocShell;
 
-class ScDocDefaultsObj : public ::cppu::WeakImplHelper<
+class ScDocDefaultsObj final : public ::cppu::WeakImplHelper<
                             css::beans::XPropertySet,
                             css::beans::XPropertyState,
                             css::lang::XServiceInfo >,
