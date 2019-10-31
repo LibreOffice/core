@@ -80,6 +80,7 @@ public:
     virtual SalGraphicsImpl* GetImpl() const override;
     virtual SystemGraphicsData GetGraphicsData() const override;
     virtual bool supportsOperation(OutDevSupportType) const override;
+    virtual OUString getRenderBackendName() const override { return "qt5"; }
 
 #if ENABLE_CAIRO_CANVAS
     virtual bool SupportsCairo() const override;
