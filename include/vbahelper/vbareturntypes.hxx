@@ -43,7 +43,7 @@ namespace ooo
         };
 
         typedef DefaultReturnHelper< sal_Int32, ov::msforms::XReturnInteger > ReturnInteger_BASE;
-        class ReturnInteger : public ReturnInteger_BASE
+        class ReturnInteger final : public ReturnInteger_BASE
         {
             public:
             ReturnInteger( sal_Int32 nValue ) : ReturnInteger_BASE( nValue ){}

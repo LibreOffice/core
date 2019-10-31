@@ -41,7 +41,7 @@ protected:
 };
 
 
-class VBAHELPER_DLLPUBLIC ScVbaPropValue : public ::cppu::WeakImplHelper< ov::XPropValue >
+class VBAHELPER_DLLPUBLIC ScVbaPropValue final : public ::cppu::WeakImplHelper< ov::XPropValue >
 {
     PropListener* m_pListener;
 public:

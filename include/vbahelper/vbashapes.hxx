@@ -51,7 +51,7 @@ namespace ooo { namespace vba {
 
 typedef CollTestImplHelper< ov::msforms::XShapes > ScVbaShapes_BASE;
 
-class VBAHELPER_DLLPUBLIC ScVbaShapes : public ScVbaShapes_BASE
+class VBAHELPER_DLLPUBLIC ScVbaShapes final : public ScVbaShapes_BASE
 {
 private:
     css::uno::Reference< css::drawing::XShapes > m_xShapes;
