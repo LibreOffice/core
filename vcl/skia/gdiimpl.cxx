@@ -728,7 +728,6 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
 void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkBitmap& rBitmap,
                                    Color nMaskColor)
 {
-    preDraw();
     SkBitmap tmpBitmap;
     if (!tmpBitmap.tryAllocN32Pixels(rBitmap.width(), rBitmap.height()))
         abort();
@@ -739,13 +738,8 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkBitmap& rB
     paint.setBlendMode(SkBlendMode::kDstOut);
     SkCanvas canvas(tmpBitmap);
     canvas.drawBitmap(rBitmap, 0, 0, &paint);
-    mSurface->getCanvas()->drawBitmapRect(
-        tmpBitmap,
-        SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
-        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
-                         rPosAry.mnDestHeight),
-        nullptr);
-    postDraw();
+
+    drawBitmap(rPosAry, tmpBitmap);
 }
 
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
