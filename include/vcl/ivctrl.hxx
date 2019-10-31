@@ -280,7 +280,7 @@ public:
 
 struct VerticalTabPageData;
 
-class VerticalTabControl : public VclHBox
+class VerticalTabControl final : public VclHBox
 {
     VclPtr<SvtIconChoiceCtrl> m_xChooser;
     VclPtr<VclVBox> m_xBox;

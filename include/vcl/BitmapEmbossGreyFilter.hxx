@@ -15,7 +15,7 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC BitmapEmbossGreyFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapEmbossGreyFilter final : public BitmapFilter
 {
 public:
     BitmapEmbossGreyFilter(sal_uInt16 nAzimuthAngle100, sal_uInt16 nElevationAngle100)

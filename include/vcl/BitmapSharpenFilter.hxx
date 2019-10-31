@@ -13,7 +13,7 @@
 
 #include <vcl/BitmapConvolutionMatrixFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapSharpenFilter : public BitmapConvolutionMatrixFilter
+class VCL_DLLPUBLIC BitmapSharpenFilter final : public BitmapConvolutionMatrixFilter
 {
 public:
     BitmapSharpenFilter();

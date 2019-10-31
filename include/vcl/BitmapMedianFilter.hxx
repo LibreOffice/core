@@ -15,7 +15,7 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC BitmapMedianFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapMedianFilter final : public BitmapFilter
 {
 public:
     BitmapMedianFilter() {}

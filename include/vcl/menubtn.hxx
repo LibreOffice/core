@@ -86,7 +86,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC MenuToggleButton : public MenuButton
+class VCL_DLLPUBLIC MenuToggleButton final : public MenuButton
 {
 public:
     explicit        MenuToggleButton( vcl::Window* pParent, WinBits nStyle );

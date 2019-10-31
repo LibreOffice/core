@@ -25,13 +25,11 @@
 
 class Fraction;
 
-class VCL_DLLPUBLIC IMapRectangleObject : public IMapObject
+class VCL_DLLPUBLIC IMapRectangleObject final : public IMapObject
 {
     tools::Rectangle           aRect;
 
     VCL_DLLPRIVATE void             ImpConstruct( const tools::Rectangle& rRect, bool bPixel );
-
-protected:
 
     // binary import/export
     virtual void        WriteIMapObject( SvStream& rOStm ) const override;

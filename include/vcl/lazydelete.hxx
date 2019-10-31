@@ -65,7 +65,7 @@ namespace vcl
     };
 
     template < typename T >
-    class DeleteOnDeinit : public DeleteOnDeinitBase
+    class DeleteOnDeinit final : public DeleteOnDeinitBase
     {
         std::unique_ptr<T> m_pT;
         virtual void doCleanup() override { m_pT.reset(); }
@@ -92,7 +92,7 @@ namespace vcl
                 \<do something with xFactory>
     */
     template <typename I>
-    class DeleteUnoReferenceOnDeinit : public vcl::DeleteOnDeinitBase
+    class DeleteUnoReferenceOnDeinit final : public vcl::DeleteOnDeinitBase
     {
         css::uno::Reference<I> m_xI;
         virtual void doCleanup() override { set(nullptr); }

@@ -26,7 +26,7 @@
 
 #include <vector>
 
-class VCL_DLLPUBLIC Throbber : public ImageControl
+class VCL_DLLPUBLIC Throbber final : public ImageControl
 {
 public:
     enum class ImageSet
@@ -62,14 +62,12 @@ public:
     static ::std::vector< OUString >
         getDefaultImageURLs( const ImageSet i_imageSet );
 
-protected:
+private:
     // Window overridables
     virtual void        Resize() override;
 
-private:
     SAL_DLLPRIVATE void initImages();
 
-private:
     ::std::vector< Image >  maImageList;
 
     bool    mbRepeat;

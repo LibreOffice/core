@@ -25,7 +25,7 @@
 
 class FixedLine;
 
-class VCL_DLLPUBLIC TabDialog : public Dialog
+class VCL_DLLPUBLIC TabDialog final : public Dialog
 {
 private:
     VclPtr<FixedLine>   mpFixedLine;

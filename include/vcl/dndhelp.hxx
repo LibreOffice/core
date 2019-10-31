@@ -74,7 +74,7 @@ public:
     virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde );
 };
 
-class VCL_DLLPUBLIC DragAndDropWrapper :
+class VCL_DLLPUBLIC DragAndDropWrapper final :
                             public css::datatransfer::dnd::XDragGestureListener,
                             public css::datatransfer::dnd::XDragSourceListener,
                             public css::datatransfer::dnd::XDropTargetListener,

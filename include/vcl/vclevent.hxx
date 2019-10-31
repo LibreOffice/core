@@ -188,7 +188,7 @@ public:
     VclEventId GetId() const { return nId; }
 };
 
-class VCL_DLLPUBLIC VclWindowEvent : public VclSimpleEvent
+class VCL_DLLPUBLIC VclWindowEvent final : public VclSimpleEvent
 {
 private:
     VclPtr<vcl::Window> pWindow;
@@ -202,7 +202,7 @@ public:
     void*   GetData() const { return pData; }
 };
 
-class VCL_DLLPUBLIC VclMenuEvent : public VclSimpleEvent
+class VCL_DLLPUBLIC VclMenuEvent final : public VclSimpleEvent
 {
 private:
     VclPtr<Menu> pMenu;
@@ -219,7 +219,7 @@ public:
     sal_uInt16 GetItemPos() const { return mnPos; }
 };
 
-class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
+class VCL_DLLPUBLIC VclAccessibleEvent final : public VclSimpleEvent
 {
 public:
     VclAccessibleEvent( VclEventId n, const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible );

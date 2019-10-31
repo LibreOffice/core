@@ -25,7 +25,7 @@
 
 //  A simple container for docked toolbars
 //  - its main purpose is theming support
-class VCL_DLLPUBLIC DockingAreaWindow : public vcl::Window
+class VCL_DLLPUBLIC DockingAreaWindow final : public vcl::Window
 {
     class ImplData;
 

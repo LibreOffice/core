@@ -46,7 +46,7 @@
  ************************************************************************/
 
 
-class VCL_DLLPUBLIC ProgressBar : public vcl::Window
+class VCL_DLLPUBLIC ProgressBar final : public vcl::Window
 {
 private:
     Point               maPos;

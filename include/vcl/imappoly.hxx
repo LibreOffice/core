@@ -26,15 +26,13 @@
 
 class Fraction;
 
-class VCL_DLLPUBLIC IMapPolygonObject : public IMapObject
+class VCL_DLLPUBLIC IMapPolygonObject final : public IMapObject
 {
     tools::Polygon aPoly;
     tools::Rectangle           aEllipse;
     bool                bEllipse;
 
     VCL_DLLPRIVATE void ImpConstruct( const tools::Polygon& rPoly, bool bPixel );
-
-protected:
 
     // binary import/export
     virtual void        WriteIMapObject( SvStream& rOStm ) const override;

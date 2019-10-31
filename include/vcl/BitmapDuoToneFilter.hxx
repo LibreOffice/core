@@ -15,7 +15,7 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC BitmapDuoToneFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapDuoToneFilter final : public BitmapFilter
 {
 public:
     BitmapDuoToneFilter(sal_uLong nColorOne, sal_uLong nColorTwo)

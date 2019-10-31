@@ -15,7 +15,7 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC BitmapSolarizeFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapSolarizeFilter final : public BitmapFilter
 {
 public:
     BitmapSolarizeFilter(double cSolarGreyThreshold)

@@ -15,7 +15,7 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC BitmapSepiaFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapSepiaFilter final : public BitmapFilter
 {
 public:
     BitmapSepiaFilter(double nSepiaPercent)

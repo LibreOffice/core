@@ -51,7 +51,7 @@ namespace solarthread {
 namespace detail {
 
 template <typename FuncT, typename ResultT>
-class GenericSolarThreadExecutor : public SolarThreadExecutor
+class GenericSolarThreadExecutor final : public SolarThreadExecutor
 {
 public:
     static ResultT exec( FuncT const& func )

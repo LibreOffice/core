@@ -31,7 +31,7 @@ class ImpVclMEdit;
 class ExtTextEngine;
 class TextView;
 
-class TextWindow : public vcl::Window
+class TextWindow final : public vcl::Window
 {
 private:
     VclPtr<Edit>    mxParent;

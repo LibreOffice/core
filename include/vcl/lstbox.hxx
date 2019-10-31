@@ -286,7 +286,7 @@ public:
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
-class VCL_DLLPUBLIC MultiListBox : public ListBox
+class VCL_DLLPUBLIC MultiListBox final : public ListBox
 {
 public:
     explicit        MultiListBox( vcl::Window* pParent, WinBits nStyle );

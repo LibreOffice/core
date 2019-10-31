@@ -13,7 +13,7 @@
 
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapMonochromeFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapMonochromeFilter final : public BitmapFilter
 {
 public:
     /** Convert to 2 color bitmap.

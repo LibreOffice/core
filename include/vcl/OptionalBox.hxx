@@ -26,7 +26,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
 
-class OptionalBox : public VclHBox, public vcl::IPrioritable
+class OptionalBox final : public VclHBox, public vcl::IPrioritable
 {
 private:
     bool m_bInFullView;

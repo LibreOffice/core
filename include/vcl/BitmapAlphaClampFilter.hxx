@@ -15,7 +15,7 @@
 
 /** If the alpha is beyond a certain threshold, make it fully transparent
  */
-class VCL_DLLPUBLIC BitmapAlphaClampFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapAlphaClampFilter final : public BitmapFilter
 {
 public:
     BitmapAlphaClampFilter(sal_uInt8 cThreshold)

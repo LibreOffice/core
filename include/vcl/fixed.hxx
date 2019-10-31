@@ -75,7 +75,7 @@ public:
     vcl::Window*    get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
 
-class VCL_DLLPUBLIC SelectableFixedText : public Edit
+class VCL_DLLPUBLIC SelectableFixedText final : public Edit
 {
 public:
     explicit SelectableFixedText( vcl::Window* pParent, WinBits nStyle );
@@ -115,7 +115,7 @@ public:
     virtual Size    GetOptimalSize() const override;
 };
 
-class VCL_DLLPUBLIC FixedBitmap : public Control
+class VCL_DLLPUBLIC FixedBitmap final : public Control
 {
 private:
     BitmapEx        maBitmap;

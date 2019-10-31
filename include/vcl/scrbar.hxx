@@ -138,7 +138,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC ScrollBarBox : public vcl::Window
+class VCL_DLLPUBLIC ScrollBarBox final : public vcl::Window
 {
 private:
     using Window::ImplInit;

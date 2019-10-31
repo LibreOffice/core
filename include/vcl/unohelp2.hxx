@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer { namesp
 
 namespace vcl { namespace unohelper {
 
-    class VCL_DLLPUBLIC TextDataObject :
+    class VCL_DLLPUBLIC TextDataObject final :
                             public css::datatransfer::XTransferable,
                             public ::cppu::OWeakObject
     {

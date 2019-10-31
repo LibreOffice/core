@@ -21,7 +21,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-template <class T> class VclStatusListener : public cppu::WeakImplHelper < css::frame::XStatusListener>
+template <class T> class VclStatusListener final : public cppu::WeakImplHelper < css::frame::XStatusListener>
 {
 public:
     VclStatusListener<T>(T* widget, const OUString& aCommand);
