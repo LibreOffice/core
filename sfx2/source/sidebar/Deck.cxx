@@ -81,9 +81,6 @@ Deck::~Deck()
 
 void Deck::dispose()
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        ReleaseLOKNotifier();
-
     SharedPanelContainer aPanels;
     aPanels.swap(maPanels);
 
@@ -318,15 +315,6 @@ void Deck::ShowPanel(const Panel& rPanel)
         Point(
             mpScrollContainer->GetPosPixel().X(),
             -nNewThumbPos));
-
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "deck");
-        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-        aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
-        pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-    }
 }
 
 static OUString GetWindowClassification(const vcl::Window* pWindow)

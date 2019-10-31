@@ -1221,11 +1221,11 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
         // In case we are routing the window, notify the client
         std::vector<vcl::LOKPayloadItem> aPayload;
         if (pRectangle)
-            aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
+            aPayload.emplace_back("rectangle", pRectangle->toString());
         else
         {
             const tools::Rectangle aRect(Point(0, 0), GetSizePixel());
-            aPayload.push_back(std::make_pair(OString("rectangle"), aRect.toString()));
+            aPayload.emplace_back("rectangle", aRect.toString());
         }
 
         pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
