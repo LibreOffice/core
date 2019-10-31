@@ -36,6 +36,7 @@
                   <object class="GtkScrolledWindow" id="bitmapwin">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="valign">start</property>
                     <property name="vexpand">True</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">never</property>
@@ -332,6 +333,78 @@
                     <property name="position">2</property>
                   </packing>
                 </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="bitmaptabpage|label2">Options</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="frame3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">end</property>
+        <property name="valign">start</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkAlignment" id="alignment8">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
+            <child>
+              <object class="GtkBox" id="box4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">4</property>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="CTL_BITMAP_PREVIEW">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="CTL_BITMAP_PREVIEW-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="bitmaptabpage|CTL_BITMAP_PREVIEW-atkobject">Example</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkBox" id="posoffbox">
                     <property name="visible">True</property>
@@ -431,7 +504,7 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -482,6 +555,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="text" translatable="yes" context="bitmaptabpage|tileoffmtr">0</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>
@@ -501,78 +575,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="bitmaptabpage|label2">Options</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkFrame" id="frame3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
-        <child>
-          <object class="GtkAlignment" id="alignment8">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="GtkBox" id="box4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="vscrollbar_policy">never</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <object class="GtkViewport">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkDrawingArea" id="CTL_BITMAP_PREVIEW">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="CTL_BITMAP_PREVIEW-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes" context="bitmaptabpage|CTL_BITMAP_PREVIEW-atkobject">Example</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -600,14 +603,14 @@
   </object>
   <object class="GtkSizeGroup">
     <widgets>
-      <widget name="label10"/>
-      <widget name="label11"/>
+      <widget name="label5"/>
+      <widget name="label6"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
     <widgets>
-      <widget name="label5"/>
-      <widget name="label6"/>
+      <widget name="label10"/>
+      <widget name="label11"/>
     </widgets>
   </object>
 </interface>

@@ -69,8 +69,9 @@ SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     , m_xHatchLBWin(new weld::CustomWeld(*m_xBuilder, "hatchpresetlist", *m_xHatchLB))
     , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "previewctl", m_aCtlPreview))
 {
-    Size aSize = getDrawPreviewOptimalSize(this);
+    Size aSize = getPagePropertiesOptimalSize(this);
     m_xHatchLBWin->set_size_request(aSize.Width(), aSize.Height());
+    aSize = getDrawPreviewOptimalSize(this);
     m_xCtlPreview->set_size_request(aSize.Width(), aSize.Height());
 
     // this page needs ExchangeSupport
