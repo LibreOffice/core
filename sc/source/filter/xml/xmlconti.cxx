@@ -31,7 +31,6 @@ ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       OUStringBuffer& sTempValue) :
     ScXMLImportContext( rImport, nPrfx, rLName ),
-    sOUText(),
     sValue(sTempValue)
 {
 }
@@ -60,9 +59,9 @@ SvXMLImportContextRef ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefi
         }
         if (nRepeat)
             for (sal_Int32 j = 0; j < nRepeat; ++j)
-                sOUText.append(' ');
+                sValue.append(' ');
         else
-            sOUText.append(' ');
+            sValue.append(' ');
     }
 
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
@@ -70,12 +69,7 @@ SvXMLImportContextRef ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefi
 
 void ScXMLContentContext::Characters( const OUString& rChars )
 {
-    sOUText.append(rChars);
-}
-
-void ScXMLContentContext::EndElement()
-{
-    sValue.append(sOUText.toString());
+    sValue.append(rChars);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

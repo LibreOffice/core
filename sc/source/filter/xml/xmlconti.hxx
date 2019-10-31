@@ -24,7 +24,6 @@
 
 class ScXMLContentContext : public ScXMLImportContext
 {
-    OUStringBuffer sOUText;
     OUStringBuffer& sValue;
 
 public:
@@ -40,8 +39,6 @@ public:
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void Characters( const OUString& rChars ) override;
-
-    virtual void EndElement() override;
 };
 
 #endif
