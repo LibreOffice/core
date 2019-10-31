@@ -174,7 +174,7 @@ struct FieldConversion
 
 typedef std::unordered_map<OUString, FieldConversion> FieldConversionMap_t;
 
-/// Gives access to the parent field contenxt of the topmost one, if there is any.
+/// Gives access to the parent field context of the topmost one, if there is any.
 static FieldContextPtr GetParentFieldContext(const std::deque<FieldContextPtr>& rFieldStack)
 {
     if (rFieldStack.size() < 2)

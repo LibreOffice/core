@@ -219,8 +219,8 @@ DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.odt")
 {
     // This should be roughly 33% of the ORIGINAL(non-reduced) size. However, during export the
-    // propertional height has to be changed into direct formating, which then changes the relative percent.
-    // In this case, a 24pt font, proportional at 65% becomes roughtly a 16pt font.
+    // proportional height has to be changed into direct formatting, which then changes the relative percent.
+    // In this case, a 24pt font, proportional at 65% becomes roughly a 16pt font.
     // Thus an escapement of 33% (8pt) becomes roughly 50% for the 16pt font.
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
