@@ -267,12 +267,12 @@ void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, con
 
 void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID)
 {
-    pCurrentAction->aDeletedList.emplace_front( nID, nullptr );
+    pCurrentAction->aDeletedList.emplace_back( nID, nullptr );
 }
 
 void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID, std::unique_ptr<ScMyCellInfo> pCellInfo)
 {
-    pCurrentAction->aDeletedList.emplace_front( nID, std::move(pCellInfo) );
+    pCurrentAction->aDeletedList.emplace_back( nID, std::move(pCellInfo) );
 }
 
 void ScXMLChangeTrackingImportHelper::SetMultiSpanned(const sal_Int16 nTempMultiSpanned)
@@ -304,7 +304,7 @@ void ScXMLChangeTrackingImportHelper::AddMoveCutOff(const sal_uInt32 nID, const 
     if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
         (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
     {
-        static_cast<ScMyDelAction*>(pCurrentAction.get())->aMoveCutOffs.push_front(ScMyMoveCutOff(nID, nStartPosition, nEndPosition));
+        static_cast<ScMyDelAction*>(pCurrentAction.get())->aMoveCutOffs.push_back(ScMyMoveCutOff(nID, nStartPosition, nEndPosition));
     }
     else
     {
@@ -478,7 +478,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateContentAc
         pAction->aBigRange, aUser, aDateTime, sComment, aCell, pDoc, sInputString);
 }
 
-void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(std::deque<ScMyGenerated>& rList)
+void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(std::vector<ScMyGenerated>& rList)
 {
     for (ScMyGenerated & rGenerated : rList)
     {
@@ -536,8 +536,9 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
         OSL_ENSURE(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
             (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
             (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
-        for (const ScMyMoveCutOff & rCutOff : pAction->aMoveCutOffs)
+        for (auto it = pAction->aMoveCutOffs.crbegin(); it != pAction->aMoveCutOffs.crend(); ++it)
         {
+            const ScMyMoveCutOff & rCutOff  = *it;
             ScChangeAction* pChangeAction = pTrack->GetAction(rCutOff.nID);
             if (pChangeAction && (pChangeAction->GetType() == SC_CAT_MOVE))
             {
@@ -602,16 +603,15 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
     {
         if (!pAction->aDependencies.empty())
         {
-            for (const auto & rID : pAction->aDependencies)
-            {
-                pAct->AddDependent(rID, pTrack);
-            }
+            for (auto it = pAction->aDependencies.crbegin(); it != pAction->aDependencies.crend(); ++it)
+                pAct->AddDependent(*it, pTrack);
             pAction->aDependencies.clear();
         }
         if (!pAction->aDeletedList.empty())
         {
-            for(const ScMyDeleted & rDeleted : pAction->aDeletedList)
+            for (auto it = pAction->aDeletedList.crbegin(); it != pAction->aDeletedList.crend(); ++it)
             {
+                const ScMyDeleted & rDeleted  = *it;
                 pAct->SetDeletedInThis(rDeleted.nID, pTrack);
                 ScChangeAction* pDeletedAct = pTrack->GetAction(rDeleted.nID);
                 if ((pDeletedAct->GetType() == SC_CAT_CONTENT) && rDeleted.pCellInfo)
