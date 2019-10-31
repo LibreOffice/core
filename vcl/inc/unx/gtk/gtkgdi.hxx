@@ -131,6 +131,8 @@ public:
 
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
 
+    virtual OUString getRenderBackendName() const override { return "gtk3svp"; }
+
     GtkStyleContext* createStyleContext(gtk_widget_path_iter_set_object_nameFunc set_object_name, GtkControlPart ePart);
     GtkStyleContext* createNewContext(GtkControlPart ePart, gtk_widget_path_iter_set_object_nameFunc set_object_name);
     GtkStyleContext* createOldContext(GtkControlPart ePart);
@@ -292,6 +294,8 @@ public:
     // before copyBits
     virtual void            copyBits( const SalTwoRect& rPosAry,
                                       SalGraphics* pSrcGraphics ) override;
+
+    virtual OUString getRenderBackendName() const override { return "gtk3"; }
 
 protected:
 
