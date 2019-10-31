@@ -33,6 +33,7 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 			$(if $(DISABLE_DYNLOADING),--disable-shared) \
 			--disable-bzlib \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			--without-glpk \
 			--enable-dependency-linking F77=unavailable \
 			$(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
