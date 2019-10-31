@@ -47,7 +47,7 @@ public:
  * reference instead of a copy to avoid broadcasting changes to the
  * authoritative copy.
  */
-class ScHeaderFooterEditSource : public ScEditSource
+class ScHeaderFooterEditSource final : public ScEditSource
 {
 private:
     ScHeaderFooterTextData& mrTextData;
@@ -71,7 +71,7 @@ public:
  * ScCellEditSource with local copy of ScCellTextData is used by
  * ScCellFieldsObj, ScCellFieldObj.
  */
-class ScCellEditSource : public ScEditSource
+class ScCellEditSource final : public ScEditSource
 {
 private:
     std::unique_ptr<ScCellTextData> pCellTextData;
@@ -92,7 +92,7 @@ public:
     bool IsDirty() const;
 };
 
-class ScAnnotationEditSource : public SvxEditSource, public SfxListener
+class ScAnnotationEditSource final : public SvxEditSource, public SfxListener
 {
 private:
     ScDocShell*             pDocShell;
@@ -115,7 +115,7 @@ public:
 
 //  EditSource with a shared forwarder for all children of one text object
 
-class ScSimpleEditSource : public SvxEditSource
+class ScSimpleEditSource final : public SvxEditSource
 {
 private:
     SvxTextForwarder* const   pForwarder;
@@ -130,7 +130,7 @@ public:
 
 };
 
-class ScAccessibilityEditSource : public SvxEditSource
+class ScAccessibilityEditSource final : public SvxEditSource
 {
 private:
     ::std::unique_ptr < ScAccessibleTextData > mpAccessibleTextData;

@@ -35,7 +35,7 @@ public:
 
 //  ConfigItem for classes that use items from several sub trees
 
-class SC_DLLPUBLIC ScLinkConfigItem : public utl::ConfigItem
+class SC_DLLPUBLIC ScLinkConfigItem final : public utl::ConfigItem
 {
     Link<ScLinkConfigItem&,void>  aCommitLink;
 

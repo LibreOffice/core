@@ -75,7 +75,7 @@ public:
 
 // item for the dialog / options page
 
-class SC_DLLPUBLIC ScTpFormulaItem : public SfxPoolItem
+class SC_DLLPUBLIC ScTpFormulaItem final : public SfxPoolItem
 {
 public:
     ScTpFormulaItem( const ScFormulaOptions& rOpt );
@@ -97,7 +97,7 @@ private:
 
 // config item
 
-class ScFormulaCfg : public ScFormulaOptions, public utl::ConfigItem
+class ScFormulaCfg final : public ScFormulaOptions, public utl::ConfigItem
 {
     typedef std::map<OUString,sal_uInt16> PropsToIds;
     static css::uno::Sequence<OUString> GetPropertyNames();

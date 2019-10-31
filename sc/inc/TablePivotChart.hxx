@@ -32,7 +32,7 @@ typedef cppu::WeakComponentImplHelper<css::table::XTablePivotChart,
                                       css::lang::XServiceInfo>
         TablePivotChart_Base;
 
-class TablePivotChart : public cppu::BaseMutex,
+class TablePivotChart final : public cppu::BaseMutex,
                         public TablePivotChart_Base,
                         public SfxListener
 {

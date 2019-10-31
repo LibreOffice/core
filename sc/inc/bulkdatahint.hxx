@@ -19,7 +19,7 @@ namespace sc {
 
 class ColumnSpanSet;
 
-class BulkDataHint : public SfxHint
+class BulkDataHint final : public SfxHint
 {
     struct Impl;
     std::unique_ptr<Impl> mpImpl;

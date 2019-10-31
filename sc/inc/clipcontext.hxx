@@ -43,7 +43,7 @@ public:
     ColumnBlockPositionSet* getBlockPositionSet() { return mpSet.get(); }
 };
 
-class CopyFromClipContext : public ClipContextBase
+class CopyFromClipContext final : public ClipContextBase
 {
     SCCOL mnDestCol1;
     SCCOL mnDestCol2;
@@ -131,7 +131,7 @@ public:
     bool isDateCell( const ScColumn& rCol, SCROW nRow ) const;
 };
 
-class CopyToClipContext : public ClipContextBase
+class CopyToClipContext final : public ClipContextBase
 {
     bool const mbKeepScenarioFlags:1;
 
@@ -142,7 +142,7 @@ public:
     bool isKeepScenarioFlags() const;
 };
 
-class CopyToDocContext : public ClipContextBase
+class CopyToDocContext final : public ClipContextBase
 {
     bool mbStartListening;
 
@@ -154,7 +154,7 @@ public:
     bool isStartListening() const;
 };
 
-class MixDocContext : public ClipContextBase
+class MixDocContext final : public ClipContextBase
 {
 public:
     MixDocContext(ScDocument& rDoc);

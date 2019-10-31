@@ -28,7 +28,7 @@
 class SfxObjectShell;
 class ScDocShell;
 
-class SC_DLLPUBLIC ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
+class SC_DLLPUBLIC ScAreaLink final : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
     ScDocShell*     m_pDocSh;

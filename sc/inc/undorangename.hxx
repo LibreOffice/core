@@ -20,7 +20,7 @@ class ScDocShell;
 /**
  * Undo object for named ranges, both in global and sheet-local scopes.
  */
-class ScUndoAllRangeNames : public ScSimpleUndo
+class ScUndoAllRangeNames final : public ScSimpleUndo
 {
 public:
     ScUndoAllRangeNames(ScDocShell* pDocSh,
@@ -43,7 +43,7 @@ private:
     std::map<OUString, std::unique_ptr<ScRangeName>> m_NewNames;
 };
 
-class ScUndoAddRangeData : public ScSimpleUndo
+class ScUndoAddRangeData final : public ScSimpleUndo
 {
 public:
     // nTab = -1 for global range names

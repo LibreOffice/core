@@ -55,7 +55,7 @@ struct ScImportSourceDesc
 /**
  * This class represents source data from database source.
  */
-class ScDatabaseDPData : public ScDPTableData
+class ScDatabaseDPData final : public ScDPTableData
 {
 private:
     ScDPFilteredCache aCacheTable;

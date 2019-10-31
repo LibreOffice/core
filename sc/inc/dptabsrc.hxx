@@ -72,7 +72,7 @@ enum class ScGeneralFunction;
 
 //  implementation of DataPilotSource using ScDPTableData
 
-class ScDPSource : public cppu::WeakImplHelper<
+class ScDPSource final : public cppu::WeakImplHelper<
                             css::sheet::XDimensionsSupplier,
                             css::sheet::XDataPilotResults,
                             css::util::XRefreshable,

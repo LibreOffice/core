@@ -27,11 +27,10 @@ class ScDocShell;
 
 //  object to set forbidden characters to document
 
-class ScForbiddenCharsObj : public SvxUnoForbiddenCharsTable, public SfxListener
+class ScForbiddenCharsObj final : public SvxUnoForbiddenCharsTable, public SfxListener
 {
     ScDocShell*     pDocShell;
 
-protected:
     virtual void    onChange() override;
 
 public:
