@@ -185,14 +185,16 @@ public:
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
                               const Gradient& rGradient) override;
 
-    void drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& bitmap);
-
     virtual bool supportsOperation(OutDevSupportType eType) const override;
 
 #ifdef DBG_UTIL
     void dump(const char* file) const;
     static void dump(const SkBitmap& bitmap, const char* file);
 #endif
+
+    // Default blend mode for SkPaint is SkBlendMode::kSrcOver
+    void drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& aBitmap,
+                    SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
 
 protected:
     // To be called before any drawing.
