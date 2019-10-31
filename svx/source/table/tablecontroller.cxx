@@ -504,12 +504,6 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                 break;
             }
 
-            case SID_AUTOFORMAT:
-            case SID_TABLE_SORT_DIALOG:
-            case SID_TABLE_AUTOSUM:
-//              if( !mxTable.is() )
-//                  rSet.DisableItem( nWhich );
-                break;
             default:
                 break;
         }
