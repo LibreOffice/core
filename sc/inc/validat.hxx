@@ -57,7 +57,7 @@ enum ScValidErrorStyle
 
 // Entry for validation (only one condition exists)
 
-class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
+class SC_DLLPUBLIC ScValidationData final : public ScConditionEntry
 {
 private:
     sal_uInt32 nKey;               // index in attributes

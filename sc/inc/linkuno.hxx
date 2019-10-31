@@ -48,7 +48,7 @@ class ScTableLink;
 
 typedef std::vector< css::uno::Reference< css::util::XRefreshListener > > XRefreshListenerArr_Impl;
 
-class ScSheetLinkObj : public cppu::WeakImplHelper<
+class ScSheetLinkObj final : public cppu::WeakImplHelper<
                             css::container::XNamed,
                             css::util::XRefreshable,
                             css::beans::XPropertySet,
@@ -112,7 +112,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScSheetLinksObj : public cppu::WeakImplHelper<
+class ScSheetLinksObj final : public cppu::WeakImplHelper<
                             css::container::XNameAccess,
                             css::container::XEnumerationAccess,
                             css::container::XIndexAccess,
@@ -154,7 +154,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScAreaLinkObj : public cppu::WeakImplHelper<
+class ScAreaLinkObj final : public cppu::WeakImplHelper<
                             css::sheet::XAreaLink,
                             css::util::XRefreshable,
                             css::beans::XPropertySet,
@@ -221,7 +221,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScAreaLinksObj : public cppu::WeakImplHelper<
+class ScAreaLinksObj final : public cppu::WeakImplHelper<
                             css::sheet::XAreaLinks,
                             css::container::XEnumerationAccess,
                             css::lang::XServiceInfo >,
@@ -266,7 +266,7 @@ public:
 
 //! order of XNamed and DDELink changed to avoid "duplicate comdat" symbols
 
-class ScDDELinkObj : public cppu::WeakImplHelper<
+class ScDDELinkObj final : public cppu::WeakImplHelper<
                             css::sheet::XDDELink,
                             css::container::XNamed,
                             css::util::XRefreshable,
@@ -316,7 +316,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScDDELinksObj : public cppu::WeakImplHelper<
+class ScDDELinksObj final : public cppu::WeakImplHelper<
                             css::container::XEnumerationAccess,
                             css::container::XIndexAccess,
                             css::sheet::XDDELinks,
@@ -363,7 +363,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScExternalSheetCacheObj : public cppu::WeakImplHelper< css::sheet::XExternalSheetCache >
+class ScExternalSheetCacheObj final : public cppu::WeakImplHelper< css::sheet::XExternalSheetCache >
 {
 public:
     explicit ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef const & pTable, size_t nIndex);
@@ -391,7 +391,7 @@ private:
     size_t const mnIndex;
 };
 
-class ScExternalDocLinkObj : public cppu::WeakImplHelper< css::sheet::XExternalDocLink >
+class ScExternalDocLinkObj final : public cppu::WeakImplHelper< css::sheet::XExternalDocLink >
 {
 public:
     ScExternalDocLinkObj(ScDocShell* pDocShell, ScExternalRefManager* pRefMgr, sal_uInt16 nFileId);
@@ -428,7 +428,7 @@ private:
 };
 
 /** This is the UNO API equivalent of ScExternalRefManager. */
-class ScExternalDocLinksObj : public cppu::WeakImplHelper< css::sheet::XExternalDocLinks >
+class ScExternalDocLinksObj final : public cppu::WeakImplHelper< css::sheet::XExternalDocLinks >
 {
 public:
     ScExternalDocLinksObj(ScDocShell* pDocShell);

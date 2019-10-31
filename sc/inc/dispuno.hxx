@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 
 class ScTabViewShell;
 
-class ScDispatchProviderInterceptor : public cppu::WeakImplHelper<
+class ScDispatchProviderInterceptor final : public cppu::WeakImplHelper<
                                         css::frame::XDispatchProviderInterceptor,
                                         css::lang::XEventListener>,
                                     public SfxListener
@@ -78,7 +78,7 @@ public:
     virtual void SAL_CALL   disposing( const css::lang::EventObject& Source ) override;
 };
 
-class ScDispatch : public cppu::WeakImplHelper<
+class ScDispatch final : public cppu::WeakImplHelper<
                                     css::frame::XDispatch,
                                     css::view::XSelectionChangeListener >,
                                 public SfxListener

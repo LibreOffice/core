@@ -34,7 +34,7 @@ class ScDocShell;
 class SvxUnoText;
 class ScPostIt;
 
-class ScAnnotationObj : public cppu::WeakImplHelper<
+class ScAnnotationObj final : public cppu::WeakImplHelper<
                             css::container::XChild,
                             css::text::XSimpleText,
                             css::sheet::XSheetAnnotation,

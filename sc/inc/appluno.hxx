@@ -78,7 +78,7 @@ OUString ScXMLImport_Settings_getImplementationName() throw();
 css::uno::Reference< css::uno::XInterface > ScXMLImport_Settings_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
 
-class ScSpreadsheetSettings : public cppu::WeakImplHelper<
+class ScSpreadsheetSettings final : public cppu::WeakImplHelper<
                                         css::sheet::XGlobalSheetSettings,
                                         css::beans::XPropertySet,
                                         css::lang::XServiceInfo>
@@ -204,7 +204,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScRecentFunctionsObj : public cppu::WeakImplHelper<
+class ScRecentFunctionsObj final : public cppu::WeakImplHelper<
                                         css::sheet::XRecentFunctions,
                                         css::lang::XServiceInfo>
 {
@@ -223,7 +223,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScFunctionListObj : public cppu::WeakImplHelper<
+class ScFunctionListObj final : public cppu::WeakImplHelper<
                                         css::sheet::XFunctionDescriptions,
                                         css::container::XEnumerationAccess,
                                         css::container::XNameAccess,

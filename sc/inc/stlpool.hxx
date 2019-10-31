@@ -26,7 +26,7 @@
 class ScStyleSheet;
 class ScDocument;
 
-class SC_DLLPUBLIC ScStyleSheetPool : public SfxStyleSheetPool
+class SC_DLLPUBLIC ScStyleSheetPool final : public SfxStyleSheetPool
 {
 public:
                         ScStyleSheetPool( const SfxItemPool& rPool,
@@ -58,7 +58,7 @@ public:
 
     void setAllStandard();
 
-protected:
+private:
     virtual             ~ScStyleSheetPool() override;
 
     using SfxStyleSheetPool::Create;    // calcwarnings: Create(const SfxStyleSheet&) - ever used?
@@ -68,7 +68,6 @@ protected:
                                        SfxStyleSearchBits     nMask) override;
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& rStyle ) override;
 
-private:
     SfxStyleSheetBase*  pActualStyleSheet;
     ScDocument*         pDoc;
     bool                bHasStandardStyles;

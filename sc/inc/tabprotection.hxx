@@ -93,7 +93,7 @@ public:
     virtual bool verifyPassword(const OUString& aPassText) const = 0;
 };
 
-class SC_DLLPUBLIC ScDocProtection : public ScPassHashProtectable
+class SC_DLLPUBLIC ScDocProtection final : public ScPassHashProtectable
 {
 public:
     enum Option
@@ -164,7 +164,7 @@ struct ScEnhancedProtection
  * container for the undo/redo stack, in which case the password, hash and
  * the options need to be preserved even when the protection flag is
  * off. */
-class SC_DLLPUBLIC ScTableProtection : public ScPassHashProtectable
+class SC_DLLPUBLIC ScTableProtection final : public ScPassHashProtectable
 {
 public:
     enum Option

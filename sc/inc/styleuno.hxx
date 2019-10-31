@@ -46,7 +46,7 @@ class ScStyleFamilyObj;
 class ScStyleObj;
 struct SfxItemPropertySimpleEntry;
 
-class ScStyleFamiliesObj : public ::cppu::WeakImplHelper<
+class ScStyleFamiliesObj final : public ::cppu::WeakImplHelper<
                             css::container::XIndexAccess,
                             css::container::XNameAccess,
                             css::style::XStyleLoader2,

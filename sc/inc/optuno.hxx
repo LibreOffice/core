@@ -54,7 +54,7 @@ public:
 
 //  empty doc object to supply only doc options
 
-class ScDocOptionsObj : public ScModelObj
+class ScDocOptionsObj final : public ScModelObj
 {
 private:
     ScDocOptions    aOptions;

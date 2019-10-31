@@ -28,7 +28,7 @@
 
 class ScDocShell;
 
-class ScDocumentConfiguration : public cppu::WeakImplHelper<
+class ScDocumentConfiguration final : public cppu::WeakImplHelper<
                                         css::beans::XPropertySet,
                                         css::lang::XServiceInfo>,
                                 public SfxListener

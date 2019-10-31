@@ -53,7 +53,7 @@ enum class ScHeaderFooterPart{ LEFT, CENTER, RIGHT };
 //  ScHeaderFooterContentObj is a dumb container which must be re-written into
 //  the page template using setPropertyValue
 
-class ScHeaderFooterContentObj : public cppu::WeakImplHelper<
+class ScHeaderFooterContentObj final : public cppu::WeakImplHelper<
                             css::sheet::XHeaderFooterContent,
                             css::lang::XUnoTunnel,
                             css::lang::XServiceInfo >
@@ -213,7 +213,7 @@ public:
 
 //! uno3: SvxUnoTextCursor is not derived from XUnoTunnel, but should be (?)
 
-class ScCellTextCursor : public SvxUnoTextCursor
+class ScCellTextCursor final : public SvxUnoTextCursor
 {
     rtl::Reference<ScCellObj> mxTextObj;
 
@@ -240,7 +240,7 @@ public:
     UNO3_GETIMPLEMENTATION_DECL(ScCellTextCursor)
 };
 
-class ScHeaderFooterTextCursor : public SvxUnoTextCursor
+class ScHeaderFooterTextCursor final : public SvxUnoTextCursor
 {
 private:
     rtl::Reference<ScHeaderFooterTextObj> rTextObj;
@@ -266,7 +266,7 @@ public:
     UNO3_GETIMPLEMENTATION_DECL(ScHeaderFooterTextCursor)
 };
 
-class ScDrawTextCursor : public SvxUnoTextCursor
+class ScDrawTextCursor final : public SvxUnoTextCursor
 {
 private:
     css::uno::Reference< css::text::XText > xParentText;
@@ -312,7 +312,7 @@ public:
     ScEditEngineDefaulter* GetEditEngine() const    { return pEditEngine.get(); }
 };
 
-class ScEditEngineTextObj : public ScSimpleEditSourceHelper, public SvxUnoText
+class ScEditEngineTextObj final : public ScSimpleEditSourceHelper, public SvxUnoText
 {
 public:
                         ScEditEngineTextObj();
@@ -358,7 +358,7 @@ public:
     void                    SetDoUpdate(bool bValue)    { bDoUpdate = bValue; }
 };
 
-class ScCellTextObj : public ScCellTextData, public SvxUnoText
+class ScCellTextObj final : public ScCellTextData, public SvxUnoText
 {
 public:
                  ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP);

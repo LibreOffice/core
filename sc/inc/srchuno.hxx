@@ -30,7 +30,7 @@
 
 class SvxSearchItem;
 
-class ScCellSearchObj : public cppu::WeakImplHelper<
+class ScCellSearchObj final : public cppu::WeakImplHelper<
                                 css::util::XReplaceDescriptor,
                                 css::lang::XUnoTunnel,
                                 css::lang::XServiceInfo >

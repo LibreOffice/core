@@ -50,7 +50,7 @@ class ScDocShell;
 class ScHeaderFooterTextData;
 class SfxItemPropertySet;
 
-class ScCellFieldsObj : public cppu::WeakImplHelper<
+class ScCellFieldsObj final : public cppu::WeakImplHelper<
                             css::container::XEnumerationAccess,
                             css::container::XIndexAccess,
                             css::container::XContainer,
@@ -106,7 +106,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScHeaderFieldsObj : public cppu::WeakImplHelper<
+class ScHeaderFieldsObj final : public cppu::WeakImplHelper<
                             css::container::XEnumerationAccess,
                             css::container::XIndexAccess,
                             css::container::XContainer,
@@ -160,7 +160,7 @@ public:
  * Generic UNO wrapper for edit engine's field item in cells, headers, and
  * footers.
  */
-class ScEditFieldObj : public cppu::WeakImplHelper<
+class ScEditFieldObj final : public cppu::WeakImplHelper<
                             css::text::XTextField,
                             css::beans::XPropertySet,
                             css::lang::XUnoTunnel,

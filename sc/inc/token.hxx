@@ -56,7 +56,7 @@ void DumpToken(formula::FormulaToken const & rToken);
 */
 formula::FormulaTokenRef extendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
 
-class ScSingleRefToken : public formula::FormulaToken
+class ScSingleRefToken final : public formula::FormulaToken
 {
 private:
             ScSingleRefData       aSingleRef;
@@ -70,7 +70,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScSingleRefToken(*this); }
 };
 
-class ScDoubleRefToken : public formula::FormulaToken
+class ScDoubleRefToken final : public formula::FormulaToken
 {
 private:
             ScComplexRefData        aDoubleRef;
@@ -88,7 +88,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScDoubleRefToken(*this); }
 };
 
-class ScMatrixToken : public formula::FormulaToken
+class ScMatrixToken final : public formula::FormulaToken
 {
 private:
             ScMatrixRef const         pMatrix;
@@ -107,7 +107,7 @@ public:
  * both the values in matrix form, and the range address the matrix
  * represents.
  */
-class ScMatrixRangeToken : public formula::FormulaToken
+class ScMatrixRangeToken final : public formula::FormulaToken
 {
     ScMatrixRef const mpMatrix;
     ScComplexRefData maRef;
@@ -124,7 +124,7 @@ public:
     virtual FormulaToken* Clone() const override;
 };
 
-class ScExternalSingleRefToken : public formula::FormulaToken
+class ScExternalSingleRefToken final : public formula::FormulaToken
 {
     sal_uInt16 const            mnFileId;
     svl::SharedString const     maTabName;
@@ -148,7 +148,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScExternalSingleRefToken(*this); }
 };
 
-class ScExternalDoubleRefToken : public formula::FormulaToken
+class ScExternalDoubleRefToken final : public formula::FormulaToken
 {
     sal_uInt16 const            mnFileId;
     svl::SharedString const     maTabName;  // name of the first sheet
@@ -176,7 +176,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScExternalDoubleRefToken(*this); }
 };
 
-class ScExternalNameToken : public formula::FormulaToken
+class ScExternalNameToken final : public formula::FormulaToken
 {
     sal_uInt16 const                  mnFileId;
     svl::SharedString const           maName;
@@ -198,7 +198,7 @@ public:
 };
 
 /** Special token to remember details of ocTableRef "structured references". */
-class ScTableRefToken : public formula::FormulaToken
+class ScTableRefToken final : public formula::FormulaToken
 {
 public:
 
@@ -239,7 +239,7 @@ private:
 
 // Only created from within the interpreter, no conversion from ScRawToken,
 // never added to ScTokenArray!
-class ScJumpMatrixToken : public formula::FormulaToken
+class ScJumpMatrixToken final : public formula::FormulaToken
 {
 private:
     std::shared_ptr<ScJumpMatrix> mpJumpMatrix;
@@ -254,7 +254,7 @@ public:
 
 // Only created from within the interpreter, no conversion from ScRawToken,
 // never added to ScTokenArray!
-class ScRefListToken : public formula::FormulaToken
+class ScRefListToken final : public formula::FormulaToken
 {
 private:
             ScRefList           aRefList;
@@ -271,7 +271,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScRefListToken(*this); }
 };
 
-class SC_DLLPUBLIC ScEmptyCellToken : public formula::FormulaToken
+class SC_DLLPUBLIC ScEmptyCellToken final : public formula::FormulaToken
 {
             bool const          bInherited          :1;
             bool const          bDisplayedAsString  :1;
@@ -319,7 +319,7 @@ public:
 
 /** Stores the matrix result at the formula cell, additionally the range the
     matrix formula occupies. */
-class SC_DLLPUBLIC ScMatrixFormulaCellToken : public ScMatrixCellResultToken
+class SC_DLLPUBLIC ScMatrixFormulaCellToken final : public ScMatrixCellResultToken
 {
 private:
             SCROW               nRows;
@@ -373,7 +373,7 @@ private:
     void CloneUpperLeftIfNecessary();
 };
 
-class SC_DLLPUBLIC ScHybridCellToken : public formula::FormulaToken
+class SC_DLLPUBLIC ScHybridCellToken final : public formula::FormulaToken
 {
 private:
     double const mfDouble;

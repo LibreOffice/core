@@ -24,7 +24,7 @@ namespace sc {
 
 class BulkDataHint;
 
-class FormulaGroupAreaListener : public SvtListener
+class FormulaGroupAreaListener final : public SvtListener
 {
     ScRange maRange;
     const ScColumn* mpColumn;

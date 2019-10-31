@@ -24,7 +24,7 @@
 
 class ScCheckListMenuWindow;
 
-class ScAccessibleFilterTopWindow : public ScAccessibleFilterMenu
+class ScAccessibleFilterTopWindow final : public ScAccessibleFilterMenu
 {
 public:
     ScAccessibleFilterTopWindow(
