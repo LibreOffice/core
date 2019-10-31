@@ -8860,7 +8860,7 @@ SvxWordLineModeItem WordMode SID_ATTR_CHAR_WORDLINEMODE
 
 
 XLineColorItem XLineColor SID_ATTR_LINE_COLOR
-
+(SfxStringItem Color SID_ATTR_COLOR_STR, XLineColorItem XLineColor SID_ATTR_LINE_COLOR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

@@ -34,6 +34,8 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <memory>
+#include <svl/stritem.hxx>
+#include <svx/xlnclit.hxx>
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
@@ -200,6 +202,29 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             pDoc->SetChanged();
 }
 
+namespace
+{
+    void lcl_convertStringArguments(std::unique_ptr<SfxItemSet>& pArgs)
+    {
+        Color aColor;
+        OUString sColor;
+        const SfxPoolItem* pColorStringItem = nullptr;
+
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
+        {
+            sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+
+            if (sColor == "transparent")
+                aColor = COL_TRANSPARENT;
+            else
+                aColor = Color(sColor.toInt32(16));
+
+            XLineColorItem aLineColorItem(OUString(), aColor);
+            pArgs->Put(aLineColorItem);
+        }
+    }
+}
+
 void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
 {
     SwWrtShell* pSh   = &GetShell();
@@ -213,7 +238,11 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
     if (pArgs)
     {
         if(pView->AreObjectsMarked())
-            pView->SetAttrToMarked(*rReq.GetArgs(), false);
+        {
+            std::unique_ptr<SfxItemSet> pNewArgs = pArgs->Clone();
+            lcl_convertStringArguments(pNewArgs);
+            pView->SetAttrToMarked(*pNewArgs, false);
+        }
         else
             pView->SetDefaultAttr(*rReq.GetArgs(), false);
     }
