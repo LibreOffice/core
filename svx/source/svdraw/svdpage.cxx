@@ -668,7 +668,7 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
 
     for (size_t i = 0; i < aNewSortOrder.size(); ++i)
     {
-        aNewList[i] = maList[ sortOrder[i] ];
+        aNewList[i] = maList[ aNewSortOrder[i] ];
         aNewList[i]->SetOrdNum(i);
     }
 
