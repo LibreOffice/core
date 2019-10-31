@@ -387,6 +387,7 @@ public:
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
+    virtual OUString getRenderBackendName() const override { return "aqua"; }
 
     virtual SystemGraphicsData
                             GetGraphicsData() const override;

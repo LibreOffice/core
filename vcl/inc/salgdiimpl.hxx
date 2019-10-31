@@ -50,7 +50,7 @@ public:
 
     virtual void freeResources() = 0;
 
-    virtual OUString getRenderBackendName() const { return OUString(); }
+    virtual OUString getRenderBackendName() const = 0;
 
     virtual bool setClipRegion( const vcl::Region& ) = 0;
     //

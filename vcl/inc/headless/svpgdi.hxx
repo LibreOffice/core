@@ -261,6 +261,7 @@ public:
 
     virtual SystemGraphicsData GetGraphicsData() const override;
 
+    virtual OUString getRenderBackendName() const override { return "svp"; }
 
 #if ENABLE_CAIRO_CANVAS
     virtual bool            SupportsCairo() const override;
