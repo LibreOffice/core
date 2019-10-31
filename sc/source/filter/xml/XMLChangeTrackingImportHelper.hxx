@@ -108,8 +108,8 @@ struct ScMyBaseAction
 {
     ScMyActionInfo aInfo;
     ScBigRange aBigRange;
-    std::deque<sal_uInt32> aDependencies;
-    std::deque<ScMyDeleted> aDeletedList;
+    std::vector<sal_uInt32> aDependencies;
+    std::vector<ScMyDeleted> aDeletedList;
     sal_uInt32 nActionNumber;
     sal_uInt32 nRejectingNumber;
     sal_uInt32 nPreviousAction;
@@ -128,9 +128,9 @@ struct ScMyInsAction : public ScMyBaseAction
 
 struct ScMyDelAction : public ScMyBaseAction
 {
-    std::deque<ScMyGenerated> aGeneratedList;
+    std::vector<ScMyGenerated> aGeneratedList;
     std::unique_ptr<ScMyInsertionCutOff> pInsCutOff;
-    std::deque<ScMyMoveCutOff> aMoveCutOffs;
+    std::vector<ScMyMoveCutOff> aMoveCutOffs;
     sal_Int32 nD;
 
     explicit ScMyDelAction(const ScChangeActionType nActionType);
@@ -139,7 +139,7 @@ struct ScMyDelAction : public ScMyBaseAction
 
 struct ScMyMoveAction : public ScMyBaseAction
 {
-    std::deque<ScMyGenerated> aGeneratedList;
+    std::vector<ScMyGenerated> aGeneratedList;
     std::unique_ptr<ScMyMoveRanges> pMoveRanges;
 
     ScMyMoveAction();
@@ -163,7 +163,7 @@ struct ScMyRejAction : public ScMyBaseAction
 class ScXMLChangeTrackingImportHelper
 {
     std::set<OUString>  aUsers;
-    std::deque<std::unique_ptr<ScMyBaseAction>> aActions;
+    std::vector<std::unique_ptr<ScMyBaseAction>> aActions;
     css::uno::Sequence<sal_Int8> aProtect;
     ScDocument*         pDoc;
     ScChangeTrack*      pTrack;
@@ -179,7 +179,7 @@ private:
     std::unique_ptr<ScChangeAction> CreateRejectionAction(const ScMyRejAction* pAction);
     std::unique_ptr<ScChangeAction> CreateContentAction(const ScMyContentAction* pAction);
 
-    void CreateGeneratedActions(std::deque<ScMyGenerated>& rList);
+    void CreateGeneratedActions(std::vector<ScMyGenerated>& rList);
 
 public:
     ScXMLChangeTrackingImportHelper();
@@ -197,7 +197,7 @@ public:
     void SetBigRange(const ScBigRange& aBigRange) { pCurrentAction->aBigRange = aBigRange; }
     void SetPreviousChange(const sal_uInt32 nPreviousAction, ScMyCellInfo* pCellInfo);
     void SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable);
-    void AddDependence(const sal_uInt32 nID) { pCurrentAction->aDependencies.push_front(nID); }
+    void AddDependence(const sal_uInt32 nID) { pCurrentAction->aDependencies.push_back(nID); }
     void AddDeleted(const sal_uInt32 nID);
     void AddDeleted(const sal_uInt32 nID, std::unique_ptr<ScMyCellInfo> pCellInfo);
     void SetMultiSpanned(const sal_Int16 nMultiSpanned);
