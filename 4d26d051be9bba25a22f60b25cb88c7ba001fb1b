@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_7373a9b2",
+        "filename": "drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-10-31T23:37:58Z",
+      "side": 1,
+      "message": "The same change should me made here, too",
+      "revId": "4d26d051be9bba25a22f60b25cb88c7ba001fb1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
