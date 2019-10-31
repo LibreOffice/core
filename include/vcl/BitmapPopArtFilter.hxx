@@ -13,7 +13,7 @@
 
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapPopArtFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapPopArtFilter final : public BitmapFilter
 {
 public:
     BitmapPopArtFilter() {}

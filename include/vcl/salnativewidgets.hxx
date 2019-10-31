@@ -289,7 +289,7 @@ class VCL_DLLPUBLIC ImplControlValue
  *
  *   Value container for scrollbars.
  */
-class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
+class VCL_DLLPUBLIC ScrollbarValue final : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -319,7 +319,7 @@ class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
         ScrollbarValue & operator =(ScrollbarValue &&) = delete; // due to ImplControlValue
 };
 
-class VCL_DLLPUBLIC SliderValue : public ImplControlValue
+class VCL_DLLPUBLIC SliderValue final : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -341,7 +341,7 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
         SliderValue & operator =(SliderValue &&) = delete; // due to ImplControlValue
 };
 
-class VCL_DLLPUBLIC TabPaneValue : public ImplControlValue
+class VCL_DLLPUBLIC TabPaneValue final : public ImplControlValue
 {
 public:
     tools::Rectangle m_aTabHeaderRect;
@@ -383,7 +383,7 @@ namespace o3tl
     template<> struct typed_flags<TabitemFlags> : is_typed_flags<TabitemFlags, 0x0f> {};
 }
 
-class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
+class VCL_DLLPUBLIC TabitemValue final : public ImplControlValue
 {
     public:
         TabitemFlags    mnAlignment;
@@ -418,7 +418,7 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
  *   Note: the other parameters of DrawNativeControl will have no meaning
  *         all parameters for spinbuttons are carried here
  */
-class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
+class VCL_DLLPUBLIC SpinbuttonValue final : public ImplControlValue
 {
     public:
         tools::Rectangle       maUpperRect;
@@ -450,7 +450,7 @@ class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
  *
  *  Value container for toolbars detailing the grip position
  */
-class VCL_DLLPUBLIC ToolbarValue : public ImplControlValue
+class VCL_DLLPUBLIC ToolbarValue final : public ImplControlValue
 {
 public:
     ToolbarValue() : ImplControlValue( ControlType::Toolbar, 0 )
@@ -472,7 +472,7 @@ public:
  *
  *  Value container for menubars specifying height of adjacent docking area
  */
-class VCL_DLLPUBLIC MenubarValue : public ImplControlValue
+class VCL_DLLPUBLIC MenubarValue final : public ImplControlValue
 {
 public:
     MenubarValue() : ImplControlValue( ControlType::Menubar, 0 )
@@ -491,7 +491,7 @@ public:
  * Value container for menu items; specifies the rectangle for the whole item which
  * may be useful when drawing parts with a smaller rectangle.
  */
-class VCL_DLLPUBLIC MenupopupValue : public ImplControlValue
+class VCL_DLLPUBLIC MenupopupValue final : public ImplControlValue
 {
 public:
     MenupopupValue( long i_nGutterWidth, const tools::Rectangle& i_rItemRect )
@@ -511,7 +511,7 @@ public:
  *
  *  Value container for pushbuttons specifying additional drawing hints
  */
-class VCL_DLLPUBLIC PushButtonValue : public ImplControlValue
+class VCL_DLLPUBLIC PushButtonValue final : public ImplControlValue
 {
 public:
     PushButtonValue()

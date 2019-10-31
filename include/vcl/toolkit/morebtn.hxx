@@ -27,7 +27,7 @@
 struct ImplMoreButtonData;
 
 
-class VCL_DLLPUBLIC MoreButton : public PushButton
+class VCL_DLLPUBLIC MoreButton final : public PushButton
 {
     std::unique_ptr<ImplMoreButtonData> mpMBData;
     bool                mbState;

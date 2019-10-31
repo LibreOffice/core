@@ -272,7 +272,7 @@ template<typename T> inline bool operator !=(T * p1, VclPtr<T> const & p2) {
  * @param reference_type must be a subclass of vcl::Window
  */
 template <class reference_type>
-class SAL_WARN_UNUSED VclPtrInstance : public VclPtr<reference_type>
+class SAL_WARN_UNUSED VclPtrInstance final : public VclPtr<reference_type>
 {
 public:
     template<typename... Arg> VclPtrInstance(Arg &&... arg)
@@ -404,7 +404,7 @@ protected:
 #pragma warning(disable: 4521) // " multiple copy constructors specified"
 #endif
 template <class reference_type>
-class SAL_WARN_UNUSED ScopedVclPtrInstance : public ScopedVclPtr<reference_type>
+class SAL_WARN_UNUSED ScopedVclPtrInstance final : public ScopedVclPtr<reference_type>
 {
 public:
     template<typename... Arg> ScopedVclPtrInstance(Arg &&... arg)

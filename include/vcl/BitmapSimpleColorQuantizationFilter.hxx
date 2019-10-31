@@ -13,7 +13,7 @@
 
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapSimpleColorQuantizationFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapSimpleColorQuantizationFilter final : public BitmapFilter
 {
 public:
     /** Reduce number of colors for the bitmap using the POPULAR algorithm

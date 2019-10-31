@@ -19,7 +19,7 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC BitmapMosaicFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapMosaicFilter final : public BitmapFilter
 {
 public:
     BitmapMosaicFilter(sal_uLong nTileWidth, sal_uLong nTileHeight)

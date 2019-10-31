@@ -483,11 +483,9 @@ public:
 
 struct TransferDataContainer_Impl;
 
-class VCL_DLLPUBLIC TransferDataContainer : public TransferableHelper
+class VCL_DLLPUBLIC TransferDataContainer final : public TransferableHelper
 {
     std::unique_ptr<TransferDataContainer_Impl> pImpl;
-
-protected:
 
     virtual void        AddSupportedFormats() override;
     virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;

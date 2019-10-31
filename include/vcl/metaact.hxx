@@ -92,7 +92,7 @@ public:
     static MetaAction*  ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData );
 };
 
-class VCL_DLLPUBLIC MetaPixelAction : public MetaAction
+class VCL_DLLPUBLIC MetaPixelAction final : public MetaAction
 {
 private:
     Point               maPt;
@@ -104,7 +104,7 @@ public:
     MetaPixelAction(MetaPixelAction &&) = default;
     MetaPixelAction & operator =(MetaPixelAction const &) = delete; // due to MetaAction
     MetaPixelAction & operator =(MetaPixelAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaPixelAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -121,7 +121,7 @@ public:
     const Color&        GetColor() const { return maColor; }
 };
 
-class VCL_DLLPUBLIC MetaPointAction : public MetaAction
+class VCL_DLLPUBLIC MetaPointAction final : public MetaAction
 {
 private:
     Point               maPt;
@@ -132,7 +132,7 @@ public:
     MetaPointAction(MetaPointAction &&) = default;
     MetaPointAction & operator =(MetaPointAction const &) = delete; // due to MetaAction
     MetaPointAction & operator =(MetaPointAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaPointAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -148,7 +148,7 @@ public:
     const Point&        GetPoint() const { return maPt; }
 };
 
-class VCL_DLLPUBLIC MetaLineAction : public MetaAction
+class VCL_DLLPUBLIC MetaLineAction final : public MetaAction
 {
 private:
 
@@ -162,7 +162,7 @@ public:
     MetaLineAction(MetaLineAction &&) = default;
     MetaLineAction & operator =(MetaLineAction const &) = delete; // due to MetaAction
     MetaLineAction & operator =(MetaLineAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaLineAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -182,7 +182,7 @@ public:
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
 };
 
-class VCL_DLLPUBLIC MetaRectAction : public MetaAction
+class VCL_DLLPUBLIC MetaRectAction final : public MetaAction
 {
 private:
 
@@ -194,7 +194,7 @@ public:
     MetaRectAction(MetaRectAction &&) = default;
     MetaRectAction & operator =(MetaRectAction const &) = delete; // due to MetaAction
     MetaRectAction & operator =(MetaRectAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaRectAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -210,7 +210,7 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
 };
 
-class VCL_DLLPUBLIC MetaRoundRectAction : public MetaAction
+class VCL_DLLPUBLIC MetaRoundRectAction final : public MetaAction
 {
 private:
 
@@ -224,7 +224,7 @@ public:
     MetaRoundRectAction(MetaRoundRectAction &&) = default;
     MetaRoundRectAction & operator =(MetaRoundRectAction const &) = delete; // due to MetaAction
     MetaRoundRectAction & operator =(MetaRoundRectAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaRoundRectAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -243,7 +243,7 @@ public:
     sal_uInt32          GetVertRound() const { return mnVertRound; }
 };
 
-class VCL_DLLPUBLIC MetaEllipseAction : public MetaAction
+class VCL_DLLPUBLIC MetaEllipseAction final : public MetaAction
 {
 private:
 
@@ -255,7 +255,7 @@ public:
     MetaEllipseAction(MetaEllipseAction &&) = default;
     MetaEllipseAction & operator =(MetaEllipseAction const &) = delete; // due to MetaAction
     MetaEllipseAction & operator =(MetaEllipseAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaEllipseAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -271,7 +271,7 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
 };
 
-class VCL_DLLPUBLIC MetaArcAction : public MetaAction
+class VCL_DLLPUBLIC MetaArcAction final : public MetaAction
 {
 private:
 
@@ -285,7 +285,7 @@ public:
     MetaArcAction(MetaArcAction &&) = default;
     MetaArcAction & operator =(MetaArcAction const &) = delete; // due to MetaAction
     MetaArcAction & operator =(MetaArcAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaArcAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -304,7 +304,7 @@ public:
     const Point&        GetEndPoint() const { return maEndPt; }
 };
 
-class VCL_DLLPUBLIC MetaPieAction : public MetaAction
+class VCL_DLLPUBLIC MetaPieAction final : public MetaAction
 {
 private:
 
@@ -318,7 +318,7 @@ public:
     MetaPieAction(MetaPieAction &&) = default;
     MetaPieAction & operator =(MetaPieAction const &) = delete; // due to MetaAction
     MetaPieAction & operator =(MetaPieAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaPieAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -337,7 +337,7 @@ public:
     const Point&        GetEndPoint() const { return maEndPt; }
 };
 
-class VCL_DLLPUBLIC MetaChordAction : public MetaAction
+class VCL_DLLPUBLIC MetaChordAction final : public MetaAction
 {
 private:
 
@@ -351,7 +351,7 @@ public:
     MetaChordAction(MetaChordAction &&) = default;
     MetaChordAction & operator =(MetaChordAction const &) = delete; // due to MetaAction
     MetaChordAction & operator =(MetaChordAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaChordAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -370,7 +370,7 @@ public:
     const Point&        GetEndPoint() const { return maEndPt; }
 };
 
-class VCL_DLLPUBLIC MetaPolyLineAction : public MetaAction
+class VCL_DLLPUBLIC MetaPolyLineAction final : public MetaAction
 {
 private:
 
@@ -383,7 +383,7 @@ public:
     MetaPolyLineAction(MetaPolyLineAction &&) = default;
     MetaPolyLineAction & operator =(MetaPolyLineAction const &) = delete; // due to MetaAction
     MetaPolyLineAction & operator =(MetaPolyLineAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaPolyLineAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -401,7 +401,7 @@ public:
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
 };
 
-class VCL_DLLPUBLIC MetaPolygonAction : public MetaAction
+class VCL_DLLPUBLIC MetaPolygonAction final : public MetaAction
 {
 private:
 
@@ -413,7 +413,7 @@ public:
     MetaPolygonAction(MetaPolygonAction &&) = default;
     MetaPolygonAction & operator =(MetaPolygonAction const &) = delete; // due to MetaAction
     MetaPolygonAction & operator =(MetaPolygonAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaPolygonAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -429,7 +429,7 @@ public:
     const tools::Polygon& GetPolygon() const { return maPoly; }
 };
 
-class VCL_DLLPUBLIC MetaPolyPolygonAction : public MetaAction
+class VCL_DLLPUBLIC MetaPolyPolygonAction final : public MetaAction
 {
 private:
 
@@ -441,7 +441,7 @@ public:
     MetaPolyPolygonAction(MetaPolyPolygonAction &&) = default;
     MetaPolyPolygonAction & operator =(MetaPolyPolygonAction const &) = delete; // due to MetaAction
     MetaPolyPolygonAction & operator =(MetaPolyPolygonAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaPolyPolygonAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -457,7 +457,7 @@ public:
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
 };
 
-class VCL_DLLPUBLIC MetaTextAction : public MetaAction
+class VCL_DLLPUBLIC MetaTextAction final : public MetaAction
 {
 private:
 
@@ -472,7 +472,7 @@ public:
     MetaTextAction(MetaTextAction &&) = default;
     MetaTextAction & operator =(MetaTextAction const &) = delete; // due to MetaAction
     MetaTextAction & operator =(MetaTextAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaTextAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -492,7 +492,7 @@ public:
     sal_Int32       GetLen() const { return mnLen; }
 };
 
-class VCL_DLLPUBLIC MetaTextArrayAction : public MetaAction
+class VCL_DLLPUBLIC MetaTextArrayAction final : public MetaAction
 {
 private:
 
@@ -503,7 +503,6 @@ private:
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
-protected:
     virtual             ~MetaTextArrayAction() override;
 
 public:
@@ -530,7 +529,7 @@ public:
     long*           GetDXArray() const { return mpDXAry.get(); }
 };
 
-class VCL_DLLPUBLIC MetaStretchTextAction : public MetaAction
+class VCL_DLLPUBLIC MetaStretchTextAction final : public MetaAction
 {
 private:
 
@@ -546,7 +545,7 @@ public:
     MetaStretchTextAction(MetaStretchTextAction &&) = default;
     MetaStretchTextAction & operator =(MetaStretchTextAction const &) = delete; // due to MetaAction
     MetaStretchTextAction & operator =(MetaStretchTextAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaStretchTextAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -568,7 +567,7 @@ public:
     sal_Int32       GetLen() const { return mnLen; }
 };
 
-class VCL_DLLPUBLIC MetaTextRectAction : public MetaAction
+class VCL_DLLPUBLIC MetaTextRectAction final : public MetaAction
 {
 private:
 
@@ -582,7 +581,7 @@ public:
     MetaTextRectAction(MetaTextRectAction &&) = default;
     MetaTextRectAction & operator =(MetaTextRectAction const &) = delete; // due to MetaAction
     MetaTextRectAction & operator =(MetaTextRectAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaTextRectAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -601,7 +600,7 @@ public:
     DrawTextFlags       GetStyle() const { return mnStyle; }
 };
 
-class VCL_DLLPUBLIC MetaTextLineAction : public MetaAction
+class VCL_DLLPUBLIC MetaTextLineAction final : public MetaAction
 {
 private:
 
@@ -617,7 +616,7 @@ public:
     MetaTextLineAction(MetaTextLineAction &&) = default;
     MetaTextLineAction & operator =(MetaTextLineAction const &) = delete; // due to MetaAction
     MetaTextLineAction & operator =(MetaTextLineAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaTextLineAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -639,7 +638,7 @@ public:
     FontLineStyle       GetOverline()  const { return meOverline; }
 };
 
-class VCL_DLLPUBLIC MetaBmpAction : public MetaAction
+class VCL_DLLPUBLIC MetaBmpAction final : public MetaAction
 {
 private:
 
@@ -652,7 +651,7 @@ public:
     MetaBmpAction(MetaBmpAction &&) = default;
     MetaBmpAction & operator =(MetaBmpAction const &) = delete; // due to MetaAction
     MetaBmpAction & operator =(MetaBmpAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaBmpAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -669,7 +668,7 @@ public:
     const Point&        GetPoint() const { return maPt; }
 };
 
-class VCL_DLLPUBLIC MetaBmpScaleAction : public MetaAction
+class VCL_DLLPUBLIC MetaBmpScaleAction final : public MetaAction
 {
 private:
 
@@ -683,7 +682,7 @@ public:
     MetaBmpScaleAction(MetaBmpScaleAction &&) = default;
     MetaBmpScaleAction & operator =(MetaBmpScaleAction const &) = delete; // due to MetaAction
     MetaBmpScaleAction & operator =(MetaBmpScaleAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaBmpScaleAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -702,7 +701,7 @@ public:
     const Size&         GetSize() const { return maSz; }
 };
 
-class VCL_DLLPUBLIC MetaBmpScalePartAction : public MetaAction
+class VCL_DLLPUBLIC MetaBmpScalePartAction final : public MetaAction
 {
 private:
 
@@ -718,7 +717,7 @@ public:
     MetaBmpScalePartAction(MetaBmpScalePartAction &&) = default;
     MetaBmpScalePartAction & operator =(MetaBmpScalePartAction const &) = delete; // due to MetaAction
     MetaBmpScalePartAction & operator =(MetaBmpScalePartAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaBmpScalePartAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -740,7 +739,7 @@ public:
     const Size&         GetSrcSize() const { return maSrcSz; }
 };
 
-class VCL_DLLPUBLIC MetaBmpExAction : public MetaAction
+class VCL_DLLPUBLIC MetaBmpExAction final : public MetaAction
 {
 private:
 
@@ -753,7 +752,7 @@ public:
     MetaBmpExAction(MetaBmpExAction &&) = default;
     MetaBmpExAction & operator =(MetaBmpExAction const &) = delete; // due to MetaAction
     MetaBmpExAction & operator =(MetaBmpExAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaBmpExAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -770,7 +769,7 @@ public:
     const Point&        GetPoint() const { return maPt; }
 };
 
-class VCL_DLLPUBLIC MetaBmpExScaleAction : public MetaAction
+class VCL_DLLPUBLIC MetaBmpExScaleAction final : public MetaAction
 {
 private:
 
@@ -784,7 +783,7 @@ public:
     MetaBmpExScaleAction(MetaBmpExScaleAction &&) = default;
     MetaBmpExScaleAction & operator =(MetaBmpExScaleAction const &) = delete; // due to MetaAction
     MetaBmpExScaleAction & operator =(MetaBmpExScaleAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaBmpExScaleAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -803,7 +802,7 @@ public:
     const Size&         GetSize() const { return maSz; }
 };
 
-class VCL_DLLPUBLIC MetaBmpExScalePartAction : public MetaAction
+class VCL_DLLPUBLIC MetaBmpExScalePartAction final : public MetaAction
 {
 private:
 
@@ -819,7 +818,7 @@ public:
     MetaBmpExScalePartAction(MetaBmpExScalePartAction &&) = default;
     MetaBmpExScalePartAction & operator =(MetaBmpExScalePartAction const &) = delete; // due to MetaAction
     MetaBmpExScalePartAction & operator =(MetaBmpExScalePartAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaBmpExScalePartAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -841,7 +840,7 @@ public:
     const Size&         GetSrcSize() const { return maSrcSz; }
 };
 
-class VCL_DLLPUBLIC MetaMaskAction : public MetaAction
+class VCL_DLLPUBLIC MetaMaskAction final : public MetaAction
 {
 private:
 
@@ -855,7 +854,7 @@ public:
     MetaMaskAction(MetaMaskAction &&) = default;
     MetaMaskAction & operator =(MetaMaskAction const &) = delete; // due to MetaAction
     MetaMaskAction & operator =(MetaMaskAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaMaskAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -875,7 +874,7 @@ public:
     const Point&        GetPoint() const { return maPt; }
 };
 
-class VCL_DLLPUBLIC MetaMaskScaleAction : public MetaAction
+class VCL_DLLPUBLIC MetaMaskScaleAction final : public MetaAction
 {
 private:
 
@@ -890,7 +889,7 @@ public:
     MetaMaskScaleAction(MetaMaskScaleAction &&) = default;
     MetaMaskScaleAction & operator =(MetaMaskScaleAction const &) = delete; // due to MetaAction
     MetaMaskScaleAction & operator =(MetaMaskScaleAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaMaskScaleAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -911,7 +910,7 @@ public:
     const Size&         GetSize() const { return maSz; }
 };
 
-class VCL_DLLPUBLIC MetaMaskScalePartAction : public MetaAction
+class VCL_DLLPUBLIC MetaMaskScalePartAction final : public MetaAction
 {
 private:
 
@@ -928,7 +927,7 @@ public:
     MetaMaskScalePartAction(MetaMaskScalePartAction &&) = default;
     MetaMaskScalePartAction & operator =(MetaMaskScalePartAction const &) = delete; // due to MetaAction
     MetaMaskScalePartAction & operator =(MetaMaskScalePartAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaMaskScalePartAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -952,7 +951,7 @@ public:
     const Size&         GetSrcSize() const { return maSrcSz; }
 };
 
-class VCL_DLLPUBLIC MetaGradientAction : public MetaAction
+class VCL_DLLPUBLIC MetaGradientAction final : public MetaAction
 {
 private:
 
@@ -965,7 +964,7 @@ public:
     MetaGradientAction(MetaGradientAction &&) = default;
     MetaGradientAction & operator =(MetaGradientAction const &) = delete; // due to MetaAction
     MetaGradientAction & operator =(MetaGradientAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaGradientAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -982,7 +981,7 @@ public:
     const Gradient&     GetGradient() const { return maGradient; }
 };
 
-class VCL_DLLPUBLIC MetaGradientExAction : public MetaAction
+class VCL_DLLPUBLIC MetaGradientExAction final : public MetaAction
 {
 private:
 
@@ -995,7 +994,7 @@ public:
     MetaGradientExAction(MetaGradientExAction &&) = default;
     MetaGradientExAction & operator =(MetaGradientExAction const &) = delete; // due to MetaAction
     MetaGradientExAction & operator =(MetaGradientExAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaGradientExAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1012,7 +1011,7 @@ public:
     const Gradient&     GetGradient() const { return maGradient; }
 };
 
-class VCL_DLLPUBLIC MetaHatchAction : public MetaAction
+class VCL_DLLPUBLIC MetaHatchAction final : public MetaAction
 {
 private:
 
@@ -1025,7 +1024,7 @@ public:
     MetaHatchAction(MetaHatchAction &&) = default;
     MetaHatchAction & operator =(MetaHatchAction const &) = delete; // due to MetaAction
     MetaHatchAction & operator =(MetaHatchAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaHatchAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1042,7 +1041,7 @@ public:
     const Hatch&        GetHatch() const { return maHatch; }
 };
 
-class VCL_DLLPUBLIC MetaWallpaperAction : public MetaAction
+class VCL_DLLPUBLIC MetaWallpaperAction final : public MetaAction
 {
 private:
 
@@ -1055,7 +1054,7 @@ public:
     MetaWallpaperAction(MetaWallpaperAction &&) = default;
     MetaWallpaperAction & operator =(MetaWallpaperAction const &) = delete; // due to MetaAction
     MetaWallpaperAction & operator =(MetaWallpaperAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaWallpaperAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1073,7 +1072,7 @@ public:
     const Wallpaper&    GetWallpaper() const { return maWallpaper; }
 };
 
-class VCL_DLLPUBLIC MetaClipRegionAction : public MetaAction
+class VCL_DLLPUBLIC MetaClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1086,7 +1085,7 @@ public:
     MetaClipRegionAction(MetaClipRegionAction &&) = default;
     MetaClipRegionAction & operator =(MetaClipRegionAction const &) = delete; // due to MetaAction
     MetaClipRegionAction & operator =(MetaClipRegionAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1103,7 +1102,7 @@ public:
     bool                IsClipping() const { return mbClip; }
 };
 
-class VCL_DLLPUBLIC MetaISectRectClipRegionAction : public MetaAction
+class VCL_DLLPUBLIC MetaISectRectClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1115,7 +1114,7 @@ public:
     MetaISectRectClipRegionAction(MetaISectRectClipRegionAction &&) = default;
     MetaISectRectClipRegionAction & operator =(MetaISectRectClipRegionAction const &) = delete; // due to MetaAction
     MetaISectRectClipRegionAction & operator =(MetaISectRectClipRegionAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaISectRectClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1131,7 +1130,7 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
 };
 
-class VCL_DLLPUBLIC MetaISectRegionClipRegionAction : public MetaAction
+class VCL_DLLPUBLIC MetaISectRegionClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1143,7 +1142,7 @@ public:
     MetaISectRegionClipRegionAction(MetaISectRegionClipRegionAction &&) = default;
     MetaISectRegionClipRegionAction & operator =(MetaISectRegionClipRegionAction const &) = delete; // due to MetaAction
     MetaISectRegionClipRegionAction & operator =(MetaISectRegionClipRegionAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaISectRegionClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1159,7 +1158,7 @@ public:
     const vcl::Region&  GetRegion() const { return maRegion; }
 };
 
-class VCL_DLLPUBLIC MetaMoveClipRegionAction : public MetaAction
+class VCL_DLLPUBLIC MetaMoveClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1172,7 +1171,7 @@ public:
     MetaMoveClipRegionAction(MetaMoveClipRegionAction &&) = default;
     MetaMoveClipRegionAction & operator =(MetaMoveClipRegionAction const &) = delete; // due to MetaAction
     MetaMoveClipRegionAction & operator =(MetaMoveClipRegionAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaMoveClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1188,7 +1187,7 @@ public:
     long                GetVertMove() const { return mnVertMove; }
 };
 
-class VCL_DLLPUBLIC MetaLineColorAction : public MetaAction
+class VCL_DLLPUBLIC MetaLineColorAction final : public MetaAction
 {
 private:
 
@@ -1201,7 +1200,7 @@ public:
     MetaLineColorAction(MetaLineColorAction &&) = default;
     MetaLineColorAction & operator =(MetaLineColorAction const &) = delete; // due to MetaAction
     MetaLineColorAction & operator =(MetaLineColorAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaLineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1215,7 +1214,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class VCL_DLLPUBLIC MetaFillColorAction : public MetaAction
+class VCL_DLLPUBLIC MetaFillColorAction final : public MetaAction
 {
 private:
 
@@ -1228,7 +1227,7 @@ public:
     MetaFillColorAction(MetaFillColorAction &&) = default;
     MetaFillColorAction & operator =(MetaFillColorAction const &) = delete; // due to MetaAction
     MetaFillColorAction & operator =(MetaFillColorAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaFillColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1242,7 +1241,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class VCL_DLLPUBLIC MetaTextColorAction : public MetaAction
+class VCL_DLLPUBLIC MetaTextColorAction final : public MetaAction
 {
 private:
 
@@ -1254,7 +1253,7 @@ public:
     MetaTextColorAction(MetaTextColorAction &&) = default;
     MetaTextColorAction & operator =(MetaTextColorAction const &) = delete; // due to MetaAction
     MetaTextColorAction & operator =(MetaTextColorAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaTextColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1267,7 +1266,7 @@ public:
     const Color&        GetColor() const { return maColor; }
 };
 
-class VCL_DLLPUBLIC MetaTextFillColorAction : public MetaAction
+class VCL_DLLPUBLIC MetaTextFillColorAction final : public MetaAction
 {
 private:
 
@@ -1280,7 +1279,7 @@ public:
     MetaTextFillColorAction(MetaTextFillColorAction &&) = default;
     MetaTextFillColorAction & operator =(MetaTextFillColorAction const &) = delete; // due to MetaAction
     MetaTextFillColorAction & operator =(MetaTextFillColorAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaTextFillColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1294,7 +1293,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class VCL_DLLPUBLIC MetaTextLineColorAction : public MetaAction
+class VCL_DLLPUBLIC MetaTextLineColorAction final : public MetaAction
 {
 private:
 
@@ -1307,7 +1306,7 @@ public:
     MetaTextLineColorAction(MetaTextLineColorAction &&) = default;
     MetaTextLineColorAction & operator =(MetaTextLineColorAction const &) = delete; // due to MetaAction
     MetaTextLineColorAction & operator =(MetaTextLineColorAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaTextLineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1321,7 +1320,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class VCL_DLLPUBLIC MetaOverlineColorAction : public MetaAction
+class VCL_DLLPUBLIC MetaOverlineColorAction final : public MetaAction
 {
 private:
 
@@ -1334,7 +1333,7 @@ public:
     MetaOverlineColorAction(MetaOverlineColorAction &&) = default;
     MetaOverlineColorAction & operator =(MetaOverlineColorAction const &) = delete; // due to MetaAction
     MetaOverlineColorAction & operator =(MetaOverlineColorAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaOverlineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1348,7 +1347,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class VCL_DLLPUBLIC MetaTextAlignAction : public MetaAction
+class VCL_DLLPUBLIC MetaTextAlignAction final : public MetaAction
 {
 private:
 
@@ -1360,7 +1359,7 @@ public:
     MetaTextAlignAction(MetaTextAlignAction &&) = default;
     MetaTextAlignAction & operator =(MetaTextAlignAction const &) = delete; // due to MetaAction
     MetaTextAlignAction & operator =(MetaTextAlignAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaTextAlignAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1373,7 +1372,7 @@ public:
     TextAlign           GetTextAlign() const { return maAlign; }
 };
 
-class VCL_DLLPUBLIC MetaMapModeAction : public MetaAction
+class VCL_DLLPUBLIC MetaMapModeAction final : public MetaAction
 {
 private:
 
@@ -1385,7 +1384,7 @@ public:
     MetaMapModeAction(MetaMapModeAction &&) = default;
     MetaMapModeAction & operator =(MetaMapModeAction const &) = delete; // due to MetaAction
     MetaMapModeAction & operator =(MetaMapModeAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaMapModeAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1400,7 +1399,7 @@ public:
     const MapMode&      GetMapMode() const { return maMapMode; }
 };
 
-class VCL_DLLPUBLIC MetaFontAction : public MetaAction
+class VCL_DLLPUBLIC MetaFontAction final : public MetaAction
 {
 private:
 
@@ -1412,7 +1411,7 @@ public:
     MetaFontAction(MetaFontAction &&) = default;
     MetaFontAction & operator =(MetaFontAction const &) = delete; // due to MetaAction
     MetaFontAction & operator =(MetaFontAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaFontAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1427,7 +1426,7 @@ public:
     const vcl::Font&    GetFont() const { return maFont; }
 };
 
-class VCL_DLLPUBLIC MetaPushAction : public MetaAction
+class VCL_DLLPUBLIC MetaPushAction final : public MetaAction
 {
 private:
 
@@ -1439,7 +1438,7 @@ public:
     MetaPushAction(MetaPushAction &&) = default;
     MetaPushAction & operator =(MetaPushAction const &) = delete; // due to MetaAction
     MetaPushAction & operator =(MetaPushAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaPushAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1452,7 +1451,7 @@ public:
     PushFlags           GetFlags() const { return mnFlags; }
 };
 
-class VCL_DLLPUBLIC MetaPopAction : public MetaAction
+class VCL_DLLPUBLIC MetaPopAction final : public MetaAction
 {
 public:
 
@@ -1461,7 +1460,7 @@ public:
     MetaPopAction(MetaPopAction &&) = default;
     MetaPopAction & operator =(MetaPopAction const &) = delete; // due to MetaAction
     MetaPopAction & operator =(MetaPopAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaPopAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1470,7 +1469,7 @@ public:
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 };
 
-class VCL_DLLPUBLIC MetaRasterOpAction : public MetaAction
+class VCL_DLLPUBLIC MetaRasterOpAction final : public MetaAction
 {
 private:
 
@@ -1482,7 +1481,7 @@ public:
     MetaRasterOpAction(MetaRasterOpAction &&) = default;
     MetaRasterOpAction & operator =(MetaRasterOpAction const &) = delete; // due to MetaAction
     MetaRasterOpAction & operator =(MetaRasterOpAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaRasterOpAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1495,7 +1494,7 @@ public:
     RasterOp            GetRasterOp() const { return meRasterOp; }
 };
 
-class VCL_DLLPUBLIC MetaTransparentAction : public MetaAction
+class VCL_DLLPUBLIC MetaTransparentAction final : public MetaAction
 {
 private:
 
@@ -1508,7 +1507,7 @@ public:
     MetaTransparentAction(MetaTransparentAction &&) = default;
     MetaTransparentAction & operator =(MetaTransparentAction const &) = delete; // due to MetaAction
     MetaTransparentAction & operator =(MetaTransparentAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaTransparentAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1525,7 +1524,7 @@ public:
     sal_uInt16              GetTransparence() const { return mnTransPercent; }
 };
 
-class VCL_DLLPUBLIC MetaFloatTransparentAction : public MetaAction
+class VCL_DLLPUBLIC MetaFloatTransparentAction final : public MetaAction
 {
 private:
 
@@ -1540,7 +1539,7 @@ public:
     MetaFloatTransparentAction(MetaFloatTransparentAction &&) = default;
     MetaFloatTransparentAction & operator =(MetaFloatTransparentAction const &) = delete; // due to MetaAction
     MetaFloatTransparentAction & operator =(MetaFloatTransparentAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaFloatTransparentAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1560,7 +1559,7 @@ public:
     const Gradient&     GetGradient() const { return maGradient; }
 };
 
-class VCL_DLLPUBLIC MetaEPSAction : public MetaAction
+class VCL_DLLPUBLIC MetaEPSAction final : public MetaAction
 {
 private:
 
@@ -1575,7 +1574,7 @@ public:
     MetaEPSAction(MetaEPSAction &&) = default;
     MetaEPSAction & operator =(MetaEPSAction const &) = delete; // due to MetaAction
     MetaEPSAction & operator =(MetaEPSAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaEPSAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1595,7 +1594,7 @@ public:
     const Size&         GetSize() const { return maSize; }
 };
 
-class VCL_DLLPUBLIC MetaRefPointAction : public MetaAction
+class VCL_DLLPUBLIC MetaRefPointAction final : public MetaAction
 {
 private:
 
@@ -1608,7 +1607,7 @@ public:
     MetaRefPointAction(MetaRefPointAction &&) = default;
     MetaRefPointAction & operator =(MetaRefPointAction const &) = delete; // due to MetaAction
     MetaRefPointAction & operator =(MetaRefPointAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaRefPointAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1622,7 +1621,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class VCL_DLLPUBLIC MetaCommentAction : public MetaAction
+class VCL_DLLPUBLIC MetaCommentAction final : public MetaAction
 {
 private:
 
@@ -1634,7 +1633,7 @@ private:
 
     SAL_DLLPRIVATE void ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize );
 
-protected:
+private:
     virtual             ~MetaCommentAction() override;
 
 public:
@@ -1656,7 +1655,7 @@ public:
     const sal_uInt8*    GetData() const { return mpData.get(); }
 };
 
-class VCL_DLLPUBLIC MetaLayoutModeAction : public MetaAction
+class VCL_DLLPUBLIC MetaLayoutModeAction final : public MetaAction
 {
 private:
 
@@ -1668,7 +1667,7 @@ public:
     MetaLayoutModeAction(MetaLayoutModeAction &&) = default;
     MetaLayoutModeAction & operator =(MetaLayoutModeAction const &) = delete; // due to MetaAction
     MetaLayoutModeAction & operator =(MetaLayoutModeAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaLayoutModeAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -1681,7 +1680,7 @@ public:
     ComplexTextLayoutFlags  GetLayoutMode() const { return mnLayoutMode; }
 };
 
-class VCL_DLLPUBLIC MetaTextLanguageAction : public MetaAction
+class VCL_DLLPUBLIC MetaTextLanguageAction final : public MetaAction
 {
 private:
 
@@ -1693,7 +1692,7 @@ public:
     MetaTextLanguageAction(MetaTextLanguageAction &&) = default;
     MetaTextLanguageAction & operator =(MetaTextLanguageAction const &) = delete; // due to MetaAction
     MetaTextLanguageAction & operator =(MetaTextLanguageAction &&) = delete; // due to MetaAction
-protected:
+private:
     virtual             ~MetaTextLanguageAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;

@@ -247,7 +247,7 @@ public:
     virtual void    Click() override;
 };
 
-class VCL_DLLPUBLIC CloseButton : public CancelButton
+class VCL_DLLPUBLIC CloseButton final : public CancelButton
 {
 public:
     explicit CloseButton(vcl::Window* pParent, WinBits nStyle = 0);
@@ -484,7 +484,7 @@ inline bool CheckBox::IsChecked() const
     return (GetState() == TRISTATE_TRUE);
 }
 
-class VCL_DLLPUBLIC ImageButton : public PushButton
+class VCL_DLLPUBLIC ImageButton final : public PushButton
 {
 protected:
     using PushButton::ImplInitStyle;
@@ -508,7 +508,7 @@ public:
     explicit        ImageRadioButton( vcl::Window* pParent );
 };
 
-class VCL_DLLPUBLIC TriStateBox : public CheckBox
+class VCL_DLLPUBLIC TriStateBox final : public CheckBox
 {
                     TriStateBox( const TriStateBox & ) = delete;
                     TriStateBox & operator= ( const TriStateBox & ) = delete;
@@ -517,9 +517,8 @@ public:
     explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle );
 };
 
-class VCL_DLLPUBLIC DisclosureButton : public CheckBox
+class VCL_DLLPUBLIC DisclosureButton final : public CheckBox
 {
-protected:
     SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext) override;
 
 public:

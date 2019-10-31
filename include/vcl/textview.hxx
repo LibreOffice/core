@@ -48,7 +48,7 @@ namespace i18nutil {
 struct ImpTextView;
 class ExtTextEngine;
 
-class VCL_DLLPUBLIC TETextDataObject :    public css::datatransfer::XTransferable,
+class VCL_DLLPUBLIC TETextDataObject final : public css::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
 
 {
@@ -74,7 +74,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC TextView : public vcl::unohelper::DragAndDropClient
+class VCL_DLLPUBLIC TextView final : public vcl::unohelper::DragAndDropClient
 {
     friend class        TextEngine;
     friend class        TextUndo;

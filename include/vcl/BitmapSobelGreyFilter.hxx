@@ -13,7 +13,7 @@
 
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapSobelGreyFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapSobelGreyFilter final : public BitmapFilter
 {
 public:
     BitmapSobelGreyFilter() {}

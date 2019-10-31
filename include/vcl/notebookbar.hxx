@@ -22,7 +22,7 @@ class NotebookbarContextControl;
 class SystemWindow;
 
 /// This implements Widget Layout-based notebook-like menu bar.
-class VCL_DLLPUBLIC NotebookBar : public Control, public VclBuilderContainer
+class VCL_DLLPUBLIC NotebookBar final : public Control, public VclBuilderContainer
 {
 friend class NotebookBarContextChangeEventListener;
 public:

@@ -263,7 +263,7 @@ protected:
     }
 };
 
-class VCL_DLLPUBLIC VclHButtonBox : public VclButtonBox
+class VCL_DLLPUBLIC VclHButtonBox final : public VclButtonBox
 {
 public:
     VclHButtonBox(vcl::Window *pParent)
@@ -271,7 +271,7 @@ public:
     {
         m_bVerticalContainer = false;
     }
-protected:
+private:
     virtual long getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
@@ -302,7 +302,7 @@ protected:
     }
 };
 
-class VCL_DLLPUBLIC VclGrid : public VclContainer
+class VCL_DLLPUBLIC VclGrid final : public VclContainer
 {
 private:
     bool m_bRowHomogeneous;
@@ -384,7 +384,7 @@ public:
     void set_position(long nPosition) { m_nPosition = nPosition; }
 };
 
-class VCL_DLLPUBLIC VclVPaned : public VclPaned
+class VCL_DLLPUBLIC VclVPaned final : public VclPaned
 {
 private:
     DECL_LINK(SplitHdl, Splitter*, void);
@@ -396,7 +396,7 @@ public:
     virtual void setAllocation(const Size &rAllocation) override;
 };
 
-class VCL_DLLPUBLIC VclHPaned : public VclPaned
+class VCL_DLLPUBLIC VclHPaned final : public VclPaned
 {
 private:
     DECL_LINK(SplitHdl, Splitter*, void);
@@ -408,7 +408,7 @@ public:
     virtual void setAllocation(const Size &rAllocation) override;
 };
 
-class VCL_DLLPUBLIC VclFrame : public VclBin
+class VCL_DLLPUBLIC VclFrame final : public VclBin
 {
 private:
     VclPtr<vcl::Window> m_pLabel;
@@ -431,13 +431,13 @@ public:
     vcl::Window *get_label_widget();
     const vcl::Window *get_label_widget() const;
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
-protected:
+private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
     virtual OUString getDefaultAccessibleName() const override;
 };
 
-class VCL_DLLPUBLIC VclAlignment : public VclBin
+class VCL_DLLPUBLIC VclAlignment final : public VclBin
 {
 public:
     VclAlignment(vcl::Window *pParent)
@@ -449,17 +449,16 @@ public:
     {
     }
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
-protected:
+private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
-private:
     sal_Int32 m_nBottomPadding;
     sal_Int32 m_nLeftPadding;
     sal_Int32 m_nRightPadding;
     sal_Int32 m_nTopPadding;
 };
 
-class VCL_DLLPUBLIC VclExpander : public VclBin
+class VCL_DLLPUBLIC VclExpander final : public VclBin
 {
 public:
     VclExpander(vcl::Window *pParent)
@@ -489,17 +488,16 @@ public:
     }
     virtual void StateChanged(StateChangedType nType) override;
     void  SetExpandedHdl( const Link<VclExpander&,void>& rLink ) { maExpandedHdl = rLink; }
-protected:
+private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
-private:
     bool m_bResizeTopLevel;
     VclPtr<DisclosureButton> m_pDisclosureButton;
     Link<VclExpander&,void> maExpandedHdl;
     DECL_DLLPRIVATE_LINK(ClickHdl, CheckBox&, void);
 };
 
-class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
+class VCL_DLLPUBLIC VclScrolledWindow final : public VclBin
 {
 public:
     VclScrolledWindow(vcl::Window *pParent );
@@ -527,7 +525,7 @@ private:
     VclPtr<ScrollBarBox> m_aScrollBarBox;
 };
 
-class VCL_DLLPUBLIC VclViewport : public VclBin
+class VCL_DLLPUBLIC VclViewport final : public VclBin
 {
 public:
     VclViewport(vcl::Window *pParent)
@@ -535,9 +533,8 @@ public:
         , m_bInitialAllocation(true)
     {
     }
-protected:
-    virtual void setAllocation(const Size &rAllocation) override;
 private:
+    virtual void setAllocation(const Size &rAllocation) override;
     bool m_bInitialAllocation;
 };
 
@@ -546,7 +543,7 @@ private:
 //
 //by default the Commands are discarded, inherit from this
 //and implement "Command" to get them
-class VCL_DLLPUBLIC VclEventBox : public VclBin
+class VCL_DLLPUBLIC VclEventBox final : public VclBin
 {
 private:
     //Any Commands an EventBoxHelper receives are forwarded to its parent
@@ -570,7 +567,6 @@ private:
     };
 
     VclPtr<EventBoxHelper> m_aEventBoxHelper;
-protected:
     virtual void dispose() override;
     virtual ~VclEventBox() override;
 public:
@@ -631,7 +627,7 @@ public:
     void set_property(const OString &rKey, const OUString &rValue);
 };
 
-class VCL_DLLPUBLIC VclDrawingArea : public Control
+class VCL_DLLPUBLIC VclDrawingArea final : public Control
 {
 private:
     FactoryFunction m_pFactoryFunction;

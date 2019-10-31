@@ -26,14 +26,12 @@
 
 class Fraction;
 
-class VCL_DLLPUBLIC IMapCircleObject : public IMapObject
+class VCL_DLLPUBLIC IMapCircleObject final : public IMapObject
 {
     Point               aCenter;
     sal_Int32               nRadius;
 
     void                ImpConstruct( const Point& rCenter, sal_uLong nRad, bool bPixel );
-
-protected:
 
     // binary import/export
     virtual void        WriteIMapObject( SvStream& rOStm ) const override;

@@ -35,7 +35,7 @@ namespace vcl
 
     //= SettingsConfigItem
 
-    class VCL_DLLPUBLIC SettingsConfigItem : public ::utl::ConfigItem
+    class VCL_DLLPUBLIC SettingsConfigItem final : public ::utl::ConfigItem
     {
     private:
         std::unordered_map< OUString, SmallOUStrMap > m_aSettings;

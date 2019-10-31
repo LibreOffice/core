@@ -69,7 +69,7 @@ private:
 };
 
 
-class VCL_DLLPUBLIC LongCurrencyField : public SpinField, public LongCurrencyFormatter
+class VCL_DLLPUBLIC LongCurrencyField final : public SpinField, public LongCurrencyFormatter
 {
     friend void ImplNewLongCurrencyFieldValue(LongCurrencyField*, const BigInt&);
 
@@ -98,7 +98,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC LongCurrencyBox : public ComboBox, public LongCurrencyFormatter
+class VCL_DLLPUBLIC LongCurrencyBox final : public ComboBox, public LongCurrencyFormatter
 {
 public:
                     LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle );

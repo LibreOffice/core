@@ -1521,9 +1521,8 @@ public:
     void set_height_request_by_rows(int nRows);
 };
 
-class VCL_DLLPUBLIC MetricSpinButton
+class VCL_DLLPUBLIC MetricSpinButton final
 {
-protected:
     FieldUnit m_eSrcUnit;
     std::unique_ptr<weld::SpinButton> m_xSpinButton;
     Link<MetricSpinButton&, void> m_aValueChangedHdl;
@@ -1683,9 +1682,8 @@ public:
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 
-class VCL_DLLPUBLIC TimeSpinButton
+class VCL_DLLPUBLIC TimeSpinButton final
 {
-protected:
     TimeFieldFormat const m_eFormat;
     std::unique_ptr<weld::SpinButton> m_xSpinButton;
     Link<TimeSpinButton&, void> m_aValueChangedHdl;

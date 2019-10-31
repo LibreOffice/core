@@ -422,7 +422,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC PatternField : public SpinField, public PatternFormatter
+class VCL_DLLPUBLIC PatternField final : public SpinField, public PatternFormatter
 {
 public:
     explicit                PatternField( vcl::Window* pParent, WinBits nWinStyle );
@@ -521,7 +521,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC CurrencyField : public SpinField, public CurrencyFormatter
+class VCL_DLLPUBLIC CurrencyField final : public SpinField, public CurrencyFormatter
 {
 public:
     CurrencyField( vcl::Window* pParent, WinBits nWinStyle );
@@ -571,13 +571,12 @@ public:
 };
 
 
-class VCL_DLLPUBLIC TimeField : public SpinField, public TimeFormatter
+class VCL_DLLPUBLIC TimeField final : public SpinField, public TimeFormatter
 {
 private:
     tools::Time                    maFirst;
     tools::Time                    maLast;
 
-protected:
     SAL_DLLPRIVATE void     ImplTimeSpinArea( bool bUp );
 
 public:
@@ -604,7 +603,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC PatternBox : public ComboBox, public PatternFormatter
+class VCL_DLLPUBLIC PatternBox final : public ComboBox, public PatternFormatter
 {
 public:
                             PatternBox( vcl::Window* pParent, WinBits nWinStyle );
@@ -666,7 +665,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC CurrencyBox : public ComboBox, public CurrencyFormatter
+class VCL_DLLPUBLIC CurrencyBox final : public ComboBox, public CurrencyFormatter
 {
 public:
     explicit                CurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
@@ -683,7 +682,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC DateBox : public ComboBox, public DateFormatter
+class VCL_DLLPUBLIC DateBox final : public ComboBox, public DateFormatter
 {
 public:
     explicit                DateBox( vcl::Window* pParent, WinBits nWinStyle );
@@ -699,7 +698,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC TimeBox : public ComboBox, public TimeFormatter
+class VCL_DLLPUBLIC TimeBox final : public ComboBox, public TimeFormatter
 {
 public:
     explicit                TimeBox( vcl::Window* pParent, WinBits nWinStyle );

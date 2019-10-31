@@ -31,7 +31,7 @@ namespace weld
 namespace vcl
 {
     struct ImplOldStyleAdaptorData;
-    class VCL_DLLPUBLIC OldStylePrintAdaptor : public PrinterController
+    class VCL_DLLPUBLIC OldStylePrintAdaptor final : public PrinterController
     {
         std::unique_ptr<ImplOldStyleAdaptorData>  mpData;
     public:

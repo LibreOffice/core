@@ -76,7 +76,7 @@ public:
 };
 
 /// Indirect object: something with a unique ID.
-class VCL_DLLPUBLIC PDFObjectElement : public PDFElement
+class VCL_DLLPUBLIC PDFObjectElement final : public PDFElement
 {
     /// The document owning this element.
     PDFDocument& m_rDoc;
@@ -198,7 +198,7 @@ public:
 };
 
 /// Name object: a key string.
-class VCL_DLLPUBLIC PDFNameElement : public PDFElement
+class VCL_DLLPUBLIC PDFNameElement final : public PDFElement
 {
     OString m_aValue;
     /// Offset after the '/' token.
@@ -297,7 +297,7 @@ public:
 };
 
 /// Hex string: in <AABB> form.
-class VCL_DLLPUBLIC PDFHexStringElement : public PDFElement
+class VCL_DLLPUBLIC PDFHexStringElement final : public PDFElement
 {
     OString m_aValue;
 
@@ -307,7 +307,7 @@ public:
 };
 
 /// Literal string: in (asdf) form.
-class VCL_DLLPUBLIC PDFLiteralStringElement : public PDFElement
+class VCL_DLLPUBLIC PDFLiteralStringElement final : public PDFElement
 {
     OString m_aValue;
 

@@ -286,7 +286,7 @@ public:
         AnyWidget& operator=( const AnyWidget& );  // never implemented
     };
 
-    struct PushButtonWidget : public AnyWidget
+    struct PushButtonWidget final : public AnyWidget
     {
         /* If Dest is set to a valid link destination,
            Then pressing the button will act as a goto
@@ -326,7 +326,7 @@ public:
         }
     };
 
-    struct CheckBoxWidget : public AnyWidget
+    struct CheckBoxWidget final : public AnyWidget
     {
         bool                Checked;
 
@@ -341,7 +341,7 @@ public:
         }
     };
 
-    struct RadioButtonWidget : public AnyWidget
+    struct RadioButtonWidget final : public AnyWidget
     {
         bool                Selected;
         sal_Int32           RadioGroup;
@@ -367,7 +367,7 @@ public:
         // in the group
     };
 
-    struct EditWidget : public AnyWidget
+    struct EditWidget final : public AnyWidget
     {
         bool                MultiLine;  // whether multiple lines are allowed
         bool                Password;   // visible echo off
@@ -388,7 +388,7 @@ public:
         }
     };
 
-    struct ListBoxWidget : public AnyWidget
+    struct ListBoxWidget final : public AnyWidget
     {
         bool                            DropDown;
         bool                            MultiSelect;
@@ -411,7 +411,7 @@ public:
     };
 
     // note: PDF only supports dropdown comboboxes
-    struct ComboBoxWidget : public AnyWidget
+    struct ComboBoxWidget final : public AnyWidget
     {
         std::vector<OUString>      Entries;
         // set the current value in AnyWidget::Text
@@ -426,7 +426,7 @@ public:
         }
     };
 
-    struct SignatureWidget: public AnyWidget
+    struct SignatureWidget final : public AnyWidget
     {
         SignatureWidget()
                 : AnyWidget( vcl::PDFWriter::Signature )

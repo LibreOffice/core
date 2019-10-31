@@ -25,7 +25,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/field.hxx>
 
-class VCL_DLLPUBLIC Slider : public Control
+class VCL_DLLPUBLIC Slider final : public Control
 {
 private:
     tools::Rectangle       maChannel1Rect;

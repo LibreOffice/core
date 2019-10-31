@@ -18,7 +18,7 @@ class BitmapEx;
 /** Separable Unsharpen Mask filter is actually a subtracted blurred
     image from the original image.
  */
-class VCL_DLLPUBLIC BitmapSeparableUnsharpenFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapSeparableUnsharpenFilter final : public BitmapFilter
 {
 public:
     BitmapSeparableUnsharpenFilter(double fRadius)

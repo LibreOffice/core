@@ -160,7 +160,7 @@ private:
 
 };
 
-class SAL_WARN_UNUSED VCL_DLLPUBLIC StringErrorInfo : public DynamicErrorInfo
+class SAL_WARN_UNUSED VCL_DLLPUBLIC StringErrorInfo final : public DynamicErrorInfo
 {
 public:
                             StringErrorInfo(ErrCode nUserId,
@@ -174,7 +174,7 @@ private:
 
 };
 
-class SAL_WARN_UNUSED VCL_DLLPUBLIC TwoStringErrorInfo: public DynamicErrorInfo
+class SAL_WARN_UNUSED VCL_DLLPUBLIC TwoStringErrorInfo final : public DynamicErrorInfo
 {
 public:
     TwoStringErrorInfo(ErrCode nUserID, const OUString & rTheArg1,

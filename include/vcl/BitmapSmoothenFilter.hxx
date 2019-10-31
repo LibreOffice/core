@@ -15,7 +15,7 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC BitmapSmoothenFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapSmoothenFilter final : public BitmapFilter
 {
 public:
     BitmapSmoothenFilter(double fRadius)
