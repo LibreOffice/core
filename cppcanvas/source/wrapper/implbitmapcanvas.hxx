@@ -22,7 +22,6 @@
 
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <basegfx/vector/b2dsize.hxx>
 #include <cppcanvas/bitmapcanvas.hxx>
 
 #include "implcanvas.hxx"

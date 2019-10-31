@@ -11,8 +11,9 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/rendering/RenderState.hpp>
 #include <basegfx/vector/b2dsize.hxx>
-#include <canvasgraphichelper.hxx>
+#include <cppcanvas/canvas.hxx>
 
 namespace com
 {

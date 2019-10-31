@@ -21,7 +21,6 @@
 #define INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_TRANSPARENCYGROUPACTION_HXX
 
 #include <cppcanvas/canvas.hxx>
-#include <cppcanvas/renderer.hxx>
 #include <action.hxx>
 
 #include <memory>

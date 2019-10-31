@@ -25,9 +25,6 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/utils/canvastools.hxx>
-
 #include "implpolypolygon.hxx"
 #include <tools.hxx>
 

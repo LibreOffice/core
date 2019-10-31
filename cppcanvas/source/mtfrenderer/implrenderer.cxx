@@ -20,19 +20,13 @@
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
-#include <com/sun/star/rendering/ViewState.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
@@ -49,7 +43,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <canvas/canvastools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/gdimtf.hxx>
@@ -74,10 +67,8 @@
 #include <utility>
 #include <vector>
 #include <algorithm>
-#include <iterator>
 #include <memory>
 #include "mtftools.hxx"
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;
 

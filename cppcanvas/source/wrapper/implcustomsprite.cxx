@@ -18,7 +18,6 @@
  */
 
 
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <osl/diagnose.h>
 
 #include "implcustomsprite.hxx"

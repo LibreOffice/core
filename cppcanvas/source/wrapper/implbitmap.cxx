@@ -21,8 +21,7 @@
 #include "implbitmap.hxx"
 #include "implbitmapcanvas.hxx"
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <canvas/canvastools.hxx>
+#include <osl/diagnose.h>
 
 
 using namespace ::com::sun::star;

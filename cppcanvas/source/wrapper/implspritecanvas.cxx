@@ -19,8 +19,6 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/utils/canvastools.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <com/sun/star/rendering/InterpolationMode.hpp>
 #include <osl/diagnose.h>
 
 #include "implspritecanvas.hxx"

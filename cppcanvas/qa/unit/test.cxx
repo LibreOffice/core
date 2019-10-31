@@ -11,14 +11,8 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <osl/file.hxx>
-#include <osl/process.h>
-#include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/canvastools.hxx>
-
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>

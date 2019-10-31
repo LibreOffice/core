@@ -10,7 +10,6 @@
 #include "uno_mtfrenderer.hxx"
 #include <cppcanvas/vclfactory.hxx>
 #include <comphelper/servicedecl.hxx>
-#include <cppuhelper/factory.hxx>
 #include <o3tl/any.hxx>
 
 using namespace ::com::sun::star;

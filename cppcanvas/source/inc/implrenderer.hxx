@@ -22,9 +22,9 @@
 
 #include <sal/config.h>
 
-#include <basegfx/vector/b2dsize.hxx>
 #include <sal/types.h>
 #include <tools/stream.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/canvas.hxx>
 
@@ -32,12 +32,8 @@
 #include "action.hxx"
 #include "outdevstate.hxx"
 
-#include <com/sun/star/rendering/FontRequest.hpp>
-#include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <osl/diagnose.h>
-#include <osl/endian.h>
 
-#include <map>
 #include <memory>
 #include <vector>
 

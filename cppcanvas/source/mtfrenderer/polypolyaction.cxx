@@ -19,10 +19,8 @@
 
 
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
 
 #include <sal/types.h>
-#include <vcl/canvastools.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>

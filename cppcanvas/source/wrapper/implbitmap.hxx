@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
 
 #include <cppcanvas/bitmap.hxx>
 #include <canvasgraphichelper.hxx>
