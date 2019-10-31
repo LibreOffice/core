@@ -129,6 +129,13 @@ public:
     bool getTextInserted() const;
 };
 
+/// Information about a paragraph to be finished after a field end.
+struct FieldParagraph
+{
+    PropertyMapPtr m_pPropertyMap;
+    bool m_bRemove = false;
+};
+
 /// field stack element
 class FieldContext : public virtual SvRefBase
 {
@@ -154,6 +161,8 @@ class FieldContext : public virtual SvRefBase
     FormControlHelper::Pointer_t m_pFormControlHelper;
     /// (Character) properties of the field itself.
     PropertyMapPtr m_pProperties;
+
+    std::vector<FieldParagraph> m_aParagraphsToFinish;
 
 public:
     explicit FieldContext(css::uno::Reference<css::text::XTextRange> const& xStart);
@@ -202,6 +211,8 @@ public:
     const PropertyMapPtr& getProperties() const { return m_pProperties; }
 
     ::std::vector<OUString> GetCommandParts() const;
+
+    std::vector<FieldParagraph>& GetParagraphsToFinish() { return m_aParagraphsToFinish; }
 };
 
 struct TextAppendContext

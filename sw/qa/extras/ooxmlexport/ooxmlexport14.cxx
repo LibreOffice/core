@@ -56,7 +56,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038b, "tdf125038b.docx")
     uno::Reference<container::XEnumerationAccess> xParagraphAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphAccess->createEnumeration();
     CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
-    xParagraphs->nextElement();
+    uno::Reference<text::XTextRange> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: phone: 1234
+    // - Actual  :
+    // i.e. the the first paragraph was empty and the second paragraph had the content.
+    CPPUNIT_ASSERT_EQUAL(OUString("phone: 1234"), xParagraph->getString());
     CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
     xParagraphs->nextElement();
 

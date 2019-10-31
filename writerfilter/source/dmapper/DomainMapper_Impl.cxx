@@ -1309,6 +1309,17 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 return;
             }
         }
+
+        if (pFieldContext && pFieldContext->IsCommandCompleted())
+        {
+            if (pFieldContext->GetFieldId() == FIELD_IF)
+            {
+                // Conditional text fields can't contain newlines, finish the paragraph later.
+                FieldParagraph aFinish{pPropertyMap, bRemove};
+                pFieldContext->GetParagraphsToFinish().push_back(aFinish);
+                return;
+            }
+        }
     }
 
 #ifdef DBG_UTIL
@@ -5661,10 +5672,22 @@ void DomainMapper_Impl::PopFieldContext()
         }
 
         //TOCs have to include all the imported content
-
     }
+
+    std::vector<FieldParagraph> aParagraphsToFinish;
+    if (pContext)
+    {
+        aParagraphsToFinish = pContext->GetParagraphsToFinish();
+    }
+
     //remove the field context
     m_aFieldStack.pop_back();
+
+    // Finish the paragraph(s) now that the field is closed.
+    for (const auto& rFinish : aParagraphsToFinish)
+    {
+        finishParagraph(rFinish.m_pPropertyMap, rFinish.m_bRemove);
+    }
 }
 
 
