@@ -11,6 +11,7 @@
 
 #include <tools/sk_app/win/WindowContextFactory_win.h>
 #include <tools/sk_app/WindowContext.h>
+#include <win/saldata.hxx>
 
 #include <SkColorFilter.h>
 #include <SkPixelRef.h>
@@ -84,22 +85,40 @@ void WinSkiaSalGraphicsImpl::performFlush()
 bool WinSkiaSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const& rControlCacheKey,
                                                           int nX, int nY)
 {
-    (void)rControlCacheKey;
-    (void)nX;
-    (void)nY;
-    return false; // TODO
+    static bool gbCacheEnabled = !getenv("SAL_WITHOUT_WIDGET_CACHE");
+    if (!gbCacheEnabled)
+        return false;
+
+    auto& controlsCache = SkiaControlsCache::get();
+    SkiaControlCacheType::const_iterator iterator = controlsCache.find(rControlCacheKey);
+    if (iterator == controlsCache.end())
+        return false;
+
+    preDraw();
+    mSurface->getCanvas()->drawBitmap(iterator->second, nX, nY);
+    postDraw();
+    return true;
 }
 
 bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack,
                                                          int nX, int nY,
                                                          ControlCacheKey& aControlCacheKey)
 {
-    (void)rWhite;
+    assert(dynamic_cast<SkiaCompatibleDC*>(&rWhite));
+    assert(dynamic_cast<SkiaCompatibleDC*>(&rBlack));
+
+    SkBitmap bitmap = static_cast<SkiaCompatibleDC&>(rWhite).getAsBitmap();
+    preDraw();
+    mSurface->getCanvas()->drawBitmap(bitmap, nX, nY);
+    postDraw();
+    // TODO what is the point of the second texture?
     (void)rBlack;
-    (void)nX;
-    (void)nY;
-    (void)aControlCacheKey;
-    return false; // TODO
+
+    if (!aControlCacheKey.canCacheControl())
+        return true;
+    SkiaControlCachePair pair(aControlCacheKey, std::move(bitmap));
+    SkiaControlsCache::get().insert(std::move(pair));
+    return true;
 }
 
 void WinSkiaSalGraphicsImpl::PreDrawText() { preDraw(); }
@@ -146,6 +165,12 @@ SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int wid
 std::unique_ptr<CompatibleDC::Texture> SkiaCompatibleDC::getAsMaskTexture()
 {
     auto ret = std::make_unique<SkiaCompatibleDC::Texture>();
+    ret->bitmap = getAsMaskBitmap();
+    return ret;
+}
+
+SkBitmap SkiaCompatibleDC::getAsMaskBitmap()
+{
     // mpData is in the BGRA format, with A unused (and set to 0), and RGB are grey,
     // so convert it to Skia format, then to 8bit and finally use as alpha mask
     SkBitmap tmpBitmap;
@@ -171,8 +196,7 @@ std::unique_ptr<CompatibleDC::Texture> SkiaCompatibleDC::getAsMaskTexture()
     alpha.setInfo(bitmap8.info().makeColorType(kAlpha_8_SkColorType), bitmap8.rowBytes());
     alpha.setPixelRef(sk_ref_sp(bitmap8.pixelRef()), bitmap8.pixelRefOrigin().x(),
                       bitmap8.pixelRefOrigin().y());
-    ret->bitmap = alpha;
-    return ret;
+    return alpha;
 }
 
 bool SkiaCompatibleDC::copyToTexture(CompatibleDC::Texture& aTexture)
@@ -197,6 +221,45 @@ bool SkiaCompatibleDC::copyToTexture(CompatibleDC::Texture& aTexture)
                           SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
                           SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight), &paint);
     return true;
+}
+
+SkBitmap SkiaCompatibleDC::getAsBitmap()
+{
+    SkBitmap tmpBitmap;
+    if (!tmpBitmap.installPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
+                                                   kBGRA_8888_SkColorType, kUnpremul_SkAlphaType),
+                                 mpData, maRects.mnSrcWidth * 4))
+        abort();
+    SkBitmap bitmap;
+    if (!bitmap.tryAllocPixels(tmpBitmap.info()))
+        abort();
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+    SkCanvas canvas(bitmap);
+    // The data we got is upside-down.
+    SkMatrix matrix;
+    matrix.preTranslate(0, maRects.mnSrcHeight);
+    matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
+    canvas.concat(matrix);
+    canvas.drawBitmapRect(tmpBitmap,
+                          SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
+                          SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight), &paint);
+    return bitmap;
+}
+
+SkiaControlsCache::SkiaControlsCache()
+    : cache(200)
+{
+}
+
+SkiaControlCacheType& SkiaControlsCache::get()
+{
+    SalData* data = GetSalData();
+    if (!data->m_pSkiaControlsCache)
+    {
+        data->m_pSkiaControlsCache.reset(new SkiaControlsCache);
+    }
+    return data->m_pSkiaControlsCache->cache;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

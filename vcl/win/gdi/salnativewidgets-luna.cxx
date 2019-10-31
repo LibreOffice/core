@@ -1300,19 +1300,19 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     }
     else
     {
-        // We can do OpenGL
-        OpenGLCompatibleDC aBlackDC(*this, cacheRect.Left(), cacheRect.Top(), cacheRect.GetWidth()+1, cacheRect.GetHeight()+1);
-        SetTextAlign(aBlackDC.getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
-        aBlackDC.fill(RGB(0, 0, 0));
+        // We can do OpenGL/Skia
+        std::unique_ptr<CompatibleDC> aBlackDC(CompatibleDC::create(*this, cacheRect.Left(), cacheRect.Top(), cacheRect.GetWidth()+1, cacheRect.GetHeight()+1));
+        SetTextAlign(aBlackDC->getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
+        aBlackDC->fill(RGB(0, 0, 0));
 
-        OpenGLCompatibleDC aWhiteDC(*this, cacheRect.Left(), cacheRect.Top(), cacheRect.GetWidth()+1, cacheRect.GetHeight()+1);
-        SetTextAlign(aWhiteDC.getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
-        aWhiteDC.fill(RGB(0xff, 0xff, 0xff));
+        std::unique_ptr<CompatibleDC> aWhiteDC(CompatibleDC::create(*this, cacheRect.Left(), cacheRect.Top(), cacheRect.GetWidth()+1, cacheRect.GetHeight()+1));
+        SetTextAlign(aWhiteDC->getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
+        aWhiteDC->fill(RGB(0xff, 0xff, 0xff));
 
-        if (ImplDrawNativeControl(aBlackDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr) &&
-            ImplDrawNativeControl(aWhiteDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr))
+        if (ImplDrawNativeControl(aBlackDC->getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr) &&
+            ImplDrawNativeControl(aWhiteDC->getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr))
         {
-            bOk = pImpl->RenderAndCacheNativeControl(aWhiteDC, aBlackDC, cacheRect.Left(), cacheRect.Top(), aControlCacheKey);
+            bOk = pImpl->RenderAndCacheNativeControl(*aWhiteDC, *aBlackDC, cacheRect.Left(), cacheRect.Top(), aControlCacheKey);
         }
     }
 

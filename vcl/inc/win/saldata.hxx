@@ -42,7 +42,8 @@ struct GlobalWinGlyphCache;
 struct HDCCache;
 struct TempFontItem;
 class TextOutRenderer;
-class TheTextureCache;
+class OpenGLControlsCache;
+class SkiaControlsCache;
 
 #define MAX_STOCKPEN            4
 #define MAX_STOCKBRUSH          4
@@ -123,7 +124,8 @@ public:
     // tdf#107205 need 2 instances because D2DWrite can't rotate text
     std::unique_ptr<TextOutRenderer> m_pExTextOutRenderer;
     std::unique_ptr<GlobalWinGlyphCache> m_pGlobalWinGlyphCache;
-    std::unique_ptr<TheTextureCache> m_pTextureCache;
+    std::unique_ptr<OpenGLControlsCache> m_pOpenGLControlsCache;
+    std::unique_ptr<SkiaControlsCache> m_pSkiaControlsCache;
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
