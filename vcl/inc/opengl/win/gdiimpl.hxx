@@ -79,16 +79,16 @@ public:
 
 };
 
-typedef std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> ControlCachePair;
-typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
+typedef std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> OpenGLControlCachePair;
+typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> OpenGLControlCacheType;
 
-class TheTextureCache {
-    ControlCacheType cache;
+class OpenGLControlsCache {
+    OpenGLControlCacheType cache;
 
-    TheTextureCache();
+    OpenGLControlsCache();
 
 public:
-    static ControlCacheType & get();
+    static OpenGLControlCacheType & get();
 };
 
 #endif
