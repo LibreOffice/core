@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/outdev.hxx>
 
 #include <memory>
@@ -31,18 +32,6 @@ class ImplImage;
 
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
-
-namespace vcl
-{
-    enum class ImageType
-    {
-        Size16,
-        Size26,
-        Size32,
-        Small = Size16,
-        LAST = Size32,
-    };
-}
 
 #define IMAGELIST_IMAGE_NOTFOUND (sal_uInt16(0xFFFF))
 

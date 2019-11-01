@@ -1025,6 +1025,36 @@ public:
         m_xToolBox->InsertSeparator(nInsertPos, 5);
     }
 
+    virtual int get_n_items() const override
+    {
+        return m_xToolBox->GetItemCount();
+    }
+
+    virtual OString get_item_ident(int nIndex) const override
+    {
+        return m_xToolBox->GetItemCommand(m_xToolBox->GetItemId(nIndex)).toUtf8();
+    }
+
+    virtual void set_item_label(int nIndex, const OUString& rLabel) override
+    {
+        m_xToolBox->SetItemText(m_xToolBox->GetItemId(nIndex), rLabel);
+    }
+
+    virtual void set_item_icon(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
+    {
+        m_xToolBox->SetItemImage(m_xToolBox->GetItemId(nIndex), Image(rIcon));
+    }
+
+    virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) override
+    {
+        m_xToolBox->SetQuickHelpText(m_xToolBox->GetItemId(nIndex), rTip);
+    }
+
+    virtual vcl::ImageType get_icon_size() const override
+    {
+        return m_xToolBox->GetImageSize();
+    }
+
     virtual ~SalInstanceToolbar() override
     {
         m_xToolBox->SetDropdownClickHdl(Link<ToolBox*, void>());

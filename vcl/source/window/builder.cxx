@@ -3696,11 +3696,14 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
         {
             name = reader.getAttributeValue(false);
             sID = OString(name.begin, name.length);
-            sal_Int32 nDelim = sID.indexOf(':');
-            if (nDelim != -1)
+            if (m_bLegacy)
             {
-                sCustomProperty = OUString::fromUtf8(sID.copy(nDelim+1));
-                sID = sID.copy(0, nDelim);
+                sal_Int32 nDelim = sID.indexOf(':');
+                if (nDelim != -1)
+                {
+                    sCustomProperty = OUString::fromUtf8(sID.copy(nDelim+1));
+                    sID = sID.copy(0, nDelim);
+                }
             }
         }
     }
