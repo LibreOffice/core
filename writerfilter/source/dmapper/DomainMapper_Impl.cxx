@@ -3653,7 +3653,11 @@ void DomainMapper_Impl::handleFieldSet
     // remove surrounding "" if exists
     if( sHint.getLength() >= 2 && sHint.startsWith("\"") )
     {
-        sHint = sHint.trim().copy(1, sHint.getLength() - 2);
+        OUString tmp = sHint.trim();
+        if (tmp.endsWith("\""))
+        {
+            sHint = tmp.copy(1, tmp.getLength() - 2);
+        }
     }
 
     // determine field master name
