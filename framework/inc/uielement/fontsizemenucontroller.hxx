@@ -21,19 +21,13 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_FONTSIZEMENUCONTROLLER_HXX
 
 #include <macros/xserviceinfo.hxx>
-#include <stdtypes.h>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 
 #include <svtools/popupmenucontrollerbase.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
-#include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 
 #include <memory>

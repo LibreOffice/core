@@ -23,34 +23,26 @@
 /** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
                with solaris headers ...
 */
+#include <unordered_map>
 #include <vector>
-
-#include <stdtypes.h>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/timer.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <framework/addonsoptions.hxx>

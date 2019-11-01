@@ -20,6 +20,7 @@
 #include <memory>
 #include <config_feature_desktop.h>
 
+#include <properties.h>
 #include <services/layoutmanager.hxx>
 #include "helpers.hxx"
 

@@ -27,6 +27,8 @@
 
 #include <comphelper/sequence.hxx>
 
+#include <unordered_map>
+
 namespace framework{
 
 DispatchInformationProvider::DispatchInformationProvider(const css::uno::Reference< css::uno::XComponentContext >& xContext ,

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <utility>
+#include <unordered_map>
 
 #include <properties.h>
 #include <stdtypes.h>

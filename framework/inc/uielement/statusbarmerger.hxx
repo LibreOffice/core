@@ -20,8 +20,9 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMERGER_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
-#include <uielement/statusbar.hxx>
+#include <vcl/status.hxx>
 
 namespace framework
 {

@@ -20,7 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_COMMANDINFO_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_COMMANDINFO_HXX
 
-#include <stdtypes.h>
+#include <rtl/ustring.hxx>
+
+#include <unordered_map>
+#include <vector>
 
 namespace framework
 {
