@@ -84,8 +84,8 @@ public:
                 short nChannelGPercent, short nChannelBPercent, double fGamma = 1.0,
                 bool bInvert = false);
 
-    friend VCL_DLLPUBLIC SvStream& ReadAnimation(SvStream& rIStream, Animation& rAnimation);
-    friend VCL_DLLPUBLIC SvStream& WriteAnimation(SvStream& rOStream, const Animation& rAnimation);
+    friend SvStream& ReadAnimation(SvStream& rIStream, Animation& rAnimation);
+    friend SvStream& WriteAnimation(SvStream& rOStream, const Animation& rAnimation);
 
 public:
     SAL_DLLPRIVATE static void ImplIncAnimCount() { mnAnimCount++; }

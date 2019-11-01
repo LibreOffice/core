@@ -937,7 +937,7 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
     return eReadState;
 }
 
-VCL_DLLPUBLIC bool IsGIFAnimated(SvStream & rStm)
+bool IsGIFAnimated(SvStream & rStm)
 {
     GIFReader aReader(rStm);
 

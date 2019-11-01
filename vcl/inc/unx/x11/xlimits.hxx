@@ -13,7 +13,7 @@
 #include <X11/Xlib.h>
 #include <vclpluginapi.h>
 
-VCLPLUG_GEN_PUBLIC Pixmap limitXCreatePixmap(Display *display, Drawable d, unsigned int width, unsigned int height, unsigned int depth);
+Pixmap limitXCreatePixmap(Display *display, Drawable d, unsigned int width, unsigned int height, unsigned int depth);
 
 #endif // INCLUDED_VCL_INC_UNX_X11_XLIMITS_HXX
 

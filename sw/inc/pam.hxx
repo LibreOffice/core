@@ -125,12 +125,12 @@ SW_DLLPUBLIC extern SwMoveFnCollection const & fnMoveBackward;
 
 using SwGoInDoc = auto (*)(SwPaM& rPam, SwMoveFnCollection const & fnMove) -> bool;
 SW_DLLPUBLIC bool GoInDoc( SwPaM&, SwMoveFnCollection const &);
-SW_DLLPUBLIC bool GoInSection( SwPaM&, SwMoveFnCollection const &);
+bool GoInSection( SwPaM&, SwMoveFnCollection const &);
 SW_DLLPUBLIC bool GoInNode( SwPaM&, SwMoveFnCollection const &);
 SW_DLLPUBLIC bool GoInContent( SwPaM&, SwMoveFnCollection const &);
-SW_DLLPUBLIC bool GoInContentCells( SwPaM&, SwMoveFnCollection const &);
-SW_DLLPUBLIC bool GoInContentSkipHidden( SwPaM&, SwMoveFnCollection const &);
-SW_DLLPUBLIC bool GoInContentCellsSkipHidden( SwPaM&, SwMoveFnCollection const &);
+bool GoInContentCells( SwPaM&, SwMoveFnCollection const &);
+bool GoInContentSkipHidden( SwPaM&, SwMoveFnCollection const &);
+bool GoInContentCellsSkipHidden( SwPaM&, SwMoveFnCollection const &);
 
 /// PaM is Point and Mark: a selection of the document model.
 class SAL_WARN_UNUSED SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>

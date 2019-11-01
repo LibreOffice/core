@@ -37,7 +37,7 @@ TOOLS_DLLPUBLIC rtl_TextEncoding GetExtendedTextEncoding( rtl_TextEncoding eEnco
 /// if the given encoding is an multi-byte encoding (which allows more than
 /// one byte per char, e.g. UTF-8 or Shift-JIS), a one-byte encoding
 /// is returned (normally windows-1252).
-TOOLS_DLLPUBLIC rtl_TextEncoding GetOneByteTextEncoding( rtl_TextEncoding eEncoding );
+rtl_TextEncoding GetOneByteTextEncoding( rtl_TextEncoding eEncoding );
 
 TOOLS_DLLPUBLIC rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding );
 TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding );

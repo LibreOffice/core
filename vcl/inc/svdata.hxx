@@ -378,8 +378,8 @@ css::uno::Reference<css::i18n::XCharacterClassification> const& ImplGetCharClass
 void        ImplDeInitSVData();
 VCL_PLUGIN_PUBLIC basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager();
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow();
-VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultContextWindow();
-VCL_PLUGIN_PUBLIC const std::locale& ImplGetResLocale();
+vcl::Window* ImplGetDefaultContextWindow();
+const std::locale& ImplGetResLocale();
 VCL_PLUGIN_PUBLIC OUString VclResId(const char* pId);
 DockingManager*     ImplGetDockingManager();
 BlendFrameCache*    ImplGetBlendFrameCache();
@@ -387,7 +387,7 @@ BlendFrameCache*    ImplGetBlendFrameCache();
 VCL_DLLPUBLIC bool        ImplCallPreNotify( NotifyEvent& rEvt );
 
 VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData();
-VCL_PLUGIN_PUBLIC void ImplHideSplash();
+void ImplHideSplash();
 
 #ifdef _WIN32
 bool ImplInitAccessBridge();

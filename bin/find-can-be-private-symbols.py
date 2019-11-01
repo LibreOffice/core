@@ -13,7 +13,7 @@ import re
 exported_symbols = set()
 imported_symbols = set()
 
-subprocess_find = subprocess.Popen("find ./instdir -name *.so", stdout=subprocess.PIPE, shell=True)
+subprocess_find = subprocess.Popen("find ./instdir -name *.so && find ./workdir/LinkTarget/CppunitTest -name *.so", stdout=subprocess.PIPE, shell=True)
 with subprocess_find.stdout as txt:
     for line in txt:
         sharedlib = line.strip()
@@ -43,7 +43,7 @@ with subprocess_find.stdout as txt:
                 if len(tokens) < 7 or not(tokens[7].startswith("*UND*")): continue
                 sym = tokens[len(tokens)-1]
                 imported_symbols.add(sym)
-
+subprocess_find.terminate()
 
 # look for imported symbols in executables
 subprocess_find = subprocess.Popen("find ./instdir -name *.bin", stdout=subprocess.PIPE, shell=True)
@@ -59,12 +59,120 @@ with subprocess_find.stdout as txt:
                 line2 = line2.strip()
                 sym = line2.split(" ")[1]
                 imported_symbols.add(sym)
+subprocess_find.terminate()
 
 diff = exported_symbols - imported_symbols
 print("exported = " + str(len(exported_symbols)))
 print("imported = " + str(len(imported_symbols)))
 print("diff     = " + str(len(diff)))
-# todo process these with c++filt
-#for sym in diff:
-#    if "Sd" in sym:
-#        print sym
+
+# standalone functions that are exported but not imported
+unused_function_exports = set()
+classes_with_exported_symbols = set()
+classes_with_imported_symbols = set()
+
+for sym in exported_symbols:
+    filtered_sym = subprocess.check_output(["c++filt", sym]).strip()
+    if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
+    i = filtered_sym.find("(")
+    i = filtered_sym.rfind("::", 0, i)
+    if i != -1:
+        classname = filtered_sym[:i]
+        func = filtered_sym[i+2:]
+        # find classes where all of the exported symbols are not imported
+        classes_with_exported_symbols.add(classname)
+        if sym in imported_symbols: classes_with_imported_symbols.add(classname)
+    else:
+        package = ""
+        func = filtered_sym
+        # find standalone functions which are exported but not imported
+        if not(sym in imported_symbols): unused_function_exports.add(func)
+
+with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
+    for sym in sorted(unused_function_exports):
+        # Filter out most of the noise.
+        # No idea where these are coming from, but not our code.
+        if sym.startswith("CERT_"): continue
+        elif sym.startswith("DER_"): continue
+        elif sym.startswith("FORM_"): continue
+        elif sym.startswith("FPDF"): continue
+        elif sym.startswith("HASH_"): continue
+        elif sym.startswith("Hunspell_"): continue
+        elif sym.startswith("LL_"): continue
+        elif sym.startswith("LP_"): continue
+        elif sym.startswith("LU"): continue
+        elif sym.startswith("MIP"): continue
+        elif sym.startswith("MPS"): continue
+        elif sym.startswith("NSS"): continue
+        elif sym.startswith("NSC_"): continue
+        elif sym.startswith("PK11"): continue
+        elif sym.startswith("PL_"): continue
+        elif sym.startswith("PQ"): continue
+        elif sym.startswith("PBE_"): continue
+        elif sym.startswith("PORT_"): continue
+        elif sym.startswith("PRP_"): continue
+        elif sym.startswith("PR_"): continue
+        elif sym.startswith("PT_"): continue
+        elif sym.startswith("QS_"): continue
+        elif sym.startswith("REPORT_"): continue
+        elif sym.startswith("RSA_"): continue
+        elif sym.startswith("SEC"): continue
+        elif sym.startswith("SGN"): continue
+        elif sym.startswith("SOS"): continue
+        elif sym.startswith("SSL_"): continue
+        elif sym.startswith("VFY_"): continue
+        elif sym.startswith("_PR_"): continue
+        elif sym.startswith("_"): continue
+        elif sym.startswith("ber_"): continue
+        elif sym.startswith("bfp_"): continue
+        elif sym.startswith("ldap_"): continue
+        elif sym.startswith("ne_"): continue
+        elif sym.startswith("opj_"): continue
+        elif sym.startswith("pg_"): continue
+        elif sym.startswith("pq"): continue
+        elif sym.startswith("presolve_"): continue
+        elif sym.startswith("sqlite3_"): continue
+        # dynamically loaded
+        elif sym.endswith("get_implementation"): continue
+        elif sym.endswith("component_getFactory"): continue
+        elif sym == "CreateDialogFactory": continue
+        elif sym == "CreateUnoWrapper": continue
+        elif sym == "CreateWindow": continue
+        elif sym == "ExportDOC": continue
+        elif sym == "ExportPPT": continue
+        elif sym == "ExportRTF": continue
+        elif sym == "GetSaveWarningOfMSVBAStorage_ww8": continue
+        elif sym == "GetSpecialCharsForEdit": continue
+        elif sym.startswith("Import"): continue
+        elif sym.startswith("Java_com_sun_star_"): continue
+        elif sym.startswith("TestImport"): continue
+        elif sym.startswith("getAllCalendars_"): continue
+        elif sym.startswith("getAllCurrencies_"): continue
+        elif sym.startswith("getAllFormats"): continue
+        elif sym.startswith("getBreakIteratorRules_"): continue
+        elif sym.startswith("getCollationOptions_"): continue
+        elif sym.startswith("getCollatorImplementation_"): continue
+        elif sym.startswith("getContinuousNumberingLevels_"): continue
+        elif sym.startswith("getDateAcceptancePatterns_"): continue
+        elif sym.startswith("getForbiddenCharacters_"): continue
+        elif sym.startswith("getIndexAlgorithm_"): continue
+        elif sym.startswith("getLCInfo_"): continue
+        elif sym.startswith("getLocaleItem_"): continue
+        elif sym.startswith("getOutlineNumberingLevels_"): continue
+        elif sym.startswith("getReservedWords_"): continue
+        elif sym.startswith("getSTC_"): continue
+        elif sym.startswith("getSearchOptions_"): continue
+        elif sym.startswith("getTransliterations_"): continue
+        elif sym.startswith("getUnicodeScripts_"): continue
+        elif sym.startswith("lok_"): continue
+        # UDK API
+        elif sym.startswith("osl_"): continue
+        elif sym.startswith("rtl_"): continue
+        elif sym.startswith("typelib_"): continue
+        elif sym.startswith("typereg_"): continue
+        elif sym.startswith("uno_"): continue
+        f.write(sym + "\n")
+
+with open("bin/find-can-be-private-symbols.classes.results", "wt") as f:
+    for sym in sorted(classes_with_exported_symbols - classes_with_imported_symbols):
+        f.write(sym + "\n")

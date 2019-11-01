@@ -104,8 +104,8 @@ public:
                !IsBitmap() && !IsGradient() && !IsRect();
     }
 
-    friend VCL_DLLPUBLIC SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper );
-    friend VCL_DLLPUBLIC SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper );
+    friend SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper );
+    friend SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper );
 };
 
 #endif // INCLUDED_VCL_WALL_HXX

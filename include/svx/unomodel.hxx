@@ -96,10 +96,10 @@ public:
 };
 
 SVX_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const css::uno::Reference<css::io::XOutputStream>& xOut );
-SVX_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const css::uno::Reference<css::io::XOutputStream>& xOut, const css::uno::Reference< css::lang::XComponent >& xComponent );
+extern bool SvxDrawingLayerExport( SdrModel* pModel, const css::uno::Reference<css::io::XOutputStream>& xOut, const css::uno::Reference< css::lang::XComponent >& xComponent );
 SVX_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const css::uno::Reference<css::io::XOutputStream>& xOut, const css::uno::Reference< css::lang::XComponent >& xComponent, const char* pExportService  );
 SVX_DLLPUBLIC extern bool SvxDrawingLayerImport( SdrModel* pModel, const css::uno::Reference<css::io::XInputStream>& xInputStream );
-SVX_DLLPUBLIC extern bool SvxDrawingLayerImport( SdrModel* pModel, const css::uno::Reference<css::io::XInputStream>& xInputStream, const css::uno::Reference< css::lang::XComponent >& xComponent  );
+extern bool SvxDrawingLayerImport( SdrModel* pModel, const css::uno::Reference<css::io::XInputStream>& xInputStream, const css::uno::Reference< css::lang::XComponent >& xComponent  );
 SVX_DLLPUBLIC extern bool SvxDrawingLayerImport( SdrModel* pModel, const css::uno::Reference<css::io::XInputStream>& xInputStream, const css::uno::Reference< css::lang::XComponent >& xComponent, const char* pImportService );
 
 #endif
