@@ -1,0 +1,36 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_VCL_WELDUTILS_HXX
+#define INCLUDED_VCL_WELDUTILS_HXX
+
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <tools/link.hxx>
+#include <vcl/dllapi.h>
+
+namespace weld
+{
+class Toolbar;
+
+class VCL_DLLPUBLIC ToolbarUnoDispatcher
+{
+private:
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    DECL_LINK(SelectHdl, const OString&, void);
+
+public:
+    // fill in the label and icons for actions and dispatch the action on item click
+    ToolbarUnoDispatcher(Toolbar& rToolbar, const css::uno::Reference<css::frame::XFrame>& rFrame);
+};
+}
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

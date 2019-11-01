@@ -6751,8 +6751,7 @@ public:
         GtkWidget* pImage = nullptr;
         if (pIconName)
         {
-            GdkPixbuf* pixbuf = load_icon_by_name(*pIconName);
-            if (!pixbuf)
+            if (GdkPixbuf* pixbuf = load_icon_by_name(*pIconName))
             {
                 pImage = gtk_image_new_from_pixbuf(pixbuf);
                 g_object_unref(pixbuf);
@@ -6796,6 +6795,34 @@ public:
         clear_extras();
     }
 };
+
+namespace
+{
+    vcl::ImageType GtkToVcl(GtkIconSize eSize)
+    {
+        vcl::ImageType eRet;
+        switch (eSize)
+        {
+            case GTK_ICON_SIZE_MENU:
+            case GTK_ICON_SIZE_SMALL_TOOLBAR:
+            case GTK_ICON_SIZE_BUTTON:
+                eRet = vcl::ImageType::Size16;
+                break;
+            case GTK_ICON_SIZE_LARGE_TOOLBAR:
+                eRet = vcl::ImageType::Size26;
+                break;
+            case GTK_ICON_SIZE_DND:
+            case GTK_ICON_SIZE_DIALOG:
+                eRet = vcl::ImageType::Size32;
+                break;
+            default:
+            case GTK_ICON_SIZE_INVALID:
+                eRet = vcl::ImageType::Small;
+                break;
+        }
+        return eRet;
+    }
+}
 
 void GtkInstanceMenuButton::set_menu(weld::Menu* pMenu)
 {
@@ -6939,6 +6966,49 @@ public:
     virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
     {
         m_aMenuButtonMap[rIdent]->set_menu(pMenu);
+    }
+
+    virtual int get_n_items() const override
+    {
+        return gtk_toolbar_get_n_items(m_pToolbar);
+    }
+
+    virtual OString get_item_ident(int nIndex) const override
+    {
+        GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
+        return OString(pStr, pStr ? strlen(pStr) : 0);
+    }
+
+    virtual void set_item_label(int nIndex, const OUString& rLabel) override
+    {
+        GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
+    }
+
+    virtual void set_item_icon(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
+    {
+        GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+
+        GtkWidget* pImage = nullptr;
+        if (GdkPixbuf* pixbuf = getPixbuf(rIcon))
+        {
+            pImage = gtk_image_new_from_pixbuf(pixbuf);
+            g_object_unref(pixbuf);
+        }
+
+        gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pItem), pImage);
+    }
+
+    virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) override
+    {
+        GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+        gtk_widget_set_tooltip_text(GTK_WIDGET(pItem), OUStringToOString(rTip, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual vcl::ImageType get_icon_size() const override
+    {
+        return GtkToVcl(gtk_toolbar_get_icon_size(m_pToolbar));
     }
 
     virtual ~GtkInstanceToolbar() override
