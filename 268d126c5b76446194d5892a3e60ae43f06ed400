@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_136d9531",
+        "filename": "vcl/source/gdi/impgraph.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2019-11-01T13:08:26Z",
+      "side": 1,
+      "message": "These are the two fields that would have been initialised in this case before my recent commit ef3dabd1f814d1b005efc5d5144978c1d26a8e73\n\nI do worry that maSwapInfo.maSizePixel and .maPrefSize can be left uninitialised too, but that is an older problem.\n\nReally if we reach here it means that the graphic file format and size was not detected at all, so I wonder if we should abandon our effort to work with an unloaded graphic if we get to this point.",
+      "revId": "268d126c5b76446194d5892a3e60ae43f06ed400",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
