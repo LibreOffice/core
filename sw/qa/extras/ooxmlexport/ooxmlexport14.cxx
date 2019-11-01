@@ -67,6 +67,27 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("phone: \t1234567890"), aActual);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf124986, "tdf124986.docx")
+{
+    // Load a document with SET fields, where the SET fields contain leading/trailing quotation marks and spaces.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    while (xFields->hasMoreElements())
+    {
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xFields->nextElement(), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xServiceInfo, uno::UNO_QUERY);
+        OUString aValue;
+        if (xServiceInfo->supportsService("com.sun.star.text.TextField.SetExpression"))
+        {
+            xPropertySet->getPropertyValue("Content") >>= aValue;
+            CPPUNIT_ASSERT_EQUAL(OUString("demo"), aValue);
+        }
+    }
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf125038b, "tdf125038b.docx")
 {
     // Load a document with an IF field, where the IF field command contains a paragraph break.
