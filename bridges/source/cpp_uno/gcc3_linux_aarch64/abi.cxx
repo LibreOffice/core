@@ -39,6 +39,7 @@
 #include <uno/mapping.h>
 
 #include "abi.hxx"
+#include "../gcc3_linux_arm/share.hxx"
 #include <osl/mutex.hxx>
 #include <unordered_map>
 
