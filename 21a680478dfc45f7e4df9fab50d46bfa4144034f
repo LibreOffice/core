@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_33aa11d2",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-01T05:45:55Z",
+      "side": 1,
+      "message": "Having a list like this is more of a last resort for exceptions. It should be safe to consider every MemberId item potentially a default - just means a bit more processing time.",
+      "range": {
+        "startLine": 992,
+        "startChar": 4,
+        "endLine": 993,
+        "endChar": 84
+      },
+      "revId": "21a680478dfc45f7e4df9fab50d46bfa4144034f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
