@@ -280,11 +280,13 @@ long ScPositionHelper::computePosition(index_type nIndex, const std::function<lo
     return nTotalPixels;
 }
 
-ScBoundsProvider::ScBoundsProvider(ScDocument* pD, SCTAB nT, bool bColHeader)
-    : pDoc(pD)
+ScBoundsProvider::ScBoundsProvider(const ScViewData &rView, SCTAB nT, bool bColHeader)
+    : pDoc(rView.GetDocument())
     , nTab(nT)
     , bColumnHeader(bColHeader)
-    , MAX_INDEX(bColHeader ? pD->MaxCol() : MAXTILEDROW)
+    , MAX_INDEX(bColHeader ? pDoc->MaxCol() : MAXTILEDROW)
+    , mfPPTX(rView.GetPPTX())
+    , mfPPTY(rView.GetPPTY())
     , nFirstIndex(-1)
     , nSecondIndex(-1)
     , nFirstPositionPx(-1)
@@ -322,7 +324,7 @@ void ScBoundsProvider::GetEndIndexAndPosition(SCROW& nIndex, long& nPosition) co
 long ScBoundsProvider::GetSize(index_type nIndex) const
 {
     const sal_uInt16 nSize = bColumnHeader ? pDoc->GetColWidth(nIndex, nTab) : pDoc->GetRowHeight(nIndex, nTab);
-    return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+    return ScViewData::ToPixel(nSize, bColumnHeader ? mfPPTX : mfPPTY);
 }
 
 void ScBoundsProvider::GetIndexAndPos(index_type nNearestIndex, long nNearestPosition,
@@ -1372,10 +1374,9 @@ void ScViewData::SetMaxTiledCol( SCCOL nNewMaxCol )
         nNewMaxCol = pDoc->MaxCol();
 
     const SCTAB nTab = GetTabNo();
-    ScDocument* pThisDoc = pDoc;
-    auto GetColWidthPx = [pThisDoc, nTab](SCCOL nCol) {
-        const sal_uInt16 nSize = pThisDoc->GetColWidth(nCol, nTab);
-        const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+    auto GetColWidthPx = [this, nTab](SCCOL nCol) {
+        const sal_uInt16 nSize = this->pDoc->GetColWidth(nCol, nTab);
+        const long nSizePx = ScViewData::ToPixel(nSize, nPPTX);
         return nSizePx;
     };
 
@@ -1398,10 +1399,9 @@ void ScViewData::SetMaxTiledRow( SCROW nNewMaxRow )
         nNewMaxRow = MAXTILEDROW;
 
     const SCTAB nTab = GetTabNo();
-    ScDocument* pThisDoc = pDoc;
-    auto GetRowHeightPx = [pThisDoc, nTab](SCROW nRow) {
-        const sal_uInt16 nSize = pThisDoc->GetRowHeight(nRow, nTab);
-        const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+    auto GetRowHeightPx = [this, nTab](SCROW nRow) {
+        const sal_uInt16 nSize = this->pDoc->GetRowHeight(nRow, nTab);
+        const long nSizePx = ScViewData::ToPixel(nSize, nPPTY);
         return nSizePx;
     };
 
