@@ -161,13 +161,15 @@ class ScBoundsProvider
     const bool bColumnHeader;
     const index_type MAX_INDEX;
 
+    double mfPPTX;
+    double mfPPTY;
     index_type nFirstIndex;
     index_type nSecondIndex;
     long nFirstPositionPx;
     long nSecondPositionPx;
 
 public:
-    ScBoundsProvider(ScDocument* pD, SCTAB nT, bool bColumnHeader);
+    ScBoundsProvider(const ScViewData &rView, SCTAB nT, bool bColumnHeader);
 
     void GetStartIndexAndPosition(SCCOL& nIndex, long& nPosition) const;
     void GetEndIndexAndPosition(SCCOL& nIndex, long& nPosition) const;
