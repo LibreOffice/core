@@ -25,8 +25,6 @@
 
 #include <salgdi.hxx>
 
-#include <cassert>
-
 namespace vcl
 {
 bool B2DPolygonDrawable::DrawCommand(OutputDevice* pRenderContext) const
