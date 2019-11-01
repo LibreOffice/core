@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_16dd836f",
+        "filename": "framework/source/uielement/FixedImageToolbarController.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-11-01T19:27:11Z",
+      "side": 1,
+      "message": "given that this is no-op, do we need the mutex here?",
+      "revId": "cb9c8f0597b9efdfe8fc3290f3153f06f1780b95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f6e1e72b",
+        "filename": "framework/source/uielement/FixedImageToolbarController.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-11-01T19:27:11Z",
+      "side": 1,
+      "message": "Does this work? Isn\u0027t there some invalidate() or some other kind of refresh needed?",
+      "revId": "cb9c8f0597b9efdfe8fc3290f3153f06f1780b95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
