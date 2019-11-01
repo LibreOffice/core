@@ -45,6 +45,7 @@
                   <object class="GtkScrolledWindow" id="hatchpresetlistwin">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="valign">start</property>
                     <property name="vexpand">True</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">never</property>
@@ -292,7 +293,6 @@
                     <property name="valign">center</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -331,7 +331,6 @@
                     <property name="valign">center</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>

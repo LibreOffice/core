@@ -32,6 +32,8 @@ Size SFX2_DLLPUBLIC getPreviewStripSize(const OutputDevice& rReference);
 
 Size SFX2_DLLPUBLIC getPreviewOptionsSize(const OutputDevice& rReference);
 
+Size SFX2_DLLPUBLIC getPagePropertiesOptimalSize(const OutputDevice& rReference);
+
 OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper);
 
 OUString SFX2_DLLPUBLIC formatTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper);
