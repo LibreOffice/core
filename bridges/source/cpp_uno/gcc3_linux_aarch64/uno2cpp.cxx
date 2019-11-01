@@ -252,13 +252,13 @@ void call(
         switch (rtd->nSize) {
         case 16:
             std::memcpy(static_cast<char *>(ret) + 12, fpr + 3, 4);
-            // fall through
+            [[fallthrough]];
         case 12:
             std::memcpy(static_cast<char *>(ret) + 8, fpr + 2, 4);
-            // fall through
+            [[fallthrough]];
         case 8:
             std::memcpy(static_cast<char *>(ret) + 4, fpr + 1, 4);
-            // fall through
+            [[fallthrough]];
         case 4:
             std::memcpy(ret, fpr, 4);
             break;
@@ -356,7 +356,7 @@ void unoInterfaceProxyDispatch(
                         TYPELIB_DANGER_RELEASE(td);
                     }
                 }
-                // fall through
+                [[fallthrough]];
             default:
                 call(
                     proxy, slot, mtd->pReturnTypeRef, mtd->nParams,

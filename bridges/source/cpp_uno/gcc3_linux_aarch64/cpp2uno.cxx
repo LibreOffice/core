@@ -187,13 +187,13 @@ void call(
         switch (rtd->nSize) {
         case 16:
             std::memcpy(fpr + 3, static_cast<char *>(retin) + 12, 4);
-            // fall through
+            [[fallthrough]];
         case 12:
             std::memcpy(fpr + 2, static_cast<char *>(retin) + 8, 4);
-            // fall through
+            [[fallthrough]];
         case 8:
             std::memcpy(fpr + 1, static_cast<char *>(retin) + 4, 4);
-            // fall through
+            [[fallthrough]];
         case 4:
             std::memcpy(fpr, retin, 4);
             break;
@@ -286,7 +286,7 @@ extern "C" void vtableCall(
                     TYPELIB_DANGER_RELEASE(td);
                 }
             }
-            // fall through
+            [[fallthrough]];
         default:
             call(
                 proxy, desc,
