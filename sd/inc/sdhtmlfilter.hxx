@@ -23,8 +23,7 @@
 #include "sdfilter.hxx"
 
 // SdHTMLFilter
-class SdHTMLFilter
-    : public SdFilter
+class SdHTMLFilter final : public SdFilter
 {
 public:
     SdHTMLFilter (

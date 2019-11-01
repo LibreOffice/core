@@ -345,7 +345,7 @@ protected:
 
 class MainSequence;
 
-class InteractiveSequence : public EffectSequenceHelper
+class InteractiveSequence final : public EffectSequenceHelper
 {
 friend class MainSequence;
 friend class MainSequenceChangeGuard;

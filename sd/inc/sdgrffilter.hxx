@@ -24,7 +24,7 @@
 class ErrCode;
 
 // SdCGMFilter
-class SdGRFFilter : public SdFilter
+class SdGRFFilter final : public SdFilter
 {
 public:
     SdGRFFilter ( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell );

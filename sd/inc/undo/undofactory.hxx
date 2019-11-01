@@ -25,7 +25,7 @@
 namespace sd
 {
 
-class UndoFactory : public SdrUndoFactory
+class UndoFactory final : public SdrUndoFactory
 {
 public:
     virtual std::unique_ptr<SdrUndoAction> CreateUndoRemoveObject(SdrObject& rObject) override;

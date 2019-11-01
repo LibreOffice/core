@@ -33,7 +33,7 @@ namespace sd
 
 struct UndoAnimationImpl;
 
-class UndoAnimation : public SdrUndoAction
+class UndoAnimation final : public SdrUndoAction
 {
 public:
     UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage );
@@ -49,7 +49,7 @@ private:
 };
 
 struct UndoAnimationPathImpl;
-class UndoAnimationPath : public SdrUndoAction
+class UndoAnimationPath final : public SdrUndoAction
 {
 public:
     UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
@@ -66,7 +66,7 @@ private:
 
 struct UndoTransitionImpl;
 
-class UndoTransition : public SdUndoAction
+class UndoTransition final : public SdUndoAction
 {
 public:
     UndoTransition( SdDrawDocument* pDoc, SdPage* pThePage );

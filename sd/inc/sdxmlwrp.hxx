@@ -32,7 +32,7 @@ enum SdXMLFilterMode
     SDXMLMODE_Organizer ///< only for import, only the styles are loaded
 };
 
-class SdXMLFilter : public SdFilter
+class SdXMLFilter final : public SdFilter
 {
 public:
     SdXMLFilter(

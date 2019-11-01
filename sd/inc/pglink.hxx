@@ -24,7 +24,7 @@
 
 class SdPage;
 
-class SdPageLink : public ::sfx2::SvBaseLink
+class SdPageLink final : public ::sfx2::SvBaseLink
 {
     SdPage* pPage;
 
