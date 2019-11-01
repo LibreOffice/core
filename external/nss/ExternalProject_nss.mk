@@ -38,8 +38,8 @@ else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter ANDROID FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
-		$(if $(filter iOS,$(OS)),\
-			$(if $(filter arm64,$(CC)),USE_64=1)) \
+		$(if $(filter ANDROID,$(OS)),$(if $(filter AARCH64,$(CPUNAME)),USE_64=1)) \
+		$(if $(filter iOS,$(OS)),$(if $(filter ARM64,$(CPUNAME)),USE_64=1)) \
 		$(if $(filter MACOSX,$(OS)),\
 			$(if $(filter-out POWERPC,$(CPUNAME)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH)) \
 			NSS_USE_SYSTEM_SQLITE=1) \
