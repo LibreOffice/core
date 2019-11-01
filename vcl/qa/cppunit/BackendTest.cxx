@@ -237,9 +237,14 @@ public:
     void testDrawFilledRectWithRectangle()
     {
         vcl::test::OutputDeviceTestRect aOutDevTest;
-        Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap);
-        exportImage("03-01_filled_rectangle_test-rectangle.png", aBitmap);
+        Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
+        exportImage("03-01_filled_rectangle_test-rectangle_noline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+        aBitmap = aOutDevTest.setupFilledRectangle(true);
+        eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
+        exportImage("03-01_filled_rectangle_test-rectangle_line.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -247,9 +252,14 @@ public:
     void testDrawFilledRectWithPolygon()
     {
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
-        Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap);
-        exportImage("03-02_filled_rectangle_test-polygon.png", aBitmap);
+        Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
+        exportImage("03-02_filled_rectangle_test-polygon_noline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+        aBitmap = aOutDevTest.setupFilledRectangle(true);
+        eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
+        exportImage("03-02_filled_rectangle_test-polygon_line.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -257,9 +267,14 @@ public:
     void testDrawFilledRectWithPolyPolygon()
     {
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
-        Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap);
-        exportImage("03-03_filled_rectangle_test-polypolygon.png", aBitmap);
+        Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
+        exportImage("03-03_filled_rectangle_test-polypolygon_noline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+        aBitmap = aOutDevTest.setupFilledRectangle(true);
+        eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
+        exportImage("03-03_filled_rectangle_test-polypolygon_line.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -267,9 +282,14 @@ public:
     void testDrawFilledRectWithPolyPolygon2D()
     {
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
-        Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap);
-        exportImage("03-04_filled_rectangle_test-polypolygon_b2d.png", aBitmap);
+        Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
+        exportImage("03-04_filled_rectangle_test-polypolygon_b2d_noline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+        aBitmap = aOutDevTest.setupFilledRectangle(true);
+        eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
+        exportImage("03-04_filled_rectangle_test-polypolygon_b2d_line.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -434,9 +454,9 @@ public:
     CPPUNIT_TEST(testDrawRectAAWithPolyPolygonB2D);
 
     CPPUNIT_TEST(testDrawFilledRectWithRectangle);
-    //    CPPUNIT_TEST(testDrawFilledRectWithPolygon); TODO SKIA
-    //    CPPUNIT_TEST(testDrawFilledRectWithPolyPolygon); TODO SKIA
-    //    CPPUNIT_TEST(testDrawFilledRectWithPolyPolygon2D); TODO SKIA
+    CPPUNIT_TEST(testDrawFilledRectWithPolygon);
+    CPPUNIT_TEST(testDrawFilledRectWithPolyPolygon);
+    CPPUNIT_TEST(testDrawFilledRectWithPolyPolygon2D);
 
     CPPUNIT_TEST(testDrawDiamondWithPolygon);
     CPPUNIT_TEST(testDrawDiamondWithLine);
