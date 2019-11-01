@@ -1086,7 +1086,6 @@ namespace
         const bool bColumnHeader = std::is_same<IndexType, SCCOL>::value;
 
         SCTAB nTab = pViewData->GetTabNo();
-        ScDocument* pDoc = pViewData->GetDocument();
 
         IndexType nStartIndex = -1;
         IndexType nEndIndex = -1;
@@ -1098,7 +1097,7 @@ namespace
         const auto& rStartNearest = rPositionHelper.getNearestByPosition(nTileStartPosPx);
         const auto& rEndNearest = rPositionHelper.getNearestByPosition(nTileEndPosPx);
 
-        ScBoundsProvider aBoundsProvider(pDoc, nTab, bColumnHeader);
+        ScBoundsProvider aBoundsProvider(*pViewData, nTab, bColumnHeader);
         aBoundsProvider.Compute(rStartNearest, rEndNearest, nTileStartPosPx, nTileEndPosPx);
         aBoundsProvider.GetStartIndexAndPosition(nStartIndex, nStartPosPx); ++nStartIndex;
         aBoundsProvider.GetEndIndexAndPosition(nEndIndex, nEndPosPx);
