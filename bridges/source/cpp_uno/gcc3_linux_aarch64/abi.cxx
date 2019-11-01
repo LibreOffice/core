@@ -39,6 +39,7 @@
 #include <uno/mapping.h>
 
 #include "abi.hxx"
+#include "../gcc3_linux_arm/share.hxx"
 #include <osl/mutex.hxx>
 #include <unordered_map>
 
@@ -262,7 +263,7 @@ ReturnKind getReturnKind(typelib_TypeDescription const * type) {
     switch (type->eTypeClass) {
     default:
         assert(false);
-        // fall through to avoid warnings
+        SAL_FALLTHROUGH;
     case typelib_TypeClass_VOID:
     case typelib_TypeClass_BOOLEAN:
     case typelib_TypeClass_BYTE:
