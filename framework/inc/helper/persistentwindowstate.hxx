@@ -20,16 +20,11 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_PERSISTENTWINDOWSTATE_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_PERSISTENTWINDOWSTATE_HXX
 
-#include <general.h>
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <unotools/moduleoptions.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 

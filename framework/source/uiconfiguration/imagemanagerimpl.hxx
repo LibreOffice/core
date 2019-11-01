@@ -20,18 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_UICONFIGURATION_IMAGEMANAGERIMPL_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_UICONFIGURATION_IMAGEMANAGERIMPL_HXX
 
-#include <stdtypes.h>
-#include <uiconfiguration/imagetype.hxx>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#include <com/sun/star/ui/XUIConfiguration.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
+#include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
@@ -42,7 +34,6 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-#include <list>
 #include <unordered_map>
 #include <vector>
 

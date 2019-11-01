@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCACHE_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCACHE_HXX
 
-#include <general.h>
 #include <stdtypes.h>
 
 #include <com/sun/star/awt/KeyEvent.hpp>

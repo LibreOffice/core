@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
 
-#include <osl/time.h>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 

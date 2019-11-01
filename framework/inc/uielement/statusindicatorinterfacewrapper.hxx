@@ -21,14 +21,11 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSINDICATORINTERFACEWRAPPER_HXX
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
-
-#include <vector>
 
 namespace framework
 {

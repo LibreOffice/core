@@ -20,12 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <rtl/ustring.hxx>

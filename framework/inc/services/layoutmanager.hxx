@@ -20,26 +20,18 @@
 #ifndef INCLUDED_FRAMEWORK_INC_SERVICES_LAYOUTMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_SERVICES_LAYOUTMANAGER_HXX
 
-#include <properties.h>
-#include <stdtypes.h>
 #include <uielement/menubarmanager.hxx>
-#include <framework/addonsoptions.hxx>
 #include <uielement/uielement.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XLayoutManager2.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/ui/XUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/awt/XTopWindow2.hpp>
-#include <com/sun/star/awt/XDockableWindow.hpp>
-#include <com/sun/star/awt/XDockableWindowListener.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -48,9 +40,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
-#include <tools/wintypes.hxx>
-#include <svtools/miscopt.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/timer.hxx>
 
 class MenuBar;

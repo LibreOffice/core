@@ -11,6 +11,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 

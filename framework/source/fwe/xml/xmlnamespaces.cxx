@@ -19,6 +19,8 @@
 
 #include <xml/xmlnamespaces.hxx>
 
+#include <com/sun/star/xml/sax/SAXException.hpp>
+
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 

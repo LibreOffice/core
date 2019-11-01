@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX
 
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <uielement/complextoolbarcontroller.hxx>

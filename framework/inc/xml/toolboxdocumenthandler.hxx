@@ -23,12 +23,12 @@
 #include <framework/toolboxconfiguration.hxx>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <stdtypes.h>
 #include <framework/fwedllapi.h>
+
+#include <unordered_map>
 
 namespace framework{
 
