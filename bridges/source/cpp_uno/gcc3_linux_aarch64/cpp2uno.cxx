@@ -314,6 +314,7 @@ struct aarch64_va_list {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wvolatile-register-var"
+#pragma GCC diagnostic ignored "-Wuninitialized"
 extern "C" void vtableSlotCall(
     unsigned long gpr0, unsigned long gpr1, unsigned long gpr2,
     unsigned long gpr3, unsigned long gpr4, unsigned long gpr5,
