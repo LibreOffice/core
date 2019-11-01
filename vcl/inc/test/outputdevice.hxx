@@ -50,7 +50,7 @@ public:
 
     static TestResult checkRectangle(Bitmap& rBitmap);
     static TestResult checkRectangleAA(Bitmap& rBitmap);
-    static TestResult checkFilledRectangle(Bitmap& rBitmap);
+    static TestResult checkFilledRectangle(Bitmap& rBitmap, bool useLineColor);
     static TestResult checkLines(Bitmap& rBitmap);
     static TestResult checkAALines(Bitmap& rBitmap);
     static TestResult checkDiamond(Bitmap& rBitmap);
@@ -155,7 +155,7 @@ public:
     OutputDeviceTestRect() = default;
 
     Bitmap setupRectangle(bool bEnableAA);
-    Bitmap setupFilledRectangle();
+    Bitmap setupFilledRectangle(bool useLineColor);
     Bitmap setupInvert_NONE();
     Bitmap setupInvert_N50();
     Bitmap setupInvert_TrackFrame();
@@ -167,7 +167,7 @@ public:
     OutputDeviceTestPolygon() = default;
 
     Bitmap setupRectangle(bool bEnableAA);
-    Bitmap setupFilledRectangle();
+    Bitmap setupFilledRectangle(bool useLineColor);
     Bitmap setupDiamond();
     Bitmap setupLines();
     Bitmap setupAALines();
@@ -179,7 +179,7 @@ public:
     OutputDeviceTestPolyPolygon() = default;
 
     Bitmap setupRectangle(bool bEnableAA);
-    Bitmap setupFilledRectangle();
+    Bitmap setupFilledRectangle(bool useLineColor);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyPolygonB2D : public OutputDeviceTestCommon
@@ -188,7 +188,7 @@ public:
     OutputDeviceTestPolyPolygonB2D() = default;
 
     Bitmap setupRectangle(bool bEnableAA);
-    Bitmap setupFilledRectangle();
+    Bitmap setupFilledRectangle(bool useLineColor);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestGradient : public OutputDeviceTestCommon

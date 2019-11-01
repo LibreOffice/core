@@ -16,13 +16,17 @@ namespace test
 {
 namespace
 {
-basegfx::B2DPolygon createPolygonOffset(tools::Rectangle const& rRect, int nOffset)
+basegfx::B2DPolygon createPolygonOffset(tools::Rectangle const& rRect, int nOffset, int nFix = 0)
 {
+    // Note: According to https://lists.freedesktop.org/archives/libreoffice/2019-November/083709.html
+    // filling polygons always skips the right-most and bottom-most pixels, in order to avoid
+    // overlaps when drawing adjacent polygons. Specifying nFix = 1 allows to visually compensate
+    // for this by making the polygon explicitly larger.
     basegfx::B2DPolygon aPolygon{
         basegfx::B2DPoint(rRect.Left() + nOffset, rRect.Top() + nOffset),
-        basegfx::B2DPoint(rRect.Right() - nOffset, rRect.Top() + nOffset),
-        basegfx::B2DPoint(rRect.Right() - nOffset, rRect.Bottom() - nOffset),
-        basegfx::B2DPoint(rRect.Left() + nOffset, rRect.Bottom() - nOffset),
+        basegfx::B2DPoint(rRect.Right() - nOffset + nFix, rRect.Top() + nOffset),
+        basegfx::B2DPoint(rRect.Right() - nOffset + nFix, rRect.Bottom() - nOffset + nFix),
+        basegfx::B2DPoint(rRect.Left() + nOffset, rRect.Bottom() - nOffset + nFix),
     };
     aPolygon.setClosed(true);
     return aPolygon;
@@ -46,14 +50,18 @@ Bitmap OutputDeviceTestPolyPolygonB2D::setupRectangle(bool bEnableAA)
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
-Bitmap OutputDeviceTestPolyPolygonB2D::setupFilledRectangle()
+Bitmap OutputDeviceTestPolyPolygonB2D::setupFilledRectangle(bool useLineColor)
 {
     initialSetup(13, 13, constBackgroundColor);
 
-    mpVirtualDevice->SetLineColor();
+    if (useLineColor)
+        mpVirtualDevice->SetLineColor(constLineColor);
+    else
+        mpVirtualDevice->SetLineColor();
     mpVirtualDevice->SetFillColor(constFillColor);
 
-    basegfx::B2DPolyPolygon aPolyPolygon(createPolygonOffset(maVDRectangle, 2));
+    basegfx::B2DPolyPolygon aPolyPolygon(
+        createPolygonOffset(maVDRectangle, 2, useLineColor ? 0 : 1));
 
     mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
 

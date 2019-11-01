@@ -48,7 +48,7 @@ Bitmap OutputDeviceTestLine::setupDiamond()
 {
     initialSetup(11, 11, constBackgroundColor);
 
-    mpVirtualDevice->SetLineColor(constFillColor);
+    mpVirtualDevice->SetLineColor(constLineColor);
     mpVirtualDevice->SetFillColor();
 
     Point aPoint1, aPoint2, aPoint3, aPoint4;
