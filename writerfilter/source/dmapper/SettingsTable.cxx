@@ -248,6 +248,7 @@ struct SettingsTable_Impl
     bool                m_bDoNotUseHTMLParagraphAutoSpacing;
     bool                m_bNoColumnBalance;
     bool                m_bAutoHyphenation;
+    sal_Int16           m_nHyphenationZone;
     bool                m_bWidowControl;
     bool                m_bSplitPgBreakAndParaMark;
     bool                m_bMirrorMargin;
@@ -279,6 +280,7 @@ struct SettingsTable_Impl
     , m_bDoNotUseHTMLParagraphAutoSpacing(false)
     , m_bNoColumnBalance(false)
     , m_bAutoHyphenation(false)
+    , m_nHyphenationZone(0)
     , m_bWidowControl(false)
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
@@ -446,6 +448,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_rsids: //  92549; revision save Ids - probably not necessary
     break;
     case NS_ooxml::LN_CT_Settings_hyphenationZone: // 92508;
+        m_pImpl->m_nHyphenationZone = nIntValue;
     break;
     case NS_ooxml::LN_CT_Compat_useFELayout: // 92422;
     // useFELayout (Do Not Bypass East Asian/Complex Script Layout Code - support of old versions of Word - ignored)
@@ -621,6 +624,10 @@ bool SettingsTable::GetDoNotExpandShiftReturn() const
 bool SettingsTable::GetProtectForm() const
 {
     return m_pImpl->m_bProtectForm;
+}
+sal_Int16 SettingsTable::GetHypenationZone() const
+{
+    return m_pImpl->m_nHyphenationZone;
 }
 uno::Sequence<beans::PropertyValue> const & SettingsTable::GetThemeFontLangProperties() const
 {
