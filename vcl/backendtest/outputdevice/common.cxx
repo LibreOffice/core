@@ -220,7 +220,7 @@ TestResult checkDiamondLine(Bitmap& rBitmap, int aLayerNumber, Color aExpectedCo
 
 const Color OutputDeviceTestCommon::constBackgroundColor(COL_LIGHTGRAY);
 const Color OutputDeviceTestCommon::constLineColor(COL_LIGHTBLUE);
-const Color OutputDeviceTestCommon::constFillColor(COL_LIGHTBLUE);
+const Color OutputDeviceTestCommon::constFillColor(COL_BLUE);
 
 OutputDeviceTestCommon::OutputDeviceTestCommon()
 {}
@@ -366,12 +366,13 @@ TestResult OutputDeviceTestCommon::checkRectangleAA(Bitmap& aBitmap)
     return checkRectangles(aBitmap, aExpected);
 }
 
-TestResult OutputDeviceTestCommon::checkFilledRectangle(Bitmap& aBitmap)
+TestResult OutputDeviceTestCommon::checkFilledRectangle(Bitmap& aBitmap, bool useLineColor)
 {
     std::vector<Color> aExpected
     {
         constBackgroundColor, constBackgroundColor,
-        constFillColor, constFillColor, constFillColor, constFillColor, constFillColor
+        useLineColor ? constLineColor : constFillColor,
+        constFillColor, constFillColor, constFillColor, constFillColor
     };
     return checkRectangles(aBitmap, aExpected);
 }

@@ -55,7 +55,12 @@ Bitmap OutputDeviceTestAnotherOutDev::setupXOR()
 
 TestResult OutputDeviceTestAnotherOutDev::checkDrawOutDev(Bitmap& rBitmap)
 {
-    return checkFilledRectangle(rBitmap);
+    std::vector<Color> aExpected
+    {
+        constBackgroundColor, constBackgroundColor,
+        constFillColor, constFillColor, constFillColor, constFillColor, constFillColor
+    };
+    return checkRectangles(rBitmap, aExpected);
 }
 
 TestResult OutputDeviceTestAnotherOutDev::checkXOR(Bitmap& rBitmap)
