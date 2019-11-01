@@ -52,6 +52,9 @@ class ScRecursionHelper
     ScFormulaRecursionList::iterator    aLastIterationStart;
     ScRecursionInIterationStack         aRecursionInIterationStack;
     ScFGList                            aFGList;
+    // Flag list corresponding to aFGList to indicate whether each formula-group
+    // is in a depedency evaluation mode or not.
+    std::vector< bool >                 aInDependencyEvalMode;
     sal_uInt16                              nRecursionCount;
     sal_uInt16                              nIteration;
     // Count of ScFormulaCell::CheckComputeDependencies in current call-stack.
@@ -110,7 +113,9 @@ public:
     /** Detects a simple cycle involving formula-groups and singleton formula-cells. */
     bool PushFormulaGroup(ScFormulaCell* pCell);
     void PopFormulaGroup();
+    bool AnyCycleMemberInDependencyEvalMode(ScFormulaCell* pCell);
     bool AnyParentFGInCycle();
+    void SetFormulaGroupDepEvalMode(bool bSet);
 
     void AddTemporaryGroupCell(ScFormulaCell* cell);
     void CleanTemporaryGroupCells();
