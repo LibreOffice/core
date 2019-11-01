@@ -3650,9 +3650,13 @@ void DomainMapper_Impl::handleFieldSet
     sVariable = lcl_ExctractVariableAndHint(pContext->GetCommand(), sHint);
 
     // remove surrounding "" if exists
-    if( sHint.getLength() >= 2 && sHint.startsWith("\"") )
+    if(sHint.getLength() >= 2)
     {
-        sHint = sHint.trim().copy(1, sHint.getLength() - 2);
+        OUString sTmp = sHint.trim();
+        if (sTmp.startsWith("\"") && sTmp.endsWith("\""))
+        {
+            sHint = sTmp.copy(1, sTmp.getLength() - 2);
+        }
     }
 
     // determine field master name
