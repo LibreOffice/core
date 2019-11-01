@@ -7028,6 +7028,17 @@ if test "$COM_IS_CLANG" = "TRUE"; then
             if test -z "$CLANGLIBDIR"; then
                 CLANGLIBDIR=$($LLVM_CONFIG --libdir)
             fi
+            # Try if clang is built from source (in which case its includes are not together with llvm includes).
+            # src-root is [llvm-toplevel-src-dir]/llvm, clang is [llvm-toplevel-src-dir]/clang
+            clangsrcdir=$(dirname $($LLVM_CONFIG --src-root))
+            if test -n "$clangsrcdir" -a -d "$clangsrcdir" -a -d "$clangsrcdir/clang/include"; then
+                COMPILER_PLUGINS_CXXFLAGS="$COMPILER_PLUGINS_CXXFLAGS -I$clangsrcdir/clang/include"
+            fi
+            # obj-root is [llvm-toplevel-obj-dir]/, clang is [llvm-toplevel-obj-dir]/tools/clang
+            clangobjdir=$($LLVM_CONFIG --obj-root)
+            if test -n "$clangobjdir" -a -d "$clangobjdir" -a -d "$clangobjdir/tools/clang/include"; then
+                COMPILER_PLUGINS_CXXFLAGS="$COMPILER_PLUGINS_CXXFLAGS -I$clangobjdir/tools/clang/include"
+            fi
         fi
         AC_MSG_NOTICE([compiler plugins compile flags: $COMPILER_PLUGINS_CXXFLAGS])
         AC_LANG_PUSH([C++])
