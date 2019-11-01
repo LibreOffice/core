@@ -20,19 +20,14 @@
 #ifndef INCLUDED_FRAMEWORK_INC_TABWIN_TABWINFACTORY_HXX
 #define INCLUDED_FRAMEWORK_INC_TABWIN_TABWINFACTORY_HXX
 
-#include <stdtypes.h>
 #include <macros/xserviceinfo.hxx>
-#include <services.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/XToolkit2.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <rtl/ustring.hxx>
 
 namespace framework
 {

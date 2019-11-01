@@ -20,10 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENVEXCEPTION_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENVEXCEPTION_HXX
 
-#include <com/sun/star/uno/Any.h>
-#include <com/sun/star/uno/Exception.hpp>
-
-#include <rtl/string.hxx>
+#include <com/sun/star/uno/Any.hxx>
 
 namespace framework{
 

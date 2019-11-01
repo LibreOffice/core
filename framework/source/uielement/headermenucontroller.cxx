@@ -31,6 +31,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>

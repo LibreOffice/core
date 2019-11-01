@@ -21,10 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_POPUPMENUDISPATCHER_HXX
 
 #include <macros/xserviceinfo.hxx>
-#include <general.h>
-#include <stdtypes.h>
 
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -35,7 +32,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#include <com/sun/star/uri/XUriReference.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>

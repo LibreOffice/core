@@ -22,18 +22,10 @@
 
 #include <accelerators/presethandler.hxx>
 #include <accelerators/acceleratorcache.hxx>
-#include <general.h>
-#include <stdtypes.h>
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-#include <com/sun/star/ui/XUIConfiguration.hpp>
-#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
@@ -41,7 +33,6 @@
 // TODO use XPresetHandler interface instead if available
 #include <com/sun/star/form/XReset.hpp>
 
-#include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase.hxx>
 
 // definition

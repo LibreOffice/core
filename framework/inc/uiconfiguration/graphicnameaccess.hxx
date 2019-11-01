@@ -20,9 +20,9 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_GRAPHICNAMEACCESS_HXX
 #define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_GRAPHICNAMEACCESS_HXX
 
-#include <stdtypes.h>
+#include <unordered_map>
 
-#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <cppuhelper/implbase.hxx>
 

@@ -20,6 +20,7 @@
 #include <accelerators/keymapping.hxx>
 
 #include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/instance.hxx>
 
 namespace framework
