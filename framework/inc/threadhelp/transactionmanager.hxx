@@ -22,10 +22,6 @@
 
 #include <threadhelp/gate.hxx>
 
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-
 #include <osl/mutex.hxx>
 #include <fwidllapi.h>
 

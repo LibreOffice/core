@@ -26,7 +26,6 @@
 #include <uielement/menubarmanager.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 namespace framework

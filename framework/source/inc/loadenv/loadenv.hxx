@@ -19,14 +19,10 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENV_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENV_HXX
 
-#include <loadenv/loadenvexception.hxx>
 #include <loadenv/actionlockguard.hxx>
 
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <rtl/ref.hxx>

@@ -20,13 +20,8 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_LAYOUTMANAGER_HELPERS_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_LAYOUTMANAGER_HELPERS_HXX
 
-#include <stdtypes.h>
-#include <properties.h>
-
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/awt/XToolkit2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

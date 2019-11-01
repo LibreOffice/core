@@ -31,6 +31,7 @@
 #include <threadhelp/transactionguard.hxx>
 #include <general.h>
 #include <properties.h>
+#include <targets.h>
 
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>

@@ -29,7 +29,6 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <framework/fwedllapi.h>
 
 namespace framework{

@@ -32,6 +32,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/sequence.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
