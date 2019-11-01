@@ -262,7 +262,7 @@ ReturnKind getReturnKind(typelib_TypeDescription const * type) {
     switch (type->eTypeClass) {
     default:
         assert(false);
-        // fall through to avoid warnings
+        [[fallthrough]];
     case typelib_TypeClass_VOID:
     case typelib_TypeClass_BOOLEAN:
     case typelib_TypeClass_BYTE:
