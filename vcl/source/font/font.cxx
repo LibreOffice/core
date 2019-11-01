@@ -589,7 +589,8 @@ namespace
             const char* pItalicPos = std::search( pStream, pExecPos, pItalic, pItalic+12 );
             if( pItalicPos != pExecPos )
             {
-                sal_Int32 nItalic = rtl_str_toInt32( pItalicPos+12, 10 );
+                const char* pItalicEnd = pItalicPos + 12;
+                auto nItalic = rtl_str_toInt64_WithLength(pItalicEnd, 10, pExecPos - pItalicEnd);
                 o_rResult.SetItalic( (nItalic != 0) ? ITALIC_NORMAL : ITALIC_NONE );
             }
 
