@@ -31,11 +31,14 @@ namespace
 
 } // end anonymous namespace
 
-Bitmap OutputDeviceTestRect::setupFilledRectangle()
+Bitmap OutputDeviceTestRect::setupFilledRectangle(bool useLineColor)
 {
     initialSetup(13, 13, constBackgroundColor);
 
-    mpVirtualDevice->SetLineColor();
+    if(useLineColor)
+        mpVirtualDevice->SetLineColor(constLineColor);
+    else
+        mpVirtualDevice->SetLineColor();
     mpVirtualDevice->SetFillColor(constFillColor);
 
     drawRectOffset(*mpVirtualDevice, maVDRectangle, 2);
