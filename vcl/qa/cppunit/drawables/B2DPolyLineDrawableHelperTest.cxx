@@ -31,12 +31,14 @@ class B2DPolyLineDrawableTest : public CppUnit::TestFixture
     void testDrawPolyPolygonOutline();
     void testFillPolyPolygon();
     void testDrawB2DPolyLine();
+    void testDrawFallbackPolyLine();
 
     CPPUNIT_TEST_SUITE(B2DPolyLineDrawableTest);
     CPPUNIT_TEST(testCreateFilledPolygon);
     CPPUNIT_TEST(testDrawPolyPolygonOutline);
     CPPUNIT_TEST(testFillPolyPolygon);
     CPPUNIT_TEST(testDrawB2DPolyLine);
+    CPPUNIT_TEST(testDrawFallbackPolyLine);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -103,6 +105,19 @@ void B2DPolyLineDrawableTest::testDrawB2DPolyLine()
 
     vcl::B2DPolyLineDrawableHelper::DrawB2DPolyLine(pRenderContext, aTestPolygon, aTestLineInfo,
                                                     15.0);
+}
+
+void B2DPolyLineDrawableTest::testDrawFallbackPolyLine()
+{
+    const basegfx::B2DPolygon aTestPolygon({ basegfx::B2DPoint(0, 0), basegfx::B2DPoint(0, 10) });
+
+    LineInfo aTestLineInfo;
+    aTestLineInfo.SetWidth(1);
+
+    VclPtrInstance<VirtualDevice> pRenderContext;
+
+    CPPUNIT_ASSERT(vcl::B2DPolyLineDrawableHelper::DrawFallbackPolyLine(
+        pRenderContext, aTestPolygon, aTestLineInfo));
 }
 } // namespace
 
