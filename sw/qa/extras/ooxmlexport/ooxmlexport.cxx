@@ -357,9 +357,23 @@ DECLARE_OOXMLEXPORT_TEST(testPositionAndRotation, "position-and-rotation.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
 {
+    // check that the original numrule font name is still Calibri
     uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName("ListLabel 1"), uno::UNO_QUERY);
-    // This was Calibri, i.e. custom font of the numbering itself ("1.\t") was lost on import.
-    CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(xStyle, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(xStyle, "CharFontName"));
+
+    uno::Reference<text::XTextRange> xPara = getParagraph(2);
+    uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
+    uno::Any aValue = properties->getPropertyValue("ListAutoFormat");
+    CPPUNIT_ASSERT(aValue.hasValue());
+    uno::Sequence<beans::NamedValue> aListAutoFormat;
+    CPPUNIT_ASSERT(aValue >>= aListAutoFormat);
+    auto it = std::find_if(std::cbegin(aListAutoFormat), std::cend(aListAutoFormat),
+        [](const css::beans::NamedValue& val) { return val.Name == "CharFontName"; });
+    CPPUNIT_ASSERT(it != std::cend(aListAutoFormat));
+    OUString sOverrideFontName;
+    CPPUNIT_ASSERT(it->Value >>= sOverrideFontName);
+    // but the overridden font name is Verdana
+    CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), sOverrideFontName);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106541_noinheritChapterNumbering, "tdf106541_noinheritChapterNumbering.odt")
