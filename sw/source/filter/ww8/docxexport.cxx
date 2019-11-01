@@ -1041,6 +1041,7 @@ void DocxExport::WriteSettings()
         bHasRedlineProtectionKey = aKey.hasElements();
         bHasDummyRedlineProtectionKey = aKey.getLength() == 1 && aKey[0] == 1;
     }
+
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
@@ -1145,6 +1146,13 @@ void DocxExport::WriteSettings()
 
                     hasProtectionProperties = true;
                 }
+            }
+            else if ( rProp.Name == "HyphenationZone" )
+            {
+                sal_Int16 nHyphenationZone;
+                rProp.Value >>= nHyphenationZone;
+                pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
+                                     OString::number(nHyphenationZone));
             }
         }
     }

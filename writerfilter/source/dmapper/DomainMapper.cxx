@@ -229,6 +229,9 @@ DomainMapper::~DomainMapper()
         // Add the saved DocumentProtection settings
         aProperties["DocumentProtection"] <<= m_pImpl->GetSettingsTable()->GetDocumentProtectionSettings();
 
+        // Add the saved w:hypenationZone setting
+        aProperties["HyphenationZone"] <<= m_pImpl->GetSettingsTable()->GetHypenationZone();
+
         uno::Reference<beans::XPropertySet> xDocProps(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
         if (xDocProps.is())
         {
