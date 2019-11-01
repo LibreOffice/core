@@ -18,6 +18,7 @@
  */
 
 #include <loadenv/targethelper.hxx>
+#include <targets.h>
 
 namespace framework{
 

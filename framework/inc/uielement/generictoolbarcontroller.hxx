@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 #include <tools/link.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/vclptr.hxx>
 
 class PopupMenu;

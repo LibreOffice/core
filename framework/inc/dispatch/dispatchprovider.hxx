@@ -22,14 +22,10 @@
 
 #include <classes/protocolhandlercache.hxx>
 
-#include <stdtypes.h>
-
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>

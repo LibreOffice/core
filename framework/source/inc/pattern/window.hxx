@@ -20,15 +20,12 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_WINDOW_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_WINDOW_HXX
 
-#include <general.h>
-
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/ustring.hxx>
 
 // namespaces
 

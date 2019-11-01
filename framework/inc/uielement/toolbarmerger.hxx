@@ -20,21 +20,12 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARMERGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARMERGER_HXX
 
-#include <uielement/comboboxtoolbarcontroller.hxx>
-#include <uielement/imagebuttontoolbarcontroller.hxx>
-#include <uielement/togglebuttontoolbarcontroller.hxx>
-#include <uielement/buttontoolbarcontroller.hxx>
-#include <uielement/spinfieldtoolbarcontroller.hxx>
-#include <uielement/edittoolbarcontroller.hxx>
-#include <uielement/dropdownboxtoolbarcontroller.hxx>
-#include <uielement/FixedImageToolbarController.hxx>
-#include <uielement/FixedTextToolbarController.hxx>
 #include <uielement/commandinfo.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <svtools/toolboxcontroller.hxx>
-
+#include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/toolbox.hxx>
 

@@ -20,12 +20,9 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARMANAGER_HXX
 
-#include <stdtypes.h>
 #include <uielement/commandinfo.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
@@ -34,8 +31,6 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/ui/ItemStyle.hpp>
-#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 

@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_SERVICES_MEDIATYPEDETECTIONHELPER_HXX
 
 #include <macros/xserviceinfo.hxx>
-#include <general.h>
 
 #include <com/sun/star/util/XStringMapping.hpp>
 

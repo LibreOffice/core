@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <string_view>
+#include <unordered_map>
 
 #include <services.h>
 #include <strings.hrc>
@@ -51,6 +52,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>

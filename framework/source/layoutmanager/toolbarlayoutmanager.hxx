@@ -25,23 +25,15 @@
 */
 #include <vector>
 
-#include <stdtypes.h>
-#include <properties.h>
 #include <uiconfiguration/globalsettings.hxx>
 #include <framework/addonsoptions.hxx>
 #include <uielement/uielement.hxx>
 #include <services/layoutmanager.hxx>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
-#include <com/sun/star/awt/XToolkit2.hpp>
-#include <com/sun/star/awt/XTopWindow2.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XDockableWindowListener.hpp>

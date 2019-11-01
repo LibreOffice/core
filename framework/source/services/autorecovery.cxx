@@ -28,6 +28,7 @@
 #include <classes/fwkresid.hxx>
 #include <protocols.h>
 #include <properties.h>
+#include <targets.h>
 
 #include <helper/mischelper.hxx>
 

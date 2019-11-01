@@ -27,6 +27,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/event.hxx>
+#include <vcl/edit.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::uno;

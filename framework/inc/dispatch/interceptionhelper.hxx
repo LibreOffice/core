@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_INTERCEPTIONHELPER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_INTERCEPTIONHELPER_HXX
 
-#include <general.h>
-
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

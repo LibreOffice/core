@@ -26,6 +26,7 @@
 #include <vector>
 
 #include <classes/framecontainer.hxx>
+#include <threadhelp/transactionbase.hxx>
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -38,7 +39,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XTasksSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

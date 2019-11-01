@@ -20,6 +20,16 @@
 #include <uielement/toolbarmerger.hxx>
 #include <uielement/generictoolbarcontroller.hxx>
 
+#include <uielement/buttontoolbarcontroller.hxx>
+#include <uielement/comboboxtoolbarcontroller.hxx>
+#include <uielement/dropdownboxtoolbarcontroller.hxx>
+#include <uielement/edittoolbarcontroller.hxx>
+#include <uielement/imagebuttontoolbarcontroller.hxx>
+#include <uielement/spinfieldtoolbarcontroller.hxx>
+#include <uielement/togglebuttontoolbarcontroller.hxx>
+#include <uielement/FixedTextToolbarController.hxx>
+#include <uielement/FixedImageToolbarController.hxx>
+
 #include <svtools/miscopt.hxx>
 
 namespace framework
