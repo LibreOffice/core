@@ -669,7 +669,7 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
     if (checkInvalidSourceOrDestination(rPosAry))
         return false;
 
-    assert(dynamic_cast<const SkiaSalBitmap*>(&rSrcBitmap));
+    assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
     assert(dynamic_cast<const SkiaSalBitmap*>(&rMaskBitmap));
     assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
 
