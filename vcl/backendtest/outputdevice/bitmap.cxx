@@ -107,7 +107,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawMask()
 
     initialSetup(13, 13, constBackgroundColor);
 
-    mpVirtualDevice->DrawMask(Point(2, 2), aBitmap, constFillColor);
+    mpVirtualDevice->DrawMask(Point(2, 2), aBitmap, constLineColor);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }

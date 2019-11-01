@@ -88,7 +88,7 @@ class VisualBackendTestWindow : public WorkWindow
 private:
     Timer maUpdateTimer;
     std::vector<std::chrono::high_resolution_clock::time_point> mTimePoints;
-    static constexpr unsigned char gnNumberOfTests = 6;
+    static constexpr unsigned char gnNumberOfTests = 7;
     unsigned char mnTest;
     bool mbAnimate;
     ScopedVclPtr<VirtualDevice> mpVDev;
@@ -225,26 +225,58 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestRect aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
-            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap), aRectangle, rRenderContext);
+            Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
 
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPolygon aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
-            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap), aRectangle, rRenderContext);
+            Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
 
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
-            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap), aRectangle, rRenderContext);
+            Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestRect aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupFilledRectangle(true);
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestPolygon aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupFilledRectangle(true);
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupFilledRectangle(true);
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+    }
+
+    static void testDiamonds(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(3, 1, nWidth, nHeight);
 
         aRectangle = aRegions[index++];
         {
@@ -441,13 +473,17 @@ public:
         }
         else if (mnTest % gnNumberOfTests == 2)
         {
-            testLines(rRenderContext, nWidth, nHeight);
+            testDiamonds(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 3)
         {
-            testBitmaps(rRenderContext, nWidth, nHeight);
+            testLines(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 4)
+        {
+            testBitmaps(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 5)
         {
             std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
 
