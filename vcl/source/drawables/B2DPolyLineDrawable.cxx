@@ -48,51 +48,18 @@ bool B2DPolyLineDrawable::DrawCommand(OutputDevice* pRenderContext) const
 bool B2DPolyLineDrawable::Draw(OutputDevice* pRenderContext, basegfx::B2DPolygon const& rB2DPolygon,
                                LineInfo const& rLineInfo, double fMiterMinimumAngle) const
 {
-    if (pRenderContext->Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rB2DPolygon,
-                                                       rLineInfo, 0.0, fMiterMinimumAngle)))
-        return true;
-
-    if (!B2DPolyLineDrawableHelper::DrawB2DPolyLine(pRenderContext, rB2DPolygon, rLineInfo,
-                                                    fMiterMinimumAngle))
+    if (!pRenderContext->Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rB2DPolygon,
+                                                        rLineInfo, 0.0, fMiterMinimumAngle)))
     {
-        // fallback to old polygon drawing if needed
-        const tools::Polygon aToolsPolygon(rB2DPolygon);
-        LineInfo aLineInfo;
-        if (rLineInfo.GetWidth() != 0.0)
-            aLineInfo.SetWidth(static_cast<long>(rLineInfo.GetWidth() + 0.5));
-
-        sal_uInt16 nPoints(aToolsPolygon.GetSize());
-
-        if (nPoints < 2 || aLineInfo.GetStyle() == LineStyle::NONE)
-            return false;
-
-        tools::Polygon aPoly = pRenderContext->ImplLogicToDevicePixel(aToolsPolygon);
-
-        const LineInfo aInfo(pRenderContext->ImplLogicToDevicePixel(aLineInfo));
-        const bool bDashUsed(aInfo.GetStyle() == LineStyle::Dash);
-        const bool bLineWidthUsed(aInfo.GetWidth() > 1);
-
-        if (bDashUsed || bLineWidthUsed)
+        if (!B2DPolyLineDrawableHelper::DrawB2DPolyLine(pRenderContext, rB2DPolygon, rLineInfo,
+                                                        fMiterMinimumAngle))
         {
-            pRenderContext->Draw(vcl::B2DPolyPolyLineDrawable(
-                basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()), aInfo));
+            if (B2DPolyLineDrawableHelper::DrawFallbackPolyLine(pRenderContext, rB2DPolygon,
+                                                                rLineInfo))
+                DrawAlphaVirtDev(pRenderContext);
+            else
+                return false;
         }
-        else
-        {
-            // #100127# the subdivision HAS to be done here since only a pointer
-            // to an array of points is given to the DrawPolyLine method, there is
-            // NO way to find out there that it's a curve.
-            if (aPoly.HasFlags())
-            {
-                aPoly = tools::Polygon::SubdivideBezier(aPoly);
-                nPoints = aPoly.GetSize();
-            }
-
-            mpGraphics->DrawPolyLine(nPoints, reinterpret_cast<SalPoint*>(aPoly.GetPointAry()),
-                                     pRenderContext);
-        }
-
-        DrawAlphaVirtDev(pRenderContext);
     }
 
     return true;

@@ -27,6 +27,7 @@
 #include <vcl/drawables/B2DPolyPolyLineDrawable.hxx>
 
 #include <drawables/B2DPolyLineDrawableHelper.hxx>
+#include <salgdi.hxx>
 
 namespace vcl
 {
@@ -89,6 +90,49 @@ bool B2DPolyLineDrawableHelper::DrawB2DPolyLine(OutputDevice* pRenderContext,
     return false;
 }
 
+bool B2DPolyLineDrawableHelper::DrawFallbackPolyLine(OutputDevice* pRenderContext,
+                                                     basegfx::B2DPolygon const& rB2DPolygon,
+                                                     LineInfo const& rLineInfo)
+{
+    const tools::Polygon aToolsPolygon(rB2DPolygon);
+    LineInfo aLineInfo;
+    if (rLineInfo.GetWidth() != 0.0)
+        aLineInfo.SetWidth(static_cast<long>(rLineInfo.GetWidth() + 0.5));
+
+    sal_uInt16 nPoints(aToolsPolygon.GetSize());
+
+    if (nPoints < 2 || aLineInfo.GetStyle() == LineStyle::NONE)
+        return false;
+
+    tools::Polygon aPoly = pRenderContext->ImplLogicToDevicePixel(aToolsPolygon);
+
+    const LineInfo aInfo(pRenderContext->ImplLogicToDevicePixel(aLineInfo));
+    const bool bDashUsed(aInfo.GetStyle() == LineStyle::Dash);
+    const bool bLineWidthUsed(aInfo.GetWidth() > 1);
+
+    if (bDashUsed || bLineWidthUsed)
+    {
+        return pRenderContext->Draw(
+            vcl::B2DPolyPolyLineDrawable(basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()), aInfo));
+    }
+    else
+    {
+        // #100127# the subdivision HAS to be done here since only a pointer
+        // to an array of points is given to the DrawPolyLine method, there is
+        // NO way to find out there that it's a curve.
+        if (aPoly.HasFlags())
+        {
+            aPoly = tools::Polygon::SubdivideBezier(aPoly);
+            nPoints = aPoly.GetSize();
+        }
+
+        SalGraphics* pGraphics = pRenderContext->GetGraphics();
+        pGraphics->DrawPolyLine(nPoints, reinterpret_cast<SalPoint*>(aPoly.GetPointAry()),
+                                pRenderContext);
+    }
+
+    return true;
+}
 } // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

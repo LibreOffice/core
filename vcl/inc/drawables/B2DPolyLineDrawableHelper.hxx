@@ -43,6 +43,10 @@ public:
     static bool DrawB2DPolyLine(OutputDevice* pRenderContext,
                                 basegfx::B2DPolygon const& rB2DPolygon, LineInfo const& rLineInfo,
                                 double fMiterMinimumAngle);
+
+    static bool DrawFallbackPolyLine(OutputDevice* pRenderContext,
+                                     basegfx::B2DPolygon const& rB2DPolygon,
+                                     LineInfo const& rLineInfo);
 };
 } // namespace vcl
 
