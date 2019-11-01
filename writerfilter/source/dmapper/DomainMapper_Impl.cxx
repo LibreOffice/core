@@ -5968,6 +5968,9 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
             xLevels = GetCurrentNumberingRules(&nListLevel);
         if (!xLevels.is())
         {
+            if (IsOOXMLImport())
+                return xRet;
+
             PropertyMapPtr pContext = m_pTopContext;
             if (IsRTFImport() && !IsOpenField())
             {

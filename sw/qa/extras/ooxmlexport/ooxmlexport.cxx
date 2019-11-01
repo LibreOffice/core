@@ -368,9 +368,9 @@ DECLARE_OOXMLEXPORT_TEST(testPositionAndRotation, "position-and-rotation.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
 {
+    // check that the original numrule font name is still Calibri
     uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName("ListLabel 1"), uno::UNO_QUERY);
-    // This was Calibri, i.e. custom font of the numbering itself ("1.\t") was lost on import.
-    CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(xStyle, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(xStyle, "CharFontName"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106541_noinheritChapterNumbering, "tdf106541_noinheritChapterNumbering.odt")
