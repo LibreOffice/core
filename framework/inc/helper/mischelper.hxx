@@ -21,9 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_HELPER_MISCHELPER_HXX
 
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

@@ -21,12 +21,9 @@
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
 
 #include <accelerators/storageholder.hxx>
-#include <general.h>
-#include <stdtypes.h>
 
 #include <com/sun/star/embed/XStorage.hpp>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
