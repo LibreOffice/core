@@ -51,7 +51,7 @@ NSSLIBS = freebl3 \
 WHOLELIBS = \
   -Wl,--whole-archive \
   $(addprefix -l,$(strip \
-	juh \
+	$(if $(ENABLE_JAVA),juh) \
   )) \
   -Wl,--no-whole-archive
 
@@ -59,7 +59,7 @@ WHOLELIBS = \
 $(OBJLOCAL)/liblo-native-code.so : native-code.cxx $(ALL_STATIC_LIBS)
 	@echo "Linking $@"
 	mkdir -p $(OBJLOCAL)
-	$(CXX) -Wl,--build-id=sha1 -Wl,--gc-sections -Wl,--version-script=../Bootstrap/version.map -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -Wl,-soname,liblo-native-code.so -o $(OBJLOCAL)/liblo-native-code.so -I$(BUILDDIR)/config_host -I$(SRCDIR)/include native-code.cxx -L$(INSTDIR)/$(LIBO_LIB_FOLDER) $(WHOLELIBS) $(LIBS) -lc++_static -lc++abi -landroid_support $(if $(filter armeabi-v7a,$(ANDROID_APP_ABI)),-lunwind) $(addprefix -l,$(NSSLIBS)) -lGLESv2 -landroid -ljnigraphics -llog -lz
+	$(CXX) -fuse-ld=gold -Wl,--build-id=sha1 -Wl,--gc-sections -Wl,--version-script=../Bootstrap/version.map -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -Wl,-soname,liblo-native-code.so -o $(OBJLOCAL)/liblo-native-code.so -I$(BUILDDIR)/config_host -I$(SRCDIR)/include native-code.cxx -L$(INSTDIR)/$(LIBO_LIB_FOLDER) $(WHOLELIBS) $(LIBS) -lc++_static -lc++abi $(if $(filter-out arm64-v8a,$(ANDROID_APP_ABI)),-landroid_support) $(if $(filter armeabi-v7a,$(ANDROID_APP_ABI)),-lunwind) $(addprefix -l,$(NSSLIBS)) -lGLESv2 -landroid -ljnigraphics -llog -lz
 
 $(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
 	mkdir -p $(SODEST)
