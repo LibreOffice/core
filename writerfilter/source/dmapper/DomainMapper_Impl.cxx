@@ -1544,7 +1544,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         // affect the paragraph size => also insert empty hint!
 //                        it = aProperties.erase(it);
                     }
-                    ++it;
+//                    else
+                        ++it;
                 }
                 if (!charProperties.empty())
                 {
@@ -6493,6 +6494,9 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
             xLevels = GetCurrentNumberingRules(&nListLevel);
         if (!xLevels.is())
         {
+           if (IsOOXMLImport())
+               return xRet;
+
             PropertyMapPtr pContext = m_pTopContext;
             if (IsRTFImport() && !IsOpenField())
             {
