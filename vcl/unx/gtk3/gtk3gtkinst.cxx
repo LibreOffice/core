@@ -4117,7 +4117,7 @@ public:
             return;
         if (GTK_IS_DIALOG(m_pDialog))
             sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog))));
-        gtk_widget_show(m_pWidget);
+        GtkInstanceWindow::show();
     }
 
     virtual void set_modal(bool bModal) override
@@ -6030,29 +6030,30 @@ void GtkInstanceDialog::asyncresponse(gint ret)
     if (get_modal())
         m_aDialogRun.dec_modal_count();
     hide();
-    m_aFunc(GtkToVcl(ret));
 
-    if (m_nResponseSignalId)
-    {
-        g_signal_handler_disconnect(m_pDialog, m_nResponseSignalId);
-        m_nResponseSignalId = 0;
-    }
-    if (m_nCancelSignalId)
-    {
-        g_signal_handler_disconnect(m_pDialog, m_nCancelSignalId);
-        m_nCancelSignalId = 0;
-    }
-    if (m_nSignalDeleteId)
-    {
-        g_signal_handler_disconnect(m_pDialog, m_nSignalDeleteId);
-        m_nSignalDeleteId = 0;
-    }
-
-    m_aFunc = nullptr;
     // move the self pointer, otherwise it might be de-allocated by time we try to reset it
-    std::shared_ptr<weld::Dialog> me = std::move(m_xRunAsyncSelf);
-    m_xDialogController.reset();
-    me.reset();
+    auto xRunAsyncSelf = std::move(m_xRunAsyncSelf);
+    auto xDialogController = std::move(m_xDialogController);
+    auto aFunc = std::move(m_aFunc);
+
+    auto nResponseSignalId = m_nResponseSignalId;
+    auto nCancelSignalId = m_nCancelSignalId;
+    auto nSignalDeleteId = m_nSignalDeleteId;
+    m_nResponseSignalId = 0;
+    m_nCancelSignalId = 0;
+    m_nSignalDeleteId = 0;
+
+    aFunc(GtkToVcl(ret));
+
+    if (nResponseSignalId)
+        g_signal_handler_disconnect(m_pDialog, nResponseSignalId);
+    if (nCancelSignalId)
+        g_signal_handler_disconnect(m_pDialog, nCancelSignalId);
+    if (m_nSignalDeleteId)
+        g_signal_handler_disconnect(m_pDialog, nSignalDeleteId);
+
+    xDialogController.reset();
+    xRunAsyncSelf.reset();
 }
 
 int GtkInstanceDialog::run()
