@@ -792,28 +792,28 @@ public:
 //i.e. acts like pChild = pChild->GetWindow(GetWindowType::FirstChild);
 //in a flat hierarchy where dialogs only have one layer
 //of children
-VCL_DLLPUBLIC vcl::Window* firstLogicalChildOfParent(const vcl::Window *pTopLevel);
+vcl::Window* firstLogicalChildOfParent(const vcl::Window *pTopLevel);
 
 //Get last window of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(GetWindowType::LastChild);
 //in a flat hierarchy where dialogs only have one layer
 //of children
-VCL_DLLPUBLIC vcl::Window* lastLogicalChildOfParent(const vcl::Window *pTopLevel);
+vcl::Window* lastLogicalChildOfParent(const vcl::Window *pTopLevel);
 
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(GetWindowType::Next);
 //in a flat hierarchy where dialogs only have one layer
 //of children
-VCL_DLLPUBLIC vcl::Window* nextLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::Window *pChild);
+vcl::Window* nextLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::Window *pChild);
 
 //Get previous window before pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(GetWindowType::Prev);
 //in a flat hierarchy where dialogs only have one layer
 //of children
-VCL_DLLPUBLIC vcl::Window* prevLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::Window *pChild);
+vcl::Window* prevLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::Window *pChild);
 
 //Returns true is the Window has a single child which is a container
 VCL_DLLPUBLIC bool isLayoutEnabled(const vcl::Window *pWindow);
@@ -837,7 +837,7 @@ inline bool isContainerWindow(const vcl::Window *pWindow)
 Size getLegacyBestSizeForChildren(const vcl::Window &rWindow);
 
 //Get first parent which is not a layout widget
-VCL_DLLPUBLIC vcl::Window* getNonLayoutParent(vcl::Window *pParent);
+vcl::Window* getNonLayoutParent(vcl::Window *pParent);
 
 #endif
 

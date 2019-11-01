@@ -237,7 +237,7 @@ namespace uno {
 
 TOOLKIT_DLLPUBLIC sal_uInt16        GetPropertyId( const OUString& rPropertyName );
 const css::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
-TOOLKIT_DLLPUBLIC const OUString&    GetPropertyName( sal_uInt16 nPropertyId );
+const OUString&        GetPropertyName( sal_uInt16 nPropertyId );
 sal_Int16                           GetPropertyAttribs( sal_uInt16 nPropertyId );
 sal_uInt16                          GetPropertyOrderNr( sal_uInt16 nPropertyId );
 bool                            DoesDependOnOthers( sal_uInt16 nPropertyId );

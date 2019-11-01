@@ -518,7 +518,7 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
     @param rSize
     The size of the frame in pixels
     */
-BitmapEx VCL_DLLPUBLIC createBlendFrame(
+BitmapEx createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,

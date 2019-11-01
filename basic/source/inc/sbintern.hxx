@@ -110,7 +110,7 @@ struct SbiGlobals
 
 // utility macros and routines
 
-BASIC_DLLPUBLIC SbiGlobals* GetSbData();
+SbiGlobals* GetSbData();
 
 #endif
 
