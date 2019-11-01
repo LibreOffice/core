@@ -492,6 +492,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     aTbxCmd->InsertBreak(3);
     aTbxCmd->SetLineCount(2);
     aLbDocuments->SetDropDownLineCount(9);
+    aLbDocuments->setMaxWidthChars(20);
     aLbDocuments->SetSelectHdl(LINK(this, ScNavigatorDlg, DocumentSelectHdl));
     aStrActive    = " (" + ScResId(SCSTR_ACTIVE) + ")";     // " (active)"
     aStrNotActive = " (" + ScResId(SCSTR_NOTACTIVE) + ")";  // " (not active)"

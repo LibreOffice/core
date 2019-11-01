@@ -629,6 +629,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aGlobalToolBox->SetHelpId(HID_NAVIGATOR_GLOBAL_TOOLBOX);
     m_aDocListBox->SetHelpId(HID_NAVIGATOR_LISTBOX);
     m_aDocListBox->SetDropDownLineCount(9);
+    m_aDocListBox->setMaxWidthChars(20);
 
     // Insert the numeric field in the toolbox.
     m_xEdit = VclPtr<NumEditAction>::Create(
