@@ -314,6 +314,18 @@ namespace o3tl
     template<> struct typed_flags<WindowStateState> : is_typed_flags<WindowStateState, 0xffff> {};
 }
 
+namespace vcl
+{
+    enum class ImageType
+    {
+        Size16,
+        Size26,
+        Size32,
+        Small = Size16,
+        LAST = Size32,
+    };
+}
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

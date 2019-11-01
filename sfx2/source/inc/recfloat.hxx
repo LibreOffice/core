@@ -22,6 +22,7 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weldutils.hxx>
 
 class SfxRecordingFloatWrapper_Impl : public SfxChildWindow
 {
@@ -37,18 +38,18 @@ public:
     virtual bool        QueryClose() override;
 };
 
-class SfxRecordingFloat_Impl : public SfxFloatingWindow
+class SfxRecordingFloat_Impl : public SfxModelessDialogController
 {
+    std::unique_ptr<weld::Toolbar> m_xToolbar;
+    weld::ToolbarUnoDispatcher m_aDispatcher;
 public:
-                        SfxRecordingFloat_Impl( SfxBindings* pBindings ,
-                            SfxChildWindow* pChildWin ,
-                            vcl::Window* pParent );
-    virtual             ~SfxRecordingFloat_Impl() override;
-    virtual void        FillInfo( SfxChildWinInfo& rInfo ) const override;
-    virtual void        StateChanged( StateChangedType nStateChange ) override;
+    SfxRecordingFloat_Impl(SfxBindings* pBindings,
+                           SfxChildWindow* pChildWin,
+                           weld::Window* pParent);
+    virtual ~SfxRecordingFloat_Impl() override;
+    virtual void FillInfo(SfxChildWinInfo& rInfo) const override;
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

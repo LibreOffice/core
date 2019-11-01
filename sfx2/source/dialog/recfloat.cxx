@@ -22,6 +22,7 @@
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <recfloat.hxx>
 #include <sfx2/strings.hrc>
@@ -33,18 +34,35 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 
-SFX_IMPL_FLOATINGWINDOW( SfxRecordingFloatWrapper_Impl, SID_RECORDING_FLOATWINDOW );
+SFX_IMPL_MODELESSDIALOGCONTOLLER(SfxRecordingFloatWrapper_Impl, SID_RECORDING_FLOATWINDOW);
 
-SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( vcl::Window* pParentWnd ,
-                                                sal_uInt16 nId ,
-                                                SfxBindings* pBind ,
-                                                SfxChildWinInfo const * pInfo )
-                    : SfxChildWindow( pParentWnd, nId )
-                    , pBindings( pBind )
+SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl(vcl::Window* pParentWnd,
+                                                             sal_uInt16 nId,
+                                                             SfxBindings* pBind,
+                                                             SfxChildWinInfo const * pInfo)
+    : SfxChildWindow(pParentWnd, nId)
+    , pBindings(pBind)
 {
-    SetWindow( VclPtr<SfxRecordingFloat_Impl>::Create( pBindings, this, pParentWnd ) );
-    SetWantsFocus( false );
-    static_cast<SfxFloatingWindow*>(GetWindow())->Initialize( pInfo );
+    SetController(std::make_shared<SfxRecordingFloat_Impl>(pBindings, this, pParentWnd->GetFrameWeld()));
+    SetWantsFocus(false);
+    SfxRecordingFloat_Impl* pFloatDlg = static_cast<SfxRecordingFloat_Impl*>(GetController().get());
+
+    weld::Dialog* pDlg = pFloatDlg->getDialog();
+
+    SfxViewFrame *pFrame = pBind->GetDispatcher_Impl()->GetFrame();
+    vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();
+
+    Point aPos = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
+    aPos.AdjustX(20);
+    aPos.AdjustY(10);
+
+    WindowStateData aState;
+    aState.SetMask(WindowStateMask::Pos);
+    aState.SetX(aPos.X());
+    aState.SetY(aPos.Y());
+    pDlg->set_window_state(aState.ToStr());
+
+    pFloatDlg->Initialize(pInfo);
 }
 
 SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
@@ -76,14 +94,12 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
     return bRet;
 }
 
-SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
-    SfxBindings* pBind ,
-    SfxChildWindow* pChildWin ,
-    vcl::Window* pParent )
-    : SfxFloatingWindow( pBind,
-                         pChildWin,
-                         pParent,
-                         "FloatingRecord", "sfx/ui/floatingrecord.ui", pBind->GetActiveFrame() )
+SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(SfxBindings* pBind, SfxChildWindow* pChildWin,
+                                               weld::Window* pParent)
+    : SfxModelessDialogController(pBind, pChildWin, pParent, "sfx/ui/floatingrecord.ui",
+                                  "FloatingRecord")
+    , m_xToolbar(m_xBuilder->weld_toolbar("toolbar"))
+    , m_aDispatcher(*m_xToolbar, pBind->GetActiveFrame())
 {
     // start recording
     SfxBoolItem aItem( SID_RECORDMACRO, true );
@@ -93,30 +109,12 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
 
 SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
 {
-    disposeOnce();
 }
 
 void SfxRecordingFloat_Impl::FillInfo( SfxChildWinInfo& rInfo ) const
 {
-    SfxFloatingWindow::FillInfo( rInfo );
+    SfxModelessDialogController::FillInfo( rInfo );
     rInfo.bVisible = false;
-}
-
-void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
-{
-    if ( nStateChange == StateChangedType::InitShow )
-    {
-        SfxViewFrame *pFrame = GetBindings().GetDispatcher_Impl()->GetFrame();
-        vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();
-
-        Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
-        aPoint = GetParent()->ScreenToOutputPixel( aPoint );
-        aPoint.AdjustX(20 );
-        aPoint.AdjustY(10 );
-        SetPosPixel( aPoint );
-    }
-
-    SfxFloatingWindow::StateChanged( nStateChange );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

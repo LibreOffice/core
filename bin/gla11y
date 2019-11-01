@@ -785,6 +785,11 @@ def is_orphan_widget(filename, tree, root, obj, orphan, orphan_root, doprint = F
             # Has a <property name="action_name">
             return False
 
+        # Uses id as an action_name
+        if 'id' in obj.attrib:
+            if obj.attrib['id'].startswith(".uno:"):
+                return False
+
         gtklabels = obj.findall(".//object[@class='GtkLabel']") + obj.findall(".//object[@class='GtkAccelLabel']")
         if len(gtklabels) >= 1:
             # Has a custom label

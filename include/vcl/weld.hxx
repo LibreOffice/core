@@ -1920,6 +1920,15 @@ public:
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
 
+    virtual int get_n_items() const = 0;
+    virtual OString get_item_ident(int nIndex) const = 0;
+    virtual void set_item_label(int nIndex, const OUString& rLabel) = 0;
+    virtual void set_item_icon(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+        = 0;
+    virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) = 0;
+
+    virtual vcl::ImageType get_icon_size() const = 0;
+
     void connect_clicked(const Link<const OString&, void>& rLink) { m_aClickHdl = rLink; }
 };
 
