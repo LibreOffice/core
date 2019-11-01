@@ -24,9 +24,7 @@
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <vector>

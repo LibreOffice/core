@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTENUMERATION_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTENUMERATION_HXX
 
-#include <general.h>
-
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

@@ -20,8 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_CONVERTER_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_CONVERTER_HXX
 
-#include <general.h>
-#include <stdtypes.h>
+#include <vector>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

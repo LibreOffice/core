@@ -20,21 +20,14 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_STARTMODULEDISPATCHER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_STARTMODULEDISPATCHER_HXX
 
-#include <stdtypes.h>
-#include <general.h>
-
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <vcl/evntpost.hxx>
 
 namespace framework{
 

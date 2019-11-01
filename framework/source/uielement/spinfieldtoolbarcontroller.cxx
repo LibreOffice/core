@@ -29,6 +29,7 @@
 
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/event.hxx>
+#include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
