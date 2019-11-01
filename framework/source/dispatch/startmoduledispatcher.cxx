@@ -27,6 +27,7 @@
 #include "isstartmoduledispatch.hxx"
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/StartModule.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>

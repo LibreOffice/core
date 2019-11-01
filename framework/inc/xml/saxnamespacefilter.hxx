@@ -23,7 +23,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xml/xmlnamespaces.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/menu.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <stack>

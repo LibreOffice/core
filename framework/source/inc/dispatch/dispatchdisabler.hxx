@@ -12,7 +12,6 @@
 #include <set>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakref.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

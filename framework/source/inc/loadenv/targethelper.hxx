@@ -20,9 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_TARGETHELPER_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_TARGETHELPER_HXX
 
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <targets.h>
 
 namespace framework{
 

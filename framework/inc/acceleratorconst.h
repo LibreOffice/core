@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_ACCELERATORCONST_H
 #define INCLUDED_FRAMEWORK_INC_ACCELERATORCONST_H
 
-#include "general.h"
-
 namespace framework{
 
 #define ATTRIBUTE_TYPE_CDATA            "CDATA"

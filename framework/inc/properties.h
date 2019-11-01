@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_PROPERTIES_H
 #define INCLUDED_FRAMEWORK_INC_PROPERTIES_H
 
-#include "general.h"
+#include <com/sun/star/uno/Any.hxx>
 
 namespace framework{
 

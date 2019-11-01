@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_XML_IMAGESDOCUMENTHANDLER_HXX
 #define INCLUDED_FRAMEWORK_INC_XML_IMAGESDOCUMENTHANDLER_HXX
 
-#include <framework/fwedllapi.h>
-
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <xml/imagesconfiguration.hxx>
@@ -29,7 +27,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <unordered_map>
-#include <stdtypes.h>
 
 namespace framework{
 

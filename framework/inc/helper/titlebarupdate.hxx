@@ -20,17 +20,13 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_TITLEBARUPDATE_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_TITLEBARUPDATE_HXX
 
-#include <general.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XTitleChangeListener.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <unotools/moduleoptions.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <rtl/ustrbuf.hxx>
 
 namespace framework{
 

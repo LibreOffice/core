@@ -20,10 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_MACROS_XSERVICEINFO_HXX
 #define INCLUDED_FRAMEWORK_INC_MACROS_XSERVICEINFO_HXX
 
-#include <general.h>
-
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

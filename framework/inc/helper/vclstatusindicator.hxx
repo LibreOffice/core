@@ -20,10 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_VCLSTATUSINDICATOR_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_VCLSTATUSINDICATOR_HXX
 
-#include <general.h>
-
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
 #include <cppuhelper/implbase.hxx>
