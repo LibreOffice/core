@@ -187,13 +187,13 @@ void call(
         switch (rtd->nSize) {
         case 16:
             std::memcpy(fpr + 3, static_cast<char *>(retin) + 12, 4);
-            // fall through
+            SAL_FALLTHROUGH;
         case 12:
             std::memcpy(fpr + 2, static_cast<char *>(retin) + 8, 4);
-            // fall through
+            SAL_FALLTHROUGH;
         case 8:
             std::memcpy(fpr + 1, static_cast<char *>(retin) + 4, 4);
-            // fall through
+            SAL_FALLTHROUGH;
         case 4:
             std::memcpy(fpr, retin, 4);
             break;
@@ -286,7 +286,7 @@ extern "C" void vtableCall(
                     TYPELIB_DANGER_RELEASE(td);
                 }
             }
-            // fall through
+            SAL_FALLTHROUGH;
         default:
             call(
                 proxy, desc,
@@ -314,6 +314,7 @@ struct aarch64_va_list {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wvolatile-register-var"
+#pragma GCC diagnostic ignored "-Wuninitialized"
 extern "C" void vtableSlotCall(
     unsigned long gpr0, unsigned long gpr1, unsigned long gpr2,
     unsigned long gpr3, unsigned long gpr4, unsigned long gpr5,
