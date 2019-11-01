@@ -2189,7 +2189,16 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     // - fieldnames apply or not ...
     // ( - SwEndPortion must _no_ longer be generated. )
     // - Of course, the screen is something completely different than the printer ...
-    bReformat = bReformat || mpOpt->IsFieldName() != rOpt.IsFieldName();
+//    bReformat = bReformat || mpOpt->IsFieldName() != rOpt.IsFieldName();
+
+    if (mpOpt->IsFieldName() != rOpt.IsFieldName())
+    {
+        GetLayout()->SetHideRedlines(GetLayout->IsHideRedlines(),
+                rOpt.IsFieldName()
+                    ? FieldmarkMode::ShowCommand
+                    : FieldmarkMode::ShowResult);
+        bReformat = true;
+    }
 
     // The map mode is changed, minima/maxima will be attended by UI
     if( mpOpt->GetZoom() != rOpt.GetZoom() && !IsPreview() )

@@ -4493,15 +4493,10 @@ static void UnHideRedlinesExtras(SwRootFrame & rLayout,
     }
 }
 
-void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
+static void DoHide(SwRootFrame & rLayout)
 {
-    if (bHideRedlines == mbHideRedlines)
-    {
-        return;
-    }
-    mbHideRedlines = bHideRedlines;
-    assert(GetCurrShell()->ActionPend()); // tdf#125754 avoid recursive layout
-    SwDoc & rDoc(*GetFormat()->GetDoc());
+    assert(rLayout.GetCurrShell()->ActionPend()); // tdf#125754 avoid recursive layout
+    SwDoc & rDoc(*rLayout.GetFormat()->GetDoc());
     // don't do early return if there are no redlines:
     // Show->Hide must init hidden number trees
     // Hide->Show may be called after all redlines have been deleted but there
@@ -4531,23 +4526,23 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     // vice-versa; alas flys may contain flys, so we skip some of them
     // if they have already been created from scratch via their anchor flys.
     std::set<sal_uLong> skippedFlys;
-    UnHideRedlinesExtras(*this, rNodes, rNodes.GetEndOfAutotext(),
+    UnHideRedlinesExtras(rLayout, rNodes, rNodes.GetEndOfAutotext(),
         // when un-hiding, delay all fly frame creation to AppendAllObjs below
-                         IsHideRedlines() ? &skippedFlys : nullptr);
+                         rLayout.IsHideRedlines() ? &skippedFlys : nullptr);
     // Footnotes are created automatically (after invalidation etc.) by
     // ConnectFootnote(), but need to be deleted manually. Footnotes do not
     // occur in flys or headers/footers.
-    UnHideRedlinesExtras(*this, rNodes, rNodes.GetEndOfInserts(), nullptr);
-    UnHideRedlines(*this, rNodes, rNodes.GetEndOfContent(), nullptr);
+    UnHideRedlinesExtras(rLayout, rNodes, rNodes.GetEndOfInserts(), nullptr);
+    UnHideRedlines(rLayout, rNodes, rNodes.GetEndOfContent(), nullptr);
 
-    if (!IsHideRedlines())
+    if (!rLayout.IsHideRedlines())
     {   // create all previously hidden flys at once:
         // * Flys on first node of pre-existing merged frames that are hidden
         //   (in delete redline), to be added to the existing frame
         // * Flys on non-first (hidden/merged) nodes of pre-existing merged
         //   frames, to be added to the new frame of their node
         // * Flys anchored in other flys that are hidden
-        AppendAllObjs(rDoc.GetSpzFrameFormats(), this);
+        AppendAllObjs(rDoc.GetSpzFrameFormats(), &rLayout);
     }
 
     for (auto const pRedline : rDoc.getIDocumentRedlineAccess().GetRedlineTable())
@@ -4591,12 +4586,32 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
 
     // update SwPostItMgr / notes in the margin
     // note: as long as all shells share layout, broadcast to all shells!
-    rDoc.GetDocShell()->Broadcast( SwFormatFieldHint(nullptr, bHideRedlines
+    rDoc.GetDocShell()->Broadcast( SwFormatFieldHint(nullptr, rLayout.IsHideRedlines()
             ? SwFormatFieldHintWhich::REMOVED
             : SwFormatFieldHintWhich::INSERTED) );
 
 
 //    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?  this is the big hammer
+}
+
+void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
+{
+    if (bHideRedlines == mbHideRedlines)
+    {
+        return;
+    }
+    mbHideRedlines = bHideRedlines;
+    DoHide(*this);
+}
+
+void SwRootFrame::SetFieldmarkMode(sw::FieldmarkMode const eMode)
+{
+    if (eMode == m_FieldmarkMode)
+    {
+        return;
+    }
+    m_FieldmarkMode = eMode;
+    DoHide(*this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,6 +45,9 @@ namespace sw {
     {
         Shown, Hidden
     };
+
+    // its not enough to rely on some invalidation, SetHideRedlines must be called anyway ... so why not maintain the flag here, can use 3 for testing?
+    enum class FieldmarkMode { ShowCommand = 1, ShowResult = 2, ShowBoth = 3 };
 };
 
 enum class SwInvalidateFlags
@@ -117,6 +120,7 @@ class SAL_DLLPUBLIC_RTTI SwRootFrame: public SwLayoutFrame
                                       // @see dcontact.cxx, ::Changed()
     bool    mbLayoutFreezed;
     bool    mbHideRedlines;
+    sw::FieldmarkMode m_FieldmarkMode = sw::FieldmarkMode::ShowBoth;
 
     /**
      * For BrowseMode
@@ -415,6 +419,8 @@ public:
      */
     bool IsHideRedlines() const { return mbHideRedlines; }
     void SetHideRedlines(bool);
+    sw::FieldmarkMode GetFieldmarkMode() const { return m_FieldmarkMode; }
+    void SetFieldmarkMode(sw::FieldmarkMode);
 };
 
 inline long SwRootFrame::GetBrowseWidth() const
