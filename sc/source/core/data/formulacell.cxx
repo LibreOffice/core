@@ -1521,12 +1521,15 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
 
     ScFormulaCell* pTopCell = mxGroup ? mxGroup->mpTopCell : this;
 
-    if (pTopCell->mbSeenInPath && rRecursionHelper.GetDepComputeLevel())
+    if (pTopCell->mbSeenInPath && rRecursionHelper.GetDepComputeLevel() &&
+        rRecursionHelper.AnyCycleMemberInDependencyEvalMode(pTopCell))
     {
         // This call arose from a dependency calculation and we just found a cycle.
-        aResult.SetResultError( FormulaError::CircularReference );
         // This will mark all elements in the cycle as parts-of-cycle.
         ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, pTopCell);
+        // Reaching here does not necessarily mean a circular reference, so don't set Err:522 here yet.
+        // If there is a genuine circular reference, it will be marked so when all groups
+        // in the cycle get out of dependency evaluation mode.
         return bGroupInterpreted;
     }
 
@@ -4517,6 +4520,10 @@ struct ScDependantsCalculator
                     return false;
             }
         }
+
+        if (bHasSelfReferences)
+            mxGroup->mbPartOfCycle = true;
+
         return !bHasSelfReferences;
     }
 };
