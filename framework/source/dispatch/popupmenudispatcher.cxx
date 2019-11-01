@@ -23,6 +23,7 @@
 #include <framework/addonmenu.hxx>
 #include <services.h>
 #include <properties.h>
+#include <stdtypes.h>
 
 #include <com/sun/star/frame/XLayoutManager2.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>

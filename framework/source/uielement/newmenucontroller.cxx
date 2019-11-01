@@ -18,6 +18,7 @@
  */
 
 #include <uielement/newmenucontroller.hxx>
+#include <framework/menuconfiguration.hxx>
 
 #include <services.h>
 
@@ -40,6 +41,7 @@
 #include <svtools/menuoptions.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/imagemgr.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/moduleoptions.hxx>

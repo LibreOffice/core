@@ -20,10 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_CLOSEDISPATCHER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_CLOSEDISPATCHER_HXX
 
-#include <stdtypes.h>
-#include <general.h>
-
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
@@ -31,7 +27,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include <memory>
 #include <cppuhelper/implbase.hxx>

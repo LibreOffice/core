@@ -44,6 +44,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
+#include <unordered_map>
 
 #include <svx/svxids.hrc>
 

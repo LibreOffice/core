@@ -25,7 +25,6 @@
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>

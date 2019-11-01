@@ -19,6 +19,7 @@
 
 #include <loadenv/loadenv.hxx>
 
+#include <loadenv/loadenvexception.hxx>
 #include <loadenv/targethelper.hxx>
 #include <framework/framelistanalyzer.hxx>
 
@@ -26,6 +27,7 @@
 #include <properties.h>
 #include <protocols.h>
 #include <services.h>
+#include <targets.h>
 #include <comphelper/interaction.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -55,6 +57,7 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

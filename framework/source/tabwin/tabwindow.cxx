@@ -19,6 +19,7 @@
 
 #include <tabwin/tabwindow.hxx>
 #include <properties.h>
+#include <services.h>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>

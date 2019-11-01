@@ -20,16 +20,12 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_JOBDATA_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_JOBDATA_HXX
 
-#include <jobs/configaccess.hxx>
-#include <jobs/jobresult.hxx>
-#include <stdtypes.h>
-#include <general.h>
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <rtl/ustring.hxx>
+
+#include <vector>
 
 namespace framework{
 

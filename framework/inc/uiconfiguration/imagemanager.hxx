@@ -22,28 +22,13 @@
 
 #include <memory>
 
-#include <stdtypes.h>
-#include <uiconfiguration/imagetype.hxx>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/ui/ConfigurationEvent.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
-
-#include <vcl/image.hxx>
-#include <rtl/ref.hxx>
 
 namespace framework
 {

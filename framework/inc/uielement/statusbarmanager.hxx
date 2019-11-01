@@ -20,16 +20,12 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMANAGER_HXX
 
-#include <stdtypes.h>
-
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusbarController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
-#include <com/sun/star/ui/XUIConfiguration.hpp>
+#include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 
-#include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vcl/status.hxx>

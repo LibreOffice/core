@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARWRAPPER_HXX
 
 #include <helper/uiconfigelementwrapperbase.hxx>
-#include <uielement/statusbarmanager.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

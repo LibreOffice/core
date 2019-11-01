@@ -20,10 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_STORAGEHOLDER_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_STORAGEHOLDER_HXX
 
-#include <general.h>
-#include <stdtypes.h>
-
 #include <com/sun/star/embed/XStorage.hpp>
+
+#include <unordered_map>
+#include <vector>
 
 namespace framework
 {

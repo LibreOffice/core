@@ -19,6 +19,7 @@
 
 #include "imagemanagerimpl.hxx"
 #include <xml/imagesconfiguration.hxx>
+#include <uiconfiguration/imagetype.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include <services.h>
 

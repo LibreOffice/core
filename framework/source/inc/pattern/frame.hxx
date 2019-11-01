@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_FRAME_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_FRAME_HXX
 
-#include <general.h>
-
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>

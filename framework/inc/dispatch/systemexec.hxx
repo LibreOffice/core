@@ -21,10 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_SYSTEMEXEC_HXX
 
 #include <macros/xserviceinfo.hxx>
-#include <general.h>
-#include <stdtypes.h>
 
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

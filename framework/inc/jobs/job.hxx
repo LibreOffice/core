@@ -20,13 +20,8 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_JOB_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_JOB_HXX
 
-#include <jobs/jobresult.hxx>
 #include <jobs/jobdata.hxx>
-#include <stdtypes.h>
-#include <general.h>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
@@ -35,7 +30,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
-#include <rtl/ustring.hxx>
 
 namespace framework{
 

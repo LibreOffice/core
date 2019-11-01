@@ -26,7 +26,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-#include <sal/types.h>
 #include <salhelper/thread.hxx>
 
 namespace com { namespace sun { namespace star { namespace util {

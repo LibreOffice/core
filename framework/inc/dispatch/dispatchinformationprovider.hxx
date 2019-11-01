@@ -20,14 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHINFORMATIONPROVIDER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHINFORMATIONPROVIDER_HXX
 
-#include <general.h>
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 
 #include <cppuhelper/weakref.hxx>
-#include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 

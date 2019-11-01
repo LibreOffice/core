@@ -21,23 +21,13 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_NEWMENUCONTROLLER_HXX
 
 #include <macros/xserviceinfo.hxx>
-#include <stdtypes.h>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 #include <svtools/popupmenucontrollerbase.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
-#include <framework/menuconfiguration.hxx>
-#include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/menu.hxx>
-#include <unordered_map>
 
 namespace framework
 {

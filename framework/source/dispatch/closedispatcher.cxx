@@ -26,6 +26,7 @@
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridgeFactory2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/StartModule.hpp>
@@ -35,6 +36,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <osl/diagnose.h>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>

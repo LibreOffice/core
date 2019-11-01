@@ -20,10 +20,8 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_KEYMAPPING_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_KEYMAPPING_HXX
 
-#include <general.h>
-#include <stdtypes.h>
-
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <rtl/ustring.hxx>
+#include <unordered_map>
 
 // definition
 

@@ -18,6 +18,7 @@
  */
 
 #include <jobs/job.hxx>
+#include <jobs/jobresult.hxx>
 #include <general.h>
 #include <services.h>
 

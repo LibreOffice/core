@@ -20,10 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_INC_XML_XMLNAMESPACES_HXX
 #define INCLUDED_FRAMEWORK_INC_XML_XMLNAMESPACES_HXX
 
-#include <com/sun/star/xml/sax/SAXException.hpp>
-
 #include <map>
 #include <framework/fwedllapi.h>
+
+#include <rtl/ustring.hxx>
 
 namespace framework
 {

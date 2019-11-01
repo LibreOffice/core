@@ -20,18 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_GLOBALSETTINGS_HXX
 #define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_GLOBALSETTINGS_HXX
 
-#include <stdtypes.h>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <cppuhelper/weak.hxx>
-#include <rtl/ustring.hxx>
-
-#include <vector>
-#include <list>
 
 namespace framework
 {

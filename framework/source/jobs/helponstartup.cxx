@@ -21,6 +21,7 @@
 #include <jobs/helponstartup.hxx>
 #include <loadenv/targethelper.hxx>
 #include <services.h>
+#include <targets.h>
 
 // include others
 #include <comphelper/configurationhelper.hxx>

@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONWRITER_HXX
 
 #include <accelerators/acceleratorcache.hxx>
-#include <general.h>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <rtl/ustring.hxx>

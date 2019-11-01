@@ -20,16 +20,11 @@
 #ifndef INCLUDED_FRAMEWORK_INC_XML_IMAGESCONFIGURATION_HXX
 #define INCLUDED_FRAMEWORK_INC_XML_IMAGESCONFIGURATION_HXX
 
-#include <framework/fwedllapi.h>
-#include <tools/color.hxx>
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vector>
-#include <memory>
 
 namespace framework
 {

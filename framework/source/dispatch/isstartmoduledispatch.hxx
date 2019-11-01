@@ -20,6 +20,8 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_DISPATCH_ISSTARTMODULEDISPATCH_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_DISPATCH_ISSTARTMODULEDISPATCH_HXX
 
+#include <com/sun/star/util/URL.hpp>
+
 namespace framework {
 
 inline bool isStartModuleDispatch(css::util::URL const & url) {

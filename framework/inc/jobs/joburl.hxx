@@ -20,9 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_JOBURL_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_JOBURL_HXX
 
-#include <stdtypes.h>
-#include <general.h>
-
 #include <rtl/ustring.hxx>
 
 namespace framework{

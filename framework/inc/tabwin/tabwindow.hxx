@@ -20,17 +20,13 @@
 #ifndef INCLUDED_FRAMEWORK_INC_TABWIN_TABWINDOW_HXX
 #define INCLUDED_FRAMEWORK_INC_TABWIN_TABWINDOW_HXX
 
-#include <stdtypes.h>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
-#include <services.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

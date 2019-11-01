@@ -37,6 +37,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <rtl/string.h>

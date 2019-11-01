@@ -26,28 +26,20 @@
 
 // include files of own module
 #include <helper/wakeupthread.hxx>
-#include <general.h>
 
 // include uno interfaces
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/awt/WindowEvent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <vcl/status.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <osl/thread.hxx>
+#include <rtl/ref.hxx>
 
 namespace framework{
 

@@ -20,9 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_JOBCONST_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_JOBCONST_HXX
 
-#include <stdtypes.h>
-#include <general.h>
-
 #include <rtl/ustring.hxx>
 #include <fwidllapi.h>
 

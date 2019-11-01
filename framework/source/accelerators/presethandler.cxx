@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_SHARE   = 1;
