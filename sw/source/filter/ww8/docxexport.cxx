@@ -1146,6 +1146,14 @@ void DocxExport::WriteSettings()
                     hasProtectionProperties = true;
                 }
             }
+            else if (rProp.Name == "HyphenationZone")
+            {
+                sal_Int16 nHyphenationZone;
+                rProp.Value >>= nHyphenationZone;
+                if (nHyphenationZone > 0)
+                    pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
+                                         OString::number(nHyphenationZone));
+            }
         }
     }
 
