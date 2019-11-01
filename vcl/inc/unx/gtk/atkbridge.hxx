@@ -23,7 +23,7 @@
 #include <vclpluginapi.h>
 
 bool VCLPLUG_GTK_PUBLIC InitAtkBridge();
-void VCLPLUG_GTK_PUBLIC DeInitAtkBridge();
+void DeInitAtkBridge();
 
 #endif
 

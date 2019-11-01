@@ -195,7 +195,7 @@ SW_DLLPUBLIC const LanguageTag& GetAppLanguageTag();
 #endif
 
 SW_DLLPUBLIC CollatorWrapper& GetAppCollator();
-SW_DLLPUBLIC CollatorWrapper& GetAppCaseCollator();
+CollatorWrapper& GetAppCaseCollator();
 
 SW_DLLPUBLIC const ::utl::TransliterationWrapper& GetAppCmpStrIgnore();
 

@@ -69,7 +69,7 @@ SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrig
 * @param[in]       rBackgroundColor    the color to apply on the shell
 * @param[in,out]   rShell              the shell on which we apply the new attribute
 **/
-SW_DLLPUBLIC void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell);
+void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell);
 
 // SfxItemSets <-> PageDesc
 void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );
