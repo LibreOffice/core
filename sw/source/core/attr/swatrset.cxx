@@ -26,6 +26,7 @@
 #include <editeng/editeng.hxx>
 #include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
+#include <fmtautofmt.hxx>
 #include <hintids.hxx>
 #include <list.hxx>
 #include <node.hxx>
@@ -393,6 +394,22 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 // Anchors at any node position cannot be copied to another document, because the SwPosition
                 // would still point to the old document. It needs to be fixed up explicitly.
                 tmpSet->ClearItem( RES_ANCHOR );
+            }
+
+            if (pSrcDoc != pDstDoc &&
+                SfxItemState::SET == GetItemState(RES_PARATR_LIST_AUTOFMT, false, &pItem))
+            {
+                SfxItemSet const& rAutoStyle(*static_cast<SwFormatAutoFormat const&>(*pItem).GetStyleHandle());
+                std::shared_ptr<SfxItemSet> const pNewSet(
+                    rAutoStyle.SfxItemSet::Clone(true, &pDstDoc->GetAttrPool()));
+                SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);
+                // TODO: for ODF export we'd need to add it to the autostyle pool
+                item.SetStyleHandle(pNewSet);
+                if (!tmpSet)
+                {
+                    tmpSet.reset(new SfxItemSet(*this));
+                }
+                tmpSet->Put(item);
             }
 
             if( tmpSet )
