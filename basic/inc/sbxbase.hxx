@@ -51,7 +51,7 @@ struct SbxAppData
     ~SbxAppData();
 };
 
-BASIC_DLLPUBLIC SbxAppData& GetSbxData_Impl();
+SbxAppData& GetSbxData_Impl();
 
 #endif // INCLUDED_BASIC_INC_SBXBASE_HXX
 

@@ -142,7 +142,7 @@ static int xmlStreamClose( void * context )
 
 }
 
-XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks()
+int xmlEnableStreamInputCallbacks()
 {
     if (!g_bInputCallbacksEnabled)
     {
@@ -204,7 +204,7 @@ XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks()
     return 0 ;
 }
 
-XSECXMLSEC_DLLPUBLIC int xmlRegisterStreamInputCallbacks(
+int xmlRegisterStreamInputCallbacks(
     css::uno::Reference< css::xml::crypto::XUriBinding > const & aUriBinding
 ) {
     if (!g_bInputCallbacksEnabled)
@@ -221,7 +221,7 @@ XSECXMLSEC_DLLPUBLIC int xmlRegisterStreamInputCallbacks(
     return 0 ;
 }
 
-XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks()
+int xmlUnregisterStreamInputCallbacks()
 {
     if (g_bInputCallbacksRegistered)
     {
@@ -235,7 +235,7 @@ XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks()
     return 0 ;
 }
 
-XSECXMLSEC_DLLPUBLIC void xmlDisableStreamInputCallbacks() {
+void xmlDisableStreamInputCallbacks() {
     xmlUnregisterStreamInputCallbacks() ;
     g_bInputCallbacksEnabled = false;
 }

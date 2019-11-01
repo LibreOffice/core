@@ -92,8 +92,8 @@ public:
 
     bool            IsDefault() const;
 
-    friend VCL_DLLPUBLIC SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo );
-    friend VCL_DLLPUBLIC SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo );
+    friend SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo );
+    friend SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo );
 
     // helper to get decomposed polygon data with the LineInfo applied. The source
     // hairline polygon is given in io_rLinePolyPolygon. Both given polygons may

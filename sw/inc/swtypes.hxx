@@ -123,7 +123,7 @@ const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 
 // defined in sw/source/uibase/app/swmodule.cxx
 SW_DLLPUBLIC OUString SwResId(const char* pId);
-SW_DLLPUBLIC OUString SwResId(const char* pId, int nCardinality);
+OUString SwResId(const char* pId, int nCardinality);
 
 css::uno::Reference< css::linguistic2::XSpellChecker1 > GetSpellChecker();
 css::uno::Reference< css::linguistic2::XHyphenator >    GetHyphenator();
@@ -195,7 +195,7 @@ SW_DLLPUBLIC const LanguageTag& GetAppLanguageTag();
 #endif
 
 SW_DLLPUBLIC CollatorWrapper& GetAppCollator();
-SW_DLLPUBLIC CollatorWrapper& GetAppCaseCollator();
+CollatorWrapper& GetAppCaseCollator();
 
 SW_DLLPUBLIC const ::utl::TransliterationWrapper& GetAppCmpStrIgnore();
 

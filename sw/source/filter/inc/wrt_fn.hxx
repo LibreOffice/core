@@ -31,8 +31,8 @@ class SfxItemSet;
 typedef Writer& (*FnAttrOut)( Writer&, const SfxPoolItem& );
 typedef FnAttrOut SwAttrFnTab[ POOLATTR_END - POOLATTR_BEGIN ];
 
-SW_DLLPUBLIC Writer& Out( const SwAttrFnTab, const SfxPoolItem&, Writer& );
-SW_DLLPUBLIC Writer& Out_SfxItemSet( const SwAttrFnTab, Writer&, const SfxItemSet&,
+Writer& Out( const SwAttrFnTab, const SfxPoolItem&, Writer& );
+Writer& Out_SfxItemSet( const SwAttrFnTab, Writer&, const SfxItemSet&,
                          bool bDeep );
 
 /* function pointers to the node-write functions */
@@ -49,7 +49,7 @@ RES_NODE_END
 typedef Writer& (*FnNodeOut)( Writer&, SwContentNode& );
 typedef FnNodeOut SwNodeFnTab[ RES_NODE_END - RES_NODE_BEGIN ];
 
-SW_DLLPUBLIC Writer& Out( const SwNodeFnTab, SwNode&, Writer & rWrt );
+Writer& Out( const SwNodeFnTab, SwNode&, Writer & rWrt );
 
 #endif // INCLUDED_SW_SOURCE_FILTER_INC_WRT_FN_HXX
 

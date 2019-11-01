@@ -23,7 +23,7 @@
 #include <vcl/graph.hxx>
 
 VCL_DLLPUBLIC bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
-VCL_DLLPUBLIC bool IsGIFAnimated(SvStream& rStream);
+bool IsGIFAnimated(SvStream& rStream);
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
 
