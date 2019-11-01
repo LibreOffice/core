@@ -190,6 +190,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_B2DPolyLineDrawable \
 	CppunitTest_vcl_B2DPolyLineDrawableHelper \
 	CppunitTest_vcl_B2DPolyPolyLineDrawableHelper \
+	CppunitTest_vcl_B2DPolyPolygonDrawable \
 	CppunitTest_vcl_B2DPolygonDrawable \
 	CppunitTest_vcl_lifecycle \
 	CppunitTest_vcl_bitmap_test \
