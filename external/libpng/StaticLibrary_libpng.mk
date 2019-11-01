@@ -33,7 +33,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libpng,\
 	UnpackedTarball/libpng/pngwrite \
 	UnpackedTarball/libpng/pngwtran \
 	UnpackedTarball/libpng/pngwutil \
-	$(if $(filter ARM ARM64,$(CPUNAME)),\
+	$(if $(filter ARM AARCH64 ARM64,$(CPUNAME)),\
 	    UnpackedTarball/libpng/arm/arm_init \
 	    UnpackedTarball/libpng/arm/filter_neon_intrinsics \
 	    UnpackedTarball/libpng/arm/palette_neon_intrinsics \
