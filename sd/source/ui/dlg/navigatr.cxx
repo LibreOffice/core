@@ -93,6 +93,7 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
     maTlbObjects->SetSdNavigator(this);
 
     // DragTypeListBox
+    maLbDocs->setMaxWidthChars(20);
     maLbDocs->SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
 }
 
