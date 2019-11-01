@@ -2310,16 +2310,16 @@ void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<ed
 namespace
 {
 
-long lcl_GetRowHeightPx(const ScDocument* pDoc, SCROW nRow, SCTAB nTab)
+long lcl_GetRowHeightPx(const ScViewData &rViewData, SCROW nRow, SCTAB nTab)
 {
-    const sal_uInt16 nSize = pDoc->GetRowHeight(nRow, nTab);
-    return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+    const sal_uInt16 nSize = rViewData.GetDocument()->GetRowHeight(nRow, nTab);
+    return ScViewData::ToPixel(nSize, rViewData.GetPPTY());
 }
 
-long lcl_GetColWidthPx(const ScDocument* pDoc, SCCOL nCol, SCTAB nTab)
+long lcl_GetColWidthPx(const ScViewData &rViewData, SCCOL nCol, SCTAB nTab)
 {
-    const sal_uInt16 nSize = pDoc->GetColWidth(nCol, nTab);
-    return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+    const sal_uInt16 nSize = rViewData.GetDocument()->GetColWidth(nCol, nTab);
+    return ScViewData::ToPixel(nSize, rViewData.GetPPTX());
 }
 
 void lcl_getGroupIndexes(const ScOutlineArray& rArray, SCCOLROW nStart, SCCOLROW nEnd, std::vector<size_t>& rGroupIndexes)
@@ -2495,13 +2495,13 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     {
         SAL_INFO("sc.lok.header", "Row Header: compute start/end rows.");
         long nEndHeightPx = 0;
-        long nRectTopPx = rRectangle.Top() / TWIPS_PER_PIXEL;
-        long nRectBottomPx = rRectangle.Bottom() / TWIPS_PER_PIXEL;
+        long nRectTopPx = rRectangle.Top() * aViewData.GetPPTX();
+        long nRectBottomPx = rRectangle.Bottom() * aViewData.GetPPTY();
 
         const auto& rTopNearest = aViewData.GetLOKHeightHelper().getNearestByPosition(nRectTopPx);
         const auto& rBottomNearest = aViewData.GetLOKHeightHelper().getNearestByPosition(nRectBottomPx);
 
-        ScBoundsProvider aBoundingRowsProvider(pDoc, nTab, /*bColumnHeader: */ false);
+        ScBoundsProvider aBoundingRowsProvider(aViewData, nTab, /*bColumnHeader: */ false);
         aBoundingRowsProvider.Compute(rTopNearest, rBottomNearest, nRectTopPx, nRectBottomPx);
         aBoundingRowsProvider.EnlargeBy(2);
         aBoundingRowsProvider.GetStartIndexAndPosition(nStartRow, nStartHeightPx);
@@ -2591,7 +2591,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     {
         OUString aText = OUString::number(nStartRow + 1);
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\", ");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels / aViewData.GetPPTX())).append("\", ");
         aBuffer.append("\"groupLevels\": \"").append(OUString::number(nRowGroupDepth)).append("\" }");
     }
 
@@ -2601,14 +2601,15 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
     {
         // nSize will be 0 for hidden rows.
-        const long nSizePx = lcl_GetRowHeightPx(pDoc, nRow, nTab);
+        const long nSizePx = lcl_GetRowHeightPx(aViewData, nRow, nTab);
         nTotalPixels += nSizePx;
-        const long nTotalTwips = nTotalPixels * TWIPS_PER_PIXEL;
+        const long nTotalTwips = nTotalPixels / aViewData.GetPPTY();
 
         if (bRangeHeaderSupport && nRowGroupDepth > 0)
         {
             lcl_createGroupsData(nRow, nEndRow, nSizePx, nTotalTwips,
-                    *pRowArray, aRowGroupIndexes, aRowGroupStartPositions, aRowGroupsBuffer);
+                                 *pRowArray, aRowGroupIndexes, aRowGroupStartPositions,
+                                 aRowGroupsBuffer);
         }
 
         if (bRangeHeaderSupport && nRow < nEndRow && nSizePx == nPrevSizePx)
@@ -2638,13 +2639,13 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     {
         SAL_INFO("sc.lok.header", "Column Header: compute start/end columns.");
         long nEndWidthPx = 0;
-        long nRectLeftPx = rRectangle.Left() / TWIPS_PER_PIXEL;
-        long nRectRightPx = rRectangle.Right() / TWIPS_PER_PIXEL;
+        long nRectLeftPx = rRectangle.Left() * aViewData.GetPPTX();
+        long nRectRightPx = rRectangle.Right() * aViewData.GetPPTY();
 
         const auto& rLeftNearest = aViewData.GetLOKWidthHelper().getNearestByPosition(nRectLeftPx);
         const auto& rRightNearest = aViewData.GetLOKWidthHelper().getNearestByPosition(nRectRightPx);
 
-        ScBoundsProvider aBoundingColsProvider(pDoc, nTab, /*bColumnHeader: */ true);
+        ScBoundsProvider aBoundingColsProvider(aViewData, nTab, /*bColumnHeader: */ true);
         aBoundingColsProvider.Compute(rLeftNearest, rRightNearest, nRectLeftPx, nRectRightPx);
         aBoundingColsProvider.EnlargeBy(2);
         aBoundingColsProvider.GetStartIndexAndPosition(nStartCol, nStartWidthPx);
@@ -2734,7 +2735,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     {
         OUString aText = OUString::number(nStartCol + 1);
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\", ");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels / aViewData.GetPPTY())).append("\", ");
         aBuffer.append("\"groupLevels\": \"").append(OUString::number(nColGroupDepth)).append("\" }");
     }
 
@@ -2744,9 +2745,9 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     for (SCCOL nCol = nStartCol + 1; nCol <= nEndCol; ++nCol)
     {
         // nSize will be 0 for hidden columns.
-        const long nSizePx = lcl_GetColWidthPx(pDoc, nCol, nTab);
+        const long nSizePx = lcl_GetColWidthPx(aViewData, nCol, nTab);
         nTotalPixels += nSizePx;
-        const long nTotalTwips = nTotalPixels * TWIPS_PER_PIXEL;
+        const long nTotalTwips = nTotalPixels / aViewData.GetPPTY();
 
         if (bRangeHeaderSupport && nColGroupDepth > 0)
         {
