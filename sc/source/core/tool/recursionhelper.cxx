@@ -134,16 +134,44 @@ bool ScRecursionHelper::PushFormulaGroup(ScFormulaCell* pCell)
 
     pCell->SetSeenInPath(true);
     aFGList.push_back(pCell);
+    aInDependencyEvalMode.push_back(false);
     return true;
 }
 
 void ScRecursionHelper::PopFormulaGroup()
 {
+    assert(aFGList.size() == aInDependencyEvalMode.size());
     if (aFGList.empty())
         return;
     ScFormulaCell* pCell = aFGList.back();
     pCell->SetSeenInPath(false);
     aFGList.pop_back();
+    aInDependencyEvalMode.pop_back();
+}
+
+bool ScRecursionHelper::AnyCycleMemberInDependencyEvalMode(ScFormulaCell* pCell)
+{
+    assert(pCell);
+
+    if (pCell->GetSeenInPath())
+    {
+        // Found a simple cycle of formula-groups.
+        sal_Int32 nIdx = aFGList.size();
+        assert(nIdx > 0);
+        do
+        {
+            --nIdx;
+            assert(nIdx >= 0);
+            const ScFormulaCellGroupRef& mxGroup = aFGList[nIdx]->GetCellGroup();
+            // Found a cycle member FG that is in dependency evaluation mode.
+            if (mxGroup && aInDependencyEvalMode[nIdx])
+                return true;
+        } while (aFGList[nIdx] != pCell);
+
+        return false;
+    }
+
+    return false;
 }
 
 bool ScRecursionHelper::AnyParentFGInCycle()
@@ -157,6 +185,14 @@ bool ScRecursionHelper::AnyParentFGInCycle()
         --nIdx;
     };
     return false;
+}
+
+void ScRecursionHelper::SetFormulaGroupDepEvalMode(bool bSet)
+{
+    assert(aFGList.size());
+    assert(aFGList.size() == aInDependencyEvalMode.size());
+    assert(aFGList.back()->GetCellGroup());
+    aInDependencyEvalMode.back() = bSet;
 }
 
 void ScRecursionHelper::AddTemporaryGroupCell(ScFormulaCell* cell)
@@ -207,10 +243,12 @@ ScFormulaGroupDependencyComputeGuard::ScFormulaGroupDependencyComputeGuard(ScRec
     mrRecHelper(rRecursionHelper)
 {
     mrRecHelper.IncDepComputeLevel();
+    mrRecHelper.SetFormulaGroupDepEvalMode(true);
 }
 
 ScFormulaGroupDependencyComputeGuard::~ScFormulaGroupDependencyComputeGuard()
 {
+    mrRecHelper.SetFormulaGroupDepEvalMode(false);
     mrRecHelper.DecDepComputeLevel();
 }
 
