@@ -23,7 +23,7 @@
 #include "sdfilter.hxx"
 
 // SdCGMFilter
-class SdCGMFilter : public SdFilter
+class SdCGMFilter final : public SdFilter
 {
 public:
     SdCGMFilter (

@@ -46,7 +46,7 @@ private:
     std::unique_ptr<SfxUndoAction>  mpUndoPresObj;
 };
 
-class UndoRemoveObject : public SdrUndoRemoveObj, public UndoRemovePresObjectImpl
+class UndoRemoveObject final : public SdrUndoRemoveObj, public UndoRemovePresObjectImpl
 {
 public:
     UndoRemoveObject(SdrObject& rObject);
@@ -58,7 +58,7 @@ private:
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
-class UndoDeleteObject : public SdrUndoDelObj, public UndoRemovePresObjectImpl
+class UndoDeleteObject final : public SdrUndoDelObj, public UndoRemovePresObjectImpl
 {
 public:
     UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect );
@@ -70,7 +70,7 @@ private:
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
-class UndoReplaceObject : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl
+class UndoReplaceObject final : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl
 {
 public:
     UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject );
@@ -82,7 +82,7 @@ private:
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
-class UndoObjectSetText : public SdrUndoObjSetText
+class UndoObjectSetText final : public SdrUndoObjSetText
 {
 public:
     UndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );

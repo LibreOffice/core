@@ -128,7 +128,7 @@ namespace sd
 }
 
 // SdDrawDocument
-class SD_DLLPUBLIC SdDrawDocument : public FmFormModel
+class SD_DLLPUBLIC SdDrawDocument final : public FmFormModel
 {
 public:
     SAL_DLLPRIVATE void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
@@ -199,8 +199,6 @@ private:
     bool mbEmbedFontScriptLatin : 1;
     bool mbEmbedFontScriptAsian : 1;
     bool mbEmbedFontScriptComplex : 1;
-
-protected:
 
     SAL_DLLPRIVATE virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
 

@@ -30,7 +30,7 @@ namespace sd {
 
 class TextAPIEditSource;
 
-class TextApiObject : public SvxUnoText
+class TextApiObject final : public SvxUnoText
 {
 public:
     static rtl::Reference< TextApiObject > create( SdDrawDocument* pDoc );

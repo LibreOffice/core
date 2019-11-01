@@ -28,7 +28,7 @@ namespace sd
 class DrawDocShell;
 }
 
-class SdPdfFilter : public SdFilter
+class SdPdfFilter final : public SdFilter
 {
 public:
     SdPdfFilter(SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell);

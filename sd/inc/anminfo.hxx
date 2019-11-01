@@ -28,7 +28,7 @@
 #include <tools/color.hxx>
 #include "sddllapi.h"
 
-class SD_DLLPUBLIC SdAnimationInfo : public SdrObjUserData
+class SD_DLLPUBLIC SdAnimationInfo final : public SdrObjUserData
 {
 public:
     PresObjKind             mePresObjKind;

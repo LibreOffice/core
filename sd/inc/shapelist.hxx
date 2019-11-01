@@ -27,7 +27,7 @@
 
 namespace sd
 {
-    class ShapeList : public sdr::ObjectUser
+    class ShapeList final : public sdr::ObjectUser
     {
     public:
         ShapeList();
