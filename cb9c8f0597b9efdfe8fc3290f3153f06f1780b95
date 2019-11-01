@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_1674a367",
+        "filename": "framework/source/uielement/FixedImageToolbarController.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2019-11-01T20:19:32Z",
+      "side": 1,
+      "message": "yeah, this trash should be removed",
+      "parentUuid": "7f7f9b97_16dd836f",
+      "revId": "cb9c8f0597b9efdfe8fc3290f3153f06f1780b95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_f6e1e72b",
         "filename": "framework/source/uielement/FixedImageToolbarController.cxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-11-01T19:27:11Z",
       "side": 1,
       "message": "Does this work? Isn\u0027t there some invalidate() or some other kind of refresh needed?",
+      "revId": "cb9c8f0597b9efdfe8fc3290f3153f06f1780b95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_765dd7e7",
+        "filename": "framework/source/uielement/FixedImageToolbarController.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2019-11-01T20:19:32Z",
+      "side": 1,
+      "message": "This method is called on MiscOptionsChanged event which is handled also inside toolbar class (our parent) where actual invalidate/update methods are called for all toolbars controls",
+      "parentUuid": "7f7f9b97_f6e1e72b",
       "revId": "cb9c8f0597b9efdfe8fc3290f3153f06f1780b95",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
