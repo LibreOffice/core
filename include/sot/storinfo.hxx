@@ -54,7 +54,7 @@ public:
 
 typedef std::vector<SvStorageInfo> SvStorageInfoList;
 
-SOT_DLLPUBLIC SotClipboardFormatId ReadClipboardFormat(SvStream & rStm);
+SotClipboardFormatId ReadClipboardFormat(SvStream & rStm);
 SOT_DLLPUBLIC void WriteClipboardFormat(SvStream & rStm, SotClipboardFormatId nFormat);
 
 #endif // _STORINFO_HXX

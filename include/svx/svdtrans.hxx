@@ -227,8 +227,8 @@ public:
 tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo);
 void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGeo);
 
-SVX_DLLPUBLIC void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho);
-SVX_DLLPUBLIC void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho);
+void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho);
+void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho);
 
 // Multiplication and subsequent division
 // Calculation and intermediate values are in BigInt

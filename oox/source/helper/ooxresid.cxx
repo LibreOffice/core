@@ -11,9 +11,6 @@
 #include <ooxresid.hxx>
 #include <unotools/resmgr.hxx>
 
-OOX_DLLPUBLIC OUString OoxResId(const char* pId)
-{
-    return Translate::get(pId, Translate::Create("oox"));
-}
+OUString OoxResId(const char* pId) { return Translate::get(pId, Translate::Create("oox")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

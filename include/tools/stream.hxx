@@ -480,7 +480,7 @@ inline std::size_t write_uInt16s_FromOUString(SvStream& rStrm,
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
-TOOLS_DLLPUBLIC std::size_t write_uInt32_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
+std::size_t write_uInt32_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
                                                 const OUString &rStr);
 
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence

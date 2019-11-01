@@ -80,8 +80,8 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool operator!= (const ScCalcConfig& r) const;
 };
 
-SC_DLLPUBLIC OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes);
-SC_DLLPUBLIC ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes);
+OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes);
+ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes);
 
 #endif
 

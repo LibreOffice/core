@@ -31,7 +31,7 @@ struct SalTwoRect;
 // the bmpfast functions have signatures with good compatibility to
 // their canonic counterparts, which employ the GetPixel/SetPixel methods
 
-VCL_DLLPUBLIC bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
+bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
         const SalTwoRect& rTwoRect );
 
 bool ImplFastBitmapBlending( BitmapWriteAccess const & rDst,

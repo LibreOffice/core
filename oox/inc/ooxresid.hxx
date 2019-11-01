@@ -13,7 +13,7 @@
 #include <rtl/ustring.hxx>
 #include <oox/dllapi.h>
 
-OOX_DLLPUBLIC OUString OoxResId(const char* pId);
+OUString OoxResId(const char* pId);
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

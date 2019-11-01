@@ -25,12 +25,12 @@
 namespace com::sun::star::xml::crypto { class XUriBinding; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
-XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks() ;
-XSECXMLSEC_DLLPUBLIC void xmlDisableStreamInputCallbacks() ;
-XSECXMLSEC_DLLPUBLIC int xmlRegisterStreamInputCallbacks(
+int xmlEnableStreamInputCallbacks() ;
+void xmlDisableStreamInputCallbacks() ;
+int xmlRegisterStreamInputCallbacks(
     css::uno::Reference< css::xml::crypto::XUriBinding > const & aUriBinding
 );
-XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks() ;
+int xmlUnregisterStreamInputCallbacks() ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
 

@@ -63,8 +63,8 @@ public:
                         { return !(MapMode::operator==( rMapMode )); }
     bool            IsDefault() const;
 
-    friend VCL_DLLPUBLIC SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode );
-    friend VCL_DLLPUBLIC SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode );
+    friend SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode );
+    friend SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode );
 
     // tdf#117984 needs to be thread-safe due to being used e.g. in Bitmaps
     // vcl::ScopedBitmapAccess in parallelized 3D renderer

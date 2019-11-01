@@ -65,8 +65,8 @@ public:
     void            SetAngle( sal_uInt16 nAngle10 );
     sal_uInt16          GetAngle() const { return mpImplHatch->mnAngle; }
 
-    friend VCL_DLLPUBLIC SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch );
-    friend VCL_DLLPUBLIC SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch );
+    friend SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch );
+    friend SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch );
 
 private:
     o3tl::cow_wrapper< ImplHatch >          mpImplHatch;

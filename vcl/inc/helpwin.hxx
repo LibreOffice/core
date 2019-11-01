@@ -72,7 +72,7 @@ public:
 void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
         const OUString& rHelpText,
         const Point& rScreenPos, const tools::Rectangle& rHelpArea );
-VCL_DLLPUBLIC void ImplDestroyHelpWindow( bool bUpdateHideTime );
+void ImplDestroyHelpWindow( bool bUpdateHideTime );
 void ImplSetHelpWindowPos( vcl::Window* pHelpWindow, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
                             const Point& rPos, const tools::Rectangle& rHelpArea );
 
