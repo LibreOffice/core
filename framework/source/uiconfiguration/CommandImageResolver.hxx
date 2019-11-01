@@ -10,7 +10,6 @@
 #ifndef INCLUDED_VCL_COMMANDICONRESOLVER_HXX
 #define INCLUDED_VCL_COMMANDICONRESOLVER_HXX
 
-#include <vcl/dllapi.h>
 #include <vcl/image.hxx>
 #include <o3tl/enumarray.hxx>
 

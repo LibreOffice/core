@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_MACROS_REGISTRATION_HXX
 #define INCLUDED_FRAMEWORK_INC_MACROS_REGISTRATION_HXX
 
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //namespace framework{

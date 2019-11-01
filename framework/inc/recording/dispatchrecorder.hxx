@@ -26,17 +26,14 @@
 #include <vector>
 
 #include <macros/xserviceinfo.hxx>
-#include <general.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XDispatchRecorder.hpp>
 #include <com/sun/star/frame/DispatchStatement.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <cppuhelper/implbase.hxx>
 
