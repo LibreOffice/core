@@ -570,6 +570,9 @@ void ImpGraphic::ImplSetPrepared(bool bAnimated, const Size* pSizeHint)
         maSwapInfo.maSizePixel = aDescriptor.GetSizePixel();
         maSwapInfo.mbIsTransparent = aDescriptor.IsTransparent();
         maSwapInfo.mbIsAlpha = aDescriptor.IsAlpha();
+    } else {
+        maSwapInfo.mbIsTransparent = false;
+        maSwapInfo.mbIsAlpha = false;
     }
 
     maSwapInfo.mnAnimationLoopCount = 0;
