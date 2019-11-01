@@ -345,9 +345,37 @@ void SkiaSalGraphicsImpl::SetXORMode(bool bSet, bool bInvertOnly)
     (void)bInvertOnly;
 }
 
-void SkiaSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor) { (void)nROPColor; }
+void SkiaSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor)
+{
+    switch (nROPColor)
+    {
+        case SalROPColor::N0:
+            mLineColor = Color(0, 0, 0);
+            break;
+        case SalROPColor::N1:
+            mLineColor = Color(0xff, 0xff, 0xff);
+            break;
+        case SalROPColor::Invert:
+            mLineColor = Color(0xff, 0xff, 0xff);
+            break;
+    }
+}
 
-void SkiaSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor) { (void)nROPColor; }
+void SkiaSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor)
+{
+    switch (nROPColor)
+    {
+        case SalROPColor::N0:
+            mFillColor = Color(0, 0, 0);
+            break;
+        case SalROPColor::N1:
+            mFillColor = Color(0xff, 0xff, 0xff);
+            break;
+        case SalROPColor::Invert:
+            mFillColor = Color(0xff, 0xff, 0xff);
+            break;
+    }
+}
 
 void SkiaSalGraphicsImpl::drawPixel(long nX, long nY) { drawPixel(nX, nY, mLineColor); }
 
