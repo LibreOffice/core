@@ -43,6 +43,7 @@
 #include <uno/data.h>
 
 #include "abi.hxx"
+#include "../gcc3_linux_arm/share.hxx"
 #include "callvirtualfunction.hxx"
 
 namespace {
