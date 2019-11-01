@@ -1685,7 +1685,17 @@ static bool lcl_InterpretSpan(sc::formula_block::const_iterator& rSpanIter, SCRO
                 // Evaluate from second cell in non-grouped style (no point in trying group-interpret again).
                 ++itSpanStart;
                 for (SCROW nIdx = nSpanStart+1; nIdx <= nSpanEnd; ++nIdx, ++itSpanStart)
+                {
                     (*itSpanStart)->Interpret(); // We know for sure that this cell is dirty so directly call Interpret().
+                    // Allow early exit like above.
+                    if ((mxParentGroup && mxParentGroup->mbPartOfCycle) || !rRecursionHelper.AreGroupsIndependent())
+                    {
+                        // Set this cell as dirty as this may be interpreted in InterpretTail()
+                        pCellStart->SetDirtyVar();
+                        bAllowThreading = false;
+                        return bAnyDirty;
+                    }
+                }
             }
 
             pCellStart = nullptr; // For next sub span start detection.
