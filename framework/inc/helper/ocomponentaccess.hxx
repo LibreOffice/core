@@ -20,11 +20,8 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTACCESS_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTACCESS_HXX
 
-#include <general.h>
-
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XElementAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

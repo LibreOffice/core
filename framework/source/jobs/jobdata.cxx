@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <jobs/configaccess.hxx>
 #include <jobs/jobdata.hxx>
 #include <classes/converter.hxx>
 #include <general.h>

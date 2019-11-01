@@ -21,10 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_OXT_HANDLER_HXX
 
 #include <macros/xserviceinfo.hxx>
-#include <general.h>
-#include <stdtypes.h>
 
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>

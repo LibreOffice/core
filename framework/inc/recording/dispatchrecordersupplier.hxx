@@ -21,10 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_RECORDING_DISPATCHRECORDERSUPPLIER_HXX
 
 #include <macros/xserviceinfo.hxx>
-#include <general.h>
-#include <stdtypes.h>
 
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>

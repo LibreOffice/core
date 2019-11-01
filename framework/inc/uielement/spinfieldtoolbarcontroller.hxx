@@ -20,11 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_SPINFIELDTOOLBARCONTROLLER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_SPINFIELDTOOLBARCONTROLLER_HXX
 
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <uielement/complextoolbarcontroller.hxx>
-#include <vcl/spinfld.hxx>
+#include <vcl/event.hxx>
 #include <vcl/vclptr.hxx>
 
 class ToolBox;

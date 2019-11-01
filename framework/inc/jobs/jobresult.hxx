@@ -20,13 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_JOBRESULT_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_JOBRESULT_HXX
 
-#include <stdtypes.h>
-#include <general.h>
-
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 
-#include <rtl/ustring.hxx>
+#include <vector>
 
 namespace framework{
 

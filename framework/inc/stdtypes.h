@@ -20,13 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_STDTYPES_H
 #define INCLUDED_FRAMEWORK_INC_STDTYPES_H
 
-#include <algorithm>
-#include <queue>
-#include <unordered_map>
-#include <vector>
-
-#include "general.h"
-
 #include <com/sun/star/awt/KeyEvent.hpp>
 
 #include <cppuhelper/interfacecontainer.hxx>
