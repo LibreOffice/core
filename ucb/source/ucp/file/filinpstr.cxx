@@ -25,6 +25,8 @@
 #include "filinpstr.hxx"
 #include "filerror.hxx"
 
+#include <limits>
+
 using namespace fileaccess;
 using namespace com::sun::star;
 
@@ -88,6 +90,10 @@ XInputStream_impl::readBytes(
     if(m_aFile.read( aData.getArray(),sal_uInt64(nBytesToRead),nrc )
        != osl::FileBase::E_None)
         throw io::IOException( THROW_WHERE );
+
+    // tdf#127648: workaround some filesystem returning large unsigned 32-bit value instead of error
+    if (nrc > std::numeric_limits<sal_Int32>::max())
+        throw io::IOException(THROW_WHERE);
 
     // Shrink aData in case we read less than nBytesToRead (XInputStream
     // documentation does not tell whether this is required, and I do not know
