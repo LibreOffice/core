@@ -582,6 +582,8 @@ namespace
         {
             auto const pField(startedFields.top());
             startedFields.pop();
+            if (!pField)
+                continue;
             SwPosition const& rStart(pField->GetMarkStart());
             std::pair<sal_uLong, sal_Int32> const pos(
                     rStart.nNode.GetIndex(), rStart.nContent.GetIndex());
