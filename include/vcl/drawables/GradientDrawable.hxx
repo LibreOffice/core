@@ -69,41 +69,6 @@ private:
     bool Draw(OutputDevice* pRenderContext, tools::PolyPolygon const& rRect,
               Gradient const& rGradient) const;
 
-    static bool AddGradientActions(OutputDevice* pRenderContext, tools::Rectangle const& rRect,
-                                   Gradient const& rGradient, GDIMetaFile* pMetaFile);
-
-    SAL_DLLPRIVATE void DrawLinearGradient(OutputDevice* pRenderContext,
-                                           const tools::Rectangle& rRect, const Gradient& rGradient,
-                                           const tools::PolyPolygon* pClipPolyPoly) const;
-
-    SAL_DLLPRIVATE void DrawComplexGradient(OutputDevice* pRenderContext,
-                                            const tools::Rectangle& rRect,
-                                            const Gradient& rGradient,
-                                            const tools::PolyPolygon* pClipPolyPoly) const;
-
-    SAL_DLLPRIVATE void DrawGradientToMetafile(OutputDevice* pRenderContext,
-                                               const tools::PolyPolygon& rPolyPoly,
-                                               const Gradient& rGradient) const;
-
-    SAL_DLLPRIVATE static void DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
-                                                            const tools::Rectangle& rRect,
-                                                            const Gradient& rGradient);
-
-    SAL_DLLPRIVATE static void DrawComplexGradientToMetafile(OutputDevice* pRenderContext,
-                                                             const tools::Rectangle& rRect,
-                                                             const Gradient& rGradient);
-
-    SAL_DLLPRIVATE static void SetGrayscaleColors(OutputDevice* pRenderContext,
-                                                  Gradient const& rGradient);
-    SAL_DLLPRIVATE static long GetGradientSteps(OutputDevice* pRenderContext,
-                                                const Gradient& rGradient,
-                                                const tools::Rectangle& rRect, bool bMtf,
-                                                bool bComplex = false);
-
-    SAL_DLLPRIVATE static Color GetSingleColorGradientFill(OutputDevice* pRenderContext);
-    SAL_DLLPRIVATE static void SetGrayscaleColors(OutputDevice* pRenderContext,
-                                                  Gradient& rGradient);
-
     tools::Rectangle maRect;
     tools::PolyPolygon maPolyPolygon;
     Gradient maGradient;
