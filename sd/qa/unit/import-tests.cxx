@@ -81,6 +81,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include <stlpool.hxx>
@@ -210,6 +211,7 @@ public:
     void testOOXTheme();
     void testCropToShape();
     void testTdf127964();
+    void testTdf106638();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -308,6 +310,7 @@ public:
     CPPUNIT_TEST(testOOXTheme);
     CPPUNIT_TEST(testCropToShape);
     CPPUNIT_TEST(testTdf127964);
+    CPPUNIT_TEST(testTdf106638);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2980,6 +2983,27 @@ void SdImportTest::testTdf127964()
     // blue.
     CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, rFillColorItem.GetColorValue());
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf106638()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf106638.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<text::XTextRange> const xPara(getParagraphFromShape(1, xShape));
+    uno::Reference<text::XText> xText= xPara->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursorByRange(xPara->getStart());
+    uno::Reference<beans::XPropertySet> xPropSet(xTextCursor, uno::UNO_QUERY_THROW );
+    OUString aCharFontName;
+    CPPUNIT_ASSERT(xTextCursor->goRight(1, true));
+    // First charcter U+f0fe that use Wingding
+    xPropSet->getPropertyValue("CharFontName") >>= aCharFontName;
+    CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), aCharFontName);
+
+    // The rest characters that do not use Wingding.
+    CPPUNIT_ASSERT(xTextCursor->goRight(45, true));
+    xPropSet->getPropertyValue("CharFontName") >>= aCharFontName;
+    CPPUNIT_ASSERT(aCharFontName != "Wingdings");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
