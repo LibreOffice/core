@@ -472,7 +472,7 @@ public:
  *
  *  Value container for menubars specifying height of adjacent docking area
  */
-class VCL_DLLPUBLIC MenubarValue final : public ImplControlValue
+class MenubarValue final : public ImplControlValue
 {
 public:
     MenubarValue() : ImplControlValue( ControlType::Menubar, 0 )
@@ -491,7 +491,7 @@ public:
  * Value container for menu items; specifies the rectangle for the whole item which
  * may be useful when drawing parts with a smaller rectangle.
  */
-class VCL_DLLPUBLIC MenupopupValue final : public ImplControlValue
+class MenupopupValue final : public ImplControlValue
 {
 public:
     MenupopupValue( long i_nGutterWidth, const tools::Rectangle& i_rItemRect )

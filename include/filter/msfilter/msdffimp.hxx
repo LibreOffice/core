@@ -130,7 +130,7 @@ struct MSFILTER_DLLPUBLIC CompareSvxMSDffShapeInfoById
     bool operator()(std::shared_ptr<SvxMSDffShapeInfo> const& lhs,
                     std::shared_ptr<SvxMSDffShapeInfo> const& rhs) const;
 };
-struct MSFILTER_DLLPUBLIC CompareSvxMSDffShapeInfoByTxBxComp
+struct CompareSvxMSDffShapeInfoByTxBxComp
 {
     bool operator()(std::shared_ptr<SvxMSDffShapeInfo> const& lhs,
                     std::shared_ptr<SvxMSDffShapeInfo> const& rhs) const;

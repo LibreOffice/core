@@ -135,7 +135,7 @@ protected:
 };
 
 // TODO: moggi: what about push buttons?
-class UITEST_DLLPUBLIC ButtonUIObject final : public WindowUIObject
+class ButtonUIObject final : public WindowUIObject
 {
     VclPtr<Button> mxButton;
 public:
@@ -157,7 +157,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC DialogUIObject final : public WindowUIObject
+class DialogUIObject final : public WindowUIObject
 {
     VclPtr<Dialog> mxDialog;
 
@@ -175,7 +175,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC EditUIObject : public WindowUIObject
+class EditUIObject : public WindowUIObject
 {
     VclPtr<Edit> mxEdit;
 
@@ -198,7 +198,7 @@ protected:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC MultiLineEditUIObject final : public WindowUIObject
+class MultiLineEditUIObject final : public WindowUIObject
 {
     VclPtr<VclMultiLineEdit> mxEdit;
 
@@ -220,7 +220,7 @@ private:
 };
 
 // TODO: moggi: maybe let it inherit from the button case
-class UITEST_DLLPUBLIC CheckBoxUIObject final : public WindowUIObject
+class CheckBoxUIObject final : public WindowUIObject
 {
 private:
     VclPtr<CheckBox> mxCheckBox;
@@ -286,7 +286,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC ListBoxUIObject final : public WindowUIObject
+class ListBoxUIObject final : public WindowUIObject
 {
 private:
     VclPtr<ListBox> mxListBox;
@@ -311,7 +311,7 @@ private:
 };
 
 // TODO: moggi: should it inherit from EditUIObject?
-class UITEST_DLLPUBLIC ComboBoxUIObject final : public WindowUIObject
+class ComboBoxUIObject final : public WindowUIObject
 {
 private:
     VclPtr<ComboBox> mxComboBox;

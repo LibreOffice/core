@@ -20,7 +20,7 @@
 
 // Struct that describs an actual instance of an OpenCL device
 
-struct OPENCL_DLLPUBLIC OpenCLDeviceInfo
+struct OpenCLDeviceInfo
 {
     cl_device_id device;
     OUString maName;
@@ -35,7 +35,7 @@ struct OPENCL_DLLPUBLIC OpenCLDeviceInfo
 
 // Struct that describs an actual instance of an OpenCL platform implementation
 
-struct OPENCL_DLLPUBLIC OpenCLPlatformInfo
+struct OpenCLPlatformInfo
 {
     cl_platform_id platform;
     OUString maVendor;

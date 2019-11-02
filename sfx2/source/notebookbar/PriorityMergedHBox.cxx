@@ -30,7 +30,7 @@
 * PriorityMergedHBox is a VclHBox which hides its own children if there is no sufficient space.
 */
 
-class SFX2_DLLPUBLIC PriorityMergedHBox : public PriorityHBox
+class PriorityMergedHBox : public PriorityHBox
 {
 private:
     VclPtr<PushButton> m_pButton;

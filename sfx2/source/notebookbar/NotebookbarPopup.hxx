@@ -30,7 +30,7 @@
  * and after close moved to the original parent
  */
 
-class SFX2_DLLPUBLIC NotebookbarPopup : public FloatingWindow
+class NotebookbarPopup : public FloatingWindow
 {
 private:
     VclPtr<VclHBox> m_pBox;
