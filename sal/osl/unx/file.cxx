@@ -340,6 +340,17 @@ oslFileError FileHandle_Impl::readAt(
         nBytes = 0;
     }
 
+    // tdf#127648: some 'pread()'s may return large "unsigned 32-bit int" when fail; presumably the
+    // returned value is negated errno (e.g., EACCESS => -13) as signed 32-bit integer (0xFFFFFFF3)
+    // treated as unsigned 32-bit integer (4294967283) and returned as 64-bit ssize_t.
+    // The diagnostic will fail for reads larger than and slightly less than 2^32 bytes.
+    if (nBytes > 0 && static_cast<size_t>(nBytes) > nBytesRequested)
+    {
+        nBytes = -1;
+        if (!errno)
+            errno = EIO;
+    }
+
     if (nBytes == -1)
         return oslTranslateFileError(errno);
 
