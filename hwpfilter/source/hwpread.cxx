@@ -371,17 +371,17 @@ namespace
     {
     private:
         HIODev* m_pOldMem;
-        HIODev* m_pNewMem;
+        std::unique_ptr<HMemIODev> m_xNewMem;
     public:
-        ChangeMemGuard(HMemIODev* pNewMem)
+        ChangeMemGuard(unsigned char* data, size_t nLen)
             : m_pOldMem(hmem)
-            , m_pNewMem(pNewMem)
+            , m_xNewMem(std::make_unique<HMemIODev>(reinterpret_cast<char*>(data), nLen))
         {
-            hmem = m_pNewMem;
+            hmem = m_xNewMem.get();
         }
         ~ChangeMemGuard()
         {
-            assert(hmem == m_pNewMem);
+            assert(hmem == m_xNewMem.get());
             hmem = m_pOldMem;
         }
     };
@@ -489,12 +489,10 @@ bool Picture::Read(HWPFile & hwpf)
 
         if (pictype == PICTYPE_DRAW)
         {
-            auto xNewMem(std::make_unique<HMemIODev>(reinterpret_cast<char*>(follow.data()), follow_block_size));
-            auto xGuard(std::make_unique<ChangeMemGuard>(xNewMem.get()));
+            auto xGuard(std::make_unique<ChangeMemGuard>(follow.data(), follow_block_size));
             LoadDrawingObjectBlock(this);
             style.cell = picinfo.picdraw.hdo;
             xGuard.reset();
-            xNewMem.reset();
         }
         else if (follow_block_size >= 4)
         {
