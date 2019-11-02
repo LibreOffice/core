@@ -54,6 +54,17 @@ PolyPolygon::~PolyPolygon()
 {
 }
 
+bool PolyPolygon::HasCurve() const
+{
+    for(sal_uInt16 nPos(0); nPos < Count(); nPos++)
+    {
+        if (mpImplPolyPolygon->mvPolyAry[nPos].HasFlags())
+            return true;
+    }
+
+    return false;
+}
+
 void PolyPolygon::Insert( const tools::Polygon& rPoly, sal_uInt16 nPos )
 {
     assert ( mpImplPolyPolygon->mvPolyAry.size() < MAX_POLYGONS );
