@@ -41,7 +41,7 @@ bool SfxFlagItem::GetPresentation
 {
     rText.clear();
     for ( sal_uInt8 nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
-        rText += GetFlag(nFlag) ? OUString("true") : OUString("false");
+        rText += GetFlag(nFlag) ? OUStringLiteral("true") : OUStringLiteral("false");
     return true;
 }
 

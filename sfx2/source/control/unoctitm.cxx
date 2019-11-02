@@ -1050,7 +1050,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         }
         else
         {
-            aBuffer.append(aEvent.IsEnabled ? OUString("enabled") : OUString("disabled"));
+            aBuffer.append(aEvent.IsEnabled ? OUStringLiteral("enabled") : OUStringLiteral("disabled"));
         }
     }
     else if (aEvent.FeatureURL.Path == "Cut" ||
@@ -1090,7 +1090,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "ThesaurusDialog")
 
     {
-        aBuffer.append(aEvent.IsEnabled ? OUString("enabled") : OUString("disabled"));
+        aBuffer.append(aEvent.IsEnabled ? OUStringLiteral("enabled") : OUStringLiteral("disabled"));
     }
     else if (aEvent.FeatureURL.Path == "AssignLayout" ||
              aEvent.FeatureURL.Path == "StatusSelectionMode" ||

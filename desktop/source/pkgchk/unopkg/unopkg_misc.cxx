@@ -262,7 +262,7 @@ void printf_package(
         if (reg.IsAmbiguous)
             value = "unknown";
         else
-            value = reg.Value ? OUString("yes") : OUString("no");
+            value = reg.Value ? OUStringLiteral("yes") : OUStringLiteral("no");
     }
     else
         value = "n/a";

@@ -653,7 +653,7 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( sal_uInt16 nFa
             xAutoStyles = mxParaAutoStyles;
         else
         {
-            sName = bPara ? OUString( "ParagraphStyles" ): OUString( "CharacterStyles" );
+            sName = bPara ? OUStringLiteral( "ParagraphStyles" ): OUStringLiteral( "CharacterStyles" );
             Reference< XAutoStylesSupplier > xAutoStylesSupp(   GetImport().GetModel(), UNO_QUERY );
             Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
             if (xAutoStyleFamilies->hasByName(sName))
