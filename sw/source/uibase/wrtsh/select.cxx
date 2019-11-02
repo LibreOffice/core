@@ -941,15 +941,22 @@ void SwWrtShell::SelectNextPrevHyperlink( bool bNext )
 {
     StartAction();
     bool bRet = SwCursorShell::SelectNxtPrvHyperlink( bNext );
-    if( !bRet )
+    if( !bRet ) // didn't find? wrap and check again
     {
-        // will we have this feature?
+        SwShellCursor* pCursor = GetCursor_();
+        SwCursorSaveState aSaveState(*pCursor);
         EnterStdMode();
         if( bNext )
             SttEndDoc(true);
         else
             SttEndDoc(false);
-        SwCursorShell::SelectNxtPrvHyperlink( bNext );
+        bRet = SwCursorShell::SelectNxtPrvHyperlink(bNext);
+        if (!bRet) // didn't find again? restore cursor position and bail
+        {
+            pCursor->RestoreSavePos();
+            EndAction(true); // don't scroll to restored cursor position
+            return;
+        }
     }
     EndAction();
 
