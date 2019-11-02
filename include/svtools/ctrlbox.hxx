@@ -356,7 +356,7 @@ private:
     FontNameBox&    operator =( const FontNameBox& ) = delete;
 };
 
-class SVT_DLLPUBLIC FontStyleBox final : public ComboBox
+class FontStyleBox final : public ComboBox
 {
     Size            aOptimalSize;
 

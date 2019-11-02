@@ -47,7 +47,7 @@ class SvStream;
 #define IMAP_ERR_OK         0x00000000L
 #define IMAP_ERR_FORMAT     0x00000001L
 
-class VCL_DLLPUBLIC IMapObject
+class IMapObject
 {
     friend class        ImageMap;
 

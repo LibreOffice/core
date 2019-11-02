@@ -26,7 +26,7 @@ struct PackedTexture;
  * [2]: https://github.com/lukaszdk/texture-atlas-generator
  *
  */
-class VCL_DLLPUBLIC PackedTextureAtlasManager final
+class PackedTextureAtlasManager final
 {
     std::vector<std::unique_ptr<PackedTexture>> maPackedTextures;
 

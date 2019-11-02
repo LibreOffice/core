@@ -40,7 +40,7 @@ private:
     std::unique_ptr<GtkSalPrinter_Impl> m_xImpl;
 };
 
-class VCL_DLLPUBLIC GtkSalInfoPrinter : public PspSalInfoPrinter
+class GtkSalInfoPrinter : public PspSalInfoPrinter
 {
 public:
     sal_uInt32 GetCapabilities(const ImplJobSetup* i_pSetupData, PrinterCapType i_nType) override;

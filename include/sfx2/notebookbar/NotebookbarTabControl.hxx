@@ -18,7 +18,7 @@ namespace com { namespace sun { namespace star { namespace ui {
 } } } }
 namespace com::sun::star::uno { class XComponentContext; }
 
-class SFX2_DLLPUBLIC NotebookbarTabControl final : public NotebookbarTabControlBase
+class NotebookbarTabControl final : public NotebookbarTabControlBase
 {
 friend class ChangedUIEventListener;
 

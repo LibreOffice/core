@@ -28,7 +28,7 @@ class SvxColorValueSet;
 
 typedef std::pair<Color, OUString> NamedColor;
 
-class SVX_DLLPUBLIC Palette
+class Palette
 {
 public:
     virtual ~Palette();

@@ -88,7 +88,7 @@ private:
     sal_IntPtr              m_nMaxFontId;
 };
 
-class VCL_DLLPUBLIC FreetypeFont final
+class FreetypeFont final
 {
 public:
                             FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*);
