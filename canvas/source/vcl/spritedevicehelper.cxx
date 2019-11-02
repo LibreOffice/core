@@ -19,15 +19,11 @@
 
 #include <sal/config.h>
 
-#include <basegfx/utils/canvastools.hxx>
-#include <canvas/canvastools.hxx>
-#include <vcl/canvastools.hxx>
+#include <osl/diagnose.h>
+#include <vcl/bitmapex.hxx>
 #include <vcl/dibtools.hxx>
 #include <tools/stream.hxx>
 
-#include "canvasbitmap.hxx"
-#include "spritecanvas.hxx"
-#include "spritecanvashelper.hxx"
 #include "spritedevicehelper.hxx"
 
 using namespace ::com::sun::star;

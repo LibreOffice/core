@@ -19,21 +19,13 @@
 
 #include <sal/config.h>
 
-#include <limits>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/utils/canvastools.hxx>
-#include <basegfx/utils/tools.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/math.hxx>
 
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 
-#include <canvas/canvastools.hxx>
 #include <canvas/parametricpolypolygon.hxx>
 
 using namespace ::com::sun::star;

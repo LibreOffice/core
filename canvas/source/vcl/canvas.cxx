@@ -19,24 +19,12 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
-#include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/bitmapex.hxx>
-#include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
-
-#include <canvas/canvastools.hxx>
 
 #include "canvas.hxx"
-#include "windowoutdevholder.hxx"
 
 using namespace ::com::sun::star;
 

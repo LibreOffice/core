@@ -30,8 +30,6 @@
 #include <comphelper/servicedecl.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <o3tl/lazy_update.hxx>
 
 #include <canvas/canvastools.hxx>

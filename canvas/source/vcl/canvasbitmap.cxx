@@ -20,8 +20,6 @@
 #include <sal/config.h>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
-#include <vcl/bitmapaccess.hxx>
 
 #include "canvasbitmap.hxx"
 

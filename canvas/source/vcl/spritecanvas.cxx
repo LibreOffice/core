@@ -20,20 +20,8 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <algorithm>
-
-#include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/diagnose_ex.h>
-#include <vcl/bitmapex.hxx>
-#include <vcl/canvastools.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
-
-#include <canvas/canvastools.hxx>
 
 #include "spritecanvas.hxx"
 #include "windowoutdevholder.hxx"

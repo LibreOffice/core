@@ -19,16 +19,7 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/servicedecl.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
-
-#include <canvas/canvastools.hxx>
 
 #include "cairo_canvas.hxx"
 #include "cairo_spritecanvas.hxx"

@@ -9,8 +9,6 @@
 
 #include <sal/config.h>
 
-#include <tools/diagnose_ex.h>
-
 #include <canvas/canvastools.hxx>
 
 #include "ogl_bitmapcanvashelper.hxx"

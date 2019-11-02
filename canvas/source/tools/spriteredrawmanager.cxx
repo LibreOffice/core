@@ -23,7 +23,6 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

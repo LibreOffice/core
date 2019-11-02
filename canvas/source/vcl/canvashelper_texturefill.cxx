@@ -24,35 +24,26 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/keystoplerp.hxx>
 #include <basegfx/utils/lerp.hxx>
 #include <basegfx/utils/tools.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/poly.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 
 #include <canvas/canvastools.hxx>
 #include <canvas/parametricpolypolygon.hxx>
 
 #include "canvashelper.hxx"
 #include "impltools.hxx"
-#include "spritecanvas.hxx"
 
 
 using namespace ::com::sun::star;

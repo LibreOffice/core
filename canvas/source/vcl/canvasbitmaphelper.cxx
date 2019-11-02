@@ -20,20 +20,11 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
-#include <com/sun/star/util/Endianness.hpp>
-#include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/poly.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/window.hxx>
 
 #include "canvasbitmap.hxx"
 #include "canvasbitmaphelper.hxx"

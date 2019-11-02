@@ -9,8 +9,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/rendering/PanoseWeight.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <com/sun/star/rendering/FontMetrics.hpp>
 #include <canvas/canvastools.hxx>
 
 #include "ogl_canvasfont.hxx"

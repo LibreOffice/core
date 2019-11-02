@@ -36,7 +36,6 @@
 
 #include <canvas/canvastools.hxx>
 
-#include "impltools.hxx"
 #include "textlayout.hxx"
 
 #include <memory>

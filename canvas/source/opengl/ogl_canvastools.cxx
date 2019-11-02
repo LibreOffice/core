@@ -14,11 +14,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/tools.hxx>
 #include <com/sun/star/rendering/ARGBColor.hpp>
-#include <tools/diagnose_ex.h>
 
 #include "ogl_canvastools.hxx"
 

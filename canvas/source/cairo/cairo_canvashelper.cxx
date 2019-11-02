@@ -23,10 +23,8 @@
 #include <algorithm>
 #include <tuple>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/keystoplerp.hxx>
@@ -38,7 +36,6 @@
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/RenderingIntent.hpp>
-#include <com/sun/star/rendering/RepaintResult.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/util/Endianness.hpp>
@@ -48,7 +45,6 @@
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
@@ -60,7 +56,6 @@
 #include "cairo_cachedbitmap.hxx"
 #include "cairo_canvasbitmap.hxx"
 #include "cairo_canvashelper.hxx"
-#include "cairo_spritecanvas.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

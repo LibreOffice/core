@@ -23,15 +23,12 @@
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <canvas/canvastools.hxx>
 #include <rtl/instance.hxx>
-#include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
 
 #include "canvasbitmap.hxx"
 #include "devicehelper.hxx"
-#include "spritecanvas.hxx"
-#include "spritecanvashelper.hxx"
 
 using namespace ::com::sun::star;
 

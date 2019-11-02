@@ -20,7 +20,8 @@
 #include <sal/config.h>
 
 #include <canvas/propertysethelper.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyVetoException.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
 
 using namespace ::com::sun::star;
 

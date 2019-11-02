@@ -14,16 +14,12 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/syschild.hxx>
-#include <vcl/sysdata.hxx>
 
 #include "ogl_spritedevicehelper.hxx"
 #include "ogl_spritecanvas.hxx"

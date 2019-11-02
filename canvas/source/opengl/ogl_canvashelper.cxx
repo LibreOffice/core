@@ -14,15 +14,10 @@
 #include <epoxy/gl.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/RepaintResult.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
 #include <rtl/crc.h>
 #include <tools/diagnose_ex.h>
 #include <vcl/font.hxx>
@@ -32,7 +27,6 @@
 #include "ogl_canvasbitmap.hxx"
 #include "ogl_canvasfont.hxx"
 #include "ogl_canvastools.hxx"
-#include "ogl_spritecanvas.hxx"
 #include "ogl_texturecache.hxx"
 #include "ogl_tools.hxx"
 

@@ -22,8 +22,6 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>

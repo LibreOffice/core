@@ -20,10 +20,8 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <canvas/canvastools.hxx>

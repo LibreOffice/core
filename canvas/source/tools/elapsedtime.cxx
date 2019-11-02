@@ -23,9 +23,6 @@
 
 #include <tools/time.hxx>
 
-#include <algorithm>
-#include <limits>
-
 namespace canvas {
 namespace tools {
 
