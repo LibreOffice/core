@@ -121,6 +121,25 @@ void GradientDrawableHelper::SetGrayscaleColors(OutputDevice* pRenderContext, Gr
     rGradient.SetEndColor(aEndCol);
 }
 
+long GradientDrawableHelper::GetStartColorIntensity(Gradient const& rGradient, double nColor)
+{
+    long nFactor = rGradient.GetStartIntensity();
+    return (nColor * nFactor) / 100;
+}
+
+long GradientDrawableHelper::GetEndColorIntensity(Gradient const& rGradient, double nColor)
+{
+    long nFactor = rGradient.GetEndIntensity();
+    return (nColor * nFactor) / 100;
+}
+
+void GradientDrawableHelper::SwapStartEndColor(long& nStart, long& nEnd)
+{
+    long nTemp = nStart;
+    nStart = nEnd;
+    nEnd = nTemp;
+}
+
 void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
                                                           tools::Rectangle const& rRect,
                                                           Gradient const& rGradient)
@@ -150,36 +169,22 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     }
 
     // colour-intensities of start- and finish; change if needed
-    long nFactor;
     Color aStartCol = rGradient.GetStartColor();
+    long nStartRed = GetStartColorIntensity(rGradient, aStartCol.GetRed());
+    long nStartGreen = GetStartColorIntensity(rGradient, aStartCol.GetGreen());
+    long nStartBlue = GetStartColorIntensity(rGradient, aStartCol.GetBlue());
+
     Color aEndCol = rGradient.GetEndColor();
-    long nStartRed = aStartCol.GetRed();
-    long nStartGreen = aStartCol.GetGreen();
-    long nStartBlue = aStartCol.GetBlue();
-    long nEndRed = aEndCol.GetRed();
-    long nEndGreen = aEndCol.GetGreen();
-    long nEndBlue = aEndCol.GetBlue();
-    nFactor = rGradient.GetStartIntensity();
-    nStartRed = (nStartRed * nFactor) / 100;
-    nStartGreen = (nStartGreen * nFactor) / 100;
-    nStartBlue = (nStartBlue * nFactor) / 100;
-    nFactor = rGradient.GetEndIntensity();
-    nEndRed = (nEndRed * nFactor) / 100;
-    nEndGreen = (nEndGreen * nFactor) / 100;
-    nEndBlue = (nEndBlue * nFactor) / 100;
+    long nEndRed = GetEndColorIntensity(rGradient, aEndCol.GetRed());
+    long nEndGreen = GetEndColorIntensity(rGradient, aEndCol.GetGreen());
+    long nEndBlue = GetEndColorIntensity(rGradient, aEndCol.GetBlue());
 
     // gradient style axial has exchanged start and end colors
     if (!bLinear)
     {
-        long nTempColor = nStartRed;
-        nStartRed = nEndRed;
-        nEndRed = nTempColor;
-        nTempColor = nStartGreen;
-        nStartGreen = nEndGreen;
-        nEndGreen = nTempColor;
-        nTempColor = nStartBlue;
-        nStartBlue = nEndBlue;
-        nEndBlue = nTempColor;
+        SwapStartEndColor(nStartRed, nEndRed);
+        SwapStartEndColor(nStartGreen, nEndGreen);
+        SwapStartEndColor(nStartBlue, nEndBlue);
     }
 
     sal_uInt8 nRed;
