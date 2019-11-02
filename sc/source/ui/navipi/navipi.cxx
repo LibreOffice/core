@@ -68,8 +68,9 @@ void ScNavigatorDlg::ReleaseFocus()
 }
 
 ColumnEdit::ColumnEdit(Window* pParent, WinBits nWinBits)
-    : SpinField(pParent, nWinBits),
-    nCol(0)
+    : SpinField(pParent, nWinBits)
+    , mpDoc(nullptr)
+    , nCol(0)
 {
     SetMaxTextLen(SCNAV_COLDIGITS);   // 1...256...18278 or A...IV...ZZZ
 }
