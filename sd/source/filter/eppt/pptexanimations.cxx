@@ -211,7 +211,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
         }
     }
     if ( !bTranslated )
-        nPresetSubType = static_cast<sal_uInt32>(rPresetSubType.toInt32());
+        nPresetSubType = rPresetSubType.toUInt32();
     return nPresetSubType;
 }
 
