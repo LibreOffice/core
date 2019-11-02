@@ -271,10 +271,8 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     sal_Int32 nSize(0);
     rStrm.ReadInt32( nSize );
     // size field includes trailing NUL character
-    DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF),
-        OStringBuffer("SfxOleStringHelper::ImplLoadString8 - invalid string of len ").
-        append(nSize).getStr() );
-    if (nSize < 0 || nSize > 0xFFFF)
+    SAL_WARN_IF(nSize < 1 || nSize > 0xFFFF, "sfx.doc", "SfxOleStringHelper::ImplLoadString8 - invalid string of len " << nSize);
+    if (nSize < 1 || nSize > 0xFFFF)
         return OUString();
     // load character buffer
     OString sValue(read_uInt8s_ToOString(rStrm, nSize - 1));
@@ -287,10 +285,10 @@ OUString SfxOleStringHelper::ImplLoadString16( SvStream& rStrm )
 {
     // read size field (signed 32-bit), may be buffer size or character count
     sal_Int32 nSize(0);
-    rStrm.ReadInt32( nSize );
-    DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF), "SfxOleStringHelper::ImplLoadString16 - invalid string" );
+    rStrm.ReadInt32(nSize);
+    SAL_WARN_IF(nSize < 1 || nSize > 0xFFFF, "sfx.doc", "SfxOleStringHelper::ImplLoadString16 - invalid string of len " << nSize);
     // size field includes trailing NUL character
-    if (nSize < 0 || nSize > 0xFFFF)
+    if (nSize < 1 || nSize > 0xFFFF)
         return OUString();
     // load character buffer
     OUString aValue = read_uInt16s_ToOUString(rStrm, nSize - 1);
