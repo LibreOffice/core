@@ -56,6 +56,7 @@ public:
     static Color GetSingleColorGradientFill(OutputDevice* pRenderContext);
     static void SetGrayscaleColors(OutputDevice* pRenderContext, Gradient& rGradient);
 
+    static sal_uInt8 GetGradientColorValue(long nValue);
     static long GetStartColorIntensity(Gradient const& rGradient, double nColor);
     static long GetEndColorIntensity(Gradient const& rGradient, double nColor);
     static void SwapStartEndColor(long& nStart, long& nEnd);

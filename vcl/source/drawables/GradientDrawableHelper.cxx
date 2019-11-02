@@ -23,19 +23,6 @@
 
 #define GRADIENT_DEFAULT_STEPCOUNT 0
 
-namespace
-{
-sal_uInt8 GetGradientColorValue(long nValue)
-{
-    if (nValue < 0)
-        return 0;
-    else if (nValue > 0xFF)
-        return 0xFF;
-    else
-        return static_cast<sal_uInt8>(nValue);
-}
-} // namespace
-
 namespace vcl
 {
 bool GradientDrawableHelper::AddGradientActions(OutputDevice* pRenderContext,
@@ -138,6 +125,16 @@ void GradientDrawableHelper::SwapStartEndColor(long& nStart, long& nEnd)
     long nTemp = nStart;
     nStart = nEnd;
     nEnd = nTemp;
+}
+
+sal_uInt8 GradientDrawableHelper::GetGradientColorValue(long nValue)
+{
+    if (nValue < 0)
+        return 0;
+    else if (nValue > 0xFF)
+        return 0xFF;
+    else
+        return static_cast<sal_uInt8>(nValue);
 }
 
 void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
