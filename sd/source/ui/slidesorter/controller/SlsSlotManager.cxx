@@ -886,7 +886,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
     OUString aTitle;
     if( rRequest.GetSlot() == SID_RENAME_MASTER_PAGE )
         aTitle = SdResId( STR_TITLE_RENAMEMASTER );
-    else if (pDrView && pDrView->GetDoc().GetDocumentType() == DocumentType::Draw)
+    else if (pDrView->GetDoc().GetDocumentType() == DocumentType::Draw)
         aTitle = SdResId( STR_TITLE_RENAMEPAGE );
     else
         aTitle = SdResId( STR_TITLE_RENAMESLIDE );
