@@ -51,7 +51,7 @@ class ImpGraphic;
 class OutputDevice;
 class ReaderData;
 
-class VCL_DLLPUBLIC GraphicReader
+class GraphicReader
 {
 public:
     virtual         ~GraphicReader();

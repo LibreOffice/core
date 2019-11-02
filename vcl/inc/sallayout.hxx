@@ -50,7 +50,7 @@ namespace vcl {
 }
 
 // used for managing runs e.g. for BiDi, glyph and script fallback
-class VCL_PLUGIN_PUBLIC ImplLayoutRuns
+class ImplLayoutRuns
 {
 private:
     int                 mnRunIndex;
@@ -122,7 +122,7 @@ private:
 // For nice SAL_INFO logging of ImplLayoutArgs values
 std::ostream &operator <<(std::ostream& s, ImplLayoutArgs const &rArgs);
 
-class VCL_PLUGIN_PUBLIC MultiSalLayout final : public SalLayout
+class MultiSalLayout final : public SalLayout
 {
 public:
     void            DrawText(SalGraphics&) const override;

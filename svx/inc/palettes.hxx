@@ -29,7 +29,7 @@ typedef std::vector< NamedColor > ColorList;
 
 // ASE = Adobe Swatch Exchange
 
-class SVX_DLLPUBLIC PaletteASE : public Palette
+class PaletteASE : public Palette
 {
     bool        mbValidPalette;
     OUString const    maFPath;
@@ -51,7 +51,7 @@ public:
 
 // GPL - this is *not* GNU Public License, but is the Gimp PaLette
 
-class SVX_DLLPUBLIC PaletteGPL : public Palette
+class PaletteGPL : public Palette
 {
     bool        mbLoadedPalette;
     bool        mbValidPalette;
@@ -77,7 +77,7 @@ public:
 
 // SOC - Star Office Color-table
 
-class SVX_DLLPUBLIC PaletteSOC : public Palette
+class PaletteSOC : public Palette
 {
     bool            mbLoadedPalette;
     OUString const        maFPath;

@@ -102,7 +102,7 @@ public:
 };
 
 // a class for cache entries for physical font instances that are based on serverfonts
-class VCL_DLLPUBLIC FreetypeFontInstance : public LogicalFontInstance
+class FreetypeFontInstance : public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern&) const;
 

@@ -49,7 +49,7 @@ namespace o3tl {
     template<> struct typed_flags<FontTypeFaces> : is_typed_flags<FontTypeFaces, 0xff> {};
 };
 
-class VCL_PLUGIN_PUBLIC PhysicalFontFamily
+class PhysicalFontFamily
 {
 public:
                         PhysicalFontFamily( const OUString& rSearchName );

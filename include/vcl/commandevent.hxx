@@ -170,7 +170,7 @@ public:
                         { return ((mnCode & KEY_MOD2) != 0); }
 };
 
-class VCL_DLLPUBLIC CommandScrollData
+class CommandScrollData
 {
 private:
     long            mnDeltaX;
@@ -183,7 +183,7 @@ public:
     long            GetDeltaY() const { return mnDeltaY; }
 };
 
-class VCL_DLLPUBLIC CommandModKeyData
+class CommandModKeyData
 {
 private:
     bool            mbDown;
@@ -256,7 +256,7 @@ public:
     bool GetPassThroughToOS() const { return m_bPassThroughToOS; }
 };
 
-class VCL_DLLPUBLIC CommandSelectionChangeData
+class CommandSelectionChangeData
 {
 private:
     sal_uLong          mnStart;

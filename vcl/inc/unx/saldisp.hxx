@@ -208,7 +208,7 @@ extern "C" {
     typedef Bool(*X_if_predicate)(Display*,XEvent*,XPointer);
 }
 
-class VCLPLUG_GEN_PUBLIC GLX11Window : public GLWindow
+class GLX11Window : public GLWindow
 {
 public:
     Display*           dpy;
