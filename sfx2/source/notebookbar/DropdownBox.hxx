@@ -30,8 +30,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include "NotebookbarPopup.hxx"
 
-class SFX2_DLLPUBLIC DropdownBox : public VclHBox,
-                                   public vcl::IPrioritable
+class DropdownBox : public VclHBox, public vcl::IPrioritable
 {
 private:
     bool m_bInFullView;

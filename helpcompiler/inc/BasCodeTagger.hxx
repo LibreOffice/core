@@ -20,7 +20,7 @@
 class LibXmlTreeWalker;
 
 //!Tagger class.
-class L10N_DLLPUBLIC BasicCodeTagger
+class BasicCodeTagger
 {
   private:
     xmlDocPtr             m_pDocument;
@@ -42,7 +42,7 @@ class L10N_DLLPUBLIC BasicCodeTagger
 
 //================LibXmlTreeWalker===========================================================
 
-class L10N_DLLPUBLIC LibXmlTreeWalker
+class LibXmlTreeWalker
 {
   private:
     xmlNodePtr            m_pCurrentNode;

@@ -16,7 +16,7 @@
 
 namespace vcl { class Window; }
 
-class VCL_DLLPUBLIC DebugEventInjector final : private Timer {
+class DebugEventInjector final : private Timer {
   sal_uInt32 mnEventsLeft;
   DebugEventInjector( sal_uInt32 nMaxEvents );
 

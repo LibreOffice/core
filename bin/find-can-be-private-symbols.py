@@ -1,10 +1,20 @@
 #!/usr/bin/python
 #
-# Find exported symbols that can be made private.
+# Find exported symbols that can be made non-exported.
 #
 # Noting that (a) parsing these commands is a pain, the output is quite irregular and (b) I'm fumbling in the
 # dark here, trying to guess what exactly constitutes an "import" vs an "export" of a symbol, linux linking
 # is rather complex.
+#
+# Takes about 5min to run on a decent machine.
+#
+# The standalone function analysis is reasonable reliable, but the class/method analysis is less so
+#   (something to do with destructor thunks not showing up in my results?)
+#
+# Also, the class/method analysis will not catch problems like
+#    'dynamic_cast from 'Foo' with hidden type visibility to 'Bar' with default type visibility'
+#    but loplugin:dyncastvisibility will do that for you
+#
 
 import subprocess
 import sys
@@ -74,19 +84,27 @@ classes_with_imported_symbols = set()
 for sym in exported_symbols:
     filtered_sym = subprocess.check_output(["c++filt", sym]).strip()
     if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
+    elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
     i = filtered_sym.find("(")
     i = filtered_sym.rfind("::", 0, i)
     if i != -1:
         classname = filtered_sym[:i]
-        func = filtered_sym[i+2:]
         # find classes where all of the exported symbols are not imported
         classes_with_exported_symbols.add(classname)
-        if sym in imported_symbols: classes_with_imported_symbols.add(classname)
     else:
-        package = ""
         func = filtered_sym
         # find standalone functions which are exported but not imported
         if not(sym in imported_symbols): unused_function_exports.add(func)
+
+for sym in imported_symbols:
+    filtered_sym = subprocess.check_output(["c++filt", sym]).strip()
+    if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
+    elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
+    i = filtered_sym.find("(")
+    i = filtered_sym.rfind("::", 0, i)
+    if i != -1:
+        classname = filtered_sym[:i]
+        classes_with_imported_symbols.add(classname)
 
 with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
     for sym in sorted(unused_function_exports):
@@ -175,4 +193,16 @@ with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
 
 with open("bin/find-can-be-private-symbols.classes.results", "wt") as f:
     for sym in sorted(classes_with_exported_symbols - classes_with_imported_symbols):
+        # externals
+        if sym.startswith("libcdr"): continue
+        elif sym.startswith("libabw"): continue
+        elif sym.startswith("libebook"): continue
+        elif sym.startswith("libepubgen"): continue
+        elif sym.startswith("libfreehand"): continue
+        elif sym.startswith("libmspub"): continue
+        elif sym.startswith("libpagemaker"): continue
+        elif sym.startswith("libqxp"): continue
+        elif sym.startswith("libvisio"): continue
+        elif sym.startswith("libzmf"): continue
+        elif sym.startswith("lucene::"): continue
         f.write(sym + "\n")

@@ -25,13 +25,13 @@
 
 class ConditionEdit;
 
-class SW_DLLPUBLIC ConditionEditDropTarget : public DropTargetHelper
+class ConditionEditDropTarget : public DropTargetHelper
 {
 private:
     ConditionEdit& m_rEdit;
 
-    SAL_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    SAL_DLLPRIVATE virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 public:
     ConditionEditDropTarget(ConditionEdit& rEdit);

@@ -49,7 +49,7 @@ enum class BasicErrorReason
     STDLIB           = 0x0100
 };
 
-class BASIC_DLLPUBLIC BasicError
+class BasicError
 {
 private:
     ErrCode nErrorId;

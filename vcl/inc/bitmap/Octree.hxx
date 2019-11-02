@@ -63,13 +63,13 @@ public:
     sal_uInt16 GetBestPaletteIndex(const BitmapColor& rColor);
 };
 
-class VCL_PLUGIN_PUBLIC InverseColorMap
+class InverseColorMap
 {
 private:
     std::vector<sal_uInt8> mpBuffer;
     std::vector<sal_uInt8> mpMap;
 
-    SAL_DLLPRIVATE void ImplCreateBuffers();
+    void ImplCreateBuffers();
 
 public:
     explicit InverseColorMap(const BitmapPalette& rPal);

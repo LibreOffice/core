@@ -30,7 +30,7 @@ enum class Disposal
     Previous
 };
 
-struct VCL_DLLPUBLIC AnimationBitmap
+struct AnimationBitmap
 {
     BitmapEx maBitmapEx;
     Point maPositionPixel;

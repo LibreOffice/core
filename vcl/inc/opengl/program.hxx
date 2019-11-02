@@ -39,7 +39,7 @@ enum class DrawShaderType
     Line
 };
 
-class VCL_PLUGIN_PUBLIC OpenGLProgram
+class OpenGLProgram
 {
 private:
     GLuint          mnId;
