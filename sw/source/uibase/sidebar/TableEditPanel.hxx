@@ -14,6 +14,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <svx/relfld.hxx>
 
 namespace sw
 {
@@ -26,14 +27,26 @@ class TableEditPanel : public PanelLayout,
 
 public:
     static VclPtr<vcl::Window> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                      const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                      SfxBindings* pBindings);
 
     virtual void NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
                                   const SfxPoolItem* pState) override;
 
 private:
-    TableEditPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    TableEditPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                   SfxBindings* pBindings);
     virtual ~TableEditPanel() override;
+    virtual void dispose() override;
+
+    void InitRowHeightToolitem();
+
+    SfxBindings* m_pBindings;
+
+    VclPtr<SvxRelativeField> m_pHeightEdit;
+    ::sfx2::sidebar::ControllerItem m_aRowHeightController;
+
+    DECL_LINK(RowHeightMofiyHdl, Edit&, void);
 };
 }
 } // end of namespace sw::sidebar

@@ -411,6 +411,7 @@
 #define FN_TABLE_MODE_FIX_PROP      (FN_FORMAT + 190)  /*  -"-  */
 #define FN_TABLE_MODE_VARIABLE      (FN_FORMAT + 191)  /*  -"-  */
 #define FN_TABLE_BOX_TEXTORIENTATION (FN_FORMAT + 192)  /* text orientation of table cells */
+#define SID_ATTR_TABLE_ROW_HEIGHT    (FN_FORMAT + 193)
 
 #define FN_TABLE_AUTOSUM            (FN_FORMAT + 195)  /* */
 
