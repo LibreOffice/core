@@ -16,7 +16,6 @@
 
 class ScDocument;
 class ScRangeList;
-class SvTreeListBox;
 
 namespace sc {
 

@@ -845,7 +845,6 @@ void SvxScriptOrgDialog::createEntry(weld::TreeIter& rEntry)
 
         // ISSUE do we need to remove all entries for parent
         // to achieve sort? Just need to determine position
-        // SvTreeListBox::InsertEntry can take position arg
         // -- Basic doesn't do this on create.
         // Suppose we could avoid this too. -> created nodes are
         // not in alphabetical order
