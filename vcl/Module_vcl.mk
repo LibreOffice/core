@@ -193,6 +193,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_B2DPolyPolygonDrawable \
 	CppunitTest_vcl_B2DPolygonDrawable \
 	CppunitTest_vcl_ChordDrawable \
+	CppunitTest_vcl_EllipseDrawable \
 	CppunitTest_vcl_lifecycle \
 	CppunitTest_vcl_bitmap_test \
 	CppunitTest_vcl_bitmapprocessor_test \
