@@ -50,6 +50,9 @@
 #include "mtftools.hxx"
 #include <cppcanvas/vclfactory.hxx>
 
+#if OSL_DEBUG_LEVEL > 2
+#include <vcl/canvastools.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
