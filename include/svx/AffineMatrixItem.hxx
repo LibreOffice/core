@@ -26,7 +26,7 @@
 
 class SfxItemPool;
 
-class SVX_DLLPUBLIC AffineMatrixItem final : public SfxPoolItem
+class AffineMatrixItem final : public SfxPoolItem
 {
 private:
     css::geometry::AffineMatrix2D        maMatrix;

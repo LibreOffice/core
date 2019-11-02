@@ -23,7 +23,7 @@
 #include <swdllapi.h>
 
 // numerical input
-class SW_DLLPUBLIC NumEditAction: public NumericField
+class NumEditAction: public NumericField
 {
     Link<NumEditAction&,void> aActionLink;
 

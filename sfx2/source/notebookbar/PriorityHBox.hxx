@@ -34,7 +34,7 @@
  * priority assigned (VCL_PRIORITY_DEFAULT), it is always shown.
  */
 
-class SFX2_DLLPUBLIC PriorityHBox : public VclHBox
+class PriorityHBox : public VclHBox
 {
 private:
     bool m_bInitialized;

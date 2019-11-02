@@ -22,7 +22,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include "swdllapi.h"
 
-class SW_DLLPUBLIC PageOrientationPopup : public SfxToolBoxControl
+class PageOrientationPopup : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

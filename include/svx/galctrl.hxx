@@ -32,7 +32,7 @@ class GalleryTheme;
 class GalleryBrowser2;
 class INetURLObject;
 
-class SVX_DLLPUBLIC GalleryPreview final : public vcl::Window, public DropTargetHelper, public DragSourceHelper
+class GalleryPreview final : public vcl::Window, public DropTargetHelper, public DragSourceHelper
 {
 private:
 
@@ -40,24 +40,24 @@ private:
     tools::Rectangle           aPreviewRect;
     GalleryTheme* const       mpTheme;
 
-    SVX_DLLPRIVATE bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
-    SVX_DLLPRIVATE void             InitSettings();
+    bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
+    void             InitSettings();
 
     // Window
-    SVX_DLLPRIVATE virtual void     Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    SVX_DLLPRIVATE virtual Size     GetOptimalSize() const override;
-    SVX_DLLPRIVATE virtual void     MouseButtonDown(const MouseEvent& rMEvt) override;
-    SVX_DLLPRIVATE virtual void     Command(const CommandEvent& rCEvt) override;
-    SVX_DLLPRIVATE virtual void     KeyInput( const KeyEvent& rKEvt ) override;
-    SVX_DLLPRIVATE virtual void     DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void     Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual Size     GetOptimalSize() const override;
+    virtual void     MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void     Command(const CommandEvent& rCEvt) override;
+    virtual void     KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void     DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 
     // DropTargetHelper
-    SVX_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    SVX_DLLPRIVATE virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
     // DragSourceHelper
-    SVX_DLLPRIVATE virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
+    virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
 public:
 

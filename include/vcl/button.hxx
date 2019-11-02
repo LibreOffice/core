@@ -247,7 +247,7 @@ public:
     virtual void    Click() override;
 };
 
-class VCL_DLLPUBLIC CloseButton final : public CancelButton
+class CloseButton final : public CancelButton
 {
 public:
     explicit CloseButton(vcl::Window* pParent, WinBits nStyle = 0);
@@ -517,9 +517,9 @@ public:
     explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle );
 };
 
-class VCL_DLLPUBLIC DisclosureButton final : public CheckBox
+class DisclosureButton final : public CheckBox
 {
-    SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext) override;
+    virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext) override;
 
 public:
     explicit DisclosureButton( vcl::Window* pParent );
