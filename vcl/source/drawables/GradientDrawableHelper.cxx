@@ -137,6 +137,17 @@ sal_uInt8 GradientDrawableHelper::GetGradientColorValue(long nValue)
         return static_cast<sal_uInt8>(nValue);
 }
 
+double GradientDrawableHelper::CalculateBorder(Gradient const& rGradient,
+                                               tools::Rectangle const& rRect)
+{
+    double fBorder = rGradient.GetBorder() * rRect.GetHeight() / 100.0;
+
+    if (rGradient.GetStyle() != GradientStyle::Linear)
+        fBorder /= 2.0;
+
+    return fBorder;
+}
+
 void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
                                                           tools::Rectangle const& rRect,
                                                           Gradient const& rGradient)
@@ -151,13 +162,9 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
     rGradient.GetBoundRect(rRect, aRect, aCenter);
+    double fBorder = CalculateBorder(rGradient, aRect);
 
     bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
-    double fBorder = rGradient.GetBorder() * aRect.GetHeight() / 100.0;
-    if (!bLinear)
-    {
-        fBorder /= 2.0;
-    }
     tools::Rectangle aMirrorRect = aRect; // used in style axial
     aMirrorRect.SetTop((aRect.Top() + aRect.Bottom()) / 2);
     if (!bLinear)
@@ -511,11 +518,8 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     rGradient.GetBoundRect(rRect, aRect, aCenter);
 
     bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
-    double fBorder = rGradient.GetBorder() * aRect.GetHeight() / 100.0;
-    if (!bLinear)
-    {
-        fBorder /= 2.0;
-    }
+    double fBorder = CalculateBorder(rGradient, aRect);
+
     tools::Rectangle aMirrorRect = aRect; // used in style axial
     aMirrorRect.SetTop((aRect.Top() + aRect.Bottom()) / 2);
     if (!bLinear)

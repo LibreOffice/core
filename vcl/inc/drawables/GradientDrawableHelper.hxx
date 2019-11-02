@@ -60,6 +60,8 @@ public:
     static long GetStartColorIntensity(Gradient const& rGradient, double nColor);
     static long GetEndColorIntensity(Gradient const& rGradient, double nColor);
     static void SwapStartEndColor(long& nStart, long& nEnd);
+
+    static double CalculateBorder(Gradient const& rGradient, tools::Rectangle const& rRect);
 };
 } // namespace vcl
 
