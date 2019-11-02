@@ -354,7 +354,7 @@ namespace dmapper {
                     if (m_pCurrentInteropGrabBag)
                     {
                         beans::PropertyValue aValue;
-                        aValue.Name = (nSprmId == NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize ? OUString("tblStyleRowBandSize") : OUString("tblStyleColBandSize"));
+                        aValue.Name = (nSprmId == NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize ? OUStringLiteral("tblStyleRowBandSize") : OUStringLiteral("tblStyleColBandSize"));
                         aValue.Value <<= nIntValue;
                         m_pCurrentInteropGrabBag->push_back(aValue);
                     }

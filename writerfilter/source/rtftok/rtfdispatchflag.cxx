@@ -1040,8 +1040,9 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DOBYMARGIN:
         {
             beans::PropertyValue aPropertyValue;
-            aPropertyValue.Name = (nKeyword == RTF_DOBXMARGIN ? OUString("HoriOrientRelation")
-                                                              : OUString("VertOrientRelation"));
+            aPropertyValue.Name
+                = (nKeyword == RTF_DOBXMARGIN ? OUStringLiteral("HoriOrientRelation")
+                                              : OUStringLiteral("VertOrientRelation"));
             aPropertyValue.Value <<= text::RelOrientation::PAGE_PRINT_AREA;
             m_aStates.top().getDrawingObject().getPendingProperties().push_back(aPropertyValue);
         }
@@ -1050,8 +1051,9 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DOBYPAGE:
         {
             beans::PropertyValue aPropertyValue;
-            aPropertyValue.Name = (nKeyword == RTF_DOBXPAGE ? OUString("HoriOrientRelation")
-                                                            : OUString("VertOrientRelation"));
+            aPropertyValue.Name
+                = (nKeyword == RTF_DOBXPAGE ? OUStringLiteral("HoriOrientRelation")
+                                            : OUStringLiteral("VertOrientRelation"));
             aPropertyValue.Value <<= text::RelOrientation::PAGE_FRAME;
             m_aStates.top().getDrawingObject().getPendingProperties().push_back(aPropertyValue);
         }

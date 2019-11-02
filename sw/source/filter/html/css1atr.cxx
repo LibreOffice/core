@@ -1742,8 +1742,8 @@ static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
     if( bHasNotes )
     {
         aSelector = OOO_STRING_SVTOOLS_HTML_anchor "." +
-                    ( bEndNote ? OUString(OOO_STRING_SVTOOLS_HTML_sdendnote_anc)
-                               : OUString(OOO_STRING_SVTOOLS_HTML_sdfootnote_anc) );
+                    ( bEndNote ? OUStringLiteral(OOO_STRING_SVTOOLS_HTML_sdendnote_anc)
+                               : OUStringLiteral(OOO_STRING_SVTOOLS_HTML_sdfootnote_anc) );
         SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                              &aSelector );
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_size,
@@ -1773,8 +1773,8 @@ static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         if( aItemSet.Count() )
         {
             aSelector = OOO_STRING_SVTOOLS_HTML_anchor "." +
-                        ( bEndNote ? OUString(OOO_STRING_SVTOOLS_HTML_sdendnote_sym)
-                                   : OUString(OOO_STRING_SVTOOLS_HTML_sdfootnote_sym));
+                        ( bEndNote ? OUStringLiteral(OOO_STRING_SVTOOLS_HTML_sdendnote_sym)
+                                   : OUStringLiteral(OOO_STRING_SVTOOLS_HTML_sdfootnote_sym));
             if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, true, false ))
                 rHTMLWrt.m_aScriptTextStyles.insert( pSymCharFormat->GetName() );
         }
