@@ -148,6 +148,16 @@ double GradientDrawableHelper::CalculateBorder(Gradient const& rGradient,
     return fBorder;
 }
 
+void GradientDrawableHelper::AddFillColorAction(GDIMetaFile* pMetaFile, long nStartRed,
+                                                long nStartGreen, long nStartBlue)
+{
+    sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed);
+    sal_uInt8 nGreen = static_cast<sal_uInt8>(nStartGreen);
+    sal_uInt8 nBlue = static_cast<sal_uInt8>(nStartBlue);
+
+    pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
+}
+
 void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
                                                           tools::Rectangle const& rRect,
                                                           Gradient const& rGradient)
@@ -168,9 +178,7 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     tools::Rectangle aMirrorRect = aRect; // used in style axial
     aMirrorRect.SetTop((aRect.Top() + aRect.Bottom()) / 2);
     if (!bLinear)
-    {
         aRect.SetBottom(aMirrorRect.Top());
-    }
 
     // colour-intensities of start- and finish; change if needed
     Color aStartCol = rGradient.GetStartColor();
@@ -200,14 +208,9 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     tools::Polygon aPoly(4);
     if (fBorder > 0.0)
     {
-        nRed = static_cast<sal_uInt8>(nStartRed);
-        nGreen = static_cast<sal_uInt8>(nStartGreen);
-        nBlue = static_cast<sal_uInt8>(nStartBlue);
-
-        pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
+        AddFillColorAction(pMetaFile, nStartRed, nStartGreen, nStartBlue);
 
         aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorder));
-        aRect.SetTop(aBorderRect.Bottom());
         aPoly[0] = aBorderRect.TopLeft();
         aPoly[1] = aBorderRect.TopRight();
         aPoly[2] = aBorderRect.BottomRight();
@@ -215,6 +218,8 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         aPoly.Rotate(aCenter, nAngle);
 
         pMetaFile->AddAction(new MetaPolygonAction(aPoly));
+
+        aRect.SetTop(aBorderRect.Bottom());
 
         if (!bLinear)
         {

@@ -62,6 +62,7 @@ public:
     static void SwapStartEndColor(long& nStart, long& nEnd);
 
     static double CalculateBorder(Gradient const& rGradient, tools::Rectangle const& rRect);
+    static void AddFillColorAction(GDIMetaFile* pMetaFile, long nRed, long nGreen, long nBlue);
 };
 } // namespace vcl
 
