@@ -591,7 +591,7 @@ void OP_SheetName123(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLeng
 
     if (!ValidTab(nSheetNum))
         return;
-    // coverity[tainted_data] - ValidTab has sanitized nSheetNum
+    // coverity[tainted_data : FALSE] - ValidTab has sanitized nSheetNum
     rContext.pDoc->MakeTable(nSheetNum);
     if (!sSheetName.empty())
     {
