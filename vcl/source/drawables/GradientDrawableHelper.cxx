@@ -196,7 +196,6 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     // get BoundRect of rotated rectangle
     tools::Rectangle aRect;
     Point aCenter;
-    sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
     rGradient.GetBoundRect(rRect, aRect, aCenter);
     double fBorder = CalculateBorder(rGradient, aRect);
@@ -233,6 +232,9 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     // Create border
     tools::Rectangle aBorderRect = aRect;
     tools::Polygon aPoly(4);
+
+    sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
+
     if (fBorder > 0.0)
     {
         AddFillColorAction(pMetaFile, nStartRed, nStartGreen, nStartBlue);
