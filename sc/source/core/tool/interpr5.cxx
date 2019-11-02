@@ -1446,8 +1446,7 @@ void ScInterpreter::ScAmpersand()
                             pResMat->PutError( nErr, i, j);
                         else
                         {
-                            OUString aTmp = sStr;
-                            aTmp += pMat->GetString(*pFormatter, i, j).getString();
+                            OUString aTmp = sStr + pMat->GetString(*pFormatter, i, j).getString();
                             pResMat->PutString(mrStrPool.intern(aTmp), i, j);
                         }
                     }
@@ -1462,8 +1461,7 @@ void ScInterpreter::ScAmpersand()
                             pResMat->PutError( nErr, i, j);
                         else
                         {
-                            OUString aTmp = pMat->GetString(*pFormatter, i, j).getString();
-                            aTmp += sStr;
+                            OUString aTmp = pMat->GetString(*pFormatter, i, j).getString() + sStr;
                             pResMat->PutString(mrStrPool.intern(aTmp), i, j);
                         }
                     }

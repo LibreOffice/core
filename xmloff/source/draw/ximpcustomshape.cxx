@@ -1205,13 +1205,13 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     if ( GetEquationName( rEquation, nIndexOf + 1, aEquationName ) )
                     {
                         // copying first characters inclusive '?'
-                        OUString aNew( rEquation.copy( 0, nIndexOf + 1 ) );
                         sal_Int32 nIndex = 0;
                         EquationHashMap::iterator aHashIter( pH->find( aEquationName ) );
                         if ( aHashIter != pH->end() )
                             nIndex = (*aHashIter).second;
-                        aNew += OUString::number( nIndex );
-                        aNew += rEquation.copy( nIndexOf + aEquationName.getLength() + 1 );
+                        OUString aNew = rEquation.copy( 0, nIndexOf + 1 ) +
+                            OUString::number( nIndex ) +
+                            rEquation.copy( nIndexOf + aEquationName.getLength() + 1 );
                         rEquation = aNew;
                     }
                     nIndexOf++;

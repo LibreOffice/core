@@ -655,12 +655,12 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
         aStr += GetMetricText( static_cast<long>(GetInWidth()), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
-        aStr += cpDelim;
-        aStr += GetMetricText( static_cast<long>(GetOutWidth()), eSrcUnit, eDestUnit, pIntl );
+        aStr += cpDelim +
+            GetMetricText( static_cast<long>(GetOutWidth()), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
-        aStr += cpDelim;
-        aStr += GetMetricText( static_cast<long>(GetDistance()), eSrcUnit, eDestUnit, pIntl );
+        aStr += cpDelim +
+            GetMetricText( static_cast<long>(GetDistance()), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
     }

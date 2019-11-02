@@ -353,8 +353,8 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
                         {
                             // update link page number
                             number += nIncrement;
-                            aURL = aURL.replaceAt(aHashSlide.getLength() + 1, aURL.getLength() - aHashSlide.getLength() - 1, "");
-                            aURL += OUString::number(number);
+                            aURL = aURL.replaceAt(aHashSlide.getLength() + 1, aURL.getLength() - aHashSlide.getLength() - 1, "") +
+                                OUString::number(number);
                             if (bNotes)
                             {
                                 aURL += " " + sNotes;

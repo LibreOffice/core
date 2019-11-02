@@ -95,11 +95,11 @@ void SearchDialog::SaveConfig()
     {
         sUserData += m_xSearchEdit->get_text(i) + "\t";
     }
-    sUserData = comphelper::string::stripStart(sUserData, '\t') + ";";
-    sUserData += OUString::number( m_xWholeWordsBox->get_active() ? 1 : 0 ) + ";";
-    sUserData += OUString::number( m_xMatchCaseBox->get_active() ? 1 : 0 ) + ";";
-    sUserData += OUString::number( m_xWrapAroundBox->get_active() ? 1 : 0 ) + ";";
-    sUserData += OUString::number( m_xBackwardsBox->get_active() ? 1 : 0 );
+    sUserData = comphelper::string::stripStart(sUserData, '\t') + ";" +
+        OUString::number( m_xWholeWordsBox->get_active() ? 1 : 0 ) + ";" +
+        OUString::number( m_xMatchCaseBox->get_active() ? 1 : 0 ) + ";" +
+        OUString::number( m_xWrapAroundBox->get_active() ? 1 : 0 ) + ";" +
+        OUString::number( m_xBackwardsBox->get_active() ? 1 : 0 );
 
     Any aUserItem = makeAny( sUserData );
     aViewOpt.SetUserItem( "UserItem", aUserItem );

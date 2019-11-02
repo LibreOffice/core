@@ -324,8 +324,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
         nLoopStart = nEEnd;
     }
 
-    OUString aTotal = maFormula.copy(0, nStartPos);
-    aTotal += aResult.makeStringAndClear();
+    OUString aTotal = maFormula.copy(0, nStartPos) + aResult.makeStringAndClear();
     if (nEndPos < maFormula.getLength()-1)
         aTotal += maFormula.copy(nEndPos+1);
 

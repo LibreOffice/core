@@ -2927,8 +2927,7 @@ std::unique_ptr<OSQLParseNode> OQueryDesignView::getPredicateTreeFromEntry(const
         if ( nType == DataType::OTHER || (sFunction.isEmpty() && pEntry->isNumericOrAggregateFunction()) )
         {
             // first try the international version
-            OUString sSql;
-            sSql += "SELECT * FROM x WHERE " + pEntry->GetField() + _sCriteria;
+            OUString sSql = "SELECT * FROM x WHERE " + pEntry->GetField() + _sCriteria;
             std::unique_ptr<OSQLParseNode> pParseNode( rParser.parseTree( _rsErrorMessage, sSql, true ) );
             nType = DataType::DOUBLE;
             if (pParseNode)

@@ -725,9 +725,7 @@ OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase
             std::unique_ptr<sal_Char[]> p( new sal_Char[ nLeft + 1 ] );
             memset( p.get(), bNeg ? GetMaxChar( nBase ) : '0', nLeft );
             p[ nLeft ] = 0x00;
-            OUString  aTmp( p.get(), nLeft, RTL_TEXTENCODING_MS_1252 );
-            aTmp += aRet;
-            aRet = aTmp;
+            aRet = OUString( p.get(), nLeft, RTL_TEXTENCODING_MS_1252 ) + aRet;
         }
     }
 

@@ -1878,9 +1878,9 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
         if (rHTMLWrt.GetOrigFileName())
             aFileName = *rHTMLWrt.GetOrigFileName();
         INetURLObject aURL(aFileName);
-        OUString aName(aURL.getBase() + "_");
-        aName += aURL.getExtension() + "_";
-        aName += OUString::number(aGraphic.GetChecksum(), 16);
+        OUString aName = aURL.getBase() + "_" +
+            aURL.getExtension() + "_" +
+            OUString::number(aGraphic.GetChecksum(), 16);
         aURL.setBase(aName);
         aURL.setExtension("ole");
         aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);

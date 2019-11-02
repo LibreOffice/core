@@ -2402,8 +2402,7 @@ OUString TimeFormatter::FormatTime(const tools::Time& rNewTime, TimeFieldFormat 
         sal_uLong n  = rNewTime.GetHour() * 3600L;
         n       += rNewTime.GetMin()  * 60L;
         n       += rNewTime.GetSec();
-        aStr     = OUString::number( n );
-        aStr    += rLocaleData.getTime100SecSep();
+        aStr     = OUString::number( n ) + rLocaleData.getTime100SecSep();
         std::ostringstream ostr;
         ostr.fill('0');
         ostr.width(9);

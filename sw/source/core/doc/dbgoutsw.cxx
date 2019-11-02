@@ -395,8 +395,8 @@ static OUString lcl_dbg_out(const SwFrameFormat & rFrameFormat)
 
     OUString aResult = "[ " +
         OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US) +
-        "(";
-    aResult += rFrameFormat.GetName() + ")";
+        "(" +
+        rFrameFormat.GetName() + ")";
 
     if (rFrameFormat.IsAuto())
         aResult += "*";
@@ -710,11 +710,8 @@ const char * dbg_out(const SwNumRule & rRule)
 
 static OUString lcl_dbg_out(const SwTextFormatColl & rFormat)
 {
-    OUString aResult(rFormat.GetName() + "(");
-
-    aResult += OUString::number(rFormat.GetAttrOutlineLevel()) + ")";
-
-    return aResult;
+    return rFormat.GetName() + "(" +
+        OUString::number(rFormat.GetAttrOutlineLevel()) + ")";
 }
 
 const char * dbg_out(const SwTextFormatColl & rFormat)

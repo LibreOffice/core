@@ -662,8 +662,8 @@ bool ImplSdPPTImport::Import()
 
                         for ( nLevel = 0; nLevel < 9; nLevel++ )
                         {
-                            OUString aName( pPage->GetLayoutName() );
-                            aName += " " + OUString::number( nLevel + 1 );
+                            OUString aName = pPage->GetLayoutName() +
+                                " " + OUString::number( nLevel + 1 );
                             SfxStyleSheet* pOutlineSheet = static_cast<SfxStyleSheet*>( mpDoc->GetStyleSheetPool()->Find( aName, SfxStyleFamily::Page ) );
                             DBG_ASSERT( pOutlineSheet, "Template for outline object not found" );
                             if ( pOutlineSheet )
@@ -2229,8 +2229,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         {
             for ( sal_uInt16 nLevel = 9; nLevel; nLevel-- )
             {
-                OUString aName( pPage->GetLayoutName() );
-                aName += " " + OUString::number( nLevel );
+                OUString aName = pPage->GetLayoutName() + " " + OUString::number( nLevel );
                 pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find( aName, SfxStyleFamily::Page ));
                 if ( pSheet )
                     pText->StartListening( *pSheet );

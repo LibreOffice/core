@@ -401,8 +401,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         if (nPos >= 0)
         {
             OUString aNumStr(aStyleName.copy(aOutlineStr.getLength()));
-            aInternalName = OUString(STR_LAYOUT_OUTLINE);
-            aInternalName += aNumStr;
+            aInternalName = STR_LAYOUT_OUTLINE + aNumStr;
         }
     }
 

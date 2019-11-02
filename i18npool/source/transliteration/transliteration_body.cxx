@@ -256,8 +256,8 @@ static OUString transliterate_titlecase_Impl(
 
         // now we can properly use toTitle to get the expected result for the resolved string.
         // The rest of the text should just become lowercase.
-        aRes = xCharClassImpl->toTitle( aResolvedLigature, 0, nResolvedLen, rLocale );
-        aRes += xCharClassImpl->toLower( aText, 1, aText.getLength() - 1, rLocale );
+        aRes = xCharClassImpl->toTitle( aResolvedLigature, 0, nResolvedLen, rLocale ) +
+               xCharClassImpl->toLower( aText, 1, aText.getLength() - 1, rLocale );
         offset.realloc( aRes.getLength() );
 
         sal_Int32* pOffset = std::fill_n(offset.begin(), nResolvedLen, 0);

@@ -250,16 +250,16 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
                 case 0x03:  // Date: Day, Month
                     //fDate;dfDayMonthLong;
                     eType = SvNumFormatType::DATE;
-                    aFormString = pFormTable->GetKeyword( eLanguage, NF_KEY_DD);
-                    aFormString += pFormTable->GetDateSep();    // matches last eLanguage
-                    aFormString += pFormTable->GetKeyword( eLanguage, NF_KEY_MMMM);
+                    aFormString = pFormTable->GetKeyword( eLanguage, NF_KEY_DD) +
+                        pFormTable->GetDateSep() +    // matches last eLanguage
+                        pFormTable->GetKeyword( eLanguage, NF_KEY_MMMM);
                     break;
                 case 0x04:  // Date: Month, Year
                     //fDate;dfMonthYearLong;
                     eType = SvNumFormatType::DATE;
-                    aFormString = pFormTable->GetKeyword( eLanguage, NF_KEY_MM);
-                    aFormString += pFormTable->GetDateSep();    // matches last eLanguage
-                    aFormString += pFormTable->GetKeyword( eLanguage, NF_KEY_YYYY);
+                    aFormString = pFormTable->GetKeyword( eLanguage, NF_KEY_MM) +
+                        pFormTable->GetDateSep() +    // matches last eLanguage
+                        pFormTable->GetKeyword( eLanguage, NF_KEY_YYYY);
                     break;
                 case 0x05:  // Text formats
                     //fString;nSt;

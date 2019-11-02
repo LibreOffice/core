@@ -254,9 +254,9 @@ namespace
          * language-territory stuff needs to be changed! */
         SAL_INFO_IF( !rLangTag.isIsoLocale(), "vcl.fonts", "localizedsorter::bestname - not an ISO locale");
         OString sLangMatch(OUStringToOString(rLangTag.getLanguage().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8));
-        OString sFullMatch = sLangMatch;
-        sFullMatch += OString('-');
-        sFullMatch += OUStringToOString(rLangTag.getCountry().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8);
+        OString sFullMatch = sLangMatch +
+            "-" +
+            OUStringToOString(rLangTag.getCountry().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8);
 
         bool alreadyclosematch = false;
         bool found_fallback_englishname = false;

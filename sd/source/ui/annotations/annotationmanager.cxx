@@ -550,9 +550,8 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     if( sAuthor.isEmpty() )
         sAuthor = SdResId( STR_ANNOTATION_NOAUTHOR );
 
-    aStr = aStr.replaceFirst("%1", sAuthor);
-
-    aStr += " (" + getAnnotationDateTimeString( xAnnotation ) + "): \"";
+    aStr = aStr.replaceFirst("%1", sAuthor) +
+        " (" + getAnnotationDateTimeString( xAnnotation ) + "): \"";
 
     OUString sQuote( pTextApi->GetText() );
 

@@ -414,8 +414,7 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
                     int iFiles;
                     for ( iFiles = 1; iFiles < nFiles; iFiles++ )
                     {
-                        OUString    aURL = aBaseDirURL;
-                        aURL += sFiles[iFiles];
+                        OUString aURL = aBaseDirURL + sFiles[iFiles];
                         OpenURL( aURL, "_default", aArgs );
                     }
                 }

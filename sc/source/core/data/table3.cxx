@@ -2133,8 +2133,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 DBShowRow(aRowEntry.nDestRow, true);
 
                 // insert label
-                OUString label = ScResId(STR_TABLE_GRAND) + " ";
-                label += ScResId(lcl_GetSubTotalStrId(pResFunc[0]));
+                OUString label = ScResId(STR_TABLE_GRAND) + " " + ScResId(lcl_GetSubTotalStrId(pResFunc[0]));
                 SetString(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, label);
                 ApplyStyle(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle);
             }

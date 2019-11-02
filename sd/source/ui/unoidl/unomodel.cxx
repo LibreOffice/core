@@ -1562,9 +1562,7 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
                                 *(SD_MOD()->GetNumberFormatter()), eLanguage );
 
             vcl::PDFNote aNote;
-            OUString sTitle( xAnnotation->getAuthor() );
-            sTitle += ", " + aStr;
-            aNote.Title = sTitle;
+            aNote.Title = xAnnotation->getAuthor() + ", " + aStr;
             aNote.Contents = xText->getString();
             rPDFExtOutDevData.CreateNote( ::tools::Rectangle( Point( static_cast< long >( aRealPoint2D.X * 100 ),
                 static_cast< long >( aRealPoint2D.Y * 100 ) ), Size( 1000, 1000 ) ), aNote );

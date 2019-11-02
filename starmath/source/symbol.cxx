@@ -237,8 +237,7 @@ void SmSymbolManager::Load()
         vcl::Font aFont( rSym.GetFace() );
         OSL_ENSURE( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
         aFont.SetItalic( ITALIC_NORMAL );
-        OUString aSymbolName('i');
-        aSymbolName += rSym.GetName();
+        OUString aSymbolName = "i" + rSym.GetName();
         SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),
                 aSymbolSetName, true /*bIsPredefined*/ );
 
@@ -254,8 +253,8 @@ void SmSymbolManager::Save()
     SmMathConfig &rCfg = *SM_MOD()->GetConfig();
 
     // prepare to skip symbols from iGreek on saving
-    OUString aSymbolSetName('i');
-    aSymbolSetName += SmLocalizedSymbolData::GetUiSymbolSetName("Greek");
+    OUString aSymbolSetName = "i" +
+        SmLocalizedSymbolData::GetUiSymbolSetName("Greek");
 
     SymbolPtrVec_t aTmp( GetSymbols() );
     std::vector< SmSym > aSymbols;

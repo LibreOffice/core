@@ -181,8 +181,7 @@ ErrCode ScQProReader::parse( ScDocument *pDoc )
                 {
                     if( nTab < 26 )
                     {
-                        OUString aName;
-                        aName += OUStringChar( sal_Unicode('A' + nTab) );
+                        OUString aName = OUStringChar( sal_Unicode('A' + nTab) );
                         if (!nTab)
                             pDoc->RenameTab( nTab, aName );
                         else
