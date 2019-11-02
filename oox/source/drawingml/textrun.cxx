@@ -22,6 +22,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
@@ -62,6 +63,11 @@ sal_Int32 TextRun::insertAt(
         Reference< XTextRange > xStart = xAt;
         PropertySet aPropSet( xStart );
 
+        Reference<XPropertyState> xState(xStart, UNO_QUERY);
+        Any aOldFontName = xState->getPropertyDefault("CharFontName");
+        Any aOldFontPitch = xState->getPropertyDefault("CharFontPitch");
+        Any aOldFontFamily = xState->getPropertyDefault("CharFontFamily");
+
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
         aTextCharacterProps.assignUsed( maTextCharacterProperties );
         if ( aTextCharacterProps.moHeight.has() )
@@ -78,61 +84,50 @@ sal_Int32 TextRun::insertAt(
                 SAL_WARN("oox",  "OOX: TextRun::insertAt() insert line break" );
                 xText->insertControlCharacter( xStart, ControlCharacter::LINE_BREAK, false );
             }
-            else
+            else if (!getText().isEmpty())
             {
-                OUString aSymbolFontName;
-                sal_Int16 nSymbolFontFamily = 0, nSymbolFontPitch = 0;
-
-                if ( !aTextCharacterProps.maSymbolFont.getFontData( aSymbolFontName, nSymbolFontPitch, nSymbolFontFamily, rFilterBase ) )
-                    xText->insertString( xStart, getText(), false );
-                else if ( !getText().isEmpty() )
+                sal_Int32 nIndex = 0;
+                sal_Int32 nMax = getText().getLength();
+                while(true)
                 {
-                    // #i113673
-                    OUString aLatinFontName;
-                    sal_Int16 nLatinFontPitch = 0, nLatinFontFamily = 0;
-                    bool bLatinOk = aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );
+                    bool bSymbol = (getText()[nIndex] & 0xff00) == 0xf000;
+                    sal_Int32 nCount = 1;
+                    while(nIndex + nCount < nMax
+                            && ((getText()[nIndex + nCount] & 0xff00) == 0xf000) == bSymbol)
+                        ++nCount;
 
-                    sal_Int32 nIndex = 0;
-                    while ( true )
+                    OUString aFontName;
+                    sal_Int16 nFontFamily = 0, nFontPitch = 0;
+                    bool bReset = false;
+
+                    // Direct formatting for symbols.
+                    if (bSymbol && aTextCharacterProps.maSymbolFont.getFontData(aFontName, nFontPitch, nFontFamily, rFilterBase))
+
                     {
-                        sal_Int32 nCount = 0;
-                        bool bSymbol = ( getText()[ nIndex ] & 0xff00 ) == 0xf000;
-                        if ( bSymbol )
-                        {
-                            do
-                            {
-                                nCount++;
-                            }
-                            while( ( ( nCount + nIndex ) < getText().getLength() ) && ( ( getText()[ nCount + nIndex ] & 0xff00 ) == 0xf000 ) );
-                            aPropSet.setAnyProperty( PROP_CharFontName, Any( aSymbolFontName ) );
-                            aPropSet.setAnyProperty( PROP_CharFontPitch, Any( nSymbolFontPitch ) );
-                            aPropSet.setAnyProperty( PROP_CharFontFamily, Any( nSymbolFontFamily ) );
-                        }
-                        else
-                        {
-                            do
-                            {
-                                nCount++;
-                            }
-                            while( ( ( nCount + nIndex ) < getText().getLength() ) && ( ( getText()[ nCount + nIndex ] & 0xff00 ) != 0xf000 ) );
-                            if (bLatinOk)
-                            {
-                                aPropSet.setAnyProperty( PROP_CharFontName, Any( aLatinFontName ) );
-                                aPropSet.setAnyProperty( PROP_CharFontPitch, Any( nLatinFontPitch ) );
-                                aPropSet.setAnyProperty( PROP_CharFontFamily, Any( nLatinFontFamily ) );
-                            }
-                        }
-                        OUString aSubString( getText().copy( nIndex, nCount ) );
-                        xText->insertString( xStart, aSubString, false );
-                        nIndex += nCount;
-
-                        if ( nIndex >= getText().getLength() )
-                            break;
-
-                        xStart = xAt;
-                        aPropSet = PropertySet( xStart );
-                        aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
+                        aPropSet.setAnyProperty(PROP_CharFontName, Any(aFontName));
+                        aPropSet.setAnyProperty(PROP_CharFontPitch, Any(nFontPitch));
+                        aPropSet.setAnyProperty(PROP_CharFontFamily, Any(nFontFamily));
+                        bReset = true;
                     }
+
+                    OUString aSubString(getText().copy(nIndex, nCount));
+                    xText->insertString(xStart, aSubString, false);
+
+                    aPropSet = PropertySet(xStart);
+                    // Reset to whatever it was.
+                    if (bReset)
+                    {
+                        aPropSet.setAnyProperty(PROP_CharFontName, aOldFontName);
+                        aPropSet.setAnyProperty(PROP_CharFontPitch, aOldFontPitch);
+                        aPropSet.setAnyProperty(PROP_CharFontFamily, aOldFontFamily);
+                    }
+
+                    nIndex += nCount;
+
+                    if (nIndex >= nMax)
+                        break;
+
+                    aTextCharacterProps.pushToPropSet(aPropSet, rFilterBase);
                 }
             }
         }
