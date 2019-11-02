@@ -158,6 +158,24 @@ void GradientDrawableHelper::AddFillColorAction(GDIMetaFile* pMetaFile, long nSt
     pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 }
 
+long GradientDrawableHelper::GetLinearGradientSteps(long nStepCount, long nStartRed,
+                                                    long nStartGreen, long nStartBlue, long nEndRed,
+                                                    long nEndGreen, long nEndBlue)
+{
+    // minimal three steps and maximal as max color steps
+    long nAbsRedSteps = std::abs(nEndRed - nStartRed);
+    long nAbsGreenSteps = std::abs(nEndGreen - nStartGreen);
+    long nAbsBlueSteps = std::abs(nEndBlue - nStartBlue);
+
+    long nMaxColorSteps = std::max(nAbsRedSteps, nAbsGreenSteps);
+    nMaxColorSteps = std::max(nMaxColorSteps, nAbsBlueSteps);
+
+    long nSteps = std::min(nStepCount, nMaxColorSteps);
+    nSteps = std::max(3L, nSteps);
+
+    return nSteps;
+}
+
 void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
                                                           tools::Rectangle const& rRect,
                                                           Gradient const& rGradient)
@@ -236,19 +254,9 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         }
     }
 
-    long nStepCount = GetGradientSteps(pRenderContext, rGradient, aRect, true /*bMtf*/);
-
-    // minimal three steps and maximal as max color steps
-    long nAbsRedSteps = std::abs(nEndRed - nStartRed);
-    long nAbsGreenSteps = std::abs(nEndGreen - nStartGreen);
-    long nAbsBlueSteps = std::abs(nEndBlue - nStartBlue);
-    long nMaxColorSteps = std::max(nAbsRedSteps, nAbsGreenSteps);
-    nMaxColorSteps = std::max(nMaxColorSteps, nAbsBlueSteps);
-    long nSteps = std::min(nStepCount, nMaxColorSteps);
-    if (nSteps < 3)
-    {
-        nSteps = 3;
-    }
+    long nSteps
+        = GetLinearGradientSteps(GetGradientSteps(pRenderContext, rGradient, aRect, true /*bMtf*/),
+                                 nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 
     double fScanInc = static_cast<double>(aRect.GetHeight()) / static_cast<double>(nSteps);
     double fGradientLine = static_cast<double>(aRect.Top());
@@ -256,9 +264,8 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
 
     const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
     if (!bLinear)
-    {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
-    }
+
     for (long i = 0; i < nSteps; i++)
     {
         // linear interpolation of color

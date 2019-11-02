@@ -17,7 +17,7 @@ namespace tools
 {
 class Rectangle;
 class PolyPolygon;
-}
+} // namespace tools
 class Gradient;
 class OutputDevice;
 
@@ -52,6 +52,9 @@ public:
     static void SetGrayscaleColors(OutputDevice* pRenderContext, Gradient const& rGradient);
     static long GetGradientSteps(OutputDevice* pRenderContext, const Gradient& rGradient,
                                  const tools::Rectangle& rRect, bool bMtf, bool bComplex = false);
+    static long GetLinearGradientSteps(long nStepCount, long nStartRed, long nStartGreen,
+                                       long nStartBlue, long nEndRed, long nEndGreen,
+                                       long nEndBlue);
 
     static Color GetSingleColorGradientFill(OutputDevice* pRenderContext);
     static void SetGrayscaleColors(OutputDevice* pRenderContext, Gradient& rGradient);
