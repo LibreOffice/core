@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_b617efa3",
+        "filename": "ucb/source/ucp/file/filinpstr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-02T12:00:23Z",
+      "side": 1,
+      "message": "Possibly even (nrc \u003e nBytesToRead)?",
+      "range": {
+        "startLine": 93,
+        "startChar": 7,
+        "endLine": 93,
+        "endChar": 52
+      },
+      "revId": "4eb7749d386ccdbfa6f5bc8e30b87331b4d3427a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
