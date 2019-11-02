@@ -79,9 +79,6 @@ private:
     mutable GDIMetaFile* mpGradientMtf;
 };
 
-void VCL_DLLPUBLIC AddGradientActions(OutputDevice* pRenderContext, tools::Rectangle const& rRect,
-                                      Gradient const& rGradient, GDIMetaFile* pMetaFile);
-
 } // namespace vcl
 #endif
 
