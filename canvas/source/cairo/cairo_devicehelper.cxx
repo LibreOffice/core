@@ -22,7 +22,6 @@
 
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
-#include <com/sun/star/lang/NoSupportException.hpp>
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
@@ -32,7 +31,6 @@
 
 #include "cairo_canvasbitmap.hxx"
 #include "cairo_devicehelper.hxx"
-#include "cairo_spritecanvas.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

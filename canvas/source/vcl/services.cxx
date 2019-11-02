@@ -19,21 +19,7 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
-#include <basegfx/utils/canvastools.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/servicedecl.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/canvastools.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
-
-#include <canvas/canvastools.hxx>
 
 #include "canvas.hxx"
 #include "spritecanvas.hxx"

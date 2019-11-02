@@ -23,6 +23,8 @@
 #include <math.h>
 #include <memory>
 
+#include <com/sun/star/rendering/TextDirection.hpp>
+#include <canvas/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -32,7 +34,6 @@
 #include <vcl/virdev.hxx>
 
 
-#include "cairo_spritecanvas.hxx"
 #include "cairo_textlayout.hxx"
 
 #include <cairo.h>

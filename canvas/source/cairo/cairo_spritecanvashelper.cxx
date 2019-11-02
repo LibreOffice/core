@@ -22,11 +22,8 @@
 
 #include <boost/cast.hpp>
 
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/utils/canvastools.hxx>
-#include <comphelper/scopeguard.hxx>
+#include <basegfx/range/b2irange.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/canvastools.hxx>
 
 #include <canvas/canvastools.hxx>
 

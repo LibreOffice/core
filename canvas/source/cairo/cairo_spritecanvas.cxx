@@ -20,21 +20,14 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <canvas/canvastools.hxx>
 
 #include "cairo_spritecanvas.hxx"
 

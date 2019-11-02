@@ -23,9 +23,7 @@
 #include <boost/cast.hpp>
 
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>

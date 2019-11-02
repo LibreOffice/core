@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <numeric>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -28,20 +26,10 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
-#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
-#include <com/sun/star/geometry/RealPoint2D.hpp>
-#include <com/sun/star/geometry/RealRectangle2D.hpp>
-#include <com/sun/star/geometry/RealSize2D.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/metric.hxx>

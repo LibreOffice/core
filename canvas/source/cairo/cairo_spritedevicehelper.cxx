@@ -20,18 +20,10 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <basegfx/utils/canvastools.hxx>
-#include <basegfx/utils/unopolypolygon.hxx>
-#include <com/sun/star/lang/NoSupportException.hpp>
 #include <vcl/cairo.hxx>
-#include <vcl/canvastools.hxx>
-#include <vcl/syschild.hxx>
-
-#include <canvas/canvastools.hxx>
 
 #include <cairo.h>
 
-#include "cairo_canvasbitmap.hxx"
 #include "cairo_devicehelper.hxx"
 #include "cairo_spritecanvas.hxx"
 
