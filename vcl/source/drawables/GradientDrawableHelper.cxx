@@ -521,59 +521,53 @@ long GradientDrawableHelper::GetGradientSteps(OutputDevice* pRenderContext,
     return nStepCount;
 }
 
+void GradientDrawableHelper::SetFillColor(OutputDevice* pRenderContext, long nStartRed,
+                                          long nStartGreen, long nStartBlue)
+{
+    sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed);
+    sal_uInt8 nGreen = static_cast<sal_uInt8>(nStartGreen);
+    sal_uInt8 nBlue = static_cast<sal_uInt8>(nStartBlue);
+
+    SalGraphics* pGraphics = pRenderContext->GetGraphics();
+    pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
+}
+
 void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
                                                 tools::Rectangle const& rRect,
                                                 Gradient const& rGradient,
                                                 tools::PolyPolygon const* pClixPolyPoly)
 {
     // get BoundRect of rotated rectangle
-    tools::Rectangle aRect;
+    tools::Rectangle aStepRect;
     Point aCenter;
-    sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
-    rGradient.GetBoundRect(rRect, aRect, aCenter);
+    // gets the sides of the step - we calculate the top and bottom later
+    rGradient.GetBoundRect(rRect, aStepRect, aCenter);
+    double fBorder = CalculateBorder(rGradient, aStepRect);
 
     bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
-    double fBorder = CalculateBorder(rGradient, aRect);
-
-    tools::Rectangle aMirrorRect = aRect; // used in style axial
-    aMirrorRect.SetTop((aRect.Top() + aRect.Bottom()) / 2);
+    tools::Rectangle aMirrorRect = aStepRect; // used in style axial
+    aMirrorRect.SetTop((aStepRect.Top() + aStepRect.Bottom()) / 2);
     if (!bLinear)
-    {
-        aRect.SetBottom(aMirrorRect.Top());
-    }
+        aStepRect.SetBottom(aMirrorRect.Top());
 
     // colour-intensities of start- and finish; change if needed
-    long nFactor;
     Color aStartCol = rGradient.GetStartColor();
+    long nStartRed = GetStartColorIntensity(rGradient, aStartCol.GetRed());
+    long nStartGreen = GetStartColorIntensity(rGradient, aStartCol.GetGreen());
+    long nStartBlue = GetStartColorIntensity(rGradient, aStartCol.GetBlue());
+
     Color aEndCol = rGradient.GetEndColor();
-    long nStartRed = aStartCol.GetRed();
-    long nStartGreen = aStartCol.GetGreen();
-    long nStartBlue = aStartCol.GetBlue();
-    long nEndRed = aEndCol.GetRed();
-    long nEndGreen = aEndCol.GetGreen();
-    long nEndBlue = aEndCol.GetBlue();
-    nFactor = rGradient.GetStartIntensity();
-    nStartRed = (nStartRed * nFactor) / 100;
-    nStartGreen = (nStartGreen * nFactor) / 100;
-    nStartBlue = (nStartBlue * nFactor) / 100;
-    nFactor = rGradient.GetEndIntensity();
-    nEndRed = (nEndRed * nFactor) / 100;
-    nEndGreen = (nEndGreen * nFactor) / 100;
-    nEndBlue = (nEndBlue * nFactor) / 100;
+    long nEndRed = GetEndColorIntensity(rGradient, aEndCol.GetRed());
+    long nEndGreen = GetEndColorIntensity(rGradient, aEndCol.GetGreen());
+    long nEndBlue = GetEndColorIntensity(rGradient, aEndCol.GetBlue());
 
     // gradient style axial has exchanged start and end colors
     if (!bLinear)
     {
-        long nTempColor = nStartRed;
-        nStartRed = nEndRed;
-        nEndRed = nTempColor;
-        nTempColor = nStartGreen;
-        nStartGreen = nEndGreen;
-        nEndGreen = nTempColor;
-        nTempColor = nStartBlue;
-        nStartBlue = nEndBlue;
-        nEndBlue = nTempColor;
+        SwapStartEndColor(nStartRed, nEndRed);
+        SwapStartEndColor(nStartGreen, nEndGreen);
+        SwapStartEndColor(nStartBlue, nEndBlue);
     }
 
     sal_uInt8 nRed;
@@ -581,19 +575,17 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     sal_uInt8 nBlue;
 
     // Create border
-    tools::Rectangle aBorderRect = aRect;
+    tools::Rectangle aBorderRect = aStepRect;
     tools::Polygon aPoly(4);
+
+    sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
+
     if (fBorder > 0.0)
     {
-        nRed = static_cast<sal_uInt8>(nStartRed);
-        nGreen = static_cast<sal_uInt8>(nStartGreen);
-        nBlue = static_cast<sal_uInt8>(nStartBlue);
-
-        SalGraphics* pGraphics = pRenderContext->GetGraphics();
-        pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
+        SetFillColor(pRenderContext, nStartRed, nStartGreen, nStartBlue);
 
         aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorder));
-        aRect.SetTop(aBorderRect.Bottom());
+        aStepRect.SetTop(aBorderRect.Bottom());
         aPoly[0] = aBorderRect.TopLeft();
         aPoly[1] = aBorderRect.TopRight();
         aPoly[2] = aBorderRect.BottomRight();
@@ -623,56 +615,38 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         }
     }
 
-    // calculate step count
-    long nStepCount = GetGradientSteps(pRenderContext, rGradient, aRect, false /*bMtf*/);
+    long nSteps = GetLinearGradientSteps(
+        GetGradientSteps(pRenderContext, rGradient, aStepRect, true /*bMtf*/), nStartRed,
+        nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 
-    // minimal three steps and maximal as max color steps
-    long nAbsRedSteps = std::abs(nEndRed - nStartRed);
-    long nAbsGreenSteps = std::abs(nEndGreen - nStartGreen);
-    long nAbsBlueSteps = std::abs(nEndBlue - nStartBlue);
-    long nMaxColorSteps = std::max(nAbsRedSteps, nAbsGreenSteps);
-    nMaxColorSteps = std::max(nMaxColorSteps, nAbsBlueSteps);
-    long nSteps = std::min(nStepCount, nMaxColorSteps);
-
-    if (nSteps < 3)
-        nSteps = 3;
-
-    double fScanInc = static_cast<double>(aRect.GetHeight()) / static_cast<double>(nSteps);
-    double fGradientLine = static_cast<double>(aRect.Top());
+    double fScanInc = static_cast<double>(aStepRect.GetHeight()) / static_cast<double>(nSteps);
+    double fGradientLine = static_cast<double>(aStepRect.Top());
     double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
 
     const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
     if (!bLinear)
-    {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
-    }
+
     for (long i = 0; i < nSteps; i++)
     {
         // linear interpolation of color
-        const double fAlpha = static_cast<double>(i) / fStepsMinus1;
-        double fTempColor = static_cast<double>(nStartRed) * (1.0 - fAlpha)
-                            + static_cast<double>(nEndRed) * fAlpha;
-        nRed = GetGradientColorValue(static_cast<long>(fTempColor));
+        double fAlpha = static_cast<double>(i) / fStepsMinus1;
 
-        fTempColor = static_cast<double>(nStartGreen) * (1.0 - fAlpha)
-                     + static_cast<double>(nEndGreen) * fAlpha;
-        nGreen = GetGradientColorValue(static_cast<long>(fTempColor));
-
-        fTempColor = static_cast<double>(nStartBlue) * (1.0 - fAlpha)
-                     + static_cast<double>(nEndBlue) * fAlpha;
-        nBlue = GetGradientColorValue(static_cast<long>(fTempColor));
+        nRed = GetGradientColorValue(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha));
+        nGreen = GetGradientColorValue(CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha));
+        nBlue = GetGradientColorValue(CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
 
         SalGraphics* pGraphics = pRenderContext->GetGraphics();
         pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
 
         // Polygon for this color step
-        aRect.SetTop(static_cast<long>(fGradientLine + static_cast<double>(i) * fScanInc));
-        aRect.SetBottom(
+        aStepRect.SetTop(static_cast<long>(fGradientLine + static_cast<double>(i) * fScanInc));
+        aStepRect.SetBottom(
             static_cast<long>(fGradientLine + (static_cast<double>(i) + 1.0) * fScanInc));
-        aPoly[0] = aRect.TopLeft();
-        aPoly[1] = aRect.TopRight();
-        aPoly[2] = aRect.BottomRight();
-        aPoly[3] = aRect.BottomLeft();
+        aPoly[0] = aStepRect.TopLeft();
+        aPoly[1] = aStepRect.TopRight();
+        aPoly[2] = aStepRect.BottomRight();
+        aPoly[3] = aStepRect.BottomLeft();
         aPoly.Rotate(aCenter, nAngle);
 
         if (pClixPolyPoly)
@@ -698,6 +672,7 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
                 pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
         }
     }
+
     if (bLinear)
         return;
 
@@ -709,13 +684,13 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     SalGraphics* pGraphics = pRenderContext->GetGraphics();
     pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
 
-    aRect.SetTop(static_cast<long>(fGradientLine + static_cast<double>(nSteps) * fScanInc));
-    aRect.SetBottom(
+    aStepRect.SetTop(static_cast<long>(fGradientLine + static_cast<double>(nSteps) * fScanInc));
+    aStepRect.SetBottom(
         static_cast<long>(fMirrorGradientLine - static_cast<double>(nSteps) * fScanInc));
-    aPoly[0] = aRect.TopLeft();
-    aPoly[1] = aRect.TopRight();
-    aPoly[2] = aRect.BottomRight();
-    aPoly[3] = aRect.BottomLeft();
+    aPoly[0] = aStepRect.TopLeft();
+    aPoly[1] = aStepRect.TopRight();
+    aPoly[2] = aStepRect.BottomRight();
+    aPoly[3] = aStepRect.BottomLeft();
     aPoly.Rotate(aCenter, nAngle);
 
     if (pClixPolyPoly)
