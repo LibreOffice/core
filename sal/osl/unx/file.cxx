@@ -340,6 +340,14 @@ oslFileError FileHandle_Impl::readAt(
         nBytes = 0;
     }
 
+    // tdf#127648: some 'pread()'s may return large "unsigned 32-bit int" when fail
+    if (nBytes > nBytesRequested)
+    {
+        nBytes = -1;
+        if (!errno)
+            errno = EIO; 
+    }
+
     if (nBytes == -1)
         return oslTranslateFileError(errno);
 
