@@ -1158,7 +1158,7 @@ void SwView::WriteUserData( OUString &rUserData, bool bBrowse )
     rUserData += OUString::number(
             static_cast<sal_uInt16>(m_pWrtShell->GetViewOptions()->GetZoomType()));//eZoom;
     rUserData += ";";
-    rUserData += FrameTypeFlags::NONE == m_pWrtShell->GetSelFrameType() ? OUString("0") : OUString("1");
+    rUserData += FrameTypeFlags::NONE == m_pWrtShell->GetSelFrameType() ? OUStringLiteral("0") : OUStringLiteral("1");
 }
 
 // Set CursorPos

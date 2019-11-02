@@ -1386,7 +1386,7 @@ void UnoControl::setDesignMode( sal_Bool bOn )
         maAccessibleContext.clear();
 
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = mbDesignMode ? OUString("design") : OUString("alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? OUStringLiteral("design") : OUStringLiteral("alive" );
     }
 
     // dispose current AccessibleContext, if we have one - without Mutex lock

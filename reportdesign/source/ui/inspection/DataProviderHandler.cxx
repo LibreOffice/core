@@ -282,9 +282,9 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
     if ( nId != -1 )
     {
         aOut.Category = (OPropertyInfoService::getPropertyUIFlags(nId ) & PropUIFlags::DataProperty) ?
-                                    OUString("Data")
+                                    OUStringLiteral("Data")
                                                         :
-                                    OUString("General");
+                                    OUStringLiteral("General");
         aOut.HelpURL = HelpIdUrl::getHelpURL( OPropertyInfoService::getPropertyHelpId( nId ) );
         aOut.DisplayName = OPropertyInfoService::getPropertyTranslation(nId);
     }

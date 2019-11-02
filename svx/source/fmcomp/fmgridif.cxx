@@ -743,7 +743,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn)
 
         // prepare firing an event
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = mbDesignMode ? OUString( "design" ) : OUString( "alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? OUStringLiteral( "design" ) : OUStringLiteral( "alive" );
     }
 
     // --- </mutex_lock> ---

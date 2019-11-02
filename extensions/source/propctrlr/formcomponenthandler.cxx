@@ -997,8 +997,8 @@ namespace pcr
             aDescriptor.Control = new OFileUrlControl( impl_getDefaultDialogParent_nothrow() );
 
             aDescriptor.PrimaryButtonId = PROPERTY_ID_TARGET_URL == nPropId
-                ? OUString(UID_PROP_DLG_ATTR_TARGET_URL)
-                : OUString(UID_PROP_DLG_IMAGE_URL);
+                ? OUStringLiteral(UID_PROP_DLG_ATTR_TARGET_URL)
+                : OUStringLiteral(UID_PROP_DLG_IMAGE_URL);
         }
         break;
 
@@ -1371,7 +1371,7 @@ namespace pcr
             aDescriptor.HasSecondaryButton = true;
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
-        aDescriptor.Category = bIsDataProperty ? OUString("Data") : OUString("General");
+        aDescriptor.Category = bIsDataProperty ? OUStringLiteral("Data") : OUStringLiteral("General");
         return aDescriptor;
     }
 

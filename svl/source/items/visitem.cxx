@@ -36,7 +36,7 @@ bool SfxVisibilityItem::GetPresentation(SfxItemPresentation,
                                         OUString & rText,
                                         const IntlWrapper&) const
 {
-    rText = m_nValue.bVisible ? OUString("TRUE") : OUString("FALSE");
+    rText = m_nValue.bVisible ? OUStringLiteral("TRUE") : OUStringLiteral("FALSE");
     return true;
 }
 

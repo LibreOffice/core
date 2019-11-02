@@ -57,7 +57,7 @@ long long addRecording(const char * aProfileId, long long aCreateTime)
 
     OUString sRecordingData(OUString::number(osl_getThreadIdentifier(nullptr)) + " " +
         OUString::number(aTime/1000000.0) + " " + aString + ": " +
-        (aCreateTime == 0 ? OUString("start") : OUString("stop")) +
+        (aCreateTime == 0 ? OUStringLiteral("start") : OUStringLiteral("stop")) +
         (aCreateTime != 0 ? (" " + OUString::number((aTime - aCreateTime)/1000.0) + " ms") : OUString("")));
 
     ::osl::MutexGuard aGuard( g_aMutex );

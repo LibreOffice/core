@@ -344,8 +344,8 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                 {
                     Sequence< OUString > aPropNames(1);
                     aPropNames[0] = GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ?
-                        OUString("ParaAutoStyleName") :
-                        OUString("CharAutoStyleName");
+                        OUStringLiteral("ParaAutoStyleName") :
+                        OUStringLiteral("CharAutoStyleName");
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
                     if( aAny.hasElements() )
                     {

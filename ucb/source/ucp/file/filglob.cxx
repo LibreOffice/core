@@ -498,8 +498,8 @@ namespace fileaccess {
             Sequence< OUString > aSeq( 1 );
             aSeq[0] =
                 ( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND )  ?
-                OUString("Title")               :
-                OUString("ContentType");
+                OUStringLiteral("Title")               :
+                OUStringLiteral("ContentType");
 
             aAny <<= MissingPropertiesException(
                 "a property is missing, necessary to create a content",

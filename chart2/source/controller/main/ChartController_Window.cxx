@@ -1008,7 +1008,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         OUString aMenuName;
         if ( isShapeContext() )
             // #i12587# support for shapes in chart
-            aMenuName = m_pDrawViewWrapper->IsTextEdit() ? OUString( "drawtext" ) : OUString( "draw" );
+            aMenuName = m_pDrawViewWrapper->IsTextEdit() ? OUStringLiteral( "drawtext" ) : OUStringLiteral( "draw" );
         else
         {
             // todo: the context menu should be specified by an xml file in uiconfig
