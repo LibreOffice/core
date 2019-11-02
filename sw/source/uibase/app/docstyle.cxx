@@ -463,7 +463,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
     pBoxFormat(nullptr),
     rDoc(rDocument),
     aCoreSet(
-        GetPool()->GetPool(),
+        rPool.GetPool(),
         svl::Items<
             RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
             RES_PARATR_BEGIN, RES_FRMATR_END - 1,
