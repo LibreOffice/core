@@ -89,6 +89,10 @@ XInputStream_impl::readBytes(
        != osl::FileBase::E_None)
         throw io::IOException( THROW_WHERE );
 
+    // tdf#127648: workaround some filesystem returning large unsigned 32-bit value instead of error
+    if (nrc > std::numeric_limits<sal_Int32>::max())
+        throw io::IOException(THROW_WHERE);
+
     // Shrink aData in case we read less than nBytesToRead (XInputStream
     // documentation does not tell whether this is required, and I do not know
     // if any code relies on this, so be conservative---SB):
