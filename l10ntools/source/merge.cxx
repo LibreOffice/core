@@ -322,8 +322,8 @@ OString MergeDataFile::CreateKey(const OString& rTYP, const OString& rGID,
     const OString& rLID, const OString& rFilename, bool bCaseSensitive)
 {
     static const char sStroke[] = "-";
-    OString sKey = rTYP + sStroke + rGID + sStroke + rLID + sStroke;
-    sKey += lcl_NormalizeFilename(rFilename);
+    OString sKey = rTYP + sStroke + rGID + sStroke + rLID + sStroke +
+        lcl_NormalizeFilename(rFilename);
     if(bCaseSensitive)
         return sKey;         // officecfg case sensitive identifier
     return sKey.toAsciiUpperCase();

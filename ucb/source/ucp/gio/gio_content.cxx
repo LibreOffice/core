@@ -757,8 +757,8 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
         {
             if (nTitlePos > -1)
             {
-                OUString aNewURL = getParentURL();
-                aNewURL += OUString( newName, strlen(newName), RTL_TEXTENCODING_UTF8 );
+                OUString aNewURL = getParentURL() +
+                    OUString( newName, strlen(newName), RTL_TEXTENCODING_UTF8 );
                 css::uno::Reference< css::ucb::XContentIdentifier > xNewId
                     = new ::ucbhelper::ContentIdentifier( aNewURL );
 

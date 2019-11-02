@@ -664,8 +664,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         if ( m_aFieldStack.back().mnObjLocFc > 0 )
                         {
                             // Store the OLE object as an internal link
-                            OUString sOleId('_');
-                            sOleId += OUString::number( m_aFieldStack.back().mnObjLocFc );
+                            OUString sOleId = "_" +
+                                OUString::number( m_aFieldStack.back().mnObjLocFc );
 
                             tools::SvRef<SotStorage> xSrc0 = m_pStg->OpenSotStorage(SL::aObjectPool);
                             tools::SvRef<SotStorage> xSrc1 = xSrc0->OpenSotStorage( sOleId, StreamMode::READ );

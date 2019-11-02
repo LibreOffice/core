@@ -501,9 +501,9 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
     for (const SmSym& rSymbol : rNewSymbols)
     {
         OUString  aNodeNameDelim = SYMBOL_LIST +
+            aDelim +
+            rSymbol.GetExportName() +
             aDelim;
-        aNodeNameDelim += rSymbol.GetExportName();
-        aNodeNameDelim += aDelim;
 
         const OUString *pName = pNames;
 

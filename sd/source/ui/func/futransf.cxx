@@ -51,8 +51,8 @@ namespace {
 void setUndo(::sd::View* pView, const SfxItemSet* pArgs)
 {
     // Undo
-    OUString aString(pView->GetDescriptionOfMarkedObjects());
-    aString += " " + SdResId(STR_TRANSFORM);
+    OUString aString = pView->GetDescriptionOfMarkedObjects() +
+        " " + SdResId(STR_TRANSFORM);
     pView->BegUndo(aString);
 
     pView->SetGeoAttrToMarked(*pArgs);

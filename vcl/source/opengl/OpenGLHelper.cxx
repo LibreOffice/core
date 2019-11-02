@@ -306,9 +306,8 @@ namespace
                             const OUString& rGeometryShaderName,
                             const OString& rDigest )
     {
-        OString aFileName;
-        aFileName += getCacheFolder();
-        aFileName += OUStringToOString( rVertexShaderName, RTL_TEXTENCODING_UTF8 ) + "-" +
+        OString aFileName = getCacheFolder() +
+            OUStringToOString( rVertexShaderName, RTL_TEXTENCODING_UTF8 ) + "-" +
             OUStringToOString( rFragmentShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
         if (!rGeometryShaderName.isEmpty())
             aFileName += OUStringToOString( rGeometryShaderName, RTL_TEXTENCODING_UTF8 ) + "-";

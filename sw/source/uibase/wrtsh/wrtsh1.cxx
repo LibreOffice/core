@@ -1644,12 +1644,12 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
                 // is already clipped to the editshell
             StartAllAction();
 
-            OUString aTmpStr1 = SwResId(STR_START_QUOTE);
-            aTmpStr1 += GetSelText();
-            aTmpStr1 += SwResId(STR_END_QUOTE);
-            OUString aTmpStr3 = SwResId(STR_START_QUOTE);
-            aTmpStr3 += OUStringChar(cChar);
-            aTmpStr3 += SwResId(STR_END_QUOTE);
+            OUString aTmpStr1 = SwResId(STR_START_QUOTE) +
+                GetSelText() +
+                SwResId(STR_END_QUOTE);
+            OUString aTmpStr3 = SwResId(STR_START_QUOTE) +
+                OUStringChar(cChar) +
+                SwResId(STR_END_QUOTE);
             aRewriter.AddRule( UndoArg1, aTmpStr1 );
             aRewriter.AddRule( UndoArg2, SwResId(STR_YIELDS) );
             aRewriter.AddRule( UndoArg3, aTmpStr3 );

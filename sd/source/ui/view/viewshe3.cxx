@@ -111,8 +111,8 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
                 {
                     // Set the necessary string like in
                     // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
-                    OUString aTmp(SvtResId(STR_UNDO));
-                    aTmp += pUndoManager->GetUndoActionComment();
+                    OUString aTmp = SvtResId(STR_UNDO) +
+                        pUndoManager->GetUndoActionComment();
                     rSet.Put(SfxStringItem(SID_UNDO, aTmp));
                 }
             }
@@ -142,8 +142,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            OUString aTmp(SvtResId(STR_REDO));
-            aTmp += pUndoManager->GetRedoActionComment();
+            OUString aTmp = SvtResId(STR_REDO) + pUndoManager->GetRedoActionComment();
             rSet.Put(SfxStringItem(SID_REDO, aTmp));
         }
     }

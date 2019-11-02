@@ -2119,8 +2119,7 @@ OUString getPageApiNameFromUiName( const OUString& rUIName )
 
     if( rUIName.startsWith( aDefPageName ) )
     {
-        aApiName = sEmptyPageName;
-        aApiName += rUIName.copy( aDefPageName.getLength() );
+        aApiName = sEmptyPageName + rUIName.copy( aDefPageName.getLength() );
     }
     else
     {

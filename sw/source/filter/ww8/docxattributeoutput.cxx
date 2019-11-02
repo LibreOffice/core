@@ -7236,8 +7236,8 @@ void DocxAttributeOutput::RefField( const SwField&  rField, const OUString& rRef
     SwFieldIds nType = rField.GetTyp( )->Which( );
     if ( nType == SwFieldIds::GetExp )
     {
-        OUString sCmd = FieldString( ww::eREF );
-        sCmd += "\"" + rRef + "\" ";
+        OUString sCmd = FieldString( ww::eREF ) +
+            "\"" + rRef + "\" ";
 
         m_rExport.OutputField( &rField, ww::eREF, sCmd );
     }

@@ -690,8 +690,8 @@ bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
                     pNew = new ImpXMLAutoLayoutInfo(nType, pInfo);
                     mvAutoLayoutInfoList.emplace_back( pNew );
                     OUString sNewName =
-                        "AL" + OUString::number(mvAutoLayoutInfoList.size() - 1);
-                    sNewName += "T" + OUString::number(nType);
+                        "AL" + OUString::number(mvAutoLayoutInfoList.size() - 1) +
+                        "T" + OUString::number(nType);
                     pNew->SetLayoutName(sNewName);
                 }
 

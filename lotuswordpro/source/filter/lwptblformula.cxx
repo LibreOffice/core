@@ -461,9 +461,8 @@ OUString LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
         aFormula += m_aArgs[1]->ToArgString(pCellsMap) + " ";
         OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
 
-        aFormula += aFuncName + " ";
-
-        aFormula += m_aArgs[0]->ToArgString(pCellsMap);
+        aFormula += aFuncName + " " +
+            m_aArgs[0]->ToArgString(pCellsMap);
     }
     else
     {
@@ -481,8 +480,8 @@ OUString LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
     if (1==m_aArgs.size())
     {
         OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
-        aFormula += aFuncName;
-        aFormula += m_aArgs[0]->ToArgString(pCellsMap);
+        aFormula += aFuncName +
+            m_aArgs[0]->ToArgString(pCellsMap);
     }
     else
     {

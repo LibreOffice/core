@@ -822,8 +822,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     SwView      *pCurrView = static_cast<SwView*>( pFrame->GetViewShell());
 
                     // Set document's title
-                    OUString aTmp( SwResId(STR_ABSTRACT_TITLE) );
-                    aTmp += GetTitle();
+                    OUString aTmp = SwResId(STR_ABSTRACT_TITLE) + GetTitle();
                     xDocSh->SetTitle( aTmp );
                     pCurrView->GetWrtShell().SetNewDoc();
                     pFrame->Show();

@@ -396,8 +396,8 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
                         aText += OUStringChar(m_cMultiSep);
                     if ( !aText.isEmpty() )
                         aText += " ";   // slightly loosen
-                    aText += m_pImplLB->GetEntryList()->GetEntryText( nP );
-                    aText += OUStringChar(m_cMultiSep);
+                    aText += m_pImplLB->GetEntryList()->GetEntryText( nP ) +
+                        OUStringChar(m_cMultiSep);
                 }
             }
             aText = comphelper::string::stripEnd( aText, m_cMultiSep );

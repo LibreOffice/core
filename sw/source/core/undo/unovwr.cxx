@@ -312,10 +312,9 @@ SwRewriter SwUndoOverwrite::GetRewriter() const
 {
     SwRewriter aResult;
 
-    OUString aString = SwResId(STR_START_QUOTE);
-    aString += ShortenString(aInsStr, nUndoStringLength,
-                             SwResId(STR_LDOTS));
-    aString += SwResId(STR_END_QUOTE);
+    OUString aString = SwResId(STR_START_QUOTE) +
+        ShortenString(aInsStr, nUndoStringLength, SwResId(STR_LDOTS)) +
+        SwResId(STR_END_QUOTE);
 
     aResult.AddRule(UndoArg1, aString);
 

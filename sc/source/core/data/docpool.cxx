@@ -435,8 +435,8 @@ static bool lcl_HFPresentation
                 else
                 {
                     aText += GetMetricText( static_cast<long>(nLeftMargin),
-                                           eCoreMetric, ePresentationMetric, &rIntl );
-                    aText += " " + EditResId(GetMetricId(ePresentationMetric));
+                                           eCoreMetric, ePresentationMetric, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresentationMetric));
                 }
                 aText += cpDelim +
                     // We don't have a nPropFirstLineOfst
@@ -449,8 +449,8 @@ static bool lcl_HFPresentation
                 else
                 {
                     aText += GetMetricText( static_cast<long>(nRightMargin),
-                                            eCoreMetric, ePresentationMetric, &rIntl );
-                    aText += " " + EditResId(GetMetricId(ePresentationMetric));
+                                            eCoreMetric, ePresentationMetric, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresentationMetric));
                 }
             }
             break;

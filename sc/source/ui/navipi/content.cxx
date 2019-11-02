@@ -650,8 +650,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 //  hidden document
                 if ( !aHiddenTitle.isEmpty() )
                 {
-                    OUString aEntry = aHiddenTitle;
-                    aEntry += pParentWindow->aStrHidden;
+                    OUString aEntry = aHiddenTitle + pParentWindow->aStrHidden;
                     ++i;
                     aDocMenu->InsertItem(i, aEntry, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK, "document" + OString::number(i));
                     if (bHiddenDoc)

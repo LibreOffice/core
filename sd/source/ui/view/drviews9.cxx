@@ -153,8 +153,8 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
                         pNewGrafObj->SetOutlinerParaObject(nullptr);
                         pNewGrafObj->SetGraphic(aGraphic);
 
-                        OUString aStr(mpDrawView->GetDescriptionOfMarkedObjects());
-                        aStr += " " + SdResId(STR_UNDO_REPLACE);
+                        OUString aStr = mpDrawView->GetDescriptionOfMarkedObjects() +
+                            " " + SdResId(STR_UNDO_REPLACE);
                         mpDrawView->BegUndo(aStr);
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
                         mpDrawView->ReplaceObjectAtView(pGrafObj, *pPV, pNewGrafObj);

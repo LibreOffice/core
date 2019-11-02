@@ -978,8 +978,8 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                         }
                     }
                 }
-                sSelectionText = aSelection.toString();
-                sSelectionText += OStringLiteral(", ") + OString::number(nRotAngle);
+                sSelectionText = aSelection.toString() +
+                    ", " + OString::number(nRotAngle);
                 if (!aExtraInfo.isEmpty())
                 {
                     sSelectionText += ", " + aExtraInfo.makeStringAndClear();
