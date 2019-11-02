@@ -176,6 +176,15 @@ long GradientDrawableHelper::GetLinearGradientSteps(long nStepCount, long nStart
     return nSteps;
 }
 
+long GradientDrawableHelper::CalculateInterpolatedColor(long nStartColor, long nEndColor,
+                                                        double fAlpha)
+{
+    double fColor = static_cast<double>(nStartColor) * (1.0 - fAlpha)
+                    + static_cast<double>(nEndColor) * fAlpha;
+
+    return static_cast<long>(fColor);
+}
+
 void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
                                                           tools::Rectangle const& rRect,
                                                           Gradient const& rGradient)
@@ -270,18 +279,10 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     {
         // linear interpolation of color
         double fAlpha = static_cast<double>(i) / fStepsMinus1;
-        double fTempColor = static_cast<double>(nStartRed) * (1.0 - fAlpha)
-                            + static_cast<double>(nEndRed) * fAlpha;
 
-        nRed = GetGradientColorValue(static_cast<long>(fTempColor));
-        fTempColor = static_cast<double>(nStartGreen) * (1.0 - fAlpha)
-                     + static_cast<double>(nEndGreen) * fAlpha;
-
-        nGreen = GetGradientColorValue(static_cast<long>(fTempColor));
-        fTempColor = static_cast<double>(nStartBlue) * (1.0 - fAlpha)
-                     + static_cast<double>(nEndBlue) * fAlpha;
-
-        nBlue = GetGradientColorValue(static_cast<long>(fTempColor));
+        nRed = GetGradientColorValue(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha));
+        nGreen = GetGradientColorValue(CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha));
+        nBlue = GetGradientColorValue(CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
 
         pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 
