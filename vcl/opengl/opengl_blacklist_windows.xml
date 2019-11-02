@@ -53,6 +53,9 @@
         <entry os="all" vendor="nvidia" compare="less" version="10.18.13.5362"> <!-- 353.62 -->
             <device id="all"/>
         </entry>
+        <entry os="10" vendor="nvidia"> <!-- tdf#128441 -->
+            <device id="0x2182"/>
+        </entry>
         <entry os="all" vendor="microsoft" compare="less" version="6.2.0.0"> <!-- 6.2.0.0 -->
             <device id="all"/>
         </entry>
