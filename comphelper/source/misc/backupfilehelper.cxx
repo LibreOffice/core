@@ -154,7 +154,19 @@ namespace
             return false;
         }
 
-        std::vector< sal_Char > aTarget(nLength);
+        sal_uInt64 nPos;
+        if (osl::File::E_None != rFile->getPos(nPos))
+            return false;
+
+        sal_uInt64 nSize;
+        if (osl::File::E_None != rFile->getSize(nSize))
+            return false;
+
+        const auto nRemainingSize = nSize - nPos;
+        if (nLength > nRemainingSize)
+            return false;
+
+        std::vector<sal_Char> aTarget(nLength);
         sal_uInt64 nBaseRead(0);
 
         // read rTarget
