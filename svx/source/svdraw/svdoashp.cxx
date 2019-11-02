@@ -2209,7 +2209,7 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
             SdrTextVertAdjust eVert = rSet.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
 
             // rescue object size
-            tools::Rectangle aObjectRect = GetSnapRect();
+            tools::Rectangle aLogicRect = GetLogicRect(); // without rotate or shear
 
             // prepare ItemSet to set exchanged width and height items
             SfxItemSet aNewSet(*rSet.GetPool(),
@@ -2241,8 +2241,9 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
                 pOutlinerParaObject->SetVertical(bVertical);
             SetObjectItemSet( aNewSet );
 
-            // restore object size
-            SetSnapRect(aObjectRect);
+            // SetSnapRect expects the LogicRect, GetSnapRect calculates maSnapRect on the fly,
+            // in case it is dirty. SetSnapRect is needed here for invalidations and broadcast.
+            SetSnapRect(aLogicRect);
         }
     }
 }
