@@ -163,8 +163,8 @@ void FuMorph::DoExecute( SfxRequest& )
 
             ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList);
 
-            OUString aString(mpView->GetDescriptionOfMarkedObjects());
-            aString += " " + SdResId(STR_UNDO_MORPHING);
+            OUString aString = mpView->GetDescriptionOfMarkedObjects() +
+                " " + SdResId(STR_UNDO_MORPHING);
 
             mpView->BegUndo(aString);
             ImpInsertPolygons(aPolyPolyList, pDlg->IsAttributeFade(), pObj1, pObj2);

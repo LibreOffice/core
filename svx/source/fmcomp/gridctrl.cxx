@@ -739,9 +739,8 @@ void DbGridControl::NavigationBar::SetState(DbGridControlNavigationBarState nWhi
             // add the number of selected rows, if applicable
             if (pParent->GetSelectRowCount())
             {
-                OUString aExtendedInfo = aText +
-                    " (";
-                aExtendedInfo += m_aAbsolute->CreateFieldText(pParent->GetSelectRowCount()) + ")";
+                OUString aExtendedInfo = aText + " (" +
+                    m_aAbsolute->CreateFieldText(pParent->GetSelectRowCount()) + ")";
                 pWnd->SetText(aExtendedInfo);
             }
             else

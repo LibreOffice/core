@@ -205,13 +205,13 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     OUString aTmp;
     if(bLabel)
     {
-        aTmp = SwResId( STR_LAB_TITLE);
-        aTmp += OUString::number(++nLabelTitleNo );
+        aTmp = SwResId( STR_LAB_TITLE) +
+            OUString::number(++nLabelTitleNo );
     }
     else
     {
-        aTmp = pDlg->GetBusinessCardStr();
-        aTmp += OUString::number( ++nBCTitleNo );
+        aTmp = pDlg->GetBusinessCardStr() +
+            OUString::number( ++nBCTitleNo );
     }
     xDocSh->SetTitle( aTmp );
 

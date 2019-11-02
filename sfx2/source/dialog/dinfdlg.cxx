@@ -133,8 +133,7 @@ OUString CreateSizeText( sal_Int64 nSize )
     }
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
-    OUString aSizeStr( rLocaleWrapper.getNum( nSize1, 0 ) );
-    aSizeStr += aUnitStr;
+    OUString aSizeStr = rLocaleWrapper.getNum( nSize1, 0 ) + aUnitStr;
     if ( nSize1 < nSize2 )
     {
         aSizeStr = ::rtl::math::doubleToUString( fSize,
@@ -818,8 +817,8 @@ void SfxDocumentPage::ImplUpdateSignatures()
     else if ( aInfos.getLength() == 1 )
     {
         const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
-        s = utl::GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime ) + ", ";
-        s += comphelper::xmlsec::GetContentPart(rInfo.Signer->getSubjectName());
+        s = utl::GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime ) + ", " +
+            comphelper::xmlsec::GetContentPart(rInfo.Signer->getSubjectName());
     }
     m_xSignedValFt->set_label(s);
 }
@@ -1223,8 +1222,8 @@ void CustomPropertiesDurationField::set_visible(bool bVisible)
 void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration )
 {
     m_aDuration = rDuration;
-    OUString sText(rDuration.Negative ? OUString('-') : OUString('+'));
-    sText += SfxResId(SFX_ST_DURATION_FORMAT);
+    OUString sText = (rDuration.Negative ? OUString('-') : OUString('+')) +
+        SfxResId(SFX_ST_DURATION_FORMAT);
     sText = sText.replaceFirst( "%1", OUString::number( rDuration.Years ) );
     sText = sText.replaceFirst( "%2", OUString::number( rDuration.Months ) );
     sText = sText.replaceFirst( "%3", OUString::number( rDuration.Days   ) );

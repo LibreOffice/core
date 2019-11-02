@@ -162,8 +162,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     pNewView->AttrChangedNotify(nullptr); // so that SelectShell is being called
     pSh = pNewView->GetWrtShellPtr();
 
-    OUString aTmp( SwResId(STR_ENV_TITLE) );
-    aTmp += OUString::number( ++nTitleNo );
+    OUString aTmp = SwResId(STR_ENV_TITLE) + OUString::number( ++nTitleNo );
     xDocSh->SetTitle( aTmp );
 
     // if applicable, copy the old Collections "Sender" and "Receiver" to

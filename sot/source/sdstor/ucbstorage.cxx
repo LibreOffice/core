@@ -1846,8 +1846,7 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
             pElement->m_xStorage->SetProps( rSequence, aPath );
         else
         {
-            OUString aElementPath( aPath );
-            aElementPath += pElement->m_aName;
+            OUString aElementPath = aPath + pElement->m_aName;
             pElement->SetContentType( Find_Impl( rSequence, aElementPath ) );
         }
     }
@@ -1899,8 +1898,7 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
         else
         {
             // properties of streams
-            OUString aElementPath( aPath );
-            aElementPath += pElement->m_aName;
+            OUString aElementPath = aPath + pElement->m_aName;
             aProps[0].Name = "MediaType";
             aProps[0].Value <<= pElement->GetContentType();
             aProps[1].Name = "FullPath";
@@ -1996,8 +1994,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 if ( !pContent && pElement->IsModified() )
                 {
                     // if the element has never been opened, no content has been created until now
-                    OUString aName = m_aURL + "/";
-                    aName += pElement->m_aOriginalName;
+                    OUString aName = m_aURL + "/" + pElement->m_aOriginalName;
                     pContent = new ::ucbhelper::Content( aName, Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                     xDeleteContent.reset(pContent);  // delete it later on exit scope
                 }

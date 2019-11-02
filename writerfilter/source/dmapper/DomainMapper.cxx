@@ -2710,8 +2710,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 // remove the dummy char
                 xHackRange->setString("");
 
-                OUString sLabel = xFootnote->getLabel();
-                sLabel += OUStringChar(aSymbolData.cSymbol);
+                OUString sLabel = xFootnote->getLabel() + OUStringChar(aSymbolData.cSymbol);
                 xFootnote->setLabel(sLabel);
             }
         }

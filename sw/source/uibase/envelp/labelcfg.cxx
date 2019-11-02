@@ -321,8 +321,8 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
         }
     }
 
-    OUString sPrefix( wrapConfigurationElementName( rManufacturer ) );
-    sPrefix += "/" + sFoundNode + "/";
+    OUString sPrefix = wrapConfigurationElementName( rManufacturer ) +
+        "/" + sFoundNode + "/";
     Sequence<OUString> aPropNames = lcl_CreatePropertyNames( sPrefix );
     OUString sMeasure;
     Sequence<PropertyValue> aPropValues = lcl_CreateProperties( aPropNames, sMeasure, rRec );

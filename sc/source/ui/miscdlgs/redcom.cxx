@@ -109,8 +109,8 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         OUString aAuthor = pChangeAction->GetUser();
 
         DateTime aDT = pChangeAction->GetDateTime();
-        OUString aDate = ScGlobal::pLocaleData->getDate( aDT ) + " ";
-        aDate += ScGlobal::pLocaleData->getTime( aDT, false );
+        OUString aDate = ScGlobal::pLocaleData->getDate( aDT ) + " " +
+            ScGlobal::pLocaleData->getTime( aDT, false );
 
         pDlg->ShowLastAuthor(aAuthor, aDate);
         pDlg->SetNote(aComment);

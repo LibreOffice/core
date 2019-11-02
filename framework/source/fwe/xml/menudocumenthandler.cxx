@@ -230,7 +230,8 @@ void SAL_CALL OReadMenuDocumentHandler::endDocument()
 {
     if ( m_nElementDepth > 0 )
     {
-        OUString aErrorMessage = getErrorLineString() + "A closing element is missing!";
+        OUString aErrorMessage = getErrorLineString() +
+            "A closing element is missing!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -276,12 +277,14 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
             m_xReader.clear();
             if ( m_eReaderMode == ReaderMode::MenuBar && aName != ELEMENT_MENUBAR )
             {
-                OUString aErrorMessage = getErrorLineString() + "closing element menubar expected!";
+                OUString aErrorMessage = getErrorLineString() +
+                    "closing element menubar expected!";
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
             else if ( m_eReaderMode == ReaderMode::MenuPopup && aName != ELEMENT_MENUPOPUP )
             {
-                OUString aErrorMessage = getErrorLineString() + "closing element menupopup expected!";
+                OUString aErrorMessage = getErrorLineString() +
+                    "closing element menupopup expected!";
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
             m_eReaderMode = ReaderMode::None;
@@ -381,7 +384,8 @@ void SAL_CALL OReadMenuBarHandler::startElement(
             }
             else
             {
-                OUString aErrorMessage = getErrorLineString() + "attribute id for element menu required!";
+                OUString aErrorMessage = getErrorLineString() +
+                    "attribute id for element menu required!";
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
 
@@ -391,7 +395,8 @@ void SAL_CALL OReadMenuBarHandler::startElement(
     }
     else
     {
-        OUString aErrorMessage = getErrorLineString() + "element menu expected!";
+        OUString aErrorMessage = getErrorLineString() +
+            "element menu expected!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -412,7 +417,8 @@ void OReadMenuBarHandler::endElement( const OUString& aName )
             m_bMenuMode = false;
             if ( aName != ELEMENT_MENU )
             {
-                OUString aErrorMessage = getErrorLineString() + "closing element menu expected!";
+                OUString aErrorMessage = getErrorLineString() +
+                    "closing element menu expected!";
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }
@@ -460,7 +466,8 @@ void SAL_CALL OReadMenuHandler::startElement(
     }
     else
     {
-        OUString aErrorMessage = getErrorLineString() + "unknown element found!";
+        OUString aErrorMessage = getErrorLineString() +
+            "unknown element found!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -481,7 +488,8 @@ void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
             m_bMenuPopupMode = false;
             if ( aName != ELEMENT_MENUPOPUP )
             {
-                OUString aErrorMessage = getErrorLineString() + "closing element menupopup expected!";
+                OUString aErrorMessage = getErrorLineString() +
+                    "closing element menupopup expected!";
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }
@@ -577,7 +585,8 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
         }
         else
         {
-            OUString aErrorMessage = getErrorLineString() + "attribute id for element menu required!";
+            OUString aErrorMessage = getErrorLineString() +
+                "attribute id for element menu required!";
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
 
@@ -645,7 +654,8 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
     }
     else
     {
-        OUString aErrorMessage = getErrorLineString() + "unknown element found!";
+        OUString aErrorMessage = getErrorLineString() +
+            "unknown element found!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -666,7 +676,8 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
             m_bMenuMode = false;
             if ( aName != ELEMENT_MENU )
             {
-                OUString aErrorMessage = getErrorLineString() + "closing element menu expected!";
+                OUString aErrorMessage = getErrorLineString() +
+                    "closing element menu expected!";
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }
@@ -679,7 +690,8 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
         {
             if ( aName != ELEMENT_MENUITEM )
             {
-                OUString aErrorMessage = getErrorLineString() + "closing element menuitem expected!";
+                OUString aErrorMessage = getErrorLineString() +
+                    "closing element menuitem expected!";
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }
@@ -687,7 +699,8 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
         {
             if ( aName != ELEMENT_MENUSEPARATOR )
             {
-                OUString aErrorMessage = getErrorLineString() + "closing element menuseparator expected!";
+                OUString aErrorMessage = getErrorLineString() +
+                    "closing element menuseparator expected!";
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }

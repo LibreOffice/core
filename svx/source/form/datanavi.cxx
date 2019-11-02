@@ -814,8 +814,8 @@ namespace svxform
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Method
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD );
-                sEntry +=  m_aMethodString.toUI( sTemp );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD ) +
+                    m_aMethodString.toUI( sTemp );
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Ref
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
@@ -827,8 +827,8 @@ namespace svxform
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Replace
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE );
-                sEntry += m_aReplaceString.toUI( sTemp );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE ) +
+                    m_aReplaceString.toUI( sTemp );
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
             }
             catch ( Exception const & )
@@ -893,13 +893,13 @@ namespace svxform
                 pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD );
-                sEntry += m_aMethodString.toUI( sTemp );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD ) +
+                    m_aMethodString.toUI( sTemp );
                 pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE );
-                sEntry += m_aReplaceString.toUI( sTemp );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE ) +
+                    m_aReplaceString.toUI( sTemp );
                 pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
             }

@@ -2214,21 +2214,15 @@ uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
 
     uno::Any anyAtrribute;
 
-    OUString sName;
-    OUString sValue;
     sal_uInt16 sheetIndex;
     OUString sSheetName;
     sheetIndex = getVisibleTable();
     if(GetDocument()==nullptr)
         return anyAtrribute;
     GetDocument()->GetName(sheetIndex,sSheetName);
-    sName = "page-name:";
-    sValue = sName + sSheetName ;
-    sName = ";page-number:";
-    sValue += sName + OUString::number(sheetIndex+1) ;
-    sName = ";total-pages:";
-    sValue += sName;
-    sValue += OUString::number(GetDocument()->GetTableCount()) + ";";
+    OUString sValue = "page-name:" + sSheetName +
+        ";page-number:" + OUString::number(sheetIndex+1) +
+        ";total-pages:" + OUString::number(GetDocument()->GetTableCount()) + ";";
     anyAtrribute <<= sValue;
     return anyAtrribute;
 }

@@ -169,9 +169,7 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
     {
         // Get Custom prefix
         const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
-        OUString aString = rOpt.GetInitTabPrefix();
-
-        aString += OUString::number(nTab+1);
+        OUString aString = rOpt.GetInitTabPrefix() + OUString::number(nTab+1);
         if ( _bNeedsNameCheck )
             CreateValidTabName( aString );  // no doubles
         if (nTab < static_cast<SCTAB>(maTabs.size()))

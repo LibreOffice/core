@@ -497,11 +497,11 @@ bool SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
         pEditControl->SetSelection(Selection(SELECTION_MIN,SELECTION_MAX));
         vcl::Window* pParent=GetParent();
         aWNameMemorized=pParent->GetText();
-        OUString aNewName = aWNameMemorized + " ";
-        aNewName += pEntry->GetItemTypeStr();
+        OUString aNewName = aWNameMemorized + " " +
+            pEntry->GetItemTypeStr();
         if (pEntry->bCanNum) {
-            aNewName += ": " + OUString::number(pEntry->nMin);
-            aNewName += ".." + OUString::number(pEntry->nMax);
+            aNewName += ": " + OUString::number(pEntry->nMin) +
+                ".." + OUString::number(pEntry->nMax);
         }
         aNewName += " - Type 'del' to reset to default.";
         pParent->SetText(aNewName);

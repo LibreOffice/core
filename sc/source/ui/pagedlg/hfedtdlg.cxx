@@ -38,9 +38,8 @@ ScHFEditDlg::ScHFEditDlg(weld::Window* pParent,
 {
     eNumType = rCoreSet.Get(ATTR_PAGE).GetNumType();
 
-    OUString aTmp = m_xDialog->get_title();
-
-    aTmp += " (" + ScResId( STR_PAGESTYLE ) + ": " + rPageStyle + ")";
+    OUString aTmp = m_xDialog->get_title() +
+        " (" + ScResId( STR_PAGESTYLE ) + ": " + rPageStyle + ")";
 
     m_xDialog->set_title(aTmp);
 }

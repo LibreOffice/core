@@ -393,9 +393,7 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
         SmTextNode *pText = static_cast<SmTextNode*>(prev),
                    *pOldN = static_cast<SmTextNode*>(next);
         SmCaretPos retval(pText, pText->GetText().getLength());
-        OUString newText;
-        newText += pText->GetText();
-        newText += pOldN->GetText();
+        OUString newText = pText->GetText() + pOldN->GetText();
         pText->ChangeText(newText);
         delete pOldN;
         pLineList->erase(aIter);

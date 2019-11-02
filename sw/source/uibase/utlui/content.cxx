@@ -1263,8 +1263,8 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     pSubPop3->InsertItem(nId++, m_aContextStrings[IDX_STR_ACTIVE_VIEW], MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
     if(m_pHiddenShell)
     {
-        OUString sHiddenEntry = m_pHiddenShell->GetView().GetDocShell()->GetTitle();
-        sHiddenEntry += " ( " +
+        OUString sHiddenEntry = m_pHiddenShell->GetView().GetDocShell()->GetTitle() +
+            " ( " +
             m_aContextStrings[IDX_STR_HIDDEN] +
             " )";
         pSubPop3->InsertItem(nId, sHiddenEntry, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
@@ -3202,10 +3202,10 @@ void SwContentTree::RequestHelp( const HelpEvent& rHEvt )
             else
             {
                 const size_t nMemberCount = static_cast<SwContentType*>(pUserData)->GetMemberCount();
-                sEntry = OUString::number(nMemberCount) + " ";
-                sEntry += nMemberCount == 1
+                sEntry = OUString::number(nMemberCount) + " " +
+                    (nMemberCount == 1
                             ? static_cast<SwContentType*>(pUserData)->GetSingleName()
-                            : static_cast<SwContentType*>(pUserData)->GetName();
+                            : static_cast<SwContentType*>(pUserData)->GetName());
                 bRet = true;
             }
             if(bRet)

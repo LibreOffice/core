@@ -914,8 +914,8 @@ void CustomAnimationList::update()
             {
                 SvTreeListEntry* pLBoxEntry = new CustomAnimationListEntry;
                 pLBoxEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
-                OUString aDescription = SdResId(STR_CUSTOMANIMATION_TRIGGER) + ": ";
-                aDescription += getShapeDescription( xShape, false );
+                OUString aDescription = SdResId(STR_CUSTOMANIMATION_TRIGGER) + ": " +
+                    getShapeDescription( xShape, false );
                 pLBoxEntry->AddItem(std::make_unique<CustomAnimationTriggerEntryItem>(aDescription));
                 Insert( pLBoxEntry );
                 SvViewDataEntry* pViewData = GetViewData( pLBoxEntry );

@@ -104,8 +104,8 @@ namespace dbaui
                 aReturn.bEnabled = isEditable() && GetUndoManager().GetUndoActionCount() != 0;
                 if ( aReturn.bEnabled )
                 {
-                    OUString sUndo(DBA_RES(STR_UNDO_COLON) + " ");
-                    sUndo += GetUndoManager().GetUndoActionComment();
+                    OUString sUndo = DBA_RES(STR_UNDO_COLON) + " " +
+                        GetUndoManager().GetUndoActionComment();
                     aReturn.sTitle = sUndo;
                 }
                 break;
@@ -114,8 +114,8 @@ namespace dbaui
                 aReturn.bEnabled = isEditable() && GetUndoManager().GetRedoActionCount() != 0;
                 if ( aReturn.bEnabled )
                 {
-                    OUString sRedo(DBA_RES(STR_REDO_COLON) + " ");
-                    sRedo += GetUndoManager().GetRedoActionComment();
+                    OUString sRedo = DBA_RES(STR_REDO_COLON) + " " +
+                        GetUndoManager().GetRedoActionComment();
                     aReturn.sTitle = sRedo;
                 }
                 break;

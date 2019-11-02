@@ -163,7 +163,7 @@ namespace stoc_connector {
         {
             if( m_socket.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
             {
-                OUString message = "ctr_socket.cxx:SocketConnection::write: error - "+
+                OUString message = "ctr_socket.cxx:SocketConnection::write: error - " +
                     m_socket.getErrorAsString();
 
                 IOException ioException(message, static_cast<XConnection *>(this));
