@@ -347,7 +347,13 @@ void SdrUndoAttrObj::Undo()
         // losing the geometry size info for the object when it is
         // laid out again from AdjustTextFrameWidthAndHeight(). This makes
         // rescuing the size of the object necessary.
-        const tools::Rectangle aSnapRect = pObj->GetSnapRect();
+        tools::Rectangle aSnapRect;
+        // SdrObjCustomShape::NbcSetSnapRect expects LogicRect, not SnapRect.
+        const SdrObjCustomShape* pCustomShape = dynamic_cast<const SdrObjCustomShape*>( pObj);
+        if ( pCustomShape !=  nullptr)
+            aSnapRect = pCustomShape->GetLogicRect();
+        else
+            aSnapRect = pObj->GetSnapRect();
 
         if(pUndoSet)
         {
@@ -424,7 +430,13 @@ void SdrUndoAttrObj::Redo()
 
         sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);
 
-        const tools::Rectangle aSnapRect = pObj->GetSnapRect();
+        // SdrObjCustomShape::NbcSetSnapRect expects LogicRect, not SnapRect.
+        tools::Rectangle aSnapRect;
+        const SdrObjCustomShape* pCustomShape = dynamic_cast<const SdrObjCustomShape*>( pObj);
+        if ( pCustomShape !=  nullptr)
+            aSnapRect = pCustomShape->GetLogicRect();
+        else
+            aSnapRect = pObj->GetSnapRect();
 
         if(pRedoSet)
         {

@@ -602,6 +602,31 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_TextRotateAngle)
 
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf128413_tbrlOnOff)
+{
+    // The document contains a rotated shape with text. The error was, that switching
+    // tb-rl writing-mode on changed the shape size.
+
+    const OUString sFileName("tdf128413_tbrl_OnOff.odp");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    awt::Rectangle aOrigFrameRect;
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aOrigFrameRect;
+
+    SdrObjCustomShape& rSdrObjCustomShape(
+        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+    rSdrObjCustomShape.SetVerticalWriting(true);
+
+    awt::Rectangle aChangeFrameRect;
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aChangeFrameRect;
+
+    CPPUNIT_ASSERT(aOrigFrameRect == aChangeFrameRect);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
