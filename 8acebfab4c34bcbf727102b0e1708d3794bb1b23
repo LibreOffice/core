@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_09600401",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/abi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-03T19:25:44Z",
+      "side": 1,
+      "message": "(here and elsewhere:) such a cross-dir include looks fishy; why would it be necessary?",
+      "revId": "8acebfab4c34bcbf727102b0e1708d3794bb1b23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_295b8054",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/abi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-03T19:25:44Z",
+      "side": 1,
+      "message": "(here and elsewhere:) SAL_FALLTHROUGH has been removed with ab9b67bbb001f380b3973941443bfbc59fe7141c \"Remove obsolete SAL_FALLTHROUGH completely\"",
+      "revId": "8acebfab4c34bcbf727102b0e1708d3794bb1b23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_c959ac5a",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-03T19:25:44Z",
+      "side": 1,
+      "message": "why exactly is this necessary? which compiler version emits it (for the reads of indirectRet, functionIndex, vtableOffset, I assume)?",
+      "revId": "8acebfab4c34bcbf727102b0e1708d3794bb1b23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
