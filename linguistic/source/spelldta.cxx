@@ -26,11 +26,10 @@
 #include <algorithm>
 #include <vector>
 
+#include <linguistic/misc.hxx>
 #include <linguistic/spelldta.hxx>
-#include "lngsvcmgr.hxx"
 
 
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;

@@ -23,10 +23,10 @@
 #include <algorithm>
 
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
-#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <i18nlangtag/lang.h>
 #include <unotools/localedatawrapper.hxx>
@@ -38,7 +38,7 @@
 
 #include "hyphdsp.hxx"
 #include <linguistic/hyphdta.hxx>
-#include <linguistic/lngprops.hxx>
+#include <linguistic/misc.hxx>
 #include "lngsvcmgr.hxx"
 
 using namespace osl;

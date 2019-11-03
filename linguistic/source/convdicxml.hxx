@@ -20,9 +20,7 @@
 #ifndef INCLUDED_LINGUISTIC_SOURCE_CONVDICXML_HXX
 #define INCLUDED_LINGUISTIC_SOURCE_CONVDICXML_HXX
 
-#include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <comphelper/processfactory.hxx>
@@ -30,10 +28,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <rtl/ustring.hxx>
-#include <linguistic/misc.hxx>
-#include "defs.hxx"
 
 
 class ConvDic;

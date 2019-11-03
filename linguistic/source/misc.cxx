@@ -18,15 +18,12 @@
  */
 
 #include <memory>
-#include <sal/macros.h>
 #include <sal/log.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svl/lngmisc.hxx>
 #include <ucbhelper/content.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -48,8 +45,6 @@
 #include <rtl/instance.hxx>
 
 #include <linguistic/misc.hxx>
-#include "defs.hxx"
-#include <linguistic/lngprops.hxx>
 #include <linguistic/hyphdta.hxx>
 
 using namespace osl;

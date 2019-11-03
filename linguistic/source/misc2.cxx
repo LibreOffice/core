@@ -20,14 +20,7 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/debug.hxx>
-#include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <unotools/ucbhelper.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/thePathSettings.hpp>

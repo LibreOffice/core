@@ -18,14 +18,11 @@
  */
 
 
-#include <string.h>
-
 #include <iprcache.hxx>
 #include <linguistic/misc.hxx>
 
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <osl/mutex.hxx>
-#include <linguistic/lngprops.hxx>
 #include <unotools/linguprops.hxx>
 
 using namespace osl;

@@ -18,13 +18,12 @@
  */
 
 #include <sal/macros.h>
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -35,23 +34,17 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEvent.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/text/TextMarkupDescriptor.hpp>
-#include <com/sun/star/text/XTextMarkup.hpp>
 #include <com/sun/star/text/XMultiTextMarkup.hpp>
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/text/XFlatParagraphIterator.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <osl/conditn.hxx>
-#include <osl/thread.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -60,13 +53,9 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <deque>
 #include <map>
-#include <vector>
 
 #include <linguistic/misc.hxx>
-#include "defs.hxx"
-#include "lngopt.hxx"
 #include "lngreg.hxx"
 
 #include "gciterator.hxx"

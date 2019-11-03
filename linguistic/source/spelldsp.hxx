@@ -20,17 +20,12 @@
 #ifndef INCLUDED_LINGUISTIC_SOURCE_SPELLDSP_HXX
 #define INCLUDED_LINGUISTIC_SOURCE_SPELLDSP_HXX
 
-#include "lngopt.hxx"
+#include "defs.hxx"
 #include <linguistic/misc.hxx>
 #include <iprcache.hxx>
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceDisplayName.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>

@@ -22,15 +22,13 @@
 
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <tools/solar.h>
+#include <i18nlangtag/lang.h>
 #include <vcl/errcode.hxx>
 
 #include "defs.hxx"
-#include <linguistic/misc.hxx>
 
 #define DIC_MAX_ENTRIES     30000
 

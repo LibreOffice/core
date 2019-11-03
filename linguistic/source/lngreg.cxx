@@ -18,9 +18,6 @@
  */
 
 #include <cppuhelper/factory.hxx>
-#include <rtl/string.hxx>
-
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "lngreg.hxx"
 

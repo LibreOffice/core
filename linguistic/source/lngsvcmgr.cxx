@@ -22,7 +22,6 @@
 
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -45,7 +44,6 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include "lngsvcmgr.hxx"
-#include "lngopt.hxx"
 #include "lngreg.hxx"
 #include <linguistic/misc.hxx>
 #include "spelldsp.hxx"

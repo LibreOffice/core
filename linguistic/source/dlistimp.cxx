@@ -24,7 +24,6 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -32,12 +31,10 @@
 #include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <svtools/strings.hrc>
 #include <unotools/resmgr.hxx>

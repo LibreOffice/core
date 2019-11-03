@@ -24,11 +24,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <rtl/ref.hxx>
 
 #include <linguistic/misc.hxx>
-#include "lngopt.hxx"
 
 
 class ConvDicNameContainer;

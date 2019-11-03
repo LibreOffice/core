@@ -19,14 +19,11 @@
 
 
 #include <linguistic/hyphdta.hxx>
-#include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
 #include <osl/mutex.hxx>
 
 
-#include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
-#include <svl/lngmisc.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 using namespace osl;

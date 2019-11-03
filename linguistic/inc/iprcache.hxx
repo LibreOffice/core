@@ -23,15 +23,12 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
 #include <rtl/ref.hxx>
-#include <rtl/string.hxx>
 #include <i18nlangtag/lang.h>
 
 #include <set>

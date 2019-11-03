@@ -27,7 +27,6 @@
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -37,9 +36,9 @@
 #include <osl/thread.h>
 #include <rtl/instance.hxx>
 
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <cppu/unotype.hxx>
+#include <comphelper/interfacecontainer2.hxx>
+#include <i18nlangtag/lang.h>
 
 #include <map>
 #include <deque>
