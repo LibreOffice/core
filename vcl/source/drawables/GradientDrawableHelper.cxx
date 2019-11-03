@@ -212,6 +212,20 @@ long GradientDrawableHelper::CalculateInterpolatedColor(long nStartColor, long n
     return static_cast<long>(fColor);
 }
 
+tools::Polygon GradientDrawableHelper::RotatePolygon(tools::Rectangle const& rRect,
+                                                     Point const& rCenter, sal_uInt16 nAngle)
+{
+    tools::Polygon aPoly(4);
+
+    aPoly[0] = rRect.TopLeft();
+    aPoly[1] = rRect.TopRight();
+    aPoly[2] = rRect.BottomRight();
+    aPoly[3] = rRect.BottomLeft();
+    aPoly.Rotate(rCenter, nAngle);
+
+    return aPoly;
+}
+
 void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
                                                           tools::Rectangle const& rRect,
                                                           Gradient const& rGradient)
@@ -251,7 +265,6 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
 
     // Create border
     tools::Rectangle aBorderRect = aStepRect;
-    tools::Polygon aPoly(4);
 
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
@@ -260,13 +273,7 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         AddFillColorAction(pMetaFile, nStartRed, nStartGreen, nStartBlue);
 
         aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorder));
-        aPoly[0] = aBorderRect.TopLeft();
-        aPoly[1] = aBorderRect.TopRight();
-        aPoly[2] = aBorderRect.BottomRight();
-        aPoly[3] = aBorderRect.BottomLeft();
-        aPoly.Rotate(aCenter, nAngle);
-
-        pMetaFile->AddAction(new MetaPolygonAction(aPoly));
+        pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aBorderRect, aCenter, nAngle)));
 
         aStepRect.SetTop(aBorderRect.Bottom());
 
@@ -275,13 +282,9 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
             aBorderRect = aMirrorRect;
             aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorder));
             aMirrorRect.SetBottom(aBorderRect.Top());
-            aPoly[0] = aBorderRect.TopLeft();
-            aPoly[1] = aBorderRect.TopRight();
-            aPoly[2] = aBorderRect.BottomRight();
-            aPoly[3] = aBorderRect.BottomLeft();
-            aPoly.Rotate(aCenter, nAngle);
 
-            pMetaFile->AddAction(new MetaPolygonAction(aPoly));
+            pMetaFile->AddAction(
+                new MetaPolygonAction(RotatePolygon(aBorderRect, aCenter, nAngle)));
         }
     }
 
@@ -315,13 +318,8 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         aStepRect.SetTop(static_cast<long>(fGradientLine + static_cast<double>(i) * fScanInc));
         aStepRect.SetBottom(
             static_cast<long>(fGradientLine + (static_cast<double>(i) + 1.0) * fScanInc));
-        aPoly[0] = aStepRect.TopLeft();
-        aPoly[1] = aStepRect.TopRight();
-        aPoly[2] = aStepRect.BottomRight();
-        aPoly[3] = aStepRect.BottomLeft();
-        aPoly.Rotate(aCenter, nAngle);
 
-        pMetaFile->AddAction(new MetaPolygonAction(aPoly));
+        pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aStepRect, aCenter, nAngle)));
 
         if (!bLinear)
         {
@@ -329,13 +327,9 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
                 static_cast<long>(fMirrorGradientLine - static_cast<double>(i) * fScanInc));
             aMirrorRect.SetTop(
                 static_cast<long>(fMirrorGradientLine - (static_cast<double>(i) + 1.0) * fScanInc));
-            aPoly[0] = aMirrorRect.TopLeft();
-            aPoly[1] = aMirrorRect.TopRight();
-            aPoly[2] = aMirrorRect.BottomRight();
-            aPoly[3] = aMirrorRect.BottomLeft();
-            aPoly.Rotate(aCenter, nAngle);
 
-            pMetaFile->AddAction(new MetaPolygonAction(aPoly));
+            pMetaFile->AddAction(
+                new MetaPolygonAction(RotatePolygon(aMirrorRect, aCenter, nAngle)));
         }
     }
 
@@ -351,13 +345,8 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     aStepRect.SetTop(static_cast<long>(fGradientLine + static_cast<double>(nSteps) * fScanInc));
     aStepRect.SetBottom(
         static_cast<long>(fMirrorGradientLine - static_cast<double>(nSteps) * fScanInc));
-    aPoly[0] = aStepRect.TopLeft();
-    aPoly[1] = aStepRect.TopRight();
-    aPoly[2] = aStepRect.BottomRight();
-    aPoly[3] = aStepRect.BottomLeft();
-    aPoly.Rotate(aCenter, nAngle);
 
-    pMetaFile->AddAction(new MetaPolygonAction(aPoly));
+    pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aStepRect, aCenter, nAngle)));
 }
 
 void GradientDrawableHelper::SetFillColor(OutputDevice* pRenderContext, long nStartRed,
@@ -407,7 +396,6 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
 
     // Create border
     tools::Rectangle aBorderRect = aStepRect;
-    tools::Polygon aPoly(4);
 
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
@@ -417,11 +405,7 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
 
         aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorder));
         aStepRect.SetTop(aBorderRect.Bottom());
-        aPoly[0] = aBorderRect.TopLeft();
-        aPoly[1] = aBorderRect.TopRight();
-        aPoly[2] = aBorderRect.BottomRight();
-        aPoly[3] = aBorderRect.BottomLeft();
-        aPoly.Rotate(aCenter, nAngle);
+        tools::Polygon aPoly(RotatePolygon(aBorderRect, aCenter, nAngle));
 
         if (pClixPolyPoly)
             pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
@@ -433,16 +417,12 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
             aBorderRect = aMirrorRect;
             aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorder));
             aMirrorRect.SetBottom(aBorderRect.Top());
-            aPoly[0] = aBorderRect.TopLeft();
-            aPoly[1] = aBorderRect.TopRight();
-            aPoly[2] = aBorderRect.BottomRight();
-            aPoly[3] = aBorderRect.BottomLeft();
-            aPoly.Rotate(aCenter, nAngle);
+            tools::Polygon aNonLinearPoly(RotatePolygon(aBorderRect, aCenter, nAngle));
 
             if (pClixPolyPoly)
-                pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+                pRenderContext->Draw(vcl::PolygonDrawable(aNonLinearPoly, *pClixPolyPoly));
             else
-                pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
+                pRenderContext->Draw(vcl::PolygonDrawable(aNonLinearPoly));
         }
     }
 
@@ -477,11 +457,7 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         aStepRect.SetTop(static_cast<long>(fGradientLine + static_cast<double>(i) * fScanInc));
         aStepRect.SetBottom(
             static_cast<long>(fGradientLine + (static_cast<double>(i) + 1.0) * fScanInc));
-        aPoly[0] = aStepRect.TopLeft();
-        aPoly[1] = aStepRect.TopRight();
-        aPoly[2] = aStepRect.BottomRight();
-        aPoly[3] = aStepRect.BottomLeft();
-        aPoly.Rotate(aCenter, nAngle);
+        tools::Polygon aPoly(RotatePolygon(aStepRect, aCenter, nAngle));
 
         if (pClixPolyPoly)
             pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
@@ -494,16 +470,12 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
                 static_cast<long>(fMirrorGradientLine - static_cast<double>(i) * fScanInc));
             aMirrorRect.SetTop(
                 static_cast<long>(fMirrorGradientLine - (static_cast<double>(i) + 1.0) * fScanInc));
-            aPoly[0] = aMirrorRect.TopLeft();
-            aPoly[1] = aMirrorRect.TopRight();
-            aPoly[2] = aMirrorRect.BottomRight();
-            aPoly[3] = aMirrorRect.BottomLeft();
-            aPoly.Rotate(aCenter, nAngle);
+            tools::Polygon aNonLinearPoly(RotatePolygon(aMirrorRect, aCenter, nAngle));
 
             if (pClixPolyPoly)
-                pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+                pRenderContext->Draw(vcl::PolygonDrawable(aNonLinearPoly, *pClixPolyPoly));
             else
-                pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
+                pRenderContext->Draw(vcl::PolygonDrawable(aNonLinearPoly));
         }
     }
 
@@ -520,11 +492,7 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     aStepRect.SetTop(static_cast<long>(fGradientLine + static_cast<double>(nSteps) * fScanInc));
     aStepRect.SetBottom(
         static_cast<long>(fMirrorGradientLine - static_cast<double>(nSteps) * fScanInc));
-    aPoly[0] = aStepRect.TopLeft();
-    aPoly[1] = aStepRect.TopRight();
-    aPoly[2] = aStepRect.BottomRight();
-    aPoly[3] = aStepRect.BottomLeft();
-    aPoly.Rotate(aCenter, nAngle);
+    tools::Polygon aPoly(RotatePolygon(aStepRect, aCenter, nAngle));
 
     if (pClixPolyPoly)
         pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));

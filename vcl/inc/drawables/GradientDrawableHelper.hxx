@@ -80,6 +80,9 @@ public:
                              long nStartBlue);
 
     static long CalculateInterpolatedColor(long nStartColor, long nEndColor, double fAlpha);
+
+    static tools::Polygon RotatePolygon(tools::Rectangle const& rRect, Point const& rCenter,
+                                        sal_uInt16 nAngle);
 };
 } // namespace vcl
 
