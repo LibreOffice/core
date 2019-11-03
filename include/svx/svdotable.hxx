@@ -26,7 +26,7 @@
 #include <rtl/ref.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svxdllapi.h>
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 class SvStream;
 class SfxStyleSheet;
