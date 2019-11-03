@@ -13,6 +13,8 @@
 
 #include <tools/color.hxx>
 
+#include <tuple>
+
 namespace tools
 {
 class Rectangle;
@@ -60,6 +62,8 @@ public:
     static void SetGrayscaleColors(OutputDevice* pRenderContext, Gradient& rGradient);
 
     static sal_uInt8 GetGradientColorValue(long nValue);
+    static std::tuple<sal_uInt16, sal_uInt16, sal_uInt16>
+    GetGradientColorValues(long nRed, long nGreen, long nBlue);
     static long GetStartColorIntensity(Gradient const& rGradient, double nColor);
     static long GetEndColorIntensity(Gradient const& rGradient, double nColor);
     static void SwapStartEndColor(long& nStart, long& nEnd);

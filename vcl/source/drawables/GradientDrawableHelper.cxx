@@ -137,6 +137,13 @@ sal_uInt8 GradientDrawableHelper::GetGradientColorValue(long nValue)
         return static_cast<sal_uInt8>(nValue);
 }
 
+std::tuple<sal_uInt16, sal_uInt16, sal_uInt16>
+GradientDrawableHelper::GetGradientColorValues(long nRed, long nGreen, long nBlue)
+{
+    return std::make_tuple(GetGradientColorValue(nRed), GetGradientColorValue(nGreen),
+                           GetGradientColorValue(nBlue));
+}
+
 double GradientDrawableHelper::CalculateBorder(Gradient const& rGradient,
                                                tools::Rectangle const& rRect)
 {
@@ -279,12 +286,11 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         // linear interpolation of color
         double fAlpha = static_cast<double>(i) / fStepsMinus1;
 
-        sal_uInt16 nRed
-            = GetGradientColorValue(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha));
-        sal_uInt16 nGreen
-            = GetGradientColorValue(CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha));
-        sal_uInt16 nBlue
-            = GetGradientColorValue(CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
+        sal_uInt16 nRed, nBlue, nGreen;
+        std::tie(nRed, nBlue, nGreen)
+            = GetGradientColorValues(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha),
+                                     CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha),
+                                     CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
 
         pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 
@@ -320,9 +326,8 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         return;
 
     // draw middle polygon with end color
-    sal_uInt16 nRed = GetGradientColorValue(nEndRed);
-    sal_uInt16 nGreen = GetGradientColorValue(nEndGreen);
-    sal_uInt16 nBlue = GetGradientColorValue(nEndBlue);
+    sal_uInt16 nRed, nBlue, nGreen;
+    std::tie(nRed, nBlue, nGreen) = GetGradientColorValues(nEndRed, nEndGreen, nEndBlue);
 
     pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 
@@ -445,12 +450,11 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         // linear interpolation of color
         double fAlpha = static_cast<double>(i) / fStepsMinus1;
 
-        sal_uInt16 nRed
-            = GetGradientColorValue(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha));
-        sal_uInt16 nGreen
-            = GetGradientColorValue(CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha));
-        sal_uInt16 nBlue
-            = GetGradientColorValue(CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
+        sal_uInt16 nRed, nBlue, nGreen;
+        std::tie(nRed, nBlue, nGreen)
+            = GetGradientColorValues(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha),
+                                     CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha),
+                                     CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
 
         SalGraphics* pGraphics = pRenderContext->GetGraphics();
         pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
@@ -493,9 +497,8 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         return;
 
     // draw middle polygon with end color
-    sal_uInt16 nRed = GetGradientColorValue(nEndRed);
-    sal_uInt16 nGreen = GetGradientColorValue(nEndGreen);
-    sal_uInt16 nBlue = GetGradientColorValue(nEndBlue);
+    sal_uInt16 nRed, nBlue, nGreen;
+    std::tie(nRed, nBlue, nGreen) = GetGradientColorValues(nEndRed, nEndGreen, nEndBlue);
 
     SalGraphics* pGraphics = pRenderContext->GetGraphics();
     pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
@@ -628,9 +631,10 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
 
         // adapt colour accordingly
         const long nStepIndex = (xPolyPoly ? i : (i + 1));
-        nRed = GetGradientColorValue(nStartRed + ((nRedSteps * nStepIndex) / nSteps));
-        nGreen = GetGradientColorValue(nStartGreen + ((nGreenSteps * nStepIndex) / nSteps));
-        nBlue = GetGradientColorValue(nStartBlue + ((nBlueSteps * nStepIndex) / nSteps));
+        std::tie(nRed, nBlue, nGreen)
+            = GetGradientColorValues(nStartRed + ((nRedSteps * nStepIndex) / nSteps),
+                                     nStartGreen + ((nGreenSteps * nStepIndex) / nSteps),
+                                     nStartBlue + ((nBlueSteps * nStepIndex) / nSteps));
 
         bPaintLastPolygon
             = true; // #107349# Paint last polygon only if loop has generated any output
@@ -658,11 +662,7 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
         // has generated output. Otherwise, the current
         // (i.e. start) color is taken, to generate _any_ output.
         if (bPaintLastPolygon)
-        {
-            nRed = GetGradientColorValue(nEndRed);
-            nGreen = GetGradientColorValue(nEndGreen);
-            nBlue = GetGradientColorValue(nEndBlue);
-        }
+            std::tie(nRed, nBlue, nGreen) = GetGradientColorValues(nEndRed, nEndGreen, nEndBlue);
 
         pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
         pMetaFile->AddAction(new MetaPolygonAction(rPoly));
@@ -823,9 +823,10 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
 
         // adapt colour accordingly
         const long nStepIndex = (xPolyPoly ? i : (i + 1));
-        nRed = GetGradientColorValue(nStartRed + ((nRedSteps * nStepIndex) / nSteps));
-        nGreen = GetGradientColorValue(nStartGreen + ((nGreenSteps * nStepIndex) / nSteps));
-        nBlue = GetGradientColorValue(nStartBlue + ((nBlueSteps * nStepIndex) / nSteps));
+        std::tie(nRed, nBlue, nGreen)
+            = GetGradientColorValues(nStartRed + ((nRedSteps * nStepIndex) / nSteps),
+                                     nStartGreen + ((nGreenSteps * nStepIndex) / nSteps),
+                                     nStartBlue + ((nBlueSteps * nStepIndex) / nSteps));
 
         // either slow tools::PolyPolygon output or fast Polygon-Painting
         if (xPolyPoly)
@@ -873,11 +874,8 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
             // has generated output. Otherwise, the current
             // (i.e. start) color is taken, to generate _any_ output.
             if (bPaintLastPolygon)
-            {
-                nRed = GetGradientColorValue(nEndRed);
-                nGreen = GetGradientColorValue(nEndGreen);
-                nBlue = GetGradientColorValue(nEndBlue);
-            }
+                std::tie(nRed, nBlue, nGreen)
+                    = GetGradientColorValues(nEndRed, nEndGreen, nEndBlue);
 
             pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
             if (pClixPolyPoly)
