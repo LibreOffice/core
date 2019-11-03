@@ -254,8 +254,6 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
 
     std::tie(aStepRect, aMirrorRect, aCenter, fBorderWidth) = GetStepValues(rGradient, rRect);
 
-    bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
-
     // colour-intensities of start- and finish; change if needed
     long nStartRed, nStartGreen, nStartBlue;
     std::tie(nStartRed, nStartGreen, nStartBlue) = GetStartColorIntensityValues(rGradient);
@@ -264,7 +262,7 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     std::tie(nEndRed, nEndGreen, nEndBlue) = GetEndColorIntensityValues(rGradient);
 
     // gradient style axial has exchanged start and end colors
-    if (!bLinear)
+    if (rGradient.GetStyle() != GradientStyle::Linear)
     {
         std::swap(nStartRed, nEndRed);
         std::swap(nStartGreen, nEndGreen);
@@ -285,7 +283,7 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
 
         aStepRect.SetTop(aBorderRect.Bottom());
 
-        if (!bLinear)
+        if (rGradient.GetStyle() != GradientStyle::Linear)
         {
             aBorderRect = aMirrorRect;
             aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorderWidth));
@@ -301,7 +299,7 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 
     const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
-    if (!bLinear)
+    if (rGradient.GetStyle() != GradientStyle::Linear)
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
 
     const double fScanInc
@@ -329,7 +327,7 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
 
         pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aStepRect, aCenter, nAngle)));
 
-        if (!bLinear)
+        if (rGradient.GetStyle() != GradientStyle::Linear)
         {
             aMirrorRect.SetBottom(
                 static_cast<long>(fMirrorGradientLine - static_cast<double>(i) * fScanInc));
@@ -341,7 +339,7 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         }
     }
 
-    if (bLinear)
+    if (rGradient.GetStyle() == GradientStyle::Linear)
         return;
 
     // draw middle polygon with end color
@@ -379,8 +377,6 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
 
     std::tie(aStepRect, aMirrorRect, aCenter, fBorderWidth) = GetStepValues(rGradient, rRect);
 
-    bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
-
     // colour-intensities of start- and finish; change if needed
     long nStartRed, nStartGreen, nStartBlue;
     std::tie(nStartRed, nStartGreen, nStartBlue) = GetStartColorIntensityValues(rGradient);
@@ -389,7 +385,7 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     std::tie(nEndRed, nEndGreen, nEndBlue) = GetEndColorIntensityValues(rGradient);
 
     // gradient style axial has exchanged start and end colors
-    if (!bLinear)
+    if (rGradient.GetStyle() != GradientStyle::Linear)
     {
         std::swap(nStartRed, nEndRed);
         std::swap(nStartGreen, nEndGreen);
@@ -414,7 +410,7 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         else
             pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
 
-        if (!bLinear)
+        if (rGradient.GetStyle() != GradientStyle::Linear)
         {
             aBorderRect = aMirrorRect;
             aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorderWidth));
@@ -433,7 +429,7 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 
     const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
-    if (!bLinear)
+    if (rGradient.GetStyle() != GradientStyle::Linear)
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
 
     const double fScanInc
@@ -466,7 +462,7 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         else
             pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
 
-        if (!bLinear)
+        if (rGradient.GetStyle() != GradientStyle::Linear)
         {
             aMirrorRect.SetBottom(
                 static_cast<long>(fMirrorGradientLine - static_cast<double>(i) * fScanInc));
@@ -481,7 +477,7 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         }
     }
 
-    if (bLinear)
+    if (rGradient.GetStyle() == GradientStyle::Linear)
         return;
 
     // draw middle polygon with end color
