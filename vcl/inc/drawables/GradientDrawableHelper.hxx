@@ -81,6 +81,9 @@ public:
 
     static tools::Polygon RotatePolygon(tools::Rectangle const& rRect, Point const& rCenter,
                                         sal_uInt16 nAngle);
+
+    static std::tuple<tools::Rectangle, tools::Rectangle, Point, double>
+    GetStepValues(Gradient const& rGradient, tools::Rectangle const& rRect);
 };
 } // namespace vcl
 

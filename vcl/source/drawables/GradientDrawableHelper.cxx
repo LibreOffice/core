@@ -220,14 +220,9 @@ tools::Polygon GradientDrawableHelper::RotatePolygon(tools::Rectangle const& rRe
     return aPoly;
 }
 
-void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
-                                                          tools::Rectangle const& rRect,
-                                                          Gradient const& rGradient)
+std::tuple<tools::Rectangle, tools::Rectangle, Point, double>
+GradientDrawableHelper::GetStepValues(Gradient const& rGradient, tools::Rectangle const& rRect)
 {
-    GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
-    if (!pMetaFile)
-        return;
-
     // get BoundRect of rotated rectangle
     tools::Rectangle aStepRect;
     Point aCenter;
@@ -236,11 +231,30 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     rGradient.GetBoundRect(rRect, aStepRect, aCenter);
     double fBorder = CalculateBorder(rGradient, aStepRect);
 
-    bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
     tools::Rectangle aMirrorRect = aStepRect; // used in style axial
     aMirrorRect.SetTop((aStepRect.Top() + aStepRect.Bottom()) / 2);
-    if (!bLinear)
+
+    if (rGradient.GetStyle() != GradientStyle::Linear)
         aStepRect.SetBottom(aMirrorRect.Top());
+
+    return std::make_tuple(aStepRect, aMirrorRect, aCenter, fBorder);
+}
+
+void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
+                                                          tools::Rectangle const& rRect,
+                                                          Gradient const& rGradient)
+{
+    GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
+    if (!pMetaFile)
+        return;
+
+    tools::Rectangle aStepRect, aMirrorRect;
+    Point aCenter;
+    double fBorder;
+
+    std::tie(aStepRect, aMirrorRect, aCenter, fBorder) = GetStepValues(rGradient, rRect);
+
+    bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
 
     // colour-intensities of start- and finish; change if needed
     long nStartRed, nStartGreen, nStartBlue;
@@ -359,19 +373,13 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
                                                 Gradient const& rGradient,
                                                 tools::PolyPolygon const* pClixPolyPoly)
 {
-    // get BoundRect of rotated rectangle
-    tools::Rectangle aStepRect;
+    tools::Rectangle aStepRect, aMirrorRect;
     Point aCenter;
+    double fBorder;
 
-    // gets the sides of the step - we calculate the top and bottom later
-    rGradient.GetBoundRect(rRect, aStepRect, aCenter);
-    double fBorder = CalculateBorder(rGradient, aStepRect);
+    std::tie(aStepRect, aMirrorRect, aCenter, fBorder) = GetStepValues(rGradient, rRect);
 
     bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
-    tools::Rectangle aMirrorRect = aStepRect; // used in style axial
-    aMirrorRect.SetTop((aStepRect.Top() + aStepRect.Bottom()) / 2);
-    if (!bLinear)
-        aStepRect.SetBottom(aMirrorRect.Top());
 
     // colour-intensities of start- and finish; change if needed
     long nStartRed, nStartGreen, nStartBlue;
