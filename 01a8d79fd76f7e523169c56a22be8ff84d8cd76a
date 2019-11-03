@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_a9bb10c2",
+        "filename": "sax/source/tools/fastattribs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-03T07:52:17Z",
+      "side": 1,
+      "message": "Possibly the problematic is this call, which has overhead even for empty sequence case - wouldn\u0027t it be the same speedup (with possibly wider application) to special-case inside it instead? Just speculating :-)",
+      "range": {
+        "startLine": 241,
+        "startChar": 23,
+        "endLine": 241,
+        "endChar": 39
+      },
+      "revId": "01a8d79fd76f7e523169c56a22be8ff84d8cd76a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
