@@ -515,7 +515,7 @@ protected:
                                    SvxMSDffClientData& rClientData,
                                    tools::Rectangle& rTextRect,
                                    SdrObject* pObj);
-    virtual void NotifyFreeObj(SvxMSDffClientData& rData, SdrObject* pObj);
+    void NotifyFreeObj(SvxMSDffClientData& rData, SdrObject* pObj);
     void FreeObj(SvxMSDffClientData& rData, SdrObject* pObj);
 
 
