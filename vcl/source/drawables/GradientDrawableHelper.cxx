@@ -226,10 +226,6 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         SwapStartEndColor(nStartBlue, nEndBlue);
     }
 
-    sal_uInt8 nRed;
-    sal_uInt8 nGreen;
-    sal_uInt8 nBlue;
-
     // Create border
     tools::Rectangle aBorderRect = aStepRect;
     tools::Polygon aPoly(4);
@@ -283,9 +279,12 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         // linear interpolation of color
         double fAlpha = static_cast<double>(i) / fStepsMinus1;
 
-        nRed = GetGradientColorValue(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha));
-        nGreen = GetGradientColorValue(CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha));
-        nBlue = GetGradientColorValue(CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
+        sal_uInt16 nRed
+            = GetGradientColorValue(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha));
+        sal_uInt16 nGreen
+            = GetGradientColorValue(CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha));
+        sal_uInt16 nBlue
+            = GetGradientColorValue(CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
 
         pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 
@@ -321,9 +320,9 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         return;
 
     // draw middle polygon with end color
-    nRed = GetGradientColorValue(nEndRed);
-    nGreen = GetGradientColorValue(nEndGreen);
-    nBlue = GetGradientColorValue(nEndBlue);
+    sal_uInt16 nRed = GetGradientColorValue(nEndRed);
+    sal_uInt16 nGreen = GetGradientColorValue(nEndGreen);
+    sal_uInt16 nBlue = GetGradientColorValue(nEndBlue);
 
     pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 
@@ -388,10 +387,6 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         SwapStartEndColor(nStartBlue, nEndBlue);
     }
 
-    sal_uInt8 nRed;
-    sal_uInt8 nGreen;
-    sal_uInt8 nBlue;
-
     // Create border
     tools::Rectangle aBorderRect = aStepRect;
     tools::Polygon aPoly(4);
@@ -450,9 +445,12 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         // linear interpolation of color
         double fAlpha = static_cast<double>(i) / fStepsMinus1;
 
-        nRed = GetGradientColorValue(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha));
-        nGreen = GetGradientColorValue(CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha));
-        nBlue = GetGradientColorValue(CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
+        sal_uInt16 nRed
+            = GetGradientColorValue(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha));
+        sal_uInt16 nGreen
+            = GetGradientColorValue(CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha));
+        sal_uInt16 nBlue
+            = GetGradientColorValue(CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
 
         SalGraphics* pGraphics = pRenderContext->GetGraphics();
         pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
@@ -495,9 +493,9 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         return;
 
     // draw middle polygon with end color
-    nRed = GetGradientColorValue(nEndRed);
-    nGreen = GetGradientColorValue(nEndGreen);
-    nBlue = GetGradientColorValue(nEndBlue);
+    sal_uInt16 nRed = GetGradientColorValue(nEndRed);
+    sal_uInt16 nGreen = GetGradientColorValue(nEndGreen);
+    sal_uInt16 nBlue = GetGradientColorValue(nEndBlue);
 
     SalGraphics* pGraphics = pRenderContext->GetGraphics();
     pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
