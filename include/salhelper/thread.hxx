@@ -49,6 +49,7 @@ public:
     void launch();
 
     using osl::Thread::getIdentifier;
+    using osl::Thread::isRunning;
     using osl::Thread::join;
     using osl::Thread::schedule;
     using osl::Thread::terminate;
