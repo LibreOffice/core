@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7f7f9b97_29c70048",
+        "filename": "sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-03T08:05:29Z",
+      "side": 1,
+      "message": "By the way, we have an optional last parameter taking pointer to OUString in the startsWith; possibly we could also add an overload taking reference to string view, to avoid the creation of the view below (and potentially speed up places using current optional OUString* parameter by avoiding OUString creation)?",
+      "range": {
+        "startLine": 202,
+        "startChar": 16,
+        "endLine": 202,
+        "endChar": 26
+      },
+      "revId": "0dd56a4a745266dcf88d43150ef1d798619ab522",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_69b5f8cc",
         "filename": "sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
         "patchSetId": 2
