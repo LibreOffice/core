@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_69b5f8cc",
+        "filename": "sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-03T08:00:10Z",
+      "side": 1,
+      "message": "Can we possibly replace strlen(LITERAL) with SAL_N_ELEMENTS(LITERAL)-1?",
+      "range": {
+        "startLine": 205,
+        "startChar": 84,
+        "endLine": 205,
+        "endChar": 90
+      },
+      "revId": "0dd56a4a745266dcf88d43150ef1d798619ab522",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
