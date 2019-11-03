@@ -64,6 +64,7 @@
 #include <osl/file.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -1126,6 +1127,13 @@ void SfxApplication::SignPDFExec_Impl(SfxRequest& rReq)
 {
     rReq.AppendItem(SfxBoolItem(SID_SIGNPDF, true));
     GetDispatcher_Impl()->Execute(SID_OPENDOC, SfxCallMode::SYNCHRON, *rReq.GetArgs());
+}
+
+void SfxApplication::OpenDocumentConverter_Impl(SfxRequest& rReq)
+{
+    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+    auto pDialog(pFact->CreateDocumentConverterDialog(rReq.GetFrameWeld()));
+    pDialog->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
