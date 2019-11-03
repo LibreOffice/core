@@ -158,15 +158,15 @@ GradientDrawableHelper::GetGradientColorValues(long nRed, long nGreen, long nBlu
                            GetGradientColorValue(nBlue));
 }
 
-double GradientDrawableHelper::CalculateBorder(Gradient const& rGradient,
-                                               tools::Rectangle const& rRect)
+double GradientDrawableHelper::CalculateBorderWidth(Gradient const& rGradient,
+                                                    tools::Rectangle const& rRect)
 {
-    double fBorder = rGradient.GetBorder() * rRect.GetHeight() / 100.0;
+    double fBorderWidth = rGradient.GetBorder() * rRect.GetHeight() / 100.0;
 
     if (rGradient.GetStyle() != GradientStyle::Linear)
-        fBorder /= 2.0;
+        fBorderWidth /= 2.0;
 
-    return fBorder;
+    return fBorderWidth;
 }
 
 void GradientDrawableHelper::AddFillColorAction(GDIMetaFile* pMetaFile, long nStartRed,
@@ -229,7 +229,7 @@ GradientDrawableHelper::GetStepValues(Gradient const& rGradient, tools::Rectangl
 
     // gets the sides of the step - we calculate the top and bottom later
     rGradient.GetBoundRect(rRect, aStepRect, aCenter);
-    double fBorder = CalculateBorder(rGradient, aStepRect);
+    double fBorderWidth = CalculateBorderWidth(rGradient, aStepRect);
 
     tools::Rectangle aMirrorRect = aStepRect; // used in style axial
     aMirrorRect.SetTop((aStepRect.Top() + aStepRect.Bottom()) / 2);
@@ -237,7 +237,7 @@ GradientDrawableHelper::GetStepValues(Gradient const& rGradient, tools::Rectangl
     if (rGradient.GetStyle() != GradientStyle::Linear)
         aStepRect.SetBottom(aMirrorRect.Top());
 
-    return std::make_tuple(aStepRect, aMirrorRect, aCenter, fBorder);
+    return std::make_tuple(aStepRect, aMirrorRect, aCenter, fBorderWidth);
 }
 
 void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
@@ -250,9 +250,9 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
 
     tools::Rectangle aStepRect, aMirrorRect;
     Point aCenter;
-    double fBorder;
+    double fBorderWidth;
 
-    std::tie(aStepRect, aMirrorRect, aCenter, fBorder) = GetStepValues(rGradient, rRect);
+    std::tie(aStepRect, aMirrorRect, aCenter, fBorderWidth) = GetStepValues(rGradient, rRect);
 
     bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
 
@@ -276,11 +276,11 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
 
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
-    if (fBorder > 0.0)
+    if (fBorderWidth > 0.0)
     {
         AddFillColorAction(pMetaFile, nStartRed, nStartGreen, nStartBlue);
 
-        aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorder));
+        aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorderWidth));
         pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aBorderRect, aCenter, nAngle)));
 
         aStepRect.SetTop(aBorderRect.Bottom());
@@ -288,7 +288,7 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         if (!bLinear)
         {
             aBorderRect = aMirrorRect;
-            aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorder));
+            aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorderWidth));
             aMirrorRect.SetBottom(aBorderRect.Top());
 
             pMetaFile->AddAction(
@@ -375,9 +375,9 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
 {
     tools::Rectangle aStepRect, aMirrorRect;
     Point aCenter;
-    double fBorder;
+    double fBorderWidth;
 
-    std::tie(aStepRect, aMirrorRect, aCenter, fBorder) = GetStepValues(rGradient, rRect);
+    std::tie(aStepRect, aMirrorRect, aCenter, fBorderWidth) = GetStepValues(rGradient, rRect);
 
     bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
 
@@ -401,11 +401,11 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
 
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
-    if (fBorder > 0.0)
+    if (fBorderWidth > 0.0)
     {
         SetFillColor(pRenderContext, nStartRed, nStartGreen, nStartBlue);
 
-        aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorder));
+        aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorderWidth));
         aStepRect.SetTop(aBorderRect.Bottom());
         tools::Polygon aPoly(RotatePolygon(aBorderRect, aCenter, nAngle));
 
@@ -417,7 +417,7 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         if (!bLinear)
         {
             aBorderRect = aMirrorRect;
-            aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorder));
+            aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorderWidth));
             aMirrorRect.SetBottom(aBorderRect.Top());
             tools::Polygon aNonLinearPoly(RotatePolygon(aBorderRect, aCenter, nAngle));
 

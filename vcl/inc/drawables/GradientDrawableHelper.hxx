@@ -72,7 +72,7 @@ public:
 
     static std::tuple<long, long, long> GetEndColorIntensityValues(Gradient const& rGradient);
 
-    static double CalculateBorder(Gradient const& rGradient, tools::Rectangle const& rRect);
+    static double CalculateBorderWidth(Gradient const& rGradient, tools::Rectangle const& rRect);
     static void AddFillColorAction(GDIMetaFile* pMetaFile, long nRed, long nGreen, long nBlue);
     static void SetFillColor(OutputDevice* pRenderContext, long nStartRed, long nStartGreen,
                              long nStartBlue);
