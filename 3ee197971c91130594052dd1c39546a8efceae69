@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_0c13325e",
+        "filename": "cui/uiconfig/ui/documentconverterdialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-03T21:27:13Z",
+      "side": 1,
+      "message": "This object is the problem: it needs to have a child. Commenting the object out makes the dialog appear.",
+      "range": {
+        "startLine": 359,
+        "startChar": 14,
+        "endLine": 359,
+        "endChar": 48
+      },
+      "revId": "3ee197971c91130594052dd1c39546a8efceae69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
