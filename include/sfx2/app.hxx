@@ -198,6 +198,7 @@ public:
     SAL_DLLPRIVATE static void  PropState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void         OfaExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE static void  OfaState_Impl(SfxItemSet &);
+    SAL_DLLPRIVATE static void  OpenDocumentConverter_Impl(SfxRequest&);
 
     SAL_DLLPRIVATE void         SetProgress_Impl(SfxProgress *);
     SAL_DLLPRIVATE const OUString& GetLastDir_Impl() const;
