@@ -160,7 +160,7 @@ namespace
             mxCanvas( grabCanvas(aArguments) ),
             maFont([this](rendering::FontRequest const& rFontRequest) {
                    return mxCanvas->createFont(rFontRequest,
-                                               uno::Sequence< beans::PropertyValue >(),
+                                               {},
                                                geometry::Matrix2D()); } ),
             maViewState(),
             maRenderState( mxCanvas->getDevice() )

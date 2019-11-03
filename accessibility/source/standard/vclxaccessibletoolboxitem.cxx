@@ -470,7 +470,7 @@ Sequence< PropertyValue > SAL_CALL VCLXAccessibleToolBoxItem::getCharacterAttrib
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return Sequence< PropertyValue >();
+    return {};
 }
 
 awt::Rectangle SAL_CALL VCLXAccessibleToolBoxItem::getCharacterBounds( sal_Int32 nIndex )

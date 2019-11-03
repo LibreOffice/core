@@ -122,13 +122,13 @@ namespace cairocanvas
     uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  )
     {
         // TODO(F1)
-        return uno::Sequence< double >();
+        return {};
     }
 
     uno::Sequence< beans::PropertyValue > SAL_CALL  CanvasFont::getExtraFontProperties(  )
     {
         // TODO(F1)
-        return uno::Sequence< beans::PropertyValue >();
+        return {};
     }
 
     OUString SAL_CALL CanvasFont::getImplementationName()

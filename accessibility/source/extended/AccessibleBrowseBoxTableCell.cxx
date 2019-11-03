@@ -243,7 +243,7 @@ namespace accessibility
         if ( !implIsValidIndex( nIndex, sText.getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return css::uno::Sequence< css::beans::PropertyValue >();
+        return {};
     }
     sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getCharacterCount(  )
     {

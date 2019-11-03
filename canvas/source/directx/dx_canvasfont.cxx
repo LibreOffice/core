@@ -96,7 +96,7 @@ namespace dxcanvas
     uno::Sequence< beans::PropertyValue > SAL_CALL CanvasFont::getExtraFontProperties(  )
     {
         // TODO
-        return uno::Sequence< beans::PropertyValue >();
+        return {};
     }
 
     rendering::FontRequest SAL_CALL CanvasFont::getFontRequest(  )

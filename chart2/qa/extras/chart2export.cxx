@@ -707,7 +707,7 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
    load("/chart2/qa/extras/data/docx/", "testMultiplechartembeddings.docx" );
    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
-   uno::Sequence<beans::PropertyValue> aGrabBag(0);
+   uno::Sequence<beans::PropertyValue> aGrabBag;
    xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
    bool bEmbeddings = false;
@@ -719,7 +719,7 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
        if (aGrabBag[i].Name == "OOXEmbeddings")
        {
            bEmbeddings = true;
-           uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
+           uno::Sequence<beans::PropertyValue> aEmbeddingsList;
            uno::Reference<io::XInputStream> aEmbeddingXlsxStream;
            OUString aEmbeddedfileName;
            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aEmbeddingsList); // PropertyValue of proper type
@@ -1367,7 +1367,7 @@ void Chart2ExportTest::testEmbeddingsOleObjectGrabBag()
    load("/chart2/qa/extras/data/docx/", "testchartoleobjectembeddings.docx" );
    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
-   uno::Sequence<beans::PropertyValue> aGrabBag(0);
+   uno::Sequence<beans::PropertyValue> aGrabBag;
    xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
    bool bEmbeddings = false;
@@ -1377,7 +1377,7 @@ void Chart2ExportTest::testEmbeddingsOleObjectGrabBag()
        if (aGrabBag[i].Name == "OOXEmbeddings")
        {
            bEmbeddings = true;
-           uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
+           uno::Sequence<beans::PropertyValue> aEmbeddingsList;
            uno::Reference<io::XInputStream> aEmbeddingXlsxStream;
            OUString aEmbeddedfileName;
            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aEmbeddingsList); // PropertyValue of proper type
