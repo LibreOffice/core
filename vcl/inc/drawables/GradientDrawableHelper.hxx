@@ -62,10 +62,16 @@ public:
     static void SetGrayscaleColors(OutputDevice* pRenderContext, Gradient& rGradient);
 
     static sal_uInt8 GetGradientColorValue(long nValue);
-    static std::tuple<sal_uInt16, sal_uInt16, sal_uInt16>
-    GetGradientColorValues(long nRed, long nGreen, long nBlue);
     static long GetStartColorIntensity(Gradient const& rGradient, double nColor);
     static long GetEndColorIntensity(Gradient const& rGradient, double nColor);
+
+    static std::tuple<sal_uInt16, sal_uInt16, sal_uInt16>
+    GetGradientColorValues(long nRed, long nGreen, long nBlue);
+
+    static std::tuple<long, long, long> GetStartColorIntensityValues(Gradient const& rGradient);
+
+    static std::tuple<long, long, long> GetEndColorIntensityValues(Gradient const& rGradient);
+
     static void SwapStartEndColor(long& nStart, long& nEnd);
 
     static double CalculateBorder(Gradient const& rGradient, tools::Rectangle const& rRect);

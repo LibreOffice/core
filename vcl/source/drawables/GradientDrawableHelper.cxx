@@ -114,10 +114,30 @@ long GradientDrawableHelper::GetStartColorIntensity(Gradient const& rGradient, d
     return (nColor * nFactor) / 100;
 }
 
+std::tuple<long, long, long>
+GradientDrawableHelper::GetStartColorIntensityValues(Gradient const& rGradient)
+{
+    Color aColor = rGradient.GetStartColor();
+
+    return std::make_tuple(GetStartColorIntensity(rGradient, aColor.GetRed()),
+                           GetStartColorIntensity(rGradient, aColor.GetGreen()),
+                           GetStartColorIntensity(rGradient, aColor.GetBlue()));
+}
+
 long GradientDrawableHelper::GetEndColorIntensity(Gradient const& rGradient, double nColor)
 {
     long nFactor = rGradient.GetEndIntensity();
     return (nColor * nFactor) / 100;
+}
+
+std::tuple<long, long, long>
+GradientDrawableHelper::GetEndColorIntensityValues(Gradient const& rGradient)
+{
+    Color aColor = rGradient.GetEndColor();
+
+    return std::make_tuple(GetEndColorIntensity(rGradient, aColor.GetRed()),
+                           GetEndColorIntensity(rGradient, aColor.GetGreen()),
+                           GetEndColorIntensity(rGradient, aColor.GetBlue()));
 }
 
 void GradientDrawableHelper::SwapStartEndColor(long& nStart, long& nEnd)
@@ -215,15 +235,11 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         aStepRect.SetBottom(aMirrorRect.Top());
 
     // colour-intensities of start- and finish; change if needed
-    Color aStartCol = rGradient.GetStartColor();
-    long nStartRed = GetStartColorIntensity(rGradient, aStartCol.GetRed());
-    long nStartGreen = GetStartColorIntensity(rGradient, aStartCol.GetGreen());
-    long nStartBlue = GetStartColorIntensity(rGradient, aStartCol.GetBlue());
+    long nStartRed, nStartGreen, nStartBlue;
+    std::tie(nStartRed, nStartGreen, nStartBlue) = GetStartColorIntensityValues(rGradient);
 
-    Color aEndCol = rGradient.GetEndColor();
-    long nEndRed = GetEndColorIntensity(rGradient, aEndCol.GetRed());
-    long nEndGreen = GetEndColorIntensity(rGradient, aEndCol.GetGreen());
-    long nEndBlue = GetEndColorIntensity(rGradient, aEndCol.GetBlue());
+    long nEndRed, nEndGreen, nEndBlue;
+    std::tie(nEndRed, nEndGreen, nEndBlue) = GetEndColorIntensityValues(rGradient);
 
     // gradient style axial has exchanged start and end colors
     if (!bLinear)
@@ -374,15 +390,11 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         aStepRect.SetBottom(aMirrorRect.Top());
 
     // colour-intensities of start- and finish; change if needed
-    Color aStartCol = rGradient.GetStartColor();
-    long nStartRed = GetStartColorIntensity(rGradient, aStartCol.GetRed());
-    long nStartGreen = GetStartColorIntensity(rGradient, aStartCol.GetGreen());
-    long nStartBlue = GetStartColorIntensity(rGradient, aStartCol.GetBlue());
+    long nStartRed, nStartGreen, nStartBlue;
+    std::tie(nStartRed, nStartGreen, nStartBlue) = GetStartColorIntensityValues(rGradient);
 
-    Color aEndCol = rGradient.GetEndColor();
-    long nEndRed = GetEndColorIntensity(rGradient, aEndCol.GetRed());
-    long nEndGreen = GetEndColorIntensity(rGradient, aEndCol.GetGreen());
-    long nEndBlue = GetEndColorIntensity(rGradient, aEndCol.GetBlue());
+    long nEndRed, nEndGreen, nEndBlue;
+    std::tie(nEndRed, nEndGreen, nEndBlue) = GetEndColorIntensityValues(rGradient);
 
     // gradient style axial has exchanged start and end colors
     if (!bLinear)
