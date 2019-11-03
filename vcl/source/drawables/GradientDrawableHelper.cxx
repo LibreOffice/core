@@ -240,21 +240,9 @@ GradientDrawableHelper::GetStepValues(Gradient const& rGradient, tools::Rectangl
     return std::make_tuple(aStepRect, aMirrorRect, aCenter, fBorderWidth);
 }
 
-void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
-                                                          tools::Rectangle const& rRect,
-                                                          Gradient const& rGradient)
+std::tuple<long, long, long, long, long, long>
+GradientDrawableHelper::GetColorIntensities(Gradient const& rGradient)
 {
-    GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
-    if (!pMetaFile)
-        return;
-
-    tools::Rectangle aStepRect, aMirrorRect;
-    Point aCenter;
-    double fBorderWidth;
-
-    std::tie(aStepRect, aMirrorRect, aCenter, fBorderWidth) = GetStepValues(rGradient, rRect);
-
-    // colour-intensities of start- and finish; change if needed
     long nStartRed, nStartGreen, nStartBlue;
     std::tie(nStartRed, nStartGreen, nStartBlue) = GetStartColorIntensityValues(rGradient);
 
@@ -268,6 +256,28 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         std::swap(nStartGreen, nEndGreen);
         std::swap(nStartBlue, nEndBlue);
     }
+
+    return std::make_tuple(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
+}
+
+void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
+                                                          tools::Rectangle const& rRect,
+                                                          Gradient const& rGradient)
+{
+    GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
+    if (!pMetaFile)
+        return;
+
+    tools::Rectangle aStepRect, aMirrorRect;
+    Point aCenter;
+    double fBorderWidth;
+
+    long nStartRed, nStartGreen, nStartBlue;
+    long nEndRed, nEndGreen, nEndBlue;
+
+    std::tie(aStepRect, aMirrorRect, aCenter, fBorderWidth) = GetStepValues(rGradient, rRect);
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue)
+        = GetColorIntensities(rGradient);
 
     // Create border
     tools::Rectangle aBorderRect = aStepRect;
@@ -375,22 +385,12 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     Point aCenter;
     double fBorderWidth;
 
-    std::tie(aStepRect, aMirrorRect, aCenter, fBorderWidth) = GetStepValues(rGradient, rRect);
-
-    // colour-intensities of start- and finish; change if needed
     long nStartRed, nStartGreen, nStartBlue;
-    std::tie(nStartRed, nStartGreen, nStartBlue) = GetStartColorIntensityValues(rGradient);
-
     long nEndRed, nEndGreen, nEndBlue;
-    std::tie(nEndRed, nEndGreen, nEndBlue) = GetEndColorIntensityValues(rGradient);
 
-    // gradient style axial has exchanged start and end colors
-    if (rGradient.GetStyle() != GradientStyle::Linear)
-    {
-        std::swap(nStartRed, nEndRed);
-        std::swap(nStartGreen, nEndGreen);
-        std::swap(nStartBlue, nEndBlue);
-    }
+    std::tie(aStepRect, aMirrorRect, aCenter, fBorderWidth) = GetStepValues(rGradient, rRect);
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue)
+        = GetColorIntensities(rGradient);
 
     // Create border
     tools::Rectangle aBorderRect = aStepRect;
