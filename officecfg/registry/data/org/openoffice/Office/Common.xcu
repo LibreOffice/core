@@ -342,6 +342,22 @@
           <value>private:image/3216</value>
         </prop>
       </node>
+
+      <node oor:name="m11a" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>.uno:DocumentConverter</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="en-US">Document ~Converter...</value>
+        </prop>
+        <prop oor:name="TargetName" oor:type="xs:string">
+          <value>_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier" oor:type="xs:string">
+          <value>private:image/3216</value>
+        </prop>
+      </node>
+
       <node oor:name="m12" oor:op="replace" install:module="writer">
         <prop oor:name="URL" oor:type="xs:string">
           <value>macro:///Euro.AutoPilotRun.StartAutoPilot</value>
