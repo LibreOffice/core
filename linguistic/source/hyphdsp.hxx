@@ -21,12 +21,8 @@
 #define INCLUDED_LINGUISTIC_SOURCE_HYPHDSP_HXX
 
 
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -34,7 +30,6 @@
 #include <map>
 #include <memory>
 
-#include "lngopt.hxx"
 #include <linguistic/misc.hxx>
 #include "defs.hxx"
 

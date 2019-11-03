@@ -20,9 +20,9 @@
 
 #include <cppuhelper/factory.hxx>
 #include "dicimp.hxx"
-#include "hyphdsp.hxx"
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <linguistic/misc.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
@@ -35,12 +35,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>

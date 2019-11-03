@@ -23,7 +23,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -31,11 +30,8 @@
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <unotools/lingucfg.hxx>
 #include <svl/itemprop.hxx>
-#include <unotools/configitem.hxx>
 #include <unotools/linguprops.hxx>
 #include <com/sun/star/uno/Any.h>
-#include <linguistic/misc.hxx>
-#include "defs.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace beans {

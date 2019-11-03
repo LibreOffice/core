@@ -19,19 +19,11 @@
 
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/stream.hxx>
-#include <ucbhelper/content.hxx>
 
-#include <cppuhelper/factory.hxx>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionPropertyType.hpp>
-#include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/util/XFlushListener.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <xmloff/nmspmap.hxx>
@@ -41,7 +33,6 @@
 #include "convdic.hxx"
 #include "convdicxml.hxx"
 #include <linguistic/misc.hxx>
-#include "defs.hxx"
 
 using namespace std;
 using namespace utl;

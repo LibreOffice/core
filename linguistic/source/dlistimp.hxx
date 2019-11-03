@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <rtl/ref.hxx>
 
 #include <vector>

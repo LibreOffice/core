@@ -26,7 +26,6 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -35,19 +34,13 @@
 
 #include <com/sun/star/linguistic2/ConversionPropertyType.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/util/XFlushListener.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>

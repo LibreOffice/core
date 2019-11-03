@@ -22,23 +22,17 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceDisplayName.hpp>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <linguistic/misc.hxx>
 
 #include <map>
 #include <memory>
 
-#include "lngopt.hxx"
+#include "defs.hxx"
 
 
 class ThesaurusDispatcher :

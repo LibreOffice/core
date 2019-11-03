@@ -36,9 +36,6 @@
 #include <vector>
 #include <memory>
 
-#include <linguistic/misc.hxx>
-#include "defs.hxx"
-
 class SpellCheckerDispatcher;
 class HyphenatorDispatcher;
 class ThesaurusDispatcher;

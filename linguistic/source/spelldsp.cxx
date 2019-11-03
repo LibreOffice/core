@@ -21,12 +21,9 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
-#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/factory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -40,7 +37,6 @@
 #include "spelldsp.hxx"
 #include <linguistic/spelldta.hxx>
 #include "lngsvcmgr.hxx"
-#include <linguistic/lngprops.hxx>
 
 using namespace osl;
 using namespace com::sun::star;

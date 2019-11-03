@@ -21,7 +21,6 @@
 #include <sal/macros.h>
 #include "lngopt.hxx"
 #include "lngreg.hxx"
-#include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
@@ -29,18 +28,12 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
-#include <i18nlangtag/mslangid.hxx>
 
 using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
-using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;

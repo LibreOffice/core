@@ -25,12 +25,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <i18nlangtag/lang.h>
 
 #include <memory>
 #include <set>
 #include <unordered_map>
-#include <linguistic/misc.hxx>
-#include "defs.hxx"
 
 // text conversion dictionary extension
 #define CONV_DIC_EXT            "tcd"

@@ -22,8 +22,6 @@
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
 
-#include <cppuhelper/factory.hxx>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -32,7 +30,7 @@
 #include <sal/log.hxx>
 
 #include "thesdsp.hxx"
-#include <linguistic/lngprops.hxx>
+#include <linguistic/misc.hxx>
 
 using namespace osl;
 using namespace com::sun::star;

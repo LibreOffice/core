@@ -19,20 +19,15 @@
 
 #include <unicode/uscript.h>
 #include <i18nlangtag/lang.h>
-#include <tools/stream.hxx>
 #include <osl/mutex.hxx>
-#include <ucbhelper/content.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "hhconvdic.hxx"
 #include <linguistic/misc.hxx>
-#include "defs.hxx"
 
 using namespace osl;
 using namespace com::sun::star;
@@ -45,7 +40,6 @@ using namespace linguistic;
 #define SN_HH_CONV_DICTIONARY   "com.sun.star.linguistic2.HangulHanjaConversionDictionary"
 
 
-#include <i18nutil/unicode.hxx>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 
 using namespace i18n;
