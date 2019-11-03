@@ -88,6 +88,7 @@
 #include <about.hxx>
 #include <tipofthedaydlg.hxx>
 #include <DiagramDialog.hxx>
+#include <DocumentConverterDialog.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -1666,6 +1667,13 @@ AbstractDialogFactory_Impl::CreateDiagramDialog(weld::Window* pParent, std::shar
 {
     return VclPtr<AbstractDiagramDialog_Impl>::Create(
         std::make_unique<DiagramDialog>(pParent, pDiagramData));
+}
+
+VclPtr<VclAbstractDialog>
+AbstractDialogFactory_Impl::CreateDocumentConverterDialog(weld::Window* pParent)
+{
+    return VclPtr<VclAbstractDialog_SimpleImpl<DocumentConverterDialog>>::Create(
+        std::make_unique<DocumentConverterDialog>(pParent));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

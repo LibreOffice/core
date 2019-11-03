@@ -113,6 +113,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/cuitbxform \
     cui/source/dialogs/dlgname \
     cui/source/dialogs/DiagramDialog \
+    cui/source/dialogs/DocumentConverterDialog \
     cui/source/dialogs/FontFeaturesDialog \
     cui/source/dialogs/hangulhanjadlg \
     cui/source/dialogs/hldocntp \

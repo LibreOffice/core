@@ -301,6 +301,10 @@ shell SfxApplication
         [
                 ExecMethod = OfaExec_Impl ;
         ]
+    SID_DOCUMENT_CONVERTER
+    [
+        ExecMethod = OpenDocumentConverter_Impl ;
+    ]
 }
 
 shell SfxModule
