@@ -179,6 +179,29 @@ void GradientDrawableHelper::AddFillColorAction(GDIMetaFile* pMetaFile, long nSt
     pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 }
 
+tools::Rectangle GradientDrawableHelper::AddGradientBorderActions(
+    GDIMetaFile* pMetaFile, Gradient const& rGradient, tools::Rectangle aBorderRect,
+    tools::Rectangle aMirrorRect, Point const& rCenter, double nAngle, double fBorderWidth)
+{
+    tools::Rectangle aStepRect = aBorderRect;
+
+    aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorderWidth));
+    pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aBorderRect, rCenter, nAngle)));
+
+    aStepRect.SetTop(aBorderRect.Bottom());
+
+    if (rGradient.GetStyle() != GradientStyle::Linear)
+    {
+        aBorderRect = aMirrorRect;
+        aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorderWidth));
+        aMirrorRect.SetBottom(aBorderRect.Top());
+
+        pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aBorderRect, rCenter, nAngle)));
+    }
+
+    return aStepRect;
+}
+
 long GradientDrawableHelper::GetLinearGradientSteps(long nStepCount, long nStartRed,
                                                     long nStartGreen, long nStartBlue, long nEndRed,
                                                     long nEndGreen, long nEndBlue)
@@ -287,21 +310,8 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     if (fBorderWidth > 0.0)
     {
         AddFillColorAction(pMetaFile, nStartRed, nStartGreen, nStartBlue);
-
-        aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorderWidth));
-        pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aBorderRect, aCenter, nAngle)));
-
-        aStepRect.SetTop(aBorderRect.Bottom());
-
-        if (rGradient.GetStyle() != GradientStyle::Linear)
-        {
-            aBorderRect = aMirrorRect;
-            aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorderWidth));
-            aMirrorRect.SetBottom(aBorderRect.Top());
-
-            pMetaFile->AddAction(
-                new MetaPolygonAction(RotatePolygon(aBorderRect, aCenter, nAngle)));
-        }
+        aStepRect = AddGradientBorderActions(pMetaFile, rGradient, aBorderRect, aMirrorRect,
+                                             aCenter, nAngle, fBorderWidth);
     }
 
     long nSteps = GetLinearGradientSteps(
