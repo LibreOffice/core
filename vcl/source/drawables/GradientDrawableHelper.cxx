@@ -20,6 +20,7 @@
 #include <salgdi.hxx>
 
 #include <cassert>
+#include <utility>
 
 #define GRADIENT_DEFAULT_STEPCOUNT 0
 
@@ -140,13 +141,6 @@ GradientDrawableHelper::GetEndColorIntensityValues(Gradient const& rGradient)
                            GetEndColorIntensity(rGradient, aColor.GetBlue()));
 }
 
-void GradientDrawableHelper::SwapStartEndColor(long& nStart, long& nEnd)
-{
-    long nTemp = nStart;
-    nStart = nEnd;
-    nEnd = nTemp;
-}
-
 sal_uInt8 GradientDrawableHelper::GetGradientColorValue(long nValue)
 {
     if (nValue < 0)
@@ -258,9 +252,9 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     // gradient style axial has exchanged start and end colors
     if (!bLinear)
     {
-        SwapStartEndColor(nStartRed, nEndRed);
-        SwapStartEndColor(nStartGreen, nEndGreen);
-        SwapStartEndColor(nStartBlue, nEndBlue);
+        std::swap(nStartRed, nEndRed);
+        std::swap(nStartGreen, nEndGreen);
+        std::swap(nStartBlue, nEndBlue);
     }
 
     // Create border
@@ -389,9 +383,9 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     // gradient style axial has exchanged start and end colors
     if (!bLinear)
     {
-        SwapStartEndColor(nStartRed, nEndRed);
-        SwapStartEndColor(nStartGreen, nEndGreen);
-        SwapStartEndColor(nStartBlue, nEndBlue);
+        std::swap(nStartRed, nEndRed);
+        std::swap(nStartGreen, nEndGreen);
+        std::swap(nStartBlue, nEndBlue);
     }
 
     // Create border
