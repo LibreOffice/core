@@ -37,7 +37,6 @@
 #include <cuitabarea.hxx>
 #include <cuitbxform.hxx>
 #include <dlgname.hxx>
-#include <DiagramDialog.hxx>
 #include <dstribut.hxx>
 #include <hangulhanjadlg.hxx>
 #include <hyphen.hxx>
@@ -49,12 +48,7 @@
 #include <passwdomdlg.hxx>
 #include <pastedlg.hxx>
 #include <postdlg.hxx>
-#include <QrCodeGenDialog.hxx>
-#include <screenshotannotationdlg.hxx>
 #include <showcols.hxx>
-#include <SignatureLineDialog.hxx>
-#include <SignSignatureLineDialog.hxx>
-#include <SpellDialog.hxx>
 #include <srchxtra.hxx>
 #include <thesdlg.hxx>
 #include <tipofthedaydlg.hxx>
@@ -63,23 +57,10 @@
 
 class SfxSingleTabDialogController;
 class SfxItemPool;
-class FmShowColsDialog;
-class SvxZoomDialog;
-class FmInputRecordNoDialog;
-class SvxJSearchOptionsDialog;
-class SvxNewDictionaryDialog;
-class SvxNameDialog;
-
-// #i68101#
-class SvxObjectNameDialog;
-class SvxObjectTitleDescDialog;
 
 class SvxMultiPathDialog;
-class SvxHpLinkDlg;
-class FmSearchDialog;
 class Graphic;
 class GraphicFilterDialog;
-class SvxAreaTabDialog;
 class InsertObjectDialog_Impl;
 class SvPasteObjectDialog;
 class SvBaseLinksDlg;
