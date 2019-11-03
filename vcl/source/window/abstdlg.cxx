@@ -21,7 +21,7 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/bitmapex.hxx>
 
-typedef VclAbstractDialogFactory* (*FuncPtrCreateDialogFactory)();
+typedef VclAbstractDialogFactory* (SAL_CALL* FuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING
 extern "C" { static void thisModule() {} }
@@ -31,19 +31,20 @@ extern "C" VclAbstractDialogFactory* CreateDialogFactory();
 
 VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 {
-    FuncPtrCreateDialogFactory fp = nullptr;
+    static auto fp = []() -> FuncPtrCreateDialogFactory {
 #ifndef DISABLE_DYNLOADING
-    static ::osl::Module aDialogLibrary;
-    if (aDialogLibrary.is() ||
-        aDialogLibrary.loadRelative(&thisModule, CUI_DLL_NAME,
-                SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
-    {
-        fp = reinterpret_cast<VclAbstractDialogFactory* (SAL_CALL*)()>(
-            aDialogLibrary.getFunctionSymbol( "CreateDialogFactory" ) );
-    }
+        static ::osl::Module aDialogLibrary;
+        if (aDialogLibrary.loadRelative(&thisModule, CUI_DLL_NAME,
+                                        SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
+        {
+            return reinterpret_cast<FuncPtrCreateDialogFactory>(
+                aDialogLibrary.getFunctionSymbol( "CreateDialogFactory" ) );
+        }
+        return nullptr;
 #else
-    fp = CreateDialogFactory;
+        return CreateDialogFactory;
 #endif
+    }();
     if ( fp )
         return fp();
     return nullptr;
