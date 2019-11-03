@@ -52,6 +52,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/databaselinkdialog \
 	cui/uiconfig/ui/diagramdialog \
 	cui/uiconfig/ui/dimensionlinestabpage \
+	cui/uiconfig/ui/documentconverterdialog \
 	cui/uiconfig/ui/editdictionarydialog \
 	cui/uiconfig/ui/editmodulesdialog \
 	cui/uiconfig/ui/embossdialog \
