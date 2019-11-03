@@ -60,6 +60,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <libxml/xmlwriter.h>
 
+#include <boost/property_tree/json_parser.hpp>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;

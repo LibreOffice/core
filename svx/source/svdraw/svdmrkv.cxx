@@ -68,6 +68,8 @@
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <boost/property_tree/json_parser.hpp>
+
 using namespace com::sun::star;
 
 // Migrate Marking of Objects, Points and GluePoints
