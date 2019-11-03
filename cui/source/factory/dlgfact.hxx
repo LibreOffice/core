@@ -112,6 +112,17 @@ bool Class::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) \
     return pDlg->StartExecuteAsync(rCtx);           \
 }
 
+template <class Dlg, class AbstractBase = VclAbstractDialog>
+class VclAbstractDialog_SimpleImpl : public AbstractBase {
+    std::unique_ptr<Dlg> m_xDlg;
+public:
+    explicit VclAbstractDialog_SimpleImpl(std::unique_ptr<Dlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override { return m_xDlg->run(); }
+};
+
 class CuiAbstractController_Impl : public VclAbstractDialog
 {
     std::unique_ptr<weld::DialogController> m_xDlg;
@@ -954,6 +965,8 @@ public:
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
         std::shared_ptr<DiagramDataInterface> pDiagramData) override;
+
+    virtual VclPtr<VclAbstractDialog> CreateDocumentConverterDialog(weld::Window* pParent) override;
 };
 
 #endif
