@@ -289,13 +289,14 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
         GetGradientSteps(pRenderContext, rGradient, aStepRect, true /*bMtf*/), nStartRed,
         nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 
-    double fScanInc = static_cast<double>(aStepRect.GetHeight()) / static_cast<double>(nSteps);
-    double fGradientLine = static_cast<double>(aStepRect.Top());
-    double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
-
     const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
     if (!bLinear)
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
+
+    const double fScanInc
+        = static_cast<double>(aStepRect.GetHeight()) / static_cast<double>(nSteps);
+    const double fGradientLine = static_cast<double>(aStepRect.Top());
+    const double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
 
     for (long i = 0; i < nSteps; i++)
     {
@@ -449,13 +450,14 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
         GetGradientSteps(pRenderContext, rGradient, aStepRect, true /*bMtf*/), nStartRed,
         nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 
-    double fScanInc = static_cast<double>(aStepRect.GetHeight()) / static_cast<double>(nSteps);
-    double fGradientLine = static_cast<double>(aStepRect.Top());
-    double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
-
     const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
     if (!bLinear)
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
+
+    const double fScanInc
+        = static_cast<double>(aStepRect.GetHeight()) / static_cast<double>(nSteps);
+    double fGradientLine = static_cast<double>(aStepRect.Top());
+    double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
 
     for (long i = 0; i < nSteps; i++)
     {
