@@ -737,11 +737,6 @@ void ProcessData::NotifyFreeObj(SdrObject* pObj)
     }
 }
 
-void SdrEscherImport::NotifyFreeObj(SvxMSDffClientData& rData, SdrObject* pObj)
-{
-    rData.NotifyFreeObj(pObj);
-}
-
 /* ProcessObject is called from ImplSdPPTImport::ProcessObj to handle all application specific things,
    such as the import of text, animation effects, header footer and placeholder.
 
