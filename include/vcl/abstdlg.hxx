@@ -180,6 +180,8 @@ public:
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
         std::shared_ptr<DiagramDataInterface> pDiagramData) = 0;
+
+    virtual VclPtr<VclAbstractDialog> CreateDocumentConverterDialog(weld::Window* pParent) = 0;
 };
 
 #endif
