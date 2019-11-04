@@ -29,6 +29,7 @@
 #include <svl/lstner.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svdmark.hxx>
+#include <vcl/layout.hxx>
 #include "bastypes.hxx"
 
 class SfxBindings;
@@ -43,19 +44,17 @@ class DialogWindowLayout;
 class PropBrw final : public DockingWindow, public SfxListener, public SfxBroadcaster
 {
 private:
+    VclPtr<VclBox> m_xContentArea;
     bool        m_bInitialStateChange;
 
     css::uno::Reference< css::frame::XFrame2 >
                     m_xMeAsFrame;
     css::uno::Reference< css::beans::XPropertySet >
                     m_xBrowserController;
-    css::uno::Reference< css::awt::XWindow >
-                    m_xBrowserComponentWindow;
     css::uno::Reference< css::frame::XModel >
                     m_xContextDocument;
 
     SdrView*        pView;
-    virtual void Resize() override;
     virtual bool Close() override;
 
     typedef std::vector< css::uno::Reference< css::uno::XInterface> > InterfaceArray;

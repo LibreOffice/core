@@ -997,13 +997,16 @@ namespace pcr
         case PROPERTY_ID_TARGET_URL:
         case PROPERTY_ID_IMAGE_URL:
         {
-            aDescriptor.Control = new OFileUrlControl( impl_getDefaultDialogParent_nothrow() );
+            std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/urlcontrol.ui", m_xContext));
+            auto pControl = new OFileUrlControl(std::make_unique<URLBox>(xBuilder->weld_combo_box("urlcontrol")), std::move(xBuilder), false);
+            pControl->SetModifyHandler();
+            aDescriptor.Control = pControl;
 
             aDescriptor.PrimaryButtonId = PROPERTY_ID_TARGET_URL == nPropId
                 ? OUStringLiteral(UID_PROP_DLG_ATTR_TARGET_URL)
                 : OUStringLiteral(UID_PROP_DLG_IMAGE_URL);
+            break;
         }
-        break;
 
         case PROPERTY_ID_ECHO_CHAR:
             nControlType = PropertyControlType::CharacterField;
@@ -1096,16 +1099,21 @@ namespace pcr
 
                     if ( bIsFormatKey )
                     {
-                        OFormatSampleControl* pControl = new OFormatSampleControl( impl_getDefaultDialogParent_nothrow() );
+                        std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedsample.ui", m_xContext));
+                        auto pControl = new OFormatSampleControl(xBuilder->weld_container("formattedsample"), std::move(xBuilder), false);
+                        pControl->SetModifyHandler();
+
+                        pControl->SetFormatSupplier(pSupplier);
+
                         aDescriptor.Control = pControl;
-                        pControl->SetFormatSupplier( pSupplier );
 
                         aDescriptor.PrimaryButtonId = UID_PROP_DLG_NUMBER_FORMAT;
                     }
                     else
                     {
-                        OFormattedNumericControl* pControl = new OFormattedNumericControl( impl_getDefaultDialogParent_nothrow(), WB_TABSTOP | WB_BORDER );
-                        aDescriptor.Control = pControl;
+                        std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedcontrol.ui", m_xContext));
+                        auto pControl = new OFormattedNumericControl(xBuilder->weld_formatted_spin_button("formattedcontrol"), std::move(xBuilder), false);
+                        pControl->SetModifyHandler();
 
                         FormatDescription aDesc;
                         aDesc.pSupplier = pSupplier;
@@ -1114,6 +1122,8 @@ namespace pcr
                             aDesc.nKey = 0;
 
                         pControl->SetFormatDescription( aDesc );
+
+                        aDescriptor.Control = pControl;
                     }
                 }
             }
@@ -1138,42 +1148,36 @@ namespace pcr
         case PROPERTY_ID_VALUEMAX:
         case PROPERTY_ID_DEFAULT_VALUE:
         case PROPERTY_ID_VALUE:
+        {
+            std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedcontrol.ui", m_xContext));
+            auto pControl = new OFormattedNumericControl(xBuilder->weld_formatted_spin_button("formattedcontrol"), std::move(xBuilder), false);
+            pControl->SetModifyHandler();
+            aDescriptor.Control = pControl;
+
+            // we don't set a formatter so the control uses a default (which uses the application
+            // language and a default numeric format)
+            // but we set the decimal digits
+            pControl->SetDecimalDigits(
+                ::comphelper::getINT16( m_xComponent->getPropertyValue( PROPERTY_DECIMAL_ACCURACY ) )
+            );
+
+            // and the default value for the property
+            try
             {
-                OFormattedNumericControl* pControl = new OFormattedNumericControl( impl_getDefaultDialogParent_nothrow(), WB_TABSTOP | WB_BORDER | WB_SPIN | WB_REPEAT );
-                aDescriptor.Control = pControl;
-
-                // we don't set a formatter so the control uses a default (which uses the application
-                // language and a default numeric format)
-                // but we set the decimal digits
-                pControl->SetDecimalDigits(
-                    ::comphelper::getINT16( m_xComponent->getPropertyValue( PROPERTY_DECIMAL_ACCURACY ) )
-                );
-
-                // and the thousands separator
-                pControl->SetThousandsSep(
-                    ::comphelper::getBOOL( m_xComponent->getPropertyValue(PROPERTY_SHOWTHOUSANDSEP) )
-                );
-
-                // and the default value for the property
-                try
+                if (m_xPropertyState.is() && ((PROPERTY_ID_VALUEMIN == nPropId) || (PROPERTY_ID_VALUEMAX == nPropId)))
                 {
-                    if (m_xPropertyState.is() && ((PROPERTY_ID_VALUEMIN == nPropId) || (PROPERTY_ID_VALUEMAX == nPropId)))
-                    {
-                        double nDefault = 0;
-                        if ( m_xPropertyState->getPropertyDefault( aProperty.Name ) >>= nDefault )
-                            pControl->SetDefaultValue( nDefault );
-                    }
+                    double nDefault = 0;
+                    if ( m_xPropertyState->getPropertyDefault( aProperty.Name ) >>= nDefault )
+                        pControl->SetDefaultValue(nDefault);
                 }
-                catch (const Exception&)
-                {
-                    // just ignore it
-                }
-
-                // and allow empty values only for the default value and the value
-                pControl->EnableEmptyField( ( PROPERTY_ID_DEFAULT_VALUE == nPropId )
-                                        ||  ( PROPERTY_ID_VALUE == nPropId ) );
             }
+            catch (const Exception&)
+            {
+                // just ignore it
+            }
+
             break;
+        }
 
         default:
             if ( TypeClass_BYTE <= eType && eType <= TypeClass_DOUBLE )
@@ -1278,11 +1282,12 @@ namespace pcr
         {
             case PROPERTY_ID_REPEAT_DELAY:
             {
-                OTimeDurationControl* pControl = new OTimeDurationControl( impl_getDefaultDialogParent_nothrow() );
-                aDescriptor.Control = pControl;
-
+                std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/numericfield.ui", m_xContext));
+                auto pControl = new ONumericControl(xBuilder->weld_metric_spin_button("numericfield", FieldUnit::MILLISECOND), std::move(xBuilder), bReadOnly);
+                pControl->SetModifyHandler();
                 pControl->setMinValue( Optional< double >( true, 0 ) );
                 pControl->setMaxValue( Optional< double >( true, std::numeric_limits< double >::max() ) );
+                aDescriptor.Control = pControl;
             }
             break;
 
@@ -1704,12 +1709,10 @@ namespace pcr
                 {
                     OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
                     DBG_ASSERT( pControl, "FormComponentPropertyHandler::actuatingPropertyChanged: invalid control!" );
-                    if ( pControl )
+                    if (pControl)
                     {
                         if ( bAccuracy )
                             pControl->SetDecimalDigits( nNewDigits );
-                        else
-                            pControl->SetThousandsSep( bUseSep );
                     }
                 }
             }
@@ -2374,12 +2377,11 @@ namespace pcr
         }
     }
 
-
     void FormComponentPropertyHandler::impl_displaySQLError_nothrow( const ::dbtools::SQLExceptionInfo& _rErrorDescriptor ) const
     {
-        ::dbtools::showError( _rErrorDescriptor, VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ), m_xContext );
+        auto pTopLevel = impl_getDefaultDialogFrame_nothrow();
+        ::dbtools::showError(_rErrorDescriptor, pTopLevel ? pTopLevel->GetXWindow() : nullptr, m_xContext);
     }
-
 
     bool FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow() const
     {
@@ -2640,7 +2642,8 @@ namespace pcr
             Reference< XPropertySet > xDialogProps( xDialog, UNO_QUERY_THROW );
             xDialogProps->setPropertyValue("QueryComposer", makeAny( xComposer ) );
             xDialogProps->setPropertyValue("RowSet",        makeAny( m_xComponent ) );
-            xDialogProps->setPropertyValue("ParentWindow",  makeAny( VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ) ) );
+            if (auto pTopLevel = impl_getDefaultDialogFrame_nothrow())
+                xDialogProps->setPropertyValue("ParentWindow",  makeAny(pTopLevel->GetXWindow()));
             xDialogProps->setPropertyValue("Title",         makeAny( sPropertyUIName ) );
 
             _rClearBeforeDialog.clear();

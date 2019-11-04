@@ -361,7 +361,11 @@ public:
     virtual void set_current_page(int nPage) = 0;
     virtual void set_current_page(const OString& rIdent) = 0;
     virtual void remove_page(const OString& rIdent) = 0;
-    virtual void append_page(const OString& rIdent, const OUString& rLabel) = 0;
+    virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) = 0;
+    void append_page(const OString& rIdent, const OUString& rLabel)
+    {
+        insert_page(rIdent, rLabel, -1);
+    }
     virtual void set_tab_label_text(const OString& rIdent, const OUString& rLabel) = 0;
     virtual OUString get_tab_label_text(const OString& rIdent) const = 0;
     virtual int get_n_pages() const = 0;
@@ -1413,8 +1417,13 @@ public:
     }
 
     virtual void set_formatter(SvNumberFormatter* pFormatter) = 0;
+    virtual SvNumberFormatter* get_formatter() = 0;
     virtual sal_Int32 get_format_key() const = 0;
     virtual void set_format_key(sal_Int32 nFormatKey) = 0;
+
+    virtual void set_digits(unsigned int digits) = 0;
+
+    virtual void treat_as_number(bool bSet) = 0;
 
     void connect_value_changed(const Link<FormattedSpinButton&, void>& rLink)
     {
@@ -1763,6 +1772,14 @@ public:
     void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
     void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
     OUString get_text() const { return m_xSpinButton->get_text(); }
+    void connect_focus_in(const Link<Widget&, void>& rLink)
+    {
+        m_xSpinButton->connect_focus_in(rLink);
+    }
+    void connect_focus_out(const Link<Widget&, void>& rLink)
+    {
+        m_xSpinButton->connect_focus_out(rLink);
+    }
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 
