@@ -11,6 +11,7 @@
 
 #include <salbmp.hxx>
 #include <skia/gdiimpl.hxx>
+#include <osl/endian.h>
 
 #include <cairo.h>
 
@@ -71,8 +72,14 @@ void SkiaX11CairoTextRender::releaseCairoContext(cairo_t* cr)
 
     SalTwoRect aRect(0, 0, nWidth, nHeight, aClipRect.Left(), aClipRect.Top(), nWidth, nHeight);
 
+    SkImageInfo info;
+#ifdef OSL_LITENDIAN
+    info = SkImageInfo::Make(nWidth, nHeight, kBGRA_8888_SkColorType, kPremul_SkAlphaType);
+#else
+    info = SkImageInfo::Make(nWidth, nHeight, kARGB_8888_SkColorType, kPremul_SkAlphaType);
+#endif
     SkBitmap bitmap;
-    if (!bitmap.installPixels(SkImageInfo::MakeN32Premul(nWidth, nHeight), pSrc, nWidth * 4))
+    if (!bitmap.installPixels(info, pSrc, nWidth * 4))
         abort();
 
     pImpl->drawBitmap(aRect, bitmap);
