@@ -19,7 +19,7 @@
 
 // class SfxBluetoothModel_Impl -----------------------------------------------
 
-class SFX2_DLLPUBLIC SfxBluetoothModel:public SfxMailModel
+class SfxBluetoothModel:public SfxMailModel
 {
 public:
     SendMailResult      SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame );

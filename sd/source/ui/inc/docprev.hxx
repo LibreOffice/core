@@ -34,7 +34,7 @@ namespace sd {
     class SlideShow;
 }
 
-class SD_DLLPUBLIC SdDocPreviewWin final : public Control, public SfxListener
+class SdDocPreviewWin final : public Control, public SfxListener
 {
     rtl::Reference< sd::SlideShow > mxSlideShow;
 

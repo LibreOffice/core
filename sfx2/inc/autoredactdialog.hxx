@@ -100,7 +100,7 @@ enum class StartFileDialogType
     SaveAs
 };
 
-class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
+class SfxAutoRedactDialog : public SfxDialogController
 {
     SfxObjectShellLock m_xDocShell;
     std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;

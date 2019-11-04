@@ -271,7 +271,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScRefListToken(*this); }
 };
 
-class SC_DLLPUBLIC ScEmptyCellToken final : public formula::FormulaToken
+class ScEmptyCellToken final : public formula::FormulaToken
 {
             bool const          bInherited          :1;
             bool const          bDisplayedAsString  :1;
@@ -289,7 +289,7 @@ public:
 };
 
 /**  Transports the result from the interpreter to the formula cell. */
-class SC_DLLPUBLIC ScMatrixCellResultToken : public formula::FormulaToken
+class ScMatrixCellResultToken : public formula::FormulaToken
 {
     // No non-const access implemented, silence down unxsols4 complaining about
     // the public GetMatrix() hiding the one from FormulaToken.
@@ -319,7 +319,7 @@ public:
 
 /** Stores the matrix result at the formula cell, additionally the range the
     matrix formula occupies. */
-class SC_DLLPUBLIC ScMatrixFormulaCellToken final : public ScMatrixCellResultToken
+class ScMatrixFormulaCellToken final : public ScMatrixCellResultToken
 {
 private:
             SCROW               nRows;
@@ -373,7 +373,7 @@ private:
     void CloneUpperLeftIfNecessary();
 };
 
-class SC_DLLPUBLIC ScHybridCellToken final : public formula::FormulaToken
+class ScHybridCellToken final : public formula::FormulaToken
 {
 private:
     double const mfDouble;

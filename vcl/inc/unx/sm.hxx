@@ -73,7 +73,7 @@ public:
     static void interactionDone( bool bCancelShutdown );
 
     static OUString getExecName();
-    static VCLPLUG_GEN_PUBLIC const OString& getSessionID();
+    static const OString& getSessionID();
 };
 
 #endif
