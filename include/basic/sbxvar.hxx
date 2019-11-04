@@ -304,7 +304,7 @@ typedef tools::SvRef<SbxVariable> SbxVariableRef;
 
 //tdf#59222 SbxEnsureParentVariable is a SbxVariable which keeps a reference to
 //its parent, ensuring it always exists while this SbxVariable exists
-class BASIC_DLLPUBLIC SbxEnsureParentVariable final : public SbxVariable
+class SbxEnsureParentVariable final : public SbxVariable
 {
     SbxObjectRef xParent;
 public:

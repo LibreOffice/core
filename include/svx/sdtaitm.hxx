@@ -58,7 +58,7 @@ enum SdrTextHorzAdjust {SDRTEXTHORZADJUST_LEFT,     // left adjusted
                         SDRTEXTHORZADJUST_BLOCK    // use the whole text frame width
                         /*,SDRTEXTHORZADJUST_STRETCH*/}; // FitToSize in X direction (ni).
 
-class SVX_DLLPUBLIC SdrTextHorzAdjustItem: public SfxEnumItem<SdrTextHorzAdjust> {
+class SdrTextHorzAdjustItem: public SfxEnumItem<SdrTextHorzAdjust> {
 public:
     SdrTextHorzAdjustItem(SdrTextHorzAdjust eAdj=SDRTEXTHORZADJUST_BLOCK): SfxEnumItem(SDRATTR_TEXT_HORZADJUST, eAdj) {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=nullptr) const override;

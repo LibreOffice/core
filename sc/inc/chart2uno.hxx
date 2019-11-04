@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star { namespace chart2 { namespace da
 class ScDocument;
 
 // DataProvider
-class SC_DLLPUBLIC ScChart2DataProvider final : public
+class ScChart2DataProvider final : public
                 ::cppu::WeakImplHelper<
                     css::chart2::data::XDataProvider,
                     css::chart2::data::XSheetDataProvider,

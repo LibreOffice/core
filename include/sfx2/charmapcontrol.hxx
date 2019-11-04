@@ -29,7 +29,7 @@
 
 namespace com::sun::star::frame { class XFrame; }
 
-class SFX2_DLLPUBLIC SfxCharmapCtrl final : public SfxPopupWindow
+class SfxCharmapCtrl final : public SfxPopupWindow
 {
 public:
     explicit SfxCharmapCtrl(sal_uInt16 nId, vcl::Window* pParent,

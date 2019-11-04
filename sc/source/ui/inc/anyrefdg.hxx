@@ -81,7 +81,7 @@ public:
     bool                CanInputDone(bool bForced) { return m_pRefEdit && (bForced || !m_pRefBtn); }
 };
 
-class SC_DLLPUBLIC ScRefHandler : public IAnyRefDialog
+class ScRefHandler : public IAnyRefDialog
 {
     weld::DialogController* m_pController;
     bool                 m_bInRefMode;

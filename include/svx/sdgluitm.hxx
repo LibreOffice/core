@@ -28,7 +28,7 @@
 // SdrGrafLuminanceItem -
 
 
-class SVX_DLLPUBLIC SdrGrafLuminanceItem : public SdrSignedPercentItem
+class SdrGrafLuminanceItem : public SdrSignedPercentItem
 {
 public:
 
@@ -43,7 +43,7 @@ public:
 // SdrGrafContrastItem -
 
 
-class SVX_DLLPUBLIC SdrGrafContrastItem : public SdrSignedPercentItem
+class SdrGrafContrastItem : public SdrSignedPercentItem
 {
 public:
 
