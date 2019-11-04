@@ -212,7 +212,6 @@
               <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
@@ -255,11 +254,9 @@
                                 </child>
                                 <child>
                                   <object class="GtkComboBoxText" id="numfmtlb">
-                                    <property name="width_request">174</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="valign">start</property>
+                                    <property name="hexpand">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -277,12 +274,11 @@
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
-                                    <property name="top_attach">1</property>
+                                    <property name="top_attach">2</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkSpinButton" id="startat">
-                                    <property name="width_request">174</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="halign">start</property>
@@ -292,7 +288,7 @@
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
-                                    <property name="top_attach">1</property>
+                                    <property name="top_attach">2</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -306,13 +302,12 @@
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
-                                    <property name="top_attach">2</property>
+                                    <property name="top_attach">1</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="bullet">
                                     <property name="label" translatable="yes" context="bulletandposition|bullet">Select...</property>
-                                    <property name="width_request">174</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -320,13 +315,12 @@
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
-                                    <property name="top_attach">2</property>
+                                    <property name="top_attach">1</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkMenuButton" id="bitmap">
                                     <property name="label" translatable="yes" context="bulletandposition|bitmap">Select image...</property>
-                                    <property name="width_request">174</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -339,7 +333,7 @@
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
-                                    <property name="top_attach">3</property>
+                                    <property name="top_attach">4</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -353,7 +347,7 @@
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
-                                    <property name="top_attach">4</property>
+                                    <property name="top_attach">3</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -361,14 +355,17 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="halign">start</property>
                                     <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="label" translatable="no"></property>
                                     <child>
                                       <placeholder/>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
-                                    <property name="top_attach">4</property>
+                                    <property name="top_attach">3</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -435,57 +432,35 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="after">
+                              <object class="GtkLabel" id="suffixft">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">12</property>
-                                <child>
-                                  <object class="GtkEntry" id="prefix">
-                                    <property name="width_request">50</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="halign">start</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="activates_default">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="suffixft">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="halign">center</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="label" translatable="yes" context="bulletandposition|suffixft">After:</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">suffix</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkEntry" id="suffix">
-                                    <property name="width_request">50</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="halign">end</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="activates_default">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
+                                <property name="label" translatable="yes" context="bulletandposition|suffixft">After:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">suffix</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="suffix">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="prefix">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -956,9 +931,6 @@
                     <property name="position">4</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1044,25 +1016,26 @@
       <widget name="heightft"/>
       <widget name="indent"/>
       <widget name="numberingwidth"/>
+      <widget name="ALlabel"/>
       <widget name="sliderb"/>
       <widget name="selectionrb"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroupwidget">
+  <object class="GtkSizeGroup" id="sizegroupSpin">
     <widgets>
+      <widget name="startat"/>
+      <widget name="color"/>
+      <widget name="bullet"/>
+      <widget name="bitmap"/>
+      <widget name="suffix"/>
+      <widget name="prefix"/>
       <widget name="widthmf"/>
       <widget name="heightmf"/>
       <widget name="relsize"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroupwidget2">
-    <widgets>
-      <widget name="numfmtlb"/>
-      <widget name="startat"/>
-      <widget name="bitmap"/>
-      <widget name="color"/>
-      <widget name="after"/>
+      <widget name="indentmf"/>
+      <widget name="numberingwidthmf"/>
       <widget name="alignmentgr"/>
+      <widget name="applytomaster"/>
     </widgets>
   </object>
 </interface>
