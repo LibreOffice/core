@@ -569,6 +569,7 @@ namespace pcr
         {
             // some special handling for URL properties
             bool bIsURLProperty = _rPropertyName.endsWith( "URL" );
+            fprintf(stderr, "string is %s\n", _rPropertyName.toUtf8().getStr());
             if ( bIsURLProperty )
             {
                 aDescriptor.Control = _rxControlFactory->createPropertyControl(
