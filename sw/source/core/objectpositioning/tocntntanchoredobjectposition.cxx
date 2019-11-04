@@ -168,6 +168,14 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
     const bool bNoSurround = rSurround.GetSurround() == css::text::WrapTextMode_NONE;
     const bool bWrapThrough = rSurround.GetSurround() == css::text::WrapTextMode_THROUGH;
 
+    if(IsObjFly())
+    {
+        if( DoesResizeShapeToFitText() )
+            //SAL DEBUG("Resize shape to fit text");
+        else
+            //SAL DEBUG("Fixed size");
+    }
+
     // new class <SwEnvironmentOfAnchoredObject>
     SwEnvironmentOfAnchoredObject aEnvOfObj( DoesObjFollowsTextFlow(), DoesObjLayoutInCell() );
 

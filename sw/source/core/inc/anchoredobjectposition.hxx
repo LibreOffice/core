@@ -55,6 +55,7 @@ namespace objectpositioning
         const SwFrameFormat* mpFrameFormat;
         // #i62875#
         bool mbFollowTextFlow;
+        bool mbResizeShapeToFitText;
         bool mbLayoutInCell = false;
         // #i62875#
         // for compatibility option <DoNotCaptureDrawObjsOnPage>
@@ -107,7 +108,11 @@ namespace objectpositioning
         // #i62875#
         bool DoesObjFollowsTextFlow() const
         {
-            return mbFollowTextFlow;
+            return mbFollowTextFlow || mbResizeShapeToFitText;
+        }
+        bool DoesResizeShapeToFitText() const
+        {
+            return mbResizeShapeToFitText;
         }
         bool DoesObjLayoutInCell() const
         {
