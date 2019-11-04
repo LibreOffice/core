@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_8ce9821b",
+        "filename": "sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-11-04T05:55:50Z",
+      "side": 1,
+      "message": "good idea",
+      "parentUuid": "7f7f9b97_29c70048",
+      "range": {
+        "startLine": 202,
+        "startChar": 16,
+        "endLine": 202,
+        "endChar": 26
+      },
+      "revId": "0dd56a4a745266dcf88d43150ef1d798619ab522",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_69b5f8cc",
         "filename": "sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-11-03T08:00:10Z",
       "side": 1,
       "message": "Can we possibly replace strlen(LITERAL) with SAL_N_ELEMENTS(LITERAL)-1?",
+      "range": {
+        "startLine": 205,
+        "startChar": 84,
+        "endLine": 205,
+        "endChar": 90
+      },
+      "revId": "0dd56a4a745266dcf88d43150ef1d798619ab522",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_acec7e29",
+        "filename": "sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-11-04T05:55:50Z",
+      "side": 1,
+      "message": "most modern compilers should calculate strlen(X) at compile time if X is a compile time constant",
+      "parentUuid": "7f7f9b97_69b5f8cc",
       "range": {
         "startLine": 205,
         "startChar": 84,
