@@ -39,7 +39,7 @@ namespace rtl { template <class reference_type> class Reference; }
 
 class XMLSignatureTemplateImpl;
 
-class XMLSECURITY_DLLPUBLIC SignatureEngine : public cppu::ImplInheritanceHelper
+class SignatureEngine : public cppu::ImplInheritanceHelper
 <
     SecurityEngine,
     css::xml::crypto::sax::XReferenceCollector,

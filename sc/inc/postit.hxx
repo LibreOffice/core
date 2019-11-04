@@ -141,7 +141,7 @@ private:
 };
 
 /** Internal data for a cell annotation. */
-struct SC_DLLPUBLIC ScNoteData
+struct ScNoteData
 {
     typedef std::shared_ptr< ScCaptionInitData > ScCaptionInitDataRef;
 

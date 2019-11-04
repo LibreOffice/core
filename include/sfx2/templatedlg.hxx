@@ -142,7 +142,7 @@ protected:
 
 //  class SfxTemplateCategoryDialog -------------------------------------------------------------------
 
-class SFX2_DLLPUBLIC SfxTemplateCategoryDialog final : public weld::GenericDialogController
+class SfxTemplateCategoryDialog final : public weld::GenericDialogController
 {
 private:
     OUString   msSelectedCategory;

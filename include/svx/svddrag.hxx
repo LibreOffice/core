@@ -38,7 +38,7 @@ class SdrView;
 class SdrPageView;
 class SdrDragMethod;
 
-struct SVX_DLLPUBLIC SdrDragStatUserData
+struct SdrDragStatUserData
 {
     virtual ~SdrDragStatUserData() = 0;
 };

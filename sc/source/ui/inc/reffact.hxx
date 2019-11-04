@@ -181,7 +181,7 @@ public:
     void            StartRefInput();
 };
 
-class SC_DLLPUBLIC ScValidityRefChildWin : public SfxChildWindow
+class ScValidityRefChildWin : public SfxChildWindow
 {
     bool    m_bVisibleLock:1;
     bool    m_bFreeWindowLock:1;
