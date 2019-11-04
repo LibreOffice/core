@@ -1506,7 +1506,7 @@ SfxVoidItem ClearOutline SID_OUTLINE_DELETEALL
 
 
 SvxColorItem Color SID_ATTR_CHAR_COLOR
-
+(SfxStringItem Color SID_ATTR_COLOR_STR, SvxColorItem Color SID_ATTR_CHAR_COLOR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

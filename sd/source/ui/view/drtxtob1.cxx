@@ -63,8 +63,33 @@
 #include <futempl.hxx>
 #include <DrawDocShell.hxx>
 #include <futext.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/colritem.hxx>
 
 #include <memory>
+
+namespace
+{
+    void lcl_convertStringArguments(std::unique_ptr<SfxItemSet>& pArgs)
+    {
+        Color aColor;
+        OUString sColor;
+        const SfxPoolItem* pColorStringItem = nullptr;
+
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
+        {
+            sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+
+            if (sColor == "transparent")
+                aColor = COL_TRANSPARENT;
+            else
+                aColor = Color(sColor.toInt32(16));
+
+            SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
+            pArgs->Put(aColorItem);
+        }
+    }
+}
 
 namespace sd {
 
@@ -735,7 +760,9 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pArgs = rReq.GetArgs();
             }
 
-            mpView->SetAttributes(*pArgs);
+            std::unique_ptr<SfxItemSet> pNewArgs = pArgs->Clone();
+            lcl_convertStringArguments(pNewArgs);
+            mpView->SetAttributes(*pNewArgs);
 
             // invalidate entire shell because of performance and
             // extension reasons
