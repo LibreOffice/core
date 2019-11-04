@@ -54,6 +54,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 
 /*
@@ -1674,7 +1675,30 @@ namespace sdr { namespace contact {
         #endif
 
             if ( !rViewInformation.getViewport().isEmpty() )
-                m_pImpl->positionAndZoomControl( rViewInformation.getObjectToViewTransformation() );
+            {
+                // tdf#121963 check and eventually pre-multiply ViewTransformation
+                // with GridOffset transformation to avoid alternating positions of
+                // FormControls which are victims of the non-linear calc ViewTransformation
+                // aka GridOffset. For other paths (e.g. repaint) this is included already
+                // as part of the object's sequence of B2DPrimitive - representation
+                // (see ViewObjectContact::getPrimitive2DSequence and how getGridOffset is used there)
+                basegfx::B2DHomMatrix aViewTransformation(rViewInformation.getObjectToViewTransformation());
+
+                if(GetObjectContact().supportsGridOffsets())
+                {
+                    const basegfx::B2DVector& rGridOffset(getGridOffset());
+
+                    if(0.0 != rGridOffset.getX() || 0.0 != rGridOffset.getY())
+                    {
+                        // pre-multiply: GridOffset needs to be applied directly to logic model data
+                        // of object coordinates, so multiply GridOffset from right to make it
+                        // work as 1st change - these objects may still be part of groups/hierarchies
+                        aViewTransformation = aViewTransformation * basegfx::utils::createTranslateB2DHomMatrix(rGridOffset);
+                    }
+                }
+
+                m_pImpl->positionAndZoomControl(aViewTransformation);
+            }
         }
 
         return ViewObjectContactOfSdrObj::isPrimitiveVisible( _rDisplayInfo );
