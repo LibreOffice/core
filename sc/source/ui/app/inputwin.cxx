@@ -165,6 +165,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         pRuntimeWindow  ( lcl_chooseRuntimeImpl( this, pBind ) ),
         aTextWindow     ( *pRuntimeWindow ),
         pInputHdl       ( nullptr ),
+        mpViewShell     ( nullptr ),
         mnMaxY          (0),
         bIsOkCancelMode ( false ),
         bInResize       ( false )
@@ -181,10 +182,15 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     }
     OSL_ENSURE( pViewSh, "no view shell for input window" );
 
+    mpViewShell = pViewSh;
+
     // Position window, 3 buttons, input window
-    InsertWindow    (1, aWndPos.get(), ToolBoxItemBits::NONE, 0);
-    InsertSeparator (1);
-    InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        InsertWindow    (1, aWndPos.get(), ToolBoxItemBits::NONE, 0);
+        InsertSeparator (1);
+        InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
+    }
     InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::DROPDOWNONLY, 3);
     InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
     InsertItem      (SID_INPUT_CANCEL,   Image(StockImage::Yes, RID_BMP_INPUT_CANCEL), ToolBoxItemBits::NONE, 5);
@@ -193,14 +199,20 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 8);
     SetDropdownClickHdl( LINK( this, ScInputWindow, DropdownClickHdl ));
 
-    aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
-    aWndPos   ->SetHelpId       (HID_INSWIN_POS);
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
+        aWndPos   ->SetHelpId       (HID_INSWIN_POS);
+    }
     aTextWindow.SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
     aTextWindow.SetHelpId       (HID_INSWIN_INPUT);
 
-    // No SetHelpText: the helptexts come from the Help
-    SetItemText (SID_INPUT_FUNCTION, ScResId(SCSTR_QHELP_BTNCALC));
-    SetHelpId   (SID_INPUT_FUNCTION, HID_INSWIN_CALC);
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // No SetHelpText: the helptexts come from the Help
+        SetItemText (SID_INPUT_FUNCTION, ScResId(SCSTR_QHELP_BTNCALC));
+        SetHelpId   (SID_INPUT_FUNCTION, HID_INSWIN_CALC);
+    }
 
     SetItemText (SID_INPUT_SUM, ScResId( SCSTR_QHELP_BTNSUM ) );
     SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
@@ -222,7 +234,8 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
 
     SetHelpId( HID_SC_INPUTWIN ); // For the whole input row
 
-    aWndPos   ->Show();
+    if (!comphelper::LibreOfficeKit::isActive())
+        aWndPos   ->Show();
     aTextWindow.Show();
 
     pInputHdl = SC_MOD()->GetInputHdl( pViewSh, false ); // use own handler even if ref-handler is set
@@ -282,6 +295,15 @@ void ScInputWindow::dispose()
                 pHdl->StopInputWinEngine( false );  // reset pTopView pointer
             }
             pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
+        }
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            ReleaseLOKNotifier();
         }
     }
 
@@ -394,6 +416,9 @@ void ScInputWindow::Select()
 
 void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
+    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
     ToolBox::Paint(rRenderContext, rRect);
 
     // draw a line at the bottom to distinguish that from the grid
@@ -402,6 +427,23 @@ void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     Size aSize = GetSizePixel();
     rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
                             Point(aSize.Width() - 1, aSize.Height() - 1));
+}
+
+void ScInputWindow::PixelInvalidate(const tools::Rectangle* pRectangle)
+{
+    if (comphelper::LibreOfficeKit::isDialogPainting() || !comphelper::LibreOfficeKit::isActive())
+        return;
+
+    if (pRectangle)
+    {
+        const Point aPos(pRectangle->getX() - GetOutOffXPixel(), pRectangle->getY() - GetOutOffYPixel());
+        const tools::Rectangle aRect(aPos, pRectangle->GetSize());
+        Window::PixelInvalidate(&aRect);
+    }
+    else
+    {
+        Window::PixelInvalidate(nullptr);
+    }
 }
 
 void ScInputWindow::Resize()
@@ -426,7 +468,35 @@ void ScInputWindow::Resize()
         }
     }
     SetSizePixel(aSize);
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    {
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back("size", GetSizePixel().toString());
+        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
+    }
+
     Invalidate();
+}
+
+void ScInputWindow::NotifyLOKClient()
+{
+    if (comphelper::LibreOfficeKit::isActive() && !GetLOKNotifier() && mpViewShell)
+        SetLOKNotifier(mpViewShell);
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    {
+        Size aSize = GetSizePixel();
+        if (aSize.Width() != 0 && aSize.Height() != 0)
+        {
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back("type", "calc-input-win");
+            aItems.emplace_back(std::make_pair("position", Point(0, 0).toString()));
+            aItems.emplace_back(std::make_pair("size", aSize.toString()));
+            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+        }
+
+    }
 }
 
 void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
@@ -1165,6 +1235,10 @@ IMPL_LINK_NOARG(ScTextWndGroup, Impl_ScrollHdl, ScrollBar*, void)
 
 void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
+    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
+    tools::Rectangle aRect = comphelper::LibreOfficeKit::isActive() ? this->PixelToLogic(rRect) : rRect;
     EditView* pView = GetEditView();
     if (pView)
     {
@@ -1173,7 +1247,7 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
             pView->Invalidate();
             mbInvalidate = false;
         }
-        mpEditView->Paint(rRect, &rRenderContext);
+        mpEditView->Paint(aRect, &rRenderContext);
     }
 }
 
@@ -1556,6 +1630,15 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
                     pHdl->CancelHandler();
                     rViewData.GetView()->ShowCursor(); // Missing for KillEditView, due to being inactive
                 }
+            }
+        }
+        else if ( nCommand == CommandEventId::EndExtTextInput )
+        {
+            if (bFormulaMode)
+            {
+                ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+                if (pHdl)
+                    pHdl->InputCommand(rCEvt);
             }
         }
         else if ( nCommand == CommandEventId::CursorPos )

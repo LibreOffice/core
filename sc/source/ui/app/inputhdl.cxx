@@ -772,6 +772,12 @@ ScInputHandler::ScInputHandler()
     pDelayTimer.reset( new Timer( "ScInputHandlerDelay timer" ) );
     pDelayTimer->SetTimeout( 500 ); // 500 ms delay
     pDelayTimer->SetInvokeHandler( LINK( this, ScInputHandler, DelayTimer ) );
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScInputHandler::bOptLoaded = true;            // Evaluate App options
+        ScInputHandler::bAutoComplete = true;         // Is set in KeyInput
+    }
 }
 
 ScInputHandler::~ScInputHandler()
@@ -3693,7 +3699,7 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
             {
                 if (pTableView)
                     pTableView->Command( rCEvt );
-                if (pTopView)
+                if (pTopView && !comphelper::LibreOfficeKit::isActive())
                     pTopView->Command( rCEvt );
 
                 if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
