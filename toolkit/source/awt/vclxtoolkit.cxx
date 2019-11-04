@@ -90,6 +90,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/floatwin.hxx>
+#include <vcl/prgsbar.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/longcurr.hxx>
 #include <vcl/lstbox.hxx>
@@ -1795,6 +1796,11 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 {
                     pNewWindow = VclPtr<FixedHyperlink>::Create( pParent, nWinBits );
                     *ppNewComp = new VCLXFixedHyperlink;
+                }
+                else if (aServiceName == "ProgressBar")
+                {
+                    pNewWindow = VclPtr<ProgressBar>::Create( pParent, nWinBits );
+                    *ppNewComp = new VCLXProgressBar;
                 }
             break;
             default:

@@ -24,7 +24,6 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <com/sun/star/awt/XProgressBar.hpp>
 #include <com/sun/star/awt/XTextArea.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
@@ -283,47 +282,6 @@ public:
     sal_Int16 SAL_CALL getDecimalDigits(  ) override;
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
     sal_Bool SAL_CALL isStrictFormat(  ) override;
-
-    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
-};
-
-
-//  class VCLXProgressBar
-
-class VCLXProgressBar final : public css::awt::XProgressBar,
-                        public VCLXWindow
-{
-private:
-    sal_Int32   m_nValue;
-    sal_Int32   m_nValueMin;
-    sal_Int32   m_nValueMax;
-
-    void            ImplUpdateValue();
-
-public:
-                    VCLXProgressBar();
-                    virtual ~VCLXProgressBar() override;
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                           SAL_CALL acquire() throw() override  { VCLXWindow::acquire(); }
-    void                           SAL_CALL release() throw() override  { VCLXWindow::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
-
-    // css::awt::XProgressBar
-    void SAL_CALL setForegroundColor( sal_Int32 nColor ) override;
-    void SAL_CALL setBackgroundColor( sal_Int32 nColor ) override;
-    void SAL_CALL setValue( sal_Int32 nValue ) override;
-    void SAL_CALL setRange( sal_Int32 nMin, sal_Int32 nMax ) override;
-    sal_Int32 SAL_CALL getValue() override;
-
-    // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
