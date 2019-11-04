@@ -1,7 +1,7 @@
 {
     "id": "org.libreoffice.LibreOffice",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "18.08",
+    "runtime-version": "19.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.openjdk11"
@@ -33,13 +33,17 @@
             ]
         },
         {
-            "name": "gperf",
-            "cleanup": [ "*" ],
+            "name": "krb5",
+            "subdir": "src",
+            "config-opts": [
+                "--disable-static",
+                "--disable-rpath"
+            ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "http://ftp.gnu.org/pub/gnu/gperf/gperf-3.1.tar.gz",
-                    "sha256": "588546b945bba4b70b6a3a616e80b4ab466e3f33024a352fc2198112cdbb3ae2"
+                    "url": "https://kerberos.org/dist/krb5/1.16/krb5-1.16.2.tar.gz",
+                    "sha256": "9f721e1fe593c219174740c71de514c7228a97d23eb7be7597b2ae14e487f027"
                 }
             ]
         },
