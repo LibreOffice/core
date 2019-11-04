@@ -91,6 +91,10 @@ public:
 
     static void SetFillColor(OutputDevice* pRenderContext, long nStartRed, long nStartGreen,
                              long nStartBlue);
+    static void DrawGradientBorder(OutputDevice* pRenderContext, Gradient const& rGradient,
+                                   tools::PolyPolygon const* pClixPolyPoly,
+                                   tools::Rectangle aBorderRect, tools::Rectangle aMirrorRect,
+                                   Point const& rCenter, double nAngle, double fBorderWidth);
 
     static long CalculateInterpolatedColor(long nStartColor, long nEndColor, double fAlpha);
 

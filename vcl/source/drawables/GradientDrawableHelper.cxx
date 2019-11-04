@@ -285,16 +285,17 @@ GradientDrawableHelper::GetColorIntensities(Gradient const& rGradient)
 }
 
 tools::Rectangle GradientDrawableHelper::SetGradientStepTop(tools::Rectangle const& rBorderRect,
-                                     double fBorderWidth, tools::Rectangle aStepRect)
+                                                            double fBorderWidth,
+                                                            tools::Rectangle aStepRect)
 {
     aStepRect.SetTop(static_cast<long>(rBorderRect.Top() + fBorderWidth));
 
     return aStepRect;
 }
 
-
-tools::Rectangle GradientDrawableHelper::SetGradientStepMirrorBottom(Gradient const& rGradient, tools::Rectangle const& rBorderRect,
-                                     double fBorderWidth, tools::Rectangle aMirrorRect)
+tools::Rectangle GradientDrawableHelper::SetGradientStepMirrorBottom(
+    Gradient const& rGradient, tools::Rectangle const& rBorderRect, double fBorderWidth,
+    tools::Rectangle aMirrorRect)
 {
     if (rGradient.GetStyle() != GradientStyle::Linear)
         aMirrorRect.SetBottom(static_cast<long>(rBorderRect.Bottom() - fBorderWidth));
@@ -334,7 +335,8 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
                                  fBorderWidth);
 
         aStepRect = SetGradientStepTop(aBorderRect, fBorderWidth, aStepRect);
-        aMirrorRect = SetGradientStepMirrorBottom(rGradient, aBorderRect, fBorderWidth, aMirrorRect);
+        aMirrorRect
+            = SetGradientStepMirrorBottom(rGradient, aBorderRect, fBorderWidth, aMirrorRect);
     }
 
     long nSteps = GetLinearGradientSteps(
@@ -409,6 +411,35 @@ void GradientDrawableHelper::SetFillColor(OutputDevice* pRenderContext, long nSt
     pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
 }
 
+void GradientDrawableHelper::DrawGradientBorder(OutputDevice* pRenderContext,
+                                                Gradient const& rGradient,
+                                                tools::PolyPolygon const* pClixPolyPoly,
+                                                tools::Rectangle aBorderRect,
+                                                tools::Rectangle aMirrorRect, Point const& rCenter,
+                                                double nAngle, double fBorderWidth)
+{
+    aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorderWidth));
+    tools::Polygon aPoly(RotatePolygon(aBorderRect, rCenter, nAngle));
+
+    if (pClixPolyPoly)
+        pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+    else
+        pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
+
+    if (rGradient.GetStyle() != GradientStyle::Linear)
+    {
+        aBorderRect = aMirrorRect;
+        aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorderWidth));
+        aMirrorRect.SetBottom(aBorderRect.Top());
+        tools::Polygon aNonLinearPoly(RotatePolygon(aBorderRect, rCenter, nAngle));
+
+        if (pClixPolyPoly)
+            pRenderContext->Draw(vcl::PolygonDrawable(aNonLinearPoly, *pClixPolyPoly));
+        else
+            pRenderContext->Draw(vcl::PolygonDrawable(aNonLinearPoly));
+    }
+}
+
 void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
                                                 tools::Rectangle const& rRect,
                                                 Gradient const& rGradient,
@@ -434,27 +465,12 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     {
         SetFillColor(pRenderContext, nStartRed, nStartGreen, nStartBlue);
 
-        aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorderWidth));
-        aStepRect.SetTop(aBorderRect.Bottom());
-        tools::Polygon aPoly(RotatePolygon(aBorderRect, aCenter, nAngle));
+        DrawGradientBorder(pRenderContext, rGradient, pClixPolyPoly, aBorderRect, aMirrorRect,
+                           aCenter, nAngle, fBorderWidth);
 
-        if (pClixPolyPoly)
-            pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
-        else
-            pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
-
-        if (rGradient.GetStyle() != GradientStyle::Linear)
-        {
-            aBorderRect = aMirrorRect;
-            aBorderRect.SetTop(static_cast<long>(aBorderRect.Bottom() - fBorderWidth));
-            aMirrorRect.SetBottom(aBorderRect.Top());
-            tools::Polygon aNonLinearPoly(RotatePolygon(aBorderRect, aCenter, nAngle));
-
-            if (pClixPolyPoly)
-                pRenderContext->Draw(vcl::PolygonDrawable(aNonLinearPoly, *pClixPolyPoly));
-            else
-                pRenderContext->Draw(vcl::PolygonDrawable(aNonLinearPoly));
-        }
+        aStepRect = SetGradientStepTop(aBorderRect, fBorderWidth, aStepRect);
+        aMirrorRect
+            = SetGradientStepMirrorBottom(rGradient, aBorderRect, fBorderWidth, aMirrorRect);
     }
 
     long nSteps = GetLinearGradientSteps(
