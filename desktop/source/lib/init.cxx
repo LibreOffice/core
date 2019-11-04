@@ -260,7 +260,21 @@ static OUString getUString(const char* pString)
     return OStringToOUString(sString, RTL_TEXTENCODING_UTF8);
 }
 
-/// Try to convert a relative URL to an absolute one, unless it already looks like an URL.
+// Tolerate embedded \0s etc.
+static char *convertOString(const OString &rStr)
+{
+    char* pMemory = static_cast<char*>(malloc(rStr.getLength() + 1));
+    assert(pMemory); // don't tolerate failed allocations.
+    memcpy(pMemory, rStr.getStr(), rStr.getLength() + 1);
+    return pMemory;
+}
+
+static char *convertOUString(const OUString &aStr)
+{
+    return convertOString(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8));
+}
+
+/// Try to convert a relative URL to an absolute one, unless it already looks like a URL.
 static OUString getAbsoluteURL(const char* pURL)
 {
     OUString aURL(getUString(pURL));
@@ -2547,12 +2561,7 @@ static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
         return nullptr;
     }
 
-    OUString aPartInfo = pDoc->getPartInfo( nPart );
-    OString aString = OUStringToOString(aPartInfo, RTL_TEXTENCODING_UTF8);
-
-    char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
-    strcpy(pMemory, aString.getStr());
-    return pMemory;
+    return convertOUString(pDoc->getPartInfo(nPart));
 }
 
 static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect)
@@ -2601,12 +2610,7 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
         return nullptr;
     }
 
-    OUString sRectangles = pDoc->getPartPageRectangles();
-    OString aString = OUStringToOString(sRectangles, RTL_TEXTENCODING_UTF8);
-    char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
-    strcpy(pMemory, aString.getStr());
-    return pMemory;
-
+    return convertOUString(pDoc->getPartPageRectangles());
 }
 
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
@@ -2623,12 +2627,7 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
         return nullptr;
     }
 
-    OUString sName = pDoc->getPartName( nPart );
-    OString aString = OUStringToOString(sName, RTL_TEXTENCODING_UTF8);
-    char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
-    strcpy(pMemory, aString.getStr());
-    return pMemory;
-
+    return convertOUString(pDoc->getPartName(nPart));
 }
 
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
@@ -2645,12 +2644,7 @@ static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
         return nullptr;
     }
 
-    OUString sHash = pDoc->getPartHash(nPart);
-    OString aString = OUStringToOString(sHash, RTL_TEXTENCODING_UTF8);
-    char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
-    strcpy(pMemory, aString.getStr());
-    return pMemory;
-
+    return convertOUString(pDoc->getPartHash(nPart));
 }
 
 static void doc_setPartMode(LibreOfficeKitDocument* pThis,
@@ -3754,14 +3748,6 @@ static bool getFromTransferrable(
     return true;
 }
 
-// Tolerate embedded \0s etc.
-static char *convertOString(const OString &rStr)
-{
-    char* pMemory = static_cast<char*>(malloc(rStr.getLength() + 1));
-    memcpy(pMemory, rStr.getStr(), rStr.getLength() + 1);
-    return pMemory;
-}
-
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
 {
     comphelper::ProfileZone aZone("doc_getTextSelection");
@@ -3912,7 +3898,7 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
         else
         {
             (*pOutSizes)[i] = aRet.getLength();
-            (*pOutStreams)[i] =  convertOString(aRet);
+            (*pOutStreams)[i] = convertOString(aRet);
         }
     }
 
@@ -4483,12 +4469,8 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         OUString aHeaders = pDoc->getRowColumnHeaders(aRectangle);
         if (aHeaders.isEmpty())
             return nullptr;
-
-        OString aString = OUStringToOString(aHeaders, RTL_TEXTENCODING_UTF8);
-
-        char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
-        strcpy(pMemory, aString.getStr());
-        return pMemory;
+        else
+            return convertOUString(aHeaders);
     }
     else if (aCommand.startsWith(aCellCursor))
     {
@@ -4535,11 +4517,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
             while (nParamIndex >= 0);
         }
 
-        OString aString = pDoc->getCellCursor(nOutputWidth, nOutputHeight, nTileWidth, nTileHeight);
-
-        char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
-        strcpy(pMemory, aString.getStr());
-        return pMemory;
+        return convertOString(pDoc->getCellCursor(nOutputWidth, nOutputHeight, nTileWidth, nTileHeight));
     }
     else if (aCommand.startsWith(aFontSubset))
     {
@@ -5106,10 +5084,7 @@ static char* lo_getError (LibreOfficeKit *pThis)
     SolarMutexGuard aGuard;
 
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
-    OString aString = OUStringToOString(pLib->maLastExceptionMsg, RTL_TEXTENCODING_UTF8);
-    char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
-    strcpy(pMemory, aString.getStr());
-    return pMemory;
+    return convertOUString(pLib->maLastExceptionMsg);
 }
 
 static void lo_freeError(char* pFree)
@@ -5201,11 +5176,7 @@ static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
         "\"BuildId\": \"%BUILDID\" "
         "}"
     );
-    const OString sVersionStr = OUStringToOString(ReplaceStringHookProc(sVersionStrTemplate), RTL_TEXTENCODING_UTF8);
-
-    char* pVersion = static_cast<char*>(malloc(sVersionStr.getLength() + 1));
-    strcpy(pVersion, sVersionStr.getStr());
-    return pVersion;
+    return convertOUString(ReplaceStringHookProc(sVersionStrTemplate));
 }
 
 static void force_c_locale()
