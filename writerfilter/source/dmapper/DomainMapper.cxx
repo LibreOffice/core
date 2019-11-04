@@ -3265,8 +3265,11 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 // This skips the one from the footnote area and just uses the reference one.
                 if (!m_pImpl->IsInFootOrEndnote())
                 {
-                    auto xFootnote = m_pImpl->GetFootnoteContext()->GetFootnote();
-                    xFootnote->setLabel(xFootnote->getLabel() + sText);
+                    if (PropertyMapPtr pFootnoteContext = m_pImpl->GetFootnoteContext())
+                    {
+                        auto xFootnote = pFootnoteContext->GetFootnote();
+                        xFootnote->setLabel(xFootnote->getLabel() + sText);
+                    }
                 }
                 return;
             }
