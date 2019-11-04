@@ -23,6 +23,7 @@
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
 namespace com { namespace sun { namespace star { namespace inspection { namespace PropertyLineElement
 {
@@ -40,7 +41,7 @@ namespace pcr
     class IButtonClickListener
     {
     public:
-        virtual void    buttonClicked( OBrowserLine* _pLine, bool _bPrimary ) = 0;
+        virtual void    buttonClicked( OBrowserLine* pLine, bool bPrimary ) = 0;
 
     protected:
         ~IButtonClickListener() {}
@@ -51,77 +52,76 @@ namespace pcr
     {
     private:
         OUString                m_sEntryName;
-        VclPtr<FixedText>       m_aFtTitle;
-        Size                    m_aOutputSize;
-        Point                   m_aLinePos;
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Container> m_xContainer;
+        std::unique_ptr<weld::Label> m_xFtTitle;
+        std::unique_ptr<weld::Button> m_xBrowseButton;
+        std::unique_ptr<weld::Button> m_xAdditionalBrowseButton;
         css::uno::Reference< css::inspection::XPropertyControl >
                                 m_xControl;
-        VclPtr<vcl::Window>     m_pControlWindow;
-        VclPtr<PushButton>      m_pBrowseButton;
-        VclPtr<PushButton>      m_pAdditionalBrowseButton;
+        weld::Container*        m_pInitialControlParent;
+        weld::Container*        m_pParent;
+        weld::Widget*           m_pControlWindow;
+        weld::Button*           m_pBrowseButton;
+        weld::Button*           m_pAdditionalBrowseButton;
         IButtonClickListener*   m_pClickListener;
-        VclPtr<vcl::Window>     m_pTheParent;
         sal_uInt16              m_nNameWidth;
         sal_uInt16              m_nEnableFlags;
         bool                    m_bIndentTitle;
         bool                    m_bReadOnly;
 
     public:
-                            OBrowserLine( const OUString& _rEntryName, vcl::Window* pParent);
-                            ~OBrowserLine();
+        OBrowserLine(const OUString& rEntryName, weld::Container* pParent, weld::SizeGroup* pLabelGroup,
+                     weld::Container* pInitialControlParent, bool bInterimBuilder);
+        ~OBrowserLine();
 
-        void setControl( const css::uno::Reference< css::inspection::XPropertyControl >& _rxControl );
+        void setControl( const css::uno::Reference< css::inspection::XPropertyControl >& rxControl );
         const css::uno::Reference< css::inspection::XPropertyControl >& getControl() const
         {
             return m_xControl;
         }
-        vcl::Window* getControlWindow() const
+        weld::Widget* getControlWindow() const
         {
             return m_pControlWindow;
         }
 
         const OUString&     GetEntryName() const { return m_sEntryName; }
 
-        void                SetComponentHelpIds(const OString& _rHelpId);
+        void                SetComponentHelpIds(const OString& rHelpId);
 
         void                SetTitle(const OUString& rString );
         void                FullFillTitleString();
         OUString            GetTitle() const;
         void                SetTitleWidth(sal_uInt16);
 
-        void                SetPosSizePixel(Point aPos,Size aSize);
+        int                 GetRowHeight() const { return m_xContainer->get_preferred_size().Height(); }
         void                Show(bool bFlag=true);
         void                Hide();
         bool                IsVisible() const;
 
-        vcl::Window*        GetRefWindow();
-        void                SetTabOrder(vcl::Window* pRefWindow, ZOrderFlags nFlags );
-
         bool                GrabFocus();
-        void                ShowBrowseButton( const OUString& _rImageURL, bool _bPrimary );
-        void                ShowBrowseButton( const Image& _rImage, bool _bPrimary );
-        void                ShowBrowseButton( bool _bPrimary );
-        void                HideBrowseButton( bool _bPrimary );
+        void                ShowBrowseButton( const OUString& rImageURL, bool bPrimary );
+        void                ShowBrowseButton( const css::uno::Reference<css::graphic::XGraphic>& rGraphic, bool bPrimary );
+        void                ShowBrowseButton( bool bPrimary );
+        void                HideBrowseButton( bool bPrimary );
 
-        void                EnablePropertyControls( sal_Int16 _nControls, bool _bEnable );
-        void                EnablePropertyLine( bool _bEnable );
+        void                EnablePropertyControls( sal_Int16 nControls, bool bEnable );
+        void                EnablePropertyLine( bool bEnable );
 
-        void                SetReadOnly( bool _bReadOnly );
+        void                SetReadOnly( bool bReadOnly );
 
-        void                SetClickListener( IButtonClickListener* _pListener );
+        void                SetClickListener( IButtonClickListener* pListener );
 
-        void                IndentTitle( bool _bIndent );
+        void                IndentTitle( bool bIndent );
 
     private:
-        DECL_LINK( OnButtonClicked, Button*, void );
-        DECL_LINK( OnButtonFocus, Control&, void );
+        DECL_LINK( OnButtonClicked, weld::Button&, void );
+        DECL_LINK( OnButtonFocus, weld::Widget&, void );
 
-        void    implHideBrowseButton(bool _bPrimary);
+        void    implHideBrowseButton(bool bPrimary);
         void    implUpdateEnabledDisabled();
 
-        void    impl_layoutComponents();
-
-        PushButton& impl_ensureButton( bool _bPrimary );
+        weld::Button& impl_ensureButton(bool bPrimary);
     };
 
 

@@ -28,13 +28,9 @@
 
 class SvNumberFormatsSupplierObj;
 
-
 namespace pcr
 {
-
-
     //= NumberFormatSampleField
-
     class NumberFormatSampleField : public FormattedField
     {
     public:
@@ -53,14 +49,12 @@ namespace pcr
         CommonBehaviourControlHelper* m_pHelper;
     };
 
-
     //= OFormatSampleControl
-
     typedef CommonBehaviourControl< css::inspection::XPropertyControl, NumberFormatSampleField > OFormatSampleControl_Base;
     class OFormatSampleControl : public OFormatSampleControl_Base
     {
     public:
-        explicit OFormatSampleControl( vcl::Window* pParent );
+        explicit OFormatSampleControl(weld::Container* pParent);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -84,23 +78,19 @@ namespace pcr
         static double getPreviewValue( const SvNumberformat& i_rEntry );
     };
 
-
     //= FormatDescription
-
     struct FormatDescription
     {
         SvNumberFormatsSupplierObj*     pSupplier;
         sal_Int32                       nKey;
     };
 
-
     //= OFormattedNumericControl
-
     typedef CommonBehaviourControl< css::inspection::XPropertyControl, FormattedField > OFormattedNumericControl_Base;
     class OFormattedNumericControl : public OFormattedNumericControl_Base
     {
     public:
-        OFormattedNumericControl( vcl::Window* pParent, WinBits nWinStyle);
+        OFormattedNumericControl( weld::Container* pParent, WinBits nWinStyle);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -119,14 +109,12 @@ namespace pcr
         virtual ~OFormattedNumericControl() override;
     };
 
-
     //= OFileUrlControl
-
     typedef CommonBehaviourControl< css::inspection::XPropertyControl, ::svt::FileURLBox > OFileUrlControl_Base;
     class OFileUrlControl : public OFileUrlControl_Base
     {
     public:
-        explicit OFileUrlControl( vcl::Window* pParent );
+        explicit OFileUrlControl( weld::Container* pParent );
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -137,13 +125,11 @@ namespace pcr
         virtual ~OFileUrlControl() override;
     };
 
-
     //= OTimeDurationControl
-
     class OTimeDurationControl : public ONumericControl
     {
     public:
-        explicit OTimeDurationControl( vcl::Window* pParent );
+        explicit OTimeDurationControl( weld::Container* pParent );
         virtual ~OTimeDurationControl() override;
 
         // XPropertyControl
@@ -153,9 +139,7 @@ namespace pcr
         DECL_LINK( OnCustomConvert, MetricFormatter&, void );
     };
 
-
 } // namespace pcr
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_USERCONTROL_HXX
 
