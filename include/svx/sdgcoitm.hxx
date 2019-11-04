@@ -28,7 +28,7 @@
 // SdrGrafRedItem -
 
 
-class SVX_DLLPUBLIC SdrGrafRedItem : public SdrSignedPercentItem
+class SdrGrafRedItem : public SdrSignedPercentItem
 {
 public:
 
@@ -42,7 +42,7 @@ public:
 // SdrGrafGreenItem -
 
 
-class SVX_DLLPUBLIC SdrGrafGreenItem : public SdrSignedPercentItem
+class SdrGrafGreenItem : public SdrSignedPercentItem
 {
 public:
 
@@ -56,7 +56,7 @@ public:
 // SdrGrafBlueItem -
 
 
-class SVX_DLLPUBLIC SdrGrafBlueItem : public SdrSignedPercentItem
+class SdrGrafBlueItem : public SdrSignedPercentItem
 {
 public:
 

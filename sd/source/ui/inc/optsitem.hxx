@@ -34,7 +34,7 @@ class FrameView;
 
 class SdOptionsGeneric;
 
-class SD_DLLPUBLIC SdOptionsItem : public ::utl::ConfigItem
+class SdOptionsItem : public ::utl::ConfigItem
 {
 
 private:
@@ -105,7 +105,7 @@ public:
     static bool             isMetricSystem();
 };
 
-class SD_DLLPUBLIC SdOptionsLayout : public SdOptionsGeneric
+class SdOptionsLayout : public SdOptionsGeneric
 {
 private:
 
@@ -162,7 +162,7 @@ private:
     SdOptionsLayout maOptionsLayout;
 };
 
-class SD_DLLPUBLIC SdOptionsContents : public SdOptionsGeneric
+class SdOptionsContents : public SdOptionsGeneric
 {
 private:
 protected:
@@ -178,7 +178,7 @@ public:
     bool    operator==( const SdOptionsContents& rOpt ) const;
 };
 
-class SD_DLLPUBLIC SdOptionsMisc : public SdOptionsGeneric
+class SdOptionsMisc : public SdOptionsGeneric
 {
 private:
 
@@ -328,7 +328,7 @@ private:
     SdOptionsMisc           maOptionsMisc;
 };
 
-class SD_DLLPUBLIC SdOptionsSnap : public SdOptionsGeneric
+class SdOptionsSnap : public SdOptionsGeneric
 {
 private:
 
@@ -463,7 +463,7 @@ public:
     void                    SetOptions( SdOptions* pOpts ) const;
 };
 
-class SD_DLLPUBLIC SdOptionsPrint : public SdOptionsGeneric
+class SdOptionsPrint : public SdOptionsGeneric
 {
 private:
 

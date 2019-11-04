@@ -60,7 +60,7 @@ struct SbClassData
 
 // #115824: Factory class to create class objects (type command)
 // Implementation: sb.cxx
-class BASIC_DLLPUBLIC SbClassFactory : public SbxFactory
+class SbClassFactory : public SbxFactory
 {
     SbxObjectRef    xClassModules;
 

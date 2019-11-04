@@ -163,7 +163,7 @@ class SalI18N_InputMethod;
 
 typedef int(*YieldFunc)(int fd, void* data);
 
-class VCLPLUG_GEN_PUBLIC SalXLib
+class SalXLib
 {
 protected:
     timeval         m_aTimeout;
@@ -396,7 +396,7 @@ public:
 inline  Display *SalColormap::GetXDisplay() const
 { return m_pDisplay->GetDisplay(); }
 
-class VCLPLUG_GEN_PUBLIC SalX11Display : public SalDisplay
+class SalX11Display : public SalDisplay
 {
 public:
              SalX11Display( Display* pDisp );

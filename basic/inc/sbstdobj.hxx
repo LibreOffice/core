@@ -26,7 +26,7 @@
 #include <basic/basicdllapi.h>
 
 // class SbStdFactory
-class BASIC_DLLPUBLIC SbStdFactory : public SbxFactory
+class SbStdFactory : public SbxFactory
 {
 public:
     SbStdFactory();
@@ -35,7 +35,7 @@ public:
 };
 
 // class SbStdPicture
-class BASIC_DLLPUBLIC SbStdPicture final : public SbxObject
+class SbStdPicture final : public SbxObject
 {
     Graphic     aGraphic;
 
@@ -55,7 +55,7 @@ public:
 };
 
 // class SbStdFont
-class BASIC_DLLPUBLIC SbStdFont final : public SbxObject
+class SbStdFont final : public SbxObject
 {
     bool    bBold;
     bool    bItalic;
@@ -92,7 +92,7 @@ public:
 };
 
 // class SbStdClipboard
-class BASIC_DLLPUBLIC SbStdClipboard final : public SbxObject
+class SbStdClipboard final : public SbxObject
 {
     virtual ~SbStdClipboard() override;
     virtual void   Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

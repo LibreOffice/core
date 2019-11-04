@@ -28,7 +28,7 @@
 // SdrGrafTransparenceItem -
 
 
-class SVX_DLLPUBLIC SdrGrafTransparenceItem : public SdrPercentItem
+class SdrGrafTransparenceItem : public SdrPercentItem
 {
 public:
 
