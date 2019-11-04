@@ -34,6 +34,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <gtk/gtk.h>
 
 namespace vcl
@@ -250,30 +252,28 @@ private:
     mutable std::shared_ptr<vcl::unx::GtkPrintWrapper> m_xPrintWrapper;
 };
 
-typedef cppu::WeakComponentImplHelper<css::awt::XWindow> SalGtkXWindow_Base;
-
-class SalGtkXWindow : public SalGtkXWindow_Base
+class SalGtkXWindow : public weld::TransportAsXWindow
 {
 private:
-    osl::Mutex m_aHelperMtx;
     weld::Window* m_pWeldWidget;
     GtkWidget* m_pWidget;
 public:
 
     SalGtkXWindow(weld::Window* pWeldWidget, GtkWidget* pWidget)
-        : SalGtkXWindow_Base(m_aHelperMtx)
+        : TransportAsXWindow(pWeldWidget)
         , m_pWeldWidget(pWeldWidget)
         , m_pWidget(pWidget)
     {
     }
 
-    void clear()
+    virtual void clear() override
     {
         m_pWeldWidget = nullptr;
         m_pWidget = nullptr;
+        TransportAsXWindow::clear();
     }
 
-    GtkWidget* getWidget() const
+    GtkWidget* getGtkWidget() const
     {
         return m_pWidget;
     }
@@ -281,91 +281,6 @@ public:
     weld::Window* getFrameWeld() const
     {
         return m_pWeldWidget;
-    }
-
-    // css::awt::XWindow
-    void SAL_CALL setPosSize(sal_Int32, sal_Int32, sal_Int32, sal_Int32, sal_Int16) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    css::awt::Rectangle SAL_CALL getPosSize() override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL setVisible(sal_Bool) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL setEnable(sal_Bool) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL setFocus() override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL addWindowListener(const css::uno::Reference< css::awt::XWindowListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-    void SAL_CALL removeWindowListener(const css::uno::Reference< css::awt::XWindowListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL addFocusListener(const css::uno::Reference< css::awt::XFocusListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL removeFocusListener(const css::uno::Reference< css::awt::XFocusListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL addKeyListener(const css::uno::Reference< css::awt::XKeyListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL removeKeyListener(const css::uno::Reference< css::awt::XKeyListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL addMouseListener(const css::uno::Reference< css::awt::XMouseListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL removeMouseListener(const css::uno::Reference< css::awt::XMouseListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL addMouseMotionListener(const css::uno::Reference< css::awt::XMouseMotionListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL removeMouseMotionListener(const css::uno::Reference< css::awt::XMouseMotionListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL addPaintListener(const css::uno::Reference< css::awt::XPaintListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
-    }
-
-    void SAL_CALL removePaintListener(const css::uno::Reference< css::awt::XPaintListener >& ) override
-    {
-        throw css::uno::RuntimeException("not implemented");
     }
 };
 

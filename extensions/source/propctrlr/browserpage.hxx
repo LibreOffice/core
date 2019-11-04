@@ -20,39 +20,26 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
 
-#include <vcl/tabpage.hxx>
+#include <vcl/builderpage.hxx>
 #include "browserlistbox.hxx"
-
 
 namespace pcr
 {
-
-    class OBrowserPage : public TabPage
+    class OBrowserPage : public BuilderPage
     {
     private:
-        VclPtr<OBrowserListBox>     m_aListBox;
-
-    protected:
-        virtual void Resize() override;
-        virtual void StateChanged(StateChangedType nType) override;
+        weld::Container* m_pParent;
+        std::unique_ptr<OBrowserListBox> m_xListBox;
 
     public:
-        explicit OBrowserPage(vcl::Window* pParent);
-        virtual ~OBrowserPage() override;
-        virtual void dispose() override;
+        explicit OBrowserPage(weld::Container* pParent, weld::Container* pContainer);
+        ~OBrowserPage();
 
-        sal_Int32 getMinimumWidth() const;
-        sal_Int32 getMinimumHeight();
-
-              OBrowserListBox& getListBox() { return *m_aListBox.get(); }
-        const OBrowserListBox& getListBox() const { return *m_aListBox.get(); }
+        OBrowserListBox& getListBox() { return *m_xListBox; }
+        const OBrowserListBox& getListBox() const { return *m_xListBox; }
     };
-
-
 } // namespace pcr
 
-
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

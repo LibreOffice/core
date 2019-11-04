@@ -49,6 +49,7 @@ OutlinerParaObjData::OutlinerParaObjData( const OutlinerParaObjData& r ):
     maParagraphDataVector(r.maParagraphDataVector),
     mbIsEditDoc(r.mbIsEditDoc)
 {
+    fprintf(stderr, "copy\n");
 }
 
 OutlinerParaObjData::~OutlinerParaObjData()

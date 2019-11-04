@@ -44,8 +44,9 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/property.hxx>
-#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/component_context.hxx>
@@ -91,11 +92,11 @@ namespace pcr
             :m_xContext(_rxContext)
             ,m_aDisposeListeners( m_aMutex )
             ,m_aControlObservers( m_aMutex )
-            ,m_pView(nullptr)
             ,m_bContainerFocusListening( false )
             ,m_bSuspendingPropertyHandlers( false )
             ,m_bConstructed( false )
             ,m_bBindingIntrospectee( false )
+            ,m_bInterimBuilder( false )
     {
     }
 
@@ -358,20 +359,26 @@ namespace pcr
         // Maybe it is intended to only announce the frame to the controller, and the instance doing this
         // announcement is responsible for calling setComponent, too.
         Reference< XWindow > xContainerWindow = m_xFrame->getContainerWindow();
-        VCLXWindow* pContainerWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>(xContainerWindow);
-        VclPtr<vcl::Window> pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : VclPtr<vcl::Window>();
-        if (!pParentWin)
-            throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);
 
-        Construct( pParentWin );
-        try
+        OUString sUIFile("modules/spropctrlr/ui/formproperties.ui");
+        std::unique_ptr<weld::Builder> xBuilder;
+
+        if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xContainerWindow.get()))
         {
-            m_xFrame->setComponent( VCLUnoHelper::GetInterface( m_pView ), this );
+            xBuilder.reset(Application::CreateBuilder(pTunnel->getWidget(), sUIFile));
+            m_bInterimBuilder = false;
         }
-        catch( const Exception& )
+        else
         {
-            OSL_FAIL( "OPropertyBrowserController::attachFrame: caught an exception!" );
+            VCLXWindow* pContainerWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>(xContainerWindow);
+            VclPtr<vcl::Window> pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : VclPtr<vcl::Window>();
+            if (!pParentWin)
+                throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);
+            xBuilder.reset(Application::CreateInterimBuilder(pParentWin, sUIFile));
+            m_bInterimBuilder = true;
         }
+
+        Construct(xContainerWindow, std::move(xBuilder));
 
         startContainerWindowListening();
 
@@ -479,19 +486,16 @@ namespace pcr
         }
     }
 
-
     Reference< XModel > SAL_CALL OPropertyBrowserController::getModel(  )
     {
         // have no model
         return Reference< XModel >();
     }
 
-
     Reference< XFrame > SAL_CALL OPropertyBrowserController::getFrame(  )
     {
         return m_xFrame;
     }
-
 
     void SAL_CALL OPropertyBrowserController::dispose(  )
     {
@@ -506,8 +510,7 @@ namespace pcr
         m_aDisposeListeners.disposeAndClear(aEvt);
         m_aControlObservers.disposeAndClear(aEvt);
 
-        // don't delete explicitly (this is done by the frame we reside in)
-        m_pView = nullptr;
+        m_xPropView.reset();
 
         if ( m_xView.is() )
             m_xView->removeEventListener( static_cast< XPropertyChangeListener* >( this ) );
@@ -517,18 +520,15 @@ namespace pcr
         impl_bindToNewModel_nothrow( nullptr );
     }
 
-
     void SAL_CALL OPropertyBrowserController::addEventListener( const Reference< XEventListener >& _rxListener )
     {
         m_aDisposeListeners.addInterface(_rxListener);
     }
 
-
     void SAL_CALL OPropertyBrowserController::removeEventListener( const Reference< XEventListener >& _rxListener )
     {
         m_aDisposeListeners.removeInterface(_rxListener);
     }
-
 
     OUString SAL_CALL OPropertyBrowserController::getImplementationName(  )
     {
@@ -592,7 +592,7 @@ namespace pcr
         if ( m_xView.is() && ( m_xView == _rSource.Source ) )
         {
             m_xView = nullptr;
-            m_pView = nullptr;
+            m_xPropView.reset();
         }
 
         auto it = std::find_if(m_aInspectedObjects.begin(), m_aInspectedObjects.end(),
@@ -616,7 +616,7 @@ namespace pcr
         OUString sOldSelection = m_sPageSelection;
         m_sPageSelection.clear();
 
-        const sal_uInt16 nCurrentPage = m_pView->getActivaPage();
+        const sal_uInt16 nCurrentPage = m_xPropView->getActivePage();
         if ( sal_uInt16(-1) != nCurrentPage )
         {
             for (auto const& pageId : m_aPageIds)
@@ -645,41 +645,46 @@ namespace pcr
         return nPageId;
     }
 
-
     void OPropertyBrowserController::selectPageFromViewData()
     {
         sal_uInt16 nNewPage = impl_getPageIdForCategory_nothrow( m_sPageSelection );
 
         if ( haveView() && ( nNewPage != sal_uInt16(-1) ) )
-            m_pView->activatePage( nNewPage );
+            m_xPropView->activatePage( nNewPage );
 
         // just in case ...
         updateViewDataFromActivePage();
     }
 
-
-    void OPropertyBrowserController::Construct(vcl::Window* _pParentWin)
+    void OPropertyBrowserController::Construct(const Reference<XWindow>& rContainerWindow, std::unique_ptr<weld::Builder> xBuilder)
     {
         DBG_ASSERT(!haveView(), "OPropertyBrowserController::Construct: already have a view!");
-        DBG_ASSERT(_pParentWin, "OPropertyBrowserController::Construct: invalid parent window!");
+        assert(xBuilder.get() && "OPropertyBrowserController::Construct: invalid parent window!");
 
-        m_pView = VclPtr<OPropertyBrowserView>::Create(_pParentWin);
-        m_pView->setPageActivationHandler(LINK(this, OPropertyBrowserController, OnPageActivation));
+        m_xBuilder = std::move(xBuilder);
+
+        m_xPropView.reset(new OPropertyBrowserView(*m_xBuilder));
+        m_xPropView->setPageActivationHandler(LINK(this, OPropertyBrowserController, OnPageActivation));
 
         // add as dispose listener for our view. The view is disposed by the frame we're plugged into,
-        // and this disposal _deletes_ the view, so it would be deadly if we use our m_pView member
+        // and this disposal _deletes_ the view, so it would be deadly if we use our m_xPropView member
         // after that
-        m_xView = VCLUnoHelper::GetInterface(m_pView);
+        m_xView = rContainerWindow;
         if (m_xView.is())
             m_xView->addEventListener( static_cast< XPropertyChangeListener* >( this ) );
 
         getPropertyBox().SetLineListener(this);
         getPropertyBox().SetControlObserver(this);
         impl_initializeView_nothrow();
-
-        m_pView->Show();
     }
 
+    std::unique_ptr<weld::Builder> OPropertyBrowserController::makeBuilder(const OUString& rUIFile)
+    {
+        // bInterimBuilder for the hosted in sidebar in basic IDE case
+        if (!m_bInterimBuilder)
+            return std::unique_ptr<weld::Builder>(Application::CreateBuilder(getPropertyBox().getControlHoldingParent(), rUIFile));
+        return std::unique_ptr<weld::Builder>(Application::CreateInterimBuilder(getPropertyBox().getControlHoldingParent(), rUIFile));
+    }
 
     void SAL_CALL OPropertyBrowserController::propertyChange( const PropertyChangeEvent& _rEvent )
     {
@@ -724,51 +729,68 @@ namespace pcr
             impl_broadcastPropertyChange_nothrow( _rEvent.PropertyName, aNewValue, _rEvent.OldValue, false );
     }
 
-
-    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, sal_Bool CreateReadOnly )
+    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, sal_Bool bCreateReadOnly )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         Reference< XPropertyControl > xControl;
 
-        // default winbits: a border only
-        WinBits nWinBits = WB_BORDER;
-
         // read-only-ness
-        CreateReadOnly |= impl_isReadOnlyModel_throw() ? 1 : 0;
-        if ( CreateReadOnly )
-            nWinBits |= WB_READONLY;
+        bCreateReadOnly |= impl_isReadOnlyModel_throw() ? 1 : 0;
 
         switch ( ControlType )
         {
-            case PropertyControlType::StringListField:
-                xControl = new OMultilineEditControl( &getPropertyBox(), eStringList, nWinBits | WB_DROPDOWN | WB_TABSTOP );
-                break;
-
             case PropertyControlType::MultiLineTextField:
-                xControl = new OMultilineEditControl( &getPropertyBox(), eMultiLineText, nWinBits | WB_DROPDOWN | WB_TABSTOP );
+            case PropertyControlType::StringListField:
+            {
+                bool bMultiLineTextField = ControlType == PropertyControlType::MultiLineTextField;
+                std::unique_ptr<weld::Builder> xBuilder(makeBuilder("modules/spropctrlr/ui/multiline.ui"));
+                auto pControl = new OMultilineEditControl(xBuilder->weld_container("multiline"), std::move(xBuilder),
+                                                          bMultiLineTextField ? eMultiLineText : eStringList, bCreateReadOnly);
+                pControl->SetModifyHandler();
+                xControl = pControl;
                 break;
+            }
 
             case PropertyControlType::ListBox:
-                xControl = new OListboxControl( &getPropertyBox(), nWinBits | WB_TABSTOP | WB_DROPDOWN);
+            {
+                std::unique_ptr<weld::Builder> xBuilder(makeBuilder("modules/spropctrlr/ui/listbox.ui"));
+                auto pControl = new OListboxControl(xBuilder->weld_combo_box("listbox"), std::move(xBuilder), bCreateReadOnly);
+                pControl->SetModifyHandler();
+                xControl = pControl;
                 break;
+            }
 
             case PropertyControlType::ComboBox:
-                xControl = new OComboboxControl( &getPropertyBox(), nWinBits | WB_TABSTOP | WB_DROPDOWN);
+            {
+                std::unique_ptr<weld::Builder> xBuilder(makeBuilder("modules/spropctrlr/ui/combobox.ui"));
+                auto pControl = new OComboboxControl(xBuilder->weld_combo_box("combobox"), std::move(xBuilder), bCreateReadOnly);
+                pControl->SetModifyHandler();
+                xControl = pControl;
                 break;
+            }
 
+            default: // TODO
             case PropertyControlType::TextField:
-                xControl = new OEditControl( &getPropertyBox(), false, nWinBits | WB_TABSTOP );
-                break;
-
             case PropertyControlType::CharacterField:
-                xControl = new OEditControl( &getPropertyBox(), true, nWinBits | WB_TABSTOP );
+            {
+                bool bCharacterField = ControlType == PropertyControlType::CharacterField;
+                std::unique_ptr<weld::Builder> xBuilder(makeBuilder("modules/spropctrlr/ui/textfield.ui"));
+                auto pControl = new OEditControl(xBuilder->weld_entry("textfield"), std::move(xBuilder), bCharacterField, bCreateReadOnly);
+                pControl->SetModifyHandler();
+                xControl = pControl;
                 break;
+            }
 
             case PropertyControlType::NumericField:
-                xControl = new ONumericControl( &getPropertyBox(), nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
+            {
+                std::unique_ptr<weld::Builder> xBuilder(makeBuilder("modules/spropctrlr/ui/numericfield.ui"));
+                auto pControl = new ONumericControl(xBuilder->weld_metric_spin_button("numericfield", FieldUnit::NONE), std::move(xBuilder), bCreateReadOnly);
+                pControl->SetModifyHandler();
+                xControl = pControl;
                 break;
-
+            }
+#if 0
             case PropertyControlType::DateTimeField:
                 xControl = new ODateTimeControl( &getPropertyBox(), nWinBits | WB_TABSTOP );
                 break;
@@ -791,6 +813,7 @@ namespace pcr
 
             default:
                 throw IllegalArgumentException( OUString(), *this, 1 );
+#endif
         }
 
         return xControl;
@@ -1044,8 +1067,8 @@ namespace pcr
     css::awt::Size SAL_CALL OPropertyBrowserController::getMinimumSize()
     {
         css::awt::Size aSize;
-        if( m_pView )
-            return m_pView->getMinimumSize();
+        if( m_xPropView )
+            return m_xPropView->getMinimumSize();
         else
             return aSize;
     }
@@ -1136,9 +1159,7 @@ namespace pcr
                 // too early, will return later
                 return;
 
-            getPropertyBox().DisableUpdate();
-
-            bool bHaveFocus = getPropertyBox().HasChildPathFocus();
+//TODO            bool bHaveFocus = getPropertyBox().HasChildPathFocus();
 
             // create our tab pages
             impl_buildCategories_throw();
@@ -1207,19 +1228,18 @@ namespace pcr
 
 
             getPropertyBox().Show();
-            getPropertyBox().EnableUpdate();
-            if ( bHaveFocus )
-                getPropertyBox().GrabFocus();
+//TODO            if ( bHaveFocus )
+//TODO                getPropertyBox().GrabFocus();
 
             // activate the first page
             if ( !m_aPageIds.empty() )
             {
                 Sequence< PropertyCategoryDescriptor > aCategories( m_xModel->describeCategories() );
                 if ( aCategories.hasElements() )
-                    m_pView->activatePage( m_aPageIds[ aCategories[0].ProgrammaticName ] );
+                    m_xPropView->activatePage( m_aPageIds[ aCategories[0].ProgrammaticName ] );
                 else
                     // allowed: if we default-created the pages ...
-                    m_pView->activatePage( m_aPageIds.begin()->second );
+                    m_xPropView->activatePage( m_aPageIds.begin()->second );
             }
 
             // activate the previously active page (if possible)
@@ -1332,7 +1352,7 @@ namespace pcr
         }
         catch(const PropertyVetoException& eVetoException)
         {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_pView ? m_pView->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xPropView->getPropertyBox().getWidget(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           eVetoException.Message));
             xInfoBox->run();
@@ -1388,25 +1408,6 @@ namespace pcr
         _rHandlers.resize( 0 );
         if ( _rObjects.empty() )
             return;
-
-        // create a component context for the handlers, containing some information about where
-        // they live
-        Reference< XComponentContext > xHandlerContext( m_xContext );
-
-        // if our own creator did not pass a dialog parent window, use our own view for this
-        Reference< XWindow > xParentWindow;
-        Any any = m_xContext->getValueByName( "DialogParentWindow" );
-        any >>= xParentWindow;
-        if ( !xParentWindow.is() )
-        {
-            ::cppu::ContextEntry_Init aHandlerContextInfo[] =
-            {
-                ::cppu::ContextEntry_Init( "DialogParentWindow", makeAny( VCLUnoHelper::GetInterface( m_pView ) ) )
-            };
-            xHandlerContext = ::cppu::createComponentContext(
-                aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
-                m_xContext );
-        }
 
         Sequence< Any > aHandlerFactories;
         if ( m_xModel.is() )
