@@ -66,6 +66,7 @@
 #include "atklistener.hxx"
 #include "atktextattributes.hxx"
 
+#include <dlfcn.h>
 #include <string.h>
 #include <vector>
 
@@ -881,16 +882,16 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
                 OSL_ASSERT( false );
         }
 
-#if ATK_CHECK_VERSION(2,33,1)
+        static auto func = reinterpret_cast<void(*)(AtkObject*, const gchar*)>(dlsym(nullptr, "atk_object_set_accessible_id"));
+        if (func)
         {
             css::uno::Reference<css::accessibility::XAccessibleContext2> xContext2(xContext, css::uno::UNO_QUERY);
             if( xContext2.is() )
             {
                 OString aId = OUStringToOString( xContext2->getAccessibleId(), RTL_TEXTENCODING_UTF8);
-                atk_object_set_accessible_id(atk_obj, aId.getStr());
+                (*func)(atk_obj, aId.getStr());
             }
         }
-#endif
 
         return ATK_OBJECT( pWrap );
     }
