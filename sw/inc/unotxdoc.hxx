@@ -129,7 +129,7 @@ typedef cppu::WeakImplHelper
 >
 SwXTextDocumentBaseClass;
 
-class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
+class SW_DLLPUBLIC SwXTextDocument final : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel,
     public vcl::ITiledRenderable,
@@ -205,7 +205,6 @@ private:
     using SfxBaseModel::addEventListener;
     using SfxBaseModel::removeEventListener;
 
-protected:
     /** abstract SdrModel provider */
     virtual SdrModel& getSdrModelFromUnoModel() const override;
 
@@ -464,7 +463,7 @@ public:
     SwDocShell*                 GetDocShell() {return pDocShell;}
 };
 
-class SwXLinkTargetSupplier : public cppu::WeakImplHelper
+class SwXLinkTargetSupplier final : public cppu::WeakImplHelper
 <
     css::container::XNameAccess,
     css::lang::XServiceInfo
@@ -500,7 +499,7 @@ public:
     void    Invalidate() {pxDoc = nullptr;}
 };
 
-class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper
+class SwXLinkNameAccessWrapper final : public cppu::WeakImplHelper
 <
     css::beans::XPropertySet,
     css::container::XNameAccess,
@@ -549,7 +548,7 @@ public:
 
 };
 
-class SwXOutlineTarget : public cppu::WeakImplHelper
+class SwXOutlineTarget final : public cppu::WeakImplHelper
 <
     css::beans::XPropertySet,
     css::lang::XServiceInfo

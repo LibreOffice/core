@@ -24,7 +24,7 @@
 
 namespace sw { namespace mark { class IMark; } }
 
-class SwTextAnnotationField : public SwTextField
+class SwTextAnnotationField final : public SwTextField
 {
 public:
     SwTextAnnotationField(

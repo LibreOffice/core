@@ -173,7 +173,7 @@ public:
     }
 };
 
-class SwGrfFormatColls : public SwFormatsModifyBase<SwGrfFormatColl*>
+class SwGrfFormatColls final : public SwFormatsModifyBase<SwGrfFormatColl*>
 {
 public:
     SwGrfFormatColls() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
@@ -276,19 +276,19 @@ public:
 
 
 /// Unsorted, undeleting SwFrameFormat vector
-class SwFrameFormatsV : public SwFormatsModifyBase<SwFrameFormat*>
+class SwFrameFormatsV final : public SwFormatsModifyBase<SwFrameFormat*>
 {
 public:
     SwFrameFormatsV() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
 };
 
-class SwCharFormats : public SwFormatsModifyBase<SwCharFormat*>
+class SwCharFormats final : public SwFormatsModifyBase<SwCharFormat*>
 {
 public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-class SwTextFormatColls : public SwFormatsModifyBase<SwTextFormatColl*>
+class SwTextFormatColls final : public SwFormatsModifyBase<SwTextFormatColl*>
 {
 public:
     SwTextFormatColls() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
@@ -296,7 +296,7 @@ public:
 };
 
 /// Array of Undo-history.
-class SW_DLLPUBLIC SwSectionFormats : public SwFormatsModifyBase<SwSectionFormat*>
+class SW_DLLPUBLIC SwSectionFormats final : public SwFormatsModifyBase<SwSectionFormat*>
 {
 public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
@@ -309,7 +309,7 @@ public:
 
 class SwTOXTypes : public std::vector<std::unique_ptr<SwTOXType>> {};
 
-class SW_DLLPUBLIC SwNumRuleTable : public SwVectorModifyBase<SwNumRule*> {
+class SW_DLLPUBLIC SwNumRuleTable final : public SwVectorModifyBase<SwNumRule*> {
 public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

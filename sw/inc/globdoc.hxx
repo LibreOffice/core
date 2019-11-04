@@ -21,7 +21,7 @@
 
 #include "docsh.hxx"
 
-class SwGlobalDocShell : public SwDocShell
+class SwGlobalDocShell final : public SwDocShell
 {
 public:
 

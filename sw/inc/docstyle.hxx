@@ -42,7 +42,7 @@ class SwBoxAutoFormat;
 enum class SwGetPoolIdFromName : sal_uInt16;
 
 // Temporary StyleSheet.
-class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
+class SW_DLLPUBLIC SwDocStyleSheet final : public SfxStyleSheetBase
 {
     friend class SwDocStyleSheetPool;
     friend class SwStyleSheetIterator;
@@ -73,7 +73,6 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
     SAL_DLLPRIVATE bool FillStyleSheet(FillStyleType eFType,
             std::unique_ptr<SfxItemSet> * o_ppFlatSet = nullptr);
 
-protected:
     virtual ~SwDocStyleSheet() override;
 
 public:

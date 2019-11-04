@@ -169,7 +169,7 @@ enum class Master_CollCondition
     PARA_IN_ENDNOTE
 };
 
-class SW_DLLPUBLIC SwCollCondition : public SwClient
+class SW_DLLPUBLIC SwCollCondition final : public SwClient
 {
     Master_CollCondition m_nCondition;
     sal_uLong m_nSubCondition;

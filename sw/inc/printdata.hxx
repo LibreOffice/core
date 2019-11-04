@@ -169,7 +169,7 @@ public:
     virtual void doSetModified () {}
 };
 
-class SwPrintUIOptions : public vcl::PrinterOptionsHelper
+class SwPrintUIOptions final : public vcl::PrinterOptionsHelper
 {
     VclPtr< OutputDevice > m_pLast;
     const SwPrintData & m_rDefaultPrintData;

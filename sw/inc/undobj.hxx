@@ -267,13 +267,13 @@ public:
     std::vector<SwFrameFormat*> * GetFlysAnchoredAt() { return m_pFrameFormats.get(); }
 };
 
-class SwUndoInsDoc : public SwUndoInserts
+class SwUndoInsDoc final : public SwUndoInserts
 {
 public:
     SwUndoInsDoc( const SwPaM& );
 };
 
-class SwUndoCpyDoc : public SwUndoInserts
+class SwUndoCpyDoc final : public SwUndoInserts
 {
 public:
     SwUndoCpyDoc( const SwPaM& );
@@ -318,7 +318,7 @@ public:
 
 };
 
-class SwUndoDelLayFormat : public SwUndoFlyBase
+class SwUndoDelLayFormat final : public SwUndoFlyBase
 {
     bool m_bShowSelFrame;
 public:

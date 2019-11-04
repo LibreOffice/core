@@ -39,7 +39,7 @@ class SwDoc;
 class SwUnoCursor;
 class SwFrameFormat;
 
-class SW_DLLPUBLIC SwUnoInternalPaM
+class SW_DLLPUBLIC SwUnoInternalPaM final
     : public SwPaM
 {
 
@@ -79,7 +79,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::text::XRedline
 > SwXTextRange_Base;
 
-class SW_DLLPUBLIC SwXTextRange
+class SW_DLLPUBLIC SwXTextRange final
     : public SwXTextRange_Base
 {
 

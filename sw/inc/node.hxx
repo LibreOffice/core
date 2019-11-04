@@ -573,7 +573,7 @@ public:
 Some of the nodes are then replaced with SwPlaceholderNode, and at the end of the operation, removed again.
 FIXME find out if this is really necessary, and if we can avoid creation of the SwPlaceholderNodes in the first place.
 */
-class SwPlaceholderNode : private SwNode
+class SwPlaceholderNode final : private SwNode
 {
 private:
     friend class SwNodes;

@@ -248,7 +248,7 @@ public:
 };
 
 // #i117863#
-class SwSectionFrameMoveAndDeleteHint : public SfxHint
+class SwSectionFrameMoveAndDeleteHint final : public SfxHint
 {
     public:
         SwSectionFrameMoveAndDeleteHint( const bool bSaveContent )

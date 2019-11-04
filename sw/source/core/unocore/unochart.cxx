@@ -1381,7 +1381,7 @@ void SAL_CALL SwChartDataProvider::dispose(  )
         aDataSequences.clear();
 
         // require listeners to release references to this object
-        lang::EventObject aEvtObj( dynamic_cast< chart2::data::XDataSequence * >(this) );
+        lang::EventObject aEvtObj( dynamic_cast< chart2::data::XDataProvider * >(this) );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
 }

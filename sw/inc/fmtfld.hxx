@@ -34,7 +34,7 @@ class SwFieldType;
 namespace com { namespace sun { namespace star { namespace text { class XTextField; } } } }
 
 // ATT_FLD
-class SW_DLLPUBLIC SwFormatField
+class SW_DLLPUBLIC SwFormatField final
     : public SfxPoolItem
     , public sw::BroadcastingModify
     , public SfxBroadcaster
@@ -47,7 +47,6 @@ class SW_DLLPUBLIC SwFormatField
     std::unique_ptr<SwField> mpField;
     SwTextField* mpTextField; // the TextAttribute
 
-protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override;
 
@@ -118,7 +117,7 @@ enum class SwFormatFieldHintWhich
     RESOLVED   = 6
 };
 
-class SW_DLLPUBLIC SwFormatFieldHint : public SfxHint
+class SW_DLLPUBLIC SwFormatFieldHint final : public SfxHint
 {
     const SwFormatField*   m_pField;
     SwFormatFieldHintWhich const m_nWhich;

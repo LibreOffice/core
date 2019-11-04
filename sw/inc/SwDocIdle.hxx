@@ -33,12 +33,11 @@ namespace sw {
  * quite probably not a problem, as busy documents have a high chance to have
  * generated idle tasks.
  */
-class SwDocIdle : public Idle
+class SwDocIdle final : public Idle
 {
 private:
     SwDoc &m_rDoc;
 
-protected:
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nTimeNow ) const override;
 
 public:

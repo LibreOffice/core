@@ -37,7 +37,7 @@ struct CommandStruct
 sal_Int16       GetCommandContextIndex( const OUString &rContextName );
 OUString   GetCommandContextByIndex( sal_Int16 nIndex );
 
-class SW_DLLPUBLIC SwCondCollItem : public SfxPoolItem
+class SW_DLLPUBLIC SwCondCollItem final : public SfxPoolItem
 {
     static const CommandStruct  aCmds[COND_COMMAND_COUNT];
 

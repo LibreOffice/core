@@ -67,7 +67,7 @@ public:
     void Clear() { maData.clear(); }
 };
 
-class SAL_DLLPUBLIC_RTTI SwGetExpFieldType : public SwValueFieldType
+class SAL_DLLPUBLIC_RTTI SwGetExpFieldType final : public SwValueFieldType
 {
 public:
     SwGetExpFieldType(SwDoc* pDoc);
@@ -75,11 +75,11 @@ public:
 
     /** Overlay, because get-field cannot be changed and therefore
      does not need to be updated. Update at changing of set-values! */
-protected:
+private:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 };
 
-class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
+class SW_DLLPUBLIC SwGetExpField final : public SwFormulaField
 {
     double          m_fValueRLHidden; ///< SwValueField; hidden redlines
     OUString        m_sExpand;
@@ -141,7 +141,7 @@ inline void SwGetExpField::ChgBodyTextFlag( bool bIsInBody )
 
 class SwSetExpField;
 
-class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
+class SW_DLLPUBLIC SwSetExpFieldType final : public SwValueFieldType
 {
     OUString const m_sName;
     OUString      m_sDelim;
@@ -149,7 +149,6 @@ class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
     sal_uInt8       m_nLevel;
     bool        m_bDeleted;
 
-protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 
 public:
@@ -268,7 +267,7 @@ inline bool SwSetExpField::GetInputFlag() const
 inline bool SwSetExpField::IsSequenceField() const
     { return 0 != (nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(GetTyp())->GetType()); }
 
-class SAL_DLLPUBLIC_RTTI SwInputFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwInputFieldType final : public SwFieldType
 {
     SwDoc* const mpDoc;
 public:
@@ -279,7 +278,7 @@ public:
     SwDoc* GetDoc() const { return mpDoc; }
 };
 
-class SW_DLLPUBLIC SwInputField : public SwField
+class SW_DLLPUBLIC SwInputField final : public SwField
 {
     mutable OUString maContent;
     OUString maPText;
@@ -364,14 +363,14 @@ private:
 };
 
  /// Implementation in tblcalc.cxx.
-class SwTableFieldType : public SwValueFieldType
+class SwTableFieldType final : public SwValueFieldType
 {
 public:
     SwTableFieldType(SwDoc* pDocPtr);
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
-class SwTableField : public SwValueField, public SwTableFormula
+class SwTableField final : public SwValueField, public SwTableFormula
 {
     OUString      m_sExpand;
     sal_uInt16      m_nSubType;

@@ -22,7 +22,7 @@
 #include "swdllapi.h"
 #include <unotools/configitem.hxx>
 
-class SW_DLLPUBLIC SwFilterOptions : public utl::ConfigItem
+class SW_DLLPUBLIC SwFilterOptions final : public utl::ConfigItem
 {
 private:
     virtual void ImplCommit() override;

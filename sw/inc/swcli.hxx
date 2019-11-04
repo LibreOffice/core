@@ -27,7 +27,7 @@ namespace svt
 class EmbeddedObjectRef;
 }
 
-class SwOleClient : public SfxInPlaceClient
+class SwOleClient final : public SfxInPlaceClient
 {
     bool m_IsInDoVerb;
     bool const m_IsOldCheckForOLEInCaption;

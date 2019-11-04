@@ -53,7 +53,7 @@ enum SwCallEventObjectType
 
 // Structure for the exchange between UI/CORE.
 
-struct SwCallMouseEvent
+struct SwCallMouseEvent final
     : public SwClient
 {
     SwCallEventObjectType eType;

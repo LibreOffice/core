@@ -25,7 +25,7 @@
 
 class SwView;
 
-class SwGotoPageDlg : public weld::GenericDialogController
+class SwGotoPageDlg final : public weld::GenericDialogController
 {
 public:
     SwGotoPageDlg(weld::Window *parent, SfxBindings* _pBindings);

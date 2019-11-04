@@ -21,7 +21,7 @@
 
 #include "unocoll.hxx"
 
-class SwXDocumentIndexes
+class SwXDocumentIndexes final
     : public SwCollectionBaseClass
     , public SwUnoCollection
 {

@@ -47,7 +47,7 @@ public:
 
 // SwPtrMsgPoolItem (old SwObjectDying!)
 
-class SwPtrMsgPoolItem : public SwMsgPoolItem
+class SwPtrMsgPoolItem final : public SwMsgPoolItem
 {
 public:
     void * pObject;
@@ -61,14 +61,14 @@ public:
  * SwFormatChg is sent when a format has changed to another format. 2 Hints are always sent
  * the old and the new format
  */
-class SwFormatChg: public SwMsgPoolItem
+class SwFormatChg final : public SwMsgPoolItem
 {
 public:
     SwFormat * const pChangedFormat;
     SwFormatChg( SwFormat *pFormat );
 };
 
-class SwInsText: public SwMsgPoolItem
+class SwInsText final : public SwMsgPoolItem
 {
 public:
     sal_Int32 const nPos;
@@ -77,7 +77,7 @@ public:
     SwInsText( sal_Int32 nP, sal_Int32 nL );
 };
 
-class SwDelChr: public SwMsgPoolItem
+class SwDelChr final : public SwMsgPoolItem
 {
 public:
     sal_Int32 const nPos;
@@ -85,7 +85,7 @@ public:
     SwDelChr( sal_Int32 nP );
 };
 
-class SwDelText: public SwMsgPoolItem
+class SwDelText final : public SwMsgPoolItem
 {
 public:
     sal_Int32 const nStart;
@@ -97,7 +97,7 @@ public:
 namespace sw {
 
 /// text is moved into pDestNode
-class MoveText : public SfxHint
+class MoveText final : public SfxHint
 {
 public:
     SwTextNode * pDestNode;
@@ -109,7 +109,7 @@ public:
 };
 
 /// new delete redline is created
-class RedlineDelText : public SfxHint
+class RedlineDelText final : public SfxHint
 {
 public:
     sal_Int32 const nStart;
@@ -119,7 +119,7 @@ public:
 };
 
 /// delete redline is removed
-class RedlineUnDelText : public SfxHint
+class RedlineUnDelText final : public SfxHint
 {
 public:
     sal_Int32 nStart;
@@ -130,7 +130,7 @@ public:
 
 }
 
-class SwUpdateAttr : public SwMsgPoolItem
+class SwUpdateAttr final : public SwMsgPoolItem
 {
 private:
     sal_Int32 const m_nStart;
@@ -166,7 +166,7 @@ public:
 /** SwRefMarkFieldUpdate is sent when the referencemarks should be updated.
      To determine Page- / chapternumbers the current frame has to be asked.
       For this we need the current outputdevice */
-class SwRefMarkFieldUpdate : public SwMsgPoolItem
+class SwRefMarkFieldUpdate final : public SwMsgPoolItem
 {
     VclPtr<OutputDevice> pOut; ///< pointer to the current output device
 public:
@@ -180,7 +180,7 @@ public:
 
 /** SwDocPosUpdate is sent to signal that only the frames from or to a specified document-global position
    have to be updated. At the moment this is only needed when updating pagenumber fields. */
-class SwDocPosUpdate : public SwMsgPoolItem
+class SwDocPosUpdate final : public SwMsgPoolItem
 {
 public:
     const SwTwips nDocPos;
@@ -195,7 +195,7 @@ enum TableFormulaUpdateFlags { TBL_CALC = 0,
                          TBL_MERGETBL,
                          TBL_SPLITTBL
                        };
-class SwTableFormulaUpdate : public SwMsgPoolItem
+class SwTableFormulaUpdate final : public SwMsgPoolItem
 {
 public:
     const SwTable* m_pTable;         ///< Pointer to the current table
@@ -213,7 +213,7 @@ public:
     SwTableFormulaUpdate( const SwTable* );
 };
 
-class SwAutoFormatGetDocNode: public SwMsgPoolItem
+class SwAutoFormatGetDocNode final : public SwMsgPoolItem
 {
 public:
     const SwNodes* pNodes;
@@ -225,7 +225,7 @@ public:
  * SwAttrSetChg is sent when something has changed in the SwAttrSet rTheChgdSet.
  * 2 Hints are always sent, the old and the new items in the rTheChgdSet.
  */
-class SwAttrSetChg: public SwMsgPoolItem
+class SwAttrSetChg final : public SwMsgPoolItem
 {
     bool const m_bDelSet;
     SwAttrSet* m_pChgSet;           ///< what has changed
@@ -251,14 +251,14 @@ public:
 #endif
 };
 
-class SwCondCollCondChg: public SwMsgPoolItem
+class SwCondCollCondChg final : public SwMsgPoolItem
 {
 public:
     SwFormat * const pChangedFormat;
     SwCondCollCondChg( SwFormat *pFormat );
 };
 
-class SwVirtPageNumInfo: public SwMsgPoolItem
+class SwVirtPageNumInfo final : public SwMsgPoolItem
 {
     const SwPageFrame *m_pPage;
     const SwPageFrame *m_pOrigPage;
@@ -275,7 +275,7 @@ public:
                    const SwFrame *pF )    { m_pFrame = pF; m_pPage = pPg; }
 };
 
-class SwFindNearestNode : public SwMsgPoolItem
+class SwFindNearestNode final : public SwMsgPoolItem
 {
     const SwNode *m_pNode, *m_pFound;
 public:
@@ -285,7 +285,7 @@ public:
     const SwNode* GetFoundNode() const { return m_pFound; }
 };
 
-class SwStringMsgPoolItem : public SwMsgPoolItem
+class SwStringMsgPoolItem final : public SwMsgPoolItem
 {
     OUString const m_sStr;
 public:

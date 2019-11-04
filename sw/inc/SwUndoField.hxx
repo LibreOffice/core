@@ -41,7 +41,7 @@ public:
     virtual ~SwUndoField() override;
 };
 
-class SwUndoFieldFromDoc : public SwUndoField
+class SwUndoFieldFromDoc final : public SwUndoField
 {
     std::unique_ptr<SwField> pOldField, pNewField;
     SwMsgPoolItem * const pHint;
@@ -61,7 +61,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
-class SwUndoFieldFromAPI : public SwUndoField
+class SwUndoFieldFromAPI final : public SwUndoField
 {
     css::uno::Any aOldVal, aNewVal;
     sal_uInt16 const nWhich;

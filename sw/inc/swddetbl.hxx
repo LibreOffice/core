@@ -23,7 +23,7 @@
 
 class SwDDEFieldType;
 
-class SwDDETable : public SwTable
+class SwDDETable final : public SwTable
 {
     sw::WriterMultiListener m_aDepends;
     SwDDEFieldType* m_pDDEType;
@@ -40,7 +40,7 @@ public:
 
     SwDDEFieldType* GetDDEFieldType();
     inline const SwDDEFieldType* GetDDEFieldType() const;
-protected:
+private:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
 };

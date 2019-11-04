@@ -62,10 +62,10 @@ enum REFERENCEMARK
 
 /// Get reference.
 
-class SAL_DLLPUBLIC_RTTI SwGetRefFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwGetRefFieldType final : public SwFieldType
 {
     SwDoc* m_pDoc;
-protected:
+
     /// Overlay in order to update all ref-fields.
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 public:
@@ -82,7 +82,7 @@ public:
                                         SwRootFrame const* pLayout = nullptr);
 };
 
-class SW_DLLPUBLIC SwGetRefField : public SwField
+class SW_DLLPUBLIC SwGetRefField final : public SwField
 {
 private:
     OUString m_sSetRefName;

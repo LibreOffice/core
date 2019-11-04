@@ -168,7 +168,7 @@ public:
     const SwShellCursor* GetPrev() const { return dynamic_cast<SwShellCursor const *>(GetPrevInRing()); }
 };
 
-class SwShellTableCursor : public virtual SwShellCursor, public virtual SwTableCursor
+class SwShellTableCursor final : public virtual SwShellCursor, public virtual SwTableCursor
 {
     /// Left edge of the selection start (top left cell).
     SwRect m_aStart;
