@@ -9595,7 +9595,7 @@ public:
                 gtkpos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
             {
                 ret = false;
-                pos = gtkpos;
+                pos = bAsTree ? gtkpos : GTK_TREE_VIEW_DROP_AFTER;
             }
         }
 
