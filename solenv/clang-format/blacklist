@@ -7791,7 +7791,6 @@ include/vcl/exceptiontypes.hxx
 include/vcl/extoutdevdata.hxx
 include/vcl/field.hxx
 include/vcl/fixed.hxx
-include/vcl/fixedhyper.hxx
 include/vcl/floatwin.hxx
 include/vcl/fltcall.hxx
 include/vcl/fmtfield.hxx
@@ -7898,6 +7897,7 @@ include/vcl/textview.hxx
 include/vcl/threadex.hxx
 include/vcl/timer.hxx
 include/vcl/toolbox.hxx
+include/vcl/toolkit/fixedhyper.hxx
 include/vcl/toolkit/group.hxx
 include/vcl/toolkit/imgctrl.hxx
 include/vcl/toolkit/morebtn.hxx

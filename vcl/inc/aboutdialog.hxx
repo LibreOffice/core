@@ -11,7 +11,7 @@
 #define INCLUDED_VCL_ABOUT_DIALOG_HXX
 
 #include <vcl/fixed.hxx>
-#include <vcl/fixedhyper.hxx>
+#include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/vclmedit.hxx>

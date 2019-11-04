@@ -88,7 +88,7 @@
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/fixedhyper.hxx>
+#include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/longcurr.hxx>
