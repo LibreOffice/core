@@ -48,7 +48,7 @@ namespace sw
 }
 
 // FieldType for DDE
-class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
+class SW_DLLPUBLIC SwDDEFieldType final : public SwFieldType
 {
     OUString const aName;
     OUString aExpansion;
@@ -102,7 +102,7 @@ public:
 };
 
 // DDE-field
-class SwDDEField : public SwField
+class SwDDEField final : public SwField
 {
 private:
     virtual OUString ExpandImpl(SwRootFrame const* pLayout) const override;

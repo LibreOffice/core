@@ -34,7 +34,7 @@ enum SwDateSubFormat
     DATE_VAR
 };
 
-class SAL_DLLPUBLIC_RTTI SwDateTimeFieldType : public SwValueFieldType
+class SAL_DLLPUBLIC_RTTI SwDateTimeFieldType final : public SwValueFieldType
 {
 public:
         SwDateTimeFieldType(SwDoc* pDoc);
@@ -42,7 +42,7 @@ public:
         virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
-class SW_DLLPUBLIC SwDateTimeField : public SwValueField
+class SW_DLLPUBLIC SwDateTimeField final : public SwValueField
 {
         sal_uInt16              m_nSubType;
         long                m_nOffset;    // Offset in minutes.

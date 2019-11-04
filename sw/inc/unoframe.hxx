@@ -307,7 +307,7 @@ public:
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
 };
 
-class SwXOLEListener : public cppu::WeakImplHelper<css::util::XModifyListener>, public SvtListener
+class SwXOLEListener final : public cppu::WeakImplHelper<css::util::XModifyListener>, public SvtListener
 {
     SwFormat* m_pOLEFormat;
     css::uno::Reference<css::frame::XModel> m_xOLEModel;

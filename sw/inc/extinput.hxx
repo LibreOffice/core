@@ -24,7 +24,7 @@
 #include <vcl/commandevent.hxx>
 #include <vector>
 
-class SwExtTextInput : public SwPaM
+class SwExtTextInput final : public SwPaM
 {
     std::vector<ExtTextInputAttr> aAttrs;
     OUString sOverwriteText;

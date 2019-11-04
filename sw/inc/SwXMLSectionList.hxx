@@ -21,9 +21,8 @@
 
 #include <xmloff/xmlimp.hxx>
 
-class SwXMLSectionList : public SvXMLImport
+class SwXMLSectionList final : public SvXMLImport
 {
-protected:
     virtual SvXMLImportContext *CreateDocumentContext( sal_uInt16 nPrefix,
                   const OUString& rLocalName,
                   const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;

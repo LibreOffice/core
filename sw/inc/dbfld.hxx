@@ -26,7 +26,7 @@
 class SwDoc;
 
 // Database field.
-class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
+class SW_DLLPUBLIC SwDBFieldType final : public SwValueFieldType
 {
     SwDBData    m_aDBData;
     OUString m_sName;          ///< only used in ::GetName() !
@@ -53,7 +53,7 @@ public:
 
 // Classes derived from SwFields. They overlay the expand-function.
 // Content is formatted according to the format (if available).
-class SW_DLLPUBLIC SwDBField : public SwValueField
+class SW_DLLPUBLIC SwDBField final : public SwValueField
 {
     OUString m_aContent;
     OUString m_sFieldCode; ///< contains Word's field code
@@ -146,7 +146,7 @@ public:
 };
 
 // Database field next record.
-class SW_DLLPUBLIC SwDBNextSetFieldType : public SwFieldType
+class SW_DLLPUBLIC SwDBNextSetFieldType final : public SwFieldType
 {
 public:
     SwDBNextSetFieldType();
@@ -155,7 +155,7 @@ public:
 };
 
 // Next data record with condition.
-class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
+class SW_DLLPUBLIC SwDBNextSetField final : public SwDBNameInfField
 {
     OUString  m_aCond;
     bool    m_bCondValid;
@@ -185,7 +185,7 @@ inline void SwDBNextSetField::SetCondValid(bool bCond)
     { m_bCondValid = bCond; }
 
 // Database field next record.
-class SwDBNumSetFieldType : public SwFieldType
+class SwDBNumSetFieldType final : public SwFieldType
 {
 public:
     SwDBNumSetFieldType();
@@ -195,7 +195,7 @@ public:
 
 // Data record with number xxx.
 // Number is in nFormat (bit of a misuse!)
-class SwDBNumSetField : public SwDBNameInfField
+class SwDBNumSetField final : public SwDBNameInfField
 {
     OUString  m_aCond;
     OUString  m_aPar2;
@@ -231,7 +231,7 @@ inline void SwDBNumSetField::SetCondValid(bool bCond)
     { m_bCondValid = bCond; }
 
 // Database name.
-class SwDBNameFieldType : public SwFieldType
+class SwDBNameFieldType final : public SwFieldType
 {
         SwDoc *m_pDoc;
 public:
@@ -242,7 +242,7 @@ public:
 };
 
 // Database field.
-class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
+class SW_DLLPUBLIC SwDBNameField final : public SwDBNameInfField
 {
 public:
     SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData);
@@ -254,7 +254,7 @@ public:
 };
 
 // Number of data record.
-class SW_DLLPUBLIC SwDBSetNumberFieldType : public SwFieldType
+class SW_DLLPUBLIC SwDBSetNumberFieldType final : public SwFieldType
 {
 public:
     SwDBSetNumberFieldType();
@@ -263,7 +263,7 @@ public:
 };
 
 // Database field.
-class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
+class SW_DLLPUBLIC SwDBSetNumberField final : public SwDBNameInfField
 {
     long    m_nNumber;
 public:

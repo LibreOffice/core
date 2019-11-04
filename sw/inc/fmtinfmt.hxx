@@ -32,7 +32,7 @@ enum class SvMacroItemId : sal_uInt16;
 
 // ATT_INETFMT
 
-class SW_DLLPUBLIC SwFormatINetFormat
+class SW_DLLPUBLIC SwFormatINetFormat final
     : public SfxPoolItem
     , public sw::BroadcasterMixin
 {

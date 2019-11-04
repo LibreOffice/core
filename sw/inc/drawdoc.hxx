@@ -23,7 +23,7 @@
 
 class SwDoc;
 
-class SwDrawModel : public FmFormModel
+class SwDrawModel final : public FmFormModel
 {
 private:
     SwDoc* m_pDoc;
@@ -41,7 +41,7 @@ public:
 
     virtual css::uno::Reference<css::embed::XStorage> GetDocumentStorage() const override;
 
-protected:
+private:
     /// override of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
     virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
 };

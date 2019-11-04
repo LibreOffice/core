@@ -34,7 +34,7 @@ enum LineNumberPosition
     LINENUMBER_POS_OUTSIDE
 };
 
-class SW_DLLPUBLIC SwLineNumberInfo : public SwClient /**< purpose of derivation from SwClient:
+class SW_DLLPUBLIC SwLineNumberInfo final : public SwClient /**< purpose of derivation from SwClient:
                                                          character style for displaying the numbers. */
 {
     SvxNumberType       aType;                  ///< e.g. roman linenumbers
@@ -49,7 +49,6 @@ class SW_DLLPUBLIC SwLineNumberInfo : public SwClient /**< purpose of derivation
     bool                bCountInFlys;           ///< Count also within FlyFrames?
     bool                bRestartEachPage;       /**< Restart counting at the first paragraph of each page
                                                        (even on follows when paragraphs are split) */
-protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 public:

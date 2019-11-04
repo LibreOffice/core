@@ -46,7 +46,7 @@ class Size;
 
 const sal_Unicode cBulletChar = 0x2022; ///< Character for lists.
 
-class SW_DLLPUBLIC SwNumFormat : public SvxNumberFormat, public SwClient
+class SW_DLLPUBLIC SwNumFormat final : public SvxNumberFormat, public SwClient
 {
     std::unique_ptr<SwFormatVertOrient> m_pVertOrient;
     //For i120928,record the cp info of graphic within bullet
@@ -56,7 +56,6 @@ class SW_DLLPUBLIC SwNumFormat : public SvxNumberFormat, public SwClient
     using SvxNumberFormat::operator ==;
     using SvxNumberFormat::operator !=;
 
-protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:

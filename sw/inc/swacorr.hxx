@@ -29,13 +29,12 @@
 class SwXMLTextBlocks;
 namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
 
-class SW_DLLPUBLIC SwAutoCorrect : public SvxAutoCorrect
+class SW_DLLPUBLIC SwAutoCorrect final : public SvxAutoCorrect
 {
     using  SvxAutoCorrect::PutText;
 
     std::unique_ptr<SwXMLTextBlocks> m_pTextBlocks;
 
-protected:
     // Return replacement text (only for SWG-format, all others can be obtained from wordlist!).
     // rShort is stream-name - encrypted!
     virtual bool GetLongText( const OUString& rShort, OUString& rLong ) override;

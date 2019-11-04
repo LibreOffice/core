@@ -187,7 +187,7 @@ typedef cppu::WeakImplHelper<
     css::text::XTextTableCursor,
     css::lang::XServiceInfo,
     css::beans::XPropertySet> SwXTextTableCursor_Base;
-class SW_DLLPUBLIC SwXTextTableCursor
+class SW_DLLPUBLIC SwXTextTableCursor final
     : public SwXTextTableCursor_Base
     , public SvtListener
     , public OTextCursorHelper
@@ -251,7 +251,7 @@ struct SwRangeDescriptor
     void Normalize();
 };
 
-class SwXTextTable : public cppu::WeakImplHelper
+class SwXTextTable final : public cppu::WeakImplHelper
 <
     css::text::XTextTable,
     css::lang::XServiceInfo,
@@ -354,7 +354,7 @@ public:
 
 };
 
-class SwXCellRange : public cppu::WeakImplHelper
+class SwXCellRange final : public cppu::WeakImplHelper
 <
     css::table::XCellRange,
     css::lang::XServiceInfo,
@@ -464,7 +464,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class SwXTableColumns : public cppu::WeakImplHelper
+class SwXTableColumns final : public cppu::WeakImplHelper
 <
     css::table::XTableColumns,
     css::lang::XServiceInfo
@@ -474,7 +474,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
     SwFrameFormat* GetFrameFormat() const;
-protected:
+
     virtual ~SwXTableColumns() override;
 public:
     SwXTableColumns(SwFrameFormat& rFrameFormat);

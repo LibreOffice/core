@@ -37,12 +37,10 @@ typedef ::cppu::WeakAggImplHelper2
 ,   css::container::XEnumerationAccess
 > SwXBodyText_Base;
 
-class SwXBodyText
+class SwXBodyText final
     : public SwXBodyText_Base
     , public SwXText
 {
-
-protected:
 
     virtual ~SwXBodyText() override;
 

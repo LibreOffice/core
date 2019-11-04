@@ -29,7 +29,7 @@
 #include <memory>
 #include <vector>
 
-class SwAuthEntry : public salhelper::SimpleReferenceObject
+class SwAuthEntry final : public salhelper::SimpleReferenceObject
 {
     OUString        aAuthFields[AUTH_FIELD_END];
 public:
@@ -54,7 +54,7 @@ struct SwTOXSortKey
 typedef std::vector<SwTOXSortKey> SortKeyArr;
 typedef std::vector<rtl::Reference<SwAuthEntry>> SwAuthDataArr;
 
-class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
+class SW_DLLPUBLIC SwAuthorityFieldType final : public SwFieldType
 {
     SwDoc*                  m_pDoc;
     SwAuthDataArr           m_DataArr;
@@ -68,8 +68,7 @@ class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
     LanguageType            m_eLanguage;
     OUString                m_sSortAlgorithm;
 
-protected:
-virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 
 public:
     SwAuthorityFieldType(SwDoc* pDoc);
@@ -145,7 +144,7 @@ public:
     one of the instances with the same m_nHandle is actually in the document,
     they're all cloned via CopyField()...
  */
-class SAL_DLLPUBLIC_RTTI SwAuthorityField : public SwField
+class SAL_DLLPUBLIC_RTTI SwAuthorityField final : public SwField
 {
     rtl::Reference<SwAuthEntry>  m_xAuthEntry;
     mutable sal_IntPtr  m_nTempSequencePos;

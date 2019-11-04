@@ -168,7 +168,7 @@ public:
     virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
 };
 
-class MetaField
+class MetaField final
     : public Meta
 {
 private:

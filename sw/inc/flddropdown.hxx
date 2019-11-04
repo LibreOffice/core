@@ -28,7 +28,7 @@
 /**
     Field type for dropdown boxes.
 */
-class SAL_DLLPUBLIC_RTTI SwDropDownFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwDropDownFieldType final : public SwFieldType
 {
 public:
     /**
@@ -55,7 +55,7 @@ public:
    The dropdown field contains a list of strings. At most one of them
    can be selected.
 */
-class SW_DLLPUBLIC SwDropDownField : public SwField
+class SW_DLLPUBLIC SwDropDownField final : public SwField
 {
     /**
        the possible values (aka items) of the dropdown box

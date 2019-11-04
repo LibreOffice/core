@@ -33,11 +33,10 @@ typedef ::cppu::WeakImplHelper
 ,   css::lang::XServiceInfo
 > SwXTextFieldMasters_Base;
 
-class SwXTextFieldMasters
+class SwXTextFieldMasters final
     : public SwXTextFieldMasters_Base
     , public SwUnoCollection
 {
-protected:
     virtual ~SwXTextFieldMasters() override;
 
 public:
@@ -71,7 +70,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::util::XRefreshable
 > SwXTextFieldTypes_Base;
 
-class SwXTextFieldTypes
+class SwXTextFieldTypes final
     : public SwXTextFieldTypes_Base
     , public SwUnoCollection
 {
@@ -79,7 +78,6 @@ private:
     class Impl;
     std::unique_ptr<Impl> m_pImpl; // currently does not need UnoImplPtr
 
-protected:
     virtual ~SwXTextFieldTypes() override;
 
 public:

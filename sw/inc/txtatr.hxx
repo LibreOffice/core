@@ -51,7 +51,7 @@ public:
 };
 
 
-class SwTextMeta : public SwTextAttrNesting
+class SwTextMeta final : public SwTextAttrNesting
 {
 private:
     SwTextMeta( SwFormatMeta & i_rAttr,

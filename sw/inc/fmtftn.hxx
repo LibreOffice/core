@@ -37,7 +37,7 @@ class SwRootFrame;
 
 // ATT_FTN
 
-class SW_DLLPUBLIC SwFormatFootnote
+class SW_DLLPUBLIC SwFormatFootnote final
     : public SfxPoolItem
     , public SwModify
     , public sw::BroadcasterMixin

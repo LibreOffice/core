@@ -49,7 +49,7 @@ public:
 };
 
 /** The default implementation of ToxTabStopTokenHandler */
-class DefaultToxTabStopTokenHandler : public ToxTabStopTokenHandler
+class DefaultToxTabStopTokenHandler final : public ToxTabStopTokenHandler
 {
 public:
 

@@ -278,7 +278,7 @@ private:
     virtual bool SetStrmStgPtr();
 };
 
-class AsciiReader: public Reader
+class AsciiReader final : public Reader
 {
     friend class SwReader;
     virtual ErrCode Read( SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;

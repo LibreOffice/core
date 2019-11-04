@@ -31,7 +31,7 @@ class SwRangeRedline;
  * directly into a redline node. It got implemented to enable XML
  * import of redlines and should not be used directly via the API.
  */
-class SwXRedlineText :
+class SwXRedlineText final :
     public SwXText,
     public cppu::OWeakObject,
     public css::container::XEnumerationAccess

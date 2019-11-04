@@ -99,7 +99,7 @@ typedef cppu::WeakImplHelper
 >
 SwChartDataProviderBaseClass;
 
-class SwChartDataProvider :
+class SwChartDataProvider final :
     public SwChartDataProviderBaseClass
 {
 
@@ -190,7 +190,7 @@ typedef cppu::WeakImplHelper
 >
 SwChartDataSourceBaseClass;
 
-class SwChartDataSource :
+class SwChartDataSource final :
     public SwChartDataSourceBaseClass
 {
     css::uno::Sequence<
@@ -227,7 +227,7 @@ typedef cppu::WeakImplHelper
 >
 SwChartDataSequenceBaseClass;
 
-class SwChartDataSequence :
+class SwChartDataSequence final :
     public SwChartDataSequenceBaseClass,
     public SvtListener
 {
@@ -325,7 +325,7 @@ typedef cppu::WeakImplHelper
 >
 SwChartLabeledDataSequenceBaseClass;
 
-class SwChartLabeledDataSequence :
+class SwChartLabeledDataSequence final :
     public SwChartLabeledDataSequenceBaseClass
 {
     ::comphelper::OInterfaceContainerHelper2                           aEvtListeners;

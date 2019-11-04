@@ -27,7 +27,7 @@
 class SwTextCharFormat;
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFormatCharFormat: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatCharFormat final : public SfxPoolItem, public SwClient
 {
     friend class SwTextCharFormat;
     SwTextCharFormat* m_pTextAttribute;     ///< My text attribute.
@@ -39,10 +39,10 @@ public:
 
     /// @@@ public copy ctor, but no copy assignment?
     SwFormatCharFormat( const SwFormatCharFormat& rAttr );
-protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 private:
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+
     /// @@@ public copy ctor, but no copy assignment?
     SwFormatCharFormat & operator= (const SwFormatCharFormat &) = delete;
 public:

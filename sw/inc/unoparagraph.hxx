@@ -60,7 +60,7 @@ typedef ::cppu::ImplInheritanceHelper
 ,   css::text::XTextRange
 > SwXParagraph_Base;
 
-class SwXParagraph
+class SwXParagraph final
     : public SwXParagraph_Base
 {
 
