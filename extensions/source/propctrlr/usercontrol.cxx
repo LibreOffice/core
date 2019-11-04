@@ -83,16 +83,13 @@ namespace pcr
         }
     }
 
-
+#if 0
     // OFormatSampleControl
-
-
-    OFormatSampleControl::OFormatSampleControl( vcl::Window* pParent )
+    OFormatSampleControl::OFormatSampleControl(weld::Container* pParent)
         :OFormatSampleControl_Base( PropertyControlType::Unknown, pParent, WB_READONLY | WB_TABSTOP | WB_BORDER )
     {
         getTypedControlWindow()->setControlHelper(*this);
     }
-
 
     void SAL_CALL OFormatSampleControl::setValue( const Any& _rValue )
     {
@@ -166,21 +163,16 @@ namespace pcr
         return ::cppu::UnoType<sal_Int32>::get();
     }
 
-
     // class OFormattedNumericControl
-
-
-    OFormattedNumericControl::OFormattedNumericControl( vcl::Window* pParent, WinBits nWinStyle )
+    OFormattedNumericControl::OFormattedNumericControl( weld::Container* pParent, WinBits nWinStyle )
         :OFormattedNumericControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
     {
         getTypedControlWindow()->TreatAsNumber(true);
     }
 
-
     OFormattedNumericControl::~OFormattedNumericControl()
     {
     }
-
 
     void SAL_CALL OFormattedNumericControl::setValue( const Any& _rValue )
     {
@@ -191,7 +183,6 @@ namespace pcr
             getTypedControlWindow()->SetText("");
     }
 
-
     Any SAL_CALL OFormattedNumericControl::getValue()
     {
         Any aPropValue;
@@ -200,12 +191,10 @@ namespace pcr
         return aPropValue;
     }
 
-
     Type SAL_CALL OFormattedNumericControl::getValueType()
     {
         return ::cppu::UnoType<double>::get();
     }
-
 
     void OFormattedNumericControl::SetFormatDescription(const FormatDescription& rDesc)
     {
@@ -237,22 +226,17 @@ namespace pcr
         }
     }
 
-
     //= OFileUrlControl
-
-
-    OFileUrlControl::OFileUrlControl( vcl::Window* pParent )
+    OFileUrlControl::OFileUrlControl( weld::Container* pParent )
         :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN )
     {
         getTypedControlWindow()->SetDropDownLineCount( 10 );
         getTypedControlWindow()->SetPlaceHolder( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) ) ;
     }
 
-
     OFileUrlControl::~OFileUrlControl()
     {
     }
-
 
     void SAL_CALL OFileUrlControl::setValue( const Any& _rValue )
     {
@@ -268,7 +252,6 @@ namespace pcr
             getTypedControlWindow()->SetText( "" );
     }
 
-
     Any SAL_CALL OFileUrlControl::getValue()
     {
         Any aPropValue;
@@ -277,17 +260,13 @@ namespace pcr
         return aPropValue;
     }
 
-
     Type SAL_CALL OFileUrlControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
 
-
     //= OTimeDurationControl
-
-
-    OTimeDurationControl::OTimeDurationControl( vcl::Window* pParent )
+    OTimeDurationControl::OTimeDurationControl( weld::Container* pParent )
         :ONumericControl( pParent, WB_BORDER | WB_TABSTOP )
     {
         getTypedControlWindow()->SetUnit( FieldUnit::CUSTOM );
@@ -324,6 +303,7 @@ namespace pcr
         getTypedControlWindow()->SetValue( getTypedControlWindow()->GetLastValue() * nMultiplier );
     }
 
+#endif
 
 } // namespace pcr
 

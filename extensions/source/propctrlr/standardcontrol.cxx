@@ -55,11 +55,8 @@
 #include <limits>
 #include <memory>
 
-
 namespace pcr
 {
-
-
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -67,19 +64,15 @@ namespace pcr
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::inspection;
-
-
+#if 0
     //= OTimeControl
-
-
-    OTimeControl::OTimeControl( vcl::Window* pParent, WinBits nWinStyle )
+    OTimeControl::OTimeControl( weld::Container* pParent, WinBits nWinStyle )
         :OTimeControl_Base( PropertyControlType::TimeField, pParent, nWinStyle )
     {
         getTypedControlWindow()->SetStrictFormat( true );
         getTypedControlWindow()->SetFormat( TimeFieldFormat::F_SEC );
         getTypedControlWindow()->EnableEmptyFieldValue( true );
     }
-
 
     void SAL_CALL OTimeControl::setValue( const Any& _rValue )
     {
@@ -95,7 +88,6 @@ namespace pcr
         }
     }
 
-
     Any SAL_CALL OTimeControl::getValue()
     {
         Any aPropValue;
@@ -106,17 +98,13 @@ namespace pcr
         return aPropValue;
     }
 
-
     Type SAL_CALL OTimeControl::getValueType()
     {
         return ::cppu::UnoType<util::Time>::get();
     }
 
-
     //= ODateControl
-
-
-    ODateControl::ODateControl( vcl::Window* pParent, WinBits nWinStyle )
+    ODateControl::ODateControl( weld::Container* pParent, WinBits nWinStyle )
         :ODateControl_Base( PropertyControlType::DateField, pParent, nWinStyle | WB_DROPDOWN )
     {
         CalendarField* pControlWindow = getTypedControlWindow();
@@ -164,20 +152,21 @@ namespace pcr
     {
         return ::cppu::UnoType<util::Date>::get();
     }
-
+#endif
 
     //= OEditControl
-
-
-    OEditControl::OEditControl(vcl::Window* _pParent, bool _bPW, WinBits _nWinStyle)
-        :OEditControl_Base( _bPW ? PropertyControlType::CharacterField : PropertyControlType::TextField, _pParent, _nWinStyle )
+    OEditControl::OEditControl(std::unique_ptr<weld::Entry> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bPW, bool bReadOnly)
+        : OEditControl_Base( bPW ? PropertyControlType::CharacterField : PropertyControlType::TextField, std::move(xBuilder), std::move(xWidget), bReadOnly )
     {
-        m_bIsPassword = _bPW;
+        m_bIsPassword = bPW;
 
-        if ( m_bIsPassword )
-           getTypedControlWindow()->SetMaxTextLen( 1 );
+        auto pWidget = getTypedControlWindow();
+        pWidget->set_sensitive(true);
+        pWidget->set_editable(!bReadOnly);
+
+        if (m_bIsPassword)
+           pWidget->set_max_length( 1 );
     }
-
 
     void SAL_CALL OEditControl::setValue( const Any& _rValue )
     {
@@ -194,15 +183,14 @@ namespace pcr
         else
             _rValue >>= sText;
 
-        getTypedControlWindow()->SetText( sText );
+        getTypedControlWindow()->set_text( sText );
     }
-
 
     Any SAL_CALL OEditControl::getValue()
     {
         Any aPropValue;
 
-        OUString sText( getTypedControlWindow()->GetText() );
+        OUString sText( getTypedControlWindow()->get_text() );
         if ( m_bIsPassword )
         {
             if ( !sText.isEmpty() )
@@ -214,12 +202,10 @@ namespace pcr
         return aPropValue;
     }
 
-
     Type SAL_CALL OEditControl::getValueType()
     {
         return m_bIsPassword ? ::cppu::UnoType<sal_Int16>::get() : ::cppu::UnoType<OUString>::get();
     }
-
 
     void OEditControl::setModified()
     {
@@ -230,20 +216,18 @@ namespace pcr
             notifyModifiedValue();
     }
 
-
-    static long ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
+    static int ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
     {
         double n = nValue;
         for ( sal_uInt16 d = 0; d < nDigits; ++d )
             n *= 10;
 
-        if ( !o3tl::convertsToAtMost(n, std::numeric_limits< long >::max()) )
-            return std::numeric_limits< long >::max();
-        return static_cast<long>(n);
+        if ( !o3tl::convertsToAtMost(n, std::numeric_limits<int>::max()) )
+            return std::numeric_limits<int>::max();
+        return static_cast<int>(n);
     }
 
-
-    static double ImplCalcDoubleValue( long nValue, sal_uInt16 nDigits )
+    static double ImplCalcDoubleValue( int nValue, sal_uInt16 nDigits )
     {
         double n = nValue;
         for ( sal_uInt16 d = 0; d < nDigits; ++d )
@@ -251,12 +235,10 @@ namespace pcr
         return n;
     }
 
-
+#if 0
     // class ODateTimeControl
-
-
-    ODateTimeControl::ODateTimeControl( vcl::Window* _pParent, WinBits _nWinStyle)
-        :ODateTimeControl_Base( PropertyControlType::DateTimeField, _pParent, _nWinStyle )
+    ODateTimeControl::ODateTimeControl( weld::Container* pParent, WinBits nWinStyle)
+        :ODateTimeControl_Base( PropertyControlType::DateTimeField, pParent, nWinStyle )
     {
         getTypedControlWindow()->EnableEmptyField( true );
 
@@ -328,8 +310,8 @@ namespace pcr
     //= HyperlinkInput
 
 
-    HyperlinkInput::HyperlinkInput( vcl::Window* _pParent, WinBits _nWinStyle )
-        :Edit( _pParent, _nWinStyle )
+    HyperlinkInput::HyperlinkInput( vcl::Window* pParent, WinBits nWinStyle )
+        :Edit( pParent, nWinStyle )
     {
         ::svtools::ColorConfig aColorConfig;
         ::svtools::ColorConfigValue aLinkColor( aColorConfig.GetColorValue( ::svtools::LINKS ) );
@@ -403,7 +385,6 @@ namespace pcr
             Application::PostUserEvent( m_aClickHandler );
     }
 
-
     void HyperlinkInput::Tracking( const TrackingEvent& rTEvt )
     {
         Edit::Tracking( rTEvt );
@@ -412,24 +393,19 @@ namespace pcr
             impl_checkEndClick( rTEvt.GetMouseEvent() );
     }
 
-
     //= OHyperlinkControl
-
-
-    OHyperlinkControl::OHyperlinkControl( vcl::Window* _pParent, WinBits _nWinStyle )
-        :OHyperlinkControl_Base( PropertyControlType::HyperlinkField, _pParent, _nWinStyle )
+    OHyperlinkControl::OHyperlinkControl( weld::Container* pParent, WinBits nWinStyle )
+        :OHyperlinkControl_Base( PropertyControlType::HyperlinkField, pParent, nWinStyle )
         ,m_aActionListeners( m_aMutex )
     {
         getTypedControlWindow()->SetClickHdl( LINK( this, OHyperlinkControl, OnHyperlinkClicked ) );
     }
-
 
     Any SAL_CALL OHyperlinkControl::getValue()
     {
         OUString sText = getTypedControlWindow()->GetText();
         return makeAny( sText );
     }
-
 
     void SAL_CALL OHyperlinkControl::setValue( const Any& _value )
     {
@@ -438,12 +414,10 @@ namespace pcr
         getTypedControlWindow()->SetText( sText );
     }
 
-
     Type SAL_CALL OHyperlinkControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
-
 
     void SAL_CALL OHyperlinkControl::addActionListener( const Reference< XActionListener >& listener )
     {
@@ -474,44 +448,39 @@ namespace pcr
             [&aEvent] (uno::Reference<awt::XActionListener> const& xListener)
                 { return xListener->actionPerformed(aEvent); });
     }
-
+#endif
 
     //= ONumericControl
-
-
-    ONumericControl::ONumericControl( vcl::Window* _pParent, WinBits _nWinStyle )
-        :ONumericControl_Base( PropertyControlType::NumericField, _pParent, _nWinStyle )
-        ,m_eValueUnit( FieldUnit::NONE )
-        ,m_nFieldToUNOValueFactor( 1 )
+    ONumericControl::ONumericControl(std::unique_ptr<weld::MetricSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
+        : ONumericControl_Base(PropertyControlType::NumericField, std::move(xBuilder), std::move(xWidget), bReadOnly)
+        , m_eValueUnit( FieldUnit::NONE )
+        , m_nFieldToUNOValueFactor( 1 )
     {
         MetricField::SetDefaultUnit( FieldUnit::NONE );
 
-        getTypedControlWindow()->EnableEmptyFieldValue( true );
-        getTypedControlWindow()->SetStrictFormat( true );
+//TODO        getTypedControlWindow()->EnableEmptyFieldValue( true );
+//TODO        getTypedControlWindow()->SetStrictFormat( true );
         Optional< double > value( getMaxValue() );
         value.Value = -value.Value;
         setMinValue( value );
     }
 
-
     ::sal_Int16 SAL_CALL ONumericControl::getDecimalDigits()
     {
-        return getTypedControlWindow()->GetDecimalDigits();
+        return getTypedControlWindow()->get_digits();
     }
-
 
     void SAL_CALL ONumericControl::setDecimalDigits( ::sal_Int16 _decimaldigits )
     {
-        getTypedControlWindow()->SetDecimalDigits( _decimaldigits );
+        getTypedControlWindow()->set_digits( _decimaldigits );
     }
-
 
     Optional< double > SAL_CALL ONumericControl::getMinValue()
     {
         Optional< double > aReturn( true, 0 );
 
-        sal_Int64 minValue = getTypedControlWindow()->GetMin();
-        if ( minValue == std::numeric_limits< sal_Int64 >::min() )
+        int minValue = getTypedControlWindow()->get_min(FieldUnit::NONE);
+        if ( minValue == std::numeric_limits<int>::min() )
             aReturn.IsPresent = false;
         else
             aReturn.Value = static_cast<double>(minValue);
@@ -519,22 +488,20 @@ namespace pcr
         return aReturn;
     }
 
-
     void SAL_CALL ONumericControl::setMinValue( const Optional< double >& _minvalue )
     {
         if ( !_minvalue.IsPresent )
-            getTypedControlWindow()->SetMin( std::numeric_limits< sal_Int64 >::min() );
+            getTypedControlWindow()->set_min( std::numeric_limits<int>::min(), FieldUnit::NONE );
         else
-            getTypedControlWindow()->SetMin( impl_apiValueToFieldValue_nothrow( _minvalue.Value ) , m_eValueUnit);
+            getTypedControlWindow()->set_min( impl_apiValueToFieldValue_nothrow( _minvalue.Value ) , m_eValueUnit);
     }
-
 
     Optional< double > SAL_CALL ONumericControl::getMaxValue()
     {
         Optional< double > aReturn( true, 0 );
 
-        sal_Int64 maxValue = getTypedControlWindow()->GetMax();
-        if ( maxValue == std::numeric_limits< sal_Int64 >::max() )
+        int maxValue = getTypedControlWindow()->get_max(FieldUnit::NONE);
+        if ( maxValue == std::numeric_limits<int>::max() )
             aReturn.IsPresent = false;
         else
             aReturn.Value = static_cast<double>(maxValue);
@@ -542,21 +509,18 @@ namespace pcr
         return aReturn;
     }
 
-
     void SAL_CALL ONumericControl::setMaxValue( const Optional< double >& _maxvalue )
     {
         if ( !_maxvalue.IsPresent )
-            getTypedControlWindow()->SetMax( std::numeric_limits< sal_Int64 >::max() );
+            getTypedControlWindow()->set_max( std::numeric_limits<int>::max(), FieldUnit::NONE );
         else
-            getTypedControlWindow()->SetMax( impl_apiValueToFieldValue_nothrow( _maxvalue.Value ), m_eValueUnit );
+            getTypedControlWindow()->set_max( impl_apiValueToFieldValue_nothrow( _maxvalue.Value ), m_eValueUnit );
     }
-
 
     ::sal_Int16 SAL_CALL ONumericControl::getDisplayUnit()
     {
-        return VCLUnoHelper::ConvertToMeasurementUnit( getTypedControlWindow()->GetUnit(), 1 );
+        return VCLUnoHelper::ConvertToMeasurementUnit( getTypedControlWindow()->get_unit(), 1 );
     }
-
 
     void SAL_CALL ONumericControl::setDisplayUnit( ::sal_Int16 _displayunit )
     {
@@ -577,15 +541,13 @@ namespace pcr
             // everything which survived the checks above should result in a factor of 1, i.e.,
             // it should have a direct counterpart as FieldUnit
             throw RuntimeException();
-        getTypedControlWindow()->MetricFormatter::SetUnit( eFieldUnit );
+        getTypedControlWindow()->set_unit(eFieldUnit);
     }
-
 
     ::sal_Int16 SAL_CALL ONumericControl::getValueUnit()
     {
         return VCLUnoHelper::ConvertToMeasurementUnit( m_eValueUnit, m_nFieldToUNOValueFactor );
     }
-
 
     void SAL_CALL ONumericControl::setValueUnit( ::sal_Int16 _valueunit )
     {
@@ -594,63 +556,58 @@ namespace pcr
         m_eValueUnit = VCLUnoHelper::ConvertToFieldUnit( _valueunit, m_nFieldToUNOValueFactor );
     }
 
-
     void SAL_CALL ONumericControl::setValue( const Any& _rValue )
     {
         if ( !_rValue.hasValue() )
         {
-            getTypedControlWindow()->SetText( "" );
-            getTypedControlWindow()->SetEmptyFieldValue();
+            getTypedControlWindow()->set_text( "" );
+//TODO            getTypedControlWindow()->SetEmptyFieldValue();
         }
         else
         {
             double nValue( 0 );
             OSL_VERIFY( _rValue >>= nValue );
-            long nControlValue = impl_apiValueToFieldValue_nothrow( nValue );
-            getTypedControlWindow()->SetValue( nControlValue, m_eValueUnit );
+            auto nControlValue = impl_apiValueToFieldValue_nothrow( nValue );
+            getTypedControlWindow()->set_value( nControlValue, m_eValueUnit );
         }
     }
 
-
-    long ONumericControl::impl_apiValueToFieldValue_nothrow( double _nApiValue ) const
+    int ONumericControl::impl_apiValueToFieldValue_nothrow( double _nApiValue ) const
     {
-        long nControlValue = ImplCalcLongValue( _nApiValue, getTypedControlWindow()->GetDecimalDigits() );
+        int nControlValue = ImplCalcLongValue( _nApiValue, getTypedControlWindow()->get_digits() );
         nControlValue /= m_nFieldToUNOValueFactor;
         return nControlValue;
     }
 
-
-    double ONumericControl::impl_fieldValueToApiValue_nothrow( sal_Int64 _nFieldValue ) const
+    double ONumericControl::impl_fieldValueToApiValue_nothrow( int nFieldValue ) const
     {
-        double nApiValue = ImplCalcDoubleValue( static_cast<long>(_nFieldValue), getTypedControlWindow()->GetDecimalDigits() );
+        double nApiValue = ImplCalcDoubleValue( nFieldValue, getTypedControlWindow()->get_digits() );
         nApiValue *= m_nFieldToUNOValueFactor;
         return nApiValue;
     }
 
-
     Any SAL_CALL ONumericControl::getValue()
     {
         Any aPropValue;
-        if ( !getTypedControlWindow()->GetText().isEmpty() )
+        if ( !getTypedControlWindow()->get_text().isEmpty() )
         {
-            double nValue = impl_fieldValueToApiValue_nothrow( getTypedControlWindow()->GetValue( m_eValueUnit ) );
+            double nValue = impl_fieldValueToApiValue_nothrow( getTypedControlWindow()->get_value( m_eValueUnit ) );
             aPropValue <<= nValue;
         }
         return aPropValue;
     }
-
 
     Type SAL_CALL ONumericControl::getValueType()
     {
         return ::cppu::UnoType<double>::get();
     }
 
-
+#if 0
     //= OColorControl
 
     #define LB_DEFAULT_COUNT 20
 
-    OColorControl::OColorControl(vcl::Window* pParent, WinBits nWinStyle)
+    OColorControl::OColorControl(weld::Container* pParent, WinBits nWinStyle)
         : OColorControl_Base(PropertyControlType::ColorListBox, pParent, nWinStyle)
     {
         getTypedControlWindow()->SetSlotId(SID_FM_CTL_PROPERTIES);
@@ -687,23 +644,17 @@ namespace pcr
         notifyModifiedValue();
     }
 
+#endif
+
     //= OListboxControl
-
-    OListboxControl::OListboxControl( vcl::Window* pParent, WinBits nWinStyle)
-        :OListboxControl_Base( PropertyControlType::ListBox, pParent, nWinStyle )
+    OListboxControl::OListboxControl(std::unique_ptr<weld::ComboBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
+        : OListboxControl_Base(PropertyControlType::ListBox, std::move(xBuilder), std::move(xWidget), bReadOnly)
     {
-        getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
-        if ( ( nWinStyle & WB_READONLY ) != 0 )
-        {
-            getTypedControlWindow()->SetReadOnly();
-            getTypedControlWindow()->Enable();
-        }
     }
-
 
     Any SAL_CALL OListboxControl::getValue()
     {
-        OUString sControlValue( getTypedControlWindow()->GetSelectedEntry() );
+        OUString sControlValue( getTypedControlWindow()->get_active_text() );
 
         Any aPropValue;
         if ( !sControlValue.isEmpty() )
@@ -711,143 +662,123 @@ namespace pcr
         return aPropValue;
     }
 
-
     Type SAL_CALL OListboxControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
 
-
     void SAL_CALL OListboxControl::setValue( const Any& _rValue )
     {
         if ( !_rValue.hasValue() )
-            getTypedControlWindow()->SetNoSelection();
+            getTypedControlWindow()->set_active(-1);
         else
         {
             OUString sSelection;
             _rValue >>= sSelection;
 
-            if ( sSelection != getTypedControlWindow()->GetSelectedEntry() )
-                getTypedControlWindow()->SelectEntry( sSelection );
+            if (getTypedControlWindow()->find_text(sSelection) == -1)
+                getTypedControlWindow()->insert_text(0, sSelection);
 
-            if ( !getTypedControlWindow()->IsEntrySelected( sSelection ) )
-            {
-                getTypedControlWindow()->InsertEntry( sSelection, 0 );
-                getTypedControlWindow()->SelectEntry( sSelection );
-            }
+            if (sSelection != getTypedControlWindow()->get_active_text())
+                getTypedControlWindow()->set_active_text(sSelection);
         }
     }
 
-
     void SAL_CALL OListboxControl::clearList()
     {
-        getTypedControlWindow()->Clear();
+        getTypedControlWindow()->clear();
     }
-
 
     void SAL_CALL OListboxControl::prependListEntry( const OUString& NewEntry )
     {
-        getTypedControlWindow()->InsertEntry( NewEntry, 0 );
+        getTypedControlWindow()->insert_text(0, NewEntry);
     }
-
 
     void SAL_CALL OListboxControl::appendListEntry( const OUString& NewEntry )
     {
-        getTypedControlWindow()->InsertEntry( NewEntry );
+        getTypedControlWindow()->append_text(NewEntry);
     }
 
-    Sequence< OUString > SAL_CALL OListboxControl::getListEntries(  )
+    Sequence< OUString > SAL_CALL OListboxControl::getListEntries()
     {
-        const sal_Int32 nCount = getTypedControlWindow()->GetEntryCount();
+        const sal_Int32 nCount = getTypedControlWindow()->get_count();
         Sequence< OUString > aRet(nCount);
         OUString* pIter = aRet.getArray();
         for (sal_Int32 i = 0; i < nCount ; ++i,++pIter)
-            *pIter = getTypedControlWindow()->GetEntry(i);
+            *pIter = getTypedControlWindow()->get_text(i);
 
         return aRet;
     }
-
 
     void OListboxControl::setModified()
     {
         OListboxControl_Base::setModified();
 
-        if ( !getTypedControlWindow()->IsTravelSelect() )
+        //TODO if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit
             notifyModifiedValue();
     }
 
-
     //= OComboboxControl
-
-
-    OComboboxControl::OComboboxControl( vcl::Window* pParent, WinBits nWinStyle)
-        :OComboboxControl_Base( PropertyControlType::ComboBox, pParent, nWinStyle )
+    OComboboxControl::OComboboxControl(std::unique_ptr<weld::ComboBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
+        : OComboboxControl_Base(PropertyControlType::ComboBox, std::move(xBuilder), std::move(xWidget), bReadOnly)
     {
-        getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
-        getTypedControlWindow()->SetSelectHdl( LINK( this, OComboboxControl, OnEntrySelected ) );
+        getTypedControlWindow()->connect_changed( LINK( this, OComboboxControl, OnEntrySelected ) );
     }
-
 
     void SAL_CALL OComboboxControl::setValue( const Any& _rValue )
     {
         OUString sText;
         _rValue >>= sText;
-        getTypedControlWindow()->SetText( sText );
+        getTypedControlWindow()->set_entry_text( sText );
     }
-
 
     Any SAL_CALL OComboboxControl::getValue()
     {
-        return makeAny( getTypedControlWindow()->GetText() );
+        return makeAny( getTypedControlWindow()->get_active_text() );
     }
-
 
     Type SAL_CALL OComboboxControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
 
-
     void SAL_CALL OComboboxControl::clearList()
     {
-        getTypedControlWindow()->Clear();
+        getTypedControlWindow()->clear();
     }
-
 
     void SAL_CALL OComboboxControl::prependListEntry( const OUString& NewEntry )
     {
-        getTypedControlWindow()->InsertEntry( NewEntry, 0 );
+        getTypedControlWindow()->insert_text(0, NewEntry);
     }
-
 
     void SAL_CALL OComboboxControl::appendListEntry( const OUString& NewEntry )
     {
-        getTypedControlWindow()->InsertEntry( NewEntry );
+        getTypedControlWindow()->append_text( NewEntry );
     }
 
     Sequence< OUString > SAL_CALL OComboboxControl::getListEntries(  )
     {
-        const sal_Int32 nCount = getTypedControlWindow()->GetEntryCount();
+        const sal_Int32 nCount = getTypedControlWindow()->get_count();
         Sequence< OUString > aRet(nCount);
         OUString* pIter = aRet.getArray();
         for (sal_Int32 i = 0; i < nCount ; ++i,++pIter)
-            *pIter = getTypedControlWindow()->GetEntry(i);
+            *pIter = getTypedControlWindow()->get_text(i);
 
         return aRet;
     }
 
-
-    IMPL_LINK_NOARG( OComboboxControl, OnEntrySelected, ComboBox&, void )
+    IMPL_LINK_NOARG( OComboboxControl, OnEntrySelected, weld::ComboBox&, void )
     {
-        if ( !getTypedControlWindow()->IsTravelSelect() )
+//TODO        if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit
             notifyModifiedValue();
     }
 
+#if 0
 
     //= OMultilineFloatingEdit
-
     class OMultilineFloatingEdit : public FloatingWindow
     {
     private:
@@ -867,8 +798,8 @@ namespace pcr
     };
 
 
-    OMultilineFloatingEdit::OMultilineFloatingEdit(vcl::Window* _pParent)
-        :FloatingWindow(_pParent, WB_BORDER)
+    OMultilineFloatingEdit::OMultilineFloatingEdit(vcl::Window* pParent)
+        :FloatingWindow(pParent, WB_BORDER)
         ,m_aImplEdit(VclPtr<MultiLineEdit>::Create(this, WB_VSCROLL|WB_IGNORETAB|WB_NOBORDER))
     {
         m_aImplEdit->Show();
@@ -920,12 +851,9 @@ namespace pcr
         return bResult;
     }
 
-
     //= DropDownEditControl_Base
-
-
-    DropDownEditControl::DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle )
-        :Edit( _pParent, _nStyle )
+    DropDownEditControl::DropDownEditControl( vcl::Window* pParent, WinBits _nStyle )
+        :Edit( pParent, _nStyle )
         ,m_pFloatingEdit( nullptr )
         ,m_pDropdownButton( nullptr )
         ,m_nOperationMode( eStringList )
@@ -1247,11 +1175,8 @@ namespace pcr
         return GetText();
     }
 
-
     //= OMultilineEditControl
-
-
-    OMultilineEditControl::OMultilineEditControl( vcl::Window* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle )
+    OMultilineEditControl::OMultilineEditControl( weld::Container* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle )
         :OMultilineEditControl_Base( _eMode == eMultiLineText ? PropertyControlType::MultiLineTextField : PropertyControlType::StringListField
                                    , pParent
                                    , ( nWinStyle | WB_DIALOGCONTROL ) & ( ~WB_READONLY | ~WB_DROPDOWN )
@@ -1260,7 +1185,6 @@ namespace pcr
         getTypedControlWindow()->setOperationMode( _eMode );
         getTypedControlWindow()->setControlHelper( *this );
     }
-
 
     void SAL_CALL OMultilineEditControl::setValue( const Any& _rValue )
     {
@@ -1287,7 +1211,6 @@ namespace pcr
         }
     }
 
-
     Any SAL_CALL OMultilineEditControl::getValue()
     {
         impl_checkDisposed_throw();
@@ -1305,7 +1228,6 @@ namespace pcr
         return aValue;
     }
 
-
     Type SAL_CALL OMultilineEditControl::getValueType()
     {
         if ( getTypedControlWindow()->getOperationMode() == eMultiLineText )
@@ -1313,8 +1235,8 @@ namespace pcr
         return cppu::UnoType<Sequence< OUString >>::get();
     }
 
+#endif
 
 } // namespace pcr
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

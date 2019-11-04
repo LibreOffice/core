@@ -54,8 +54,8 @@ namespace pcr
     class ListLikeControlWithModifyHandler : public TListboxWindow
     {
     public:
-        ListLikeControlWithModifyHandler( vcl::Window* _pParent, WinBits _nStyle )
-            : TListboxWindow( _pParent, _nStyle )
+        ListLikeControlWithModifyHandler( vcl::Window* pParent, WinBits _nStyle )
+            : TListboxWindow( pParent, _nStyle )
         {
             TListboxWindow::SetSelectHdl( LINK(this, ListLikeControlWithModifyHandler, OnSelect) );
         }
@@ -77,12 +77,11 @@ namespace pcr
     }
 
     //= OTimeControl
-
     typedef CommonBehaviourControl< css::inspection::XPropertyControl, TimeField > OTimeControl_Base;
     class OTimeControl : public OTimeControl_Base
     {
     public:
-        OTimeControl( vcl::Window* pParent, WinBits nWinStyle );
+        OTimeControl( weld::Container* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -90,14 +89,12 @@ namespace pcr
         virtual css::uno::Type SAL_CALL getValueType() override;
     };
 
-
     //= ODateControl
-
     typedef CommonBehaviourControl< css::inspection::XPropertyControl, CalendarField > ODateControl_Base;
     class ODateControl : public ODateControl_Base
     {
     public:
-        ODateControl( vcl::Window* pParent, WinBits nWinStyle );
+        ODateControl(weld::Container* pParent, WinBits nWinStyle);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -105,16 +102,18 @@ namespace pcr
         virtual css::uno::Type SAL_CALL getValueType() override;
     };
 
-
     //= OEditControl
-
-    typedef CommonBehaviourControl< css::inspection::XPropertyControl, Edit > OEditControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::Entry> OEditControl_Base;
     class OEditControl final : public OEditControl_Base
     {
         bool m_bIsPassword : 1;
 
     public:
-        OEditControl( vcl::Window* _pParent, bool _bPassWord, WinBits nWinStyle );
+        OEditControl(std::unique_ptr<weld::Entry> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bPassWord, bool bReadOnly);
+        virtual ~OEditControl()
+        {
+            fprintf(stderr, "bCharacterField dtor\n");
+        }
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -124,16 +123,15 @@ namespace pcr
     private:
         // CommonBehaviourControlHelper::modified
         virtual void setModified() override;
+        virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
     };
 
-
     //= ODateTimeControl
-
     typedef CommonBehaviourControl< css::inspection::XPropertyControl, FormattedField > ODateTimeControl_Base;
     class ODateTimeControl : public ODateTimeControl_Base
     {
     public:
-        ODateTimeControl( vcl::Window* pParent,WinBits nWinStyle );
+        ODateTimeControl( weld::Container* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -141,9 +139,7 @@ namespace pcr
         virtual css::uno::Type SAL_CALL getValueType() override;
     };
 
-
     //= HyperlinkInput
-
     class HyperlinkInput : public Edit
     {
     private:
@@ -151,7 +147,7 @@ namespace pcr
         Link<void*,void>  m_aClickHandler;
 
     public:
-        HyperlinkInput( vcl::Window* _pParent, WinBits _nWinStyle );
+        HyperlinkInput( vcl::Window* pParent, WinBits _nWinStyle );
 
         /** sets the handler which will (asynchronously, with locked SolarMutex) be called
             when the hyperlink has been clicked by the user
@@ -169,16 +165,14 @@ namespace pcr
         bool    impl_textHitTest( const Point& rWindowPos );
     };
 
-
     //= OHyperlinkControl
-
     typedef CommonBehaviourControl< css::inspection::XHyperlinkControl, HyperlinkInput > OHyperlinkControl_Base;
     class OHyperlinkControl final : public OHyperlinkControl_Base
     {
         ::comphelper::OInterfaceContainerHelper2   m_aActionListeners;
 
     public:
-        OHyperlinkControl( vcl::Window* _pParent, WinBits _nWinStyle );
+        OHyperlinkControl( weld::Container* pParent, WinBits _nWinStyle );
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -196,24 +190,8 @@ namespace pcr
         DECL_LINK( OnHyperlinkClicked, void*, void );
     };
 
-
-    //= CustomConvertibleNumericField
-
-    class CustomConvertibleNumericField : public MetricField
-    {
-    public:
-        CustomConvertibleNumericField( vcl::Window* _pParent, WinBits _nStyle )
-            :MetricField( _pParent, _nStyle )
-        {
-        }
-
-        sal_Int64 GetLastValue() const { return mnLastValue; }
-    };
-
-
     //= ONumericControl
-
-    typedef CommonBehaviourControl< css::inspection::XNumericControl, CustomConvertibleNumericField > ONumericControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XNumericControl, weld::MetricSpinButton> ONumericControl_Base;
     class ONumericControl : public ONumericControl_Base
     {
     private:
@@ -221,7 +199,8 @@ namespace pcr
         sal_Int16   m_nFieldToUNOValueFactor;
 
     public:
-        ONumericControl( vcl::Window* pParent, WinBits nWinStyle );
+        ONumericControl(std::unique_ptr<weld::MetricSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
+
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -240,30 +219,31 @@ namespace pcr
         virtual ::sal_Int16 SAL_CALL getValueUnit() override;
         virtual void SAL_CALL setValueUnit( ::sal_Int16 _valueunit ) override;
 
+        virtual weld::Widget* getWidget() override
+            { return &getTypedControlWindow()->get_widget(); }
+
     private:
         /** converts an API value (<code>double</code>, as passed into <code>set[Max|Min|]Value) into
-            a <code>long</code> value which can be passed to our NumericField.
+            a <code>int</code> value which can be passed to our NumericField.
 
             The conversion respects our decimal digits as well as our value factor (<member>m_nFieldToUNOValueFactor</member>).
         */
-        long    impl_apiValueToFieldValue_nothrow( double _nApiValue ) const;
+        int    impl_apiValueToFieldValue_nothrow( double nApiValue ) const;
 
         /** converts a control value, as obtained from our Numeric field, into a value which can passed
             to outer callers via our UNO API.
         */
-        double  impl_fieldValueToApiValue_nothrow( sal_Int64 _nFieldValue ) const;
+        double  impl_fieldValueToApiValue_nothrow( int nFieldValue ) const;
     };
 
-
     //= OColorControl
-
     typedef CommonBehaviourControl  <   css::inspection::XPropertyControl
-                                    ,   ListLikeControlWithModifyHandler<SvxColorListBox>
+                                    ,   ListLikeControlWithModifyHandler<ColorListBox>
                                     >   OColorControl_Base;
     class OColorControl : public OColorControl_Base
     {
     public:
-        OColorControl( vcl::Window* pParent, WinBits nWinStyle );
+        OColorControl( weld::Container* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -275,16 +255,12 @@ namespace pcr
         virtual void setModified() override;
     };
 
-
     //= OListboxControl
-
-    typedef CommonBehaviourControl  <   css::inspection::XStringListControl
-                                    ,   ListLikeControlWithModifyHandler< ListBox >
-                                    >   OListboxControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XStringListControl, weld::ComboBox> OListboxControl_Base;
     class OListboxControl : public OListboxControl_Base
     {
     public:
-        OListboxControl( vcl::Window* pParent, WinBits nWinStyle );
+        OListboxControl(std::unique_ptr<weld::ComboBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -300,16 +276,15 @@ namespace pcr
     protected:
         // CommonBehaviourControlHelper::setModified
         virtual void setModified() override;
+        virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
     };
 
-
     //= OComboboxControl
-
-    typedef CommonBehaviourControl< css::inspection::XStringListControl, ComboBox > OComboboxControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XStringListControl, weld::ComboBox > OComboboxControl_Base;
     class OComboboxControl final : public OComboboxControl_Base
     {
     public:
-        OComboboxControl( vcl::Window* pParent, WinBits nWinStyle );
+        OComboboxControl(std::unique_ptr<weld::ComboBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -322,8 +297,12 @@ namespace pcr
         virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) override;
 
+    protected:
+        // CommonBehaviourControlHelper::setModified
+        virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
+
     private:
-        DECL_LINK( OnEntrySelected, ComboBox&, void );
+        DECL_LINK( OnEntrySelected, weld::ComboBox&, void );
     };
 
 
@@ -350,7 +329,7 @@ namespace pcr
         CommonBehaviourControlHelper*       m_pHelper;
 
     public:
-        DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle );
+        DropDownEditControl( vcl::Window* pParent, WinBits _nStyle );
         virtual ~DropDownEditControl() override;
         virtual void dispose() override;
 
@@ -378,14 +357,12 @@ namespace pcr
         void ShowDropDown( bool bShow );
     };
 
-
     //= OMultilineEditControl
-
     typedef CommonBehaviourControl< css::inspection::XPropertyControl, DropDownEditControl > OMultilineEditControl_Base;
     class OMultilineEditControl : public OMultilineEditControl_Base
     {
     public:
-        OMultilineEditControl( vcl::Window* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle  );
+        OMultilineEditControl(weld::Container* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -393,9 +370,7 @@ namespace pcr
         virtual css::uno::Type SAL_CALL getValueType() override;
     };
 
-
 } // namespace pcr
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_STANDARDCONTROL_HXX
 
