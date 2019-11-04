@@ -3227,7 +3227,7 @@ ILibreOfficeKitNotifier::~ILibreOfficeKitNotifier()
     for (auto it = GetLOKWindowsMap().begin(); it != GetLOKWindowsMap().end();)
     {
         WindowImpl* pWindowImpl = it->second->ImplGetWindowImpl();
-        if (pWindowImpl->mpLOKNotifier == this)
+        if (pWindowImpl && pWindowImpl->mpLOKNotifier == this)
         {
             pWindowImpl->mpLOKNotifier = nullptr;
             pWindowImpl->mnLOKWindowId = 0;
