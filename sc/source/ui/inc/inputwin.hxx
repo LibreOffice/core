@@ -264,6 +264,7 @@ public:
     virtual void    dispose() override;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    PixelInvalidate(const tools::Rectangle* pRectangle) override;
     virtual void    Resize() override;
     virtual void    Select() override;
 
@@ -301,6 +302,8 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
 
+    void            NotifyLOKClient();
+
     DECL_LINK( MenuHdl, Menu *, bool );
     DECL_LINK( DropdownClickHdl, ToolBox*, void );
 
@@ -311,6 +314,7 @@ private:
     VclPtr<ScTextWndBase> pRuntimeWindow;
     ScTextWndBase&  aTextWindow;
     ScInputHandler* pInputHdl;
+    ScTabViewShell* mpViewShell;
     long            mnMaxY;
     bool            bIsOkCancelMode;
     bool            bInResize;
