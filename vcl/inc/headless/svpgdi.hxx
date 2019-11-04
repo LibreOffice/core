@@ -232,6 +232,8 @@ public:
                                                    const PolyFlags* const* pFlgAry ) override;
     virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) override { return false; };
 
+    virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) override;
+
     virtual void            copyArea( long nDestX,
                                       long nDestY,
                                       long nSrcX,

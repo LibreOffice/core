@@ -652,6 +652,11 @@ bool SalGraphics::DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradi
     return drawGradient( rPolyPoly, rGradient );
 }
 
+bool SalGraphics::DrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rSalGradient)
+{
+    return implDrawGradient(rPolyPolygon, rSalGradient);
+}
+
 void SalGraphics::CopyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
                             long nSrcWidth, long nSrcHeight,

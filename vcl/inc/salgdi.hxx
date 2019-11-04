@@ -25,6 +25,7 @@
 #include "impfontmetricdata.hxx"
 #include "salgdiimpl.hxx"
 #include "sallayout.hxx"
+#include "SalGradient.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include "WidgetDrawInterface.hxx"
 
@@ -275,6 +276,8 @@ public:
                                     const tools::PolyPolygon& rPolyPoly,
                                     const Gradient& rGradient );
 
+    bool DrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon,
+                      SalGradient const & rGradient);
 
     // CopyArea --> No RasterOp, but ClipRegion
     void                        CopyArea(
@@ -485,6 +488,12 @@ protected:
     virtual bool                drawGradient(
                                     const tools::PolyPolygon& rPolyPoly,
                                     const Gradient& rGradient ) = 0;
+
+    virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & /*rPolyPolygon*/,
+                                  SalGradient const & /*rGradient*/)
+    {
+        return false;
+    }
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void                copyArea(
