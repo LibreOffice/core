@@ -20,10 +20,12 @@
 #ifndef INCLUDED_VCL_IMGCTRL_HXX
 #define INCLUDED_VCL_IMGCTRL_HXX
 
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION)
+#error "don't use this in new code"
+#endif
+
 #include <vcl/dllapi.h>
-
 #include <vcl/fixed.hxx>
-
 
 class VCL_DLLPUBLIC ImageControl : public FixedImage
 {
