@@ -867,6 +867,9 @@ void PNGReaderImpl::ImplGetBackground()
                 sal_uInt8 nRed = ImplScaleColor();
                 sal_uInt8 nGreen = ImplScaleColor();
                 sal_uInt8 nBlue = ImplScaleColor();
+                // ofz#18653 slow and uninteresting
+                if (!utl::ConfigManager::IsFuzzing())
+                    return;
                 mxAcc->Erase(Color(nRed, nGreen, nBlue));
             }
         }
