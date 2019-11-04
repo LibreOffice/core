@@ -78,23 +78,25 @@ public:
 
     static void AddFillColorAction(GDIMetaFile* pMetaFile, long nRed, long nGreen, long nBlue);
     static void AddGradientBorderActions(GDIMetaFile* pMetaFile, Gradient const& rGradient,
-                                         tools::Rectangle aBorderRect, tools::Rectangle aMirrorRect,
+                                         tools::Rectangle aGradientBorderRect,
+                                         tools::Rectangle aGradientMirroredStepRect,
                                          Point const& rCenter, double nAngle, double fBorderWidth);
 
     static tools::Rectangle SetGradientStepTop(tools::Rectangle const& rBorderRect,
-                                               double fBorderWidth, tools::Rectangle aStepRect);
+                                               double fBorderWidth,
+                                               tools::Rectangle aGradientStepRect);
 
-    static tools::Rectangle SetGradientStepMirrorBottom(Gradient const& rGradient,
-                                                        tools::Rectangle const& rBorderRect,
-                                                        double fBorderWidth,
-                                                        tools::Rectangle aMirrorRect);
+    static tools::Rectangle
+    SetGradientMirroredStepBottom(Gradient const& rGradient, tools::Rectangle const& rBorderRect,
+                                  double fBorderWidth, tools::Rectangle aGradientMirroredStepRect);
 
     static void SetFillColor(OutputDevice* pRenderContext, long nStartRed, long nStartGreen,
                              long nStartBlue);
     static void DrawGradientBorder(OutputDevice* pRenderContext, Gradient const& rGradient,
                                    tools::PolyPolygon const* pClixPolyPoly,
-                                   tools::Rectangle aBorderRect, tools::Rectangle aMirrorRect,
-                                   Point const& rCenter, double nAngle, double fBorderWidth);
+                                   tools::Rectangle aGradientBorderRect,
+                                   tools::Rectangle aGradientMirroredStepRect, Point const& rCenter,
+                                   double nAngle, double fBorderWidth);
 
     static long CalculateInterpolatedColor(long nStartColor, long nEndColor, double fAlpha);
 
