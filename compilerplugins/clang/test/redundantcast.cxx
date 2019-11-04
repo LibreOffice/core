@@ -406,6 +406,18 @@ void testNew() {
     (void)p2;
 }
 
+using F = void (*)();
+auto testNullFunctionPointer(int i, F p) {
+    switch (i) {
+    case 0:
+        return static_cast<F>(nullptr);
+    case 1:
+        return F(nullptr);
+    default:
+        return p;
+    }
+}
+
 int main() {
     testConstCast();
     testStaticCast();
