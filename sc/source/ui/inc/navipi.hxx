@@ -231,7 +231,8 @@ private:
 
     static ScTabViewShell*  GetTabViewShell();
     static ScNavigatorSettings* GetNavigatorSettings();
-    bool                    GetViewData();
+    ScViewData*             GetViewData();
+
 
     void    UpdateColumn    ( const SCCOL* pCol = nullptr );
     void    UpdateRow       ( const SCROW* pRow = nullptr );

@@ -23,6 +23,7 @@
 
 #include <navcitem.hxx>
 #include <navipi.hxx>
+#include <viewdata.hxx>
 #include <sc.hrc>
 
 ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
@@ -49,7 +50,7 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
                 {
                     const OUString&  aAddress( pCellPosItem->GetValue() );
                     ScAddress aScAddress;
-                    aScAddress.Parse( aAddress );
+                    aScAddress.Parse( aAddress, rNavigatorDlg.GetViewData()->GetDocument() );
 
                     SCCOL nCol = aScAddress.Col()+1;
                     SCROW nRow = aScAddress.Row()+1;
