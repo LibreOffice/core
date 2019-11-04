@@ -1738,6 +1738,14 @@ public:
     void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
     void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
     OUString get_text() const { return m_xSpinButton->get_text(); }
+    void connect_focus_in(const Link<Widget&, void>& rLink)
+    {
+        m_xSpinButton->connect_focus_in(rLink);
+    }
+    void connect_focus_out(const Link<Widget&, void>& rLink)
+    {
+        m_xSpinButton->connect_focus_out(rLink);
+    }
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 
