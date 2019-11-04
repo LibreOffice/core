@@ -90,7 +90,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/prgsbar.hxx>
+#include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/longcurr.hxx>
 #include <vcl/lstbox.hxx>

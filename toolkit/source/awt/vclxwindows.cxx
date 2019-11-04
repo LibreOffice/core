@@ -49,7 +49,7 @@
 #include <vcl/longcurr.hxx>
 #include <vcl/toolkit/imgctrl.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/prgsbar.hxx>
+#include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>

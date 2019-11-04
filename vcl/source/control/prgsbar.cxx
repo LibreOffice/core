@@ -19,7 +19,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
-#include <vcl/prgsbar.hxx>
+#include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
