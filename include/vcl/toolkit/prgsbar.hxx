@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_PRGSBAR_HXX
 #define INCLUDED_VCL_PRGSBAR_HXX
 
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION)
+#error "don't use this in new code"
+#endif
+
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 

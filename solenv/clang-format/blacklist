@@ -7855,7 +7855,6 @@ include/vcl/pngread.hxx
 include/vcl/pngwrite.hxx
 include/vcl/popupmenuwindow.hxx
 include/vcl/ppdparser.hxx
-include/vcl/prgsbar.hxx
 include/vcl/print.hxx
 include/vcl/prntypes.hxx
 include/vcl/ptrstyle.hxx
@@ -7901,6 +7900,7 @@ include/vcl/toolkit/fixedhyper.hxx
 include/vcl/toolkit/group.hxx
 include/vcl/toolkit/imgctrl.hxx
 include/vcl/toolkit/morebtn.hxx
+include/vcl/toolkit/prgsbar.hxx
 include/vcl/toolkit/roadmap.hxx
 include/vcl/toolkit/spin.hxx
 include/vcl/toolkit/tabdlg.hxx

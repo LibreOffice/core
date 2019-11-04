@@ -34,7 +34,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/mnemonic.hxx>
-#include <vcl/prgsbar.hxx>
+#include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/svtabbx.hxx>
