@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_THROBBER_HXX
 #define INCLUDED_VCL_THROBBER_HXX
 
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION)
+#error "don't use this in new code"
+#endif
+
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/imgctrl.hxx>
 #include <vcl/timer.hxx>

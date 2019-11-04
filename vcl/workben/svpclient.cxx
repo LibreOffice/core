@@ -25,14 +25,13 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/ImageScaleMode.hpp>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/toolkit/imgctrl.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graph.hxx>
@@ -96,7 +95,7 @@ class MyWin : public WorkWindow
 {
     VclPtr<PushButton>   m_aListButton;
     VclPtr<ListBox>      m_aSvpBitmaps;
-    VclPtr<ImageControl> m_aImage;
+    VclPtr<FixedImage> m_aImage;
     VclPtr<PushButton>   m_aQuitButton;
 public:
                  MyWin( vcl::Window* pParent, WinBits nWinStyle );
@@ -126,7 +125,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
     m_aListButton(VclPtr<PushButton>::Create(this, 0)),
     m_aSvpBitmaps(VclPtr<ListBox>::Create(this, WB_BORDER)),
-    m_aImage(VclPtr<ImageControl>::Create(this, WB_BORDER)),
+    m_aImage(VclPtr<FixedImage>::Create(this, WB_BORDER)),
     m_aQuitButton(VclPtr<PushButton>::Create(this, 0))
 {
     m_aListButton->SetPosSizePixel( Point( 10, 10 ), Size( 120, 25 ) );
@@ -139,7 +138,6 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     m_aSvpBitmaps->Show();
 
     m_aImage->SetPosSizePixel( Point( 170, 10 ), Size( 400, 400 ) );
-    m_aImage->SetScaleMode( css::awt::ImageScaleMode::NONE );
     m_aImage->Show();
 
     m_aQuitButton->SetPosSizePixel( Point( 10, 300 ), Size( 120,25 ) );

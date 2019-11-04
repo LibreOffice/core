@@ -26,7 +26,7 @@
 #include <uielement/complextoolbarcontroller.hxx>
 
 class ToolBox;
-class ImageControl;
+class FixedImage;
 
 namespace framework
 {
@@ -49,7 +49,7 @@ protected:
     DECL_LINK(MiscOptionsChanged, LinkParamNone*, void);
 
 private:
-    VclPtr<ImageControl> m_pFixedImageControl;
+    VclPtr<FixedImage> m_pFixedImageControl;
     sal_Int16 m_eSymbolSize;
 };
 } // namespace framework
