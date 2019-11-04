@@ -201,7 +201,7 @@ ConvErr QProToSc::Convert( std::unique_ptr<ScTokenArray>& pArray )
     TokenId nPush;
     ScComplexRefData aCRD;
     ScSingleRefData aSRD;
-    FUNC_TYPE eType;
+    QPRO_FUNC_TYPE eType;
     DefTokenId eOc;
     double nFloatArray[ nBufSize ] = {0};
     const sal_Char* pExtString = nullptr;
@@ -398,7 +398,7 @@ ConvErr QProToSc::Convert( std::unique_ptr<ScTokenArray>& pArray )
 static const struct
 {
     DefTokenId const nToken;
-    FUNC_TYPE const   nType;
+    QPRO_FUNC_TYPE const   nType;
 } aFuncMap[] = {
     { ocPush, FT_ConstFloat },
     { ocPush, FT_Cref },
@@ -573,7 +573,7 @@ DefTokenId QProToSc::IndexToToken( sal_uInt16 nIndex )
     return ocNoName;
 }
 
-FUNC_TYPE QProToSc::IndexToType( sal_uInt8 nIndex )
+QPRO_FUNC_TYPE QProToSc::IndexToType( sal_uInt8 nIndex )
 {
     if( nIndex < nIndexCount )
         return aFuncMap[ nIndex ].nType;

@@ -25,7 +25,7 @@
 
 typedef OpCode DefTokenId;
 
-enum FUNC_TYPE
+enum QPRO_FUNC_TYPE
 {
     FT_Return,
     FT_FuncFix0,
@@ -63,7 +63,7 @@ public:
     void ReadSRD( ScSingleRefData& rR, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 rRel );
     void IncToken( TokenId &aParam );
     static DefTokenId IndexToToken( sal_uInt16 nToken );
-    static FUNC_TYPE IndexToType( sal_uInt8 nToken );
+    static QPRO_FUNC_TYPE IndexToType( sal_uInt8 nToken );
     static DefTokenId IndexToDLLId( sal_uInt16 nIndex );
     static const sal_Char* getString( sal_uInt8 nIndex );
 };
