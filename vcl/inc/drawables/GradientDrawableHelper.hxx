@@ -76,11 +76,17 @@ public:
 
     static double CalculateBorderWidth(Gradient const& rGradient, tools::Rectangle const& rRect);
 
-    static void AddFillColorAction(GDIMetaFile* pMetaFile, long nRed, long nGreen, long nBlue);
     static void AddGradientBorderActions(GDIMetaFile* pMetaFile, Gradient const& rGradient,
-                                         tools::Rectangle aGradientBorderRect,
-                                         tools::Rectangle aGradientMirroredStepRect,
-                                         Point const& rCenter, double nAngle, double fBorderWidth);
+                                         tools::Rectangle const& rGradientBorderRect,
+                                         tools::Rectangle const& rGradientMirroredBorderRect,
+                                         Point const& rCenter, sal_uInt16 nAngle,
+                                         double fBorderWidth, long nStartRed, long nStartGreen,
+                                         long nStartBlue);
+    static void AddFillColorAction(GDIMetaFile* pMetaFile, long nRed, long nGreen, long nBlue);
+    static void AddGradientBorderRect(GDIMetaFile* pMetaFile, Gradient const& rGradient,
+                                      tools::Rectangle aGradientBorderRect,
+                                      tools::Rectangle aGradientMirroredBorderRect,
+                                      Point const& rCenter, double nAngle, double fBorderWidth);
 
     static tools::Rectangle SetGradientStepTop(tools::Rectangle const& rBorderRect,
                                                double fBorderWidth,
@@ -96,7 +102,8 @@ public:
                                    tools::PolyPolygon const* pClixPolyPoly,
                                    tools::Rectangle aGradientBorderRect,
                                    tools::Rectangle aGradientMirroredStepRect, Point const& rCenter,
-                                   double nAngle, double fBorderWidth);
+                                   double nAngle, double fBorderWidth, long nStartRed,
+                                   long nStartGreen, long nStartBlue);
 
     static long CalculateInterpolatedColor(long nStartColor, long nEndColor, double fAlpha);
 
