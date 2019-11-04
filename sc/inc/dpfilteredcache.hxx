@@ -42,7 +42,7 @@ struct ScQueryParam;
  * This class is only a wrapper to the actual cache, to provide filtering on
  * the raw data based on the query filter and/or page field filters.
  */
-class SC_DLLPUBLIC ScDPFilteredCache
+class ScDPFilteredCache
 {
     typedef mdds::flat_segment_tree<SCROW, bool> RowFlagType;
 

@@ -24,7 +24,7 @@
 
 #include <salbmp.hxx>
 
-class VCL_DLLPUBLIC SvpSalBitmap : public SalBitmap
+class SvpSalBitmap : public SalBitmap
 {
     std::unique_ptr<BitmapBuffer> mpDIB;
 public:

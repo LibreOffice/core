@@ -447,7 +447,7 @@ typedef tools::SvRef<ScDocShell> ScDocShellRef;
     methods to avoid multiple modified status changes, only the last instance
     destroyed calls ScDocShell::SetDocumentModified().
  */
-class SC_DLLPUBLIC ScDocShellModificator
+class ScDocShellModificator
 {
     ScDocShell&     rDocShell;
     std::unique_ptr<ScRefreshTimerProtector> mpProtector;

@@ -47,7 +47,7 @@ class SvXMLExport;
     office:meta must <em>not</em> be written.
     </p>
  */
-class XMLOFF_DLLPUBLIC SvXMLMetaExport final : public cppu::WeakImplHelper<
+class SvXMLMetaExport final : public cppu::WeakImplHelper<
                 css::xml::sax::XDocumentHandler >
 {
 private:
@@ -58,15 +58,15 @@ private:
     /// preserved namespaces. necessary because we do not write the root node.
     std::vector< css::beans::StringPair > m_preservedNSs;
 
-    SAL_DLLPRIVATE void SimpleStringElement(
+    void SimpleStringElement(
         const OUString& rText, sal_uInt16 nNamespace,
         enum ::xmloff::token::XMLTokenEnum eElementName );
-    SAL_DLLPRIVATE void SimpleDateTimeElement(
+    void SimpleDateTimeElement(
         const css::util::DateTime & rDate, sal_uInt16 nNamespace,
         enum ::xmloff::token::XMLTokenEnum eElementName );
 
     /// currently unused; for exporting via the XDocumentProperties interface
-    SAL_DLLPRIVATE void MExport_();
+    void MExport_();
 
 public:
     SvXMLMetaExport( SvXMLExport& i_rExport,

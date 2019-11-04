@@ -314,7 +314,7 @@ protected:
     std::function<bool (const ThumbnailViewItem*)> maFilterFunc;
 };
 
-class SFX2_DLLPUBLIC SfxThumbnailView : public weld::CustomWidgetController, public ThumbnailViewBase
+class SfxThumbnailView : public weld::CustomWidgetController, public ThumbnailViewBase
 {
 public:
     SfxThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);
@@ -415,16 +415,16 @@ protected:
     void CalculateItemPositions (bool bScrollBarUsed = false);
     void MakeItemVisible( sal_uInt16 nId );
 
-    SFX2_DLLPRIVATE void         ImplInit();
+    void         ImplInit();
 
-    SFX2_DLLPRIVATE void         ImplDeleteItems();
-    SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
-    SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );
-    SFX2_DLLPRIVATE virtual sal_uInt16 ImplGetVisibleItemCount() const override;
-    SFX2_DLLPRIVATE virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos) override;
-    SFX2_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
-    SFX2_DLLPRIVATE bool         ImplHasAccessibleListeners();
-    DECL_DLLPRIVATE_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );
+    void         ImplDeleteItems();
+    size_t       ImplGetItem( const Point& rPoint ) const;
+    ThumbnailViewItem*    ImplGetItem( size_t nPos );
+    virtual sal_uInt16 ImplGetVisibleItemCount() const override;
+    virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos) override;
+    void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
+    bool         ImplHasAccessibleListeners();
+    DECL_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );
 
 protected:
 

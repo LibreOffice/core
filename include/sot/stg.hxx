@@ -34,7 +34,7 @@ class StgIo;
 class StgDirEntry;
 typedef struct SvGUID ClsId;
 
-class SOT_DLLPUBLIC StorageBase : public SvRefBase
+class StorageBase : public SvRefBase
 {
 protected:
     mutable ErrCode m_nError;                   // error code
