@@ -51,6 +51,7 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
       mpContact( nullptr ),
       // #i62875#
       mbFollowTextFlow( false ),
+      mbResizeShapeToFitText( false ),
       mbDoNotCaptureAnchoredObj( false )
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -114,6 +115,10 @@ void SwAnchoredObjectPosition::GetInfoAboutObj()
     {
         mbFollowTextFlow = mpFrameFormat->GetFollowTextFlow().GetValue();
     }
+
+    if( GetFrameFormat().GetFrameSize().GetHeightSizeType() != SwFrameSize::ATT_FIX_SIZE &&
+        mrDrawObj.IsTextBox() )
+        mbResizeShapeToFitText = true;
 
     // determine, if anchored object has not to be captured on the page.
     // the following conditions must be hold to *not* capture it:

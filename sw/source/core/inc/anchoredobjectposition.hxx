@@ -55,6 +55,7 @@ namespace objectpositioning
         const SwFrameFormat* mpFrameFormat;
         // #i62875#
         bool mbFollowTextFlow;
+        bool mbResizeShapeToFitText;
         // #i62875#
         // for compatibility option <DoNotCaptureDrawObjsOnPage>
         bool mbDoNotCaptureAnchoredObj;
@@ -106,7 +107,11 @@ namespace objectpositioning
         // #i62875#
         bool DoesObjFollowsTextFlow() const
         {
-            return mbFollowTextFlow;
+            return mbFollowTextFlow || mbResizeShapeToFitText;
+        }
+        bool DoesResizeShapeToFitText() const
+        {
+            return mbResizeShapeToFitText;
         }
 
         // virtual methods providing data for to character anchored objects.
