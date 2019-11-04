@@ -17,6 +17,7 @@
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -2327,6 +2328,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf118311)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128335)
+{
+    // Load the bugdoc, which has 3 textboxes.
+    SwDoc* pDoc = createDoc("tdf128335.odt");
+
+    // Select the 3rd textbox.
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
+    // SwView ctor.
+    pView->StopShellTimer();
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    // Cut it.
+    pView->GetViewFrame()->GetDispatcher()->Execute(SID_CUT, SfxCallMode::SYNCHRON);
+
+    // Paste it: this makes the 3rd textbox anchored in the 2nd one.
+    pView->GetViewFrame()->GetDispatcher()->Execute(SID_PASTE, SfxCallMode::SYNCHRON);
+
+    // Select all shapes.
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
+        pXTextDocument->getCurrentController(), uno::UNO_QUERY);
+    xSelectionSupplier->select(pXTextDocument->getDrawPages()->getByIndex(0));
+
+    // Cut them.
+    // Without the accompanying fix in place, this test would have crashed as the textboxes were
+    // deleted in an incorrect order.
+    pView->GetViewFrame()->GetDispatcher()->Execute(SID_CUT, SfxCallMode::SYNCHRON);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
