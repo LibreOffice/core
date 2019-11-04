@@ -407,7 +407,6 @@ namespace pcr
         return aReturn;
     }
 
-
     LineDescriptor SAL_CALL EFormsPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
@@ -472,7 +471,6 @@ namespace pcr
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
         return aDescriptor;
     }
-
 
     InteractiveSelectionResult SAL_CALL EFormsPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
