@@ -10,6 +10,9 @@
 
 #include <docsh.hxx>
 #include <document.hxx>
+#include <clipparam.hxx>
+#include <markdata.hxx>
+#include <undoblk.hxx>
 #include <formulacell.hxx>
 #include <formulagroup.hxx>
 #include <scopetools.hxx>
@@ -42,6 +45,9 @@ public:
     void testFormulaGroupSpanEvalNonGroup();
     void testArrayFormulaGroup();
     void testDependentFormulaGroupCollection();
+    void testFormulaGroupWithForwardSelfReference();
+    void testFormulaGroupsInCyclesAndWithSelfReference();
+    void testFormulaGroupsInCyclesAndWithSelfReference2();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
@@ -57,12 +63,18 @@ public:
     CPPUNIT_TEST(testFormulaGroupSpanEvalNonGroup);
     CPPUNIT_TEST(testArrayFormulaGroup);
     CPPUNIT_TEST(testDependentFormulaGroupCollection);
+    CPPUNIT_TEST(testFormulaGroupWithForwardSelfReference);
+    CPPUNIT_TEST(testFormulaGroupsInCyclesAndWithSelfReference);
+    CPPUNIT_TEST(testFormulaGroupsInCyclesAndWithSelfReference2);
     CPPUNIT_TEST_SUITE_END();
 
 private:
 
     bool getThreadingFlag();
     void setThreadingFlag(bool bSet);
+
+    static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo);
+    static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc);
 
     ScDocument *m_pDoc;
 
@@ -85,6 +97,47 @@ void ScParallelismTest::setThreadingFlag( bool bSet )
     std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::set(bSet, xBatch);
     xBatch->commit();
+}
+
+ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
+{
+    ScDocument* pSrcDoc = &rDocSh.GetDocument();
+
+    ScClipParam aClipParam(rRange, true);
+    ScMarkData aMark;
+    aMark.SetMarkArea(rRange);
+    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
+
+    // Taken from ScViewFunc::CutToClip()
+    ScDocumentUniquePtr pUndoDoc;
+    if (bCreateUndo)
+    {
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc->InitUndoSelected( pSrcDoc, aMark );
+        // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
+        ScRange aCopyRange = rRange;
+        aCopyRange.aStart.SetTab(0);
+        aCopyRange.aEnd.SetTab(pSrcDoc->GetTableCount()-1);
+        pSrcDoc->CopyToDocument( aCopyRange,
+                (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS,
+                false, *pUndoDoc );
+    }
+
+    aMark.MarkToMulti();
+    pSrcDoc->DeleteSelection( InsertDeleteFlags::ALL, aMark );
+    aMark.MarkToSimple();
+
+    if (pUndoDoc)
+        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, std::move(pUndoDoc) );
+
+    return nullptr;
+}
+
+void ScParallelismTest::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
+{
+    ScMarkData aMark;
+    aMark.SetMarkArea(rDestRange);
+    pDestDoc->CopyFromClip(rDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pClipDoc);
 }
 
 void ScParallelismTest::setUp()
@@ -748,6 +801,179 @@ void ScParallelismTest::testDependentFormulaGroupCollection()
     {
         aMsg = "Value at Cell C" + OString::number(nRow+1);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpected[nRow], static_cast<size_t>(m_pDoc->GetValue(2, nRow, 0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testFormulaGroupWithForwardSelfReference()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+
+    OUString aFormula;
+    m_pDoc->SetValue(2, 4, 0, 10.0);  // C5 <== 10
+
+    for (size_t nRow = 0; nRow < 4; ++nRow)
+    {
+        // Formula-group in B1:B4 with first cell = "=SUM($A1:$A1024) + C1"
+        aFormula = "=SUM($A" + OUString::number(1 + nRow) +
+            ":$A" + OUString::number(1024 + nRow) + ") + C" + OUString::number(nRow + 1);
+        m_pDoc->SetFormula(ScAddress(1, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+        // Formula-group in C1:C4 with first cell = "=SUM($A1:$A1024) + C2"
+        aFormula = "=SUM($A" + OUString::number(1 + nRow) +
+            ":$A" + OUString::number(1024 + nRow) + ") + C" + OUString::number(nRow + 2);
+        m_pDoc->SetFormula(ScAddress(2, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    OString aMsg;
+    for (size_t nCol = 0; nCol < 2; ++nCol)
+    {
+        for (size_t nRow = 0; nRow < 4; ++nRow)
+        {
+            aMsg = "Value at Cell (Col = " + OString::number(nCol + 1) + ", Row = " + OString::number(nRow) + ", Tab = 0)";
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), 10.0, m_pDoc->GetValue(1 + nCol, nRow, 0));
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+
+    m_pDoc->SetValue(1, 0, 0, 1.0); // B1 <== 1
+    m_pDoc->SetValue(3, 0, 0, 2.0); // D1 <== 2
+    OUString aFormula;
+
+    for (size_t nRow = 0; nRow < 5; ++nRow)
+    {
+        // Formula-group in C1:C5 with first cell = "=SUM($A1:$A1024) + D1"
+        aFormula = "=SUM($A" + OUString::number(1 + nRow) +
+            ":$A" + OUString::number(1024 + nRow) + ") + D" + OUString::number(nRow + 1);
+        m_pDoc->SetFormula(ScAddress(2, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+        if (nRow == 0)
+            continue;
+
+        // nRow starts from 1 till 4 (for D2 to D5).
+        // Formula-group in D2:D5 with first cell = "=SUM($A1:$A1024) + D1 + B2"
+        aFormula = "=SUM($A" + OUString::number(nRow) +
+            ":$A" + OUString::number(1023 + nRow) + ") + D" + OUString::number(nRow) +
+            " + B" + OUString::number(nRow + 1);
+        m_pDoc->SetFormula(ScAddress(3, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+        // Formula-group in B2:B5 with first cell = "=SUM($A1:$A1024) + C1 + B1"
+        aFormula = "=SUM($A" + OUString::number(nRow) +
+            ":$A" + OUString::number(1023 + nRow) + ") + C" + OUString::number(nRow) +
+            " + B" + OUString::number(nRow);
+        m_pDoc->SetFormula(ScAddress(1, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+    m_pDoc->SetAutoCalc(true);
+
+    const ScRange aChangeRange(1, 1, 0, 1, 4, 0); // B2:B5
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // Set up clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    // Cut B1:B2 to clipboard.
+    cutToClip(*m_xDocShell, aChangeRange, &aClipDoc, false);
+    pasteFromClip(m_pDoc, aChangeRange, &aClipDoc);
+
+    double fExpected[3][5] = {
+        { 1, 3,  8, 21, 55 },
+        { 2, 5, 13, 34, 89 },
+        { 2, 5, 13, 34, 89 }
+    };
+
+    OString aMsg;
+    for (size_t nCol = 0; nCol < 3; ++nCol)
+    {
+        for (size_t nRow = 0; nRow < 5; ++nRow)
+        {
+            aMsg = "Value at Cell (Col = " + OString::number(nCol + 1) + ", Row = " + OString::number(nRow) + ", Tab = 0)";
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), fExpected[nCol][nRow], m_pDoc->GetValue(1 + nCol, nRow, 0));
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference2()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+
+    m_pDoc->SetValue(1, 0, 0, 1.0); // B1 <== 1
+    m_pDoc->SetValue(3, 0, 0, 2.0); // D1 <== 2
+    m_pDoc->SetValue(4, 0, 0, 1.0); // E1 <== 1
+    OUString aFormula;
+
+    for (size_t nRow = 0; nRow < 5; ++nRow)
+    {
+        // Formula-group in C1:C5 with first cell = "=SUM($A1:$A1024) + D1 + E1"
+        aFormula = "=SUM($A" + OUString::number(1 + nRow) +
+            ":$A" + OUString::number(1024 + nRow) + ") + D" + OUString::number(nRow + 1) +
+            " + E" + OUString::number(nRow + 1);
+        m_pDoc->SetFormula(ScAddress(2, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+        if (nRow == 0)
+            continue;
+
+        // Formula-group in B2:B5 with first cell = "=SUM($A1:$A1024) + C1 + B1"
+        aFormula = "=SUM($A" + OUString::number(nRow) +
+            ":$A" + OUString::number(1023 + nRow) + ") + C" + OUString::number(nRow) +
+            " + B" + OUString::number(nRow);
+        m_pDoc->SetFormula(ScAddress(1, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+        // Formula-group in D2:D5 with first cell = "=SUM($A1:$A1024) + D1 + B2"
+        aFormula = "=SUM($A" + OUString::number(nRow) +
+            ":$A" + OUString::number(1023 + nRow) + ") + D" + OUString::number(nRow) +
+            " + B" + OUString::number(nRow + 1);
+        m_pDoc->SetFormula(ScAddress(3, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+        // Formula-group in E2:E5 with first cell = "=SUM($A1:$A1024) + E1 + D2"
+        aFormula = "=SUM($A" + OUString::number(nRow) +
+            ":$A" + OUString::number(1023 + nRow) + ") + E" + OUString::number(nRow) +
+            " + D" + OUString::number(nRow + 1);
+        m_pDoc->SetFormula(ScAddress(4, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    double fExpected[4][5] = {
+        {  1,   4,  17,  70,  286 },
+        {  3,  13,  53, 216,  881 },
+        {  2,   6,  23,  93,  379 },
+        {  1,   7,  30, 123,  502 }
+    };
+
+    OString aMsg;
+    for (size_t nCol = 0; nCol < 4; ++nCol)
+    {
+        for (size_t nRow = 0; nRow < 5; ++nRow)
+        {
+            aMsg = "Value at Cell (Col = " + OString::number(nCol + 1) + ", Row = " + OString::number(nRow) + ", Tab = 0)";
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), fExpected[nCol][nRow], m_pDoc->GetValue(1 + nCol, nRow, 0));
+        }
     }
 
     m_pDoc->DeleteTab(0);
