@@ -28,20 +28,11 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFormatFollowTextFlow : public SfxBoolItem
 {
-private:
-    bool mbLayoutInCell = false;
-
 public:
 
     SwFormatFollowTextFlow( bool bFlag = false )
         : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag )
         {}
-
-    SwFormatFollowTextFlow( bool bFlag, bool _bLayoutInCell  )
-        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag )
-        , mbLayoutInCell( _bLayoutInCell )
-        {}
-
 
     /// "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -51,16 +42,7 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
 
-    bool GetLayoutInCell() const { return mbLayoutInCell; }
-
-
-    bool PutValue(const css::uno::Any& rVal, sal_uInt8 aInt) override;
-
-    bool QueryValue(css::uno::Any& rVal, sal_uInt8 aInt = 0) const override;
-
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
-
-    bool operator==(const SfxPoolItem& rItem) const override;
 };
 
 inline const SwFormatFollowTextFlow &SwAttrSet::GetFollowTextFlow(bool bInP) const
