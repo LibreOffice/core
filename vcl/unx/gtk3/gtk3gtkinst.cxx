@@ -6469,6 +6469,7 @@ private:
     std::vector<int> m_aViewColToModelCol;
     std::vector<int> m_aModelColToViewCol;
     bool m_bWorkAroundBadDragRegion;
+    bool m_bInDrag;
     gint m_nTextCol;
     gint m_nImageCol;
     gint m_nExpanderImageCol;
@@ -6855,6 +6856,7 @@ public:
         , m_pTreeView(pTreeView)
         , m_pTreeStore(GTK_TREE_STORE(gtk_tree_view_get_model(m_pTreeView)))
         , m_bWorkAroundBadDragRegion(false)
+        , m_bInDrag(false)
         , m_nTextCol(-1)
         , m_nImageCol(-1)
         , m_nExpanderImageCol(-1)
@@ -8114,7 +8116,7 @@ public:
                 gtkpos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
             {
                 ret = false;
-                pos = gtkpos;
+                pos = bAsTree ? gtkpos : GTK_TREE_VIEW_DROP_AFTER;
             }
         }
 
@@ -8124,8 +8126,11 @@ public:
             gtk_tree_model_get_iter(pModel, &rGtkIter.iter, path);
         }
 
-        // highlight the row
-        gtk_tree_view_set_drag_dest_row(m_pTreeView, path, pos);
+        if (m_bInDrag)
+        {
+            // highlight the row
+            gtk_tree_view_set_drag_dest_row(m_pTreeView, path, pos);
+        }
 
         assert(path);
         gtk_tree_path_free(path);
@@ -8170,6 +8175,7 @@ public:
     // of the treeview's highlight effort
     virtual void drag_started() override
     {
+        m_bInDrag = true;
         GtkWidget* pWidget = GTK_WIDGET(m_pTreeView);
         GtkWidget* pParent = gtk_widget_get_parent(pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
@@ -8182,6 +8188,7 @@ public:
 
     virtual void drag_ended() override
     {
+        m_bInDrag = false;
         if (m_bWorkAroundBadDragRegion)
         {
             GtkWidget* pWidget = GTK_WIDGET(m_pTreeView);
@@ -8189,6 +8196,8 @@ public:
             gtk_drag_unhighlight(pParent);
             m_bWorkAroundBadDragRegion = false;
         }
+        // unhighlight the row
+        gtk_tree_view_set_drag_dest_row(m_pTreeView, nullptr, GTK_TREE_VIEW_DROP_BEFORE);
     }
 
     virtual ~GtkInstanceTreeView() override
