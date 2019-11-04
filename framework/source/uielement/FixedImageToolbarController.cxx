@@ -25,7 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/toolkit/imgctrl.hxx>
+#include <vcl/fixed.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <framework/sfxhelperfunctions.hxx>
@@ -47,7 +47,7 @@ FixedImageToolbarController::FixedImageToolbarController(
     : ComplexToolbarController(rxContext, rFrame, pToolbar, nID, aCommand)
     , m_eSymbolSize(SvtMiscOptions().GetCurrentSymbolsSize())
 {
-    m_pFixedImageControl = VclPtr<ImageControl>::Create(m_pToolbar, 0);
+    m_pFixedImageControl = VclPtr<FixedImage>::Create(m_pToolbar, 0);
     m_pToolbar->SetItemWindow(m_nID, m_pFixedImageControl);
 
     bool bBigImages(SvtMiscOptions().AreCurrentSymbolsLarge());
