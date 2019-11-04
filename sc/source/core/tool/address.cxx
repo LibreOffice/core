@@ -816,7 +816,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
                 ScRefFlags::COL_VALID | ScRefFlags::COL2_VALID |
                 ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS;
             r.aStart.SetCol( 0 );
-            r.aEnd.SetCol( pDoc->MaxCol() );
+            r.aEnd.SetCol( pDoc ? pDoc->MaxCol() : MAXCOL );
 
             return bOnlyAcceptSingle ? ScRefFlags::ZERO : nFlags;
         }
@@ -921,9 +921,10 @@ static const sal_Unicode* lcl_a1_get_col( const ScDocument* pDoc,
         return nullptr;
 
     nCol = sal::static_int_cast<SCCOL>( rtl::toAsciiUpperCase( *p++ ) - 'A' );
-    while (nCol <= pDoc->MaxCol() && rtl::isAsciiAlpha(*p))
+    const SCCOL nMaxCol = (pDoc ? pDoc->MaxCol() : MAXCOL);
+    while (nCol <= nMaxCol && rtl::isAsciiAlpha(*p))
         nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + rtl::toAsciiUpperCase( *p++ ) - 'A' );
-    if( nCol > pDoc->MaxCol() || rtl::isAsciiAlpha( *p ) )
+    if( nCol > nMaxCol || rtl::isAsciiAlpha( *p ) )
         return nullptr;
 
     *nFlags |= ScRefFlags::COL_VALID;
@@ -1023,7 +1024,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
         if( !tmp2 || *tmp2 != 0 )   // Must have fully parsed a singleton.
             return nBailOutFlags;
 
-        r.aStart.SetCol( 0 ); r.aEnd.SetCol( pDoc->MaxCol() );
+        r.aStart.SetCol( 0 ); r.aEnd.SetCol( pDoc ? pDoc->MaxCol() : MAXCOL );
         nFlags |=
             ScRefFlags::COL_VALID | ScRefFlags::COL2_VALID |
             ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS;
@@ -1277,16 +1278,17 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
         }
         else
         {
+            const SCCOL nMaxCol = (pDoc ? pDoc->MaxCol() : MAXCOL);
             if (rtl::isAsciiAlpha( *p ))
             {
                 nCol = sal::static_int_cast<SCCOL>( rtl::toAsciiUpperCase( *p++ ) - 'A' );
-                while (nCol < pDoc->MaxCol() && rtl::isAsciiAlpha(*p))
+                while (nCol < nMaxCol && rtl::isAsciiAlpha(*p))
                     nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + rtl::toAsciiUpperCase( *p++ ) - 'A' );
             }
             else
                 nBits = ScRefFlags::ZERO;
 
-            if (nCol > pDoc->MaxCol() || (*p && *p != '$' && !rtl::isAsciiDigit( *p ) &&
+            if (nCol > nMaxCol || (*p && *p != '$' && !rtl::isAsciiDigit( *p ) &&
                         (!pErrRef || !lcl_isString( p, *pErrRef))))
                 nBits = ScRefFlags::ZERO;
             if( nBits == ScRefFlags::ZERO )
@@ -1655,7 +1657,7 @@ static ScRefFlags lcl_ScRange_Parse_OOo( ScRange& rRange,
                 else
                 {
                     rRange.aStart.SetCol(0);
-                    rRange.aEnd.SetCol(pDoc->MaxCol());
+                    rRange.aEnd.SetCol( pDoc ? pDoc->MaxCol() : MAXCOL );
                     nRes1 |= ScRefFlags::COL_VALID | ScRefFlags::COL_ABS;
                     nRes2 |= ScRefFlags::COL_VALID | ScRefFlags::COL_ABS;
                 }
@@ -1673,7 +1675,7 @@ static ScRefFlags lcl_ScRange_Parse_OOo( ScRange& rRange,
                     nRes1 |= ScRefFlags::ROW_ABS;
                     nRes2 |= ScRefFlags::ROW_ABS;
                 }
-                else if (rRange.aStart.Col() == 0 && rRange.aEnd.Col() == pDoc->MaxCol() &&
+                else if (rRange.aStart.Col() == 0 && rRange.aEnd.Col() == (pDoc ? pDoc->MaxCol() : MAXCOL) &&
                         ((nRes1 & ScRefFlags::COL_ABS) == ScRefFlags::ZERO) && ((nRes2 & ScRefFlags::COL_ABS) == ScRefFlags::ZERO))
                 {
                     nRes1 |= ScRefFlags::COL_ABS;
@@ -2237,7 +2239,7 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
         lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
-        if( aStart.Col() == 0 && aEnd.Col() >= pDoc->MaxCol() && !bFullAddressNotation )
+        if( aStart.Col() == 0 && aEnd.Col() >= (pDoc ? pDoc->MaxCol() : MAXCOL) && !bFullAddressNotation )
         {
             // Full col refs always require 2 rows (2:2)
             lcl_a1_append_r( r, aStart.Row(), (nFlags & ScRefFlags::ROW_ABS) != ScRefFlags::ZERO );
@@ -2268,7 +2270,7 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
         lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
-        if( aStart.Col() == 0 && aEnd.Col() >= pDoc->MaxCol() && !bFullAddressNotation )
+        if( aStart.Col() == 0 && aEnd.Col() >= (pDoc ? pDoc->MaxCol() : MAXCOL) && !bFullAddressNotation )
         {
             lcl_r1c1_append_r( r, aStart.Row(), (nFlags & ScRefFlags::ROW_ABS) != ScRefFlags::ZERO, rDetails );
             if( aStart.Row() != aEnd.Row() ||
@@ -2366,14 +2368,15 @@ bool ScRange::Move( SCCOL dx, SCROW dy, SCTAB dz, ScRange& rErrorRange, const Sc
 
 bool ScRange::MoveSticky( const ScDocument* pDoc, SCCOL dx, SCROW dy, SCTAB dz, ScRange& rErrorRange )
 {
+    const SCCOL nMaxCol = (pDoc ? pDoc->MaxCol() : MAXCOL);
     bool bColRange = (aStart.Col() < aEnd.Col());
     bool bRowRange = (aStart.Row() < aEnd.Row());
     if (dy && aStart.Row() == 0 && aEnd.Row() == pDoc->MaxRow())
         dy = 0;     // Entire column not to be moved.
-    if (dx && aStart.Col() == 0 && aEnd.Col() == pDoc->MaxCol())
+    if (dx && aStart.Col() == 0 && aEnd.Col() == nMaxCol)
         dx = 0;     // Entire row not to be moved.
     bool b1 = aStart.Move( dx, dy, dz, rErrorRange.aStart );
-    if (dx && bColRange && aEnd.Col() == pDoc->MaxCol())
+    if (dx && bColRange && aEnd.Col() == nMaxCol)
         dx = 0;     // End column sticky.
     if (dy && bRowRange && aEnd.Row() == pDoc->MaxRow())
         dy = 0;     // End row sticky.
@@ -2382,9 +2385,9 @@ bool ScRange::MoveSticky( const ScDocument* pDoc, SCCOL dx, SCROW dy, SCTAB dz, 
     if (!b2)
     {
         // End column or row of a range may have become sticky.
-        bColRange = (!dx || (bColRange && aEnd.Col() == pDoc->MaxCol()));
+        bColRange = (!dx || (bColRange && aEnd.Col() == nMaxCol));
         if (dx && bColRange)
-            rErrorRange.aEnd.SetCol(pDoc->MaxCol());
+            rErrorRange.aEnd.SetCol(nMaxCol);
         bRowRange = (!dy || (bRowRange && aEnd.Row() == pDoc->MaxRow()));
         if (dy && bRowRange)
             rErrorRange.aEnd.SetRow(pDoc->MaxRow());
@@ -2400,16 +2403,16 @@ void ScRange::IncColIfNotLessThan(const ScDocument* pDoc, SCCOL nStartCol, SCCOL
         aStart.IncCol(nOffset);
         if (aStart.Col() < 0)
             aStart.SetCol(0);
-        else if(aStart.Col() > pDoc->MaxCol())
-            aStart.SetCol(pDoc->MaxCol());
+        else if(aStart.Col() > (pDoc ? pDoc->MaxCol() : MAXCOL))
+            aStart.SetCol(pDoc ? pDoc->MaxCol() : MAXCOL);
     }
     if (aEnd.Col() >= nStartCol)
     {
         aEnd.IncCol(nOffset);
         if (aEnd.Col() < 0)
             aEnd.SetCol(0);
-        else if(aEnd.Col() > pDoc->MaxCol())
-            aEnd.SetCol(pDoc->MaxCol());
+        else if(aEnd.Col() > (pDoc ? pDoc->MaxCol() : MAXCOL))
+            aEnd.SetCol(pDoc ? pDoc->MaxCol() : MAXCOL);
     }
 }
 
@@ -2443,14 +2446,15 @@ void ScRange::IncEndColSticky( const ScDocument* pDoc, SCCOL nDelta )
         return;
     }
 
-    if (nCol == pDoc->MaxCol())
+    const SCCOL nMaxCol = (pDoc ? pDoc->MaxCol() : MAXCOL);
+    if (nCol == nMaxCol)
         // already sticky
         return;
 
-    if (nCol < pDoc->MaxCol())
-        aEnd.SetCol( ::std::min( static_cast<SCCOL>(nCol + nDelta), pDoc->MaxCol()));
+    if (nCol < nMaxCol)
+        aEnd.SetCol( ::std::min( static_cast<SCCOL>(nCol + nDelta), nMaxCol));
     else
-        aEnd.IncCol( nDelta);   // was greater than pDoc->MaxCol(), caller should know...
+        aEnd.IncCol( nDelta);   // was greater than nMaxCol, caller should know...
 }
 
 void ScRange::IncEndRowSticky( const ScDocument* pDoc, SCROW nDelta )
@@ -2525,7 +2529,8 @@ bool AlphaToCol( const ScDocument* pDoc, SCCOL& rCol, const OUString& rStr)
     sal_Int32 nStop = rStr.getLength();
     sal_Int32 nPos = 0;
     sal_Unicode c;
-    while (nResult <= pDoc->MaxCol() && nPos < nStop && (c = rStr[nPos]) != 0 &&
+    const SCCOL nMaxCol = (pDoc ? pDoc->MaxCol() : MAXCOL);
+    while (nResult <= nMaxCol && nPos < nStop && (c = rStr[nPos]) != 0 &&
             rtl::isAsciiAlpha(c))
     {
         if (nPos > 0)
