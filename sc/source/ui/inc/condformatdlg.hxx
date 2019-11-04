@@ -110,11 +110,11 @@ protected:
     void CancelPressed();
 
 public:
-    SC_DLLPUBLIC ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pWindow,
+    ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pWindow,
                                  ScViewData* pViewData, const ScCondFormatDlgItem* pDlgItem);
     virtual ~ScCondFormatDlg() override;
 
-    SC_DLLPUBLIC std::unique_ptr<ScConditionalFormat> GetConditionalFormat() const;
+    std::unique_ptr<ScConditionalFormat> GetConditionalFormat() const;
 
     virtual void SetReference(const ScRange&, ScDocument*) override;
     virtual bool IsRefInputMode() const override;

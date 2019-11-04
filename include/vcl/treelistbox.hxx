@@ -100,7 +100,7 @@ namespace o3tl
 
 enum class SvLBoxItemType {String, Button, ContextBmp};
 
-class VCL_DLLPUBLIC SvLBoxTab
+class SvLBoxTab
 {
     long    nPos;
 public:

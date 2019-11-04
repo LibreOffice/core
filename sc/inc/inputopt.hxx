@@ -23,7 +23,7 @@
 #include "scdllapi.h"
 #include <unotools/configitem.hxx>
 
-class SC_DLLPUBLIC ScInputOptions
+class ScInputOptions
 {
 private:
     sal_uInt16  nMoveDir;           // enum ScDirection

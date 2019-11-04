@@ -19,7 +19,7 @@ class ScFormulaCell;
 class ScTokenArray;
 namespace sc { struct FormulaGroupContext; }
 
-class SC_DLLPUBLIC ScGroupTokenConverter
+class ScGroupTokenConverter
 {
     ScTokenArray& mrGroupTokens;
     ScDocument& mrDoc;

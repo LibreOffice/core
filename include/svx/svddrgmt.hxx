@@ -28,7 +28,7 @@
 class SdrDragView;
 class SdrDragStat;
 
-class SVX_DLLPUBLIC SdrDragEntry
+class SdrDragEntry
 {
 private:
     bool                        mbAddToTransparent : 1;

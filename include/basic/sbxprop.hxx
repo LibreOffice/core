@@ -23,7 +23,7 @@
 #include <basic/sbxvar.hxx>
 #include <basic/basicdllapi.h>
 
-class BASIC_DLLPUBLIC SbxProperty : public SbxVariable
+class SbxProperty : public SbxVariable
 {
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_PROPERTY,1);

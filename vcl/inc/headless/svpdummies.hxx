@@ -26,7 +26,7 @@
 
 class SalGraphics;
 
-class VCL_DLLPUBLIC SvpSalObject : public SalObject
+class SvpSalObject : public SalObject
 {
 public:
     SystemEnvData m_aSystemChildData;
@@ -45,7 +45,7 @@ public:
     virtual const SystemEnvData*    GetSystemData() const override;
 };
 
-class VCL_DLLPUBLIC SvpSalSystem : public SalGenericSystem
+class SvpSalSystem : public SalGenericSystem
 {
 public:
     SvpSalSystem() {}
