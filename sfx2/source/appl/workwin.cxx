@@ -965,10 +965,8 @@ SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const vcl::Window* rWindow ) const
     return nullptr;
 }
 
-
 void SfxWorkWindow::ShowChildren_Impl()
 {
-
     bool bInvisible = ( !IsVisible_Impl() || ( !pWorkWin->IsReallyVisible() && !pWorkWin->IsReallyShown() ));
 
     for (std::unique_ptr<SfxChild_Impl>& pCli : aChildren)
@@ -1005,6 +1003,7 @@ void SfxWorkWindow::ShowChildren_Impl()
                 ShowFlags nFlags = pCli->bSetFocus ? ShowFlags::NONE : ShowFlags::NoFocusChange | ShowFlags::NoActivate;
                 if (pCli->xController)
                 {
+                    fprintf(stderr, "HERE vis is %d\n", pCli->xController->getDialog()->get_visible());
                     if (!pCli->xController->getDialog()->get_visible())
                     {
                         auto xController = pCli->xController;

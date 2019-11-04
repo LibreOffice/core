@@ -5119,6 +5119,11 @@ public:
         m_xButton->SetFormatter(pFormatter);
     }
 
+    virtual SvNumberFormatter* get_formatter() override
+    {
+        return m_xButton->GetFormatter();
+    }
+
     virtual sal_Int32 get_format_key() const override
     {
         return m_xButton->GetFormatKey();
@@ -5127,6 +5132,16 @@ public:
     virtual void set_format_key(sal_Int32 nFormatKey) override
     {
         m_xButton->SetFormatKey(nFormatKey);
+    }
+
+    virtual void treat_as_number(bool bSet) override
+    {
+        m_xButton->TreatAsNumber(bSet);
+    }
+
+    virtual void set_digits(unsigned int digits) override
+    {
+        m_xButton->SetDecimalDigits(digits);
     }
 };
 

@@ -305,11 +305,6 @@ namespace pcr
         ) );
     }
 
-    vcl::Window* PropertyHandler::impl_getDefaultDialogParent_nothrow() const
-    {
-        return PropertyHandlerHelper::getDialogParentWindow( m_xContext );
-    }
-
     weld::Window* PropertyHandler::impl_getDefaultDialogFrame_nothrow() const
     {
         return PropertyHandlerHelper::getDialogParentFrame(m_xContext);

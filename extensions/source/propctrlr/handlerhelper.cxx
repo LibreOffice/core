@@ -24,8 +24,9 @@
 #include "enumrepresentation.hxx"
 #include "formmetadata.hxx"
 
-#include <com/sun/star/inspection/StringRepresentation.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/inspection/StringRepresentation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -36,6 +37,8 @@
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <vcl/window.hxx>
 
 #include <algorithm>
@@ -241,11 +244,11 @@ namespace pcr
     }
 
 
-    void PropertyHandlerHelper::setContextDocumentModified( const Reference<XComponentContext> & _rContext )
+    void PropertyHandlerHelper::setContextDocumentModified( const Reference<XComponentContext> & rContext )
     {
         try
         {
-            Reference< XModifiable > xDocumentModifiable( getContextDocument_throw(_rContext), UNO_QUERY_THROW );
+            Reference< XModifiable > xDocumentModifiable( getContextDocument_throw(rContext), UNO_QUERY_THROW );
             xDocumentModifiable->setModified( true );
         }
         catch( const Exception& )
@@ -254,12 +257,12 @@ namespace pcr
         }
     }
 
-    Reference< XInterface > PropertyHandlerHelper::getContextDocument( const Reference<XComponentContext> & _rContext )
+    Reference< XInterface > PropertyHandlerHelper::getContextDocument( const Reference<XComponentContext> & rContext )
     {
         Reference< XInterface > xI;
         try
         {
-            xI = getContextDocument_throw( _rContext );
+            xI = getContextDocument_throw( rContext );
         }
         catch( const Exception& )
         {
@@ -268,36 +271,20 @@ namespace pcr
         return xI;
     }
 
-    Reference< XInterface > PropertyHandlerHelper::getContextDocument_throw( const Reference<XComponentContext> & _rContext )
+    Reference< XInterface > PropertyHandlerHelper::getContextDocument_throw( const Reference<XComponentContext> & rContext )
     {
         Reference< XInterface > xI;
-        Any aReturn = _rContext->getValueByName( "ContextDocument" );
+        Any aReturn = rContext->getValueByName( "ContextDocument" );
         aReturn >>= xI;
         return xI;
     }
 
-
-    vcl::Window* PropertyHandlerHelper::getDialogParentWindow( const Reference<XComponentContext>& _rContext )
-    {
-        vcl::Window* pInspectorWindow = nullptr;
-        try
-        {
-            Reference< XWindow > xInspectorWindow( _rContext->getValueByName( "DialogParentWindow" ), UNO_QUERY_THROW );
-            pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow ).get();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-        }
-        return pInspectorWindow;
-    }
-
-    weld::Window* PropertyHandlerHelper::getDialogParentFrame(const Reference<XComponentContext>& _rContext)
+    weld::Window* PropertyHandlerHelper::getDialogParentFrame(const Reference<XComponentContext>& rContext)
     {
         weld::Window* pInspectorWindow = nullptr;
         try
         {
-            Reference< XWindow > xInspectorWindow( _rContext->getValueByName( "DialogParentWindow" ), UNO_QUERY_THROW );
+            Reference< XWindow > xInspectorWindow(rContext->getValueByName( "DialogParentWindow" ), UNO_QUERY_THROW);
             pInspectorWindow = Application::GetFrameWeld(xInspectorWindow);
         }
         catch( const Exception& )
@@ -306,6 +293,37 @@ namespace pcr
         }
         return pInspectorWindow;
     }
+
+    std::unique_ptr<weld::Builder> PropertyHandlerHelper::makeBuilder(const OUString& rUIFile, const Reference<XComponentContext>& rContext)
+    {
+        bool bInterimBuilder(true);
+        Any aReturn = rContext->getValueByName("InterimBuilder");
+        aReturn >>= bInterimBuilder;
+
+        Reference<XWindow> xWindow(rContext->getValueByName("BuilderParent"), UNO_QUERY_THROW);
+        weld::TransportAsXWindow& rTunnel = dynamic_cast<weld::TransportAsXWindow&>(*xWindow);
+
+        // bInterimBuilder for the hosted in sidebar in basic IDE case
+        if (!bInterimBuilder)
+            return std::unique_ptr<weld::Builder>(Application::CreateBuilder(rTunnel.getWidget(), rUIFile));
+        return std::unique_ptr<weld::Builder>(Application::CreateInterimBuilder(rTunnel.getWidget(), rUIFile));
+    }
+
+    void PropertyHandlerHelper::setBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent, bool bInterimBuilder)
+    {
+        Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
+        xName->insertByName("InterimBuilder", makeAny(bInterimBuilder));
+        Reference<XWindow> xWindow(new weld::TransportAsXWindow(pParent));
+        xName->insertByName("BuilderParent", makeAny(xWindow));
+    }
+
+    void PropertyHandlerHelper::clearBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext)
+    {
+        Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
+        xName->removeByName("InterimBuilder");
+        xName->removeByName("BuilderParent");
+    }
+
 } // namespace pcr
 
 
