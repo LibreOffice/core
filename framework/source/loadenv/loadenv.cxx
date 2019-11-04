@@ -1087,10 +1087,10 @@ bool LoadEnv::impl_loadContent()
     m_aTargetLock.setResource(xTargetLock);
 
     // Add status indicator to descriptor. Loader can show a progress then.
-    // But don't do it, if loading should be hidden or preview is used ...!
+    // But don't do it, if loading should be hidden or preview is used...!
     // So we prevent our code against wrong using. Why?
-    // It could be, that using of this progress could make trouble. e.g. He make window visible ...
-    // but shouldn't do that. But if no indicator is available ... nobody has a chance to do that!
+    // It could be, that using of this progress could make trouble. e.g. He makes window visible...
+    // but shouldn't do that. But if no indicator is available... nobody has a chance to do that!
     bool bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
     bool bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), false);
     bool bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
