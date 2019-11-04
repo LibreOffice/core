@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_8c8f4222",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-04T09:47:04Z",
+      "side": 1,
+      "message": "This cast is redundant: fGridWidth is double, and arithmetics with it produces doubles.",
+      "range": {
+        "startLine": 669,
+        "startChar": 33,
+        "endLine": 669,
+        "endChar": 52
+      },
+      "revId": "44e44239de35c1548809c96e13bfa9d64c7ca441",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_ac923e4a",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-04T09:47:04Z",
+      "side": 1,
+      "message": "Possibly rounding would be more consistent here, to reduce resulting error",
+      "range": {
+        "startLine": 671,
+        "startChar": 48,
+        "endLine": 671,
+        "endChar": 81
+      },
+      "revId": "44e44239de35c1548809c96e13bfa9d64c7ca441",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
