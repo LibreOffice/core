@@ -47,7 +47,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/fixedhyper.hxx>
+#include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/fmtfield.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/ivctrl.hxx>
