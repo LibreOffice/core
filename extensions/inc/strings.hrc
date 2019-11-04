@@ -257,7 +257,6 @@
 #define RID_STR_STANDARD                        NC_("RID_STR_STANDARD", "Default")
 #define RID_STR_PROPPAGE_DEFAULT                NC_("RID_STR_PROPPAGE_DEFAULT", "General")
 #define RID_STR_PROPPAGE_DATA                   NC_("RID_STR_PROPPAGE_DATA", "Data")
-#define RID_STR_HELP_SECTION_LABEL              NC_("RID_STR_HELP_SECTION_LABEL", "Help")
 #define RID_EMBED_IMAGE_PLACEHOLDER             NC_("RID_EMBED_IMAGE_PLACEHOLDER", "<Embedded-Image>")
 #define RID_STR_TEXT_FORMAT                     NC_("RID_STR_TEXT_FORMAT", "Text")
 

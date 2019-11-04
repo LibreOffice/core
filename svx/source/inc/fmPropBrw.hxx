@@ -40,10 +40,13 @@ public:
 class SfxBindings;
 class FmFormShell;
 
-class FmPropBrw final : public SfxFloatingWindow, public SfxControllerItem
+class FmPropBrw final : public SfxModelessDialogController, public SfxControllerItem
 {
     bool            m_bInitialStateChange;
+    weld::Window*   m_pParent;
+    ImplSVEvent*    m_nAsyncGetFocusId;
     OUString        m_sLastActivePage;
+    std::unique_ptr<weld::Container> m_xContainer;
     css::uno::Reference< css::uno::XComponentContext >
                     m_xInspectorContext;
     css::uno::Reference< css::uno::XComponentContext >
@@ -56,14 +59,10 @@ class FmPropBrw final : public SfxFloatingWindow, public SfxControllerItem
                     m_xInspectorModel;
     css::uno::Reference< css::frame::XController >
                     m_xBrowserController;
-    css::uno::Reference< css::awt::XWindow >
-                    m_xBrowserComponentWindow;
-    css::uno::Reference< css::awt::XWindow >
-                    m_xFrameContainerWindow;
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const override;
-    virtual bool Close() override;
+    virtual void Close() override;
 
     DECL_LINK( OnAsyncGetFocus, void*, void );
 
@@ -77,16 +76,12 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& _xORB,
         SfxBindings* pBindings,
         SfxChildWindow* pMgr,
-        vcl::Window* pParent,
+        weld::Window* pParent,
         const SfxChildWinInfo* _pInfo
     );
     virtual ~FmPropBrw() override;
-    virtual void dispose() override;
-
-    using SfxFloatingWindow::StateChanged;
 
 private:
-    virtual void        Resize() override;
 
     /** creates the PropertyBrowser (aka ObjectInspector) and plugs it into our frame
 
@@ -98,12 +93,10 @@ private:
 
     /** creates a property browser
 
-        After this method returns, m_xBrowserController and m_xBrowserComponentWindow are
-        not <NULL/>.
+        After this method returns, m_xBrowserController is not <NULL/>.
 
     @precond
-        we don't have an ObjectInspector, yet, i.e. m_xBrowserController and m_xBrowserComponentWindow
-        are <NULL/>.
+        we don't have an ObjectInspector, yet, i.e. m_xBrowserController is <NULL/>.
     */
     void    impl_createPropertyBrowser_throw( FmFormShell* _pFormShell );
 };

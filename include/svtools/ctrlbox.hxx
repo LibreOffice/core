@@ -310,6 +310,10 @@ public:
     void grab_focus() { m_xControl->grab_focus(); }
 
     void connect_activated(const Link<SvtCalendarBox&, void>& rActivatedHdl) { m_aActivatedHdl = rActivatedHdl; }
+    void connect_selected(const Link<SvtCalendarBox&, void>& rSelectHdl) { m_aSelectHdl = rSelectHdl; }
+
+    void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xControl->connect_focus_in(rLink); }
+    void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_xControl->connect_focus_out(rLink); }
 private:
     DECL_LINK(SelectHdl, weld::Calendar&, void);
     DECL_LINK(ActivateHdl, weld::Calendar&, void);
@@ -320,6 +324,7 @@ private:
     std::unique_ptr<weld::Calendar> m_xCalendar;
 
     Link<SvtCalendarBox&, void> m_aActivatedHdl;
+    Link<SvtCalendarBox&, void> m_aSelectHdl;
 
     void set_label_from_date();
 };

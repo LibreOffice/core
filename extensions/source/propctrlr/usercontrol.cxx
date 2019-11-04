@@ -41,58 +41,48 @@ namespace pcr
 
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
 
-
-    // NumberFormatSampleField
-
-
-    bool NumberFormatSampleField::PreNotify( NotifyEvent& rNEvt )
+    IMPL_LINK(OFormatSampleControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
     {
         // want to handle two keys myself : Del/Backspace should empty the window (setting my prop to "standard" this way)
-        if (MouseNotifyEvent::KEYINPUT == rNEvt.GetType())
+        sal_uInt16 nKey = rKeyEvent.GetKeyCode().GetCode();
+        if ((KEY_DELETE == nKey) || (KEY_BACKSPACE == nKey))
         {
-            sal_uInt16 nKey = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
-
-            if ((KEY_DELETE == nKey) || (KEY_BACKSPACE == nKey))
-            {
-                SetText( "" );
-                if ( m_pHelper )
-                    m_pHelper->setModified();
-                return true;
-            }
+            m_xSpinButton->set_text("");
+            m_xEntry->set_text("");
+            setModified();
         }
 
-        return FormattedField::PreNotify( rNEvt );
+        return true;
     }
 
-
-    void NumberFormatSampleField::SetFormatSupplier( const SvNumberFormatsSupplierObj* pSupplier )
+    void OFormatSampleControl::SetFormatSupplier( const SvNumberFormatsSupplierObj* pSupplier )
     {
-        if ( pSupplier )
+        if (pSupplier)
         {
-            TreatAsNumber( true );
+            m_xSpinButton->treat_as_number(true);
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
-            SetFormatter( pFormatter );
-            SetValue( 1234.56789 );
+            m_xSpinButton->set_formatter(pFormatter);
+            m_xSpinButton->set_value( 1234.56789 );
         }
         else
         {
-            TreatAsNumber( false );
-            SetFormatter( nullptr );
-            SetText( "" );
+            m_xSpinButton->treat_as_number(false);
+            m_xSpinButton->set_formatter(nullptr);
+            m_xSpinButton->set_text( "" );
         }
+
+        m_xEntry->set_text(m_xSpinButton->get_text());
     }
 
-
-    // OFormatSampleControl
-
-
-    OFormatSampleControl::OFormatSampleControl( vcl::Window* pParent )
-        :OFormatSampleControl_Base( PropertyControlType::Unknown, pParent, WB_READONLY | WB_TABSTOP | WB_BORDER )
+    OFormatSampleControl::OFormatSampleControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
+        : OFormatSampleControl_Base(PropertyControlType::Unknown, std::move(xBuilder), std::move(xWidget), bReadOnly)
+        , m_xSpinButton(m_xBuilder->weld_formatted_spin_button("sample"))
+        , m_xEntry(m_xBuilder->weld_entry("entry"))
     {
-        getTypedControlWindow()->setControlHelper(*this);
+        m_xSpinButton->treat_as_number(true);
+        m_xEntry->connect_key_press(LINK(this, OFormatSampleControl, KeyInputHdl));
     }
-
 
     void SAL_CALL OFormatSampleControl::setValue( const Any& _rValue )
     {
@@ -100,20 +90,22 @@ namespace pcr
         if ( _rValue >>= nFormatKey )
         {
             // else set the new format key, the text will be reformatted
-            getTypedControlWindow()->SetFormatKey( nFormatKey );
+            m_xSpinButton->set_format_key( nFormatKey );
 
-            SvNumberFormatter* pNF = getTypedControlWindow()->GetFormatter();
+            SvNumberFormatter* pNF = m_xSpinButton->get_formatter();
             const SvNumberformat* pEntry = pNF->GetEntry( nFormatKey );
             OSL_ENSURE( pEntry, "OFormatSampleControl::setValue: invalid format entry!" );
 
             const bool bIsTextFormat = ( pEntry && pEntry->IsTextFormat() );
             if ( bIsTextFormat )
-                getTypedControlWindow()->SetText( PcrRes( RID_STR_TEXT_FORMAT ) );
+                m_xSpinButton->set_text( PcrRes( RID_STR_TEXT_FORMAT ) );
             else
-                getTypedControlWindow()->SetValue( pEntry ? getPreviewValue( *pEntry ) : 1234.56789 );
+                m_xSpinButton->set_value( pEntry ? getPreviewValue( *pEntry ) : 1234.56789 );
         }
         else
-            getTypedControlWindow()->SetText( "" );
+            m_xSpinButton->set_text( "" );
+
+        m_xEntry->set_text(m_xSpinButton->get_text());
     }
 
     double OFormatSampleControl::getPreviewValue( const SvNumberformat& i_rEntry )
@@ -155,56 +147,47 @@ namespace pcr
     Any SAL_CALL OFormatSampleControl::getValue()
     {
         Any aPropValue;
-        if ( !getTypedControlWindow()->GetText().isEmpty() )
-            aPropValue <<= static_cast<sal_Int32>(getTypedControlWindow()->GetFormatKey());
+        if ( !m_xSpinButton->get_text().isEmpty() )
+            aPropValue <<= m_xSpinButton->get_value();
         return aPropValue;
     }
-
 
     Type SAL_CALL OFormatSampleControl::getValueType()
     {
         return ::cppu::UnoType<sal_Int32>::get();
     }
 
-
-
-
-    OFormattedNumericControl::OFormattedNumericControl( vcl::Window* pParent, WinBits nWinStyle )
-        :OFormattedNumericControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
+    OFormattedNumericControl::OFormattedNumericControl(std::unique_ptr<weld::FormattedSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
+        : OFormattedNumericControl_Base(PropertyControlType::Unknown, std::move(xBuilder), std::move(xWidget), bReadOnly)
     {
-        getTypedControlWindow()->TreatAsNumber(true);
+        getTypedControlWindow()->treat_as_number(true);
     }
-
 
     OFormattedNumericControl::~OFormattedNumericControl()
     {
     }
 
-
     void SAL_CALL OFormattedNumericControl::setValue( const Any& _rValue )
     {
         double nValue( 0 );
         if ( _rValue >>= nValue )
-            getTypedControlWindow()->SetValue( nValue );
+            getTypedControlWindow()->set_value( nValue );
         else
-            getTypedControlWindow()->SetText("");
+            getTypedControlWindow()->set_text("");
     }
-
 
     Any SAL_CALL OFormattedNumericControl::getValue()
     {
         Any aPropValue;
-        if ( !getTypedControlWindow()->GetText().isEmpty() )
-            aPropValue <<= getTypedControlWindow()->GetValue();
+        if ( !getTypedControlWindow()->get_text().isEmpty() )
+            aPropValue <<= getTypedControlWindow()->get_value();
         return aPropValue;
     }
-
 
     Type SAL_CALL OFormattedNumericControl::getValueType()
     {
         return ::cppu::UnoType<double>::get();
     }
-
 
     void OFormattedNumericControl::SetFormatDescription(const FormatDescription& rDesc)
     {
@@ -212,14 +195,14 @@ namespace pcr
 
         if (rDesc.pSupplier)
         {
-            getTypedControlWindow()->TreatAsNumber(true);
+            getTypedControlWindow()->treat_as_number(true);
 
             SvNumberFormatter* pFormatter = rDesc.pSupplier->GetNumberFormatter();
-            if (pFormatter != getTypedControlWindow()->GetFormatter())
-                getTypedControlWindow()->SetFormatter(pFormatter);
-            getTypedControlWindow()->SetFormatKey(rDesc.nKey);
+            if (pFormatter != getTypedControlWindow()->get_formatter())
+                getTypedControlWindow()->set_formatter(pFormatter);
+            getTypedControlWindow()->set_format_key(rDesc.nKey);
 
-            const SvNumberformat* pEntry = getTypedControlWindow()->GetFormatter()->GetEntry(getTypedControlWindow()->GetFormatKey());
+            const SvNumberformat* pEntry = getTypedControlWindow()->get_formatter()->GetEntry(getTypedControlWindow()->get_format_key());
             DBG_ASSERT( pEntry, "OFormattedNumericControl::SetFormatDescription: invalid format key!" );
             if ( pEntry )
             {
@@ -230,28 +213,23 @@ namespace pcr
 
         if ( bFallback )
         {
-            getTypedControlWindow()->TreatAsNumber(false);
-            getTypedControlWindow()->SetFormatter(nullptr);
-            getTypedControlWindow()->SetText("");
+            getTypedControlWindow()->treat_as_number(false);
+            getTypedControlWindow()->set_formatter(nullptr);
+            getTypedControlWindow()->set_text("");
         }
     }
 
-
     //= OFileUrlControl
-
-
-    OFileUrlControl::OFileUrlControl( vcl::Window* pParent )
-        :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN )
+    OFileUrlControl::OFileUrlControl(std::unique_ptr<URLBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
+        : OFileUrlControl_Base(PropertyControlType::Unknown, std::move(xBuilder), std::move(xWidget), bReadOnly)
     {
-        getTypedControlWindow()->SetDropDownLineCount( 10 );
+        getTypedControlWindow()->DisableHistory();
         getTypedControlWindow()->SetPlaceHolder( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) ) ;
     }
-
 
     OFileUrlControl::~OFileUrlControl()
     {
     }
-
 
     void SAL_CALL OFileUrlControl::setValue( const Any& _rValue )
     {
@@ -259,70 +237,26 @@ namespace pcr
         if (  _rValue >>= sURL )
         {
             if (GraphicObject::isGraphicObjectUniqueIdURL(sURL))
-                getTypedControlWindow()->DisplayURL( getTypedControlWindow()->GetPlaceHolder() );
+                getTypedControlWindow()->set_entry_text(getTypedControlWindow()->GetPlaceHolder());
             else
-                getTypedControlWindow()->DisplayURL( sURL );
+                getTypedControlWindow()->set_entry_text(sURL);
         }
         else
-            getTypedControlWindow()->SetText( "" );
+            getTypedControlWindow()->set_entry_text( "" );
     }
-
 
     Any SAL_CALL OFileUrlControl::getValue()
     {
         Any aPropValue;
-        if ( !getTypedControlWindow()->GetText().isEmpty() )
-                aPropValue <<= getTypedControlWindow()->GetURL();
+        if (!getTypedControlWindow()->get_active_text().isEmpty())
+            aPropValue <<= getTypedControlWindow()->GetURL();
         return aPropValue;
     }
-
 
     Type SAL_CALL OFileUrlControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
-
-
-    //= OTimeDurationControl
-
-
-    OTimeDurationControl::OTimeDurationControl( vcl::Window* pParent )
-        :ONumericControl( pParent, WB_BORDER | WB_TABSTOP )
-    {
-        getTypedControlWindow()->SetUnit( FieldUnit::CUSTOM );
-        getTypedControlWindow()->SetCustomUnitText(" ms");
-        getTypedControlWindow()->SetCustomConvertHdl( LINK( this, OTimeDurationControl, OnCustomConvert ) );
-    }
-
-
-    OTimeDurationControl::~OTimeDurationControl()
-    {
-    }
-
-
-    ::sal_Int16 SAL_CALL OTimeDurationControl::getControlType()
-    {
-        // don't use the base class'es method, it would claim we're a standard control, which
-        // we in fact aren't
-        return PropertyControlType::Unknown;
-    }
-
-
-    IMPL_LINK_NOARG( OTimeDurationControl, OnCustomConvert, MetricFormatter&, void )
-    {
-        long nMultiplier = 1;
-        if ( getTypedControlWindow()->GetCurUnitText().equalsIgnoreAsciiCase( "ms" ) )
-            nMultiplier = 1;
-        if ( getTypedControlWindow()->GetCurUnitText().equalsIgnoreAsciiCase( "s" ) )
-            nMultiplier = 1000;
-        else if ( getTypedControlWindow()->GetCurUnitText().equalsIgnoreAsciiCase( "m" ) )
-            nMultiplier = 1000 * 60;
-        else if ( getTypedControlWindow()->GetCurUnitText().equalsIgnoreAsciiCase( "h" ) )
-            nMultiplier = 1000 * 60 * 60;
-
-        getTypedControlWindow()->SetValue( getTypedControlWindow()->GetLastValue() * nMultiplier );
-    }
-
 
 } // namespace pcr
 

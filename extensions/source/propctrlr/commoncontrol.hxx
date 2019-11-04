@@ -25,19 +25,18 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <tools/link.hxx>
-#include <vcl/window.hxx>
+#include <tools/wintypes.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <type_traits>
 
 class NotifyEvent;
-class Control;
-class ListBox;
-class SvxColorListBox;
-class Edit;
+class ColorListBox;
+class SvtCalendarBox;
 
 namespace pcr
 {
-
 
     //= CommonBehaviourControlHelper
 
@@ -58,16 +57,16 @@ namespace pcr
 
     public:
         /** creates the instance
-            @param  _nControlType
+            @param  nControlType
                 the type of the control - one of the <type scope="css::inspection">PropertyControlType</type>
                 constants
-            @param _pAntiImpl
+            @param pAntiImpl
                 Reference to the instance as whose "impl-class" we act i.e. the CommonBehaviourControl<> template,
                 which is why we hold it without acquiring it/
         */
         CommonBehaviourControlHelper(
-            sal_Int16 _nControlType,
-            css::inspection::XPropertyControl& _rAntiImpl);
+            sal_Int16 nControlType,
+            css::inspection::XPropertyControl& rAntiImpl);
 
         virtual ~CommonBehaviourControlHelper();
 
@@ -79,7 +78,7 @@ namespace pcr
         /// @throws css::uno::RuntimeException
         const css::uno::Reference< css::inspection::XPropertyControlContext >& getControlContext() const { return m_xContext; }
         /// @throws css::uno::RuntimeException
-        void setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext );
+        void setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& controlcontext );
         /// @throws css::uno::RuntimeException
         bool isModified(  ) const { return m_bModified; }
         /// @throws css::uno::RuntimeException
@@ -89,17 +88,19 @@ namespace pcr
         */
         void activateNextControl() const;
 
-        /// automatically size the window given in the ctor
-        void    autoSizeWindow();
-
-        virtual vcl::Window* getVclWindow() = 0;
+        virtual weld::Widget* getWidget() = 0;
 
         /// may be used by derived classes, they forward the event to the PropCtrListener
-        DECL_LINK( ModifiedHdl, ListBox&, void );
-        DECL_LINK( ColorModifiedHdl, SvxColorListBox&, void );
-        DECL_LINK( EditModifiedHdl, Edit&, void );
-        DECL_LINK( GetFocusHdl, Control&, void );
-        DECL_LINK( LoseFocusHdl, Control&, void );
+        DECL_LINK( ModifiedHdl, weld::ComboBox&, void );
+        DECL_LINK( ColorModifiedHdl, ColorListBox&, void );
+        DECL_LINK( EditModifiedHdl, weld::Entry&, void );
+        DECL_LINK( TextViewModifiedHdl, weld::TextView&, void );
+        DECL_LINK( MetricModifiedHdl, weld::MetricSpinButton&, void );
+        DECL_LINK( FormattedModifiedHdl, weld::FormattedSpinButton&, void );
+        DECL_LINK( TimeModifiedHdl, weld::TimeSpinButton&, void );
+        DECL_LINK( DateModifiedHdl, SvtCalendarBox&, void );
+        DECL_LINK( GetFocusHdl, weld::Widget&, void );
+        DECL_LINK( LoseFocusHdl, weld::Widget&, void );
     };
 
 
@@ -111,7 +112,7 @@ namespace pcr
         @param TControlInterface
             an interface class which is derived from (or identical to) <type scope="css::inspection">XPropertyControl</type>
         @param TControlWindow
-            a class which is derived from vcl::Window
+            a class which is derived from weld::Widget
     */
     template < class TControlInterface, class TControlWindow >
     class CommonBehaviourControl    :public ::cppu::BaseMutex
@@ -121,81 +122,85 @@ namespace pcr
     protected:
         typedef ::cppu::WeakComponentImplHelper< TControlInterface >    ComponentBaseClass;
 
-        inline CommonBehaviourControl( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers = true );
+        inline CommonBehaviourControl(sal_Int16 nControlType,
+                                      std::unique_ptr<weld::Builder> xBuilder,
+                                      std::unique_ptr<TControlWindow> xWidget,
+                                      bool bReadOnly);
+
+        virtual ~CommonBehaviourControl() override
+        {
+            clear_widgetry();
+        }
 
         // XPropertyControl - delegated to ->m_aImplControl
         virtual ::sal_Int16 SAL_CALL getControlType() override
             { return CommonBehaviourControlHelper::getControlType(); }
         virtual css::uno::Reference< css::inspection::XPropertyControlContext > SAL_CALL getControlContext() override
             { return CommonBehaviourControlHelper::getControlContext(); }
-        virtual void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext ) override
-            { CommonBehaviourControlHelper::setControlContext( _controlcontext ); }
+        virtual void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& controlcontext ) override
+            { CommonBehaviourControlHelper::setControlContext( controlcontext ); }
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getControlWindow() override
-            { return VCLUnoHelper::GetInterface( m_pControlWindow ); }
+            { return new weld::TransportAsXWindow(getWidget()); }
         virtual sal_Bool SAL_CALL isModified(  ) override
             { return CommonBehaviourControlHelper::isModified(); }
         virtual void SAL_CALL notifyModifiedValue(  ) override
             { CommonBehaviourControlHelper::notifyModifiedValue(); }
 
+        void clear_widgetry()
+        {
+            if (!m_xControlWindow)
+                return;
+            weld::Widget* pWidget = getWidget();
+            std::unique_ptr<weld::Container> xParent(pWidget->weld_parent());
+            xParent->move(pWidget, nullptr);
+            m_xControlWindow.reset();
+            m_xBuilder.reset();
+        }
+
         // XComponent
         virtual void SAL_CALL disposing() override
-            { m_pControlWindow.disposeAndClear(); }
-
-       //  CommonBehaviourControlHelper::getVclWindow
-        virtual vcl::Window*  getVclWindow() override
-            { return m_pControlWindow.get(); }
+        {
+            clear_widgetry();
+        }
 
         TControlWindow*       getTypedControlWindow()
-            { return m_pControlWindow.get(); }
+            { return m_xControlWindow.get(); }
         const TControlWindow* getTypedControlWindow() const
-            { return m_pControlWindow.get(); }
+            { return m_xControlWindow.get(); }
+
+        virtual void SetModifyHandler()
+        {
+            m_xControlWindow->connect_focus_in( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );
+            m_xControlWindow->connect_focus_out( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
+        }
 
         /** checks whether the instance is already disposed
             @throws DisposedException
                 if the instance is already disposed
         */
         inline void impl_checkDisposed_throw();
+    protected:
+        std::unique_ptr<weld::Builder> m_xBuilder;
     private:
-        VclPtr<TControlWindow>         m_pControlWindow;
-        void implSetModifyHandler(const Edit&);
-        void implSetModifyHandler(const ListBox&);
-        void implSetModifyHandler(const SvxColorListBox&);
+        std::unique_ptr<TControlWindow> m_xControlWindow;
     };
 
-
     //= CommonBehaviourControl - implementation
-
     template< class TControlInterface, class TControlWindow >
-    inline CommonBehaviourControl< TControlInterface, TControlWindow >::CommonBehaviourControl ( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers)
-        :ComponentBaseClass( m_aMutex )
-        ,CommonBehaviourControlHelper( _nControlType, *this )
-        ,m_pControlWindow( VclPtr<TControlWindow>::Create( _pParentWindow, _nWindowStyle ) )
+    inline CommonBehaviourControl< TControlInterface, TControlWindow >::CommonBehaviourControl(sal_Int16 nControlType,
+                                                                                               std::unique_ptr<weld::Builder> xBuilder,
+                                                                                               std::unique_ptr<TControlWindow> xWidget,
+                                                                                               bool bReadOnly)
+        : ComponentBaseClass( m_aMutex )
+        , CommonBehaviourControlHelper( nControlType, *this )
+        , m_xBuilder(std::move(xBuilder))
+        , m_xControlWindow(std::move(xWidget))
     {
-        if ( _bDoSetHandlers )
+        if (bReadOnly)
         {
-            implSetModifyHandler(*m_pControlWindow);
-            m_pControlWindow->SetGetFocusHdl( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );
-            m_pControlWindow->SetLoseFocusHdl( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
+            // disable widget by default, entries will overide to enable the widget but set it non-editable
+            m_xControlWindow->set_sensitive(false);
         }
-        autoSizeWindow();
-    }
-
-    template< class TControlInterface, class TControlWindow >
-    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::implSetModifyHandler(const Edit&)
-    {
-        m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, EditModifiedHdl ) );
-    }
-
-    template< class TControlInterface, class TControlWindow >
-    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::implSetModifyHandler(const ListBox&)
-    {
-        m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, ModifiedHdl ) );
-    }
-
-    template< class TControlInterface, class TControlWindow >
-    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::implSetModifyHandler(const SvxColorListBox&)
-    {
-        m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, ColorModifiedHdl ) );
     }
 
     template< class TControlInterface, class TControlWindow >
@@ -205,9 +210,7 @@ namespace pcr
             throw css::lang::DisposedException( OUString(), *this );
     }
 
-
 } // namespace pcr
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_COMMONCONTROL_HXX
 

@@ -23,87 +23,44 @@
 
 namespace pcr
 {
-
     //= InspectorHelpWindow
-
-
-    InspectorHelpWindow::InspectorHelpWindow( vcl::Window* _pParent )
-        :Window( _pParent, WB_DIALOGCONTROL )
-        ,m_aSeparator( VclPtr<FixedLine>::Create(this) )
-        ,m_aHelpText( VclPtr<MultiLineEdit>::Create(this, WB_LEFT | WB_READONLY | WB_AUTOVSCROLL) )
-        ,m_nMinLines( 3 )
-        ,m_nMaxLines( 8 )
+    InspectorHelpWindow::InspectorHelpWindow(weld::Builder& rBuilder)
+        : m_xHelpFrame(rBuilder.weld_widget("helpframe"))
+        , m_xHelpText(rBuilder.weld_text_view("helptext"))
+        , m_nMinLines( 3 )
+        , m_nMaxLines( 8 )
     {
-        SetBackground();
-        SetPaintTransparent(true);
-        m_aSeparator->SetText( PcrRes(RID_STR_HELP_SECTION_LABEL) );
-        m_aSeparator->SetBackground();
-        m_aSeparator->Show();
-
-        m_aHelpText->SetControlBackground( /*m_aSeparator->GetBackground().GetColor() */);
-        m_aHelpText->SetBackground();
-        m_aHelpText->SetPaintTransparent(true);
-        m_aHelpText->Show();
     }
 
     InspectorHelpWindow::~InspectorHelpWindow()
     {
-        disposeOnce();
     }
 
-    void InspectorHelpWindow::dispose()
+    void InspectorHelpWindow::SetText(const OUString& rStr)
     {
-        m_aSeparator.disposeAndClear();
-        m_aHelpText.disposeAndClear();
-        vcl::Window::dispose();
+        m_xHelpText->set_text(rStr);
     }
 
-    void InspectorHelpWindow::SetText( const OUString& _rStr )
+    void InspectorHelpWindow::SetLimits(sal_Int32 nMinLines, sal_Int32 nMaxLines)
     {
-        m_aHelpText->SetText( _rStr );
+        m_nMinLines = nMinLines;
+        m_nMaxLines = nMaxLines;
     }
-
-
-    void InspectorHelpWindow::SetLimits( sal_Int32 _nMinLines, sal_Int32 _nMaxLines )
-    {
-        m_nMinLines = _nMinLines;
-        m_nMaxLines = _nMaxLines;
-    }
-
-
-    long InspectorHelpWindow::impl_getHelpTextBorderHeight()
-    {
-        sal_Int32 nTop(0), nBottom(0), nDummy(0);
-        m_aHelpText->GetBorder( nDummy, nTop, nDummy, nBottom );
-        return nTop + nBottom;
-    }
-
-
-    long InspectorHelpWindow::impl_getSpaceAboveTextWindow()
-    {
-        Size aSeparatorSize(LogicToPixel(Size(0, 8), MapMode(MapUnit::MapAppFont)));
-        Size a3AppFontSize(LogicToPixel(Size(3, 3), MapMode(MapUnit::MapAppFont)));
-        return aSeparatorSize.Height() + a3AppFontSize.Height();
-    }
-
 
     long InspectorHelpWindow::GetMinimalHeightPixel()
     {
-        return impl_getMinimalTextWindowHeight() + impl_getSpaceAboveTextWindow();
+        return impl_getMinimalTextWindowHeight();
     }
-
 
     long InspectorHelpWindow::impl_getMinimalTextWindowHeight()
     {
-        return impl_getHelpTextBorderHeight() + m_aHelpText->GetTextHeight() * m_nMinLines;
+        return m_xHelpText->get_height_rows(m_nMinLines);
     }
-
 
     long InspectorHelpWindow::impl_getMaximalTextWindowHeight()
     {
-        return impl_getHelpTextBorderHeight() + m_aHelpText->GetTextHeight() * m_nMaxLines;
+        return m_xHelpText->get_height_rows(m_nMaxLines);
     }
-
 
     long InspectorHelpWindow::GetOptimalHeightPixel()
     {
@@ -111,35 +68,13 @@ namespace pcr
         long nMinTextWindowHeight = impl_getMinimalTextWindowHeight();
         long nMaxTextWindowHeight = impl_getMaximalTextWindowHeight();
 
-        tools::Rectangle aTextRect( Point( 0, 0 ), m_aHelpText->GetOutputSizePixel() );
-        aTextRect = m_aHelpText->GetTextRect( aTextRect, m_aHelpText->GetText(),
-            DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
-        long nActTextWindowHeight = impl_getHelpTextBorderHeight() + aTextRect.GetHeight();
+        long nActTextWindowHeight = m_xHelpFrame->get_preferred_size().Height();
 
         long nOptTextWindowHeight = std::max( nMinTextWindowHeight, std::min( nMaxTextWindowHeight, nActTextWindowHeight ) );
 
-        // --- then add the space above the text window
-        return nOptTextWindowHeight + impl_getSpaceAboveTextWindow();
+        return nOptTextWindowHeight;
     }
-
-
-    void InspectorHelpWindow::Resize()
-    {
-        Size a3AppFont(LogicToPixel(Size(3, 3), MapMode(MapUnit::MapAppFont)));
-
-        tools::Rectangle aPlayground( Point( 0, 0 ), GetOutputSizePixel() );
-
-        tools::Rectangle aSeparatorArea( aPlayground );
-        aSeparatorArea.SetBottom( aSeparatorArea.Top() + LogicToPixel(Size(0, 8), MapMode(MapUnit::MapAppFont)).Height() );
-        m_aSeparator->SetPosSizePixel( aSeparatorArea.TopLeft(), aSeparatorArea.GetSize() );
-
-        tools::Rectangle aTextArea( aPlayground );
-        aTextArea.SetTop( aSeparatorArea.Bottom() + a3AppFont.Height() );
-        m_aHelpText->SetPosSizePixel( aTextArea.TopLeft(), aTextArea.GetSize() );
-    }
-
 
 } // namespace pcr
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
