@@ -49,6 +49,7 @@
 #include <vcl/longcurr.hxx>
 #include <vcl/toolkit/imgctrl.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/prgsbar.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
@@ -6644,6 +6645,256 @@ void VCLXFrame::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
     VCLXContainer::ProcessWindowEvent( rVclWindowEvent );
+}
+
+//  class VCLXProgressBar
+VCLXProgressBar::VCLXProgressBar()
+            :m_nValue(0)
+            ,m_nValueMin(0)
+            ,m_nValueMax(100)
+{
+}
+
+VCLXProgressBar::~VCLXProgressBar()
+{
+}
+
+void VCLXProgressBar::ImplUpdateValue()
+{
+    VclPtr< ProgressBar > pProgressBar = GetAs< ProgressBar >();
+    if ( !pProgressBar )
+        return;
+
+    sal_Int32 nVal;
+    sal_Int32 nValMin;
+    sal_Int32 nValMax;
+
+    // check min and max
+    if (m_nValueMin < m_nValueMax)
+    {
+        nValMin = m_nValueMin;
+        nValMax = m_nValueMax;
+    }
+    else
+    {
+        nValMin = m_nValueMax;
+        nValMax = m_nValueMin;
+    }
+
+    // check value
+    if (m_nValue < nValMin)
+    {
+        nVal = nValMin;
+    }
+    else if (m_nValue > nValMax)
+    {
+        nVal = nValMax;
+    }
+    else
+    {
+        nVal = m_nValue;
+    }
+
+    // calculate percent
+    sal_Int32 nPercent;
+    if (nValMin != nValMax)
+    {
+        nPercent = 100 * (nVal - nValMin) / (nValMax - nValMin);
+    }
+    else
+    {
+        nPercent = 0;
+    }
+
+    // set progressbar value
+    pProgressBar->SetValue( static_cast<sal_uInt16>(nPercent) );
+}
+
+// css::uno::XInterface
+css::uno::Any VCLXProgressBar::queryInterface( const css::uno::Type & rType )
+{
+    css::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        static_cast< css::awt::XProgressBar* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this) );
+    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
+}
+
+IMPL_IMPLEMENTATION_ID( VCLXProgressBar )
+
+// css::lang::XTypeProvider
+css::uno::Sequence< css::uno::Type > VCLXProgressBar::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XProgressBar>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
+
+// css::awt::XProgressBar
+void VCLXProgressBar::setForegroundColor( sal_Int32 nColor )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr<vcl::Window> pWindow = GetWindow();
+    if ( pWindow )
+    {
+        pWindow->SetControlForeground( Color(nColor) );
+    }
+}
+
+void VCLXProgressBar::setBackgroundColor( sal_Int32 nColor )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr<vcl::Window> pWindow = GetWindow();
+    if ( pWindow )
+    {
+        Color aColor( nColor );
+        pWindow->SetBackground( aColor );
+        pWindow->SetControlBackground( aColor );
+        pWindow->Invalidate();
+    }
+}
+
+void VCLXProgressBar::setValue( sal_Int32 nValue )
+{
+    SolarMutexGuard aGuard;
+
+    m_nValue = nValue;
+    ImplUpdateValue();
+}
+
+void VCLXProgressBar::setRange( sal_Int32 nMin, sal_Int32 nMax )
+{
+    SolarMutexGuard aGuard;
+
+    if ( nMin < nMax )
+    {
+        // take correct min and max
+        m_nValueMin = nMin;
+        m_nValueMax = nMax;
+    }
+    else
+    {
+        // change min and max
+        m_nValueMin = nMax;
+        m_nValueMax = nMin;
+    }
+
+    ImplUpdateValue();
+}
+
+sal_Int32 VCLXProgressBar::getValue()
+{
+    SolarMutexGuard aGuard;
+
+    return m_nValue;
+}
+
+// css::awt::VclWindowPeer
+void VCLXProgressBar::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< ProgressBar > pProgressBar = GetAs< ProgressBar >();
+    if ( !pProgressBar )
+        return;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_PROGRESSVALUE:
+        {
+            if ( Value >>= m_nValue )
+                ImplUpdateValue();
+        }
+        break;
+        case BASEPROPERTY_PROGRESSVALUE_MIN:
+        {
+            if ( Value >>= m_nValueMin )
+                ImplUpdateValue();
+        }
+        break;
+        case BASEPROPERTY_PROGRESSVALUE_MAX:
+        {
+            if ( Value >>= m_nValueMax )
+                ImplUpdateValue();
+        }
+        break;
+        case BASEPROPERTY_FILLCOLOR:
+        {
+            VclPtr<vcl::Window> pWindow = GetWindow();
+            if ( pWindow )
+            {
+                bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+
+                if ( bVoid )
+                {
+                    pWindow->SetControlForeground();
+                }
+                else
+                {
+                    sal_Int32 nColor = 0;
+                    if ( Value >>= nColor )
+                    {
+                        Color aColor( nColor );
+                        pWindow->SetControlForeground( aColor );
+                    }
+                }
+            }
+        }
+        break;
+        default:
+            VCLXWindow::setProperty( PropertyName, Value );
+            break;
+    }
+}
+
+css::uno::Any VCLXProgressBar::getProperty( const OUString& PropertyName )
+{
+    SolarMutexGuard aGuard;
+
+    css::uno::Any aProp;
+    VclPtr< ProgressBar > pProgressBar = GetAs< ProgressBar >();
+    if ( pProgressBar )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_PROGRESSVALUE:
+            {
+                 aProp <<= m_nValue;
+            }
+            break;
+            case BASEPROPERTY_PROGRESSVALUE_MIN:
+            {
+                 aProp <<= m_nValueMin;
+            }
+            break;
+            case BASEPROPERTY_PROGRESSVALUE_MAX:
+            {
+                 aProp <<= m_nValueMax;
+            }
+            break;
+            default:
+                aProp = VCLXWindow::getProperty( PropertyName );
+                break;
+        }
+    }
+    return aProp;
+}
+
+void VCLXProgressBar::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_PROGRESSVALUE,
+                     BASEPROPERTY_PROGRESSVALUE_MIN,
+                     BASEPROPERTY_PROGRESSVALUE_MAX,
+                     BASEPROPERTY_FILLCOLOR,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
