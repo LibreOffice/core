@@ -41,7 +41,6 @@
 #include <unotools/mediadescriptor.hxx>
 
 #if HAVE_FEATURE_BREAKPAD
-#include <fstream>
 #include <desktop/crashreport.hxx>
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
@@ -76,11 +75,9 @@
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* /*context*/, bool succeeded)
 {
-    std::string ini_path = CrashReporter::getIniFileName();
-    std::ofstream minidump_file(ini_path, std::ios_base::app);
-    minidump_file << "DumpFile=" << descriptor.path() << "\n";
-    minidump_file.close();
+    CrashReporter::addKeyValue("DumpFile", OStringToOUString(descriptor.path(), RTL_TEXTENCODING_UTF8), CrashReporter::Write);
     SAL_WARN("desktop", "minidump generated: " << descriptor.path());
+
     return succeeded;
 }
 #elif defined WNT
@@ -89,17 +86,14 @@ static bool dumpCallback(const wchar_t* path, const wchar_t* id,
                             MDRawAssertionInfo* /*assertion*/,
                             bool succeeded)
 {
-    std::string ini_path = CrashReporter::getIniFileName();
-    std::ofstream minidump_file(ini_path, std::ios_base::app);
     // TODO: moggi: can we avoid this conversion
 #ifdef _MSC_VER
 #pragma warning (disable: 4996)
 #endif
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
     std::string aPath = conv1.to_bytes(std::wstring(path)) + conv1.to_bytes(std::wstring(id)) + ".dmp";
-    minidump_file << "DumpFile=" << aPath << "\n";
-    minidump_file << "GDIHandles=" << ::GetGuiResources (::GetCurrentProcess(), GR_GDIOBJECTS) << "\n";
-    minidump_file.close();
+    CrashReporter::addKeyValue("DumpFile", OStringToOUString(aPath.c_str(), RTL_TEXTENCODING_UTF8), CrashReporter::AddItem);
+    CrashReporter::addKeyValue("GDIHandles", OUString::number(::GetGuiResources (::GetCurrentProcess(), GR_GDIOBJECTS)), CrashReporter::Write);
     SAL_WARN("desktop", "minidump generated: " << aPath);
     return succeeded;
 }
