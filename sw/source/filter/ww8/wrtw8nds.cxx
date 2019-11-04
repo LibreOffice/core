@@ -3100,8 +3100,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
 
     SwNodeIndex aIdx( rSectionNode, 1 );
     const SwNode& rNd = aIdx.GetNode();
-    if ( !rNd.IsSectionNode() && !IsInTable()
-        && rSection.GetType() != TOX_CONTENT_SECTION && rSection.GetType() != TOX_HEADER_SECTION) //No sections in table
+    if ( !rNd.IsSectionNode() && !IsInTable() ) //No sections in table
     {
         // if the first Node inside the section has an own
         // PageDesc or PageBreak attribute, then don't write
@@ -3121,7 +3120,8 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         else
             AttrOutput().SectionBreaks( rSectionNode );
 
-        if ( !pSet )
+        const bool bInTOX = rSection.GetType() == TOX_CONTENT_SECTION || rSection.GetType() == TOX_HEADER_SECTION;
+        if ( !pSet && !bInTOX )
         {
             // new Section with no own PageDesc/-Break
             //  -> write follow section break;
