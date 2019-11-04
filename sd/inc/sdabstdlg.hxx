@@ -169,7 +169,7 @@ protected:
 class SdAbstractDialogFactory
 {
 public:
-    SD_DLLPUBLIC static SdAbstractDialogFactory*     Create();
+    static SdAbstractDialogFactory*     Create();
 
     virtual VclPtr<AbstractSvxBulletAndPositionDlg> CreateSvxBulletAndPositionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) = 0;
     virtual VclPtr<VclAbstractDialog>          CreateBreakDlg(weld::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount ) = 0;

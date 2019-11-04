@@ -67,7 +67,7 @@ public:
 
 typedef tools::SvRef<SbMethod> SbMethodRef;
 
-class BASIC_DLLPUBLIC SbIfaceMapperMethod : public SbMethod
+class SbIfaceMapperMethod : public SbMethod
 {
     friend class SbiRuntime;
 

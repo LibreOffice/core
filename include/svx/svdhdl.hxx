@@ -507,7 +507,7 @@ private:
 };
 
 
-class SVX_DLLPUBLIC SdrCropViewHdl final : public SdrHdl
+class SdrCropViewHdl final : public SdrHdl
 {
 private:
     basegfx::B2DHomMatrix const       maObjectTransform;

@@ -28,7 +28,7 @@
 // SdrGrafInvertItem -
 
 
-class SVX_DLLPUBLIC SdrGrafInvertItem : public SdrOnOffItem
+class SdrGrafInvertItem : public SdrOnOffItem
 {
 public:
 

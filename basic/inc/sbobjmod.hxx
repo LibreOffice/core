@@ -31,7 +31,7 @@
 
 // Basic-Module for excel object.
 
-class BASIC_DLLPUBLIC SbObjModule : public SbModule
+class SbObjModule : public SbModule
 {
 protected:
     virtual ~SbObjModule() override;
@@ -50,7 +50,7 @@ public:
 
 class FormObjEventListenerImpl;
 
-class BASIC_DLLPUBLIC SbUserFormModule : public SbObjModule
+class SbUserFormModule : public SbObjModule
 {
     css::script::ModuleInfo m_mInfo;
     ::rtl::Reference< FormObjEventListenerImpl > m_DialogListener;
@@ -84,7 +84,7 @@ public:
     class SbUserFormModuleInstance* CreateInstance();
 };
 
-class BASIC_DLLPUBLIC SbUserFormModuleInstance : public SbUserFormModule
+class SbUserFormModuleInstance : public SbUserFormModule
 {
     SbUserFormModule* m_pParentModule;
 

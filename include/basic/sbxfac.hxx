@@ -26,7 +26,7 @@
 class SbxBase;
 class SbxObject;
 
-class BASIC_DLLPUBLIC SbxFactory
+class SbxFactory
 {
 public:
     virtual ~SbxFactory();

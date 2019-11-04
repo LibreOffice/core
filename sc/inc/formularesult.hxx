@@ -179,7 +179,7 @@ public:
         left result is modified instead, but only if it was of type
         formula::svDouble before or not set at all.
      */
-    SC_DLLPUBLIC void SetDouble( double f );
+    void SetDouble( double f );
 
     /** Return value if type formula::svDouble or formula::svHybridCell or formula::svMatrixCell and upper
         left formula::svDouble, else 0.0 */
@@ -198,24 +198,24 @@ public:
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridString(), or only SetHybridFormula() for
         formula string to be compiled later. */
-    SC_DLLPUBLIC void SetHybridDouble( double f );
+    void SetHybridDouble( double f );
 
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridString()/SetHybridFormula(), or only
         SetHybridFormula() for formula string to be compiled later. */
-    SC_DLLPUBLIC void SetHybridString( const svl::SharedString & rStr );
+    void SetHybridString( const svl::SharedString & rStr );
 
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridFormula(),
         SetHybridEmptyDisplayedAsString() must be last. */
-    SC_DLLPUBLIC void SetHybridEmptyDisplayedAsString();
+    void SetHybridEmptyDisplayedAsString();
 
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridString()/SetHybridFormula(), or only
         SetHybridFormula() for formula string to be compiled later. */
-    SC_DLLPUBLIC void SetHybridFormula( const OUString & rFormula );
+    void SetHybridFormula( const OUString & rFormula );
 
-    SC_DLLPUBLIC void SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL );
+    void SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL );
 
     /** Get the const ScMatrixFormulaCellToken* if token is of that type, else
         NULL. */
