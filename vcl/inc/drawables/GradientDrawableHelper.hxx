@@ -77,10 +77,17 @@ public:
     static double CalculateBorderWidth(Gradient const& rGradient, tools::Rectangle const& rRect);
 
     static void AddFillColorAction(GDIMetaFile* pMetaFile, long nRed, long nGreen, long nBlue);
-    static tools::Rectangle
-    AddGradientBorderActions(GDIMetaFile* pMetaFile, Gradient const& rGradient,
-                             tools::Rectangle aBorderRect, tools::Rectangle aMirrorRect,
-                             Point const& rCenter, double nAngle, double fBorderWidth);
+    static void AddGradientBorderActions(GDIMetaFile* pMetaFile, Gradient const& rGradient,
+                                         tools::Rectangle aBorderRect, tools::Rectangle aMirrorRect,
+                                         Point const& rCenter, double nAngle, double fBorderWidth);
+
+    static tools::Rectangle SetGradientStepTop(tools::Rectangle const& rBorderRect,
+                                               double fBorderWidth, tools::Rectangle aStepRect);
+
+    static tools::Rectangle SetGradientStepMirrorBottom(Gradient const& rGradient,
+                                                        tools::Rectangle const& rBorderRect,
+                                                        double fBorderWidth,
+                                                        tools::Rectangle aMirrorRect);
 
     static void SetFillColor(OutputDevice* pRenderContext, long nStartRed, long nStartGreen,
                              long nStartBlue);

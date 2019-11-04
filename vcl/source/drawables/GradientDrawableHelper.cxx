@@ -61,12 +61,7 @@ bool GradientDrawableHelper::AddGradientActions(OutputDevice* pRenderContext,
     pMetaFile->AddAction(new MetaISectRectClipRegionAction(aRect));
     pMetaFile->AddAction(new MetaLineColorAction(Color(), false));
 
-    // because we draw with no border line, we have to expand gradient
-    // rect to avoid missing lines on the right and bottom edge
-    aRect.AdjustLeft(-1);
-    aRect.AdjustTop(-1);
-    aRect.AdjustRight(1);
-    aRect.AdjustBottom(1);
+    ExpandGradientOverBorder(aRect);
 
     // calculate step count if necessary
     if (!aGradient.GetSteps())
@@ -191,16 +186,12 @@ void GradientDrawableHelper::AddFillColorAction(GDIMetaFile* pMetaFile, long nSt
     pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 }
 
-tools::Rectangle GradientDrawableHelper::AddGradientBorderActions(
+void GradientDrawableHelper::AddGradientBorderActions(
     GDIMetaFile* pMetaFile, Gradient const& rGradient, tools::Rectangle aBorderRect,
     tools::Rectangle aMirrorRect, Point const& rCenter, double nAngle, double fBorderWidth)
 {
-    tools::Rectangle aStepRect = aBorderRect;
-
     aBorderRect.SetBottom(static_cast<long>(aBorderRect.Top() + fBorderWidth));
     pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aBorderRect, rCenter, nAngle)));
-
-    aStepRect.SetTop(aBorderRect.Bottom());
 
     if (rGradient.GetStyle() != GradientStyle::Linear)
     {
@@ -210,8 +201,6 @@ tools::Rectangle GradientDrawableHelper::AddGradientBorderActions(
 
         pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aBorderRect, rCenter, nAngle)));
     }
-
-    return aStepRect;
 }
 
 long GradientDrawableHelper::GetLinearGradientSteps(long nStepCount, long nStartRed,
@@ -295,6 +284,24 @@ GradientDrawableHelper::GetColorIntensities(Gradient const& rGradient)
     return std::make_tuple(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 }
 
+tools::Rectangle GradientDrawableHelper::SetGradientStepTop(tools::Rectangle const& rBorderRect,
+                                     double fBorderWidth, tools::Rectangle aStepRect)
+{
+    aStepRect.SetTop(static_cast<long>(rBorderRect.Top() + fBorderWidth));
+
+    return aStepRect;
+}
+
+
+tools::Rectangle GradientDrawableHelper::SetGradientStepMirrorBottom(Gradient const& rGradient, tools::Rectangle const& rBorderRect,
+                                     double fBorderWidth, tools::Rectangle aMirrorRect)
+{
+    if (rGradient.GetStyle() != GradientStyle::Linear)
+        aMirrorRect.SetBottom(static_cast<long>(rBorderRect.Bottom() - fBorderWidth));
+
+    return aMirrorRect;
+}
+
 void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
                                                           tools::Rectangle const& rRect,
                                                           Gradient const& rGradient)
@@ -322,8 +329,12 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     if (fBorderWidth > 0.0)
     {
         AddFillColorAction(pMetaFile, nStartRed, nStartGreen, nStartBlue);
-        aStepRect = AddGradientBorderActions(pMetaFile, rGradient, aBorderRect, aMirrorRect,
-                                             aCenter, nAngle, fBorderWidth);
+
+        AddGradientBorderActions(pMetaFile, rGradient, aBorderRect, aMirrorRect, aCenter, nAngle,
+                                 fBorderWidth);
+
+        aStepRect = SetGradientStepTop(aBorderRect, fBorderWidth, aStepRect);
+        aMirrorRect = SetGradientStepMirrorBottom(rGradient, aBorderRect, fBorderWidth, aMirrorRect);
     }
 
     long nSteps = GetLinearGradientSteps(
