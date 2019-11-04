@@ -140,7 +140,7 @@ typedef tools::SvRef<SbModule> SbModuleRef;
 typedef std::vector<SbModuleRef> SbModules;
 
 // Object class for instances of class modules
-class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
+class SAL_DLLPUBLIC_RTTI SbClassModuleObject : public SbModule
 {
     SbModule*   mpClassModule;
     bool        mbInitializeEventDone;

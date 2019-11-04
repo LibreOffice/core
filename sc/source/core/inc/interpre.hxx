@@ -148,8 +148,8 @@ class ScInterpreter
     friend class ScChiSqDistFunction;
 
 public:
-    static SC_DLLPUBLIC void SetGlobalConfig(const ScCalcConfig& rConfig);
-    static SC_DLLPUBLIC const ScCalcConfig& GetGlobalConfig();
+    static void SetGlobalConfig(const ScCalcConfig& rConfig);
+    static const ScCalcConfig& GetGlobalConfig();
 
     static void GlobalExit();           // called by ScGlobal::Clear()
 

@@ -25,7 +25,7 @@
 #include <vcl/weld.hxx>
 
 // SdInsertPasteDlg
-class SD_DLLPUBLIC SdInsertPasteDlg : public weld::GenericDialogController
+class SdInsertPasteDlg : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::RadioButton> m_xRbBefore;

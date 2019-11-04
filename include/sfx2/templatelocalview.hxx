@@ -136,7 +136,7 @@ protected:
     std::vector<TemplateItemProperties > maAllTemplates;
 };
 
-class SFX2_DLLPUBLIC SfxTemplateLocalView final : public SfxThumbnailView
+class SfxTemplateLocalView final : public SfxThumbnailView
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 

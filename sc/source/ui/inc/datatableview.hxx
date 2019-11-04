@@ -78,7 +78,7 @@ public:
  * This class should only depend on ScDocument and not
  * on some of the Calc view shells.
  */
-class SC_DLLPUBLIC ScDataTableView : public Control
+class ScDataTableView : public Control
 {
     std::shared_ptr<ScDocument> mpDoc;
     std::unique_ptr<SelectionEngine> mpSelectionEngine;

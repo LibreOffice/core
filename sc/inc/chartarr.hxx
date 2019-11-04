@@ -55,7 +55,7 @@ public:
     void SetRowText(SCROW nRow, const OUString& rText) { pRowText[nRow] = rText; }
 };
 
-class SC_DLLPUBLIC ScChartArray             // only parameter-struct
+class ScChartArray             // only parameter-struct
 {
     ScDocument* pDocument;
     ScChartPositioner aPositioner;

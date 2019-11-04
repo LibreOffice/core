@@ -63,7 +63,7 @@ typedef ::cppu::WeakComponentImplHelper<
 #define BASE_URL            "private:factory/sdatabase?Interactive"
 #define STARTMODULE_URL     ".uno:ShowStartModule"
 
-class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
+class ShutdownIcon : public ShutdownIconServiceBase
 {
         ::osl::Mutex            m_aMutex;
         bool                    m_bVeto;
