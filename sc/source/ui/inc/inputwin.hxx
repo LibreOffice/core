@@ -226,6 +226,7 @@ public:
     virtual void    dispose() override;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    PixelInvalidate(const tools::Rectangle* pRectangle) override;
     virtual void    Resize() override;
     virtual void    Select() override;
 
@@ -263,6 +264,8 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
 
+    void            NotifyLOKClient();
+
 private:
     bool IsPointerAtResizePos();
 
@@ -270,6 +273,7 @@ private:
     VclPtr<ScTextWndBase> pRuntimeWindow;
     ScTextWndBase&  aTextWindow;
     ScInputHandler* pInputHdl;
+    ScTabViewShell* mpViewShell;
     long            mnMaxY;
     bool            bIsOkCancelMode;
     bool            bInResize;
