@@ -19,7 +19,6 @@
 
 
 #include <tools/debug.hxx>
-#include <vcl/fixedhyper.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
@@ -131,19 +130,6 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const cs
         TreeControlPeer* pPeer = new TreeControlPeer;
         *ppNewComp = pPeer;
         pWindow = pPeer->createVclControl( pParent, nWinBits );
-    }
-    else if ( aServiceName.equalsIgnoreAsciiCase( "FixedHyperlink" ) )
-    {
-        if ( pParent )
-        {
-            pWindow = VclPtr<FixedHyperlink>::Create( pParent, nWinBits );
-            *ppNewComp = new VCLXFixedHyperlink;
-        }
-        else
-        {
-            *ppNewComp = nullptr;
-            return nullptr;
-        }
     }
     else if ( aServiceName.equalsIgnoreAsciiCase( "Grid" ) )
     {

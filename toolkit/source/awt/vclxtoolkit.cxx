@@ -88,6 +88,7 @@
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/fixedhyper.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/longcurr.hxx>
@@ -1789,6 +1790,11 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 {
                     pNewWindow = VclPtr<::vcl::ORoadmap>::Create( pParent, WB_TABSTOP );
                     *ppNewComp = new SVTXRoadmap;
+                }
+                else if (aServiceName == "FixedHyperlink")
+                {
+                    pNewWindow = VclPtr<FixedHyperlink>::Create( pParent, nWinBits );
+                    *ppNewComp = new VCLXFixedHyperlink;
                 }
             break;
             default:
