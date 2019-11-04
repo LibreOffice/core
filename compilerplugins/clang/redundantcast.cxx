@@ -78,6 +78,17 @@ AlgebraicType algebraicType(clang::Type const & type) {
     }
 }
 
+// Do not look through FunctionToPointerDecay, but through e.g. NullToPointer:
+Expr const * stopAtFunctionPointerDecay(ExplicitCastExpr const * expr) {
+    auto const e1 = expr->getSubExpr();
+    if (auto const e2 = dyn_cast<ImplicitCastExpr>(e1)) {
+        if (e2->getCastKind() != CK_FunctionToPointerDecay) {
+            return e2->getSubExpr();
+        }
+    }
+    return e1;
+}
+
 class RedundantCast:
     public loplugin::FilteringRewritePlugin<RedundantCast>
 {
@@ -394,7 +405,7 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
     }
     auto const t2 = expr->getTypeAsWritten();
     bool const fnptr = t2->isFunctionPointerType() || t2->isMemberFunctionPointerType();
-    auto const sub = fnptr ? expr->getSubExpr() : compat::getSubExprAsWritten(expr);
+    auto const sub = fnptr ? stopAtFunctionPointerDecay(expr) : compat::getSubExprAsWritten(expr);
     auto const t1 = sub->getType();
     auto const nonClassObjectType = t2->isObjectType()
         && !(t2->isRecordType() || t2->isArrayType());
@@ -722,8 +733,8 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     // temporary):
     auto const t1 = expr->getTypeAsWritten();
     bool const fnptr = t1->isFunctionPointerType() || t1->isMemberFunctionPointerType();
-    auto const sub = fnptr ? expr->getSubExpr() : compat::getSubExprAsWritten(expr);
-    if (sub->getValueKind() != VK_RValue || expr->getType()->isRecordType()
+    auto const sub = fnptr ? stopAtFunctionPointerDecay(expr) : compat::getSubExprAsWritten(expr);
+    if ((sub->getValueKind() != VK_RValue && !fnptr) || expr->getType()->isRecordType()
         || isa<InitListExpr>(sub) || isa<CXXStdInitializerListExpr>(sub))
     {
         return true;
