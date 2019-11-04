@@ -72,10 +72,10 @@
 /**
  * Converts old SVGDI aka SVM1 format data to current VCLMTF aka SVM2 format metafile data.
  */
-class VCL_PLUGIN_PUBLIC SVMConverter
+class SVMConverter
 {
 private:
-    SAL_DLLPRIVATE static void      ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf );
+    static void      ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf );
 
 public:
                         SVMConverter( SvStream& rIStm, GDIMetaFile& rMtf  );

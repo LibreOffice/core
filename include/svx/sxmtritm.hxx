@@ -37,7 +37,7 @@ public:
 
 // Turn the calculated TextRect through 180 deg
 // Text is also switched to the other side of the dimension line, if not Rota90
-class SVX_DLLPUBLIC SdrMeasureTextUpsideDownItem final : public SdrYesNoItem {
+class SdrMeasureTextUpsideDownItem final : public SdrYesNoItem {
 public:
     SdrMeasureTextUpsideDownItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTUPSIDEDOWN,bOn) {}
     virtual ~SdrMeasureTextUpsideDownItem() override;

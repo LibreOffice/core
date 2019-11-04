@@ -27,7 +27,7 @@
 // GetValueTextByVal() returns "yes" or "no"
 // instead of "TRUE" and "FALSE"
 //-------------------------------------------------- ----------
-class SVX_DLLPUBLIC SdrYesNoItem: public SfxBoolItem {
+class SdrYesNoItem: public SfxBoolItem {
 public:
     SdrYesNoItem(sal_uInt16 nId, bool bOn): SfxBoolItem(nId,bOn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;

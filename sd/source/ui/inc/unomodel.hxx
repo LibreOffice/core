@@ -62,7 +62,7 @@ class DrawViewShell;
 extern OUString getPageApiName( SdPage const * pPage );
 extern OUString getPageApiNameFromUiName( const OUString& rUIName );
 
-class SD_DLLPUBLIC SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
+class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
                            public SvxFmMSFactory,
                            public css::drawing::XDrawPageDuplicator,
                            public css::drawing::XLayerSupplier,

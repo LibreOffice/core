@@ -26,7 +26,7 @@
 
 // specification of the unit if measurement. The numerical quantity value is converted in this unity.
 // (based on the facts of the MapUnit of the model). This unity is displayed if necessary.
-class SVX_DLLPUBLIC SdrMeasureUnitItem: public SfxEnumItem<FieldUnit> {
+class SdrMeasureUnitItem: public SfxEnumItem<FieldUnit> {
 public:
     SdrMeasureUnitItem(FieldUnit eUnit=FieldUnit::NONE): SfxEnumItem(SDRATTR_MEASUREUNIT, eUnit) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
