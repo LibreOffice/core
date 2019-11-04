@@ -30,8 +30,7 @@
 
 #include <vector>
 
-namespace vcl { class Window; }
-namespace weld { class Window; }
+namespace weld { class Builder; class Widget; class Window; }
 namespace com { namespace sun { namespace star {
     namespace inspection {
         struct LineDescriptor;
@@ -193,13 +192,12 @@ namespace pcr
         /** gets the window of the ObjectInspector in which a property handler lives
 
             The method looks up a value called "DialogParentWindow" in the given UNO component context,
-            queries it for XWindow, and returns the respective vcl::Window*. If either of those steps fails,
+            queries it for XWindow, and returns the respective weld::Window*. If either of those steps fails,
             this is asserted in a non-product version, and silently ignore otherwise.
 
             @param  _rContext
                 the component context which was used to create the component calling this method
         */
-        static vcl::Window* getDialogParentWindow( const css::uno::Reference< css::uno::XComponentContext > & _rContext );
         static weld::Window* getDialogParentFrame( const css::uno::Reference< css::uno::XComponentContext > & _rContext );
 
 
@@ -214,6 +212,12 @@ namespace pcr
         {
             return ( _nPropertyAttributes & css::beans::PropertyAttribute::READONLY ) != 0;
         }
+
+        static std::unique_ptr<weld::Builder> makeBuilder(const OUString& rUIFile, const css::uno::Reference<css::uno::XComponentContext>& rContext);
+
+        static void setBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent, bool bInterim);
+
+        static void clearBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext);
 
     private:
         PropertyHandlerHelper( const PropertyHandlerHelper& ) = delete;

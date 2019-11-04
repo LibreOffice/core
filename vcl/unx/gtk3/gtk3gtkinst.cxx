@@ -10403,6 +10403,7 @@ private:
     SvNumberFormatter* m_pFormatter;
     Color* m_pLastOutputColor;
     sal_uInt32 m_nFormatKey;
+    bool m_bTreatAsNumber;
     gulong m_nValueChangedSignalId;
     gulong m_nOutputSignalId;
     gulong m_nInputSignalId;
@@ -10443,7 +10444,7 @@ private:
 
         sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
 
-        if (m_pFormatter->IsTextFormat(nFormatKey))
+        if (m_pFormatter->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
             // for detection of values like "1,1" in fields that are formatted as text
             nFormatKey = 0;
 
@@ -10494,6 +10495,7 @@ public:
         , m_pFormatter(nullptr)
         , m_pLastOutputColor(nullptr)
         , m_nFormatKey(0)
+        , m_bTreatAsNumber(true)
         , m_nValueChangedSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
         , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
         , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
@@ -10541,6 +10543,11 @@ public:
         signal_output();
     }
 
+    virtual SvNumberFormatter* get_formatter() override
+    {
+        return m_pFormatter;
+    }
+
     virtual sal_Int32 get_format_key() const override
     {
         return m_nFormatKey;
@@ -10549,6 +10556,18 @@ public:
     virtual void set_format_key(sal_Int32 nFormatKey) override
     {
         m_nFormatKey = nFormatKey;
+    }
+
+    virtual void treat_as_number(bool bSet) override
+    {
+        m_bTreatAsNumber = bSet;
+    }
+
+    virtual void set_digits(unsigned int digits) override
+    {
+        disable_notify_events();
+        gtk_spin_button_set_digits(m_pButton, digits);
+        enable_notify_events();
     }
 
     virtual ~GtkInstanceFormattedSpinButton() override
