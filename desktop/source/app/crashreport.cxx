@@ -14,17 +14,17 @@
 #include <ucbhelper/proxydecider.hxx>
 #include <unotools/bootstrap.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <desktop/minidump.hxx>
 
 #include <config_version.h>
 #include <config_folders.h>
 
 #include <string>
-#include <fstream>
 
-osl::Mutex CrashReporter::maMutex;
 
 #if HAVE_FEATURE_BREAKPAD
 
+#include <fstream>
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 #include <client/linux/handler/exception_handler.h>
 #elif defined WNT
@@ -38,41 +38,47 @@ osl::Mutex CrashReporter::maMutex;
 #endif
 #endif
 
+osl::Mutex CrashReporter::maMutex;
 google_breakpad::ExceptionHandler* CrashReporter::mpExceptionHandler = nullptr;
 bool CrashReporter::mbInit = false;
-std::map<OUString, OUString> CrashReporter::maKeyValues;
+CrashReporter::vmaKeyValues CrashReporter::maKeyValues;
 
-namespace {
 
-void writeToStream(std::ofstream& strm, const OUString& rKey, const OUString& rValue)
+void CrashReporter::writeToFile(std::ios_base::openmode Openmode)
 {
-    strm << OUStringToOString(rKey, RTL_TEXTENCODING_UTF8).getStr() << "=";
-    strm << OUStringToOString(rValue, RTL_TEXTENCODING_UTF8).getStr() << "\n";
+    std::ofstream ini_file(getIniFileName(), Openmode);
+
+    for (auto& keyValue : maKeyValues)
+    {
+        ini_file << rtl::OUStringToOString(keyValue.first, RTL_TEXTENCODING_UTF8).getStr() << "=";
+        ini_file << rtl::OUStringToOString(keyValue.second, RTL_TEXTENCODING_UTF8).getStr() << "\n";
+    }
+
+    maKeyValues.clear();
+    ini_file.close();
 }
 
-}
-
-void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue)
+void CrashReporter::addKeyValue(const OUString& rKey, const OUString& rValue, tAddKeyHandling AddKeyHandling)
 {
     osl::MutexGuard aGuard(maMutex);
-    if (mbInit)
+
+    if (IsDumpEnable())
     {
-        std::string ini_path = getIniFileName();
-        std::ofstream ini_file(ini_path, std::ios_base::app);
-        writeToStream(ini_file, rKey, rValue);
-    }
-    else
-    {
-        maKeyValues.insert(std::pair<OUString, OUString>(rKey, rValue));
+        if (!rKey.isEmpty())
+            maKeyValues.push_back(mpair(rKey, rValue));
+
+        if (AddKeyHandling != AddItem)
+        {
+            if (mbInit)
+                writeToFile(std::ios_base::app);
+            else if (AddKeyHandling == Create)
+                writeCommonInfo();
+        }
     }
 }
-
-#endif
 
 void CrashReporter::writeCommonInfo()
 {
-    osl::MutexGuard aGuard(maMutex);
-
     ucbhelper::InternetProxyDecider proxy_decider(::comphelper::getProcessComponentContext());
 
     const OUString protocol = "https";
@@ -81,30 +87,32 @@ void CrashReporter::writeCommonInfo()
 
     const ucbhelper::InternetProxyServer proxy_server = proxy_decider.getProxy(protocol, url, port);
 
+    // save the new Keys
+    vmaKeyValues atlast = maKeyValues;
+    // clear the keys, the following Keys should be at the begin
+    maKeyValues.clear();
+
     // limit the amount of code that needs to be executed before the crash reporting
-    std::string ini_path = CrashReporter::getIniFileName();
-    std::ofstream minidump_file(ini_path, std::ios_base::trunc);
-    minidump_file << "ProductName=LibreOffice\n";
-    minidump_file << "Version=" LIBO_VERSION_DOTTED "\n";
-    minidump_file << "BuildID=" << utl::Bootstrap::getBuildIdData("") << "\n";
-    minidump_file << "URL=" << protocol << "://" << url << "/submit/\n";
+    addKeyValue("ProductName", "LibreOffice", AddItem);
+    addKeyValue("Version", LIBO_VERSION_DOTTED, AddItem);
+    addKeyValue("BuildID", utl::Bootstrap::getBuildIdData(""), AddItem);
+    addKeyValue("URL", protocol + "://" + url + "/submit/", AddItem);
 
     if (proxy_server.aName != OUString())
     {
-        minidump_file << "Proxy=" << proxy_server.aName << ":" << proxy_server.nPort << "\n";
+        addKeyValue("Proxy", proxy_server.aName + ":" + OUString::number(proxy_server.nPort), AddItem);
     }
 
-    for (auto& keyValue : maKeyValues)
-    {
-        writeToStream(minidump_file, keyValue.first, keyValue.second);
-    }
-    maKeyValues.clear();
-    minidump_file.close();
+    // write the new keys at the end
+    maKeyValues.insert(maKeyValues.end(), atlast.begin(), atlast.end());
 
     mbInit = true;
 
+    writeToFile(std::ios_base::trunc);
+
     updateMinidumpLocation();
 }
+
 
 namespace {
 
@@ -144,10 +152,47 @@ void CrashReporter::updateMinidumpLocation()
 #endif
 }
 
+bool CrashReporter::crashReportInfoExists()
+{
+    static bool first = true;
+    static bool InfoExist = false;
+
+    if (first)
+    {
+        first = false;
+        InfoExist = crashreport::readConfig(CrashReporter::getIniFileName(), nullptr);
+    }
+
+    return InfoExist;
+}
+
+bool CrashReporter::readSendConfig(std::string& response)
+{
+    return crashreport::readConfig(CrashReporter::getIniFileName(), &response);
+}
+
 void CrashReporter::storeExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler)
 {
-    mpExceptionHandler = pExceptionHandler;
+    if(IsDumpEnable())
+        mpExceptionHandler = pExceptionHandler;
 }
+
+
+
+bool CrashReporter::IsDumpEnable()
+{
+    OUString sToken;
+    OString  sEnvVar(std::getenv("CRASH_DUMP_ENABLE"));
+    bool     bEnable = true;   // default, always on
+    // read configuration item 'CrashDumpEnable' -> bool on/off
+    if (rtl::Bootstrap::get("CrashDumpEnable", sToken) && sEnvVar.isEmpty())
+    {
+        bEnable = sToken.toBoolean();
+    }
+
+    return bEnable;
+}
+
 
 std::string CrashReporter::getIniFileName()
 {
@@ -156,5 +201,8 @@ std::string CrashReporter::getIniFileName()
     std::string aRet(aUrl.getStr());
     return aRet;
 }
+
+
+#endif //HAVE_FEATURE_BREAKPAD
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
