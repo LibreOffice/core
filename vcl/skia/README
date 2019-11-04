@@ -4,15 +4,10 @@ See external/skia for info on the library itself.
 Environment variables:
 ======================
 
-SAL_DISABLESKIA=1 - force disabled Skia
-SAL_ENABLESKIA=1 - enable Skia, unless blacklisted (and if the VCL backend supports Skia)
-SAL_FORCESKIA=1 - force using Skia, even if blacklisted
-SAL_SKIA=raster|vulkan - select Skia's drawing method, by default Vulkan is used
+See README.vars in the toplevel vcl/ directory. Note that many backends do not
+use Skia. E.g. on Linux it is necessary to also use SAL_USE_VCLPLUGIN=gen .
 
-There also also GUI options for controlling whether Skia is enabled.
-
-Note that many backends do not use Skia. E.g. on Linux it is necessary to also use
-SAL_USE_VCLPLUGIN=gen .
+There are also GUI options for controlling whether Skia is enabled.
 
 Skia drawing methods:
 =====================
