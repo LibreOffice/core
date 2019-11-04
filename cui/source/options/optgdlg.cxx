@@ -431,7 +431,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xCrashReport->Enable(!officecfg::Office::Common::Misc::CrashReport::isReadOnly());
     m_xCrashReport->SaveValue();
 #else
-    m_xCrashReport->Disable();
+    m_xCrashReport->Hide();
 #endif
 
     SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
