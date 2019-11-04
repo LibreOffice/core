@@ -87,21 +87,29 @@ namespace
 
 
 PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pParent, ODesignView*  _pDesignView)
-          :DockingWindow(pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
-          ,m_xORB(_xORB)
-          ,m_pDesignView(_pDesignView)
-          ,m_pView( nullptr )
-          ,m_bInitialStateChange(true)
+    : DockingWindow(pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
+    , m_xContentArea(VclPtr<VclVBox>::Create(this))
+    , m_xORB(_xORB)
+    , m_pDesignView(_pDesignView)
+    , m_pView( nullptr )
+    , m_bInitialStateChange(true)
 {
 
     Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
     SetOutputSizePixel(aPropWinSize);
 
+    // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
+    // transparent children of the widget
+    m_xContentArea->SetControlBackground(m_xContentArea->GetSettings().GetStyleSettings().GetWindowColor());
+    m_xContentArea->SetBackground(m_xContentArea->GetControlBackground());
+    m_xContentArea->SetStyle(m_xContentArea->GetStyle() & ~WB_CLIPCHILDREN);
+    m_xContentArea->Show();
+
     try
     {
         // create a frame wrapper for myself
         m_xMeAsFrame = Frame::create( m_xORB );
-        m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
+        m_xMeAsFrame->initialize(VCLUnoHelper::GetInterface(m_xContentArea));
         m_xMeAsFrame->setName("report property browser");  // change name!
     }
     catch (Exception&)
@@ -139,8 +147,6 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
             else
             {
                 m_xBrowserController->attachFrame( Reference<XFrame>(m_xMeAsFrame, UNO_QUERY_THROW));
-                m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
-                OSL_ENSURE(m_xBrowserComponentWindow.is(), "PropBrw::PropBrw: attached the controller, but have no component window!");
                 if ( bEnableHelpSection )
                 {
                     uno::Reference< inspection::XObjectInspector > xInspector( m_xBrowserController, uno::UNO_SET_THROW );
@@ -156,22 +162,15 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
             try
             {
                 ::comphelper::disposeComponent(m_xBrowserController);
-                ::comphelper::disposeComponent(m_xBrowserComponentWindow);
             }
             catch(Exception&) { }
             m_xBrowserController.clear();
-            m_xBrowserComponentWindow.clear();
         }
     }
 
-    if (m_xBrowserComponentWindow.is())
-    {
+    VclContainer::setLayoutAllocation(*m_xContentArea, Point(0, 0), aPropWinSize);
+    m_xContentArea->Show();
 
-        m_xBrowserComponentWindow->setPosSize(0, 0, aPropWinSize.Width(), aPropWinSize.Height(),
-            awt::PosSize::WIDTH | awt::PosSize::HEIGHT | awt::PosSize::X | awt::PosSize::Y);
-        Resize();
-        m_xBrowserComponentWindow->setVisible(true);
-    }
     ::rptui::notifySystemWindow(pParent,this,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 }
 
@@ -203,6 +202,7 @@ void PropBrw::dispose()
 
     ::rptui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pDesignView.clear();
+    m_xContentArea.disposeAndClear();
     DockingWindow::dispose();
 }
 
@@ -225,7 +225,6 @@ void PropBrw::implDetachController()
 
     m_xMeAsFrame.clear();
     m_xBrowserController.clear();
-    m_xBrowserComponentWindow.clear();
 }
 
 OUString PropBrw::getCurrentPage() const
@@ -428,39 +427,6 @@ uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(const uno::Referen
     return aSize;
 }
 
-void PropBrw::Resize()
-{
-    Window::Resize();
-
-    Reference< awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
-    if( xLayoutConstrains.is() )
-    {
-        ::Size aMinSize = getMinimumSize();
-        SetMinOutputSizePixel( aMinSize );
-        ::Size aSize = GetOutputSizePixel();
-        bool bResize = false;
-        if( aSize.Width() < aMinSize.Width() )
-        {
-            aSize.setWidth( aMinSize.Width() );
-            bResize = true;
-        }
-        if( aSize.Height() < aMinSize.Height() )
-        {
-            aSize.setHeight( aMinSize.Height() );
-            bResize = true;
-        }
-        if( bResize )
-            SetOutputSizePixel( aSize );
-    }
-    // adjust size
-    if (m_xBrowserComponentWindow.is())
-    {
-        Size  aSize = GetOutputSizePixel();
-        m_xBrowserComponentWindow->setPosSize(0, 0, aSize.Width(), aSize.Height(),
-            awt::PosSize::WIDTH | awt::PosSize::HEIGHT);
-    }
-}
-
 void PropBrw::Update( OSectionView* pNewView )
 {
     try
@@ -559,8 +525,7 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
 
 IMPL_LINK_NOARG( PropBrw, OnAsyncGetFocus, void*, void )
 {
-    if (m_xBrowserComponentWindow.is())
-        m_xBrowserComponentWindow->setFocus();
+    m_xContentArea->GrabFocus();
 }
 
 void PropBrw::LoseFocus()

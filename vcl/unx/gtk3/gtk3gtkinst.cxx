@@ -5458,7 +5458,7 @@ private:
             remove_page(m_pOverFlowNotebook, sIdent);
 
             GtkWidget* pPage = m_aPages[nPageIndex]->getWidget();
-            append_page(m_pNotebook, sIdent, sLabel, pPage);
+            insert_page(m_pNotebook, sIdent, sLabel, pPage, -1);
 
             GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pNotebook,
                                                                gtk_notebook_get_nth_page(m_pNotebook, i));
@@ -5575,14 +5575,14 @@ private:
         enable_notify_events();
     }
 
-    void append_page(GtkNotebook *pNotebook, const OString& rIdent, const OUString& rLabel, GtkWidget *pChild)
+    void insert_page(GtkNotebook *pNotebook, const OString& rIdent, const OUString& rLabel, GtkWidget *pChild, int nPos)
     {
         disable_notify_events();
 
         GtkWidget *pTabWidget = gtk_label_new(MapToGtkAccelerator(rLabel).getStr());
         gtk_buildable_set_name(GTK_BUILDABLE(pTabWidget), rIdent.getStr());
 
-        gtk_notebook_append_page(pNotebook, pChild, pTabWidget);
+        gtk_notebook_insert_page(pNotebook, pChild, pTabWidget, nPos);
         gtk_widget_show(pChild);
         gtk_widget_show(pTabWidget);
 
@@ -5691,7 +5691,7 @@ private:
             OString sIdent(get_page_ident(m_pNotebook, 0));
             OUString sLabel(get_tab_label_text(m_pNotebook, 0));
             remove_page(m_pNotebook, sIdent);
-            append_page(m_pOverFlowNotebook, sIdent, sLabel, gtk_grid_new());
+            insert_page(m_pOverFlowNotebook, sIdent, sLabel, gtk_grid_new(), -1);
             GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pOverFlowNotebook,
                                                                gtk_notebook_get_nth_page(m_pOverFlowNotebook, i));
             gtk_widget_set_hexpand(pTabWidget, true);
@@ -6043,7 +6043,7 @@ public:
             m_aPages.erase(m_aPages.begin() + nPageIndex);
     }
 
-    virtual void append_page(const OString& rIdent, const OUString& rLabel) override
+    virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override
     {
         if (m_bOverFlowBoxActive)
         {
@@ -6055,7 +6055,7 @@ public:
         gtk_widget_hide(GTK_WIDGET(m_pOverFlowNotebook));
         m_bOverFlowBoxActive = false;
 
-        append_page(m_pNotebook, rIdent, rLabel, gtk_grid_new());
+        insert_page(m_pNotebook, rIdent, rLabel, gtk_grid_new(), nPos);
     }
 
     virtual ~GtkInstanceNotebook() override
@@ -10580,6 +10580,7 @@ private:
     SvNumberFormatter* m_pFormatter;
     Color* m_pLastOutputColor;
     sal_uInt32 m_nFormatKey;
+    bool m_bTreatAsNumber;
     gulong m_nValueChangedSignalId;
     gulong m_nOutputSignalId;
     gulong m_nInputSignalId;
@@ -10620,7 +10621,7 @@ private:
 
         sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
 
-        if (m_pFormatter->IsTextFormat(nFormatKey))
+        if (m_pFormatter->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
             // for detection of values like "1,1" in fields that are formatted as text
             nFormatKey = 0;
 
@@ -10671,6 +10672,7 @@ public:
         , m_pFormatter(nullptr)
         , m_pLastOutputColor(nullptr)
         , m_nFormatKey(0)
+        , m_bTreatAsNumber(true)
         , m_nValueChangedSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
         , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
         , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
@@ -10718,6 +10720,11 @@ public:
         signal_output();
     }
 
+    virtual SvNumberFormatter* get_formatter() override
+    {
+        return m_pFormatter;
+    }
+
     virtual sal_Int32 get_format_key() const override
     {
         return m_nFormatKey;
@@ -10726,6 +10733,18 @@ public:
     virtual void set_format_key(sal_Int32 nFormatKey) override
     {
         m_nFormatKey = nFormatKey;
+    }
+
+    virtual void treat_as_number(bool bSet) override
+    {
+        m_bTreatAsNumber = bSet;
+    }
+
+    virtual void set_digits(unsigned int digits) override
+    {
+        disable_notify_events();
+        gtk_spin_button_set_digits(m_pButton, digits);
+        enable_notify_events();
     }
 
     virtual ~GtkInstanceFormattedSpinButton() override

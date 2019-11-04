@@ -314,7 +314,7 @@ public:
     VclPtr<vcl::Window> GetPage(const OString& rPageId);
 
     void RemovePage(const OString& rPageId);
-    void InsertPage(const OString& rPageId, const OUString& rLabel, const Image& rImage, const OUString& rTooltip, VclPtr<vcl::Window> xPage);
+    void InsertPage(const OString& rPageId, const OUString& rLabel, const Image& rImage, const OUString& rTooltip, VclPtr<vcl::Window> xPage, int nPos = -1);
 
     void SetActivatePageHdl( const Link<VerticalTabControl*,void>& rLink ) { m_aActivateHdl = rLink; }
     void SetDeactivatePageHdl( const Link<VerticalTabControl*, bool>& rLink ) { m_aDeactivateHdl = rLink; }

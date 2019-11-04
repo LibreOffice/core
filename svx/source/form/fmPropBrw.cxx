@@ -35,7 +35,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
 
-#include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -65,7 +64,9 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <algorithm>
 
@@ -83,26 +84,15 @@ using namespace ::svxform;
 using ::com::sun::star::awt::XWindow;
 
 //= FmPropBrwMgr
-
-
-SFX_IMPL_FLOATINGWINDOW(FmPropBrwMgr, SID_FM_SHOW_PROPERTIES)
-
+SFX_IMPL_MODELESSDIALOGCONTOLLER(FmPropBrwMgr, SID_FM_SHOW_PROPERTIES)
 
 FmPropBrwMgr::FmPropBrwMgr( vcl::Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
-    SetWindow( VclPtr<FmPropBrw>::Create( ::comphelper::getProcessComponentContext(), _pBindings, this, _pParent, _pInfo ) );
-    static_cast<SfxFloatingWindow*>(GetWindow())->Initialize( _pInfo );
+    SetController(std::make_shared<FmPropBrw>(::comphelper::getProcessComponentContext(), _pBindings, this, _pParent->GetFrameWeld(), _pInfo));
+    static_cast<FmPropBrw*>(GetController().get())->Initialize( _pInfo );
 }
-
-
-const long STD_WIN_SIZE_X = 300;
-const long STD_WIN_SIZE_Y = 350;
-
-const long STD_MIN_SIZE_X = 250;
-const long STD_MIN_SIZE_Y = 250;
-
 
 static OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 {
@@ -183,79 +173,46 @@ static OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
     return SvxResId(pClassNameResourceId);
 }
 
-FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,
-            SfxChildWindow* _pMgr, vcl::Window* _pParent, const SfxChildWinInfo* _pInfo )
-    :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE) )
-    ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *_pBindings)
-    ,m_bInitialStateChange(true)
-    ,m_xORB(_xORB)
+FmPropBrw::FmPropBrw(const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,
+                     SfxChildWindow* _pMgr, weld::Window* _pParent, const SfxChildWinInfo* _pInfo)
+    : SfxModelessDialogController(_pBindings, _pMgr, _pParent, "svx/ui/formpropertydialog.ui", "FormPropertyDialog")
+    , SfxControllerItem(SID_FM_PROPERTY_CONTROL, *_pBindings)
+    , m_bInitialStateChange(true)
+    , m_pParent(_pParent)
+    , m_nAsyncGetFocusId(nullptr)
+    , m_xContainer(m_xBuilder->weld_container("container"))
+    , m_xORB(_xORB)
 {
-
-    ::Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
-    SetMinOutputSizePixel(::Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
-    SetOutputSizePixel(aPropWinSize);
+    m_xContainer->set_size_request(m_xContainer->get_approximate_digit_width() * 72, m_xContainer->get_text_height() * 20);
 
     try
     {
         // create a frame wrapper for myself
         m_xMeAsFrame = Frame::create(m_xORB);
 
-        // create an intermediate window, which is to be the container window of the frame
-        // Do *not* use |this| as container window for the frame, this would result in undefined
-        // responsibility for this window (as soon as we initialize a frame with a window, the frame
-        // is responsible for its life time, but |this| is controlled by the belonging SfxChildWindow)
-        // #i34249#
-        VclPtr<vcl::Window> pContainerWindow = VclPtr<vcl::Window>::Create( this );
-        pContainerWindow->Show();
-        m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
-
-        m_xMeAsFrame->initialize( m_xFrameContainerWindow );
+        // transport the container area of this dialog to be the container window of the frame
+        css::uno::Reference<css::awt::XWindow> xFrameContainerWindow(new weld::TransportAsXWindow(m_xContainer.get()));
+        m_xMeAsFrame->initialize(xFrameContainerWindow);
         m_xMeAsFrame->setName("form property browser");
     }
-    catch (Exception&)
+    catch (const Exception&)
     {
         OSL_FAIL("FmPropBrw::FmPropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
     }
 
-    if (m_xMeAsFrame.is())
-        _pMgr->SetFrame( Reference<XFrame>(m_xMeAsFrame,UNO_QUERY_THROW) );
-
-
-    if ( m_xBrowserComponentWindow.is() )
-        m_xBrowserComponentWindow->setVisible( true );
-
     if ( _pInfo )
         m_sLastActivePage = _pInfo->aExtraString;
 }
 
-
-void FmPropBrw::Resize()
-{
-    SfxFloatingWindow::Resize();
-
-    if ( m_xFrameContainerWindow.is() )
-    {
-        try
-        {
-            ::Size aOutputSize( GetOutputSizePixel() );
-            m_xFrameContainerWindow->setPosSize( 0, 0, aOutputSize.Width(), aOutputSize.Height(), awt::PosSize::POSSIZE );
-        }
-        catch( const Exception& )
-        {
-            OSL_FAIL( "FmPropBrw::Resize: caught an exception!" );
-        }
-    }
-}
-
-
 FmPropBrw::~FmPropBrw()
 {
-    disposeOnce();
-}
+    if (m_nAsyncGetFocusId)
+    {
+        Application::RemoveUserEvent(m_nAsyncGetFocusId);
+        m_nAsyncGetFocusId = nullptr;
+    }
 
-void FmPropBrw::dispose()
-{
     if (m_xBrowserController.is())
         implDetachController();
     try
@@ -279,9 +236,7 @@ void FmPropBrw::dispose()
         DBG_UNHANDLED_EXCEPTION("svx");
     }
     ::SfxControllerItem::dispose();
-    SfxFloatingWindow::dispose();
 }
-
 
 OUString FmPropBrw::getCurrentPage() const
 {
@@ -303,7 +258,6 @@ OUString FmPropBrw::getCurrentPage() const
     return sCurrentPage;
 }
 
-
 void FmPropBrw::implDetachController()
 {
     m_sLastActivePage = getCurrentPage();
@@ -324,15 +278,16 @@ void FmPropBrw::implDetachController()
 
     // we attached a frame to the controller manually, so we need to manually tell it that it's detached, too
     if ( m_xBrowserController.is() )
+    {
         m_xBrowserController->attachFrame( nullptr );
+    }
 
     m_xBrowserController.clear();
     m_xInspectorModel.clear();
     m_xMeAsFrame.clear();
 }
 
-
-bool FmPropBrw::Close()
+void FmPropBrw::Close()
 {
     // suspend the controller (it is allowed to veto)
     if ( m_xMeAsFrame.is() )
@@ -341,7 +296,7 @@ bool FmPropBrw::Close()
         {
             Reference< XController > xController( m_xMeAsFrame->getController() );
             if ( xController.is() && !xController->suspend( true ) )
-                return false;
+                return;
         }
         catch( const Exception& )
         {
@@ -351,25 +306,16 @@ bool FmPropBrw::Close()
 
     implDetachController();
 
-    if( IsRollUp() )
-        RollDown();
-
     // remember our bindings: while we're closed, we're deleted, too, so accessing the bindings after this
     // would be deadly
     // 10/19/00 - 79321 - FS
     SfxBindings& rBindings = SfxControllerItem::GetBindings();
 
-    bool bClose = SfxFloatingWindow::Close();
+    SfxModelessDialogController::Close();
 
-    if (bClose)
-    {
-        rBindings.Invalidate(SID_FM_CTL_PROPERTIES);
-        rBindings.Invalidate(SID_FM_PROPERTIES);
-    }
-
-    return bClose;
+    rBindings.Invalidate(SID_FM_CTL_PROPERTIES);
+    rBindings.Invalidate(SID_FM_PROPERTIES);
 }
-
 
 bool FmPropBrw::implIsReadOnlyModel() const
 {
@@ -439,40 +385,9 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
         if ( implIsReadOnlyModel() )
             sTitle += SvxResId(RID_STR_READONLY_VIEW);
 
-        SetText( sTitle );
-
-        Reference< css::awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
-        if( xLayoutConstrains.is() )
-        {
-            ::Size aConstrainedSize;
-            css::awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
-
-            sal_Int32 nLeft(0), nTop(0), nRight(0), nBottom(0);
-            GetBorder( nLeft, nTop, nRight, nBottom );
-            aMinSize.Width += nLeft + nRight + 8;
-            aMinSize.Height += nTop + nBottom + 8;
-
-            aConstrainedSize.setHeight( aMinSize.Height );
-            aConstrainedSize.setWidth( aMinSize.Width );
-            SetMinOutputSizePixel( aConstrainedSize );
-            aConstrainedSize = GetOutputSizePixel();
-            bool bResize = false;
-            if( aConstrainedSize.Width() < aMinSize.Width )
-            {
-                aConstrainedSize.setWidth( aMinSize.Width );
-                bResize = true;
-            }
-            if( aConstrainedSize.Height() < aMinSize.Height )
-            {
-                aConstrainedSize.setHeight( aMinSize.Height );
-                bResize = true;
-            }
-            if( bResize )
-                SetOutputSizePixel( aConstrainedSize );
-        }
+        m_xDialog->set_title(sTitle);
     }
 }
-
 
 void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 {
@@ -480,13 +395,10 @@ void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
     rInfo.aExtraString = getCurrentPage();
 }
 
-
 IMPL_LINK_NOARG( FmPropBrw, OnAsyncGetFocus, void*, void )
 {
-    if (m_xBrowserComponentWindow.is())
-        m_xBrowserComponentWindow->setFocus();
+    m_nAsyncGetFocusId = nullptr;
 }
-
 
 namespace
 {
@@ -528,7 +440,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     }
 
     // the default parent window for message boxes
-    Reference< XWindow > xParentWindow( VCLUnoHelper::GetInterface ( this ) );
+    Reference< XWindow > xParentWindow(m_xDialog->GetXWindow());
 
     // the mapping from control models to control shapes
     Reference< XMap > xControlMap;
@@ -566,14 +478,11 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 
     if ( !m_xBrowserController.is() )
     {
-        vcl::Window *pWin = GetParent();
-        ShowServiceNotAvailableError(pWin ? pWin->GetFrameWeld() : nullptr, "com.sun.star.inspection.ObjectInspector", true);
+        ShowServiceNotAvailableError(m_pParent, "com.sun.star.inspection.ObjectInspector", true);
     }
     else
     {
         m_xBrowserController->attachFrame( Reference<XFrame>(m_xMeAsFrame,UNO_QUERY_THROW) );
-        m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
-        DBG_ASSERT( m_xBrowserComponentWindow.is(), "FmPropBrw::impl_createPropertyBrowser_throw: attached the controller, but have no component window!" );
     }
 
     if ( bEnableHelpSection )
@@ -605,7 +514,6 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
             ::comphelper::disposeComponent( m_xBrowserController );
         m_xBrowserController.clear();
         m_xInspectorModel.clear();
-        m_xBrowserComponentWindow.clear();
 
         // and create a new one
         impl_createPropertyBrowser_throw( _pFormShell );
@@ -641,7 +549,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
             if ( m_bInitialStateChange )
             {
                 // if we're just newly created, we want to have the focus
-                PostUserEvent( LINK( this, FmPropBrw, OnAsyncGetFocus ), nullptr, true );
+                m_nAsyncGetFocusId = Application::PostUserEvent(LINK(this, FmPropBrw, OnAsyncGetFocus));
 
                 // and additionally, we want to show the page which was active during
                 // our previous incarnation

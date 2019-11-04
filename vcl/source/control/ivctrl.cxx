@@ -554,13 +554,22 @@ OString VerticalTabControl::GetPageId(sal_uInt16 nIndex) const
 }
 
 void VerticalTabControl::InsertPage(const rtl::OString &rIdent, const rtl::OUString& rLabel, const Image& rImage,
-                                    const rtl::OUString& rTooltip, VclPtr<vcl::Window> xPage)
+                                    const rtl::OUString& rTooltip, VclPtr<vcl::Window> xPage, int nPos)
 {
     SvxIconChoiceCtrlEntry* pEntry = m_xChooser->InsertEntry(rLabel, rImage);
     pEntry->SetQuickHelpText(rTooltip);
     m_xChooser->ArrangeIcons();
-    maPageList.emplace_back(new VerticalTabPageData);
-    VerticalTabPageData* pNew = maPageList.back().get();
+    VerticalTabPageData* pNew;
+    if (nPos == -1)
+    {
+        maPageList.emplace_back(new VerticalTabPageData);
+        pNew = maPageList.back().get();
+    }
+    else
+    {
+        maPageList.emplace(maPageList.begin() + nPos, new VerticalTabPageData);
+        pNew = maPageList[nPos].get();
+    }
     pNew->sId = rIdent;
     pNew->pEntry = pEntry;
     pNew->xPage = xPage;
