@@ -18,7 +18,7 @@
  */
 
 #include <vcl/event.hxx>
-#include <vcl/fixedhyper.hxx>
+#include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
