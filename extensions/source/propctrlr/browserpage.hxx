@@ -20,39 +20,51 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
 
-#include <vcl/tabpage.hxx>
+#include <vcl/builderpage.hxx>
 #include "browserlistbox.hxx"
-
 
 namespace pcr
 {
-
-    class OBrowserPage : public TabPage
+    class OBrowserPage
     {
     private:
-        VclPtr<OBrowserListBox>     m_aListBox;
+        weld::Container* m_pParent;
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Container> m_xContainer;
+        std::unique_ptr<OBrowserListBox> m_xListBox;
 
-    protected:
-        virtual void Resize() override;
-        virtual void StateChanged(StateChangedType nType) override;
+        OUString m_aPageTitle;
 
     public:
-        explicit OBrowserPage(vcl::Window* pParent);
-        virtual ~OBrowserPage() override;
-        virtual void dispose() override;
+        // if bInterimBuilder wasn't needed this could inherit from BuilderPage
+        explicit OBrowserPage(weld::Container* pParent, weld::Container* pContainer, bool bInterimBuilder);
+        ~OBrowserPage();
 
-        sal_Int32 getMinimumWidth() const;
-        sal_Int32 getMinimumHeight();
+        void SetPageTitle(const OUString& rPageTitle) { m_aPageTitle = rPageTitle; }
+        const OUString& GetPageTitle() const { return m_aPageTitle; }
 
-              OBrowserListBox& getListBox() { return *m_aListBox.get(); }
-        const OBrowserListBox& getListBox() const { return *m_aListBox.get(); }
+        void SetHelpId(const OString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
+        OString GetHelpId() const { return m_xContainer->get_help_id(); }
+
+        OBrowserListBox& getListBox() { return *m_xListBox; }
+        const OBrowserListBox& getListBox() const { return *m_xListBox; }
+
+        void detach()
+        {
+            assert(m_pParent && "already attached");
+            m_pParent->move(m_xContainer.get(), nullptr);
+            m_pParent = nullptr;
+        }
+
+        void reattach(weld::Container* pNewParent)
+        {
+            assert(!m_pParent && "already attached");
+            m_pParent = pNewParent;
+            m_pParent->move(m_xContainer.get(), pNewParent);
+        }
     };
-
-
 } // namespace pcr
 
-
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

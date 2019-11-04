@@ -66,18 +66,6 @@ namespace pcr
         }
     }
 
-
-    void CommonBehaviourControlHelper::autoSizeWindow()
-    {
-        ScopedVclPtrInstance< ComboBox > aComboBox(getVclWindow(), WB_DROPDOWN);
-        aComboBox->SetPosSizePixel(Point(0,0), Size(100,100));
-        getVclWindow()->SetSizePixel(aComboBox->GetSizePixel());
-
-        // TODO/UNOize: why do the controls this themselves? Shouldn't this be the task
-        // of the browser listbox/line?
-    }
-
-
     void CommonBehaviourControlHelper::activateNextControl() const
     {
         try
@@ -91,23 +79,47 @@ namespace pcr
         }
     }
 
-
-    IMPL_LINK_NOARG( CommonBehaviourControlHelper, EditModifiedHdl, Edit&, void )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, EditModifiedHdl, weld::Entry&, void )
     {
         setModified();
     }
 
-    IMPL_LINK_NOARG( CommonBehaviourControlHelper, ModifiedHdl, ListBox&, void )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, ModifiedHdl, weld::ComboBox&, void )
+    {
+        setModified();
+        // notify as soon as the Data source is changed, don't wait until we lose focus
+        // because the Content dropdown cannot be populated after it is popped up
+        // and going from Data source direct to Content may give focus-lost to
+        // Content after the popup attempt is made
+        notifyModifiedValue();
+    }
+
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, MetricModifiedHdl, weld::MetricSpinButton&, void )
     {
         setModified();
     }
 
-    IMPL_LINK_NOARG( CommonBehaviourControlHelper, ColorModifiedHdl, SvxColorListBox&, void )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, FormattedModifiedHdl, weld::FormattedSpinButton&, void )
     {
         setModified();
     }
 
-    IMPL_LINK_NOARG( CommonBehaviourControlHelper, GetFocusHdl, Control&, void )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, TimeModifiedHdl, weld::TimeSpinButton&, void )
+    {
+        setModified();
+    }
+
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, DateModifiedHdl, SvtCalendarBox&, void )
+    {
+        setModified();
+    }
+
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, ColorModifiedHdl, ColorListBox&, void )
+    {
+        setModified();
+    }
+
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, GetFocusHdl, weld::Widget&, void )
     {
         try
         {
@@ -120,8 +132,7 @@ namespace pcr
         }
     }
 
-
-    IMPL_LINK_NOARG( CommonBehaviourControlHelper, LoseFocusHdl, Control&, void )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, LoseFocusHdl, weld::Widget&, void )
     {
         // TODO/UNOize: should this be outside the default control's implementations? If somebody
         // has an own control implementation, which does *not* do this - would this be allowed?
@@ -129,8 +140,6 @@ namespace pcr
         notifyModifiedValue();
     }
 
-
 } // namespace pcr
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

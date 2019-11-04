@@ -85,6 +85,7 @@ class SVT_DLLPUBLIC URLBox
 
     Idle                            aChangedIdle;
     OUString                        aBaseURL;
+    OUString                        aPlaceHolder;
     rtl::Reference< MatchContext_Impl > pCtx;
     std::unique_ptr<SvtURLBox_Impl> pImpl;
     INetProtocol                    eSmartProtocol;
@@ -138,6 +139,13 @@ public:
     weld::ComboBox*     getWidget() { return m_xWidget.get(); }
 
     static OUString     ParseSmart( const OUString& aText, const OUString& aBaseURL );
+
+    void                SetPlaceHolder(const OUString& sPlaceHolder) { aPlaceHolder = sPlaceHolder; }
+    const OUString&     GetPlaceHolder() const { return aPlaceHolder; }
+    bool                MatchesPlaceHolder(const OUString& sToMatch) const
+    {
+        return (!aPlaceHolder.isEmpty() && aPlaceHolder == sToMatch);
+    }
 
     void                SetFilter(const OUString& _sFilter);
 };

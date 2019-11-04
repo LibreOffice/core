@@ -29,9 +29,10 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 namespace pcr
 {
@@ -51,235 +52,159 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-    OBrowserLine::OBrowserLine( const OUString& _rEntryName, vcl::Window* pParent )
-            :m_sEntryName( _rEntryName )
-            ,m_aFtTitle(VclPtr<FixedText>::Create(pParent))
-            ,m_pControlWindow( nullptr )
-            ,m_pBrowseButton(nullptr)
-            ,m_pAdditionalBrowseButton( nullptr )
-            ,m_pClickListener( nullptr )
-            ,m_pTheParent(pParent)
-            ,m_nNameWidth(0)
-            ,m_nEnableFlags( 0xFFFF )
-            ,m_bIndentTitle( false )
-            ,m_bReadOnly( false )
+    OBrowserLine::OBrowserLine(const OUString& rEntryName, weld::Container* pParent, weld::SizeGroup* pLabelGroup,
+                               weld::Container* pInitialControlParent, bool bInterimBuilder)
+        : m_sEntryName(rEntryName)
+        , m_xBuilder(bInterimBuilder
+                     ? Application::CreateInterimBuilder(pParent, "modules/spropctrlr/ui/browserline.ui")
+                     : Application::CreateBuilder(pParent, "modules/spropctrlr/ui/browserline.ui"))
+        , m_xContainer(m_xBuilder->weld_container("BrowserLine"))
+        , m_xFtTitle(m_xBuilder->weld_label("label"))
+        , m_xBrowseButton(m_xBuilder->weld_button("browse"))
+        , m_xAdditionalBrowseButton(m_xBuilder->weld_button("morebrowse"))
+        , m_pInitialControlParent(pInitialControlParent) // controls start with this as their parent and need to be moved into m_xContainer
+        , m_pParent(pParent)
+        , m_pControlWindow( nullptr )
+        , m_pBrowseButton(nullptr)
+        , m_pAdditionalBrowseButton( nullptr )
+        , m_pClickListener( nullptr )
+        , m_nNameWidth(0)
+        , m_nEnableFlags( 0xFFFF )
+        , m_bIndentTitle( false )
+        , m_bReadOnly( false )
     {
-        m_aFtTitle->Show();
+        pLabelGroup->add_widget(m_xFtTitle.get());
     }
 
     OBrowserLine::~OBrowserLine()
     {
         implHideBrowseButton(true);
         implHideBrowseButton(false);
-        m_aFtTitle.disposeAndClear();
+        m_pParent->move(m_xContainer.get(), nullptr);
     }
-
 
     void OBrowserLine::IndentTitle( bool _bIndent )
     {
         if ( m_bIndentTitle != _bIndent )
         {
             m_bIndentTitle = _bIndent;
-            impl_layoutComponents();
         }
     }
 
-    void OBrowserLine::SetComponentHelpIds(const OString& _rHelpId)
+    void OBrowserLine::SetComponentHelpIds(const OString& rHelpId)
     {
-        if ( m_pControlWindow )
-            m_pControlWindow->SetHelpId( _rHelpId );
+        if (m_pControlWindow)
+            m_pControlWindow->set_help_id(rHelpId);
 
         if ( m_pBrowseButton )
         {
-            m_pBrowseButton->SetHelpId( _rHelpId );
+            m_pBrowseButton->set_help_id(rHelpId);
 
             if ( m_pAdditionalBrowseButton )
             {
-                m_pAdditionalBrowseButton->SetHelpId( _rHelpId );
+                m_pAdditionalBrowseButton->set_help_id(rHelpId);
             }
         }
     }
 
-    void OBrowserLine::setControl( const Reference< XPropertyControl >& _rxControl )
+    void OBrowserLine::setControl( const Reference< XPropertyControl >& rxControl )
     {
-        m_xControl = _rxControl;
-        m_pControlWindow = m_xControl.is() ? VCLUnoHelper::GetWindow( _rxControl->getControlWindow() ) : VclPtr<vcl::Window>();
+        m_xControl = rxControl;
+        auto xWindow = m_xControl->getControlWindow();
+        if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xWindow.get()))
+            m_pControlWindow = pTunnel->getWidget();
+        else
+            m_pControlWindow = nullptr;
         DBG_ASSERT( m_pControlWindow, "OBrowserLine::setControl: setting NULL controls/windows is not allowed!" );
 
         if ( m_pControlWindow )
         {
-            m_pControlWindow->SetParent( m_pTheParent );
-            m_pControlWindow->Show();
+            m_pInitialControlParent->move(m_pControlWindow, m_xContainer.get());
+            m_pControlWindow->set_grid_left_attach(1);
+            m_xFtTitle->set_mnemonic_widget(m_pControlWindow);
+            m_pControlWindow->show();
         }
-        impl_layoutComponents();
     }
-
-
-    vcl::Window* OBrowserLine::GetRefWindow()
-    {
-        vcl::Window* pRefWindow = m_aFtTitle.get();
-
-        if(m_pBrowseButton)
-        {
-            pRefWindow = m_pBrowseButton;
-        }
-        else if ( m_pControlWindow )
-        {
-            pRefWindow = m_pControlWindow;
-        }
-        return pRefWindow;
-    }
-
-
-    void OBrowserLine::SetTabOrder(vcl::Window* pRefWindow, ZOrderFlags nFlags )
-    {
-        m_aFtTitle->SetZOrder(pRefWindow,nFlags);
-        if ( m_pControlWindow )
-            m_pControlWindow->SetZOrder( m_aFtTitle.get(), ZOrderFlags::Behind );
-
-        if ( m_pBrowseButton && m_pControlWindow )
-            m_pBrowseButton->SetZOrder( m_pControlWindow, ZOrderFlags::Behind );
-
-        if ( m_pAdditionalBrowseButton && m_pBrowseButton )
-            m_pAdditionalBrowseButton->SetZOrder( m_pBrowseButton, ZOrderFlags::Behind );
-    }
-
 
     bool OBrowserLine::GrabFocus()
     {
         bool bRes=false;
 
-        if ( m_pControlWindow && m_pControlWindow->IsEnabled() )
+        if (m_pControlWindow && m_pControlWindow->get_sensitive())
         {
-            m_pControlWindow->GrabFocus();
+            m_pControlWindow->grab_focus();
             bRes = true;
         }
-        else if ( m_pAdditionalBrowseButton && m_pAdditionalBrowseButton->IsEnabled() )
+        else if ( m_pAdditionalBrowseButton && m_pAdditionalBrowseButton->get_sensitive() )
         {
-            m_pAdditionalBrowseButton->GrabFocus();
+            m_pAdditionalBrowseButton->grab_focus();
             bRes = true;
         }
-        else if ( m_pBrowseButton && m_pBrowseButton->IsEnabled() )
+        else if ( m_pBrowseButton && m_pBrowseButton->get_sensitive() )
         {
-            m_pBrowseButton->GrabFocus();
+            m_pBrowseButton->grab_focus();
             bRes = true;
         }
         return bRes;
     }
 
-
-    void OBrowserLine::SetPosSizePixel( Point _rPos, Size _rSize )
-    {
-        m_aLinePos = _rPos;
-        m_aOutputSize = _rSize;
-
-        impl_layoutComponents();
-    }
-
-
     void OBrowserLine::Show(bool bFlag)
     {
-        m_aFtTitle->Show(bFlag);
-        if ( m_pControlWindow )
-            m_pControlWindow->Show( bFlag );
+        m_xFtTitle->set_visible(bFlag);
+        if (m_pControlWindow)
+            m_pControlWindow->set_visible( bFlag );
         if ( m_pBrowseButton )
-            m_pBrowseButton->Show( bFlag );
+            m_pBrowseButton->set_visible( bFlag );
         if ( m_pAdditionalBrowseButton )
-            m_pAdditionalBrowseButton->Show( bFlag );
+            m_pAdditionalBrowseButton->set_visible( bFlag );
     }
-
 
     void OBrowserLine::Hide()
     {
         Show(false);
     }
 
-
     bool OBrowserLine::IsVisible() const
     {
-        return m_aFtTitle->IsVisible();
+        return m_xFtTitle->get_visible();
     }
 
-
-    void OBrowserLine::impl_layoutComponents()
+    void OBrowserLine::SetTitle(const OUString& rNewTitle )
     {
-        {
-            Point aTitlePos( m_aLinePos.X(), m_aLinePos.Y() + 8 );
-            Size aTitleSize( m_nNameWidth - 3, m_aOutputSize.Height() );
-
-            if ( m_bIndentTitle )
-            {
-                Size aIndent( m_pTheParent->LogicToPixel(Size(8, 0), MapMode(MapUnit::MapAppFont)) );
-                aTitlePos.AdjustX(aIndent.Width() );
-                aTitleSize.AdjustWidth( -(aIndent.Width()) );
-            }
-            m_aFtTitle->SetPosSizePixel( aTitlePos, aTitleSize );
-        }
-
-        sal_Int32 nBrowseButtonSize = m_aOutputSize.Height() - 4;
-
-        if ( m_pControlWindow )
-        {
-            Point aControlPos( m_aLinePos.X() + m_nNameWidth, m_aLinePos.Y() + 2 );
-            m_pControlWindow->SetPosPixel( aControlPos );
-
-            Size aControlSize( m_aOutputSize.Width() - 4 - m_nNameWidth - nBrowseButtonSize - 4, m_pControlWindow->GetSizePixel().Height() );
-            if ( m_pAdditionalBrowseButton )
-                aControlSize.AdjustWidth( -(nBrowseButtonSize + 4) );
-            m_pControlWindow->SetSizePixel( aControlSize );
-        }
-
-        if ( m_pBrowseButton )
-        {
-            Point aButtonPos( m_aOutputSize.Width() - 4 - nBrowseButtonSize, m_aLinePos.Y() + 2 );
-            Size aButtonSize( nBrowseButtonSize, nBrowseButtonSize );
-            m_pBrowseButton->SetPosSizePixel( aButtonPos, aButtonSize );
-
-            if ( m_pAdditionalBrowseButton )
-            {
-                aButtonPos.AdjustX( -(nBrowseButtonSize + 4) );
-                m_pAdditionalBrowseButton->SetPosSizePixel( aButtonPos, aButtonSize );
-            }
-        }
-    }
-
-
-    void OBrowserLine::SetTitle(const OUString& _rNewTitle )
-    {
-        if ( GetTitle() == _rNewTitle )
+        if ( GetTitle() == rNewTitle )
             return;
-        m_aFtTitle->SetText( _rNewTitle );
-        if ( m_pControlWindow )
-            m_pControlWindow->SetAccessibleName( _rNewTitle );
+        m_xFtTitle->set_label( rNewTitle );
+        if (m_pControlWindow)
+            m_pControlWindow->set_accessible_name(rNewTitle);
         if ( m_pBrowseButton )
-            m_pBrowseButton->SetAccessibleName( _rNewTitle );
+            m_pBrowseButton->set_accessible_name( rNewTitle );
         FullFillTitleString();
     }
 
     void OBrowserLine::FullFillTitleString()
     {
-        if( m_pTheParent )
+        OUStringBuffer aText(m_xFtTitle->get_label());
+
+        int n10DotsWidth = m_xFtTitle->get_pixel_size("..........").Width();
+        int nTextWidth = m_xFtTitle->get_pixel_size(aText.toString()).Width();
+        int nDiff = m_nNameWidth - nTextWidth;
+        int nExtraChars = (nDiff * 10) / n10DotsWidth;
+        for (int i = 0; i < nExtraChars; ++i)
+            aText.append(".");
+
+        // for Issue 69452
+        if (AllSettings::GetLayoutRTL())
         {
-            OUStringBuffer aText( m_aFtTitle->GetText() );
-
-            while( m_pTheParent->GetTextWidth( aText.toString() ) < m_nNameWidth )
-                        aText.append("...........");
-
-            // for Issue 69452
-            if (AllSettings::GetLayoutRTL())
-            {
-                sal_Unicode const cRTL_mark = 0x200F;
-                aText.append( OUString(cRTL_mark) );
-            }
-
-            m_aFtTitle->SetText( aText.makeStringAndClear() );
+            sal_Unicode const cRTL_mark = 0x200F;
+            aText.append( OUString(cRTL_mark) );
         }
-    }
 
+        m_xFtTitle->set_label(aText.makeStringAndClear());
+    }
 
     OUString OBrowserLine::GetTitle() const
     {
-        OUString sDisplayName = m_aFtTitle->GetText();
+        OUString sDisplayName = m_xFtTitle->get_label();
 
         // for Issue 69452
         if (AllSettings::GetLayoutRTL())
@@ -293,7 +218,6 @@ namespace pcr
         return sDisplayName;
     }
 
-
     void OBrowserLine::SetReadOnly( bool _bReadOnly )
     {
         if ( m_bReadOnly != _bReadOnly )
@@ -303,37 +227,35 @@ namespace pcr
         }
     }
 
-
     namespace
     {
-        void implSetBitIfAffected( sal_uInt16& _nEnabledBits, sal_Int16 _nAffectedMask, sal_Int16 _nTestBit, bool _bSet )
+        void implSetBitIfAffected(sal_uInt16& nEnabledBits, sal_Int16 _nAffectedMask, sal_Int16 _nTestBit, bool _bSet)
         {
             if ( _nAffectedMask & _nTestBit )
             {
                 if ( _bSet )
-                    _nEnabledBits |= _nTestBit;
+                    nEnabledBits |= _nTestBit;
                 else
-                    _nEnabledBits &= ~_nTestBit;
+                    nEnabledBits &= ~_nTestBit;
             }
         }
 
-        void implEnable( vcl::Window* _pWindow, sal_uInt16 _nEnabledBits, sal_uInt16 _nMatchBits  )
+        void implEnable(weld::Widget* pWindow, sal_uInt16 nEnabledBits, sal_uInt16 nMatchBits)
         {
-            if ( _pWindow )
-                _pWindow->Enable( ( _nEnabledBits & _nMatchBits ) == _nMatchBits );
+            if (pWindow)
+                pWindow->set_sensitive((nEnabledBits & nMatchBits) == nMatchBits);
         }
 
-        void implEnable( vcl::Window* _pWindow, bool _bEnable )
+        void implEnable(weld::Widget* pWindow, bool bEnable)
         {
-            if ( _pWindow )
-                _pWindow->Enable( _bEnable );
+            if (pWindow)
+                pWindow->set_sensitive(bEnable);
         }
     }
 
-
     void OBrowserLine::implUpdateEnabledDisabled()
     {
-        implEnable( m_aFtTitle.get(),           m_nEnableFlags, PropertyLineElement::CompleteLine );
+        implEnable( m_xFtTitle.get(),           m_nEnableFlags, PropertyLineElement::CompleteLine );
         if ( m_pControlWindow )
             implEnable( m_pControlWindow,       m_nEnableFlags, PropertyLineElement::CompleteLine | PropertyLineElement::InputControl );
 
@@ -348,7 +270,6 @@ namespace pcr
             implEnable( m_pAdditionalBrowseButton,  m_nEnableFlags, PropertyLineElement::CompleteLine | PropertyLineElement::SecondaryButton );
         }
     }
-
 
     void OBrowserLine::EnablePropertyLine( bool _bEnable )
     {
@@ -365,33 +286,35 @@ namespace pcr
         implUpdateEnabledDisabled();
     }
 
-
-    PushButton& OBrowserLine::impl_ensureButton( bool _bPrimary )
+    weld::Button& OBrowserLine::impl_ensureButton(bool bPrimary)
     {
-        VclPtr<PushButton>& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
+        weld::Button* pButton;
+        if (bPrimary)
+            pButton = m_pBrowseButton;
+        else
+            pButton = m_pAdditionalBrowseButton;
 
-        if ( !rpButton )
+        if (!pButton )
         {
-            rpButton = VclPtr<PushButton>::Create( m_pTheParent, WB_NOPOINTERFOCUS );
-            rpButton->SetGetFocusHdl( LINK( this, OBrowserLine, OnButtonFocus ) );
-            rpButton->SetClickHdl( LINK( this, OBrowserLine, OnButtonClicked ) );
-            rpButton->SetText("...");
+            if (bPrimary)
+                pButton = m_pBrowseButton = m_xBrowseButton.get();
+            else
+                pButton = m_pAdditionalBrowseButton = m_xAdditionalBrowseButton.get();
+            pButton->connect_focus_in(LINK(this, OBrowserLine, OnButtonFocus));
+            pButton->connect_clicked(LINK(this, OBrowserLine, OnButtonClicked));
         }
 
-        rpButton->Show();
+        pButton->show();
 
-        impl_layoutComponents();
-
-        return *rpButton;
+        return *pButton;
     }
 
-
-    void OBrowserLine::ShowBrowseButton( const OUString& _rImageURL, bool _bPrimary )
+    void OBrowserLine::ShowBrowseButton( const OUString& rImageURL, bool bPrimary )
     {
-        PushButton& rButton( impl_ensureButton( _bPrimary ) );
+        weld::Button& rButton( impl_ensureButton( bPrimary ) );
 
-        OSL_PRECOND( !_rImageURL.isEmpty(), "OBrowserLine::ShowBrowseButton: use the other version if you don't have an image!" );
-        Image aImage;
+        OSL_PRECOND( !rImageURL.isEmpty(), "OBrowserLine::ShowBrowseButton: use the other version if you don't have an image!" );
+        Reference<XGraphic> xGraphic;
         try
         {
             Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -399,73 +322,74 @@ namespace pcr
 
             Sequence< PropertyValue > aMediaProperties(1);
             aMediaProperties[0].Name = "URL";
-            aMediaProperties[0].Value <<= _rImageURL;
+            aMediaProperties[0].Value <<= rImageURL;
 
-            Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ), css::uno::UNO_SET_THROW );
-            aImage = Image( xGraphic );
+            xGraphic = Reference<XGraphic>(xGraphicProvider->queryGraphic(aMediaProperties), css::uno::UNO_SET_THROW);
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
 
-        rButton.SetModeImage( aImage );
+        rButton.set_image(xGraphic);
     }
 
-    void OBrowserLine::ShowBrowseButton( const Image& _rImage, bool _bPrimary )
+    void OBrowserLine::ShowBrowseButton(const css::uno::Reference<css::graphic::XGraphic>& rGraphic, bool bPrimary)
     {
-        PushButton& rButton( impl_ensureButton( _bPrimary ) );
-        if ( !!_rImage )
-            rButton.SetModeImage( _rImage );
+        weld::Button& rButton( impl_ensureButton( bPrimary ) );
+        rButton.set_image(rGraphic);
     }
 
-    void OBrowserLine::ShowBrowseButton( bool _bPrimary )
+    void OBrowserLine::ShowBrowseButton( bool bPrimary )
     {
-        impl_ensureButton( _bPrimary );
+        impl_ensureButton(bPrimary);
     }
 
-    void OBrowserLine::implHideBrowseButton(bool _bPrimary)
+    void OBrowserLine::implHideBrowseButton(bool bPrimary)
     {
-        VclPtr<PushButton>& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
-
-        if ( rpButton )
+        if (bPrimary)
         {
-            rpButton->Hide();
-            rpButton.disposeAndClear();
+            if (m_pBrowseButton)
+            {
+                m_pBrowseButton->hide();
+                m_pBrowseButton = nullptr;
+            }
+        }
+        else
+        {
+            if (m_pAdditionalBrowseButton)
+            {
+                m_pAdditionalBrowseButton->hide();
+                m_pAdditionalBrowseButton = nullptr;
+            }
         }
     }
 
-    void OBrowserLine::HideBrowseButton(bool _bPrimary)
+    void OBrowserLine::HideBrowseButton(bool bPrimary)
     {
-        implHideBrowseButton(_bPrimary);
-        impl_layoutComponents();
+        implHideBrowseButton(bPrimary);
     }
 
     void OBrowserLine::SetTitleWidth(sal_uInt16 nWidth)
     {
-        if (m_nNameWidth != nWidth+10)
-        {
-            m_nNameWidth = nWidth+10;
-            impl_layoutComponents();
-        }
+        int nMinDotsWidth = m_xFtTitle->get_pixel_size("...").Width();
+        if (m_nNameWidth != nWidth + nMinDotsWidth)
+            m_nNameWidth = nWidth + nMinDotsWidth;
         FullFillTitleString();
     }
-
 
     void OBrowserLine::SetClickListener( IButtonClickListener* _pListener )
     {
         m_pClickListener = _pListener;
     }
 
-
-    IMPL_LINK( OBrowserLine, OnButtonClicked, Button*, _pButton, void )
+    IMPL_LINK(OBrowserLine, OnButtonClicked, weld::Button&, rButton, void)
     {
         if ( m_pClickListener )
-            m_pClickListener->buttonClicked( this, _pButton == m_pBrowseButton );
+            m_pClickListener->buttonClicked(this, &rButton == m_pBrowseButton);
     }
 
-
-    IMPL_LINK_NOARG( OBrowserLine, OnButtonFocus, Control&, void )
+    IMPL_LINK_NOARG( OBrowserLine, OnButtonFocus, weld::Widget&, void )
     {
         if ( m_xControl.is() )
         {
@@ -482,6 +406,5 @@ namespace pcr
     }
 
 } // namespace pcr
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
