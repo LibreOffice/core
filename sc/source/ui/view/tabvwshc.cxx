@@ -51,6 +51,7 @@
 #include <xmlsourcedlg.hxx>
 #include <condformatdlgitem.hxx>
 #include <formdata.hxx>
+#include <inputwin.hxx>
 
 #include <RandomNumberGeneratorDialog.hxx>
 #include <SamplingDialog.hxx>
@@ -436,6 +437,16 @@ int ScTabViewShell::getPart() const
 void ScTabViewShell::afterCallbackRegistered()
 {
     UpdateInputHandler(true, false);
+
+    ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : SC_MOD()->GetInputHdl();
+    if (pHdl)
+    {
+        ScInputWindow* pInputWindow = pHdl->GetInputWindow();
+        if (pInputWindow)
+        {
+            pInputWindow->NotifyLOKClient();
+        }
+    }
 }
 
 void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
