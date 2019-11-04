@@ -1372,9 +1372,9 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         ((eJob & AutoRecovery::E_USER_AUTO_SAVE) == AutoRecovery::E_USER_AUTO_SAVE);
 
     // On the other side it makes no sense to reactivate the AutoSave operation
-    // if the new dispatch indicates a final decision ...
+    // if the new dispatch indicates a final decision...
     // E.g. an EmergencySave/SessionSave indicates the end of life of the current office session.
-    // It make no sense to reactivate an AutoSave then.
+    // It makes no sense to reactivate an AutoSave then.
     // But a Recovery or SessionRestore should reactivate a may be already active AutoSave.
     bool bAllowAutoSaveReactivation = true;
 
