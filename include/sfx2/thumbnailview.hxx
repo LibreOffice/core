@@ -314,7 +314,7 @@ protected:
     std::function<bool (const ThumbnailViewItem*)> maFilterFunc;
 };
 
-class SFX2_DLLPUBLIC SfxThumbnailView : public weld::CustomWidgetController, public ThumbnailViewBase
+class SfxThumbnailView : public weld::CustomWidgetController, public ThumbnailViewBase
 {
 public:
     SfxThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);

@@ -24,7 +24,7 @@
 
 #include <vclpluginapi.h>
 
-class VCLPLUG_GEN_PUBLIC SalI18N_KeyboardExtension
+class SalI18N_KeyboardExtension
 {
 private:
 

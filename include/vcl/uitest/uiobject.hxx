@@ -243,7 +243,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC RadioButtonUIObject final : public WindowUIObject
+class RadioButtonUIObject final : public WindowUIObject
 {
 private:
     VclPtr<RadioButton> mxRadioButton;

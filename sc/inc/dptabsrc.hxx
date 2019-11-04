@@ -291,7 +291,7 @@ public:
     ScDPDimension*          CreateCloneObject();
     ScDPHierarchies*        GetHierarchiesObject();
 
-    SC_DLLPUBLIC const boost::optional<OUString> & GetLayoutName() const;
+    const boost::optional<OUString> & GetLayoutName() const;
     const boost::optional<OUString> & GetSubtotalName() const;
 
                             // XNamed
@@ -622,7 +622,7 @@ public:
     SCROW GetItemDataId() const { return mnDataId; }
     bool IsNamedItem(SCROW nIndex) const;
 
-    SC_DLLPUBLIC const boost::optional<OUString> & GetLayoutName() const;
+    const boost::optional<OUString> & GetLayoutName() const;
     long GetDim() const { return nDim;}
 
     sal_Int32               Compare( const ScDPMember& rOther ) const;      // visible order

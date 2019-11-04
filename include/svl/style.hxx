@@ -338,7 +338,7 @@ public:
                         { return pStyleSh; }
 };
 
-class SVL_DLLPUBLIC SfxStyleSheetModifiedHint final : public SfxStyleSheetHint
+class SfxStyleSheetModifiedHint final : public SfxStyleSheetHint
 {
     OUString            aName;
 

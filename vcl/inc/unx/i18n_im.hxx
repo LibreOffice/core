@@ -26,7 +26,7 @@
 
 #define bUseInputMethodDefault True
 
-class VCLPLUG_GEN_PUBLIC SalI18N_InputMethod
+class SalI18N_InputMethod
 {
     bool        mbUseable;  // system supports locale as well as status
                             // and preedit style ?

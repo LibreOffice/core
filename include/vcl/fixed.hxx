@@ -75,7 +75,7 @@ public:
     vcl::Window*    get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
 
-class VCL_DLLPUBLIC SelectableFixedText final : public Edit
+class SelectableFixedText final : public Edit
 {
 public:
     explicit SelectableFixedText( vcl::Window* pParent, WinBits nStyle );

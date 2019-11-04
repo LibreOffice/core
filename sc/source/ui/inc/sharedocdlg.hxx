@@ -45,7 +45,7 @@ private:
     DECL_LINK(SizeAllocated, const Size&, void);
 
 public:
-    SC_DLLPUBLIC ScShareDocumentDlg(weld::Window* pParent, const ScViewData* pViewData);
+    ScShareDocumentDlg(weld::Window* pParent, const ScViewData* pViewData);
     virtual ~ScShareDocumentDlg() override;
 
     bool                IsShareDocumentChecked() const;
