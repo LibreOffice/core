@@ -840,7 +840,6 @@ void SwFormatFollowTextFlow::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatFollowTextFlow"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("layoutInCell"), BAD_CAST(OString::boolean(GetLayoutInCell()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 

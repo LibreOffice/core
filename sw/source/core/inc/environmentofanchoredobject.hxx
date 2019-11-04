@@ -36,9 +36,6 @@ namespace objectpositioning
             @param _bFollowTextFlow
             input parameter - indicates, if the anchored object, for which
             this environment is instantiated, follow the text flow or not
-            @param _bLayoutInCell
-            input parameter - indicates, if the anchored object should be
-            laid out within a (table) cell
         */
         SwEnvironmentOfAnchoredObject( const bool _bFollowTextFlow );
 

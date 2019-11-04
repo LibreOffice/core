@@ -22,50 +22,9 @@
 
 #include <sal/log.hxx>
 
-
 SfxPoolItem*    SwFormatFollowTextFlow::Clone( SfxItemPool * ) const
 {
     return new SwFormatFollowTextFlow(*this);
-}
-
-
-bool SwFormatFollowTextFlow::PutValue(const css::uno::Any& rVal, sal_uInt8 aInt)
-{
-    switch( aInt )
-    {
-        case MID_FOLLOW_TEXT_FLOW :
-        {
-            bool bTheValue = bool();
-            if (rVal >>= bTheValue)
-            {
-                SetValue( bTheValue );
-                return true;
-            }
-            break;
-        }
-    }
-    SAL_WARN("sw.ui", "SfxBoolItem::PutValue(): Wrong type");
-    return false;
-}
-
-
-bool SwFormatFollowTextFlow::QueryValue(css::uno::Any& rVal, sal_uInt8 aInt) const
-{
-    switch( aInt )
-    {
-        case MID_FOLLOW_TEXT_FLOW :
-        {
-            rVal <<= GetValue();
-            break;
-        }
-    }
-    return true;
-}
-
-bool SwFormatFollowTextFlow::operator==(const SfxPoolItem& rItem) const
-{
-    return SfxBoolItem::operator==(rItem)
-           && mbLayoutInCell == static_cast<SwFormatFollowTextFlow const*>(&rItem)->mbLayoutInCell;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
