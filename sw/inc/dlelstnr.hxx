@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star {
     Happens when relevant changes (to the dictionaries of the dictionary list, or
     properties) were made.
 */
-class SwLinguServiceEventListener :
+class SwLinguServiceEventListener final :
     public cppu::WeakImplHelper
     <
         css::linguistic2::XLinguServiceEventListener,

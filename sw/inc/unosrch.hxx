@@ -34,7 +34,7 @@ namespace i18nutil {
     struct SearchOptions2;
 }
 
-class SwXTextSearch : public cppu::WeakImplHelper
+class SwXTextSearch final : public cppu::WeakImplHelper
 <
     css::util::XPropertyReplace,
     css::lang::XServiceInfo,
@@ -63,7 +63,7 @@ class SwXTextSearch : public cppu::WeakImplHelper
     sal_Int16                   m_nLevRemove;
 
     bool                    m_bIsValueSearch :1;
-protected:
+
     virtual ~SwXTextSearch() override;
 public:
     SwXTextSearch();

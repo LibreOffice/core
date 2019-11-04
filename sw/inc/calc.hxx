@@ -100,7 +100,7 @@ enum class SwCalcError
     Overflow,         //  overflow
 };
 
-class SwSbxValue : public SbxValue
+class SwSbxValue final : public SbxValue
 {
     bool m_bVoid;
     bool m_bDBvalue;
@@ -129,7 +129,7 @@ struct SwHash
     std::unique_ptr<SwHash> pNext;
 };
 
-struct SwCalcExp : public SwHash
+struct SwCalcExp final : public SwHash
 {
     SwSbxValue  nValue;
     const SwFieldType* pFieldType;

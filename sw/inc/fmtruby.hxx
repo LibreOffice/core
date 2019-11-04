@@ -25,7 +25,7 @@
 
 class SwTextRuby;
 
-class SW_DLLPUBLIC SwFormatRuby : public SfxPoolItem
+class SW_DLLPUBLIC SwFormatRuby final : public SfxPoolItem
 {
     friend class SwTextRuby;
 

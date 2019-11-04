@@ -22,7 +22,7 @@
 #include "format.hxx"
 #include "hintids.hxx"
 
-class SW_DLLPUBLIC SwCharFormat : public SwFormat
+class SW_DLLPUBLIC SwCharFormat final : public SwFormat
 {
     friend class SwDoc;
     friend class SwTextFormatColl;

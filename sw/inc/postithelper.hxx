@@ -131,7 +131,7 @@ public:
                                                                 SwPostItMgr& aMgr) = 0;
 };
 
-class SwAnnotationItem: public SwSidebarItem
+class SwAnnotationItem final : public SwSidebarItem
 {
 public:
     SwAnnotationItem(

@@ -207,7 +207,7 @@ public:
 
 /** new class for re-direct methods calls at a 'virtual'
       drawing object to its referenced object. */
-class SwDrawVirtObj : public SdrVirtObj
+class SwDrawVirtObj final : public SdrVirtObj
 {
     private:
         // data for connection to writer layout
@@ -220,7 +220,6 @@ class SwDrawVirtObj : public SdrVirtObj
          inserted into the drawing layer. */
         SwDrawContact&  mrDrawContact;
 
-    protected:
         /** AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
          not used but something own (top left of new SnapRect minus top left
          of original SnapRect) */

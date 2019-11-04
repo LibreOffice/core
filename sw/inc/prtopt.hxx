@@ -22,7 +22,7 @@
 #include <unotools/configitem.hxx>
 #include "printdata.hxx"
 
-class SwPrintOptions : public SwPrintData, public utl::ConfigItem
+class SwPrintOptions final : public SwPrintData, public utl::ConfigItem
 {
 private:
     bool const            bIsWeb;

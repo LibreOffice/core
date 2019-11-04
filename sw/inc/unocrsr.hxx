@@ -75,7 +75,7 @@ public:
                                     { m_bSkipOverHiddenSections = bFlag; }
 };
 
-class SwUnoTableCursor : public virtual SwUnoCursor, public virtual SwTableCursor
+class SwUnoTableCursor final : public virtual SwUnoCursor, public virtual SwTableCursor
 {
     // The selection has the same order as the table boxes, i.e.
     // if something is deleted from the one array at a certain position
@@ -103,7 +103,7 @@ public:
 
 namespace sw
 {
-    class UnoCursorPointer : public SfxListener
+    class UnoCursorPointer final : public SfxListener
     {
         public:
             UnoCursorPointer()

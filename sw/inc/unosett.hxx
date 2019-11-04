@@ -41,7 +41,7 @@ class SwNumFormat;
 class SfxItemPropertySet;
 namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
 
-class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
+class SwXFootnoteProperties final : public cppu::WeakAggImplHelper2
 <
     css::beans::XPropertySet,
     css::lang::XServiceInfo
@@ -49,7 +49,7 @@ class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
 {
     SwDoc*                      m_pDoc;
     const SfxItemPropertySet*   m_pPropertySet;
-protected:
+
     virtual ~SwXFootnoteProperties() override;
 public:
     SwXFootnoteProperties(SwDoc* pDoc);
@@ -71,7 +71,7 @@ public:
     void            Invalidate() {m_pDoc = nullptr;}
 };
 
-class SwXEndnoteProperties : public cppu::WeakAggImplHelper2
+class SwXEndnoteProperties final : public cppu::WeakAggImplHelper2
 <
     css::beans::XPropertySet,
     css::lang::XServiceInfo
@@ -79,7 +79,7 @@ class SwXEndnoteProperties : public cppu::WeakAggImplHelper2
 {
     SwDoc*                      m_pDoc;
     const SfxItemPropertySet*   m_pPropertySet;
-protected:
+
     virtual ~SwXEndnoteProperties() override;
 public:
     SwXEndnoteProperties(SwDoc* pDoc);
@@ -101,7 +101,7 @@ public:
     void            Invalidate() {m_pDoc = nullptr;}
 };
 
-class SwXLineNumberingProperties : public cppu::WeakAggImplHelper2
+class SwXLineNumberingProperties final : public cppu::WeakAggImplHelper2
 <
     css::beans::XPropertySet,
     css::lang::XServiceInfo
@@ -109,7 +109,7 @@ class SwXLineNumberingProperties : public cppu::WeakAggImplHelper2
 {
     SwDoc*                      m_pDoc;
     const SfxItemPropertySet*   m_pPropertySet;
-protected:
+
     virtual ~SwXLineNumberingProperties() override;
 public:
     SwXLineNumberingProperties(SwDoc* pDoc);
@@ -222,9 +222,9 @@ public:
 
 };
 
-class SwXChapterNumbering : public SwXNumberingRules
+class SwXChapterNumbering final : public SwXNumberingRules
 {
-protected:
+
     virtual ~SwXChapterNumbering() override;
 public:
     SwXChapterNumbering(SwDocShell& rDocSh);
@@ -238,7 +238,7 @@ public:
 
 };
 
-class SwXTextColumns : public cppu::WeakAggImplHelper4
+class SwXTextColumns final : public cppu::WeakAggImplHelper4
 <
 
     css::lang::XUnoTunnel,
@@ -262,7 +262,7 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
     bool                        m_bSepLineIsOn;
     sal_Int8                    m_nSepLineStyle;
 
-protected:
+
     virtual ~SwXTextColumns() override;
 public:
     SwXTextColumns();

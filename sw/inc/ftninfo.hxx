@@ -86,7 +86,7 @@ enum SwFootnoteNum : unsigned
     FTNNUM_PAGE, FTNNUM_CHAPTER, FTNNUM_DOC
 };
 
-class SW_DLLPUBLIC SwFootnoteInfo: public SwEndNoteInfo
+class SW_DLLPUBLIC SwFootnoteInfo final : public SwEndNoteInfo
 {
     using SwEndNoteInfo::operator ==;
 

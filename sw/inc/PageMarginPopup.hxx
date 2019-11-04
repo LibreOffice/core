@@ -22,7 +22,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include "swdllapi.h"
 
-class PageMarginPopup : public SfxToolBoxControl
+class PageMarginPopup final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

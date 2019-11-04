@@ -44,7 +44,7 @@ class SwDocShell;
 class SwAutoStylesEnumImpl;
 class SfxItemSet;
 
-class SwXStyleFamilies :  public cppu::WeakImplHelper
+class SwXStyleFamilies final : public cppu::WeakImplHelper
 <
     css::container::XIndexAccess,
     css::container::XNameAccess,
@@ -56,7 +56,7 @@ class SwXStyleFamilies :  public cppu::WeakImplHelper
     SwDocShell*         m_pDocShell;
 
     std::map<SfxStyleFamily, css::uno::Reference<css::container::XNameContainer>> m_vFamilies;
-protected:
+
     virtual ~SwXStyleFamilies() override;
 public:
     SwXStyleFamilies(SwDocShell& rDocShell);
@@ -102,7 +102,7 @@ namespace sw
 }
 
 // access to all automatic style families
-class SwXAutoStyles :
+class SwXAutoStyles final :
     public cppu::WeakImplHelper< css::style::XAutoStyles >,
     public SwUnoCollection
 {
@@ -131,7 +131,7 @@ public:
 };
 
 // access to a family of automatic styles (character or paragraph or ...)
-class SwXAutoStyleFamily : public cppu::WeakImplHelper< css::style::XAutoStyleFamily >, public SvtListener
+class SwXAutoStyleFamily final : public cppu::WeakImplHelper< css::style::XAutoStyleFamily >, public SvtListener
 {
     SwDocShell *m_pDocShell;
     IStyleAccess::SwAutoStyleFamily const m_eFamily;
@@ -154,7 +154,7 @@ public:
     virtual void Notify( const SfxHint&) override;
 };
 
-class SwXAutoStylesEnumerator : public cppu::WeakImplHelper< css::container::XEnumeration >, public SvtListener
+class SwXAutoStylesEnumerator final : public cppu::WeakImplHelper< css::container::XEnumeration >, public SvtListener
 {
     std::unique_ptr<SwAutoStylesEnumImpl> m_pImpl;
 public:
@@ -169,7 +169,7 @@ public:
 };
 
 // an automatic style
-class SwXAutoStyle : public cppu::WeakImplHelper
+class SwXAutoStyle final : public cppu::WeakImplHelper
 <
     css::beans::XPropertySet,
     css::beans::XPropertyState,
@@ -229,7 +229,7 @@ public:
 typedef std::map<OUString, sal_Int32> CellStyleNameMap;
 
 /// A text table style is a UNO API wrapper for a SwTableAutoFormat
-class SwXTextTableStyle : public cppu::WeakImplHelper
+class SwXTextTableStyle final : public cppu::WeakImplHelper
 <
     css::style::XStyle,
     css::beans::XPropertySet,
@@ -322,7 +322,7 @@ public:
 };
 
 /// A text cell style is a UNO API wrapper for a SwBoxAutoFormat core class
-class SwXTextCellStyle : public cppu::WeakImplHelper
+class SwXTextCellStyle final : public cppu::WeakImplHelper
 <
     css::style::XStyle,
     css::beans::XPropertySet,

@@ -74,7 +74,7 @@ public:
 
 };
 
-class SwTextInputField
+class SwTextInputField final
     : public SwTextAttrNesting
     , public SwTextField
 {

@@ -85,7 +85,7 @@ namespace o3tl
     template<> struct typed_flags<AccessibleStates> : is_typed_flags<AccessibleStates, 0x3e3> {};
 }
 
-class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
+class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
                         public ::accessibility::IAccessibleParent
                 , public std::enable_shared_from_this<SwAccessibleMap>
 {

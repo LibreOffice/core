@@ -32,7 +32,7 @@ class SwDoc;
  * Tracks the value, but conversion between the float and string representation
  * always happens with the system locale.
  */
-class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
+class SW_DLLPUBLIC SwUserFieldType final : public SwValueFieldType
 {
     bool    m_bValidValue : 1;
     bool    m_bDeleted : 1;
@@ -70,7 +70,7 @@ public:
     virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
-protected:
+private:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 };
 
@@ -98,7 +98,7 @@ inline void SwUserFieldType::SetType(sal_uInt16 nSub)
  * Tracks the number format and the language, conversion between the float and
  * string representation is independent from the system locale.
  */
-class SW_DLLPUBLIC SwUserField : public SwValueField
+class SW_DLLPUBLIC SwUserField final : public SwValueField
 {
     sal_uInt16  m_nSubType;
 

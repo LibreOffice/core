@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star { namespace text { class XTextCon
 namespace com { namespace sun { namespace star { namespace text { class XTextField; } } } }
 
 /// Undo/Redo Paragraph Signature.
-class SwUndoParagraphSigning : public SwUndo
+class SwUndoParagraphSigning final : public SwUndo
 {
 private:
     SwDoc* m_pDoc;

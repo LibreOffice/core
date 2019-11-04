@@ -25,7 +25,7 @@
 namespace tools { class Rectangle; }
 
 /** class for the positioning of drawing objects */
-class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
+class SW_DLLPUBLIC SwAnchoredDrawObject final : public SwAnchoredObject
 {
     private:
         // boolean, indicating that the object position has been invalidated
@@ -88,7 +88,6 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         /** method to invalidate the given page frame */
         void InvalidatePage_( SwPageFrame* _pPageFrame );
 
-    protected:
         virtual void ObjectAttachedToAnchorFrame() override;
 
         /** method to assure that anchored object is registered at the correct

@@ -85,7 +85,7 @@ struct FieldShadowState
     }
 };
 
-class SwNoteProps: public utl::ConfigItem
+class SwNoteProps final : public utl::ConfigItem
 {
     private:
         bool m_bIsShowAnchor;
@@ -124,7 +124,7 @@ class SwNoteProps: public utl::ConfigItem
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
-class SAL_DLLPUBLIC_RTTI SwPostItMgr: public SfxListener
+class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
 {
     private:
         SwView*                         mpView;

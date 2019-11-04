@@ -50,7 +50,7 @@ public:
     virtual bool operator == ( const SwRedlineExtraData& ) const;
 };
 
-class SW_DLLPUBLIC SwRedlineExtraData_FormatColl : public SwRedlineExtraData
+class SW_DLLPUBLIC SwRedlineExtraData_FormatColl final : public SwRedlineExtraData
 {
     OUString m_sFormatNm;
     std::unique_ptr<SfxItemSet> m_pSet;
@@ -70,7 +70,7 @@ public:
     void SetFormatAll( bool bAll )               { m_bFormatAll = bAll; }
 };
 
-class SwRedlineExtraData_Format : public SwRedlineExtraData
+class SwRedlineExtraData_Format final : public SwRedlineExtraData
 {
     std::vector<sal_uInt16> m_aWhichIds;
 
@@ -317,7 +317,7 @@ public:
         { return m_aRedlineData; }
 };
 
-class SW_DLLPUBLIC SwRedlineHint : public SfxHint
+class SW_DLLPUBLIC SwRedlineHint final : public SfxHint
 {
 };
 

@@ -41,10 +41,9 @@ cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 SwRedlinesBaseClass;
-class SwXRedlines : public SwRedlinesBaseClass,
+class SwXRedlines final : public SwRedlinesBaseClass,
     public SwUnoCollection
 {
-protected:
     virtual ~SwXRedlines() override;
 public:
     SwXRedlines(SwDoc* pDoc);
@@ -68,13 +67,13 @@ public:
     static css::beans::XPropertySet*           GetObject( SwRangeRedline& rRedline, SwDoc& rDoc );
 };
 
-class SwXRedlineEnumeration
+class SwXRedlineEnumeration final
     : public SwSimpleEnumeration_Base
     , public SvtListener
 {
     SwDoc* pDoc;
     SwRedlineTable::size_type nCurrentIndex;
-protected:
+
     virtual ~SwXRedlineEnumeration() override;
 public:
     SwXRedlineEnumeration(SwDoc& rDoc);

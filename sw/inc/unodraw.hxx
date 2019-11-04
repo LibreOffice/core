@@ -41,7 +41,7 @@ class SdrView;
 class SwDoc;
 class SwXShape;
 
-class SwFmDrawPage : public SvxFmDrawPage
+class SwFmDrawPage final : public SvxFmDrawPage
 {
     SdrPageView*        pPageView;
     std::vector<SwXShape*> m_vShapes;
@@ -78,7 +78,7 @@ typedef cppu::WeakAggImplHelper4
     css::drawing::XShapeGrouper
 >
 SwXDrawPageBaseClass;
-class SwXDrawPage : public SwXDrawPageBaseClass
+class SwXDrawPage final : public SwXDrawPageBaseClass
 {
     SwDoc*          pDoc;
     css::uno::Reference< css::uno::XAggregation >     xPageAgg;
