@@ -11,6 +11,13 @@
 #define INCLUDED_BASEGFX_DRAWCOMMANDS_H
 
 #include <memory>
+#include <vector>
+
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 namespace gfx
 {
@@ -27,6 +34,48 @@ enum class DrawCommandType
     Root,
     Rectangle,
     Path
+};
+
+enum class GradientType
+{
+    Linear
+};
+
+class GradientStop
+{
+public:
+    float mfOffset;
+    basegfx::BColor maColor;
+    float mfOpacity;
+};
+
+class GradientInfo
+{
+public:
+    GradientType meType;
+
+    std::vector<GradientStop> maGradientStops;
+
+    GradientInfo(GradientType eType)
+        : meType(eType)
+    {
+    }
+};
+
+class LinearGradientInfo : public GradientInfo
+{
+public:
+    LinearGradientInfo()
+        : GradientInfo(GradientType::Linear)
+    {
+    }
+
+    double x1;
+    double y1;
+    double x2;
+    double y2;
+
+    basegfx::B2DHomMatrix maMatrix;
 };
 
 class DrawBase : public DrawCommand
@@ -65,6 +114,7 @@ public:
     double mnOpacity;
     std::shared_ptr<basegfx::BColor> mpFillColor;
     std::shared_ptr<basegfx::BColor> mpStrokeColor;
+    std::shared_ptr<GradientInfo> mpFillGradient;
 
     DrawRectangle(basegfx::B2DRange const& rRectangle)
         : DrawBase(DrawCommandType::Rectangle)
@@ -86,6 +136,7 @@ public:
     double mnOpacity;
     std::shared_ptr<basegfx::BColor> mpFillColor;
     std::shared_ptr<basegfx::BColor> mpStrokeColor;
+    std::shared_ptr<GradientInfo> mpFillGradient;
 
     DrawPath(basegfx::B2DPolyPolygon const& rPolyPolygon)
         : DrawBase(DrawCommandType::Path)

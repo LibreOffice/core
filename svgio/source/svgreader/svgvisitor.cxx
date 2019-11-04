@@ -16,6 +16,7 @@
 #include <svgsvgnode.hxx>
 #include <svggnode.hxx>
 #include <svgpathnode.hxx>
+#include <svggradientnode.hxx>
 
 #include <svgvisitor.hxx>
 #include <tools/color.hxx>
@@ -77,8 +78,44 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
             pRectangle->mnOpacity = rRectNode.getSvgStyleAttributes()->getOpacity().getNumber();
 
             const basegfx::BColor* pFillColor = rRectNode.getSvgStyleAttributes()->getFill();
+            const SvgGradientNode* pFillGradient
+                = rRectNode.getSvgStyleAttributes()->getSvgGradientNodeFill();
             if (pFillColor)
+            {
                 pRectangle->mpFillColor = std::make_shared<basegfx::BColor>(*pFillColor);
+            }
+            else if (pFillGradient)
+            {
+                drawinglayer::primitive2d::SvgGradientEntryVector aSvgGradientEntryVector;
+                pFillGradient->collectGradientEntries(aSvgGradientEntryVector);
+                if (!aSvgGradientEntryVector.empty())
+                {
+                    auto aGradientInfo = std::make_shared<gfx::LinearGradientInfo>();
+
+                    aGradientInfo->x1 = pFillGradient->getX1().getNumber();
+                    aGradientInfo->y1 = pFillGradient->getY1().getNumber();
+                    aGradientInfo->x2 = pFillGradient->getX2().getNumber();
+                    aGradientInfo->y2 = pFillGradient->getY2().getNumber();
+
+                    const basegfx::B2DHomMatrix* pGradientTransform
+                        = pFillGradient->getGradientTransform();
+                    if (pGradientTransform)
+                    {
+                        aGradientInfo->maMatrix = *pGradientTransform;
+                    }
+
+                    pRectangle->mpFillGradient = aGradientInfo;
+
+                    for (auto const& rEntry : aSvgGradientEntryVector)
+                    {
+                        gfx::GradientStop aStop;
+                        aStop.maColor = rEntry.getColor();
+                        aStop.mfOffset = rEntry.getOffset();
+                        aStop.mfOpacity = rEntry.getOpacity();
+                        pRectangle->mpFillGradient->maGradientStops.push_back(aStop);
+                    }
+                }
+            }
 
             const basegfx::BColor* pStrokeColor = rRectNode.getSvgStyleAttributes()->getStroke();
             if (pStrokeColor)
