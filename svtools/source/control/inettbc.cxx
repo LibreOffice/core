@@ -2071,6 +2071,8 @@ OUString URLBox::GetURL()
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
     OUString aText(m_xWidget->get_active_text());
+    if (MatchesPlaceHolder(aText))
+        return aPlaceHolder;
 
     // try to get the right case preserving URL from the list of URLs
     for(std::vector<OUString>::iterator i = pImpl->aCompletions.begin(), j = pImpl->aURLs.begin(); i != pImpl->aCompletions.end() && j != pImpl->aURLs.end(); ++i, ++j)

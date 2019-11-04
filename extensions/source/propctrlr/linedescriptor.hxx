@@ -22,13 +22,9 @@
 #include <vcl/image.hxx>
 #include <com/sun/star/inspection/LineDescriptor.hpp>
 
-
 namespace pcr
 {
-
-
     //= OLineDescriptor
-
     struct OLineDescriptor : public css::inspection::LineDescriptor
     {
         OUString                    sName;              // the name of the property
@@ -51,9 +47,7 @@ namespace pcr
         }
     };
 
-
 } // namespace pcr
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_LINEDESCRIPTOR_HXX
 

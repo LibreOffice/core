@@ -29,6 +29,7 @@
 #include <svl/lstner.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svdmark.hxx>
+#include <vcl/layout.hxx>
 #include "bastypes.hxx"
 
 class SfxBindings;
@@ -43,6 +44,7 @@ class DialogWindowLayout;
 class PropBrw final : public DockingWindow, public SfxListener, public SfxBroadcaster
 {
 private:
+    VclPtr<VclBox> m_xContentArea;
     bool        m_bInitialStateChange;
 
     css::uno::Reference< css::frame::XFrame2 >

@@ -33,6 +33,7 @@ public:
     virtual void Activate();
     virtual void Deactivate();
 
+    void SetHelpId(const OString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
     OString GetHelpId() const { return m_xContainer->get_help_id(); }
 
 protected:

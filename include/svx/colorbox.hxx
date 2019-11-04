@@ -142,6 +142,7 @@ public:
     void set_visible(bool bShow) { m_xButton->set_visible(bShow); }
     void set_help_id(const OString& rHelpId) { m_xButton->set_help_id(rHelpId); }
     void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xButton->connect_focus_in(rLink); }
+    void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_xButton->connect_focus_out(rLink); }
     weld::MenuButton& get_widget() { return *m_xButton; }
 };
 

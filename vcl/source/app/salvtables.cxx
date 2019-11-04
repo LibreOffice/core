@@ -2260,8 +2260,7 @@ class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::No
 private:
     VclPtr<TabControl> m_xNotebook;
     mutable std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
-    std::vector<VclPtr<TabPage>> m_aAddedPages;
-    std::vector<VclPtr<VclGrid>> m_aAddedGrids;
+    std::map<OString, std::pair<VclPtr<TabPage>, VclPtr<VclGrid>>> m_aAddedPages;
 
     DECL_LINK(DeactivatePageHdl, TabControl*, bool);
     DECL_LINK(ActivatePageHdl, TabControl*, void);
@@ -2321,9 +2320,18 @@ public:
         sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(nPageId);
         if (nPageIndex == TAB_PAGE_NOTFOUND)
             return;
+
         m_xNotebook->RemovePage(nPageId);
         if (nPageIndex < m_aPages.size())
             m_aPages.erase(m_aPages.begin() + nPageIndex);
+
+        auto iter = m_aAddedPages.find(rIdent);
+        if (iter != m_aAddedPages.end())
+        {
+            iter->second.second.disposeAndClear();
+            iter->second.first.disposeAndClear();
+            m_aAddedPages.erase(iter);
+        }
     }
 
     virtual void append_page(const OString& rIdent, const OUString& rLabel) override
@@ -2340,8 +2348,7 @@ public:
         xGrid->Show();
         m_xNotebook->SetTabPage(nNewPageId, xPage);
         m_xNotebook->SetPageName(nNewPageId, rIdent);
-        m_aAddedPages.push_back(xPage);
-        m_aAddedGrids.push_back(xGrid);
+        m_aAddedPages.try_emplace(rIdent, xPage, xGrid);
     }
 
     virtual int get_n_pages() const override
@@ -2361,10 +2368,11 @@ public:
 
     virtual ~SalInstanceNotebook() override
     {
-        for (auto &rGrid : m_aAddedGrids)
-            rGrid.disposeAndClear();
-        for (auto &rPage : m_aAddedPages)
-            rPage.disposeAndClear();
+        for (auto &rItem : m_aAddedPages)
+        {
+            rItem.second.second.disposeAndClear();
+            rItem.second.first.disposeAndClear();
+        }
         m_xNotebook->SetActivatePageHdl(Link<TabControl*,void>());
         m_xNotebook->SetDeactivatePageHdl(Link<TabControl*,bool>());
     }
@@ -5234,6 +5242,11 @@ public:
         m_xButton->SetFormatter(pFormatter);
     }
 
+    virtual SvNumberFormatter* get_formatter() override
+    {
+        return m_xButton->GetFormatter();
+    }
+
     virtual sal_Int32 get_format_key() const override
     {
         return m_xButton->GetFormatKey();
@@ -5242,6 +5255,16 @@ public:
     virtual void set_format_key(sal_Int32 nFormatKey) override
     {
         m_xButton->SetFormatKey(nFormatKey);
+    }
+
+    virtual void treat_as_number(bool bSet) override
+    {
+        m_xButton->TreatAsNumber(bSet);
+    }
+
+    virtual void set_digits(unsigned int digits) override
+    {
+        m_xButton->SetDecimalDigits(digits);
     }
 };
 

@@ -85,6 +85,7 @@ const long WIN_BORDER = 2;
 
 PropBrw::PropBrw (DialogWindowLayout& rLayout_):
     DockingWindow(&rLayout_),
+    m_xContentArea(VclPtr<VclVBox>::Create(this)),
     m_bInitialStateChange(true),
     m_xContextDocument(SfxViewShell::Current() ? SfxViewShell::Current()->GetCurrentDocument() : Reference<XModel>()),
     pView(nullptr)
@@ -92,12 +93,13 @@ PropBrw::PropBrw (DialogWindowLayout& rLayout_):
     Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
     SetMinOutputSizePixel(Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
     SetOutputSizePixel(aPropWinSize);
+    m_xContentArea->Show();
 
     try
     {
         // create a frame wrapper for myself
         m_xMeAsFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
-        m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
+        m_xMeAsFrame->initialize(VCLUnoHelper::GetInterface(m_xContentArea));
         m_xMeAsFrame->setName( "form property browser" );  // change name!
     }
     catch (const Exception&)
@@ -126,7 +128,7 @@ void PropBrw::ImplReCreateController()
         // a ComponentContext for the
         ::cppu::ContextEntry_Init aHandlerContextInfo[] =
         {
-            ::cppu::ContextEntry_Init( "DialogParentWindow", Any( VCLUnoHelper::GetInterface ( this ) ) ),
+            ::cppu::ContextEntry_Init( "DialogParentWindow", Any(VCLUnoHelper::GetInterface(m_xContentArea))),
             ::cppu::ContextEntry_Init( "ContextDocument", Any( m_xContextDocument ) )
         };
         Reference< XComponentContext > xInspectorContext(
@@ -153,8 +155,6 @@ void PropBrw::ImplReCreateController()
             else
             {
                 xAsXController->attachFrame( Reference<XFrame>(m_xMeAsFrame,UNO_QUERY_THROW) );
-                m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
-                DBG_ASSERT(m_xBrowserComponentWindow.is(), "PropBrw::PropBrw: attached the controller, but have no component window!");
             }
         }
 
@@ -163,13 +163,8 @@ void PropBrw::ImplReCreateController()
         aPropWinSize.AdjustWidth( -(2*WIN_BORDER) );
         aPropWinSize.AdjustHeight( -(2*WIN_BORDER) );
 
-        if ( m_xBrowserComponentWindow.is() )
-        {
-            m_xBrowserComponentWindow->setPosSize(aPropWinPos.X(), aPropWinPos.Y(), aPropWinSize.Width(), aPropWinSize.Height(),
-                css::awt::PosSize::WIDTH | css::awt::PosSize::HEIGHT |
-                css::awt::PosSize::X | css::awt::PosSize::Y);
-            m_xBrowserComponentWindow->setVisible(true);
-        }
+        VclContainer::setLayoutAllocation(*m_xContentArea, aPropWinPos, aPropWinSize);
+        m_xContentArea->Show();
     }
     catch (const Exception&)
     {
@@ -177,14 +172,12 @@ void PropBrw::ImplReCreateController()
         try
         {
             ::comphelper::disposeComponent(m_xBrowserController);
-            ::comphelper::disposeComponent(m_xBrowserComponentWindow);
         }
         catch(const Exception&)
         {
         }
 
         m_xBrowserController.clear();
-        m_xBrowserComponentWindow.clear();
     }
 
     Resize();
@@ -200,6 +193,7 @@ void PropBrw::dispose()
 {
     if ( m_xBrowserController.is() )
         ImplDestroyController();
+    m_xContentArea.disposeAndClear();
     DockingWindow::dispose();
 }
 
@@ -430,24 +424,20 @@ OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
     return aName;
 }
 
-
 void PropBrw::Resize()
 {
     DockingWindow::Resize();
 
     // adjust size
-    Size aSize_ = GetOutputSizePixel();
-    Size aPropWinSize( aSize_ );
+    Size aSize = GetOutputSizePixel();
+    Size aPropWinSize( aSize );
     aPropWinSize.AdjustWidth( -(2*WIN_BORDER) );
     aPropWinSize.AdjustHeight( -(2*WIN_BORDER) );
 
-    if (m_xBrowserComponentWindow.is())
-    {
-        m_xBrowserComponentWindow->setPosSize(0, 0, aPropWinSize.Width(), aPropWinSize.Height(),
-            css::awt::PosSize::WIDTH | css::awt::PosSize::HEIGHT);
-    }
-}
+    fprintf(stderr, "size %ld %ld\n", aSize.Width(), aSize.Height());
 
+    VclContainer::setLayoutAllocation(*m_xContentArea, Point(WIN_BORDER, WIN_BORDER), aPropWinSize);
+}
 
 void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView* pNewView )
 {
@@ -482,8 +472,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         // set focus on initialization
         if ( m_bInitialStateChange )
         {
-            if ( m_xBrowserComponentWindow.is() )
-                m_xBrowserComponentWindow->setFocus();
+            m_xContentArea->GrabFocus();
             m_bInitialStateChange = false;
         }
 

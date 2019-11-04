@@ -17,60 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/svapp.hxx>
 #include "browserpage.hxx"
 
 namespace pcr
 {
-    #define LAYOUT_BORDER_LEFT      3
-    #define LAYOUT_BORDER_TOP       3
-    #define LAYOUT_BORDER_RIGHT     3
-    #define LAYOUT_BORDER_BOTTOM    3
-
-    OBrowserPage::OBrowserPage(vcl::Window* pParent)
-            :TabPage(pParent,0)
-            ,m_aListBox(VclPtr<OBrowserListBox>::Create(this))
+    OBrowserPage::OBrowserPage(weld::Container* pParent, weld::Container* pInitialControlContainer, bool bInterimBuilder)
+        : m_pParent(pParent)
+        , m_xBuilder(bInterimBuilder
+                     ? Application::CreateInterimBuilder(pParent, "modules/spropctrlr/ui/browserpage.ui")
+                     : Application::CreateBuilder(pParent, "modules/spropctrlr/ui/browserpage.ui"))
+        , m_xContainer(m_xBuilder->weld_container("BrowserPage"))
+        , m_xListBox(std::make_unique<OBrowserListBox>(*m_xBuilder, pInitialControlContainer, bInterimBuilder))
     {
-        m_aListBox->SetBackground(GetBackground());
-        m_aListBox->SetPaintTransparent( true );
-        m_aListBox->Show();
     }
 
     OBrowserPage::~OBrowserPage()
     {
-        disposeOnce();
+        m_pParent->move(m_xContainer.get(), nullptr);
     }
-
-    void OBrowserPage::dispose()
-    {
-        m_aListBox.disposeAndClear();
-        TabPage::dispose();
-    }
-
-    void OBrowserPage::Resize()
-    {
-        Size aSize( GetOutputSizePixel() );
-        aSize.AdjustWidth( -(LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT) );
-        aSize.AdjustHeight( -(LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM) );
-        m_aListBox->SetPosSizePixel( Point( LAYOUT_BORDER_LEFT, LAYOUT_BORDER_TOP ), aSize );
-    }
-
-    void OBrowserPage::StateChanged(StateChangedType nType)
-    {
-        Window::StateChanged( nType);
-        if (StateChangedType::Visible == nType && m_aListBox)
-            m_aListBox->ActivateListBox(IsVisible());
-    }
-
-    sal_Int32 OBrowserPage::getMinimumWidth() const
-    {
-        return m_aListBox->GetMinimumWidth() + LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
-    }
-
-    sal_Int32 OBrowserPage::getMinimumHeight()
-    {
-        return m_aListBox->GetMinimumHeight() + LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
-    }
-
 } // namespace pcr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

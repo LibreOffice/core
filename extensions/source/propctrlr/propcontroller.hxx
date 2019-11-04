@@ -52,19 +52,15 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
+#include <vcl/weld.hxx>
 
 #include <map>
 #include <memory>
 #include <unordered_map>
 #include <vector>
 
-namespace vcl { class Window; }
-
-
 namespace pcr
 {
-
-
     class OPropertyEditor;
     struct OLineDescriptor;
 
@@ -102,7 +98,8 @@ namespace pcr
         ::comphelper::OInterfaceContainerHelper2   m_aDisposeListeners;
         ::comphelper::OInterfaceContainerHelper2   m_aControlObservers;
         // meta data about the properties
-        VclPtr<OPropertyBrowserView>        m_pView;
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<OPropertyBrowserView> m_xPropView;
 
         OUString                     m_sPageSelection;
         OUString                     m_sLastValidPageSelection;
@@ -137,6 +134,7 @@ namespace pcr
         bool        m_bSuspendingPropertyHandlers;
         bool        m_bConstructed;
         bool        m_bBindingIntrospectee;
+        bool        m_bInterimBuilder;
 
     protected:
         DECLARE_XINTERFACE()
@@ -170,7 +168,7 @@ namespace pcr
         // XLayoutConstrains
         virtual css::awt::Size SAL_CALL getMinimumSize(  ) override;
         virtual css::awt::Size SAL_CALL getPreferredSize(  ) override;
-        virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
+        virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) override;
 
         // XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
@@ -241,8 +239,8 @@ namespace pcr
         // stop the inspection
         void stopInspection( bool _bCommitModified );
 
-        bool haveView() const { return nullptr != m_pView; }
-        OPropertyEditor&    getPropertyBox() { return m_pView->getPropertyBox(); }
+        bool haveView() const { return m_xPropView.get() != nullptr; }
+        OPropertyEditor&    getPropertyBox() { return m_xPropView->getPropertyBox(); }
 
         // does the inspection of the objects as indicated by our model
         void doInspection();
@@ -307,7 +305,7 @@ namespace pcr
         */
         bool impl_findObjectProperty_nothrow( const OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty = nullptr );
 
-        void Construct(vcl::Window* _pParentWin);
+        void Construct(const css::uno::Reference<css::awt::XWindow>& rContainerWindow, std::unique_ptr<weld::Builder> xBuilder);
 
         /** retrieves the property handler for a given property name
             @param  _rPropertyName

@@ -21,6 +21,8 @@
 #include "fontdialog.hxx"
 #include <strings.hrc>
 #include "modulepcr.hxx"
+#include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 #include <i18nlangtag/languagetag.hxx>
