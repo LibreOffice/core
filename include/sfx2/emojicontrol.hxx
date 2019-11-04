@@ -23,7 +23,7 @@ class EmojiView;
 class ThumbnailViewItem;
 enum class FILTER_CATEGORY;
 
-class SFX2_DLLPUBLIC SfxEmojiControl final : public SfxPopupWindow
+class SfxEmojiControl final : public SfxPopupWindow
 {
 public:
     explicit SfxEmojiControl(sal_uInt16 nId, vcl::Window* pParent,

@@ -29,7 +29,7 @@ class ScTableProtectionDlg : public weld::GenericDialogController
 {
 public:
     ScTableProtectionDlg() = delete;
-    explicit SC_DLLPUBLIC ScTableProtectionDlg(weld::Window* pParent);
+    explicit ScTableProtectionDlg(weld::Window* pParent);
     virtual ~ScTableProtectionDlg() override;
 
     void SetDialogData(const ScTableProtection& rData);

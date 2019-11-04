@@ -243,7 +243,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC RadioButtonUIObject final : public WindowUIObject
+class RadioButtonUIObject final : public WindowUIObject
 {
 private:
     VclPtr<RadioButton> mxRadioButton;
@@ -335,7 +335,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC SpinUIObject final : public WindowUIObject
+class SpinUIObject final : public WindowUIObject
 {
 private:
     VclPtr<SpinButton> mxSpinButton;
@@ -359,7 +359,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC SpinFieldUIObject final : public EditUIObject
+class SpinFieldUIObject final : public EditUIObject
 {
     VclPtr<SpinField> mxSpinField;
 

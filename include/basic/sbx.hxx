@@ -182,9 +182,9 @@ public:
     void setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
 };
 
-class BASIC_DLLPUBLIC SbxCollection : public SbxObject
+class SbxCollection : public SbxObject
 {
-    BASIC_DLLPRIVATE void Initialize();
+    void Initialize();
 protected:
     virtual ~SbxCollection() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
@@ -203,7 +203,7 @@ public:
     virtual void Clear() override;
 };
 
-class BASIC_DLLPUBLIC SbxStdCollection final : public SbxCollection
+class SbxStdCollection final : public SbxCollection
 {
     OUString aElemClass;
     bool bAddRemoveOk;

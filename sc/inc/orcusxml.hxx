@@ -37,7 +37,7 @@ struct ScOrcusXMLTreeParam
         bool mbRangeParent:1;
         bool mbLeafNode:1; /// Leaf if it has no child elements. Child Attributes don't count.
 
-        SC_DLLPUBLIC EntryData(EntryType eType);
+        EntryData(EntryType eType);
     };
 
     typedef std::vector<std::unique_ptr<EntryData>> UserDataStoreType;
@@ -52,7 +52,7 @@ struct ScOrcusXMLTreeParam
      */
     UserDataStoreType m_UserDataStore;
 
-    static SC_DLLPUBLIC EntryData* getUserData(const weld::TreeView& rControl, const weld::TreeIter& rEntry);
+    static EntryData* getUserData(const weld::TreeView& rControl, const weld::TreeIter& rEntry);
 };
 
 struct ScOrcusImportXMLParam

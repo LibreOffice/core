@@ -71,7 +71,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <basic/basicdllapi.h>
 
-class BASIC_DLLPUBLIC SbxBasicFormater {
+class SbxBasicFormater {
   public:
     // Constructor takes signs for decimal point, thousand separation sign
     // and necessary resource strings.
@@ -100,25 +100,25 @@ class BASIC_DLLPUBLIC SbxBasicFormater {
     static  bool isBasicFormat( const OUString& sFormatStrg );
 
   private:
-    BASIC_DLLPRIVATE static inline void ShiftString( OUStringBuffer& sStrg, sal_uInt16 nStartPos );
-    BASIC_DLLPRIVATE static void AppendDigit( OUStringBuffer& sStrg, short nDigit );
-    BASIC_DLLPRIVATE void   LeftShiftDecimalPoint( OUStringBuffer& sStrg );
-    BASIC_DLLPRIVATE void   StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& bOverflow );
-    BASIC_DLLPRIVATE void   StrRoundDigit( OUStringBuffer& sStrg, short nPos );
-    BASIC_DLLPRIVATE static void ParseBack( OUStringBuffer& sStrg, const OUString& sFormatStrg,
+    static inline void ShiftString( OUStringBuffer& sStrg, sal_uInt16 nStartPos );
+    static void AppendDigit( OUStringBuffer& sStrg, short nDigit );
+    void   LeftShiftDecimalPoint( OUStringBuffer& sStrg );
+    void   StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& bOverflow );
+    void   StrRoundDigit( OUStringBuffer& sStrg, short nPos );
+    static void ParseBack( OUStringBuffer& sStrg, const OUString& sFormatStrg,
                                        short nFormatPos );
     // Methods for string conversion with sprintf():
-    BASIC_DLLPRIVATE void   InitScan( double _dNum );
-    BASIC_DLLPRIVATE void   InitExp( double _dNewExp );
-    BASIC_DLLPRIVATE short  GetDigitAtPosScan( short nPos, bool& bFoundFirstDigit );
-    BASIC_DLLPRIVATE short  GetDigitAtPosExpScan( double dNewExponent, short nPos,
+    void   InitScan( double _dNum );
+    void   InitExp( double _dNewExp );
+    short  GetDigitAtPosScan( short nPos, bool& bFoundFirstDigit );
+    short  GetDigitAtPosExpScan( double dNewExponent, short nPos,
                                                   bool& bFoundFirstDigit );
-    BASIC_DLLPRIVATE short  GetDigitAtPosExpScan( short nPos, bool& bFoundFirstDigit );
-    BASIC_DLLPRIVATE static OUString GetPosFormatString( const OUString& sFormatStrg, bool & bFound );
-    BASIC_DLLPRIVATE static OUString GetNegFormatString( const OUString& sFormatStrg, bool & bFound );
-    BASIC_DLLPRIVATE static OUString Get0FormatString( const OUString& sFormatStrg, bool & bFound );
-    BASIC_DLLPRIVATE static OUString GetNullFormatString( const OUString& sFormatStrg, bool & bFound );
-    BASIC_DLLPRIVATE static void AnalyseFormatString( const OUString& sFormatStrg,
+    short  GetDigitAtPosExpScan( short nPos, bool& bFoundFirstDigit );
+    static OUString GetPosFormatString( const OUString& sFormatStrg, bool & bFound );
+    static OUString GetNegFormatString( const OUString& sFormatStrg, bool & bFound );
+    static OUString Get0FormatString( const OUString& sFormatStrg, bool & bFound );
+    static OUString GetNullFormatString( const OUString& sFormatStrg, bool & bFound );
+    static void AnalyseFormatString( const OUString& sFormatStrg,
                                                  short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                                                  short& nNoOfOptionalDigitsLeft,
                                                  short& nNoOfExponentDigits,
@@ -126,7 +126,7 @@ class BASIC_DLLPUBLIC SbxBasicFormater {
                                                  bool& bPercent, bool& bCurrency, bool& bScientific,
                                                  bool& bGenerateThousandSeparator,
                                                  short& nMultipleThousandSeparators );
-    BASIC_DLLPRIVATE void   ScanFormatString( double dNumber, const OUString& sFormatStrg,
+    void   ScanFormatString( double dNumber, const OUString& sFormatStrg,
                                               OUString& sReturnStrg, bool bCreateSign );
 
     //*** Data ***
