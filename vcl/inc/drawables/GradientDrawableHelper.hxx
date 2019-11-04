@@ -28,6 +28,8 @@ namespace vcl
 class VCL_DLLPUBLIC GradientDrawableHelper
 {
 public:
+    static tools::Rectangle ExpandGradientOverBorder(tools::Rectangle aRect);
+
     static bool AddGradientActions(OutputDevice* pRenderContext, tools::Rectangle const& rRect,
                                    Gradient const& rGradient, GDIMetaFile* pMetaFile);
 

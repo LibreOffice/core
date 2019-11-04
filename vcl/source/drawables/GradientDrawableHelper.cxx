@@ -26,6 +26,18 @@
 
 namespace vcl
 {
+tools::Rectangle GradientDrawableHelper::ExpandGradientOverBorder(tools::Rectangle aRect)
+{
+    // because we draw with no border line, we have to expand gradient
+    // rect to avoid missing lines on the right and bottom edge
+    aRect.AdjustLeft(-1);
+    aRect.AdjustTop(-1);
+    aRect.AdjustRight(1);
+    aRect.AdjustBottom(1);
+
+    return aRect;
+}
+
 bool GradientDrawableHelper::AddGradientActions(OutputDevice* pRenderContext,
                                                 tools::Rectangle const& rRect,
                                                 Gradient const& rGradient, GDIMetaFile* pMetaFile)

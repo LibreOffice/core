@@ -121,10 +121,7 @@ bool GradientDrawable::Draw(OutputDevice* pRenderContext, tools::PolyPolygon con
                 {
                     // because we draw with no border line, we have to expand gradient
                     // rect to avoid missing lines on the right and bottom edge
-                    aRect.AdjustLeft(-1);
-                    aRect.AdjustTop(-1);
-                    aRect.AdjustRight(1);
-                    aRect.AdjustBottom(1);
+                    aRect = GradientDrawableHelper::ExpandGradientOverBorder(aRect);
                 }
 
                 // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
@@ -216,10 +213,7 @@ void GradientDrawable::AddAction(OutputDevice* const pRenderContext) const
                     {
                         // because we draw with no border line, we have to expand gradient
                         // rect to avoid missing lines on the right and bottom edge
-                        aRect.AdjustLeft(-1);
-                        aRect.AdjustTop(-1);
-                        aRect.AdjustRight(1);
-                        aRect.AdjustBottom(1);
+                        aRect = GradientDrawableHelper::ExpandGradientOverBorder(aRect);
                     }
 
                     // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
