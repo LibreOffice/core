@@ -289,7 +289,7 @@ class VCL_DLLPUBLIC ImplControlValue
  *
  *   Value container for scrollbars.
  */
-class VCL_DLLPUBLIC ScrollbarValue final : public ImplControlValue
+class ScrollbarValue final : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -319,7 +319,7 @@ class VCL_DLLPUBLIC ScrollbarValue final : public ImplControlValue
         ScrollbarValue & operator =(ScrollbarValue &&) = delete; // due to ImplControlValue
 };
 
-class VCL_DLLPUBLIC SliderValue final : public ImplControlValue
+class SliderValue final : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -418,7 +418,7 @@ class VCL_DLLPUBLIC TabitemValue final : public ImplControlValue
  *   Note: the other parameters of DrawNativeControl will have no meaning
  *         all parameters for spinbuttons are carried here
  */
-class VCL_DLLPUBLIC SpinbuttonValue final : public ImplControlValue
+class SpinbuttonValue final : public ImplControlValue
 {
     public:
         tools::Rectangle       maUpperRect;
