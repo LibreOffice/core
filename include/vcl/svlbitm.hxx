@@ -140,7 +140,7 @@ public:
     virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 };
 
-class VCL_DLLPUBLIC SvLBoxButton : public SvLBoxItem
+class SvLBoxButton : public SvLBoxItem
 {
     bool    isVis;
     SvLBoxButtonData*   pData;

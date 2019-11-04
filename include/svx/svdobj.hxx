@@ -223,7 +223,7 @@ public:
 /**
  * All geometrical data of an arbitrary object for use in undo/redo
  */
-class SVX_DLLPUBLIC SdrObjGeoData
+class SdrObjGeoData
 {
 public:
     tools::Rectangle                   aBoundRect;

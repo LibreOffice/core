@@ -45,7 +45,7 @@ enum ScDetectiveObjType
     SC_DETOBJ_CIRCLE
 };
 
-class SC_DLLPUBLIC ScDetectiveFunc
+class ScDetectiveFunc
 {
     static Color     nArrowColor;
     static Color     nErrorColor;
