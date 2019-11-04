@@ -818,12 +818,11 @@ ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
     return pViewSh ? pViewSh->GetNavigatorSettings() : nullptr;
 }
 
-bool ScNavigatorDlg::GetViewData()
+ScViewData* ScNavigatorDlg::GetViewData()
 {
     ScTabViewShell* pViewSh = GetTabViewShell();
     pViewData = pViewSh ? &pViewSh->GetViewData() : nullptr;
-
-    return ( pViewData != nullptr );
+    return pViewData;
 }
 
 void ScNavigatorDlg::UpdateColumn( const SCCOL* pCol )
