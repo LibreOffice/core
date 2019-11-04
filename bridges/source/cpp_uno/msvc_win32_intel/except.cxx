@@ -20,7 +20,7 @@
 
 #include <sal/config.h>
 #include <malloc.h>
-#include <typeinfo.h>
+#include <typeinfo>
 #include <signal.h>
 
 #include <rtl/alloc.h>
