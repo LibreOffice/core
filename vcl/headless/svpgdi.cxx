@@ -32,6 +32,7 @@
 #include <o3tl/safeint.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/gradient.hxx>
 #include <config_cairo_canvas.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -1489,6 +1490,39 @@ bool SvpSalGraphics::drawPolyPolygon(
     // if transformation has been applied, transform also extents (ranges)
     // of damage so they can be correctly redrawn
     extents.transform(rObjectToDevice);
+    releaseCairoContext(cr, true, extents);
+
+    return true;
+}
+
+bool SvpSalGraphics::implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient)
+{
+    cairo_t* cr = getCairoContext(true);
+    clipRegion(cr);
+
+    basegfx::B2DHomMatrix rObjectToDevice;
+
+    for (auto const & rPolygon : rPolyPolygon)
+        AddPolygonToPath(cr, rPolygon, rObjectToDevice, !getAntiAliasB2DDraw(), false);
+
+    cairo_pattern_t* pattern;
+    pattern = cairo_pattern_create_linear(rGradient.maPoint1.getX(), rGradient.maPoint1.getY(), rGradient.maPoint2.getX(), rGradient.maPoint2.getY());
+
+    for (SalGradientStop const & rStop : rGradient.maStops)
+    {
+        double r = rStop.maColor.GetRed() / 255.0;
+        double g = rStop.maColor.GetGreen() / 255.0;
+        double b = rStop.maColor.GetBlue() / 255.0;
+        double a = (0xFF - rStop.maColor.GetTransparency()) / 255.0;
+        double offset = rStop.mfOffset;
+
+        cairo_pattern_add_color_stop_rgba(pattern, offset, r, g, b, a);
+    }
+    cairo_set_source(cr, pattern);
+
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
+    cairo_fill_preserve(cr);
+
     releaseCairoContext(cr, true, extents);
 
     return true;

@@ -19,11 +19,13 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/gradient.hxx>
 
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
@@ -220,6 +222,50 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                     rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
                                               basegfx::B2DPolyPolygon(aB2DPolygon),
                                               1.0 - rRectangle.mnOpacity, nullptr);
+                }
+                else if (rRectangle.mpFillGradient)
+                {
+                    rGraphics.SetLineColor();
+                    rGraphics.SetFillColor();
+                    if (rRectangle.mpFillGradient->meType == gfx::GradientType::Linear)
+                    {
+                        auto* pLinearGradient = static_cast<gfx::LinearGradientInfo*>(
+                            rRectangle.mpFillGradient.get());
+                        SalGradient aGradient;
+                        double x, y;
+
+                        x = pLinearGradient->x1;
+                        y = pLinearGradient->y1;
+
+                        if (x > aSVGRect.getCenterX())
+                            x = x + fDeltaX;
+                        if (y > aSVGRect.getCenterY())
+                            y = y + fDeltaY;
+
+                        aGradient.maPoint1 = basegfx::B2DPoint(x, y);
+                        aGradient.maPoint1 *= basegfx::utils::createTranslateB2DHomMatrix(
+                            aTargetSurface.getMinX() - 0.5, aTargetSurface.getMinY() - 0.5);
+
+                        x = pLinearGradient->x2;
+                        y = pLinearGradient->y2;
+
+                        if (x > aSVGRect.getCenterX())
+                            x = x + fDeltaX;
+                        if (y > aSVGRect.getCenterY())
+                            y = y + fDeltaY;
+
+                        aGradient.maPoint2 = basegfx::B2DPoint(x, y);
+                        aGradient.maPoint2 *= basegfx::utils::createTranslateB2DHomMatrix(
+                            aTargetSurface.getMinX() - 0.5, aTargetSurface.getMinY() - 0.5);
+
+                        for (gfx::GradientStop const& rStop : pLinearGradient->maGradientStops)
+                        {
+                            Color aColor(rStop.maColor);
+                            aColor.SetTransparency(rStop.mfOpacity * (1.0f - rRectangle.mnOpacity));
+                            aGradient.maStops.emplace_back(aColor, rStop.mfOffset);
+                        }
+                        rGraphics.DrawGradient(basegfx::B2DPolyPolygon(aB2DPolygon), aGradient);
+                    }
                 }
                 if (rRectangle.mpStrokeColor)
                 {
