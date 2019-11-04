@@ -1756,6 +1756,7 @@ void SvtCalendarBox::set_label_from_date()
 IMPL_LINK_NOARG(SvtCalendarBox, SelectHdl, weld::Calendar&, void)
 {
     set_label_from_date();
+    m_aSelectHdl.Call(*this);
 }
 
 IMPL_LINK_NOARG(SvtCalendarBox, ActivateHdl, weld::Calendar&, void)

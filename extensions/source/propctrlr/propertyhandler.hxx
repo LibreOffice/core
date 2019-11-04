@@ -137,7 +137,6 @@ namespace pcr
 
         /** retrieves a window which can be used as parent for dialogs
         */
-        vcl::Window* impl_getDefaultDialogParent_nothrow() const;
         weld::Window* impl_getDefaultDialogFrame_nothrow() const;
 
         /** retrieves the property id for a given property name

@@ -28,6 +28,7 @@
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <vcl/scrbar.hxx>
 #include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
@@ -71,48 +72,30 @@ namespace pcr
     typedef std::vector< ListBoxLine > ListBoxLines;
 
 
-    class OBrowserListBox final : public Control
-                            ,public IButtonClickListener
+    class OBrowserListBox final : public IButtonClickListener
     {
-        VclPtr<Window>              m_aLinesPlayground;
-        VclPtr<ScrollBar>           m_aVScroll;
-        VclPtr<InspectorHelpWindow> m_pHelpWindow;
+        std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
+        std::unique_ptr<weld::Container> m_xLinesPlayground;
+        std::unique_ptr<weld::SizeGroup> m_xSizeGroup;
+        std::unique_ptr<InspectorHelpWindow> m_xHelpWindow;
+        weld::Container*            m_pInitialControlParent;
         ListBoxLines                m_aLines;
         IPropertyLineListener*      m_pLineListener;
         IPropertyControlObserver*   m_pControlObserver;
-        long                        m_nYOffset;
-        long                        m_nCurrentPreferredHelpHeight;
         css::uno::Reference< css::inspection::XPropertyControl >
                                     m_xActiveControl;
         sal_uInt16                  m_nTheNameSize;
-        long                        m_nRowHeight;
-        std::set<ListBoxLines::size_type> m_aOutOfDateLines;
-        bool                    m_bIsActive : 1;
-        bool                    m_bUpdate : 1;
+        int                         m_nRowHeight;
+        bool                        m_bInterimBuilder;
         ::rtl::Reference< PropertyControlContext_Impl >
                                     m_pControlContextImpl;
 
-        void    PositionLine( ListBoxLines::size_type _nIndex );
-        void    UpdatePosNSize();
         void    UpdatePlayGround();
-        void    UpdateVScroll();
         void    ShowEntry(sal_uInt16 nPos);
-        void    MoveThumbTo(sal_Int32 nNewThumbPos);
-        void    Resize() override;
 
     public:
-        explicit                    OBrowserListBox( vcl::Window* pParent );
-
-                                    virtual ~OBrowserListBox() override;
-        virtual void                dispose() override;
-
-        void                        ActivateListBox( bool _bActive );
-
-        sal_uInt16                  CalcVisibleLines();
-        void                        EnableUpdate();
-        void                        DisableUpdate();
-        bool                        EventNotify( NotifyEvent& _rNEvt ) override;
-        virtual bool                PreNotify( NotifyEvent& _rNEvt ) override;
+        explicit OBrowserListBox(weld::Builder& rBuilder, weld::Container* pContainer, bool bInterimBuilder);
+        ~OBrowserListBox();
 
         void                        SetListener( IPropertyLineListener* _pListener );
         void                        SetObserver( IPropertyControlObserver* _pObserver );
@@ -153,10 +136,6 @@ namespace pcr
         // IButtonClickListener
         void    buttonClicked( OBrowserLine* _pLine, bool _bPrimary ) override;
 
-        using Window::SetHelpText;
-
-        DECL_LINK( ScrollHdl, ScrollBar*, void );
-
         /** retrieves the index of a given control in our line list
             @param _rxControl
                 The control to lookup. Must denote a control of one of the lines in ->m_aLines
@@ -194,8 +173,6 @@ namespace pcr
             currently don't have a help section
         */
         long        impl_getPrefererredHelpHeight();
-
-        using Window::Activate;
     };
 
 
