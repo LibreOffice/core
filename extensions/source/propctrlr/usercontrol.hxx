@@ -28,49 +28,43 @@
 
 class SvNumberFormatsSupplierObj;
 
-
 namespace pcr
 {
-
-
-    //= NumberFormatSampleField
-
-    class NumberFormatSampleField : public FormattedField
-    {
-    public:
-        NumberFormatSampleField( vcl::Window* _pParent, WinBits _nStyle )
-            : FormattedField(_pParent, _nStyle)
-            , m_pHelper(nullptr)
-        {
-        }
-
-        void         SetFormatSupplier( const SvNumberFormatsSupplierObj* pSupplier );
-        void         setControlHelper( CommonBehaviourControlHelper& _rControlHelper ) { m_pHelper = &_rControlHelper; }
-
-    protected:
-        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
-    private:
-        CommonBehaviourControlHelper* m_pHelper;
-    };
-
-
     //= OFormatSampleControl
-
-    typedef CommonBehaviourControl< css::inspection::XPropertyControl, NumberFormatSampleField > OFormatSampleControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::Container> OFormatSampleControl_Base;
     class OFormatSampleControl : public OFormatSampleControl_Base
     {
+    private:
+        std::unique_ptr<weld::FormattedSpinButton> m_xSpinButton;
+        std::unique_ptr<weld::Entry> m_xEntry;
+
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+
     public:
-        explicit OFormatSampleControl( vcl::Window* pParent );
+        OFormatSampleControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
         virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
-        void SetFormatSupplier( const SvNumberFormatsSupplierObj* _pSupplier )
+        virtual void SAL_CALL disposing() override
         {
-            getTypedControlWindow()->SetFormatSupplier( _pSupplier );
+            m_xEntry.reset();
+            m_xSpinButton.reset();
+            OFormatSampleControl_Base::disposing();
         }
+
+        virtual void SetModifyHandler() override
+        {
+            m_xEntry->connect_focus_in( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );
+            m_xEntry->connect_focus_out( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
+            m_xSpinButton->connect_value_changed(LINK(this, CommonBehaviourControlHelper, FormattedModifiedHdl));
+        }
+
+        void SetFormatSupplier(const SvNumberFormatsSupplierObj* pSupplier);
+
+        virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
 
         /** returns the default preview value for the given format key
         *
@@ -78,29 +72,25 @@ namespace pcr
         * \param _nFormatKey the format key
         * \return current date or time or the value 1234.56789
         */
-        static double getPreviewValue(SvNumberFormatter const * _pNF, sal_Int32 _nFormatKey);
+        static double getPreviewValue(SvNumberFormatter const * pNF, sal_Int32 nFormatKey);
 
     private:
         static double getPreviewValue( const SvNumberformat& i_rEntry );
     };
 
-
     //= FormatDescription
-
     struct FormatDescription
     {
         SvNumberFormatsSupplierObj*     pSupplier;
         sal_Int32                       nKey;
     };
 
-
     //= OFormattedNumericControl
-
-    typedef CommonBehaviourControl< css::inspection::XPropertyControl, FormattedField > OFormattedNumericControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::FormattedSpinButton> OFormattedNumericControl_Base;
     class OFormattedNumericControl : public OFormattedNumericControl_Base
     {
     public:
-        OFormattedNumericControl( vcl::Window* pParent, WinBits nWinStyle);
+        OFormattedNumericControl(std::unique_ptr<weld::FormattedSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -110,52 +100,46 @@ namespace pcr
         void SetFormatDescription( const FormatDescription& rDesc );
 
         // make some FormattedField methods available
-        void SetDecimalDigits(sal_uInt16 nPrecision) { getTypedControlWindow()->SetDecimalDigits(nPrecision); }
-        void SetDefaultValue(double dDef) { getTypedControlWindow()->SetDefaultValue(dDef); }
-        void EnableEmptyField(bool bEnable) { getTypedControlWindow()->EnableEmptyField(bEnable); }
-        void SetThousandsSep(bool bEnable) { getTypedControlWindow()->SetThousandsSep(bEnable); }
+        void SetDecimalDigits(sal_uInt16 nPrecision) { getTypedControlWindow()->set_digits(nPrecision); }
+        void SetDefaultValue(double dDef) { getTypedControlWindow()->set_value(dDef); }
+
+        virtual void SetModifyHandler() override
+        {
+            OFormattedNumericControl_Base::SetModifyHandler();
+            getTypedControlWindow()->connect_value_changed(LINK(this, CommonBehaviourControlHelper, FormattedModifiedHdl));
+        }
+
+        virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
 
     protected:
         virtual ~OFormattedNumericControl() override;
     };
 
-
     //= OFileUrlControl
-
-    typedef CommonBehaviourControl< css::inspection::XPropertyControl, ::svt::FileURLBox > OFileUrlControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, URLBox> OFileUrlControl_Base;
     class OFileUrlControl : public OFileUrlControl_Base
     {
     public:
-        explicit OFileUrlControl( vcl::Window* pParent );
+        OFileUrlControl(std::unique_ptr<URLBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
         virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
+        virtual void SetModifyHandler() override
+        {
+            OFileUrlControl_Base::SetModifyHandler();
+            getTypedControlWindow()->connect_changed(LINK(this, CommonBehaviourControlHelper, ModifiedHdl));
+        }
+
+        virtual weld::Widget* getWidget() override { return getTypedControlWindow()->getWidget(); }
+
     protected:
         virtual ~OFileUrlControl() override;
     };
 
-
-    //= OTimeDurationControl
-
-    class OTimeDurationControl : public ONumericControl
-    {
-    public:
-        explicit OTimeDurationControl( vcl::Window* pParent );
-        virtual ~OTimeDurationControl() override;
-
-        // XPropertyControl
-        ::sal_Int16 SAL_CALL getControlType() override;
-
-    private:
-        DECL_LINK( OnCustomConvert, MetricFormatter&, void );
-    };
-
-
 } // namespace pcr
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_USERCONTROL_HXX
 

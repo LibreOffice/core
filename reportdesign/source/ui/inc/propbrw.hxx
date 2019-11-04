@@ -28,6 +28,7 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/layout.hxx>
 #include <svx/svdmark.hxx>
 
 namespace rptui
@@ -42,6 +43,8 @@ class OObjectBase;
 
 class PropBrw final : public DockingWindow , public SfxListener, public SfxBroadcaster
 {
+    VclPtr<VclVBox> m_xContentArea;
+
     css::uno::Reference< css::uno::XComponentContext >
                         m_xInspectorContext;
     css::uno::Reference< css::uno::XComponentContext >
@@ -50,8 +53,6 @@ class PropBrw final : public DockingWindow , public SfxListener, public SfxBroad
                         m_xMeAsFrame;
     css::uno::Reference< css::inspection::XObjectInspector >
                         m_xBrowserController;
-    css::uno::Reference< css::awt::XWindow >
-                        m_xBrowserComponentWindow;
     css::uno::Reference< css::uno::XInterface>
                         m_xLastSection; /// is the previously displayed section
     OUString            m_sLastActivePage;
@@ -62,7 +63,6 @@ class PropBrw final : public DockingWindow , public SfxListener, public SfxBroad
     PropBrw(PropBrw const &) = delete;
     void operator =(PropBrw const &) = delete;
 
-    virtual void Resize() override;
     virtual bool Close() override;
 
     css::uno::Sequence< css::uno::Reference< css::uno::XInterface> >

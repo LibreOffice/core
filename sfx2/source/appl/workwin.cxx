@@ -969,10 +969,8 @@ SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const vcl::Window* rWindow ) const
     return nullptr;
 }
 
-
 void SfxWorkWindow::ShowChildren_Impl()
 {
-
     bool bInvisible = ( !IsVisible_Impl() || ( !pWorkWin->IsReallyVisible() && !pWorkWin->IsReallyShown() ));
 
     for (std::unique_ptr<SfxChild_Impl>& pCli : aChildren)
