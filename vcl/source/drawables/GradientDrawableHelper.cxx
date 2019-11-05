@@ -80,6 +80,77 @@ bool GradientDrawableHelper::AddGradientActions(OutputDevice* pRenderContext,
     return true;
 }
 
+void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
+                                                          tools::Rectangle const& rRect,
+                                                          Gradient const& rGradient)
+{
+    GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
+    if (!pMetaFile)
+        return;
+
+    tools::Rectangle aGradientStepRect, aGradientMirroredStepRect;
+    Point aCenter;
+    double fBorderWidth;
+
+    // note that the inital gradient step and mirrored gradient step is the same as the border
+    std::tie(aGradientStepRect, aGradientMirroredStepRect, aCenter, fBorderWidth)
+        = GetStepValues(rGradient, rRect);
+
+    // Create border
+    tools::Rectangle aGradientBorderRect = aGradientStepRect;
+    tools::Rectangle aGradientMirroredBorderRect = aGradientMirroredStepRect;
+
+    long nStartRed, nStartGreen, nStartBlue;
+    long nEndRed, nEndGreen, nEndBlue;
+
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue)
+        = GetColorIntensities(rGradient);
+
+    sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
+
+    AddGradientBorderActions(pRenderContext, rGradient, aGradientBorderRect,
+                             aGradientMirroredBorderRect, aCenter, nAngle, fBorderWidth, nStartRed,
+                             nStartGreen, nStartBlue);
+
+    AddGradientSteps(pRenderContext, rGradient, aGradientBorderRect, aGradientStepRect,
+                     aGradientMirroredStepRect, aCenter, fBorderWidth, nAngle, nStartRed,
+                     nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
+}
+
+void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
+                                                tools::Rectangle const& rRect,
+                                                Gradient const& rGradient,
+                                                tools::PolyPolygon const* pClixPolyPoly)
+{
+    tools::Rectangle aGradientStepRect, aGradientMirroredStepRect;
+    Point aCenter;
+    double fBorderWidth;
+
+    // note that the inital gradient step and mirrored gradient step is the same as the border
+    std::tie(aGradientStepRect, aGradientMirroredStepRect, aCenter, fBorderWidth)
+        = GetStepValues(rGradient, rRect);
+
+    // Create border
+    tools::Rectangle aGradientBorderRect = aGradientStepRect;
+    tools::Rectangle aGradientMirroredBorderRect = aGradientMirroredStepRect;
+
+    sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
+
+    long nStartRed, nStartGreen, nStartBlue;
+    long nEndRed, nEndGreen, nEndBlue;
+
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue)
+        = GetColorIntensities(rGradient);
+
+    DrawGradientBorder(pRenderContext, rGradient, pClixPolyPoly, aGradientBorderRect,
+                       aGradientMirroredBorderRect, aCenter, nAngle, fBorderWidth, nStartRed,
+                       nStartGreen, nStartBlue);
+
+    DrawGradientSteps(pRenderContext, rGradient, pClixPolyPoly, aGradientBorderRect,
+                      aGradientStepRect, aGradientMirroredStepRect, aCenter, nAngle, fBorderWidth,
+                      nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
+}
+
 Color GradientDrawableHelper::GetSingleColorGradientFill(OutputDevice* pRenderContext)
 {
     // we should never call on this function if any of these aren't set!
@@ -406,43 +477,6 @@ tools::Rectangle GradientDrawableHelper::SetGradientMirroredStepBottom(
     return aGradientMirroredStepRect;
 }
 
-void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
-                                                          tools::Rectangle const& rRect,
-                                                          Gradient const& rGradient)
-{
-    GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
-    if (!pMetaFile)
-        return;
-
-    tools::Rectangle aGradientStepRect, aGradientMirroredStepRect;
-    Point aCenter;
-    double fBorderWidth;
-
-    // note that the inital gradient step and mirrored gradient step is the same as the border
-    std::tie(aGradientStepRect, aGradientMirroredStepRect, aCenter, fBorderWidth)
-        = GetStepValues(rGradient, rRect);
-
-    // Create border
-    tools::Rectangle aGradientBorderRect = aGradientStepRect;
-    tools::Rectangle aGradientMirroredBorderRect = aGradientMirroredStepRect;
-
-    long nStartRed, nStartGreen, nStartBlue;
-    long nEndRed, nEndGreen, nEndBlue;
-
-    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue)
-        = GetColorIntensities(rGradient);
-
-    sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
-
-    AddGradientBorderActions(pRenderContext, rGradient, aGradientBorderRect,
-                             aGradientMirroredBorderRect, aCenter, nAngle, fBorderWidth, nStartRed,
-                             nStartGreen, nStartBlue);
-
-    AddGradientSteps(pRenderContext, rGradient, aGradientBorderRect, aGradientStepRect,
-                     aGradientMirroredStepRect, aCenter, fBorderWidth, nAngle, nStartRed,
-                     nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
-}
-
 void GradientDrawableHelper::SetFillColor(OutputDevice* pRenderContext, long nStartRed,
                                           long nStartGreen, long nStartBlue)
 {
@@ -578,40 +612,6 @@ void GradientDrawableHelper::DrawGradientSteps(
         pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
     else
         pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
-}
-
-void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
-                                                tools::Rectangle const& rRect,
-                                                Gradient const& rGradient,
-                                                tools::PolyPolygon const* pClixPolyPoly)
-{
-    tools::Rectangle aGradientStepRect, aGradientMirroredStepRect;
-    Point aCenter;
-    double fBorderWidth;
-
-    // note that the inital gradient step and mirrored gradient step is the same as the border
-    std::tie(aGradientStepRect, aGradientMirroredStepRect, aCenter, fBorderWidth)
-        = GetStepValues(rGradient, rRect);
-
-    // Create border
-    tools::Rectangle aGradientBorderRect = aGradientStepRect;
-    tools::Rectangle aGradientMirroredBorderRect = aGradientMirroredStepRect;
-
-    sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
-
-    long nStartRed, nStartGreen, nStartBlue;
-    long nEndRed, nEndGreen, nEndBlue;
-
-    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue)
-        = GetColorIntensities(rGradient);
-
-    DrawGradientBorder(pRenderContext, rGradient, pClixPolyPoly, aGradientBorderRect,
-                       aGradientMirroredBorderRect, aCenter, nAngle, fBorderWidth, nStartRed,
-                       nStartGreen, nStartBlue);
-
-    DrawGradientSteps(pRenderContext, rGradient, pClixPolyPoly, aGradientBorderRect,
-                      aGradientStepRect, aGradientMirroredStepRect, aCenter, nAngle, fBorderWidth,
-                      nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 }
 
 void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRenderContext,
