@@ -57,6 +57,19 @@ DECLARE_OOXMLEXPORT_TEST(TDF120315, "tdf120315.docx")
                              .Position);
 }
 
+DECLARE_OOXMLEXPORT_TEST(TDF124367, "tdf124367.docx")
+{
+    // tdf#124367 Text flox changed because the cells had separators bad location
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2762) ,
+                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             xTableRows->getByIndex(2), "TableColumnSeparators")[0]
+                             .Position);
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
