@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -15,6 +15,9 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -171,37 +174,41 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="customslideshow">
-                            <property name="label" translatable="yes" context="presentationdialog|customslideshow">_Custom slide show:</property>
+                          <object class="GtkGrid" id="grid">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">allslides</property>
-                            <accessibility>
-                              <relation type="label-for" target="customslideshow_cb"/>
-                            </accessibility>
+                            <property name="can_focus">False</property>
+                            <property name="column_spacing">12</property>
+                            <child>
+                              <object class="GtkRadioButton" id="customslideshow">
+                                <property name="label" translatable="yes" context="presentationdialog|customslideshow">_Custom slide show:</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                                <property name="xalign">0</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">allslides</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="customslideshow_cb">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="customslideshow_cb">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
-                            <property name="hexpand">True</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="customslideshow"/>
-                            </accessibility>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">3</property>
                           </packing>
                         </child>
                       </object>
@@ -641,8 +648,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
-      <placeholder/>
-    </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel1">
+    <widgets>
+      <widget name="from"/>
+      <widget name="allslides"/>
+      <widget name="customslideshow"/>
+      <widget name="presdisplay_label"/>
+    </widgets>
   </object>
 </interface>
