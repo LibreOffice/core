@@ -70,7 +70,7 @@
 
 namespace
 {
-    void lcl_convertStringArguments(std::unique_ptr<SfxItemSet>& pArgs)
+    void lcl_convertStringArguments(sal_uInt16 nSlot, std::unique_ptr<SfxItemSet>& pArgs)
     {
         Color aColor;
         OUString sColor;
@@ -85,8 +85,22 @@ namespace
             else
                 aColor = Color(sColor.toInt32(16));
 
-            SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
-            pArgs->Put(aColorItem);
+            switch (nSlot)
+            {
+                case SID_ATTR_CHAR_COLOR:
+                {
+                    SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
+                    pArgs->Put(aColorItem);
+                    break;
+                }
+
+                case SID_ATTR_CHAR_BACK_COLOR:
+                {
+                    SvxBackgroundColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
+                    pArgs->Put(pBackgroundItem);
+                    break;
+                }
+            }
         }
     }
 }
@@ -761,7 +775,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             }
 
             std::unique_ptr<SfxItemSet> pNewArgs = pArgs->Clone();
-            lcl_convertStringArguments(pNewArgs);
+            lcl_convertStringArguments(nSlot, pNewArgs);
             mpView->SetAttributes(*pNewArgs);
 
             // invalidate entire shell because of performance and
