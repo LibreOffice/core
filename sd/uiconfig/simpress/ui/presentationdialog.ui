@@ -188,6 +188,9 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">allslides</property>
+                                <accessibility>
+                                  <relation type="label-for" target="customslideshow_cb"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -199,6 +202,9 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="customslideshow"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
