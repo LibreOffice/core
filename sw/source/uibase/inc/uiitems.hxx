@@ -90,7 +90,7 @@ public:
           SwNumRule* GetNumRule()               { return pRule.get(); }
 };
 
-class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem
+class SwPaMItem : public SfxPoolItem
 {
     SwPaM* const m_pPaM;
 

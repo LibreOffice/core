@@ -266,7 +266,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC TabPageUIObject final : public WindowUIObject
+class TabPageUIObject final : public WindowUIObject
 {
 private:
     VclPtr<TabPage> mxTabPage;
@@ -382,7 +382,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC TabControlUIObject final : public WindowUIObject
+class TabControlUIObject final : public WindowUIObject
 {
 private:
     VclPtr<TabControl> mxTabControl;

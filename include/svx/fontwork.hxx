@@ -71,7 +71,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkChildWindow final : public SfxChi
 /** Floating window for setting attributes of text effects
   */
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
+class SAL_WARN_UNUSED SvxFontWorkDialog : public SfxDockingWindow
 {
 #define CONTROLLER_COUNT 11
 

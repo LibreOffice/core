@@ -12,7 +12,7 @@
 
 #include <sfx2/templatelocalview.hxx>
 
-class SFX2_DLLPUBLIC TemplateDefaultView final : public TemplateLocalView
+class TemplateDefaultView final : public TemplateLocalView
 {
 public:
     TemplateDefaultView(Window *pParent);

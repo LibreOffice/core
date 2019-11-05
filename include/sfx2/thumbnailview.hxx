@@ -160,13 +160,13 @@ public:
  *
  **/
 
-class SFX2_DLLPUBLIC ThumbnailViewBase
+class ThumbnailViewBase
 {
     friend class ThumbnailViewAcc;
     friend class ThumbnailViewItemAcc;
 
-    SFX2_DLLPRIVATE virtual sal_uInt16 ImplGetVisibleItemCount() const = 0;
-    SFX2_DLLPRIVATE virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos) = 0;
+    virtual sal_uInt16 ImplGetVisibleItemCount() const = 0;
+    virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos) = 0;
 
     virtual css::uno::Reference<css::accessibility::XAccessible> getAccessible() = 0;
 

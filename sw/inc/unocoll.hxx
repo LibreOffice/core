@@ -295,7 +295,7 @@ cppu::WeakImplHelper
     css::lang::XServiceInfo
 > SwXFramesBaseClass;
 
-class SW_DLLPUBLIC SwXFrames : public SwXFramesBaseClass,
+class SwXFrames : public SwXFramesBaseClass,
     public SwUnoCollection
 {
     const FlyCntType    m_eType;

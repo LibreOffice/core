@@ -46,7 +46,7 @@ enum class NumberingPageType
     BITMAP
 };
 
-class SVX_DLLPUBLIC SvxNumValueSet final : public ValueSet
+class SvxNumValueSet final : public ValueSet
 {
     NumberingPageType ePageType;
     tools::Rectangle       aOrgRect;
