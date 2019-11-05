@@ -74,6 +74,9 @@ void X11SkiaSalGraphicsImpl::createSurface()
     assert(SkToBool(mWindowContext)); // TODO
     mSurface = mWindowContext->getBackbufferSurface();
     assert(mSurface.get());
+#ifdef DBG_UTIL
+    prefillSurface();
+#endif
 }
 
 void X11SkiaSalGraphicsImpl::DeInit()

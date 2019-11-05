@@ -237,6 +237,10 @@ protected:
     };
     static RenderMethod renderMethodToUse();
 
+#ifdef DBG_UTIL
+    void prefillSurface();
+#endif
+
     SalGraphics& mParent;
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mProvider;
