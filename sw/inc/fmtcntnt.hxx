@@ -28,7 +28,7 @@ class SwNodeIndex;
 class SwStartNode;
 
 /// Content, content of frame (header, footer, fly).
-class SW_DLLPUBLIC SwFormatContent: public SfxPoolItem
+class SwFormatContent: public SfxPoolItem
 {
     std::unique_ptr<SwNodeIndex> m_pStartNode;
 

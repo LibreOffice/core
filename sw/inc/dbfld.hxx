@@ -242,7 +242,7 @@ public:
 };
 
 // Database field.
-class SW_DLLPUBLIC SwDBNameField final : public SwDBNameInfField
+class SwDBNameField final : public SwDBNameInfField
 {
 public:
     SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData);

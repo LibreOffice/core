@@ -127,7 +127,7 @@ enum class SwFontScript
 // mostly used as a "unknown script" marker
 #define SW_SCRIPTS (SwFontScript(int(SwFontScript::LAST)+1))
 
-class SW_DLLPUBLIC SwFont
+class SwFont
 {
     // CJK == Chinese, Japanese, Korean
     // CTL == Complex text layout ( Hebrew, Arabic )

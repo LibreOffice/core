@@ -161,7 +161,7 @@ public:
     void            ResetDescriptor();
     //copy text from a given source PaM
     void            SetSelection(SwPaM& rCopySource);
-    static SW_DLLPUBLIC SdrObject *GetOrCreateSdrObject(SwFlyFrameFormat &rFormat);
+    static SdrObject *GetOrCreateSdrObject(SwFlyFrameFormat &rFormat);
 };
 
 typedef cppu::WeakImplHelper

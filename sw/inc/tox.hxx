@@ -252,7 +252,7 @@ typedef std::vector<SwFormToken> SwFormTokens;
    Helper class that converts vectors of tokens to strings and vice
    versa.
  */
-class SW_DLLPUBLIC SwFormTokensHelper
+class SwFormTokensHelper
 {
     /// the tokens
     SwFormTokens m_Tokens;

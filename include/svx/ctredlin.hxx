@@ -115,7 +115,7 @@ public:
     DECL_LINK(HeaderBarClick, int, void);
 };
 
-class SVX_DLLPUBLIC SvxTPage
+class SvxTPage
 {
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
