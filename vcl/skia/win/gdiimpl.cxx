@@ -66,6 +66,9 @@ void WinSkiaSalGraphicsImpl::createSurface()
     assert(SkToBool(mWindowContext)); // TODO
     mSurface = mWindowContext->getBackbufferSurface();
     assert(mSurface.get());
+#ifdef DBG_UTIL
+    prefillSurface();
+#endif
 }
 
 void WinSkiaSalGraphicsImpl::DeInit()
