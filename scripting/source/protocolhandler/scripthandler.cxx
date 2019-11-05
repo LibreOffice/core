@@ -46,6 +46,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <framework/documentundoguard.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
@@ -70,7 +71,7 @@ namespace scripting_protocolhandler
 void SAL_CALL ScriptProtocolHandler::initialize(
     const css::uno::Sequence < css::uno::Any >& aArguments )
 {
-    if ( m_bInitialised )
+    if ( m_bInitialised || officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get() )
     {
         return ;
     }
