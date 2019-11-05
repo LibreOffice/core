@@ -71,7 +71,7 @@ namespace scripting_protocolhandler
 void SAL_CALL ScriptProtocolHandler::initialize(
     const css::uno::Sequence < css::uno::Any >& aArguments )
 {
-    if ( m_bInitialised || officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get() )
+    if ( m_bInitialised )
     {
         return ;
     }
@@ -123,6 +123,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     const URL& aURL, const Sequence < PropertyValue >& lArgs,
     const Reference< XDispatchResultListener >& xListener )
 {
+    if (officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get())
+        return;
+
     bool bSuccess = false;
     Any invokeResult;
     bool bCaughtException = false;
