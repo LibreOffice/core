@@ -89,7 +89,7 @@ public:
     FontWeight getFontWeight() const { return meWeight; }
 };
 
-class VCL_DLLPUBLIC TextAttribProtect final : public TextAttrib
+class TextAttribProtect final : public TextAttrib
 {
 public:
                             TextAttribProtect();

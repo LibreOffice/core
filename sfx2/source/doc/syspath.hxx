@@ -22,7 +22,7 @@
 
 #include <sfx2/dllapi.h>
 
-class SFX2_DLLPUBLIC SystemPath
+class SystemPath
 {
 public:
     static bool GetUserTemplateLocation(sal_Unicode*, int nSize);

@@ -35,7 +35,7 @@ class EditEngine;
     case denotes the destination position, the two parameters the
     start and the end of the moved paragraph range.
  */
-class EDITENG_DLLPUBLIC SvxEditSourceHint : public TextHint
+class SAL_DLLPUBLIC_RTTI SvxEditSourceHint : public TextHint
 {
 private:
     sal_Int32   mnStart;

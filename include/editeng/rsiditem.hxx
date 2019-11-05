@@ -16,7 +16,7 @@
 // SvxRsidItem
 
 
-class EDITENG_DLLPUBLIC SvxRsidItem final : public SfxUInt32Item
+class SAL_DLLPUBLIC_RTTI SvxRsidItem final : public SfxUInt32Item
 {
 public:
     SvxRsidItem( sal_uInt32 nRsid, sal_uInt16 nId ) : SfxUInt32Item( nId, nRsid ) {}

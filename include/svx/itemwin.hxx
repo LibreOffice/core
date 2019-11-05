@@ -84,7 +84,7 @@ public:
     void            RefreshDlgUnit();
 };
 
-class SVX_DLLPUBLIC SvxFillTypeBox final : public FillTypeLB
+class SAL_DLLPUBLIC_RTTI SvxFillTypeBox final : public FillTypeLB
 {
 public:
     SvxFillTypeBox( vcl::Window* pParent );

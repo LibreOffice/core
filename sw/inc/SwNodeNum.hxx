@@ -26,7 +26,7 @@ class SwTextNode;
 struct SwPosition;
 class SwNumRule;
 
-class SW_DLLPUBLIC SwNodeNum : public SwNumberTreeNode
+class SwNodeNum : public SwNumberTreeNode
 {
 public:
 

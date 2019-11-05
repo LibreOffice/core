@@ -41,7 +41,7 @@ enum class RndStdIds;
     of Writer fly frames (derived classes of <SwFlyFrame>) and of drawing objects
     (derived classes of <SwAnchoredDrawObject>).
 */
-class SW_DLLPUBLIC SwAnchoredObject
+class SAL_DLLPUBLIC_RTTI SwAnchoredObject
 {
     private:
         // drawing object representing the anchored object in the drawing layer

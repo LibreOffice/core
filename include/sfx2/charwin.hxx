@@ -71,7 +71,7 @@ public:
     void ContextMenuSelect(const OString& rIdent);
 };
 
-class SFX2_DLLPUBLIC SvxCharViewControl final : public Control
+class SvxCharViewControl final : public Control
 {
 public:
     SvxCharViewControl(vcl::Window* pParent);
