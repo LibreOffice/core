@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_026d3931",
+        "filename": "sc/source/core/data/global.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-11-05T13:26:52Z",
+      "side": 1,
+      "message": "Instead of copy-pasting and duplicating the code from ShouldOpenURL() please modify the ShouldOpenURL() code such that it can take a bBypassCtrlClickSecurity parameter into account.",
+      "revId": "546e0a982cedc42e5b78dce2f2928031440232da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
