@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_42f3310b",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-11-05T08:21:58Z",
+      "side": 1,
+      "message": "assignment is unnecessary",
+      "range": {
+        "startLine": 595,
+        "startChar": 12,
+        "endLine": 596,
+        "endChar": 46
+      },
+      "revId": "1d7a825243f902f79ee0adbcb6498015eaa45e14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_62f66dfc",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-11-05T08:21:58Z",
+      "side": 1,
+      "message": "assignment is unnecessary",
+      "range": {
+        "startLine": 622,
+        "startChar": 0,
+        "endLine": 623,
+        "endChar": 46
+      },
+      "revId": "1d7a825243f902f79ee0adbcb6498015eaa45e14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
