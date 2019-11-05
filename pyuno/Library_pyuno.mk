@@ -23,9 +23,14 @@ $(eval $(call gb_Library_use_api,pyuno,\
     udkapi \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,pyuno,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_libraries,pyuno,\
     cppu \
     cppuhelper \
+    comphelper \
     sal \
     salhelper \
 ))

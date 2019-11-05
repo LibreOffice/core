@@ -42,6 +42,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -333,7 +334,8 @@ static Mutex & getInitMutex()
 static css::uno::Reference<XInterface> JavaComponentLoader_CreateInstance(const css::uno::Reference<XComponentContext> & xCtx)
 {
     css::uno::Reference<XInterface> xRet;
-
+    if (officecfg::Office::Common::Security::Scripting::DisableScriptExecution::get())
+        return xRet;
     try {
         MutexGuard guard( getInitMutex() );
         // The javaloader is never destroyed and there can be only one!

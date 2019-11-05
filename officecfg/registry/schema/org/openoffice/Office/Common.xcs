@@ -2719,6 +2719,15 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="DisableScriptExecution" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether the script execution is disabled.
+            This will disable Java, Beanshell, Javascript and Python scripting
+            (also extensions in those languages won't work anymore).
+            </desc>
+          </info>
+          <value>false</value>
+        </prop>
         <set oor:name="TrustedAuthors" oor:node-type="TrustedAuthor">
           <info>
             <desc>List with trusted authors.</desc>

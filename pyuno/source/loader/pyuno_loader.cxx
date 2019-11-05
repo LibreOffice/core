@@ -33,6 +33,7 @@
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -243,6 +244,9 @@ static Reference<XInterface> CreateInstance(const Reference<XComponentContext> &
     static PythonInit s_Init;
 
     Reference< XInterface > ret;
+
+    if (officecfg::Office::Common::Security::Scripting::DisableScriptExecution::get())
+        return ret;
 
     PyThreadAttach attach( PyInterpreterState_Head() );
     {
