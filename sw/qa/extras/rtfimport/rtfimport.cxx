@@ -60,8 +60,9 @@ protected:
     AllSettings m_aSavedSettings;
 };
 
-DECLARE_RTFIMPORT_TEST(testN695479, "n695479.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testN695479)
 {
+    load(mpTestDocumentPath, "n695479.rtf");
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
                                                          uno::UNO_QUERY);
