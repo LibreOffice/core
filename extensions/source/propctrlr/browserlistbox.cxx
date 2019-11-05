@@ -1059,10 +1059,6 @@ namespace pcr
 
             // the old control and some data about it
             Reference< XPropertyControl > xControl = rLine.pLine->getControl();
-            vcl::Window* pControlWindow = rLine.pLine->getControlWindow();
-            Point aControlPos;
-            if ( pControlWindow )
-                aControlPos = pControlWindow->GetPosPixel();
 
             // clean up the old control
             lcl_implDisposeControl_nothrow( xControl );
