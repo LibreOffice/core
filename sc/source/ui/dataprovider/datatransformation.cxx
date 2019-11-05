@@ -486,7 +486,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
                         if(rtl::math::isSignBitSet(nVal))
-                        rDoc.SetValue(rCol, nRow, 0, -1 * nVal);
+                            rDoc.SetValue(rCol, nRow, 0, -1 * nVal);
                     }
                 }
             }

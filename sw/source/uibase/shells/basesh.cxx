@@ -1237,11 +1237,14 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         default:
             bMore = true;
     }
-    if(bMore && pArgs)
-    {
-        pItem = nullptr;
-        pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
-        if(pItem)
+
+
+    if(!bMore || !pArgs)
+        return;
+
+    pItem = nullptr;
+    pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
+    if(pItem)
         switch(nSlot)
         {
         case SID_ATTR_BRUSH:
@@ -1304,8 +1307,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         default:
                 OSL_FAIL("wrong Dispatcher");
         }
-
-    }
 }
 
 // Here the state for SID_IMAP / SID_CONTOUR will be handled

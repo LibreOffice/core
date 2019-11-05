@@ -184,7 +184,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sSuffix == "text" ||
                         sSuffix == "graphic" ||
                         sSuffix == "ole" )
-                    sText = sText.copy( 0, nFound - 1);
+                        sText = sText.copy( 0, nFound - 1);
                 }
                 // #i104300#
                 // special handling if target is a cross-reference bookmark

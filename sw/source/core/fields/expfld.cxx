@@ -368,7 +368,7 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
             m_bLateInitialization = false;
             if( !(GetSubType() & nsSwGetSetExpType::GSE_STRING) &&
                 static_cast< SwSetExpFieldType* >(pSetExpField)->GetType() == nsSwGetSetExpType::GSE_STRING )
-            SetSubType( nsSwGetSetExpType::GSE_STRING );
+                SetSubType( nsSwGetSetExpType::GSE_STRING );
         }
     }
 

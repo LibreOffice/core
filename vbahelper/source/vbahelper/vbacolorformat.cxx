@@ -124,7 +124,7 @@ ScVbaColorFormat::getSchemeColor()
     for( ; i < 56; i++ )
     {
         if( nColor == MsoColorIndices::getColorIndex(i) )
-       break;
+            break;
     }
 
     if( i == 56 ) // this is most likely an error condition

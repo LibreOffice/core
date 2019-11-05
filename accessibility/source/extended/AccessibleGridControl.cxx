@@ -162,7 +162,7 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
 
             if( xCurrChildComp.is() &&
                 VCLRectangle( xCurrChildComp->getBounds() ).IsInside( aPoint ) )
-            xChild = xCurrChild;
+                xChild = xCurrChild;
         }
     }
     return xChild;

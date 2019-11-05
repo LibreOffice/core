@@ -368,7 +368,7 @@ void HelpTextWindow::ImplShow()
     VclPtr<HelpTextWindow> xWindow( this );
     Show( true, ShowFlags::NoActivate );
     if( !xWindow->IsDisposed() )
-    Update();
+        Update();
 }
 
 void HelpTextWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )

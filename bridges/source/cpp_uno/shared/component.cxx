@@ -217,7 +217,7 @@ SAL_DLLPUBLIC_EXPORT void uno_ext_getMapping(
             (*(*ppMapping)->release)( *ppMapping );
         }
         if (pMapping)
-        *ppMapping = pMapping;
+            *ppMapping = pMapping;
     }
 }
 

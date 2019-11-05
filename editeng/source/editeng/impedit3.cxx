@@ -4565,7 +4565,7 @@ bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
             nShrink /= 10000;
             long nNewWidth = pTextPortion->GetExtraInfos()->nOrgWidth - nShrink;
             if ( nNewWidth < pTextPortion->GetSize().Width() )
-            pTextPortion->GetSize().setWidth( nNewWidth );
+                pTextPortion->GetSize().setWidth( nNewWidth );
         }
     }
     return bCompressed;

@@ -2282,7 +2282,7 @@ void ScViewFunc::SetWidthOrHeight(
 
         pDocSh->UpdateOle(&GetViewData());
         if( !pDocSh->IsReadOnly() )
-        aModificator.SetDocumentModified();
+            aModificator.SetDocumentModified();
     }
 
     if ( bWidth )

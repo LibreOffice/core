@@ -472,7 +472,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                 {
                     SdrObject* pDrawObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
                     if( pDrawObj )
-                    aDrawObjs.push_back( pDrawObj );
+                        aDrawObjs.push_back( pDrawObj );
                 }
             }
             // loop on marked drawing objects

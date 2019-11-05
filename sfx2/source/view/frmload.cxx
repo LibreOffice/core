@@ -538,35 +538,35 @@ SfxInterfaceId SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const
     try
     {
         if ( nViewId == SFX_INTERFACE_NONE )
-        do
-        {
-            Reference< XViewDataSupplier > xViewDataSupplier( i_rDocument.GetModel(), UNO_QUERY );
-            Reference< XIndexAccess > xViewData;
-            if ( xViewDataSupplier.is() )
-                xViewData.set( xViewDataSupplier->getViewData() );
+            do
+            {
+                Reference< XViewDataSupplier > xViewDataSupplier( i_rDocument.GetModel(), UNO_QUERY );
+                Reference< XIndexAccess > xViewData;
+                if ( xViewDataSupplier.is() )
+                    xViewData.set( xViewDataSupplier->getViewData() );
 
-            if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
-                // no view data stored together with the model
-                break;
+                if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
+                    // no view data stored together with the model
+                    break;
 
-            // obtain the ViewID from the view data
-            Sequence< PropertyValue > aViewData;
-            if ( !( xViewData->getByIndex( 0 ) >>= aViewData ) )
-                break;
+                // obtain the ViewID from the view data
+                Sequence< PropertyValue > aViewData;
+                if ( !( xViewData->getByIndex( 0 ) >>= aViewData ) )
+                    break;
 
-            ::comphelper::NamedValueCollection aNamedViewData( aViewData );
-            OUString sViewId = aNamedViewData.getOrDefault( "ViewId", OUString() );
-            if ( sViewId.isEmpty() )
-                break;
+                ::comphelper::NamedValueCollection aNamedViewData( aViewData );
+                OUString sViewId = aNamedViewData.getOrDefault( "ViewId", OUString() );
+                if ( sViewId.isEmpty() )
+                    break;
 
-            // somewhat weird convention here ... in the view data, the ViewId is a string, effectively describing
-            // a view name. In the document load descriptor, the ViewId is in fact the numeric ID.
+                // somewhat weird convention here ... in the view data, the ViewId is a string, effectively describing
+                // a view name. In the document load descriptor, the ViewId is in fact the numeric ID.
 
-            SfxViewFactory* pViewFactory = i_rDocument.GetFactory().GetViewFactoryByViewName( sViewId );
-            if ( pViewFactory )
-                nViewId = pViewFactory->GetOrdinal();
-        }
-        while ( false );
+                SfxViewFactory* pViewFactory = i_rDocument.GetFactory().GetViewFactoryByViewName( sViewId );
+                if ( pViewFactory )
+                    nViewId = pViewFactory->GetOrdinal();
+            }
+            while ( false );
     }
     catch( const Exception& )
     {

@@ -482,7 +482,7 @@ namespace svt
             AsynchGetFocus();
 
         if (!(IsEditing() && aController->GetWindow().IsEnabled() && aController->WantMouseEvent()))
-return;
+            return;
 
 // forwards the event to the control
 

@@ -1009,7 +1009,7 @@ inline void TYPELIB_DANGER_GET( typelib_TypeDescription** ppMacroTypeDescr,
     {
         typelib_typedescriptionreference_getDescription( ppMacroTypeDescr, pMacroTypeRef );
         if (*ppMacroTypeDescr)
-        typelib_typedescription_release( *ppMacroTypeDescr );
+            typelib_typedescription_release( *ppMacroTypeDescr );
     }
     else
     {

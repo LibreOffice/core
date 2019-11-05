@@ -196,7 +196,7 @@ void remove_dotdot(char *path)
               *tp++ = *fp; /* move all the pointers down */
             } while (*fp++);
             if (cp != components)
-            cp--;   /* go back and check for nested ".." */
+                cp--;   /* go back and check for nested ".." */
         } else {
             cp++;
         }
