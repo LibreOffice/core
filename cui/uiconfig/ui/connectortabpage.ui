@@ -414,4 +414,15 @@
       <widget name="FT_VERT_2"/>
     </widgets>
   </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget">
+    <widgets>
+      <widget name="MTR_FLD_LINE_1"/>
+      <widget name="MTR_FLD_LINE_2"/>
+      <widget name="MTR_FLD_LINE_3"/>
+      <widget name="MTR_FLD_HORZ_1"/>
+      <widget name="MTR_FLD_HORZ_2"/>
+      <widget name="MTR_FLD_VERT_1"/>
+      <widget name="MTR_FLD_VERT_2"/>
+    </widgets>
+  </object>
 </interface>
