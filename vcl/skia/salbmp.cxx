@@ -55,7 +55,8 @@ SkiaSalBitmap::SkiaSalBitmap(const SkImage& image)
 
 bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
 {
-    Destroy();
+    mBitmap.reset();
+    mBuffer.reset();
     if (!isValidBitCount(nBitCount))
         return false;
     // Skia only supports 8bit gray, 16bit and 32bit formats (e.g. 24bpp is actually stored as 32bpp).
@@ -96,7 +97,7 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
         int bitScanlineWidth;
         if (o3tl::checked_multiply<int>(rSize.Width(), nBitCount, bitScanlineWidth))
         {
-            SAL_WARN("vcl.gdi", "checked multiply failed");
+            SAL_WARN("vcl.skia", "checked multiply failed");
             return false;
         }
         mScanlineSize = AlignedWidth4Bytes(bitScanlineWidth);
@@ -120,6 +121,7 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
     mPalette = rPal;
     mBitCount = nBitCount;
     mSize = rSize;
+    SAL_INFO("vcl.skia", "create(" << this << ")");
     return true;
 }
 
@@ -154,11 +156,13 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
             mBuffer.reset(newBuffer);
             mScanlineSize = src.mScanlineSize;
         }
+        SAL_INFO("vcl.skia", "create(" << this << "): (" << &src << ")");
         return true;
     }
     if (!Create(src.mSize, src.mBitCount, src.mPalette))
         return false;
     // TODO copy data
+    SAL_INFO("vcl.skia", "copy(" << this << "): (" << &src << ")");
     abort();
     return true;
 }
@@ -174,6 +178,7 @@ bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanv
 
 void SkiaSalBitmap::Destroy()
 {
+    SAL_INFO("vcl.skia", "destroy(" << this << ")");
     mBitmap.reset();
     mBuffer.reset();
 }
@@ -309,6 +314,7 @@ const SkBitmap& SkiaSalBitmap::GetSkBitmap() const
                     data.release(), mSize.Width() * 4,
                     [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
                 abort();
+            SAL_INFO("vcl.skia", "skbitmap(" << this << ")");
         }
         else
         {
@@ -324,6 +330,7 @@ const SkBitmap& SkiaSalBitmap::GetSkBitmap() const
                     data.release(), mSize.Width() * 4,
                     [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
                 abort();
+            SAL_INFO("vcl.skia", "skbitmap(" << this << ")");
         }
     }
     return mBitmap;
@@ -347,6 +354,7 @@ const SkBitmap& SkiaSalBitmap::GetAlphaSkBitmap() const
                          [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); },
                          nullptr))
                 abort();
+            SAL_INFO("vcl.skia", "skalphabitmap(" << this << ")");
         }
         else
         {
@@ -378,6 +386,7 @@ const SkBitmap& SkiaSalBitmap::GetAlphaSkBitmap() const
                 .setPixelRef(sk_ref_sp(bitmap8->pixelRef()), bitmap8->pixelRefOrigin().x(),
                              bitmap8->pixelRefOrigin().y());
             delete convertedBitmap;
+            SAL_INFO("vcl.skia", "skalphabitmap(" << this << ")");
             return mAlphaBitmap;
         }
     }

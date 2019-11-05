@@ -215,6 +215,8 @@ protected:
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 
     bool isOffscreen() const { return mProvider == nullptr || mProvider->IsOffScreen(); }
+    // TODO mainly for debugging purposes
+    bool isGPU() const;
 
     void invert(basegfx::B2DPolygon const& rPoly, SalInvert eFlags);
 
@@ -240,6 +242,14 @@ protected:
 #ifdef DBG_UTIL
     void prefillSurface();
 #endif
+
+    template <typename charT, typename traits>
+    friend inline std::basic_ostream<charT, traits>&
+    operator<<(std::basic_ostream<charT, traits>& stream, const SkiaSalGraphicsImpl* graphics)
+    { // O - offscreen, G - GPU-based, R - raster
+        return stream << (void*)graphics << " " << Size(graphics->GetWidth(), graphics->GetHeight())
+                      << (graphics->isOffscreen() ? "O" : "") << (graphics->isGPU() ? "G" : "R");
+    }
 
     SalGraphics& mParent;
     /// Pointer to the SalFrame or SalVirtualDevice
