@@ -82,6 +82,13 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
         {
             return false;
         }
+#ifdef DBG_UTIL
+        // fill with random garbage
+        sal_uInt8* buffer = static_cast<sal_uInt8*>(mBitmap.getPixels());
+        size_t size = mBitmap.rowBytes() & mBitmap.height();
+        for (size_t i = 0; i < size; i++)
+            buffer[i] = (i & 0xFF);
+#endif
     }
     else
     {
@@ -101,7 +108,10 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
             allocate += sizeof(CANARY);
 #endif
             buffer = new sal_uInt8[allocate];
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
+            // fill with random garbage
+            for (size_t i = 0; i < allocate; i++)
+                buffer[i] = (i & 0xFF);
             memcpy(buffer + allocate - sizeof(CANARY), CANARY, sizeof(CANARY));
 #endif
         }

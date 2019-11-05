@@ -209,6 +209,9 @@ void SkiaSalGraphicsImpl::createSurface()
     // Create surface for offscreen graphics. Subclasses will create GPU-backed
     // surfaces as appropriate.
     mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
+#ifdef DBG_UTIL
+    prefillSurface();
+#endif
 }
 
 void SkiaSalGraphicsImpl::destroySurface()
@@ -1030,6 +1033,23 @@ void SkiaSalGraphicsImpl::dump(const SkBitmap& bitmap, const char* file)
     sk_sp<SkData> data = image->encodeToData();
     std::ofstream ostream(file, std::ios::binary);
     ostream.write(static_cast<const char*>(data->data()), data->size());
+}
+
+void SkiaSalGraphicsImpl::prefillSurface()
+{
+    // Pre-fill the surface with deterministic garbage.
+    SkBitmap bitmap;
+    bitmap.allocN32Pixels(2, 2);
+    SkPMColor* scanline;
+    scanline = bitmap.getAddr32(0, 0);
+    *scanline++ = SkPreMultiplyARGB(0xFF, 0xBF, 0x80, 0x40);
+    *scanline++ = SkPreMultiplyARGB(0xFF, 0x40, 0x80, 0xBF);
+    scanline = bitmap.getAddr32(0, 1);
+    *scanline++ = SkPreMultiplyARGB(0xFF, 0xE3, 0x5C, 0x13);
+    *scanline++ = SkPreMultiplyARGB(0xFF, 0x13, 0x5C, 0xE3);
+    SkPaint paint;
+    paint.setShader(bitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
+    mSurface->getCanvas()->drawPaint(paint);
 }
 #endif
 
