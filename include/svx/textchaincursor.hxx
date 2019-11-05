@@ -30,7 +30,7 @@ enum class CursorChainingEvent;
 struct ESelection;
 
 
-class SVX_DLLPUBLIC TextChainCursorManager
+class TextChainCursorManager
 {
 public:
     TextChainCursorManager(SdrObjEditView *pEditView, const SdrTextObj *pTextObj);

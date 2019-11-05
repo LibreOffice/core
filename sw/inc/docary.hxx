@@ -296,7 +296,7 @@ public:
 };
 
 /// Array of Undo-history.
-class SW_DLLPUBLIC SwSectionFormats final : public SwFormatsModifyBase<SwSectionFormat*>
+class SwSectionFormats final : public SwFormatsModifyBase<SwSectionFormat*>
 {
 public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
@@ -309,7 +309,7 @@ public:
 
 class SwTOXTypes : public std::vector<std::unique_ptr<SwTOXType>> {};
 
-class SW_DLLPUBLIC SwNumRuleTable final : public SwVectorModifyBase<SwNumRule*> {
+class SwNumRuleTable final : public SwVectorModifyBase<SwNumRule*> {
 public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

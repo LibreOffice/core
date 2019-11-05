@@ -383,7 +383,7 @@ namespace o3tl
     template<> struct typed_flags<TabitemFlags> : is_typed_flags<TabitemFlags, 0x0f> {};
 }
 
-class VCL_DLLPUBLIC TabitemValue final : public ImplControlValue
+class TabitemValue final : public ImplControlValue
 {
     public:
         TabitemFlags    mnAlignment;
