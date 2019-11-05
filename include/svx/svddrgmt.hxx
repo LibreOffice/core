@@ -28,7 +28,7 @@
 class SdrDragView;
 class SdrDragStat;
 
-class SdrDragEntry
+class SAL_DLLPUBLIC_RTTI SdrDragEntry
 {
 private:
     bool                        mbAddToTransparent : 1;
