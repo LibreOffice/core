@@ -2421,7 +2421,7 @@ void SAL_CALL SfxBaseModel::removeShapeEventListener( const css::uno::Reference<
         {
             rVec.erase(it2);
             if (rVec.empty())
-            m_pData->maShapeListeners.erase(it);
+                m_pData->maShapeListeners.erase(it);
         }
     }
 }

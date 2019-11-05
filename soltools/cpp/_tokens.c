@@ -513,8 +513,8 @@ void
     {
         if ( write(1, wbuf, (int)(wbp - wbuf)) != -1)
             wbp = wbuf;
-    else
-        exit(1);
+        else
+            exit(1);
     }
 }
 

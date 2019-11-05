@@ -132,7 +132,7 @@ static bool IsUserWordbook( const OUString& rFile )
                     if ( !strcmp(pMagicHeader, "WBSWG2")
                      ||  !strcmp(pMagicHeader, "WBSWG5")
                      ||  !strcmp(pMagicHeader, "WBSWG6") )
-                    bRet = true;
+                        bRet = true;
                 }
             }
         }

@@ -806,11 +806,11 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
         {
             sal_Int16 nType = 0;
             if( GetNodeType( xNode, nType ) )
-            switch( nType )
-            {
-                case css::presentation::EffectNodeType::TIMING_ROOT : aAnim.mnNodeType = 0x12; break;
-                case css::presentation::EffectNodeType::MAIN_SEQUENCE : aAnim.mnNodeType = 0x18; break;
-            }
+                switch( nType )
+                {
+                    case css::presentation::EffectNodeType::TIMING_ROOT : aAnim.mnNodeType = 0x12; break;
+                    case css::presentation::EffectNodeType::MAIN_SEQUENCE : aAnim.mnNodeType = 0x18; break;
+                }
         }
         break;
 

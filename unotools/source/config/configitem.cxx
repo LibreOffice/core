@@ -873,26 +873,26 @@ bool ConfigItem::ReplaceSetProperties(
                 {
                     bool bFound = comphelper::findValue(aSubNodeNames, rContainerSubNode) != -1;
                     if(!bFound)
-                    try
-                    {
-                        xCont->removeByName(rContainerSubNode);
-                    }
-                    catch (const Exception&)
-                    {
-                        if (isSimpleValueSet)
+                        try
                         {
-                            try
-                            {
-                                // #i37322#: fallback action: replace with <void/>
-                                xCont->replaceByName(rContainerSubNode, Any());
-                                // fallback successful: continue looping
-                                continue;
-                            }
-                            catch (Exception &)
-                            {} // propagate original exception, if fallback fails
+                            xCont->removeByName(rContainerSubNode);
                         }
-                        throw;
-                    }
+                        catch (const Exception&)
+                        {
+                            if (isSimpleValueSet)
+                            {
+                                try
+                                {
+                                    // #i37322#: fallback action: replace with <void/>
+                                    xCont->replaceByName(rContainerSubNode, Any());
+                                    // fallback successful: continue looping
+                                    continue;
+                                }
+                                catch (Exception &)
+                                {} // propagate original exception, if fallback fails
+                            }
+                            throw;
+                        }
                 }
                 try { xBatch->commitChanges(); }
                 catch (css::uno::Exception &)

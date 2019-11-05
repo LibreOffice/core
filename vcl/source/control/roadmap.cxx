@@ -690,7 +690,7 @@ void RoadmapItem::GrabFocus()
 void RoadmapItem::SetInteractive(bool _bInteractive)
 {
     if ( mpDescription )
-    mpDescription->SetInteractive(_bInteractive);
+        mpDescription->SetInteractive(_bInteractive);
 }
 
 void RoadmapItem::SetID(sal_Int16 ID)

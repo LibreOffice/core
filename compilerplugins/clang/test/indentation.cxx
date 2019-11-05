@@ -38,6 +38,39 @@ void top1(int x) {
          case 2: foo(); break; // 1expected-error {{statement mis-aligned compared to neighbours [loplugin:indentation]}}
     };
 
+
+    if (x)
+    foo(); // expected-error {{if body should be indented [loplugin:indentation]}}
+
+    if (x)
+    {
+        foo();
+    }
+
+    if (x)
+        ;
+    else
+    foo(); // expected-error {{else body should be indented [loplugin:indentation]}}
+
+    if (x)
+        ;
+    else
+    {
+        foo();
+    }
+
+    if (x)
+        ;
+     else  // expected-error {{if and else not aligned [loplugin:indentation]}}
+        foo();
+
+    if (x)
+    {
+    } else
+    {
+        foo();
+    }
+
 #if 0
     if (x)
         foo();

@@ -857,18 +857,18 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
   if (info->perfect) {
     if (info->num_components == 1) {
       if (!jtransform_perfect_transform(srcinfo->output_width,
-      srcinfo->output_height,
-      srcinfo->min_DCT_h_scaled_size_,
-      srcinfo->min_DCT_v_scaled_size_,
-      info->transform))
-    return FALSE;
+          srcinfo->output_height,
+          srcinfo->min_DCT_h_scaled_size_,
+          srcinfo->min_DCT_v_scaled_size_,
+          info->transform))
+        return FALSE;
     } else {
       if (!jtransform_perfect_transform(srcinfo->output_width,
-      srcinfo->output_height,
-      srcinfo->max_h_samp_factor * srcinfo->min_DCT_h_scaled_size_,
-      srcinfo->max_v_samp_factor * srcinfo->min_DCT_v_scaled_size_,
-      info->transform))
-    return FALSE;
+          srcinfo->output_height,
+          srcinfo->max_h_samp_factor * srcinfo->min_DCT_h_scaled_size_,
+          srcinfo->max_v_samp_factor * srcinfo->min_DCT_v_scaled_size_,
+          info->transform))
+        return FALSE;
     }
   }
 

@@ -543,7 +543,7 @@ SwLayNotify::~SwLayNotify()
             //Thereby the subordinates are retouched clean.
             //Example problem: Take the Flys with the handles and downsize.
             //Not for body and page, otherwise it flickers when loading HTML.
-            pLay->SetCompletePaint();
+                pLay->SetCompletePaint();
         }
     }
     //Notify Lower if the position has changed.

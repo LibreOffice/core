@@ -554,7 +554,7 @@ void PDFOutDev::processLink(Link* link, Catalog*)
 
     LinkAction* pAction = link->getAction();
     if (!(pAction && pAction->getKind() == actionURI))
-return;
+        return;
 
 #if POPPLER_CHECK_VERSION(0, 72, 0)
     const char* pURI = static_cast<LinkURI*>(pAction)->getURI()->c_str();

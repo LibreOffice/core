@@ -359,7 +359,7 @@ void PrinterInfoManager::initialize()
                                 const PPDValue* pPrinterValue = pPrinterKey->getValue( pDefValue->m_aOption );
                                 if( pPrinterValue )
                                     // the printer has a corresponding option for the key
-                                aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, pPrinterValue );
+                                    aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, pPrinterValue );
                             }
                             else
                                 aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, nullptr );

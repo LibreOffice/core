@@ -720,9 +720,9 @@ sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTra
     case TransitionType::FADE :
     {
         if ( nTransitionSubtype == TransitionSubType::CROSSFADE )
-        nPPTTransitionType = PPT_TRANSITION_TYPE_SMOOTHFADE;
+            nPPTTransitionType = PPT_TRANSITION_TYPE_SMOOTHFADE;
         else if ( nTransitionSubtype == TransitionSubType::FADEOVERCOLOR )
-        nPPTTransitionType = PPT_TRANSITION_TYPE_FADE;
+            nPPTTransitionType = PPT_TRANSITION_TYPE_FADE;
     }
     break;
     case TransitionType::PUSHWIPE :

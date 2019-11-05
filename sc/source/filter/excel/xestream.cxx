@@ -482,7 +482,7 @@ void XclExpBiff8Encrypter::GetSalt( sal_uInt8 pnSalt[16] ) const
 void XclExpBiff8Encrypter::GetDocId( sal_uInt8 pnDocId[16] ) const
 {
     if ( sizeof( mpnDocId ) == 16 )
-    memcpy( pnDocId, mpnDocId, 16 );
+        memcpy( pnDocId, mpnDocId, 16 );
 }
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt8 nData )

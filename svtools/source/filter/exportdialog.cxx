@@ -722,7 +722,7 @@ void ExportDialog::setupSizeControls()
     mxLbSizeX->set_active( static_cast< sal_uInt16 >( nUnit ) );
 
     if ( !mbIsPixelFormat )      // TODO: (metafileresolutionsupport) should be supported for vector formats also... this makes
-return;
+        return;
 
 // sense eg for bitmap fillings in metafiles, to preserve high dpi output
                             // (atm without special vector support the bitmaps are rendered with 96dpi)

@@ -936,9 +936,9 @@ void SelectionFunction::ModeHandler::SwitchView (const model::SharedPageDescript
             (rpDescriptor->GetPage()->GetPageNum()-1)/2);
     }
     if (mrSlideSorter.GetViewShellBase() != nullptr)
-    framework::FrameworkHelper::Instance(*mrSlideSorter.GetViewShellBase())->RequestView(
-        framework::FrameworkHelper::msImpressViewURL,
-        framework::FrameworkHelper::msCenterPaneURL);
+        framework::FrameworkHelper::Instance(*mrSlideSorter.GetViewShellBase())->RequestView(
+            framework::FrameworkHelper::msImpressViewURL,
+            framework::FrameworkHelper::msCenterPaneURL);
 }
 
 void SelectionFunction::ModeHandler::StartDrag (

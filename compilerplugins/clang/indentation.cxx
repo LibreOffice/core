@@ -144,8 +144,10 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
         auto stmtLoc = compat::getBeginLoc(stmt);
 
         StringRef macroName;
+        bool partOfMacro = false;
         if (SM.isMacroArgExpansion(stmtLoc) || SM.isMacroBodyExpansion(stmtLoc))
         {
+            partOfMacro = true;
             macroName = Lexer::getImmediateMacroNameForDiagnostics(
                 stmtLoc, compiler.getSourceManager(), compiler.getLangOpts());
             // CPPUNIT_TEST_SUITE/CPPUNIT_TEST/CPPUNIT_TEST_SUITE_END work together, so the one is indented inside the other
@@ -213,6 +215,51 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
             //getParentStmt(compoundStmt)->dump();
             //stmt->dump();
         }
+
+        if (!partOfMacro)
+            if (auto ifStmt = dyn_cast<IfStmt>(stmt))
+            {
+                auto bodyStmt = ifStmt->getThen();
+                if (bodyStmt && !isa<CompoundStmt>(bodyStmt))
+                {
+                    stmtLoc = compat::getBeginLoc(bodyStmt);
+                    invalid1 = false;
+                    invalid2 = false;
+                    unsigned bodyColumn = SM.getPresumedColumnNumber(stmtLoc, &invalid1);
+                    unsigned bodyLine = SM.getPresumedLineNumber(stmtLoc, &invalid2);
+                    if (invalid1 || invalid2)
+                        return true;
+
+                    if (bodyLine != tmpLine && bodyColumn <= tmpColumn)
+                        report(DiagnosticsEngine::Warning, "if body should be indented", stmtLoc);
+                }
+
+                auto elseStmt = ifStmt->getElse();
+                if (elseStmt && !isa<CompoundStmt>(elseStmt) && !isa<IfStmt>(elseStmt))
+                {
+                    stmtLoc = compat::getBeginLoc(elseStmt);
+                    invalid1 = false;
+                    invalid2 = false;
+                    unsigned elseColumn = SM.getPresumedColumnNumber(stmtLoc, &invalid1);
+                    unsigned elseLine = SM.getPresumedLineNumber(stmtLoc, &invalid2);
+                    if (invalid1 || invalid2)
+                        return true;
+                    if (elseLine != tmpLine && elseColumn <= tmpColumn)
+                        report(DiagnosticsEngine::Warning, "else body should be indented", stmtLoc);
+                }
+                if (elseStmt && !isa<CompoundStmt>(bodyStmt))
+                {
+                    stmtLoc = ifStmt->getElseLoc();
+                    invalid1 = false;
+                    invalid2 = false;
+                    unsigned elseColumn = SM.getPresumedColumnNumber(stmtLoc, &invalid1);
+                    unsigned elseLine = SM.getPresumedLineNumber(stmtLoc, &invalid2);
+                    if (invalid1 || invalid2)
+                        return true;
+                    if (elseLine != tmpLine && elseColumn != tmpColumn)
+                        report(DiagnosticsEngine::Warning, "if and else not aligned", stmtLoc);
+                }
+            }
     }
     return true;
 }

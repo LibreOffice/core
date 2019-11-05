@@ -166,9 +166,9 @@ private:
 
             virtual css::uno::Any SAL_CALL nextElement(  ) override
             {
-                    if ( hasMoreElements() )
-                return css::uno::makeAny( *mIt++ );
-                    throw css::container::NoSuchElementException();
+                if ( hasMoreElements() )
+                    return css::uno::makeAny( *mIt++ );
+                throw css::container::NoSuchElementException();
             }
     };
 

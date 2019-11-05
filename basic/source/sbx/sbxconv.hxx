@@ -70,9 +70,12 @@ sal_Int64   ImpGetCurrency( const SbxValues* );
 void        ImpPutCurrency( SbxValues*, const sal_Int64 );
 
 inline  sal_Int64   ImpDoubleToCurrency( double d )
-                    {   if (d > 0) return static_cast<sal_Int64>( d * CURRENCY_FACTOR + 0.5);
-                              else return static_cast<sal_Int64>( d * CURRENCY_FACTOR - 0.5);
-                    }
+{
+    if (d > 0)
+        return static_cast<sal_Int64>( d * CURRENCY_FACTOR + 0.5);
+    else
+        return static_cast<sal_Int64>( d * CURRENCY_FACTOR - 0.5);
+}
 
 inline  double      ImpCurrencyToDouble( const sal_Int64 r )
                     { return static_cast<double>(r) / double(CURRENCY_FACTOR); }

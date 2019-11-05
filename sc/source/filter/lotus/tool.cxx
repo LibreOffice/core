@@ -135,9 +135,9 @@ double Snum32ToDouble( sal_uInt32 nValue )
     if (temp)
     {
         if (nValue & 0x00000010)
-                fValue /= pow(double(10), temp);
+            fValue /= pow(double(10), temp);
         else
-        fValue *= pow(double(10), temp);
+            fValue *= pow(double(10), temp);
     }
 
     if (nValue & 0x00000020)

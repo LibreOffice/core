@@ -2906,7 +2906,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                     const sal_uInt16 nWhich = pHt->Which();
                     if (RES_TXTATR_FIELD == nWhich ||
                         (HasFootnote() && pVoid && RES_TXTATR_FTN == nWhich))
-                    InvalidateRange(SwCharRange(nStart, TextFrameIndex(1)), 1);
+                        InvalidateRange(SwCharRange(nStart, TextFrameIndex(1)), 1);
                 }
             }
             // A new boss, a new chance for growing

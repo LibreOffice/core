@@ -152,8 +152,9 @@ inline const char* MzString::c_str() const
     {
         Data[Length] = '\0';                      // We always leave room for this.
         return Data;
-    } else
-    return "";
+    }
+    else
+        return "";
 }
 
 

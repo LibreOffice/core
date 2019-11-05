@@ -668,7 +668,7 @@ void PspSalInfoPrinter::GetPageInfo(
 
     // get the selected page size
     if( !aData.m_pParser )
-return;
+        return;
 
 
     OUString aPaper;
