@@ -63,7 +63,6 @@
 #include <futempl.hxx>
 #include <DrawDocShell.hxx>
 #include <futext.hxx>
-#include <svl/stritem.hxx>
 #include <editeng/colritem.hxx>
 
 #include <memory>
