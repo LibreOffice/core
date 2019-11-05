@@ -18,44 +18,30 @@
  */
 
 
-#include <comphelper_module.hxx>
-#include <comphelper_services.hxx>
-
 #include <rtl/instance.hxx>
-
-namespace comphelper { namespace module
-{
-
-
-    namespace
-    {
-        class doInitialize
-        {
-        public:
-            doInitialize()
-            {
-                createRegistryInfo_Map();
-            }
-        };
-
-        struct theInitializer : public rtl::Static< doInitialize, theInitializer > {};
-    }
-
-    static void initializeModule()
-    {
-        theInitializer::get();
-    }
-
-
-} } // namespace comphelper::module
+#include <enumerablemap.hxx>
+#include <cppuhelper/factory.hxx>
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* comphelp_component_getFactory(
     const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*,
     SAL_UNUSED_PARAMETER void* )
 {
-    ::comphelper::module::initializeModule();
-    return ::comphelper::module::ComphelperModule::getInstance().getComponentFactory( pImplementationName );
+    if ( comphelper::EnumerableMap::getImplementationName_static().equalsAscii(pImplementationName) )
+    {
+      css::uno::Reference< css::uno::XInterface > xReturn = ::cppu::createSingleComponentFactory(
+          comphelper::EnumerableMap::Create,
+          comphelper::EnumerableMap::getImplementationName_static(),
+          comphelper::EnumerableMap::getSupportedServiceNames_static(),
+          nullptr
+      );
+      if ( xReturn.is() )
+      {
+          xReturn->acquire();
+          return xReturn.get();
+      }
+    }
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

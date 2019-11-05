@@ -18,34 +18,22 @@
  */
 
 
-#include <comphelper_module.hxx>
-#include <comphelper_services.hxx>
 #include <comphelper/anytostring.hxx>
-#include <comphelper/anycompare.hxx>
-#include <comphelper/componentbase.hxx>
+#include <enumerablemap.hxx>
 
-#include <com/sun/star/container/XEnumerableMap.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
-#include <com/sun/star/beans/Pair.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
 #include <typelib/typedescription.hxx>
 
-#include <map>
-#include <memory>
 #include <utility>
 
 namespace comphelper
 {
-
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -76,36 +64,6 @@ namespace comphelper
     using ::com::sun::star::uno::TypeDescription;
     using ::com::sun::star::lang::DisposedException;
 
-    class MapEnumerator;
-
-    typedef std::map< Any, Any, LessPredicateAdapter > KeyedValues;
-    struct MapData
-    {
-        Type                                        m_aKeyType;
-        Type                                        m_aValueType;
-        std::unique_ptr< KeyedValues >            m_pValues;
-        std::shared_ptr< IKeyPredicateLess >      m_pKeyCompare;
-        bool                                        m_bMutable;
-        std::vector< MapEnumerator* >             m_aModListeners;
-
-        MapData()
-            :m_bMutable( true )
-        {
-        }
-
-        MapData( const MapData& _source )
-            :m_aKeyType( _source.m_aKeyType )
-            ,m_aValueType( _source.m_aValueType )
-            ,m_pValues( new KeyedValues( *_source.m_pValues ) )
-            ,m_pKeyCompare( _source.m_pKeyCompare )
-            ,m_bMutable( false )
-            ,m_aModListeners()
-        {
-        }
-    private:
-        MapData& operator=( const MapData& _source ) = delete;
-    };
-
 
     static void lcl_registerMapModificationListener( MapData& _mapData, MapEnumerator& _listener )
     {
@@ -134,65 +92,6 @@ namespace comphelper
     static void lcl_notifyMapDataListeners_nothrow( const MapData& _mapData );
 
 
-    // EnumerableMap
-
-    typedef ::cppu::WeakAggComponentImplHelper3 <   XInitialization
-                                                ,   XEnumerableMap
-                                                ,   XServiceInfo
-                                                > Map_IFace;
-
-    class EnumerableMap: public Map_IFace, public ComponentBase
-    {
-    protected:
-        EnumerableMap();
-        virtual ~EnumerableMap() override;
-
-        // XInitialization
-        virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
-
-        // XEnumerableMap
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createKeyEnumeration( sal_Bool Isolated ) override;
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createValueEnumeration( sal_Bool Isolated ) override;
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createElementEnumeration( sal_Bool Isolated ) override;
-
-        // XMap
-        virtual Type SAL_CALL getKeyType() override;
-        virtual Type SAL_CALL getValueType() override;
-        virtual void SAL_CALL clear(  ) override;
-        virtual sal_Bool SAL_CALL containsKey( const Any& _key ) override;
-        virtual sal_Bool SAL_CALL containsValue( const Any& _value ) override;
-        virtual Any SAL_CALL get( const Any& _key ) override;
-        virtual Any SAL_CALL put( const Any& _key, const Any& _value ) override;
-        virtual Any SAL_CALL remove( const Any& _key ) override;
-
-        // XElementAccess (base of XMap)
-        virtual Type SAL_CALL getElementType() override;
-        virtual sal_Bool SAL_CALL hasElements() override;
-
-        // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    public:
-        // XServiceInfo, static version (used for component registration)
-        static OUString getImplementationName_static(  );
-        static Sequence< OUString > getSupportedServiceNames_static(  );
-        static Reference< XInterface > Create( const Reference< XComponentContext >& );
-
-    private:
-        void    impl_initValues_throw( const Sequence< Pair< Any, Any > >& _initialValues );
-
-        /// throws an IllegalTypeException if the given value is not compatible with our ValueType
-        void    impl_checkValue_throw( const Any& _value ) const;
-        void    impl_checkKey_throw( const Any& _key ) const;
-        void    impl_checkNaN_throw( const Any& _keyOrValue, const Type& _keyOrValueType ) const;
-        void    impl_checkMutable_throw() const;
-
-    private:
-        ::osl::Mutex        m_aMutex;
-        MapData             m_aData;
-    };
 
 
     enum EnumerationType
@@ -714,10 +613,5 @@ namespace comphelper
 
 } // namespace comphelper
 
-
-void createRegistryInfo_Map()
-{
-    ::comphelper::module::OAutoRegistration< ::comphelper::EnumerableMap > aAutoRegistration;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
