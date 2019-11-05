@@ -122,6 +122,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     const URL& aURL, const Sequence < PropertyValue >& lArgs,
     const Reference< XDispatchResultListener >& xListener )
 {
+    if (officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get())
+        return;
+
     bool bSuccess = false;
     Any invokeResult;
     bool bCaughtException = false;
