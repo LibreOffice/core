@@ -1524,7 +1524,7 @@ SvxColorItem Color SID_ATTR_CHAR_COLOR
 ]
 
 SvxBackgroundColorItem CharBackColor SID_ATTR_CHAR_BACK_COLOR
-
+(SfxStringItem Color SID_ATTR_COLOR_STR, SvxBackgroundColorItem CharBackColor SID_ATTR_CHAR_BACK_COLOR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
