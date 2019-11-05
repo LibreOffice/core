@@ -666,9 +666,9 @@ void DomainMapperTableManager::endOfRowAction()
                 for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
                     fGridWidth += (*pTableGrid)[nBorderGridIndex++];
 
-                double nRelPos = static_cast<double>((fGridWidth * 10000) / nFullWidthRelative);
+                double nRelPos = (fGridWidth * 10000) / nFullWidthRelative;
 
-                pSeparators[nBorder].Position = sal::static_int_cast< sal_Int16 >( nRelPos + nLastRelPos );
+                pSeparators[nBorder].Position = rtl::math::round(nRelPos + nLastRelPos);
                 pSeparators[nBorder].IsVisible = true;
                 nLastRelPos = nLastRelPos + nRelPos;
                 ++aSpansIter;

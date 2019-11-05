@@ -884,7 +884,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo59273, "fdo59273.docx")
 
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // Was 9997, so the 4th column had ~zero width
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(7498), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[2].Position);
+    CPPUNIT_ASSERT_LESSEQUAL(2, (sal_Int16(7500)
+                                 - getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                                       xTableRows->getByIndex(0), "TableColumnSeparators")[2]
+                                       .Position));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testConditionalstylesTablelook, "conditionalstyles-tbllook.docx")
