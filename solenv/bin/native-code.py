@@ -350,6 +350,7 @@ edit_constructor_list = [
     "com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation",
     "com_sun_star_comp_Writer_WriterModule_get_implementation",
+    "org_apache_openoffice_comp_sw_sidebar_SwPanelFactory_get_implementation",
     ]
 
 # math
