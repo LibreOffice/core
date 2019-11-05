@@ -2713,6 +2713,7 @@
         <prop oor:name="DisableMacrosExecution" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether the macro execution is disabled in general.
+            This will disable Basic, Beanshell, Javascript and Python scripts.
             If it is set to true, the "MacroSecurityLevel" is ignored. If it is
             set to false, the mentioned entry specified the level of macro
             security.</desc>
