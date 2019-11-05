@@ -223,7 +223,7 @@ public:
 /**
  * All geometrical data of an arbitrary object for use in undo/redo
  */
-class SdrObjGeoData
+class SAL_DLLPUBLIC_RTTI SdrObjGeoData
 {
 public:
     tools::Rectangle                   aBoundRect;
