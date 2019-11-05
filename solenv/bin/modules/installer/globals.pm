@@ -182,7 +182,6 @@ BEGIN
     $is_simple_packager_project = 0;
     $patch_user_dir = 0;
     $languagepack = 0;
-    $devsnapshotbuild = 0;
     $helppack = 0;
     $refresh_includepaths = 0;
     $include_paths_read = 0;
