@@ -831,27 +831,29 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             // TODO Cache the bitmap
             SkBitmap aBitmap;
             aBitmap.allocN32Pixels(4, 4);
+            const SkPMColor white = SkPreMultiplyARGB(0xFF, 0xFF, 0xFF, 0xFF);
+            const SkPMColor black = SkPreMultiplyARGB(0xFF, 0x00, 0x00, 0x00);
             SkPMColor* scanline;
             scanline = aBitmap.getAddr32(0, 0);
-            *scanline++ = 0xFFFFFFFF;
-            *scanline++ = 0xFFFFFFFF;
-            *scanline++ = 0xFF000000;
-            *scanline++ = 0xFF000000;
+            *scanline++ = white;
+            *scanline++ = white;
+            *scanline++ = black;
+            *scanline++ = black;
             scanline = aBitmap.getAddr32(0, 1);
-            *scanline++ = 0xFFFFFFFF;
-            *scanline++ = 0xFFFFFFFF;
-            *scanline++ = 0xFF000000;
-            *scanline++ = 0xFF000000;
+            *scanline++ = white;
+            *scanline++ = white;
+            *scanline++ = black;
+            *scanline++ = black;
             scanline = aBitmap.getAddr32(0, 2);
-            *scanline++ = 0xFF000000;
-            *scanline++ = 0xFF000000;
-            *scanline++ = 0xFFFFFFFF;
-            *scanline++ = 0xFFFFFFFF;
+            *scanline++ = black;
+            *scanline++ = black;
+            *scanline++ = white;
+            *scanline++ = white;
             scanline = aBitmap.getAddr32(0, 3);
-            *scanline++ = 0xFF000000;
-            *scanline++ = 0xFF000000;
-            *scanline++ = 0xFFFFFFFF;
-            *scanline++ = 0xFFFFFFFF;
+            *scanline++ = black;
+            *scanline++ = black;
+            *scanline++ = white;
+            *scanline++ = white;
             // The bitmap is repeated in both directions the checker pattern is as big
             // as the polygon (usually rectangle)
             aPaint.setShader(aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
