@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_bd2eeaa2",
+        "filename": "vcl/source/outdev/rect.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-11-05T23:39:28Z",
+      "side": 1,
+      "message": "That is most definitely the wrong place for such a fix",
+      "revId": "4a3dab5a4cd5c7a7039b2cef9d5bb14c1fff49c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
