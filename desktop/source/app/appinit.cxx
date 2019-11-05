@@ -38,6 +38,7 @@
 #include <uno/current_context.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <officecfg/Setup.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <osl/module.h>
 #include <rtl/uri.hxx>
@@ -141,6 +142,9 @@ static bool bAccept = false;
 
 void Desktop::createAcceptor(const OUString& aAcceptString)
 {
+    if (officecfg::Office::Common::Security::DisableExternalConnection::get())
+        return;
+
     // check whether the requested acceptor already exists
     AcceptorMap &rMap = acceptorMap::get();
     AcceptorMap::const_iterator pIter = rMap.find(aAcceptString);

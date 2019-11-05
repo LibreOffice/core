@@ -2542,6 +2542,16 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="DisableExternalConnection" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether the connection from external apps is disabled.
+          This will disable the command line option "--accept", meaning that no external
+          applications will be able to connect to LibreOffice.
+          Also the property `ooSetupConnectionURL` won't work anymore.
+          </desc>
+        </info>
+        <value>false</value>
+      </prop>
       <group oor:name="OpenPGP">
         <info>
           <desc>Contains security settings regarding the GnuPG/OpenPGP backend.</desc>
