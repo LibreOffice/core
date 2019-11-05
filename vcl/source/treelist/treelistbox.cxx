@@ -1027,6 +1027,9 @@ void SvTreeListBox::SelectEntry( vcl::StringEntryIdentifier _entry )
 
 bool SvTreeListBox::HandleKeyInput( const KeyEvent& _rKEvt )
 {
+    if ( _rKEvt.GetKeyCode().IsMod1() )
+        return false;
+
     if  (   IsEntryMnemonicsEnabled()
         &&  mpImpl->m_aMnemonicEngine.HandleKeyEvent( _rKEvt )
         )
