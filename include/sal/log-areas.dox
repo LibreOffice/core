@@ -496,6 +496,7 @@ certain functionality.
 @li @c vcl.scrollbar - Scroll Bars
 @li @c vcl.se - VCL Session Manager
 @li @c vcl.se.debug
+@li @c vcl.skia - drawing using the Skia library
 @li @c vcl.sm - Session Manager Client
 @li @c vcl.sm.debug
 @li @c vcl.uitest - The UI testing framework code
