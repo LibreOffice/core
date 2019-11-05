@@ -89,6 +89,17 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
     return bDone;
 }
 
+namespace
+{
+    bool parentNotDialogControl(Window* pWindow)
+    {
+        vcl::Window* pParent = getNonLayoutParent(pWindow);
+        if (!pParent)
+            return true;
+        return ((pParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL);
+    }
+}
+
 bool Window::EventNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
@@ -172,8 +183,7 @@ bool Window::EventNotify( NotifyEvent& rNEvt )
         // if the parent also has dialog control activated, the parent takes over control
         if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) || (rNEvt.GetType() == MouseNotifyEvent::KEYUP) )
         {
-            if ( ImplIsOverlapWindow() ||
-                 ((getNonLayoutParent(this)->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
+            if (ImplIsOverlapWindow() || parentNotDialogControl(this))
             {
                 bRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == MouseNotifyEvent::KEYINPUT );
             }
