@@ -1109,6 +1109,12 @@ void Dialog::EndDialog( long nResult )
     if ( mpDialogImpl && mpDialogImpl->maEndCtx.isSet() )
     {
         auto fn = std::move(mpDialogImpl->maEndCtx.maEndDialogFn);
+        // std::move leaves maEndDialogFn in a valid state with unspecified
+        // value. For the SwSyncBtnDlg case gcc and msvc left maEndDialogFn
+        // unset, but clang left maEndDialogFn at its original value, keeping
+        // an extra reference to the DialogController in its lambda giving
+        // an inconsistent lifecycle for the dialog. Force it to be unset.
+        mpDialogImpl->maEndCtx.maEndDialogFn = nullptr;
         fn(nResult);
     }
 
