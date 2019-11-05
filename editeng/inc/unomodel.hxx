@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase4.hxx>
 
-class EDITENG_DLLPUBLIC SvxSimpleUnoModel : public cppu::WeakAggImplHelper4<
+class SvxSimpleUnoModel : public cppu::WeakAggImplHelper4<
                                     css::frame::XModel,
                                     css::ucb::XAnyCompareFactory,
                                     css::style::XStyleFamiliesSupplier,

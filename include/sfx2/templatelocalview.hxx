@@ -63,7 +63,7 @@ private:
 };
 
 
-class SFX2_DLLPUBLIC TemplateLocalView : public ThumbnailView
+class TemplateLocalView : public ThumbnailView
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 

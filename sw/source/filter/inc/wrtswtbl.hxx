@@ -93,7 +93,7 @@ public:
 
 typedef std::vector<std::unique_ptr<SwWriteTableCell>> SwWriteTableCells;
 
-class SW_DLLPUBLIC SwWriteTableRow final
+class SwWriteTableRow final
 {
     SwWriteTableCells m_Cells;       ///< all cells of the rows
     const SvxBrushItem *pBackground; // background
@@ -154,7 +154,7 @@ inline bool SwWriteTableRow::operator<( const SwWriteTableRow& rRow ) const
 using SwWriteTableRows
     = o3tl::sorted_vector< std::unique_ptr<SwWriteTableRow>, o3tl::less_uniqueptr_to<SwWriteTableRow> >;
 
-class SW_DLLPUBLIC SwWriteTableCol
+class SwWriteTableCol
 {
     sal_uInt32 const nPos;                    // end position of the column
 

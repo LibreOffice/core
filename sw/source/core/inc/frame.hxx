@@ -127,7 +127,7 @@ namespace drawinglayer { namespace attribute {
 ///
 /// Added most important flags about the state of this geometric
 /// information and if it is valid or not
-class SW_DLLPUBLIC SwFrameAreaDefinition
+class SwFrameAreaDefinition
 {
 private:
     // The absolute position and size of the SwFrame in the document.

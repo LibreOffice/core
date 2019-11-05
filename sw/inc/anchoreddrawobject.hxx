@@ -25,7 +25,7 @@
 namespace tools { class Rectangle; }
 
 /** class for the positioning of drawing objects */
-class SW_DLLPUBLIC SwAnchoredDrawObject final : public SwAnchoredObject
+class SwAnchoredDrawObject final : public SwAnchoredObject
 {
     private:
         // boolean, indicating that the object position has been invalidated

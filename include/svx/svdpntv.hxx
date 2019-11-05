@@ -81,7 +81,7 @@ namespace sdr
 }
 
 
-class SVX_DLLPUBLIC SvxViewChangedHint final : public SfxHint
+class SvxViewChangedHint final : public SfxHint
 {
 public:
     explicit SvxViewChangedHint();

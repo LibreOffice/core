@@ -290,7 +290,7 @@ public:
 
 // The stack for the attributes:
 // this class may only be used by SvxRTFParser!
-class EDITENG_DLLPUBLIC SvxRTFItemStackType
+class SvxRTFItemStackType
 {
     friend class SvxRTFParser;
 

@@ -36,7 +36,7 @@ enum SwChapterFormat
     CF_NUM_NOPREPST_TITLE,      ///< chapter number without post-/prefix and title
 };
 
-class SW_DLLPUBLIC SwChapterFieldType final : public SwFieldType
+class SwChapterFieldType final : public SwFieldType
 {
 public:
     SwChapterFieldType();
