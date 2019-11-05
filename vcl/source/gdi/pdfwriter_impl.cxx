@@ -8699,8 +8699,23 @@ OString PDFWriterImpl::copyExternalResources(filter::PDFObjectElement& rPage, co
     if (auto pResources = dynamic_cast<filter::PDFDictionaryElement*>(rPage.Lookup("Resources")))
     {
         // Resources is a direct dictionary.
-        if (auto pDictionary = dynamic_cast<filter::PDFDictionaryElement*>(pResources->LookupElement(rKind)))
+        filter::PDFElement* pLookup = pResources->LookupElement(rKind);
+        if (auto pDictionary = dynamic_cast<filter::PDFDictionaryElement*>(pLookup))
+        {
+            // rKind is an inline dictionary.
             aItems = pDictionary->GetItems();
+        }
+        else if (auto pReference = dynamic_cast<filter::PDFReferenceElement*>(pLookup))
+        {
+            // rKind refers to a dictionary.
+            filter::PDFObjectElement* pReferenced = pReference->LookupObject();
+            if (!pReferenced)
+            {
+                return OString();
+            }
+
+            aItems = pReferenced->GetDictionaryItems();
+        }
     }
     else if (filter::PDFObjectElement* pPageResources = rPage.LookupObject("Resources"))
     {

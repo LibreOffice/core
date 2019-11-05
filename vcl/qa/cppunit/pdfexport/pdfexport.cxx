@@ -19,6 +19,9 @@
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -131,6 +134,7 @@ public:
     void testTdf115967();
     void testTdf121615();
     void testTocLink();
+    void testPdfImageResourceInlineXObjectRef();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -166,6 +170,7 @@ public:
     CPPUNIT_TEST(testTdf115967);
     CPPUNIT_TEST(testTdf121615);
     CPPUNIT_TEST(testTocLink);
+    CPPUNIT_TEST(testPdfImageResourceInlineXObjectRef);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1813,6 +1818,65 @@ void PdfExportTest::testTocLink()
     // Without the accompanying fix in place, this test would have failed, as FPDFLink_Enumerate()
     // returned false, as the page contained no links.
     CPPUNIT_ASSERT(FPDFLink_Enumerate(pPdfPage.get(), &nStartPos, &pLinkAnnot));
+}
+
+void PdfExportTest::testPdfImageResourceInlineXObjectRef()
+{
+    // Create an empty document.
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    CPPUNIT_ASSERT(mxComponent.is());
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+
+    // Insert the PDF image.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphicObject(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-image-resource-inline-xobject-ref.pdf";
+    xGraphicObject->setPropertyValue("GraphicURL", uno::makeAny(aURL));
+    uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
+    xShape->setSize(awt::Size(1000, 1000));
+    uno::Reference<text::XTextContent> xTextContent(xGraphicObject, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor->getStart(), xTextContent, /*bAbsorb=*/false);
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Init pdfium, vcl::ImportPDF() calls FPDF_DestroyLibrary after our setUp().
+    FPDF_LIBRARY_CONFIG config;
+    config.version = 2;
+    config.m_pUserFontPaths = nullptr;
+    config.m_pIsolate = nullptr;
+    config.m_v8EmbedderSlot = 0;
+    FPDF_InitLibraryWithConfig(&config);
+
+    // Parse the export result.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+
+    // Make sure that the page -> form -> form has a child image.
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
+    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pPageObject));
+    CPPUNIT_ASSERT_EQUAL(1, FPDFFormObj_CountObjects(pPageObject));
+    FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(pPageObject, 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pFormObject));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the sub-form was missing its image.
+    CPPUNIT_ASSERT_EQUAL(1, FPDFFormObj_CountObjects(pFormObject));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
