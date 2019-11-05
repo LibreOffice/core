@@ -903,7 +903,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                             || !pDoc->IsDocEditable()
                             || nVis < 2
                             || nTabSelCount == nTabCount)
-                        rSet.DisableItem( nWhich );
+                            rSet.DisableItem( nWhich );
                     }
                 }
                 break;

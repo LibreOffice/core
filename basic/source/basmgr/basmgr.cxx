@@ -197,7 +197,7 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager const * pM
                 pLib->MakeModule( aModuleName, aInfo, aMod );
             }
             else
-        pLib->MakeModule( aModuleName, aMod );
+                pLib->MakeModule( aModuleName, aMod );
         }
 
         pLib->SetModified( false );

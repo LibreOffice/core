@@ -367,7 +367,8 @@ void SchXMLImportHelper::DeleteDataSeries(
                     const Reference< chart2::XDataSeries > & xSeries,
                     const Reference< chart2::XChartDocument > & xDoc )
 {
-    if( xDoc.is() )
+    if( !xDoc.is() )
+        return;
     try
     {
         Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
@@ -584,7 +585,8 @@ void SAL_CALL SchXMLImport::setTargetDocument(const uno::Reference<lang::XCompon
 
     uno::Reference<chart2::XChartDocument> xChartDoc(GetModel(), uno::UNO_QUERY);
 
-    if (xChartDoc.is())
+    if (!xChartDoc.is())
+        return;
     try
     {
         // prevent rebuild of view during load (necessary especially if loaded not

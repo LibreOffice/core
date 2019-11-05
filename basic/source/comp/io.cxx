@@ -290,18 +290,18 @@ void SbiParser::Close()
     if( IsEoln( eCurTok ) )
         aGen.Gen( SbiOpcode::CLOSE_, 0 );
     else
-    for( ;; )
-    {
-        SbiExpression aExpr( this );
-        while( Peek() == COMMA || Peek() == SEMICOLON )
-            Next();
-        aExpr.Gen();
-        aGen.Gen( SbiOpcode::CHANNEL_ );
-        aGen.Gen( SbiOpcode::CLOSE_, 1 );
+        for( ;; )
+        {
+            SbiExpression aExpr( this );
+            while( Peek() == COMMA || Peek() == SEMICOLON )
+                Next();
+            aExpr.Gen();
+            aGen.Gen( SbiOpcode::CHANNEL_ );
+            aGen.Gen( SbiOpcode::CLOSE_, 1 );
 
-        if( IsEoln( Peek() ) )
-            break;
-    }
+            if( IsEoln( Peek() ) )
+                break;
+        }
 }
 
 

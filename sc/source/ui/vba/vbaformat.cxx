@@ -704,16 +704,17 @@ ScVbaFormat< Ifc... >::getReadingOrder(  )
         {
             text::WritingMode aWritingMode = text::WritingMode_LR_TB;
             if ( ( mxPropertySet->getPropertyValue(sWritingMode) ) >>= aWritingMode )
-            switch (aWritingMode){
-                case text::WritingMode_LR_TB:
-                    NRetReadingOrder <<= excel::Constants::xlLTR;
-                    break;
-                case text::WritingMode_RL_TB:
-                    NRetReadingOrder <<= excel::Constants::xlRTL;
-                    break;
-                default:
-                    NRetReadingOrder <<= excel::Constants::xlRTL;
-            }
+                switch (aWritingMode)
+                {
+                    case text::WritingMode_LR_TB:
+                        NRetReadingOrder <<= excel::Constants::xlLTR;
+                        break;
+                    case text::WritingMode_RL_TB:
+                        NRetReadingOrder <<= excel::Constants::xlRTL;
+                        break;
+                    default:
+                        NRetReadingOrder <<= excel::Constants::xlRTL;
+                }
         }
     }
     catch (const uno::Exception& )

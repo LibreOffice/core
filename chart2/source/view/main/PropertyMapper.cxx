@@ -405,7 +405,9 @@ void PropertyMapper::setMultiProperties(
         TOOLS_WARN_EXCEPTION("chart2", "" ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
     }
 
-    if(!bSuccess)
+    if(bSuccess)
+        return;
+
     try
     {
         sal_Int32 nCount = std::max( rNames.getLength(), rValues.getLength() );

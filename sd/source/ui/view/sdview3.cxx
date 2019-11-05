@@ -266,7 +266,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         SfxInPlaceClient* pIpClient = mpViewSh->GetViewShell()->GetIPClient();
         if( dynamic_cast< ::sd::slidesorter::SlideSorterViewShell *>( mpViewSh ) !=  nullptr
             || (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive()))
-        nPasteOptions |= SdrInsertFlags::DONTMARK;
+            nPasteOptions |= SdrInsertFlags::DONTMARK;
     }
 
     if( bDrag )

@@ -314,7 +314,7 @@ void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< 
                 // merged cells are ignored, but newly added columns will be added to leftovers
                 xCell.set( dynamic_cast< Cell* >(mxTable->getCellByPosition( nCol+1, nRow ).get() ) );
                 if( !xCell.is() || !xCell->isMerged() )
-                rLeftOvers[nRow] += nNewCols;
+                    rLeftOvers[nRow] += nNewCols;
             }
         }
         else

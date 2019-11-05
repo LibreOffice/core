@@ -450,7 +450,7 @@ void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
     {
         SwRootFrame* pLayout = pMaster->getRootFrame();
         if( pLayout && pLayout->IsAnyShellAccessible() )
-        pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
+            pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
     }
 }
 
@@ -496,7 +496,7 @@ void SwFlyFrame::UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
     {
         SwRootFrame* pLayout = pMaster->getRootFrame();
         if( pLayout && pLayout->IsAnyShellAccessible() )
-        pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
+            pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
     }
 }
 
@@ -761,7 +761,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 {
                     SwRootFrame* pLayout = getRootFrame();
                     if( pLayout && pLayout->IsAnyShellAccessible() )
-                    pSh->Imp()->InvalidateAccessibleEditableState( true, this );
+                        pSh->Imp()->InvalidateAccessibleEditableState( true, this );
                 }
             }
             break;

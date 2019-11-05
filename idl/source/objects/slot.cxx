@@ -313,7 +313,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList)
             {
                 nLow = nMid + 1;
                 if ( nLow == 0 )
-                break;
+                    break;
             }
             else
                 bFound = true;

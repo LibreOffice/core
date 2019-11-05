@@ -1112,7 +1112,7 @@ const SwFootnoteFrame *SwFootnoteBossFrame::FindFirstFootnote( SwContentFrame co
                 const SwFootnoteBossFrame* pBoss = pRet->GetRef()->FindFootnoteBossFrame();
                 if( pBoss->GetPhyPageNum() != nPageNum ||
                     nColNum != lcl_ColumnNum( pBoss ) )
-                pRet = nullptr;
+                    pRet = nullptr;
             }
         }
     }
@@ -2562,7 +2562,7 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
     {
         const SwViewShell *pSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
         if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-        nRet += BROWSE_HEIGHT - getFrameArea().Height();
+            nRet += BROWSE_HEIGHT - getFrameArea().Height();
     }
     return nRet;
 }

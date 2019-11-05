@@ -2260,7 +2260,7 @@ static void ImplHandleStartReconversion( vcl::Window *pWindow )
 {
     vcl::Window* pChild = ImplGetKeyInputWindow( pWindow );
     if( pChild )
-    ImplCallCommand( pChild, CommandEventId::PrepareReconversion );
+        ImplCallCommand( pChild, CommandEventId::PrepareReconversion );
 }
 
 static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,

@@ -732,32 +732,31 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     {
         if( aShapeInfo.meShapeType != XmlShapeTypeDrawPageShape && aShapeInfo.meShapeType != XmlShapeTypePresPageShape &&
             aShapeInfo.meShapeType != XmlShapeTypeHandoutShape && aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape )
-
-        try
-        {
-            bool bVisible = true;
-            bool bPrintable = true;
-
-            xSet->getPropertyValue(gsVisible) >>= bVisible;
-            xSet->getPropertyValue(gsPrintable) >>= bPrintable;
-
-            XMLTokenEnum eDisplayToken = XML_TOKEN_INVALID;
-            const unsigned short nDisplay = (bVisible ? 2 : 0) | (bPrintable ? 1 : 0);
-            switch( nDisplay )
+            try
             {
-            case 0: eDisplayToken = XML_NONE; break;
-            case 1: eDisplayToken = XML_PRINTER; break;
-            case 2: eDisplayToken = XML_SCREEN; break;
-            // case 3: eDisplayToken = XML_ALWAYS break; this is the default
-            }
+                bool bVisible = true;
+                bool bPrintable = true;
 
-            if( eDisplayToken != XML_TOKEN_INVALID )
-                mrExport.AddAttribute(XML_NAMESPACE_DRAW_EXT, XML_DISPLAY, eDisplayToken );
-        }
-        catch(const uno::Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("xmloff.draw");
-        }
+                xSet->getPropertyValue(gsVisible) >>= bVisible;
+                xSet->getPropertyValue(gsPrintable) >>= bPrintable;
+
+                XMLTokenEnum eDisplayToken = XML_TOKEN_INVALID;
+                const unsigned short nDisplay = (bVisible ? 2 : 0) | (bPrintable ? 1 : 0);
+                switch( nDisplay )
+                {
+                case 0: eDisplayToken = XML_NONE; break;
+                case 1: eDisplayToken = XML_PRINTER; break;
+                case 2: eDisplayToken = XML_SCREEN; break;
+                // case 3: eDisplayToken = XML_ALWAYS break; this is the default
+                }
+
+                if( eDisplayToken != XML_TOKEN_INVALID )
+                    mrExport.AddAttribute(XML_NAMESPACE_DRAW_EXT, XML_DISPLAY, eDisplayToken );
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("xmloff.draw");
+            }
     }
 
     // #82003# test export count

@@ -1173,7 +1173,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     {
         if ( (pPortionInfo->GetRefDevPtr() == GetRefDevice()) ||
              (pPortionInfo->RefDevIsVirtual() && GetRefDevice()->IsVirtual()) )
-        bUsePortionInfo = true;
+            bUsePortionInfo = true;
     }
 
     bool bConvertMetricOfItems = false;

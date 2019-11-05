@@ -1782,7 +1782,9 @@ public:
             if (NumericRange* NR =
                 dynamic_cast<NumericRange*>(vSubArguments[i].get()))
             {
-                bool needBody; NR->GenReductionLoopHeader(ss, needBody); if (!needBody)
+                bool needBody;
+                NR->GenReductionLoopHeader(ss, needBody);
+                if (!needBody)
                     continue;
             }
             else if (ParallelNumericRange* PNR =

@@ -175,7 +175,7 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
         css::uno::Reference< css::accessibility::XAccessibleContext >
             xParentContext( m_xParent->getAccessibleContext() );
         if( xParentContext.is() )
-        return xParentContext->getLocale();
+            return xParentContext->getLocale();
     }
     throw IllegalAccessibleComponentStateException();
 }

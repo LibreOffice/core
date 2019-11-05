@@ -1834,7 +1834,7 @@ void SAL_CALL SwXTextField::attach(
                 {
                     if (nSubType != nsSwGetSetExpType::GSE_STRING &&
                         static_cast< SwSetExpFieldType* >(pSetExpField)->GetType() == nsSwGetSetExpType::GSE_STRING)
-                    nSubType = nsSwGetSetExpType::GSE_STRING;
+                        nSubType = nsSwGetSetExpType::GSE_STRING;
                 }
                 else
                     bSetGetExpFieldUninitialized = true; // #i82544#
