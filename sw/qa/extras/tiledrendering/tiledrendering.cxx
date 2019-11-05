@@ -123,6 +123,7 @@ public:
     void testAnchorTypes();
     void testLanguageStatus();
     void testRedlineNotificationDuringSave();
+    void testHyperlink();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -185,6 +186,7 @@ public:
     CPPUNIT_TEST(testAnchorTypes);
     CPPUNIT_TEST(testLanguageStatus);
     CPPUNIT_TEST(testRedlineNotificationDuringSave);
+    CPPUNIT_TEST(testHyperlink);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -203,6 +205,8 @@ private:
     int m_nRedlineTableSizeChanged;
     int m_nRedlineTableEntryModified;
     int m_nTrackedChangeIndex;
+    OString m_sHyperlinkText;
+    OString m_sHyperlinkLink;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
@@ -331,6 +335,19 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                 m_nTrackedChangeIndex = -1;
             else
                 m_nTrackedChangeIndex = sIndex.toInt32();
+        }
+    }
+    break;
+    case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+    {
+        if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+        {
+            boost::property_tree::ptree aTree;
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, aTree);
+            boost::property_tree::ptree &aChild = aTree.get_child("hyperlink");
+            m_sHyperlinkText = aChild.get("text", "").c_str();
+            m_sHyperlinkLink = aChild.get("link", "").c_str();
         }
     }
     break;
@@ -2472,6 +2489,27 @@ void SwTiledRenderingTest::testRedlineNotificationDuringSave()
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // loop while sending not needed LOK notifications for redline changes during save.
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+}
+
+void SwTiledRenderingTest::testHyperlink()
+{
+    comphelper::LibreOfficeKit::setActive();
+    comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
+    SwXTextDocument* pXTextDocument = createDoc("hyperlink.odt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+
+    Point aStart = pShellCursor->GetSttPos();
+    aStart.setX(aStart.getX() + 1800);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1,
+                                   MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1,
+                                   MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OString("hyperlink"), m_sHyperlinkText);
+    CPPUNIT_ASSERT_EQUAL(OString("http://example.com/"), m_sHyperlinkLink);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
