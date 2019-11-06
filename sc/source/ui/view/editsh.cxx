@@ -53,6 +53,7 @@
 #include <vcl/transfer.hxx>
 #include <vcl/unohelp2.hxx>
 #include <svl/stritem.hxx>
+#include <editeng/colritem.hxx>
 
 #include <editsh.hxx>
 #include <global.hxx>
@@ -955,7 +956,24 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             {
                 if (pArgs)
                 {
-                    aSet.Put( pArgs->Get( pArgs->GetPool()->GetWhich( nSlot ) ) );
+                    Color aColor;
+                    OUString sColor;
+                    const SfxPoolItem* pColorStringItem = nullptr;
+
+                    if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_ATTR_COLOR_STR, false, &pColorStringItem ) )
+                    {
+                        sColor = static_cast<const SfxStringItem*>( pColorStringItem )->GetValue();
+                        if ( sColor == "transparent" )
+                            aColor = COL_TRANSPARENT;
+                        else
+                            aColor = Color( sColor.toInt32( 16 ) );
+
+                        aSet.Put( SvxColorItem( aColor, EE_CHAR_COLOR ) );
+                    }
+                    else
+                    {
+                        aSet.Put( pArgs->Get( pArgs->GetPool()->GetWhich( nSlot ) ) );
+                    }
                     rBindings.Invalidate( nSlot );
                 }
             }
