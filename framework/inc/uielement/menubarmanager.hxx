@@ -153,10 +153,12 @@ class MenuBarManager final :
                              css::uno::Reference< css::frame::XStatusListener > const & xManager,
                              css::uno::Reference< css::frame::XDispatch > const & rDispatch ) :
                              nItemId( aItemId ),
+                             bMadeInvisible ( false ),
                              xSubMenuManager( xManager ),
                              xMenuItemDispatch( rDispatch ) {}
 
             sal_uInt16                                                        nItemId;
+            bool                                                              bMadeInvisible;
             OUString                                                          aTargetFrame;
             OUString                                                          aMenuItemURL;
             OUString                                                          aParsedItemURL;
