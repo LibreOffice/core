@@ -42,7 +42,7 @@ private:
     css::uno::Reference< css::frame::XModel > mxModel;
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockGuard
+class ControllerLockGuard
 {
 public:
     explicit ControllerLockGuard( ChartModel& rModel );

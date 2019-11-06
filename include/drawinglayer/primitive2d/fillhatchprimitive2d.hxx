@@ -48,7 +48,7 @@ namespace drawinglayer
 
             The decomposition will deliver the hatch lines.
          */
-        class DRAWINGLAYER_DLLPUBLIC FillHatchPrimitive2D final : public DiscreteMetricDependentPrimitive2D
+        class FillHatchPrimitive2D final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             /// the geometrically visible area

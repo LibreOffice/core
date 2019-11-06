@@ -30,7 +30,7 @@
 //  class UnoControlBase
 
 
-class TOOLKIT_DLLPUBLIC UnoControlBase : public UnoControl
+class UnoControlBase : public UnoControl
 {
 protected:
     UnoControlBase() :UnoControl() {}

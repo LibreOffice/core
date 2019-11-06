@@ -30,7 +30,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XOutdevItemPool : public SfxItemPool
+class XOutdevItemPool : public SfxItemPool
 {
 protected:
     std::vector<SfxPoolItem*>*     mpLocalPoolDefaults;

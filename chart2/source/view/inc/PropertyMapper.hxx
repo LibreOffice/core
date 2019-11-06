@@ -44,7 +44,7 @@ typedef css::uno::Sequence< css::uno::Any > tAnySequence;
  * shape objects (those whose service names begin with
  * com.sun.star.drawing.).
  */
-class OOO_DLLPUBLIC_CHARTTOOLS PropertyMapper
+class PropertyMapper
 {
 public:
     static void setMappedProperties(

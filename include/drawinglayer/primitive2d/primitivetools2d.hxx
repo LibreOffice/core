@@ -113,7 +113,7 @@ namespace drawinglayer
             guards the buffered local decomposition and ensures that a create2DDecomposition
             implementation may use an up-to-date ViewTransformation accessible using getViewTransformation()
          */
-        class DRAWINGLAYER_DLLPUBLIC ViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
+        class ViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /** the last used ViewTransformation definition for decomposition. Since this
@@ -152,7 +152,7 @@ namespace drawinglayer
             implementation may use an up-to-date ViewTransformation accessible using getViewTransformation()
             and an object transformation via getObjectTransformation()
          */
-        class DRAWINGLAYER_DLLPUBLIC ObjectAndViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
+        class ObjectAndViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /** the last used ViewTransformation and the last ObjectTransformation

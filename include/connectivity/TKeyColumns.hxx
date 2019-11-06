@@ -26,7 +26,7 @@
 namespace connectivity
 {
     class OTableKeyHelper;
-    class OOO_DLLPUBLIC_DBTOOLS OKeyColumnsHelper final : public connectivity::sdbcx::OCollection
+    class OKeyColumnsHelper final : public connectivity::sdbcx::OCollection
     {
         OTableKeyHelper* m_pKey;
         virtual sdbcx::ObjectType createObject(const OUString& _rName) override;

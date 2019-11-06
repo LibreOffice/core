@@ -42,7 +42,7 @@ namespace drawinglayer
             should process it (Currently it is only used for grid visualisation,
             but this may change).
          */
-        class DRAWINGLAYER_DLLPUBLIC PointArrayPrimitive2D final : public BasePrimitive2D
+        class PointArrayPrimitive2D final : public BasePrimitive2D
         {
         private:
             /// the array of positions

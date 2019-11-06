@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star { namespace uno { template <class
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS FormattedStringHelper
+class FormattedStringHelper
 {
 public:
     static css::uno::Sequence<

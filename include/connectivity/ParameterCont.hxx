@@ -28,7 +28,7 @@ namespace dbtools
 
     //= OParameterContinuation
 
-    class OOO_DLLPUBLIC_DBTOOLS OParameterContinuation final : public comphelper::OInteraction< css::sdb::XInteractionSupplyParameters >
+    class OParameterContinuation final : public comphelper::OInteraction< css::sdb::XInteractionSupplyParameters >
     {
         css::uno::Sequence< css::beans::PropertyValue >       m_aValues;
 

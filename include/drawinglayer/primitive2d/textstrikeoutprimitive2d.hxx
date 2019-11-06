@@ -34,7 +34,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class DRAWINGLAYER_DLLPUBLIC BaseTextStrikeoutPrimitive2D : public BufferedDecompositionPrimitive2D
+        class BaseTextStrikeoutPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// geometric definitions
@@ -67,7 +67,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class DRAWINGLAYER_DLLPUBLIC TextCharacterStrikeoutPrimitive2D final : public BaseTextStrikeoutPrimitive2D
+        class TextCharacterStrikeoutPrimitive2D final : public BaseTextStrikeoutPrimitive2D
         {
         private:
             sal_Unicode                             maStrikeoutChar;
@@ -106,7 +106,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class DRAWINGLAYER_DLLPUBLIC TextGeometryStrikeoutPrimitive2D final : public BaseTextStrikeoutPrimitive2D
+        class TextGeometryStrikeoutPrimitive2D final : public BaseTextStrikeoutPrimitive2D
         {
         private:
             double                                  mfHeight;

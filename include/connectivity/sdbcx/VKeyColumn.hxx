@@ -30,7 +30,7 @@ namespace connectivity
         class OKeyColumn;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OKeyColumn> OKeyColumn_PROP;
 
-        class OOO_DLLPUBLIC_DBTOOLS OKeyColumn :
+        class OKeyColumn :
             public OColumn, public OKeyColumn_PROP
         {
             OUString m_ReferencedColumn;

@@ -51,7 +51,7 @@ private: //private member
     css::uno::Any m_aNullDate;
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS FixedNumberFormatter final
+class FixedNumberFormatter final
 {
 public:
     FixedNumberFormatter( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier

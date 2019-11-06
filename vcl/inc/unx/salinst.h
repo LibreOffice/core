@@ -34,7 +34,7 @@ class SalXLib;
 class X11SalGraphics;
 class SalX11Display;
 
-class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
+class X11SalInstance : public SalGenericInstance
 {
 private:
     std::unordered_map< Atom, css::uno::Reference< css::datatransfer::clipboard::XClipboard > > m_aInstances;

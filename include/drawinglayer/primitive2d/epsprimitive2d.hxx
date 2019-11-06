@@ -32,7 +32,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /** EpsPrimitive2D class */
-        class DRAWINGLAYER_DLLPUBLIC EpsPrimitive2D final : public BufferedDecompositionPrimitive2D
+        class EpsPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the geometry definition

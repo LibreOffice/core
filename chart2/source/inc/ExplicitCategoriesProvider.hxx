@@ -44,7 +44,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
     {}
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS SplitCategoriesProvider
+class SplitCategoriesProvider
 {
 public:
     virtual ~SplitCategoriesProvider();
