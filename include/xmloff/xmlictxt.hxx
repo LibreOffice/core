@@ -24,8 +24,9 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <memory>
 
@@ -37,7 +38,14 @@ class SvXMLImportContext;
 
 typedef rtl::Reference<SvXMLImportContext> SvXMLImportContextRef;
 
-class XMLOFF_DLLPUBLIC SvXMLImportContext : public cppu::WeakImplHelper< css::xml::sax::XFastContextHandler >
+/**
+This class deliberately does not support XWeak, to improve performance when loading
+large documents.
+*/
+class XMLOFF_DLLPUBLIC SvXMLImportContext : public salhelper::SimpleReferenceObject,
+                                            public css::xml::sax::XFastContextHandler,
+                                            public css::lang::XTypeProvider
+
 {
     friend class SvXMLImport;
 
@@ -74,7 +82,7 @@ public:
      * ends. By default, nothing is done.
      * Note that virtual methods cannot be used inside destructors. Use
      * EndElement instead if this is required. */
-    virtual ~SvXMLImportContext() override;
+    virtual ~SvXMLImportContext();
 
     /** Create a children element context. By default, the import's
      * CreateContext method is called to create a new default context. */
@@ -115,6 +123,15 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual void SAL_CALL characters(const OUString & aChars) override;
+
+    // XInterface
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) final override;
+    virtual void SAL_CALL acquire() throw () final override;
+    virtual void SAL_CALL release() throw () final override;
+
+    // XTypeProvider
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) final override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) final override;
 };
 
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX

@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,sm,\
         msfilter \
         oox \
         sal \
+        salhelper \
         sax \
         sfx \
         sot \
