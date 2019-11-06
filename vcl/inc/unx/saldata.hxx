@@ -30,7 +30,7 @@ class SalXLib;
 class SalDisplay;
 class SalPrinter;
 
-class VCLPLUG_GEN_PUBLIC X11SalData : public GenericUnixSalData
+class X11SalData : public GenericUnixSalData
 {
     struct XErrorStackEntry
     {

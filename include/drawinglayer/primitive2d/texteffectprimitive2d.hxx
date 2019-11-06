@@ -46,7 +46,7 @@ namespace drawinglayer
             also be used for any other primitives) which have some TextEffect applied
             and create the needed geometry and embedding on decomposition.
         */
-        class DRAWINGLAYER_DLLPUBLIC TextEffectPrimitive2D final : public BufferedDecompositionPrimitive2D
+        class TextEffectPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the text (or other) content

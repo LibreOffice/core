@@ -28,7 +28,7 @@
 #include <libxml/tree.h>
 #include <xsecxmlsecdllapi.h>
 
-class XSECXMLSEC_DLLPUBLIC XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper
+class XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper
 <
     css::xml::wrapper::XXMLElementWrapper,
     css::lang::XUnoTunnel,

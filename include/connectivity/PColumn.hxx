@@ -114,7 +114,7 @@ namespace connectivity
         typedef sdbcx::OColumn OOrderColumn_BASE;
         typedef ::comphelper::OPropertyArrayUsageHelper<OOrderColumn> OOrderColumn_PROP;
 
-        class OOO_DLLPUBLIC_DBTOOLS OOrderColumn :
+        class OOrderColumn :
             public OOrderColumn_BASE, public OOrderColumn_PROP
         {
             const   bool        m_bAscending;

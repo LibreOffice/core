@@ -29,7 +29,7 @@
 
 //  class UnoPropertyArrayHelper
 
-class TOOLKIT_DLLPUBLIC UnoPropertyArrayHelper final : public ::cppu::IPropertyArrayHelper
+class UnoPropertyArrayHelper final : public ::cppu::IPropertyArrayHelper
 {
     std::set<sal_Int32>       maIDs;
 

@@ -126,7 +126,7 @@ namespace comphelper
         calls which your derived class gets to the dispose method of this class.</p>
     */
 
-    class COMPHELPER_DLLPUBLIC OComponentProxyAggregationHelper :public ::cppu::ImplHelper1 <   css::lang::XEventListener
+    class OComponentProxyAggregationHelper :public ::cppu::ImplHelper1 <   css::lang::XEventListener
                                                                         >
                                             ,private OProxyAggregation
     {
