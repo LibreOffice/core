@@ -439,54 +439,9 @@ void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,
     m_nChangingCalls++;
     if (m_pCurrentMainType && bAlsoResetSubTypeList)
     {
-        // FIXME: This is just to test. This if-block should just call m_pCurrentMainType->fillSubTypeList(*m_pSubTypeList, rParameter);
-        // after adding a new method to ColumnChartDialogController and its children
-        //m_pCurrentMainType->fillSubTypeList(*m_pSubTypeList, rParameter);
-        //m_pCurrentMainType->fillSubTypeList(*m_pSubTypeList, rParameter);
-        m_pSubTypeList->Clear();
-
-        if (rParameter.b3DLook)
-        {
-            switch (rParameter.nGeometry3D)
-            {
-                case css::chart2::DataPointGeometry3D::CYLINDER:
-                    m_pSubTypeList->InsertItem(1, Image(StockImage::Yes, BMP_SAEULE_3D_1));
-                    m_pSubTypeList->InsertItem(2, Image(StockImage::Yes, BMP_SAEULE_3D_2));
-                    m_pSubTypeList->InsertItem(3, Image(StockImage::Yes, BMP_SAEULE_3D_3));
-                    m_pSubTypeList->InsertItem(4, Image(StockImage::Yes, BMP_SAEULE_3D_4));
-                    break;
-                case css::chart2::DataPointGeometry3D::CONE:
-                    m_pSubTypeList->InsertItem(1, Image(StockImage::Yes, BMP_KEGEL_3D_1));
-                    m_pSubTypeList->InsertItem(2, Image(StockImage::Yes, BMP_KEGEL_3D_2));
-                    m_pSubTypeList->InsertItem(3, Image(StockImage::Yes, BMP_KEGEL_3D_3));
-                    m_pSubTypeList->InsertItem(4, Image(StockImage::Yes, BMP_KEGEL_3D_4));
-                    break;
-                case css::chart2::DataPointGeometry3D::PYRAMID:
-                    m_pSubTypeList->InsertItem(1, Image(StockImage::Yes, BMP_PYRAMID_3D_1));
-                    m_pSubTypeList->InsertItem(2, Image(StockImage::Yes, BMP_PYRAMID_3D_2));
-                    m_pSubTypeList->InsertItem(3, Image(StockImage::Yes, BMP_PYRAMID_3D_3));
-                    m_pSubTypeList->InsertItem(4, Image(StockImage::Yes, BMP_PYRAMID_3D_4));
-                    break;
-                default: //DataPointGeometry3D::CUBOID:
-                    m_pSubTypeList->InsertItem(1, Image(StockImage::Yes, BMP_COLUMNS_3D_1));
-                    m_pSubTypeList->InsertItem(2, Image(StockImage::Yes, BMP_COLUMNS_3D_2));
-                    m_pSubTypeList->InsertItem(3, Image(StockImage::Yes, BMP_COLUMNS_3D_3));
-                    m_pSubTypeList->InsertItem(4, Image(StockImage::Yes, BMP_COLUMNS_3D));
-                    break;
-            }
-        }
-        else
-        {
-            m_pSubTypeList->InsertItem(1, Image(StockImage::Yes, BMP_COLUMNS_2D_1));
-            m_pSubTypeList->InsertItem(2, Image(StockImage::Yes, BMP_COLUMNS_2D_2));
-            m_pSubTypeList->InsertItem(3, Image(StockImage::Yes, BMP_COLUMNS_2D_3));
-        }
-
-        m_pSubTypeList->SetItemText(1, SchResId(STR_NORMAL));
-        m_pSubTypeList->SetItemText(2, SchResId(STR_STACKED));
-        m_pSubTypeList->SetItemText(3, SchResId(STR_PERCENT));
-        m_pSubTypeList->SetItemText(4, SchResId(STR_DEEP));
+        m_pCurrentMainType->fillSubTypeList(*m_pSubTypeList, rParameter);
     }
+
     m_pSubTypeList->SelectItem(static_cast<sal_uInt16>(rParameter.nSubTypeIndex));
     m_pDim3DLookResourceGroup->fillControls(rParameter);
     /*m_pStackingResourceGroup->fillControls( rParameter );
