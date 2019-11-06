@@ -3574,8 +3574,8 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         } catch(...) {}
 
         // force resend
-        pWindow->GetParent()->Hide();
-        pWindow->GetParent()->Show();
+        pWindow->Hide();
+        pWindow->Show();
     }
 }
 
