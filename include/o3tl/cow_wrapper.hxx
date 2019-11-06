@@ -194,6 +194,12 @@ int cow_wrapper_client::queryUnmodified() const
             {
             }
 
+            explicit impl_t( T&& v ) :
+                m_value(std::move(v)),
+                m_ref_count(1)
+            {
+            }
+
             T                              m_value;
             typename MTPolicy::ref_count_t m_ref_count;
         };
@@ -224,6 +230,13 @@ int cow_wrapper_client::queryUnmodified() const
          */
         explicit cow_wrapper( const value_type& r ) :
             m_pimpl( new impl_t(r) )
+        {
+        }
+
+        /** Move-construct wrapped type instance from given object
+         */
+        explicit cow_wrapper( value_type&& r ) :
+            m_pimpl( new impl_t(std::move(r)) )
         {
         }
 
