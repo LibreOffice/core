@@ -406,7 +406,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class UITEST_DLLPUBLIC TreeListUIObject final : public WindowUIObject
+class TreeListUIObject final : public WindowUIObject
 {
 public:
     TreeListUIObject(const VclPtr<SvTreeListBox>& xTreeList);
@@ -429,7 +429,7 @@ private:
     VclPtr<SvTreeListBox> mxTreeList;
 };
 
-class UITEST_DLLPUBLIC TreeListEntryUIObject final : public UIObject
+class TreeListEntryUIObject final : public UIObject
 {
 public:
 

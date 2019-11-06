@@ -370,7 +370,7 @@ public:
     virtual void setAllocation(const Size &rAllocation) override;
 };
 
-class VCL_DLLPUBLIC VclPaned : public VclContainer
+class VclPaned : public VclContainer
 {
 protected:
     VclPtr<Splitter> m_pSplitter;
@@ -384,7 +384,7 @@ public:
     void set_position(long nPosition) { m_nPosition = nPosition; }
 };
 
-class VCL_DLLPUBLIC VclVPaned final : public VclPaned
+class VclVPaned final : public VclPaned
 {
 private:
     DECL_LINK(SplitHdl, Splitter*, void);
@@ -396,7 +396,7 @@ public:
     virtual void setAllocation(const Size &rAllocation) override;
 };
 
-class VCL_DLLPUBLIC VclHPaned final : public VclPaned
+class VclHPaned final : public VclPaned
 {
 private:
     DECL_LINK(SplitHdl, Splitter*, void);
@@ -408,7 +408,7 @@ public:
     virtual void setAllocation(const Size &rAllocation) override;
 };
 
-class VCL_DLLPUBLIC VclFrame final : public VclBin
+class VclFrame final : public VclBin
 {
 private:
     VclPtr<vcl::Window> m_pLabel;
@@ -458,7 +458,7 @@ private:
     sal_Int32 m_nTopPadding;
 };
 
-class VCL_DLLPUBLIC VclExpander final : public VclBin
+class VclExpander final : public VclBin
 {
 public:
     VclExpander(vcl::Window *pParent)
@@ -494,7 +494,7 @@ private:
     bool m_bResizeTopLevel;
     VclPtr<DisclosureButton> m_pDisclosureButton;
     Link<VclExpander&,void> maExpandedHdl;
-    DECL_DLLPRIVATE_LINK(ClickHdl, CheckBox&, void);
+    DECL_LINK(ClickHdl, CheckBox&, void);
 };
 
 class VCL_DLLPUBLIC VclScrolledWindow final : public VclBin
@@ -526,7 +526,7 @@ private:
     VclPtr<ScrollBarBox> m_aScrollBarBox;
 };
 
-class VCL_DLLPUBLIC VclViewport final : public VclBin
+class VclViewport final : public VclBin
 {
 public:
     VclViewport(vcl::Window *pParent)
@@ -544,7 +544,7 @@ private:
 //
 //by default the Commands are discarded, inherit from this
 //and implement "Command" to get them
-class VCL_DLLPUBLIC VclEventBox final : public VclBin
+class VclEventBox final : public VclBin
 {
 private:
     //Any Commands an EventBoxHelper receives are forwarded to its parent
@@ -585,7 +585,7 @@ public:
     virtual void Command(const CommandEvent& rCEvt) override;
 };
 
-class VCL_DLLPUBLIC VclSizeGroup
+class VclSizeGroup
 {
 private:
     std::set< VclPtr<vcl::Window> > m_aWindows;

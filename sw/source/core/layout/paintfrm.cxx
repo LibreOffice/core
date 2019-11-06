@@ -4478,7 +4478,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SW_DLLPUBLIC SwBorderRectanglePrimitive2D : public BufferedDecompositionPrimitive2D
+        class SwBorderRectanglePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the transformation defining the geometry of this BorderRectangle

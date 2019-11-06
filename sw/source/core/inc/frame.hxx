@@ -228,7 +228,7 @@ public:
 /// RotateFlyFrame3: Helper class when you want to make your SwFrame derivate
 /// transformable. It provides some tooling to do so. To use, add as member
 /// (see e.g. SwFlyFreeFrame which uses 'std::unique_ptr< TransformableSwFrame >')
-class SW_DLLPUBLIC TransformableSwFrame
+class TransformableSwFrame
 {
 private:
     // The SwFrameAreaDefinition to work on

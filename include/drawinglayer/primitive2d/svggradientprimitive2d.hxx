@@ -306,7 +306,7 @@ namespace drawinglayer
             It's derived from DiscreteMetricDependentPrimitive2D to allow view-dependent
             decompositions allowing reduced color steps
          **/
-        class DRAWINGLAYER_DLLPUBLIC SvgLinearAtomPrimitive2D final : public DiscreteMetricDependentPrimitive2D
+        class SvgLinearAtomPrimitive2D final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             /// the geometric definition in unit coordinates
@@ -350,7 +350,7 @@ namespace drawinglayer
             It's derived from DiscreteMetricDependentPrimitive2D to allow view-dependent
             decompositions allowing reduced color steps
          **/
-        class DRAWINGLAYER_DLLPUBLIC SvgRadialAtomPrimitive2D final : public DiscreteMetricDependentPrimitive2D
+        class SvgRadialAtomPrimitive2D final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             /// the geometric definition in unit coordinates

@@ -28,7 +28,7 @@ namespace connectivity
     namespace file
     {
         class OConnection;
-        class OOO_DLLPUBLIC_FILE OSQLAnalyzer final
+        class OSQLAnalyzer final
         {
             typedef std::pair< ::rtl::Reference<OPredicateCompiler>,::rtl::Reference<OPredicateInterpreter> > TPredicates;
 
