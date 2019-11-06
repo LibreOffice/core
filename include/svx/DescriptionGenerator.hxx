@@ -38,7 +38,7 @@ namespace accessibility {
     are all the specified property names and values that differ from the
     default values in the style.</p>
 */
-class SVX_DLLPUBLIC DescriptionGenerator
+class DescriptionGenerator
 {
 public:
     enum class PropertyType {
@@ -122,12 +122,12 @@ private:
 
     /** Add a property value formatted as color to the description string.
     */
-    SVX_DLLPRIVATE void AddColor (const OUString& sPropertyName,
+    void AddColor (const OUString& sPropertyName,
         const OUString& sLocalizedName);
 
     /** Add a property value formatted as integer to the description string.
     */
-    SVX_DLLPRIVATE void AddInteger (const OUString& sPropertyName,
+    void AddInteger (const OUString& sPropertyName,
         const OUString& sLocalizedName);
 };
 

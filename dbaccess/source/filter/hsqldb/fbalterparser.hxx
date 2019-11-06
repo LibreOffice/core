@@ -14,7 +14,7 @@
 
 namespace dbahsql
 {
-class SAL_DLLPUBLIC_EXPORT FbAlterStmtParser : public AlterStmtParser
+class FbAlterStmtParser : public AlterStmtParser
 {
 protected:
     void ensureProperTableLengths() const;

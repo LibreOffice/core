@@ -25,7 +25,7 @@ namespace chart
 {
 /** This guard sets the given boolean reference to true in the constructor and to false in the destructor
  */
-class OOO_DLLPUBLIC_CHARTTOOLS TrueGuard final
+class TrueGuard final
 {
 public:
     explicit TrueGuard( bool& rbTrueDuringGuardedTime );

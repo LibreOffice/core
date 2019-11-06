@@ -738,7 +738,7 @@ struct UnoControlListBoxModel_Data;
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
                                             ,   css::awt::XItemList
                                             >   UnoControlListBoxModel_Base;
-class TOOLKIT_DLLPUBLIC UnoControlListBoxModel : public UnoControlListBoxModel_Base
+class UnoControlListBoxModel : public UnoControlListBoxModel_Base
 {
 protected:
     enum ConstructorMode
@@ -845,7 +845,7 @@ typedef ::cppu::AggImplInheritanceHelper5   <   UnoControlBase
                                             ,   css::awt::XTextLayoutConstrains
                                             ,   css::awt::XItemListListener
                                             >   UnoListBoxControl_Base;
-class TOOLKIT_DLLPUBLIC UnoListBoxControl final : public UnoListBoxControl_Base
+class UnoListBoxControl final : public UnoListBoxControl_Base
 {
 public:
                         UnoListBoxControl();

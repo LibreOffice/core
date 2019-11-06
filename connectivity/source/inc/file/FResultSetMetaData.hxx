@@ -36,7 +36,7 @@ namespace connectivity
 
         typedef ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
-        class OOO_DLLPUBLIC_FILE OResultSetMetaData :
+        class OResultSetMetaData :
             public  OResultSetMetaData_BASE
         {
             OUString     m_aTableName;

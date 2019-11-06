@@ -38,7 +38,7 @@ namespace chart
 namespace ModifyListenerHelper
 {
 
-OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::util::XModifyListener > createModifyEventForwarder();
+css::uno::Reference< css::util::XModifyListener > createModifyEventForwarder();
 
 /** This helper class serves as forwarder of modify events.  It can be used
     whenever an object has to send modify events after it gets a modify event of

@@ -26,7 +26,7 @@
 namespace connectivity
 {
     class OTableHelper;
-    class OOO_DLLPUBLIC_DBTOOLS OTableKeyHelper final : public connectivity::sdbcx::OKey
+    class OTableKeyHelper final : public connectivity::sdbcx::OKey
     {
         OTableHelper*   m_pTable;
     public:
