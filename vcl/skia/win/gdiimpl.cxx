@@ -12,6 +12,7 @@
 #include <tools/sk_app/win/WindowContextFactory_win.h>
 #include <tools/sk_app/WindowContext.h>
 #include <win/saldata.hxx>
+#include <skia/vulkan.hxx>
 
 #include <SkColorFilter.h>
 #include <SkPixelRef.h>
@@ -44,14 +45,30 @@ void WinSkiaSalGraphicsImpl::Init()
 
 void WinSkiaSalGraphicsImpl::createSurface()
 {
+    destroySurface();
     if (isOffscreen())
+    {
+        switch (renderMethodToUse())
+        {
+            case RenderVulkan:
+                mSurface = SkSurface::MakeRenderTarget(
+                    SkiaVulkanGrContext::getGrContext(), SkBudgeted::kNo,
+                    SkImageInfo::MakeN32Premul(GetWidth(), GetHeight()));
+                assert(mSurface.get());
+#ifdef DBG_UTIL
+                prefillSurface();
+#endif
+                return;
+            default:
+                break;
+        }
         return SkiaSalGraphicsImpl::createSurface();
+    }
     // When created, Init() gets called with size (0,0), which is invalid size
     // for Skia. Creating the actual surface is delayed, so the size should be always
     // valid here, but better check.
     assert(GetWidth() != 0 && GetHeight() != 0);
     sk_app::DisplayParams displayParams;
-    destroySurface();
     switch (renderMethodToUse())
     {
         case RenderRaster:
