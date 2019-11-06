@@ -1396,15 +1396,17 @@ SvXMLImportContextRef SdXMLMasterStylesContext::CreateChildContext(
 
         if( xMasterPages.is() )
         {
-            if(GetSdImport().GetNewMasterPageCount() + 1 > xMasterPages->getCount())
+            sal_Int32 nNewMasterPageCount = GetSdImport().GetNewMasterPageCount();
+            sal_Int32 nMasterPageCount = xMasterPages->getCount();
+            if (nNewMasterPageCount + 1 > nMasterPageCount)
             {
                 // new page, create and insert
-                xNewMasterPage = xMasterPages->insertNewByIndex(xMasterPages->getCount());
+                xNewMasterPage = xMasterPages->insertNewByIndex(nMasterPageCount);
             }
             else
             {
                 // existing page, use it
-                xMasterPages->getByIndex(GetSdImport().GetNewMasterPageCount()) >>= xNewMasterPage;
+                xMasterPages->getByIndex(nNewMasterPageCount) >>= xNewMasterPage;
             }
 
             // increment global import page counter
