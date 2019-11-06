@@ -57,7 +57,7 @@ typedef ::cppu::WeakAggImplHelper7  <   css::awt::XControlModel
                                     ,   css::util::XCloneable
                                     >   UnoControlModel_Base;
 
-class TOOLKIT_DLLPUBLIC UnoControlModel :public UnoControlModel_Base
+class UnoControlModel :public UnoControlModel_Base
                                         ,public MutexAndBroadcastHelper
                                         ,public ::cppu::OPropertySetHelper
 {

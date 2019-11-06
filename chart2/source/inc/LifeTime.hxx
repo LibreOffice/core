@@ -81,19 +81,19 @@ class CloseableLifeTimeManager final : public LifeTimeManager
     bool volatile       m_bOwnership;
 
 public:
-OOO_DLLPUBLIC_CHARTTOOLS    CloseableLifeTimeManager( css::util::XCloseable* pCloseable
+    CloseableLifeTimeManager( css::util::XCloseable* pCloseable
         , css::lang::XComponent* pComponent );
-OOO_DLLPUBLIC_CHARTTOOLS    virtual ~CloseableLifeTimeManager() override;
+    virtual ~CloseableLifeTimeManager() override;
 
-OOO_DLLPUBLIC_CHARTTOOLS    bool    impl_isDisposedOrClosed( bool bAssert=true );
+    bool    impl_isDisposedOrClosed( bool bAssert=true );
 /// @throws css::uno::Exception
-OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_startTryClose(bool bDeliverOwnership);
+    bool    g_close_startTryClose(bool bDeliverOwnership);
 /// @throws css::util::CloseVetoException
-OOO_DLLPUBLIC_CHARTTOOLS    void    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException const & ex );
-OOO_DLLPUBLIC_CHARTTOOLS    void    g_close_endTryClose(bool bDeliverOwnership );
-OOO_DLLPUBLIC_CHARTTOOLS    void    g_close_endTryClose_doClose();
+    void    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException const & ex );
+    void    g_close_endTryClose(bool bDeliverOwnership );
+    void    g_close_endTryClose_doClose();
 /// @throws css::uno::RuntimeException
-OOO_DLLPUBLIC_CHARTTOOLS    void    g_addCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener );
+    void    g_addCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener );
 
 private:
     virtual bool    impl_canStartApiCall() override;
@@ -165,7 +165,7 @@ your XComponent::dispose method has to be implemented in the following way:
 
 */
 
-class OOO_DLLPUBLIC_CHARTTOOLS LifeTimeGuard
+class LifeTimeGuard
 {
 
 public:

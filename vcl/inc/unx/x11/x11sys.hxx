@@ -23,7 +23,7 @@
 #include <unx/gensys.h>
 #include <vclpluginapi.h>
 
-class VCLPLUG_GEN_PUBLIC X11SalSystem : public SalGenericSystem
+class X11SalSystem : public SalGenericSystem
 {
 public:
     X11SalSystem() {}

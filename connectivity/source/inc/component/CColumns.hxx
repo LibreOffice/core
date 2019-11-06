@@ -27,7 +27,7 @@ namespace connectivity
     namespace component
     {
         /// Columns implementation for Writer tables and Calc sheets.
-        class OOO_DLLPUBLIC_FILE OComponentColumns : public file::OColumns
+        class OComponentColumns : public file::OColumns
         {
         protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;

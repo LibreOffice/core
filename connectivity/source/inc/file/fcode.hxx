@@ -73,7 +73,7 @@ namespace connectivity
 
         };
 
-        class OOO_DLLPUBLIC_FILE OOperandRow : public OOperand
+        class OOperandRow : public OOperand
         {
             sal_uInt16  m_nRowPos;
             OValueRefRow    m_pRow;
@@ -88,7 +88,7 @@ namespace connectivity
         };
 
         // Attributes from a result row
-        class OOO_DLLPUBLIC_FILE OOperandAttr : public OOperandRow
+        class OOperandAttr : public OOperandRow
         {
         public:
             OOperandAttr(sal_uInt16 _nPos,
