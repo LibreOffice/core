@@ -559,6 +559,12 @@ $(eval $(call gb_Library_use_externals,vcl,\
     fontconfig \
 ))
 
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+$(eval $(call gb_Library_add_libs,vcl,\
+    -lm $(DLOPEN_LIBS) \
+))
+endif
+
 else # ! DISABLE_GUI
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
