@@ -100,6 +100,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("email: test@test.test"), aActual);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf121661, "tdf121661.docx")
+{
+    xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
+    if (!pXmlSettings)
+        return;
+    assertXPath(pXmlSettings, "/w:settings/w:hyphenationZone", "val", "851");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
