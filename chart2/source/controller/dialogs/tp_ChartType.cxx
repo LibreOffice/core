@@ -18,6 +18,7 @@
  */
 
 #include "tp_ChartType.hxx"
+#include <ChartResourceGroupDlgs.hxx>
 #include <ChartResourceGroups.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>
