@@ -1022,6 +1022,16 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 {
 }
 
+SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+        bool bOutl )
+:   SvXMLStyleContext( rImport, nElement, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
+,   bConsecutive( false )
+,   bOutline( bOutl )
+{
+}
+
 SvxXMLListStyleContext::~SvxXMLListStyleContext() {}
 
 SvXMLImportContextRef SvxXMLListStyleContext::CreateChildContext(

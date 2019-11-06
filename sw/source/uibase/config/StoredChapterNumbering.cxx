@@ -16,7 +16,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -271,39 +271,27 @@ class StoredChapterNumberingDummyStyleContext
 public:
     StoredChapterNumberingDummyStyleContext(
             SvXMLImport & rImport,
-            sal_uInt16 const nPrefix, OUString const& rLocalName,
-            uno::Reference<xml::sax::XAttributeList> const& xAttrList)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+            uno::Reference<xml::sax::XFastAttributeList> const& xAttrList)
+        : SvXMLImportContext(rImport)
     {
         OUString name;
         OUString displayName;
         sal_uInt16 nFamily(0);
-        for (sal_Int32 i = 0; i < xAttrList->getLength(); ++i)
-        {
-            OUString localName;
-            sal_uInt16 const prefix(rImport.GetNamespaceMap().GetKeyByAttrName(
-                xAttrList->getNameByIndex(i), &localName));
-            OUString const& rValue = xAttrList->getValueByIndex(i);
 
-            if (XML_NAMESPACE_STYLE == prefix)
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+
+        for (auto &aIter : *pAttribList)
+            if (aIter.getToken() == (XML_NAMESPACE_STYLE | XML_FAMILY))
             {
-                if (IsXMLToken(localName, XML_FAMILY))
-                {
-                    if (IsXMLToken(rValue, XML_TEXT))
-                    {
-                        nFamily = XML_STYLE_FAMILY_TEXT_TEXT;
-                    }
-                }
-                else if (IsXMLToken(localName, XML_NAME))
-                {
-                    name = rValue;
-                }
-                else if (IsXMLToken(localName, XML_DISPLAY_NAME))
-                {
-                    displayName = rValue;
-                }
+                if (IsXMLToken(aIter.toString(), XML_TEXT))
+                    nFamily = XML_STYLE_FAMILY_TEXT_TEXT;
+                else if (IsXMLToken(aIter.toString(), XML_NAME))
+                    name = aIter.toString();
+                else if (IsXMLToken(aIter.toString(), XML_DISPLAY_NAME))
+                    displayName = aIter.toString();
             }
-        }
+
         if (nFamily && !name.isEmpty() && !displayName.isEmpty())
         {
             rImport.AddStyleDisplayName(nFamily, name, displayName);
@@ -323,15 +311,14 @@ private:
 
 public:
     StoredChapterNumberingRootContext(
-            SwChapterNumRules & rNumRules, SvXMLImport & rImport,
-            sal_uInt16 const nPrefix, OUString const& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+            SwChapterNumRules & rNumRules, SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
         , m_rNumRules(rNumRules)
         , m_nCounter(0)
     {
     }
 
-    virtual void EndElement() override
+    virtual void SAL_CALL endFastElement(sal_Int32 /*Element*/) override
     {
         assert(m_Contexts.size() < SwChapterNumRules::nMaxRules);
         for (auto iter = m_Contexts.begin(); iter != m_Contexts.end(); ++iter)
@@ -346,30 +333,27 @@ public:
         }
     }
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 const nPrefix, OUString const& rLocalName,
-        uno::Reference<xml::sax::XAttributeList> const& xAttrList) override
+    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+                sal_Int32 Element,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override
     {
-        if (XML_NAMESPACE_TEXT == nPrefix && IsXMLToken(rLocalName, XML_OUTLINE_STYLE))
+        if (Element == XML_ELEMENT(TEXT, XML_OUTLINE_STYLE))
         {
             ++m_nCounter;
             if (m_nCounter <= SwChapterNumRules::nMaxRules)
             {
                 SvxXMLListStyleContext *const pContext(
-                    new SvxXMLListStyleContext(GetImport(),
-                                nPrefix, rLocalName, xAttrList, true));
+                    new SvxXMLListStyleContext(GetImport(), Element, xAttrList, true));
                 m_Contexts.emplace_back(pContext);
                 return pContext;
             }
         }
-        else if (XML_NAMESPACE_STYLE == nPrefix && IsXMLToken(rLocalName, XML_STYLE))
+        else if (Element == XML_ELEMENT(STYLE, XML_STYLE))
         {
-            return new StoredChapterNumberingDummyStyleContext(
-                    GetImport(), nPrefix, rLocalName, xAttrList);
+            return new StoredChapterNumberingDummyStyleContext(GetImport(), xAttrList);
         }
 
-        return SvXMLImportContext::CreateChildContext(
-                    nPrefix, rLocalName, xAttrList);
+        return SvXMLImportContext::createFastChildContext(Element, xAttrList);
     }
 };
 
@@ -388,16 +372,14 @@ public:
     {
     }
 
-    virtual SvXMLImportContext * CreateDocumentContext(
-        sal_uInt16 const nPrefix, OUString const& rLocalName,
-        uno::Reference<xml::sax::XAttributeList> const& xAttrList) override
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override
     {
-        if (XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken(rLocalName, XML_STYLES))
+        if (Element == XML_ELEMENT(OFFICE, XML_STYLES))
         {
-            return new StoredChapterNumberingRootContext(m_rNumRules,
-                    *this, nPrefix, rLocalName);
+            return new StoredChapterNumberingRootContext(m_rNumRules, *this);
         }
-        return SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
+        return SvXMLImport::CreateFastContext(Element, xAttrList);
     }
 };
 
@@ -458,13 +440,13 @@ void ImportStoredChapterNumberingRules(SwChapterNumRules & rRules,
     uno::Reference<io::XInputStream> const xInStream(
             new ::utl::OInputStreamWrapper(rStream));
 
-    uno::Reference<xml::sax::XParser> const xParser(
-            xml::sax::Parser::create(xContext));
+    uno::Reference<xml::sax::XFastParser> const xParser(
+            xml::sax::FastParser::create(xContext));
 
-    uno::Reference<xml::sax::XDocumentHandler> const xHandler(
+    uno::Reference<xml::sax::XFastDocumentHandler> const xHandler(
             new StoredChapterNumberingImport(xContext, rRules));
 
-    xParser->setDocumentHandler(xHandler);
+    xParser->setFastDocumentHandler(xHandler);
 
     xml::sax::InputSource const source(xInStream, "", "", rFileName);
 

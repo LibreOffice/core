@@ -140,6 +140,20 @@ SvXMLStyleContext::SvXMLStyleContext(
 {
 }
 
+SvXMLStyleContext::SvXMLStyleContext(
+        SvXMLImport& rImp,
+        sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > &,
+        sal_uInt16 nFam, bool bDefault ) :
+    SvXMLImportContext( rImp ),
+    mbHidden( false ),
+    mnFamily( nFam ),
+    mbValid( true ),
+    mbNew( true ),
+    mbDefaultStyle( bDefault )
+{
+}
+
 SvXMLStyleContext::~SvXMLStyleContext()
 {
 }
