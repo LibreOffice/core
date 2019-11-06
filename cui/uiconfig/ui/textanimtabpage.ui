@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentAMOUNT">
@@ -42,202 +42,201 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">12</property>
+    <property name="spacing">6</property>
     <child>
-      <object class="GtkBox" id="box2">
+      <object class="GtkFrame">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="spacing">18</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
         <child>
-          <object class="GtkBox" id="box1">
+          <object class="GtkAlignment">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
             <child>
-              <object class="GtkLabel" id="FT_EFFECTS">
+              <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="textanimtabpage|FT_EFFECTS">E_ffect:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">LB_EFFECT</property>
-                <property name="xalign">0</property>
+                <property name="hexpand">True</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkComboBoxText" id="LB_EFFECT">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <items>
+                      <item id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">No Effect</item>
+                      <item id="1" translatable="yes" context="textanimtabpage|liststoreEFFECT">Blink</item>
+                      <item id="2" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Through</item>
+                      <item id="3" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Back and Forth</item>
+                      <item id="4" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll In</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="boxDIRECTION">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="FT_DIRECTION">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="textanimtabpage|FT_DIRECTION">Direction:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">grid1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkGrid" id="grid1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkToggleButton" id="BTN_UP">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="has_tooltip">True</property>
+                            <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_UP|tooltip_text">To top</property>
+                            <property name="halign">center</property>
+                            <property name="hexpand">True</property>
+                            <property name="image">imageUP</property>
+                            <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_UP-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_UP-atkobject">Up</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToggleButton" id="BTN_RIGHT">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="has_tooltip">True</property>
+                            <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_RIGHT|tooltip_text">To right</property>
+                            <property name="halign">center</property>
+                            <property name="hexpand">True</property>
+                            <property name="image">imageRIGHT</property>
+                            <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_RIGHT-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_RIGHT-atkobject">Right</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToggleButton" id="BTN_LEFT">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="has_tooltip">True</property>
+                            <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_LEFT|tooltip_text">To left</property>
+                            <property name="halign">center</property>
+                            <property name="hexpand">True</property>
+                            <property name="image">imageLEFT</property>
+                            <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LEFT-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_LEFT-atkobject">Left</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToggleButton" id="BTN_DOWN">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="has_tooltip">True</property>
+                            <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_DOWN|tooltip_text">To bottom</property>
+                            <property name="halign">center</property>
+                            <property name="hexpand">True</property>
+                            <property name="image">imageDOWN</property>
+                            <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_DOWN-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_DOWN-atkobject">Down</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="LB_EFFECT">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="valign">center</property>
-                <items>
-                  <item id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">No Effect</item>
-                  <item id="1" translatable="yes" context="textanimtabpage|liststoreEFFECT">Blink</item>
-                  <item id="2" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Through</item>
-                  <item id="3" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Back and Forth</item>
-                  <item id="4" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll In</item>
-                </items>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
-        <child>
-          <object class="GtkBox" id="boxDIRECTION">
+        <child type="label">
+          <object class="GtkLabel" id="FT_EFFECTS">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="hexpand">True</property>
-            <property name="spacing">12</property>
-            <child>
-              <object class="GtkLabel" id="FT_DIRECTION">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="textanimtabpage|FT_DIRECTION">Direction:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">grid1</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkToggleButton" id="BTN_UP">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_UP|tooltip_text">To top</property>
-                    <property name="halign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="image">imageUP</property>
-                    <property name="always_show_image">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="BTN_UP-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_UP-atkobject">Up</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleButton" id="BTN_RIGHT">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_RIGHT|tooltip_text">To right</property>
-                    <property name="halign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="image">imageRIGHT</property>
-                    <property name="always_show_image">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="BTN_RIGHT-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_RIGHT-atkobject">Right</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleButton" id="BTN_LEFT">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_LEFT|tooltip_text">To left</property>
-                    <property name="halign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="image">imageLEFT</property>
-                    <property name="always_show_image">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="BTN_LEFT-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_LEFT-atkobject">Left</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleButton" id="BTN_DOWN">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_DOWN|tooltip_text">To bottom</property>
-                    <property name="halign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="image">imageDOWN</property>
-                    <property name="always_show_image">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="BTN_DOWN-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_DOWN-atkobject">Down</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="label" translatable="yes" context="textanimtabpage|FT_EFFECTS">E_ffect</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">LB_EFFECT</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
       <packing>
@@ -259,11 +258,11 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkBox" id="box4">
+              <object class="GtkGrid" id="box4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="TSB_START_INSIDE">
                     <property name="label" translatable="yes" context="textanimtabpage|TSB_START_INSIDE">S_tart inside</property>
@@ -276,9 +275,9 @@
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -293,9 +292,9 @@
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -306,9 +305,8 @@
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -356,9 +354,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -369,9 +366,8 @@
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -419,9 +415,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">5</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -432,9 +427,8 @@
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">6</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -482,9 +476,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">7</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">4</property>
                   </packing>
                 </child>
               </object>
