@@ -108,6 +108,7 @@ public:
     void testLegendManualLayoutXLSX();
     void testChartSubTitle();
     void testChartMainWithSubTitle();
+    void testAutoTitleDeleted();
     void testChartTitlePropertiesColorFillXLSX();
     void testChartTitlePropertiesGradientFillXLSX();
     void testChartTitlePropertiesBitmapFillXLSX();
@@ -217,6 +218,7 @@ public:
     CPPUNIT_TEST(testLegendManualLayoutXLSX);
     CPPUNIT_TEST(testChartSubTitle);
     CPPUNIT_TEST(testChartMainWithSubTitle);
+    CPPUNIT_TEST(testAutoTitleDeleted);
     CPPUNIT_TEST(testChartTitlePropertiesColorFillXLSX);
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillXLSX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillXLSX);
@@ -1730,6 +1732,14 @@ void Chart2ExportTest::testChartMainWithSubTitle()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr/a:latin", "typeface", "Arial");
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:t", "It is a Maintitle\nIt is a Subtitle");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr", "val", "81d41a");
+}
+
+void Chart2ExportTest::testAutoTitleDeleted()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testAutoTitleDeleted.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:autoTitleDeleted", "val", "1");
 }
 
 void Chart2ExportTest::testChartTitlePropertiesColorFillXLSX()

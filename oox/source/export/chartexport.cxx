@@ -917,7 +917,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
 
     // get Properties of ChartDocument
     bool bHasMainTitle = false;
-    bool bHasSubTitle = false;
+    OUString aSubTitle;
     bool bHasLegend = false;
     Reference< beans::XPropertySet > xDocPropSet( xChartDoc, uno::UNO_QUERY );
     if( xDocPropSet.is())
@@ -926,8 +926,6 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
         {
             Any aAny( xDocPropSet->getPropertyValue("HasMainTitle"));
             aAny >>= bHasMainTitle;
-            aAny = xDocPropSet->getPropertyValue("HasSubTitle");
-            aAny >>= bHasSubTitle;
             aAny = xDocPropSet->getPropertyValue("HasLegend");
             aAny >>= bHasLegend;
         }
@@ -937,33 +935,38 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
         }
     } // if( xDocPropSet.is())
 
-    // chart element
+    Reference< beans::XPropertySet > xPropSubTitle( xChartDoc->getSubTitle(), UNO_QUERY );
+    if( xPropSubTitle.is())
+    {
+        try
+        {
+            xPropSubTitle->getPropertyValue("String") >>= aSubTitle;
+        }
+        catch( beans::UnknownPropertyException & )
+        {
+        }
+    }
 
+    // chart element
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_chart));
 
     // titles
-    if( bHasMainTitle || bHasSubTitle )
+    if( bHasMainTitle )
     {
-        OUString aSubText;
-        Reference< drawing::XShape > xShape;
-        if( bHasSubTitle )
-        {
-            xShape = xChartDoc->getSubTitle();
-            if( bHasMainTitle )
-            {
-                // if we have a title and a subtitle too, we need only the subtitle text
-                Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-                if( xPropSet.is() )
-                    xPropSet->getPropertyValue("String") >>= aSubText;
-            }
-        }
-        if( bHasMainTitle )
-            xShape = xChartDoc->getTitle();
-
-        exportTitle( xShape, !aSubText.isEmpty() ? &aSubText : nullptr );
+        exportTitle( xChartDoc->getTitle(), !aSubTitle.isEmpty() ? &aSubTitle : nullptr );
         pFS->singleElement(FSNS(XML_c, XML_autoTitleDeleted), XML_val, "0");
     }
+    else if( !aSubTitle.isEmpty() )
+    {
+        exportTitle( xChartDoc->getSubTitle(), nullptr );
+        pFS->singleElement(FSNS(XML_c, XML_autoTitleDeleted), XML_val, "0");
+    }
+    else
+    {
+        pFS->singleElement(FSNS(XML_c, XML_autoTitleDeleted), XML_val, "1");
+    }
+
     InitPlotArea( );
     if( mbIs3DChart )
     {
