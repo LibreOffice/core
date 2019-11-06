@@ -998,6 +998,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHanging
     CPPUNIT_ASSERT_MESSAGE( "Footnote starts with a tab", xTextRange->getString().startsWith("\t") );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123262_textFootnoteSeparators, "tdf123262_textFootnoteSeparators.docx")
+{
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
+    uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(2), uno::UNO_QUERY);
+    // The separator text was being added to each footnote.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote 3:", OUString(" LibreOffice"), xTextRange->getString() );
+    CPPUNIT_ASSERT_EQUAL( 1, getPages() );
+}
+
 DECLARE_OOXMLEXPORT_TEST( testActiveXTextfield, "activex_textbox.docx" )
 {
     uno::Reference<drawing::XControlShape> xControlShape( getShape(1), uno::UNO_QUERY );

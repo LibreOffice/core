@@ -495,11 +495,10 @@ private:
     }                               m_eInHeaderFooterImport;
     bool                            m_bDiscardHeaderFooter;
     bool                            m_bInFootOrEndnote;
+    bool                            m_bInFootOrEndnoteSeparator;
     PropertyMapPtr m_pFootnoteContext;
     bool m_bHasFootnoteStyle;
     bool m_bCheckFootnoteStyle;
-    /// Did we get a <w:separator/> for this footnote already?
-    bool                            m_bSeenFootOrEndnoteSeparator;
 
     bool                            m_bLineNumberingSet;
     bool                            m_bIsInFootnoteProperties;
@@ -758,6 +757,8 @@ public:
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
     bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }
+    bool IsInFootOrEndnoteSeparator() const { return m_bInFootOrEndnoteSeparator; }
+    void SetInFootOrEndnoteSeparator( const bool bIn ) { m_bInFootOrEndnoteSeparator = bIn; }
 
     void StartCustomFootnote(const PropertyMapPtr pContext);
     void EndCustomFootnote();
@@ -768,8 +769,6 @@ public:
 
     const PropertyMapPtr& GetFootnoteContext() const { return m_pFootnoteContext; }
     OUString StripFootnoteLabelCharacters(const OUString sAppendString);
-    /// Got a <w:separator/>.
-    void SeenFootOrEndnoteSeparator();
 
     void PushAnnotation();
     void PopAnnotation();
@@ -974,8 +973,6 @@ public:
     /// If the current section has a footnote separator.
     bool m_bHasFtnSep;
 
-    /// If the next newline should be ignored, used by the special footnote separator paragraph.
-    bool m_bIgnoreNextPara;
     /// If the next tab should be ignored, used for footnotes.
     bool m_bCheckFirstFootnoteTab;
     bool m_bIgnoreNextTab;

@@ -265,9 +265,9 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_eInHeaderFooterImport( HeaderFooterImportState::none ),
         m_bDiscardHeaderFooter( false ),
         m_bInFootOrEndnote(false),
+        m_bInFootOrEndnoteSeparator(false),
         m_bHasFootnoteStyle(false),
         m_bCheckFootnoteStyle(false),
-        m_bSeenFootOrEndnoteSeparator(false),
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( false ),
         m_bIsParaMarkerChange( false ),
@@ -298,7 +298,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_nLastTableCellParagraphDepth(0),
         m_bHasFtn(false),
         m_bHasFtnSep(false),
-        m_bIgnoreNextPara(false),
         m_bCheckFirstFootnoteTab(false),
         m_bIgnoreNextTab(false),
         m_bIsSplitPara(false),
@@ -2442,6 +2441,8 @@ void DomainMapper_Impl::PopFootOrEndnote()
 
     // In case the foot or endnote did not contain a tab.
     m_bIgnoreNextTab = false;
+    // In case there was no normal foot or endnote
+    SetInFootOrEndnoteSeparator( false );
 
     if (!m_aTextAppendStack.empty())
         m_aTextAppendStack.pop();
@@ -2452,19 +2453,9 @@ void DomainMapper_Impl::PopFootOrEndnote()
         return;
     }
     m_aRedlines.pop();
-    m_bSeenFootOrEndnoteSeparator = false;
     m_bInFootOrEndnote = false;
     m_pFootnoteContext = nullptr;
     m_bFirstParagraphInCell = m_bSaveFirstParagraphInCell;
-}
-
-void DomainMapper_Impl::SeenFootOrEndnoteSeparator()
-{
-    if (!m_bSeenFootOrEndnoteSeparator)
-    {
-        m_bSeenFootOrEndnoteSeparator = true;
-        m_bIgnoreNextPara = true;
-    }
 }
 
 void DomainMapper_Impl::PopAnnotation()

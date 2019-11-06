@@ -1072,9 +1072,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_FtnEdn_type:
-            // This is the "separator" footnote, ignore its linebreak.
-            if (static_cast<sal_uInt32>(nIntValue) == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator)
-                m_pImpl->SeenFootOrEndnoteSeparator();
+            // The separator footnote is always parsed twice (only superficially the second time), and in practice is the first footnote.
+            // Ignore the text contents on the first pass (except to confirm that the separator exists)
+            if ( nIntValue == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator )
+                m_pImpl->SetInFootOrEndnoteSeparator( !m_pImpl->IsInFootOrEndnoteSeparator() );
+        break;
+        case NS_ooxml::LN_CT_FtnEdn_id:
         break;
         case NS_ooxml::LN_CT_DataBinding_prefixMappings:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_prefixMappings", sStringValue);
@@ -3350,18 +3353,16 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     if (!m_pImpl->hasTableManager())
         return;
 
+    // Throw out any text from the Separator footnotes - LO only has a yes/no for the separator line (m_bHasFtnSep)
+    if ( m_pImpl->IsInFootOrEndnoteSeparator() )
+        return;
+
     try
     {
         m_pImpl->getTableManager().utext(data_, len);
 
         if (bNewLine)
         {
-            if (m_pImpl->m_bIgnoreNextPara)
-            {
-                m_pImpl->m_bIgnoreNextPara = false;
-                return;
-            }
-
             const bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
             const bool bSingleParagraphAfterRedline = m_pImpl->GetIsFirstParagraphInSection(true) && m_pImpl->GetIsLastParagraphInSection();
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
