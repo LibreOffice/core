@@ -36,6 +36,7 @@
 #include <fpdf_doc.h>
 #include <fpdfview.h>
 #include <vcl/graphicfilter.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1877,6 +1878,33 @@ void PdfExportTest::testPdfImageResourceInlineXObjectRef()
     // - Actual  : 0
     // i.e. the sub-form was missing its image.
     CPPUNIT_ASSERT_EQUAL(1, FPDFFormObj_CountObjects(pFormObject));
+
+    // Check if the inner form object (original page object in the pdf image) has the correct
+    // rotation.
+    FPDF_PAGEOBJECT pInnerFormObject = FPDFFormObj_GetObject(pFormObject, 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pInnerFormObject));
+    CPPUNIT_ASSERT_EQUAL(1, FPDFFormObj_CountObjects(pInnerFormObject));
+    FPDF_PAGEOBJECT pImage = FPDFFormObj_GetObject(pInnerFormObject, 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pImage));
+    double fA = 0;
+    double fB = 0;
+    double fC = 0;
+    double fD = 0;
+    double fE = 0;
+    double fF = 0;
+    FPDFFormObj_GetMatrix(pInnerFormObject, &fA, &fB, &fC, &fD, &fE, &fF);
+    basegfx::B2DHomMatrix aMat{ fA, fC, fE, fB, fD, fF };
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate = 0;
+    double fShearX = 0;
+    aMat.decompose(aScale, aTranslate, fRotate, fShearX);
+    int nRotateDeg = basegfx::rad2deg(fRotate);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -90
+    // - Actual  : 0
+    // i.e. rotation was lost on pdf export.
+    CPPUNIT_ASSERT_EQUAL(-90, nRotateDeg);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);

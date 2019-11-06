@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_pdfexport, \
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_pdfexport))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_pdfexport, \
+	basegfx \
 	comphelper \
 	cppu \
 	cppuhelper \
