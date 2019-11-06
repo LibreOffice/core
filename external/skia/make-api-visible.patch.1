@@ -1,3 +1,29 @@
+diff --git a/tools/gpu/GrContextFactory.h b/tools/gpu/GrContextFactory.h
+index d1b7fd5fa0..1b0bc249d2 100644
+--- a/tools/gpu/GrContextFactory.h
++++ b/tools/gpu/GrContextFactory.h
+@@ -26,7 +26,7 @@ class ContextInfo;
+  * factory is destroyed (though the caller can always grab a ref on the returned
+  * Gr and GL contexts to make them outlive the factory).
+  */
+-class GrContextFactory : SkNoncopyable {
++class SK_API GrContextFactory : SkNoncopyable {
+ public:
+     // The availability of context types is subject to platform and build configuration
+     // restrictions.
+diff --git a/tools/gpu/gl/GLTestContext.cpp b/tools/gpu/gl/GLTestContext.cpp
+index d4aa605188..5d246f9737 100644
+--- a/tools/gpu/gl/GLTestContext.cpp
++++ b/tools/gpu/gl/GLTestContext.cpp
+@@ -298,7 +298,7 @@ void GLTestContext::teardown() {
+ void GLTestContext::testAbandon() {
+     INHERITED::testAbandon();
+     if (fGL) {
+-        fGL->abandon();
++//        fGL->abandon();
+     }
+ }
+ 
 diff --git a/tools/sk_app/unix/WindowContextFactory_unix.h b/tools/sk_app/unix/WindowContextFactory_unix.h
 index 47310970d5..e02e6eb5b7 100644
 --- a/tools/sk_app/unix/WindowContextFactory_unix.h

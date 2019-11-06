@@ -407,6 +407,8 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
     paint.setColor(toSkColor(nColor));
     // Apparently drawPixel() is actually expected to set the pixel and not draw it.
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+    if (isGPU()) // TODO this may need caching?
+        ++nX; // https://bugs.chromium.org/p/skia/issues/detail?id=9611
     canvas->drawPoint(nX, nY, paint);
     postDraw();
 }
@@ -677,7 +679,6 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
                                      << Size(nSrcWidth, nSrcHeight));
     sk_sp<SkImage> image
         = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight));
-    // TODO makeNonTextureImage() ?
     mSurface->getCanvas()->drawImage(image, nDestX, nDestY);
     postDraw();
 }
@@ -690,14 +691,18 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     {
         assert(dynamic_cast<SkiaSalGraphicsImpl*>(pSrcGraphics->GetImpl()));
         src = static_cast<SkiaSalGraphicsImpl*>(pSrcGraphics->GetImpl());
+        src->checkSurface();
+        // TODO Without this flush() Skia asserts if both src and destination are
+        // GPU-backed SkSurface that come from different GrContext (e.g. when
+        // src comes from SkiaVulkanGrContext and target is a window). I don't
+        // know if it's a Skia bug or our GrContext usage is incorrect.
+        src->mSurface->flush();
     }
     else
         src = this;
-    src->checkSurface();
     SAL_INFO("vcl.skia", "copybits(" << this << "): (" << src << "):" << rPosAry);
     sk_sp<SkImage> image = src->mSurface->makeImageSnapshot(
         SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
-    // TODO makeNonTextureImage() ?
     mSurface->getCanvas()->drawImageRect(image,
                                          SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
                                                           rPosAry.mnDestWidth,
@@ -1055,7 +1060,8 @@ bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
 bool SkiaSalGraphicsImpl::isGPU() const
 {
     return mSurface.get()
-           && mSurface->getBackendRenderTarget(SkSurface::kFlushRead_BackendHandleAccess).isValid();
+           && mSurface->getBackendRenderTarget(SkSurface::kFlushWrite_BackendHandleAccess)
+                  .isValid();
 }
 
 #ifdef DBG_UTIL
