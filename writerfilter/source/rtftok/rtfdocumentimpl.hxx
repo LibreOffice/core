@@ -758,6 +758,7 @@ private:
     void resolveSubstream(std::size_t nPos, Id nId);
     void resolveSubstream(std::size_t nPos, Id nId, OUString const& rIgnoreFirst);
 
+    void enlargeSpaceSequence(OUString& rString);
     void text(OUString& rString);
     // Sends a single character to dmapper, taking care of buffering.
     void singleChar(sal_uInt8 nValue, bool bRunProps = false);
@@ -969,6 +970,8 @@ private:
 
     /// Are we after a \cell, but before a \row?
     bool m_bAfterCellBeforeRow;
+    /// Use longer space sequence (\stshfdbch31505 or no \stshfdbch)
+    bool m_bLongerSpaceSequence;
 };
 } // namespace rtftok
 } // namespace writerfilter
