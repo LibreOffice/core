@@ -543,6 +543,12 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+$(eval $(call gb_Library_add_libs,vcl,\
+    -lm $(DLOPEN_LIBS) \
+))
+endif
+
 ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/jobdata \
@@ -585,7 +591,6 @@ endif
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
-    -lm $(DLOPEN_LIBS) \
     -lX11 \
     -lXext \
 ))
