@@ -442,6 +442,7 @@ void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,
         // FIXME: This is just to test. This if-block should just call m_pCurrentMainType->fillSubTypeList(*m_pSubTypeList, rParameter);
         // after adding a new method to ColumnChartDialogController and its children
         //m_pCurrentMainType->fillSubTypeList(*m_pSubTypeList, rParameter);
+        //m_pCurrentMainType->fillSubTypeList(*m_pSubTypeList, rParameter);
         m_pSubTypeList->Clear();
 
         if (rParameter.b3DLook)
