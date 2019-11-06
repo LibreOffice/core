@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_e2727ae3",
+        "filename": "sw/source/uibase/dialog/SwSpellDialogChildWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-11-06T20:40:21Z",
+      "side": 1,
+      "message": "did you notice STR_DICTIONARY_UNAVAILABLE ?\nIf I remember on master there is a warning that no dictionary is available - so this patch is something older than master",
+      "revId": "f7aabb048ddfb0519d665c1972a2bf12dc6ac4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
