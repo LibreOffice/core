@@ -23,10 +23,6 @@
 
 class SwXMLSectionList final : public SvXMLImport
 {
-    virtual SvXMLImportContext *CreateDocumentContext( sal_uInt16 nPrefix,
-                  const OUString& rLocalName,
-                  const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-
 public:
     std::vector<OUString> & m_rSectionList;
 
@@ -34,8 +30,11 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         std::vector<OUString> & rNewSectionList);
 
-    virtual ~SwXMLSectionList ( )
-        throw() override;
+    virtual ~SwXMLSectionList ( ) throw() override;
+
+private:
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
 #endif
