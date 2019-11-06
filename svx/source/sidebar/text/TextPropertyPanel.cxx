@@ -21,6 +21,8 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <vcl/toolbox.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 using namespace css;
 
@@ -44,6 +46,15 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     get(mpToolBoxFontColorSw, "colorbar_writer");
     get(mpToolBoxFontColor, "colorbar_others");
     get(mpToolBoxBackgroundColor, "colorbar_background");
+
+    bool isMobile = false;
+    if (comphelper::LibreOfficeKit::isActive() &&
+        comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+        isMobile = true;
+    VclPtr<ToolBox> xSpacingBar;
+    get(xSpacingBar, "spacingbar");
+    xSpacingBar->Show(!isMobile);
+    xSpacingBar->ShowItem(0, !isMobile);
 }
 
 TextPropertyPanel::~TextPropertyPanel()

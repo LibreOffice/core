@@ -332,7 +332,7 @@
             </child>
             <child>
               <object class="sfxlo-SidebarToolBox" id="spacingbar">
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="can_focus">True</property>
                 <child>
                   <object class="GtkToolButton" id="spacing">
