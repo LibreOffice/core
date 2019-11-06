@@ -71,7 +71,7 @@ namespace connectivity
 
     //= SQLParseNodeParameter
 
-    struct OOO_DLLPUBLIC_DBTOOLS SQLParseNodeParameter
+    struct SQLParseNodeParameter
     {
         const css::lang::Locale&                              rLocale;
         ::dbtools::DatabaseMetaData                           aMetaData;

@@ -35,7 +35,7 @@ typedef ::cppu::ImplHelper1 <   css::awt::XTopWindow2
 typedef ::cppu::ImplHelper1 <   css::awt::XSystemDependentWindowPeer
                             >   VCLXTopWindow_SBase;
 
-class TOOLKIT_DLLPUBLIC VCLXTopWindow_Base  :public VCLXTopWindow_XBase
+class VCLXTopWindow_Base  :public VCLXTopWindow_XBase
                                             ,public VCLXTopWindow_SBase
 {
 protected:
@@ -75,7 +75,7 @@ public:
 //  class VCLXTopWindow
 
 
-class TOOLKIT_DLLPUBLIC VCLXTopWindow: public VCLXTopWindow_Base,
+class VCLXTopWindow: public VCLXTopWindow_Base,
                      public VCLXContainer
 {
 protected:

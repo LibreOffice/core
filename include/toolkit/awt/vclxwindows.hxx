@@ -66,7 +66,7 @@ class TabPage;
 //    deriving from VCLXWindow, drawing the graphic which exists as "Graphic" at the model
 
 
-class TOOLKIT_DLLPUBLIC VCLXGraphicControl : public VCLXWindow
+class VCLXGraphicControl : public VCLXWindow
 {
 private:
     /// the image we currently display
@@ -350,7 +350,7 @@ public:
 
 //  class VCLXDialog
 
-class TOOLKIT_DLLPUBLIC VCLXDialog final : public css::awt::XDialog2,
+class VCLXDialog final : public css::awt::XDialog2,
                     public VCLXTopWindow
 {
 public:

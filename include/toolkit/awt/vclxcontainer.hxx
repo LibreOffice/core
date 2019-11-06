@@ -31,7 +31,7 @@
 //  class VCLXContainer
 
 
-class TOOLKIT_DLLPUBLIC VCLXContainer : public css::awt::XVclContainer,
+class VCLXContainer : public css::awt::XVclContainer,
                         public css::awt::XVclContainerPeer,
                         public VCLXWindow
 {
