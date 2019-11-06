@@ -50,7 +50,7 @@ namespace param
     /** wraps a parameter column as got from an SQLQueryComposer, so that it has an additional
         property "Value", which is forwarded to an XParameters interface
     */
-    class OOO_DLLPUBLIC_DBTOOLS ParameterWrapper final : public ::cppu::OWeakObject
+    class ParameterWrapper final : public ::cppu::OWeakObject
                             ,public css::lang::XTypeProvider
                             ,public ::comphelper::OMutexAndBroadcastHelper
                             ,public ::cppu::OPropertySetHelper

@@ -53,7 +53,7 @@ namespace drawinglayer
             Of course this is a primitive, so feel free to just ignore all that
             stuff and use the automatically generated decomposition. Sigh.
         */
-        class DRAWINGLAYER_DLLPUBLIC CropPrimitive2D final : public GroupPrimitive2D
+        class CropPrimitive2D final : public GroupPrimitive2D
         {
         private:
             // the transformation already applied to the child geometry
