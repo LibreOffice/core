@@ -632,6 +632,9 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             case RTF_STATICVAL:
                 m_aStates.top().setDestination(Destination::STATICVAL);
                 break;
+            case RTF_GENERATOR:
+                m_aStates.top().setDestination(Destination::GENERATOR);
+                break;
             default:
             {
                 // Check if it's a math token.
