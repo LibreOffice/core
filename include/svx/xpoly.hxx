@@ -110,7 +110,7 @@ public:
 
 class ImpXPolyPolygon;
 
-class SVX_DLLPUBLIC XPolyPolygon final
+class XPolyPolygon final
 {
     o3tl::cow_wrapper< ImpXPolyPolygon > pImpXPolyPolygon;
 

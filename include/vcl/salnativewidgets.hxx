@@ -450,7 +450,7 @@ class SAL_DLLPUBLIC_RTTI SpinbuttonValue final : public ImplControlValue
  *
  *  Value container for toolbars detailing the grip position
  */
-class VCL_DLLPUBLIC ToolbarValue final : public ImplControlValue
+class ToolbarValue final : public ImplControlValue
 {
 public:
     ToolbarValue() : ImplControlValue( ControlType::Toolbar, 0 )

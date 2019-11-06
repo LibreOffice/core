@@ -24,7 +24,7 @@
 #include <tools/GenericTypeSerializer.hxx>
 #include <vcl/gradient.hxx>
 
-class VCL_DLLPUBLIC TypeSerializer : public tools::GenericTypeSerializer
+class TypeSerializer : public tools::GenericTypeSerializer
 {
 public:
     TypeSerializer(SvStream& rStream);

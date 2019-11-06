@@ -44,7 +44,7 @@ namespace drawinglayer
             layouting which is dependent from WallpaperStyle; thus it does not need
             to be handled anywhere else in the future.
          */
-        class DRAWINGLAYER_DLLPUBLIC WallpaperBitmapPrimitive2D final : public ViewTransformationDependentPrimitive2D
+        class WallpaperBitmapPrimitive2D final : public ViewTransformationDependentPrimitive2D
         {
         private:
             basegfx::B2DRange                   maObjectRange;

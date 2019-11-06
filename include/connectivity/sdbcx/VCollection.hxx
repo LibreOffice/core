@@ -59,7 +59,7 @@ namespace connectivity
 
         typedef css::uno::Reference< css::beans::XPropertySet > ObjectType;
 
-        class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IObjectCollection
+        class SAL_NO_VTABLE IObjectCollection
         {
         public:
             virtual ~IObjectCollection();
