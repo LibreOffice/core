@@ -138,8 +138,9 @@ DECLARE_RTFEXPORT_TEST(testCjklist34, "cjklist34.rtf")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
 }
 
-DECLARE_RTFIMPORT_TEST(testTabStopFillChars, "tab-stop-fill-chars.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTabStopFillChars)
 {
+    load(mpTestDocumentPath, "tab-stop-fill-chars.rtf");
     // tlmdot
     auto aTabstops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), "ParaTabStops");
     CPPUNIT_ASSERT(aTabstops.hasElements());
@@ -207,8 +208,9 @@ DECLARE_RTFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nActual);
 }
 
-DECLARE_RTFIMPORT_TEST(testPageBorder, "page-border.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testPageBorder)
 {
+    load(mpTestDocumentPath, "page-border.rtf");
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
                                                    uno::UNO_QUERY);
     auto aTopBorder = getProperty<table::BorderLine2>(xPageStyle, "TopBorder");
@@ -236,8 +238,9 @@ DECLARE_RTFEXPORT_TEST(testTbrlPage, "tbrl-page.rtf")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
 }
 
-DECLARE_RTFIMPORT_TEST(testTdf126309, "tdf126309.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf126309)
 {
+    load(mpTestDocumentPath, "tdf126309.rtf");
     // Without the accompanying fix in place, this test would have failed, as
     // the paragraph was aligned to left, not right.
     CPPUNIT_ASSERT_EQUAL(

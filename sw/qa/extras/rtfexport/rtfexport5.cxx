@@ -181,8 +181,9 @@ DECLARE_RTFEXPORT_TEST(testParaBottomMargin, "para-bottom-margin.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
 }
 
-DECLARE_RTFIMPORT_TEST(testParaStyleBottomMargin2, "para-style-bottom-margin-2.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin2)
 {
+    load(mpTestDocumentPath, "para-style-bottom-margin-2.rtf");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(xPropertySet, "ParaBottomMargin"));
