@@ -52,7 +52,7 @@ public:
     virtual SdrInventor GetObjInventor()     const override;
     virtual sal_uInt16  GetObjIdentifier()   const override;
     virtual bool IsTextBox() const override { return mbIsTextBox; }
-    virtual void SetTextBox(bool bIsTextBox) { mbIsTextBox = bIsTextBox; }
+    void SetTextBox(bool bIsTextBox) { mbIsTextBox = bIsTextBox; }
 };
 
 // virtual objects for Flys

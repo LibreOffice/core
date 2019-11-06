@@ -52,6 +52,10 @@ forms/source/xforms/namedcollection.hxx:99
     class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
 forms/source/xforms/namedcollection.hxx:104
     unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
+fpicker/source/office/fileview.cxx:139
+    void ViewTabListBox_Impl::~ViewTabListBox_Impl()
+fpicker/source/office/fileview.hxx:76
+    void SvtFileView::~SvtFileView()
 include/basegfx/utils/unopolypolygon.hxx:97
     void basegfx::unotools::UnoPolyPolygon::modifying()const
 include/comphelper/interaction.hxx:54
@@ -82,9 +86,9 @@ include/svl/svdde.hxx:244
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
-include/svx/svdmrkv.hxx:323
-    _Bool SdrMarkView::IsPointMarkable(const class SdrHdl &,)const
-include/toolkit/controls/geometrycontrolmodel.hxx:184
+include/svx/svdpage.hxx:111
+    void SdrObjList::sort(class std::__debug::vector<int, class std::allocator<int> > &,)
+include/toolkit/controls/geometrycontrolmodel.hxx:183
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 include/vbahelper/vbacollectionimpl.hxx:290
     int ScVbaCollectionBase::getCount()
@@ -110,12 +114,12 @@ include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:41
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/tabpage.hxx:51
-    void TabPage::DeactivatePage()
-include/vcl/weld.hxx:97
+include/vcl/dialog.hxx:115
+    short Dialog::Execute()
+include/vcl/dialog.hxx:138
+    _Bool Dialog::StartExecuteAsync(struct VclAbstractDialog::AsyncContext &,)
+include/vcl/weld.hxx:100
     void weld::Widget::set_visible(_Bool,)
-include/vcl/window.hxx:1157
-    class rtl::OString vcl::Window::GetScreenshotId()const
 sc/source/core/opencl/formulagroupcl.cxx:1051
     _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction()const
 sc/source/core/opencl/formulagroupcl.cxx:1059
@@ -126,6 +130,8 @@ sc/source/core/opencl/formulagroupcl.cxx:1518
     class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > sc::opencl::ParallelReductionVectorRef::GenSlidingWindowDeclRef(_Bool,)const
 sc/source/core/opencl/formulagroupcl.cxx:1553
     unsigned long sc::opencl::ParallelReductionVectorRef::Marshal(struct _cl_kernel *,int,int,struct _cl_program *,)
+sc/source/ui/inc/AccessibleContextBase.hxx:74
+    _Bool ScAccessibleContextBase::isShowing()
 sc/source/ui/vba/vbacondition.hxx:41
     class rtl::OUString ScVbaCondition::Formula1()
 sc/source/ui/vba/vbacondition.hxx:42
@@ -206,13 +212,15 @@ slideshow/source/engine/activities/activitiesfactory.cxx:538
     void slideshow::internal::(anonymous namespace)::ValuesActivity::endAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:583
     void slideshow::internal::(anonymous namespace)::ValuesActivity::performEnd()
-slideshow/source/engine/animationfactory.cxx:443
-    void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
-slideshow/source/engine/animationfactory.cxx:447
+slideshow/source/engine/animationfactory.cxx:441
+    void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
+slideshow/source/engine/animationfactory.cxx:444
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
-sw/source/ui/dbui/mmaddressblockpage.hxx:241
+sw/source/core/inc/dflyobj.hxx:55
+    void SwFlyDrawObj::SetTextBox(_Bool,)
+sw/source/ui/dbui/mmaddressblockpage.hxx:239
     class weld::TreeView * SwCustomizeAddressBlockDialog::get_drag_source()const
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
@@ -232,10 +240,8 @@ vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
 vcl/inc/unx/glyphcache.hxx:54
     void GlyphCache::~GlyphCache()
-vcl/inc/unx/gtk/gtkdata.hxx:138
+vcl/inc/unx/gtk/gtkdata.hxx:136
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
-vcl/inc/unx/pixmap.hxx:27
-    void X11Pixmap::~X11Pixmap()
 vcl/inc/unx/saldata.hxx:51
     void X11SalData::Init()
 vcl/inc/unx/saldisp.hxx:182
@@ -256,18 +262,12 @@ vcl/inc/unx/saldisp.hxx:196
     void SalXLib::StopTimer()
 vcl/inc/unx/saldisp.hxx:198
     _Bool SalXLib::CheckTimeout(_Bool,)
-vcl/inc/unx/saldisp.hxx:350
-    int SalDisplay::CaptureMouse(class SalFrame *,)
-vcl/inc/unx/saldisp.hxx:352
-    struct SalDisplay::ScreenData * SalDisplay::initScreen(class SalX11Screen,)const
-vcl/inc/unx/saldisp.hxx:409
+vcl/inc/unx/saldisp.hxx:406
     void SalX11Display::Yield()
-vcl/inc/unx/salframe.h:208
+vcl/inc/unx/salframe.h:207
     void X11SalFrame::updateGraphics(_Bool,)
 vcl/inc/unx/salinst.h:45
     class SalX11Display * X11SalInstance::CreateDisplay()const
-vcl/inc/wizdlg.hxx:390
-    class rtl::OUString vcl::RoadmapWizard::getStateDisplayName(short,)const
 workdir/../vcl/inc/qt5/Qt5FilePicker.hxx:145
     void Qt5FilePicker::disposing(const struct com::sun::star::lang::EventObject &,)
 workdir/../vcl/inc/qt5/Qt5FilePicker.hxx:161

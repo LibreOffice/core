@@ -73,7 +73,7 @@ public:
                 std::unique_ptr<weld::TreeView> xTreeView,
                 std::unique_ptr<weld::IconView> xIconView,
                 bool bOnlyFolder, bool bMultiSelection, bool bShowType = true);
-    virtual ~SvtFileView();
+    ~SvtFileView();
 
     void                    SetViewMode( FileViewMode eMode );
 

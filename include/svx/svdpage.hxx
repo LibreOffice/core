@@ -108,7 +108,7 @@ public:
     bool           IsObjOrdNumsDirty() const        { return mbObjOrdNumsDirty; }
     virtual void   NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE);
     virtual void   InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE);
-    virtual void sort( std::vector<sal_Int32>& sortOrder );
+    void           sort( std::vector<sal_Int32>& sortOrder );
 
     void InsertObjectThenMakeNameUnique(SdrObject* pObj);
     void InsertObjectThenMakeNameUnique(SdrObject* pObj, std::unordered_set<rtl::OUString>& rNameSet, size_t nPos=SAL_MAX_SIZE);

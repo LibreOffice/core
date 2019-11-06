@@ -136,7 +136,6 @@ private:
 
 public:
     ViewTabListBox_Impl(std::unique_ptr<weld::TreeView> xTreeView, weld::Window* pTopLevel, SvtFileView_Impl* pParent, FileViewFlags nFlags);
-    virtual ~ViewTabListBox_Impl();
 
     std::unique_ptr<weld::TreeIter> make_iterator() const { return mxTreeView->make_iterator(); }
     void insert(const OUString &rEntry, const OUString& rId, const OUString& rImage, weld::TreeIter& rIter)
@@ -444,10 +443,6 @@ ViewTabListBox_Impl::ViewTabListBox_Impl(std::unique_ptr<weld::TreeView> xTreeVi
 IMPL_LINK_NOARG(ViewTabListBox_Impl, EditingEntryHdl, const weld::TreeIter&, bool)
 {
     return mbEditing;
-}
-
-ViewTabListBox_Impl::~ViewTabListBox_Impl()
-{
 }
 
 IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer *, void)
