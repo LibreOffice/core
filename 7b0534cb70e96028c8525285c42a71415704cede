@@ -46,6 +46,30 @@
       "revId": "7b0534cb70e96028c8525285c42a71415704cede",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_d81c14c3",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-11-06T10:05:46Z",
+      "side": 1,
+      "message": "Oh, and if we\u0027re at it: it\u0027s always weird to fix something in writerfilter/ and add a test in sw/: I think it would be nice to keep fixes and tests in the same module. Not sure what others think about starting a new CppunitTest_writerfilter_dmapper for *new* dmapper fixes (I\u0027m not talking about moving existing tests around).",
+      "parentUuid": "7f7f9b97_18236c07",
+      "range": {
+        "startLine": 42,
+        "startChar": 13,
+        "endLine": 42,
+        "endChar": 19
+      },
+      "revId": "7b0534cb70e96028c8525285c42a71415704cede",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
