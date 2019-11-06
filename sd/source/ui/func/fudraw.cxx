@@ -644,15 +644,12 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
 
             if (nInv == SdrInventor::Default && nSdrObjKind == OBJ_OLE2)
             {
-                DrawDocShell* pDocSh = mpDoc->GetDocSh();
-
-                if ( !pDocSh->IsUIActive() )
-                {
-                    /**********************************************************
-                    * activate OLE-object
-                    **********************************************************/
-                    mpViewShell->ActivateObject( static_cast<SdrOle2Obj*>(pObj), 0);
-                }
+                // activate OLE-object
+                SfxInt16Item aItem(SID_OBJECT, 0);
+                mpViewShell->GetViewFrame()->
+                    GetDispatcher()->ExecuteList(SID_OBJECT,
+                                                 SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                                                 { &aItem });
             }
             else if (nInv == SdrInventor::Default &&  nSdrObjKind == OBJ_GRAF && pObj->IsEmptyPresObj() )
             {
