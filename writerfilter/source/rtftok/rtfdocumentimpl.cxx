@@ -311,6 +311,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_hasRFooter(false)
     , m_hasFFooter(false)
     , m_bAfterCellBeforeRow(false)
+    , m_bLongerSpaceSequence(true)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, true);
@@ -1317,6 +1318,30 @@ void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
     }
 }
 
+void RTFDocumentImpl::enlargeSpaceSequence(OUString& rString)
+{
+    sal_Int32 nPos;
+    OUString sDoubleSpace("  ");
+    if (
+        // to avoid failing testPlaceholder test
+        !m_aStates.empty() && m_aStates.top().getDestination() == Destination::NORMAL &&
+        // text with space sequence
+        (nPos = rString.indexOf(sDoubleSpace)) > -1 &&
+        // \fprq2 (instead of \fprq1 = monospaced) still results monospaced characters without longer space sequence
+        // fix only for the base monospaced font
+        getFontName(m_nCurrentFontIndex).indexOf("Courier") == -1)
+    {
+#if !defined(MACOSX) // TODO: check layout differences and support all platforms, if needed
+        // tdf#123703 an RTF space character is longer by an extra six-em-space in a space sequence,
+        // insert them to keep RTF document layout formatted by consecutive spaces
+        const sal_Unicode aExtraSpace[5] = { 0x2006, 0x20, 0x2006, 0x20, 0 };
+        const sal_Unicode aExtraSpace2[4] = { 0x20, 0x2006, 0x20, 0 };
+        rString = rString.replaceAll(sDoubleSpace, aExtraSpace, nPos)
+                      .replaceAll(sDoubleSpace, aExtraSpace2, nPos);
+#endif
+    }
+}
+
 void RTFDocumentImpl::text(OUString& rString)
 {
     if (rString.getLength() == 1 && m_aStates.top().getDestination() != Destination::DOCCOMM)
@@ -1465,6 +1490,11 @@ void RTFDocumentImpl::text(OUString& rString)
         case Destination::STATICVAL:
             m_aStates.top().appendDestinationText(rString);
             break;
+        case Destination::GENERATOR:
+            // don't handle space sequences, if the document was made in LibreOffice
+            if (rString.indexOf("LibreOffice") != -1)
+                m_bLongerSpaceSequence = false;
+            break;
         default:
             bRet = false;
             break;
@@ -1513,7 +1543,11 @@ void RTFDocumentImpl::text(OUString& rString)
         runProps();
 
     if (!pCurrentBuffer)
+    {
+        if (m_bLongerSpaceSequence)
+            enlargeSpaceSequence(rString);
         Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
+    }
     else
     {
         auto pValue = new RTFValue(rString);
@@ -1659,7 +1693,9 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         }
         else if (std::get<0>(aTuple) == BUFFER_UTEXT)
         {
-            OUString const aString(std::get<1>(aTuple)->getString());
+            OUString aString(std::get<1>(aTuple)->getString());
+            if (m_bLongerSpaceSequence)
+                enlargeSpaceSequence(aString);
             Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aString.getStr()),
                            aString.getLength());
         }
