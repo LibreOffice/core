@@ -43,7 +43,7 @@ namespace connectivity
                                                    css::container::XNamed,
                                                    css::lang::XServiceInfo> OGroup_BASE;
 
-        class OOO_DLLPUBLIC_DBTOOLS OGroup :
+        class OGroup :
                         public cppu::BaseMutex,
                         public OGroup_BASE,
                         public IRefreshableUsers,

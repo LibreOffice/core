@@ -21,7 +21,7 @@ enum class AlterAction
     IDENTITY_RESTART
 };
 
-class SAL_DLLPUBLIC_EXPORT AlterStmtParser
+class AlterStmtParser
 {
 private:
     OUString m_sStmt;

@@ -34,7 +34,7 @@ class   ImplSalDDB;
 class   ImplSalBitmapCache;
 
 
-class VCLPLUG_GEN_PUBLIC X11SalBitmap final : public SalBitmap
+class X11SalBitmap final : public SalBitmap
 {
 private:
 
@@ -74,7 +74,7 @@ private:
 
 public:
 
-    SAL_DLLPRIVATE bool         ImplCreateFromDrawable(
+    bool         ImplCreateFromDrawable(
                                     Drawable aDrawable,
                                     SalX11Screen nXScreen,
                                     long nDrawableDepth,
@@ -84,14 +84,14 @@ public:
                                     long nHeight
                                 );
 
-    SAL_DLLPRIVATE XImage*      ImplCreateXImage(
+    XImage*      ImplCreateXImage(
                                     SalDisplay const * pSalDisp,
                                     SalX11Screen nXScreen,
                                     long nDepth,
                                     const SalTwoRect& rTwoRect
                                 ) const;
 
-    SAL_DLLPRIVATE ImplSalDDB*  ImplGetDDB(
+    ImplSalDDB*  ImplGetDDB(
                                     Drawable,
                                     SalX11Screen nXScreen,
                                     long nDrawableDepth,

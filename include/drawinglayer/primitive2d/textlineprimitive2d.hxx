@@ -32,7 +32,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class DRAWINGLAYER_DLLPUBLIC TextLinePrimitive2D final : public BufferedDecompositionPrimitive2D
+        class TextLinePrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// geometric definitions

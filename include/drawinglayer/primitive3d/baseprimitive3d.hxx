@@ -95,7 +95,7 @@ namespace drawinglayer
 
             That's all for 3D!
          */
-        class DRAWINGLAYER_DLLPUBLIC BasePrimitive3D
+        class BasePrimitive3D
         :   protected cppu::BaseMutex,
             public BasePrimitive3DImplBase
         {

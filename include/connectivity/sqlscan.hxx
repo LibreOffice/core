@@ -29,7 +29,7 @@ namespace connectivity
 
     /** Scanner for SQL92
     */
-    class OOO_DLLPUBLIC_DBTOOLS OSQLScanner
+    class OSQLScanner
     {
         const IParseContext*    m_pContext;                 // context for parse, knows all international stuff
         OString          m_sStatement;               // statement to parse

@@ -49,7 +49,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC MinimalSystemDependentDataManager final : public SystemDependentDataManager
+    class MinimalSystemDependentDataManager final : public SystemDependentDataManager
     {
     private:
         // example of a minimal SystemDependentDataManager. It *needs to hold*
@@ -125,7 +125,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC SystemDependentDataHolder
+    class SystemDependentDataHolder
     {
     private:
         // Possibility to hold System-Dependent B2DPolygon-Representations

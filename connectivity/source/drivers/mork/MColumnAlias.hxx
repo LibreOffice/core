@@ -30,7 +30,7 @@ namespace connectivity
 {
     namespace mork
     {
-        class SAL_DLLPUBLIC_EXPORT OColumnAlias
+        class OColumnAlias
         {
         public:
             struct AliasEntry

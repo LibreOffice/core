@@ -29,7 +29,7 @@ class SvXMLImport;
 
 // style:style context
 
-class XMLOFF_DLLPUBLIC XMLShapeStyleContext: public XMLPropStyleContext
+class XMLShapeStyleContext: public XMLPropStyleContext
 {
     OUString     m_sControlDataStyleName;
     bool         m_bIsNumRuleAlreadyConverted;

@@ -23,7 +23,7 @@ namespace com { namespace sun { namespace star { namespace uno { template <typen
 
 class UIObject;
 
-class UITEST_DLLPUBLIC UITest
+class UITest
 {
 public:
 

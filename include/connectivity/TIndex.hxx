@@ -26,7 +26,7 @@
 namespace connectivity
 {
     class OTableHelper;
-    class OOO_DLLPUBLIC_DBTOOLS OIndexHelper final : public connectivity::sdbcx::OIndex
+    class OIndexHelper final : public connectivity::sdbcx::OIndex
     {
         OTableHelper*   m_pTable;
     public:

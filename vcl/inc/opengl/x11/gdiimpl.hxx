@@ -19,7 +19,7 @@
 
 struct TextureCombo;
 
-class VCL_PLUGIN_PUBLIC X11OpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl, public X11GraphicsImpl
+class X11OpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl, public X11GraphicsImpl
 {
 private:
     X11SalGraphics&     mrX11Parent;

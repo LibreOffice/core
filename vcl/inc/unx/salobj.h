@@ -53,7 +53,7 @@ private:
     int         maxClipRectangles;
 };
 
-class VCLPLUG_GEN_PUBLIC X11SalObject : public SalObject
+class X11SalObject : public SalObject
 {
 public:
     SystemEnvData maSystemChildData;

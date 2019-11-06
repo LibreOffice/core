@@ -26,7 +26,7 @@
 namespace connectivity
 {
     class OIndexHelper;
-    class OOO_DLLPUBLIC_DBTOOLS OIndexColumns final : public sdbcx::OCollection
+    class OIndexColumns final : public sdbcx::OCollection
     {
         OIndexHelper* m_pIndex;
         virtual sdbcx::ObjectType createObject(const OUString& _rName) override;

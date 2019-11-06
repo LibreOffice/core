@@ -52,7 +52,7 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitScaleData
     Date        NullDate;
 };
 
-struct OOO_DLLPUBLIC_CHARTVIEW ExplicitSubIncrement
+struct ExplicitSubIncrement
 {
     ExplicitSubIncrement();
 

@@ -58,7 +58,7 @@ namespace connectivity
         typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OKey_BASE;
         class OCollection;
 
-        class OOO_DLLPUBLIC_DBTOOLS OKey :
+        class OKey :
                                 public cppu::BaseMutex,
                                 public ODescriptor_BASE,
                                 public IRefreshableColumns,

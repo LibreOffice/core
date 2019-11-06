@@ -37,7 +37,7 @@ namespace connectivity
 
 
         /// ResultSet implementation for Writer tables and Calc sheets.
-        class OOO_DLLPUBLIC_FILE OComponentResultSet : public OComponentResultSet_BASE2,
+        class OComponentResultSet : public OComponentResultSet_BASE2,
                                 public OComponentResultSet_BASE,
                                 public OComponentResultSet_BASE3
         {

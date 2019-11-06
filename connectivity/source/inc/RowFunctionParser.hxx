@@ -60,7 +60,7 @@ struct OOO_DLLPUBLIC_DBTOOLS ParseError
     ParseError( const char* ) {}
 };
 
-class OOO_DLLPUBLIC_DBTOOLS FunctionParser
+class FunctionParser
 {
 public:
 
