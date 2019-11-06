@@ -40,10 +40,9 @@ public:
     XGradient                   aGradient;
 };
 
-class GradTransformer
+struct GradTransformer
 {
-public:
-    GradTransformer() {}
+    GradTransformer() = delete;
 
     static void GradToVec(GradTransGradient const & rG, GradTransVector& rV,
         const SdrObject* pObj);

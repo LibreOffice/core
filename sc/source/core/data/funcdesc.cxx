@@ -88,11 +88,7 @@ struct ScFuncDescCore
     sal_uInt8 const aOptionalArgs[7];
 };
 
-class ScFuncRes
-{
-public:
-    ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc*, bool& rbSuppressed);
-};
+static void ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc*, bool& rbSuppressed);
 
 // class ScFuncDesc:
 ScFuncDesc::ScFuncDesc() :
@@ -815,7 +811,7 @@ ScFunctionList::ScFunctionList()
             pDesc = new ScFuncDesc;
             bool bSuppressed = false;
 
-            ScFuncRes aSubRes(*pEntry, pDesc, bSuppressed);
+            ScFuncRes(*pEntry, pDesc, bSuppressed);
             // Instead of dealing with this exceptional case at 1001 places
             // we simply don't add an entirely suppressed function to the
             // list and delete it.
@@ -1185,8 +1181,7 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
     return 0;
 }
 
-// class ScFuncRes:
-ScFuncRes::ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc* pDesc, bool& rbSuppressed)
+static void ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc* pDesc, bool& rbSuppressed)
 {
     const sal_uInt16 nOpCode = rEntry.nOpCode;
     sal_uInt16 nFunctionFlags = rEntry.nFunctionFlags;

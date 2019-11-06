@@ -317,7 +317,6 @@ protected:
         uno::Reference< drawing::XDrawPages > xDrawPages = xDrawPagesSupplier->getDrawPages();
         CPPUNIT_ASSERT(xDrawPages.is());
 
-        XShapeDumper aShapeDumper;
         sal_Int32 nLength = xDrawPages->getCount();
         for (sal_Int32 i = 0; i < nLength; ++i)
         {

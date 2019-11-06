@@ -2893,7 +2893,6 @@ OUString ChartView::dump()
         uno::Reference< drawing::XShapes > xShape(xShapes->getByIndex(i), uno::UNO_QUERY);
         if(xShape.is())
         {
-            XShapeDumper dumper;
             OUString aString = XShapeDumper::dump(mxRootShape);
             aBuffer.append(aString);
         }
@@ -2902,7 +2901,6 @@ OUString ChartView::dump()
             uno::Reference< drawing::XShape > xSingleShape(xShapes->getByIndex(i), uno::UNO_QUERY);
             if(!xSingleShape.is())
                 continue;
-            XShapeDumper dumper;
             OUString aString = XShapeDumper::dump(xSingleShape);
             aBuffer.append(aString);
         }
