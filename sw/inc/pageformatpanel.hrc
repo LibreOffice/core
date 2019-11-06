@@ -12,6 +12,9 @@
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
+namespace sw
+{
+
 // To translators: this is a listbox labelled by "Margins:", inch units
 const char* RID_PAGEFORMATPANEL_MARGINS_INCH[] =
 {
@@ -37,6 +40,8 @@ const char* RID_PAGEFORMATPANEL_MARGINS_CM[] =
     NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Wide"),
     NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Mirrored")
 };
+
+}
 
 #endif
 
