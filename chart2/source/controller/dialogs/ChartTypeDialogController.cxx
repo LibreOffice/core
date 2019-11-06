@@ -433,7 +433,11 @@ const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTem
         {"com.sun.star.chart2.template.ThreeDColumnDeep" ,               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z)}};
     return s_aTemplateMap;
 }
-void ColumnChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+
+namespace
+{
+template<class AnyValueSet>
+void ColumnChartDialogController_fillSubTypeList( AnyValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -479,52 +483,16 @@ void ColumnChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, co
     rSubTypeList.SetItemText( 3, SchResId( STR_PERCENT ) );
     rSubTypeList.SetItemText( 4, SchResId( STR_DEEP ) );
 }
+} // end of anon namespace
+
+void ColumnChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+{
+    ColumnChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
+}
 
 void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
-    rSubTypeList.Clear();
-
-    if( rParameter.b3DLook )
-    {
-        switch(rParameter.nGeometry3D)
-        {
-            case DataPointGeometry3D::CYLINDER:
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_SAEULE_3D_1));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_SAEULE_3D_2));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_SAEULE_3D_3));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_SAEULE_3D_4));
-            break;
-            case DataPointGeometry3D::CONE:
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_KEGEL_3D_1));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_KEGEL_3D_2));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_KEGEL_3D_3));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_KEGEL_3D_4));
-            break;
-            case DataPointGeometry3D::PYRAMID:
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_PYRAMID_3D_1));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_PYRAMID_3D_2));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_PYRAMID_3D_3));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_PYRAMID_3D_4));
-            break;
-            default: //DataPointGeometry3D::CUBOID:
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_COLUMNS_3D_1));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_COLUMNS_3D_2));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_COLUMNS_3D_3));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_COLUMNS_3D));
-            break;
-        }
-    }
-    else
-    {
-        rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_COLUMNS_2D_1));
-        rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_COLUMNS_2D_2));
-        rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_COLUMNS_2D_3));
-    }
-
-    rSubTypeList.SetItemText( 1, SchResId( STR_NORMAL ) );
-    rSubTypeList.SetItemText( 2, SchResId( STR_STACKED ) );
-    rSubTypeList.SetItemText( 3, SchResId( STR_PERCENT ) );
-    rSubTypeList.SetItemText( 4, SchResId( STR_DEEP ) );
+    ColumnChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
 }
 
 BarChartDialogController::BarChartDialogController()
@@ -557,7 +525,11 @@ const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTempla
         {"com.sun.star.chart2.template.ThreeDBarDeep" ,               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z)}};
     return s_aTemplateMap;
 }
-void BarChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+
+namespace
+{
+template<class AnyValueSet>
+void BarChartDialogController_fillSubTypeList( AnyValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -602,51 +574,16 @@ void BarChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const
     rSubTypeList.SetItemText( 3, SchResId( STR_PERCENT ) );
     rSubTypeList.SetItemText( 4, SchResId( STR_DEEP ) );
 }
+} // end of anon namespace
+
+void BarChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+{
+    BarChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
+}
 
 void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
-    rSubTypeList.Clear();
-
-    if( rParameter.b3DLook )
-    {
-        switch(rParameter.nGeometry3D)
-        {
-            case DataPointGeometry3D::CYLINDER:
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_ROEHRE_3D_1));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_ROEHRE_3D_2));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_ROEHRE_3D_3));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_ROEHRE_3D_4));
-            break;
-            case DataPointGeometry3D::CONE:
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_KEGELQ_3D_1));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_KEGELQ_3D_2));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_KEGELQ_3D_3));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_KEGELQ_3D_4));
-            break;
-            case DataPointGeometry3D::PYRAMID:
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_PYRAMIDQ_3D_1));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_PYRAMIDQ_3D_2));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_PYRAMIDQ_3D_3));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_PYRAMIDQ_3D_4));
-            break;
-            default: //DataPointGeometry3D::CUBOID:
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_BARS_3D_1));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_BARS_3D_2));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_BARS_3D_3));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_BARS_3D));
-            break;
-        }
-    }
-    else
-    {
-        rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_BARS_2D_1));
-        rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_BARS_2D_2));
-        rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_BARS_2D_3));
-    }
-    rSubTypeList.SetItemText( 1, SchResId( STR_NORMAL ) );
-    rSubTypeList.SetItemText( 2, SchResId( STR_STACKED ) );
-    rSubTypeList.SetItemText( 3, SchResId( STR_PERCENT ) );
-    rSubTypeList.SetItemText( 4, SchResId( STR_DEEP ) );
+    BarChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
 }
 
 PieChartDialogController::PieChartDialogController()
@@ -680,7 +617,11 @@ const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTempla
     {"com.sun.star.chart2.template.ThreeDDonutAllExploded" , ChartTypeParameter(4,false,true)}};
     return s_aTemplateMap;
 }
-void PieChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+
+namespace
+{
+template<class AnyValueSet>
+void PieChartDialogController_fillSubTypeList( AnyValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -703,29 +644,16 @@ void PieChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const
     rSubTypeList.SetItemText( 3, SchResId( STR_DONUT          ) );
     rSubTypeList.SetItemText( 4, SchResId( STR_DONUT_EXPLODED ) );
 }
+} // end of anon namespace
+
+void PieChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+{
+    PieChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
+}
 
 void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
-    rSubTypeList.Clear();
-
-    if( rParameter.b3DLook )
-    {
-        rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_CIRCLES_3D));
-        rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_CIRCLES_3D_EXPLODED));
-        rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_DONUT_3D));
-        rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_DONUT_3D_EXPLODED));
-    }
-    else
-    {
-        rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_CIRCLES_2D));
-        rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_CIRCLES_2D_EXPLODED));
-        rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_DONUT_2D));
-        rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_DONUT_2D_EXPLODED));
-    }
-    rSubTypeList.SetItemText( 1, SchResId( STR_NORMAL         ) );
-    rSubTypeList.SetItemText( 2, SchResId( STR_PIE_EXPLODED   ) );
-    rSubTypeList.SetItemText( 3, SchResId( STR_DONUT          ) );
-    rSubTypeList.SetItemText( 4, SchResId( STR_DONUT_EXPLODED ) );
+    PieChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
 }
 
 bool PieChartDialogController::shouldShow_3DLookControl() const
@@ -774,7 +702,11 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
     {"com.sun.star.chart2.template.ThreeDLineDeep" ,             ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z,false,true)}};
     return s_aTemplateMap;
 }
-void LineChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+
+namespace
+{
+template<class AnyValueSet>
+void LineChartDialogController_fillSubTypeList( AnyValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -839,71 +771,16 @@ void LineChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, cons
     rSubTypeList.SetItemText( 3, SchResId( STR_LINES_ONLY ) );
     rSubTypeList.SetItemText( 4, SchResId( STR_LINES_3D ) );
 }
+} // end of anon namespace
+
+void LineChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+{
+    LineChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
+}
 
 void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
-    rSubTypeList.Clear();
-
-    switch( rParameter.eCurveStyle )
-    {
-        case CurveStyle_CUBIC_SPLINES:
-        case CurveStyle_B_SPLINES:
-            if( rParameter.eStackMode == GlobalStackMode_NONE || rParameter.eStackMode == GlobalStackMode_STACK_Z )
-            {
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_POINTS_XCATEGORY));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_LINE_P_XCATEGORY_SMOOTH));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_LINE_O_XCATEGORY_SMOOTH));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_LINE3D_XCATEGORY_SMOOTH));
-            }
-            else
-            {
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_POINTS_STACKED));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_LINE_P_STACKED_SMOOTH));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_LINE_O_STACKED_SMOOTH));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_LINE3D_STACKED_SMOOTH));
-            }
-            break;
-        case CurveStyle_STEP_START:
-        case CurveStyle_STEP_END:
-        case CurveStyle_STEP_CENTER_X:
-        case CurveStyle_STEP_CENTER_Y:
-            if( rParameter.eStackMode == GlobalStackMode_NONE || rParameter.eStackMode == GlobalStackMode_STACK_Z )
-            {
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_POINTS_XCATEGORY));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_LINE_P_XCATEGORY_STEPPED));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_LINE_O_XCATEGORY_STEPPED));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_LINE3D_XCATEGORY_STEPPED));
-            }
-            else
-            {
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_POINTS_STACKED));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_LINE_P_STACKED_STEPPED));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_LINE_O_STACKED_STEPPED));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_LINE3D_STACKED_STEPPED));
-            }
-            break;
-        default: // includes CurveStyle_LINES
-            //direct lines
-            if( rParameter.eStackMode == GlobalStackMode_NONE || rParameter.eStackMode == GlobalStackMode_STACK_Z )
-            {
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_POINTS_XCATEGORY));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_LINE_P_XCATEGORY));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_LINE_O_XCATEGORY));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_LINE3D_XCATEGORY));
-            }
-            else
-            {
-                rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_POINTS_STACKED));
-                rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_LINE_P_STACKED));
-                rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_LINE_O_STACKED));
-                rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_LINE3D_STACKED));
-            }
-    }
-
-    rSubTypeList.SetItemText( 1, SchResId( STR_POINTS_ONLY ) );
-    rSubTypeList.SetItemText( 2, SchResId( STR_POINTS_AND_LINES ) );
-    rSubTypeList.SetItemText( 3, SchResId( STR_LINES_ONLY ) );
-    rSubTypeList.SetItemText( 4, SchResId( STR_LINES_3D ) );
+    LineChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
 }
 
 bool LineChartDialogController::shouldShow_StackingControl() const
@@ -985,7 +862,10 @@ const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplat
     return s_aTemplateMap;
 }
 
-void XYChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+namespace
+{
+template<class AnyValueSet>
+void XYChartDialogController_fillSubTypeList( AnyValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -1023,44 +903,16 @@ void XYChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const 
     rSubTypeList.SetItemText( 3, SchResId( STR_LINES_ONLY ) );
     rSubTypeList.SetItemText( 4, SchResId( STR_LINES_3D ) );
 }
+} // end of anon namespace
+
+void XYChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+{
+    XYChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
+}
 
 void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
-    rSubTypeList.Clear();
-
-    switch (rParameter.eCurveStyle)
-    {
-        case CurveStyle_CUBIC_SPLINES:
-        case CurveStyle_B_SPLINES:
-        {
-            rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_POINTS_XVALUES));
-            rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_LINE_P_XVALUES_SMOOTH));
-            rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_LINE_O_XVALUES_SMOOTH));
-            rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_LINE3D_XVALUES_SMOOTH));
-            break;
-        }
-        case CurveStyle_STEP_START:
-        case CurveStyle_STEP_END:
-        case CurveStyle_STEP_CENTER_X:
-        case CurveStyle_STEP_CENTER_Y:
-        {
-            rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_POINTS_XVALUES));
-            rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_LINE_P_XVALUES_STEPPED));
-            rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_LINE_O_XVALUES_STEPPED));
-            rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_LINE3D_XVALUES_STEPPED));
-            break;
-        }
-        default: // includes CurveStyle_LINES
-            rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_POINTS_XVALUES));
-            rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_LINE_P_XVALUES));
-            rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_LINE_O_XVALUES));
-            rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_LINE3D_XVALUES));
-    }
-
-    rSubTypeList.SetItemText( 1, SchResId( STR_POINTS_ONLY ) );
-    rSubTypeList.SetItemText( 2, SchResId( STR_POINTS_AND_LINES ) );
-    rSubTypeList.SetItemText( 3, SchResId( STR_LINES_ONLY ) );
-    rSubTypeList.SetItemText( 4, SchResId( STR_LINES_3D ) );
+    XYChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
 }
 
 bool XYChartDialogController::shouldShow_SplineControl() const
@@ -1135,7 +987,10 @@ const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTempl
     return s_aTemplateMap;
 }
 
-void AreaChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+namespace
+{
+template<class AnyValueSet>
+void AreaChartDialogController_fillSubTypeList( AnyValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -1156,27 +1011,16 @@ void AreaChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, cons
     rSubTypeList.SetItemText( 2, SchResId( STR_STACKED ) );
     rSubTypeList.SetItemText( 3, SchResId( STR_PERCENT ) );
 }
+} // end of anon namespace
+
+void AreaChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+{
+    AreaChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
+}
 
 void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
-    rSubTypeList.Clear();
-
-    if( rParameter.b3DLook )
-    {
-        rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_AREAS_3D));
-        rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_AREAS_3D_1));
-        rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_AREAS_3D_2));
-    }
-    else
-    {
-        rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_AREAS_2D_1));
-        rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_AREAS_2D));
-        rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_AREAS_2D_3));
-    }
-
-    rSubTypeList.SetItemText( 1, SchResId( rParameter.b3DLook ? STR_DEEP : STR_NORMAL ) );
-    rSubTypeList.SetItemText( 2, SchResId( STR_STACKED ) );
-    rSubTypeList.SetItemText( 3, SchResId( STR_PERCENT ) );
+    AreaChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
 }
 
 void AreaChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
@@ -1254,7 +1098,11 @@ const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTempla
     {"com.sun.star.chart2.template.PercentStackedFilledNet" ,ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y_PERCENT,false,false)}};
     return s_aTemplateMap;
 }
-void NetChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+
+namespace
+{
+template<class AnyValueSet>
+void NetChartDialogController_fillSubTypeList( AnyValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -1278,30 +1126,16 @@ void NetChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const
     rSubTypeList.SetItemText( 3, SchResId( STR_LINES_ONLY ) );
     rSubTypeList.SetItemText( 4, SchResId( STR_FILLED ) );
 }
+} // end of anon namespace
+
+void NetChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+{
+    NetChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
+}
 
 void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
-    rSubTypeList.Clear();
-
-    if( rParameter.eStackMode == GlobalStackMode_NONE )
-    {
-        rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_NET_SYMB));
-        rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_NET_LINESYMB));
-        rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_NET));
-        rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_NET_FILL));
-    }
-    else
-    {
-        rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_NET_SYMB_STACK));
-        rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_NET_LINESYMB_STACK));
-        rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_NET_STACK));
-        rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_NET_FILL_STACK));
-    }
-
-    rSubTypeList.SetItemText( 1, SchResId( STR_POINTS_ONLY ) );
-    rSubTypeList.SetItemText( 2, SchResId( STR_POINTS_AND_LINES ) );
-    rSubTypeList.SetItemText( 3, SchResId( STR_LINES_ONLY ) );
-    rSubTypeList.SetItemText( 4, SchResId( STR_FILLED ) );
+    NetChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
 }
 
 void NetChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
@@ -1359,7 +1193,10 @@ const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemp
     return s_aTemplateMap;
 }
 
-void StockChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+namespace
+{
+template<class AnyValueSet>
+void StockChartDialogController_fillSubTypeList( AnyValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_STOCK_1));
@@ -1372,19 +1209,16 @@ void StockChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, con
     rSubTypeList.SetItemText( 3, SchResId(STR_STOCK_3) );
     rSubTypeList.SetItemText( 4, SchResId(STR_STOCK_4) );
 }
+} // end of anon namespace
 
-void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void StockChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
-    rSubTypeList.Clear();
-    rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_STOCK_1));
-    rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_STOCK_2));
-    rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_STOCK_3));
-    rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_STOCK_4));
+    StockChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
+}
 
-    rSubTypeList.SetItemText( 1, SchResId(STR_STOCK_1) );
-    rSubTypeList.SetItemText( 2, SchResId(STR_STOCK_2) );
-    rSubTypeList.SetItemText( 3, SchResId(STR_STOCK_3) );
-    rSubTypeList.SetItemText( 4, SchResId(STR_STOCK_4) );
+void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+{
+    StockChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
 }
 
 void StockChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
@@ -1416,7 +1250,10 @@ const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogControlle
     return s_aTemplateMap;
 }
 
-void CombiColumnLineChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+namespace
+{
+template<class AnyValueSet>
+void CombiColumnLineChartDialogController_fillSubTypeList( AnyValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_COLUMN_LINE));
@@ -1425,15 +1262,16 @@ void CombiColumnLineChartDialogController::fillSubTypeList( SvtValueSet& rSubTyp
     rSubTypeList.SetItemText(1, SchResId(STR_LINE_COLUMN));
     rSubTypeList.SetItemText(2, SchResId(STR_LINE_STACKEDCOLUMN));
 }
+} // end of anon namespace
 
-void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void CombiColumnLineChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
-    rSubTypeList.Clear();
-    rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_COLUMN_LINE));
-    rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_COLUMN_LINE_STACKED));
+    CombiColumnLineChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
+}
 
-    rSubTypeList.SetItemText(1, SchResId(STR_LINE_COLUMN));
-    rSubTypeList.SetItemText(2, SchResId(STR_LINE_STACKEDCOLUMN));
+void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+{
+    CombiColumnLineChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
 }
 
 void CombiColumnLineChartDialogController::showExtraControls(weld::Builder* pBuilder)
@@ -1554,20 +1392,27 @@ const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTem
         {"com.sun.star.chart2.template.Bubble" ,          ChartTypeParameter(1,true)}};
     return s_aTemplateMap;
 }
-void BubbleChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+
+namespace
+{
+template<class AnyValueSet>
+void BubbleChartDialogController_fillSubTypeList( AnyValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_BUBBLE_1));
 
     rSubTypeList.SetItemText( 1, SchResId(STR_BUBBLE_1) );
 }
+} // end of anon namespace
 
-void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void BubbleChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
-    rSubTypeList.Clear();
-    rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_BUBBLE_1));
+    BubbleChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
+}
 
-    rSubTypeList.SetItemText( 1, SchResId(STR_BUBBLE_1) );
+void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+{
+    BubbleChartDialogController_fillSubTypeList(rSubTypeList, rParameter);
 }
 
 void BubbleChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
