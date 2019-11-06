@@ -338,13 +338,14 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                 if ( Event.State >>= bCheckmark )
                 {
                     // Checkmark or RadioButton
-                    m_pVCLMenu->ShowItem( menuItemHandler->nItemId );
                     m_pVCLMenu->CheckItem( menuItemHandler->nItemId, bCheckmark );
-
+                    // If not already designated RadioButton set as CheckMark
                     MenuItemBits nBits = m_pVCLMenu->GetItemBits( menuItemHandler->nItemId );
-                    //If not already designated RadioButton set as CheckMark
                     if (!(nBits & MenuItemBits::RADIOCHECK))
                         m_pVCLMenu->SetItemBits( menuItemHandler->nItemId, nBits | MenuItemBits::CHECKABLE );
+
+                    if ( menuItemHandler->bMadeInvisible )
+                        m_pVCLMenu->ShowItem( menuItemHandler->nItemId );
                 }
                 else if ( Event.State >>= aItemText )
                 {
@@ -353,11 +354,9 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                     if ( !aEnumPart.isEmpty() && aURL.GetProtocol() == INetProtocol::Uno )
                     {
                         // Checkmark or RadioButton
-                        m_pVCLMenu->ShowItem( menuItemHandler->nItemId );
                         m_pVCLMenu->CheckItem( menuItemHandler->nItemId, aItemText == aEnumPart );
-
+                        // If not already designated RadioButton set as CheckMark
                         MenuItemBits nBits = m_pVCLMenu->GetItemBits( menuItemHandler->nItemId );
-                        //If not already designated RadioButton set as CheckMark
                         if (!(nBits & MenuItemBits::RADIOCHECK))
                             m_pVCLMenu->SetItemBits( menuItemHandler->nItemId, nBits | MenuItemBits::CHECKABLE );
                     }
@@ -377,16 +376,19 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                             aItemText = FwkResId(STR_SAVECOPYDOC) + aItemText.copy( 4 );
                         }
 
-                        m_pVCLMenu->ShowItem( menuItemHandler->nItemId );
                         m_pVCLMenu->SetItemText( menuItemHandler->nItemId, aItemText );
                     }
+
+                    if ( menuItemHandler->bMadeInvisible )
+                        m_pVCLMenu->ShowItem( menuItemHandler->nItemId );
                 }
                 else if ( Event.State >>= aVisibilityStatus )
                 {
                     // Visibility
                     m_pVCLMenu->ShowItem( menuItemHandler->nItemId, aVisibilityStatus.bVisible );
+                    menuItemHandler->bMadeInvisible = !aVisibilityStatus.bVisible;
                 }
-                else
+                else if ( menuItemHandler->bMadeInvisible )
                     m_pVCLMenu->ShowItem( menuItemHandler->nItemId );
             }
 
