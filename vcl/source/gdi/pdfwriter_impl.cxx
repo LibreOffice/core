@@ -8842,6 +8842,34 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         aLine.append(" 0 obj\n");
         aLine.append("<< /Type /XObject");
         aLine.append(" /Subtype /Form");
+
+        long nWidth = aSize.Width();
+        long nHeight = aSize.Height();
+        if (auto pRotate = dynamic_cast<filter::PDFNumberElement*>(pPage->Lookup("Rotate")))
+        {
+            // The original page was rotated, then construct a transformation matrix which does the
+            // same with our form object.
+            if (rtl::math::approxEqual(pRotate->GetValue(), 90))
+            {
+                std::swap(nWidth, nHeight);
+                basegfx::B2DHomMatrix aMat;
+                aMat.rotate(basegfx::deg2rad(pRotate->GetValue()));
+                // Rotate around the origo (bottom left corner) counter-clockwise, then translate
+                // horizontally to effectively keep the bottom left corner unchanged.
+                aLine.append(" /Matrix [ ");
+                aLine.append(aMat.get(0, 0));
+                aLine.append(" ");
+                aLine.append(aMat.get(0, 1));
+                aLine.append(" ");
+                aLine.append(aMat.get(1, 0));
+                aLine.append(" ");
+                aLine.append(aMat.get(1, 1));
+                aLine.append(" 0 ");
+                aLine.append(nWidth);
+                aLine.append(" ] ");
+            }
+        }
+
         aLine.append(" /Resources <<");
         static const std::initializer_list<OString> aKeys =
         {
@@ -8855,9 +8883,9 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             aLine.append(copyExternalResources(*pPage, rKey, aCopiedResources));
         aLine.append(">>");
         aLine.append(" /BBox [ 0 0 ");
-        aLine.append(aSize.Width());
+        aLine.append(nWidth);
         aLine.append(" ");
-        aLine.append(aSize.Height());
+        aLine.append(nHeight);
         aLine.append(" ]");
 
         if (!g_bDebugDisableCompression)
