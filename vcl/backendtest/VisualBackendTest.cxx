@@ -485,7 +485,7 @@ IMPL_LINK_NOARG(VisualBackendTestWindow, updateHdl, Timer *, void)
 {
     if (mbAnimate)
     {
-        maUpdateTimer.SetTimeout(1000.0 / 60.0);
+        maUpdateTimer.SetTimeout(1.0);
         maUpdateTimer.Start();
         Invalidate();
     }
