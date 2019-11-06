@@ -286,10 +286,9 @@ struct PDFPart : public PDFContainer
     virtual PDFEntry* clone() const override;
 };
 
-class PDFReader
+struct PDFReader
 {
-public:
-    PDFReader() {}
+    PDFReader() = delete;
 
     static std::unique_ptr<PDFEntry> read( const char* pFileName );
 #ifdef _WIN32

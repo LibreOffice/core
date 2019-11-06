@@ -214,8 +214,6 @@ typedef int(*PDFFileHdl)(const char*, const char*, PDFFile*);
 
 static int handleFile( const char* pInFile, const char* pOutFile, const char* pPassword, PDFFileHdl pHdl )
 {
-
-    PDFReader aParser;
     int nRet = 0;
     std::unique_ptr<PDFEntry> pEntry = pdfparse::PDFReader::read( pInFile );
     if( pEntry )

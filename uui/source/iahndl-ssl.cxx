@@ -150,7 +150,6 @@ executeUnknownAuthDialog(
     aArguments.push_back( getContentPart( rXCert->getSubjectName()) );
 
     std::locale aResLocale(Translate::Create("uui"));
-    ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
 
     aMessage = Translate::get(STR_UUI_UNKNOWNAUTH_UNTRUSTED, aResLocale);
     aMessage = UUIInteractionHelper::replaceMessageWithArguments(

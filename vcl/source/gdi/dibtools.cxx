@@ -1108,7 +1108,6 @@ bool ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess const & rAcc )
     const sal_uLong     nPalSize = nColors * 4UL;
     std::unique_ptr<sal_uInt8[]> pEntries(new sal_uInt8[ nPalSize ]);
     sal_uInt8*          pTmpEntry = pEntries.get();
-    BitmapColor     aPalColor;
 
     for( sal_uInt16 i = 0; i < nColors; i++ )
     {

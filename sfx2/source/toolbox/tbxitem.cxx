@@ -817,10 +817,10 @@ void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
         vcl::Window* pWindow = GetChild( i );
         while ( pWindow )
         {
-            ::MouseEvent aMEvt( pWindow->ScreenToOutputPixel( aScrPos ),
+            ::MouseEvent aChildMEvt( pWindow->ScreenToOutputPixel( aScrPos ),
                               rMEvt.GetClicks(), rMEvt.GetMode(),
                               rMEvt.GetButtons(), rMEvt.GetModifier() );
-            pWindow->MouseMove( rMEvt );
+            pWindow->MouseMove( aChildMEvt );
             pWindow->Update();
             i++;
             pWindow = GetChild( i );

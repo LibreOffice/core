@@ -1318,7 +1318,6 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 }
 
                 // set values and transform to vector set
-                GradTransformer aGradTransformer;
                 GradTransVector aGradTransVector;
                 GradTransGradient aGradTransGradient;
 
@@ -1359,7 +1358,6 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 if(eFillStyle == drawing::FillStyle_GRADIENT)
                 {
                     // set values and transform to vector set
-                    GradTransformer aGradTransformer;
                     GradTransVector aGradTransVector;
                     GradTransGradient aGradTransGradient;
                     Size aHdlSize(15, 15);

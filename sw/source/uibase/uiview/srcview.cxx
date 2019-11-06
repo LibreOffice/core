@@ -567,7 +567,6 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
                                                   bool bRecursive)
 {
     TextView* pTextView = aEditWin->GetTextView();
-    TextSelection aSel;
     TextPaM aPaM;
 
     bool bForward = !rSearchItem.GetBackward();

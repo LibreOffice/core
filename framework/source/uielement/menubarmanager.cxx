@@ -689,7 +689,6 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
 
         if ( xDispatchProvider.is() )
         {
-            vcl::KeyCode      aEmptyKeyCode;
             SvtCommandOptions aCmdOptions;
             for (auto const& menuItemHandler : m_aMenuItemHandlerVector)
             {

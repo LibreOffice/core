@@ -1048,8 +1048,6 @@ bool Bitmap::CombineSimple(const Bitmap& rMask, BmpCombine eCombine)
         const long nWidth = std::min(pMaskAcc->Width(), pAcc->Width());
         const long nHeight = std::min(pMaskAcc->Height(), pAcc->Height());
         const Color aColBlack(COL_BLACK);
-        BitmapColor aPixel;
-        BitmapColor aMaskPixel;
         const BitmapColor aWhite(pAcc->GetBestMatchingColor(COL_WHITE));
         const BitmapColor aBlack(pAcc->GetBestMatchingColor(aColBlack));
         const BitmapColor aMaskBlack(pMaskAcc->GetBestMatchingColor(aColBlack));

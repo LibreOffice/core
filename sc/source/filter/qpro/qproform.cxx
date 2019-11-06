@@ -72,7 +72,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
 {
     TokenId  eParam[ nBufSize ];
     sal_Int32    nCount;
-    TokenId  nPush, nPush1;
+    TokenId  nPush;
 
     bool bAddIn = false;
 

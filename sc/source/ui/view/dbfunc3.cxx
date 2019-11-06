@@ -965,7 +965,6 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
     {
         // create date group dimensions
 
-        ScDPNumGroupInfo aEmpty;
         bool bFirst = true;
         sal_Int32 nMask = 1;
         for (sal_uInt16 nBit=0; nBit<32; nBit++)

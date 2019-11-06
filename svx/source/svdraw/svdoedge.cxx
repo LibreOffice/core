@@ -2149,7 +2149,6 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     size_t no=pOL->GetObjCount();
     bool bFnd = false;
     SdrObjConnection aTestCon;
-    SdrObjConnection aBestCon;
 
     while (no>0 && !bFnd) {
         // issue: group objects on different layers return LayerID=0!

@@ -1371,7 +1371,6 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
     // from IAO positions and colors to gradient
     const SfxItemSet& rSet = _pObj->GetMergedItemSet();
 
-    GradTransformer aGradTransformer;
     GradTransGradient aOldGradTransGradient;
     GradTransGradient aGradTransGradient;
     GradTransVector aGradTransVector;

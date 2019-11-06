@@ -478,7 +478,6 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
         return xEmbed;
     aPDFFile = OUStringToOString( aSysUPath, osl_getThreadTextEncoding() );
 
-    pdfparse::PDFReader aParser;
     std::unique_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
     if( pEntry )
     {

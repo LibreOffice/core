@@ -1106,7 +1106,6 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
                     }
 
                     aBoxItem = aNewBox;
-                    SvxBorderLine aDestBorderLine;
 
                     if( aBoxItem->GetTop() != nullptr )
                         aBoxItem->SetLine(&aBorderLine, SvxBoxItemLine::TOP);

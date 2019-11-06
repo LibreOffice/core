@@ -910,7 +910,6 @@ static bool checkEncryption( const OUString&                               i_rPa
     bool bSuccess = false;
     OString aPDFFile = OUStringToOString( i_rPath, osl_getThreadTextEncoding() );
 
-    pdfparse::PDFReader aParser;
     std::unique_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
     if( pEntry )
     {

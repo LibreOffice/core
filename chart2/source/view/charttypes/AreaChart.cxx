@@ -421,8 +421,6 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
                 aPoint2.PositionY = aPoly.SequenceY[nPoly][nPoint];
                 aPoint2.PositionZ = aPoly.SequenceZ[nPoly][nPoint];
 
-                Stripe aStripe( aPoint1, aPoint2, fDepth );
-
                 m_pShapeFactory->createStripe(xSeriesGroupShape_Shapes
                     , Stripe( aPoint1, aPoint2, fDepth )
                     , pSeries->getPropertiesOfSeries(), PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), true, 1 );

@@ -734,8 +734,6 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
     }
     else // travel through the select column parse node
     {
-        ::comphelper::UStringMixEqual bCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
-
         OTableFieldDescRef aSelEntry = _pEntry;
         sal_uInt16 nColumnId = aSelEntry->GetColumnId();
 

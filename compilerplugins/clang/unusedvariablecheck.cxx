@@ -53,7 +53,21 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
         return true;
     if( var->isDefinedOutsideFunctionOrMethod())
         return true;
-    if( loplugin::isExtraWarnUnusedType(var->getType()))
+
+    auto type = var->getType();
+    bool check = loplugin::isExtraWarnUnusedType(type);
+
+    // this chunk of logic generates false+, which is why we don't leave it on
+/*
+    if (!check && type->isRecordType())
+    {
+        auto recordDecl
+            = dyn_cast_or_null<CXXRecordDecl>(type->getAs<RecordType>()->getDecl());
+        if (recordDecl && recordDecl->hasDefinition() && recordDecl->hasTrivialDestructor())
+            check = true;
+    }
+*/
+    if(check)
         {
             if( const ParmVarDecl* param = dyn_cast< ParmVarDecl >( var ))
                 {

@@ -69,7 +69,6 @@ OUString SAL_CALL ScVbaPageSetup::getPrintArea()
     const uno::Sequence< table::CellRangeAddress > aSeq = xPrintAreas->getPrintAreas();
     if( aSeq.hasElements() )
     {
-        ScAddress::Details aDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
         ScRangeList aRangeList;
         for( const auto& rRange : aSeq )
         {
