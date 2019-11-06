@@ -36,7 +36,9 @@ class VCL_DLLPUBLIC OpenGLZone {
     // increasing, so will eventually overflow, so the underlying type better be unsigned, which
     // sig_atomic_t is not guaranteed to be:
     using AtomicCounter = std::atomic<std::make_unsigned_t<std::sig_atomic_t>>;
+#if !defined ARM32 && !defined __ARM_PCS_VFP
     static_assert(AtomicCounter::is_always_lock_free);
+#endif
 
     /// how many times have we entered a GL zone
     static AtomicCounter gnEnterCount;
