@@ -47,12 +47,6 @@
 #define DEBUG_DUMPER 0
 
 using namespace com::sun::star;
-//class XShapeDumper
-
-XShapeDumper::XShapeDumper()
-{
-
-}
 
 namespace {
 

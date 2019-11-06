@@ -257,7 +257,6 @@ void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSeq
                 reading the formula definition it will be retried to insert the
                 formula via retryPendingSharedFormulaCell(). */
             ScAddress aTokenAddr( aTokenInfo.First.Column, aTokenInfo.First.Row, aTokenInfo.First.Sheet );
-            BinAddress aBaseAddr( aTokenAddr );
             aTokens = resolveSharedFormula( aTokenAddr );
             if( !aTokens.hasElements() )
             {
