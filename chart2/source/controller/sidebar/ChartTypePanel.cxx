@@ -138,6 +138,272 @@ IMPL_LINK_NOARG(Dim3DLookResourceGroup_unwelded, SelectSchemeHdl, ListBox&, void
         m_pChangeListener->stateChanged(this);
 }
 
+class StackingResourceGroup_unwelded : public ChangingResource
+{
+public:
+    explicit StackingResourceGroup_unwelded(VclBuilderContainer* pWindow);
+
+    void showControls(bool bShow, bool bShowDeepStacking);
+
+    void fillControls(const ChartTypeParameter& rParameter);
+    void fillParameter(ChartTypeParameter& rParameter);
+
+private:
+    DECL_LINK(StackingChangeHdl, RadioButton&, void);
+    DECL_LINK(StackingEnableHdl, CheckBox&, void);
+
+private:
+    VclPtr<CheckBox> m_pCB_Stacked;
+    VclPtr<RadioButton> m_pRB_Stack_Y;
+    VclPtr<RadioButton> m_pRB_Stack_Y_Percent;
+    VclPtr<RadioButton> m_pRB_Stack_Z;
+};
+
+StackingResourceGroup_unwelded::StackingResourceGroup_unwelded(VclBuilderContainer* pWindow)
+    : ChangingResource()
+{
+    pWindow->get(m_pCB_Stacked, "stack");
+    pWindow->get(m_pRB_Stack_Y, "ontop");
+    pWindow->get(m_pRB_Stack_Y_Percent, "percent");
+    pWindow->get(m_pRB_Stack_Z, "deep");
+
+    m_pCB_Stacked->SetToggleHdl(LINK(this, StackingResourceGroup_unwelded, StackingEnableHdl));
+    m_pRB_Stack_Y->SetToggleHdl(LINK(this, StackingResourceGroup_unwelded, StackingChangeHdl));
+    m_pRB_Stack_Y_Percent->SetToggleHdl(
+        LINK(this, StackingResourceGroup_unwelded, StackingChangeHdl));
+    m_pRB_Stack_Z->SetToggleHdl(LINK(this, StackingResourceGroup_unwelded, StackingChangeHdl));
+}
+
+void StackingResourceGroup_unwelded::showControls(bool bShow, bool bShowDeepStacking)
+{
+    m_pCB_Stacked->Show(bShow);
+    m_pRB_Stack_Y->Show(bShow);
+    m_pRB_Stack_Y_Percent->Show(bShow);
+    m_pRB_Stack_Z->Show(bShow && bShowDeepStacking);
+}
+
+void StackingResourceGroup_unwelded::fillControls(const ChartTypeParameter& rParameter)
+{
+    m_pCB_Stacked->Check(
+        rParameter.eStackMode != GlobalStackMode_NONE
+        && rParameter.eStackMode
+               != GlobalStackMode_STACK_Z); //todo remove this condition if z stacking radio button is really used
+    switch (rParameter.eStackMode)
+    {
+        case GlobalStackMode_STACK_Y:
+            m_pRB_Stack_Y->Check();
+            break;
+        case GlobalStackMode_STACK_Y_PERCENT:
+            m_pRB_Stack_Y_Percent->Check();
+            break;
+        case GlobalStackMode_STACK_Z:
+            //todo uncomment this condition if z stacking radio button is really used
+            /*
+            if( rParameter.b3DLook )
+                m_pRB_Stack_Z->Check();
+            else
+            */
+            m_pRB_Stack_Y->Check();
+            break;
+        default:
+            m_pRB_Stack_Y->Check();
+            break;
+    }
+    //dis/enabling
+    m_pCB_Stacked->Enable(!rParameter.bXAxisWithValues);
+    m_pRB_Stack_Y->Enable(m_pCB_Stacked->IsChecked() && !rParameter.bXAxisWithValues);
+    m_pRB_Stack_Y_Percent->Enable(m_pCB_Stacked->IsChecked() && !rParameter.bXAxisWithValues);
+    m_pRB_Stack_Z->Enable(m_pCB_Stacked->IsChecked() && rParameter.b3DLook);
+}
+
+void StackingResourceGroup_unwelded::fillParameter(ChartTypeParameter& rParameter)
+{
+    if (!m_pCB_Stacked->IsChecked())
+        rParameter.eStackMode = GlobalStackMode_NONE;
+    else if (m_pRB_Stack_Y->IsChecked())
+        rParameter.eStackMode = GlobalStackMode_STACK_Y;
+    else if (m_pRB_Stack_Y_Percent->IsChecked())
+        rParameter.eStackMode = GlobalStackMode_STACK_Y_PERCENT;
+    else if (m_pRB_Stack_Z->IsChecked())
+        rParameter.eStackMode = GlobalStackMode_STACK_Z;
+}
+
+IMPL_LINK(StackingResourceGroup_unwelded, StackingChangeHdl, RadioButton&, rRadio, void)
+{
+    //for each radio click there are coming two change events
+    //first uncheck of previous button -> ignore that call
+    //the second call gives the check of the new button
+    if (m_pChangeListener && rRadio.IsChecked())
+        m_pChangeListener->stateChanged(this);
+}
+
+IMPL_LINK_NOARG(StackingResourceGroup_unwelded, StackingEnableHdl, CheckBox&, void)
+{
+    if (m_pChangeListener)
+        m_pChangeListener->stateChanged(this);
+}
+
+#define POS_LINETYPE_STRAIGHT 0
+#define POS_LINETYPE_SMOOTH 1
+#define POS_LINETYPE_STEPPED 2
+
+class SplineResourceGroup_unwelded : public ChangingResource
+{
+public:
+    explicit SplineResourceGroup_unwelded(VclBuilderContainer* pWindow);
+
+    void showControls(bool bShow);
+
+    void fillControls(const ChartTypeParameter& rParameter);
+    void fillParameter(ChartTypeParameter& rParameter);
+
+private:
+    DECL_LINK(LineTypeChangeHdl, ListBox&, void);
+    DECL_LINK(SplineDetailsDialogHdl, Button*, void);
+    DECL_LINK(SteppedDetailsDialogHdl, Button*, void);
+    SplinePropertiesDialog& getSplinePropertiesDialog();
+    SteppedPropertiesDialog& getSteppedPropertiesDialog();
+
+private:
+    VclPtr<FixedText> m_pFT_LineType;
+    VclPtr<ListBox> m_pLB_LineType;
+    VclPtr<PushButton> m_pPB_DetailsDialog;
+    std::unique_ptr<SplinePropertiesDialog> m_xSplinePropertiesDialog;
+    std::unique_ptr<SteppedPropertiesDialog> m_xSteppedPropertiesDialog;
+};
+
+SplineResourceGroup::SplineResourceGroup(VclBuilderContainer* pWindow)
+    : ChangingResource()
+{
+    pWindow->get(m_pFT_LineType, "linetypeft");
+    pWindow->get(m_pLB_LineType, "linetype");
+    pWindow->get(m_pPB_DetailsDialog, "properties");
+
+    m_pLB_LineType->SetSelectHdl(LINK(this, SplineResourceGroup, LineTypeChangeHdl));
+}
+
+SplinePropertiesDialog& SplineResourceGroup::getSplinePropertiesDialog()
+{
+    if (!m_xSplinePropertiesDialog.get())
+    {
+        Dialog* pDialog = m_pPB_DetailsDialog->GetParentDialog();
+        m_xSplinePropertiesDialog.reset(
+            new SplinePropertiesDialog(pDialog ? pDialog->GetFrameWeld() : nullptr));
+    }
+    return *m_xSplinePropertiesDialog;
+}
+
+SteppedPropertiesDialog& SplineResourceGroup::getSteppedPropertiesDialog()
+{
+    if (!m_xSteppedPropertiesDialog)
+    {
+        m_xSteppedPropertiesDialog.reset(
+            new SteppedPropertiesDialog(m_pPB_DetailsDialog->GetFrameWeld()));
+    }
+    return *m_xSteppedPropertiesDialog;
+}
+
+void SplineResourceGroup::showControls(bool bShow)
+{
+    m_pFT_LineType->Show(bShow);
+    m_pLB_LineType->Show(bShow);
+    m_pPB_DetailsDialog->Show(bShow);
+}
+
+void SplineResourceGroup::fillControls(const ChartTypeParameter& rParameter)
+{
+    switch (rParameter.eCurveStyle)
+    {
+        case CurveStyle_LINES:
+            m_pLB_LineType->SelectEntryPos(POS_LINETYPE_STRAIGHT);
+            m_pPB_DetailsDialog->Enable(false);
+            break;
+        case CurveStyle_CUBIC_SPLINES:
+        case CurveStyle_B_SPLINES:
+            m_pLB_LineType->SelectEntryPos(POS_LINETYPE_SMOOTH);
+            m_pPB_DetailsDialog->Enable();
+            m_pPB_DetailsDialog->SetClickHdl(
+                LINK(this, SplineResourceGroup, SplineDetailsDialogHdl));
+            m_pPB_DetailsDialog->SetQuickHelpText(SchResId(STR_DLG_SMOOTH_LINE_PROPERTIES));
+            getSplinePropertiesDialog().fillControls(rParameter);
+            break;
+        case CurveStyle_STEP_START:
+        case CurveStyle_STEP_END:
+        case CurveStyle_STEP_CENTER_X:
+        case CurveStyle_STEP_CENTER_Y:
+            m_pLB_LineType->SelectEntryPos(POS_LINETYPE_STEPPED);
+            m_pPB_DetailsDialog->Enable();
+            m_pPB_DetailsDialog->SetClickHdl(
+                LINK(this, SplineResourceGroup, SteppedDetailsDialogHdl));
+            m_pPB_DetailsDialog->SetQuickHelpText(SchResId(STR_DLG_STEPPED_LINE_PROPERTIES));
+            getSteppedPropertiesDialog().fillControls(rParameter);
+            break;
+        default:
+            m_pLB_LineType->SetNoSelection();
+            m_pPB_DetailsDialog->Enable(false);
+    }
+}
+void SplineResourceGroup::fillParameter(ChartTypeParameter& rParameter)
+{
+    switch (m_pLB_LineType->GetSelectedEntryPos())
+    {
+        case POS_LINETYPE_SMOOTH:
+            getSplinePropertiesDialog().fillParameter(rParameter, true);
+            break;
+        case POS_LINETYPE_STEPPED:
+            getSteppedPropertiesDialog().fillParameter(rParameter, true);
+            break;
+        default: // includes POS_LINETYPE_STRAIGHT
+            rParameter.eCurveStyle = CurveStyle_LINES;
+            break;
+    }
+}
+IMPL_LINK_NOARG(SplineResourceGroup, LineTypeChangeHdl, ListBox&, void)
+{
+    if (m_pChangeListener)
+        m_pChangeListener->stateChanged(this);
+}
+IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl, Button*, void)
+{
+    ChartTypeParameter aOldParameter;
+    getSplinePropertiesDialog().fillParameter(aOldParameter, m_pLB_LineType->GetSelectedEntryPos()
+                                                                 == POS_LINETYPE_SMOOTH);
+
+    const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectedEntryPos();
+    m_pLB_LineType->SelectEntryPos(POS_LINETYPE_SMOOTH);
+    if (getSplinePropertiesDialog().run() == RET_OK)
+    {
+        if (m_pChangeListener)
+            m_pChangeListener->stateChanged(this);
+    }
+    else
+    {
+        //restore old state:
+        m_pLB_LineType->SelectEntryPos(iOldLineTypePos);
+        getSplinePropertiesDialog().fillControls(aOldParameter);
+    }
+}
+IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, Button*, void)
+{
+    ChartTypeParameter aOldParameter;
+    getSteppedPropertiesDialog().fillParameter(aOldParameter, m_pLB_LineType->GetSelectedEntryPos()
+                                                                  == POS_LINETYPE_STEPPED);
+
+    const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectedEntryPos();
+    m_pLB_LineType->SelectEntryPos(POS_LINETYPE_STEPPED);
+    if (getSteppedPropertiesDialog().run() == RET_OK)
+    {
+        if (m_pChangeListener)
+            m_pChangeListener->stateChanged(this);
+    }
+    else
+    {
+        //restore old state:
+        m_pLB_LineType->SelectEntryPos(iOldLineTypePos);
+        getSteppedPropertiesDialog().fillControls(aOldParameter);
+    }
+}
+
 namespace sidebar
 {
 namespace
@@ -169,6 +435,7 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
     , mxListener(new ChartSidebarModifyListener(this))
     , mbModelValid(true)
     , m_pDim3DLookResourceGroup(new Dim3DLookResourceGroup_unwelded(this))
+    , m_pStackingResourceGroup(new StackingResourceGroup_unwelded(this))
     , m_xChartModel(mxModel, css::uno::UNO_QUERY_THROW)
     , m_aChartTypeDialogControllerList(0)
     , m_pCurrentMainType(nullptr)
@@ -233,6 +500,7 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
     }
 
     m_pDim3DLookResourceGroup->setChangeListener(this);
+    m_pStackingResourceGroup->setChangeListener(this);
 
     Initialize();
 }
@@ -251,6 +519,7 @@ void ChartTypePanel::dispose()
 
     //delete all resource helpers
     m_pDim3DLookResourceGroup.reset();
+    m_pStackingResourceGroup.reset();
 
     PanelLayout::dispose();
 }
@@ -327,10 +596,7 @@ void ChartTypePanel::Initialize()
     {
         m_pSubTypeList->Hide();
         m_pDim3DLookResourceGroup->showControls(false);
-        /*m_pStackingResourceGroup->showControls( false, false );
-            m_pSplineResourceGroup->showControls( false );
-            m_pGeometryResourceGroup->showControls( false );
-            m_pSortByXValuesResourceGroup->showControls( false );*/
+        m_pStackingResourceGroup->showControls(false, false);
     }
 }
 
@@ -422,15 +688,8 @@ void ChartTypePanel::showAllControls(ChartTypeDialogController& rTypeController)
 
     bool bShow = rTypeController.shouldShow_3DLookControl();
     m_pDim3DLookResourceGroup->showControls(bShow);
-    /*bShow = rTypeController.shouldShow_StackingControl();
-    m_pStackingResourceGroup->showControls( bShow, rTypeController.shouldShow_DeepStackingControl() );
-    bShow = rTypeController.shouldShow_SplineControl();
-    m_pSplineResourceGroup->showControls( bShow );
-    bShow = rTypeController.shouldShow_GeometryControl();
-    m_pGeometryResourceGroup->showControls( bShow );
-    bShow = rTypeController.shouldShow_SortByXValuesResourceGroup();
-    m_pSortByXValuesResourceGroup->showControls( bShow );
-    rTypeController.showExtraControls(this);*/
+    bShow = rTypeController.shouldShow_StackingControl();
+    m_pStackingResourceGroup->showControls(bShow, rTypeController.shouldShow_DeepStackingControl());
 }
 
 void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,
@@ -488,10 +747,7 @@ void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,
     }
     m_pSubTypeList->SelectItem(static_cast<sal_uInt16>(rParameter.nSubTypeIndex));
     m_pDim3DLookResourceGroup->fillControls(rParameter);
-    /*m_pStackingResourceGroup->fillControls( rParameter );
-    m_pSplineResourceGroup->fillControls( rParameter );
-    m_pGeometryResourceGroup->fillControls( rParameter );
-    m_pSortByXValuesResourceGroup->fillControls( rParameter );*/
+    m_pStackingResourceGroup->fillControls(rParameter);
     m_nChangingCalls--;
 }
 
@@ -500,6 +756,7 @@ ChartTypeParameter ChartTypePanel::getCurrentParamter() const
     ChartTypeParameter aParameter;
     aParameter.nSubTypeIndex = static_cast<sal_Int32>(m_pSubTypeList->GetSelectedItemId());
     m_pDim3DLookResourceGroup->fillParameter(aParameter);
+    m_pStackingResourceGroup->fillParameter(aParameter);
     //m_pStackingResourceGroup->fillParameter( aParameter );
     //m_pSplineResourceGroup->fillParameter( aParameter );
     //m_pGeometryResourceGroup->fillParameter( aParameter );
