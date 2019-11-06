@@ -5366,11 +5366,13 @@ private:
         return -1;
     }
 
-    void remove_page(GtkNotebook *pNotebook, const OString& rIdent)
+    int remove_page(GtkNotebook *pNotebook, const OString& rIdent)
     {
         disable_notify_events();
-        gtk_notebook_remove_page(pNotebook, get_page_number(pNotebook, rIdent));
+        int nPageNumber = get_page_number(pNotebook, rIdent);
+        gtk_notebook_remove_page(pNotebook, nPageNumber);
         enable_notify_events();
+        return nPageNumber;
     }
 
     static OUString get_tab_label_text(GtkNotebook *pNotebook, guint nPage)
@@ -5874,7 +5876,10 @@ public:
             unsplit_notebooks();
             reset_split_data();
         }
-        remove_page(m_pNotebook, rIdent);
+
+        unsigned int nPageIndex = remove_page(m_pNotebook, rIdent);
+        if (nPageIndex < m_aPages.size())
+            m_aPages.erase(m_aPages.begin() + nPageIndex);
     }
 
     virtual void append_page(const OString& rIdent, const OUString& rLabel) override
