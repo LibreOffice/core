@@ -112,7 +112,7 @@ public:
 
     virtual bool    Close() override;
 
-    virtual short   Execute();
+    short           Execute();
     bool            IsInExecute() const { return mbInExecute; }
     // Return true when dialog is synchronously executed (calling ::Execute())
     bool            IsInSyncExecute() const { return mbInSyncExecute; };
@@ -135,7 +135,7 @@ public:
     }
 
     /// Commence execution of a modal dialog, disposes owner on failure
-    virtual bool    StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx);
+    bool            StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx);
 
     // Dialog::Execute replacement API
 
