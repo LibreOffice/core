@@ -35,7 +35,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <officecfg/Office/Common.hxx>
@@ -1003,11 +1003,11 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
             aParserInput.aInputStream = xStm->getInputStream();
 
             // get filter
-            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xContext, rStrings );
+            uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLSectionList( xContext, rStrings );
 
             // connect parser and filter
-            uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
-            xParser->setDocumentHandler( xFilter );
+            uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+            xParser->setFastDocumentHandler( xFilter );
 
             // parse
             xParser->parseStream( aParserInput );
