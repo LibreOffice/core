@@ -22,19 +22,22 @@
 #include <xmloff/xmlictxt.hxx>
 #include <sax/fastattribs.hxx>
 #include <comphelper/attributelist.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace ::com::sun::star;
 
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
                               const OUString& rLName )
-    : mrImport(rImp)
+    : m_nRefCount(0)
+    , mrImport(rImp)
     , mnPrefix(nPrfx)
     , maLocalName(rLName)
 {
 }
 
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp )
-    : mrImport(rImp)
+    : m_nRefCount(0)
+    , mrImport(rImp)
     , mnPrefix(0)
 {
 }
@@ -141,6 +144,29 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::cre
 void SAL_CALL SvXMLImportContext::characters(const OUString &rChars)
 {
     mrImport.Characters( rChars );
+}
+
+// XInterface
+css::uno::Any SAL_CALL SvXMLImportContext::queryInterface( const css::uno::Type& aType )
+{
+    css::uno::Any a = ::cppu::queryInterface(
+                aType,
+                static_cast< XFastContextHandler* >(this),
+                static_cast< XTypeProvider* >(this));
+
+    return a;
+}
+
+// XTypeProvider
+css::uno::Sequence< css::uno::Type > SAL_CALL SvXMLImportContext::getTypes()
+{
+    return { cppu::UnoType<XFastContextHandler>::get(),
+             cppu::UnoType<XTypeProvider>::get() };
+}
+
+css::uno::Sequence< sal_Int8 > SAL_CALL SvXMLImportContext::getImplementationId()
+{
+    return css::uno::Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
