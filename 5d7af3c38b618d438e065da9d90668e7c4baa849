@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7f7f9b97_8292a69d",
+        "filename": "include/editeng/unoedhlp.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-06T15:14:31Z",
+      "side": 1,
+      "message": "would have been useful to document that SAL_DLLPUBLIC_RTTI here was (presumably) meant to address:\n\n\u003e svx/source/accessibility/AccessibleTextHelper.cxx:975:60: error: Suspicious dynamic_cast to \u0027const SvxEditSourceHint\u0027 with hidden type visibility [loplugin:dyncastvisibility]\n\u003e                 const SvxEditSourceHint* pEditSourceHint \u003d dynamic_cast\u003cconst SvxEditSourceHint*\u003e( pEvent );\n\u003e                                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\u003e include/editeng/unoedhlp.hxx:38:7: note: class \u0027const SvxEditSourceHint\u0027 defined here [loplugin:dyncastvisibility]\n\u003e class SvxEditSourceHint : public TextHint\n\u003e ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\u003e svx/source/accessibility/AccessibleTextHelper.cxx:1181:73: error: Suspicious dynamic_cast to \u0027const SvxEditSourceHint\u0027 with hidden type visibility [loplugin:dyncastvisibility]\n\u003e                     else if( const SvxEditSourceHint* pEditSourceHint \u003d dynamic_cast\u003cconst SvxEditSourceHint*\u003e( \u0026rHint ) )\n\u003e                                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\u003e include/editeng/unoedhlp.hxx:38:7: note: class \u0027const SvxEditSourceHint\u0027 defined here [loplugin:dyncastvisibility]\n\u003e class SvxEditSourceHint : public TextHint\n\u003e ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\u003e svx/source/accessibility/AccessibleTextHelper.cxx:1328:65: error: Suspicious dynamic_cast to \u0027const SvxEditSourceHint\u0027 with hidden type visibility [loplugin:dyncastvisibility]\n\u003e             else if( const SvxEditSourceHint* pEditSourceHint \u003d dynamic_cast\u003cconst SvxEditSourceHint*\u003e( \u0026rHint ) )\n\u003e                                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\u003e include/editeng/unoedhlp.hxx:38:7: note: class \u0027const SvxEditSourceHint\u0027 defined here [loplugin:dyncastvisibility]\n\u003e class SvxEditSourceHint : public TextHint\n\u003e ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+      "range": {
+        "startLine": 38,
+        "startChar": 6,
+        "endLine": 38,
+        "endChar": 24
+      },
+      "revId": "5d7af3c38b618d438e065da9d90668e7c4baa849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_98ca1c18",
         "filename": "include/svx/itemwin.hxx",
         "patchSetId": 5
@@ -13,6 +36,52 @@
       "writtenOn": "2019-11-06T10:40:40Z",
       "side": 1,
       "message": "This breaks e.g. GCC builds (where SAL_DLLPUBLIC_RTTI always expands to nothing), as the typeinfo is needed via the dynamic_cast in SAL_WARN_IF/assert in VclBuilder::get (include/vcl/builder.hxx) from sd/source/ui/sidebar/SlideBackground.cxx.  (See e.g. \u003chttps://ci.libreoffice.org/job/lo_tb_master_linux_dbg/27824/\u003e).",
+      "revId": "5d7af3c38b618d438e065da9d90668e7c4baa849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_c2989ec1",
+        "filename": "include/svx/relfld.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-06T15:14:31Z",
+      "side": 1,
+      "message": "would have been useful to document that SAL_DLLPUBLIC_RTTI here was (presumably) meant to address:\n\n\u003e In file included from sw/source/uibase/sidebar/PageFormatPanel.cxx:29:\n\u003e In file included from sw/source/uibase/sidebar/PageFormatPanel.hxx:24:\n\u003e In file included from include/svx/sidebar/PanelLayout.hxx:15:\n\u003e include/vcl/builder.hxx:432:18: error: Suspicious dynamic_cast to \u0027SvxRelativeField\u0027 with hidden type visibility [loplugin:dyncastvisibility]\n\u003e     SAL_WARN_IF(!dynamic_cast\u003cT*\u003e(w),\n\u003e                  ^~~~~~~~~~~~~~~~~~~\n\u003e include/sal/log.hxx:335:40: note: expanded from macro \u0027SAL_WARN_IF\u0027\n\u003e         SAL_DETAIL_ENABLE_LOG_WARN \u0026\u0026 (condition), \\\n\u003e                                        ^~~~~~~~~\n\u003e include/sal/log.hxx:118:14: note: expanded from macro \u0027SAL_DETAIL_LOG_STREAM\u0027\n\u003e         if ((condition) \u0026\u0026 sal_detail_log_report(level, area)) { \\\n\u003e              ^~~~~~~~~\n\u003e include/svx/relfld.hxx:28:7: note: class \u0027SvxRelativeField\u0027 defined here [loplugin:dyncastvisibility]\n\u003e class SvxRelativeField final : public MetricField\n\u003e ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\u003e In file included from sw/source/uibase/sidebar/PageFormatPanel.cxx:29:\n\u003e In file included from sw/source/uibase/sidebar/PageFormatPanel.hxx:24:\n\u003e In file included from include/svx/sidebar/PanelLayout.hxx:15:\n\u003e include/vcl/builder.hxx:435:12: error: Suspicious dynamic_cast to \u0027SvxRelativeField\u0027 with hidden type visibility [loplugin:dyncastvisibility]\n\u003e     assert(dynamic_cast\u003cT*\u003e(w));\n\u003e            ^~~~~~~~~~~~~~~~~~~\n\u003e /usr/include/assert.h:90:27: note: expanded from macro \u0027assert\u0027\n\u003e      (static_cast \u003cbool\u003e (expr)                                         \\\n\u003e                           ^~~~\n\u003e include/svx/relfld.hxx:28:7: note: class \u0027SvxRelativeField\u0027 defined here [loplugin:dyncastvisibility]\n\u003e class SvxRelativeField final : public MetricField\n\u003e ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 24
+      },
+      "revId": "5d7af3c38b618d438e065da9d90668e7c4baa849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e2935aa2",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-06T15:14:31Z",
+      "side": 1,
+      "message": "would have been useful to document that SAL_DLLPUBLIC_RTTI here was (presumably) meant to address:\n\n\u003e sw/source/core/access/accfrmobj.cxx:249:16: error: dynamic_cast from \u0027const SwContact\u0027 with hidden type visibility to \u0027const SwDrawContact\u0027 with default type visibility [loplugin:dyncastvisibility]\n\u003e         assert(dynamic_cast\u003cSwDrawContact const*\u003e(pContact));\n\u003e                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\u003e /usr/include/assert.h:90:27: note: expanded from macro \u0027assert\u0027\n\u003e      (static_cast \u003cbool\u003e (expr)                                         \\\n\u003e                           ^~~~\n\u003e sw/inc/dcontact.hxx:66:7: note: base class \u0027const SwContact\u0027 with hidden type visibility defined here [loplugin:dyncastvisibility]\n\u003e class SwContact : public SdrObjUserCall, public SwClient\n\u003e ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\u003e sw/inc/dcontact.hxx:304:26: note: derived class \u0027const SwDrawContact\u0027 with default type visibility defined here [loplugin:dyncastvisibility]\n\u003e class SAL_DLLPUBLIC_RTTI SwDrawContact final : public SwContact\n\u003e ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+      "range": {
+        "startLine": 66,
+        "startChar": 6,
+        "endLine": 66,
+        "endChar": 24
+      },
       "revId": "5d7af3c38b618d438e065da9d90668e7c4baa849",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
