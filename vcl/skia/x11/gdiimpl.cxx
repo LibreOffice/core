@@ -21,6 +21,8 @@
 #include <tools/sk_app/unix/WindowContextFactory_unix.h>
 #include <tools/sk_app/WindowContext.h>
 
+#include <skia/vulkan.hxx>
+
 X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
     : SkiaSalGraphicsImpl(rParent, rParent.GetGeometryProvider())
     , mX11Parent(rParent)
@@ -38,8 +40,25 @@ void X11SkiaSalGraphicsImpl::Init()
 
 void X11SkiaSalGraphicsImpl::createSurface()
 {
+    destroySurface();
     if (isOffscreen())
+    {
+        switch (renderMethodToUse())
+        {
+            case RenderVulkan:
+                mSurface = SkSurface::MakeRenderTarget(
+                    SkiaVulkanGrContext::getGrContext(), SkBudgeted::kNo,
+                    SkImageInfo::MakeN32Premul(GetWidth(), GetHeight()));
+                assert(mSurface.get());
+#ifdef DBG_UTIL
+                prefillSurface();
+#endif
+                return;
+            default:
+                break;
+        }
         return SkiaSalGraphicsImpl::createSurface();
+    }
     sk_app::DisplayParams displayParams;
     // TODO The Skia Xlib code actually requires the non-native color type to work properly.
     // Use a macro to hide an unreachable code warning.
@@ -59,7 +78,6 @@ void X11SkiaSalGraphicsImpl::createSurface()
     // Avoid this somehow.
     winInfo.fWidth = GetWidth();
     winInfo.fHeight = GetHeight();
-    destroySurface();
     switch (renderMethodToUse())
     {
         case RenderRaster:
