@@ -332,4 +332,12 @@
       <placeholder/>
     </child>
   </object>
+  <object class="GtkSizeGroup" id="sizegroup">
+    <widgets>
+      <widget name="automatic"/>
+      <widget name="character"/>
+      <widget name="footnote"/>
+      <widget name="endnote"/>
+    </widgets>
+  </object>
 </interface>
