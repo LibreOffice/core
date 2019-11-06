@@ -662,7 +662,10 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
     if (!bShow)
     {
         if (mpCloseButton)
+        {
             gtk_widget_destroy(mpCloseButton);
+            mpCloseButton = nullptr;
+        }
         return;
     }
 
