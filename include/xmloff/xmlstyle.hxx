@@ -91,6 +91,12 @@ public:
               sal_uInt16 nFamily=0,
               bool bDefaultStyle = false );
 
+    SvXMLStyleContext( SvXMLImport& rImport,
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            sal_uInt16 nFamily=0,
+            bool bDefaultStyle = false );
+
     virtual ~SvXMLStyleContext() override;
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
