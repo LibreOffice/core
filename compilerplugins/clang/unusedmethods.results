@@ -866,8 +866,6 @@ include/vcl/weld.hxx:748
     void weld::TreeView::append(const class weld::TreeIter *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
 include/vcl/weld.hxx:757
     void weld::TreeView::append(const class rtl::OUString &,const class rtl::OUString &,class VirtualDevice &)
-include/vcl/weld.hxx:803
-    void weld::TreeView::set_top_entry(int)
 include/vcl/weld.hxx:941
     void weld::TreeView::select_all()
 include/vcl/weld.hxx:985

@@ -8542,13 +8542,6 @@ public:
         enable_notify_events();
     }
 
-    virtual void set_top_entry(int pos) override
-    {
-        disable_notify_events();
-        move_before(pos, 0);
-        enable_notify_events();
-    }
-
     virtual void swap(int pos1, int pos2) override
     {
         disable_notify_events();
