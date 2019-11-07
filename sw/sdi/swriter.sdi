@@ -7803,9 +7803,9 @@ SfxUInt32Item TableRowHeight SID_ATTR_TABLE_ROW_HEIGHT
     RecordPerSet;
 
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Table;
 ]
 
@@ -7821,8 +7821,8 @@ SfxUInt32Item TableColumWidth SID_ATTR_TABLE_COLUMN_WIDTH
     RecordPerSet;
 
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Table;
 ]
