@@ -2208,8 +2208,9 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
             SdrTextHorzAdjust eHorz = rSet.Get(SDRATTR_TEXT_HORZADJUST).GetValue();
             SdrTextVertAdjust eVert = rSet.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
 
-            // rescue object size
-            tools::Rectangle aObjectRect = GetSnapRect();
+            // rescue object size, SetSnapRect below expects logic rect,
+            // not snap rect.
+            tools::Rectangle aObjectRect = GetLogicRect();
 
             // prepare ItemSet to set exchanged width and height items
             SfxItemSet aNewSet(*rSet.GetPool(),
