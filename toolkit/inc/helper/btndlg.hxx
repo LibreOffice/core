@@ -49,7 +49,6 @@ namespace o3tl
 class ButtonDialog : public Dialog
 {
 public:
-                        ButtonDialog( vcl::Window* pParent, WinBits nStyle );
     virtual             ~ButtonDialog() override;
     virtual void        dispose() override;
 
