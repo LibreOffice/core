@@ -100,8 +100,7 @@ private:
                            FloatingWindow & operator= (const FloatingWindow &) = delete;
 
 protected:
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInitFloating( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
