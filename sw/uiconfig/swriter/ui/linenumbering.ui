@@ -565,7 +565,7 @@
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkSizeGroup" id="siezgroupWidget">
+  <object class="GtkSizeGroup" id="sizegroupWidget">
     <widgets>
       <widget name="styledropdown"/>
       <widget name="formatdropdown"/>
