@@ -936,7 +936,6 @@ friend void WW8_WrtRedlineAuthor::Write(Writer &rWrt);
 
     WW8Export *m_pExport;
     SfxMedium *mpMedium;
-
 public:
     SwWW8Writer(const OUString& rFltName, const OUString& rBaseURL);
     virtual ~SwWW8Writer() override;
@@ -981,6 +980,7 @@ public:
 private:
     SwWW8Writer(const SwWW8Writer&) = delete;
     SwWW8Writer& operator=(const SwWW8Writer&) = delete;
+    ErrCode WriteStorageImpl();
 };
 
 /// Exporter of the binary Word file formats.
