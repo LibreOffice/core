@@ -424,7 +424,6 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
 void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 
 VCL_DLLPUBLIC void ImplWindowStateFromStr(WindowStateData& rData, const OString& rStr);
-VCL_DLLPUBLIC OString ImplWindowStateToStr(const WindowStateData& rData);
 
 VCL_DLLPUBLIC css::uno::Reference<css::accessibility::XAccessibleEditableText>
 FindFocusedEditableText(css::uno::Reference<css::accessibility::XAccessibleContext> const&);

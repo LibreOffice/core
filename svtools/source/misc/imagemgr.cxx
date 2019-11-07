@@ -805,23 +805,6 @@ OUString SvFileInformationManager::GetFolderImageId( const svtools::VolumeInfo& 
     return GetImageNameFromList_Impl(nImage, false/*bBig*/);
 }
 
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo )
-{
-    SvImageId nImage = SvImageId::Folder;
-    DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
-
-    if ( rInfo.m_bIsRemote )
-        nImage = SvImageId::NetworkDevice;
-    else if ( rInfo.m_bIsCompactDisc )
-        nImage = SvImageId::CDRomDevice;
-    else if ( rInfo.m_bIsRemoveable || rInfo.m_bIsFloppy )
-        nImage = SvImageId::RemoveableDevice;
-    else if ( rInfo.m_bIsVolume )
-        nImage = SvImageId::FixedDevice;
-
-    return GetImageFromList_Impl( nImage, false/*bBig*/ );
-}
-
 OUString SvFileInformationManager::GetDescription( const INetURLObject& rObject )
 {
     return SvFileInformationManager::GetDescription_Impl( rObject, true );

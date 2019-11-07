@@ -1664,20 +1664,6 @@ void SvtURLBox::Select()
 }
 
 
-void SvtURLBox::SetOnlyDirectories( bool bDir )
-{
-    bOnlyDirectories = bDir;
-    if ( bOnlyDirectories )
-        Clear();
-}
-
-
-void SvtURLBox::SetNoURLSelection( bool bSet )
-{
-    bNoSelection = bSet;
-}
-
-
 OUString SvtURLBox::GetURL()
 {
     // wait for end of autocompletion
@@ -1760,17 +1746,6 @@ void SvtURLBox::DisableHistory()
 {
     bHistoryDisabled = true;
     UpdatePicklistForSmartProtocol_Impl();
-}
-
-void SvtURLBox::SetBaseURL( const OUString& rURL )
-{
-    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
-
-    // Reset match lists
-    pImpl->aCompletions.clear();
-    pImpl->aURLs.clear();
-
-    aBaseURL = rURL;
 }
 
 /** Parse leading ~ for Unix systems,

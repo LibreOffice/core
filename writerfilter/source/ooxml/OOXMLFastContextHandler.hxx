@@ -169,7 +169,6 @@ public:
     void startTxbxContent();
     void endTxbxContent();
     void propagateCharacterProperties();
-    void propagateCharacterPropertiesAsSet(Id nId);
     void propagateTableProperties();
     void propagateRowProperties();
     void propagateCellProperties();

@@ -149,8 +149,6 @@ public:
     void                EnableAutoSize( bool bAuto );
     bool                IsAutoSizeEnabled() const { return mbDDAutoSize; }
 
-    void                EnableDDAutoWidth( bool b );
-
     sal_Int32           InsertEntry( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
     sal_Int32           InsertEntry( const OUString& rStr, const Image& rImage, sal_Int32  nPos = LISTBOX_APPEND );
     void                RemoveEntry( const OUString& rStr );

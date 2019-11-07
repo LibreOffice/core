@@ -519,12 +519,6 @@ void ListBox::EnableAutoSize( bool bAuto )
     }
 }
 
-void ListBox::EnableDDAutoWidth( bool b )
-{
-    if ( mpFloatWin )
-        mpFloatWin->SetAutoWidth( b );
-}
-
 void ListBox::SetDropDownLineCount( sal_uInt16 nLines )
 {
     mnLineCount = nLines;

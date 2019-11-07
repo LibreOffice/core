@@ -125,15 +125,6 @@ private:
     void            ImplSetModalInputMode(bool bModal);
 public:
 
-    /// Returns true if the dialog successfully starts
-    bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn)
-    {
-        VclAbstractDialog::AsyncContext aCtx;
-        aCtx.mxOwner = this;
-        aCtx.maEndDialogFn = rEndDialogFn;
-        return StartExecuteAsync(aCtx);
-    }
-
     /// Commence execution of a modal dialog, disposes owner on failure
     bool            StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx);
 

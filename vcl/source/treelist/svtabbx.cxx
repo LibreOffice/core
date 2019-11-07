@@ -538,18 +538,6 @@ sal_uLong SvHeaderTabListBox::Insert( SvTreeListEntry* pEntry, sal_uLong nRootPo
     return nPos;
 }
 
-void SvHeaderTabListBox::RemoveEntry( SvTreeListEntry const * _pEntry )
-{
-    GetModel()->Remove( _pEntry );
-    m_aAccessibleChildren.clear();
-}
-
-void SvHeaderTabListBox::Clear()
-{
-    SvTabListBox::Clear();
-    m_aAccessibleChildren.clear();
-}
-
 IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl, SvTreeListBox*, void)
 {
     m_pImpl->m_pHeaderBar->SetOffset( -GetXOffset() );

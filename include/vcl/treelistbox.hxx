@@ -383,7 +383,6 @@ public:
     bool IsInplaceEditingEnabled() const { return bool(nImpFlags & SvTreeListBoxFlags::EDT_ENABLED); }
     bool IsEditingActive() const { return bool(nImpFlags & SvTreeListBoxFlags::IN_EDT); }
     void EndEditing( bool bCancel = false );
-    void ForbidEmptyText();
 
     void            Clear();
 
@@ -481,9 +480,6 @@ public:
             The entry.
         @return  The bounding rectangle of an entry. */
     tools::Rectangle           GetBoundingRect( SvTreeListEntry* pEntry );
-
-    /** Enables, that one cell of a tablistbox entry can be focused */
-    void                EnableCellFocus();
 
     SvTreeFlags         GetTreeFlags() const {return nTreeFlags;}
 

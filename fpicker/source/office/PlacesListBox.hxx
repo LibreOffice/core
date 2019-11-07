@@ -55,10 +55,6 @@ public:
 
     void set_help_id(const OString& rHelpId) { mxImpl->set_help_id(rHelpId); }
 
-    const weld::Button& GetAddButton() const { return *mxAddBtn; }
-    const weld::Button& GetDeleteButton() const { return *mxDelBtn; }
-    weld::TreeView& GetPlacesListBox() { return *mxImpl; }
-
 private:
 
     static OUString getEntryIcon(const PlacePtr& pPlace);
