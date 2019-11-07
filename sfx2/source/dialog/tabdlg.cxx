@@ -945,6 +945,7 @@ void SfxTabDialogController::setPreviewsToSamePlace()
         return;
 
     m_xSizeGroup = m_xBuilder->create_size_group();
+    m_xSizeGroup->set_mode(VclSizeGroupMode::Both);
     for (auto& rGrid : aGrids)
         m_xSizeGroup->add_widget(rGrid.get());
 }
