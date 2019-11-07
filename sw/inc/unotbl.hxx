@@ -251,7 +251,7 @@ struct SwRangeDescriptor
     void Normalize();
 };
 
-class SwXTextTable final : public cppu::WeakImplHelper
+class SAL_DLLPUBLIC_RTTI SwXTextTable final : public cppu::WeakImplHelper
 <
     css::text::XTextTable,
     css::lang::XServiceInfo,

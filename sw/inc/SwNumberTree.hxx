@@ -111,7 +111,7 @@ struct compSwNumberTreeNodeLessThan
 
      The phantom gets numbered with the start value.
 */
-class SwNumberTreeNode
+class SAL_DLLPUBLIC_RTTI SwNumberTreeNode
 {
 protected:
     typedef std::set<SwNumberTreeNode *, compSwNumberTreeNodeLessThan>

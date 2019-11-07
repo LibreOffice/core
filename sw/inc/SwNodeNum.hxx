@@ -26,7 +26,7 @@ class SwTextNode;
 struct SwPosition;
 class SwNumRule;
 
-class SwNodeNum : public SwNumberTreeNode
+class SAL_DLLPUBLIC_RTTI SwNodeNum : public SwNumberTreeNode
 {
 public:
 
