@@ -6347,14 +6347,15 @@ void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHashMap& 
         {
             // Read stream
             tools::SvRef<SotStorageStream> rStream = pStorage->OpenSotStream(aElement.GetName(), StreamMode::READ | StreamMode::SHARE_DENYALL);
-            assert(rStream.is());
-
-            sal_Int32 nStreamSize = rStream->GetSize();
-            css::uno::Sequence< sal_Int8 > oData;
-            oData.realloc(nStreamSize);
-            sal_Int32 nReadBytes = rStream->ReadBytes(oData.getArray(), nStreamSize);
-            assert(nStreamSize == nReadBytes);
-            aStreamsData[sStreamFullName] <<= oData;
+            if (rStream.is())
+            {
+                sal_Int32 nStreamSize = rStream->GetSize();
+                css::uno::Sequence< sal_Int8 > oData;
+                oData.realloc(nStreamSize);
+                sal_Int32 nReadBytes = rStream->ReadBytes(oData.getArray(), nStreamSize);
+                if (nStreamSize == nReadBytes)
+                    aStreamsData[sStreamFullName] <<= oData;
+            }
         }
     }
 }
