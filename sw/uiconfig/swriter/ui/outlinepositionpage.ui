@@ -3,19 +3,19 @@
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">19.989999999999998</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="upper">20</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
-    <property name="lower">-19.989999999999998</property>
-    <property name="upper">19.989999999999998</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="lower">-20</property>
+    <property name="upper">20</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
-    <property name="upper">19.989999999999998</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="upper">20</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
@@ -62,6 +62,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkScrolledWindow">
+                <property name="width_request">50</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="shadow_type">in</property>
