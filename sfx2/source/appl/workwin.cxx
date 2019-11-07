@@ -884,7 +884,7 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
 {
     DBG_ASSERT( aChildren.size() < 255, "too many children" );
     DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
-    DBG_ASSERT( !FindChild_Impl(rWindow), "child registered more than once" );
+    DBG_ASSERT( !FindChild_Impl(&rWindow), "child registered more than once" );
 
 
     if ( rWindow.GetParent() != pWorkWin )
@@ -951,14 +951,14 @@ void SfxWorkWindow::ReleaseChild_Impl(SfxDialogController& rController)
     OSL_FAIL( "releasing unregistered child" );
 }
 
-SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const vcl::Window& rWindow ) const
+SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const vcl::Window* rWindow ) const
 {
 
     sal_uInt16 nCount = aChildren.size();
     for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
     {
         SfxChild_Impl *pChild = aChildren[nPos].get();
-        if ( pChild && pChild->pWin == &rWindow )
+        if ( pChild && pChild->pWin == rWindow )
             return pChild;
     }
 
@@ -1509,7 +1509,7 @@ void SfxWorkWindow::HidePopups_Impl(bool bHide, sal_uInt16 nId )
         if (pCW && pCW->GetAlignment() == SfxChildAlignment::NOALIGNMENT && pCW->GetType() != nId)
         {
             vcl::Window *pWin = pCW->GetWindow();
-            SfxChild_Impl *pChild = FindChild_Impl(*pWin);
+            SfxChild_Impl *pChild = FindChild_Impl(pWin);
             if (!pChild)
             {
                 SAL_WARN("sfx.appl", "missing SfxChild_Impl child!");
