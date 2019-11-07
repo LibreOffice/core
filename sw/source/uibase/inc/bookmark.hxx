@@ -64,7 +64,6 @@ public:
 
 class SwInsertBookmarkDlg : public SfxDialogController
 {
-    OUString                            sRemoveWarning;
     SwWrtShell&                         rSh;
     SfxRequest&                         rReq;
     std::vector<std::pair<sw::mark::IMark*, OUString>> aTableBookmarks;
@@ -80,6 +79,7 @@ class SwInsertBookmarkDlg : public SfxDialogController
     std::unique_ptr<weld::Label> m_xConditionFT;
     std::unique_ptr<ConditionEdit> m_xConditionED;
     std::unique_ptr<BookmarkTable> m_xBookmarksBox;
+    std::unique_ptr<weld::Label> m_xForbiddenChars;
 
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(InsertHdl, weld::Button&, void);
