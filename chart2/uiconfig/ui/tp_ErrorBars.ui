@@ -79,7 +79,6 @@
                         <property name="halign">start</property>
                         <property name="valign">center</property>
                         <property name="use_underline">True</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">RB_NONE</property>
                       </object>
@@ -98,7 +97,6 @@
                         <property name="halign">start</property>
                         <property name="valign">center</property>
                         <property name="use_underline">True</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">RB_NONE</property>
                       </object>
@@ -121,7 +119,6 @@
                             <property name="halign">start</property>
                             <property name="valign">center</property>
                             <property name="use_underline">True</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">RB_NONE</property>
                           </object>
@@ -164,7 +161,6 @@
                         <property name="halign">start</property>
                         <property name="valign">center</property>
                         <property name="use_underline">True</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">RB_NONE</property>
                       </object>
@@ -240,7 +236,6 @@
                         <property name="halign">start</property>
                         <property name="valign">center</property>
                         <property name="use_underline">True</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">RB_BOTH</property>
                       </object>
@@ -258,7 +253,6 @@
                         <property name="halign">start</property>
                         <property name="valign">center</property>
                         <property name="use_underline">True</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">RB_BOTH</property>
                       </object>
