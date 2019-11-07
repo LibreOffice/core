@@ -86,6 +86,7 @@ BitmapEx VCL_DLLPUBLIC createHistorical8x8FromArray(std::array<sal_uInt8,64> con
 bool VCL_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, Color& o_rBack, Color& o_rFront);
 
 VCL_DLLPUBLIC bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult);
+VCL_DLLPUBLIC bool convertBitmap24Plus8To32(BitmapEx const & rInput, BitmapEx & rResult);
 
 /** Retrieve downsampled and cropped bitmap
 

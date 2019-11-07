@@ -1297,6 +1297,47 @@ Bitmap GetDownsampledBitmap(Size const& rDstSizeTwip, Point const& rSrcPt, Size 
     return aBmp;
 }
 
+bool convertBitmap24Plus8To32(BitmapEx const & rInput, BitmapEx & rResult)
+{
+    Bitmap aBitmap(rInput.GetBitmap());
+    if (aBitmap.getPixelFormat() != vcl::PixelFormat::N24_BPP)
+    {
+        aBitmap.Convert(BmpConversion::N24Bit);
+    }
+    AlphaMask aAlpha(rInput.GetAlphaMask());
+    Size aSize = rInput.GetSizePixel();
+
+    Bitmap aResultBitmap(aSize, vcl::PixelFormat::N32_BPP);
+    if (aResultBitmap.getPixelFormat() != vcl::PixelFormat::N32_BPP)
+        return false;
+
+    {
+        BitmapScopedWriteAccess pResultBitmapAccess(aResultBitmap);
+
+        BitmapScopedReadAccess pReadAccess(aBitmap);
+        BitmapScopedReadAccess pReadAccessAlpha(aAlpha);
+
+        for (long nY = 0; nY < aSize.Height(); ++nY)
+        {
+            Scanline aResultScan = pResultBitmapAccess->GetScanline(nY);
+
+            Scanline aReadScan = pReadAccess->GetScanline(nY);
+            Scanline aReadScanAlpha = pReadAccessAlpha->GetScanline(nY);
+
+            for (long nX = 0; nX < aSize.Width(); ++nX)
+            {
+                const BitmapColor aColor = pReadAccess->GetPixelFromData(aReadScan, nX);
+                const BitmapColor aColorAlpha = pReadAccessAlpha->GetPixelFromData(aReadScanAlpha, nX);
+                BitmapColor aResultColor(aColor);
+                aResultColor.SetAlpha(aColorAlpha.GetIndex());
+                pResultBitmapAccess->SetPixelOnData(aResultScan, nX, aResultColor);
+            }
+        }
+    }
+    rResult = BitmapEx(aResultBitmap);
+    return true;
+}
+
 } // end vcl::bitmap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
