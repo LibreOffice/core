@@ -49,13 +49,6 @@ ButtonDialog::ButtonDialog( WindowType nType ) :
     ImplInitButtonDialogData();
 }
 
-ButtonDialog::ButtonDialog( vcl::Window* pParent, WinBits nStyle ) :
-    Dialog( WindowType::BUTTONDIALOG )
-{
-    ImplInitButtonDialogData();
-    ImplInit( pParent, nStyle );
-}
-
 ButtonDialog::~ButtonDialog()
 {
     disposeOnce();
