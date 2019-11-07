@@ -24,7 +24,7 @@
       <object class="GtkBox" id="buttonbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="valign">end</property>
+        <property name="valign">start</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
