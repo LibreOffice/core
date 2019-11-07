@@ -21,7 +21,7 @@
 
 #include "frmfmt.hxx"
 
-class SwTableFormat final : public SwFrameFormat
+class SAL_DLLPUBLIC_RTTI SwTableFormat final : public SwFrameFormat
 {
     friend class SwDoc;
 
@@ -46,7 +46,7 @@ public:
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 };
 
-class SwTableBoxFormat final : public SwFrameFormat
+class SAL_DLLPUBLIC_RTTI SwTableBoxFormat final : public SwFrameFormat
 {
     friend class SwDoc;
 

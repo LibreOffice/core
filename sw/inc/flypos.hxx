@@ -27,7 +27,7 @@ class SwFrameFormat;
 class SwNodeIndex;
 
 /// For querying current flys in document.
-class SwPosFlyFrame final
+class SAL_DLLPUBLIC_RTTI SwPosFlyFrame final
 {
     const SwFrameFormat* m_pFrameFormat;    ///< FlyFrameFormat
     SwNodeIndex* m_pNodeIndex;        ///< Index for node is sufficient.
