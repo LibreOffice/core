@@ -2496,7 +2496,21 @@ void SwFrameFormat::SetOtherTextBoxFormat( SwFrameFormat *pFormat )
     {
         assert( nullptr != m_pOtherTextBoxFormat );
     }
+    bool bChanged = m_pOtherTextBoxFormat != pFormat;
     m_pOtherTextBoxFormat = pFormat;
+
+    if (m_pOtherTextBoxFormat && bChanged && Which() == RES_DRAWFRMFMT)
+    {
+        // This is a shape of a shape+frame pair and my frame has changed. Make sure my content is
+        // in sync with the frame's content.
+        if (GetAttrSet().GetContent() != m_pOtherTextBoxFormat->GetAttrSet().GetContent())
+        {
+            SwAttrSet aSet(GetAttrSet());
+            SwFormatContent aContent(m_pOtherTextBoxFormat->GetAttrSet().GetContent());
+            aSet.Put(aContent);
+            SetFormatAttr(aSet);
+        }
+    }
 }
 
 bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
@@ -2795,6 +2809,11 @@ void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     }
     if (pWhich)
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("which"), BAD_CAST(pWhich));
+
+    if (m_pOtherTextBoxFormat)
+    {
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("OtherTextBoxFormat"), "%p", m_pOtherTextBoxFormat);
+    }
 
     GetAttrSet().dumpAsXml(pWriter);
 

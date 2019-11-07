@@ -164,9 +164,10 @@ static void lcl_RestoreAnchor( SwFrameFormat* pFormat, sal_uLong nNodePos )
             aPos.nContent.Assign( aIdx.GetNode().GetContentNode(), nContentPos );
         }
         aTmp.SetAnchor( &aPos );
+        RndStdIds nAnchorId = rAnchor.GetAnchorId();
         pFormat->SetFormatAttr( aTmp );
 
-        if (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())
+        if (RndStdIds::FLY_AS_CHAR == nAnchorId)
         {
             SwTextNode *pTextNd = aIdx.GetNode().GetTextNode();
             OSL_ENSURE( pTextNd, "no Text Node" );
