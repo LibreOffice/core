@@ -39,7 +39,7 @@ $(eval $(call gb_CppunitTest_use_externals,sw_fodfexport,\
 $(eval $(call gb_CppunitTest_set_include,sw_fodfexport,\
 	-I$(SRCDIR)/sw/inc \
 	-I$(SRCDIR)/sw/source/core/inc \
-	-I$(SRCDIR)/sw/qa/extras/inc \
+	-I$(SRCDIR)/sw/qa/inc \
 	$$(INCLUDE) \
 ))
 
