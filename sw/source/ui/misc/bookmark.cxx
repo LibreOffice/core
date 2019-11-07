@@ -59,14 +59,12 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, weld::Entry&, void)
         if (sTmp.getLength() != nTmpLen)
            sMsg += OUStringChar(BookmarkTable::aForbiddenChars[i]);
     }
-    if (sTmp.getLength() != nLen)
-    {
-        m_xEditBox->set_text(sTmp);
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                      VclMessageType::Info, VclButtonsType::Ok,
-                                                      sRemoveWarning + sMsg));
-        xInfoBox->run();
-    }
+    const bool bHasForbiddenChars = sTmp.getLength() != nLen;
+    m_xForbiddenChars->set_visible(bHasForbiddenChars);
+    if (bHasForbiddenChars)
+        m_xEditBox->set_message_type(weld::EntryMessageType::Error);
+    else
+        m_xEditBox->set_message_type(weld::EntryMessageType::Normal);
 
     sal_Int32 nSelectedEntries = 0;
     sal_Int32 nEntries = 0;
@@ -83,7 +81,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, weld::Entry&, void)
     }
 
     // allow to add new bookmark only if one name provided and it's not taken
-    m_xInsertBtn->set_sensitive(nEntries == 1 && nSelectedEntries == 0);
+    m_xInsertBtn->set_sensitive(nEntries == 1 && nSelectedEntries == 0 && !bHasForbiddenChars);
 
     // allow to delete only if all bookmarks are recognized
     m_xDeleteBtn->set_sensitive(nEntries > 0 && nSelectedEntries == nEntries);
@@ -313,6 +311,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
     , m_xConditionFT(m_xBuilder->weld_label("condlabel"))
     , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry("withcond")))
     , m_xBookmarksBox(new BookmarkTable(m_xBuilder->weld_tree_view("bookmarks")))
+    , m_xForbiddenChars(m_xBuilder->weld_label("lbForbiddenChars"))
 {
     m_xBookmarksBox->connect_changed(LINK(this, SwInsertBookmarkDlg, SelectionChangedHdl));
     m_xBookmarksBox->connect_row_activated(LINK(this, SwInsertBookmarkDlg, DoubleClickHdl));
@@ -333,7 +332,8 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
     m_xEditBox->set_text(m_xBookmarksBox->GetNameProposal());
     m_xEditBox->set_position(-1);
 
-    sRemoveWarning = SwResId(STR_REMOVE_WARNING);
+    m_xForbiddenChars->set_label(SwResId(STR_BOOKMARK_FORBIDDENCHARS) + " " + BookmarkTable::aForbiddenChars);
+    m_xForbiddenChars->set_visible(false);
 }
 
 IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
