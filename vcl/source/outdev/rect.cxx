@@ -224,10 +224,6 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
 
     tools::Rectangle aDstRect( PixelToLogic( Point() ), GetOutputSize() );
     aDstRect.Intersection( rRect );
-    // FIXME: seems we have an off-by-one around the border
-    // here with the cairo / svp backend at least.
-    aDstRect.AdjustRight(1);
-    aDstRect.AdjustBottom(1);
 
     if( aDstRect.IsEmpty() || ImplIsRecordLayout() )
         return;
@@ -240,6 +236,11 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
 
     if( mbOutputClipped )
         return;
+
+    // FIXME: seems we have an off-by-one around the border
+    // here with the cairo / svp backend at least.
+    aDstRect.AdjustRight(1);
+    aDstRect.AdjustBottom(1);
 
     const long nDistX = std::max( rDist.Width(), 1L );
     const long nDistY = std::max( rDist.Height(), 1L );
