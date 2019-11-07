@@ -156,7 +156,7 @@ TabDialog::TabDialog( vcl::Window* pParent, WinBits nStyle ) :
     Dialog( WindowType::TABDIALOG )
 {
     ImplInitTabDialogData();
-    ImplInit( pParent, nStyle );
+    ImplInitDialog( pParent, nStyle );
 }
 
 TabDialog::~TabDialog()
