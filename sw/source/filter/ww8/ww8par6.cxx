@@ -3448,6 +3448,15 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
         return;
     }
 
+    // if the fontsize for these characters is specified, make sure it is updated first
+    if ( m_xPlcxMan )
+    {
+        const sal_uInt16 nFontsizeID = m_bVer67 ? NS_sprm::v6::sprmCHps : NS_sprm::sprmCHps;
+        const SprmResult aFontsize = m_xPlcxMan->GetChpPLCF()->HasSprm( nFontsizeID );
+        if ( aFontsize.pSprm && aFontsize.nRemainingData )
+            Read_FontSize(nFontsizeID, aFontsize.pSprm, aFontsize.nRemainingData);
+    }
+
     // font position in HalfPoints
     short nPos = eVersion <= ww::eWW2 ? static_cast< sal_Int8 >( *pData ) : SVBT16ToInt16( pData );
     sal_Int32 nPos2 = nPos * ( 10 * 100 );      // HalfPoints in 100 * tw
@@ -3460,10 +3469,10 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
     if (pF != nullptr && pF->GetHeight() != 0)
         nHeight = pF->GetHeight();
     nPos2 /= nHeight;                       // ... now in % (rounded)
-    if( nPos2 > 100 )                       // for safety
-        nPos2 = 100;
-    if( nPos2 < -100 )
-        nPos2 = -100;
+    if( nPos2 > MAX_ESC_POS )
+        nPos2 = MAX_ESC_POS;
+    if( nPos2 < -MAX_ESC_POS )
+        nPos2 = -MAX_ESC_POS;
     SvxEscapementItem aEs( static_cast<short>(nPos2), 100, RES_CHRATR_ESCAPEMENT );
     NewAttr( aEs );
 }
@@ -3833,6 +3842,9 @@ void SwWW8ImplReader::closeFont(sal_uInt16 nId)
 */
 void SwWW8ImplReader::Read_FontCode( sal_uInt16 nId, const sal_uInt8* pData, short nLen )
 {
+    //Note: this function needs to be able to run multiple times on the same data.
+    //It is called by Read_SubSuperProp to ensure that the current fontsize is known.
+
     if (!m_bSymbol)           // if bSymbol, the symbol's font
     {                       // (see sprmCSymbol) is valid!
         switch( nId )
