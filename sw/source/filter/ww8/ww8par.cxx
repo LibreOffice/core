@@ -6331,7 +6331,7 @@ ErrCode WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uIn
     return nRet;
 }
 
-void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHashMap& aStreamsData, const OUString& sPrefix)
+static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHashMap& aStreamsData, const OUString& sPrefix)
 {
     SvStorageInfoList aElements;
     pStorage->FillInfoList(&aElements);
@@ -6347,14 +6347,15 @@ void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHashMap& 
         {
             // Read stream
             tools::SvRef<SotStorageStream> rStream = pStorage->OpenSotStream(aElement.GetName(), StreamMode::READ | StreamMode::SHARE_DENYALL);
-            assert(rStream.is());
-
-            sal_Int32 nStreamSize = rStream->GetSize();
-            css::uno::Sequence< sal_Int8 > oData;
-            oData.realloc(nStreamSize);
-            sal_Int32 nReadBytes = rStream->ReadBytes(oData.getArray(), nStreamSize);
-            assert(nStreamSize == nReadBytes);
-            aStreamsData[sStreamFullName] <<= oData;
+            if (rStream.is())
+            {
+                sal_Int32 nStreamSize = rStream->GetSize();
+                css::uno::Sequence< sal_Int8 > oData;
+                oData.realloc(nStreamSize);
+                sal_Int32 nReadBytes = rStream->ReadBytes(oData.getArray(), nStreamSize);
+                if (nStreamSize == nReadBytes)
+                    aStreamsData[sStreamFullName] <<= oData;
+            }
         }
     }
 }
@@ -6374,9 +6375,8 @@ ErrCode WW8Reader::DecryptDRMPackage()
         return ERRCODE_IO_ACCESSDENIED;
     }
 
-    std::vector<OUString> aStreamsList;
     comphelper::SequenceAsHashMap aStreamsData;
-    lcl_getListOfStreams(m_pStorage.get(), aStreamsData, OUString(""));
+    lcl_getListOfStreams(m_pStorage.get(), aStreamsData, "");
 
     try {
         uno::Sequence<beans::NamedValue> aStreams = aStreamsData.getAsConstNamedValueList();
@@ -6392,10 +6392,10 @@ ErrCode WW8Reader::DecryptDRMPackage()
             return ERRCODE_IO_NOTEXISTS;
         }
 
-        mDecodedStream.reset(new SvMemoryStream());
+        mDecodedStream = std::make_shared<SvMemoryStream>();
 
         uno::Reference<io::XInputStream > xInputStream(new utl::OSeekableInputStreamWrapper(rContentStream.get(), false));
-        uno::Reference<io::XOutputStream > xDecryptedStream(new utl::OSeekableOutputStreamWrapper(*mDecodedStream.get()));
+        uno::Reference<io::XOutputStream > xDecryptedStream(new utl::OSeekableOutputStreamWrapper(*mDecodedStream));
 
         if (!xPackageEncryption->decrypt(xInputStream, xDecryptedStream))
         {

@@ -983,6 +983,7 @@ public:
 private:
     SwWW8Writer(const SwWW8Writer&) = delete;
     SwWW8Writer& operator=(const SwWW8Writer&) = delete;
+    ErrCode WriteStorageImpl();
 };
 
 /// Exporter of the binary Word file formats.
