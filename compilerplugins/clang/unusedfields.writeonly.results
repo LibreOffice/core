@@ -58,11 +58,11 @@ bridges/source/jni_uno/jni_java2uno.cxx:151
     jni_uno::largest p void *
 bridges/source/jni_uno/jni_java2uno.cxx:152
     jni_uno::largest a uno_Any
-canvas/source/cairo/cairo_canvasbitmap.hxx:122
+canvas/source/cairo/cairo_canvasbitmap.hxx:120
     cairocanvas::CanvasBitmap mpBufferCairo ::cairo::CairoSharedPtr
-canvas/source/cairo/cairo_spritedevicehelper.hxx:76
+canvas/source/cairo/cairo_spritedevicehelper.hxx:74
     cairocanvas::SpriteDeviceHelper mbFullScreen _Bool
-canvas/source/cairo/cairo_spritehelper.hxx:103
+canvas/source/cairo/cairo_spritehelper.hxx:99
     cairocanvas::SpriteHelper mbTextureDirty _Bool
 chart2/inc/ChartModel.hxx:143
     chart::ChartModel m_aGraphicObjectVector std::vector<GraphicObject>
@@ -152,7 +152,7 @@ connectivity/source/inc/OTypeInfo.hxx:38
     connectivity::OTypeInfo nType sal_Int16
 connectivity/source/inc/writer/WConnection.hxx:66
     connectivity::writer::OWriterConnection::CloseVetoButTerminateListener m_pCloseListener std::unique_ptr<utl::CloseVeto>
-cppcanvas/source/inc/implrenderer.hxx:215
+cppcanvas/source/inc/implrenderer.hxx:211
     cppcanvas::internal::ImplRenderer aBaseTransform struct cppcanvas::internal::XForm
 cppu/source/typelib/typelib.cxx:897
     (anonymous namespace)::BaseList set (anonymous namespace)::BaseList::Set
@@ -268,10 +268,6 @@ drawinglayer/source/attribute/sdrsceneattribute3d.cxx:32
     drawinglayer::attribute::ImpSdrSceneAttribute mfDistance double
 drawinglayer/source/tools/emfpcustomlinecap.hxx:34
     emfplushelper::EMFPCustomLineCap mbIsFilled _Bool
-editeng/source/accessibility/AccessibleHyperlink.hxx:46
-    accessibility::AccessibleHyperlink nPara sal_Int32
-editeng/source/accessibility/AccessibleHyperlink.hxx:47
-    accessibility::AccessibleHyperlink nRealIdx sal_uInt16
 embeddedobj/source/inc/oleembobj.hxx:132
     OleEmbeddedObject m_nTargetState sal_Int32
 embeddedobj/source/inc/oleembobj.hxx:144
@@ -296,6 +292,14 @@ extensions/source/propctrlr/genericpropertyhandler.hxx:63
     pcr::GenericPropertyHandler m_xComponentIntrospectionAccess css::uno::Reference<css::beans::XIntrospectionAccess>
 extensions/source/scanner/scanner.hxx:48
     ScannerManager mpData void *
+fpicker/source/office/autocmpledit.hxx:24
+    AutocompleteEdit m_nCurrent std::vector<class OUString>::size_type
+fpicker/source/office/PlacesListBox.hxx:36
+    PlacesListBox mbSelectionChanged _Bool
+fpicker/source/office/RemoteFilesDialog.hxx:113
+    RemoteFilesDialog m_nWidth int
+fpicker/source/office/RemoteFilesDialog.hxx:114
+    RemoteFilesDialog m_nHeight int
 framework/inc/services/layoutmanager.hxx:259
     framework::LayoutManager m_bGlobalSettings _Bool
 framework/inc/services/layoutmanager.hxx:273
@@ -396,23 +400,19 @@ include/svtools/brwbox.hxx:249
     BrowseBox::CursorMoveAttempt m_bScrolledToReachCell const _Bool
 include/svtools/ctrltool.hxx:150
     FontList mpDev2 VclPtr<class OutputDevice>
-include/svx/bmpmask.hxx:127
+include/svx/bmpmask.hxx:125
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/float3d.hxx:171
     Svx3DWin pControllerItem std::unique_ptr<Svx3DCtrlItem>
 include/svx/fmtools.hxx:134
     FmXDisposeListener m_pAdapter rtl::Reference<FmXDisposeMultiplexer>
-include/svx/gridctrl.hxx:255
+include/svx/gridctrl.hxx:254
     DbGridControl m_pCursorDisposeListener std::unique_ptr<DisposeListenerGridBridge>
-include/svx/langbox.hxx:71
-    SvxLanguageBoxBase m_aNotCheckedImage class Image
-include/svx/langbox.hxx:72
-    SvxLanguageBoxBase m_aCheckedImage class Image
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
-include/svx/srchdlg.hxx:162
-    SvxSearchDialog pSearchController std::unique_ptr<SvxSearchController>
 include/svx/srchdlg.hxx:163
+    SvxSearchDialog pSearchController std::unique_ptr<SvxSearchController>
+include/svx/srchdlg.hxx:164
     SvxSearchDialog pOptionsController std::unique_ptr<SvxSearchController>
 include/svx/viewpt3d.hxx:62
     Viewport3D::(anonymous) H double
@@ -438,11 +438,11 @@ include/vcl/opengl/OpenGLContext.hxx:32
     GLWindow bMultiSampleSupported _Bool
 include/vcl/pdfextoutdevdata.hxx:83
     vcl::PDFExtOutDevData mbSinglePageSheets _Bool
-include/vcl/salnativewidgets.hxx:469
+include/vcl/salnativewidgets.hxx:467
     ToolbarValue mbIsTopDockingArea _Bool
-include/vcl/salnativewidgets.hxx:534
+include/vcl/salnativewidgets.hxx:532
     PushButtonValue mbBevelButton _Bool
-include/vcl/salnativewidgets.hxx:535
+include/vcl/salnativewidgets.hxx:533
     PushButtonValue mbSingleLine _Bool
 include/vcl/sysdata.hxx:69
     SystemEnvData pSalFrame void *
@@ -490,11 +490,11 @@ registry/source/reflread.cxx:466
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b2 sal_uInt32
 reportdesign/inc/RptObject.hxx:72
     rptui::OObjectBase m_xKeepShapeAlive css::uno::Reference<css::uno::XInterface>
-sal/qa/osl/file/osl_File.cxx:4154
+sal/qa/osl/file/osl_File.cxx:4156
     osl_Directory::isOpen nError1 osl::class FileBase::RC
-sal/qa/osl/file/osl_File.cxx:4154
+sal/qa/osl/file/osl_File.cxx:4156
     osl_Directory::isOpen nError2 osl::class FileBase::RC
-sal/qa/osl/file/osl_File.cxx:4212
+sal/qa/osl/file/osl_File.cxx:4214
     osl_Directory::close nError2 osl::class FileBase::RC
 sal/rtl/alloc_arena.hxx:35
     rtl_arena_stat_type m_mem_total sal_Size
@@ -518,11 +518,11 @@ sal/textenc/tcvtutf7.cxx:416
     ImplUTF7FromUCContextData mnBitBuffer sal_uInt32
 sal/textenc/tcvtutf7.cxx:417
     ImplUTF7FromUCContextData mnBufferBits sal_uInt32
-sc/inc/compiler.hxx:256
+sc/inc/compiler.hxx:258
     ScCompiler::AddInMap pODFF const char *
-sc/inc/compiler.hxx:257
-    ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:259
+    ScCompiler::AddInMap pEnglish const char *
+sc/inc/compiler.hxx:261
     ScCompiler::AddInMap pUpper const char *
 sc/inc/document.hxx:2592
     ScMutationDisable mpDocument class ScDocument *
@@ -538,9 +538,9 @@ sc/inc/tabopparams.hxx:38
     ScInterpreterTableOpParams bValid _Bool
 sc/source/core/data/column4.cxx:1308
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
-sc/source/core/data/column.cxx:1397
-    (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
 sc/source/core/data/column.cxx:1398
+    (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
+sc/source/core/data/column.cxx:1399
     (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags const enum ScCloneFlags
 sc/source/core/data/table2.cxx:3664
     (anonymous namespace)::OutlineArrayFinder mpArray class ScOutlineArray *
@@ -652,7 +652,7 @@ sd/source/ui/remotecontrol/Receiver.hxx:35
     sd::Receiver pTransmitter class sd::Transmitter *
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL const class rtl::OUString
-sd/source/ui/sidebar/SlideBackground.hxx:93
+sd/source/ui/sidebar/SlideBackground.hxx:94
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
 sd/source/ui/slideshow/slideshowimpl.hxx:333
     sd::SlideshowImpl mpPaneHider ::std::unique_ptr<PaneHider>
@@ -666,7 +666,7 @@ sd/source/ui/view/ToolBarManager.cxx:315
     sd::ToolBarManager::Implementation mpAsynchronousLayouterLock ::std::unique_ptr<LayouterLock>
 sdext/source/presenter/PresenterTimer.cxx:106
     sdext::presenter::(anonymous namespace)::TimerScheduler mpLateDestroy std::shared_ptr<TimerScheduler>
-sfx2/source/appl/fileobj.hxx:37
+sfx2/source/appl/fileobj.hxx:38
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
 sfx2/source/doc/sfxbasemodel.cxx:449
     SfxSaveGuard m_pFramesLock std::unique_ptr<SfxOwnFramesLocker>
@@ -780,7 +780,7 @@ svx/source/svdraw/svdibrow.cxx:95
     ImpItemListRow pType const std::type_info *
 svx/source/svdraw/svdpdf.hxx:196
     ImpSdrPdfImport mdPageWidthPts double
-svx/source/tbxctrls/tbcontrl.cxx:197
+svx/source/tbxctrls/tbcontrl.cxx:199
     SvxFontNameBox_Impl m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:96
     SwAccessibleMap mvShapes SwShapeList_Impl
@@ -842,7 +842,7 @@ ucb/source/ucp/gio/gio_mount.hxx:79
     OOoMountOperationClass _gtk_reserved3 void (*)(void)
 ucb/source/ucp/gio/gio_mount.hxx:80
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
-ucb/source/ucp/webdav-neon/NeonSession.cxx:160
+ucb/source/ucp/webdav-neon/NeonSession.cxx:157
     NeonRequestContext pResource struct webdav_ucp::DAVResource *
 unoidl/source/legacyprovider.cxx:86
     unoidl::detail::(anonymous namespace)::Cursor manager_ rtl::Reference<Manager>
@@ -1016,21 +1016,21 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:47
     AtkObjectWrapper aParent const AtkObject
 vcl/unx/gtk3/a11y/atkwrapper.hxx:75
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
-vcl/unx/gtk3/a11y/gtk3atkutil.cxx:142
+vcl/unx/gtk3/a11y/gtk3atkutil.cxx:138
     DocumentFocusListener m_aRefList std::set<uno::Reference<uno::XInterface> >
-vcl/unx/gtk3/gtk3gloactiongroup.cxx:28
+vcl/unx/gtk3/gtk3gloactiongroup.cxx:26
     GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3glomenu.cxx:17
+vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk3/gtk3gtkinst.cxx:1596
      in char *
-vcl/unx/gtk3/gtk3hudawareness.cxx:17
+vcl/unx/gtk3/gtk3hudawareness.cxx:16
     HudAwarenessHandle connection GDBusConnection *
-vcl/unx/gtk3/gtk3hudawareness.cxx:20
+vcl/unx/gtk3/gtk3hudawareness.cxx:19
     HudAwarenessHandle notify GDestroyNotify
 vcl/workben/vcldemo.cxx:1744
     DemoWin mxThread rtl::Reference<RenderThread>
-writerfilter/source/dmapper/PropertyMap.hxx:198
+writerfilter/source/dmapper/PropertyMap.hxx:204
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 writerfilter/source/dmapper/SettingsTable.cxx:253
     writerfilter::dmapper::SettingsTable_Impl m_sRedlineProtectionKey class rtl::OUString

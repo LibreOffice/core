@@ -110,8 +110,6 @@ private:
     bool m_bServiceChanged;
 
     OUString m_sIniKey;
-    int m_nWidth;
-    int m_nHeight;
 
     bool m_bIsInExecute;
 

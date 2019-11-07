@@ -30,8 +30,6 @@ RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     : SvtFileDialog_Base( pParent, "fps/ui/remotefilesdialog.ui", "RemoteFilesDialog" )
     , m_xContext( comphelper::getProcessComponentContext() )
     , m_xMasterPasswd( PasswordContainer::create( m_xContext ) )
-    , m_nWidth( 0 )
-    , m_nHeight( 0 )
     , m_bIsInExecute( false )
     , m_xCancel_btn(m_xBuilder->weld_button("cancel"))
     , m_xAddService_bar(m_xBuilder->weld_toolbar("add_service_bar"))
@@ -245,8 +243,6 @@ void RemoteFilesDialog::InitSize()
             sal_Int32 nPos2{ sCfgStr.indexOf('|', nPos1+1 ) };
             if (nPos2<0)
                 return;
-            m_nWidth = sCfgStr.copy(0, nPos1++).toInt32();
-            m_nHeight = sCfgStr.copy(nPos1, nPos2-nPos1).toInt32();
             m_xFileView->SetConfigString( sCfgStr.copy(nPos2+1) );
         }
     }

@@ -9778,8 +9778,6 @@ class GtkInstanceIconView : public GtkInstanceContainer, public virtual weld::Ic
 private:
     GtkIconView* m_pIconView;
     GtkTreeStore* m_pTreeStore;
-    std::vector<int> m_aViewColToModelCol;
-    std::vector<int> m_aModelColToViewCol;
     gint m_nTextCol;
     gint m_nImageCol;
     gint m_nIdCol;

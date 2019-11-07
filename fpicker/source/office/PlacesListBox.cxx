@@ -24,7 +24,6 @@ PlacesListBox::PlacesListBox(std::unique_ptr<weld::TreeView> xControl,
     , mxDelBtn(std::move(xDel))
     , mnNbEditables(0)
     , mbUpdated( false )
-    , mbSelectionChanged( false )
 {
     Size aSize(mxImpl->get_approximate_digit_width() * 18,
                mxImpl->get_height_rows(9));
@@ -103,7 +102,6 @@ IMPL_LINK_NOARG( PlacesListBox, Selection, weld::TreeView&, void )
     sal_uInt32 nSelected = mxImpl->get_cursor_index();
     PlacePtr pPlace = maPlaces[nSelected];
 
-    mbSelectionChanged = true;
     if (pPlace->IsEditable())
         mpDlg->RemovablePlaceSelected();
     else

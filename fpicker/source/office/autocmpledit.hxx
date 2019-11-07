@@ -21,7 +21,6 @@ private:
 
     std::vector< OUString > m_aEntries;
     std::vector< OUString > m_aMatching;
-    std::vector< OUString >::size_type m_nCurrent;
     Idle m_aChangedIdle;
     Link<weld::Entry&, void> m_aChangeHdl;
 
