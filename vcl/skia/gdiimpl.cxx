@@ -680,7 +680,9 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
                                      << Size(nSrcWidth, nSrcHeight));
     sk_sp<SkImage> image
         = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight));
-    mSurface->getCanvas()->drawImage(image, nDestX, nDestY);
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+    mSurface->getCanvas()->drawImage(image, nDestX, nDestY, &paint);
     postDraw();
 }
 
@@ -704,11 +706,13 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     SAL_INFO("vcl.skia", "copybits(" << this << "): (" << src << "):" << rPosAry);
     sk_sp<SkImage> image = src->mSurface->makeImageSnapshot(
         SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
     mSurface->getCanvas()->drawImageRect(image,
                                          SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
                                                           rPosAry.mnDestWidth,
                                                           rPosAry.mnDestHeight),
-                                         nullptr);
+                                         &paint);
     postDraw();
 }
 
