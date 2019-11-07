@@ -49,6 +49,7 @@ void X11SkiaSalGraphicsImpl::createSurface()
                 mSurface = SkSurface::MakeRenderTarget(
                     SkiaVulkanGrContext::getGrContext(), SkBudgeted::kNo,
                     SkImageInfo::MakeN32Premul(GetWidth(), GetHeight()));
+                mIsGPU = true;
                 assert(mSurface.get());
 #ifdef DBG_UTIL
                 prefillSurface();
@@ -83,10 +84,12 @@ void X11SkiaSalGraphicsImpl::createSurface()
         case RenderRaster:
             mWindowContext
                 = sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
+            mIsGPU = false;
             break;
         case RenderVulkan:
             mWindowContext
                 = sk_app::window_context_factory::MakeVulkanForXlib(winInfo, displayParams);
+            mIsGPU = true;
             break;
     }
     assert(SkToBool(mWindowContext)); // TODO
