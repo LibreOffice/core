@@ -33,7 +33,6 @@ private:
     std::unique_ptr<weld::Button> mxDelBtn;
     sal_Int32            mnNbEditables;
     bool                 mbUpdated;
-    bool                 mbSelectionChanged;
 
 public:
     PlacesListBox(std::unique_ptr<weld::TreeView> xTreeView,

@@ -98,7 +98,7 @@ connectivity/source/inc/TConnection.hxx:56
     connectivity::OMetaConnection m_aResources class connectivity::SharedResources
 connectivity/source/inc/writer/WTable.hxx:65
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
-cppcanvas/source/mtfrenderer/textaction.cxx:1652
+cppcanvas/source/mtfrenderer/textaction.cxx:1651
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextFillColor const ::Color
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:34
     Mapping m_from uno::Environment
@@ -172,7 +172,7 @@ dbaccess/source/core/inc/ContentHelper.hxx:109
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
 dbaccess/source/filter/hsqldb/parseschema.hxx:36
     dbahsql::SchemaParser m_PrimaryKeys std::map<OUString, std::vector<OUString> >
-dbaccess/source/ui/control/tabletree.cxx:234
+dbaccess/source/ui/control/tabletree.cxx:233
     dbaui::(anonymous namespace)::OViewSetter m_aEqualFunctor ::comphelper::UStringMixEqual
 dbaccess/source/ui/inc/charsetlistbox.hxx:44
     dbaui::CharSetListBox m_aCharSets class dbaui::OCharsetDisplay
@@ -278,13 +278,13 @@ include/drawinglayer/processor3d/defaultprocessor3d.hxx:90
     drawinglayer::processor3d::DefaultProcessor3D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 include/editeng/brushitem.hxx:51
     SvxBrushItem maSecOptions class SvtSecurityOptions
-include/filter/msfilter/svdfppt.hxx:709
+include/filter/msfilter/svdfppt.hxx:708
     PPTExtParaSheet aExtParaLevel struct PPTExtParaLevel [5]
-include/filter/msfilter/svdfppt.hxx:880
+include/filter/msfilter/svdfppt.hxx:879
     ImplPPTParaPropSet nDontKnow1 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:881
+include/filter/msfilter/svdfppt.hxx:880
     ImplPPTParaPropSet nDontKnow2 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:882
+include/filter/msfilter/svdfppt.hxx:881
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/oox/core/contexthandler2.hxx:217
     oox::core::ContextHandler2Helper mnRootStackSize const size_t
@@ -370,7 +370,7 @@ include/unoidl/unoidl.hxx:453
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories class test::Directories
-include/vcl/headbar.hxx:231
+include/vcl/headbar.hxx:229
     HeaderBar maDragHdl Link<class HeaderBar *, void>
 include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
@@ -604,11 +604,11 @@ sw/source/core/access/accmap.cxx:631
     SwAccessibleEventMap_Impl maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/access/accmap.cxx:671
     SwAccessibleSelectedParas_Impl maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/doc/swstylemanager.cxx:58
+sw/source/core/doc/swstylemanager.cxx:54
     SwStyleManager aAutoCharPool class StylePool
-sw/source/core/doc/swstylemanager.cxx:59
+sw/source/core/doc/swstylemanager.cxx:55
     SwStyleManager aAutoParaPool class StylePool
-sw/source/core/doc/tblrwcl.cxx:84
+sw/source/core/doc/tblrwcl.cxx:78
     CpyTabFrame::(anonymous) nSize SwTwips
 sw/source/core/inc/swblocks.hxx:69
     SwImpBlocks m_bInPutMuchBlocks _Bool
@@ -626,7 +626,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:113
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:79
     SwInsertField_Data m_aDBDataSource const css::uno::Any
-toolkit/source/awt/vclxtoolkit.cxx:430
+toolkit/source/awt/vclxtoolkit.cxx:432
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:74
     OOoMountOperationClass parent_class GMountOperationClass
@@ -950,9 +950,9 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:47
     AtkObjectWrapper aParent const AtkObject
 vcl/unx/gtk3/a11y/atkwrapper.hxx:75
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
-vcl/unx/gtk3/gtk3gloactiongroup.cxx:28
+vcl/unx/gtk3/gtk3gloactiongroup.cxx:26
     GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3glomenu.cxx:17
+vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk3/gtk3gtkinst.cxx:1596
      out gpointer *

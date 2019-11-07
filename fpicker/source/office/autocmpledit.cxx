@@ -13,7 +13,6 @@
 
 AutocompleteEdit::AutocompleteEdit(std::unique_ptr<weld::Entry> xEntry)
     : m_xEntry(std::move(xEntry))
-    , m_nCurrent(0)
 {
     m_xEntry->connect_changed(LINK(this, AutocompleteEdit, ChangedHdl));
 
@@ -56,7 +55,6 @@ IMPL_LINK_NOARG(AutocompleteEdit, TryAutoComplete, Timer *, void)
     {
         if( Match( aCurText ) )
         {
-            m_nCurrent = 0;
             m_xEntry->set_text(m_aMatching[0]);
             auto nNewLen = m_aMatching[0].getLength();
             m_xEntry->select_region(nLen, nNewLen);
