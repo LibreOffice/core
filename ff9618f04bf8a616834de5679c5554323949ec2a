@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_a869c38b",
+        "filename": "solenv/sanitizers/ui/modules/swriter.suppr",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-11-07T15:36:25Z",
+      "side": 1,
+      "message": "I bet this should be GtkLabel instead of GtkEntry",
+      "revId": "ff9618f04bf8a616834de5679c5554323949ec2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
