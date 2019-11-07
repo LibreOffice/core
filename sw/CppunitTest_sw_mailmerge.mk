@@ -49,7 +49,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sw_mailmerge))
 $(eval $(call gb_CppunitTest_set_include,sw_mailmerge,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
-    -I$(SRCDIR)/sw/qa/extras/inc \
+    -I$(SRCDIR)/sw/qa/inc \
     -I$(SRCDIR)/sw/source/uibase/inc \
     $$(INCLUDE) \
 ))

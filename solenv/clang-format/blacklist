@@ -14836,8 +14836,6 @@ sw/qa/extras/docbookexport/docbookexport.cxx
 sw/qa/extras/globalfilter/globalfilter.cxx
 sw/qa/extras/htmlexport/htmlexport.cxx
 sw/qa/extras/htmlimport/htmlimport.cxx
-sw/qa/extras/inc/bordertest.hxx
-sw/qa/extras/inc/swmodeltestbase.hxx
 sw/qa/extras/mailmerge/mailmerge.cxx
 sw/qa/extras/odfexport/odfexport.cxx
 sw/qa/extras/odfimport/odfimport.cxx
@@ -14866,6 +14864,8 @@ sw/qa/extras/ww8export/ww8export.cxx
 sw/qa/extras/ww8export/ww8export2.cxx
 sw/qa/extras/ww8export/ww8export3.cxx
 sw/qa/extras/ww8import/ww8import.cxx
+sw/qa/inc/bordertest.hxx
+sw/qa/inc/swmodeltestbase.hxx
 sw/qa/unit/sw-dialogs-test.cxx
 sw/qa/unit/sw-dialogs-test_2.cxx
 sw/source/core/SwNumberTree/SwNodeNum.cxx
