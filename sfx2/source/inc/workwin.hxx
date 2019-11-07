@@ -221,7 +221,7 @@ class SfxWorkWindow final
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,bool);
     void                    RemoveChildWin_Impl(SfxChildWin_Impl*);
     void                    Sort_Impl();
-    SfxChild_Impl*          FindChild_Impl( const vcl::Window& rWindow ) const;
+    SfxChild_Impl*          FindChild_Impl( const vcl::Window* rWindow ) const;
     bool                    RequestTopToolSpacePixel_Impl( SvBorder aBorder );
     tools::Rectangle        GetTopRect_Impl() const;
     SvBorder                Arrange_Impl();
