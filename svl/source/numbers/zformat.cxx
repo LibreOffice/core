@@ -5239,6 +5239,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         {
             aStr.append( aPrefix );
         }
+        sal_Int32 nPosHaveLCID = -1;
         sal_Int32 nPosInsertLCID = aStr.getLength();
         sal_uInt32 nCalendarID = 0x0000000; // Excel ID of calendar used in sub-format see tdf#36038
         if ( nCnt )
@@ -5317,6 +5318,10 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         // other calendars (see tdf#36038) not corresponding between LibO and XL
                         if ( nCalendarID > 0 )
                             j = j+2;
+                        break;
+                    case NF_SYMBOLTYPE_CURREXT :
+                        nPosHaveLCID = aStr.getLength();
+                        aStr.append( rStrArray[j] );
                         break;
                     default:
                         aStr.append( rStrArray[j] );
@@ -5428,19 +5433,24 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             if ( aNatNum.GetDBNum() > 0 && nLanguageID == LANGUAGE_SYSTEM )
                 nLanguageID = MsLangId::getRealLanguage( aNatNum.GetLang());
         }
-        else if (!bSystemLanguage && nOriginalLang != LANGUAGE_DONTKNOW)
+        else if (nPosHaveLCID < 0)
         {
-            // Explicit locale, write only to the first subformat.
-            if (n == 0)
-                nLanguageID = MsLangId::getRealLanguage( nOriginalLang);
-        }
-        else if (bSystemLanguage && maLocale.meLanguageWithoutLocaleData != LANGUAGE_DONTKNOW)
-        {
-            // Explicit locale but no locale data thus assigned to system
-            // locale, preserve for roundtrip, write only to the first
-            // subformat.
-            if (n == 0)
-                nLanguageID = maLocale.meLanguageWithoutLocaleData;
+            // Do not insert a duplicated LCID that was already given with a
+            // currency format as [$R-1C09]
+            if (!bSystemLanguage && nOriginalLang != LANGUAGE_DONTKNOW)
+            {
+                // Explicit locale, write only to the first subformat.
+                if (n == 0)
+                    nLanguageID = MsLangId::getRealLanguage( nOriginalLang);
+            }
+            else if (bSystemLanguage && maLocale.meLanguageWithoutLocaleData != LANGUAGE_DONTKNOW)
+            {
+                // Explicit locale but no locale data thus assigned to system
+                // locale, preserve for roundtrip, write only to the first
+                // subformat.
+                if (n == 0)
+                    nLanguageID = maLocale.meLanguageWithoutLocaleData;
+            }
         }
         if ( nCalendarID > 0 )
         {   // Add alphabet and language to calendar
