@@ -38,11 +38,11 @@ public:
      * Wraps a reqif-xhtml fragment into an XHTML file, so an XML parser can
      * parse it.
      */
-    void wrapFragment(SvMemoryStream& rStream)
+    static void wrapFragment(const utl::TempFile& rTempFile, SvMemoryStream& rStream)
     {
         rStream.WriteCharPtr(
             "<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
-        SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+        SvFileStream aFileStream(rTempFile.GetURL(), StreamMode::READ);
         rStream.WriteStream(aFileStream);
         rStream.WriteCharPtr("</reqif-xhtml:html>\n");
         rStream.Seek(0);
@@ -101,6 +101,11 @@ private:
 };
 
 #define DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, HtmlExportTest)
+
+/// HTML export of the sw doc model tests.
+class SwHtmlDomExportTest : public SwModelTestBase, public HtmlTestTools
+{
+};
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testFdo81276, "fdo81276.html")
 {
@@ -563,7 +568,7 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
     {
         // Check that the replacement graphic is exported at RTF level.
         SvMemoryStream aStream;
-        wrapFragment(aStream);
+        wrapFragment(maTempFile, aStream);
         xmlDocPtr pDoc = parseXmlStream(&aStream);
         CPPUNIT_ASSERT(pDoc);
         // Get the path of the RTF data.
@@ -626,7 +631,7 @@ DECLARE_HTMLEXPORT_TEST(testTransparentImage, "transparent-image.odt")
 DECLARE_HTMLEXPORT_TEST(testTransparentImageReqIf, "transparent-image.odt")
 {
     SvMemoryStream aStream;
-    wrapFragment(aStream);
+    wrapFragment(maTempFile, aStream);
     xmlDocPtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
@@ -643,7 +648,7 @@ DECLARE_HTMLEXPORT_TEST(testOleNodataReqIf, "reqif-ole-nodata.odt")
 {
     // This failed, io::IOException was thrown during the filter() call.
     SvMemoryStream aStream;
-    wrapFragment(aStream);
+    wrapFragment(maTempFile, aStream);
     xmlDocPtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
@@ -658,7 +663,7 @@ DECLARE_HTMLEXPORT_TEST(testOleNodataReqIf, "reqif-ole-nodata.odt")
 DECLARE_HTMLEXPORT_TEST(testNoLangReqIf, "reqif-no-lang.odt")
 {
     SvMemoryStream aStream;
-    wrapFragment(aStream);
+    wrapFragment(maTempFile, aStream);
     xmlDocPtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
@@ -694,6 +699,31 @@ DECLARE_HTMLEXPORT_TEST(testFieldShadeReqIf, "field-shade-reqif.odt")
     // an invalid ReqIF-XHTML.
     assertXPath(pDoc, "/html/body/div/p[1]/span", 0);
     assertXPath(pDoc, "/html/body/div/p[1]/sdfield", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteReqIf)
+{
+    // Build a document model that uses the Quotations paragraph style.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    xParagraph->setPropertyValue("ParaStyleName", uno::makeAny(OUString("Quotations")));
+
+    // Export it.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("HTML (StarWriter)");
+    aMediaDescriptor["FilterOptions"] <<= OUString("xhtmlns=reqif-xhtml");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. <blackquote> had character (direct) children, which is invalid xhtml.
+    assertXPath(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:blockquote/reqif-xhtml:p", 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
