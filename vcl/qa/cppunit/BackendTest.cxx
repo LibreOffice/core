@@ -438,8 +438,8 @@ public:
     //    CPPUNIT_TEST(testDrawFilledRectWithPolyPolygon); TODO SKIA
     //    CPPUNIT_TEST(testDrawFilledRectWithPolyPolygon2D); TODO SKIA
 
-    //    CPPUNIT_TEST(testDrawDiamondWithPolygon); TODO SKIA
-    //    CPPUNIT_TEST(testDrawDiamondWithLine); TODO SKIA
+    CPPUNIT_TEST(testDrawDiamondWithPolygon);
+    CPPUNIT_TEST(testDrawDiamondWithLine);
     CPPUNIT_TEST(testDrawDiamondWithPolyline);
     CPPUNIT_TEST(testDrawDiamondWithPolylineB2D);
 

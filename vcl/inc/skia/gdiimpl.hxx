@@ -215,8 +215,7 @@ protected:
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 
     bool isOffscreen() const { return mProvider == nullptr || mProvider->IsOffScreen(); }
-    // TODO mainly for debugging purposes
-    bool isGPU() const;
+    bool isGPU() const { return mIsGPU; }
 
     void invert(basegfx::B2DPolygon const& rPoly, SalInvert eFlags);
 
@@ -230,6 +229,13 @@ protected:
     int GetHeight() const { return mProvider ? mProvider->GetHeight() : 1; }
 
     void drawMask(const SalTwoRect& rPosAry, const SkBitmap& rBitmap, Color nMaskColor);
+
+    // When drawing using GPU, rounding errors may result in off-by-one errors,
+    // see https://bugs.chromium.org/p/skia/issues/detail?id=9611 . Compensate for
+    // it by using centers of pixels (Skia uses float coordinates). In raster case
+    // it seems better to not do this though.
+    SkScalar toSkX(long x) const { return mIsGPU ? x + 0.5 : x; }
+    SkScalar toSkY(long y) const { return mIsGPU ? y + 0.5 : y; }
 
     // Which Skia backend to use.
     enum RenderMethod
@@ -256,6 +262,7 @@ protected:
     SalGeometryProvider* mProvider;
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
+    bool mIsGPU; // whether the surface is GPU-backed
     vcl::Region mClipRegion;
     Color mLineColor;
     Color mFillColor;
