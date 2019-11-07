@@ -5633,7 +5633,7 @@ SvxLineItem LineStyle SID_FRAME_LINESTYLE
 
 
 XLineWidthItem LineWidth SID_ATTR_LINE_WIDTH
-
+(SvxDoubleItem Width SID_ATTR_LINE_WIDTH_ARG, XLineWidthItem LineWidth SID_ATTR_LINE_WIDTH)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
