@@ -724,10 +724,6 @@ include/vcl/customweld.hxx:115
     void weld::CustomWeld::queue_draw_area(int,int,int,int)
 include/vcl/dialog.hxx:129
     _Bool Dialog::StartExecuteAsync(const class std::function<void (int)> &)
-include/vcl/edit.hxx:184
-    _Bool Edit::IsSelectAllSingleClick() const
-include/vcl/edit.hxx:216
-    class rtl::OUString Edit::GetPlaceholderText() const
 include/vcl/EnumContext.hxx:118
      vcl::EnumContext::EnumContext(const class rtl::OUString &,const class rtl::OUString &)
 include/vcl/errcode.hxx:86
