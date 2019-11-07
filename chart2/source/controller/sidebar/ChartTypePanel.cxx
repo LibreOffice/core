@@ -598,7 +598,6 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
     , m_nChangingCalls(0)
     , m_aTimerTriggeredControllerLock(uno::Reference<frame::XModel>(m_xChartModel, uno::UNO_QUERY))
 {
-    get(mpChartTypeLabel, "lbl_chartType");
     get(m_pMainTypeList, "cmb_chartType");
     get(m_pSubTypeList, "subtype");
 
@@ -674,7 +673,6 @@ void ChartTypePanel::dispose()
                                                                     css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
 
-    mpChartTypeLabel.clear();
     m_pMainTypeList.clear();
     m_pSubTypeList.clear();
 
