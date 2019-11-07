@@ -69,8 +69,7 @@ private:
     DECL_DLLPRIVATE_LINK(ResponseHdl, Button*, void);
 
 protected:
-    using Window::ImplInit;
-    void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
+    void    ImplInitDialog( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
 
     /// Find and set the LOK notifier according to the pParent.
     void ImplLOKNotifier(vcl::Window* pParent);
