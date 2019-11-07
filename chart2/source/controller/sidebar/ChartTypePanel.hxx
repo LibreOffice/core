@@ -25,6 +25,7 @@
 //#include <vcl/layout.hxx>
 #include "ChartSidebarModifyListener.hxx"
 #include <ChartTypeDialogController.hxx>
+#include <ChartTypeTemplateProvider.hxx>
 #include <TimerTriggeredControllerLock.hxx>
 #include <TitleHelper.hxx>
 
@@ -61,7 +62,8 @@ class ChartTypePanel : public ResourceChangeListener,
                        public PanelLayout,
                        public ::sfx2::sidebar::IContextChangeReceiver,
                        public sfx2::sidebar::SidebarModelUpdate,
-                       public ChartSidebarModifyListenerParent
+                       public ChartSidebarModifyListenerParent,
+                       public ChartTypeTemplateProvider
 {
 public:
     static VclPtr<vcl::Window> Create(vcl::Window* pParent,
@@ -94,6 +96,10 @@ private:
     virtual void stateChanged(ChangingResource* pResource) override;
 
     void commitToModel(const ChartTypeParameter& rParameter);
+    void selectMainType();
+
+    virtual css::uno::Reference<css::chart2::XChartTypeTemplate>
+    getCurrentTemplate() const override;
 
     DECL_LINK(SelectMainTypeHdl, ListBox&, void);
     DECL_LINK(SelectSubTypeHdl, ValueSet*, void);
