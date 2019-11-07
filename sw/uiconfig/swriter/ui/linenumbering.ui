@@ -252,6 +252,7 @@
                               <object class="GtkSpinButton" id="spacingspin">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="halign">start</property>
                                 <property name="adjustment">spacingadjustment</property>
                                 <property name="digits">2</property>
                               </object>
@@ -368,6 +369,7 @@
                               <object class="GtkEntry" id="textentry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="halign">start</property>
                                 <property name="activates_default">True</property>
                                 <property name="width_chars">3</property>
                               </object>
@@ -568,9 +570,7 @@
       <widget name="styledropdown"/>
       <widget name="formatdropdown"/>
       <widget name="positiondropdown"/>
-      <widget name="spacingspin"/>
       <widget name="box4"/>
-      <widget name="textentry"/>
       <widget name="box6"/>
     </widgets>
   </object>
@@ -583,6 +583,14 @@
       <widget name="interval"/>
       <widget name="text"/>
       <widget name="every"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget1">
+    <widgets>
+      <widget name="linesspin"/>
+      <widget name="textentry"/>
+      <widget name="intervalspin"/>
+      <widget name="spacingspin"/>
     </widgets>
   </object>
 </interface>
