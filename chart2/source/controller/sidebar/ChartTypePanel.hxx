@@ -105,7 +105,6 @@ private:
     DECL_LINK(SelectSubTypeHdl, ValueSet*, void);
 
     //ui controls
-    VclPtr<FixedText> mpChartTypeLabel;
     VclPtr<ListBox> m_pMainTypeList;
     VclPtr<ValueSet> m_pSubTypeList;
 
