@@ -36,6 +36,7 @@
 #include <svtools/valueset.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -369,6 +370,9 @@ bool ChartTypeDialogController::shouldShow_SortByXValuesResourceGroup() const
 }
 
 void ChartTypeDialogController::showExtraControls(weld::Builder* /*pBuilder*/)
+{
+}
+void ChartTypeDialogController::showExtraControls(VclBuilderContainer* /*pParent*/)
 {
 }
 void ChartTypeDialogController::hideExtraControls() const
@@ -1228,6 +1232,8 @@ void StockChartDialogController::adjustParameterToSubType( ChartTypeParameter& r
 }
 
 CombiColumnLineChartDialogController::CombiColumnLineChartDialogController()
+    : m_pFT_NumberOfLines(nullptr)
+    , m_pMF_NumberOfLines(nullptr)
 {
     bSupports3D = false;
 }
@@ -1294,20 +1300,50 @@ void CombiColumnLineChartDialogController::showExtraControls(weld::Builder* pBui
     m_xMF_NumberOfLines->show();
 }
 
+void CombiColumnLineChartDialogController::showExtraControls(VclBuilderContainer* pParent)
+{
+    if (!m_pFT_NumberOfLines)
+        {
+            pParent->get(m_pFT_NumberOfLines, "nolinesft");
+        }
+        if (!m_pMF_NumberOfLines)
+        {
+            pParent->get(m_pMF_NumberOfLines, "nolines");
+
+            m_pMF_NumberOfLines->SetSpinSize(1);
+            m_pMF_NumberOfLines->SetFirst( 1 );
+            m_pMF_NumberOfLines->SetLast( 100 );
+            m_pMF_NumberOfLines->SetMin( 1 );
+            m_pMF_NumberOfLines->SetMax( 100 );
+
+            m_pMF_NumberOfLines->SetModifyHdl( LINK( this, CombiColumnLineChartDialogController, ChangeLineCountHdl_unwelded ) );
+        }
+
+        m_pFT_NumberOfLines->Show();
+        m_pMF_NumberOfLines->Show();
+}
+
 void CombiColumnLineChartDialogController::hideExtraControls() const
 {
     if (m_xFT_NumberOfLines)
         m_xFT_NumberOfLines->hide();
     if (m_xMF_NumberOfLines)
         m_xMF_NumberOfLines->hide();
+
+    if(m_pFT_NumberOfLines)
+        m_pFT_NumberOfLines->Hide();
+    if(m_pMF_NumberOfLines)
+        m_pMF_NumberOfLines->Hide();
 }
 
 void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypeParameter& /*rParameter*/
                 , const uno::Reference< XChartDocument >& xChartModel
                 , const uno::Reference< beans::XPropertySet >& xTemplateProps ) const
 {
-    if (!m_xMF_NumberOfLines)
+    if (!m_xMF_NumberOfLines && !m_pMF_NumberOfLines)
         return;
+
+    bool bIsWelded = m_xMF_NumberOfLines != nullptr;
 
     uno::Reference< frame::XModel > xModel( xChartModel, uno::UNO_QUERY );
 
@@ -1330,18 +1366,31 @@ void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypePar
     }
     if( nNumLines < 0 )
         nNumLines = 0;
-    m_xMF_NumberOfLines->set_value(nNumLines);
+
+    if (bIsWelded)
+        m_xMF_NumberOfLines->set_value(nNumLines);
+    else
+        m_pMF_NumberOfLines->SetValue( nNumLines );
 
     sal_Int32 nMaxLines = ChartModelHelper::getDataSeries( xModel ).size() - 1;
     if( nMaxLines < 0 )
         nMaxLines = 0;
-    m_xMF_NumberOfLines->set_max(nMaxLines);
+
+    if (bIsWelded)
+        m_xMF_NumberOfLines->set_max(nMaxLines);
+    else
+    {
+        m_pMF_NumberOfLines->SetLast( nMaxLines );
+        m_pMF_NumberOfLines->SetMax( nMaxLines );
+    }
 }
 void CombiColumnLineChartDialogController::setTemplateProperties( const uno::Reference< beans::XPropertySet >& xTemplateProps ) const
 {
+    bool bIsWelded = m_xMF_NumberOfLines != nullptr;
     if( xTemplateProps.is() )
     {
-        sal_Int32 nNumLines = m_xMF_NumberOfLines->get_value();
+        sal_Int32 nNumLines =
+                bIsWelded ? m_xMF_NumberOfLines->get_value() : static_cast< sal_Int32 >(m_pMF_NumberOfLines->GetValue());
         xTemplateProps->setPropertyValue( "NumberOfLines" , uno::Any(nNumLines) );
     }
 }
@@ -1351,6 +1400,13 @@ IMPL_LINK_NOARG(CombiColumnLineChartDialogController, ChangeLineCountHdl, weld::
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
 }
+
+IMPL_LINK_NOARG(CombiColumnLineChartDialogController, ChangeLineCountHdl_unwelded, Edit&, void)
+{
+    if( m_pChangeListener )
+        m_pChangeListener->stateChanged(this);
+}
+
 void CombiColumnLineChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
 {
     rParameter.b3DLook = false;
