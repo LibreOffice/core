@@ -3133,7 +3133,7 @@ private:
     GtkSizeGroup* m_pGroup;
 public:
     GtkInstanceSizeGroup()
-        : m_pGroup(gtk_size_group_new(GTK_SIZE_GROUP_NONE))
+        : m_pGroup(gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL))
     {
     }
     virtual void add_widget(weld::Widget* pWidget) override
