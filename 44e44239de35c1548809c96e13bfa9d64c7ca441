@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_0cfa5274",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2019-11-07T14:38:34Z",
+      "side": 1,
+      "message": "Thanks your comment, I agree with the cast I just forgot to remove it...",
+      "parentUuid": "7f7f9b97_8c8f4222",
+      "range": {
+        "startLine": 669,
+        "startChar": 33,
+        "endLine": 669,
+        "endChar": 52
+      },
+      "revId": "44e44239de35c1548809c96e13bfa9d64c7ca441",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_ac923e4a",
         "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
         "patchSetId": 5
