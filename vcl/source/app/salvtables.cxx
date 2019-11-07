@@ -3637,13 +3637,6 @@ public:
         return -1;
     }
 
-    virtual void set_top_entry(int pos) override
-    {
-        SvTreeList* pModel = m_xTreeView->GetModel();
-        SvTreeListEntry* pEntry = pModel->GetEntry(nullptr, pos);
-        pModel->Move(pEntry, nullptr, 0);
-    }
-
     virtual void swap(int pos1, int pos2) override
     {
         SvTreeList* pModel = m_xTreeView->GetModel();

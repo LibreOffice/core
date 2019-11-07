@@ -8524,31 +8524,6 @@ public:
         thaw();
     }
 
-    void move_before(int pos, int before)
-    {
-        if (pos == before)
-            return;
-
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-
-        disable_notify_events();
-        GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos);
-
-        GtkTreeIter position;
-        gtk_tree_model_iter_nth_child(pModel, &position, nullptr, before);
-
-        gtk_tree_store_move_before(m_pTreeStore, &iter, &position);
-        enable_notify_events();
-    }
-
-    virtual void set_top_entry(int pos) override
-    {
-        disable_notify_events();
-        move_before(pos, 0);
-        enable_notify_events();
-    }
-
     virtual void swap(int pos1, int pos2) override
     {
         disable_notify_events();
