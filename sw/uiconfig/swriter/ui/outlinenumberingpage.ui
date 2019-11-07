@@ -42,6 +42,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkScrolledWindow">
+                <property name="width_request">50</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="shadow_type">in</property>
