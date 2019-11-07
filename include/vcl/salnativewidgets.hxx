@@ -289,7 +289,7 @@ class VCL_DLLPUBLIC ImplControlValue
  *
  *   Value container for scrollbars.
  */
-class ScrollbarValue final : public ImplControlValue
+class SAL_DLLPUBLIC_RTTI ScrollbarValue final : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -319,7 +319,7 @@ class ScrollbarValue final : public ImplControlValue
         ScrollbarValue & operator =(ScrollbarValue &&) = delete; // due to ImplControlValue
 };
 
-class SliderValue final : public ImplControlValue
+class SAL_DLLPUBLIC_RTTI SliderValue final : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -383,7 +383,7 @@ namespace o3tl
     template<> struct typed_flags<TabitemFlags> : is_typed_flags<TabitemFlags, 0x0f> {};
 }
 
-class TabitemValue final : public ImplControlValue
+class SAL_DLLPUBLIC_RTTI TabitemValue final : public ImplControlValue
 {
     public:
         TabitemFlags    mnAlignment;
@@ -418,7 +418,7 @@ class TabitemValue final : public ImplControlValue
  *   Note: the other parameters of DrawNativeControl will have no meaning
  *         all parameters for spinbuttons are carried here
  */
-class SpinbuttonValue final : public ImplControlValue
+class SAL_DLLPUBLIC_RTTI SpinbuttonValue final : public ImplControlValue
 {
     public:
         tools::Rectangle       maUpperRect;
@@ -491,7 +491,7 @@ public:
  * Value container for menu items; specifies the rectangle for the whole item which
  * may be useful when drawing parts with a smaller rectangle.
  */
-class MenupopupValue final : public ImplControlValue
+class SAL_DLLPUBLIC_RTTI MenupopupValue final : public ImplControlValue
 {
 public:
     MenupopupValue( long i_nGutterWidth, const tools::Rectangle& i_rItemRect )
