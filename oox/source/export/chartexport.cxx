@@ -251,7 +251,7 @@ static bool lcl_isCategoryAxisShifted(const Reference< chart2::XChartDocument >&
                     if( xAxis.is())
                     {
                         chart2::ScaleData aScaleData = xAxis->getScaleData();
-                        if( aScaleData.Categories.is() )
+                        if( aScaleData.AxisType == AXIS_PRIMARY_Y )
                         {
                             isCategoryPositionShifted = aScaleData.ShiftedCategoryPosition;
                             break;
