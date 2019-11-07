@@ -58,8 +58,6 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:407
     _Bool lok::Document::setClipboard(const unsigned long,const char **,const unsigned long *,const char **)
 include/LibreOfficeKit/LibreOfficeKit.hxx:422
     _Bool lok::Document::paste(const char *,const char *,unsigned long)
-include/LibreOfficeKit/LibreOfficeKit.hxx:453
-    char * lok::Document::getCommandValues(const char *)
 include/LibreOfficeKit/LibreOfficeKit.hxx:539
     int lok::Document::getView()
 include/LibreOfficeKit/LibreOfficeKit.hxx:547
@@ -220,7 +218,7 @@ include/vcl/fontcharmap.hxx:49
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
 include/vcl/gdimtf.hxx:185
     class SvStream & GDIMetaFile::Read(class SvStream &)
-include/vcl/graphicfilter.hxx:260
+include/vcl/graphicfilter.hxx:268
     class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
 include/vcl/GraphicNativeTransform.hxx:32
     _Bool GraphicNativeTransform::rotateBitmapOnly(unsigned short)
@@ -232,11 +230,11 @@ include/vcl/texteng.hxx:276
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:505
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:849
+include/vcl/weld.hxx:851
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1705
+include/vcl/weld.hxx:1774
     _Bool weld::TextView::get_selection_bounds(int &,int &)
-include/vcl/window.hxx:1515
+include/vcl/window.hxx:1505
     _Bool vcl::Window::set_font_attribute(const class rtl::OString &,const class rtl::OUString &)
 include/vcl/wizardmachine.hxx:319
     class BuilderPage * vcl::WizardMachine::GetOrCreatePage(const short)
@@ -312,11 +310,11 @@ sfx2/inc/autoredactdialog.hxx:146
     _Bool SfxAutoRedactDialog::getTargets(class std::__debug::vector<struct std::pair<struct RedactionTarget *, class rtl::OUString>, class std::allocator<struct std::pair<struct RedactionTarget *, class rtl::OUString> > > &)
 svgio/source/svguno/xsvgparser.cxx:52
     _Bool svgio::svgreader::XSvgParser::parseSvgXML(const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &)
-sw/inc/authfld.hxx:98
+sw/inc/authfld.hxx:97
     unsigned short SwAuthorityFieldType::AppendField(const class SwAuthEntry &)
 sw/inc/calc.hxx:114
     class SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/crsrsh.hxx:550
+sw/inc/crsrsh.hxx:551
     _Bool SwCursorShell::GoNextPrevCursorSetSearchLabel(const _Bool)
 sw/inc/doc.hxx:1083
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
@@ -328,7 +326,7 @@ sw/inc/editsh.hxx:266
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
 sw/inc/editsh.hxx:641
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
-sw/inc/fesh.hxx:719
+sw/inc/fesh.hxx:724
     _Bool SwFEShell::SetTableStyle(const class rtl::OUString &)
 sw/inc/IDocumentUndoRedo.hxx:181
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)

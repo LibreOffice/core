@@ -686,15 +686,6 @@ void OOXMLFastContextHandler::propagateCharacterProperties()
     mpParserState->setCharacterProperties(getPropertySet());
 }
 
-void OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(Id nId)
-{
-    OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
-    OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
-
-    pPropertySet->add(nId, pValue, OOXMLProperty::SPRM);
-    mpParserState->setCharacterProperties(pPropertySet);
-}
-
 void OOXMLFastContextHandler::propagateCellProperties()
 {
     mpParserState->setCellProperties(getPropertySet());

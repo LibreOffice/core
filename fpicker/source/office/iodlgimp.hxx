@@ -191,11 +191,6 @@ public:
         m_xLbFilter->set_active_text(rFilterName);
     }
 
-    void SetNoFilterListSelection( )
-    {
-        m_xLbFilter->set_active(-1);
-    }
-
     void            InsertFilterListEntry( const SvtFileDialogFilter_Impl* _pFilterDesc );
     // _pFilterDesc must already have been added to _pFilter
     SvtFileDialogFilter_Impl* GetSelectedFilterEntry( OUString& rDisplayName ) const

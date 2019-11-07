@@ -115,9 +115,6 @@ public:
     EnumContext (
         const Application eApplication,
         const Context eContext);
-    EnumContext (
-        const OUString& rsApplicationName,
-        const OUString& rsContextName);
 
     /** This variant of the GetCombinedContext() method treats some
         application names as identical to each other.  Replacements

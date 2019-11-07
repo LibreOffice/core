@@ -202,7 +202,6 @@ private:
     void                CalcCellFocusRect( SvTreeListEntry const * pEntry, tools::Rectangle& rRect );
 
     bool                AreChildrenTransient() const { return m_bAreChildrenTransient; }
-    void                SetChildrenNotTransient() { m_bAreChildrenTransient = false; }
 
     void ExpandAll();
     void CollapseTo(SvTreeListEntry* pParentToCollapse);

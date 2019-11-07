@@ -125,7 +125,6 @@ public:
     SVT_DLLPUBLIC static Image  GetFileImage( const INetURLObject& rURL );
     SVT_DLLPUBLIC static Image  GetImageNoDefault(const INetURLObject& rURL, bool bBig = false, Size const & rPreferredSize = Size());
     SVT_DLLPUBLIC static OUString GetFolderImageId( const svtools::VolumeInfo& rInfo );
-    SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo );
 
     SVT_DLLPUBLIC static OUString GetDescription( const INetURLObject& rObject );
     SVT_DLLPUBLIC static OUString GetFileDescription( const INetURLObject& rObject );

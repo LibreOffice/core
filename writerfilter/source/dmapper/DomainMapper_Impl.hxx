@@ -767,7 +767,6 @@ public:
     void SetCheckFootnoteStyle(bool bVal) { m_bCheckFootnoteStyle = bVal; }
 
     const PropertyMapPtr& GetFootnoteContext() const { return m_pFootnoteContext; }
-    OUString StripFootnoteLabelCharacters(const OUString sAppendString);
     /// Got a <w:separator/>.
     void SeenFootOrEndnoteSeparator();
 

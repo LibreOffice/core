@@ -937,11 +937,6 @@ void SvTreeListBox::EndEditing( bool bCancel )
 }
 
 
-void SvTreeListBox::ForbidEmptyText()
-{
-    mpImpl->m_bIsEmptyTextAllowed = false;
-}
-
 const void* SvTreeListBox::FirstSearchEntry( OUString& _rEntryText ) const
 {
     SvTreeListEntry* pEntry = GetCurEntry();
@@ -3607,11 +3602,6 @@ tools::Rectangle SvTreeListBox::GetBoundingRect( SvTreeListEntry* pEntry )
     Point aPos = GetEntryPosition( pEntry );
     tools::Rectangle aRect = GetFocusRect( pEntry, aPos.Y() );
     return aRect;
-}
-
-void SvTreeListBox::EnableCellFocus()
-{
-    pImpl->EnableCellFocus();
 }
 
 void SvTreeListBox::CallImplEventListeners(VclEventId nEvent, void* pData)

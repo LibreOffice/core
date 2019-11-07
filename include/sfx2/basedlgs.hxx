@@ -99,11 +99,6 @@ protected:
                                               SfxChildWindow *pCW,
                                               vcl::Window* pParent,
                                               WinBits nWinBits);
-                            SfxFloatingWindow( SfxBindings *pBindings,
-                                              SfxChildWindow *pCW,
-                                              vcl::Window* pParent,
-                                              const OString& rID, const OUString& rUIXMLDescription,
-                                              const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
                             virtual ~SfxFloatingWindow() override;
     virtual void            dispose() override;
 

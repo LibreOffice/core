@@ -1208,9 +1208,6 @@ public:
     /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.
     virtual boost::property_tree::ptree DumpAsPropertyTree();
 
-    /// Dialog / window tunneling related methods.
-    Size PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
-
     /// Same as MouseButtonDown(), but coordinates are in logic unit. used for LOK
     virtual void LogicMouseButtonDown(const MouseEvent&) {};
     /// Same as MouseButtonUp(), but coordinates are in logic unit. used for LOK

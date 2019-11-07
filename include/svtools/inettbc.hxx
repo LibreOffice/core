@@ -65,12 +65,9 @@ public:
                                     virtual ~SvtURLBox() override;
     virtual void                    dispose() override;
 
-    void                            SetBaseURL( const OUString& rURL );
     const OUString&                 GetBaseURL() const { return aBaseURL; }
     void                            SetOpenHdl( const Link<SvtURLBox*,void>& rLink ) { aOpenHdl = rLink; }
     const Link<SvtURLBox*,void>&    GetOpenHdl() const { return aOpenHdl; }
-    void                            SetOnlyDirectories( bool bDir );
-    void                            SetNoURLSelection( bool bSet );
     INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
     OUString                        GetURL();
     void                            DisableHistory();
@@ -79,8 +76,6 @@ public:
 
     static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
 
-    void                            EnableAutocompletion( bool _bEnable )
-                                        { bIsAutoCompleteEnabled = _bEnable; }
     void                            SetPlaceHolder( const OUString& sPlaceHolder )
                                         { aPlaceHolder = sPlaceHolder; }
     const OUString&                 GetPlaceHolder() const { return aPlaceHolder; }

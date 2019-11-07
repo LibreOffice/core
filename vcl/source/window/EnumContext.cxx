@@ -56,14 +56,6 @@ EnumContext::EnumContext (
 {
 }
 
-EnumContext::EnumContext (
-    const OUString& rsApplicationName,
-    const OUString& rsContextName)
-    : meApplication(GetApplicationEnum(rsApplicationName)),
-      meContext(GetContextEnum(rsContextName))
-{
-}
-
 sal_Int32 EnumContext::GetCombinedContext_DI() const
 {
     return CombinedEnumContext(GetApplication_DI(), meContext);

@@ -279,23 +279,6 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImpl->aMoveIdle.SetInvokeHandler(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
-SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
-                        SfxChildWindow *pCW,
-                        vcl::Window* pParent,
-                        const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame) :
-    FloatingWindow(pParent, rID, rUIXMLDescription, rFrame),
-    pBindings(pBindinx),
-    pImpl( new SfxFloatingWindow_Impl )
-{
-    pImpl->pMgr = pCW;
-    pImpl->bConstructed = false;
-
-    if ( pBindinx )
-        pImpl->StartListening( *pBindinx );
-    pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
-    pImpl->aMoveIdle.SetInvokeHandler(LINK(this,SfxFloatingWindow,TimerHdl));
-}
-
 bool SfxFloatingWindow::Close()
 
 /*  [Description]
