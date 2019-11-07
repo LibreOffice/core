@@ -692,7 +692,7 @@ IMPL_LINK_NOARG(ChartTypePanel, SelectSubTypeHdl, ValueSet*, void)
 {
     if (m_pCurrentMainType)
     {
-        ChartTypeParameter aParameter(getCurrentParamter());
+        ChartTypeParameter aParameter(getCurrentParameter());
         m_pCurrentMainType->adjustParameterToSubType(aParameter);
         fillAllControls(aParameter, false);
         commitToModel(aParameter);
@@ -887,7 +887,7 @@ void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,
     m_nChangingCalls--;
 }
 
-ChartTypeParameter ChartTypePanel::getCurrentParamter() const
+ChartTypeParameter ChartTypePanel::getCurrentParameter() const
 {
     ChartTypeParameter aParameter;
     aParameter.nSubTypeIndex = static_cast<sal_Int32>(m_pSubTypeList->GetSelectedItemId());
@@ -905,7 +905,7 @@ void ChartTypePanel::stateChanged(ChangingResource* /*pResource*/)
         return;
     m_nChangingCalls++;
 
-    ChartTypeParameter aParameter(getCurrentParamter());
+    ChartTypeParameter aParameter(getCurrentParameter());
     if (m_pCurrentMainType)
     {
         m_pCurrentMainType->adjustParameterToSubType(aParameter);
@@ -942,7 +942,7 @@ void ChartTypePanel::commitToModel(const ChartTypeParameter& rParameter)
 
 void ChartTypePanel::selectMainType()
 {
-    ChartTypeParameter aParameter(getCurrentParamter());
+    ChartTypeParameter aParameter(getCurrentParameter());
 
     if (m_pCurrentMainType)
     {
@@ -985,7 +985,7 @@ uno::Reference<css::chart2::XChartTypeTemplate> ChartTypePanel::getCurrentTempla
 {
     if (m_pCurrentMainType && m_xChartModel.is())
     {
-        ChartTypeParameter aParameter(getCurrentParamter());
+        ChartTypeParameter aParameter(getCurrentParameter());
         m_pCurrentMainType->adjustParameterToSubType(aParameter);
         uno::Reference<lang::XMultiServiceFactory> xTemplateManager(
             m_xChartModel->getChartTypeManager(), uno::UNO_QUERY);
