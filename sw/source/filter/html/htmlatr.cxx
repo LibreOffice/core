@@ -803,8 +803,9 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     // for BLOCKQUOTE, ADDRESS and DD we output another paragrah token, if
     // - no styles are written and
     // - a lower spacing or a paragraph alignment exists
+    // Also, XHTML does not allow character children in this context.
     OString aToken = rInfo.aToken;
-    if( !rHWrt.m_bCfgOutStyles && rInfo.bParaPossible && !bPara &&
+    if( (!rHWrt.m_bCfgOutStyles || rHWrt.mbXHTML) && rInfo.bParaPossible && !bPara &&
         (bHasParSpace || pAdjItem) )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHWrt.GetNamespace() + rInfo.aToken );
