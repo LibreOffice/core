@@ -220,7 +220,7 @@ MessBox::MessBox(vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits nWinB
     maMessText( rMessage )
 {
     ImplLOKNotifier(pParent);
-    ImplInit(pParent, nWinBits | WB_MOVEABLE | WB_HORZ | WB_CENTER);
+    ImplInitDialog(pParent, nWinBits | WB_MOVEABLE | WB_HORZ | WB_CENTER);
     ImplInitButtons();
 
     if ( !rTitle.isEmpty() )
