@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -22,13 +22,12 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkBox" id="OutlineNumberingPage">
+  <object class="GtkGrid" id="OutlineNumberingPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="spacing">12</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">12</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -87,9 +86,9 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="height">2</property>
       </packing>
     </child>
     <child>
@@ -105,239 +104,140 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkBox" id="box2">
+              <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">12</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkGrid" id="grid2">
+                  <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes" context="outlinenumberingpage|label3">Paragraph style:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">style</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="style">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label4">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="outlinenumberingpage|label4">Number:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">numbering</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label5">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="outlinenumberingpage|label5">Character style:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">charstyle</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="sublevelsft">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="outlinenumberingpage|sublevelsft">Show sublevels:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">sublevelsnf</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label7">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="outlinenumberingpage|label7">Separator</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">5</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="numbering">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="charstyle">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="sublevelsnf">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can_focus">True</property>
-                        <property name="activates_default">True</property>
-                        <property name="adjustment">adjustment2</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="prefix">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="activates_default">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">6</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="suffix">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="activates_default">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">7</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="startat">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="activates_default">True</property>
-                        <property name="adjustment">adjustment1</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">8</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkAlignment" id="alignment3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
-                        <child>
-                          <object class="GtkLabel" id="label8">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="outlinenumberingpage|label8">Before:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">prefix</property>
-                            <property name="xalign">0</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">6</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkAlignment" id="alignment4">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
-                        <child>
-                          <object class="GtkLabel" id="label9">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="outlinenumberingpage|label9">After:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">suffix</property>
-                            <property name="xalign">0</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">7</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="outlinenumberingpage|label10">Start at:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">startat</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">8</property>
-                      </packing>
-                    </child>
+                    <property name="label" translatable="yes" context="outlinenumberingpage|label3">Paragraph style:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">style</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkDrawingArea" id="preview">
-                    <property name="width_request">150</property>
-                    <property name="height_request">260</property>
+                  <object class="GtkComboBoxText" id="style">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="outlinenumberingpage|label4">Number:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">numbering</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="outlinenumberingpage|label5">Character style:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">charstyle</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="sublevelsft">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="outlinenumberingpage|sublevelsft">Show sublevels:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">sublevelsnf</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="numbering">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="charstyle">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="sublevelsnf">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment2</property>
+                    <property name="value">1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label10">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="outlinenumberingpage|label10">Start at:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">startat</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="startat">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
               </object>
@@ -356,10 +256,175 @@
         </child>
       </object>
       <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkFrame" id="frame3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkAlignment" id="alignment5">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
+            <child>
+              <object class="GtkBox" id="box1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkDrawingArea" id="preview">
+                    <property name="width_request">150</property>
+                    <property name="height_request">260</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label17">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="outlinenumberingpage|label17">Preview</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">0</property>
+        <property name="height">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="frame4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkAlignment" id="alignment3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
+            <child>
+              <object class="GtkGrid" id="grid1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="prefix">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="suffix">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label8">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="outlinenumberingpage|label8">Before:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">prefix</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label9">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="outlinenumberingpage|label9">After:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">suffix</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label6">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="outlinenumberingpage|label7">Separator</property>
+            <property name="xalign">0</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel">
+    <widgets>
+      <widget name="label3"/>
+      <widget name="label4"/>
+      <widget name="label5"/>
+      <widget name="sublevelsft"/>
+      <widget name="label10"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget">
+    <widgets>
+      <widget name="style"/>
+      <widget name="numbering"/>
+      <widget name="charstyle"/>
+      <widget name="sublevelsnf"/>
+      <widget name="prefix"/>
+      <widget name="suffix"/>
+      <widget name="startat"/>
+    </widgets>
   </object>
 </interface>
