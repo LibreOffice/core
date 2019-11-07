@@ -37,6 +37,8 @@
 #include <svl/stritem.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/chrtitem.hxx>
+#include <svx/xlnwtit.hxx>
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
@@ -209,11 +211,11 @@ namespace
     {
         Color aColor;
         OUString sColor;
-        const SfxPoolItem* pColorStringItem = nullptr;
+        const SfxPoolItem* pItem = nullptr;
 
-        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
         {
-            sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+            sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
             if (sColor == "transparent")
                 aColor = COL_TRANSPARENT;
@@ -236,6 +238,16 @@ namespace
                     break;
                 }
             }
+        }
+        else if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
+        {
+            double fValue = static_cast<const SvxDoubleItem*>(pItem)->GetValue();
+            // FIXME: different units...
+            int nPow = 100;
+            int nValue = fValue * nPow;
+
+            XLineWidthItem aItem(nValue);
+            pArgs->Put(aItem);
         }
     }
 }
