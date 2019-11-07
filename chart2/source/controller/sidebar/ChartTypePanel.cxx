@@ -602,13 +602,12 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
     get(m_pMainTypeList, "cmb_chartType");
     get(m_pSubTypeList, "subtype");
 
-    //Chart Type related
-    m_pMainTypeList->SetSelectHdl(LINK(this, ChartTypePanel, SelectMainTypeHdl));
-    m_pSubTypeList->SetSelectHdl(LINK(this, ChartTypePanel, SelectSubTypeHdl));
-
     Size aSize(m_pSubTypeList->LogicToPixel(Size(120, 40), MapMode(MapUnit::MapAppFont)));
     m_pSubTypeList->set_width_request(aSize.Width());
     m_pSubTypeList->set_height_request(aSize.Height());
+
+    m_pMainTypeList->SetSelectHdl(LINK(this, ChartTypePanel, SelectMainTypeHdl));
+    m_pSubTypeList->SetSelectHdl(LINK(this, ChartTypePanel, SelectSubTypeHdl));
 
     m_pSubTypeList->SetStyle(m_pSubTypeList->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER
                              | WB_NAMEFIELD | WB_FLATVALUESET | WB_3DLOOK);
@@ -641,11 +640,14 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
         m_aChartTypeDialogControllerList.push_back(
             o3tl::make_unique<BubbleChartDialogController>());
     }
+
     m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<NetChartDialogController>());
+
     if (bEnableComplexChartTypes)
     {
         m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<StockChartDialogController>());
     }
+
     m_aChartTypeDialogControllerList.push_back(
         o3tl::make_unique<CombiColumnLineChartDialogController>());
 
@@ -686,10 +688,7 @@ void ChartTypePanel::dispose()
     PanelLayout::dispose();
 }
 
-IMPL_LINK_NOARG(ChartTypePanel, SelectMainTypeHdl, ListBox&, void)
-{
-    //selectMainType();
-}
+IMPL_LINK_NOARG(ChartTypePanel, SelectMainTypeHdl, ListBox&, void) { selectMainType(); }
 
 IMPL_LINK_NOARG(ChartTypePanel, SelectSubTypeHdl, ValueSet*, void)
 {
@@ -866,7 +865,6 @@ void ChartTypePanel::showAllControls(ChartTypeDialogController& rTypeController)
     bShow = rTypeController.shouldShow_SortByXValuesResourceGroup();
     m_pSortByXValuesResourceGroup->showControls(bShow);
 
-    // TODO: Extend ChartTypeDialogController::showExtraControls()
     rTypeController.showExtraControls(this);
 }
 
@@ -874,6 +872,7 @@ void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,
                                      bool bAlsoResetSubTypeList)
 {
     m_nChangingCalls++;
+
     if (m_pCurrentMainType && bAlsoResetSubTypeList)
     {
         m_pCurrentMainType->fillSubTypeList(*m_pSubTypeList, rParameter);
@@ -941,6 +940,60 @@ void ChartTypePanel::commitToModel(const ChartTypeParameter& rParameter)
 
     m_aTimerTriggeredControllerLock.startTimer();
     m_pCurrentMainType->commitToModel(rParameter, m_xChartModel);
+}
+
+void ChartTypePanel::selectMainType()
+{
+    ChartTypeParameter aParameter(getCurrentParamter());
+
+    if (m_pCurrentMainType)
+    {
+        m_pCurrentMainType->adjustParameterToSubType(aParameter);
+        m_pCurrentMainType->hideExtraControls();
+    }
+
+    m_pCurrentMainType = getSelectedMainType();
+    if (m_pCurrentMainType)
+    {
+        showAllControls(*m_pCurrentMainType);
+
+        m_pCurrentMainType->adjustParameterToMainType(aParameter);
+        commitToModel(aParameter);
+        //detect the new ThreeDLookScheme
+        aParameter.eThreeDLookScheme
+            = ThreeDHelper::detectScheme(ChartModelHelper::findDiagram(m_xChartModel));
+        if (!aParameter.b3DLook && aParameter.eThreeDLookScheme != ThreeDLookScheme_Realistic)
+            aParameter.eThreeDLookScheme = ThreeDLookScheme_Realistic;
+
+        uno::Reference<css::chart2::XDiagram> xDiagram
+            = ChartModelHelper::findDiagram(m_xChartModel);
+        try
+        {
+            uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
+            xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+        }
+        catch (const uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+
+        fillAllControls(aParameter);
+        uno::Reference<beans::XPropertySet> xTemplateProps(getCurrentTemplate(), uno::UNO_QUERY);
+        m_pCurrentMainType->fillExtraControls(aParameter, m_xChartModel, xTemplateProps);
+    }
+}
+
+uno::Reference<css::chart2::XChartTypeTemplate> ChartTypePanel::getCurrentTemplate() const
+{
+    if (m_pCurrentMainType && m_xChartModel.is())
+    {
+        ChartTypeParameter aParameter(getCurrentParamter());
+        m_pCurrentMainType->adjustParameterToSubType(aParameter);
+        uno::Reference<lang::XMultiServiceFactory> xTemplateManager(
+            m_xChartModel->getChartTypeManager(), uno::UNO_QUERY);
+        return m_pCurrentMainType->getCurrentTemplate(aParameter, xTemplateManager);
+    }
+    return nullptr;
 }
 }
 } // end of namespace ::chart::sidebar
