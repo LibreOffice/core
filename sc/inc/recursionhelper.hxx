@@ -53,7 +53,7 @@ class ScRecursionHelper
     ScRecursionInIterationStack         aRecursionInIterationStack;
     ScFGList                            aFGList;
     // Flag list corresponding to aFGList to indicate whether each formula-group
-    // is in a depedency evaluation mode or not.
+    // is in a dependency evaluation mode or not.
     std::vector< bool >                 aInDependencyEvalMode;
     sal_uInt16                              nRecursionCount;
     sal_uInt16                              nIteration;
