@@ -180,8 +180,17 @@ DECLARE_WW8EXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.o
     // Automatic escapement SHOULD BE limited by the font bottom line(?)
     // and so the calculations ought to be different. There is room for a lot of export improvement here.
     // Negative escapements (subscripts) were decreasing by 1% every round-trip due to bad manual rounding.
-    // The actual number of 33% isn't so important here, but test that it is stable across multiple round-trips.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Did you fix or break me?", -33.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 1);
+    // The actual number of 50% isn't so important here, but test that it is stable across multiple round-trips.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Did you fix or break me?", -50.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 1);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf120412_proportionalEscapement, "tdf120412_proportionalEscapement.odt")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 2, "Base"), "CharEscapement"), 0);
+    // Import was limiting to 100%. And export based the position on the original height, not the proportional height.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 150.f, getProperty<float>(getRun(xPara, 3,"Super"), "CharEscapement"), 2);
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.docx")
