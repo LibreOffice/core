@@ -33,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/runtimetooustring.hxx>
+#include <rtl/uri.hxx>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -431,6 +432,10 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         OUString aSystemPath;
         if (::osl::FileBase::E_None == ::osl::FileBase::getSystemPathFromFileURL(preprocessed_command, aSystemPath))
             preprocessed_command = aSystemPath;
+        else if (preprocessed_command.startsWithIgnoreAsciiCase("file:"))
+            //I use ToIUri conversion instead of the translateToExternal method of the css.uri.ExternalUriReferenceTranslator
+            //UNO service, because the translateToExternal method only supports characters covered by the current Windows code page.
+            preprocessed_command = rtl::Uri::decode(preprocessed_command, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
     }
 
     SHELLEXECUTEINFOW sei;
