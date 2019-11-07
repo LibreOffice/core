@@ -40,7 +40,7 @@ namespace
 {
 // Create Skia Path from B2DPolygon
 // TODO - use this for all Polygon / PolyPolygon needs
-void lclPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
+void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
 {
     const sal_uInt32 nPointCount(rPolygon.count());
 
@@ -105,7 +105,7 @@ void lclPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
     }
 }
 
-void lclPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& rPath)
+void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& rPath)
 {
     const sal_uInt32 nPolygonCount(rPolyPolygon.count());
 
@@ -114,7 +114,7 @@ void lclPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& r
 
     for (const auto& rPolygon : rPolyPolygon)
     {
-        lclPolygonToPath(rPolygon, rPath);
+        addPolygonToPath(rPolygon, rPath);
     }
 }
 
@@ -183,6 +183,7 @@ SkiaSalGraphicsImpl::RenderMethod SkiaSalGraphicsImpl::renderMethodToUse()
 SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider* pProvider)
     : mParent(rParent)
     , mProvider(pProvider)
+    , mIsGPU(false)
     , mLineColor(SALCOLOR_NONE)
     , mFillColor(SALCOLOR_NONE)
     , mFlush(new SkiaFlushIdle(this))
@@ -210,6 +211,7 @@ void SkiaSalGraphicsImpl::createSurface()
     // Create surface for offscreen graphics. Subclasses will create GPU-backed
     // surfaces as appropriate.
     mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
+    mIsGPU = false;
 #ifdef DBG_UTIL
     prefillSurface();
 #endif
@@ -234,6 +236,7 @@ void SkiaSalGraphicsImpl::destroySurface()
     if (mSurface)
         mSurface->flush();
     mSurface.reset();
+    mIsGPU = false;
 }
 
 void SkiaSalGraphicsImpl::DeInit() { destroySurface(); }
@@ -287,7 +290,7 @@ static SkRegion toSkRegion(const vcl::Region& region)
     if (region.HasPolyPolygonOrB2DPolyPolygon())
     {
         SkPath path;
-        lclPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
+        addPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
         path.setFillType(SkPath::kEvenOdd_FillType);
         SkRegion skRegion;
         skRegion.setPath(path, SkRegion(path.getBounds().roundOut()));
@@ -327,7 +330,7 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     if (!region.IsEmpty() && !region.IsRectangle())
     {
         SkPath path;
-        lclPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
+        addPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
         path.setFillType(SkPath::kEvenOdd_FillType);
         canvas->clipPath(path);
     }
@@ -407,9 +410,7 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
     paint.setColor(toSkColor(nColor));
     // Apparently drawPixel() is actually expected to set the pixel and not draw it.
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-    if (isGPU()) // TODO this may need caching?
-        ++nX; // https://bugs.chromium.org/p/skia/issues/detail?id=9611
-    canvas->drawPoint(nX, nY, paint);
+    canvas->drawPoint(toSkX(nX), toSkY(nY), paint);
     postDraw();
 }
 
@@ -424,7 +425,7 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
     SkPaint paint;
     paint.setColor(toSkColor(mLineColor));
     paint.setAntiAlias(mParent.getAntiAliasB2DDraw());
-    canvas->drawLine(nX1, nY1, nX2, nY2, paint);
+    canvas->drawLine(toSkX(nX1), toSkY(nY1), toSkX(nX2), toSkY(nY2), paint);
     postDraw();
 }
 
@@ -521,7 +522,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     aPolyPolygon.transform(rObjectToDevice);
     SAL_INFO("vcl.skia", "drawpolypolygon(" << this << "): " << aPolyPolygon << ":" << mLineColor
                                             << ":" << mFillColor);
-    lclPolyPolygonToPath(aPolyPolygon, aPath);
+    addPolyPolygonToPath(aPolyPolygon, aPath);
     aPath.setFillType(SkPath::kEvenOdd_FillType);
 
     SkPaint aPaint;
@@ -534,6 +535,8 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     }
     if (mLineColor != SALCOLOR_NONE)
     {
+        if (isGPU()) // Apply the same adjustment as toSkX()/toSkY() do.
+            aPath.offset(0.5, 0.5, nullptr);
         aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
         aPaint.setStyle(SkPaint::kStroke_Style);
         mSurface->getCanvas()->drawPath(aPath, aPaint);
@@ -626,14 +629,12 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
 
     SkPath aPath;
-    lclPolygonToPath(rPolyLine, aPath);
+    addPolygonToPath(rPolyLine, aPath);
     aPath.setFillType(SkPath::kEvenOdd_FillType);
-    SkMatrix matrix = SkMatrix::MakeTrans(0.5, 0.5);
-    {
-        SkAutoCanvasRestore autoRestore(mSurface->getCanvas(), true);
-        mSurface->getCanvas()->concat(matrix);
-        mSurface->getCanvas()->drawPath(aPath, aPaint);
-    }
+    // Apply the same adjustment as toSkX()/toSkY() do. Do it here even in the non-GPU
+    // case as it seems to produce better results.
+    aPath.offset(0.5, 0.5, nullptr);
+    mSurface->getCanvas()->drawPath(aPath, aPaint);
     postDraw();
 
     return true;
@@ -838,7 +839,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     if (eFlags == SalInvert::TrackFrame)
     {
         SkPath aPath;
-        lclPolygonToPath(rPoly, aPath);
+        addPolygonToPath(rPoly, aPath);
         aPath.setFillType(SkPath::kEvenOdd_FillType);
         SkPaint aPaint;
         aPaint.setStrokeWidth(2);
@@ -853,7 +854,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     else
     {
         SkPath aPath;
-        lclPolygonToPath(rPoly, aPath);
+        addPolygonToPath(rPoly, aPath);
         aPath.setFillType(SkPath::kEvenOdd_FillType);
         SkPaint aPaint;
         aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
@@ -1055,13 +1056,6 @@ bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
         default:
             return false;
     }
-}
-
-bool SkiaSalGraphicsImpl::isGPU() const
-{
-    return mSurface.get()
-           && mSurface->getBackendRenderTarget(SkSurface::kFlushWrite_BackendHandleAccess)
-                  .isValid();
 }
 
 #ifdef DBG_UTIL
