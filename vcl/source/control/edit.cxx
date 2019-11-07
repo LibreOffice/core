@@ -2585,14 +2585,6 @@ void Edit::SetPlaceholderText( const OUString& rStr )
     }
 }
 
-OUString Edit::GetPlaceholderText() const
-{
-    if ( mpSubEdit )
-        return mpSubEdit->GetPlaceholderText();
-
-    return maPlaceholderText;
-}
-
 void Edit::SetModifyFlag()
 {
     if ( mpSubEdit )

@@ -181,7 +181,6 @@ public:
     virtual bool        IsReadOnly() const { return mbReadOnly; }
 
     void                SetSelectAllSingleClick( bool bSelectAllSingleClick );
-    bool                IsSelectAllSingleClick() const { return mbSelectAllSingleClick; }
 
     void                SetInsertMode( bool bInsert );
     bool                IsInsertMode() const;
@@ -213,7 +212,6 @@ public:
     void                SetCursorAtLast();
 
     void                SetPlaceholderText( const OUString& rStr );
-    OUString            GetPlaceholderText() const;
 
     void                SaveValue() { maSaveValue = GetText(); }
     const OUString&     GetSavedValue() const { return maSaveValue; }
