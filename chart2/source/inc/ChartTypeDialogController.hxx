@@ -37,6 +37,7 @@ namespace com { namespace sun { namespace star { namespace lang { class XMultiSe
 
 class SvtValueSet;
 class ValueSet;
+class VclBuilderContainer;
 
 namespace chart
 {
@@ -104,6 +105,7 @@ public:
     virtual bool    shouldShow_SortByXValuesResourceGroup() const;
 
     virtual void    showExtraControls(weld::Builder* pBuilder);
+    virtual void    showExtraControls(VclBuilderContainer* pParent);
     virtual void    hideExtraControls() const;
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
                                      , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
@@ -279,6 +281,7 @@ public:
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) override;
 
     virtual void    showExtraControls(weld::Builder* pBuilder) override;
+    virtual void    showExtraControls(VclBuilderContainer* pParent) override;
     virtual void    hideExtraControls() const override;
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
                                      , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
@@ -288,10 +291,16 @@ public:
 
 private:
     DECL_LINK(ChangeLineCountHdl, weld::SpinButton&, void);
+    //Needed for showExtraControls() overload
+    DECL_LINK( ChangeLineCountHdl_unwelded, Edit&, void );
 
 private:
     std::unique_ptr<weld::Label> m_xFT_NumberOfLines;
     std::unique_ptr<weld::SpinButton> m_xMF_NumberOfLines;
+
+    //Needed for showExtraControls() overload
+    VclPtr<FixedText>    m_pFT_NumberOfLines;
+    VclPtr<NumericField> m_pMF_NumberOfLines;
 };
 
 class BubbleChartDialogController : public ChartTypeDialogController

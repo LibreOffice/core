@@ -867,7 +867,7 @@ void ChartTypePanel::showAllControls(ChartTypeDialogController& rTypeController)
     m_pSortByXValuesResourceGroup->showControls(bShow);
 
     // TODO: Extend ChartTypeDialogController::showExtraControls()
-    //rTypeController.showExtraControls(this);
+    rTypeController.showExtraControls(this);
 }
 
 void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,

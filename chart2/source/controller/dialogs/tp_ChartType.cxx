@@ -32,6 +32,7 @@
 
 #include <svtools/controldims.hxx>
 #include <svtools/valueset.hxx>
+#include <vcl/fixed.hxx>
 
 #include <o3tl/make_unique.hxx>
 #include <vcl/weld.hxx>
