@@ -692,13 +692,13 @@ IMPL_LINK_NOARG(ChartTypePanel, SelectMainTypeHdl, ListBox&, void) { selectMainT
 
 IMPL_LINK_NOARG(ChartTypePanel, SelectSubTypeHdl, ValueSet*, void)
 {
-    /*if( m_pCurrentMainType )
+    if (m_pCurrentMainType)
     {
-        ChartTypeParameter aParameter( getCurrentParamter() );
-        m_pCurrentMainType->adjustParameterToSubType( aParameter );
-        fillAllControls( aParameter, false );
-        commitToModel( aParameter );
-    }*/
+        ChartTypeParameter aParameter(getCurrentParamter());
+        m_pCurrentMainType->adjustParameterToSubType(aParameter);
+        fillAllControls(aParameter, false);
+        commitToModel(aParameter);
+    }
 }
 
 void ChartTypePanel::Initialize()
