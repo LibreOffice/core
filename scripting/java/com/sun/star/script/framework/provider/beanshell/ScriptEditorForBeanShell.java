@@ -17,11 +17,17 @@
  */
 package com.sun.star.script.framework.provider.beanshell;
 
+import com.sun.star.beans.NamedValue;
+import com.sun.star.configuration.theDefaultProvider;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.provider.ClassLoaderFactory;
 import com.sun.star.script.framework.provider.ScriptEditor;
 import com.sun.star.script.framework.provider.SwingInvocation;
 import com.sun.star.script.provider.XScriptContext;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -172,8 +178,31 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
      *
      */
     public Object execute() throws Exception {
+        if (!isMacroExectionEnabled()) {
+            showErrorMessage("Macro Execution has been disabled.");
+            return null;
+        }
+
         frame.toFront();
         return model.execute(context, cl);
+    }
+
+    private boolean isMacroExectionEnabled() {
+        XNameAccess xNameAccess = null;
+        try {
+            String sAccess = "com.sun.star.configuration.ConfigurationAccess";
+            XMultiServiceFactory xMSFCfg = theDefaultProvider.get(context.getComponentContext());
+            Object oAccess = xMSFCfg.createInstanceWithArguments(sAccess,
+                    new Object[] { new NamedValue("nodepath", "org.openoffice.Office.Common/Security/Scripting") });
+            xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oAccess);
+            Object result = xNameAccess.getByName("DisableMacrosExecution");
+            boolean bMacrosDisabled = AnyConverter.toBoolean(result);
+            if (bMacrosDisabled)
+                return false;
+        } catch (com.sun.star.uno.Exception e) {
+            return false;
+        }
+        return true;
     }
 
     /**
