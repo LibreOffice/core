@@ -1287,7 +1287,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
             }
             else
 #endif
-            nRet = mxFileDlg->execute();
+                nRet = mxFileDlg->execute();
         }
         catch( const Exception& )
         {
