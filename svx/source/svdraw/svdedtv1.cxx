@@ -63,6 +63,11 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/svdview.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xflclit.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <rtl/ustring.hxx>
+#include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>
 
 // EditView
@@ -923,6 +928,36 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
             {
                 const SfxPoolItem& rItem = rSet.Get(nWhich);
                 rAttr.MergeValue(rItem, true);
+            }
+
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                OUString sPayload;
+                switch(nWhich)
+                {
+                    case XATTR_LINECOLOR:
+                    {
+                        const SfxPoolItem* pItem = rSet.GetItem(XATTR_LINECOLOR);
+                        Color aColor = static_cast<const XLineColorItem*>(pItem)->GetColorValue();
+                        sPayload = OUString::number(static_cast<sal_uInt32>(aColor));
+
+                        sPayload = ".uno:XLineColor=" + sPayload;
+                        break;
+                    }
+
+                    case XATTR_FILLCOLOR:
+                    {
+                        const SfxPoolItem* pItem = rSet.GetItem(XATTR_FILLCOLOR);
+                        Color aColor = static_cast<const XFillColorItem*>(pItem)->GetColorValue();
+                        sPayload = OUString::number(static_cast<sal_uInt32>(aColor));
+
+                        sPayload = ".uno:FillColor=" + sPayload;
+                        break;
+                    }
+                }
+
+                GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                    OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
             }
 
             nWhich = aIter.NextWhich();
