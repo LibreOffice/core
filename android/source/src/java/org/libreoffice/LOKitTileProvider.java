@@ -406,8 +406,10 @@ class LOKitTileProvider implements TileProvider {
         Log.i(LOGTAG, "cacheDocument: " + cacheFile);
         if(isDocumentCached()){
             LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
-        }else{
+        }else if(mDocument != null){
             mDocument.saveAs("file://"+cacheFile, FileUtilities.getExtension(input.getPath()).substring(1),"");
+        }else{
+            Log.w(LOGTAG, "mDocument was null when trying to save cacheDocument: " + cacheFile);
         }
     }
 
