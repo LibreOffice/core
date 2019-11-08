@@ -65,6 +65,7 @@
 
   <!-- Present in RTF, but not in OOXML. -->
   <token tokenid="ooxml:CT_Settings_widowControl"/>
+  <token tokenid="ooxml:CT_Settings_longerSpaceSequence"/>
 
   <namespace name="dml-stylesheet">
     <start name="theme"/>
