@@ -442,6 +442,8 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
 {
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
     rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetFieldTextColor());
+    rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetFieldColor()));
+    rRenderContext.Erase();
 
     int nPages = mnRows * mnColumns;
     Font aFont(rRenderContext.GetSettings().GetStyleSettings().GetFieldFont());
