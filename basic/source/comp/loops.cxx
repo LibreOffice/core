@@ -21,6 +21,8 @@
 #include <parser.hxx>
 #include <memory>
 
+#include <basic/sberrors.hxx>
+
 // Single-line IF and Multiline IF
 
 void SbiParser::If()

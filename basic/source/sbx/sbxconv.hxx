@@ -21,6 +21,7 @@
 #define INCLUDED_BASIC_SOURCE_SBX_SBXCONV_HXX
 
 #include "sbxdec.hxx"
+#include <basic/sbx.hxx>
 
 class SbxArray;
 

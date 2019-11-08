@@ -24,12 +24,10 @@
 #include <postwin.h>
 #endif
 
+#include <basic/sberrors.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxvar.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <salhelper/simplereferenceobject.hxx>
 #include <osl/time.h>
 
 #include "dllmgr.hxx"

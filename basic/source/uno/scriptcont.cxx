@@ -18,16 +18,11 @@
  */
 
 #include <scriptcont.hxx>
-#include <filefmt.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -36,26 +31,20 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/storagehelper.hxx>
-#include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <osl/thread.h>
-#include <rtl/digest.h>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <sot/storage.hxx>
 
 // For password functionality
 #include <tools/urlobj.hxx>
 
 
-#include <unotools/pathoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
-#include <basic/basicmanagerrepository.hxx>
 #include <basic/modsizeexceeded.hxx>
 #include <xmlscript/xmlmod_imexp.hxx>
-#include <cppuhelper/factory.hxx>
 #include <com/sun/star/util/VetoException.hpp>
 #include <memory>
 

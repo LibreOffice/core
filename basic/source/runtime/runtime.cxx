@@ -65,6 +65,7 @@
 #include <runtime.hxx>
 #include <sb.hxx>
 #include <sbintern.hxx>
+#include <sbprop.hxx>
 #include <sbunoobj.hxx>
 #include <basic/codecompletecache.hxx>
 #include <memory>

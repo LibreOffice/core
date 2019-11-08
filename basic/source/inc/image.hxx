@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_IMAGE_HXX
 #define INCLUDED_BASIC_SOURCE_INC_IMAGE_HXX
 
-#include "sbintern.hxx"
+#include <basic/sbx.hxx>
 #include <rtl/ustring.hxx>
 #include "filefmt.hxx"
 #include <o3tl/typed_flags_set.hxx>

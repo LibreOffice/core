@@ -31,10 +31,11 @@
 #include <sbjsmod.hxx>
 #include <sbintern.hxx>
 #include <runtime.hxx>
+#include <basic/sberrors.hxx>
 #include <basic/sbuno.hxx>
+#include <sbprop.hxx>
 #include <sbobjmod.hxx>
 #include <stdobj.hxx>
-#include <filefmt.hxx>
 #include <basic.hrc>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -47,7 +48,7 @@
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
-#include <svtools/miscopt.hxx>
+
 using namespace ::com::sun::star::script;
 
 

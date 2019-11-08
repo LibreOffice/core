@@ -7,11 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "basictest.hxx"
-#include <osl/file.hxx>
-#include <osl/process.h>
 
-#include <basic/sbmod.hxx>
-#include <basic/sbmeth.hxx>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <basic/sbuno.hxx>

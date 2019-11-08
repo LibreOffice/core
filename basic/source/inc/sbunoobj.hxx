@@ -27,12 +27,10 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
-#include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
 #include <rtl/ustring.hxx>
 #include <unordered_map>
 #include <vector>

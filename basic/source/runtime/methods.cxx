@@ -42,7 +42,6 @@
 #include <tools/wldcrd.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/string.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 #include <runtime.hxx>
@@ -52,16 +51,13 @@
 
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/script/XErrorQuery.hpp>
-#include <ooo/vba/XHelperInterface.hpp>
 #include <ooo/vba/VbTriState.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <memory>
@@ -75,7 +71,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
 #include <date.hxx>
-#include <stdobj.hxx>
 #include <sbstdobj.hxx>
 #include <rtlproto.hxx>
 #include <image.hxx>

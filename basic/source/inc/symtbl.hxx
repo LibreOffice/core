@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <vector>
+#include <basic/sbdef.hxx>
 
 class SbiConstDef;
 class SbiParser;

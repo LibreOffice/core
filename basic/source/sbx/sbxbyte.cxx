@@ -18,7 +18,7 @@
  */
 
 #include <vcl/errcode.hxx>
-#include <basic/sbx.hxx>
+//#include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
 

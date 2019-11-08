@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basic/sberrors.hxx>
 
 #include <codegen.hxx>
 #include <expr.hxx>

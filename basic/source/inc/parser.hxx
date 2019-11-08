@@ -23,7 +23,7 @@
 #include "expr.hxx"
 #include "codegen.hxx"
 #include "symtbl.hxx"
-
+#include <basic/sbx.hxx>
 
 #include <vector>
 

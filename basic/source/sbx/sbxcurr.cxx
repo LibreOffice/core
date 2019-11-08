@@ -18,10 +18,7 @@
  */
 
 #include <rtl/ustrbuf.hxx>
-#include <vcl/errcode.hxx>
-#include <vcl/svapp.hxx>
 
-#include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/sbxvar.hxx>
 #include "sbxconv.hxx"

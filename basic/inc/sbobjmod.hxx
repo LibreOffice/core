@@ -22,9 +22,7 @@
 
 #include <rtl/ref.hxx>
 #include <basic/sbmod.hxx>
-#include <basic/sbstar.hxx>
 #include <com/sun/star/script/ModuleInfo.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <basic/basicdllapi.h>

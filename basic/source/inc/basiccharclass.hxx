@@ -20,10 +20,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_BASICCHARCLASS_HXX
 #define INCLUDED_BASIC_SOURCE_INC_BASICCHARCLASS_HXX
 
-#include <unotools/charclass.hxx>
-#include <rtl/instance.hxx>
-
-#include <vcl/svapp.hxx>
+#include <sal/types.h>
 
 namespace BasicCharClass
 {

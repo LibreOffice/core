@@ -18,10 +18,14 @@
  */
 
 
+#include <basic/sberrors.hxx>
 #include <basic/sbx.hxx>
+#include <basic/sbmeth.hxx>
+#include <basic/sbmod.hxx>
 #include <image.hxx>
 #include <codegen.hxx>
 #include <parser.hxx>
+#include <sbintern.hxx>
 #include <cstddef>
 #include <limits>
 #include <algorithm>

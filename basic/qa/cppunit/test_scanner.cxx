@@ -13,8 +13,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <osl/file.hxx>
-#include <osl/process.h>
 #include <rtl/math.hxx>
 
 #include <scanner.hxx>

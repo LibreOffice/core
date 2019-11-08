@@ -21,7 +21,7 @@
 #define INCLUDED_BASIC_SOURCE_RUNTIME_DLLMGR_HXX
 
 #include <sal/config.h>
-#include <basic/sberrors.hxx>
+#include <vcl/errcode.hxx>
 #include <memory>
 
 class SbxArray;

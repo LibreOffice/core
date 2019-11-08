@@ -29,7 +29,6 @@
 #include <basic/sbxprop.hxx>
 #include <sbxbase.hxx>
 
-#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 

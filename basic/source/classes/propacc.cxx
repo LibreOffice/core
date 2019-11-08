@@ -30,7 +30,6 @@
 #include <o3tl/any.hxx>
 
 #include <algorithm>
-#include <limits.h>
 
 using com::sun::star::uno::Reference;
 using namespace com::sun::star;

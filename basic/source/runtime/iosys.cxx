@@ -22,27 +22,18 @@
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <osl/file.hxx>
-#include <tools/urlobj.hxx>
 
 #include <runtime.hxx>
 
-#include <rtl/byteseq.hxx>
-#include <rtl/textenc.h>
 #include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <com/sun/star/bridge/BridgeFactory.hpp>
-#include <com/sun/star/bridge/XBridge.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -55,7 +46,6 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::bridge;
 
 #include <iosys.hxx>
-#include <sbintern.hxx>
 
 
 class SbiInputDialog : public weld::GenericDialogController
