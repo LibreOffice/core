@@ -157,7 +157,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
 
                 ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
                 if ( SUCCEEDED( hr ) && pPersist && m_pStorage )
-                    hr = pPersist->InitNew( m_pStorage );
+                    hr = pPersist->InitNew( m_pStorage.get() );
             }
             else if ( m_nInitMode == LOAD_FROM_STORAGE )
             {
@@ -166,7 +166,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
 
                 ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
                 if ( SUCCEEDED( hr ) && pPersist && m_pStorage )
-                    hr = pPersist->Load( m_pStorage );
+                    hr = pPersist->Load( m_pStorage.get() );
             }
             else if ( m_nInitMode == LOAD_FROM_FILE )
             {
@@ -192,13 +192,13 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
         if ( SUCCEEDED( hr ) && pOleObject )
         {
             if ( m_pClientSite )
-                pOleObject->SetClientSite( m_pClientSite );
+                pOleObject->SetClientSite( m_pClientSite.get() );
 
             for ( DWORD nInd = 0; nInd < DEFAULT_ARRAY_LEN; nInd++ )
                 if ( m_pOleAdvises[nInd] )
                 {
                     DWORD nRegID = 0;
-                    if ( SUCCEEDED( pOleObject->Advise( m_pOleAdvises[nInd], &nRegID ) ) && nRegID > 0 )
+                    if ( SUCCEEDED( pOleObject->Advise( m_pOleAdvises[nInd].get(), &nRegID ) ) && nRegID > 0 )
                         m_pOleAdvises[nInd]->SetRegID( nRegID );
                 }
         }
@@ -211,7 +211,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                 if ( m_pDataAdvises[nInd] )
                 {
                     DWORD nRegID = 0;
-                    if ( SUCCEEDED( pIDataObject->DAdvise( m_pDataAdvises[nInd]->GetFormatEtc(), m_pDataAdvises[nInd]->GetDataAdviseFlag(), m_pDataAdvises[nInd], &nRegID ) ) && nRegID > 0 )
+                    if ( SUCCEEDED( pIDataObject->DAdvise( m_pDataAdvises[nInd]->GetFormatEtc(), m_pDataAdvises[nInd]->GetDataAdviseFlag(), m_pDataAdvises[nInd].get(), &nRegID ) ) && nRegID > 0 )
                         m_pDataAdvises[nInd]->SetRegID( nRegID );
                 }
         }
@@ -221,7 +221,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
         if ( SUCCEEDED( hr ) && pIViewObject )
         {
             if ( m_pViewAdvise )
-                pIViewObject->SetAdvise( m_pViewAdvise->GetAspect(), m_pViewAdvise->GetViewAdviseFlag(), m_pViewAdvise );
+                pIViewObject->SetAdvise( m_pViewAdvise->GetAspect(), m_pViewAdvise->GetViewAdviseFlag(), m_pViewAdvise.get() );
         }
     }
 
@@ -659,7 +659,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetCurFile( LPOLESTR
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
 {
-    if ( pSite == m_pClientSite )
+    if ( pSite == m_pClientSite.get() )
         return S_OK;
 
     if ( !pSite )
@@ -988,7 +988,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Advise( IAdviseSink 
             ComSmart<OleWrapperAdviseSink> pOwnAdvise(new OleWrapperAdviseSink(aListener));
             DWORD nRegID = 0;
 
-            if ( SUCCEEDED( pOleObject->Advise( pOwnAdvise, &nRegID ) ) && nRegID > 0 )
+            if ( SUCCEEDED( pOleObject->Advise( pOwnAdvise.get(), &nRegID ) ) && nRegID > 0 )
             {
                 pOwnAdvise->SetRegID( nRegID );
                 *pdwConnection = InsertAdviseLinkToList( pOwnAdvise, m_pOleAdvises );
@@ -1191,7 +1191,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::DAdvise( FORMATETC *
             ComSmart< OleWrapperAdviseSink > pOwnAdvise( new OleWrapperAdviseSink( ComSmart<IAdviseSink>( pAdvSink ), pFormatetc, advf ) );
             DWORD nRegID = 0;
 
-            if ( SUCCEEDED( pIDataObject->DAdvise( pFormatetc, advf, pOwnAdvise, &nRegID ) ) && nRegID > 0 )
+            if ( SUCCEEDED( pIDataObject->DAdvise( pFormatetc, advf, pOwnAdvise.get(), &nRegID ) ) && nRegID > 0 )
             {
                 pOwnAdvise->SetRegID( nRegID );
                 *pdwConnection = InsertAdviseLinkToList( pOwnAdvise, m_pDataAdvises );
@@ -1417,7 +1417,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetAdvise( DWORD asp
             ComSmart<IAdviseSink> aListener(pAdvSink);
             ComSmart<OleWrapperAdviseSink> pOwnAdvise(new OleWrapperAdviseSink(aListener, aspects, advf));
 
-            if ( SUCCEEDED( pIViewObject->SetAdvise( aspects, advf, pOwnAdvise ) ) )
+            if ( SUCCEEDED( pIViewObject->SetAdvise( aspects, advf, pOwnAdvise.get() ) ) )
             {
                 m_pViewAdvise = pOwnAdvise;
                 return S_OK;
@@ -1442,7 +1442,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetAdvise( DWORD *pA
         if ( pAdvf )
             *pAdvf = m_pViewAdvise->GetViewAdviseFlag();
 
-        *ppAdvSink = m_pViewAdvise->GetOrigAdvise();
+        *ppAdvSink = m_pViewAdvise->GetOrigAdvise().get();
         if ( *ppAdvSink )
             (*ppAdvSink)->AddRef();
     }
