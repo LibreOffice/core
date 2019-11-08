@@ -222,8 +222,6 @@ bool SdPPTFilter::Export()
 
     if( mxModel.is() )
     {
-        tools::SvRef<SotStorage> xStorRef = new SotStorage( mrMedium.GetOutStream(), false );
-
 #ifdef DISABLE_DYNLOADING
         ExportPPTPointer PPTExport = ExportPPT;
 #else
@@ -231,7 +229,7 @@ bool SdPPTFilter::Export()
             SdFilter::GetLibrarySymbol(mrMedium.GetFilter()->GetUserData(), "ExportPPT"));
 #endif
 
-        if( PPTExport && xStorRef.is() )
+        if( PPTExport)
         {
             sal_uInt32          nCnvrtFlags = 0;
             const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();
@@ -255,8 +253,106 @@ bool SdPPTFilter::Export()
             aProperty.Value <<= mrMedium.GetBaseURL( true );
             aProperties.push_back( aProperty );
 
-            bRet = PPTExport( aProperties, xStorRef, mxModel, mxStatusIndicator, pBas, nCnvrtFlags );
-            xStorRef->Commit();
+            SvStream * pOutputStrm = mrMedium.GetOutStream();
+
+            Sequence< NamedValue > aEncryptionData;
+            Reference< css::packages::XPackageEncryption > xPackageEncryption;
+            const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(mrMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);
+            std::shared_ptr<SvStream> pMediaStrm;
+            if (pEncryptionDataItem && (pEncryptionDataItem->GetValue() >>= aEncryptionData))
+            {
+                ::comphelper::SequenceAsHashMap aHashData(aEncryptionData);
+                OUString sCryptoType = aHashData.getUnpackedValueOrDefault("CryptoType", OUString());
+
+                if (sCryptoType.getLength())
+                {
+                    Reference<XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+                    Sequence<Any> aArguments(1);
+                    aArguments[0] = makeAny(NamedValue("Binary", makeAny(true)));
+                    xPackageEncryption.set(
+                        xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                            "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), UNO_QUERY);
+
+                    if (xPackageEncryption.is())
+                    {
+                        // We have an encryptor. Export document into memory stream and encrypt it later
+                        pMediaStrm.reset(new SvMemoryStream());
+                        pOutputStrm = pMediaStrm.get();
+
+                        // Temp removal of EncryptionData to avoid password protection triggering
+                        mrMedium.GetItemSet()->ClearItem(SID_ENCRYPTIONDATA);
+                    }
+                }
+            }
+
+            tools::SvRef<SotStorage> xStorRef = new SotStorage(pOutputStrm, false);
+
+            if (xStorRef.is())
+            {
+                bRet = PPTExport(aProperties, xStorRef, mxModel, mxStatusIndicator, pBas, nCnvrtFlags);
+                xStorRef->Commit();
+
+                if (xPackageEncryption.is())
+                {
+                    // Perform DRM encryption
+                    pOutputStrm->Seek(0);
+
+                    xPackageEncryption->setupEncryption(aEncryptionData);
+
+                    Reference<css::io::XInputStream > xInputStream(new utl::OSeekableInputStreamWrapper(pOutputStrm, false));
+                    Sequence<NamedValue> aStreams = xPackageEncryption->encrypt(xInputStream);
+
+                    tools::SvRef<SotStorage> xEncryptedRootStrg = new SotStorage(mrMedium.GetOutStream(), false);
+                    for (const NamedValue & aStreamData : aStreams)
+                    {
+                        // To avoid long paths split and open substorages recursively
+                        // Splitting paths manually, since comphelper::string::split is trimming special characters like \0x01, \0x09
+                        SotStorage * pStorage = xEncryptedRootStrg.get();
+                        OUString sFileName;
+                        sal_Int32 idx = 0;
+                        do
+                        {
+                            OUString sPathElem = aStreamData.Name.getToken(0, L'/', idx);
+                            if (!sPathElem.isEmpty())
+                            {
+                                if (idx < 0)
+                                {
+                                    sFileName = sPathElem;
+                                }
+                                else
+                                {
+                                    pStorage = pStorage->OpenSotStorage(sPathElem);
+                                }
+                            }
+                        } while (pStorage && idx >= 0);
+
+                        if (!pStorage)
+                        {
+                            bRet = false;
+                            break;
+                        }
+
+                        SotStorageStream* pStream = pStorage->OpenSotStream(sFileName);
+                        if (!pStream)
+                        {
+                            bRet = false;
+                            break;
+                        }
+                        Sequence<sal_Int8> aStreamContent;
+                        aStreamData.Value >>= aStreamContent;
+                        size_t nBytesWritten = pStream->WriteBytes(aStreamContent.getArray(), aStreamContent.getLength());
+                        if (nBytesWritten != (size_t)aStreamContent.getLength())
+                        {
+                            bRet = false;
+                            break;
+                        }
+                    }
+                    xEncryptedRootStrg->Commit();
+
+                    // Restore encryption data
+                    mrMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, makeAny(aEncryptionData)));
+                }
+            }
         }
     }
 
