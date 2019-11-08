@@ -167,8 +167,7 @@ namespace connectivity
                 if (FAILED(pInterface->get_Item(OLEVariant(sStr), &pT)))
                 {
 #if OSL_DEBUG_LEVEL > 0
-                    OString sTemp("Unknown Item: ");
-                    sTemp += OString(sStr.getStr(),sStr.getLength(),osl_getThreadTextEncoding());
+                    OString sTemp("Unknown Item: " + OString(sStr.getStr(),sStr.getLength(),osl_getThreadTextEncoding()));
                     OSL_FAIL(sTemp.getStr());
 #endif
                 }
