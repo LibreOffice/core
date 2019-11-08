@@ -158,6 +158,7 @@ enum class Destination
     USERPROPS,
     PROPNAME,
     STATICVAL,
+    GENERATOR,
 };
 
 enum RTFKeyword
