@@ -221,15 +221,25 @@ public:
                                                                                    sal_Int32                                               nFlags ,
                                                                              const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  );
 
-    /** @short  set some changeable parameters for a new load request.
+    /** @short  start loading of a resource
 
         @descr  The parameter for targeting, the content description, and
                 some environment specifier (UI, dispatch functionality)
-                can be set here ... BEFORE the real load process is started
-                by calling startLoading(). Of course a still running load request
+                can be set here. Of course a still running load request
                 will be detected here and a suitable exception will be thrown.
                 Such constellation can be detected outside by using provided
                 synchronisation methods or callbacks.
+
+                There is no direct return value possible here. Because it depends
+                from the usage of this instance! E.g. for loading a "visible component"
+                a frame with a controller/model inside can be possible. For loading
+                of a "non visible component" only an information about a successfully start
+                can be provided.
+                Further it can't be guaranteed, that the internal process runs synchronous.
+                that's why we prefer using of specialized methods afterwards e.g. to:
+                    - wait till the internal job will be finished
+                      and get the results
+                    - or to let it run without any further control from outside.
 
         @param  sURL
                 points to the resource, which should be loaded.
@@ -258,34 +268,12 @@ public:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    void initializeLoading(const OUString&                                           sURL            ,
+    void startLoading(const OUString&                                           sURL            ,
                            const css::uno::Sequence< css::beans::PropertyValue >&    lMediaDescriptor,
                            const css::uno::Reference< css::frame::XFrame >&          xBaseFrame      ,
                            const OUString&                                           sTarget         ,
                                  sal_Int32                                           nSearchFlags    ,
                                  LoadEnvFeatures                                     eFeature        = LoadEnvFeatures::NONE);
-
-    /** @short  start loading of the resource represented by this loadenv instance.
-
-        @descr  There is no direct return value possible here. Because it depends
-                from the usage of this instance! E.g. for loading a "visible component"
-                a frame with a controller/model inside can be possible. For loading
-                of a "non visible component" only an information about a successfully start
-                can be provided.
-                Further it can't be guaranteed, that the internal process runs synchronous.
-                that's why we prefer using of specialized methods afterwards e.g. to:
-                    - wait till the internal job will be finished
-                      and get the results
-                    - or to let it run without any further control from outside.
-
-        @throw  A LoadEnvException if start of the load process failed (because
-                another is still in progress!).
-                The reason, a suitable message and ID will be given here immediately.
-
-        @throw  A RuntimeException in case any internal process indicates, that
-                the whole runtime can't be used any longer.
-     */
-    void startLoading();
 
     /** @short  wait for an already running load request (started by calling
                 startLoading() before).
@@ -375,6 +363,7 @@ public:
     void impl_reactForLoadingState();
 
 private:
+    void start();
 
     /** @short  tries to detect the type and the filter of the specified content.
 
