@@ -649,8 +649,7 @@ void WinOpenGLDeviceInfo::GetData()
                         sizeof(value),
                         nullptr))
             {
-                OUString  driverKey("System\\CurrentControlSet\\Control\\Class\\");
-                driverKey += o3tl::toU(value);
+                OUString  driverKey(OUStringLiteral("System\\CurrentControlSet\\Control\\Class\\") + o3tl::toU(value));
                 result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, o3tl::toW(driverKey.getStr()), 0, KEY_QUERY_VALUE, &key);
                 if (result == ERROR_SUCCESS)
                 {
@@ -737,8 +736,7 @@ void WinOpenGLDeviceInfo::GetData()
                             sizeof(value),
                             nullptr))
                 {
-                    OUString driverKey2("System\\CurrentControlSet\\Control\\Class\\");
-                    driverKey2 += o3tl::toU(value);
+                    OUString driverKey2(OUStringLiteral("System\\CurrentControlSet\\Control\\Class\\") + o3tl::toU(value));
                     result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, o3tl::toW(driverKey2.getStr()), 0, KEY_QUERY_VALUE, &key);
                     if (result == ERROR_SUCCESS)
                     {

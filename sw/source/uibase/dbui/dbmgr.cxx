@@ -2660,8 +2660,7 @@ uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
     case DBConnURIType::MSJET:
 #ifdef _WIN32
     {
-        OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=");
-        sDBURL += rURL.PathToFileName();
+        OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=" + rURL.PathToFileName());
         aURLAny <<= sDBURL;
     }
 #endif
@@ -2669,8 +2668,7 @@ uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
     case DBConnURIType::MSACE:
 #ifdef _WIN32
     {
-        OUString sDBURL("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=");
-        sDBURL += rURL.PathToFileName();
+        OUString sDBURL("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=" + rURL.PathToFileName());
         aURLAny <<= sDBURL;
     }
 #endif

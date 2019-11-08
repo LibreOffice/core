@@ -825,8 +825,7 @@ OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseUR
             if( aText.startsWith("\\") && (aText.getLength() < 2 || aText[ 1 ] != '\\') )
             {
                 // cut to first segment
-                OUString aTmp = INetURLObject::GetScheme( eBaseProt );
-                aTmp += "/";
+                OUString aTmp = INetURLObject::GetScheme( eBaseProt ) + "/";
                 aTmp += aObj.getName( 0, true, INetURLObject::DecodeMechanism::WithCharset );
                 aObj.SetURL( aTmp );
 
@@ -1889,8 +1888,7 @@ OUString URLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseURL )
             if( aText.startsWith("\\") && (aText.getLength() < 2 || aText[ 1 ] != '\\') )
             {
                 // cut to first segment
-                OUString aTmp = INetURLObject::GetScheme( eBaseProt );
-                aTmp += "/";
+                OUString aTmp = INetURLObject::GetScheme( eBaseProt ) + "/";
                 aTmp += aObj.getName( 0, true, INetURLObject::DecodeMechanism::WithCharset );
                 aObj.SetURL( aTmp );
 
