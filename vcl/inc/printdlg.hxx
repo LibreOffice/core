@@ -138,6 +138,8 @@ namespace vcl
         std::unique_ptr<weld::SpinButton>       mxCopyCountField;
         std::unique_ptr<weld::CheckButton>      mxCollateBox;
         std::unique_ptr<weld::Image>            mxCollateImage;
+        std::unique_ptr<weld::Entry>            mxPageRangeEdit;
+        std::unique_ptr<weld::RadioButton>      mxPageRangesRadioButton;
         std::unique_ptr<weld::ComboBox>         mxPaperSidesBox;
         std::unique_ptr<weld::CheckButton>      mxReverseOrderBox;
 
