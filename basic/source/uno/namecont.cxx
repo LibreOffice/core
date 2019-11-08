@@ -33,29 +33,25 @@
 #include <osl/mutex.hxx>
 #include <vcl/errinf.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <sot/storage.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <namecont.hxx>
 #include <basic/basicmanagerrepository.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
-#include <unotools/streamwrap.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <basic/basmgr.hxx>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -68,7 +64,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <basic/sbmod.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <memory>
 
 namespace basic

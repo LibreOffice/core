@@ -20,9 +20,10 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_RUNTIME_HXX
 #define INCLUDED_BASIC_SOURCE_INC_RUNTIME_HXX
 
+#include <basic/sberrors.hxx>
+#include <basic/sbmeth.hxx>
+#include <basic/sbstar.hxx>
 #include <basic/sbx.hxx>
-
-#include <sb.hxx>
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

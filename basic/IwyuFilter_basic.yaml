@@ -1,0 +1,22 @@
+---
+assumeFilename: basic/source/classes/global.cxx
+blacklist:
+    basic/source/runtime/methods.cxx:
+    # Needed on WIN
+    - o3tl/char16_t2wchar_t.hxx
+    - rtl/character.hxx
+    basic/source/sbx/sbxdec.cxx:
+    # Needed on WIN
+    - o3tl/char16_t2wchar_t.hxx
+    basic/source/sbx/sbxbyte.cxx:
+    # math::round is used
+    - rtl/math.hxx
+    basic/source/sbx/sbxchar.cxx:
+    # math::round is used
+    - rtl/math.hxx
+    basic/source/sbx/sbxint.cxx:
+    # math::round is used
+    - rtl/math.hxx
+    basic/source/sbx/sbxlng.cxx:
+    # math::round is used
+    - rtl/math.hxx

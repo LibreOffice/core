@@ -21,7 +21,10 @@
 #define INCLUDED_BASIC_SOURCE_RUNTIME_DDECTRL_HXX
 
 #include <tools/link.hxx>
-#include <basic/sberrors.hxx>
+#include <vcl/errcode.hxx>
+
+#include <memory>
+#include <vector>
 
 class DdeConnection;
 class DdeData;

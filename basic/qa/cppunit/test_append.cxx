@@ -8,11 +8,7 @@
  */
 
 #include "basictest.hxx"
-#include <osl/file.hxx>
-#include <osl/process.h>
 
-#include <basic/sbmod.hxx>
-#include <basic/sbmeth.hxx>
 namespace
 {
     class EnableTest : public test::BootstrapFixture

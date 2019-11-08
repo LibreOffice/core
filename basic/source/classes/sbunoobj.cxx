@@ -27,14 +27,12 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <rtl/instance.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
@@ -55,7 +53,6 @@
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
-#include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/script/XDirectInvocation.hpp>
@@ -64,6 +61,7 @@
 #include <com/sun/star/reflection/XIdlArray.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
+#include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
@@ -71,7 +69,6 @@
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <com/sun/star/script/XAutomationInvocation.hpp>
-#include <basic/codecompletecache.hxx>
 
 #include <rtlproto.hxx>
 
@@ -79,8 +76,6 @@
 #include <basic/sbuno.hxx>
 #include <basic/sberrors.hxx>
 #include <sbunoobj.hxx>
-#include <sbjsmod.hxx>
-#include <basic/basmgr.hxx>
 #include <sbintern.hxx>
 #include <runtime.hxx>
 

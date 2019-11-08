@@ -24,8 +24,8 @@
 #include <osl/diagnose.h>
 
 #include <stdio.h>
-#include <string.h>
 #include <rtl/character.hxx>
+#include <basic/sberrors.hxx>
 
 // All symbol names are laid down int the symbol-pool's stringpool, so that
 // all symbols are handled in the same case. On saving the code-image, the

@@ -20,13 +20,7 @@
 #ifndef INCLUDED_BASIC_INC_SB_HXX
 #define INCLUDED_BASIC_INC_SB_HXX
 
-#include <basic/sberrors.hxx>
-#include <basic/sbdef.hxx>
-#include <basic/sbmeth.hxx>
-#include <basic/sbmod.hxx>
-#include <basic/sbstar.hxx>
-
-#include "sbprop.hxx"
+#include <basic/sbxobj.hxx>
 
 // create object from user-type  (+StringID+StringID)
 SbxObject* createUserTypeImpl( const OUString& rClassName );

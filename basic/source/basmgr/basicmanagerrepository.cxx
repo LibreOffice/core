@@ -21,7 +21,6 @@
 #include <basic/basmgr.hxx>
 #include <scriptcont.hxx>
 #include <dlgcont.hxx>
-#include <basic/sbuno.hxx>
 #include <sbintern.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -41,7 +40,7 @@
 
 #include <osl/getglobalmutex.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/strbuf.hxx>
+#include <sot/storage.hxx>
 
 #include <map>
 

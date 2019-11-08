@@ -20,7 +20,8 @@
 
 #include <memory>
 #include <parser.hxx>
-#include <basic/sbx.hxx>
+#include <basic/sberrors.hxx>
+#include <basic/sbmod.hxx>
 #include <expr.hxx>
 #include <uno/current_context.hxx>
 

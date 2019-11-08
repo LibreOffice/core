@@ -22,12 +22,13 @@
 #include <tools/stream.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/SfxBroadcaster.hxx>
+#include <basic/codecompletecache.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
-#include <sb.hxx>
 #include <sbjsmeth.hxx>
 #include <sbjsmod.hxx>
 #include <sbintern.hxx>
+#include <sbprop.hxx>
 #include <image.hxx>
 #include <opcodes.hxx>
 #include <runtime.hxx>
@@ -36,13 +37,12 @@
 
 #include <sal/log.hxx>
 
-#include <basic/basrdll.hxx>
+#include <basic/sberrors.hxx>
 #include <sbobjmod.hxx>
 #include <basic/vbahelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/eventcfg.hxx>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
@@ -66,9 +66,7 @@
 #include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XControl.hpp>
 #include <ooo/vba/VbQueryClose.hpp>
-#include <list>
 #include <memory>
 #include <sbxmod.hxx>
 #include <parser.hxx>

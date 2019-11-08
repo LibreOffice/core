@@ -21,7 +21,6 @@
 
 #include <o3tl/float_int_conversion.hxx>
 #include <vcl/errcode.hxx>
-#include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 #include <runtime.hxx>
 

@@ -28,8 +28,6 @@
 #include <oleauto.h>
 #endif
 
-#include <basic/sbx.hxx>
-
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 
 
