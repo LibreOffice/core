@@ -30,10 +30,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#ifdef _MSC_VER
-#include <float.h>
-#define isnan _isnan
-#endif
 #include "hcode.h"
 #include "ksc5601.h"
 
