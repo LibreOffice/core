@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_0b855108",
+        "filename": "sal/osl/w32/module.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-08T10:27:35Z",
+      "side": 1,
+      "message": "Moving the GetModuleFileNameW call into the guarded section doesn\u0027t help:  osl_unloadModule clears the cache, releases the lock, then osl_getModuleURLFromAddress on another cache inserts into the cache again, and only then osl_unloadModule calls FreeLibrary.",
+      "revId": "8e938632f74ad1ecb11e1372d66d699db2e8cda4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
