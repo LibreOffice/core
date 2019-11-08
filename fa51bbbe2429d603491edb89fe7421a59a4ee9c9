@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_eb681522",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-11-08T11:32:05Z",
+      "side": 1,
+      "message": "typo in commit message",
+      "revId": "fa51bbbe2429d603491edb89fe7421a59a4ee9c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
