@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     cppuhelper \
     sal \
     salhelper \
+    svl \
     svt \
     svxcore \
     tl \

@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,slideshow,\
     cppuhelper \
     sal \
     salhelper \
+    svl \
     svt \
     svx \
     svxcore \
