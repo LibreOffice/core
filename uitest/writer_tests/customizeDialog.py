@@ -4,10 +4,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import time
+
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
-import time
+from uitest.uihelper.common import select_pos
 from uitest.debug import sleep
 
 class ConfigureDialog(UITestCase):
@@ -50,6 +52,30 @@ class ConfigureDialog(UITestCase):
         finalEntryCount = get_state_as_dict(xfunc)["Children"]
         self.assertEqual(initialEntryCount, finalEntryCount)
 
+
+        xcancBtn = xDialog.getChild("cancel")  #button Cancel
+        xcancBtn.executeAction("CLICK", tuple())  #click the button
+
+        self.ui_test.close_doc()
+
+    def test_category_listbox(self):
+        self.ui_test.create_doc_in_start_center("writer")
+        self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        xFunc = xDialog.getChild("functions")
+        xCategory = xDialog.getChild("commandcategorylist")
+
+        initialEntryCount = get_state_as_dict(xFunc)["Children"]
+        self.assertTrue(initialEntryCount is not 0)
+
+        select_pos(xCategory, "1")
+        filteredEntryCount = get_state_as_dict(xFunc)["Children"]
+        self.assertTrue(filteredEntryCount < initialEntryCount)
+
+        select_pos(xCategory, "0")
+        finalEntryCount = get_state_as_dict(xFunc)["Children"]
+        self.assertEqual(initialEntryCount, finalEntryCount)
 
         xcancBtn = xDialog.getChild("cancel")  #button Cancel
         xcancBtn.executeAction("CLICK", tuple())  #click the button
