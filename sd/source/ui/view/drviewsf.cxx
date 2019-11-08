@@ -62,6 +62,10 @@
 #include <editeng/adjustitem.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
+#include <svx/xlnclit.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <rtl/ustring.hxx>
 #include <memory>
 
 using namespace svx::sidebar;
@@ -694,6 +698,16 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 {
                     rSet.ClearItem( nWhich );
                     rSet.DisableItem( nWhich );
+                }
+                if (comphelper::LibreOfficeKit::isActive() && nWhich == XATTR_LINECOLOR)
+                {
+                    const SfxPoolItem* pItem = pSet->GetItem(XATTR_LINECOLOR);
+                    Color aColor = static_cast<const XLineColorItem*>(pItem)->GetColorValue();
+                    OUString sColor = OUString::number(static_cast<sal_uInt32>(aColor));
+
+                    sColor = ".uno:XLineColor=" + sColor;
+                    GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                        OUStringToOString(sColor, RTL_TEXTENCODING_ASCII_US).getStr());
                 }
                 nWhich = aNewIter.NextWhich();
             }
