@@ -75,6 +75,11 @@ short AbstractScImportAsciiDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScImportAsciiDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScAutoFormatDlg_Impl::Execute()
 {
     return m_xDlg->run();
