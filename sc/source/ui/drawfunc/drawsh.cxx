@@ -61,6 +61,7 @@
 #include <memory>
 #include <svx/xlnwtit.hxx>
 #include <svx/chrtitem.hxx>
+#include <svx/xlnclit.hxx>
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
@@ -68,6 +69,8 @@ namespace
 {
     void lcl_convertStringArguments(std::unique_ptr<SfxItemSet>& pArgs)
     {
+        Color aColor;
+        OUString sColor;
         const SfxPoolItem* pItem = nullptr;
 
         if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
@@ -79,6 +82,18 @@ namespace
 
             XLineWidthItem aItem(nValue);
             pArgs->Put(aItem);
+        }
+        else if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
+        {
+            sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+            if (sColor == "transparent")
+                aColor = COL_TRANSPARENT;
+            else
+                aColor = Color(sColor.toInt32(16));
+
+            XLineColorItem aLineColorItem(OUString(), aColor);
+            pArgs->Put(aLineColorItem);
         }
     }
 }
