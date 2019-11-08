@@ -40,7 +40,7 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.tools.debugger.Main;
 import org.mozilla.javascript.tools.debugger.ScopeProvider;
 
-public class ScriptEditorForJavaScript implements ScriptEditor {
+public class ScriptEditorForJavaScript extends ScriptEditor {
 
     // global ScriptEditorForJavaScript instance
     private static ScriptEditorForJavaScript theScriptEditorForJavaScript;
@@ -194,6 +194,12 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
     }
 
     private ScriptEditorForJavaScript(XScriptContext context, URL url) {
+        setContext(context);
+        // Need to check that before showing the window. Checking in execute() has no effect.
+        if (!isMacroExectionEnabled()) {
+            showErrorMessage("Macro Execution has been disabled.");
+            return ;
+        }
         initUI();
         Scriptable scope = getScope(context);
         rhinoWindow.openFile(url, scope, new CloseHandler(url));
