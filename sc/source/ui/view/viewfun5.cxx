@@ -378,6 +378,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
                         if (bShowErrorDialog)
                             ErrorMessage(STR_PASTE_ERROR);
+                        pDlg->disposeOnce();
                     });
                     return true;
                 }

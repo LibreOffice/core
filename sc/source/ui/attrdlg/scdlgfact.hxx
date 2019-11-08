@@ -101,13 +101,14 @@ OString Class::GetScreenshotId() const              \
 
 class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg
 {
-    std::unique_ptr<ScImportAsciiDlg> m_xDlg;
+    std::shared_ptr<ScImportAsciiDlg> m_xDlg;
 public:
     explicit AbstractScImportAsciiDlg_Impl(std::unique_ptr<ScImportAsciiDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual void                        GetOptions( ScAsciiOptions& rOpt ) override;
     virtual void                        SaveParameters() override;
 
