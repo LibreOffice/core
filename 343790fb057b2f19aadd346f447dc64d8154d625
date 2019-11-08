@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_4b77c9a1",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-11-08T08:23:07Z",
+      "side": 1,
+      "message": "Can\u0027t you clean up the static_cast\u003c\u003e completely here? fGridWidth is already a double, and then you just multiply and divide it.\n\nIf so, I would do that on master, as a follow-up commit.",
+      "revId": "343790fb057b2f19aadd346f447dc64d8154d625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
