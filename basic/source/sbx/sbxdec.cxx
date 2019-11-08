@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/errcode.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-#include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
 
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
-#include <memory>
 
 // Implementation SbxDecimal
 SbxDecimal::SbxDecimal()

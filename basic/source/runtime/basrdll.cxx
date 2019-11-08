@@ -19,14 +19,11 @@
 
 #include <memory>
 #include <vcl/svapp.hxx>
-#include <svl/solar.hrc>
 #include <tools/debug.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/settings.hxx>
 
 #include <basic/sbstar.hxx>
 #include <basic/basrdll.hxx>
-#include <unotools/resmgr.hxx>
 #include <strings.hrc>
 #include <sbxbase.hxx>
 #include <config_features.h>

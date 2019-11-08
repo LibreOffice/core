@@ -19,14 +19,13 @@
 
 
 #include <math.h>
-#include <algorithm>
 
 #include <o3tl/temporary.hxx>
 #include <rtl/math.hxx>
-#include <codegen.hxx>
 #include <parser.hxx>
 #include <expr.hxx>
 
+#include <basic/sberrors.hxx>
 
 SbiExprNode::SbiExprNode( std::unique_ptr<SbiExprNode> l, SbiToken t, std::unique_ptr<SbiExprNode> r ) :
     pLeft(std::move(l)),

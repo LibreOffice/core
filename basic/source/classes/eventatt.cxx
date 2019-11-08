@@ -22,10 +22,7 @@
 #include <comphelper/string.hxx>
 
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -44,8 +41,8 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <xmlscript/xmldlg_imexp.hxx>
 #include <sbunoobj.hxx>
+#include <basic/sberrors.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>

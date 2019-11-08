@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_BUFFER_HXX
 #define INCLUDED_BASIC_SOURCE_INC_BUFFER_HXX
 
-#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <memory>
 
 class SbiParser;

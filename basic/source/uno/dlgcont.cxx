@@ -25,10 +25,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/resource/StringResourceWithStorage.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/document/GraphicStorageHandler.hpp>
@@ -36,13 +33,11 @@
 #include <dlgcont.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
-#include <unotools/streamwrap.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <unotools/pathoptions.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
-#include <cppuhelper/factory.hxx>
+#include <sot/storage.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <vcl/GraphicObject.hxx>

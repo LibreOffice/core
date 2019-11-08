@@ -9,8 +9,6 @@
 
 #include "basictest.hxx"
 #include <osl/file.hxx>
-#include <basic/sbmod.hxx>
-#include <basic/sbmeth.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocaleoptions.hxx>
 

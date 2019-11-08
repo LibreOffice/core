@@ -21,31 +21,24 @@
 
 #include <vcl/errcode.hxx>
 #include <unotools/resmgr.hxx>
-#include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
 
-#include <stdlib.h>
-
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <math.h>
-#include <string.h>
 
-#include "sbxres.hxx"
 #include <sbxbase.hxx>
 #include <sbintern.hxx>
-#include <basic/sbxfac.hxx>
 #include <basic/sbxform.hxx>
 
 #include <date.hxx>
 #include <runtime.hxx>
 #include <strings.hrc>
 
-#include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
 #include <svl/zforlist.hxx>

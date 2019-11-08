@@ -7,12 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "basictest.hxx"
-#include <comphelper/processfactory.hxx>
 #include <unotools/syslocaleoptions.hxx>
-#include <o3tl/char16_t2wchar_t.hxx>
 
 #ifdef _WIN32
 #include <string.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN

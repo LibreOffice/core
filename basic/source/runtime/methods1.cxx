@@ -37,14 +37,12 @@
 #include <tools/fract.hxx>
 #include <o3tl/temporary.hxx>
 #include <osl/file.hxx>
-#include <vcl/jobset.hxx>
 #include <sbobjmod.hxx>
 #include <basic/sbuno.hxx>
 
 #include <date.hxx>
 #include <sbintern.hxx>
 #include <runtime.hxx>
-#include <stdobj.hxx>
 #include <rtlproto.hxx>
 #include "dllmgr.hxx"
 #include <iosys.hxx>

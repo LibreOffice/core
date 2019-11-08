@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basic/sberrors.hxx>
+#include <basic/sbstar.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/transfer.hxx>
-#include <runtime.hxx>
 #include <sbstdobj.hxx>
 
 #define ATTR_IMP_TYPE           1

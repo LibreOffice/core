@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <svl/SfxBroadcaster.hxx>
 
@@ -28,7 +27,6 @@
 #include "sbxres.hxx"
 #include "sbxconv.hxx"
 #include <sbunoobj.hxx>
-#include <math.h>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
 

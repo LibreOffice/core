@@ -22,9 +22,9 @@
 #include <sbintern.hxx>
 #include <runtime.hxx>
 
+#include <basic/sberrors.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/zforlist.hxx>
-#include <vcl/svapp.hxx>
 #include <rtl/character.hxx>
 
 SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )

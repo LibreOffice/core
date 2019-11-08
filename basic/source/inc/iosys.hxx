@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <tools/stream.hxx>
-#include <basic/sberrors.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class SvStream;

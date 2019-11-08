@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <vcl/errcode.hxx>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 #include "sbxres.hxx"

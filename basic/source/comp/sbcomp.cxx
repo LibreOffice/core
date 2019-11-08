@@ -18,12 +18,13 @@
  */
 
 
+#include <basic/sbmeth.hxx>
+#include <basic/sbstar.hxx>
 #include <basic/sbx.hxx>
 #include <parser.hxx>
 #include <image.hxx>
+#include <sbintern.hxx>
 #include <sbobjmod.hxx>
-#include <svtools/miscopt.hxx>
-#include <rtl/character.hxx>
 #include <memory>
 
 // This routine is defined here, so that the

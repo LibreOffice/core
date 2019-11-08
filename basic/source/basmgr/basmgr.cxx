@@ -22,22 +22,20 @@
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/hint.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <basic/sbx.hxx>
+#include <basic/sbmeth.hxx>
 #include <sot/storinfo.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <basic/sbmod.hxx>
-#include <unotools/intlwrapper.hxx>
+#include <unotools/transliterationwrapper.hxx>
 #include <sal/log.hxx>
 
+#include <basic/sberrors.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
 #include <global.hxx>
-#include <sbunoobj.hxx>
-#include <sbintern.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XPersistentLibraryContainer.hpp>
 

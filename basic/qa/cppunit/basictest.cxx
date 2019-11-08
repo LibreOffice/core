@@ -8,11 +8,8 @@
  */
 
 #include "basictest.hxx"
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <basic/sbstar.hxx>
-#include <basic/basrdll.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>

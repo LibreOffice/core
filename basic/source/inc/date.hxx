@@ -24,6 +24,8 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
+#include <basic/sbxvar.hxx>
+
 enum class SbDateCorrection
 {
     None,

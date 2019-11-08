@@ -21,9 +21,10 @@
 #define INCLUDED_BASIC_SOURCE_INC_SBINTERN_HXX
 
 #include <basic/basicdllapi.h>
+#include <basic/sbstar.hxx>
 #include <basic/sbxfac.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <sb.hxx>
+#include <vcl/errcode.hxx>
 
 namespace utl
 {

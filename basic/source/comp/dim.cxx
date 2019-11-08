@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basic/sberrors.hxx>
+#include <basic/sbstar.hxx>
 #include <basic/sbx.hxx>
 #include <sbunoobj.hxx>
 #include <parser.hxx>
-#include <svtools/miscopt.hxx>
+#include <sb.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <basic/codecompletecache.hxx>
 #include <memory>

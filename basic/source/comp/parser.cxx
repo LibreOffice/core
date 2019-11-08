@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basic/sberrors.hxx>
+#include <basic/sbxmeth.hxx>
+#include <basic/sbmod.hxx>
+#include <basic/sbstar.hxx>
 #include <basic/sbx.hxx>
 #include <parser.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
-#include <svtools/miscopt.hxx>
 #include <rtl/character.hxx>
 
 struct SbiParseStack {              // "Stack" for statement-blocks
