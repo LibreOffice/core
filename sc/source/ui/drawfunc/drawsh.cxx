@@ -53,9 +53,29 @@
 #include <sfx2/viewsh.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <memory>
-
+#include <svx/xlnwtit.hxx>
+#include <svx/chrtitem.hxx>
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
+
+namespace
+{
+    void lcl_convertStringArguments(std::unique_ptr<SfxItemSet>& pArgs)
+    {
+        const SfxPoolItem* pItem = nullptr;
+
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
+        {
+            double fValue = static_cast<const SvxDoubleItem*>(pItem)->GetValue();
+            // FIXME: different units...
+            int nPow = 100;
+            int nValue = fValue * nPow;
+
+            XLineWidthItem aItem(nValue);
+            pArgs->Put(aItem);
+        }
+    }
+}
 
 void ScDrawShell::InitInterface_Impl()
 {
@@ -201,7 +221,11 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 }
 
                 if( pView->AreObjectsMarked() )
-                    pView->SetAttrToMarked( *rReq.GetArgs(), false );
+                {
+                    std::unique_ptr<SfxItemSet> pNewArgs = rReq.GetArgs()->Clone();
+                    lcl_convertStringArguments( pNewArgs );
+                    pView->SetAttrToMarked( *pNewArgs, false );
+                }
                 else
                     pView->SetDefaultAttr( *rReq.GetArgs(), false);
                 pView->InvalidateAttribs();
