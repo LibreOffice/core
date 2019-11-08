@@ -97,11 +97,50 @@
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
+#include <svl/stritem.hxx>
+#include <svx/chrtitem.hxx>
 
 #include <swabstdlg.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;
+
+namespace
+{
+    void lcl_convertStringArguments(sal_uInt16 nSlot, std::unique_ptr<SfxItemSet>& pArgs)
+    {
+        Color aColor;
+        OUString sColor;
+        const SfxPoolItem* pItem = nullptr;
+
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
+        {
+            sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+            if (sColor == "transparent")
+                aColor = COL_TRANSPARENT;
+            else
+                aColor = Color(sColor.toInt32(16));
+
+            switch (nSlot)
+            {
+                case SID_ATTR_CHAR_COLOR:
+                {
+                    SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
+                    pArgs->Put(aColorItem);
+                    break;
+                }
+
+                case SID_ATTR_CHAR_BACK_COLOR:
+                {
+                    SvxBackgroundColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
+                    pArgs->Put(pBackgroundItem);
+                    break;
+                }
+            }
+        }
+    }
+}
 
 void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
@@ -614,12 +653,17 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             assert(false && "wrong dispatcher");
             return;
     }
+
+    std::unique_ptr<SfxItemSet> pNewArgs = pNewAttrs->Clone();
+    lcl_convertStringArguments(nSlot, pNewArgs);
+
     if(nEEWhich && pNewAttrs)
     {
-        aNewAttr.Put(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
+        std::unique_ptr<SfxPoolItem> pNewItem(pNewArgs->Get(nWhich).CloneSetWhich(nEEWhich));
+        pNewArgs->Put(*pNewItem);
     }
 
-    SetAttrToMarked(aNewAttr);
+    SetAttrToMarked(*pNewArgs);
 
     GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
 
