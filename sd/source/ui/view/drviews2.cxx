@@ -80,6 +80,13 @@
 #include <svx/svxids.hrc>
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdmetitm.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/chrtitem.hxx>
 
 #include <tools/diagnose_ex.h>
 
@@ -530,6 +537,25 @@ public:
     }
 };
 
+namespace
+{
+    void lcl_convertStringArguments(std::unique_ptr<SfxItemSet>& pArgs)
+    {
+        const SfxPoolItem* pItem = nullptr;
+
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
+        {
+            double fValue = static_cast<const SvxDoubleItem*>(pItem)->GetValue();
+            // FIXME: different units...
+            int nPow = 100;
+            int nValue = fValue * nPow;
+
+            XLineWidthItem aItem(nValue);
+            pArgs->Put(aItem);
+        }
+    }
+}
+
 /**
  * SfxRequests for temporary actions
  */
@@ -615,7 +641,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if( rReq.GetArgs() )
             {
-                mpDrawView->SetAttributes(*rReq.GetArgs());
+                std::unique_ptr<SfxItemSet> pNewArgs = rReq.GetArgs()->Clone();
+                lcl_convertStringArguments(pNewArgs);
+                mpDrawView->SetAttributes(*pNewArgs);
                 rReq.Done();
             }
             else
