@@ -70,6 +70,7 @@ public:
     void testNfEnglishKeywordsIntegrity();
     void testStandardColorIntegrity();
     void testColorNamesConversion();
+    void testExcelExportFormats();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
@@ -86,6 +87,7 @@ public:
     CPPUNIT_TEST(testNfEnglishKeywordsIntegrity);
     CPPUNIT_TEST(testStandardColorIntegrity);
     CPPUNIT_TEST(testColorNamesConversion);
+    CPPUNIT_TEST(testExcelExportFormats);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1685,6 +1687,45 @@ void Test::testColorNamesConversion()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Type should be NUMBER.", SvNumFormatType::NUMBER, nType);
         CPPUNIT_ASSERT_EQUAL( OUString("[" + rEnglishKeywords[i] + "]0"), aFormatCode);
     }
+}
+
+void Test::testExcelExportFormats()
+{
+    // Create a formatter with "system" locale other than the specific formats'
+    // locale, and different from the en-US export locale.
+    SvNumberFormatter aFormatter( m_xContext, LANGUAGE_ENGLISH_UK);
+
+    OUString aCode;
+    sal_Int32 nCheckPos;
+    SvNumFormatType eType;
+    sal_uInt32 nKey1, nKey2;
+
+    aCode = "00.00";
+    aFormatter.PutandConvertEntry( aCode, nCheckPos, eType, nKey1,
+            LANGUAGE_ENGLISH_US, LANGUAGE_ENGLISH_SAFRICA, false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CheckPos should be 0.", sal_Int32(0), nCheckPos);
+    CPPUNIT_ASSERT_MESSAGE("Key should be greater than system locale's keys.",
+            nKey1 > SV_COUNTRY_LANGUAGE_OFFSET);
+
+    aCode = "[$R-1C09] #,##0.0;[$R-1C09]-#,##0.0";
+    aFormatter.PutandConvertEntry( aCode, nCheckPos, eType, nKey2,
+            LANGUAGE_ENGLISH_US, LANGUAGE_ENGLISH_SAFRICA, false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CheckPos should be 0.", sal_Int32(0), nCheckPos);
+    CPPUNIT_ASSERT_MESSAGE("Key should be greater than system locale's keys.",
+            nKey2 > SV_COUNTRY_LANGUAGE_OFFSET);
+
+    // The export formatter.
+    SvNumberFormatter aTempFormatter( m_xContext, LANGUAGE_ENGLISH_US);
+    NfKeywordTable aKeywords;
+    aTempFormatter.FillKeywordTableForExcel( aKeywords);
+
+    aCode = aFormatter.GetFormatStringForExcel( nKey1, aKeywords, aTempFormatter);
+    // Test that LCID is prepended.
+    CPPUNIT_ASSERT_EQUAL( OUString("[$-1C09]00.00"), aCode);
+
+    aCode = aFormatter.GetFormatStringForExcel( nKey2, aKeywords, aTempFormatter);
+    // Test that LCID is not prepended. Note that literal characters are escaped.
+    CPPUNIT_ASSERT_EQUAL( OUString("[$R-1C09]\\ #,##0.0;[$R-1C09]\\-#,##0.0"), aCode);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
