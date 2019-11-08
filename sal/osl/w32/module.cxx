@@ -30,11 +30,17 @@
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <vector>
+#include <o3tl/lru_map.hxx>
+#include <mutex>
 
 /*
     under WIN32, we use the void* oslModule
     as a WIN32 HANDLE (which is also a 32-bit value)
 */
+
+// Module lookups under windows are fairly expensive, so use a small cache
+static o3tl::lru_map<void*, OUString> gModuleAddrToUrlCache(128);
+static std::mutex gCacheMutex;
 
 oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldMode*/ )
 {
@@ -128,6 +134,10 @@ osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 
 void SAL_CALL osl_unloadModule(oslModule Module)
 {
+    {
+        std::lock_guard<std::mutex> guard(gCacheMutex);
+        gModuleAddrToUrlCache.clear();
+    }
     FreeLibrary(static_cast<HMODULE>(Module));
 }
 
@@ -183,38 +193,45 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
 {
     bool    bSuccess    = false;    /* Assume failure */
-    static HMODULE hModPsapi = LoadLibraryW( L"PSAPI.DLL" );
-    static auto lpfnEnumProcessModules = reinterpret_cast<decltype(EnumProcessModules)*>(
-        hModPsapi ? GetProcAddress(hModPsapi, "EnumProcessModules") : nullptr);
-    static auto lpfnGetModuleInformation = reinterpret_cast<decltype(GetModuleInformation)*>(
-        hModPsapi ? GetProcAddress(hModPsapi, "GetModuleInformation") : nullptr);
 
-    if (lpfnEnumProcessModules && lpfnGetModuleInformation)
     {
-        DWORD cbNeeded = 0;
-        HMODULE* lpModules = nullptr;
-        DWORD nModules = 0;
-        UINT iModule = 0;
-        MODULEINFO modinfo;
-
-        lpfnEnumProcessModules(GetCurrentProcess(), nullptr, 0, &cbNeeded);
-
-        lpModules = static_cast<HMODULE*>(_alloca(cbNeeded));
-        lpfnEnumProcessModules(GetCurrentProcess(), lpModules, cbNeeded, &cbNeeded);
-
-        nModules = cbNeeded / sizeof(HMODULE);
-
-        for (iModule = 0; !bSuccess && iModule < nModules; iModule++)
+        std::lock_guard<std::mutex> guard(gCacheMutex);
+        auto it = gModuleAddrToUrlCache.find(pv);
+        if (it != gModuleAddrToUrlCache.end())
         {
-            lpfnGetModuleInformation(GetCurrentProcess(), lpModules[iModule], &modinfo,
-                                     sizeof(modinfo));
+            *pustrURL = it->second.pData;
+            rtl_uString_acquire(*pustrURL);
+            return true;
+        }
+    }
 
-            if (static_cast<BYTE*>(pv) >= static_cast<BYTE*>(modinfo.lpBaseOfDll)
-                && static_cast<BYTE*>(pv)
-                       < static_cast<BYTE*>(modinfo.lpBaseOfDll) + modinfo.SizeOfImage)
+    DWORD cbNeeded = 0;
+    HMODULE* lpModules = nullptr;
+    DWORD nModules = 0;
+    UINT iModule = 0;
+    MODULEINFO modinfo;
+
+    EnumProcessModules(GetCurrentProcess(), nullptr, 0, &cbNeeded);
+
+    lpModules = static_cast<HMODULE*>(_alloca(cbNeeded));
+    EnumProcessModules(GetCurrentProcess(), lpModules, cbNeeded, &cbNeeded);
+
+    nModules = cbNeeded / sizeof(HMODULE);
+
+    for (iModule = 0; !bSuccess && iModule < nModules; iModule++)
+    {
+        GetModuleInformation(GetCurrentProcess(), lpModules[iModule], &modinfo,
+                                 sizeof(modinfo));
+
+        if (static_cast<BYTE*>(pv) >= static_cast<BYTE*>(modinfo.lpBaseOfDll)
+            && static_cast<BYTE*>(pv)
+                   < static_cast<BYTE*>(modinfo.lpBaseOfDll) + modinfo.SizeOfImage)
+        {
+            ::osl::LongPathBuffer<sal_Unicode> aBuffer(MAX_LONG_PATH);
+            rtl_uString* ustrSysPath = nullptr;
+
             {
-                ::osl::LongPathBuffer<sal_Unicode> aBuffer(MAX_LONG_PATH);
-                rtl_uString* ustrSysPath = nullptr;
+                std::lock_guard<std::mutex> guard(gCacheMutex);
 
                 GetModuleFileNameW(lpModules[iModule], o3tl::toW(aBuffer),
                                    aBuffer.getBufSizeInSymbols());
@@ -223,8 +240,10 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL 
                 osl_getFileURLFromSystemPath(ustrSysPath, pustrURL);
                 rtl_uString_release(ustrSysPath);
 
-                bSuccess = true;
+                gModuleAddrToUrlCache.insert({pv, OUString::unacquired(pustrURL)});
             }
+
+            bSuccess = true;
         }
     }
 
