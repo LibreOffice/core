@@ -23,6 +23,7 @@
 
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/transliterationwrapper.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
