@@ -17,7 +17,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/color/bcolor.hxx>
 
 namespace gfx
 {
