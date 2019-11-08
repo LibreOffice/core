@@ -52,6 +52,24 @@
       "revId": "1432bb5f3903e81a7f47cdce2bed0b23649eb9c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_4ba269b0",
+        "filename": "sal/osl/w32/module.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-08T10:23:42Z",
+      "side": 1,
+      "message": "\u003e There is a race with osl_unloadModule calling FreeLibrary between\n \u003e the call to GetModuelFileNameW\n\n...or whatever call it is in the EnumProcessModules+EnumProcessModules+GetModuleInformat+GetModuleFileNameW chain that would cause the GetModuleFileNameW call to successfully provide the module name in aBuffer if there is no intervening call to FreeLibrary",
+      "parentUuid": "7f7f9b97_0b423111",
+      "revId": "1432bb5f3903e81a7f47cdce2bed0b23649eb9c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
