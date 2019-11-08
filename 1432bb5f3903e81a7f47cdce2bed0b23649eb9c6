@@ -70,6 +70,24 @@
       "revId": "1432bb5f3903e81a7f47cdce2bed0b23649eb9c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_0bb311ec",
+        "filename": "sal/osl/w32/module.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-08T10:46:11Z",
+      "side": 1,
+      "message": "That was exactly the reason I mentioned checking the return result.",
+      "parentUuid": "7f7f9b97_4ba269b0",
+      "revId": "1432bb5f3903e81a7f47cdce2bed0b23649eb9c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
