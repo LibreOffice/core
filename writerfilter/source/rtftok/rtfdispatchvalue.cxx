@@ -519,6 +519,12 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_DEFF:
             m_nDefaultFontIndex = nParam;
             break;
+        case RTF_STSHFDBCH:
+            // tdf#123703 switch off longer space sequence except in the case of the fixed compatibility setting font id 31505
+            if (nParam != 31505)
+                m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_longerSpaceSequence,
+                                          new RTFValue(0));
+            break;
         case RTF_DEFLANG:
         case RTF_ADEFLANG:
         {
