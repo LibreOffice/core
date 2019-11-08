@@ -373,7 +373,6 @@ protected:
     std::unique_ptr<CuiConfigFunctionListBox>  m_xFunctions;
 
     std::unique_ptr<weld::Label>               m_xCategoryLabel;
-    std::unique_ptr<weld::ComboBox>            m_xCategoryListBox;
     std::unique_ptr<weld::Label>               m_xDescriptionFieldLb;
     std::unique_ptr<weld::TextView>            m_xDescriptionField;
     std::unique_ptr<weld::Label>               m_xLeftFunctionLabel;

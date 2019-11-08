@@ -976,7 +976,6 @@ SvxConfigPage::SvxConfigPage(weld::Container* pPage, weld::DialogController* pCo
     , m_xCommandCategoryListBox(new CommandCategoryListBox(m_xBuilder->weld_combo_box("commandcategorylist")))
     , m_xFunctions(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view("functions")))
     , m_xCategoryLabel(m_xBuilder->weld_label("categorylabel"))
-    , m_xCategoryListBox(m_xBuilder->weld_combo_box("commandcategorylist"))
     , m_xDescriptionFieldLb(m_xBuilder->weld_label("descriptionlabel"))
     , m_xDescriptionField(m_xBuilder->weld_text_view("desc"))
     , m_xLeftFunctionLabel(m_xBuilder->weld_label("leftfunctionlabel"))

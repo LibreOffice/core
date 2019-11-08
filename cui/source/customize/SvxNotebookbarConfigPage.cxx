@@ -106,6 +106,7 @@ SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(weld::Container* pPage,
                                                    const SfxItemSet& rSet)
     : SvxConfigPage(pPage, pController, rSet)
 {
+    m_xCommandCategoryListBox->set_visible(false);
     m_xDescriptionFieldLb->set_visible(false);
     m_xSearchEdit->set_visible(false);
     m_xDescriptionField->set_visible(false);
@@ -116,7 +117,6 @@ SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(weld::Container* pPage,
     m_xLeftFunctionLabel->set_visible(false);
     m_xSearchLabel->set_visible(false);
     m_xCategoryLabel->set_visible(false);
-    m_xCategoryListBox->set_visible(false);
     m_xInsertBtn->set_visible(false);
     m_xModifyBtn->set_visible(false);
     m_xResetBtn->set_visible(false);
