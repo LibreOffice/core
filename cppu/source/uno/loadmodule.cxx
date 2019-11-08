@@ -20,10 +20,15 @@
 
 #include <sal/config.h>
 
+#include <cassert>
+
 #include <osl/module.h>
 #include <osl/module.hxx>
+#include <rtl/malformeduriexception.hxx>
+#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include "loadmodule.hxx"
 
@@ -32,14 +37,34 @@ namespace cppu { namespace detail {
 #ifndef DISABLE_DYNLOADING
 
 bool loadModule(osl::Module& rModule, OUString const & name) {
+    static OUString base = [] {
+            OUString url;
+            if (!osl::Module::getUrlFromAddress(
+                    reinterpret_cast<oslGenericFunction>(&loadModule), url))
+            {
+                SAL_WARN("cppu", "osl::Module::getUrlFromAddress failed");
+                return OUString();
+            }
+            assert(!url.isEmpty());
+            return url;
+        }();
+    if (base.isEmpty()) {
+        SAL_INFO("cppu", "osl::Module::getUrlFromAddress had failed");
+        return false;
+    }
     OUString b =
 #if defined SAL_DLLPREFIX
         SAL_DLLPREFIX +
 #endif
         name +
         SAL_DLLEXTENSION;
-    return rModule.loadRelative(
-        reinterpret_cast< oslGenericFunction >(&loadModule),
+    try {
+        b = rtl::Uri::convertRelToAbs(base, b);
+    } catch (rtl::MalformedUriException & e) {
+        SAL_INFO("cppu", "rtl::MalformedUriException <" << e.getMessage() << ">");
+        return false;
+    }
+    return rModule.load(
         b,
         SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY);
 }
