@@ -521,6 +521,8 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     , mxCopyCountField(m_xBuilder->weld_spin_button("copycount"))
     , mxCollateBox(m_xBuilder->weld_check_button("collate"))
     , mxCollateImage(m_xBuilder->weld_image("collateimage"))
+    , mxPageRangeEdit(m_xBuilder->weld_entry("pagerange"))
+    , mxPageRangesRadioButton(m_xBuilder->weld_radio_button("rbRangePages"))
     , mxPaperSidesBox(m_xBuilder->weld_combo_box("sidesbox"))
     , mxReverseOrderBox(m_xBuilder->weld_check_button("reverseorder"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
@@ -1647,10 +1649,8 @@ void PrintDialog::setupOptionalUI()
     // update enable states
     checkOptionalControlDependencies();
 
-    std::unique_ptr<weld::Widget> xPageRange = m_xBuilder->weld_widget("pagerange");
-
     // print range not shown (currently math only) -> hide spacer line and reverse order
-    if (!xPageRange || !xPageRange->get_visible())
+    if (!mxPageRangeEdit->get_visible())
     {
         mxReverseOrderBox->hide();
     }
@@ -2047,6 +2047,10 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, weld::ToggleButton&, i_rBtn, void )
             updateOrientationBox();
 
             checkOptionalControlDependencies();
+
+            // tdf#41205 give focus to the page range edit if the corresponding radio button was selected
+            if (pVal->Name == "PrintContent" && mxPageRangesRadioButton->get_active())
+                mxPageRangeEdit->grab_focus();
 
             // update preview and page settings
             preparePreview(false);
