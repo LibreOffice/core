@@ -154,7 +154,7 @@ task copyUnpackAssets(type: Copy) {
 task copyAssets(type: Copy) {
     description "copies assets that can be accessed within the installed apk"
     into 'assets'
-    from("${liboSrcRoot}/readlicense_oo/license/") {
+    from("${liboInstdir}") {
         includes = ["LICENSE", "NOTICE"]
         rename "LICENSE", "license.txt"
         rename "NOTICE", "notice.txt"
