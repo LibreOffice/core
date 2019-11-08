@@ -23,7 +23,7 @@ namespace {
 
 bool isSalBool(QualType type) {
     TypedefType const * t = type->getAs<TypedefType>();
-    return t != nullptr && t->getDecl()->getNameAsString() == "sal_Bool";
+    return t != nullptr && t->getDecl()->getName() == "sal_Bool";
 }
 
 bool isSalBoolArray(QualType type) {
