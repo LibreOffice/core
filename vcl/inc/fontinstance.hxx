@@ -30,6 +30,7 @@
 #include <tools/fontenum.hxx>
 #include <vcl/glyphitem.hxx>
 
+#include <boost/optional.hpp>
 #include <unordered_map>
 #include <memory>
 
@@ -64,6 +65,7 @@ public: // TODO: make data members private
     void            IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
 
     inline hb_font_t* GetHbFont();
+    bool IsGraphiteFont();
     void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = std::abs(nFactor); }
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
     const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
@@ -100,6 +102,7 @@ private:
     hb_font_t* m_pHbFont;
     double m_nAveWidthFactor;
     rtl::Reference<PhysicalFontFace> m_pFontFace;
+    boost::optional<bool> m_xbIsGraphiteFont;
 };
 
 inline hb_font_t* LogicalFontInstance::GetHbFont()

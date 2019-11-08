@@ -291,7 +291,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
     }
 
     hb_font_t *pHbFont = GetFont().GetHbFont();
-    bool isGraphite = hb_graphite2_face_get_gr_face(hb_font_get_face(pHbFont)) != nullptr;
+    bool isGraphite = GetFont().IsGraphiteFont();
 
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
     m_GlyphItems.Impl()->reserve(nGlyphCapacity);

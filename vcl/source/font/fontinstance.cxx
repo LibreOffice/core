@@ -19,6 +19,7 @@
 
 
 #include <hb-ot.h>
+#include <hb-graphite2.h>
 
 #include <fontinstance.hxx>
 #include <impfontcache.hxx>
@@ -153,6 +154,15 @@ bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &r
     if (mpFontCache && res)
         mpFontCache->CacheGlyphBoundRect(this, nID, rRect);
     return res;
+}
+
+bool LogicalFontInstance::IsGraphiteFont()
+{
+    if (!m_xbIsGraphiteFont)
+    {
+        m_xbIsGraphiteFont = hb_graphite2_face_get_gr_face(hb_font_get_face(GetHbFont())) != nullptr;
+    }
+    return *m_xbIsGraphiteFont;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
