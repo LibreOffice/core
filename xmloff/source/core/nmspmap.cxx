@@ -173,19 +173,15 @@ const OUString& SvXMLNamespaceMap::GetNameByKey( sal_uInt16 nKey ) const
 
 OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
 {
-    OUStringBuffer sAttrName;
     NameSpaceMap::const_iterator aIter = aNameMap.find ( nKey );
-    if (aIter != aNameMap.end())
-    {
-        sAttrName.append( sXMLNS  );
-        const OUString & prefix( (*aIter).second->sPrefix );
-        if (!prefix.isEmpty()) // not default namespace
-        {
-            sAttrName.append( ':' );
-            sAttrName.append( prefix );
-        }
-    }
-    return sAttrName.makeStringAndClear();
+    if (aIter == aNameMap.end())
+        return OUString();
+
+    const OUString & prefix( (*aIter).second->sPrefix );
+    if (prefix.isEmpty()) // default namespace
+        return sXMLNS;
+
+    return sXMLNS + ":" + prefix;
 }
 
 OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
