@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="StatisticsInfoPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="border_width">12</property>
     <property name="row_spacing">6</property>
     <property name="column_spacing">12</property>
     <child>
@@ -139,7 +139,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -151,7 +150,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -163,7 +161,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -175,7 +172,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -187,7 +183,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -199,7 +194,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -211,7 +205,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -223,7 +216,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -235,7 +227,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="hexpand">True</property>
         <property name="label">...</property>
       </object>
       <packing>
@@ -249,7 +240,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="halign">end</property>
+        <property name="halign">start</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
