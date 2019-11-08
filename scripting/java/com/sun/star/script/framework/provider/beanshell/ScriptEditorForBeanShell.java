@@ -17,17 +17,11 @@
  */
 package com.sun.star.script.framework.provider.beanshell;
 
-import com.sun.star.beans.NamedValue;
-import com.sun.star.configuration.theDefaultProvider;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.provider.ClassLoaderFactory;
 import com.sun.star.script.framework.provider.ScriptEditor;
 import com.sun.star.script.framework.provider.SwingInvocation;
 import com.sun.star.script.provider.XScriptContext;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.UnoRuntime;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -48,7 +42,6 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -56,7 +49,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.BorderFactory;
 
-public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
+public class ScriptEditorForBeanShell extends ScriptEditor implements ActionListener {
 
     private JFrame frame;
     private String filename;
@@ -64,7 +57,6 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
     private ScriptSourceModel model;
     private ScriptSourceView view;
 
-    private XScriptContext context;
     private URL scriptURL = null;
     private ClassLoader  cl = null;
     private JButton saveBtn;
@@ -187,24 +179,6 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         return model.execute(context, cl);
     }
 
-    private boolean isMacroExectionEnabled() {
-        XNameAccess xNameAccess = null;
-        try {
-            String sAccess = "com.sun.star.configuration.ConfigurationAccess";
-            XMultiServiceFactory xMSFCfg = theDefaultProvider.get(context.getComponentContext());
-            Object oAccess = xMSFCfg.createInstanceWithArguments(sAccess,
-                    new Object[] { new NamedValue("nodepath", "org.openoffice.Office.Common/Security/Scripting") });
-            xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oAccess);
-            Object result = xNameAccess.getByName("DisableMacrosExecution");
-            boolean bMacrosDisabled = AnyConverter.toBoolean(result);
-            if (bMacrosDisabled)
-                return false;
-        } catch (com.sun.star.uno.Exception e) {
-            return false;
-        }
-        return true;
-    }
-
     /**
      *  Opens an editor window for the specified ScriptMetaData.
      *  If an editor window is already open for that data it will be
@@ -254,7 +228,7 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
 
     private ScriptEditorForBeanShell(XScriptContext context, ClassLoader cl,
                                      URL url) {
-        this.context   = context;
+        setContext(context);
         this.scriptURL = url;
         this.model     = new ScriptSourceModel(url);
         this.filename  = ScriptMetaData.getFileName(url);
@@ -293,22 +267,6 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
             }
         });
         frame.setVisible(true);
-    }
-
-    // Wraps long error messages
-    private static class NarrowOptionPane extends JOptionPane {
-        private static final long serialVersionUID = 1L;
-        public int getMaxCharactersPerLineCount() {
-            return 100;
-        }
-    }
-
-    private void showErrorMessage(String message) {
-        JOptionPane optionPane = new NarrowOptionPane();
-        optionPane.setMessage(message);
-        optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
-        JDialog dialog = optionPane.createDialog(null, "Error");
-        dialog.setVisible(true);
     }
 
     private void initUI() {
