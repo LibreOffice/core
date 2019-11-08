@@ -282,9 +282,13 @@ namespace sd
 
     Reference< XAnimationNode > CustomAnimationClonerImpl::getClonedNode( const Reference< XAnimationNode >& xSource ) const
     {
-        sal_Int32 nNode, nNodeCount = maSourceNodeVector.size();
+        std::size_t nNodeCount = maSourceNodeVector.size();
+        std::size_t nCloneNodeCount = maCloneNodeVector.size();
 
-        for( nNode = 0; nNode < nNodeCount; nNode++ )
+        if (nNodeCount != nCloneNodeCount)
+            SAL_WARN("sd.core", "Sizes of maSourceNodeVector and maCloneNodeVector mismatch!");
+
+        for( std::size_t nNode = 0; nNode < nNodeCount && nNode < nCloneNodeCount; ++nNode )
         {
             if( maSourceNodeVector[nNode] == xSource )
                 return maCloneNodeVector[nNode];
