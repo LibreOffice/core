@@ -265,6 +265,35 @@ DECLARE_RTFEXPORT_TEST(testTdf123703, "tdf123703.rtf")
 #endif
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf123703_stshfdbch, "tdf123703_stshfdbch.rtf")
+{
+    // still 1 here
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf123703_compatible, "tdf123703_compatible.rtf")
+{
+#if !defined(MACOSX)
+    // in the case of compatibility font id 31505
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+#else
+    // still 1 here
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+#endif
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf128428_monospaced, "tdf128428_monospaced.rtf")
+{
+    // still 1 here
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf128428_compatible_monospaced, "tdf128428_compatible_monospaced.rtf")
+{
+    // still 1 here
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

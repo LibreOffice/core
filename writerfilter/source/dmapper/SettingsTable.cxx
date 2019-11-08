@@ -245,6 +245,7 @@ struct SettingsTable_Impl
     bool                m_bNoColumnBalance;
     bool                m_bAutoHyphenation;
     bool                m_bWidowControl;
+    bool                m_bLongerSpaceSequence;
     bool                m_bSplitPgBreakAndParaMark;
     bool                m_bMirrorMargin;
     bool                m_bDoNotExpandShiftReturn;
@@ -278,6 +279,7 @@ struct SettingsTable_Impl
     , m_bNoColumnBalance(false)
     , m_bAutoHyphenation(false)
     , m_bWidowControl(false)
+    , m_bLongerSpaceSequence(true)
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
     , m_bDoNotExpandShiftReturn(false)
@@ -544,6 +546,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_widowControl:
         m_pImpl->m_bWidowControl = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Settings_longerSpaceSequence:
+        m_pImpl->m_bLongerSpaceSequence = nIntValue;
+        break;
     case NS_ooxml::LN_CT_Compat_doNotExpandShiftReturn:
         m_pImpl->m_bDoNotExpandShiftReturn = true;
         break;
@@ -744,6 +749,11 @@ sal_Int32 SettingsTable::GetWordCompatibilityMode() const
     }
 
     return -1; // Word compatibility mode not found
+}
+
+bool SettingsTable::GetLongerSpaceSequence() const
+{
+    return m_pImpl->m_bLongerSpaceSequence;
 }
 
 }//namespace dmapper

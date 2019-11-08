@@ -1786,14 +1786,21 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                 {
 #if !defined(MACOSX) // TODO: check layout differences and support all platforms, if needed
                     sal_Int32 nPos;
+                    OUString sFontName;
+                    PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
                     OUString sDoubleSpace("  ");
-                    if (IsRTFImport() && (nPos = rString.indexOf(sDoubleSpace)) > -1)
-                    {
-                        // tdf#123703 an RTF space character is longer by an extra six-em-space in a space sequence,
-                        // insert them to keep RTF document layout formatted by consecutive spaces
-                        const sal_Unicode aExtraSpace[5] = { 0x2006, 0x20, 0x2006, 0x20, 0 };
-                        const sal_Unicode aExtraSpace2[4] = { 0x20, 0x2006, 0x20, 0 };
-                        xTextRange = xTextAppend->appendTextPortion(rString.replaceAll(sDoubleSpace, aExtraSpace, nPos)
+                    // tdf#123703 workaround for the obsolete RTF-only longer space sequences of the old or compatible RTF documents
+                    if (IsRTFImport() && m_pSettingsTable->GetLongerSpaceSequence() && (nPos = rString.indexOf(sDoubleSpace)) > -1 &&
+                        // monospaced fonts have no longer space sequences, regardless of \fprq2 (not monospaced) font setting
+                        // fix for the base monospaced font Courier
+                        (!pContext || !pContext->isSet(PROP_CHAR_FONT_NAME) ||
+                            ((pContext->getProperty(PROP_CHAR_FONT_NAME)->second >>= sFontName) && sFontName.indexOf("Courier") == -1)))
+                        {
+                            // an RTF space character is longer by an extra six-em-space in an old-style RTF space sequence,
+                            // insert them to keep RTF document layout formatted by consecutive spaces
+                            const sal_Unicode aExtraSpace[5] = { 0x2006, 0x20, 0x2006, 0x20, 0 };
+                            const sal_Unicode aExtraSpace2[4] = { 0x20, 0x2006, 0x20, 0 };
+                            xTextRange = xTextAppend->appendTextPortion(rString.replaceAll(sDoubleSpace, aExtraSpace, nPos)
                                                                            .replaceAll(sDoubleSpace, aExtraSpace2, nPos), aValues);
                     }
                     else
