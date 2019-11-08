@@ -71,6 +71,7 @@
   <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
   <block-list:block block-list:abbreviated-name=":álfur:" block-list:name="🧝"/>
   <block-list:block block-list:abbreviated-name=":almenningsgarður:" block-list:name="🏞"/>
+  <block-list:block block-list:abbreviated-name=":amfóra:" block-list:name="🏺"/>
   <block-list:block block-list:abbreviated-name=":ananas:" block-list:name="🍍"/>
   <block-list:block block-list:abbreviated-name=":andi:" block-list:name="🧞"/>
   <block-list:block block-list:abbreviated-name=":angistarfullur:" block-list:name="😧"/>
@@ -221,6 +222,7 @@
   <block-list:block block-list:abbreviated-name=":brostið hjarta:" block-list:name="💔"/>
   <block-list:block block-list:abbreviated-name=":brosviprur:" block-list:name="😅"/>
   <block-list:block block-list:abbreviated-name=":brottför:" block-list:name="🛫"/>
+  <block-list:block block-list:abbreviated-name=":brottnámsbox:" block-list:name="🥡"/>
   <block-list:block block-list:abbreviated-name=":brú:" block-list:name="🌉"/>
   <block-list:block block-list:abbreviated-name=":brúðgumi:" block-list:name="🤵"/>
   <block-list:block block-list:abbreviated-name=":brúðkaup:" block-list:name="💒"/>
@@ -249,6 +251,7 @@
   <block-list:block block-list:abbreviated-name=":davíðsstjarna:" block-list:name="✡"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
   <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
+  <block-list:block block-list:abbreviated-name=":deigkoddi:" block-list:name="🥟"/>
   <block-list:block block-list:abbreviated-name=":deilir:" block-list:name="∣"/>
   <block-list:block block-list:abbreviated-name=":deilir ekki:" block-list:name="∤"/>
   <block-list:block block-list:abbreviated-name=":delta:" block-list:name="δ"/>
@@ -728,6 +731,7 @@
   <block-list:block block-list:abbreviated-name=":klappspjald:" block-list:name="🎬"/>
   <block-list:block block-list:abbreviated-name=":kleinuhringur:" block-list:name="🍩"/>
   <block-list:block block-list:abbreviated-name=":klifrari:" block-list:name="🧗"/>
+  <block-list:block block-list:abbreviated-name=":klikkhaus:" block-list:name="🤪"/>
   <block-list:block block-list:abbreviated-name=":klippispjald:" block-list:name="📋"/>
   <block-list:block block-list:abbreviated-name=":klukka:" block-list:name="🕰"/>
   <block-list:block block-list:abbreviated-name=":klukkan 10:" block-list:name="🕙"/>

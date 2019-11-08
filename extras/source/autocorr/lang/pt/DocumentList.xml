@@ -3201,6 +3201,8 @@
   <block-list:block block-list:abbreviated-name=":fax2:" block-list:name="🖷"/>
   <block-list:block block-list:abbreviated-name=":fax:" block-list:name="📠"/>
   <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
+  <block-list:block block-list:abbreviated-name=":feast2:" block-list:name="🕄"/>
+  <block-list:block block-list:abbreviated-name=":feast:" block-list:name="🕃"/>
   <block-list:block block-list:abbreviated-name=":feiticeira:" block-list:name="🧙"/>
   <block-list:block block-list:abbreviated-name=":felicidade:" block-list:name="🙋"/>
   <block-list:block block-list:abbreviated-name=":feminino:" block-list:name="♀"/>
@@ -3874,6 +3876,7 @@
   <block-list:block block-list:abbreviated-name=":semicolcheia:" block-list:name="𝅘𝅥𝅯"/>
   <block-list:block block-list:abbreviated-name=":semínima2:" block-list:name="𝅘𝅥"/>
   <block-list:block block-list:abbreviated-name=":semínima:" block-list:name="♩"/>
+  <block-list:block block-list:abbreviated-name=":sem pirataria:" block-list:name="🕲"/>
   <block-list:block block-list:abbreviated-name=":sem rede:" block-list:name="📵"/>
   <block-list:block block-list:abbreviated-name=":sem som:" block-list:name="🔇"/>
   <block-list:block block-list:abbreviated-name=":sentinela:" block-list:name="💂"/>

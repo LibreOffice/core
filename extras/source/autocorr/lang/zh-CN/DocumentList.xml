@@ -902,6 +902,7 @@
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":---:" block-list:name="—"/>
   <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
   <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
   <block-list:block block-list:abbreviated-name=":^+:" block-list:name="⁺"/>
@@ -975,7 +976,6 @@
   <block-list:block block-list:abbreviated-name=":right2:" block-list:name="👉"/>
   <block-list:block block-list:abbreviated-name=":^s:" block-list:name="ˢ"/>
   <block-list:block block-list:abbreviated-name=":_s:" block-list:name="ₛ"/>
-  <block-list:block block-list:abbreviated-name=":SET_MINUS:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":small in:" block-list:name="∊"/>
   <block-list:block block-list:abbreviated-name=":small ni:" block-list:name="∍"/>
   <block-list:block block-list:abbreviated-name=":^t:" block-list:name="ᵗ"/>
@@ -1081,8 +1081,8 @@
   <block-list:block block-list:abbreviated-name=":五边形:" block-list:name="⬠"/>
   <block-list:block block-list:abbreviated-name=":五重积分:" block-list:name="∰"/>
   <block-list:block block-list:abbreviated-name=":交叉的剑:" block-list:name="⚔"/>
-  <block-list:block block-list:abbreviated-name=":交通信号灯（横排）:" block-list:name="🚥"/>
-  <block-list:block block-list:abbreviated-name=":交通信号灯（竖排）:" block-list:name="🚦"/>
+  <block-list:block block-list:abbreviated-name=":交通信号灯 (横排):" block-list:name="🚥"/>
+  <block-list:block block-list:abbreviated-name=":交通信号灯 (竖排):" block-list:name="🚦"/>
   <block-list:block block-list:abbreviated-name=":交集:" block-list:name="∩"/>
   <block-list:block block-list:abbreviated-name=":亲亲:" block-list:name="😗"/>
   <block-list:block block-list:abbreviated-name=":人鱼:" block-list:name="🧜"/>
@@ -1153,8 +1153,8 @@
   <block-list:block block-list:abbreviated-name=":六边形 2:" block-list:name="⬢"/>
   <block-list:block block-list:abbreviated-name=":六边形:" block-list:name="⬡"/>
   <block-list:block block-list:abbreviated-name=":关东煮:" block-list:name="🍢"/>
-  <block-list:block block-list:abbreviated-name=":关闭的信箱（发件标志放倒）:" block-list:name="📪"/>
-  <block-list:block block-list:abbreviated-name=":关闭的信箱（发件标志竖起）:" block-list:name="📫"/>
+  <block-list:block block-list:abbreviated-name=":关闭的信箱 (发件标志放倒):" block-list:name="📪"/>
+  <block-list:block block-list:abbreviated-name=":关闭的信箱 (发件标志竖起):" block-list:name="📫"/>
   <block-list:block block-list:abbreviated-name=":兴奋:" block-list:name="🤩"/>
   <block-list:block block-list:abbreviated-name=":再生纸:" block-list:name="♼"/>
   <block-list:block block-list:abbreviated-name=":冥王星:" block-list:name="♇"/>
@@ -1570,8 +1570,8 @@
   <block-list:block block-list:abbreviated-name=":打印机 2:" block-list:name="🖶"/>
   <block-list:block block-list:abbreviated-name=":打印机:" block-list:name="🖨"/>
   <block-list:block block-list:abbreviated-name=":打喷嚏:" block-list:name="🤧"/>
-  <block-list:block block-list:abbreviated-name=":打开的信箱（发件标志放倒）:" block-list:name="📭"/>
-  <block-list:block block-list:abbreviated-name=":打开的信箱（发件标志竖起）:" block-list:name="📬"/>
+  <block-list:block block-list:abbreviated-name=":打开的信箱 (发件标志放倒):" block-list:name="📭"/>
+  <block-list:block block-list:abbreviated-name=":打开的信箱 (发件标志竖起):" block-list:name="📬"/>
   <block-list:block block-list:abbreviated-name=":打开的锁:" block-list:name="🔓"/>
   <block-list:block block-list:abbreviated-name=":打滑的汽车:" block-list:name="⛐"/>
   <block-list:block block-list:abbreviated-name=":扩音器 2:" block-list:name="🕬"/>
@@ -2164,8 +2164,8 @@
   <block-list:block block-list:abbreviated-name=":远小于:" block-list:name="≪"/>
   <block-list:block block-list:abbreviated-name=":迷你光盘:" block-list:name="💽"/>
   <block-list:block block-list:abbreviated-name=":迷惑:" block-list:name="😕"/>
-  <block-list:block block-list:abbreviated-name=":选定状态的复选框 2:" block-list:name="☒"/>
-  <block-list:block block-list:abbreviated-name=":选定状态的复选框:" block-list:name="☑"/>
+  <block-list:block block-list:abbreviated-name=":选中状态的复选框 2:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":选中状态的复选框:" block-list:name="☑"/>
   <block-list:block block-list:abbreviated-name=":选框 4:" block-list:name="🗷"/>
   <block-list:block block-list:abbreviated-name=":选框5:" block-list:name="🗹"/>
   <block-list:block block-list:abbreviated-name=":选票:" block-list:name="🗳"/>
@@ -2364,7 +2364,7 @@
   <block-list:block block-list:abbreviated-name=":鼠标 4:" block-list:name="🖰"/>
   <block-list:block block-list:abbreviated-name=":鼠标 5:" block-list:name="🖯"/>
   <block-list:block block-list:abbreviated-name=":鼻子:" block-list:name="👃"/>
-  <block-list:block block-list:abbreviated-name=":鼻子喷气（获胜）:" block-list:name="😤"/>
+  <block-list:block block-list:abbreviated-name=":鼻子喷气 (获胜):" block-list:name="😤"/>
   <block-list:block block-list:abbreviated-name=":齿轮:" block-list:name="⚙"/>
   <block-list:block block-list:abbreviated-name=":龙 2:" block-list:name="🐲"/>
   <block-list:block block-list:abbreviated-name=":龙:" block-list:name="🐉"/>
