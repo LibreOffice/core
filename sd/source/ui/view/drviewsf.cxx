@@ -59,6 +59,7 @@
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/xflclit.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <rtl/ustring.hxx>
@@ -700,6 +701,16 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 OUString sColor = OUString::number(static_cast<sal_uInt32>(aColor));
 
                 sColor = ".uno:XLineColor=" + sColor;
+                GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                    OUStringToOString(sColor, RTL_TEXTENCODING_ASCII_US).getStr());
+            }
+            if (comphelper::LibreOfficeKit::isActive() && nWhich == XATTR_FILLCOLOR)
+            {
+                const SfxPoolItem* pItem = pSet->GetItem(XATTR_FILLCOLOR);
+                Color aColor = static_cast<const XFillColorItem*>(pItem)->GetColorValue();
+                OUString sColor = OUString::number(static_cast<sal_uInt32>(aColor));
+
+                sColor = ".uno:FillColor=" + sColor;
                 GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
                     OUStringToOString(sColor, RTL_TEXTENCODING_ASCII_US).getStr());
             }
