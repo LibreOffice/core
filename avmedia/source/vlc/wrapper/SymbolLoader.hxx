@@ -46,21 +46,21 @@ struct ApiMap
     inline OUString GetVLCPath()
     {
         HKEY hKey;
-        wchar_t arCurrent[MAX_PATH];
+        sal_Unicode arCurrent[MAX_PATH];
         DWORD dwType, dwCurrentSize = sizeof( arCurrent );
 
         //TODO: This one will work only with LibreOffice 32-bit + VLC 32-bit on Win x86_64.
         const LONG errorCore = ::RegOpenKeyExW( HKEY_LOCAL_MACHINE, L"SOFTWARE\\Wow6432Node\\VideoLAN\\VLC", 0, KEY_READ | KEY_WOW64_64KEY, &hKey );
         if ( errorCore == ERROR_SUCCESS )
         {
-            if ( ::RegQueryValueExW( hKey, L"InstallDir", NULL, &dwType, (LPBYTE) arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
+            if ( ::RegQueryValueExW( hKey, L"InstallDir", nullptr, &dwType, reinterpret_cast<LPBYTE>(arCurrent), &dwCurrentSize ) == ERROR_SUCCESS &&
                  dwType == REG_SZ )
             {
                 ::RegCloseKey( hKey );
                 dwCurrentSize -= 2;
                 dwCurrentSize /= 2;
 
-                return OUString( arCurrent, dwCurrentSize ) + OUString::createFromAscii("\\");
+                return OUString( arCurrent, dwCurrentSize ) + "\\";
             }
 
             ::RegCloseKey( hKey );
