@@ -423,6 +423,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     @Override
     protected void onStop() {
         Log.i(LOGTAG, "onStop..");
+        //save document to cache
+        mTileProvider.cacheDocument();
         hideSoftKeyboardDirect();
         LOKitShell.sendCloseEvent();
         super.onStop();
@@ -970,8 +972,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //save document to cache
-        mTileProvider.cacheDocument();
     }
 
 }
