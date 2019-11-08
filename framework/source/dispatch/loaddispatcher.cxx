@@ -102,8 +102,7 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     css::uno::Reference< css::lang::XComponent > xComponent;
     try
     {
-        m_aLoader.initializeLoading( rURL.Complete, lArguments, xBaseFrame, m_sTarget, m_nSearchFlags, LoadEnvFeatures::AllowContentHandler | LoadEnvFeatures::WorkWithUI);
-        m_aLoader.startLoading();
+        m_aLoader.startLoading( rURL.Complete, lArguments, xBaseFrame, m_sTarget, m_nSearchFlags, LoadEnvFeatures::AllowContentHandler | LoadEnvFeatures::WorkWithUI);
         m_aLoader.waitWhileLoading(); // wait for ever!
         xComponent = m_aLoader.getTargetComponent();
 

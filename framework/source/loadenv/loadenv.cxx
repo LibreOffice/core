@@ -162,13 +162,12 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         if (aDescriptor.get("Hidden") == uno::Any(true) || Application::IsHeadlessModeEnabled())
             loadEnvFeatures = LoadEnvFeatures::NONE;
 
-        aEnv.initializeLoading(sURL,
+        aEnv.startLoading(sURL,
                                lArgs,
                                css::uno::Reference< css::frame::XFrame >(xLoader, css::uno::UNO_QUERY),
                                sTarget,
                                nSearchFlags,
                                loadEnvFeatures);
-        aEnv.startLoading();
         aEnv.waitWhileLoading(); // wait for ever!
 
         xComponent = aEnv.getTargetComponent();
@@ -226,7 +225,7 @@ utl::MediaDescriptor addModelArgs(const uno::Sequence<beans::PropertyValue>& rDe
 
 }
 
-void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans::PropertyValue>& lMediaDescriptor,
+void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::PropertyValue>& lMediaDescriptor,
         const uno::Reference<frame::XFrame>& xBaseFrame, const OUString& sTarget,
         sal_Int32 nSearchFlags, LoadEnvFeatures eFeature)
 {
@@ -258,7 +257,7 @@ void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans:
     // the load request. We take over the result then!
     m_eContentType = LoadEnv::classifyContent(aRealURL, lMediaDescriptor);
     if (m_eContentType == E_UNSUPPORTED_CONTENT)
-        throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, "from LoadEnv::initializeLoading");
+        throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, "from LoadEnv::startLoading");
 
     // make URL part of the MediaDescriptor
     // It doesn't matter if it is already an item of it.
@@ -293,6 +292,8 @@ void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans:
         !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
 
     initializeUIDefaults(m_xContext, m_lMediaDescriptor, bUIMode, &m_pQuietInteraction);
+
+    start();
 }
 
 void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
@@ -346,7 +347,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
         io_lMediaDescriptor[utl::MediaDescriptor::PROP_UPDATEDOCMODE()] <<= nUpdateMode;
 }
 
-void LoadEnv::startLoading()
+void LoadEnv::start()
 {
     // SAFE ->
     {
@@ -360,7 +361,7 @@ void LoadEnv::startLoading()
         // check "classifyContent()" failed before ...
         if (m_eContentType == E_UNSUPPORTED_CONTENT)
             throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT,
-                                   "from LoadEnv::startLoading");
+                                   "from LoadEnv::start");
     }
     // <- SAFE
 
