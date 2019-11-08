@@ -73,6 +73,8 @@ public:
         const weld::TreeIter* parentEntry, const css::uno::Reference<com::sun::star::script::browse::XBrowseNode> &parentNode,
         CuiConfigFunctionListBox* pFunctionListBox, const OUString &filterTerm , SaveInData *pCurrentSaveInData,
         std::vector<std::unique_ptr<weld::TreeIter>> &rNodesToExpand);
+
+    void set_visible(bool bVisible) {m_xControl->set_visible(bVisible);}
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
