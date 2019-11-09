@@ -709,6 +709,7 @@ void DesktopLOKTest::testRowColumnHeaders()
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
+        nSize *= 15; /* TWIPS_PER_PIXEL */
         OString aText(rValue.second.get<std::string>("text").c_str());
 
         if (bFirstHeader)
@@ -737,6 +738,7 @@ void DesktopLOKTest::testRowColumnHeaders()
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
+        nSize *= 15; /* TWIPS_PER_PIXEL */
         OString aText(rValue.second.get<std::string>("text").c_str());
         if (bFirstHeader)
         {

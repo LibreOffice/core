@@ -2386,7 +2386,7 @@ void lcl_getGroupIndexes(const ScOutlineArray& rArray, SCCOLROW nStart, SCCOLROW
 }
 
 void lcl_createGroupsData(
-        SCCOLROW nHeaderIndex, SCCOLROW nEnd, long nSizePx, long nTotalTwips,
+        SCCOLROW nHeaderIndex, SCCOLROW nEnd, long nSizePx, long nTotalPx,
         const ScOutlineArray& rArray, std::vector<size_t>& rGroupIndexes,
         std::vector<long>& rGroupStartPositions, OUString& rGroupsBuffer)
 {
@@ -2406,13 +2406,13 @@ void lcl_createGroupsData(
             }
             else if (nHeaderIndex == pEntry->GetStart())
             {
-                rGroupStartPositions[nLevel] = nTotalTwips - nSizePx * TWIPS_PER_PIXEL;
+                rGroupStartPositions[nLevel] = nTotalPx - nSizePx;
             }
             else if (nHeaderIndex > pEntry->GetStart() && (nHeaderIndex < nEnd && nHeaderIndex < pEntry->GetEnd()))
             {
                 // for handling group started before the current view range
                 if (rGroupStartPositions[nLevel] < 0)
-                    rGroupStartPositions[nLevel] *= -TWIPS_PER_PIXEL;
+                    rGroupStartPositions[nLevel] *= -1;
                 break;
             }
             if (nHeaderIndex == pEntry->GetEnd() || (nHeaderIndex == nEnd && rGroupStartPositions[nLevel] != -1))
@@ -2430,7 +2430,7 @@ void lcl_createGroupsData(
                 OUString aGroupData = "{ \"level\": \"" + OUString::number(nLevel + 1) + "\", "
                     "\"index\": \"" + OUString::number(nIndex) + "\", "
                     "\"startPos\": \"" + OUString::number(rGroupStartPositions[nLevel]) + "\", "
-                    "\"endPos\": \"" + OUString::number(nTotalTwips) + "\", "
+                    "\"endPos\": \"" + OUString::number(nTotalPx) + "\", "
                     "\"hidden\": \"" + OUString::number(bGroupHidden ? 1 : 0) + "\" }";
 
                 rGroupsBuffer += aGroupData;
@@ -2591,7 +2591,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     {
         OUString aText = OUString::number(nStartRow + 1);
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels / aViewData.GetPPTX())).append("\", ");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels)).append("\", ");
         aBuffer.append("\"groupLevels\": \"").append(OUString::number(nRowGroupDepth)).append("\" }");
     }
 
@@ -2603,11 +2603,10 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         // nSize will be 0 for hidden rows.
         const long nSizePx = lcl_GetRowHeightPx(aViewData, nRow, nTab);
         nTotalPixels += nSizePx;
-        const long nTotalTwips = nTotalPixels / aViewData.GetPPTY();
 
         if (bRangeHeaderSupport && nRowGroupDepth > 0)
         {
-            lcl_createGroupsData(nRow, nEndRow, nSizePx, nTotalTwips,
+            lcl_createGroupsData(nRow, nEndRow, nSizePx, nTotalPixels,
                                  *pRowArray, aRowGroupIndexes, aRowGroupStartPositions,
                                  aRowGroupsBuffer);
         }
@@ -2619,7 +2618,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
         aBuffer.append(", ");
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalTwips)).append("\" }");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels)).append("\" }");
     }
 
     aRowGroupsBuffer += "]";
@@ -2735,7 +2734,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     {
         OUString aText = OUString::number(nStartCol + 1);
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels / aViewData.GetPPTY())).append("\", ");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels)).append("\", ");
         aBuffer.append("\"groupLevels\": \"").append(OUString::number(nColGroupDepth)).append("\" }");
     }
 
@@ -2747,13 +2746,11 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         // nSize will be 0 for hidden columns.
         const long nSizePx = lcl_GetColWidthPx(aViewData, nCol, nTab);
         nTotalPixels += nSizePx;
-        const long nTotalTwips = nTotalPixels / aViewData.GetPPTY();
 
         if (bRangeHeaderSupport && nColGroupDepth > 0)
-        {
-            lcl_createGroupsData(nCol, nEndCol, nSizePx, nTotalTwips,
-                    *pColArray, aColGroupIndexes, aColGroupStartPositions, aColGroupsBuffer);
-        }
+            lcl_createGroupsData(nCol, nEndCol, nSizePx, nTotalPixels,
+                                 *pColArray, aColGroupIndexes,
+                                 aColGroupStartPositions, aColGroupsBuffer);
 
         if (bRangeHeaderSupport && nCol < nEndCol && nSizePx == nPrevSizePx)
             continue;
@@ -2764,7 +2761,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
         aBuffer.append(", ");
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalTwips)).append("\" }");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels)).append("\" }");
     }
 
     aColGroupsBuffer += "]";
