@@ -42,6 +42,7 @@
 #include <strings.hrc>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/searchopt.hxx>
@@ -381,8 +382,15 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                                 SfxCfgKind::GROUP_SCRIPTCONTAINER, 0 ) );
                         std::unique_ptr<weld::TreeIter> xMacroGroup(pFunctionListBox->tree_append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName));
 
-                        //Add the children and the grand children
-                        addChildren(xMacroGroup.get(), childGroup, pFunctionListBox, filterTerm, pCurrentSaveInData, aNodesToExpand);
+                        {
+                            // tdf#128010: Do not nag user asking to enable JRE: if it's disabled,
+                            // simply don't show relevant entries (user chose to not use JRE)
+                            css::uno::ContextLayer layer(
+                                comphelper::NoEnableJavaInteractionContext());
+                            //Add the children and the grand children
+                            addChildren(xMacroGroup.get(), childGroup, pFunctionListBox, filterTerm,
+                                        pCurrentSaveInData, aNodesToExpand);
+                        }
 
                         // Remove the main group if empty
                         if (!pFunctionListBox->iter_has_child(*xMacroGroup))
