@@ -226,6 +226,22 @@ DECLARE_WW8EXPORT_TEST(testTdf127862_pageFillStyle, "tdf127862_pageFillStyle.odt
     CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf128608_tableParaBackColor, "tdf128608_tableParaBackColor.doc")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A4"), uno::UNO_QUERY);
+
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    // ParaBackColor doesn't seem to be used in this case, but keep it here to make sure it stays as AUTO.
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(getProperty<sal_uInt32>(xPara, "ParaBackColor")));
+    // No paragraph background colour/fill. (The cell background colour should be used.)
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No fillstyle", drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xPara, "FillStyle"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf94009_zeroPgMargin, "tdf94009_zeroPgMargin.odt")
 {
     uno::Reference<beans::XPropertySet> defaultStyle(getStyles("PageStyles")->getByName("Standard"),
