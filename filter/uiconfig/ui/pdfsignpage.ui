@@ -27,14 +27,12 @@
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="pdfsignpage|label2">Use this certificate to digitally sign PDF documents:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">cert</property>
@@ -43,6 +41,7 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -53,42 +52,49 @@
                     <property name="activates_default">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="select">
-                    <property name="label" translatable="yes" context="pdfsignpage|select">Select...</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="clear">
-                    <property name="label">gtk-clear</property>
+                  <object class="GtkBox" id="SelectClear">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="valign">center</property>
-                    <property name="use_stock">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkButton" id="select">
+                        <property name="label" translatable="yes" context="pdfsignpage|select">Select...</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="valign">center</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="clear">
+                        <property name="label">gtk-clear</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="valign">center</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -259,8 +265,12 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
-      <widget name="select"/>
-      <widget name="clear"/>
+      <widget name="SelectClear"/>
+      <widget name="label7"/>
+      <widget name="label12"/>
+      <widget name="label13"/>
+      <widget name="label14"/>
+      <widget name="label15"/>
     </widgets>
   </object>
 </interface>
