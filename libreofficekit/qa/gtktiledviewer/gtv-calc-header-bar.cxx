@@ -114,7 +114,7 @@ static gboolean gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCair
         if (priv->m_eType == CalcHeaderType::ROW)
         {
             aRectangle.x = 0;
-            aRectangle.y = nPrevious - 1;
+            aRectangle.y = nPrevious;
             aRectangle.width = ROW_HEADER_WIDTH - 1;
             aRectangle.height = rHeader.m_nSize - nPrevious;
             // Left line.
@@ -129,7 +129,7 @@ static gboolean gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCair
         }
         else if (priv->m_eType == CalcHeaderType::COLUMN)
         {
-            aRectangle.x = nPrevious - 1;
+            aRectangle.x = nPrevious;
             aRectangle.y = 0;
             aRectangle.width = rHeader.m_nSize - nPrevious;
             aRectangle.height = COLUMN_HEADER_HEIGHT - 1;
@@ -179,7 +179,6 @@ gtv_calc_header_bar_class_init(GtvCalcHeaderBarClass* klass)
 
 void gtv_calc_header_bar_configure(GtvCalcHeaderBar* bar, const boost::property_tree::ptree* values)
 {
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(bar)));
     GtvCalcHeaderBarPrivate& priv = getPrivate(bar);
     priv->m_aHeaders.clear();
 
@@ -190,7 +189,7 @@ void gtv_calc_header_bar_configure(GtvCalcHeaderBar* bar, const boost::property_
         {
             for (const boost::property_tree::ptree::value_type& rValue : val)
             {
-                int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(window->lokdocview), std::atof(rValue.second.get<std::string>("size").c_str())));
+                int nSize = std::round(std::atof(rValue.second.get<std::string>("size").c_str()));
                 if (nSize >= bar->m_nPositionPixel)
                 {
                     const int nScrolledSize = nSize - bar->m_nPositionPixel;
