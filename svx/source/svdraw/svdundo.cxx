@@ -46,6 +46,7 @@
 #include <svx/svdotable.hxx> // #i124389#
 #include <vcl/svapp.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svx/svdoashp.hxx>
 
 
 // iterates over all views and unmarks this SdrObject if it is marked
@@ -348,6 +349,8 @@ void SdrUndoAttrObj::Undo()
         // laid out again from AdjustTextFrameWidthAndHeight(). This makes
         // rescuing the size of the object necessary.
         const tools::Rectangle aSnapRect = pObj->GetSnapRect();
+        // SdrObjCustomShape::NbcSetSnapRect needs logic instead of snap rect
+        const tools::Rectangle aLogicRect = pObj->GetLogicRect();
 
         if(pUndoSet)
         {
@@ -382,7 +385,10 @@ void SdrUndoAttrObj::Undo()
         // Restore previous size here when it was changed.
         if(aSnapRect != pObj->GetSnapRect())
         {
-            pObj->NbcSetSnapRect(aSnapRect);
+            if(dynamic_cast<const SdrObjCustomShape*>(pObj))
+                pObj->NbcSetSnapRect(aLogicRect);
+            else
+                pObj->NbcSetSnapRect(aSnapRect);
         }
 
         pObj->GetProperties().BroadcastItemChange(aItemChange);
@@ -425,6 +431,7 @@ void SdrUndoAttrObj::Redo()
         sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);
 
         const tools::Rectangle aSnapRect = pObj->GetSnapRect();
+        const tools::Rectangle aLogicRect = pObj->GetLogicRect();
 
         if(pRedoSet)
         {
@@ -459,7 +466,10 @@ void SdrUndoAttrObj::Redo()
         // Restore previous size here when it was changed.
         if(aSnapRect != pObj->GetSnapRect())
         {
-            pObj->NbcSetSnapRect(aSnapRect);
+            if(dynamic_cast<const SdrObjCustomShape*>(pObj))
+                pObj->NbcSetSnapRect(aLogicRect);
+            else
+                pObj->NbcSetSnapRect(aSnapRect);
         }
 
         pObj->GetProperties().BroadcastItemChange(aItemChange);
