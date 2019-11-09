@@ -1548,29 +1548,6 @@
         </prop>
       </node>
 
-      <node oor:name="ChartCharacterPanel" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Character</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>ChartCharacterPanel</value>
-        </prop>
-        <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartDeck</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            Chart, any, visible ;
-          </value>
-        </prop>
-        <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/ChartPanelFactory/CharacterPanel</value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>8</value>
-        </prop>
-      </node>
-
       <node oor:name="TableEditPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Table</value>
