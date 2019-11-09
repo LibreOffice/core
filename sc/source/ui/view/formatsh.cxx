@@ -2280,16 +2280,10 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     {
         FontLineStyle eUnderline =
                     rAttrSet.Get(ATTR_FONT_UNDERLINE).GetLineStyle();
-        sal_uInt16 nId = SID_ULINE_VAL_NONE;
-        switch (eUnderline)
-        {
-            case LINESTYLE_SINGLE:  nId = SID_ULINE_VAL_SINGLE; break;
-            case LINESTYLE_DOUBLE:  nId = SID_ULINE_VAL_DOUBLE; break;
-            case LINESTYLE_DOTTED:  nId = SID_ULINE_VAL_DOTTED; break;
-            default:
-                break;
-        }
-        rSet.Put( SfxBoolItem( nId, true ) );
+        rSet.Put(SfxBoolItem(SID_ULINE_VAL_SINGLE, eUnderline == LINESTYLE_SINGLE));
+        rSet.Put(SfxBoolItem(SID_ULINE_VAL_DOUBLE, eUnderline == LINESTYLE_DOUBLE));
+        rSet.Put(SfxBoolItem(SID_ULINE_VAL_DOTTED, eUnderline == LINESTYLE_DOTTED));
+        rSet.Put(SfxBoolItem(SID_ULINE_VAL_NONE, eUnderline == LINESTYLE_NONE));
     }
 
     // horizontal alignment
