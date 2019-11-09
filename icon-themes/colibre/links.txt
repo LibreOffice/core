@@ -1009,6 +1009,7 @@ cmd/sc_savesimple.png cmd/sc_save.png
 cmd/lc_underlinesimple.png cmd/lc_underline.png
 cmd/sc_underlinesimple.png cmd/sc_underline.png
 cmd/32/underlinesimple.png cmd/32/underline.png
+cmd/32/ko/underlinesimple.png cmd/32/ko/underline.png
 
 cmd/ca/lc_underlinesimple.png cmd/ca/lc_underline.png
 cmd/ca/sc_underlinesimple.png cmd/ca/sc_underline.png
