@@ -19,11 +19,14 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxids.hrc>
+#include <svx/svdoashp.hxx>
 #include <svl/stritem.hxx>
+#include <undo/undomanager.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <app.hrc>
+#include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 
@@ -150,6 +153,42 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126197)
     // Without the accompanying fix in place, this test would have failed with an assertion failure
     // in SdrObjEditView::SdrEndTextEdit()
     pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf128651)
+{
+    // Error was, that undo and redo changes size of the shape. Affected actions were e.g.
+    // extrusion on/off, shadow on/off, changes on line or fill attributes.
+    // All these actions do not change the snap rectangle.
+    mxComponent = loadFromDesktop(
+        m_directories.getURLFromSrc("sd/qa/unit/data/tdf128651_CustomShapeUndo.odp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(pObject);
+    CPPUNIT_ASSERT_MESSAGE("No Shape", pCustomShape);
+    const sal_Int32 nOrigWidth(pCustomShape->GetSnapRect().GetWidth());
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    sd::UndoManager* pUndoManager = pDocument->GetUndoManager();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pUndoManager->GetRedoActionCount());
+
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pCustomShape, pView->GetSdrPageView());
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_EXTRUSION_TOGGLE,
+                                                         SfxCallMode::SYNCHRON);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
+
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+    const sal_Int32 nUndoWidth(pCustomShape->GetSnapRect().GetWidth());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Undo changes width", nOrigWidth, nUndoWidth);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetRedoActionCount());
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_REDO, SfxCallMode::SYNCHRON);
+    const sal_Int32 nRedoWidth(pCustomShape->GetSnapRect().GetWidth());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Redo changes width", nUndoWidth, nRedoWidth);
 }
 CPPUNIT_PLUGIN_IMPLEMENT();
 
