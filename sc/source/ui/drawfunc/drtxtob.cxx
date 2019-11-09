@@ -1115,16 +1115,10 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     else
     {
         FontLineStyle eUnderline = aAttrSet.Get(EE_CHAR_UNDERLINE).GetLineStyle();
-        sal_uInt16 nId = SID_ULINE_VAL_NONE;
-        switch (eUnderline)
-        {
-            case LINESTYLE_SINGLE:  nId = SID_ULINE_VAL_SINGLE; break;
-            case LINESTYLE_DOUBLE:  nId = SID_ULINE_VAL_DOUBLE; break;
-            case LINESTYLE_DOTTED:  nId = SID_ULINE_VAL_DOTTED; break;
-            default:
-                break;
-        }
-        rDestSet.Put( SfxBoolItem( nId, true ) );
+        rDestSet.Put(SfxBoolItem(SID_ULINE_VAL_SINGLE, eUnderline == LINESTYLE_SINGLE));
+        rDestSet.Put(SfxBoolItem(SID_ULINE_VAL_DOUBLE, eUnderline == LINESTYLE_DOUBLE));
+        rDestSet.Put(SfxBoolItem(SID_ULINE_VAL_DOTTED, eUnderline == LINESTYLE_DOTTED));
+        rDestSet.Put(SfxBoolItem(SID_ULINE_VAL_NONE, eUnderline == LINESTYLE_NONE));
     }
 
     //  horizontal / vertical
