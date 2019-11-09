@@ -29,7 +29,6 @@ import org.mozilla.gecko.gfx.LayerView;
 import java.util.ArrayList;
 
 import static org.libreoffice.SearchController.addProperty;
-import static org.libreoffice.UnitConverter.twipToPixel;
 
 public class CalcHeadersController {
     private static final String LOGTAG = CalcHeadersController.class.getSimpleName();
@@ -236,12 +235,12 @@ public class CalcHeadersController {
             JSONArray rowResult = collectiveResult.getJSONArray("rows");
             for (int i = 0; i < rowResult.length(); i++) {
                 headerInfo.rowLabels.add(rowResult.getJSONObject(i).getString("text"));
-                headerInfo.rowDimens.add(twipToPixel(rowResult.getJSONObject(i).getLong("size"), LOKitShell.getDpi(mContext)));
+                headerInfo.rowDimens.add(rowResult.getJSONObject(i).getLong("size"));
             }
             JSONArray columnResult = collectiveResult.getJSONArray("columns");
             for (int i = 0; i < columnResult.length(); i++) {
                 headerInfo.columnLabels.add(columnResult.getJSONObject(i).getString("text"));
-                headerInfo.columnDimens.add(twipToPixel(columnResult.getJSONObject(i).getLong("size"), LOKitShell.getDpi(mContext)));
+                headerInfo.columnDimens.add(columnResult.getJSONObject(i).getLong("size"));
             }
             return headerInfo;
         } catch (JSONException e) {
