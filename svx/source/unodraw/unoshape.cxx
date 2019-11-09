@@ -2493,7 +2493,12 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         return false;
     }
     }
-    throw lang::IllegalArgumentException();
+
+    OUString sExceptionMessage  ("IllegalArgumentException in SvxShape::setPropertyValueImpl."
+                                " Property Type: " + pProperty->aType.getTypeName() + " Property nWID: " + OUString::number(pProperty->nWID)
+                                + " Value Type: " + (rValue.hasValue() ? rValue.getValueTypeName() : "void (no value)"));
+
+    throw lang::IllegalArgumentException(sExceptionMessage, nullptr, 1);
 }
 
 
