@@ -2154,7 +2154,11 @@ uno::Reference< drawing::XShape >
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
         try
         {
-            xProp->setPropertyValue( "Transformation", rATransformation );
+            if (rATransformation.hasValue())
+                xProp->setPropertyValue( "Transformation", rATransformation );
+            else
+                SAL_INFO("chart2", "No rATransformation value is given to ShapeFactory::createText()");
+
         }
         catch( const uno::Exception& )
         {
