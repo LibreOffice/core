@@ -35,8 +35,12 @@ class VCL_DLLPUBLIC OpenGLZone {
     // that is actually lock-free.  However, gnEnterCount and gnLeaveCount are both monotonically
     // increasing, so will eventually overflow, so the underlying type better be unsigned, which
     // sig_atomic_t is not guaranteed to be:
+#if !defined ARM32 || (defined ARM32 && defined __ARM_PCS_VFP)
     using AtomicCounter = std::atomic<std::make_unsigned_t<std::sig_atomic_t>>;
     static_assert(AtomicCounter::is_always_lock_free);
+#else
+    using AtomicCounter = volatile std::make_unsigned_t<std::sig_atomic_t>;
+#endif
 
     /// how many times have we entered a GL zone
     static AtomicCounter gnEnterCount;
