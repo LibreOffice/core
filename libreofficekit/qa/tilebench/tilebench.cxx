@@ -259,6 +259,31 @@ static uint32_t fade(uint32_t col)
     return (a<<24) + (grey<<16) + (grey<<8) + grey;
 }
 
+static bool sloppyEqual(uint32_t pixA, uint32_t pixB)
+{
+    uint8_t a[4], b[4];
+
+    a[0] = (pixA >> 24) & 0xff;
+    a[1] = (pixA >> 16) & 0xff;
+    a[2] = (pixA >>  8) & 0xff;
+    a[3] = (pixA >>  0) & 0xff;
+
+    b[0] = (pixB >> 24) & 0xff;
+    b[1] = (pixB >> 16) & 0xff;
+    b[2] = (pixB >>  8) & 0xff;
+    b[3] = (pixB >>  0) & 0xff;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        int delta = a[i];
+        delta -= b[i];
+        // tolerate small differences
+        if (delta < -4 || delta > 4)
+            return false;
+    }
+    return true;
+}
+
 // Count and build a picture of any differences into rDiff
 static int diffTiles( const std::vector<unsigned char> &vBase,
                        long nBaseRowPixelWidth,
@@ -283,7 +308,7 @@ static int diffTiles( const std::vector<unsigned char> &vBase,
             pDiff[nDiffRowStart + left  + x] = pBase[nBaseOffset + x];
             pDiff[nDiffRowStart + mid   + x] = pCompare[nCompareOffset + x];
             pDiff[nDiffRowStart + right + x] = fade(pBase[nBaseOffset + x]);
-            if (pBase[nBaseOffset + x] != pCompare[nCompareOffset + x])
+            if (!sloppyEqual(pBase[nBaseOffset + x], pCompare[nCompareOffset + x]))
             {
                 pDiff[nDiffRowStart + right + x] = 0xffff00ff;
                 if (!nDifferent)
@@ -310,9 +335,9 @@ static std::vector<unsigned char> paintTile( Document *pDocument,
     return vData;
 }
 
-static bool testJoinsAt( Document *pDocument, long nX, long nY,
-                         long const nTilePixelSize,
-                         long const nTileTwipSize )
+static int testJoinsAt( Document *pDocument, long nX, long nY,
+                        long const nTilePixelSize,
+                        long const nTileTwipSize )
 {
     const int mode = pDocument->getTileMode();
 
@@ -352,6 +377,7 @@ static bool testJoinsAt( Document *pDocument, long nX, long nY,
         { 1, 1 }
     };
 
+    int nDifferences = 0;
     // Compare each of the 4x tiles with a sub-tile of the larger image
     for( auto &rPos : aCompare )
     {
@@ -363,15 +389,15 @@ static bool testJoinsAt( Document *pDocument, long nX, long nY,
                       nTileTwipWidth, nTileTwipHeight));
 
         std::vector<unsigned char> vDiff( nTilePixelWidth * 3 * nTilePixelHeight * 4 );
-        int nDifferences = diffTiles( vBase, nTilePixelWidth * 2,
-                                      vCompare, nTilePixelWidth,
-                                      nTilePixelHeight,
-                                      rPos.X, rPos.Y * nTilePixelHeight,
-                                      vDiff );
-        if ( nDifferences > 0 )
+        int nDiffs = diffTiles( vBase, nTilePixelWidth * 2,
+                                vCompare, nTilePixelWidth,
+                                nTilePixelHeight,
+                                rPos.X, rPos.Y * nTilePixelHeight,
+                                vDiff );
+        if ( nDiffs > 0 )
         {
             fprintf( stderr, "  %d differences in sub-tile pixel mismatch at %ld, %ld at offset %ld, %ld (twips) size %ld\n",
-                     nDifferences, rPos.X, rPos.Y, initPosX, initPosY,
+                     nDiffs, rPos.X, rPos.Y, initPosX, initPosY,
                      nTileTwipWidth);
             dumpTile("_base", nTilePixelWidth * 2, nTilePixelHeight * 2,
                      mode, vBase.data());
@@ -382,11 +408,11 @@ static bool testJoinsAt( Document *pDocument, long nX, long nY,
             dumpTile("_compare", nTilePixelWidth, nTilePixelHeight,
             mode, vCompare.data());*/
             dumpTile("_diff", nTilePixelWidth * 3, nTilePixelHeight, mode, vDiff.data());
-            return false;
         }
+        nDifferences += nDiffs;
     }
 
-    return true;
+    return nDifferences;
 }
 
 // Check that our tiles join nicely ...
@@ -413,16 +439,19 @@ static int testJoin( Document *pDocument)
     for( auto z : fZooms )
     {
         long nBad = 0;
-        for( long y = 0; y < 5; ++y )
+        long nDifferences = 0;
+        for( long y = 0; y < 8; ++y )
         {
-            for( long x = 0; x < 5; ++x )
+            for( long x = 0; x < 8; ++x )
             {
-                if ( !testJoinsAt( pDocument, x, y, nTilePixelSize, nTileTwipSize * z ) )
+                int nDiffs = testJoinsAt( pDocument, x, y, nTilePixelSize, nTileTwipSize * z );
+                if (nDiffs)
                     nBad++;
+                nDifferences += nDiffs;
             }
         }
         if (nBad > 0)
-            results << "\tZoom " << z << " bad tiles: " << nBad << "\n";
+            results << "\tZoom " << z << " bad tiles: " << nBad << " with " << nDifferences << " mismatching pixels\n";
         nFails += nBad;
     }
 
