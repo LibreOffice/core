@@ -112,7 +112,7 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
 
     // Additionally even if RegisterDragDrop is called from an STA thread we have
     // to ensure that it is called from the same thread that created the Window
-    // otherwise meesages sent during DND won't reach the windows message queue.
+    // otherwise messages sent during DND won't reach the windows message queue.
     // Calling AttachThreadInput first would resolve this problem but would block
     // the message queue of the calling thread. So if the current thread
     // (even if it's an STA thread) and the thread that created the window are not
