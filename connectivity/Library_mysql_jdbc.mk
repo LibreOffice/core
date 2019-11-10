@@ -22,7 +22,7 @@ $(eval $(call gb_Library_set_include,mysql_jdbc,\
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,mysql_jdbc,connectivity/inc/pch/precompiled_mysql))
+$(eval $(call gb_Library_set_precompiled_header,mysql_jdbc,connectivity/inc/pch/precompiled_mysql_jdbc))
 
 $(eval $(call gb_Library_use_libraries,mysql_jdbc,\
 	cppu \
