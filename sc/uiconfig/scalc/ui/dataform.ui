@@ -267,4 +267,14 @@
       <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkSizeGroup" id="sizegroup">
+    <widgets>
+      <widget name="label"/>
+      <widget name="new"/>
+      <widget name="delete"/>
+      <widget name="restore"/>
+      <widget name="prev"/>
+      <widget name="next"/>
+    </widgets>
+  </object>
 </interface>
