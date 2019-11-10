@@ -255,7 +255,7 @@
               <object class="GtkButtonBox" id="buttonbox1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">12</property>
+                <property name="spacing">6</property>
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="add">
