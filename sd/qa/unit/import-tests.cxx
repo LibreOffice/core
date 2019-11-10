@@ -2996,7 +2996,7 @@ void SdImportTest::testTdf106638()
     uno::Reference<beans::XPropertySet> xPropSet(xTextCursor, uno::UNO_QUERY_THROW );
     OUString aCharFontName;
     CPPUNIT_ASSERT(xTextCursor->goRight(1, true));
-    // First charcter U+f0fe that use Wingding
+    // First character U+f0fe that uses Wingding
     xPropSet->getPropertyValue("CharFontName") >>= aCharFontName;
     CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), aCharFontName);
 
