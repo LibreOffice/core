@@ -29,7 +29,7 @@ import java.sql.*;
 
 /**
  * Implements a log mechanism to create a protocol of all steps of e.g. an api test
- * It provides the possibility to write the logged meesages to a file and/or
+ * It provides the possibility to write the logged messages to a file and/or
  * to stdout/stderr (if necessary at the same time!).
  *
  *  TODO
