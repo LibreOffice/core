@@ -3742,6 +3742,20 @@ lok_doc_view_post_command (LOKDocView* pDocView,
         g_info ("LOK_POST_COMMAND: ignoring commands in view-only mode");
 }
 
+SAL_DLLPUBLIC_EXPORT gchar *
+lok_doc_view_get_command_values (LOKDocView* pDocView,
+                                 const gchar* pCommand)
+{
+    g_return_val_if_fail (LOK_IS_DOC_VIEW (pDocView), nullptr);
+    g_return_val_if_fail (pCommand != nullptr, nullptr);
+
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
+    if (!pDocument)
+        return nullptr;
+
+    return pDocument->pClass->getCommandValues(pDocument, pCommand);
+}
+
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_find_prev (LOKDocView* pDocView,
                         const gchar* pText,

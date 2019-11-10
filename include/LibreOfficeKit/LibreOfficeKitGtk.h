@@ -235,6 +235,18 @@ void                           lok_doc_view_post_command           (LOKDocView* 
                                                                     const gchar* pArguments,
                                                                     gboolean bNotifyWhenFinished);
 
+/**
+ * lok_doc_view_get_command_values:
+ * @pDocView: the #LOKDocView instance
+ * @pCommand: the command to issue to LO core
+ *
+ * Get a json mapping of the possible values for the given command.
+ * In the form of: {commandName: unoCmd, commandValues: {possible_values}}
+ *
+ * Returns: A json mapping of the possible values for the given command
+ */
+gchar *                        lok_doc_view_get_command_values     (LOKDocView* pDocView,
+                                                                    const gchar* pCommand);
 
 /**
  * lok_doc_view_find_next:
