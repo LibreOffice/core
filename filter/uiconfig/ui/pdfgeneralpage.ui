@@ -12,15 +12,14 @@
   <object class="GtkGrid" id="PdfGeneralPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="column_spacing">12</property>
+    <property name="column_spacing">24</property>
     <child>
-      <object class="GtkGrid" id="grid2">
+      <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="row_spacing">12</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
@@ -37,16 +36,16 @@
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="row_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="all">
                         <property name="label" translatable="yes" context="pdfgeneralpage|all">_All</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="halign">start</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -62,8 +61,9 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">all</property>
                         <accessibility>
@@ -81,8 +81,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="halign">start</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">all</property>
                       </object>
@@ -96,6 +96,7 @@
                       <object class="GtkEntry" id="pages">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">5</property>
                         <accessibility>
@@ -111,8 +112,8 @@
                       <object class="GtkLabel" id="slides">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes" context="pdfgeneralpage|slides">Slides:</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -120,11 +121,27 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="viewpdf">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|viewpdf">_View PDF after export</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">4</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkLabel" id="selectedsheets">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes" context="pdfgeneralpage|selectedsheets">_Selection/Selected sheet(s)</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -147,8 +164,9 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -167,136 +185,23 @@
                   <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <child>
-                      <object class="GtkGrid" id="grid6">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkGrid" id="qualityframe">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkSpinButton" id="quality">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="activates_default">True</property>
-                                <property name="adjustment">adjustment1</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkAlignment" id="qualalign">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="left_padding">12</property>
-                                <child>
-                                  <object class="GtkLabel" id="label6">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes" context="pdfgeneralpage|label6">_Quality:</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">quality</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkGrid" id="frame5">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkCheckButton" id="reduceresolution">
-                                <property name="label" translatable="yes" context="pdfgeneralpage|reduceresolution">_Reduce image resolution</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <accessibility>
-                                  <relation type="label-for" target="resolution"/>
-                                </accessibility>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="resolution">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="has_entry">True</property>
-                                <items>
-                                  <item translatable="yes" context="pdfgeneralpage|resolution">75 DPI</item>
-                                  <item translatable="yes" context="pdfgeneralpage|resolution">150 DPI</item>
-                                  <item translatable="yes" context="pdfgeneralpage|resolution">300 DPI</item>
-                                  <item translatable="yes" context="pdfgeneralpage|resolution">600 DPI</item>
-                                  <item translatable="yes" context="pdfgeneralpage|resolution">1200 DPI</item>
-                                </items>
-                                <child internal-child="entry">
-                                  <object class="GtkEntry" id="comboboxtext-entry">
-                                    <property name="can_focus">True</property>
-                                    <property name="activates_default">True</property>
-                                    <property name="text" translatable="yes" context="pdfgeneralpage|comboboxtext-entry">75 DPI</property>
-                                  </object>
-                                </child>
-                                <accessibility>
-                                  <relation type="labelled-by" target="reduceresolution"/>
-                                </accessibility>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">2</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
+                    <property name="row_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="losslesscompress">
                         <property name="label" translatable="yes" context="pdfgeneralpage|losslesscompress">_Lossless compression</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="halign">start</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -305,14 +210,107 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="halign">start</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">losslesscompress</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="reduceresolution">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|reduceresolution">_Reduce image resolution</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="resolution"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="resolution">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_entry">True</property>
+                        <items>
+                          <item translatable="yes" context="pdfgeneralpage|resolution">75 DPI</item>
+                          <item translatable="yes" context="pdfgeneralpage|resolution">150 DPI</item>
+                          <item translatable="yes" context="pdfgeneralpage|resolution">300 DPI</item>
+                          <item translatable="yes" context="pdfgeneralpage|resolution">600 DPI</item>
+                          <item translatable="yes" context="pdfgeneralpage|resolution">1200 DPI</item>
+                        </items>
+                        <child internal-child="entry">
+                          <object class="GtkEntry" id="comboboxtext-entry">
+                            <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
+                            <property name="text" translatable="yes" context="pdfgeneralpage|comboboxtext-entry">75 DPI</property>
+                          </object>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="reduceresolution"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkGrid" id="qualityframe">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="column_spacing">6</property>
+                        <child>
+                          <object class="GtkSpinButton" id="quality">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustment1</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAlignment" id="qualalign">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="left_padding">18</property>
+                            <child>
+                              <object class="GtkLabel" id="label5">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes" context="pdfgeneralpage|label6">_Quality:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">quality</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                   </object>
@@ -331,8 +329,9 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -351,56 +350,49 @@
                   <object class="GtkGrid" id="grid7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="row_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="watermark">
                         <property name="label" translatable="yes" context="pdfgeneralpage|watermark">Sign with _watermark</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="halign">start</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="watermarkentry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
+                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkAlignment" id="alignment3">
-                        <property name="visible">True</property>
+                      <object class="GtkLabel" id="watermarklabel">
                         <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
-                        <child>
-                          <object class="GtkLabel" id="watermarklabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="pdfgeneralpage|watermarklabel">Text:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">watermarkentry</property>
-                            <property name="xalign">0</property>
-                          </object>
-                        </child>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|watermarklabel">Text:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">watermarkentry</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -418,8 +410,9 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
@@ -429,291 +422,37 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame4">
+      <object class="GtkBox" id="box2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkAlignment" id="alignment7">
+          <object class="GtkFrame" id="frame4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">13</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
             <child>
-              <object class="GtkGrid" id="grid10">
+              <object class="GtkAlignment" id="alignment7">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">13</property>
                 <child>
-                  <object class="GtkCheckButton" id="embed">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|embed">Hybrid PDF (em_bed ODF file)</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|embed|tooltip_text">Creates a PDF that is easily editable in %PRODUCTNAME</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="tagged">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|tagged">_Tagged PDF (add document structure)</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|tagged|tooltip_text">Includes a document's content structure information in a PDF</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="forms">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|forms">_Create PDF form</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|forms|tooltip_text">Creates a PDF with fields that can be filled out</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkAlignment" id="formsframe">
+                  <object class="GtkGrid" id="grid10">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
+                    <property name="row_spacing">3</property>
                     <child>
-                      <object class="GtkGrid" id="grid3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkLabel" id="label7">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="pdfgeneralpage|label7">Submit _format:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">format</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="format">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <items>
-                              <item translatable="yes" context="pdfgeneralpage|format">FDF</item>
-                              <item translatable="yes" context="pdfgeneralpage|format">PDF</item>
-                              <item translatable="yes" context="pdfgeneralpage|format">HTML</item>
-                              <item translatable="yes" context="pdfgeneralpage|format">XML</item>
-                            </items>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="allowdups">
-                            <property name="label" translatable="yes" context="pdfgeneralpage|allowdups">Allow duplicate field _names</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">2</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="bookmarks">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|bookmarks">Export _bookmarks</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="exportplaceholders">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|exportplaceholders">Expo_rt placeholders</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="comments">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|comments">_Comments as PDF annotations</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">7</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="emptypages">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|emptypages">Exp_ort automatically inserted blank pages</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">12</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="viewpdf">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|viewpdf">_View PDF after export</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">13</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="usereferencexobject">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|usereferencexobject">Use reference XObjects</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">14</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="hiddenpages">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|hiddenpages">Export _hidden pages</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">10</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="notes">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|notes">Export _notes pages</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">8</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkAlignment" id="onlynotesframe">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
-                    <child>
-                      <object class="GtkCheckButton" id="onlynotes">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|onlynotes">Export onl_y notes pages</property>
+                      <object class="GtkCheckButton" id="embed">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|embed">Hybrid PDF (em_bed ODF file)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|embed|tooltip_text">Creates a PDF that is easily editable in %PRODUCTNAME</property>
+                        <property name="halign">start</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">9</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkGrid">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <child>
-                      <object class="GtkCheckButton" id="pdfa">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|pdfa">Archive (P_DF/A, ISO 19005)</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|pdfa|tooltip_text">Creates an ISO 19005-2 compliant PDF file, ideal for long-term document preservation</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -722,18 +461,116 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="pdfagrid">
+                      <object class="GtkCheckButton" id="tagged">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|tagged">_Tagged PDF (add document structure)</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|tagged|tooltip_text">Includes a document's content structure information in a PDF</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="forms">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|forms">_Create PDF form</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|forms|tooltip_text">Creates a PDF with fields that can be filled out</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="formsframe">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">20</property>
-                        <property name="column_spacing">14</property>
+                        <property name="left_padding">18</property>
                         <child>
-                          <object class="GtkRadioButton" id="pdfa2">
-                            <property name="label" context="pdfgeneralpage|pdfa">PDF/A-2b</property>
+                          <object class="GtkGrid" id="grid3">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="row_spacing">6</property>
+                            <property name="column_spacing">12</property>
+                            <child>
+                              <object class="GtkLabel" id="label7">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes" context="pdfgeneralpage|label7">Submit _format:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">format</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="format">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <items>
+                                  <item translatable="yes" context="pdfgeneralpage|format">FDF</item>
+                                  <item translatable="yes" context="pdfgeneralpage|format">PDF</item>
+                                  <item translatable="yes" context="pdfgeneralpage|format">HTML</item>
+                                  <item translatable="yes" context="pdfgeneralpage|format">XML</item>
+                                </items>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="allowdups">
+                                <property name="label" translatable="yes" context="pdfgeneralpage|allowdups">Allow duplicate field _names</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="halign">start</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                                <property name="width">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkGrid">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="row_spacing">6</property>
+                        <child>
+                          <object class="GtkCheckButton" id="pdfa">
+                            <property name="label" translatable="yes" context="pdfgeneralpage|pdfa">Archive (P_DF/A, ISO 19005)</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="active">True</property>
+                            <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|pdfa|tooltip_text">Creates an ISO 19005-2 compliant PDF file, ideal for long-term document preservation</property>
+                            <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -742,18 +579,50 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="pdfa1">
-                            <property name="label" context="pdfgeneralpage|pdfa">PDF/A-1b</property>
+                          <object class="GtkAlignment">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">pdfa2</property>
+                            <property name="can_focus">False</property>
+                            <property name="left_padding">18</property>
+                            <child>
+                              <object class="GtkGrid" id="pdfagrid">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="column_spacing">14</property>
+                                <child>
+                                  <object class="GtkRadioButton" id="pdfa2">
+                                    <property name="label" context="pdfgeneralpage|pdfa">PDF/A-2b</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="pdfa1">
+                                    <property name="label" context="pdfgeneralpage|pdfa">PDF/A-1b</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">pdfa2</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">0</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
                           </packing>
                         </child>
                       </object>
@@ -763,39 +632,205 @@
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="singlepagesheets">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|singlepagesheets">Full-Sheet Previews</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">11</property>
-                  </packing>
                 </child>
               </object>
             </child>
+            <child type="label">
+              <object class="GtkLabel" id="label4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage|label4">General</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
         </child>
-        <child type="label">
-          <object class="GtkLabel" id="label4">
+        <child>
+          <object class="GtkFrame" id="frame7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="pdfgeneralpage|label4">General</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">13</property>
+                <child>
+                  <object class="GtkGrid" id="grid2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="row_spacing">3</property>
+                    <child>
+                      <object class="GtkCheckButton" id="bookmarks">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|bookmarks">Export _bookmarks</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="exportplaceholders">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|exportplaceholders">Expo_rt placeholders</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="comments">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|comments">_Comments as PDF annotations</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="emptypages">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|emptypages">Exp_ort automatically inserted blank pages</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="usereferencexobject">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|usereferencexobject">Use reference XObjects</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="hiddenpages">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|hiddenpages">Export _hidden pages</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="notes">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|notes">Export _notes pages</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="onlynotesframe">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="left_padding">18</property>
+                        <child>
+                          <object class="GtkCheckButton" id="onlynotes">
+                            <property name="label" translatable="yes" context="pdfgeneralpage|onlynotes">Export onl_y notes pages</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="halign">start</property>
+                            <property name="use_underline">True</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="singlepagesheets">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|singlepagesheets">Full-sheet previews</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">6</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label9">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage|label9">Structure</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
       <packing>
@@ -804,22 +839,28 @@
       </packing>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
+  <object class="GtkSizeGroup" id="sizegroupLabel1">
     <widgets>
-      <widget name="all"/>
-      <widget name="range"/>
-      <widget name="selection"/>
       <widget name="qualalign"/>
-      <widget name="reduceresolution"/>
-      <widget name="losslesscompress"/>
-      <widget name="jpegcompress"/>
+      <widget name="range"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup2">
+  <object class="GtkSizeGroup" id="sizegroupLabel2">
+    <widgets>
+      <widget name="reduceresolution"/>
+      <widget name="watermark"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget1">
     <widgets>
       <widget name="pages"/>
       <widget name="quality"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget2">
+    <widgets>
       <widget name="resolution"/>
+      <widget name="watermarkentry"/>
     </widgets>
   </object>
 </interface>
