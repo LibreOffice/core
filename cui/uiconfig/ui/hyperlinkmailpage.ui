@@ -14,7 +14,7 @@
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">24</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -147,6 +147,7 @@
       <object class="GtkFrame" id="frame2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="valign">end</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="label_xalign">0</property>
@@ -325,9 +326,6 @@
     <widgets>
       <widget name="receiver_label"/>
       <widget name="subject_label"/>
-      <widget name="frame_label"/>
-      <widget name="indication_label"/>
-      <widget name="name_label"/>
     </widgets>
   </object>
 </interface>
