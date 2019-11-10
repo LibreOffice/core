@@ -281,6 +281,7 @@ cmd/32/justifypara.png cmd/32/alignblock.png
 cmd/32/km/underlinesimple.png cmd/32/km/underline.png
 cmd/32/ko/drawtext.png cmd/32/ko/text.png
 cmd/32/ko/fontcolor.png cmd/32/ko/color.png
+cmd/32/ko/formattextmenu.png cmd/32/ko/text.png
 cmd/32/ko/ordercrit.png cmd/32/ko/datasort.png
 cmd/32/ko/sortdown.png cmd/32/ko/sortdescending.png
 cmd/32/ko/sortup.png cmd/32/ko/sortascending.png
@@ -606,6 +607,7 @@ cmd/km/lc_underlinesimple.png cmd/km/lc_underline.png
 cmd/km/sc_underlinesimple.png cmd/km/sc_underline.png
 cmd/ko/lc_drawtext.png cmd/ko/lc_text.png
 cmd/ko/lc_fontcolor.png cmd/ko/lc_color.png
+cmd/ko/lc_formattextmenu.png cmd/ko/lc_text.png
 cmd/ko/lc_ordercrit.png cmd/ko/lc_datasort.png
 cmd/ko/lc_sortdown.png cmd/ko/lc_sortdescending.png
 cmd/ko/lc_sortup.png cmd/ko/lc_sortascending.png
@@ -613,6 +615,7 @@ cmd/ko/lc_tablesort.png cmd/ko/lc_datasort.png
 cmd/ko/lc_underlinesimple.png cmd/ko/lc_underline.png
 cmd/ko/sc_drawtext.png cmd/ko/sc_text.png
 cmd/ko/sc_fontcolor.png cmd/ko/sc_color.png
+cmd/ko/sc_formattextmenu.png cmd/ko/sc_text.png
 cmd/ko/sc_ordercrit.png cmd/ko/sc_datasort.png
 cmd/ko/sc_sortdown.png cmd/ko/sc_sortdescending.png
 cmd/ko/sc_sortup.png cmd/ko/sc_sortascending.png
