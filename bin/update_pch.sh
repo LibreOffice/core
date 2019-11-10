@@ -11,8 +11,12 @@
 # Usage: update_pch.sh [<module>]
 # Invoke: make cmd cmd="./bin/update_pch.sh [..]"
 
-root=`dirname $0`
-root=`cd $root/.. >/dev/null && pwd`
+if test -n "$SRC_DIR"; then
+    root="$SRC_DIR"
+else
+    root=`dirname $0`
+    root=`cd $root/.. >/dev/null && pwd`
+fi
 root=`readlink -f $root`
 cd $root
 

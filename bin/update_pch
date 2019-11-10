@@ -33,6 +33,7 @@ EXCLUDE_MODULE = False
 EXCLUDE_LOCAL = False
 EXCLUDE_SYSTEM = True
 SILENT = False
+WORKDIR = 'workdir'
 
 # System includes: oox, sal, sd, svl, vcl
 
@@ -607,7 +608,7 @@ def parse_makefile(groups, lines, lineno, lastif, ifstack):
                 if osname not in groups:
                     groups[osname] = []
                 if ingeneratedobjects:
-                    file = 'workdir/' + file
+                    file = WORKDIR + '/' + file
                 groups[osname].append(file)
 
     return groups
@@ -909,6 +910,10 @@ def main():
     global EXCLUDE_LOCAL
     global EXCLUDE_SYSTEM
     global SILENT
+    global WORKDIR
+
+    if os.getenv('WORKDIR'):
+        WORKDIR = os.getenv('WORKDIR')
 
     root = '.'
     module = sys.argv[1]
