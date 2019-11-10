@@ -191,6 +191,7 @@ $(share_WORKDIR)/%/LOKDocView-0.1.gir: \
                  --library=libreofficekitgtk --library-path="${INSTDIR}/program" \
                  --include=Gdk-3.0 --include=GdkPixbuf-2.0 --include=Gtk-3.0 \
                  --namespace=LOKDocView --nsversion=0.1 --identifier-prefix=LOKDoc --symbol-prefix=lok_doc \
+                 --c-include="LibreOfficeKit/LibreOfficeKitGtk.h" \
 				 --output="$@" --warn-all --no-libtool
 
 $(share_WORKDIR)/%/LOKDocView-0.1.typelib: $(share_WORKDIR)/%/LOKDocView-0.1.gir
