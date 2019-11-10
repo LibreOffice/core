@@ -3358,8 +3358,8 @@ const char* SC_OPCODE_H_LOOKUP_ARY[] =
     NC_("SC_OPCODE_H_LOOKUP", "The array or the range for the reference."),
     NC_("SC_OPCODE_H_LOOKUP", "Index"),
     NC_("SC_OPCODE_H_LOOKUP", "The row index in the array."),
-    NC_("SC_OPCODE_H_LOOKUP", "Sorted"),
-    NC_("SC_OPCODE_H_LOOKUP", "If the value is TRUE or not given, the search row of the array must be sorted in ascending order.")
+    NC_("SC_OPCODE_H_LOOKUP", "Sorted range lookup"),
+    NC_("SC_OPCODE_H_LOOKUP", "If the value is TRUE or not given, the search row of the array represents a series of ranges, and must be sorted in ascending order.")
 };
 
 // -=*# Resource for function VLOOKUP #*=-
@@ -3372,8 +3372,8 @@ const char* SC_OPCODE_V_LOOKUP_ARY[] =
     NC_("SC_OPCODE_V_LOOKUP", "The array or range for referencing."),
     NC_("SC_OPCODE_V_LOOKUP", "Index"),
     NC_("SC_OPCODE_V_LOOKUP", "Column index number in the array."),
-    NC_("SC_OPCODE_V_LOOKUP", "Sort order"),
-    NC_("SC_OPCODE_V_LOOKUP", "If the value is TRUE or not given, the search column of the array must be sorted in ascending order.")
+    NC_("SC_OPCODE_V_LOOKUP", "Sorted range lookup"),
+    NC_("SC_OPCODE_V_LOOKUP", "If the value is TRUE or not given, the search column of the array represents a series of ranges, and must be sorted in ascending order.")
 };
 
 // -=*# Resource for function INDEX #*=-
