@@ -26,9 +26,10 @@
 #include <tools/color.hxx>
 #include <rtl/ustring.hxx>
 
-#define ROADMAP_INDENT_X        4
-#define ROADMAP_INDENT_Y        27
-#define ROADMAP_ITEM_DISTANCE_Y 6
+constexpr long LABELBASEMAPHEIGHT = 8;
+constexpr long ROADMAP_INDENT_X = 4;
+constexpr long ROADMAP_INDENT_Y = 27;
+constexpr long ROADMAP_ITEM_DISTANCE_Y = 6;
 
 namespace vcl
 {
