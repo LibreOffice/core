@@ -9,6 +9,9 @@
         <shadowColor value="#808080"/>
         <darkShadowColor value="#000000"/>
         <buttonTextColor value="#007AFF"/>
+        <defaultActionButtonTextColor value="#007AFF"/>
+        <actionButtonRolloverTextColor value="#007AFF"/>
+        <buttonTextColor value="#007AFF"/>
         <buttonRolloverTextColor value="#FFFFFF"/>
         <radioCheckTextColor value="#000000"/>
         <groupTextColor value="#000000"/>
