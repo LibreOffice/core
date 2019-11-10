@@ -3197,7 +3197,9 @@ void SwXTextDocument::setClipboard(const uno::Reference<datatransfer::clipboard:
 {
     SolarMutexGuard aGuard;
 
-    pDocShell->GetView()->GetEditWin().SetClipboard(xClipboard);
+    SwView* pView = pDocShell->GetView();
+    if (pView)
+        pView->GetEditWin().SetClipboard(xClipboard);
 }
 
 bool SwXTextDocument::isMimeTypeSupported()
