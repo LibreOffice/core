@@ -27,7 +27,8 @@ interface XShapes3
      * Sort shapes according to given sort order, for perf reason
      * just rearrange and don't broadcast
      *
-     * @param desired order of the shapes
+     * @param sortOrder
+     * desired order of the shapes
      *
      * @since LibreOffice 6.4
      */
