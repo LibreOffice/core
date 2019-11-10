@@ -23,8 +23,6 @@
 
 #include <vcl/fixed.hxx>
 
-#define LABELBASEMAPHEIGHT      8
-
 namespace vcl
 {
     class HyperLabelImpl;
