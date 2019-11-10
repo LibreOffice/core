@@ -1350,6 +1350,8 @@ svx/res/symphony/rotate_right.png cmd/sc_rotateright.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
 svx/res/symphony/para_numbullet01.png cmd/sc_defaultbullet.png
 svx/res/symphony/para_numbullet02.png cmd/sc_defaultnumbering.png
+svx/res/symphony/para_numbullet_rtl01.png cmd/ar/sc_defaultbullet.png
+svx/res/symphony/para_numbullet_rtl02.png cmd/ar/sc_defaultnumbering.png
 svx/res/symphony/decrease_font.png cmd/sc_shrink.png
 svx/res/symphony/enlarge_font.png cmd/sc_grow.png
 
