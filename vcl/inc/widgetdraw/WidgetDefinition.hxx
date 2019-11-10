@@ -211,6 +211,9 @@ public:
     Color maShadowColor;
     Color maDarkShadowColor;
     Color maButtonTextColor;
+    Color maDefaultActionButtonTextColor;
+    Color maActionButtonTextColor;
+    Color maActionButtonRolloverTextColor;
     Color maButtonRolloverTextColor;
     Color maRadioCheckTextColor;
     Color maGroupTextColor;
