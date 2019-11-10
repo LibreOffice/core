@@ -10,26 +10,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="sidebartype|liststore1">Bar</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="sidebartype|liststore1">Cylinder</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="sidebartype|liststore1">Cone</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="sidebartype|liststore1">Pyramid</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkGrid" id="ChartTypePanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -98,46 +78,36 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="row_spacing">6</property>
+            <property name="column_spacing">6</property>
             <child>
-              <object class="GtkGrid" id="grid9">
+              <object class="GtkComboBoxText" id="3dscheme">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="column_spacing">12</property>
-                <child>
-                  <object class="GtkCheckButton" id="3dlook">
-                    <property name="label" translatable="yes" context="sidebartype|3dlook">_3D Look</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                    <accessibility>
-                      <relation type="label-for" target="3dscheme"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="3dscheme">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <items>
-                      <item translatable="yes" context="sidebartype|3dscheme">Simple</item>
-                      <item translatable="yes" context="sidebartype|3dscheme">Realistic</item>
-                    </items>
-                    <accessibility>
-                      <relation type="labelled-by" target="3dlook"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
+                <property name="hexpand">True</property>
+                <items>
+                  <item translatable="yes" context="sidebartype|3dscheme">Simple</item>
+                  <item translatable="yes" context="sidebartype|3dscheme">Realistic</item>
+                </items>
+                <accessibility>
+                  <relation type="labelled-by" target="3dlook"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="3dlook">
+                <property name="label" translatable="yes" context="sidebartype|3dlook">_3D Look:</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+                <property name="draw_indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="3dscheme"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -145,33 +115,37 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="shapeft">
+              <object class="GtkComboBoxText" id="shape">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="sidebartype|shapeft">Sh_ape</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">shape:border</property>
-                <property name="angle">0.02</property>
-                <property name="xalign">0</property>
+                <property name="hexpand">True</property>
+                <items>
+                  <item translatable="yes" context="sidebartype|shape">Bar</item>
+                  <item translatable="yes" context="sidebartype|shape">Cylinder</item>
+                  <item translatable="yes" context="sidebartype|shape">Cone</item>
+                  <item translatable="yes" context="sidebartype|shape">Pyramid</item>
+                </items>
+                <accessibility>
+                  <relation type="labelled-by" target="shapeft"/>
+                </accessibility>
               </object>
               <packing>
-                <property name="left_attach">0</property>
+                <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkTreeView" id="shape:border">
+              <object class="GtkLabel" id="shapeft">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="model">liststore1</property>
-                <property name="search_column">0</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
-                </child>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="sidebartype|lbl_chartType">Sh_ape:</property>
+                <accessibility>
+                  <relation type="label-for" target="shape"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
           </object>
@@ -392,5 +366,16 @@
     <child>
       <placeholder/>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <property name="mode">both</property>
+    <widgets>
+      <widget name="cmb_chartType"/>
+      <widget name="3dscheme"/>
+      <widget name="shape"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="mode">both</property>
   </object>
 </interface>
