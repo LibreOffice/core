@@ -66,6 +66,10 @@ class LinearGradientInfo : public GradientInfo
 public:
     LinearGradientInfo()
         : GradientInfo(GradientType::Linear)
+        , x1(0.0)
+        , y1(0.0)
+        , x2(0.0)
+        , y2(0.0)
     {
     }
 
