@@ -945,6 +945,9 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
     aStyleSet.SetShadowColor(pDefinitionStyle->maShadowColor);
     aStyleSet.SetDarkShadowColor(pDefinitionStyle->maDarkShadowColor);
     aStyleSet.SetButtonTextColor(pDefinitionStyle->maButtonTextColor);
+    aStyleSet.SetDefaultActionButtonTextColor(pDefinitionStyle->maDefaultActionButtonTextColor);
+    aStyleSet.SetActionButtonTextColor(pDefinitionStyle->maActionButtonTextColor);
+    aStyleSet.SetActionButtonRolloverTextColor(pDefinitionStyle->maActionButtonRolloverTextColor);
     aStyleSet.SetButtonRolloverTextColor(pDefinitionStyle->maButtonRolloverTextColor);
     aStyleSet.SetRadioCheckTextColor(pDefinitionStyle->maRadioCheckTextColor);
     aStyleSet.SetGroupTextColor(pDefinitionStyle->maGroupTextColor);
