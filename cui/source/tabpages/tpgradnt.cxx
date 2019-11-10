@@ -188,11 +188,11 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
     {
         pXGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient() ));
         aString = m_xGradientLB->GetItemText( m_xGradientLB->GetSelectedItemId() );
+        rSet->Put( XFillGradientItem( aString, *pXGradient ) );
     }
     else
     // gradient was passed (unidentified)
     {
-        aString = "gradient";
         pXGradient.reset(new XGradient( m_xLbColorFrom->GetSelectEntryColor(),
                     m_xLbColorTo->GetSelectEntryColor(),
                     static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
@@ -211,7 +211,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 
     assert( pXGradient && "XGradient could not be created" );
     rSet->Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
-    rSet->Put( XFillGradientItem( aString, *pXGradient ) );
+    rSet->Put( XFillGradientItem( OUString(), *pXGradient ) );
     rSet->Put( XGradientStepCountItem( nValue ) );
     return true;
 }
