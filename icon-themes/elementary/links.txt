@@ -1439,6 +1439,9 @@ cmd/32/ko/drawtext.png cmd/32/ko/text.png
 cmd/32/ko/fontheight.png cmd/32/ko/scaletext.png
 cmd/32/ko/formattextmenu.png cmd/32/ko/bold.png
 cmd/32/ko/insertedit.png cmd/32/ko/text.png
+cmd/32/ko/ordercrit.png cmd/32/ko/datasort.png
+cmd/32/ko/sortdown.png cmd/32/ko/sortdescending.png
+cmd/32/ko/sortup.png cmd/32/ko/sortascending.png
 cmd/32/ko/texttoolbox.png cmd/32/ko/text.png
 cmd/32/ko/underlinesimple.png cmd/32/ko/underline.png
 cmd/32/nl/italic.png cmd/32/ca/italic.png
@@ -1493,6 +1496,9 @@ cmd/ko/lc_drawtext.png cmd/ko/lc_text.png
 cmd/ko/lc_fontheight.png cmd/ko/lc_scaletext.png
 cmd/ko/lc_formattextmenu.png cmd/lc_bold.png
 cmd/ko/lc_insertedit.png cmd/ko/lc_text.png
+cmd/ko/lc_ordercrit.png cmd/ko/lc_datasort.png
+cmd/ko/lc_sortdown.png cmd/ko/lc_sortdescending.png
+cmd/ko/lc_sortup.png cmd/ko/lc_sortascending.png
 cmd/ko/lc_texttoolbox.png cmd/ko/lc_text.png
 cmd/ko/lc_underlinesimple.png cmd/ko/lc_underline.png
 cmd/nl/lc_italic.png cmd/ca/lc_italic.png
@@ -1547,6 +1553,9 @@ cmd/ko/sc_drawtext.png cmd/ko/sc_text.png
 cmd/ko/sc_fontheight.png cmd/ko/sc_scaletext.png
 cmd/ko/sc_formattextmenu.png cmd/ko/sc_bold.png
 cmd/ko/sc_insertedit.png cmd/ko/sc_text.png
+cmd/ko/sc_ordercrit.png cmd/ko/sc_datasort.png
+cmd/ko/sc_sortdown.png cmd/ko/sc_sortdescending.png
+cmd/ko/sc_sortup.png cmd/ko/sc_sortascending.png
 cmd/ko/sc_texttoolbox.png cmd/ko/sc_text.png
 cmd/ko/sc_underlinesimple.png cmd/ko/sc_underline.png
 cmd/nl/sc_italic.png cmd/ca/sc_italic.png
