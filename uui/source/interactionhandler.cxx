@@ -30,6 +30,7 @@
 
 #include "iahndl.hxx"
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -99,8 +100,7 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override
     {
-        assert(false);
-        return nullptr;
+        return new comphelper::PropertySetInfo;
     }
 
     virtual void SAL_CALL setPropertyValue(const OUString& rPropertyName, const css::uno::Any& rValue) override
