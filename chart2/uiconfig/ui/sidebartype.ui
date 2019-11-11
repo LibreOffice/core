@@ -343,7 +343,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="nolinesft">
-                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="label" translatable="yes" context="sidebartype|nolinesft">_Number of lines</property>
@@ -359,7 +359,7 @@
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="nolines">
-                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
                     <property name="adjustment">adjustment1</property>

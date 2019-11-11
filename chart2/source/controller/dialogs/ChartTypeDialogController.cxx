@@ -1319,6 +1319,8 @@ void CombiColumnLineChartDialogController::showExtraControls(VclBuilderContainer
             m_pMF_NumberOfLines->SetModifyHdl( LINK( this, CombiColumnLineChartDialogController, ChangeLineCountHdl_unwelded ) );
         }
 
+        m_pFT_NumberOfLines->Enable();
+        m_pMF_NumberOfLines->Enable();
         m_pFT_NumberOfLines->Show();
         m_pMF_NumberOfLines->Show();
 }
@@ -1331,9 +1333,15 @@ void CombiColumnLineChartDialogController::hideExtraControls() const
         m_xMF_NumberOfLines->hide();
 
     if(m_pFT_NumberOfLines)
+    {
+        m_pFT_NumberOfLines->Disable();
         m_pFT_NumberOfLines->Hide();
+    }
     if(m_pMF_NumberOfLines)
+    {
+        m_pMF_NumberOfLines->Disable();
         m_pMF_NumberOfLines->Hide();
+    }
 }
 
 void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypeParameter& /*rParameter*/
