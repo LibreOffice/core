@@ -1210,26 +1210,28 @@ void SbModule::RunInit()
      && !pImage->bInit
      && pImage->IsFlag( SbiImageFlags::INITCODE ) )
     {
-        // Set flag, so that RunInit get active (Testtool)
-        GetSbData()->bRunInit = true;
+        SbiGlobals* pSbData = GetSbData();
 
-        SbModule* pOldMod = GetSbData()->pMod;
-        GetSbData()->pMod = this;
+        // Set flag, so that RunInit get active (Testtool)
+        pSbData->bRunInit = true;
+
+        SbModule* pOldMod = pSbData->pMod;
+        pSbData->pMod = this;
         // The init code starts always here
         std::unique_ptr<SbiRuntime> pRt(new SbiRuntime( this, nullptr, 0 ));
 
-        pRt->pNext = GetSbData()->pInst->pRun;
-        GetSbData()->pInst->pRun = pRt.get();
+        pRt->pNext = pSbData->pInst->pRun;
+        pSbData->pInst->pRun = pRt.get();
         while( pRt->Step() ) {}
 
-        GetSbData()->pInst->pRun = pRt->pNext;
+        pSbData->pInst->pRun = pRt->pNext;
         pRt.reset();
-        GetSbData()->pMod = pOldMod;
+        pSbData->pMod = pOldMod;
         pImage->bInit = true;
         pImage->bFirstInit = false;
 
         // RunInit is not active anymore
-        GetSbData()->bRunInit = false;
+        pSbData->bRunInit = false;
     }
 }
 
