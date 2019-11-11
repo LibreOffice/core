@@ -129,7 +129,7 @@ static const FlavorMap flavorMap[]
         // PBTYPE_UTF8PLAINTEXT, "text/plain;charset=utf-8", "Unicode Text (UTF-8)", false },
         { PBTYPE_RTF, "text/rtf", "Rich Text Format", false },
         { PBTYPE_PNG, "image/png", "Portable Network Graphics", false },
-        { PBTYPE_JPEG, "image/jpeg", "Portable Network Graphics", false },
+        { PBTYPE_JPEG, "image/jpeg", "JPEG", false },
         { PBTYPE_HTML, "text/html", "Plain HTML", false },
         { PBTYPE_PDF, "application/pdf", "PDF File", false },
         { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", false },
