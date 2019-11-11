@@ -1217,14 +1217,8 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
         rSet.ClearItem( EE_CHAR_WEIGHT );   // Highlighted brace not here
 
     SvxEscapement eEsc = static_cast<SvxEscapement>(aAttribs.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
-    if( eEsc == SvxEscapement::Superscript )
-    {
-        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
-    }
-    else if( eEsc == SvxEscapement::Subscript )
-    {
-        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
-    }
+    rSet.Put(SfxBoolItem(SID_SET_SUPER_SCRIPT, eEsc == SvxEscapement::Superscript));
+    rSet.Put(SfxBoolItem(SID_SET_SUB_SCRIPT, eEsc == SvxEscapement::Subscript));
     pViewData->GetBindings().Invalidate( SID_SET_SUPER_SCRIPT );
     pViewData->GetBindings().Invalidate( SID_SET_SUB_SCRIPT );
 

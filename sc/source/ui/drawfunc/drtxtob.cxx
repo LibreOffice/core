@@ -1095,15 +1095,11 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
 
     //  super-/subscript
-
     SvxEscapement eEsc = static_cast<SvxEscapement>(aAttrSet.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
-    if( eEsc == SvxEscapement::Superscript )
-        rDestSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
-    else if( eEsc == SvxEscapement::Subscript )
-        rDestSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
+    rDestSet.Put(SfxBoolItem(SID_SET_SUPER_SCRIPT, eEsc == SvxEscapement::Superscript));
+    rDestSet.Put(SfxBoolItem(SID_SET_SUB_SCRIPT, eEsc == SvxEscapement::Subscript));
 
     //  Underline
-
     eState = aAttrSet.GetItemState( EE_CHAR_UNDERLINE );
     if ( eState == SfxItemState::DONTCARE )
     {
