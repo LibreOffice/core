@@ -23,11 +23,11 @@
 */
 namespace
 {
-class ReturnConstant : public loplugin::FunctionAddress<ReturnConstant>
+class ReturnConstant : public loplugin::FunctionAddress<loplugin::FilteringPlugin<ReturnConstant>>
 {
 public:
     explicit ReturnConstant(loplugin::InstantiationData const& data)
-        : loplugin::FunctionAddress<ReturnConstant>(data)
+        : FunctionAddress(data)
     {
     }
 

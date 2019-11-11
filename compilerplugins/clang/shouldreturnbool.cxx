@@ -24,11 +24,12 @@
 
 namespace
 {
-class ShouldReturnBool : public loplugin::FunctionAddress<ShouldReturnBool>
+class ShouldReturnBool
+    : public loplugin::FunctionAddress<loplugin::FilteringPlugin<ShouldReturnBool>>
 {
 public:
     explicit ShouldReturnBool(loplugin::InstantiationData const& data)
-        : loplugin::FunctionAddress<ShouldReturnBool>(data)
+        : FunctionAddress(data)
     {
     }
 
@@ -143,13 +144,13 @@ bool ShouldReturnBool::TraverseFunctionDecl(FunctionDecl* functionDecl)
     {
         mbInsideFunction = true;
         mbFunctionOnlyReturningOneOrZero = true;
-        ret = loplugin::FunctionAddress<ShouldReturnBool>::TraverseFunctionDecl(functionDecl);
+        ret = FunctionAddress::TraverseFunctionDecl(functionDecl);
         mbInsideFunction = false;
         if (mbFunctionOnlyReturningOneOrZero)
             problemFunctions.insert(functionDecl);
     }
     else
-        ret = loplugin::FunctionAddress<ShouldReturnBool>::TraverseFunctionDecl(functionDecl);
+        ret = FunctionAddress::TraverseFunctionDecl(functionDecl);
     return ret;
 }
 
@@ -160,13 +161,13 @@ bool ShouldReturnBool::TraverseCXXMethodDecl(CXXMethodDecl* methodDecl)
     {
         mbInsideFunction = true;
         mbFunctionOnlyReturningOneOrZero = true;
-        ret = loplugin::FunctionAddress<ShouldReturnBool>::TraverseCXXMethodDecl(methodDecl);
+        ret = FunctionAddress::TraverseCXXMethodDecl(methodDecl);
         mbInsideFunction = false;
         if (mbFunctionOnlyReturningOneOrZero)
             problemFunctions.insert(methodDecl);
     }
     else
-        ret = loplugin::FunctionAddress<ShouldReturnBool>::TraverseCXXMethodDecl(methodDecl);
+        ret = FunctionAddress::TraverseCXXMethodDecl(methodDecl);
     return ret;
 }
 

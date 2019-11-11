@@ -19,16 +19,16 @@
  */
 namespace loplugin {
 
-template<typename Derived>
-class FunctionAddress : public RecursiveASTVisitor<Derived>, public loplugin::Plugin
+template<typename Base>
+class FunctionAddress : public Base
 {
 public:
-    explicit FunctionAddress( const InstantiationData& data ) : loplugin::Plugin(data) {}
+    explicit FunctionAddress( const InstantiationData& data ) : Base(data) {}
 
     bool TraverseCallExpr(CallExpr * expr) {
         auto const saved = callee_;
         callee_ = expr->getCallee();
-        auto const ret = RecursiveASTVisitor<Derived>::TraverseCallExpr(expr);
+        auto const ret = Base::TraverseCallExpr(expr);
         callee_ = saved;
         return ret;
     }
@@ -36,7 +36,7 @@ public:
     bool TraverseCXXOperatorCallExpr(CXXOperatorCallExpr * expr) {
         auto const saved = callee_;
         callee_ = expr->getCallee();
-        auto const ret = RecursiveASTVisitor<Derived>::TraverseCXXOperatorCallExpr(expr);
+        auto const ret = Base::TraverseCXXOperatorCallExpr(expr);
         callee_ = saved;
         return ret;
     }
@@ -44,7 +44,7 @@ public:
     bool TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr) {
         auto const saved = callee_;
         callee_ = expr->getCallee();
-        auto const ret = RecursiveASTVisitor<Derived>::TraverseCXXMemberCallExpr(expr);
+        auto const ret = Base::TraverseCXXMemberCallExpr(expr);
         callee_ = saved;
         return ret;
     }
@@ -52,7 +52,7 @@ public:
     bool TraverseCUDAKernelCallExpr(CUDAKernelCallExpr * expr) {
         auto const saved = callee_;
         callee_ = expr->getCallee();
-        auto const ret = RecursiveASTVisitor<Derived>::TraverseCUDAKernelCallExpr(expr);
+        auto const ret = Base::TraverseCUDAKernelCallExpr(expr);
         callee_ = saved;
         return ret;
     }
@@ -60,7 +60,7 @@ public:
     bool TraverseUserDefinedLiteral(UserDefinedLiteral * expr) {
         auto const saved = callee_;
         callee_ = expr->getCallee();
-        auto const ret = RecursiveASTVisitor<Derived>::TraverseUserDefinedLiteral(expr);
+        auto const ret = Base::TraverseUserDefinedLiteral(expr);
         callee_ = saved;
         return ret;
     }
@@ -69,7 +69,7 @@ public:
         if (expr == callee_) {
             return true;
         }
-        if (ignoreLocation(expr)) {
+        if (this->ignoreLocation(expr)) {
             return true;
         }
         if (expr->getCastKind() != CK_FunctionToPointerDecay) {
@@ -89,7 +89,7 @@ public:
     }
 
     bool VisitUnaryAddrOf(UnaryOperator const * expr) {
-        if (ignoreLocation(expr)) {
+        if (this->ignoreLocation(expr)) {
             return true;
         }
         auto const dre = dyn_cast<DeclRefExpr>(

@@ -31,10 +31,10 @@ namespace
 {
 
 class ConstMethod:
-    public loplugin::FunctionAddress<ConstMethod>
+    public loplugin::FunctionAddress<loplugin::FilteringPlugin<ConstMethod>>
 {
 public:
-    explicit ConstMethod(loplugin::InstantiationData const & data): loplugin::FunctionAddress<ConstMethod>(data) {}
+    explicit ConstMethod(loplugin::InstantiationData const & data): FunctionAddress(data) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
