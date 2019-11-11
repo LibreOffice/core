@@ -923,10 +923,7 @@ chart2/source/controller/chartapiwrapper/WrappedSymbolProperties.hxx
 chart2/source/controller/chartapiwrapper/WrappedTextRotationProperty.cxx
 chart2/source/controller/chartapiwrapper/WrappedTextRotationProperty.hxx
 chart2/source/controller/dialogs/ChangingResource.cxx
-chart2/source/controller/dialogs/ChangingResource.hxx
 chart2/source/controller/dialogs/ChartTypeDialogController.cxx
-chart2/source/controller/dialogs/ChartTypeDialogController.hxx
-chart2/source/controller/dialogs/ChartTypeTemplateProvider.hxx
 chart2/source/controller/dialogs/DataBrowser.cxx
 chart2/source/controller/dialogs/DataBrowser.hxx
 chart2/source/controller/dialogs/DataBrowserModel.cxx
