@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <dlg_DataSource.hxx>
-#include "ChartTypeTemplateProvider.hxx"
+#include <ChartTypeTemplateProvider.hxx>
 #include <DiagramHelper.hxx>
 #include "DialogModel.hxx"
 

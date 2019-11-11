@@ -22,15 +22,26 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartTypeTemplate; } } } }
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace chart2
+{
+class XChartTypeTemplate;
+}
+}
+}
+}
 
 namespace chart
 {
-
 class ChartTypeTemplateProvider
 {
 public:
-    virtual css::uno::Reference< css::chart2::XChartTypeTemplate > getCurrentTemplate() const =0;
+    virtual css::uno::Reference<css::chart2::XChartTypeTemplate> getCurrentTemplate() const = 0;
     virtual ~ChartTypeTemplateProvider() {}
 };
 

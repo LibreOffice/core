@@ -22,7 +22,6 @@
 
 namespace chart
 {
-
 class ChangingResource;
 class ResourceChangeListener
 {
@@ -37,7 +36,7 @@ public:
     ChangingResource();
     virtual ~ChangingResource();
 
-    void setChangeListener( ResourceChangeListener* pListener );
+    void setChangeListener(ResourceChangeListener* pListener);
 
 protected:
     ResourceChangeListener* m_pChangeListener;
