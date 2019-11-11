@@ -40,7 +40,6 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <vcl/transfer.hxx>
 
 #include <vcl/uitest/uiobject.hxx>
 
