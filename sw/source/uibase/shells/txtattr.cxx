@@ -158,25 +158,37 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
             rSh.QuickUpdateStyle();
             rReq.Done();
             break;
-        case FN_UNDERLINE_DOUBLE:
+
+        case SID_ULINE_VAL_NONE:
         {
-            FontLineStyle eUnderline =
-                            aSet.Get(RES_CHRATR_UNDERLINE).GetLineStyle();
-            switch( eState )
+            SvxUnderlineItem aUnderline(LINESTYLE_NONE, RES_CHRATR_UNDERLINE );
+            rSh.SetAttrItem( aUnderline );
+            rReq.AppendItem( aUnderline );
+            rReq.Done();
+            break;
+        }
+
+        case SID_ULINE_VAL_SINGLE:
+        case SID_ULINE_VAL_DOUBLE:
+        case SID_ULINE_VAL_DOTTED:
+        {
+            FontLineStyle eOld = aSet.Get(RES_CHRATR_UNDERLINE).GetLineStyle();
+            FontLineStyle eNew = eOld;
+
+            switch (nWhich)
             {
-                case STATE_TOGGLE:
-                    eUnderline = eUnderline == LINESTYLE_DOUBLE ?
-                        LINESTYLE_NONE :
-                            LINESTYLE_DOUBLE;
-                break;
-                case STATE_ON:
-                    eUnderline = LINESTYLE_DOUBLE;
-                break;
-                case STATE_OFF:
-                    eUnderline = LINESTYLE_NONE;
-                break;
+                case SID_ULINE_VAL_SINGLE:
+                    eNew = ( eOld == LINESTYLE_SINGLE ) ? LINESTYLE_NONE : LINESTYLE_SINGLE;
+                    break;
+                case SID_ULINE_VAL_DOUBLE:
+                    eNew = ( eOld == LINESTYLE_DOUBLE ) ? LINESTYLE_NONE : LINESTYLE_DOUBLE;
+                    break;
+                case SID_ULINE_VAL_DOTTED:
+                    eNew = ( eOld == LINESTYLE_DOTTED ) ? LINESTYLE_NONE : LINESTYLE_DOTTED;
+                    break;
             }
-            SvxUnderlineItem aUnderline(eUnderline, RES_CHRATR_UNDERLINE );
+
+            SvxUnderlineItem aUnderline(eNew, RES_CHRATR_UNDERLINE );
             rSh.SetAttrItem( aUnderline );
             rReq.AppendItem( aUnderline );
             rReq.Done();
@@ -691,14 +703,31 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 nSlot = 0;
             }
             break;
-            case FN_UNDERLINE_DOUBLE:
+            case SID_ULINE_VAL_NONE:
+            case SID_ULINE_VAL_SINGLE:
+            case SID_ULINE_VAL_DOUBLE:
+            case SID_ULINE_VAL_DOTTED:
             {
                 eState = aCoreSet.GetItemState(RES_CHRATR_UNDERLINE);
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    FontLineStyle eUnderline =
-                            aCoreSet.Get(RES_CHRATR_UNDERLINE).GetLineStyle();
-                    rSet.Put(SfxBoolItem(nSlot, eUnderline == LINESTYLE_DOUBLE));
+                    FontLineStyle eLineStyle = aCoreSet.Get(RES_CHRATR_UNDERLINE).GetLineStyle();
+
+                    switch (nSlot)
+                    {
+                        case SID_ULINE_VAL_NONE:
+                            rSet.Put(SfxBoolItem(nSlot, eLineStyle == LINESTYLE_NONE));
+                            break;
+                        case SID_ULINE_VAL_SINGLE:
+                            rSet.Put(SfxBoolItem(nSlot, eLineStyle == LINESTYLE_SINGLE));
+                            break;
+                        case SID_ULINE_VAL_DOUBLE:
+                            rSet.Put(SfxBoolItem(nSlot, eLineStyle == LINESTYLE_DOUBLE));
+                            break;
+                        case SID_ULINE_VAL_DOTTED:
+                            rSet.Put(SfxBoolItem(nSlot, eLineStyle == LINESTYLE_DOTTED));
+                            break;
+                    }
                 }
                 else
                     rSet.InvalidateItem(nSlot);
