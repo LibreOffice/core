@@ -27,8 +27,6 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 
-#include "impoptimizer.hxx"
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;

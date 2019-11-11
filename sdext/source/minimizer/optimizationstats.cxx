@@ -22,7 +22,6 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 
 
 using namespace ::com::sun::star;

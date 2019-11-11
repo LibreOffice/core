@@ -35,9 +35,7 @@
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/Color.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 namespace sdext { namespace presenter {

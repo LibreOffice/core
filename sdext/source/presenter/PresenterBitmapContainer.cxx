@@ -20,11 +20,8 @@
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterConfigurationAccess.hxx"
 
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;

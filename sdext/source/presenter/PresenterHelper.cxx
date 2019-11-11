@@ -19,8 +19,6 @@
 
 #include "PresenterHelper.hxx"
 
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 

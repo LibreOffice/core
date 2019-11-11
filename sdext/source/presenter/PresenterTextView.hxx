@@ -21,17 +21,16 @@
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERTEXTVIEW_HXX
 
 #include "PresenterTheme.hxx"
-#include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/TextSegment.hpp>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/basemutex.hxx>
 
 #include <functional>
 

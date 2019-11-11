@@ -25,10 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <osl/file.h>
-#include <rtl/crc.h>
 
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace com::sun::star;

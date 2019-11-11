@@ -19,20 +19,13 @@
 
 #include "PresenterViewFactory.hxx"
 #include "PresenterPaneContainer.hxx"
-#include "PresenterHelper.hxx"
 #include "PresenterHelpView.hxx"
 #include "PresenterNotesView.hxx"
 #include "PresenterSlideShowView.hxx"
 #include "PresenterSlidePreview.hxx"
 #include "PresenterSlideSorter.hxx"
 #include "PresenterToolBar.hxx"
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#include <com/sun/star/drawing/XDrawPages.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XSlideSorterBase.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

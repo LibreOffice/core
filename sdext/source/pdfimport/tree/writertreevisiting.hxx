@@ -22,6 +22,8 @@
 
 #include <treevisiting.hxx>
 
+#include <pdfihelper.hxx>
+
 namespace pdfi
 {
     struct DrawElement;

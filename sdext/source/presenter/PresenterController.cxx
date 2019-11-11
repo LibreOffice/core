@@ -26,10 +26,7 @@
 #include "PresenterAccessibility.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterCurrentSlideObserver.hxx"
-#include "PresenterFrameworkObserver.hxx"
-#include "PresenterHelper.hxx"
 #include "PresenterScreen.hxx"
-#include "PresenterNotesView.hxx"
 #include "PresenterPaintManager.hxx"
 #include "PresenterPaneBase.hxx"
 #include "PresenterPaneContainer.hxx"
@@ -38,12 +35,9 @@
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
 
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -55,7 +49,6 @@
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 

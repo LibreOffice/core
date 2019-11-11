@@ -25,7 +25,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/alloc.h>
 #include <rtl/digest.h>
 #include <rtl/cipher.h>
 #include <sal/log.hxx>

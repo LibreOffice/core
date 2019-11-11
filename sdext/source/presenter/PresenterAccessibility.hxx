@@ -22,14 +22,8 @@
 
 #include "PresenterPaneContainer.hxx"
 
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/awt/WindowEvent.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XPane2.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

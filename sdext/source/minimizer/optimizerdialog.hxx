@@ -23,20 +23,12 @@
 #include "unodialog.hxx"
 #include "optimizationstats.hxx"
 #include "configurationaccess.hxx"
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XItemListener.hpp>
-#include <com/sun/star/awt/XSpinField.hpp>
 #include <com/sun/star/awt/XSpinListener.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/awt/XTextListener.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/XItemEventBroadcaster.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/awt/PushButtonType.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #define MAX_STEP        4

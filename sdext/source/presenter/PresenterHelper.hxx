@@ -20,10 +20,8 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERHELPER_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERHELPER_HXX
 
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace sdext { namespace presenter {
 

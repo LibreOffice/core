@@ -36,8 +36,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <com/sun/star/rendering/XSprite.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
 namespace sdext { namespace presenter {
 

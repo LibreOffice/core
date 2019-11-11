@@ -22,8 +22,6 @@
 
 #include "PresenterController.hxx"
 
-#include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/awt/XDisplayBitmap.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -31,7 +29,6 @@
 #include <com/sun/star/drawing/XSlideRenderer.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
