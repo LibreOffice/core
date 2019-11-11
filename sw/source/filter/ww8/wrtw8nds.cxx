@@ -1676,17 +1676,6 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nCurrentPos,
     aSnippet = aSnippet.replace(CHAR_HARDHYPHEN, 0x1e);
     aSnippet = aSnippet.replace(CHAR_SOFTHYPHEN, 0x1f);
 
-    // tdf#123703 revert import workaround for longer space characters in consecutive spaces
-    sal_Int32 nPos;
-    if ((nPos = aSnippet.indexOf(0x2006)) > -1)
-    {
-        const sal_Unicode aExtraSpace[5] = { 0x2006, 0x20, 0x2006, 0x20, 0 };
-        const sal_Unicode aExtraSpace2[4] = { 0x20, 0x2006, 0x20, 0 };
-        OUString sDoubleSpace("  ");
-        aSnippet = aSnippet.replaceAll(aExtraSpace, sDoubleSpace, nPos)
-                           .replaceAll(aExtraSpace2, sDoubleSpace);
-    }
-
     m_rExport.m_aCurrentCharPropStarts.push( nCurrentPos );
     const SfxPoolItem &rItem = GetItem(RES_CHRATR_CASEMAP);
 

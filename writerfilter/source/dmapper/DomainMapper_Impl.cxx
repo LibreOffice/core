@@ -1884,11 +1884,18 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                 else
                 {
 #if !defined(MACOSX) // TODO: check layout differences and support all platforms, if needed
-                    sal_Int32 nPos;
+                    sal_Int32 nPos = 0;
+                    OUString sFontName;
                     OUString sDoubleSpace("  ");
-                    if (IsRTFImport() && !IsOpenFieldCommand() && (nPos = rString.indexOf(sDoubleSpace)) > -1)
+                    PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
+                    // tdf#123703 workaround for longer space sequences of the old or compatible RTF documents
+                    if (GetSettingsTable()->GetLongerSpaceSequence() && !IsOpenFieldCommand() && (nPos = rString.indexOf(sDoubleSpace)) != -1 &&
+                        // monospaced fonts have no longer space sequences, regardless of \fprq2 (not monospaced) font setting
+                        // fix for the base monospaced font Courier
+                        (!pContext || !pContext->isSet(PROP_CHAR_FONT_NAME) ||
+                            ((pContext->getProperty(PROP_CHAR_FONT_NAME)->second >>= sFontName) && sFontName.indexOf("Courier") == -1)))
                     {
-                        // tdf#123703 an RTF space character is longer by an extra six-em-space in a space sequence,
+                        // an RTF space character is longer by an extra six-em-space in an old-style RTF space sequence,
                         // insert them to keep RTF document layout formatted by consecutive spaces
                         const sal_Unicode aExtraSpace[5] = { 0x2006, 0x20, 0x2006, 0x20, 0 };
                         const sal_Unicode aExtraSpace2[4] = { 0x20, 0x2006, 0x20, 0 };
