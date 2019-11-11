@@ -644,27 +644,24 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
         break;
         case VclEventId::WindowKeyInput:
+        {
+            if ( mpImpl->getKeyListeners().getLength() )
+            {
+                css::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
+                    *static_cast<KeyEvent*>(rVclWindowEvent.GetData()), *this
+                ) );
+                mpImpl->getKeyListeners().keyPressed( aEvent );
+            }
+        }
+        break;
         case VclEventId::WindowKeyUp:
         {
-            VclPtr<vcl::Window> pWin = GetWindow();
-            while (pWin)
+            if ( mpImpl->getKeyListeners().getLength() )
             {
-                VCLXWindow* pXWindow = pWin->GetWindowPeer();
-                if (!pXWindow || pXWindow->mpImpl->getKeyListeners().getLength() == 0)
-                {
-                    pWin = pWin->GetWindow(GetWindowType::RealParent);
-                    continue;
-                }
-
-                awt::KeyEvent aEvent(VCLUnoHelper::createKeyEvent(
-                    *static_cast<KeyEvent*>(rVclWindowEvent.GetData()), *this));
-                if (rVclWindowEvent.GetId() == VclEventId::WindowKeyInput)
-                    pXWindow->mpImpl->getKeyListeners().keyPressed(aEvent);
-                else
-                    pXWindow->mpImpl->getKeyListeners().keyReleased(aEvent);
-
-                // Next window (parent)
-                pWin = pWin->GetWindow(GetWindowType::RealParent);
+                css::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
+                    *static_cast<KeyEvent*>(rVclWindowEvent.GetData()), *this
+                ) );
+                mpImpl->getKeyListeners().keyReleased( aEvent );
             }
         }
         break;
@@ -697,66 +694,50 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VclEventId::WindowMouseMove:
         {
             MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rVclWindowEvent.GetData());
-            VclPtr<vcl::Window> pWin = GetWindow();
-            while (pWin)
+            if ( mpImpl->getMouseListeners().getLength() && ( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() ) )
             {
-                VCLXWindow* pXWindow = pWin->GetWindowPeer();
-                if (!pXWindow || pXWindow->mpImpl->getMouseListeners().getLength() == 0)
-                {
-                    pWin = pWin->GetWindow(GetWindowType::RealParent);
-                    continue;
-                }
-                awt::MouseEvent aEvent(VCLUnoHelper::createMouseEvent(*pMouseEvt, *pXWindow));
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
+                bool const isEnter(pMouseEvt->IsEnterWindow());
+                Callback aCallback = [ this, isEnter, aEvent ]()
+                     { MouseListenerMultiplexer& rMouseListeners = this->mpImpl->getMouseListeners();
+                       isEnter
+                           ? rMouseListeners.mouseEntered(aEvent)
+                           : rMouseListeners.mouseExited(aEvent); };
 
-                if (pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow())
-                {
-                    bool const isEnter(pMouseEvt->IsEnterWindow());
-                    Callback aCallback = [pXWindow, isEnter, aEvent]() {
-                        isEnter ? pXWindow->mpImpl->getMouseListeners().mouseEntered(aEvent)
-                                : pXWindow->mpImpl->getMouseListeners().mouseExited(aEvent);
-                    };
-                    ImplExecuteAsyncWithoutSolarLock(aCallback);
-                }
+                ImplExecuteAsyncWithoutSolarLock( aCallback );
+            }
+
+            if ( mpImpl->getMouseMotionListeners().getLength() && !pMouseEvt->IsEnterWindow() && !pMouseEvt->IsLeaveWindow() )
+            {
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
+                aEvent.ClickCount = 0;
+                if ( pMouseEvt->GetMode() & MouseEventModifiers::SIMPLEMOVE )
+                    mpImpl->getMouseMotionListeners().mouseMoved( aEvent );
                 else
-                {
-                    aEvent.ClickCount = 0;
-                    MouseMotionListenerMultiplexer& rMouseListeners
-                        = pXWindow->mpImpl->getMouseMotionListeners();
-                    if (pMouseEvt->GetMode() & MouseEventModifiers::SIMPLEMOVE)
-                        rMouseListeners.mouseMoved(aEvent);
-                    else
-                        rMouseListeners.mouseDragged(aEvent);
-                }
-
-                // Next window (parent)
-                pWin = pWin->GetWindow(GetWindowType::RealParent);
+                    mpImpl->getMouseMotionListeners().mouseDragged( aEvent );
             }
         }
         break;
         case VclEventId::WindowMouseButtonDown:
+        {
+            if ( mpImpl->getMouseListeners().getLength() )
+            {
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast<MouseEvent*>(rVclWindowEvent.GetData()), *this ) );
+                Callback aCallback = [ this, aEvent ]()
+                                     { this->mpImpl->getMouseListeners().mousePressed( aEvent ); };
+                ImplExecuteAsyncWithoutSolarLock( aCallback );
+            }
+        }
+        break;
         case VclEventId::WindowMouseButtonUp:
         {
-            VclPtr<vcl::Window> pWin = GetWindow();
-            while (pWin)
+            if ( mpImpl->getMouseListeners().getLength() )
             {
-                VCLXWindow* pXWindow = pWin->GetWindowPeer();
-                if (!pXWindow || pXWindow->mpImpl->getMouseListeners().getLength() == 0)
-                {
-                    pWin = pWin->GetWindow(GetWindowType::RealParent);
-                    continue;
-                }
-                MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rVclWindowEvent.GetData());
-                awt::MouseEvent aEvent(VCLUnoHelper::createMouseEvent(*pMouseEvt, *pXWindow));
-                VclEventId eventId = rVclWindowEvent.GetId();
-                Callback aCallback = [pXWindow, aEvent, eventId]() {
-                    eventId == VclEventId::WindowMouseButtonDown
-                        ? pXWindow->mpImpl->getMouseListeners().mousePressed(aEvent)
-                        : pXWindow->mpImpl->getMouseListeners().mouseReleased(aEvent);
-                };
-                ImplExecuteAsyncWithoutSolarLock(aCallback);
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast<MouseEvent*>(rVclWindowEvent.GetData()), *this ) );
 
-                // Next window (parent)
-                pWin = pWin->GetWindow(GetWindowType::RealParent);
+                Callback aCallback = [ this, aEvent ]()
+                                     { this->mpImpl->getMouseListeners().mouseReleased( aEvent ); };
+                ImplExecuteAsyncWithoutSolarLock( aCallback );
             }
         }
         break;
