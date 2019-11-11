@@ -128,6 +128,7 @@ public:
     void testTdf66597_3();
     void testTdf109143();
     void testTdf105954();
+    void testTdf128630();
     void testTdf106702();
     void testTdf113143();
     void testTdf115262();
@@ -164,6 +165,7 @@ public:
     CPPUNIT_TEST(testTdf66597_3);
     CPPUNIT_TEST(testTdf109143);
     CPPUNIT_TEST(testTdf105954);
+    CPPUNIT_TEST(testTdf128630);
     CPPUNIT_TEST(testTdf106702);
     CPPUNIT_TEST(testTdf113143);
     CPPUNIT_TEST(testTdf115262);
@@ -1508,6 +1510,40 @@ void PdfExportTest::testTdf105954()
     // This was 2000, i.e. the 'reduce to 300 DPI' request was ignored.
     // This is now around 238 (228 on macOS).
     CPPUNIT_ASSERT_LESS(static_cast<unsigned int>(250), aMeta.width);
+}
+
+void PdfExportTest::testTdf128630()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf128630.odp";
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
+    DocumentHolder pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+
+    // Assert the aspect ratio of the only bitmap on the page.
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
+        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
+            continue;
+
+        FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject);
+        CPPUNIT_ASSERT(pBitmap);
+        int nWidth = FPDFBitmap_GetWidth(pBitmap);
+        int nHeight = FPDFBitmap_GetHeight(pBitmap);
+        FPDFBitmap_Destroy(pBitmap);
+        // Without the accompanying fix in place, this test would have failed with:
+        // assertion failed
+        // - Expression: nWidth != nHeight
+        // i.e. the bitmap lost its custom aspect ratio during export.
+        CPPUNIT_ASSERT(nWidth != nHeight);
+    }
 }
 
 void PdfExportTest::testTdf106702()
