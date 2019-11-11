@@ -24,6 +24,7 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
 #include <editeng/eeitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -372,6 +373,34 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                     if( !bLeftToRight )
                         bDisableParagraphTextDirection = true;
+                }
+            }
+            break;
+
+            case SID_ULINE_VAL_NONE:
+            case SID_ULINE_VAL_SINGLE:
+            case SID_ULINE_VAL_DOUBLE:
+            case SID_ULINE_VAL_DOTTED:
+            {
+                if( aAttrSet.GetItemState( EE_CHAR_UNDERLINE ) >= SfxItemState::DEFAULT )
+                {
+                    FontLineStyle eLineStyle = aAttrSet.Get(EE_CHAR_UNDERLINE).GetLineStyle();
+
+                    switch (nSlotId)
+                    {
+                        case SID_ULINE_VAL_NONE:
+                            rSet.Put(SfxBoolItem(nSlotId, eLineStyle == LINESTYLE_NONE));
+                            break;
+                        case SID_ULINE_VAL_SINGLE:
+                            rSet.Put(SfxBoolItem(nSlotId, eLineStyle == LINESTYLE_SINGLE));
+                            break;
+                        case SID_ULINE_VAL_DOUBLE:
+                            rSet.Put(SfxBoolItem(nSlotId, eLineStyle == LINESTYLE_DOUBLE));
+                            break;
+                        case SID_ULINE_VAL_DOTTED:
+                            rSet.Put(SfxBoolItem(nSlotId, eLineStyle == LINESTYLE_DOTTED));
+                            break;
+                    }
                 }
             }
             break;

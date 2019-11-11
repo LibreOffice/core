@@ -2727,6 +2727,26 @@ interface DrawView
         ExecMethod = ExecChar ;
         StateMethod = GetAttrState ;
     ]
+    SID_ULINE_VAL_NONE
+    [
+        ExecMethod = ExecChar ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_ULINE_VAL_SINGLE
+    [
+        ExecMethod = ExecChar ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_ULINE_VAL_DOUBLE
+    [
+        ExecMethod = ExecChar ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_ULINE_VAL_DOTTED
+    [
+        ExecMethod = ExecChar ;
+        StateMethod = GetAttrState ;
+    ]
     SID_ATTR_CHAR_SHADOWED
     [
         ExecMethod = ExecChar ;

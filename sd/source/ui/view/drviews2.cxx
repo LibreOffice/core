@@ -3560,6 +3560,38 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
             }
         }
         break;
+
+        case SID_ULINE_VAL_NONE:
+        {
+            aNewAttr.Put(SvxUnderlineItem(LINESTYLE_NONE, EE_CHAR_UNDERLINE));
+            break;
+        }
+
+        case SID_ULINE_VAL_SINGLE:
+        case SID_ULINE_VAL_DOUBLE:
+        case SID_ULINE_VAL_DOTTED:
+        {
+            FontLineStyle eOld = aEditAttr.Get(EE_CHAR_UNDERLINE).GetLineStyle();
+            FontLineStyle eNew = eOld;
+
+            switch (nSId)
+            {
+                case SID_ULINE_VAL_SINGLE:
+                    eNew = ( eOld == LINESTYLE_SINGLE ) ? LINESTYLE_NONE : LINESTYLE_SINGLE;
+                    break;
+                case SID_ULINE_VAL_DOUBLE:
+                    eNew = ( eOld == LINESTYLE_DOUBLE ) ? LINESTYLE_NONE : LINESTYLE_DOUBLE;
+                    break;
+                case SID_ULINE_VAL_DOTTED:
+                    eNew = ( eOld == LINESTYLE_DOTTED ) ? LINESTYLE_NONE : LINESTYLE_DOTTED;
+                    break;
+            }
+
+            SvxUnderlineItem aUnderline(eNew, EE_CHAR_UNDERLINE);
+            aNewAttr.Put(aUnderline);
+        }
+        break;
+
     case SID_ATTR_CHAR_SHADOWED:
         if( rReq.GetArgs() )
         {

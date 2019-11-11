@@ -25,6 +25,7 @@
 #include <svx/hlnkitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/eitem.hxx>
@@ -363,6 +364,39 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 rSet.Put(aULSP);
                 bAttr = true;
                 Invalidate(SID_ATTR_PARA_ULSPACE);
+            }
+            break;
+            case SID_ULINE_VAL_NONE:
+            case SID_ULINE_VAL_SINGLE:
+            case SID_ULINE_VAL_DOUBLE:
+            case SID_ULINE_VAL_DOTTED:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+                if( aAttrs.GetItemState( EE_CHAR_UNDERLINE ) >= SfxItemState::DEFAULT )
+                {
+                    FontLineStyle eLineStyle = aAttrs.Get(EE_CHAR_UNDERLINE).GetLineStyle();
+
+                    switch (nSlotId)
+                    {
+                        case SID_ULINE_VAL_NONE:
+                            rSet.Put(SfxBoolItem(nSlotId, eLineStyle == LINESTYLE_NONE));
+                            break;
+                        case SID_ULINE_VAL_SINGLE:
+                            rSet.Put(SfxBoolItem(nSlotId, eLineStyle == LINESTYLE_SINGLE));
+                            break;
+                        case SID_ULINE_VAL_DOUBLE:
+                            rSet.Put(SfxBoolItem(nSlotId, eLineStyle == LINESTYLE_DOUBLE));
+                            break;
+                        case SID_ULINE_VAL_DOTTED:
+                            rSet.Put(SfxBoolItem(nSlotId, eLineStyle == LINESTYLE_DOTTED));
+                            break;
+                    }
+                }
+
+                bAttr = true;
+
+                Invalidate(nSlotId);
             }
             break;
             case SID_ATTR_FILL_STYLE:
