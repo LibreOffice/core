@@ -100,7 +100,7 @@ GtkWindow* RunDialog::GetTransientFor()
     {
         GtkSalFrame *pFrame = dynamic_cast<GtkSalFrame *>( pWindow->ImplGetFrame() );
         if( pFrame )
-            pParent = GTK_WINDOW( pFrame->getWindow() );
+            pParent = GTK_WINDOW(gtk_widget_get_toplevel(pFrame->getWindow()));
     }
 
     return pParent;
