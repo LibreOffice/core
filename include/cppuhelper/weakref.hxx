@@ -174,7 +174,7 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     WeakReference & SAL_CALL operator = (
-            const css::uno::Reference< interface_type > && xInt )
+            css::uno::Reference< interface_type > && xInt )
         { WeakReferenceHelper::operator=(std::move(xInt)); return *this; }
 #endif
 
