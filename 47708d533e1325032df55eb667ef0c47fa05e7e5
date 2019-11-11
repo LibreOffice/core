@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_172332aa",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2724,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-11T08:39:44Z",
+      "side": 1,
+      "message": "If \"The filter needs to be the unescaped file name\", is it really intentional to use DecodeMechanism::Unambiguous (keeps some percent encodings intact) rather than DecodeMechanism::WithCharset (decodes all percent encodings)?",
+      "range": {
+        "startLine": 2724,
+        "startChar": 70,
+        "endLine": 2724,
+        "endChar": 113
+      },
+      "revId": "47708d533e1325032df55eb667ef0c47fa05e7e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
