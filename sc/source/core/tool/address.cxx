@@ -2234,20 +2234,23 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
             r.append(":");
             r.append(aName);
         }
+        break;
     }
-    break;
 
     case formula::FormulaGrammar::CONV_XL_A1:
-    case formula::FormulaGrammar::CONV_XL_OOX:
+    case formula::FormulaGrammar::CONV_XL_OOX: {
+        SCCOL nMaxCol = pDoc ? pDoc->MaxCol() : MAXCOL;
+        SCROW nMaxRow = pDoc ? pDoc->MaxRow() : MAXROW;
+
         lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
-        if( aStart.Col() == 0 && aEnd.Col() >= (pDoc ? pDoc->MaxCol() : MAXCOL) && !bFullAddressNotation )
+        if( aStart.Col() == 0 && aEnd.Col() >= nMaxCol && !bFullAddressNotation )
         {
             // Full col refs always require 2 rows (2:2)
             lcl_a1_append_r( r, aStart.Row(), (nFlags & ScRefFlags::ROW_ABS) != ScRefFlags::ZERO );
             r.append(":");
             lcl_a1_append_r( r, aEnd.Row(), (nFlags & ScRefFlags::ROW2_ABS) != ScRefFlags::ZERO );
         }
-        else if( aStart.Row() == 0 && aEnd.Row() >= pDoc->MaxRow() && !bFullAddressNotation )
+        else if( aStart.Row() == 0 && aEnd.Row() >= nMaxRow && !bFullAddressNotation )
         {
             // Full row refs always require 2 cols (A:A)
             lcl_a1_append_c( r, aStart.Col(), (nFlags & ScRefFlags::COL_ABS) != ScRefFlags::ZERO );
@@ -2267,11 +2270,15 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
                 lcl_a1_append_r ( r, aEnd.Row(), (nFlags & ScRefFlags::ROW2_ABS) != ScRefFlags::ZERO );
             }
         }
-    break;
+        break;
+    }
 
-    case formula::FormulaGrammar::CONV_XL_R1C1:
+    case formula::FormulaGrammar::CONV_XL_R1C1: {
+        SCCOL nMaxCol = pDoc ? pDoc->MaxCol() : MAXCOL;
+        SCROW nMaxRow = pDoc ? pDoc->MaxRow() : MAXROW;
+
         lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
-        if( aStart.Col() == 0 && aEnd.Col() >= (pDoc ? pDoc->MaxCol() : MAXCOL) && !bFullAddressNotation )
+        if( aStart.Col() == 0 && aEnd.Col() >= nMaxCol && !bFullAddressNotation )
         {
             lcl_r1c1_append_r( r, aStart.Row(), (nFlags & ScRefFlags::ROW_ABS) != ScRefFlags::ZERO, rDetails );
             if( aStart.Row() != aEnd.Row() ||
@@ -2280,7 +2287,7 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
                 lcl_r1c1_append_r( r, aEnd.Row(), (nFlags & ScRefFlags::ROW2_ABS) != ScRefFlags::ZERO, rDetails );
             }
         }
-        else if( aStart.Row() == 0 && aEnd.Row() >= pDoc->MaxRow() && !bFullAddressNotation )
+        else if( aStart.Row() == 0 && aEnd.Row() >= nMaxRow && !bFullAddressNotation )
         {
             lcl_r1c1_append_c( r, aStart.Col(), (nFlags & ScRefFlags::COL_ABS) != ScRefFlags::ZERO, rDetails );
             if( aStart.Col() != aEnd.Col() ||
@@ -2302,6 +2309,8 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
                 lcl_r1c1_append_c( r, aEnd.Col(), (nFlags & ScRefFlags::COL2_ABS) != ScRefFlags::ZERO, rDetails );
             }
         }
+        break;
+    }
     }
     return r.makeStringAndClear();
 }
