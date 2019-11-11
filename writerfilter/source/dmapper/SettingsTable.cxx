@@ -246,6 +246,7 @@ struct SettingsTable_Impl
     bool                m_bAutoHyphenation;
     sal_Int16           m_nHyphenationZone;
     bool                m_bWidowControl;
+    bool                m_bLongerSpaceSequence;
     bool                m_bSplitPgBreakAndParaMark;
     bool                m_bMirrorMargin;
     bool                m_bDoNotExpandShiftReturn;
@@ -280,6 +281,7 @@ struct SettingsTable_Impl
     , m_bAutoHyphenation(false)
     , m_nHyphenationZone(0)
     , m_bWidowControl(false)
+    , m_bLongerSpaceSequence(false)
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
     , m_bDoNotExpandShiftReturn(false)
@@ -298,9 +300,13 @@ SettingsTable::SettingsTable(const DomainMapper& rDomainMapper)
 , LoggedTable("SettingsTable")
 , m_pImpl( new SettingsTable_Impl )
 {
-    // HTML paragraph auto-spacing is opt-in for RTF, opt-out for OOXML.
     if (rDomainMapper.IsRTFImport())
+    {
+        // HTML paragraph auto-spacing is opt-in for RTF, opt-out for OOXML.
         m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing = true;
+        // Longer space sequence is opt-in for RTF, and not in OOXML.
+        m_pImpl->m_bLongerSpaceSequence = true;
+    }
 }
 
 SettingsTable::~SettingsTable()
@@ -547,6 +553,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_widowControl:
         m_pImpl->m_bWidowControl = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Settings_longerSpaceSequence:
+        m_pImpl->m_bLongerSpaceSequence = nIntValue;
+        break;
     case NS_ooxml::LN_CT_Compat_doNotExpandShiftReturn:
         m_pImpl->m_bDoNotExpandShiftReturn = true;
         break;
@@ -751,6 +760,11 @@ sal_Int32 SettingsTable::GetWordCompatibilityMode() const
     }
 
     return -1; // Word compatibility mode not found
+}
+
+bool SettingsTable::GetLongerSpaceSequence() const
+{
+    return m_pImpl->m_bLongerSpaceSequence;
 }
 
 }//namespace dmapper
