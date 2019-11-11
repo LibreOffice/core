@@ -18,18 +18,10 @@
  */
 
 #include "PresenterPaneBase.hxx"
-#include "PresenterCanvasHelper.hxx"
 #include "PresenterController.hxx"
-#include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
-#include "PresenterTextView.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/drawing/CanvasFeature.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
 
 using namespace css;
 using namespace css::uno;

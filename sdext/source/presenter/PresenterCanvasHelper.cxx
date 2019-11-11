@@ -19,11 +19,9 @@
 
 #include "PresenterCanvasHelper.hxx"
 
-#include "PresenterController.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/TextDirection.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

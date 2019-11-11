@@ -24,6 +24,9 @@
 #include "pppoptimizer.hxx"
 #include "graphiccollector.hxx"
 #include "pagecollector.hxx"
+#include <com/sun/star/awt/PushButtonType.hpp>
+#include <com/sun/star/awt/XSpinField.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>

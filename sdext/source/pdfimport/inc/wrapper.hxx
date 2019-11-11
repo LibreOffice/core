@@ -22,6 +22,7 @@
 
 #include "contentsink.hxx"
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace uno {

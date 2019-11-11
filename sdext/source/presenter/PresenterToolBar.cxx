@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "PresenterToolBar.hxx"
 
@@ -25,29 +24,21 @@
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
-#include "PresenterPaneBase.hxx"
-#include "PresenterPaneFactory.hxx"
 #include "PresenterTimer.hxx"
 #include "PresenterWindowManager.hxx"
 
 #include <cppuhelper/compbase.hxx>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/util/Color.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star;

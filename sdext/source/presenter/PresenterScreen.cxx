@@ -28,17 +28,14 @@
 #include "PresenterWindowManager.hxx"
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/drawing/framework/Configuration.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
-#include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <cppuhelper/compbase.hxx>
 
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 

@@ -24,16 +24,14 @@
 #include "PresenterPaneContainer.hxx"
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/task/XJob.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#include <com/sun/star/drawing/framework/XView.hpp>
-#include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <rtl/ref.hxx>
+
+#include <map>
 
 namespace sdext { namespace presenter {
 

@@ -20,12 +20,7 @@
 #ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZER_HXX
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZER_HXX
 
-#include <cppuhelper/implbase.hxx>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/XController.hpp>
+#include <rtl/ustring.hxx>
 
 
 struct PPPOptimizer

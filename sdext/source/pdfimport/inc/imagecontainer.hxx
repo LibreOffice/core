@@ -22,9 +22,7 @@
 
 #include "pdfihelper.hxx"
 
-#include <rtl/ustring.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <vector>
 

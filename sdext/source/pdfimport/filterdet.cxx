@@ -25,14 +25,13 @@
 #include <osl/file.h>
 #include <osl/thread.h>
 #include <rtl/digest.h>
-#include <rtl/ref.hxx>
 #include <sal/log.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/hash.hxx>
 #include <cppuhelper/supportsservice.hxx>

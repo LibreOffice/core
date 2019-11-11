@@ -18,9 +18,7 @@
  */
 
 #include "PresenterSpritePane.hxx"
-#include "PresenterGeometryHelper.hxx"
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

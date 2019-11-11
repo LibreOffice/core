@@ -25,11 +25,8 @@
 #include "PresenterTimer.hxx"
 #include "PresenterUIPainter.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
 #include <algorithm>

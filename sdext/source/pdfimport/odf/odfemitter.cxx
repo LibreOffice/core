@@ -22,8 +22,6 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-#include <cppuhelper/exc_hlp.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <comphelper/stl_types.hxx>

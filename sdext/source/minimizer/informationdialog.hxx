@@ -22,18 +22,8 @@
 
 #include "unodialog.hxx"
 #include "configurationaccess.hxx"
-#include "pppoptimizertoken.hxx"
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XItemListener.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/XItemEventBroadcaster.hpp>
-#include <com/sun/star/awt/PushButtonType.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include <cppuhelper/implbase.hxx>
 
 OUString InsertFixedText( UnoDialog& rInformationDialog, const OUString& rControlName, const OUString& rLabel,

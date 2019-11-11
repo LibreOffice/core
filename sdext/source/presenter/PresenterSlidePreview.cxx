@@ -21,14 +21,8 @@
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
-#include "PresenterScrollBar.hxx"
 #include "PresenterBitmapContainer.hxx"
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 
 using namespace ::com::sun::star;

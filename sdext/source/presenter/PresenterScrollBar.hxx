@@ -21,7 +21,6 @@
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSCROLLBAR_HXX
 
 #include "PresenterBitmapContainer.hxx"
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>

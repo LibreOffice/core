@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <zlib.h>
 
 #include "outputwrap.hxx"
 #include <contentsink.hxx>
@@ -32,20 +31,17 @@
 #include <comphelper/sequence.hxx>
 
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
 
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
+#include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/BlendMode.hpp>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/utils/canvastools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -53,7 +49,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <cassert>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 

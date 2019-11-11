@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERUIPAINTER_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERUIPAINTER_HXX
 
-#include "PresenterTheme.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>

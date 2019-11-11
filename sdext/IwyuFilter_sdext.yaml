@@ -1,0 +1,19 @@
+---
+assumeFilename: sdext/source/presenter/PresenterSlideSorter.cxx
+blacklist:
+    sdext/source/pdfimport/odf/odfemitter.cxx:
+    # Actually in use
+    - com/sun/star/io/XOutputStream.hpp
+    sdext/source/pdfimport/pdfparse/pdfparse.cxx:
+    # ignore boost stuff
+    - boost/spirit/include/classic_core.hpp
+    - boost/spirit/include/classic_utility.hpp
+    - boost/spirit/include/classic_error_handling.hpp
+    - boost/spirit/include/classic_file_iterator.hpp
+    - boost/bind.hpp
+    sdext/source/pdfimport/tree/imagecontainer.cxx:
+    # Actually in use
+    - com/sun/star/beans/PropertyValue.hpp
+    sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx:
+    # Actually in use
+    - vector

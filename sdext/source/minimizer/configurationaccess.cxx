@@ -23,7 +23,6 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <sal/macros.h>

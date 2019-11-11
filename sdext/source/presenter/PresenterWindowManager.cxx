@@ -17,37 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "PresenterWindowManager.hxx"
 #include "PresenterController.hxx"
 #include "PresenterGeometryHelper.hxx"
-#include "PresenterHelper.hxx"
 #include "PresenterPaintManager.hxx"
-#include "PresenterPaneBase.hxx"
 #include "PresenterPaneBorderPainter.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneFactory.hxx"
-#include "PresenterSprite.hxx"
 #include "PresenterToolBar.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterTheme.hxx"
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/SystemPointer.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/Texture.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <math.h>
 
 using namespace ::com::sun::star;

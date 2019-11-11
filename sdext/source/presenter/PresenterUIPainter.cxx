@@ -23,10 +23,8 @@
 
 #include "PresenterUIPainter.hxx"
 
-#include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

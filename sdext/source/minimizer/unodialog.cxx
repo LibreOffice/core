@@ -20,15 +20,10 @@
 
 #include "unodialog.hxx"
 
-#include <com/sun/star/awt/MessageBoxButtons.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
-#include <com/sun/star/awt/XMessageBoxFactory.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/view/XControlAccess.hpp>
 
 
 using namespace ::com::sun::star::awt;

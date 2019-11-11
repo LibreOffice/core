@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_TREEVISITORFACTORY_HXX
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_TREEVISITORFACTORY_HXX
 
-#include "pdfihelper.hxx"
 #include <memory>
 
 namespace pdfi

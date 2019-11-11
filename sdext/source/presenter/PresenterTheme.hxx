@@ -25,8 +25,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <com/sun/star/util/Color.hpp>
 #include <memory>
 
 namespace sdext { namespace presenter {

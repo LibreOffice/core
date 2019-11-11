@@ -19,11 +19,7 @@
 
 
 #include "informationdialog.hxx"
-#include "optimizationstats.hxx"
-#include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -38,7 +34,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;

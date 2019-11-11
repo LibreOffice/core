@@ -20,14 +20,11 @@
 #ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_IMPOPTIMIZER_HXX
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_IMPOPTIMIZER_HXX
 
-#include "pppoptimizertoken.hxx"
 #include "optimizationstats.hxx"
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 

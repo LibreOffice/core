@@ -20,10 +20,7 @@
 #include "PresenterPane.hxx"
 #include "PresenterController.hxx"
 #include "PresenterPaintManager.hxx"
-#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/drawing/CanvasFeature.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

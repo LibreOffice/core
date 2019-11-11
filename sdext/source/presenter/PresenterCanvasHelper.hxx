@@ -20,14 +20,13 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERCANVASHELPER_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERCANVASHELPER_HXX
 
-#include "PresenterTheme.hxx"
+#include "PresenterBitmapContainer.hxx"
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <rtl/ref.hxx>
 
 namespace sdext { namespace presenter {
 

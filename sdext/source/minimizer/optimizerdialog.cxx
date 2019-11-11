@@ -21,13 +21,15 @@
 #include "optimizerdialog.hxx"
 #include "impoptimizer.hxx"
 #include "fileopendialog.hxx"
+#include <com/sun/star/awt/XItemEventBroadcaster.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <sal/macros.h>
 #include <osl/time.h>

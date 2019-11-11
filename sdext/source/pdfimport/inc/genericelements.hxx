@@ -26,7 +26,6 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/range/b2drange.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
