@@ -3202,7 +3202,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             else
                             {
                                 ScRange aErrorRange( ScAddress::UNINITIALIZED );
-                                if (!aAbs.MoveSticky(&rCxt.mrDoc, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
+                                if (!aAbs.MoveSticky(rCxt.mrDoc, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
                                     aAbs = aErrorRange;
                                 aRes.mbReferenceModified = true;
                             }

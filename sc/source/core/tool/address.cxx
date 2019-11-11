@@ -2376,19 +2376,20 @@ bool ScRange::Move( SCCOL dx, SCROW dy, SCTAB dz, ScRange& rErrorRange, const Sc
     return b;
 }
 
-bool ScRange::MoveSticky( const ScDocument* pDoc, SCCOL dx, SCROW dy, SCTAB dz, ScRange& rErrorRange )
+bool ScRange::MoveSticky( const ScDocument& rDoc, SCCOL dx, SCROW dy, SCTAB dz, ScRange& rErrorRange )
 {
-    const SCCOL nMaxCol = (pDoc ? pDoc->MaxCol() : MAXCOL);
+    const SCCOL nMaxCol = rDoc.MaxCol();
+    const SCROW nMaxRow = rDoc.MaxRow();
     bool bColRange = (aStart.Col() < aEnd.Col());
     bool bRowRange = (aStart.Row() < aEnd.Row());
-    if (dy && aStart.Row() == 0 && aEnd.Row() == pDoc->MaxRow())
+    if (dy && aStart.Row() == 0 && aEnd.Row() == nMaxRow)
         dy = 0;     // Entire column not to be moved.
     if (dx && aStart.Col() == 0 && aEnd.Col() == nMaxCol)
         dx = 0;     // Entire row not to be moved.
     bool b1 = aStart.Move( dx, dy, dz, rErrorRange.aStart );
     if (dx && bColRange && aEnd.Col() == nMaxCol)
         dx = 0;     // End column sticky.
-    if (dy && bRowRange && aEnd.Row() == pDoc->MaxRow())
+    if (dy && bRowRange && aEnd.Row() == nMaxRow)
         dy = 0;     // End row sticky.
     SCTAB nOldTab = aEnd.Tab();
     bool b2 = aEnd.Move( dx, dy, dz, rErrorRange.aEnd );
@@ -2398,9 +2399,9 @@ bool ScRange::MoveSticky( const ScDocument* pDoc, SCCOL dx, SCROW dy, SCTAB dz, 
         bColRange = (!dx || (bColRange && aEnd.Col() == nMaxCol));
         if (dx && bColRange)
             rErrorRange.aEnd.SetCol(nMaxCol);
-        bRowRange = (!dy || (bRowRange && aEnd.Row() == pDoc->MaxRow()));
+        bRowRange = (!dy || (bRowRange && aEnd.Row() == nMaxRow));
         if (dy && bRowRange)
-            rErrorRange.aEnd.SetRow(pDoc->MaxRow());
+            rErrorRange.aEnd.SetRow(nMaxRow);
         b2 = bColRange && bRowRange && (aEnd.Tab() - nOldTab == dz);
     }
     return b1 && b2;
