@@ -36,6 +36,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
+#include <svx/xflgrit.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/sdr/properties/properties.hxx>
@@ -385,6 +386,15 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
                     if (pMergedFillStyleItem->GetValue() == drawing::FillStyle_NONE)
                         mbPageBckgrdDeleted = true;
                 }
+            }
+
+            const XFillGradientItem* pTempGradItem = pTempSet->GetItem<XFillGradientItem>(XATTR_FILLGRADIENT);
+            if (pTempGradItem && pTempGradItem->GetName().isEmpty())
+            {
+                // MigrateItemSet guarantees unique gradient names
+                SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
+                aMigrateSet.Put( XFillGradientItem("gradient", pTempGradItem->GetGradientValue()) );
+                SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDoc);
             }
 
             if( !mbMasterPage && bChanges && mbPageBckgrdDeleted )
