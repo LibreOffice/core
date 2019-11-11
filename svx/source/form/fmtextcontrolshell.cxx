@@ -837,7 +837,7 @@ namespace svx
                 const SfxPoolItem* pItem = aToggled.GetItem( nWhich );
                 if ( ( SID_ATTR_CHAR_UNDERLINE == nSlot ) || ( SID_ATTR_CHAR_OVERLINE == nSlot ) )
                 {
-                    const SvxOverlineItem* pTextLine = dynamic_cast<const SvxOverlineItem*>( pItem  );
+                    const SvxTextLineItem* pTextLine = dynamic_cast<const SvxTextLineItem*>( pItem  );
                     DBG_ASSERT( pTextLine, "FmTextControlShell::ExecuteTextAttribute: ooops - no underline/overline item!" );
                     if ( pTextLine )
                     {
