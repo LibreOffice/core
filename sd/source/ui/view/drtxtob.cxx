@@ -590,11 +590,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
     // justification (superscript, subscript) is also needed in outline-mode
     SvxEscapement eEsc = static_cast<SvxEscapement>(aAttrSet.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
-
-    if( eEsc == SvxEscapement::Superscript )
-        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
-    else if( eEsc == SvxEscapement::Subscript )
-        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
+    rSet.Put(SfxBoolItem(SID_SET_SUPER_SCRIPT, eEsc == SvxEscapement::Superscript));
+    rSet.Put(SfxBoolItem(SID_SET_SUB_SCRIPT, eEsc == SvxEscapement::Subscript));
 }
 
 } // end of namespace sd
