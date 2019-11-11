@@ -24,9 +24,10 @@
 
 #include <osl/diagnose.h>
 
-ScMarkArray::ScMarkArray() :
+ScMarkArray::ScMarkArray(SCROW nMaxRow) :
     nCount( 0 ),
-    nLimit( 0 )
+    nLimit( 0 ),
+    mnMaxRow( nMaxRow )
 {
     // special case "no marks" with pData = NULL
 }
@@ -56,7 +57,7 @@ void ScMarkArray::Reset( bool bMarked, SCSIZE nNeeded )
     nLimit = nNeeded;
     nCount = 1;
     pData.reset( new ScMarkEntry[nNeeded] );
-    pData[0].nRow = MAXROW;
+    pData[0].nRow = mnMaxRow;
     pData[0].bMarked = bMarked;
 }
 
@@ -111,7 +112,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
 {
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
-        if ((nStartRow == 0) && (nEndRow == MAXROW))
+        if ((nStartRow == 0) && (nEndRow == mnMaxRow))
         {
             Reset(bMarked);
         }
@@ -143,7 +144,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
             }
 
             SCSIZE ni;          // number of entries in beginning
-            SCSIZE nInsert;     // insert position (MAXROW+1 := no insert)
+            SCSIZE nInsert;     // insert position (mnMaxRow+1 := no insert)
             bool bCombined = false;
             bool bSplit = false;
             if ( nStartRow > 0 )
@@ -254,7 +255,7 @@ void ScMarkArray::Set( const std::vector<ScMarkEntry> & rMarkEntries )
     nLimit = nCount;
     pData.reset( new ScMarkEntry[nLimit] );
     memcpy(pData.get(), rMarkEntries.data(), sizeof(ScMarkEntry) * rMarkEntries.size());
-    pData[nCount-1] = ScMarkEntry{MAXROW, false};
+    pData[nCount-1] = ScMarkEntry{mnMaxRow, false};
 }
 
 bool ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
@@ -279,7 +280,7 @@ bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
         if ( pData[0].bMarked )
         {
             rStartRow = 0;
-            rEndRow = MAXROW;
+            rEndRow = mnMaxRow;
             bRet = true;
         }
     }
@@ -293,7 +294,7 @@ bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
         else
         {
             rStartRow = pData[0].nRow + 1;
-            rEndRow = MAXROW;
+            rEndRow = mnMaxRow;
         }
         bRet = true;
     }
@@ -335,6 +336,7 @@ ScMarkArray& ScMarkArray::operator=( const ScMarkArray& rOther )
         pData.reset();
 
     nCount = nLimit = rOther.nCount;
+    mnMaxRow = rOther.mnMaxRow;
     return *this;
 }
 
@@ -343,6 +345,7 @@ ScMarkArray& ScMarkArray::operator=(ScMarkArray&& rOther) noexcept
     nCount = rOther.nCount;
     nLimit = rOther.nLimit;
     pData = std::move( rOther.pData );
+    mnMaxRow = rOther.mnMaxRow;
     rOther.nCount = 0;
     rOther.nLimit = 0;
     return *this;
@@ -398,7 +401,7 @@ SCROW ScMarkArray::GetMarkEnd( SCROW nRow, bool bUp ) const
 
 void ScMarkArray::Shift(SCROW nStartRow, long nOffset)
 {
-    if (!pData || nOffset == 0 || nStartRow > MAXROW)
+    if (!pData || nOffset == 0 || nStartRow > mnMaxRow)
         return;
 
     for (size_t i=0; i < nCount; ++i)
@@ -412,9 +415,9 @@ void ScMarkArray::Shift(SCROW nStartRow, long nOffset)
         {
             rEntry.nRow = 0;
         }
-        else if (rEntry.nRow > MAXROW)
+        else if (rEntry.nRow > mnMaxRow)
         {
-            rEntry.nRow = MAXROW;
+            rEntry.nRow = mnMaxRow;
         }
     }
 }

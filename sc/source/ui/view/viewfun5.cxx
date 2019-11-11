@@ -139,7 +139,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     if (!rSrcDoc.HasTable(nSrcTab))
                         nSrcTab = 0;
 
-                    ScMarkData aSrcMark;
+                    ScMarkData aSrcMark(rSrcDoc.MaxRow(), rSrcDoc.MaxCol());
                     aSrcMark.SelectOneTable( nSrcTab );         // for CopyToClip
                     ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
 

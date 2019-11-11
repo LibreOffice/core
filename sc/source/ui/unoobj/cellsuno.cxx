@@ -1070,7 +1070,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
             rDoc.CopyToDocument(rRange, InsertDeleteFlags::ATTRIB, false, *pUndoDoc);
         }
 
-        ScMarkData aMark;
+        ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
         aMark.SetMarkArea( rRange );
         aMark.SelectTable( nTab, true );
 
@@ -1211,7 +1211,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     if ( pUndoDoc )
     {
-        ScMarkData aDestMark;
+        ScMarkData aDestMark(rDoc.MaxRow(), rDoc.MaxCol());
         aDestMark.SelectOneTable( nTab );
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoPaste>(
@@ -1308,7 +1308,7 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     if ( pUndoDoc )
     {
-        ScMarkData aDestMark;
+        ScMarkData aDestMark(rDoc.MaxRow(), rDoc.MaxCol());
         aDestMark.SelectOneTable( nTab );
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoPaste>( &rDocShell,
@@ -1522,7 +1522,7 @@ const ScMarkData* ScCellRangesBase::GetMarkData()
 {
     if (!pMarkData)
     {
-        pMarkData.reset( new ScMarkData(aRanges) );
+        pMarkData.reset( new ScMarkData(GetDocument()->MaxRow(), GetDocument()->MaxCol(), aRanges) );
     }
     return pMarkData.get();
 }
@@ -2450,7 +2450,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
 
                             ScDocument& rDoc = pDocShell->GetDocument();
-                            ScMarkData aMark;
+                            ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
                             aMark.SetMarkArea( rFirst );
                             aMark.SelectTable( rFirst.aStart.Tab(), true );
                             rDoc.GetSelectionFrame( aMark, aOuter, aInner );
@@ -3412,7 +3412,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
     {
         ScDocument& rDoc = pDocShell->GetDocument();
 
-        ScMarkData aMarkData;
+        ScMarkData aMarkData(rDoc.MaxRow(), rDoc.MaxCol());
 
         //  select matching cells
         for ( size_t i = 0, nCount = aRanges.size(); i < nCount; ++i )
@@ -3501,7 +3501,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
     {
         ScDocument& rDoc = pDocShell->GetDocument();
 
-        ScMarkData aMarkData;
+        ScMarkData aMarkData(rDoc.MaxRow(), rDoc.MaxCol());
 
         //  select matching cells
         for ( size_t i = 0, nCount = aRanges.size(); i < nCount; ++i )
@@ -3555,7 +3555,7 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
         size_t nRangeCount = aRanges.size();
         size_t i;
         ScDocument& rDoc = pDocShell->GetDocument();
-        ScMarkData aMarkData;
+        ScMarkData aMarkData(rDoc.MaxRow(), rDoc.MaxCol());
 
         SCCOLROW nCmpPos = bColumnDiff ? static_cast<SCCOLROW>(aCompare.Row) : static_cast<SCCOLROW>(aCompare.Column);
 
@@ -3685,7 +3685,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
             bFound = false;
 
             //  aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
-            ScMarkData aMarkData;
+            ScMarkData aMarkData(rDoc.MaxRow(), rDoc.MaxCol());
             aMarkData.MarkFromRangeList( aNewRanges, false );
             aMarkData.MarkToMulti();        // needed for IsAllMarked
 
@@ -3734,7 +3734,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
             bFound = false;
 
             //  aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
-            ScMarkData aMarkData;
+            ScMarkData aMarkData(rDoc.MaxRow(), rDoc.MaxCol());
             aMarkData.MarkFromRangeList( aNewRanges, false );
             aMarkData.MarkToMulti();        // needed for IsAllMarked
 
@@ -4168,7 +4168,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress
             aNotSheetRanges.push_back( rRanges[ i ] );
         }
     }
-    ScMarkData aMarkData;
+    ScMarkData aMarkData(GetDocument()->MaxRow(), GetDocument()->MaxCol());
     aMarkData.MarkFromRangeList( aSheetRanges, false );
     ScRange aRange(static_cast<SCCOL>(rRange.StartColumn),
                 static_cast<SCROW>(rRange.StartRow),
@@ -4321,7 +4321,7 @@ static bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
     if ( (nParse & ( ScRefFlags::VALID | ScRefFlags::TAB_3D ))
                == ( ScRefFlags::VALID | ScRefFlags::TAB_3D ))
     {
-        ScMarkData aMarkData;
+        ScMarkData aMarkData(pDocSh->GetDocument().MaxRow(), pDocSh->GetDocument().MaxCol());
         aMarkData.MarkFromRangeList( rRanges, false );
         aMarkData.MarkToMulti();        // needed for IsAllMarked
         if ( aMarkData.IsAllMarked( aCellRange ) )
@@ -4339,7 +4339,7 @@ static bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
             //  test if named entry is contained in rRanges
 
             const ScRange& rComp = rNamedEntry.GetRange();
-            ScMarkData aMarkData;
+            ScMarkData aMarkData(pDocSh->GetDocument().MaxRow(), pDocSh->GetDocument().MaxCol());
             aMarkData.MarkFromRangeList( rRanges, false );
             aMarkData.MarkToMulti();        // needed for IsAllMarked
             if ( aMarkData.IsAllMarked( rComp ) )
@@ -4388,7 +4388,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
         }
         if ( bValid )
         {
-            ScMarkData aMarkData;
+            ScMarkData aMarkData(GetDocument()->MaxRow(), GetDocument()->MaxCol());
             aMarkData.MarkFromRangeList( rRanges, false );
 
             for ( size_t i = 0, nDiffCount = aDiff.size(); i < nDiffCount; i++ )
@@ -4881,7 +4881,7 @@ void ScCellRangeObj::SetArrayFormula_Impl(const OUString& rFormula,
         else
         {
             //  empty string -> erase array formula
-            ScMarkData aMark;
+            ScMarkData aMark(GetDocument()->MaxRow(), GetDocument()->MaxCol());
             aMark.SetMarkArea( aRange );
             aMark.SelectTable( aRange.aStart.Tab(), true );
             pDocSh->GetDocFunc().DeleteContents( aMark, InsertDeleteFlags::CONTENTS, true, true );
@@ -4956,7 +4956,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
         else
         {
             //  empty sequence -> erase array formula
-            ScMarkData aMark;
+            ScMarkData aMark(pDocSh->GetDocument().MaxRow(), pDocSh->GetDocument().MaxCol());
             aMark.SetMarkArea( aRange );
             aMark.SelectTable( aRange.aStart.Tab(), true );
             pDocSh->GetDocFunc().DeleteContents( aMark, InsertDeleteFlags::CONTENTS, true, true );
@@ -7689,7 +7689,7 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
 
         if (rDoc.IsScenario(nTab))
         {
-            ScMarkData aMarkData;
+            ScMarkData aMarkData(rDoc.MaxRow(), rDoc.MaxCol());
             aMarkData.SelectTable( nTab, true );
 
             for (const table::CellRangeAddress& rRange : rScenRanges)
@@ -8732,7 +8732,7 @@ void ScCellsEnumeration::CheckPos_Impl()
     {
         if (!pMark)
         {
-            pMark.reset( new ScMarkData );
+            pMark.reset( new ScMarkData(rDoc.MaxRow(), rDoc.MaxCol()) );
             pMark->MarkFromRangeList(aRanges, false);
             pMark->MarkToMulti();   // needed for GetNextMarkedCell
         }
@@ -8756,7 +8756,7 @@ void ScCellsEnumeration::Advance_Impl()
     OSL_ENSURE(!bAtEnd,"too much Advance_Impl");
     if (!pMark)
     {
-        pMark.reset( new ScMarkData );
+        pMark.reset( new ScMarkData(pDocShell->GetDocument().MaxRow(), pDocShell->GetDocument().MaxCol()) );
         pMark->MarkFromRangeList( aRanges, false );
         pMark->MarkToMulti();   // needed for GetNextMarkedCell
     }

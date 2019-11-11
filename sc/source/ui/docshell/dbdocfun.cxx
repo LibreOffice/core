@@ -837,7 +837,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                 aOldForm.aEnd.SetRow( aOldDest.aEnd.Row() );
                 rDoc.FitBlock( aOldForm, aNewForm, false );
 
-                ScMarkData aMark;
+                ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
                 aMark.SelectOneTable(nDestTab);
                 SCROW nFStartY = aLocalParam.nRow1 + ( aLocalParam.bHasHeader ? 1 : 0 );
 
