@@ -54,10 +54,10 @@ bool operator < (const MyCallSiteInfo &lhs, const MyCallSiteInfo &rhs)
 static std::set<MyCallSiteInfo> callSet;
 
 class ConstantParam:
-    public loplugin::FunctionAddress<ConstantParam>
+    public loplugin::FunctionAddress<loplugin::FilteringPlugin<ConstantParam>>
 {
 public:
-    explicit ConstantParam(loplugin::InstantiationData const & data): loplugin::FunctionAddress<ConstantParam>(data) {}
+    explicit ConstantParam(loplugin::InstantiationData const & data): FunctionAddress(data) {}
 
     virtual void run() override
     {

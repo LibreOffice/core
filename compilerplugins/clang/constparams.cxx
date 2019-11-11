@@ -28,10 +28,10 @@ namespace
 {
 
 class ConstParams:
-    public loplugin::FunctionAddress<ConstParams>
+    public loplugin::FunctionAddress<loplugin::FilteringPlugin<ConstParams>>
 {
 public:
-    explicit ConstParams(loplugin::InstantiationData const & data): loplugin::FunctionAddress<ConstParams>(data) {}
+    explicit ConstParams(loplugin::InstantiationData const & data): FunctionAddress(data) {}
 
     virtual void run() override {
         std::string fn(handler.getMainFileName());
@@ -110,7 +110,7 @@ bool ConstParams::TraverseFunctionDecl(FunctionDecl * functionDecl)
     auto prev = currentFunctionDecl;
     if (CheckTraverseFunctionDecl(functionDecl))
         currentFunctionDecl = functionDecl;
-    auto rv = loplugin::FunctionAddress<ConstParams>::TraverseFunctionDecl(functionDecl);
+    auto rv = FunctionAddress::TraverseFunctionDecl(functionDecl);
     currentFunctionDecl = prev;
     return rv;
 }
@@ -119,7 +119,7 @@ bool ConstParams::TraverseCXXMethodDecl(CXXMethodDecl * f)
     auto prev = currentFunctionDecl;
     if (CheckTraverseFunctionDecl(f))
         currentFunctionDecl = f;
-    auto rv = loplugin::FunctionAddress<ConstParams>::TraverseCXXMethodDecl(f);
+    auto rv = FunctionAddress::TraverseCXXMethodDecl(f);
     currentFunctionDecl = prev;
     return rv;
 }
@@ -128,7 +128,7 @@ bool ConstParams::TraverseCXXConstructorDecl(CXXConstructorDecl * f)
     auto prev = currentFunctionDecl;
     if (CheckTraverseFunctionDecl(f))
         currentFunctionDecl = f;
-    auto rv = loplugin::FunctionAddress<ConstParams>::TraverseCXXConstructorDecl(f);
+    auto rv = FunctionAddress::TraverseCXXConstructorDecl(f);
     currentFunctionDecl = prev;
     return rv;
 }
