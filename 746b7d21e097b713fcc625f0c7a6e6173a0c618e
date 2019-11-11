@@ -16,6 +16,24 @@
       "revId": "746b7d21e097b713fcc625f0c7a6e6173a0c618e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_89e2c62e",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-11T15:31:09Z",
+      "side": 1,
+      "message": "\u003e However:  I would only do this ToIUri conversion for file URLs, and\n \u003e add a comment stating that this is specifically meant to support\n \u003e file URLs with fragment, and why toIUri is used instead of\n \u003e css.uri.ExternalUriReferenceTranslator.\n\nTo clarify:  This part is not yet addressed by patch set 2.  Do you plan on addressing it, or do you have a reason not to?",
+      "parentUuid": "7f7f9b97_d7285ae3",
+      "revId": "746b7d21e097b713fcc625f0c7a6e6173a0c618e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
