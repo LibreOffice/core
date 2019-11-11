@@ -18,7 +18,7 @@
  */
 
 #include "tp_PointGeometry.hxx"
-#include "res_BarGeometry.hxx"
+#include <res_BarGeometry.hxx>
 
 #include <chartview/ChartSfxItemIds.hxx>
 
