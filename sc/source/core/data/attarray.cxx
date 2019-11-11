@@ -99,7 +99,7 @@ void ScAttrArray::TestData() const
         if (mvData[nPos].pPattern->Which() != ATTR_PATTERN)
             ++nErr;
     }
-    if ( nPos && mvData[nPos-1].nRow != MAXROW )
+    if ( nPos && mvData[nPos-1].nRow != pDocument->MaxRow() )
         ++nErr;
 
     SAL_WARN_IF( nErr, "sc", nErr << " errors in attribute array, column " << nCol );
@@ -114,7 +114,7 @@ void ScAttrArray::SetDefaultIfNotInit( SCSIZE nNeeded )
     SCSIZE nNewLimit = std::max<SCSIZE>( SC_ATTRARRAY_DELTA, nNeeded );
     mvData.reserve( nNewLimit );
     mvData.emplace_back();
-    mvData[0].nEndRow = MAXROW;
+    mvData[0].nEndRow = pDocument->MaxRow();
     mvData[0].pPattern = pDocument->GetDefPattern(); // no put
 }
 
@@ -147,7 +147,7 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern )
 
     mvData.resize(1);
     const ScPatternAttr* pNewPattern = &pDocPool->Put(*pPattern);
-    mvData[0].nEndRow = MAXROW;
+    mvData[0].nEndRow = pDocument->MaxRow();
     mvData[0].pPattern = pNewPattern;
 }
 
@@ -259,7 +259,7 @@ const ScPatternAttr* ScAttrArray::GetPatternRange( SCROW& rStartRow,
         if ( !ValidRow( nRow ) )
             return nullptr;
         rStartRow = 0;
-        rEndRow = MAXROW;
+        rEndRow = pDocument->MaxRow();
         return pDocument->GetDefPattern();
     }
     SCSIZE nIndex;
@@ -431,7 +431,7 @@ bool ScAttrArray::Reserve( SCSIZE nReserve )
         try {
             mvData.reserve(nReserve);
             mvData.emplace_back();
-            mvData[0].nEndRow = MAXROW;
+            mvData[0].nEndRow = pDocument->MaxRow();
             mvData[0].pPattern = pDocument->GetDefPattern(); // no put
             return true;
         } catch (std::bad_alloc const &) {
@@ -463,7 +463,7 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
             else
                 pPattern = &pDocument->GetPool()->Put(*pPattern);
         }
-        if ((nStartRow == 0) && (nEndRow == MAXROW))
+        if ((nStartRow == 0) && (nEndRow == pDocument->MaxRow()))
             Reset(pPattern);
         else
         {
@@ -1022,7 +1022,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
             if ( !mvData.empty() )
                 nStart = mvData[nPos].nEndRow + 1;
             else
-                nStart = MAXROW + 1;
+                nStart = pDocument->MaxRow() + 1;
             ++nPos;
         }
         while (nStart <= nEndRow);
@@ -1407,7 +1407,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) cons
 {
     if (mvData.empty())
     {
-        return HasAttrib_Impl(pDocument->GetDefPattern(), nMask, 0, MAXROW, 0);
+        return HasAttrib_Impl(pDocument->GetDefPattern(), nMask, 0, pDocument->MaxRow(), 0);
     }
 
     SCSIZE nStartIndex;
@@ -1550,7 +1550,7 @@ void ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
         if ( nIndex < mvData.size() )
             nThisStart = mvData[nIndex-1].nEndRow+1;
         else
-            nThisStart = MAXROW+1;   // End
+            nThisStart = pDocument->MaxRow()+1;   // End
     }
 }
 
@@ -1785,7 +1785,7 @@ SCROW ScAttrArray::GetNextUnprotected( SCROW nRow, bool bUp ) const
             if ( bUp )
                 return -1;
             else
-                return MAXROW+1;
+                return pDocument->MaxRow()+1;
         }
 
         SCSIZE nIndex;
@@ -1805,7 +1805,7 @@ SCROW ScAttrArray::GetNextUnprotected( SCROW nRow, bool bUp ) const
                 nRet = mvData[nIndex].nEndRow+1;
                 ++nIndex;
                 if (nIndex >= mvData.size())
-                    return MAXROW+1; // not found
+                    return pDocument->MaxRow()+1; // not found
             }
         }
     }
@@ -1943,9 +1943,9 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
     //  ignore all attributes starting with the first run of SC_VISATTR_STOP equal rows
     //  below the last content cell
 
-    if ( nLastData == MAXROW )
+    if ( nLastData == pDocument->MaxRow() )
     {
-        rLastRow = MAXROW;      // can't look for attributes below MAXROW
+        rLastRow = pDocument->MaxRow();      // can't look for attributes below pDocument->MaxRow()
         return true;
     }
 
@@ -1956,7 +1956,7 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
     if (nStartRow <= nLastData + 1)
     {
         // Ignore here a few rows if data happens to end within
-        // SC_VISATTR_STOP rows before MAXROW.
+        // SC_VISATTR_STOP rows before pDocument->MaxRow().
         rLastRow = nLastData;
         return false;
     }
@@ -2198,14 +2198,14 @@ bool ScAttrArray::TestInsertRow( SCSIZE nSize ) const
 {
     // if 1st row pushed out is vertically overlapped, summary would be broken
 
-    // MAXROW + 1 - nSize   = 1st row pushed out
+    // pDocument->MaxRow() + 1 - nSize   = 1st row pushed out
 
     if ( mvData.empty() )
         return !pDocument->GetDefPattern()->
                        GetItem(ATTR_MERGE_FLAG).IsVerOverlapped();
 
     SCSIZE nFirstLost = mvData.size()-1;
-    while ( nFirstLost && mvData[nFirstLost-1].nEndRow >= sal::static_int_cast<SCROW>(MAXROW + 1 - nSize) )
+    while ( nFirstLost && mvData[nFirstLost-1].nEndRow >= sal::static_int_cast<SCROW>(pDocument->MaxRow() + 1 - nSize) )
         --nFirstLost;
 
     return !mvData[nFirstLost].pPattern->
@@ -2231,9 +2231,9 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
     for (i = nIndex; i < mvData.size()-1; i++)
     {
         SCROW nNew = mvData[i].nEndRow + nSize;
-        if ( nNew >= MAXROW )    // at end?
+        if ( nNew >= pDocument->MaxRow() )    // at end?
         {
-            nNew = MAXROW;
+            nNew = pDocument->MaxRow();
             if (!nRemove)
                 nRemove = i+1;  // remove the following?
         }
@@ -2306,7 +2306,7 @@ void ScAttrArray::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     // Below does not follow the pattern to detect pressure ranges;
     // instead, only remove merge flags.
-    RemoveFlags( MAXROW-nSize+1, MAXROW, ScMF::Hor | ScMF::Ver | ScMF::Auto );
+    RemoveFlags( pDocument->MaxRow()-nSize+1, pDocument->MaxRow(), ScMF::Hor | ScMF::Ver | ScMF::Auto );
 }
 
 void ScAttrArray::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex )
@@ -2402,7 +2402,7 @@ void ScAttrArray::CopyArea(
     nEndRow -= nDy;
 
     SCROW nDestStart = std::max(static_cast<long>(static_cast<long>(nStartRow) + nDy), long(0));
-    SCROW nDestEnd = std::min(static_cast<long>(static_cast<long>(nEndRow) + nDy), long(MAXROW));
+    SCROW nDestEnd = std::min(static_cast<long>(static_cast<long>(nEndRow) + nDy), long(pDocument->MaxRow()));
 
     ScDocumentPool* pSourceDocPool = pDocument->GetPool();
     ScDocumentPool* pDestDocPool = rAttrArray.pDocument->GetPool();
@@ -2473,7 +2473,7 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
     nEndRow -= nDy;
 
     SCROW nDestStart = std::max(static_cast<long>(static_cast<long>(nStartRow) + nDy), long(0));
-    SCROW nDestEnd = std::min(static_cast<long>(static_cast<long>(nEndRow) + nDy), long(MAXROW));
+    SCROW nDestEnd = std::min(static_cast<long>(static_cast<long>(nEndRow) + nDy), long(pDocument->MaxRow()));
 
     if ( !rAttrArray.HasAttrib( nDestStart, nDestEnd, HasAttrFlags::Overlapped ) )
     {
@@ -2538,7 +2538,7 @@ SCROW ScAttrArray::SearchStyle(
         if (pDocument->GetDefPattern()->GetStyleSheet() == pSearchStyle)
             return nRow;
 
-        nRow = bUp ? -1 : MAXROW + 1;
+        nRow = bUp ? -1 : pDocument->MaxRow() + 1;
         return nRow;
     }
 
@@ -2614,7 +2614,7 @@ bool ScAttrArray::SearchStyleRange(
             }
             else
             {
-                rEndRow = MAXROW;
+                rEndRow = pDocument->MaxRow();
                 if (pMarkArray)
                 {
                     SCROW nMarkEnd = pMarkArray->GetMarkEnd( nStartRow, false );
