@@ -12,7 +12,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <tools/cpuid.hxx>
-#include <tools/simd.hxx>
 #include <rtl/ustring.hxx>
 
 namespace
@@ -50,21 +49,6 @@ void CpuInstructionSetSupport::testCpuInstructionSetSupport()
     {
         CPPUNIT_ASSERT(aString.indexOf("AVX2") > 0);
     }
-
-#ifdef LO_SSE2_AVAILABLE
-    CPPUNIT_ASSERT_EQUAL(cpuid::hasSSE2(),
-                         cpuid::isCpuInstructionSetSupported(cpuid::InstructionSetFlags::SSE2));
-#endif
-
-#ifdef LO_SSSE3_AVAILABLE
-    CPPUNIT_ASSERT_EQUAL(cpuid::hasSSSE3(),
-                         cpuid::isCpuInstructionSetSupported(cpuid::InstructionSetFlags::SSE2));
-#endif
-
-#ifdef LO_AVX2_AVAILABLE
-    CPPUNIT_ASSERT_EQUAL(cpuid::hasAVX2(),
-                         cpuid::isCpuInstructionSetSupported(cpuid::InstructionSetFlags::AVX2));
-#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CpuInstructionSetSupport);
