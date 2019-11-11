@@ -714,14 +714,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     }
 
     SvxEscapement eEsc = static_cast<SvxEscapement>(pSet->Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
-    if( eEsc == SvxEscapement::Superscript )
-    {
-        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
-    }
-    else if( eEsc == SvxEscapement::Subscript )
-    {
-        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
-    }
+    rSet.Put(SfxBoolItem(SID_SET_SUPER_SCRIPT, eEsc == SvxEscapement::Superscript));
+    rSet.Put(SfxBoolItem(SID_SET_SUB_SCRIPT, eEsc == SvxEscapement::Subscript));
 
     eState = pSet->GetItemState( EE_CHAR_KERNING );
     if ( eState == SfxItemState::DONTCARE )
