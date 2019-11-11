@@ -89,18 +89,18 @@ public:
 
 class SwTableColumnPage : public SfxTabPage
 {
-    SwTableRep*     pTableData;
+    SwTableRep*     m_pTableData;
     ImplSVEvent*    m_pSizeHdlEvent;
-    SwTwips         nTableWidth;
-    SwTwips         nMinWidth;
-    sal_uInt16      nMetFields;
-    sal_uInt16      nNoOfCols;
-    sal_uInt16      nNoOfVisibleCols;
+    SwTwips         m_nTableWidth;
+    SwTwips         m_nMinWidth;
+    sal_uInt16      m_nMetFields;
+    sal_uInt16      m_nNoOfCols;
+    sal_uInt16      m_nNoOfVisibleCols;
     // Remember the width, when switching to autoalign
-    sal_uInt16      aValueTable[MET_FIELDS];// primary assignment of the MetricFields
-    bool            bModified:1;
-    bool            bModifyTable:1;
-    bool            bPercentMode:1;
+    sal_uInt16      m_aValueTable[MET_FIELDS];// primary assignment of the MetricFields
+    bool            m_bModified:1;
+    bool            m_bModifyTable:1;
+    bool            m_bPercentMode:1;
 
     SwPercentField  m_aFieldArr[MET_FIELDS];
     std::unique_ptr<weld::Label> m_aTextArr[MET_FIELDS];
