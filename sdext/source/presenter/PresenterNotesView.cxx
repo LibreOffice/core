@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <vcl/svapp.hxx>
+
 #include <vcl/settings.hxx>
 #include "PresenterNotesView.hxx"
 #include "PresenterButton.hxx"
@@ -29,7 +29,6 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
@@ -38,8 +37,6 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/container/XChild.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

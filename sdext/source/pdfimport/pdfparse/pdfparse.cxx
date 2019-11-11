@@ -38,7 +38,6 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/alloc.h>
 #include <sal/log.hxx>
 
 // disable warnings again because someone along the line has enabled them

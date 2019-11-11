@@ -27,6 +27,8 @@
 
 #include <functional>
 
+#include "PresenterPaneContainer.hxx"
+
 namespace sdext { namespace presenter {
 
 class PresenterPaneContainer;

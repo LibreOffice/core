@@ -29,7 +29,6 @@
 #include <com/sun/star/task/XInteractionPassword.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>

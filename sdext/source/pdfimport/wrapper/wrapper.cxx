@@ -33,30 +33,25 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/byteseq.hxx>
 #include <sal/log.hxx>
 
-#include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 
 #include <vcl/metric.hxx>
@@ -68,14 +63,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <rtl/bootstrap.h>
-
 #include <rtl/character.hxx>
-
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/pdfread.hxx>
-#include <vcl/pngwrite.hxx>
 
 using namespace com::sun::star;
 

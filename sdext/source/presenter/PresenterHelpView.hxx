@@ -28,7 +28,6 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <memory>
 
 namespace sdext { namespace presenter {

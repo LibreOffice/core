@@ -19,19 +19,11 @@
 
 #include <memory>
 #include "PresenterProtocolHandler.hxx"
-#include "PresenterConfigurationAccess.hxx"
 #include "PresenterController.hxx"
-#include "PresenterHelper.hxx"
 #include "PresenterNotesView.hxx"
 #include "PresenterPaneContainer.hxx"
-#include "PresenterPaneFactory.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
-#include <com/sun/star/drawing/SlideSorter.hpp>
-#include <com/sun/star/drawing/framework/Configuration.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
-#include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>

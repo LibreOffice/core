@@ -26,14 +26,10 @@
 #include <cmath>
 #include <numeric>
 
-#include <sal/log.hxx>
-
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
-#include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <com/sun/star/i18n/CTLScriptType.hpp>
 #include <com/sun/star/i18n/ScriptDirection.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>

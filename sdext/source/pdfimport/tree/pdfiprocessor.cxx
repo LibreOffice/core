@@ -26,25 +26,14 @@
 #include "style.hxx"
 #include <treevisiting.hxx>
 
-#include <rtl/string.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 #include <comphelper/sequence.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2irange.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/svapp.hxx>
-
-#include <com/sun/star/rendering/XVolatileBitmap.hpp>
-#include <com/sun/star/geometry/RealSize2D.hpp>
-#include <com/sun/star/geometry/RealPoint2D.hpp>
-#include <com/sun/star/geometry/RealRectangle2D.hpp>
 
 using namespace com::sun::star;
 

@@ -17,24 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
 #include "PresenterPaneBorderPainter.hxx"
 #include "PresenterCanvasHelper.hxx"
-#include "PresenterConfigurationAccess.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterTheme.hxx"
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/SimpleFontMetric.hpp>
-#include <com/sun/star/awt/XFont.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/graphic/XGraphicRenderer.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <map>
 #include <memory>

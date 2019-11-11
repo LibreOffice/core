@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_PAGECOLLECTOR_HXX
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_PAGECOLLECTOR_HXX
 
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <vector>
 
 class PageCollector

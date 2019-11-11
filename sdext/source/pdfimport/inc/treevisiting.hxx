@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 #include <list>
-
+#include <memory>
 
 namespace pdfi
 {

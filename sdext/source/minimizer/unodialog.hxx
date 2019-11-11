@@ -21,12 +21,9 @@
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_UNODIALOG_HXX
 
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -34,19 +31,14 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
-#include <com/sun/star/awt/XTextListener.hpp>
 #include <com/sun/star/awt/XButton.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XComboBox.hpp>
-#include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XFixedText.hpp>
 #include <com/sun/star/awt/XUnoControlDialog.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XReschedule.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
-#include <com/sun/star/awt/Size.hpp>
 
 
 class UnoDialog

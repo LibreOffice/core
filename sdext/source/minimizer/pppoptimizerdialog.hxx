@@ -21,13 +21,9 @@
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERDIALOG_HXX
 
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

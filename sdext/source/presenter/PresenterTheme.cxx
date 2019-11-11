@@ -21,15 +21,8 @@
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterConfigurationAccess.hxx"
-#include "PresenterHelper.hxx"
-#include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/beans/UnknownPropertyException.hpp>
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/rendering/PanoseWeight.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/util/Color.hpp>
 #include <osl/diagnose.h>
 #include <map>
 #include <numeric>

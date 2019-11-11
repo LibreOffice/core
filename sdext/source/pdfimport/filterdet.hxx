@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>

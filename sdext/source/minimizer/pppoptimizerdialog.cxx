@@ -30,7 +30,6 @@ using namespace ::com::sun::star::beans;
 
 #define SERVICE_NAME "com.sun.star.comp.PresentationMinimizer"
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ustrbuf.hxx>
 
 PPPOptimizerDialog::PPPOptimizerDialog( const Reference< XComponentContext > &xContext ) :
     mxContext( xContext ),

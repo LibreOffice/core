@@ -23,21 +23,14 @@
 #include <saxemitter.hxx>
 #include <odfemitter.hxx>
 #include "inc/wrapper.hxx"
-#include "inc/contentsink.hxx"
 #include <pdfiprocessor.hxx>
 
 #include <osl/file.h>
-#include <osl/thread.h>
 #include <sal/log.hxx>
 
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <tools/diagnose_ex.h>
 

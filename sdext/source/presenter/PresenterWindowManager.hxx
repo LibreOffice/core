@@ -22,19 +22,14 @@
 
 #include "PresenterPaneContainer.hxx"
 #include "PresenterTheme.hxx"
-#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
-#include <com/sun/star/awt/XGraphics.hpp>
-#include <com/sun/star/awt/XMouseMotionListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/XSprite.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>

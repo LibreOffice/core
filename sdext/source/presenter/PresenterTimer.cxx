@@ -20,11 +20,9 @@
 #include "PresenterTimer.hxx"
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 
-#include <osl/doublecheckedlocking.h>
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 

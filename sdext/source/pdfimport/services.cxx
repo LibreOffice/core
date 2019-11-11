@@ -23,7 +23,6 @@
 #include <treevisitorfactory.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 using namespace ::com::sun::star;

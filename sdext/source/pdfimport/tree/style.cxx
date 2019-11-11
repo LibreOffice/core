@@ -21,7 +21,6 @@
 #include "style.hxx"
 #include <genericelements.hxx>
 #include <xmlemitter.hxx>
-#include <pdfiprocessor.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
