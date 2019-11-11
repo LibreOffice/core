@@ -1450,7 +1450,25 @@ interface BaseText
         StateMethod = GetTextCtrlState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    FN_UNDERLINE_DOUBLE // status(final|play)
+    SID_ULINE_VAL_NONE // status(final|play)
+    [
+        ExecMethod = ExecCharAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_ULINE_VAL_SINGLE // status(final|play)
+    [
+        ExecMethod = ExecCharAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_ULINE_VAL_DOUBLE // status(final|play)
+    [
+        ExecMethod = ExecCharAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_ULINE_VAL_DOTTED // status(final|play)
     [
         ExecMethod = ExecCharAttr ;
         StateMethod = GetAttrState ;

@@ -990,8 +990,13 @@ class SvxSetItem;
 
 #define SID_IMPRESS_DOC                                 TypedWhichId<SfxBoolItem>( SID_SVX_START + 1194 )
 
+#define SID_ULINE_VAL_NONE                              (SID_SVX_START + 1195) /* no underline */
+#define SID_ULINE_VAL_SINGLE                            (SID_SVX_START + 1196) /* single underline */
+#define SID_ULINE_VAL_DOUBLE                            (SID_SVX_START + 1197) /* double underline */
+#define SID_ULINE_VAL_DOTTED                            (SID_SVX_START + 1198) /* dotted underline */
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1194 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1198 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

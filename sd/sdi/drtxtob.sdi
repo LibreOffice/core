@@ -68,7 +68,37 @@ shell TextObjectBar
         StateMethod = GetAttrState;
     ]
 
+    SID_ULINE_VAL_NONE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+
+    SID_ULINE_VAL_SINGLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+
+    SID_ULINE_VAL_DOUBLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+
+    SID_ULINE_VAL_DOTTED
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+
     SID_ATTR_CHAR_OVERLINE  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_ATTR_CHAR_UNDERLINE  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
