@@ -1251,11 +1251,11 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
 
 static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDragSrc nFlags, vcl::Window* pWin )
 {
-    ScMarkData aMark;
+    ScDocument& rSrcDoc = pSrcShell->GetDocument();
+    ScMarkData aMark(rSrcDoc.MaxRow(), rSrcDoc.MaxCol());
     aMark.SelectTable( rRange.aStart.Tab(), true );
     aMark.SetMarkArea( rRange );
 
-    ScDocument& rSrcDoc = pSrcShell->GetDocument();
     if ( !rSrcDoc.HasSelectedBlockMatrixFragment( rRange.aStart.Col(), rRange.aStart.Row(),
                                                    rRange.aEnd.Col(),   rRange.aEnd.Row(),
                                                    aMark ) )

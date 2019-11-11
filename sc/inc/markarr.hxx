@@ -43,12 +43,13 @@ class ScMarkArray
     SCSIZE                            nCount;
     SCSIZE                            nLimit;
     std::unique_ptr<ScMarkEntry[]>    pData;
+    SCROW                             mnMaxRow;
 
 friend class ScMarkArrayIter;
 friend class ScDocument;                // for FillInfo
 
 public:
-            ScMarkArray();
+            ScMarkArray(SCROW nMaxRow);
             ScMarkArray( ScMarkArray&& rArray ) noexcept;
             ScMarkArray( const ScMarkArray& rArray );
             ~ScMarkArray();

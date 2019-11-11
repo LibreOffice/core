@@ -2401,7 +2401,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScViewData* pData  = GetViewData();
                 ScMarkData& rMark  = pData->GetMarkData();
                 ScDocument* pDoc   = pData->GetDocument();
-                ScMarkData  aNewMark;
+                ScMarkData  aNewMark(pDoc->MaxRow(), pDoc->MaxCol());
                 ScRangeList aRangeList;
 
                 for (auto const& rTab : rMark.GetSelectedTabs())

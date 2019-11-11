@@ -213,7 +213,7 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( !pSource->GetItem(ATTR_MERGE).IsMerged() )
     {
         ScRange aRange( nCol, nRow, nTab, nCol, nRow, nTab );
-        ScMarkData aMark;
+        ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
         aMark.SetMarkArea( aRange );
 
         ScDocFunc &rFunc = GetViewData().GetDocFunc();
@@ -552,7 +552,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     const sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::NUMBER, nLang);
                     ScPatternAttr aPattern( pDoc->GetPool());
                     aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat));
-                    ScMarkData aMark;
+                    ScMarkData aMark(pDoc->MaxRow(), pDoc->MaxCol());
                     aMark.SelectTable( i, true);
                     aMark.SetMarkArea( ScRange( aPos));
                     rFunc.ApplyAttributes( aMark, aPattern, false);
