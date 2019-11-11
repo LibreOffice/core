@@ -152,7 +152,8 @@ css::uno::Any SAL_CALL SvXMLImportContext::queryInterface( const css::uno::Type&
     css::uno::Any a = ::cppu::queryInterface(
                 aType,
                 static_cast< XFastContextHandler* >(this),
-                static_cast< XTypeProvider* >(this));
+                static_cast< XTypeProvider* >(this),
+                static_cast< css::uno::XInterface* >(static_cast< XFastContextHandler* >(this)));
 
     return a;
 }
