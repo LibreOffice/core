@@ -20,7 +20,7 @@
 #include "tp_DataSource.hxx"
 #include <strings.hrc>
 #include <ResId.hxx>
-#include "ChartTypeTemplateProvider.hxx"
+#include <ChartTypeTemplateProvider.hxx>
 #include <RangeSelectionHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ControllerLockGuard.hxx>
