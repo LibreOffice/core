@@ -97,7 +97,6 @@
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
-#include <svl/stritem.hxx>
 #include <svx/chrtitem.hxx>
 
 #include <swabstdlg.hxx>
