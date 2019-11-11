@@ -906,6 +906,7 @@ static gboolean postDocumentLoad(gpointer pData)
 
     // we are completely loaded
     priv->m_bInit = true;
+    g_object_notify_by_pspec(G_OBJECT(pLOKDocView), properties[PROP_IS_INITIALIZED]);
 
     return G_SOURCE_REMOVE;
 }
