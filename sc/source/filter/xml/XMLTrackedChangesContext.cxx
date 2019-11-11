@@ -42,8 +42,8 @@ using namespace xmloff::token;
 class ScXMLChangeInfoContext : public ScXMLImportContext
 {
     ScMyActionInfo                      aInfo;
-    OUStringBuffer                      sAuthorBuffer{32};
-    OUStringBuffer                      sDateTimeBuffer{32};
+    OUString                            sAuthor;
+    OUString                            sDateTime;
     OUStringBuffer                      sCommentBuffer{64};
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     sal_uInt32                          nParagraphCount;
@@ -53,9 +53,8 @@ public:
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
@@ -422,47 +421,40 @@ ScXMLChangeInfoContext::ScXMLChangeInfoContext( ScXMLImport& rImport,
         {
             sal_Int32 nToken = aIter.getToken();
             if ( nToken == XML_ELEMENT( OFFICE, XML_CHG_AUTHOR ) )
-                sAuthorBuffer = aIter.toString();
+                sAuthor = aIter.toString();
             else if ( nToken == XML_ELEMENT( OFFICE, XML_CHG_DATE_TIME ) )
-                sDateTimeBuffer = aIter.toString();
+                sDateTime = aIter.toString();
         }
     }
 }
 
-SvXMLImportContextRef ScXMLChangeInfoContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLChangeInfoContext::createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if( XML_NAMESPACE_DC == nPrefix )
-    {
-        if( IsXMLToken( rLocalName, XML_CREATOR ) )
-            pContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLocalName, sAuthorBuffer);
-        else if( IsXMLToken( rLocalName, XML_DATE ) )
-            pContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLocalName, sDateTimeBuffer);
-    }
-    else if ((nPrefix == XML_NAMESPACE_TEXT) && (IsXMLToken(rLocalName, XML_P)) )
+    if( nElement == XML_ELEMENT(DC, XML_CREATOR ) )
+            pContext = new ScXMLContentContext2(GetScImport(), sAuthor);
+    else if( nElement == XML_ELEMENT(DC, XML_DATE ) )
+        pContext = new ScXMLContentContext2(GetScImport(), sDateTime);
+    else if( nElement == XML_ELEMENT(TEXT, XML_P ) )
     {
         if(nParagraphCount)
             sCommentBuffer.append('\n');
         ++nParagraphCount;
-        pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLocalName, sCommentBuffer);
+        pContext = new ScXMLContentContext( GetScImport(), sCommentBuffer);
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
 void SAL_CALL ScXMLChangeInfoContext::endFastElement( sal_Int32 /*nElement*/ )
 {
-    aInfo.sUser = sAuthorBuffer.makeStringAndClear();
-    ::sax::Converter::parseDateTime(aInfo.aDateTime,
-            sDateTimeBuffer.makeStringAndClear());
+    aInfo.sUser = sAuthor;
+    ::sax::Converter::parseDateTime(aInfo.aDateTime, sDateTime);
     aInfo.sComment = sCommentBuffer.makeStringAndClear();
     pChangeTrackingImportHelper->SetActionInfo(aInfo);
 }
