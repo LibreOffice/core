@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d7285ae3",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-11T12:44:15Z",
+      "side": 1,
+      "message": "The \"correct\" way to convert from a LO-internal to -external file URL would be the translateToExternal method of the css.uri.ExternalUriReferenceTranslator UNO service.  But that translates the URL to be interpreted according to the current Windows code page (i.e., osl_getThreadTextEncoding), so only supports characters covered by that code page, and given that  the result is passed into a Windows wchar_t API, ToIUri nicely avoids such potential conversion failure.\n\nHowever:  I would only do this ToIUri conversion for file URLs, and add a comment stating that this is specifically meant to support file URLs with fragment, and why toIUri is used instead of css.uri.ExternalUriReferenceTranslator.\n\n(And instead of INetURLObject::decode you should use rtl::Uri::decode from include/rtl/uri.hxx.  That also avoids a dependency on library tl.)",
+      "revId": "746b7d21e097b713fcc625f0c7a6e6173a0c618e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
