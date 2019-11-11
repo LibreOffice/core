@@ -26,14 +26,19 @@
 
 #include <algorithm>
 
-ScMultiSel::ScMultiSel()
+ScMultiSel::ScMultiSel(SCROW nMaxRow, SCCOL nMaxCol)
+    : aRowSel(nMaxRow),
+    mnMaxRow(nMaxRow),
+    mnMaxCol(nMaxCol)
 {
 }
 
 ScMultiSel::ScMultiSel( const ScMultiSel& rOther )
+    : aRowSel(rOther.aRowSel)
 {
-    aRowSel = rOther.aRowSel;
     aMultiSelContainer = rOther.aMultiSelContainer;
+    mnMaxRow = rOther.mnMaxRow;
+    mnMaxCol = rOther.mnMaxCol;
 }
 
 ScMultiSel::~ScMultiSel()
@@ -44,6 +49,8 @@ ScMultiSel& ScMultiSel::operator=(const ScMultiSel& rOther)
 {
     aRowSel = rOther.aRowSel;
     aMultiSelContainer = rOther.aMultiSelContainer;
+    mnMaxRow = rOther.mnMaxRow;
+    mnMaxCol = rOther.mnMaxCol;
     return *this;
 }
 
@@ -175,7 +182,7 @@ SCROW ScMultiSel::GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const
 
 void ScMultiSel::MarkAllCols( SCROW nStartRow, SCROW nEndRow )
 {
-    aMultiSelContainer.resize(MAXCOL+1);
+    aMultiSelContainer.resize(MAXCOL+1, ScMarkArray(mnMaxRow));
     for ( SCCOL nCol = MAXCOL; nCol >= 0; --nCol )
     {
         aMultiSelContainer[nCol].SetMarkArea( nStartRow, nEndRow, true );
@@ -233,7 +240,7 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
     }
 
     if (nEndCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
-        aMultiSelContainer.resize(nEndCol+1);
+        aMultiSelContainer.resize(nEndCol+1, ScMarkArray(mnMaxRow));
     for ( SCCOL nColIter = nEndCol; nColIter >= nStartCol; --nColIter )
         aMultiSelContainer[nColIter].SetMarkArea( nStartRow, nEndRow, bMark );
 }
@@ -295,7 +302,7 @@ void ScMultiSel::Set( ScRangeList const & rList )
         ++i;
     }
 
-    aMultiSelContainer.resize(nMaxCol+1);
+    aMultiSelContainer.resize(nMaxCol+1, ScMarkArray(mnMaxRow));
     for (SCCOL nCol = 0; nCol<=nMaxCol; ++nCol)
         if (!aMarkEntriesPerCol[nCol].empty())
         {
@@ -320,7 +327,7 @@ bool ScMultiSel::IsRowRangeMarked( SCROW nStartRow, SCROW nEndRow ) const
 ScMarkArray ScMultiSel::GetMarkArray( SCCOL nCol ) const
 {
     ScMultiSelIter aMultiIter( *this, nCol );
-    ScMarkArray aMarkArray;
+    ScMarkArray aMarkArray(mnMaxRow);
     SCROW nTop, nBottom;
     while( aMultiIter.Next( nTop, nBottom ) )
         aMarkArray.SetMarkArea( nTop, nBottom, true );
@@ -366,7 +373,7 @@ void ScMultiSel::ShiftCols(SCCOL nStartCol, long nColOffset)
                 nDestCol = MAXCOL;
         }
         if (nDestCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
-            aMultiSelContainer.resize(nDestCol);
+            aMultiSelContainer.resize(nDestCol, ScMarkArray(mnMaxRow));
         aMultiSelContainer[nDestCol] = aSourceArray;
         ++nCol;
     }
@@ -382,7 +389,7 @@ void ScMultiSel::ShiftCols(SCCOL nStartCol, long nColOffset)
         rNewCol = rStartPos;
         rNewCol.Intersect(rPrevPos);
         if (nStartCol + nColOffset >= static_cast<SCCOL>(aNewMultiSel.aMultiSelContainer.size()))
-            aNewMultiSel.aMultiSelContainer.resize(nStartCol + nColOffset);
+            aNewMultiSel.aMultiSelContainer.resize(nStartCol + nColOffset, ScMarkArray(mnMaxRow));
         for (long i = 1; i < nColOffset; ++i)
             aMultiSelContainer[nStartCol + i] = rNewCol;
     }
@@ -418,7 +425,7 @@ ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
     if (bHasMarks1 && bHasMarks2)
     {
         pRowSegs.reset( new ScFlatBoolRowSegments);
-        pRowSegs->setFalse( 0, MAXROW );
+        pRowSegs->setFalse( 0, rMultiSel.mnMaxRow );
         {
             ScMarkArrayIter aMarkIter( &rMultiSel.aRowSel );
             SCROW nTop, nBottom;

@@ -105,6 +105,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         pFormulaTrack( nullptr ),
         pEOFormulaTrack( nullptr ),
         pPreviewCellStyle( nullptr ),
+        maPreviewSelection(MAXROW, MAXCOL),
         nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MaxCol(),0,0),

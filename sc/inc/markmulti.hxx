@@ -34,11 +34,13 @@ private:
     typedef std::vector<ScMarkArray> MapType;
     MapType aMultiSelContainer;
     ScMarkArray aRowSel;
+    SCROW mnMaxRow;
+    SCCOL mnMaxCol;
 
 friend class ScMultiSelIter;
 
 public:
-    ScMultiSel();
+    ScMultiSel(SCROW nMaxRow, SCCOL nMaxCol);
     ScMultiSel( const ScMultiSel& rMultiSel );
     ~ScMultiSel();
 

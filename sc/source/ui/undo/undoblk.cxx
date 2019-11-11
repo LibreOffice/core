@@ -465,7 +465,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
                     aWorkRange.aEnd.SetCol(rDoc.MaxCol());
                 if ( eCmd==DelCellCmd::Rows || eCmd==DelCellCmd::CellsUp )
                     aWorkRange.aEnd.SetRow(rDoc.MaxRow());
-                ScMarkData aMarkData;
+                ScMarkData aMarkData(rDoc.MaxRow(), rDoc.MaxCol());
                 aMarkData.SelectOneTable( aWorkRange.aStart.Tab() );
                 ScPatternAttr aPattern( rDoc.GetPool() );
                 aPattern.GetItemSet().Put( ScMergeFlagAttr() );
@@ -1083,7 +1083,7 @@ void ScUndoPaste::DoChange(bool bUndo)
         ScRange& rDrawRange = aDrawRanges[i];
         rDoc.ExtendMerge(rDrawRange, true);      // only needed for single sheet (text/rtf etc.)
         ScRangeList aRangeList(rDrawRange);
-        ScMarkData aData(aRangeList);
+        ScMarkData aData(rDoc.MaxRow(), rDoc.MaxCol(), aRangeList);
         if (bPaintAll)
         {
             rDrawRange.aStart.SetCol(0);
@@ -1408,7 +1408,7 @@ void ScUndoDragDrop::Redo()
         of drawing undo actions. */
 
     SCTAB nTab;
-    ScMarkData aSourceMark;
+    ScMarkData aSourceMark(rDoc.MaxRow(), rDoc.MaxCol());
     for (nTab=aSrcRange.aStart.Tab(); nTab<=aSrcRange.aEnd.Tab(); nTab++)
         aSourceMark.SelectTable( nTab, true );
 
@@ -1427,7 +1427,7 @@ void ScUndoDragDrop::Redo()
         PaintArea( aSrcPaintRange, nExtFlags );
     }
 
-    ScMarkData aDestMark;
+    ScMarkData aDestMark(rDoc.MaxRow(), rDoc.MaxCol());
     for (nTab=aDestRange.aStart.Tab(); nTab<=aDestRange.aEnd.Tab(); nTab++)
         aDestMark.SelectTable( nTab, true );
 
@@ -1917,7 +1917,7 @@ void ScUndoEnterMatrix::Redo()
 
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    ScMarkData aDestMark;
+    ScMarkData aDestMark(rDoc.MaxRow(), rDoc.MaxCol());
     aDestMark.SelectOneTable( aBlockRange.aStart.Tab() );
     aDestMark.SetMarkArea( aBlockRange );
 
@@ -2365,7 +2365,7 @@ void ScUndoBorder::Undo()
     BeginUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    ScMarkData aMarkData;
+    ScMarkData aMarkData(rDoc.MaxRow(), rDoc.MaxCol());
     aMarkData.MarkFromRangeList(*xRanges, false);
     xUndoDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ATTRIB, true, rDoc, &aMarkData);
     pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
@@ -2384,7 +2384,7 @@ void ScUndoBorder::Redo()
         ScRange const & rRange = (*xRanges)[i];
         SCTAB nTab = rRange.aStart.Tab();
 
-        ScMarkData aMark;
+        ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
         aMark.SetMarkArea( rRange );
         aMark.SelectTable( nTab, true );
 

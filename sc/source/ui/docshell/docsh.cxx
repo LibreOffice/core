@@ -1602,7 +1602,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             m_aDocument.GetCellArea( nTab, nEndCol, nEndRow );
             aColWidthRange.aEnd.SetCol( nEndCol );
             aColWidthRange.aEnd.SetRow( nEndRow );
-            ScMarkData aMark;
+            ScMarkData aMark(m_aDocument.MaxRow(), m_aDocument.MaxCol());
             aMark.SetMarkArea( aColWidthRange );
             aMark.MarkToMulti();
 

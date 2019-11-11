@@ -104,7 +104,7 @@ ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRang
     ScDocument* pSrcDoc = &rDocSh.GetDocument();
 
     ScClipParam aClipParam(rRange, true);
-    ScMarkData aMark;
+    ScMarkData aMark(MAXROW, MAXCOL);
     aMark.SetMarkArea(rRange);
     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 
@@ -135,7 +135,7 @@ ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRang
 
 void ScParallelismTest::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
 {
-    ScMarkData aMark;
+    ScMarkData aMark(MAXROW, MAXCOL);
     aMark.SetMarkArea(rDestRange);
     pDestDoc->CopyFromClip(rDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pClipDoc);
 }
@@ -884,7 +884,7 @@ void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference()
     m_pDoc->SetAutoCalc(true);
 
     const ScRange aChangeRange(1, 1, 0, 1, 4, 0); // B2:B5
-    ScMarkData aMark;
+    ScMarkData aMark(MAXROW, MAXCOL);
     aMark.SelectOneTable(0);
 
     // Set up clip document.

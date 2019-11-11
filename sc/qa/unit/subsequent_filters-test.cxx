@@ -798,7 +798,7 @@ void ScFiltersTest::testFormulaDepDeleteContentsODS()
     // Delete D2:D5.
     ScDocFunc& rFunc = xDocSh->GetDocFunc();
     ScRange aRange(3,1,0,3,4,0);
-    ScMarkData aMark;
+    ScMarkData aMark(MAXROW, MAXCOL);
     aMark.SetMarkArea(aRange);
     aMark.MarkToMulti();
     bool bGood = rFunc.DeleteContents(aMark, InsertDeleteFlags::ALL, true, true);
@@ -2832,7 +2832,7 @@ void ScFiltersTest::testOptimalHeightReset()
 
     // delete content of A1
     ScRange aDelRange(0,0,0,0,0,0);
-    ScMarkData aMark;
+    ScMarkData aMark(MAXROW, MAXCOL);
     aMark.SetMarkArea(aDelRange);
     bool bRet = rFunc.DeleteContents( aMark, InsertDeleteFlags::ALL, false, true );
     CPPUNIT_ASSERT_MESSAGE("DeleteContents failed", bRet);

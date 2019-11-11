@@ -142,7 +142,7 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
                 nDestTab ) );
 
     ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
-    ScMarkData aSourceMark;
+    ScMarkData aSourceMark(pSrcDoc->MaxRow(), pSrcDoc->MaxCol());
     aSourceMark.SelectOneTable( nSrcTab );      // for CopyToClip
     aSourceMark.SetMarkArea( rSrcRange );
     ScClipParam aClipParam(rSrcRange, false);
@@ -157,7 +157,7 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
         pClipDoc->ApplyPatternAreaTab( 0,0, pClipDoc->MaxCol(), pClipDoc->MaxRow(), nSrcTab, aPattern );
     }
 
-    ScMarkData aDestMark;
+    ScMarkData aDestMark(pDestDoc->MaxRow(), pDestDoc->MaxCol());
     aDestMark.SelectOneTable( nDestTab );
     aDestMark.SetMarkArea( aNewRange );
     pDestDoc->CopyFromClip( aNewRange, aDestMark, InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA, nullptr, pClipDoc.get(), false );
