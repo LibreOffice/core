@@ -1468,8 +1468,8 @@ void RTFDocumentImpl::text(OUString& rString)
             m_aStates.top().appendDestinationText(rString);
             break;
         case Destination::GENERATOR:
-            // don't enlarge space sequences again, if the document was saved in LibreOffice
-            if (rString.indexOf("LibreOffice") != -1)
+            // don't enlarge space sequences, eg. it was saved in LibreOffice
+            if (!rString.startsWithIgnoreAsciiCase("Microsoft"))
                 m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_longerSpaceSequence,
                                           new RTFValue(0));
             break;
