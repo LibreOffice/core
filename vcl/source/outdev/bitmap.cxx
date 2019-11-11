@@ -1285,8 +1285,20 @@ void OutputDevice::DrawTransformedBitmapEx(
                 aFullTransform *= aTransform;
             }
 
-            if (bSheared)
+            double fSourceRatio = 1.0;
+            if (rOriginalSizePixel.getHeight() != 0)
             {
+                fSourceRatio = rOriginalSizePixel.getWidth() / rOriginalSizePixel.getHeight();
+            }
+            double fTargetRatio = 1.0;
+            if (aFullScale.getY() != 0)
+            {
+                fTargetRatio = aFullScale.getX() / aFullScale.getY();
+            }
+            bool bAspectRatioKept = rtl::math::approxEqual(fSourceRatio, fTargetRatio);
+            if (bSheared || !bAspectRatioKept)
+            {
+                // Not only rotation, or scaling does not keep aspect ratio.
                 aTransformed = aTransformed.getTransformed(
                     aFullTransform,
                     aVisibleRange,
