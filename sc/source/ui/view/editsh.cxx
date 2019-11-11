@@ -1193,7 +1193,6 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
         ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_ITALIC, nScript );
 
     // underline
-
     SfxItemState eState = aAttribs.GetItemState( EE_CHAR_UNDERLINE );
     if ( eState == SfxItemState::DONTCARE )
     {

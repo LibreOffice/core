@@ -313,7 +313,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Bold"/>
           <menu:menuitem menu:id=".uno:Italic"/>
-          <menu:menuitem menu:id=".uno:Underline"/>
+          <menu:menuitem menu:id=".uno:UnderlineSingle"/>
           <menu:menuitem menu:id=".uno:UnderlineDouble"/>
           <menu:menuitem menu:id=".uno:Strikeout"/>
           <menu:menuitem menu:id=".uno:Overline"/>

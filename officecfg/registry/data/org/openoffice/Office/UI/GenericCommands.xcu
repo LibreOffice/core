@@ -1563,6 +1563,7 @@
           <value>9</value>
         </prop>
       </node>
+      <!-- selection of possible underlines -->
       <node oor:name=".uno:Underline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Underline</value>
@@ -1571,6 +1572,7 @@
           <value>9</value>
         </prop>
       </node>
+      <!-- set single underline, state of any non-None underline -->
       <node oor:name=".uno:UnderlineSimple" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Underline</value>
@@ -1582,12 +1584,33 @@
           <value>.uno:Underline</value>
         </prop>
       </node>
+      <node oor:name=".uno:UnderlineNone" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Underline: Off</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:UnderlineSingle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Single Underline</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
       <node oor:name=".uno:UnderlineDouble" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Double Underline</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:UnderlineDotted" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Dotted Underline</value>
         </prop>
       </node>
       <node oor:name=".uno:Overline" oor:op="replace">
