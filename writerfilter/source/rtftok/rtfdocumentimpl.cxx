@@ -1467,6 +1467,12 @@ void RTFDocumentImpl::text(OUString& rString)
         case Destination::STATICVAL:
             m_aStates.top().appendDestinationText(rString);
             break;
+        case Destination::GENERATOR:
+            // don't enlarge space sequences again, if the document was saved in LibreOffice
+            if (rString.indexOf("LibreOffice") != -1)
+                m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_longerSpaceSequence,
+                                          new RTFValue(0));
+            break;
         default:
             bRet = false;
             break;
