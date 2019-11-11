@@ -32,7 +32,7 @@ class LazyMathBufferingContext : public core::ContextHandler
 {
 private:
     XmlStreamBuilder & m_rBuilder;
-    long m_Counter;
+    std::vector<sal_Int32> m_OpenElements;
 
 public:
     LazyMathBufferingContext(core::ContextHandler const& rParent,
@@ -51,7 +51,6 @@ LazyMathBufferingContext::LazyMathBufferingContext(
         core::ContextHandler const& rParent, drawingml::TextParagraph & rPara)
     : core::ContextHandler(rParent)
     , m_rBuilder(rPara.GetMathXml())
-    , m_Counter(0)
 {
 }
 
@@ -59,22 +58,22 @@ void SAL_CALL LazyMathBufferingContext::startFastElement(
         sal_Int32 const nElement,
         uno::Reference<xml::sax::XFastAttributeList> const& xAttrs)
 {
-    if (0 < m_Counter) // ignore a14:m
+    if (0 < m_OpenElements.size()) // ignore a14:m
     {   // ignore outer oMathPara
-        if (1 != m_Counter || OOX_TOKEN(officeMath, oMathPara) != nElement)
+        if (1 != m_OpenElements.size() || OOX_TOKEN(officeMath, oMathPara) != nElement)
         {
             m_rBuilder.appendOpeningTag(nElement, xAttrs);
         }
     }
-    ++m_Counter;
+    m_OpenElements.push_back(nElement);
 }
 
 void SAL_CALL LazyMathBufferingContext::endFastElement(sal_Int32 const nElement)
 {
-    --m_Counter;
-    if (0 < m_Counter) // ignore a14:m
+    m_OpenElements.pop_back();
+    if (0 < m_OpenElements.size()) // ignore a14:m
     {   // ignore outer oMathPara
-        if (1 != m_Counter || OOX_TOKEN(officeMath, oMathPara) != nElement)
+        if (1 != m_OpenElements.size() || OOX_TOKEN(officeMath, oMathPara) != nElement)
         {
             m_rBuilder.appendClosingTag(nElement);
         }
@@ -90,9 +89,12 @@ LazyMathBufferingContext::createFastChildContext(sal_Int32 const,
 
 void SAL_CALL LazyMathBufferingContext::characters(OUString const& rChars)
 {
-    if (0 < m_Counter) // ignore a14:m
+    if (0 < m_OpenElements.size()) // ignore a14:m
     {
-        m_rBuilder.appendCharacters(rChars);
+        if (m_OpenElements.back() == OOX_TOKEN(officeMath, t))
+        {
+            m_rBuilder.appendCharacters(rChars);
+        }
     }
 }
 
