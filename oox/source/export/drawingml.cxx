@@ -605,7 +605,7 @@ void DrawingML::WriteGradientFill(awt::Gradient rGradient, awt::Gradient rTransp
                 nStartAlpha = GetAlphaFromTransparenceGradient(rTransparenceGradient, true);
                 nEndAlpha = GetAlphaFromTransparenceGradient(rTransparenceGradient, false);
             }
-            WriteGradientStop(0, ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity),
+            WriteGradientStop(rGradient.Border, ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity),
                               nStartAlpha);
             WriteGradientStop(100, ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity),
                               nEndAlpha);

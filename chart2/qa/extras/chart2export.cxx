@@ -91,6 +91,7 @@ public:
     void testChartTitlePropertiesBitmapFillDOCX();
     void testColorGradientWithTransparancyDOCX();
     void testColorGradientWithTransparancyODS();
+    void testColorGradientStopXLSX();
     void testBarChartDataPointPropDOCX();
     void testFdo83058dlblPos();
     void testAutoTitleDelXLSX();
@@ -201,6 +202,7 @@ public:
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillDOCX);
     CPPUNIT_TEST(testColorGradientWithTransparancyDOCX);
     CPPUNIT_TEST(testColorGradientWithTransparancyODS);
+    CPPUNIT_TEST(testColorGradientStopXLSX);
     CPPUNIT_TEST(testBarChartDataPointPropDOCX);
     CPPUNIT_TEST(testFdo83058dlblPos);
     CPPUNIT_TEST(testAutoTitleDelXLSX);
@@ -1249,6 +1251,18 @@ void Chart2ExportTest::testColorGradientWithTransparancyODS()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "60000");
     // Test the transparency of the second color
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "60000");
+}
+
+void Chart2ExportTest::testColorGradientStopXLSX()
+{
+    // Test color gradient (two color) stop of the first color
+    load("/chart2/qa/extras/data/xlsx/", "tdf128619.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Test the position of the first color
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:spPr/a:gradFill/a:gsLst/a:gs[1]", "pos", "45000");
+    // Test the position of the second color
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:spPr/a:gradFill/a:gsLst/a:gs[2]", "pos", "100000");
 }
 
 void Chart2ExportTest::testBarChartDataPointPropDOCX()
