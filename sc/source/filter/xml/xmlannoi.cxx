@@ -122,17 +122,14 @@ SvXMLImportContextRef ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPr
     if( XML_NAMESPACE_DC == nPrefix )
     {
         if( IsXMLToken( rLName, XML_CREATOR ) )
-            xContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, maAuthorBuffer);
+            xContext = new ScXMLContentContext(GetScImport(), maAuthorBuffer);
         else if( IsXMLToken( rLName, XML_DATE ) )
-            xContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, maCreateDateBuffer);
+            xContext = new ScXMLContentContext(GetScImport(), maCreateDateBuffer);
     }
     else if( XML_NAMESPACE_META == nPrefix )
     {
         if( IsXMLToken( rLName, XML_DATE_STRING ) )
-            xContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, maCreateDateStringBuffer);
+            xContext = new ScXMLContentContext(GetScImport(), maCreateDateStringBuffer);
     }
 
     if( !xContext && pShapeContext )
