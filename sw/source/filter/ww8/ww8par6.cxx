@@ -4886,13 +4886,8 @@ void SwWW8ImplReader::Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, sho
     if (nLen <= 0)
     {
         // end of attribute
-        if ( m_nInTable )
-            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BACKGROUND );
-        else
-        {
-            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), XATTR_FILLSTYLE );
-            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), XATTR_FILLCOLOR );
-        }
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), XATTR_FILLSTYLE );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), XATTR_FILLCOLOR );
     }
     else
     {
@@ -4900,13 +4895,12 @@ void SwWW8ImplReader::Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, sho
         if (nLen != 10)
             return;
 
-        if ( m_nInTable )
-            NewAttr( SvxBrushItem(ExtractColour(pData, m_bVer67), RES_BACKGROUND) );
+        const Color aColor = ExtractColour(pData, m_bVer67);
+        NewAttr( XFillColorItem(OUString(), aColor) );
+        if ( aColor == COL_AUTO )
+            NewAttr( XFillStyleItem(drawing::FillStyle_NONE) );
         else
-        {
             NewAttr( XFillStyleItem(drawing::FillStyle_SOLID) );
-            NewAttr( XFillColorItem(OUString(), ExtractColour(pData, m_bVer67)) );
-        }
     }
 }
 
