@@ -962,6 +962,19 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                         }
                         break;
                     }
+
+                    case XATTR_LINEWIDTH:
+                    {
+                        const SfxPoolItem* pItem = rSet.GetItem(XATTR_LINEWIDTH);
+                        if (pItem)
+                        {
+                            sal_uInt32 nWidth = static_cast<const XLineWidthItem*>(pItem)->GetValue();
+                            sPayload = OUString::number(nWidth);
+
+                            sPayload = ".uno:LineWidth=" + sPayload;
+                        }
+                        break;
+                    }
                 }
 
                 if (!sPayload.isEmpty())
