@@ -59,11 +59,13 @@ private:
     ScRangeList     aBottomEnvelope;          // list of ranges in the bottom envelope of the multi selection
     ScRangeList     aLeftEnvelope;            // list of ranges in the left envelope of the multi selection
     ScRangeList     aRightEnvelope;           // list of ranges in the right envelope of the multi selection
+    SCROW           mnMaxRow;
+    SCCOL           mnMaxCol;
 
 public:
-                ScMarkData();
+                ScMarkData(SCROW nMaxRow, SCCOL nMaxCol);
                 ScMarkData(const ScMarkData& rData);
-                ScMarkData(const ScRangeList& rList);
+                ScMarkData(SCROW nMaxRow, SCCOL nMaxCol, const ScRangeList& rList);
                 ~ScMarkData();
 
     ScMarkData& operator=(const ScMarkData& rData);

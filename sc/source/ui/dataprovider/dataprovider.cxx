@@ -237,7 +237,7 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
     SCROW nRowSize = std::min<SCROW>(aDestRange.aEnd.Row() - aDestRange.aStart.Row(), nEndRow);
     aDestRange.aEnd.SetRow(aDestRange.aStart.Row() + nRowSize);
 
-    ScMarkData aMark;
+    ScMarkData aMark(mpDoc->MaxRow(), mpDoc->MaxCol());
     aMark.SelectTable(0, true);
     mpDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &rDoc);
     ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDoc->GetDocumentShell());

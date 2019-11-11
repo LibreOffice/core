@@ -374,7 +374,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
             {
                 ScRange const & rTokenRange( aSourceRanges[nRange]);
                 SCTAB nSrcTab = rTokenRange.aStart.Tab();
-                ScMarkData aSourceMark;
+                ScMarkData aSourceMark(rSrcDoc.MaxRow(), rSrcDoc.MaxCol());
                 aSourceMark.SelectOneTable( nSrcTab );      // selecting for CopyToClip
                 aSourceMark.SetMarkArea( rTokenRange );
 
@@ -394,7 +394,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
                 aNewTokenRange.aEnd.SetCol( aNewTokenRange.aStart.Col() + (rTokenRange.aEnd.Col() - rTokenRange.aStart.Col()) );
                 aNewTokenRange.aEnd.SetRow( aNewTokenRange.aStart.Row() + (rTokenRange.aEnd.Row() - rTokenRange.aStart.Row()) );
-                ScMarkData aDestMark;
+                ScMarkData aDestMark(rDoc.MaxRow(), rDoc.MaxCol());
                 aDestMark.SelectOneTable( nDestTab );
                 aDestMark.SetMarkArea( aNewTokenRange );
                 rDoc.CopyFromClip( aNewTokenRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, false );
