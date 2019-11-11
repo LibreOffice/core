@@ -1233,16 +1233,6 @@
           <value xml:lang="en-US">Collaborate...</value>
         </prop>
       </node>
-      <node oor:name=".uno:UnderlineNone" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Underline: Off</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:UnderlineSingle" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Underline: Single</value>
-        </prop>
-      </node>
       <node oor:name=".uno:AcceptChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Manage...</value>
@@ -1263,11 +1253,6 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:UnderlineDotted" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Underline: Dotted</value>
         </prop>
       </node>
       <node oor:name=".uno:Delete" oor:op="replace">

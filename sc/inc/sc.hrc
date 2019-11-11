@@ -584,12 +584,6 @@
 
 #define FID_FOCUS_POSWND        (SID_NEW_SLOTS+74)
 
-//  single slots for different underline kinds (popup menu)
-#define SID_ULINE_VAL_NONE      (SID_NEW_SLOTS+75)
-#define SID_ULINE_VAL_SINGLE    (SID_NEW_SLOTS+76)
-#define SID_ULINE_VAL_DOUBLE    (SID_NEW_SLOTS+77)
-#define SID_ULINE_VAL_DOTTED    (SID_NEW_SLOTS+78)
-
 #define FID_DEL_MANUALBREAKS    (SID_NEW_SLOTS+79)
 #define SID_ADD_PRINTAREA       (SID_NEW_SLOTS+80)
 #define FID_ADJUST_PRINTZOOM    (SID_NEW_SLOTS+81)
