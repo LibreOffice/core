@@ -955,7 +955,6 @@ chart2/source/controller/dialogs/dlg_ShapeFont.cxx
 chart2/source/controller/dialogs/dlg_ShapeParagraph.cxx
 chart2/source/controller/dialogs/dlg_View3D.cxx
 chart2/source/controller/dialogs/res_BarGeometry.cxx
-chart2/source/controller/dialogs/res_BarGeometry.hxx
 chart2/source/controller/dialogs/res_DataLabel.cxx
 chart2/source/controller/dialogs/res_DataLabel.hxx
 chart2/source/controller/dialogs/res_ErrorBar.cxx
