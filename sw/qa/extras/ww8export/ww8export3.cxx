@@ -188,7 +188,14 @@ DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.doc
 
     uno::Reference<text::XTextRange> xText(getParagraph(12));
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(getProperty<sal_uInt32>(xText, "ParaBackColor")));
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xText, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No fill", drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xText, "FillStyle"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf128608_fillStyleNoneB, "tdf128608_fillStyleNoneB.odt")
+{
+    uno::Reference<text::XTextRange> xText(getParagraph(1));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(getProperty<sal_uInt32>(xText, "ParaBackColor")));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No fill", drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xText, "FillStyle"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf112618_textbox_no_bg, "tdf112618_textbox_no_bg.doc")
