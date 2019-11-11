@@ -1201,9 +1201,39 @@ void SbModule::Run( SbMethod* pMeth )
     }
 }
 
+namespace
+{
+    class SbiRuntimeGuard
+    {
+    private:
+        std::unique_ptr<SbiRuntime> m_xRt;
+        SbiGlobals* m_pSbData;
+        SbModule* m_pOldMod;
+    public:
+        SbiRuntimeGuard(SbModule* pModule, SbiGlobals* pSbData)
+            : m_xRt(new SbiRuntime(pModule, nullptr, 0))
+            , m_pSbData(pSbData)
+            , m_pOldMod(pSbData->pMod)
+        {
+            m_xRt->pNext = pSbData->pInst->pRun;
+            m_pSbData->pMod = pModule;
+            m_pSbData->pInst->pRun = m_xRt.get();
+        }
+        void run()
+        {
+            while (m_xRt->Step()) {}
+        }
+        ~SbiRuntimeGuard()
+        {
+            m_pSbData->pInst->pRun = m_xRt->pNext;
+            m_pSbData->pMod = m_pOldMod;
+            m_xRt.reset();
+        }
+    };
+}
+
 // Execute of the init method of a module after the loading
 // or the compilation
-
 void SbModule::RunInit()
 {
     if( pImage
@@ -1215,18 +1245,11 @@ void SbModule::RunInit()
         // Set flag, so that RunInit get active (Testtool)
         pSbData->bRunInit = true;
 
-        SbModule* pOldMod = pSbData->pMod;
-        pSbData->pMod = this;
         // The init code starts always here
-        std::unique_ptr<SbiRuntime> pRt(new SbiRuntime( this, nullptr, 0 ));
+        auto xRuntimeGuard(std::make_unique<SbiRuntimeGuard>(this, pSbData));
+        xRuntimeGuard->run();
+        xRuntimeGuard.reset();
 
-        pRt->pNext = pSbData->pInst->pRun;
-        pSbData->pInst->pRun = pRt.get();
-        while( pRt->Step() ) {}
-
-        pSbData->pInst->pRun = pRt->pNext;
-        pRt.reset();
-        pSbData->pMod = pOldMod;
         pImage->bInit = true;
         pImage->bFirstInit = false;
 
