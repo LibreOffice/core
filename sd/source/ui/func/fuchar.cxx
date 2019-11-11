@@ -102,6 +102,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
                     SID_ATTR_CHAR_WEIGHT,
                     SID_ATTR_CHAR_SHADOWED,
                     SID_ATTR_CHAR_STRIKEOUT,
+                    SID_ATTR_CHAR_CONTOUR,
                     SID_ATTR_CHAR_UNDERLINE,
                     SID_ATTR_CHAR_FONTHEIGHT,
                     SID_ATTR_CHAR_COLOR,

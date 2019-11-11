@@ -84,6 +84,7 @@ static const sal_uInt16 SidArray[] = {
     SID_ATTR_CHAR_WEIGHT,             //   10009
     SID_ATTR_CHAR_SHADOWED,           //   10010
     SID_ATTR_CHAR_STRIKEOUT,          //   10013
+    SID_ATTR_CHAR_CONTOUR,            //   10013
     SID_ATTR_CHAR_UNDERLINE,          //   10014
     SID_ATTR_CHAR_FONTHEIGHT,         //   10015
     SID_ATTR_CHAR_COLOR,              //   10017

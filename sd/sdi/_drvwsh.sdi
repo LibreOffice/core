@@ -2757,6 +2757,11 @@ interface DrawView
         ExecMethod = ExecChar ;
         StateMethod = GetAttrState ;
     ]
+    SID_ATTR_CHAR_CONTOUR  // ole : ?, status : ?
+    [
+        ExecMethod = ExecChar ;
+        StateMethod = GetAttrState;
+    ]
     SID_ATTR_CHAR_COLOR
     [
         ExecMethod = ExecChar ;

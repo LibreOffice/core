@@ -3602,6 +3602,17 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
             }
         }
         break;
+    case SID_ATTR_CHAR_CONTOUR:
+        if( rReq.GetArgs() )
+        {
+            const SvxContourItem* pItem = rReq.GetArg<SvxContourItem>(SID_ATTR_CHAR_CONTOUR);
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+        }
+        break;
+
     case SID_ATTR_CHAR_STRIKEOUT:
         if( rReq.GetArgs() )
         {
