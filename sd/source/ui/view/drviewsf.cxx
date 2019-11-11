@@ -426,6 +426,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_OVERLINE:
             case SID_ATTR_CHAR_UNDERLINE:
             case SID_ATTR_CHAR_STRIKEOUT:
+            case SID_ATTR_CHAR_CONTOUR:
             case SID_ATTR_CHAR_WEIGHT:
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_KERNING:
