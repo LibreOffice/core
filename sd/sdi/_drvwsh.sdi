@@ -2717,6 +2717,11 @@ interface DrawView
         ExecMethod = ExecChar ;
         StateMethod = GetAttrState ;
     ]
+    SID_ATTR_CHAR_OVERLINE
+    [
+        ExecMethod = ExecChar ;
+        StateMethod = GetAttrState ;
+    ]
     SID_ATTR_CHAR_UNDERLINE
     [
         ExecMethod = ExecChar ;

@@ -389,6 +389,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_FONTHEIGHT:
             case SID_ATTR_CHAR_SHADOWED:
             case SID_ATTR_CHAR_POSTURE:
+            case SID_ATTR_CHAR_OVERLINE:
             case SID_ATTR_CHAR_UNDERLINE:
             case SID_ATTR_CHAR_STRIKEOUT:
             case SID_ATTR_CHAR_WEIGHT:

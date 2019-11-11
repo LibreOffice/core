@@ -3542,7 +3542,22 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
             {
                 FontLineStyle eFU = aEditAttr.Get( EE_CHAR_UNDERLINE ).GetLineStyle();
                 aNewAttr.Put( SvxUnderlineItem( eFU != LINESTYLE_NONE ?LINESTYLE_NONE : LINESTYLE_SINGLE,  EE_CHAR_UNDERLINE ) );
-            }//aNewAttr.Put( (const SvxUnderlineItem&)aEditAttr.Get( EE_CHAR_UNDERLINE ) );
+            }
+        }
+        break;
+    case SID_ATTR_CHAR_OVERLINE:
+        if( rReq.GetArgs() )
+        {
+            const SvxOverlineItem* pItem = rReq.GetArg<SvxOverlineItem>(SID_ATTR_CHAR_OVERLINE);
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+            else
+            {
+                FontLineStyle eFU = aEditAttr.Get( EE_CHAR_OVERLINE ).GetLineStyle();
+                aNewAttr.Put( SvxOverlineItem( eFU != LINESTYLE_NONE ?LINESTYLE_NONE : LINESTYLE_SINGLE,  EE_CHAR_OVERLINE ) );
+            }
         }
         break;
     case SID_ATTR_CHAR_SHADOWED:
