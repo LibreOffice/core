@@ -327,6 +327,12 @@ void UnoEditControl::insertText( const awt::Selection& rSel, const OUString& rNe
     awt::Selection aSelection( rSel );
     lcl_normalize( aSelection );
 
+    OUString aOldText = getText();
+    if (aSelection.Min < 0 || aOldText.getLength() < aSelection.Max)
+    {
+        throw lang::IllegalArgumentException();
+    }
+
     // preserve the selection resp. cursor position
     awt::Selection aNewSelection( getSelection() );
 #ifdef ALSO_PRESERVE_COMPLETE_SELECTION
@@ -341,7 +347,6 @@ void UnoEditControl::insertText( const awt::Selection& rSel, const OUString& rNe
     aNewSelection.Min = aNewSelection.Max;
 #endif
 
-    OUString aOldText = getText();
     OUString  aNewText = aOldText.replaceAt( aSelection.Min, aSelection.Max - aSelection.Min, rNewText );
     setText( aNewText );
 
