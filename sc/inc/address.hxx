@@ -625,7 +625,7 @@ public:
             ScRange& rErrorRange, const ScDocument* pDocument = nullptr );
 
     /** Same as Move() but with sticky end col/row anchors. */
-    [[nodiscard]] SC_DLLPUBLIC bool MoveSticky( const ScDocument* pDoc, SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
+    [[nodiscard]] SC_DLLPUBLIC bool MoveSticky( const ScDocument& rDoc, SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange );
 
     SC_DLLPUBLIC void IncColIfNotLessThan(const ScDocument* pDoc, SCCOL nStartCol, SCCOL nOffset);
