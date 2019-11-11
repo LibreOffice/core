@@ -1332,7 +1332,8 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
                 long n = rtl_ustr_toInt32( p, 10 ) - 1;
                 while (rtl::isAsciiDigit( *p ))
                     p++;
-                if( n < 0 || n > pDoc->MaxRow() )
+                const SCROW nMaxRow = (pDoc ? pDoc->MaxRow() : MAXROW);
+                if( n < 0 || n > nMaxRow )
                     nBits = ScRefFlags::ZERO;
                 nRow = static_cast<SCROW>(n);
             }
