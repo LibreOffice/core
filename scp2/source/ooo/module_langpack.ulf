@@ -17,10 +17,10 @@
  */
 
 [STR_NAME_MODULE_ROOT_LANGPACK]
-en-US = "Additional user interface languages"
+en-US = "User interface languages"
 
 [STR_DESC_MODULE_ROOT_LANGPACK]
-en-US = "Additional user interface languages"
+en-US = "User interface languages"
 
 [STR_NAME_MODULE_LANGPACK_EN_US]
 en-US = "English (United States)"
