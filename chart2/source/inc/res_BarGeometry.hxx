@@ -23,19 +23,18 @@
 
 namespace chart
 {
-
 class BarGeometryResources
 {
 public:
     explicit BarGeometryResources(weld::Builder* pParent);
 
-    void set_visible( bool bShow );
-    void set_sensitive( bool bEnable );
+    void set_visible(bool bShow);
+    void set_sensitive(bool bEnable);
 
     sal_Int32 get_selected_index() const;
     void select(sal_Int32 nPos);
 
-    void connect_changed(const Link<weld::TreeView&,void>& rLink);
+    void connect_changed(const Link<weld::TreeView&, void>& rLink);
 
 private:
     std::unique_ptr<weld::Label> m_xFT_Geometry;
