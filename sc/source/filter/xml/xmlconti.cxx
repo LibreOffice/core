@@ -27,10 +27,8 @@
 using namespace xmloff::token;
 
 ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
                                       OUStringBuffer& sTempValue) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     sValue(sTempValue)
 {
 }
@@ -39,24 +37,17 @@ ScXMLContentContext::~ScXMLContentContext()
 {
 }
 
-SvXMLImportContextRef ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLContentContext::createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_S))
+    if (nElement == XML_ELEMENT(TEXT, XML_S))
     {
         sal_Int32 nRepeat(0);
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for( sal_Int16 i=0; i < nAttrCount; ++i )
-        {
-            const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-            const OUString& sAttrValue(xAttrList->getValueByIndex( i ));
-            OUString aLocalName;
-            sal_uInt16 nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                                sAttrName, &aLocalName );
-            if ((nPrfx == XML_NAMESPACE_TEXT) && IsXMLToken(aLocalName, XML_C))
-                nRepeat = sAttrValue.toInt32();
-        }
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        for (auto &aIter : *pAttribList)
+            if (aIter.getToken() == XML_ELEMENT(TEXT, XML_C))
+                nRepeat = aIter.toInt32();
         if (nRepeat)
             for (sal_Int32 j = 0; j < nRepeat; ++j)
                 sValue.append(' ');
@@ -64,12 +55,49 @@ SvXMLImportContextRef ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefi
             sValue.append(' ');
     }
 
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
+    return new SvXMLImportContext( GetImport() );
 }
 
-void ScXMLContentContext::Characters( const OUString& rChars )
+void ScXMLContentContext::characters( const OUString& rChars )
 {
     sValue.append(rChars);
+}
+
+ScXMLContentContext2::ScXMLContentContext2( ScXMLImport& rImport,
+                                      OUString& sTempValue) :
+    ScXMLImportContext( rImport ),
+    sValue(sTempValue)
+{
+}
+
+ScXMLContentContext2::~ScXMLContentContext2()
+{
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLContentContext2::createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    if (nElement == XML_ELEMENT(TEXT, XML_S))
+    {
+        sal_Int32 nRepeat(0);
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        for (auto &aIter : *pAttribList)
+            if (aIter.getToken() == XML_ELEMENT(TEXT, XML_C))
+                nRepeat = aIter.toInt32();
+        if (nRepeat)
+            for (sal_Int32 j = 0; j < nRepeat; ++j)
+                sValue += " ";
+        else
+            sValue += " ";
+    }
+
+    return new SvXMLImportContext( GetImport() );
+}
+
+void ScXMLContentContext2::characters( const OUString& rChars )
+{
+    sValue += rChars;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

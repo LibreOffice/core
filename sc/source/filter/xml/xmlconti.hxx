@@ -28,17 +28,30 @@ class ScXMLContentContext : public ScXMLImportContext
 
 public:
 
-    ScXMLContentContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
-                       OUStringBuffer& sValue);
+    ScXMLContentContext( ScXMLImport& rImport, OUStringBuffer& sValue);
 
     virtual ~ScXMLContentContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
+};
+
+class ScXMLContentContext2 : public ScXMLImportContext
+{
+    OUString& sValue;
+
+public:
+
+    ScXMLContentContext2( ScXMLImport& rImport, OUString& sValue);
+
+    virtual ~ScXMLContentContext2() override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    virtual void characters( const OUString& rChars ) override;
 };
 
 #endif

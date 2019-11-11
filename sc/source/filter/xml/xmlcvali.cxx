@@ -474,7 +474,7 @@ SvXMLImportContextRef ScXMLHelpMessageContext::CreateChildContext( sal_uInt16 nP
             if(nParagraphCount)
                 sMessage.append('\n');
             ++nParagraphCount;
-            pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, sMessage);
+            pContext = new ScXMLContentContext( GetScImport(), sMessage);
         }
         break;
     }
@@ -535,7 +535,7 @@ SvXMLImportContextRef ScXMLErrorMessageContext::CreateChildContext( sal_uInt16 n
             if(nParagraphCount)
                 sMessage.append('\n');
             ++nParagraphCount;
-            pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, sMessage);
+            pContext = new ScXMLContentContext( GetScImport(), sMessage);
         }
         break;
     }
