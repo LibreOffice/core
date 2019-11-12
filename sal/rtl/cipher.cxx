@@ -717,7 +717,7 @@ static rtlCipherError BF_update(
     assert(eMode == rtl_Cipher_ModeStream);
     (void) eMode;
     (void) eDirection;
-    while (nDatLen > std::numeric_limits<int>::max()) {
+    while (nDatLen > static_cast<unsigned int>(std::numeric_limits<int>::max())) {
         int outl;
         if (EVP_CipherUpdate(ctx->m_context, pBuffer, &outl, pData, std::numeric_limits<int>::max())
             == 0)
@@ -1043,7 +1043,7 @@ rtlCipherError SAL_CALL rtl_cipher_initBF(
         // Cannot easily support DirectionBoth, and it isn't used in the LO code at least:
         return rtl_Cipher_E_Direction;
     }
-    if (nKeyLen > std::numeric_limits<int>::max()) {
+    if (nKeyLen > static_cast<unsigned int>(std::numeric_limits<int>::max())) {
         return rtl_Cipher_E_BufferSize;
     }
     if (pImpl->m_context.m_context != nullptr) {
@@ -1176,7 +1176,7 @@ static rtlCipherError rtl_cipherARCFOUR_init_Impl(
     const sal_uInt8     *pKeyData, sal_Size nKeyLen)
 {
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
-    if (nKeyLen > std::numeric_limits<int>::max()) {
+    if (nKeyLen > static_cast<unsigned int>(std::numeric_limits<int>::max())) {
         return rtl_Cipher_E_BufferSize;
     }
     if (ctx->m_context != nullptr) {
@@ -1256,7 +1256,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl(
         return rtl_Cipher_E_BufferSize;
 
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
-    while (nDatLen > std::numeric_limits<int>::max()) {
+    while (nDatLen > static_cast<unsigned int>(std::numeric_limits<int>::max())) {
         int outl;
         if (EVP_CipherUpdate(ctx->m_context, pBuffer, &outl, pData, std::numeric_limits<int>::max())
             == 0)
