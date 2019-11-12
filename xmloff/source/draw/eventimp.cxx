@@ -21,8 +21,6 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/presentation/ClickAction.hpp>
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -35,7 +33,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "eventimp.hxx"
-#include <anim.hxx>
 
 using namespace ::std;
 using namespace ::cppu;
@@ -68,31 +65,6 @@ SvXMLEnumMapEntry<ClickAction> const aXML_EventActions_EnumMap[] =
     { XML_FADE_OUT,         ClickAction_VANISH },
     { XML_SOUND,            ClickAction_SOUND },
     { XML_TOKEN_INVALID, ClickAction(0) }
-};
-
-class SdXMLEventContextData
-{
-private:
-    css::uno::Reference< css::drawing::XShape > mxShape;
-
-public:
-    SdXMLEventContextData(const Reference< XShape >& rxShape);
-
-    void ApplyProperties();
-
-    bool mbValid;
-    bool mbScript;
-    ClickAction meClickAction;
-    XMLEffect meEffect;
-    XMLEffectDirection meDirection;
-    sal_Int16 mnStartScale;
-    AnimationSpeed meSpeed;
-    sal_Int32 mnVerb;
-    OUString msSoundURL;
-    bool mbPlayFull;
-    OUString msMacroName;
-    OUString msBookmark;
-    OUString msLanguage;
 };
 
 SdXMLEventContextData::SdXMLEventContextData(const Reference< XShape >& rxShape)
@@ -268,7 +240,7 @@ SvXMLImportContextRef SdXMLEventContext::CreateChildContext( sal_uInt16 nPrefix,
 
 void SdXMLEventContext::EndElement()
 {
-    maData.ApplyProperties();
+    GetImport().GetShapeImport()->addShapeEvents(maData);
 }
 
 void SdXMLEventContextData::ApplyProperties()

@@ -22,6 +22,9 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/presentation/ClickAction.hpp>
+#include <com/sun/star/presentation/AnimationSpeed.hpp>
+#include <anim.hxx>
 
 // office:events inside a shape
 
@@ -41,6 +44,28 @@ public:
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
+};
+
+struct SdXMLEventContextData
+{
+    SdXMLEventContextData(const css::uno::Reference<css::drawing::XShape>& rxShape);
+    void ApplyProperties();
+
+    css::uno::Reference<css::drawing::XShape> mxShape;
+
+    bool mbValid;
+    bool mbScript;
+    css::presentation::ClickAction meClickAction;
+    XMLEffect meEffect;
+    XMLEffectDirection meDirection;
+    sal_Int16 mnStartScale;
+    css::presentation::AnimationSpeed meSpeed;
+    sal_Int32 mnVerb;
+    OUString msSoundURL;
+    bool mbPlayFull;
+    OUString msMacroName;
+    OUString msBookmark;
+    OUString msLanguage;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_EVENTIMP_HXX
