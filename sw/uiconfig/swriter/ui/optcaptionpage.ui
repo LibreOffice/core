@@ -542,7 +542,6 @@ when inserting:</property>
                       <object class="GtkComboBoxText" id="captionorder">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
                         <items>
                           <item translatable="yes" context="optcaptionpage|captionorder">Category first</item>
                           <item translatable="yes" context="optcaptionpage|captionorder">Numbering first</item>
