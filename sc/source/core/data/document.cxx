@@ -6075,7 +6075,7 @@ void ScDocument::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirect
 }
 
 void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCCOL nMovX, SCROW nMovY,
-                                bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const
+        bool bMarked, bool bUnprotected, const ScMarkData& rMark, SCCOL nTabStartCol ) const
 {
     OSL_ENSURE( !nMovX || !nMovY, "GetNextPos: only X or Y" );
 
@@ -6084,7 +6084,7 @@ void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCCOL nMovX, 
     aCopyMark.MarkToMulti();
 
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->GetNextPos( rCol, rRow, nMovX, nMovY, bMarked, bUnprotected, aCopyMark );
+        maTabs[nTab]->GetNextPos( rCol, rRow, nMovX, nMovY, bMarked, bUnprotected, aCopyMark, nTabStartCol );
 }
 
 //  Data operations

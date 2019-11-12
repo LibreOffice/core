@@ -90,6 +90,7 @@ const SCTAB TABLEID_DOC       = SCTAB_MAX;  // entire document, e.g. protect
 const SCROW SCROWS32K         = 32000;
 const SCCOL SCCOL_REPEAT_NONE = SCCOL_MAX;
 const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
+const SCCOL SC_TABSTART_NONE  = SCCOL_MAX;
 
 #define MAXROW_30   8191
 
