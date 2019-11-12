@@ -193,6 +193,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ClockwisePieChartDirection" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+        <!-- See tdf#108059 for rationale -->
+            <desc>Specifies whether the default orientation of pie charts should be clockwise. In OOXML-heavy environments it might be confusing to see charts being mirrored after save, avoid that by setting this key to true.</desc>
+            <label>Pie chart default orientation. Set to true for more OOXML-ish UX.</label>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>

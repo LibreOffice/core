@@ -2977,9 +2977,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123218)
         }
         ~ReverseXAxisOrientationDoughnutChart() = delete;
     };
+
+    struct ClockwisePieChartDirection
+        : public comphelper::ConfigurationProperty<ClockwisePieChartDirection, bool>
+    {
+        static OUString path()
+        {
+            return "/org.openoffice.Office.Compatibility/View/ClockwisePieChartDirection";
+        }
+        ~ClockwisePieChartDirection() = delete;
+    };
     auto batch = comphelper::ConfigurationChanges::create();
 
     ReverseXAxisOrientationDoughnutChart::set(false, batch);
+    ClockwisePieChartDirection::set(true, batch);
     batch->commit();
 
     createDoc();
@@ -3028,5 +3039,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123218)
     CPPUNIT_ASSERT(xAxis.is());
     chart2::ScaleData aScaleData = xAxis->getScaleData();
     CPPUNIT_ASSERT_EQUAL(chart2::AxisOrientation_MATHEMATICAL, aScaleData.Orientation);
+
+    // tdf#108059 test primary Y axis Orientation value
+    uno::Reference<chart2::XAxis> xYAxis = xCoord->getAxisByDimension(1, 0);
+    CPPUNIT_ASSERT(xYAxis.is());
+    aScaleData = xYAxis->getScaleData();
+    CPPUNIT_ASSERT_EQUAL(chart2::AxisOrientation_REVERSE, aScaleData.Orientation);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

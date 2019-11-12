@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <officecfg/Office/Compatibility.hxx>
 #include <tools/diagnose_ex.h>
+#include <officecfg/Office/Compatibility.hxx>
 
 #include <rtl/math.hxx>
 
@@ -237,7 +238,15 @@ void PieChartTypeTemplate::adaptScales(
             {
                 chart2::ScaleData aScaleData( xAxis->getScaleData() );
                 AxisHelper::removeExplicitScaling( aScaleData );
-                aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+                // tdf#108059 Create new pie/donut charts with clockwise orientation
+                if (!officecfg::Office::Compatibility::View::ClockwisePieChartDirection::get())
+                {
+                    aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+                }
+                else
+                {
+                    aScaleData.Orientation = chart2::AxisOrientation_REVERSE;
+                }
                 xAxis->setScaleData( aScaleData );
             }
 
