@@ -687,19 +687,17 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     std::unique_ptr<tools::PolyPolygon> xPolyPoly;
     tools::Rectangle aRect;
     Point aCenter;
-    Color aStartCol(rGradient.GetStartColor());
-    Color aEndCol(rGradient.GetEndColor());
-    long nStartRed = (static_cast<long>(aStartCol.GetRed()) * rGradient.GetStartIntensity()) / 100;
-    long nStartGreen
-        = (static_cast<long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity()) / 100;
-    long nStartBlue
-        = (static_cast<long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity()) / 100;
-    long nEndRed = (static_cast<long>(aEndCol.GetRed()) * rGradient.GetEndIntensity()) / 100;
-    long nEndGreen = (static_cast<long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity()) / 100;
-    long nEndBlue = (static_cast<long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity()) / 100;
+
+    long nStartRed, nStartGreen, nStartBlue;
+    long nEndRed, nEndGreen, nEndBlue;
+
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue)
+        = GetColorIntensities(rGradient);
+
     long nRedSteps = nEndRed - nStartRed;
     long nGreenSteps = nEndGreen - nStartGreen;
     long nBlueSteps = nEndBlue - nStartBlue;
+
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
     rGradient.GetBoundRect(rRect, aRect, aCenter);
