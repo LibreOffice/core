@@ -26,8 +26,6 @@
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
 #include <layact.hxx>
-#include <fmtanchr.hxx>
-#include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 
 #include <vector>

@@ -26,8 +26,6 @@
 #include <o3tl/any.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <editeng/unolingu.hxx>
-#include <svx/pageitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <com/sun/star/text/SetVariableType.hpp>
@@ -54,7 +52,6 @@
 #include <calc.hxx>
 #include <pam.hxx>
 #include <docfld.hxx>
-#include <swcache.hxx>
 #include <swtable.hxx>
 #include <breakit.hxx>
 #include <SwStyleNameMapper.hxx>

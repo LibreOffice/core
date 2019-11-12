@@ -22,20 +22,13 @@
 
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
-#include <sot/storage.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/viewsh.hxx>
-#include <svx/xflasit.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/xflclit.hxx>
-#include <editeng/brushitem.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/xoutbmp.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/unomodel.hxx>
@@ -65,7 +58,6 @@
 #include <flyfrm.hxx>
 #include <pagefrm.hxx>
 #include <fldbas.hxx>
-#include <edimp.hxx>
 #include <swundo.hxx>
 #include <viewimp.hxx>
 #include <dview.hxx>

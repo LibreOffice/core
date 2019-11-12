@@ -20,7 +20,9 @@
 #include <memory>
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <svx/svdobj.hxx>
 
+#include <anchoredobject.hxx>
 #include <bodyfrm.hxx>
 #include <swtable.hxx>
 #include <rootfrm.hxx>
@@ -30,9 +32,9 @@
 #include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#include <dcontact.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
+#include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtpdsc.hxx>
 #include <editeng/ulspitem.hxx>
@@ -48,7 +50,7 @@
 #include <rowfrm.hxx>
 #include <pagedesc.hxx>
 #include <layact.hxx>
-#include <flyfrms.hxx>
+#include <flyfrm.hxx>
 #include <sectfrm.hxx>
 #include <section.hxx>
 #include <dbg_lay.hxx>

@@ -18,23 +18,18 @@
  */
 
 #include <osl/endian.h>
-#include <hintids.hxx>
-#include <svl/urihelper.hxx>
+#include <tools/urlobj.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
-#include <edimp.hxx>
 #include <frmfmt.hxx>
 #include <rootfrm.hxx>
-#include <swundo.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <shellio.hxx>
-#include <acorrect.hxx>
-#include <swerror.h>
 #include <iodetect.hxx>
 
 void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const OUString& rStr )

@@ -21,11 +21,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
-#include <vcl/svapp.hxx>
-#include <editeng/boxitem.hxx>
 #include <swwait.hxx>
-#include <fmtfsize.hxx>
-#include <frmatr.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -35,18 +31,14 @@
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <fldbas.hxx>
 #include <swtable.hxx>
 #include <swundo.hxx>
 #include <tblsel.hxx>
-#include <edimp.hxx>
-#include <tabfrm.hxx>
 #include <cellfrm.hxx>
 #include <cellatr.hxx>
 #include <swtblfmt.hxx>
 #include <swddetbl.hxx>
 #include <mdiexp.hxx>
-#include <unochart.hxx>
 #include <itabenum.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>

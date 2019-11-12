@@ -22,7 +22,6 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <pam.hxx>
-#include <edimp.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>
 

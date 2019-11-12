@@ -24,20 +24,14 @@
 #include <o3tl/any.hxx>
 
 #include <svl/zforlist.hxx>
-#include <svl/zformat.hxx>
 #include <unotools/charclass.hxx>
 
-#include <svx/svdmodel.hxx>
-
-#include <calbck.hxx>
 #include <calc.hxx>
 #include <usrfld.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
-#include <editsh.hxx>
-#include <dpage.hxx>
 #include <unofldmid.h>
 
 using namespace ::com::sun::star;

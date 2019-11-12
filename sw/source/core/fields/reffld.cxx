@@ -22,7 +22,6 @@
 #include <o3tl/unreachable.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <editeng/unolingu.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -32,7 +31,6 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <modeltoviewhelper.hxx>
-#include <docary.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <txtftn.hxx>
@@ -58,8 +56,6 @@
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <calbck.hxx>
-
-#include <sfx2/childwin.hxx>
 
 #include <cstddef>
 #include <memory>

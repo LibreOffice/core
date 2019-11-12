@@ -33,7 +33,6 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <redline.hxx>
-#include <fesh.hxx>
 #include <docsh.hxx>
 #include <ftninfo.hxx>
 #include <ftnidx.hxx>
@@ -46,7 +45,7 @@
 #include <fmtcntnt.hxx>
 #include <ftnfrm.hxx>
 #include <tabfrm.hxx>
-#include <flyfrms.hxx>
+#include <flyfrm.hxx>
 #include <sectfrm.hxx>
 #include <fmtclds.hxx>
 #include <txtfrm.hxx>
@@ -58,6 +57,7 @@
 #include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
+#include <swtable.hxx>
 
 // RotateFlyFrame3
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

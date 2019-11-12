@@ -20,11 +20,9 @@
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
-#include <dcontact.hxx>
-#include <flyfrm.hxx>
-#include <dflyobj.hxx>
-#include <calbck.hxx>
-#include <pam.hxx>
+#include <fmtanchr.hxx>
+#include <ndindex.hxx>
+#include <svx/swframetypes.hxx>
 
 bool SwPosFlyFrameCmp::operator()(const SwPosFlyFramePtr& rA, const SwPosFlyFramePtr& rB) const
 {

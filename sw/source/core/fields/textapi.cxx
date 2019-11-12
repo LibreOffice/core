@@ -21,7 +21,6 @@
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
-#include <comphelper/propertysetinfo.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>

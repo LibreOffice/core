@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdview.hxx>
-#include <sal/log.hxx>
+#include <svx/svdmark.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -27,15 +26,12 @@
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <IDocumentContentOperations.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <pam.hxx>
 #include <UndoCore.hxx>
 #include <swundo.hxx>
-#include <dcontact.hxx>
 #include <flyfrm.hxx>
 #include <frmfmt.hxx>
-#include <viewimp.hxx>
 #include <docsh.hxx>
 #include <pagefrm.hxx>
 

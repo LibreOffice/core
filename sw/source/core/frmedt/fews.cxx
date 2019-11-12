@@ -40,11 +40,9 @@
 #include <fmtcntnt.hxx>
 #include <fmtfsize.hxx>
 #include <tabfrm.hxx>
-#include <cellfrm.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
 #include <mdiexp.hxx>
-#include <edimp.hxx>
 #include <pagedesc.hxx>
 #include <fmtanchr.hxx>
 #include <environmentofanchoredobject.hxx>

@@ -22,7 +22,6 @@
 #include <editeng/pbinitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <sal/log.hxx>

@@ -30,13 +30,9 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <pamtyp.hxx>
-#include <edimp.hxx>
-#include <dbfld.hxx>
 #include <expfld.hxx>
-#include <flddat.hxx>
 #include <swundo.hxx>
 #include <dbmgr.hxx>
-#include <swddetbl.hxx>
 #include <hints.hxx>
 #include <calbck.hxx>
 #include <fieldhint.hxx>

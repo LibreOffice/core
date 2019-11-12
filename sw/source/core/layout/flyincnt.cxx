@@ -22,7 +22,6 @@
 #include <hints.hxx>
 #include <fmtornt.hxx>
 #include <rootfrm.hxx>
-#include <txtfrm.hxx>
 #include <flyfrms.hxx>
 #include <dflyobj.hxx>
 #include <IDocumentSettingAccess.hxx>

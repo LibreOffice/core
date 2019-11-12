@@ -464,3 +464,13 @@ blacklist:
     sw/source/core/undo/untbl.cxx:
     # Needed for linker visibility of sw_DebugRedline
     - docredln.hxx
+    sw/source/core/edit/edglss.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    sw/source/core/edit/edfcol.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    sw/source/core/fields/textapi.cxx:
+    # Needed for macros to work
+    - editeng/unoprnms.hxx
+    - com/sun/star/lang/Locale.hpp

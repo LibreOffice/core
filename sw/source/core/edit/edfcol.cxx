@@ -28,7 +28,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -43,7 +42,6 @@
 #include <com/sun/star/text/XParagraphAppend.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
@@ -55,7 +53,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <svx/ClassificationCommon.hxx>
@@ -70,10 +67,8 @@
 #include <hintids.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <edimp.hxx>
 #include <ndtxt.hxx>
 #include <paratr.hxx>
-#include <fmtpdsc.hxx>
 #include <viewopt.hxx>
 #include <SwRewriter.hxx>
 #include <numrule.hxx>
@@ -88,16 +83,12 @@
 #include <sfx2/watermarkitem.hxx>
 
 #include <unoparagraph.hxx>
-#include <unotextrange.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <modeltoviewhelper.hxx>
 #include <strings.hrc>
 #include <undobj.hxx>
 #include <UndoParagraphSignature.hxx>
 #include <txtatr.hxx>
 #include <fmtmeta.hxx>
 
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/diagnose_ex.h>
 #include <IDocumentRedlineAccess.hxx>
 

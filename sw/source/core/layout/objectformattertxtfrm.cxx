@@ -20,7 +20,7 @@
 #include "objectformattertxtfrm.hxx"
 #include <sortedobjs.hxx>
 #include <rootfrm.hxx>
-#include <flyfrms.hxx>
+#include <anchoredobject.hxx>
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
 #include <rowfrm.hxx>

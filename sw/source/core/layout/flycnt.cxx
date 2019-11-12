@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/bigint.hxx>
 #include <sal/log.hxx>
+#include <svx/swframetypes.hxx>
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>
@@ -30,6 +30,7 @@
 #include <frmtool.hxx>
 #include <dflyobj.hxx>
 #include <hints.hxx>
+#include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>
@@ -41,7 +42,6 @@
 #include <sectfrm.hxx>
 
 #include <tocntntanchoredobjectposition.hxx>
-#include <dcontact.hxx>
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
 #include "objectformattertxtfrm.hxx"

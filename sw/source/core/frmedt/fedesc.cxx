@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -32,7 +31,6 @@
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
 #include <tabfrm.hxx>
-#include <edimp.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <ndtxt.hxx>
 

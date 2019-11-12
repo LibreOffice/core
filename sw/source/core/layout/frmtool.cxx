@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/shaditem.hxx>

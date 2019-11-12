@@ -18,10 +18,7 @@
  */
 
 #include <memory>
-#include <hintids.hxx>
 #include <comphelper/string.hxx>
-#include <editeng/unolingu.hxx>
-#include <editeng/langitem.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
 #include <swtypes.hxx>
@@ -33,7 +30,6 @@
 #include <rootfrm.hxx>
 #include <tox.hxx>
 #include <txmsrt.hxx>
-#include <doctxm.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
@@ -43,7 +39,6 @@
 #include <unofldmid.h>
 #include <unoprnms.hxx>
 #include <calbck.hxx>
-#include <unomid.h>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 

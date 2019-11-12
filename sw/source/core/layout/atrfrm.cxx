@@ -32,7 +32,6 @@
 #include <frmfmt.hxx>
 #include <unocoll.hxx>
 #include <unosett.hxx>
-#include <unostyle.hxx>
 #include <fmtclds.hxx>
 #include <fmtornt.hxx>
 #include <fmthdft.hxx>
@@ -73,7 +72,6 @@
 #include <fmtclbl.hxx>
 #include <swunohelper.hxx>
 #include <unoframe.hxx>
-#include <unotextbodyhf.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <editeng/brushitem.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -90,7 +88,6 @@
 #include <ndtxt.hxx>
 
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
-#include <svx/xfillit0.hxx>
 #include <svl/itemiter.hxx>
 #include <wrtsh.hxx>
 #include <txtfld.hxx>
