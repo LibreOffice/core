@@ -33,6 +33,8 @@
 #include <iterator>
 
 #include <com/sun/star/util/Color.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 class Chart2ImportTest : public ChartTest
 {
@@ -63,6 +65,7 @@ public:
     void testODPChartSeries();
     void testBnc864396();
     void testBnc882383();
+    void testTransparancyGradientValue();
     void testBnc889755();
     void testSimpleStrictXLSX();
     void testDelayedCellImport(); // chart range referencing content on later sheets
@@ -167,6 +170,7 @@ public:
     CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST(testBnc864396);
     CPPUNIT_TEST(testBnc882383);
+    CPPUNIT_TEST(testTransparancyGradientValue);
     CPPUNIT_TEST(testBnc889755);
     CPPUNIT_TEST(testSimpleStrictXLSX);
     CPPUNIT_TEST(testDelayedCellImport);
@@ -812,6 +816,29 @@ void Chart2ImportTest::testBnc882383()
     OUString sGradientName;
     xPropertySet->getPropertyValue("GradientName") >>= sGradientName;
     CPPUNIT_ASSERT(!sGradientName.isEmpty());
+}
+
+void Chart2ImportTest::testTransparancyGradientValue()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf128732.xlsx");
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    OUString sTranspGradientName;
+    xPropertySet->getPropertyValue("FillTransparenceGradientName") >>= sTranspGradientName;
+    CPPUNIT_ASSERT(!sTranspGradientName.isEmpty());
+
+    awt::Gradient aTransparenceGradient;
+    uno::Reference< lang::XMultiServiceFactory > xFact(xChartDoc, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFact.is());
+    uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
+    uno::Any rTransparenceValue = xTransparenceGradient->getByName(sTranspGradientName);
+    CPPUNIT_ASSERT(rTransparenceValue >>= aTransparenceGradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3355443), aTransparenceGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5000268), aTransparenceGradient.StartColor);
 }
 
 void Chart2ImportTest::testSimpleStrictXLSX()

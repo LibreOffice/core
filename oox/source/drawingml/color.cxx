@@ -623,7 +623,7 @@ bool Color::hasTransparency() const
 
 sal_Int16 Color::getTransparency() const
 {
-    return static_cast< sal_Int16 >( (MAX_PERCENT - mnAlpha) / PER_PERCENT );
+    return sal_Int16(std::round( (1.0 * (MAX_PERCENT - mnAlpha)) / PER_PERCENT) );
 }
 
 // private --------------------------------------------------------------------
