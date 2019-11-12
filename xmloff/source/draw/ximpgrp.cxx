@@ -89,7 +89,7 @@ void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 
         mxChildren.set( mxShape, uno::UNO_QUERY );
         if( mxChildren.is() )
-            GetImport().GetShapeImport()->pushGroupForSorting( mxChildren );
+            GetImport().GetShapeImport()->pushGroupForPostProcessing( mxChildren );
     }
 
     GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
@@ -98,7 +98,7 @@ void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 void SdXMLGroupShapeContext::EndElement()
 {
     if( mxChildren.is() )
-        GetImport().GetShapeImport()->popGroupAndSort();
+        GetImport().GetShapeImport()->popGroupAndPostProcess();
 
     SdXMLShapeContext::EndElement();
 }

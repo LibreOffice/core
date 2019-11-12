@@ -54,14 +54,14 @@ XMLTextShapeImportHelper::XMLTextShapeImportHelper(
     if( xDPS.is() )
     {
         Reference < XShapes > xShapes = xDPS->getDrawPage();
-        pushGroupForSorting( xShapes );
+        pushGroupForPostProcessing( xShapes );
     }
 
 }
 
 XMLTextShapeImportHelper::~XMLTextShapeImportHelper()
 {
-    popGroupAndSort();
+    popGroupAndPostProcess();
 }
 
 void XMLTextShapeImportHelper::addShape(

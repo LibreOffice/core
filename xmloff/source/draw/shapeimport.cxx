@@ -47,7 +47,7 @@
 #include <map>
 #include <vector>
 
-class ShapeSortContext;
+class ShapeGroupContext;
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -91,7 +91,7 @@ struct XMLShapeImportPageContextImpl
 struct XMLShapeImportHelperImpl
 {
     // context for sorting shapes
-    std::shared_ptr<ShapeSortContext> mpSortContext;
+    std::shared_ptr<ShapeGroupContext> mpGroupContext;
 
     std::vector<ConnectionHint> maConnections;
 
@@ -114,7 +114,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 :   mpImpl( new XMLShapeImportHelperImpl ),
     mrImporter( rImporter )
 {
-    mpImpl->mpSortContext = nullptr;
+    mpImpl->mpGroupContext = nullptr;
 
     // #88546# init to sal_False
     mpImpl->mbHandleProgressBar = false;
@@ -705,7 +705,9 @@ struct ZOrderHint
     bool operator<(const ZOrderHint& rComp) const { return nShould < rComp.nShould; }
 };
 
-class ShapeSortContext
+// a) handle z-order of group contents after it has been imported
+// b) apply group events over group contents after it has been imported
+class ShapeGroupContext
 {
 public:
     uno::Reference< drawing::XShapes > mxShapes;
@@ -714,21 +716,21 @@ public:
     vector<ZOrderHint>              maUnsortedList;
 
     sal_Int32                       mnCurrentZ;
-    std::shared_ptr<ShapeSortContext> mpParentContext;
+    std::shared_ptr<ShapeGroupContext> mpParentContext;
 
-    ShapeSortContext( uno::Reference< drawing::XShapes > const & rShapes, std::shared_ptr<ShapeSortContext> pParentContext );
+    ShapeGroupContext( uno::Reference< drawing::XShapes > const & rShapes, std::shared_ptr<ShapeGroupContext> pParentContext );
 
-    void popGroupAndSort();
+    void popGroupAndPostProcess();
 private:
     void moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos );
 };
 
-ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes > const & rShapes, std::shared_ptr<ShapeSortContext> pParentContext )
+ShapeGroupContext::ShapeGroupContext( uno::Reference< drawing::XShapes > const & rShapes, std::shared_ptr<ShapeGroupContext> pParentContext )
 :   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( std::move(pParentContext) )
 {
 }
 
-void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
+void ShapeGroupContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
 {
     uno::Any aAny( mxShapes->getByIndex( nSourcePos ) );
     uno::Reference< beans::XPropertySet > xPropSet;
@@ -759,7 +761,7 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
 }
 
 // sort shapes
-void ShapeSortContext::popGroupAndSort()
+void ShapeGroupContext::popGroupAndPostProcess()
 {
     if (!maEventData.empty())
     {
@@ -865,33 +867,33 @@ void ShapeSortContext::popGroupAndSort()
     maZOrderList.clear();
 }
 
-void XMLShapeImportHelper::pushGroupForSorting( uno::Reference< drawing::XShapes >& rShapes )
+void XMLShapeImportHelper::pushGroupForPostProcessing( uno::Reference< drawing::XShapes >& rShapes )
 {
-    mpImpl->mpSortContext = std::make_shared<ShapeSortContext>( rShapes, mpImpl->mpSortContext );
+    mpImpl->mpGroupContext = std::make_shared<ShapeGroupContext>( rShapes, mpImpl->mpGroupContext );
 }
 
 void XMLShapeImportHelper::addShapeEvents(SdXMLEventContextData& rData)
 {
-    if (mpImpl->mpSortContext && mpImpl->mpSortContext->mxShapes == rData.mxShape)
+    if (mpImpl->mpGroupContext && mpImpl->mpGroupContext->mxShapes == rData.mxShape)
     {
         // tdf#127791 wait until a group is popped to set its event data so
         // that the events are applied to all its children, which are not available
         // at the start of the group tag
-        mpImpl->mpSortContext->maEventData.push_back(rData);
+        mpImpl->mpGroupContext->maEventData.push_back(rData);
     }
     else
         rData.ApplyProperties();
 }
 
-void XMLShapeImportHelper::popGroupAndSort()
+void XMLShapeImportHelper::popGroupAndPostProcess()
 {
-    SAL_WARN_IF( !mpImpl->mpSortContext, "xmloff", "No context to sort!" );
-    if( !mpImpl->mpSortContext )
+    SAL_WARN_IF( !mpImpl->mpGroupContext, "xmloff", "No context to sort!" );
+    if( !mpImpl->mpGroupContext )
         return;
 
     try
     {
-        mpImpl->mpSortContext->popGroupAndSort();
+        mpImpl->mpGroupContext->popGroupAndPostProcess();
     }
     catch( const uno::Exception& )
     {
@@ -899,51 +901,51 @@ void XMLShapeImportHelper::popGroupAndSort()
     }
 
     // put parent on top and drop current context, we are done
-    mpImpl->mpSortContext = mpImpl->mpSortContext->mpParentContext;
+    mpImpl->mpGroupContext = mpImpl->mpGroupContext->mpParentContext;
 }
 
 void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawing::XShape > const & xShape, sal_Int32 nZIndex )
 {
-    if( mpImpl->mpSortContext)
+    if( mpImpl->mpGroupContext)
     {
         ZOrderHint aNewHint;
-        aNewHint.nIs = mpImpl->mpSortContext->mnCurrentZ++;
+        aNewHint.nIs = mpImpl->mpGroupContext->mnCurrentZ++;
         aNewHint.nShould = nZIndex;
         aNewHint.xShape = xShape;
 
         if( nZIndex == -1 )
         {
             // don't care, so add to unsorted list
-            mpImpl->mpSortContext->maUnsortedList.push_back(aNewHint);
+            mpImpl->mpGroupContext->maUnsortedList.push_back(aNewHint);
         }
         else
         {
             // insert into sort list
-            mpImpl->mpSortContext->maZOrderList.push_back(aNewHint);
+            mpImpl->mpGroupContext->maZOrderList.push_back(aNewHint);
         }
     }
 }
 
 void XMLShapeImportHelper::shapeRemoved(const uno::Reference<drawing::XShape>& xShape)
 {
-    auto it = std::find_if(mpImpl->mpSortContext->maZOrderList.begin(), mpImpl->mpSortContext->maZOrderList.end(), [&xShape](const ZOrderHint& rHint)
+    auto it = std::find_if(mpImpl->mpGroupContext->maZOrderList.begin(), mpImpl->mpGroupContext->maZOrderList.end(), [&xShape](const ZOrderHint& rHint)
     {
         return rHint.xShape == xShape;
     });
-    if (it == mpImpl->mpSortContext->maZOrderList.end())
+    if (it == mpImpl->mpGroupContext->maZOrderList.end())
         // Part of the unsorted list, nothing to do.
         return;
 
     sal_Int32 nZIndex = it->nIs;
 
-    for (it = mpImpl->mpSortContext->maZOrderList.begin(); it != mpImpl->mpSortContext->maZOrderList.end();)
+    for (it = mpImpl->mpGroupContext->maZOrderList.begin(); it != mpImpl->mpGroupContext->maZOrderList.end();)
     {
         if (it->nIs == nZIndex)
         {
             // This is xShape: remove it and adjust the max of indexes
             // accordingly.
-            it = mpImpl->mpSortContext->maZOrderList.erase(it);
-            mpImpl->mpSortContext->mnCurrentZ--;
+            it = mpImpl->mpGroupContext->maZOrderList.erase(it);
+            mpImpl->mpGroupContext->mnCurrentZ--;
             continue;
         }
         else if (it->nIs > nZIndex)

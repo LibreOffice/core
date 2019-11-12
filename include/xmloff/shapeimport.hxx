@@ -311,9 +311,10 @@ public:
     // tdf#127791 help function for group shape events
     void addShapeEvents(SdXMLEventContextData& rData);
 
-    // helper functions for z-order sorting
-    void pushGroupForSorting( css::uno::Reference< css::drawing::XShapes >& rShapes );
-    void popGroupAndSort();
+    // helper functions processing groups after their component shapes are collected
+    // e.g. for z-order sorting or adding events to the group
+    void pushGroupForPostProcessing( css::uno::Reference< css::drawing::XShapes >& rShapes );
+    void popGroupAndPostProcess();
 
     void shapeWithZIndexAdded( css::uno::Reference< css::drawing::XShape > const & rShape,
                                sal_Int32 nZIndex );
