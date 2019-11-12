@@ -461,7 +461,10 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     get(aLbDocuments, "documents");
     get(aEdCol, "column");
     ScTabViewShell* pViewSh = GetTabViewShell();
-    aEdCol->SetNavigatorDlg(this, pViewSh->GetViewData().GetDocument());
+    if (pViewSh)
+    {
+        aEdCol->SetNavigatorDlg(this, pViewSh->GetViewData().GetDocument());
+    }
     get(aEdRow, "row");
     aEdRow->SetNavigatorDlg(this);
     get(aTbxCmd, "toolbox");
