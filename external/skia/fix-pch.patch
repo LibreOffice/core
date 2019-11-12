@@ -54,3 +54,31 @@
  #include <dwrite.h>
  #include <d2d1.h>
  
+--- skia/include/core/SkColor.h
++++ skia/include/core/SkColor.h
+@@ -396,6 +396,7 @@ using SkColor4f = SkRGBA4f<kUnpremul_SkAlphaType>;
+ 
+ template <> SK_API SkColor4f SkColor4f::FromColor(SkColor);
+ template <> SK_API SkColor   SkColor4f::toSkColor() const;
++template <> uint32_t SkColor4f::toBytes_RGBA() const;
+ 
+ namespace SkColors {
+ constexpr SkColor4f kTransparent = {0, 0, 0, 0};
+--- skia/include/private/SkColorData.h
++++ skia/include/private/SkColorData.h
+@@ -441,4 +441,6 @@ constexpr SkPMColor4f SK_PMColor4fILLEGAL = { SK_FloatNegativeInfinity,
+                                                   SK_FloatNegativeInfinity,
+                                                   SK_FloatNegativeInfinity };
+ 
++template <> uint32_t SkPMColor4f::toBytes_RGBA() const;
++
+ #endif
+--- skia/src/gpu/text/GrTextBlobCache.h
++++ skia/src/gpu/text/GrTextBlobCache.h
+@@ -188,4 +188,6 @@ private:
+     SkMessageBus<PurgeBlobMessage>::Inbox fPurgeBlobInbox;
+ };
+ 
++template<> SkMessageBus<GrTextBlobCache::PurgeBlobMessage>* SkMessageBus<GrTextBlobCache::PurgeBlobMessage>::Get();
++
+ #endif
