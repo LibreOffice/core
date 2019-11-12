@@ -132,6 +132,9 @@ public:
                                   Point const& rCenter, double fBorderWidth, sal_uInt16 nAngle,
                                   long nStartRed, long nStartGreen, long nStartBlue, long nEndRed,
                                   long nEndGreen, long nEndBlue);
+    static void SetStepFillColor(OutputDevice* pRenderContext, long nStep, long nSteps,
+                                 long nStartRed, long nStartGreen, long nStartBlue, long nEndRed,
+                                 long nEndGreen, long nEndBlue);
 
     static long CalculateInterpolatedColor(long nStartColor, long nEndColor, double fAlpha);
 

@@ -361,7 +361,6 @@ void GradientDrawableHelper::DrawGradientSteps(
         GetGradientSteps(pRenderContext, rGradient, aGradientStepRect, true /*bMtf*/), nStartRed,
         nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 
-    const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
     if (rGradient.GetStyle() != GradientStyle::Linear)
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
 
@@ -372,17 +371,8 @@ void GradientDrawableHelper::DrawGradientSteps(
 
     for (long i = 0; i < nSteps; i++)
     {
-        // linear interpolation of color
-        double fAlpha = static_cast<double>(i) / fStepsMinus1;
-
-        sal_uInt16 nRed, nBlue, nGreen;
-        std::tie(nRed, nBlue, nGreen)
-            = GetGradientColorValues(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha),
-                                     CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha),
-                                     CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
-
-        SalGraphics* pGraphics = pRenderContext->GetGraphics();
-        pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
+        SetStepFillColor(pRenderContext, i, nSteps, nStartRed, nStartGreen, nStartBlue, nEndRed,
+                         nEndGreen, nEndBlue);
 
         // Polygon for this color step
         aGradientStepRect.SetTop(
@@ -432,6 +422,24 @@ void GradientDrawableHelper::DrawGradientSteps(
         pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
     else
         pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
+}
+
+void GradientDrawableHelper::SetStepFillColor(OutputDevice* pRenderContext, long nStep, long nSteps,
+                                              long nStartRed, long nStartGreen, long nStartBlue,
+                                              long nEndRed, long nEndGreen, long nEndBlue)
+{
+    // linear interpolation of color
+    const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
+    double fAlpha = static_cast<double>(nStep) / fStepsMinus1;
+
+    sal_uInt16 nRed, nBlue, nGreen;
+    std::tie(nRed, nBlue, nGreen)
+        = GetGradientColorValues(CalculateInterpolatedColor(nStartRed, nEndRed, fAlpha),
+                                 CalculateInterpolatedColor(nStartGreen, nEndGreen, fAlpha),
+                                 CalculateInterpolatedColor(nStartBlue, nEndBlue, fAlpha));
+
+    SalGraphics* pGraphics = pRenderContext->GetGraphics();
+    pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
 }
 
 Color GradientDrawableHelper::GetSingleColorGradientFill(OutputDevice* pRenderContext)
