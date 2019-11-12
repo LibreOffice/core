@@ -1694,6 +1694,9 @@ namespace
 
     GtkWidget* ensureEventWidget(GtkWidget* pWidget)
     {
+        if (!pWidget)
+            return nullptr;
+
         GtkWidget* pMouseEventBox;
         // not every widget has a GdkWindow and can get any event, so if we
         // want an event it doesn't have, insert a GtkEventBox so we can get
@@ -1719,6 +1722,21 @@ namespace
                         nullptr);
             }
 
+            gboolean bExpand(false), bFill(false);
+            GtkPackType ePackType(GTK_PACK_START);
+            guint nPadding(0);
+            gint nPosition(0);
+            if (GTK_IS_BOX(pParent))
+            {
+                gtk_container_child_get(GTK_CONTAINER(pParent), pWidget,
+                        "expand", &bExpand,
+                        "fill", &bFill,
+                        "pack-type", &ePackType,
+                        "padding", &nPadding,
+                        "position", &nPosition,
+                        nullptr);
+            }
+
             gtk_container_remove(GTK_CONTAINER(pParent), pWidget);
 
             pMouseEventBox = gtk_event_box_new();
@@ -1735,6 +1753,17 @@ namespace
                         "top-attach", nLeftAttach,
                         "width", nWidth,
                         "height", nHeight,
+                        nullptr);
+            }
+
+            if (GTK_IS_BOX(pParent))
+            {
+                gtk_container_child_set(GTK_CONTAINER(pParent), pMouseEventBox,
+                        "expand", bExpand,
+                        "fill", bFill,
+                        "pack-type", ePackType,
+                        "padding", nPadding,
+                        "position", nPosition,
                         nullptr);
             }
 
@@ -4442,13 +4471,16 @@ class GtkInstanceAssistant : public GtkInstanceDialog, public virtual weld::Assi
 private:
     GtkAssistant* m_pAssistant;
     GtkWidget* m_pSidebar;
+    GtkWidget* m_pSidebarEventBox;
     GtkButtonBox* m_pButtonBox;
     GtkButton* m_pHelp;
     GtkButton* m_pBack;
     GtkButton* m_pNext;
     GtkButton* m_pFinish;
     GtkButton* m_pCancel;
+    gulong m_nButtonPressSignalId;
     std::vector<std::unique_ptr<GtkInstanceContainer>> m_aPages;
+    std::map<OString, bool> m_aNotClickable;
 
     int find_page(const OString& rIdent) const
     {
@@ -4493,6 +4525,66 @@ private:
     void signal_help_clicked()
     {
         help();
+    }
+
+    static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
+    {
+        GtkInstanceAssistant* pThis = static_cast<GtkInstanceAssistant*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_button(pEvent);
+    }
+
+    bool signal_button(GdkEventButton* pEvent)
+    {
+        int nNewCurrentPage = -1;
+
+        GtkAllocation allocation;
+
+        int nPageIndex = 0;
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pSidebar));
+        for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
+        {
+            GtkWidget* pWidget = static_cast<GtkWidget*>(pChild->data);
+            if (!gtk_widget_get_visible(pWidget))
+                continue;
+
+            gtk_widget_get_allocation(pWidget, &allocation);
+
+            gint dest_x1, dest_y1;
+            gtk_widget_translate_coordinates(pWidget,
+                                             m_pSidebarEventBox,
+                                             0,
+                                             0,
+                                             &dest_x1,
+                                             &dest_y1);
+
+            gint dest_x2, dest_y2;
+            gtk_widget_translate_coordinates(pWidget,
+                                             m_pSidebarEventBox,
+                                             allocation.width,
+                                             allocation.height,
+                                             &dest_x2,
+                                             &dest_y2);
+
+
+            if (pEvent->x >= dest_x1 && pEvent->x <= dest_x2 && pEvent->y >= dest_y1 && pEvent->y <= dest_y2)
+            {
+                nNewCurrentPage = nPageIndex;
+                break;
+            }
+
+            ++nPageIndex;
+        }
+        g_list_free(pChildren);
+
+        if (nNewCurrentPage != -1 && nNewCurrentPage != get_current_page())
+        {
+            OString sIdent = get_page_ident(nNewCurrentPage);
+            if (!m_aNotClickable[sIdent] && !signal_jump_page(sIdent))
+                set_current_page(nNewCurrentPage);
+        }
+
+        return false;
     }
 
 public:
@@ -4550,6 +4642,9 @@ public:
         gtk_widget_show_all(GTK_WIDGET(m_pButtonBox));
 
         find_sidebar(GTK_WIDGET(m_pAssistant), &m_pSidebar);
+
+        m_pSidebarEventBox = ::ensureEventWidget(m_pSidebar);
+        m_nButtonPressSignalId = m_pSidebarEventBox ? g_signal_connect(m_pSidebarEventBox, "button-press-event", G_CALLBACK(signalButton), this) : 0;
     }
 
     virtual int get_current_page() const override
@@ -4616,10 +4711,9 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
-    virtual void set_page_sensitive(const OString& /*rIdent*/, bool /*bSensitive*/) override
+    virtual void set_page_sensitive(const OString& rIdent, bool bSensitive) override
     {
-        // seeing as the GtkAssistant doesn't have clickable roadmap entries
-        // sensitive vs insensitive is moot
+        m_aNotClickable[rIdent] = !bSensitive;
     }
 
     virtual void set_page_index(const OString& rIdent, int nNewIndex) override
@@ -4681,6 +4775,12 @@ public:
         else if (nGtkResponse == GTK_RESPONSE_HELP)
             pButton = m_pHelp;
         return pButton;
+    }
+
+    virtual ~GtkInstanceAssistant() override
+    {
+        if (m_nButtonPressSignalId)
+            g_signal_handler_disconnect(m_pSidebarEventBox, m_nButtonPressSignalId);
     }
 };
 
