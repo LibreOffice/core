@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_ff0c4c3c",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-11-12T13:58:10Z",
+      "side": 1,
+      "message": "If a named gradient is selected, it is put into the item set (so far so good) ...",
+      "revId": "87e701ad5af38b18f7f51cc4a6a998efc100da70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_df22b0a4",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-11-12T13:58:10Z",
+      "side": 1,
+      "message": "... but here the named gradient is *unconditionally* overwritten by an unnamed gradient. Why that? Doesn\u0027t this affect selection of preset gradients? \n\nI\u0027d remove \u0027rSet-\u003ePut(...)\u0027 line above and keep this line the way it was, aString is impliticly empty. \n\nUnless ofc I missed something, with chart2 code one never knows :|",
+      "revId": "87e701ad5af38b18f7f51cc4a6a998efc100da70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
