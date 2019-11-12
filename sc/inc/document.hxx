@@ -1858,7 +1858,7 @@ public:
      * specified height.
      */
     SCROW                       GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const;
-    sal_uLong                   GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale ) const;
+    sal_uLong                   GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale, const sal_uLong* pnMaxHeight = nullptr ) const;
     SC_DLLPUBLIC sal_uLong      GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uLong      GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
 

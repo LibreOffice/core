@@ -3243,7 +3243,7 @@ sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZ
         return (nEndRow - nStartRow + 1) * static_cast<sal_uLong>(ScGlobal::nStdRowHeight);
 }
 
-sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const
+sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale, const sal_uLong* pnMaxHeight ) const
 {
     OSL_ENSURE(ValidRow(nStartRow) && ValidRow(nEndRow),"wrong row number");
 
@@ -3269,8 +3269,17 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
                     SCROW nSegmentEnd = std::min( nLastRow, aData.mnRow2 );
 
                     // round-down a single height value, multiply resulting (pixel) values
-                    sal_uLong nOneHeight = static_cast<sal_uLong>( aData.mnValue * fScale );
-                    nHeight += nOneHeight * ( nSegmentEnd + 1 - nRow );
+                    const sal_uLong nOneHeight = static_cast<sal_uLong>( aData.mnValue * fScale );
+                    if (pnMaxHeight)
+                    {
+                        for (int i = 0; i<( nSegmentEnd + 1 - nRow ) && nHeight <= *pnMaxHeight; ++i)
+                            nHeight += nOneHeight;
+                        if (nHeight > *pnMaxHeight)
+                            return nHeight;
+                    }
+                    else
+                        nHeight += nOneHeight * ( nSegmentEnd + 1 - nRow );
+
 
                     nRow = nSegmentEnd + 1;
                 }
@@ -3280,7 +3289,18 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
         return nHeight;
     }
     else
-        return static_cast<sal_uLong>((nEndRow - nStartRow + 1) * ScGlobal::nStdRowHeight * fScale);
+    {
+        const sal_uLong nOneHeight = static_cast<sal_uLong>(ScGlobal::nStdRowHeight * fScale);
+        if (pnMaxHeight)
+        {
+            sal_uLong nHeight = 0;
+            for (int i = 0; i<(nEndRow - nStartRow + 1) && nHeight <= *pnMaxHeight; ++i)
+                nHeight += nOneHeight;
+            return nHeight;
+        }
+        else
+            return static_cast<sal_uLong>((nEndRow - nStartRow + 1) * nOneHeight);
+    }
 }
 
 sal_uInt16 ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if hidden
