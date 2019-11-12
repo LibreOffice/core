@@ -34,7 +34,7 @@ class VCL_DLLPUBLIC OutputDeviceTestCommon
 {
 protected:
 
-    VclPtr<VirtualDevice> mpVirtualDevice;
+    ScopedVclPtr<VirtualDevice> mpVirtualDevice;
     tools::Rectangle maVDRectangle;
 
     static const Color constBackgroundColor;
