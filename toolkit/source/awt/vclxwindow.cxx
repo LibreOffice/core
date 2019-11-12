@@ -654,27 +654,24 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
         break;
         case VclEventId::WindowKeyInput:
+        {
+            if ( mpImpl->getKeyListeners().getLength() )
+            {
+                css::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
+                    *static_cast<KeyEvent*>(rVclWindowEvent.GetData()), *this
+                ) );
+                mpImpl->getKeyListeners().keyPressed( aEvent );
+            }
+        }
+        break;
         case VclEventId::WindowKeyUp:
         {
-            VclPtr<vcl::Window> pWin = GetWindow();
-            while (pWin)
+            if ( mpImpl->getKeyListeners().getLength() )
             {
-                VCLXWindow* pXWindow = pWin->GetWindowPeer();
-                if (!pXWindow || pXWindow->mpImpl->getKeyListeners().getLength() == 0)
-                {
-                    pWin = pWin->GetWindow(GetWindowType::RealParent);
-                    continue;
-                }
-
-                awt::KeyEvent aEvent(VCLUnoHelper::createKeyEvent(
-                    *static_cast<KeyEvent*>(rVclWindowEvent.GetData()), *this));
-                if (rVclWindowEvent.GetId() == VclEventId::WindowKeyInput)
-                    pXWindow->mpImpl->getKeyListeners().keyPressed(aEvent);
-                else
-                    pXWindow->mpImpl->getKeyListeners().keyReleased(aEvent);
-
-                // Next window (parent)
-                pWin = pWin->GetWindow(GetWindowType::RealParent);
+                css::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
+                    *static_cast<KeyEvent*>(rVclWindowEvent.GetData()), *this
+                ) );
+                mpImpl->getKeyListeners().keyReleased( aEvent );
             }
         }
         break;
