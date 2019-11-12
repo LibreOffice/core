@@ -117,7 +117,6 @@
 #define SV_PRINT_TOFILE_TXT                          NC_("SV_PRINT_TOFILE_TXT", "Print to File...")
 #define SV_PRINT_DEFPRT_TXT                          NC_("SV_PRINT_DEFPRT_TXT", "Default printer")
 #define SV_PRINT_QUERYFAXNUMBER_TXT                  NC_("SV_PRINT_QUERYFAXNUMBER_TXT", "Please enter the fax number")
-#define SV_PRINT_INVALID_TXT                         NC_("SV_PRINT_INVALID_TXT", "<ignore>")
 #define SV_PRINT_CUSTOM_TXT                          NC_("SV_PRINT_CUSTOM_TXT", "Custom")
 
 #define SV_EDIT_WARNING_STR                          NC_("SV_EDIT_WARNING_STR", "The inserted text exceeded the maximum length of this text field. The text was truncated.")
