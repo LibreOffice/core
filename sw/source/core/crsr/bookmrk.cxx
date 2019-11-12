@@ -158,24 +158,35 @@ namespace
         SwPosition const*const pSepPos)
     {
         io_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::UI_REPLACE, nullptr);
+        OUString startChar(aStartMark);
+        if (aEndMark != CH_TXT_ATR_FORMELEMENT
+            && pField->GetMarkStart() == pField->GetMarkEnd())
+        {
+            // do only 1 InsertString call - to expand existing bookmarks at the
+            // position over the whole field instead of just aStartMark
+            startChar += OUStringChar(CH_TXT_ATR_FIELDSEP) + OUStringChar(aEndMark);
+        }
 
         SwPosition start = pField->GetMarkStart();
         if (aEndMark != CH_TXT_ATR_FORMELEMENT)
         {
             SwPaM aStartPaM(start);
-            io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, OUString(aStartMark));
-            --start.nContent; // restore, it was moved by InsertString
+            io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, startChar);
+            start.nContent -= startChar.getLength(); // restore, it was moved by InsertString
             // do not manipulate via reference directly but call SetMarkStartPos
             // which works even if start and end pos were the same
             pField->SetMarkStartPos( start );
             SwPosition& rEnd = pField->GetMarkEnd(); // note: retrieve after
             // setting start, because if start==end it can go stale, see SetMarkPos()
             assert(pSepPos == nullptr || (start < *pSepPos && *pSepPos <= rEnd));
-            *aStartPaM.GetPoint() = pSepPos ? *pSepPos : rEnd;
-            io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, OUString(CH_TXT_ATR_FIELDSEP));
-            if (!pSepPos || rEnd < *pSepPos)
-            {   // rEnd is not moved automatically if it's same as insert pos
-                ++rEnd.nContent;
+            if (startChar.getLength() == 1)
+            {
+                *aStartPaM.GetPoint() = pSepPos ? *pSepPos : rEnd;
+                io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, OUString(CH_TXT_ATR_FIELDSEP));
+                if (!pSepPos || rEnd < *pSepPos)
+                {   // rEnd is not moved automatically if it's same as insert pos
+                    ++rEnd.nContent;
+                }
             }
             assert(pSepPos == nullptr || (start < *pSepPos && *pSepPos <= rEnd));
         }
@@ -185,7 +196,7 @@ namespace
         }
 
         SwPosition& rEnd = pField->GetMarkEnd();
-        if (aEndMark)
+        if (aEndMark && startChar.getLength() == 1)
         {
             SwPaM aEndPaM(rEnd);
             io_pDoc->getIDocumentContentOperations().InsertString(aEndPaM, OUString(aEndMark));
