@@ -35,6 +35,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
 #include <xmloff/attrlist.hxx>
+#include "eventimp.hxx"
 #include "ximpshap.hxx"
 #include "sdpropls.hxx"
 #include <xmloff/xmlprmap.hxx>
@@ -708,6 +709,7 @@ class ShapeSortContext
 {
 public:
     uno::Reference< drawing::XShapes > mxShapes;
+    std::vector<SdXMLEventContextData> maEventData;
     vector<ZOrderHint>              maZOrderList;
     vector<ZOrderHint>              maUnsortedList;
 
@@ -759,6 +761,14 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
 // sort shapes
 void ShapeSortContext::popGroupAndSort()
 {
+    if (!maEventData.empty())
+    {
+        // tdf#127791 wait until a group is popped to set its event data
+        for (auto& event : maEventData)
+            event.ApplyProperties();
+        maEventData.clear();
+    }
+
     // only do something if we have shapes to sort
     if( maZOrderList.empty() )
         return;
@@ -858,6 +868,19 @@ void ShapeSortContext::popGroupAndSort()
 void XMLShapeImportHelper::pushGroupForSorting( uno::Reference< drawing::XShapes >& rShapes )
 {
     mpImpl->mpSortContext = std::make_shared<ShapeSortContext>( rShapes, mpImpl->mpSortContext );
+}
+
+void XMLShapeImportHelper::addShapeEvents(SdXMLEventContextData& rData)
+{
+    if (mpImpl->mpSortContext && mpImpl->mpSortContext->mxShapes == rData.mxShape)
+    {
+        // tdf#127791 wait until a group is popped to set its event data so
+        // that the events are applied to all its children, which are not available
+        // at the start of the group tag
+        mpImpl->mpSortContext->maEventData.push_back(rData);
+    }
+    else
+        rData.ApplyProperties();
 }
 
 void XMLShapeImportHelper::popGroupAndSort()

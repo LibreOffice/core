@@ -215,6 +215,7 @@ public:
 
 struct XMLShapeImportHelperImpl;
 struct XMLShapeImportPageContextImpl;
+struct SdXMLEventContextData;
 
 class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceObject
 {
@@ -306,6 +307,9 @@ public:
         css::uno::Reference< css::drawing::XShape >& rShape,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
+
+    // tdf#127791 help function for group shape events
+    void addShapeEvents(SdXMLEventContextData& rData);
 
     // helper functions for z-order sorting
     void pushGroupForSorting( css::uno::Reference< css::drawing::XShapes >& rShapes );
