@@ -1883,6 +1883,7 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
         SvXMLElementExport aPGR(mrExport, XML_NAMESPACE_DRAW, XML_G, bCreateNewline, true);
 
         ImpExportDescription( xShape ); // #i68101#
+        ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
 
         // #89764# if export of position is suppressed for group shape,
@@ -1899,13 +1900,6 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
 
         // write members
         exportShapes( xShapes, nFeatures, pRefPoint );
-
-        /* tdf#127791 write events after shapes are exported because
-           the group shape import applies the events over the
-           children it has when it reads the events, so putting
-           it before exportShapes means it get applied over 0 children
-        */
-        ImpExportEvents( xShape );
     }
 }
 
