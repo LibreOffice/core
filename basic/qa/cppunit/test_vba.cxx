@@ -11,6 +11,7 @@
 
 #ifdef _WIN32
 #include <string.h>
+#include <comphelper/processfactory.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #if !defined WIN32_LEAN_AND_MEAN
