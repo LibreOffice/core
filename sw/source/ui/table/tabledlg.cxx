@@ -736,6 +736,10 @@ SwTableColumnPage::SwTableColumnPage(weld::Container* pPage, weld::DialogControl
     // the pages are instantiated and the dialog preferred size is that of the
     // all the pages that currently exist and the rest to come after this one
     m_pSizeHdlEvent = Application::PostUserEvent(LINK(this, SwTableColumnPage, SizeHdl));
+
+    const SfxPoolItem* pItem;
+    Init(SfxItemState::SET == GetItemSet().GetItemState(SID_HTML_MODE, false, &pItem)
+         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 }
 
 IMPL_LINK_NOARG(SwTableColumnPage, SizeHdl, void*, void)
@@ -759,10 +763,6 @@ IMPL_LINK_NOARG(SwTableColumnPage, SizeHdl, void*, void)
             break;
         }
     }
-
-    const SfxPoolItem* pItem;
-    Init(SfxItemState::SET == GetItemSet().GetItemState(SID_HTML_MODE, false, &pItem)
-         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 }
 
 SwTableColumnPage::~SwTableColumnPage()
@@ -829,7 +829,7 @@ void  SwTableColumnPage::Init(bool bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
     Link<weld::MetricSpinButton&,void> aLk = LINK(this, SwTableColumnPage, ValueChangedHdl);
-    for (sal_uInt16 i = 0; i < m_nMetFields; ++i)
+    for (sal_uInt16 i = 0; i < MET_FIELDS; ++i)
     {
         m_aValueTable[i] = i;
         m_aFieldArr[i].SetMetric(aMetric);
