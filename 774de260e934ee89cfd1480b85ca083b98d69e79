@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_6cc6584b",
+        "filename": "uui/source/interactionhandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-12T10:50:30Z",
+      "side": 1,
+      "message": "Whatever the APSO extension is, but css.beans.XPropertySet::getPropertySetInfo is documented as \"@returns NULL if the implementation cannot or will not provide information about the properties\", so the original\n\n  return nullptr;\n\nshould have been fine?",
+      "revId": "774de260e934ee89cfd1480b85ca083b98d69e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
