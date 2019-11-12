@@ -356,22 +356,6 @@ struct CallbackData
 };
 
 static void
-payloadToSize(const char* pPayload, long& rWidth, long& rHeight)
-{
-    rWidth = rHeight = 0;
-    gchar** ppCoordinates = g_strsplit(pPayload, ", ", 2);
-    gchar** ppCoordinate = ppCoordinates;
-    if (!*ppCoordinate)
-        return;
-    rWidth = atoi(*ppCoordinate);
-    ++ppCoordinate;
-    if (!*ppCoordinate)
-        return;
-    rHeight = atoi(*ppCoordinate);
-    g_strfreev(ppCoordinates);
-}
-
-static void
 LOKPostCommand (LOKDocView* pDocView,
                 const gchar* pCommand,
                 const gchar* pArguments,
@@ -867,6 +851,25 @@ static std::string getAuthorRenderingArgument(LOKDocViewPrivate& priv)
 /// Author string <-> View ID map
 static std::map<std::string, int> g_aAuthorViews;
 
+static void refreshSize(LOKDocView* pDocView)
+{
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+
+    priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
+    float zoom = priv->m_fZoom;
+    long nDocumentWidthTwips = priv->m_nDocumentWidthTwips;
+    long nDocumentHeightTwips = priv->m_nDocumentHeightTwips;
+    long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips, zoom);
+    long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips, zoom);
+
+    // Total number of columns in this document.
+    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
+    priv->m_pTileBuffer = std::make_unique<TileBuffer>(nColumns);
+    gtk_widget_set_size_request(GTK_WIDGET(pDocView),
+                                nDocumentWidthPixels,
+                                nDocumentHeightPixels);
+}
+
 /// Set up LOKDocView after the document is loaded, invoked on the main thread by openDocumentInThread() running in a thread.
 static gboolean postDocumentLoad(gpointer pData)
 {
@@ -878,23 +881,12 @@ static gboolean postDocumentLoad(gpointer pData)
     priv->m_nViewId = priv->m_pDocument->pClass->getView(priv->m_pDocument);
     g_aAuthorViews[getAuthorRenderingArgument(priv)] = priv->m_nViewId;
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
-    priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     priv->m_nParts = priv->m_pDocument->pClass->getParts(priv->m_pDocument);
     aGuard.unlock();
     priv->m_nTimeoutId = g_timeout_add(600, handleTimeout, pLOKDocView);
 
-    float zoom = priv->m_fZoom;
-    long nDocumentWidthTwips = priv->m_nDocumentWidthTwips;
-    long nDocumentHeightTwips = priv->m_nDocumentHeightTwips;
-    long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips, zoom);
-    long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips, zoom);
-    // Total number of columns in this document.
-    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
+    refreshSize(pLOKDocView);
 
-    priv->m_pTileBuffer = std::make_unique<TileBuffer>(nColumns);
-    gtk_widget_set_size_request(GTK_WIDGET(pLOKDocView),
-                                nDocumentWidthPixels,
-                                nDocumentHeightPixels);
     gtk_widget_set_can_focus(GTK_WIDGET(pLOKDocView), TRUE);
     gtk_widget_grab_focus(GTK_WIDGET(pLOKDocView));
     lok_doc_view_set_zoom(pLOKDocView, 1.0);
@@ -1220,15 +1212,7 @@ callback (gpointer pData)
     break;
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
-        if (!pCallback->m_aPayload.empty())
-            payloadToSize(pCallback->m_aPayload.c_str(), priv->m_nDocumentWidthTwips, priv->m_nDocumentHeightTwips);
-        else
-            priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
-
-        gtk_widget_set_size_request(GTK_WIDGET(pDocView),
-                                    twipToPixel(priv->m_nDocumentWidthTwips, priv->m_fZoom),
-                                    twipToPixel(priv->m_nDocumentHeightTwips, priv->m_fZoom));
-
+        refreshSize(pDocView);
         g_signal_emit(pDocView, doc_view_signals[SIZE_CHANGED], 0, nullptr);
     }
     break;
