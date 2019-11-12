@@ -61,8 +61,6 @@ void RTSDialog::insertAllPPDValues(weld::ComboBox& rBox, const PPDParser* pParse
         if (nPos != -1)
             rBox.set_active(nPos);
     }
-    else
-        rBox.set_active_text(m_aInvalidString);
 }
 
 /*
@@ -72,7 +70,6 @@ void RTSDialog::insertAllPPDValues(weld::ComboBox& rBox, const PPDParser* pParse
 RTSDialog::RTSDialog(const PrinterInfo& rJobData, weld::Window* pParent)
     : GenericDialogController(pParent, "vcl/ui/printerpropertiesdialog.ui", "PrinterPropertiesDialog")
     , m_aJobData(rJobData)
-    , m_aInvalidString(VclResId(SV_PRINT_INVALID_TXT))
     , m_bDataModified(false)
     , m_xTabControl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
@@ -151,14 +148,6 @@ RTSPaperPage::RTSPaperPage(weld::Widget* pPage, RTSDialog* pDialog)
     m_xDuplexBox->connect_changed( LINK( this, RTSPaperPage, SelectHdl ) );
     m_xSlotBox->connect_changed( LINK( this, RTSPaperPage, SelectHdl ) );
     m_xCbFromSetup->connect_toggled( LINK( this, RTSPaperPage, CheckBoxHdl ) );
-
-    // duplex
-    m_xDuplexBox->append_text(m_pParent->m_aInvalidString);
-
-    // paper does not have an invalid entry
-
-    // input slots
-    m_xSlotBox->append_text(m_pParent->m_aInvalidString);
 
     update();
 }
