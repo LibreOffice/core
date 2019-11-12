@@ -1442,17 +1442,9 @@ void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> up/down
     }
     else
     {
-        pDoc->GetNextPos( nNewX, nNewY, nTab, nMoveX, nMoveY, false, true, rMark );
-
-        if ( nMoveY != 0 && !nMoveX )
-        {
-            // after Tab and Enter back to the starting column again
-            SCCOL nTabCol = aViewData.GetTabStartCol();
-            if (nTabCol != SC_TABSTART_NONE)
-            {
-                nNewX = nTabCol;
-            }
-        }
+        // After Tab and Enter back to the starting column again.
+        const SCCOL nTabStartCol = ((nMoveY != 0 && !nMoveX) ? aViewData.GetTabStartCol() : SC_TABSTART_NONE);
+        pDoc->GetNextPos( nNewX, nNewY, nTab, nMoveX, nMoveY, false, true, rMark, nTabStartCol );
 
         MoveCursorRel( nNewX - nCurX, nNewY - nCurY, SC_FOLLOW_LINE, false);
     }

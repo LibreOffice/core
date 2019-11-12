@@ -1386,7 +1386,7 @@ bool ScTable::SkipRow( const SCCOL nCol, SCROW& rRow, const SCROW nMovY,
 }
 
 void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
-                                bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const
+        bool bMarked, bool bUnprotected, const ScMarkData& rMark, SCCOL nTabStartCol ) const
 {
     // Ensure bMarked is set only if there is a mark.
     assert( !bMarked || rMark.IsMarked() || rMark.IsMultiMarked());
@@ -1447,53 +1447,82 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
             rCol = nCol;
             rRow = nRow;
         }
+
+        // Caller ensures actually moving nMovY to jump to prev/next row's
+        // start col.
+        if (nTabStartCol != SC_TABSTART_NONE)
+            rCol = nTabStartCol;
+
         return;
     }
 
     if ( nMovY && (bMarked || bUnprotected))
     {
-        bool bUp = (nMovY < 0);
-        const SCCOL nColAdd = (bUp ? -1 : 1);
-        sal_uInt16 nWrap = 0;
-
-        if (bMarked)
-            nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-
-        while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nEndRow, bMarked, bSheetProtected ))
-            ;
-
-        while ( nRow < nStartRow || nRow > nEndRow )
+        do
         {
-            nCol += nColAdd;
-
-            while (nStartCol <= nCol && nCol <= nEndCol && ValidCol(nCol) && ColHidden(nCol))
-                nCol += nColAdd;    //  skip hidden cols
-
-            if (nCol < nStartCol)
-            {
-                nCol = nEndCol;
-
-                if (++nWrap >= 2)
-                    return;
-            }
-            else if (nCol > nEndCol)
-            {
-                nCol = nStartCol;
-
-                if (++nWrap >= 2)
-                    return;
-            }
-            if (nRow < nStartRow)
-                nRow = nEndRow;
-            else if (nRow > nEndRow)
-                nRow = nStartRow;
+            const bool bUp = (nMovY < 0);
+            const SCCOL nColAdd = (bUp ? -1 : 1);
 
             if (bMarked)
                 nRow = rMark.GetNextMarked( nCol, nRow, bUp );
 
+            if (nTabStartCol != SC_TABSTART_NONE)
+            {
+                /* NOTE: If current rCol < nTabStartCol when going down, there
+                 * is no way to detect if the previous Tab wrapped around to
+                 * the next row or if it was a Shift+Tab going backwards. The
+                 * result after a wrap is an odd jump to the next row's
+                 * nTabStartCol, which is logical though and always has been
+                 * the case. Similar for rCol > nTabStartCol when going up.
+                 * Related, it would be nice to limit advancing the position
+                 * within bounds even if another wrap would occur, but again we
+                 * can't tell if previously Tab or Shift+Tab was used, so we
+                 * don't know if it would be nTabStartCol to nEndCol (for Tab)
+                 * or nStartCol to nTabStartCol (for Shift+Tab). */
+
+                // Continue moving horizontally.
+                nMovX = nColAdd;
+                nCol = nTabStartCol;
+                break;  // do
+            }
+
             while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nEndRow, bMarked, bSheetProtected ))
                 ;
-        }
+
+            sal_uInt16 nWrap = 0;
+            while ( nRow < nStartRow || nRow > nEndRow )
+            {
+                nCol += nColAdd;
+
+                while (nStartCol <= nCol && nCol <= nEndCol && ValidCol(nCol) && ColHidden(nCol))
+                    nCol += nColAdd;    //  skip hidden cols
+
+                if (nCol < nStartCol)
+                {
+                    nCol = nEndCol;
+
+                    if (++nWrap >= 2)
+                        return;
+                }
+                else if (nCol > nEndCol)
+                {
+                    nCol = nStartCol;
+
+                    if (++nWrap >= 2)
+                        return;
+                }
+                if (nRow < nStartRow)
+                    nRow = nEndRow;
+                else if (nRow > nEndRow)
+                    nRow = nStartRow;
+
+                if (bMarked)
+                    nRow = rMark.GetNextMarked( nCol, nRow, bUp );
+
+                while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nEndRow, bMarked, bSheetProtected ))
+                    ;
+            }
+        } while (false);
     }
 
     if ( nMovX && ( bMarked || bUnprotected ) )

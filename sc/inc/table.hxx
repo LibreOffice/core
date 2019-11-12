@@ -588,7 +588,7 @@ public:
 
     void        FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection ) const;
     void        GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
-                                bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const;
+                            bool bMarked, bool bUnprotected, const ScMarkData& rMark, SCCOL nTabStartCol ) const;
 
     bool        SkipRow( const SCCOL rCol, SCROW& rRow, const SCROW nMovY, const ScMarkData& rMark,
                          const bool bUp, const SCROW nUsedY, const bool bMarked, const bool bSheetProtected ) const;

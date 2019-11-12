@@ -30,7 +30,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #define SC_SIZE_NONE        65535
-const SCCOL SC_TABSTART_NONE = SCCOL_MAX;
 
 enum class ScFillMode
 {

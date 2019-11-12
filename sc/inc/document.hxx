@@ -1444,7 +1444,8 @@ public:
 
     void               FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirection eDirection ) const;
     SC_DLLPUBLIC void  GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCCOL nMovX, SCROW nMovY,
-                                   bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const;
+                                   bool bMarked, bool bUnprotected, const ScMarkData& rMark,
+                                   SCCOL nTabStartCol = SC_TABSTART_NONE ) const;
 
     bool               GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
                                           const ScMarkData& rMark );
