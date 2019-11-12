@@ -710,21 +710,10 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     // at least three steps and at most the number of colour differences
     long nSteps = std::max(nStepCount, 2L);
     long nCalcSteps = std::abs(nRedSteps);
-    long nTempSteps = std::abs(nGreenSteps);
-
-    if (nTempSteps > nCalcSteps)
-        nCalcSteps = nTempSteps;
-
-    nTempSteps = std::abs(nBlueSteps);
-
-    if (nTempSteps > nCalcSteps)
-        nCalcSteps = nTempSteps;
-
-    if (nCalcSteps < nSteps)
-        nSteps = nCalcSteps;
-
-    if (!nSteps)
-        nSteps = 1;
+    nCalcSteps = std::max(std::abs(nGreenSteps), nCalcSteps);
+    nCalcSteps = std::max(std::abs(nBlueSteps), nCalcSteps);
+    nSteps = std::min(nCalcSteps, nSteps);
+    nSteps = std::max(nSteps, 1);
 
     // determine output limits and stepsizes for all directions
     tools::Polygon aPoly;
