@@ -716,8 +716,6 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed),
               nGreen = static_cast<sal_uInt8>(nStartGreen),
               nBlue = static_cast<sal_uInt8>(nStartBlue);
-    bool bPaintLastPolygon(
-        false); // #107349# Paint last polygon only if loop has generated any output
 
     pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 
@@ -725,6 +723,9 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     aPoly = rRect;
     xPolyPoly->Insert(aPoly);
     xPolyPoly->Insert(aPoly);
+
+    bool bPaintLastPolygon
+        = false; // #107349# Paint last polygon only if loop has generated any output
 
     // loop to output Polygon/PolyPolygon sequentially
     for (long i = 1; i < nSteps; i++)
@@ -833,8 +834,6 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
     sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed),
               nGreen = static_cast<sal_uInt8>(nStartGreen),
               nBlue = static_cast<sal_uInt8>(nStartBlue);
-    bool bPaintLastPolygon(
-        false); // #107349# Paint last polygon only if loop has generated any output
 
     SalGraphics* pGraphics = pRenderContext->GetGraphics();
     pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
@@ -863,6 +862,9 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
         else
             pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
     }
+
+    bool bPaintLastPolygon
+        = false; // #107349# Paint last polygon only if loop has generated any output
 
     // loop to output Polygon/PolyPolygon sequentially
     for (long i = 1; i < nSteps; i++)
