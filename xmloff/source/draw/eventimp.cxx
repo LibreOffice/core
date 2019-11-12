@@ -70,17 +70,15 @@ SvXMLEnumMapEntry<ClickAction> const aXML_EventActions_EnumMap[] =
     { XML_TOKEN_INVALID, ClickAction(0) }
 };
 
-class SdXMLEventContext : public SvXMLImportContext
+class SdXMLEventContextData
 {
 private:
     css::uno::Reference< css::drawing::XShape > mxShape;
 
 public:
+    SdXMLEventContextData(const Reference< XShape >& rxShape);
 
-    SdXMLEventContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape );
-
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,    const Reference< XAttributeList>& xAttrList ) override;
-    virtual void EndElement() override;
+    void ApplyProperties();
 
     bool mbValid;
     bool mbScript;
@@ -95,6 +93,27 @@ public:
     OUString msMacroName;
     OUString msBookmark;
     OUString msLanguage;
+};
+
+SdXMLEventContextData::SdXMLEventContextData(const Reference< XShape >& rxShape)
+    : mxShape(rxShape), mbValid(false), mbScript(false)
+    , meClickAction(ClickAction_NONE), meEffect(EK_none)
+    , meDirection(ED_none), mnStartScale(100), meSpeed(AnimationSpeed_MEDIUM)
+    , mnVerb(0), mbPlayFull(false)
+{
+}
+
+class SdXMLEventContext : public SvXMLImportContext
+{
+public:
+    SdXMLEventContextData maData;
+
+public:
+
+    SdXMLEventContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape );
+
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,    const Reference< XAttributeList>& xAttrList ) override;
+    virtual void EndElement() override;
 };
 
 class XMLEventSoundContext : public SvXMLImportContext
@@ -123,13 +142,13 @@ XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
             case XML_NAMESPACE_XLINK:
                 if( IsXMLToken( aAttrLocalName, XML_HREF ) )
                 {
-                    pParent->msSoundURL = rImp.GetAbsoluteReference(sValue);
+                    pParent->maData.msSoundURL = rImp.GetAbsoluteReference(sValue);
                 }
                 break;
             case XML_NAMESPACE_PRESENTATION:
                 if( IsXMLToken( aAttrLocalName, XML_PLAY_FULL ) )
                 {
-                    pParent->mbPlayFull = IsXMLToken( sValue, XML_TRUE );
+                    pParent->maData.mbPlayFull = IsXMLToken( sValue, XML_TRUE );
                 }
             }
         }
@@ -138,19 +157,16 @@ XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
 
 SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const Reference< XShape >& rxShape )
     : SvXMLImportContext(rImp, nPrfx, rLocalName)
-    , mxShape(rxShape), mbValid(false), mbScript(false)
-    , meClickAction(ClickAction_NONE), meEffect(EK_none)
-    , meDirection(ED_none), mnStartScale(100), meSpeed(AnimationSpeed_MEDIUM)
-    , mnVerb(0), mbPlayFull(false)
+    , maData(rxShape)
 {
     if( nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_EVENT_LISTENER ) )
     {
-        mbValid = true;
+        maData.mbValid = true;
     }
     else if( nPrfx == XML_NAMESPACE_SCRIPT && IsXMLToken( rLocalName, XML_EVENT_LISTENER ) )
     {
-        mbScript = true;
-        mbValid = true;
+        maData.mbScript = true;
+        maData.mbValid = true;
     }
     else
     {
@@ -160,7 +176,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
     // read attributes
     OUString sEventName;
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; (i < nAttrCount) && mbValid; i++)
+    for(sal_Int16 i=0; (i < nAttrCount) && maData.mbValid; i++)
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aAttrLocalName;
@@ -172,29 +188,29 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
         case XML_NAMESPACE_PRESENTATION:
             if( IsXMLToken( aAttrLocalName, XML_ACTION ) )
             {
-                SvXMLUnitConverter::convertEnum( meClickAction, sValue, aXML_EventActions_EnumMap );
+                SvXMLUnitConverter::convertEnum( maData.meClickAction, sValue, aXML_EventActions_EnumMap );
             }
             if( IsXMLToken( aAttrLocalName, XML_EFFECT ) )
             {
-                SvXMLUnitConverter::convertEnum( meEffect, sValue, aXML_AnimationEffect_EnumMap );
+                SvXMLUnitConverter::convertEnum( maData.meEffect, sValue, aXML_AnimationEffect_EnumMap );
             }
             else if( IsXMLToken( aAttrLocalName, XML_DIRECTION ) )
             {
-                SvXMLUnitConverter::convertEnum( meDirection, sValue, aXML_AnimationDirection_EnumMap );
+                SvXMLUnitConverter::convertEnum( maData.meDirection, sValue, aXML_AnimationDirection_EnumMap );
             }
             else if( IsXMLToken( aAttrLocalName, XML_START_SCALE ) )
             {
                 sal_Int32 nScale;
                 if (::sax::Converter::convertPercent( nScale, sValue ))
-                    mnStartScale = static_cast<sal_Int16>(nScale);
+                    maData.mnStartScale = static_cast<sal_Int16>(nScale);
             }
             else if( IsXMLToken( aAttrLocalName, XML_SPEED ) )
             {
-                SvXMLUnitConverter::convertEnum( meSpeed, sValue, aXML_AnimationSpeed_EnumMap );
+                SvXMLUnitConverter::convertEnum( maData.meSpeed, sValue, aXML_AnimationSpeed_EnumMap );
             }
             else if( IsXMLToken( aAttrLocalName, XML_VERB ) )
             {
-                ::sax::Converter::convertNumber( mnVerb, sValue );
+                ::sax::Converter::convertNumber( maData.mnVerb, sValue );
             }
             break;
 
@@ -204,36 +220,36 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                 sEventName = sValue;
                 sal_uInt16 nScriptPrefix =
                     GetImport().GetNamespaceMap().GetKeyByAttrName( sValue, &sEventName );
-                mbValid = XML_NAMESPACE_DOM == nScriptPrefix && sEventName == "click";
+                maData.mbValid = XML_NAMESPACE_DOM == nScriptPrefix && sEventName == "click";
             }
             else if( IsXMLToken( aAttrLocalName, XML_LANGUAGE ) )
             {
                 // language is not evaluated!
                 OUString aScriptLanguage;
-                msLanguage = sValue;
+                maData.msLanguage = sValue;
                 sal_uInt16 nScriptPrefix = rImp.GetNamespaceMap().
-                    GetKeyByAttrName( msLanguage, &aScriptLanguage );
+                    GetKeyByAttrName( maData.msLanguage, &aScriptLanguage );
                 if( XML_NAMESPACE_OOO == nScriptPrefix )
-                    msLanguage = aScriptLanguage;
+                    maData.msLanguage = aScriptLanguage;
             }
             else if( IsXMLToken( aAttrLocalName, XML_MACRO_NAME ) )
             {
-                msMacroName = sValue;
+                maData.msMacroName = sValue;
             }
             break;
 
         case XML_NAMESPACE_XLINK:
             if( IsXMLToken( aAttrLocalName, XML_HREF ) )
             {
-                if ( mbScript )
+                if ( maData.mbScript )
                 {
-                    msMacroName = sValue;
+                    maData.msMacroName = sValue;
                 }
                 else
                 {
                     const OUString &rTmp =
                         rImp.GetAbsoluteReference(sValue);
-                    INetURLObject::translateToInternal( rTmp, msBookmark,
+                    INetURLObject::translateToInternal( rTmp, maData.msBookmark,
                         INetURLObject::DecodeMechanism::Unambiguous );
                 }
             }
@@ -241,8 +257,8 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
         }
     }
 
-    if( mbValid )
-        mbValid = !sEventName.isEmpty();
+    if( maData.mbValid )
+        maData.mbValid = !sEventName.isEmpty();
 }
 
 SvXMLImportContextRef SdXMLEventContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
@@ -251,6 +267,11 @@ SvXMLImportContextRef SdXMLEventContext::CreateChildContext( sal_uInt16 nPrefix,
 }
 
 void SdXMLEventContext::EndElement()
+{
+    maData.ApplyProperties();
+}
+
+void SdXMLEventContextData::ApplyProperties()
 {
     if( !mbValid )
         return;
