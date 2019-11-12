@@ -102,6 +102,12 @@ public:
                                      tools::Rectangle aGradientMirroredStepRect,
                                      Point const& rCenter, sal_uInt16 nAngle, double fScanInc,
                                      double fGradientLine, double fMirrorGradientLine);
+    static void AddMiddlePolygonWithEndColorAction(OutputDevice* pRenderContext,
+                                                   tools::Rectangle aGradientStepRect,
+                                                   Point const& rCenter, long nMiddlePos,
+                                                   double fGradientLine, long fMirrorGradientLine,
+                                                   long fScanInc, sal_uInt16 nAngle, long nEndRed,
+                                                   long nEndGreen, long nEndBlue);
 
     static tools::Rectangle SetGradientStepTop(tools::Rectangle const& rBorderRect,
                                                double fBorderWidth,
