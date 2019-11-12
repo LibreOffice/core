@@ -11,8 +11,12 @@
 
 #include <sal/types.h>
 
+namespace {
+
 struct S {
-    sal_Bool b; // expected-error {{FieldDecl, use "bool" instead of "sal_Bool" [loplugin:salbool]}}
+    sal_Bool b; // expected-error {{FieldDecl, use "bool" instead of 'sal_Bool' (aka 'unsigned char') [loplugin:fakebool]}}
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

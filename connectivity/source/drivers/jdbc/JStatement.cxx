@@ -213,7 +213,7 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
-    jboolean out(false);
+    bool out(false);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
     {
         createStatement(t.pEnv);

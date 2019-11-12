@@ -187,7 +187,7 @@ g_lo_action_group_perform_submenu_action (GLOActionGroup *group,
                                           const gchar    *action_name,
                                           GVariant       *state)
 {
-    gboolean bState = g_variant_get_boolean (state);
+    bool bState = g_variant_get_boolean (state);
     SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group << " to " << bState);
 
     if (bState)
@@ -217,7 +217,7 @@ g_lo_action_group_change_state (GActionGroup *group,
                 g_lo_action_group_perform_submenu_action (lo_group, action_name, value);
             else
             {
-                gboolean is_new = FALSE;
+                bool is_new = FALSE;
 
                 /* If action already exists but has no state, it should be removed and added again. */
                 if (action->state_type == nullptr)

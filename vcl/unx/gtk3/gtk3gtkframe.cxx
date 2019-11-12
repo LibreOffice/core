@@ -490,7 +490,7 @@ static void hud_activated( gboolean hud_active, gpointer user_data )
     }
 }
 
-static gboolean ensure_dbus_setup( gpointer data )
+static bool ensure_dbus_setup( gpointer data )
 {
     GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( data );
     GdkWindow* gdkWindow = widget_get_window( pSalFrame->getWindow() );
@@ -3429,7 +3429,7 @@ gboolean GtkDropTarget::signalDragDrop(GtkWidget* pWidget, GdkDragContext* conte
 {
     // remove the deferred dragExit, as we'll do a drop
 #ifndef NDEBUG
-    gboolean res =
+    bool res =
 #endif
         g_idle_remove_by_data(this);
     assert(res);
@@ -3808,7 +3808,7 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
         if( aDel.isDeleted() )
             return true;
 
-        gboolean bResult = gtk_im_context_filter_keypress( m_pIMContext, pEvent );
+        bool bResult = gtk_im_context_filter_keypress( m_pIMContext, pEvent );
         g_object_unref( pRef );
 
         if( aDel.isDeleted() )
@@ -3839,7 +3839,7 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
     if (pEvent->type == GDK_KEY_RELEASE)
     {
         GObject* pRef = G_OBJECT( g_object_ref( G_OBJECT( m_pIMContext ) ) );
-        gboolean bResult = gtk_im_context_filter_keypress( m_pIMContext, pEvent );
+        bool bResult = gtk_im_context_filter_keypress( m_pIMContext, pEvent );
         g_object_unref( pRef );
 
         if( aDel.isDeleted() )

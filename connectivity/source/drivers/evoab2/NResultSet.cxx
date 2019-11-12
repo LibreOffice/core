@@ -255,7 +255,7 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
         return false;
 
     GParamSpec* pSpec = pSpecs->pField;
-    gboolean bIsSplittedColumn = pSpecs->bIsSplittedValue;
+    bool bIsSplittedColumn = pSpecs->bIsSplittedValue;
 
     _out_rWasNull = true;
     if ( !pSpec || !pContact)

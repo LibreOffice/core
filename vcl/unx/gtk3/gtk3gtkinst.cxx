@@ -2521,7 +2521,7 @@ public:
     {
         //for toplevel windows this is sadly futile under wayland, so we can't tell where a dialog is in order to allow
         //the document underneath to auto-scroll to place content in a visible location
-        gboolean ret = gtk_widget_translate_coordinates(m_pWidget,
+        bool ret = gtk_widget_translate_coordinates(m_pWidget,
                                                         dynamic_cast<GtkInstanceWidget&>(rRelative).getWidget(),
                                                         0, 0, &x, &y);
         width = gtk_widget_get_allocated_width(m_pWidget);
@@ -7385,7 +7385,7 @@ private:
         pThis->signal_activated();
     }
 
-    gboolean signal_key_press(GdkEventKey* pEvent)
+    bool signal_key_press(GdkEventKey* pEvent)
     {
         if (pEvent->keyval == GDK_KEY_Return)
         {
@@ -8101,7 +8101,7 @@ private:
 
     bool get_bool(int pos, int col) const
     {
-        gboolean bRet(false);
+        bool bRet(false);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
@@ -8358,7 +8358,7 @@ private:
         g_DragSource = nullptr;
     }
 
-    gboolean signal_key_press(GdkEventKey* pEvent)
+    bool signal_key_press(GdkEventKey* pEvent)
     {
         if (pEvent->keyval != GDK_KEY_Left && pEvent->keyval != GDK_KEY_Right)
             return false;
@@ -9322,7 +9322,7 @@ public:
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter tmp;
-        gboolean ret = gtk_tree_model_iter_children(pModel, &tmp, &rGtkIter.iter);
+        bool ret = gtk_tree_model_iter_children(pModel, &tmp, &rGtkIter.iter);
         rGtkIter.iter = tmp;
         if (ret)
         {
@@ -11094,7 +11094,7 @@ private:
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<int> m_aSeparatorRows;
-    gboolean m_bPopupActive;
+    bool m_bPopupActive;
     bool m_bAutoComplete;
     bool m_bAutoCompleteCaseSensitive;
     gulong m_nToggleFocusInSignalId;
@@ -11217,7 +11217,7 @@ private:
         m_aQuickSelectionEngine.Reset();
         gboolean bIsShown(false);
         g_object_get(m_pComboBox, "popup-shown", &bIsShown, nullptr);
-        if (m_bPopupActive != bIsShown)
+        if (m_bPopupActive != bool(bIsShown))
         {
             m_bPopupActive = bIsShown;
             ComboBox::signal_popup_toggled();
@@ -11965,7 +11965,7 @@ private:
     guint m_nAutoCompleteIdleId;
     bool m_bAutoCompleteCaseSensitive;
 
-    gboolean signal_key_press(GdkEventKey* pEvent)
+    bool signal_key_press(GdkEventKey* pEvent)
     {
         if (pEvent->keyval == GDK_KEY_KP_Up || pEvent->keyval == GDK_KEY_Up || pEvent->keyval == GDK_KEY_KP_Page_Up || pEvent->keyval == GDK_KEY_Page_Up ||
             pEvent->keyval == GDK_KEY_KP_Down || pEvent->keyval == GDK_KEY_Down || pEvent->keyval == GDK_KEY_KP_Page_Down || pEvent->keyval == GDK_KEY_Page_Down)

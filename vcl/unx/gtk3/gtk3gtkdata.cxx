@@ -375,7 +375,7 @@ bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if( bDispatchThread )
         {
             int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
-            gboolean wasOneEvent = TRUE;
+            bool wasOneEvent = TRUE;
             while( nMaxEvents-- && wasOneEvent )
             {
                 wasOneEvent = g_main_context_iteration( nullptr, bWait && !bWasEvent );

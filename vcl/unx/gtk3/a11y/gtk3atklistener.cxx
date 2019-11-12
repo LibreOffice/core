@@ -468,7 +468,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             AtkStateType eOldState = mapState( aEvent.OldValue );
             AtkStateType eNewState = mapState( aEvent.NewValue );
 
-            gboolean bState = eNewState != ATK_STATE_INVALID;
+            bool bState = eNewState != ATK_STATE_INVALID;
             AtkStateType eRealState = bState ? eNewState : eOldState;
 
             atk_object_notify_state_change( atk_obj, eRealState, bState );

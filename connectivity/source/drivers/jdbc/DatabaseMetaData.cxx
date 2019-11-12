@@ -536,7 +536,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
 bool java_sql_DatabaseMetaData::impl_callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID )
 {
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, _pMethodName );
-    jboolean out( java_lang_Object::callBooleanMethod(_pMethodName,_inout_MethodID) );
+    bool out( java_lang_Object::callBooleanMethod(_pMethodName,_inout_MethodID) );
     m_aLogger.log< const sal_Char*, bool>( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
     return out;
 }
@@ -578,7 +578,7 @@ bool java_sql_DatabaseMetaData::impl_callBooleanMethodWithIntArg( const char* _p
 {
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD_ARG1, _pMethodName, _nArgument );
 
-    jboolean out( callBooleanMethodWithIntArg(_pMethodName,_inout_MethodID,_nArgument) );
+    bool out( callBooleanMethodWithIntArg(_pMethodName,_inout_MethodID,_nArgument) );
 
     m_aLogger.log< const sal_Char*, bool >( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
     return out;
@@ -990,7 +990,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsConvert( sal_Int32 fromType
     static const char* const pMethodName = "supportsConvert";
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD_ARG2, pMethodName, fromType, toType );
 
-    jboolean out( false );
+    bool out( false );
     SDBThreadAttach t;
 
     {
@@ -1332,7 +1332,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetConcurrency( sal_I
     static const char* const pMethodName = "supportsResultSetConcurrency";
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD_ARG2, pMethodName, setType, concurrency );
 
-    jboolean out( false );
+    bool out( false );
     SDBThreadAttach t;
 
     {

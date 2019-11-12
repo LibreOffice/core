@@ -414,7 +414,7 @@ void Player::processMessage( GstMessage *message )
 
 #define LCL_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE "GstWaylandDisplayHandleContextType"
 
-static gboolean lcl_is_wayland_display_handle_need_context_message(GstMessage* msg)
+static bool lcl_is_wayland_display_handle_need_context_message(GstMessage* msg)
 {
     g_return_val_if_fail(GST_IS_MESSAGE(msg), false);
 

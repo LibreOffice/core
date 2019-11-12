@@ -78,7 +78,7 @@ sal_Int32 SAL_CALL java_io_Reader::available(  )
 {
     if(m_buf)
         return 1;
-    jboolean out;
+    bool out;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
 
     {

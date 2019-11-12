@@ -101,7 +101,7 @@ static void gtv_calc_header_bar_draw_text(cairo_t* pCairo, const GdkRectangle& r
     cairo_show_text(pCairo, rText.c_str());
 }
 
-static gboolean gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCairo)
+static bool gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCairo)
 {
     GtvCalcHeaderBar* self = GTV_CALC_HEADER_BAR(pWidget);
     GtvCalcHeaderBarPrivate& priv = getPrivate(GTV_CALC_HEADER_BAR(self));

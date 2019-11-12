@@ -52,7 +52,7 @@ g_lo_menu_struct_item_init (struct item *menu_item)
  * - no consecutive '-'
  * - not longer than 1024 chars
  */
-static gboolean
+static bool
 valid_attribute_name (const gchar *name)
 {
     gint i;
