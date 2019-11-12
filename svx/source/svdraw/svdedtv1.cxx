@@ -938,26 +938,33 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                     case XATTR_LINECOLOR:
                     {
                         const SfxPoolItem* pItem = rSet.GetItem(XATTR_LINECOLOR);
-                        Color aColor = static_cast<const XLineColorItem*>(pItem)->GetColorValue();
-                        sPayload = OUString::number(static_cast<sal_uInt32>(aColor));
+                        if (pItem)
+                        {
+                            Color aColor = static_cast<const XLineColorItem*>(pItem)->GetColorValue();
+                            sPayload = OUString::number(static_cast<sal_uInt32>(aColor));
 
-                        sPayload = ".uno:XLineColor=" + sPayload;
+                            sPayload = ".uno:XLineColor=" + sPayload;
+                        }
                         break;
                     }
 
                     case XATTR_FILLCOLOR:
                     {
                         const SfxPoolItem* pItem = rSet.GetItem(XATTR_FILLCOLOR);
-                        Color aColor = static_cast<const XFillColorItem*>(pItem)->GetColorValue();
-                        sPayload = OUString::number(static_cast<sal_uInt32>(aColor));
+                        if (pItem)
+                        {
+                            Color aColor = static_cast<const XFillColorItem*>(pItem)->GetColorValue();
+                            sPayload = OUString::number(static_cast<sal_uInt32>(aColor));
 
-                        sPayload = ".uno:FillColor=" + sPayload;
+                            sPayload = ".uno:FillColor=" + sPayload;
+                        }
                         break;
                     }
                 }
 
-                GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                    OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
+                if (!sPayload.isEmpty())
+                    GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                        OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
             }
 
             nWhich = aIter.NextWhich();
