@@ -208,6 +208,8 @@ protected:
     void checkSurface();
     void recreateSurface();
     void destroySurface();
+    // Reimplemented for X11.
+    virtual bool avoidRecreateByResize() const { return false; }
 
     void privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight, double nTransparency,
                               bool blockAA = false);
