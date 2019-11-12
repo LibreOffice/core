@@ -94,6 +94,14 @@ public:
                                  double fBorderWidth, sal_uInt16 nAngle, long nStartRed,
                                  long nStartGreen, long nStartBlue, long nEndRed, long nEndGreen,
                                  long nEndBlue);
+    static void AddStepFillColorAction(OutputDevice* pRenderContext, long nStep, long nSteps,
+                                       long nStartRed, long nStartGreen, long nStartBlue,
+                                       long nEndRed, long nEndGreen, long nEndBlue);
+    static void AddStepPolygonAction(OutputDevice* pRenderContext, double nStep,
+                                     Gradient const& rGradient, tools::Rectangle aGradientStepRect,
+                                     tools::Rectangle aGradientMirroredStepRect,
+                                     Point const& rCenter, sal_uInt16 nAngle, double fScanInc,
+                                     double fGradientLine, double fMirrorGradientLine);
 
     static tools::Rectangle SetGradientStepTop(tools::Rectangle const& rBorderRect,
                                                double fBorderWidth,
