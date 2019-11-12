@@ -73,10 +73,6 @@ void X11SkiaSalGraphicsImpl::createSurface()
     assert(winInfo.fDisplay && winInfo.fWindow != None);
     winInfo.fFBConfig = nullptr; // not used
     winInfo.fVisualInfo = const_cast<SalVisual*>(&mX11Parent.GetVisual());
-    // TODO Vulkan does not use these dimensions, instead it uses dimensions of the actual
-    // drawable, which may lead to repeated createSurface() calls from checkSurface()
-    // if the window is being resized and VCL already knows the new size but Vulkan doesn't.
-    // Avoid this somehow.
     winInfo.fWidth = GetWidth();
     winInfo.fHeight = GetHeight();
     switch (renderMethodToUse())
@@ -98,6 +94,24 @@ void X11SkiaSalGraphicsImpl::createSurface()
 #ifdef DBG_UTIL
     prefillSurface();
 #endif
+}
+
+bool X11SkiaSalGraphicsImpl::avoidRecreateByResize() const
+{
+    if (!mSurface)
+        return false;
+    // Skia's WindowContext uses actual dimensions of the X window, which due to X11 being
+    // asynchronous may be temporarily different from what VCL thinks are the dimensions.
+    // That can lead to us repeatedly calling recreateSurface() because of "incorrect"
+    // size, and we otherwise need to check for size changes, because VCL does not inform us.
+    // Avoid the problem here by checking the size of the X window and bail out if Skia
+    // would just return the same size as it is now.
+    Window r;
+    int x, y;
+    unsigned int w, h, border, depth;
+    XGetGeometry(mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(), &r, &x, &y, &w, &h, &border,
+                 &depth);
+    return mSurface->width() == int(w) && mSurface->height() == int(h);
 }
 
 void X11SkiaSalGraphicsImpl::DeInit()
