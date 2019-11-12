@@ -2330,7 +2330,7 @@ void ScTable::UpdateInsertTabAbs(SCTAB nTable)
 bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
                                     const ScMarkData& rMark) const
 {
-    if (rRow == MAXROW+2)                       // end of table
+    if (rRow == pDocument->MaxRow()+2)                       // end of table
     {
         rRow = 0;
         rCol = 0;
@@ -2338,13 +2338,13 @@ bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
     else
     {
         rRow++;
-        if (rRow == MAXROW+1)
+        if (rRow == pDocument->MaxRow()+1)
         {
             rCol++;
             rRow = 0;
         }
     }
-    if (rCol == MAXCOL+1)
+    if (rCol == pDocument->MaxCol()+1)
         return true;
     for (;;)
     {
@@ -2354,7 +2354,7 @@ bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
             return true;
         if (aCol[rCol].GetNextSpellingCell(rRow, bInSel, rMark))
             return true;
-         /*else (rRow == MAXROW+1) */
+         /*else (rRow == pDocument->MaxRow()+1) */
         rCol++;
         rRow = 0;
     }

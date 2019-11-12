@@ -76,8 +76,8 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
-    SCCOL nEndCol = MAXCOL;
-    SCROW nEndRow = MAXROW;
+    SCCOL nEndCol = pDocument->MaxCol();
+    SCROW nEndRow = pDocument->MaxRow();
     if (pUserArea)
     {
         nStartCol = pUserArea->aStart.Col();
@@ -92,10 +92,10 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         {
             // Show nothing, when multiple ranges
 
-            for (SCCOL nX : GetColumnsRange(0, MAXCOL))
+            for (SCCOL nX : GetColumnsRange(0, pDocument->MaxCol()))
                 RemoveColBreak(nX, true, false);
 
-            RemoveRowPageBreaks(0, MAXROW-1);
+            RemoveRowPageBreaks(0, pDocument->MaxRow()-1);
 
             return;
         }
@@ -283,17 +283,17 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
         //  End: Remove Break
 
-    if (nEndCol < MAXCOL)
+    if (nEndCol < pDocument->MaxCol())
     {
         SetColBreak(nEndCol+1, true, false);  // AREABREAK
-        for (SCCOL nCol : GetColumnsRange(nEndCol + 2, MAXCOL))
+        for (SCCOL nCol : GetColumnsRange(nEndCol + 2, pDocument->MaxCol()))
             RemoveColBreak(nCol, true, false);
     }
-    if (nEndRow < MAXROW)
+    if (nEndRow < pDocument->MaxRow())
     {
         SetRowBreak(nEndRow+1, true, false);  // AREABREAK
-        if (nEndRow+2 <= MAXROW)
-            RemoveRowPageBreaks(nEndRow+2, MAXROW);
+        if (nEndRow+2 <= pDocument->MaxRow())
+            RemoveRowPageBreaks(nEndRow+2, pDocument->MaxRow());
     }
     mbPageBreaksValid = !pUserArea;     // #i116881# the valid flag can only apply to the "no user area" case
 }
@@ -770,7 +770,7 @@ SCCOLROW ScTable::LastHiddenColRow(SCCOLROW nPos, bool bCol) const
         SCCOL nCol = static_cast<SCCOL>(nPos);
         if (ColHidden(nCol))
         {
-            for (SCCOL i = nCol+1; i <= MAXCOL; ++i)
+            for (SCCOL i = nCol+1; i <= pDocument->MaxCol(); ++i)
             {
                 if (!ColHidden(i))
                     return i - 1;
@@ -957,22 +957,22 @@ bool ScTable::IsManualRowHeight(SCROW nRow) const
 
 namespace {
 
-void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, const ScFlatBoolRowSegments& rRowSegments,
+void lcl_syncFlags(const ScDocument* pDocument, ScFlatBoolColSegments& rColSegments, const ScFlatBoolRowSegments& rRowSegments,
     ScBitMaskCompressedArray<SCCOL, CRFlags>* pColFlags, ScBitMaskCompressedArray< SCROW, CRFlags>* pRowFlags, const CRFlags nFlagMask)
 {
     using ::sal::static_int_cast;
 
     CRFlags nFlagMaskComplement = ~nFlagMask;
 
-    pRowFlags->AndValue(0, MAXROW, nFlagMaskComplement);
-    pColFlags->AndValue(0, MAXCOL+1, nFlagMaskComplement);
+    pRowFlags->AndValue(0, pDocument->MaxRow(), nFlagMaskComplement);
+    pColFlags->AndValue(0, pDocument->MaxCol()+1, nFlagMaskComplement);
 
     {
         // row hidden flags.
 
         SCROW nRow = 0;
         ScFlatBoolRowSegments::RangeData aData;
-        while (nRow <= MAXROW)
+        while (nRow <= pDocument->MaxRow())
         {
             if (!rRowSegments.getRangeData(nRow, aData))
                 break;
@@ -989,7 +989,7 @@ void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, const ScFlatBoolRowSegme
 
         SCCOL nCol = 0;
         ScFlatBoolColSegments::RangeData aData;
-        while (nCol <= MAXCOL)
+        while (nCol <= pDocument->MaxCol())
         {
             if (!rColSegments.getRangeData(nCol, aData))
                 break;
@@ -1009,8 +1009,8 @@ void ScTable::SyncColRowFlags()
     CRFlags nManualBreakComplement = ~CRFlags::ManualBreak;
 
     // Manual breaks.
-    pRowFlags->AndValue(0, MAXROW, nManualBreakComplement);
-    mpColFlags->AndValue(0, MAXCOL+1, nManualBreakComplement);
+    pRowFlags->AndValue(0, pDocument->MaxRow(), nManualBreakComplement);
+    mpColFlags->AndValue(0, pDocument->MaxCol()+1, nManualBreakComplement);
 
     for (const auto& rBreakPos : maRowManualBreaks)
         pRowFlags->OrValue(rBreakPos, CRFlags::ManualBreak);
@@ -1019,8 +1019,8 @@ void ScTable::SyncColRowFlags()
         mpColFlags->OrValue(rBreakPos, CRFlags::ManualBreak);
 
     // Hidden flags.
-    lcl_syncFlags(*mpHiddenCols, *mpHiddenRows, mpColFlags.get(), pRowFlags.get(), CRFlags::Hidden);
-    lcl_syncFlags(*mpFilteredCols, *mpFilteredRows, mpColFlags.get(), pRowFlags.get(), CRFlags::Filtered);
+    lcl_syncFlags(pDocument, *mpHiddenCols, *mpHiddenRows, mpColFlags.get(), pRowFlags.get(), CRFlags::Hidden);
+    lcl_syncFlags(pDocument, *mpFilteredCols, *mpFilteredRows, mpColFlags.get(), pRowFlags.get(), CRFlags::Filtered);
 }
 
 void ScTable::SetPageSize( const Size& rSize )
@@ -1200,7 +1200,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
     const SCCOL nCol1 = pAdrFrom ? pAdrFrom->Col() : 0;
     const SCROW nRow1 = pAdrFrom ? pAdrFrom->Row() : 0;
     const SCCOL nCol2 = pAdrTo   ? pAdrTo->Col()   : aCol.size() - 1;
-    const SCROW nRow2 = pAdrTo   ? pAdrTo->Row()   : MAXROW;
+    const SCROW nRow2 = pAdrTo   ? pAdrTo->Row()   : pDocument->MaxRow();
 
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
     {

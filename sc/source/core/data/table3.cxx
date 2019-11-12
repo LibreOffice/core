@@ -1001,7 +1001,7 @@ void ScTable::SortReorderByColumn(
         sc::CellStoreType& rCells = aCol[nCol].maCells;
         sc::CellStoreType::position_type aPos = rCells.position(nRow1);
         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
-        if (nRow2 < MAXROW)
+        if (nRow2 < pDocument->MaxRow())
         {
             aPos = rCells.position(aPos.first, nRow2+1);
             sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
@@ -1809,7 +1809,7 @@ public:
             if (mrTab.HasData(nCol, nRow))
                 return true;
         }
-        for (SCCOL nCol : mrTab.GetColumnsRange(nEndCol + 1, MAXCOL))
+        for (SCCOL nCol : mrTab.GetColumnsRange(nEndCol + 1, mrTab.GetDoc().MaxCol()))
         {
             if (mrTab.HasData(nCol, nRow))
                 return true;
@@ -1872,7 +1872,7 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
 
     std::for_each(aRows.rbegin(), aRows.rend(), [this](const SCROW nRow) {
             RemoveRowBreak(nRow+1, false, true);
-            pDocument->DeleteRow(0, nTab, MAXCOL, nTab, nRow, 1);
+            pDocument->DeleteRow(0, nTab, pDocument->MaxCol(), nTab, nRow, 1);
         });
 
     rParam.nRow2 -= aRows.size();
@@ -1939,7 +1939,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     sal_uInt16 i;
 
     //  Remove empty rows at the end
-    //  so that all exceeding (MAXROW) can be found by InsertRow (#35180#)
+    //  so that all exceeding (pDocument->MaxRow()) can be found by InsertRow (#35180#)
     //  If sorted, all empty rows are at the end.
     SCSIZE nEmpty = GetEmptyLinesInBlock( nStartCol, nStartRow, nEndCol, nEndRow, DIR_BOTTOM );
     nEndRow -= nEmpty;
@@ -2035,10 +2035,10 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     aRowEntry.nFuncStart = aRowEntry.nSubStartRow;
                     aRowEntry.nFuncEnd   = nRow-1;
 
-                    bSpaceLeft = pDocument->InsertRow( 0, nTab, MAXCOL, nTab,
+                    bSpaceLeft = pDocument->InsertRow( 0, nTab, pDocument->MaxCol(), nTab,
                             aRowEntry.nDestRow, 1 );
                     DBShowRow( aRowEntry.nDestRow, bBlockVis );
-                    if ( rParam.bPagebreak && nRow < MAXROW &&
+                    if ( rParam.bPagebreak && nRow < pDocument->MaxRow() &&
                             aRowEntry.nSubStartRow != nStartRow && nLevel == 0)
                         SetRowBreak(aRowEntry.nSubStartRow, false, true);
 
@@ -2124,7 +2124,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             // increment row
             nGlobalEndFunc++;
 
-            bSpaceLeft = pDocument->InsertRow(0, nTab, MAXCOL, nTab, aRowEntry.nDestRow, 1);
+            bSpaceLeft = pDocument->InsertRow(0, nTab, pDocument->MaxCol(), nTab, aRowEntry.nDestRow, 1);
 
             if (bSpaceLeft)
             {
@@ -3551,7 +3551,7 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& 
     {
         assert(!"ScTable::UpdateSelectionFunction - called without anything marked");
         aMarkArea.aStart.SetCol(0);
-        aMarkArea.aEnd.SetCol(MAXCOL);
+        aMarkArea.aEnd.SetCol(pDocument->MaxCol());
     }
     const SCCOL nStartCol = aMarkArea.aStart.Col();
     const SCCOL nEndCol = ClampToAllocatedColumns(aMarkArea.aEnd.Col());
