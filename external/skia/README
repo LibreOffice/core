@@ -17,3 +17,9 @@ tar cvJf skia-mXX-$id.tar.xz skia
 (where XX refers to the branch version)
 
 And review differences for BUILD.gn and relevant files in gn/ .
+
+
+GrContext sharing
+=================
+
+For details about the share-grcontext patch, see vcl/skia/README.

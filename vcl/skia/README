@@ -17,3 +17,19 @@ Skia supports several methods to draw:
 - Vulkan - Vulkan-based GPU drawing, this is the default
 
 There are more (OpenGL, Metal on Mac, etc.), but (as of now) they are not supported by VCL.
+
+GrContext sharing:
+==================
+
+We use Skia's sk_app::WindowContext class for creating surfaces for windows, that class
+takes care of the internals. But of offscreen drawing, we need an instance of class
+GrContext. There is sk_app::WindowContext::getGrContext(), but each instance creates
+its own GrContext, and apparently it does not work to mix them. Which means that
+for offscreen drawing we would need to know which window (and only that window)
+the contents will be eventually painted to, which is not possible (it may not even
+be known at the time).
+
+To solve this problem we patch sk_app::WindowContext to create just one GrContext object
+and share it between instances. Additionally, using sk_app::WindowContext::SharedGrContext
+it is possible to share it also for offscreen drawing, including keeping proper reference
+count.

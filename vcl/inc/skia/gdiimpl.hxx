@@ -26,6 +26,7 @@
 #include <salgeom.hxx>
 
 #include <SkSurface.h>
+#include <tools/sk_app/VulkanWindowContext.h>
 
 class SkiaFlushIdle;
 
@@ -210,6 +211,7 @@ protected:
     void destroySurface();
     // Reimplemented for X11.
     virtual bool avoidRecreateByResize() const { return false; }
+    void createOffscreenSurface();
 
     void privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight, double nTransparency,
                               bool blockAA = false);
@@ -265,6 +267,8 @@ protected:
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
     bool mIsGPU; // whether the surface is GPU-backed
+    // Keep reference to shared GrContext.
+    sk_app::VulkanWindowContext::SharedGrContext mOffscreenGrContext;
     vcl::Region mClipRegion;
     Color mLineColor;
     Color mFillColor;
