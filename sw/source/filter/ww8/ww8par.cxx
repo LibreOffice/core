@@ -114,6 +114,8 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
+
+#include <svl/lngmisc.hxx>
 #include <svl/itemiter.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -3391,13 +3393,37 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
     }
 }
 
+namespace sw {
+
+auto FilterControlChars(OUString const& rString) -> OUString
+{
+    OUStringBuffer buf(rString.getLength());
+    for (sal_Int32 i = 0; i < rString.getLength(); ++i)
+    {
+        sal_Unicode const ch(rString[i]);
+        if (!linguistic::IsControlChar(ch) || ch == '\r' || ch == '\n' || ch == '\t')
+        {
+            buf.append(ch);
+        }
+        else
+        {
+            SAL_INFO("sw.ww8", "filtering control character");
+        }
+    }
+    return buf.makeStringAndClear();
+}
+
+} // namespace sw
+
 void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
 {
-    if (rAddString.isEmpty())
+    OUString const addString(sw::FilterControlChars(rAddString));
+
+    if (addString.isEmpty())
         return;
 
 #if OSL_DEBUG_LEVEL > 1
-    SAL_INFO("sw.ww8", "<addTextToParagraph>" << rAddString << "</addTextToParagraph>");
+    SAL_INFO("sw.ww8", "<addTextToParagraph>" << addString << "</addTextToParagraph>");
 #endif
 
     const SwContentNode *pCntNd = m_pPaM->GetContentNode();
@@ -3411,21 +3437,21 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
     const sal_Int32 nCharsLeft = SAL_MAX_INT32 - pNd->GetText().getLength();
     if (nCharsLeft > 0)
     {
-        if (rAddString.getLength() <= nCharsLeft)
+        if (addString.getLength() <= nCharsLeft)
         {
-            m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, rAddString);
+            m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, addString);
         }
         else
         {
-            m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, rAddString.copy(0, nCharsLeft));
+            m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, addString.copy(0, nCharsLeft));
             AppendTextNode(*m_pPaM->GetPoint());
-            m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, rAddString.copy(nCharsLeft));
+            m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, addString.copy(nCharsLeft));
         }
     }
     else
     {
         AppendTextNode(*m_pPaM->GetPoint());
-        m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, rAddString);
+        m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, addString);
     }
 
     m_bReadTable = false;
@@ -3451,13 +3477,17 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
                 nRequested = nMaxPossible;
             }
 
-            for (WW8_CP nCh = 0; nCh < nRequested; ++nCh)
+            if (!linguistic::IsControlChar(m_cSymbol)
+                || m_cSymbol == '\r' || m_cSymbol == '\n' || m_cSymbol == '\t')
             {
-                m_rDoc.getIDocumentContentOperations().InsertString( *m_pPaM, OUString(m_cSymbol) );
+                for (WW8_CP nCh = 0; nCh < nRequested; ++nCh)
+                {
+                    m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, OUString(m_cSymbol));
+                }
+                m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_CHRATR_FONT);
+                m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_CHRATR_CJK_FONT);
+                m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_CHRATR_CTL_FONT);
             }
-            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_FONT );
-            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CJK_FONT );
-            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CTL_FONT );
         }
         m_pStrm->SeekRel(nRequested);
         rPos = nEnd; // Ignore until attribute end
