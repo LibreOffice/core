@@ -37,6 +37,7 @@ public:
 protected:
     virtual void createSurface() override;
     virtual void performFlush() override;
+    virtual bool avoidRecreateByResize() const override;
 
 private:
     std::unique_ptr<sk_app::WindowContext> mWindowContext;
