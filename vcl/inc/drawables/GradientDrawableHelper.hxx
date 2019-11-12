@@ -135,6 +135,12 @@ public:
     static void SetStepFillColor(OutputDevice* pRenderContext, long nStep, long nSteps,
                                  long nStartRed, long nStartGreen, long nStartBlue, long nEndRed,
                                  long nEndGreen, long nEndBlue);
+    static void DrawGradientStep(OutputDevice* pRenderContext, double nStep,
+                                 Gradient const& rGradient, tools::Rectangle aGradientStepRect,
+                                 tools::Rectangle aGradientMirroredStepRect, Point const& rCenter,
+                                 sal_uInt16 nAngle, double fScanInc, double fGradientLine,
+                                 double fMirrorGradientLine,
+                                 tools::PolyPolygon const* pClixPolyPoly);
 
     static long CalculateInterpolatedColor(long nStartColor, long nEndColor, double fAlpha);
 
