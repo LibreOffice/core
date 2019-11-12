@@ -30,7 +30,6 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <comphelper/scopeguard.hxx>
 
 namespace vcl {
@@ -213,11 +212,6 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
 
     if ( xWindow->IsDisposed() )
         return;
-
-    // If maEventListeners is empty, the XVCLWindow has not yet been initialized.
-    // Calling GetComponentInterface will do that.
-    if (mpWindowImpl->maEventListeners.empty() && pData)
-        xWindow->GetComponentInterface();
 
     if (!mpWindowImpl->maEventListeners.empty())
     {

@@ -10,20 +10,14 @@ import unohelper
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.awt import XMouseListener
 from com.sun.star.awt import XToolkitRobot
-from com.sun.star.awt import MouseButton
 from com.sun.star.awt import MouseEvent
 from com.sun.star.awt import KeyEvent
 from com.sun.star.awt import XKeyListener
 
 
 mouseListenerCount = 0
-keyListenerCount = 0
-mousePressedEventsIntercepted = 0
-mouseReleasedEventsIntercepted = 0
-mouseEnteredEventsIntercepted = 0
-mouseExitedEventsIntercepted = 0
-keyPressedEventsIntercepted = 0
-keyReleasedEventsIntercepted = 0
+mouseEventsIntercepted = 0
+keymouseEventsIntercepted = 0
 
 
 class XMouseListenerExtended(unohelper.Base, XMouseListener):
@@ -35,54 +29,57 @@ class XMouseListenerExtended(unohelper.Base, XMouseListener):
     # is invoked when a mouse button has been pressed on a window.
     @classmethod
     def mousePressed(self, xMouseEvent):
-        global mousePressedEventsIntercepted
-        mousePressedEventsIntercepted += 1
+        global mouseEventsIntercepted
+        mouseEventsIntercepted += 1
+        return super(XMouseListenerExtended, self).mousePressed(xMouseEvent)
 
     # is invoked when a mouse button has been released on a window.
     @classmethod
     def mouseReleased(self, xMouseEvent):
-        global mouseReleasedEventsIntercepted
-        mouseReleasedEventsIntercepted += 1
+        global mouseEventsIntercepted
+        mouseEventsIntercepted += 1
+        return super(XMouseListenerExtended, self).mouseReleased(xMouseEvent)
 
     # is invoked when the mouse enters a window.
     @classmethod
     def mouseEntered(self, xMouseEvent):
-        global mouseEnteredEventsIntercepted
-        mouseEnteredEventsIntercepted += 1
+        # doesn't work in UI tests
+        return super(XMouseListenerExtended, self).mouseEntered(xMouseEvent)
 
     # is invoked when the mouse exits a window.
     @classmethod
     def mouseExited(self, xMouseEvent):
-        global mouseExitedEventsIntercepted
-        mouseExitedEventsIntercepted += 1
+        # doesn't work in UI tests
+        return super(XMouseListenerExtended, self).mouseExited(xMouseEvent)
 
 
 class XKeyListenerExtended(unohelper.Base, XKeyListener):
-    def __init__(self):
-        global keyListenerCount
-        keyListenerCount += 1
-        super().__init__()
-
     # is invoked when a key has been pressed
     @classmethod
     def keyPressed(self, xKeyEvent):
-        global keyPressedEventsIntercepted
-        keyPressedEventsIntercepted += 1
+        global keymouseEventsIntercepted
+        keymouseEventsIntercepted += 1
+        return super(XKeyListenerExtended, self).keyPressed(xKeyEvent)
 
     # is invoked when a key has been released
     @classmethod
     def keyReleased(self, xKeyEvent):
-        global keyReleasedEventsIntercepted
-        keyReleasedEventsIntercepted += 1
+        global keymouseEventsIntercepted
+        keymouseEventsIntercepted += 1
+        return super(XKeyListenerExtended, self).keyReleased(xKeyEvent)
 
-# Test that registered mouse/key listeners for top window receive mouse/key events
+# registered mouse/key listeners for top window
+# do not receive any mouse/key events while
+# everything is passed only to focused child window
+# where we have no any registered mouse/key listeners
 class XWindow(UITestCase):
     def test_listeners(self):
         global mouseListenerCount
-        global keyListenerCount
 
-        self.ui_test.create_doc_in_start_center("writer")
+        writer_doc = self.ui_test.create_doc_in_start_center("writer")
         xDoc = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         # create new mouse listener
         xFrame = xDoc.getCurrentController().getFrame()
@@ -100,38 +97,24 @@ class XWindow(UITestCase):
         xKeyListener = XKeyListenerExtended()
         self.assertIsNotNone(xKeyListener)
         xWindow.addKeyListener(xKeyListener)
-        self.assertEqual(1, keyListenerCount)
 
         # create dummy mouse event
         xMouseEvent = MouseEvent()
         xMouseEvent.Modifiers = 0
-        xMouseEvent.Buttons = MouseButton.LEFT
+        xMouseEvent.Buttons = 0
         xMouseEvent.X = 10
         xMouseEvent.Y = 10
         xMouseEvent.ClickCount = 1
         xMouseEvent.PopupTrigger = False
         xMouseEvent.Source = xWindow
 
-        xMouseEvent2 = MouseEvent()
-        xMouseEvent2.Modifiers = 0
-        xMouseEvent2.Buttons = MouseButton.LEFT
-        xMouseEvent2.X = 300
-        xMouseEvent2.Y = 300
-        xMouseEvent2.ClickCount = 1
-        xMouseEvent2.PopupTrigger = False
-        xMouseEvent2.Source = xWindow
-
+        # send mouse event
         xToolkitRobot = xWindow.getToolkit()
         self.assertIsNotNone(xToolkitRobot)
 
-        # Click in the menubar/toolbar area
-        xToolkitRobot.mouseMove(xMouseEvent)
         xToolkitRobot.mousePress(xMouseEvent)
+        xToolkitRobot.mouseMove(xMouseEvent)
         xToolkitRobot.mouseRelease(xMouseEvent)
-
-        # Click into the document content
-        xToolkitRobot.mousePress(xMouseEvent2)
-        xToolkitRobot.mouseRelease(xMouseEvent2)
 
         # send key press event
         xKeyEvent = KeyEvent()
@@ -143,11 +126,7 @@ class XWindow(UITestCase):
         xToolkitRobot.keyPress(xKeyEvent)
         xToolkitRobot.keyRelease(xKeyEvent)
 
-        # Wait for async events to be processed
-        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-        xToolkit.processEventsToIdle()
-
-        # remove mouse listener
+        # remove moue listener
         xWindow.removeMouseListener(xMouseListener)
         self.assertEqual(1, mouseListenerCount)
         del xMouseListener
@@ -156,26 +135,13 @@ class XWindow(UITestCase):
         xWindow.removeKeyListener(xKeyListener)
         del xKeyListener
 
-        global keyPressedEventsIntercepted
-        # Not expected any interceptions
-        self.assertEqual(1, keyPressedEventsIntercepted)
+        global keymouseEventsIntercepted
+        # Not expected 2 interceptions
+        self.assertEqual(0, keymouseEventsIntercepted)
 
-        global keyReleasedEventsIntercepted
-        # Not expected any interceptions
-        self.assertEqual(1, keyReleasedEventsIntercepted)
-
-        global mousePressedEventsIntercepted
-        self.assertEqual(2, mousePressedEventsIntercepted)
-
-        global mouseReleasedEventsIntercepted
-        self.assertEqual(2, mouseReleasedEventsIntercepted)
-
-        # Upon xMouseEvent, enter the vcl::Window with GetText() being "Standard", then upon
-        # xMouseEvent2, exit that vcl::Window and enter the one with get_id() being "writer_edit":
-        global mouseEnteredEventsIntercepted
-        self.assertEqual(2, mouseEnteredEventsIntercepted)
-        global mouseExitedEventsIntercepted
-        self.assertEqual(1, mouseExitedEventsIntercepted)
+        global mouseEventsIntercepted
+        # mousePressed, mouseReleased and mouseEntered should be triggered
+        self.assertEqual(2, mouseEventsIntercepted)
 
         # close document
         self.ui_test.close_doc()
