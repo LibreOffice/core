@@ -234,7 +234,7 @@ uno::Reference< drawing::XShapes > const & ScMyTables::GetCurrentXShapes()
     {
         xShapes = GetCurrentXDrawPage();
         rImport.GetShapeImport()->startPage(xShapes);
-        rImport.GetShapeImport()->pushGroupForSorting ( xShapes );
+        rImport.GetShapeImport()->pushGroupForPostProcessing ( xShapes );
         nCurrentXShapes = sal::static_int_cast<sal_Int16>(maCurrentCellPos.Tab());
     }
     return xShapes;

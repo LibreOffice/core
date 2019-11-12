@@ -405,7 +405,7 @@ void SAL_CALL ScXMLTableContext::endFastElement(sal_Int32 /*nElement*/)
     {
         if (rTables.HasXShapes())
         {
-            rImport.GetShapeImport()->popGroupAndSort();
+            rImport.GetShapeImport()->popGroupAndPostProcess();
             uno::Reference < drawing::XShapes > xTempShapes(rTables.GetCurrentXShapes());
             rImport.GetShapeImport()->endPage(xTempShapes);
         }

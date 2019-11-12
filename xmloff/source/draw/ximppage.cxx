@@ -237,7 +237,7 @@ SdXMLGenericPageContext::~SdXMLGenericPageContext()
 
 void SdXMLGenericPageContext::StartElement( const Reference< css::xml::sax::XAttributeList >& )
 {
-    GetImport().GetShapeImport()->pushGroupForSorting( mxShapes );
+    GetImport().GetShapeImport()->pushGroupForPostProcessing( mxShapes );
 
     if( GetImport().IsFormsSupported() )
         GetImport().GetFormImport()->startPage( Reference< drawing::XDrawPage >::query( mxShapes ) );
@@ -279,7 +279,7 @@ SvXMLImportContextRef SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nP
 
 void SdXMLGenericPageContext::EndElement()
 {
-    GetImport().GetShapeImport()->popGroupAndSort();
+    GetImport().GetShapeImport()->popGroupAndPostProcess();
 
     if( GetImport().IsFormsSupported() )
         GetImport().GetFormImport()->endPage();

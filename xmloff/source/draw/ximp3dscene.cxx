@@ -124,7 +124,7 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
         mxChildren.set( mxShape, uno::UNO_QUERY );
         if( mxChildren.is() )
-            GetImport().GetShapeImport()->pushGroupForSorting( mxChildren );
+            GetImport().GetShapeImport()->pushGroupForPostProcessing( mxChildren );
 
         SetLayer();
 
@@ -162,7 +162,7 @@ void SdXML3DSceneShapeContext::EndElement()
         }
 
         if( mxChildren.is() )
-            GetImport().GetShapeImport()->popGroupAndSort();
+            GetImport().GetShapeImport()->popGroupAndPostProcess();
 
         // call parent
         SdXMLShapeContext::EndElement();
