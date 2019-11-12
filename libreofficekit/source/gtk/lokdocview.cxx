@@ -359,7 +359,7 @@ static void
 LOKPostCommand (LOKDocView* pDocView,
                 const gchar* pCommand,
                 const gchar* pArguments,
-                gboolean bNotifyWhenFinished)
+                bool bNotifyWhenFinished)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
@@ -903,7 +903,7 @@ globalCallback (gpointer pData)
 {
     CallbackData* pCallback = static_cast<CallbackData*>(pData);
     LOKDocViewPrivate& priv = getPrivate(pCallback->m_pDocView);
-    gboolean bModify = false;
+    bool bModify = false;
 
     switch (pCallback->m_nType)
     {
@@ -1111,7 +1111,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_TEXT_SELECTION:
     {
         priv->m_aTextSelectionRectangles = payloadToRectangles(pDocView, pCallback->m_aPayload.c_str());
-        gboolean bIsTextSelected = !priv->m_aTextSelectionRectangles.empty();
+        bool bIsTextSelected = !priv->m_aTextSelectionRectangles.empty();
         // In case the selection is empty, then we get no LOK_CALLBACK_TEXT_SELECTION_START/END events.
         if (!bIsTextSelected)
         {
@@ -1545,7 +1545,7 @@ paintTileCallback(GObject* sourceObject, GAsyncResult* res, gpointer userData)
 }
 
 
-static gboolean
+static bool
 renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
@@ -1665,7 +1665,7 @@ static const GdkRGBA& getDarkColor(int nViewId, LOKDocViewPrivate& priv)
     return aColorMap[nViewId];
 }
 
-static gboolean
+static bool
 renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
@@ -2267,8 +2267,8 @@ setEditInThread(gpointer data)
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
-    gboolean bWasEdit = priv->m_bEdit;
-    gboolean bEdit = pLOEvent->m_bEdit;
+    bool bWasEdit = priv->m_bEdit;
+    bool bEdit = pLOEvent->m_bEdit;
 
     if (!priv->m_bEdit && bEdit)
         g_info("lok_doc_view_set_edit: entering edit mode");
@@ -2463,9 +2463,9 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (object);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    gboolean bDocPasswordEnabled = priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD;
-    gboolean bDocPasswordToModifyEnabled = priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
-    gboolean bTiledAnnotationsEnabled = !(priv->m_nLOKFeatures & LOK_FEATURE_NO_TILED_ANNOTATIONS);
+    bool bDocPasswordEnabled = priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD;
+    bool bDocPasswordToModifyEnabled = priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
+    bool bTiledAnnotationsEnabled = !(priv->m_nLOKFeatures & LOK_FEATURE_NO_TILED_ANNOTATIONS);
 
     switch (propId)
     {
@@ -2502,21 +2502,21 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
         priv->m_nDocumentHeightTwips = g_value_get_long (value);
         break;
     case PROP_DOC_PASSWORD:
-        if (g_value_get_boolean (value) != bDocPasswordEnabled)
+        if (bool(g_value_get_boolean (value)) != bDocPasswordEnabled)
         {
             priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ LOK_FEATURE_DOCUMENT_PASSWORD;
             priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
         }
         break;
     case PROP_DOC_PASSWORD_TO_MODIFY:
-        if ( g_value_get_boolean (value) != bDocPasswordToModifyEnabled)
+        if ( bool(g_value_get_boolean (value)) != bDocPasswordToModifyEnabled)
         {
             priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
             priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
         }
         break;
     case PROP_TILED_ANNOTATIONS:
-        if ( g_value_get_boolean (value) != bTiledAnnotationsEnabled)
+        if ( bool(g_value_get_boolean (value)) != bTiledAnnotationsEnabled)
         {
             priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ LOK_FEATURE_NO_TILED_ANNOTATIONS;
             priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
@@ -2580,10 +2580,10 @@ static void lok_doc_view_get_property (GObject* object, guint propId, GValue *va
         g_value_set_boolean (value, priv->m_bCanZoomOut);
         break;
     case PROP_DOC_PASSWORD:
-        g_value_set_boolean (value, priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD);
+        g_value_set_boolean (value, (priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD) != 0);
         break;
     case PROP_DOC_PASSWORD_TO_MODIFY:
-        g_value_set_boolean (value, priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY);
+        g_value_set_boolean (value, (priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY) != 0);
         break;
     case PROP_TILED_ANNOTATIONS:
         g_value_set_boolean (value, !(priv->m_nLOKFeatures & LOK_FEATURE_NO_TILED_ANNOTATIONS));
@@ -3780,7 +3780,7 @@ lok_doc_view_paste (LOKDocView* pDocView,
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LibreOfficeKitDocument* pDocument = priv->m_pDocument;
-    gboolean ret = 0;
+    bool ret = 0;
 
     if (!pDocument)
         return false;

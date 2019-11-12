@@ -47,9 +47,9 @@ using my_bool = char;
 
 struct BindMetaData
 {
-    my_bool is_null = 0;
+    my_bool is_null = false;
     unsigned long length = 0;
-    my_bool error = 0;
+    my_bool error = false;
 };
 
 typedef ::cppu::ImplHelper5<css::sdbc::XPreparedStatement, css::sdbc::XParameters,

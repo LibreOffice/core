@@ -43,7 +43,7 @@ static gboolean destroyLokDialog(GtkWidget* pWidget, gpointer userdata)
 void LOKDocViewSigHandlers::editChanged(LOKDocView* pDocView, gboolean bWasEdit, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-    gboolean bEdit = lok_doc_view_get_edit(LOK_DOC_VIEW(window->lokdocview));
+    bool bEdit = lok_doc_view_get_edit(LOK_DOC_VIEW(window->lokdocview));
     g_info("signalEdit: %d -> %d", bWasEdit, bEdit);
 
     // Let the main toolbar know, so that it can enable disable the button
@@ -64,8 +64,8 @@ void LOKDocViewSigHandlers::commandChanged(LOKDocView* pDocView, char* pPayload,
         if (pItem != nullptr)
         {
             if (aValue == "true" || aValue == "false") {
-                gboolean bEdit = aValue == "true";
-                if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem)) != bEdit)
+                bool bEdit = aValue == "true";
+                if (bool(gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem))) != bEdit)
                 {
                     // Avoid invoking lok_doc_view_post_command().
                     // FIXME: maybe block/unblock the signal (see
@@ -76,7 +76,7 @@ void LOKDocViewSigHandlers::commandChanged(LOKDocView* pDocView, char* pPayload,
 
                 }
             } else if (aValue == "enabled" || aValue == "disabled") {
-                gboolean bSensitive = aValue == "enabled";
+                bool bSensitive = aValue == "enabled";
                 gtk_widget_set_sensitive(GTK_WIDGET(pItem), bSensitive);
 
                 // Remember state, so in case edit is disable and enabled

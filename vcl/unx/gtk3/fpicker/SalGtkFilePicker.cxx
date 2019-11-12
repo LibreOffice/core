@@ -1480,7 +1480,7 @@ void SalGtkFilePicker::selection_changed_cb( GtkFileChooser *, SalGtkFilePicker 
 
 void SalGtkFilePicker::update_preview_cb( GtkFileChooser *file_chooser, SalGtkFilePicker* pobjFP )
 {
-    gboolean have_preview = false;
+    bool have_preview = false;
 
     GtkWidget* preview = pobjFP->m_pPreview;
     char* filename = gtk_file_chooser_get_preview_filename( file_chooser );
@@ -1794,7 +1794,7 @@ extern "C"
 static gboolean
 case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 {
-    gboolean bRetval = false;
+    bool bRetval = false;
     const char *pFilter = static_cast<const char *>(data);
 
     g_return_val_if_fail( data != nullptr, false );

@@ -1084,7 +1084,7 @@ void Content::transfer( const css::ucb::TransferInfo& aTransferInfo, const css::
     GFile *pDest = g_file_new_for_uri(OUStringToOString(sDest, RTL_TEXTENCODING_UTF8).getStr());
     GFile *pSource = g_file_new_for_uri(OUStringToOString(aTransferInfo.SourceURL, RTL_TEXTENCODING_UTF8).getStr());
 
-    gboolean bSuccess = false;
+    bool bSuccess = false;
     GError *pError = nullptr;
     if (aTransferInfo.MoveData)
         bSuccess = g_file_move(pSource, pDest, G_FILE_COPY_OVERWRITE, nullptr, nullptr, nullptr, &pError);

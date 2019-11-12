@@ -36,6 +36,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/expressionalwayszero \
     compilerplugins/clang/test/intvsfloat \
     compilerplugins/clang/test/faileddyncast \
+    compilerplugins/clang/test/fakebool \
     compilerplugins/clang/test/finalprotected \
     compilerplugins/clang/test/flatten \
     compilerplugins/clang/test/fragiledestructor \
@@ -60,7 +61,6 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/refcounting \
     compilerplugins/clang/test/referencecasting \
     compilerplugins/clang/test/returnconstval \
-    compilerplugins/clang/test/salbool \
     compilerplugins/clang/test/salcall \
     compilerplugins/clang/test/sallogareas \
     compilerplugins/clang/test/salunicodeliteral \
