@@ -6,7 +6,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# Use via environment variable LSAN_OPTIONS=.../leak-suppress.txt
+# Use via environment variable LSAN_OPTIONS=suppressions=.../leak-suppress.txt
 
 # uno typelib
 leak:cppu/source/typelib/typelib.cxx
