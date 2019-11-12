@@ -48,6 +48,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/EnumContext.hxx>
 #include <o3tl/enumrange.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <editeng/itemtype.hxx>
 
 #include <fmtornt.hxx>
 #include <fmtclds.hxx>
@@ -1427,6 +1430,19 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                     long nHeight = pHeight->GetHeight();
                     aRowHeight.SetValue(nHeight);
                     rSet.Put(aRowHeight);
+
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        // TODO: set correct unit
+                        MapUnit eTargetUnit = MapUnit::MapInch;
+                        OUString sHeight = GetMetricText(nHeight,
+                                            MapUnit::MapTwip, eTargetUnit, nullptr);
+
+                        OUString sPayload = ".uno:TableRowHeight=" + sHeight;
+
+                        GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                            OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
+                    }
                 }
                 break;
             }
@@ -1438,6 +1454,20 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 SwTwips nWidth = aFunc.GetColWidth(aFunc.GetCurColNum());
                 aColumnWidth.SetValue(nWidth);
                 rSet.Put(aColumnWidth);
+
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    // TODO: set correct unit
+                    MapUnit eTargetUnit = MapUnit::MapInch;
+                    OUString sWidth = GetMetricText(nWidth,
+                                        MapUnit::MapTwip, eTargetUnit, nullptr);
+
+                    OUString sPayload = ".uno:TableColumWidth=" + sWidth;
+
+                    GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                        OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
+                }
+
                 break;
             }
         }
