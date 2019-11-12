@@ -1253,7 +1253,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             rDataFlavorExVector.push_back( aFlavorEx );
 
             // add additional formats for special mime types
-            if(SotClipboardFormatId::BMP == aFlavorEx.mnSotId || SotClipboardFormatId::PNG == aFlavorEx.mnSotId)
+            if(SotClipboardFormatId::BMP == aFlavorEx.mnSotId || SotClipboardFormatId::PNG == aFlavorEx.mnSotId || SotClipboardFormatId::JPEG == aFlavorEx.mnSotId)
             {
                 if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::BITMAP, aFlavorEx ) )
                 {
@@ -1519,6 +1519,15 @@ bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx
         DataFlavor aFlavor;
 
         if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::PNG, aFlavor))
+        {
+            if(GetBitmapEx(aFlavor, rBmpEx))
+            {
+                return true;
+            }
+        }
+
+        // then JPEG
+        if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::JPEG, aFlavor))
         {
             if(GetBitmapEx(aFlavor, rBmpEx))
             {
