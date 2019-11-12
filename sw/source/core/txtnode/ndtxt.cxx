@@ -1412,6 +1412,14 @@ void SwTextNode::Update(
                     {   // don't switch to iterating aTmpIdxReg!
                         next = rEndIdx.GetNext();
                     }
+                    if (pMark->IsExpanded()
+                        && pMark->GetMarkStart() == pMark->GetMarkEnd()
+                        // empty fieldmark means the CH_TXT_ATR_FIELD* being inserted -> must expand
+                        && dynamic_cast<sw::mark::IFieldmark const*>(pMark) == nullptr)
+                    {   // corner case: start == end -> also avoid moving start!
+                        const_cast<SwIndex&>(pMark->GetMarkStart().nContent)
+                            .Assign(&aTmpIdxReg, rEndIdx.GetIndex());
+                    }
                     rEndIdx.Assign( &aTmpIdxReg, rEndIdx.GetIndex() );
                     bAtLeastOneBookmarkMoved = true;
                 }
