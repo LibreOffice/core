@@ -267,11 +267,14 @@ void SkiaSalGraphicsImpl::checkSurface()
     }
     else if (GetWidth() != mSurface->width() || GetHeight() != mSurface->height())
     {
-        Size oldSize(mSurface->width(), mSurface->height());
-        recreateSurface();
-        SAL_INFO("vcl.skia", "recreate(" << this << "): old " << oldSize << " new "
-                                         << Size(mSurface->width(), mSurface->height())
-                                         << " requested " << Size(GetWidth(), GetHeight()));
+        if (!avoidRecreateByResize())
+        {
+            Size oldSize(mSurface->width(), mSurface->height());
+            recreateSurface();
+            SAL_INFO("vcl.skia", "recreate(" << this << "): old " << oldSize << " new "
+                                             << Size(mSurface->width(), mSurface->height())
+                                             << " requested " << Size(GetWidth(), GetHeight()));
+        }
     }
 }
 
