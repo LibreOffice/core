@@ -1295,7 +1295,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 }
                 else
                 {
+                    // eg. disabled numbering using non-existent numId "0"
                     rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( OUString() ) );
+                    // disable inheritance of indentation of parent styles
+                    rContext->Insert( PROP_PARA_LEFT_MARGIN, uno::makeAny( sal_Int32(0) ), /*bOverwrite=*/false);
+                    rContext->Insert( PROP_PARA_FIRST_LINE_INDENT,
+                                                 uno::makeAny( sal_Int32(0) ), /*bOverwrite=*/false);
                 }
             }
         }
