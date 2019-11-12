@@ -732,7 +732,10 @@ ScSplitPos ScViewDataTable::SanitizeWhichActive() const
 ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         nPPTX(0.0),
         nPPTY(0.0),
-        mpMarkData(new ScMarkData(pDocSh->GetDocument().MaxRow(), pDocSh->GetDocument().MaxCol()) ),
+        mpMarkData(pDocSh?
+                   new ScMarkData(pDocSh->GetDocument().MaxRow(), pDocSh->GetDocument().MaxCol()) :
+                   new ScMarkData(MAXROW, MAXCOL)
+                  ),
         pDocShell   ( pDocSh ),
         pDoc        ( nullptr ),
         pView       ( pViewSh ),
