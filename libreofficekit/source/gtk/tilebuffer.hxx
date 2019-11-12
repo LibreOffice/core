@@ -116,6 +116,15 @@ class TileBuffer
        @return the tile at the mentioned position (x, y)
      */
     Tile& getTile(int x, int y, GTask* task, GThreadPool* pool);
+
+    /*
+      Takes ownership of the surface and sets it on a tile at a given location
+    */
+    void  setTile(int x, int y, cairo_surface_t *surface);
+
+    /// Returns true if a valid tile exists at this location
+    bool hasValidTile(int x, int y);
+
     /// Destroys all the tiles in the tile buffer; also frees the memory allocated
     /// for all the Tile objects.
     void resetAllTiles();
@@ -133,6 +142,7 @@ class TileBuffer
      */
     void setInvalid(int x, int y, float zoom, GTask* task, GThreadPool*);
 
+private:
     /// Stores all the tiles cached by this tile buffer.
     std::map<int, Tile> m_mTiles;
     /// Width of the current tile buffer (number of columns)

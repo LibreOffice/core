@@ -109,6 +109,21 @@ Tile& TileBuffer::getTile(int x, int y, GTask* task,
     return m_mTiles[index];
 }
 
+void TileBuffer::setTile(int x, int y, cairo_surface_t *surface)
+{
+    int index = x * m_nWidth + y;
+
+    m_mTiles[index].setSurface(surface);
+    m_mTiles[index].valid = true;
+}
+
+bool TileBuffer::hasValidTile(int x, int y)
+{
+    int index = x * m_nWidth + y;
+    auto it = m_mTiles.find(index);
+    return (it != m_mTiles.end()) && it->second.valid;
+}
+
 void LOEvent::destroy(void* pMemory)
 {
     LOEvent* pLOEvent = static_cast<LOEvent*>(pMemory);
