@@ -31,7 +31,7 @@ struct ScXMLExternalTabData;
 class ScXMLExternalRefTabSourceContext : public ScXMLImportContext
 {
 public:
-    ScXMLExternalRefTabSourceContext( ScXMLImport& rImport,
+    ScXMLExternalRefTabSourceContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLExternalTabData& rRefInfo );
 
@@ -51,7 +51,7 @@ private:
 class ScXMLExternalRefRowsContext : public ScXMLImportContext
 {
 public:
-    ScXMLExternalRefRowsContext( ScXMLImport& rImport,
+    ScXMLExternalRefRowsContext( ScXMLImport& rImport, sal_Int32 nElement,
                         ScXMLExternalTabData& rRefInfo );
 
     virtual ~ScXMLExternalRefRowsContext() override;
@@ -68,7 +68,7 @@ private:
 class ScXMLExternalRefRowContext : public ScXMLImportContext
 {
 public:
-    ScXMLExternalRefRowContext( ScXMLImport& rImport,
+    ScXMLExternalRefRowContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLExternalTabData& rRefInfo );
 
@@ -89,7 +89,7 @@ private:
 class ScXMLExternalRefCellContext : public ScXMLImportContext
 {
 public:
-    ScXMLExternalRefCellContext( ScXMLImport& rImport,
+    ScXMLExternalRefCellContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLExternalTabData& rRefInfo );
 
@@ -118,7 +118,7 @@ private:
 class ScXMLExternalRefCellTextContext : public ScXMLImportContext
 {
 public:
-    ScXMLExternalRefCellTextContext( ScXMLImport& rImport,
+    ScXMLExternalRefCellTextContext( ScXMLImport& rImport, sal_Int32 nElement,
                         ScXMLExternalRefCellContext& rParent );
 
     virtual ~ScXMLExternalRefCellTextContext() override;

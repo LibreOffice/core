@@ -52,7 +52,7 @@ class ScXMLFilterContext : public ScXMLImportContext
 
 public:
 
-    ScXMLFilterContext( ScXMLImport& rImport,
+    ScXMLFilterContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScQueryParam& rParam,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -76,7 +76,7 @@ class ScXMLAndContext : public ScXMLImportContext
 
 public:
 
-    ScXMLAndContext( ScXMLImport& rImport,
+    ScXMLAndContext( ScXMLImport& rImport, sal_Int32 nElement,
                      ScQueryParam& rParam,
                      ScXMLFilterContext* pTempFilterContext);
 
@@ -95,7 +95,7 @@ class ScXMLOrContext : public ScXMLImportContext
 
 public:
 
-    ScXMLOrContext( ScXMLImport& rImport,
+    ScXMLOrContext( ScXMLImport& rImport, sal_Int32 nElement,
                     ScQueryParam& rParam,
                     ScXMLFilterContext* pTempFilterContext);
 
@@ -164,7 +164,7 @@ class ScXMLDPFilterContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDPFilterContext( ScXMLImport& rImport,
+    ScXMLDPFilterContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDataPilotTableContext* pTempDataPilotTableContext);
 
@@ -213,7 +213,7 @@ class ScXMLDPAndContext : public ScXMLImportContext
     ScXMLDPFilterContext* pFilterContext;
 public:
 
-    ScXMLDPAndContext( ScXMLImport& rImport,
+    ScXMLDPAndContext( ScXMLImport& rImport, sal_Int32 nElement,
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPAndContext() override;
@@ -229,7 +229,7 @@ class ScXMLDPOrContext : public ScXMLImportContext
     ScXMLDPFilterContext* pFilterContext;
 public:
 
-    ScXMLDPOrContext( ScXMLImport& rImport,
+    ScXMLDPOrContext( ScXMLImport& rImport, sal_Int32 nElement,
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPOrContext() override;

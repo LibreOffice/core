@@ -19,8 +19,8 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLTransformationsContext::ScXMLTransformationsContext(ScXMLImport& rImport)
-    : ScXMLImportContext(rImport)
+ScXMLTransformationsContext::ScXMLTransformationsContext(ScXMLImport& rImport, sal_Int32 nElement)
+    : ScXMLImportContext(rImport, nElement)
 {
 }
 
@@ -38,55 +38,56 @@ uno::Reference<xml::sax::XFastContextHandler>
     {
         case XML_ELEMENT(CALC_EXT, XML_COLUMN_REMOVE_TRANSFORMATION):
         {
-            pContext = new ScXMLColumnRemoveContext(GetScImport(), pAttribList);
+            pContext = new ScXMLColumnRemoveContext(GetScImport(), nElement, pAttribList);
         }
         break;
         case XML_ELEMENT(CALC_EXT, XML_COLUMN_SPLIT_TRANSFORMATION):
         {
-            pContext = new ScXMLColumnSplitContext(GetScImport(), pAttribList);
+            pContext = new ScXMLColumnSplitContext(GetScImport(), nElement, pAttribList);
         }
         break;
         case XML_ELEMENT(CALC_EXT, XML_COLUMN_MERGE_TRANSFORMATION):
         {
-            pContext = new ScXMLColumnMergeContext(GetScImport(), pAttribList);
+            pContext = new ScXMLColumnMergeContext(GetScImport(), nElement, pAttribList);
         }
         break;
         case XML_ELEMENT(CALC_EXT, XML_COLUMN_SORT_TRANSFORMATION):
         {
-            pContext = new ScXMLColumnSortContext(GetScImport(), pAttribList);
+            pContext = new ScXMLColumnSortContext(GetScImport(), nElement, pAttribList);
         }
         break;
         case XML_ELEMENT(CALC_EXT, XML_COLUMN_TEXT_TRANSFORMATION):
         {
-            pContext = new ScXMLColumnTextContext(GetScImport(), pAttribList);
+            pContext = new ScXMLColumnTextContext(GetScImport(), nElement, pAttribList);
         }
         break;
         case XML_ELEMENT(CALC_EXT, XML_COLUMN_AGGREGATE_TRANSFORMATION):
         {
-            pContext = new ScXMLColumnAggregateContext(GetScImport(), pAttribList);
+            pContext = new ScXMLColumnAggregateContext(GetScImport(), nElement, pAttribList);
         }
         break;
         case XML_ELEMENT(CALC_EXT, XML_COLUMN_NUMBER_TRANSFORMATION):
         {
-            pContext = new ScXMLColumnNumberContext(GetScImport(), pAttribList);
+            pContext = new ScXMLColumnNumberContext(GetScImport(), nElement, pAttribList);
         }
         break;
         case XML_ELEMENT(CALC_EXT, XML_COLUMN_REPLACENULL_TRANSFORMATION):
         {
-            pContext = new ScXMLColumnRemoveNullContext(GetScImport(), pAttribList);
+            pContext = new ScXMLColumnRemoveNullContext(GetScImport(), nElement, pAttribList);
         }
         break;
     }
 
     if (!pContext)
-        pContext = new SvXMLImportContext(GetImport());
+        pContext = new SvXMLImportContext(GetImport(), nElement);
 
     return pContext;
 }
 
 ScXMLColumnRemoveContext::ScXMLColumnRemoveContext(
-    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& /*rAttrList*/)
-    : ScXMLImportContext(rImport)
+    ScXMLImport& rImport, sal_Int32 nElement,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& /*rAttrList*/)
+    : ScXMLImportContext(rImport, nElement)
 {
 }
 
@@ -132,12 +133,13 @@ uno::Reference<xml::sax::XFastContextHandler>
         break;
     }
 
-    return new SvXMLImportContext(GetImport());
+    return new SvXMLImportContext(GetImport(), nElement);
 }
 
 ScXMLColumnSplitContext::ScXMLColumnSplitContext(
-    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
-    : ScXMLImportContext(rImport)
+    ScXMLImport& rImport, sal_Int32 nElement,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
+    : ScXMLImportContext(rImport, nElement)
 {
     SCCOL mnCol = 0;
     OUString cSeparator;
@@ -177,8 +179,9 @@ ScXMLColumnSplitContext::ScXMLColumnSplitContext(
 ScXMLColumnSplitContext::~ScXMLColumnSplitContext() {}
 
 ScXMLColumnMergeContext::ScXMLColumnMergeContext(
-    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
-    : ScXMLImportContext(rImport)
+    ScXMLImport& rImport, sal_Int32 nElement,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
+    : ScXMLImportContext(rImport, nElement)
 {
     if (rAttrList.is())
     {
@@ -235,12 +238,13 @@ uno::Reference<xml::sax::XFastContextHandler>
         }
         break;
     }
-    return new SvXMLImportContext(GetImport());
+    return new SvXMLImportContext(GetImport(), nElement);
 }
 
 ScXMLColumnSortContext::ScXMLColumnSortContext(
-    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& /*rAttrList*/)
-    : ScXMLImportContext(rImport)
+    ScXMLImport& rImport, sal_Int32 nElement,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& /*rAttrList*/)
+    : ScXMLImportContext(rImport, nElement)
 {
 }
 
@@ -256,8 +260,9 @@ uno::Reference<xml::sax::XFastContextHandler>
 */
 
 ScXMLColumnTextContext::ScXMLColumnTextContext(
-    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
-    : ScXMLImportContext(rImport)
+    ScXMLImport& rImport, sal_Int32 nElement,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
+    : ScXMLImportContext(rImport, nElement)
     , maType(sc::TEXT_TRANSFORM_TYPE::TO_LOWER)
 {
     OUString aType;
@@ -331,12 +336,13 @@ uno::Reference<xml::sax::XFastContextHandler>
         }
         break;
     }
-    return new SvXMLImportContext(GetImport());
+    return new SvXMLImportContext(GetImport(), nElement);
 }
 
 ScXMLColumnAggregateContext::ScXMLColumnAggregateContext(
-    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
-    : ScXMLImportContext(rImport)
+    ScXMLImport& rImport, sal_Int32 nElement,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
+    : ScXMLImportContext(rImport, nElement)
     , maType(sc::AGGREGATE_FUNCTION::SUM)
 {
     OUString aType;
@@ -409,12 +415,13 @@ uno::Reference<xml::sax::XFastContextHandler>
         }
         break;
     }
-    return new SvXMLImportContext(GetImport());
+    return new SvXMLImportContext(GetImport(), nElement);
 }
 
 ScXMLColumnNumberContext::ScXMLColumnNumberContext(
-    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
-    : ScXMLImportContext(rImport)
+    ScXMLImport& rImport, sal_Int32 nElement,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
+    : ScXMLImportContext(rImport, nElement)
     , maType(sc::NUMBER_TRANSFORM_TYPE::ROUND)
     , maPrecision(0)
 {
@@ -510,12 +517,13 @@ uno::Reference<xml::sax::XFastContextHandler>
         }
         break;
     }
-    return new SvXMLImportContext(GetImport());
+    return new SvXMLImportContext(GetImport(), nElement);
 }
 
 ScXMLColumnRemoveNullContext::ScXMLColumnRemoveNullContext(
-    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
-    : ScXMLImportContext(rImport)
+    ScXMLImport& rImport, sal_Int32 nElement,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
+    : ScXMLImportContext(rImport, nElement)
 {
     if (rAttrList.is())
     {
@@ -572,12 +580,13 @@ uno::Reference<xml::sax::XFastContextHandler>
         }
         break;
     }
-    return new SvXMLImportContext(GetImport());
+    return new SvXMLImportContext(GetImport(), nElement);
 }
 
 ScXMLDateTimeContext::ScXMLDateTimeContext(
-    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
-    : ScXMLImportContext(rImport)
+    ScXMLImport& rImport, sal_Int32 nElement,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
+    : ScXMLImportContext(rImport, nElement)
     , maType(sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING)
 {
     if (rAttrList.is())
@@ -675,7 +684,7 @@ uno::Reference<xml::sax::XFastContextHandler> SAL_CALL ScXMLDateTimeContext::cre
         }
         break;
     }
-    return new SvXMLImportContext(GetImport());
+    return new SvXMLImportContext(GetImport(), nElement);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

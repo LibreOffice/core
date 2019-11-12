@@ -22,7 +22,7 @@ class FastAttributeList;
 class ScXMLTransformationsContext : public ScXMLImportContext
 {
 public:
-    ScXMLTransformationsContext(ScXMLImport& rImport);
+    ScXMLTransformationsContext(ScXMLImport& rImport, sal_Int32 nElement);
 
     virtual ~ScXMLTransformationsContext() override;
 
@@ -36,7 +36,7 @@ class ScXMLColumnRemoveContext : public ScXMLImportContext
     std::set<SCCOL> maColumns;
 
 public:
-    ScXMLColumnRemoveContext(ScXMLImport& rImport,
+    ScXMLColumnRemoveContext(ScXMLImport& rImport, sal_Int32 nElement,
                              const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLColumnRemoveContext() override;
@@ -49,7 +49,7 @@ public:
 class ScXMLColumnSplitContext : public ScXMLImportContext
 {
 public:
-    ScXMLColumnSplitContext(ScXMLImport& rImport,
+    ScXMLColumnSplitContext(ScXMLImport& rImport, sal_Int32 nElement,
                             const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLColumnSplitContext() override;
@@ -61,7 +61,7 @@ class ScXMLColumnMergeContext : public ScXMLImportContext
     OUString maMergeString;
 
 public:
-    ScXMLColumnMergeContext(ScXMLImport& rImport,
+    ScXMLColumnMergeContext(ScXMLImport& rImport, sal_Int32 nElement,
                             const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLColumnMergeContext() override;
@@ -74,7 +74,7 @@ public:
 class ScXMLColumnSortContext : public ScXMLImportContext
 {
 public:
-    ScXMLColumnSortContext(ScXMLImport& rImport,
+    ScXMLColumnSortContext(ScXMLImport& rImport, sal_Int32 nElement,
                            const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLColumnSortContext() override;
@@ -91,7 +91,7 @@ class ScXMLColumnTextContext : public ScXMLImportContext
     sc::TEXT_TRANSFORM_TYPE maType;
 
 public:
-    ScXMLColumnTextContext(ScXMLImport& rImport,
+    ScXMLColumnTextContext(ScXMLImport& rImport, sal_Int32 nElement,
                            const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLColumnTextContext() override;
@@ -107,7 +107,7 @@ class ScXMLColumnAggregateContext : public ScXMLImportContext
     sc::AGGREGATE_FUNCTION maType;
 
 public:
-    ScXMLColumnAggregateContext(ScXMLImport& rImport,
+    ScXMLColumnAggregateContext(ScXMLImport& rImport, sal_Int32 nElement,
                                 const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLColumnAggregateContext() override;
@@ -124,7 +124,7 @@ class ScXMLColumnNumberContext : public ScXMLImportContext
     std::set<SCCOL> maColumns;
 
 public:
-    ScXMLColumnNumberContext(ScXMLImport& rImport,
+    ScXMLColumnNumberContext(ScXMLImport& rImport, sal_Int32 nElement,
                              const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLColumnNumberContext() override;
@@ -141,7 +141,8 @@ class ScXMLColumnRemoveNullContext : public ScXMLImportContext
 
 public:
     ScXMLColumnRemoveNullContext(
-        ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
+        ScXMLImport& rImport, sal_Int32 nElement,
+        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLColumnRemoveNullContext() override;
 
@@ -157,7 +158,7 @@ class ScXMLDateTimeContext : public ScXMLImportContext
     std::set<SCCOL> maColumns;
 
 public:
-    ScXMLDateTimeContext(ScXMLImport& rImport,
+    ScXMLDateTimeContext(ScXMLImport& rImport, sal_Int32 nElement,
                          const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLDateTimeContext() override;

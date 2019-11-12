@@ -79,7 +79,7 @@ private:
 
 public:
                                 ScXMLDetectiveContext(
-                                    ScXMLImport& rImport,
+                                    ScXMLImport& rImport, sal_Int32 nElement,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
     virtual                     ~ScXMLDetectiveContext() override;
@@ -100,7 +100,7 @@ private:
 
 public:
                                 ScXMLDetectiveHighlightedContext(
-                                    ScXMLImport& rImport,
+                                    ScXMLImport& rImport, sal_Int32 nElement,
                                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
@@ -117,7 +117,7 @@ private:
 
 public:
                                 ScXMLDetectiveOperationContext(
-                                    ScXMLImport& rImport,
+                                    ScXMLImport& rImport, sal_Int32 nElement,
                                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList
                                     );
     virtual                     ~ScXMLDetectiveOperationContext() override;

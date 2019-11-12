@@ -20,9 +20,9 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLDataStreamContext::ScXMLDataStreamContext(
-    ScXMLImport& rImport,
+    ScXMLImport& rImport, sal_Int32 nElement,
     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext(rImport),
+    ScXMLImportContext(rImport, nElement),
     mbRefreshOnEmpty(false),
     meInsertPos(sc::ImportPostProcessData::DataStream::InsertBottom)
 {

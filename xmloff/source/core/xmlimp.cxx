@@ -326,10 +326,10 @@ SvXMLImportContext *SvXMLImport::CreateDocumentContext(sal_uInt16 const nPrefix,
     return new SvXMLImportContext( *this, nPrefix, rLocalName );
 }
 
-SvXMLImportContext *SvXMLImport::CreateFastContext( sal_Int32 /*Element*/,
+SvXMLImportContext *SvXMLImport::CreateFastContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( *this );
+    return new SvXMLImportContext( *this, nElement );
 }
 
 void SvXMLImport::InitCtor_()
@@ -778,11 +778,14 @@ rName
 
 #ifdef DBG_UTIL
         // Non product only: check if endElement call matches startELement call.
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-        SAL_WARN_IF( xContext->GetPrefix() != nPrefix,  "xmloff.core", "SvXMLImport::endElement: popped context has wrong prefix" );
-        SAL_WARN_IF( xContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname" );
+        if (xContext->HasLocalName())
+        {
+            OUString aLocalName;
+            sal_uInt16 nPrefix =
+                mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
+            SAL_WARN_IF( xContext->GetPrefix() != nPrefix,  "xmloff.core", "SvXMLImport::endElement: popped context has wrong prefix" );
+            SAL_WARN_IF( xContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname" );
+        }
 #endif
 
         // Call a EndElement at the current context.
@@ -835,7 +838,7 @@ void SAL_CALL SvXMLImport::setDocumentLocator( const uno::Reference< xml::sax::X
 }
 
 // XFastContextHandler
-void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
+void SAL_CALL SvXMLImport::startFastElement (sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     if ( Attribs.is() )
@@ -863,18 +866,18 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     if (!maFastContexts.empty())
     {
         uno::Reference<XFastContextHandler> pHandler = maFastContexts.top();
-        xContext = pHandler->createFastChildContext( Element, Attribs );
+        xContext = pHandler->createFastChildContext( nElement, Attribs );
     }
     else
-        xContext.set( CreateFastContext( Element, Attribs ) );
+        xContext.set( CreateFastContext( nElement, Attribs ) );
 
     if ( !xContext.is() )
-        xContext.set( new SvXMLImportContext( *this ) );
+        xContext.set( new SvXMLImportContext( *this, nElement ) );
 
     isFastContext = true;
 
     // Call a startElement at the new context.
-    xContext->startFastElement( Element, Attribs );
+    xContext->startFastElement( nElement, Attribs );
 
     if ( isFastContext )
     {
@@ -910,7 +913,7 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const 
         xContext.set( CreateFastContext( -1, Attribs ) );
 
     if ( !xContext.is() )
-        xContext.set( new SvXMLImportContext( *this ) );
+        xContext.set( new SvXMLImportContext( *this, 0/*???*/, rLocalName ) );
 
     xContext->startUnknownElement( rPrefix, rLocalName, Attribs );
     maFastContexts.push(xContext);

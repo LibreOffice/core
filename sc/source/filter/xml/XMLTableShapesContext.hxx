@@ -28,7 +28,7 @@ class ScXMLImport;
 class ScXMLTableShapesContext : public ScXMLImportContext
 {
 public:
-    ScXMLTableShapesContext( ScXMLImport& rImport );
+    ScXMLTableShapesContext( ScXMLImport& rImport, sal_Int32 nElement );
 
     virtual ~ScXMLTableShapesContext() override;
 

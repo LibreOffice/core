@@ -270,9 +270,9 @@ class StoredChapterNumberingDummyStyleContext
 {
 public:
     StoredChapterNumberingDummyStyleContext(
-            SvXMLImport & rImport,
+            SvXMLImport & rImport, sal_Int32 nElement,
             uno::Reference<xml::sax::XFastAttributeList> const& xAttrList)
-        : SvXMLImportContext(rImport)
+        : SvXMLImportContext(rImport, nElement)
     {
         OUString name;
         OUString displayName;
@@ -311,8 +311,8 @@ private:
 
 public:
     StoredChapterNumberingRootContext(
-            SwChapterNumRules & rNumRules, SvXMLImport & rImport)
-        : SvXMLImportContext(rImport)
+            SwChapterNumRules & rNumRules, SvXMLImport & rImport, sal_Int32 nElement)
+        : SvXMLImportContext(rImport, nElement)
         , m_rNumRules(rNumRules)
         , m_nCounter(0)
     {
@@ -350,7 +350,7 @@ public:
         }
         else if (Element == XML_ELEMENT(STYLE, XML_STYLE))
         {
-            return new StoredChapterNumberingDummyStyleContext(GetImport(), xAttrList);
+            return new StoredChapterNumberingDummyStyleContext(GetImport(), Element, xAttrList);
         }
 
         return SvXMLImportContext::createFastChildContext(Element, xAttrList);
@@ -377,7 +377,7 @@ public:
     {
         if (Element == XML_ELEMENT(OFFICE, XML_STYLES))
         {
-            return new StoredChapterNumberingRootContext(m_rNumRules, *this);
+            return new StoredChapterNumberingRootContext(m_rNumRules, *this, Element);
         }
         return SvXMLImport::CreateFastContext(Element, xAttrList);
     }

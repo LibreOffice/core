@@ -23,7 +23,7 @@ public:
     ScXMLImportContext(
         ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName);
 
-    ScXMLImportContext( SvXMLImport& rImport );
+    ScXMLImportContext( SvXMLImport& rImport, sal_Int32 nElement );
 
     virtual void SAL_CALL startFastElement (sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;

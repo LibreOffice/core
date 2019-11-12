@@ -23,8 +23,8 @@
 
 using namespace com::sun::star;
 
-ScXMLTableShapesContext::ScXMLTableShapesContext( ScXMLImport& rImport ) :
-    ScXMLImportContext( rImport )
+ScXMLTableShapesContext::ScXMLTableShapesContext( ScXMLImport& rImport, sal_Int32 nElement ) :
+    ScXMLImportContext( rImport, nElement )
 {
     // here are no attributes
 }

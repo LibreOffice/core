@@ -545,7 +545,7 @@ SvXMLImportContext *SchXMLImport::CreateFastContext( sal_Int32 nElement,
             // mst@: right now, this seems to be not supported, so it is untested
             if (xDPS.is()) {
                 pContext = (nElement == XML_ELEMENT(OFFICE, XML_DOCUMENT_META))
-                               ? new SvXMLMetaDocumentContext(*this, xDPS->getDocumentProperties())
+                               ? new SvXMLMetaDocumentContext(*this, nElement, xDPS->getDocumentProperties())
                                // flat OpenDocument file format
                                : new SchXMLFlatDocContext_Impl(*maImportHelper, *this, nElement,
                                                                xDPS->getDocumentProperties());
@@ -553,7 +553,7 @@ SvXMLImportContext *SchXMLImport::CreateFastContext( sal_Int32 nElement,
         }
         break;
         default:
-            pContext = new SvXMLImportContext( *this );
+            pContext = new SvXMLImportContext( *this, nElement );
     }
     return pContext;
 }

@@ -142,10 +142,10 @@ SvXMLStyleContext::SvXMLStyleContext(
 
 SvXMLStyleContext::SvXMLStyleContext(
         SvXMLImport& rImp,
-        sal_Int32 /*nElement*/,
+        sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > &,
         sal_uInt16 nFam, bool bDefault ) :
-    SvXMLImportContext( rImp ),
+    SvXMLImportContext( rImp, nElement ),
     mbHidden( false ),
     mnFamily( nFam ),
     mbValid( true ),

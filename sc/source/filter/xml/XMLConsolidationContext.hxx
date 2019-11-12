@@ -39,7 +39,7 @@ private:
 
 public:
                                 ScXMLConsolidationContext(
-                                    ScXMLImport& rImport,
+                                    ScXMLImport& rImport, sal_Int32 nElement,
                                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList
                                     );
     virtual                     ~ScXMLConsolidationContext() override;

@@ -27,7 +27,7 @@ class ScXMLLabelRangesContext : public ScXMLImportContext
 {
 public:
                                 ScXMLLabelRangesContext(
-                                    ScXMLImport& rImport
+                                    ScXMLImport& rImport, sal_Int32 nElement
                                     );
     virtual                     ~ScXMLLabelRangesContext() override;
 
@@ -47,7 +47,7 @@ private:
 
 public:
                                 ScXMLLabelRangeContext(
-                                    ScXMLImport& rImport,
+                                    ScXMLImport& rImport, sal_Int32 nElement,
                                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList
                                     );
     virtual                     ~ScXMLLabelRangeContext() override;

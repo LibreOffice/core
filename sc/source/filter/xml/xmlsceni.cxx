@@ -32,9 +32,9 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLTableScenarioContext::ScXMLTableScenarioContext(
-        ScXMLImport& rImport,
+        ScXMLImport& rImport, sal_Int32 nElement,
         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ):
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     aBorderColor( COL_BLACK ),
     bDisplayBorder( true ),
     bCopyBack( true ),

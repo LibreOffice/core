@@ -46,7 +46,7 @@ class ScXMLSortContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSortContext( ScXMLImport& rImport,
+    ScXMLSortContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 

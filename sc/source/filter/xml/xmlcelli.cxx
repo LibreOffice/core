@@ -108,11 +108,11 @@ ScXMLTableRowCellContext::Field::~Field()
 {
 }
 
-ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
+ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       const bool bTempIsCovered,
                                       const sal_Int32 nTempRepeatedRows ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     mpEditEngine(GetScImport().GetEditEngine()),
     mnCurParagraph(0),
     fValue(0.0),
@@ -701,7 +701,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
             bIsEmpty = false;
             // bTextP = true;
 
-            pContext = new ScXMLCellTextParaContext(rXMLImport, *this);
+            pContext = new ScXMLCellTextParaContext(rXMLImport, nElement, *this);
         }
         break;
         case XML_ELEMENT( TABLE, XML_SUB_TABLE ):
@@ -715,7 +715,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
             if (!pDetectiveObjVec)
                 pDetectiveObjVec.reset( new ScMyImpDetectiveObjVec );
             pContext = new ScXMLDetectiveContext(
-                rXMLImport, pDetectiveObjVec.get() );
+                rXMLImport, nElement, pDetectiveObjVec.get() );
         }
         break;
         case XML_ELEMENT( TABLE, XML_CELL_RANGE_SOURCE ):
@@ -724,13 +724,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
             if (!pCellRangeSource)
                 pCellRangeSource.reset(new ScMyImpCellRangeSource());
             pContext = new ScXMLCellRangeSourceContext(
-                rXMLImport, pAttribList, pCellRangeSource.get() );
+                rXMLImport, nElement, pAttribList, pCellRangeSource.get() );
         }
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }

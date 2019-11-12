@@ -40,7 +40,7 @@ private:
     css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
 
 public:
-    SvXMLMetaDocumentContext(SvXMLImport& rImport,
+    SvXMLMetaDocumentContext(SvXMLImport& rImport, sal_Int32 nElement,
         const css::uno::Reference< css::document::XDocumentProperties>& xDocProps);
 
     virtual ~SvXMLMetaDocumentContext() override;

@@ -130,9 +130,9 @@ ScXMLExternalTabData::ScXMLExternalTabData() :
 {
 }
 
-ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
+ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     nStartOffset(-1),
     bStartFormPage(false),
     bPrintEntireSheet(true)
@@ -267,17 +267,17 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
             case XML_ELEMENT( TABLE, XML_TABLE_ROWS ):
                 // #i101319# don't discard rows in groups or header (repeat range)
                 return new ScXMLExternalRefRowsContext(
-                    GetScImport(), *pExternalRefInfo);
+                    GetScImport(), nElement, *pExternalRefInfo);
             case XML_ELEMENT( TABLE, XML_TABLE_ROW ):
                 return new ScXMLExternalRefRowContext(
-                    GetScImport(), pAttribList, *pExternalRefInfo);
+                    GetScImport(), nElement, pAttribList, *pExternalRefInfo);
             case XML_ELEMENT( TABLE, XML_TABLE_SOURCE ):
                 return new ScXMLExternalRefTabSourceContext(
-                    GetScImport(), pAttribList, *pExternalRefInfo);
+                    GetScImport(), nElement, pAttribList, *pExternalRefInfo);
             default:
                 ;
         }
-        return new SvXMLImportContext( GetImport() );
+        return new SvXMLImportContext( GetImport(), nElement );
     }
 
     SvXMLImportContext *pContext(nullptr);
@@ -288,59 +288,59 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     {
         SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
         pContext = new ScXMLNamedExpressionsContext(
-            GetScImport(),
+            GetScImport(), nElement,
             new ScXMLNamedExpressionsContext::SheetLocalInserter(GetScImport(), nTab));
     }
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN_GROUP ):
-        pContext = new ScXMLTableColsContext( GetScImport(), pAttribList,
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, pAttribList,
                                                    false, true );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_HEADER_COLUMNS ):
-        pContext = new ScXMLTableColsContext( GetScImport(), pAttribList,
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, pAttribList,
                                                    true, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMNS ):
-        pContext = new ScXMLTableColsContext( GetScImport(), pAttribList,
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, pAttribList,
                                                    false, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN ):
-        pContext = new ScXMLTableColContext( GetScImport(), pAttribList );
+        pContext = new ScXMLTableColContext( GetScImport(), nElement, pAttribList );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_PROTECTION ):
     case XML_ELEMENT( LO_EXT, XML_TABLE_PROTECTION ):
     case XML_ELEMENT( OFFICE_EXT, XML_TABLE_PROTECTION ):
-        pContext = new ScXMLTableProtectionContext( GetScImport(), pAttribList );
+        pContext = new ScXMLTableProtectionContext( GetScImport(), nElement, pAttribList );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_ROW_GROUP ):
-        pContext = new ScXMLTableRowsContext( GetScImport(), pAttribList,
+        pContext = new ScXMLTableRowsContext( GetScImport(), nElement, pAttribList,
                                                    false, true );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_HEADER_ROWS ):
-        pContext = new ScXMLTableRowsContext( GetScImport(), pAttribList,
+        pContext = new ScXMLTableRowsContext( GetScImport(), nElement, pAttribList,
                                                    true, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_ROWS ):
-        pContext = new ScXMLTableRowsContext( GetScImport(), pAttribList,
+        pContext = new ScXMLTableRowsContext( GetScImport(), nElement, pAttribList,
                                                    false, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_ROW ):
-            pContext = new ScXMLTableRowContext( GetScImport(), pAttribList );
+            pContext = new ScXMLTableRowContext( GetScImport(), nElement, pAttribList );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_SOURCE ):
-        pContext = new ScXMLTableSourceContext( GetScImport(), pAttribList);
+        pContext = new ScXMLTableSourceContext( GetScImport(), nElement, pAttribList);
         break;
     case XML_ELEMENT( TABLE, XML_SCENARIO ):
-        pContext = new ScXMLTableScenarioContext( GetScImport(), pAttribList);
+        pContext = new ScXMLTableScenarioContext( GetScImport(), nElement, pAttribList);
         break;
     case XML_ELEMENT( TABLE, XML_SHAPES ):
-        pContext = new ScXMLTableShapesContext( GetScImport() );
+        pContext = new ScXMLTableShapesContext( GetScImport(), nElement );
         break;
     case XML_ELEMENT( CALC_EXT, XML_CONDITIONAL_FORMATS ):
-        pContext = new ScXMLConditionalFormatsContext( GetScImport() );
+        pContext = new ScXMLConditionalFormatsContext( GetScImport(), nElement );
         break;
     default:
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
     }
 
     assert(pContext);
@@ -427,9 +427,9 @@ void SAL_CALL ScXMLTableContext::endFastElement(sal_Int32 /*nElement*/)
 }
 
 ScXMLTableProtectionContext::ScXMLTableProtectionContext(
-    ScXMLImport& rImport,
+    ScXMLImport& rImport, sal_Int32 nElement,
     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext( rImport )
+    ScXMLImportContext( rImport, nElement )
 {
     bool bSelectProtectedCells = false;
     bool bSelectUnprotectedCells = false;

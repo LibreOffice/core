@@ -37,9 +37,9 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
+ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     sVisibility(GetXMLToken(XML_VISIBLE))
 {
     nColCount = 1;
@@ -80,9 +80,9 @@ ScXMLTableColContext::~ScXMLTableColContext()
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableColContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return new SvXMLImportContext( GetImport(), nElement );
 }
 
 void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
@@ -141,10 +141,10 @@ void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
     GetScImport().GetTables().AddColStyle(nColCount, sCellStyleName);
 }
 
-ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
+ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       const bool bTempHeader, const bool bTempGroup) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     nHeaderStartCol(0),
     nHeaderEndCol(0),
     nGroupStartCol(0),
@@ -182,24 +182,24 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableColsContext::
     switch (nElement)
     {
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN_GROUP ):
-        pContext = new ScXMLTableColsContext( GetScImport(), pAttribList,
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, pAttribList,
                                                    false, true );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_HEADER_COLUMNS ):
-        pContext = new ScXMLTableColsContext( GetScImport(), pAttribList,
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, pAttribList,
                                                    true, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMNS ):
-        pContext = new ScXMLTableColsContext( GetScImport(), pAttribList,
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, pAttribList,
                                                    false, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN ):
-        pContext = new ScXMLTableColContext( GetScImport(), pAttribList );
+        pContext = new ScXMLTableColContext( GetScImport(), nElement, pAttribList );
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }

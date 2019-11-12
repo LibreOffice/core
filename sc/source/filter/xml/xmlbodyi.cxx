@@ -55,9 +55,9 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
+ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport, sal_Int32 nElement,
                                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     sPassword(),
     meHash1(PASSHASH_SHA1),
     meHash2(PASSHASH_UNSPECIFIED),
@@ -138,60 +138,60 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT( TABLE, XML_TRACKED_CHANGES ):
         pChangeTrackingImportHelper = GetScImport().GetChangeTrackingImportHelper();
         if (pChangeTrackingImportHelper)
-            pContext = new ScXMLTrackedChangesContext( GetScImport(), pAttribList, pChangeTrackingImportHelper);
+            pContext = new ScXMLTrackedChangesContext( GetScImport(), nElement, pAttribList, pChangeTrackingImportHelper);
         break;
     case XML_ELEMENT( TABLE, XML_CALCULATION_SETTINGS ):
-        pContext = new ScXMLCalculationSettingsContext( GetScImport(), pAttribList );
+        pContext = new ScXMLCalculationSettingsContext( GetScImport(), nElement, pAttribList );
         bHadCalculationSettings = true;
         break;
     case XML_ELEMENT( TABLE, XML_CONTENT_VALIDATIONS ):
-        pContext = new ScXMLContentValidationsContext( GetScImport() );
+        pContext = new ScXMLContentValidationsContext( GetScImport(), nElement );
         break;
     case XML_ELEMENT( TABLE, XML_LABEL_RANGES ):
-        pContext = new ScXMLLabelRangesContext( GetScImport() );
+        pContext = new ScXMLLabelRangesContext( GetScImport(), nElement );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE ):
         if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
         {
             GetScImport().SetRangeOverflowType(SCWARN_IMPORT_SHEET_OVERFLOW);
-            pContext = new ScXMLEmptyContext(GetScImport() );
+            pContext = new ScXMLEmptyContext(GetScImport(), nElement );
         }
         else
         {
-            pContext = new ScXMLTableContext( GetScImport(), pAttribList );
+            pContext = new ScXMLTableContext( GetScImport(), nElement, pAttribList );
         }
         break;
     case XML_ELEMENT( TABLE, XML_NAMED_EXPRESSIONS ):
         pContext = new ScXMLNamedExpressionsContext (
-            GetScImport(),
+            GetScImport(), nElement,
             new ScXMLNamedExpressionsContext::GlobalInserter(GetScImport()) );
         break;
     case XML_ELEMENT( TABLE, XML_DATABASE_RANGES ):
-        pContext = new ScXMLDatabaseRangesContext ( GetScImport() );
+        pContext = new ScXMLDatabaseRangesContext ( GetScImport(), nElement );
         break;
     case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPINGS ):
-        pContext = new ScXMLMappingsContext(GetScImport());
+        pContext = new ScXMLMappingsContext(GetScImport(), nElement);
         break;
     case XML_ELEMENT( TABLE, XML_DATABASE_RANGE ):
-        pContext = new ScXMLDatabaseRangeContext ( GetScImport(),
+        pContext = new ScXMLDatabaseRangeContext ( GetScImport(), nElement,
                                                         pAttribList );
         break;
     case XML_ELEMENT( TABLE, XML_DATA_PILOT_TABLES ):
-        pContext = new ScXMLDataPilotTablesContext ( GetScImport() );
+        pContext = new ScXMLDataPilotTablesContext ( GetScImport(), nElement );
         break;
     case XML_ELEMENT( TABLE, XML_CONSOLIDATION ):
-        pContext = new ScXMLConsolidationContext ( GetScImport(), pAttribList );
+        pContext = new ScXMLConsolidationContext ( GetScImport(), nElement, pAttribList );
         break;
     case XML_ELEMENT( TABLE, XML_DDE_LINKS ):
-        pContext = new ScXMLDDELinksContext ( GetScImport() );
+        pContext = new ScXMLDDELinksContext ( GetScImport(), nElement );
         break;
     case XML_ELEMENT( CALC_EXT, XML_DATA_STREAM_SOURCE ):
-        pContext = new ScXMLDataStreamContext(GetScImport(), pAttribList);
+        pContext = new ScXMLDataStreamContext(GetScImport(), nElement, pAttribList);
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }
@@ -229,7 +229,7 @@ void SAL_CALL ScXMLBodyContext::endFastElement(sal_Int32 nElement)
     if (!bHadCalculationSettings)
     {
         // #111055#; set calculation settings defaults if there is no calculation settings element
-        rtl::Reference<ScXMLCalculationSettingsContext> pContext( new ScXMLCalculationSettingsContext(GetScImport(), nullptr) );
+        rtl::Reference<ScXMLCalculationSettingsContext> pContext( new ScXMLCalculationSettingsContext(GetScImport(), nElement, nullptr) );
         pContext->endFastElement( nElement );
     }
 

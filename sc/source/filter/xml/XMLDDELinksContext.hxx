@@ -28,7 +28,7 @@ namespace sax_fastparser { class FastAttributeList; }
 class ScXMLDDELinksContext : public ScXMLImportContext
 {
 public:
-    ScXMLDDELinksContext( ScXMLImport& rImport);
+    ScXMLDDELinksContext( ScXMLImport& rImport, sal_Int32 nElement);
 
     virtual ~ScXMLDDELinksContext() override;
 
@@ -59,7 +59,7 @@ class ScXMLDDELinkContext : public ScXMLImportContext
     sal_uInt8       nMode;
 
 public:
-    ScXMLDDELinkContext( ScXMLImport& rImport);
+    ScXMLDDELinkContext( ScXMLImport& rImport, sal_Int32 nElement);
 
     virtual ~ScXMLDDELinkContext() override;
 
@@ -84,7 +84,7 @@ class ScXMLDDESourceContext : public ScXMLImportContext
     ScXMLDDELinkContext* pDDELink;
 
 public:
-    ScXMLDDESourceContext( ScXMLImport& rImport,
+    ScXMLDDESourceContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
@@ -98,7 +98,7 @@ class ScXMLDDETableContext : public ScXMLImportContext
     ScXMLDDELinkContext* const pDDELink;
 
 public:
-    ScXMLDDETableContext( ScXMLImport& rImport,
+    ScXMLDDETableContext( ScXMLImport& rImport, sal_Int32 nElement,
                         ScXMLDDELinkContext* pDDELink);
 
     virtual ~ScXMLDDETableContext() override;
@@ -110,7 +110,7 @@ public:
 class ScXMLDDEColumnContext : public ScXMLImportContext
 {
 public:
-    ScXMLDDEColumnContext( ScXMLImport& rImport,
+    ScXMLDDEColumnContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
@@ -123,7 +123,7 @@ class ScXMLDDERowContext : public ScXMLImportContext
     sal_Int32               nRows;
 
 public:
-    ScXMLDDERowContext( ScXMLImport& rImport,
+    ScXMLDDERowContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
@@ -147,7 +147,7 @@ class ScXMLDDECellContext : public ScXMLImportContext
     ScXMLDDELinkContext* pDDELink;
 
 public:
-    ScXMLDDECellContext( ScXMLImport& rImport,
+    ScXMLDDECellContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDDELinkContext* pDDELink);
 

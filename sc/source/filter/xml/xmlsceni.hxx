@@ -42,7 +42,7 @@ private:
 
 public:
 
-    ScXMLTableScenarioContext( ScXMLImport& rImport,
+    ScXMLTableScenarioContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
     virtual ~ScXMLTableScenarioContext() override;

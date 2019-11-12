@@ -73,8 +73,8 @@ class ConvDicXMLImportContext :
     public SvXMLImportContext
 {
 public:
-    ConvDicXMLImportContext( ConvDicXMLImport &rImport ) :
-        SvXMLImportContext( rImport )
+    ConvDicXMLImportContext( ConvDicXMLImport &rImport, sal_Int32 nElement ) :
+        SvXMLImportContext( rImport, nElement )
     {
     }
 
@@ -97,8 +97,8 @@ class ConvDicXMLDictionaryContext_Impl :
     sal_Int16    nConversionType;
 
 public:
-    ConvDicXMLDictionaryContext_Impl( ConvDicXMLImport &rImport ) :
-        ConvDicXMLImportContext( rImport )
+    ConvDicXMLDictionaryContext_Impl( ConvDicXMLImport &rImport, sal_Int32 nElement ) :
+        ConvDicXMLImportContext( rImport, nElement )
     {
         nLanguage = LANGUAGE_NONE;
         nConversionType = -1;
@@ -117,8 +117,8 @@ class ConvDicXMLEntryTextContext_Impl :
     OUString    aLeftText;
 
 public:
-    ConvDicXMLEntryTextContext_Impl( ConvDicXMLImport &rImport ) :
-        ConvDicXMLImportContext( rImport )
+    ConvDicXMLEntryTextContext_Impl( ConvDicXMLImport &rImport, sal_Int32 nElement ) :
+        ConvDicXMLImportContext( rImport, nElement )
     {
     }
 
@@ -139,9 +139,9 @@ class ConvDicXMLRightTextContext_Impl :
 
 public:
     ConvDicXMLRightTextContext_Impl(
-            ConvDicXMLImport &rImport,
+            ConvDicXMLImport &rImport, sal_Int32 nElement,
             ConvDicXMLEntryTextContext_Impl &rParentContext ) :
-        ConvDicXMLImportContext( rImport ),
+        ConvDicXMLImportContext( rImport, nElement ),
         rEntryContext( rParentContext )
     {
     }
@@ -172,9 +172,9 @@ css::uno::Reference<XFastContextHandler> ConvDicXMLImportContext::createFastChil
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if ( Element == ConvDicXMLToken::TEXT_CONVERSION_DICTIONARY )
-        return new ConvDicXMLDictionaryContext_Impl( GetConvDicImport() );
+        return new ConvDicXMLDictionaryContext_Impl( GetConvDicImport(), Element );
     else
-        return new SvXMLImportContext( GetImport() );
+        return new SvXMLImportContext( GetImport(), Element );
 }
 
 
@@ -211,9 +211,9 @@ css::uno::Reference<XFastContextHandler> ConvDicXMLDictionaryContext_Impl::creat
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if ( Element == ConvDicXMLToken::ENTRY )
-        return new ConvDicXMLEntryTextContext_Impl( GetConvDicImport() );
+        return new ConvDicXMLEntryTextContext_Impl( GetConvDicImport(), Element );
     else
-        return new SvXMLImportContext(GetImport());
+        return new SvXMLImportContext(GetImport(), Element);
 }
 
 css::uno::Reference<XFastContextHandler> ConvDicXMLEntryTextContext_Impl::createFastChildContext(
@@ -221,9 +221,9 @@ css::uno::Reference<XFastContextHandler> ConvDicXMLEntryTextContext_Impl::create
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if ( Element == ConvDicXMLToken::RIGHT_TEXT )
-        return new ConvDicXMLRightTextContext_Impl( GetConvDicImport(), *this );
+        return new ConvDicXMLRightTextContext_Impl( GetConvDicImport(), Element, *this );
     else
-        return new SvXMLImportContext(GetImport());
+        return new SvXMLImportContext(GetImport(), Element);
 }
 
 void ConvDicXMLEntryTextContext_Impl::startFastElement(
@@ -357,7 +357,7 @@ SvXMLImportContext * ConvDicXMLImport::CreateFastContext(
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
     if( Element == ConvDicXMLToken::TEXT_CONVERSION_DICTIONARY )
-        return new ConvDicXMLDictionaryContext_Impl( *this );
+        return new ConvDicXMLDictionaryContext_Impl( *this, Element );
     else
         return SvXMLImport::CreateFastContext( Element, xAttrList );
 }

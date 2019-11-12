@@ -44,7 +44,7 @@ private:
     DECL_LINK(FormatDeletedHdl, ScConditionalFormat*, void);
 
 public:
-    ScXMLConditionalFormatsContext( ScXMLImport& rImport );
+    ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_Int32 nElement );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
@@ -59,7 +59,7 @@ public:
 class ScXMLConditionalFormatContext : public ScXMLImportContext
 {
 public:
-    ScXMLConditionalFormatContext( ScXMLImport& rImport,
+    ScXMLConditionalFormatContext( ScXMLImport& rImport, sal_Int32 nElement,
                                    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                    ScXMLConditionalFormatsContext& rParent );
 
@@ -79,7 +79,7 @@ private:
 class ScXMLColorScaleFormatContext : public ScXMLImportContext
 {
 public:
-    ScXMLColorScaleFormatContext( ScXMLImport& rImport,
+    ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_Int32 nElement,
                         ScConditionalFormat* pFormat);
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -92,7 +92,7 @@ private:
 class ScXMLDataBarFormatContext : public ScXMLImportContext
 {
 public:
-    ScXMLDataBarFormatContext( ScXMLImport& rImport,
+    ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScConditionalFormat* pFormat);
 
@@ -112,7 +112,7 @@ class ScXMLIconSetFormatContext : public ScXMLImportContext
     ScConditionalFormat* const mpParent;
 public:
 
-    ScXMLIconSetFormatContext( ScXMLImport& rImport,
+    ScXMLIconSetFormatContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScConditionalFormat* pFormat);
 
@@ -123,7 +123,7 @@ public:
 class ScXMLColorScaleFormatEntryContext : public ScXMLImportContext
 {
 public:
-    ScXMLColorScaleFormatEntryContext( ScXMLImport& rImport,
+    ScXMLColorScaleFormatEntryContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScColorScaleFormat* pFormat);
 };
@@ -131,7 +131,7 @@ public:
 class ScXMLFormattingEntryContext : public ScXMLImportContext
 {
 public:
-    ScXMLFormattingEntryContext( ScXMLImport& rImport,
+    ScXMLFormattingEntryContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScColorScaleEntry*& pData);
 };
@@ -139,7 +139,7 @@ public:
 class ScXMLCondContext : public ScXMLImportContext
 {
 public:
-    ScXMLCondContext( ScXMLImport& rImport,
+    ScXMLCondContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScConditionalFormat* pFormat);
 };
@@ -147,7 +147,7 @@ public:
 class ScXMLDateContext : public ScXMLImportContext
 {
 public:
-    ScXMLDateContext( ScXMLImport& rImport,
+    ScXMLDateContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScConditionalFormat* pFormat);
 };

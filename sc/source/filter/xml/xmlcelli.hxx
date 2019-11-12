@@ -129,7 +129,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
 public:
 
-    ScXMLTableRowCellContext( ScXMLImport& rImport,
+    ScXMLTableRowCellContext( ScXMLImport& rImport, sal_Int32 nElement,
                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                        const bool bIsCovered, const sal_Int32 nRepeatedRows );
 

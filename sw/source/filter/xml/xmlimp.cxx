@@ -198,7 +198,7 @@ public:
     SwXMLDocContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName );
 
-    SwXMLDocContext_Impl( SwXMLImport& rImport );
+    SwXMLDocContext_Impl( SwXMLImport& rImport, sal_Int32 nElement );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -214,15 +214,15 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
 {
 }
 
-SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport ) :
-    SvXMLImportContext( rImport )
+SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport, sal_Int32 nElement ) :
+    SvXMLImportContext( rImport, nElement )
 {
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return new SvXMLImportContext( GetImport(), nElement );
 }
 
 SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
@@ -246,7 +246,7 @@ SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
         break;
     case XML_TOK_DOC_AUTOSTYLES:
         // don't use the autostyles from the styles-document for the progress
-        if ( ! IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
+        if ( HasLocalName() && !IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
             GetSwImport().GetProgressBarHelper()->Increment
                 ( PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
@@ -288,7 +288,7 @@ class SwXMLOfficeDocContext_Impl :
 {
 public:
 
-    SwXMLOfficeDocContext_Impl( SwXMLImport& rImport,
+    SwXMLOfficeDocContext_Impl( SwXMLImport& rImport, sal_Int32 nElement,
                 const Reference< document::XDocumentProperties >& xDocProps);
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -296,11 +296,11 @@ public:
 };
 
 SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
-                SwXMLImport& rImport,
+                SwXMLImport& rImport, sal_Int32 nElement,
                 const Reference< document::XDocumentProperties >& xDocProps) :
-    SvXMLImportContext( rImport ),
-    SwXMLDocContext_Impl( rImport ),
-    SvXMLMetaDocumentContext( rImport, xDocProps )
+    SvXMLImportContext( rImport, nElement ),
+    SwXMLDocContext_Impl( rImport, nElement ),
+    SvXMLMetaDocumentContext( rImport, nElement, xDocProps )
 {
 }
 
@@ -403,11 +403,11 @@ SvXMLImportContext *SwXMLImport::CreateFastContext( sal_Int32 nElement,
             uno::Reference<document::XDocumentProperties> const xDocProps(
                 GetDocumentProperties());
             // flat OpenDocument file format
-            pContext = new SwXMLOfficeDocContext_Impl( *this, xDocProps );
+            pContext = new SwXMLOfficeDocContext_Impl( *this, nElement, xDocProps );
         }
         break;
         default:
-            pContext = new SvXMLImportContext( *this );
+            pContext = new SvXMLImportContext( *this, nElement );
     }
     return pContext;
 }

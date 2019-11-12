@@ -31,9 +31,9 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& rImport,
+ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     fIterationEpsilon(0.001),
     nIterationCount(100),
     nYear2000(1930),
@@ -100,12 +100,12 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCalculationSetting
         sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     if (nElement == XML_ELEMENT( TABLE, XML_NULL_DATE ))
-        pContext = new ScXMLNullDateContext(GetScImport(), pAttribList, this);
+        pContext = new ScXMLNullDateContext(GetScImport(), nElement, pAttribList, this);
     else if (nElement == XML_ELEMENT( TABLE, XML_ITERATION ))
-        pContext = new ScXMLIterationContext(GetScImport(), pAttribList, this);
+        pContext = new ScXMLIterationContext(GetScImport(), nElement, pAttribList, this);
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }
@@ -140,10 +140,10 @@ void SAL_CALL ScXMLCalculationSettingsContext::endFastElement( sal_Int32 /*nElem
     }
 }
 
-ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
+ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
-    ScXMLImportContext( rImport )
+    ScXMLImportContext( rImport, nElement )
 {
     if ( rAttrList.is() )
     {
@@ -165,10 +165,10 @@ ScXMLNullDateContext::~ScXMLNullDateContext()
 {
 }
 
-ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
+ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
-    ScXMLImportContext( rImport )
+    ScXMLImportContext( rImport, nElement )
 {
     if ( rAttrList.is() )
     {

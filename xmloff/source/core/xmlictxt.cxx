@@ -35,10 +35,10 @@ SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
 {
 }
 
-SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp )
+SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_Int32 nElement )
     : m_nRefCount(0)
     , mrImport(rImp)
-    , mnPrefix(0)
+    , mnElement(nElement)
 {
 }
 
@@ -132,7 +132,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::cre
     if ( mrImport.maFastContexts.empty() )
         return mrImport.CreateFastContext( Element, Attribs );
     else
-        return new SvXMLImportContext( GetImport() );
+        return new SvXMLImportContext( GetImport(), Element );
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createUnknownChildContext

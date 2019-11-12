@@ -1903,8 +1903,8 @@ public:
 class SmXMLOfficeContext_Impl : public virtual SvXMLImportContext
 {
 public:
-    SmXMLOfficeContext_Impl( SmXMLImport &rImport )
-        : SvXMLImportContext(rImport) {}
+    SmXMLOfficeContext_Impl( SmXMLImport &rImport, sal_Int32 nElement )
+        : SvXMLImportContext(rImport, nElement) {}
 
     virtual void SAL_CALL characters( const OUString& /*aChars*/ ) override {}
 
@@ -1943,9 +1943,9 @@ SvXMLImportContextRef SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPr
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLOfficeContext_Impl::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return new SvXMLImportContext( GetImport(), nElement );
 }
 
 
@@ -1954,7 +1954,7 @@ class SmXMLFlatDocContext_Impl
     : public SmXMLOfficeContext_Impl, public SvXMLMetaDocumentContext
 {
 public:
-    SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
+    SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport, sal_Int32 nElement,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
     virtual void SAL_CALL characters( const OUString& aChars ) override;
@@ -1968,11 +1968,11 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
-SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
+SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport, sal_Int32 nElement,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
-    SvXMLImportContext(i_rImport),
-    SmXMLOfficeContext_Impl(i_rImport),
-    SvXMLMetaDocumentContext(i_rImport, i_xDocProps)
+    SvXMLImportContext(i_rImport, nElement),
+    SmXMLOfficeContext_Impl(i_rImport, nElement),
+    SvXMLMetaDocumentContext(i_rImport, nElement, i_xDocProps)
 {
 }
 
@@ -2844,18 +2844,18 @@ SvXMLImportContext *SmXMLImport::CreateFastContext(sal_Int32 nElement,
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
             pContext = ( (nElement & TOKEN_MASK) == XML_DOCUMENT_META )
-                ? new SvXMLMetaDocumentContext( *this,
+                ? new SvXMLMetaDocumentContext( *this, nElement,
                         xDPS->getDocumentProperties() )
                 // flat OpenDocument file format -- this has not been tested...
-                : new SmXMLFlatDocContext_Impl( *this,
+                : new SmXMLFlatDocContext_Impl( *this, nElement,
                             xDPS->getDocumentProperties() );
         }
         break;
         default:
             if ((nElement & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_OFFICE))
-                pContext = new SmXMLOfficeContext_Impl(*this);
+                pContext = new SmXMLOfficeContext_Impl(*this, nElement);
             else
-                pContext = new SvXMLImportContext(*this);
+                pContext = new SvXMLImportContext(*this, nElement);
     }
     return pContext;
 }

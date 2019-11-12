@@ -32,7 +32,7 @@ private:
     SwXMLSectionList & m_rImport;
 
 public:
-    SvXMLSectionListContext(SwXMLSectionList& rImport);
+    SvXMLSectionListContext(SwXMLSectionList& rImport, sal_Int32 nElement);
 
     virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 Element,
@@ -45,8 +45,8 @@ private:
     SwXMLSectionList & m_rImport;
 
 public:
-    SwXMLParentContext(SwXMLSectionList& rImport)
-        : SvXMLImportContext(rImport)
+    SwXMLParentContext(SwXMLSectionList& rImport, sal_Int32 nElement)
+        : SvXMLImportContext(rImport, nElement)
         , m_rImport(rImport)
     {
     }
@@ -65,11 +65,11 @@ public:
             Element == XML_ELEMENT(TEXT, XML_INSERTION) ||
             Element == XML_ELEMENT(TEXT, XML_DELETION))
         {
-            return new SvXMLSectionListContext(m_rImport);
+            return new SvXMLSectionListContext(m_rImport, Element);
         }
         else
         {
-            return new SwXMLParentContext(m_rImport);
+            return new SwXMLParentContext(m_rImport, Element);
         }
     }
 };
@@ -95,26 +95,26 @@ SwXMLSectionList::~SwXMLSectionList()
 }
 
 SvXMLImportContext * SwXMLSectionList::CreateFastContext(
-        sal_Int32 /*Element*/,
+        sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
-    return new SwXMLParentContext(*this);
+    return new SwXMLParentContext(*this, nElement);
 }
 
-SvXMLSectionListContext::SvXMLSectionListContext( SwXMLSectionList& rImport )
-    : SvXMLImportContext ( rImport ),
+SvXMLSectionListContext::SvXMLSectionListContext( SwXMLSectionList& rImport, sal_Int32 nElement )
+    : SvXMLImportContext ( rImport, nElement ),
       m_rImport(rImport)
 {
 }
 
 css::uno::Reference<css::xml::sax::XFastContextHandler> SvXMLSectionListContext::createFastChildContext(
-        sal_Int32 Element,
+        sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if (Element == XML_ELEMENT(TEXT, XML_SECTION ) ||
-        Element == XML_ELEMENT(TEXT, XML_BOOKMARK) )
+    if (nElement == XML_ELEMENT(TEXT, XML_SECTION ) ||
+        nElement == XML_ELEMENT(TEXT, XML_BOOKMARK) )
     {
         sax_fastparser::FastAttributeList *pAttribList =
             sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
@@ -127,7 +127,7 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> SvXMLSectionListContext:
             m_rImport.m_rSectionList.push_back(sName);
     }
 
-    pContext = new SvXMLSectionListContext(m_rImport);
+    pContext = new SvXMLSectionListContext(m_rImport, nElement);
     return pContext;
 }
 

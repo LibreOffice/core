@@ -43,9 +43,9 @@ void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpressio
 }
 
 ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext(
-    ScXMLImport& rImport,
+    ScXMLImport& rImport, sal_Int32 nElement,
     Inserter* pInserter ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     mpInserter(pInserter)
 {
     rImport.LockSolarMutex();
@@ -67,25 +67,25 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNamedExpressionsCo
     {
         case XML_ELEMENT( TABLE, XML_NAMED_RANGE ):
             pContext = new ScXMLNamedRangeContext(
-                GetScImport(), pAttribList, mpInserter.get() );
+                GetScImport(), nElement, pAttribList, mpInserter.get() );
             break;
         case XML_ELEMENT( TABLE, XML_NAMED_EXPRESSION ):
             pContext = new ScXMLNamedExpressionContext(
-                GetScImport(), pAttribList, mpInserter.get() );
+                GetScImport(), nElement, pAttribList, mpInserter.get() );
             break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }
 
 ScXMLNamedRangeContext::ScXMLNamedRangeContext(
-    ScXMLImport& rImport,
+    ScXMLImport& rImport, sal_Int32 nElement,
     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
     ScXMLNamedExpressionsContext::Inserter* pInserter ) :
-    ScXMLImportContext( rImport )
+    ScXMLImportContext( rImport, nElement )
 {
     if (!pInserter)
         return;
@@ -127,10 +127,10 @@ ScXMLNamedRangeContext::~ScXMLNamedRangeContext()
 }
 
 ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
-    ScXMLImport& rImport,
+    ScXMLImport& rImport, sal_Int32 nElement,
     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
     ScXMLNamedExpressionsContext::Inserter* pInserter ) :
-    ScXMLImportContext( rImport )
+    ScXMLImportContext( rImport, nElement )
 {
     if (!pInserter)
         return;

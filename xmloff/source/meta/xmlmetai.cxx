@@ -68,9 +68,9 @@ public:
 };
 
 XMLDocumentBuilderContext::XMLDocumentBuilderContext(SvXMLImport& rImport,
-        sal_Int32 /*nElement*/, const uno::Reference<xml::sax::XFastAttributeList>&,
+        sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>&,
         const uno::Reference<xml::dom::XSAXDocumentBuilder2>& rDocBuilder) :
-    SvXMLImportContext( rImport ),
+    SvXMLImportContext( rImport, nElement ),
     mxDocBuilder(rDocBuilder)
 {
 }
@@ -165,9 +165,9 @@ lcl_initGenerator(SvXMLImport & rImport,
     }
 }
 
-SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
+SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport, sal_Int32 nElement,
             const uno::Reference<document::XDocumentProperties>& xDocProps) :
-    SvXMLImportContext( rImport ),
+    SvXMLImportContext( rImport, nElement ),
     mxDocProps(xDocProps),
     mxDocBuilder(
         xml::dom::SAXDocumentBuilder::create(
@@ -215,7 +215,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLMetaDocumentContex
         return new XMLDocumentBuilderContext(
                 GetImport(), nElement, xAttrList, mxDocBuilder);
     else
-        return new SvXMLImportContext( GetImport() );
+        return new SvXMLImportContext( GetImport(), nElement );
 }
 
 void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno::Reference<beans::XPropertySet>& xImportInfo )

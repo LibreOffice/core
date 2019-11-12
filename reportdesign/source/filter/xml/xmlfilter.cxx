@@ -762,7 +762,7 @@ SvXMLImportContext *ORptFilter::CreateFastContext( sal_Int32 nElement,
             pContext = CreateMetaContext( nElement );
             break;
         default:
-            pContext = new SvXMLImportContext(*this);
+            pContext = new SvXMLImportContext(*this, nElement);
     }
     return pContext;
 }
@@ -1106,14 +1106,14 @@ void ORptFilter::insertFunction(const css::uno::Reference< css::report::XFunctio
     m_aFunctions.emplace(_xFunction->getName(),_xFunction);
 }
 
-SvXMLImportContext* ORptFilter::CreateMetaContext(const sal_Int32 /*nElement*/)
+SvXMLImportContext* ORptFilter::CreateMetaContext(const sal_Int32 nElement)
 {
     SvXMLImportContext* pContext = nullptr;
 
     if ( getImportFlags() & SvXMLImportFlags::META )
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
-        pContext = new SvXMLMetaDocumentContext(*this, xDPS->getDocumentProperties());
+        pContext = new SvXMLMetaDocumentContext(*this, nElement, xDPS->getDocumentProperties());
     }
     return pContext;
 }

@@ -68,7 +68,7 @@ public:
     };
 
     ScXMLNamedExpressionsContext(
-        ScXMLImport& rImport,
+        ScXMLImport& rImport, sal_Int32 nElement,
         Inserter* pInserter );
 
     virtual ~ScXMLNamedExpressionsContext() override;
@@ -85,7 +85,7 @@ class ScXMLNamedRangeContext : public ScXMLImportContext
 public:
 
     ScXMLNamedRangeContext(
-        ScXMLImport& rImport,
+        ScXMLImport& rImport, sal_Int32 nElement,
         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 
@@ -97,7 +97,7 @@ class ScXMLNamedExpressionContext : public ScXMLImportContext
 public:
 
     ScXMLNamedExpressionContext(
-        ScXMLImport& rImport,
+        ScXMLImport& rImport, sal_Int32 nElement,
         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 

@@ -41,7 +41,7 @@ class ScXMLCalculationSettingsContext : public ScXMLImportContext
     bool bMatchWholeCell;
 
 public:
-    ScXMLCalculationSettingsContext( ScXMLImport& rImport,
+    ScXMLCalculationSettingsContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLCalculationSettingsContext() override;
@@ -59,7 +59,7 @@ public:
 class ScXMLNullDateContext : public ScXMLImportContext
 {
 public:
-    ScXMLNullDateContext( ScXMLImport& rImport,
+    ScXMLNullDateContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
     virtual ~ScXMLNullDateContext() override;
@@ -68,7 +68,7 @@ public:
 class ScXMLIterationContext : public ScXMLImportContext
 {
 public:
-    ScXMLIterationContext( ScXMLImport& rImport,
+    ScXMLIterationContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
     virtual ~ScXMLIterationContext() override;

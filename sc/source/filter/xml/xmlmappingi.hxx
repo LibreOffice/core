@@ -18,7 +18,7 @@ class ScXMLMappingsContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLMappingsContext( ScXMLImport& rImport );
+    ScXMLMappingsContext( ScXMLImport& rImport, sal_Int32 nElement );
 
     virtual ~ScXMLMappingsContext() override;
 
@@ -32,7 +32,7 @@ class ScXMLMappingContext : public ScXMLImportContext
 
 public:
 
-    ScXMLMappingContext( ScXMLImport& rImport,
+    ScXMLMappingContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
     virtual ~ScXMLMappingContext() override;

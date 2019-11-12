@@ -57,7 +57,7 @@ class ScXMLContentValidationContext : public ScXMLImportContext
 
 public:
 
-    ScXMLContentValidationContext( ScXMLImport& rImport,
+    ScXMLContentValidationContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
@@ -85,7 +85,7 @@ class ScXMLHelpMessageContext : public ScXMLImportContext
 
 public:
 
-    ScXMLHelpMessageContext( ScXMLImport& rImport,
+    ScXMLHelpMessageContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
@@ -108,7 +108,7 @@ class ScXMLErrorMessageContext : public ScXMLImportContext
 
 public:
 
-    ScXMLErrorMessageContext( ScXMLImport& rImport,
+    ScXMLErrorMessageContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
@@ -126,7 +126,7 @@ class ScXMLErrorMacroContext : public ScXMLImportContext
 
 public:
 
-    ScXMLErrorMacroContext( ScXMLImport& rImport,
+    ScXMLErrorMacroContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
@@ -136,8 +136,8 @@ public:
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
-ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport ) :
-    ScXMLImportContext( rImport )
+ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport, sal_Int32 nElement ) :
+    ScXMLImportContext( rImport, nElement )
 {
     // here are no attributes
 }
@@ -156,19 +156,19 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidations
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_CONTENT_VALIDATION ):
-            pContext = new ScXMLContentValidationContext( GetScImport(), pAttribList );
+            pContext = new ScXMLContentValidationContext( GetScImport(), nElement, pAttribList );
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }
 
-ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImport,
+ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     nShowList(sheet::TableValidationVisibility::UNSORTED),
     bAllowEmptyCell(true),
     bDisplayHelp(false),
@@ -248,18 +248,18 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationC
     switch (nElement)
     {
     case XML_ELEMENT( TABLE, XML_HELP_MESSAGE ):
-        pContext = new ScXMLHelpMessageContext( GetScImport(), pAttribList, this);
+        pContext = new ScXMLHelpMessageContext( GetScImport(), nElement, pAttribList, this);
         break;
     case XML_ELEMENT( TABLE, XML_ERROR_MESSAGE ):
-        pContext = new ScXMLErrorMessageContext( GetScImport(), pAttribList, this);
+        pContext = new ScXMLErrorMessageContext( GetScImport(), nElement, pAttribList, this);
         break;
     case XML_ELEMENT( TABLE, XML_ERROR_MACRO ):
-        pContext = new ScXMLErrorMacroContext( GetScImport(), pAttribList, this);
+        pContext = new ScXMLErrorMacroContext( GetScImport(), nElement, pAttribList, this);
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }
@@ -433,10 +433,10 @@ void ScXMLContentValidationContext::SetErrorMacro(const bool bExecute)
     bDisplayError = bExecute;
 }
 
-ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
+ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     sTitle(),
     sMessage(),
     nParagraphCount(0),
@@ -490,10 +490,10 @@ void SAL_CALL ScXMLHelpMessageContext::endFastElement( sal_Int32 /*nElement*/ )
     pValidationContext->SetHelpMessage(sTitle, sMessage.makeStringAndClear(), bDisplay);
 }
 
-ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
+ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     sTitle(),
     sMessage(),
     sMessageType(),
@@ -551,10 +551,10 @@ void SAL_CALL ScXMLErrorMessageContext::endFastElement( sal_Int32 /*nElement*/ )
     pValidationContext->SetErrorMessage(sTitle, sMessage.makeStringAndClear(), sMessageType, bDisplay);
 }
 
-ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
+ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     bExecute(false)
 {
     pValidationContext = pTempValidationContext;

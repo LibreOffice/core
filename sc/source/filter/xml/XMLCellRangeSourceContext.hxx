@@ -42,7 +42,7 @@ class ScXMLCellRangeSourceContext : public ScXMLImportContext
 {
 public:
                                 ScXMLCellRangeSourceContext(
-                                    ScXMLImport& rImport,
+                                    ScXMLImport& rImport, sal_Int32 nElement,
                                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                     ScMyImpCellRangeSource* pCellRangeSource
                                     );

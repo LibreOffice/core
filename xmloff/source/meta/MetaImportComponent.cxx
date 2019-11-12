@@ -74,8 +74,7 @@ SvXMLImportContext *XMLMetaImportComponent::CreateFastContext( sal_Int32 nElemen
                 "XMLMetaImportComponent::CreateFastContext: setTargetDocument "
                 "has not been called", *this);
         }
-        return new SvXMLMetaDocumentContext(
-                        *this, mxDocProps);
+        return new SvXMLMetaDocumentContext(*this, nElement, mxDocProps);
     }
     else
     {

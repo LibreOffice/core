@@ -81,7 +81,7 @@ SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
 SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
                                     SvXMLImport& rImport,
                                     sal_Int32 nElement ) :
-        SvXMLImportContext( rImport ),
+        SvXMLImportContext( rImport, nElement ),
         mrImportHelper( rImpHelper )
 {
     SAL_WARN_IF(( nElement != XML_ELEMENT( OFFICE, XML_DOCUMENT ) &&
@@ -136,9 +136,9 @@ SvXMLImportContextRef SchXMLDocContext::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SchXMLDocContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return new SvXMLImportContext( GetImport(), nElement );
 }
 
 SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
@@ -146,9 +146,9 @@ SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
         SchXMLImport& i_rImport,
         sal_Int32 i_nElement,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
-    SvXMLImportContext(i_rImport),
+    SvXMLImportContext(i_rImport, i_nElement),
     SchXMLDocContext(i_rImpHelper, i_rImport, i_nElement),
-    SvXMLMetaDocumentContext(i_rImport, i_xDocProps)
+    SvXMLMetaDocumentContext(i_rImport, i_nElement, i_xDocProps)
 {
 }
 

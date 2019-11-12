@@ -20,8 +20,8 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLMappingsContext::ScXMLMappingsContext( ScXMLImport& rImport ) :
-    ScXMLImportContext( rImport )
+ScXMLMappingsContext::ScXMLMappingsContext( ScXMLImport& rImport, sal_Int32 nElement ) :
+    ScXMLImportContext( rImport, nElement )
 {
     // has no attributes
     rImport.LockSolarMutex();
@@ -44,25 +44,25 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingsContext::c
     {
         case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPING ):
         {
-            pContext = new ScXMLMappingContext( GetScImport(), pAttribList );
+            pContext = new ScXMLMappingContext( GetScImport(), nElement, pAttribList );
         }
         break;
         case XML_ELEMENT( CALC_EXT, XML_DATA_TRANSFORMATIONS):
         {
-             pContext = new ScXMLTransformationsContext( GetScImport() );
+             pContext = new ScXMLTransformationsContext( GetScImport(), nElement );
         }
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }
 
-ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
+ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext( rImport )
+    ScXMLImportContext( rImport, nElement )
 {
     OUString aProvider;
     OUString aID;
@@ -133,13 +133,13 @@ uno::Reference<xml::sax::XFastContextHandler>
     {
         case XML_ELEMENT( CALC_EXT, XML_DATA_TRANSFORMATIONS):
         {
-             pContext = new ScXMLTransformationsContext( GetScImport() );
+             pContext = new ScXMLTransformationsContext( GetScImport(), nElement );
         }
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }

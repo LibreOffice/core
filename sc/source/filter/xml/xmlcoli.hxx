@@ -32,7 +32,7 @@ class ScXMLTableColContext : public ScXMLImportContext
 
 public:
 
-    ScXMLTableColContext( ScXMLImport& rImport,
+    ScXMLTableColContext( ScXMLImport& rImport, sal_Int32 nElement,
                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLTableColContext() override;
@@ -55,7 +55,7 @@ class ScXMLTableColsContext : public ScXMLImportContext
 
 public:
 
-    ScXMLTableColsContext( ScXMLImport& rImport,
+    ScXMLTableColsContext( ScXMLImport& rImport, sal_Int32 nElement,
                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         const bool bHeader, const bool bGroup);
 

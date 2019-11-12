@@ -36,7 +36,7 @@ class ScXMLDatabaseRangesContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLDatabaseRangesContext( ScXMLImport& rImport );
+    ScXMLDatabaseRangesContext( ScXMLImport& rImport, sal_Int32 nElement );
 
     virtual ~ScXMLDatabaseRangesContext() override;
 
@@ -89,7 +89,7 @@ class ScXMLDatabaseRangeContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDatabaseRangeContext( ScXMLImport& rImport,
+    ScXMLDatabaseRangeContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
     virtual ~ScXMLDatabaseRangeContext() override;
@@ -124,7 +124,7 @@ class ScXMLSourceSQLContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSourceSQLContext( ScXMLImport& rImport,
+    ScXMLSourceSQLContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -143,7 +143,7 @@ class ScXMLSourceTableContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSourceTableContext( ScXMLImport& rImport,
+    ScXMLSourceTableContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -162,7 +162,7 @@ class ScXMLSourceQueryContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSourceQueryContext( ScXMLImport& rImport,
+    ScXMLSourceQueryContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -178,7 +178,7 @@ class ScXMLConResContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLConResContext( ScXMLImport& rImport,
+    ScXMLConResContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -191,7 +191,7 @@ class ScXMLSubTotalRulesContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSubTotalRulesContext( ScXMLImport& rImport,
+    ScXMLSubTotalRulesContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -205,7 +205,7 @@ class ScXMLSortGroupsContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLSortGroupsContext( ScXMLImport& rImport,
+    ScXMLSortGroupsContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -219,7 +219,7 @@ class ScXMLSubTotalRuleContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSubTotalRuleContext( ScXMLImport& rImport,
+    ScXMLSubTotalRuleContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -245,7 +245,7 @@ class ScXMLSubTotalFieldContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSubTotalFieldContext( ScXMLImport& rImport,
+    ScXMLSubTotalFieldContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLSubTotalRuleContext* pSubTotalRuleContext);
 

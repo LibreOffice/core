@@ -29,9 +29,9 @@ using namespace ::com::sun::star;
 using namespace xmloff::token;
 
 ScXMLConsolidationContext::ScXMLConsolidationContext(
-        ScXMLImport& rImport,
+        ScXMLImport& rImport, sal_Int32 nElement,
         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     eFunction( SUBTOTAL_FUNC_NONE ),
     bLinkToSource( false ),
     bTargetAddr(false)

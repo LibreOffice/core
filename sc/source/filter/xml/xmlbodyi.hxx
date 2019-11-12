@@ -40,7 +40,7 @@ class ScXMLBodyContext : public ScXMLImportContext
 
 public:
 
-    ScXMLBodyContext( ScXMLImport& rImport,
+    ScXMLBodyContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
     virtual ~ScXMLBodyContext() override;

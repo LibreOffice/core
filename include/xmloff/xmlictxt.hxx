@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <rtl/ustring.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <boost/optional.hpp>
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
@@ -49,8 +50,10 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public css::xml::sax::XFastContextHa
 
     oslInterlockedCount                m_nRefCount;
     SvXMLImport&                       mrImport;
-    sal_uInt16                         mnPrefix;
-    OUString                           maLocalName;
+    // We have either mnElement or (mnPrefix and maLocalName)
+    boost::optional<sal_Int32>         mnElement;
+    boost::optional<sal_uInt16>        mnPrefix;
+    boost::optional<OUString>          maLocalName;
     std::unique_ptr<SvXMLNamespaceMap> m_pRewindMap;
 
     SAL_DLLPRIVATE std::unique_ptr<SvXMLNamespaceMap> TakeRewindMap() { return std::move(m_pRewindMap); }
@@ -63,8 +66,10 @@ protected:
 
 public:
 
-    sal_uInt16 GetPrefix() const { return mnPrefix; }
-    const OUString& GetLocalName() const { return maLocalName; }
+    sal_uInt16 GetPrefix() const { return *mnPrefix; }
+    bool HasLocalName() const { return bool(maLocalName); }
+    const OUString& GetLocalName() const { return *maLocalName; }
+    sal_Int32 GetElement() const { return *mnElement; }
 
     /** A contexts constructor does anything that is required if an element
      * starts. Namespace processing has been done already.
@@ -73,7 +78,7 @@ public:
     SvXMLImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName );
 
-    SvXMLImportContext( SvXMLImport& rImport );
+    SvXMLImportContext( SvXMLImport& rImport, sal_Int32 nElement );
 
     /** A contexts destructor does anything that is required if an element
      * ends. By default, nothing is done.

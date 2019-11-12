@@ -57,9 +57,9 @@ bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
 }
 
 ScXMLDetectiveContext::ScXMLDetectiveContext(
-        ScXMLImport& rImport,
+        ScXMLImport& rImport, sal_Int32 nElement,
         ScMyImpDetectiveObjVec* pNewDetectiveObjVec ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     pDetectiveObjVec( pNewDetectiveObjVec )
 {
 }
@@ -78,23 +78,23 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDetectiveContext::
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_HIGHLIGHTED_RANGE ):
-            pContext = new ScXMLDetectiveHighlightedContext( GetScImport(), pAttribList, pDetectiveObjVec );
+            pContext = new ScXMLDetectiveHighlightedContext( GetScImport(), nElement, pAttribList, pDetectiveObjVec );
         break;
         case XML_ELEMENT( TABLE, XML_OPERATION ):
-            pContext = new ScXMLDetectiveOperationContext( GetScImport(), pAttribList );
+            pContext = new ScXMLDetectiveOperationContext( GetScImport(), nElement, pAttribList );
         break;
     }
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }
 
 ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
-        ScXMLImport& rImport,
+        ScXMLImport& rImport, sal_Int32 nElement,
         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
         ScMyImpDetectiveObjVec* pNewDetectiveObjVec ):
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     pDetectiveObjVec( pNewDetectiveObjVec ),
     aDetectiveObj(),
     bValid( false )
@@ -152,9 +152,9 @@ void SAL_CALL ScXMLDetectiveHighlightedContext::endFastElement( sal_Int32 /*nEle
 }
 
 ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
-        ScXMLImport& rImport,
+        ScXMLImport& rImport, sal_Int32 nElement,
         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     aDetectiveOp(),
     bHasType( false )
 {

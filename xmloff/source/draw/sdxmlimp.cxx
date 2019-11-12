@@ -86,7 +86,7 @@ protected:
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 public:
-    SdXMLDocContext_Impl( SdXMLImport& rImport );
+    SdXMLDocContext_Impl( SdXMLImport& rImport, sal_Int32 nElement );
 
     virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -104,8 +104,8 @@ public:
 };
 
 SdXMLDocContext_Impl::SdXMLDocContext_Impl(
-    SdXMLImport& rImport )
-:   SvXMLImportContext(rImport)
+    SdXMLImport& rImport, sal_Int32 nElement )
+:   SvXMLImportContext(rImport, nElement)
 {
 }
 
@@ -193,9 +193,9 @@ SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return new SvXMLImportContext( GetImport(), nElement );
 }
 
 // context for flat file xml format
@@ -203,7 +203,7 @@ class SdXMLFlatDocContext_Impl
     : public SdXMLDocContext_Impl, public SvXMLMetaDocumentContext
 {
 public:
-    SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
+    SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport, sal_Int32 nElement,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps );
 
     virtual void SAL_CALL startFastElement( sal_Int32 nElement,
@@ -217,11 +217,11 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
-SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
+SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport, sal_Int32 nElement,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
-    SvXMLImportContext(i_rImport),
-    SdXMLDocContext_Impl(i_rImport),
-    SvXMLMetaDocumentContext(i_rImport, i_xDocProps)
+    SvXMLImportContext(i_rImport, nElement),
+    SdXMLDocContext_Impl(i_rImport, nElement),
+    SvXMLMetaDocumentContext(i_rImport, nElement, i_xDocProps)
 {
 }
 
@@ -661,7 +661,7 @@ SvXMLImportContext *SdXMLImport::CreateFastContext( sal_Int32 nElement,
         case XML_ELEMENT( OFFICE, XML_DOCUMENT_STYLES ):
         case XML_ELEMENT( OFFICE, XML_DOCUMENT_CONTENT ):
         case XML_ELEMENT( OFFICE, XML_DOCUMENT_SETTINGS ):
-            pContext = new SdXMLDocContext_Impl(*this);
+            pContext = new SdXMLDocContext_Impl(*this, nElement);
         break;
         case XML_ELEMENT( OFFICE, XML_DOCUMENT_META ):
             pContext = CreateMetaContext(nElement, xAttrList);
@@ -671,7 +671,7 @@ SvXMLImportContext *SdXMLImport::CreateFastContext( sal_Int32 nElement,
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
             // flat OpenDocument file format
-            pContext = new SdXMLFlatDocContext_Impl( *this, xDPS->getDocumentProperties());
+            pContext = new SdXMLFlatDocContext_Impl( *this, nElement, xDPS->getDocumentProperties());
         }
         break;
         default:
@@ -680,7 +680,7 @@ SvXMLImportContext *SdXMLImport::CreateFastContext( sal_Int32 nElement,
     return pContext;
 }
 
-SvXMLImportContext *SdXMLImport::CreateMetaContext(const sal_Int32 /*nElement*/,
+SvXMLImportContext *SdXMLImport::CreateMetaContext(const sal_Int32 nElement,
     const uno::Reference<xml::sax::XFastAttributeList>&)
 {
     SvXMLImportContext* pContext = nullptr;
@@ -691,12 +691,12 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const sal_Int32 /*nElement*/,
             GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
             !mbLoadDoc ? nullptr : xDPS->getDocumentProperties());
-        pContext = new SvXMLMetaDocumentContext(*this, xDocProps);
+        pContext = new SvXMLMetaDocumentContext(*this, nElement, xDocProps);
     }
 
     if(!pContext)
     {
-        pContext = new SvXMLImportContext(*this);
+        pContext = new SvXMLImportContext(*this, nElement);
     }
 
     return pContext;

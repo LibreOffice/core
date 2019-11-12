@@ -32,10 +32,10 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
+ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
     sAlgorithm(),
     nUserListIndex(0),
@@ -122,7 +122,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSortContext::creat
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+        pContext = new SvXMLImportContext( GetImport(), nElement );
 
     return pContext;
 }
@@ -198,10 +198,10 @@ void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString
 }
 
 ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
+                                      sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLSortContext* pTempSortContext) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     pSortContext(pTempSortContext),
     sDataType(GetXMLToken(XML_AUTOMATIC)),
     sOrder(GetXMLToken(XML_ASCENDING))

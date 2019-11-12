@@ -30,9 +30,9 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
+ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport, sal_Int32 nElement,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
-    ScXMLImportContext( rImport ),
+    ScXMLImportContext( rImport, nElement ),
     sLink(),
     sTableName(),
     sFilterName(),
@@ -77,9 +77,9 @@ ScXMLTableSourceContext::~ScXMLTableSourceContext()
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableSourceContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return new SvXMLImportContext( GetImport(), nElement );
 }
 
 void SAL_CALL ScXMLTableSourceContext::endFastElement( sal_Int32 /*nElement*/ )

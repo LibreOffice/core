@@ -25,7 +25,7 @@ class ScXMLContentValidationsContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLContentValidationsContext( ScXMLImport& rImport );
+    ScXMLContentValidationsContext( ScXMLImport& rImport, sal_Int32 nElement );
 
     virtual ~ScXMLContentValidationsContext() override;
 
