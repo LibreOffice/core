@@ -773,7 +773,7 @@ rName
 
     {
         // Get topmost context and remove it from the stack.
-        SvXMLImportContextRef xContext = maContexts.top();
+        SvXMLImportContextRef xContext = std::move(maContexts.top());
         maContexts.pop();
 
 #ifdef DBG_UTIL

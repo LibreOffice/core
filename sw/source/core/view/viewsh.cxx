@@ -225,7 +225,7 @@ void SwViewShell::DLPostPaint2(bool bPaintFormLayer)
 
     if( mPrePostPaintRegions.size() > 1 )
     {
-        vcl::Region current = mPrePostPaintRegions.top();
+        vcl::Region current = std::move(mPrePostPaintRegions.top());
         mPrePostPaintRegions.pop();
         if( current != mPrePostPaintRegions.top())
             Imp()->GetDrawView()->UpdateDrawLayersRegion(mpPrePostOutDev, mPrePostPaintRegions.top());

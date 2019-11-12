@@ -257,7 +257,7 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
     if (ignoring_ > 0) {
         --ignoring_;
     } else if (!elements_.empty()) {
-        Element top(elements_.top());
+        Element top(std::move(elements_.top()));
         elements_.pop();
         if (top.node.is()) {
             if (elements_.empty()) {
