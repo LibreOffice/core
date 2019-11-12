@@ -135,6 +135,7 @@ public:
     void testTdf114179();
     void testTdf124243();
     void testTdf127393();
+    void testTdf128733();
     void testTdf128432();
     void testTdf128627();
     void testTdf128634();
@@ -231,6 +232,7 @@ public:
     CPPUNIT_TEST(testTdf114179);
     CPPUNIT_TEST(testTdf124243);
     CPPUNIT_TEST(testTdf127393);
+    CPPUNIT_TEST(testTdf128733);
     CPPUNIT_TEST(testTdf128432);
     CPPUNIT_TEST(testTdf128627);
     CPPUNIT_TEST(testTdf128634);
@@ -2026,6 +2028,21 @@ void Chart2ImportTest::testTdf127393()
     chart2::ScaleData aScaleData2 = xAxis->getScaleData();
     CPPUNIT_ASSERT(aScaleData2.Categories.is());
     CPPUNIT_ASSERT(!aScaleData2.ShiftedCategoryPosition);
+}
+
+void Chart2ImportTest::testTdf128733()
+{
+    load("/chart2/qa/extras/data/odt/", "tdf128733.odt");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    // test secondary X axis ShiftedCategoryPosition value
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 1);
+    CPPUNIT_ASSERT(xAxis.is());
+
+    chart2::ScaleData aScaleData = xAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+    CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
 }
 
 void Chart2ImportTest::testTdf128432()
