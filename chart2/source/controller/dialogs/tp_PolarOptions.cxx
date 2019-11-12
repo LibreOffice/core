@@ -22,6 +22,7 @@
 
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <officecfg/Office/Compatibility.hxx>
 
 namespace chart
 {
@@ -80,7 +81,8 @@ void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
     {
         m_xFL_StartingAngle->hide();
     }
-    if (rInAttrs->GetItemState(SCHATTR_CLOCKWISE, true, &pPoolItem) == SfxItemState::SET)
+    // tdf#108059 Hide clockwise orientation checkbox in OOXML-heavy environments it would be useless anyways
+    if (!officecfg::Office::Compatibility::View::ClockwisePieChartDirection::get() && rInAttrs->GetItemState(SCHATTR_CLOCKWISE, true, &pPoolItem) == SfxItemState::SET)
     {
         bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_xCB_Clockwise->set_active(bCheck);
