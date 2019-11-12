@@ -546,6 +546,8 @@ namespace sw
             sal_Int32 GetPtContent() { return mnPtContent; };
         };
     }
+
+    auto FilterControlChars(OUString const& rString) -> OUString;
 }
 
 class WW8FieldEntry

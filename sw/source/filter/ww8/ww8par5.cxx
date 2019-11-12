@@ -35,6 +35,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <svl/lngmisc.hxx>
 #include <sfx2/linkmgr.hxx>
 
 #include <ucbhelper/content.hxx>
@@ -1908,7 +1909,8 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, OUString& rStr )
     if( aQ.isEmpty() )
         return eF_ResT::TAGIGN;                      // -> no 0-char in text
 
-    if (sal_Unicode cChar = static_cast<sal_Unicode>(aQ.toInt32()))
+    sal_Unicode const cChar = static_cast<sal_Unicode>(aQ.toInt32());
+    if (!linguistic::IsControlChar(cChar) || cChar == '\r' || cChar == '\n' || cChar == '\t')
     {
         if (!aName.isEmpty())                           // Font Name set ?
         {
@@ -2688,11 +2690,11 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
                             if ((nBegin != -1) && (nEnd != -1) && (nBegin < nEnd))
                             {
                                 sText = sPart.copy(nBegin+1,nEnd-nBegin-1);
+                                sText = sw::FilterControlChars(sText);
                             }
                         }
                     }
                 }
-
             }
             break;
         }
