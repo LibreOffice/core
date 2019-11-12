@@ -684,10 +684,6 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
 
-    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
-    tools::Rectangle aRect;
-    Point aCenter;
-
     long nStartRed, nStartGreen, nStartBlue;
     long nEndRed, nEndGreen, nEndBlue;
 
@@ -700,8 +696,12 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
 
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
+    tools::Rectangle aRect;
+    Point aCenter;
+
     rGradient.GetBoundRect(rRect, aRect, aCenter);
 
+    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
     xPolyPoly.reset(new tools::PolyPolygon(2));
 
     // last parameter - true if complex gradient, false if linear
