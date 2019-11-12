@@ -929,6 +929,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf124604, "tdf124604.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "0");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf95374, "tdf95374.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // Numbering disabled by non-existent numId=0, disabling also inheritance of indentation of parent styles
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "hanging", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "start", "1136");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf118691, "tdf118691.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
