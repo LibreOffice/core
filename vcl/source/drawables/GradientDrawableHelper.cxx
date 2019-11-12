@@ -96,10 +96,6 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     std::tie(aGradientBorderRect, aGradientMirroredBorderRect, aCenter, fBorderWidth)
         = GetBorderValues(rGradient, rRect);
 
-    // Create border
-    tools::Rectangle aGradientStepRect = aGradientBorderRect;
-    tools::Rectangle aGradientMirroredStepRect = aGradientMirroredBorderRect;
-
     long nStartRed, nStartGreen, nStartBlue;
     long nEndRed, nEndGreen, nEndBlue;
 
@@ -112,9 +108,9 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
                              aGradientMirroredBorderRect, aCenter, nAngle, fBorderWidth, nStartRed,
                              nStartGreen, nStartBlue);
 
-    AddGradientSteps(pRenderContext, rGradient, aGradientBorderRect, aGradientStepRect,
-                     aGradientMirroredStepRect, aCenter, fBorderWidth, nAngle, nStartRed,
-                     nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
+    AddGradientSteps(pRenderContext, rGradient, aGradientBorderRect, aGradientMirroredBorderRect,
+                     aCenter, fBorderWidth, nAngle, nStartRed, nStartGreen, nStartBlue, nEndRed,
+                     nEndGreen, nEndBlue);
 }
 
 void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
@@ -130,10 +126,6 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     std::tie(aGradientBorderRect, aGradientMirroredBorderRect, aCenter, fBorderWidth)
         = GetBorderValues(rGradient, rRect);
 
-    // Create border
-    tools::Rectangle aGradientStepRect = aGradientBorderRect;
-    tools::Rectangle aGradientMirroredStepRect = aGradientMirroredBorderRect;
-
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
     long nStartRed, nStartGreen, nStartBlue;
@@ -147,8 +139,8 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
                        nStartGreen, nStartBlue);
 
     DrawGradientSteps(pRenderContext, rGradient, pClixPolyPoly, aGradientBorderRect,
-                      aGradientStepRect, aGradientMirroredStepRect, aCenter, nAngle, fBorderWidth,
-                      nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
+                      aGradientMirroredBorderRect, aCenter, nAngle, fBorderWidth, nStartRed,
+                      nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 }
 
 Color GradientDrawableHelper::GetSingleColorGradientFill(OutputDevice* pRenderContext)
@@ -299,10 +291,13 @@ void GradientDrawableHelper::AddGradientBorderRect(OutputDevice* pRenderContext,
 
 void GradientDrawableHelper::AddGradientSteps(
     OutputDevice* pRenderContext, Gradient const& rGradient, tools::Rectangle aGradientBorderRect,
-    tools::Rectangle aGradientStepRect, tools::Rectangle aGradientMirroredStepRect,
-    Point const& rCenter, double fBorderWidth, sal_uInt16 nAngle, long nStartRed, long nStartGreen,
-    long nStartBlue, long nEndRed, long nEndGreen, long nEndBlue)
+    tools::Rectangle aGradientMirroredBorderRect, Point const& rCenter, double fBorderWidth,
+    sal_uInt16 nAngle, long nStartRed, long nStartGreen, long nStartBlue, long nEndRed,
+    long nEndGreen, long nEndBlue)
 {
+    tools::Rectangle aGradientStepRect = aGradientBorderRect;
+    tools::Rectangle aGradientMirroredStepRect = aGradientMirroredBorderRect;
+
     if (fBorderWidth > 0.0)
     {
         aGradientStepRect
@@ -526,10 +521,13 @@ void GradientDrawableHelper::DrawGradientBorder(
 void GradientDrawableHelper::DrawGradientSteps(
     OutputDevice* pRenderContext, Gradient const& rGradient,
     tools::PolyPolygon const* pClixPolyPoly, tools::Rectangle aGradientBorderRect,
-    tools::Rectangle aGradientStepRect, tools::Rectangle aGradientMirroredStepRect,
-    Point const& rCenter, double fBorderWidth, sal_uInt16 nAngle, long nStartRed, long nStartGreen,
-    long nStartBlue, long nEndRed, long nEndGreen, long nEndBlue)
+    tools::Rectangle aGradientMirroredBorderRect, Point const& rCenter, double fBorderWidth,
+    sal_uInt16 nAngle, long nStartRed, long nStartGreen, long nStartBlue, long nEndRed,
+    long nEndGreen, long nEndBlue)
 {
+    tools::Rectangle aGradientStepRect = aGradientBorderRect;
+    tools::Rectangle aGradientMirroredStepRect = aGradientMirroredBorderRect;
+
     if (fBorderWidth > 0.0)
     {
         aGradientStepRect
