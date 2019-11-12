@@ -647,7 +647,7 @@ public:
 
     bool            IsSelCtrlMouseClick() const { return bSelCtrlMouseClick; }
 
-    static inline long ToPixel( sal_uInt16 nTwips, double nFactor );
+    static inline long ToPixel( sal_Int32 nTwips, double nFactor );
 
     /** while (rScrY <= nEndPixels && rPosY <= nEndRow) add pixels of row
         heights converted with nPPTY to rScrY, optimized for row height
@@ -668,7 +668,7 @@ public:
                                     const ScDocument * pDoc, SCTAB nTabNo );
 };
 
-inline long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )
+inline long ScViewData::ToPixel( sal_Int32 nTwips, double nFactor )
 {
     long nRet = static_cast<long>( nTwips * nFactor );
     if ( !nRet && nTwips )
