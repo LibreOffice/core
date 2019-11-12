@@ -590,6 +590,12 @@ service MediaDescriptor
         @since LibreOffice 6.4
      */
     [optional,property] boolean LockSave;
+
+    /** Setting this option will disable switching to edit mode from read-only mode.
+     *
+        @since LibreOffice 6.4
+     */
+    [optional,property] boolean LockEditDoc;
 };
 
 
