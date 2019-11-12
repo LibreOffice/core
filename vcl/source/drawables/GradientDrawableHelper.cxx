@@ -708,11 +708,9 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
                                           nBlueSteps);
 
     // determine output limits and stepsizes for all directions
-    tools::Polygon aPoly;
-    double fScanLeft = aRect.Left();
-    double fScanTop = aRect.Top();
-    double fScanRight = aRect.Right();
-    double fScanBottom = aRect.Bottom();
+    double fScanLeft, fScanTop, fScanRight, fScanBottom;
+    std::tie(fScanLeft, fScanTop, fScanRight, fScanBottom) = CalculateOutputLimits(aRect);
+
     double fScanIncX = static_cast<double>(aRect.GetWidth()) / static_cast<double>(nSteps) * 0.5;
     double fScanIncY = static_cast<double>(aRect.GetHeight()) / static_cast<double>(nSteps) * 0.5;
 
@@ -732,6 +730,7 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
 
     pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 
+    tools::Polygon aPoly;
     aPoly = rRect;
     xPolyPoly->Insert(aPoly);
     xPolyPoly->Insert(aPoly);
@@ -835,11 +834,9 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
                                           nBlueSteps);
 
     // determine output limits and stepsizes for all directions
-    tools::Polygon aPoly;
-    double fScanLeft = aRect.Left();
-    double fScanTop = aRect.Top();
-    double fScanRight = aRect.Right();
-    double fScanBottom = aRect.Bottom();
+    double fScanLeft, fScanTop, fScanRight, fScanBottom;
+    std::tie(fScanLeft, fScanTop, fScanRight, fScanBottom) = CalculateOutputLimits(aRect);
+
     double fScanIncX = static_cast<double>(aRect.GetWidth()) / static_cast<double>(nSteps) * 0.5;
     double fScanIncY = static_cast<double>(aRect.GetHeight()) / static_cast<double>(nSteps) * 0.5;
 
@@ -859,6 +856,8 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
 
     SalGraphics* pGraphics = pRenderContext->GetGraphics();
     pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
+
+    tools::Polygon aPoly;
 
     if (xPolyPoly)
     {
@@ -1017,6 +1016,17 @@ long GradientDrawableHelper::GetComplexGradientSteps(OutputDevice* pRenderContex
     nSteps = std::max(nSteps, 1L);
 
     return nSteps;
+}
+
+std::tuple<double, double, double, double>
+GradientDrawableHelper::CalculateOutputLimits(tools::Rectangle const& rRect)
+{
+    double fScanLeft = rRect.Left();
+    double fScanTop = rRect.Top();
+    double fScanRight = rRect.Right();
+    double fScanBottom = rRect.Bottom();
+
+    return std::make_tuple(fScanLeft, fScanTop, fScanRight, fScanBottom);
 }
 } // namespace vcl
 

@@ -163,6 +163,9 @@ public:
     GetColorIntensities(Gradient const& rGradient);
 
     static double GetStepHeight(tools::Rectangle const& rStepRect, double nSteps);
+
+    static std::tuple<double, double, double, double>
+    CalculateOutputLimits(tools::Rectangle const& rRect);
 };
 } // namespace vcl
 
