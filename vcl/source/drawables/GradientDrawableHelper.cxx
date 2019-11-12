@@ -694,15 +694,18 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     long nGreenSteps = nEndGreen - nStartGreen;
     long nBlueSteps = nEndBlue - nStartBlue;
 
+    sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed),
+              nGreen = static_cast<sal_uInt8>(nStartGreen),
+              nBlue = static_cast<sal_uInt8>(nStartBlue);
+
+    pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
+
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
     tools::Rectangle aRect;
     Point aCenter;
 
     rGradient.GetBoundRect(rRect, aRect, aCenter);
-
-    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
-    xPolyPoly.reset(new tools::PolyPolygon(2));
 
     long nSteps = GetComplexGradientSteps(pRenderContext, rGradient, rRect, nRedSteps, nGreenSteps,
                                           nBlueSteps);
@@ -713,14 +716,12 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     double fScanIncX, fScanIncY;
     std::tie(fScanIncX, fScanIncY) = GetStepSize(rGradient, aRect, nSteps);
 
-    sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed),
-              nGreen = static_cast<sal_uInt8>(nStartGreen),
-              nBlue = static_cast<sal_uInt8>(nStartBlue);
-
-    pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
+    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
+    xPolyPoly.reset(new tools::PolyPolygon(2));
 
     tools::Polygon aPoly;
     aPoly = rRect;
+
     xPolyPoly->Insert(aPoly);
     xPolyPoly->Insert(aPoly);
 
@@ -812,15 +813,19 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
     long nGreenSteps = nEndGreen - nStartGreen;
     long nBlueSteps = nEndBlue - nStartBlue;
 
+    sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed),
+              nGreen = static_cast<sal_uInt8>(nStartGreen),
+              nBlue = static_cast<sal_uInt8>(nStartBlue);
+
+    SalGraphics* pGraphics = pRenderContext->GetGraphics();
+    pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
+
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
     tools::Rectangle aRect;
     Point aCenter;
 
     rGradient.GetBoundRect(rRect, aRect, aCenter);
-
-    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
-    xPolyPoly.reset(new tools::PolyPolygon(2));
 
     long nSteps = GetComplexGradientSteps(pRenderContext, rGradient, rRect, nRedSteps, nGreenSteps,
                                           nBlueSteps);
@@ -831,12 +836,8 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
     double fScanIncX, fScanIncY;
     std::tie(fScanIncX, fScanIncY) = GetStepSize(rGradient, aRect, nSteps);
 
-    sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed),
-              nGreen = static_cast<sal_uInt8>(nStartGreen),
-              nBlue = static_cast<sal_uInt8>(nStartBlue);
-
-    SalGraphics* pGraphics = pRenderContext->GetGraphics();
-    pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
+    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
+    xPolyPoly.reset(new tools::PolyPolygon(2));
 
     tools::Polygon aPoly;
 
@@ -849,12 +850,7 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
     else
     {
         // extend rect, to avoid missing bounding line
-        tools::Rectangle aExtRect(rRect);
-
-        aExtRect.AdjustLeft(-1);
-        aExtRect.AdjustTop(-1);
-        aExtRect.AdjustRight(1);
-        aExtRect.AdjustBottom(1);
+        tools::Rectangle aExtRect = ExpandGradientOverBorder(rRect);
 
         aPoly = aExtRect;
         if (pClixPolyPoly)
