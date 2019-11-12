@@ -1386,8 +1386,9 @@ void SwTextNode::Update(
             }
         }
 
-        // Bookmarks must never grow to either side, when editing (directly) to the left or right (#i29942#)!
-        // And a bookmark with same start and end must remain to the left of the inserted text (used in XML import).
+        // Bookmarks must never grow to either side, when editing (directly)
+        // to the left or right (i#29942)! Exception: if the bookmark has
+        // 2 positions and start == end, then expand it (tdf#96479)
         {
             bool bAtLeastOneBookmarkMoved = false;
             bool bAtLeastOneExpandedBookmarkAtInsertionPosition = false;
@@ -1412,6 +1413,8 @@ void SwTextNode::Update(
                     {   // don't switch to iterating aTmpIdxReg!
                         next = rEndIdx.GetNext();
                     }
+                    // tdf#96479: if start == end, ignore the other position
+                    // so it is moved!
                     rEndIdx.Assign( &aTmpIdxReg, rEndIdx.GetIndex() );
                     bAtLeastOneBookmarkMoved = true;
                 }
