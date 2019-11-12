@@ -707,21 +707,12 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     long nSteps = GetComplexGradientSteps(pRenderContext, rGradient, rRect, nRedSteps, nGreenSteps,
                                           nBlueSteps);
 
-    // determine output limits and stepsizes for all directions
     double fScanLeft, fScanTop, fScanRight, fScanBottom;
     std::tie(fScanLeft, fScanTop, fScanRight, fScanBottom) = CalculateOutputLimits(aRect);
 
-    double fScanIncX = static_cast<double>(aRect.GetWidth()) / static_cast<double>(nSteps) * 0.5;
-    double fScanIncY = static_cast<double>(aRect.GetHeight()) / static_cast<double>(nSteps) * 0.5;
+    double fScanIncX, fScanIncY;
+    std::tie(fScanIncX, fScanIncY) = GetStepSize(rGradient, aRect, nSteps);
 
-    // all gradients are rendered as nested rectangles which shrink
-    // equally in each dimension - except for 'square' gradients
-    // which shrink to a central vertex but are not per-se square.
-    if (rGradient.GetStyle() != GradientStyle::Square)
-    {
-        fScanIncY = std::min(fScanIncY, fScanIncX);
-        fScanIncX = fScanIncY;
-    }
     sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed),
               nGreen = static_cast<sal_uInt8>(nStartGreen),
               nBlue = static_cast<sal_uInt8>(nStartBlue);
@@ -833,21 +824,12 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
     long nSteps = GetComplexGradientSteps(pRenderContext, rGradient, rRect, nRedSteps, nGreenSteps,
                                           nBlueSteps);
 
-    // determine output limits and stepsizes for all directions
     double fScanLeft, fScanTop, fScanRight, fScanBottom;
     std::tie(fScanLeft, fScanTop, fScanRight, fScanBottom) = CalculateOutputLimits(aRect);
 
-    double fScanIncX = static_cast<double>(aRect.GetWidth()) / static_cast<double>(nSteps) * 0.5;
-    double fScanIncY = static_cast<double>(aRect.GetHeight()) / static_cast<double>(nSteps) * 0.5;
+    double fScanIncX, fScanIncY;
+    std::tie(fScanIncX, fScanIncY) = GetStepSize(rGradient, aRect, nSteps);
 
-    // all gradients are rendered as nested rectangles which shrink
-    // equally in each dimension - except for 'square' gradients
-    // which shrink to a central vertex but are not per-se square.
-    if (rGradient.GetStyle() != GradientStyle::Square)
-    {
-        fScanIncY = std::min(fScanIncY, fScanIncX);
-        fScanIncX = fScanIncY;
-    }
     sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed),
               nGreen = static_cast<sal_uInt8>(nStartGreen),
               nBlue = static_cast<sal_uInt8>(nStartBlue);
@@ -1027,6 +1009,25 @@ GradientDrawableHelper::CalculateOutputLimits(tools::Rectangle const& rRect)
     double fScanBottom = rRect.Bottom();
 
     return std::make_tuple(fScanLeft, fScanTop, fScanRight, fScanBottom);
+}
+
+std::tuple<double, double> GradientDrawableHelper::GetStepSize(Gradient const& rGradient,
+                                                               tools::Rectangle const& rRect,
+                                                               long nSteps)
+{
+    double fScanIncX = static_cast<double>(rRect.GetWidth()) / static_cast<double>(nSteps) * 0.5;
+    double fScanIncY = static_cast<double>(rRect.GetHeight()) / static_cast<double>(nSteps) * 0.5;
+
+    // all gradients are rendered as nested rectangles which shrink
+    // equally in each dimension - except for 'square' gradients
+    // which shrink to a central vertex but are not per-se square.
+    if (rGradient.GetStyle() != GradientStyle::Square)
+    {
+        fScanIncY = std::min(fScanIncY, fScanIncX);
+        fScanIncX = fScanIncY;
+    }
+
+    return std::make_tuple(fScanIncX, fScanIncY);
 }
 } // namespace vcl
 

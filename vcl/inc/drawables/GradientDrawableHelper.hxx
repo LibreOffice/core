@@ -166,6 +166,9 @@ public:
 
     static std::tuple<double, double, double, double>
     CalculateOutputLimits(tools::Rectangle const& rRect);
+
+    static std::tuple<double, double> GetStepSize(Gradient const& rGradient,
+                                                  tools::Rectangle const& rRect, long nSteps);
 };
 } // namespace vcl
 
