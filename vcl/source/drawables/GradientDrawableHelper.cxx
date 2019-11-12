@@ -704,16 +704,8 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     std::unique_ptr<tools::PolyPolygon> xPolyPoly;
     xPolyPoly.reset(new tools::PolyPolygon(2));
 
-    // last parameter - true if complex gradient, false if linear
-    long nStepCount = GetGradientSteps(pRenderContext, rGradient, rRect, true, true);
-
-    // at least three steps and at most the number of colour differences
-    long nSteps = std::max(nStepCount, 2L);
-    long nCalcSteps = std::abs(nRedSteps);
-    nCalcSteps = std::max(std::abs(nGreenSteps), nCalcSteps);
-    nCalcSteps = std::max(std::abs(nBlueSteps), nCalcSteps);
-    nSteps = std::min(nCalcSteps, nSteps);
-    nSteps = std::max(nSteps, 1);
+    long nSteps = GetComplexGradientSteps(pRenderContext, rGradient, rRect, nRedSteps, nGreenSteps,
+                                          nBlueSteps);
 
     // determine output limits and stepsizes for all directions
     tools::Polygon aPoly;
@@ -808,34 +800,6 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     }
 }
 
-long GradientDrawableHelper::GetGradientSteps(OutputDevice* pRenderContext,
-                                              Gradient const& rGradient,
-                                              tools::Rectangle const& rRect, bool bMtf,
-                                              bool bComplex)
-{
-    // calculate step count
-    long nStepCount = rGradient.GetSteps();
-    long nMinRect;
-
-    // generate nStepCount, if not passed
-    if (bComplex)
-        nMinRect = std::min(rRect.GetWidth(), rRect.GetHeight());
-    else
-        nMinRect = rRect.GetHeight();
-
-    if (!nStepCount)
-    {
-        long nInc;
-
-        nInc = pRenderContext->GetGradientStepCount(nMinRect);
-        if (!nInc || bMtf)
-            nInc = 1;
-        nStepCount = nMinRect / nInc;
-    }
-
-    return nStepCount;
-}
-
 void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
                                                  tools::Rectangle const& rRect,
                                                  Gradient const& rGradient,
@@ -847,45 +811,28 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
 
-    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
-    tools::Rectangle aRect;
-    Point aCenter;
-    Color aStartCol(rGradient.GetStartColor());
-    Color aEndCol(rGradient.GetEndColor());
-    long nStartRed = (static_cast<long>(aStartCol.GetRed()) * rGradient.GetStartIntensity()) / 100;
-    long nStartGreen
-        = (static_cast<long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity()) / 100;
-    long nStartBlue
-        = (static_cast<long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity()) / 100;
-    long nEndRed = (static_cast<long>(aEndCol.GetRed()) * rGradient.GetEndIntensity()) / 100;
-    long nEndGreen = (static_cast<long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity()) / 100;
-    long nEndBlue = (static_cast<long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity()) / 100;
+    long nStartRed, nStartGreen, nStartBlue;
+    long nEndRed, nEndGreen, nEndBlue;
+
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue)
+        = GetColorIntensities(rGradient);
+
     long nRedSteps = nEndRed - nStartRed;
     long nGreenSteps = nEndGreen - nStartGreen;
     long nBlueSteps = nEndBlue - nStartBlue;
+
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
+
+    tools::Rectangle aRect;
+    Point aCenter;
 
     rGradient.GetBoundRect(rRect, aRect, aCenter);
 
-    if (pRenderContext->UsePolyPolygonForComplexGradient())
-        xPolyPoly.reset(new tools::PolyPolygon(2));
+    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
+    xPolyPoly.reset(new tools::PolyPolygon(2));
 
-    long nStepCount
-        = GetGradientSteps(pRenderContext, rGradient, rRect, false /*bMtf*/, true /*bComplex*/);
-
-    // at least three steps and at most the number of colour differences
-    long nSteps = std::max(nStepCount, 2L);
-    long nCalcSteps = std::abs(nRedSteps);
-    long nTempSteps = std::abs(nGreenSteps);
-    if (nTempSteps > nCalcSteps)
-        nCalcSteps = nTempSteps;
-    nTempSteps = std::abs(nBlueSteps);
-    if (nTempSteps > nCalcSteps)
-        nCalcSteps = nTempSteps;
-    if (nCalcSteps < nSteps)
-        nSteps = nCalcSteps;
-    if (!nSteps)
-        nSteps = 1;
+    long nSteps = GetComplexGradientSteps(pRenderContext, rGradient, rRect, nRedSteps, nGreenSteps,
+                                          nBlueSteps);
 
     // determine output limits and stepsizes for all directions
     tools::Polygon aPoly;
@@ -1025,6 +972,52 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
     }
 }
 
+long GradientDrawableHelper::GetGradientSteps(OutputDevice* pRenderContext,
+                                              Gradient const& rGradient,
+                                              tools::Rectangle const& rRect, bool bMtf,
+                                              bool bComplex)
+{
+    // calculate step count
+    long nStepCount = rGradient.GetSteps();
+    long nMinRect;
+
+    // generate nStepCount, if not passed
+    if (bComplex)
+        nMinRect = std::min(rRect.GetWidth(), rRect.GetHeight());
+    else
+        nMinRect = rRect.GetHeight();
+
+    if (!nStepCount)
+    {
+        long nInc;
+
+        nInc = pRenderContext->GetGradientStepCount(nMinRect);
+        if (!nInc || bMtf)
+            nInc = 1;
+        nStepCount = nMinRect / nInc;
+    }
+
+    return nStepCount;
+}
+
+long GradientDrawableHelper::GetComplexGradientSteps(OutputDevice* pRenderContext,
+                                                     Gradient const& rGradient,
+                                                     tools::Rectangle const& rRect, long nRedSteps,
+                                                     long nGreenSteps, long nBlueSteps)
+{
+    // last parameter - true if complex gradient, false if linear
+    long nStepCount = GetGradientSteps(pRenderContext, rGradient, rRect, true, true);
+
+    // at least three steps and at most the number of colour differences
+    long nSteps = std::max(nStepCount, 2L);
+    long nCalcSteps = std::abs(nRedSteps);
+    nCalcSteps = std::max(std::abs(nGreenSteps), nCalcSteps);
+    nCalcSteps = std::max(std::abs(nBlueSteps), nCalcSteps);
+    nSteps = std::min(nCalcSteps, nSteps);
+    nSteps = std::max(nSteps, 1L);
+
+    return nSteps;
+}
 } // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
