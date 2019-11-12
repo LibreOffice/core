@@ -579,8 +579,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/skia/SkiaHelper \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         vcl/skia/salbmp \
-        vcl/skia/gdiimpl \
-        vcl/skia/vulkan) \
+        vcl/skia/gdiimpl) \
  ))
 
 # runtime dependency

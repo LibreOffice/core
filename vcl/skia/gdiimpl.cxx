@@ -23,12 +23,14 @@
 #include <skia/salbmp.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/lazydelete.hxx>
 
 #include <SkCanvas.h>
 #include <SkPath.h>
 #include <SkRegion.h>
 #include <SkDashPathEffect.h>
 #include <GrBackendSurface.h>
+#include <GrContextFactory.h>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -190,7 +192,11 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
 {
 }
 
-SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl() {}
+SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl()
+{
+    assert(!mSurface);
+    assert(!mOffscreenGrContext);
+}
 
 void SkiaSalGraphicsImpl::Init() {}
 
@@ -208,13 +214,59 @@ void SkiaSalGraphicsImpl::recreateSurface()
 
 void SkiaSalGraphicsImpl::createSurface()
 {
-    // Create surface for offscreen graphics. Subclasses will create GPU-backed
-    // surfaces as appropriate.
+    // Create raster surface. Subclasses will create GPU-backed surfaces as appropriate.
     mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
     mIsGPU = false;
 #ifdef DBG_UTIL
     prefillSurface();
 #endif
+}
+
+void SkiaSalGraphicsImpl::createOffscreenSurface()
+{
+    assert(isOffscreen());
+    destroySurface();
+    switch (renderMethodToUse())
+    {
+        case RenderVulkan:
+        {
+            mOffscreenGrContext = sk_app::VulkanWindowContext::getSharedGrContext();
+            GrContext* grContext = mOffscreenGrContext.getGrContext();
+            // We may not get a GrContext if called before any onscreen window is created,
+            // but that happens very early, so this should be rare and insignificant.
+            // Unittests are an exception, they usually do not create any windows,
+            // so in that case do create GrContext that has no window associated.
+            if (!grContext)
+            {
+                static bool isUnitTest = (getenv("LO_TESTNAME") != nullptr);
+                if (isUnitTest)
+                {
+                    static vcl::DeleteOnDeinit<sk_gpu_test::GrContextFactory> factory(
+                        new sk_gpu_test::GrContextFactory);
+                    // The factory owns the context.
+                    grContext
+                        = factory.get()->get(sk_gpu_test::GrContextFactory::kVulkan_ContextType);
+                }
+            }
+            if (grContext)
+            {
+                mSurface = SkSurface::MakeRenderTarget(
+                    grContext, SkBudgeted::kNo,
+                    SkImageInfo::MakeN32Premul(GetWidth(), GetHeight()));
+                mIsGPU = true;
+                assert(mSurface.get());
+#ifdef DBG_UTIL
+                prefillSurface();
+#endif
+                return;
+            }
+            SAL_WARN("vcl.skia", "cannot create Vulkan GPU offscreen surface");
+            break;
+        }
+        default:
+            break;
+    }
+    return SkiaSalGraphicsImpl::createSurface(); // create a raster one
 }
 
 void SkiaSalGraphicsImpl::destroySurface()
@@ -237,6 +289,7 @@ void SkiaSalGraphicsImpl::destroySurface()
         mSurface->flush();
     mSurface.reset();
     mIsGPU = false;
+    mOffscreenGrContext.reset();
 }
 
 void SkiaSalGraphicsImpl::DeInit() { destroySurface(); }

@@ -21,8 +21,6 @@
 #include <tools/sk_app/unix/WindowContextFactory_unix.h>
 #include <tools/sk_app/WindowContext.h>
 
-#include <skia/vulkan.hxx>
-
 X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
     : SkiaSalGraphicsImpl(rParent, rParent.GetGeometryProvider())
     , mX11Parent(rParent)
@@ -40,29 +38,12 @@ void X11SkiaSalGraphicsImpl::Init()
 
 void X11SkiaSalGraphicsImpl::createSurface()
 {
-    destroySurface();
     if (isOffscreen())
-    {
-        switch (renderMethodToUse())
-        {
-            case RenderVulkan:
-                mSurface = SkSurface::MakeRenderTarget(
-                    SkiaVulkanGrContext::getGrContext(), SkBudgeted::kNo,
-                    SkImageInfo::MakeN32Premul(GetWidth(), GetHeight()));
-                mIsGPU = true;
-                assert(mSurface.get());
-#ifdef DBG_UTIL
-                prefillSurface();
-#endif
-                return;
-            default:
-                break;
-        }
-        return SkiaSalGraphicsImpl::createSurface();
-    }
+        return createOffscreenSurface();
+    destroySurface();
     sk_app::DisplayParams displayParams;
-    // TODO The Skia Xlib code actually requires the non-native color type to work properly.
     // Use a macro to hide an unreachable code warning.
+    // TODO The Skia Xlib code actually requires the non-native color type to work properly.
 #define GET_FORMAT                                                                                 \
     kN32_SkColorType == kBGRA_8888_SkColorType ? kRGBA_8888_SkColorType : kBGRA_8888_SkColorType
     displayParams.fColorType = GET_FORMAT;
@@ -73,6 +54,13 @@ void X11SkiaSalGraphicsImpl::createSurface()
     assert(winInfo.fDisplay && winInfo.fWindow != None);
     winInfo.fFBConfig = nullptr; // not used
     winInfo.fVisualInfo = const_cast<SalVisual*>(&mX11Parent.GetVisual());
+#ifdef DBG_UTIL
+    // Our patched Skia has VulkanWindowContext that shares GrContext, which requires
+    // that the X11 visual is always the same. Ensure it is so.
+    static VisualID checkVisualID = -1U;
+    assert(checkVisualID == -1U || winInfo.fVisualInfo->visualid == checkVisualID);
+    checkVisualID = winInfo.fVisualInfo->visualid;
+#endif
     winInfo.fWidth = GetWidth();
     winInfo.fHeight = GetHeight();
     switch (renderMethodToUse())
