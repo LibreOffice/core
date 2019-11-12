@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 #include "iahndl.hxx"
 #include <comphelper/namedvaluecollection.hxx>
@@ -75,25 +76,29 @@ public:
     virtual void SAL_CALL
         addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
     {
-        assert(false);
+        throw css::uno::RuntimeException(
+            "UUIInteractionHandler addPropertyChangeListener is not supported");
     }
 
     virtual void SAL_CALL
         removePropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
     {
-        assert(false);
+        throw css::uno::RuntimeException(
+            "UUIInteractionHandler removePropertyChangeListener is not supported");
     }
 
     virtual void SAL_CALL
         addVetoableChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
     {
-        assert(false);
+        throw css::uno::RuntimeException(
+            "UUIInteractionHandler addVetoableChangeListener is not supported");
     }
 
     virtual void SAL_CALL
         removeVetoableChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
     {
-        assert(false);
+        throw css::uno::RuntimeException(
+            "UUIInteractionHandler removeVetoableChangeListener is not supported");
     }
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
