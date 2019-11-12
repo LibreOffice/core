@@ -22,6 +22,10 @@ $(eval $(call gb_Library_use_external,chartcontroller,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,chartcontroller))
 
+$(eval $(call gb_Library_use_custom_headers,chartcontroller,\
+        officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_libraries,chartcontroller,\
     basegfx \
     chartcore \
