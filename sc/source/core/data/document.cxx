@@ -4183,7 +4183,7 @@ SCROW ScDocument::GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const
 }
 
 sal_uLong ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
-        SCTAB nTab, double fScale ) const
+        SCTAB nTab, double fScale, const sal_uLong* pnMaxHeight ) const
 {
     // faster for a single row
     if (nStartRow == nEndRow)
@@ -4194,7 +4194,7 @@ sal_uLong ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
         return 0;
 
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetScaledRowHeight( nStartRow, nEndRow, fScale);
+        return maTabs[nTab]->GetScaledRowHeight( nStartRow, nEndRow, fScale, pnMaxHeight );
 
     OSL_FAIL("wrong sheet number");
     return 0;
