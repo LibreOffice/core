@@ -42,7 +42,7 @@
 #include <viewimp.hxx>
 #include <editeng/brushitem.hxx>
 #include <fmtftntx.hxx>
-#include <flyfrms.hxx>
+#include <flyfrm.hxx>
 #include <sortedobjs.hxx>
 #include <hints.hxx>
 #include <frmatr.hxx>

@@ -25,7 +25,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <unofldmid.h>
-#include <unoprnms.hxx>
 
 using namespace com::sun::star;
 

@@ -19,16 +19,12 @@
 
 #include <editsh.hxx>
 #include <dbfld.hxx>
-#include <dbmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
-#include <txtfld.hxx>
 #include <fmtfld.hxx>
-#include <edimp.hxx>
-#include <flddat.hxx>
 #include <calbck.hxx>
 
 using namespace com::sun::star;

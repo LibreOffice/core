@@ -21,9 +21,7 @@
 #include <hintids.hxx>
 
 #include <vcl/errinf.hxx>
-#include <vcl/svapp.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/protitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -32,7 +30,6 @@
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
-#include <docary.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentState.hxx>
@@ -46,7 +43,6 @@
 #include <rowfrm.hxx>
 #include <cellfrm.hxx>
 #include <flyfrm.hxx>
-#include <dflyobj.hxx>
 #include <swtable.hxx>
 #include <swddetbl.hxx>
 #include <ndtxt.hxx>
@@ -56,10 +52,8 @@
 #include <tblafmt.hxx>
 #include <cellatr.hxx>
 #include <pam.hxx>
-#include <pamtyp.hxx>
 #include <viscrs.hxx>
 #include <tblsel.hxx>
-#include <swtblfmt.hxx>
 #include <swerror.h>
 #include <swundo.hxx>
 #include <frmtool.hxx>

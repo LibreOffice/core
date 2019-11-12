@@ -29,13 +29,9 @@
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <editsh.hxx>
-#include <ndtxt.hxx>
 #include <fmtfld.hxx>
-#include <txtfld.hxx>
 #include <ddefld.hxx>
-#include <swtable.hxx>
 #include <swbaslnk.hxx>
-#include <swddetbl.hxx>
 #include <unofldmid.h>
 #include <hints.hxx>
 #include <calbck.hxx>

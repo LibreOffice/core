@@ -21,15 +21,13 @@
 
 #include <o3tl/any.hxx>
 
+#include <calc.hxx>
 #include <calbck.hxx>
-#include <cntfrm.hxx>
 #include <doc.hxx>
-#include <pam.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <expfld.hxx>
-#include <docfld.hxx>
 #include <unofldmid.h>
 
 using namespace ::com::sun::star;

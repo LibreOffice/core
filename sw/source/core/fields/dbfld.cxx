@@ -19,25 +19,19 @@
 
 #include <float.h>
 #include <o3tl/any.hxx>
-#include <sfx2/app.hxx>
+#include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
-#include <svx/pageitem.hxx>
-#include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
+#include <calc.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
-#include <frame.hxx>
 #include <fldbas.hxx>
-#include <pam.hxx>
 #include <ndtxt.hxx>
 #include <dbfld.hxx>
 #include <dbmgr.hxx>
-#include <docfld.hxx>
-#include <expfld.hxx>
-#include <txtatr.hxx>
 #include <unofldmid.h>
 #include <calbck.hxx>
 

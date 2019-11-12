@@ -20,26 +20,17 @@
 #include <fldbas.hxx>
 
 #include <float.h>
-#include <math.h>
 
 #include <libxml/xmlwriter.h>
 
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <editeng/unolingu.hxx>
 #include <o3tl/enumarray.hxx>
+#include <osl/diagnose.h>
 #include <unofldmid.h>
 #include <doc.hxx>
-#include <editsh.hxx>
-#include <frame.hxx>
-#include <flddat.hxx>
-#include <ndtxt.hxx>
 #include <fmtfld.hxx>
-#include <txtfld.hxx>
-#include <pam.hxx>
-#include <docfld.hxx>
-#include <swtable.hxx>
 #include <docufld.hxx>
 #include <expfld.hxx>
 #include <shellres.hxx>
@@ -48,6 +39,7 @@
 #include <docary.hxx>
 #include <authfld.hxx>
 #include <calbck.hxx>
+#include <viewsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;

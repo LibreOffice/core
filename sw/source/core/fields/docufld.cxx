@@ -28,18 +28,15 @@
 #include <com/sun/star/text/TemplateDisplayFormat.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
-#include <com/sun/star/text/DocumentStatistic.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <o3tl/any.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/svapp.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
@@ -51,10 +48,8 @@
 #include <tools/datetime.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Time.hpp>
 
 #include <swmodule.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/doctempl.hxx>
 #include <fmtfld.hxx>
@@ -86,10 +81,8 @@
 #include <swunohelper.hxx>
 #include <strings.hrc>
 
-#include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <calbck.hxx>
-#include <docary.hxx>
 #include <hints.hxx>
 
 #define URL_DECODE  INetURLObject::DecodeMechanism::Unambiguous

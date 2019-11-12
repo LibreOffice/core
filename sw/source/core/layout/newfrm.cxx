@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <drawdoc.hxx>
 #include <fmtpdsc.hxx>
@@ -31,7 +30,6 @@
 #include <frmtool.hxx>
 #include "virtoutp.hxx"
 #include <blink.hxx>
-#include <sectfrm.hxx>
 #include <notxtfrm.hxx>
 #include <pagedesc.hxx>
 #include <viewimp.hxx>

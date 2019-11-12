@@ -24,7 +24,6 @@
 #include <docary.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
-#include <edimp.hxx>
 #include <expfld.hxx>
 #include <pam.hxx>
 #include <docfld.hxx>

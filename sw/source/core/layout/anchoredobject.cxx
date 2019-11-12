@@ -30,7 +30,6 @@
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
 #include <layouter.hxx>
-#include <pam.hxx>
 
 using namespace ::com::sun::star;
 

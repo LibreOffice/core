@@ -19,10 +19,6 @@
 
 #include <hintids.hxx>
 
-#include <officecfg/Office/Common.hxx>
-
-#include <comphelper/processfactory.hxx>
-
 #include <unotools/charclass.hxx>
 
 #include <editeng/boxitem.hxx>
@@ -32,12 +28,10 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/acorrcfg.hxx>
 
 #include <swwait.hxx>
 #include <fmtpdsc.hxx>
-#include <fmtanchr.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentRedlineManager.hxx>
@@ -48,8 +42,6 @@
 #include <editsh.hxx>
 #include <index.hxx>
 #include <pam.hxx>
-#include <edimp.hxx>
-#include <fesh.hxx>
 #include <swundo.hxx>
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
@@ -58,7 +50,6 @@
 #include <frminf.hxx>
 #include <pagedesc.hxx>
 #include <paratr.hxx>
-#include <swtable.hxx>
 #include <acorrect.hxx>
 #include <shellres.hxx>
 #include <section.hxx>

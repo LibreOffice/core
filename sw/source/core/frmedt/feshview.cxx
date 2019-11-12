@@ -24,7 +24,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/svdoole2.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
@@ -39,8 +38,6 @@
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/sdtaaitm.hxx>
-#include <sfx2/app.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/protitem.hxx>
 #include <svx/svdpage.hxx>
@@ -53,7 +50,6 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <cmdid.h>
 #include <drawdoc.hxx>
 #include <textboxhelper.hxx>
 #include <frmfmt.hxx>
@@ -66,11 +62,7 @@
 #include <fmtcntnt.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtcnct.hxx>
-#include <docary.hxx>
-#include <tblsel.hxx>
 #include <swmodule.hxx>
-#include <swtable.hxx>
-#include <flyfrms.hxx>
 #include <fesh.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
@@ -90,7 +82,6 @@
 #include <swundo.hxx>
 #include <notxtfrm.hxx>
 #include <txtfrm.hxx>
-#include <txatbase.hxx>
 #include <mdiexp.hxx>
 #include <sortedobjs.hxx>
 #include <HandleAnchorNodeChg.hxx>

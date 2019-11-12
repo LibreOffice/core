@@ -20,20 +20,11 @@
 
 #include <sfx2/ipclient.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/app.hxx>
-#include <unotools/moduleoptions.hxx>
-#include <sfx2/viewfrm.hxx>
 
-#include <sot/exchange.hxx>
-#include <fmtcntnt.hxx>
-#include <fmtanchr.hxx>
 #include <fesh.hxx>
 #include <cntfrm.hxx>
-#include <frmfmt.hxx>
 #include <flyfrm.hxx>
-#include <pam.hxx>
 #include <doc.hxx>
-#include <ndtxt.hxx>
 #include <notxtfrm.hxx>
 #include <ndole.hxx>
 #include <swcli.hxx>

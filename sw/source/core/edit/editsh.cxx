@@ -23,7 +23,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <swwait.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
@@ -41,14 +40,10 @@
 #include <frame.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
-#include <pamtyp.hxx>
 #include <ndtxt.hxx>
-#include <grfatr.hxx>
 #include <flyfrm.hxx>
-#include <swtable.hxx>
 #include <swundo.hxx>
 #include <calc.hxx>
-#include <edimp.hxx>
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <txtfrm.hxx>
@@ -57,7 +52,6 @@
 #include <scriptinfo.hxx>
 #include <unocrsrhelper.hxx>
 #include <section.hxx>
-#include <unochart.hxx>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <unocrsr.hxx>

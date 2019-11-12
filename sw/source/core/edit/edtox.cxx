@@ -23,32 +23,24 @@
 #include <i18nutil/transliteration.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <svl/fstathelper.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
-#include <unotools/textsearch.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <sfx2/docfile.hxx>
 
-#include <xmloff/odffields.hxx>
-
-#include <editeng/unolingu.hxx>
-
 #include <swtypes.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
-#include <viewopt.hxx>
-#include <ndtxt.hxx>
 #include <swundo.hxx>
-#include <txttxmrk.hxx>
-#include <edimp.hxx>
 #include <tox.hxx>
 #include <doctxm.hxx>
 #include <docary.hxx>
 #include <mdiexp.hxx>
 #include <strings.hrc>
-#include <bookmrk.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;

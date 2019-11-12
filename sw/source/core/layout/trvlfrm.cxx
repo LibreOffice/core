@@ -50,7 +50,6 @@
 #include <ndtxt.hxx>
 #include <undobj.hxx>
 
-#include <cfloat>
 #include <swselectionlist.hxx>
 #include <comphelper/lok.hxx>
 

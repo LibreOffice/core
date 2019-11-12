@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
+#include <config_feature_desktop.h>
 
 #include <ctime>
 #include <rootfrm.hxx>
@@ -27,7 +27,6 @@
 #include <dflyobj.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
-#include <dcontact.hxx>
 #include <viewopt.hxx>
 #include <dbg_lay.hxx>
 #include <layouter.hxx>
@@ -40,7 +39,6 @@
 #include <sfx2/event.hxx>
 
 #include <ftnidx.hxx>
-#include <vcl/svapp.hxx>
 #include <editeng/opaqitem.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <sal/log.hxx>
@@ -50,6 +48,7 @@
 #include <fmtsrnd.hxx>
 #include <docsh.hxx>
 
+#include <anchoreddrawobject.hxx>
 #include <ndtxt.hxx>
 #include <tabfrm.hxx>
 #include <ftnfrm.hxx>

@@ -18,15 +18,11 @@
  */
 
 #include <hintids.hxx>
-#include <mdiexp.hxx>
 #include <tools/helpers.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
-#include <svl/undo.hxx>
 #include <svl/fstathelper.hxx>
 #include <vcl/imap.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/boxitem.hxx>
@@ -45,14 +41,9 @@
 #include <hints.hxx>
 #include <swbaslnk.hxx>
 #include <pagefrm.hxx>
-#include <editsh.hxx>
-#include <pam.hxx>
 
 #include <rtl/ustring.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <o3tl/deleter.hxx>
-#include <vcl/svapp.hxx>
 #include <retrieveinputstreamconsumer.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>

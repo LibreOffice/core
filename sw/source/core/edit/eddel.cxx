@@ -18,21 +18,14 @@
  */
 
 #include <memory>
-#include <hintids.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
-#include <IDocumentRedlineAccess.hxx>
 #include <editsh.hxx>
-#include <cntfrm.hxx>
 #include <pam.hxx>
-#include <unocrsr.hxx>
 #include <swundo.hxx>
-#include <edimp.hxx>
-#include <IMark.hxx>
-#include <docary.hxx>
 #include <SwRewriter.hxx>
-#include <globals.hrc>
+#include <osl/diagnose.h>
 
 #include <strings.hrc>
 #include <vector>

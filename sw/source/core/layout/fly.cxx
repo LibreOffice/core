@@ -25,7 +25,6 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/outlobj.hxx>
-#include <drawdoc.hxx>
 #include <fmtfsize.hxx>
 #include <fmtclds.hxx>
 #include <fmtcntnt.hxx>
@@ -40,7 +39,6 @@
 #include <objectformatter.hxx>
 #include <ndole.hxx>
 #include <swtable.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
 #include <layouter.hxx>
 #include <pagefrm.hxx>
@@ -66,8 +64,6 @@
 #include <textboxhelper.hxx>
 #include <txtfly.hxx>
 #include <ndindex.hxx>
-#include <pam.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <wrtsh.hxx>

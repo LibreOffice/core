@@ -23,24 +23,19 @@
 
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
-#include <docufld.hxx>
 #include <ndtxt.hxx>
-#include <cntfrm.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
-#include <tabfrm.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <redline.hxx>
 #include <scriptinfo.hxx>
-#include <editeng/charhiddenitem.hxx>
 #include <calbck.hxx>
 #include <IMark.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <fmtanchr.hxx>
-#include <tools/solar.h>
 
 class Point;
 

@@ -97,11 +97,9 @@
 
 #include <dbg_lay.hxx>
 
-#include <flyfrm.hxx>
 #include <txtfrm.hxx>
 #include <fntcache.hxx>
 #include <tabfrm.hxx>
-#include <swtblfmt.hxx>
 #include <rowfrm.hxx>
 #include <cellfrm.hxx>
 #include <layfrm.hxx>

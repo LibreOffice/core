@@ -25,7 +25,6 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <docary.hxx>
-#include <swwait.hxx>
 #include <swundo.hxx>
 #include <section.hxx>
 #include <doctxm.hxx>

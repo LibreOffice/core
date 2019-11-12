@@ -20,12 +20,10 @@
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <o3tl/any.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <swtypes.hxx>
 #include <grfatr.hxx>
 #include <swunohelper.hxx>
 #include <osl/diagnose.h>
 
-#include <cmdid.h>
 #include <unomid.h>
 
 using namespace ::com::sun::star;

@@ -20,9 +20,7 @@
 #include <docary.hxx>
 #include <redline.hxx>
 #include <doc.hxx>
-#include <swundo.hxx>
 #include <editsh.hxx>
-#include <edimp.hxx>
 #include <frmtool.hxx>
 
 RedlineFlags SwEditShell::GetRedlineFlags() const

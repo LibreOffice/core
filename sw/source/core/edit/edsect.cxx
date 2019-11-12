@@ -25,7 +25,6 @@
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <section.hxx>
-#include <edimp.hxx>
 #include <sectfrm.hxx>
 #include <cntfrm.hxx>
 #include <tabfrm.hxx>

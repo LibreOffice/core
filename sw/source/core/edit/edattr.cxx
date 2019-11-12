@@ -21,7 +21,6 @@
 #include <hintids.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <txatbase.hxx>
@@ -37,17 +36,13 @@
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
 #include <breakit.hxx>
-#include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <txtfrm.hxx>
 #include <scriptinfo.hxx>
-#include <svl/ctloptions.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/languageoptions.hxx>
 #include <charfmt.hxx>
 #include <numrule.hxx>
-
-#include <algorithm>
-#include <charatr.hxx>
 
 /*
  * hard Formatting (Attributes)

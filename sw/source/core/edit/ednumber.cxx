@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <editsh.hxx>
 #include <edimp.hxx>
 #include <doc.hxx>
@@ -25,7 +24,6 @@
 #include <IDocumentState.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
-#include <paratr.hxx>
 #include <swundo.hxx>
 #include <numrule.hxx>
 

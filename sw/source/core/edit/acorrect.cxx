@@ -19,15 +19,12 @@
 
 #include <hintids.hxx>
 
-#include <svx/svxids.hrc>
-#include <editeng/langitem.hxx>
 #include <fmtinfmt.hxx>
-#include <txtatr.hxx>
-#include <txtinet.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
 #include <unocrsr.hxx>
+#include <txatbase.hxx>
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
 #include <acorrect.hxx>

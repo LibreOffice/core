@@ -26,7 +26,7 @@
 #include <tabfrm.hxx>
 #include <sectfrm.hxx>
 #include <frmatr.hxx>
-#include <flyfrms.hxx>
+#include <flyfrm.hxx>
 #include <ftnfrm.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
