@@ -1135,6 +1135,11 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
                 ok = true;
             }
         }
+        else if (rArg.Name == "LockEditDoc")
+        {
+            rArg.Value >>= bValue;
+            pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_EDITDOC, bValue));
+        }
         else if (rArg.Name == "EncryptionData")
         {
             if (rArg.Value >>= bValue)
