@@ -2069,7 +2069,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         const_cast<ScViewData*>(this)->aScrSize.setHeight( pView->GetGridHeight(eWhichY) );
     }
 
-    sal_uInt16 nTSize;
+    sal_uLong nTSize;
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
 
@@ -2137,27 +2137,20 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 
         if (nWhereY >= nStartPosY)
         {
-            for (SCROW nY = nStartPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
+            if (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height())
             {
-                if ( nY > MAXROW )
+                if ( nWhereY-1 > MAXROW )
                     nScrPosY = 0x7FFFFFFF;
+                else if (bAllowNeg || bIsTiledRendering)
+                {
+                    sal_uLong nSizeYPix = pDoc->GetScaledRowHeight( nStartPosY, nWhereY-1, nTabNo, nPPTY );
+                    nScrPosY += nSizeYPix;
+                }
                 else
                 {
-                    nTSize = pDoc->GetRowHeight( nY, nTabNo );
-                    if (nTSize)
-                    {
-                        long nSizeYPix = ToPixel( nTSize, nPPTY );
-                        nScrPosY += nSizeYPix;
-                    }
-                    else if ( nY < MAXROW )
-                    {
-                        // skip multiple hidden rows (forward only for now)
-                        SCROW nNext = pDoc->FirstVisibleRow(nY + 1, MAXROW, nTabNo);
-                        if ( nNext > MAXROW )
-                            nY = MAXROW;
-                        else
-                            nY = nNext - 1;     // +=nDir advances to next visible row
-                    }
+                    sal_uLong nMaxHeight = aScrSize.getHeight() - nScrPosY;
+                    sal_uLong nSizeYPix = pDoc->GetScaledRowHeight( nStartPosY, nWhereY-1, nTabNo, nPPTY, &nMaxHeight );
+                    nScrPosY += nSizeYPix;
                 }
             }
         }
