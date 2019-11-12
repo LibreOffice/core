@@ -46,7 +46,7 @@ void DocumentListItemsManager::addListItem( const SwNodeNum& rNodeNum )
 
     const bool bAlreadyInserted(
             mpListItemsList->insert( &rNodeNum ).second );
-    OSL_ENSURE( !bAlreadyInserted,
+    OSL_ENSURE( bAlreadyInserted,
             "<DocumentListItemsManager::addListItem(..)> - <SwNodeNum> instance already registered as numbered item!" );
 }
 
