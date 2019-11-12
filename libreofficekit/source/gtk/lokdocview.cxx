@@ -1533,7 +1533,6 @@ paintTileCallback(GObject* sourceObject, GAsyncResult* res, gpointer userData)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(userData);
     std::unique_ptr<TileBuffer>& buffer = priv->m_pTileBuffer;
-    int index = pLOEvent->m_nPaintTileX * buffer->m_nWidth + pLOEvent->m_nPaintTileY;
     GError* error;
 
     error = nullptr;
@@ -1550,8 +1549,7 @@ paintTileCallback(GObject* sourceObject, GAsyncResult* res, gpointer userData)
         return;
     }
 
-    buffer->m_mTiles[index].setSurface(pSurface);
-    buffer->m_mTiles[index].valid = true;
+    buffer->setTile(pLOEvent->m_nPaintTileX, pLOEvent->m_nPaintTileY, pSurface);
     gdk_threads_add_idle(queueDraw, GTK_WIDGET(pDocView));
 
     cairo_surface_destroy(pSurface);
@@ -2338,9 +2336,7 @@ paintTileInThread (gpointer data)
         return;
     }
     std::unique_ptr<TileBuffer>& buffer = priv->m_pTileBuffer;
-    int index = pLOEvent->m_nPaintTileX * buffer->m_nWidth + pLOEvent->m_nPaintTileY;
-    if (buffer->m_mTiles.find(index) != buffer->m_mTiles.end() &&
-        buffer->m_mTiles[index].valid)
+    if (buffer->hasValidTile(pLOEvent->m_nPaintTileX, pLOEvent->m_nPaintTileY))
         return;
 
     cairo_surface_t *pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nTileSizePixels, nTileSizePixels);
@@ -3511,7 +3507,6 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     long nDocumentHeightPixels = twipToPixel(priv->m_nDocumentHeightTwips, fZoom);
     // Total number of columns in this document.
     guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
-
     priv->m_pTileBuffer = std::unique_ptr<TileBuffer>(new TileBuffer(nColumns));
     gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                 nDocumentWidthPixels,
