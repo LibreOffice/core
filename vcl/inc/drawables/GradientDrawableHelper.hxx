@@ -159,6 +159,8 @@ public:
 
     static std::tuple<long, long, long, long, long, long>
     GetColorIntensities(Gradient const& rGradient);
+
+    static double GetStepHeight(tools::Rectangle const& rStepRect, double nSteps);
 };
 } // namespace vcl
 

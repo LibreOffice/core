@@ -217,8 +217,7 @@ void GradientDrawableHelper::AddGradientSteps(
     if (rGradient.GetStyle() != GradientStyle::Linear)
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
 
-    const double fScanInc
-        = static_cast<double>(aGradientStepRect.GetHeight()) / static_cast<double>(nSteps);
+    const double fScanInc = GetStepHeight(aGradientStepRect, static_cast<double>(nSteps));
     const double fGradientLine = static_cast<double>(aGradientStepRect.Top());
     const double fMirrorGradientLine = static_cast<double>(aGradientMirroredStepRect.Bottom());
 
@@ -363,8 +362,7 @@ void GradientDrawableHelper::DrawGradientSteps(
     if (rGradient.GetStyle() != GradientStyle::Linear)
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
 
-    const double fScanInc
-        = static_cast<double>(aGradientStepRect.GetHeight()) / static_cast<double>(nSteps);
+    const double fScanInc = GetStepHeight(aGradientStepRect, static_cast<double>(nSteps));
     double fGradientLine = static_cast<double>(aGradientStepRect.Top());
     double fMirrorGradientLine = static_cast<double>(aGradientMirroredStepRect.Bottom());
 
@@ -457,6 +455,11 @@ void GradientDrawableHelper::DrawMiddlePolygonWithEndColorAction(
         pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
     else
         pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
+}
+
+double GradientDrawableHelper::GetStepHeight(tools::Rectangle const& rStepRect, double nSteps)
+{
+    return static_cast<double>(rStepRect.GetHeight()) / nSteps;
 }
 
 Color GradientDrawableHelper::GetSingleColorGradientFill(OutputDevice* pRenderContext)
