@@ -731,26 +731,10 @@ void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRender
     // loop to output Polygon/PolyPolygon sequentially
     for (long i = 1; i < nSteps; i++)
     {
-        // calculate new Polygon
-        fScanLeft += fScanIncX;
-        aRect.SetLeft(static_cast<long>(fScanLeft));
-        fScanTop += fScanIncY;
-        aRect.SetTop(static_cast<long>(fScanTop));
-        fScanRight -= fScanIncX;
-        aRect.SetRight(static_cast<long>(fScanRight));
-        fScanBottom -= fScanIncY;
-        aRect.SetBottom(static_cast<long>(fScanBottom));
-
-        if ((aRect.GetWidth() < 2) || (aRect.GetHeight() < 2))
+        aPoly = GetGradientStepPolygon(rGradient, i, fScanLeft, fScanTop, fScanRight, fScanBottom,
+                                       fScanIncX, fScanIncY, aCenter, nAngle);
+        if (aPoly.GetBoundRect().IsEmpty())
             break;
-
-        if (rGradient.GetStyle() == GradientStyle::Radial
-            || rGradient.GetStyle() == GradientStyle::Elliptical)
-            aPoly = tools::Polygon(aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1);
-        else
-            aPoly = tools::Polygon(aRect);
-
-        aPoly.Rotate(aCenter, nAngle);
 
         // adapt colour accordingly
         const long nStepIndex = (xPolyPoly ? i : (i + 1));
@@ -865,26 +849,10 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
     // loop to output Polygon/PolyPolygon sequentially
     for (long i = 1; i < nSteps; i++)
     {
-        // calculate new Polygon
-        fScanLeft += fScanIncX;
-        aRect.SetLeft(static_cast<long>(fScanLeft));
-        fScanTop += fScanIncY;
-        aRect.SetTop(static_cast<long>(fScanTop));
-        fScanRight -= fScanIncX;
-        aRect.SetRight(static_cast<long>(fScanRight));
-        fScanBottom -= fScanIncY;
-        aRect.SetBottom(static_cast<long>(fScanBottom));
-
-        if ((aRect.GetWidth() < 2) || (aRect.GetHeight() < 2))
+        aPoly = GetGradientStepPolygon(rGradient, i, fScanLeft, fScanTop, fScanRight, fScanBottom,
+                                       fScanIncX, fScanIncY, aCenter, nAngle);
+        if (aPoly.GetBoundRect().IsEmpty())
             break;
-
-        if (rGradient.GetStyle() == GradientStyle::Radial
-            || rGradient.GetStyle() == GradientStyle::Elliptical)
-            aPoly = tools::Polygon(aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1);
-        else
-            aPoly = tools::Polygon(aRect);
-
-        aPoly.Rotate(aCenter, nAngle);
 
         // adapt colour accordingly
         const long nStepIndex = (xPolyPoly ? i : (i + 1));
@@ -1026,6 +994,34 @@ std::tuple<double, double> GradientDrawableHelper::GetStepSize(Gradient const& r
     }
 
     return std::make_tuple(fScanIncX, fScanIncY);
+}
+
+tools::Polygon GradientDrawableHelper::GetGradientStepPolygon(
+    Gradient const& rGradient, long nStep, double fScanLeft, double fScanTop, double fScanRight,
+    double fScanBottom, double fScanIncX, double fScanIncY, Point const& rCenter, sal_uInt16 nAngle)
+{
+    tools::Rectangle aRect;
+
+    // calculate new Polygon
+    aRect.SetLeft(static_cast<long>(fScanLeft + (fScanIncX * nStep)));
+    aRect.SetTop(static_cast<long>(fScanTop + (fScanIncY * nStep)));
+    aRect.SetRight(static_cast<long>(fScanRight - (fScanIncX * nStep)));
+    aRect.SetBottom(static_cast<long>(fScanBottom - (fScanIncY * nStep)));
+
+    if ((aRect.GetWidth() < 2) || (aRect.GetHeight() < 2))
+        return tools::Polygon();
+
+    tools::Polygon aPoly;
+
+    if (rGradient.GetStyle() == GradientStyle::Radial
+        || rGradient.GetStyle() == GradientStyle::Elliptical)
+        aPoly = tools::Polygon(aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1);
+    else
+        aPoly = tools::Polygon(aRect);
+
+    aPoly.Rotate(rCenter, nAngle);
+
+    return aPoly;
 }
 } // namespace vcl
 

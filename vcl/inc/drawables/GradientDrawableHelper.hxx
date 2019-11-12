@@ -169,6 +169,12 @@ public:
 
     static std::tuple<double, double> GetStepSize(Gradient const& rGradient,
                                                   tools::Rectangle const& rRect, long nSteps);
+
+    static tools::Polygon GetGradientStepPolygon(Gradient const& rGradient, long nStep,
+                                                 double fScanLeft, double fScanTop,
+                                                 double fScanRight, double fScanBottom,
+                                                 double fScanIncX, double fScanIncY,
+                                                 Point const& rCenter, sal_uInt16 nAngle);
 };
 } // namespace vcl
 
