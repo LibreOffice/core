@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_4c3b5c9b",
+        "filename": "offapi/com/sun/star/awt/XStyleSettings.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-12T09:28:25Z",
+      "side": 1,
+      "message": "I assume you are aware that these additions are an incompatible change to an interface that had been published in the past (and continues to be published in e.g. AOO) before \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/78cca63070ae6cf82b45ec3bc75fafa2db31a7f2%5E!/\u003e \"Revert publishing of lots of UNO types\" made it unpublished for LO.  That means that it might negatively affect existing extensions, and should probably be mentioned at \u003chttps://wiki.documentfoundation.org/ReleaseNotes/6.4#UNO_API_changes\u003e.\n\nAnd please add appropriate @since tags.",
+      "revId": "8a425fbd9c6b75b09672e0ce18f43162d9eda360",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
