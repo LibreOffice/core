@@ -141,7 +141,7 @@ void ScTable::CopyOneCellFromClip(
         }
     }
 
-    if (nCol1 == 0 && nCol2 == MAXCOL && mpRowHeights)
+    if (nCol1 == 0 && nCol2 == pDocument->MaxCol() && mpRowHeights)
     {
         mpRowHeights->setValue(nRow1, nRow2, pSrcTab->GetOriginalHeight(nSrcRow));
 
@@ -344,7 +344,7 @@ bool ScTable::IsEditActionAllowed(
     if (!IsProtected())
     {
         SCCOL nCol1 = 0, nCol2 = aCol.size() - 1;
-        SCROW nRow1 = 0, nRow2 = MAXROW;
+        SCROW nRow1 = 0, nRow2 = pDocument->MaxRow();
 
         switch (eAction)
         {
@@ -384,7 +384,7 @@ bool ScTable::IsEditActionAllowed(
         case sc::ColRowEditAction::InsertColumnsAfter:
         {
             // TODO: improve the matrix range handling for the insert-before action.
-            if (HasBlockMatrixFragment(nStart, 0, nEnd, MAXROW))
+            if (HasBlockMatrixFragment(nStart, 0, nEnd, pDocument->MaxRow()))
                 return false;
 
             return pTabProtection->isOptionEnabled(ScTableProtection::INSERT_COLUMNS);
@@ -393,7 +393,7 @@ bool ScTable::IsEditActionAllowed(
         case sc::ColRowEditAction::InsertRowsAfter:
         {
             // TODO: improve the matrix range handling for the insert-before action.
-            if (HasBlockMatrixFragment(0, nStart, MAXCOL, nEnd))
+            if (HasBlockMatrixFragment(0, nStart, pDocument->MaxCol(), nEnd))
                 return false;
 
             return pTabProtection->isOptionEnabled(ScTableProtection::INSERT_ROWS);
@@ -403,14 +403,14 @@ bool ScTable::IsEditActionAllowed(
             if (!pTabProtection->isOptionEnabled(ScTableProtection::DELETE_COLUMNS))
                 return false;
 
-            return !HasAttrib(nStart, 0, nEnd, MAXROW, HasAttrFlags::Protected);
+            return !HasAttrib(nStart, 0, nEnd, pDocument->MaxRow(), HasAttrFlags::Protected);
         }
         case sc::ColRowEditAction::DeleteRows:
         {
             if (!pTabProtection->isOptionEnabled(ScTableProtection::DELETE_ROWS))
                 return false;
 
-            return !HasAttrib(0, nStart, MAXCOL, nEnd, HasAttrFlags::Protected);
+            return !HasAttrib(0, nStart, pDocument->MaxCol(), nEnd, HasAttrFlags::Protected);
         }
         default:
             ;
@@ -456,9 +456,9 @@ void ScTable::finalizeOutlineImport()
 void ScTable::StoreToCache(SvStream& rStrm) const
 {
     SCCOL nStartCol = 0;
-    SCCOL nEndCol = MAXCOL;
+    SCCOL nEndCol = pDocument->MaxCol();
     SCROW nStartRow = 0;
-    SCROW nEndRow = MAXROW;
+    SCROW nEndRow = pDocument->MaxRow();
 
     GetDataArea(nStartCol, nStartRow, nEndCol, nEndRow, false, false);
 

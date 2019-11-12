@@ -132,7 +132,7 @@ bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SC
 {
     bool bTest = true;
 
-    if ( nStartCol==0 && nEndCol==MAXCOL && pOutlineTable )
+    if ( nStartCol==0 && nEndCol==pDocument->MaxCol() && pOutlineTable )
         bTest = pOutlineTable->TestInsertRow(nSize);
 
     for (SCCOL i=nStartCol; (i<=nEndCol) && bTest; i++)
@@ -143,7 +143,7 @@ bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SC
 
 void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize )
 {
-    if (nStartCol==0 && nEndCol==MAXCOL)
+    if (nStartCol==0 && nEndCol==pDocument->MaxCol())
     {
         if (mpRowHeights && pRowFlags)
         {
@@ -193,7 +193,7 @@ void ScTable::DeleteRow(
     const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
     bool* pUndoOutline, std::vector<ScAddress>* pGroupPos )
 {
-    if (nStartCol==0 && nEndCol==MAXCOL)
+    if (nStartCol==0 && nEndCol==pDocument->MaxCol())
     {
         if (pRowFlags)
             pRowFlags->Remove( nStartRow, nSize);
@@ -249,14 +249,14 @@ void ScTable::DeleteRow(
 
 bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const
 {
-    if ( nSize > static_cast<SCSIZE>(MAXCOL) )
+    if ( nSize > static_cast<SCSIZE>(pDocument->MaxCol()) )
         return false;
 
-    if ( nStartRow==0 && nEndRow==MAXROW && pOutlineTable
+    if ( nStartRow==0 && nEndRow==pDocument->MaxRow() && pOutlineTable
         && ! pOutlineTable->TestInsertCol(nSize) )
             return false;
 
-    auto range = GetColumnsRange( MAXCOL - static_cast<SCCOL>(nSize) + 1, MAXCOL );
+    auto range = GetColumnsRange( pDocument->MaxCol() - static_cast<SCCOL>(nSize) + 1, pDocument->MaxCol() );
     for (auto it = range.rbegin(); it != range.rend(); ++it )
         if (! aCol[*it].TestInsertCol(nStartRow, nEndRow))
             return false;
@@ -267,13 +267,13 @@ bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) cons
 void ScTable::InsertCol(
     const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 {
-    if (nStartRow==0 && nEndRow==MAXROW)
+    if (nStartRow==0 && nEndRow==pDocument->MaxRow())
     {
         if (mpColWidth && mpColFlags)
         {
             mpColWidth->InsertPreservingSize(nStartCol, nSize, STD_COL_WIDTH);
             // The inserted columns have the same widths as the columns, which were selected for insert.
-            for (SCSIZE i=0; i < std::min(MAXCOL-nSize-nStartCol, nSize); ++i)
+            for (SCSIZE i=0; i < std::min(pDocument->MaxCol()-nSize-nStartCol, nSize); ++i)
                 mpColWidth->SetValue(nStartCol + i, mpColWidth->GetValue(nStartCol+i+nSize));
             mpColFlags->InsertPreservingSize(nStartCol, nSize, CRFlags::NONE);
         }
@@ -299,7 +299,7 @@ void ScTable::InsertCol(
         }
     }
 
-    if ((nStartRow == 0) && (nEndRow == MAXROW))
+    if ((nStartRow == 0) && (nEndRow == pDocument->MaxRow()))
     {
         for (SCSIZE i=0; i < nSize; i++)
             for (SCCOL nCol = aCol.size() - 1; nCol > nStartCol; nCol--)
@@ -344,11 +344,11 @@ void ScTable::InsertCol(
 void ScTable::DeleteCol(
     const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize, bool* pUndoOutline )
 {
-    if (nStartRow==0 && nEndRow==MAXROW)
+    if (nStartRow==0 && nEndRow==pDocument->MaxRow())
     {
         if (mpColWidth && mpColFlags)
         {
-            assert( nStartCol + nSize <= MAXCOL+1 );    // moving 0 if ==MAXCOL+1 is correct
+            assert( nStartCol + nSize <= size_t(pDocument->MaxCol()+1) );    // moving 0 if ==pDocument->MaxCol()+1 is correct
             mpColWidth->RemovePreservingSize(nStartCol, nSize, STD_COL_WIDTH);
             mpColFlags->RemovePreservingSize(nStartCol, nSize, CRFlags::NONE);
         }
@@ -384,7 +384,7 @@ void ScTable::DeleteCol(
     for (SCSIZE i = 0; i < nSize; i++)
         aCol[nStartCol + i].DeleteArea(nStartRow, nEndRow, InsertDeleteFlags::ALL, false);
 
-    if ((nStartRow == 0) && (nEndRow == MAXROW))
+    if ((nStartRow == 0) && (nEndRow == pDocument->MaxRow()))
     {
         for (SCSIZE i=0; i < nSize; i++)
             for (SCCOL nCol = nStartCol; nCol < aCol.size() - 1; nCol++)
@@ -412,7 +412,7 @@ void ScTable::DeleteArea(
     bool bBroadcast, sc::ColumnSpanSet* pBroadcastSpans )
 {
     if ( nCol2 >= aCol.size() ) nCol2 = aCol.size() - 1;
-    if (nRow2 > MAXROW) nRow2 = MAXROW;
+    if (nRow2 > pDocument->MaxRow()) nRow2 = pDocument->MaxRow();
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
         {   // scope for bulk broadcast
@@ -713,10 +713,10 @@ void ScTable::CopyFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCCOL nDx, SCROW nDy, ScTable* pTable )
 {
-    if (nCol2 > MAXCOL)
-        nCol2 = MAXCOL;
-    if (nRow2 > MAXROW)
-        nRow2 = MAXROW;
+    if (nCol2 > pDocument->MaxCol())
+        nCol2 = pDocument->MaxCol();
+    if (nRow2 > pDocument->MaxRow())
+        nRow2 = pDocument->MaxRow();
 
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
@@ -739,10 +739,10 @@ void ScTable::CopyFromClip(
 
         if ((rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
         {
-            if (nRow1==0 && nRow2==MAXROW && mpColWidth && pTable->mpColWidth)
+            if (nRow1==0 && nRow2==pDocument->MaxRow() && mpColWidth && pTable->mpColWidth)
                 mpColWidth->CopyFrom(*pTable->mpColWidth, nCol1, nCol2, nCol1 - nDx);
 
-            if (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pTable->mpRowHeights &&
+            if (nCol1==0 && nCol2==pDocument->MaxCol() && mpRowHeights && pTable->mpRowHeights &&
                                              pRowFlags && pTable->pRowFlags)
             {
                 CopyRowHeight(*pTable, nRow1, nRow2, -nDy);
@@ -969,10 +969,10 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if (rOldMerge.IsMerged())
                         rNewSet.Put( ScMergeAttr( std::min(
                                         static_cast<SCCOL>(rOldMerge.GetRowMerge()),
-                                        static_cast<SCCOL>(MAXCOL+1 - (nAttrRow2-nRow1))),
+                                        static_cast<SCCOL>(pDocument->MaxCol()+1 - (nAttrRow2-nRow1))),
                                     std::min(
                                         static_cast<SCROW>(rOldMerge.GetColMerge()),
-                                        static_cast<SCROW>(MAXROW+1 - (nCol-nCol1)))));
+                                        static_cast<SCROW>(pDocument->MaxRow()+1 - (nCol-nCol1)))));
                     const ScMergeFlagAttr& rOldFlag = rSet.Get(ATTR_MERGE_FLAG);
                     if (rOldFlag.IsOverlapped())
                     {
@@ -1138,8 +1138,8 @@ void ScTable::SetDirtyFromClip(
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans )
 {
     if ( nCol2 >= aCol.size() ) nCol2 = aCol.size() - 1;
-    if (nCol2 > MAXCOL) nCol2 = MAXCOL;
-    if (nRow2 > MAXROW) nRow2 = MAXROW;
+    if (nCol2 > pDocument->MaxCol()) nCol2 = pDocument->MaxCol();
+    if (nRow2 > pDocument->MaxRow()) nRow2 = pDocument->MaxRow();
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
         for (SCCOL i = nCol1; i <= nCol2; i++)
             aCol[i].SetDirtyFromClip(nRow1, nRow2, rBroadcastSpans);
@@ -1150,8 +1150,8 @@ void ScTable::StartListeningFormulaCells(
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     if ( nCol2 >= aCol.size() ) nCol2 = aCol.size() - 1;
-    if (nCol2 > MAXCOL) nCol2 = MAXCOL;
-    if (nRow2 > MAXROW) nRow2 = MAXROW;
+    if (nCol2 > pDocument->MaxCol()) nCol2 = pDocument->MaxCol();
+    if (nRow2 > pDocument->MaxRow()) nRow2 = pDocument->MaxRow();
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
         for (SCCOL i = nCol1; i <= nCol2; i++)
             aCol[i].StartListeningFormulaCells(rStartCxt, rEndCxt, nRow1, nRow2);
@@ -1202,8 +1202,8 @@ void ScTable::CopyToTable(
 
     bool bFlagChange = false;
 
-    bool bWidth  = (nRow1==0 && nRow2==MAXROW && mpColWidth && pDestTab->mpColWidth);
-    bool bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
+    bool bWidth  = (nRow1==0 && nRow2==pDocument->MaxRow() && mpColWidth && pDestTab->mpColWidth);
+    bool bHeight = (nCol1==0 && nCol2==pDocument->MaxCol() && mpRowHeights && pDestTab->mpRowHeights);
 
     if (bWidth || bHeight)
     {
@@ -1221,7 +1221,7 @@ void ScTable::CopyToTable(
                 pDestTab->SetColHidden(i, i, bThisHidden);
                 //TODO: collect changes?
                 if (bHiddenChange && pCharts)
-                    pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, MAXROW, nTab ));
+                    pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, pDocument->MaxRow(), nTab ));
 
                 if (bChange)
                     bFlagChange = true;
@@ -1254,7 +1254,7 @@ void ScTable::CopyToTable(
                 bool bHiddenChanged = pDestTab->SetRowHidden(i, nLastRow, bHidden);
                 if (bHiddenChanged && pCharts)
                     // Hidden flags differ.
-                    pCharts->SetRangeDirty(ScRange(0, i, nTab, MAXCOL, nLastRow, nTab));
+                    pCharts->SetRangeDirty(ScRange(0, i, nTab, pDocument->MaxCol(), nLastRow, nTab));
 
                 if (bHiddenChanged)
                     bFlagChange = true;
@@ -1317,15 +1317,15 @@ void ScTable::UndoToTable(
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
-        bool bWidth  = (nRow1==0 && nRow2==MAXROW && mpColWidth && pDestTab->mpColWidth);
-        bool bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
+        bool bWidth  = (nRow1==0 && nRow2==pDocument->MaxRow() && mpColWidth && pDestTab->mpColWidth);
+        bool bHeight = (nCol1==0 && nCol2==pDocument->MaxCol() && mpRowHeights && pDestTab->mpRowHeights);
 
         for ( SCCOL i = 0; i < aCol.size(); i++)
         {
             if ( i >= nCol1 && i <= nCol2 )
                 aCol[i].UndoToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, pDestTab->aCol[i]);
             else
-                aCol[i].CopyToColumn(rCxt, 0, MAXROW, InsertDeleteFlags::FORMULA, false, pDestTab->aCol[i]);
+                aCol[i].CopyToColumn(rCxt, 0, pDocument->MaxRow(), InsertDeleteFlags::FORMULA, false, pDestTab->aCol[i]);
         }
 
         if (nFlags & InsertDeleteFlags::ATTRIB)
@@ -1489,7 +1489,7 @@ SCROW ScTable::GetFirstEditTextRow( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW
         return -1;
 
     nCol2 = ClampToAllocatedColumns(nCol2);
-    SCROW nFirst = MAXROW+1;
+    SCROW nFirst = pDocument->MaxRow()+1;
     for (SCCOL i = nCol1; i <= nCol2; ++i)
     {
         const ScColumn& rCol = aCol[i];
@@ -1504,7 +1504,7 @@ SCROW ScTable::GetFirstEditTextRow( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW
         }
     }
 
-    return nFirst == (MAXROW+1) ? -1 : nFirst;
+    return nFirst == (pDocument->MaxRow()+1) ? -1 : nFirst;
 }
 
 void ScTable::SetEmptyCell( SCCOL nCol, SCROW nRow )
@@ -1734,7 +1734,7 @@ CommentCaptionState ScTable::GetAllNoteCaptionsState(const ScRange& rRange, std:
 void ScTable::GetUnprotectedCells( ScRangeList& rRangeList ) const
 {
     for (auto const & pCol : aCol)
-        pCol->GetUnprotectedCells(0, MAXROW, rRangeList);
+        pCol->GetUnprotectedCells(0, pDocument->MaxRow(), rRangeList);
 }
 
 bool ScTable::ContainsNotesInRange( const ScRange& rRange ) const
@@ -1770,7 +1770,7 @@ ScRefCellValue ScTable::GetCellValue( SCCOL nCol, SCROW nRow ) const
 void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
 {
     rCol = 0;
-    rRow = MAXROW+1;
+    rRow = pDocument->MaxRow()+1;
     while (rCol < (aCol.size() - 1) && aCol[rCol].IsEmptyData() )
         ++rCol;
     SCCOL nCol = rCol;
@@ -1789,7 +1789,7 @@ void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
     while (aCol[rCol].IsEmptyData() && (rCol > 0))
         rCol--;
     SCCOL nCol = rCol;
-    while (nCol >= 0 && rRow < MAXROW)
+    while (nCol >= 0 && rRow < pDocument->MaxRow())
         rRow = ::std::max( rRow, aCol[nCol--].GetLastDataPos());
 }
 
@@ -2208,7 +2208,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
     SCROW nY1 = pRowInfo[0].nRowNo;
     SCROW nY2 = pRowInfo[nArrCount-1].nRowNo;
 
-    for (SCCOL nCol : GetColumnsRange(0, MAXCOL))
+    for (SCCOL nCol : GetColumnsRange(0, pDocument->MaxCol()))
     {
         if (!ColHidden(nCol))
         {
@@ -2697,7 +2697,7 @@ void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, S
     {
         PutInOrder(nStartCol, nEndCol);
         PutInOrder(nStartRow, nEndRow);
-        if ( nEndCol == MAXCOL )
+        if ( nEndCol == pDocument->MaxCol() )
         {
             if ( nStartCol < aCol.size() )
             {
@@ -2826,7 +2826,7 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRem
 
     sc::RowHeightContext aCxt(nPPTX, nPPTY, rZoomX, rZoomY, pDev);
     SCROW nRow = 0;
-    while (nRow <= MAXROW)
+    while (nRow <= pDocument->MaxRow())
     {
         ScFlatBoolRowSegments::RangeData aData;
         if (!aUsedRows.getRangeData(nRow, aData))
@@ -3132,7 +3132,7 @@ sal_uInt16 ScTable::GetCommonWidth( SCCOL nEndCol ) const
     if ( !ValidCol(nEndCol) )
     {
         OSL_FAIL("wrong column");
-        nEndCol = MAXCOL;
+        nEndCol = pDocument->MaxCol();
     }
 
     sal_uInt16 nMaxWidth = 0;
@@ -3320,7 +3320,7 @@ void ScTable::ShowCol(SCCOL nCol, bool bShow)
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
-                pCharts->SetRangeDirty(ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ));
+                pCharts->SetRangeDirty(ScRange( nCol, 0, nTab, nCol, pDocument->MaxRow(), nTab ));
         }
     }
     else
@@ -3341,7 +3341,7 @@ void ScTable::ShowRow(SCROW nRow, bool bShow)
                 SetRowFiltered(nRow, nRow, false);
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
-                pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, MAXCOL, nRow, nTab ));
+                pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, pDocument->MaxCol(), nRow, nTab ));
 
             InvalidatePageBreaks();
         }
@@ -3364,7 +3364,7 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
-                pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, MAXCOL, nRow, nTab ));
+                pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, pDocument->MaxCol(), nRow, nTab ));
 
             if (pOutlineTable)
                 UpdateOutlineRow( nRow, nRow, bShow );
@@ -3397,7 +3397,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
-                pCharts->SetRangeDirty(ScRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab ));
+                pCharts->SetRangeDirty(ScRange( 0, nStartRow, nTab, pDocument->MaxCol(), nEndRow, nTab ));
         }
 
         nStartRow = nEndRow + 1;
@@ -3435,7 +3435,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
-                pCharts->SetRangeDirty(ScRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab ));
+                pCharts->SetRangeDirty(ScRange( 0, nStartRow, nTab, pDocument->MaxCol(), nEndRow, nTab ));
 
             InvalidatePageBreaks();
         }
@@ -3596,7 +3596,7 @@ void ScTable::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     while (rX1 > 0 && ColHidden(rX1-1))
         --rX1;
 
-    while (rX2 < MAXCOL && ColHidden(rX2+1))
+    while (rX2 < pDocument->MaxCol() && ColHidden(rX2+1))
         ++rX2;
 
     // Row-wise expansion
@@ -3611,7 +3611,7 @@ void ScTable::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
                 rY1 = nStartRow;
         }
     }
-    if (rY2 < MAXROW)
+    if (rY2 < pDocument->MaxRow())
     {
         SCROW nEndRow = -1;
         if (RowHidden(rY2+1, nullptr, &nEndRow) && ValidRow(nEndRow))
@@ -3704,7 +3704,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
 
                             // Rows
 
-    UsedRowsType aUsed(0, MAXROW+1, false);
+    UsedRowsType aUsed(0, pDocument->MaxRow()+1, false);
     for (nCol=nStartCol; nCol<=nEndCol; nCol++)
         aCol[nCol].FindUsed(nStartRow, nEndRow, aUsed);
     aUsed.build_tree();
@@ -3845,8 +3845,8 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     if( pDrawLayer )
     {
-        double fValX = GetColOffset( MAXCOL + 1 ) * HMM_PER_TWIPS;
-        double fValY = GetRowOffset( MAXROW + 1 ) * HMM_PER_TWIPS;
+        double fValX = GetColOffset( pDocument->MaxCol() + 1 ) * HMM_PER_TWIPS;
+        double fValY = GetRowOffset( pDocument->MaxRow() + 1 ) * HMM_PER_TWIPS;
         const long nMax = ::std::numeric_limits<long>::max();
         // #i113884# Avoid int32 overflow with possible negative results than can cause bad effects.
         // If the draw page size is smaller than all rows, only the bottom of the sheet is affected.
@@ -3913,7 +3913,7 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
     aRowHeightRange.mnRow2 = -1;
     aRowHeightRange.mnValue = 0; // silence MSVC C4701
 
-    for (SCROW nRow = 0; nRow <= MAXROW; ++nRow)
+    for (SCROW nRow = 0; nRow <= pDocument->MaxRow(); ++nRow)
     {
         if (!mpHiddenRows->getRangeData(nRow, aData))
             // Failed to fetch the range data for whatever reason.
@@ -3937,8 +3937,8 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
 
         if (nSum > nHeight)
         {
-            if (nRow >= MAXROW)
-                return MAXROW;
+            if (nRow >= pDocument->MaxRow())
+                return pDocument->MaxRow();
 
             // Find the next visible row.
             ++nRow;
@@ -3951,7 +3951,7 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
                 // These rows are hidden.
                 nRow = aData.mnRow2 + 1;
 
-            return nRow <= MAXROW ? nRow : MAXROW;
+            return nRow <= pDocument->MaxRow() ? nRow : pDocument->MaxRow();
         }
     }
     return -1;

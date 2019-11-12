@@ -333,7 +333,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
         aCol[ i ].InitBlockPosition( blockPos[ i ] );
     if (!bAll && rSearchItem.GetBackward())
     {
-        SCROW nLastNonFilteredRow = MAXROW + 1;
+        SCROW nLastNonFilteredRow = pDocument->MaxRow() + 1;
         nCol = std::min(nCol, static_cast<SCCOL>(nLastCol + 1));
         nRow = std::min(nRow, static_cast<SCROW>(nLastRow + 1));
         if (rSearchItem.GetRowDirection())
@@ -405,7 +405,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     // Not found in this column.  Move to the next column.
                     bool bIsEmpty;
                     nRow = nLastRow;
-                    nLastNonFilteredRow = MAXROW + 1;
+                    nLastNonFilteredRow = pDocument->MaxRow() + 1;
                     do
                     {
                         nCol--;
@@ -476,7 +476,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                         else
                         {
                             if (!aCol[nCol].GetNextDataPos(nRow))
-                                nRow = MAXROW + 1;
+                                nRow = pDocument->MaxRow() + 1;
                         }
                     }
                 }
@@ -627,7 +627,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
             SCROW nNextRow = aCol[nCol].SearchStyle( nRow, pSearchStyle, bBack, bSelect, rMark );
             if (!ValidRow(nNextRow))
             {
-                nRow = bBack ? MAXROW : 0;
+                nRow = bBack ? pDocument->MaxRow() : 0;
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAdd );
             }
             else
@@ -669,7 +669,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
         }
         else                                // forwards
         {
-            nRow = MAXROW+1;
+            nRow = pDocument->MaxRow()+1;
             for (i=0; i < aColSize; ++i)
                 if (nNextRows[i]<nRow)
                 {
@@ -730,7 +730,7 @@ bool ScTable::SearchAllStyle(
         bool bFound = true;
         SCROW nRow = 0;
         SCROW nEndRow;
-        while (bFound && nRow <= MAXROW)
+        while (bFound && nRow <= pDocument->MaxRow())
         {
             bFound = aCol[i].SearchStyleRange( nRow, nEndRow, pSearchStyle, bBack, bSelect, rMark );
             if (bFound)
@@ -765,7 +765,7 @@ bool ScTable::ReplaceAllStyle(
         if (pReplaceStyle)
         {
             if (pUndoDoc)
-                pDocument->CopyToDocument(0, 0 ,nTab, MAXCOL,MAXROW,nTab,
+                pDocument->CopyToDocument(0, 0 ,nTab, pDocument->MaxCol(),pDocument->MaxRow(),nTab,
                                           InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &rMark);
             ApplySelectionStyle( *pReplaceStyle, rMark );
         }
@@ -955,7 +955,7 @@ bool ScTable::SearchRangeForEmptyCell(
         if (rSearchItem.GetRowDirection())
         {
             // row direction.
-            SCROW nLastNonFilteredRow = MAXROW + 1;
+            SCROW nLastNonFilteredRow = pDocument->MaxRow() + 1;
             SCROW nBeginRow = std::min(rRange.aEnd.Row(), rRow);
             for (SCROW nRow = nBeginRow; nRow >= rRange.aStart.Row(); --nRow)
             {
@@ -982,7 +982,7 @@ bool ScTable::SearchRangeForEmptyCell(
             SCCOL nBeginCol = std::min(rRange.aEnd.Col(), rCol);
             for (SCCOL nCol = nBeginCol; nCol >= rRange.aStart.Col(); --nCol)
             {
-                SCROW nLastNonFilteredRow = MAXROW + 1;
+                SCROW nLastNonFilteredRow = pDocument->MaxRow() + 1;
                 SCROW nBeginRow = rRange.aEnd.Row();
                 if (nCol == rCol && nBeginRow >= rRow)
                     // always start from one cell before the cursor.
