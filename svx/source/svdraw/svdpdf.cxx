@@ -798,7 +798,7 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         return;
 
     double a, b, c, d, e, f;
-    FPDFText_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
+    FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
     Matrix aTextMatrix(mCurMatrix);
 
     aTextMatrix.Transform(left, right, top, bottom);
@@ -850,7 +850,7 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     Color aTextColor(COL_TRANSPARENT);
     bool bFill = false;
     bool bUse = true;
-    switch (FPDFText_GetTextRenderMode(pPageObject))
+    switch (FPDFTextObj_GetTextRenderMode(pPageObject))
     {
         case FPDF_TEXTRENDERMODE_FILL:
         case FPDF_TEXTRENDERMODE_FILL_CLIP:

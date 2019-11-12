@@ -23,7 +23,7 @@ $(eval $(call gb_Library_set_include,pdfium,\
 ))
 
 $(eval $(call gb_Library_add_defs,pdfium,\
-    -DPDFIUM_DLLIMPLEMENTATION \
+    -DFPDF_IMPLEMENTATION \
     -DUSE_SYSTEM_LCMS2 \
     -DUSE_SYSTEM_LIBJPEG \
     -DUSE_SYSTEM_ZLIB \
@@ -241,6 +241,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_textrenderer \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_type3cache \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_type3glyphmap \
+    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_rendershading \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_creator \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_encryptor \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_flateencoder \
@@ -634,6 +635,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 
 $(eval $(call gb_Library_use_system_win32_libs,pdfium,\
     gdi32 \
+))
+
+$(eval $(call gb_Library_add_defs,pdfium,\
+    -DWIN32 \
 ))
 endif
 
