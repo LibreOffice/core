@@ -120,18 +120,18 @@ public:
     static void SetFillColor(OutputDevice* pRenderContext, long nStartRed, long nStartGreen,
                              long nStartBlue);
     static void DrawGradientBorder(OutputDevice* pRenderContext, Gradient const& rGradient,
-                                   tools::PolyPolygon const* pClixPolyPoly,
                                    tools::Rectangle aGradientBorderRect,
                                    tools::Rectangle aGradientMirroredBorderRect,
                                    Point const& rCenter, double nAngle, double fBorderWidth,
-                                   long nStartRed, long nStartGreen, long nStartBlue);
+                                   long nStartRed, long nStartGreen, long nStartBlue,
+                                   tools::PolyPolygon const* pClixPolyPoly);
     static void DrawGradientSteps(OutputDevice* pRenderContext, Gradient const& rGradient,
-                                  tools::PolyPolygon const* pClixPolyPoly,
                                   tools::Rectangle aGradientBorderRect,
                                   tools::Rectangle aGradientMirroredBorderRect,
                                   Point const& rCenter, double fBorderWidth, sal_uInt16 nAngle,
                                   long nStartRed, long nStartGreen, long nStartBlue, long nEndRed,
-                                  long nEndGreen, long nEndBlue);
+                                  long nEndGreen, long nEndBlue,
+                                  tools::PolyPolygon const* pClixPolyPoly);
     static void SetStepFillColor(OutputDevice* pRenderContext, long nStep, long nSteps,
                                  long nStartRed, long nStartGreen, long nStartBlue, long nEndRed,
                                  long nEndGreen, long nEndBlue);
@@ -141,6 +141,13 @@ public:
                                  sal_uInt16 nAngle, double fScanInc, double fGradientLine,
                                  double fMirrorGradientLine,
                                  tools::PolyPolygon const* pClixPolyPoly);
+    static void DrawMiddlePolygonWithEndColorAction(OutputDevice* pRenderContext,
+                                                    tools::Rectangle aGradientStepRect,
+                                                    Point const& rCenter, long nMiddlePos,
+                                                    double fGradientLine, long fMirrorGradientLine,
+                                                    long fScanInc, sal_uInt16 nAngle, long nEndRed,
+                                                    long nEndGreen, long nEndBlue,
+                                                    tools::PolyPolygon const* pClixPolyPoly);
 
     static long CalculateInterpolatedColor(long nStartColor, long nEndColor, double fAlpha);
 

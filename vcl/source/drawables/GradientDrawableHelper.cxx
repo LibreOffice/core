@@ -134,13 +134,13 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue)
         = GetColorIntensities(rGradient);
 
-    DrawGradientBorder(pRenderContext, rGradient, pClixPolyPoly, aGradientBorderRect,
-                       aGradientMirroredBorderRect, aCenter, nAngle, fBorderWidth, nStartRed,
-                       nStartGreen, nStartBlue);
+    DrawGradientBorder(pRenderContext, rGradient, aGradientBorderRect, aGradientMirroredBorderRect,
+                       aCenter, nAngle, fBorderWidth, nStartRed, nStartGreen, nStartBlue,
+                       pClixPolyPoly);
 
-    DrawGradientSteps(pRenderContext, rGradient, pClixPolyPoly, aGradientBorderRect,
-                      aGradientMirroredBorderRect, aCenter, nAngle, fBorderWidth, nStartRed,
-                      nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
+    DrawGradientSteps(pRenderContext, rGradient, aGradientBorderRect, aGradientMirroredBorderRect,
+                      aCenter, nAngle, fBorderWidth, nStartRed, nStartGreen, nStartBlue, nEndRed,
+                      nEndGreen, nEndBlue, pClixPolyPoly);
 }
 
 void GradientDrawableHelper::AddGradientBorderActions(
@@ -306,10 +306,10 @@ void GradientDrawableHelper::AddMiddlePolygonWithEndColorAction(
 }
 
 void GradientDrawableHelper::DrawGradientBorder(
-    OutputDevice* pRenderContext, Gradient const& rGradient,
-    tools::PolyPolygon const* pClixPolyPoly, tools::Rectangle aGradientBorderRect,
+    OutputDevice* pRenderContext, Gradient const& rGradient, tools::Rectangle aGradientBorderRect,
     tools::Rectangle aGradientMirroredStepRect, Point const& rCenter, double nAngle,
-    double fBorderWidth, long nStartRed, long nStartGreen, long nStartBlue)
+    double fBorderWidth, long nStartRed, long nStartGreen, long nStartBlue,
+    tools::PolyPolygon const* pClixPolyPoly)
 {
     if (fBorderWidth > 0.0)
     {
@@ -340,11 +340,10 @@ void GradientDrawableHelper::DrawGradientBorder(
 }
 
 void GradientDrawableHelper::DrawGradientSteps(
-    OutputDevice* pRenderContext, Gradient const& rGradient,
-    tools::PolyPolygon const* pClixPolyPoly, tools::Rectangle aGradientBorderRect,
+    OutputDevice* pRenderContext, Gradient const& rGradient, tools::Rectangle aGradientBorderRect,
     tools::Rectangle aGradientMirroredBorderRect, Point const& rCenter, double fBorderWidth,
     sal_uInt16 nAngle, long nStartRed, long nStartGreen, long nStartBlue, long nEndRed,
-    long nEndGreen, long nEndBlue)
+    long nEndGreen, long nEndBlue, tools::PolyPolygon const* pClixPolyPoly)
 {
     tools::Rectangle aGradientStepRect = aGradientBorderRect;
     tools::Rectangle aGradientMirroredStepRect = aGradientMirroredBorderRect;
@@ -382,23 +381,9 @@ void GradientDrawableHelper::DrawGradientSteps(
     if (rGradient.GetStyle() == GradientStyle::Linear)
         return;
 
-    // draw middle polygon with end color
-    sal_uInt16 nRed, nBlue, nGreen;
-    std::tie(nRed, nBlue, nGreen) = GetGradientColorValues(nEndRed, nEndGreen, nEndBlue);
-
-    SalGraphics* pGraphics = pRenderContext->GetGraphics();
-    pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
-
-    aGradientStepRect.SetTop(
-        static_cast<long>(fGradientLine + static_cast<double>(nSteps) * fScanInc));
-    aGradientStepRect.SetBottom(
-        static_cast<long>(fMirrorGradientLine - static_cast<double>(nSteps) * fScanInc));
-    tools::Polygon aPoly(RotatePolygon(aGradientStepRect, rCenter, nAngle));
-
-    if (pClixPolyPoly)
-        pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
-    else
-        pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
+    DrawMiddlePolygonWithEndColorAction(pRenderContext, aGradientStepRect, rCenter, nSteps,
+                                        fGradientLine, fMirrorGradientLine, fScanInc, nAngle,
+                                        nEndRed, nEndGreen, nEndBlue, pClixPolyPoly);
 }
 
 void GradientDrawableHelper::SetStepFillColor(OutputDevice* pRenderContext, long nStep, long nSteps,
@@ -448,6 +433,30 @@ void GradientDrawableHelper::DrawGradientStep(
         else
             pRenderContext->Draw(vcl::PolygonDrawable(aNonLinearPoly));
     }
+}
+
+void GradientDrawableHelper::DrawMiddlePolygonWithEndColorAction(
+    OutputDevice* pRenderContext, tools::Rectangle aGradientStepRect, Point const& rCenter,
+    long nMiddlePos, double fGradientLine, long fMirrorGradientLine, long fScanInc,
+    sal_uInt16 nAngle, long nEndRed, long nEndGreen, long nEndBlue,
+    tools::PolyPolygon const* pClixPolyPoly)
+{
+    sal_uInt16 nRed, nBlue, nGreen;
+    std::tie(nRed, nBlue, nGreen) = GetGradientColorValues(nEndRed, nEndGreen, nEndBlue);
+
+    SalGraphics* pGraphics = pRenderContext->GetGraphics();
+    pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
+
+    aGradientStepRect.SetTop(
+        static_cast<long>(fGradientLine + static_cast<double>(nMiddlePos) * fScanInc));
+    aGradientStepRect.SetBottom(
+        static_cast<long>(fMirrorGradientLine - static_cast<double>(nMiddlePos) * fScanInc));
+    tools::Polygon aPoly(RotatePolygon(aGradientStepRect, rCenter, nAngle));
+
+    if (pClixPolyPoly)
+        pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+    else
+        pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
 }
 
 Color GradientDrawableHelper::GetSingleColorGradientFill(OutputDevice* pRenderContext)
