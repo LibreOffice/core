@@ -1691,6 +1691,62 @@ namespace
         return AllSettings::GetLayoutRTL();
     }
 #endif
+
+    GtkWidget* ensureEventWidget(GtkWidget* pWidget)
+    {
+        GtkWidget* pMouseEventBox;
+        // not every widget has a GdkWindow and can get any event, so if we
+        // want an event it doesn't have, insert a GtkEventBox so we can get
+        // those
+        if (gtk_widget_get_has_window(pWidget))
+            pMouseEventBox = pWidget;
+        else
+        {
+            // remove the widget and replace it with an eventbox and put the old
+            // widget into it
+            GtkWidget* pParent = gtk_widget_get_parent(pWidget);
+
+            g_object_ref(pWidget);
+
+            gint nTopAttach(0), nLeftAttach(0), nHeight(1), nWidth(1);
+            if (GTK_IS_GRID(pParent))
+            {
+                gtk_container_child_get(GTK_CONTAINER(pParent), pWidget,
+                        "left-attach", &nTopAttach,
+                        "top-attach", &nLeftAttach,
+                        "width", &nWidth,
+                        "height", &nHeight,
+                        nullptr);
+            }
+
+            gtk_container_remove(GTK_CONTAINER(pParent), pWidget);
+
+            pMouseEventBox = gtk_event_box_new();
+            gtk_event_box_set_above_child(GTK_EVENT_BOX(pMouseEventBox), false);
+            gtk_event_box_set_visible_window(GTK_EVENT_BOX(pMouseEventBox), false);
+            gtk_widget_set_visible(pMouseEventBox, gtk_widget_get_visible(pWidget));
+
+            gtk_container_add(GTK_CONTAINER(pParent), pMouseEventBox);
+
+            if (GTK_IS_GRID(pParent))
+            {
+                gtk_container_child_set(GTK_CONTAINER(pParent), pMouseEventBox,
+                        "left-attach", nTopAttach,
+                        "top-attach", nLeftAttach,
+                        "width", nWidth,
+                        "height", nHeight,
+                        nullptr);
+            }
+
+            gtk_container_add(GTK_CONTAINER(pMouseEventBox), pWidget);
+            g_object_unref(pWidget);
+
+            gtk_widget_set_hexpand(pMouseEventBox, gtk_widget_get_hexpand(pWidget));
+            gtk_widget_set_vexpand(pMouseEventBox, gtk_widget_get_vexpand(pWidget));
+        }
+
+        return pMouseEventBox;
+    }
 }
 
 class GtkInstanceWidget : public virtual weld::Widget
@@ -1761,58 +1817,8 @@ protected:
 
     void ensureEventWidget()
     {
-        // not every widget has a GdkWindow and can get any event, so if we
-        // want an event it doesn't have, insert a GtkEventBox so we can get
-        // those
         if (!m_pMouseEventBox)
-        {
-            if (gtk_widget_get_has_window(m_pWidget))
-                m_pMouseEventBox = m_pWidget;
-            else
-            {
-                // remove the widget and replace it with an eventbox and put the old
-                // widget into it
-                GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
-
-                g_object_ref(m_pWidget);
-
-                gint nTopAttach(0), nLeftAttach(0), nHeight(1), nWidth(1);
-                if (GTK_IS_GRID(pParent))
-                {
-                    gtk_container_child_get(GTK_CONTAINER(pParent), m_pWidget,
-                            "left-attach", &nTopAttach,
-                            "top-attach", &nLeftAttach,
-                            "width", &nWidth,
-                            "height", &nHeight,
-                            nullptr);
-                }
-
-                gtk_container_remove(GTK_CONTAINER(pParent), m_pWidget);
-
-                m_pMouseEventBox = gtk_event_box_new();
-                gtk_event_box_set_above_child(GTK_EVENT_BOX(m_pMouseEventBox), false);
-                gtk_event_box_set_visible_window(GTK_EVENT_BOX(m_pMouseEventBox), false);
-                gtk_widget_show(m_pMouseEventBox);
-
-                gtk_container_add(GTK_CONTAINER(pParent), m_pMouseEventBox);
-
-                if (GTK_IS_GRID(pParent))
-                {
-                    gtk_container_child_set(GTK_CONTAINER(pParent), m_pMouseEventBox,
-                            "left-attach", nTopAttach,
-                            "top-attach", nLeftAttach,
-                            "width", nWidth,
-                            "height", nHeight,
-                            nullptr);
-                }
-
-                gtk_container_add(GTK_CONTAINER(m_pMouseEventBox), m_pWidget);
-                g_object_unref(m_pWidget);
-
-                gtk_widget_set_hexpand(m_pMouseEventBox, gtk_widget_get_hexpand(m_pWidget));
-                gtk_widget_set_vexpand(m_pMouseEventBox, gtk_widget_get_vexpand(m_pWidget));
-            }
-        }
+            m_pMouseEventBox = ::ensureEventWidget(m_pWidget);
     }
 
     void ensureButtonPressSignal()
