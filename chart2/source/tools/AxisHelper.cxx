@@ -364,6 +364,7 @@ Reference< XAxis > AxisHelper::createAxis(
                 aScale.AutoDateAxis = aMainScale.AutoDateAxis;
                 aScale.Categories = aMainScale.Categories;
                 aScale.Orientation = aMainScale.Orientation;
+                aScale.ShiftedCategoryPosition = aMainScale.ShiftedCategoryPosition;
 
                 xAxis->setScaleData( aScale );
 
