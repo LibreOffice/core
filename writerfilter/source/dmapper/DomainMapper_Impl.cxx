@@ -2264,7 +2264,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
                     xFootnoteText->createTextCursorByRange(xFootnoteText->getStart())));
 
         // Redlines for the footnote anchor in the main text content
-        std::vector< RedlineParamsPtr > aFootnoteRedline = m_aRedlines.top();
+        std::vector< RedlineParamsPtr > aFootnoteRedline = std::move(m_aRedlines.top());
         m_aRedlines.pop();
         CheckRedline( xFootnote->getAnchor( ) );
         m_aRedlines.push( aFootnoteRedline );

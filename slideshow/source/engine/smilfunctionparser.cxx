@@ -238,7 +238,7 @@ namespace slideshow
                         throw ParseError( "Not enough arguments for unary operator" );
 
                     // retrieve arguments
-                    std::shared_ptr<ExpressionNode> pArg( rNodeStack.top() );
+                    std::shared_ptr<ExpressionNode> pArg( std::move(rNodeStack.top()) );
                     rNodeStack.pop();
 
                     // check for constness
@@ -313,9 +313,9 @@ namespace slideshow
                         throw ParseError( "Not enough arguments for binary operator" );
 
                     // retrieve arguments
-                    std::shared_ptr<ExpressionNode> pSecondArg( rNodeStack.top() );
+                    std::shared_ptr<ExpressionNode> pSecondArg( std::move(rNodeStack.top()) );
                     rNodeStack.pop();
-                    std::shared_ptr<ExpressionNode> pFirstArg( rNodeStack.top() );
+                    std::shared_ptr<ExpressionNode> pFirstArg( std::move(rNodeStack.top()) );
                     rNodeStack.pop();
 
                     // create combined ExpressionNode
