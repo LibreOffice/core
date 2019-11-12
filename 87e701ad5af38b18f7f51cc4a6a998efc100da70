@@ -33,6 +33,24 @@
       "revId": "87e701ad5af38b18f7f51cc4a6a998efc100da70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_bfcb3470",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-11-12T15:50:31Z",
+      "side": 1,
+      "message": "You are right in the unconditional part - this should go inside the else block, then the preset gradient would be selected in the dialog next time.\n\nThe key to this issue is, as far as I understand, that chart does not work correctly if the custom gradients name is not OUString(). This is why I removed aString.\n\nOther items like paragraph, shape, frame or slide background do not have this quirk.",
+      "parentUuid": "7f7f9b97_df22b0a4",
+      "revId": "87e701ad5af38b18f7f51cc4a6a998efc100da70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
