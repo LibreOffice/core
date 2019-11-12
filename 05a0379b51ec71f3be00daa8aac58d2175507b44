@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_1fd34862",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-12T15:09:27Z",
+      "side": 1,
+      "message": "better use startsWithIgnoreAsciiCase",
+      "range": {
+        "startLine": 435,
+        "startChar": 38,
+        "endLine": 435,
+        "endChar": 48
+      },
+      "revId": "05a0379b51ec71f3be00daa8aac58d2175507b44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
