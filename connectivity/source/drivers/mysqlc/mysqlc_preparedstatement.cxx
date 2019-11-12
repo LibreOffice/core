@@ -182,7 +182,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString&
     m_binds[nIndex].buffer_type = MYSQL_TYPE_STRING;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, stringie.getStr(), MYSQL_TYPE_STRING,
                                     stringie.getLength());
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
     m_bindMetas[nIndex].length = stringie.getLength();
 }
 
@@ -228,7 +228,7 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 parameter, sal_Bool x)
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_TINY;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &x, MYSQL_TYPE_TINY);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setByte(sal_Int32 parameter, sal_Int8 x)
@@ -240,7 +240,7 @@ void SAL_CALL OPreparedStatement::setByte(sal_Int32 parameter, sal_Int8 x)
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_TINY;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &x, MYSQL_TYPE_TINY);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData)
@@ -258,7 +258,7 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_DATE;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &my_time, MYSQL_TYPE_DATE);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
@@ -276,7 +276,7 @@ void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_TIME;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &my_time, MYSQL_TYPE_TIME);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTime& aVal)
@@ -297,7 +297,7 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTi
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_DATETIME;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &my_time, MYSQL_TYPE_DATETIME);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setDouble(sal_Int32 parameter, double x)
@@ -309,7 +309,7 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 parameter, double x)
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_DOUBLE;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &x, MYSQL_TYPE_DOUBLE);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setFloat(sal_Int32 parameter, float x)
@@ -321,7 +321,7 @@ void SAL_CALL OPreparedStatement::setFloat(sal_Int32 parameter, float x)
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_FLOAT;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &x, MYSQL_TYPE_FLOAT);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setInt(sal_Int32 parameter, sal_Int32 x)
@@ -333,7 +333,7 @@ void SAL_CALL OPreparedStatement::setInt(sal_Int32 parameter, sal_Int32 x)
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_LONG;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &x, MYSQL_TYPE_LONG);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setLong(sal_Int32 parameter, sal_Int64 aVal)
@@ -345,7 +345,7 @@ void SAL_CALL OPreparedStatement::setLong(sal_Int32 parameter, sal_Int64 aVal)
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_LONGLONG;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &aVal, MYSQL_TYPE_LONGLONG);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setNull(sal_Int32 parameter, sal_Int32 /*sqlType*/)
@@ -355,7 +355,7 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 parameter, sal_Int32 /*sqlTy
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
-    m_bindMetas[nIndex].is_null = 1;
+    m_bindMetas[nIndex].is_null = true;
     free(m_binds[nIndex].buffer);
     m_binds[nIndex].buffer = nullptr;
 }
@@ -408,7 +408,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, co
     {
         free(m_binds[nIndex].buffer);
         m_binds[nIndex].buffer = nullptr;
-        m_bindMetas[parameterIndex - 1].is_null = 1;
+        m_bindMetas[parameterIndex - 1].is_null = true;
         return;
     }
 
@@ -433,7 +433,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, co
                 m_binds[nIndex].buffer_type = MYSQL_TYPE_DOUBLE;
                 mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &nValue, MYSQL_TYPE_DOUBLE,
                                                 sValue.getLength());
-                m_bindMetas[nIndex].is_null = 0;
+                m_bindMetas[nIndex].is_null = false;
                 break;
             }
 
@@ -478,7 +478,7 @@ void SAL_CALL OPreparedStatement::setShort(sal_Int32 parameter, sal_Int16 x)
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_SHORT;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &x, MYSQL_TYPE_SHORT);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence<sal_Int8>& x)
@@ -490,7 +490,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence<s
     const sal_Int32 nIndex = parameter - 1;
     m_binds[nIndex].buffer_type = MYSQL_TYPE_BLOB; // FIXME
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &x, MYSQL_TYPE_BLOB);
-    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].is_null = false;
 }
 
 void SAL_CALL OPreparedStatement::setCharacterStream(sal_Int32 parameter,
@@ -524,7 +524,7 @@ void SAL_CALL OPreparedStatement::clearParameters()
 
     for (size_t i = 0; i < m_binds.size(); ++i)
     {
-        m_bindMetas[i].is_null = 1;
+        m_bindMetas[i].is_null = true;
         free(m_binds[i].buffer);
         m_binds[i].buffer = nullptr;
     }

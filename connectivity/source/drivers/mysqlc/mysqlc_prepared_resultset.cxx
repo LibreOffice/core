@@ -111,9 +111,9 @@ bool OPreparedResultSet::fetchResult()
     }
     for (sal_Int32 i = 0; i < m_nColumnCount; ++i)
     {
-        m_aMetaData[i].is_null = 0;
+        m_aMetaData[i].is_null = false;
         m_aMetaData[i].length = 0l;
-        m_aMetaData[i].error = 0;
+        m_aMetaData[i].error = false;
 
         m_aData[i].is_null = &m_aMetaData[i].is_null;
         m_aData[i].buffer_length = m_aFields[i].type == MYSQL_TYPE_BLOB ? 0 : m_aFields[i].length;

@@ -137,7 +137,7 @@ namespace vcl {
 
 const char ScriptRun::fgClassID=0;
 
-static UBool sameScript(int32_t scriptOne, int32_t scriptTwo)
+static bool sameScript(int32_t scriptOne, int32_t scriptTwo)
 {
     return scriptOne <= USCRIPT_INHERITED || scriptTwo <= USCRIPT_INHERITED || scriptOne == scriptTwo;
 }

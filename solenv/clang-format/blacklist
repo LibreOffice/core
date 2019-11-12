@@ -1680,6 +1680,7 @@ compilerplugins/clang/expressionalwayszero.cxx
 compilerplugins/clang/externandnotdefined.cxx
 compilerplugins/clang/externvar.cxx
 compilerplugins/clang/faileddyncast.cxx
+compilerplugins/clang/fakebool.cxx
 compilerplugins/clang/finalclasses.cxx
 compilerplugins/clang/finalprotected.cxx
 compilerplugins/clang/flatten.cxx
@@ -1715,7 +1716,6 @@ compilerplugins/clang/redundantpointerops.cxx
 compilerplugins/clang/refcounting.cxx
 compilerplugins/clang/rendercontext.cxx
 compilerplugins/clang/reservedid.cxx
-compilerplugins/clang/salbool.cxx
 compilerplugins/clang/sallogareas.cxx
 compilerplugins/clang/salunicodeliteral.cxx
 compilerplugins/clang/sfxpoolitem.cxx
@@ -1788,6 +1788,7 @@ compilerplugins/clang/test/expressionalwayszero.cxx
 compilerplugins/clang/test/externvar.cxx
 compilerplugins/clang/test/externvar.hxx
 compilerplugins/clang/test/faileddyncast.cxx
+compilerplugins/clang/test/fakebool.cxx
 compilerplugins/clang/test/finalprotected.cxx
 compilerplugins/clang/test/flatten.cxx
 compilerplugins/clang/test/indentation.cxx
@@ -1804,7 +1805,6 @@ compilerplugins/clang/test/redundantinline.cxx
 compilerplugins/clang/test/redundantinline.hxx
 compilerplugins/clang/test/redundantpointerops.cxx
 compilerplugins/clang/test/refcounting.cxx
-compilerplugins/clang/test/salbool.cxx
 compilerplugins/clang/test/salunicodeliteral.cxx
 compilerplugins/clang/test/salunicodeliteral.hxx
 compilerplugins/clang/test/stringconcatauto.cxx

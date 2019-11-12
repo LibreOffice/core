@@ -255,7 +255,7 @@ void java_lang_Object::obtainMethodId_throwRuntime(JNIEnv* _pEnv,const char* _pM
 
 bool java_lang_Object::callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const
 {
-    jboolean out( false );
+    bool out( false );
 
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callBooleanMethod: no Java environment anymore!" );
@@ -269,7 +269,7 @@ bool java_lang_Object::callBooleanMethod( const char* _pMethodName, jmethodID& _
 
 bool java_lang_Object::callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const
 {
-    jboolean out( false );
+    bool out( false );
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callBooleanMethodWithIntArg: no Java environment anymore!" );
     obtainMethodId_throwSQL(t.pEnv, _pMethodName,"(I)Z", _inout_MethodID);
