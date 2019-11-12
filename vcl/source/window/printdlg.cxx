@@ -1873,6 +1873,7 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
             }
 
             updateOrientationBox( false );
+            setupPaperSidesBox();
 
             // tdf#63905 don't use cache: page size may change
             preparePreview(false);
