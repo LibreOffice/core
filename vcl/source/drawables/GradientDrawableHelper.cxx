@@ -88,17 +88,17 @@ void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderC
     if (!pMetaFile)
         return;
 
-    tools::Rectangle aGradientStepRect, aGradientMirroredStepRect;
+    tools::Rectangle aGradientBorderRect, aGradientMirroredBorderRect;
     Point aCenter;
     double fBorderWidth;
 
     // note that the inital gradient step and mirrored gradient step is the same as the border
-    std::tie(aGradientStepRect, aGradientMirroredStepRect, aCenter, fBorderWidth)
-        = GetStepValues(rGradient, rRect);
+    std::tie(aGradientBorderRect, aGradientMirroredBorderRect, aCenter, fBorderWidth)
+        = GetBorderValues(rGradient, rRect);
 
     // Create border
-    tools::Rectangle aGradientBorderRect = aGradientStepRect;
-    tools::Rectangle aGradientMirroredBorderRect = aGradientMirroredStepRect;
+    tools::Rectangle aGradientStepRect = aGradientBorderRect;
+    tools::Rectangle aGradientMirroredStepRect = aGradientMirroredBorderRect;
 
     long nStartRed, nStartGreen, nStartBlue;
     long nEndRed, nEndGreen, nEndBlue;
@@ -122,17 +122,17 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
                                                 Gradient const& rGradient,
                                                 tools::PolyPolygon const* pClixPolyPoly)
 {
-    tools::Rectangle aGradientStepRect, aGradientMirroredStepRect;
+    tools::Rectangle aGradientBorderRect, aGradientMirroredBorderRect;
     Point aCenter;
     double fBorderWidth;
 
     // note that the inital gradient step and mirrored gradient step is the same as the border
-    std::tie(aGradientStepRect, aGradientMirroredStepRect, aCenter, fBorderWidth)
-        = GetStepValues(rGradient, rRect);
+    std::tie(aGradientBorderRect, aGradientMirroredBorderRect, aCenter, fBorderWidth)
+        = GetBorderValues(rGradient, rRect);
 
     // Create border
-    tools::Rectangle aGradientBorderRect = aGradientStepRect;
-    tools::Rectangle aGradientMirroredBorderRect = aGradientMirroredStepRect;
+    tools::Rectangle aGradientStepRect = aGradientBorderRect;
+    tools::Rectangle aGradientMirroredStepRect = aGradientMirroredBorderRect;
 
     sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
@@ -419,23 +419,24 @@ tools::Polygon GradientDrawableHelper::RotatePolygon(tools::Rectangle const& rRe
 }
 
 std::tuple<tools::Rectangle, tools::Rectangle, Point, double>
-GradientDrawableHelper::GetStepValues(Gradient const& rGradient, tools::Rectangle const& rRect)
+GradientDrawableHelper::GetBorderValues(Gradient const& rGradient, tools::Rectangle const& rRect)
 {
     // get BoundRect of rotated rectangle
-    tools::Rectangle aGradientStepRect;
+    tools::Rectangle aGradientBorderRect;
     Point aCenter;
 
     // gets the sides of the step - we calculate the top and bottom later
-    rGradient.GetBoundRect(rRect, aGradientStepRect, aCenter);
-    double fBorderWidth = CalculateBorderWidth(rGradient, aGradientStepRect);
+    rGradient.GetBoundRect(rRect, aGradientBorderRect, aCenter);
+    double fBorderWidth = CalculateBorderWidth(rGradient, aGradientBorderRect);
 
-    tools::Rectangle aGradientMirroredStepRect = aGradientStepRect; // used in style axial
-    aGradientMirroredStepRect.SetTop((aGradientStepRect.Top() + aGradientStepRect.Bottom()) / 2);
+    tools::Rectangle aGradientMirroredBorderRect = aGradientBorderRect; // used in style axial
+    aGradientMirroredBorderRect.SetTop((aGradientBorderRect.Top() + aGradientBorderRect.Bottom())
+                                       / 2);
 
     if (rGradient.GetStyle() != GradientStyle::Linear)
-        aGradientStepRect.SetBottom(aGradientMirroredStepRect.Top());
+        aGradientBorderRect.SetBottom(aGradientMirroredBorderRect.Top());
 
-    return std::make_tuple(aGradientStepRect, aGradientMirroredStepRect, aCenter, fBorderWidth);
+    return std::make_tuple(aGradientBorderRect, aGradientMirroredBorderRect, aCenter, fBorderWidth);
 }
 
 std::tuple<long, long, long, long, long, long>

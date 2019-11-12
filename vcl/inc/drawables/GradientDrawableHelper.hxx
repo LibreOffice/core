@@ -127,7 +127,7 @@ public:
                                         sal_uInt16 nAngle);
 
     static std::tuple<tools::Rectangle, tools::Rectangle, Point, double>
-    GetStepValues(Gradient const& rGradient, tools::Rectangle const& rRect);
+    GetBorderValues(Gradient const& rGradient, tools::Rectangle const& rRect);
 
     static std::tuple<long, long, long, long, long, long>
     GetColorIntensities(Gradient const& rGradient);
