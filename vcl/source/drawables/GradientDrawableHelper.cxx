@@ -26,18 +26,6 @@
 
 namespace vcl
 {
-tools::Rectangle GradientDrawableHelper::ExpandGradientOverBorder(tools::Rectangle aRect)
-{
-    // because we draw with no border line, we have to expand gradient
-    // rect to avoid missing lines on the right and bottom edge
-    aRect.AdjustLeft(-1);
-    aRect.AdjustTop(-1);
-    aRect.AdjustRight(1);
-    aRect.AdjustBottom(1);
-
-    return aRect;
-}
-
 bool GradientDrawableHelper::AddGradientActions(OutputDevice* pRenderContext,
                                                 tools::Rectangle const& rRect,
                                                 Gradient const& rGradient, GDIMetaFile* pMetaFile)
@@ -78,6 +66,18 @@ bool GradientDrawableHelper::AddGradientActions(OutputDevice* pRenderContext,
     pRenderContext->SetConnectMetaFile(pOldMtf);
 
     return true;
+}
+
+tools::Rectangle GradientDrawableHelper::ExpandGradientOverBorder(tools::Rectangle aRect)
+{
+    // because we draw with no border line, we have to expand gradient
+    // rect to avoid missing lines on the right and bottom edge
+    aRect.AdjustLeft(-1);
+    aRect.AdjustTop(-1);
+    aRect.AdjustRight(1);
+    aRect.AdjustBottom(1);
+
+    return aRect;
 }
 
 void GradientDrawableHelper::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
@@ -143,114 +143,6 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
                       nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 }
 
-Color GradientDrawableHelper::GetSingleColorGradientFill(OutputDevice* pRenderContext)
-{
-    // we should never call on this function if any of these aren't set!
-    assert(pRenderContext->GetDrawMode()
-           & (DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient
-              | DrawModeFlags::SettingsGradient));
-
-    if (pRenderContext->GetDrawMode() & DrawModeFlags::BlackGradient)
-        return COL_BLACK;
-    else if (pRenderContext->GetDrawMode() & DrawModeFlags::WhiteGradient)
-        return COL_WHITE;
-    else if (pRenderContext->GetDrawMode() & DrawModeFlags::SettingsGradient)
-        return pRenderContext->GetSettings().GetStyleSettings().GetWindowColor();
-
-    return Color();
-}
-
-void GradientDrawableHelper::SetGrayscaleColors(OutputDevice* pRenderContext, Gradient& rGradient)
-{
-    // this should only be called with the drawing mode is for grayscale gradients
-    assert(pRenderContext->GetDrawMode() & DrawModeFlags::GrayGradient);
-
-    Color aStartCol(rGradient.GetStartColor());
-    Color aEndCol(rGradient.GetEndColor());
-
-    if (pRenderContext->GetDrawMode() & DrawModeFlags::GrayGradient)
-    {
-        sal_uInt8 cStartLum = aStartCol.GetLuminance(), cEndLum = aEndCol.GetLuminance();
-        aStartCol = Color(cStartLum, cStartLum, cStartLum);
-        aEndCol = Color(cEndLum, cEndLum, cEndLum);
-    }
-
-    rGradient.SetStartColor(aStartCol);
-    rGradient.SetEndColor(aEndCol);
-}
-
-long GradientDrawableHelper::GetStartColorIntensity(Gradient const& rGradient, double nColor)
-{
-    long nFactor = rGradient.GetStartIntensity();
-    return (nColor * nFactor) / 100;
-}
-
-std::tuple<long, long, long>
-GradientDrawableHelper::GetStartColorIntensityValues(Gradient const& rGradient)
-{
-    Color aColor = rGradient.GetStartColor();
-
-    return std::make_tuple(GetStartColorIntensity(rGradient, aColor.GetRed()),
-                           GetStartColorIntensity(rGradient, aColor.GetGreen()),
-                           GetStartColorIntensity(rGradient, aColor.GetBlue()));
-}
-
-long GradientDrawableHelper::GetEndColorIntensity(Gradient const& rGradient, double nColor)
-{
-    long nFactor = rGradient.GetEndIntensity();
-    return (nColor * nFactor) / 100;
-}
-
-std::tuple<long, long, long>
-GradientDrawableHelper::GetEndColorIntensityValues(Gradient const& rGradient)
-{
-    Color aColor = rGradient.GetEndColor();
-
-    return std::make_tuple(GetEndColorIntensity(rGradient, aColor.GetRed()),
-                           GetEndColorIntensity(rGradient, aColor.GetGreen()),
-                           GetEndColorIntensity(rGradient, aColor.GetBlue()));
-}
-
-sal_uInt8 GradientDrawableHelper::GetGradientColorValue(long nValue)
-{
-    if (nValue < 0)
-        return 0;
-    else if (nValue > 0xFF)
-        return 0xFF;
-    else
-        return static_cast<sal_uInt8>(nValue);
-}
-
-std::tuple<sal_uInt16, sal_uInt16, sal_uInt16>
-GradientDrawableHelper::GetGradientColorValues(long nRed, long nGreen, long nBlue)
-{
-    return std::make_tuple(GetGradientColorValue(nRed), GetGradientColorValue(nGreen),
-                           GetGradientColorValue(nBlue));
-}
-
-double GradientDrawableHelper::CalculateBorderWidth(Gradient const& rGradient,
-                                                    tools::Rectangle const& rRect)
-{
-    double fBorderWidth = rGradient.GetBorder() * rRect.GetHeight() / 100.0;
-
-    if (rGradient.GetStyle() != GradientStyle::Linear)
-        fBorderWidth /= 2.0;
-
-    return fBorderWidth;
-}
-
-void GradientDrawableHelper::AddFillColorAction(OutputDevice* pRenderContext, long nStartRed,
-                                                long nStartGreen, long nStartBlue)
-{
-    GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
-
-    sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed);
-    sal_uInt8 nGreen = static_cast<sal_uInt8>(nStartGreen);
-    sal_uInt8 nBlue = static_cast<sal_uInt8>(nStartBlue);
-
-    pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
-}
-
 void GradientDrawableHelper::AddGradientBorderActions(
     OutputDevice* pRenderContext, Gradient const& rGradient,
     tools::Rectangle const& rGradientBorderRect,
@@ -264,6 +156,18 @@ void GradientDrawableHelper::AddGradientBorderActions(
         AddGradientBorderRect(pRenderContext, rGradient, rGradientBorderRect,
                               rGradientMirroredBorderRect, rCenter, nAngle, fBorderWidth);
     }
+}
+
+void GradientDrawableHelper::AddFillColorAction(OutputDevice* pRenderContext, long nStartRed,
+                                                long nStartGreen, long nStartBlue)
+{
+    GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
+
+    sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed);
+    sal_uInt8 nGreen = static_cast<sal_uInt8>(nStartGreen);
+    sal_uInt8 nBlue = static_cast<sal_uInt8>(nStartBlue);
+
+    pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 }
 
 void GradientDrawableHelper::AddGradientBorderRect(OutputDevice* pRenderContext,
@@ -286,33 +190,6 @@ void GradientDrawableHelper::AddGradientBorderRect(OutputDevice* pRenderContext,
 
         pMetaFile->AddAction(
             new MetaPolygonAction(RotatePolygon(aGradientBorderRect, rCenter, nAngle)));
-    }
-}
-
-void GradientDrawableHelper::AddStepPolygonAction(OutputDevice* pRenderContext, double nStep,
-                                                  Gradient const& rGradient,
-                                                  tools::Rectangle aGradientStepRect,
-                                                  tools::Rectangle aGradientMirroredStepRect,
-                                                  Point const& rCenter, sal_uInt16 nAngle,
-                                                  double fScanInc, double fGradientLine,
-                                                  double fMirrorGradientLine)
-{
-    GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
-
-    aGradientStepRect.SetTop(static_cast<long>(fGradientLine + nStep * fScanInc));
-    aGradientStepRect.SetBottom(static_cast<long>(fGradientLine + (nStep + 1.0) * fScanInc));
-
-    pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aGradientStepRect, rCenter, nAngle)));
-
-    if (rGradient.GetStyle() != GradientStyle::Linear)
-    {
-        aGradientMirroredStepRect.SetBottom(
-            static_cast<long>(fMirrorGradientLine - nStep * fScanInc));
-        aGradientMirroredStepRect.SetTop(
-            static_cast<long>(fMirrorGradientLine - (nStep + 1.0) * fScanInc));
-
-        pMetaFile->AddAction(
-            new MetaPolygonAction(RotatePolygon(aGradientMirroredStepRect, rCenter, nAngle)));
     }
 }
 
@@ -374,6 +251,33 @@ void GradientDrawableHelper::AddGradientSteps(
     pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aGradientStepRect, rCenter, nAngle)));
 }
 
+void GradientDrawableHelper::AddStepPolygonAction(OutputDevice* pRenderContext, double nStep,
+                                                  Gradient const& rGradient,
+                                                  tools::Rectangle aGradientStepRect,
+                                                  tools::Rectangle aGradientMirroredStepRect,
+                                                  Point const& rCenter, sal_uInt16 nAngle,
+                                                  double fScanInc, double fGradientLine,
+                                                  double fMirrorGradientLine)
+{
+    GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
+
+    aGradientStepRect.SetTop(static_cast<long>(fGradientLine + nStep * fScanInc));
+    aGradientStepRect.SetBottom(static_cast<long>(fGradientLine + (nStep + 1.0) * fScanInc));
+
+    pMetaFile->AddAction(new MetaPolygonAction(RotatePolygon(aGradientStepRect, rCenter, nAngle)));
+
+    if (rGradient.GetStyle() != GradientStyle::Linear)
+    {
+        aGradientMirroredStepRect.SetBottom(
+            static_cast<long>(fMirrorGradientLine - nStep * fScanInc));
+        aGradientMirroredStepRect.SetTop(
+            static_cast<long>(fMirrorGradientLine - (nStep + 1.0) * fScanInc));
+
+        pMetaFile->AddAction(
+            new MetaPolygonAction(RotatePolygon(aGradientMirroredStepRect, rCenter, nAngle)));
+    }
+}
+
 void GradientDrawableHelper::AddStepFillColorAction(OutputDevice* pRenderContext, long nStep,
                                                     long nSteps, long nStartRed, long nStartGreen,
                                                     long nStartBlue, long nEndRed, long nEndGreen,
@@ -391,118 +295,6 @@ void GradientDrawableHelper::AddStepFillColorAction(OutputDevice* pRenderContext
 
     GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
     pMetaFile->AddAction(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
-}
-
-long GradientDrawableHelper::GetLinearGradientSteps(long nStepCount, long nStartRed,
-                                                    long nStartGreen, long nStartBlue, long nEndRed,
-                                                    long nEndGreen, long nEndBlue)
-{
-    // minimal three steps and maximal as max color steps
-    long nAbsRedSteps = std::abs(nEndRed - nStartRed);
-    long nAbsGreenSteps = std::abs(nEndGreen - nStartGreen);
-    long nAbsBlueSteps = std::abs(nEndBlue - nStartBlue);
-
-    long nMaxColorSteps = std::max(nAbsRedSteps, nAbsGreenSteps);
-    nMaxColorSteps = std::max(nMaxColorSteps, nAbsBlueSteps);
-
-    long nSteps = std::min(nStepCount, nMaxColorSteps);
-    nSteps = std::max(3L, nSteps);
-
-    return nSteps;
-}
-
-long GradientDrawableHelper::CalculateInterpolatedColor(long nStartColor, long nEndColor,
-                                                        double fAlpha)
-{
-    double fColor = static_cast<double>(nStartColor) * (1.0 - fAlpha)
-                    + static_cast<double>(nEndColor) * fAlpha;
-
-    return static_cast<long>(fColor);
-}
-
-tools::Polygon GradientDrawableHelper::RotatePolygon(tools::Rectangle const& rRect,
-                                                     Point const& rCenter, sal_uInt16 nAngle)
-{
-    tools::Polygon aPoly(4);
-
-    aPoly[0] = rRect.TopLeft();
-    aPoly[1] = rRect.TopRight();
-    aPoly[2] = rRect.BottomRight();
-    aPoly[3] = rRect.BottomLeft();
-    aPoly.Rotate(rCenter, nAngle);
-
-    return aPoly;
-}
-
-std::tuple<tools::Rectangle, tools::Rectangle, Point, double>
-GradientDrawableHelper::GetBorderValues(Gradient const& rGradient, tools::Rectangle const& rRect)
-{
-    // get BoundRect of rotated rectangle
-    tools::Rectangle aGradientBorderRect;
-    Point aCenter;
-
-    // gets the sides of the step - we calculate the top and bottom later
-    rGradient.GetBoundRect(rRect, aGradientBorderRect, aCenter);
-    double fBorderWidth = CalculateBorderWidth(rGradient, aGradientBorderRect);
-
-    tools::Rectangle aGradientMirroredBorderRect = aGradientBorderRect; // used in style axial
-    aGradientMirroredBorderRect.SetTop((aGradientBorderRect.Top() + aGradientBorderRect.Bottom())
-                                       / 2);
-
-    if (rGradient.GetStyle() != GradientStyle::Linear)
-        aGradientBorderRect.SetBottom(aGradientMirroredBorderRect.Top());
-
-    return std::make_tuple(aGradientBorderRect, aGradientMirroredBorderRect, aCenter, fBorderWidth);
-}
-
-std::tuple<long, long, long, long, long, long>
-GradientDrawableHelper::GetColorIntensities(Gradient const& rGradient)
-{
-    long nStartRed, nStartGreen, nStartBlue;
-    std::tie(nStartRed, nStartGreen, nStartBlue) = GetStartColorIntensityValues(rGradient);
-
-    long nEndRed, nEndGreen, nEndBlue;
-    std::tie(nEndRed, nEndGreen, nEndBlue) = GetEndColorIntensityValues(rGradient);
-
-    // gradient style axial has exchanged start and end colors
-    if (rGradient.GetStyle() != GradientStyle::Linear)
-    {
-        std::swap(nStartRed, nEndRed);
-        std::swap(nStartGreen, nEndGreen);
-        std::swap(nStartBlue, nEndBlue);
-    }
-
-    return std::make_tuple(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
-}
-
-tools::Rectangle GradientDrawableHelper::SetGradientStepTop(tools::Rectangle const& rBorderRect,
-                                                            double fBorderWidth,
-                                                            tools::Rectangle aGradientStepRect)
-{
-    aGradientStepRect.SetTop(static_cast<long>(rBorderRect.Top() + fBorderWidth));
-
-    return aGradientStepRect;
-}
-
-tools::Rectangle GradientDrawableHelper::SetGradientMirroredStepBottom(
-    Gradient const& rGradient, tools::Rectangle const& rBorderRect, double fBorderWidth,
-    tools::Rectangle aGradientMirroredStepRect)
-{
-    if (rGradient.GetStyle() != GradientStyle::Linear)
-        aGradientMirroredStepRect.SetBottom(static_cast<long>(rBorderRect.Bottom() - fBorderWidth));
-
-    return aGradientMirroredStepRect;
-}
-
-void GradientDrawableHelper::SetFillColor(OutputDevice* pRenderContext, long nStartRed,
-                                          long nStartGreen, long nStartBlue)
-{
-    sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed);
-    sal_uInt8 nGreen = static_cast<sal_uInt8>(nStartGreen);
-    sal_uInt8 nBlue = static_cast<sal_uInt8>(nStartBlue);
-
-    SalGraphics* pGraphics = pRenderContext->GetGraphics();
-    pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
 }
 
 void GradientDrawableHelper::DrawGradientBorder(
@@ -632,6 +424,214 @@ void GradientDrawableHelper::DrawGradientSteps(
         pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
     else
         pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
+}
+
+Color GradientDrawableHelper::GetSingleColorGradientFill(OutputDevice* pRenderContext)
+{
+    // we should never call on this function if any of these aren't set!
+    assert(pRenderContext->GetDrawMode()
+           & (DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient
+              | DrawModeFlags::SettingsGradient));
+
+    if (pRenderContext->GetDrawMode() & DrawModeFlags::BlackGradient)
+        return COL_BLACK;
+    else if (pRenderContext->GetDrawMode() & DrawModeFlags::WhiteGradient)
+        return COL_WHITE;
+    else if (pRenderContext->GetDrawMode() & DrawModeFlags::SettingsGradient)
+        return pRenderContext->GetSettings().GetStyleSettings().GetWindowColor();
+
+    return Color();
+}
+
+void GradientDrawableHelper::SetGrayscaleColors(OutputDevice* pRenderContext, Gradient& rGradient)
+{
+    // this should only be called with the drawing mode is for grayscale gradients
+    assert(pRenderContext->GetDrawMode() & DrawModeFlags::GrayGradient);
+
+    Color aStartCol(rGradient.GetStartColor());
+    Color aEndCol(rGradient.GetEndColor());
+
+    if (pRenderContext->GetDrawMode() & DrawModeFlags::GrayGradient)
+    {
+        sal_uInt8 cStartLum = aStartCol.GetLuminance(), cEndLum = aEndCol.GetLuminance();
+        aStartCol = Color(cStartLum, cStartLum, cStartLum);
+        aEndCol = Color(cEndLum, cEndLum, cEndLum);
+    }
+
+    rGradient.SetStartColor(aStartCol);
+    rGradient.SetEndColor(aEndCol);
+}
+
+long GradientDrawableHelper::GetStartColorIntensity(Gradient const& rGradient, double nColor)
+{
+    long nFactor = rGradient.GetStartIntensity();
+    return (nColor * nFactor) / 100;
+}
+
+std::tuple<long, long, long>
+GradientDrawableHelper::GetStartColorIntensityValues(Gradient const& rGradient)
+{
+    Color aColor = rGradient.GetStartColor();
+
+    return std::make_tuple(GetStartColorIntensity(rGradient, aColor.GetRed()),
+                           GetStartColorIntensity(rGradient, aColor.GetGreen()),
+                           GetStartColorIntensity(rGradient, aColor.GetBlue()));
+}
+
+long GradientDrawableHelper::GetEndColorIntensity(Gradient const& rGradient, double nColor)
+{
+    long nFactor = rGradient.GetEndIntensity();
+    return (nColor * nFactor) / 100;
+}
+
+std::tuple<long, long, long>
+GradientDrawableHelper::GetEndColorIntensityValues(Gradient const& rGradient)
+{
+    Color aColor = rGradient.GetEndColor();
+
+    return std::make_tuple(GetEndColorIntensity(rGradient, aColor.GetRed()),
+                           GetEndColorIntensity(rGradient, aColor.GetGreen()),
+                           GetEndColorIntensity(rGradient, aColor.GetBlue()));
+}
+
+sal_uInt8 GradientDrawableHelper::GetGradientColorValue(long nValue)
+{
+    if (nValue < 0)
+        return 0;
+    else if (nValue > 0xFF)
+        return 0xFF;
+    else
+        return static_cast<sal_uInt8>(nValue);
+}
+
+std::tuple<sal_uInt16, sal_uInt16, sal_uInt16>
+GradientDrawableHelper::GetGradientColorValues(long nRed, long nGreen, long nBlue)
+{
+    return std::make_tuple(GetGradientColorValue(nRed), GetGradientColorValue(nGreen),
+                           GetGradientColorValue(nBlue));
+}
+
+double GradientDrawableHelper::CalculateBorderWidth(Gradient const& rGradient,
+                                                    tools::Rectangle const& rRect)
+{
+    double fBorderWidth = rGradient.GetBorder() * rRect.GetHeight() / 100.0;
+
+    if (rGradient.GetStyle() != GradientStyle::Linear)
+        fBorderWidth /= 2.0;
+
+    return fBorderWidth;
+}
+
+long GradientDrawableHelper::GetLinearGradientSteps(long nStepCount, long nStartRed,
+                                                    long nStartGreen, long nStartBlue, long nEndRed,
+                                                    long nEndGreen, long nEndBlue)
+{
+    // minimal three steps and maximal as max color steps
+    long nAbsRedSteps = std::abs(nEndRed - nStartRed);
+    long nAbsGreenSteps = std::abs(nEndGreen - nStartGreen);
+    long nAbsBlueSteps = std::abs(nEndBlue - nStartBlue);
+
+    long nMaxColorSteps = std::max(nAbsRedSteps, nAbsGreenSteps);
+    nMaxColorSteps = std::max(nMaxColorSteps, nAbsBlueSteps);
+
+    long nSteps = std::min(nStepCount, nMaxColorSteps);
+    nSteps = std::max(3L, nSteps);
+
+    return nSteps;
+}
+
+long GradientDrawableHelper::CalculateInterpolatedColor(long nStartColor, long nEndColor,
+                                                        double fAlpha)
+{
+    double fColor = static_cast<double>(nStartColor) * (1.0 - fAlpha)
+                    + static_cast<double>(nEndColor) * fAlpha;
+
+    return static_cast<long>(fColor);
+}
+
+tools::Polygon GradientDrawableHelper::RotatePolygon(tools::Rectangle const& rRect,
+                                                     Point const& rCenter, sal_uInt16 nAngle)
+{
+    tools::Polygon aPoly(4);
+
+    aPoly[0] = rRect.TopLeft();
+    aPoly[1] = rRect.TopRight();
+    aPoly[2] = rRect.BottomRight();
+    aPoly[3] = rRect.BottomLeft();
+    aPoly.Rotate(rCenter, nAngle);
+
+    return aPoly;
+}
+
+std::tuple<tools::Rectangle, tools::Rectangle, Point, double>
+GradientDrawableHelper::GetBorderValues(Gradient const& rGradient, tools::Rectangle const& rRect)
+{
+    // get BoundRect of rotated rectangle
+    tools::Rectangle aGradientBorderRect;
+    Point aCenter;
+
+    // gets the sides of the step - we calculate the top and bottom later
+    rGradient.GetBoundRect(rRect, aGradientBorderRect, aCenter);
+    double fBorderWidth = CalculateBorderWidth(rGradient, aGradientBorderRect);
+
+    tools::Rectangle aGradientMirroredBorderRect = aGradientBorderRect; // used in style axial
+    aGradientMirroredBorderRect.SetTop((aGradientBorderRect.Top() + aGradientBorderRect.Bottom())
+                                       / 2);
+
+    if (rGradient.GetStyle() != GradientStyle::Linear)
+        aGradientBorderRect.SetBottom(aGradientMirroredBorderRect.Top());
+
+    return std::make_tuple(aGradientBorderRect, aGradientMirroredBorderRect, aCenter, fBorderWidth);
+}
+
+std::tuple<long, long, long, long, long, long>
+GradientDrawableHelper::GetColorIntensities(Gradient const& rGradient)
+{
+    long nStartRed, nStartGreen, nStartBlue;
+    std::tie(nStartRed, nStartGreen, nStartBlue) = GetStartColorIntensityValues(rGradient);
+
+    long nEndRed, nEndGreen, nEndBlue;
+    std::tie(nEndRed, nEndGreen, nEndBlue) = GetEndColorIntensityValues(rGradient);
+
+    // gradient style axial has exchanged start and end colors
+    if (rGradient.GetStyle() != GradientStyle::Linear)
+    {
+        std::swap(nStartRed, nEndRed);
+        std::swap(nStartGreen, nEndGreen);
+        std::swap(nStartBlue, nEndBlue);
+    }
+
+    return std::make_tuple(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
+}
+
+tools::Rectangle GradientDrawableHelper::SetGradientStepTop(tools::Rectangle const& rBorderRect,
+                                                            double fBorderWidth,
+                                                            tools::Rectangle aGradientStepRect)
+{
+    aGradientStepRect.SetTop(static_cast<long>(rBorderRect.Top() + fBorderWidth));
+
+    return aGradientStepRect;
+}
+
+tools::Rectangle GradientDrawableHelper::SetGradientMirroredStepBottom(
+    Gradient const& rGradient, tools::Rectangle const& rBorderRect, double fBorderWidth,
+    tools::Rectangle aGradientMirroredStepRect)
+{
+    if (rGradient.GetStyle() != GradientStyle::Linear)
+        aGradientMirroredStepRect.SetBottom(static_cast<long>(rBorderRect.Bottom() - fBorderWidth));
+
+    return aGradientMirroredStepRect;
+}
+
+void GradientDrawableHelper::SetFillColor(OutputDevice* pRenderContext, long nStartRed,
+                                          long nStartGreen, long nStartBlue)
+{
+    sal_uInt8 nRed = static_cast<sal_uInt8>(nStartRed);
+    sal_uInt8 nGreen = static_cast<sal_uInt8>(nStartGreen);
+    sal_uInt8 nBlue = static_cast<sal_uInt8>(nStartBlue);
+
+    SalGraphics* pGraphics = pRenderContext->GetGraphics();
+    pGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
 }
 
 void GradientDrawableHelper::DrawComplexGradientToMetafile(OutputDevice* pRenderContext,
