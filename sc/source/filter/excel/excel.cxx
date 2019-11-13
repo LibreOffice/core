@@ -261,7 +261,8 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         if (sCryptoType.getLength())
         {
             uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
-            uno::Sequence<uno::Any> aArguments;
+            uno::Sequence<uno::Any> aArguments(1);
+            aArguments[0] = uno::makeAny(beans::NamedValue("Binary", uno::makeAny(true)));
             xPackageEncryption.set(
                 xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), uno::UNO_QUERY);
