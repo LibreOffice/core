@@ -88,7 +88,7 @@ class VisualBackendTestWindow : public WorkWindow
 private:
     Timer maUpdateTimer;
     std::vector<std::chrono::high_resolution_clock::time_point> mTimePoints;
-    static constexpr unsigned char gnNumberOfTests = 7;
+    static constexpr unsigned char gnNumberOfTests = 8;
     unsigned char mnTest;
     bool mbAnimate;
     ScopedVclPtr<VirtualDevice> mpVDev;
@@ -389,6 +389,43 @@ public:
         }
     }
 
+    static void testInvert(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(2, 2, nWidth, nHeight);
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestRect aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupInvert_NONE();
+            assertAndSetBackground(vcl::test::OutputDeviceTestRect::checkInvertRectangle(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestRect aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupInvert_N50();
+            assertAndSetBackground(vcl::test::OutputDeviceTestRect::checkInvertN50Rectangle(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestRect aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupInvert_TrackFrame();
+            assertAndSetBackground(vcl::test::OutputDeviceTestRect::checkInvertTrackFrameRectangle(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupXOR();
+            assertAndSetBackground(vcl::test::OutputDeviceTestAnotherOutDev::checkXOR(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+    }
+
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
     {
         if (mnTest % gnNumberOfTests == gnNumberOfTests - 1)
@@ -485,20 +522,17 @@ public:
         }
         else if (mnTest % gnNumberOfTests == 5)
         {
-            std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
+            testInvert(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 6)
+        {
+            std::vector<tools::Rectangle> aRegions = setupRegions(3, 1, nWidth, nHeight);
 
             aRectangle = aRegions[index++];
             {
                 vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
                 Bitmap aBitmap = aOutDevTest.setupDrawOutDev();
                 assertAndSetBackground(vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDev(aBitmap), aRectangle, rRenderContext);
-                drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
-            }
-            aRectangle = aRegions[index++];
-            {
-                vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
-                Bitmap aBitmap = aOutDevTest.setupXOR();
-                assertAndSetBackground(vcl::test::OutputDeviceTestAnotherOutDev::checkXOR(aBitmap), aRectangle, rRenderContext);
                 drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
             }
             aRectangle = aRegions[index++];
