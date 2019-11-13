@@ -40,7 +40,6 @@ public:
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
 private:
-    ScXMLImport&            mrScImport;
     ScXMLExternalTabData&   mrExternalRefInfo;
 
     OUString         maRelativeUrl;
@@ -61,7 +60,6 @@ public:
                         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
-    ScXMLImport&            mrScImport;
     ScXMLExternalTabData&   mrExternalRefInfo;
 };
 

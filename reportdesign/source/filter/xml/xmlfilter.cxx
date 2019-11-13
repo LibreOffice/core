@@ -86,7 +86,7 @@ using namespace ::com::sun::star::util;
 class RptMLMasterStylesContext_Impl:
     public XMLTextMasterStylesContext
 {
-    ORptFilter& m_rImport;
+    ORptFilter& GetImport() { return static_cast<ORptFilter&>(XMLTextMasterStylesContext::GetImport()); }
 
 public:
 
@@ -106,14 +106,13 @@ RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
         const OUString& rLName ,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
     XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
-    ,m_rImport(rImport)
 {
 }
 
 void RptMLMasterStylesContext_Impl::EndElement()
 {
     FinishStyles( true );
-    m_rImport.FinishStyles();
+    GetImport().FinishStyles();
 }
 
     /// read a component (file + filter version)
