@@ -426,7 +426,7 @@ index 2db9e79ae6..7950dc159b 100644
      void swapBuffers() override;
  
 -    bool isValid() override { return fDevice != VK_NULL_HANDLE; }
-+    bool isValid() override { return fShared->fDevice != VK_NULL_HANDLE; }
++    bool isValid() override { return fShared && fShared->fDevice != VK_NULL_HANDLE; }
  
      void resize(int w, int h) override {
          this->createSwapchain(w, h, fDisplayParams);
