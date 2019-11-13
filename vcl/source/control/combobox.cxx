@@ -914,11 +914,7 @@ void ComboBox::RemoveEntry( const OUString& rStr )
 void ComboBox::RemoveEntryAt(sal_Int32 const nPos)
 {
     const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
-    if (nPos < 0 || nPos > COMBOBOX_MAX_ENTRIES - nMRUCount)
-    {
-        assert("bad position");
-        return;
-    }
+    assert(nPos >= 0 && nPos <= COMBOBOX_MAX_ENTRIES - nMRUCount);
     m_pImpl->m_pImplLB->RemoveEntry( nPos + nMRUCount );
     CallEventListeners( VclEventId::ComboboxItemRemoved, reinterpret_cast<void*>(nPos) );
 }
