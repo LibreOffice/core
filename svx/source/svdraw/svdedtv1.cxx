@@ -69,6 +69,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
+#include <svx/sdprcitm.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <rtl/ustring.hxx>
 #include <sfx2/viewsh.hxx>
@@ -1000,6 +1001,19 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                             sPayload = OUString::number(nWidth);
 
                             sPayload = ".uno:LineWidth=" + sPayload;
+                        }
+                        break;
+                    }
+
+                    case SDRATTR_SHADOWTRANSPARENCE:
+                    {
+                        const SfxPoolItem* pItem = rSet.GetItem(SDRATTR_SHADOWTRANSPARENCE);
+                        if (pItem)
+                        {
+                            sal_uInt16 nWidth = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                            sPayload = OUString::number(nWidth);
+
+                            sPayload = ".uno:FillShadowTransparency=" + sPayload;
                         }
                         break;
                     }
