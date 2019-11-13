@@ -20,7 +20,9 @@
 #include "syspath.hxx"
 #include "syspathw32.hxx"
 
-bool SystemPath::GetUserTemplateLocation( sal_Unicode* pFolder, int nSize )
+namespace SystemPath
+{
+bool GetUserTemplateLocation( sal_Unicode* pFolder, int nSize )
 {
 #ifdef _WIN32
     return ::GetUserTemplateLocation( pFolder, nSize );
@@ -29,6 +31,7 @@ bool SystemPath::GetUserTemplateLocation( sal_Unicode* pFolder, int nSize )
     (void)nSize;
     return false;
 #endif
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
