@@ -1580,7 +1580,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     if (xParentWindow.is())
     {
         if (SalGtkXWindow* pGtkXWindow = dynamic_cast<SalGtkXWindow*>(xParentWindow.get()))
-            m_pParentWidget = pGtkXWindow->getWidget();
+            m_pParentWidget = pGtkXWindow->getGtkWidget();
         else
         {
             css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xParentWindow, css::uno::UNO_QUERY);
