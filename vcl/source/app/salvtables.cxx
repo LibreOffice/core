@@ -2277,7 +2277,13 @@ public:
 
     virtual void remove_page(const OString& rIdent) override
     {
-        m_xNotebook->RemovePage(m_xNotebook->GetPageId(rIdent));
+        sal_uInt16 nPageId = m_xNotebook->GetPageId(rIdent);
+        sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(nPageId);
+        if (nPageIndex == TAB_PAGE_NOTFOUND)
+            return;
+        m_xNotebook->RemovePage(nPageId);
+        if (nPageIndex < m_aPages.size())
+            m_aPages.erase(m_aPages.begin() + nPageIndex);
     }
 
     virtual void append_page(const OString& rIdent, const OUString& rLabel) override
@@ -2392,7 +2398,12 @@ public:
 
     virtual void remove_page(const OString& rIdent) override
     {
+        sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(rIdent);
+        if (nPageIndex == TAB_PAGE_NOTFOUND)
+            return;
         m_xNotebook->RemovePage(rIdent);
+        if (nPageIndex < m_aPages.size())
+            m_aPages.erase(m_aPages.begin() + nPageIndex);
     }
 
     virtual void append_page(const OString& rIdent, const OUString& rLabel) override
