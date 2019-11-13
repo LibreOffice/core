@@ -33,7 +33,7 @@ void FillStyle(const OUString& rName, std::map<OUString, librevenge::RVNGPropert
     const librevenge::RVNGPropertyList& rStyle = itStyle->second;
     if (rStyle["style:parent-style-name"])
     {
-        // Style has a parent.
+        // The style has a parent.
         OUString aParent = OStringToOUString(rStyle["style:parent-style-name"]->getStr().cstr(),
                                              RTL_TEXTENCODING_UTF8);
         if (!aParent.isEmpty())
