@@ -35,6 +35,7 @@ PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const css::un
 
 PDFWriter::~PDFWriter()
 {
+    xImplementation.disposeAndClear();
 }
 
 OutputDevice* PDFWriter::GetReferenceDevice()
