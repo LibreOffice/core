@@ -24,6 +24,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <SkCanvas.h>
 #include <SkPath.h>
@@ -168,20 +169,6 @@ public:
     }
 };
 
-SkiaSalGraphicsImpl::RenderMethod SkiaSalGraphicsImpl::renderMethodToUse()
-{
-    static RenderMethod method = [] {
-        if (const char* env = getenv("SAL_SKIA"))
-        {
-            if (strcmp(env, "raster") == 0)
-                return RenderRaster;
-        }
-        return RenderVulkan;
-    }();
-
-    return method;
-}
-
 SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider* pProvider)
     : mParent(rParent)
     , mProvider(pProvider)
@@ -226,9 +213,9 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
 {
     assert(isOffscreen());
     destroySurface();
-    switch (renderMethodToUse())
+    switch (SkiaHelper::renderMethodToUse())
     {
-        case RenderVulkan:
+        case SkiaHelper::RenderVulkan:
         {
             mOffscreenGrContext = sk_app::VulkanWindowContext::getSharedGrContext();
             GrContext* grContext = mOffscreenGrContext.getGrContext();
@@ -260,7 +247,8 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
 #endif
                 return;
             }
-            SAL_WARN("vcl.skia", "cannot create Vulkan GPU offscreen surface");
+            SAL_WARN("vcl.skia", "cannot create Vulkan offscreen GPU surface, disabling Vulkan");
+            SkiaHelper::disableRenderMethod(SkiaHelper::RenderVulkan);
             break;
         }
         default:
