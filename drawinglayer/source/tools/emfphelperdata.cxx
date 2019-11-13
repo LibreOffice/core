@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "emfpcustomlinecap.hxx"
 #include "emfphelperdata.hxx"
 #include "emfpbrush.hxx"
 #include "emfppen.hxx"
@@ -452,6 +453,46 @@ namespace emfplushelper
                     aPattern[i] = maMapTransform.get(1, 1) * pen->penWidth * pen->dashPattern[i];
                 }
                 aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(aPattern);
+            }
+
+
+            if (pen->penDataFlags & 0x00000800) // PenDataCustomStartCap
+            {
+                ::basegfx::B2DPolyPolygon startCapPolygon(pen->customStartCap->polygon);
+                startCapPolygon.transform(maMapTransform);
+                SAL_WARN("drawinglayer", "EMF+\tTODO: Custom Start Line Cap");
+                if (pen->customStartCap->mbIsFilled)
+                {
+                    mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                                    startCapPolygon,
+                                    pen->GetColor().getBColor()));
+                } else {
+                    mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
+                                    startCapPolygon,
+                                    lineAttribute,
+                                    aStrokeAttribute));
+                }
+            }
+
+            if ((pen->penDataFlags & 0x00001000) && pen->customEndCap->polygon.count() != 0) // PenDataCustomEndCap
+            {
+                SAL_WARN("drawinglayer", "EMF+\tTODO: Custom End Line Cap");
+                ::basegfx::B2DPolyPolygon endCapPolygon(pen->customEndCap->polygon);
+                endCapPolygon.transform(maMapTransform);
+                basegfx::B2DHomMatrix tran = basegfx::B2DHomMatrix();
+                //trans.set(0, 2, polygon.end()->getB2DPoint(polygon.end()->count()).getX());
+                //trans.set(1, 2, polygon.end()->getB2DPoint(polygon.end()->count()).getY());
+                tran.set(0, 2, polygon.begin()->getB2DPoint(0).getX());
+                tran.set(1, 2, polygon.begin()->getB2DPoint(0).getY());
+
+                endCapPolygon.transform(tran);
+                mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
+                                endCapPolygon,
+                                lineAttribute,
+                                aStrokeAttribute));
             }
 
             if (pen->GetColor().GetTransparency() == 0)
