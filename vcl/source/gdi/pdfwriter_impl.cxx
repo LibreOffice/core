@@ -1428,6 +1428,7 @@ void PDFWriterImpl::dispose()
 {
     if( m_aCipher )
         rtl_cipher_destroyARCFOUR( m_aCipher );
+    m_aPages.clear();
     VirtualDevice::dispose();
 }
 
