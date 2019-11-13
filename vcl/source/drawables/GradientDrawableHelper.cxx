@@ -204,10 +204,9 @@ void GradientDrawableHelper::AddGradientSteps(
 
     if (fBorderWidth > 0.0)
     {
-        aGradientStepRect
-            = SetGradientStepTop(aGradientBorderRect, fBorderWidth, aGradientStepRect);
-        aGradientMirroredStepRect = SetGradientMirroredStepBottom(
-            rGradient, aGradientBorderRect, fBorderWidth, aGradientMirroredStepRect);
+        aGradientStepRect = SetGradientStepRect(aGradientBorderRect, fBorderWidth);
+        aGradientMirroredStepRect
+            = SetGradientMirroredStepRect(rGradient, aGradientBorderRect, fBorderWidth);
     }
 
     long nSteps = GetLinearGradientSteps(
@@ -349,10 +348,9 @@ void GradientDrawableHelper::DrawGradientSteps(
 
     if (fBorderWidth > 0.0)
     {
-        aGradientStepRect
-            = SetGradientStepTop(aGradientBorderRect, fBorderWidth, aGradientStepRect);
-        aGradientMirroredStepRect = SetGradientMirroredStepBottom(
-            rGradient, aGradientBorderRect, fBorderWidth, aGradientMirroredStepRect);
+        aGradientStepRect = SetGradientStepRect(aGradientBorderRect, fBorderWidth);
+        aGradientMirroredStepRect
+            = SetGradientMirroredStepRect(rGradient, aGradientBorderRect, fBorderWidth);
     }
 
     long nSteps = GetLinearGradientSteps(
@@ -640,19 +638,20 @@ GradientDrawableHelper::GetColorIntensities(Gradient const& rGradient)
     return std::make_tuple(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
 }
 
-tools::Rectangle GradientDrawableHelper::SetGradientStepTop(tools::Rectangle const& rBorderRect,
-                                                            double fBorderWidth,
-                                                            tools::Rectangle aGradientStepRect)
+tools::Rectangle GradientDrawableHelper::SetGradientStepRect(tools::Rectangle const& rBorderRect,
+                                                             double fBorderWidth)
 {
+    tools::Rectangle aGradientStepRect = rBorderRect;
     aGradientStepRect.SetTop(static_cast<long>(rBorderRect.Top() + fBorderWidth));
 
     return aGradientStepRect;
 }
 
-tools::Rectangle GradientDrawableHelper::SetGradientMirroredStepBottom(
-    Gradient const& rGradient, tools::Rectangle const& rBorderRect, double fBorderWidth,
-    tools::Rectangle aGradientMirroredStepRect)
+tools::Rectangle GradientDrawableHelper::SetGradientMirroredStepRect(
+    Gradient const& rGradient, tools::Rectangle const& rBorderRect, double fBorderWidth)
 {
+    tools::Rectangle aGradientMirroredStepRect = rBorderRect;
+
     if (rGradient.GetStyle() != GradientStyle::Linear)
         aGradientMirroredStepRect.SetBottom(static_cast<long>(rBorderRect.Bottom() - fBorderWidth));
 

@@ -111,13 +111,12 @@ public:
                                                    long fScanInc, sal_uInt16 nAngle, long nEndRed,
                                                    long nEndGreen, long nEndBlue);
 
-    static tools::Rectangle SetGradientStepTop(tools::Rectangle const& rBorderRect,
-                                               double fBorderWidth,
-                                               tools::Rectangle aGradientStepRect);
+    static tools::Rectangle SetGradientStepRect(tools::Rectangle const& rBorderRect,
+                                                double fBorderWidth);
 
-    static tools::Rectangle
-    SetGradientMirroredStepBottom(Gradient const& rGradient, tools::Rectangle const& rBorderRect,
-                                  double fBorderWidth, tools::Rectangle aGradientMirroredStepRect);
+    static tools::Rectangle SetGradientMirroredStepRect(Gradient const& rGradient,
+                                                        tools::Rectangle const& rBorderRect,
+                                                        double fBorderWidth);
 
     static void SetFillColor(OutputDevice* pRenderContext, long nStartRed, long nStartGreen,
                              long nStartBlue);
