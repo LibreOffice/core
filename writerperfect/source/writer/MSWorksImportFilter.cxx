@@ -31,7 +31,8 @@ static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData& data,
 
 bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
                                            librevenge::RVNGInputStream& rInput,
-                                           OdtGenerator& rGenerator, utl::MediaDescriptor& mediaDescriptor)
+                                           OdtGenerator& rGenerator,
+                                           utl::MediaDescriptor& mediaDescriptor)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
     libwps::WPSCreator creator;
@@ -54,22 +55,22 @@ bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
 
             switch (creator)
             {
-            case libwps::WPS_MSWORKS:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
-                encoding = "CP850";
-                break;
-            case libwps::WPS_RESERVED_0: // MS Write
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWRITE);
-                encoding = "CP1252";
-                break;
-            case libwps::WPS_RESERVED_1: // DosWord
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_DOSWORD);
-                encoding = "CP850";
-                break;
-            default:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE);
-                encoding = "CP850";
-                break;
+                case libwps::WPS_MSWORKS:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
+                    encoding = "CP850";
+                    break;
+                case libwps::WPS_RESERVED_0: // MS Write
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWRITE);
+                    encoding = "CP1252";
+                    break;
+                case libwps::WPS_RESERVED_1: // DosWord
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_DOSWORD);
+                    encoding = "CP850";
+                    break;
+                default:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE);
+                    encoding = "CP850";
+                    break;
             }
 
             try
@@ -87,7 +88,8 @@ bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
             catch (css::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("writerperfect", "ignoring");
-                fileEncoding = encoding.toUtf8().getStr(); // revert to the proposed default encoding
+                fileEncoding
+                    = encoding.toUtf8().getStr(); // revert to the proposed default encoding
             }
         }
     }

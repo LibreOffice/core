@@ -38,7 +38,8 @@ namespace MSWorksCalcImportFilterInternal
 {
 /// returns the list of stream name present in a folder
 static uno::Reference<sdbc::XResultSet>
-getResultSet(const css::uno::Reference<css::ucb::XContent>& xPackageContent) try
+getResultSet(const css::uno::Reference<css::ucb::XContent>& xPackageContent)
+try
 {
     if (xPackageContent.is())
     {
@@ -169,12 +170,13 @@ private:
     FolderStream(const FolderStream&) = delete;
     FolderStream& operator=(const FolderStream&) = delete;
 };
-}
+} // namespace MSWorksCalcImportFilterInternal
 
 ////////////////////////////////////////////////////////////
 bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
                                                librevenge::RVNGInputStream& rInput,
-                                               OdsGenerator& rGenerator, utl::MediaDescriptor& mediaDescriptor)
+                                               OdsGenerator& rGenerator,
+                                               utl::MediaDescriptor& mediaDescriptor)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
     libwps::WPSCreator creator;
@@ -198,31 +200,31 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
             OUString title;
             switch (creator)
             {
-            case libwps::WPS_MSWORKS:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
-                encoding = "CP850";
-                break;
-            case libwps::WPS_LOTUS:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_LOTUS);
-                encoding = "CP437";
-                break;
-            case libwps::WPS_SYMPHONY:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
-                encoding = "CP437";
-                break;
-            case libwps::WPS_QUATTRO_PRO:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
-                encoding = "CP437";
-                break;
-            case libwps::WPS_RESERVED_2:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSMULTIPLAN);
-                encoding = "CP437";
-                break;
-            default:
-                SAL_INFO("writerperfect", "unexpected creator: " << creator);
-                title = WpResId(STR_ENCODING_DIALOG_TITLE);
-                encoding = "CP437";
-                break;
+                case libwps::WPS_MSWORKS:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
+                    encoding = "CP850";
+                    break;
+                case libwps::WPS_LOTUS:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_LOTUS);
+                    encoding = "CP437";
+                    break;
+                case libwps::WPS_SYMPHONY:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
+                    encoding = "CP437";
+                    break;
+                case libwps::WPS_QUATTRO_PRO:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
+                    encoding = "CP437";
+                    break;
+                case libwps::WPS_RESERVED_2:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_MSMULTIPLAN);
+                    encoding = "CP437";
+                    break;
+                default:
+                    SAL_INFO("writerperfect", "unexpected creator: " << creator);
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE);
+                    encoding = "CP437";
+                    break;
             }
 
             try
@@ -241,7 +243,8 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
             {
                 SAL_WARN("writerperfect",
                          "ignoring Exception in MSWorksCalcImportFilter::doImportDocument");
-                fileEncoding = encoding.toUtf8().getStr(); // revert to the proposed default encoding
+                fileEncoding
+                    = encoding.toUtf8().getStr(); // revert to the proposed default encoding
             }
         }
     }
@@ -252,7 +255,7 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
         // now check if we can find the password in the properties
         // (just in case, "soffice --headless" adds an option to send password)
         mediaDescriptor[utl::MediaDescriptor::PROP_PASSWORD()] >>= sPassword;
-        if(!sPassword.isEmpty())
+        if (!sPassword.isEmpty())
             aUtf8Passwd = OUStringToOString(sPassword, RTL_TEXTENCODING_UTF8);
         else
         {
