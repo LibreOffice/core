@@ -67,13 +67,7 @@ namespace emfplushelper
         path.Read(s, pathFlags);
         polygon = path.GetPolygon(rR, false);
         mbIsFilled = bFill;
-
-        // transformation to convert the path to what LibreOffice
-        // expects
-        B2DHomMatrix aMatrix;
-        aMatrix.scale(1.0, -1.0);
-        polygon.transform(aMatrix);
-    };
+    }
 
     void EMFPCustomLineCap::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
