@@ -1809,10 +1809,21 @@ WinBits RadioButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nSty
          (!pPrevWindow || (pPrevWindow->GetType() != WindowType::RADIOBUTTON)) )
         nStyle |= WB_GROUP;
     if ( !(nStyle & WB_NOTABSTOP) )
-        nStyle |= WB_TABSTOP;
+    {
+        VclPtr<RadioButton> pOtherButton;
+        std::vector<VclPtr<RadioButton> > aGroup(GetRadioButtonGroup());
+        for (VclPtr<RadioButton>& pWindow : aGroup)
+        {
+            if (pWindow.get() == this)
+                continue;
+            pOtherButton = pWindow;
+        }
+        if (!pOtherButton || ((pOtherButton->mpWindowImpl->mnStyle & WB_TABSTOP) && !pOtherButton->IsChecked()))
+            nStyle |= WB_TABSTOP;
+    }
 
     if ( IsChecked() && IsRadioCheckEnabled() )
-        ImplUncheckAllOther( /*bSetStyle=*/false );
+        ImplUncheckAllOther();
 
     return nStyle;
 }
@@ -2134,7 +2145,7 @@ void RadioButton::group(RadioButton &rOther)
 
         if (rOther.m_xGroup)
         {
-            std::vector< VclPtr<RadioButton> > aOthers(rOther.GetRadioButtonGroup(false));
+            std::vector< VclPtr<RadioButton> > aOthers(rOther.GetRadioButtonGroup());
             //make all members of the group share the same button group
             for (auto const& elem : aOthers)
             {
@@ -2156,21 +2167,10 @@ void RadioButton::group(RadioButton &rOther)
         ImplUncheckAllOther();
 }
 
-std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bIncludeThis) const
+std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup() const
 {
     if (m_xGroup)
-    {
-        if (bIncludeThis)
-            return *m_xGroup;
-        std::vector< VclPtr<RadioButton> > aGroup;
-        for (VclPtr<RadioButton> const & pRadioButton : *m_xGroup)
-        {
-            if (pRadioButton == this)
-                continue;
-            aGroup.push_back(pRadioButton);
-        }
-        return aGroup;
-    }
+        return *m_xGroup;
 
     //old-school
 
@@ -2184,30 +2184,28 @@ std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bInclud
         else
             break;
     }
+
     std::vector< VclPtr<RadioButton> > aGroup;
     // insert radiobuttons up to next group
     do
     {
         if( pFirst->GetType() == WindowType::RADIOBUTTON )
-        {
-            if( pFirst != this || bIncludeThis )
-                aGroup.emplace_back(static_cast<RadioButton*>(pFirst) );
-        }
+            aGroup.emplace_back(static_cast<RadioButton*>(pFirst));
         pFirst = pFirst->GetWindow( GetWindowType::Next );
     } while( pFirst && ( ( pFirst->GetStyle() & WB_GROUP ) == 0 ) );
 
     return aGroup;
 }
 
-void RadioButton::ImplUncheckAllOther( const bool bSetStyle )
+void RadioButton::ImplUncheckAllOther()
 {
-    if ( bSetStyle )
-        mpWindowImpl->mnStyle |= WB_TABSTOP;
+    mpWindowImpl->mnStyle |= WB_TABSTOP;
 
-    std::vector<VclPtr<RadioButton> > aGroup(GetRadioButtonGroup(false));
-    // iterate over radio button group and checked buttons
+    std::vector<VclPtr<RadioButton> > aGroup(GetRadioButtonGroup());
     for (VclPtr<RadioButton>& pWindow : aGroup)
     {
+        if (pWindow.get() == this)
+            continue;
         if ( pWindow->IsChecked() )
         {
             pWindow->SetState( false );
@@ -2215,7 +2213,7 @@ void RadioButton::ImplUncheckAllOther( const bool bSetStyle )
                 return;
         }
 
-        // not inside if clause to always remove wrongly set WB_TABSTOPS
+        // if there wasn't a selection before, all buttons were tabstop-able
         pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
     }
 }
@@ -2572,21 +2570,14 @@ void RadioButton::SetModeRadioImage( const Image& rImage )
     }
 }
 
-
 void RadioButton::SetState( bool bCheck )
 {
-    // carry the TabStop flag along correctly
-    if ( bCheck )
-        mpWindowImpl->mnStyle |= WB_TABSTOP;
-    else
-        mpWindowImpl->mnStyle &= ~WB_TABSTOP;
+    if (mbChecked == bCheck)
+        return;
 
-    if ( mbChecked != bCheck )
-    {
-        mbChecked = bCheck;
-        CompatStateChanged( StateChangedType::State );
-        Toggle();
-    }
+    mbChecked = bCheck;
+    CompatStateChanged(StateChangedType::State);
+    Toggle();
 }
 
 bool RadioButton::set_property(const OString &rKey, const OUString &rValue)
@@ -2630,25 +2621,19 @@ bool RadioButton::set_property(const OString &rKey, const OUString &rValue)
 
 void RadioButton::Check( bool bCheck )
 {
-    // TabStop-Flag richtig mitfuehren
-    if ( bCheck )
-        mpWindowImpl->mnStyle |= WB_TABSTOP;
-    else
-        mpWindowImpl->mnStyle &= ~WB_TABSTOP;
+    if (mbChecked == bCheck)
+        return;
 
-    if ( mbChecked != bCheck )
-    {
-        mbChecked = bCheck;
-        VclPtr<vcl::Window> xWindow = this;
-        CompatStateChanged( StateChangedType::State );
-        if ( xWindow->IsDisposed() )
-            return;
-        if ( bCheck && mbRadioCheck )
-            ImplUncheckAllOther();
-        if ( xWindow->IsDisposed() )
-            return;
-        Toggle();
-    }
+    mbChecked = bCheck;
+    VclPtr<vcl::Window> xWindow = this;
+    CompatStateChanged(StateChangedType::State);
+    if (xWindow->IsDisposed())
+        return;
+    if (bCheck && mbRadioCheck)
+        ImplUncheckAllOther();
+    if (xWindow->IsDisposed())
+        return;
+    Toggle();
 }
 
 long RadioButton::ImplGetImageToTextDistance() const

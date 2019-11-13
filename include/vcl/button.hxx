@@ -293,7 +293,7 @@ private:
                               const Size& rImageSize, tools::Rectangle& rStateRect,
                               tools::Rectangle& rMouseRect );
     SAL_DLLPRIVATE void     ImplDrawRadioButton(vcl::RenderContext& rRenderContext );
-    SAL_DLLPRIVATE void     ImplUncheckAllOther( const bool bSetStyle = true);
+    SAL_DLLPRIVATE void     ImplUncheckAllOther();
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
     SAL_DLLPRIVATE long     ImplGetImageToTextDistance() const;
 
@@ -360,14 +360,9 @@ public:
     or giving up the SolarMutex may mean events get executed that lead to the pointers getting
     invalid.
 
-    @param bIncludeThis
-    defines whether <code>this</code> is contained in the returned list
-
-    @return
-    on return contains the <code>RadioButton</code>s
-    in the same group as this <code>RadioButton</code>.
+    @return the <code>RadioButton</code>s in the same group as this one.
     */
-    std::vector<VclPtr<RadioButton> > GetRadioButtonGroup(bool bIncludeThis = true) const;
+    std::vector<VclPtr<RadioButton> > GetRadioButtonGroup() const;
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
