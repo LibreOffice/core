@@ -1316,7 +1316,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
         pParamRequest->addContinuation(pAbort);
 
         // create the handler, let it handle the request
-        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), nullptr) );
+        Reference< XInteractionHandler2 > xHandler(InteractionHandler::createWithParent(getORB(), getComponentWindow()));
         xHandler->handle(xParamRequest);
 
         if (!pParamValues->wasSelected())
