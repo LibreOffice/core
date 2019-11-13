@@ -43,15 +43,15 @@ constexpr SCROW BCA_SLOTS_ROW  = MAXROWCOUNT / BCA_SLICE;
 constexpr SCCOL BCA_SLOT_COLS  = MAXCOLCOUNT / BCA_SLOTS_COL;
 constexpr SCROW BCA_SLOT_ROWS  = MAXROWCOUNT / BCA_SLOTS_ROW;
 // multiple?
-static_assert((BCA_SLOT_COLS * BCA_SLOTS_COL) == MAXCOLCOUNT && "bad BCA_SLOTS_COL value");
-static_assert((BCA_SLOT_ROWS * BCA_SLOTS_ROW) == MAXROWCOUNT && "bad BCA_SLOTS_ROW value");
+static_assert((BCA_SLOT_COLS * BCA_SLOTS_COL) == MAXCOLCOUNT, "bad BCA_SLOTS_COL value");
+static_assert((BCA_SLOT_ROWS * BCA_SLOTS_ROW) == MAXROWCOUNT, "bad BCA_SLOTS_ROW value");
 
 // size of slot array if linear
 constexpr int BCA_SLOTS  = BCA_SLOTS_COL * BCA_SLOTS_ROW;
 // Arbitrary 2**31/8, assuming size_t can hold at least 2^31 values and
 // sizeof_ptr is at most 8 bytes. You'd probably doom your machine's memory
 // anyway, once you reached these values...
-static_assert(BCA_SLOTS <= 268435456 && "DOOMed");
+static_assert(BCA_SLOTS <= 268435456, "DOOMed");
 
 struct ScSlotData
 {
