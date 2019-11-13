@@ -578,10 +578,8 @@ void CheckValidName(OUString const& rName)
         auto const c(rName[i]);
         if (c == ':')
         {
-            if (hasColon)
-                assert("only one colon allowed");
-            else
-                hasColon = true;
+            assert(!hasColon && "only one colon allowed");
+            hasColon = true;
         }
         else if (!rtl::isAsciiAlphanumeric(c) && c != '_' && c != '-' && c != '.' &&
                  !inrange(c, 0x00C0, 0x00D6) && !inrange(c, 0x00D8, 0x00F6) &&
