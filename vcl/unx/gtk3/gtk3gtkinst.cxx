@@ -13180,4 +13180,38 @@ void* GtkInstance::CreateGStreamerSink(const SystemChildWindow *pWindow)
 #endif
 }
 
+
+
+void SAL_CALL SalGtkXWindow::setPosSize(sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nFlags )
+{
+    if(m_pWidget)
+    {
+        if( (nFlags & ( SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT )) &&
+            (nWidth > 0 && nHeight > 0 ) // sometimes stupid things happen
+                )
+        {
+            gtk_window_resize(GTK_WINDOW(m_pWidget), nWidth, nHeight);
+        }
+
+        if( nFlags & ( SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y ) )
+        {
+            gtk_window_move(GTK_WINDOW(m_pWidget), nX, nY);
+        }
+    }
+}
+
+css::awt::Rectangle SAL_CALL SalGtkXWindow::getPosSize()
+{
+    if(m_pWidget)
+    {
+        gint w, h, x, y;
+        gtk_window_get_size(GTK_WINDOW(m_pWidget), &w, &h);
+        gtk_window_get_position(GTK_WINDOW(m_pWidget), &x, &x);
+        return css::awt::Rectangle(x, y, w, h);
+    }
+    else {
+        return css::awt::Rectangle();
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
