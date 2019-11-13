@@ -186,6 +186,7 @@ public:
     void testTdf77747();
     void testTdf116266();
     void testTdf126324();
+    void testTdf128684();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -282,6 +283,7 @@ public:
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testTdf120028b);
     CPPUNIT_TEST(testCropToShape);
+    CPPUNIT_TEST(testTdf128684);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2690,6 +2692,34 @@ void SdImportTest::testCropToShape()
     css::drawing::BitmapMode bitmapmode;
     xShapeProps->getPropertyValue("FillBitmapMode") >>= bitmapmode;
     CPPUNIT_ASSERT_EQUAL(css::drawing::BitmapMode_STRETCH, bitmapmode);
+}
+
+
+void SdImportTest::testTdf128684()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf128684.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPage.is());
+    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Any aAny = xShape->getPropertyValue("CustomShapeGeometry");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    uno::Sequence<beans::PropertyValue> aProps;
+    CPPUNIT_ASSERT(aAny >>= aProps);
+    sal_Int32 nRotateAngle = 0;
+    for(int i=0;i<aProps.getLength();++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if(rProp.Name == "TextPreRotateAngle")
+        {
+            rProp.Value >>= nRotateAngle;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90), nRotateAngle);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
