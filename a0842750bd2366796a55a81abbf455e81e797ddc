@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_bd56dc5b",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-11-13T14:10:15Z",
+      "side": 1,
+      "message": "Do I understand correctly that \"nVisibleSize\" in this comment and the commit message refers to sbVal\u0027s \"mnVisibleSize\" member? If so, it might be good to explicitly add that \"m\" at the beginning for clarification",
+      "range": {
+        "startLine": 490,
+        "startChar": 11,
+        "endLine": 492,
+        "endChar": 67
+      },
+      "revId": "a0842750bd2366796a55a81abbf455e81e797ddc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
