@@ -70,8 +70,6 @@ namespace dbaui
         Timer                  m_aResetVisitFlag;
             // we reset the "visited flag" 1 second after and entry has been selected
 
-        bool                   m_bNeedErrorOnCurrent;
-
         css::uno::Sequence< css::beans::PropertyValue >
                                m_aFinalValues;     /// the final values as entered by the user
 
@@ -100,7 +98,7 @@ namespace dbaui
         DECL_LINK(OnEntryListBoxSelected, weld::TreeView&, void);
         DECL_LINK(OnButtonClicked, weld::Button&, void);
         DECL_LINK(OnValueLoseFocusHdl, weld::Widget&, void);
-        bool OnValueLoseFocus();
+        bool CheckValueForError(bool bShowDialog);
         bool OnEntrySelected();
     };
 
