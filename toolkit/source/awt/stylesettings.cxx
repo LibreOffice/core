@@ -236,19 +236,11 @@ namespace toolkit
     {
         StyleMethodGuard aGuard( *m_pData );
         lcl_setStyleColor( *m_pData, &StyleSettings::SetButtonRolloverTextColor, _buttonrollovertextcolor );
-    }
-
-
-    ::sal_Int32 SAL_CALL WindowStyleSettings::getActionButtonRolloverTextColor()
-    {
-        StyleMethodGuard aGuard( *m_pData );
-        return lcl_getStyleColor( *m_pData, &StyleSettings::GetActionButtonRolloverTextColor );
-    }
-
-
-    void SAL_CALL WindowStyleSettings::setActionButtonRolloverTextColor( ::sal_Int32 _buttonrollovertextcolor )
-    {
-        StyleMethodGuard aGuard( *m_pData );
+        // Also need to set ActionButtonRolloverTextColor as this setting can't be
+        // set through the UNO interface otherwise.
+        // Previously this setting was used to set colors for both scenarios,
+        // but action button setting was added to differentiate the buttons from
+        // "normal" buttons in some themes.
         lcl_setStyleColor( *m_pData, &StyleSettings::SetActionButtonRolloverTextColor, _buttonrollovertextcolor );
     }
 
@@ -264,33 +256,13 @@ namespace toolkit
     {
         StyleMethodGuard aGuard( *m_pData );
         lcl_setStyleColor( *m_pData, &StyleSettings::SetButtonTextColor, _buttontextcolor );
-    }
-
-    ::sal_Int32 SAL_CALL WindowStyleSettings::getDefaultActionButtonTextColor()
-    {
-        StyleMethodGuard aGuard( *m_pData );
-        return lcl_getStyleColor( *m_pData, &StyleSettings::GetDefaultActionButtonTextColor );
-    }
-
-
-    void SAL_CALL WindowStyleSettings::setDefaultActionButtonTextColor( ::sal_Int32 _buttontextcolor )
-    {
-        StyleMethodGuard aGuard( *m_pData );
-        lcl_setStyleColor( *m_pData, &StyleSettings::SetDefaultActionButtonTextColor, _buttontextcolor );
-    }
-
-
-    ::sal_Int32 SAL_CALL WindowStyleSettings::getActionButtonTextColor()
-    {
-        StyleMethodGuard aGuard( *m_pData );
-        return lcl_getStyleColor( *m_pData, &StyleSettings::GetActionButtonTextColor );
-    }
-
-
-    void SAL_CALL WindowStyleSettings::setActionButtonTextColor( ::sal_Int32 _buttontextcolor )
-    {
-        StyleMethodGuard aGuard( *m_pData );
+        // Also need to set ActionButtonTextColor and DefaultActionButtonTextColor
+        // as this two settings can't be set through the UNO interface otherwise.
+        // Previously this setting was used to set colors for all three scenarios,
+        // but action button setting was added to differentiate the buttons from
+        // "normal" buttons in some themes.
         lcl_setStyleColor( *m_pData, &StyleSettings::SetActionButtonTextColor, _buttontextcolor );
+        lcl_setStyleColor( *m_pData, &StyleSettings::SetDefaultActionButtonTextColor, _buttontextcolor );
     }
 
 
