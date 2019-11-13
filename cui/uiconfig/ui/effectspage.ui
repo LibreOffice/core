@@ -87,9 +87,11 @@
                   <object class="GtkLabel" id="reliefft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">start</property>
+                    <property name="vexpand">True</property>
                     <property name="label" translatable="yes" context="effectspage|reliefft">Relief:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">relieflb</property>
+                    <property name="mnemonic_widget">rbReliefNone</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -112,21 +114,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="relieflb">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <items>
-                      <item translatable="yes" context="effectspage|liststore2">(Without)</item>
-                      <item translatable="yes" context="effectspage|liststore2">Embossed</item>
-                      <item translatable="yes" context="effectspage|liststore2">Engraved</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -250,6 +237,67 @@
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkRadioButton" id="rbReliefNone">
+                        <property name="label" translatable="yes" context="effectspage|rbReliefOptionNone">_None</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="rbReliefEmbossed">
+                        <property name="label" translatable="yes" context="effectspage|rbReliefOptionEmbossed">Em_bossed</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">rbReliefNone</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="rbReliefEngraved">
+                        <property name="label" translatable="yes" context="effectspage|rbReliefOptionEngraved">En_graved</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">rbReliefNone</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -429,7 +477,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -445,7 +492,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -559,7 +605,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -623,15 +668,5 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <property name="ignore_hidden">True</property>
-    <widgets>
-      <widget name="effectslb"/>
-      <widget name="relieflb"/>
-      <widget name="emphasislb"/>
-      <widget name="positionlb"/>
-      <widget name="overlinelb"/>
-      <widget name="underlinelb"/>
-      <widget name="strikeoutlb"/>
-      <widget name="fontcolorlb"/>
-    </widgets>
   </object>
 </interface>

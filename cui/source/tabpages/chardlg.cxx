@@ -1336,7 +1336,9 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_xUnderlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("underlinecolorlb"), pController->getDialog()))
     , m_xIndividualWordsBtn(m_xBuilder->weld_check_button("individualwordscb"))
     , m_xEmphasisFT(m_xBuilder->weld_label("emphasisft"))
-    , m_xEmphasisLB(m_xBuilder->weld_combo_box("emphasislb"))
+    , m_xReliefNone(m_xBuilder->weld_radio_button("rbReliefNone")
+    , m_xReliefEmbossed(m_xBuilder->weld_radio_button("rbReliefEmbossed"))
+    , m_xReliefEngraved(m_xBuilder->weld_radio_button("rbReliefEngraved"))
     , m_xPositionFT(m_xBuilder->weld_label("positionft"))
     , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
     , m_xA11yWarningFT(m_xBuilder->weld_label("a11ywarning"))
@@ -1401,7 +1403,6 @@ void SvxCharEffectsPage::Initialize()
     m_xOverlineLB->connect_changed( aLink );
     m_xOverlineColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
     m_xStrikeoutLB->connect_changed( aLink );
-    m_xEmphasisLB->connect_changed( aLink );
     m_xPositionLB->connect_changed( aLink );
     m_xEffectsLB->connect_changed( aLink );
     m_xReliefLB->connect_changed( aLink );
@@ -1409,10 +1410,11 @@ void SvxCharEffectsPage::Initialize()
     m_xUnderlineLB->set_active( 0 );
     m_xOverlineLB->set_active( 0 );
     m_xStrikeoutLB->set_active( 0 );
-    m_xEmphasisLB->set_active( 0 );
     m_xPositionLB->set_active( 0 );
+    m_xReliefNone->set_active( 0 );
+    m_xReliefEmbossed->set_active( 0 );
+    m_xReliefEngraved->set_active( 0 );
     SelectHdl_Impl(nullptr);
-    SelectHdl_Impl(m_xEmphasisLB.get());
 
     m_xEffectsLB->set_active( 0 );
 
@@ -1423,8 +1425,11 @@ void SvxCharEffectsPage::Initialize()
 
     if ( !SvtLanguageOptions().IsAsianTypographyEnabled() )
     {
-        m_xEmphasisFT->hide();
-        m_xEmphasisLB->hide();
+        nRelief = -1;
+        m_xEmphasisFT->set_active( false );
+        m_xReliefNone->set_active( false );
+        m_xReliefEmbossed->set_active( false );
+        m_xReliefEngraved->set_active( false );
         m_xPositionFT->hide();
         m_xPositionLB->hide();
     }
@@ -1458,7 +1463,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rCJKFont.SetStrikeout( eStrikeout );
     rCTLFont.SetStrikeout( eStrikeout );
 
-    auto nEmphasis = m_xEmphasisLB->get_active();
+    auto nEmphasis = m_xReliefNone->get_active();
     if (nEmphasis != -1)
     {
         bool bUnder = (CHRDLG_POSITION_UNDER == m_xPositionLB->get_active_id().toInt32());
@@ -1600,14 +1605,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectListBoxHdl_Impl, weld::ComboBox&, rBox, voi
 
 void SvxCharEffectsPage::SelectHdl_Impl(const weld::ComboBox* pBox)
 {
-    if (m_xEmphasisLB.get() == pBox)
-    {
-        auto nEPos = m_xEmphasisLB->get_active();
-        bool bEnable = nEPos > 0;
-        m_xPositionFT->set_sensitive( bEnable );
-        m_xPositionLB->set_sensitive( bEnable );
-    }
-    else if (m_xReliefLB.get() == pBox)
+    if (m_xReliefLB.get() == pBox)
     {
         bool bEnable = ( pBox->get_active() == 0 );
         m_xOutlineBtn->set_sensitive( bEnable );
@@ -2493,6 +2491,9 @@ void SvxCharPositionPage::Initialize()
     m_x90degRB->connect_toggled(aLink2);
     m_x270degRB->connect_toggled(aLink2);
 
+    aLink2 = LINK( this, SvxCharPositionPage, RotationHdl_Impl );
+    m_xReliefNone->connect_toggled(aLink2);
+
     Link<weld::MetricSpinButton&,void> aLink3 = LINK(this, SvxCharPositionPage, ValueChangedHdl_Impl);
     m_xHighLowMF->connect_value_changed(aLink3);
     m_xFontSizeMF->connect_value_changed(aLink3);
@@ -2576,6 +2577,19 @@ IMPL_LINK_NOARG(SvxCharPositionPage, RotationHdl_Impl, weld::ToggleButton&, void
     else
         OSL_ENSURE(m_x0degRB->get_active(), "unexpected button");
     m_xFitToLineCB->set_sensitive(bEnable);
+}
+
+IMPL_LINK_NOARG(SvxCharPositionPage, ReliefHdl_Impl, weld::ToggleButton&, void)
+{
+    if m_xReliefNone->get_active()
+       nRelief = 0;
+    else if m_xReliefEmbossed->get_active()
+       nRelief = 1;
+    else
+       nRelief = 2;
+
+    m_xPositionFT->set_sensitive( nRelief > 0 );
+    m_xPositionLB->set_sensitive( nRelief > 0 );
 }
 
 void SvxCharPositionPage::FontModifyHdl_Impl()

@@ -102,6 +102,7 @@ private:
     std::unique_ptr<weld::Label> m_xCTLFontTypeFT;
     std::unique_ptr<weld::Button> m_xCTLFontFeaturesButton;
 
+    long nRelief; //-1 = disabled, 0 = None, 1 = Embossed, 2 = Engraved
     void                Initialize();
     const FontList*     GetFontList() const;
     void                UpdatePreview_Impl();
@@ -172,7 +173,9 @@ private:
     std::unique_ptr<weld::Label> m_xFontColorFT;
     std::unique_ptr<ColorListBox> m_xFontColorLB;
     std::unique_ptr<weld::Label> m_xEffectsFT;
-    std::unique_ptr<weld::ComboBox> m_xEffectsLB;
+    std::unique_ptr<weld::RadioButton> m_xReliefNone;
+    std::unique_ptr<weld::RadioButton> m_xReliefEmbossed;
+    std::unique_ptr<weld::RadioButton> m_xReliefEngraved;
     std::unique_ptr<weld::Label> m_xReliefFT;
     std::unique_ptr<weld::ComboBox> m_xReliefLB;
     std::unique_ptr<weld::CheckButton> m_xOutlineBtn;
@@ -270,6 +273,7 @@ private:
 
     DECL_LINK(PositionHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(RotationHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ReliefHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(AutoPositionHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(FitToLineHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(KerningSelectHdl_Impl, weld::ComboBox&, void);
