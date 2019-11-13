@@ -916,7 +916,7 @@ void ComboBox::RemoveEntryAt(sal_Int32 const nPos)
     const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
     if (nPos < 0 || nPos > COMBOBOX_MAX_ENTRIES - nMRUCount)
     {
-        assert("bad position");
+        assert(!"bad position");
         return;
     }
     m_pImpl->m_pImplLB->RemoveEntry( nPos + nMRUCount );
