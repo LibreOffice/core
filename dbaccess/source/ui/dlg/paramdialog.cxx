@@ -55,7 +55,6 @@ namespace dbaui
         , m_nCurrentlySelected(-1)
         , m_xConnection(_rxConnection)
         , m_aPredicateInput( rxContext, _rxConnection, getParseContext() )
-        , m_bNeedErrorOnCurrent(true)
         , m_xAllParams(m_xBuilder->weld_tree_view("allParamTreeview"))
         , m_xParam(m_xBuilder->weld_entry("paramEntry"))
         , m_xTravelNext(m_xBuilder->weld_button("next"))
@@ -145,10 +144,10 @@ namespace dbaui
 
     IMPL_LINK_NOARG(OParameterDialog, OnValueLoseFocusHdl, weld::Widget&, void)
     {
-        OnValueLoseFocus();
+        CheckValueForError(false);
     }
 
-    bool OParameterDialog::OnValueLoseFocus()
+    bool OParameterDialog::CheckValueForError(bool bShowDialog)
     {
         if (m_nCurrentlySelected != -1)
         {
@@ -166,6 +165,7 @@ namespace dbaui
                 OUString sParamValue(m_xParam->get_text());
                 bool bValid = m_aPredicateInput.normalizePredicateString( sParamValue, xParamAsSet );
                 m_xParam->set_text(sParamValue);
+                m_xParam->set_message_type(bValid ? weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
                 if ( bValid )
                 {
                     // with this the value isn't dirty anymore
@@ -174,9 +174,6 @@ namespace dbaui
                 }
                 else
                 {
-                    if (!m_bNeedErrorOnCurrent)
-                        return true;
-
                     OUString sName;
                     try
                     {
@@ -187,13 +184,16 @@ namespace dbaui
                         DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
 
-                    OUString sMessage(DBA_RES(STR_COULD_NOT_CONVERT_PARAM));
-                    sMessage = sMessage.replaceAll( "$name$", sName );
-                    std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(m_xDialog.get(),
-                                                                 VclMessageType::Warning, VclButtonsType::Ok,
-                                                                 sMessage));
-                    xDialog->run();
-                    m_xParam->grab_focus();
+                    if (bShowDialog)
+                    {
+                        OUString sMessage(DBA_RES(STR_COULD_NOT_CONVERT_PARAM));
+                        sMessage = sMessage.replaceAll( "$name$", sName );
+                        std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(m_xDialog.get(),
+                                                                     VclMessageType::Warning, VclButtonsType::Ok,
+                                                                     sMessage));
+                        xDialog->run();
+                        m_xParam->grab_focus();
+                    }
                     return true;
                 }
             }
@@ -208,7 +208,6 @@ namespace dbaui
         {
             // no interpreting of the given values anymore ....
             m_xParam->connect_focus_out(Link<weld::Widget&, void>()); // no direct call from the control anymore ...
-            m_bNeedErrorOnCurrent = false;      // in case of any indirect calls -> no error message
             m_xDialog->response(RET_CANCEL);
         }
         else if (m_xOKBtn.get() == &rButton)
@@ -216,10 +215,6 @@ namespace dbaui
             // transfer the current values into the Any
             if (OnEntrySelected())
             {   // there was an error interpreting the current text
-                m_bNeedErrorOnCurrent = true;
-                    // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
-                    // so the next time it is called we need an error message, again ....
-                    // (TODO : there surely are better solutions for this ...)
                 return;
             }
 
@@ -265,10 +260,6 @@ namespace dbaui
 
                 m_xAllParams->select(nNext);
                 OnEntrySelected();
-                m_bNeedErrorOnCurrent = true;
-                    // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
-                    // so the next time it is called we need an error message, again ....
-                    // (TODO : there surely are better solutions for this ...)
             }
         }
     }
@@ -289,7 +280,7 @@ namespace dbaui
         if (m_nCurrentlySelected != -1)
         {
             // do the transformation of the current text
-            if (OnValueLoseFocus())
+            if (CheckValueForError(true))
             {   // there was an error interpreting the text
                 m_xAllParams->select(m_nCurrentlySelected);
                 return true;
@@ -342,13 +333,12 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK_NOARG(OParameterDialog, OnValueModified, weld::Entry&, void)
+    IMPL_LINK(OParameterDialog, OnValueModified, weld::Entry&, rEdit, void)
     {
         // mark the currently selected entry as dirty
         OSL_ENSURE(static_cast<size_t>(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= VisitFlags::Dirty;
-
-        m_bNeedErrorOnCurrent = true;
+        rEdit.set_message_type(weld::EntryMessageType::Normal);
     }
 
 }   // namespace dbaui
