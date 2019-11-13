@@ -177,7 +177,8 @@ private:
 ////////////////////////////////////////////////////////////
 bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
                                                librevenge::RVNGInputStream& rInput,
-                                               OdsGenerator& rGenerator, utl::MediaDescriptor&)
+                                               OdsGenerator& rGenerator,
+                                               utl::MediaDescriptor& mediaDescriptor)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
     libwps::WPSCreator creator;
@@ -191,70 +192,88 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
     std::string fileEncoding;
     if (needEncoding)
     {
-        OUString title, encoding;
-        switch (creator)
+        OUString encoding;
+        // first check if we can find the encoding in the filter options (headless mode)
+        mediaDescriptor[utl::MediaDescriptor::PROP_FILTEROPTIONS()] >>= encoding;
+        if (!encoding.isEmpty()) // TODO: check if the encoding string is valid
+            fileEncoding = encoding.toUtf8().getStr();
+        else
         {
-            case libwps::WPS_MSWORKS:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
-                encoding = "CP850";
-                break;
-            case libwps::WPS_LOTUS:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_LOTUS);
-                encoding = "CP437";
-                break;
-            case libwps::WPS_SYMPHONY:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
-                encoding = "CP437";
-                break;
-            case libwps::WPS_QUATTRO_PRO:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
-                encoding = "CP437";
-                break;
-            case libwps::WPS_RESERVED_2:
-                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSMULTIPLAN);
-                encoding = "CP437";
-                break;
-            default:
-                SAL_INFO("writerperfect", "unexpected creator: " << creator);
-                title = WpResId(STR_ENCODING_DIALOG_TITLE);
-                encoding = "CP437";
-                break;
-        }
-
-        try
-        {
-            writerperfect::WPFTEncodingDialog aDlg(pParent, title, encoding);
-            if (aDlg.run() == RET_OK)
+            OUString title;
+            switch (creator)
             {
-                if (!aDlg.GetEncoding().isEmpty())
-                    fileEncoding = aDlg.GetEncoding().toUtf8().getStr();
+                case libwps::WPS_MSWORKS:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
+                    encoding = "CP850";
+                    break;
+                case libwps::WPS_LOTUS:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_LOTUS);
+                    encoding = "CP437";
+                    break;
+                case libwps::WPS_SYMPHONY:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
+                    encoding = "CP437";
+                    break;
+                case libwps::WPS_QUATTRO_PRO:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
+                    encoding = "CP437";
+                    break;
+                case libwps::WPS_RESERVED_2:
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE_MSMULTIPLAN);
+                    encoding = "CP437";
+                    break;
+                default:
+                    SAL_INFO("writerperfect", "unexpected creator: " << creator);
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE);
+                    encoding = "CP437";
+                    break;
             }
-            // we can fail because we are in headless mode, the user has cancelled conversion, ...
-            else if (aDlg.hasUserCalledCancel())
-                return false;
-        }
-        catch (...)
-        {
-            SAL_WARN("writerperfect",
-                     "ignoring Exception in MSWorksCalcImportFilter::doImportDocument");
+
+            fileEncoding = encoding.toUtf8().getStr(); // set default to the proposed encoding
+            try
+            {
+                writerperfect::WPFTEncodingDialog aDlg(pParent, title, encoding);
+                if (aDlg.run() == RET_OK)
+                {
+                    if (!aDlg.GetEncoding().isEmpty())
+                        fileEncoding = aDlg.GetEncoding().toUtf8().getStr();
+                }
+                // we can fail because we are in headless mode, the user has cancelled conversion, ...
+                else if (aDlg.hasUserCalledCancel())
+                    return false;
+            }
+            catch (...)
+            {
+                SAL_WARN("writerperfect",
+                         "ignoring Exception in MSWorksCalcImportFilter::doImportDocument");
+            }
         }
     }
     OString aUtf8Passwd;
     if (confidence == libwps::WPS_CONFIDENCE_SUPPORTED_ENCRYPTION)
     {
-        // try to ask for a password
-        try
+        OUString sPassword;
+        // now check if we can find the password in the properties
+        // (just in case, "soffice --headless" adds an option to send password)
+        mediaDescriptor[utl::MediaDescriptor::PROP_PASSWORD()] >>= sPassword;
+        if (!sPassword.isEmpty())
+            aUtf8Passwd = OUStringToOString(sPassword, RTL_TEXTENCODING_UTF8);
+        else
         {
-            SfxPasswordDialog aPasswdDlg(pParent);
-            aPasswdDlg.SetMinLen(1);
-            if (!aPasswdDlg.run())
+            // ok, ask the user for a password
+            try
+            {
+                SfxPasswordDialog aPasswdDlg(pParent);
+                aPasswdDlg.SetMinLen(1);
+                if (!aPasswdDlg.run())
+                    return false;
+                OUString aPasswd = aPasswdDlg.GetPassword();
+                aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
+            }
+            catch (...)
+            {
                 return false;
-            OUString aPasswd = aPasswdDlg.GetPassword();
-            aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
-        }
-        catch (...)
-        {
-            return false;
+            }
         }
     }
     return libwps::WPS_OK
