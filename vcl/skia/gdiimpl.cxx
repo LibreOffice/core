@@ -739,11 +739,6 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
         assert(dynamic_cast<SkiaSalGraphicsImpl*>(pSrcGraphics->GetImpl()));
         src = static_cast<SkiaSalGraphicsImpl*>(pSrcGraphics->GetImpl());
         src->checkSurface();
-        // TODO Without this flush() Skia asserts if both src and destination are
-        // GPU-backed SkSurface that come from different GrContext (e.g. when
-        // src comes from SkiaVulkanGrContext and target is a window). I don't
-        // know if it's a Skia bug or our GrContext usage is incorrect.
-        src->mSurface->flush();
     }
     else
         src = this;
