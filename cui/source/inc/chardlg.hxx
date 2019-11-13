@@ -168,11 +168,15 @@ private:
     Color                      m_aOrigFontColor;
     sal_uInt16                 m_nHtmlMode;
     bool                       m_bUnderlineColorDisabled;
+    sal_Int32                  nRelief; //-2 = hide, -1 = disabled, 0 = None, 1 = Embossed, 2 = Engraved
 
     std::unique_ptr<weld::Label> m_xFontColorFT;
     std::unique_ptr<ColorListBox> m_xFontColorLB;
     std::unique_ptr<weld::Label> m_xEffectsFT;
     std::unique_ptr<weld::ComboBox> m_xEffectsLB;
+    std::unique_ptr<weld::RadioButton> m_xReliefNone;
+    std::unique_ptr<weld::RadioButton> m_xReliefEmbossed;
+    std::unique_ptr<weld::RadioButton> m_xReliefEngraved;
     std::unique_ptr<weld::Label> m_xReliefFT;
     std::unique_ptr<weld::ComboBox> m_xReliefLB;
     std::unique_ptr<weld::CheckButton> m_xOutlineBtn;
@@ -188,7 +192,6 @@ private:
     std::unique_ptr<ColorListBox> m_xUnderlineColorLB;
     std::unique_ptr<weld::CheckButton> m_xIndividualWordsBtn;
     std::unique_ptr<weld::Label> m_xEmphasisFT;
-    std::unique_ptr<weld::ComboBox> m_xEmphasisLB;
     std::unique_ptr<weld::Label> m_xPositionFT;
     std::unique_ptr<weld::ComboBox> m_xPositionLB;
     std::unique_ptr<weld::Label> m_xA11yWarningFT;
@@ -200,6 +203,7 @@ private:
     bool                FillItemSetColor_Impl( SfxItemSet& rSet );
     Color               GetPreviewFontColor(const Color& rColor) const;
     void                EnableNoneFontColor();
+    void                UpdateReliefOptions();
 
     void SelectHdl_Impl(const weld::ComboBox*);
     DECL_LINK(SelectListBoxHdl_Impl, weld::ComboBox&, void);
@@ -207,6 +211,7 @@ private:
     DECL_LINK(TristClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(UpdatePreview_Impl, weld::ComboBox&, void);
     DECL_LINK(ColorBoxSelectHdl_Impl, ColorListBox&, void);
+    DECL_LINK(ReliefHdl_Impl, weld::ToggleButton&, void);
 
 public:
     SvxCharEffectsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
@@ -267,7 +272,6 @@ private:
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
     void                SetEscapement_Impl( SvxEscapement nEsc );
-
     DECL_LINK(PositionHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(RotationHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(AutoPositionHdl_Impl, weld::ToggleButton&, void);

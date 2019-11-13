@@ -468,7 +468,6 @@ namespace
     }
 }
 
-
 void SvxCharNamePage::UpdatePreview_Impl()
 {
     SvxFont& rFont = GetPreviewFont();
@@ -1321,6 +1320,9 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button("fontcolorlb"), pController->getDialog()))
     , m_xEffectsFT(m_xBuilder->weld_label("effectsft"))
     , m_xEffectsLB(m_xBuilder->weld_combo_box("effectslb"))
+    , m_xReliefNone(m_xBuilder->weld_radio_button("rbReliefNone"))
+    , m_xReliefEmbossed(m_xBuilder->weld_radio_button("rbReliefEmbossed"))
+    , m_xReliefEngraved(m_xBuilder->weld_radio_button("rbReliefEngraved"))
     , m_xReliefFT(m_xBuilder->weld_label("reliefft"))
     , m_xReliefLB(m_xBuilder->weld_combo_box("relieflb"))
     , m_xOutlineBtn(m_xBuilder->weld_check_button("outlinecb"))
@@ -1336,7 +1338,6 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_xUnderlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("underlinecolorlb"), pController->getDialog()))
     , m_xIndividualWordsBtn(m_xBuilder->weld_check_button("individualwordscb"))
     , m_xEmphasisFT(m_xBuilder->weld_label("emphasisft"))
-    , m_xEmphasisLB(m_xBuilder->weld_combo_box("emphasislb"))
     , m_xPositionFT(m_xBuilder->weld_label("positionft"))
     , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
     , m_xA11yWarningFT(m_xBuilder->weld_label("a11ywarning"))
@@ -1400,19 +1401,24 @@ void SvxCharEffectsPage::Initialize()
     m_xUnderlineColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
     m_xOverlineLB->connect_changed( aLink );
     m_xOverlineColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
+
     m_xStrikeoutLB->connect_changed( aLink );
-    m_xEmphasisLB->connect_changed( aLink );
     m_xPositionLB->connect_changed( aLink );
     m_xEffectsLB->connect_changed( aLink );
-    m_xReliefLB->connect_changed( aLink );
+
+    Link<weld::ToggleButton&,void> aLink1 = LINK(this, SvxCharEffectsPage, ReliefHdl_Impl);
+    m_xReliefNone->connect_toggled( aLink1 );
+    m_xReliefEmbossed->connect_toggled( aLink1 );
+    m_xReliefEngraved->connect_toggled( aLink1 );
 
     m_xUnderlineLB->set_active( 0 );
     m_xOverlineLB->set_active( 0 );
     m_xStrikeoutLB->set_active( 0 );
-    m_xEmphasisLB->set_active( 0 );
     m_xPositionLB->set_active( 0 );
+    m_xReliefNone->set_active( 0 );
+    m_xReliefEmbossed->set_active( 0 );
+    m_xReliefEngraved->set_active( 0 );
     SelectHdl_Impl(nullptr);
-    SelectHdl_Impl(m_xEmphasisLB.get());
 
     m_xEffectsLB->set_active( 0 );
 
@@ -1423,8 +1429,8 @@ void SvxCharEffectsPage::Initialize()
 
     if ( !SvtLanguageOptions().IsAsianTypographyEnabled() )
     {
-        m_xEmphasisFT->hide();
-        m_xEmphasisLB->hide();
+        nRelief = -1;
+        UpdateReliefOptions();
         m_xPositionFT->hide();
         m_xPositionLB->hide();
     }
@@ -1458,7 +1464,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rCJKFont.SetStrikeout( eStrikeout );
     rCTLFont.SetStrikeout( eStrikeout );
 
-    auto nEmphasis = m_xEmphasisLB->get_active();
+    auto nEmphasis = nRelief;
     if (nEmphasis != -1)
     {
         bool bUnder = (CHRDLG_POSITION_UNDER == m_xPositionLB->get_active_id().toInt32());
@@ -1469,7 +1475,6 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
         rCTLFont.SetEmphasisMark( eMark );
     }
 
-    auto nRelief = m_xReliefLB->get_active();
     if (nRelief != -1)
     {
         rFont.SetRelief( static_cast<FontRelief>(nRelief) );
@@ -1593,6 +1598,19 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
     return bChanged;
 }
 
+IMPL_LINK_NOARG(SvxCharEffectsPage, ReliefHdl_Impl, weld::ToggleButton&, void)
+{
+    if (m_xReliefNone->get_active())
+       nRelief = 0;
+    else if (m_xReliefEmbossed->get_active())
+       nRelief = 1;
+    else
+       nRelief = 2;
+
+    m_xPositionFT->set_sensitive( nRelief > 0 );
+    m_xPositionLB->set_sensitive( nRelief > 0 );
+}
+
 IMPL_LINK( SvxCharEffectsPage, SelectListBoxHdl_Impl, weld::ComboBox&, rBox, void )
 {
     SelectHdl_Impl(&rBox);
@@ -1600,14 +1618,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectListBoxHdl_Impl, weld::ComboBox&, rBox, voi
 
 void SvxCharEffectsPage::SelectHdl_Impl(const weld::ComboBox* pBox)
 {
-    if (m_xEmphasisLB.get() == pBox)
-    {
-        auto nEPos = m_xEmphasisLB->get_active();
-        bool bEnable = nEPos > 0;
-        m_xPositionFT->set_sensitive( bEnable );
-        m_xPositionLB->set_sensitive( bEnable );
-    }
-    else if (m_xReliefLB.get() == pBox)
+    if (m_xReliefLB.get() == pBox)
     {
         bool bEnable = ( pBox->get_active() == 0 );
         m_xOutlineBtn->set_sensitive( bEnable );
@@ -1840,7 +1851,8 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         rCJKFont.SetEmphasisMark( eMark );
         rCTLFont.SetEmphasisMark( eMark );
 
-        m_xEmphasisLB->set_active( static_cast<sal_Int32>(FontEmphasisMark( eMark & FontEmphasisMark::Style )) );
+        nRelief = static_cast<sal_Int32>(FontEmphasisMark( eMark & FontEmphasisMark::Style ));
+
         eMark &= ~FontEmphasisMark::Style;
         int nEntryData = ( eMark == FontEmphasisMark::PosAbove )
             ? CHRDLG_POSITION_OVER
@@ -1851,23 +1863,16 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             m_xPositionLB->set_active(nPos);
     }
     else if ( eState == SfxItemState::DONTCARE )
-        m_xEmphasisLB->set_active(-1);
+        nRelief = 0;
     else if ( eState == SfxItemState::UNKNOWN )
-    {
-        m_xEmphasisFT->hide();
-        m_xEmphasisLB->hide();
-    }
+        nRelief = -2;
     else // SfxItemState::DISABLED or SfxItemState::READONLY
-    {
-        m_xEmphasisFT->set_sensitive(false);
-        m_xEmphasisLB->set_sensitive(false);
-    }
+        nRelief = -1;
+
+    UpdateReliefOptions();
 
     // the select handler for the underline/overline/strikeout list boxes
     SelectHdl_Impl(m_xUnderlineLB.get());
-
-    // the select handler for the emphasis listbox
-    SelectHdl_Impl(m_xEmphasisLB.get());
 
     // Effects
     SvxCaseMap eCaseMap = SvxCaseMap::End;
@@ -2056,8 +2061,10 @@ void SvxCharEffectsPage::ChangesApplied()
     m_xOverlineLB->save_value();
     m_xStrikeoutLB->save_value();
     m_xIndividualWordsBtn->save_state();
-    m_xEmphasisLB->save_value();
-    m_xPositionLB->save_value();
+/*    m_xReliefNone->save_value();
+    m_xReliefEmbossed->save_value();
+    m_xReliefEngraved->save_value();
+*/    m_xPositionLB->save_value();
     m_xEffectsLB->save_value();
     m_xReliefLB->save_value();
     m_xOutlineBtn->save_state();
@@ -2200,10 +2207,9 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     // Emphasis
     nWhich = GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_EMPHASISMARK );
-    int nMarkPos = m_xEmphasisLB->get_active();
-    OUString sMarkPos = m_xEmphasisLB->get_active_text();
+//    OUString sMarkPos = m_xEmphasisLB->get_active_text();
     OUString sPosPos = m_xPositionLB->get_active_text();
-    FontEmphasisMark eMark = static_cast<FontEmphasisMark>(nMarkPos);
+    FontEmphasisMark eMark = static_cast<FontEmphasisMark>(nRelief);
     if (m_xPositionLB->get_sensitive())
     {
         eMark |= (CHRDLG_POSITION_UNDER == m_xPositionLB->get_active_id().toInt32())
@@ -2219,13 +2225,13 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
                 bChanged = false;
         }
     }
-
+/*
     if (rOldSet.GetItemState( nWhich ) == SfxItemState::DONTCARE &&
          m_xEmphasisLB->get_saved_value() == sMarkPos && m_xPositionLB->get_saved_value() == sPosPos)
     {
         bChanged = false;
     }
-
+*/
     if (bChanged)
     {
         rSet->Put( SvxEmphasisMarkItem( eMark, nWhich ) );
@@ -2428,6 +2434,19 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
             // the writer uses SID_ATTR_BRUSH as font background
             m_bPreviewBackgroundToCharacter = true;
     }
+}
+
+void SvxCharEffectsPage::UpdateReliefOptions()
+{
+//    m_xEmphasisFT->set_visible( nRelief > -2 );
+    m_xReliefNone->set_visible( nRelief > -2 );
+    m_xReliefEmbossed->set_visible( nRelief > -2 );
+    m_xReliefEngraved->set_visible( nRelief > -2 );
+
+//    m_xEmphasisFT->set_active( nRelief > -1 );
+    m_xReliefNone->set_active( nRelief > -1 );
+    m_xReliefEmbossed->set_active( nRelief > -1 );
+    m_xReliefEngraved->set_active( nRelief > -1 );
 }
 
 // class SvxCharPositionPage ---------------------------------------------
@@ -3043,6 +3062,7 @@ void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
             m_bPreviewBackgroundToCharacter = true;
     }
 }
+
 // class SvxCharTwoLinesPage ------------------------------------------------
 
 SvxCharTwoLinesPage::SvxCharTwoLinesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
