@@ -459,16 +459,29 @@ namespace svt
 
     void OControlAccess::setLabel( sal_Int16 nId, const OUString &rLabel )
     {
-        weld::Label* pControl = dynamic_cast<weld::Label*>(m_pFilePickerController->getControl(nId, true));
-        assert(pControl && "OControlAccess::GetValue: don't have this control in the current mode!");
-        pControl->set_label(rLabel);
+        weld::Widget* pControl = m_pFilePickerController->getControl(nId, true);
+        if (weld::Label* pLabel = dynamic_cast<weld::Label*>(pControl))
+        {
+            pLabel->set_label(rLabel);
+            return;
+        }
+        if (weld::Button* pButton = dynamic_cast<weld::Button*>(pControl))
+        {
+            pButton->set_label(rLabel);
+            return;
+        }
+        assert(false && "OControlAccess::GetValue: don't have this control in the current mode!");
     }
 
     OUString OControlAccess::getLabel( sal_Int16 nId ) const
     {
-        weld::Label* pControl = dynamic_cast<weld::Label*>(m_pFilePickerController->getControl(nId, true));
-        assert(pControl && "OControlAccess::GetValue: don't have this control in the current mode!");
-        return pControl->get_label();
+        weld::Widget* pControl = m_pFilePickerController->getControl(nId, true);
+        if (weld::Label* pLabel = dynamic_cast<weld::Label*>(pControl))
+            return pLabel->get_label();
+        if (weld::Button* pButton = dynamic_cast<weld::Button*>(pControl))
+            return pButton->get_label();
+        assert(false && "OControlAccess::GetValue: don't have this control in the current mode!");
+        return OUString();
     }
 
     void OControlAccess::enableControl(sal_Int16 nId, bool bEnable)
