@@ -487,13 +487,17 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             if (horizontal)
                 option.state |= QStyle::State_Horizontal;
 
-            //setup parameters from the OO values
+            // If the scrollbar has a mnMin == 0 and mnMax == 0 then mnVisibleSize is set to -1?!
+            // I don't know if a negative mnVisibleSize makes any sense, so just handle this case
+            // without crashing LO with a SIGFPE in the Qt library.
+            const long nVisibleSize = (sbVal->mnMin == sbVal->mnMax) ? 0 : sbVal->mnVisibleSize;
+
             option.minimum = sbVal->mnMin;
-            option.maximum = sbVal->mnMax - sbVal->mnVisibleSize;
+            option.maximum = sbVal->mnMax - nVisibleSize;
             option.maximum = qMax(option.maximum, option.minimum); // bnc#619772
             option.sliderValue = sbVal->mnCur;
             option.sliderPosition = sbVal->mnCur;
-            option.pageStep = sbVal->mnVisibleSize;
+            option.pageStep = nVisibleSize;
             if (part == ControlPart::DrawBackgroundHorz)
                 option.upsideDown
                     = (QGuiApplication::isRightToLeft()
