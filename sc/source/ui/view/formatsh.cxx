@@ -58,6 +58,9 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <sal/log.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <editeng/itemtype.hxx>
 
 #include <formatsh.hxx>
 #include <sc.hrc>
@@ -2576,6 +2579,13 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         aFormat += sBreak;
 
                         rSet.Put(SfxStringItem(nWhich, aFormat));
+
+                        if (comphelper::LibreOfficeKit::isActive())
+                        {
+                            OUString sPayload = ".uno:NumberFormat=" + aFormat;
+                            GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
+                        }
                     }
                     else
                     {
