@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "emfpcustomlinecap.hxx"
 #include "emfphelperdata.hxx"
 #include "emfpbrush.hxx"
 #include "emfppen.hxx"
@@ -474,6 +475,56 @@ namespace emfplushelper
                             std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
                                 drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
                                 pen->GetColor().GetTransparency() / 255.0));
+            }
+
+            if ((pen->penDataFlags & 0x00000800) && pen->customStartCap->polygon.begin()->count() > 1) // PenDataCustomStartCap
+            {
+                SAL_WARN("drawinglayer", "EMF+\tCustom Start Line Cap");
+                ::basegfx::B2DPolyPolygon startCapPolygon(pen->customStartCap->polygon);
+                startCapPolygon.transform(maMapTransform);
+
+                basegfx::B2DHomMatrix tran = basegfx::B2DHomMatrix( pen->penWidth, 0.0, polygon.begin()->getB2DPoint(0).getX(),
+                                                                    0.0, pen->penWidth, polygon.begin()->getB2DPoint(0).getY());
+                startCapPolygon.transform(tran);
+
+                mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                                startCapPolygon,
+                                basegfx::BColor(0.1, 1.0, 0.1)));
+                /*
+                if (pen->customStartCap->mbIsFilled)
+                {
+                    mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                                    startCapPolygon,
+                                    pen->GetColor().getBColor()));
+                } else {
+                    mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
+                                    startCapPolygon,
+                                    lineAttribute,
+                                    aStrokeAttribute));
+                }*/
+            }
+
+            if ((pen->penDataFlags & 0x00001000) && pen->customEndCap->polygon.begin()->count() > 1) // PenDataCustomEndCap
+            {
+                SAL_WARN("drawinglayer", "EMF+\tCustom End Line Cap");
+
+                ::basegfx::B2DPolyPolygon endCapPolygon(pen->customEndCap->polygon);
+                endCapPolygon.transform(maMapTransform);
+                basegfx::B2DHomMatrix tran = basegfx::B2DHomMatrix( pen->penWidth, 0.0, polygon.begin()->getB2DPoint(polygon.begin()->count() - 1).getX(),
+                                                                    0.0, pen->penWidth, polygon.begin()->getB2DPoint(polygon.begin()->count() - 1).getY());
+                endCapPolygon.transform(tran);
+                mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                                endCapPolygon,
+                                basegfx::BColor(1.0, 0.1, 0.1)));
+                /*mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
+                                endCapPolygon,
+                                lineAttribute,
+                                aStrokeAttribute));*/
             }
 
             mrPropertyHolders.Current().setLineColor(pen->GetColor().getBColor());
