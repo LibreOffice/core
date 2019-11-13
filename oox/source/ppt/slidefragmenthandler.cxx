@@ -129,7 +129,6 @@ SlideFragmentHandler::~SlideFragmentHandler()
 
     case PPT_TOKEN( spTree ):           // CT_GroupShape
         {
-            // TODO Convert this to FragmentHandler2
             return new PPTShapeGroupContext(
                 *this, mpSlidePersistPtr, meShapeLocation, mpSlidePersistPtr->getShapes(),
                 oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) );
