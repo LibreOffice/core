@@ -75,14 +75,14 @@ class GroupShapeContext : public ::oox::drawingml::ShapeGroupContext, public Wor
 {
 public:
     explicit            GroupShapeContext(
-                            const ::oox::core::ContextHandler2Helper& rParent,
+                            const ::oox::core::FragmentHandler2& rParent,
                             const WorksheetHelper& rHelper,
                             const ::oox::drawingml::ShapePtr& rxParentShape,
                             const ::oox::drawingml::ShapePtr& rxShape );
 
     static ::oox::core::ContextHandlerRef
                         createShapeContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::FragmentHandler2& rParent,
                             const WorksheetHelper& rHelper,
                             sal_Int32 nElement,
                             const AttributeList& rAttribs,

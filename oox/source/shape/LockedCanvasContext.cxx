@@ -23,8 +23,8 @@ namespace oox
 namespace shape
 {
 
-LockedCanvasContext::LockedCanvasContext(ContextHandler2Helper const& rParent)
-    : ContextHandler2(rParent)
+LockedCanvasContext::LockedCanvasContext(FragmentHandler2 const& rParent)
+    : FragmentHandler2(rParent)
 {
 }
 
