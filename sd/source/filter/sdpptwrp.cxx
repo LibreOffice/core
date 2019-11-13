@@ -264,7 +264,8 @@ bool SdPPTFilter::Export()
                 if (sCryptoType.getLength())
                 {
                     Reference<XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
-                    Sequence<Any> aArguments;
+                    Sequence<Any> aArguments(1);
+                    aArguments[0] = makeAny(NamedValue("Binary", makeAny(true)));
                     xPackageEncryption.set(
                         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                             "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), UNO_QUERY);
