@@ -161,7 +161,7 @@ public:
     static std::tuple<long, long, long, long, long, long>
     GetColorIntensities(Gradient const& rGradient);
 
-    static double GetStepHeight(tools::Rectangle const& rStepRect, double nSteps);
+    static double GetStepHeight(tools::Rectangle const& rBorderRect, double nSteps);
 
     static std::tuple<double, double, double, double>
     CalculateOutputLimits(tools::Rectangle const& rRect);
