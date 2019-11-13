@@ -16,6 +16,24 @@
       "revId": "7311ee84addac9efd5db10c479f4c0d20debbf80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_9d69a08c",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2019-11-13T11:40:47Z",
+      "side": 1,
+      "message": "Yes, the info bar says \"Document is opened in read only mode\". When we have no rights to switch on Edit mode \u003d\u003e let\u0027s just hide this button from the info bar.",
+      "parentUuid": "7f7f9b97_3d388c9e",
+      "revId": "7311ee84addac9efd5db10c479f4c0d20debbf80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
