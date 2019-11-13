@@ -2474,7 +2474,8 @@ void WW8TabDesc::CreateSwTable()
     if( m_nMaxRight - m_nMinLeft > MINLAY * m_nDefaultSwCols )
     {
         SwFormatFrameSize aFrameSize(ATT_FIX_SIZE, m_nSwWidth);
-        if( m_nPercentWidth )
+        // Don't set relative width if the table has been converted into a floating frame
+        if ( m_nPercentWidth && (!m_pIo->m_xSFlyPara || !m_pIo->m_xSFlyPara->pFlyFormat) )
             aFrameSize.SetWidthPercent(m_nPercentWidth);
         m_pTable->GetFrameFormat()->SetFormatAttr(aFrameSize);
         m_aItemSet.Put(aFrameSize);
