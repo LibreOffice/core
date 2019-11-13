@@ -2163,13 +2163,15 @@ public:
 
     virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
     {
-        m_nKeyPressSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKey), this);
+        if (!m_nKeyPressSignalId)
+            m_nKeyPressSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKey), this);
         weld::Widget::connect_key_press(rLink);
     }
 
     virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override
     {
-        m_nKeyReleaseSignalId = g_signal_connect(m_pWidget, "key-release-event", G_CALLBACK(signalKey), this);
+        if (!m_nKeyReleaseSignalId)
+            m_nKeyReleaseSignalId = g_signal_connect(m_pWidget, "key-release-event", G_CALLBACK(signalKey), this);
         weld::Widget::connect_key_release(rLink);
     }
 
@@ -2182,16 +2184,20 @@ public:
     virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink) override
     {
         ensureEventWidget();
-        m_nMotionSignalId = g_signal_connect(m_pMouseEventBox, "motion-notify-event", G_CALLBACK(signalMotion), this);
-        m_nLeaveSignalId = g_signal_connect(m_pMouseEventBox, "leave-notify-event", G_CALLBACK(signalCrossing), this);
-        m_nEnterSignalId = g_signal_connect(m_pMouseEventBox, "enter-notify-event", G_CALLBACK(signalCrossing), this);
+        if (!m_nMotionSignalId)
+            m_nMotionSignalId = g_signal_connect(m_pMouseEventBox, "motion-notify-event", G_CALLBACK(signalMotion), this);
+        if (!m_nLeaveSignalId)
+            m_nLeaveSignalId = g_signal_connect(m_pMouseEventBox, "leave-notify-event", G_CALLBACK(signalCrossing), this);
+        if (!m_nEnterSignalId)
+            m_nEnterSignalId = g_signal_connect(m_pMouseEventBox, "enter-notify-event", G_CALLBACK(signalCrossing), this);
         weld::Widget::connect_mouse_move(rLink);
     }
 
     virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
     {
         ensureEventWidget();
-        m_nButtonReleaseSignalId = g_signal_connect(m_pMouseEventBox, "button-release-event", G_CALLBACK(signalButton), this);
+        if (!m_nButtonReleaseSignalId)
+            m_nButtonReleaseSignalId = g_signal_connect(m_pMouseEventBox, "button-release-event", G_CALLBACK(signalButton), this);
         weld::Widget::connect_mouse_release(rLink);
     }
 
@@ -2573,19 +2579,22 @@ public:
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
-        m_nFocusInSignalId = g_signal_connect(m_pWidget, "focus-in-event", G_CALLBACK(signalFocusIn), this);
+        if (!m_nFocusInSignalId)
+            m_nFocusInSignalId = g_signal_connect(m_pWidget, "focus-in-event", G_CALLBACK(signalFocusIn), this);
         weld::Widget::connect_focus_in(rLink);
     }
 
     virtual void connect_mnemonic_activate(const Link<Widget&, bool>& rLink) override
     {
-        m_nMnemonicActivateSignalId = g_signal_connect(m_pWidget, "mnemonic-activate", G_CALLBACK(signalMnemonicActivate), this);
+        if (!m_nMnemonicActivateSignalId)
+            m_nMnemonicActivateSignalId = g_signal_connect(m_pWidget, "mnemonic-activate", G_CALLBACK(signalMnemonicActivate), this);
         weld::Widget::connect_mnemonic_activate(rLink);
     }
 
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
     {
-        m_nFocusOutSignalId = g_signal_connect(m_pWidget, "focus-out-event", G_CALLBACK(signalFocusOut), this);
+        if (!m_nFocusOutSignalId)
+            m_nFocusOutSignalId = g_signal_connect(m_pWidget, "focus-out-event", G_CALLBACK(signalFocusOut), this);
         weld::Widget::connect_focus_out(rLink);
     }
 
@@ -8899,8 +8908,11 @@ public:
     virtual void connect_visible_range_changed(const Link<weld::TreeView&, void>& rLink) override
     {
         weld::TreeView::connect_visible_range_changed(rLink);
-        GtkAdjustment* pVAdjustment = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(m_pTreeView));
-        m_nVAdjustmentChangedSignalId = g_signal_connect(pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustmentChanged), this);
+        if (!m_nVAdjustmentChangedSignalId)
+        {
+            GtkAdjustment* pVAdjustment = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(m_pTreeView));
+            m_nVAdjustmentChangedSignalId = g_signal_connect(pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustmentChanged), this);
+        }
     }
 
     virtual bool is_selected(const weld::TreeIter& rIter) const override
@@ -11918,13 +11930,15 @@ public:
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
-        m_nToggleFocusInSignalId = g_signal_connect(m_pToggleButton, "focus-in-event", G_CALLBACK(signalFocusIn), this);
+        if (!m_nToggleFocusInSignalId)
+            m_nToggleFocusInSignalId = g_signal_connect(m_pToggleButton, "focus-in-event", G_CALLBACK(signalFocusIn), this);
         weld::Widget::connect_focus_in(rLink);
     }
 
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
     {
-        m_nToggleFocusOutSignalId = g_signal_connect(m_pToggleButton, "focus-out-event", G_CALLBACK(signalFocusOut), this);
+        if (!m_nToggleFocusOutSignalId)
+            m_nToggleFocusOutSignalId = g_signal_connect(m_pToggleButton, "focus-out-event", G_CALLBACK(signalFocusOut), this);
         weld::Widget::connect_focus_out(rLink);
     }
 
