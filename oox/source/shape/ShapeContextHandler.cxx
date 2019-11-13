@@ -68,7 +68,7 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getLo
         switch (nElement & 0xffff)
         {
             case XML_lockedCanvas:
-                mxLockedCanvasContext.set(new LockedCanvasContext(*rFragmentHandler));
+                mxLockedCanvasContext.set(static_cast<oox::core::ContextHandler*>(new LockedCanvasContext(*rFragmentHandler)));
                 break;
             default:
                 break;
@@ -139,7 +139,7 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getWp
         switch (getBaseToken(nElement))
         {
             case XML_wgp:
-                mxWpgContext.set(new WpgContext(*rFragmentHandler));
+                mxWpgContext.set(static_cast<oox::core::ContextHandler*>(new WpgContext(*rFragmentHandler)));
                 break;
             default:
                 break;

@@ -23,8 +23,8 @@ namespace oox
 namespace shape
 {
 
-WpgContext::WpgContext(ContextHandler2Helper const& rParent)
-    : ContextHandler2(rParent)
+WpgContext::WpgContext(FragmentHandler2 const& rParent)
+    : FragmentHandler2(rParent)
 {
     mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
     mpShape->setWps(true);

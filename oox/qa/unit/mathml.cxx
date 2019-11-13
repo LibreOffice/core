@@ -10,8 +10,9 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
-#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/processfactory.hxx>
@@ -58,6 +59,21 @@ CPPUNIT_TEST_FIXTURE(OoxMathmlTest, testImportCharacters)
     // Without the accompanying fix in place, this failed with an assertion failure on import.
     getComponent() = loadFromDesktop(aURL);
     CPPUNIT_ASSERT(getComponent().is());
+}
+
+CPPUNIT_TEST_FIXTURE(OoxMathmlTest, testImportMce)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "import-mce.pptx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // Without the accompanying fix in place, this failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. both the math object and its replacement image was imported, as two separate objects.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
