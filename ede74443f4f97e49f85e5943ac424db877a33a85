@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_9d18c075",
+        "filename": "external/hunspell/0001-invalid-read-memory-access-624.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-11-13T09:59:01Z",
+      "side": 1,
+      "message": "this could overflow, should be size_t...",
+      "revId": "ede74443f4f97e49f85e5943ac424db877a33a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
