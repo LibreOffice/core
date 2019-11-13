@@ -183,10 +183,11 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,vcl,\
+	CppunitTest_vcl_drawable \
 	CppunitTest_vcl_PixelTest \
 	CppunitTest_vcl_LineTest \
-	CppunitTest_vcl_drawable \
 	CppunitTest_vcl_ArcDrawable \
+	CppunitTest_vcl_GradientDrawable \
 	CppunitTest_vcl_B2DPolyLineDrawable \
 	CppunitTest_vcl_B2DPolyLineDrawableHelper \
 	CppunitTest_vcl_B2DPolyPolyLineDrawableHelper \
