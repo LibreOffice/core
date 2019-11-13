@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <oox/core/xmlfilterbase.hxx>
+#include <oox/core/fragmenthandler2.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/ppt/pptshape.hxx>
 #include <oox/ppt/pptgraphicshapecontext.hxx>
@@ -51,7 +52,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace ppt {
 
 PPTShapeGroupContext::PPTShapeGroupContext(
-        ContextHandler2Helper const & rParent,
+        FragmentHandler2 const & rParent,
         const oox::ppt::SlidePersistPtr& rSlidePersistPtr,
         const ShapeLocation eShapeLocation,
         const oox::drawingml::ShapePtr& pMasterShapePtr,
