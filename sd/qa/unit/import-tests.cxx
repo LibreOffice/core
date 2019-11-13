@@ -196,6 +196,7 @@ public:
     void testTdf77747();
     void testTdf116266();
     void testTdf126324();
+    void testTdf128684();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -311,6 +312,7 @@ public:
     CPPUNIT_TEST(testCropToShape);
     CPPUNIT_TEST(testTdf127964);
     CPPUNIT_TEST(testTdf106638);
+    CPPUNIT_TEST(testTdf128684);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3004,6 +3006,33 @@ void SdImportTest::testTdf106638()
     CPPUNIT_ASSERT(xTextCursor->goRight(45, true));
     xPropSet->getPropertyValue("CharFontName") >>= aCharFontName;
     CPPUNIT_ASSERT(aCharFontName != "Wingdings");
+}
+
+
+void SdImportTest::testTdf128684()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf128684.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPage.is());
+    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Any aAny = xShape->getPropertyValue("CustomShapeGeometry");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    uno::Sequence<beans::PropertyValue> aProps;
+    CPPUNIT_ASSERT(aAny >>= aProps);
+    sal_Int32 nRotateAngle = 0;
+    for( const auto& rProp : std::as_const(aProps) )
+    {
+        if( rProp.Name == "TextPreRotateAngle")
+        {
+            rProp.Value >>= nRotateAngle;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90), nRotateAngle);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
