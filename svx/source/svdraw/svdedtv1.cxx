@@ -1001,6 +1001,19 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                         }
                         break;
                     }
+
+                    case SDRATTR_SHADOWTRANSPARENCE:
+                    {
+                        const SfxPoolItem* pItem = rSet.GetItem(SDRATTR_SHADOWTRANSPARENCE);
+                        if (pItem)
+                        {
+                            sal_uInt16 nWidth = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                            sPayload = OUString::number(nWidth);
+
+                            sPayload = ".uno:FillShadowTransparency=" + sPayload;
+                        }
+                        break;
+                    }
                 }
 
                 if (!sPayload.isEmpty())
