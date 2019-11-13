@@ -230,6 +230,8 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_Type, OUString( "ooxml-non-primitive" ));
         aPropertyMap.setProperty( PROP_MirroredX, mbMirroredX );
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
+        if( mnTextRotateAngle )
+            aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
         // Note 1: If Equations are defined - they are processed using internal div by 360 coordinates
         // while if they are not, standard ooxml coordinates are used.
         // This size specifically affects scaling.
