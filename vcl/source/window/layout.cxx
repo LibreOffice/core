@@ -1757,7 +1757,7 @@ void VclScrolledWindow::InitScrollBars(const Size &rRequest)
     m_pHScroll->Scroll();
 }
 
-void VclScrolledWindow::setAllocation(const Size &rAllocation)
+void VclScrolledWindow::doSetAllocation(const Size &rAllocation, bool bRetryOnFailure)
 {
     Size aChildReq;
 
@@ -1835,11 +1835,31 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     if (pChild && pChild->IsVisible())
     {
         assert(dynamic_cast<VclViewport*>(pChild) && "scrolledwindow child should be a Viewport");
+
+        WinBits nOldBits = (GetStyle() & (WB_AUTOVSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_HSCROLL));
+
         setLayoutAllocation(*pChild, Point(1, 1), aInnerSize);
+
+        // tdf#128758 if the layout allocation triggered some callback that
+        // immediately invalidates the layout by adding scrollbars then
+        // normally this would simply retrigger layout and another toplevel
+        // attempt is made later. But the initial layout attempt blocks
+        // relayouts, so just make another single effort here.
+        WinBits nNewBits = (GetStyle() & (WB_AUTOVSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_HSCROLL));
+        if (nOldBits != nNewBits && bRetryOnFailure)
+        {
+            doSetAllocation(rAllocation, false);
+            return;
+        }
     }
 
     if (!m_bUserManagedScrolling)
         InitScrollBars(aChildReq);
+}
+
+void VclScrolledWindow::setAllocation(const Size &rAllocation)
+{
+    doSetAllocation(rAllocation, true);
 }
 
 Size VclScrolledWindow::getVisibleChildSize() const
