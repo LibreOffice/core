@@ -10,7 +10,7 @@
 #ifndef INCLUDED_OOX_SOURCE_SHAPE_LOCKEDCANVASCONTEXT_HXX
 #define INCLUDED_OOX_SOURCE_SHAPE_LOCKEDCANVASCONTEXT_HXX
 
-#include <oox/core/contexthandler2.hxx>
+#include <oox/core/fragmenthandler2.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
 namespace oox
@@ -19,10 +19,10 @@ namespace shape
 {
 
 /// Locked canvas is kind of a container for drawingml shapes: it can even contain group shapes.
-class LockedCanvasContext final : public oox::core::ContextHandler2
+class LockedCanvasContext final : public oox::core::FragmentHandler2
 {
 public:
-    explicit LockedCanvasContext(oox::core::ContextHandler2Helper const& rParent);
+    explicit LockedCanvasContext(oox::core::FragmentHandler2 const& rParent);
     ~LockedCanvasContext() override;
 
     oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const ::oox::AttributeList& rAttribs) override;

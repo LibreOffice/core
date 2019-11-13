@@ -26,6 +26,7 @@
 namespace oox {
 namespace core {
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
@@ -72,13 +73,25 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
                 // is long gone. For now let's decide depending on a list of supported
                 // namespaces like we do in writerfilter
 
-                static std::vector<OUString> aSupportedNS =
+                std::vector<OUString> aSupportedNS =
                 {
+                    "a14", // Impress needs this to import math formulas.
                     "p14",
                     "p15",
                     "x12ac",
                     "v",
                 };
+
+                uno::Reference<lang::XServiceInfo> xModel(getFilter().getModel(), uno::UNO_QUERY);
+                if (xModel.is() && xModel->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+                {
+                    // No a14 for Calc documents, it would cause duplicated shapes as-is.
+                    auto it = std::find(aSupportedNS.begin(), aSupportedNS.end(), "a14");
+                    if (it != aSupportedNS.end())
+                    {
+                        aSupportedNS.erase(it);
+                    }
+                }
 
                 if (std::find(aSupportedNS.begin(), aSupportedNS.end(), aRequires) != aSupportedNS.end())
                     aMceState.back() = MCE_STATE::FoundChoice;

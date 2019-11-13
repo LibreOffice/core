@@ -10,7 +10,7 @@
 #ifndef INCLUDED_OOX_SOURCE_SHAPE_WPGCONTEXT_HXX
 #define INCLUDED_OOX_SOURCE_SHAPE_WPGCONTEXT_HXX
 
-#include <oox/core/contexthandler2.hxx>
+#include <oox/core/fragmenthandler2.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
 namespace oox
@@ -19,10 +19,10 @@ namespace shape
 {
 
 /// Wpg is the drawingML equivalent of v:group.
-class WpgContext final : public oox::core::ContextHandler2
+class WpgContext final : public oox::core::FragmentHandler2
 {
 public:
-    explicit WpgContext(oox::core::ContextHandler2Helper const& rParent);
+    explicit WpgContext(oox::core::FragmentHandler2 const& rParent);
     ~WpgContext() override;
 
     oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) override;
