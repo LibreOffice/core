@@ -189,7 +189,7 @@ namespace dbaui
 
                     OUString sMessage(DBA_RES(STR_COULD_NOT_CONVERT_PARAM));
                     sMessage = sMessage.replaceAll( "$name$", sName );
-                    std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(nullptr,
+                    std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(m_xDialog.get(),
                                                                  VclMessageType::Warning, VclButtonsType::Ok,
                                                                  sMessage));
                     xDialog->run();
