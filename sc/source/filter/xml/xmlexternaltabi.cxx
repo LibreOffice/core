@@ -43,7 +43,6 @@ ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
     ScXMLImport& rImport,
     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList, ScXMLExternalTabData& rRefInfo ) :
     ScXMLImportContext( rImport ),
-    mrScImport(rImport),
     mrExternalRefInfo(rRefInfo)
 {
     using namespace ::xmloff::token;
@@ -98,7 +97,7 @@ static bool lcl_isValidRelativeURL(const OUString& rUrl)
 
 void SAL_CALL ScXMLExternalRefTabSourceContext::endFastElement( sal_Int32 /*nElement*/ )
 {
-    ScDocument* pDoc = mrScImport.GetDocument();
+    ScDocument* pDoc = GetScImport().GetDocument();
     if (!pDoc)
         return;
 
@@ -111,7 +110,6 @@ void SAL_CALL ScXMLExternalRefTabSourceContext::endFastElement( sal_Int32 /*nEle
 ScXMLExternalRefRowsContext::ScXMLExternalRefRowsContext(
     ScXMLImport& rImport, ScXMLExternalTabData& rRefInfo ) :
     ScXMLImportContext( rImport ),
-    mrScImport(rImport),
     mrExternalRefInfo(rRefInfo)
 {
 }
@@ -126,7 +124,7 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowsContext::createFas
     // #i101319# row elements inside group, rows or header-rows
     // are treated like row elements directly in the table element
 
-    const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowsElemTokenMap();
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetTableRowsElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get( nElement );
     sax_fastparser::FastAttributeList *pAttribList =
         sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
@@ -137,10 +135,10 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowsContext::createFas
         case XML_TOK_TABLE_ROWS_HEADER_ROWS:
         case XML_TOK_TABLE_ROWS_ROWS:
             return new ScXMLExternalRefRowsContext(
-                mrScImport, mrExternalRefInfo);
+                GetScImport(), mrExternalRefInfo);
         case XML_TOK_TABLE_ROWS_ROW:
             return new ScXMLExternalRefRowContext(
-                mrScImport, pAttribList, mrExternalRefInfo);
+                GetScImport(), pAttribList, mrExternalRefInfo);
         default:
             ;
     }

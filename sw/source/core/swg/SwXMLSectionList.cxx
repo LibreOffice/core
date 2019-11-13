@@ -29,7 +29,7 @@ using namespace ::xmloff::token;
 class SvXMLSectionListContext : public SvXMLImportContext
 {
 private:
-    SwXMLSectionList & m_rImport;
+    SwXMLSectionList & GetImport() { return static_cast<SwXMLSectionList&>(SvXMLImportContext::GetImport()); }
 
 public:
     SvXMLSectionListContext(SwXMLSectionList& rImport);
@@ -42,12 +42,11 @@ public:
 class SwXMLParentContext : public SvXMLImportContext
 {
 private:
-    SwXMLSectionList & m_rImport;
+    SwXMLSectionList & GetImport() { return static_cast<SwXMLSectionList&>(SvXMLImportContext::GetImport()); }
 
 public:
     SwXMLParentContext(SwXMLSectionList& rImport)
         : SvXMLImportContext(rImport)
-        , m_rImport(rImport)
     {
     }
 
@@ -65,11 +64,11 @@ public:
             Element == XML_ELEMENT(TEXT, XML_INSERTION) ||
             Element == XML_ELEMENT(TEXT, XML_DELETION))
         {
-            return new SvXMLSectionListContext(m_rImport);
+            return new SvXMLSectionListContext(GetImport());
         }
         else
         {
-            return new SwXMLParentContext(m_rImport);
+            return new SwXMLParentContext(GetImport());
         }
     }
 };
@@ -102,8 +101,7 @@ SvXMLImportContext * SwXMLSectionList::CreateFastContext(
 }
 
 SvXMLSectionListContext::SvXMLSectionListContext( SwXMLSectionList& rImport )
-    : SvXMLImportContext ( rImport ),
-      m_rImport(rImport)
+    : SvXMLImportContext ( rImport )
 {
 }
 
@@ -124,10 +122,10 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> SvXMLSectionListContext:
             if (aIter.getToken() == (XML_NAMESPACE_TEXT | XML_NAME))
                 sName = aIter.toString();
         if ( !sName.isEmpty() )
-            m_rImport.m_rSectionList.push_back(sName);
+            GetImport().m_rSectionList.push_back(sName);
     }
 
-    pContext = new SvXMLSectionListContext(m_rImport);
+    pContext = new SvXMLSectionListContext(GetImport());
     return pContext;
 }
 
