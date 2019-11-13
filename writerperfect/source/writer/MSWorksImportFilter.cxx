@@ -31,7 +31,7 @@ static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData& data,
 
 bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
                                            librevenge::RVNGInputStream& rInput,
-                                           OdtGenerator& rGenerator, utl::MediaDescriptor&)
+                                           OdtGenerator& rGenerator, utl::MediaDescriptor& mediaDescriptor)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
     libwps::WPSCreator creator;
@@ -40,47 +40,56 @@ bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
         = libwps::WPSDocument::isFileFormatSupported(&rInput, kind, creator, needEncoding);
 
     std::string fileEncoding;
-    try
+    if ((kind == libwps::WPS_TEXT) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT)
+        && needEncoding)
     {
-        if ((kind == libwps::WPS_TEXT) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT)
-            && needEncoding)
+        OUString encoding;
+        // first check if we can find the encoding in the filter options (headless mode)
+        mediaDescriptor[utl::MediaDescriptor::PROP_FILTEROPTIONS()] >>= encoding;
+        if (!encoding.isEmpty()) // TODO: check if the encoding string is valid
+            fileEncoding = encoding.toUtf8().getStr();
+        else
         {
-            OUString title, encoding;
+            OUString title;
 
             switch (creator)
             {
-                case libwps::WPS_MSWORKS:
-                    title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
-                    encoding = "CP850";
-                    break;
-                case libwps::WPS_RESERVED_0: // MS Write
-                    title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWRITE);
-                    encoding = "CP1252";
-                    break;
-                case libwps::WPS_RESERVED_1: // DosWord
-                    title = WpResId(STR_ENCODING_DIALOG_TITLE_DOSWORD);
-                    encoding = "CP850";
-                    break;
-                default:
-                    title = WpResId(STR_ENCODING_DIALOG_TITLE);
-                    encoding = "CP850";
-                    break;
+            case libwps::WPS_MSWORKS:
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
+                encoding = "CP850";
+                break;
+            case libwps::WPS_RESERVED_0: // MS Write
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWRITE);
+                encoding = "CP1252";
+                break;
+            case libwps::WPS_RESERVED_1: // DosWord
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_DOSWORD);
+                encoding = "CP850";
+                break;
+            default:
+                title = WpResId(STR_ENCODING_DIALOG_TITLE);
+                encoding = "CP850";
+                break;
             }
 
-            writerperfect::WPFTEncodingDialog aDlg(pParent, title, encoding);
-            if (aDlg.run() == RET_OK)
+            try
             {
-                if (!aDlg.GetEncoding().isEmpty())
-                    fileEncoding = aDlg.GetEncoding().toUtf8().getStr();
+                writerperfect::WPFTEncodingDialog aDlg(pParent, title, encoding);
+                if (aDlg.run() == RET_OK)
+                {
+                    if (!aDlg.GetEncoding().isEmpty())
+                        fileEncoding = aDlg.GetEncoding().toUtf8().getStr();
+                }
+                // we can fail because we are in headless mode, the user has cancelled conversion, ...
+                else if (aDlg.hasUserCalledCancel())
+                    return false;
             }
-            // we can fail because we are in headless mode, the user has cancelled conversion, ...
-            else if (aDlg.hasUserCalledCancel())
-                return false;
+            catch (css::uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("writerperfect", "ignoring");
+                fileEncoding = encoding.toUtf8().getStr(); // revert to the proposed default encoding
+            }
         }
-    }
-    catch (css::uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("writerperfect", "ignoring");
     }
     return libwps::WPS_OK
            == libwps::WPSDocument::parse(&rInput, &rGenerator, "", fileEncoding.c_str());
