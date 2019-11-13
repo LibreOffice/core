@@ -513,6 +513,7 @@ public:
     //set to true to disable the built-in scrolling callbacks to allow the user
     //to override it
     void setUserManagedScrolling(bool bUserManagedScrolling) { m_bUserManagedScrolling = bUserManagedScrolling;}
+    void doSetAllocation(const Size &rAllocation, bool bRetryOnFailure);
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
