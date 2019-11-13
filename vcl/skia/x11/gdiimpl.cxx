@@ -21,6 +21,8 @@
 #include <tools/sk_app/unix/WindowContextFactory_unix.h>
 #include <tools/sk_app/WindowContext.h>
 
+#include <vcl/skia/SkiaHelper.hxx>
+
 X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
     : SkiaSalGraphicsImpl(rParent, rParent.GetGeometryProvider())
     , mX11Parent(rParent)
@@ -63,22 +65,30 @@ void X11SkiaSalGraphicsImpl::createSurface()
 #endif
     winInfo.fWidth = GetWidth();
     winInfo.fHeight = GetHeight();
-    switch (renderMethodToUse())
+    switch (SkiaHelper::renderMethodToUse())
     {
-        case RenderRaster:
+        case SkiaHelper::RenderRaster:
             mWindowContext
                 = sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
+            assert(SkToBool(mWindowContext));
+            mSurface = mWindowContext->getBackbufferSurface();
+            assert(mSurface.get());
             mIsGPU = false;
             break;
-        case RenderVulkan:
+        case SkiaHelper::RenderVulkan:
             mWindowContext
                 = sk_app::window_context_factory::MakeVulkanForXlib(winInfo, displayParams);
+            if (mWindowContext)
+                mSurface = mWindowContext->getBackbufferSurface();
+            if (!mSurface)
+            {
+                SAL_WARN("vcl.skia", "cannot create Vulkan GPU surface, disabling Vulkan");
+                SkiaHelper::disableRenderMethod(SkiaHelper::RenderVulkan);
+                return createSurface(); // try again
+            }
             mIsGPU = true;
             break;
     }
-    assert(SkToBool(mWindowContext)); // TODO
-    mSurface = mWindowContext->getBackbufferSurface();
-    assert(mSurface.get());
 #ifdef DBG_UTIL
     prefillSurface();
 #endif

@@ -9,12 +9,13 @@
 
 #include <skia/win/gdiimpl.hxx>
 
-#include <tools/sk_app/win/WindowContextFactory_win.h>
-#include <tools/sk_app/WindowContext.h>
 #include <win/saldata.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <SkColorFilter.h>
 #include <SkPixelRef.h>
+#include <tools/sk_app/win/WindowContextFactory_win.h>
+#include <tools/sk_app/WindowContext.h>
 
 WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
                                                SalGeometryProvider* mpProvider)
@@ -52,22 +53,30 @@ void WinSkiaSalGraphicsImpl::createSurface()
     // valid here, but better check.
     assert(GetWidth() != 0 && GetHeight() != 0);
     sk_app::DisplayParams displayParams;
-    switch (renderMethodToUse())
+    switch (SkiaHelper::renderMethodToUse())
     {
-        case RenderRaster:
+        case SkiaHelper::RenderRaster:
             mWindowContext = sk_app::window_context_factory::MakeRasterForWin(mWinParent.gethWnd(),
                                                                               displayParams);
+            assert(SkToBool(mWindowContext));
+            mSurface = mWindowContext->getBackbufferSurface();
+            assert(mSurface.get());
             mIsGPU = false;
             break;
-        case RenderVulkan:
+        case SkiaHelper::RenderVulkan:
             mWindowContext = sk_app::window_context_factory::MakeVulkanForWin(mWinParent.gethWnd(),
                                                                               displayParams);
+            if (mWindowContext)
+                mSurface = mWindowContext->getBackbufferSurface();
+            if (!mSurface)
+            {
+                SAL_WARN("vcl.skia", "cannot create Vulkan GPU surface, disabling Vulkan");
+                SkiaHelper::disableRenderMethod(SkiaHelper::RenderVulkan);
+                return createSurface(); // try again
+            }
             mIsGPU = true;
             break;
     }
-    assert(SkToBool(mWindowContext)); // TODO
-    mSurface = mWindowContext->getBackbufferSurface();
-    assert(mSurface.get());
 #ifdef DBG_UTIL
     prefillSurface();
 #endif

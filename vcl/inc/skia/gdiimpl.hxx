@@ -241,14 +241,6 @@ protected:
     SkScalar toSkX(long x) const { return mIsGPU ? x + 0.5 : x; }
     SkScalar toSkY(long y) const { return mIsGPU ? y + 0.5 : y; }
 
-    // Which Skia backend to use.
-    enum RenderMethod
-    {
-        RenderRaster,
-        RenderVulkan
-    };
-    static RenderMethod renderMethodToUse();
-
 #ifdef DBG_UTIL
     void prefillSurface();
 #endif

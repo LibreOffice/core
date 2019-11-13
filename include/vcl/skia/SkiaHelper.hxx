@@ -12,6 +12,8 @@
 
 #include <vcl/dllapi.h>
 
+#include <config_features.h>
+
 // All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
 struct VCL_DLLPUBLIC SkiaHelper
 {
@@ -19,6 +21,17 @@ struct VCL_DLLPUBLIC SkiaHelper
 
 public:
     static bool isVCLSkiaEnabled();
+
+#if HAVE_FEATURE_SKIA
+    // Which Skia backend to use.
+    enum RenderMethod
+    {
+        RenderRaster,
+        RenderVulkan
+    };
+    static RenderMethod renderMethodToUse();
+    static void disableRenderMethod(RenderMethod method);
+#endif
 };
 
 #endif

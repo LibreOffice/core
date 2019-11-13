@@ -13,8 +13,6 @@
 #include <desktop/crashreport.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#include <config_features.h>
-
 #if !HAVE_FEATURE_SKIA
 bool SkiaHelper::isVCLSkiaEnabled() { return false; }
 
@@ -84,6 +82,37 @@ bool SkiaHelper::isVCLSkiaEnabled()
     CrashReporter::addKeyValue("UseSkia", OUString::boolean(bRet), CrashReporter::Write);
 
     return bRet;
+}
+
+static SkiaHelper::RenderMethod methodToUse = SkiaHelper::RenderRaster;
+
+static bool initRenderMethodToUse()
+{
+    if (const char* env = getenv("SAL_SKIA"))
+    {
+        if (strcmp(env, "raster") == 0)
+        {
+            methodToUse = SkiaHelper::RenderRaster;
+            return true;
+        }
+    }
+    methodToUse = SkiaHelper::RenderVulkan;
+    return true;
+}
+
+SkiaHelper::RenderMethod SkiaHelper::renderMethodToUse()
+{
+    static bool methodToUseInited = initRenderMethodToUse();
+    (void)methodToUseInited; // Used just to ensure thread-safe one-time init.
+    return methodToUse;
+}
+
+void SkiaHelper::disableRenderMethod(RenderMethod method)
+{
+    if (renderMethodToUse() != method)
+        return;
+    // Choose a fallback, right now always raster.
+    methodToUse = RenderRaster;
 }
 
 #endif // HAVE_FEATURE_SKIA
