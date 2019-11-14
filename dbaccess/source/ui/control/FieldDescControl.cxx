@@ -1197,14 +1197,29 @@ void OFieldDescControl::LoseFocus()
     TabPage::LoseFocus();
 }
 
+bool OFieldDescControl::IsFocusInEditableWidget() const
+{
+    if (m_xDefault && m_pActFocusWindow == m_xDefault->GetWidget())
+        return true;
+    if (m_xFormatSample && m_pActFocusWindow == m_xFormatSample->GetWidget())
+        return true;
+    if (m_xTextLen && m_pActFocusWindow == m_xTextLen->GetWidget())
+        return true;
+    if (m_xLength && m_pActFocusWindow == m_xLength->GetWidget())
+        return true;
+    if (m_xScale && m_pActFocusWindow == m_xScale->GetWidget())
+        return true;
+    if (m_xColumnName && m_pActFocusWindow == m_xColumnName->GetWidget())
+        return true;
+    if (m_xAutoIncrementValue && m_pActFocusWindow == m_xAutoIncrementValue->GetWidget())
+        return true;
+    return false;
+}
+
 bool OFieldDescControl::isCopyAllowed() const
 {
     int nStartPos, nEndPos;
-    bool bAllowed = (m_pActFocusWindow != nullptr) &&
-                        (m_pActFocusWindow == m_xDefault->GetWidget() || m_pActFocusWindow == m_xFormatSample->GetWidget() ||
-                        m_pActFocusWindow == m_xTextLen->GetWidget() || m_pActFocusWindow == m_xLength->GetWidget() ||
-                        m_pActFocusWindow == m_xScale->GetWidget() || m_pActFocusWindow == m_xColumnName->GetWidget() ||
-                        m_pActFocusWindow == m_xAutoIncrementValue->GetWidget()) &&
+    bool bAllowed = (m_pActFocusWindow != nullptr) && IsFocusInEditableWidget() &&
                         dynamic_cast<weld::Entry&>(*m_pActFocusWindow).get_selection_bounds(nStartPos, nEndPos);
     return bAllowed;
 }
@@ -1212,22 +1227,14 @@ bool OFieldDescControl::isCopyAllowed() const
 bool OFieldDescControl::isCutAllowed() const
 {
     int nStartPos, nEndPos;
-    bool bAllowed = (m_pActFocusWindow != nullptr) &&
-                        (m_pActFocusWindow == m_xDefault->GetWidget() || m_pActFocusWindow == m_xFormatSample->GetWidget() ||
-                        m_pActFocusWindow == m_xTextLen->GetWidget() || m_pActFocusWindow == m_xLength->GetWidget() ||
-                        m_pActFocusWindow == m_xScale->GetWidget() || m_pActFocusWindow == m_xColumnName->GetWidget() ||
-                        m_pActFocusWindow == m_xAutoIncrementValue->GetWidget()) &&
+    bool bAllowed = (m_pActFocusWindow != nullptr) && IsFocusInEditableWidget() &&
                         dynamic_cast<weld::Entry&>(*m_pActFocusWindow).get_selection_bounds(nStartPos, nEndPos);
     return bAllowed;
 }
 
 bool OFieldDescControl::isPasteAllowed() const
 {
-    bool bAllowed = (m_pActFocusWindow != nullptr) &&
-                        (m_pActFocusWindow == m_xDefault->GetWidget() || m_pActFocusWindow == m_xFormatSample->GetWidget() ||
-                        m_pActFocusWindow == m_xTextLen->GetWidget() || m_pActFocusWindow == m_xLength->GetWidget() ||
-                        m_pActFocusWindow == m_xScale->GetWidget() || m_pActFocusWindow == m_xColumnName->GetWidget() ||
-                        m_pActFocusWindow == m_xAutoIncrementValue->GetWidget());
+    bool bAllowed = (m_pActFocusWindow != nullptr) && IsFocusInEditableWidget();
     if ( bAllowed )
     {
         TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
