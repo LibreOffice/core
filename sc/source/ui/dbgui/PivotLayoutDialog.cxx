@@ -74,9 +74,9 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     , maPivotTableObject(*pPivotTableObject)
     , mpPreviouslyFocusedListBox(nullptr)
     , mpViewData(pViewData)
-    , mpDocument(pViewData->GetDocument())
+    , mrDocument(*pViewData->GetDocument())
     , mbNewPivotTable(bNewPivotTable)
-    , maAddressDetails(mpDocument->GetAddressConvention(), 0, 0)
+    , maAddressDetails(mrDocument.GetAddressConvention(), 0, 0)
     , mbDialogLostFocus(false)
     , mpActiveEdit(nullptr)
     , mxListBoxField(new ScPivotLayoutTreeListLabel(m_xBuilder->weld_tree_view("listbox-fields")))
@@ -210,7 +210,7 @@ void ScPivotLayoutDialog::SetupSource()
         }
         else
         {
-            OUString aSourceRangeName = aSourceRange.Format(ScRefFlags::RANGE_ABS_3D, mpDocument, maAddressDetails);
+            OUString aSourceRangeName = aSourceRange.Format(ScRefFlags::RANGE_ABS_3D, &mrDocument, maAddressDetails);
             mxSourceEdit->SetText(aSourceRangeName);
         }
     }
@@ -225,7 +225,7 @@ void ScPivotLayoutDialog::SetupSource()
     // Setup Named Ranges
     bool bIsNamedRange = false;
 
-    ScAreaNameIterator aIterator(mpDocument);
+    ScAreaNameIterator aIterator(&mrDocument);
     OUString aEachName;
     ScRange aEachRange;
 
@@ -265,7 +265,7 @@ void ScPivotLayoutDialog::SetupDestination()
     mxDestinationListBox->clear();
 
     // Fill up named ranges
-    ScAreaNameIterator aIterator(mpDocument);
+    ScAreaNameIterator aIterator(&mrDocument);
     OUString aName;
     ScRange aRange;
 
@@ -293,7 +293,7 @@ void ScPivotLayoutDialog::SetupDestination()
         if (maPivotParameters.nTab != MAXTAB + 1)
         {
             ScAddress aAddress(maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
-            OUString aAddressString = aAddress.Format(ScRefFlags::ADDR_ABS_3D, mpDocument, maAddressDetails);
+            OUString aAddressString = aAddress.Format(ScRefFlags::ADDR_ABS_3D, &mrDocument, maAddressDetails);
             mxDestinationEdit->SetText(aAddressString);
             mxDestinationRadioSelection->set_active(true);
         }
@@ -398,7 +398,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
     if (mxSourceRadioNamedRange->get_active())
     {
         OUString aEntryString = mxSourceListBox->get_active_text();
-        ScRange aSourceRange = lclGetRangeForNamedRange(aEntryString, mpDocument);
+        ScRange aSourceRange = lclGetRangeForNamedRange(aEntryString, &mrDocument);
         if (!aSourceRange.IsValid() || aSourceSheet.GetSourceRange() == aSourceRange)
             return;
         aSourceSheet.SetRangeName(aEntryString);
@@ -407,7 +407,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
     {
         OUString aSourceString = mxSourceEdit->GetText();
         ScRange aSourceRange;
-        ScRefFlags nResult = aSourceRange.Parse(aSourceString, mpDocument, maAddressDetails);
+        ScRefFlags nResult = aSourceRange.Parse(aSourceString, &mrDocument, maAddressDetails);
 
         bool bIsValid = (nResult & ScRefFlags::VALID) == ScRefFlags::VALID; // aSourceString is valid
 
@@ -418,13 +418,13 @@ void ScPivotLayoutDialog::UpdateSourceRange()
             ScRefAddress aStart;
             ScRefAddress aEnd;
 
-            ConvertDoubleRef(mpDocument, aSourceString, 1, aStart, aEnd, maAddressDetails);
+            ConvertDoubleRef(&mrDocument, aSourceString, 1, aStart, aEnd, maAddressDetails);
             aSourceRange.aStart = aStart.GetAddress();
             aSourceRange.aEnd = aEnd.GetAddress();
         }
         else
         {
-            aSourceRange = lclGetRangeForNamedRange(aSourceString, mpDocument);
+            aSourceRange = lclGetRangeForNamedRange(aSourceString, &mrDocument);
         }
 
         if (!aSourceRange.IsValid())
@@ -461,7 +461,7 @@ void ScPivotLayoutDialog::ApplyChanges()
     ApplySaveData(aSaveData);
     ApplyLabelData(aSaveData);
 
-    ScDPObject *pOldDPObj = mpDocument->GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
+    ScDPObject *pOldDPObj = mrDocument.GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
     ScRange aDestinationRange;
     bool bToNewSheet = false;
 
@@ -494,7 +494,7 @@ void ScPivotLayoutDialog::ApplyChanges()
             if ( ( ( rOldRange != aDestinationRange ) && !rOldRange.In( aDestinationRange ) )
                  || bToNewSheet )
             {
-                pDPObj = mpDocument->GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
+                pDPObj = mrDocument.GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
             }
             if (pDPObj)
             {
@@ -583,14 +583,14 @@ bool ScPivotLayoutDialog::GetDestination(ScRange& aDestinationRange, bool& bToNe
     if (mxDestinationRadioNamedRange->get_active())
     {
         OUString aName = mxDestinationListBox->get_active_text();
-        aDestinationRange = lclGetRangeForNamedRange(aName, mpDocument);
+        aDestinationRange = lclGetRangeForNamedRange(aName, &mrDocument);
         if (!aDestinationRange.IsValid())
             return false;
     }
     else if (mxDestinationRadioSelection->get_active())
     {
         ScAddress aAddress;
-        aAddress.Parse(mxDestinationEdit->GetText(), mpDocument, maAddressDetails);
+        aAddress.Parse(mxDestinationEdit->GetText(), &mrDocument, maAddressDetails);
         aDestinationRange = ScRange(aAddress);
     }
     else
