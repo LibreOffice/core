@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
 #include <dispatch/dispatchprovider.hxx>
 #include <loadenv/loadenv.hxx>
 #include <dispatch/loaddispatcher.hxx>
@@ -25,25 +24,17 @@
 #include <dispatch/startmoduledispatcher.hxx>
 
 #include <pattern/window.hxx>
-#include <threadhelp/transactionguard.hxx>
-#include <protocols.h>
-#include <services.h>
 #include <targets.h>
-#include <general.h>
 #include "isstartmoduledispatch.hxx"
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
-#include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 namespace framework{

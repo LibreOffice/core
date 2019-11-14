@@ -19,10 +19,7 @@
 
 #include <jobs/jobresult.hxx>
 #include <jobs/jobconst.hxx>
-#include <general.h>
-#include <services.h>
 
-#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>

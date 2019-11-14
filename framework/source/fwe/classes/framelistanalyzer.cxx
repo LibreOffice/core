@@ -21,17 +21,14 @@
 
 #include <targets.h>
 #include <properties.h>
-#include <services.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

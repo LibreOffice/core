@@ -33,7 +33,6 @@
 #include <sal/config.h>
 #include <sal/macros.h>
 #include <vcl/svapp.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustrbuf.hxx>
 

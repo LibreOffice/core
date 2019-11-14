@@ -27,8 +27,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <vcl/svapp.hxx>
-
 #include <officecfg/Office/TabBrowse.hxx>
 
 namespace framework{

@@ -19,26 +19,18 @@
 
 #include <helper/titlebarupdate.hxx>
 
-#include <pattern/window.hxx>
-#include <services.h>
 #include <properties.h>
 
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/bootstrap.hxx>
 #include <vcl/window.hxx>
-#include <vcl/syswin.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>

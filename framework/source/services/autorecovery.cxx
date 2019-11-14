@@ -21,12 +21,8 @@
 
 #include <loadenv/loadenv.hxx>
 
-#include <loadenv/targethelper.hxx>
-#include <pattern/frame.hxx>
-
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>
-#include <protocols.h>
 #include <properties.h>
 #include <targets.h>
 
@@ -49,10 +45,8 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -88,7 +82,6 @@
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
 
-#include <osl/time.h>
 #include <vcl/weld.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
@@ -99,7 +92,6 @@
 #include <officecfg/Office/Recovery.hxx>
 #include <officecfg/Setup.hxx>
 
-#include <general.h>
 #include <stdtypes.h>
 
 using namespace css::uno;

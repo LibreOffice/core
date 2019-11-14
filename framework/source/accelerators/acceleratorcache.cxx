@@ -19,10 +19,6 @@
 
 #include <accelerators/acceleratorcache.hxx>
 
-#include <xml/acceleratorconfigurationreader.hxx>
-
-#include <com/sun/star/container/ElementExistException.hpp>
-
 #include <com/sun/star/container/NoSuchElementException.hpp>
 
 #include <vcl/svapp.hxx>

@@ -18,15 +18,9 @@
  */
 
 #include <accelerators/acceleratorconfiguration.hxx>
-#include <accelerators/presethandler.hxx>
 #include <helper/mischelper.hxx>
 
-#include <acceleratorconst.h>
-
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -35,7 +29,6 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <rtl/ref.hxx>
 
 using namespace framework;
 

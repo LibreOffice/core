@@ -19,24 +19,10 @@
 
 #include <uielement/togglebuttontoolbarcontroller.hxx>
 
-#include <framework/addonsoptions.hxx>
-
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <rtl/uri.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
-#include <vcl/window.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/combobox.hxx>
-#include <svtools/miscopt.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;

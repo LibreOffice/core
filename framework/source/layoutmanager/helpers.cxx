@@ -18,7 +18,6 @@
  */
 
 #include "helpers.hxx"
-#include <services.h>
 
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>

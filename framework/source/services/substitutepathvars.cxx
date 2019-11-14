@@ -33,7 +33,6 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 
 #include <officecfg/Office/Paths.hxx>
 

@@ -22,7 +22,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <tools/stream.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <vcl/dibtools.hxx>
 
 using namespace com::sun::star::lang;

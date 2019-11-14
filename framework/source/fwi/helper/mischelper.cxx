@@ -19,7 +19,6 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 
 #include <sal/log.hxx>
@@ -28,7 +27,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/langtab.hxx>
 #include <helper/mischelper.hxx>
-#include <services.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

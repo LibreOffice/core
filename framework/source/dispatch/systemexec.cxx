@@ -18,7 +18,6 @@
  */
 
 #include <dispatch/systemexec.hxx>
-#include <general.h>
 #include <services.h>
 
 #include <com/sun/star/system/SystemShellExecute.hpp>
@@ -26,8 +25,6 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-
-#include <vcl/svapp.hxx>
 
 namespace framework{
 

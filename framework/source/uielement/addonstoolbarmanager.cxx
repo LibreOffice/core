@@ -20,36 +20,20 @@
 #include <uielement/addonstoolbarmanager.hxx>
 #include <uielement/toolbarmerger.hxx>
 
-#include <uielement/generictoolbarcontroller.hxx>
-#include <services.h>
-#include <framework/sfxhelperfunctions.hxx>
 #include <classes/resource.hxx>
 #include <framework/addonsoptions.hxx>
-#include <uielement/comboboxtoolbarcontroller.hxx>
-#include <uielement/imagebuttontoolbarcontroller.hxx>
-#include <uielement/togglebuttontoolbarcontroller.hxx>
-#include <uielement/buttontoolbarcontroller.hxx>
-#include <uielement/spinfieldtoolbarcontroller.hxx>
-#include <uielement/edittoolbarcontroller.hxx>
-#include <uielement/dropdownboxtoolbarcontroller.hxx>
 
-#include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/util/XUpdatable.hpp>
 #include <comphelper/propertysequence.hxx>
-#include <svtools/imgdef.hxx>
-#include <svtools/toolboxcontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <svtools/miscopt.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/syswin.hxx>
-#include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>

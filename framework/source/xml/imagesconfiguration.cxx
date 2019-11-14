@@ -18,7 +18,6 @@
  */
 
 #include <xml/imagesconfiguration.hxx>
-#include <services.h>
 
 #include <xml/imagesdocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
@@ -27,11 +26,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

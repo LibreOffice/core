@@ -19,13 +19,11 @@
 
 #include <uielement/comboboxtoolbarcontroller.hxx>
 
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/Color.hpp>
 
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/combobox.hxx>
 

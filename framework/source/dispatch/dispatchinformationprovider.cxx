@@ -19,10 +19,7 @@
 
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <dispatch/closedispatcher.hxx>
-#include <stdtypes.h>
-#include <services.h>
 
-#include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/AppDispatchProvider.hpp>
 
 #include <comphelper/sequence.hxx>

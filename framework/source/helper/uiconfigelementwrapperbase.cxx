@@ -18,14 +18,12 @@
  */
 
 #include <helper/uiconfigelementwrapperbase.hxx>
-#include <general.h>
 #include <properties.h>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 
 #include <vcl/svapp.hxx>

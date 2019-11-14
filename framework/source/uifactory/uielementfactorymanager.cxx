@@ -36,13 +36,12 @@
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/ui/XUIElementFactoryManager.hpp>
 
-#include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

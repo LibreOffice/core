@@ -22,7 +22,6 @@
 #include <framework/addonmenu.hxx>
 #include <xml/menudocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
-#include <services.h>
 
 #include <uielement/rootitemcontainer.hxx>
 
@@ -30,7 +29,6 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::com::sun::star::uno;

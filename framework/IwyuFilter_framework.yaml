@@ -44,3 +44,93 @@ blacklist:
     framework/source/uiconfiguration/imagemanagerimpl.hxx:
     #  Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx
+    framework/source/dispatch/closedispatcher.cxx:
+    # Needed on MAC
+    - com/sun/star/beans/XFastPropertySet.hpp
+    - services.h
+    framework/source/dispatch/servicehandler.cxx:
+    # Actually used
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    framework/source/fwe/classes/framelistanalyzer.cxx:
+    # Actually used
+    - com/sun/star/frame/XFrame.hpp
+    framework/source/fwe/classes/addonmenu.cxx:
+    # Actually used
+    - com/sun/star/uno/Reference.hxx
+    - com/sun/star/beans/PropertyValue.hpp
+    framework/source/fwe/helper/configimporter.cxx:
+    # Actually used
+    - com/sun/star/ui/XUIConfigurationManager2.hpp
+    framework/source/fwe/helper/undomanagerhelper.cxx:
+    # Actually used
+    - com/sun/star/document/XUndoManager.hpp
+    framework/source/fwe/xml/toolboxconfiguration.cxx:
+    # Actually used
+    - com/sun/star/io/XInputStream.hpp
+    framework/source/fwe/xml/statusbarconfiguration.cxx:
+    # Actually used
+    - com/sun/star/io/XInputStream.hpp
+    framework/source/helper/persistentwindowstate.cxx:
+    # Actually used
+    - com/sun/star/awt/XWindow.hpp
+    framework/source/layoutmanager/uielement.cxx:
+    # Actually used
+    - com/sun/star/ui/DockingArea.hpp
+    framework/source/layoutmanager/helpers.cxx:
+    # Actually used
+    - com/sun/star/ui/DockingArea.hpp
+    - com/sun/star/ui/XUIElement.hpp
+    framework/source/services/substitutepathvars.cxx:
+    #  Don't propose hxx -> h change in URE libs
+    - osl/thread.hxx
+    framework/source/uifactory/menubarfactory.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    framework/source/xml/imagesconfiguration.cxx:
+    # Actually used
+    - com/sun/star/io/XInputStream.hpp
+    framework/source/uielement/genericstatusbarcontroller.cxx:
+    # Actually used
+    - com/sun/star/ui/XStatusbarItem.hpp
+    framework/source/uielement/complextoolbarcontroller.cxx:
+    # Actually used
+    - com/sun/star/util/XURLTransformer.hpp
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/frame/XFrame.hpp
+    framework/source/uielement/generictoolbarcontroller.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    framework/source/uielement/dropdownboxtoolbarcontroller.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    framework/source/uielement/comboboxtoolbarcontroller.cxx::
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    framework/source/uielement/edittoolbarcontroller.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    framework/source/uielement/comboboxtoolbarcontroller.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    framework/source/uielement/imagebuttontoolbarcontroller.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    framework/source/uielement/menubarmanager.cxx:
+    # Needed on WIN32
+    - com/sun/star/lang/SystemDependent.hpp
+    # Actually used
+    - com/sun/star/frame/XDispatch.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    framework/source/uielement/menubarwrapper.cxx:
+    # Actually used
+    - com/sun/star/container/XNameAccess.hpp
+    framework/source/uielement/spinfieldtoolbarcontroller.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    framework/source/uielement/styletoolbarcontroller.cxx:
+    # Actually used
+    - com/sun/star/util/XURLTransformer.hpp
+    framework/source/uielement/toolbarsmenucontroller.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/frame/XLayoutManager.hpp

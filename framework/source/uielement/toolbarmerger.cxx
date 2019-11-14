@@ -30,8 +30,6 @@
 #include <uielement/FixedTextToolbarController.hxx>
 #include <uielement/FixedImageToolbarController.hxx>
 
-#include <svtools/miscopt.hxx>
-
 namespace framework
 {
 
