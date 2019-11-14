@@ -411,7 +411,9 @@ IMPL_LINK(RTSDevicePage, ModifyHdl, weld::Entry&, rEdit, void)
 {
     if (m_pCustomValue)
     {
-        m_pCustomValue->m_aCustomOption = rEdit.get_text();
+        // tdf#123734 Custom PPD option values are a CUPS extension to PPDs and the user-set value
+        // needs to be prefixed with "Custom." in order to be processed properly
+        m_pCustomValue->m_aCustomOption = "Custom." + rEdit.get_text();
     }
 }
 
@@ -477,7 +479,8 @@ void RTSDevicePage::ValueBoxChanged( const PPDKey* pKey )
     {
         m_pCustomValue = pValue;
         m_pParent->m_aJobData.m_aContext.setValue(pKey, pValue);
-        m_xCustomEdit->set_text(m_pCustomValue->m_aCustomOption);
+        // don't show the "Custom." prefix in the UI, s.a. comment in ModifyHdl
+        m_xCustomEdit->set_text(m_pCustomValue->m_aCustomOption.replaceFirst("Custom.", ""));
         m_xCustomEdit->show();
         m_aReselectCustomIdle.Start();
     }
