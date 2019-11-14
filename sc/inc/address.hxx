@@ -606,8 +606,8 @@ public:
         @returns
             String contains formatted cell range in address convention
      */
-    SC_DLLPUBLIC OUString Format( ScRefFlags nFlags = ScRefFlags::ZERO,
-                                  const ScDocument* pDocument = nullptr,
+    SC_DLLPUBLIC OUString Format( const ScDocument& rDocument,
+                                  ScRefFlags nFlags = ScRefFlags::ZERO,
                                   const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                                   bool bFullAddressNotation = false ) const;
 

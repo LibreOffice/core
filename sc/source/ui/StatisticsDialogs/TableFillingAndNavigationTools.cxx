@@ -63,14 +63,14 @@ void FormulaTemplate::autoReplaceAddress(const OUString& aVariable, ScAddress co
 void FormulaTemplate::applyRange(const OUString& aVariable, const ScRange& aRange, bool b3D)
 {
     ScRefFlags nFlag = b3D ? ScRefFlags::RANGE_ABS_3D : ScRefFlags::RANGE_ABS;
-    OUString aString = aRange.Format(nFlag, mpDoc, mpDoc->GetAddressConvention());
+    OUString aString = aRange.Format(*mpDoc, nFlag, mpDoc->GetAddressConvention());
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
 void FormulaTemplate::applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList, sal_Unicode cDelimiter)
 {
     OUString aString;
-    aRangeList.Format(aString, ScRefFlags::RANGE_ABS_3D, mpDoc, mpDoc->GetAddressConvention(), cDelimiter);
+    aRangeList.Format(aString, ScRefFlags::RANGE_ABS_3D, *mpDoc, mpDoc->GetAddressConvention(), cDelimiter);
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 

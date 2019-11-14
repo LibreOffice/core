@@ -254,11 +254,11 @@ public:
     static OString ToOString( const Color& rColor );
     static OString ToOString( const ScfUInt16Vec& rBuffer );
     static OStringBuffer& ToOString( OStringBuffer& s, const ScAddress& rRange );
-    static OString ToOString( const ScDocument* pDoc, const ScRange& rRange, bool bFullAddressNotation = false );
-    static OString ToOString( const ScDocument* pDoc, const ScRangeList& rRangeList );
+    static OString ToOString( const ScDocument& rDoc, const ScRange& rRange, bool bFullAddressNotation = false );
+    static OString ToOString( const ScDocument& rDoc, const ScRangeList& rRangeList );
     static OStringBuffer& ToOString( OStringBuffer& s, const XclAddress& rAddress );
     static OString ToOString( const XclExpString& s );
-    static OString ToOString( const ScDocument* pDoc, const XclRangeList& rRangeList );
+    static OString ToOString( const ScDocument& rDoc, const XclRangeList& rRangeList );
 
     static OUString ToOUString( const char* s );
     static OUString ToOUString( const ScfUInt16Vec& rBuffer, sal_Int32 nStart = 0, sal_Int32 nLength = -1 );

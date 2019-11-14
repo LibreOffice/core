@@ -718,18 +718,18 @@ OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
         RTL_TEXTENCODING_UTF8);
 }
 
-OString XclXmlUtils::ToOString( const ScDocument* pDoc, const ScRange& rRange, bool bFullAddressNotation )
+OString XclXmlUtils::ToOString( const ScDocument& rDoc, const ScRange& rRange, bool bFullAddressNotation )
 {
-    OUString sRange(rRange.Format( ScRefFlags::VALID, pDoc,
+    OUString sRange(rRange.Format( rDoc, ScRefFlags::VALID,
                                    ScAddress::Details( FormulaGrammar::CONV_XL_A1 ),
                                    bFullAddressNotation ) );
     return sRange.toUtf8();
 }
 
-OString XclXmlUtils::ToOString( const ScDocument* pDoc, const ScRangeList& rRangeList )
+OString XclXmlUtils::ToOString( const ScDocument& rDoc, const ScRangeList& rRangeList )
 {
     OUString s;
-    rRangeList.Format(s, ScRefFlags::VALID, pDoc, FormulaGrammar::CONV_XL_OOX, ' ');
+    rRangeList.Format(s, ScRefFlags::VALID, rDoc, FormulaGrammar::CONV_XL_OOX, ' ');
     return s.toUtf8();
 }
 
@@ -768,14 +768,14 @@ static ScRange lcl_ToRange( const XclRange& rRange )
     return aRange;
 }
 
-OString XclXmlUtils::ToOString( const ScDocument* pDoc, const XclRangeList& rRanges )
+OString XclXmlUtils::ToOString( const ScDocument& rDoc, const XclRangeList& rRanges )
 {
     ScRangeList aRanges;
     for( const auto& rRange : rRanges )
     {
         aRanges.push_back( lcl_ToRange( rRange ) );
     }
-    return ToOString( pDoc, aRanges );
+    return ToOString( rDoc, aRanges );
 }
 
 OUString XclXmlUtils::ToOUString( const char* s )

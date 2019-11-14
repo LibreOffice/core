@@ -164,7 +164,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_xEdAssign.get());
-        OUString aRefStr(rRef.Format(ScRefFlags::RANGE_ABS_3D, &rDocP,
+        OUString aRefStr(rRef.Format(rDocP, ScRefFlags::RANGE_ABS_3D,
                 ScAddress::Details(rDocP.GetAddressConvention(), 0, 0)));
         m_xEdAssign->SetRefString( aRefStr );
     }

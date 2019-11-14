@@ -154,8 +154,8 @@ void ScConsolidateDlg::Init()
         if ( rArea.nTab < pDoc->GetTableCount() )
         {
             aStr = ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
-                    rArea.nColEnd, rArea.nRowEnd, rArea.nTab ).Format(
-                        ScRefFlags::RANGE_ABS_3D, pDoc, eConv );
+                    rArea.nColEnd, rArea.nRowEnd, rArea.nTab ).Format( *pDoc,
+                        ScRefFlags::RANGE_ABS_3D, eConv );
             m_xLbConsAreas->append_text(aStr);
         }
     }
@@ -190,7 +190,7 @@ void ScConsolidateDlg::Init()
         ScAreaNameIterator aIter( pDoc );
         while ( aIter.Next( aStrName, aRange ) )
         {
-            OUString aStrArea(aRange.Format(ScRefFlags::ADDR_ABS_3D, pDoc, eConv));
+            OUString aStrArea(aRange.Format(*pDoc, ScRefFlags::ADDR_ABS_3D, eConv));
             pAreaData[nAt++].Set( aStrName, aStrArea );
         }
     }
@@ -244,7 +244,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
             nFmt |= ScRefFlags::TAB2_3D;
 
         if ( m_pRefInputEdit == m_xEdDataArea.get())
-            aStr = rRef.Format(nFmt, &rDocP, eConv);
+            aStr = rRef.Format(rDocP, nFmt, eConv);
         else if ( m_pRefInputEdit == m_xEdDestArea.get() )
             aStr = rRef.aStart.Format(nFmt, &rDocP, eConv);
 
@@ -401,7 +401,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, weld::Button&, rBtn, void )
                     const ScArea& rArea = ppAreas[i];
                     OUString aNewArea = ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
                             rArea.nColEnd, rArea.nRowEnd, rArea.nTab
-                            ).Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv);
+                            ).Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv);
 
                     if (m_xLbConsAreas->find_text(aNewArea) == -1)
                     {

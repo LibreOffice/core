@@ -191,7 +191,7 @@ void ScDocument::SetChartRanges( const OUString& rChartName, const ::std::vector
         {
             ScRangeList aScRangeList( rRangesVector[nN] );
             OUString sRangeStr;
-            aScRangeList.Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, this, GetAddressConvention() );
+            aScRangeList.Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, *this, GetAddressConvention() );
             aRangeStrings[nN]=sRangeStr;
         }
         ScChartHelper::SetChartRanges( xChartDoc, aRangeStrings );
@@ -317,7 +317,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
                     }
 
                     OUString sRangeStr;
-                    aNewRanges->Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, this, GetAddressConvention() );
+                    aNewRanges->Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, *this, GetAddressConvention() );
 
                     lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
@@ -510,7 +510,7 @@ void ScDocument::SetChartRangeList( const OUString& rChartName,
                     lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
                     OUString sRangeStr;
-                    rNewRangeListRef->Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, this, GetAddressConvention() );
+                    rNewRangeListRef->Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, *this, GetAddressConvention() );
 
                     lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 

@@ -98,7 +98,7 @@ void ScFilterOptionsMgr::Init()
         OUString   theDbName(STR_DB_LOCAL_NONAME);
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-        theAreaStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv);
+        theAreaStr = theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv);
 
         // fill the target area list
 

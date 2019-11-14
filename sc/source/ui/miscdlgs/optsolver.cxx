@@ -470,7 +470,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
             if ( bSingle )
                 aStr = aAdr.Format(nFmt, &rDocP, rDocP.GetAddressConvention());
             else
-                aStr = rRef.Format(nFmt | ScRefFlags::RANGE_ABS, &rDocP, rDocP.GetAddressConvention());
+                aStr = rRef.Format(rDocP, nFmt | ScRefFlags::RANGE_ABS, rDocP.GetAddressConvention());
         }
 
         // variable cells can be several ranges, so only the selection is replaced

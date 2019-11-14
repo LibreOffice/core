@@ -2280,7 +2280,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             {
                 ScRange aScRange;
                 rMark.GetMarkArea( aScRange );
-                aAddr = aScRange.Format(ScRefFlags::RANGE_ABS);
+                aAddr = aScRange.Format(*pDoc, ScRefFlags::RANGE_ABS);
                 if ( aScRange.aStart == aScRange.aEnd )
                 {
                     //  make sure there is a range selection string even for a single cell
@@ -4007,7 +4007,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             OUString aChartName;
             if (pThisDoc->HasChartAtPoint( nThisTab, rLogicPos, aChartName ))
             {
-                OUString aRangeName(aSource.Format(ScRefFlags::RANGE_ABS_3D, pThisDoc));
+                OUString aRangeName(aSource.Format(*pThisDoc, ScRefFlags::RANGE_ABS_3D));
                 SfxStringItem aNameItem( SID_CHART_NAME, aChartName );
                 SfxStringItem aRangeItem( SID_CHART_SOURCE, aRangeName );
                 sal_uInt16 nId = bIsMove ? SID_CHART_SOURCE : SID_CHART_ADDSOURCE;
@@ -4202,7 +4202,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 {
                     OUString aApp = Application::GetAppName();
                     OUString aTopic = pSourceSh->GetTitle( SFX_TITLE_FULLNAME );
-                    OUString aItem(aSource.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, pSourceDoc));
+                    OUString aItem(aSource.Format(*pSourceDoc, ScRefFlags::VALID | ScRefFlags::TAB_3D));
 
                     // TODO: we could define ocQuote for "
                     const OUString aQuote('"');

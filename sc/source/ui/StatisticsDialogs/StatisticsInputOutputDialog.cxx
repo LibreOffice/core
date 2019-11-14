@@ -118,7 +118,7 @@ void ScStatisticsInputOutputDialog::Init()
 void ScStatisticsInputOutputDialog::GetRangeFromSelection()
 {
     mViewData->GetSimpleArea(mInputRange);
-    OUString aCurrentString(mInputRange.Format(ScRefFlags::RANGE_ABS_3D, &mDocument, mAddressDetails));
+    OUString aCurrentString(mInputRange.Format(mDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails));
     mxInputRangeEdit->SetText(aCurrentString);
 }
 
@@ -149,7 +149,7 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
         if (mpActiveEdit == mxInputRangeEdit.get())
         {
             mInputRange = rReferenceRange;
-            aReferenceString = mInputRange.Format(ScRefFlags::RANGE_ABS_3D, &rDocument, mAddressDetails);
+            aReferenceString = mInputRange.Format(rDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails);
             mxInputRangeEdit->SetRefString( aReferenceString );
         }
         else if (mpActiveEdit == mxOutputRangeEdit.get())
