@@ -41,7 +41,7 @@ public:
 
 private:
     ScViewData* mpViewData;
-    ScDocument* const mpDocument;
+    ScDocument& mrDocument;
 
     bool const mbNewPivotTable;
 
