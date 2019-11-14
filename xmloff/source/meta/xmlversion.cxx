@@ -31,7 +31,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -113,105 +113,88 @@ XMLVersionListImport::XMLVersionListImport(
 XMLVersionListImport::~XMLVersionListImport() throw()
 {}
 
-SvXMLImportContext *XMLVersionListImport::CreateDocumentContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+SvXMLImportContext *XMLVersionListImport::CreateFastContext( sal_Int32 nElement,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if ( XML_NAMESPACE_FRAMEWORK == nPrefix &&
-        rLocalName == xmloff::token::GetXMLToken(xmloff::token::XML_VERSION_LIST) )
+    if ( nElement == XML_ELEMENT(FRAMEWORK, xmloff::token::XML_VERSION_LIST) )
     {
-        pContext = new XMLVersionListContext( *this, nPrefix, rLocalName, xAttrList );
+        pContext = new XMLVersionListContext( *this );
     }
     else
     {
-        pContext = SvXMLImport::CreateDocumentContext( nPrefix, rLocalName, xAttrList );
+        pContext = SvXMLImport::CreateFastContext( nElement, xAttrList );
     }
 
     return pContext;
 }
 
-XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport,
-                                        sal_uInt16 nPrefix,
-                                        const OUString& rLocalName,
-                                        const Reference< XAttributeList > & )
-    : SvXMLImportContext( rImport, nPrefix, rLocalName )
-    , rLocalRef( rImport )
+XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport)
+    : SvXMLImportContext( rImport )
 {
 }
 
 XMLVersionListContext::~XMLVersionListContext()
 {}
 
-SvXMLImportContextRef XMLVersionListContext::CreateChildContext( sal_uInt16 nPrefix,
-                                        const OUString& rLocalName,
-                                        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+XMLVersionListContext::createFastChildContext(sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList)
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if ( nPrefix == XML_NAMESPACE_FRAMEWORK &&
-         rLocalName == xmloff::token::GetXMLToken(xmloff::token::XML_VERSION_ENTRY) )
+    if ( nElement == XML_ELEMENT(FRAMEWORK, xmloff::token::XML_VERSION_ENTRY) )
     {
-        pContext = new XMLVersionContext( rLocalRef, nPrefix, rLocalName, xAttrList );
+        pContext = new XMLVersionContext( GetImport(), xAttrList );
     }
     else
     {
-        pContext = new SvXMLImportContext( rLocalRef, nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
     }
 
     return pContext;
 }
 
 XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
-                                        sal_uInt16 nPref,
-                                        const OUString& rLocalName,
-                                        const Reference< XAttributeList > & xAttrList )
-    : SvXMLImportContext( rImport, nPref, rLocalName )
-    , rLocalRef( rImport )
+                                        const Reference< XFastAttributeList > & xAttrList )
+    : SvXMLImportContext( rImport )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-
-    if ( !nAttrCount )
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    if ( pAttribList->getFastAttributeTokens().empty() )
         return;
-
     util::RevisionTag aInfo;
-    for ( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : *pAttribList)
     {
-        OUString        aLocalName;
-        const OUString& rAttrName   = xAttrList->getNameByIndex( i );
-        sal_uInt16      nPrefix     = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-
-        if ( XML_NAMESPACE_FRAMEWORK == nPrefix )
+        switch( aIter.getToken() )
         {
-            if ( aLocalName == xmloff::token::GetXMLToken(xmloff::token::XML_TITLE) )
-            {
-                const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-                aInfo.Identifier = rAttrValue;
-            }
-            else if ( aLocalName == xmloff::token::GetXMLToken(xmloff::token::XML_COMMENT) )
-            {
-                const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-                aInfo.Comment = rAttrValue;
-            }
-            else if ( aLocalName == xmloff::token::GetXMLToken(xmloff::token::XML_CREATOR) )
-            {
-                const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-                aInfo.Author = rAttrValue;
-            }
+        case XML_ELEMENT(FRAMEWORK, xmloff::token::XML_TITLE):
+        {
+            aInfo.Identifier = aIter.toString();
+            break;
         }
-        else if ( ( XML_NAMESPACE_DC == nPrefix ) &&
-                  ( aLocalName == xmloff::token::GetXMLToken(xmloff::token::XML_DATE_TIME) ) )
+        case XML_ELEMENT(FRAMEWORK, xmloff::token::XML_COMMENT):
         {
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            aInfo.Comment = aIter.toString();
+            break;
+        }
+        case XML_ELEMENT(FRAMEWORK, xmloff::token::XML_CREATOR):
+        {
+            aInfo.Author = aIter.toString();
+            break;
+        }
+        case XML_ELEMENT(DC, xmloff::token::XML_DATE_TIME):
+        {
             util::DateTime aTime;
-            if ( ParseISODateTimeString( rAttrValue, aTime ) )
+            if ( ParseISODateTimeString( aIter.toString(), aTime ) )
                 aInfo.TimeStamp = aTime;
+            break;
+        }
         }
     }
 
-    uno::Sequence < util::RevisionTag >& aList = rLocalRef.GetList();
+    uno::Sequence < util::RevisionTag >& aList = rImport.GetList();
     sal_Int32 nLength = aList.getLength();
     aList.realloc( nLength+1 );
     aList[nLength] = aInfo;
@@ -398,11 +381,11 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
                 throw uno::RuntimeException();
 
             // get filter
-            Reference< XDocumentHandler > xFilter = new XMLVersionListImport( xContext, aVersions );
+            Reference< XFastDocumentHandler > xFilter = new XMLVersionListImport( xContext, aVersions );
 
             // connect parser and filter
-            Reference< XParser > xParser = xml::sax::Parser::create(xContext);
-            xParser->setDocumentHandler( xFilter );
+            Reference< XFastParser > xParser = xml::sax::FastParser::create(xContext);
+            xParser->setFastDocumentHandler( xFilter );
 
             // parse
             try
