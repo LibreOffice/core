@@ -653,16 +653,19 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             return;
     }
 
-    std::unique_ptr<SfxItemSet> pNewArgs = pNewAttrs->Clone();
-    lcl_convertStringArguments(nSlot, pNewArgs);
-
-    if(nEEWhich && pNewAttrs)
+    std::unique_ptr<SfxItemSet> pNewArgs = pNewAttrs ? pNewAttrs->Clone() : nullptr;
+    if (pNewArgs)
     {
-        std::unique_ptr<SfxPoolItem> pNewItem(pNewArgs->Get(nWhich).CloneSetWhich(nEEWhich));
-        pNewArgs->Put(*pNewItem);
-    }
+        lcl_convertStringArguments(nSlot, pNewArgs);
 
-    SetAttrToMarked(*pNewArgs);
+        if (nEEWhich)
+        {
+            std::unique_ptr<SfxPoolItem> pNewItem(pNewArgs->Get(nWhich).CloneSetWhich(nEEWhich));
+            pNewArgs->Put(*pNewItem);
+        }
+
+        SetAttrToMarked(*pNewArgs);
+    }
 
     GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
 
