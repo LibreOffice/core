@@ -39,6 +39,7 @@ protected:
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool Command(const CommandEvent& rCEvt) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
     virtual void Resize() override;
