@@ -96,7 +96,7 @@ void X11SkiaSalGraphicsImpl::createSurface()
 
 bool X11SkiaSalGraphicsImpl::avoidRecreateByResize() const
 {
-    if (!mSurface)
+    if (!mSurface || isOffscreen())
         return false;
     // Skia's WindowContext uses actual dimensions of the X window, which due to X11 being
     // asynchronous may be temporarily different from what VCL thinks are the dimensions.
