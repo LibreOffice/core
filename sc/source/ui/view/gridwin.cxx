@@ -3199,7 +3199,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             ScRange aRef(
                 pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                 pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
-            SC_MOD()->SetReference( aRef, pViewData->GetDocument() );
+            SC_MOD()->SetReference( aRef, *pViewData->GetDocument() );
         }
         pViewData->GetViewShell()->SelectionChanged();
         return ;

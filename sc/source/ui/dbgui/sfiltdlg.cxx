@@ -196,7 +196,7 @@ void ScSpecialFilterDlg::Close()
 // Transfer of a table area selected with the mouse, which is then displayed
 // as a new selection in the reference edit.
 
-void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if ( bRefInputMode && m_pRefInputEdit )       // only possible if in the reference edit mode
     {
@@ -204,12 +204,12 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             RefInputStart( m_pRefInputEdit );
 
         OUString aRefStr;
-        const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = rDocP.GetAddressConvention();
 
         if (m_pRefInputEdit == m_xEdCopyArea.get())
-            aRefStr = rRef.aStart.Format(ScRefFlags::ADDR_ABS_3D, pDocP, eConv);
+            aRefStr = rRef.aStart.Format(ScRefFlags::ADDR_ABS_3D, &rDocP, eConv);
         else if (m_pRefInputEdit == m_xEdFilterArea.get())
-            aRefStr = rRef.Format(ScRefFlags::RANGE_ABS_3D, pDocP, eConv);
+            aRefStr = rRef.Format(ScRefFlags::RANGE_ABS_3D, &rDocP, eConv);
 
         m_pRefInputEdit->SetRefString( aRefStr );
     }

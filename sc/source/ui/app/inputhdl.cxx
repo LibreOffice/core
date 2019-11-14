@@ -3182,20 +3182,20 @@ void ScInputHandler::AddRefEntry()
     DataChanged();
 }
 
-void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument* pDoc )
+void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
 {
     HideTip();
 
     const ScDocument* pThisDoc = nullptr;
-    bool bOtherDoc = (pRefViewSh && ((pThisDoc = pRefViewSh->GetViewData().GetDocument()) != pDoc));
-    if (bOtherDoc && !pDoc->GetDocumentShell()->HasName())
+    bool bOtherDoc = (pRefViewSh && ((pThisDoc = pRefViewSh->GetViewData().GetDocument()) != &rDoc));
+    if (bOtherDoc && !rDoc.GetDocumentShell()->HasName())
     {
         // References to unnamed document; that doesn't work
         // SetReference should not be called, then
         return;
     }
     if (!pThisDoc)
-        pThisDoc = pDoc;
+        pThisDoc = &rDoc;
 
     UpdateActiveView();
     if (!pTableView && !pTopView)
@@ -3239,9 +3239,9 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument* pDoc )
         OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
         // Always 3D and absolute.
-        OUString aTmp(rRef.Format( ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, pDoc, aAddrDetails));
+        OUString aTmp(rRef.Format( ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, &rDoc, aAddrDetails));
 
-        SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
+        SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
         // #i75893# convert escaped URL of the document to something user friendly
         OUString aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
 
@@ -3264,9 +3264,9 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument* pDoc )
         if ( rRef.aStart.Tab() != aCursorPos.Tab() ||
              rRef.aStart.Tab() != rRef.aEnd.Tab() )
             // pointer-selected => absolute sheet reference
-            aRefStr = rRef.Format(ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, pDoc, aAddrDetails);
+            aRefStr = rRef.Format(ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, &rDoc, aAddrDetails);
         else
-            aRefStr = rRef.Format(ScRefFlags::VALID, pDoc, aAddrDetails);
+            aRefStr = rRef.Format(ScRefFlags::VALID, &rDoc, aAddrDetails);
     }
 
     if (pTableView || pTopView)

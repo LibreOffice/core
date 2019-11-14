@@ -128,7 +128,7 @@ void ScSolverDlg::SetActive()
     RefInputDone();
 }
 
-void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if( m_pEdActive )
     {
@@ -140,7 +140,7 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
                                 ? ScRefFlags::ADDR_ABS
                                 : ScRefFlags::ADDR_ABS_3D;
 
-        OUString aStr(aAdr.Format(nFmt, pDocP, pDocP->GetAddressConvention()));
+        OUString aStr(aAdr.Format(nFmt, &rDocP, rDocP.GetAddressConvention()));
         m_pEdActive->SetRefString( aStr );
 
         if (m_pEdActive == m_xEdFormulaCell.get())

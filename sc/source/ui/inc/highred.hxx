@@ -65,7 +65,7 @@ public:
     virtual ~ScHighlightChgDlg() override;
 
     virtual void    SetActive() override;
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
     virtual void    Close() override;
     virtual bool    IsRefInputMode() const override;
 

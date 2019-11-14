@@ -101,7 +101,7 @@ ScValidationDlg::~ScValidationDlg()
         RemoveRefDlg(false);
 }
 
-void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , const ScDocument* pDoc )
+void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , const ScDocument& rDoc )
 {
     if ( rRange.aStart != rRange.aEnd )
         if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
@@ -110,7 +110,7 @@ void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , const ScDocume
 
     if ( m_pRefEdit )
     {
-        OUString aStr(rRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+        OUString aStr(rRange.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, rDoc.GetAddressConvention()));
         m_pRefEdit->SetRefString( aStr );
     }
 }

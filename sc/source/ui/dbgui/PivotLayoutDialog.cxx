@@ -331,7 +331,7 @@ void ScPivotLayoutDialog::SetActive()
     RefInputDone();
 }
 
-void ScPivotLayoutDialog::SetReference(const ScRange& rReferenceRange, ScDocument* pDocument)
+void ScPivotLayoutDialog::SetReference(const ScRange& rReferenceRange, ScDocument& rDocument)
 {
     if (!mbDialogLostFocus)
         return;
@@ -342,7 +342,7 @@ void ScPivotLayoutDialog::SetReference(const ScRange& rReferenceRange, ScDocumen
     if (rReferenceRange.aStart != rReferenceRange.aEnd)
         RefInputStart(mpActiveEdit);
 
-    OUString aReferenceString = rReferenceRange.Format(ScRefFlags::RANGE_ABS_3D, pDocument, maAddressDetails);
+    OUString aReferenceString = rReferenceRange.Format(ScRefFlags::RANGE_ABS_3D, &rDocument, maAddressDetails);
 
     if (mpActiveEdit == mxSourceEdit.get())
     {

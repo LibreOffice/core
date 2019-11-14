@@ -33,7 +33,7 @@ public:
     ScPrintAreasDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent);
     virtual ~ScPrintAreasDlg() override;
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
     virtual void    AddRefEntry() override;
 
     virtual bool    IsTableLocked() const override;

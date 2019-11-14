@@ -275,7 +275,7 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 // Transfer of a table area selected with the mouse, which is then displayed
 // as a new selection in the reference window.
 
-void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if (m_xEdAssign->GetWidget()->get_sensitive())
     {
@@ -284,7 +284,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         theCurArea = rRef;
 
-        OUString aRefStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDocP, aAddrDetails));
+        OUString aRefStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, &rDocP, aAddrDetails));
         m_xEdAssign->SetRefString( aRefStr );
         m_xOptions->set_sensitive(true);
         m_xBtnAdd->set_sensitive(true);

@@ -357,13 +357,13 @@ void ScFilterDlg::Close()
 // Mouse-selected cell area becomes the new selection and is shown in the
 // reference text box
 
-void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if ( bRefInputMode )    // Only possible if in reference edit mode
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( m_xEdCopyArea.get() );
-        OUString aRefStr(rRef.aStart.Format(ScRefFlags::ADDR_ABS_3D, pDocP, pDocP->GetAddressConvention()));
+        OUString aRefStr(rRef.aStart.Format(ScRefFlags::ADDR_ABS_3D, &rDocP, rDocP.GetAddressConvention()));
         m_xEdCopyArea->SetRefString( aRefStr );
     }
 }

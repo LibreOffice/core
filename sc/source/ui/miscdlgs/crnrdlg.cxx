@@ -303,7 +303,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
 
 // Set the reference to a cell range selected with the mouse and update
 // the selection form element
-void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ )
+void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument& /* rDoc */ )
 {
     if ( m_pEdActive )
     {

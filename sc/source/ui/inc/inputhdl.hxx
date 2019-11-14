@@ -197,7 +197,7 @@ public:
     bool            KeyInput( const KeyEvent& rKEvt, bool bStartEdit );
     void            EnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL );
     void            CancelHandler();
-    void            SetReference( const ScRange& rRef, const ScDocument* pDoc );
+    void            SetReference( const ScRange& rRef, const ScDocument& rDoc );
     void            AddRefEntry();
 
     void            InputCommand( const CommandEvent& rCEvt );

@@ -124,11 +124,11 @@ void ScTabOpDlg::SetActive()
     RefInputDone();
 }
 
-void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if (m_pEdActive)
     {
-        ScAddress::Details aDetails(pDocP->GetAddressConvention(), 0, 0);
+        ScAddress::Details aDetails(rDocP.GetAddressConvention(), 0, 0);
 
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_pEdActive);
@@ -142,17 +142,17 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         {
             theFormulaCell.Set( rRef.aStart, false, false, false);
             theFormulaEnd.Set( rRef.aEnd, false, false, false);
-            aStr = rRef.Format(nFmt, pDocP, aDetails);
+            aStr = rRef.Format(nFmt, &rDocP, aDetails);
         }
         else if (m_pEdActive == m_xEdRowCell.get())
         {
             theRowCell.Set( rRef.aStart, false, false, false);
-            aStr = rRef.aStart.Format(nFmt, pDocP, aDetails);
+            aStr = rRef.aStart.Format(nFmt, &rDocP, aDetails);
         }
         else if (m_pEdActive == m_xEdColCell.get())
         {
             theColCell.Set( rRef.aStart, false, false, false);
-            aStr = rRef.aStart.Format(nFmt, pDocP, aDetails);
+            aStr = rRef.aStart.Format(nFmt, &rDocP, aDetails);
         }
 
         m_pEdActive->SetRefString( aStr );

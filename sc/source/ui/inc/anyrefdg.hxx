@@ -108,7 +108,7 @@ public:
                         ScRefHandler(SfxDialogController &rController, SfxBindings* pB, bool bBindRef);
     virtual             ~ScRefHandler() COVERITY_NOEXCEPT_FALSE override;
 
-    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override = 0;
+    virtual void        SetReference( const ScRange& rRef, ScDocument& rDoc ) override = 0;
     virtual void        AddRefEntry() override;
 
     virtual bool        IsRefInputMode() const override;

@@ -116,7 +116,7 @@ public:
 
     std::unique_ptr<ScConditionalFormat> GetConditionalFormat() const;
 
-    virtual void SetReference(const ScRange&, ScDocument*) override;
+    virtual void SetReference(const ScRange&, ScDocument&) override;
     virtual bool IsRefInputMode() const override;
     virtual void SetActive() override;
     virtual bool IsTableLocked() const override;

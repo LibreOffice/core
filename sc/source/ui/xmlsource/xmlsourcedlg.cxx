@@ -113,7 +113,7 @@ bool ScXMLSourceDlg::IsRefInputMode() const
     return mpActiveEdit != nullptr && mpActiveEdit->GetWidget()->get_sensitive();
 }
 
-void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
+void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument& rDoc)
 {
     if (!mpActiveEdit)
         return;
@@ -121,7 +121,7 @@ void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
     if (rRange.aStart != rRange.aEnd)
         RefInputStart(mpActiveEdit);
 
-    OUString aStr(rRange.aStart.Format(ScRefFlags::ADDR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+    OUString aStr(rRange.aStart.Format(ScRefFlags::ADDR_ABS_3D, &rDoc, rDoc.GetAddressConvention()));
     mpActiveEdit->SetRefString(aStr);
 
     RefEditModified();

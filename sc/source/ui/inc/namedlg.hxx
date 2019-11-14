@@ -113,7 +113,7 @@ public:
                std::map<OUString, std::unique_ptr<ScRangeName>>* pRangeMap = nullptr);
     virtual         ~ScNameDlg() override;
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
     virtual bool    IsRefInputMode() const override;
 
     virtual void    SetActive() override;

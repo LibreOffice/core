@@ -78,7 +78,7 @@ public:
 
     virtual ~ScNameDefDlg() override;
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
     virtual bool    IsRefInputMode() const override;
 
     virtual void    SetActive() override;

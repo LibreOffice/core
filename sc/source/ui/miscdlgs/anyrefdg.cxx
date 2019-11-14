@@ -304,7 +304,7 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit )
                         rRange.aStart.Row(), SC_FOLLOW_JUMP, false, false );
                     pViewShell->MoveCursorAbs( rRange.aEnd.Col(),
                         rRange.aEnd.Row(), SC_FOLLOW_JUMP, true, false );
-                    m_pDlg->SetReference( rRange, pDoc );
+                    m_pDlg->SetReference( rRange, *pDoc );
                 }
             }
         }

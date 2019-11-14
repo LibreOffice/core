@@ -66,7 +66,7 @@ void ScSimpleRefDlg::Init()
 
 // Set the reference to a cell range selected with the mouse. This is then
 // shown as the new selection in the reference field.
-void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if (m_xEdAssign->GetWidget()->get_sensitive())
     {
@@ -78,10 +78,10 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( bSingleCell )
         {
             ScAddress aAdr = rRef.aStart;
-            aRefStr = aAdr.Format(ScRefFlags::ADDR_ABS_3D, pDocP, pDocP->GetAddressConvention());
+            aRefStr = aAdr.Format(ScRefFlags::ADDR_ABS_3D, &rDocP, rDocP.GetAddressConvention());
         }
         else
-            aRefStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDocP, pDocP->GetAddressConvention());
+            aRefStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, &rDocP, rDocP.GetAddressConvention());
 
         if ( bMultiSelection )
         {

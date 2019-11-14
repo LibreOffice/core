@@ -1668,7 +1668,7 @@ static void lcl_MarkedTabs( const ScMarkData& rMark, SCTAB& rStartTab, SCTAB& rE
     }
 }
 
-void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
+void ScModule::SetReference( const ScRange& rRef, ScDocument& rDoc,
                                     const ScMarkData* pMarkData )
 {
     //TODO: Move reference dialog handling to view
@@ -1702,7 +1702,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
                     // hide the (color) selection now instead of later from LoseFocus,
                     // don't abort the ref input that causes this call (bDoneRefMode = sal_False)
                     pRefDlg->HideReference( false );
-                    pRefDlg->SetReference( aNew, pDoc );
+                    pRefDlg->SetReference( aNew, rDoc );
                 }
             }
         }
@@ -1711,7 +1711,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
     {
         ScInputHandler* pHdl = GetInputHdl();
         if (pHdl)
-            pHdl->SetReference( aNew, pDoc );
+            pHdl->SetReference( aNew, rDoc );
         else
         {
             OSL_FAIL("SetReference without receiver");

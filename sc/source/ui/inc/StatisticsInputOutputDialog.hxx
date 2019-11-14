@@ -31,7 +31,7 @@ public:
 
     virtual ~ScStatisticsInputOutputDialog() override;
 
-    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void        SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
     virtual void        SetActive() override;
 
 protected:

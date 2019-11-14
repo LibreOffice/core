@@ -225,7 +225,7 @@ public:
     bool                IsFormulaMode();
     bool                IsRefDialogOpen();
     bool                IsTableLocked();
-    void                SetReference( const ScRange& rRef, ScDocument* pDoc,
+    void                SetReference( const ScRange& rRef, ScDocument& rDoc,
                                         const ScMarkData* pMarkData = nullptr );
     void                AddRefEntry();
     void                EndReference();

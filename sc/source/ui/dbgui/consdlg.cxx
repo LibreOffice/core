@@ -229,7 +229,7 @@ void ScConsolidateDlg::FillAreaLists()
 // Handover of a range within a table that has been selected by the mouse.
 // This range is then shown in the reference window as new selection.
 
-void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if ( m_pRefInputEdit )
     {
@@ -238,15 +238,15 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         OUString      aStr;
         ScRefFlags      nFmt = ScRefFlags::RANGE_ABS_3D;       //!!! nCurTab is still missing
-        const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = rDocP.GetAddressConvention();
 
         if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
             nFmt |= ScRefFlags::TAB2_3D;
 
         if ( m_pRefInputEdit == m_xEdDataArea.get())
-            aStr = rRef.Format(nFmt, pDocP, eConv);
+            aStr = rRef.Format(nFmt, &rDocP, eConv);
         else if ( m_pRefInputEdit == m_xEdDestArea.get() )
-            aStr = rRef.aStart.Format(nFmt, pDocP, eConv);
+            aStr = rRef.aStart.Format(nFmt, &rDocP, eConv);
 
         m_pRefInputEdit->SetRefString( aStr );
         ModifyHdl( *m_pRefInputEdit );

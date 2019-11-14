@@ -30,7 +30,7 @@ public:
 
     virtual ~ScStatisticsTwoVariableDialog() override;
 
-    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void        SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
     virtual void        SetActive() override;
 
 protected:

@@ -137,7 +137,7 @@ void ScStatisticsInputOutputDialog::SetActive()
     RefInputDone();
 }
 
-void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange, ScDocument* pDocument )
+void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange, ScDocument& rDocument )
 {
     if ( mpActiveEdit )
     {
@@ -149,7 +149,7 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
         if (mpActiveEdit == mxInputRangeEdit.get())
         {
             mInputRange = rReferenceRange;
-            aReferenceString = mInputRange.Format(ScRefFlags::RANGE_ABS_3D, pDocument, mAddressDetails);
+            aReferenceString = mInputRange.Format(ScRefFlags::RANGE_ABS_3D, &rDocument, mAddressDetails);
             mxInputRangeEdit->SetRefString( aReferenceString );
         }
         else if (mpActiveEdit == mxOutputRangeEdit.get())
@@ -159,7 +159,7 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
             ScRefFlags nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ?
                                                              ScRefFlags::ADDR_ABS :
                                                              ScRefFlags::ADDR_ABS_3D;
-            aReferenceString = mOutputAddress.Format(nFormat, pDocument, pDocument->GetAddressConvention());
+            aReferenceString = mOutputAddress.Format(nFormat, &rDocument, rDocument.GetAddressConvention());
             mxOutputRangeEdit->SetRefString( aReferenceString );
         }
     }

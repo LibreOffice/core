@@ -126,13 +126,13 @@ void ScHighlightChgDlg::Init()
 
 // Set the reference to a cell range selected with the mouse. This is then
 // shown as the new selection in the reference field.
-void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if (m_xEdAssign->GetWidget()->get_visible())
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_xEdAssign.get());
-        OUString aRefStr(rRef.Format(ScRefFlags::RANGE_ABS_3D, pDocP, pDocP->GetAddressConvention()));
+        OUString aRefStr(rRef.Format(ScRefFlags::RANGE_ABS_3D, &rDocP, rDocP.GetAddressConvention()));
         m_xEdAssign->SetRefString( aRefStr );
         m_xFilterCtr->SetRange(aRefStr);
     }

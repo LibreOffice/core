@@ -164,7 +164,7 @@ bool ScPrintAreasDlg::IsTableLocked() const
     return true;
 }
 
-void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ )
+void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument& /* rDoc */ )
 {
     if ( m_pRefInputEdit )
     {
