@@ -627,6 +627,11 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
         // example aShapesWithTextbox [0 2]
     }
 
+    if (aShapesWithTextbox.size() != maList.size() - sortOrder.size())
+    {
+        throw lang::IllegalArgumentException("mismatch of no. of shapes", nullptr, 0);
+    }
+
     for (size_t i = 0; i< sortOrder.size(); ++i)
     {
 
@@ -637,17 +642,19 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
 
          // example aDuplicates [2 2 0 0 1]
     }
+    assert(aDuplicates.size() == maList.size());
 
     aIncrements.push_back(0);
     for (size_t i = 1; i< sortOrder.size(); ++i)
     {
-         if (aShapesWithTextbox.count(i))
+         if (aShapesWithTextbox.count(i - 1))
              aIncrements.push_back(aIncrements[i-1] + 1 );
          else
              aIncrements.push_back(aIncrements[i-1]);
 
          // example aIncrements [0 1 1]
     }
+    assert(aIncrements.size() == sortOrder.size());
 
     std::vector<sal_Int32> aNewSortOrder(maList.size());
     sal_Int32 nPrev = -1;
@@ -662,9 +669,18 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
 
         // example aNewSortOrder [3 4 0 1 2]
     }
+    assert(aNewSortOrder.size() == maList.size());
 
-    if ( aNewSortOrder.size() !=  maList.size())
-        throw css::lang::IllegalArgumentException("mismatch of no. of shapes", nullptr, 0);
+#ifndef NDEBUG
+    {
+        std::vector<sal_Int32> tmp(aNewSortOrder);
+        std::sort(tmp.begin(), tmp.end());
+        for (size_t i = 0; i < tmp.size(); ++i)
+        {
+            assert(size_t(tmp[i]) == i);
+        }
+    }
+#endif
 
     for (size_t i = 0; i < aNewSortOrder.size(); ++i)
     {
