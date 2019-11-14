@@ -322,6 +322,7 @@ static GParamSpec *properties[PROP_LAST] = { nullptr };
 
 static void lok_doc_view_initable_iface_init (GInitableIface *iface);
 static void callbackWorker (int nType, const char* pPayload, void* pData);
+static void updateClientZoom (LOKDocView *pDocView);
 
 SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
 #ifdef __GNUC__
@@ -588,6 +589,8 @@ postKeyEventInThread(gpointer data)
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+    gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
+    gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;
 
     std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
@@ -598,11 +601,11 @@ postKeyEventInThread(gpointer data)
     if (priv->m_nTileSizeTwips)
     {
         ss.str(std::string());
-        ss << "lok::Document::setClientZoom(" << nTileSizePixels << ", " << nTileSizePixels << ", " << priv->m_nTileSizeTwips << ", " << priv->m_nTileSizeTwips << ")";
+        ss << "lok::Document::setClientZoom(" << nTileSizePixelsScaled << ", " << nTileSizePixelsScaled << ", " << priv->m_nTileSizeTwips << ", " << priv->m_nTileSizeTwips << ")";
         g_info("%s", ss.str().c_str());
         priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
-                                                 nTileSizePixels,
-                                                 nTileSizePixels,
+                                                 nTileSizePixelsScaled,
+                                                 nTileSizePixelsScaled,
                                                  priv->m_nTileSizeTwips,
                                                  priv->m_nTileSizeTwips);
         priv->m_nTileSizeTwips = 0;
@@ -865,14 +868,16 @@ static void refreshSize(LOKDocView* pDocView)
 
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     float zoom = priv->m_fZoom;
+    gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
+    gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;
     long nDocumentWidthTwips = priv->m_nDocumentWidthTwips;
     long nDocumentHeightTwips = priv->m_nDocumentHeightTwips;
     long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips, zoom);
     long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips, zoom);
 
     // Total number of columns in this document.
-    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
-    priv->m_pTileBuffer = std::make_unique<TileBuffer>(nColumns);
+    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixelsScaled);
+    priv->m_pTileBuffer = std::make_unique<TileBuffer>(nColumns, nScaleFactor);
     gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                 nDocumentWidthPixels,
                                 nDocumentHeightPixels);
@@ -1041,16 +1046,18 @@ setTilesInvalid (LOKDocView* pDocView, const GdkRectangle& rRectangle)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     GdkRectangle aRectanglePixels;
     GdkPoint aStart, aEnd;
+    gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
+    gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;
 
-    aRectanglePixels.x = twipToPixel(rRectangle.x, priv->m_fZoom);
-    aRectanglePixels.y = twipToPixel(rRectangle.y, priv->m_fZoom);
-    aRectanglePixels.width = twipToPixel(rRectangle.width, priv->m_fZoom);
-    aRectanglePixels.height = twipToPixel(rRectangle.height, priv->m_fZoom);
+    aRectanglePixels.x = twipToPixel(rRectangle.x, priv->m_fZoom) * nScaleFactor;
+    aRectanglePixels.y = twipToPixel(rRectangle.y, priv->m_fZoom) * nScaleFactor;
+    aRectanglePixels.width = twipToPixel(rRectangle.width, priv->m_fZoom) * nScaleFactor;
+    aRectanglePixels.height = twipToPixel(rRectangle.height, priv->m_fZoom) * nScaleFactor;
 
-    aStart.x = aRectanglePixels.y / nTileSizePixels;
-    aStart.y = aRectanglePixels.x / nTileSizePixels;
-    aEnd.x = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixels) / nTileSizePixels;
-    aEnd.y = (aRectanglePixels.x + aRectanglePixels.width + nTileSizePixels) / nTileSizePixels;
+    aStart.x = aRectanglePixels.y / nTileSizePixelsScaled;
+    aStart.y = aRectanglePixels.x / nTileSizePixelsScaled;
+    aEnd.x = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixelsScaled) / nTileSizePixelsScaled;
+    aEnd.y = (aRectanglePixels.x + aRectanglePixels.width + nTileSizePixelsScaled) / nTileSizePixelsScaled;
     for (int i = aStart.x; i < aEnd.x; i++)
     {
         for (int j = aStart.y; j < aEnd.y; j++)
@@ -1420,6 +1427,7 @@ renderHandle(LOKDocView* pDocView,
              GdkRectangle& rRectangle)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+    gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
     GdkPoint aCursorBottom;
     int nHandleWidth, nHandleHeight;
     double fHandleScale;
@@ -1433,8 +1441,9 @@ renderHandle(LOKDocView* pDocView,
     aCursorBottom.y = twipToPixel(rCursor.y, priv->m_fZoom) + twipToPixel(rCursor.height, priv->m_fZoom);
 
     cairo_save (pCairo);
-    cairo_translate(pCairo, aCursorBottom.x, aCursorBottom.y);
-    cairo_scale(pCairo, fHandleScale, fHandleScale);
+    cairo_scale(pCairo, 1.0 / nScaleFactor, 1.0 / nScaleFactor);
+    cairo_translate(pCairo, aCursorBottom.x * nScaleFactor, aCursorBottom.y * nScaleFactor);
+    cairo_scale(pCairo, fHandleScale * nScaleFactor, fHandleScale * nScaleFactor);
     cairo_set_source_surface(pCairo, pHandle, 0, 0);
     cairo_paint(pCairo);
     cairo_restore (pCairo);
@@ -1559,12 +1568,16 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     GdkRectangle aVisibleArea;
-    long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, priv->m_fZoom);
-    long nDocumentHeightPixels = twipToPixel(priv->m_nDocumentHeightTwips, priv->m_fZoom);
+    gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
+    gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;
+    long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, priv->m_fZoom) * nScaleFactor;
+    long nDocumentHeightPixels = twipToPixel(priv->m_nDocumentHeightTwips, priv->m_fZoom) * nScaleFactor;
     // Total number of rows / columns in this document.
-    guint nRows = ceil(static_cast<double>(nDocumentHeightPixels) / nTileSizePixels);
-    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
+    guint nRows = ceil(static_cast<double>(nDocumentHeightPixels) / nTileSizePixelsScaled);
+    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixelsScaled);
 
+    cairo_save (pCairo);
+    cairo_scale (pCairo, 1.0/nScaleFactor, 1.0/nScaleFactor);
     gdk_cairo_get_clip_rectangle (pCairo, &aVisibleArea);
     aVisibleArea.x = pixelToTwip (aVisibleArea.x, priv->m_fZoom);
     aVisibleArea.y = pixelToTwip (aVisibleArea.y, priv->m_fZoom);
@@ -1582,18 +1595,18 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
             // Determine size of the tile: the rightmost/bottommost tiles may
             // be smaller, and we need the size to decide if we need to repaint.
             if (nColumn == nColumns - 1)
-                aTileRectanglePixels.width = nDocumentWidthPixels - nColumn * nTileSizePixels;
+                aTileRectanglePixels.width = nDocumentWidthPixels - nColumn * nTileSizePixelsScaled;
             else
-                aTileRectanglePixels.width = nTileSizePixels;
+                aTileRectanglePixels.width = nTileSizePixelsScaled;
             if (nRow == nRows - 1)
-                aTileRectanglePixels.height = nDocumentHeightPixels - nRow * nTileSizePixels;
+                aTileRectanglePixels.height = nDocumentHeightPixels - nRow * nTileSizePixelsScaled;
             else
-                aTileRectanglePixels.height = nTileSizePixels;
+                aTileRectanglePixels.height = nTileSizePixelsScaled;
 
             // Determine size and position of the tile in document coordinates,
             // so we can decide if we can skip painting for partial rendering.
-            aTileRectangleTwips.x = pixelToTwip(nTileSizePixels, priv->m_fZoom) * nColumn;
-            aTileRectangleTwips.y = pixelToTwip(nTileSizePixels, priv->m_fZoom) * nRow;
+            aTileRectangleTwips.x = pixelToTwip(nTileSizePixelsScaled, priv->m_fZoom) * nColumn;
+            aTileRectangleTwips.y = pixelToTwip(nTileSizePixelsScaled, priv->m_fZoom) * nRow;
             aTileRectangleTwips.width = pixelToTwip(aTileRectanglePixels.width, priv->m_fZoom);
             aTileRectangleTwips.height = pixelToTwip(aTileRectanglePixels.height, priv->m_fZoom);
 
@@ -1621,6 +1634,7 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
         }
     }
 
+    cairo_restore (pCairo);
     return false;
 }
 
@@ -2322,6 +2336,8 @@ paintTileInThread (gpointer data)
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+    gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
+    gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;
 
     // check if "source" tile buffer is different from "current" tile buffer
     if (pLOEvent->m_pTileBuffer != &*priv->m_pTileBuffer)
@@ -2337,7 +2353,7 @@ paintTileInThread (gpointer data)
     if (buffer->hasValidTile(pLOEvent->m_nPaintTileX, pLOEvent->m_nPaintTileY))
         return;
 
-    cairo_surface_t *pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nTileSizePixels, nTileSizePixels);
+    cairo_surface_t *pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nTileSizePixelsScaled, nTileSizePixelsScaled);
     if (cairo_surface_status(pSurface) != CAIRO_STATUS_SUCCESS)
     {
         cairo_surface_destroy(pSurface);
@@ -2350,8 +2366,8 @@ paintTileInThread (gpointer data)
 
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     GdkRectangle aTileRectangle;
-    aTileRectangle.x = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileY;
-    aTileRectangle.y = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileX;
+    aTileRectangle.x = pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor) * pLOEvent->m_nPaintTileY;
+    aTileRectangle.y = pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor) * pLOEvent->m_nPaintTileX;
 
     std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
@@ -2362,17 +2378,17 @@ paintTileInThread (gpointer data)
     GTimer* aTimer = g_timer_new();
     gulong nElapsedMs;
     ss << "lok::Document::paintTile(" << static_cast<void*>(pBuffer) << ", "
-        << nTileSizePixels << ", " << nTileSizePixels << ", "
+        << nTileSizePixelsScaled << ", " << nTileSizePixelsScaled << ", "
         << aTileRectangle.x << ", " << aTileRectangle.y << ", "
-        << pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) << ", "
-        << pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) << ")";
+        << pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor) << ", "
+        << pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor) << ")";
 
     priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
                                          pBuffer,
-                                         nTileSizePixels, nTileSizePixels,
+                                         nTileSizePixelsScaled, nTileSizePixelsScaled,
                                          aTileRectangle.x, aTileRectangle.y,
-                                         pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom),
-                                         pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom));
+                                         pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor),
+                                         pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor));
     aGuard.unlock();
 
     g_timer_elapsed(aTimer, &nElapsedMs);
@@ -2449,6 +2465,14 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
     g_object_unref(task);
 }
 
+static void
+onStyleContextChanged (LOKDocView* pDocView)
+{
+    // The scale factor might have changed
+    updateClientZoom (pDocView);
+    gtk_widget_queue_draw (GTK_WIDGET (pDocView));
+}
+
 static void lok_doc_view_init (LOKDocView* pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
@@ -2466,6 +2490,8 @@ static void lok_doc_view_init (LOKDocView* pDocView)
                                             1,
                                             FALSE,
                                             nullptr);
+
+    g_signal_connect (pDocView, "style-updated", G_CALLBACK(onStyleContextChanged), nullptr);
 }
 
 static void lok_doc_view_set_property (GObject* object, guint propId, const GValue *value, GParamSpec *pspec)
@@ -2707,6 +2733,33 @@ static gboolean spin_lok_loop(void *pData)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     priv->m_pOffice->pClass->runLoop(priv->m_pOffice, lok_poll_callback, lok_wake_callback, nullptr);
     return FALSE;
+}
+
+// Update the client's view size
+static void updateClientZoom(LOKDocView *pDocView)
+{
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
+    gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;
+    GError* error = nullptr;
+
+    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
+    LOEvent* pLOEvent = new LOEvent(LOK_SET_CLIENT_ZOOM);
+    pLOEvent->m_nTilePixelWidth = nTileSizePixelsScaled;
+    pLOEvent->m_nTilePixelHeight = nTileSizePixelsScaled;
+    pLOEvent->m_nTileTwipWidth = pixelToTwip(nTileSizePixelsScaled, priv->m_fZoom * nScaleFactor);
+    pLOEvent->m_nTileTwipHeight = pixelToTwip(nTileSizePixelsScaled, priv->m_fZoom * nScaleFactor);
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+
+    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    if (error != nullptr)
+    {
+        g_warning("Unable to call LOK_SET_CLIENT_ZOOM: %s", error->message);
+        g_clear_error(&error);
+    }
+    g_object_unref(task);
+
+    priv->m_nTileSizeTwips = pixelToTwip(nTileSizePixelsScaled, priv->m_fZoom * nScaleFactor);
 }
 
 static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /*cancellable*/, GError **error)
@@ -3488,7 +3541,6 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    GError* error = nullptr;
 
     if (!priv->m_pDocument)
         return;
@@ -3500,15 +3552,17 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     if (lok_approxEqual(fZoom, priv->m_fZoom))
         return;
 
+    gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
+    gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;
     priv->m_fZoom = fZoom;
-    long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, fZoom);
-    long nDocumentHeightPixels = twipToPixel(priv->m_nDocumentHeightTwips, fZoom);
+    long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, fZoom * nScaleFactor);
+    long nDocumentHeightPixels = twipToPixel(priv->m_nDocumentHeightTwips, fZoom * nScaleFactor);
     // Total number of columns in this document.
-    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
-    priv->m_pTileBuffer = std::make_unique<TileBuffer>(nColumns);
+    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixelsScaled);
+    priv->m_pTileBuffer = std::make_unique<TileBuffer>(nColumns, nScaleFactor);
     gtk_widget_set_size_request(GTK_WIDGET(pDocView),
-                                nDocumentWidthPixels,
-                                nDocumentHeightPixels);
+                                nDocumentWidthPixels / nScaleFactor,
+                                nDocumentHeightPixels / nScaleFactor);
 
     g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_ZOOM]);
 
@@ -3526,24 +3580,7 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
         g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_OUT]);
     }
 
-    // Update the client's view size
-    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
-    LOEvent* pLOEvent = new LOEvent(LOK_SET_CLIENT_ZOOM);
-    pLOEvent->m_nTilePixelWidth = nTileSizePixels;
-    pLOEvent->m_nTilePixelHeight = nTileSizePixels;
-    pLOEvent->m_nTileTwipWidth = pixelToTwip(nTileSizePixels, fZoom);
-    pLOEvent->m_nTileTwipHeight = pixelToTwip(nTileSizePixels, fZoom);
-    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-    if (error != nullptr)
-    {
-        g_warning("Unable to call LOK_SET_CLIENT_ZOOM: %s", error->message);
-        g_clear_error(&error);
-    }
-    g_object_unref(task);
-
-    priv->m_nTileSizeTwips = pixelToTwip(nTileSizePixels, priv->m_fZoom);
+    updateClientZoom(pDocView);
 }
 
 SAL_DLLPUBLIC_EXPORT gfloat

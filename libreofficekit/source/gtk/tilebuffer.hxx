@@ -90,10 +90,10 @@ private:
 class TileBuffer
 {
  public:
- TileBuffer(int columns = 0)
+ TileBuffer(int columns = 0, int scale = 1)
      : m_nWidth(columns)
     {
-        cairo_surface_t *pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nTileSizePixels, nTileSizePixels);
+        cairo_surface_t *pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nTileSizePixels * scale, nTileSizePixels * scale);
         m_DummyTile.setSurface(pSurface);
         cairo_surface_destroy(pSurface);
     }
