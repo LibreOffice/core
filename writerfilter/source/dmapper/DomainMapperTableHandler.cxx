@@ -823,6 +823,13 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 TagLogger::getInstance().attribute("row", nRow);
 #endif
 
+                // Do not apply horizontal and vertical borders to a one cell table.
+                if (m_aCellProperties.size() <= 1)
+                {
+                    rInfo.pTableBorders->Erase(META_PROP_HORIZONTAL_BORDER);
+                    rInfo.pTableBorders->Erase(META_PROP_VERTICAL_BORDER);
+                }
+
                 lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow );
 
                 //now set the default left+right border distance TODO: there's an sprm containing the default distance!
