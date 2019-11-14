@@ -284,14 +284,12 @@ void GradientDrawableHelperTest::testGetGradientSteps()
         VclPtrInstance<VirtualDevice> pRenderContext;
         const long EXPECTEDSTEPS = 25;
 
-        CPPUNIT_ASSERT_EQUAL(EXPECTEDSTEPS,
-                             vcl::GradientDrawableHelper::GetGradientSteps(
-                                 pRenderContext, aGradient, aRect, bUseMetafile, true));
+        CPPUNIT_ASSERT_EQUAL(EXPECTEDSTEPS, vcl::GradientDrawableHelper::GetGradientSteps(
+                                                pRenderContext, aGradient, aRect, bUseMetafile));
 
         aGradient.SetStyle(GradientStyle::Square);
-        CPPUNIT_ASSERT_EQUAL(EXPECTEDSTEPS,
-                             vcl::GradientDrawableHelper::GetGradientSteps(
-                                 pRenderContext, aGradient, aRect, bUseMetafile, true));
+        CPPUNIT_ASSERT_EQUAL(EXPECTEDSTEPS, vcl::GradientDrawableHelper::GetGradientSteps(
+                                                pRenderContext, aGradient, aRect, bUseMetafile));
     }
 
     {
@@ -300,14 +298,12 @@ void GradientDrawableHelperTest::testGetGradientSteps()
         VclPtrInstance<Printer> pRenderContext;
         const long EXPECTEDSTEPS = 10;
 
-        CPPUNIT_ASSERT_EQUAL(EXPECTEDSTEPS,
-                             vcl::GradientDrawableHelper::GetGradientSteps(
-                                 pRenderContext, aGradient, aRect, bUseMetafile, true));
+        CPPUNIT_ASSERT_EQUAL(EXPECTEDSTEPS, vcl::GradientDrawableHelper::GetGradientSteps(
+                                                pRenderContext, aGradient, aRect, bUseMetafile));
 
         aGradient.SetStyle(GradientStyle::Square);
-        CPPUNIT_ASSERT_EQUAL(EXPECTEDSTEPS,
-                             vcl::GradientDrawableHelper::GetGradientSteps(
-                                 pRenderContext, aGradient, aRect, bUseMetafile, true));
+        CPPUNIT_ASSERT_EQUAL(EXPECTEDSTEPS, vcl::GradientDrawableHelper::GetGradientSteps(
+                                                pRenderContext, aGradient, aRect, bUseMetafile));
     }
 }
 

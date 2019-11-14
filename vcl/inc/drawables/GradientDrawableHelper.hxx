@@ -54,7 +54,7 @@ public:
                                               const Gradient& rGradient);
 
     static long GetGradientSteps(OutputDevice* pRenderContext, const Gradient& rGradient,
-                                 const tools::Rectangle& rRect, bool bMtf, bool bComplex = false);
+                                 const tools::Rectangle& rRect, bool bMtf);
     static long GetLinearGradientSteps(long nStepCount, long nStartRed, long nStartGreen,
                                        long nStartBlue, long nEndRed, long nEndGreen,
                                        long nEndBlue);

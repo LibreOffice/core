@@ -920,15 +920,15 @@ void GradientDrawableHelper::DrawComplexGradient(OutputDevice* pRenderContext,
 
 long GradientDrawableHelper::GetGradientSteps(OutputDevice* pRenderContext,
                                               Gradient const& rGradient,
-                                              tools::Rectangle const& rRect, bool bMtf,
-                                              bool bComplex)
+                                              tools::Rectangle const& rRect, bool bMtf)
 {
     // calculate step count
     long nStepCount = rGradient.GetSteps();
     long nMinRect;
 
     // generate nStepCount, if not passed
-    if (bComplex)
+    if (!(rGradient.GetStyle() == GradientStyle::Linear
+          || rGradient.GetStyle() == GradientStyle::Axial))
         nMinRect = std::min(rRect.GetWidth(), rRect.GetHeight());
     else
         nMinRect = rRect.GetHeight();
@@ -952,7 +952,7 @@ long GradientDrawableHelper::GetComplexGradientSteps(OutputDevice* pRenderContex
                                                      long nGreenSteps, long nBlueSteps)
 {
     // last parameter - true if complex gradient, false if linear
-    long nStepCount = GetGradientSteps(pRenderContext, rGradient, rRect, true, true);
+    long nStepCount = GetGradientSteps(pRenderContext, rGradient, rRect, true);
 
     // at least three steps and at most the number of colour differences
     long nSteps = std::max(nStepCount, 2L);
