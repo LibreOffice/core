@@ -5360,8 +5360,12 @@ void DomainMapper_Impl::PopFieldContext()
                                     uno::Any aAny = xCrsrProperties->getPropertyValue("CharStyleName");
                                     OUString charStyle;
                                     if (css::uno::fromAny(aAny, &charStyle))
-                                    {
-                                        if(!charStyle.isEmpty() && charStyle.equalsIgnoreAsciiCase("Internet Link"))
+                                        if (charStyle.isEmpty())
+                                        {
+                                            xCrsrProperties->setPropertyValue("VisitedCharStyleName", uno::makeAny(OUString("Default Style")));
+                                            xCrsrProperties->setPropertyValue("UnvisitedCharStyleName", uno::makeAny(OUString("Default Style")));
+                                        }
+                                        else if (charStyle.equalsIgnoreAsciiCase("Internet Link"))
                                         {
                                             xCrsrProperties->setPropertyValue("CharStyleName", uno::makeAny(OUString("Default Style")));
                                         }
