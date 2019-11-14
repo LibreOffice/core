@@ -216,7 +216,7 @@ public:
             eConv(eConvP), nRow(0), nCol(0)
         {}
         /* Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab() */
-        Details( const ScDocument* pDoc, const ScAddress & rAddr );
+        Details( const ScDocument& rDoc, const ScAddress& rAddr );
     };
     SC_DLLPUBLIC static const Details detailsOOOa1;
 

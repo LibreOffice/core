@@ -42,9 +42,9 @@ using namespace css;
 
 const ScAddress::Details ScAddress::detailsOOOa1( formula::FormulaGrammar::CONV_OOO, 0, 0 );
 
-ScAddress::Details::Details ( const ScDocument* pDoc,
-                              const ScAddress & rAddr ) :
-    eConv( pDoc->GetAddressConvention() ),
+ScAddress::Details::Details ( const ScDocument& rDoc,
+                              const ScAddress& rAddr ) :
+    eConv( rDoc.GetAddressConvention() ),
     nRow( rAddr.Row() ),
     nCol( rAddr.Col() )
 {}
