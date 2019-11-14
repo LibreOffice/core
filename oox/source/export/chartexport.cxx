@@ -3264,7 +3264,12 @@ void ChartExport::exportDataLabels(
     if (GetProperty(xPropSet, "LinkNumberFormatToSource"))
         mAny >>= bLinkedNumFmt;
 
-    if (GetProperty(xPropSet, "NumberFormat") || GetProperty(xPropSet, "PercentageNumberFormat"))
+    chart2::DataPointLabel aLabel;
+    bool bLabelIsNumberFormat = true;
+    if( xPropSet->getPropertyValue("Label") >>= aLabel )
+        bLabelIsNumberFormat = aLabel.ShowNumber;
+
+    if (GetProperty(xPropSet, bLabelIsNumberFormat ? OUString("NumberFormat") : OUString("PercentageNumberFormat")))
     {
         sal_Int32 nKey = 0;
         mAny >>= nKey;
@@ -3337,7 +3342,10 @@ void ChartExport::exportDataLabels(
         pFS->startElement(FSNS(XML_c, XML_dLbl));
         pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, OString::number(nIdx));
 
-        if (GetProperty(xLabelPropSet, "NumberFormat") || GetProperty(xLabelPropSet, "PercentageNumberFormat"))
+        if( xLabelPropSet->getPropertyValue("Label") >>= aLabel )
+            bLabelIsNumberFormat = aLabel.ShowNumber;
+
+        if (GetProperty(xLabelPropSet, bLabelIsNumberFormat ? OUString("NumberFormat") : OUString("PercentageNumberFormat")))
         {
             sal_Int32 nKey = 0;
             mAny >>= nKey;
