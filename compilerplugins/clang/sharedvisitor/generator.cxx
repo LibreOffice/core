@@ -335,7 +335,7 @@ static bool readFile( const string& fileName )
     string version = getValue( line, "InfoVersion" );
     if( version != "1" )
     {
-        cerr << "Incorrect version '" << version << "'" << endl;
+        cerr << "Incorrect version '" << version << "' in " << fileName << endl;
         return false;
     }
     getline( file, line );
