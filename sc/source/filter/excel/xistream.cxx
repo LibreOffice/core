@@ -831,7 +831,7 @@ std::size_t XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlag
 
 OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
 {
-    OUStringBuffer aRet(nChars);
+    OUStringBuffer aRet(std::min<sal_uInt16>(nChars, mnRawRecLeft / (b16Bit ? 2 : 1)));
     sal_uInt16 nCharsLeft = nChars;
     sal_uInt16 nReadSize;
 
@@ -839,7 +839,7 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
     {
         if( b16Bit )
         {
-            nReadSize = ::std::min< sal_uInt16 >( nCharsLeft, mnRawRecLeft / 2 );
+            nReadSize = std::min<sal_uInt16>(nCharsLeft, mnRawRecLeft / 2);
             OSL_ENSURE( (nReadSize <= nCharsLeft) || !(mnRawRecLeft & 0x1),
                 "XclImpStream::ReadRawUniString - missing a byte" );
         }
