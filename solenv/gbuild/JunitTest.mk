@@ -40,7 +40,7 @@ else
         rm -rf $(call gb_JunitTest_get_userdir,$*) && \
 		mkdir -p $(call gb_JunitTest_get_userdir,$*)/user && \
 		cp $(SRCDIR)/qadevOOo/qa/registrymodifications.xcu $(call gb_JunitTest_get_userdir,$*)/user/ && \
-        ($(gb_TEST_ENV_VARS) $(gb_JunitTest_JAVACOMMAND) \
+        ($(gb_TEST_ENV_VARS) $(ICECREAM_RUN) $(gb_JunitTest_JAVACOMMAND) \
             -classpath "$(T_CP)" \
             $(DEFS) \
             org.junit.runner.JUnitCore \
