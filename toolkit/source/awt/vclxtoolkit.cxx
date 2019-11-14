@@ -707,6 +707,7 @@ static ComponentInfo const aComponentInfos [] =
     { OUStringLiteral("edit"),               WindowType::EDIT },
     { OUStringLiteral("errorbox"),           WindowType::ERRORBOX },
     { OUStringLiteral("fixedbitmap"),        WindowType::FIXEDBITMAP },
+    { OUStringLiteral("fixedhyperlink"),     WindowType::CONTROL },
     { OUStringLiteral("fixedimage"),         WindowType::FIXEDIMAGE },
     { OUStringLiteral("fixedline"),          WindowType::FIXEDLINE },
     { OUStringLiteral("fixedtext"),          WindowType::FIXEDTEXT },
@@ -734,9 +735,11 @@ static ComponentInfo const aComponentInfos [] =
     { OUStringLiteral("okbutton"),           WindowType::OKBUTTON },
     { OUStringLiteral("patternbox"),         WindowType::PATTERNBOX },
     { OUStringLiteral("patternfield"),       WindowType::PATTERNFIELD },
+    { OUStringLiteral("progressbar"),        WindowType::CONTROL },
     { OUStringLiteral("pushbutton"),         WindowType::PUSHBUTTON },
     { OUStringLiteral("querybox"),           WindowType::QUERYBOX },
     { OUStringLiteral("radiobutton"),        WindowType::RADIOBUTTON },
+    { OUStringLiteral("roadmap"),            WindowType::CONTROL },
     { OUStringLiteral("scrollbar"),          WindowType::SCROLLBAR },
     { OUStringLiteral("scrollbarbox"),       WindowType::SCROLLBARBOX },
     { OUStringLiteral("spinbutton"),         WindowType::SPINBUTTON },
@@ -1792,12 +1795,12 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     pNewWindow = VclPtr<::vcl::ORoadmap>::Create( pParent, WB_TABSTOP );
                     *ppNewComp = new SVTXRoadmap;
                 }
-                else if (aServiceName == "FixedHyperlink")
+                else if (aServiceName == "fixedhyperlink")
                 {
                     pNewWindow = VclPtr<FixedHyperlink>::Create( pParent, nWinBits );
                     *ppNewComp = new VCLXFixedHyperlink;
                 }
-                else if (aServiceName == "ProgressBar")
+                else if (aServiceName == "progressbar")
                 {
                     pNewWindow = VclPtr<ProgressBar>::Create( pParent, nWinBits );
                     *ppNewComp = new VCLXProgressBar;
