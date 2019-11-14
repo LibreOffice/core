@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_98e0ce98",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-14T07:21:08Z",
+      "side": 1,
+      "message": "Wouldn\u0027t lower case be better suited here?",
+      "range": {
+        "startLine": 59,
+        "startChar": 115,
+        "endLine": 59,
+        "endChar": 116
+      },
+      "revId": "4a133e1354458a5d4034d72b251dd2a5b819e698",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
