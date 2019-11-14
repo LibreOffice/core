@@ -284,14 +284,14 @@ void ScNameDefDlg::RefInputDone( bool bForced)
     IsNameValid();
 }
 
-void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if (m_xEdRange->GetWidget()->get_sensitive())
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_xEdRange.get());
-        OUString aRefStr(rRef.Format(ScRefFlags::RANGE_ABS_3D, pDocP,
-                ScAddress::Details(pDocP->GetAddressConvention(), 0, 0)));
+        OUString aRefStr(rRef.Format(ScRefFlags::RANGE_ABS_3D, &rDocP,
+                ScAddress::Details(rDocP.GetAddressConvention(), 0, 0)));
         m_xEdRange->SetRefString( aRefStr );
     }
 }

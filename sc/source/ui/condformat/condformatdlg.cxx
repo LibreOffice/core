@@ -529,7 +529,7 @@ bool ScCondFormatDlg::IsRefInputMode() const
     return mxEdRange->GetWidget()->get_sensitive();
 }
 
-void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
+void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument&)
 {
     formula::RefEdit* pEdit = mpLastEdit;
     if (!mpLastEdit)

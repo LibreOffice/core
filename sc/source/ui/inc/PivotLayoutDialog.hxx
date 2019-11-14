@@ -117,7 +117,7 @@ public:
                              ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bCreateNewPivotTable);
     virtual ~ScPivotLayoutDialog() override;
 
-    virtual void SetReference(const ScRange& rReferenceRange, ScDocument* pDocument) override;
+    virtual void SetReference(const ScRange& rReferenceRange, ScDocument& rDocument) override;
     virtual void SetActive() override;
     virtual bool IsRefInputMode() const override;
 

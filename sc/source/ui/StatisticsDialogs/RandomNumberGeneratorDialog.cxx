@@ -130,7 +130,7 @@ void ScRandomNumberGeneratorDialog::Close()
     DoClose( ScRandomNumberGeneratorDialogWrapper::GetChildWindowId() );
 }
 
-void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange, ScDocument* pDoc )
+void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange, ScDocument& rDoc )
 {
     if (mxInputRangeEdit->GetWidget()->get_sensitive())
     {
@@ -139,7 +139,7 @@ void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange
 
         maInputRange = rReferenceRange;
 
-        OUString aReferenceString(maInputRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+        OUString aReferenceString(maInputRange.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, rDoc.GetAddressConvention()));
         mxInputRangeEdit->SetRefString( aReferenceString );
 
         mxButtonApply->set_sensitive(true);

@@ -314,7 +314,7 @@ void ScTabControl::Select()
             ScRange aRange(
                     pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                     pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
-            pScMod->SetReference( aRange, pDoc, &rMark );
+            pScMod->SetReference( aRange, *pDoc, &rMark );
             pScMod->EndReference();                     // due to Auto-Hide
         }
 }

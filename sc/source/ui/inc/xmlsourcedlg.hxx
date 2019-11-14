@@ -69,7 +69,7 @@ public:
     virtual ~ScXMLSourceDlg() override;
 
     virtual bool IsRefInputMode() const override;
-    virtual void SetReference(const ScRange& rRange, ScDocument* pDoc) override;
+    virtual void SetReference(const ScRange& rRange, ScDocument& rDoc) override;
     virtual void Deactivate() override;
     virtual void SetActive() override;
     virtual void Close() override;

@@ -143,7 +143,7 @@ void ScStatisticsTwoVariableDialog::SetActive()
     RefInputDone();
 }
 
-void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange, ScDocument* pDocument )
+void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange, ScDocument& rDocument )
 {
     if ( mpActiveEdit != nullptr )
     {
@@ -155,13 +155,13 @@ void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange
         if ( mpActiveEdit == mxVariable1RangeEdit.get() )
         {
             mVariable1Range = rReferenceRange;
-            aReferenceString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, pDocument, mAddressDetails);
+            aReferenceString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, &rDocument, mAddressDetails);
             mxVariable1RangeEdit->SetRefString(aReferenceString);
         }
         else if ( mpActiveEdit == mxVariable2RangeEdit.get() )
         {
             mVariable2Range = rReferenceRange;
-            aReferenceString = mVariable2Range.Format(ScRefFlags::RANGE_ABS_3D, pDocument, mAddressDetails);
+            aReferenceString = mVariable2Range.Format(ScRefFlags::RANGE_ABS_3D, &rDocument, mAddressDetails);
             mxVariable2RangeEdit->SetRefString(aReferenceString);
         }
         else if ( mpActiveEdit == mxOutputRangeEdit.get() )
@@ -171,7 +171,7 @@ void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange
             ScRefFlags nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ?
                                                              ScRefFlags::ADDR_ABS :
                                                              ScRefFlags::ADDR_ABS_3D;
-            aReferenceString = mOutputAddress.Format(nFormat, pDocument, pDocument->GetAddressConvention());
+            aReferenceString = mOutputAddress.Format(nFormat, &rDocument, rDocument.GetAddressConvention());
             mxOutputRangeEdit->SetRefString( aReferenceString );
         }
     }

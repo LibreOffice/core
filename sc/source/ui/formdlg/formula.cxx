@@ -389,7 +389,7 @@ void ScFormulaDlg::RefInputDone( bool bForced )
     RefInputDoneAfter( bForced );
 }
 
-void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
+void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument& rRefDoc )
 {
     const IFunctionDescription* pFunc = getCurrentFunctionDescription();
     if ( pFunc && pFunc->getSuppressedArgumentCount() > 0 )
@@ -403,7 +403,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         }
 
         OUString      aRefStr;
-        bool bOtherDoc = (pRefDoc != m_pDoc && pRefDoc->GetDocumentShell()->HasName());
+        bool bOtherDoc = (&rRefDoc != m_pDoc && rRefDoc.GetDocumentShell()->HasName());
         if ( bOtherDoc )
         {
             //  reference to other document - like inputhdl.cxx
@@ -411,9 +411,9 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
             OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
             // Always 3D and absolute.
-            OUString aTmp( rRef.Format( ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, pRefDoc));
+            OUString aTmp( rRef.Format( ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, &rRefDoc));
 
-            SfxObjectShell* pObjSh = pRefDoc->GetDocumentShell();
+            SfxObjectShell* pObjSh = rRefDoc.GetDocumentShell();
 
             // #i75893# convert escaped URL of the document to something user friendly
 //           OUString aFileName = pObjSh->GetMedium()->GetName();

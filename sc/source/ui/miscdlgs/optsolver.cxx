@@ -445,7 +445,7 @@ void ScOptSolverDlg::SetActive()
     RefInputDone();
 }
 
-void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if( mpEdActive )
     {
@@ -462,15 +462,15 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             aNewRef.aEnd = aAdr;
 
         OUString aName;
-        if ( pDocP->GetRangeAtBlock( aNewRef, &aName ) )            // named range: show name
+        if ( rDocP.GetRangeAtBlock( aNewRef, &aName ) )            // named range: show name
             aStr = aName;
         else                                                        // format cell/range reference
         {
             ScRefFlags nFmt = ( aAdr.Tab() == mnCurTab ) ? ScRefFlags::ADDR_ABS : ScRefFlags::ADDR_ABS_3D;
             if ( bSingle )
-                aStr = aAdr.Format(nFmt, pDocP, pDocP->GetAddressConvention());
+                aStr = aAdr.Format(nFmt, &rDocP, rDocP.GetAddressConvention());
             else
-                aStr = rRef.Format(nFmt | ScRefFlags::RANGE_ABS, pDocP, pDocP->GetAddressConvention());
+                aStr = rRef.Format(nFmt | ScRefFlags::RANGE_ABS, &rDocP, rDocP.GetAddressConvention());
         }
 
         // variable cells can be several ranges, so only the selection is replaced

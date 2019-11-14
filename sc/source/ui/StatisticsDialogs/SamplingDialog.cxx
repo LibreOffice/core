@@ -126,7 +126,7 @@ void ScSamplingDialog::Close()
     DoClose( ScSamplingDialogWrapper::GetChildWindowId() );
 }
 
-void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument* pDocument )
+void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument& rDocument )
 {
     if ( mpActiveEdit )
     {
@@ -138,7 +138,7 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
         if ( mpActiveEdit == mxInputRangeEdit.get() )
         {
             mInputRange = rReferenceRange;
-            aReferenceString = mInputRange.Format(ScRefFlags::RANGE_ABS_3D, pDocument, mAddressDetails);
+            aReferenceString = mInputRange.Format(ScRefFlags::RANGE_ABS_3D, &rDocument, mAddressDetails);
             mxInputRangeEdit->SetRefString( aReferenceString );
 
             LimitSampleSizeAndPeriod();
@@ -150,7 +150,7 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
             ScRefFlags nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ?
                                                              ScRefFlags::ADDR_ABS :
                                                              ScRefFlags::ADDR_ABS_3D;
-            aReferenceString = mOutputAddress.Format(nFormat, pDocument, pDocument->GetAddressConvention());
+            aReferenceString = mOutputAddress.Format(nFormat, &rDocument, rDocument.GetAddressConvention());
             mxOutputRangeEdit->SetRefString( aReferenceString );
 
             // Change sampling size according to output range selection

@@ -231,7 +231,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             ScRange aRef(
                     aViewData.GetRefStartX(), aViewData.GetRefStartY(), aViewData.GetRefStartZ(),
                     aViewData.GetRefEndX(), aViewData.GetRefEndY(), aViewData.GetRefEndZ() );
-            SC_MOD()->SetReference( aRef, pDoc, &rMark );
+            SC_MOD()->SetReference( aRef, *pDoc, &rMark );
             ShowRefTip();
         }
         else if ( eType == SC_REFTYPE_EMBED_LT || eType == SC_REFTYPE_EMBED_RB )
@@ -331,7 +331,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
 
             //  SetReference without Merge-Adjustment
             ScRange aRef( nCurX,nCurY,nCurZ, nCurX,nCurY,nCurZ );
-            SC_MOD()->SetReference( aRef, pDoc, &rMark );
+            SC_MOD()->SetReference( aRef, *pDoc, &rMark );
         }
 
         ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl();

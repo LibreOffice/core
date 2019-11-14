@@ -158,14 +158,14 @@ void ScNameDlg::RefInputDone( bool bForced)
     RefEdModifyHdl(*m_xEdAssign);
 }
 
-void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+void ScNameDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
     if (m_xEdAssign->GetWidget()->get_sensitive())
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_xEdAssign.get());
-        OUString aRefStr(rRef.Format(ScRefFlags::RANGE_ABS_3D, pDocP,
-                ScAddress::Details(pDocP->GetAddressConvention(), 0, 0)));
+        OUString aRefStr(rRef.Format(ScRefFlags::RANGE_ABS_3D, &rDocP,
+                ScAddress::Details(rDocP.GetAddressConvention(), 0, 0)));
         m_xEdAssign->SetRefString( aRefStr );
     }
 }

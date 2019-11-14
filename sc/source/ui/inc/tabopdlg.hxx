@@ -42,7 +42,7 @@ public:
                const ScRefAddress& rCursorPos);
     virtual ~ScTabOpDlg() override;
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
     virtual bool    IsRefInputMode() const override { return true; }
     virtual void    SetActive() override;
 

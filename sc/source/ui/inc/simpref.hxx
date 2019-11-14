@@ -58,7 +58,7 @@ public:
                     ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent);
     virtual        ~ScSimpleRefDlg() override;
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
 
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;

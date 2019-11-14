@@ -37,7 +37,7 @@ protected:
 #ifdef _WIN32
     #pragma pack(push, 16)
 #endif
-    void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , const ScDocument* );
+    void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , const ScDocument& );
     void            (ScRefHandlerCaller::*m_pSetActiveHdl)();
     void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::RefEdit* pEdit, const formula::RefButton* pButton );
     void            (ScRefHandlerCaller::*m_pRefInputDonePostHdl)();
@@ -46,7 +46,7 @@ protected:
 #endif
 
 public:
-    typedef void            (ScRefHandlerCaller::*PFUNCSETREFHDLTYPE)( const ScRange& , const ScDocument* );
+    typedef void            (ScRefHandlerCaller::*PFUNCSETREFHDLTYPE)( const ScRange& , const ScDocument& );
     typedef void            (ScRefHandlerCaller::*PCOMMONHDLTYPE)();
     typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  formula::RefEdit* pEdit, const formula::RefButton* pButton );
 
@@ -132,7 +132,7 @@ private:
     weld::Container* m_pRefEditParent;
     weld::Container* m_pBtnRefParent;
 
-    void            SetReferenceHdl( const ScRange& , const ScDocument* );
+    void            SetReferenceHdl( const ScRange& , const ScDocument& );
     void            SetActiveHdl();
     void            RefInputStartPreHdl(formula::RefEdit* pEdit, const formula::RefButton* pButton);
     void            RefInputDonePostHdl();
@@ -176,10 +176,10 @@ public:
 
     void            SetModal(bool bModal) { m_xDialog->set_modal(bModal); }
 
-    virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc ) override
+    virtual void            SetReference( const ScRange& rRef, ScDocument& rDoc ) override
     {
         if ( m_pHandler && m_pSetReferenceHdl )
-            (m_pHandler->*m_pSetReferenceHdl)( rRef, pDoc );
+            (m_pHandler->*m_pSetReferenceHdl)( rRef, rDoc );
     }
 
     virtual void            SetActive() override
