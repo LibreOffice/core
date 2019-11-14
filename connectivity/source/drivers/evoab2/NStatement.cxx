@@ -268,9 +268,9 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         pArgs[1] = whereAnalysis( parseTree->getChild( 2 ) );
 
         if( SQL_ISTOKEN( parseTree->getChild( 1 ), OR ) )
-            pResult = e_book_query_or( 2, pArgs, TRUE );
+            pResult = e_book_query_or( 2, pArgs, true );
         else
-            pResult = e_book_query_and( 2, pArgs, TRUE );
+            pResult = e_book_query_and( 2, pArgs, true );
     }
     // SQL =, !=
     else if( SQL_ISRULE( parseTree, comparison_predicate ) )
@@ -328,7 +328,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         pResult = createTest( aColumnName, E_BOOK_QUERY_IS, aMatchString );
 
         if ( pResult && ( pPrec->getNodeType() == SQLNodeType::NotEqual ) )
-            pResult = e_book_query_not( pResult, TRUE );
+            pResult = e_book_query_not( pResult, true );
     }
     // SQL like
     else if( SQL_ISRULE( parseTree, like_predicate ) )
@@ -372,7 +372,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
             SAL_INFO( "connectivity.evoab2", "Plain contains '" << aMatchString << "'" );
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString );
             if( pResult && bNotLike )
-                pResult = e_book_query_not( pResult, TRUE );
+                pResult = e_book_query_not( pResult, true );
         }
         else if( bNotLike )
         {

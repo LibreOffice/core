@@ -22,6 +22,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     $(if $(filter-out WNT,$(OS)),compilerplugins/clang/test/constfields) \
     compilerplugins/clang/test/constparams \
     compilerplugins/clang/test/constmethod \
+    compilerplugins/clang/test/consttobool \
     compilerplugins/clang/test/constvars \
     compilerplugins/clang/test/convertlong \
     compilerplugins/clang/test/cppunitassertequals \

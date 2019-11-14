@@ -314,8 +314,8 @@ static void setupDocView(GtvApplicationWindow* window)
 {
     GtvApplicationWindowPrivate* priv = getPrivate(window);
     g_object_set(G_OBJECT(window->lokdocview),
-                 "doc-password", TRUE,
-                 "doc-password-to-modify", TRUE,
+                 "doc-password", true,
+                 "doc-password-to-modify", true,
                  "tiled-annotations", priv->m_pRenderingArgs->m_bEnableTiledAnnotations,
                  nullptr);
 

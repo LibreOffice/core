@@ -369,7 +369,7 @@ static gboolean pipeline_bus_callback( GstBus *, GstMessage *message, gpointer d
 
     pPlayer->processMessage( message );
 
-    return TRUE;
+    return true;
 }
 
 
@@ -428,7 +428,7 @@ static bool lcl_is_wayland_display_handle_need_context_message(GstMessage* msg)
 
 static GstContext* lcl_wayland_display_handle_context_new(void* display)
 {
-    GstContext *context = gst_context_new(LCL_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE, TRUE);
+    GstContext *context = gst_context_new(LCL_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE, true);
     gst_structure_set (gst_context_writable_structure (context),
                        "handle", G_TYPE_POINTER, display, nullptr);
     return context;

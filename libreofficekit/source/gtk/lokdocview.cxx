@@ -435,22 +435,22 @@ handleTextSelectionOnButtonPress(GdkRectangle& aClick, LOKDocView* pDocView) {
     {
         g_info("LOKDocView_Impl::signalButton: start of drag start handle");
         priv->m_bInDragStartHandle = true;
-        return TRUE;
+        return true;
     }
     else if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleMiddleRect, nullptr))
     {
         g_info("LOKDocView_Impl::signalButton: start of drag middle handle");
         priv->m_bInDragMiddleHandle = true;
-        return TRUE;
+        return true;
     }
     else if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleEndRect, nullptr))
     {
         g_info("LOKDocView_Impl::signalButton: start of drag end handle");
         priv->m_bInDragEndHandle = true;
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /// if handled, returns TRUE else FALSE
@@ -481,11 +481,11 @@ handleGraphicSelectionOnButtonPress(GdkRectangle& aClick, LOKDocView* pDocView) 
             }
             g_object_unref(task);
 
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 /// if handled, returns TRUE else FALSE
@@ -497,22 +497,22 @@ handleTextSelectionOnButtonRelease(LOKDocView* pDocView) {
     {
         g_info("LOKDocView_Impl::signalButton: end of drag start handle");
         priv->m_bInDragStartHandle = false;
-        return TRUE;
+        return true;
     }
     else if (priv->m_bInDragMiddleHandle)
     {
         g_info("LOKDocView_Impl::signalButton: end of drag middle handle");
         priv->m_bInDragMiddleHandle = false;
-        return TRUE;
+        return true;
     }
     else if (priv->m_bInDragEndHandle)
     {
         g_info("LOKDocView_Impl::signalButton: end of drag end handle");
         priv->m_bInDragEndHandle = false;
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /// if handled, returns TRUE else FALSE
@@ -543,7 +543,7 @@ handleGraphicSelectionOnButtonRelease(LOKDocView* pDocView, GdkEventButton* pEve
             }
             g_object_unref(task);
 
-            return TRUE;
+            return true;
         }
     }
 
@@ -567,10 +567,10 @@ handleGraphicSelectionOnButtonRelease(LOKDocView* pDocView, GdkEventButton* pEve
         }
         g_object_unref(task);
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 static void
@@ -887,12 +887,12 @@ static gboolean postDocumentLoad(gpointer pData)
 
     refreshSize(pLOKDocView);
 
-    gtk_widget_set_can_focus(GTK_WIDGET(pLOKDocView), TRUE);
+    gtk_widget_set_can_focus(GTK_WIDGET(pLOKDocView), true);
     gtk_widget_grab_focus(GTK_WIDGET(pLOKDocView));
     lok_doc_view_set_zoom(pLOKDocView, 1.0);
 
     // we are completely loaded
-    priv->m_bInit = TRUE;
+    priv->m_bInit = true;
 
     return G_SOURCE_REMOVE;
 }
@@ -1612,7 +1612,7 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 static const GdkRGBA& getDarkColor(int nViewId, LOKDocViewPrivate& priv)
@@ -1891,7 +1891,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         cairo_stroke(pCairo);
     }
 
-    return FALSE;
+    return false;
 }
 
 static gboolean
@@ -2677,7 +2677,7 @@ static int lok_poll_callback(void*, int timeoutUs)
     if (timeoutUs)
     {
         guint timeout = g_timeout_add(timeoutUs / 1000, timeout_wakeup, nullptr);
-        g_main_context_iteration(nullptr, TRUE);
+        g_main_context_iteration(nullptr, true);
         g_source_remove(timeout);
     }
     else
@@ -2706,7 +2706,7 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     if (priv->m_pOffice != nullptr)
-        return TRUE;
+        return true;
 
     if (priv->m_bUnipoll)
         g_setenv("SAL_LOK_OPTIONS", "unipoll", FALSE);
@@ -2728,7 +2728,7 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
     if (priv->m_bUnipoll)
         g_idle_add(spin_lok_loop, pDocView);
 
-    return TRUE;
+    return true;
 }
 
 static void lok_doc_view_initable_iface_init (GInitableIface *iface)
@@ -2939,7 +2939,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
         g_param_spec_boolean("can-zoom-in",
                              "Can Zoom In",
                              "Whether the view can be zoomed in further",
-                             TRUE,
+                             true,
                              static_cast<GParamFlags>(G_PARAM_READABLE
                                                       | G_PARAM_STATIC_STRINGS));
 
@@ -2952,7 +2952,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
         g_param_spec_boolean("can-zoom-out",
                              "Can Zoom Out",
                              "Whether the view can be zoomed out further",
-                             TRUE,
+                             true,
                              static_cast<GParamFlags>(G_PARAM_READABLE
                                                       | G_PARAM_STATIC_STRINGS));
 
@@ -2993,7 +2993,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
         g_param_spec_boolean("tiled-annotations",
                              "Render comments in tiles",
                              "Whether the client wants in tile comment rendering",
-                             TRUE,
+                             true,
                              static_cast<GParamFlags>(G_PARAM_READWRITE
                                                       | G_PARAM_STATIC_STRINGS));
 
@@ -3780,7 +3780,7 @@ lok_doc_view_paste (LOKDocView* pDocView,
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LibreOfficeKitDocument* pDocument = priv->m_pDocument;
-    bool ret = 0;
+    bool ret = false;
 
     if (!pDocument)
         return false;

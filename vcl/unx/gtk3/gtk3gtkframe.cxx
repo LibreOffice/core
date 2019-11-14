@@ -502,7 +502,7 @@ static bool ensure_dbus_setup( gpointer data )
             pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, nullptr, nullptr);
         if( !pSessionBus )
         {
-            return FALSE;
+            return false;
         }
 
         // Create menu model and action group attached to this frame.
@@ -551,7 +551,7 @@ static bool ensure_dbus_setup( gpointer data )
         g_free( aDBusMenubarPath );
     }
 
-    return FALSE;
+    return false;
 }
 
 void on_registrar_available( GDBusConnection * /*connection*/,
@@ -1773,7 +1773,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     {
         // temporarily re-sizeable
         if( !(m_nStyle & SalFrameStyleFlags::SIZEABLE) )
-            gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
+            gtk_window_set_resizable( GTK_WINDOW(m_pWindow), true );
         window_resize(nWidth, nHeight);
     }
 

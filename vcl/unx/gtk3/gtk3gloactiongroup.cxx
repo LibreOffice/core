@@ -61,7 +61,7 @@ g_lo_action_init (GLOAction *action)
 {
     action->item_id = -1;
     action->submenu = FALSE;
-    action->enabled = TRUE;
+    action->enabled = true;
     action->parameter_type = nullptr;
     action->state_type = nullptr;
     action->state_hint = nullptr;
@@ -179,7 +179,7 @@ g_lo_action_group_query_action (GActionGroup        *group,
     if (state)
         *state = (action->state) ? g_variant_ref (action->state) : nullptr;
 
-    return TRUE;
+    return true;
 }
 
 static void
@@ -217,14 +217,14 @@ g_lo_action_group_change_state (GActionGroup *group,
                 g_lo_action_group_perform_submenu_action (lo_group, action_name, value);
             else
             {
-                bool is_new = FALSE;
+                bool is_new = false;
 
                 /* If action already exists but has no state, it should be removed and added again. */
                 if (action->state_type == nullptr)
                 {
                     g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
                     action->state_type = g_variant_type_copy (g_variant_get_type(value));
-                    is_new = TRUE;
+                    is_new = true;
                 }
 
                 if (g_variant_is_of_type (value, action->state_type))

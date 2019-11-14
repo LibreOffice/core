@@ -82,7 +82,7 @@ static void
 gtv_comments_sidebar_init(GtvCommentsSidebar* sidebar)
 {
     sidebar->scrolledwindow = gtk_scrolled_window_new(nullptr, nullptr);
-    gtk_widget_set_vexpand(sidebar->scrolledwindow, TRUE);
+    gtk_widget_set_vexpand(sidebar->scrolledwindow, true);
     sidebar->commentsgrid = gtk_grid_new();
     g_object_set(sidebar->commentsgrid, "orientation", GTK_ORIENTATION_VERTICAL, nullptr);
 
