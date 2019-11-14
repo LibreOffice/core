@@ -3727,7 +3727,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             break;
         case 0x2:               // TODO: Auto-Footnote-Number, should be replaced by SwWW8ImplReader::End_Footnote later
             if (!m_aFootnoteStack.empty())
-                cInsert = 0x2;
+                cInsert = '?';
             break;
         default:
             SAL_INFO( "sw.ww8.level2", "<unknownValue val=\"" << nWCharVal << "\">" );
