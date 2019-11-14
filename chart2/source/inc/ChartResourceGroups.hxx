@@ -20,9 +20,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CHARTRESOURCEGROUPS_HXX
 #define INCLUDED_CHART2_SOURCE_CHARTRESOURCEGROUPS_HXX
 
-#include <strings.hrc>
-#include "ResId.hxx"
-
 #include "res_BarGeometry.hxx"
 #include "ChangingResource.hxx"
 #include "ChartTypeDialogController.hxx"
@@ -35,6 +32,9 @@ namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+
+class SplinePropertiesDialog;
+class SteppedPropertiesDialog;
 
 enum
 {
@@ -97,42 +97,6 @@ private:
     std::unique_ptr<weld::RadioButton> m_xRB_Stack_Y;
     std::unique_ptr<weld::RadioButton> m_xRB_Stack_Y_Percent;
     std::unique_ptr<weld::RadioButton> m_xRB_Stack_Z;
-};
-
-class SplinePropertiesDialog : public weld::GenericDialogController
-{
-public:
-    explicit SplinePropertiesDialog(weld::Window* pParent);
-
-    void fillControls(const ChartTypeParameter& rParameter);
-    void fillParameter(ChartTypeParameter& rParameter, bool bSmoothLines);
-
-private:
-    DECL_LINK(SplineTypeListBoxHdl, weld::ComboBox&, void);
-
-private:
-    std::unique_ptr<weld::ComboBox> m_xLB_Spline_Type;
-    std::unique_ptr<weld::SpinButton> m_xMF_SplineResolution;
-    std::unique_ptr<weld::Label> m_xFT_SplineOrder;
-    std::unique_ptr<weld::SpinButton> m_xMF_SplineOrder;
-};
-
-const sal_uInt16 CUBIC_SPLINE_POS = 0;
-const sal_uInt16 B_SPLINE_POS = 1;
-
-class SteppedPropertiesDialog : public weld::GenericDialogController
-{
-public:
-    explicit SteppedPropertiesDialog(weld::Window* pParent);
-
-    void fillControls(const ChartTypeParameter& rParameter);
-    void fillParameter(ChartTypeParameter& rParameter, bool bSteppedLines);
-
-private:
-    std::unique_ptr<weld::RadioButton> m_xRB_Start;
-    std::unique_ptr<weld::RadioButton> m_xRB_End;
-    std::unique_ptr<weld::RadioButton> m_xRB_CenterX;
-    std::unique_ptr<weld::RadioButton> m_xRB_CenterY;
 };
 
 #define POS_LINETYPE_STRAIGHT 0
