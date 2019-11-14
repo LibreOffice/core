@@ -18,11 +18,8 @@
  */
 
 #include <accelerators/acceleratorconfiguration.hxx>
-#include <accelerators/presethandler.hxx>
 #include <accelerators/keymapping.hxx>
 #include <helper/mischelper.hxx>
-
-#include <acceleratorconst.h>
 
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -30,8 +27,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/svapp.hxx>
-#include <i18nlangtag/languagetag.hxx>
 
 using namespace framework;
 

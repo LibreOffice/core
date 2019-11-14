@@ -21,12 +21,8 @@
 #include <sal/log.hxx>
 
 #include <services/desktop.hxx>
-#include <protocols.h>
-#include <general.h>
 
 #include <tools/diagnose_ex.h>
-#include <vcl/svapp.hxx>
-#include <unotools/tempfile.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/theAutoRecovery.hpp>
@@ -43,7 +39,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/pathoptions.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

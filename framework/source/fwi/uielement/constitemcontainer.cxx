@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include <uielement/constitemcontainer.hxx>
-#include <uielement/rootitemcontainer.hxx>
 #include <uielement/itemcontainer.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include <cppuhelper/implbase.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
 

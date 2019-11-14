@@ -261,7 +261,6 @@
 #if PCH_LEVEL >= 4
 #include <framework/fwedllapi.h>
 #include <fwidllapi.h>
-#include <general.h>
 #include <services.h>
 #include <stdtypes.h>
 #endif // PCH_LEVEL >= 4

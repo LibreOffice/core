@@ -18,15 +18,12 @@
  */
 
 #include <dispatch/servicehandler.hxx>
-#include <general.h>
 #include <services.h>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <vcl/svapp.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace framework{

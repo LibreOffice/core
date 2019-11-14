@@ -25,7 +25,6 @@
 #include <com/sun/star/script/Converter.hpp>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
-#include <services.h>
 #include <vcl/svapp.hxx>
 #include <typelib/typedescription.h>
 

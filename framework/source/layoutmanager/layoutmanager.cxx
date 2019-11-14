@@ -26,8 +26,6 @@
 
 #include <framework/sfxhelperfunctions.hxx>
 #include <uielement/menubarwrapper.hxx>
-#include <framework/addonsoptions.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <uielement/progressbarwrapper.hxx>
 #include <uiconfiguration/globalsettings.hxx>
 #include <uiconfiguration/windowstateproperties.hxx>
@@ -38,17 +36,10 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
-#include <com/sun/star/lang/SystemDependent.hpp>
-#include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -60,25 +51,17 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/lok.hxx>
-#include <svtools/imgdef.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/status.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/window.hxx>
-#include <vcl/dockingarea.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <vcl/wall.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/instance.hxx>
-#include <unotools/cmdoptions.hxx>
 #include <unotools/compatibilityviewoptions.hxx>
 
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>

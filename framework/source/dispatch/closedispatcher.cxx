@@ -20,8 +20,6 @@
 #include <dispatch/closedispatcher.hxx>
 #include <pattern/frame.hxx>
 #include <framework/framelistanalyzer.hxx>
-#include <services.h>
-#include <general.h>
 
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridgeFactory2.hpp>
@@ -33,7 +31,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <osl/diagnose.h>

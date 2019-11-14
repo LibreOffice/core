@@ -21,13 +21,11 @@
 #include <uiconfiguration/windowstateproperties.hxx>
 #include <uielement/addonstoolbarwrapper.hxx>
 #include "helpers.hxx"
-#include <services.h>
 #include <services/layoutmanager.hxx>
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -39,7 +37,6 @@
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>

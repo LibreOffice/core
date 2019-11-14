@@ -28,9 +28,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 
-#include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
-
 #include <comphelper/attributelist.hxx>
 
 namespace framework{

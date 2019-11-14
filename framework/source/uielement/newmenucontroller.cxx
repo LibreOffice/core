@@ -22,9 +22,7 @@
 
 #include <services.h>
 
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
@@ -33,12 +31,8 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <vcl/svapp.hxx>
-#include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <osl/file.hxx>
-#include <svtools/menuoptions.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/imagemgr.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -46,7 +40,6 @@
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <osl/mutex.hxx>
-#include <memory>
 
 //  Defines
 #define aSlotNewDocDirect ".uno:AddDirect"

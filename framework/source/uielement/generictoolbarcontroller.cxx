@@ -19,13 +19,11 @@
 
 #include <uielement/generictoolbarcontroller.hxx>
 
-#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
-#include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
@@ -33,12 +31,10 @@
 
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
 #include <tools/urlobj.hxx>
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>
-#include <framework/menuconfiguration.hxx>
 #include <uielement/menubarmanager.hxx>
 
 using namespace ::com::sun::star::awt;

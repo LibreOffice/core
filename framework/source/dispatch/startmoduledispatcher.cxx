@@ -19,22 +19,15 @@
 
 #include <dispatch/startmoduledispatcher.hxx>
 
-#include <pattern/frame.hxx>
 #include <framework/framelistanalyzer.hxx>
 #include <targets.h>
-#include <services.h>
-#include <general.h>
 #include "isstartmoduledispatch.hxx"
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/StartModule.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 
-#include <vcl/window.hxx>
-#include <vcl/svapp.hxx>
 #include <unotools/moduleoptions.hxx>
 
 namespace framework{

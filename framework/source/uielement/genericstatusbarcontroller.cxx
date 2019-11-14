@@ -21,9 +21,6 @@
 #include <uielement/statusbarmerger.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/status.hxx>
-#include <vcl/image.hxx>
-#include <toolkit/helper/convert.hxx>
 
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/XStatusbarItem.hpp>

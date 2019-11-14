@@ -19,13 +19,8 @@
 
 #include <stdtypes.h>
 
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
-
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -33,9 +28,6 @@
 #include <cppuhelper/weak.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 
 using namespace com::sun::star::uno;

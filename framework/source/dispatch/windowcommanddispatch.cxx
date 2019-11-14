@@ -19,7 +19,6 @@
 
 #include <dispatch/windowcommanddispatch.hxx>
 #include <targets.h>
-#include <services.h>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

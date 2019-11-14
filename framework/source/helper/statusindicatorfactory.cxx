@@ -22,17 +22,8 @@
 #include <helper/statusindicatorfactory.hxx>
 #include <helper/statusindicator.hxx>
 #include <helper/vclstatusindicator.hxx>
-#include <services.h>
 #include <properties.h>
 
-#include <com/sun/star/awt/Rectangle.hpp>
-
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XLayoutConstrains.hpp>
-#include <com/sun/star/awt/DeviceInfo.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager2.hpp>
