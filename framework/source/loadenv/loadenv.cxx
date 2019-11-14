@@ -36,11 +36,8 @@
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -58,9 +55,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -85,7 +80,6 @@
 #include <svtools/sfxecode.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 #include <vcl/errcode.hxx>

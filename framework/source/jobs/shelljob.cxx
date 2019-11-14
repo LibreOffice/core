@@ -25,10 +25,7 @@
 
 // include others
 
-#include <osl/file.hxx>
 #include <osl/process.h>
-#include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 // include interfaces

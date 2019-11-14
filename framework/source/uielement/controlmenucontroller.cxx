@@ -19,11 +19,6 @@
 
 #include <sal/config.h>
 
-#include <stdtypes.h>
-
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -34,19 +29,12 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <svl/solar.hrc>
 #include <vcl/image.hxx>
-#include <svtools/menuoptions.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
 #include <unordered_map>
-
-#include <svx/svxids.hrc>
 
 #include <bitmaps.hlst>
 

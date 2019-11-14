@@ -19,7 +19,6 @@
 
 #include <uielement/progressbarwrapper.hxx>
 
-#include <helper/statusindicator.hxx>
 #include <uielement/statusindicatorinterfacewrapper.hxx>
 
 #include <com/sun/star/ui/UIElementType.hpp>

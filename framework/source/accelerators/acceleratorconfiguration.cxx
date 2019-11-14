@@ -29,18 +29,13 @@
 #include <xml/acceleratorconfigurationreader.hxx>
 #include <xml/acceleratorconfigurationwriter.hxx>
 
-#include <acceleratorconst.h>
-#include <services.h>
-
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <vcl/svapp.hxx>
 #include <com/sun/star/container/XNamed.hpp>

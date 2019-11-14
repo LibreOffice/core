@@ -5041,7 +5041,6 @@ framework/inc/dispatch/servicehandler.hxx
 framework/inc/dispatch/startmoduledispatcher.hxx
 framework/inc/dispatch/systemexec.hxx
 framework/inc/fwidllapi.h
-framework/inc/general.h
 framework/inc/helper/dockingareadefaultacceptor.hxx
 framework/inc/helper/mischelper.hxx
 framework/inc/helper/ocomponentaccess.hxx

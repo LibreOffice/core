@@ -29,9 +29,7 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

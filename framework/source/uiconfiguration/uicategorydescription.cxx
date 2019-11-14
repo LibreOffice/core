@@ -19,25 +19,17 @@
 
 #include <uielement/uicommanddescription.hxx>
 
-#include <properties.h>
-
 #include <helper/mischelper.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/configmgr.hxx>
 
-#include <vcl/mnemonic.hxx>
 #include <comphelper/propertysequence.hxx>
 
 #include <unordered_map>

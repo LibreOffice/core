@@ -24,26 +24,19 @@
 #include <framework/addonsoptions.hxx>
 #include <uielement/statusbarmerger.hxx>
 #include <uielement/statusbaritem.hxx>
-#include <stdtypes.h>
-#include <services.h>
-#include <general.h>
-#include <properties.h>
-#include <helper/mischelper.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/theStatusbarControllerFactory.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Command.hpp>
 #include <com/sun/star/ui/XStatusbarItem.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/statusbarcontroller.hxx>
-#include <svtools/toolboxcontroller.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/commandevent.hxx>

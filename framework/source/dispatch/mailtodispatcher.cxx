@@ -18,7 +18,6 @@
  */
 
 #include <dispatch/mailtodispatcher.hxx>
-#include <general.h>
 #include <services.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -26,8 +25,6 @@
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-
-#include <vcl/svapp.hxx>
 
 namespace framework{
 

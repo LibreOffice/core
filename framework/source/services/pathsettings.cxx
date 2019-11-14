@@ -23,7 +23,6 @@
 #include <unordered_map>
 
 #include <properties.h>
-#include <stdtypes.h>
 #include <helper/mischelper.hxx>
 
 #include <com/sun/star/beans/Property.hpp>
@@ -48,7 +47,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include <unotools/configitem.hxx>
 #include <unotools/configpaths.hxx>
 
 using namespace framework;

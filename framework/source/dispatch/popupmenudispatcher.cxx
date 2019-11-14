@@ -18,29 +18,17 @@
  */
 
 #include <dispatch/popupmenudispatcher.hxx>
-#include <general.h>
-#include <framework/menuconfiguration.hxx>
-#include <framework/addonmenu.hxx>
 #include <services.h>
 #include <properties.h>
-#include <stdtypes.h>
 
 #include <com/sun/star/frame/XLayoutManager2.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
-#include <com/sun/star/awt/WindowDescriptor.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/beans/UnknownPropertyException.hpp>
-#include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
+#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
 
 namespace framework{

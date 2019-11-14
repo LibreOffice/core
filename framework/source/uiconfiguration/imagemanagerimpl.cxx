@@ -21,12 +21,10 @@
 #include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/imagetype.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
-#include <services.h>
 
 #include <properties.h>
 
 #include <com/sun/star/frame/theUICommandDescription.hpp>
-#include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
@@ -40,16 +38,13 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <o3tl/enumrange.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
 #include <rtl/instance.hxx>
-#include <svtools/miscopt.hxx>
 #include <memory>
 
 using ::com::sun::star::uno::Sequence;

@@ -30,8 +30,6 @@
 
 #include <comphelper/attributelist.hxx>
 
-#include <vcl/svapp.hxx>
-
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
