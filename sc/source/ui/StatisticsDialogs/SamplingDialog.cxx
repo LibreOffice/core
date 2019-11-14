@@ -25,9 +25,9 @@ ScSamplingDialog::ScSamplingDialog(SfxBindings* pSfxBindings, SfxChildWindow* pC
                           "modules/scalc/ui/samplingdialog.ui", "SamplingDialog")
     , mpActiveEdit(nullptr)
     , mViewData(pViewData)
-    , mDocument(pViewData->GetDocument())
+    , mDocument(*pViewData->GetDocument())
     , mInputRange(ScAddress::INITIALIZE_INVALID)
-    , mAddressDetails(mDocument->GetAddressConvention(), 0, 0)
+    , mAddressDetails(mDocument.GetAddressConvention(), 0, 0)
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)
     , mCurrentAddress(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo())
     , mnLastSampleSizeValue(1)
@@ -102,7 +102,7 @@ void ScSamplingDialog::Init()
 void ScSamplingDialog::GetRangeFromSelection()
 {
     mViewData->GetSimpleArea(mInputRange);
-    OUString aCurrentString(mInputRange.Format(ScRefFlags::RANGE_ABS_3D, mDocument, mAddressDetails));
+    OUString aCurrentString(mInputRange.Format(ScRefFlags::RANGE_ABS_3D, &mDocument, mAddressDetails));
     mxInputRangeEdit->SetText(aCurrentString);
 }
 
@@ -188,7 +188,7 @@ ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell* pDocShell)
                 assert(aPeriod && "div-by-zero");
                 if (i % aPeriod == aPeriod - 1 ) // Sample the last of period
                 {
-                    double aValue = mDocument->GetValue(ScAddress(inCol, inRow, inTab));
+                    double aValue = mDocument.GetValue(ScAddress(inCol, inRow, inTab));
                     pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
                     outRow++;
                 }
@@ -268,7 +268,7 @@ ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
                     nRandom += aStart.Row();
                 }
 
-                const double fValue = mDocument->GetValue( ScAddress(inCol, nRandom, inTab) );
+                const double fValue = mDocument.GetValue( ScAddress(inCol, nRandom, inTab) );
                 pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), fValue, true);
                 outRow++;
             }
@@ -312,7 +312,7 @@ ScRange ScSamplingDialog::PerformRandomSamplingKeepOrder(ScDocShell* pDocShell)
                 }
                 else
                 {
-                    double aValue = mDocument->GetValue( ScAddress(inCol, inRow, inTab) );
+                    double aValue = mDocument.GetValue( ScAddress(inCol, inRow, inTab) );
                     pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
                     inRow++;
                     outRow++;
@@ -497,7 +497,7 @@ IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, formula::RefEdit&, void
         if ( mpActiveEdit == mxInputRangeEdit.get() )
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), &mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
@@ -515,7 +515,7 @@ IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, formula::RefEdit&, void
         else if ( mpActiveEdit == mxOutputRangeEdit.get() )
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxOutputRangeEdit->GetText(), mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxOutputRangeEdit->GetText(), &mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
@@ -527,7 +527,7 @@ IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, formula::RefEdit&, void
                     ScRefFlags nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ?
                                                                      ScRefFlags::ADDR_ABS :
                                                                      ScRefFlags::ADDR_ABS_3D;
-                    OUString aReferenceString = mOutputAddress.Format(nFormat, mDocument, mDocument->GetAddressConvention());
+                    OUString aReferenceString = mOutputAddress.Format(nFormat, &mDocument, mDocument.GetAddressConvention());
                     mxOutputRangeEdit->SetRefString( aReferenceString );
                 }
 

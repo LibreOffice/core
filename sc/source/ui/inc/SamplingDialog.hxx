@@ -33,7 +33,7 @@ private:
 
     // Data
     ScViewData* const         mViewData;
-    ScDocument* const         mDocument;
+    const ScDocument&         mDocument;
 
     ScRange                   mInputRange;
     ScAddress::Details const  mAddressDetails;
