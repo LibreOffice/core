@@ -30,7 +30,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* 
         const ScAddress& aCursorPos, const bool bUndo )
     : ScAnyRefDlgController( pB, pCW, pParent, "modules/scalc/ui/definename.ui", "DefineNameDialog")
     , mbUndo( bUndo )
-    , mpDoc( pViewData->GetDocument() )
+    , mrDoc(*pViewData->GetDocument())
     , mpDocShell ( pViewData->GetDocShell() )
     , maCursorPos( aCursorPos )
     , maGlobalNameStr  ( ScResId(STR_GLOBAL_SCOPE) )
@@ -59,11 +59,11 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* 
     // Initialize scope list.
     m_xLbScope->append_text(maGlobalNameStr);
     m_xLbScope->set_active(0);
-    SCTAB n = mpDoc->GetTableCount();
+    SCTAB n = mrDoc.GetTableCount();
     for (SCTAB i = 0; i < n; ++i)
     {
         OUString aTabName;
-        mpDoc->GetName(i, aTabName);
+        mrDoc.GetName(i, aTabName);
         m_xLbScope->append_text(aTabName);
     }
 
@@ -77,8 +77,8 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* 
     ScRange aRange;
 
     pViewData->GetSimpleArea( aRange );
-    OUString aAreaStr(aRange.Format(ScRefFlags::RANGE_ABS_3D, mpDoc,
-            ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0)));
+    OUString aAreaStr(aRange.Format(ScRefFlags::RANGE_ABS_3D, &mrDoc,
+            ScAddress::Details(mrDoc.GetAddressConvention(), 0, 0)));
 
     m_xEdRange->SetText( aAreaStr );
 
@@ -103,7 +103,7 @@ void ScNameDefDlg::CancelPushed()
 
 bool ScNameDefDlg::IsFormulaValid()
 {
-    ScCompiler aComp( mpDoc, maCursorPos, mpDoc->GetGrammar());
+    ScCompiler aComp( &mrDoc, maCursorPos, mrDoc.GetGrammar());
     std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(m_xEdRange->GetText());
     if (pCode->GetCodeError() != FormulaError::NONE)
     {
@@ -139,7 +139,7 @@ bool ScNameDefDlg::IsNameValid()
         m_xFtInfo->set_label(maStrInfoDefault);
         return false;
     }
-    else if ((eType = ScRangeData::IsNameValid( aName, mpDoc )) != ScRangeData::NAME_VALID)
+    else if ((eType = ScRangeData::IsNameValid( aName, &mrDoc )) != ScRangeData::NAME_VALID)
     {
         m_xFtInfo->set_message_type(weld::EntryMessageType::Error);
         if (eType == ScRangeData::NAME_INVALID_BAD_STRING)
@@ -204,65 +204,62 @@ void ScNameDefDlg::AddPushed()
         return;
     else
     {
-        if ( mpDoc )
+        ScRangeData::Type nType = ScRangeData::Type::Name;
+
+        ScRangeData* pNewEntry = new ScRangeData( &mrDoc,
+                aName,
+                aExpression,
+                maCursorPos,
+                nType );
+
+        if ( m_xBtnRowHeader->get_active() ) nType |= ScRangeData::Type::RowHeader;
+        if ( m_xBtnColHeader->get_active() ) nType |= ScRangeData::Type::ColHeader;
+        if ( m_xBtnPrintArea->get_active() ) nType |= ScRangeData::Type::PrintArea;
+        if ( m_xBtnCriteria->get_active()  ) nType |= ScRangeData::Type::Criteria;
+
+        pNewEntry->AddType(nType);
+
+        // aExpression valid?
+        if ( FormulaError::NONE == pNewEntry->GetErrCode() )
         {
-            ScRangeData::Type nType = ScRangeData::Type::Name;
+            if ( !pRangeName->insert( pNewEntry, false /*bReuseFreeIndex*/ ) )
+                pNewEntry = nullptr;
 
-            ScRangeData* pNewEntry = new ScRangeData( mpDoc,
-                    aName,
-                    aExpression,
-                    maCursorPos,
-                    nType );
-
-            if ( m_xBtnRowHeader->get_active() ) nType |= ScRangeData::Type::RowHeader;
-            if ( m_xBtnColHeader->get_active() ) nType |= ScRangeData::Type::ColHeader;
-            if ( m_xBtnPrintArea->get_active() ) nType |= ScRangeData::Type::PrintArea;
-            if ( m_xBtnCriteria->get_active()  ) nType |= ScRangeData::Type::Criteria;
-
-            pNewEntry->AddType(nType);
-
-            // aExpression valid?
-            if ( FormulaError::NONE == pNewEntry->GetErrCode() )
+            if (mbUndo)
             {
-                if ( !pRangeName->insert( pNewEntry, false /*bReuseFreeIndex*/ ) )
-                    pNewEntry = nullptr;
+                // this means we called directly through the menu
 
-                if (mbUndo)
-                {
-                    // this means we called directly through the menu
+                SCTAB nTab;
+                // if no table with that name is found, assume global range name
+                if (!mrDoc.GetTable(aScope, nTab))
+                    nTab = -1;
 
-                    SCTAB nTab;
-                    // if no table with that name is found, assume global range name
-                    if (!mpDoc->GetTable(aScope, nTab))
-                        nTab = -1;
+                assert( pNewEntry);     // undo of no insertion smells fishy
+                if (pNewEntry)
+                    mpDocShell->GetUndoManager()->AddUndoAction(
+                            std::make_unique<ScUndoAddRangeData>( mpDocShell, pNewEntry, nTab) );
 
-                    assert( pNewEntry);     // undo of no insertion smells fishy
-                    if (pNewEntry)
-                        mpDocShell->GetUndoManager()->AddUndoAction(
-                                std::make_unique<ScUndoAddRangeData>( mpDocShell, pNewEntry, nTab) );
-
-                    // set table stream invalid, otherwise RangeName won't be saved if no other
-                    // call invalidates the stream
-                    if (nTab != -1)
-                        mpDoc->SetStreamValid(nTab, false);
-                    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreasChanged ) );
-                    mpDocShell->SetDocumentModified();
-                    Close();
-                }
-                else
-                {
-                    maName = aName;
-                    maScope = aScope;
-                    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-                    pViewSh->SwitchBetweenRefDialogs(this);
-                }
+                // set table stream invalid, otherwise RangeName won't be saved if no other
+                // call invalidates the stream
+                if (nTab != -1)
+                    mrDoc.SetStreamValid(nTab, false);
+                SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreasChanged ) );
+                mpDocShell->SetDocumentModified();
+                Close();
             }
             else
             {
-                delete pNewEntry;
-                m_xEdRange->GrabFocus();
-                m_xEdRange->SelectAll();
+                maName = aName;
+                maScope = aScope;
+                ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+                pViewSh->SwitchBetweenRefDialogs(this);
             }
+        }
+        else
+        {
+            delete pNewEntry;
+            m_xEdRange->GrabFocus();
+            m_xEdRange->SelectAll();
         }
     }
 }

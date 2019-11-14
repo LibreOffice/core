@@ -23,7 +23,7 @@ class ScNameDefDlg : public ScAnyRefDlgController
 {
 private:
     bool const mbUndo; //if true we need to add an undo action after creating a range name
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     ScDocShell* mpDocShell;
 
     ScAddress const maCursorPos;
