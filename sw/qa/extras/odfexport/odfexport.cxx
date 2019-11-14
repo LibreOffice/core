@@ -2254,6 +2254,17 @@ DECLARE_ODFEXPORT_TEST(tdf99631, "tdf99631.docx")
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']", "1354");
 }
+
+DECLARE_ODFEXPORT_TEST(tdf128504, "tdf128504.docx")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(6);
+    uno::Reference<beans::XPropertySet> xRun(getRun(xPara, 1), uno::UNO_QUERY);
+    OUString unVisitedStyleName = getProperty<OUString>(xRun, "UnvisitedCharStyleName");
+    CPPUNIT_ASSERT(!unVisitedStyleName.equalsIgnoreAsciiCase("Internet Link"));
+    OUString visitedStyleName = getProperty<OUString>(xRun, "VisitedCharStyleName");
+    CPPUNIT_ASSERT(!visitedStyleName.equalsIgnoreAsciiCase("Visited Internet Link"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
