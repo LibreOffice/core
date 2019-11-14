@@ -106,7 +106,7 @@ void ScRandomNumberGeneratorDialog::Init()
 void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
 {
     mpViewData->GetSimpleArea(maInputRange);
-    OUString aCurrentString(maInputRange.Format(ScRefFlags::RANGE_ABS_3D, &mrDoc, mrDoc.GetAddressConvention()));
+    OUString aCurrentString(maInputRange.Format(mrDoc, ScRefFlags::RANGE_ABS_3D, mrDoc.GetAddressConvention()));
     mxInputRangeEdit->SetText( aCurrentString );
 }
 
@@ -139,7 +139,7 @@ void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange
 
         maInputRange = rReferenceRange;
 
-        OUString aReferenceString(maInputRange.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, rDoc.GetAddressConvention()));
+        OUString aReferenceString(maInputRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
         mxInputRangeEdit->SetRefString( aReferenceString );
 
         mxButtonApply->set_sensitive(true);

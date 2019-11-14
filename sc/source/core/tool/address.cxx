@@ -2153,13 +2153,13 @@ static void lcl_Split_DocTab( const ScDocument& rDoc,  SCTAB nTab,
 }
 
 static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange& rRange,
-                                          ScRefFlags nFlags, const ScDocument* pDoc,
+                                          ScRefFlags nFlags, const ScDocument& rDoc,
                                           const ScAddress::Details& rDetails )
 {
     if( nFlags & ScRefFlags::TAB_3D )
     {
         OUString aTabName, aDocName;
-        lcl_Split_DocTab( *pDoc, rRange.aStart.Tab(), rDetails, nFlags, aTabName, aDocName );
+        lcl_Split_DocTab( rDoc, rRange.aStart.Tab(), rDetails, nFlags, aTabName, aDocName );
         switch (rDetails.eConv)
         {
             case formula::FormulaGrammar::CONV_XL_OOX:
@@ -2186,7 +2186,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
         }
         if( nFlags & ScRefFlags::TAB2_3D )
         {
-            lcl_Split_DocTab( *pDoc, rRange.aEnd.Tab(), rDetails, nFlags, aTabName, aDocName );
+            lcl_Split_DocTab( rDoc, rRange.aEnd.Tab(), rDetails, nFlags, aTabName, aDocName );
             rString.append(":");
             rString.append(aTabName);
         }
@@ -2204,7 +2204,7 @@ static bool lcl_RowAbsFlagDiffer(const ScRefFlags nFlags)
     return static_cast<bool>(nFlags & ScRefFlags::ROW_ABS) != static_cast<bool>(nFlags & ScRefFlags::ROW2_ABS);
 }
 
-OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
+OUString ScRange::Format( const ScDocument& rDoc, ScRefFlags nFlags,
                           const ScAddress::Details& rDetails, bool bFullAddressNotation ) const
 {
     if( !( nFlags & ScRefFlags::VALID ) )
@@ -2219,11 +2219,12 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
         bool bOneTab = (aStart.Tab() == aEnd.Tab());
         if ( !bOneTab )
             nFlags |= ScRefFlags::TAB_3D;
-        r = aStart.Format(nFlags, pDoc, rDetails);
+        r = aStart.Format(nFlags, &rDoc, rDetails);
         if( aStart != aEnd ||
             lcl_ColAbsFlagDiffer( nFlags ) ||
             lcl_RowAbsFlagDiffer( nFlags ))
         {
+            const ScDocument* pDoc = &rDoc;
             // move flags of end reference to start reference, mask with BITS to exclude FORCE_DOC flag
             nFlags = ScRefFlags::VALID | (ScRefFlags(o3tl::underlyingEnumValue(nFlags) >> 4) & ScRefFlags::BITS);
             if ( bOneTab )
@@ -2239,10 +2240,10 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
 
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX: {
-        SCCOL nMaxCol = pDoc ? pDoc->MaxCol() : MAXCOL;
-        SCROW nMaxRow = pDoc ? pDoc->MaxRow() : MAXROW;
+        SCCOL nMaxCol = rDoc.MaxCol();
+        SCROW nMaxRow = rDoc.MaxRow();
 
-        lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
+        lcl_ScRange_Format_XL_Header( r, *this, nFlags, rDoc, rDetails );
         if( aStart.Col() == 0 && aEnd.Col() >= nMaxCol && !bFullAddressNotation )
         {
             // Full col refs always require 2 rows (2:2)
@@ -2274,10 +2275,10 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
     }
 
     case formula::FormulaGrammar::CONV_XL_R1C1: {
-        SCCOL nMaxCol = pDoc ? pDoc->MaxCol() : MAXCOL;
-        SCROW nMaxRow = pDoc ? pDoc->MaxRow() : MAXROW;
+        SCCOL nMaxCol = rDoc.MaxCol();
+        SCROW nMaxRow = rDoc.MaxRow();
 
-        lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
+        lcl_ScRange_Format_XL_Header( r, *this, nFlags, rDoc, rDetails );
         if( aStart.Col() == 0 && aEnd.Col() >= nMaxCol && !bFullAddressNotation )
         {
             lcl_r1c1_append_r( r, aStart.Row(), (nFlags & ScRefFlags::ROW_ABS) != ScRefFlags::ZERO, rDetails );

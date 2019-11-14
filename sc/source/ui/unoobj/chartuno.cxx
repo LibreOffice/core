@@ -207,7 +207,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
             if( xReceiver.is())
             {
                 OUString sRangeStr;
-                xNewRanges->Format(sRangeStr, ScRefFlags::RANGE_ABS_3D, &rDoc);
+                xNewRanges->Format(sRangeStr, ScRefFlags::RANGE_ABS_3D, rDoc);
 
                 // connect
                 if( !sRangeStr.isEmpty() )

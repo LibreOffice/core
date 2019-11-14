@@ -129,7 +129,7 @@ void DataStreamDlg::Init( const DataStream& rStrm )
     ScRange aRange = rStrm.GetRange();
     ScRange aTopRange = aRange;
     aTopRange.aEnd.SetRow(aTopRange.aStart.Row());
-    OUString aStr = aTopRange.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, rDoc.GetAddressConvention());
+    OUString aStr = aTopRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention());
     m_xEdRange->set_text(aStr);
     SCROW nRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
 

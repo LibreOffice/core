@@ -484,7 +484,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
                         XML_hashValue, rProt.maPasswordHash.maHashValue.isEmpty() ? nullptr : rProt.maPasswordHash.maHashValue.toUtf8().getStr(),
                         XML_saltValue, rProt.maPasswordHash.maSaltValue.isEmpty() ? nullptr : rProt.maPasswordHash.maSaltValue.toUtf8().getStr(),
                         XML_spinCount, rProt.maPasswordHash.mnSpinCount ? OString::number( rProt.maPasswordHash.mnSpinCount).getStr() : nullptr,
-                        XML_sqref, rProt.maRangeList.is() ? XclXmlUtils::ToOString( &rStrm.GetRoot().GetDoc(), *rProt.maRangeList).getStr() : nullptr);
+                        XML_sqref, rProt.maRangeList.is() ? XclXmlUtils::ToOString( rStrm.GetRoot().GetDoc(), *rProt.maRangeList).getStr() : nullptr);
             }
             rWorksheet->endElement( XML_protectedRanges);
         }
@@ -986,7 +986,7 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-    rWorksheet->startElement(XML_autoFilter, XML_ref, XclXmlUtils::ToOString(&rStrm.GetRoot().GetDoc(), maRef));
+    rWorksheet->startElement(XML_autoFilter, XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), maRef));
     // OOXTODO: XML_extLst, XML_sortState
     if( !maFilterList.IsEmpty() )
         maFilterList.SaveXml( rStrm );

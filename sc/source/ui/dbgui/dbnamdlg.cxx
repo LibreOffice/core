@@ -208,7 +208,7 @@ void ScDbNameDlg::Init()
 
         theCurArea = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
 
-        theAreaStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, aAddrDetails);
+        theAreaStr = theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, aAddrDetails);
 
         if ( pDBColl )
         {
@@ -284,7 +284,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 
         theCurArea = rRef;
 
-        OUString aRefStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, &rDocP, aAddrDetails));
+        OUString aRefStr(theCurArea.Format(rDocP, ScRefFlags::RANGE_ABS_3D, aAddrDetails));
         m_xEdAssign->SetRefString( aRefStr );
         m_xOptions->set_sensitive(true);
         m_xBtnAdd->set_sensitive(true);
@@ -351,7 +351,7 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
         pData->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
         theCurArea = ScRange( ScAddress( nColStart, nRowStart, nTab ),
                               ScAddress( nColEnd,   nRowEnd,   nTab ) );
-        OUString theArea(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, aAddrDetails));
+        OUString theArea(theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, aAddrDetails));
         m_xEdAssign->SetText( theArea );
         m_xBtnAdd->set_label( aStrModify );
         m_xBtnHeader->set_active( pData->HasHeader() );

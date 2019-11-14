@@ -144,7 +144,7 @@ ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument* pDoc,
         return ScRefFlags::ZERO;
 }
 
-void ScRangeList::Format( OUString& rStr, ScRefFlags nFlags, const ScDocument* pDoc,
+void ScRangeList::Format( OUString& rStr, ScRefFlags nFlags, const ScDocument& rDoc,
                           formula::FormulaGrammar::AddressConvention eConv,
                           sal_Unicode cDelimiter, bool bFullAddressNotation ) const
 {
@@ -159,7 +159,7 @@ void ScRangeList::Format( OUString& rStr, ScRefFlags nFlags, const ScDocument* p
             bFirst = false;
         else
             aBuf.append(OUStringChar(cDelimiter));
-        aBuf.append(r.Format(nFlags, pDoc, eConv, bFullAddressNotation));
+        aBuf.append(r.Format(rDoc, nFlags, eConv, bFullAddressNotation));
     }
     rStr = aBuf.makeStringAndClear();
 }

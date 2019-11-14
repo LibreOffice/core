@@ -774,7 +774,7 @@ static void lcl_appendCellRangeAddress(
         ScRange aRange;
         aRange.aStart = rCell1;
         aRange.aEnd   = rCell2;
-        OUString aAddr(aRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+        OUString aAddr(aRange.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }

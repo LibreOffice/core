@@ -143,7 +143,7 @@ void FormulaLogger::GroupScope::addRefMessage(
 
     ScRange aRefRange(rRefPos);
     aRefRange.aEnd.IncRow(nLen-1);
-    OUString aRangeStr = aRefRange.Format(getRefFlags(rCellPos, rRefPos), &mpImpl->mrDoc);
+    OUString aRangeStr = aRefRange.Format(mpImpl->mrDoc, getRefFlags(rCellPos, rRefPos));
     aBuf.append(aRangeStr);
     aBuf.append(": ");
 

@@ -2514,7 +2514,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 case SC_WID_UNO_ABSNAME:
                     {
                         OUString sRet;
-                        aRanges.Format(sRet, ScRefFlags::RANGE_ABS_3D, &pDocShell->GetDocument());
+                        aRanges.Format(sRet, ScRefFlags::RANGE_ABS_3D, pDocShell->GetDocument());
                         rAny <<= sRet;
                     }
                 break;
@@ -4123,7 +4123,7 @@ OUString SAL_CALL ScCellRangesObj::getRangeAddressesAsString()
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     if (pDocSh)
-        rRanges.Format( aString, ScRefFlags::VALID | ScRefFlags::TAB_3D, &pDocSh->GetDocument() );
+        rRanges.Format( aString, ScRefFlags::VALID | ScRefFlags::TAB_3D, pDocSh->GetDocument() );
     return aString;
 }
 
@@ -4290,7 +4290,7 @@ static bool lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDocSh,
         ScDocument& rDoc = pDocSh->GetDocument();
         for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
-            aRangeStr = rRanges[ i ].Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc);
+            aRangeStr = rRanges[ i ].Format(rDoc, ScRefFlags::VALID | ScRefFlags::TAB_3D);
             if ( aRangeStr == rName )
             {
                 rIndex = i;
@@ -4481,7 +4481,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
             if (m_pImpl->m_aNamedEntries.empty() ||
                 !lcl_FindEntryName(m_pImpl->m_aNamedEntries, rRange, aRangeStr))
             {
-                aRangeStr = rRange.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc);
+                aRangeStr = rRange.Format(rDoc, ScRefFlags::VALID | ScRefFlags::TAB_3D);
             }
             pAry[i] = aRangeStr;
         }

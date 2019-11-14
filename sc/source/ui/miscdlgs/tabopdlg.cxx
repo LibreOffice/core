@@ -142,7 +142,7 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
         {
             theFormulaCell.Set( rRef.aStart, false, false, false);
             theFormulaEnd.Set( rRef.aEnd, false, false, false);
-            aStr = rRef.Format(nFmt, &rDocP, aDetails);
+            aStr = rRef.Format(rDocP, nFmt, aDetails);
         }
         else if (m_pEdActive == m_xEdRowCell.get())
         {
