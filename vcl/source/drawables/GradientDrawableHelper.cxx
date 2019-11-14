@@ -126,13 +126,13 @@ void GradientDrawableHelper::DrawLinearGradient(OutputDevice* pRenderContext,
     std::tie(aGradientBorderRect, aGradientMirroredBorderRect, aCenter, fBorderWidth)
         = GetBorderValues(rGradient, rRect);
 
-    sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
-
     long nStartRed, nStartGreen, nStartBlue;
     long nEndRed, nEndGreen, nEndBlue;
 
     std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue)
         = GetColorIntensities(rGradient);
+
+    sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
     DrawGradientBorder(pRenderContext, rGradient, aGradientBorderRect, aGradientMirroredBorderRect,
                        aCenter, nAngle, fBorderWidth, nStartRed, nStartGreen, nStartBlue,
