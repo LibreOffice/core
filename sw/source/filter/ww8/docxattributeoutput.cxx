@@ -7205,8 +7205,8 @@ void DocxAttributeOutput::TextINetFormat( const SwFormatINetFormat& rLink )
     const SwCharFormat* pCharFormat = pINetFormat->GetCharFormat();
 
     OString aStyleId(m_rExport.m_pStyles->GetStyleId(m_rExport.GetId(pCharFormat)));
-
-    m_pSerializer->singleElementNS(XML_w, XML_rStyle, FSNS(XML_w, XML_val), aStyleId);
+    if (!aStyleId.isEmpty() && !aStyleId.equalsIgnoreAsciiCase("DefaultStyle"))
+        m_pSerializer->singleElementNS(XML_w, XML_rStyle, FSNS(XML_w, XML_val), aStyleId);
 }
 
 void DocxAttributeOutput::TextCharFormat( const SwFormatCharFormat& rCharFormat )
