@@ -128,6 +128,8 @@ namespace dbaui
         void                InitializeControl(weld::Widget* _pControl,const OString& _sHelpId);
         void                InitializeControl(OPropListBoxCtrl* _pControl,const OString& _sHelpId,bool _bAddChangeHandler);
 
+        bool                IsFocusInEditableWidget() const;
+
     protected:
         void                saveCurrentFieldDescData() { SaveData( pActFieldDescr ); }
         OFieldDescription*  getCurrentFieldDescData() { return pActFieldDescr; }
