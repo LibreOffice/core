@@ -279,7 +279,7 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
     if( !pFrame )
     {
         if( m_pCapture )
-            static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( FALSE );
+            static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( false );
         m_pCapture = nullptr;
         return 0;
     }
@@ -288,11 +288,11 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
     {
         if( pFrame == m_pCapture )
             return 1;
-        static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( FALSE );
+        static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( false );
     }
 
     m_pCapture = pFrame;
-    pFrame->grabPointer( TRUE );
+    pFrame->grabPointer( true );
     return 1;
 }
 
@@ -375,7 +375,7 @@ bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if( bDispatchThread )
         {
             int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
-            bool wasOneEvent = TRUE;
+            bool wasOneEvent = true;
             while( nMaxEvents-- && wasOneEvent )
             {
                 wasOneEvent = g_main_context_iteration( nullptr, bWait && !bWasEvent );
@@ -557,7 +557,7 @@ extern "C" {
         if( nDeltaSec < 0 || ( nDeltaSec == 0 && nDeltaUSec < 0) )
         {
             *nTimeoutMS = 0;
-            return TRUE;
+            return true;
         }
         if( nDeltaUSec < 0 )
         {
@@ -568,7 +568,7 @@ extern "C" {
         if( static_cast<unsigned long>(nDeltaSec) > 1 + ( pTSource->pInstance->m_nTimeoutMS / 1000 ) )
         {
             sal_gtk_timeout_defer( pTSource );
-            return TRUE;
+            return true;
         }
 
         *nTimeoutMS = MIN( G_MAXINT, ( nDeltaSec * 1000 + (nDeltaUSec + 999) / 1000 ) );
@@ -635,7 +635,7 @@ create_sal_gtk_timeout( GtkSalTimer *pTimer )
   // #i36226# timers should be executed with lower priority
   // than XEvents like in generic plugin
   g_source_set_priority( pSource, G_PRIORITY_LOW );
-  g_source_set_can_recurse( pSource, TRUE );
+  g_source_set_can_recurse( pSource, true );
   g_source_set_callback( pSource,
                          /* unused dummy */ g_idle_remove_by_data,
                          nullptr, nullptr );
@@ -705,7 +705,7 @@ extern "C" {
             assert(static_cast<const SalGenericDisplay *>(pThisDisplay) == pDisplay);
             pThisDisplay->DispatchInternalEvent();
         }
-        return TRUE;
+        return true;
     }
 }
 
@@ -720,7 +720,7 @@ void GtkSalData::TriggerUserEventProcessing()
         // events, which is G_PRIORITY_HIGH_IDLE + 20, so presentations
         // queue-redraw has a chance to be fulfilled
         g_source_set_priority (m_pUserEvent,  G_PRIORITY_HIGH_IDLE + 30);
-        g_source_set_can_recurse (m_pUserEvent, TRUE);
+        g_source_set_can_recurse (m_pUserEvent, true);
         g_source_set_callback (m_pUserEvent, call_userEventFn,
                                static_cast<gpointer>(this), nullptr);
         g_source_attach (m_pUserEvent, g_main_context_default ());
@@ -760,7 +760,7 @@ void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
 {
     if( m_pCapture == pFrame )
     {
-        static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( FALSE );
+        static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( false );
         m_pCapture = nullptr;
     }
     SalGenericDisplay::deregisterFrame( pFrame );

@@ -81,7 +81,7 @@ extern "C" {
         SolarMutexGuard aGuard;
 
         // This is an equivalent to a state change to DEFUNC(T).
-        atk_object_notify_state_change( atk_obj, ATK_STATE_DEFUNCT, TRUE );
+        atk_object_notify_state_change( atk_obj, ATK_STATE_DEFUNCT, true );
         if( atk_get_focus_object() == atk_obj )
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH

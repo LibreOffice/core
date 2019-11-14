@@ -133,7 +133,7 @@ GtkWidget* GtvHelpers::createCommentBox(const boost::property_tree::ptree& aComm
     gtk_container_add(GTK_CONTAINER(pCommentVBox), pControlsHBox);
     gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentSeparator);
 
-    gtk_label_set_line_wrap(GTK_LABEL(pCommentText), TRUE);
+    gtk_label_set_line_wrap(GTK_LABEL(pCommentText), true);
     gtk_label_set_max_width_chars(GTK_LABEL(pCommentText), 35);
 
     return pCommentVBox;

@@ -1189,7 +1189,7 @@ void SAL_CALL BluetoothServer::run()
         while (true)
         {
             aDBusFD.revents = 0;
-            g_main_context_iteration( mpImpl->mpContext, TRUE );
+            g_main_context_iteration( mpImpl->mpContext, true );
             if( aDBusFD.revents )
             {
                 dbus_connection_read_write( pConnection, 0 );
@@ -1233,7 +1233,7 @@ void SAL_CALL BluetoothServer::run()
     {
         aDBusFD.revents = 0;
         aSocketFD.revents = 0;
-        g_main_context_iteration( mpImpl->mpContext, TRUE );
+        g_main_context_iteration( mpImpl->mpContext, true );
 
         SAL_INFO( "sdremote.bluetooth", "main-loop spin "
                   << aDBusFD.revents << " " << aSocketFD.revents );

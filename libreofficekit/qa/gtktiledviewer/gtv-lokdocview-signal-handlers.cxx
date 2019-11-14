@@ -220,11 +220,11 @@ void LOKDocViewSigHandlers::passwordRequired(LOKDocView* pDocView, char* pUrl, g
     GtkWidget* pPasswordEntry = gtk_entry_new ();
     gtk_entry_set_visibility (GTK_ENTRY(pPasswordEntry), FALSE);
     gtk_entry_set_invisible_char (GTK_ENTRY(pPasswordEntry), '*');
-    gtk_box_pack_end(GTK_BOX(pDialogMessageArea), pPasswordEntry, TRUE, TRUE, 2);
+    gtk_box_pack_end(GTK_BOX(pDialogMessageArea), pPasswordEntry, true, true, 2);
     if (bModify)
     {
         GtkWidget* pSecondaryLabel = gtk_label_new ("Document requires password to edit");
-        gtk_box_pack_end(GTK_BOX(pDialogMessageArea), pSecondaryLabel, TRUE, TRUE, 2);
+        gtk_box_pack_end(GTK_BOX(pDialogMessageArea), pSecondaryLabel, true, true, 2);
         gtk_dialog_add_button (GTK_DIALOG (pPasswordDialog), "Open as read-only", GTK_RESPONSE_ACCEPT);
     }
     gtk_widget_show_all(pPasswordDialog);
@@ -444,7 +444,7 @@ gboolean LOKDocViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEventConfi
         gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->cornerarea), nullptr);
     }
 
-    return TRUE;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

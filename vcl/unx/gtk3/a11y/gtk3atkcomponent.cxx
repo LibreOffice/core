@@ -82,7 +82,7 @@ component_wrapper_grab_focus (AtkComponent *component)
         if( pComponent.is() )
         {
             pComponent->grabFocus();
-            return TRUE;
+            return true;
         }
     }
     catch( const uno::Exception & )
