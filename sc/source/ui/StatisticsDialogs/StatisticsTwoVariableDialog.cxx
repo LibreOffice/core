@@ -32,10 +32,10 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("output-range-edit")))
     , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("output-range-button")))
     , mViewData(pViewData)
-    , mDocument(pViewData->GetDocument())
+    , mDocument(*pViewData->GetDocument())
     , mVariable1Range(ScAddress::INITIALIZE_INVALID)
     , mVariable2Range(ScAddress::INITIALIZE_INVALID)
-    , mAddressDetails(mDocument->GetAddressConvention(), 0, 0 )
+    , mAddressDetails(mDocument.GetAddressConvention(), 0, 0 )
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)
     , mGroupedBy(BY_COLUMN)
     , mxButtonOk(m_xBuilder->weld_button("ok"))
@@ -112,18 +112,18 @@ void ScStatisticsTwoVariableDialog::GetRangeFromSelection()
     {
         mVariable1Range = aCurrentRange;
         mVariable1Range.aEnd.SetCol(mVariable1Range.aStart.Col());
-        aCurrentString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, mDocument, mAddressDetails);
+        aCurrentString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, &mDocument, mAddressDetails);
         mxVariable1RangeEdit->SetText(aCurrentString);
 
         mVariable2Range = aCurrentRange;
         mVariable2Range.aStart.SetCol(mVariable2Range.aEnd.Col());
-        aCurrentString = mVariable2Range.Format(ScRefFlags::RANGE_ABS_3D, mDocument, mAddressDetails);
+        aCurrentString = mVariable2Range.Format(ScRefFlags::RANGE_ABS_3D, &mDocument, mAddressDetails);
         mxVariable2RangeEdit->SetText(aCurrentString);
     }
     else
     {
         mVariable1Range = aCurrentRange;
-        aCurrentString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, mDocument, mAddressDetails);
+        aCurrentString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, &mDocument, mAddressDetails);
         mxVariable1RangeEdit->SetText(aCurrentString);
     }
 }
@@ -252,7 +252,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::
         if (mpActiveEdit == mxVariable1RangeEdit.get())
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxVariable1RangeEdit->GetText(), mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxVariable1RangeEdit->GetText(), &mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
@@ -268,7 +268,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::
         else if ( mpActiveEdit == mxVariable2RangeEdit.get() )
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxVariable2RangeEdit->GetText(), mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxVariable2RangeEdit->GetText(), &mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
@@ -284,7 +284,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::
         else if ( mpActiveEdit == mxOutputRangeEdit.get() )
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxOutputRangeEdit->GetText(), mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxOutputRangeEdit->GetText(), &mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::
                     ScRefFlags nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ?
                                                                      ScRefFlags::ADDR_ABS :
                                                                      ScRefFlags::ADDR_ABS_3D;
-                    OUString aReferenceString = mOutputAddress.Format(nFormat, mDocument, mDocument->GetAddressConvention());
+                    OUString aReferenceString = mOutputAddress.Format(nFormat, &mDocument, mDocument.GetAddressConvention());
                     mxOutputRangeEdit->SetRefString( aReferenceString );
                 }
 

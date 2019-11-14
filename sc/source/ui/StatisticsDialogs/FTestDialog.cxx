@@ -41,9 +41,9 @@ const char* ScFTestDialog::GetUndoNameId()
 
 ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, &mDocument,
             formula::FormulaGrammar::mergeToGrammar(formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument);
+    FormulaTemplate aTemplate(&mDocument);
 
     std::unique_ptr<DataRangeIterator> pVariable1Iterator;
     if (mGroupedBy == BY_COLUMN)

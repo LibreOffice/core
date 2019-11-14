@@ -170,9 +170,9 @@ const char* ScRegressionDialog::GetUndoNameId()
 
 ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, &mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument);
+    FormulaTemplate aTemplate(&mDocument);
     aTemplate.autoReplaceUses3D(mbUse3DAddresses);
     mbCalcIntercept = !mxNoInterceptCheckBox->get_active();
 
@@ -318,8 +318,8 @@ OUString ScRegressionDialog::GetVariableNameFormula(bool bXVar, size_t nIndex, b
 
         ScRefFlags eAddrFlag = mbUse3DAddresses ? ScRefFlags::ADDR_ABS_3D : ScRefFlags::ADDR_ABS;
         return bWithLog ? OUString("=CONCAT(\"LN(\";" +
-            aAddr.Format(eAddrFlag, mDocument, mDocument->GetAddressConvention()) + ";\")\")") :
-            OUString("=" + aAddr.Format(eAddrFlag, mDocument, mDocument->GetAddressConvention()));
+            aAddr.Format(eAddrFlag, &mDocument, mDocument.GetAddressConvention()) + ";\")\")") :
+            OUString("=" + aAddr.Format(eAddrFlag, &mDocument, mDocument.GetAddressConvention()));
     }
 
     OUString aDefaultVarName;

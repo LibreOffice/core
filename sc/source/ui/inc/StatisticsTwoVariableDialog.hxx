@@ -56,7 +56,7 @@ protected:
 
     // Data
     ScViewData* const         mViewData;
-    ScDocument* const         mDocument;
+    ScDocument&               mDocument;
 
     ScRange                   mVariable1Range;
     ScRange                   mVariable2Range;
