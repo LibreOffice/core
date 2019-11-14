@@ -307,10 +307,11 @@ public:
      *
      * @param nWindowId id of the window to notify
      * @param pArguments arguments of the event.
+     * returns logged ui events
      */
-    void sendDialogEvent(unsigned nWindowId, const char* pArguments = NULL)
+    const char* sendDialogEvent(unsigned nWindowId, const char* pArguments = NULL)
     {
-        mpDoc->pClass->sendDialogEvent(mpDoc, nWindowId, pArguments);
+        return mpDoc->pClass->sendDialogEvent(mpDoc, nWindowId, pArguments);
     }
 
     /**

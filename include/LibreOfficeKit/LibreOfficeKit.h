@@ -415,7 +415,7 @@ struct _LibreOfficeKitDocumentClass
                                int nAfter);
 
     /// @see lok::Document::sendDialogEvent
-    void (*sendDialogEvent) (LibreOfficeKitDocument* pThis,
+    const char* (*sendDialogEvent) (LibreOfficeKitDocument* pThis,
                             unsigned nLOKWindowId,
                             const char* pArguments);
 

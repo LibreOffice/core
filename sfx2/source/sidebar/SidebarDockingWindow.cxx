@@ -109,6 +109,7 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
     : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
     , mpSidebarController()
     , mbIsReadyToDrag(false)
+    , rLogger(UITestLogger::getInstance(!comphelper::LibreOfficeKit::isActive()))
     , mpIdleNotify(new SidebarNotifyIdle(*this))
 {
     // Get the XFrame from the bindings.

@@ -56,6 +56,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/threadpool.hxx>
+#include <vcl/uitest/logger.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -802,7 +803,7 @@ static void doc_removeTextContext(LibreOfficeKitDocument* pThis,
                                   unsigned nLOKWindowId,
                                   int nCharBefore,
                                   int nCharAfter);
-static void doc_sendDialogEvent(LibreOfficeKitDocument* pThis,
+static const char* doc_sendDialogEvent(LibreOfficeKitDocument* pThis,
                                unsigned nLOKWindowId,
                                const char* pArguments);
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* pThis,
@@ -3294,18 +3295,40 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
 };
 
-static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWindowId, const char* pArguments)
+OString toAscii(OUString const & name) {
+    OString ascii;
+    if (!name.convertToString(
+            &ascii, RTL_TEXTENCODING_ASCII_US,
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+    {
+        std::cerr
+            << "Cannot convert \"" << name << "\" to US ASCII" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    return ascii;
+}
+
+static const char* doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWindowId, const char* pArguments)
 {
     SolarMutexGuard aGuard;
 
+    const char* pOut = nullptr;
+
+    UITestLogger& aLogger = UITestLogger::getInstance(false);
+    aLogger.readLogLine(); // clear logs
+
     StringMap aMap(jsonToStringMap(pArguments));
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
-    if (!pWindow)
+
+    if (aMap["id"] == "-1")
     {
-        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
-        return;
+        // TODO: trigger redraw?
+        pWindow->Hide();
+        pWindow->Show();
     }
-    else if (aMap.find("id") != aMap.end())
+
+    if (pWindow && aMap.find("id") != aMap.end())
     {
         const OUString sClickAction("CLICK");
         const OUString sSelectAction("SELECT");
@@ -3355,9 +3378,13 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
             }
         } catch(...) {}
 
-        // force resend
-        pWindow->Resize();
+        OString aUILogs(aLogger.readLogLine());
+        OUString aLogs = "dialogeventlogs " + OUString::fromUtf8(aUILogs);
+        OString aOS = toAscii(aLogs);
+        pOut = aOS.getStr();
     }
+
+    return pOut;
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)

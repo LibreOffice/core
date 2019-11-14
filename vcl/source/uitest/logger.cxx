@@ -16,22 +16,35 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <svdata.hxx>
+#include <rtl/character.hxx>
 
 #include <memory>
 
-UITestLogger::UITestLogger():
-    maStream(),
-    mbValid(false)
+UITestLogger::UITestLogger(bool bFileBased):
+    mbValid(false),
+    mbFileBased(bFileBased)
 {
+    if (mbFileBased)
+    {
+        mpStream = new SvFileStream();
+    }
+    else
+    {
+        size_t nSize = 1000;
+        mpStream = new SvMemoryStream(nSize, nSize);
+        mpStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+        mbValid = true;
+    }
+
     static const char* pFile = std::getenv("LO_COLLECT_UIINFO");
-    if (pFile)
+    if (mbFileBased && pFile)
     {
         OUString aDirPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/uitest/");
         rtl::Bootstrap::expandMacros(aDirPath);
         osl::Directory::createPath(aDirPath);
         OUString aFilePath = aDirPath + OUString::fromUtf8(pFile);
 
-        maStream.Open(aFilePath, StreamMode::READWRITE | StreamMode::TRUNC);
+        static_cast<SvFileStream*>(mpStream)->Open(aFilePath, StreamMode::READWRITE | StreamMode::TRUNC);
         mbValid = true;
     }
 }
@@ -82,7 +95,7 @@ void UITestLogger::logCommand(const OUString& rAction, const css::uno::Sequence<
     }
 
     OUString aCommand(aBuffer.makeStringAndClear());
-    maStream.WriteLine(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8));
+    mpStream->WriteLine(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8));
 }
 
 namespace {
@@ -122,7 +135,7 @@ void UITestLogger::logAction(VclPtr<Control> const & xUIElement, VclEventId nEve
     }
 
     if (!aAction.isEmpty())
-        maStream.WriteLine(OUStringToOString(aAction, RTL_TEXTENCODING_UTF8));
+        mpStream->WriteLine(OUStringToOString(aAction, RTL_TEXTENCODING_UTF8));
 }
 
 void UITestLogger::log(const OUString& rString)
@@ -133,7 +146,7 @@ void UITestLogger::log(const OUString& rString)
     if (rString.isEmpty())
         return;
 
-    maStream.WriteLine(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
+    mpStream->WriteLine(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
 }
 
 void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const KeyEvent& rEvent)
@@ -217,7 +230,7 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
 
     OUString aContent = pUIObject->get_type() + " Action:TYPE Id:" +
             rID + " Parent:"+ aParentID +" " + aKeyCode;
-    maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
+    mpStream->WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
 }
 
 namespace {
@@ -255,17 +268,47 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
     log(aLogLine);
 }
 
-UITestLogger& UITestLogger::getInstance()
+UITestLogger& UITestLogger::getInstance(bool bFileBased)
 {
     ImplSVData *const pSVData = ImplGetSVData();
     assert(pSVData);
 
-    if (!pSVData->maWinData.m_pUITestLogger)
+    if (!pSVData->maWinData.m_pUITestLogger || (!bFileBased && pSVData->maWinData.m_pUITestLogger->isFileBased()))
     {
-        pSVData->maWinData.m_pUITestLogger.reset(new UITestLogger);
+        pSVData->maWinData.m_pUITestLogger.reset(new UITestLogger(bFileBased));
     }
 
     return *pSVData->maWinData.m_pUITestLogger;
+}
+
+OString UITestLogger::readLogLine()
+{
+    bool bCanRead = true;
+    OStringBuffer aBuf;
+    OString aStr;
+
+    mpStream->Seek(0);
+
+    while (bCanRead && mpStream->good())
+    {
+        bCanRead = mpStream->ReadLine(aStr);
+
+        if (aStr.getLength())
+        {
+            bool bIsValidString = !aStr.isEmpty() && aStr.getLength();
+
+            if (bIsValidString)
+            {
+                aBuf.append(aStr);
+                aBuf.append("\n");
+            }
+        }
+    }
+
+    OString aOut(aBuf.makeStringAndClear());
+    static_cast<SvMemoryStream*>(mpStream)->SwitchBuffer();
+
+    return aOut;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_VCL_UITEST_LOGGER_HXX
+#define INCLUDED_VCL_UITEST_LOGGER_HXX
+
 #include <vcl/dllapi.h>
 
 #include <tools/stream.hxx>
@@ -23,13 +26,15 @@ class UITEST_DLLPUBLIC UITestLogger
 {
 private:
 
-    SvFileStream maStream;
+    SvStream* mpStream;
 
     bool mbValid;
 
-public:
+    bool mbFileBased;
 
-    UITestLogger();
+    UITestLogger(bool bFileBased = true);
+
+public:
 
     void logCommand(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
 
@@ -41,8 +46,14 @@ public:
 
     void logEvent(const EventDescription& rDescription);
 
-    static UITestLogger& getInstance();
+    static UITestLogger& getInstance(bool bFileBased = true);
+
+    OString readLogLine();
+
+    bool isFileBased() { return mbFileBased; }
 
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

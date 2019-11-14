@@ -526,6 +526,15 @@ OUString WindowUIObject::get_action(VclEventId nEvent) const
         case VclEventId::EditModify:
             aActionName = "TYPE";
         break;
+
+        case VclEventId::WindowShow:
+            aActionName = "SHOW";
+        break;
+
+        case VclEventId::WindowHide:
+            aActionName = "HIDE";
+        break;
+
         default:
             aActionName = OUString::number(static_cast<int>(nEvent));
     }

@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARDOCKINGWINDOW_HXX
 
 #include <sfx2/dockwin.hxx>
+#include <vcl/uitest/logger.hxx>
 
 #include <rtl/ref.hxx>
 
@@ -70,6 +71,8 @@ private:
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;
     bool mbIsReadyToDrag;
     std::unique_ptr<svt::AcceleratorExecute> mpAccel;
+    UITestLogger& rLogger;
+
 
     std::unique_ptr<SidebarNotifyIdle> mpIdleNotify;
 };

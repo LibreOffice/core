@@ -45,6 +45,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/uitest/eventdescription.hxx>
+#include <vcl/uitest/logger.hxx>
 
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/uitest.hxx>
@@ -2361,6 +2363,12 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
     if( xWindow->IsDisposed() )
         return;
 
+    EventDescription aDescription;
+    aDescription.aID = get_id();
+    aDescription.aAction = mpWindowImpl->mbReallyVisible ? "SHOW" : "HIDE";
+    aDescription.aKeyWord = "ElementUIObject";
+    UITestLogger::getInstance().logEvent(aDescription);
+
     // the SHOW/HIDE events also serve as indicators to send child creation/destroy events to the access bridge
     // However, the access bridge only uses this event if the data member is not NULL (it's kind of a hack that
     // we re-use the SHOW/HIDE events this way, with this particular semantics).
@@ -3354,23 +3362,22 @@ boost::property_tree::ptree Window::DumpAsPropertyTree()
     aTree.put("type", windowTypeName(GetType()));
     aTree.put("text", GetText());
     aTree.put("enabled", IsEnabled());
+    aTree.put("visible", IsVisible());
 
     boost::property_tree::ptree aChildren;
     if (vcl::Window* pChild = mpWindowImpl->mpFirstChild)
     {
         while (pChild)
         {
-            if (pChild->IsVisible()) {
-                boost::property_tree::ptree aSubTree = pChild->DumpAsPropertyTree();
-                int nLeft = pChild->get_grid_left_attach();
-                int nTop = pChild->get_grid_top_attach();
-                if (nLeft != -1 && nTop != -1)
-                {
-                    aSubTree.put("left", OUString::number(nLeft));
-                    aSubTree.put("top", OUString::number(nTop));
-                }
-                aChildren.push_back(std::make_pair("", aSubTree));
+            boost::property_tree::ptree aSubTree = pChild->DumpAsPropertyTree();
+            int nLeft = pChild->get_grid_left_attach();
+            int nTop = pChild->get_grid_top_attach();
+            if (nLeft != -1 && nTop != -1)
+            {
+                aSubTree.put("left", OUString::number(nLeft));
+                aSubTree.put("top", OUString::number(nTop));
             }
+            aChildren.push_back(std::make_pair("", aSubTree));
             pChild = pChild->mpWindowImpl->mpNext;
         }
         aTree.add_child("children", aChildren);
