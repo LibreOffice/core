@@ -99,6 +99,7 @@ public:
     void testMarkerColorXLSX();
     void testRoundedCornersXLSX();
     void testAxisNumberFormatXLSX();
+    void testDataPointLabelNumberFormatXLSX();
     void testDataLabelDefaultValuesXLSX();
     void testTitleOverlayXLSX();
     void testInvertIfNegativeXLSX();
@@ -210,6 +211,7 @@ public:
     CPPUNIT_TEST(testMarkerColorXLSX);
     CPPUNIT_TEST(testRoundedCornersXLSX);
     CPPUNIT_TEST(testAxisNumberFormatXLSX);
+    CPPUNIT_TEST(testDataPointLabelNumberFormatXLSX);
     CPPUNIT_TEST(testDataLabelDefaultValuesXLSX);
     CPPUNIT_TEST(testTitleOverlayXLSX);
     CPPUNIT_TEST(testInvertIfNegativeXLSX);
@@ -1582,6 +1584,18 @@ void Chart2ExportTest::testAxisNumberFormatXLSX()
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:numFmt", "formatCode", "[$$-409]#,##0;\\-[$$-409]#,##0");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:numFmt", "sourceLinked", "1");
+}
+
+void Chart2ExportTest::testDataPointLabelNumberFormatXLSX()
+{
+    load("/chart2/qa/extras/data/ods/", "tdf123774.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:numFmt", "formatCode", "[$-40E]0.00%");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:numFmt", "sourceLinked", "0");
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:numFmt", "formatCode", "[$-40E]0.00%");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:numFmt", "sourceLinked", "0");
 }
 
 void Chart2ExportTest::testDataLabelDefaultValuesXLSX()
