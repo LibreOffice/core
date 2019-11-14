@@ -54,9 +54,8 @@ private:
 
 protected:
 
-    virtual SvXMLImportContext *CreateDocumentContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 public:
 
@@ -72,27 +71,23 @@ public:
 class XMLVersionListContext : public SvXMLImportContext
 {
 private:
-    XMLVersionListImport & rLocalRef;
+    XMLVersionListImport & GetImport() { return static_cast<XMLVersionListImport&>(SvXMLImportContext::GetImport()); }
 
 public:
 
-    XMLVersionListContext( XMLVersionListImport& rImport,
-                           sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+    XMLVersionListContext( XMLVersionListImport& rImport );
 
     virtual ~XMLVersionListContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext(sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 };
 
 class XMLVersionContext: public SvXMLImportContext
 {
 private:
-    XMLVersionListImport&  rLocalRef;
+    XMLVersionListImport&  GetImport() { return static_cast<XMLVersionListImport&>(SvXMLImportContext::GetImport()); }
 
     static bool         ParseISODateTimeString(
                                 const OUString& rString,
@@ -101,9 +96,7 @@ private:
 public:
 
     XMLVersionContext( XMLVersionListImport& rImport,
-                          sal_uInt16 nPrefix,
-                          const OUString& rLocalName,
-                          const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+                          const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual ~XMLVersionContext() override;
 };
