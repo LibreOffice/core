@@ -21,7 +21,6 @@
 #include <jobs/joburl.hxx>
 #include <jobs/job.hxx>
 #include <classes/converter.hxx>
-#include <general.h>
 
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -37,8 +36,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <unotools/configpaths.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace framework;

@@ -22,9 +22,7 @@
 #include <cstring>
 
 #include <jobs/joburl.hxx>
-#include <general.h>
 
-#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
 namespace framework{

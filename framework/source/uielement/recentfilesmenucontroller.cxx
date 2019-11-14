@@ -21,16 +21,13 @@
 #include <classes/fwkresid.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/file.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/ref.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <tools/urlobj.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/commandinfoprovider.hxx>
 
 using namespace css;
 using namespace com::sun::star::uno;

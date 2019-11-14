@@ -19,17 +19,8 @@
 
 #include <uielement/statusbarwrapper.hxx>
 
-#include <framework/actiontriggerhelper.hxx>
-#include <uielement/constitemcontainer.hxx>
-#include <uielement/rootitemcontainer.hxx>
 #include <uielement/statusbar.hxx>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
-#include <com/sun/star/awt/XMenuBar.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>

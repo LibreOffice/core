@@ -21,8 +21,6 @@
 
 #include <services.h>
 
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

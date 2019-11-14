@@ -20,18 +20,15 @@
 #include <sal/config.h>
 
 #include <stdio.h>
-#include <wchar.h>
 
 #include <uielement/spinfieldtoolbarcontroller.hxx>
 
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/event.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 

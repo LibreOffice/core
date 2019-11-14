@@ -20,8 +20,6 @@
 #include <jobs/configaccess.hxx>
 #include <jobs/jobdata.hxx>
 #include <classes/converter.hxx>
-#include <general.h>
-#include <services.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>

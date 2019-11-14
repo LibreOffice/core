@@ -24,14 +24,11 @@
 #include <helper/mischelper.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
-#include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/configmgr.hxx>
 

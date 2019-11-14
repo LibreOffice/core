@@ -19,22 +19,14 @@
 
 #include <framework/addonmenu.hxx>
 #include <framework/addonsoptions.hxx>
-#include <general.h>
 #include <framework/menuconfiguration.hxx>
-#include <services.h>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <tools/config.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/svapp.hxx>
-#include <svtools/menuoptions.hxx>
-#include <svl/solar.hrc>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

@@ -18,21 +18,16 @@
  */
 
 #include <helper/tagwindowasmodified.hxx>
-#include <pattern/window.hxx>
-#include <services.h>
 
 #include <com/sun/star/awt/XWindow.hpp>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <vcl/syswin.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <tools/wintypes.hxx>
 
 namespace framework{

@@ -21,18 +21,7 @@
 
 #include <services.h>
 
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <vcl/menu.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <rtl/ustrbuf.hxx>
 
 //  Defines
 

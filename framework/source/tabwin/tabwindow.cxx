@@ -21,14 +21,12 @@
 #include <properties.h>
 #include <services.h>
 
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

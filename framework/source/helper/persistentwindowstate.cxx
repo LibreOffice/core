@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <pattern/window.hxx>
 #include <helper/persistentwindowstate.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
@@ -32,7 +31,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <rtl/string.hxx>
 
 namespace framework{
 

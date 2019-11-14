@@ -25,8 +25,6 @@
 
 #include <uielement/generictoolbarcontroller.hxx>
 #include <uielement/styletoolbarcontroller.hxx>
-#include <services.h>
-#include <general.h>
 #include <properties.h>
 #include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>

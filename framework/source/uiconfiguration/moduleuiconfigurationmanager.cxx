@@ -19,7 +19,6 @@
 
 #include <accelerators/presethandler.hxx>
 #include <uiconfiguration/moduleimagemanager.hxx>
-#include <stdtypes.h>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/uielementtypenames.hxx>
@@ -31,7 +30,6 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/ModuleAcceleratorConfiguration.hpp>
-#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManager2.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
@@ -53,11 +51,8 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>

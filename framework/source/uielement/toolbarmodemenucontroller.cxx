@@ -19,13 +19,9 @@
 
 #include <uielement/toolbarmodemenucontroller.hxx>
 #include <services.h>
-#include <framework/sfxhelperfunctions.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -35,15 +31,11 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/EnumContext.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/types.hxx>
-#include <vcl/window.hxx>
-#include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
-#include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <unotools/confignode.hxx>
 
 //  Defines

@@ -20,25 +20,15 @@
 #include <uielement/buttontoolbarcontroller.hxx>
 
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <rtl/uri.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
-#include <vcl/window.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <vcl/toolbox.hxx>
-#include <svtools/miscopt.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::awt;

@@ -22,14 +22,10 @@
 #include <classes/fwkresid.hxx>
 
 #include <strings.hrc>
-#include <services.h>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/CorruptedUIConfigurationException.hpp>
-#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
