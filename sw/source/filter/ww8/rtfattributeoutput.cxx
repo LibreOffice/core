@@ -1883,7 +1883,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
             if (RtfSdrExport::isTextBox(rFrame.GetFrameFormat()))
                 break;
 
-            OSL_ENSURE(m_aRunText.getLength() == 0, "m_aRunText is not empty");
+            assert(m_aRunText.getLength() == 0 && "this will corrupt the document");
             m_rExport.m_pParentFrame = &rFrame;
 
             m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHP);
@@ -1950,11 +1950,15 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                 m_rExport.OutputFormat(rFrame.GetFrameFormat(), false, false, true);
                 m_aRunText->append('}');
                 m_rExport.m_pParentFrame = nullptr;
+                m_rExport.Strm().WriteOString(m_aRunText.makeStringAndClear());
             }
 
             if (pGrfNode)
+            {
                 m_aRunText.append(dynamic_cast<const SwFlyFrameFormat*>(&rFrame.GetFrameFormat()),
                                   pGrfNode);
+                m_rExport.Strm().WriteOString(m_aRunText.makeStringAndClear());
+            }
             break;
         case ww8::Frame::eDrawing:
         {
@@ -1972,6 +1976,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
 
                 m_aRunText->append('}');
                 m_aRunText->append('}');
+                m_rExport.Strm().WriteOString(m_aRunText.makeStringAndClear());
             }
         }
         break;
