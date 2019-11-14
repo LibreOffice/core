@@ -132,6 +132,12 @@ bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
     return true;
 }
 
+bool WeldEditView::Command(const CommandEvent& rCEvt)
+{
+    m_xEditView->Command(rCEvt);
+    return true;
+}
+
 class WeldEditAccessible;
 
 class WeldViewForwarder : public SvxViewForwarder
