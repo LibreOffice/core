@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d872c6e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-14T08:10:43Z",
+      "side": 1,
+      "message": "That should not be possible by definition of a radio-group.  It probably is not even correct to have a radio-group with none selected by default - although it is possible and I can see how that could be nice to have on forms etc. So I wouldn\u0027t want to \"lose\" that edge case.",
+      "range": {
+        "startLine": 18,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_384dfa99",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-14T08:10:43Z",
+      "side": 1,
+      "message": "that is the whole point of bug 108687 - it is an accessibility problem if skipping a radio-group occurs.",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 20,
+        "endChar": 42
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_5850f632",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-14T08:10:43Z",
+      "side": 1,
+      "message": "Ultimately yes. However, if NONE are checked, then which one should be the tabstop? I would say the first one. Since that is really hard to know which one will be the first one, if ALL of them are tabstopped, then the first one in the list will be jumped to, selected, and untabstop the rest. So I would say that each one should be initialized as tabstopped until one of them is checked.",
+      "range": {
+        "startLine": 21,
+        "startChar": 25,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f846a27c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-14T08:10:43Z",
+      "side": 1,
+      "message": "I don\u0027t recall any other application doing that.",
+      "range": {
+        "startLine": 22,
+        "startChar": 8,
+        "endLine": 22,
+        "endChar": 45
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_184a7e7f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-14T08:10:43Z",
+      "side": 1,
+      "message": "Yes. Never tab between radio buttons in the same group. The group is a single item, with a single value. It should only have one tabstop.",
+      "range": {
+        "startLine": 23,
+        "startChar": 51,
+        "endLine": 23,
+        "endChar": 61
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
