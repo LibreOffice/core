@@ -81,7 +81,7 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
             aRefStr = aAdr.Format(ScRefFlags::ADDR_ABS_3D, &rDocP, rDocP.GetAddressConvention());
         }
         else
-            aRefStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, &rDocP, rDocP.GetAddressConvention());
+            aRefStr = theCurArea.Format(rDocP, ScRefFlags::RANGE_ABS_3D, rDocP.GetAddressConvention());
 
         if ( bMultiSelection )
         {

@@ -27,6 +27,7 @@ class BulkDataHint;
 class FormulaGroupAreaListener final : public SvtListener
 {
     ScRange maRange;
+    const ScDocument& mrDocument;
     const ScColumn* mpColumn;
     SCROW mnTopCellRow;
     SCROW mnGroupLen;

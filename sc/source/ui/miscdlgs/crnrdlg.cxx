@@ -766,7 +766,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl, weld::Button&, void)
         if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == pDoc->MaxCol() )
         {
             theCurArea.aEnd.SetCol( pDoc->MaxCol() - 1 );
-            OUString aStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+            OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
             m_xEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );

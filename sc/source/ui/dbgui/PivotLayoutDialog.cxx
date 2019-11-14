@@ -210,7 +210,7 @@ void ScPivotLayoutDialog::SetupSource()
         }
         else
         {
-            OUString aSourceRangeName = aSourceRange.Format(ScRefFlags::RANGE_ABS_3D, &mrDocument, maAddressDetails);
+            OUString aSourceRangeName = aSourceRange.Format(mrDocument, ScRefFlags::RANGE_ABS_3D, maAddressDetails);
             mxSourceEdit->SetText(aSourceRangeName);
         }
     }
@@ -342,7 +342,7 @@ void ScPivotLayoutDialog::SetReference(const ScRange& rReferenceRange, ScDocumen
     if (rReferenceRange.aStart != rReferenceRange.aEnd)
         RefInputStart(mpActiveEdit);
 
-    OUString aReferenceString = rReferenceRange.Format(ScRefFlags::RANGE_ABS_3D, &rDocument, maAddressDetails);
+    OUString aReferenceString = rReferenceRange.Format(rDocument, ScRefFlags::RANGE_ABS_3D, maAddressDetails);
 
     if (mpActiveEdit == mxSourceEdit.get())
     {
