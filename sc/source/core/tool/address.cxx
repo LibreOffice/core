@@ -2123,12 +2123,12 @@ OUString ScAddress::Format(ScRefFlags nFlags, const ScDocument* pDoc,
     return r.makeStringAndClear();
 }
 
-static void lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
+static void lcl_Split_DocTab( const ScDocument& rDoc,  SCTAB nTab,
                               const ScAddress::Details& rDetails,
                               ScRefFlags nFlags,
                               OUString& rTabName, OUString& rDocName )
 {
-    pDoc->GetName(nTab, rTabName);
+    rDoc.GetName(nTab, rTabName);
     rDocName.clear();
     // External reference, same as in ScCompiler::MakeTabStr()
     if ( rTabName[0] == '\'' )
@@ -2147,7 +2147,7 @@ static void lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
         // needlessly complicated if it constructed an actual external
         // reference so we add this somewhat cheesy kludge to force the
         // addition of the document name even for non-external references
-        rDocName = getFileNameFromDoc( pDoc );
+        rDocName = getFileNameFromDoc(&rDoc);
     }
     ScCompiler::CheckTabQuotes( rTabName, rDetails.eConv);
 }
@@ -2159,7 +2159,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
     if( nFlags & ScRefFlags::TAB_3D )
     {
         OUString aTabName, aDocName;
-        lcl_Split_DocTab( pDoc, rRange.aStart.Tab(), rDetails, nFlags, aTabName, aDocName );
+        lcl_Split_DocTab( *pDoc, rRange.aStart.Tab(), rDetails, nFlags, aTabName, aDocName );
         switch (rDetails.eConv)
         {
             case formula::FormulaGrammar::CONV_XL_OOX:
@@ -2186,7 +2186,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
         }
         if( nFlags & ScRefFlags::TAB2_3D )
         {
-            lcl_Split_DocTab( pDoc, rRange.aEnd.Tab(), rDetails, nFlags, aTabName, aDocName );
+            lcl_Split_DocTab( *pDoc, rRange.aEnd.Tab(), rDetails, nFlags, aTabName, aDocName );
             rString.append(":");
             rString.append(aTabName);
         }
