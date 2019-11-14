@@ -128,10 +128,10 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     : ScAnyRefDlgController(pB, pCW, pParent,
         "modules/scalc/ui/definedatabaserangedialog.ui", "DefineDatabaseRangeDialog")
     , pViewData(ptrViewData)
-    , pDoc(ptrViewData->GetDocument())
+    , rDoc(*ptrViewData->GetDocument())
     , bRefInputMode(false)
-    , aAddrDetails(pDoc->GetAddressConvention(), 0, 0)
-    , aLocalDbCol(*(pDoc->GetDBCollection()))
+    , aAddrDetails(rDoc.GetAddressConvention(), 0, 0)
+    , aLocalDbCol(*(rDoc.GetDBCollection()))
     , m_xEdName(m_xBuilder->weld_entry_tree_view("entrygrid", "entry", "entry-list"))
     , m_xAssignFrame(m_xBuilder->weld_frame("RangeFrame"))
     , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry("assign")))
@@ -191,7 +191,7 @@ void ScDbNameDlg::Init()
 
     OUString  theAreaStr;
 
-    if ( pViewData && pDoc )
+    if ( pViewData )
     {
         SCCOL   nStartCol   = 0;
         SCROW   nStartRow   = 0;
@@ -200,7 +200,7 @@ void ScDbNameDlg::Init()
         SCROW   nEndRow     = 0;
         SCTAB   nEndTab     = 0;
 
-        ScDBCollection* pDBColl = pDoc->GetDBCollection();
+        ScDBCollection* pDBColl = rDoc.GetDBCollection();
         ScDBData*       pDBData = nullptr;
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
@@ -208,7 +208,7 @@ void ScDbNameDlg::Init()
 
         theCurArea = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
 
-        theAreaStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, aAddrDetails);
+        theAreaStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, aAddrDetails);
 
         if ( pDBColl )
         {
@@ -351,7 +351,7 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
         pData->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
         theCurArea = ScRange( ScAddress( nColStart, nRowStart, nTab ),
                               ScAddress( nColEnd,   nRowEnd,   nTab ) );
-        OUString theArea(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, aAddrDetails));
+        OUString theArea(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, aAddrDetails));
         m_xEdAssign->SetText( theArea );
         m_xBtnAdd->set_label( aStrModify );
         m_xBtnHeader->set_active( pData->HasHeader() );
@@ -403,12 +403,12 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, weld::Button&, void)
 
     if ( !aNewName.isEmpty() && !aNewArea.isEmpty() )
     {
-        if ( ScRangeData::IsNameValid( aNewName, pDoc ) == ScRangeData::NAME_VALID && aNewName != STR_DB_LOCAL_NONAME )
+        if ( ScRangeData::IsNameValid( aNewName, &rDoc ) == ScRangeData::NAME_VALID && aNewName != STR_DB_LOCAL_NONAME )
         {
             //  because editing can be done now, parsing is needed first
             ScRange aTmpRange;
             OUString aText = m_xEdAssign->GetText();
-            if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & ScRefFlags::VALID )
+            if ( aTmpRange.ParseAny( aText, &rDoc, aAddrDetails ) & ScRefFlags::VALID )
             {
                 theCurArea = aTmpRange;
                 ScAddress aStart = theCurArea.aStart;
@@ -611,7 +611,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl, formula::RefEdit&, void)
 
     ScRange aTmpRange;
     OUString aText = m_xEdAssign->GetText();
-    if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & ScRefFlags::VALID )
+    if ( aTmpRange.ParseAny( aText, &rDoc, aAddrDetails ) & ScRefFlags::VALID )
         theCurArea = aTmpRange;
 
     if (!aText.isEmpty() && !m_xEdName->get_active_text().isEmpty())

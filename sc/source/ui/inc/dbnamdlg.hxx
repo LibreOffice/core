@@ -51,7 +51,7 @@ private:
     OUString        aStrOperations;
 
     ScViewData*     pViewData;
-    ScDocument* const     pDoc;
+    const ScDocument& rDoc;
     bool            bRefInputMode;
     ScAddress::Details const aAddrDetails;
 
