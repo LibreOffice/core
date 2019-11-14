@@ -20,11 +20,9 @@
 #include <uifactory/factoryconfiguration.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>

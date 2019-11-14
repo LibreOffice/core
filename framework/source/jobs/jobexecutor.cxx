@@ -18,21 +18,16 @@
  */
 
 #include <jobs/job.hxx>
-#include <jobs/joburl.hxx>
 #include <jobs/configaccess.hxx>
 #include <classes/converter.hxx>
-#include <general.h>
-#include <stdtypes.h>
 
 #include <helper/mischelper.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 
@@ -42,7 +37,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 

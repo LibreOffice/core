@@ -18,12 +18,9 @@
  */
 
 #include <helper/uielementwrapperbase.hxx>
-#include <general.h>
-#include <properties.h>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>

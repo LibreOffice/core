@@ -19,17 +19,14 @@
 
 // include own header
 #include <jobs/helponstartup.hxx>
-#include <loadenv/targethelper.hxx>
 #include <services.h>
 #include <targets.h>
 
 // include others
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-#include <rtl/ustrbuf.hxx>
 
 // include interfaces
 #include <com/sun/star/frame/FrameSearchFlag.hpp>

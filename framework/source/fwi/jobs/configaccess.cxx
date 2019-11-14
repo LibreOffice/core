@@ -18,19 +18,12 @@
  */
 
 #include <jobs/configaccess.hxx>
-#include <general.h>
 #include <services.h>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
-#include <unotools/configpaths.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace framework{

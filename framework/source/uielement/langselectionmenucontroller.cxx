@@ -21,22 +21,13 @@
 
 #include <services.h>
 
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <vcl/mnemonic.hxx>
 
-#include <com/sun/star/document/XDocumentLanguages.hpp>
-
-#include <i18nlangtag/mslangid.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
 #include <classes/fwkresid.hxx>

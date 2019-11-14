@@ -19,10 +19,6 @@
 
 #include <uielement/FixedTextToolbarController.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/svapp.hxx>

@@ -23,7 +23,6 @@
 
 #include <dispatch/dispatchprovider.hxx>
 #include <dispatch/interceptionhelper.hxx>
-#include <dispatch/closedispatcher.hxx>
 #include <dispatch/windowcommanddispatch.hxx>
 #include <loadenv/loadenv.hxx>
 #include <helper/oframes.hxx>
@@ -35,7 +34,6 @@
 #include <helper/dockingareadefaultacceptor.hxx>
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <classes/framecontainer.hxx>
-#include <general.h>
 
 #include <pattern/window.hxx>
 #include <properties.h>
@@ -70,24 +68,17 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/menu.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <vcl/threadex.hxx>
 

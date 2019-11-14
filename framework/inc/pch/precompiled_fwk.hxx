@@ -298,7 +298,6 @@
 #include <framework/addonsoptions.hxx>
 #include <framework/fwedllapi.h>
 #include <fwidllapi.h>
-#include <general.h>
 #include <properties.h>
 #include <services.h>
 #include <stdtypes.h>

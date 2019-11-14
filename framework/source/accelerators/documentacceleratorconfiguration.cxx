@@ -20,20 +20,12 @@
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
 
-#include <xml/acceleratorconfigurationreader.hxx>
-#include <xml/acceleratorconfigurationwriter.hxx>
-#include <xml/saxnamespacefilter.hxx>
-
-#include <acceleratorconst.h>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace framework;

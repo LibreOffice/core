@@ -22,16 +22,13 @@
 #include <framework/titlehelper.hxx>
 #include <classes/fwkresid.hxx>
 #include <strings.hrc>
-#include <services.h>
 #include <properties.h>
 
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
-#include <com/sun/star/beans/XMaterialHolder.hpp>
 
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>

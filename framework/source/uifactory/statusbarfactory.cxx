@@ -21,8 +21,6 @@
 #include <uielement/statusbarwrapper.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

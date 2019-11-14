@@ -18,21 +18,11 @@
  */
 
 #include <uiconfiguration/imagemanager.hxx>
-#include <xml/imagesconfiguration.hxx>
-#include <uiconfiguration/graphicnameaccess.hxx>
 #include "imagemanagerimpl.hxx"
 
-#include <properties.h>
-
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/io/XStream.hpp>
 
 #include <vcl/svapp.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;

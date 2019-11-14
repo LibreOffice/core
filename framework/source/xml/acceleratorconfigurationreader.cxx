@@ -23,16 +23,10 @@
 #include <accelerators/keymapping.hxx>
 #include <xml/acceleratorconfigurationreader.hxx>
 
-#include <acceleratorconst.h>
-
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/container/ElementExistException.hpp>
 
-#include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 
 namespace framework{

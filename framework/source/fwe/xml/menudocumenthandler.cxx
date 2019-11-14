@@ -23,7 +23,6 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <xml/menudocumenthandler.hxx>
-#include <framework/menuconfiguration.hxx>
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>

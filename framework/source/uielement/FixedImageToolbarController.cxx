@@ -19,16 +19,11 @@
 
 #include <uielement/FixedImageToolbarController.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
-#include <framework/sfxhelperfunctions.hxx>
 #include <framework/addonsoptions.hxx>
 
 using namespace ::com::sun::star;

@@ -24,9 +24,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/embed/XPackageStructureCreator.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
@@ -37,7 +34,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <vcl/svapp.hxx>
 
 #include <unordered_map>
 

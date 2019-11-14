@@ -21,14 +21,11 @@
 #include <tabwin/tabwinfactory.hxx>
 #include <tabwin/tabwindow.hxx>
 
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 
 #include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
 
 //  Defines
 

@@ -19,8 +19,6 @@
 
 #include <jobs/job.hxx>
 #include <jobs/jobresult.hxx>
-#include <general.h>
-#include <services.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
@@ -32,7 +30,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <comphelper/sequence.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>

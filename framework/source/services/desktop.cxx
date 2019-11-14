@@ -20,7 +20,6 @@
 #include <services/desktop.hxx>
 
 #include <loadenv/loadenv.hxx>
-#include <loadenv/targethelper.hxx>
 
 #include <helper/ocomponentaccess.hxx>
 #include <helper/oframes.hxx>
@@ -29,7 +28,6 @@
 #include <dispatch/interceptionhelper.hxx>
 #include <classes/taskcreator.hxx>
 #include <threadhelp/transactionguard.hxx>
-#include <general.h>
 #include <properties.h>
 #include <targets.h>
 
@@ -39,25 +37,14 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/awt/WindowDescriptor.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
-#include <com/sun/star/ucb/InteractiveIOException.hpp>
-#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XTerminateListener2.hpp>
 
 #include <comphelper/numberedcollection.hxx>
@@ -69,9 +56,7 @@
 #include <desktop/crashreport.hxx>
 #include <vcl/scheduler.hxx>
 #include <sal/log.hxx>
-#include <rtl/ustrbuf.hxx>
-
-#include <vcl/errinf.hxx>
+#include <vcl/errcode.hxx>
 #include <unotools/configmgr.hxx>
 
 namespace framework{

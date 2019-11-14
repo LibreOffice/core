@@ -21,23 +21,10 @@
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <sal/log.hxx>
 
-#include <services.h>
-
-#include <com/sun/star/container/NoSuchElementException.hpp>
-
-#include <com/sun/star/container/XNameAccess.hpp>
-
-#include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
-#include <com/sun/star/embed/XPackageStructureCreator.hpp>
-
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-
-#include <com/sun/star/io/XSeekable.hpp>
 #include <rtl/ustrbuf.hxx>
 
 #include <algorithm>

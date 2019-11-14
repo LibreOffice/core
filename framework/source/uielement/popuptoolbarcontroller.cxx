@@ -23,7 +23,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <framework/menuconfiguration.hxx>
-#include <rtl/ref.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -36,7 +35,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <sal/log.hxx>
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>

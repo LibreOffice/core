@@ -21,19 +21,15 @@
 
 #include <services.h>
 
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/menu.hxx>
-#include <tools/mapunit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/print.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/ctrltool.hxx>

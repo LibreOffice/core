@@ -21,9 +21,6 @@
 #include <services.h>
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
-#include <vcl/status.hxx>
-#include <toolkit/helper/convert.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/PopupMenu.hpp>
@@ -32,26 +29,19 @@
 #include <svtools/statusbarcontroller.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/ui/XStatusbarItem.hpp>
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <tools/gen.hxx>
 #include <com/sun/star/awt/Command.hpp>
 #include <svl/languageoptions.hxx>
 
 #include <helper/mischelper.hxx>
 
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ref.hxx>
-
-#include <stdtypes.h>
 
 #include <map>
 #include <set>

@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-#include <stdio.h>
-
 #include <xml/imagesdocumenthandler.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <vcl/svapp.hxx>
-#include <vcl/toolbox.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <comphelper/attributelist.hxx>

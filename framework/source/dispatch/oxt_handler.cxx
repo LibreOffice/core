@@ -18,15 +18,11 @@
  */
 
 #include <dispatch/oxt_handler.hxx>
-#include <threadhelp/transactionguard.hxx>
 #include <services.h>
 #include <unotools/mediadescriptor.hxx>
 
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
-
-#include <rtl/ustrbuf.hxx>
 
 namespace framework{
 

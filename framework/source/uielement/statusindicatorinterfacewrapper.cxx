@@ -20,8 +20,6 @@
 #include <uielement/statusindicatorinterfacewrapper.hxx>
 #include <uielement/progressbarwrapper.hxx>
 
-#include <vcl/svapp.hxx>
-
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

@@ -21,8 +21,6 @@
 #include <framework/ContextChangeEventMultiplexerTunnel.hxx>
 #include <helper/mischelper.hxx>
 
-#include <tools/diagnose_ex.h>
-
 static pfunc_setToolBoxControllerCreator   pToolBoxControllerCreator   = nullptr;
 static pfunc_setStatusBarControllerCreator pStatusBarControllerCreator = nullptr;
 static pfunc_getRefreshToolbars            pRefreshToolbars            = nullptr;

@@ -19,7 +19,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <uielement/toolbarwrapper.hxx>
 #include <uifactory/menubarfactory.hxx>
 
