@@ -123,7 +123,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
             pTabViewShell->DoneRefMode();
             pTabViewShell->ClearHighlightRanges();
 
-            if( ParseWithNames( aRangeList, rStr, pDoc ) )
+            if( ParseWithNames( aRangeList, rStr, *pDoc ) )
             {
                 for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
                 {
@@ -136,14 +136,14 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
     }
 }
 
-bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument* pDoc )
+bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument& rDoc )
 {
     rRanges.RemoveAll();
 
     if (rStr.isEmpty())
         return true;
 
-    ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
+    ScAddress::Details aDetails(rDoc.GetAddressConvention(), 0, 0);
 
     bool bError = false;
     sal_Int32 nIdx {0};
@@ -152,7 +152,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
         ScRange aRange;
         OUString aRangeStr( rStr.getToken( 0, ';', nIdx ) );
 
-        ScRefFlags nFlags = aRange.ParseAny( aRangeStr, pDoc, aDetails );
+        ScRefFlags nFlags = aRange.ParseAny( aRangeStr, &rDoc, aDetails );
         if ( nFlags & ScRefFlags::VALID )
         {
             if ( (nFlags & ScRefFlags::TAB_3D) == ScRefFlags::ZERO )
@@ -161,7 +161,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
                 aRange.aEnd.SetTab( aRange.aStart.Tab() );
             rRanges.push_back( aRange );
         }
-        else if ( ScRangeUtil::MakeRangeFromName( aRangeStr, pDoc, m_nRefTab, aRange, RUTL_NAMES, aDetails ) )
+        else if ( ScRangeUtil::MakeRangeFromName( aRangeStr, &rDoc, m_nRefTab, aRange, RUTL_NAMES, aDetails ) )
             rRanges.push_back( aRange );
         else
             bError = true;
@@ -294,7 +294,7 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit )
             const ScViewData& rViewData = pViewShell->GetViewData();
             ScDocument* pDoc = rViewData.GetDocument();
             ScRangeList aRangeList;
-            if( ParseWithNames( aRangeList, m_pRefEdit->GetText(), pDoc ) )
+            if( ParseWithNames( aRangeList, m_pRefEdit->GetText(), *pDoc ) )
             {
                 if ( !aRangeList.empty() )
                 {
@@ -729,9 +729,9 @@ void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
     m_aHelper.ToggleCollapsed( pEdit, pButton );
 }
 
-bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument* pDoc )
+bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument& rDoc )
 {
-    return m_aHelper.ParseWithNames( rRanges, rStr, pDoc );
+    return m_aHelper.ParseWithNames( rRanges, rStr, rDoc );
 }
 
 void ScRefHandler::HideReference( bool bDoneRefMode )

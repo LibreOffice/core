@@ -334,7 +334,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseButtonFocusHandler, formula::
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, InputRangeModified, formula::RefEdit&, void)
 {
     ScRangeList aRangeList;
-    bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), &mrDoc);
+    bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), mrDoc);
     const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
     if (pRange)
     {
