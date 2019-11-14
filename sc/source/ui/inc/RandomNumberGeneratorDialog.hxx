@@ -33,7 +33,7 @@ public:
 private:
     // Data
     ScViewData* const          mpViewData;
-    ScDocument* const          mpDoc;
+    const ScDocument&          mrDoc;
 
     ScRange             maInputRange;
 
