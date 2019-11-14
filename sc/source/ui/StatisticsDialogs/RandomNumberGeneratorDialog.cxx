@@ -49,7 +49,7 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
                           "modules/scalc/ui/randomnumbergenerator.ui",
                           "RandomNumberGeneratorDialog")
     , mpViewData(pViewData)
-    , mpDoc(pViewData->GetDocument())
+    , mrDoc(*pViewData->GetDocument())
     , mbDialogLostFocus(false)
     , mxInputRangeText(m_xBuilder->weld_label("cell-range-label"))
     , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("cell-range-edit")))
@@ -106,7 +106,7 @@ void ScRandomNumberGeneratorDialog::Init()
 void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
 {
     mpViewData->GetSimpleArea(maInputRange);
-    OUString aCurrentString(maInputRange.Format(ScRefFlags::RANGE_ABS_3D, mpDoc, mpDoc->GetAddressConvention()));
+    OUString aCurrentString(maInputRange.Format(ScRefFlags::RANGE_ABS_3D, &mrDoc, mrDoc.GetAddressConvention()));
     mxInputRangeEdit->SetText( aCurrentString );
 }
 
@@ -334,7 +334,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseButtonFocusHandler, formula::
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, InputRangeModified, formula::RefEdit&, void)
 {
     ScRangeList aRangeList;
-    bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), mpDoc);
+    bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), &mrDoc);
     const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
     if (pRange)
     {
