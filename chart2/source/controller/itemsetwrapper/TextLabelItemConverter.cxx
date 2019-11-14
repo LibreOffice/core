@@ -151,6 +151,7 @@ bool useSourceFormatFromItemToPropertySet(
     uno::Any aNewValue;
     bool bUseSourceFormat = static_cast<const SfxBoolItem&>(
             rItemSet.Get(nWhichId)).GetValue();
+    xPropertySet->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(bUseSourceFormat));
     if (!bUseSourceFormat)
     {
         SfxItemState aState = rItemSet.GetItemState(nFormatWhich);
