@@ -59,9 +59,9 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
     , mxGroupByColumnsRadio(m_xBuilder->weld_radio_button("groupedby-columns-radio"))
     , mxGroupByRowsRadio(m_xBuilder->weld_radio_button("groupedby-rows-radio"))
     , mViewData(pViewData)
-    , mDocument(pViewData->GetDocument())
+    , mDocument(*pViewData->GetDocument())
     , mInputRange(ScAddress::INITIALIZE_INVALID)
-    , mAddressDetails(mDocument->GetAddressConvention(), 0, 0)
+    , mAddressDetails(mDocument.GetAddressConvention(), 0, 0)
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)
     , mGroupedBy(BY_COLUMN)
     , mxButtonOk(m_xBuilder->weld_button("ok"))
@@ -118,7 +118,7 @@ void ScStatisticsInputOutputDialog::Init()
 void ScStatisticsInputOutputDialog::GetRangeFromSelection()
 {
     mViewData->GetSimpleArea(mInputRange);
-    OUString aCurrentString(mInputRange.Format(ScRefFlags::RANGE_ABS_3D, mDocument, mAddressDetails));
+    OUString aCurrentString(mInputRange.Format(ScRefFlags::RANGE_ABS_3D, &mDocument, mAddressDetails));
     mxInputRangeEdit->SetText(aCurrentString);
 }
 
@@ -226,7 +226,7 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, formula::
         if (mpActiveEdit == mxInputRangeEdit.get())
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), &mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
@@ -242,7 +242,7 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, formula::
         else if (mpActiveEdit == mxOutputRangeEdit.get())
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxOutputRangeEdit->GetText(), mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxOutputRangeEdit->GetText(), &mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
@@ -254,7 +254,7 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, formula::
                     ScRefFlags nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ?
                                                                      ScRefFlags::ADDR_ABS :
                                                                      ScRefFlags::ADDR_ABS_3D;
-                    OUString aReferenceString = mOutputAddress.Format(nFormat, mDocument, mDocument->GetAddressConvention());
+                    OUString aReferenceString = mOutputAddress.Format(nFormat, &mDocument, mDocument.GetAddressConvention());
                     mxOutputRangeEdit->SetRefString( aReferenceString );
                 }
 

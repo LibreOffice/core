@@ -39,9 +39,9 @@ const char* ScChiSquareTestDialog::GetUndoNameId()
 
 ScRange ScChiSquareTestDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, &mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument);
+    FormulaTemplate aTemplate(&mDocument);
 
     aTemplate.autoReplaceRange("%RANGE%", mInputRange);
 
