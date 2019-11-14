@@ -56,6 +56,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Select a different icon set from Tools > Options > %PRODUCTNAME > View > User Interface > Icon style."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can display a number as a fraction (0.125 = 1/8): Format > Cells, Number > Fraction."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To remove a hyperlink but keep its text, right click on the hyperlink, and use 'Remove Hyperlink'."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "To remove several hyperlinks at once, select the text with the hyperlinks, then right click and use ‟Remove Hyperlink”"), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To quickly zoom in the selection, press / (divide key) on the number pad. Press * to restore entire page in screen."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Click a column field (row) PivotTable and press F12 to group data. Choices adapt to content: Date (month, quarter, year), number (classes)"), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can restarts the slide show after a pause specified at Slide Show > Slide Show Settings > Loop and repeat."), "", "tipoftheday_i.png"},
