@@ -242,7 +242,10 @@ void Qt5Widget::moveEvent(QMoveEvent* event)
 void Qt5Widget::showEvent(QShowEvent*)
 {
     QSize aSize(m_rFrame.GetQWidget()->size());
-    SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
+    // forcing an immediate update somehow interferes with the hide + show
+    // sequence from Qt5Frame::SetModal, if the frame was already set visible,
+    // resulting in a hidden / unmapped window
+    SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height());
     m_rFrame.CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
