@@ -813,7 +813,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
     // "changing cells" can be several ranges
     ScRangeList aVarRanges;
-    if ( !ParseWithNames( aVarRanges, m_xEdVariableCells->GetText(), &mrDoc ) )
+    if ( !ParseWithNames( aVarRanges, m_xEdVariableCells->GetText(), mrDoc ) )
     {
         ShowError( false, m_xEdVariableCells.get() );
         return false;

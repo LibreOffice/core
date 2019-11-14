@@ -497,7 +497,7 @@ IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, formula::RefEdit&, void
         if ( mpActiveEdit == mxInputRangeEdit.get() )
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), &mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
@@ -515,7 +515,7 @@ IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, formula::RefEdit&, void
         else if ( mpActiveEdit == mxOutputRangeEdit.get() )
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxOutputRangeEdit->GetText(), &mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxOutputRangeEdit->GetText(), mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {

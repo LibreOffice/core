@@ -252,7 +252,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::
         if (mpActiveEdit == mxVariable1RangeEdit.get())
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxVariable1RangeEdit->GetText(), &mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxVariable1RangeEdit->GetText(), mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
@@ -268,7 +268,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::
         else if ( mpActiveEdit == mxVariable2RangeEdit.get() )
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxVariable2RangeEdit->GetText(), &mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxVariable2RangeEdit->GetText(), mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
@@ -284,7 +284,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::
         else if ( mpActiveEdit == mxOutputRangeEdit.get() )
         {
             ScRangeList aRangeList;
-            bool bValid = ParseWithNames( aRangeList, mxOutputRangeEdit->GetText(), &mDocument);
+            bool bValid = ParseWithNames( aRangeList, mxOutputRangeEdit->GetText(), mDocument);
             const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
