@@ -3572,10 +3572,6 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                     pUIWindow->execute(sClickAction, aMap);
             }
         } catch(...) {}
-
-        // force resend
-        pWindow->Hide();
-        pWindow->Show();
     }
 }
 
