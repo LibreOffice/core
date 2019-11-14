@@ -101,7 +101,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
 
                         if ( caretPos != -1 )
                         {
-                            atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, TRUE );
+                            atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, true );
                             g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
                         }
                     }

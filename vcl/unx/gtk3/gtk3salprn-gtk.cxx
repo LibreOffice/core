@@ -697,8 +697,8 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
     // sw/source/core/view/printdata.cxx)
     if (m_xWrapper->supportsPrintSelection() && !i_rDisabled[2])
     {
-        m_xWrapper->print_unix_dialog_set_support_selection(pDialog, TRUE);
-        m_xWrapper->print_unix_dialog_set_has_selection(pDialog, TRUE);
+        m_xWrapper->print_unix_dialog_set_support_selection(pDialog, true);
+        m_xWrapper->print_unix_dialog_set_has_selection(pDialog, true);
     }
 
     beans::PropertyValue* const pPrintContent(

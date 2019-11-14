@@ -161,7 +161,7 @@ static bool gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCairo)
         cairo_stroke(pCairo);
     }
 
-    return FALSE;
+    return false;
 }
 
 static gboolean

@@ -155,23 +155,23 @@ static void addMoreUnoParam(GtkWidget* /*pWidget*/, gpointer userdata)
     GtkWidget* pUnoParamAreaBox = GTK_WIDGET(userdata);
 
     GtkWidget* pParamContainer = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_pack_start(GTK_BOX(pUnoParamAreaBox), pParamContainer, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pUnoParamAreaBox), pParamContainer, true, true, 2);
 
     GtkWidget* pTypeEntry = gtk_entry_new();
-    gtk_box_pack_start(GTK_BOX(pParamContainer), pTypeEntry, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pParamContainer), pTypeEntry, true, true, 2);
     gtk_entry_set_placeholder_text(GTK_ENTRY(pTypeEntry), "Param type (Eg. boolean, string etc.)");
 
     GtkWidget* pNameEntry = gtk_entry_new();
-    gtk_box_pack_start(GTK_BOX(pParamContainer), pNameEntry, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pParamContainer), pNameEntry, true, true, 2);
     gtk_entry_set_placeholder_text(GTK_ENTRY(pNameEntry), "Param name");
 
     GtkWidget* pValueEntry = gtk_entry_new();
-    gtk_box_pack_start(GTK_BOX(pParamContainer), pValueEntry, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pParamContainer), pValueEntry, true, true, 2);
     gtk_entry_set_placeholder_text(GTK_ENTRY(pValueEntry), "Param value");
 
     GtkWidget* pRemoveButton = gtk_button_new_from_icon_name("list-remove-symbolic", GTK_ICON_SIZE_BUTTON);
     g_signal_connect(pRemoveButton, "clicked", G_CALLBACK(removeUnoParam), pUnoParamAreaBox);
-    gtk_box_pack_start(GTK_BOX(pParamContainer), pRemoveButton, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pParamContainer), pRemoveButton, true, true, 2);
 
     gtk_widget_show_all(pUnoParamAreaBox);
 }
@@ -238,19 +238,19 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
     g_object_set(G_OBJECT(pUnoCmdDialog), "resizable", FALSE, nullptr);
     GtkWidget* pDialogMessageArea = gtk_dialog_get_content_area (GTK_DIALOG (pUnoCmdDialog));
     GtkWidget* pUnoCmdAreaBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pUnoCmdAreaBox, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pUnoCmdAreaBox, true, true, 2);
 
     GtkWidget* pUnoCmdLabel = gtk_label_new("Enter UNO command");
-    gtk_box_pack_start(GTK_BOX(pUnoCmdAreaBox), pUnoCmdLabel, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pUnoCmdAreaBox), pUnoCmdLabel, true, true, 2);
 
     GtkWidget* pUnoCmdEntry = gtk_entry_new ();
-    gtk_box_pack_start(GTK_BOX(pUnoCmdAreaBox), pUnoCmdEntry, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pUnoCmdAreaBox), pUnoCmdEntry, true, true, 2);
     gtk_entry_set_placeholder_text(GTK_ENTRY(pUnoCmdEntry), "UNO command (Eg. Bold, Italic etc.)");
     GtkWidget* pUnoParamAreaBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pUnoParamAreaBox, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pUnoParamAreaBox, true, true, 2);
 
     GtkWidget* pAddMoreButton = gtk_button_new_with_label("Add UNO parameter");
-    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pAddMoreButton, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pAddMoreButton, true, true, 2);
     g_signal_connect(G_OBJECT(pAddMoreButton), "clicked", G_CALLBACK(addMoreUnoParam), pUnoParamAreaBox);
 
     gtk_widget_show_all(pUnoCmdDialog);
@@ -425,7 +425,7 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
         gtk_tree_view_append_column(GTK_TREE_VIEW(pTreeView), pColumn);
     }
     gtk_container_add(GTK_CONTAINER(pScrolledWindow), pTreeView);
-    gtk_box_pack_start(GTK_BOX(pContentArea), pScrolledWindow, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pContentArea), pScrolledWindow, true, true, 2);
 
     // Show the dialog.
     gtk_widget_show_all(pDialog);
@@ -532,7 +532,7 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
         gtk_tree_view_append_column(GTK_TREE_VIEW(pTreeView), pColumn);
     }
     gtk_container_add(GTK_CONTAINER(pScrolledWindow), pTreeView);
-    gtk_box_pack_start(GTK_BOX(pContentArea), pScrolledWindow, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(pContentArea), pScrolledWindow, true, true, 2);
 
     // Show the dialog.
     gtk_widget_show_all(pDialog);
@@ -616,13 +616,13 @@ gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData
         {
             // Search forward.
             signalSearchNext(pWidget, nullptr);
-            return TRUE;
+            return true;
         }
         case GDK_KEY_Escape:
         {
             // Hide the findbar.
             gtk_widget_hide(GTK_WIDGET(window->findtoolbar));
-            return TRUE;
+            return true;
         }
     }
     return FALSE;
@@ -738,14 +738,14 @@ gboolean signalAddressbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pD
 
             lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), ".uno:GoToCell", aArguments.c_str(), false);
             gtk_widget_grab_focus(window->lokdocview);
-            return TRUE;
+            return true;
         }
         case GDK_KEY_Escape:
         {
             std::string aArguments;
             lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), ".uno:Cancel", aArguments.c_str(), false);
             gtk_widget_grab_focus(window->lokdocview);
-            return TRUE;
+            return true;
         }
     }
     return FALSE;
@@ -756,7 +756,7 @@ gboolean signalFormulabar(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/, gpoin
 {
     // for now it just displays the callback
     // TODO - submit the edited formula
-    return TRUE;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

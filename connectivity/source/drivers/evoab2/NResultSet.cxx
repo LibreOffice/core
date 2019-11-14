@@ -415,7 +415,7 @@ public:
 
         ESource *pSource = e_source_registry_ref_source(get_e_source_registry(), id);
         EBookClient *pBook = pSource ? createClient (pSource) : nullptr;
-        if (pBook && !e_client_open_sync (pBook, TRUE, nullptr, nullptr))
+        if (pBook && !e_client_open_sync (pBook, true, nullptr, nullptr))
         {
             g_object_unref (G_OBJECT (pBook));
             pBook = nullptr;
@@ -541,7 +541,7 @@ public:
     {
         ESource *pSource = findSource (abname);
         EBook *pBook = pSource ? e_book_new (pSource, nullptr) : nullptr;
-        if (pBook && !e_book_open (pBook, TRUE, nullptr))
+        if (pBook && !e_book_open (pBook, true, nullptr))
         {
             g_object_unref (G_OBJECT (pBook));
             pBook = nullptr;

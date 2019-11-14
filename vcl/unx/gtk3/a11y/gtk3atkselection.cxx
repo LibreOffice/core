@@ -53,7 +53,7 @@ selection_add_selection( AtkSelection *selection,
         if( pSelection.is() )
         {
             pSelection->selectAccessibleChild( i );
-            return TRUE;
+            return true;
         }
     }
     catch(const uno::Exception&) {
@@ -72,7 +72,7 @@ selection_clear_selection( AtkSelection *selection )
         if( pSelection.is() )
         {
             pSelection->clearAccessibleSelection();
-            return TRUE;
+            return true;
         }
     }
     catch(const uno::Exception&) {
@@ -142,7 +142,7 @@ selection_remove_selection( AtkSelection *selection,
         if( pSelection.is() )
         {
             pSelection->deselectAccessibleChild( i );
-            return TRUE;
+            return true;
         }
     }
     catch(const uno::Exception&) {
@@ -161,7 +161,7 @@ selection_select_all_selection( AtkSelection   *selection)
         if( pSelection.is() )
         {
             pSelection->selectAllAccessibleChildren();
-            return TRUE;
+            return true;
         }
     }
     catch(const uno::Exception&) {

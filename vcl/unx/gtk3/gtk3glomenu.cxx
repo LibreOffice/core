@@ -58,26 +58,26 @@ valid_attribute_name (const gchar *name)
     gint i;
 
     if (!g_ascii_islower (name[0]))
-        return FALSE;
+        return false;
 
     for (i = 1; name[i]; i++)
     {
         if (name[i] != '-' &&
                 !g_ascii_islower (name[i]) &&
                 !g_ascii_isdigit (name[i]))
-            return FALSE;
+            return false;
 
         if (name[i] == '-' && name[i + 1] == '-')
-            return FALSE;
+            return false;
     }
 
     if (name[i - 1] == '-')
-        return FALSE;
+        return false;
 
     if (i > 1024)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -88,7 +88,7 @@ static gboolean
 g_lo_menu_is_mutable (GMenuModel*)
 {
     // Menu is always mutable.
-    return TRUE;
+    return true;
 }
 
 static gint

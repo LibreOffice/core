@@ -1014,7 +1014,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
          rCTLFont.SetFillColor( rColor );
     }
     else
-        bTransparent = TRUE;
+        bTransparent = true;
 
     rFont.SetTransparent( bTransparent );
     rCJKFont.SetTransparent( bTransparent );

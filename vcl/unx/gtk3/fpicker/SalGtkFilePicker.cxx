@@ -182,7 +182,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         g_object_unref (pListStores[i]); // owned by the widget.
         GtkCellRenderer *pCell = gtk_cell_renderer_text_new ();
         gtk_cell_layout_pack_start(
-                GTK_CELL_LAYOUT(m_pLists[i]), pCell, TRUE);
+                GTK_CELL_LAYOUT(m_pLists[i]), pCell, true);
         gtk_cell_layout_set_attributes(
             GTK_CELL_LAYOUT (m_pLists[i]), pCell, "text", 0, nullptr);
 
