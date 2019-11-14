@@ -56,7 +56,7 @@ protected:
 
     // Data
     ScViewData* const         mViewData;
-    ScDocument* const         mDocument;
+    ScDocument&               mDocument;
 
     ScRange                   mInputRange;
     ScAddress::Details const  mAddressDetails;

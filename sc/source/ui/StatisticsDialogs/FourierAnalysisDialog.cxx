@@ -63,10 +63,10 @@ const char* ScFourierAnalysisDialog::GetUndoNameId() { return STR_FOURIER_ANALYS
 ScRange ScFourierAnalysisDialog::ApplyOutput(ScDocShell* pDocShell)
 {
     getOptions();
-    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, &mDocument,
                                 formula::FormulaGrammar::mergeToGrammar(
                                     formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument);
+    FormulaTemplate aTemplate(&mDocument);
     aTemplate.autoReplaceUses3D(mbUse3DAddresses);
 
     aOutput.writeBoldString(mbInverse ? ScResId(STR_INVERSE_FOURIER_TRANSFORM)
@@ -204,14 +204,14 @@ void ScFourierAnalysisDialog::getDataLabel(OUString& rLabel)
         rLabel = "="
                  + maLabelAddr.Format(mbUse3DAddresses ? ScRefFlags::ADDR_ABS_3D
                                                        : ScRefFlags::ADDR_ABS,
-                                      mDocument, mAddressDetails);
+                                      &mDocument, mAddressDetails);
 
         return;
     }
 
     OUString aDataSrc(
         mInputRange.Format(mbUse3DAddresses ? ScRefFlags::RANGE_ABS_3D : ScRefFlags::RANGE_ABS,
-                           mDocument, mAddressDetails));
+                           &mDocument, mAddressDetails));
 
     rLabel = ScResId(STR_INPUT_DATA_RANGE) + " : " + aDataSrc;
     return;
