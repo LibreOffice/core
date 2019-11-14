@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_0e0d5436",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-14T14:00:00Z",
+      "side": 1,
+      "message": "lower-case here?",
+      "range": {
+        "startLine": 59,
+        "startChar": 115,
+        "endLine": 59,
+        "endChar": 116
+      },
+      "revId": "1ad134e268afb97bfa858bd768faaaa234b5fd36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
