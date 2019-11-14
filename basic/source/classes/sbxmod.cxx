@@ -992,6 +992,78 @@ void SbModule::SetVBACompat( bool bCompat )
     }
 }
 
+namespace
+{
+    class RunInitGuard
+    {
+    protected:
+        std::unique_ptr<SbiRuntime> m_xRt;
+        SbiGlobals* m_pSbData;
+        SbModule* m_pOldMod;
+    public:
+        RunInitGuard(SbModule* pModule, SbMethod* pMethod, sal_uInt32 nArg, SbiGlobals* pSbData)
+            : m_xRt(new SbiRuntime(pModule, pMethod, nArg))
+            , m_pSbData(pSbData)
+            , m_pOldMod(pSbData->pMod)
+        {
+            m_xRt->pNext = pSbData->pInst->pRun;
+            m_pSbData->pMod = pModule;
+            m_pSbData->pInst->pRun = m_xRt.get();
+        }
+        void run()
+        {
+            while (m_xRt->Step()) {}
+        }
+        virtual ~RunInitGuard()
+        {
+            m_pSbData->pInst->pRun = m_xRt->pNext;
+            m_pSbData->pMod = m_pOldMod;
+            m_xRt.reset();
+        }
+    };
+
+    class RunGuard : public RunInitGuard
+    {
+    private:
+        bool m_bDelInst;
+    public:
+        RunGuard(SbModule* pModule, SbMethod* pMethod, sal_uInt32 nArg, SbiGlobals* pSbData, bool bDelInst)
+            : RunInitGuard(pModule, pMethod, nArg, pSbData)
+            , m_bDelInst(bDelInst)
+        {
+            if (m_xRt->pNext)
+                m_xRt->pNext->block();
+        }
+        virtual ~RunGuard() override
+        {
+            if (m_xRt->pNext)
+                m_xRt->pNext->unblock();
+
+            // #63710 It can happen by an another thread handling at events,
+            // that the show call returns to a dialog (by closing the
+            // dialog per UI), before a by an event triggered further call returned,
+            // which stands in Basic more top in the stack and that had been run on
+            // a  Basic-Breakpoint. Then would the instance below destroyed. And if the Basic,
+            // that stand still in the call, further runs, there is a GPF.
+            // Thus here had to be wait until the other call comes back.
+            if (m_bDelInst)
+            {
+                // Compare here with 1 instead of 0, because before nCallLvl--
+                while (m_pSbData->pInst->nCallLvl != 1)
+                    Application::Yield();
+            }
+
+            m_pSbData->pInst->nCallLvl--;          // Call-Level down again
+
+            // Exist an higher-ranking runtime instance?
+            // Then take over BasicDebugFlags::Break, if set
+            SbiRuntime* pRtNext = m_xRt->pNext;
+            if (pRtNext && (m_xRt->GetDebugFlags() & BasicDebugFlags::Break))
+                pRtNext->SetDebugFlags(BasicDebugFlags::Break);
+        }
+    };
+}
+
 // Run a Basic-subprogram
 void SbModule::Run( SbMethod* pMeth )
 {
@@ -1094,49 +1166,17 @@ void SbModule::Run( SbMethod* pMeth )
                 pSbData->pInst->CalcBreakCallLevel( pMeth->GetDebugFlags() );
             }
 
-            SbModule* pOldMod = pSbData->pMod;
-            pSbData->pMod = this;
-            std::unique_ptr<SbiRuntime> pRt(new SbiRuntime( this, pMeth, pMeth->nStart ));
+            auto xRuntimeGuard(std::make_unique<RunGuard>(this, pMeth, pMeth->nStart, pSbData, bDelInst));
 
-            pRt->pNext = pSbData->pInst->pRun;
-            if( pRt->pNext )
-                pRt->pNext->block();
-            pSbData->pInst->pRun = pRt.get();
             if ( mbVBACompat )
             {
                 pSbData->pInst->EnableCompatibility( true );
             }
 
-            while( pRt->Step() ) {}
+            xRuntimeGuard->run();
 
-            if( pRt->pNext )
-                pRt->pNext->unblock();
+            xRuntimeGuard.reset();
 
-            // #63710 It can happen by an another thread handling at events,
-            // that the show call returns to a dialog (by closing the
-            // dialog per UI), before a by an event triggered further call returned,
-            // which stands in Basic more top in the stack and that had been run on
-            // a  Basic-Breakpoint. Then would the instance below destroyed. And if the Basic,
-            // that stand still in the call, further runs, there is a GPF.
-            // Thus here had to be wait until the other call comes back.
-            if( bDelInst )
-            {
-                // Compare here with 1 instead of 0, because before nCallLvl--
-                while (pSbData->pInst->nCallLvl != 1)
-                    Application::Yield();
-            }
-
-            pSbData->pInst->pRun = pRt->pNext;
-            pSbData->pInst->nCallLvl--;          // Call-Level down again
-
-            // Exist an higher-ranking runtime instance?
-            // Then take over BasicDebugFlags::Break, if set
-            SbiRuntime* pRtNext = pRt->pNext;
-            if( pRtNext && (pRt->GetDebugFlags() & BasicDebugFlags::Break) )
-                pRtNext->SetDebugFlags( BasicDebugFlags::Break );
-
-            pRt.reset();
-            pSbData->pMod = pOldMod;
             if( bDelInst )
             {
                 // #57841 Clear Uno-Objects, which were helt in RTL functions,
@@ -1199,37 +1239,6 @@ void SbModule::Run( SbMethod* pMeth )
     }
 }
 
-namespace
-{
-    class SbiRuntimeGuard
-    {
-    private:
-        std::unique_ptr<SbiRuntime> m_xRt;
-        SbiGlobals* m_pSbData;
-        SbModule* m_pOldMod;
-    public:
-        SbiRuntimeGuard(SbModule* pModule, SbiGlobals* pSbData)
-            : m_xRt(new SbiRuntime(pModule, nullptr, 0))
-            , m_pSbData(pSbData)
-            , m_pOldMod(pSbData->pMod)
-        {
-            m_xRt->pNext = pSbData->pInst->pRun;
-            m_pSbData->pMod = pModule;
-            m_pSbData->pInst->pRun = m_xRt.get();
-        }
-        void run()
-        {
-            while (m_xRt->Step()) {}
-        }
-        ~SbiRuntimeGuard()
-        {
-            m_pSbData->pInst->pRun = m_xRt->pNext;
-            m_pSbData->pMod = m_pOldMod;
-            m_xRt.reset();
-        }
-    };
-}
-
 // Execute of the init method of a module after the loading
 // or the compilation
 void SbModule::RunInit()
@@ -1244,7 +1253,7 @@ void SbModule::RunInit()
         pSbData->bRunInit = true;
 
         // The init code starts always here
-        auto xRuntimeGuard(std::make_unique<SbiRuntimeGuard>(this, pSbData));
+        auto xRuntimeGuard(std::make_unique<RunInitGuard>(this, nullptr, 0, pSbData));
         xRuntimeGuard->run();
         xRuntimeGuard.reset();
 
