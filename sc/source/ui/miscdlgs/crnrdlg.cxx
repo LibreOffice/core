@@ -204,7 +204,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
     if ( bValid )
     {
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        OUString aStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv));
+        OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv));
 
         if(bRef)
             m_xEdAssign->SetRefString( aStr );
@@ -212,7 +212,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
             m_xEdAssign->SetText( aStr );
 
         m_xEdAssign->SetCursorAtLast();
-        aStr = theCurData.Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv);
+        aStr = theCurData.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv);
 
         if(bRef)
             m_xEdAssign2->SetRefString( aStr );
@@ -291,7 +291,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
             }
         }
     }
-    OUString aStr(theCurData.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+    OUString aStr(theCurData.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
 
     if(bRef)
         m_xEdAssign2->SetRefString( aStr );
@@ -375,7 +375,7 @@ void ScColRowNameRangesDlg::UpdateNames()
         for ( j=0; j < nCount; j++ )
         {
             const ScRange aRange(aSortArray[j]->GetRange(0));
-            aString = aRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc, aDetails);
+            aString = aRange.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, aDetails);
 
             //@008 get range parameters from document
             aSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
@@ -414,7 +414,7 @@ void ScColRowNameRangesDlg::UpdateNames()
         for ( j=0; j < nCount; j++ )
         {
             const ScRange aRange(aSortArray[j]->GetRange(0));
-            aString = aRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc, aDetails);
+            aString = aRange.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, aDetails);
 
             //@008 Build string for rows below
             aSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
@@ -458,14 +458,14 @@ void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, bool bColNam
     {
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         theCurArea = rRange;
-        OUString aStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv));
+        OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv));
         m_xEdAssign->SetText( aStr );
         m_xBtnAdd->set_sensitive(false);
         m_xBtnRemove->set_sensitive(true);
         m_xBtnColHead->set_active(bColName);
         m_xBtnRowHead->set_active(!bColName);
         theCurData = pPair->GetRange(1);
-        aStr = theCurData.Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv);
+        aStr = theCurData.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv);
         m_xEdAssign2->SetText( aStr );
     }
     else
@@ -748,7 +748,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl, weld::Button&, void)
         if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == pDoc->MaxRow() )
         {
             theCurArea.aEnd.SetRow( pDoc->MaxRow() - 1 );
-            OUString aStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+            OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
             m_xEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );
@@ -766,7 +766,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl, weld::Button&, void)
         if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == pDoc->MaxCol() )
         {
             theCurArea.aEnd.SetCol( pDoc->MaxCol() - 1 );
-            OUString aStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+            OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
             m_xEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );

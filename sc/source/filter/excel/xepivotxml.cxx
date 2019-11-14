@@ -271,7 +271,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
     OUString aSheetName;
     GetDoc().GetName(rEntry.maSrcRange.aStart.Tab(), aSheetName);
     pDefStrm->singleElement(XML_worksheetSource,
-        XML_ref, XclXmlUtils::ToOString(&rStrm.GetRoot().GetDoc(), rEntry.maSrcRange),
+        XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), rEntry.maSrcRange),
         XML_sheet, aSheetName.toUtf8());
 
     pDefStrm->endElement(XML_cacheSource);
@@ -864,7 +864,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
     pPivotStrm->write("<")->writeId(XML_location);
     rStrm.WriteAttributes(XML_ref,
-        XclXmlUtils::ToOString(&rStrm.GetRoot().GetDoc(), aOutRange),
+        XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aOutRange),
         XML_firstHeaderRow, OUString::number(nFirstHeaderRow),
         XML_firstDataRow, OUString::number(nFirstDataRow),
         XML_firstDataCol, OUString::number(nFirstDataCol));

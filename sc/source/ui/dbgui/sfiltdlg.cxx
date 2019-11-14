@@ -150,7 +150,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         ScRange aAdvSource;
         if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
         {
-            OUString aRefStr(aAdvSource.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+            OUString aRefStr(aAdvSource.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
             m_xEdFilterArea->SetRefString( aRefStr );
         }
     }
@@ -209,7 +209,7 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
         if (m_pRefInputEdit == m_xEdCopyArea.get())
             aRefStr = rRef.aStart.Format(ScRefFlags::ADDR_ABS_3D, &rDocP, eConv);
         else if (m_pRefInputEdit == m_xEdFilterArea.get())
-            aRefStr = rRef.Format(ScRefFlags::RANGE_ABS_3D, &rDocP, eConv);
+            aRefStr = rRef.Format(rDocP, ScRefFlags::RANGE_ABS_3D, eConv);
 
         m_pRefInputEdit->SetRefString( aRefStr );
     }

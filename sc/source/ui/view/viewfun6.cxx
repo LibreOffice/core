@@ -104,9 +104,9 @@ void ScViewFunc::DetectiveRefresh()
     RecalcPPT();
 }
 
-static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, const ScDocument* pDoc)
+static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, const ScDocument& rDoc)
 {
-    OUString aAddrText(rRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc));
+    OUString aAddrText(rRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D));
     SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);
     SfxBoolItem aUnmarkItem(FN_PARAM_1, true);        // remove existing selection
     pView->GetDispatcher().ExecuteList(
@@ -137,7 +137,7 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
 
     // Jump to the first range of all precedent ranges.
     const ScRange & r = aRangesToMark.front();
-    lcl_jumpToRange(r, &rView, &pDocSh->GetDocument());
+    lcl_jumpToRange(r, &rView, pDocSh->GetDocument());
 
     ListSize = aRangesToMark.size();
     for ( size_t i = 0; i < ListSize; ++i )
@@ -180,7 +180,7 @@ void ScViewFunc::DetectiveMarkPred()
         if (pPath && ScRefTokenHelper::getRangeFromToken(aRange, p, aCurPos, true))
         {
             OUString aTabName = p->GetString().getString();
-            OUString aRangeStr(aRange.Format(ScRefFlags::VALID));
+            OUString aRangeStr(aRange.Format(rDoc, ScRefFlags::VALID));
             OUString sUrl =
                 *pPath +
                 "#" +
@@ -200,7 +200,7 @@ void ScViewFunc::DetectiveMarkPred()
         {
             // The first precedent range is on a different sheet.  Jump to it
             // immediately and forget the rest.
-            lcl_jumpToRange(aRange, &rView, &rDoc);
+            lcl_jumpToRange(aRange, &rView, rDoc);
             return;
         }
     }

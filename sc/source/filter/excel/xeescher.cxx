@@ -1285,7 +1285,7 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr rComments = rStrm.GetCurrentStream();
 
     rComments->startElement( XML_comment,
-            XML_ref,        XclXmlUtils::ToOString(&mrRoot.GetDoc(), maScPos),
+            XML_ref,        XclXmlUtils::ToOString(mrRoot.GetDoc(), maScPos),
             XML_authorId,   OString::number(nAuthorId)
             // OOXTODO: XML_guid
     );

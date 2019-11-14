@@ -112,18 +112,18 @@ void ScStatisticsTwoVariableDialog::GetRangeFromSelection()
     {
         mVariable1Range = aCurrentRange;
         mVariable1Range.aEnd.SetCol(mVariable1Range.aStart.Col());
-        aCurrentString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, &mDocument, mAddressDetails);
+        aCurrentString = mVariable1Range.Format(mDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails);
         mxVariable1RangeEdit->SetText(aCurrentString);
 
         mVariable2Range = aCurrentRange;
         mVariable2Range.aStart.SetCol(mVariable2Range.aEnd.Col());
-        aCurrentString = mVariable2Range.Format(ScRefFlags::RANGE_ABS_3D, &mDocument, mAddressDetails);
+        aCurrentString = mVariable2Range.Format(mDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails);
         mxVariable2RangeEdit->SetText(aCurrentString);
     }
     else
     {
         mVariable1Range = aCurrentRange;
-        aCurrentString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, &mDocument, mAddressDetails);
+        aCurrentString = mVariable1Range.Format(mDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails);
         mxVariable1RangeEdit->SetText(aCurrentString);
     }
 }
@@ -155,13 +155,13 @@ void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange
         if ( mpActiveEdit == mxVariable1RangeEdit.get() )
         {
             mVariable1Range = rReferenceRange;
-            aReferenceString = mVariable1Range.Format(ScRefFlags::RANGE_ABS_3D, &rDocument, mAddressDetails);
+            aReferenceString = mVariable1Range.Format(rDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails);
             mxVariable1RangeEdit->SetRefString(aReferenceString);
         }
         else if ( mpActiveEdit == mxVariable2RangeEdit.get() )
         {
             mVariable2Range = rReferenceRange;
-            aReferenceString = mVariable2Range.Format(ScRefFlags::RANGE_ABS_3D, &rDocument, mAddressDetails);
+            aReferenceString = mVariable2Range.Format(rDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails);
             mxVariable2RangeEdit->SetRefString(aReferenceString);
         }
         else if ( mpActiveEdit == mxOutputRangeEdit.get() )

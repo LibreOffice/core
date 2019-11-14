@@ -209,9 +209,9 @@ void ScFourierAnalysisDialog::getDataLabel(OUString& rLabel)
         return;
     }
 
-    OUString aDataSrc(
-        mInputRange.Format(mbUse3DAddresses ? ScRefFlags::RANGE_ABS_3D : ScRefFlags::RANGE_ABS,
-                           &mDocument, mAddressDetails));
+    OUString aDataSrc(mInputRange.Format(
+        mDocument, mbUse3DAddresses ? ScRefFlags::RANGE_ABS_3D : ScRefFlags::RANGE_ABS,
+        mAddressDetails));
 
     rLabel = ScResId(STR_INPUT_DATA_RANGE) + " : " + aDataSrc;
     return;

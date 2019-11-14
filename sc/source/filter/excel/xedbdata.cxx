@@ -182,7 +182,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         XML_id, OString::number( rEntry.mnTableId),
         XML_name, rData.GetName().toUtf8(),
         XML_displayName, rData.GetName().toUtf8(),
-        XML_ref, XclXmlUtils::ToOString(&rStrm.GetRoot().GetDoc(), aRange),
+        XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aRange),
         XML_headerRowCount, ToPsz10(rData.HasHeader()),
         XML_totalsRowCount, ToPsz10(rData.HasTotals()),
         XML_totalsRowShown, ToPsz10(rData.HasTotals())  // we don't support that but if there are totals they are shown

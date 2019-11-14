@@ -2081,7 +2081,7 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
         table::CellRangeAddress refAddress = getCellRangeAddressForVBARange( RelativeTo, pDocShell );
         dDetails = ScAddress::Details( formula::FormulaGrammar::CONV_XL_R1C1, static_cast< SCROW >( refAddress.StartRow ), static_cast< SCCOL >( refAddress.StartColumn ) );
     }
-    return aRange.Format(nFlags, &rDoc, dDetails);
+    return aRange.Format(rDoc, nFlags, dDetails);
 }
 
 uno::Reference < excel::XFont >

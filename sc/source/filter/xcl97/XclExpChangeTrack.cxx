@@ -992,7 +992,7 @@ static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScA
     sax_fastparser::FSHelperPtr pStream = rStrm.GetCurrentStream();
 
     pStream->startElement(nElement,
-        XML_r, XclXmlUtils::ToOString(&rStrm.GetRoot().GetDoc(), rPosition),
+        XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), rPosition),
         XML_s, nullptr,   // OOXTODO: not supported
         XML_t, lcl_GetType(pData),
         XML_cm, nullptr,   // OOXTODO: not supported
@@ -1053,7 +1053,7 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
         lcl_WriteCell( rRevisionLogStrm, XML_oc, aPosition, pOldData.get() );
         if (!pNewData)
         {
-            pStream->singleElement(XML_nc, XML_r, XclXmlUtils::ToOString(&rRevisionLogStrm.GetRoot().GetDoc(), aPosition));
+            pStream->singleElement(XML_nc, XML_r, XclXmlUtils::ToOString(rRevisionLogStrm.GetRoot().GetDoc(), aPosition));
         }
     }
     if( pNewData )
@@ -1169,7 +1169,7 @@ void XclExpChTrInsert::SaveXml( XclExpXmlStream& rRevisionLogStrm )
             XML_ra,     nullptr,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
             XML_sId,    OString::number(GetTabId(aRange.aStart.Tab())),
             XML_eol,    ToPsz10(mbEndOfList),
-            XML_ref,    XclXmlUtils::ToOString(&rRevisionLogStrm.GetRoot().GetDoc(), aRange),
+            XML_ref,    XclXmlUtils::ToOString(rRevisionLogStrm.GetRoot().GetDoc(), aRange),
             XML_action, lcl_GetAction( nOpCode ),
             XML_edge,   nullptr);      // OOXTODO: ???
 
@@ -1293,8 +1293,8 @@ void XclExpChTrMoveRange::SaveXml( XclExpXmlStream& rRevisionLogStrm )
             XML_ua,             ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
             XML_ra,             nullptr,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
             XML_sheetId,        OString::number(GetTabId(aDestRange.aStart.Tab())),
-            XML_source,         XclXmlUtils::ToOString(&rRevisionLogStrm.GetRoot().GetDoc(), aSourceRange),
-            XML_destination,    XclXmlUtils::ToOString(&rRevisionLogStrm.GetRoot().GetDoc(), aDestRange),
+            XML_source,         XclXmlUtils::ToOString(rRevisionLogStrm.GetRoot().GetDoc(), aSourceRange),
+            XML_destination,    XclXmlUtils::ToOString(rRevisionLogStrm.GetRoot().GetDoc(), aDestRange),
             XML_sourceSheetId,  OString::number(GetTabId(aSourceRange.aStart.Tab())) );
     // OOXTODO: does this handle XML_rfmt, XML_undo?
     XclExpChTrAction* pAction = GetAddAction();
@@ -1343,7 +1343,7 @@ void XclExpChTr0x014A::SaveXml( XclExpXmlStream& rStrm )
             XML_sheetId,    OString::number(GetTabId(aRange.aStart.Tab())),
             XML_xfDxf,      nullptr,   // OOXTODO: not supported
             XML_s,          nullptr,   // OOXTODO: style
-            XML_sqref,      XclXmlUtils::ToOString(&rStrm.GetRoot().GetDoc(), aRange),
+            XML_sqref,      XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aRange),
             XML_start,      nullptr,   // OOXTODO: for string changes
             XML_length,     nullptr);  // OOXTODO: for string changes
     // OOXTODO: XML_dxf, XML_extLst

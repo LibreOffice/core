@@ -110,7 +110,7 @@ void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , const ScDocume
 
     if ( m_pRefEdit )
     {
-        OUString aStr(rRange.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, rDoc.GetAddressConvention()));
+        OUString aStr(rRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
         m_pRefEdit->SetRefString( aStr );
     }
 }

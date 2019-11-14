@@ -41,7 +41,7 @@ void ScCondFormatManagerWindow::Init()
         for(const auto& rItem : *mpFormatList)
         {
             const ScRangeList& aRange = rItem->GetRange();
-            aRange.Format(sRangeStr, ScRefFlags::VALID, mpDoc, mpDoc->GetAddressConvention());
+            aRange.Format(sRangeStr, ScRefFlags::VALID, *mpDoc, mpDoc->GetAddressConvention());
             mrTreeView.append(OUString::number(rItem->GetKey()), sRangeStr);
             mrTreeView.set_text(nRow, ScCondFormatHelper::GetExpression(*rItem, aRange.GetTopLeftCorner()), 1);
             ++nRow;

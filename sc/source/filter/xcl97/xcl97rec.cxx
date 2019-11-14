@@ -1121,7 +1121,7 @@ ScRefFlags parseAddress(const OUString& rString, ScAddress& rAddress, const ScDo
     return rAddress.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
-void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument* pDoc)
+void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument& rDoc)
 {
     if (rOldURL.startsWith("#"))
     {
@@ -1132,19 +1132,19 @@ void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument* 
 
         ScRange aRange;
         ScAddress aAddress;
-        ScRefFlags nResult = parseRange(aAddressString, aRange, pDoc);
+        ScRefFlags nResult = parseRange(aAddressString, aRange, &rDoc);
         if ( nResult & ScRefFlags::VALID )
         {
-            OUString aString = aRange.Format(nResult, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
+            OUString aString = aRange.Format(rDoc, nResult, formula::FormulaGrammar::CONV_XL_OOX);
             rNewURL = "#" + aString;
             return;
         }
         else
         {
-            nResult = parseAddress(aAddressString, aAddress, pDoc);
+            nResult = parseAddress(aAddressString, aAddress, &rDoc);
             if( nResult & ScRefFlags::VALID )
             {
-                OUString aString = aAddress.Format(nResult, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
+                OUString aString = aAddress.Format(nResult, &rDoc, formula::FormulaGrammar::CONV_XL_OOX);
                 rNewURL = "#" + aString;
                 return;
             }
@@ -1164,7 +1164,7 @@ ScURLTransformer::ScURLTransformer(ScDocument& rDoc)
 OUString ScURLTransformer::getTransformedString(const OUString& rURL) const
 {
     OUString aNewURL;
-    transformURL(rURL, aNewURL, &mrDoc);
+    transformURL(rURL, aNewURL, mrDoc);
     return aNewURL;
 }
 
@@ -1338,7 +1338,7 @@ void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm ) const
     rStrm.GetCurrentStream()->singleElement( XML_inputCells,
             // OOXTODO: XML_deleted,
             // OOXTODO: XML_numFmtId,
-            XML_r,      XclXmlUtils::ToOString( &rStrm.GetRoot().GetDoc(), ScAddress( nCol, nRow, 0 ) ),
+            XML_r,      XclXmlUtils::ToOString( rStrm.GetRoot().GetDoc(), ScAddress( nCol, nRow, 0 ) ),
             // OOXTODO: XML_undone,
             XML_val,    XclXmlUtils::ToOString( sText ) );
 }

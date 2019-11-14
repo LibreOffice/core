@@ -77,7 +77,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* 
     ScRange aRange;
 
     pViewData->GetSimpleArea( aRange );
-    OUString aAreaStr(aRange.Format(ScRefFlags::RANGE_ABS_3D, &mrDoc,
+    OUString aAreaStr(aRange.Format(mrDoc, ScRefFlags::RANGE_ABS_3D,
             ScAddress::Details(mrDoc.GetAddressConvention(), 0, 0)));
 
     m_xEdRange->SetText( aAreaStr );
@@ -287,7 +287,7 @@ void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_xEdRange.get());
-        OUString aRefStr(rRef.Format(ScRefFlags::RANGE_ABS_3D, &rDocP,
+        OUString aRefStr(rRef.Format(rDocP, ScRefFlags::RANGE_ABS_3D,
                 ScAddress::Details(rDocP.GetAddressConvention(), 0, 0)));
         m_xEdRange->SetRefString( aRefStr );
     }

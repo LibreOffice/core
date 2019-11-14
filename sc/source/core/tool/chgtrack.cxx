@@ -544,7 +544,7 @@ OUString ScChangeAction::GetRefString(
                 if ( bFlag3D || GetType() == SC_CAT_INSERT_TABS )
                     nFlags |= ScRefFlags::TAB_3D;
 
-                aBuf.append(aTmpRange.Format(nFlags, pDoc, pDoc->GetAddressConvention()));
+                aBuf.append(aTmpRange.Format(*pDoc, nFlags, pDoc->GetAddressConvention()));
             }
         }
         if ( (bFlag3D && IsDeleteType()) || IsDeletedIn() )

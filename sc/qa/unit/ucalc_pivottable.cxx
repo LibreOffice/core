@@ -682,7 +682,7 @@ void Test::testPivotTableNamedSource()
 
     // Insert the raw data.
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
-    OUString aRangeStr(aSrcRange.Format(ScRefFlags::RANGE_ABS_3D, m_pDoc));
+    OUString aRangeStr(aSrcRange.Format(*m_pDoc, ScRefFlags::RANGE_ABS_3D));
 
     // Name this range.
     OUString aRangeName("MyData");

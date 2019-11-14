@@ -570,7 +570,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         aJustified.PutInOrder(); // Always display Ref in the Formula the right way
         ScDocument* pDoc = pDocView->GetViewData().GetDocument();
         const ScAddress::Details aAddrDetails( *pDoc, aCursorPos );
-        OUString aNewStr(aJustified.Format(rData.nFlags, pDoc, aAddrDetails));
+        OUString aNewStr(aJustified.Format(*pDoc, rData.nFlags, aAddrDetails));
         ESelection aOldSel( 0, nOldStart, 0, nOldEnd );
         SfxItemSet aSet( mpEditEngine->GetEmptyItemSet() );
 
@@ -3239,7 +3239,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
         OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
         // Always 3D and absolute.
-        OUString aTmp(rRef.Format( ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, &rDoc, aAddrDetails));
+        OUString aTmp(rRef.Format(rDoc, ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, aAddrDetails));
 
         SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
         // #i75893# convert escaped URL of the document to something user friendly
@@ -3264,9 +3264,9 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
         if ( rRef.aStart.Tab() != aCursorPos.Tab() ||
              rRef.aStart.Tab() != rRef.aEnd.Tab() )
             // pointer-selected => absolute sheet reference
-            aRefStr = rRef.Format(ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, &rDoc, aAddrDetails);
+            aRefStr = rRef.Format(rDoc, ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, aAddrDetails);
         else
-            aRefStr = rRef.Format(ScRefFlags::VALID, &rDoc, aAddrDetails);
+            aRefStr = rRef.Format(rDoc, ScRefFlags::VALID, aAddrDetails);
     }
 
     if (pTableView || pTopView)
@@ -3854,7 +3854,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         {
                             ScRange r(rSPos, rEPos);
                             applyStartToEndFlags(nFlags);
-                            aPosStr = r.Format(ScRefFlags::VALID | nFlags, &rDoc, aAddrDetails);
+                            aPosStr = r.Format(rDoc, ScRefFlags::VALID | nFlags, aAddrDetails);
                         }
                         else
                             aPosStr = aCursorPos.Format(ScRefFlags::VALID | nFlags, &rDoc, aAddrDetails);

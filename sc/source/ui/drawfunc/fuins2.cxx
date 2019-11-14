@@ -109,7 +109,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
                 pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
 
                 ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                aRangeString = aRange.Format(ScRefFlags::RANGE_ABS_3D, &rScDoc, rScDoc.GetAddressConvention());
+                aRangeString = aRange.Format(rScDoc, ScRefFlags::RANGE_ABS_3D, rScDoc.GetAddressConvention());
             }
         }
     }
@@ -155,7 +155,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
 
                 // update string from modified ranges.  The ranges must be in the current formula syntax.
                 OUString aTmpStr;
-                aRangeListRef->Format( aTmpStr, ScRefFlags::RANGE_ABS_3D, &rScDoc, rScDoc.GetAddressConvention() );
+                aRangeListRef->Format( aTmpStr, ScRefFlags::RANGE_ABS_3D, rScDoc, rScDoc.GetAddressConvention() );
                 aRangeString = aTmpStr;
 
                 ScChartPositioner aChartPositioner( &rScDoc, aRangeListRef );
@@ -451,7 +451,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             ScRangeList aRanges;
             aMultiMark.FillRangeListWithMarks( &aRanges, false );
             OUString aStr;
-            aRanges.Format( aStr, ScRefFlags::RANGE_ABS_3D, pDocument, pDocument->GetAddressConvention() );
+            aRanges.Format( aStr, ScRefFlags::RANGE_ABS_3D, *pDocument, pDocument->GetAddressConvention() );
             aRangeString = aStr;
 
             // get "total" range for positioning

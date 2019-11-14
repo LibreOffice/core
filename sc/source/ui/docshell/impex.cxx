@@ -453,7 +453,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
             {
                 if( aRange.aStart.Tab() != aRange.aEnd.Tab() )
                     nFlags |= ScRefFlags::TAB2_3D;
-                aRefName = aRange.Format(nFlags, pDoc, formula::FormulaGrammar::CONV_OOO);
+                aRefName = aRange.Format(*pDoc, nFlags, formula::FormulaGrammar::CONV_OOO);
             }
             OUString aAppName = Application::GetAppName();
 

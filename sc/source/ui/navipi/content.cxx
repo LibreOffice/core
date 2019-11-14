@@ -355,7 +355,7 @@ static OUString lcl_GetDBAreaRange( const ScDocument* pDoc, const OUString& rDBN
         {
             ScRange aRange;
             pData->GetArea(aRange);
-            aRet = aRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc);
+            aRet = aRange.Format(*pDoc, ScRefFlags::RANGE_ABS_3D);
         }
     }
     return aRet;
@@ -421,7 +421,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
                 {
                     const ScRange& aRange = pLink->GetDestArea();
                     ScDocument* pSrcDoc = GetSourceDocument();
-                    OUString aRangeStr(aRange.Format(ScRefFlags::RANGE_ABS_3D, pSrcDoc, pSrcDoc->GetAddressConvention()));
+                    OUString aRangeStr(aRange.Format(*pSrcDoc, ScRefFlags::RANGE_ABS_3D, pSrcDoc->GetAddressConvention()));
                     pParentWindow->SetCurrentCellStr( aRangeStr );
                 }
             }

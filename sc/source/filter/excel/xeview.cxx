@@ -232,7 +232,7 @@ void XclExpSelection::SaveXml( XclExpXmlStream& rStrm )
             XML_pane,           lcl_GetActivePane( mnPane ),
             XML_activeCell,     XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), maSelData.maXclCursor ).getStr(),
             XML_activeCellId,   OString::number(maSelData.mnCursorIdx),
-            XML_sqref,          XclXmlUtils::ToOString(&rStrm.GetRoot().GetDoc(), maSelData.maXclSelection) );
+            XML_sqref,          XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), maSelData.maXclSelection) );
 }
 
 void XclExpSelection::WriteBody( XclExpStream& rStrm )

@@ -102,7 +102,7 @@ void ScSamplingDialog::Init()
 void ScSamplingDialog::GetRangeFromSelection()
 {
     mViewData->GetSimpleArea(mInputRange);
-    OUString aCurrentString(mInputRange.Format(ScRefFlags::RANGE_ABS_3D, &mDocument, mAddressDetails));
+    OUString aCurrentString(mInputRange.Format(mDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails));
     mxInputRangeEdit->SetText(aCurrentString);
 }
 
@@ -138,7 +138,7 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument&
         if ( mpActiveEdit == mxInputRangeEdit.get() )
         {
             mInputRange = rReferenceRange;
-            aReferenceString = mInputRange.Format(ScRefFlags::RANGE_ABS_3D, &rDocument, mAddressDetails);
+            aReferenceString = mInputRange.Format(rDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails);
             mxInputRangeEdit->SetRefString( aReferenceString );
 
             LimitSampleSizeAndPeriod();

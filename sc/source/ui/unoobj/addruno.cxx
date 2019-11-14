@@ -245,7 +245,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
         if ( aRange.aStart.Tab() != nRefSheet )
             nFlags |= ScRefFlags::TAB_3D;
         if ( bIsRange )
-            aFormatStr = aRange.Format(nFlags, &rDoc);
+            aFormatStr = aRange.Format(rDoc, nFlags);
         else
             aFormatStr = aRange.aStart.Format(nFlags, &rDoc);
         aRet <<= aFormatStr;

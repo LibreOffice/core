@@ -176,7 +176,7 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument& /* rDoc */ 
 
         if (m_xEdPrintArea.get() == m_pRefInputEdit)
         {
-            aStr = rRef.Format(ScRefFlags::RANGE_ABS, pDoc, eConv);
+            aStr = rRef.Format(*pDoc, ScRefFlags::RANGE_ABS, eConv);
             OUString aVal = m_xEdPrintArea->GetText();
             Selection aSel = m_xEdPrintArea->GetSelection();
             aSel.Justify();
@@ -269,7 +269,7 @@ void ScPrintAreasDlg::Impl_Reset()
         {
             if ( !aStrRange.isEmpty() )
                 aStrRange += OUStringChar(sep);
-            aStrRange += pPrintRange->Format(ScRefFlags::RANGE_ABS, pDoc, eConv);
+            aStrRange += pPrintRange->Format(*pDoc, ScRefFlags::RANGE_ABS, eConv);
         }
     }
     m_xEdPrintArea->SetText( aStrRange );
@@ -305,7 +305,7 @@ bool ScPrintAreasDlg::Impl_GetItem( const formula::RefEdit* pEd, SfxStringItem& 
         ScRange aRange;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         lcl_CheckRepeatString(aRangeStr, pDoc, m_xEdRepeatRow.get() == pEd, &aRange);
-        aRangeStr = aRange.Format(ScRefFlags::RANGE_ABS, pDoc, eConv);
+        aRangeStr = aRange.Format(*pDoc, ScRefFlags::RANGE_ABS, eConv);
     }
 
     rItem.SetValue( aRangeStr );
@@ -392,12 +392,12 @@ void ScPrintAreasDlg::Impl_FillLists()
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
     if ( bSimple )
-        aStrRange = aRange.Format(ScRefFlags::RANGE_ABS, pDoc, eConv);
+        aStrRange = aRange.Format(*pDoc, ScRefFlags::RANGE_ABS, eConv);
     else
     {
         ScRangeListRef aList( new ScRangeList );
         pViewData->GetMarkData().FillRangeListWithMarks( aList.get(), false );
-        aList->Format(aStrRange, ScRefFlags::RANGE_ABS, pDoc, eConv);
+        aList->Format(aStrRange, ScRefFlags::RANGE_ABS, *pDoc, eConv);
     }
 
     m_xLbPrintArea->set_id(SC_AREASDLG_PR_SELECT, aStrRange);
@@ -424,7 +424,7 @@ void ScPrintAreasDlg::Impl_FillLists()
         {
             if (rEntry.second->HasType(ScRangeData::Type::PrintArea))
             {
-                aSymbol = aRange.Format(ScRefFlags::RANGE_ABS, pDoc, eConv);
+                aSymbol = aRange.Format(*pDoc, ScRefFlags::RANGE_ABS, eConv);
                 m_xLbPrintArea->append(aSymbol, aName);
             }
 

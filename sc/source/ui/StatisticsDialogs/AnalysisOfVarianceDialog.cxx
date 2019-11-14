@@ -52,13 +52,13 @@ static const char strWildcardRange[] = "%RANGE%";
 
 OUString lclCreateMultiParameterFormula(
             ScRangeList&        aRangeList, const OUString& aFormulaTemplate,
-            const OUString&     aWildcard,  const ScDocument*     pDocument,
+            const OUString&     aWildcard,  const ScDocument& rDocument,
             const ScAddress::Details& aAddressDetails)
 {
     OUStringBuffer aResult;
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
-        OUString aRangeString(aRangeList[i].Format(ScRefFlags::RANGE_ABS_3D, pDocument, aAddressDetails));
+        OUString aRangeString(aRangeList[i].Format(rDocument, ScRefFlags::RANGE_ABS_3D, aAddressDetails));
         OUString aFormulaString = aFormulaTemplate.replaceAll(aWildcard, aRangeString);
         aResult.append(aFormulaString);
         if(i != aRangeList.size() - 1) // Not Last
@@ -286,7 +286,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
         output.nextColumn();
 
         // Sum of Squares
-        OUString aSSPart = lclCreateMultiParameterFormula(aRangeList, "DEVSQ(%RANGE%)", strWildcardRange, &mDocument, mAddressDetails);
+        OUString aSSPart = lclCreateMultiParameterFormula(aRangeList, "DEVSQ(%RANGE%)", strWildcardRange, mDocument, mAddressDetails);
         aTemplate.setTemplate("=SUM(%RANGE%)");
         aTemplate.applyString(strWildcardRange, aSSPart);
         aTemplate.autoReplaceAddress("%WITHIN_SS%", output.current());

@@ -446,7 +446,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, const
     XclExpNameRef xName( new XclExpName( GetRoot(), cBuiltIn ) );
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( aRange.aStart.Tab() );
-    OUString sSymbol(aRange.Format(ScRefFlags::RANGE_ABS_3D, &GetDoc(), ScAddress::Details( ::formula::FormulaGrammar::CONV_XL_A1)));
+    OUString sSymbol(aRange.Format(GetDoc(), ScRefFlags::RANGE_ABS_3D, ScAddress::Details( ::formula::FormulaGrammar::CONV_XL_A1)));
     xName->SetSymbol( sSymbol );
     return Append( xName );
 }
@@ -457,7 +457,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, const
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( nScTab );
     OUString sSymbol;
-    rRangeList.Format( sSymbol, ScRefFlags::RANGE_ABS_3D, &GetDoc(), ::formula::FormulaGrammar::CONV_XL_A1 );
+    rRangeList.Format( sSymbol, ScRefFlags::RANGE_ABS_3D, GetDoc(), ::formula::FormulaGrammar::CONV_XL_A1 );
     xName->SetSymbol( sSymbol );
     return Append( xName );
 }

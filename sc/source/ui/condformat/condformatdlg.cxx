@@ -474,8 +474,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     mxEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
 
     OUString aRangeString;
-    aRange.Format(aRangeString, ScRefFlags::VALID, pViewData->GetDocument(),
-                    pViewData->GetDocument()->GetAddressConvention());
+    const ScDocument* pDoc = pViewData->GetDocument();
+    aRange.Format(aRangeString, ScRefFlags::VALID, *pDoc, pDoc->GetAddressConvention());
     mxEdRange->SetText(aRangeString);
 
     msBaseTitle = m_xDialog->get_title();
@@ -546,8 +546,9 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument&)
         else
             nFlags = ScRefFlags::RANGE_ABS;
 
-        OUString aRefStr(rRef.Format(nFlags, mpViewData->GetDocument(),
-            ScAddress::Details(mpViewData->GetDocument()->GetAddressConvention(), 0, 0)));
+        const ScDocument* pDoc = mpViewData->GetDocument();
+        OUString aRefStr(rRef.Format(*pDoc, nFlags,
+            ScAddress::Details(pDoc->GetAddressConvention(), 0, 0)));
         if (pEdit != mxEdRange.get())
         {
             Selection sel = pEdit->GetSelection();
