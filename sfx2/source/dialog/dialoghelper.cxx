@@ -35,11 +35,6 @@ Size getPreviewOptionsSize(const OutputDevice& rReference)
     return rReference.LogicToPixel(Size(70 , 27), MapMode(MapUnit::MapAppFont));
 }
 
-Size getPagePropertiesOptimalSize(const OutputDevice& rReference)
-{
-    return rReference.LogicToPixel(Size(88, 120), MapMode(MapUnit::MapAppFont));
-}
-
 OUString getWidestTime(const LocaleDataWrapper& rWrapper)
 {
     Date aDate(22, 12, 2000);

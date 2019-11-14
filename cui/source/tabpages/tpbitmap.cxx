@@ -119,11 +119,8 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
         m_xBtnImport->hide();
 
     // Calculate size of display boxes
-
-    Size aBitmapLBSize = getPagePropertiesOptimalSize(m_xBitmapLB->GetDrawingArea()->get_ref_device());
-    m_xBitmapLB->set_size_request(aBitmapLBSize.Width(), aBitmapLBSize.Height());
-
     Size aSize = getDrawPreviewOptimalSize(m_aCtlBitmapPreview.GetDrawingArea()->get_ref_device());
+    m_xBitmapLB->set_size_request(aSize.Width(), aSize.Height());
     m_xCtlBitmapPreview->set_size_request(aSize.Width(), aSize.Height());
 
     SfxItemPool* pPool = m_rXFSet.GetPool();
