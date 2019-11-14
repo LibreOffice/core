@@ -377,7 +377,7 @@ handle_r1c1:
         if ( nPos > nStart )
         {
             OUString aTest = rFormula.copy( nStart, nPos-nStart );
-            const ScAddress::Details aAddrDetails( &rDoc, aCursorPos );
+            const ScAddress::Details aAddrDetails( rDoc, aCursorPos );
             ScRefFlags nFlags = aRange.ParseAny( aTest, &rDoc, aAddrDetails );
             if ( nFlags & ScRefFlags::VALID )
             {
@@ -569,7 +569,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         ScRange aJustified = rNew;
         aJustified.PutInOrder(); // Always display Ref in the Formula the right way
         ScDocument* pDoc = pDocView->GetViewData().GetDocument();
-        const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
+        const ScAddress::Details aAddrDetails( *pDoc, aCursorPos );
         OUString aNewStr(aJustified.Format(rData.nFlags, pDoc, aAddrDetails));
         ESelection aOldSel( 0, nOldStart, 0, nOldEnd );
         SfxItemSet aSet( mpEditEngine->GetEmptyItemSet() );
@@ -3232,7 +3232,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
 
     // Create string from reference, in the syntax of the document being edited.
     OUString aRefStr;
-    const ScAddress::Details aAddrDetails( pThisDoc, aCursorPos );
+    const ScAddress::Details aAddrDetails( *pThisDoc, aCursorPos );
     if (bOtherDoc)
     {
         // Reference to other document
@@ -3837,7 +3837,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                 if ( pInputWin || comphelper::LibreOfficeKit::isActive())                        // Named range input
                 {
                     OUString aPosStr;
-                    const ScAddress::Details aAddrDetails( &rDoc, aCursorPos );
+                    const ScAddress::Details aAddrDetails( rDoc, aCursorPos );
 
                     // Is the range a name?
                     //! Find by Timer?
