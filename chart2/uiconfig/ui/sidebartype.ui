@@ -2,68 +2,71 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkGrid" id="ChartTypePanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="margin_left">6</property>
+    <property name="margin_right">6</property>
+    <property name="margin_top">6</property>
+    <property name="margin_bottom">6</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">6</property>
     <child>
-      <object class="GtkBox" id="container">
+      <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="border_width">6</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="hexpand">True</property>
+        <property name="row_spacing">6</property>
         <child>
-          <object class="GtkGrid">
+          <object class="GtkScrolledWindow" id="subtypewin">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">6</property>
-            <child>
-              <object class="GtkLabel" id="lbl_chartType">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="sidebartype|lbl_chartType">Chart Type:</property>
-                <accessibility>
-                  <relation type="label-for" target="cmb_chartType"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="cmb_chartType">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <accessibility>
-                  <relation type="labelled-by" target="lbl_chartType"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="svtlo-ValueSet" id="subtype:border">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="hexpand">True</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="vscrollbar_policy">never</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkViewport">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkDrawingArea" id="subtype">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
           </packing>
         </child>
         <child>
@@ -79,7 +82,6 @@
                 <child>
                   <object class="GtkCheckButton" id="3dlook">
                     <property name="label" translatable="yes" context="sidebartype|3dlook">_3D Look</property>
-                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
@@ -96,7 +98,6 @@
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="3dscheme">
-                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <items>
                       <item translatable="yes" context="sidebartype|3dscheme">Simple</item>
@@ -123,7 +124,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="sidebartype|shapeft">Sh_ape</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">shape:border</property>
+                <property name="mnemonic_widget">shape</property>
                 <property name="angle">0.02</property>
                 <property name="xalign">0</property>
               </object>
@@ -133,12 +134,35 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTreeView" id="shape:border">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="search_column">0</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="shape">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -148,9 +172,8 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
@@ -161,7 +184,6 @@
             <child>
               <object class="GtkCheckButton" id="stack">
                 <property name="label" translatable="yes" context="sidebartype|stack">_Stack series</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
@@ -174,7 +196,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkAlignment" id="alignment2">
+              <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="left_padding">12</property>
@@ -186,13 +208,12 @@
                     <child>
                       <object class="GtkRadioButton" id="ontop">
                         <property name="label" translatable="yes" context="sidebartype|ontop">On top</property>
-                        <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
+                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">percent</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -202,13 +223,12 @@
                     <child>
                       <object class="GtkRadioButton" id="percent">
                         <property name="label" translatable="yes" context="sidebartype|percent">Percent</property>
-                        <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">deep</property>
+                        <property name="group">ontop</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -218,7 +238,6 @@
                     <child>
                       <object class="GtkRadioButton" id="deep">
                         <property name="label" translatable="yes" context="sidebartype|deep">Deep</property>
-                        <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -246,12 +265,10 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="linetypeft">
-                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="sidebartype|linetypeft">_Line type</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">linetype</property>
-                    <property name="ellipsize">end</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -261,7 +278,6 @@
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="linetype">
-                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <items>
                       <item translatable="yes" context="sidebartype|linetype">Straight</item>
@@ -277,7 +293,6 @@
                 <child>
                   <object class="GtkButton" id="properties">
                     <property name="label" translatable="yes" context="sidebartype|properties">Properties...</property>
-                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
@@ -296,7 +311,6 @@
             <child>
               <object class="GtkCheckButton" id="sort">
                 <property name="label" translatable="yes" context="sidebartype|sort">_Sort by X values</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
@@ -315,7 +329,6 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="nolinesft">
-                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="label" translatable="yes" context="sidebartype|nolinesft">_Number of lines</property>
@@ -331,10 +344,10 @@
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="nolines">
-                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
-                    <property name="value">1</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -349,9 +362,49 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="charttypeblock">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="lbl_chartType">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="sidebartype|lbl_chartType">Chart Type:</property>
+                <accessibility>
+                  <relation type="label-for" target="cmb_chartType"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="cmb_chartType">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="model">liststore2</property>
+                <accessibility>
+                  <relation type="labelled-by" target="lbl_chartType"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
       </object>
