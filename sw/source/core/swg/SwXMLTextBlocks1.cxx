@@ -112,21 +112,19 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             aParserInput.aInputStream = xStream->getInputStream();
 
             // get filter
-            uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, m_aCurrentText, true );
+            rtl::Reference< SwXMLTextBlockImport > xImport = new SwXMLTextBlockImport( xContext, m_aCurrentText, true );
             uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
 
             // connect parser and filter
-            uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
-            xParser->setFastDocumentHandler( xFilter );
-            xParser->setTokenHandler( xTokenHandler );
+            xImport->setTokenHandler( xTokenHandler );
 
-            xParser->registerNamespace( "http://openoffice.org/2000/text", FastToken::NAMESPACE | XML_NAMESPACE_TEXT );
-            xParser->registerNamespace( "http://openoffice.org/2000/office", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE );
+            xImport->registerNamespace( "http://openoffice.org/2000/text", FastToken::NAMESPACE | XML_NAMESPACE_TEXT );
+            xImport->registerNamespace( "http://openoffice.org/2000/office", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE );
 
             // parse
             try
             {
-                xParser->parseStream( aParserInput );
+                xImport->parseStream( aParserInput );
             }
             catch( xml::sax::SAXParseException&  )
             {
@@ -292,21 +290,19 @@ ErrCode SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
         aParserInput.aInputStream = xContents->getInputStream();
 
         // get filter
-        uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, rText, bTextOnly );
+        rtl::Reference< SwXMLTextBlockImport > xImport = new SwXMLTextBlockImport( xContext, rText, bTextOnly );
         uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
 
         // connect parser and filter
-        uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
-        xParser->setFastDocumentHandler( xFilter );
-        xParser->setTokenHandler( xTokenHandler );
+        xImport->setTokenHandler( xTokenHandler );
 
-        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:office:1.0", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE );
-        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:text:1.0", FastToken::NAMESPACE | XML_NAMESPACE_TEXT );
+        xImport->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:office:1.0", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE );
+        xImport->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:text:1.0", FastToken::NAMESPACE | XML_NAMESPACE_TEXT );
 
         // parse
         try
         {
-            xParser->parseStream( aParserInput );
+            xImport->parseStream( aParserInput );
         }
         catch( xml::sax::SAXParseException&  )
         {
@@ -415,19 +411,17 @@ void SwXMLTextBlocks::ReadInfo()
         aParserInput.aInputStream = xDocStream->getInputStream();
 
         // get filter
-        uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLBlockListImport( xContext, *this );
+        rtl::Reference< SwXMLBlockListImport > xImport = new SwXMLBlockListImport( xContext, *this );
         uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLBlockListTokenHandler();
 
         // connect parser and filter
-        uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
-        xParser->setFastDocumentHandler( xFilter );
-        xParser->registerNamespace( "http://openoffice.org/2001/block-list", FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST );
-        xParser->setTokenHandler( xTokenHandler );
+        xImport->registerNamespace( "http://openoffice.org/2001/block-list", FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST );
+        xImport->setTokenHandler( xTokenHandler );
 
         // parse
         try
         {
-            xParser->parseStream( aParserInput );
+            xImport->parseStream( aParserInput );
         }
         catch( xml::sax::SAXParseException&  )
         {
