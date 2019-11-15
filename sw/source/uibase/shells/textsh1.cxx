@@ -133,7 +133,7 @@ using namespace svx::sidebar;
 
 static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> const & pCoreSet, bool bSel, bool bSelectionPut, SfxRequest *pReq);
 
-void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const SfxItemSet *pArgs, SfxRequest *pReq )
+static void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const SfxItemSet *pArgs, SfxRequest *pReq )
 {
     FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rWrtSh.GetView()) != nullptr );
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
@@ -187,7 +187,7 @@ void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const 
             pDlg->SetCurPageId("hyperlink");
         else if (nSlot == SID_CHAR_DLG_EFFECT)
             pDlg->SetCurPageId("fonteffects");
-        else if (nSlot == SID_ATTR_CHAR_FONT || nSlot == SID_CHAR_DLG_FOR_PARAGRAPH)
+        else if (nSlot == SID_CHAR_DLG_FOR_PARAGRAPH)
             pDlg->SetCurPageId("font");
         else if (pReq)
         {

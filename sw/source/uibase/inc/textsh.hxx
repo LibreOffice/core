@@ -83,8 +83,6 @@ public:
     SfxItemSet CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr);
 };
 
-void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
