@@ -282,9 +282,38 @@ private:
             canStatic = isa<FunctionDecl>(decl) || isa<VarDecl>(decl)
                         || isa<FunctionTemplateDecl>(decl) || isa<VarTemplateDecl>(decl);
         }
+        // In general, moving functions into an unnamed namespace can: break ADL like in
+        //
+        //   struct S1 { int f() { return 1; } };
+        //   int f(S1 s) { return s.f(); }
+        //   namespace N {
+        //     struct S2: S1 { int f() { return 0; } };
+        //     int f(S2 s) { return s.f(); } // [*]
+        //   }
+        //   int main() { return f(N::S2()); }
+        //
+        // changing from returning 0 to returning 1 when [*] is moved into an unnamed namespace; can
+        // conflict with function declarations in the moved function like in
+        //
+        //   int f(int) { return 0; }
+        //   namespace { int f(int) { return 1; } }
+        //   int g() { // [*]
+        //     int f(int);
+        //     return f(0);
+        //   }
+        //   int main() { return g(); }
+        //
+        // changing from returning 0 to returning 1 when [*] is moved into an unnamed namespace; and
+        // can conflict with overload resolution in general like in
+        //
+        //   int f(int) { return 0; }
+        //   namespace { int f(...) { return 1; } }
+        //   int g() { return f(0); } // [*]
+        //   int main() { return g(); }
+        //
+        // changing from returning 0 to returning 1 when [*] is moved into an unnamed namespace:
         auto const canUnnamed = compiler.getLangOpts().CPlusPlus
                                 && !(isa<FunctionDecl>(decl) || isa<FunctionTemplateDecl>(decl));
-        // in general, moving functions into an unnamed namespace can break ADL
         assert(canStatic || canUnnamed);
         report(
             DiagnosticsEngine::Warning,
