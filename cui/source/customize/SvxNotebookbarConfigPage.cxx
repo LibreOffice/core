@@ -127,6 +127,8 @@ SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(weld::Container* pPage,
 
     m_xContentsListBox.reset(
         new SvxNotebookbarEntriesListBox(m_xBuilder->weld_tree_view("toolcontents"), this));
+    m_xDropTargetHelper.reset(
+        new SvxConfigPageFunctionDropTarget(*this, m_xContentsListBox->get_widget()));
     std::vector<int> aWidths;
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     Size aSize(m_xFunctions->get_size_request());
