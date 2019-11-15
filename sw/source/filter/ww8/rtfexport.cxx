@@ -746,11 +746,9 @@ ErrCode RtfExport::ExportDocument_Impl()
     // breaks moving of drawings - so write it only in case there is really a
     // protected section in the document.
     {
-        const SfxItemPool& rPool = m_pDoc->GetAttrPool();
-        for (const SfxPoolItem* pItem2 : rPool.GetItemSurrogates(RES_PROTECT))
+        for (auto const& pSectionFormat : m_pDoc->GetSections())
         {
-            auto pProtect = dynamic_cast<const SvxProtectItem*>(pItem2);
-            if (pProtect && pProtect->IsContentProtected())
+            if (!pSectionFormat->IsInUndo() && pSectionFormat->GetProtect().IsContentProtected())
             {
                 Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FORMPROT);
                 break;
