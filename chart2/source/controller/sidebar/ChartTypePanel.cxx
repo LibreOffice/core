@@ -69,6 +69,10 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
     , mxListener(new ChartSidebarModifyListener(this))
     , mbModelValid(true)
     , m_pDim3DLookResourceGroup(new Dim3DLookResourceGroup(m_xBuilder.get()))
+    , m_pStackingResourceGroup(new StackingResourceGroup(m_xBuilder.get()))
+    //, m_pSplineResourceGroup( new SplineResourceGroup(m_xBuilder.get(), pController->getDialog()) )
+    , m_pGeometryResourceGroup(new GeometryResourceGroup(m_xBuilder.get()))
+    , m_pSortByXValuesResourceGroup(new SortByXValuesResourceGroup(m_xBuilder.get()))
     , m_xChartModel(mxModel, css::uno::UNO_QUERY_THROW)
     , m_aChartTypeDialogControllerList(0)
     , m_pCurrentMainType(nullptr)
@@ -130,6 +134,10 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
     }
 
     m_pDim3DLookResourceGroup->setChangeListener(this);
+    m_pStackingResourceGroup->setChangeListener(this);
+    //m_pSplineResourceGroup->setChangeListener( this );
+    m_pGeometryResourceGroup->setChangeListener(this);
+    m_pSortByXValuesResourceGroup->setChangeListener(this);
 
     Initialize();
 }
@@ -142,18 +150,15 @@ void ChartTypePanel::dispose()
                                                                     css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
 
-    /*mpChartTypeLabel.clear();
-    m_pMainTypeList.clear();
-    m_pSubTypeList.clear();*/
-
-    //delete all resource helpers
-    //m_pDim3DLookResourceGroup.reset();
-
     //delete all dialog controller
     m_aChartTypeDialogControllerList.clear();
 
-    //delete all resource helper
+    //delete all resource helpers
     m_pDim3DLookResourceGroup.reset();
+    m_pStackingResourceGroup.reset();
+    //m_pSplineResourceGroup.reset();
+    m_pGeometryResourceGroup.reset();
+    m_pSortByXValuesResourceGroup.reset();
     m_xSubTypeListWin.reset();
     m_xSubTypeList.reset();
 
@@ -228,10 +233,10 @@ void ChartTypePanel::Initialize()
     {
         m_xSubTypeList->Hide();
         m_pDim3DLookResourceGroup->showControls(false);
-        /*m_pStackingResourceGroup->showControls( false, false );
-        m_pSplineResourceGroup->showControls( false );
-        m_pGeometryResourceGroup->showControls( false );
-        m_pSortByXValuesResourceGroup->showControls( false );*/
+        m_pStackingResourceGroup->showControls(false, false);
+        //m_pSplineResourceGroup->showControls( false );
+        m_pGeometryResourceGroup->showControls(false);
+        m_pSortByXValuesResourceGroup->showControls(false);
     }
 }
 
@@ -337,14 +342,14 @@ void ChartTypePanel::showAllControls(ChartTypeDialogController& rTypeController)
 
     bool bShow = rTypeController.shouldShow_3DLookControl();
     m_pDim3DLookResourceGroup->showControls(bShow);
-    /*bShow = rTypeController.shouldShow_StackingControl();
-    m_pStackingResourceGroup->showControls( bShow, false );
-    bShow = rTypeController.shouldShow_SplineControl();
-    m_pSplineResourceGroup->showControls( bShow );
+    bShow = rTypeController.shouldShow_StackingControl();
+    m_pStackingResourceGroup->showControls(bShow, false);
+    /*bShow = rTypeController.shouldShow_SplineControl();
+    m_pSplineResourceGroup->showControls( bShow );*/
     bShow = rTypeController.shouldShow_GeometryControl();
-    m_pGeometryResourceGroup->showControls( bShow );
+    m_pGeometryResourceGroup->showControls(bShow);
     bShow = rTypeController.shouldShow_SortByXValuesResourceGroup();
-    m_pSortByXValuesResourceGroup->showControls( bShow );*/
+    m_pSortByXValuesResourceGroup->showControls(bShow);
     rTypeController.showExtraControls(m_xBuilder.get());
 }
 
@@ -358,10 +363,10 @@ void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,
     }
     m_xSubTypeList->SelectItem(static_cast<sal_uInt16>(rParameter.nSubTypeIndex));
     m_pDim3DLookResourceGroup->fillControls(rParameter);
-    /*m_pStackingResourceGroup->fillControls( rParameter );
-    m_pSplineResourceGroup->fillControls( rParameter );
-    m_pGeometryResourceGroup->fillControls( rParameter );
-    m_pSortByXValuesResourceGroup->fillControls( rParameter );*/
+    m_pStackingResourceGroup->fillControls(rParameter);
+    //m_pSplineResourceGroup->fillControls( rParameter );
+    m_pGeometryResourceGroup->fillControls(rParameter);
+    m_pSortByXValuesResourceGroup->fillControls(rParameter);
     m_nChangingCalls--;
 }
 
@@ -370,10 +375,10 @@ ChartTypeParameter ChartTypePanel::getCurrentParamter() const
     ChartTypeParameter aParameter;
     aParameter.nSubTypeIndex = static_cast<sal_Int32>(m_xSubTypeList->GetSelectedItemId());
     m_pDim3DLookResourceGroup->fillParameter(aParameter);
-    /*m_pStackingResourceGroup->fillParameter( aParameter );
-    m_pSplineResourceGroup->fillParameter( aParameter );
-    m_pGeometryResourceGroup->fillParameter( aParameter );
-    m_pSortByXValuesResourceGroup->fillParameter( aParameter );*/
+    m_pStackingResourceGroup->fillParameter(aParameter);
+    //m_pSplineResourceGroup->fillParameter( aParameter );
+    m_pGeometryResourceGroup->fillParameter(aParameter);
+    m_pSortByXValuesResourceGroup->fillParameter(aParameter);
     return aParameter;
 }
 
