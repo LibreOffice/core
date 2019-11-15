@@ -56,7 +56,7 @@ private:
     DECL_LINK( ModifyItemHdl, const OString&, void );
     DECL_LINK( ResetToolbarHdl, weld::Button&, void );
 
-    DECL_LINK( ListModifiedHdl, weld::TreeView&, void );
+    virtual void ListModified() override;
 
     void            UpdateButtonStates() override;
     short           QueryReset() override;

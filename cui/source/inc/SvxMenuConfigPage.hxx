@@ -58,7 +58,7 @@ private:
 
     DECL_LINK( MenuEntriesSizeAllocHdl, const Size&, void );
 
-    DECL_LINK( ListModifiedHdl, weld::TreeView&, void );
+    virtual void ListModified() override;
 
     void            Init() override;
     void            UpdateButtonStates() override;

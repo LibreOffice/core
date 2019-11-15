@@ -100,6 +100,7 @@ SvxMenuConfigPage::SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rS
     m_xGearBtn->show();
     m_xContentsListBox.reset(new SvxMenuEntriesListBox(m_xBuilder->weld_tree_view("menucontents"), this));
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
+    m_xDropTargetHelper.reset(new SvxConfigPageFunctionDropTarget(*this, rTreeView));
     rTreeView.connect_size_allocate(LINK(this, SvxMenuConfigPage, MenuEntriesSizeAllocHdl));
     Size aSize(m_xFunctions->get_size_request());
     rTreeView.set_size_request(aSize.Width(), aSize.Height());
@@ -110,8 +111,6 @@ SvxMenuConfigPage::SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rS
 
     rTreeView.connect_changed(
         LINK( this, SvxMenuConfigPage, SelectMenuEntry ) );
-
-    rTreeView.connect_model_changed(LINK(this, SvxMenuConfigPage, ListModifiedHdl));
 
     m_xGearBtn->connect_selected(LINK(this, SvxMenuConfigPage, GearHdl));
 
@@ -148,7 +147,7 @@ SvxMenuConfigPage::SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rS
     }
 }
 
-IMPL_LINK_NOARG(SvxMenuConfigPage, ListModifiedHdl, weld::TreeView&, void)
+void SvxMenuConfigPage::ListModified()
 {
     // regenerate with the current ordering within the list
     SvxEntries* pEntries = GetTopLevelSelection()->GetEntries();
