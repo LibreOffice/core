@@ -61,10 +61,6 @@
 
 static FT_Library aLibFT = nullptr;
 
-typedef std::unordered_map<const char*, std::shared_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
-
-namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
-
 // TODO: remove when the priorities are selected by UI
 // if (AH==0) => disable autohinting
 // if (AA==0) => disable antialiasing
@@ -99,22 +95,6 @@ FreetypeFontFile::FreetypeFontFile( const OString& rNativeFileName )
         if( pLangBoost && !strncasecmp( pLangBoost, &maNativeFileName.getStr()[nPos+1], 3 ) )
            mnLangBoost += 0x2000;     // matching langinfo => better
     }
-}
-
-FreetypeFontFile* FreetypeFontFile::FindFontFile( const OString& rNativeFileName )
-{
-    // font file already known? (e.g. for ttc, synthetic, aliased fonts)
-    const char* pFileName = rNativeFileName.getStr();
-    FontFileList &rFontFileList = vclFontFileList::get();
-    FontFileList::const_iterator it = rFontFileList.find( pFileName );
-    if( it != rFontFileList.end() )
-        return it->second.get();
-
-    // no => create new one
-    FreetypeFontFile* pFontFile = new FreetypeFontFile( rNativeFileName );
-    pFileName = pFontFile->maNativeFileName.getStr();
-    rFontFileList[pFileName].reset(pFontFile);
-    return pFontFile;
 }
 
 bool FreetypeFontFile::Map()
@@ -154,10 +134,10 @@ void FreetypeFontFile::Unmap()
 }
 
 FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
-    const OString& rNativeFileName, int nFaceNum, int nFaceVariation, sal_IntPtr nFontId)
+    FreetypeFontFile* const pFontFile, int nFaceNum, int nFaceVariation, sal_IntPtr nFontId)
 :
     maFaceFT( nullptr ),
-    mpFontFile( FreetypeFontFile::FindFontFile( rNativeFileName ) ),
+    mpFontFile(pFontFile),
     mnFaceNum( nFaceNum ),
     mnFaceVariation( nFaceVariation ),
     mnRefCount( 0 ),
@@ -310,8 +290,6 @@ void GlyphCache::InitFreetype()
     pEnv = ::getenv( "SAL_ANTIALIASED_TEXT_PRIORITY" );
     if( pEnv )
         nDefaultPrioAntiAlias = pEnv[0] - '0';
-
-    (void)vclFontFileList::get();
 }
 
 namespace
@@ -351,7 +329,7 @@ void GlyphCache::AddFontFile(const OString& rNormalizedName,
         return;
 
     FreetypeFontInfo* pFontInfo = new FreetypeFontInfo( rDevFontAttr,
-        rNormalizedName, nFaceNum, nVariantNum, nFontId);
+        FindFontFile(rNormalizedName), nFaceNum, nVariantNum, nFontId);
     m_aFontInfoList[ nFontId ].reset(pFontInfo);
     if( m_nMaxFontId < nFontId )
         m_nMaxFontId = nFontId;
