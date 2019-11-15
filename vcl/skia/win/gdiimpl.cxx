@@ -43,43 +43,26 @@ void WinSkiaSalGraphicsImpl::Init()
     SkiaSalGraphicsImpl::Init();
 }
 
-void WinSkiaSalGraphicsImpl::createSurface()
+void WinSkiaSalGraphicsImpl::createWindowContext()
 {
-    if (isOffscreen())
-        return createOffscreenSurface();
-    destroySurface();
     // When created, Init() gets called with size (0,0), which is invalid size
     // for Skia. Creating the actual surface is delayed, so the size should be always
     // valid here, but better check.
-    assert(GetWidth() != 0 && GetHeight() != 0);
+    assert((GetWidth() != 0 && GetHeight() != 0) || isOffscreen());
     sk_app::DisplayParams displayParams;
     switch (SkiaHelper::renderMethodToUse())
     {
         case SkiaHelper::RenderRaster:
             mWindowContext = sk_app::window_context_factory::MakeRasterForWin(mWinParent.gethWnd(),
                                                                               displayParams);
-            assert(SkToBool(mWindowContext));
-            mSurface = mWindowContext->getBackbufferSurface();
-            assert(mSurface.get());
             mIsGPU = false;
             break;
         case SkiaHelper::RenderVulkan:
             mWindowContext = sk_app::window_context_factory::MakeVulkanForWin(mWinParent.gethWnd(),
                                                                               displayParams);
-            if (mWindowContext)
-                mSurface = mWindowContext->getBackbufferSurface();
-            if (!mSurface)
-            {
-                SAL_WARN("vcl.skia", "cannot create Vulkan GPU surface, disabling Vulkan");
-                SkiaHelper::disableRenderMethod(SkiaHelper::RenderVulkan);
-                return createSurface(); // try again
-            }
             mIsGPU = true;
             break;
     }
-#ifdef DBG_UTIL
-    prefillSurface();
-#endif
 }
 
 void WinSkiaSalGraphicsImpl::DeInit()

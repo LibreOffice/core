@@ -21,10 +21,6 @@
 #include <svdata.hxx>
 
 class ControlCacheKey;
-namespace sk_app
-{
-class WindowContext;
-}
 
 class SkiaCompatibleDC : public CompatibleDC
 {
@@ -79,11 +75,8 @@ public:
                                   const SalTwoRect& rPosAry) override;
 
 protected:
-    virtual void createSurface() override;
+    virtual void createWindowContext() override;
     virtual void performFlush() override;
-
-private:
-    std::unique_ptr<sk_app::WindowContext> mWindowContext;
 };
 
 typedef std::pair<ControlCacheKey, SkBitmap> SkiaControlCachePair;
