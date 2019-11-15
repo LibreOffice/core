@@ -81,6 +81,7 @@ namespace vcl
             virtual ~PrintPreviewWindow() override;
             virtual void dispose() override;
 
+            virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
             virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
             virtual void Command( const CommandEvent& ) override;
             virtual void Resize() override;
