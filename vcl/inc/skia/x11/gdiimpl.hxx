@@ -16,11 +16,6 @@
 #include <unx/x11/x11gdiimpl.h>
 #include <skia/gdiimpl.hxx>
 
-namespace sk_app
-{
-class WindowContext;
-}
-
 class VCL_PLUGIN_PUBLIC X11SkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public X11GraphicsImpl
 {
 private:
@@ -35,12 +30,9 @@ public:
     virtual void freeResources() override;
 
 protected:
-    virtual void createSurface() override;
+    virtual void createWindowContext() override;
     virtual void performFlush() override;
     virtual bool avoidRecreateByResize() const override;
-
-private:
-    std::unique_ptr<sk_app::WindowContext> mWindowContext;
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_X11_GDIIMPL_HXX

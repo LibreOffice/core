@@ -38,11 +38,8 @@ void X11SkiaSalGraphicsImpl::Init()
     SkiaSalGraphicsImpl::Init();
 }
 
-void X11SkiaSalGraphicsImpl::createSurface()
+void X11SkiaSalGraphicsImpl::createWindowContext()
 {
-    if (isOffscreen())
-        return createOffscreenSurface();
-    destroySurface();
     sk_app::DisplayParams displayParams;
     // Use a macro to hide an unreachable code warning.
     // TODO The Skia Xlib code actually requires the non-native color type to work properly.
@@ -53,7 +50,10 @@ void X11SkiaSalGraphicsImpl::createSurface()
     sk_app::window_context_factory::XlibWindowInfo winInfo;
     winInfo.fDisplay = mX11Parent.GetXDisplay();
     winInfo.fWindow = mX11Parent.GetDrawable();
-    assert(winInfo.fDisplay && winInfo.fWindow != None);
+    assert(winInfo.fDisplay);
+    // Allow window being None if offscreen, this is used to temporarily create GrContext
+    // for an offscreen surface.
+    assert(winInfo.fWindow != None || isOffscreen());
     winInfo.fFBConfig = nullptr; // not used
     winInfo.fVisualInfo = const_cast<SalVisual*>(&mX11Parent.GetVisual());
 #ifdef DBG_UTIL
@@ -70,28 +70,14 @@ void X11SkiaSalGraphicsImpl::createSurface()
         case SkiaHelper::RenderRaster:
             mWindowContext
                 = sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
-            assert(SkToBool(mWindowContext));
-            mSurface = mWindowContext->getBackbufferSurface();
-            assert(mSurface.get());
             mIsGPU = false;
             break;
         case SkiaHelper::RenderVulkan:
             mWindowContext
                 = sk_app::window_context_factory::MakeVulkanForXlib(winInfo, displayParams);
-            if (mWindowContext)
-                mSurface = mWindowContext->getBackbufferSurface();
-            if (!mSurface)
-            {
-                SAL_WARN("vcl.skia", "cannot create Vulkan GPU surface, disabling Vulkan");
-                SkiaHelper::disableRenderMethod(SkiaHelper::RenderVulkan);
-                return createSurface(); // try again
-            }
             mIsGPU = true;
             break;
     }
-#ifdef DBG_UTIL
-    prefillSurface();
-#endif
 }
 
 bool X11SkiaSalGraphicsImpl::avoidRecreateByResize() const
