@@ -71,11 +71,9 @@ void BitmapRenderTest::testTdf104141()
 
     // Check drawing results: ensure that it contains transparent
     // (greenish) pixels
-#if !defined MACOSX //TODO: on Mac colors are drifted, so exact compare fails
     const Color aColor = pVDev->GetPixel(Point(21, 21));
     CPPUNIT_ASSERT(aColor.GetGreen() > 10 * aColor.GetRed()
                    && aColor.GetGreen() > 10 * aColor.GetBlue());
-#endif
 }
 
 void BitmapRenderTest::testTdf113918()
@@ -188,10 +186,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
 
     aColor = pAlphaVirtualDevice->GetPixel(Point(1, 1));
     // Read back the opaque pixel
-#ifdef MACOSX
-    // Oh no... what we input is not the same as what we get out!
-    CPPUNIT_ASSERT_EQUAL(Color(0x002Cff44), aColor);
-#elif defined _WIN32
+#if defined _WIN32
     CPPUNIT_ASSERT_LESS(6, deltaColor(Color(0x0022ff55), aColor));
 #else
     CPPUNIT_ASSERT_EQUAL(Color(0x0022ff55), aColor);
@@ -203,10 +198,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     CPPUNIT_ASSERT_EQUAL(long(4), aBitmap.GetSizePixel().Height());
 
     aColor = aBitmap.GetPixelColor(1, 1);
-#ifdef MACOSX
-    // Oh no... what we input is not the same as what we get out!
-    CPPUNIT_ASSERT_EQUAL(Color(0x002Cff44), aColor);
-#elif defined _WIN32
+#if defined _WIN32
     CPPUNIT_ASSERT_LESS(6, deltaColor(Color(0x0022ff55), aColor));
 #else
     CPPUNIT_ASSERT_EQUAL(Color(0x0022ff55), aColor);
@@ -217,10 +209,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
 
     aColor = pAlphaVirtualDevice->GetPixel(Point(0, 0));
     // Read back the semi-transparent pixel
-#ifdef MACOSX
-    // Oh no... what we input is not the same as what we get out!
-    CPPUNIT_ASSERT_EQUAL(Color(0x342CFF44), aColor);
-#elif defined _WIN32
+#if defined _WIN32
     CPPUNIT_ASSERT_LESS(6, deltaColor(Color(0x4422FF55), aColor));
 #else
     CPPUNIT_ASSERT_EQUAL(Color(0x4422FF55), aColor);
@@ -232,10 +221,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     CPPUNIT_ASSERT_EQUAL(long(4), aBitmap.GetSizePixel().Height());
 
     aColor = aBitmap.GetPixelColor(0, 0);
-#ifdef MACOSX
-    // Oh no... what we input is not the same as what we get out!
-    CPPUNIT_ASSERT_EQUAL(Color(0x342CFF44), aColor);
-#elif defined _WIN32
+#if defined _WIN32
     CPPUNIT_ASSERT_LESS(6, deltaColor(Color(0x4422FF55), aColor));
 #else
     CPPUNIT_ASSERT_EQUAL(Color(0x4422FF55), aColor);

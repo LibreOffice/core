@@ -100,7 +100,7 @@ void VclOutdevTest::testVirtualDevice()
 #endif
 
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0,0)));
-#if defined LINUX //TODO: various failures on Mac and Windows tinderboxes
+#if !defined _WIN32 //TODO: various failures on Windows tinderboxes
     CPPUNIT_ASSERT_EQUAL(COL_BLUE, pVDev->GetPixel(Point(1,2)));
     CPPUNIT_ASSERT_EQUAL(COL_RED, pVDev->GetPixel(Point(31,30)));
 #endif
@@ -109,7 +109,7 @@ void VclOutdevTest::testVirtualDevice()
     // Gotcha: y and x swap for BitmapReadAccess: deep joy.
     Bitmap::ScopedReadAccess pAcc(aBmp);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, static_cast<Color>(pAcc->GetPixel(0,0)));
-#if defined LINUX //TODO: various failures on Mac and Windows tinderboxes
+#if !defined _WIN32 //TODO: various failures on Windows tinderboxes
     CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<Color>(pAcc->GetPixel(2,1)));
     CPPUNIT_ASSERT_EQUAL(COL_RED, static_cast<Color>(pAcc->GetPixel(30,31)));
 #endif
