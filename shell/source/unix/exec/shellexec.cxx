@@ -117,6 +117,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         }
 
 #ifdef MACOSX
+        bool dir = false;
         if (uri->getScheme().equalsIgnoreAsciiCase("file")) {
             OUString pathname;
             auto const e1 = osl::FileBase::getSystemPathFromFileURL(aCommand, pathname);
@@ -142,8 +143,10 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
                 auto const e3 = errno;
                 SAL_INFO("shell", "stat(" << pathname8 << ") failed with errno " << e3);
             }
-            if (e2 != 0 || !S_ISREG(st.st_mode)
-                || (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) != 0)
+            if (e2 == 0 && S_ISDIR(st.st_mode)) {
+                dir = true;
+            } else if (e2 != 0 || !S_ISREG(st.st_mode)
+                       || (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) != 0)
             {
                 throw css::lang::IllegalArgumentException(
                     "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, 0);
@@ -172,7 +175,11 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         // 2.4  If it does not match an exitsting pathname (relative to CWD):
         //  Results in "The file /.../foo:bar does not exits." (where "/..." is
         //  the CWD) on stderr and SystemShellExecuteException.
-        aBuffer.append("open --");
+        aBuffer.append("open");
+        if (dir) {
+            aBuffer.append(" -R");
+        }
+        aBuffer.append(" --");
 #else
         // Just use xdg-open on non-Mac
         aBuffer.append("/usr/bin/xdg-open");
