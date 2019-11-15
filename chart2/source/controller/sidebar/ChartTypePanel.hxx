@@ -109,21 +109,12 @@ private:
     DECL_LINK(SelectMainTypeHdl, weld::ComboBox&, void);
     DECL_LINK(SelectSubTypeHdl, SvtValueSet*, void);
 
-    //ui controls
-    //std::unique_ptr<weld::Label>  mpChartTypeLabel;
-    //std::unique_ptr<weld::ComboBox> m_pMainTypeList;
-    //VclPtr<ListBox> m_pMainTypeList;
-    //VclPtr<ValueSet> m_pSubTypeList;
-
     vcl::EnumContext maContext;
 
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
 
     bool mbModelValid;
-
-    OUString maTextTitle;
-    OUString maTextSubTitle;
 
     void Initialize();
 
