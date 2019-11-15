@@ -190,6 +190,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_b3792830",
+        "filename": "offapi/com/sun/star/frame/XInfobarProvider.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-15T10:05:54Z",
+      "side": 1,
+      "message": "I have no idea at all :)",
+      "parentUuid": "7f7f9b97_13bd7cd7",
+      "revId": "8e2f3f3bd18e16bf9dc5e7839f036403f2ccc86a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_73fe30af",
         "filename": "offapi/com/sun/star/frame/XInfobarProvider.idl",
         "patchSetId": 4
@@ -288,6 +306,24 @@
       "side": 1,
       "message": "Not really, I just looked at existing code and saw there was a use case for updating message and type, but not for actionButtons and showCloseButton.\n\nBut of course I can allow all properties here if you think it makes more sense.",
       "parentUuid": "7f7f9b97_d3286435",
+      "revId": "8e2f3f3bd18e16bf9dc5e7839f036403f2ccc86a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_5378d428",
+        "filename": "offapi/com/sun/star/frame/XInfobarProvider.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-15T10:05:54Z",
+      "side": 1,
+      "message": "I was just curious about the inconsistency (and users might be too, so it might be good to document the rationale in the documentation comment)",
+      "parentUuid": "7f7f9b97_93d0ac21",
       "revId": "8e2f3f3bd18e16bf9dc5e7839f036403f2ccc86a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
