@@ -455,7 +455,7 @@ namespace emfio
         {}
     };
 
-    class EMFIO_DLLPUBLIC MtfTools
+    class MtfTools
     {
         MtfTools(MtfTools const &) = delete;
         MtfTools& operator =(MtfTools const &) = delete;

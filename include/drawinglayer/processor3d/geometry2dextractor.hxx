@@ -38,7 +38,7 @@ namespace drawinglayer
             It is e.g. used as sub-processor for contour extraction where 3D geometry is only
             useful as 2D projected geometry.
          */
-        class DRAWINGLAYER_DLLPUBLIC Geometry2DExtractingProcessor final : public BaseProcessor3D
+        class Geometry2DExtractingProcessor final : public BaseProcessor3D
         {
         private:
             /// result holding vector (2D)

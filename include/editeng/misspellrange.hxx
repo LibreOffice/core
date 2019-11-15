@@ -16,7 +16,7 @@
 
 namespace editeng {
 
-struct EDITENG_DLLPUBLIC MisspellRange
+struct MisspellRange
 {
     size_t mnStart;
     size_t mnEnd;
@@ -24,7 +24,7 @@ struct EDITENG_DLLPUBLIC MisspellRange
     MisspellRange(size_t nStart, size_t nEnd);
 };
 
-struct EDITENG_DLLPUBLIC MisspellRanges
+struct MisspellRanges
 {
     sal_Int32 mnParagraph;
     std::vector<MisspellRange> maRanges;
