@@ -13,6 +13,7 @@
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <sfx2/safemode.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <comphelper/processfactory.hxx>
@@ -295,6 +296,7 @@ namespace {
         try {
             exec->execute(uri, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
         } catch (const css::uno::Exception &) {
+            TOOLS_WARN_EXCEPTION("svx.dialog", "opening <" << uri << "> failed:");
         }
         m_xDialog->response(RET_OK);
     }
