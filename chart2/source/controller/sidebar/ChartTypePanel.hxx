@@ -125,10 +125,10 @@ private:
     void Initialize();
 
     std::unique_ptr<Dim3DLookResourceGroup> m_pDim3DLookResourceGroup;
-    /*std::unique_ptr<StackingResourceGroup>      m_pStackingResourceGroup;
-    std::unique_ptr<SplineResourceGroup>        m_pSplineResourceGroup;
-    std::unique_ptr<GeometryResourceGroup>      m_pGeometryResourceGroup;
-    std::unique_ptr<SortByXValuesResourceGroup> m_pSortByXValuesResourceGroup;*/
+    std::unique_ptr<StackingResourceGroup> m_pStackingResourceGroup;
+    //std::unique_ptr<SplineResourceGroup>        m_pSplineResourceGroup;
+    std::unique_ptr<GeometryResourceGroup> m_pGeometryResourceGroup;
+    std::unique_ptr<SortByXValuesResourceGroup> m_pSortByXValuesResourceGroup;
 
     css::uno::Reference<css::chart2::XChartDocument> m_xChartModel;
 
