@@ -190,6 +190,15 @@ public:
                 return true;
             }
         }
+        if (auto const e = dyn_cast<CallExpr>(sub->IgnoreParenImpCasts()))
+        {
+            // Ignore use of `long __builtin_expect(long, long)`, as found in the definition of
+            // `assert` on macOS:
+            if (e->getBuiltinCallee() == Builtin::BI__builtin_expect)
+            {
+                return true;
+            }
+        }
         bool suggestion;
         bool replacement = {};
         if (res.isInt())
