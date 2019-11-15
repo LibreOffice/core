@@ -291,20 +291,20 @@ SalGraphics* AquaSalFrame::AcquireGraphics()
         mpGraphics->SetWindowGraphics( this );
     }
 
-    mbGraphics = TRUE;
+    mbGraphics = true;
     return mpGraphics;
 }
 
 void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
     SAL_WARN_IF( pGraphics != mpGraphics, "vcl", "graphics released on wrong frame" );
-    mbGraphics = FALSE;
+    mbGraphics = false;
 }
 
 bool AquaSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
     GetSalData()->mpInstance->PostEvent( this, pData.release(), SalEvent::UserEvent );
-    return TRUE;
+    return true;
 }
 
 void AquaSalFrame::SetTitle(const OUString& rTitle)
@@ -680,9 +680,9 @@ bool AquaSalFrame::GetWindowState( SalFrameState* pState )
             pState->mnWidth = maGeometry.nWidth;
             pState->mnHeight = maGeometry.nHeight;
             pState->mnState = WindowStateState::Normal;
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
 
     OSX_SALDATA_RUNINMAIN_UNION( GetWindowState( pState ), boolean )
@@ -708,7 +708,7 @@ bool AquaSalFrame::GetWindowState( SalFrameState* pState )
     else
         pState->mnState = WindowStateState::Maximized;
 
-    return TRUE;
+    return true;
 }
 
 void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
@@ -1543,7 +1543,7 @@ bool AquaSalFrame::SetPluginParent( SystemParentData* )
 bool AquaSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , vcl::KeyCode& )
 {
     // not supported yet
-    return FALSE;
+    return false;
 }
 
 LanguageType AquaSalFrame::GetInputLanguage()
@@ -1593,7 +1593,7 @@ void AquaSalFrame::SetParent( SalFrame* pNewParent )
     bool bShown = mbShown;
     // remove from child list
     if (bShown)
-        Show(FALSE);
+        Show(false);
     mpParent = static_cast<AquaSalFrame*>(pNewParent);
     // insert to correct parent and paint
     Show( bShown );

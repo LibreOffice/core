@@ -743,7 +743,7 @@ bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
 
     // draw the EPS
     const NSRect aDstRect = NSMakeRect( nX, nY, nWidth, nHeight);
-    const BOOL bOK = [xEpsImage drawInRect: aDstRect];
+    const bool bOK = [xEpsImage drawInRect: aDstRect];
 
     // restore the NSGraphicsContext
     [NSGraphicsContext setCurrentContext: pOrigNSCtx];

@@ -141,22 +141,22 @@ using namespace ::com::sun::star::uno;
 }
 
 +(BOOL)isStrikethrough:(PropertyValue)property {
-    BOOL strikethrough = NO;
+    bool strikethrough = false;
     sal_Int16 value = 0;
     property.Value >>= value;
     if ( value != ::css_awt::FontStrikeout::NONE
       && value != ::css_awt::FontStrikeout::DONTKNOW ) {
-        strikethrough = YES;
+        strikethrough = true;
     }
     return strikethrough;
 }
 
 +(BOOL)convertBoolean:(PropertyValue)property {
-    BOOL myBoolean = NO;
+    bool myBoolean = false;
     bool value = false;
     property.Value >>= value;
     if ( value ) {
-        myBoolean = YES;
+        myBoolean = true;
     }
     return myBoolean;
 }
@@ -210,7 +210,7 @@ using namespace ::com::sun::star::uno;
     static const OUString attrTextAlignment("ParaAdjust");
     // vars
     sal_Int32 underlineColor = 0;
-    BOOL underlineHasColor = NO;
+    bool underlineHasColor = false;
     // add attributes to string
     for ( int attrIndex = 0; attrIndex < attributes.getLength(); attrIndex++ ) {
         PropertyValue property = attributes [ attrIndex ];

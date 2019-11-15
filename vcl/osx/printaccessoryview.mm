@@ -299,7 +299,7 @@ public:
             if( name_it != maTagToPropertyName.end() && name_it->second != "PrintContent" )
             {
                 vcl::PrinterController * mpController = [mpAccessoryController printerController];
-                BOOL bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
+                bool bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
                 if( pCtrl )
                 {
                     [pCtrl setEnabled: bEnabled];

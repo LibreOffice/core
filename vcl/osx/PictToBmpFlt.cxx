@@ -28,7 +28,7 @@
 bool ImageToPNG( css::uno::Sequence<sal_Int8> const & rImgData,
                  css::uno::Sequence<sal_Int8>& rPngData)
 {
-    NSData* pData = [NSData dataWithBytesNoCopy: const_cast<sal_Int8 *>(rImgData.getConstArray()) length: rImgData.getLength() freeWhenDone: 0];
+    NSData* pData = [NSData dataWithBytesNoCopy: const_cast<sal_Int8 *>(rImgData.getConstArray()) length: rImgData.getLength() freeWhenDone: false];
     if( !pData)
         return false;
 
@@ -51,7 +51,7 @@ bool PNGToImage( css::uno::Sequence<sal_Int8> const & rPngData,
                  NSBitmapImageFileType eOutFormat
                 )
 {
-    NSData* pData = [NSData dataWithBytesNoCopy: const_cast<sal_Int8*>(rPngData.getConstArray()) length: rPngData.getLength() freeWhenDone: 0];
+    NSData* pData = [NSData dataWithBytesNoCopy: const_cast<sal_Int8*>(rPngData.getConstArray()) length: rPngData.getLength() freeWhenDone: false];
     if( !pData)
         return false;
 

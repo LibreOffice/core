@@ -59,7 +59,7 @@ using namespace ::com::sun::star::uno;
 -(Reference<XAccessibleContext>)accessibleContext;
 @end
 
-static BOOL isPopupMenuOpen = NO;
+static bool isPopupMenuOpen = false;
 
 static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     return s << [[obj description] UTF8String];
@@ -710,7 +710,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     if ( isPopupMenuOpen ) {
         return NO;
     }
-    BOOL ignored = NO;
+    bool ignored = false;
     sal_Int16 nRole = [ self accessibleContext ] -> getAccessibleRole();
     switch ( nRole ) {
         //case AccessibleRole::PANEL:
@@ -719,7 +719,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         case AccessibleRole::SEPARATOR:
         case AccessibleRole::FILLER:
         case AccessibleRole::DIALOG:
-            ignored = YES;
+            ignored = true;
             break;
         default:
             ignored = ! ( [ self accessibleContext ] -> getAccessibleStateSet() -> contains ( AccessibleStateType::VISIBLE ) );
@@ -811,7 +811,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 
 -(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeIsSettable:" << attribute << "]");
-    BOOL isSettable = NO;
+    bool isSettable = false;
     if ( [ self accessibleText ] ) {
         isSettable = [ AquaA11yTextWrapper isAttributeSettable: attribute forElement: self ];
     }
@@ -904,7 +904,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     // get some information
     NSString * role = static_cast<NSString *>([ self accessibilityAttributeValue: NSAccessibilityRoleAttribute ]);
     id enabledAttr = [ self enabledAttribute ];
-    BOOL enabled = [ enabledAttr boolValue ];
+    bool enabled = [ enabledAttr boolValue ];
     NSView * parent = static_cast<NSView *>([ self accessibilityAttributeValue: NSAccessibilityParentAttribute ]);
     AquaA11yWrapper * parentAsWrapper = nil;
     if ( [ parent isKindOfClass: [ AquaA11yWrapper class ] ] ) {
@@ -953,7 +953,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 #pragma mark Hit Test
 
 -(BOOL)isViewElement:(NSObject *)viewElement hitByPoint:(NSPoint)point {
-    BOOL hit = NO;
+    bool hit = false;
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
         //TODO: 10.10 accessibilityAttributeValue:
@@ -966,7 +966,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         float maxX = minX + [ size sizeValue ].width;
         float maxY = minY + [ size sizeValue ].height;
         if ( minX < point.x && maxX > point.x && minY < point.y && maxY > point.y ) {
-            hit = YES;
+            hit = true;
         }
     }
     [ pool release ];

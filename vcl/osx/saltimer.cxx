@@ -152,7 +152,7 @@ void AquaSalTimer::handleTimerElapsed()
         callTimerCallback();
     }
     else
-        queueDispatchTimerEvent( YES );
+        queueDispatchTimerEvent( true );
 }
 
 bool AquaSalTimer::handleDispatchTimerEvent( NSEvent *pEvent )
@@ -203,7 +203,7 @@ void AquaSalTimer::handleWindowShouldClose()
     // for whatever reason events get filtered on close, presumably by
     // timestamp so post a new timeout event, if there was one queued...
     if ( ExistsValidEvent() && !m_pRunningTimer )
-        queueDispatchTimerEvent( NO );
+        queueDispatchTimerEvent( false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -73,7 +73,7 @@ Window::~Window()
 
 bool Window::handleObservation( NSString* /*pKeyPath*/ )
 {
-    const BOOL bReadyForDisplay = [mpPlayerLayer isReadyForDisplay];
+    const bool bReadyForDisplay = [mpPlayerLayer isReadyForDisplay];
     [mpPlayerLayer setHidden:!bReadyForDisplay];
     return true;
 }

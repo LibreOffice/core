@@ -225,7 +225,7 @@ static AquaSalFrame* getMouseContainerFrame()
     // is this event actually inside that NSWindow ?
     NSPoint aPt = [NSEvent mouseLocation];
     NSRect aFrameRect = [self frame];
-    BOOL bInRect = NSPointInRect( aPt, aFrameRect );
+    bool bInRect = NSPointInRect( aPt, aFrameRect );
     return bInRect;
 }
 
@@ -352,7 +352,7 @@ static AquaSalFrame* getMouseContainerFrame()
     (void)pNotification;
     SolarMutexGuard aGuard;
 
-    BOOL bRet = YES;
+    bool bRet = true;
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
         // #i84461# end possible input
@@ -360,7 +360,7 @@ static AquaSalFrame* getMouseContainerFrame()
         if( AquaSalFrame::isAlive( mpFrame ) )
         {
             mpFrame->CallCallback( SalEvent::Close, nullptr );
-            bRet = NO; // application will close the window or not, AppKit shouldn't
+            bRet = false; // application will close the window or not, AppKit shouldn't
             AquaSalTimer *pTimer = static_cast<AquaSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
             assert( pTimer );
             pTimer->handleWindowShouldClose();
@@ -772,7 +772,7 @@ static AquaSalFrame* getMouseContainerFrame()
         aEvent.mnY              = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mnCode           |= KEY_MOD1; // we want zooming, no scrolling
-        aEvent.mbDeltaIsPixel   = TRUE;
+        aEvent.mbDeltaIsPixel   = true;
 
         if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
@@ -781,7 +781,7 @@ static AquaSalFrame* getMouseContainerFrame()
         aEvent.mnNotchDelta = (nDeltaZ >= 0) ? +1 : -1;
         if( aEvent.mnDelta == 0 )
             aEvent.mnDelta = aEvent.mnNotchDelta;
-        aEvent.mbHorz = FALSE;
+        aEvent.mbHorz = false;
         sal_uInt32 nScrollLines = nDeltaZ;
         if (nScrollLines == 0)
             nScrollLines = 1;
@@ -831,7 +831,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
         aEvent.mnY              = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
-        aEvent.mbDeltaIsPixel   = TRUE;
+        aEvent.mbDeltaIsPixel   = true;
 
         if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
@@ -842,7 +842,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             aEvent.mnNotchDelta = (dX < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
-            aEvent.mbHorz = TRUE;
+            aEvent.mbHorz = true;
             aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
             mpFrame->CallCallback( SalEvent::WheelMouse, &aEvent );
         }
@@ -852,7 +852,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             aEvent.mnNotchDelta = (dY < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
-            aEvent.mbHorz = FALSE;
+            aEvent.mbHorz = false;
             aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
             mpFrame->CallCallback( SalEvent::WheelMouse, &aEvent );
         }
@@ -893,7 +893,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         aEvent.mnX            = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
         aEvent.mnY            = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
         aEvent.mnCode         = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
-        aEvent.mbDeltaIsPixel = FALSE;
+        aEvent.mbDeltaIsPixel = false;
 
         if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
@@ -904,7 +904,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             aEvent.mnNotchDelta = (dX < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
-            aEvent.mbHorz = TRUE;
+            aEvent.mbHorz = true;
             sal_uInt32 nScrollLines = fabs(dX) / WHEEL_EVENT_FACTOR;
             if (nScrollLines == 0)
                 nScrollLines = 1;
@@ -918,7 +918,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             aEvent.mnNotchDelta = (dY < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
-            aEvent.mbHorz = FALSE;
+            aEvent.mbHorz = false;
             sal_uInt32 nScrollLines = fabs(dY) / WHEEL_EVENT_FACTOR;
             if (nScrollLines == 0)
                 nScrollLines = 1;
@@ -1509,7 +1509,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             // don't send code points in the private use area
             if( keyChar >= 0xf700 && keyChar < 0xf780 )
                 keyChar = 0;
-            BOOL bRet = [self sendKeyToFrameDirect: nKeyCode character: keyChar modifiers: mpFrame->mnLastModifierFlags];
+            bool bRet = [self sendKeyToFrameDirect: nKeyCode character: keyChar modifiers: mpFrame->mnLastModifierFlags];
             mbInKeyInput = false;
 
             return bRet;
@@ -1527,7 +1527,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 - (BOOL)hasMarkedText
 {
-    BOOL bHasMarkedText;
+    bool bHasMarkedText;
 
     bHasMarkedText = ( mMarkedRange.location != NSNotFound ) &&
                      ( mMarkedRange.length != 0 );
@@ -1545,7 +1545,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     // This is a hack, since it is not understood what a) causes that crash
     // and b) why we should have a marked range at this point.
     if( ! mbInKeyInput )
-        bHasMarkedText = YES;
+        bHasMarkedText = true;
 
     return bHasMarkedText;
 }

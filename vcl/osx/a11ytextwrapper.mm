@@ -279,13 +279,13 @@ using namespace ::com::sun::star::uno;
 }
 
 +(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper {
-    BOOL isSettable = NO;
+    bool isSettable = false;
     if ( [ attribute isEqualToString: NSAccessibilityValueAttribute ]
       || [ attribute isEqualToString: NSAccessibilitySelectedTextAttribute ]
       || [ attribute isEqualToString: NSAccessibilitySelectedTextRangeAttribute ]
       || [ attribute isEqualToString: NSAccessibilityVisibleCharacterRangeAttribute ] ) {
         if ( ! [ [ wrapper accessibilityAttributeValue: NSAccessibilityRoleAttribute ] isEqualToString: NSAccessibilityStaticTextRole ] ) {
-            isSettable = YES;
+            isSettable = true;
         }
     }
     return isSettable;
