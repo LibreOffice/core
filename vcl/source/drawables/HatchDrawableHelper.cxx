@@ -8,7 +8,7 @@
  *
  */
 
-#include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <tools/gen.hxx>
 #include <tools/line.hxx>
 #include <tools/helpers.hxx>
@@ -33,9 +33,9 @@ bool HatchDrawableHelper::DrawDecomposedHatchLines(OutputDevice* pRenderContext,
         // #i115630# DrawHatch does not work with beziers included in the polypolygon, take care of that
         if (rPolyPolygon.HasCurve())
         {
-            OSL_ENSURE(
-                false,
-                "DrawHatch does *not* support curves, falling back to AdaptiveSubdivide()...");
+            SAL_WARN("vcl.gdi",
+                     "DrawHatch does *not* support curves, falling back to AdaptiveSubdivide()...");
+
             tools::PolyPolygon aPolyPoly;
 
             rPolyPolygon.AdaptiveSubdivide(aPolyPoly);
