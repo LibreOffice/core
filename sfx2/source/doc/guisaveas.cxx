@@ -724,6 +724,8 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
     ::comphelper::SequenceAsHashMap aDefFiltPropsHM = GetDocServiceDefaultFilterCheckFlags( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT, SfxFilterFlags::NONE );
     SfxFilterFlags nDefFiltFlags = static_cast<SfxFilterFlags>(aDefFiltPropsHM.getUnpackedValueOrDefault("Flags", sal_Int32(0) ));
 
+    bool bAsk = false;
+
     // if the old filter is not acceptable
     // and there is no default filter or it is not acceptable for requested parameters then proceed with saveAs
     if ( ( aFiltPropsHM.empty() || !( nFiltFlags & SfxFilterFlags::EXPORT ) )
@@ -739,6 +741,38 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
     else if ( ( !( nFiltFlags & SfxFilterFlags::OWN ) || ( nFiltFlags & SfxFilterFlags::ALIEN ) )
            && !aDefFiltPropsHM.empty()
            && ( nDefFiltFlags & SfxFilterFlags::EXPORT ) && !( nDefFiltFlags & SfxFilterFlags::INTERNAL ))
+    {
+        bAsk = true;
+    }
+
+    // check if EncryptionData supports this output format
+    {
+        OUString aSupportedFilters;
+        const ::comphelper::SequenceAsHashMap& rDocumentProperties = GetDocProps();
+        css::uno::Sequence<css::beans::NamedValue> aEncryptionData = rDocumentProperties.getUnpackedValueOrDefault("EncryptionData", css::uno::Sequence<css::beans::NamedValue>());
+        if (aEncryptionData != css::uno::Sequence<css::beans::NamedValue>())
+        {
+            for (const css::beans::NamedValue& aNamedValue : aEncryptionData)
+            {
+                if (aNamedValue.Name == "SupportedFilters")
+                {
+                    aNamedValue.Value >>= aSupportedFilters;
+                }
+            }
+        }
+
+        // if 'SupportedFilters' is empty assume that all filters are supported.
+        if (!aSupportedFilters.isEmpty())
+        {
+            const OUString aSelectedFilter = aFiltPropsHM.getUnpackedValueOrDefault("UIName", OUString());
+
+            aSupportedFilters = ";" + aSupportedFilters + ";";
+            const OUString aSearchToken = ";" + aSelectedFilter + ";";
+            bAsk = (aSupportedFilters.indexOf(aSearchToken) < 0);
+        }
+    }
+
+    if (bAsk)
     {
         // the default filter is acceptable and the old filter is alien one
         // so ask to make a saveAs operation
