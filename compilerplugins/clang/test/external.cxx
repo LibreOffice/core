@@ -16,10 +16,37 @@ int const n2 = 0; // no warning, internal linkage
 
 constexpr int n3 = 0; // no warning, internal linkage
 
+struct S1
+{
+    friend void f1() {} // no warning for injected function (no place where to mark it `static`)
+    template <typename> friend void ft1() {} // ...nor for injected function template
+    // expected-error@+1 {{externally available entity 'f2' is not previously declared in an included file (if it is only used in this translation unit, make it static; otherwise, provide a declaration of it in an included file) [loplugin:external]}}
+    friend void f2() {}
+};
+
+struct S2
+{
+    friend void f1();
+    template <typename> friend void ft1();
+    // expected-note@+1 {{another declaration is here [loplugin:external]}}
+    friend void f2();
+};
+
+static void g()
+{
+    void f1();
+    // expected-note@+1 {{another declaration is here [loplugin:external]}}
+    void f2();
+}
+
+// expected-note@+1 {{another declaration is here [loplugin:external]}}
+void f2();
+
 int main()
 {
     (void)n2;
     (void)n3;
+    g();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
