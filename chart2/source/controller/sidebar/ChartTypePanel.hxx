@@ -110,9 +110,6 @@ private:
 
     bool mbModelValid;
 
-    OUString maTextTitle;
-    OUString maTextSubTitle;
-
     void Initialize();
 
     std::unique_ptr<Dim3DLookResourceGroup_unwelded> m_pDim3DLookResourceGroup;
