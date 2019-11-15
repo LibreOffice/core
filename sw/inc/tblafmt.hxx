@@ -209,7 +209,8 @@ public:
 
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
                                 SwTableAutoFormatUpdateFlags eFlags, SvNumberFormatter const * );
-    void UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet, SwTableAutoFormatUpdateFlags eFlags,
+    void UpdateToSet( const sal_uInt8 nPos, const bool bSingleRowTable, const bool bSingleColTable,
+                        SfxItemSet& rSet, SwTableAutoFormatUpdateFlags eFlags,
                         SvNumberFormatter* ) const ;
 
     void RestoreTableProperties(SwTable &table) const;

@@ -316,17 +316,25 @@ DECLARE_HTMLIMPORT_TEST(testReqIfBr, "reqif-br.xhtml")
 
 DECLARE_HTMLIMPORT_TEST(testReqIfTable, "reqif-table.xhtml")
 {
+    // to see this: soffice --infilter="HTML (StarWriter):xhtmlns=reqif-xhtml" sw/qa/extras/htmlimport/data/reqif-table.xhtml
     // Load a table with xhtmlns=reqif-xhtml filter param.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xTables->getCount());
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     auto aBorder = getProperty<table::BorderLine2>(xCell, "TopBorder");
     // This was 0, tables had no borders, even if the default autoformat has
     // borders and the markup allows no custom borders.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(18), aBorder.LineWidth);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCell, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCell, "LeftBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Left Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCell, "RightBorder");
+    // This was 0. Single column tables had no right border.  tdf#115576
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Right Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
 }
 
 DECLARE_HTMLIMPORT_TEST(testImageSize, "image-size.html")
