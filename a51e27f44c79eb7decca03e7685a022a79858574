@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_13a25caf",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-11-15T09:57:03Z",
+      "side": 1,
+      "message": "stylistic, but: why not put the logical operator inside the first test expression?",
+      "revId": "a51e27f44c79eb7decca03e7685a022a79858574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_539f745e",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-11-15T09:57:03Z",
+      "side": 1,
+      "message": "In the case of no comment, I\u0027d prefer the /c parameter not given, instead of empty comments added - we\u0027ve got literally 100eds of builds doing that",
+      "revId": "a51e27f44c79eb7decca03e7685a022a79858574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
