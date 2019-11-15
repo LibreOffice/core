@@ -168,13 +168,13 @@ private:
     Color                      m_aOrigFontColor;
     sal_uInt16                 m_nHtmlMode;
     bool                       m_bUnderlineColorDisabled;
+    sal_Int32                  m_nRelief;
 
     std::unique_ptr<weld::Label> m_xFontColorFT;
     std::unique_ptr<ColorListBox> m_xFontColorLB;
     std::unique_ptr<weld::Label> m_xEffectsFT;
     std::unique_ptr<weld::ComboBox> m_xEffectsLB;
     std::unique_ptr<weld::Label> m_xReliefFT;
-    std::unique_ptr<weld::ComboBox> m_xReliefLB;
     std::unique_ptr<weld::CheckButton> m_xOutlineBtn;
     std::unique_ptr<weld::CheckButton> m_xShadowBtn;
     std::unique_ptr<weld::CheckButton> m_xBlinkingBtn;
@@ -192,6 +192,9 @@ private:
     std::unique_ptr<weld::Label> m_xPositionFT;
     std::unique_ptr<weld::ComboBox> m_xPositionLB;
     std::unique_ptr<weld::Label> m_xA11yWarningFT;
+    std::unique_ptr<weld::RadioButton> m_xReliefNone;
+    std::unique_ptr<weld::RadioButton> m_xReliefEmbossed;
+    std::unique_ptr<weld::RadioButton> m_xReliefEngraved;
 
     void                Initialize();
     void                UpdatePreview_Impl();
@@ -207,6 +210,7 @@ private:
     DECL_LINK(TristClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(UpdatePreview_Impl, weld::ComboBox&, void);
     DECL_LINK(ColorBoxSelectHdl_Impl, ColorListBox&, void);
+    DECL_LINK(ReliefButtonHdl_Impl, weld::ToggleButton&, void);
 
 public:
     SvxCharEffectsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
