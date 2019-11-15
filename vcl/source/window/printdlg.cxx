@@ -145,6 +145,13 @@ void PrintDialog::PrintPreviewWindow::Resize()
     preparePreviewBitmap();
 }
 
+void PrintDialog::PrintPreviewWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 55,
+                                   pDrawingArea->get_text_height() * 40);
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+}
+
 void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push();

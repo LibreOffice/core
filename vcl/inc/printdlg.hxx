@@ -74,6 +74,7 @@ namespace vcl
             PrintPreviewWindow(PrintDialog* pDialog);
             virtual ~PrintPreviewWindow() override;
 
+            virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
             virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
             virtual bool Command( const CommandEvent& ) override;
             virtual void Resize() override;
