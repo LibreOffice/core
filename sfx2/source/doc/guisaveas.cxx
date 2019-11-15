@@ -764,8 +764,10 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
         // if 'SupportedFilters' is empty assume that all filters are supported.
         if (!aSupportedFilters.isEmpty())
         {
+            const OUString aSelectedFilter = aFiltPropsHM.getUnpackedValueOrDefault("UIName", OUString());
+
             aSupportedFilters = ";" + aSupportedFilters + ";";
-            const OUString aSearchToken = ";" + aFilterName + ";";
+            const OUString aSearchToken = ";" + aSelectedFilter + ";";
             bAsk = (aSupportedFilters.indexOf(aSearchToken) < 0);
         }
     }
