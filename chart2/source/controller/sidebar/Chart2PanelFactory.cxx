@@ -86,7 +86,15 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         if (rsResourceURL.endsWith("/ElementsPanel"))
             pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pController );
         else if (rsResourceURL.endsWith("/TypePanel"))
-            pPanel = ChartTypePanel::Create( pParentWindow, xFrame, pController );
+        {
+            //pPanel = ChartTypePanel::Create( pParentWindow, xFrame, pController );
+            VclPtrInstance<ChartTypePanel> ppPanel(pParentWindow, xFrame, pController);
+            xElement = sfx2::sidebar::SidebarPanelBase::Create(
+                rsResourceURL,
+                xFrame,
+                ppPanel,
+                css::ui::LayoutSize(-1,-1,-1));
+        }
         else if (rsResourceURL.endsWith("/SeriesPanel"))
             pPanel = ChartSeriesPanel::Create(pParentWindow, xFrame, pController);
         else if (rsResourceURL.endsWith("/AxisPanel"))
