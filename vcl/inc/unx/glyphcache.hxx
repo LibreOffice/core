@@ -37,6 +37,7 @@
 #include <unordered_map>
 
 class FreetypeFont;
+class FreetypeFontFile;
 class FreetypeFontInstance;
 class FreetypeFontInfo;
 class FontConfigFontOptions;
@@ -47,11 +48,36 @@ class SvpGcpHelper;
 namespace basegfx { class B2DPolyPolygon; }
 namespace vcl { struct FontCapabilities; }
 
+ /**
+  * The GlyphCache caches various aspects of Freetype fonts
+  *
+  * It mainly consists of three std::unordered_map lists, which hold the items of the cache.
+  *
+  * They form kind of a tree, with FreetypeFontFile as the roots, referenced by multiple FreetypeFontInfo
+  * entries, which are referenced by the FreetypeFont items.
+  *
+  * All of these items have reference counters, but these don't control the items life-cycle, but that of
+  * the managed resources.
+  *
+  * The respective resources are:
+  *   FreetypeFontFile = holds the mmapped font file, as long as it's used by any FreetypeFontInfo.
+  *   FreetypeFontInfo = holds the FT_FaceRec_ object, as long as it's used by any FreetypeFont.
+  *   FreetypeFont     = holds the FT_SizeRec_.
+  *
+  * FreetypeFontInfo therefore is embedded in the Freetype subclass of PhysicalFontFace.
+  * FreetypeFont is embedded in the Freetype subclass of LogicalFontInstance.
+  *
+  * Nowadays there is not really a reason to have seperate files for the classes, as the GlyphCache is
+  * just about handling of Freetype based fonts, not some abstract glyphs.
+  *
+  * One additional note: the byte-size based garbage collection of unused fonts can currently be assumed
+  * to be broken. Since the move of the glyph rect cache into the ImplFontCache, so it can be used by all
+  * platforms, it just takes too long to kick-in, as there is no real accounting left.
+  **/
 class VCL_DLLPUBLIC GlyphCache final
 {
 public:
-    explicit                GlyphCache();
-    virtual                 ~GlyphCache();
+    ~GlyphCache();
 
     static GlyphCache&      GetInstance();
 
@@ -68,9 +94,14 @@ public:
     void                    ClearFontOptions();
 
 private:
+    // to access the constructor (can't use InitFreetypeManager function, because it's private?!)
+    friend class GenericUnixSalData;
+    explicit GlyphCache();
+
     static void             InitFreetype();
     void                    GarbageCollect();
     FreetypeFont*           CreateFont(LogicalFontInstance* pLogicalFont);
+    FreetypeFontFile* FindFontFile(const OString& rNativeFileName);
 
     // the GlyphCache's FontList matches a font request to a serverfont instance
     // the FontList key's mpFontData member is reinterpreted as integer font id
@@ -78,6 +109,7 @@ private:
     struct IFSD_Hash{ size_t operator()( const rtl::Reference<LogicalFontInstance>& ) const; };
     typedef std::unordered_map<rtl::Reference<LogicalFontInstance>,std::unique_ptr<FreetypeFont>,IFSD_Hash,IFSD_Equal > FontList;
     typedef std::unordered_map<sal_IntPtr, std::unique_ptr<FreetypeFontInfo>> FontInfoList;
+    typedef std::unordered_map<const char*, std::unique_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
     FontList                maFontList;
     static constexpr sal_uLong gnMaxSize = 1500000;  // max overall cache size in bytes
@@ -86,12 +118,13 @@ private:
 
     FontInfoList            m_aFontInfoList;
     sal_IntPtr              m_nMaxFontId;
+
+    FontFileList            m_aFontFileList;
 };
 
 class FreetypeFont final
 {
 public:
-                            FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*);
                             ~FreetypeFont();
 
     const OString&          GetFontFileName() const;
@@ -126,9 +159,7 @@ public:
 
 private:
     friend class GlyphCache;
-    friend class FreetypeFontInstance;
-    friend class X11SalGraphics;
-    friend class CairoTextRender;
+    explicit FreetypeFont(LogicalFontInstance*, FreetypeFontInfo*);
 
     void                    AddRef() const      { ++mnRefCount; }
     long                    GetRefCount() const { return mnRefCount; }

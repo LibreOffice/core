@@ -25,7 +25,6 @@
 GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstance* const pInstance)
     : m_eType(t)
     , m_pDisplay(nullptr)
-    , m_pGlyphCache(new GlyphCache)
 {
     m_pInstance = pInstance;
     SetSalData(this);
