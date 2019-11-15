@@ -1484,7 +1484,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             // the same.
             SwTableAutoFormatTable& rTable = m_pParser->GetDoc()->GetTableStyles();
             SwTableAutoFormat* pTableFormat = rTable.FindAutoFormat(
-                SwStyleNameMapper::GetUIName(RES_POOLTABSTYLE_DEFAULT, OUString()));
+                SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_DEFAULT, OUString()));
             if (pTableFormat)
             {
                 sal_uInt8 nPos = SwTableAutoFormat::CountPos(nCol, m_nCols, nRow, m_nRows);

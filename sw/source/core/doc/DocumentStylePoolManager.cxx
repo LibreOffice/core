@@ -527,7 +527,7 @@ static const char* STR_POOLNUMRULE_NUM_ARY[] =
 
 // XXX MUST match the entries of TableStyleProgNameTable in
 // sw/source/core/doc/SwStyleNameMapper.cxx and MUST match the order of
-// RES_POOL_TABSTYLE_TYPE in sw/inc/poolfmt.hxx
+// RES_POOL_TABLESTYLE_TYPE in sw/inc/poolfmt.hxx
 static const char* STR_TABSTYLE_ARY[] =
 {
     // XXX MUST be in order, Writer first, then Svx old, then Svx new
