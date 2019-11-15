@@ -18,7 +18,7 @@ class SfxPoolItem;
 
 namespace editeng {
 
-struct EDITENG_DLLPUBLIC Section
+struct Section
 {
     sal_Int32 mnParagraph;
     sal_Int32 mnStart;

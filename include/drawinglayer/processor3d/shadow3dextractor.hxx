@@ -44,7 +44,7 @@ namespace drawinglayer
             some data to do so since we do not only offer flat projected 2D shadow, but also projections
             dependent on the light source
          */
-        class DRAWINGLAYER_DLLPUBLIC Shadow3DExtractingProcessor final : public BaseProcessor3D
+        class Shadow3DExtractingProcessor final : public BaseProcessor3D
         {
         private:
             /// result holding vector (2D) and target vector for stacking (inited to &maPrimitive2DSequence)

@@ -32,7 +32,7 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC PropertySetContainer : public css::container::XIndexContainer    ,
+class PropertySetContainer : public css::container::XIndexContainer    ,
                              public ::cppu::OWeakObject
 {
     public:

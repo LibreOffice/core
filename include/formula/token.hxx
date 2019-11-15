@@ -225,7 +225,7 @@ inline void intrusive_ptr_release(const FormulaToken* p)
     p->DecRef();
 }
 
-class FORMULA_DLLPUBLIC FormulaByteToken : public FormulaToken
+class FormulaByteToken : public FormulaToken
 {
 private:
             sal_uInt8           nByte;
@@ -259,7 +259,7 @@ public:
 
 // A special token for the FormulaAutoPilot only. Keeps a reference pointer of
 // the token of which it was created for comparison.
-class FORMULA_DLLPUBLIC FormulaFAPToken final : public FormulaByteToken
+class FormulaFAPToken final : public FormulaByteToken
 {
 private:
             FormulaTokenRef     pOrigToken;
@@ -275,7 +275,7 @@ public:
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
-class FORMULA_DLLPUBLIC FormulaDoubleToken : public FormulaToken
+class FormulaDoubleToken : public FormulaToken
 {
 private:
             double              fDouble;
@@ -292,7 +292,7 @@ public:
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
-class FORMULA_DLLPUBLIC FormulaTypedDoubleToken final : public FormulaDoubleToken
+class FormulaTypedDoubleToken final : public FormulaDoubleToken
 {
 private:
             sal_Int16           mnType;     /**< Can hold, for example, a value
@@ -341,7 +341,7 @@ public:
     virtual bool operator==( const FormulaToken& rToken ) const override;
 };
 
-class FORMULA_DLLPUBLIC FormulaIndexToken final : public FormulaToken
+class FormulaIndexToken final : public FormulaToken
 {
 private:
             sal_uInt16          nIndex;
@@ -385,7 +385,7 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaMissingToken final : public FormulaToken
+class FormulaMissingToken final : public FormulaToken
 {
 public:
                                 FormulaMissingToken() :
@@ -399,7 +399,7 @@ public:
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
-class FORMULA_DLLPUBLIC FormulaJumpToken final : public FormulaToken
+class FormulaJumpToken final : public FormulaToken
 {
 private:
             std::unique_ptr<short[]>
@@ -429,7 +429,7 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaUnknownToken final : public FormulaToken
+class FormulaUnknownToken final : public FormulaToken
 {
 public:
                                 FormulaUnknownToken( OpCode e ) :
@@ -442,7 +442,7 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaErrorToken final : public FormulaToken
+class FormulaErrorToken final : public FormulaToken
 {
          FormulaError          nError;
 public:
