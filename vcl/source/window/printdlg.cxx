@@ -124,6 +124,9 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     , maHorzDim(VclPtr<FixedLine>::Create(this, WB_HORZ | WB_CENTER))
     , maVertDim(VclPtr<FixedLine>::Create(this, WB_VERT | WB_VCENTER))
 {
+    set_width_request(approximate_digit_width() * 55);
+    set_height_request(GetTextHeight() * 40);
+
     SetPaintTransparent( true );
     SetBackground();
     maHorzDim->Show();
