@@ -1478,7 +1478,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             if (pTableFormat)
             {
                 sal_uInt8 nPos = SwTableAutoFormat::CountPos(nCol, m_nCols, nRow, m_nRows);
-                pTableFormat->UpdateToSet(nPos,
+                pTableFormat->UpdateToSet(nPos, m_nRows==1, m_nCols==1,
                                           const_cast<SfxItemSet&>(static_cast<SfxItemSet const&>(
                                               pFrameFormat->GetAttrSet())),
                                           SwTableAutoFormatUpdateFlags::Box,

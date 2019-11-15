@@ -162,7 +162,8 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
         pNewTableBoxFormat->SetFormatAttr( pBoxFrameFormat->GetAttrSet().Get( RES_FRM_SIZE ) );
 
         if( pAutoFormat )
-            pAutoFormat->UpdateToSet( nId, const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pNewTableBoxFormat->GetAttrSet())),
+            pAutoFormat->UpdateToSet( nId, false, false,
+                                    const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pNewTableBoxFormat->GetAttrSet())),
                                     SwTableAutoFormatUpdateFlags::Box,
                                     pDoc->GetNumberFormatter() );
         else
@@ -190,12 +191,13 @@ static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTab
 
 static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<SwTableBoxFormat*> &rBoxFormatArr,
                                     const SwTableAutoFormat& rAutoFormat,
-                                    sal_uInt16 nCols, sal_uInt8 nId )
+                                    const sal_uInt16 nRows, const sal_uInt16 nCols, sal_uInt8 nId )
 {
     if( !rBoxFormatArr[nId] )
     {
         SwTableBoxFormat* pBoxFormat = rDoc.MakeTableBoxFormat();
-        rAutoFormat.UpdateToSet( nId, const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pBoxFormat->GetAttrSet())),
+        rAutoFormat.UpdateToSet( nId, nRows==1, nCols==1,
+                                const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pBoxFormat->GetAttrSet())),
                                 SwTableAutoFormatUpdateFlags::Box,
                                 rDoc.GetNumberFormatter( ) );
         if( USHRT_MAX != nCols )
@@ -488,13 +490,13 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             {
                 sal_uInt8 nId = SwTableAutoFormat::CountPos(i, nCols, n, nRows);
                 pBoxF = ::lcl_CreateAFormatBoxFormat( *this, aBoxFormatArr, *pTAFormat,
-                                                nCols, nId );
+                                                nRows, nCols, nId );
 
                 // Set the Paragraph/Character Attributes if needed
                 if( pTAFormat->IsFont() || pTAFormat->IsJustify() )
                 {
                     aCharSet.ClearItem();
-                    pTAFormat->UpdateToSet( nId, aCharSet,
+                    pTAFormat->UpdateToSet( nId, nRows==1, nCols==1, aCharSet,
                                         SwTableAutoFormatUpdateFlags::Char, nullptr );
                     if( aCharSet.Count() )
                         GetNodes()[ aNdIdx.GetIndex()+1 ]->GetContentNode()->
@@ -786,14 +788,14 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                     {
                         bChgSz = nullptr == (*aBoxFormatArr2)[ nId ];
                         pBoxF = ::lcl_CreateAFormatBoxFormat( *this, *aBoxFormatArr2,
-                                                *pTAFormat, USHRT_MAX, nId );
+                                                *pTAFormat, USHRT_MAX, USHRT_MAX, nId );
                     }
 
                     // Set Paragraph/Character Attributes if needed
                     if( pTAFormat->IsFont() || pTAFormat->IsJustify() )
                     {
                         aCharSet.ClearItem();
-                        pTAFormat->UpdateToSet( nId, aCharSet,
+                        pTAFormat->UpdateToSet( nId, nRows==1, nCols==1, aCharSet,
                                             SwTableAutoFormatUpdateFlags::Char, nullptr );
                         if( aCharSet.Count() )
                         {
@@ -3588,10 +3590,11 @@ struct SetAFormatTabPara
     SwUndoTableAutoFormat* pUndo;
     sal_uInt16 nEndBox, nCurBox;
     sal_uInt8 nAFormatLine, nAFormatBox;
+    bool bSingleRowTable;
 
     explicit SetAFormatTabPara( const SwTableAutoFormat& rNew )
         : rTableFormat( const_cast<SwTableAutoFormat&>(rNew) ), pUndo( nullptr ),
-        nEndBox( 0 ), nCurBox( 0 ), nAFormatLine( 0 ), nAFormatBox( 0 )
+        nEndBox( 0 ), nCurBox( 0 ), nAFormatLine( 0 ), nAFormatBox( 0 ), bSingleRowTable(false)
     {}
 };
 
@@ -3616,7 +3619,7 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
             pSetPara->nAFormatBox = 0;
         else if( pSetPara->nCurBox == pSetPara->nEndBox )
             pSetPara->nAFormatBox = 3;
-        else
+        else //Even column(1) or Odd column(2)
             pSetPara->nAFormatBox = static_cast<sal_uInt8>(1 + ((pSetPara->nCurBox-1) & 1));
     }
 
@@ -3632,8 +3635,10 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
             SfxItemSet aCharSet(pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1>{});
             SfxItemSet aBoxSet(pDoc->GetAttrPool(), aTableBoxSetRange);
             sal_uInt8 nPos = pSetPara->nAFormatLine * 4 + pSetPara->nAFormatBox;
-            pSetPara->rTableFormat.UpdateToSet(nPos, aCharSet, SwTableAutoFormatUpdateFlags::Char, nullptr);
-            pSetPara->rTableFormat.UpdateToSet(nPos, aBoxSet, SwTableAutoFormatUpdateFlags::Box, pDoc->GetNumberFormatter());
+            const bool bSingleRowTable = pSetPara->bSingleRowTable;
+            const bool bSingleColTable = pSetPara->nEndBox == 0;
+            pSetPara->rTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aCharSet, SwTableAutoFormatUpdateFlags::Char, nullptr);
+            pSetPara->rTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aBoxSet, SwTableAutoFormatUpdateFlags::Box, pDoc->GetNumberFormatter());
 
             if (aCharSet.Count())
             {
@@ -3658,10 +3663,15 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
     }
     else
     {
+        // Not sure how this situation can occur, but apparently we have some kind of table in table.
+        // I am guessing at how to best handle singlerow in this situation.
+        const bool bOrigSingleRowTable = pSetPara->bSingleRowTable;
+        pSetPara->bSingleRowTable = rBox.GetLines().size() == 1;
         for (auto const& rpFndLine : rBox.GetLines())
         {
             lcl_SetAFormatLine(*rpFndLine, pSetPara, bResetDirect);
         }
+        pSetPara->bSingleRowTable = bOrigSingleRowTable;
     }
 
     if (!rBox.GetUpper()->GetUpper()) // a BaseLine
@@ -3717,6 +3727,7 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat
 
     SetAFormatTabPara aPara( rNew );
     FndLines_t& rFLns = pFndBox->GetLines();
+    aPara.bSingleRowTable = rFLns.size() == 1;
 
     for (FndLines_t::size_type n = 0; n < rFLns.size(); ++n)
     {
