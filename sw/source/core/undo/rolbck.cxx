@@ -1070,7 +1070,26 @@ void SwHistory::Add(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOth
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
-    std::unique_ptr<SwHistoryHint> pHt(new SwHistoryBookmark(rBkmk, bSavePos, bSaveOtherPos));
+    std::unique_ptr<SwHistoryHint> pHt;
+
+    switch (IDocumentMarkAccess::GetType(rBkmk))
+    {
+        case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
+        case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
+            assert(bSavePos && bSaveOtherPos); // must be deleted completely!
+            pHt.reset(new SwHistoryTextFieldmark(dynamic_cast<sw::mark::IFieldmark const&>(rBkmk)));
+            break;
+        case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
+        case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
+            assert(bSavePos && bSaveOtherPos); // must be deleted completely!
+            pHt.reset(new SwHistoryNoTextFieldmark(dynamic_cast<sw::mark::IFieldmark const&>(rBkmk)));
+            break;
+        default:
+            pHt.reset(new SwHistoryBookmark(rBkmk, bSavePos, bSaveOtherPos));
+            break;
+    }
+
+    assert(pHt);
     m_SwpHstry.push_back( std::move(pHt) );
 }
 
