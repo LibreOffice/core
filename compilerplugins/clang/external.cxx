@@ -32,6 +32,19 @@ bool derivesFromTestFixture(CXXRecordDecl const* decl)
            || std::any_of(decl->vbases_begin(), decl->vbases_end(), pred);
 }
 
+bool isInjectedFunction(FunctionDecl const* decl)
+{
+    for (auto d = decl->redecls_begin(); d != decl->redecls_end(); ++d)
+    {
+        auto const c = d->getLexicalDeclContext();
+        if (!(c->isFunctionOrMethod() || c->isRecord()))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 class External : public loplugin::FilteringPlugin<External>
 {
 public:
@@ -146,6 +159,10 @@ public:
             //  #pragma GCC diagnostic ignored "-Wunused-function"
             return true;
         }
+        if (isInjectedFunction(decl))
+        {
+            return true;
+        }
         return handleDeclaration(decl);
     }
 
@@ -192,6 +209,10 @@ public:
             return true;
         }
         if (isa<CXXRecordDecl>(decl->getDeclContext()))
+        {
+            return true;
+        }
+        if (isInjectedFunction(decl->getTemplatedDecl()))
         {
             return true;
         }
