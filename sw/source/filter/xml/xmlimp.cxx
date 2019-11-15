@@ -1321,39 +1321,40 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     std::unordered_set< OUString > aExcludeAlways;
     aExcludeAlways.insert("LinkUpdateMode");
     // this should contain things that are actually user-settable, via Tools->Options
-    std::unordered_set< OUString > aExcludeWhenNotLoadingUserSettings;
-    aExcludeWhenNotLoadingUserSettings.insert("ForbiddenCharacters");
-    aExcludeWhenNotLoadingUserSettings.insert("IsKernAsianPunctuation");
-    aExcludeWhenNotLoadingUserSettings.insert("CharacterCompressionType");
-    aExcludeWhenNotLoadingUserSettings.insert("FieldAutoUpdate");
-    aExcludeWhenNotLoadingUserSettings.insert("ChartAutoUpdate");
-    aExcludeWhenNotLoadingUserSettings.insert("AddParaTableSpacing");
-    aExcludeWhenNotLoadingUserSettings.insert("AddParaTableSpacingAtStart");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintAnnotationMode");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintBlackFonts");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintControls");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintDrawings");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintGraphics");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintHiddenText");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintLeftPages");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintPageBackground");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintProspect");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintReversed");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintRightPages");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintFaxName");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintPaperFromSetup");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintTables");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintTextPlaceholder");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintSingleJobs");
-    aExcludeWhenNotLoadingUserSettings.insert("UpdateFromTemplate");
-    aExcludeWhenNotLoadingUserSettings.insert("PrinterIndependentLayout");
-    aExcludeWhenNotLoadingUserSettings.insert("PrintEmptyPages");
-    aExcludeWhenNotLoadingUserSettings.insert("ConsiderTextWrapOnObjPos");
-    aExcludeWhenNotLoadingUserSettings.insert("DoNotJustifyLinesWithManualBreak");
-    aExcludeWhenNotLoadingUserSettings.insert("ProtectForm");
-    aExcludeWhenNotLoadingUserSettings.insert("MsWordCompTrailingBlanks");
-    aExcludeWhenNotLoadingUserSettings.insert("SubtractFlysAnchoredAtFlys");
-    aExcludeWhenNotLoadingUserSettings.insert("EmptyDbFieldHidesPara");
+    std::unordered_set< OUString > aExcludeWhenNotLoadingUserSettings {
+        "ForbiddenCharacters",
+        "IsKernAsianPunctuation",
+        "CharacterCompressionType",
+        "FieldAutoUpdate",
+        "ChartAutoUpdate",
+        "AddParaTableSpacing",
+        "AddParaTableSpacingAtStart",
+        "PrintAnnotationMode",
+        "PrintBlackFonts",
+        "PrintControls",
+        "PrintDrawings",
+        "PrintGraphics",
+        "PrintHiddenText",
+        "PrintLeftPages",
+        "PrintPageBackground",
+        "PrintProspect",
+        "PrintReversed",
+        "PrintRightPages",
+        "PrintFaxName",
+        "PrintPaperFromSetup",
+        "PrintTables",
+        "PrintTextPlaceholder",
+        "PrintSingleJobs",
+        "UpdateFromTemplate",
+        "PrinterIndependentLayout",
+        "PrintEmptyPages",
+        "ConsiderTextWrapOnObjPos",
+        "DoNotJustifyLinesWithManualBreak",
+        "ProtectForm",
+        "MsWordCompTrailingBlanks",
+        "SubtractFlysAnchoredAtFlys",
+        "EmptyDbFieldHidesPara"
+    };
 
     SvtSaveOptions aSaveOpt;
     bool bIsUserSetting = aSaveOpt.IsLoadUserSettings();
