@@ -1099,6 +1099,10 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                     uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
                     uno::Any aBottomMargin = pTableProp->Value;
                     sal_Int32 nRows = aCellProperties.getLength();
+
+                    for (const auto& rParaProp : m_rDMapper_Impl.m_aPendingParaProp )
+                        rParaProp->setPropertyValue("ParaBottomMargin", aBottomMargin );
+
                     for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
                     {
                         const uno::Sequence< beans::PropertyValues > aCurrentRow = aCellProperties[nRow];
@@ -1184,6 +1188,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
     m_aCellProperties.clear();
     m_aRowProperties.clear();
     m_bHadFootOrEndnote = false;
+    m_rDMapper_Impl.m_aPendingParaProp.clear();
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endElement();

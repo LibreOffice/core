@@ -726,7 +726,7 @@ public:
     OUString  GetDefaultParaStyleName();
 
     // specified style - including inherited properties. Indicate whether paragraph defaults should be checked.
-    css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara);
+    css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara, const bool bStyles = true);
     // current paragraph style - including inherited properties
     css::uno::Any GetPropertyFromParaStyleSheet(PropertyIds eId);
     // context's character style - including inherited properties
@@ -1034,6 +1034,9 @@ public:
     /// store their data, and create them after frame creation
     bool m_bIsActualParagraphFramed;
     std::vector<css::uno::Any> aFramedRedlines;
+
+    /// Table paragraph properties may need style update based on table style
+    std::vector<css::uno::Reference<css::beans::XPropertySet>> m_aPendingParaProp;
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);

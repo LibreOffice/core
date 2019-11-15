@@ -459,6 +459,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127814, "tdf127814.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "before", "0");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf128752, "tdf128752.docx")
+{
+    // Paragraph bottom margin was 200, docDefault instead of table style setting
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "after", "0");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
 {
     /*
