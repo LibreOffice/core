@@ -1322,7 +1322,6 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_xEffectsFT(m_xBuilder->weld_label("effectsft"))
     , m_xEffectsLB(m_xBuilder->weld_combo_box("effectslb"))
     , m_xReliefFT(m_xBuilder->weld_label("reliefft"))
-    , m_xReliefLB(m_xBuilder->weld_combo_box("relieflb"))
     , m_xOutlineBtn(m_xBuilder->weld_check_button("outlinecb"))
     , m_xShadowBtn(m_xBuilder->weld_check_button("shadowcb"))
     , m_xBlinkingBtn(m_xBuilder->weld_check_button("blinkingcb"))
@@ -1340,6 +1339,9 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_xPositionFT(m_xBuilder->weld_label("positionft"))
     , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
     , m_xA11yWarningFT(m_xBuilder->weld_label("a11ywarning"))
+    , m_xReliefNone(m_xBuilder->weld_radio_button("rbReliefNone"))
+    , m_xReliefEmbossed(m_xBuilder->weld_radio_button("rbReliefEmbossed"))
+    , m_xReliefEngraved(m_xBuilder->weld_radio_button("rbReliefEngraved"))
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
 #ifdef IOS
@@ -1404,7 +1406,13 @@ void SvxCharEffectsPage::Initialize()
     m_xEmphasisLB->connect_changed( aLink );
     m_xPositionLB->connect_changed( aLink );
     m_xEffectsLB->connect_changed( aLink );
-    m_xReliefLB->connect_changed( aLink );
+
+    Link<weld::ToggleButton&,void> aLink1 = LINK( this, SvxCharEffectsPage, ReliefButtonHdl_Impl );
+    m_xReliefNone->connect_toggled(aLink1);
+    m_xReliefEmbossed->connect_toggled(aLink1);
+    m_xReliefEngraved->connect_toggled(aLink1);
+    m_xReliefNone->set_active( true );
+    m_nRelief = 0;
 
     m_xUnderlineLB->set_active( 0 );
     m_xOverlineLB->set_active( 0 );
@@ -1469,12 +1477,11 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
         rCTLFont.SetEmphasisMark( eMark );
     }
 
-    auto nRelief = m_xReliefLB->get_active();
-    if (nRelief != -1)
+    if (m_nRelief > -1)
     {
-        rFont.SetRelief( static_cast<FontRelief>(nRelief) );
-        rCJKFont.SetRelief( static_cast<FontRelief>(nRelief) );
-        rCTLFont.SetRelief( static_cast<FontRelief>(nRelief) );
+        rFont.SetRelief( static_cast<FontRelief>(m_nRelief) );
+        rCJKFont.SetRelief( static_cast<FontRelief>(m_nRelief) );
+        rCTLFont.SetRelief( static_cast<FontRelief>(m_nRelief) );
     }
 
     rFont.SetOutline( StateToAttr( m_xOutlineBtn->get_state() ) );
@@ -1607,12 +1614,6 @@ void SvxCharEffectsPage::SelectHdl_Impl(const weld::ComboBox* pBox)
         m_xPositionFT->set_sensitive( bEnable );
         m_xPositionLB->set_sensitive( bEnable );
     }
-    else if (m_xReliefLB.get() == pBox)
-    {
-        bool bEnable = ( pBox->get_active() == 0 );
-        m_xOutlineBtn->set_sensitive( bEnable );
-        m_xShadowBtn->set_sensitive( bEnable );
-    }
     else if (m_xPositionLB.get() != pBox)
     {
         bool bUEnable = false;
@@ -1652,6 +1653,23 @@ IMPL_LINK_NOARG(SvxCharEffectsPage, CbClickHdl_Impl, weld::ToggleButton&, void)
 
 IMPL_LINK_NOARG(SvxCharEffectsPage, TristClickHdl_Impl, weld::ToggleButton&, void)
 {
+    UpdatePreview_Impl();
+}
+
+IMPL_LINK_NOARG(SvxCharEffectsPage, ReliefButtonHdl_Impl, weld::ToggleButton&, void)
+{
+    if (m_xReliefNone->get_active())
+        m_nRelief = 0;
+    else if (m_xReliefEmbossed->get_active())
+        m_nRelief = 1;
+    else if (m_xReliefEngraved->get_active())
+        m_nRelief = 2;
+    else
+        m_nRelief = -1;
+
+    m_xOutlineBtn->set_sensitive( m_nRelief == 0 );
+    m_xShadowBtn->set_sensitive( m_nRelief == 0 );
+
     UpdatePreview_Impl();
 }
 
@@ -1906,26 +1924,40 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
-            m_xReliefFT->hide();
-            m_xReliefLB->hide();
-            break;
-
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
-            m_xReliefFT->set_sensitive(false);
-            m_xReliefLB->set_sensitive(false);
+            m_xReliefFT->set_sensitive( false );
+            m_xReliefNone->set_sensitive( false );
+            m_xReliefEmbossed->set_sensitive( false );
+            m_xReliefEngraved->set_sensitive( false );
             break;
 
         case SfxItemState::DONTCARE:
-            m_xReliefLB->set_active(-1);
+            m_xReliefNone->set_active( false );
+            m_xReliefEmbossed->set_active( false );
+            m_xReliefEngraved->set_active( false );
             break;
 
         case SfxItemState::DEFAULT:
         case SfxItemState::SET:
         {
             const SvxCharReliefItem& rItem = static_cast<const SvxCharReliefItem&>(rSet->Get( nWhich ));
-            m_xReliefLB->set_active(static_cast<sal_Int32>(rItem.GetValue()));
-            SelectHdl_Impl(m_xReliefLB.get());
+            switch ( rItem.GetValue() )
+            {
+                case FontRelief::NONE:
+                    m_xReliefNone->set_active( true );
+                    break;
+                case FontRelief::Embossed:
+                    m_xReliefEmbossed->set_active( true );
+                    break;
+                case FontRelief::Engraved:
+                    m_xReliefEngraved->set_active( true );
+                    break;
+                case FontRelief::FontRelief_FORCE_EQUAL_SIZE:
+                    break;
+            };//switch
+//            SelectHdl_Impl(m_xReliefLB.get());
+//            ReliefButtonHdl_Impl(m_xReliefNone.get());
             break;
         }
     }
@@ -2059,7 +2091,6 @@ void SvxCharEffectsPage::ChangesApplied()
     m_xEmphasisLB->save_value();
     m_xPositionLB->save_value();
     m_xEffectsLB->save_value();
-    m_xReliefLB->save_value();
     m_xOutlineBtn->save_state();
     m_xShadowBtn->save_state();
     m_xBlinkingBtn->save_state();
@@ -2274,12 +2305,8 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
 
     //Relief
     nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
-    if (m_xReliefLB->get_value_changed_from_saved())
-    {
-        m_xReliefLB->save_value();
-        SvxCharReliefItem aRelief(static_cast<FontRelief>(m_xReliefLB->get_active()), nWhich);
-        rSet->Put(aRelief);
-    }
+    SvxCharReliefItem aRelief(static_cast<FontRelief>(m_nRelief), nWhich);
+    rSet->Put(aRelief);
 
     // Outline
     const SfxItemSet* pExampleSet = GetDialogExampleSet();
