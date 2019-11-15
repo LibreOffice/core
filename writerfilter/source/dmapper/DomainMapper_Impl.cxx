@@ -1702,6 +1702,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 }
 
                 css::uno::Reference<css::beans::XPropertySet> xParaProps(xTextRange, uno::UNO_QUERY);
+
+                // table style has got bigger precedence than docDefault style
+                // collect these pending paragraph properties to process in endTable()
+                if (xParaProps && m_nTableDepth > 0)
+                {
+                    TableParagraph aPending{pParaContext, xParaProps};
+                    m_aParagraphsToEndTable.push_back(aPending);
+                }
+
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style
                 // if we already set the other margin with direct formatting
                 if (xParaProps)
@@ -1722,16 +1731,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         {
                             uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_BOTTOM_MARGIN);
                             if ( aMargin != uno::Any() )
-                            {
                                 xParaProps->setPropertyValue("ParaBottomMargin", aMargin);
-
-                                // table style has got bigger precedence than docDefault style
-                                // collect these pending paragraph properties to process in endTable()
-                                // TODO check the case, when two parent styles modify the docDefault and the last one set back the docDefault value
-                                uno::Any aMarginDocDefault = GetPropertyFromStyleSheet(PROP_PARA_BOTTOM_MARGIN, nullptr, true, true, false);
-                                if ( m_nTableDepth > 0 && aMargin == aMarginDocDefault )
-                                    m_aPendingParaProp.push_back(xParaProps);
-                            }
                         }
                         if ( !bContextSet )
                         {
