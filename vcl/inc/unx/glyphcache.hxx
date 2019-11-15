@@ -37,6 +37,7 @@
 #include <unordered_map>
 
 class FreetypeFont;
+class FreetypeFontFile;
 class FreetypeFontInstance;
 class FreetypeFontInfo;
 class FontConfigFontOptions;
@@ -59,6 +60,7 @@ public:
                                 int nFaceNum, int nVariantNum,
                                 sal_IntPtr nFontId,
                                 const FontAttributes&);
+    FreetypeFontFile*       FindFontFile(const OString& rNativeFileName);
 
     void                    AnnounceFonts( PhysicalFontCollection* ) const;
 
@@ -78,6 +80,7 @@ private:
     struct IFSD_Hash{ size_t operator()( const rtl::Reference<LogicalFontInstance>& ) const; };
     typedef std::unordered_map<rtl::Reference<LogicalFontInstance>,std::unique_ptr<FreetypeFont>,IFSD_Hash,IFSD_Equal > FontList;
     typedef std::unordered_map<sal_IntPtr, std::unique_ptr<FreetypeFontInfo>> FontInfoList;
+    typedef std::unordered_map<const char*, std::unique_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
     FontList                maFontList;
     static constexpr sal_uLong gnMaxSize = 1500000;  // max overall cache size in bytes
@@ -86,6 +89,8 @@ private:
 
     FontInfoList            m_aFontInfoList;
     sal_IntPtr              m_nMaxFontId;
+
+    FontFileList            m_aFontFileList;
 };
 
 class FreetypeFont final

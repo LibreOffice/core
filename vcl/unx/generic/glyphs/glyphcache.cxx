@@ -240,6 +240,21 @@ void GlyphCache::GarbageCollect()
     }
 }
 
+FreetypeFontFile* GlyphCache::FindFontFile(const OString& rNativeFileName)
+{
+    // font file already known? (e.g. for ttc, synthetic, aliased fonts)
+    const char* pFileName = rNativeFileName.getStr();
+    FontFileList::const_iterator it = m_aFontFileList.find(pFileName);
+    if (it != m_aFontFileList.end())
+        return it->second.get();
+
+    // no => create new one
+    FreetypeFontFile* pFontFile = new FreetypeFontFile(rNativeFileName);
+    pFileName = pFontFile->maNativeFileName.getStr();
+    m_aFontFileList[pFileName].reset(pFontFile);
+    return pFontFile;
+}
+
 void FreetypeFont::ReleaseFromGarbageCollect()
 {
     // remove from GC list

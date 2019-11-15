@@ -32,9 +32,9 @@ class CmapResult;
 // in up to nTTC*nSizes*nOrientation*nSynthetic times
 class FreetypeFontFile
 {
-public:
-    static FreetypeFontFile*      FindFontFile( const OString& rNativeFileName );
+    friend class GlyphCache;
 
+public:
     bool                    Map();
     void                    Unmap();
 
