@@ -102,6 +102,8 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(TabPageParent pParent, const SfxItemS
     m_xContainer->set_help_id(HID_SVX_CONFIG_TOOLBAR);
 
     m_xContentsListBox.reset(new SvxToolbarEntriesListBox(m_xBuilder->weld_tree_view("toolcontents"), this));
+    m_xDropTargetHelper.reset(new SvxConfigPageFunctionDropTarget(*this, m_xContentsListBox->get_widget()));
+
     std::vector<int> aWidths;
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     Size aSize(m_xFunctions->get_size_request());
@@ -132,8 +134,6 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(TabPageParent pParent, const SfxItemS
 
     rTreeView.connect_changed(
         LINK( this, SvxToolbarConfigPage, SelectToolbarEntry ) );
-
-    rTreeView.connect_model_changed(LINK(this, SvxToolbarConfigPage, ListModifiedHdl));
 
     m_xTopLevelListBox->set_help_id ( HID_SVX_TOPLEVELLISTBOX );
     m_xSaveInListBox->set_help_id( HID_SVX_SAVE_IN );
@@ -188,7 +188,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(TabPageParent pParent, const SfxItemS
     }
 }
 
-IMPL_LINK_NOARG(SvxToolbarConfigPage, ListModifiedHdl, weld::TreeView&, void)
+void SvxToolbarConfigPage::ListModified()
 {
     // regenerate with the current ordering within the list
     SvxEntries* pEntries = GetTopLevelSelection()->GetEntries();

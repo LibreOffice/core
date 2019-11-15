@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CFG_HXX
 #define INCLUDED_CUI_SOURCE_INC_CFG_HXX
 
+#include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
@@ -335,6 +336,7 @@ public:
     void remove(int nPos) { m_xControl->remove(nPos); }
     int n_children() const { return m_xControl->n_children(); }
     void set_text(int row, const OUString& rText, int col) { m_xControl->set_text(row, rText, col); }
+    OUString get_text(int row) { return m_xControl->get_text(row); }
     void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage, int col) { m_xControl->set_image(row, rImage, col); }
     void set_dropdown(int row, int col) { m_xControl->set_image(row, *m_xDropDown, col); }
     void set_id(int row, const OUString& rId) { m_xControl->set_id(row, rId); }
@@ -359,6 +361,19 @@ public:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
     void CreateDropDown();
+};
+
+class SvxConfigPageFunctionDropTarget : public DropTargetHelper
+{
+private:
+    SvxConfigPage& m_rPage;
+    weld::TreeView& m_rTreeView;
+
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+
+public:
+    SvxConfigPageFunctionDropTarget(SvxConfigPage&rPage, weld::TreeView& rTreeView);
 };
 
 class SvxConfigPage : public SfxTabPage
@@ -393,6 +408,7 @@ protected:
     // Used to add and remove toolbars/menus
     std::unique_ptr<weld::MenuButton>          m_xGearBtn;
     std::unique_ptr<SvxMenuEntriesListBox>     m_xContentsListBox;
+    std::unique_ptr<SvxConfigPageFunctionDropTarget> m_xDropTargetHelper;
 
     std::unique_ptr<weld::Button>              m_xMoveUpButton;
     std::unique_ptr<weld::Button>              m_xMoveDownButton;
@@ -467,6 +483,8 @@ public:
 
     virtual void    DeleteSelectedContent() = 0;
     virtual void    DeleteSelectedTopLevel() = 0;
+
+    virtual void    ListModified() {}
 
     SvxConfigEntry* GetTopLevelSelection()
     {
