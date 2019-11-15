@@ -1063,13 +1063,13 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
         if( pMarkAccess->getAllMarksCount() )
         {
-
             for( sal_Int32 n = 0; n < pMarkAccess->getAllMarksCount(); ++n )
             {
                 // #i81002#
                 bool bSavePos = false;
                 bool bSaveOtherPos = false;
-                const ::sw::mark::IMark* pBkmk = pMarkAccess->getAllMarksBegin()[n];
+                const ::sw::mark::IMark *const pBkmk = pMarkAccess->getAllMarksBegin()[n];
+                auto const type(IDocumentMarkAccess::GetType(*pBkmk));
 
                 if( DelContentType::CheckNoCntnt & nDelContentType )
                 {
@@ -1090,8 +1090,8 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     // #i92125#
                     // keep cross-reference bookmarks, if content inside one paragraph is deleted.
                     if ( rMark.nNode == rPoint.nNode
-                         && ( IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK
-                              || IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK ) )
+                        && (   type == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK
+                            || type == IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK))
                     {
                         continue;
                     }
@@ -1109,7 +1109,11 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         *pStt <= pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() <= *pEnd )
                     {
                         if ( bSavePos || bSaveOtherPos
-                             || ( pBkmk->GetOtherMarkPos() < *pEnd && pBkmk->GetOtherMarkPos() > *pStt ) )
+                            || (*pStt < pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() < *pEnd)
+                            || type == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
+                            || type == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK
+                            || type == IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK
+                            || type == IDocumentMarkAccess::MarkType::DATE_FIELDMARK)
                         {
                             if( bMaybe )
                                 bSavePos = true;
@@ -1145,7 +1149,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                             }
                         }
                     }
-                    else if ( IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK )
+                    else if (type == IDocumentMarkAccess::MarkType::ANNOTATIONMARK)
                     {
                         // delete annotation marks, if its end position is covered by the deletion
                         const SwPosition& rAnnotationEndPos = pBkmk->GetMarkEnd();
@@ -1159,7 +1163,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
                 if ( bSavePos || bSaveOtherPos )
                 {
-                    if( IDocumentMarkAccess::GetType(*pBkmk) != IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
+                    if (type != IDocumentMarkAccess::MarkType::UNO_BOOKMARK)
                     {
                         if( !m_pHistory )
                             m_pHistory.reset( new SwHistory );
