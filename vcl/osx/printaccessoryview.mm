@@ -256,7 +256,7 @@ public:
                 // ugly
                 if( name_it->second == "PrintContent" )
                    pVal->Value <<= i_bValue ? sal_Int32(2) : sal_Int32(0);
-               else
+                else
                    pVal->Value <<= i_bValue;
 
                 mnLastPageCount = [mpAccessoryController updatePrintOperation: mnLastPageCount];
