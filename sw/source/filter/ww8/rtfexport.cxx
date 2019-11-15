@@ -745,16 +745,12 @@ ErrCode RtfExport::ExportDocument_Impl()
     // enable it on a per-section basis. OTOH don't always enable it as it
     // breaks moving of drawings - so write it only in case there is really a
     // protected section in the document.
+    for (auto const& pSectionFormat : m_pDoc->GetSections())
     {
-        const SfxItemPool& rPool = m_pDoc->GetAttrPool();
-        for (const SfxPoolItem* pItem2 : rPool.GetItemSurrogates(RES_PROTECT))
+        if (!pSectionFormat->IsInUndo() && pSectionFormat->GetProtect().IsContentProtected())
         {
-            auto pProtect = dynamic_cast<const SvxProtectItem*>(pItem2);
-            if (pProtect && pProtect->IsContentProtected())
-            {
-                Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FORMPROT);
-                break;
-            }
+            Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FORMPROT);
+            break;
         }
     }
 
