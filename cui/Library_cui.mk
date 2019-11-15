@@ -87,6 +87,7 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,cui,\
     advapi32 \
     shlwapi \
+    ole32 \
 ))
 endif
 

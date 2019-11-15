@@ -81,6 +81,12 @@
 #include <svtools/restartdialog.hxx>
 #include <svtools/imgdef.hxx>
 
+#if defined(_WIN32)
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <prewin.h>
+#include <shobjidl.h>
+#include <postwin.h>
+#endif
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -248,6 +254,10 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
 #else
     , m_xQuickLaunchCB(m_xBuilder->weld_check_button("quicklaunch"))
 #endif
+#if defined(_WIN32)
+    , m_xFileAssocFrame(m_xBuilder->weld_widget("fileassoc"))
+    , m_xFileAssocBtn(m_xBuilder->weld_button("assocfiles"))
+#endif
 {
     if (!lcl_HasSystemFilePicker())
         m_xFileDlgFrame->hide();
@@ -271,6 +281,11 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     //Only available in Win or if building the gtk systray
 #if !defined(_WIN32)
     m_xQuickStarterFrame->hide();
+#endif
+
+#if defined(_WIN32)
+    m_xFileAssocFrame->show();
+    m_xFileAssocBtn->connect_clicked(LINK(this, OfaMiscTabPage, FileAssocClick));
 #endif
 
     m_aStrDateInfo = m_xToYearFT->get_label();
@@ -426,6 +441,30 @@ IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, weld::SpinButton&, void )
     }
     m_xToYearFT->set_label( aOutput );
 }
+
+#if defined(_WIN32)
+IMPL_LINK_NOARG(OfaMiscTabPage, FileAssocClick, weld::Button&, void)
+{
+    const bool bUninit = SUCCEEDED(CoInitialize(nullptr));
+    IApplicationAssociationRegistrationUI* pIf = nullptr;
+    HRESULT res = CoCreateInstance(CLSID_ApplicationAssociationRegistrationUI, 0,
+                                   CLSCTX_INPROC_SERVER, IID_IApplicationAssociationRegistrationUI,
+                                   reinterpret_cast<LPVOID*>(&pIf));
+
+    if (SUCCEEDED(res) && pIf)
+    {
+        // LaunchAdvancedAssociationUI only works for applications registered under
+        // Software\RegisteredApplications. See scp2/source/ooo/registryitem_ooo.scp
+        const OUString expanded = Translate::ExpandVariables("%PRODUCTNAME %PRODUCTVERSION");
+        // This will only show "To change your default apps, go to Settings > Apps > Default apps"
+        // on Win10; this is expected. At least this will self-document it to users.
+        pIf->LaunchAdvancedAssociationUI(o3tl::toW(expanded.getStr()));
+        pIf->Release();
+    }
+    if (bUninit)
+        CoUninitialize();
+}
+#endif
 
 class CanvasSettings
 {
