@@ -295,9 +295,13 @@ private:
             decl->getLocation())
             << (typedefed != nullptr) << (typedefed == nullptr ? decl : typedefed) << canStatic
             << (canStatic && canUnnamed) << canUnnamed << decl->getSourceRange();
-        for (auto d = decl->getPreviousDecl(); d != nullptr; d = d->getPreviousDecl())
+        for (auto d = decl->redecls_begin(); d != decl->redecls_end(); ++d)
         {
-            report(DiagnosticsEngine::Note, "previous declaration is here", d->getLocation())
+            if (*d == decl)
+            {
+                continue;
+            }
+            report(DiagnosticsEngine::Note, "another declaration is here", d->getLocation())
                 << d->getSourceRange();
         }
         //TODO: Class template specializations can be in the enclosing namespace, so no need to

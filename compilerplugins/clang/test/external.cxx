@@ -9,6 +9,8 @@
 
 // expected-error@+1 {{externally available entity 'n1' is not previously declared in an included file (if it is only used in this translation unit, make it static or put it in an unnamed namespace; otherwise, provide a declaration of it in an included file) [loplugin:external]}}
 int n1 = 0;
+// expected-note@+1 {{another declaration is here [loplugin:external]}}
+extern int n1;
 
 int const n2 = 0; // no warning, internal linkage
 
