@@ -393,7 +393,8 @@ PointArray HatchDrawableHelper::GetHatchLinePoints(tools::Line const& rLine,
                                                    tools::PolyPolygon const& rPolyPolygon)
 {
     double fX, fY;
-    long nAdd, nPCounter = 0;
+    long nPCounter = 0;
+    bool bAppendPoint = false;
     Point* pPtBuffer(new Point[HATCH_MAXPOINTS]);
 
     for (long nPoly = 0, nPolyCount = rPolyPolygon.Count(); nPoly < nPolyCount; nPoly++)
@@ -407,7 +408,7 @@ PointArray HatchDrawableHelper::GetHatchLinePoints(tools::Line const& rLine,
             for (long i = 1, nCount = rPoly.GetSize(); i <= nCount; i++)
             {
                 aCurSegment.SetEnd(rPoly[static_cast<sal_uInt16>(i % nCount)]);
-                nAdd = 0;
+                bAppendPoint = false;
 
                 if (rLine.Intersection(aCurSegment, fX, fY))
                 {
@@ -423,7 +424,7 @@ PointArray HatchDrawableHelper::GetHatchLinePoints(tools::Line const& rLine,
                         if ((fPrevDistance <= 0.0 && fCurDistance > 0.0)
                             || (fPrevDistance > 0.0 && fCurDistance < 0.0))
                         {
-                            nAdd = 1;
+                            bAppendPoint = true;
                         }
                     }
                     else if ((fabs(fX - aCurSegment.GetEnd().X()) <= 0.0000001)
@@ -435,15 +436,15 @@ PointArray HatchDrawableHelper::GetHatchLinePoints(tools::Line const& rLine,
                         if ((fabs(rLine.GetDistance(aNextSegment.GetEnd())) <= 0.0000001)
                             && (rLine.GetDistance(aCurSegment.GetStart()) > 0.0))
                         {
-                            nAdd = 1;
+                            bAppendPoint = true;
                         }
                     }
                     else
                     {
-                        nAdd = 1;
+                        bAppendPoint = true;
                     }
 
-                    if (nAdd)
+                    if (bAppendPoint)
                         pPtBuffer[nPCounter++] = Point(FRound(fX), FRound(fY));
                 }
 
