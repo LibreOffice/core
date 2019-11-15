@@ -618,7 +618,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FILTER_NAVIGATOR:
         case SID_FM_SHOW_DATANAVIGATOR :
         {
-            GetViewShell()->GetViewFrame()->ChildWindowExecute( rReq );
+            GetViewShell()->GetViewFrame()->ToggleChildWindow(nSlot);
             rReq.Done();
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
