@@ -30,7 +30,7 @@ namespace framework
 /**
  * This acts like a rtl::Reference<osl::Mutex>
  */
-class FWI_DLLPUBLIC ShareableMutex
+class ShareableMutex
 {
     public:
         ShareableMutex();
