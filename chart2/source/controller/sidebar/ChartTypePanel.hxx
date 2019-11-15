@@ -25,6 +25,7 @@
 //#include <vcl/layout.hxx>
 #include "ChartSidebarModifyListener.hxx"
 #include <ChartTypeDialogController.hxx>
+#include <ChartTypeTemplateProvider.hxx>
 #include <TimerTriggeredControllerLock.hxx>
 #include <TitleHelper.hxx>
 
@@ -42,18 +43,23 @@ class XModifyListener;
 }
 }
 
+namespace weld
+{
+class CustomWeld;
+}
+
 class ListBox;
 class ValueSet;
 
 namespace chart
 {
 class ChartController;
-class Dim3DLookResourceGroup_unwelded;
-class StackingResourceGroup_unwelded;
-class SplineResourceGroup_unwelded;
-class GeometryResourceGroup_unwelded;
-class ChartTypeParameter_unwelded;
-class SortByXValuesResourceGroup_unwelded;
+class Dim3DLookResourceGroup;
+class StackingResourceGroup;
+class SplineResourceGroup;
+class GeometryResourceGroup;
+class ChartTypeParameter;
+class SortByXValuesResourceGroup;
 
 namespace sidebar
 {
@@ -61,7 +67,8 @@ class ChartTypePanel : public ResourceChangeListener,
                        public PanelLayout,
                        public ::sfx2::sidebar::IContextChangeReceiver,
                        public sfx2::sidebar::SidebarModelUpdate,
-                       public ChartSidebarModifyListenerParent
+                       public ChartSidebarModifyListenerParent,
+                       public ChartTypeTemplateProvider
 {
 public:
     static VclPtr<vcl::Window> Create(vcl::Window* pParent,
@@ -85,6 +92,9 @@ public:
 
     virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
 
+    virtual css::uno::Reference<css::chart2::XChartTypeTemplate>
+    getCurrentTemplate() const override;
+
 private:
     ChartTypeDialogController* getSelectedMainType();
     void showAllControls(ChartTypeDialogController& rTypeController);
@@ -94,14 +104,16 @@ private:
     virtual void stateChanged() override;
 
     void commitToModel(const ChartTypeParameter& rParameter);
+    void selectMainType();
 
-    /*DECL_LINK(SelectMainTypeHdl, ListBox&, void);
-    DECL_LINK(SelectSubTypeHdl, ValueSet*, void);*/
+    DECL_LINK(SelectMainTypeHdl, weld::ComboBox&, void);
+    DECL_LINK(SelectSubTypeHdl, SvtValueSet*, void);
 
     //ui controls
-    VclPtr<FixedText> mpChartTypeLabel;
-    VclPtr<ListBox> m_pMainTypeList;
-    VclPtr<ValueSet> m_pSubTypeList;
+    //std::unique_ptr<weld::Label>  mpChartTypeLabel;
+    //std::unique_ptr<weld::ComboBox> m_pMainTypeList;
+    //VclPtr<ListBox> m_pMainTypeList;
+    //VclPtr<ValueSet> m_pSubTypeList;
 
     vcl::EnumContext maContext;
 
@@ -112,7 +124,7 @@ private:
 
     void Initialize();
 
-    std::unique_ptr<Dim3DLookResourceGroup_unwelded> m_pDim3DLookResourceGroup;
+    std::unique_ptr<Dim3DLookResourceGroup> m_pDim3DLookResourceGroup;
     /*std::unique_ptr<StackingResourceGroup>      m_pStackingResourceGroup;
     std::unique_ptr<SplineResourceGroup>        m_pSplineResourceGroup;
     std::unique_ptr<GeometryResourceGroup>      m_pGeometryResourceGroup;
@@ -126,6 +138,11 @@ private:
     sal_Int32 m_nChangingCalls;
 
     TimerTriggeredControllerLock m_aTimerTriggeredControllerLock;
+
+    std::unique_ptr<weld::Label> m_xChartTypeLabel;
+    std::unique_ptr<weld::ComboBox> m_xMainTypeList;
+    std::unique_ptr<SvtValueSet> m_xSubTypeList;
+    std::unique_ptr<weld::CustomWeld> m_xSubTypeListWin;
 };
 }
 } // end of namespace ::chart::sidebar
