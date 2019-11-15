@@ -19,8 +19,6 @@
 #include "DomainMapperTableHandler.hxx"
 #include "DomainMapper_Impl.hxx"
 #include "StyleSheetTable.hxx"
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -976,23 +974,6 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
     return aRowProperties;
 }
 
-// Apply paragraph property to each paragraph within a cell.
-static void lcl_ApplyCellParaProps(uno::Reference<table::XCell> const& xCell,
-        const uno::Any& rBottomMargin)
-{
-    uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCell, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
-    while (xEnumeration->hasMoreElements())
-    {
-        uno::Reference<beans::XPropertySet> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertyState> xPropertyState(xParagraph, uno::UNO_QUERY);
-        // Don't apply in case direct formatting is already present.
-        // TODO: probably paragraph style has priority over table style here.
-        if (xPropertyState.is() && xPropertyState->getPropertyState("ParaBottomMargin") == beans::PropertyState_DEFAULT_VALUE)
-            xParagraph->setPropertyValue("ParaBottomMargin", rBottomMargin);
-    }
-}
-
 void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart)
 {
 #ifdef DBG_UTIL
@@ -1096,20 +1077,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                     [](const beans::PropertyValue& rProp) { return rProp.Name == "ParaBottomMargin"; });
                 if (pTableProp != aTableInfo.aTableProperties.end())
                 {
-                    uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
                     uno::Any aBottomMargin = pTableProp->Value;
-                    sal_Int32 nRows = aCellProperties.getLength();
-
                     for (const auto& rParaProp : m_rDMapper_Impl.m_aPendingParaProp )
                         rParaProp->setPropertyValue("ParaBottomMargin", aBottomMargin );
-
-                    for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
-                    {
-                        const uno::Sequence< beans::PropertyValues > aCurrentRow = aCellProperties[nRow];
-                        sal_Int32 nCells = aCurrentRow.getLength();
-                        for (sal_Int32 nCell = 0; nCell < nCells; ++nCell)
-                            lcl_ApplyCellParaProps(xCellRange->getCellByPosition(nCell, nRow), aBottomMargin);
-                    }
                 }
             }
         }
