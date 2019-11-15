@@ -191,7 +191,7 @@ public:
             }
         }
         bool suggestion;
-        bool replacement;
+        bool replacement = {};
         if (res.isInt())
         {
             suggestion = true;
