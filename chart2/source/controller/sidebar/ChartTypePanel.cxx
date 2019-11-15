@@ -23,6 +23,7 @@
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartResourceGroupDlgs.hxx>
 #include <ChartResourceGroups.hxx>
 #include <ChartTypeDialogController.hxx>
 #include <ChartTypeHelper.hxx>
@@ -70,7 +71,8 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
     , mbModelValid(true)
     , m_pDim3DLookResourceGroup(new Dim3DLookResourceGroup(m_xBuilder.get()))
     , m_pStackingResourceGroup(new StackingResourceGroup(m_xBuilder.get()))
-    //, m_pSplineResourceGroup( new SplineResourceGroup(m_xBuilder.get(), pController->getDialog()) )
+    , m_pSplineResourceGroup(
+          new SplineResourceGroup(m_xBuilder.get(), pController->GetChartFrame()))
     , m_pGeometryResourceGroup(new GeometryResourceGroup(m_xBuilder.get()))
     , m_pSortByXValuesResourceGroup(new SortByXValuesResourceGroup(m_xBuilder.get()))
     , m_xChartModel(mxModel, css::uno::UNO_QUERY_THROW)
@@ -135,7 +137,7 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
 
     m_pDim3DLookResourceGroup->setChangeListener(this);
     m_pStackingResourceGroup->setChangeListener(this);
-    //m_pSplineResourceGroup->setChangeListener( this );
+    m_pSplineResourceGroup->setChangeListener(this);
     m_pGeometryResourceGroup->setChangeListener(this);
     m_pSortByXValuesResourceGroup->setChangeListener(this);
 
@@ -156,7 +158,7 @@ void ChartTypePanel::dispose()
     //delete all resource helpers
     m_pDim3DLookResourceGroup.reset();
     m_pStackingResourceGroup.reset();
-    //m_pSplineResourceGroup.reset();
+    m_pSplineResourceGroup.reset();
     m_pGeometryResourceGroup.reset();
     m_pSortByXValuesResourceGroup.reset();
     m_xSubTypeListWin.reset();
@@ -234,7 +236,7 @@ void ChartTypePanel::Initialize()
         m_xSubTypeList->Hide();
         m_pDim3DLookResourceGroup->showControls(false);
         m_pStackingResourceGroup->showControls(false, false);
-        //m_pSplineResourceGroup->showControls( false );
+        m_pSplineResourceGroup->showControls(false);
         m_pGeometryResourceGroup->showControls(false);
         m_pSortByXValuesResourceGroup->showControls(false);
     }
@@ -344,8 +346,8 @@ void ChartTypePanel::showAllControls(ChartTypeDialogController& rTypeController)
     m_pDim3DLookResourceGroup->showControls(bShow);
     bShow = rTypeController.shouldShow_StackingControl();
     m_pStackingResourceGroup->showControls(bShow, false);
-    /*bShow = rTypeController.shouldShow_SplineControl();
-    m_pSplineResourceGroup->showControls( bShow );*/
+    bShow = rTypeController.shouldShow_SplineControl();
+    m_pSplineResourceGroup->showControls(bShow);
     bShow = rTypeController.shouldShow_GeometryControl();
     m_pGeometryResourceGroup->showControls(bShow);
     bShow = rTypeController.shouldShow_SortByXValuesResourceGroup();
@@ -364,7 +366,7 @@ void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,
     m_xSubTypeList->SelectItem(static_cast<sal_uInt16>(rParameter.nSubTypeIndex));
     m_pDim3DLookResourceGroup->fillControls(rParameter);
     m_pStackingResourceGroup->fillControls(rParameter);
-    //m_pSplineResourceGroup->fillControls( rParameter );
+    m_pSplineResourceGroup->fillControls(rParameter);
     m_pGeometryResourceGroup->fillControls(rParameter);
     m_pSortByXValuesResourceGroup->fillControls(rParameter);
     m_nChangingCalls--;
@@ -376,7 +378,7 @@ ChartTypeParameter ChartTypePanel::getCurrentParamter() const
     aParameter.nSubTypeIndex = static_cast<sal_Int32>(m_xSubTypeList->GetSelectedItemId());
     m_pDim3DLookResourceGroup->fillParameter(aParameter);
     m_pStackingResourceGroup->fillParameter(aParameter);
-    //m_pSplineResourceGroup->fillParameter( aParameter );
+    m_pSplineResourceGroup->fillParameter(aParameter);
     m_pGeometryResourceGroup->fillParameter(aParameter);
     m_pSortByXValuesResourceGroup->fillParameter(aParameter);
     return aParameter;
