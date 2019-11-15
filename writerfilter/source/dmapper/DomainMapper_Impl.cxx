@@ -792,9 +792,9 @@ OUString DomainMapper_Impl::GetDefaultParaStyleName()
     return m_sDefaultParaStyleName;
 }
 
-uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara)
+uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara, const bool bStyles)
 {
-    while(pEntry.get( ) )
+    while( bStyles && pEntry.get( ) )
     {
         if(pEntry->pProperties)
         {
@@ -1722,7 +1722,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         {
                             uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_BOTTOM_MARGIN);
                             if ( aMargin != uno::Any() )
+                            {
                                 xParaProps->setPropertyValue("ParaBottomMargin", aMargin);
+
+                                // table style has got bigger precedence than docDefault style
+                                // collect these pending paragraph properties to process in endTable()
+                                // TODO check the case, when two parent styles modify the docDefault and the last one set back the docDefault value
+                                uno::Any aMarginDocDefault = GetPropertyFromStyleSheet(PROP_PARA_BOTTOM_MARGIN, nullptr, true, true, false);
+                                if ( m_nTableDepth > 0 && aMargin == aMarginDocDefault )
+                                    m_aPendingParaProp.push_back(xParaProps);
+                            }
                         }
                         if ( !bContextSet )
                         {
