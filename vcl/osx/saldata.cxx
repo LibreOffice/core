@@ -51,8 +51,8 @@ SalData::SalData()
     mpFirstPrinter( nullptr ),
     mpFontList( nullptr ),
     mpStatusItem( nil ),
-    mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) ),
-    mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) ),
+    mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceSRGB) ),
+    mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGrayGamma2_2) ),
     maCursors(),
     mbIsScrollbarDoubleMax( false ),
 #if !HAVE_FEATURE_MACOSX_SANDBOX
