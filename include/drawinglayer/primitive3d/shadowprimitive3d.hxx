@@ -41,7 +41,7 @@ namespace drawinglayer
             combined with the scene and camera definition to create the correct
             projected shadow 2D-Polygons.
          */
-        class DRAWINGLAYER_DLLPUBLIC ShadowPrimitive3D final : public GroupPrimitive3D
+        class ShadowPrimitive3D final : public GroupPrimitive3D
         {
             /// 2D shadow definition
             basegfx::B2DHomMatrix                   maShadowTransform;

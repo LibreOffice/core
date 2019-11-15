@@ -37,7 +37,7 @@ namespace drawinglayer
             primitive has no default buffering, it is necessary here to add a local
             buffering mechanism for the decomposition
          */
-        class DRAWINGLAYER_DLLPUBLIC HatchTexturePrimitive3D final : public TexturePrimitive3D
+        class HatchTexturePrimitive3D final : public TexturePrimitive3D
         {
             /// the hatch definition
             attribute::FillHatchAttribute                   maHatch;

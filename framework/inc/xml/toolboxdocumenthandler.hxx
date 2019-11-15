@@ -37,7 +37,7 @@ namespace framework{
 // workaround for incremental linking bugs in MSVC2015
 class SAL_DLLPUBLIC_TEMPLATE OReadToolBoxDocumentHandler_Base : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler > {};
 
-class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : public OReadToolBoxDocumentHandler_Base
+class OReadToolBoxDocumentHandler : public OReadToolBoxDocumentHandler_Base
 {
     public:
         enum ToolBox_XML_Entry
@@ -117,7 +117,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : public OReadToolBoxDocumentHan
         OUString                                                  m_aCommandURL;
 };
 
-class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler final
+class OWriteToolBoxDocumentHandler final
 {
     public:
             OWriteToolBoxDocumentHandler(

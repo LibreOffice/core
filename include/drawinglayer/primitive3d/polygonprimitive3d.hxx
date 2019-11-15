@@ -41,7 +41,7 @@ namespace drawinglayer
             This is one of the non-decomposable 3D primitives, so a renderer
             should process it.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolygonHairlinePrimitive3D : public BasePrimitive3D
+        class PolygonHairlinePrimitive3D : public BasePrimitive3D
         {
         private:
             /// the hairline geometry
@@ -83,7 +83,7 @@ namespace drawinglayer
             and stroke attributes. It will be decomposed dependent on the definition
             to the needed primitives, e.g. filled Tubes for fat lines.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolygonStrokePrimitive3D final : public BufferedDecompositionPrimitive3D
+        class PolygonStrokePrimitive3D final : public BufferedDecompositionPrimitive3D
         {
         private:
             /// the line geometry

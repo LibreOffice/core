@@ -39,7 +39,7 @@ namespace drawinglayer
         // decomposes to nothing, so no one not knowing it will be influenced. Only
         // helper processors for hit test (and maybe BoundRect extractors) will
         // use it and its children subcontent.
-        class DRAWINGLAYER_DLLPUBLIC HiddenGeometryPrimitive3D final : public GroupPrimitive3D
+        class HiddenGeometryPrimitive3D final : public GroupPrimitive3D
         {
         public:
             explicit HiddenGeometryPrimitive3D(const Primitive3DContainer& rChildren);

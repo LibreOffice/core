@@ -40,7 +40,7 @@ namespace drawinglayer
      */
     namespace primitive3d
     {
-        class DRAWINGLAYER_DLLPUBLIC SdrPrimitive3D : public BufferedDecompositionPrimitive3D
+        class SdrPrimitive3D : public BufferedDecompositionPrimitive3D
         {
         private:
             /// object surface attributes

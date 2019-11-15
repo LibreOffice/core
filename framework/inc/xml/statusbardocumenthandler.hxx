@@ -37,7 +37,7 @@ namespace framework{
 // workaround for incremental linking bugs in MSVC2015
 class SAL_DLLPUBLIC_TEMPLATE OReadStatusBarDocumentHandler_Base : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler > {};
 
-class FWE_DLLPUBLIC OReadStatusBarDocumentHandler : public OReadStatusBarDocumentHandler_Base
+class OReadStatusBarDocumentHandler : public OReadStatusBarDocumentHandler_Base
 {
     public:
         enum StatusBar_XML_Entry
@@ -101,7 +101,7 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler : public OReadStatusBarDocumen
         css::uno::Reference< css::xml::sax::XLocator >            m_xLocator;
 };
 
-class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler final
+class OWriteStatusBarDocumentHandler final
 {
     public:
         OWriteStatusBarDocumentHandler(

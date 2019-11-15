@@ -58,7 +58,7 @@ protected:
     size_t                  mnSize;
 };
 
-class I18NUTIL_DLLPUBLIC oneToOneMappingWithFlag final : public oneToOneMapping
+class oneToOneMappingWithFlag final : public oneToOneMapping
 {
 private:
     oneToOneMappingWithFlag(const oneToOneMappingWithFlag&) = delete;

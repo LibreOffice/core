@@ -34,7 +34,7 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC RootActionTriggerContainer :  public PropertySetContainer,
+class RootActionTriggerContainer :  public PropertySetContainer,
                                     public css::lang::XMultiServiceFactory,
                                     public css::lang::XServiceInfo,
                                     public css::lang::XUnoTunnel,

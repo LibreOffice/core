@@ -33,7 +33,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvx
+        class GeoTexSvx
         {
         public:
             GeoTexSvx();
@@ -70,7 +70,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradient : public GeoTexSvx
+        class GeoTexSvxGradient : public GeoTexSvx
         {
         protected:
             basegfx::ODFGradientInfo            maGradientInfo;
@@ -103,7 +103,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientLinear final : public GeoTexSvxGradient
+        class GeoTexSvxGradientLinear final : public GeoTexSvxGradient
         {
             double                  mfUnitMinX;
             double                  mfUnitWidth;
@@ -133,7 +133,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientAxial final : public GeoTexSvxGradient
+        class GeoTexSvxGradientAxial final : public GeoTexSvxGradient
         {
             double                  mfUnitMinX;
             double                  mfUnitWidth;
@@ -162,7 +162,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientRadial final : public GeoTexSvxGradient
+        class GeoTexSvxGradientRadial final : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientRadial(
@@ -188,7 +188,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientElliptical final : public GeoTexSvxGradient
+        class GeoTexSvxGradientElliptical final : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientElliptical(
@@ -215,7 +215,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientSquare final : public GeoTexSvxGradient
+        class GeoTexSvxGradientSquare final : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientSquare(
@@ -242,7 +242,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientRect final : public GeoTexSvxGradient
+        class GeoTexSvxGradientRect final : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientRect(
@@ -269,7 +269,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxHatch final : public GeoTexSvx
+        class GeoTexSvxHatch final : public GeoTexSvx
         {
             basegfx::B2DRange                   maOutputRange;
             basegfx::B2DHomMatrix               maTextureTransform;
@@ -312,7 +312,7 @@ namespace drawinglayer
         // given percentage value (offsetX has to be 0.0 <= offsetX <= 1.0).
         // Accordingly to offsetY. If both are given, offsetX is preferred
         // and offsetY is ignored.
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxTiled final : public GeoTexSvx
+        class GeoTexSvxTiled final : public GeoTexSvx
         {
             basegfx::B2DRange               maRange;
             double                          mfOffsetX;

@@ -159,7 +159,7 @@ namespace drawinglayer
             The description/functionality is identical with the 2D case in baseprimitive2d.hxx,
             please see there for detailed information
          */
-        class DRAWINGLAYER_DLLPUBLIC BufferedDecompositionPrimitive3D
+        class BufferedDecompositionPrimitive3D
         :   public BasePrimitive3D
         {
         private:

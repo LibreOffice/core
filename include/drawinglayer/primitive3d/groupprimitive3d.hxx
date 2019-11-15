@@ -48,7 +48,7 @@ namespace drawinglayer
                 - HatchTexturePrimitive3D (for 3D hatch fill)
             - TransformPrimitive3D (for a transformation stack)
          */
-        class DRAWINGLAYER_DLLPUBLIC GroupPrimitive3D : public BasePrimitive3D
+        class GroupPrimitive3D : public BasePrimitive3D
         {
         private:
             /// the children. Declared private since this shall never be changed at all after construction

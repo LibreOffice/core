@@ -33,7 +33,7 @@
 namespace framework
 {
 class ConstItemContainer;
-class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper< css::container::XIndexContainer>
+class ItemContainer :   public ::cppu::WeakImplHelper< css::container::XIndexContainer>
 {
     friend class ConstItemContainer;
 

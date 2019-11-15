@@ -104,7 +104,7 @@ inline void RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUStr
     }
 }
 
-class FWI_DLLPUBLIC LanguageGuessingHelper
+class LanguageGuessingHelper
 {
     mutable css::uno::Reference< css::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
     css::uno::Reference< css::uno::XComponentContext >                    m_xContext;

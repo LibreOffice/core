@@ -126,7 +126,7 @@ class FWI_DLLPUBLIC HandlerCache final
     @devstatus      ready to use
     @threadsafe     no
 */
-class FWI_DLLPUBLIC HandlerCFGAccess : public ::utl::ConfigItem
+class HandlerCFGAccess : public ::utl::ConfigItem
 {
     private:
         HandlerCache* m_pCache;
