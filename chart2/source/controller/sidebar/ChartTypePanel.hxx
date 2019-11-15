@@ -99,7 +99,7 @@ private:
     ChartTypeDialogController* getSelectedMainType();
     void showAllControls(ChartTypeDialogController& rTypeController);
     void fillAllControls(const ChartTypeParameter& rParameter, bool bAlsoResetSubTypeList = true);
-    ChartTypeParameter getCurrentParamter() const;
+    ChartTypeParameter getCurrentParameter() const;
 
     virtual void stateChanged() override;
 
