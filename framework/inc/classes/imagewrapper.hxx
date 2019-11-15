@@ -29,8 +29,7 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC ImageWrapper :
-                     public ::cppu::WeakImplHelper< css::awt::XBitmap,
+class ImageWrapper : public ::cppu::WeakImplHelper< css::awt::XBitmap,
                                                     css::lang::XUnoTunnel >
 {
     public:

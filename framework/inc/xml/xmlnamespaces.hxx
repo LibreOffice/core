@@ -28,7 +28,7 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC XMLNamespaces final
+class XMLNamespaces final
 {
     public:
         /// @throws css::xml::sax::SAXException
