@@ -809,6 +809,8 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 // Remove properties from style/row that aren't allowed in cells
                 pAllCellProps->Erase( PROP_HEADER_ROW_COUNT );
                 pAllCellProps->Erase( PROP_TBL_HEADER );
+                // Remove paragraph properties from style/row that paragraph style can overwrite
+                pAllCellProps->Erase( PROP_PARA_BOTTOM_MARGIN );
 
                 // Then add the cell properties
                 pAllCellProps->InsertProps(*aCellIterator);
