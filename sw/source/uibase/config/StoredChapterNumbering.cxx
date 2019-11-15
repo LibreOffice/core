@@ -16,7 +16,6 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -440,19 +439,13 @@ void ImportStoredChapterNumberingRules(SwChapterNumRules & rRules,
     uno::Reference<io::XInputStream> const xInStream(
             new ::utl::OInputStreamWrapper(rStream));
 
-    uno::Reference<xml::sax::XFastParser> const xParser(
-            xml::sax::FastParser::create(xContext));
-
-    uno::Reference<xml::sax::XFastDocumentHandler> const xHandler(
-            new StoredChapterNumberingImport(xContext, rRules));
-
-    xParser->setFastDocumentHandler(xHandler);
+    rtl::Reference<StoredChapterNumberingImport> const xImport(new StoredChapterNumberingImport(xContext, rRules));
 
     xml::sax::InputSource const source(xInStream, "", "", rFileName);
 
     try
     {
-        xParser->parseStream(source);
+        xImport->parseStream(source);
     }
     catch (uno::Exception const&)
     {
