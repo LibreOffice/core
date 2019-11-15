@@ -54,8 +54,15 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCrashReport;
     std::unique_ptr<weld::Widget> m_xQuickStarterFrame;
     std::unique_ptr<weld::CheckButton> m_xQuickLaunchCB;
+#if defined(_WIN32)
+    std::unique_ptr<weld::Widget> m_xFileAssocFrame;
+    std::unique_ptr<weld::Button> m_xFileAssocBtn;
+#endif
 
     DECL_LINK(TwoFigureHdl, weld::SpinButton&, void);
+#if defined(_WIN32)
+    DECL_LINK(FileAssocClick, weld::Button&, void);
+#endif
 protected:
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
