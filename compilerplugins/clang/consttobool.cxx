@@ -153,7 +153,7 @@ public:
             {
                 l1 = compiler.getSourceManager().getImmediateMacroCallerLoc(l1);
             }
-            // For exmaple, /usr/include/glib-2.0/glib/gmacros.h from
+            // For example, /usr/include/glib-2.0/glib/gmacros.h from
             // glib2-devel-2.62.1-1.fc31.x86_64 has
             //
             //   #define TRUE (!FALSE)
