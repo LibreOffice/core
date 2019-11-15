@@ -74,7 +74,7 @@ class VCL_DLLPUBLIC PDFOutputStream
 
 class VCL_DLLPUBLIC PDFWriter
 {
-    VclPtr<PDFWriterImpl> xImplementation;
+    ScopedVclPtr<PDFWriterImpl> xImplementation;
 
     PDFWriter(const PDFWriter&) = delete;
     PDFWriter& operator=(const PDFWriter&) = delete;
