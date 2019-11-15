@@ -931,7 +931,10 @@ bool FakeBool::VisitFieldDecl(FieldDecl const * decl) {
         return true;
     }
     TagDecl const * td = dyn_cast<TagDecl>(decl->getDeclContext());
-    assert(td != nullptr);
+    if (td == nullptr) {
+        //TODO: ObjCInterface
+        return true;
+    }
     if (!(((td->isStruct() || td->isUnion()) && td->isExternCContext())
           || isInUnoIncludeFile(
               compiler.getSourceManager().getSpellingLoc(
