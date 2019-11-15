@@ -151,7 +151,7 @@ static bool g_bInputLanguageSwitched = false;
 // not currently being pulled open. Unfortunately in MouseButtonDown there
 // is being selected at double/triple click. That selection is completely
 // finished in the Handler and thus can't be distinguished in the Up.
-// To resolve this g_bHoldSelection is set in Down at evaluated in Up.
+// To resolve this g_bHoldSelection is set in Down and evaluated in Up.
 static bool g_bHoldSelection      = false;
 
 bool g_bFrameDrag                   = false;

@@ -153,7 +153,7 @@ NameToIdHash GetNumRuleMap(bool bProgName)
 NameToIdHash GetTableStyleMap(bool bProgName)
 {
     return HashFromRange(0,
-        RES_POOLTABSTYLE_BEGIN, RES_POOLTABSTYLE_END, bProgName ? &SwStyleNameMapper::GetTableStyleProgNameArray : &SwStyleNameMapper::GetTableStyleUINameArray
+        RES_POOLTABLESTYLE_BEGIN, RES_POOLTABLESTYLE_END, bProgName ? &SwStyleNameMapper::GetTableStyleProgNameArray : &SwStyleNameMapper::GetTableStyleUINameArray
     );
 };
 
@@ -389,10 +389,10 @@ const OUString& SwStyleNameMapper::getNameFromId(
         }
         break;
     case POOLGRP_TABSTYLE:
-        if( RES_POOLTABSTYLE_BEGIN <= nId && nId < RES_POOLTABSTYLE_END )
+        if( RES_POOLTABLESTYLE_BEGIN <= nId && nId < RES_POOLTABLESTYLE_END )
         {
             pStrArr = bProgName ? &GetTableStyleProgNameArray() : &GetTableStyleUINameArray();
-            nStt = RES_POOLTABSTYLE_BEGIN;
+            nStt = RES_POOLTABLESTYLE_BEGIN;
         }
         break;
     }
@@ -717,7 +717,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetTableStyleProgNameArray()
 {
     // XXX MUST match the entries of STR_TABSTYLE_ARY in
     // sw/source/core/doc/DocumentStylePoolManager.cxx and MUST match the order of
-    // RES_POOL_TABSTYLE_TYPE in sw/inc/poolfmt.hxx
+    // RES_POOL_TABLESTYLE_TYPE in sw/inc/poolfmt.hxx
     static const std::vector<OUString> s_aTableStyleProgNameArray = {
         "Default Style",       // RES_POOLTABLESTYLE_DEFAULT
         "3D",                  // RES_POOLTABLESTYLE_3D
