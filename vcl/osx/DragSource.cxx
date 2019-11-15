@@ -268,7 +268,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
    event: mLastMouseEventBeforeStartDrag
    pasteboard: clipb->getPasteboard()
    source: mDragSourceHelper
-   slideBack: 1];
+   slideBack: true];
    SAL_WNODEPRECATED_DECLARATIONS_POP
 
   [dragImage release];

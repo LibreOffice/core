@@ -66,12 +66,12 @@ using namespace ::com::sun::star::uno;
 }
 
 +(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper {
-    BOOL isSettable = NO;
+    bool isSettable = false;
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     if ( [ attribute isEqualToString: NSAccessibilityFocusedAttribute ] 
       && ! [ [ AquaA11yRoleHelper getNativeRoleFrom: [ wrapper accessibleContext ] ] isEqualToString: NSAccessibilityScrollBarRole ] 
       && ! [ [ AquaA11yRoleHelper getNativeRoleFrom: [ wrapper accessibleContext ] ] isEqualToString: NSAccessibilityStaticTextRole ] ) {
-        isSettable = YES;
+        isSettable = true;
     }
     [ pool release ];
     return isSettable;

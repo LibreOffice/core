@@ -477,7 +477,7 @@ void ControlHelper::createUserPane()
                 nCheckboxMaxWidth = nControlWidth;
             }
 
-            bButtonControlPresent = YES;
+            bButtonControlPresent = true;
             nControlWidth -= 2 * kAquaSpaceSwitchButtonFrameBoundsDiff;
             nControlHeight -= 2 * kAquaSpaceSwitchButtonFrameBoundsDiff;
         }

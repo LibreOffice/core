@@ -262,7 +262,7 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
         fire_dragOver(dtde);
 
         // drag over callbacks likely have rendered something
-        [mView setNeedsDisplay: TRUE];
+        [mView setNeedsDisplay: true];
 
         dragOp = OfficeToSystemDragActions(mSelectedDropAction);
 
@@ -290,7 +290,7 @@ void DropTarget::draggingExited(id /*sender*/)
 
 BOOL DropTarget::prepareForDragOperation()
 {
-    return 1;
+    return true;
 }
 
 BOOL DropTarget::performDragOperation()

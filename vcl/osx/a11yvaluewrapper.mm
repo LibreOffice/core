@@ -73,11 +73,11 @@ using namespace ::com::sun::star::uno;
 }
 
 +(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper {
-    BOOL isSettable = NO;
+    bool isSettable = false;
     if ( [ wrapper accessibleValue ]
       && [ attribute isEqualToString: NSAccessibilityValueAttribute ] 
       && ! [ wrapper isKindOfClass: [ AquaA11yWrapperStaticText class ] ] ) {
-        isSettable = YES;
+        isSettable = true;
     }
     return isSettable;
 }

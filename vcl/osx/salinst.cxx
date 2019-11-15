@@ -282,7 +282,7 @@ bool ImplSalYieldMutexTryToAcquire()
     if ( pInst )
         return pInst->GetYieldMutex()->tryToAcquire();
     else
-        return FALSE;
+        return false;
 }
 
 void ImplSalYieldMutexRelease()
@@ -453,7 +453,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         {
             const Point aPoint;
             CommandMediaData aMediaData(nCommand);
-            CommandEvent aCEvt( aPoint, CommandEventId::Media, FALSE, &aMediaData );
+            CommandEvent aCEvt( aPoint, CommandEventId::Media, false, &aMediaData );
             NotifyEvent aNCmdEvt( MouseNotifyEvent::COMMAND, pWindow, &aCEvt );
 
             if ( !ImplCallPreNotify( aNCmdEvt ) )
