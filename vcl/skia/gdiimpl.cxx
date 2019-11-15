@@ -31,7 +31,6 @@
 #include <SkRegion.h>
 #include <SkDashPathEffect.h>
 #include <GrBackendSurface.h>
-#include <GrContextFactory.h>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -182,6 +181,7 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
 SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl()
 {
     assert(!mSurface);
+    assert(!mWindowContext);
     assert(!mOffscreenGrContext);
 }
 
@@ -191,6 +191,17 @@ void SkiaSalGraphicsImpl::recreateSurface()
 {
     destroySurface();
     createSurface();
+}
+
+void SkiaSalGraphicsImpl::createSurface()
+{
+    if (isOffscreen())
+        createOffscreenSurface();
+    else
+        createWindowSurface();
+#ifdef DBG_UTIL
+    prefillSurface();
+#endif
     mSurface->getCanvas()->save(); // see SetClipRegion()
     mClipRegion = vcl::Region(tools::Rectangle(0, 0, GetWidth(), GetHeight()));
 
@@ -199,20 +210,35 @@ void SkiaSalGraphicsImpl::recreateSurface()
     mFlush->SetPriority(TaskPriority::POST_PAINT);
 }
 
-void SkiaSalGraphicsImpl::createSurface()
+void SkiaSalGraphicsImpl::createWindowSurface()
 {
-    // Create raster surface. Subclasses will create GPU-backed surfaces as appropriate.
-    mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
-    mIsGPU = false;
-#ifdef DBG_UTIL
-    prefillSurface();
-#endif
+    assert(!isOffscreen());
+    assert(!mSurface);
+    assert(!mWindowContext);
+    createWindowContext();
+    if (mWindowContext)
+        mSurface = mWindowContext->getBackbufferSurface();
+    if (!mSurface)
+    {
+        switch (SkiaHelper::renderMethodToUse())
+        {
+            case SkiaHelper::RenderVulkan:
+                SAL_WARN("vcl.skia", "cannot create Vulkan GPU window surface, disabling Vulkan");
+                // fall back to raster
+                SkiaHelper::disableRenderMethod(SkiaHelper::RenderVulkan);
+                destroySurface(); // destroys also WindowContext
+                return createWindowSurface(); // try again
+            case SkiaHelper::RenderRaster:
+                abort(); // this should not really happen
+        }
+    }
 }
 
 void SkiaSalGraphicsImpl::createOffscreenSurface()
 {
     assert(isOffscreen());
-    destroySurface();
+    assert(!mSurface);
+    assert(!mWindowContext);
     switch (SkiaHelper::renderMethodToUse())
     {
         case SkiaHelper::RenderVulkan:
@@ -228,11 +254,16 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
                 static bool isUnitTest = (getenv("LO_TESTNAME") != nullptr);
                 if (isUnitTest)
                 {
-                    static vcl::DeleteOnDeinit<sk_gpu_test::GrContextFactory> factory(
-                        new sk_gpu_test::GrContextFactory);
-                    // The factory owns the context.
-                    grContext
-                        = factory.get()->get(sk_gpu_test::GrContextFactory::kVulkan_ContextType);
+                    // Create temporary WindowContext with no window. That will fail,
+                    // but it will initialize the shared GrContext.
+                    createWindowContext();
+                    // Keep a reference.
+                    sk_app::VulkanWindowContext::SharedGrContext context
+                        = sk_app::VulkanWindowContext::getSharedGrContext();
+                    // Destroy the temporary WindowContext.
+                    destroySurface();
+                    mOffscreenGrContext = context;
+                    grContext = mOffscreenGrContext.getGrContext();
                 }
             }
             if (grContext)
@@ -241,7 +272,7 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
                     grContext, SkBudgeted::kNo,
                     SkImageInfo::MakeN32Premul(GetWidth(), GetHeight()));
                 mIsGPU = true;
-                assert(mSurface.get());
+                assert(mSurface);
 #ifdef DBG_UTIL
                 prefillSurface();
 #endif
@@ -254,7 +285,10 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
         default:
             break;
     }
-    return SkiaSalGraphicsImpl::createSurface(); // create a raster one
+    // Create raster surface. Subclasses will create GPU-backed surfaces as appropriate.
+    mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
+    assert(mSurface);
+    mIsGPU = false;
 }
 
 void SkiaSalGraphicsImpl::destroySurface()
@@ -266,6 +300,7 @@ void SkiaSalGraphicsImpl::destroySurface()
         // if this fails, something forgot to use SkAutoCanvasRestore
         assert(mSurface->getCanvas()->getTotalMatrix().isIdentity());
     }
+    // TODO Is this still needed?
     // If we use e.g. Vulkan, we must destroy the surface before the context,
     // otherwise destroying the surface will reference the context. This is
     // handled by calling destroySurface() before destroying the context.
@@ -276,6 +311,7 @@ void SkiaSalGraphicsImpl::destroySurface()
     if (mSurface)
         mSurface->flush();
     mSurface.reset();
+    mWindowContext.reset();
     mIsGPU = false;
     mOffscreenGrContext.reset();
 }

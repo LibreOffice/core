@@ -62,7 +62,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,skia,\
     -lm \
     -ldl \
-    -lGLU \
     -lGLX \
     -lGL \
     -lX11-xcb \
@@ -814,12 +813,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/tools/gpu/GrContextFactory \
-    UnpackedTarball/skia/tools/gpu/TestContext \
-    UnpackedTarball/skia/tools/gpu/gl/GLTestContext \
-    UnpackedTarball/skia/tools/gpu/gl/command_buffer/GLTestContext_command_buffer \
-    UnpackedTarball/skia/tools/gpu/mock/MockTestContext \
-    UnpackedTarball/skia/tools/gpu/vk/VkTestContext \
     UnpackedTarball/skia/tools/gpu/vk/VkTestUtils \
     UnpackedTarball/skia/tools/sk_app/GLWindowContext \
     UnpackedTarball/skia/tools/sk_app/VulkanWindowContext \
@@ -848,7 +841,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/tools/gpu/gl/win/CreatePlatformGLTestContext_win \
     UnpackedTarball/skia/tools/sk_app/win/GLWindowContext_win \
     UnpackedTarball/skia/tools/sk_app/win/RasterWindowContext_win \
     UnpackedTarball/skia/tools/sk_app/win/VulkanWindowContext_win \
@@ -871,7 +863,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/tools/gpu/gl/glx/CreatePlatformGLTestContext_glx \
     UnpackedTarball/skia/tools/sk_app/unix/GLWindowContext_unix \
     UnpackedTarball/skia/tools/sk_app/unix/RasterWindowContext_unix \
     UnpackedTarball/skia/tools/sk_app/unix/VulkanWindowContext_unix \
