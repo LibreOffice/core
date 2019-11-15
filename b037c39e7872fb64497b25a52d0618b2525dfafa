@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_1629ea88",
+        "filename": "offapi/com/sun/star/frame/InfobarType.idl",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-15T11:53:51Z",
+      "side": 1,
+      "message": "without a compelling argument for a different type, best to always use the \"canonic\" integer type (i.e., long)",
+      "revId": "b037c39e7872fb64497b25a52d0618b2525dfafa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_362c2698",
+        "filename": "offapi/com/sun/star/frame/InfobarType.idl",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-15T11:53:51Z",
+      "side": 1,
+      "message": "some descriptions lack a terminating colon :)",
+      "revId": "b037c39e7872fb64497b25a52d0618b2525dfafa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
