@@ -3180,7 +3180,7 @@ sal_Int8 SvxConfigPageFunctionDropTarget::AcceptDrop(const AcceptDropEvent& rEvt
 sal_Int8 SvxConfigPageFunctionDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     weld::TreeView* pSource = m_rTreeView.get_drag_source();
-    // only draging within the same widget allowed
+    // only dragging within the same widget allowed
     if (!pSource || pSource != &m_rTreeView)
         return DND_ACTION_NONE;
 
