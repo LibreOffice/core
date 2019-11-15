@@ -139,7 +139,6 @@ private:
 
     TimerTriggeredControllerLock m_aTimerTriggeredControllerLock;
 
-    std::unique_ptr<weld::Label> m_xChartTypeLabel;
     std::unique_ptr<weld::ComboBox> m_xMainTypeList;
     std::unique_ptr<SvtValueSet> m_xSubTypeList;
     std::unique_ptr<weld::CustomWeld> m_xSubTypeListWin;
