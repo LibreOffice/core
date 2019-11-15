@@ -1,13 +1,168 @@
-diff --git a/tools/sk_app/VulkanWindowContext.cpp b/tools/sk_app/VulkanWindowContext.cpp
-index 793c88c158..21164cac67 100644
---- a/tools/sk_app/VulkanWindowContext.cpp
-+++ b/tools/sk_app/VulkanWindowContext.cpp
-@@ -1,4 +1,3 @@
+--- ./tools/sk_app/VulkanWindowContext.h.sav	2019-11-14 16:46:31.218722399 +0100
++++ ./tools/sk_app/VulkanWindowContext.h	2019-11-15 11:58:46.656455921 +0100
+@@ -23,14 +23,30 @@ class GrRenderTarget;
+ 
+ namespace sk_app {
+ 
+-class VulkanWindowContext : public WindowContext {
++class SK_API VulkanWindowContext : public WindowContext {
++    struct Shared;
+ public:
+     ~VulkanWindowContext() override;
+ 
++    class SharedGrContext {
++    public:
++        SharedGrContext() {}
++        GrContext* getGrContext() { return shared ? shared->fContext.get() : nullptr; }
++        ~SharedGrContext() { shared.reset(); checkDestroyShared(); }
++        bool operator!() const { return !shared; }
++        void reset() { shared.reset(); }
++    private:
++        friend class VulkanWindowContext;
++        SharedGrContext(sk_sp<Shared>& sh ) : shared( sh ) {}
++        sk_sp<Shared> shared;
++    };
++
++    static SharedGrContext getSharedGrContext() { return SharedGrContext( fGlobalShared ); }
++
+     sk_sp<SkSurface> getBackbufferSurface() override;
+     void swapBuffers() override;
+ 
+-    bool isValid() override { return fDevice != VK_NULL_HANDLE; }
++    bool isValid() override { return fSurface != VK_NULL_HANDLE; }
+ 
+     void resize(int w, int h) override {
+         this->createSwapchain(w, h, fDisplayParams);
+@@ -53,6 +69,7 @@ public:
+ private:
+     void initializeContext();
+     void destroyContext();
++    static void checkDestroyShared();
+ 
+     struct BackbufferInfo {
+         uint32_t        fImageIndex;          // image this is associated with
+@@ -64,11 +81,6 @@ private:
+     void createBuffers(VkFormat format, SkColorType colorType);
+     void destroyBuffers();
+ 
+-    VkInstance fInstance = VK_NULL_HANDLE;
+-    VkPhysicalDevice fPhysicalDevice = VK_NULL_HANDLE;
+-    VkDevice fDevice = VK_NULL_HANDLE;
+-    VkDebugReportCallbackEXT fDebugCallback = VK_NULL_HANDLE;
 -
- /*
-  * Copyright 2015 Google Inc.
-  *
-@@ -24,8 +23,10 @@
+     // Create functions
+     CreateVkSurfaceFn fCreateVkSurfaceFn;
+     CanPresentFn      fCanPresentFn;
+@@ -90,20 +102,41 @@ private:
+     PFN_vkAcquireNextImageKHR fAcquireNextImageKHR = nullptr;
+     PFN_vkQueuePresentKHR fQueuePresentKHR = nullptr;
+ 
+-    PFN_vkDestroyInstance fDestroyInstance = nullptr;
+     PFN_vkDeviceWaitIdle fDeviceWaitIdle = nullptr;
+-    PFN_vkDestroyDebugReportCallbackEXT fDestroyDebugReportCallbackEXT = nullptr;
+     PFN_vkQueueWaitIdle fQueueWaitIdle = nullptr;
+-    PFN_vkDestroyDevice fDestroyDevice = nullptr;
+     PFN_vkGetDeviceQueue fGetDeviceQueue = nullptr;
+ 
++    // We need to use just one GrContext, so share all the relevant data.
++    struct Shared : public SkRefCnt
++    {
++    PFN_vkDestroyInstance fDestroyInstance = nullptr;
++    PFN_vkDestroyDevice fDestroyDevice = nullptr;
++    PFN_vkDestroyDebugReportCallbackEXT fDestroyDebugReportCallbackEXT = nullptr;
++
++    VkInstance fInstance = VK_NULL_HANDLE;
++    VkPhysicalDevice fPhysicalDevice = VK_NULL_HANDLE;
++    VkDevice fDevice = VK_NULL_HANDLE;
++    VkDebugReportCallbackEXT fDebugCallback = VK_NULL_HANDLE;
++
+     sk_sp<const GrVkInterface> fInterface;
+ 
+-    VkSurfaceKHR      fSurface;
+-    VkSwapchainKHR    fSwapchain;
++    // Original code had this as a function-local variable, but that seems wrong.
++    // It should exist as long as the context exists.
++    VkPhysicalDeviceFeatures2 features;
++
+     uint32_t          fGraphicsQueueIndex;
+     VkQueue           fGraphicsQueue;
+     uint32_t          fPresentQueueIndex;
++
++    sk_sp<GrContext> fContext;
++    };
++
++    sk_sp<Shared> fShared;
++
++    static sk_sp<Shared> fGlobalShared;
++
++    VkSurfaceKHR      fSurface;
++    VkSwapchainKHR    fSwapchain;
+     VkQueue           fPresentQueue;
+ 
+     uint32_t               fImageCount;
+--- ./tools/sk_app/unix/VulkanWindowContext_unix.cpp.sav	2019-10-21 12:03:51.753745188 +0200
++++ ./tools/sk_app/unix/VulkanWindowContext_unix.cpp	2019-11-15 12:08:01.605967642 +0100
+@@ -30,7 +30,7 @@ std::unique_ptr<WindowContext> MakeVulka
+         return nullptr;
+     }
+ 
+-    auto createVkSurface = [&info, instProc](VkInstance instance) -> VkSurfaceKHR {
++    VulkanWindowContext::CreateVkSurfaceFn createVkSurface = [&info, instProc](VkInstance instance) -> VkSurfaceKHR {
+         static PFN_vkCreateXcbSurfaceKHR createXcbSurfaceKHR = nullptr;
+         if (!createXcbSurfaceKHR) {
+             createXcbSurfaceKHR =
+@@ -54,6 +54,9 @@ std::unique_ptr<WindowContext> MakeVulka
+ 
+         return surface;
+     };
++    // Allow creating just the shared context, without an associated window.
++    if(info.fWindow == None)
++        createVkSurface = nullptr;
+ 
+     auto canPresent = [&info, instProc](VkInstance instance, VkPhysicalDevice physDev,
+                               uint32_t queueFamilyIndex) {
+@@ -76,7 +79,7 @@ std::unique_ptr<WindowContext> MakeVulka
+     };
+     std::unique_ptr<WindowContext> ctx(
+             new VulkanWindowContext(displayParams, createVkSurface, canPresent, instProc, devProc));
+-    if (!ctx->isValid()) {
++    if (!ctx->isValid() && createVkSurface != nullptr) {
+         return nullptr;
+     }
+     return ctx;
+--- ./tools/sk_app/win/VulkanWindowContext_win.cpp.sav	2019-10-21 12:03:51.753745188 +0200
++++ ./tools/sk_app/win/VulkanWindowContext_win.cpp	2019-11-15 12:08:21.466022257 +0100
+@@ -30,7 +30,7 @@ std::unique_ptr<WindowContext> MakeVulka
+         return nullptr;
+     }
+ 
+-    auto createVkSurface = [hwnd, instProc] (VkInstance instance) -> VkSurfaceKHR {
++    VulkanWindowContext::CreateVkSurfaceFn createVkSurface = [hwnd, instProc] (VkInstance instance) -> VkSurfaceKHR {
+         static PFN_vkCreateWin32SurfaceKHR createWin32SurfaceKHR = nullptr;
+         if (!createWin32SurfaceKHR) {
+             createWin32SurfaceKHR = (PFN_vkCreateWin32SurfaceKHR)
+@@ -54,6 +54,9 @@ std::unique_ptr<WindowContext> MakeVulka
+ 
+         return surface;
+     };
++    // Allow creating just the shared context, without an associated window.
++    if(hwnd == nullptr)
++        createVkSurface = nullptr;
+ 
+     auto canPresent = [instProc] (VkInstance instance, VkPhysicalDevice physDev,
+                                   uint32_t queueFamilyIndex) {
+@@ -71,7 +74,7 @@ std::unique_ptr<WindowContext> MakeVulka
+ 
+     std::unique_ptr<WindowContext> ctx(
+             new VulkanWindowContext(params, createVkSurface, canPresent, instProc, devProc));
+-    if (!ctx->isValid()) {
++    if (!ctx->isValid() && createVkSurface != nullptr) {
+         return nullptr;
+     }
+     return ctx;
+--- ./tools/sk_app/VulkanWindowContext.cpp.sav	2019-11-14 16:46:31.218722399 +0100
++++ ./tools/sk_app/VulkanWindowContext.cpp	2019-11-15 11:58:46.656455921 +0100
+@@ -24,8 +24,10 @@
  #undef CreateSemaphore
  #endif
  
@@ -20,7 +175,7 @@ index 793c88c158..21164cac67 100644
  
  namespace sk_app {
  
-@@ -49,6 +50,14 @@ VulkanWindowContext::VulkanWindowContext(const DisplayParams& params,
+@@ -49,6 +51,14 @@ VulkanWindowContext::VulkanWindowContext
  }
  
  void VulkanWindowContext::initializeContext() {
@@ -35,7 +190,7 @@ index 793c88c158..21164cac67 100644
      // any config code here (particularly for msaa)?
  
      PFN_vkGetInstanceProcAddr getInstanceProc = fGetInstanceProcAddr;
-@@ -62,24 +71,25 @@ void VulkanWindowContext::initializeContext() {
+@@ -62,24 +72,25 @@ void VulkanWindowContext::initializeCont
      };
      GrVkBackendContext backendContext;
      GrVkExtensions extensions;
@@ -71,7 +226,7 @@ index 793c88c158..21164cac67 100644
  
      PFN_vkGetPhysicalDeviceProperties localGetPhysicalDeviceProperties =
              reinterpret_cast<PFN_vkGetPhysicalDeviceProperties>(
-@@ -87,21 +97,31 @@ void VulkanWindowContext::initializeContext() {
+@@ -87,21 +98,31 @@ void VulkanWindowContext::initializeCont
                                              backendContext.fInstance,
                                              VK_NULL_HANDLE));
      if (!localGetPhysicalDeviceProperties) {
@@ -108,7 +263,7 @@ index 793c88c158..21164cac67 100644
      GET_PROC(DestroySurfaceKHR);
      GET_PROC(GetPhysicalDeviceSurfaceSupportKHR);
      GET_PROC(GetPhysicalDeviceSurfaceCapabilitiesKHR);
-@@ -109,7 +129,6 @@ void VulkanWindowContext::initializeContext() {
+@@ -109,7 +130,6 @@ void VulkanWindowContext::initializeCont
      GET_PROC(GetPhysicalDeviceSurfacePresentModesKHR);
      GET_DEV_PROC(DeviceWaitIdle);
      GET_DEV_PROC(QueueWaitIdle);
@@ -116,12 +271,15 @@ index 793c88c158..21164cac67 100644
      GET_DEV_PROC(CreateSwapchainKHR);
      GET_DEV_PROC(DestroySwapchainKHR);
      GET_DEV_PROC(GetSwapchainImagesKHR);
-@@ -117,46 +136,40 @@ void VulkanWindowContext::initializeContext() {
+@@ -117,46 +137,44 @@ void VulkanWindowContext::initializeCont
      GET_DEV_PROC(QueuePresentKHR);
      GET_DEV_PROC(GetDeviceQueue);
  
 -    fContext = GrContext::MakeVulkan(backendContext, fDisplayParams.fGrContextOptions);
--
++    // No actual window, used just to create the shared GrContext.
++    if(fCreateVkSurfaceFn == nullptr)
++        return;
+ 
 -    fSurface = fCreateVkSurfaceFn(fInstance);
 +    fSurface = fCreateVkSurfaceFn(fShared->fInstance);
      if (VK_NULL_HANDLE == fSurface) {
@@ -130,6 +288,9 @@ index 793c88c158..21164cac67 100644
          return;
      }
  
++    // create presentQueue
++    fGetDeviceQueue(fShared->fDevice, fShared->fPresentQueueIndex, 0, &fPresentQueue);
++
      VkBool32 supported;
 -    VkResult res = fGetPhysicalDeviceSurfaceSupportKHR(fPhysicalDevice, fPresentQueueIndex,
 +    VkResult res = fGetPhysicalDeviceSurfaceSupportKHR(fShared->fPhysicalDevice, fShared->fPresentQueueIndex,
@@ -145,11 +306,10 @@ index 793c88c158..21164cac67 100644
 -        sk_gpu_test::FreeVulkanFeaturesStructs(&features);
          return;
      }
- 
-     // create presentQueue
+-
+-    // create presentQueue
 -    fGetDeviceQueue(fDevice, fPresentQueueIndex, 0, &fPresentQueue);
 -    sk_gpu_test::FreeVulkanFeaturesStructs(&features);
-+    fGetDeviceQueue(fShared->fDevice, fShared->fPresentQueueIndex, 0, &fPresentQueue);
  }
  
  bool VulkanWindowContext::createSwapchain(int width, int height,
@@ -168,7 +328,7 @@ index 793c88c158..21164cac67 100644
                                                nullptr);
      if (VK_SUCCESS != res) {
          return false;
-@@ -164,14 +177,14 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
+@@ -164,14 +182,14 @@ bool VulkanWindowContext::createSwapchai
  
      SkAutoMalloc surfaceFormatAlloc(surfaceFormatCount * sizeof(VkSurfaceFormatKHR));
      VkSurfaceFormatKHR* surfaceFormats = (VkSurfaceFormatKHR*)surfaceFormatAlloc.get();
@@ -185,7 +345,7 @@ index 793c88c158..21164cac67 100644
                                                     nullptr);
      if (VK_SUCCESS != res) {
          return false;
-@@ -179,7 +192,7 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
+@@ -179,7 +197,7 @@ bool VulkanWindowContext::createSwapchai
  
      SkAutoMalloc presentModeAlloc(presentModeCount * sizeof(VkPresentModeKHR));
      VkPresentModeKHR* presentModes = (VkPresentModeKHR*)presentModeAlloc.get();
@@ -194,7 +354,7 @@ index 793c88c158..21164cac67 100644
                                                     presentModes);
      if (VK_SUCCESS != res) {
          return false;
-@@ -286,8 +299,8 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
+@@ -286,8 +304,8 @@ bool VulkanWindowContext::createSwapchai
      swapchainCreateInfo.imageArrayLayers = 1;
      swapchainCreateInfo.imageUsage = usageFlags;
  
@@ -205,7 +365,7 @@ index 793c88c158..21164cac67 100644
          swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
          swapchainCreateInfo.queueFamilyIndexCount = 2;
          swapchainCreateInfo.pQueueFamilyIndices = queueFamilies;
-@@ -303,18 +316,18 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
+@@ -303,18 +321,18 @@ bool VulkanWindowContext::createSwapchai
      swapchainCreateInfo.clipped = true;
      swapchainCreateInfo.oldSwapchain = fSwapchain;
  
@@ -227,7 +387,7 @@ index 793c88c158..21164cac67 100644
      }
  
      this->createBuffers(swapchainCreateInfo.imageFormat, colorType);
-@@ -323,10 +336,10 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
+@@ -323,10 +341,10 @@ bool VulkanWindowContext::createSwapchai
  }
  
  void VulkanWindowContext::createBuffers(VkFormat format, SkColorType colorType) {
@@ -240,7 +400,7 @@ index 793c88c158..21164cac67 100644
  
      // set up initial image layouts and create surfaces
      fImageLayouts = new VkImageLayout[fImageCount];
-@@ -341,7 +354,7 @@ void VulkanWindowContext::createBuffers(VkFormat format, SkColorType colorType)
+@@ -341,7 +359,7 @@ void VulkanWindowContext::createBuffers(
          info.fImageTiling = VK_IMAGE_TILING_OPTIMAL;
          info.fFormat = format;
          info.fLevelCount = 1;
@@ -249,7 +409,7 @@ index 793c88c158..21164cac67 100644
  
          if (fSampleCount == 1) {
              GrBackendRenderTarget backendRT(fWidth, fHeight, fSampleCount, info);
-@@ -372,8 +385,8 @@ void VulkanWindowContext::createBuffers(VkFormat format, SkColorType colorType)
+@@ -372,8 +390,8 @@ void VulkanWindowContext::createBuffers(
      fBackbuffers = new BackbufferInfo[fImageCount + 1];
      for (uint32_t i = 0; i < fImageCount + 1; ++i) {
          fBackbuffers[i].fImageIndex = -1;
@@ -260,7 +420,7 @@ index 793c88c158..21164cac67 100644
                                              nullptr, &fBackbuffers[i].fRenderSemaphore));
      }
      fCurrentBackbufferIndex = fImageCount;
-@@ -384,8 +397,8 @@ void VulkanWindowContext::destroyBuffers() {
+@@ -384,8 +402,8 @@ void VulkanWindowContext::destroyBuffers
      if (fBackbuffers) {
          for (uint32_t i = 0; i < fImageCount + 1; ++i) {
              fBackbuffers[i].fImageIndex = -1;
@@ -271,7 +431,7 @@ index 793c88c158..21164cac67 100644
                                          fBackbuffers[i].fRenderSemaphore,
                                          nullptr));
          }
-@@ -410,41 +423,55 @@ VulkanWindowContext::~VulkanWindowContext() {
+@@ -410,41 +428,55 @@ VulkanWindowContext::~VulkanWindowContex
  void VulkanWindowContext::destroyContext() {
      if (this->isValid()) {
          fQueueWaitIdle(fPresentQueue);
@@ -340,7 +500,7 @@ index 793c88c158..21164cac67 100644
  }
  
  VulkanWindowContext::BackbufferInfo* VulkanWindowContext::getAvailableBackbuffer() {
-@@ -470,34 +497,34 @@ sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
+@@ -470,34 +502,34 @@ sk_sp<SkSurface> VulkanWindowContext::ge
      semaphoreInfo.pNext = nullptr;
      semaphoreInfo.flags = 0;
      VkSemaphore semaphore;
@@ -381,119 +541,10 @@ index 793c88c158..21164cac67 100644
              return nullptr;
          }
      }
-@@ -541,4 +568,6 @@ void VulkanWindowContext::swapBuffers() {
+@@ -541,4 +573,6 @@ void VulkanWindowContext::swapBuffers()
      fQueuePresentKHR(fPresentQueue, &presentInfo);
  }
  
 +SK_API sk_sp<VulkanWindowContext::Shared> VulkanWindowContext::fGlobalShared;
 +
  }   //namespace sk_app
-diff --git a/tools/sk_app/VulkanWindowContext.h b/tools/sk_app/VulkanWindowContext.h
-index 2db9e79ae6..7950dc159b 100644
---- a/tools/sk_app/VulkanWindowContext.h
-+++ b/tools/sk_app/VulkanWindowContext.h
-@@ -1,4 +1,3 @@
--
- /*
-  * Copyright 2016 Google Inc.
-  *
-@@ -23,14 +22,30 @@ class GrRenderTarget;
- 
- namespace sk_app {
- 
--class VulkanWindowContext : public WindowContext {
-+class SK_API VulkanWindowContext : public WindowContext {
-+    struct Shared;
- public:
-     ~VulkanWindowContext() override;
- 
-+    class SharedGrContext {
-+    public:
-+        SharedGrContext() {}
-+        GrContext* getGrContext() { return shared ? shared->fContext.get() : nullptr; }
-+        ~SharedGrContext() { shared.reset(); checkDestroyShared(); }
-+        bool operator!() const { return !shared; }
-+        void reset() { shared.reset(); }
-+    private:
-+        friend class VulkanWindowContext;
-+        SharedGrContext(sk_sp<Shared>& sh ) : shared( sh ) {}
-+        sk_sp<Shared> shared;
-+    };
-+
-+    static SharedGrContext getSharedGrContext() { return SharedGrContext( fGlobalShared ); }
-+
-     sk_sp<SkSurface> getBackbufferSurface() override;
-     void swapBuffers() override;
- 
--    bool isValid() override { return fDevice != VK_NULL_HANDLE; }
-+    bool isValid() override { return fShared && fShared->fDevice != VK_NULL_HANDLE; }
- 
-     void resize(int w, int h) override {
-         this->createSwapchain(w, h, fDisplayParams);
-@@ -53,6 +68,7 @@ public:
- private:
-     void initializeContext();
-     void destroyContext();
-+    static void checkDestroyShared();
- 
-     struct BackbufferInfo {
-         uint32_t        fImageIndex;          // image this is associated with
-@@ -64,11 +80,6 @@ private:
-     void createBuffers(VkFormat format, SkColorType colorType);
-     void destroyBuffers();
- 
--    VkInstance fInstance = VK_NULL_HANDLE;
--    VkPhysicalDevice fPhysicalDevice = VK_NULL_HANDLE;
--    VkDevice fDevice = VK_NULL_HANDLE;
--    VkDebugReportCallbackEXT fDebugCallback = VK_NULL_HANDLE;
--
-     // Create functions
-     CreateVkSurfaceFn fCreateVkSurfaceFn;
-     CanPresentFn      fCanPresentFn;
-@@ -90,20 +101,41 @@ private:
-     PFN_vkAcquireNextImageKHR fAcquireNextImageKHR = nullptr;
-     PFN_vkQueuePresentKHR fQueuePresentKHR = nullptr;
- 
--    PFN_vkDestroyInstance fDestroyInstance = nullptr;
-     PFN_vkDeviceWaitIdle fDeviceWaitIdle = nullptr;
--    PFN_vkDestroyDebugReportCallbackEXT fDestroyDebugReportCallbackEXT = nullptr;
-     PFN_vkQueueWaitIdle fQueueWaitIdle = nullptr;
--    PFN_vkDestroyDevice fDestroyDevice = nullptr;
-     PFN_vkGetDeviceQueue fGetDeviceQueue = nullptr;
- 
-+    // We need to use just one GrContext, so share all the relevant data.
-+    struct Shared : public SkRefCnt
-+    {
-+    PFN_vkDestroyInstance fDestroyInstance = nullptr;
-+    PFN_vkDestroyDevice fDestroyDevice = nullptr;
-+    PFN_vkDestroyDebugReportCallbackEXT fDestroyDebugReportCallbackEXT = nullptr;
-+
-+    VkInstance fInstance = VK_NULL_HANDLE;
-+    VkPhysicalDevice fPhysicalDevice = VK_NULL_HANDLE;
-+    VkDevice fDevice = VK_NULL_HANDLE;
-+    VkDebugReportCallbackEXT fDebugCallback = VK_NULL_HANDLE;
-+
-     sk_sp<const GrVkInterface> fInterface;
- 
--    VkSurfaceKHR      fSurface;
--    VkSwapchainKHR    fSwapchain;
-+    // Original code had this as a function-local variable, but that seems wrong.
-+    // It should exist as long as the context exists.
-+    VkPhysicalDeviceFeatures2 features;
-+
-     uint32_t          fGraphicsQueueIndex;
-     VkQueue           fGraphicsQueue;
-     uint32_t          fPresentQueueIndex;
-+
-+    sk_sp<GrContext> fContext;
-+    };
-+
-+    sk_sp<Shared> fShared;
-+
-+    static sk_sp<Shared> fGlobalShared;
-+
-+    VkSurfaceKHR      fSurface;
-+    VkSwapchainKHR    fSwapchain;
-     VkQueue           fPresentQueue;
- 
-     uint32_t               fImageCount;
