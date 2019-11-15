@@ -843,8 +843,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         }
         else if (nId == MN_SET_SELECTION_MORE)
         {
-            //Open Format/Character Dialog
-            sw_CharDialog( *m_pSh, true, SID_ATTR_CHAR_FONT, nullptr, nullptr );
+            SfxStringItem aDlgString(FN_PARAM_1, "font");
+            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_CHAR_DLG, SfxCallMode::SYNCHRON, { &aDlgString });
         }
         else if (MN_SET_LANGUAGE_PARAGRAPH_START <= nId && nId <= MN_SET_LANGUAGE_PARAGRAPH_END)
         {
@@ -873,11 +873,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         }
         else if (nId == MN_SET_PARA_MORE)
         {
-            m_pSh->Push();        // save cursor
-            SwLangHelper::SelectCurrentPara( *m_pSh );
-            //Open Format/Character Dialog
-            sw_CharDialog( *m_pSh, true, SID_ATTR_CHAR_FONT, nullptr, nullptr );
-            m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor
+            m_pSh->GetView().GetViewFrame()->GetDispatcher()->Execute( SID_CHAR_DLG_FOR_PARAGRAPH );
         }
     }
 
