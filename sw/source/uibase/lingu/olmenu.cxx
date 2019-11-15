@@ -817,29 +817,20 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else
     {
-        // Set language for selection or for paragraph...
-
-        SfxItemSet aCoreSet( m_pSh->GetView().GetPool(),
-                    svl::Items<RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
-                    RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
-                    RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE>{} );
-        OUString aNewLangText;
-
         if (MN_SET_LANGUAGE_SELECTION_START <= nId && nId <= MN_SET_LANGUAGE_SELECTION_END)
         {
-            //Set language for current selection
-            aNewLangText = m_aLangTable_Text[nId];
-            SwLangHelper::SetLanguage( *m_pSh, aNewLangText, true, aCoreSet );
+            SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Current_" + m_aLangTable_Text[nId]);
+            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_SELECTION_NONE)
         {
-            //Set Language_None for current selection
-            SwLangHelper::SetLanguage_None( *m_pSh, true, aCoreSet );
+            SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Current_LANGUAGE_NONE");
+            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_SELECTION_RESET)
         {
-            //reset languages for current selection
-            SwLangHelper::ResetLanguages( *m_pSh );
+            SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Current_RESET_LANGUAGES");
+            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_SELECTION_MORE)
         {
