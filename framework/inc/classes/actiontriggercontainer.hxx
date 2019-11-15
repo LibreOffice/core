@@ -32,7 +32,7 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC ActionTriggerContainer :    public PropertySetContainer,
+class ActionTriggerContainer :    public PropertySetContainer,
                                 public css::lang::XMultiServiceFactory,
                                 public css::lang::XServiceInfo,
                                 public css::lang::XTypeProvider

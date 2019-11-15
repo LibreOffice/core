@@ -83,7 +83,7 @@ namespace drawinglayer
             and stroke attributes. It will be decomposed dependent on the definition
             to the needed primitives, e.g. filled Tubes for fat lines.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolygonStrokePrimitive3D final : public BufferedDecompositionPrimitive3D
+        class PolygonStrokePrimitive3D final : public BufferedDecompositionPrimitive3D
         {
         private:
             /// the line geometry

@@ -36,7 +36,7 @@ namespace drawinglayer
             3D objects needed for the line tubes and the edge roundings
             in full 3D.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolygonTubePrimitive3D final : public PolygonHairlinePrimitive3D
+        class PolygonTubePrimitive3D final : public PolygonHairlinePrimitive3D
         {
             /// hold the last decomposition since it's expensive
             Primitive3DContainer                         maLast3DDecomposition;
