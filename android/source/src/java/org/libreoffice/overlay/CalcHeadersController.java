@@ -26,6 +26,7 @@ import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.mozilla.gecko.gfx.LayerView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import static org.libreoffice.SearchController.addProperty;
@@ -235,12 +236,12 @@ public class CalcHeadersController {
             JSONArray rowResult = collectiveResult.getJSONArray("rows");
             for (int i = 0; i < rowResult.length(); i++) {
                 headerInfo.rowLabels.add(rowResult.getJSONObject(i).getString("text"));
-                headerInfo.rowDimens.add(rowResult.getJSONObject(i).getLong("size"));
+                headerInfo.rowDimens.add(BigDecimal.valueOf(rowResult.getJSONObject(i).getLong("size")).floatValue());
             }
             JSONArray columnResult = collectiveResult.getJSONArray("columns");
             for (int i = 0; i < columnResult.length(); i++) {
                 headerInfo.columnLabels.add(columnResult.getJSONObject(i).getString("text"));
-                headerInfo.columnDimens.add(columnResult.getJSONObject(i).getLong("size"));
+                headerInfo.columnDimens.add(BigDecimal.valueOf(columnResult.getJSONObject(i).getLong("size")).floatValue());
             }
             return headerInfo;
         } catch (JSONException e) {
