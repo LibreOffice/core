@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <cassert>
+
 #include <sal/types.h>
 
 #pragma clang diagnostic ignored "-Wnull-conversion"
@@ -44,6 +46,15 @@ int main()
     b = c2;
     // expected-error@+1 {{implicit conversion of constant 3 of type 'int' to 'bool'; use 'true' instead [loplugin:consttobool]}}
     b = (c1 | c2);
+
+    assert(b); // no warnings from within assert macro itself
+    assert(b && "msg"); // no warnings for `&& "msg"`
+    if (b)
+    {
+        assert(!"msg"); // no warnings for `!"msg"`
+    }
+    // expected-error@+1 {{implicit conversion of constant &"msg"[0] of type 'const char *' to 'bool'; use 'true' instead [loplugin:consttobool]}}
+    assert("msg");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

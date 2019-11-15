@@ -207,6 +207,11 @@ public:
             suggestion = true;
             replacement = false;
         }
+        else if (res.isLValue())
+        {
+            suggestion = true;
+            replacement = true;
+        }
         else
         {
             suggestion = false;
