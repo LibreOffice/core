@@ -1330,6 +1330,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aExcludeWhenNotLoadingUserSettings.insert("PrintControls");
     aExcludeWhenNotLoadingUserSettings.insert("PrintDrawings");
     aExcludeWhenNotLoadingUserSettings.insert("PrintGraphics");
+    aExcludeWhenNotLoadingUserSettings.insert("PrintHiddenText");
     aExcludeWhenNotLoadingUserSettings.insert("PrintLeftPages");
     aExcludeWhenNotLoadingUserSettings.insert("PrintPageBackground");
     aExcludeWhenNotLoadingUserSettings.insert("PrintProspect");
@@ -1338,6 +1339,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aExcludeWhenNotLoadingUserSettings.insert("PrintFaxName");
     aExcludeWhenNotLoadingUserSettings.insert("PrintPaperFromSetup");
     aExcludeWhenNotLoadingUserSettings.insert("PrintTables");
+    aExcludeWhenNotLoadingUserSettings.insert("PrintTextPlaceholder");
     aExcludeWhenNotLoadingUserSettings.insert("PrintSingleJobs");
     aExcludeWhenNotLoadingUserSettings.insert("UpdateFromTemplate");
     aExcludeWhenNotLoadingUserSettings.insert("PrinterIndependentLayout");
