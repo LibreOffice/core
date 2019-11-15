@@ -809,6 +809,9 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 // Remove properties from style/row that aren't allowed in cells
                 pAllCellProps->Erase( PROP_HEADER_ROW_COUNT );
                 pAllCellProps->Erase( PROP_TBL_HEADER );
+                // Remove paragraph properties from style/row that paragraph style can overwrite
+                pAllCellProps->Erase( PROP_PARA_BOTTOM_MARGIN );
+                pAllCellProps->Erase( PROP_PARA_LINE_SPACING );
 
                 // Then add the cell properties
                 pAllCellProps->InsertProps(*aCellIterator);
@@ -981,6 +984,36 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
     return aRowProperties;
 }
 
+// table style has got bigger precedence than docDefault style,
+// but lower precedence than the paragraph styles and direct paragraph formatting
+void DomainMapperTableHandler::ApplyParaProperty(css::beans::PropertyValues aTableProperties, PropertyIds eId)
+{
+    OUString sPropertyName = getPropertyName(eId);
+    auto pTableProp = std::find_if(aTableProperties.begin(), aTableProperties.end(),
+        [&](const beans::PropertyValue& rProp) { return rProp.Name == sPropertyName; });
+    if (pTableProp != aTableProperties.end())
+    {
+        uno::Any aValue = pTableProp->Value;
+        for (const auto& rParaProp : m_rDMapper_Impl.m_aParagraphsToEndTable)
+        {
+            // there is no direct paragraph formatting
+            if (!rParaProp.m_pPropertyMap->isSet(eId))
+            {
+                OUString sParaStyleName;
+                rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
+                StyleSheetEntryPtr pEntry = m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName);
+                uno::Any aMargin = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, pEntry, true, true);
+                uno::Any aMarginDocDefault = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, nullptr, true, true);
+                // use table style only when 1) both values are empty (no docDefault and paragraph style definitions) or
+                // 2) both non-empty values are equal (docDefault paragraph properties are copied to the base paragraph style during import)
+                // TODO check the case, when two parent styles modify the docDefault and the last one set back the docDefault value
+                if (aMargin == aMarginDocDefault)
+                    rParaProp.m_rPropertySet->setPropertyValue(sPropertyName, aValue);
+            }
+        }
+    }
+}
+
 void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart)
 {
 #ifdef DBG_UTIL
@@ -1080,14 +1113,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 }
 
                 // OOXML table style may container paragraph properties, apply these now.
-                auto pTableProp = std::find_if(aTableInfo.aTableProperties.begin(), aTableInfo.aTableProperties.end(),
-                    [](const beans::PropertyValue& rProp) { return rProp.Name == "ParaBottomMargin"; });
-                if (pTableProp != aTableInfo.aTableProperties.end())
-                {
-                    uno::Any aBottomMargin = pTableProp->Value;
-                    for (const auto& rParaProp : m_rDMapper_Impl.m_aPendingParaProp )
-                        rParaProp->setPropertyValue("ParaBottomMargin", aBottomMargin );
-                }
+                ApplyParaProperty(aTableInfo.aTableProperties, PROP_PARA_BOTTOM_MARGIN);
+                ApplyParaProperty(aTableInfo.aTableProperties, PROP_PARA_LINE_SPACING);
             }
         }
         catch ( const lang::IllegalArgumentException & )
@@ -1165,7 +1192,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
     m_aCellProperties.clear();
     m_aRowProperties.clear();
     m_bHadFootOrEndnote = false;
-    m_rDMapper_Impl.m_aPendingParaProp.clear();
+    m_rDMapper_Impl.m_aParagraphsToEndTable.clear();
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
