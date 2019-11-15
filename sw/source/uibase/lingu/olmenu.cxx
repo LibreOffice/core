@@ -848,28 +848,18 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         }
         else if (MN_SET_LANGUAGE_PARAGRAPH_START <= nId && nId <= MN_SET_LANGUAGE_PARAGRAPH_END)
         {
-            //Set language for current paragraph
-            aNewLangText = m_aLangTable_Paragraph[nId];
-            m_pSh->Push();        // save cursor
-            SwLangHelper::SelectCurrentPara( *m_pSh );
-            SwLangHelper::SetLanguage( *m_pSh, aNewLangText, true, aCoreSet );
-            m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor
+            SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Paragraph_" + m_aLangTable_Paragraph[nId]);
+            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_PARA_NONE)
         {
-            //Set Language_None for current paragraph
-            m_pSh->Push();        // save cursor
-            SwLangHelper::SelectCurrentPara( *m_pSh );
-            SwLangHelper::SetLanguage_None( *m_pSh, true, aCoreSet );
-            m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor
+            SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Paragraph_LANGUAGE_NONE");
+            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_PARA_RESET)
         {
-            //reset languages for current paragraph
-            m_pSh->Push();        // save cursor
-            SwLangHelper::SelectCurrentPara( *m_pSh );
-            SwLangHelper::ResetLanguages( *m_pSh );
-            m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor
+            SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Paragraph_RESET_LANGUAGES");
+            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_PARA_MORE)
         {
