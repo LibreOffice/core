@@ -118,7 +118,7 @@ void SfxRequest_Impl::SetPool( SfxItemPool *pNewPool )
 }
 
 
-SfxRequest::~SfxRequest() COVERITY_NOEXCEPT_FALSE
+SfxRequest::~SfxRequest()
 {
     // Leave out Done() marked requests with 'rem'
     if ( pImpl->xRecorder.is() && !pImpl->bDone && !pImpl->bIgnored )
