@@ -42,7 +42,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
@@ -93,21 +92,10 @@ static void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport 
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xIn;
 
-    // get parser
-    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
-
-    //!! keep a reference until everything is done to
-    //!! ensure the proper lifetime of the object
-    uno::Reference < xml::sax::XDocumentHandler > xFilter(
-            static_cast<xml::sax::XExtendedDocumentHandler *>(&rImport), UNO_QUERY );
-
-    // connect parser and filter
-    xParser->setDocumentHandler( xFilter );
-
     // finally, parser the stream
     try
     {
-        xParser->parseStream( aParserInput );   // implicitly calls ConvDicXMLImport::CreateContext
+        rImport.parseStream( aParserInput );   // implicitly calls ConvDicXMLImport::CreateContext
     }
     catch( xml::sax::SAXParseException& )
     {
