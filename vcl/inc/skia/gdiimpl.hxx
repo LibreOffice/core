@@ -211,6 +211,8 @@ protected:
     void destroySurface();
     // Reimplemented for X11.
     virtual bool avoidRecreateByResize() const { return false; }
+    void createWindowSurface();
+    virtual void createWindowContext() = 0;
     void createOffscreenSurface();
 
     void privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight, double nTransparency,
@@ -256,11 +258,12 @@ protected:
     SalGraphics& mParent;
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mProvider;
+    std::unique_ptr<sk_app::WindowContext> mWindowContext;
+    sk_app::VulkanWindowContext::SharedGrContext mOffscreenGrContext;
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
     bool mIsGPU; // whether the surface is GPU-backed
     // Keep reference to shared GrContext.
-    sk_app::VulkanWindowContext::SharedGrContext mOffscreenGrContext;
     vcl::Region mClipRegion;
     Color mLineColor;
     Color mFillColor;
