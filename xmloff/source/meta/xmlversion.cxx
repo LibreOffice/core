@@ -31,7 +31,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -381,16 +380,12 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
                 throw uno::RuntimeException();
 
             // get filter
-            Reference< XFastDocumentHandler > xFilter = new XMLVersionListImport( xContext, aVersions );
-
-            // connect parser and filter
-            Reference< XFastParser > xParser = xml::sax::FastParser::create(xContext);
-            xParser->setFastDocumentHandler( xFilter );
+            rtl::Reference< XMLVersionListImport > xImport = new XMLVersionListImport( xContext, aVersions );
 
             // parse
             try
             {
-                xParser->parseStream( aParserInput );
+                xImport->parseStream( aParserInput );
             }
             catch( SAXParseException&  ) {}
             catch( SAXException&  )      {}
