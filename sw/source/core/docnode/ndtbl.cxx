@@ -190,7 +190,7 @@ static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTab
 
 static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<SwTableBoxFormat*> &rBoxFormatArr,
                                     const SwTableAutoFormat& rAutoFormat,
-                                    sal_uInt16 nCols, sal_uInt8 nId )
+                                    const sal_uInt16 nRows, const sal_uInt16 nCols, sal_uInt8 nId )
 {
     if( !rBoxFormatArr[nId] )
     {
@@ -201,6 +201,30 @@ static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<Sw
         if( USHRT_MAX != nCols )
             pBoxFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
+        // Neither the first, nor the last is adequate to specify the borders of single column/row tables, so combine first/last.
+        if ( nRows == 1 || nCols == 1 )
+        {
+            // Switch to Last Column/Row, but merge with the borders from the First Column/Row
+            SvxBoxItem aFirstBox( pBoxFormat->GetBox() );
+
+            sal_uInt8 nSingleRowOrColumnId = 15; //LAST_ROW_END_COLUMN  - see Mapping schema in docnode/tblafmt.cxx
+            if ( nRows != 1 )
+                nSingleRowOrColumnId = nId + 3;  //LAST COLUMN (3, 7, 11, 15)
+            else if ( nCols != 1 )
+                nSingleRowOrColumnId = nId + 12; //LAST ROW (12, 13, 14, 15)
+
+            rAutoFormat.UpdateToSet( nSingleRowOrColumnId,
+                                    const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pBoxFormat->GetAttrSet())),
+                                    SwTableAutoFormatUpdateFlags::Box,
+                                    rDoc.GetNumberFormatter( ) );
+            SvxBoxItem aLastBox( pBoxFormat->GetBox() );
+            if ( nRows == 1 )
+                aLastBox.SetLine( aFirstBox.GetLine(SvxBoxItemLine::TOP),  SvxBoxItemLine::TOP );
+            if ( nCols == 1 )
+                aLastBox.SetLine( aFirstBox.GetLine(SvxBoxItemLine::LEFT), SvxBoxItemLine::LEFT );
+            pBoxFormat->SetFormatAttr( aLastBox );
+        }
+
         rBoxFormatArr[ nId ] = pBoxFormat;
     }
     return rBoxFormatArr[nId];
@@ -488,7 +512,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             {
                 sal_uInt8 nId = SwTableAutoFormat::CountPos(i, nCols, n, nRows);
                 pBoxF = ::lcl_CreateAFormatBoxFormat( *this, aBoxFormatArr, *pTAFormat,
-                                                nCols, nId );
+                                                nRows, nCols, nId );
 
                 // Set the Paragraph/Character Attributes if needed
                 if( pTAFormat->IsFont() || pTAFormat->IsJustify() )
@@ -786,7 +810,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                     {
                         bChgSz = nullptr == (*aBoxFormatArr2)[ nId ];
                         pBoxF = ::lcl_CreateAFormatBoxFormat( *this, *aBoxFormatArr2,
-                                                *pTAFormat, USHRT_MAX, nId );
+                                                *pTAFormat, USHRT_MAX, USHRT_MAX, nId );
                     }
 
                     // Set Paragraph/Character Attributes if needed
