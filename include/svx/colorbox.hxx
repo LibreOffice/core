@@ -38,7 +38,6 @@ private:
     Color m_aAutoDisplayColor;
     NamedColor m_aSelectedColor;
     sal_uInt16 m_nSlotId;
-    bool m_bShowNoneButton;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
     ColorStatus m_aColorStatus;
 

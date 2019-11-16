@@ -121,7 +121,6 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl()
     , m_eDlgType( FILEDLG_TYPE_FILEDLG )
     , m_nStyle( PickerFlags::NONE )
     , m_bDoubleClick( false )
-    , m_bNeedDelayedFilterExecute ( false )
     , m_bMultiSelection( false )
 {
 }

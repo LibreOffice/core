@@ -3914,7 +3914,6 @@ SvxColorListBox::SvxColorListBox(vcl::Window* pParent, WinBits nStyle)
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
     , m_nSlotId(0)
-    , m_bShowNoneButton(false)
 {
     m_aSelectedColor = GetAutoColor(m_nSlotId);
     LockWidthRequest();
@@ -3943,7 +3942,6 @@ void ColorListBox::EnsurePaletteManager()
 void SvxColorListBox::SetSlotId(sal_uInt16 nSlotId)
 {
     m_nSlotId = nSlotId;
-    m_bShowNoneButton = false;
     m_xColorWindow.disposeAndClear();
     m_aSelectedColor = GetAutoColor(m_nSlotId);
     ShowPreview(m_aSelectedColor);
@@ -3993,20 +3991,10 @@ void SvxColorListBox::ShowPreview(const NamedColor &rColor)
     ScopedVclPtrInstance<VirtualDevice> xDevice;
     xDevice->SetOutputSize(aImageSize);
     const tools::Rectangle aRect(Point(0, 0), aImageSize);
-    if (m_bShowNoneButton && rColor.first == COL_NONE_COLOR)
-    {
-        const Color aW(COL_WHITE);
-        const Color aG(0xef, 0xef, 0xef);
-        xDevice->DrawCheckered(aRect.TopLeft(), aRect.GetSize(), 8, aW, aG);
-        xDevice->SetFillColor();
-    }
+    if (rColor.first == COL_AUTO)
+        xDevice->SetFillColor(m_aAutoDisplayColor);
     else
-    {
-        if (rColor.first == COL_AUTO)
-            xDevice->SetFillColor(m_aAutoDisplayColor);
-        else
-            xDevice->SetFillColor(rColor.first);
-    }
+        xDevice->SetFillColor(rColor.first);
 
     xDevice->SetLineColor(rStyleSettings.GetDisableColor());
     xDevice->DrawRect(aRect);
@@ -4053,8 +4041,6 @@ void SvxColorListBox::createColorWindow()
     m_xColorWindow->AddEventListener(LINK(this, SvxColorListBox, WindowEventListener));
 
     SetNoSelection();
-    if (m_bShowNoneButton)
-        m_xColorWindow->ShowNoneButton();
     m_xColorWindow->SelectEntry(m_aSelectedColor);
     SetPopover(m_xColorWindow);
 }

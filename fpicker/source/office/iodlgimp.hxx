@@ -155,7 +155,6 @@ public:
 
     // shows OpenHdl_Imp() if the open was triggered by a double click
     bool m_bDoubleClick;
-    bool m_bNeedDelayedFilterExecute;
 
     // MultiSelection?
     bool m_bMultiSelection;

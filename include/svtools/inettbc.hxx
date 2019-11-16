@@ -43,7 +43,6 @@ friend class SvtURLBox_Impl;
     INetProtocol                    eSmartProtocol;
     bool                            bAutoCompleteMode   : 1;
     bool                            bHistoryDisabled    : 1;
-    bool                            bIsAutoCompleteEnabled : 1;
 
     SVT_DLLPRIVATE bool             ProcessKey( const vcl::KeyCode& rCode );
     SVT_DLLPRIVATE void             TryAutoComplete();
