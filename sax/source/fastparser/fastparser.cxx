@@ -175,6 +175,8 @@ struct Entity : public ParserData
     css::uno::Any                           maSavedException;
     osl::Mutex maSavedExceptionMutex;
     void saveException( const Any & e );
+    // Thread-safe check if maSavedException has value
+    bool hasException();
     void throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
                          bool mbDuringParse );
 
@@ -622,6 +624,12 @@ void Entity::saveException( const Any & e )
     }
 }
 
+bool Entity::hasException()
+{
+    osl::MutexGuard g(maSavedExceptionMutex);
+    return maSavedException.hasValue();
+}
+
 } // namespace
 
 namespace sax_fastparser {
@@ -1040,6 +1048,8 @@ void FastSaxParserImpl::parse()
             {
                 if( xmlParseChunk( rEntity.mpParser, reinterpret_cast<const char*>(seqOut.getConstArray()), 0, 1 ) != XML_ERR_OK )
                     rEntity.throwException( mxDocumentLocator, true );
+                if (rEntity.hasException())
+                    rEntity.throwException(mxDocumentLocator, true);
             }
             break;
         }
@@ -1068,10 +1078,8 @@ void FastSaxParserImpl::parse()
         {
             rEntity.throwException( mxDocumentLocator, true );
         }
-        osl::ClearableMutexGuard g(rEntity.maSavedExceptionMutex);
-        if (rEntity.maSavedException.hasValue())
+        if (rEntity.hasException())
         {
-            g.clear();
             rEntity.throwException( mxDocumentLocator, true );
         }
     } while( nRead > 0 );
