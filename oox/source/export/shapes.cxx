@@ -381,6 +381,14 @@ awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
     return awt::Size( aRetSize.Width(), aRetSize.Height() );
 }
 
+static bool IsNonEmptySimpleText(const Reference<XInterface>& xIface)
+{
+    if (Reference<XSimpleText> xText{ xIface, UNO_QUERY })
+        return xText->getString().getLength();
+
+    return false;
+}
+
 bool ShapeExport::NonEmptyText( const Reference< XInterface >& xIface )
 {
     Reference< XPropertySet > xPropSet( xIface, UNO_QUERY );
@@ -414,12 +422,7 @@ bool ShapeExport::NonEmptyText( const Reference< XInterface >& xIface )
         }
     }
 
-    Reference< XSimpleText > xText( xIface, UNO_QUERY );
-
-    if( xText.is() )
-        return xText->getString().getLength();
-
-    return false;
+    return IsNonEmptySimpleText(xIface);
 }
 
 ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xShape, const bool bClosed )
@@ -529,7 +532,11 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
         uno::Reference<lang::XServiceInfo> xServiceInfo(xChild, uno::UNO_QUERY_THROW);
         if (GetDocumentType() == DOCUMENT_DOCX)
         {
-            if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+            // tdf#128820: WriteGraphicObjectShapePart calls WriteTextShape for non-empty simple
+            // text objects, which needs writing into wps::wsp element, so make sure to use wps
+            // namespace for those objects
+            if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape")
+                && !IsNonEmptySimpleText(xChild))
                 mnXmlNamespace = XML_pic;
             else
                 mnXmlNamespace = XML_wps;
@@ -1165,19 +1172,13 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 {
     SAL_INFO("oox.shape", "write graphic object shape");
 
-    if( NonEmptyText( xShape ) )
+    if (IsNonEmptySimpleText(xShape))
     {
-        // avoid treating all 'IsPresentationObject' objects as having text.
-        Reference< XSimpleText > xText( xShape, UNO_QUERY );
+        SAL_INFO("oox.shape", "graphicObject: wrote only text");
 
-        if( xText.is() && !xText->getString().isEmpty() )
-        {
-            SAL_INFO("oox.shape", "graphicObject: wrote only text");
+        WriteTextShape(xShape);
 
-            WriteTextShape( xShape );
-
-            return;
-        }
+        return;
     }
 
     SAL_INFO("oox.shape", "graphicObject without text");
