@@ -48,6 +48,28 @@ class SvpGcpHelper;
 namespace basegfx { class B2DPolyPolygon; }
 namespace vcl { struct FontCapabilities; }
 
+ /**
+  * The GlyphCache caches various aspects of Freetype fonts
+  *
+  * It mainly consists of three std::unordered_map lists, which hold the items of the cache.
+  *
+  * They form kind of a tree, with FreetypeFontFile as the roots, referenced by multiple FreetypeFontInfo
+  * entries, which are referenced by the FreetypeFont items.
+  *
+  * All of these items have reference counters, but these don't control the items life-cycle, but that of
+  * the managed resources.
+  *
+  * The respective resources are:
+  *   FreetypeFontFile = holds the mmapped font file, as long as it's used by any FreetypeFontInfo.
+  *   FreetypeFontInfo = holds the FT_FaceRec_ object, as long as it's used by any FreetypeFont.
+  *   FreetypeFont     = holds the FT_SizeRec_.
+  *
+  * FreetypeFontInfo therefore is embedded in the Freetype subclass of PhysicalFontFace.
+  * FreetypeFont is embedded in the Freetype subclass of LogicalFontInstance.
+  *
+  * Nowadays there is not really a reason to have seperate files for the classes, as the GlyphCache can
+  * just handle Freetype based fonts.
+  **/
 class VCL_DLLPUBLIC GlyphCache final
 {
 public:
@@ -82,7 +104,7 @@ private:
     typedef std::unordered_map<sal_IntPtr, std::unique_ptr<FreetypeFontInfo>> FontInfoList;
     typedef std::unordered_map<const char*, std::unique_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
-    FontList                maFontList;
+    FontList                m_aFontList;
     static constexpr sal_uLong gnMaxSize = 1500000;  // max overall cache size in bytes
     mutable sal_uLong       mnBytesUsed;
     FreetypeFont*           mpCurrentGCFont;
@@ -96,7 +118,6 @@ private:
 class FreetypeFont final
 {
 public:
-                            FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*);
                             ~FreetypeFont();
 
     const OString&          GetFontFileName() const;
@@ -130,10 +151,10 @@ public:
     static bool             AlmostHorizontalDrainsRenderingPool();
 
 private:
+    // too access the constructor, but can't use GlyphCache::CreateFont directly
     friend class GlyphCache;
-    friend class FreetypeFontInstance;
-    friend class X11SalGraphics;
-    friend class CairoTextRender;
+
+    explicit FreetypeFont(LogicalFontInstance*, FreetypeFontInfo*);
 
     void                    AddRef() const      { ++mnRefCount; }
     long                    GetRefCount() const { return mnRefCount; }
@@ -162,7 +183,6 @@ private:
     FreetypeFontInfo*       mpFontInfo;
     FT_Int                  mnLoadFlags;
     double                  mfStretch;
-    FT_FaceRec_*            maFaceFT;
     FT_SizeRec_*            maSizeFT;
 
     mutable std::unique_ptr<FontConfigFontOptions> mxFontOptions;

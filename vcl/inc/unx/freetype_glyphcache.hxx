@@ -30,9 +30,10 @@ class CmapResult;
 // FreetypeFontFile has the responsibility that a font file is only mapped once.
 // (#86621#) the old directly ft-managed solution caused it to be mapped
 // in up to nTTC*nSizes*nOrientation*nSynthetic times
-class FreetypeFontFile
+class FreetypeFontFile final
 {
-    friend class GlyphCache;
+    // to access the constructor
+    friend FreetypeFontFile* GlyphCache::FindFontFile(const OString& rNativeFileName);
 
 public:
     bool                    Map();
@@ -54,11 +55,13 @@ private:
 };
 
 // FreetypeFontInfo corresponds to an unscaled font face
-class FreetypeFontInfo
+class FreetypeFontInfo final
 {
+    // to access the constructor
+    friend void GlyphCache::AddFontFile(const OString& rNormalizedName, int nFaceNum, int nVariantNum,
+                                        sal_IntPtr nFontId, const FontAttributes& rDevFontAttr);
+
 public:
-    FreetypeFontInfo(const FontAttributes&, const OString& rNativeFileName,
-                     int nFaceNum, int nFaceVariation, sal_IntPtr nFontId);
     ~FreetypeFontInfo();
 
     const unsigned char*  GetTable( const char*, sal_uLong* pLength) const;
@@ -78,6 +81,9 @@ public:
     const FontCharMapRef& GetFontCharMap();
 
 private:
+    explicit FreetypeFontInfo(const FontAttributes&, const OString& rNativeFileName,
+                              int nFaceNum, int nFaceVariation, sal_IntPtr nFontId);
+
     FT_FaceRec_*    maFaceFT;
     FreetypeFontFile* const mpFontFile;
     const int       mnFaceNum;
@@ -101,7 +107,6 @@ public:
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 };
 
-// a class for cache entries for physical font instances that are based on serverfonts
 class FreetypeFontInstance : public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern&) const;
