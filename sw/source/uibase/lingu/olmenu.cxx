@@ -702,8 +702,6 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         }
         m_pSh->Left(CRSR_SKIP_CHARS, false, 1, false );
         {
-            uno::Reference<linguistic2::XSearchableDictionaryList> xDictionaryList( LinguMgr::GetDictionaryList() );
-            SvxDicListChgClamp aClamp( xDictionaryList );
             m_pSh->GetView().GetViewFrame()->GetDispatcher()->
                 Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON );
         }
