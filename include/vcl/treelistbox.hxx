@@ -545,8 +545,6 @@ protected:
 
     void            ImplEditEntry( SvTreeListEntry* pEntry );
 
-    bool            AreChildrenTransient() const;
-
     void            AdjustEntryHeightAndRecalc();
 public:
 

@@ -773,38 +773,15 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
     OSL_ENSURE( m_pAccessible, "Invalid call: Accessible is null" );
 
     Reference< XAccessible > xChild;
-    sal_Int32 nIndex = -1;
 
-    if ( !AreChildrenTransient() )
-    {
-        const sal_uInt16 nColumnCount = GetColumnCount();
-
-        // first call? -> initial list
-        if ( m_aAccessibleChildren.empty() )
-        {
-            sal_Int32 nCount = ( GetRowCount() + 1 ) * nColumnCount;
-            m_aAccessibleChildren.assign( nCount, Reference< XAccessible >() );
-        }
-
-        nIndex = ( _nRow * nColumnCount ) + _nColumnPos + nColumnCount;
-        xChild = m_aAccessibleChildren[ nIndex ];
-    }
-
-    if ( !xChild.is() )
-    {
-        TriState eState = TRISTATE_INDET;
-        bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
-        if ( bIsCheckBox )
-            xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleCheckBoxCell(
+    TriState eState = TRISTATE_INDET;
+    bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
+    if ( bIsCheckBox )
+        xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleCheckBoxCell(
                 m_pAccessible->getHeaderBar(), *this, nullptr, _nRow, _nColumnPos, eState, false );
-        else
-            xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
+    else
+        xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
                 m_pAccessible->getHeaderBar(), *this, nullptr, _nRow, _nColumnPos, OFFSET_NONE );
-
-        // insert into list
-        if ( !AreChildrenTransient() )
-            m_aAccessibleChildren[ nIndex ] = xChild;
-    }
 
     return xChild;
 }
@@ -821,9 +798,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
     if ( m_aAccessibleChildren.empty() )
     {
         const sal_uInt16 nColumnCount = GetColumnCount();
-        sal_Int32 nCount = AreChildrenTransient() ?
-                nColumnCount : ( GetRowCount() + 1 ) * nColumnCount;
-        m_aAccessibleChildren.assign( nCount, Reference< XAccessible >() );
+        m_aAccessibleChildren.assign( nColumnCount, Reference< XAccessible >() );
     }
 
     // get header
@@ -972,8 +947,7 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
             if ( _eType == ::vcl::BBTYPE_TABLE )
             {
 
-                if ( AreChildrenTransient() )
-                    _rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+                _rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
                 _rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
             }
             break;
@@ -1009,8 +983,7 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
 void SvHeaderTabListBox::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const
 {
     _rStateSet.AddState( AccessibleStateType::SELECTABLE );
-    if ( AreChildrenTransient() )
-        _rStateSet.AddState( AccessibleStateType::TRANSIENT );
+    _rStateSet.AddState( AccessibleStateType::TRANSIENT );
 
     if ( IsCellVisible( _nRow, _nColumn ) )
     {

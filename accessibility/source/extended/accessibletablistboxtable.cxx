@@ -105,29 +105,8 @@ namespace accessibility
                             Reference< XAccessible > xChild =
                                 m_pTabListBox->CreateAccessibleCell( nRow, nCol );
                             uno::Any aOldValue, aNewValue;
-
-                            if ( m_pTabListBox->IsTransientChildrenDisabled() )
-                            {
-                                aNewValue <<= AccessibleStateType::FOCUSED;
-                                TriState eState = TRISTATE_INDET;
-                                if ( m_pTabListBox->IsCellCheckBox( nRow, nCol, eState ) )
-                                {
-                                    AccessibleCheckBoxCell* pCell =
-                                        static_cast< AccessibleCheckBoxCell* >( xChild.get() );
-                                    pCell->commitEvent( AccessibleEventId::STATE_CHANGED, aNewValue, aOldValue );
-                                }
-                                else
-                                {
-                                    AccessibleBrowseBoxTableCell* pCell =
-                                        static_cast< AccessibleBrowseBoxTableCell* >( xChild.get() );
-                                    pCell->commitEvent( AccessibleEventId::STATE_CHANGED, aNewValue, aOldValue );
-                                }
-                            }
-                            else
-                            {
-                                aNewValue <<= xChild;
-                                commitEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aNewValue, aOldValue );
-                            }
+                            aNewValue <<= xChild;
+                            commitEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aNewValue, aOldValue );
                         }
                     }
                     break;
@@ -215,37 +194,6 @@ namespace accessibility
 
                 case VclEventId::TableCellNameChanged :
                 {
-                    if ( m_pTabListBox->IsTransientChildrenDisabled() )
-                    {
-                        commitEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
-                        TabListBoxEventData* pData = static_cast< TabListBoxEventData* >( rVclWindowEvent.GetData() );
-                        SvTreeListEntry* pEntry = pData != nullptr ? pData->m_pEntry : nullptr;
-                        if ( pEntry )
-                        {
-                            sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
-                            sal_uInt16 nCol = pData->m_nColumn;
-                            Reference< XAccessible > xChild =
-                                m_pTabListBox->CreateAccessibleCell( nRow, nCol );
-                            uno::Any aOldValue, aNewValue;
-                            aOldValue <<= pData->m_sOldText;
-                            OUString sNewText( m_pTabListBox->GetCellText( nRow, nCol ) );
-                            aNewValue <<= sNewText;
-                            TriState eState = TRISTATE_INDET;
-
-                            if ( m_pTabListBox->IsCellCheckBox( nRow, nCol, eState ) )
-                            {
-                                AccessibleCheckBoxCell* pCell =
-                                    static_cast< AccessibleCheckBoxCell* >( xChild.get() );
-                                pCell->commitEvent( AccessibleEventId::NAME_CHANGED, aNewValue, aOldValue );
-                            }
-                            else
-                            {
-                                AccessibleBrowseBoxTableCell* pCell =
-                                    static_cast< AccessibleBrowseBoxTableCell* >( xChild.get() );
-                                pCell->nameChanged( sNewText, pData->m_sOldText );
-                            }
-                        }
-                    }
                     break;
                 }
                 default: break;

@@ -141,8 +141,6 @@ public:
 
     // Accessible -------------------------------------------------------------
 
-    bool     IsTransientChildrenDisabled() const { return !AreChildrenTransient(); }
-
     bool            IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState );
 
     /** @return  The count of the rows. */

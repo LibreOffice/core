@@ -344,7 +344,6 @@ int SvLBoxItem::CalcWidth(const SvTreeListBox* /*pView*/) const
 
 struct SvTreeListBoxImpl
 {
-    bool m_bIsEmptyTextAllowed:1;
     bool m_bEntryMnemonicsEnabled:1;
     bool m_bDoingQuickSelection:1;
 
@@ -352,7 +351,6 @@ struct SvTreeListBoxImpl
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
 
     explicit SvTreeListBoxImpl(SvTreeListBox& _rBox) :
-        m_bIsEmptyTextAllowed(true),
         m_bEntryMnemonicsEnabled(false),
         m_bDoingQuickSelection(false),
         m_aMnemonicEngine(_rBox),
@@ -912,8 +910,7 @@ IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl, SvInplaceEdit2&, void)
         aStr = pEdCtrl->GetText();
     else
         aStr = pEdCtrl->GetSavedValue();
-    if ( mpImpl->m_bIsEmptyTextAllowed || !aStr.isEmpty() )
-        EditedText( aStr );
+    EditedText( aStr );
     // Hide may only be called after the new text was put into the entry, so
     // that we don't call the selection handler in the GetFocus of the listbox
     // with the old entry text.
@@ -2485,11 +2482,6 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
         MakeVisible( pEntry );
         EditItemText( pEntry, pItem, aSel );
     }
-}
-
-bool SvTreeListBox::AreChildrenTransient() const
-{
-    return pImpl->AreChildrenTransient();
 }
 
 void SvTreeListBox::EditedText( const OUString& rStr )
