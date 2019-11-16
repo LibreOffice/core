@@ -730,6 +730,8 @@ bool SwFieldRefPage::MatchSubstring( const OUString& rListString, const OUString
     return aListString.indexOf(aSubstr) >= 0;
 }
 
+namespace {
+
 enum FMT_REF_IDX
 {
     FMT_REF_PAGE_IDX                = 0,
@@ -744,6 +746,8 @@ enum FMT_REF_IDX
     FMT_REF_NUMBER_NO_CONTEXT_IDX   = 9,
     FMT_REF_NUMBER_FULL_CONTEXT_IDX = 10
 };
+
+}
 
 static const char* FMT_REF_ARY[] =
 {

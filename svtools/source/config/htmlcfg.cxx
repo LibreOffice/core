@@ -29,6 +29,8 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+namespace {
+
 enum class HtmlCfgFlags {
     NONE                  = 0x000,
     UnknownTags           = 0x001,
@@ -39,6 +41,9 @@ enum class HtmlCfgFlags {
     IsBasicWarning        = 0x080,
     NumbersEnglishUS      = 0x100,
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<HtmlCfgFlags> : is_typed_flags<HtmlCfgFlags, 0x1f9> {};
 }

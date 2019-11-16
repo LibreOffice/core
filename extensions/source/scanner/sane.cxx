@@ -466,9 +466,13 @@ void Sane::SetOptionValue( int n, double const * pSet )
     ControlOption( n, SANE_ACTION_SET_VALUE, pFixedSet.get() );
 }
 
+namespace {
+
 enum FrameStyleType {
     FrameStyle_BW, FrameStyle_Gray, FrameStyle_RGB, FrameStyle_Separated
 };
+
+}
 
 #define BYTE_BUFFER_SIZE 32768
 

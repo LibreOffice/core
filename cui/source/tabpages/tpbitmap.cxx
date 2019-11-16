@@ -48,6 +48,8 @@
 
 using namespace com::sun::star;
 
+namespace {
+
 enum BitmapStyle
 {
     CUSTOM,
@@ -60,6 +62,8 @@ enum TileOffset
     ROW,
     COLUMN
 };
+
+}
 
 const sal_uInt16 SvxBitmapTabPage::pBitmapRanges[] =
 {

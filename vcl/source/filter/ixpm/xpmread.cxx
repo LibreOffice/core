@@ -42,12 +42,16 @@
 #define XPMSTRING           0x00000004
 #define XPMFINISHED         0x00000008
 
+namespace {
+
 enum ReadState
 {
     XPMREAD_OK,
     XPMREAD_ERROR,
     XPMREAD_NEED_MORE
 };
+
+}
 
 class BitmapWriteAccess;
 class Graphic;

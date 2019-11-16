@@ -82,6 +82,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
+namespace {
+
 enum URLTypeId
 {
     URLType_BOOL,
@@ -94,6 +96,8 @@ enum URLTypeId
     URLType_DOUBLE,
     URLType_COUNT
 };
+
+}
 
 const char* const URLTypeNames[URLType_COUNT] =
 {

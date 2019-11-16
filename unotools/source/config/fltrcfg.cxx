@@ -28,6 +28,8 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
+namespace {
+
 enum class ConfigFlags {
     NONE                         = 0x0000000,
     WordCode                     = 0x0000001,
@@ -55,6 +57,9 @@ enum class ConfigFlags {
     CreateMSOLockFiles           = 0x2000000,
     VisioLoad                    = 0x4000000,
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<ConfigFlags> : is_typed_flags<ConfigFlags, 0xe7fff3f> {};
 }

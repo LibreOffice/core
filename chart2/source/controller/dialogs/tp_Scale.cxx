@@ -193,12 +193,16 @@ IMPL_LINK( ScaleTabPage, EnableValueHdl, weld::ToggleButton&, rCbx, void )
     }
 }
 
+namespace {
+
 enum AxisTypeListBoxEntry
 {
     TYPE_AUTO=0,
     TYPE_TEXT=1,
     TYPE_DATE=2
 };
+
+}
 
 IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl, weld::ComboBox&, void)
 {

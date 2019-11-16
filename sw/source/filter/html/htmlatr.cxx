@@ -1057,6 +1057,8 @@ HTMLStartEndPos::HTMLStartEndPos( const SfxPoolItem& rItem, sal_Int32 nStt,
 
 typedef std::vector<HTMLStartEndPos *> HTMLStartEndPositions;
 
+namespace {
+
 enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // unsupported Attribute
                       HTML_REAL_VALUE,      // Attribute with value
                       HTML_ON_VALUE,        // Attribute is On-Tag
@@ -1066,6 +1068,8 @@ enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // unsupported Attribute
                       HTML_STYLE_VALUE,     // Attribute must be exported as style
                       HTML_DROPCAP_VALUE,   // DropCap-Attribute
                       HTML_AUTOFMT_VALUE }; // Attribute for automatic character styles
+
+}
 
 class HTMLEndPosLst
 {

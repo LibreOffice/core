@@ -31,6 +31,8 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_TABSTOP_POSITION,
@@ -39,6 +41,8 @@ enum SvXMLTokenMapAttrs
     XML_TOK_TABSTOP_LEADER_STYLE,
     XML_TOK_TABSTOP_LEADER_TEXT
 };
+
+}
 
 static const SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
 {

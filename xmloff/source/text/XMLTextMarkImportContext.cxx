@@ -107,10 +107,14 @@ XMLTextMarkImportContext::XMLTextMarkImportContext(
 {
 }
 
+namespace {
+
 enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
                     TypeBookmark, TypeBookmarkStart, TypeBookmarkEnd,
                     TypeFieldmark, TypeFieldmarkStart, TypeFieldmarkEnd
                   };
+
+}
 
 static SvXMLEnumMapEntry<lcl_MarkType> const lcl_aMarkTypeMap[] =
 {

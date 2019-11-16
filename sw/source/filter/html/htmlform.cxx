@@ -103,7 +103,11 @@ static HTMLOptionEnum<FormSubmitEncoding> const aHTMLFormEncTypeTable[] =
     { nullptr,                              FormSubmitEncoding(0)           }
 };
 
+namespace {
+
 enum HTMLWordWrapMode { HTML_WM_OFF, HTML_WM_HARD, HTML_WM_SOFT };
+
+}
 
 static HTMLOptionEnum<HTMLWordWrapMode> const aHTMLTextAreaWrapTable[] =
 {

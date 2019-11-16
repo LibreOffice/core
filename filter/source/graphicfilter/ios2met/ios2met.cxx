@@ -35,8 +35,11 @@
 
 class FilterConfigItem;
 
+namespace {
+
 enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 
+}
 
 // -----------------------------Field Types-------------------------------
 

@@ -129,6 +129,8 @@ using std::make_pair;
 
 struct SwPaintProperties;
 
+namespace {
+
 //Class declaration; here because they are only used in this file
 enum class SubColFlags {
     Page     = 0x01,    //Helplines of the page
@@ -136,6 +138,9 @@ enum class SubColFlags {
     Fly      = 0x10,    //Helplines inside fly frames
     Sect     = 0x20,    //Helplines inside sections
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<SubColFlags> : is_typed_flags<SubColFlags, 0x39> {};
 }
@@ -5698,7 +5703,12 @@ bool SwPageFrame::IsLeftShadowNeeded() const
     }
 }
 
+namespace {
+
 enum PaintArea {LEFT, RIGHT, TOP, BOTTOM};
+
+}
+
 #define BORDER_TILE_SIZE 512
 
 /// Wrapper around pOut->DrawBitmapEx.

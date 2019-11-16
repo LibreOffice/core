@@ -229,6 +229,8 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
     return bChanged;
 }
 
+namespace {
+
 enum ScAutoSum
 {
     ScAutoSumNone = 0,
@@ -239,6 +241,8 @@ enum ScAutoSum
     ScAutoSumMin,
     ScAutoSumCount
 };
+
+}
 
 static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
         SCTAB nTab, ScDirection eDir, SCCOLROW& nExtend )

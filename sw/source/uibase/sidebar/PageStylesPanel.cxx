@@ -44,6 +44,8 @@ using namespace ::com::sun::star;
 
 namespace sw { namespace sidebar{
 
+namespace {
+
 enum eFillStyle
 {
     NONE,
@@ -53,6 +55,8 @@ enum eFillStyle
     BITMAP,
     PATTERN
 };
+
+}
 
 const SvxPageUsage aArr[] =
 {

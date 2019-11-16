@@ -85,6 +85,8 @@ namespace
     }
 }
 
+namespace {
+
 enum class SylkVersion
 {
     SCALC3,    // Wrote wrongly quoted strings and unescaped semicolons.
@@ -92,6 +94,8 @@ enum class SylkVersion
     OWN,       // Place our new versions, if any, before this value.
     OTHER      // Assume that aliens wrote correct strings.
 };
+
+}
 
 // Whole document without Undo
 ScImportExport::ScImportExport( ScDocument* p )
@@ -544,6 +548,8 @@ void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
 #endif
 }
 
+namespace {
+
 enum QuoteType
 {
     FIELDSTART_QUOTE,
@@ -552,6 +558,8 @@ enum QuoteType
     FIELDEND_QUOTE,
     DONTKNOW_QUOTE
 };
+
+}
 
 /** Determine if *p is a quote that ends a quoted field.
 
@@ -638,11 +646,15 @@ static bool lcl_appendLineData( OUString& rField, const sal_Unicode* p1, const s
     }
 }
 
+namespace {
+
 enum class DoubledQuoteMode
 {
     KEEP_ALL,   // both are taken, additionally start and end quote are included in string
     ESCAPE,     // escaped quote, one is taken, one ignored
 };
+
+}
 
 static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rString,
             const sal_Unicode* pSeps, sal_Unicode cStr, DoubledQuoteMode eMode, bool& rbOverflowCell )

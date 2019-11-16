@@ -777,7 +777,11 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     }
 }
 
+namespace {
+
 enum InspectorAction { eOpenInspector, eCloseInspector, eUpdateInspector, eNone };
+
+}
 
 void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
 {

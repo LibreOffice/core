@@ -133,6 +133,8 @@ void WriteSndAc(const FSHelperPtr& pFS, const OUString& sSoundRelId, const OUStr
 }
 }
 
+namespace {
+
 enum PPTXLayout
 {
     LAYOUT_BLANK,
@@ -149,6 +151,8 @@ enum PPTXLayout
     LAYOUT_TITLE_6CONTENT,
     LAYOUT_SIZE
 };
+
+}
 
 struct PPTXLayoutInfo
 {

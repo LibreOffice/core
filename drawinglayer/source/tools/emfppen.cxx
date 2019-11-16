@@ -28,6 +28,8 @@ using namespace ::basegfx;
 
 namespace emfplushelper
 {
+    namespace {
+
     enum EmfPlusPenData
     {
         PenDataTransform        = 0x00000001,
@@ -44,6 +46,8 @@ namespace emfplushelper
         PenDataCustomStartCap   = 0x00000800,
         PenDataCustomEndCap     = 0x00001000
     };
+
+    }
 
     EMFPPen::EMFPPen()
         : EMFPBrush()

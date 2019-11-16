@@ -50,6 +50,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 
+namespace {
+
 enum XMLUserDefinedTransformerAction
 {
     XML_ETACTION_DOCUMENT=XML_ETACTION_USER_DEFINED,
@@ -67,6 +69,8 @@ enum XMLUserDefinedTransformerAction
     XML_ETACTION_DOCUMENT_RENAME,
     XML_ETACTION_TABLE
 };
+
+}
 
 #define ENTRY3( n, l, a, p1, p2, p3 ) \
     { XML_NAMESPACE_##n, XML_##l, a, p1, p2, p3 }

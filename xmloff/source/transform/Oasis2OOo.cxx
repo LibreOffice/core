@@ -54,6 +54,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 
+namespace {
+
 enum XMLUserDefinedTransformerAction
 {
     XML_ETACTION_META=XML_ETACTION_USER_DEFINED,
@@ -74,6 +76,8 @@ enum XMLUserDefinedTransformerAction
     XML_ETACTION_CHART,
     XML_ETACTION_CHART_PLOT_AREA
 };
+
+}
 
 #define ENTRY3( n, l, a, p1, p2, p3 ) \
     { XML_NAMESPACE_##n, XML_##l, a, p1, p2, p3 }

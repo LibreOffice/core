@@ -298,6 +298,7 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
     return aFoundFilterName;
 }
 
+namespace {
 
 /** search for an internal typename, which map to the current app module
     and map also to a "family" of file formats as e.g. PDF/MS Doc/OOo Doc.
@@ -307,6 +308,8 @@ enum ETypeFamily
     E_MS_DOC,
     E_OOO_DOC
 };
+
+}
 
 static OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFrame >& xFrame     ,
                                                   ETypeFamily                                eTypeFamily)

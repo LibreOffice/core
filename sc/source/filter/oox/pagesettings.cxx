@@ -343,6 +343,8 @@ void PageSettings::importPictureData( const Relations& rRelations, const OUStrin
     }
 }
 
+namespace {
+
 enum HFPortionId
 {
     HF_LEFT,
@@ -350,6 +352,8 @@ enum HFPortionId
     HF_RIGHT,
     HF_COUNT
 };
+
+}
 
 struct HFPortionInfo
 {

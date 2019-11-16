@@ -29,6 +29,8 @@
 
 using namespace css;
 
+namespace {
+
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_SYMBOL_IMAGE_HREF,
@@ -36,6 +38,8 @@ enum SvXMLTokenMapAttrs
     XML_TOK_SYMBOL_IMAGE_ACTUATE,
     XML_TOK_SYMBOL_IMAGE_SHOW,
 };
+
+}
 
 static const SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
 {

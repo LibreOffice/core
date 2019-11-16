@@ -354,9 +354,13 @@ OUString FTPURL::child() const
 
 namespace ftp {
 
+    namespace {
+
     enum OS {
         FTP_DOS,FTP_UNIX,FTP_VMS,FTP_UNKNOWN
     };
+
+    }
 
 }
 

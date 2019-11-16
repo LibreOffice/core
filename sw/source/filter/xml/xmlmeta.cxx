@@ -72,6 +72,8 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
     return pContext;
 }
 
+namespace {
+
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_META_STAT_TABLE = 1,
@@ -84,6 +86,8 @@ enum SvXMLTokenMapAttrs
     XML_TOK_META_STAT_NON_WHITE_SPACE_CHAR = 128,
     XML_TOK_META_STAT_END=XML_TOK_UNKNOWN
 };
+
+}
 
 struct statistic {
     SvXMLTokenMapAttrs const token;

@@ -89,12 +89,17 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::utl;
 
+namespace {
+
 enum class Flags {
     NONE            = 0x00,
     FullStop        = 0x01,
     ExclamationMark = 0x02,
     QuestionMark    = 0x04,
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<Flags> : is_typed_flags<Flags, 0x07> {};
 }

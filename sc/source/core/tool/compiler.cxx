@@ -81,6 +81,8 @@ using ::std::vector;
 CharClass*                          ScCompiler::pCharClassEnglish = nullptr;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
+namespace {
+
 enum ScanState
 {
     ssGetChar,
@@ -96,6 +98,8 @@ enum ScanState
     ssGetTableRefColumn,
     ssStop
 };
+
+}
 
 static const sal_Char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
 

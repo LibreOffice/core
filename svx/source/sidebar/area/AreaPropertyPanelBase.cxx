@@ -45,6 +45,8 @@ const char UNO_SIDEBARGRADIENT[] = ".uno:sidebargradient";
 
 namespace svx { namespace sidebar {
 
+namespace {
+
 enum eFillStyle
 {
     NONE,
@@ -54,6 +56,8 @@ enum eFillStyle
     BITMAP,
     PATTERN
 };
+
+}
 
 const sal_Int32 AreaPropertyPanelBase::DEFAULT_CENTERX = 50;
 const sal_Int32 AreaPropertyPanelBase::DEFAULT_CENTERY = 50;

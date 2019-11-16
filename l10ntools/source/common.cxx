@@ -9,10 +9,14 @@
 
 #include <common.hxx>
 
+namespace {
+
 //flags for handleArguments()
 enum class State {
     NONE, Input, Output, MergeSrc, Languages
 };
+
+}
 
 namespace common {
 

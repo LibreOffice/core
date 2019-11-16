@@ -1577,6 +1577,7 @@ void XMLShapeExport::ImpExportText( const uno::Reference< drawing::XShape >& xSh
     }
 }
 
+namespace {
 
 enum class Found {
     NONE              = 0x0000,
@@ -1591,6 +1592,9 @@ enum class Found {
     MACRO             = 0x0100,
     LIBRARY           = 0x0200,
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<Found> : is_typed_flags<Found, 0x03ff> {};
 }

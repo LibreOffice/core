@@ -64,6 +64,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 
+namespace {
+
 enum SwDocumentSettingsPropertyHandles
 {
     HANDLE_FORBIDDEN_CHARS,
@@ -145,6 +147,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_EMPTY_DB_FIELD_HIDES_PARA,
     HANDLE_CONTINUOUS_ENDNOTES,
 };
+
+}
 
 static MasterPropertySetInfo * lcl_createSettingsInfo()
 {

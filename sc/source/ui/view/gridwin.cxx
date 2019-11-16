@@ -140,11 +140,15 @@
 using namespace css;
 using namespace css::uno;
 
+namespace {
+
 enum class ScFilterBoxMode
 {
     DataSelect,
     Scenario
 };
+
+}
 
 struct ScGridWindow::MouseEventState
 {

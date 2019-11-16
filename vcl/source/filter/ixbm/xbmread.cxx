@@ -26,6 +26,8 @@
 
 #include "xbmread.hxx"
 
+namespace {
+
 enum XBMFormat
 {
     XBM10,
@@ -38,6 +40,8 @@ enum ReadState
     XBMREAD_ERROR,
     XBMREAD_NEED_MORE
 };
+
+}
 
 class XBMReader : public GraphicReader
 {

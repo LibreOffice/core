@@ -2091,7 +2091,11 @@ static BitmapEx readBitmapEx( const OUString& rPath )
     return aGraphic.GetBitmapEx();
 }
 
+namespace {
+
 enum WhichPersona { PERSONA_HEADER, PERSONA_FOOTER };
+
+}
 
 /** Update the setting of the Persona header / footer in ImplStyleData */
 static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFooter, BitmapEx& rHeaderFooterBitmap, boost::optional<Color>& rMenuBarTextColor )

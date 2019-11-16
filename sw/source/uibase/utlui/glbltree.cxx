@@ -135,6 +135,8 @@ void SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint&
         bValid = false;
 }
 
+namespace {
+
 enum GLOBAL_CONTEXT_IDX
 {
     IDX_STR_UPDATE = 0,
@@ -152,6 +154,8 @@ enum GLOBAL_CONTEXT_IDX
     IDX_STR_BROKEN_LINK = 12,
     IDX_STR_EDIT_LINK = 13
 };
+
+}
 
 static const char* GLOBAL_CONTEXT_ARY[] =
 {

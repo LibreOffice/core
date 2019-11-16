@@ -7645,6 +7645,8 @@ void OpHypGeomDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
+namespace {
+
 enum MixDoubleString
 {
     svDoubleVectorRefDoubleString,
@@ -7657,6 +7659,8 @@ enum MixDoubleString
     svSingleVectorRefNULL,
     svDoubleDouble
 };
+
+}
 
 void OpMinA::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)

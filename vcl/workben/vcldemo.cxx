@@ -86,10 +86,14 @@ namespace {
 
 }
 
+namespace {
+
 enum RenderStyle {
     RENDER_THUMB,    // small view <n> to a page
     RENDER_EXPANDED, // expanded view of this renderer
 };
+
+}
 
 class DemoRenderer
 {

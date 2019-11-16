@@ -42,11 +42,14 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
+namespace {
 
 enum XMLFootnoteChildToken {
     XML_TOK_FTN_NOTE_CITATION,
     XML_TOK_FTN_NOTE_BODY
 };
+
+}
 
 static const SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
 {

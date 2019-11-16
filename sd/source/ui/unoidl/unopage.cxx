@@ -78,6 +78,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::office;
 
+namespace {
+
 // this are the ids for page properties
 enum WID_PAGE
 {
@@ -92,6 +94,8 @@ enum WID_PAGE
     WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION, WID_LOOP_SOUND,
     WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE
 };
+
+}
 
 static sal_Char const sEmptyPageName[sizeof("page")] = "page";
 

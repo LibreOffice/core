@@ -51,10 +51,14 @@
 
 typedef time_t  osl_TStamp;
 
+namespace {
+
 enum osl_TLockMode
 {
     un_lock, read_lock, write_lock
 };
+
+}
 
 struct osl_TFile
 {

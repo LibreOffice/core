@@ -67,6 +67,7 @@ SfxPoolItem* SvxFormatSplitItem::CreateDefault() { return new  SvxFormatSplitIte
 SfxPoolItem* SvxPageModelItem::CreateDefault() { return new  SvxPageModelItem(0);}
 SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlignItem(Align::Automatic, 0);}
 
+namespace {
 
 enum class SvxSpecialLineSpace
 {
@@ -77,6 +78,7 @@ enum class SvxSpecialLineSpace
     End
 };
 
+}
 
 SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId )

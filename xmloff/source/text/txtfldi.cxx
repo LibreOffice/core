@@ -2666,6 +2666,7 @@ void XMLReferenceFieldImportContext::PrepareField(
 
 // field declarations container
 
+namespace {
 
 enum DdeFieldDeclAttrs
 {
@@ -2675,6 +2676,8 @@ enum DdeFieldDeclAttrs
     XML_TOK_DDEFIELD_ITEM,
     XML_TOK_DDEFIELD_UPDATE
 };
+
+}
 
 static const SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
 {

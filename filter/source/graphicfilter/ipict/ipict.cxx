@@ -138,10 +138,14 @@ namespace PictReaderInternal {
 
 //============================ PictReader ==================================
 
+namespace {
+
 enum class PictDrawingMethod {
     FRAME, PAINT, ERASE, INVERT, FILL,
     TEXT, UNDEFINED
 };
+
+}
 
 class PictReader {
   typedef class PictReaderInternal::Pattern Pattern;
