@@ -103,6 +103,7 @@
 #include <xmloff/ProgressBarHelper.hxx>
 
 #include <sax/tools/converter.hxx>
+#include <tools/fldunit.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -326,7 +327,8 @@ sal_Int16 ScXMLExport::GetMeasureUnit()
 {
     css::uno::Reference<css::sheet::XGlobalSheetSettings> xProperties =
                 css::sheet::GlobalSheetSettings::create( comphelper::getProcessComponentContext() );
-    return xProperties->getMetric();
+    const FieldUnit eFieldUnit = static_cast<FieldUnit>(xProperties->getMetric());
+    return SvXMLUnitConverter::GetMeasureUnit(eFieldUnit);
 }
 
 static const OUStringLiteral gsLayerID( SC_LAYERID );
