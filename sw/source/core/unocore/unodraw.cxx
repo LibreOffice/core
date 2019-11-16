@@ -63,6 +63,8 @@
 #include <crstate.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/profilezone.hxx>
+#include <comphelper/OUStringLiteralList.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/scene3d.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -2146,9 +2148,8 @@ uno::Sequence< OUString > SwXShape::getSupportedServiceNames()
     uno::Sequence< OUString > aSeq;
     if (SvxShape* pSvxShape = GetSvxShape())
         aSeq = pSvxShape->getSupportedServiceNames();
-    aSeq.realloc(aSeq.getLength() + 1);
-    aSeq.getArray()[aSeq.getLength() - 1] = "com.sun.star.drawing.Shape";
-    return aSeq;
+    return comphelper::concatSequences(
+        aSeq, comphelper::OUStringLiteralList({ "com.sun.star.drawing.Shape" }));
 }
 
 SvxShape*   SwXShape::GetSvxShape()
