@@ -1740,5 +1740,11 @@ interface BaseText
         StateMethod = GetState ;
     ]
 
+    SID_APPLY_SPELLCHECKING
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
 }  // end of interface text
 

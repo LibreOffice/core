@@ -711,9 +711,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if (nId == MN_IGNORE_SELECTION)
     {
-        SwPaM *pPaM = m_pSh->GetCursor();
-        if (pPaM)
-            SwEditShell::IgnoreGrammarErrorAt( *pPaM );
+        SfxStringItem aIgnoreString(FN_PARAM_1, "Ignore");
+        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_APPLY_SPELLCHECKING, SfxCallMode::SYNCHRON, { &aIgnoreString });
     }
     else if (nId == m_nIgnoreWordId)
     {

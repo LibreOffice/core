@@ -1429,6 +1429,29 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
     }
     break;
+    case SID_APPLY_SPELLCHECKING:
+    {
+        OUString sApplyText;
+        const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+        if (pItem2)
+            sApplyText = pItem2->GetValue();
+
+        const OUString sIgnoreString("Ignore");
+        //const OUString sIgnoreAllPrefix("IgnoreAll_");
+        //const OUString sSpellingRule("Spelling");
+        //const OUString sGrammarRule("Grammar");
+        //const OUString aReplacePrefix("Replace_");
+
+        // Ignore the word at the cursor pos
+        //sal_Int32 nPos = 0;
+        if (sApplyText == sIgnoreString)
+        {
+            SwPaM *pPaM = rWrtSh.GetCursor();
+            if (pPaM)
+                SwEditShell::IgnoreGrammarErrorAt( *pPaM );
+        }
+    }
+    break;
     default:
         OSL_ENSURE(false, "wrong dispatcher");
         return;
