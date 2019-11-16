@@ -46,8 +46,9 @@
 #include <drawdoc.hxx>
 #include <svx/unoshape.hxx>
 #include <svl/style.hxx>
-#include <comphelper/serviceinfohelper.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/OUStringLiteralList.hxx>
+#include <comphelper/sequence.hxx>
 #include <svx/svditer.hxx>
 #include <vcl/wmf.hxx>
 #include <svx/svdoole2.hxx>
@@ -1482,11 +1483,11 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
 // XServiceInfo
 Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
 {
-    Sequence< OUString > aSeq( SvxFmDrawPage::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.GenericDrawPage",
-                                                  "com.sun.star.document.LinkTarget",
-                                                  "com.sun.star.document.LinkTargetSupplier"});
-    return aSeq;
+    return comphelper::concatSequences(
+        SvxFmDrawPage::getSupportedServiceNames(),
+        comphelper::OUStringLiteralList({ "com.sun.star.drawing.GenericDrawPage",
+                                          "com.sun.star.document.LinkTarget",
+                                          "com.sun.star.document.LinkTargetSupplier" }));
 }
 
 // XLinkTargetSupplier
@@ -2185,13 +2186,12 @@ Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames()
 
     throwIfDisposed();
 
-    Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.DrawPage"} );
+    std::vector<OUStringLiteral> aAdd{ "com.sun.star.drawing.DrawPage" };
 
     if( IsImpressDocument() )
-        comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.DrawPage"} );
+        aAdd.emplace_back("com.sun.star.presentation.DrawPage");
 
-    return aSeq;
+    return comphelper::concatSequences(SdGenericDrawPage::getSupportedServiceNames(), aAdd);
 }
 
 sal_Bool SAL_CALL SdDrawPage::supportsService( const OUString& ServiceName )
@@ -2705,13 +2705,12 @@ Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames()
 
     throwIfDisposed();
 
-    Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.MasterPage"} );
+    std::vector<OUStringLiteral> aAdd{ "com.sun.star.drawing.MasterPage" };
 
     if( SvxFmDrawPage::mpPage && static_cast<SdPage*>(SvxFmDrawPage::mpPage)->GetPageKind() == PageKind::Handout )
-        comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.HandoutMasterPage"} );
+        aAdd.emplace_back("com.sun.star.presentation.HandoutMasterPage");
 
-    return aSeq;
+    return comphelper::concatSequences(SdGenericDrawPage::getSupportedServiceNames(), aAdd);
 }
 
 sal_Bool SAL_CALL SdMasterPage::supportsService( const OUString& ServiceName )
