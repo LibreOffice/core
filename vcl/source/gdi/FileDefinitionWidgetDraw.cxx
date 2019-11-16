@@ -737,9 +737,14 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
 
             auto const& pEntirePart
                 = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
+
             OString sOrientation = pEntirePart->msOrientation;
 
-            if (sOrientation.isEmpty() || sOrientation == "decrease-edit-increase")
+            if (sOrientation.isEmpty() || sOrientation == "stacked")
+            {
+                return false;
+            }
+            else if (sOrientation == "decrease-edit-increase")
             {
                 if (ePart == ControlPart::ButtonUp)
                 {
