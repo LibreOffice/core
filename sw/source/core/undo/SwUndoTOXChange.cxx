@@ -24,12 +24,22 @@
 #include <doc.hxx>
 #include <node.hxx>
 
+namespace
+{
+    sal_uLong GetSectionNodeIndex(SwTOXBaseSection const& rTOX)
+    {
+        const SwSectionNode* pSectNd = rTOX.GetFormat()->GetSectionNode();
+        assert(pSectNd);
+        return pSectNd->GetIndex();
+    }
+}
+
 SwUndoTOXChange::SwUndoTOXChange(const SwDoc *pDoc,
         SwTOXBaseSection const& rTOX, SwTOXBase const& rNew)
     : SwUndo(SwUndoId::TOXCHANGE, pDoc)
     , m_Old(rTOX)
     , m_New(rNew)
-    , m_nNodeIndex(rTOX.GetFormat()->GetSectionNode()->GetIndex())
+    , m_nNodeIndex(GetSectionNodeIndex(rTOX))
 {
 }
 
