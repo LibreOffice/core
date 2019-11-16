@@ -94,8 +94,6 @@ class SvtMatchContext_Impl: public salhelper::Thread
     OUString const                  aBaseURL;
     OUString const                  aText;
     VclPtr<SvtURLBox>               pBox;
-    bool const                      bOnlyDirectories;
-    bool const                      bNoSelection;
 
     osl::Mutex mutex_;
     bool stopped_;
@@ -159,11 +157,8 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(
     SvtURLBox* pBoxP, const OUString& rText )
     : Thread( "SvtMatchContext_Impl" )
     , aLink( LINK( this, SvtMatchContext_Impl, Select_Impl ) )
-    , aBaseURL( pBoxP->aBaseURL )
     , aText( rText )
     , pBox( pBoxP )
-    , bOnlyDirectories( pBoxP->bOnlyDirectories )
-    , bNoSelection( pBoxP->bNoSelection )
     , stopped_(false)
     , commandId_(0)
 {
@@ -276,7 +271,7 @@ IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl, void*, void )
         pBox->InsertEntry(completion);
     }
 
-    if( !bNoSelection && !aCompletions.empty() && !bValidCompletionsFiltered )
+    if( !aCompletions.empty() && !bValidCompletionsFiltered )
     {
         // select the first one
         OUString aTmp( pBox->GetEntry(0) );
@@ -383,8 +378,6 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
         {
             uno::Reference< XDynamicResultSet > xDynResultSet;
             ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
-            if ( bOnlyDirectories )
-                eInclude = INCLUDE_FOLDERS_ONLY;
 
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
@@ -998,10 +991,6 @@ void SvtMatchContext_Impl::doExecute()
         }
     }
 
-    if ( bOnlyDirectories )
-        // don't scan history picklist if only directories are allowed, picklist contains only files
-        return;
-
     bool bFull = false;
 
     INetURLObject aCurObj;
@@ -1385,9 +1374,7 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, INetProtocol eSmart, bool bSetDefaul
     :   ComboBox( pParent , WB_DROPDOWN | WB_AUTOHSCROLL ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( false ),
-        bOnlyDirectories( false ),
         bHistoryDisabled( false ),
-        bNoSelection( false ),
         bIsAutoCompleteEnabled( true )
 {
     Init(bSetDefaultHelpID);
@@ -1404,9 +1391,7 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart
     :   ComboBox( pParent, _nStyle ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( false ),
-        bOnlyDirectories( false ),
         bHistoryDisabled( false ),
-        bNoSelection( false ),
         bIsAutoCompleteEnabled( true )
 {
     Init(bSetDefaultHelpID);
@@ -1538,10 +1523,7 @@ bool SvtURLBox::ProcessKey( const vcl::KeyCode& rKey )
             bAutoCompleteMode = false;
             Selection aSelection( GetSelection() );
             SetSelection( Selection( aSelection.Min(), aSelection.Min() ) );
-            if ( bOnlyDirectories )
-                Clear();
-            else
-                UpdatePicklistForSmartProtocol_Impl();
+            UpdatePicklistForSmartProtocol_Impl();
             Resize();
         }
 
@@ -1573,10 +1555,7 @@ bool SvtURLBox::ProcessKey( const vcl::KeyCode& rKey )
         if ( bAutoCompleteMode || aSelection.Min() != aSelection.Max() )
         {
             SetSelection( Selection( aSelection.Min(), aSelection.Min() ) );
-            if ( bOnlyDirectories )
-                Clear();
-            else
-                UpdatePicklistForSmartProtocol_Impl();
+            UpdatePicklistForSmartProtocol_Impl();
             Resize();
         }
         else
@@ -1703,7 +1682,7 @@ OUString SvtURLBox::GetURL()
 
     if ( aObj.GetProtocol() == INetProtocol::NotValid )
     {
-        OUString aName = ParseSmart( aText, aBaseURL );
+        OUString aName = ParseSmart( aText, "" );
         aObj.SetURL(aName);
         OUString aURL( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         if ( aURL.isEmpty() )

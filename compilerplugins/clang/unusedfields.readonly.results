@@ -232,15 +232,15 @@ filter/source/graphicfilter/itga/itga.cxx:52
     TGAFileFooter nSignature sal_uInt32 [4]
 filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:90
     XMLFilterSettingsDialog maModuleOpt class SvtModuleOptions
-framework/inc/dispatch/dispatchprovider.hxx:81
+framework/inc/dispatch/dispatchprovider.hxx:77
     framework::DispatchProvider m_aProtocolHandlerCache class framework::HandlerCache
 framework/inc/helper/uiconfigelementwrapperbase.hxx:128
     framework::UIConfigElementWrapperBase m_bConfigListening _Bool
-framework/inc/xml/menudocumenthandler.hxx:133
+framework/inc/xml/menudocumenthandler.hxx:132
     framework::OReadMenuBarHandler m_bMenuMode _Bool
-framework/inc/xml/menudocumenthandler.hxx:160
+framework/inc/xml/menudocumenthandler.hxx:159
     framework::OReadMenuHandler m_bMenuPopupMode _Bool
-framework/inc/xml/menudocumenthandler.hxx:190
+framework/inc/xml/menudocumenthandler.hxx:189
     framework::OReadMenuPopupHandler m_bMenuMode _Bool
 framework/source/fwe/classes/addonsoptions.cxx:343
     framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
@@ -322,6 +322,12 @@ include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:32
     MultiLineEditSyntaxHighlight m_aColorConfig const svtools::ColorConfig
+include/svtools/inettbc.hxx:40
+    SvtURLBox aBaseURL class rtl::OUString
+include/svtools/inettbc.hxx:46
+    SvtURLBox bOnlyDirectories _Bool
+include/svtools/inettbc.hxx:48
+    SvtURLBox bNoSelection _Bool
 include/svx/dialcontrol.hxx:112
     svx::DialControl::DialControl_Impl mnLinkedFieldValueMultiplyer sal_Int32
 include/svx/graphctl.hxx:52
@@ -347,7 +353,7 @@ include/test/sheet/xnamedranges.hxx:49
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/disk2/libo7/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/disk2/libo4/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -394,7 +400,7 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
-linguistic/source/dlistimp.hxx:56
+linguistic/source/dlistimp.hxx:55
     DicList aOpt class LinguOptions
 oox/qa/token/tokenmap-test.cxx:34
     oox::TokenmapTest tokenMap const class oox::TokenMap
@@ -431,7 +437,7 @@ sal/rtl/uuid.cxx:65
 sc/inc/compiler.hxx:126
     ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
 sc/inc/compiler.hxx:127
-    ScRawToken::(anonymous) table const struct (anonymous struct at /media/disk2/libo7/sc/inc/compiler.hxx:124:9)
+    ScRawToken::(anonymous) table const struct (anonymous struct at /media/disk2/libo4/sc/inc/compiler.hxx:124:9)
 sc/inc/compiler.hxx:132
     ScRawToken::(anonymous) pMat class ScMatrix *const
 sc/inc/formulagroup.hxx:39
@@ -520,7 +526,7 @@ sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:97
     sd::slidesorter::controller::Animator maElapsedTime const ::canvas::tools::ElapsedTime
 sd/source/ui/table/TableDesignPane.hxx:90
     sd::TableDesignWidget m_aCheckBoxes VclPtr<class CheckBox> [6]
-sdext/source/pdfimport/inc/pdfihelper.hxx:102
+sdext/source/pdfimport/inc/pdfihelper.hxx:101
     pdfi::GraphicsContext BlendMode sal_Int8
 sdext/source/pdfimport/tree/style.hxx:43
     pdfi::StyleContainer::Style Contents const class rtl::OUString
@@ -737,142 +743,148 @@ vcl/inc/WidgetThemeLibrary.hxx:26
 vcl/inc/WidgetThemeLibrary.hxx:27
     vcl::WidgetDrawStyle maButtonTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:28
-    vcl::WidgetDrawStyle maButtonRolloverTextColor uint32_t
+    vcl::WidgetDrawStyle maDefaultActionButtonTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:29
-    vcl::WidgetDrawStyle maRadioCheckTextColor uint32_t
+    vcl::WidgetDrawStyle maActionButtonTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:30
-    vcl::WidgetDrawStyle maGroupTextColor uint32_t
+    vcl::WidgetDrawStyle maActionButtonRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:31
-    vcl::WidgetDrawStyle maLabelTextColor uint32_t
+    vcl::WidgetDrawStyle maButtonRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:32
-    vcl::WidgetDrawStyle maWindowColor uint32_t
+    vcl::WidgetDrawStyle maRadioCheckTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:33
-    vcl::WidgetDrawStyle maWindowTextColor uint32_t
+    vcl::WidgetDrawStyle maGroupTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:34
-    vcl::WidgetDrawStyle maDialogColor uint32_t
+    vcl::WidgetDrawStyle maLabelTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:35
-    vcl::WidgetDrawStyle maDialogTextColor uint32_t
+    vcl::WidgetDrawStyle maWindowColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:36
-    vcl::WidgetDrawStyle maWorkspaceColor uint32_t
+    vcl::WidgetDrawStyle maWindowTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:37
-    vcl::WidgetDrawStyle maMonoColor uint32_t
+    vcl::WidgetDrawStyle maDialogColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:38
-    vcl::WidgetDrawStyle maFieldColor uint32_t
+    vcl::WidgetDrawStyle maDialogTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:39
-    vcl::WidgetDrawStyle maFieldTextColor uint32_t
+    vcl::WidgetDrawStyle maWorkspaceColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:40
-    vcl::WidgetDrawStyle maFieldRolloverTextColor uint32_t
+    vcl::WidgetDrawStyle maMonoColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:41
-    vcl::WidgetDrawStyle maActiveColor uint32_t
+    vcl::WidgetDrawStyle maFieldColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:42
-    vcl::WidgetDrawStyle maActiveTextColor uint32_t
+    vcl::WidgetDrawStyle maFieldTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:43
-    vcl::WidgetDrawStyle maActiveBorderColor uint32_t
+    vcl::WidgetDrawStyle maFieldRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:44
-    vcl::WidgetDrawStyle maDeactiveColor uint32_t
+    vcl::WidgetDrawStyle maActiveColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:45
-    vcl::WidgetDrawStyle maDeactiveTextColor uint32_t
+    vcl::WidgetDrawStyle maActiveTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:46
-    vcl::WidgetDrawStyle maDeactiveBorderColor uint32_t
+    vcl::WidgetDrawStyle maActiveBorderColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:47
-    vcl::WidgetDrawStyle maMenuColor uint32_t
+    vcl::WidgetDrawStyle maDeactiveColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:48
-    vcl::WidgetDrawStyle maMenuBarColor uint32_t
+    vcl::WidgetDrawStyle maDeactiveTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:49
-    vcl::WidgetDrawStyle maMenuBarRolloverColor uint32_t
+    vcl::WidgetDrawStyle maDeactiveBorderColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:50
-    vcl::WidgetDrawStyle maMenuBorderColor uint32_t
+    vcl::WidgetDrawStyle maMenuColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:51
-    vcl::WidgetDrawStyle maMenuTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuBarColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:52
-    vcl::WidgetDrawStyle maMenuBarTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuBarRolloverColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:53
-    vcl::WidgetDrawStyle maMenuBarRolloverTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuBorderColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:54
-    vcl::WidgetDrawStyle maMenuBarHighlightTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:55
-    vcl::WidgetDrawStyle maMenuHighlightColor uint32_t
+    vcl::WidgetDrawStyle maMenuBarTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:56
-    vcl::WidgetDrawStyle maMenuHighlightTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuBarRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:57
-    vcl::WidgetDrawStyle maHighlightColor uint32_t
+    vcl::WidgetDrawStyle maMenuBarHighlightTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:58
-    vcl::WidgetDrawStyle maHighlightTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuHighlightColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:59
-    vcl::WidgetDrawStyle maActiveTabColor uint32_t
+    vcl::WidgetDrawStyle maMenuHighlightTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:60
-    vcl::WidgetDrawStyle maInactiveTabColor uint32_t
+    vcl::WidgetDrawStyle maHighlightColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:61
-    vcl::WidgetDrawStyle maTabTextColor uint32_t
+    vcl::WidgetDrawStyle maHighlightTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:62
-    vcl::WidgetDrawStyle maTabRolloverTextColor uint32_t
+    vcl::WidgetDrawStyle maActiveTabColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:63
-    vcl::WidgetDrawStyle maTabHighlightTextColor uint32_t
+    vcl::WidgetDrawStyle maInactiveTabColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:64
-    vcl::WidgetDrawStyle maDisableColor uint32_t
+    vcl::WidgetDrawStyle maTabTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:65
-    vcl::WidgetDrawStyle maHelpColor uint32_t
+    vcl::WidgetDrawStyle maTabRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:66
-    vcl::WidgetDrawStyle maHelpTextColor uint32_t
+    vcl::WidgetDrawStyle maTabHighlightTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:67
-    vcl::WidgetDrawStyle maLinkColor uint32_t
+    vcl::WidgetDrawStyle maDisableColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:68
-    vcl::WidgetDrawStyle maVisitedLinkColor uint32_t
+    vcl::WidgetDrawStyle maHelpColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:69
-    vcl::WidgetDrawStyle maToolTextColor uint32_t
+    vcl::WidgetDrawStyle maHelpTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:70
+    vcl::WidgetDrawStyle maLinkColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:71
+    vcl::WidgetDrawStyle maVisitedLinkColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:72
+    vcl::WidgetDrawStyle maToolTextColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:73
     vcl::WidgetDrawStyle maFontColor uint32_t
-vcl/inc/WidgetThemeLibrary.hxx:108
+vcl/inc/WidgetThemeLibrary.hxx:111
     vcl::WidgetThemeLibrary_t isNativeControlSupported _Bool (*)(enum ControlType, enum ControlPart)
-vcl/inc/WidgetThemeLibrary.hxx:109
+vcl/inc/WidgetThemeLibrary.hxx:112
     vcl::WidgetThemeLibrary_t getRegion _Bool (*)(enum ControlType, enum ControlPart, enum ControlState, const vcl::rectangle_t &, vcl::rectangle_t &, vcl::rectangle_t &)
-vcl/inc/WidgetThemeLibrary.hxx:113
-    vcl::WidgetThemeLibrary_t drawPushButton _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
-vcl/inc/WidgetThemeLibrary.hxx:114
-    vcl::WidgetThemeLibrary_t drawRadiobutton _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
-vcl/inc/WidgetThemeLibrary.hxx:115
-    vcl::WidgetThemeLibrary_t drawCheckbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:116
-    vcl::WidgetThemeLibrary_t drawCombobox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawPushButton _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:117
-    vcl::WidgetThemeLibrary_t drawEditbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawRadiobutton _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:118
-    vcl::WidgetThemeLibrary_t drawScrollbar _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawCheckbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:119
-    vcl::WidgetThemeLibrary_t drawSpinButtons _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawCombobox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:120
-    vcl::WidgetThemeLibrary_t drawSpinbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawEditbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:121
-    vcl::WidgetThemeLibrary_t drawTabItem _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawScrollbar _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:122
-    vcl::WidgetThemeLibrary_t drawTabPane _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawSpinButtons _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:123
-    vcl::WidgetThemeLibrary_t drawTabHeader _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawSpinbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:124
-    vcl::WidgetThemeLibrary_t drawTabBody _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawTabItem _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:125
-    vcl::WidgetThemeLibrary_t drawSlider _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawTabPane _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:126
-    vcl::WidgetThemeLibrary_t drawFixedline _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawTabHeader _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:127
-    vcl::WidgetThemeLibrary_t drawToolbar _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawTabBody _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:128
-    vcl::WidgetThemeLibrary_t drawProgress _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawSlider _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:129
-    vcl::WidgetThemeLibrary_t drawWindowsBackground _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawFixedline _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:130
+    vcl::WidgetThemeLibrary_t drawToolbar _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:131
-    vcl::WidgetThemeLibrary_t drawListbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawProgress _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:132
-    vcl::WidgetThemeLibrary_t drawFrame _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
-vcl/inc/WidgetThemeLibrary.hxx:133
-    vcl::WidgetThemeLibrary_t drawListNode _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawWindowsBackground _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:134
-    vcl::WidgetThemeLibrary_t drawListNet _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawListbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:135
-    vcl::WidgetThemeLibrary_t drawListHeader _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawFrame _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:136
+    vcl::WidgetThemeLibrary_t drawListNode _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:137
+    vcl::WidgetThemeLibrary_t drawListNet _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:138
+    vcl::WidgetThemeLibrary_t drawListHeader _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:140
     vcl::WidgetThemeLibrary_t updateSettings _Bool (*)(struct vcl::WidgetDrawStyle &)
-vcl/source/app/settings.cxx:184
+vcl/source/app/settings.cxx:187
     ImplStyleData maDialogStyle struct DialogStyle
 vcl/source/control/roadmapwizard.cxx:62
     vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions

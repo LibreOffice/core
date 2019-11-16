@@ -35,12 +35,11 @@ private:
     MapType aMultiSelContainer;
     ScMarkArray aRowSel;
     SCROW mnMaxRow;
-    SCCOL mnMaxCol;
 
 friend class ScMultiSelIter;
 
 public:
-    ScMultiSel(SCROW nMaxRow, SCCOL nMaxCol);
+    ScMultiSel(SCROW nMaxRow);
     ScMultiSel( const ScMultiSel& rMultiSel );
     ~ScMultiSel();
 
