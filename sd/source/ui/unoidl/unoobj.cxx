@@ -51,7 +51,7 @@
 #include <svl/instrm.hxx>
 #include <editeng/outlobj.hxx>
 #include <Outliner.hxx>
-#include <comphelper/serviceinfohelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <svx/svdogrp.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/svapp.hxx>
@@ -806,10 +806,8 @@ SdAnimationInfo* SdXShape::GetAnimationInfo( bool bCreate ) const
 
 uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq( mpShape->_getSupportedServiceNames() );
-
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.Shape",
-                                                  "com.sun.star.document.LinkTarget"} );
+    std::vector<OUStringLiteral> aAdd{ "com.sun.star.presentation.Shape",
+                                       "com.sun.star.document.LinkTarget" };
 
     SdrObject* pObj = mpShape->GetSdrObject();
     if(pObj && pObj->GetObjInventor() == SdrInventor::Default )
@@ -818,14 +816,14 @@ uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames()
         switch( nInventor )
         {
         case OBJ_TITLETEXT:
-            comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.TitleTextShape"} );
+            aAdd.emplace_back("com.sun.star.presentation.TitleTextShape");
             break;
         case OBJ_OUTLINETEXT:
-            comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.OutlinerShape"} );
+            aAdd.emplace_back("com.sun.star.presentation.OutlinerShape");
             break;
         }
     }
-    return aSeq;
+    return comphelper::concatSequences(mpShape->_getSupportedServiceNames(), aAdd);
 }
 
 /** checks if this is a presentation object
