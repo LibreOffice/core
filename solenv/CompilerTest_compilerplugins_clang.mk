@@ -59,6 +59,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/redundantfcast \
     compilerplugins/clang/test/redundantinline \
     compilerplugins/clang/test/redundantpointerops \
+    compilerplugins/clang/test/redundantpreprocessor \
     compilerplugins/clang/test/refcounting \
     compilerplugins/clang/test/referencecasting \
     compilerplugins/clang/test/returnconstval \

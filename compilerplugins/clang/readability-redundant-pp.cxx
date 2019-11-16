@@ -69,9 +69,9 @@ void RedundantPreprocessor::Ifdef(clang::SourceLocation aLoc, const clang::Token
     if (ignoreLocation(aLoc))
         return;
 
+    std::string aMacroName = m_rPP.getSpelling(rMacroNameTok);
     if (m_rPP.getSourceManager().isInMainFile(aLoc))
     {
-        std::string aMacroName = m_rPP.getSpelling(rMacroNameTok);
         for (const auto& rEntry : m_aDefStack)
         {
             if (rEntry.m_aMacroName == aMacroName)
@@ -84,7 +84,7 @@ void RedundantPreprocessor::Ifdef(clang::SourceLocation aLoc, const clang::Token
 
     Entry aEntry;
     aEntry.m_aLoc = aLoc;
-    aEntry.m_aMacroName = m_rPP.getSpelling(rMacroNameTok);
+    aEntry.m_aMacroName = aMacroName;
     m_aDefStack.push_back(aEntry);
 }
 
@@ -94,9 +94,9 @@ void RedundantPreprocessor::Ifndef(clang::SourceLocation aLoc, const clang::Toke
     if (ignoreLocation(aLoc))
         return;
 
+    std::string aMacroName = m_rPP.getSpelling(rMacroNameTok);
     if (m_rPP.getSourceManager().isInMainFile(aLoc))
     {
-        std::string aMacroName = m_rPP.getSpelling(rMacroNameTok);
         for (const auto& rEntry : m_aNotDefStack)
         {
             if (rEntry.m_aMacroName == aMacroName)
@@ -109,7 +109,7 @@ void RedundantPreprocessor::Ifndef(clang::SourceLocation aLoc, const clang::Toke
 
     Entry aEntry;
     aEntry.m_aLoc = aLoc;
-    aEntry.m_aMacroName = m_rPP.getSpelling(rMacroNameTok);
+    aEntry.m_aMacroName = aMacroName;
     m_aNotDefStack.push_back(aEntry);
 }
 
