@@ -22,12 +22,16 @@
 
 using namespace osl;
 
+namespace {
+
 enum ConditionType
 {
     thread_type_set,
     thread_type_reset,
     thread_type_wait
 };
+
+}
 
 /** thread for testing Condition.
  */

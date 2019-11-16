@@ -335,6 +335,8 @@ public:
     static constexpr OUStringLiteral gsIsAnimation = "IsAnimation";
 };
 
+namespace {
+
 enum XMLActionKind
 {
     XMLE_SHOW,
@@ -342,6 +344,8 @@ enum XMLActionKind
     XMLE_DIM,
     XMLE_PLAY
 };
+
+}
 
 class XMLAnimationsEffectContext : public SvXMLImportContext
 {

@@ -66,8 +66,12 @@ static OUString getNormDicEntry_Impl(const OUString &rText)
     return aTmp.replaceAll("=", "");
 }
 
+namespace {
+
 // Compare Dictionary Entry  result
 enum CDE_RESULT { CDE_EQUAL, CDE_SIMILAR, CDE_DIFFERENT };
+
+}
 
 static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rText2 )
 {

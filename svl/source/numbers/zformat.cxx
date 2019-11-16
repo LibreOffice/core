@@ -348,6 +348,8 @@ bool ImpSvNumFor::GetNewCurrencySymbol( OUString& rSymbol,
  * SvNumberformat
  */
 
+namespace {
+
 enum BracketFormatSymbolType
 {
     BRACKET_SYMBOLTYPE_FORMAT   = -1,   // subformat string
@@ -384,6 +386,8 @@ enum BracketFormatSymbolType
     BRACKET_SYMBOLTYPE_NATNUM18 = -32,
     BRACKET_SYMBOLTYPE_NATNUM19 = -33
 };
+
+}
 
 void SvNumberformat::ImpCopyNumberformat( const SvNumberformat& rFormat )
 {
@@ -1408,6 +1412,8 @@ SvNumberformat::~SvNumberformat()
  * ---------------+-------------------+----------------------------+---------------
  */
 
+namespace {
+
 enum ScanState
 {
     SsStop,
@@ -1419,6 +1425,8 @@ enum ScanState
     SsGetBracketed,     // any [...] not decided yet
     SsGetQuoted         // quoted text
 };
+
+}
 
 // read a string until ']' and delete spaces in input
 // static

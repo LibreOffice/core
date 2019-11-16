@@ -128,6 +128,8 @@ namespace sd
         return static_cast<XWeak*>(new DocumentSettings( pModel ));
     }
 
+namespace {
+
 enum SdDocumentSettingsPropertyHandles
 {
     HANDLE_PRINTDRAWING, HANDLE_PRINTNOTES, HANDLE_PRINTHANDOUT, HANDLE_PRINTOUTLINE, HANDLE_MEASUREUNIT, HANDLE_SCALE_NUM,
@@ -143,6 +145,8 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_EMBED_FONTS, HANDLE_EMBED_USED_FONTS,
     HANDLE_EMBED_LATIN_SCRIPT_FONTS, HANDLE_EMBED_ASIAN_SCRIPT_FONTS, HANDLE_EMBED_COMPLEX_SCRIPT_FONTS,
 };
+
+}
 
 #define MID_PRINTER 1
 

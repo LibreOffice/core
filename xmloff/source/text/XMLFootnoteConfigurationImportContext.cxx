@@ -159,6 +159,8 @@ XMLFootnoteConfigurationImportContext::~XMLFootnoteConfigurationImportContext()
 {
 }
 
+namespace {
+
 enum XMLFtnConfigToken
 {
     XML_TOK_FTNCONFIG_CITATION_STYLENAME,
@@ -173,6 +175,8 @@ enum XMLFtnConfigToken
     XML_TOK_FTNCONFIG_START_AT,
     XML_TOK_FTNCONFIG_POSITION
 };
+
+}
 
 static const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 {

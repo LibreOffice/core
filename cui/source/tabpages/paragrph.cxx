@@ -84,6 +84,8 @@ const sal_uInt16 SvxExtParagraphTabPage::pExtRanges[] =
                             // according to BP
 #define FIX_DIST_DEF 283    // standard fix distance 0,5 cm
 
+namespace {
+
 enum LineSpaceList
 {
     LLINESPACE_1    = 0,
@@ -95,6 +97,8 @@ enum LineSpaceList
     LLINESPACE_DURCH= 6,
     LLINESPACE_FIX  = 7
 };
+
+}
 
 static void SetLineSpace_Impl( SvxLineSpacingItem&, int, long lValue = 0 );
 

@@ -39,6 +39,8 @@ using namespace ::com::sun::star;
 
 using namespace ::xmloff::token;
 
+namespace {
+
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_DASH_NAME,
@@ -50,6 +52,8 @@ enum SvXMLTokenMapAttrs
     XML_TOK_DASH_DOTS2LEN,
     XML_TOK_DASH_DISTANCE,
 };
+
+}
 
 static const SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
 {

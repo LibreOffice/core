@@ -77,6 +77,8 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
+namespace {
+
 enum SwXMLTableElemTokens
 {
     XML_TOK_TABLE_HEADER_COLS,
@@ -104,6 +106,8 @@ enum SwXMLTableCellAttrTokens
     XML_TOK_TABLE_STRING_VALUE,
     XML_TOK_TABLE_VALUE_TYPE,
 };
+
+}
 
 static const SvXMLTokenMapEntry aTableElemTokenMap[] =
 {

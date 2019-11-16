@@ -91,6 +91,8 @@ struct StringIdPair_Impl
 #define MAX_PERCENT_WIDTH   254
 #define MAX_PERCENT_HEIGHT  254
 
+namespace {
+
 enum class LB {
     NONE                = 0x00000000L,
     Frame               = 0x00000001L,  // text region of the paragraph
@@ -119,6 +121,9 @@ enum class LB {
 
     VertLine            = 0x00400000L,  // vertical text line
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<LB> : is_typed_flags<LB, 0x00773fffL> {};
 }

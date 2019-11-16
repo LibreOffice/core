@@ -1771,6 +1771,7 @@ void SbRtl_Weekday(StarBASIC *, SbxArray & rPar, bool)
     }
 }
 
+namespace {
 
 enum Interval
 {
@@ -1785,6 +1786,8 @@ enum Interval
     INTERVAL_N,
     INTERVAL_S
 };
+
+}
 
 struct IntervalInfo
 {

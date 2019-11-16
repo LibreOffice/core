@@ -89,12 +89,17 @@ public:
     OutputDevice*           GetDevice() const { return mpDevice; }
 };
 
+namespace {
+
 enum class FontListFontNameType
 {
     NONE              = 0x00,
     PRINTER           = 0x01,
     SCREEN            = 0x02,
 };
+
+}
+
 namespace o3tl
 {
     template<> struct typed_flags<FontListFontNameType> : is_typed_flags<FontListFontNameType, 0x3> {};

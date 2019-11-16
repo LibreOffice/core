@@ -169,10 +169,20 @@ void lcl_emitEvent(SfxEventHintId nEventId, sal_Int32 nStrId, SfxObjectShell* pD
 
 std::vector<std::pair<SwDocShell*, OUString>> SwDBManager::m_aUncommittedRegistrations;
 
+namespace {
+
 enum class SwDBNextRecord { NEXT, FIRST };
+
+}
+
 static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action = SwDBNextRecord::NEXT );
 
+namespace {
+
 enum class WorkingDocType { SOURCE, TARGET, COPY };
+
+}
+
 static SfxObjectShell* lcl_CreateWorkingDocument(
     const WorkingDocType aType, const SwWrtShell &rSourceWrtShell,
     const vcl::Window *pSourceWindow,

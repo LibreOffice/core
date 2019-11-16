@@ -133,6 +133,8 @@ static GtkStateFlags NWConvertVCLStateToGTKState(ControlState nVCLState)
     return nGTKState;
 }
 
+namespace {
+
 enum class RenderType {
     BackgroundAndFrame = 1,
     Check,
@@ -151,6 +153,8 @@ enum class RenderType {
     TabItem,
     Focus
 };
+
+}
 
 static void NWCalcArrowRect( const tools::Rectangle& rButton, tools::Rectangle& rArrow )
 {

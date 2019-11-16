@@ -58,6 +58,8 @@
 
 using namespace x86_64;
 
+namespace {
+
 /* Register class used for passing given 64bit part of the argument.
    These represent classes as documented by the PS ABI, with the exception
    of SSESF, SSEDF classes, that are basically SSE class, just gcc will
@@ -79,6 +81,8 @@ enum x86_64_reg_class
     X86_64_X87UP_CLASS,
     X86_64_MEMORY_CLASS
 };
+
+}
 
 #define MAX_CLASSES 4
 

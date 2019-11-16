@@ -815,7 +815,12 @@ static bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker3 >& _rxFP 
     return false;
 }
 
+namespace {
+
 enum open_or_save_t {OPEN, SAVE, UNDEFINED};
+
+}
+
 static open_or_save_t lcl_OpenOrSave(sal_Int16 const nDialogType)
 {
     switch (nDialogType)

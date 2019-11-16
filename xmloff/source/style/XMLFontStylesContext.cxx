@@ -50,6 +50,8 @@ using namespace ::xmloff::token;
 
 #define XML_STYLE_FAMILY_FONT 1
 
+namespace {
+
 enum XMLFontStyleAttrTokens
 {
     XML_TOK_FONT_STYLE_ATTR_FAMILY,
@@ -58,6 +60,8 @@ enum XMLFontStyleAttrTokens
     XML_TOK_FONT_STYLE_ATTR_PITCH,
     XML_TOK_FONT_STYLE_ATTR_CHARSET,
 };
+
+}
 
 static const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
 {

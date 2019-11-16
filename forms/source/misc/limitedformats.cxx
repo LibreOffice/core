@@ -43,6 +43,7 @@ namespace frm
 
     //=
 
+    namespace {
 
     enum LocaleType
     {
@@ -51,6 +52,7 @@ namespace frm
         ltSystem
     };
 
+    }
 
     static const Locale& getLocale(LocaleType _eType)
     {

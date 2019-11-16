@@ -32,6 +32,8 @@ using ::com::sun::star::uno::Sequence;
 
 using namespace ::com::sun::star;
 
+namespace {
+
 enum LocaleMatch
 {
     LOCALE_MATCH_NONE = 0,
@@ -40,6 +42,8 @@ enum LocaleMatch
     LOCALE_MATCH_LANG_SCRIPT_COUNTRY,
     LOCALE_MATCH_ALL
 };
+
+}
 
 static LocaleMatch lclLocaleCompare(const lang::Locale& rLocale1, const LanguageTag& rLanguageTag2)
 {

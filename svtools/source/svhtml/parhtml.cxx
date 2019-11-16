@@ -1894,6 +1894,8 @@ bool HTMLParser::InternalImgToPrivateURL( OUString& rURL )
     return bFound;
 }
 
+namespace {
+
 enum class HtmlMeta {
     NONE = 0,
     Author,
@@ -1909,6 +1911,8 @@ enum class HtmlMeta {
     SDEndnote,
     ContentType
 };
+
+}
 
 // <META NAME=xxx>
 static HTMLOptionEnum<HtmlMeta> const aHTMLMetaNameTable[] =

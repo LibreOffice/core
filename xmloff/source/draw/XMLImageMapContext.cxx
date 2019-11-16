@@ -55,6 +55,7 @@ using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::document::XEventsSupplier;
 
+namespace {
 
 enum XMLImageMapToken: decltype(XML_TOK_UNKNOWN)
 {
@@ -72,6 +73,8 @@ enum XMLImageMapToken: decltype(XML_TOK_UNKNOWN)
     XML_TOK_IMAP_RADIUS,
     XML_TOK_IMAP_TARGET
 };
+
+}
 
 static const SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
 {

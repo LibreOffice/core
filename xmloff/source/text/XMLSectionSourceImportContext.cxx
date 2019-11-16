@@ -52,12 +52,15 @@ XMLSectionSourceImportContext::~XMLSectionSourceImportContext()
 {
 }
 
+namespace {
 enum XMLSectionSourceToken
 {
     XML_TOK_SECTION_XLINK_HREF,
     XML_TOK_SECTION_TEXT_FILTER_NAME,
     XML_TOK_SECTION_TEXT_SECTION_NAME
 };
+
+}
 
 static const SvXMLTokenMapEntry aSectionSourceTokenMap[] =
 {

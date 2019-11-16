@@ -4261,11 +4261,15 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     return pJson;
 }
 
+namespace {
+
 enum class UndoOrRedo
 {
     UNDO,
     REDO
 };
+
+}
 
 /// Returns the JSON representation of either an undo or a redo stack.
 static char* getUndoOrRedo(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)

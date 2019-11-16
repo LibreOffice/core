@@ -63,8 +63,11 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/ptrstyle.hxx>
 
+namespace {
 
 enum EscDir {LKS,RTS,OBN,UNT};
+
+}
 
 class ImpCaptParams
 {

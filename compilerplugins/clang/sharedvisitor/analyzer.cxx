@@ -14,6 +14,7 @@
 #include "clang/Tooling/Tooling.h"
 #include "llvm/ADT/StringExtras.h"
 
+#include <cassert>
 #include <cstddef>
 #include <cstring>
 #include <iostream>
@@ -55,6 +56,8 @@ class CheckFileVisitor
     : public RecursiveASTVisitor< CheckFileVisitor >
 {
 public:
+    void setContext(ASTContext const& context) { context_ = &context; }
+
     bool VisitCXXRecordDecl(CXXRecordDecl *Declaration);
 
     bool TraverseNamespaceDecl(NamespaceDecl * decl)
@@ -66,6 +69,21 @@ public:
             return true;
         }
         return RecursiveASTVisitor<CheckFileVisitor>::TraverseNamespaceDecl(decl);
+    }
+
+private:
+    ASTContext const* context_ = nullptr;
+
+    QualType unqualifyPointeeType(QualType type)
+    {
+        assert(context_ != nullptr);
+        if (auto const t = type->getAs<PointerType>())
+        {
+            return context_->getQualifiedType(
+                context_->getPointerType(t->getPointeeType().getUnqualifiedType()),
+                type.getQualifiers());
+        }
+        return type;
     }
 };
 
@@ -116,7 +134,8 @@ bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
                 cout << "VisitFunctionStart" << endl;
                 cout << "VisitFunctionName:" << method->getName().str() << endl;
                 cout << "VisitFunctionArgument:"
-                    << method->getParamDecl( 0 )->getTypeSourceInfo()->getType().getAsString()
+                    << unqualifyPointeeType(
+                        method->getParamDecl( 0 )->getTypeSourceInfo()->getType()).getAsString()
                     << endl;
                 cout << "VisitFunctionEnd" << endl;
             }
@@ -185,6 +204,10 @@ class FindNamedClassConsumer
     : public ASTConsumer
 {
 public:
+    void Initialize(ASTContext& context) override
+    {
+        visitor.setContext(context);
+    }
     virtual void HandleTranslationUnit(ASTContext& context) override
     {
         visitor.TraverseDecl( context.getTranslationUnitDecl());

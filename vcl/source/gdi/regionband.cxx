@@ -190,7 +190,11 @@ bool RegionBand::operator==( const RegionBand& rRegionBand ) const
     return true;
 }
 
+namespace {
+
 enum StreamEntryType { STREAMENTRY_BANDHEADER, STREAMENTRY_SEPARATION, STREAMENTRY_END };
+
+}
 
 bool RegionBand::load(SvStream& rIStrm)
 {

@@ -49,6 +49,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::comphelper;
 
+namespace {
+
 enum SwViewSettingsPropertyHandles
 {
     HANDLE_VIEWSET_ANNOTATIONS,
@@ -118,6 +120,8 @@ enum SwPrintSettingsPropertyHandles
     HANDLE_PRINTSET_PLACEHOLDER,
     HANDLE_PRINTSET_HIDDEN_TEXT
 };
+
+}
 
 static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
 {

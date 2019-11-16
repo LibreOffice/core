@@ -1052,6 +1052,7 @@ void XMLDatabaseDisplayImportContext::EndElement()
 
 // value import helper
 
+namespace {
 
 enum ValueType
 {
@@ -1063,6 +1064,8 @@ enum ValueType
     XML_VALUE_TYPE_TIME,
     XML_VALUE_TYPE_BOOLEAN
 };
+
+}
 
 static SvXMLEnumMapEntry<ValueType> const aValueTypeMap[] =
 {

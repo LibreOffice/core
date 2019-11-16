@@ -51,11 +51,15 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 enum SwSplitDocType
 {
     SPLITDOC_TO_GLOBALDOC,
     SPLITDOC_TO_HTML
 };
+
+}
 
 bool SwDoc::GenerateGlobalDoc( const OUString& rPath,
                                    const SwTextFormatColl* pSplitColl )

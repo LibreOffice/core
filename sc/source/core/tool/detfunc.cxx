@@ -81,11 +81,15 @@ using namespace com::sun::star;
 // The checkForUniqueItem method then finds a unique name for the item's value.
 #define SC_LINEEND_NAME     EMPTY_OUSTRING
 
+namespace {
+
 enum DetInsertResult {              // return-values for inserting in one level
             DET_INS_CONTINUE,
             DET_INS_INSERTED,
             DET_INS_EMPTY,
             DET_INS_CIRCULAR };
+
+}
 
 class ScDetectiveData
 {

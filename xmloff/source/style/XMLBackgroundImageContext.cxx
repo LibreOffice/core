@@ -43,6 +43,8 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
+namespace {
+
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_BGIMG_HREF,
@@ -54,6 +56,9 @@ enum SvXMLTokenMapAttrs
     XML_TOK_BGIMG_FILTER,
     XML_TOK_BGIMG_OPACITY
 };
+
+}
+
 static const SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },

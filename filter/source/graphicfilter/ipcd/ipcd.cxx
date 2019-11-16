@@ -29,6 +29,8 @@
 
 //============================ PCDReader ==================================
 
+namespace {
+
 // these resolutions are contained in a PCD file:
 enum PCDResolution {
     PCDRES_BASE16,  //  192 x  128
@@ -39,6 +41,8 @@ enum PCDResolution {
     PCDRES_4BASE,   // 1536 x 1024
     PCDRES_16BASE   // 3072 x 3072
 };
+
+}
 
 class PCDReader {
 

@@ -88,6 +88,8 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::frame::XLayoutManager;
 using com::sun::star::beans::XPropertySet;
 
+namespace {
+
 enum ScNameInputType
 {
     SC_NAME_INPUT_CELL,
@@ -101,6 +103,8 @@ enum ScNameInputType
     SC_NAME_INPUT_BAD_SELECTION,
     SC_MANAGE_NAMES
 };
+
+}
 
 ScTextWndBase::ScTextWndBase( vcl::Window* pParent,  WinBits nStyle )
     : Window ( pParent, nStyle )

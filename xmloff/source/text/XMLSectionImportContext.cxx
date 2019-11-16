@@ -47,6 +47,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
+namespace {
 
 enum XMLSectionToken
 {
@@ -59,6 +60,8 @@ enum XMLSectionToken
     XML_TOK_SECTION_PROTECTION_KEY,
     XML_TOK_SECTION_IS_HIDDEN
 };
+
+}
 
 static const SvXMLTokenMapEntry aSectionTokenMap[] =
 {

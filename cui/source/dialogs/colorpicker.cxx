@@ -43,6 +43,8 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::beans;
 using namespace ::basegfx;
 
+namespace {
+
 enum class UpdateFlags
 {
     NONE         = 0x00,
@@ -54,6 +56,9 @@ enum class UpdateFlags
     Hex          = 0x20,
     All          = 0x3f,
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<UpdateFlags> : is_typed_flags<UpdateFlags, 0x3f> {};
 }
@@ -61,6 +66,8 @@ namespace o3tl {
 
 namespace cui
 {
+
+namespace {
 
 enum class ColorComponent {
     Red,
@@ -75,6 +82,7 @@ enum class ColorComponent {
     Key,
 };
 
+}
 
 // color space conversion helpers
 
@@ -171,7 +179,12 @@ void ColorPreviewControl::Paint(vcl::RenderContext& rRenderContext, const tools:
     rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
 }
 
+namespace {
+
 enum ColorMode { HUE, SATURATION, BRIGHTNESS, RED, GREEN, BLUE };
+
+}
+
 const ColorMode DefaultMode = HUE;
 
 class ColorFieldControl : public weld::CustomWidgetController

@@ -1011,11 +1011,15 @@ static sal_Unicode ImplStarSymbolToStarBats( sal_Unicode c )
     return c;
 }
 
+namespace {
+
 enum SymbolFont
 {
     Symbol=1, Wingdings=2, MonotypeSorts=4, Webdings=8, Wingdings2=16,
     Wingdings3=32, MTExtra=64, TimesNewRoman=128
 };
+
+}
 
 const char * const aSymbolNames[] =
 {

@@ -99,6 +99,8 @@ public:
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
 };
 
+namespace {
+
 enum SvxXMLTextListLevelStyleAttrTokens
 {
     XML_TOK_TEXT_LEVEL_ATTR_LEVEL,
@@ -115,6 +117,8 @@ enum SvxXMLTextListLevelStyleAttrTokens
     XML_TOK_TEXT_LEVEL_ATTR_START_VALUE,
     XML_TOK_TEXT_LEVEL_ATTR_DISPLAY_LEVELS
 };
+
+}
 
 static const SvXMLTokenMapEntry* lcl_getLevelAttrTokenMap()
 {
@@ -583,6 +587,8 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
     return aPropSeq;
 }
 
+namespace {
+
 enum SvxXMLStyleAttributesAttrTokens
 {
     XML_TOK_STYLE_ATTRIBUTES_ATTR_SPACE_BEFORE,
@@ -604,6 +610,8 @@ enum SvxXMLStyleAttributesAttrTokens
     XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE
 };
+
+}
 
 static const SvXMLTokenMapEntry* lcl_getStyleAttributesAttrTokenMap()
 {
@@ -912,6 +920,8 @@ SvXMLImportContextRef SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
     return pContext;
 }
 
+namespace {
+
 enum SvxXMLStyleAttributesLabelAlignmentAttrTokens
 {
     XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY,
@@ -919,6 +929,9 @@ enum SvxXMLStyleAttributesLabelAlignmentAttrTokens
     XML_TOK_STYLE_ATTRIBUTES_ATTR_FIRST_LINE_INDENT,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_INDENT_AT
 };
+
+}
+
 static const SvXMLTokenMapEntry* lcl_getStyleAlignmentAttributesAttrTokenMap()
 {
     static const SvXMLTokenMapEntry aStyleAlignmentAttributesAttrTokenMap[] =

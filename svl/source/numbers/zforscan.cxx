@@ -757,6 +757,8 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
  * we write back the rest of the characters!
  */
 
+namespace {
+
 enum ScanState
 {
     SsStop      = 0,
@@ -767,6 +769,8 @@ enum ScanState
     SsGetStar   = 5,
     SsGetBlank  = 6
 };
+
+}
 
 short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                                           sal_Int32& nPos,

@@ -87,12 +87,17 @@ static osl::Mutex &    GetMailMergeMutex()
     return aMutex;
 }
 
+namespace {
+
 enum CloseResult
 {
     eSuccess,       // successfully closed
     eVetoed,        // vetoed, ownership transferred to the vetoing instance
     eFailed         // failed for some unknown reason
 };
+
+}
+
 static CloseResult CloseModelAndDocSh(
        Reference< frame::XModel > const &rxModel,
        SfxObjectShellRef &rxDocSh )

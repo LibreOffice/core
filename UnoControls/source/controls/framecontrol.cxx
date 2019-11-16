@@ -44,12 +44,16 @@ using namespace ::com::sun::star::util;
 
 namespace unocontrols {
 
+namespace {
+
 enum PropertyHandle  // values represent index in PropertyArray
 {                   // for FrameControl
     Componenturl    = 0,
     Frame           = 1,
     Loaderarguments = 2
 };
+
+}
 
 //  construct/destruct
 

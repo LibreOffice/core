@@ -99,6 +99,8 @@ using editeng::SvxBorderLine;
 
 #define HTML_HEADSPACE (12*20)
 
+namespace {
+
 enum class Css1Background {
     Attr    = 1,
     Page    = 2,
@@ -115,6 +117,9 @@ enum class Css1FrameSize {
     AnyHeight  = 0x06,
     Pixel      = 0x10,
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<Css1FrameSize> : is_typed_flags<Css1FrameSize, 0x17> {};
 }

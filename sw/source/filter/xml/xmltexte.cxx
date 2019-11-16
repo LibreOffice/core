@@ -58,6 +58,8 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
+namespace {
+
 enum SvEmbeddedObjectTypes
 {
     SV_EMBEDDED_OWN,
@@ -66,6 +68,8 @@ enum SvEmbeddedObjectTypes
     SV_EMBEDDED_PLUGIN,
     SV_EMBEDDED_FRAME
 };
+
+}
 
 SwNoTextNode *SwXMLTextParagraphExport::GetNoTextNode(
     const Reference < XPropertySet >& rPropSet )

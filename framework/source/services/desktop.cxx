@@ -76,9 +76,13 @@
 
 namespace framework{
 
+namespace {
+
 enum PropHandle {
     ActiveFrame, DispatchRecorderSupplier, IsPlugged, SuspendQuickstartVeto,
     Title };
+
+}
 
 OUString SAL_CALL Desktop::getImplementationName()
 {

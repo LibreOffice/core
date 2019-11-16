@@ -585,12 +585,16 @@ void SwNavigationPI::ZoomIn()
     m_aContentToolBox->CheckItem(m_aContentToolBox->GetItemId("listbox"), false);
 }
 
+namespace {
+
 enum StatusIndex
 {
     IDX_STR_HIDDEN = 0,
     IDX_STR_ACTIVE = 1,
     IDX_STR_INACTIVE = 2
 };
+
+}
 
 SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
                                vcl::Window* pParent)

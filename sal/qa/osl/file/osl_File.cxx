@@ -277,6 +277,8 @@ static void deleteTestDirectory(const OUString& basename, const OUString& dirnam
     deleteTestDirectory(aBaseURL);
 }
 
+namespace {
+
 /** Check for the file and directory access right.
 */
 enum class oslCheckMode {
@@ -284,6 +286,8 @@ enum class oslCheckMode {
     ReadAccess,
     WriteAccess
 };
+
+}
 
 /** check if the file exist
 */

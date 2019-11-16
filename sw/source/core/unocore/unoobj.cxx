@@ -789,7 +789,11 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
     }
 }
 
+namespace {
+
 enum ForceIntoMetaMode { META_CHECK_BOTH, META_INIT_START, META_INIT_END };
+
+}
 
 static bool
 lcl_ForceIntoMeta(SwPaM & rCursor,

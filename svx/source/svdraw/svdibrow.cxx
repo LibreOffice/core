@@ -74,6 +74,8 @@ using namespace com::sun::star;
 
 #define ITEM_NOT_FOUND std::numeric_limits<std::size_t>::max()
 
+namespace {
+
 enum class ItemType {
     DONTKNOW, BYTE, INT16, UINT16, INT32, UINT32,
     ENUM, BOOL, FLAG, STRING, POINT, RECT, RANGE,
@@ -83,6 +85,7 @@ enum class ItemType {
     FONT, FONTHEIGHT, FONTWIDTH, FIELD
 };
 
+}
 
 class ImpItemListRow
 {
