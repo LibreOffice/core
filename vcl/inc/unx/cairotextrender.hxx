@@ -44,7 +44,7 @@ protected:
 
 public:
                                 CairoTextRender();
-
+                                virtual ~CairoTextRender() override;
 
     virtual void                SetTextColor( Color nColor ) override;
     virtual void                SetFont(LogicalFontInstance*, int nFallbackLevel) override;
