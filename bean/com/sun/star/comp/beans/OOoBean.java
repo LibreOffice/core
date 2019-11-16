@@ -655,7 +655,10 @@ public class OOoBean
                     {
                         // reactivate old document
                         if ( aFrame != null && aFrame.getController() != null )
-                            aFrame.getController().suspend(false);
+                        {
+                            boolean bResult = aFrame.getController().suspend(false);
+                            dbgPrint( "loadFromURL() .. suspend() -> " + bResult );
+                        }
                         aDocument.setModified(true);
 
                         // throw exception
