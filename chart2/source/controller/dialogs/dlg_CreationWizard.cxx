@@ -68,6 +68,10 @@ CreationWizard::CreationWizard(weld::Window* pParent, const uno::Reference<frame
 
     declarePath(PATH_FULL, aPath);
 
+    m_pTemplateProvider = static_cast<ChartTypeTabPage*>(GetOrCreatePage(STATE_CHARTTYPE));
+    assert(m_pTemplateProvider && "must exist");
+    m_pDialogModel->setTemplate(m_pTemplateProvider->getCurrentTemplate());
+
     SetRoadmapHelpId(HID_SCH_WIZARD_ROADMAP);
 
     if (!m_pDialogModel->getModel().isDataFromSpreadsheet())
@@ -97,9 +101,6 @@ std::unique_ptr<BuilderPage> CreationWizard::createPage(WizardState nState)
         {
             m_aTimerTriggeredControllerLock.startTimer();
             xRet = std::make_unique<ChartTypeTabPage>(pPageContainer, this, m_xChartModel);
-            m_pTemplateProvider = static_cast<ChartTypeTabPage*>(xRet.get());
-            if (m_pDialogModel)
-                m_pDialogModel->setTemplate( m_pTemplateProvider->getCurrentTemplate());
             break;
         }
         case STATE_SIMPLE_RANGE:
