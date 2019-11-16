@@ -80,7 +80,7 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
             maString = rStrm.ReadRawUniString( nChars, b16Bit );
 
             // --- formatting ---
-            if( nRunCount > 0 )
+            if (nRunCount)
                 ReadFormats( rStrm, maFormats, nRunCount );
 
             // --- extended (FarEast) information ---
