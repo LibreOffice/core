@@ -63,12 +63,14 @@
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <tools/datetime.hxx>
+#include <tools/fldunit.hxx>
 #include <svl/zformat.hxx>
 
 #include <test/xmltesttools.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <comphelper/storagehelper.hxx>
 
 using namespace ::com::sun::star;
@@ -226,6 +228,7 @@ public:
     void testCommentTextHAlignment();
 
     void testXltxExport();
+    void testRotatedImageODS();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -355,6 +358,7 @@ public:
     CPPUNIT_TEST(testCommentTextHAlignment);
 
     CPPUNIT_TEST(testXltxExport);
+    CPPUNIT_TEST(testRotatedImageODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4522,6 +4526,35 @@ void ScExportTest::testCommentTextHAlignment()
     assertXPathContent(pVmlDrawing, "/xml/v:shape/xx:ClientData/xx:TextHAlign", "Center");
 }
 
+void ScExportTest::testRotatedImageODS()
+{
+    // Error was, that the length values in shapes were not
+    // written in the given unit into the file.
+    css::uno::Reference<css::sheet::XGlobalSheetSettings> xGlobalSheetSettings
+        = css::sheet::GlobalSheetSettings::create(comphelper::getProcessComponentContext());
+    xGlobalSheetSettings->setMetric(static_cast<sal_Int16>(FieldUnit::MM));
+
+    ScDocShellRef xDocSh = loadDoc("tdf103092_RotatedImage.", FORMAT_ODS, true);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pTemp = saveAs(xDocSh.get(), FORMAT_ODS);
+    CPPUNIT_ASSERT(pTemp);
+    const xmlDocPtr pXmlDoc = XPathHelper::parseExport(pTemp, m_xSFactory, "content.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    const OString sPathStart = "/office:document-content/office:body/office:spreadsheet/"
+                               "table:table/table:shapes/draw:frame";
+    const OUString sTransform = getXPath(pXmlDoc, sPathStart, "transform");
+    // Attribute transform has the structure skew (...) rotate (...) translate (x y)
+    // parts are separated by blank
+    OUString sTranslate(sTransform.copy(sTransform.lastIndexOf('(')));
+    sTranslate = sTranslate.copy(1, sTranslate.getLength()-2); // remove '(' and ')'
+    const OUString sX(sTranslate.getToken(0, ' '));
+    const OUString sY(sTranslate.getToken(1, ' '));
+    CPPUNIT_ASSERT(sX.endsWith("mm") && sY.endsWith("mm"));
+
+    xDocSh->DoClose();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
