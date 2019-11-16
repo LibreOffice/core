@@ -197,11 +197,15 @@ FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
 
 void FreetypeFont::SetFontVariationsOnHBFont(hb_font_t* pHbFace) const
 {
+    FT_FaceRec_ *pFaceFT = mpFontInfo->GetFaceFT();
+    if (!pFaceFT)
+        return;
+
     sal_uInt32 nFaceVariation = mpFontInfo->GetFontFaceVariation();
-    if (maFaceFT && nFaceVariation)
+    if (pFaceFT && nFaceVariation)
     {
         FT_MM_Var *pFtMMVar;
-        if (FT_Get_MM_Var(maFaceFT, &pFtMMVar) == 0)
+        if (FT_Get_MM_Var(pFaceFT, &pFtMMVar) == 0)
         {
             if (nFaceVariation <= pFtMMVar->num_namedstyles)
             {
@@ -314,9 +318,10 @@ bool FreetypeFont::AlmostHorizontalDrainsRenderingPool()
 
 FT_Face FreetypeFont::GetFtFace() const
 {
-    FT_Activate_Size( maSizeFT );
+    if (maSizeFT)
+        FT_Activate_Size(maSizeFT);
 
-    return maFaceFT;
+    return mpFontInfo->GetFaceFT();
 }
 
 void GlyphCache::AddFontFile(const OString& rNormalizedName,
@@ -388,7 +393,6 @@ FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
     mpFontInfo( pFI ),
     mnLoadFlags( 0 ),
-    maFaceFT( nullptr ),
     maSizeFT( nullptr ),
     mbFaceOk( false ),
     mbArtItalic( false ),
@@ -399,7 +403,7 @@ FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*
     // it becomes responsible for the FreetypeFont instantiation
     mpFontInstance->SetFreetypeFont( this );
 
-    maFaceFT = pFI->GetFaceFT();
+    FT_FaceRec_* pFaceFT = pFI->GetFaceFT();
 
     const FontSelectPattern& rFSD = pFontInstance->GetFontSelectPattern();
 
@@ -419,21 +423,21 @@ FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*
     if( (mnWidth < 0) || (mfStretch > +64.0) || (mfStretch < -64.0) )
         return;
 
-    if( !maFaceFT )
+    if (!pFaceFT)
         return;
 
-    FT_New_Size( maFaceFT, &maSizeFT );
+    FT_New_Size(pFaceFT, &maSizeFT);
     FT_Activate_Size( maSizeFT );
     /* This might fail for color bitmap fonts, but that is fine since we will
      * not need any glyph data from FreeType in this case */
-    /*FT_Error rc = */ FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
+    /*FT_Error rc = */ FT_Set_Pixel_Sizes(pFaceFT, mnWidth, rFSD.mnHeight);
 
-    FT_Select_Charmap(maFaceFT, FT_ENCODING_UNICODE);
+    FT_Select_Charmap(pFaceFT, FT_ENCODING_UNICODE);
 
     if( mpFontInfo->IsSymbolFont() )
     {
         FT_Encoding eEncoding = FT_ENCODING_MS_SYMBOL;
-        FT_Select_Charmap(maFaceFT, eEncoding);
+        FT_Select_Charmap(pFaceFT, eEncoding);
     }
 
     mbFaceOk = true;
@@ -515,14 +519,15 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
     if ( IsStarSymbol( rxTo->GetFamilyName() ) )
         rxTo->SetSymbolFlag( true );
 
-    FT_Activate_Size( maSizeFT );
+    if (maSizeFT)
+        FT_Activate_Size(maSizeFT);
 
     rxTo->ImplCalcLineSpacing(mpFontInstance.get());
 
     rxTo->SetSlant( 0 );
     rxTo->SetWidth( mnWidth );
 
-    const TT_OS2* pOS2 = static_cast<const TT_OS2*>(FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 ));
+    const TT_OS2* pOS2 = static_cast<const TT_OS2*>(FT_Get_Sfnt_Table(mpFontInfo->GetFaceFT(), ft_sfnt_os2));
     if( pOS2 && (pOS2->version != 0xFFFF) )
     {
         // map the panose info from the OS2 table to their VCL counterparts
@@ -565,7 +570,7 @@ void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
     if (!mpFontInstance->GetFontSelectPattern().mnOrientation && !bVertical)
         return;
 
-    const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
+    const FT_Size_Metrics& rMetrics = mpFontInfo->GetFaceFT()->size->metrics;
     FT_Vector aVector;
     FT_Matrix aMatrix;
 
@@ -615,18 +620,23 @@ void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
 
 bool FreetypeFont::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& rRect, bool bVertical) const
 {
-    FT_Activate_Size( maSizeFT );
+    FT_FaceRec_ *pFaceFT = mpFontInfo->GetFaceFT();
+    if (!pFaceFT)
+        return false;
 
-    FT_Error rc = FT_Load_Glyph(maFaceFT, nID, mnLoadFlags);
+    if (maSizeFT)
+        FT_Activate_Size(maSizeFT);
+
+    FT_Error rc = FT_Load_Glyph(pFaceFT, nID, mnLoadFlags);
 
     if (rc != FT_Err_Ok)
         return false;
 
     if (mbArtBold)
-        FT_GlyphSlot_Embolden(maFaceFT->glyph);
+        FT_GlyphSlot_Embolden(pFaceFT->glyph);
 
     FT_Glyph pGlyphFT;
-    rc = FT_Get_Glyph(maFaceFT->glyph, &pGlyphFT);
+    rc = FT_Get_Glyph(pFaceFT->glyph, &pGlyphFT);
     if (rc != FT_Err_Ok)
         return false;
 
@@ -862,6 +872,10 @@ static int FT_cubic_to( const FT_Vector* p1, const FT_Vector* p2, const FT_Vecto
 
 bool FreetypeFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2DPolyPoly, bool bIsVertical) const
 {
+    FT_FaceRec_ *pFaceFT = mpFontInfo->GetFaceFT();
+    if (!pFaceFT)
+        return false;
+
     if( maSizeFT )
         FT_Activate_Size( maSizeFT );
 
@@ -874,15 +888,15 @@ bool FreetypeFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2
     nLoadFlags |= FT_LOAD_TARGET_LIGHT;
 #endif
 
-    FT_Error rc = FT_Load_Glyph(maFaceFT, nId, nLoadFlags);
+    FT_Error rc = FT_Load_Glyph(pFaceFT, nId, nLoadFlags);
     if( rc != FT_Err_Ok )
         return false;
 
     if (mbArtBold)
-        FT_GlyphSlot_Embolden(maFaceFT->glyph);
+        FT_GlyphSlot_Embolden(pFaceFT->glyph);
 
     FT_Glyph pGlyphFT;
-    rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
+    rc = FT_Get_Glyph(pFaceFT->glyph, &pGlyphFT);
     if( rc != FT_Err_Ok )
         return false;
 
