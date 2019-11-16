@@ -1356,7 +1356,7 @@ void SvtURLBox::TryAutoComplete()
         return;
     sal_uInt16 nLen = static_cast<sal_uInt16>(aSelection.Min());
     aCurText = aCurText.copy( 0, nLen );
-    if( !aCurText.isEmpty() && bIsAutoCompleteEnabled )
+    if( !aCurText.isEmpty() )
     {
         if ( pCtx.is() )
         {
@@ -1374,8 +1374,7 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, INetProtocol eSmart, bool bSetDefaul
     :   ComboBox( pParent , WB_DROPDOWN | WB_AUTOHSCROLL ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( false ),
-        bHistoryDisabled( false ),
-        bIsAutoCompleteEnabled( true )
+        bHistoryDisabled( false )
 {
     Init(bSetDefaultHelpID);
 
@@ -1391,8 +1390,7 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart
     :   ComboBox( pParent, _nStyle ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( false ),
-        bHistoryDisabled( false ),
-        bIsAutoCompleteEnabled( true )
+        bHistoryDisabled( false )
 {
     Init(bSetDefaultHelpID);
 }
@@ -1440,7 +1438,7 @@ void SvtURLBox::UpdatePickList( )
     }
 
     OUString sText = GetText();
-    if ( !sText.isEmpty() && bIsAutoCompleteEnabled )
+    if ( !sText.isEmpty() )
     {
         pCtx = new SvtMatchContext_Impl( this, sText );
         pCtx->launch();

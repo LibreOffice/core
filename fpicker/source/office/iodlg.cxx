@@ -110,7 +110,7 @@ namespace
         return pFilter->GetType();
     }
 
-    bool restoreCurrentFilter( std::unique_ptr<SvtExpFileDlg_Impl> const & pImpl )
+    void restoreCurrentFilter( std::unique_ptr<SvtExpFileDlg_Impl> const & pImpl )
     {
         SAL_WARN_IF( !pImpl->GetCurFilter(), "fpicker.office", "restoreCurrentFilter: no current filter!" );
         SAL_WARN_IF( pImpl->GetCurFilterDisplayName().isEmpty(), "fpicker.office", "restoreCurrentFilter: no current filter (no display name)!" );
@@ -123,7 +123,6 @@ namespace
                 &&  ( sSelectedDisplayName == pImpl->GetCurFilterDisplayName() ),
             "restoreCurrentFilter: inconsistence!" );
 #endif
-        return pImpl->m_bNeedDelayedFilterExecute;
     }
 
 
@@ -916,8 +915,7 @@ IMPL_LINK_NOARG( SvtFileDialog, FilterSelectHdl_Impl, weld::ComboBox&, void )
     {   // there is no current selection. This happens if for instance the user selects a group separator using
         // the keyboard, and then presses enter: When the selection happens, we immediately deselect the entry,
         // so in this situation there is no current selection.
-        if ( restoreCurrentFilter( m_xImpl ) )
-            ExecuteFilter();
+        restoreCurrentFilter( m_xImpl );
     }
     else
     {
@@ -1072,7 +1070,6 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
 
 void SvtFileDialog::ExecuteFilter()
 {
-    m_xImpl->m_bNeedDelayedFilterExecute = false;
     executeAsync( AsyncPickerAction::eExecuteFilter, OUString(), getMostCurrentFilter(m_xImpl) );
 }
 
