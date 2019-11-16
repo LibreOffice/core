@@ -74,7 +74,7 @@ struct SfxRequest_Impl: public SfxListener
     SfxViewFrame*   pViewFrame;
 
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
-    css::uno::Reference< uno::XComponentContext > xContext;
+    css::uno::Reference< css::util::XURLTransformer > xTransform;
 
     explicit SfxRequest_Impl( SfxRequest *pOwner )
         : pAnti( pOwner)
@@ -88,7 +88,6 @@ struct SfxRequest_Impl: public SfxListener
         , nCallMode( SfxCallMode::SYNCHRON )
         , bAllowRecording( false )
         , pViewFrame(nullptr)
-        , xContext(comphelper::getProcessComponentContext())
     {
     }
 
@@ -167,6 +166,8 @@ SfxRequest::SfxRequest
     {
         pImpl->SetPool( &pImpl->pShell->GetPool() );
         pImpl->xRecorder = SfxRequest::GetMacroRecorder(pImpl->pViewFrame);
+        if (pImpl->xRecorder)
+            pImpl->xTransform = util::URLTransformer::create(comphelper::getProcessComponentContext());
         pImpl->aTarget = pImpl->pShell->GetName();
     }
     else
@@ -206,6 +207,8 @@ SfxRequest::SfxRequest
     {
         pImpl->SetPool( &pImpl->pShell->GetPool() );
         pImpl->xRecorder = SfxRequest::GetMacroRecorder( pViewFrame );
+        if (pImpl->xRecorder)
+            pImpl->xTransform = util::URLTransformer::create(comphelper::getProcessComponentContext());
         pImpl->aTarget = pImpl->pShell->GetName();
     }
     else
@@ -333,9 +336,10 @@ void SfxRequest_Impl::Record
 */
 
 {
-    OUString aCmd = ".uno:" + OUString::createFromAscii( pSlot->GetUnoName() );
     if(!xRecorder.is())
         return;
+
+    OUString aCmd = ".uno:" + OUString::createFromAscii( pSlot->GetUnoName() );
 
     uno::Reference< container::XIndexReplace > xReplace( xRecorder, uno::UNO_QUERY );
     if ( xReplace.is() && aCmd == ".uno:InsertText" )
@@ -359,8 +363,6 @@ void SfxRequest_Impl::Record
             }
         }
     }
-
-    uno::Reference< util::XURLTransformer > xTransform = util::URLTransformer::create( xContext );
 
     css::util::URL aURL;
     aURL.Complete = aCmd;
@@ -392,6 +394,8 @@ void SfxRequest::Record_Impl
     pImpl->pShell = &rSh;
     pImpl->pSlot = &rSlot;
     pImpl->xRecorder = xRecorder;
+    if (!pImpl->xTransform)
+        pImpl->xTransform = util::URLTransformer::create(comphelper::getProcessComponentContext());
     pImpl->aTarget = rSh.GetName();
     pImpl->pViewFrame = pViewFrame;
 }
