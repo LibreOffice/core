@@ -301,6 +301,7 @@ SwSpellPopup::SwSpellPopup(
     {
         m_xPopupMenu->HideItem(m_nCorrectDialogId);
         m_xPopupMenu->HideItem(m_nAddId);
+        m_xPopupMenu->HideItem(m_nAddMenuId);
     }
     sal_uInt16 nItemPos = m_xPopupMenu->GetItemPos(m_nIgnoreWordId);
     m_xPopupMenu->InsertItem(MN_IGNORE_SELECTION, aIgnoreSelection, MenuItemBits::NONE, OString(), nItemPos);
