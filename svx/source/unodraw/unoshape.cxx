@@ -35,7 +35,6 @@
 #include <svx/shapepropertynotifier.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/serviceinfohelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/virdev.hxx>
@@ -3142,25 +3141,15 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         {
         case OBJ_GRUP:
             {
-                static uno::Sequence< OUString > aSvxShape_GroupServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_GroupShape,
-                              sUNO_service_drawing_Shape} );
-                    return tmp;
-                }();
-
+                static const uno::Sequence<OUString> aSvxShape_GroupServices
+                        = { sUNO_service_drawing_GroupShape,
+                            sUNO_service_drawing_Shape };
                 return aSvxShape_GroupServices;
             }
         case OBJ_CUSTOMSHAPE:
             {
-                static uno::Sequence< OUString > aSvxShape_CustomShapeServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                           {sUNO_service_drawing_CustomShape,
+                static const uno::Sequence<OUString> aSvxShape_CustomShapeServices
+                        = { sUNO_service_drawing_CustomShape,
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_CustomShapeProperties,
                             sUNO_service_drawing_FillProperties,
@@ -3174,19 +3163,13 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-                    return tmp;
-                }();
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_CustomShapeServices;
             }
         case OBJ_LINE:
             {
-                static uno::Sequence< OUString > aSvxShape_LineServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_LineShape,
+                static const uno::Sequence<OUString> aSvxShape_LineServices
+                        = { sUNO_service_drawing_LineShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_LineProperties,
@@ -3202,20 +3185,14 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-                    return tmp;
-                }();
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_LineServices;
             }
 
         case OBJ_RECT:
             {
-                static uno::Sequence< OUString > aSvxShape_RectServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_RectangleShape,
+                static const uno::Sequence<OUString> aSvxShape_RectServices
+                        = { sUNO_service_drawing_RectangleShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_FillProperties,
@@ -3230,9 +3207,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-                    return tmp;
-                }();
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_RectServices;
             }
 
@@ -3241,12 +3216,8 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         case OBJ_CARC:
         case OBJ_CCUT:
             {
-                static uno::Sequence< OUString > aSvxShape_CircServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_EllipseShape,
+                static const uno::Sequence<OUString> aSvxShape_CircServices
+                        = { sUNO_service_drawing_EllipseShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_FillProperties,
@@ -3262,22 +3233,15 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-
-                    return tmp;
-                }();
-
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_CircServices;
             }
 
         case OBJ_PATHPLIN:
         case OBJ_PLIN:
             {
-                static uno::Sequence< OUString > aSvxShape_PathServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_PolyLineShape,
+                static const uno::Sequence<OUString> aSvxShape_PathServices
+                        = { sUNO_service_drawing_PolyLineShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_LineProperties,
@@ -3294,20 +3258,15 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-                    return tmp;
-                }();
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_PathServices;
             }
 
         case OBJ_PATHPOLY:
         case OBJ_POLY:
             {
-                static uno::Sequence< OUString > aSvxShape_PolyServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_PolyPolygonShape,
+                static const uno::Sequence<OUString> aSvxShape_PolyServices
+                        = { sUNO_service_drawing_PolyPolygonShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_LineProperties,
@@ -3325,22 +3284,15 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-
-                    return tmp;
-                }();
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_PolyServices;
             }
 
         case OBJ_FREELINE:
         case OBJ_PATHLINE:
             {
-                static uno::Sequence< OUString > aSvxShape_FreeLineServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_OpenBezierShape,
+                static const uno::Sequence<OUString> aSvxShape_FreeLineServices
+                        = { sUNO_service_drawing_OpenBezierShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_LineProperties,
@@ -3358,22 +3310,15 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-
-                    return tmp;
-                }();
-
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_FreeLineServices;
             }
 
         case OBJ_FREEFILL:
         case OBJ_PATHFILL:
             {
-                static uno::Sequence< OUString > aSvxShape_FreeFillServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_ClosedBezierShape,
+                static const uno::Sequence<OUString> aSvxShape_FreeFillServices
+                        = { sUNO_service_drawing_ClosedBezierShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_LineProperties,
@@ -3391,10 +3336,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-
-                    return tmp;
-                }();
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_FreeFillServices;
             }
 
@@ -3402,11 +3344,8 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         case OBJ_TITLETEXT:
         case OBJ_TEXT:
             {
-                static uno::Sequence< OUString > aSvxShape_TextServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_TextShape,
+                static const uno::Sequence<OUString> aSvxShape_TextServices
+                        = { sUNO_service_drawing_TextShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_FillProperties,
@@ -3422,20 +3361,14 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-
-                    return tmp;
-                }();
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_TextServices;
             }
 
         case OBJ_GRAF:
             {
-                static uno::Sequence< OUString > aSvxShape_GrafServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_GraphicObjectShape,
+                static const uno::Sequence<OUString> aSvxShape_GrafServices
+                        = { sUNO_service_drawing_GraphicObjectShape,
 
                             sUNO_service_drawing_Shape,
 
@@ -3449,21 +3382,14 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-
-                    return tmp;
-                }();
+                            sUNO_service_drawing_RotationDescriptor};
                 return aSvxShape_GrafServices;
             }
 
         case OBJ_OLE2:
             {
-                static uno::Sequence< OUString > aSvxShape_Ole2Services = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_OLE2Shape,
+                static const uno::Sequence<OUString> aSvxShape_Ole2Services
+                        = { sUNO_service_drawing_OLE2Shape,
                             sUNO_service_drawing_Shape,
 
                             // #i118485# Added Text, Shadow and Rotation
@@ -3477,21 +3403,14 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-
-                    return tmp;
-                }();
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_Ole2Services;
             }
 
         case OBJ_CAPTION:
             {
-                static uno::Sequence< OUString > aSvxShape_CaptionServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_CaptionShape,
+                static const uno::Sequence<OUString> aSvxShape_CaptionServices
+                        = { sUNO_service_drawing_CaptionShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_FillProperties,
@@ -3507,37 +3426,22 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-
-                    return tmp;
-                }();
-
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_CaptionServices;
             }
 
         case OBJ_PAGE:
             {
-                static uno::Sequence< OUString > aSvxShape_PageServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_PageShape,
-                            sUNO_service_drawing_Shape} );
-
-                    return tmp;
-                }();
-
+                static const uno::Sequence<OUString> aSvxShape_PageServices
+                        = { sUNO_service_drawing_PageShape,
+                            sUNO_service_drawing_Shape };
                 return aSvxShape_PageServices;
             }
 
         case OBJ_MEASURE:
             {
-                static uno::Sequence< OUString > aSvxShape_MeasureServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_MeasureShape,
+                static const uno::Sequence<OUString> aSvxShape_MeasureServices
+                        = { sUNO_service_drawing_MeasureShape,
 
                             sUNO_service_drawing_MeasureProperties,
 
@@ -3555,52 +3459,30 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-
-                    return tmp;
-                }();
-
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_MeasureServices;
             }
 
         case OBJ_FRAME:
             {
-                static uno::Sequence< OUString > aSvxShape_FrameServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_FrameShape,
-                            sUNO_service_drawing_Shape} );
-
-                    return tmp;
-                }();
-
+                static const uno::Sequence<OUString> aSvxShape_FrameServices
+                        = { sUNO_service_drawing_FrameShape,
+                            sUNO_service_drawing_Shape };
                 return aSvxShape_FrameServices;
             }
 
         case OBJ_UNO:
             {
-                static uno::Sequence< OUString > aSvxShape_UnoServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_ControlShape,
-                            sUNO_service_drawing_Shape} );
-
-                    return tmp;
-                }();
+                static const uno::Sequence<OUString> aSvxShape_UnoServices
+                        = { sUNO_service_drawing_ControlShape,
+                            sUNO_service_drawing_Shape };
                 return aSvxShape_UnoServices;
             }
 
         case OBJ_EDGE:
             {
-                static uno::Sequence< OUString > aSvxShape_EdgeServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_ConnectorShape,
+                static const uno::Sequence<OUString> aSvxShape_EdgeServices
+                        = { sUNO_service_drawing_ConnectorShape,
                             sUNO_service_drawing_ConnectorProperties,
 
                             sUNO_service_drawing_Shape,
@@ -3617,24 +3499,14 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor});
-
-                    return tmp;
-                }();
+                            sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_EdgeServices;
             }
         case OBJ_MEDIA:
             {
-                static uno::Sequence< OUString > aSvxShape_MediaServices = [&]()
-                {
-                    uno::Sequence< OUString > tmp;
-
-                    comphelper::ServiceInfoHelper::addToSequence( tmp,
-                            {sUNO_service_drawing_MediaShape,
-                            sUNO_service_drawing_Shape});
-
-                    return tmp;
-                }();
+                static const uno::Sequence<OUString> aSvxShape_MediaServices
+                        = { sUNO_service_drawing_MediaShape,
+                            sUNO_service_drawing_Shape };
                 return aSvxShape_MediaServices;
             }
         }
@@ -3645,15 +3517,9 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         const sal_uInt16 nIdent = GetSdrObject()->GetObjIdentifier();
         OSL_ENSURE( nIdent == OBJ_UNO, "SvxShape::_getSupportedServiceNames: SdrInventor::FmForm, but no UNO object?" );
 #endif
-        static uno::Sequence< OUString > aSvxShape_UnoServices = [&]()
-        {
-            uno::Sequence< OUString > tmp;
-            comphelper::ServiceInfoHelper::addToSequence( tmp,
-                    {sUNO_service_drawing_ControlShape,
-                    sUNO_service_drawing_Shape} );
-
-            return tmp;
-        }();
+        static const uno::Sequence<OUString> aSvxShape_UnoServices
+                = { sUNO_service_drawing_ControlShape,
+                    sUNO_service_drawing_Shape };
         return aSvxShape_UnoServices;
     }
     OSL_FAIL( "SvxShape::_getSupportedServiceNames: could not determine object type!" );
