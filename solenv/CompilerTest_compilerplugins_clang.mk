@@ -20,8 +20,8 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/commaoperator \
     compilerplugins/clang/test/conditionalstring \
     $(if $(filter-out WNT,$(OS)),compilerplugins/clang/test/constfields) \
-    compilerplugins/clang/test/constparams \
     compilerplugins/clang/test/constmethod \
+    compilerplugins/clang/test/constparams \
     compilerplugins/clang/test/consttobool \
     compilerplugins/clang/test/constvars \
     compilerplugins/clang/test/convertlong \
@@ -32,10 +32,9 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/dodgyswitch \
     compilerplugins/clang/test/doubleconvert \
     compilerplugins/clang/test/emptyif \
+    compilerplugins/clang/test/expressionalwayszero \
     compilerplugins/clang/test/external \
     compilerplugins/clang/test/externvar \
-    compilerplugins/clang/test/expressionalwayszero \
-    compilerplugins/clang/test/intvsfloat \
     compilerplugins/clang/test/faileddyncast \
     compilerplugins/clang/test/fakebool \
     compilerplugins/clang/test/finalprotected \
@@ -43,11 +42,12 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/fragiledestructor \
     compilerplugins/clang/test/getstr \
     compilerplugins/clang/test/indentation \
+    compilerplugins/clang/test/intvsfloat \
     compilerplugins/clang/test/logexceptionnicely \
     compilerplugins/clang/test/loopvartoosmall \
-    compilerplugins/clang/test/nullptr \
     compilerplugins/clang/test/mapindex \
     compilerplugins/clang/test/noexceptmove \
+    compilerplugins/clang/test/nullptr \
     compilerplugins/clang/test/oncevar \
     compilerplugins/clang/test/oslendian-1 \
     compilerplugins/clang/test/oslendian-2 \
@@ -67,8 +67,8 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/sallogareas \
     compilerplugins/clang/test/salunicodeliteral \
     compilerplugins/clang/test/selfinit \
-    compilerplugins/clang/test/sequentialassign \
     compilerplugins/clang/test/sequenceloop \
+    compilerplugins/clang/test/sequentialassign \
     compilerplugins/clang/test/shouldreturnbool \
     compilerplugins/clang/test/simplifybool \
     compilerplugins/clang/test/simplifyconstruct \
@@ -91,9 +91,9 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/unoany \
     compilerplugins/clang/test/unoquery \
     compilerplugins/clang/test/unreffun \
-    compilerplugins/clang/test/unusedindex \
     compilerplugins/clang/test/unusedenumconstants \
     compilerplugins/clang/test/unusedfields \
+    compilerplugins/clang/test/unusedindex \
     compilerplugins/clang/test/unusedvariablecheck \
     compilerplugins/clang/test/unusedvariablemore \
     compilerplugins/clang/test/useuniqueptr \
