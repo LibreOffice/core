@@ -22,7 +22,7 @@
 
 /// Finds preprocessor usage which is redundant (only #ifndef for now).
 
-namespace loplugin
+namespace
 {
 struct Entry
 {
@@ -30,10 +30,10 @@ struct Entry
     std::string m_aMacroName;
 };
 
-class RedundantPreprocessor : public clang::PPCallbacks, public Plugin
+class RedundantPreprocessor : public clang::PPCallbacks, public loplugin::Plugin
 {
 public:
-    explicit RedundantPreprocessor(const InstantiationData& data);
+    explicit RedundantPreprocessor(const loplugin::InstantiationData& data);
     virtual void run() override;
     void Ifndef(clang::SourceLocation aLoc, const clang::Token& rMacroNameTok,
                 const clang::MacroDefinition& rMacroDefinition) override;
@@ -51,7 +51,7 @@ private:
     std::vector<Entry> m_aNotDefStack;
 };
 
-RedundantPreprocessor::RedundantPreprocessor(const InstantiationData& data)
+RedundantPreprocessor::RedundantPreprocessor(const loplugin::InstantiationData& data)
     : Plugin(data)
     , m_rPP(compiler.getPreprocessor())
 {
@@ -127,7 +127,7 @@ void RedundantPreprocessor::Endif(clang::SourceLocation /*aLoc*/, clang::SourceL
     }
 }
 
-static Plugin::Registration<RedundantPreprocessor> X("redundantpreprocessor");
+loplugin::Plugin::Registration<RedundantPreprocessor> X("redundantpreprocessor");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

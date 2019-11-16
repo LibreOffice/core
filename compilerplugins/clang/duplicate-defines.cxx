@@ -23,17 +23,17 @@
 /// Finds duplicated preprocessor defines, which generally indicate that some definition
 /// needs to be centralised somewhere.
 
-namespace loplugin
+namespace
 {
 struct Entry
 {
     clang::SourceLocation m_aLoc;
 };
 
-class DuplicateDefines : public clang::PPCallbacks, public Plugin
+class DuplicateDefines : public clang::PPCallbacks, public loplugin::Plugin
 {
 public:
-    explicit DuplicateDefines(const InstantiationData& data);
+    explicit DuplicateDefines(const loplugin::InstantiationData& data);
     virtual void run() override;
     void MacroDefined(const Token& MacroNameTok, const MacroDirective* MD) override;
     void MacroUndefined(const Token& MacroNameTok, const MacroDefinition& MD,
@@ -48,7 +48,7 @@ private:
     std::unordered_map<std::string, Entry> m_aDefMap;
 };
 
-DuplicateDefines::DuplicateDefines(const InstantiationData& data)
+DuplicateDefines::DuplicateDefines(const loplugin::InstantiationData& data)
     : Plugin(data)
     , m_rPP(compiler.getPreprocessor())
 {
@@ -99,7 +99,7 @@ void DuplicateDefines::MacroUndefined(const Token& rMacroNameTok, const MacroDef
     m_aDefMap.erase(aMacroName);
 }
 
-static Plugin::Registration<DuplicateDefines> X("duplicatedefines", false);
+loplugin::Plugin::Registration<DuplicateDefines> X("duplicatedefines", false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
