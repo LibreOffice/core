@@ -199,6 +199,21 @@ void GlyphCache::UncacheFont( FreetypeFont& rFreetypeFont )
     }
 }
 
+void GlyphCache::TryGarbageCollectFont(LogicalFontInstance *pFontInstance)
+{
+    if (maFontList.empty() || !pFontInstance)
+        return;
+    FreetypeFontInstance* pFFI = dynamic_cast<FreetypeFontInstance*>(pFontInstance);
+    if (!pFFI)
+        return;
+    FreetypeFont* pFreetypeFont = pFFI->GetFreetypeFont();
+    if (pFreetypeFont && (pFreetypeFont->GetRefCount() <= 0))
+    {
+        mpCurrentGCFont = pFreetypeFont;
+        GarbageCollect();
+    }
+}
+
 void GlyphCache::GarbageCollect()
 {
     // when current GC font has been destroyed get another one
@@ -236,7 +251,11 @@ void GlyphCache::GarbageCollect()
         if( pFreetypeFont == mpCurrentGCFont )
             mpCurrentGCFont = nullptr;
 
-        maFontList.erase(pFreetypeFont->GetFontInstance());
+#ifndef NDEBUG
+        int nErased =
+#endif
+            maFontList.erase(pFreetypeFont->GetFontInstance());
+        assert(1 == nErased);
     }
 }
 
