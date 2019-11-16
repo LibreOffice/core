@@ -24,6 +24,10 @@
 #include <PhysicalFontFamily.hxx>
 #include <sal/log.hxx>
 
+#if !(defined(_WIN32) || defined(MACOSX) || defined(IOS))
+#include <unx/glyphcache.hxx>
+#endif
+
 size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPattern& rFSD ) const
 {
     return rFSD.hashCode();
@@ -91,7 +95,12 @@ ImplFontCache::ImplFontCache()
 ImplFontCache::~ImplFontCache()
 {
     for (const auto & rLFI : maFontInstanceList)
+    {
+#if !(defined(_WIN32) || defined(MACOSX) || defined(IOS))
+        GlyphCache::GetInstance().TryGarbageCollectFont(rLFI.second.get());
+#endif
         rLFI.second->mpFontCache = nullptr;
+    }
 }
 
 rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFontCollection const * pFontList,
