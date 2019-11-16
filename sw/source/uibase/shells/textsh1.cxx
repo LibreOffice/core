@@ -103,6 +103,8 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/linguistic2/ProofreadingResult.hpp>
+#include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <doc.hxx>
@@ -1437,18 +1439,51 @@ void SwTextShell::Execute(SfxRequest &rReq)
             sApplyText = pItem2->GetValue();
 
         const OUString sIgnoreString("Ignore");
-        //const OUString sIgnoreAllPrefix("IgnoreAll_");
+        const OUString sIgnoreAllPrefix("IgnoreAll_");
         //const OUString sSpellingRule("Spelling");
-        //const OUString sGrammarRule("Grammar");
+        const OUString sGrammarRule("Grammar");
         //const OUString aReplacePrefix("Replace_");
 
         // Ignore the word at the cursor pos
-        //sal_Int32 nPos = 0;
+        sal_Int32 nPos = 0;
         if (sApplyText == sIgnoreString)
         {
             SwPaM *pPaM = rWrtSh.GetCursor();
             if (pPaM)
                 SwEditShell::IgnoreGrammarErrorAt( *pPaM );
+        }
+        // Ignore all similar items as the current word
+        else if (-1 != (nPos = sApplyText.indexOf( sIgnoreAllPrefix )))
+        {
+            sApplyText = sApplyText.replaceAt(nPos, sIgnoreAllPrefix.getLength(), "");
+            if(sApplyText == sGrammarRule)
+            {
+                linguistic2::ProofreadingResult aGrammarCheckRes;
+                sal_Int32 nErrorInResult = -1;
+                uno::Sequence< OUString > aSuggestions;
+                sal_Int32 nErrorPosInText = -1;
+                SwRect aToFill;
+                bool bCorrectionRes = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
+                if(bCorrectionRes)
+                {
+                    try{
+                        uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
+                        aGrammarCheckRes.xProofreader->ignoreRule(
+                            aGrammarCheckRes.aErrors[ nErrorInResult ].aRuleIdentifier,
+                                aGrammarCheckRes.aLocale );
+                        // refresh the layout of the actual paragraph (faster)
+                        SwPaM *pPaM = rWrtSh.GetCursor();
+                        if (pPaM)
+                            SwEditShell::IgnoreGrammarErrorAt( *pPaM );
+                        // refresh the layout of all paragraphs (workaround to launch a dictionary event)
+                        xDictionary->setActive(false);
+                        xDictionary->setActive(true);
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
+                }
+            }
         }
     }
     break;
