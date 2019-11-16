@@ -90,6 +90,19 @@ public:
 
     FreetypeFont*           CacheFont(LogicalFontInstance* pFontInstance);
     void                    UncacheFont( FreetypeFont& );
+
+    /** Try to GarbageCollect an explicit logical font
+     *
+     * This should just be called from the ~ImplFontCache destructor, which holds the mapping of the
+     * FontSelectPattern to the LogicalFontInstance per OutputDevice. All other users should just
+     * call CacheFont and UncacheFont correctly. When the ImplFontCache is destroyed with its
+     * OutputDevice, we can safely garbage collection its unused entries, as these can't be reused.
+     *
+     * It's always safe to call this, as it just ignores the used bytes when considering a font for
+     * garbage collection, which normally keeps unreferenced fonts alive.
+     **/
+    void TryGarbageCollectFont(LogicalFontInstance*);
+
     void                    ClearFontCache();
     void                    ClearFontOptions();
 
