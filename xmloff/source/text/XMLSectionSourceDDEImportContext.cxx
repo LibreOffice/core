@@ -53,6 +53,8 @@ XMLSectionSourceDDEImportContext::~XMLSectionSourceDDEImportContext()
 {
 }
 
+namespace {
+
 enum XMLSectionSourceDDEToken
 {
     XML_TOK_SECTION_DDE_APPLICATION,
@@ -60,6 +62,8 @@ enum XMLSectionSourceDDEToken
     XML_TOK_SECTION_DDE_ITEM,
     XML_TOK_SECTION_IS_AUTOMATIC_UPDATE
 };
+
+}
 
 static const SvXMLTokenMapEntry aSectionSourceDDETokenMap[] =
 {

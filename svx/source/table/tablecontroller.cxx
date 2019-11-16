@@ -88,6 +88,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
 
+namespace {
+
 enum class CellPosFlag  // signals the relative position of a cell to a selection
 {
     NONE   = 0x0000, // not set or inside
@@ -102,6 +104,9 @@ enum class CellPosFlag  // signals the relative position of a cell to a selectio
     Bottom = 0x0040,
     Lower  = 0x0080
 };
+
+}
+
 namespace o3tl
 { template<> struct typed_flags<CellPosFlag> : is_typed_flags<CellPosFlag, 0xff> {}; }
 

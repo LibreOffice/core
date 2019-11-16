@@ -42,6 +42,8 @@ const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 
 using namespace com::sun::star::uno;
 
+namespace {
+
 // Defines - CSV Import Preserve Options
 enum CSVImportOptionsIndex
 {
@@ -58,6 +60,8 @@ enum CSVImportOptionsIndex
     CSVIO_Language,
     CSVIO_PasteSkipEmptyCells
 };
+
+}
 
 const ::std::vector<OUString> CSVImportOptionNames =
 {

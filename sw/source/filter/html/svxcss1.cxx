@@ -170,7 +170,11 @@ static CSS1PropertyEnum const aBorderWidthTable[] =
     { nullptr,                    0   }
 };
 
+namespace {
+
 enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE, CSS1_BS_DOTTED, CSS1_BS_DASHED, CSS1_BS_GROOVE, CSS1_BS_RIDGE, CSS1_BS_INSET, CSS1_BS_OUTSET };
+
+}
 
 static CSS1PropertyEnum const aBorderStyleTable[] =
 {

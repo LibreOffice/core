@@ -2427,6 +2427,8 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+namespace {
+
 enum class FrmValidFlags {
     NONE      = 0x00,
     Left      = 0x01,
@@ -2437,6 +2439,9 @@ enum class FrmValidFlags {
     VInner    = 0x20,
     AllMask   = 0x3f,
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<FrmValidFlags> : is_typed_flags<FrmValidFlags, 0x3f> {};
 }

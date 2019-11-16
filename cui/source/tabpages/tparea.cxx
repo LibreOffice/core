@@ -32,6 +32,8 @@ using namespace com::sun::star;
 
 // static ----------------------------------------------------------------
 
+namespace {
+
 enum FillType
 {
     TRANSPARENT,
@@ -41,6 +43,8 @@ enum FillType
     BITMAP,
     PATTERN
 };
+
+}
 
 const sal_uInt16 SvxAreaTabPage::pAreaRanges[] =
 {

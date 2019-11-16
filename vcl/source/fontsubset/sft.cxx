@@ -54,6 +54,8 @@ static const char * const modextra = "gelf";
 
 /*- private functions, constants and data types */
 
+namespace {
+
 enum PathSegmentType {
     PS_NOOP      = 0,
     PS_MOVETO    = 1,
@@ -61,6 +63,8 @@ enum PathSegmentType {
     PS_CURVETO   = 3,
     PS_CLOSEPATH = 4
 };
+
+}
 
 struct PSPathElement
 {
@@ -1013,6 +1017,8 @@ static void GetNames(TrueTypeFont *t)
     }
 }
 
+namespace {
+
 enum cmapType {
     CMAP_NOT_USABLE           = -1,
     CMAP_MS_Symbol            = 10,
@@ -1023,6 +1029,8 @@ enum cmapType {
     CMAP_MS_Wansung           = 15,
     CMAP_MS_Johab             = 16
 };
+
+}
 
 #define MISSING_GLYPH_INDEX 0
 

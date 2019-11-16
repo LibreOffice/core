@@ -182,6 +182,7 @@ double ImpSvNumberInputScan::StringToDouble( const OUString& rStr, bool bForceFr
     return fNum;
 }
 
+namespace {
 
 /**
  * Splits up the input into numbers and strings for further processing
@@ -208,6 +209,8 @@ enum ScanState  // States of the Turing machine
     SsGetValue  = 2,
     SsGetString = 3
 };
+
+}
 
 bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
                                                    OUString& rSymbol )

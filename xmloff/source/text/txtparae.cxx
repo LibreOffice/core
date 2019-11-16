@@ -355,12 +355,16 @@ static const sal_Char* aParagraphPropertyNamesAuto[] =
     nullptr
 };
 
+namespace {
+
 enum eParagraphPropertyNamesEnumAuto
 {
     NUMBERING_RULES_AUTO = 0,
     PARA_CONDITIONAL_STYLE_NAME_AUTO = 1,
     PARA_STYLE_NAME_AUTO = 2
 };
+
+}
 
 static const sal_Char* aParagraphPropertyNames[] =
 {
@@ -373,6 +377,8 @@ static const sal_Char* aParagraphPropertyNames[] =
     nullptr
 };
 
+namespace {
+
 enum eParagraphPropertyNamesEnum
 {
     NUMBERING_IS_NUMBER = 0,
@@ -382,6 +388,8 @@ enum eParagraphPropertyNamesEnum
     PARA_STYLE_NAME = 4,
     TEXT_SECTION = 5
 };
+
+}
 
 void BoundFrames::Fill(const filter_t& rFilter)
 {

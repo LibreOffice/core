@@ -37,6 +37,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
 
+namespace {
 
 enum SvXMLTokenMapDropAttrs
 {
@@ -45,6 +46,8 @@ enum SvXMLTokenMapDropAttrs
     XML_TOK_DROP_DISTANCE,
     XML_TOK_DROP_STYLE
 };
+
+}
 
 static const SvXMLTokenMapEntry aDropAttrTokenMap[] =
 {

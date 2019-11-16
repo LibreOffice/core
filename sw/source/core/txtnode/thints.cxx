@@ -181,7 +181,12 @@ bool isSplittable(const sal_uInt16 nWhich)
     return false;
 }
 
+namespace {
+
 enum Split_t { FAIL, SPLIT_NEW, SPLIT_OTHER };
+
+}
+
 /**
   Calculate splitting policy for overlapping hints, based on what kind of
   hint is inserted, and what kind of existing hint overlaps.

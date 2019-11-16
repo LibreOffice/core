@@ -1080,6 +1080,8 @@ SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
 {
 }
 
+namespace {
+
 enum class FoundFlags {
     NONE          = 0x0000,
     ClickAction   = 0x0001,
@@ -1093,6 +1095,9 @@ enum class FoundFlags {
     Macro         = 0x0100,
     Library       = 0x0200,
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<FoundFlags> : is_typed_flags<FoundFlags, 0x03ff> {};
 }

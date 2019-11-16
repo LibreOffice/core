@@ -52,11 +52,15 @@ namespace basctl
     typedef ::cppu::WeakComponentImplHelper<   XDocumentEventListener
                                            >   DocumentEventNotifier_Impl_Base;
 
+    namespace {
+
     enum ListenerAction
     {
         RegisterListener,
         RemoveListener
     };
+
+    }
 
     /** impl class for DocumentEventNotifier
     */

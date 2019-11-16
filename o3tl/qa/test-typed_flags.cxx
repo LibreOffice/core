@@ -15,8 +15,11 @@
 
 using namespace ::o3tl;
 
+namespace {
 
 enum class ConfigurationChangedHint { NONE, ONE, TWO };
+
+}
 
 namespace o3tl
 {

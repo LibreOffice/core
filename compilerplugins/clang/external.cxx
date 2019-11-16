@@ -10,6 +10,9 @@
 
 #include <algorithm>
 #include <cassert>
+#include <iterator>
+#include <list>
+#include <set>
 
 #include "clang/Sema/SemaDiagnostic.h"
 
@@ -45,6 +48,79 @@ bool isInjectedFunction(FunctionDecl const* decl)
     return true;
 }
 
+// Whether type1 mentions type2 (in a way relevant for argument-dependent name lookup):
+bool mentions(QualType type1, QualType type2)
+{
+    auto t1 = type1;
+    for (;;)
+    {
+        if (auto const t2 = t1->getAs<ReferenceType>())
+        {
+            t1 = t2->getPointeeType();
+        }
+        else if (auto const t3 = t1->getAs<PointerType>())
+        {
+            t1 = t3->getPointeeType();
+        }
+        else if (auto const t4 = t1->getAsArrayTypeUnsafe())
+        {
+            t1 = t4->getElementType();
+        }
+        else
+        {
+            break;
+        }
+    }
+    if (t1.getCanonicalType().getTypePtr() == type2.getTypePtr())
+    {
+        return true;
+    }
+    if (auto const t2 = t1->getAs<TemplateSpecializationType>())
+    {
+        for (auto a = t2->begin(); a != t2->end(); ++a)
+        {
+            if (a->getKind() != TemplateArgument::Type)
+            {
+                continue;
+            }
+            if (mentions(a->getAsType(), type2))
+            {
+                return true;
+            }
+        }
+        auto const t3 = t2->desugar();
+        if (t3.getTypePtr() == t2)
+        {
+            return false;
+        }
+        return mentions(t3, type2);
+    }
+    if (auto const t2 = t1->getAs<FunctionProtoType>())
+    {
+        if (mentions(t2->getReturnType(), type2))
+        {
+            return true;
+        }
+        for (auto t3 = t2->param_type_begin(); t3 != t2->param_type_end(); ++t3)
+        {
+            if (mentions(*t3, type2))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    if (auto const t2 = t1->getAs<MemberPointerType>())
+    {
+        if (t2->getClass()->getUnqualifiedDesugaredType() == type2.getTypePtr())
+        {
+            return true;
+        }
+        return mentions(t2->getPointeeType(), type2);
+    }
+    return false;
+}
+
 class External : public loplugin::FilteringPlugin<External>
 {
 public:
@@ -55,10 +131,11 @@ public:
 
     void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-    bool VisitTagDecl(TagDecl const* decl)
+    bool VisitTagDecl(TagDecl* decl)
     {
         /*TODO:*/
-        return true; // in general, moving classes or enumerations into an unnamed namespace can break ADL
+        if (!isa<EnumDecl>(decl))
+            return true; // in general, moving classes into an unnamed namespace can break ADL
         if (isa<ClassTemplateSpecializationDecl>(decl))
         {
             return true;
@@ -102,7 +179,7 @@ public:
         return handleDeclaration(decl);
     }
 
-    bool VisitFunctionDecl(FunctionDecl const* decl)
+    bool VisitFunctionDecl(FunctionDecl* decl)
     {
         if (isa<CXXMethodDecl>(decl))
         {
@@ -166,7 +243,7 @@ public:
         return handleDeclaration(decl);
     }
 
-    bool VisitVarDecl(VarDecl const* decl)
+    bool VisitVarDecl(VarDecl* decl)
     {
         if (decl->isStaticDataMember())
         {
@@ -187,7 +264,7 @@ public:
         return handleDeclaration(decl);
     }
 
-    bool VisitClassTemplateDecl(ClassTemplateDecl const* decl)
+    bool VisitClassTemplateDecl(ClassTemplateDecl* decl)
     {
         /*TODO:*/
         return true; // in general, moving classes or enumerations into an unnamed namespace can break ADL
@@ -202,7 +279,7 @@ public:
         return handleDeclaration(decl);
     }
 
-    bool VisitFunctionTemplateDecl(FunctionTemplateDecl const* decl)
+    bool VisitFunctionTemplateDecl(FunctionTemplateDecl* decl)
     {
         if (!decl->isThisDeclarationADefinition())
         {
@@ -219,7 +296,7 @@ public:
         return handleDeclaration(decl);
     }
 
-    bool VisitVarTemplateDecl(VarTemplateDecl const* decl)
+    bool VisitVarTemplateDecl(VarTemplateDecl* decl)
     {
         if (!decl->isThisDeclarationADefinition())
         {
@@ -243,7 +320,149 @@ private:
         }
     }
 
-    bool handleDeclaration(NamedDecl const* decl)
+    void computeAffectedTypes(Decl const* decl, std::vector<QualType>* affected)
+    {
+        assert(affected != nullptr);
+        if (auto const d = dyn_cast<EnumDecl>(decl))
+        {
+            affected->push_back(compiler.getASTContext().getEnumType(d));
+        }
+        else
+        {
+            CXXRecordDecl const* rec;
+            if (auto const d = dyn_cast<ClassTemplateDecl>(decl))
+            {
+                rec = d->getTemplatedDecl();
+            }
+            else
+            {
+                rec = cast<CXXRecordDecl>(decl);
+            }
+            affected->push_back(compiler.getASTContext().getRecordType(rec));
+            for (auto d = rec->decls_begin(); d != rec->decls_end(); ++d)
+            {
+                if (*d != (*d)->getCanonicalDecl())
+                {
+                    continue;
+                }
+                if (isa<TagDecl>(*d) || isa<ClassTemplateDecl>(*d))
+                {
+                    if (auto const d1 = dyn_cast<RecordDecl>(*d))
+                    {
+                        if (d1->isInjectedClassName())
+                        {
+                            continue;
+                        }
+                    }
+                    computeAffectedTypes(*d, affected);
+                }
+            }
+        }
+    }
+
+    void reportAssociatingFunctions(std::vector<QualType> const& affected, Decl* decl)
+    {
+        auto c = decl->getDeclContext();
+        while (isa<LinkageSpecDecl>(c) || c->isInlineNamespace())
+        {
+            c = c->getParent();
+        }
+        assert(c->isTranslationUnit() || c->isNamespace());
+        SmallVector<DeclContext*, 2> parts;
+        c->collectAllContexts(parts);
+        std::list<DeclContext const*> ctxs;
+        std::copy(parts.begin(), parts.end(),
+                  std::back_insert_iterator<std::list<DeclContext const*>>(ctxs));
+        if (auto const d = dyn_cast<CXXRecordDecl>(decl))
+        {
+            // To find friend functions declared in the class:
+            ctxs.push_back(d);
+        }
+        std::set<FunctionDecl const*> fdecls; // to report every function just once
+        for (auto ctx = ctxs.begin(); ctx != ctxs.end(); ++ctx)
+        {
+            for (auto i = (*ctx)->decls_begin(); i != (*ctx)->decls_end(); ++i)
+            {
+                auto d = *i;
+                if (auto const d1 = dyn_cast<LinkageSpecDecl>(d))
+                {
+                    ctxs.push_back(d1);
+                    continue;
+                }
+                if (auto const d1 = dyn_cast<NamespaceDecl>(d))
+                {
+                    if (d1->isInline())
+                    {
+                        ctxs.push_back(d1);
+                    }
+                    continue;
+                }
+                if (auto const d1 = dyn_cast<FriendDecl>(d))
+                {
+                    d = d1->getFriendDecl();
+                }
+                FunctionDecl const* f;
+                if (auto const d1 = dyn_cast<FunctionTemplateDecl>(d))
+                {
+                    f = d1->getTemplatedDecl();
+                }
+                else
+                {
+                    f = dyn_cast<FunctionDecl>(d);
+                    if (f == nullptr)
+                    {
+                        continue;
+                    }
+                }
+                if (!fdecls.insert(f->getCanonicalDecl()).second)
+                {
+                    continue;
+                }
+                if (isa<CXXMethodDecl>(f))
+                {
+                    continue;
+                }
+                for (auto const t : affected)
+                {
+                    auto const tc = t.getCanonicalType();
+                    for (auto p = f->param_begin(); p != f->param_end(); ++p)
+                    {
+                        if (mentions((*p)->getType(), tc))
+                        {
+                            report(DiagnosticsEngine::Note,
+                                   "a %select{function|function template|function template "
+                                   "specialization}0 associating %1 is declared here",
+                                   f->getLocation())
+                                << (f->isFunctionTemplateSpecialization()
+                                        ? 2
+                                        : f->getDescribedFunctionTemplate() != nullptr ? 1 : 0)
+                                << t << f->getSourceRange();
+                            for (auto f1 = f->redecls_begin(); f1 != f->redecls_end(); ++f1)
+                            {
+                                if (*f1 == f)
+                                {
+                                    continue;
+                                }
+                                report(DiagnosticsEngine::Note, "another declaration is here",
+                                       f1->getLocation())
+                                    << f1->getSourceRange();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void reportAssociatingFunctions(Decl* decl)
+    {
+        std::vector<QualType> affected; // enum/class/class template + recursively affected members
+        computeAffectedTypes(decl, &affected);
+        reportAssociatingFunctions(affected, decl);
+    }
+
+    bool handleDeclaration(NamedDecl* decl)
     {
         if (ignoreLocation(decl))
         {
@@ -363,6 +582,10 @@ private:
         if (auto const d = dyn_cast<VarTemplateDecl>(decl))
         {
             reportSpecializations(d->specializations());
+        }
+        if (isa<TagDecl>(decl) || isa<ClassTemplateDecl>(decl))
+        {
+            reportAssociatingFunctions(decl);
         }
         return true;
     }

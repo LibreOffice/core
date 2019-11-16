@@ -39,6 +39,8 @@ using namespace ::com::sun::star;
 
 using namespace ::xmloff::token;
 
+namespace {
+
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_GRADIENT_NAME,
@@ -51,6 +53,8 @@ enum SvXMLTokenMapAttrs
     XML_TOK_GRADIENT_ANGLE,
     XML_TOK_GRADIENT_BORDER
 };
+
+}
 
 SvXMLEnumMapEntry<awt::GradientStyle> const pXML_GradientStyle_Enum[] =
 {

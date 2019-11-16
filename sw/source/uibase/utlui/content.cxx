@@ -821,6 +821,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
     m_bDataValid = true;
 }
 
+namespace {
+
 enum STR_CONTEXT_IDX
 {
     IDX_STR_OUTLINE_LEVEL = 0,
@@ -837,6 +839,8 @@ enum STR_CONTEXT_IDX
     IDX_STR_DELETE_ENTRY = 11,
     IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY = 12
 };
+
+}
 
 static const char* STR_CONTEXT_ARY[] =
 {

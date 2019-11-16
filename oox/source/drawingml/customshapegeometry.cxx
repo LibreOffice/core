@@ -39,6 +39,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
+namespace {
+
 enum FormularCommand
 {
     FC_MULDIV = 0,
@@ -60,6 +62,9 @@ enum FormularCommand
     FC_TAN,
     FC_VAL
 };
+
+}
+
 struct FormularCommandNameTable
 {
     const char*     pS;

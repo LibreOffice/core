@@ -33,11 +33,16 @@ using namespace com::sun::star;
 // Declaration and initialization of a map from service names to locally
 // unique factory identifiers.
 
+namespace {
+
 enum FactoryId
 {
     SdDrawingDocumentFactoryId,
     SdPresentationDocumentFactoryId,
 };
+
+}
+
 typedef std::unordered_map<OUString, FactoryId> FactoryMap;
 
 namespace {

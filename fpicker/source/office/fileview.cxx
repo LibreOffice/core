@@ -82,6 +82,8 @@ using ::svt::FolderDescriptor;
 
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reset
 
+namespace {
+
 enum class FileViewFlags
 {
     NONE               = 0x00,
@@ -89,6 +91,9 @@ enum class FileViewFlags
     SHOW_TYPE          = 0x04,
     SHOW_NONE          = 0x20,
 };
+
+}
+
 namespace o3tl
 {
     template<> struct typed_flags<FileViewFlags> : is_typed_flags<FileViewFlags, 0x26> {};

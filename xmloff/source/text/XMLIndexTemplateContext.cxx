@@ -185,7 +185,7 @@ void XMLIndexTemplateContext::EndElement()
     }
 }
 
-
+namespace {
 /// template token types; used for aTokenTypeMap parameter
 enum TemplateTokenType
 {
@@ -199,6 +199,7 @@ enum TemplateTokenType
     XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
 };
 
+}
 
 SvXMLEnumMapEntry<TemplateTokenType> const aTemplateTokenTypeMap[] =
 {

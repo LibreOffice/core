@@ -23,6 +23,8 @@
 #include <osl/diagnose.h>
 #include <vcl/outdev.hxx>
 
+namespace {
+
 enum ScPreviewLocationType
 {
     SC_PLOC_CELLRANGE,
@@ -35,6 +37,8 @@ enum ScPreviewLocationType
     SC_PLOC_NOTEMARK,
     SC_PLOC_NOTETEXT
 };
+
+}
 
 struct ScPreviewLocationEntry
 {

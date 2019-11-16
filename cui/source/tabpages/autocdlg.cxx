@@ -321,6 +321,8 @@ public:
 /*                                                                   */
 /*********************************************************************/
 
+namespace {
+
 enum OfaAutoFmtOptions
 {
     USE_REPLACE_TABLE,
@@ -342,6 +344,8 @@ enum OfaAutoFmtOptions
     REPLACE_BULLETS,
     MERGE_SINGLE_LINE_PARA
 };
+
+}
 
 OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage(weld::Container* pPage, weld::DialogController* pController,
                                                  const SfxItemSet& rSet )
@@ -1516,11 +1520,15 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, weld::Entry&, rEdt, void)
     }
 }
 
+namespace {
+
 enum OfaQuoteOptions
 {
     ADD_NONBRK_SPACE,
     REPLACE_1ST
 };
+
+}
 
 void OfaQuoteTabPage::CreateEntry(weld::TreeView& rCheckLB, const OUString& rTxt, sal_uInt16 nCol, sal_uInt16 nTextCol)
 {

@@ -147,6 +147,8 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, "ScCellFieldsObj", "com.sun.star.text.TextFields" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, "ScHeaderFieldsObj", "com.sun.star.text.TextFields" )
 
+namespace {
+
 enum ScUnoCollectMode
 {
     SC_UNO_COLLECT_NONE,
@@ -154,6 +156,8 @@ enum ScUnoCollectMode
     SC_UNO_COLLECT_FINDINDEX,
     SC_UNO_COLLECT_FINDPOS
 };
+
+}
 
 /**
  * This class exists solely to allow searching through field items.  TODO:

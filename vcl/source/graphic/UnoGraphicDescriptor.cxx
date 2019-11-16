@@ -32,6 +32,8 @@
 #include <vcl/svapp.hxx>
 #include <memory>
 
+namespace {
+
 enum class UnoGraphicProperty
 {
       GraphicType = 1
@@ -46,6 +48,7 @@ enum class UnoGraphicProperty
     , OriginURL = 10
 };
 
+}
 
 using namespace ::com::sun::star;
 

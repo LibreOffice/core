@@ -192,6 +192,8 @@ public:
     virtual void EndElement() override;
 };
 
+namespace {
+
 enum SvXMLStyleTokens
 {
     XML_TOK_STYLE_TEXT,
@@ -264,6 +266,7 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_CALENDAR
 };
 
+}
 
 //  standard colors
 

@@ -194,12 +194,14 @@ namespace comphelper
         MapData             m_aData;
     };
 
+    namespace {
 
     enum EnumerationType
     {
         eKeys, eValues, eBoth
     };
 
+    }
 
     class MapEnumerator final
     {

@@ -38,7 +38,6 @@ using namespace com::sun::star;
 namespace {
     //global
     std::weak_ptr<SvtHelpOptions_Impl> g_pHelpOptions;
-}
 
 enum class HelpProperty
 {
@@ -49,6 +48,8 @@ enum class HelpProperty
     StyleSheet      = 4,
     OfflineHelpPopUp = 5
 };
+
+}
 
 class SvtHelpOptions_Impl : public utl::ConfigItem
 {

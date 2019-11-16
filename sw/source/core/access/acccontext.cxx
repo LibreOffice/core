@@ -113,8 +113,12 @@ const SwCursorShell* SwAccessibleContext::GetCursorShell() const
     return dynamic_cast<const SwCursorShell*>( pViewShell);
 }
 
+namespace {
+
 enum class Action { NONE, SCROLLED, SCROLLED_WITHIN,
                           SCROLLED_IN, SCROLLED_OUT };
+
+}
 
 void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
                                             const SwRect& rOldVisArea )

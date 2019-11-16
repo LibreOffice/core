@@ -39,6 +39,8 @@ using namespace ::com::sun::star;
 
 using namespace ::xmloff::token;
 
+namespace {
+
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_HATCH_NAME,
@@ -49,6 +51,8 @@ enum SvXMLTokenMapAttrs
     XML_TOK_HATCH_ROTATION,
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
+
+}
 
 SvXMLEnumMapEntry<drawing::HatchStyle> const pXML_HatchStyle_Enum[] =
 {

@@ -1626,6 +1626,8 @@ namespace
     }
 }
 
+namespace {
+
 enum wwTableSprm
 {
     sprmNil,
@@ -1636,6 +1638,8 @@ enum wwTableSprm
     sprmTTableHeader, sprmTDxaGapHalf, sprmTTableBorders, sprmTTableBorders90,
     sprmTDefTableNewShd, sprmTCellPadding, sprmTCellPaddingDefault
 };
+
+}
 
 static wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
 {

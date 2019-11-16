@@ -944,7 +944,11 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
     }
 }
 
+namespace {
+
 enum Result { R_NOTHING, R_OVERFLOW, R_SUCCESS };
+
+}
 
 static Result
 readUnsignedNumber(const OUString & rString,

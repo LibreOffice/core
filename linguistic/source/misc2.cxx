@@ -30,6 +30,8 @@
 
 using namespace com::sun::star;
 
+namespace {
+
 /// Flags to be used with the multi-path related functions
 /// @see GetDictionaryPaths
 enum class DictionaryPathFlags
@@ -38,6 +40,9 @@ enum class DictionaryPathFlags
     INTERNAL  = 0x01,
     USER      = 0x02,
 };
+
+}
+
 namespace o3tl
 {
     template<> struct typed_flags<DictionaryPathFlags> : is_typed_flags<DictionaryPathFlags, 0x03> {};

@@ -191,7 +191,11 @@ std::ostream &operator <<(std::ostream& s, const SwPosition& position)
     return s << "SwPosition (node " << position.nNode.GetIndex() << ", offset " << position.nContent.GetIndex() << ")";
 }
 
+namespace {
+
 enum CHKSECTION { Chk_Both, Chk_One, Chk_None };
+
+}
 
 static CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode& rEndNd )
 {

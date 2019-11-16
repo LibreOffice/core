@@ -43,6 +43,8 @@ using namespace ::com::sun::star::util;
 
 namespace validation
 {
+    namespace {
+
     // the states of our automat.
     enum State
     {
@@ -58,6 +60,8 @@ namespace validation
 
         END                 // reached the end of the string
     };
+
+    }
 
     // a row in the transition table (means the set of states to be reached from a given state)
     typedef ::std::map< sal_Unicode, State >        StateTransitions;

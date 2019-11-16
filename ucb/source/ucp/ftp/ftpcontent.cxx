@@ -219,6 +219,8 @@ ResultSetBase* ResultSetFactory::createResultSet()
 
 // XCommandProcessor methods.
 
+namespace {
+
 enum ACTION { NOACTION,
               THROWAUTHENTICATIONREQUEST,
               THROWACCESSDENIED,
@@ -227,6 +229,8 @@ enum ACTION { NOACTION,
               THROWQUOTE,
               THROWNOFILE,
               THROWGENERAL };
+
+}
 
 // virtual
 Any SAL_CALL FTPContent::execute( const Command& aCommand,

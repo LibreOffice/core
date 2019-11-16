@@ -26,6 +26,8 @@
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
 
+namespace {
+
 enum GIFAction
 {
     GLOBAL_HEADER_READING,
@@ -44,6 +46,8 @@ enum ReadState
     GIFREAD_ERROR,
     GIFREAD_NEED_MORE
 };
+
+}
 
 class GIFLZWDecompressor;
 

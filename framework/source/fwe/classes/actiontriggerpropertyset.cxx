@@ -33,6 +33,8 @@ using namespace com::sun::star::awt;
 
 //struct SAL_DLLPUBLIC_IMPORT ::cppu::OBroadcastHelperVar< OMultiTypeInterfaceContainerHelper, OMultiTypeInterfaceContainerHelper::keyType >;
 
+namespace {
+
 // Handles for properties
 // (PLEASE SORT THIS FIELD, IF YOU ADD NEW PROPERTIES!)
 // We use an enum to define these handles, to use all numbers from 0 to nn and
@@ -47,6 +49,8 @@ enum EPROPERTIES
     HANDLE_TEXT,
     PROPERTYCOUNT
 };
+
+}
 
 namespace framework
 {

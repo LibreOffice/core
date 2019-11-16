@@ -66,8 +66,11 @@ using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 using namespace cppu;
 
+namespace {
+
 enum class SvxXMLTableImportContextEnum { Color, Marker, Dash, Hatch, Gradient, Bitmap };
 
+}
 
 class SvxXMLTableImportContext : public SvXMLImportContext
 {

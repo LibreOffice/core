@@ -186,6 +186,8 @@ void SdXMLImplSetEffect( AnimationEffect eEffect, XMLEffect& eKind, XMLEffectDir
     bIn = rEffect.mbIn;
 }
 
+namespace {
+
 enum XMLActionKind
 {
     XMLE_SHOW,
@@ -193,6 +195,8 @@ enum XMLActionKind
     XMLE_DIM,
     XMLE_PLAY
 };
+
+}
 
 struct XMLEffectHint
 {

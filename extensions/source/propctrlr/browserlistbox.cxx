@@ -59,12 +59,16 @@ namespace pcr
 
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
 
+    namespace {
+
     enum ControlEventType
     {
         FOCUS_GAINED,
         VALUE_CHANGED,
         ACTIVATE_NEXT
     };
+
+    }
 
     struct ControlEvent : public ::comphelper::AnyEvent
     {

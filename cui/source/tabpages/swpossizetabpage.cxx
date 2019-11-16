@@ -41,7 +41,11 @@ using namespace ::com::sun::star::text;
 
 #define SwFPos SvxSwFramePosString
 
+namespace {
+
 enum class LB;
+
+}
 
 struct FrmMap
 {
@@ -63,6 +67,8 @@ struct StringIdPair_Impl
     SvxSwFramePosString::StringId eHori;
     SvxSwFramePosString::StringId eVert;
 };
+
+namespace {
 
 enum class LB {
     NONE                = 0x000000,
@@ -96,6 +102,9 @@ enum class LB {
 
     LAST = VertLine
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<LB> : is_typed_flags<LB, 0x0fffff> {};
 }

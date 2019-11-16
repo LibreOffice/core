@@ -154,6 +154,8 @@ SmPrintUIOptions::SmPrintUIOptions()
 
 // class SmModel
 
+namespace {
+
 enum SmModelPropertyHandles
 {
     HANDLE_FORMULA,
@@ -224,6 +226,8 @@ enum SmModelPropertyHandles
     HANDLE_BASELINE,
     HANDLE_INTEROP_GRAB_BAG,
 };
+
+}
 
 static rtl::Reference<PropertySetInfo> lcl_createModelPropertyInfo ()
 {

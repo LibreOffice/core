@@ -164,6 +164,8 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeTokenMap()
     return *mpAnimationNodeTokenMap;
 }
 
+namespace {
+
 enum AnimationNodeAttributes
 {
     ANA_Begin,
@@ -216,6 +218,8 @@ enum AnimationNodeAttributes
     ANA_Command,
     ANA_Volume
 };
+
+}
 
 const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenMap()
 {

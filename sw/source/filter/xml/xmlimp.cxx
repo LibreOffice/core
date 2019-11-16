@@ -104,6 +104,8 @@ using namespace ::com::sun::star::xforms;
 using namespace ::xmloff::token;
 using namespace ::std;
 
+namespace {
+
 enum SwXMLDocTokens
 {
     XML_TOK_DOC_FONTDECLS,
@@ -116,6 +118,8 @@ enum SwXMLDocTokens
     XML_TOK_DOC_SETTINGS,
     XML_TOK_DOC_XFORMS,
 };
+
+}
 
 static const SvXMLTokenMapEntry aDocTokenMap[] =
 {

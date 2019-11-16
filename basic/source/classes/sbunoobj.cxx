@@ -1488,11 +1488,17 @@ static void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, s
     }
 
 }
+
+namespace {
+
 enum class INVOKETYPE
 {
    GetProp = 0,
    Func
 };
+
+}
+
 static Any invokeAutomationMethod( const OUString& Name, Sequence< Any > const & args, SbxArray* pParams, sal_uInt32 nParamCount, Reference< XInvocation > const & rxInvocation, INVOKETYPE invokeType )
 {
     Sequence< sal_Int16 > OutParamIndex;

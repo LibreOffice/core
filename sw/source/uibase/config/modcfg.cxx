@@ -359,6 +359,8 @@ void SwRevisionConfig::Load()
     }
 }
 
+namespace {
+
 enum InsertConfigProp
 {
     INS_PROP_TABLE_HEADER = 0,
@@ -456,6 +458,9 @@ enum InsertConfigProp
     INS_PROP_CAP_OBJECT_OLEMISC_CHARACTERSTYLE,         //92
     INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES        //93
 };
+
+}
+
 const Sequence<OUString>& SwInsertConfig::GetPropertyNames() const
 {
     static Sequence<OUString> aNames

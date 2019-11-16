@@ -43,6 +43,8 @@
 #include <oox/token/properties.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+namespace {
+
 enum class FuncFlags : sal_uInt16 {
     NONE              = 0x0000,
     VOLATILE          = 0x0001,   /// Result is volatile (e.g. NOW() function).
@@ -64,6 +66,9 @@ enum class FuncFlags : sal_uInt16 {
     INTERNAL          = 0x2000,   /// Function is internal in Calc.
     EUROTOOL          = 0x4000,   /// function of euro tool lib, FUNCLIB_EUROTOOL
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<FuncFlags> : is_typed_flags<FuncFlags, 0x77ff> {};
 }

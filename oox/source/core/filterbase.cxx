@@ -111,8 +111,6 @@ DocumentOpenedGuard::~DocumentOpenedGuard()
         rUrlPool.maUrls.erase( maUrl );
 }
 
-} // namespace
-
 /** Specifies whether this filter is an import or export filter. */
 enum FilterDirection
 {
@@ -120,6 +118,8 @@ enum FilterDirection
     FILTERDIRECTION_IMPORT,
     FILTERDIRECTION_EXPORT
 };
+
+} // namespace
 
 struct FilterBaseImpl
 {

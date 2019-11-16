@@ -34,11 +34,15 @@ namespace utl
 
     //= NodeValueAccessor
 
+    namespace {
+
     enum class LocationType
     {
         SimplyObjectInstance,
         Unbound
     };
+
+    }
 
     struct NodeValueAccessor
     {

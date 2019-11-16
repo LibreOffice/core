@@ -67,6 +67,8 @@ using ::com::sun::star::uno::Reference;
 
 namespace sd { namespace sidebar {
 
+namespace {
+
 enum eFillStyle
 {
     NONE,
@@ -76,6 +78,8 @@ enum eFillStyle
     BITMAP,
     PATTERN
 };
+
+}
 
 SlideBackground::SlideBackground(
     Window * pParent,

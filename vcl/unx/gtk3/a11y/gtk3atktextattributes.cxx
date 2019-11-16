@@ -73,6 +73,8 @@ static AtkTextAttribute atk_text_attribute_mm_to_pixel_ratio = ATK_TEXT_ATTR_INV
   *                        and re-arrange the enum values accordingly.
   */
 
+namespace {
+
 enum ExportedAttribute
 {
     TEXT_ATTRIBUTE_BACKGROUND_COLOR = 0,
@@ -108,6 +110,8 @@ enum ExportedAttribute
     TEXT_ATTRIBUTE_WRITING_MODE,
     TEXT_ATTRIBUTE_LAST
 };
+
+}
 
 static const char * ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
 {

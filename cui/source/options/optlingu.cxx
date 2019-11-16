@@ -172,6 +172,8 @@ DicUserData::DicUserData(
     Entry IDs for options listbox of dialog
 --------------------------------------------------*/
 
+namespace {
+
 enum EID_OPTIONS
 {
     EID_SPELL_AUTO,
@@ -185,6 +187,8 @@ enum EID_OPTIONS
     EID_HYPH_AUTO,
     EID_HYPH_SPECIAL
 };
+
+}
 
 //! this array must have an entry for every value of EID_OPTIONS.
 //  It is used to get the respective property name.

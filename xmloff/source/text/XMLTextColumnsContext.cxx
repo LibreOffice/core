@@ -40,6 +40,8 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
+namespace {
+
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_COLUMN_WIDTH,
@@ -55,6 +57,8 @@ enum SvXMLSepTokenMapAttrs
     XML_TOK_COLUMN_SEP_ALIGN,
     XML_TOK_COLUMN_SEP_STYLE
 };
+
+}
 
 static const SvXMLTokenMapEntry aColAttrTokenMap[] =
 {

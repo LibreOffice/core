@@ -1041,6 +1041,7 @@ bool XMLSectionExport::ExportIndexTemplate(
     return true;
 }
 
+namespace {
 
 enum TemplateTypeEnum
 {
@@ -1069,6 +1070,8 @@ enum TemplateParamEnum
     TOK_TPARAM_CHAPTER_LEVEL,//i53420
     TOK_TPARAM_BIBLIOGRAPHY_DATA
 };
+
+}
 
 SvXMLEnumStringMapEntry<TemplateTypeEnum> const aTemplateTypeMap[] =
 {

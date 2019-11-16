@@ -26,6 +26,8 @@
 #include <comphelper/syntaxhighlight.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+namespace {
+
 // Flags for character properties
 enum class CharFlags {
     StartIdentifier   = 0x0001,
@@ -39,6 +41,9 @@ enum class CharFlags {
     Space             = 0x0100,
     EOL               = 0x0200
 };
+
+}
+
 namespace o3tl {
     template<> struct typed_flags<CharFlags> : is_typed_flags<CharFlags, 0x03ff> {};
 }
