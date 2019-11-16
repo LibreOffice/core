@@ -718,22 +718,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     {
         uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
         if (m_bGrammarResults) {
-            try
-            {
-                m_xGrammarResult.xProofreader->ignoreRule(
-                    m_xGrammarResult.aErrors[ m_nGrammarError ].aRuleIdentifier,
-                        m_xGrammarResult.aLocale );
-                // refresh the layout of the actual paragraph (faster)
-                SwPaM *pPaM = m_pSh->GetCursor();
-                if (pPaM)
-                    SwEditShell::IgnoreGrammarErrorAt( *pPaM );
-                // refresh the layout of all paragraphs (workaround to launch a dictionary event)
-                xDictionary->setActive(false);
-                xDictionary->setActive(true);
-            }
-            catch( const uno::Exception& )
-            {
-            }
+            SfxStringItem aIgnoreString(FN_PARAM_1, "IgnoreAll_Grammar");
+            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_APPLY_SPELLCHECKING, SfxCallMode::SYNCHRON, { &aIgnoreString });
         } else {
             OUString sWord(m_xSpellAlt->getWord());
             linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic( xDictionary,
