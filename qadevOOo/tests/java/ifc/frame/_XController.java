@@ -67,7 +67,7 @@ public class _XController extends MultiMethodTest {
     * previously obtained object relation 'Frame'.
     * The following method tests are to be completed successfully before:
     * <ul>
-    *  <li> <code> attachFrame() </code> : attachs frame obtained object
+    *  <li> <code> attachFrame() </code> : attaches frame obtained object
     * relation 'Frame' </li>
     * </ul>
     */
