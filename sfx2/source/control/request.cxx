@@ -394,7 +394,7 @@ void SfxRequest::Record_Impl
     pImpl->pShell = &rSh;
     pImpl->pSlot = &rSlot;
     pImpl->xRecorder = xRecorder;
-    if (!pImpl->xTransform)
+    if (pImpl->xRecorder && !pImpl->xTransform)
         pImpl->xTransform = util::URLTransformer::create(comphelper::getProcessComponentContext());
     pImpl->aTarget = rSh.GetName();
     pImpl->pViewFrame = pViewFrame;
