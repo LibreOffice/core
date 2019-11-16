@@ -2783,7 +2783,18 @@ void DomainMapper_Impl::PopShapeContext()
 
         // Relative width calculations deferred until section's margins are defined.
         // Being cautious: only deferring undefined/minimum-width shapes in order to avoid causing potential regressions
-        if( xShape->getSize().Width <= 2 )
+        css::awt::Size aShapeSize;
+        try
+        {
+            aShapeSize = xShape->getSize();
+        }
+        catch (const css::uno::RuntimeException& e)
+        {
+            // May happen e.g. when text frame has no frame format
+            // See sw/qa/extras/ooxmlimport/data/n779627.docx
+            SAL_WARN("writerfilter.dmapper", "getSize failed. " << e.Message);
+        }
+        if( aShapeSize.Width <= 2 )
         {
             const uno::Reference<beans::XPropertySet> xShapePropertySet( xShape, uno::UNO_QUERY );
             SectionPropertyMap* pSectionContext = GetSectionContext();
