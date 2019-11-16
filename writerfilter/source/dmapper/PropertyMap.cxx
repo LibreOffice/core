@@ -1638,7 +1638,16 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             if ( xShapePropertySet->getPropertySetInfo()->hasPropertyByName(sPropRelativeWidth) )
             {
                 sal_uInt16 nPercent = 0;
-                xShapePropertySet->getPropertyValue( sPropRelativeWidth ) >>= nPercent;
+                try
+                {
+                    xShapePropertySet->getPropertyValue(sPropRelativeWidth) >>= nPercent;
+                }
+                catch (const css::uno::RuntimeException& e)
+                {
+                    // May happen e.g. when text frame has no frame format
+                    // See sw/qa/extras/ooxmlimport/data/n779627.docx
+                    SAL_WARN("writerfilter", "Getting relative width failed. " << e.Message);
+                }
                 if ( nPercent )
                 {
                     const sal_Int32 nWidth = nParagraphWidth * nPercent / 100;

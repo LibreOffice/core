@@ -533,83 +533,93 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
 
             if ( bExtendedInfo )
             {
-                sal_uInt8 cByte = 0;
+                do {
+                    sal_uInt8 cByte = 0;
 
-                // IHDR-Chunk
-                rStm.SeekRel( 8 );
+                    // IHDR-Chunk
+                    rStm.SeekRel( 8 );
 
-                // width
-                rStm.ReadUInt32( nTemp32 );
-                aPixSize.setWidth( nTemp32 );
+                    // width
+                    rStm.ReadUInt32( nTemp32 );
+                    if (!rStm.good())
+                        break;
+                    aPixSize.setWidth( nTemp32 );
 
-                // height
-                rStm.ReadUInt32( nTemp32 );
-                aPixSize.setHeight( nTemp32 );
+                    // height
+                    rStm.ReadUInt32( nTemp32 );
+                    if (!rStm.good())
+                        break;
+                    aPixSize.setHeight( nTemp32 );
 
-                // Bits/Pixel
-                rStm.ReadUChar( cByte );
-                nBitsPerPixel = cByte;
+                    // Bits/Pixel
+                    rStm.ReadUChar( cByte );
+                    if (!rStm.good())
+                        break;
+                    nBitsPerPixel = cByte;
 
-                // Colour type - check whether it supports alpha values
-                sal_uInt8 cColType = 0;
-                rStm.ReadUChar( cColType );
-                bIsAlpha = bIsTransparent = ( cColType == 4 || cColType == 6 );
+                    // Colour type - check whether it supports alpha values
+                    sal_uInt8 cColType = 0;
+                    rStm.ReadUChar( cColType );
+                    if (!rStm.good())
+                         break;
+                    bIsAlpha = bIsTransparent = ( cColType == 4 || cColType == 6 );
 
-                // Planes always 1;
-                // compression always
-                nPlanes = 1;
+                    // Planes always 1;
+                    // compression always
+                    nPlanes = 1;
 
-                sal_uInt32  nLen32 = 0;
-                nTemp32 = 0;
+                    sal_uInt32  nLen32 = 0;
+                    nTemp32 = 0;
 
-                rStm.SeekRel( 7 );
+                    rStm.SeekRel( 7 );
 
-                // read up to the start of the image
-                rStm.ReadUInt32( nLen32 );
-                rStm.ReadUInt32( nTemp32 );
-                while( ( nTemp32 != 0x49444154 ) && rStm.good() )
-                {
-                    if ( nTemp32 == 0x70485973 ) // physical pixel dimensions
-                    {
-                        sal_uLong   nXRes;
-                        sal_uLong   nYRes;
-
-                        // horizontal resolution
-                        nTemp32 = 0;
-                        rStm.ReadUInt32( nTemp32 );
-                        nXRes = nTemp32;
-
-                        // vertical resolution
-                        nTemp32 = 0;
-                        rStm.ReadUInt32( nTemp32 );
-                        nYRes = nTemp32;
-
-                        // unit
-                        cByte = 0;
-                        rStm.ReadUChar( cByte );
-
-                        if ( cByte )
-                        {
-                            if ( nXRes )
-                                aLogSize.setWidth( (aPixSize.Width() * 100000) / nXRes );
-
-                            if ( nYRes )
-                                aLogSize.setHeight( (aPixSize.Height() * 100000) / nYRes );
-                        }
-
-                        nLen32 -= 9;
-                    }
-                    else if ( nTemp32 == 0x74524e53 ) // transparency
-                    {
-                        bIsTransparent = true;
-                        bIsAlpha = ( cColType != 0 && cColType != 2 );
-                    }
-
-                    // skip forward to next chunk
-                    rStm.SeekRel( 4 + nLen32 );
+                    // read up to the start of the image
                     rStm.ReadUInt32( nLen32 );
                     rStm.ReadUInt32( nTemp32 );
-                }
+                    while( ( nTemp32 != 0x49444154 ) && rStm.good() )
+                    {
+                        if ( nTemp32 == 0x70485973 ) // physical pixel dimensions
+                        {
+                            sal_uLong   nXRes;
+                            sal_uLong   nYRes;
+
+                            // horizontal resolution
+                            nTemp32 = 0;
+                            rStm.ReadUInt32( nTemp32 );
+                            nXRes = nTemp32;
+
+                            // vertical resolution
+                            nTemp32 = 0;
+                            rStm.ReadUInt32( nTemp32 );
+                            nYRes = nTemp32;
+
+                            // unit
+                            cByte = 0;
+                            rStm.ReadUChar( cByte );
+
+                            if ( cByte )
+                            {
+                                if ( nXRes )
+                                    aLogSize.setWidth( (aPixSize.Width() * 100000) / nXRes );
+
+                                if ( nYRes )
+                                    aLogSize.setHeight( (aPixSize.Height() * 100000) / nYRes );
+                            }
+
+                            nLen32 -= 9;
+                        }
+                        else if ( nTemp32 == 0x74524e53 ) // transparency
+                        {
+                            bIsTransparent = true;
+                            bIsAlpha = ( cColType != 0 && cColType != 2 );
+                        }
+
+                        // skip forward to next chunk
+                        rStm.SeekRel( 4 + nLen32 );
+                        rStm.ReadUInt32( nLen32 );
+                        rStm.ReadUInt32( nTemp32 );
+                    }
+                } while (false);
             }
         }
     }
