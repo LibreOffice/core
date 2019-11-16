@@ -82,8 +82,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
     INetURLObject aObj( rName );
     if ( aObj.GetProtocol() == INetProtocol::NotValid )
     {
-        OUString aBaseURL = GetURLBox()->GetBaseURL();
-        aName = SvtURLBox::ParseSmart( rName, aBaseURL );
+        aName = SvtURLBox::ParseSmart( rName, "" );
     }
     else
         aName = rName;

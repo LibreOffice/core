@@ -241,7 +241,7 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
 {
 
     ScMarkData aMark(MAXROW, MAXCOL);
-    ScMultiSel aMultiSel(MAXROW, MAXCOL);
+    ScMultiSel aMultiSel(MAXROW);
     CPPUNIT_ASSERT( !aMark.IsMarked() && !aMark.IsMultiMarked() );
     CPPUNIT_ASSERT_EQUAL( SCCOL(0), aMultiSel.GetMultiSelectionCount() );
     CPPUNIT_ASSERT( !aMultiSel.HasAnyMarks() );

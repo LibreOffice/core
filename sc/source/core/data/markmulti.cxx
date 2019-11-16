@@ -26,10 +26,9 @@
 
 #include <algorithm>
 
-ScMultiSel::ScMultiSel(SCROW nMaxRow, SCCOL nMaxCol)
+ScMultiSel::ScMultiSel(SCROW nMaxRow)
     : aRowSel(nMaxRow),
-    mnMaxRow(nMaxRow),
-    mnMaxCol(nMaxCol)
+    mnMaxRow(nMaxRow)
 {
 }
 
@@ -38,7 +37,6 @@ ScMultiSel::ScMultiSel( const ScMultiSel& rOther )
 {
     aMultiSelContainer = rOther.aMultiSelContainer;
     mnMaxRow = rOther.mnMaxRow;
-    mnMaxCol = rOther.mnMaxCol;
 }
 
 ScMultiSel::~ScMultiSel()
@@ -50,7 +48,6 @@ ScMultiSel& ScMultiSel::operator=(const ScMultiSel& rOther)
     aRowSel = rOther.aRowSel;
     aMultiSelContainer = rOther.aMultiSelContainer;
     mnMaxRow = rOther.mnMaxRow;
-    mnMaxCol = rOther.mnMaxCol;
     return *this;
 }
 

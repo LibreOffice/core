@@ -37,15 +37,12 @@ class SVT_DLLPUBLIC SvtURLBox : public ComboBox
 friend class SvtMatchContext_Impl;
 friend class SvtURLBox_Impl;
     Link<SvtURLBox*,void>           aOpenHdl;
-    OUString                        aBaseURL;
     OUString                        aPlaceHolder;
     rtl::Reference< SvtMatchContext_Impl > pCtx;
     std::unique_ptr<SvtURLBox_Impl> pImpl;
     INetProtocol                    eSmartProtocol;
     bool                            bAutoCompleteMode   : 1;
-    bool                            bOnlyDirectories    : 1;
     bool                            bHistoryDisabled    : 1;
-    bool                            bNoSelection        : 1;
     bool                            bIsAutoCompleteEnabled : 1;
 
     SVT_DLLPRIVATE bool             ProcessKey( const vcl::KeyCode& rCode );
@@ -65,7 +62,6 @@ public:
                                     virtual ~SvtURLBox() override;
     virtual void                    dispose() override;
 
-    const OUString&                 GetBaseURL() const { return aBaseURL; }
     void                            SetOpenHdl( const Link<SvtURLBox*,void>& rLink ) { aOpenHdl = rLink; }
     const Link<SvtURLBox*,void>&    GetOpenHdl() const { return aOpenHdl; }
     INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }

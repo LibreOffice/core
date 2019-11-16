@@ -10,11 +10,11 @@ basctl/source/inc/IDEComboBox.hxx:101
     basctl::DocListenerBox maNotifier class basctl::DocumentEventNotifier
 basegfx/source/polygon/b2dpolygontriangulator.cxx:113
     basegfx::(anonymous namespace)::Triangulator maNewEdgeEntries std::vector<std::unique_ptr<EdgeEntry> >
-basic/qa/cppunit/test_scanner.cxx:26
+basic/qa/cppunit/test_scanner.cxx:24
     (anonymous namespace)::Symbol line sal_uInt16
-basic/qa/cppunit/test_scanner.cxx:27
+basic/qa/cppunit/test_scanner.cxx:25
     (anonymous namespace)::Symbol col1 sal_uInt16
-basic/source/inc/runtime.hxx:251
+basic/source/inc/runtime.hxx:252
     SbiRuntime aRefSaved std::vector<SbxVariableRef>
 bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:56
     Data pMethod sal_uInt64
@@ -210,6 +210,8 @@ cppuhelper/source/access_control.cxx:80
     cppu::(anonymous namespace)::permission m_str2 rtl_uString *
 cppuhelper/source/typemanager.cxx:825
     (anonymous namespace)::BaseOffset set_ std::set<OUString>
+cui/source/inc/cfg.hxx:405
+    SvxConfigPage m_xDropTargetHelper std::unique_ptr<SvxConfigPageFunctionDropTarget>
 cui/source/inc/cuihyperdlg.hxx:46
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
 cui/source/inc/cuihyperdlg.hxx:77
@@ -292,30 +294,24 @@ extensions/source/propctrlr/genericpropertyhandler.hxx:63
     pcr::GenericPropertyHandler m_xComponentIntrospectionAccess css::uno::Reference<css::beans::XIntrospectionAccess>
 extensions/source/scanner/scanner.hxx:48
     ScannerManager mpData void *
-fpicker/source/office/autocmpledit.hxx:24
-    AutocompleteEdit m_nCurrent std::vector<class OUString>::size_type
-fpicker/source/office/PlacesListBox.hxx:36
-    PlacesListBox mbSelectionChanged _Bool
-fpicker/source/office/RemoteFilesDialog.hxx:113
-    RemoteFilesDialog m_nWidth int
-fpicker/source/office/RemoteFilesDialog.hxx:114
-    RemoteFilesDialog m_nHeight int
-framework/inc/services/layoutmanager.hxx:259
+framework/inc/services/layoutmanager.hxx:248
     framework::LayoutManager m_bGlobalSettings _Bool
-framework/inc/services/layoutmanager.hxx:273
+framework/inc/services/layoutmanager.hxx:262
     framework::LayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
-framework/inc/uielement/langselectionmenucontroller.hxx:81
+framework/inc/uielement/langselectionmenucontroller.hxx:75
     framework::LanguageSelectionMenuController m_xMenuDispatch_Lang css::uno::Reference<css::frame::XDispatch>
-framework/inc/uielement/langselectionmenucontroller.hxx:83
+framework/inc/uielement/langselectionmenucontroller.hxx:77
     framework::LanguageSelectionMenuController m_xMenuDispatch_Font css::uno::Reference<css::frame::XDispatch>
-framework/inc/uielement/langselectionmenucontroller.hxx:85
+framework/inc/uielement/langselectionmenucontroller.hxx:79
     framework::LanguageSelectionMenuController m_xMenuDispatch_CharDlgForParagraph css::uno::Reference<css::frame::XDispatch>
-framework/source/layoutmanager/toolbarlayoutmanager.hxx:280
+framework/source/layoutmanager/toolbarlayoutmanager.hxx:272
     framework::ToolbarLayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
-framework/source/layoutmanager/toolbarlayoutmanager.hxx:284
+framework/source/layoutmanager/toolbarlayoutmanager.hxx:276
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
 i18nutil/source/utility/paper.cxx:301
     paperword string char *
+include/basegfx/DrawCommands.hxx:81
+    gfx::LinearGradientInfo maMatrix basegfx::B2DHomMatrix
 include/basegfx/utils/systemdependentdata.hxx:66
     basegfx::MinimalSystemDependentDataManager maSystemDependentDataReferences std::set<SystemDependentData_SharedPtr>
 include/basic/basmgr.hxx:56
@@ -524,7 +520,7 @@ sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:261
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2592
+sc/inc/document.hxx:2593
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
@@ -542,7 +538,7 @@ sc/source/core/data/column.cxx:1398
     (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
 sc/source/core/data/column.cxx:1399
     (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags const enum ScCloneFlags
-sc/source/core/data/table2.cxx:3664
+sc/source/core/data/table2.cxx:3684
     (anonymous namespace)::OutlineArrayFinder mpArray class ScOutlineArray *
 sc/source/filter/excel/xltoolbar.hxx:25
     TBCCmd A _Bool
@@ -590,7 +586,7 @@ sc/source/filter/xml/xmldpimp.hxx:248
     ScXMLDataPilotFieldContext mbHasHiddenMember _Bool
 sc/source/filter/xml/xmldrani.hxx:72
     ScXMLDatabaseRangeContext bIsSelection _Bool
-sc/source/filter/xml/xmlexternaltabi.hxx:113
+sc/source/filter/xml/xmlexternaltabi.hxx:111
     ScXMLExternalRefCellContext mnCellType sal_Int16
 sc/source/ui/inc/AccessibleText.hxx:194
     ScAccessiblePreviewHeaderCellTextData mbRowHeader const _Bool
@@ -664,7 +660,7 @@ sd/source/ui/slidesorter/inc/controller/SlsClipboard.hxx:118
     sd::slidesorter::controller::Clipboard mxUndoContext std::unique_ptr<UndoContext>
 sd/source/ui/view/ToolBarManager.cxx:315
     sd::ToolBarManager::Implementation mpAsynchronousLayouterLock ::std::unique_ptr<LayouterLock>
-sdext/source/presenter/PresenterTimer.cxx:106
+sdext/source/presenter/PresenterTimer.cxx:104
     sdext::presenter::(anonymous namespace)::TimerScheduler mpLateDestroy std::shared_ptr<TimerScheduler>
 sfx2/source/appl/fileobj.hxx:38
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
@@ -806,7 +802,7 @@ sw/source/core/inc/swfont.hxx:990
     SvStatistics nChangeFont sal_uInt16
 sw/source/core/inc/unoflatpara.hxx:140
     SwXFlatParagraphIterator m_aFlatParaList std::set<css::uno::Reference<css::text::XFlatParagraph> >
-sw/source/core/layout/dbg_lay.cxx:133
+sw/source/core/layout/dbg_lay.cxx:131
     SwImplProtocol aVars std::vector<long>
 sw/source/core/table/swtable.cxx:2599
     SwTableCellInfo::Impl m_HandledTableBoxes SwTableCellInfo::Impl::TableBoxes_t
@@ -821,7 +817,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/disk2/libo7/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/glossary.hxx:63
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/maildispatcher.hxx:146
@@ -972,11 +968,11 @@ vcl/inc/unx/salgdi.h:306
     X11SalGraphics nTextPixel_ Pixel
 vcl/inc/WidgetThemeLibrary.hxx:20
     vcl::WidgetDrawStyle nSize uint32_t
-vcl/inc/WidgetThemeLibrary.hxx:91
+vcl/inc/WidgetThemeLibrary.hxx:94
     vcl::ControlDrawParameters eButtonValue enum ButtonValue
-vcl/inc/WidgetThemeLibrary.hxx:92
+vcl/inc/WidgetThemeLibrary.hxx:95
     vcl::ControlDrawParameters bIsAction _Bool
-vcl/inc/WidgetThemeLibrary.hxx:93
+vcl/inc/WidgetThemeLibrary.hxx:96
     vcl::ControlDrawParameters nValue int64_t
 vcl/opengl/salbmp.cxx:440
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
@@ -997,9 +993,9 @@ vcl/source/gdi/pdfwriter_impl.hxx:180
 vcl/source/gdi/pdfwriter_impl.hxx:181
     vcl::PDFWriterImpl::BitmapID m_nMaskChecksum BitmapChecksum
 vcl/unx/generic/app/wmadaptor.cxx:1259
-    _mwmhints func unsigned long
-vcl/unx/generic/app/wmadaptor.cxx:1259
     _mwmhints flags unsigned long
+vcl/unx/generic/app/wmadaptor.cxx:1259
+    _mwmhints func unsigned long
 vcl/unx/generic/app/wmadaptor.cxx:1259
     _mwmhints deco unsigned long
 vcl/unx/generic/app/wmadaptor.cxx:1260
@@ -1032,7 +1028,7 @@ vcl/workben/vcldemo.cxx:1744
     DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/PropertyMap.hxx:204
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-writerfilter/source/dmapper/SettingsTable.cxx:253
+writerfilter/source/dmapper/SettingsTable.cxx:255
     writerfilter::dmapper::SettingsTable_Impl m_sRedlineProtectionKey class rtl::OUString
 xmlhelp/source/cxxhelp/provider/databases.hxx:251
     chelp::Databases m_aDatabases chelp::Databases::DatabasesTable

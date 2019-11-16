@@ -34,7 +34,7 @@
 
 ScMarkData::ScMarkData(SCROW nMaxRow, SCCOL nMaxCol) :
     maTabMarked(),
-    aMultiSel(nMaxRow, nMaxCol),
+    aMultiSel(nMaxRow),
     mnMaxRow(nMaxRow),
     mnMaxCol(nMaxCol)
 {
@@ -366,7 +366,7 @@ void ScMarkData::MarkFromRangeList( const ScRangeList& rList, bool bReset )
   Optimise the case of constructing from a range list, speeds up import.
 */
 ScMarkData::ScMarkData(SCROW nMaxRow, SCCOL nMaxCol, const ScRangeList& rList)
-    : aMultiSel(nMaxRow, nMaxCol),
+    : aMultiSel(nMaxRow),
     mnMaxRow(nMaxRow),
     mnMaxCol(nMaxCol)
 {
