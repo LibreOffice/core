@@ -190,13 +190,22 @@ FreetypeFont* GlyphCache::CacheFont(LogicalFontInstance* pFontInstance)
     return pNew;
 }
 
-void GlyphCache::UncacheFont( FreetypeFont& rFreetypeFont )
+void GlyphCache::UncacheFont(FreetypeFont& rFreetypeFont, bool bForce)
 {
-    if( (rFreetypeFont.Release() <= 0) && (gnMaxSize <= mnBytesUsed) )
+    if ((rFreetypeFont.Release() <= 0) && ((gnMaxSize <= mnBytesUsed) || bForce))
     {
         mpCurrentGCFont = &rFreetypeFont;
         GarbageCollect();
     }
+}
+
+void GlyphCache::ForceUncacheFont(LogicalFontInstance *pFontInstance)
+{
+    if (m_aFontList.empty() || !pFontInstance)
+        return;
+    FreetypeFontInstance* pFFI = dynamic_cast<FreetypeFontInstance*>(pFontInstance);
+    if (pFFI && pFFI->GetFreetypeFont())
+        UncacheFont(*pFFI->GetFreetypeFont(), true);
 }
 
 void GlyphCache::GarbageCollect()
@@ -236,7 +245,11 @@ void GlyphCache::GarbageCollect()
         if( pFreetypeFont == mpCurrentGCFont )
             mpCurrentGCFont = nullptr;
 
-        m_aFontList.erase(pFreetypeFont->GetFontInstance());
+#ifndef NDEBUG
+        int nErased =
+#endif
+            m_aFontList.erase(pFreetypeFont->GetFontInstance());
+        assert(1 == nErased);
     }
 }
 

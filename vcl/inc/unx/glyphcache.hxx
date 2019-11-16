@@ -87,7 +87,14 @@ public:
     void                    AnnounceFonts( PhysicalFontCollection* ) const;
 
     FreetypeFont*           CacheFont(LogicalFontInstance* pFontInstance);
-    void                    UncacheFont( FreetypeFont& );
+    void UncacheFont(FreetypeFont& rFont) { UncacheFont(rFont, false); }
+
+    // This should just be used by the ~ImplFontCache destructor, which holds the mapping of the
+    // FontSelectPattern to the LogicalFontInstance. If the font cache is destroyed when an
+    // OutputDevice is destroyed, we can / must remove it's cached GlyphCache entries, as these
+    // won't / can't be accessed anymore from outside.
+    void ForceUncacheFont(LogicalFontInstance*);
+
     void                    ClearFontCache();
     void                    ClearFontOptions();
 
@@ -95,6 +102,7 @@ private:
     static void             InitFreetype();
     void                    GarbageCollect();
     FreetypeFont*           CreateFont(LogicalFontInstance* pLogicalFont);
+    void UncacheFont(FreetypeFont&, bool bForce);
 
     // the GlyphCache's FontList matches a font request to a serverfont instance
     // the FontList key's mpFontData member is reinterpreted as integer font id

@@ -81,6 +81,11 @@ CairoTextRender::CairoTextRender()
         rp = nullptr;
 }
 
+CairoTextRender::~CairoTextRender()
+{
+    setFont(nullptr, 0);
+}
+
 void CairoTextRender::setFont(LogicalFontInstance *pEntry, int nFallbackLevel)
 {
     // release all no longer needed font resources
