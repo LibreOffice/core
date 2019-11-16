@@ -444,15 +444,11 @@ void MSWordExportBase::NumberingLevel(
         SwNumRule const& rRule, sal_uInt8 const nLvl)
 {
     // prepare the NodeNum to generate the NumString
-    static SwNumberTree::tNumberVector aNumVector;
-    static std::once_flag aInitOnce;
-    std::call_once(aInitOnce, []
-        {
-            for (int n = 0; n < WW8ListManager::nMaxLevel; ++n)
-            {
-                aNumVector.push_back( n );
-            }
-        });
+    static const SwNumberTree::tNumberVector aNumVector = [] {
+        SwNumberTree::tNumberVector vec(WW8ListManager::nMaxLevel);
+        std::iota(vec.begin(), vec.end(), 0);
+        return std::move(vec);
+    }();
 
     // write the static data of the SwNumFormat of this level
     sal_uInt8 aNumLvlPos[WW8ListManager::nMaxLevel] = { 0,0,0,0,0,0,0,0,0 };

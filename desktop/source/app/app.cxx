@@ -394,18 +394,12 @@ namespace
 
 OUString ReplaceStringHookProc( const OUString& rStr )
 {
-    const static OUString sBuildId(utl::Bootstrap::getBuildIdData("development"));
-    static OUString sBrandName, sVersion, sAboutBoxVersion, sAboutBoxVersionSuffix, sExtension;
-
-    static std::once_flag aInitOnce;
-    std::call_once(aInitOnce, []
-    {
-        sBrandName = utl::ConfigManager::getProductName();
-        sVersion = utl::ConfigManager::getProductVersion();
-        sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
-        sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
-        sExtension = utl::ConfigManager::getProductExtension();
-    } );
+    const static OUString sBuildId(utl::Bootstrap::getBuildIdData("development")),
+        sBrandName(utl::ConfigManager::getProductName()),
+        sVersion(utl::ConfigManager::getProductVersion()),
+        sAboutBoxVersion(utl::ConfigManager::getAboutBoxProductVersion()),
+        sAboutBoxVersionSuffix(utl::ConfigManager::getAboutBoxProductVersionSuffix()),
+        sExtension(utl::ConfigManager::getProductExtension());
 
     OUString sRet(rStr);
     if (sRet.indexOf("%PRODUCT") != -1 || sRet.indexOf("%ABOUTBOX") != -1)
