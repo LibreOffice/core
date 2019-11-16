@@ -337,7 +337,6 @@ public:
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     bool                IsCellFocusEnabled() const { return m_bIsCellFocusEnabled; }
-    void                EnableCellFocus() { m_bIsCellFocusEnabled = true; }
     bool                SetCurrentTabPos( sal_uInt16 _nNewPos );
     sal_uInt16          GetCurrentTabPos() const { return m_nCurTabPos; }
 

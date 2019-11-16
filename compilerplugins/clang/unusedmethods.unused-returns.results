@@ -63,24 +63,24 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:539
 include/LibreOfficeKit/LibreOfficeKit.hxx:547
     int lok::Document::getViewsCount()
 include/LibreOfficeKit/LibreOfficeKit.hxx:556
-    unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:595
+    unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *,int)
+include/LibreOfficeKit/LibreOfficeKit.hxx:599
     _Bool lok::Document::getViewIds(int *,unsigned long)
-include/LibreOfficeKit/LibreOfficeKit.hxx:656
+include/LibreOfficeKit/LibreOfficeKit.hxx:660
     _Bool lok::Document::insertCertificate(const unsigned char *,const int,const unsigned char *,const int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:670
+include/LibreOfficeKit/LibreOfficeKit.hxx:674
     _Bool lok::Document::addCertificate(const unsigned char *,const int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:682
+include/LibreOfficeKit/LibreOfficeKit.hxx:686
     int lok::Document::getSignatureState()
-include/LibreOfficeKit/LibreOfficeKit.hxx:692
+include/LibreOfficeKit/LibreOfficeKit.hxx:696
     unsigned long lok::Document::renderShapeSelection(char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:845
+include/LibreOfficeKit/LibreOfficeKit.hxx:849
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:899
+include/LibreOfficeKit/LibreOfficeKit.hxx:903
     char * lok::Office::getVersionInfo()
-include/LibreOfficeKit/LibreOfficeKit.hxx:913
+include/LibreOfficeKit/LibreOfficeKit.hxx:917
     _Bool lok::Office::runMacro(const char *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:921
+include/LibreOfficeKit/LibreOfficeKit.hxx:925
     _Bool lok::Office::signDocument(const char *,const unsigned char *,const int,const unsigned char *,const int)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
@@ -230,11 +230,11 @@ include/vcl/texteng.hxx:276
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:505
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:851
+include/vcl/weld.hxx:850
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1774
+include/vcl/weld.hxx:1773
     _Bool weld::TextView::get_selection_bounds(int &,int &)
-include/vcl/window.hxx:1505
+include/vcl/window.hxx:1502
     _Bool vcl::Window::set_font_attribute(const class rtl::OString &,const class rtl::OUString &)
 include/vcl/wizardmachine.hxx:319
     class BuilderPage * vcl::WizardMachine::GetOrCreatePage(const short)
@@ -244,7 +244,7 @@ lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/inc/document.hxx:2155
+sc/inc/document.hxx:2156
     const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScRange &,unsigned int,unsigned int)
 sc/inc/orcusfilters.hxx:45
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
@@ -362,11 +362,11 @@ vcl/inc/opengl/texture.hxx:112
     _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
 vcl/inc/salframe.hxx:233
     _Bool SalFrame::SetPluginParent(struct SystemParentData *)
-vcl/inc/salgdi.hxx:211
+vcl/inc/salgdi.hxx:212
     class basegfx::B2DPoint SalGraphics::mirror(const class basegfx::B2DPoint &,const class OutputDevice *) const
-vcl/inc/salgdi.hxx:385
+vcl/inc/salgdi.hxx:388
     _Bool SalGraphics::UpdateSettings(class AllSettings &)
-vcl/inc/salgdi.hxx:387
+vcl/inc/salgdi.hxx:390
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
 vcl/inc/salinst.hxx:177
     _Bool SalInstance::CallEventCallback(const void *,int)
