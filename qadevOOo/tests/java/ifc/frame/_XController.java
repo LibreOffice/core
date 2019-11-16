@@ -153,7 +153,8 @@ public class _XController extends MultiMethodTest {
             log.println("as expected, see #82938");
         }
         tRes.tested("attachModel()", result);
-        oObj.attachModel(firstModel);
+        boolean bResult = oObj.attachModel(firstModel);
+        log.println("attachModel() --> " + bResult);
     }
 
     /**
