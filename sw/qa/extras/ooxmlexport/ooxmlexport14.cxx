@@ -145,7 +145,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128820, "tdf128820.fodt")
 {
-    // Import of exported DOCX failed because of wrong namespase used for wsp element
+    // Import of exported DOCX failed because of wrong namespace used for wsp element
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
