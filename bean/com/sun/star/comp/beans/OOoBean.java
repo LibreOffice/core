@@ -291,12 +291,16 @@ public class OOoBean
             // avoid concurrent access from multiple threads
             final OfficeConnection iConn = getOOoConnection();
 
+            com.sun.star.uno.XComponentContext xComponentContext = iConn.getComponentContext();
+            if (xComponentContext == null)
+                throw new NoConnectionException();
+
             Thread aConnectorThread = new Thread("getServiceManager") {
                 @Override
                 public void run()
                 {
                     com.sun.star.lang.XMultiComponentFactory aFactory =
-                        iConn.getComponentContext().getServiceManager();
+                        xComponentContext.getServiceManager();
                     xServiceFactory = UnoRuntime.queryInterface(
                         com.sun.star.lang.XMultiServiceFactory.class, aFactory );
                 }
