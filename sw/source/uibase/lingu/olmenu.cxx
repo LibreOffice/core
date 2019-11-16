@@ -307,6 +307,7 @@ SwSpellPopup::SwSpellPopup(
     {
         m_xPopupMenu->HideItem(m_nCorrectDialogId);
         m_xPopupMenu->HideItem(m_nAddId);
+        m_xPopupMenu->HideItem(m_nAddMenuId);
     }
     sal_uInt16 nItemPos = m_xPopupMenu->GetItemPos(m_nIgnoreWordId);
     OUString aIgnoreSelection( SwResId( STR_IGNORE_SELECTION ) );
