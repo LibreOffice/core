@@ -12169,3 +12169,20 @@ SfxVoidItem EditQrCode SID_EDIT_QRCODE
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Edit;
 ]
+
+SfxVoidItem ApplySpellChecking SID_APPLY_SPELLCHECKING
+(SfxStringItem ApplyRule FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]

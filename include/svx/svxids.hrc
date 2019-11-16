@@ -355,6 +355,7 @@ class SvxSetItem;
 #define SID_SPELL_DIALOG                                ( SID_SVX_START + 243 )
 #define SID_INSERT_DRAW                                 ( SID_SVX_START + 244 )
 #define SID_THESAURUS                                   ( SID_SVX_START + 245 )
+#define SID_APPLY_SPELLCHECKING                         ( SID_SVX_START + 246 )
 
 // CAUTION! Range <250 .. 250> used by EditEngine (!)
 
