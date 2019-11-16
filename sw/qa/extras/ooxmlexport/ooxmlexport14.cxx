@@ -143,6 +143,31 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
                              .Position);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128820, "tdf128820.fodt")
+{
+    // Import of exported DOCX failed because of wrong namespase used for wsp element
+    // Now test the exported XML, in case we stop failing opening invalid files
+    xmlDocPtr pXml = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXml);
+    // The parent wpg:wgp element has three children: wpg:cNvGrpSpPr, wpg:grpSpPr, and wpg:wsp
+    // (if we start legitimately exporting additional children, this needs to be adjusted to check
+    // all those, to make sure we don't export wrong elements).
+    assertXPathChildren(pXml,
+                        "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                        "wp:inline/a:graphic/a:graphicData/wpg:wgp",
+                        3);
+    assertXPath(pXml,
+                "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/"
+                "a:graphic/a:graphicData/wpg:wgp/wpg:cNvGrpSpPr");
+    assertXPath(pXml,
+                "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/"
+                "a:graphic/a:graphicData/wpg:wgp/wpg:grpSpPr");
+    // This one was pic:wsp instead of wps:wsp
+    assertXPath(pXml,
+                "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/"
+                "a:graphic/a:graphicData/wpg:wgp/wps:wsp");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
