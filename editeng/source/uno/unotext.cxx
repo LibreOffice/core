@@ -45,8 +45,9 @@
 #include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unoipset.hxx>
+#include <comphelper/OUStringLiteralList.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/serviceinfohelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <editeng/unonames.hxx>
@@ -2163,9 +2164,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames(  )
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Static(  )
 {
-    uno::Sequence< OUString > aSeq( SvxUnoTextRangeBase::getSupportedServiceNames_Static() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.text.Text"} );
-    return aSeq;
+    return comphelper::concatSequences(
+        SvxUnoTextRangeBase::getSupportedServiceNames_Static(),
+        comphelper::OUStringLiteralList({ "com.sun.star.text.Text" }));
 }
 
 namespace

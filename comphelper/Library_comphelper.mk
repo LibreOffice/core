@@ -128,7 +128,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/SelectionMultiplex \
     comphelper/source/misc/sequenceashashmap \
     comphelper/source/misc/servicedecl \
-    comphelper/source/misc/serviceinfohelper \
     comphelper/source/misc/sharedmutex \
     comphelper/source/misc/simplefileaccessinteraction \
     comphelper/source/misc/solarmutex \

@@ -24,7 +24,8 @@
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
-#include <comphelper/serviceinfohelper.hxx>
+#include <comphelper/OUStringLiteralList.hxx>
+#include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 
 #include <svx/svdpool.hxx>
@@ -406,9 +407,9 @@ bool Svx3DSceneObject::getPropertyValueImpl(const OUString& rName, const SfxItem
 // css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.Shape3DScene"} );
-    return aSeq;
+    return comphelper::concatSequences(
+        SvxShape::getSupportedServiceNames(),
+        comphelper::OUStringLiteralList({ "com.sun.star.drawing.Shape3DScene" }));
 }
 
 Svx3DCubeObject::Svx3DCubeObject(SdrObject* pObj)
@@ -526,10 +527,10 @@ bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItem
 // css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.Shape3D",
-                            "com.sun.star.drawing.Shape3DCube"});
-    return aSeq;
+    return comphelper::concatSequences(
+        SvxShape::getSupportedServiceNames(),
+        comphelper::OUStringLiteralList({ "com.sun.star.drawing.Shape3D",
+                                          "com.sun.star.drawing.Shape3DCube" }));
 }
 
 Svx3DSphereObject::Svx3DSphereObject(SdrObject* pObj)
@@ -631,10 +632,10 @@ bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxIt
 // css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.Shape3D",
-                            "com.sun.star.drawing.Shape3DSphere"});
-    return aSeq;
+    return comphelper::concatSequences(
+        SvxShape::getSupportedServiceNames(),
+        comphelper::OUStringLiteralList({ "com.sun.star.drawing.Shape3D",
+                                          "com.sun.star.drawing.Shape3DSphere" }));
 }
 
 Svx3DLatheObject::Svx3DLatheObject(SdrObject* pObj)
@@ -811,10 +812,10 @@ bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 // css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.Shape3D",
-                            "com.sun.star.drawing.Shape3DLathe"});
-    return aSeq;
+    return comphelper::concatSequences(
+        SvxShape::getSupportedServiceNames(),
+        comphelper::OUStringLiteralList({ "com.sun.star.drawing.Shape3D",
+                                          "com.sun.star.drawing.Shape3DLathe" }));
 }
 
 Svx3DExtrudeObject::Svx3DExtrudeObject(SdrObject* pObj)
@@ -894,10 +895,10 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxI
 // css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.Shape3D",
-                            "com.sun.star.drawing.Shape3DExtrude"});
-    return aSeq;
+    return comphelper::concatSequences(
+        SvxShape::getSupportedServiceNames(),
+        comphelper::OUStringLiteralList({ "com.sun.star.drawing.Shape3D",
+                                          "com.sun.star.drawing.Shape3DExtrude" }));
 }
 
 Svx3DPolygonObject::Svx3DPolygonObject(SdrObject* pObj)
@@ -1030,10 +1031,10 @@ bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxI
 // css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames()
 {
-    Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.Shape3D",
-                            "com.sun.star.drawing.Shape3DPolygon"});
-    return aSeq;
+    return comphelper::concatSequences(
+        SvxShape::getSupportedServiceNames(),
+        comphelper::OUStringLiteralList({ "com.sun.star.drawing.Shape3D",
+                                          "com.sun.star.drawing.Shape3DPolygon" }));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
