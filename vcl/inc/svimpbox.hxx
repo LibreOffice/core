@@ -140,7 +140,6 @@ private:
     bool                m_bSubLstOpDblClick : 1; // open/close sublist with mouse double click, defaulted with true
     bool                m_bContextMenuHandling : 1;
     bool                m_bIsCellFocusEnabled : 1;
-    bool                m_bAreChildrenTransient;
     bool                mbForceMakeVisible;
 
     Point               m_aEditClickPos;
@@ -200,8 +199,6 @@ private:
     void                UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEntry );
 
     void                CalcCellFocusRect( SvTreeListEntry const * pEntry, tools::Rectangle& rRect );
-
-    bool                AreChildrenTransient() const { return m_bAreChildrenTransient; }
 
     void ExpandAll();
     void CollapseTo(SvTreeListEntry* pParentToCollapse);
