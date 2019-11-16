@@ -583,6 +583,8 @@ SwSpellPopup::SwSpellPopup(
 
     checkRedline();
     m_xPopupMenu->RemoveDisabledEntries(true, true);
+
+    SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, uno::makeAny( true ));
 }
 
 SwSpellPopup::~SwSpellPopup() {}
@@ -703,10 +705,6 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if (nId == m_nSpellDialogId)
     {
-        if (m_bGrammarResults)
-        {
-            SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, uno::makeAny( true ));
-        }
         m_pSh->Left(CRSR_SKIP_CHARS, false, 1, false );
         {
             m_pSh->GetView().GetViewFrame()->GetDispatcher()->
