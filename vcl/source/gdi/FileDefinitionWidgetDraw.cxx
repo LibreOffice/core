@@ -899,8 +899,8 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
             if (ePart == ControlPart::ButtonDown)
             {
                 Point aPoint(aLocation.X() + rBoundingControlRegion.GetWidth()
-                                 - aComboButtonSize.Width(),
-                             aLocation.Y() + 1);
+                                 - aComboButtonSize.Width() - 1,
+                             aLocation.Y());
                 rNativeContentRegion = tools::Rectangle(aPoint, aComboButtonSize);
                 rNativeBoundingRegion = rNativeContentRegion;
                 return true;
@@ -918,7 +918,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
                 Size aSize(rBoundingControlRegion.GetWidth(), aComboButtonSize.Height());
                 rNativeContentRegion = tools::Rectangle(aLocation, aSize);
                 rNativeBoundingRegion = rNativeContentRegion;
-                rNativeBoundingRegion.expand(1);
+                rNativeBoundingRegion.expand(2);
                 return true;
             }
         }
