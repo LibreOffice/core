@@ -320,11 +320,14 @@ constexpr ::Color COL_AUTHOR9_LIGHT           ( 255,  231, 199 );
 template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, traits>& rStream, const Color& rColor)
 {
-    return rStream << "c[" << std::hex << std::setfill ('0')
-                   << std::setw(2) << static_cast<int>(rColor.GetRed())
-                   << std::setw(2) << static_cast<int>(rColor.GetGreen())
-                   << std::setw(2) << static_cast<int>(rColor.GetBlue())
-                   << std::setw(2) << static_cast<int>(rColor.GetTransparency()) << "]";
+    std::ios_base::fmtflags nOrigFlags = rStream.flags();
+    rStream << "c[" << std::hex << std::setfill ('0')
+            << std::setw(2) << static_cast<int>(rColor.GetRed())
+            << std::setw(2) << static_cast<int>(rColor.GetGreen())
+            << std::setw(2) << static_cast<int>(rColor.GetBlue())
+            << std::setw(2) << static_cast<int>(rColor.GetTransparency()) << "]";
+    rStream.setf(nOrigFlags);
+    return rStream;
 }
 
 #endif
