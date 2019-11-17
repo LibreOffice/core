@@ -113,6 +113,17 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats )
 void XclImpString::ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, sal_uInt16 nRunCount )
 {
     rFormats.clear();
+
+    size_t nElementSize = rStrm.GetRoot().GetBiff() == EXC_BIFF8 ? 4 : 2;
+    size_t nAvailableBytes = rStrm.GetRecLeft();
+    size_t nMaxElements = nAvailableBytes / nElementSize;
+    if (nRunCount > nMaxElements)
+    {
+        SAL_WARN("sc.filter", "XclImpString::ReadFormats - more formats claimed than stream could contain");
+        rStrm.SetSvStreamError(SVSTREAM_FILEFORMAT_ERROR);
+        return;
+    }
+
     rFormats.reserve( nRunCount );
     /*  #i33341# real life -- same character index may occur several times
         -> use AppendFormat() to validate formats */
