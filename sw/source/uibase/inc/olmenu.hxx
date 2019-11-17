@@ -96,7 +96,6 @@ class SW_DLLPUBLIC SwSpellPopup
     css::linguistic2::ProofreadingResult m_xGrammarResult;
     sal_Int32 m_nGrammarError;
 
-    css::uno::Sequence< OUString >  m_aSuggestions;
     OUString m_sExplanationLink;
 
     LanguageType                m_nCheckedLanguage;

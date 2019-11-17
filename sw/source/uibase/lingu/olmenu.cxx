@@ -242,12 +242,13 @@ SwSpellPopup::SwSpellPopup(
     bool bUseImagesInMenus = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 
     m_nCheckedLanguage = LANGUAGE_NONE;
+    css::uno::Sequence< OUString > aSuggestions;
     if (m_xSpellAlt.is())
     {
         m_nCheckedLanguage = LanguageTag( m_xSpellAlt->getLocale() ).getLanguageType();
-        m_aSuggestions = m_xSpellAlt->getAlternatives();
+        aSuggestions = m_xSpellAlt->getAlternatives();
     }
-    sal_Int16 nStringCount = static_cast< sal_Int16 >( m_aSuggestions.getLength() );
+    sal_Int16 nStringCount = static_cast< sal_Int16 >( aSuggestions.getLength() );
 
     SvtLinguConfig aCfg;
 
@@ -275,7 +276,7 @@ SwSpellPopup::SwSpellPopup(
         sal_uInt16 nItemId          = MN_SUGGESTION_START;
         for (sal_uInt16 i = 0; i < nStringCount; ++i)
         {
-            const OUString aEntry = m_aSuggestions[ i ];
+            const OUString aEntry = aSuggestions[ i ];
             m_xPopupMenu->InsertItem(nItemId, aEntry, MenuItemBits::NONE, OString(), i);
             m_xPopupMenu->SetHelpId(nItemId, HID_LINGU_REPLACE);
             if (!aSuggestionImageUrl.isEmpty())
@@ -443,7 +444,6 @@ SwSpellPopup::SwSpellPopup(
     , m_nRedlinePrevId(m_xPopupMenu->GetItemId("prev"))
     , m_pSh(pWrtSh)
     , m_xGrammarResult(rResult)
-    , m_aSuggestions(rSuggestions)
     , m_sExplanationLink()
     , m_bGrammarResults(true)
 {
@@ -480,7 +480,7 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
 
     m_xPopupMenu->InsertSeparator(OString(), nPos++);
-    if ( m_aSuggestions.hasElements() )     // suggestions available...
+    if ( rSuggestions.hasElements() )     // suggestions available...
     {
         Image aImage;
         OUString aSuggestionImageUrl;
@@ -496,7 +496,7 @@ SwSpellPopup::SwSpellPopup(
         }
 
         sal_uInt16 nItemId = MN_SUGGESTION_START;
-        for (const OUString& aEntry : std::as_const(m_aSuggestions))
+        for (const OUString& aEntry : std::as_const(rSuggestions))
         {
             m_xPopupMenu->InsertItem(nItemId, aEntry, MenuItemBits::NONE, OString(), nPos++);
             m_xPopupMenu->SetHelpId(nItemId, HID_LINGU_REPLACE);
@@ -639,15 +639,22 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     if ((MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ||
         (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END))
     {
-        sal_Int32 nAltIdx = (MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ?
-                nId - MN_SUGGESTION_START : nId - MN_AUTOCORR_START;
-        OSL_ENSURE(nAltIdx < m_aSuggestions.getLength(), "index out of range");
-        if (nAltIdx < m_aSuggestions.getLength() && (m_bGrammarResults || m_xSpellAlt.is()))
+        OUString sNewWord;
+        if (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END)
+        {
+            PopupMenu* pMenu = m_xPopupMenu->GetPopupMenu(m_nCorrectMenuId);
+            assert(pMenu);
+            sNewWord = pMenu->GetItemText(nId);
+        }
+        else
+            sNewWord = m_xPopupMenu->GetItemText(nId);
+
+        if (m_bGrammarResults || m_xSpellAlt.is())
         {
             bool bOldIns = m_pSh->IsInsMode();
             m_pSh->SetInsMode();
 
-            OUString aTmp( m_aSuggestions[ nAltIdx ] );
+            OUString aTmp( sNewWord );
             OUString aOrig( m_bGrammarResults ? OUString() : m_xSpellAlt->getWord() );
 
             // if original word has a trailing . (likely the end of a sentence)
@@ -682,11 +689,10 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
             OUString aOrigWord( m_bGrammarResults ? OUString() : m_xSpellAlt->getWord() ) ;
-            OUString aNewWord( m_aSuggestions[ nAltIdx ] );
-            SvxPrepareAutoCorrect( aOrigWord, aNewWord );
+            SvxPrepareAutoCorrect( aOrigWord, sNewWord );
 
             if (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END)
-                pACorr->PutText( aOrigWord, aNewWord, m_nCheckedLanguage );
+                pACorr->PutText( aOrigWord, sNewWord, m_nCheckedLanguage );
 
             /* #102505# EndAction/EndUndo moved down since insertion
                of temporary auto correction is now undoable two and
