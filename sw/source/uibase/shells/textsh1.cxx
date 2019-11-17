@@ -105,6 +105,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
+#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <doc.hxx>
@@ -126,6 +127,7 @@
 #include <memory>
 #include <xmloff/odffields.hxx>
 #include <bookmrk.hxx>
+#include <linguistic/misc.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -1440,7 +1442,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         const OUString sIgnoreString("Ignore");
         const OUString sIgnoreAllPrefix("IgnoreAll_");
-        //const OUString sSpellingRule("Spelling");
+        const OUString sSpellingRule("Spelling");
         const OUString sGrammarRule("Grammar");
         //const OUString aReplacePrefix("Replace_");
 
@@ -1466,7 +1468,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 bool bCorrectionRes = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
                 if(bCorrectionRes)
                 {
-                    try{
+                    try {
                         uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
                         aGrammarCheckRes.xProofreader->ignoreRule(
                             aGrammarCheckRes.aErrors[ nErrorInResult ].aRuleIdentifier,
@@ -1482,6 +1484,19 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     catch( const uno::Exception& )
                     {
                     }
+                }
+            }
+            else if (sApplyText == sSpellingRule)
+            {
+                SwRect aToFill;
+                uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt( rWrtSh.GetCorrection(nullptr, aToFill) );
+                uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
+                OUString sWord(xSpellAlt->getWord());
+                linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic( xDictionary,
+                        sWord, false, OUString() );
+                if (linguistic::DictionaryError::NONE != nAddRes && !xDictionary->getEntry(sWord).is())
+                {
+                    SvxDicError(rWrtSh.GetView().GetFrameWeld(), nAddRes);
                 }
             }
         }
