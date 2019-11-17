@@ -1061,6 +1061,11 @@ SwSectionFormat::MakeUnoObject()
     return xMeta;
 }
 
+bool SwSectionFormat::supportsFullDrawingLayerFillAttributeSet() const
+{
+    return false;
+}
+
 void SwSectionFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionFormat"));
