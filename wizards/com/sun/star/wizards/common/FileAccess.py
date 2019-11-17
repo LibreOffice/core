@@ -129,7 +129,7 @@ class FileAccess(object):
 
     def getPath(self, parentURL, childURL):
         string = ""
-        if childURL is not None and childURL is not "":
+        if childURL is not None and childURL != "":
             string = "/" + childURL
         return self.filenameConverter.getSystemPathFromFileURL(
             parentURL + string)
