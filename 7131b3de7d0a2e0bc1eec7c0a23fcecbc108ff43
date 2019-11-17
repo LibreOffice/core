@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_eabb1d6f",
+        "filename": "sc/source/filter/excel/xistring.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-11-17T19:31:52Z",
+      "side": 1,
+      "message": "is this the right thing to use here ?",
+      "revId": "7131b3de7d0a2e0bc1eec7c0a23fcecbc108ff43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
