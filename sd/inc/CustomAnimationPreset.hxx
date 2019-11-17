@@ -118,7 +118,7 @@ private:
 
 private:
     css::uno::Reference< css::animations::XAnimationNode > mxRootNode;
-    EffectDescriptorMap maEffectDiscriptorMap;
+    EffectDescriptorMap maEffectDescriptorMap;
     UStringMap maEffectNameMap;
     UStringMap maPropertyNameMap;
 
