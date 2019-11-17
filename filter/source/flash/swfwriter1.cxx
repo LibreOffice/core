@@ -402,9 +402,9 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
             if ( aTextColor == COL_BLACK )
                 aTextColor = COL_WHITE;
 
-            if ( aTextColor == COL_WHITE )
+            // coverity[copy_paste_error : FALSE] - aReliefColor depending on aTextColor is correct
+            if (aTextColor == COL_WHITE)
                 aReliefColor = COL_BLACK;
-
 
             Point aPos( rPos );
             Point aOffset( 6,6 );
