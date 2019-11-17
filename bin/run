@@ -46,6 +46,7 @@ elif [ $(uname) = Darwin ]; then
         exit 1
     fi
 
+    exedir="$dir"/workdir/LinkTarget/Executable
     export URE_BOOTSTRAP=file://"${dir}"/instdir/$PRODUCTNAME.app/Contents/Resources/fundamentalrc
     export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+$DYLD_LIBRARY_PATH:}"${dir}"/instdir/$PRODUCTNAME.app/Contents/Frameworks
     SEARCH_PATH="${DYLD_LIBRARY_PATH}"
