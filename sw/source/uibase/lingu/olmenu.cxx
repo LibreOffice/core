@@ -716,19 +716,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if (nId == m_nIgnoreWordId)
     {
-        uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
-        if (m_bGrammarResults) {
-            SfxStringItem aIgnoreString(FN_PARAM_1, "IgnoreAll_Grammar");
-            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_APPLY_SPELLCHECKING, SfxCallMode::SYNCHRON, { &aIgnoreString });
-        } else {
-            OUString sWord(m_xSpellAlt->getWord());
-            linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic( xDictionary,
-                    sWord, false, OUString() );
-            if (linguistic::DictionaryError::NONE != nAddRes && !xDictionary->getEntry(sWord).is())
-            {
-                SvxDicError(m_pSh->GetView().GetFrameWeld(), nAddRes);
-            }
-        }
+        SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? OUString("IgnoreAll_Grammar") : OUString("IgnoreAll_Spelling"));
+        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_APPLY_SPELLCHECKING, SfxCallMode::SYNCHRON, { &aIgnoreString });
     }
     else if ((MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END) || nId == m_nAddId)
     {
