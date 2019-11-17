@@ -630,6 +630,7 @@ tools::Rectangle ImpEditView::GetWindowPos( const tools::Rectangle& rDocRect ) c
     else
     {
         Point aNewPos( aPos.X()-aSz.Height(), aPos.Y() );
+        // coverity[swapped_arguments : FALSE] - this is in the correct order
         aRect = tools::Rectangle( aNewPos, Size( aSz.Height(), aSz.Width() ) );
     }
     return aRect;
