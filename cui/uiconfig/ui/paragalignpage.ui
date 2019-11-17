@@ -5,8 +5,6 @@
   <object class="GtkGrid" id="ParaAlignPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="valign">start</property>
-    <property name="hexpand">True</property>
     <property name="border_width">6</property>
     <property name="row_spacing">12</property>
     <property name="column_spacing">24</property>
@@ -55,10 +53,6 @@
       <object class="GtkGrid" id="maingrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
         <property name="row_spacing">12</property>
         <child>
           <object class="GtkFrame" id="frame1">
@@ -76,7 +70,7 @@
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
+                    <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkRadioButton" id="radioBTN_LEFTALIGN">
                         <property name="label" translatable="yes" context="paragalignpage|radioBTN_LEFTALIGN">_Left</property>
@@ -176,65 +170,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="box4">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="spacing">12</property>
-                        <child>
-                          <object class="GtkBox" id="box1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="margin_left">13</property>
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <object class="GtkLabel" id="labelLB_LASTLINE">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="margin_left">12</property>
-                                <property name="vexpand">True</property>
-                                <property name="label" translatable="yes" context="paragalignpage|labelLB_LASTLINE">_Last line:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">comboLB_LASTLINE</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="comboLB_LASTLINE">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="active">0</property>
-                            <items>
-                              <item id="0" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Start</item>
-                              <item id="1" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Start</item>
-                              <item id="2" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Centered</item>
-                              <item id="3" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Justified</item>
-                            </items>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkBox" id="box5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -268,6 +203,57 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="left_padding">18</property>
+                        <child>
+                          <object class="GtkBox" id="box4">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="labelLB_LASTLINE">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes" context="paragalignpage|labelLB_LASTLINE">_Last line:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">comboLB_LASTLINE</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="comboLB_LASTLINE">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="active">0</property>
+                                <items>
+                                  <item id="0" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Start</item>
+                                  <item id="1" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Start</item>
+                                  <item id="2" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Centered</item>
+                                  <item id="3" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Justified</item>
+                                </items>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">4</property>
                       </packing>
                     </child>
                   </object>
@@ -306,12 +292,11 @@
                   <object class="GtkBox" id="box2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">12</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="labelFT_VERTALIGN">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_right">12</property>
                         <property name="label" translatable="yes" context="paragalignpage|labelFT_VERTALIGN">_Alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboLB_VERTALIGN</property>
@@ -378,12 +363,11 @@
                   <object class="GtkBox" id="box3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">12</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_right">12</property>
                         <property name="label" translatable="yes" context="paragalignpage|label2">_Text direction:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboLB_TEXTDIRECTION</property>
@@ -435,7 +419,6 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
-      <widget name="box1"/>
       <widget name="labelFT_VERTALIGN"/>
       <widget name="label2"/>
     </widgets>
