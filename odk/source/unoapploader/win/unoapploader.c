@@ -218,6 +218,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             wcscat( envstr, PATHSEPARATOR );
             wcscat( envstr, value );
         }
+        /* coverity[tainted_data : FALSE] */
         _wputenv( envstr );
         free( envstr );
         free( path );

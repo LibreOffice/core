@@ -200,6 +200,7 @@ int main( int argc, char *argv[] )
             strcat( envstr, PATHSEPARATOR );
             strcat( envstr, value );
         }
+        /* coverity[tainted_data : FALSE] */
         putenv( envstr );
     }
     else
