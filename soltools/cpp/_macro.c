@@ -411,6 +411,7 @@ int
         ntok++;
         if (trp->tp >= trp->lp)
         {
+            // coverity[overrun-buffer-arg: FALSE] - a multiple of trp->max is allocated, not trp->max itself
             gettokens(trp, 0);
             if ((trp->lp - 1)->type == END)
             {
