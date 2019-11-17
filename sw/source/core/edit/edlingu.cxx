@@ -889,12 +889,13 @@ uno::Reference< XSpellAlternatives >
         return nullptr;
     SwPaM* pCursor = GetCursor();
     SwPosition aPos( *pCursor->GetPoint() );
-    Point aPt( *pPt );
     SwCursorMoveState eTmpState( MV_SETONLYTEXT );
     SwTextNode *pNode = nullptr;
     SwWrongList *pWrong = nullptr;
-    if (GetLayout()->GetCursorOfst( &aPos, aPt, &eTmpState ))
+    if (pPt && GetLayout()->GetCursorOfst( &aPos, *(const_cast<Point*>(pPt)), &eTmpState ))
         pNode = aPos.nNode.GetNode().GetTextNode();
+    if (nullptr == pNode)
+        pNode = pCursor->GetNode().GetTextNode();
     if (nullptr != pNode)
         pWrong = pNode->GetWrong();
     if (nullptr != pWrong && !pNode->IsInProtectSect())
