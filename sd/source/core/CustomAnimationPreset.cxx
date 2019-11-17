@@ -320,7 +320,7 @@ void CustomAnimationPresets::importEffects()
                     {
                         pDescriptor.reset( new CustomAnimationPreset( pEffect ) );
                         pDescriptor->maLabel = getUINameForPresetId( pEffect->getPresetId() );
-                        maEffectDiscriptorMap[aPresetId] = pDescriptor;
+                        maEffectDescriptorMap[aPresetId] = pDescriptor;
                     }
 
                     ++aIter;
@@ -450,9 +450,9 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
 
 CustomAnimationPresetPtr CustomAnimationPresets::getEffectDescriptor( const OUString& rPresetId ) const
 {
-    EffectDescriptorMap::const_iterator aIter( maEffectDiscriptorMap.find( rPresetId ) );
+    EffectDescriptorMap::const_iterator aIter( maEffectDescriptorMap.find( rPresetId ) );
 
-    if( aIter != maEffectDiscriptorMap.end() )
+    if( aIter != maEffectDescriptorMap.end() )
     {
         return (*aIter).second;
     }
