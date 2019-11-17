@@ -397,12 +397,13 @@ sal_Int32 CustomAnimationEffect::get_node_type( const Reference< XAnimationNode 
     return nNodeType;
 }
 
-void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
+void CustomAnimationEffect::setPresetClassAndId( sal_Int16 nPresetClass, const OUString& rPresetId )
 {
-    if( mnPresetClass == nPresetClass )
+    if( mnPresetClass == nPresetClass && maPresetId == rPresetId )
         return;
 
     mnPresetClass = nPresetClass;
+    maPresetId = rPresetId;
     if( !mxNode.is() )
         return;
 
@@ -410,7 +411,8 @@ void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
     // and change it
     Sequence< NamedValue > aUserData( mxNode->getUserData() );
     sal_Int32 nLength = aUserData.getLength();
-    bool bFound = false;
+    bool bFoundPresetClass = false;
+    bool bFoundPresetId = false;
     if( nLength )
     {
         NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
@@ -418,16 +420,32 @@ void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
         if (pProp != aUserData.end())
         {
             pProp->Value <<= mnPresetClass;
-            bFound = true;
+            bFoundPresetClass = true;
+        }
+
+        pProp = std::find_if(aUserData.begin(), aUserData.end(),
+            [](const NamedValue& rProp) { return rProp.Name == "preset-id"; });
+        if (pProp != aUserData.end())
+        {
+            pProp->Value <<= mnPresetClass;
+            bFoundPresetId = true;
         }
     }
 
     // no "preset-class" entry inside user data, so add it
-    if( !bFound )
+    if( !bFoundPresetClass )
     {
         aUserData.realloc( nLength + 1);
         aUserData[nLength].Name = "preset-class";
         aUserData[nLength].Value <<= mnPresetClass;
+        ++nLength;
+    }
+
+    if( !bFoundPresetId && maPresetId.getLength() > 0 )
+    {
+        aUserData.realloc( nLength + 1);
+        aUserData[nLength].Name = "preset-id";
+        aUserData[nLength].Value <<= maPresetId;
     }
 
     mxNode->setUserData( aUserData );
@@ -1687,7 +1705,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
     return pEffect;
 }
 
-CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathObj, const Any& rTarget, double fDuration /* = -1.0 */ )
+CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathObj, const Any& rTarget, double fDuration /* = -1.0 */, const OUString& rPresetId )
 {
     CustomAnimationEffectPtr pEffect;
 
@@ -1713,7 +1731,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
         pEffect->setTarget( rTarget );
         pEffect->setTargetSubItem( nSubItem );
         pEffect->setNodeType( css::presentation::EffectNodeType::ON_CLICK );
-        pEffect->setPresetClass( css::presentation::EffectPresetClass::MOTIONPATH );
+        pEffect->setPresetClassAndId( css::presentation::EffectPresetClass::MOTIONPATH, rPresetId );
         pEffect->setAcceleration( 0.5 );
         pEffect->setDecelerate( 0.5 );
         pEffect->setFill( AnimationFill::HOLD );

@@ -71,7 +71,7 @@ public:
     SAL_DLLPRIVATE const OUString&    getProperty() const { return maProperty; }
 
     SAL_DLLPRIVATE sal_Int16       getPresetClass() const { return mnPresetClass; }
-    SAL_DLLPRIVATE void            setPresetClass( sal_Int16 nPresetClass );
+    SAL_DLLPRIVATE void            setPresetClassAndId( sal_Int16 nPresetClass, const OUString& rPresetId );
 
     SAL_DLLPRIVATE sal_Int16       getNodeType() const { return mnNodeType; }
     void                           setNodeType( sal_Int16 nNodeType );
@@ -271,7 +271,7 @@ public:
     SAL_DLLPRIVATE virtual css::uno::Reference< css::animations::XAnimationNode > getRootNode();
 
     SAL_DLLPRIVATE CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const css::uno::Any& rTarget, double fDuration );
-    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const css::uno::Any& rTarget, double fDuration );
+    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const css::uno::Any& rTarget, double fDuration, const OUString& rPresetId );
     void append( const CustomAnimationEffectPtr& pEffect );
     SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration );
     SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const OUString& rPresetSubType, double fDuration );

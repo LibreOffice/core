@@ -1272,7 +1272,7 @@ void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj const * pPa
         {
             std::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
             if( pMainSequence.get() )
-                CustomAnimationEffectPtr pCreated( pMainSequence->append( *pPathObj, makeAny( xShape ), -1.0 ) );
+                CustomAnimationEffectPtr pCreated( pMainSequence->append( *pPathObj, makeAny( xShape ), -1.0, "" ) );
         }
     }
 }

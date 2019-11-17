@@ -242,9 +242,24 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
                     double fDuration = 0.0;
                     *pTarget++ >>= fDuration;
                     bool bFirst = true;
+
+                    OUString sPresetId;
+                    switch(nSlotId)
+                    {
+                        case SID_DRAW_BEZIER_NOFILL:
+                            sPresetId = "libo-motionpath-curve";
+                            break;
+                        case SID_DRAW_POLYGON_NOFILL:
+                            sPresetId = "libo-motionpath-polygon";
+                            break;
+                        case SID_DRAW_FREELINE_NOFILL:
+                            sPresetId = "libo-motionpath-freeform-line";
+                            break;
+                    }
+
                     while( --nTCount )
                     {
-                        CustomAnimationEffectPtr pCreated( pMainSequence->append( *pPathObj, *pTarget++, fDuration ) );
+                        CustomAnimationEffectPtr pCreated( pMainSequence->append( *pPathObj, *pTarget++, fDuration, sPresetId) );
                         if( bFirst )
                             bFirst = false;
                         else

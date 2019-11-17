@@ -700,6 +700,21 @@
           <value xml:lang="en-US">Whip</value>
         </prop>
       </node>
+      <node oor:name="libo-motionpath-curve" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Curve</value>
+        </prop>
+      </node>
+      <node oor:name="libo-motionpath-polygon" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Polygon</value>
+        </prop>
+      </node>
+      <node oor:name="libo-motionpath-freeform-line" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Freeform Line</value>
+        </prop>
+      </node>
       <node oor:name="ooo-motionpath-4-point-star" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">4 Point Star</value>
