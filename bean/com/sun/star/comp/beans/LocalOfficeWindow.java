@@ -95,6 +95,8 @@ public class LocalOfficeWindow
     {
          // Create a UNO toolkit.
          XComponentContext xContext = mConnection.getComponentContext();
+         if (xContext == null)
+             throw new RuntimeException("no context");
          XMultiComponentFactory compfactory = xContext.getServiceManager();
          XMultiServiceFactory factory = UnoRuntime.queryInterface(
                  XMultiServiceFactory.class, compfactory);
