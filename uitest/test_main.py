@@ -54,7 +54,7 @@ def find_test_files(dir_path):
 
         # ignore the __init__.py file
         # it is obviously not a test file
-        if f is "__init__.py":
+        if f == "__init__.py":
             continue
 
         valid_files.append(file_path)

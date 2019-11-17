@@ -45,7 +45,7 @@ class SimpleWriterTest(UITestCase):
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         state = get_state_as_dict(xWriterEdit)
-        while state["CurrentPage"] is "1":
+        while state["CurrentPage"] == "1":
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
             state = get_state_as_dict(xWriterEdit)
 
