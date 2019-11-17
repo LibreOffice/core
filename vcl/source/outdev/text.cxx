@@ -338,6 +338,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
         // relief-color is black for white text, in all other cases
         // we set this to LightGray
+        // coverity[copy_paste_error: FALSE] - this is intentional
         if ( aTextColor == COL_WHITE )
             aReliefColor = COL_BLACK;
         SetTextLineColor( aReliefColor );
