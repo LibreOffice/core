@@ -636,26 +636,29 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     if (/*m_bGrammarResults && */nId == MN_SHORT_COMMENT)
         return;     // nothing to do since it is the error message (short comment)
 
-    if ((MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ||
-        (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END))
+    if (MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END)
     {
-        OUString sNewWord;
-        if (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END)
-        {
-            PopupMenu* pMenu = m_xPopupMenu->GetPopupMenu(m_nCorrectMenuId);
-            assert(pMenu);
-            sNewWord = pMenu->GetItemText(nId);
-        }
-        else
-            sNewWord = m_xPopupMenu->GetItemText(nId);
+        OUString sApplyRule("Replace_");
+        if(m_bGrammarResults)
+            sApplyRule += "Grammar_";
+        else if (m_xSpellAlt.is())
+            sApplyRule += "Spelling_";
+        sApplyRule += m_xPopupMenu->GetItemText(nId);
 
-        if (m_bGrammarResults || m_xSpellAlt.is())
+        SfxStringItem aApplyItem(FN_PARAM_1, sApplyRule);
+        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_APPLY_SPELLCHECKING, SfxCallMode::SYNCHRON, { &aApplyItem });
+    }
+    else if(MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END)
+    {
+        if (m_xSpellAlt.is())
         {
             bool bOldIns = m_pSh->IsInsMode();
             m_pSh->SetInsMode();
 
-            OUString aTmp( sNewWord );
-            OUString aOrig( m_bGrammarResults ? OUString() : m_xSpellAlt->getWord() );
+            PopupMenu* pMenu = m_xPopupMenu->GetPopupMenu(m_nCorrectMenuId);
+            assert(pMenu);
+            OUString aTmp( pMenu->GetItemText(nId) );
+            OUString aOrig( m_xSpellAlt->getWord() );
 
             // if original word has a trailing . (likely the end of a sentence)
             // and the replacement text hasn't, then add it to the replacement
@@ -688,11 +691,11 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             // record only if it's NOT already present in autocorrection
             SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
-            OUString aOrigWord( m_bGrammarResults ? OUString() : m_xSpellAlt->getWord() ) ;
-            SvxPrepareAutoCorrect( aOrigWord, sNewWord );
+            OUString aOrigWord( m_xSpellAlt->getWord() ) ;
+            OUString aNewWord( pMenu->GetItemText(nId) );
+            SvxPrepareAutoCorrect( aOrigWord, aNewWord );
 
-            if (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END)
-                pACorr->PutText( aOrigWord, sNewWord, m_nCheckedLanguage );
+            pACorr->PutText( aOrigWord, aNewWord, m_nCheckedLanguage );
 
             /* #102505# EndAction/EndUndo moved down since insertion
                of temporary auto correction is now undoable two and
