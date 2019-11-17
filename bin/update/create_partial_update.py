@@ -58,7 +58,7 @@ def download_mar_for_update_channel_and_platform(config, platform, temp_dir):
     base_url = config.server_url + "update/partial-targets/1/"
     url = base_url + platform + "/" + config.channel
     r = requests.get(url)
-    if r.status_code is not 200:
+    if r.status_code != 200:
         print(r.content)
         raise Exception("download failed")
 
