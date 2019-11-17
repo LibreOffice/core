@@ -637,6 +637,17 @@ void CustomAnimationPane::updateControls()
             }
         }
 
+        // If preset id is missing and category is motion path.
+        if (nAnimationPos < 0 && nCategoryPos == 3)
+        {
+            if (rsPresetId == "libo-motionpath-curve")
+                mpLBAnimation->SelectEntryPos(mnCurvePathPos);
+            else if (rsPresetId == "libo-motionpath-polygon")
+                mpLBAnimation->SelectEntryPos(mnPolygonPathPos);
+            else if (rsPresetId == "libo-motionpath-freeform-line")
+                mpLBAnimation->SelectEntryPos(mnFreeformPathPos);
+        }
+
         sal_uInt16 nPos = 0xffff;
 
         sal_Int16 nNodeType = pEffect->getNodeType();
