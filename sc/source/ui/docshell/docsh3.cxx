@@ -545,6 +545,7 @@ sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPr
 
                     // flip size
                     Size aOldSize = rSet.Get(ATTR_PAGE_SIZE).GetSize();
+                    // coverity[swapped_arguments : FALSE] - this is in the correct order
                     Size aNewSize(aOldSize.Height(),aOldSize.Width());
                     SvxSizeItem aNewSItem(ATTR_PAGE_SIZE,aNewSize);
                     rSet.Put( aNewSItem );
