@@ -465,10 +465,69 @@ DECLARE_OOXMLEXPORT_TEST(testTextInput, "textinput.odt")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    // Ensure we have a formfield
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", " FILLIN \"\"");
-    // and it's content is not gone
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:t", "SomeText");
+
+    // test the exported DOCX
+
+    // no hint, empty
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:instrText", " FILLIN \"\"");
+    assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[5]", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[5]/w:rPr", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[6]/w:fldChar", "fldCharType", "end");
+
+    // no hint, content
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[3]/w:instrText", " FILLIN \"\"");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[5]/w:t", "content without hint");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[6]/w:fldChar", "fldCharType", "end");
+
+    // hint, empty
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[3]/w:instrText", " FILLIN \"hint empty\"");
+    assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[5]", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[5]/w:rPr", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[6]/w:fldChar", "fldCharType", "end");
+
+    // hint, content
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[3]/w:instrText", " FILLIN \"hint content\"");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[5]/w:t", "content with hint");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[6]/w:fldChar", "fldCharType", "end");
+
+    // test the imported DOCX
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    int nElements = 0;
+
+    do
+    {
+        uno::Any aField = xFields->nextElement();
+        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.Input"));
+        uno::Reference<beans::XPropertySet> xPropertySet(aField, uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xText(aField, uno::UNO_QUERY);
+
+        // why is the enumeration not in the same order then the fields in the document?
+        // it seems to be stable and the navigation in the GUI is actually correct.
+        OUString sContent, sHint;
+        switch (nElements)
+        {
+        case 1:
+            sContent = "content with hint";
+            sHint = "hint content";
+            break;
+        case 2:
+            sHint = "hint empty";
+            break;
+        case 3:
+            sContent = "content without hint";
+            break;
+        }
+        CPPUNIT_ASSERT_EQUAL(uno::makeAny(sContent), xPropertySet->getPropertyValue("Content"));
+        CPPUNIT_ASSERT_EQUAL(sContent, xText->getAnchor()->getString());
+        CPPUNIT_ASSERT_EQUAL(uno::makeAny(sHint), xPropertySet->getPropertyValue("Hint"));
+        nElements++;
+    }
+    while (xFields->hasMoreElements());
+    CPPUNIT_ASSERT_EQUAL(4, nElements);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf123460, "tdf123460.docx")
