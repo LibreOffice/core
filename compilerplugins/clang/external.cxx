@@ -58,7 +58,7 @@ bool mentions(QualType type1, QualType type2)
         {
             t1 = t2->getPointeeType();
         }
-        else if (auto const t3 = t1->getAs<PointerType>())
+        else if (auto const t3 = t1->getAs<clang::PointerType>())
         {
             t1 = t3->getPointeeType();
         }

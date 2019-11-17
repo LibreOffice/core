@@ -77,7 +77,7 @@ private:
     QualType unqualifyPointeeType(QualType type)
     {
         assert(context_ != nullptr);
-        if (auto const t = type->getAs<PointerType>())
+        if (auto const t = type->getAs<clang::PointerType>())
         {
             return context_->getQualifiedType(
                 context_->getPointerType(t->getPointeeType().getUnqualifiedType()),
