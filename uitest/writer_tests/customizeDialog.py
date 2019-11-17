@@ -34,7 +34,7 @@ class ConfigureDialog(UITestCase):
         xSearch = xDialog.getChild("searchEntry")
 
         initialEntryCount = get_state_as_dict(xfunc)["Children"]
-        self.assertTrue(initialEntryCount is not 0)
+        self.assertTrue(initialEntryCount != 0)
 
         xSearch.executeAction("SET", mkPropertyValues({"TEXT":"format"}))
 
@@ -67,7 +67,7 @@ class ConfigureDialog(UITestCase):
         xCategory = xDialog.getChild("commandcategorylist")
 
         initialEntryCount = get_state_as_dict(xFunc)["Children"]
-        self.assertTrue(initialEntryCount is not 0)
+        self.assertTrue(initialEntryCount != 0)
 
         select_pos(xCategory, "1")
         filteredEntryCount = get_state_as_dict(xFunc)["Children"]
