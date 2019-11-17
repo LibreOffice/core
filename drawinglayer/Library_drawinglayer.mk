@@ -169,6 +169,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/tools/emfppen \
     drawinglayer/source/tools/emfpregion \
     drawinglayer/source/tools/emfpimage \
+    drawinglayer/source/tools/emfpimageattributes \
     drawinglayer/source/tools/emfpfont \
     drawinglayer/source/tools/emfpstringformat \
     drawinglayer/source/tools/emfpcustomlinecap \
