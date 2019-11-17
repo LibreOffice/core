@@ -128,6 +128,7 @@
 #include <xmloff/odffields.hxx>
 #include <bookmrk.hxx>
 #include <linguistic/misc.hxx>
+#include <editeng/splwrap.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -1444,7 +1445,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         const OUString sIgnoreAllPrefix("IgnoreAll_");
         const OUString sSpellingRule("Spelling");
         const OUString sGrammarRule("Grammar");
-        //const OUString aReplacePrefix("Replace_");
+        const OUString aReplacePrefix("Replace_");
 
         // Ignore the word at the cursor pos
         sal_Int32 nPos = 0;
@@ -1499,6 +1500,88 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     SvxDicError(rWrtSh.GetView().GetFrameWeld(), nAddRes);
                 }
             }
+        }
+        // Replace text with the suggestion
+        else if (-1 != (nPos = sApplyText.indexOf( aReplacePrefix )))
+        {
+            sApplyText = sApplyText.replaceAt(nPos, aReplacePrefix.getLength(), "");
+
+            const OUString sSpellingRule2(sSpellingRule + "_");
+            const OUString sGrammarRule2(sGrammarRule + "_");
+            bool bGrammar = false;
+            uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt;
+            if(-1 != (nPos = sApplyText.indexOf( sGrammarRule2 )))
+            {
+                sApplyText = sApplyText.replaceAt(nPos, sGrammarRule2.getLength(), "");
+                linguistic2::ProofreadingResult aGrammarCheckRes;
+                sal_Int32 nErrorInResult = -1;
+                uno::Sequence< OUString > aSuggestions;
+                sal_Int32 nErrorPosInText = -1;
+                SwRect aToFill;
+                bGrammar = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
+            }
+            else if (-1 != (nPos = sApplyText.indexOf( sSpellingRule2 )))
+            {
+                sApplyText = sApplyText.replaceAt(nPos, sSpellingRule2.getLength(), "");
+                SwRect aToFill;
+                xSpellAlt.set(rWrtSh.GetCorrection(nullptr, aToFill));
+                bGrammar = false;
+            }
+
+            if (!bGrammar && !xSpellAlt.is())
+                return;
+
+            bool bOldIns = rWrtSh.IsInsMode();
+            rWrtSh.SetInsMode();
+
+            OUString aTmp( sApplyText );
+            OUString aOrig( bGrammar ? OUString() : xSpellAlt->getWord() );
+
+            // if original word has a trailing . (likely the end of a sentence)
+            // and the replacement text hasn't, then add it to the replacement
+            if (!aTmp.isEmpty() && !aOrig.isEmpty() &&
+                aOrig.endsWith(".") && /* !IsAlphaNumeric ??*/
+                !aTmp.endsWith("."))
+            {
+                aTmp += ".";
+            }
+
+            SwRewriter aRewriter;
+
+            aRewriter.AddRule(UndoArg1, rWrtSh.GetCursorDescr());
+            aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
+
+            OUString aTmpStr = SwResId(STR_START_QUOTE) +
+                aTmp + SwResId(STR_END_QUOTE);
+            aRewriter.AddRule(UndoArg3, aTmpStr);
+
+            rWrtSh.StartUndo(SwUndoId::UI_REPLACE, &aRewriter);
+            rWrtSh.StartAction();
+            rWrtSh.DelLeft();
+
+            rWrtSh.Insert( aTmp );
+
+            /* #102505# EndAction/EndUndo moved down since insertion
+               of temporary auto correction is now undoable two and
+               must reside in the same undo group.*/
+
+            // record only if it's NOT already present in autocorrection
+            SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
+
+            OUString aOrigWord( bGrammar ? OUString() : xSpellAlt->getWord() ) ;
+            OUString aNewWord( sApplyText );
+            SvxPrepareAutoCorrect( aOrigWord, aNewWord );
+
+            if (xSpellAlt.is())
+                pACorr->PutText( aOrigWord, aNewWord, LanguageTag( xSpellAlt->getLocale() ).getLanguageType() );
+
+            /* #102505# EndAction/EndUndo moved down since insertion
+               of temporary auto correction is now undoable two and
+               must reside in the same undo group.*/
+            rWrtSh.EndAction();
+            rWrtSh.EndUndo();
+
+            rWrtSh.SetInsMode( bOldIns );
         }
     }
     break;
