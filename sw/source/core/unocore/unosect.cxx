@@ -64,6 +64,7 @@
 #include <editeng/lrspitem.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
+#include <svx/unobrushitemhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -365,10 +366,12 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
             RES_BACKGROUND, RES_BACKGROUND,
             RES_COL, RES_COL,
             RES_FTN_AT_TXTEND, RES_FRAMEDIR,
-            RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER>{});
+            RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER,
+            XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
     if (m_pImpl->m_pProps->m_pBrushItem)
     {
         aSet.Put(*m_pImpl->m_pProps->m_pBrushItem);
+        setSvxBrushItemAsFillAttributesToTargetSet(*m_pImpl->m_pProps->m_pBrushItem, aSet);
     }
     if (m_pImpl->m_pProps->m_pColItem)
     {
