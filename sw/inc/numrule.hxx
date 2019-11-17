@@ -172,6 +172,7 @@ public:
     OUString MakeRefNumString( const SwNodeNum& rNodeNum,
                              const bool bInclSuperiorNumLabels,
                              const int nRestrictInclToThisLevel ) const;
+    OUString MakeParagraphStyleListString() const;
 
     /** @return list of associated text nodes */
     void GetTextNodeList( SwNumRule::tTextNodeList& rTextNodeList ) const;

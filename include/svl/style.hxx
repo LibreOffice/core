@@ -157,6 +157,8 @@ public:
     virtual bool IsUsed() const;                // Default true
     virtual OUString GetDescription( MapUnit eMetric );
 
+    virtual OUString GetUsedBy() { return OUString(); }
+
     SfxStyleSheetBasePool* GetPool() { return m_pPool; }
     SfxStyleFamily GetFamily() const     { return nFamily; }
     SfxStyleSearchBits   GetMask() const     { return nMask; }

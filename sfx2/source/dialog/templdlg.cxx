@@ -314,6 +314,52 @@ bool DropListBox_Impl::EventNotify( NotifyEvent& rNEvt )
     return bRet;
 }
 
+void DropListBox_Impl::RequestHelp( const HelpEvent& rHEvt )
+{
+    if( rHEvt.GetMode() & HelpEventMode::QUICK )
+    {
+        Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
+        SvTreeListEntry* pEntry = GetEntry( aPos );
+        if( pEntry )
+        {
+            // check the style is used or not
+            const OUString aTemplName(GetEntryText(pEntry));
+            const SfxStyleFamilyItem* pItem = pDialog->GetFamilyItem_Impl();
+
+            SfxStyleSheetBase* pStyle = pDialog->pStyleSheetPool->Find(aTemplName, pItem->GetFamily());
+
+            if ( pStyle && pStyle->IsUsed() )  // pStyle is in use in the document?
+            {
+                OUString sUsedBy;
+                if ( pStyle->GetFamily() == SfxStyleFamily::Pseudo )
+                {
+                    sUsedBy = pStyle->GetUsedBy();
+                }
+                Size aSize( GetOutputSizePixel().Width(), GetEntryHeight() );
+                tools::Rectangle aScreenRect( OutputToScreenPixel( GetEntryPosition( pEntry ) ), aSize );
+
+                OUString sQuickHelpText(aTemplName);
+                if (!sUsedBy.isEmpty())
+                    sQuickHelpText = aTemplName + " -> " + sUsedBy;
+
+                Help::ShowQuickHelp( this, aScreenRect,
+                                     sQuickHelpText, QuickHelpFlags::Left | QuickHelpFlags::VCenter );
+                return;
+            }
+            else
+            {
+                Size aSize( GetOutputSizePixel().Width(), GetEntryHeight() );
+                tools::Rectangle aScreenRect( OutputToScreenPixel( GetEntryPosition( pEntry ) ), aSize );
+
+                Help::ShowQuickHelp( this, aScreenRect,
+                                     aTemplName, QuickHelpFlags::Left | QuickHelpFlags::VCenter );
+                return;
+            }
+        }
+    }
+    SvTreeListBox::RequestHelp( rHEvt );
+}
+
 /** ListBox class that starts a PopupMenu (designer specific) in the
     command handler.
 */
@@ -1948,6 +1994,7 @@ void SfxCommonTemplateDialog_Impl::ShowHdl()
 
 void SfxCommonTemplateDialog_Impl::EnableDelete()
 {
+    bool bEnableDelete(false);
     if(IsInitialized() && HasSelectedStyle())
     {
         OSL_ENSURE(pStyleSheetPool, "No StyleSheetPool");
@@ -1963,19 +2010,10 @@ void SfxCommonTemplateDialog_Impl::EnableDelete()
             pStyleSheetPool->Find(aTemplName,eFam, pTreeBox->IsVisible()? SfxStyleSearchBits::All : nFilter);
 
         OSL_ENSURE(pStyle, "Style not found");
-        if(pStyle && pStyle->IsUserDefined())
-        {
-            EnableDel(true);
-        }
-        else
-        {
-            EnableDel(false);
-        }
+        if (pStyle && pStyle->IsUserDefined() && (pStyle->HasParentSupport() || !pStyle->IsUsed()))
+            bEnableDelete = true;
     }
-    else
-    {
-        EnableDel(false);
-    }
+    EnableDel(bEnableDelete);
 }
 
 IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, TreeListApplyHdl, SvTreeListBox *, bool )
