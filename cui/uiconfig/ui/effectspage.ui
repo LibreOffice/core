@@ -11,46 +11,6 @@
     <property name="row_spacing">6</property>
     <property name="column_spacing">12</property>
     <child>
-      <object class="GtkAlignment" id="alignment12">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="top_padding">6</property>
-        <property name="left_padding">12</property>
-        <property name="right_padding">12</property>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hscrollbar_policy">never</property>
-            <property name="vscrollbar_policy">never</property>
-            <property name="shadow_type">in</property>
-            <child>
-              <object class="GtkViewport">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkDrawingArea" id="preview">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="preview-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="effectspage|preview-atkobject">Preview</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkFrame" id="Effects">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -605,6 +565,67 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="Preview">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="valign">end</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkAlignment" id="alignment12">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
+            <property name="right_padding">12</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="preview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="preview-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="effectspage|preview-atkobject">Preview</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="effectspage|label">Preview</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
       </packing>
     </child>
   </object>

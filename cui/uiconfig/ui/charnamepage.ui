@@ -176,7 +176,7 @@
               <object class="GtkLabel" id="westfontnameft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no" context="charnamepage|westfontnameft-nocjk">Family:</property>
+                <property name="label" context="charnamepage|westfontnameft-nocjk">Family:</property>
               </object>
             </child>
           </object>
@@ -265,7 +265,7 @@
               <object class="GtkLabel" id="weststyleft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no" context="charnamepage|weststyleft-nocjk">Style:</property>
+                <property name="label" context="charnamepage|weststyleft-nocjk">Style:</property>
               </object>
             </child>
           </object>
@@ -482,7 +482,7 @@
                   <object class="GtkLabel" id="westfontnameft-cjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|westfontnameft-cjk">Family:</property>
+                    <property name="label" context="charnamepage|westfontnameft-cjk">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">westfontnamelb-cjk</property>
                     <property name="xalign">0</property>
@@ -496,7 +496,7 @@
                   <object class="GtkLabel" id="weststyleft-cjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|weststyleft-cjk">Style:</property>
+                    <property name="label" context="charnamepage|weststyleft-cjk">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">weststylelb-cjk</property>
                     <property name="xalign">0</property>
@@ -694,7 +694,7 @@
                   <object class="GtkLabel" id="eastfontnameft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|eastfontnameft">Family:</property>
+                    <property name="label" context="charnamepage|eastfontnameft">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eastfontnamelb</property>
                     <property name="xalign">0</property>
@@ -708,7 +708,7 @@
                   <object class="GtkLabel" id="eaststyleft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|eaststyleft">Style:</property>
+                    <property name="label" context="charnamepage|eaststyleft">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eaststylelb</property>
                     <property name="xalign">0</property>
@@ -904,7 +904,7 @@
                   <object class="GtkLabel" id="ctlfontnameft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|ctlfontnameft">Family:</property>
+                    <property name="label" context="charnamepage|ctlfontnameft">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlfontnamelb</property>
                     <property name="xalign">0</property>
@@ -918,7 +918,7 @@
                   <object class="GtkLabel" id="ctlstyleft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|ctlstyleft">Style:</property>
+                    <property name="label" context="charnamepage|ctlstyleft">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlstylelb</property>
                     <property name="xalign">0</property>
@@ -1092,37 +1092,55 @@
       </packing>
     </child>
     <child>
-      <object class="GtkAlignment" id="alignment4">
+      <object class="GtkFrame" id="preview1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="valign">end</property>
-        <property name="top_padding">6</property>
-        <property name="left_padding">12</property>
-        <property name="right_padding">12</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkAlignment" id="alignment4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hscrollbar_policy">never</property>
-            <property name="vscrollbar_policy">never</property>
-            <property name="shadow_type">in</property>
+            <property name="valign">end</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
+            <property name="right_padding">12</property>
             <child>
-              <object class="GtkViewport">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkDrawingArea" id="preview">
+                  <object class="GtkViewport">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="preview-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="charnamepage|preview-atkobject">Preview</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="preview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="preview-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="charnamepage|preview-atkobject">Preview</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
               </object>
             </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="charnamepage|label">Preview</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
