@@ -14,7 +14,9 @@
       <object class="GtkAlignment" id="alignment12">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="valign">end</property>
         <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="top_padding">6</property>
         <property name="left_padding">12</property>
         <property name="right_padding">12</property>
