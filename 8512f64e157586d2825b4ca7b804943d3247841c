@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_8ad06921",
+        "filename": "sfx2/uiconfig/ui/optprintpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-11-17T08:59:34Z",
+      "side": 1,
+      "message": "\"Transparency\"",
+      "range": {
+        "startLine": 533,
+        "startChar": 91,
+        "endLine": 533,
+        "endChar": 103
+      },
+      "revId": "8512f64e157586d2825b4ca7b804943d3247841c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
