@@ -466,6 +466,10 @@ public:
     /** Restores stream position contained in rPos. */
     void                RestorePosition( const XclImpStreamPos& rPos );
 
+    /** Set an SVSTREAM_..._ERROR. */
+    void                SetSvStreamError( const ErrCode& rErrCode )
+                            { mrStrm.SetError( rErrCode ); }
+
 private:
     /** Seeks to next raw record header and reads record ID and size.
         @descr  This is a "raw" function, means that stream members are
