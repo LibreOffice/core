@@ -1399,6 +1399,7 @@ void SdrPage::SetOrientation(Orientation eOri)
     Size aSiz(GetSize());
     if (aSiz.Width()!=aSiz.Height()) {
         if ((eOri==Orientation::Portrait) == (aSiz.Width()>aSiz.Height())) {
+            // coverity[swapped_arguments : FALSE] - this is in the correct order
             SetSize(Size(aSiz.Height(),aSiz.Width()));
         }
     }
