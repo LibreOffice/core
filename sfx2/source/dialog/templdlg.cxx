@@ -1948,6 +1948,7 @@ void SfxCommonTemplateDialog_Impl::ShowHdl()
 
 void SfxCommonTemplateDialog_Impl::EnableDelete()
 {
+    bool bEnableDelete(false);
     if(IsInitialized() && HasSelectedStyle())
     {
         OSL_ENSURE(pStyleSheetPool, "No StyleSheetPool");
@@ -1963,19 +1964,10 @@ void SfxCommonTemplateDialog_Impl::EnableDelete()
             pStyleSheetPool->Find(aTemplName,eFam, pTreeBox->IsVisible()? SfxStyleSearchBits::All : nFilter);
 
         OSL_ENSURE(pStyle, "Style not found");
-        if(pStyle && pStyle->IsUserDefined())
-        {
-            EnableDel(true);
-        }
-        else
-        {
-            EnableDel(false);
-        }
+        if (pStyle && pStyle->IsUserDefined() && (pStyle->HasParentSupport() || !pStyle->IsUsed()))
+            bEnableDelete = true;
     }
-    else
-    {
-        EnableDel(false);
-    }
+    EnableDel(bEnableDelete);
 }
 
 IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, TreeListApplyHdl, SvTreeListBox *, bool )
