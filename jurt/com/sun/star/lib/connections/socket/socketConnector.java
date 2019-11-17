@@ -143,6 +143,10 @@ public final class socketConnector implements XConnector {
                     throw new NoConnectException(e);
             }
         }
+
+        if (socket == null)
+            throw new ConnectionSetupException("no socket");
+
         XConnection con;
         try {
             // we enable tcpNoDelay for loopback connections because
