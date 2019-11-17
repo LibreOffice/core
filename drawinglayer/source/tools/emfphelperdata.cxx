@@ -23,6 +23,7 @@
 #include "emfppath.hxx"
 #include "emfpregion.hxx"
 #include "emfpimage.hxx"
+#include "emfpimageattributes.hxx"
 #include "emfpfont.hxx"
 #include "emfpstringformat.hxx"
 #include <basegfx/curve/b2dcubicbezier.hxx>
@@ -226,7 +227,9 @@ namespace emfplushelper
             }
             case EmfPlusObjectTypeImageAttributes:
             {
-                SAL_WARN("drawinglayer", "EMF+\t TODO Object type 'image attributes' not yet implemented");
+                EMFPImageAttributes *imageAttributes = new EMFPImageAttributes();
+                maEMFPObjects[index].reset(imageAttributes);
+                imageAttributes->Read(rObjectStream);
                 break;
             }
             case EmfPlusObjectTypeCustomLineCap:
