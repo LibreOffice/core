@@ -1441,7 +1441,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if (pItem2)
             sApplyText = pItem2->GetValue();
 
-        const OUString sIgnoreString("Ignore");
+        const OUString sIgnorePrefix("Ignore_");
         const OUString sIgnoreAllPrefix("IgnoreAll_");
         const OUString sSpellingRule("Spelling");
         const OUString sGrammarRule("Grammar");
@@ -1449,8 +1449,31 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         // Ignore the word at the cursor pos
         sal_Int32 nPos = 0;
-        if (sApplyText == sIgnoreString)
+        if (-1 != (nPos = sApplyText.indexOf( sIgnorePrefix )))
         {
+            if(!rWrtSh.HasSelection())
+            {
+                sApplyText = sApplyText.replaceAt(nPos, sIgnorePrefix.getLength(), "");
+                if (-1 != (nPos = sApplyText.indexOf( sGrammarRule )))
+                {
+                    linguistic2::ProofreadingResult aGrammarCheckRes;
+                    sal_Int32 nErrorInResult = -1;
+                    uno::Sequence< OUString > aSuggestions;
+                    sal_Int32 nErrorPosInText = -1;
+                    SwRect aToFill;
+                    bool bCorrectionRes = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
+                    if (!bCorrectionRes)
+                        return;
+                }
+                else
+                {
+                    SwRect aToFill;
+                    uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt( rWrtSh.GetCorrection(nullptr, aToFill) );
+                    if (!xSpellAlt.is())
+                        return;
+                }
+            }
+
             SwPaM *pPaM = rWrtSh.GetCursor();
             if (pPaM)
                 SwEditShell::IgnoreGrammarErrorAt( *pPaM );
@@ -1513,12 +1536,19 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if(-1 != (nPos = sApplyText.indexOf( sGrammarRule2 )))
             {
                 sApplyText = sApplyText.replaceAt(nPos, sGrammarRule2.getLength(), "");
-                linguistic2::ProofreadingResult aGrammarCheckRes;
-                sal_Int32 nErrorInResult = -1;
-                uno::Sequence< OUString > aSuggestions;
-                sal_Int32 nErrorPosInText = -1;
-                SwRect aToFill;
-                bGrammar = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
+                if(rWrtSh.HasSelection())
+                {
+                    bGrammar = true;
+                }
+                else
+                {
+                    linguistic2::ProofreadingResult aGrammarCheckRes;
+                    sal_Int32 nErrorInResult = -1;
+                    uno::Sequence< OUString > aSuggestions;
+                    sal_Int32 nErrorPosInText = -1;
+                    SwRect aToFill;
+                    bGrammar = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
+                }
             }
             else if (-1 != (nPos = sApplyText.indexOf( sSpellingRule2 )))
             {
