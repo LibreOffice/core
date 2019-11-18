@@ -175,8 +175,6 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
         {
             uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 
-            uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
-
             uno::Reference<io::XInputStream> xInputStream = new utl::OInputStreamWrapper( rStream );
 
 /* testcode
@@ -212,14 +210,12 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
 */
 
             // uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
-            uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xContext, xText ) );
-
-            xParser->setDocumentHandler( xHandler );
+            rtl::Reference< SvxXMLXTextImportComponent > xImport( new SvxXMLXTextImportComponent( xContext, xText ) );
 
             xml::sax::InputSource aParserInput;
             aParserInput.aInputStream = xInputStream;
 //          aParserInput.sSystemId = aMedium.GetName();
-            xParser->parseStream( aParserInput );
+            xImport->parseStream( aParserInput );
         }
         while(false);
 
