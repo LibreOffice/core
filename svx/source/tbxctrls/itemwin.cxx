@@ -456,6 +456,13 @@ void SvxFillTypeBox::ReleaseFocus_Impl()
     }
 }
 
+boost::property_tree::ptree SvxFillTypeBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree = FillTypeLB::DumpAsPropertyTree();
+    aTree.put("command", ".uno:FillStyle");
+    return aTree;
+}
+
 SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent ) :
     ListBox(pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_TABSTOP),
     nCurPos( 0 )
