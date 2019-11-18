@@ -3270,17 +3270,20 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
 
                     // round-down a single height value, multiply resulting (pixel) values
                     const sal_uLong nOneHeight = static_cast<sal_uLong>( aData.mnValue * fScale );
-                    SCROW nRowsInSegment = nSegmentEnd + 1 - nRow;
-                    if (pnMaxHeight)
+                    // sometimes scaling results in zero height
+                    if (nOneHeight)
                     {
-                        nRowsInSegment = std::min(nRowsInSegment, static_cast<SCROW>(*pnMaxHeight / nOneHeight + 1));
-                        nHeight += nOneHeight * nRowsInSegment;
-                        if (nHeight > *pnMaxHeight)
-                            return nHeight;
+                        SCROW nRowsInSegment = nSegmentEnd + 1 - nRow;
+                        if (pnMaxHeight)
+                        {
+                            nRowsInSegment = std::min(nRowsInSegment, static_cast<SCROW>(*pnMaxHeight / nOneHeight + 1));
+                            nHeight += nOneHeight * nRowsInSegment;
+                            if (nHeight > *pnMaxHeight)
+                                return nHeight;
+                        }
+                        else
+                            nHeight += nOneHeight * nRowsInSegment;
                     }
-                    else
-                        nHeight += nOneHeight * nRowsInSegment;
-
 
                     nRow = nSegmentEnd + 1;
                 }
