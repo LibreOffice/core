@@ -32,30 +32,30 @@
 #include <breakit.hxx>
 
 SwCallLink::SwCallLink( SwCursorShell & rSh )
-    : rShell( rSh )
+    : m_rShell( rSh )
 {
     // remember SPoint-values of current cursor
-    SwPaM* pCursor = rShell.IsTableMode() ? rShell.GetTableCrs() : rShell.GetCursor();
+    SwPaM* pCursor = m_rShell.IsTableMode() ? m_rShell.GetTableCrs() : m_rShell.GetCursor();
     SwNode& rNd = pCursor->GetPoint()->nNode.GetNode();
-    nNode = rNd.GetIndex();
-    nContent = pCursor->GetPoint()->nContent.GetIndex();
-    nNdTyp = rNd.GetNodeType();
-    bHasSelection = ( *pCursor->GetPoint() != *pCursor->GetMark() );
+    m_nNode = rNd.GetIndex();
+    m_nContent = pCursor->GetPoint()->nContent.GetIndex();
+    m_nNodeType = rNd.GetNodeType();
+    m_bHasSelection = ( *pCursor->GetPoint() != *pCursor->GetMark() );
 
     if( rNd.IsTextNode() )
-        nLeftFramePos = SwCallLink::getLayoutFrame( rShell.GetLayout(), *rNd.GetTextNode(), nContent,
-                                            !rShell.ActionPend() );
+        m_nLeftFramePos = SwCallLink::getLayoutFrame( m_rShell.GetLayout(), *rNd.GetTextNode(), m_nContent,
+                                            !m_rShell.ActionPend() );
     else
     {
-        nLeftFramePos = 0;
+        m_nLeftFramePos = 0;
 
         // A special treatment for SwFeShell:
         // When deleting the header/footer, footnotes SwFeShell sets the
         // Cursor to NULL (Node + Content).
         // If the Cursor is not on a ContentNode (ContentNode) this fact gets
         // saved in nNdType.
-        if( SwNodeType::ContentMask & nNdTyp )
-            nNdTyp = SwNodeType::NONE;
+        if( SwNodeType::ContentMask & m_nNodeType )
+            m_nNodeType = SwNodeType::NONE;
     }
 }
 
@@ -81,25 +81,25 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell const & rShe
 
 SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
 {
-    if( nNdTyp == SwNodeType::NONE || !rShell.m_bCallChgLnk ) // see ctor
+    if( m_nNodeType == SwNodeType::NONE || !m_rShell.m_bCallChgLnk ) // see ctor
         return ;
 
     // If travelling over Nodes check formats and register them anew at the
     // new Node.
-    SwPaM* pCurrentCursor = rShell.IsTableMode() ? rShell.GetTableCrs() : rShell.GetCursor();
+    SwPaM* pCurrentCursor = m_rShell.IsTableMode() ? m_rShell.GetTableCrs() : m_rShell.GetCursor();
     SwContentNode * pCNd = pCurrentCursor->GetContentNode();
     if( !pCNd )
         return;
 
-    lcl_notifyRow(pCNd, rShell);
+    lcl_notifyRow(pCNd, m_rShell);
 
-    const SwDoc *pDoc=rShell.GetDoc();
+    const SwDoc *pDoc=m_rShell.GetDoc();
     const SwContentNode *pNode = nullptr;
-    if ( pDoc && nNode < pDoc->GetNodes( ).Count( ) )
+    if ( pDoc && m_nNode < pDoc->GetNodes( ).Count( ) )
     {
-        pNode = pDoc->GetNodes()[nNode]->GetContentNode();
+        pNode = pDoc->GetNodes()[m_nNode]->GetContentNode();
     }
-    lcl_notifyRow(pNode, rShell);
+    lcl_notifyRow(pNode, m_rShell);
 
     sal_Int32 nCmp, nCurrentContent = pCurrentCursor->GetPoint()->nContent.GetIndex();
     SwNodeType nNdWhich = pCNd->GetNodeType();
@@ -107,32 +107,32 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
 
     // Register the Shell as dependent at the current Node. By doing this all
     // attribute changes can be signaled over the link.
-    pCNd->Add( &rShell );
+    pCNd->Add( &m_rShell );
 
     const bool bCurrentHasSelection = (*pCurrentCursor->GetPoint() != *pCurrentCursor->GetMark());
 
-    if( nNdTyp != nNdWhich || nNode != nCurrentNode )
+    if( m_nNodeType != nNdWhich || m_nNode != nCurrentNode )
     {
         // Every time a switch between nodes occurs, there is a chance that
         // new attributes do apply - meaning text-attributes.
         // So the currently applying attributes would have to be determined.
         // That can be done in one go by the handler.
-        rShell.CallChgLnk();
+        m_rShell.CallChgLnk();
     }
-    else if (bHasSelection != bCurrentHasSelection)
+    else if (m_bHasSelection != bCurrentHasSelection)
     {
         // always call change link when selection changes
-        rShell.CallChgLnk();
+        m_rShell.CallChgLnk();
     }
-    else if( rShell.m_aChgLnk.IsSet() && SwNodeType::Text == nNdWhich &&
-             nContent != nCurrentContent )
+    else if( m_rShell.m_aChgLnk.IsSet() && SwNodeType::Text == nNdWhich &&
+             m_nContent != nCurrentContent )
     {
         // If travelling with left/right only and the frame is
         // unchanged (columns!) then check text hints.
-        if( nLeftFramePos == SwCallLink::getLayoutFrame( rShell.GetLayout(), *pCNd->GetTextNode(), nCurrentContent,
-                                                    !rShell.ActionPend() ) &&
-            (( nCmp = nContent ) + 1 == nCurrentContent ||          // Right
-            nContent -1 == ( nCmp = nCurrentContent )) )            // Left
+        if( m_nLeftFramePos == SwCallLink::getLayoutFrame( m_rShell.GetLayout(), *pCNd->GetTextNode(), nCurrentContent,
+                                                    !m_rShell.ActionPend() ) &&
+            (( nCmp = m_nContent ) + 1 == nCurrentContent ||          // Right
+            m_nContent -1 == ( nCmp = nCurrentContent )) )            // Left
         {
             if( nCmp == nCurrentContent && pCurrentCursor->HasMark() ) // left & select
                 ++nCmp;
@@ -150,9 +150,9 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
                     // If "only start" or "start and end equal" then call on
                     // every overflow of start.
                     if( ( !pEnd || ( nStart == *pEnd ) ) &&
-                        ( nStart == nContent || nStart == nCurrentContent) )
+                        ( nStart == m_nContent || nStart == nCurrentContent) )
                     {
-                        rShell.CallChgLnk();
+                        m_rShell.CallChgLnk();
                         return;
                     }
 
@@ -163,7 +163,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
                             ( pHt->DontExpand() ? nCmp == *pEnd-1
                                                 : nCmp == *pEnd ) ))
                     {
-                        rShell.CallChgLnk();
+                        m_rShell.CallChgLnk();
                         return;
                     }
                 }
@@ -172,10 +172,10 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
             assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
             const OUString rText = pCNd->GetTextNode()->GetText();
             if( !nCmp ||
-                g_pBreakIt->GetBreakIter()->getScriptType( rText, nContent )
+                g_pBreakIt->GetBreakIter()->getScriptType( rText, m_nContent )
                 != g_pBreakIt->GetBreakIter()->getScriptType(rText, nCurrentContent))
             {
-                rShell.CallChgLnk();
+                m_rShell.CallChgLnk();
                 return;
             }
         }
@@ -183,13 +183,13 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
             // If travelling more than one character with home/end/.. then
             // always call ChgLnk, because it can not be determined here what
             // has changed. Something may have changed.
-            rShell.CallChgLnk();
+            m_rShell.CallChgLnk();
     }
 
     const SwFrame* pFrame;
     const SwFlyFrame *pFlyFrame;
-    if (!rShell.ActionPend() && nullptr != (pFrame = pCNd->getLayoutFrame(rShell.GetLayout(), nullptr, nullptr)) &&
-        nullptr != ( pFlyFrame = pFrame->FindFlyFrame() ) && !rShell.IsTableMode() )
+    if (!m_rShell.ActionPend() && nullptr != (pFrame = pCNd->getLayoutFrame(m_rShell.GetLayout(), nullptr, nullptr)) &&
+        nullptr != ( pFlyFrame = pFrame->FindFlyFrame() ) && !m_rShell.IsTableMode() )
     {
         const SwNodeIndex* pIndex = pFlyFrame->GetFormat()->GetContent().GetContentIdx();
         OSL_ENSURE( pIndex, "Fly without Content" );
@@ -199,9 +199,9 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
 
         const SwNode& rStNd = pIndex->GetNode();
 
-        if( rStNd.EndOfSectionNode()->StartOfSectionIndex() > nNode ||
-            nNode > rStNd.EndOfSectionIndex() )
-            rShell.GetFlyMacroLnk().Call( pFlyFrame->GetFormat() );
+        if( rStNd.EndOfSectionNode()->StartOfSectionIndex() > m_nNode ||
+            m_nNode > rStNd.EndOfSectionIndex() )
+            m_rShell.GetFlyMacroLnk().Call( pFlyFrame->GetFormat() );
     }
 }
 

@@ -30,12 +30,12 @@ class SwRootFrame;
 class SwCallLink
 {
 public:
-    SwCursorShell & rShell;
-    sal_uLong nNode;
-    sal_Int32 nContent;
-    SwNodeType nNdTyp;
-    long nLeftFramePos;
-    bool bHasSelection;
+    SwCursorShell & m_rShell;
+    sal_uLong m_nNode;
+    sal_Int32 m_nContent;
+    SwNodeType m_nNodeType;
+    long m_nLeftFramePos;
+    bool m_bHasSelection;
 
     explicit SwCallLink( SwCursorShell & rSh );
     ~SwCallLink() COVERITY_NOEXCEPT_FALSE;
