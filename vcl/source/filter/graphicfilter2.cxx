@@ -532,7 +532,7 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
             bRet = true;
 
             if ( bExtendedInfo )
-            {
+            do {
                 sal_uInt8 cByte = 0;
 
                 // IHDR-Chunk
@@ -540,19 +540,27 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
 
                 // width
                 rStm.ReadUInt32( nTemp32 );
+                if (!rStm.good())
+                    break;
                 aPixSize.setWidth( nTemp32 );
 
                 // height
                 rStm.ReadUInt32( nTemp32 );
+                if (!rStm.good())
+                    break;
                 aPixSize.setHeight( nTemp32 );
 
                 // Bits/Pixel
                 rStm.ReadUChar( cByte );
+                if (!rStm.good())
+                    break;
                 nBitsPerPixel = cByte;
 
                 // Colour type - check whether it supports alpha values
                 sal_uInt8 cColType = 0;
                 rStm.ReadUChar( cColType );
+                if (!rStm.good())
+                    break;
                 bIsAlpha = bIsTransparent = ( cColType == 4 || cColType == 6 );
 
                 // Planes always 1;
@@ -610,7 +618,7 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                     rStm.ReadUInt32( nLen32 );
                     rStm.ReadUInt32( nTemp32 );
                 }
-            }
+            } while (false);
         }
     }
     rStm.Seek( nStmPos );
