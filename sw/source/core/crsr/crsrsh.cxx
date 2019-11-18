@@ -269,10 +269,10 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
 
     {
         SwCallLink aLk( *this );           // Watch cursor moves,
-        aLk.nNode = m_nCurrentNode;        // possibly call the link
-        aLk.nNdTyp = m_nCurrentNdTyp;
-        aLk.nContent = m_nCurrentContent;
-        aLk.nLeftFramePos = m_nLeftFramePos;
+        aLk.m_nNode = m_nCurrentNode;        // possibly call the link
+        aLk.m_nNodeType = m_nCurrentNdTyp;
+        aLk.m_nContent = m_nCurrentContent;
+        aLk.m_nLeftFramePos = m_nLeftFramePos;
 
         if( !m_nCursorMove ||
             ( 1 == m_nCursorMove && m_bInCMvVisportChgd ) )
@@ -3191,7 +3191,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
                     {
                         SwCallLink aTmp( *this );
                         SwCursorSaveState aSaveState( *m_pCurrentCursor );
-                        aTmp.nNdTyp = SwNodeType::NONE; // don't do anything in DTOR
+                        aTmp.m_nNodeType = SwNodeType::NONE; // don't do anything in DTOR
                         if( !m_pCurrentCursor->IsInProtectTable( true ) )
                         {
                             const SwSectionNode* pSNd = pCNd->FindSectionNode();
