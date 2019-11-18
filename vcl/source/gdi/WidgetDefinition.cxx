@@ -64,7 +64,7 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
 
         if (state->msButtonValue != "any"
             && !((state->msButtonValue == "true" && eButtonValue == ButtonValue::On)
-                 || (state->msButtonValue == "false" && eButtonValue != ButtonValue::On)))
+                 || (state->msButtonValue == "false" && eButtonValue == ButtonValue::Off)))
         {
             bAdd = false;
         }
