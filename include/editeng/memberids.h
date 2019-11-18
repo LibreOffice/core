@@ -175,6 +175,10 @@
 // SvxShadowItem
 #define MID_SHADOW_TRANSPARENCE 1
 
+// SvxColorItem
+#define MID_COLOR_RGB 0
+#define MID_COLOR_ALPHA 1
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
