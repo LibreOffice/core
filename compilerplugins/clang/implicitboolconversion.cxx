@@ -15,6 +15,8 @@
 #include <string>
 #include <vector>
 
+#include "clang/Basic/Builtins.h"
+
 #include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
