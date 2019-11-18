@@ -599,21 +599,22 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
+        // None is added only for LOK, it means there is no need to execute anything
         m_xPopupMenu->SetItemCommand(MN_SHORT_COMMENT, ".uno:None");
         m_xPopupMenu->SetItemCommand(m_nSpellDialogId, ".uno:SpellingAndGrammarDialog");
         if(m_bGrammarResults)
-            m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:ApplySpellChecking?ApplyRule:string=IgnoreAll_Grammar");
+            m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:SpellCheckIgnoreAll?Type:string=Grammar");
         else
-            m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:ApplySpellChecking?ApplyRule:string=IgnoreAll_Spelling");
+            m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:SpellCheckIgnoreAll?Type:string=Spelling");
         if(m_bGrammarResults)
-            m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:ApplySpellChecking?ApplyRule:string=Ignore_Grammar");
+            m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:SpellCheckIgnore?Type:string=Grammar");
         else
-            m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:ApplySpellChecking?ApplyRule:string=Ignore_Spelling");
+            m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:SpellCheckIgnore?Type:string=Spelling");
 
         for(int i = 0; i < aSuggestions.getLength(); ++i)
         {
             sal_uInt16 nItemId = MN_SUGGESTION_START + i;
-            OUString sCommandString = OUString(".uno:ApplySpellChecking?ApplyRule:string=Replace_");
+            OUString sCommandString = OUString(".uno:SpellCheckApplySuggestion?ApplyRule:string=");
             if(m_bGrammarResults)
                 sCommandString += "Grammar_";
             else if (m_xSpellAlt.is())
@@ -706,7 +707,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
 
     if (MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END)
     {
-        OUString sApplyRule("Replace_");
+        OUString sApplyRule("");
         if(m_bGrammarResults)
             sApplyRule += "Grammar_";
         else if (m_xSpellAlt.is())
@@ -714,7 +715,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         sApplyRule += m_xPopupMenu->GetItemText(nId);
 
         SfxStringItem aApplyItem(FN_PARAM_1, sApplyRule);
-        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_APPLY_SPELLCHECKING, SfxCallMode::SYNCHRON, { &aApplyItem });
+        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_SPELLCHECK_APPLY_SUGGESTION, SfxCallMode::SYNCHRON, { &aApplyItem });
     }
     else if(MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END)
     {
@@ -788,13 +789,13 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if (nId == MN_IGNORE_SELECTION)
     {
-        SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? OUString("Ignore_Grammar") : OUString("Ignore_Spelling"));
-        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_APPLY_SPELLCHECKING, SfxCallMode::SYNCHRON, { &aIgnoreString });
+        SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? OUString("Grammar") : OUString("Spelling"));
+        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_SPELLCHECK_IGNORE, SfxCallMode::SYNCHRON, { &aIgnoreString });
     }
     else if (nId == m_nIgnoreWordId)
     {
-        SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? OUString("IgnoreAll_Grammar") : OUString("IgnoreAll_Spelling"));
-        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_APPLY_SPELLCHECKING, SfxCallMode::SYNCHRON, { &aIgnoreString });
+        SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? OUString("Grammar") : OUString("Spelling"));
+        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_SPELLCHECK_IGNORE_ALL, SfxCallMode::SYNCHRON, { &aIgnoreString });
     }
     else if ((MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END) || nId == m_nAddId)
     {
