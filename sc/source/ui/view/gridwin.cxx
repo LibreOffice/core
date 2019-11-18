@@ -1248,6 +1248,11 @@ void ScGridWindow::FilterSelect( sal_uLong nSel )
 
 void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr )
 {
+    ScModule* pScMod = SC_MOD();
+    ScInputHandler* pViewHdl = pScMod->GetInputHdl(pViewData->GetViewShell());
+    if (pViewHdl && pViewData->HasEditView(pViewData->GetActivePart()))
+        pViewHdl->CancelHandler();
+
     SCTAB nTab = pViewData->GetTabNo();
     ScViewFunc* pView = pViewData->GetView();
     pView->EnterData( nCol, nRow, nTab, rStr );
