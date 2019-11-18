@@ -40,8 +40,12 @@ Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage )
     , m_aTextColor( 0x00, 0x00, 0x00 )
 {
     ResetClipRegion();
-    if (!Qt5Data::noNativeControls())
-        m_pWidgetDraw.reset(new Qt5Graphics_Controls());
+
+    if (!initWidgetDrawBackends(false))
+    {
+        if (!Qt5Data::noNativeControls())
+            m_pWidgetDraw.reset(new Qt5Graphics_Controls());
+    }
 }
 
 Qt5Graphics::~Qt5Graphics()
