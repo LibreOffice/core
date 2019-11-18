@@ -830,8 +830,15 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
     {
         void* address;
         size_t size;
+        // some requests are /assets//foo...
+        size_t offset = sizeof("/assets/")-1;
+        if (cpFilePath[offset] == '/') {
+            __android_log_print(ANDROID_LOG_DEBUG,"libo:sal/osl/unx/file", "double-slash in path: %s", cpFilePath);
+            offset++;
+        }
         AAssetManager* mgr = lo_get_native_assetmgr();
-        AAsset* asset = AAssetManager_open(mgr, cpFilePath + sizeof("/assets/")-1, AASSET_MODE_BUFFER);
+        AAsset* asset = AAssetManager_open(mgr, cpFilePath + offset, AASSET_MODE_BUFFER);
+
         if (!asset)
         {
             address = NULL;
