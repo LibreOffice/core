@@ -59,6 +59,7 @@ public:
     {
         // This ensures that all backends return a valid name.
         assert(!name.isEmpty());
+        (void)name;
         return false;
     }
 
