@@ -1740,7 +1740,19 @@ interface BaseText
         StateMethod = GetState ;
     ]
 
-    SID_APPLY_SPELLCHECKING
+    SID_SPELLCHECK_IGNORE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_SPELLCHECK_IGNORE_ALL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_SPELLCHECK_APPLY_SUGGESTION
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

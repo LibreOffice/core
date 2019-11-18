@@ -1434,55 +1434,57 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
     }
     break;
-    case SID_APPLY_SPELLCHECKING:
+    case SID_SPELLCHECK_IGNORE:
     {
-        OUString sApplyText;
-        const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
-        if (pItem2)
-            sApplyText = pItem2->GetValue();
-
-        const OUString sIgnorePrefix("Ignore_");
-        const OUString sIgnoreAllPrefix("IgnoreAll_");
-        const OUString sSpellingRule("Spelling");
-        const OUString sGrammarRule("Grammar");
-        const OUString aReplacePrefix("Replace_");
-
-        // Ignore the word at the cursor pos
-        sal_Int32 nPos = 0;
-        if (-1 != (nPos = sApplyText.indexOf( sIgnorePrefix )))
+        // If there is not selection, we need to create one, before ignoring
+        if(!rWrtSh.HasSelection())
         {
-            if(!rWrtSh.HasSelection())
+            OUString sApplyText;
+            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            if (pItem2)
+                sApplyText = pItem2->GetValue();
+
+            const OUString sGrammarType("Grammar");
+            const OUString sSpellingType("Spelling");
+
+            if (sApplyText == sGrammarType)
             {
-                sApplyText = sApplyText.replaceAt(nPos, sIgnorePrefix.getLength(), "");
-                if (-1 != (nPos = sApplyText.indexOf( sGrammarRule )))
-                {
-                    linguistic2::ProofreadingResult aGrammarCheckRes;
-                    sal_Int32 nErrorInResult = -1;
-                    uno::Sequence< OUString > aSuggestions;
-                    sal_Int32 nErrorPosInText = -1;
-                    SwRect aToFill;
-                    bool bCorrectionRes = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
-                    if (!bCorrectionRes)
-                        return;
-                }
-                else
-                {
-                    SwRect aToFill;
-                    uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt( rWrtSh.GetCorrection(nullptr, aToFill) );
-                    if (!xSpellAlt.is())
-                        return;
-                }
+                linguistic2::ProofreadingResult aGrammarCheckRes;
+                sal_Int32 nErrorInResult = -1;
+                uno::Sequence< OUString > aSuggestions;
+                sal_Int32 nErrorPosInText = -1;
+                SwRect aToFill;
+                bool bCorrectionRes = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
+                if (!bCorrectionRes)
+                    return;
             }
-
-            SwPaM *pPaM = rWrtSh.GetCursor();
-            if (pPaM)
-                SwEditShell::IgnoreGrammarErrorAt( *pPaM );
+            else if (sApplyText == sSpellingType)
+            {
+                SwRect aToFill;
+                uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt( rWrtSh.GetCorrection(nullptr, aToFill) );
+                if (!xSpellAlt.is())
+                    return;
+            }
         }
-        // Ignore all similar items as the current word
-        else if (-1 != (nPos = sApplyText.indexOf( sIgnoreAllPrefix )))
+
+        SwPaM *pPaM = rWrtSh.GetCursor();
+        if (pPaM)
+            SwEditShell::IgnoreGrammarErrorAt( *pPaM );
+    }
+    break;
+    case SID_SPELLCHECK_IGNORE_ALL:
+    {
+        if(!rWrtSh.HasSelection())
         {
-            sApplyText = sApplyText.replaceAt(nPos, sIgnoreAllPrefix.getLength(), "");
-            if(sApplyText == sGrammarRule)
+            OUString sApplyText;
+            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            if (pItem2)
+                sApplyText = pItem2->GetValue();
+
+            const OUString sGrammarType("Grammar");
+            const OUString sSpellingType("Spelling");
+
+            if(sApplyText == sGrammarType)
             {
                 linguistic2::ProofreadingResult aGrammarCheckRes;
                 sal_Int32 nErrorInResult = -1;
@@ -1510,7 +1512,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     }
                 }
             }
-            else if (sApplyText == sSpellingRule)
+            else if (sApplyText == sSpellingType)
             {
                 SwRect aToFill;
                 uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt( rWrtSh.GetCorrection(nullptr, aToFill) );
@@ -1524,95 +1526,100 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
             }
         }
-        // Replace text with the suggestion
-        else if (-1 != (nPos = sApplyText.indexOf( aReplacePrefix )))
+    }
+    break;
+    case SID_SPELLCHECK_APPLY_SUGGESTION:
+    {
+        OUString sApplyText;
+        const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+        if (pItem2)
+            sApplyText = pItem2->GetValue();
+
+        const OUString sSpellingRule("Spelling_");
+        const OUString sGrammarRule("Grammar_");
+
+        bool bGrammar = false;
+        sal_Int32 nPos = 0;
+        uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt;
+        if(-1 != (nPos = sApplyText.indexOf( sGrammarRule )))
         {
-            sApplyText = sApplyText.replaceAt(nPos, aReplacePrefix.getLength(), "");
-
-            const OUString sSpellingRule2(sSpellingRule + "_");
-            const OUString sGrammarRule2(sGrammarRule + "_");
-            bool bGrammar = false;
-            uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt;
-            if(-1 != (nPos = sApplyText.indexOf( sGrammarRule2 )))
+            sApplyText = sApplyText.replaceAt(nPos, sGrammarRule.getLength(), "");
+            if(rWrtSh.HasSelection())
             {
-                sApplyText = sApplyText.replaceAt(nPos, sGrammarRule2.getLength(), "");
-                if(rWrtSh.HasSelection())
-                {
-                    bGrammar = true;
-                }
-                else
-                {
-                    linguistic2::ProofreadingResult aGrammarCheckRes;
-                    sal_Int32 nErrorInResult = -1;
-                    uno::Sequence< OUString > aSuggestions;
-                    sal_Int32 nErrorPosInText = -1;
-                    SwRect aToFill;
-                    bGrammar = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
-                }
+                bGrammar = true;
             }
-            else if (-1 != (nPos = sApplyText.indexOf( sSpellingRule2 )))
+            else
             {
-                sApplyText = sApplyText.replaceAt(nPos, sSpellingRule2.getLength(), "");
+                linguistic2::ProofreadingResult aGrammarCheckRes;
+                sal_Int32 nErrorInResult = -1;
+                uno::Sequence< OUString > aSuggestions;
+                sal_Int32 nErrorPosInText = -1;
                 SwRect aToFill;
-                xSpellAlt.set(rWrtSh.GetCorrection(nullptr, aToFill));
-                bGrammar = false;
+                bGrammar = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
             }
-
-            if (!bGrammar && !xSpellAlt.is())
-                return;
-
-            bool bOldIns = rWrtSh.IsInsMode();
-            rWrtSh.SetInsMode();
-
-            OUString aTmp( sApplyText );
-            OUString aOrig( bGrammar ? OUString() : xSpellAlt->getWord() );
-
-            // if original word has a trailing . (likely the end of a sentence)
-            // and the replacement text hasn't, then add it to the replacement
-            if (!aTmp.isEmpty() && !aOrig.isEmpty() &&
-                aOrig.endsWith(".") && /* !IsAlphaNumeric ??*/
-                !aTmp.endsWith("."))
-            {
-                aTmp += ".";
-            }
-
-            SwRewriter aRewriter;
-
-            aRewriter.AddRule(UndoArg1, rWrtSh.GetCursorDescr());
-            aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
-
-            OUString aTmpStr = SwResId(STR_START_QUOTE) +
-                aTmp + SwResId(STR_END_QUOTE);
-            aRewriter.AddRule(UndoArg3, aTmpStr);
-
-            rWrtSh.StartUndo(SwUndoId::UI_REPLACE, &aRewriter);
-            rWrtSh.StartAction();
-            rWrtSh.DelLeft();
-
-            rWrtSh.Insert( aTmp );
-
-            /* #102505# EndAction/EndUndo moved down since insertion
-               of temporary auto correction is now undoable two and
-               must reside in the same undo group.*/
-
-            // record only if it's NOT already present in autocorrection
-            SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
-
-            OUString aOrigWord( bGrammar ? OUString() : xSpellAlt->getWord() ) ;
-            OUString aNewWord( sApplyText );
-            SvxPrepareAutoCorrect( aOrigWord, aNewWord );
-
-            if (xSpellAlt.is())
-                pACorr->PutText( aOrigWord, aNewWord, LanguageTag( xSpellAlt->getLocale() ).getLanguageType() );
-
-            /* #102505# EndAction/EndUndo moved down since insertion
-               of temporary auto correction is now undoable two and
-               must reside in the same undo group.*/
-            rWrtSh.EndAction();
-            rWrtSh.EndUndo();
-
-            rWrtSh.SetInsMode( bOldIns );
         }
+        else if (-1 != (nPos = sApplyText.indexOf( sSpellingRule )))
+        {
+            sApplyText = sApplyText.replaceAt(nPos, sSpellingRule.getLength(), "");
+            SwRect aToFill;
+            xSpellAlt.set(rWrtSh.GetCorrection(nullptr, aToFill));
+            bGrammar = false;
+        }
+
+        if (!bGrammar && !xSpellAlt.is())
+            return;
+
+        bool bOldIns = rWrtSh.IsInsMode();
+        rWrtSh.SetInsMode();
+
+        OUString aTmp( sApplyText );
+        OUString aOrig( bGrammar ? OUString() : xSpellAlt->getWord() );
+
+        // if original word has a trailing . (likely the end of a sentence)
+        // and the replacement text hasn't, then add it to the replacement
+        if (!aTmp.isEmpty() && !aOrig.isEmpty() &&
+            aOrig.endsWith(".") && /* !IsAlphaNumeric ??*/
+            !aTmp.endsWith("."))
+        {
+            aTmp += ".";
+        }
+
+        SwRewriter aRewriter;
+
+        aRewriter.AddRule(UndoArg1, rWrtSh.GetCursorDescr());
+        aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
+
+        OUString aTmpStr = SwResId(STR_START_QUOTE) +
+            aTmp + SwResId(STR_END_QUOTE);
+        aRewriter.AddRule(UndoArg3, aTmpStr);
+
+        rWrtSh.StartUndo(SwUndoId::UI_REPLACE, &aRewriter);
+        rWrtSh.StartAction();
+        rWrtSh.DelLeft();
+
+        rWrtSh.Insert( aTmp );
+
+        /* #102505# EndAction/EndUndo moved down since insertion
+           of temporary auto correction is now undoable two and
+           must reside in the same undo group.*/
+
+        // record only if it's NOT already present in autocorrection
+        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
+
+        OUString aOrigWord( bGrammar ? OUString() : xSpellAlt->getWord() ) ;
+        OUString aNewWord( sApplyText );
+        SvxPrepareAutoCorrect( aOrigWord, aNewWord );
+
+        if (xSpellAlt.is())
+            pACorr->PutText( aOrigWord, aNewWord, LanguageTag( xSpellAlt->getLocale() ).getLanguageType() );
+
+        /* #102505# EndAction/EndUndo moved down since insertion
+           of temporary auto correction is now undoable two and
+           must reside in the same undo group.*/
+        rWrtSh.EndAction();
+        rWrtSh.EndUndo();
+
+        rWrtSh.SetInsMode( bOldIns );
     }
     break;
     default:
