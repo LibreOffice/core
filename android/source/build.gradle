@@ -149,6 +149,13 @@ task copyUnpackAssets(type: Copy) {
                 )
         }
     }
+    // documents with manual page break trigger attempt to read the ui file
+    // would trigger a css::container::NoSuchElementException with osl_File_E_NOENT
+    // if not present and since it is not caught would crash the app...
+    into('config') {
+        from "${liboInstdir}/share/config"
+        include '**/pagebreakmenu.ui'
+    }
 }
 
 task copyAssets(type: Copy) {
