@@ -1442,15 +1442,45 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
     return  mColor == static_cast<const SvxColorItem&>( rAttr ).mColor;
 }
 
-bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    rVal <<= mColor;
+    nMemberId &= ~CONVERT_TWIPS;
+    switch (nMemberId)
+    {
+        case MID_COLOR_ALPHA:
+        {
+            rVal <<= mColor.GetTransparency();
+            break;
+        }
+        default:
+        {
+            rVal <<= mColor;
+            break;
+        }
+    }
     return true;
 }
 
-bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    return (rVal >>= mColor);
+    nMemberId &= ~CONVERT_TWIPS;
+    switch(nMemberId)
+    {
+        case MID_COLOR_ALPHA:
+        {
+            sal_Int16 nTransparency = 0;
+            bool bRet = rVal >>= nTransparency;
+            if (bRet)
+            {
+                mColor.SetTransparency(nTransparency);
+            }
+            return bRet;
+        }
+        default:
+        {
+            return rVal >>= mColor;
+        }
+    }
 }
 
 SfxPoolItem* SvxColorItem::Clone( SfxItemPool * ) const
