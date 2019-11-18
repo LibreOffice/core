@@ -2791,7 +2791,18 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             if (!bOk)
             {
                 if ( pActiveViewSh )                // If it came from MouseButtonDown
+                {
                     pActiveViewSh->StopMarking();   // (the InfoBox consumes the MouseButtonUp)
+
+                    // tdf#125917 Release the grab the a current mouse-down event being handled
+                    // by ScTabView has put on the mouse via its SelectionEngine.
+                    // Otherwise the warning box cannot interact with the mouse
+                    if (ScTabView* pView = pActiveViewSh->GetViewData().GetView())
+                    {
+                        if (ScViewSelectionEngine* pSelEngine = pView->GetSelEngine())
+                            pSelEngine->ReleaseMouse();
+                    }
+                }
 
                 vcl::Window* pParent = nullptr;
                 if (pActiveViewSh)
