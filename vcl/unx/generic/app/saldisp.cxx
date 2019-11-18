@@ -336,7 +336,7 @@ void SalDisplay::doDestruct()
             rMap.clear();
         }
     }
-    GlyphCache::GetInstance().ClearFontCache();
+    FreetypeManager::get().ClearFontCache();
 
     if( IsDisplay() )
     {

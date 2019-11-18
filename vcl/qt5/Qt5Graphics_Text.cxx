@@ -91,7 +91,7 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
         return;
 
     QFontDatabase aFDB;
-    GlyphCache& rGC = GlyphCache::GetInstance();
+    FreetypeManager& rFontManager = FreetypeManager::get();
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     ::std::vector<psp::fontID> aList;
     psp::FastPrintFontInfo aInfo;
@@ -102,15 +102,15 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
         if (!rMgr.getFontFastInfo(elem, aInfo))
             continue;
 
-        // normalize face number to the GlyphCache
+        // normalize face number to the FreetypeManager
         int nFaceNum = rMgr.getFontFaceNumber(aInfo.m_nID);
         int nVariantNum = rMgr.getFontFaceVariation(aInfo.m_nID);
 
-        // inform GlyphCache about this font provided by the PsPrint subsystem
+        // inform FreetypeManager about this font provided by the PsPrint subsystem
         FontAttributes aDFA = GenPspGraphics::Info2FontAttributes(aInfo);
         aDFA.IncreaseQualityBy(4096);
         const OString& rFileName = rMgr.getFontFileSysPath(aInfo.m_nID);
-        rGC.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
+        rFontManager.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
     }
 
     if (bUseFontconfig)

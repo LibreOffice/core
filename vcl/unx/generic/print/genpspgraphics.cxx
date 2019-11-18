@@ -616,7 +616,7 @@ void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLe
         if( m_pFreetypeFont[i] != nullptr )
         {
             // old server side font is no longer referenced
-            GlyphCache::GetInstance().UncacheFont( *m_pFreetypeFont[i] );
+            FreetypeManager::get().UncacheFont(*m_pFreetypeFont[i]);
             m_pFreetypeFont[i] = nullptr;
         }
     }
@@ -647,13 +647,13 @@ void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLe
 
     // also set the serverside font for layouting
     // requesting a font provided by builtin rasterizer
-    FreetypeFont* pFreetypeFont = GlyphCache::GetInstance().CacheFont(pFontInstance);
+    FreetypeFont* pFreetypeFont = FreetypeManager::get().CacheFont(pFontInstance);
     if( pFreetypeFont != nullptr )
     {
         if( pFreetypeFont->TestFont() )
             m_pFreetypeFont[ nFallbackLevel ] = pFreetypeFont;
         else
-            GlyphCache::GetInstance().UncacheFont( *pFreetypeFont );
+            FreetypeManager::get().UncacheFont( *pFreetypeFont );
     }
 
     // set the printer font
@@ -682,8 +682,7 @@ bool GenPspGraphics::AddTempDevFont( PhysicalFontCollection*, const OUString&,co
 
 bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollection,
                                            const OUString& rFileURL,
-                                           const OUString& rFontName,
-                                           GlyphCache &rGC )
+                                           const OUString& rFontName)
 {
     // inform PSP font manager
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -691,6 +690,7 @@ bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollecti
     if( aFontIds.empty() )
         return false;
 
+    FreetypeManager& rFreetypeManager = FreetypeManager::get();
     for (auto const& elem : aFontIds)
     {
         // prepare font data
@@ -706,11 +706,11 @@ bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollecti
         int nVariantNum = rMgr.getFontFaceVariation( aInfo.m_nID );
 
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
-        rGC.AddFontFile( rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA );
+        rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
     }
 
     // announce new font to device's font list
-    rGC.AnnounceFonts( pFontCollection );
+    rFreetypeManager.AnnounceFonts(pFontCollection);
     return true;
 }
 
@@ -731,7 +731,7 @@ void GenPspGraphics::GetDevFontList( PhysicalFontCollection *pFontCollection )
 
 void GenPspGraphics::ClearDevFontCache()
 {
-    GlyphCache::GetInstance().ClearFontCache();
+    FreetypeManager::get().ClearFontCache();
 }
 
 void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel)
@@ -765,7 +765,7 @@ bool GenPspGraphics::CreateFontSubset(
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
+    // be to have the FreetypeManager search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -788,7 +788,7 @@ void GenPspGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
+    // be to have the FreetypeManager search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
     GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
@@ -997,7 +997,7 @@ const void* GenPspGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
+    // be to have the FreetypeManager search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
     return DoGetEmbedFontData(aFont, pDataLen);
 }

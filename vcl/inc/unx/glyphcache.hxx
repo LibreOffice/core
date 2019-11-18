@@ -27,6 +27,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/solar.h>
+#include <unx/gendata.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 
@@ -49,7 +50,7 @@ namespace basegfx { class B2DPolyPolygon; }
 namespace vcl { struct FontCapabilities; }
 
  /**
-  * The GlyphCache caches various aspects of Freetype fonts
+  * The FreetypeManager caches various aspects of Freetype fonts
   *
   * It mainly consists of three std::unordered_map lists, which hold the items of the cache.
   *
@@ -67,19 +68,19 @@ namespace vcl { struct FontCapabilities; }
   * FreetypeFontInfo therefore is embedded in the Freetype subclass of PhysicalFontFace.
   * FreetypeFont is embedded in the Freetype subclass of LogicalFontInstance.
   *
-  * Nowadays there is not really a reason to have seperate files for the classes, as the GlyphCache is
-  * just about handling of Freetype based fonts, not some abstract glyphs.
+  * Nowadays there is not really a reason to have seperate files for the classes, as the FreetypeManager
+  * is just about handling of Freetype based fonts, not some abstract glyphs.
   *
   * One additional note: the byte-size based garbage collection of unused fonts can currently be assumed
   * to be broken. Since the move of the glyph rect cache into the ImplFontCache, so it can be used by all
   * platforms, it just takes too long to kick-in, as there is no real accounting left.
   **/
-class VCL_DLLPUBLIC GlyphCache final
+class VCL_DLLPUBLIC FreetypeManager final
 {
 public:
-    ~GlyphCache();
+    ~FreetypeManager();
 
-    static GlyphCache&      GetInstance();
+    static FreetypeManager& get();
 
     void                    AddFontFile(const OString& rNormalizedName,
                                 int nFaceNum, int nVariantNum,
@@ -109,14 +110,14 @@ public:
 private:
     // to access the constructor (can't use InitFreetypeManager function, because it's private?!)
     friend class GenericUnixSalData;
-    explicit GlyphCache();
+    explicit FreetypeManager();
 
     static void             InitFreetype();
     void                    GarbageCollect();
     FreetypeFont*           CreateFont(LogicalFontInstance* pLogicalFont);
     FreetypeFontFile* FindFontFile(const OString& rNativeFileName);
 
-    // the GlyphCache's FontList matches a font request to a serverfont instance
+    // the FreetypeManager's FontList matches a font request to a serverfont instance
     // the FontList key's mpFontData member is reinterpreted as integer font id
     struct IFSD_Equal{  bool operator()( const rtl::Reference<LogicalFontInstance>&, const rtl::Reference<LogicalFontInstance>& ) const; };
     struct IFSD_Hash{ size_t operator()( const rtl::Reference<LogicalFontInstance>& ) const; };
@@ -171,7 +172,7 @@ public:
     static bool             AlmostHorizontalDrainsRenderingPool();
 
 private:
-    friend class GlyphCache;
+    friend class FreetypeManager;
     explicit FreetypeFont(LogicalFontInstance*, FreetypeFontInfo*);
 
     void                    AddRef() const      { ++mnRefCount; }
@@ -185,7 +186,7 @@ private:
 
     rtl::Reference<FreetypeFontInstance> mpFontInstance;
 
-    // used by GlyphCache for cache LRU algorithm
+    // used by FreetypeManager for cache LRU algorithm
     mutable long            mnRefCount;
     mutable sal_uLong       mnBytesUsed;
 

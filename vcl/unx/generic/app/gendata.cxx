@@ -32,11 +32,11 @@ GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstan
 
 GenericUnixSalData::~GenericUnixSalData() {}
 
-void GenericUnixSalData::InitGlyphCache() { m_pGlyphCache.reset(new GlyphCache); }
+void GenericUnixSalData::InitFreetypeManager() { m_pFreetypeManager.reset(new FreetypeManager); }
 
 void GenericUnixSalData::InitPrintFontManager()
 {
-    GetGlyphCache();
+    GetFreetypeManager();
     m_pPrintFontManager.reset(new psp::PrintFontManager);
     m_pPrintFontManager->initialize();
 }

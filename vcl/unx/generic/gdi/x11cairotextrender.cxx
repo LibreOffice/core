@@ -29,11 +29,6 @@ X11CairoTextRender::X11CairoTextRender(X11SalGraphics& rParent)
 {
 }
 
-GlyphCache& X11CairoTextRender::getPlatformGlyphCache()
-{
-    return GlyphCache::GetInstance();
-}
-
 cairo_t* X11CairoTextRender::getCairoContext()
 {
     return mrParent.getCairoContext();

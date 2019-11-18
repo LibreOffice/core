@@ -94,7 +94,7 @@ void CairoTextRender::SetFont(LogicalFontInstance *pEntry, int nFallbackLevel)
         if( mpFreetypeFont[i] != nullptr )
         {
             // old server side font is no longer referenced
-            GlyphCache::GetInstance().UncacheFont( *mpFreetypeFont[i] );
+            FreetypeManager::get().UncacheFont( *mpFreetypeFont[i] );
             mpFreetypeFont[i] = nullptr;
         }
     }
@@ -103,14 +103,14 @@ void CairoTextRender::SetFont(LogicalFontInstance *pEntry, int nFallbackLevel)
     if( !pEntry )
         return;
 
-    // handle the request for a non-native X11-font => use the GlyphCache
-    FreetypeFont* pFreetypeFont = GlyphCache::GetInstance().CacheFont(pEntry);
+    // handle the request for a non-native X11-font => use the FreetypeManager
+    FreetypeFont* pFreetypeFont = FreetypeManager::get().CacheFont(pEntry);
     if( pFreetypeFont != nullptr )
     {
         // ignore fonts with e.g. corrupted font files
         if( !pFreetypeFont->TestFont() )
         {
-            GlyphCache::GetInstance().UncacheFont( *pFreetypeFont );
+            FreetypeManager::get().UncacheFont( *pFreetypeFont );
             return;
         }
 
@@ -398,19 +398,18 @@ bool CairoTextRender::AddTempDevFont( PhysicalFontCollection* pFontCollection,
                                      const OUString& rFileURL,
                                      const OUString& rFontName )
 {
-    return GenPspGraphics::AddTempDevFontHelper( pFontCollection, rFileURL, rFontName, getPlatformGlyphCache() );
+    return GenPspGraphics::AddTempDevFontHelper(pFontCollection, rFileURL, rFontName);
 }
 
 void CairoTextRender::ClearDevFontCache()
 {
-    GlyphCache& rGC = getPlatformGlyphCache();
-    rGC.ClearFontCache();
+    FreetypeManager::get().ClearFontCache();
 }
 
 void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
-    // prepare the GlyphCache using psprint's font infos
-    GlyphCache& rGC = getPlatformGlyphCache();
+    // prepare the FreetypeManager using psprint's font infos
+    FreetypeManager& rFreetypeManager = FreetypeManager::get();
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     ::std::vector< psp::fontID > aList;
@@ -421,19 +420,19 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
         if( !rMgr.getFontFastInfo( elem, aInfo ) )
             continue;
 
-        // normalize face number to the GlyphCache
+        // normalize face number to the FreetypeManager
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
         int nVariantNum = rMgr.getFontFaceVariation( aInfo.m_nID );
 
-        // inform GlyphCache about this font provided by the PsPrint subsystem
+        // inform FreetypeManager about this font provided by the PsPrint subsystem
         FontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
         aDFA.IncreaseQualityBy( 4096 );
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
-        rGC.AddFontFile( rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA );
+        rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
    }
 
     // announce glyphcache fonts
-    rGC.AnnounceFonts( pFontCollection );
+    rFreetypeManager.AnnounceFonts(pFontCollection);
 
     // register platform specific font substitutions if available
     if (!utl::ConfigManager::IsFuzzing())
@@ -503,7 +502,7 @@ bool CairoTextRender::CreateFontSubset(
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
+    // be to have the FreetypeManager search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -523,7 +522,7 @@ const void* CairoTextRender::GetEmbedFontData(const PhysicalFontFace* pFont, lon
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
+    // be to have the FreetypeManager search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
     return GenPspGraphics::DoGetEmbedFontData(aFont, pDataLen);
 }
@@ -542,7 +541,7 @@ void CairoTextRender::GetGlyphWidths( const PhysicalFontFace* pFont,
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
+    // be to have the FreetypeManager search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
     GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }

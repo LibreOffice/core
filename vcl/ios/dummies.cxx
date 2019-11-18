@@ -23,7 +23,7 @@
 #include "unx/fontmanager.hxx"
 #include "unx/gendata.hxx"
 
-class GlyphCache
+class FreetypeManager
 {
 };
 
@@ -120,7 +120,7 @@ using namespace psp;
 GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstance *const pInstance)
     : m_eType(t)
     , m_pDisplay(nullptr)
-    , m_pGlyphCache(new GlyphCache)
+    , m_pFreetypeManager(new FreetypeManager)
     , m_pPrintFontManager(nullptr)
 {
     m_pInstance = pInstance;

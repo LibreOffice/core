@@ -171,7 +171,7 @@ Qt5Data::Qt5Data(SalInstance* pInstance)
                                              + style->pixelMetric(QStyle::PM_MenuVMargin);
 }
 
-// outline dtor b/c of GlyphCache incomplete type
+// outline dtor b/c of FreetypeManager incomplete type
 Qt5Data::~Qt5Data() {}
 
 static QCursor* getQCursorFromXBM(const unsigned char* pBitmap, const unsigned char* pMask,

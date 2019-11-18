@@ -26,20 +26,20 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
-GlyphCache::GlyphCache()
-:   mnBytesUsed(sizeof(GlyphCache)),
+FreetypeManager::FreetypeManager()
+:   mnBytesUsed(sizeof(FreetypeManager)),
     mpCurrentGCFont(nullptr)
     , m_nMaxFontId(0)
 {
     InitFreetype();
 }
 
-GlyphCache::~GlyphCache()
+FreetypeManager::~FreetypeManager()
 {
     ClearFontCache();
 }
 
-void GlyphCache::ClearFontCache()
+void FreetypeManager::ClearFontCache()
 {
     for (auto &aFontPair : maFontList)
         static_cast<FreetypeFontInstance*>(aFontPair.first.get())->SetFreetypeFont(nullptr);
@@ -48,7 +48,7 @@ void GlyphCache::ClearFontCache()
     m_aFontInfoList.clear();
 }
 
-void GlyphCache::ClearFontOptions()
+void FreetypeManager::ClearFontOptions()
 {
     for (auto const& font : maFontList)
     {
@@ -66,7 +66,7 @@ static sal_IntPtr GetFontId(const LogicalFontInstance& rFontInstance)
 }
 
 inline
-size_t GlyphCache::IFSD_Hash::operator()(const rtl::Reference<LogicalFontInstance>& rFontInstance) const
+size_t FreetypeManager::IFSD_Hash::operator()(const rtl::Reference<LogicalFontInstance>& rFontInstance) const
 {
     // TODO: is it worth to improve this hash function?
     sal_uIntPtr nFontId = GetFontId(*rFontInstance);
@@ -91,7 +91,7 @@ size_t GlyphCache::IFSD_Hash::operator()(const rtl::Reference<LogicalFontInstanc
     return seed;
 }
 
-bool GlyphCache::IFSD_Equal::operator()(const rtl::Reference<LogicalFontInstance>& rAFontInstance,
+bool FreetypeManager::IFSD_Equal::operator()(const rtl::Reference<LogicalFontInstance>& rAFontInstance,
                                         const rtl::Reference<LogicalFontInstance>& rBFontInstance) const
 {
     if (!rAFontInstance->GetFontCache() || !rBFontInstance->GetFontCache())
@@ -141,14 +141,14 @@ bool GlyphCache::IFSD_Equal::operator()(const rtl::Reference<LogicalFontInstance
     return true;
 }
 
-GlyphCache& GlyphCache::GetInstance()
+FreetypeManager& FreetypeManager::get()
 {
     GenericUnixSalData* const pSalData(GetGenericUnixSalData());
     assert(pSalData);
-    return *pSalData->GetGlyphCache();
+    return *pSalData->GetFreetypeManager();
 }
 
-FreetypeFont* GlyphCache::CacheFont(LogicalFontInstance* pFontInstance)
+FreetypeFont* FreetypeManager::CacheFont(LogicalFontInstance* pFontInstance)
 {
     // a serverfont request has a fontid > 0
     if (GetFontId(*pFontInstance) <= 0)
@@ -190,7 +190,7 @@ FreetypeFont* GlyphCache::CacheFont(LogicalFontInstance* pFontInstance)
     return pNew;
 }
 
-void GlyphCache::UncacheFont( FreetypeFont& rFreetypeFont )
+void FreetypeManager::UncacheFont( FreetypeFont& rFreetypeFont )
 {
     if( (rFreetypeFont.Release() <= 0) && (gnMaxSize <= mnBytesUsed) )
     {
@@ -199,7 +199,7 @@ void GlyphCache::UncacheFont( FreetypeFont& rFreetypeFont )
     }
 }
 
-void GlyphCache::TryGarbageCollectFont(LogicalFontInstance *pFontInstance)
+void FreetypeManager::TryGarbageCollectFont(LogicalFontInstance *pFontInstance)
 {
     if (maFontList.empty() || !pFontInstance)
         return;
@@ -214,7 +214,7 @@ void GlyphCache::TryGarbageCollectFont(LogicalFontInstance *pFontInstance)
     }
 }
 
-void GlyphCache::GarbageCollect()
+void FreetypeManager::GarbageCollect()
 {
     // when current GC font has been destroyed get another one
     if( !mpCurrentGCFont )
@@ -236,7 +236,7 @@ void GlyphCache::GarbageCollect()
     &&  (pFreetypeFont->GetRefCount() <= 0) )  // font still used
     {
         SAL_WARN_IF( (pFreetypeFont->GetRefCount() != 0), "vcl",
-            "GlyphCache::GC detected RefCount underflow" );
+            "FreetypeManager::GC detected RefCount underflow" );
 
         // free all pFreetypeFont related data
         if( pFreetypeFont == mpCurrentGCFont )
@@ -259,7 +259,7 @@ void GlyphCache::GarbageCollect()
     }
 }
 
-FreetypeFontFile* GlyphCache::FindFontFile(const OString& rNativeFileName)
+FreetypeFontFile* FreetypeManager::FindFontFile(const OString& rNativeFileName)
 {
     // font file already known? (e.g. for ttc, synthetic, aliased fonts)
     const char* pFileName = rNativeFileName.getStr();

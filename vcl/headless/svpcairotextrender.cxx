@@ -16,11 +16,6 @@ SvpCairoTextRender::SvpCairoTextRender(SvpSalGraphics& rParent)
 {
 }
 
-GlyphCache& SvpCairoTextRender::getPlatformGlyphCache()
-{
-    return SvpSalGraphics::getPlatformGlyphCache();
-}
-
 cairo_t* SvpCairoTextRender::getCairoContext()
 {
     return mrParent.getCairoContext(false);

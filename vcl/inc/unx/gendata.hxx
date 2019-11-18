@@ -16,7 +16,7 @@
 
 #include <memory>
 
-class GlyphCache;
+class FreetypeManager;
 class SalGenericDisplay;
 namespace psp
 {
@@ -46,10 +46,10 @@ private:
     // for transient storage of unicode strings eg. 'u123' by input methods
     OUString m_aUnicodeEntry;
 
-    std::unique_ptr<GlyphCache> m_pGlyphCache;
+    std::unique_ptr<FreetypeManager> m_pFreetypeManager;
     std::unique_ptr<psp::PrintFontManager> m_pPrintFontManager;
 
-    void InitGlyphCache();
+    void InitFreetypeManager();
     void InitPrintFontManager();
 
 public:
@@ -71,19 +71,19 @@ public:
 
     GenericUnixSalDataType GetType() const { return m_eType; }
 
-    GlyphCache* GetGlyphCache()
+    FreetypeManager* GetFreetypeManager()
     {
-        if (!m_pGlyphCache)
-            InitGlyphCache();
-        return m_pGlyphCache.get();
+        if (!m_pFreetypeManager)
+            InitFreetypeManager();
+        return m_pFreetypeManager.get();
     }
 
     psp::PrintFontManager* GetPrintFontManager()
     {
         if (!m_pPrintFontManager)
             InitPrintFontManager();
-        // PrintFontManager needs the GlyphCache
-        assert(m_pGlyphCache.get());
+        // PrintFontManager needs the FreetypeManager
+        assert(m_pFreetypeManager.get());
         return m_pPrintFontManager.get();
     }
 

@@ -1439,7 +1439,7 @@ vcl/inc/schedulerimpl.hxx:38
 vcl/inc/svimpbox.hxx:340
     void SvImpLBox::EnableCellFocus()
 vcl/inc/unx/glyphcache.hxx:68
-    void GlyphCache::ClearFontOptions()
+    void FreetypeManager::ClearFontOptions()
 vcl/inc/unx/gtk/gtkframe.hxx:214
     void ensure_dbus_setup(struct _GdkWindow *,class GtkSalFrame *)
 vcl/inc/unx/saldisp.hxx:378

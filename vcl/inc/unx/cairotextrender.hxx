@@ -23,7 +23,6 @@
 #include <textrender.hxx>
 
 class FreetypeFont;
-class GlyphCache;
 typedef struct _cairo cairo_t;
 
 class VCL_DLLPUBLIC CairoTextRender : public TextRenderImpl
@@ -33,7 +32,6 @@ class VCL_DLLPUBLIC CairoTextRender : public TextRenderImpl
     Color           mnTextColor;
 
 protected:
-    virtual GlyphCache&         getPlatformGlyphCache() = 0;
     virtual cairo_t*            getCairoContext() = 0;
     virtual void                getSurfaceOffset(double& nDX, double& nDY) = 0;
     virtual void                releaseCairoContext(cairo_t* cr) = 0;
