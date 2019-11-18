@@ -615,7 +615,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLIconSetF
             {
                 ScColorScaleEntry* pEntry(nullptr);
                 pContext = new ScXMLFormattingEntryContext( GetScImport(), pAttribList, pEntry );
-                mpFormatData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>(pEntry));
+                mpFormatData->m_Entries.emplace_back(pEntry);
                 pEntry->SetRepaintCallback(mpParent);
             }
             break;

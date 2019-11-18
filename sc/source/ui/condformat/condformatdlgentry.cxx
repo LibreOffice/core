@@ -1513,7 +1513,7 @@ ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
     pData->eIconSetType = static_cast<ScIconSetType>(mxLbIconSetType->get_active());
     for(const auto& rxEntry : maEntries)
     {
-        pData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>(rxEntry->CreateEntry(mpDoc, maPos)));
+        pData->m_Entries.emplace_back(rxEntry->CreateEntry(mpDoc, maPos));
     }
     pFormat->SetIconSetData(pData);
 

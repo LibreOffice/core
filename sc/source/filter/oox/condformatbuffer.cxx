@@ -382,7 +382,7 @@ void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScA
     for(const ColorScaleRuleModelEntry & rEntry : maEntries)
     {
         ScColorScaleEntry* pModelEntry = ConvertToModel( rEntry, pDoc, rPos );
-        mxFormatData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>(pModelEntry));
+        mxFormatData->m_Entries.emplace_back(pModelEntry);
     }
 
     mxFormatData->eIconSetType = getType(maIconSetType);
