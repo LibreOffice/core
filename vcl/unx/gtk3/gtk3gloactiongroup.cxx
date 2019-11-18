@@ -20,19 +20,22 @@
 #define G_TYPE_LO_ACTION                                (g_lo_action_get_type ())
 #define G_LO_ACTION(inst)                               (G_TYPE_CHECK_INSTANCE_CAST ((inst),                     \
                                                          G_TYPE_LO_ACTION, GLOAction))
+namespace {
 
 struct GLOAction
 {
     GObject         parent_instance;
 
     gint            item_id;            // Menu item ID.
-    gboolean        submenu;            // TRUE if action is a submenu action.
-    gboolean        enabled;            // TRUE if action is enabled.
+    bool            submenu;            // TRUE if action is a submenu action.
+    bool            enabled;            // TRUE if action is enabled.
     GVariantType*   parameter_type;     // A GVariantType with the action parameter type.
     GVariantType*   state_type;         // A GVariantType with item state type
     GVariant*       state_hint;         // A GVariant with state hints.
     GVariant*       state;              // A GVariant with current item state
 };
+
+}
 
 typedef GObjectClass GLOActionClass;
 
@@ -60,7 +63,7 @@ static void
 g_lo_action_init (GLOAction *action)
 {
     action->item_id = -1;
-    action->submenu = FALSE;
+    action->submenu = false;
     action->enabled = true;
     action->parameter_type = nullptr;
     action->state_type = nullptr;
