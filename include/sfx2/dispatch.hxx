@@ -29,6 +29,8 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/span.hxx>
 
+#include <boost/property_tree/ptree.hpp>
+#include <vcl/menu.hxx>
 #include <initializer_list>
 
 class SfxSlotServer;
@@ -168,6 +170,8 @@ public:
     SAL_DLLPRIVATE void DoActivate_Impl( bool bMDI );
     SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame const * pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(bool);
+
+    static boost::property_tree::ptree fillPopupMenu(Menu* pMenu);
 };
 
 #endif
