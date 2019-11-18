@@ -418,8 +418,7 @@ public:
                         {
                             pS = nullptr;
                             pD = rT.GetDoubleRef();
-                            // aDub intentionally not initialized, unnecessary
-                            // because unused.
+                            // coverity[uninit_member] - aDub intentionally not initialized, unnecessary because unused.
                         }
                     }
                 SingleDoubleRefModifier( ScSingleRefData& rS )
