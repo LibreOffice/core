@@ -14,6 +14,7 @@
 #include <string>
 
 #include "clang/AST/Attr.h"
+#include "clang/Basic/Builtins.h"
 
 #include "check.hxx"
 #include "compat.hxx"

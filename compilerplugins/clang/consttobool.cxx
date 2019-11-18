@@ -13,6 +13,8 @@
 #include <limits>
 #include <stack>
 
+#include "clang/Basic/Builtins.h"
+
 #include "check.hxx"
 #include "plugin.hxx"
 
