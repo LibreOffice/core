@@ -120,7 +120,7 @@ class ScColumnsRange final
  public:
     class Iterator final
     {
-        std::vector<std::unique_ptr<ScColumn>>::const_iterator maColIter;
+        std::vector<std::unique_ptr<ScColumn, o3tl::default_delete<ScColumn>>>::const_iterator maColIter;
     public:
         typedef std::input_iterator_tag iterator_category;
         typedef SCCOL value_type;
@@ -128,7 +128,7 @@ class ScColumnsRange final
         typedef const SCCOL* pointer;
         typedef SCCOL reference;
 
-        explicit Iterator(const std::vector<std::unique_ptr<ScColumn>>::const_iterator& colIter) : maColIter(colIter) {}
+        explicit Iterator(const std::vector<std::unique_ptr<ScColumn, o3tl::default_delete<ScColumn>>>::const_iterator& colIter) : maColIter(colIter) {}
 
         Iterator& operator++() { ++maColIter; return *this;}
         Iterator& operator--() { --maColIter; return *this;}

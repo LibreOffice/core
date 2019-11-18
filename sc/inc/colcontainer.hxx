@@ -29,7 +29,7 @@
 class ScColContainer
 {
 public:
-    typedef std::vector<std::unique_ptr<ScColumn>> ScColumnVector;
+    typedef std::vector<std::unique_ptr<ScColumn, o3tl::default_delete<ScColumn>>> ScColumnVector;
 
     ScColContainer( const size_t nSize );
     ~ScColContainer() COVERITY_NOEXCEPT_FALSE;
