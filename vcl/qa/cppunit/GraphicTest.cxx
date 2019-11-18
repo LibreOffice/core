@@ -18,6 +18,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
+#include <unotest/directories.hxx>
 
 using namespace css;
 
@@ -29,12 +30,14 @@ class GraphicTest : public CppUnit::TestFixture
     void testUnloadedGraphicLoading();
     void testUnloadedGraphicWmf();
     void testUnloadedGraphicAlpha();
+    void testUnloadedGraphicSizeUnit();
 
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
     CPPUNIT_TEST(testUnloadedGraphicLoading);
     CPPUNIT_TEST(testUnloadedGraphicWmf);
     CPPUNIT_TEST(testUnloadedGraphicAlpha);
+    CPPUNIT_TEST(testUnloadedGraphicSizeUnit);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -78,6 +81,8 @@ Graphic makeUnloadedGraphic(OUString const& sType, bool alpha = false)
     createBitmapAndExportForType(aStream, sType, alpha);
     return rGraphicFilter.ImportUnloadedGraphic(aStream);
 }
+
+char const DATA_DIRECTORY[] = "/vcl/qa/cppunit/data/";
 
 void GraphicTest::testUnloadedGraphic()
 {
@@ -192,6 +197,23 @@ void GraphicTest::testUnloadedGraphicAlpha()
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsAlpha());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsTransparent());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+}
+
+void GraphicTest::testUnloadedGraphicSizeUnit()
+{
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "inch-size.emf";
+    Size aMtfSize100(42, 42);
+    SvFileStream aStream(aURL, StreamMode::READ);
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream, 0, &aMtfSize100);
+    aGraphic.makeAvailable();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 400x363
+    // - Actual  : 42x42
+    // i.e. a mm100 size was used as a hint and the inch size was set for a non-matching unit.
+    CPPUNIT_ASSERT_EQUAL(Size(400, 363), aGraphic.GetPrefSize());
 }
 
 } // namespace
