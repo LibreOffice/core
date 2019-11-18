@@ -752,6 +752,7 @@ namespace o3tl
 #define LANGUAGE_USER_ENGLISH_ZAMBIA        LanguageType(0xA009)  /* makeLangID( 0x28, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 #define LANGUAGE_USER_ENGLISH_SRI_LANKA     LanguageType(0xA409)  /* makeLangID( 0x29, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 #define LANGUAGE_USER_ENGLISH_NIGERIA       LanguageType(0xA809)  /* makeLangID( 0x2A, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
+#define LANGUAGE_USER_KABARDIAN             LanguageType(0x06A4)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
