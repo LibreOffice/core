@@ -84,7 +84,12 @@ CairoTextRender::CairoTextRender()
         rp = nullptr;
 }
 
-void CairoTextRender::setFont(LogicalFontInstance *pEntry, int nFallbackLevel)
+CairoTextRender::~CairoTextRender()
+{
+    ReleaseFonts();
+}
+
+void CairoTextRender::SetFont(LogicalFontInstance *pEntry, int nFallbackLevel)
 {
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
@@ -383,11 +388,6 @@ bool CairoTextRender::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCap
 }
 
 // SalGraphics
-
-void CairoTextRender::SetFont(LogicalFontInstance *pEntry, int nFallbackLevel)
-{
-    setFont(pEntry, nFallbackLevel);
-}
 
 void
 CairoTextRender::SetTextColor( Color nColor )

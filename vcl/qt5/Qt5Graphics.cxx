@@ -44,16 +44,7 @@ Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage )
         m_pWidgetDraw.reset(new Qt5Graphics_Controls());
 }
 
-Qt5Graphics::~Qt5Graphics()
-{
-    // release the text styles
-    for (int i = 0; i < MAX_FALLBACK; ++i)
-    {
-        if (!m_pTextStyle[i])
-            break;
-        m_pTextStyle[i].clear();
-    }
-}
+Qt5Graphics::~Qt5Graphics() { ReleaseFonts(); }
 
 void Qt5Graphics::ChangeQImage(QImage* pQImage)
 {
