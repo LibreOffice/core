@@ -11,7 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,i18npool/breakiterator))
 
 i18npool_BIDIR := $(call gb_CustomTarget_get_workdir,i18npool/breakiterator)
 
-ifeq ($(OS),iOS)
+ifneq ($(filter iOS ANDROID,$(OS)),)
 
 $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
 	$(i18npool_BIDIR)/dict_ja.data $(i18npool_BIDIR)/dict_zh.data $(i18npool_BIDIR)/OpenOffice_dat.c
