@@ -1861,20 +1861,50 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
     return  mColor == static_cast<const SvxColorItem&>( rAttr ).mColor;
 }
 
-bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    rVal <<= (sal_Int32)(mColor.GetColor());
+    nMemberId &= ~CONVERT_TWIPS;
+    switch (nMemberId)
+    {
+        case MID_COLOR_ALPHA:
+        {
+            rVal <<= mColor.GetTransparency();
+            break;
+        }
+        default:
+        {
+            rVal <<= (sal_Int32)(mColor.GetColor());
+            break;
+        }
+    }
     return true;
 }
 
-bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Int32 nColor = 0;
-    if(!(rVal >>= nColor))
-        return false;
+    nMemberId &= ~CONVERT_TWIPS;
+    switch(nMemberId)
+    {
+        case MID_COLOR_ALPHA:
+        {
+            sal_Int16 nTransparency = 0;
+            bool bRet = rVal >>= nTransparency;
+            if (bRet)
+            {
+                mColor.SetTransparency(nTransparency);
+            }
+            return bRet;
+        }
+        default:
+        {
+            sal_Int32 nColor = 0;
+            if(!(rVal >>= nColor))
+                return false;
 
-    mColor.SetColor( nColor );
-    return true;
+            mColor.SetColor( nColor );
+            return true;
+        }
+    }
 }
 
 SfxPoolItem* SvxColorItem::Clone( SfxItemPool * ) const
