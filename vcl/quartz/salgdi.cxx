@@ -222,12 +222,7 @@ AquaSalGraphics::~AquaSalGraphics()
         CGPathRelease( mxClipPath );
     }
 
-    for (int i = 0; i < MAX_FALLBACK; ++i)
-    {
-        if (!mpTextStyle[i])
-            break;
-        mpTextStyle[i].clear();
-    }
+    ReleaseFonts();
 
     if( mpXorEmulation )
         delete mpXorEmulation;
