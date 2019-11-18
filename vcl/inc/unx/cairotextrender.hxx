@@ -38,13 +38,11 @@ protected:
     virtual void                getSurfaceOffset(double& nDX, double& nDY) = 0;
     virtual void                releaseCairoContext(cairo_t* cr) = 0;
 
-    void                        setFont(LogicalFontInstance *pEntry, int nFallbackLevel);
-
     virtual void                clipRegion(cairo_t* cr) = 0;
 
 public:
                                 CairoTextRender();
-
+    virtual ~CairoTextRender() override;
 
     virtual void                SetTextColor( Color nColor ) override;
     virtual void                SetFont(LogicalFontInstance*, int nFallbackLevel) override;

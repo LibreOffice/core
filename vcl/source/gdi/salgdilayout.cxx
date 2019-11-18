@@ -82,6 +82,7 @@ bool SalGraphics::initWidgetDrawBackends(bool bForce)
 
 SalGraphics::~SalGraphics() COVERITY_NOEXCEPT_FALSE
 {
+    // can't call ReleaseFonts here, as the destructor just calls this classes SetFont (pure virtual)!
 }
 
 #if HAVE_FEATURE_OPENGL
