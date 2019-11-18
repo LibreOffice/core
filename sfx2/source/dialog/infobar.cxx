@@ -23,6 +23,7 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/decoview.hxx>
 
 using namespace std;
 using namespace drawinglayer::geometry;
@@ -114,11 +115,15 @@ public:
 
 void SfxCloseButton::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
+    Point aBtnPos(0, 0);
+    if (GetButtonState() & DrawButtonFlags::Pressed)
+        aBtnPos.Move(Size(1, 1));
+
     const ViewInformation2D aNewViewInfos;
     const unique_ptr<BaseProcessor2D> pProcessor(
                 createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
-    const ::tools::Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
+    const ::tools::Rectangle aRect(aBtnPos, PixelToLogic(GetSizePixel()));
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
 
