@@ -612,6 +612,7 @@ SvpSalGraphics::SvpSalGraphics()
 
 SvpSalGraphics::~SvpSalGraphics()
 {
+    ReleaseFonts();
 }
 
 void SvpSalGraphics::setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize)
