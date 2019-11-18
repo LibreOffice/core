@@ -22,7 +22,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
@@ -347,8 +346,6 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
     {
         uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 
-        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
-
         xml::sax::InputSource aParserInput;
         comphelper::LifecycleProxy aNasty;
 
@@ -403,9 +400,8 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
         {
         }
 
-        uno::Reference<XDocumentHandler> xHandler(new SvxXMLXTableImport(xContext, xTable, xGraphicStorageHandler));
-        xParser->setDocumentHandler( xHandler );
-        xParser->parseStream( aParserInput );
+        rtl::Reference<SvxXMLXTableImport> xImport(new SvxXMLXTableImport(xContext, xTable, xGraphicStorageHandler));
+        xImport->parseStream( aParserInput );
 
         if( xGraphicHelper )
             xGraphicHelper->dispose();
