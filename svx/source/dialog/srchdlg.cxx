@@ -1581,16 +1581,16 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
     if (std::find(pArr->begin(), pArr->end(), rStr) != pArr->end())
         return;
 
-    // delete oldest entry at maximum occupancy (ListBox and Array)
-    if(nRememberSize < pArr->size())
-    {
-        pListBox->remove(static_cast<sal_uInt16>(nRememberSize - 1));
-        (*pArr)[nRememberSize - 1] = rStr;
-        pArr->erase(pArr->begin() + nRememberSize - 1);
-    }
-
     pArr->insert(pArr->begin(), rStr);
     pListBox->insert_text(0, rStr);
+
+    // delete oldest entry at maximum occupancy (ListBox and Array)
+    size_t nArrSize = pArr->size();
+    if (nArrSize > nRememberSize)
+    {
+        pListBox->remove(nArrSize - 1);
+        pArr->erase(pArr->begin() + nArrSize - 1);
+    }
 }
 
 void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
