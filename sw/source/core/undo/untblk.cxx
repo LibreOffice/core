@@ -27,6 +27,7 @@
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
+#include <mvsave.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
@@ -238,7 +239,8 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
                 m_pLastNodeColl = pTextNd->GetTextColl();
         }
 
-        RemoveIdxFromRange(rPam, false);
+        // tdf#128739 correct cursors but do not delete bookmarks yet
+        ::PaMCorrAbs(rPam, *rPam.End());
 
         SetPaM(rPam);
     }

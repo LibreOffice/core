@@ -1153,9 +1153,9 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( !m_bDelFullPara )
     {
-        SwUndRng aTmpRng( rPam );
-        RemoveIdxFromRange( rPam, false );
-        aTmpRng.SetPaM( rPam );
+        // tdf#128739 correct cursors but do not delete bookmarks yet
+        ::PaMCorrAbs(rPam, *rPam.End());
+        SetPaM(rPam);
 
         if( !m_bJoinNext )           // then restore selection from bottom to top
             rPam.Exchange();
