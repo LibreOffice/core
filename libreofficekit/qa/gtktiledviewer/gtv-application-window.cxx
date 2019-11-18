@@ -26,6 +26,8 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
 
+namespace {
+
 struct GtvApplicationWindowPrivate
 {
     GtkWidget* container;
@@ -34,14 +36,16 @@ struct GtvApplicationWindowPrivate
     GtkWidget* scrolledwindowcontainer;
     GtkWidget* lokDialog;
 
-    gboolean toolbarBroadcast;
-    gboolean partSelectorBroadcast;
+    bool toolbarBroadcast;
+    bool partSelectorBroadcast;
 
     GList* m_pChildWindows;
 
     // Rendering args; options with which lokdocview was rendered in this window
     GtvRenderingArgs* m_pRenderingArgs;
 };
+
+}
 
 #if defined __clang__
 #if __has_warning("-Wdeprecated-volatile")

@@ -47,6 +47,8 @@
 /// This is expected to be locked during setView(), doSomethingElse() LOK calls.
 static std::mutex g_aLOKMutex;
 
+namespace {
+
 /// Same as a GdkRectangle, but also tracks in which part the rectangle is.
 struct ViewRectangle
 {
@@ -81,11 +83,11 @@ struct LOKDocViewPrivateImpl
     std::string m_aDocPath;
     std::string m_aRenderingArguments;
     gdouble m_nLoadProgress;
-    gboolean m_bIsLoading;
-    gboolean m_bInit; // initializeForRendering() has been called
-    gboolean m_bCanZoomIn;
-    gboolean m_bCanZoomOut;
-    gboolean m_bUnipoll;
+    bool m_bIsLoading;
+    bool m_bInit; // initializeForRendering() has been called
+    bool m_bCanZoomIn;
+    bool m_bCanZoomOut;
+    bool m_bUnipoll;
     LibreOfficeKit* m_pOffice;
     LibreOfficeKitDocument* m_pDocument;
 
@@ -96,7 +98,7 @@ struct LOKDocViewPrivateImpl
     glong m_nDocumentWidthTwips;
     glong m_nDocumentHeightTwips;
     /// View or edit mode.
-    gboolean m_bEdit;
+    bool m_bEdit;
     /// LOK Features
     guint64 m_nLOKFeatures;
     /// Number of parts in currently loaded document
@@ -107,9 +109,9 @@ struct LOKDocViewPrivateImpl
     /// them, can't modify them. Key is the view id.
     std::map<int, ViewRectangle> m_aViewCursors;
     /// Cursor overlay is visible or hidden (for blinking).
-    gboolean m_bCursorOverlayVisible;
+    bool m_bCursorOverlayVisible;
     /// Cursor is visible or hidden (e.g. for graphic selection).
-    gboolean m_bCursorVisible;
+    bool m_bCursorVisible;
     /// Visibility of view selections. The current view can only see / them,
     /// can't modify them. Key is the view id.
     std::map<int, bool> m_aViewCursorVisibilities;
@@ -138,7 +140,7 @@ struct LOKDocViewPrivateImpl
     /// Position and size of the cell view cursors. The current view can only
     /// see them, can't modify them. Key is the view id.
     std::map<int, ViewRectangle> m_aCellViewCursors;
-    gboolean m_bInDragGraphicSelection;
+    bool m_bInDragGraphicSelection;
     /// Position, size and color of the reference marks. The current view can only
     /// see them, can't modify them. Key is the view id.
     std::vector<std::pair<ViewRectangle, sal_uInt32>> m_aReferenceMarks;
@@ -150,19 +152,19 @@ struct LOKDocViewPrivateImpl
     /// Rectangle of the text selection start handle, to know if the user clicked on it or not
     GdkRectangle m_aHandleStartRect;
     /// If we are in the middle of a drag of the text selection end handle.
-    gboolean m_bInDragStartHandle;
+    bool m_bInDragStartHandle;
     /// Bitmap of the text selection middle handle.
     cairo_surface_t* m_pHandleMiddle;
     /// Rectangle of the text selection middle handle, to know if the user clicked on it or not
     GdkRectangle m_aHandleMiddleRect;
     /// If we are in the middle of a drag of the text selection middle handle.
-    gboolean m_bInDragMiddleHandle;
+    bool m_bInDragMiddleHandle;
     /// Bitmap of the text selection end handle.
     cairo_surface_t* m_pHandleEnd;
     /// Rectangle of the text selection end handle, to know if the user clicked on it or not
     GdkRectangle m_aHandleEndRect;
     /// If we are in the middle of a drag of the text selection end handle.
-    gboolean m_bInDragEndHandle;
+    bool m_bInDragEndHandle;
     ///@}
 
     /// @name Graphic handles.
@@ -170,7 +172,7 @@ struct LOKDocViewPrivateImpl
     /// Rectangle of a graphic selection handle, to know if the user clicked on it or not.
     GdkRectangle m_aGraphicHandleRects[8];
     /// If we are in the middle of a drag of a graphic selection handle.
-    gboolean m_bInDragGraphicHandles[8];
+    bool m_bInDragGraphicHandles[8];
     ///@}
 
     /// View ID, returned by createView() or 0 by default.
@@ -209,7 +211,7 @@ struct LOKDocViewPrivateImpl
         m_fZoom(0),
         m_nDocumentWidthTwips(0),
         m_nDocumentHeightTwips(0),
-        m_bEdit(FALSE),
+        m_bEdit(false),
         m_nLOKFeatures(0),
         m_nParts(0),
         m_aVisibleCursor({0, 0, 0, 0}),
@@ -226,7 +228,7 @@ struct LOKDocViewPrivateImpl
         m_bInDragGraphicSelection(false),
         m_pHandleStart(nullptr),
         m_aHandleStartRect({0, 0, 0, 0}),
-        m_bInDragStartHandle(0),
+        m_bInDragStartHandle(false),
         m_pHandleMiddle(nullptr),
         m_aHandleMiddleRect({0, 0, 0, 0}),
         m_bInDragMiddleHandle(false),
@@ -251,6 +253,8 @@ struct LOKDocViewPrivateImpl
             g_source_remove(m_nTimeoutId);
     }
 };
+
+}
 
 /// Wrapper around LOKDocViewPrivateImpl, managed by malloc/memset/free.
 struct _LOKDocViewPrivate
@@ -342,6 +346,8 @@ static LOKDocViewPrivate& getPrivate(LOKDocView* pDocView)
     return *priv;
 }
 
+namespace {
+
 /// Helper struct used to pass the data from soffice thread -> main thread.
 struct CallbackData
 {
@@ -354,6 +360,8 @@ struct CallbackData
           m_aPayload(rPayload),
           m_pDocView(pDocView) {}
 };
+
+}
 
 static void
 LOKPostCommand (LOKDocView* pDocView,
