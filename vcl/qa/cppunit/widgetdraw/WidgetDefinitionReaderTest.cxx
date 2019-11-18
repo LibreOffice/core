@@ -28,18 +28,44 @@ private:
 
 public:
     void testRead();
+    void testReadSettings();
 
     CPPUNIT_TEST_SUITE(WidgetDefinitionReaderTest);
     CPPUNIT_TEST(testRead);
+    CPPUNIT_TEST(testReadSettings);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void WidgetDefinitionReaderTest::testReadSettings()
+{
+    {
+        vcl::WidgetDefinition aDefinition;
+        vcl::WidgetDefinitionReader aReader(getFullUrl("definitionSettings1.xml"), getFullUrl(""));
+        CPPUNIT_ASSERT(aReader.read(aDefinition));
+        CPPUNIT_ASSERT_EQUAL(OString(""), aDefinition.mpSettings->msCenteredTabs);
+    }
+
+    {
+        vcl::WidgetDefinition aDefinition;
+        vcl::WidgetDefinitionReader aReader(getFullUrl("definitionSettings2.xml"), getFullUrl(""));
+        CPPUNIT_ASSERT(aReader.read(aDefinition));
+        CPPUNIT_ASSERT_EQUAL(OString("true"), aDefinition.mpSettings->msCenteredTabs);
+    }
+
+    {
+        vcl::WidgetDefinition aDefinition;
+        vcl::WidgetDefinitionReader aReader(getFullUrl("definitionSettings3.xml"), getFullUrl(""));
+        CPPUNIT_ASSERT(aReader.read(aDefinition));
+        CPPUNIT_ASSERT_EQUAL(OString("false"), aDefinition.mpSettings->msCenteredTabs);
+    }
+}
 
 void WidgetDefinitionReaderTest::testRead()
 {
     vcl::WidgetDefinition aDefinition;
 
     vcl::WidgetDefinitionReader aReader(getFullUrl("definition1.xml"), getFullUrl(""));
-    aReader.read(aDefinition);
+    CPPUNIT_ASSERT(aReader.read(aDefinition));
 
     CPPUNIT_ASSERT_EQUAL(OUString("123456"), aDefinition.mpStyle->maFaceColor.AsRGBHexString());
     CPPUNIT_ASSERT_EQUAL(OUString("234567"), aDefinition.mpStyle->maCheckedColor.AsRGBHexString());
