@@ -1570,10 +1570,12 @@ bool ImpGraphic::loadPrepared()
         GraphicExternalLink aLink = maGraphicExternalLink;
 
         Size aPrefSize = maSwapInfo.maPrefSize;
+        MapMode aPrefMapMode = maSwapInfo.maPrefMapMode;
         *this = *aGraphic.ImplGetImpGraphic();
-        if (aPrefSize.getWidth() && aPrefSize.getHeight())
+        if (aPrefSize.getWidth() && aPrefSize.getHeight() && aPrefMapMode == ImplGetPrefMapMode())
         {
             // Use custom preferred size if it was set when the graphic was still unloaded.
+            // Only set the size in case the unloaded and loaded unit matches.
             ImplSetPrefSize(aPrefSize);
         }
 
