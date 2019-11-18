@@ -156,8 +156,8 @@ public:
     */
     class ModelChangeLock
     {public:
-        ModelChangeLock (SlideSorterController& rController);
-        ~ModelChangeLock() COVERITY_NOEXCEPT_FALSE;
+        ModelChangeLock(SlideSorterController& rController);
+        ~ModelChangeLock();
         void Release();
     private:
         SlideSorterController* mpController;

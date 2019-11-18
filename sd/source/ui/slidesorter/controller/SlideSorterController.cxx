@@ -902,7 +902,7 @@ SlideSorterController::ModelChangeLock::ModelChangeLock (
     mpController->LockModelChange();
 }
 
-SlideSorterController::ModelChangeLock::~ModelChangeLock() COVERITY_NOEXCEPT_FALSE
+SlideSorterController::ModelChangeLock::~ModelChangeLock()
 {
     Release();
 }

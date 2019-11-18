@@ -295,7 +295,8 @@ void Listener::Notify (
             case ViewShellHint::HINT_PAGE_RESIZE_START:
                 // Initiate a model change but do nothing (well, not much)
                 // until we are told that all slides have been resized.
-                mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController));
+                mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController),
+                                        o3tl::default_delete<SlideSorterController::ModelChangeLock>());
                 mrController.HandleModelChange();
                 break;
 
@@ -313,7 +314,8 @@ void Listener::Notify (
                 break;
 
             case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START:
-                mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController));
+                mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController),
+                                        o3tl::default_delete<SlideSorterController::ModelChangeLock>());
                 break;
 
             case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END:
