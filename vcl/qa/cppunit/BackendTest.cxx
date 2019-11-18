@@ -465,8 +465,7 @@ public:
 
     CPPUNIT_TEST(testDrawInvertWithRectangle);
     CPPUNIT_TEST(testDrawInvertN50WithRectangle);
-    // AFAIK this test (itself) is broken.
-    // CPPUNIT_TEST(testDrawInvertTrackFrameWithRectangle);
+    CPPUNIT_TEST(testDrawInvertTrackFrameWithRectangle);
 
     CPPUNIT_TEST(testDrawBezierWithPolylineB2D);
     CPPUNIT_TEST(testDrawBezierAAWithPolylineB2D);
