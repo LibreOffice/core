@@ -605,6 +605,8 @@ sal_Bool SAL_CALL GtkTransferable::isDataFlavorSupported(const css::datatransfer
     return std::any_of(aAll.begin(), aAll.end(), DataFlavorEq(rFlavor));
 }
 
+namespace {
+
 class GtkClipboardTransferable : public GtkTransferable
 {
 private:
@@ -738,6 +740,8 @@ public:
     void ClipboardClear();
     void OwnerPossiblyChanged(GtkClipboard *clipboard);
 };
+
+}
 
 OUString VclGtkClipboard::getImplementationName()
 {
@@ -1338,6 +1342,8 @@ Reference< XInterface > GtkInstance::CreateDragSource()
     return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new GtkDragSource()) );
 }
 
+namespace {
+
 class GtkOpenGLContext : public OpenGLContext
 {
     GLWindow m_aGLWin;
@@ -1598,6 +1604,8 @@ private:
     }
 };
 
+}
+
 OpenGLContext* GtkInstance::CreateOpenGLContext()
 {
     return new GtkOpenGLContext;
@@ -1620,10 +1628,11 @@ bool DLSYM_GDK_IS_X11_DISPLAY(GdkDisplay* pDisplay)
     return G_TYPE_CHECK_INSTANCE_TYPE(pDisplay, get_type());
 }
 
-class GtkInstanceBuilder;
-
 namespace
 {
+
+class GtkInstanceBuilder;
+
     void set_help_id(const GtkWidget *pWidget, const OString& rHelpId)
     {
         gchar *helpid = g_strdup(rHelpId.getStr());
@@ -1777,6 +1786,8 @@ namespace
         return pMouseEventBox;
     }
 }
+
+namespace {
 
 class GtkInstanceWidget : public virtual weld::Widget
 {
@@ -2609,7 +2620,7 @@ public:
         m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
     }
 
-    gboolean signal_key(const GdkEventKey* pEvent)
+    bool signal_key(const GdkEventKey* pEvent)
     {
         if (pEvent->type == GDK_KEY_PRESS && m_aKeyPressHdl.IsSet())
         {
@@ -2790,6 +2801,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(GtkInstanceWidget, async_signal_focus_in, void*, void)
 {
     m_pFocusInEvent = nullptr;
@@ -2886,7 +2899,7 @@ namespace
         return pixbuf;
     }
 
-    GdkPixbuf* load_icon_by_name(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
+    GdkPixbuf* load_icon_by_name_theme_lang(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
     {
         auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
         if (!xMemStm)
@@ -2899,7 +2912,7 @@ GdkPixbuf* load_icon_by_name(const OUString& rIconName)
 {
     OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
     OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
-    return load_icon_by_name(rIconName, sIconTheme, sUILang);
+    return load_icon_by_name_theme_lang(rIconName, sIconTheme, sUILang);
 }
 
 namespace
@@ -2973,7 +2986,6 @@ namespace
         }
         return pImage;
     }
-}
 
 class MenuHelper
 {
@@ -3212,8 +3224,6 @@ public:
     }
 };
 
-namespace
-{
     class ChildFrame : public WorkWindow
     {
     public:
@@ -3228,7 +3238,6 @@ namespace
                 pChild->SetPosSizePixel(Point(0, 0), GetSizePixel());
         }
     };
-}
 
 class GtkInstanceContainer : public GtkInstanceWidget, public virtual weld::Container
 {
@@ -3302,6 +3311,8 @@ public:
     }
 };
 
+}
+
 std::unique_ptr<weld::Container> GtkInstanceWidget::weld_parent() const
 {
     GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
@@ -3309,6 +3320,8 @@ std::unique_ptr<weld::Container> GtkInstanceWidget::weld_parent() const
         return nullptr;
     return std::make_unique<GtkInstanceContainer>(GTK_CONTAINER(pParent), m_pBuilder, false);
 }
+
+namespace {
 
 class GtkInstanceBox : public GtkInstanceContainer, public virtual weld::Box
 {
@@ -3331,8 +3344,6 @@ public:
     }
 };
 
-namespace
-{
     void set_cursor(GtkWidget* pWidget, const char *pName)
     {
         if (!gtk_widget_get_realized(pWidget))
@@ -3466,7 +3477,6 @@ namespace
         if (GTK_IS_CONTAINER(pItem))
             gtk_container_forall(GTK_CONTAINER(pItem), do_collect_screenshot_data, data);
     }
-}
 
 class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Window
 {
@@ -3882,6 +3892,8 @@ struct DialogRunner
     }
 };
 
+}
+
 typedef std::set<GtkWidget*> winset;
 
 namespace
@@ -3908,7 +3920,6 @@ namespace
         }
         g_list_free(pChildren);
     }
-}
 
 class GtkInstanceButton;
 
@@ -4318,6 +4329,8 @@ public:
     }
 };
 
+}
+
 void DialogRunner::signal_response(GtkDialog*, gint nResponseId, gpointer data)
 {
     DialogRunner* pThis = static_cast<DialogRunner*>(data);
@@ -4340,6 +4353,8 @@ void DialogRunner::signal_cancel(GtkAssistant*, gpointer data)
     // make esc in an assistant act as if cancel button was pressed
     pThis->m_pInstance->close(false);
 }
+
+namespace {
 
 class GtkInstanceMessageDialog : public GtkInstanceDialog, public virtual weld::MessageDialog
 {
@@ -4818,6 +4833,8 @@ public:
     virtual std::unique_ptr<weld::Label> weld_label_widget() const override;
 };
 
+}
+
 static GType crippled_viewport_get_type();
 
 #define CRIPPLED_TYPE_VIEWPORT            (crippled_viewport_get_type ())
@@ -4826,6 +4843,8 @@ static GType crippled_viewport_get_type();
 #   define CRIPPLED_IS_VIEWPORT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CRIPPLED_TYPE_VIEWPORT))
 #endif
 
+namespace {
+
 struct CrippledViewport
 {
     GtkViewport viewport;
@@ -4833,6 +4852,8 @@ struct CrippledViewport
     GtkAdjustment  *hadjustment;
     GtkAdjustment  *vadjustment;
 };
+
+}
 
 enum
 {
@@ -5067,6 +5088,8 @@ static GtkSelectionMode VclToGtk(SelectionMode eType)
     }
     return eRet;
 }
+
+namespace {
 
 class GtkInstanceScrolledWindow final : public GtkInstanceContainer, public virtual weld::ScrolledWindow
 {
@@ -6130,6 +6153,8 @@ public:
     }
 };
 
+}
+
 void GtkInstanceDialog::asyncresponse(gint ret)
 {
     if (ret == GTK_RESPONSE_HELP)
@@ -6259,6 +6284,8 @@ GtkInstanceButton* GtkInstanceDialog::has_click_handler(int nResponse)
     }
     return pButton;
 }
+
+namespace {
 
 class GtkInstanceToggleButton : public GtkInstanceButton, public virtual weld::ToggleButton
 {
@@ -6916,8 +6943,6 @@ public:
     }
 };
 
-namespace
-{
     vcl::ImageType GtkToVcl(GtkIconSize eSize)
     {
         vcl::ImageType eRet;
@@ -6951,6 +6976,8 @@ void GtkInstanceMenuButton::set_menu(weld::Menu* pMenu)
     GtkWidget* pMenuWidget = GTK_WIDGET(pPopoverWidget ? pPopoverWidget->getMenu() : nullptr);
     gtk_menu_button_set_popup(m_pMenuButton, pMenuWidget);
 }
+
+namespace {
 
 class GtkInstanceToolbar : public GtkInstanceWidget, public virtual weld::Toolbar
 {
@@ -7457,8 +7484,6 @@ public:
     }
 };
 
-namespace
-{
     PangoAttrList* create_attr_list(const vcl::Font& rFont)
     {
         PangoAttrList* pAttrList = pango_attr_list_new();
@@ -7545,7 +7570,6 @@ namespace
         else
             gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
     }
-}
 
 class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
@@ -7761,8 +7785,6 @@ public:
     }
 };
 
-namespace
-{
     struct Search
     {
         OString str;
@@ -7812,7 +7834,7 @@ namespace
         else
         {
             const AllSettings& rSettings = Application::GetSettings();
-            pixbuf = load_icon_by_name(rIconName,
+            pixbuf = load_icon_by_name_theme_lang(rIconName,
                                        rSettings.GetStyleSettings().DetermineIconTheme(),
                                        rSettings.GetUILanguageTag().getBcp47());
         }
@@ -7911,7 +7933,6 @@ namespace
 
         return -1;
     }
-}
 
 struct GtkInstanceTreeIter : public weld::TreeIter
 {
@@ -7935,7 +7956,11 @@ struct GtkInstanceTreeIter : public weld::TreeIter
 
 class GtkInstanceTreeView;
 
+}
+
 static GtkInstanceTreeView* g_DragSource;
+
+namespace {
 
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
 {
@@ -9855,6 +9880,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_changed, void*, void)
 {
     m_pChangeEvent = nullptr;
@@ -9865,6 +9892,8 @@ IMPL_LINK_NOARG(GtkInstanceTreeView, async_stop_cell_editing, void*, void)
 {
     end_editing();
 }
+
+namespace {
 
 class GtkInstanceIconView : public GtkInstanceContainer, public virtual weld::IconView
 {
@@ -10225,11 +10254,15 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(GtkInstanceIconView, async_signal_selection_changed, void*, void)
 {
     m_pSelectionChangeEvent = nullptr;
     signal_selection_changed();
 }
+
+namespace {
 
 class GtkInstanceSpinButton : public GtkInstanceEntry, public virtual weld::SpinButton
 {
@@ -10630,6 +10663,8 @@ public:
     }
 };
 
+}
+
 std::unique_ptr<weld::Label> GtkInstanceFrame::weld_label_widget() const
 {
     GtkWidget* pLabel = gtk_frame_get_label_widget(m_pFrame);
@@ -10637,6 +10672,8 @@ std::unique_ptr<weld::Label> GtkInstanceFrame::weld_label_widget() const
         return nullptr;
     return std::make_unique<GtkInstanceLabel>(GTK_LABEL(pLabel), m_pBuilder, false);
 }
+
+namespace {
 
 class GtkInstanceTextView : public GtkInstanceContainer, public virtual weld::TextView
 {
@@ -10822,10 +10859,7 @@ public:
     }
 };
 
-namespace
-{
     AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
-}
 
 class GtkInstanceDrawingArea : public GtkInstanceWidget, public virtual weld::DrawingArea
 {
@@ -11072,6 +11106,8 @@ public:
     }
 };
 
+}
+
 #define g_signal_handlers_block_by_data(instance, data) \
     g_signal_handlers_block_matched ((instance), G_SIGNAL_MATCH_DATA, 0, 0, nullptr, nullptr, (data))
 
@@ -11094,6 +11130,8 @@ static void disable_area_apply_attributes_cb(GtkWidget* pItem, gpointer userdata
     GtkCellArea* pCellArea = gtk_cell_layout_get_area(pCellLayout);
     g_signal_handlers_block_by_data(pCellArea, userdata);
 }
+
+namespace {
 
 class GtkInstanceComboBox : public GtkInstanceContainer, public vcl::ISearchableStringList, public virtual weld::ComboBox
 {
@@ -12228,8 +12266,6 @@ public:
     }
 };
 
-namespace
-{
     gboolean signalTooltipQuery(GtkWidget* pWidget, gint /*x*/, gint /*y*/,
                                          gboolean /*keyboard_mode*/, GtkTooltip *tooltip)
     {
@@ -12298,8 +12334,6 @@ void ensure_intercept_drawing_area_accessibility()
     }
 }
 
-}
-
 class GtkInstanceBuilder : public weld::Builder
 {
 private:
@@ -12332,7 +12366,7 @@ private:
             if (icon_name)
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
-                GdkPixbuf* pixbuf = load_icon_by_name(aIconName, m_aIconTheme, m_aUILang);
+                GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang);
                 if (pixbuf)
                 {
                     gtk_image_set_from_pixbuf(pImage, pixbuf);
@@ -12347,7 +12381,7 @@ private:
             if (icon_name)
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
-                GdkPixbuf* pixbuf = load_icon_by_name(aIconName, m_aIconTheme, m_aUILang);
+                GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang);
                 if (pixbuf)
                 {
                     GtkWidget* pImage = gtk_image_new_from_pixbuf(pixbuf);
@@ -12960,6 +12994,8 @@ public:
         return std::make_unique<GtkInstanceSizeGroup>();
     }
 };
+
+}
 
 void GtkInstanceWindow::help()
 {
