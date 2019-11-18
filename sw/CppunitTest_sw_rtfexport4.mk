@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_rtfexport4, \
     cppu \
 	cppuhelper \
     sal \
+	svl \
     sfx \
 	sw \
     test \

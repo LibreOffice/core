@@ -1874,6 +1874,41 @@ void RtfAttributeOutput::writeTextFrame(const ww8::Frame& rFrame, bool bTextBox)
     }
 }
 
+/** save the current run state around exporting things that contain paragraphs
+    themselves like text frames.
+    TODO: probably more things need to be saved?
+ */
+class SaveRunState
+{
+private:
+    RtfAttributeOutput& m_rRtf;
+    RtfStringBuffer const m_Run;
+    RtfStringBuffer const m_RunText;
+    bool const m_bSingleEmptyRun;
+    bool const m_bInRun;
+
+public:
+    explicit SaveRunState(RtfAttributeOutput& rRtf)
+        : m_rRtf(rRtf)
+        , m_Run(std::move(rRtf.m_aRun))
+        , m_RunText(std::move(rRtf.m_aRunText))
+        , m_bSingleEmptyRun(rRtf.m_bSingleEmptyRun)
+        , m_bInRun(rRtf.m_bInRun)
+    {
+        m_rRtf.m_rExport.setStream();
+    }
+    ~SaveRunState()
+    {
+        m_rRtf.m_aRun = std::move(m_Run);
+        m_rRtf.m_aRunText = std::move(m_RunText);
+        m_rRtf.m_bSingleEmptyRun = m_bSingleEmptyRun;
+        m_rRtf.m_bInRun = m_bInRun;
+
+        m_rRtf.m_aRunText->append(m_rRtf.m_rExport.getStream());
+        m_rRtf.m_rExport.resetStream();
+    }
+};
+
 void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Point& /*rNdTopLeft*/)
 {
     const SwNode* pNode = rFrame.GetContent();
@@ -1887,7 +1922,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
             if (RtfSdrExport::isTextBox(rFrame.GetFrameFormat()))
                 break;
 
-            assert(m_aRunText.getLength() == 0 && "this will corrupt the document");
+            SaveRunState const saved(*this);
+
             m_rExport.m_pParentFrame = &rFrame;
 
             m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHP);
@@ -1954,14 +1990,12 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                 m_rExport.OutputFormat(rFrame.GetFrameFormat(), false, false, true);
                 m_aRunText->append('}');
                 m_rExport.m_pParentFrame = nullptr;
-                m_rExport.Strm().WriteOString(m_aRunText.makeStringAndClear());
             }
 
             if (pGrfNode)
             {
                 m_aRunText.append(dynamic_cast<const SwFlyFrameFormat*>(&rFrame.GetFrameFormat()),
                                   pGrfNode);
-                m_rExport.Strm().WriteOString(m_aRunText.makeStringAndClear());
             }
             break;
         case ww8::Frame::eDrawing:
@@ -1980,7 +2014,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
 
                 m_aRunText->append('}');
                 m_aRunText->append('}');
-                m_rExport.Strm().WriteOString(m_aRunText.makeStringAndClear());
             }
         }
         break;

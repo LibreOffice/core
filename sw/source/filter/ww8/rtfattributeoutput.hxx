@@ -39,6 +39,7 @@ class RtfExport;
 class RtfAttributeOutput : public AttributeOutputBase
 {
     friend class RtfStringBufferValue;
+    friend class SaveRunState;
 
 public:
     /// Export the state of RTL/CJK.
