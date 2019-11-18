@@ -559,9 +559,9 @@ void Test::testIconSet()
 
     ScIconSetFormat* pEntry = new ScIconSetFormat(m_pDoc);
     ScIconSetFormatData* pData = new ScIconSetFormatData;
-    pData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(0, COL_BLUE));
-    pData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(1, COL_GREEN));
-    pData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(2, COL_RED));
+    pData->m_Entries.emplace_back(new ScColorScaleEntry(0, COL_BLUE));
+    pData->m_Entries.emplace_back(new ScColorScaleEntry(1, COL_GREEN));
+    pData->m_Entries.emplace_back(new ScColorScaleEntry(2, COL_RED));
     pEntry->SetIconSetData(pData);
 
     m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
@@ -1211,9 +1211,9 @@ void Test::testCondFormatListenToOwnRange()
 
     ScIconSetFormat* pEntry = new ScIconSetFormat(m_pDoc);
     ScIconSetFormatData* pData = new ScIconSetFormatData;
-    pData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(0, COL_BLUE));
-    pData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(1, COL_GREEN));
-    pData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(2, COL_RED));
+    pData->m_Entries.emplace_back(new ScColorScaleEntry(0, COL_BLUE));
+    pData->m_Entries.emplace_back(new ScColorScaleEntry(1, COL_GREEN));
+    pData->m_Entries.emplace_back(new ScColorScaleEntry(2, COL_RED));
     pEntry->SetIconSetData(pData);
     pEntry->SetParent(pFormat.get());
 

@@ -1989,13 +1989,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScIconSetFormat* pEntry = new ScIconSetFormat(pDoc);
                     ScIconSetFormatData* pIconSetFormatData = new ScIconSetFormatData(eIconSetType);
 
-                    pIconSetFormatData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(0, COL_RED, COLORSCALE_PERCENT));
-                    pIconSetFormatData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(round(100. / nSteps), COL_BROWN, COLORSCALE_PERCENT));
-                    pIconSetFormatData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(round(200. / nSteps), COL_YELLOW, COLORSCALE_PERCENT));
+                    pIconSetFormatData->m_Entries.emplace_back(new ScColorScaleEntry(0, COL_RED, COLORSCALE_PERCENT));
+                    pIconSetFormatData->m_Entries.emplace_back(new ScColorScaleEntry(round(100. / nSteps), COL_BROWN, COLORSCALE_PERCENT));
+                    pIconSetFormatData->m_Entries.emplace_back(new ScColorScaleEntry(round(200. / nSteps), COL_YELLOW, COLORSCALE_PERCENT));
                     if (nSteps > 3)
-                        pIconSetFormatData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(round(300. / nSteps), COL_WHITE, COLORSCALE_PERCENT));
+                        pIconSetFormatData->m_Entries.emplace_back(new ScColorScaleEntry(round(300. / nSteps), COL_WHITE, COLORSCALE_PERCENT));
                     if (nSteps > 4)
-                        pIconSetFormatData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(round(400. / nSteps), COL_GREEN, COLORSCALE_PERCENT));
+                        pIconSetFormatData->m_Entries.emplace_back(new ScColorScaleEntry(round(400. / nSteps), COL_GREEN, COLORSCALE_PERCENT));
 
                     pEntry->SetIconSetData(pIconSetFormatData);
                     pFormat->AddEntry(pEntry);

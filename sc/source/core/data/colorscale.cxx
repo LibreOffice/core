@@ -197,7 +197,7 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
     }
 }
 
-ScColorScaleEntry::~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE
+ScColorScaleEntry::~ScColorScaleEntry()
 {
     if(mpCell)
         mpCell->EndListeningTo(mpCell->GetDocument());
@@ -376,7 +376,7 @@ ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleForma
 {
     for(const auto& rxEntry : rFormat)
     {
-        maColorScales.push_back(std::make_unique<ScColorScaleEntry>(pDoc, *rxEntry));
+        maColorScales.emplace_back(new ScColorScaleEntry(pDoc, *rxEntry));
     }
 }
 
@@ -400,7 +400,7 @@ void ScColorScaleFormat::SetParent(ScConditionalFormat* pFormat)
 
 void ScColorScaleFormat::AddEntry( ScColorScaleEntry* pEntry )
 {
-    maColorScales.push_back(std::unique_ptr<ScColorScaleEntry>( pEntry ));
+    maColorScales.push_back(std::unique_ptr<ScColorScaleEntry, o3tl::default_delete<ScColorScaleEntry>>(pEntry));
     maColorScales.back()->SetRepaintCallback(mpParent);
 }
 
@@ -977,7 +977,7 @@ ScIconSetFormatData::ScIconSetFormatData(ScIconSetFormatData const& rOther)
     m_Entries.reserve(rOther.m_Entries.size());
     for (auto const& it : rOther.m_Entries)
     {
-        m_Entries.push_back(std::make_unique<ScColorScaleEntry>(*it));
+        m_Entries.emplace_back(new ScColorScaleEntry(*it));
     }
 }
 
