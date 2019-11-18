@@ -88,7 +88,7 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
 
         if (nType == Frmmgr_Type::GRF || nType == Frmmgr_Type::OLE)
         {
-            m_aSet.Put(SwFormatAnchor(RndStdIds::FLY_AS_CHAR));
+            m_aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_CHAR));
         }
     }
     else if ( nType == Frmmgr_Type::NONE )
