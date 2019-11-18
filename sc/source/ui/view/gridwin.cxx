@@ -122,6 +122,7 @@
 #include <uiobject.hxx>
 #include <undoblk.hxx>
 #include <datamapper.hxx>
+#include <warnbox.hxx>
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -3211,8 +3212,14 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
     else if( rKeyCode.GetCode() == KEY_RETURN && pViewData->IsPasteMode() )
     {
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
-        ScClipUtil::PasteFromClipboard( pViewData, pTabViewShell, false );
 
+        // Show replace warning dialog before clearing clipboard content.
+        ScReplaceWarnBox aBox(ScDocShell::GetActiveDialogParent());
+        if (aBox.run() != RET_YES)
+        {
+            return;
+        }
+        ScClipUtil::PasteFromClipboard(pViewData, pTabViewShell, false);
         // Clear clipboard content.
         uno::Reference<datatransfer::clipboard::XClipboard> xSystemClipboard =
             GetClipboard();
