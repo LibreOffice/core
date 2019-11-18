@@ -18,11 +18,12 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
 
-enum class InfoBarType {
-    Info,
-    Success,
-    Warning,
-    Danger
+// These must match the values in offapi/com/sun/star/frame/InfobarType.idl
+enum class InfobarType {
+    INFO = 0,
+    SUCCESS = 1,
+    WARNING = 2,
+    DANGER = 3
 };
 
 /** SfxChildWindow for positioning the InfoBar in the view.
@@ -50,27 +51,30 @@ class SFX2_DLLPUBLIC SfxInfoBarWindow final : public vcl::Window
 {
     private:
         OUString const            m_sId;
-        InfoBarType m_eType;
+        InfobarType m_eType;
         VclPtr<FixedImage>        m_pImage;
-        VclPtr<FixedText>           m_pMessage;
+        VclPtr<FixedText> m_pPrimaryMessage;
+        VclPtr<FixedText> m_pSecondaryMessage;
         VclPtr<Button>                m_pCloseBtn;
         std::vector< VclPtr<PushButton> >  m_aActionBtns;
 
-        void SetForeAndBackgroundColors( InfoBarType eType );
+        void SetForeAndBackgroundColors( InfobarType eType );
 
     public:
         SfxInfoBarWindow( vcl::Window* parent, const OUString& sId,
-                          const OUString& sMessage,
-                          InfoBarType infoBarType,
-                          WinBits nMessageStyle);
+                          const OUString& sPrimaryMessage,
+                          const OUString& sSecondaryMessage,
+                          InfobarType InfobarType,
+                          bool bShowCloseButton, WinBits nMessageStyle);
         virtual ~SfxInfoBarWindow( ) override;
         virtual void dispose() override;
 
         const OUString& getId() const { return m_sId; }
         virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
         virtual void Resize( ) override;
-        void Update( const OUString& sNewMessage, InfoBarType eType );
-        basegfx::BColor                m_aBackgroundColor;
+        void Update(const OUString& sPrimaryMessage, const OUString& sSecondaryMessage,
+                    InfobarType eType);
+        basegfx::BColor m_aBackgroundColor;
         basegfx::BColor                m_aForegroundColor;
 
         /** Add button to Infobar.
@@ -95,9 +99,11 @@ class SfxInfoBarContainerWindow final : public vcl::Window
         virtual void dispose() override;
 
         VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId,
-                                        const OUString& sMessage,
-                                        InfoBarType ibType,
-                                        WinBits nMessageStyle);
+                                        const OUString& sPrimaryMessage,
+                                        const OUString& sSecondaryMessage,
+                                        InfobarType ibType,
+                                        WinBits nMessageStyle,
+                                        bool bShowCloseButton);
         VclPtr<SfxInfoBarWindow> getInfoBar(const OUString& sId);
         bool hasInfoBarWithID(const OUString& sId);
         void removeInfoBar(VclPtr<SfxInfoBarWindow> const & pInfoBar);

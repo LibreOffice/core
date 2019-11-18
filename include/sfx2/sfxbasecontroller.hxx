@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XControllerBorder.hpp>
+#include <com/sun/star/frame/XInfobarProvider.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -70,6 +71,7 @@ typedef ::cppu::WeakImplHelper  <   css::frame::XController2
                                 ,   css::ui::XContextMenuInterception
                                 ,   css::awt::XUserInputInterception
                                 ,   css::frame::XDispatchInformationProvider
+                                ,   css::frame::XInfobarProvider
                                 ,   css::frame::XTitle
                                 ,   css::frame::XTitleChangeBroadcaster
                                 ,   css::lang::XInitialization
@@ -174,6 +176,17 @@ public:
 
     // css::lang::XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+
+    // XInfobarProvider
+    virtual void SAL_CALL
+    appendInfobar(const OUString& sId, const OUString& sPrimaryMessage,
+                  const OUString& sSecondaryMessage, sal_Int32 aInfobarType,
+                  const css::uno::Sequence<css::beans::StringPair>& actionButtons,
+                  sal_Bool bShowCloseButton) override;
+    virtual void SAL_CALL updateInfobar(const OUString& sId, const OUString& sPrimaryMessage,
+                                        const OUString& sSecondaryMessage,
+                                        sal_Int32 aInfobarType) override;
+    virtual void SAL_CALL removeInfobar(const OUString& sId) override;
 
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API

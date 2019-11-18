@@ -2584,6 +2584,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	FrameActionEvent \
 	FrameSearchFlag \
 	IllegalArgumentIOException \
+	InfobarType \
 	LayoutManagerEvents \
 	TerminationVetoException \
 	TitleChangedEvent \
@@ -2624,6 +2625,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XFrames \
 	XFramesSupplier \
 	XGlobalEventBroadcaster \
+	XInfobarProvider \
 	XInterceptorInfo \
 	XLayoutManager \
 	XLayoutManager2 \
