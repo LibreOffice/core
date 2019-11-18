@@ -68,6 +68,7 @@ namespace SwGlobals
 {
     void ensure()
     {
+        // coverity[side_effect_free : FALSE] - not actually side-effect-free
         theSwDLLInstance::get();
     }
 
