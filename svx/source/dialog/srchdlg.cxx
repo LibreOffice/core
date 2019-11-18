@@ -2310,19 +2310,19 @@ void SvxSearchDialog::SetDocWin(vcl::Window* pDocWin, SvxSearchCmd eCommand)
 
        But with search/all we do want the new multi-cellselection as the result.
     */
-    AccessibilityFlowTo eFlowTo(AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM);
+    AccessibilityFlowTo eFlowTo(AccessibilityFlowTo::ForFindReplaceItem);
     switch (eCommand)
     {
         case SvxSearchCmd::FIND:
         case SvxSearchCmd::REPLACE:
-            eFlowTo = AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM;
+            eFlowTo = AccessibilityFlowTo::ForFindReplaceItem;
             break;
         case SvxSearchCmd::FIND_ALL:
         case SvxSearchCmd::REPLACE_ALL:
-            eFlowTo = AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE;
+            eFlowTo = AccessibilityFlowTo::ForFindReplaceRange;
             break;
     }
-    uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo(Any(GetSrchFlag()), eFlowTo);
+    uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo(Any(GetSrchFlag()), static_cast<sal_Int32>(eFlowTo));
 
     sal_Int32 nLen = aAnySeq.getLength();
     if (nLen)

@@ -2279,95 +2279,34 @@ css::uno::Sequence< css::uno::Any > ScAccessibleDocument::GetScAccFlowToSequence
 css::uno::Sequence< css::uno::Any >
         SAL_CALL ScAccessibleDocument::getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType)
 {
+    AccessibilityFlowTo eType = static_cast<AccessibilityFlowTo>(nType);
+
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
+    assert(eType == AccessibilityFlowTo::ForFindReplaceItem || eType == AccessibilityFlowTo::ForFindReplaceRange);
+#endif
+
     SolarMutexGuard g;
 
-    if (nType == AccessibilityFlowTo::FORSPELLCHECKFLOWTO)
+    bool bSuccess(false);
+    rAny >>= bSuccess;
+    if ( bSuccess )
     {
-        uno::Reference< css::drawing::XShape > xShape;
-        rAny >>= xShape;
-        if ( xShape.is() )
+        if (eType == AccessibilityFlowTo::ForFindReplaceRange)
         {
-            uno::Reference < XAccessible > xAcc = mpChildrenShapes->GetAccessibleCaption(xShape);
-            uno::Reference < XAccessibleSelection > xAccSelection( xAcc, uno::UNO_QUERY );
-            if ( xAccSelection.is() )
+            uno::Sequence< uno::Any> aSeq = GetScAccFlowToSequence();
+            if ( aSeq.hasElements() )
             {
-                if ( xAccSelection->getSelectedAccessibleChildCount() )
-                {
-                    uno::Reference < XAccessible > xSel = xAccSelection->getSelectedAccessibleChild( 0 );
-                    if ( xSel.is() )
-                    {
-                        uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
-                        if ( xSelContext.is() )
-                        {
-                            //if in sw we find the selected paragraph here
-                            if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-                            {
-                                uno::Sequence<uno::Any> aRet( 1 );
-                                aRet[0] <<= xSel;
-                                return aRet;
-                            }
-                        }
-                    }
-                }
+                return aSeq;
             }
         }
-        else
-        {
-            if ( getSelectedAccessibleChildCount() )
-            {
-                uno::Reference < XAccessible > xSel = getSelectedAccessibleChild( 0 );
-                if ( xSel.is() )
-                {
-                    uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
-                    if ( xSelContext.is() )
-                    {
-                        uno::Reference < XAccessibleSelection > xAccChildSelection( xSel, uno::UNO_QUERY );
-                        if ( xAccChildSelection.is() )
-                        {
-                            if ( xAccChildSelection->getSelectedAccessibleChildCount() )
-                            {
-                                uno::Reference < XAccessible > xChildSel = xAccChildSelection->getSelectedAccessibleChild( 0 );
-                                if ( xChildSel.is() )
-                                {
-                                    uno::Reference < css::accessibility::XAccessibleContext > xChildSelContext( xChildSel->getAccessibleContext() );
-                                    if ( xChildSelContext.is() &&
-                                        xChildSelContext->getAccessibleRole() == css::accessibility::AccessibleRole::PARAGRAPH )
-                                    {
-                                        uno::Sequence<uno::Any> aRet( 1 );
-                                        aRet[0] <<= xChildSel;
-                                        return aRet;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM || nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
-    {
-        bool bSuccess(false);
-        rAny >>= bSuccess;
-        if ( bSuccess )
-        {
-            if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
-            {
-                uno::Sequence< uno::Any> aSeq = GetScAccFlowToSequence();
-                if ( aSeq.hasElements() )
-                {
-                    return aSeq;
-                }
-            }
 
-            if( mpAccessibleSpreadsheet.is() )
-            {
-                uno::Reference < XAccessible > xFindCellAcc = mpAccessibleSpreadsheet->GetActiveCell();
-                // add xFindCellAcc to the return the Sequence
-                uno::Sequence< uno::Any> aSeq2(1);
-                aSeq2[0] <<= xFindCellAcc;
-                return aSeq2;
-            }
+        if( mpAccessibleSpreadsheet.is() )
+        {
+            uno::Reference < XAccessible > xFindCellAcc = mpAccessibleSpreadsheet->GetActiveCell();
+            // add xFindCellAcc to the return the Sequence
+            uno::Sequence< uno::Any> aSeq2(1);
+            aSeq2[0] <<= xFindCellAcc;
+            return aSeq2;
         }
     }
     uno::Sequence< uno::Any> aEmpty;

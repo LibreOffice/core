@@ -22,11 +22,13 @@
 
 #include <sal/types.h>
 
-enum AccessibilityFlowTo : sal_Int32
+/**
+  enum for css::accessibility::XAccessibleGetAccFlowTo::getAccFlowTo method
+*/
+enum class AccessibilityFlowTo : sal_Int32
 {
-    FORSPELLCHECKFLOWTO = 1,
-    FORFINDREPLACEFLOWTO_ITEM = 2,
-    FORFINDREPLACEFLOWTO_RANGE = 3
+    ForFindReplaceItem = 2,
+    ForFindReplaceRange = 3
 };
 
 #endif // INCLUDED_COMPHELPER_ACCFLOWENUM_HXX
