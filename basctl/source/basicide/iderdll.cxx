@@ -75,6 +75,7 @@ struct theDllInstance : public rtl::Static<DllInstance, theDllInstance> { };
 
 void EnsureIde ()
 {
+    // coverity[side_effect_free : FALSE] - not actually side-effect-free
     theDllInstance::get();
 }
 
