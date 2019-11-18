@@ -309,6 +309,7 @@ SwSpellPopup::SwSpellPopup(
         m_xPopupMenu->HideItem(m_nCorrectDialogId);
         m_xPopupMenu->HideItem(m_nAddId);
         m_xPopupMenu->HideItem(m_nAddMenuId);
+        m_xPopupMenu->HideItem(m_nCorrectMenuId);
     }
     sal_uInt16 nItemPos = m_xPopupMenu->GetItemPos(m_nIgnoreWordId);
     OUString aIgnoreSelection( SwResId( STR_IGNORE_SELECTION ) );
@@ -588,6 +589,11 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->RemoveDisabledEntries(true, true);
 
     SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, uno::makeAny( true ));
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_xPopupMenu->HideItem(MN_EXPLANATION_LINK);
+    }
 }
 
 SwSpellPopup::~SwSpellPopup() {}
