@@ -495,7 +495,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if (pViewFrame)
                     {
                         pViewFrame->RemoveInfoBar("enablecontent");
-                        auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", ScResId(STR_RELOAD_TABLES), InfoBarType::Warning);
+                        auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", "", ScResId(STR_RELOAD_TABLES), InfobarType::WARNING);
                         if (pInfoBar)
                         {
                             VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());

@@ -99,6 +99,7 @@ using ::com::sun::star::frame::XDispatchProvider;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::beans::StringPair;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Exception;
@@ -1395,7 +1396,8 @@ void SfxBaseController::ShowInfoBars( )
 
     // Get the Frame and show the InfoBar if not checked out
     SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
-    auto pInfoBar = pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), InfoBarType::Warning);
+    auto pInfoBar = pViewFrame->AppendInfoBar("checkout", "", SfxResId(STR_NONCHECKEDOUT_DOCUMENT),
+                                              InfobarType::WARNING);
     if (pInfoBar)
     {
         VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());
@@ -1467,6 +1469,66 @@ void SAL_CALL SfxBaseController::removeTitleChangeListener(const Reference< fram
 
 void SfxBaseController::initialize( const css::uno::Sequence< css::uno::Any >& /*aArguments*/ )
 {
+}
+
+void SAL_CALL SfxBaseController::appendInfobar(const OUString& sId, const OUString& sPrimaryMessage,
+                                               const OUString& sSecondaryMessage,
+                                               sal_Int32 aInfobarType,
+                                               const Sequence<StringPair>& actionButtons,
+                                               sal_Bool bShowCloseButton)
+{
+    if (aInfobarType < static_cast<sal_Int32>(InfobarType::INFO)
+        || aInfobarType > static_cast<sal_Int32>(InfobarType::DANGER))
+        throw lang::IllegalArgumentException("Undefined InfobarType: "
+                                                 + OUString::number(aInfobarType),
+                                             static_cast<::cppu::OWeakObject*>(this), 0);
+    SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+    if (pViewFrame->HasInfoBarWithID(sId))
+        throw lang::IllegalArgumentException("Infobar with ID '" + sId + "' already existing.",
+                                             static_cast<::cppu::OWeakObject*>(this), 0);
+
+    auto pInfoBar
+        = pViewFrame->AppendInfoBar(sId, sPrimaryMessage, sSecondaryMessage,
+                                    static_cast<InfobarType>(aInfobarType), bShowCloseButton);
+    if (!pInfoBar)
+        throw uno::RuntimeException("Could not create Infobar");
+
+    auto vActionButtons = comphelper::sequenceToContainer<std::vector<StringPair>>(actionButtons);
+    for (auto& actionButton : vActionButtons)
+    {
+        if (actionButton.First.isEmpty() || actionButton.Second.isEmpty())
+            continue;
+        VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());
+        xBtn->SetText(actionButton.First);
+        xBtn->SetSizePixel(xBtn->GetOptimalSize());
+        xBtn->SetCommandHandler(actionButton.Second);
+        pInfoBar->addButton(xBtn);
+    }
+}
+
+void SAL_CALL SfxBaseController::updateInfobar(const OUString& sId, const OUString& sPrimaryMessage,
+                                               const OUString& sSecondaryMessage,
+                                               sal_Int32 aInfobarType)
+{
+    if (aInfobarType < static_cast<sal_Int32>(InfobarType::INFO)
+        || aInfobarType > static_cast<sal_Int32>(InfobarType::DANGER))
+        throw lang::IllegalArgumentException("Undefined InfobarType: "
+                                                 + OUString::number(aInfobarType),
+                                             static_cast<::cppu::OWeakObject*>(this), 0);
+    SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+    if (!pViewFrame->HasInfoBarWithID(sId))
+        throw css::container::NoSuchElementException("Infobar with ID '" + sId + "' not found.");
+
+    pViewFrame->UpdateInfoBar(sId, sPrimaryMessage, sSecondaryMessage,
+                              static_cast<InfobarType>(aInfobarType));
+}
+
+void SAL_CALL SfxBaseController::removeInfobar(const OUString& sId)
+{
+    SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+    if (!pViewFrame->HasInfoBarWithID(sId))
+        throw css::container::NoSuchElementException("Infobar with ID '" + sId + "' not found.");
+    pViewFrame->RemoveInfoBar(sId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
