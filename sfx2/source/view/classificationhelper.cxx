@@ -693,11 +693,11 @@ bool SfxClassificationHelper::HasDocumentFooter()
     return it != rCategory.m_aLabels.end() && !it->second.isEmpty();
 }
 
-InfoBarType SfxClassificationHelper::GetImpactLevelType()
+InfobarType SfxClassificationHelper::GetImpactLevelType()
 {
-    InfoBarType aRet;
+    InfobarType aRet;
 
-    aRet = InfoBarType::Warning;
+    aRet = InfobarType::WARNING;
 
     auto itCategory = m_pImpl->m_aCategory.find(SfxClassificationPolicyType::IntellectualProperty);
     if (itCategory == m_pImpl->m_aCategory.end())
@@ -718,22 +718,22 @@ InfoBarType SfxClassificationHelper::GetImpactLevelType()
     if (aScale == "UK-Cabinet")
     {
         if (aLevel == "0")
-            aRet = InfoBarType::Success;
+            aRet = InfobarType::SUCCESS;
         else if (aLevel == "1")
-            aRet = InfoBarType::Warning;
+            aRet = InfobarType::WARNING;
         else if (aLevel == "2")
-            aRet = InfoBarType::Warning;
+            aRet = InfobarType::WARNING;
         else if (aLevel == "3")
-            aRet = InfoBarType::Danger;
+            aRet = InfobarType::DANGER;
     }
     else if (aScale == "FIPS-199")
     {
         if (aLevel == "Low")
-            aRet = InfoBarType::Success;
+            aRet = InfobarType::SUCCESS;
         else if (aLevel == "Moderate")
-            aRet = InfoBarType::Warning;
+            aRet = InfobarType::WARNING;
         else if (aLevel == "High")
-            aRet = InfoBarType::Danger;
+            aRet = InfobarType::DANGER;
     }
     return aRet;
 }
@@ -890,7 +890,7 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
         aMessage = aMessage.replaceFirst("%1", aBACName);
 
         rViewFrame.RemoveInfoBar("classification");
-        rViewFrame.AppendInfoBar("classification", aMessage, GetImpactLevelType());
+        rViewFrame.AppendInfoBar("classification", "", aMessage, GetImpactLevelType());
     }
 }
 
