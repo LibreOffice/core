@@ -87,11 +87,7 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
 
         if (nType == Frmmgr_Type::GRF || nType == Frmmgr_Type::OLE)
         {
-#ifndef IOS // tdf#128021
-            m_aSet.Put(SwFormatAnchor(RndStdIds::FLY_AS_CHAR));
-#else
             m_aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_CHAR));
-#endif
         }
     }
     else if ( nType == Frmmgr_Type::NONE )
