@@ -55,6 +55,13 @@ bool readColor(OString const& rString, Color& rColor)
     return true;
 }
 
+bool readSetting(OString const& rInputString, OString& rOutputString)
+{
+    if (!rInputString.isEmpty())
+        rOutputString = rInputString;
+    return true;
+}
+
 OString getValueOrAny(OString const& rInputString)
 {
     if (rInputString.isEmpty())
@@ -412,7 +419,16 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
         { "toolTextColor", &pStyle->maToolTextColor },
         { "fontColor", &pStyle->maFontColor },
     };
+
     rWidgetDefinition.mpStyle = pStyle;
+
+    auto pSettings = std::make_shared<WidgetDefinitionSettings>();
+
+    std::unordered_map<OString, OString*> aSettingMap = {
+        { "centeredTabs", &pSettings->msCenteredTabs },
+    };
+
+    rWidgetDefinition.mpSettings = pSettings;
 
     SvFileStream aFileStream(m_rDefinitionFile, StreamMode::READ);
 
@@ -436,6 +452,20 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
                 if (pair != aStyleColorMap.end())
                 {
                     readColor(aWalker.attribute("value"), *pair->second);
+                }
+                aWalker.next();
+            }
+            aWalker.parent();
+        }
+        if (aWalker.name() == "settings")
+        {
+            aWalker.children();
+            while (aWalker.isValid())
+            {
+                auto pair = aSettingMap.find(aWalker.name());
+                if (pair != aSettingMap.end())
+                {
+                    readSetting(aWalker.attribute("value"), *pair->second);
                 }
                 aWalker.next();
             }
