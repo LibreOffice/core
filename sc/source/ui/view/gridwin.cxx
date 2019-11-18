@@ -1769,6 +1769,10 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             tools::Rectangle aButtonRect = GetListValButtonRect( aListValPos );
             if ( aButtonRect.IsInside( aPos ) )
             {
+                // tdf#125917 typically we have the mouse captured already, except if are editing the cell.
+                // Ensure its captured before the menu is launched even in the cell editing case
+                CaptureMouse();
+
                 LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
 
                 nMouseStatus = SC_GM_FILTER;    // not set in DoAutoFilterMenue for bDataSelect
