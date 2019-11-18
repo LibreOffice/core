@@ -888,13 +888,23 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
     {
         OString aData;
         bool bCache = true;
-        AndroidFileCache::Entry *pHit = AndroidFileCache::getHitCache().find(cpFilePath);
+
+        const char *cpAssetsPath = cpFilePath + sizeof("/assets/") - 1;
+        // some requests are /assets//foo...
+        if (cpAssetsPath[0] == '/')
+        {
+            __android_log_print(ANDROID_LOG_DEBUG,"libo:sal/osl/unx/file", "double-slash in path: %s", cpFilePath);
+            cpAssetsPath++;
+        }
+
+        AndroidFileCache::Entry *pHit = AndroidFileCache::getHitCache().find(cpAssetsPath);
         if (pHit)
             aData = pHit->maData;
+
         else
         {
             bCache = false;
-            AndroidFileCache::Entry *pMiss = AndroidFileCache::getMissCache().find(cpFilePath);
+            AndroidFileCache::Entry *pMiss = AndroidFileCache::getMissCache().find(cpAssetsPath);
             if (pMiss)
             {
                 errno = ENOENT;
@@ -902,10 +912,10 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
                 return osl_File_E_NOENT;
             }
             AAssetManager* mgr = lo_get_native_assetmgr();
-            AAsset* asset = AAssetManager_open(mgr, cpFilePath + sizeof("/assets/")-1, AASSET_MODE_BUFFER);
+            AAsset* asset = AAssetManager_open(mgr, cpAssetsPath, AASSET_MODE_BUFFER);
             if (!asset)
             {
-                AndroidFileCache::getMissCache().insert(cpFilePath, aData);
+                AndroidFileCache::getMissCache().insert(cpAssetsPath, aData);
                 errno = ENOENT;
                 __android_log_print(ANDROID_LOG_ERROR,"libo:sal/osl/unx/file", "failed to open %s", cpFilePath);
                 return osl_File_E_NOENT;
@@ -922,7 +932,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
                 aData = OString(pData, SAL_NO_ACQUIRE);
 
                 if (pData->length < 50 * 1024)
-                    AndroidFileCache::getHitCache().insert(cpFilePath, aData);
+                    AndroidFileCache::getHitCache().insert(cpAssetsPath, aData);
             }
         }
 
@@ -933,8 +943,8 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
             // loading a document from /assets fails with that idiotic
             // "General Error" dialog...
         }
-        SAL_WARN("sal.file", "osl_openFile(" << cpFilePath << ") => " << aData.getLength() <<
-                 " bytes from file " << (bCache ? "cache" : "system"));
+        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ") => '" << cpAssetsPath << "'"
+                 << aData.getLength() << " bytes from file " << (bCache ? "cache" : "system"));
         return openMemoryAsFile(aData, pHandle, cpFilePath);
     }
 #endif
