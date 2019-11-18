@@ -422,6 +422,8 @@ SwSpellPopup::SwSpellPopup(
 
     checkRedline();
     m_xPopupMenu->RemoveDisabledEntries( true, true );
+
+    InitItemCommands(aSuggestions);
 }
 
 SwSpellPopup::SwSpellPopup(
@@ -587,9 +589,68 @@ SwSpellPopup::SwSpellPopup(
     {
         m_xPopupMenu->HideItem(MN_EXPLANATION_LINK);
     }
+
+    InitItemCommands(rSuggestions);
 }
 
 SwSpellPopup::~SwSpellPopup() {}
+
+void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSuggestions)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_xPopupMenu->SetItemCommand(MN_SHORT_COMMENT, ".uno:None");
+        m_xPopupMenu->SetItemCommand(m_nSpellDialogId, ".uno:SpellingAndGrammarDialog");
+        if(m_bGrammarResults)
+            m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:ApplySpellChecking?ApplyRule:string=IgnoreAll_Grammar");
+        else
+            m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:ApplySpellChecking?ApplyRule:string=IgnoreAll_Spelling");
+        if(m_bGrammarResults)
+            m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:ApplySpellChecking?ApplyRule:string=Ignore_Grammar");
+        else
+            m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:ApplySpellChecking?ApplyRule:string=Ignore_Spelling");
+
+        for(int i = 0; i < aSuggestions.getLength(); ++i)
+        {
+            sal_uInt16 nItemId = MN_SUGGESTION_START + i;
+            OUString sCommandString = OUString(".uno:ApplySpellChecking?ApplyRule:string=Replace_");
+            if(m_bGrammarResults)
+                sCommandString += "Grammar_";
+            else if (m_xSpellAlt.is())
+                sCommandString += "Spelling_";
+            sCommandString += m_xPopupMenu->GetItemText(nItemId);
+            m_xPopupMenu->SetItemCommand(nItemId, sCommandString);
+        }
+
+        PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
+        if(pMenu)
+        {
+            for (auto item : m_aLangTable_Text)
+            {
+                OUString sCommandString = OUString(".uno:LanguageStatus?Language:string=Current_") + item.second;
+                pMenu->SetItemCommand(item.first, sCommandString);
+            }
+
+            pMenu->SetItemCommand(MN_SET_SELECTION_NONE, ".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE");
+            pMenu->SetItemCommand(MN_SET_SELECTION_RESET, ".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES");
+            pMenu->SetItemCommand(MN_SET_SELECTION_MORE, ".uno:FontDialog?Page:string=font");
+        }
+
+        pMenu = m_xPopupMenu->GetPopupMenu(m_nLangParaMenuId);
+        if(pMenu)
+        {
+            for (auto item : m_aLangTable_Paragraph)
+            {
+                OUString sCommandString = OUString(".uno:LanguageStatus?Language:string=Paragraph_") + item.second;
+                pMenu->SetItemCommand(item.first, sCommandString);
+            }
+
+            pMenu->SetItemCommand(MN_SET_PARA_NONE, ".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE");
+            pMenu->SetItemCommand(MN_SET_PARA_RESET, ".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES");
+            pMenu->SetItemCommand(MN_SET_PARA_MORE, ".uno:FontDialogForParagraph");
+        }
+    }
+}
 
 void SwSpellPopup::checkRedline()
 {
@@ -727,7 +788,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if (nId == MN_IGNORE_SELECTION)
     {
-        SfxStringItem aIgnoreString(FN_PARAM_1, "Ignore");
+        SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? OUString("Ignore_Grammar") : OUString("Ignore_Spelling"));
         m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_APPLY_SPELLCHECKING, SfxCallMode::SYNCHRON, { &aIgnoreString });
     }
     else if (nId == m_nIgnoreWordId)
