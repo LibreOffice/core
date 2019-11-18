@@ -172,11 +172,16 @@ task copyAssets(type: Copy) {
         }
     }
     into('share') {
-        from "${liboInstdir}/share"
-        // Filter data is needed by e.g. the drawingML preset shape import.
-        includes = ['registry/**', 'filter/**']
-        // those two get processed by mobile-config.py
-        excludes = ['registry/main.xcd', 'registry/res/registry_en-US.xcd']
+        from("${liboInstdir}/share") {
+            // Filter data is needed by e.g. the drawingML preset shape import.
+            includes = ['registry/**', 'filter/**']
+            // those two get processed by mobile-config.py
+            excludes = ['registry/main.xcd', 'registry/res/registry_en-US.xcd']
+        }
+        // separate data files for Chinese and Japanese
+        from("${liboWorkdir}/CustomTarget/i18npool/breakiterator/") {
+            include '*.data'
+        }
     }
 }
 
