@@ -43,6 +43,7 @@ namespace comphelper { namespace module
 
     static void initializeModule()
     {
+        // coverity[side_effect_free : FALSE] - not actually side-effect-free
         theInitializer::get();
     }
 
