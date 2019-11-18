@@ -1,3 +1,4 @@
 CC=/opt/rh/devtoolset-7/root/usr/bin/gcc
 CXX=/opt/rh/devtoolset-7/root/usr/bin/g++
 --enable-kf5
+--enable-skia
