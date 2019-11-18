@@ -7,6 +7,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -25,15 +26,16 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="companyft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|companyft">_Company:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">company</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -44,10 +46,11 @@
                   <object class="GtkLabel" id="nameft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|nameft">First/last _name/initials:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">firstname</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -58,10 +61,11 @@
                   <object class="GtkLabel" id="streetft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|streetft">_Street:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">street</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -72,10 +76,11 @@
                   <object class="GtkLabel" id="cityft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|cityft">City/state/_zip:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">city</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -86,10 +91,11 @@
                   <object class="GtkLabel" id="countryft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|countryft">Country/re_gion:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">country</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -100,10 +106,11 @@
                   <object class="GtkLabel" id="titleft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|titleft">_Title/position:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">title</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -114,10 +121,11 @@
                   <object class="GtkLabel" id="phoneft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|phoneft">Telephone (home/_work):</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">home</property>
+                    <property name="xalign">0</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="phoneft-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="phoneft-atkobject">Home telephone number</property>
@@ -133,10 +141,11 @@
                   <object class="GtkLabel" id="faxft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|faxft">Fa_x/email:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">fax</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -435,10 +444,11 @@
                   <object class="GtkLabel" id="rusnameft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes" context="optuserpage|rusnameft">Last name/first _name/father’s name/initials:</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes" context="optuserpage|rusnameft">Last/first/father’s _name/initials:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ruslastname</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -532,10 +542,11 @@
                   <object class="GtkLabel" id="eastnameft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|eastnameft">Last/first _name/initials:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eastlastname</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -611,10 +622,11 @@
                   <object class="GtkLabel" id="russtreetft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|russtreetft">_Street/apartment number:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">russtreet</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -672,10 +684,11 @@
                   <object class="GtkLabel" id="icityft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="optuserpage|icityft">_Zip/city:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">izip</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -842,15 +855,15 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="signingkeylabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
                     <property name="label" translatable="yes" context="optuserpage|signingkeylabel">OpenPGP signing key:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">signingkey</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -861,10 +874,10 @@
                   <object class="GtkLabel" id="encryptionkeylabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
                     <property name="label" translatable="yes" context="optuserpage|encryptionkeylabel">OpenPGP encryption key:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">encryptionkey</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -939,5 +952,23 @@
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel">
+    <widgets>
+      <widget name="companyft"/>
+      <widget name="nameft"/>
+      <widget name="streetft"/>
+      <widget name="cityft"/>
+      <widget name="countryft"/>
+      <widget name="titleft"/>
+      <widget name="phoneft"/>
+      <widget name="faxft"/>
+      <widget name="rusnameft"/>
+      <widget name="eastnameft"/>
+      <widget name="russtreetft"/>
+      <widget name="icityft"/>
+      <widget name="signingkeylabel"/>
+      <widget name="encryptionkeylabel"/>
+    </widgets>
   </object>
 </interface>
