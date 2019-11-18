@@ -192,7 +192,7 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     SetForeAndBackgroundColors(m_eType);
     float fScaleFactor = GetDPIScaleFactor();
     long nWidth = pParent->GetSizePixel().getWidth();
-    SetPosSizePixel(Point(0, 0), Size(nWidth, INFO_BAR_BASE_HEIGHT * fScaleFactor));
+    SetPosSizePixel(Point(0,0), Size(nWidth, INFO_BAR_BASE_HEIGHT * fScaleFactor));
 
     m_pImage->SetImage(Image(StockImage::Yes, GetInfoBarIconName(ibType)));
     m_pImage->SetPaintTransparent(true);
@@ -263,7 +263,7 @@ void SfxInfoBarWindow::Paint(vcl::RenderContext& rRenderContext, const ::tools::
     const unique_ptr<BaseProcessor2D> pProcessor(
                 createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
-    const ::tools::Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
+    const ::tools::Rectangle aRect(GetPosPixel(), PixelToLogic(GetSizePixel()));
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
 
@@ -339,7 +339,7 @@ void SfxInfoBarWindow::Resize()
     m_pSecondaryMessage->SetPosSizePixel(aSecondaryMessagePosition, aSecondaryTextSize);
     m_pImage->SetPosSizePixel(Point(4, 4), Size(32 * fScaleFactor, 32 * fScaleFactor));
 
-    SetPosSizePixel(Point(0, 0), Size(nWidth, INFO_BAR_BASE_HEIGHT * fScaleFactor + aExtraHeight * fScaleFactor));
+    SetPosSizePixel(GetPosPixel(), Size(nWidth, INFO_BAR_BASE_HEIGHT * fScaleFactor + aExtraHeight * fScaleFactor));
 }
 
 void SfxInfoBarWindow::Update( const OUString& sPrimaryMessage, const OUString& sSecondaryMessage, InfobarType eType )
@@ -387,8 +387,6 @@ SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sP
                                          const OUString& sSecondaryMessage, InfobarType ibType,
                                          WinBits nMessageStyle, bool bShowCloseButton)
 {
-    Size aSize = GetSizePixel();
-
     auto pInfoBar = VclPtr<SfxInfoBarWindow>::Create(this, sId, sPrimaryMessage, sSecondaryMessage,
                                                      ibType, nMessageStyle, bShowCloseButton);
 
@@ -398,14 +396,9 @@ SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sP
     GetInfoBarColors(ibType,aBackgroundColor,aForegroundColor,aMessageColor);
     pInfoBar->m_aBackgroundColor = aBackgroundColor;
     pInfoBar->m_aForegroundColor = aForegroundColor;
-
-    pInfoBar->SetPosPixel(Point(0, aSize.getHeight()));
-    pInfoBar->Show();
     m_pInfoBars.push_back(pInfoBar);
 
-    long nHeight = pInfoBar->GetSizePixel().getHeight();
-    aSize.setHeight(aSize.getHeight() + nHeight);
-    SetSizePixel(aSize);
+    Resize();
     return pInfoBar;
 }
 
@@ -434,24 +427,13 @@ void SfxInfoBarContainerWindow::removeInfoBar(VclPtr<SfxInfoBarWindow> const & p
         m_pInfoBars.erase(it);
     }
 
-    // Resize
-    long nY = 0;
-    for (auto const& infoBar : m_pInfoBars)
-    {
-        infoBar->SetPosPixel(Point(0, nY));
-        nY += infoBar->GetSizePixel().getHeight();
-    }
-
-    Size aSize = GetSizePixel();
-    aSize.setHeight(nY);
-    SetSizePixel(aSize);
+    Resize();
 
     m_pChildWin->Update();
 }
 
 void SfxInfoBarContainerWindow::Resize()
 {
-    // Only need to change the width of the infobars
     long nWidth = GetSizePixel().getWidth();
     long nHeight = 0;
 
@@ -459,14 +441,13 @@ void SfxInfoBarContainerWindow::Resize()
     {
         Size aSize = rxInfoBar->GetSizePixel();
         aSize.setWidth(nWidth);
-        rxInfoBar->SetSizePixel(aSize);
+        Point aPos(0, nHeight);
+        rxInfoBar->SetPosSizePixel(aPos, aSize);
         rxInfoBar->Resize();
+        rxInfoBar->Show();
 
         // Stretch to fit the infobar(s)
-        if (aSize.getHeight() > nHeight)
-        {
-            nHeight = aSize.getHeight();
-        }
+        nHeight += aSize.getHeight();
     }
 
     SetSizePixel(Size(nWidth, nHeight));
