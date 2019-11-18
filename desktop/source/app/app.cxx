@@ -96,6 +96,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <officecfg/Office/Update.hxx>
@@ -325,6 +326,15 @@ void DoRestartActionsIfNecessary(bool quickstart) {
             TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
         }
     }
+}
+
+void RemoveIconCacheDirectory()
+{
+    // See getIconCacheUrl in vcl/source/image/ImplImageTree.cxx
+    OUString sUrl = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+        "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache";
+    rtl::Bootstrap::expandMacros(sUrl);
+    utl::UCBContentHelper::Kill(sUrl);
 }
 
 }
@@ -1684,6 +1694,9 @@ int Desktop::doShutdown()
 
     if (pExecGlobals->bRestartRequested)
     {
+        // tdf#128523
+        RemoveIconCacheDirectory();
+
         // a restart is already requested, usually due to a configuration change
         // that needs a restart to get active. If this is the case, do not try
         // to use SecureUserConfig to safe this still untested new configuration
