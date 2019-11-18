@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_45e7a241",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-11-18T08:05:23Z",
+      "side": 1,
+      "message": "That was my first patch, but doesn\u0027t work look to line 86 it is the same, the error was:\nbin/symstore.sh: Zeile 11: [: Fehlende `]\u0027\nOkay found a solution with -a works, change it",
+      "parentUuid": "7f7f9b97_13a25caf",
+      "revId": "a51e27f44c79eb7decca03e7685a022a79858574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_539f745e",
         "filename": "bin/symstore.sh",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-11-15T09:57:03Z",
       "side": 1,
       "message": "In the case of no comment, I\u0027d prefer the /c parameter not given, instead of empty comments added - we\u0027ve got literally 100eds of builds doing that",
+      "revId": "a51e27f44c79eb7decca03e7685a022a79858574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_a5f476d0",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-11-18T08:05:23Z",
+      "side": 1,
+      "message": "it does not matter whether it is specified or not, the entries are:\nwithout /c\n----------\n0000000001,add,file,11/18/2019,08:48:52,\"LibreOffice\",\"6.1.7.0.0+\",\"\",\n\nwith /c (empty)\n---------------\n0000000001,add,file,11/18/2019,08:59:12,\"LibreOffice\",\"6.1.7.0.0+\",\"\",\n\nwith /c \"LHM-9999\"\n------------------\n0000000001,add,file,11/18/2019,08:54:01,\"LibreOffice\",\"6.1.7.0.0+\",\"LHM-9999\",\n\nOkay, I\u0027ll change it (a little more complicated with the spaces it needs to test, that\u0027s why I made it so easy).",
+      "parentUuid": "7f7f9b97_539f745e",
       "revId": "a51e27f44c79eb7decca03e7685a022a79858574",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
