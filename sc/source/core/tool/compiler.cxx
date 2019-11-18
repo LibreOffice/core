@@ -4739,6 +4739,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
     // remember pArr, in case a subsequent CompileTokenArray() is executed.
     std::unique_ptr<ScTokenArray> pNew(new ScTokenArray( aArr ));
     pNew->GenHash();
+    // coverity[escape : FALSE] - ownership of pNew is retained by caller, so pArr remains valid
     pArr = pNew.get();
     maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
 
@@ -4770,6 +4771,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
         {
             // remember pArr, in case a subsequent CompileTokenArray() is executed.
             std::unique_ptr<ScTokenArray> pNew(new ScTokenArray( aTokenArray ));
+            // coverity[escape : FALSE] - ownership of pNew is retained by caller, so pArr remains valid
             pArr = pNew.get();
             maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
             return pNew;
