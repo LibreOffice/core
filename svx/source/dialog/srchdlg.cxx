@@ -150,7 +150,7 @@ struct SearchDlg_Impl
     }
 };
 
-static void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, weld::ComboBox& rCBox )
+static void ListToStrArr_Impl(sal_uInt16 nId, std::vector<OUString>& rStrLst, weld::ComboBox& rCBox, sal_uInt16 nRememberSize)
 {
     const SfxStringListItem* pSrchItem =
         static_cast<const SfxStringListItem*>(SfxGetpApp()->GetItem( nId ));
@@ -158,6 +158,9 @@ static void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, w
     if (pSrchItem)
     {
         std::vector<OUString> aLst = pSrchItem->GetList();
+
+        if (aLst.size() > nRememberSize)
+            aLst.resize(nRememberSize);
 
         for (const OUString & s : aLst)
         {
@@ -378,9 +381,9 @@ void SvxSearchDialog::Construct_Impl()
 
     // Get stored search-strings from the application
     ListToStrArr_Impl(SID_SEARCHDLG_SEARCHSTRINGS,
-                       aSearchStrings, *m_xSearchLB);
+                       aSearchStrings, *m_xSearchLB, nRememberSize);
     ListToStrArr_Impl(SID_SEARCHDLG_REPLACESTRINGS,
-                       aReplaceStrings, *m_xReplaceLB);
+                       aReplaceStrings, *m_xReplaceLB, nRememberSize);
 
     InitControls_Impl();
 
