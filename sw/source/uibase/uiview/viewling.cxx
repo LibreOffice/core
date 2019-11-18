@@ -65,6 +65,8 @@
 #include <strings.hrc>
 #include <hhcwrp.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -88,6 +90,7 @@
 #include <xmloff/odffields.hxx>
 
 #include <editeng/editerr.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <memory>
 
@@ -764,9 +767,23 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                     else
                     {
                         if (comphelper::LibreOfficeKit::isActive())
-                            xPopup->GetMenu().SetLOKNotifier(SfxViewShell::Current());
+                        {
+                            if (SfxViewShell* pViewShell = SfxViewShell::Current())
+                            {
+                                boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(&xPopup->GetMenu());
+                                boost::property_tree::ptree aRoot;
+                                aRoot.add_child("menu", aMenu);
 
-                        xPopup->Execute(aToFill.SVRect(), m_pEditWin);
+                                std::stringstream aStream;
+                                boost::property_tree::write_json(aStream, aRoot, true);
+                                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
+                            }
+                        }
+                        else
+                        {
+                            boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(&xPopup->GetMenu());
+                            xPopup->Execute(aToFill.SVRect(), m_pEditWin);
+                        }
                     }
                 }
             }
