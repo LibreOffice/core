@@ -35,7 +35,6 @@ protected:
 public:
     explicit X11CairoTextRender(X11SalGraphics& rParent);
 
-    virtual GlyphCache& getPlatformGlyphCache() override;
     virtual cairo_t* getCairoContext() override;
     virtual void getSurfaceOffset(double& nDX, double& nDY) override;
     virtual void clipRegion(cairo_t* cr) override;

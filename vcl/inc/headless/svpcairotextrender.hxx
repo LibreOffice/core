@@ -21,7 +21,6 @@ class SvpCairoTextRender : public CairoTextRender
 public:
     explicit SvpCairoTextRender(SvpSalGraphics& rParent);
 
-    virtual GlyphCache& getPlatformGlyphCache() override;
     virtual cairo_t* getCairoContext() override;
     virtual void getSurfaceOffset(double& nDX, double& nDY) override;
     virtual void clipRegion(cairo_t* cr) override;

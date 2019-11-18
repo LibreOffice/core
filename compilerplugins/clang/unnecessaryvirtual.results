@@ -239,7 +239,7 @@ vcl/inc/salobj.hxx:49
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
 vcl/inc/unx/glyphcache.hxx:54
-    void GlyphCache::~GlyphCache()
+    void FreetypeManager::~FreetypeManager()
 vcl/inc/unx/gtk/gtkdata.hxx:136
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
 vcl/inc/unx/saldata.hxx:51

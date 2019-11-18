@@ -42,7 +42,7 @@ public:
     int                     GetLangBoost() const { return mnLangBoost; }
 
 private:
-    friend class GlyphCache;
+    friend class FreetypeManager;
     explicit                FreetypeFontFile( const OString& rNativeFileName );
 
     const OString    maNativeFileName;
@@ -75,7 +75,7 @@ public:
     const FontCharMapRef& GetFontCharMap();
 
 private:
-    friend class GlyphCache;
+    friend class FreetypeManager;
     explicit FreetypeFontInfo(const FontAttributes&, FreetypeFontFile* const pFontFile,
                               int nFaceNum, int nFaceVariation, sal_IntPtr nFontId);
 

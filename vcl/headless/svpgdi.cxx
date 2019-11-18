@@ -2159,13 +2159,6 @@ bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
     return false;
 }
 
-GlyphCache& SvpSalGraphics::getPlatformGlyphCache()
-{
-    GenericUnixSalData* const pSalData(GetGenericUnixSalData());
-    assert(pSalData);
-    return *pSalData->GetGlyphCache();
-}
-
 void dl_cairo_surface_set_device_scale(cairo_surface_t *surface, double x_scale, double y_scale)
 {
     static auto func = reinterpret_cast<void(*)(cairo_surface_t*, double, double)>(

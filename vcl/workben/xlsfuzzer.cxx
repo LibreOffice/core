@@ -50,7 +50,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
     //fontconfigs alloc mechanism is too complicated for lsan/valgrind so
     //force the fontconfig options to be released now, they are demand loaded
     //so will be recreated if necessary
-    SvpSalGraphics::getPlatformGlyphCache().ClearFontOptions();
+    FreetypeManager::get().ClearFontOptions();
     return 0;
 }
 

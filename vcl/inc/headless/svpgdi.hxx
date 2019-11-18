@@ -64,7 +64,6 @@
 #endif
 
 struct BitmapBuffer;
-class GlyphCache;
 class FreetypeFont;
 typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
@@ -95,7 +94,6 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
     PaintMode                      m_ePaintMode;
 
 public:
-    static GlyphCache& getPlatformGlyphCache();
     void setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize);
     cairo_surface_t* getSurface() const { return m_pSurface; }
     static cairo_user_data_key_t* getDamageKey();

@@ -35,22 +35,22 @@ class PhysicalFontCollection;
 
 // TODO: closely couple with PhysicalFontCollection
 
-struct GlpyhBoundRectCacheKey
+struct GlyphBoundRectCacheKey
 {
     const LogicalFontInstance* m_pFont;
     const sal_GlyphId m_nId;
 
-    GlpyhBoundRectCacheKey(const LogicalFontInstance* pFont, sal_GlyphId nID)
+    GlyphBoundRectCacheKey(const LogicalFontInstance* pFont, sal_GlyphId nID)
         : m_pFont(pFont), m_nId(nID)
     {}
 
-    bool operator==(GlpyhBoundRectCacheKey const& aOther) const
+    bool operator==(GlyphBoundRectCacheKey const& aOther) const
     { return m_pFont == aOther.m_pFont && m_nId == aOther.m_nId; }
 };
 
-struct GlpyhBoundRectCacheHash
+struct GlyphBoundRectCacheHash
 {
-    std::size_t operator()(GlpyhBoundRectCacheKey const& aCache) const
+    std::size_t operator()(GlyphBoundRectCacheKey const& aCache) const
     {
         std::size_t seed = 0;
         boost::hash_combine(seed, aCache.m_pFont);
@@ -59,9 +59,9 @@ struct GlpyhBoundRectCacheHash
     }
 };
 
-typedef o3tl::lru_map<GlpyhBoundRectCacheKey, tools::Rectangle,
-                      GlpyhBoundRectCacheHash> GlpyhBoundRectCache;
-typedef GlpyhBoundRectCache::key_value_pair_t GlpyhBoundRectCachePair;
+typedef o3tl::lru_map<GlyphBoundRectCacheKey, tools::Rectangle,
+                      GlyphBoundRectCacheHash> GlyphBoundRectCache;
+typedef GlyphBoundRectCache::key_value_pair_t GlyphBoundRectCachePair;
 
 class ImplFontCache
 {
@@ -74,7 +74,7 @@ private:
 
     LogicalFontInstance* mpLastHitCacheEntry; ///< keeps the last hit cache entry
     FontInstanceList maFontInstanceList;
-    GlpyhBoundRectCache m_aBoundRectCache;
+    GlyphBoundRectCache m_aBoundRectCache;
 
     rtl::Reference<LogicalFontInstance> GetFontInstance(PhysicalFontCollection const*, FontSelectPattern&);
 

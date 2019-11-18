@@ -97,7 +97,7 @@ ImplFontCache::~ImplFontCache()
     for (const auto & rLFI : maFontInstanceList)
     {
 #if !(defined(_WIN32) || defined(MACOSX) || defined(IOS))
-        GlyphCache::GetInstance().TryGarbageCollectFont(rLFI.second.get());
+        FreetypeManager::get().TryGarbageCollectFont(rLFI.second.get());
 #endif
         rLFI.second->mpFontCache = nullptr;
     }
@@ -186,7 +186,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
                         LogicalFontInstance* pFontEntry = rFontPair.second.get();
                         if (pFontEntry->m_nCount > 1)
                             return false;
-                        m_aBoundRectCache.remove_if([&pFontEntry] (GlpyhBoundRectCachePair const& rGlyphPair)
+                        m_aBoundRectCache.remove_if([&pFontEntry] (GlyphBoundRectCachePair const& rGlyphPair)
                             { return rGlyphPair.first.m_pFont == pFontEntry; });
                         if (mpLastHitCacheEntry == pFontEntry)
                             mpLastHitCacheEntry = nullptr;

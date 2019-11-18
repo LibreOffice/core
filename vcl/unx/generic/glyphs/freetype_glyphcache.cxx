@@ -278,7 +278,7 @@ void FreetypeFontInfo::AnnounceFont( PhysicalFontCollection* pFontCollection )
     pFontCollection->Add( pFD.get() );
 }
 
-void GlyphCache::InitFreetype()
+void FreetypeManager::InitFreetype()
 {
     /*FT_Error rcFT =*/ FT_Init_FreeType( &aLibFT );
 
@@ -319,7 +319,7 @@ FT_Face FreetypeFont::GetFtFace() const
     return maFaceFT;
 }
 
-void GlyphCache::AddFontFile(const OString& rNormalizedName,
+void FreetypeManager::AddFontFile(const OString& rNormalizedName,
     int nFaceNum, int nVariantNum, sal_IntPtr nFontId, const FontAttributes& rDevFontAttr)
 {
     if( rNormalizedName.isEmpty() )
@@ -335,7 +335,7 @@ void GlyphCache::AddFontFile(const OString& rNormalizedName,
         m_nMaxFontId = nFontId;
 }
 
-void GlyphCache::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
+void FreetypeManager::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
 {
     for (auto const& font : m_aFontInfoList)
     {
@@ -344,7 +344,7 @@ void GlyphCache::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
     }
 }
 
-FreetypeFont* GlyphCache::CreateFont(LogicalFontInstance* pFontInstance)
+FreetypeFont* FreetypeManager::CreateFont(LogicalFontInstance* pFontInstance)
 {
     // find a FontInfo matching to the font id
     if (!pFontInstance)
