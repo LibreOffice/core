@@ -56,7 +56,7 @@ public:
     ScColorScaleEntry();
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
     ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry);
-    ~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE;
+    ~ScColorScaleEntry();
 
     const Color& GetColor() const { return maColor;}
     void SetColor(const Color&);
@@ -182,8 +182,8 @@ struct SC_DLLPUBLIC ScDataBarFormatData
      */
     bool mbOnlyBar;
 
-    std::unique_ptr<ScColorScaleEntry> mpUpperLimit;
-    std::unique_ptr<ScColorScaleEntry> mpLowerLimit;
+    std::unique_ptr<ScColorScaleEntry, o3tl::default_delete<ScColorScaleEntry>> mpUpperLimit;
+    std::unique_ptr<ScColorScaleEntry, o3tl::default_delete<ScColorScaleEntry>> mpLowerLimit;
 };
 
 enum ScIconSetType
@@ -248,7 +248,7 @@ private:
     mutable std::unique_ptr<ScColorFormatCache> mpCache;
 };
 
-typedef std::vector<std::unique_ptr<ScColorScaleEntry>> ScColorScaleEntries;
+typedef std::vector<std::unique_ptr<ScColorScaleEntry, o3tl::default_delete<ScColorScaleEntry>>> ScColorScaleEntries;
 
 class SC_DLLPUBLIC ScColorScaleFormat final : public ScColorFormat
 {
@@ -337,7 +337,7 @@ struct ScIconSetFormatData
      * Specifies whether the icons should be shown in reverse order
      */
     bool mbReverse;
-    typedef std::vector<std::unique_ptr<ScColorScaleEntry>> Entries_t;
+    typedef std::vector<std::unique_ptr<ScColorScaleEntry, o3tl::default_delete<ScColorScaleEntry>>> Entries_t;
     Entries_t m_Entries;
     bool mbCustom;
     // the std::pair points to exactly one image
