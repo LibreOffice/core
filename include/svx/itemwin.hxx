@@ -90,6 +90,7 @@ public:
     SvxFillTypeBox( vcl::Window* pParent );
 
     void            Selected() { bSelect = true; }
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 
 private:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
