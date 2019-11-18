@@ -12,6 +12,13 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
+#include <svx/swframetypes.hxx>
+
+#include <doc.hxx>
+#include <unotxdoc.hxx>
+#include <pam.hxx>
+#include <fmtanchr.hxx>
+
 /**
   Split these tests into their own file because they are really really slow
 */
@@ -77,6 +84,32 @@ DECLARE_RTFEXPORT_TEST(testCjklist31, "cjklist31.rtf")
 {
     sal_Int16 numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
+}
+
+DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
+{
+    SwXTextDocument* const pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* const pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("foobar"), getParagraph(1)->getString());
+
+    SwFrameFormats& rFlys(*pDoc->GetSpzFrameFormats());
+    if (mbExported)
+    { // 2, not 3: the form control becomes a field on export...
+        CPPUNIT_ASSERT_EQUAL(size_t(2), rFlys.size());
+    }
+    else
+    {
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rFlys.size());
+    }
+
+    sal_Int32 const nIndex(mbExported ? 4 : 3);
+    CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, rFlys[0]->GetAnchor().GetAnchorId());
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(12), rFlys[0]->GetAnchor().GetContentAnchor()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[0]->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, rFlys[1]->GetAnchor().GetAnchorId());
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(12), rFlys[1]->GetAnchor().GetContentAnchor()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[1]->GetAnchor().GetContentAnchor()->nContent.GetIndex());
 }
 
 DECLARE_RTFEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.rtf")
