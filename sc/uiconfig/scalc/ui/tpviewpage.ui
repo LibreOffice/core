@@ -6,12 +6,11 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="spacing">12</property>
+    <property name="spacing">24</property>
     <child>
       <object class="GtkGrid" id="grid3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="vexpand">True</property>
         <property name="row_spacing">12</property>
         <child>
           <object class="GtkFrame" id="frame4">
@@ -29,8 +28,7 @@
                   <object class="GtkGrid" id="grid6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkCheckButton" id="formula">
                         <property name="label" translatable="yes" context="tpviewpage|formula">_Formulas</property>
@@ -172,8 +170,7 @@
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkCheckButton" id="rowcolheader">
                         <property name="label" translatable="yes" context="tpviewpage|rowcolheader">Colu_mn/row headers</property>
@@ -285,6 +282,47 @@
             <property name="top_attach">1</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkFrame" id="frame3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkCheckButton" id="synczoom">
+                    <property name="label" translatable="yes" context="tpviewpage|synczoom">S_ynchronize sheets</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="tpviewpage|label3">Zoom</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -296,47 +334,41 @@
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="halign">center</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
         <property name="row_spacing">12</property>
         <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="row_spacing">6</property>
+                    <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkGrid" id="grid7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="hexpand">True</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
+                        <property name="row_spacing">3</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkMenuButton" id="color">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
-                            <property name="hexpand">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="label" translatable="no"></property>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -361,7 +393,6 @@
                           <object class="GtkLabel" id="color_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
                             <property name="label" translatable="yes" context="tpviewpage|color_label">_Color:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">color</property>
@@ -376,7 +407,6 @@
                           <object class="GtkComboBoxText" id="grid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
                             <items>
                               <item translatable="yes" context="tpviewpage|grid">Show</item>
                               <item translatable="yes" context="tpviewpage|grid">Show on colored cells</item>
@@ -448,23 +478,20 @@
           <object class="GtkFrame" id="frame2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
               <object class="GtkAlignment" id="alignment2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="row_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="objgrf_label">
                         <property name="visible">True</property>
@@ -511,7 +538,6 @@
                       <object class="GtkComboBoxText" id="objgrf">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="tpviewpage|objgrf">Show</item>
                           <item translatable="yes" context="tpviewpage|objgrf">Hide</item>
@@ -526,7 +552,6 @@
                       <object class="GtkComboBoxText" id="diagram">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="tpviewpage|diagram">Show</item>
                           <item translatable="yes" context="tpviewpage|diagram">Hide</item>
@@ -541,7 +566,6 @@
                       <object class="GtkComboBoxText" id="draw">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="tpviewpage|draw">Show</item>
                           <item translatable="yes" context="tpviewpage|draw">Hide</item>
@@ -572,49 +596,6 @@
             <property name="top_attach">1</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkFrame" id="frame3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
-            <child>
-              <object class="GtkAlignment" id="alignment3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkCheckButton" id="synczoom">
-                    <property name="label" translatable="yes" context="tpviewpage|synczoom">S_ynchronize sheets</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="tpviewpage|label3">Zoom</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
-          </packing>
-        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -622,5 +603,23 @@
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel">
+    <widgets>
+      <widget name="grid_label"/>
+      <widget name="color_label"/>
+      <widget name="objgrf_label"/>
+      <widget name="diagram_label"/>
+      <widget name="draw_label"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget">
+    <widgets>
+      <widget name="grid"/>
+      <widget name="color"/>
+      <widget name="objgrf"/>
+      <widget name="diagram"/>
+      <widget name="draw"/>
+    </widgets>
   </object>
 </interface>
