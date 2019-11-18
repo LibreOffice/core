@@ -73,7 +73,7 @@ public:
     OUString GetHigherClass(const OUString& first, const OUString& second);
     /// If GetImpactScale() and GetImpactLevel*() will return something meaningful.
     bool HasImpactLevel();
-    InfoBarType GetImpactLevelType();
+    InfobarType GetImpactLevelType();
     /// Larger value means more confidential.
     sal_Int32 GetImpactLevel();
     /// Comparing the GetImpactLevel() result is only meaningful when the impact scale is the same.
