@@ -723,8 +723,15 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
 }
 
 css::uno::Sequence< css::uno::Any >
-        SAL_CALL SwAccessibleDocument::getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType)
+        SAL_CALL SwAccessibleDocument::getAccFlowTo(const css::uno::Any& /*rAny*/, sal_Int32 nType)
 {
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
+    AccessibilityFlowTo eType = static_cast<AccessibilityFlowTo>(nType);
+    assert(eType == AccessibilityFlowTo::ForFindReplaceItem || eType == AccessibilityFlowTo::ForFindReplaceRange);
+#else
+    (void) nType;
+#endif
+
     SolarMutexGuard g;
 
     SwAccessibleMap* pAccMap = GetMap();
@@ -733,104 +740,46 @@ css::uno::Sequence< css::uno::Any >
         return uno::Sequence< uno::Any >();
     }
 
-    if (nType == AccessibilityFlowTo::FORSPELLCHECKFLOWTO)
+    SwCursorShell* pCursorShell = GetCursorShell();
+    if ( pCursorShell )
     {
-        uno::Reference< css::drawing::XShape > xShape;
-        rAny >>= xShape;
-        if( xShape.is() )
+        SwPaM *_pStartCursor = pCursorShell->GetCursor(), *_pStartCursor2 = _pStartCursor;
+        std::set<SwFrame*> vFrameList;
+        do
         {
-            SdrObject* pObj = GetSdrObjectFromXShape(xShape);
-            if( pObj )
+            if ( _pStartCursor && _pStartCursor->HasMark() )
             {
-                uno::Reference<XAccessible> xAcc = pAccMap->GetContext(pObj, this, false);
-                uno::Reference < XAccessibleSelection > xAccSelection( xAcc, uno::UNO_QUERY );
-                if ( xAccSelection.is() )
+                SwContentNode* pContentNode = _pStartCursor->GetContentNode();
+                SwFrame *const pFrame = pContentNode
+                    ? pContentNode->getLayoutFrame(pCursorShell->GetLayout(), _pStartCursor->GetPoint())
+                    : nullptr;
+                if ( pFrame )
                 {
-                    try
-                    {
-                        if ( xAccSelection->getSelectedAccessibleChildCount() )
-                        {
-                            uno::Reference < XAccessible > xSel = xAccSelection->getSelectedAccessibleChild( 0 );
-                            if ( xSel.is() )
-                            {
-                                uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
-                                if ( xSelContext.is() )
-                                {
-                                    //if in sw we find the selected paragraph here
-                                    if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-                                    {
-                                        uno::Sequence<uno::Any> aRet( 1 );
-                                        aRet[0] <<= xSel;
-                                        return aRet;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch ( const css::lang::IndexOutOfBoundsException& )
-                    {
-                        return uno::Sequence< uno::Any >();
-                    }
-                    //end of try...catch
+                    vFrameList.insert( pFrame );
                 }
             }
         }
-        else
+        while( _pStartCursor && ( (_pStartCursor = _pStartCursor->GetNext()) != _pStartCursor2) );
+
+        if ( !vFrameList.empty() )
         {
-            uno::Reference< XAccessible > xAcc = pAccMap->GetCursorContext();
-            SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
-            if ( pAccImpl && pAccImpl->getAccessibleRole() == AccessibleRole::PARAGRAPH )
+            uno::Sequence< uno::Any > aRet(vFrameList.size());
+            sal_Int32 nIndex = 0;
+            for ( const auto& rpFrame : vFrameList )
             {
-                uno::Sequence< uno::Any > aRet(1);
-                aRet[0] <<= xAcc;
-                return aRet;
-            }
-        }
-    }
-    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM || nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
-    {
-        SwCursorShell* pCursorShell = GetCursorShell();
-        if ( pCursorShell )
-        {
-            SwPaM *_pStartCursor = pCursorShell->GetCursor(), *_pStartCursor2 = _pStartCursor;
-            std::set<SwFrame*> vFrameList;
-            do
-            {
-                if ( _pStartCursor && _pStartCursor->HasMark() )
+                uno::Reference< XAccessible > xAcc = pAccMap->GetContext(rpFrame, false);
+                if ( xAcc.is() )
                 {
-                    SwContentNode* pContentNode = _pStartCursor->GetContentNode();
-                    SwFrame *const pFrame = pContentNode
-                        ? pContentNode->getLayoutFrame(pCursorShell->GetLayout(), _pStartCursor->GetPoint())
-                        : nullptr;
-                    if ( pFrame )
+                    SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
+                    if ( pAccImpl && pAccImpl->getAccessibleRole() == AccessibleRole::PARAGRAPH )
                     {
-                        vFrameList.insert( pFrame );
+                        aRet[nIndex] <<= xAcc;
                     }
                 }
+                nIndex++;
             }
-
-            while( _pStartCursor && ( (_pStartCursor = _pStartCursor->GetNext()) != _pStartCursor2) );
-
-            if ( !vFrameList.empty() )
-            {
-                uno::Sequence< uno::Any > aRet(vFrameList.size());
-                sal_Int32 nIndex = 0;
-                for ( const auto& rpFrame : vFrameList )
-                {
-                    uno::Reference< XAccessible > xAcc = pAccMap->GetContext(rpFrame, false);
-                    if ( xAcc.is() )
-                    {
-                        SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
-                        if ( pAccImpl && pAccImpl->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-                        {
-                            aRet[nIndex] <<= xAcc;
-                        }
-                    }
-                    nIndex++;
-                }
-                aRet.realloc(nIndex);
-                return aRet;
-            }
+            aRet.realloc(nIndex);
+            return aRet;
         }
     }
 

@@ -738,94 +738,55 @@ void SAL_CALL AccessibleDrawDocumentView::disposing()
 }
 
 css::uno::Sequence< css::uno::Any >
-        SAL_CALL AccessibleDrawDocumentView::getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType)
+        SAL_CALL AccessibleDrawDocumentView::getAccFlowTo(const css::uno::Any& /*rAny*/, sal_Int32 nType)
 {
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
+    AccessibilityFlowTo eType = static_cast<AccessibilityFlowTo>(nType);
+    assert(eType == AccessibilityFlowTo::ForFindReplaceItem || eType == AccessibilityFlowTo::ForFindReplaceRange);
+#else
+    (void) nType;
+#endif
+
     SolarMutexGuard g;
 
-    if (nType == AccessibilityFlowTo::FORSPELLCHECKFLOWTO)
+    sal_Int32 nChildCount = getSelectedAccessibleChildCount();
+    if ( nChildCount )
     {
-        uno::Reference< css::drawing::XShape > xShape;
-        rAny >>= xShape;
-        if ( mpChildrenManager && xShape.is() )
+        uno::Reference < XAccessible > xSel = getSelectedAccessibleChild( 0 );
+        if ( xSel.is() )
         {
-            uno::Reference < XAccessible > xAcc = mpChildrenManager->GetChild(xShape);
-            uno::Reference < XAccessibleSelection > xAccSelection( xAcc, uno::UNO_QUERY );
-            if ( xAccSelection.is() )
+            uno::Reference < XAccessibleSelection > xAccChildSelection( xSel, uno::UNO_QUERY );
+            if ( xAccChildSelection.is() )
             {
-                if ( xAccSelection->getSelectedAccessibleChildCount() )
+                if ( xAccChildSelection->getSelectedAccessibleChildCount() )
                 {
-                    uno::Reference < XAccessible > xSel = xAccSelection->getSelectedAccessibleChild( 0 );
-                    if ( xSel.is() )
+                    uno::Reference < XAccessible > xChildSel = xAccChildSelection->getSelectedAccessibleChild( 0 );
+                    if ( xChildSel.is() )
                     {
-                        uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
-                        if ( xSelContext.is() )
+                        uno::Reference < XAccessibleContext > xChildSelContext( xChildSel->getAccessibleContext() );
+                        if ( xChildSelContext.is() &&
+                            xChildSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
                         {
-                            //if in sw we find the selected paragraph here
-                            if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-                            {
-                                uno::Sequence<uno::Any> aRet( 1 );
-                                aRet[0] <<= xSel;
-                                return aRet;
-                            }
+                            uno::Sequence<uno::Any> aRet( 1 );
+                            aRet[0] <<= xChildSel;
+                            return aRet;
                         }
                     }
                 }
             }
-            uno::Reference<XAccessible> xPara = GetSelAccContextInTable();
-            if ( xPara.is() )
-            {
-                uno::Sequence<uno::Any> aRet( 1 );
-                aRet[0] <<= xPara;
-                return aRet;
-            }
-        }
-        else
-        {
-            goto Rt;
         }
     }
-    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM || nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
+    else
     {
-        sal_Int32 nChildCount = getSelectedAccessibleChildCount();
-        if ( nChildCount )
+        uno::Reference<XAccessible> xPara = GetSelAccContextInTable();
+        if ( xPara.is() )
         {
-            uno::Reference < XAccessible > xSel = getSelectedAccessibleChild( 0 );
-            if ( xSel.is() )
-            {
-                uno::Reference < XAccessibleSelection > xAccChildSelection( xSel, uno::UNO_QUERY );
-                if ( xAccChildSelection.is() )
-                {
-                    if ( xAccChildSelection->getSelectedAccessibleChildCount() )
-                    {
-                        uno::Reference < XAccessible > xChildSel = xAccChildSelection->getSelectedAccessibleChild( 0 );
-                        if ( xChildSel.is() )
-                        {
-                            uno::Reference < XAccessibleContext > xChildSelContext( xChildSel->getAccessibleContext() );
-                            if ( xChildSelContext.is() &&
-                                xChildSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-                            {
-                                uno::Sequence<uno::Any> aRet( 1 );
-                                aRet[0] <<= xChildSel;
-                                return aRet;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            uno::Reference<XAccessible> xPara = GetSelAccContextInTable();
-            if ( xPara.is() )
-            {
-                uno::Sequence<uno::Any> aRet( 1 );
-                aRet[0] <<= xPara;
-                return aRet;
-            }
+            uno::Sequence<uno::Any> aRet( 1 );
+            aRet[0] <<= xPara;
+            return aRet;
         }
     }
 
-Rt:
     css::uno::Sequence< uno::Any> aRet;
     return aRet;
 }
