@@ -36,6 +36,7 @@ namespace
 
 void SvxErrorHandler::ensure()
 {
+    // coverity[side_effect_free : FALSE] - not actually side-effect-free
     theSvxErrorHandler::get();
 }
 
