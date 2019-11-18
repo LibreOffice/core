@@ -1155,7 +1155,17 @@ OUString Application::GetHWOSConfInfo()
     else
 #endif
     if ( SkiaHelper::isVCLSkiaEnabled() )
-        aDetails.append( VclResId(SV_APP_SKIA) );
+    {
+        switch(SkiaHelper::renderMethodToUse())
+        {
+            case SkiaHelper::RenderVulkan:
+                aDetails.append( VclResId(SV_APP_SKIA_VULKAN) );
+                break;
+            case SkiaHelper::RenderRaster:
+                aDetails.append( VclResId(SV_APP_SKIA_RASTER) );
+                break;
+        }
+    }
     else
         aDetails.append( VclResId(SV_APP_DEFAULT) );
     aDetails.append( "; " );
