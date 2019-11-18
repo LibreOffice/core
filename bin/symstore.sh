@@ -20,11 +20,11 @@ add_pdb()
 }
 
 # check preconditions
-if [ -z "${INSTDIR}" ] || [ -z "${WORKDIR}" ]; then
+if [ -z "${INSTDIR}" -o -z "${WORKDIR}" ]; then
     echo "INSTDIR or WORKDIR not set - script expects calling inside buildenv"
     exit 1
 fi
-if [ ! -d "${INSTDIR}" ] || [ ! -d "${WORKDIR}" ]; then
+if [ ! -d "${INSTDIR}" -o ! -d "${WORKDIR}" ]; then
     echo "INSTDIR or WORKDIR not present - script expects calling after full build"
     exit 1
 fi
@@ -77,7 +77,7 @@ rm -f "${TMPFILE}"
 # Cleanup symstore, older revisions will be removed.  Unless the
 # .dll/.exe changes, the .pdb should be shared, so with incremental
 # tinderbox several revisions should not be that space-demanding.
-if [ "${MAX_KEEP}" -gt 0 ] && [ -d "${SYM_PATH}/000Admin" ]; then
+if [ "${MAX_KEEP}" -gt 0 -a -d "${SYM_PATH}/000Admin" ]; then
     to_remove=$(ls -1 "${SYM_PATH}/000Admin" | grep -v '\.txt' | grep -v '\.deleted' | sort | head -n "-${MAX_KEEP}")
     for revision in $to_remove; do
         symstore.exe del /i "${revision}" /s "$(cygpath -w "${SYM_PATH}")"
