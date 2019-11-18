@@ -2678,9 +2678,19 @@
           <value xml:lang="en-US">Language Status</value>
         </prop>
       </node>
-      <node oor:name=".uno:ApplySpellChecking" oor:op="replace">
+      <node oor:name=".uno:SpellCheckIgnore" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Apply Spell Checking</value>
+          <value xml:lang="en-US">Ignore</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SpellCheckIgnoreAll" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">IgnoreAll</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SpellCheckApplySuggestion" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Apply Suggestion</value>
         </prop>
       </node>
       <node oor:name=".uno:ChooseControls" oor:op="replace">

@@ -12170,7 +12170,41 @@ SfxVoidItem EditQrCode SID_EDIT_QRCODE
     GroupId = SfxGroupId::Edit;
 ]
 
-SfxVoidItem ApplySpellChecking SID_APPLY_SPELLCHECKING
+SfxVoidItem SpellCheckIgnore SID_SPELLCHECK_IGNORE
+(SfxStringItem Type FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
+SfxVoidItem SpellCheckIgnoreAll SID_SPELLCHECK_IGNORE_ALL
+(SfxStringItem Type FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
+SfxVoidItem SpellCheckApplySuggestion SID_SPELLCHECK_APPLY_SUGGESTION
 (SfxStringItem ApplyRule FN_PARAM_1)
 [
     AutoUpdate = FALSE,
