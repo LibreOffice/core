@@ -1646,11 +1646,6 @@ const uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
         for ( sal_Int32 nInd = 0; nInd < m_aStorageEncryptionKeys.getLength(); nInd++ )
             if ( m_aStorageEncryptionKeys[nInd].Name == aNameToFind )
                 m_aStorageEncryptionKeys[nInd].Value >>= aResult;
-
-        // empty keys are not allowed here
-        // so it is not important whether there is no key, or the key is empty, it is an error
-        if ( !aResult.hasElements() )
-            throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
     }
     else
         aResult = m_aEncryptionKey;
