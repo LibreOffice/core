@@ -47,8 +47,6 @@ private:
                                     Button (const Button &) = delete;
                                     Button & operator= (const Button &) = delete;
 public:
-    SAL_DLLPRIVATE DrawButtonFlags  ImplGetButtonState() const;
-    SAL_DLLPRIVATE DrawButtonFlags& ImplGetButtonState();
     SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( WinBits nWinStyle, DrawFlags nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
                                               sal_uLong nImageSep,
@@ -81,6 +79,9 @@ public:
     bool                HasImage() const;
     void                SetImageAlign( ImageAlign eAlign );
     ImageAlign          GetImageAlign() const;
+    DrawButtonFlags     GetButtonState() const;
+    DrawButtonFlags&    GetButtonState();
+
 
     bool                IsSmallSymbol() const;
     void                SetSmallSymbol();
