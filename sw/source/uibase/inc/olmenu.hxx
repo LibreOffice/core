@@ -125,6 +125,8 @@ public:
 
     ~SwSpellPopup();
 
+    void InitItemCommands(const css::uno::Sequence< OUString >& aSuggestions);
+
     PopupMenu& GetMenu()
     {
         return *m_xPopupMenu.get();
@@ -132,7 +134,6 @@ public:
 
     void Execute( const tools::Rectangle& rPopupPos, vcl::Window* pWin );
     void Execute( sal_uInt16 nId );
-
 };
 
 #endif
