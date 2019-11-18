@@ -85,6 +85,15 @@ std::shared_ptr<WidgetDefinition> const& getWidgetDefinitionForTheme(OUString co
     return spDefinition;
 }
 
+bool getSettingValueBool(OString const& rValue, bool bDefault)
+{
+    if (rValue.isEmpty())
+        return bDefault;
+    if (rValue == "true" || rValue == "false")
+        return rValue == "true";
+    return bDefault;
+}
+
 } // end anonymous namespace
 
 FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
@@ -104,7 +113,8 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
         pSVData->maNWFData.mbNoFocusRects = true;
         pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
         pSVData->maNWFData.mbNoActiveTabTextRaise = true;
-        pSVData->maNWFData.mbCenteredTabs = true;
+        pSVData->maNWFData.mbCenteredTabs
+            = getSettingValueBool(m_pWidgetDefinition->mpSettings->msCenteredTabs, true);
         pSVData->maNWFData.mbProgressNeedsErase = true;
         pSVData->maNWFData.mnStatusBarLowerRightOffset = 10;
         pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
