@@ -32,10 +32,12 @@ class PhysicalFontFace;
 class TextRenderImpl
 {
 public:
+    // can't call ReleaseFonts here, as the destructor just calls this classes SetFont (pure virtual)!
     virtual ~TextRenderImpl() {}
 
     virtual void                    SetTextColor( Color nColor ) = 0;
     virtual void                    SetFont(LogicalFontInstance*, int nFallbackLevel) = 0;
+    void ReleaseFonts() { SetFont(nullptr, 0); }
     virtual void                    GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) = 0;
     virtual const FontCharMapRef    GetFontCharMap() const = 0;
     virtual bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
