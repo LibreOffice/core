@@ -889,15 +889,15 @@ void FastSaxParserImpl::setTokenHandler( const Reference< XFastTokenHandler >& x
 
 void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
 {
-    if( NamespaceToken >= FastToken::NAMESPACE )
+    if( NamespaceToken < FastToken::NAMESPACE )
+        throw IllegalArgumentException("Invalid namespace token " + OUString::number(NamespaceToken), css::uno::Reference<css::uno::XInterface >(), 0);
+
+    if( GetNamespaceToken( NamespaceURL ) == FastToken::DONTKNOW )
     {
-        if( GetNamespaceToken( NamespaceURL ) == FastToken::DONTKNOW )
-        {
-            maNamespaceMap[ NamespaceURL ] = NamespaceToken;
-            return;
-        }
+        maNamespaceMap[ NamespaceURL ] = NamespaceToken;
+        return;
     }
-    throw IllegalArgumentException();
+    throw IllegalArgumentException("namespace URL is already registered: " + NamespaceURL, css::uno::Reference<css::uno::XInterface >(), 0);
 }
 
 OUString const & FastSaxParserImpl::getNamespaceURL( const OUString& rPrefix )
