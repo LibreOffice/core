@@ -18,6 +18,10 @@
  */
 
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XInfobarProvider.hpp>
+#include <com/sun/star/frame/InfobarType.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
@@ -70,8 +74,11 @@
 #include <docufld.hxx>
 #include <frmfmt.hxx>
 #include <unomid.h>
+#include <docsh.hxx>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -1453,9 +1460,21 @@ bool SwTextFormatInfo::IsHyphenate() const
 
     if (!xHyph->hasLocale(g_pBreakIt->GetLocale(eTmp)))
     {
-        // TODO: Add an infobar for this case, tdf#128191
-        SAL_WARN("sw", "missing hyphenation package for locale: "
-                           << g_pBreakIt->GetLocale(eTmp).Language);
+        Reference<XController> xController = m_pFrame->GetDoc().GetDocShell()->GetController();
+        Reference<XInfobarProvider> xInfobarProvider(xController, UNO_QUERY);
+        Sequence<StringPair> aButtons;
+        try
+        {
+            xInfobarProvider->appendInfobar(
+                "hyphenationmissing", SwResId(STR_HYPH_MISSING),
+                SwResId(STR_HYPH_MISSING_DETAIL)
+                    .replaceFirst("%1", g_pBreakIt->GetLocale(eTmp).Language),
+                InfobarType::WARNING, aButtons, true);
+        }
+        catch (lang::IllegalArgumentException)
+        {
+            // ignore (Infobar with ID 'hyphenationmissing' already exists - don't add it twice!)
+        }
     }
 
     return xHyph->hasLocale( g_pBreakIt->GetLocale(eTmp) );

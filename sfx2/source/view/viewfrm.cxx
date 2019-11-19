@@ -3287,6 +3287,9 @@ VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
                                                const OUString& sSecondaryMessage,
                                                InfobarType aInfobarType, bool bShowCloseButton)
 {
+    // Needed for infobar API to work during loading of doc
+    ShowChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
+
     SfxChildWindow* pChild = GetChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     if (!pChild)
         return nullptr;
