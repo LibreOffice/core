@@ -1516,7 +1516,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
             ##826##, ##653##
 
             If a style has borders set,and the para attributes attempt remove
-            the borders, then this is perfectably acceptable, so we shouldn't
+            the borders, then this is perfectly acceptable, so we shouldn't
             ignore this blank entry
 
             nSetBorders has a bit set for each location that a sprm set a
