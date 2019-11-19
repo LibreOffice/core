@@ -385,6 +385,8 @@
 #define RID_STR_SYSTEM                          NC_("RID_STR_SYSTEM", "[System]")
 #define STR_MULT_INTERACT_HYPH_WARN             NC_("STR_MULT_INTERACT_HYPH_WARN", "The interactive hyphenation is already active\nin a different document")
 #define STR_HYPH_TITLE                          NC_("STR_HYPH_TITLE", "Hyphenation")
+#define STR_HYPH_MISSING                        NC_("STR_HYPH_MISSING", "Missing hyphenation info")
+#define STR_HYPH_MISSING_DETAIL                 NC_("STR_HYPH_MISSING", "Please install the hyphenation package for locale “%1“.")
 
 // Undo
 #define STR_CANT_UNDO                           NC_("STR_CANT_UNDO", "not possible")
