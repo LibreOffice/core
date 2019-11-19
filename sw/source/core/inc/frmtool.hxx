@@ -297,6 +297,7 @@ class SwBorderAttrs : public SwCacheObj
     bool m_bTop         : 1;
     bool m_bBottom      : 1;
     bool m_bLine        : 1;
+    bool m_bLineSpacing : 1;
 
     bool m_bIsLine      : 1; // border on at least one side?
 
@@ -320,7 +321,8 @@ class SwBorderAttrs : public SwCacheObj
            m_nTop,
            m_nBottom,
            m_nGetTopLine,
-           m_nGetBottomLine;
+           m_nGetBottomLine,
+           m_nLineSpacing;
 
     // only calculate lines and shadow
     void CalcTopLine_();
@@ -356,6 +358,9 @@ class SwBorderAttrs : public SwCacheObj
                        const SwFrame *pCaller,
                        const SwFrame *pCmp ) const;
 
+    // tdf#125300 line spacing before cell border
+    void CalcLineSpacing_();
+
 public:
     SwBorderAttrs( const SwModify *pOwner, const SwFrame *pConstructor );
     virtual ~SwBorderAttrs() override;
@@ -371,6 +376,7 @@ public:
     inline sal_uInt16 CalcRightLine() const;
     inline sal_uInt16 CalcTop() const;
     inline sal_uInt16 CalcBottom() const;
+    inline sal_uInt16 CalcLineSpacing() const;
            long CalcLeft( const SwFrame *pCaller ) const;
            long CalcRight( const SwFrame *pCaller ) const;
 
@@ -510,6 +516,12 @@ inline sal_uInt16 SwBorderAttrs::CalcBottom() const
     if ( m_bBottom )
         const_cast<SwBorderAttrs*>(this)->CalcBottom_();
     return m_nBottom;
+}
+inline sal_uInt16 SwBorderAttrs::CalcLineSpacing() const
+{
+    if ( m_bLineSpacing )
+        const_cast<SwBorderAttrs*>(this)->CalcLineSpacing_();
+    return m_nLineSpacing;
 }
 inline bool SwBorderAttrs::IsLine() const
 {
