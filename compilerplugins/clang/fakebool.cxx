@@ -689,6 +689,9 @@ bool FakeBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
                 }
                 return true;
             }
+            if (isSharedCAndCppCode(loc)) {
+                return true;
+            }
         }
         report(
             DiagnosticsEngine::Warning,
@@ -743,24 +746,15 @@ bool FakeBool::VisitImplicitCastExpr(ImplicitCastExpr * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    auto const k = isFakeBool(expr->getType());
-    if (k == FBK_No) {
+    if (isFakeBool(expr->getType()) == FBK_No) {
         return true;
     }
     auto l = compat::getBeginLoc(expr);
     while (compiler.getSourceManager().isMacroArgExpansion(l)) {
         l = compiler.getSourceManager().getImmediateMacroCallerLoc(l);
     }
-    if (compiler.getSourceManager().isMacroBodyExpansion(l)) {
-        auto n = Lexer::getImmediateMacroName(
-            l, compiler.getSourceManager(), compiler.getLangOpts());
-        if ((k == FBK_GLboolean && (n == "GL_FALSE" || n == "GL_TRUE"))
-            || (k == FBK_UBool && (n == "FALSE" || n == "TRUE"))
-            || (k == FBK_jboolean && (n == "JNI_FALSE" || n == "JNI_TRUE"))
-            || (k == FBK_sal_Bool && (n == "sal_False" || n == "sal_True")))
-        {
-            return true;
-        }
+    if (compiler.getSourceManager().isMacroBodyExpansion(l) && isSharedCAndCppCode(l)) {
+        return true;
     }
     auto e1 = expr->getSubExprAsWritten();
     auto t = e1->getType();
