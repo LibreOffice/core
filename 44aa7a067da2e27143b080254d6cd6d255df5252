@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_1003270f",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3667,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-19T16:12:43Z",
+      "side": 1,
+      "message": "This else clause was here on initial import, so I wasn\u0027t able to find out anything about WHY/WHEN this occurs.\n\nI was not able to reproduce it when I created a table-in-table, or when I merged cells together. No unit tests ever invoke this area.",
+      "range": {
+        "startLine": 3667,
+        "startChar": 11,
+        "endLine": 3667,
+        "endChar": 75
+      },
+      "revId": "44aa7a067da2e27143b080254d6cd6d255df5252",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
