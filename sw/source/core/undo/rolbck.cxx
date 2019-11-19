@@ -1093,18 +1093,21 @@ void SwHistory::Add(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOth
     m_SwpHstry.push_back( std::move(pHt) );
 }
 
-void SwHistory::Add( SwFrameFormat& rFormat )
+void SwHistory::AddChangeFlyAnchor(SwFrameFormat& rFormat)
 {
     std::unique_ptr<SwHistoryHint> pHt(new SwHistoryChangeFlyAnchor( rFormat ));
     m_SwpHstry.push_back( std::move(pHt) );
 }
 
-void SwHistory::Add( SwFlyFrameFormat& rFormat, sal_uInt16& rSetPos )
+void SwHistory::AddDeleteFly(SwFrameFormat& rFormat, sal_uInt16& rSetPos)
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
     const sal_uInt16 nWh = rFormat.Which();
-    if( RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh )
+    (void) nWh;
+    // only Flys!
+    assert((RES_FLYFRMFMT == nWh && dynamic_cast<SwFlyFrameFormat*>(&rFormat))
+        || (RES_DRAWFRMFMT == nWh && dynamic_cast<SwDrawFrameFormat*>(&rFormat)));
     {
         std::unique_ptr<SwHistoryHint> pHint(new SwHistoryTextFlyCnt( &rFormat ));
         m_SwpHstry.push_back( std::move(pHint) );
@@ -1113,10 +1116,11 @@ void SwHistory::Add( SwFlyFrameFormat& rFormat, sal_uInt16& rSetPos )
         if( SfxItemState::SET == rFormat.GetItemState( RES_CHAIN, false,
             reinterpret_cast<const SfxPoolItem**>(&pChainItem) ))
         {
+            assert(RES_FLYFRMFMT == nWh); // not supported on SdrObjects
             if( pChainItem->GetNext() || pChainItem->GetPrev() )
             {
                 std::unique_ptr<SwHistoryHint> pHt(
-                    new SwHistoryChangeFlyChain( rFormat, *pChainItem ));
+                    new SwHistoryChangeFlyChain(static_cast<SwFlyFrameFormat&>(rFormat), *pChainItem));
                 m_SwpHstry.insert( m_SwpHstry.begin() + rSetPos++, std::move(pHt) );
                 if ( pChainItem->GetNext() )
                 {

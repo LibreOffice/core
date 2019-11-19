@@ -988,7 +988,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                     // Do not try to move the anchor to a table!
                                     && rMark.nNode.GetNode().IsTextNode())
                                 {
-                                    m_pHistory->Add( *pFormat );
+                                    m_pHistory->AddChangeFlyAnchor(*pFormat);
                                     SwFormatAnchor aAnch( *pAnchor );
                                     SwPosition aPos( rMark.nNode );
                                     aAnch.SetAnchor( &aPos );
@@ -996,7 +996,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                 }
                                 else
                                 {
-                                    m_pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
+                                    m_pHistory->AddDeleteFly(*pFormat, nChainInsPos );
                                     // reset n so that no Format is skipped
                                     n = n >= rSpzArr.size() ?
                                         rSpzArr.size() : n+1;
@@ -1014,7 +1014,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         if (IsDestroyFrameAnchoredAtChar(
                                 *pAPos, *pStt, *pEnd, nDelContentType))
                         {
-                            m_pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
+                            m_pHistory->AddDeleteFly(*pFormat, nChainInsPos);
                             n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                         }
                         else if (!((DelContentType::CheckNoCntnt |
@@ -1028,7 +1028,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                 // Do not try to move the anchor to a table!
                                 if( rMark.nNode.GetNode().GetTextNode() )
                                 {
-                                    m_pHistory->Add( *pFormat );
+                                    m_pHistory->AddChangeFlyAnchor(*pFormat);
                                     SwFormatAnchor aAnch( *pAnchor );
                                     aAnch.SetAnchor( &rMark );
                                     pFormat->SetFormatAttr( aAnch );
@@ -1045,7 +1045,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         if( !m_pHistory )
                             m_pHistory.reset( new SwHistory );
 
-                        m_pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
+                        m_pHistory->AddDeleteFly(*pFormat, nChainInsPos);
 
                         // reset n so that no Format is skipped
                         n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;

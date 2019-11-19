@@ -364,8 +364,8 @@ public:
     void Add( SwTextAttr* pTextHt, sal_uLong nNodeIdx, bool bNewAttr );
     void Add( SwFormatColl*, sal_uLong nNodeIdx, SwNodeType nWhichNd );
     void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
-    void Add( SwFrameFormat& rFormat );
-    void Add( SwFlyFrameFormat&, sal_uInt16& rSetPos );
+    void AddChangeFlyAnchor( SwFrameFormat& rFormat );
+    void AddDeleteFly( SwFrameFormat&, sal_uInt16& rSetPos );
     void Add( const SwTextFootnote& );
     void Add( const SfxItemSet & rSet, const SwCharFormat & rCharFormat);
 
