@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_90e2d700",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-11-19T10:51:56Z",
+      "side": 1,
+      "message": "i think this is sensible - take the color defined by the currently applied section and if it says there is none use the page background.",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "a2af7cfdddd5671f88f521171faf61c8b0b094f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_30f183ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-11-19T10:51:56Z",
+      "side": 1,
+      "message": "what happens in older versions that didn\u0027t have fill-style items? like 4.1 or 4.2 - i forgot when that was added...",
+      "range": {
+        "startLine": 50,
+        "startChar": 33,
+        "endLine": 51,
+        "endChar": 29
+      },
+      "revId": "a2af7cfdddd5671f88f521171faf61c8b0b094f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
