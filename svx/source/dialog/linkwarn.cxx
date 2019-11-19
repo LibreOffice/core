@@ -23,7 +23,7 @@
 #include <svtools/miscopt.hxx>
 
 SvxLinkWarningDialog::SvxLinkWarningDialog(weld::Widget* pParent, const OUString& _rFileName)
-    : MessageDialogController(pParent, "svx/ui/linkwarndialog.ui", "LinkWarnDialog")
+    : MessageDialogController(pParent, "svx/ui/linkwarndialog.ui", "LinkWarnDialog", "ask")
     , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
 {
     // replace filename
