@@ -23,7 +23,9 @@
 #include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
 #include <svl/ctloptions.hxx>
+#include <sfx2/infobar.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sal/log.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/escapementitem.hxx>
@@ -69,9 +71,13 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <docufld.hxx>
 #include <frmfmt.hxx>
+#include <view.hxx>
 #include <unomid.h>
+#include <docsh.hxx>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -1453,9 +1459,11 @@ bool SwTextFormatInfo::IsHyphenate() const
 
     if (!xHyph->hasLocale(g_pBreakIt->GetLocale(eTmp)))
     {
-        // TODO: Add an infobar for this case, tdf#128191
-        SAL_WARN("sw", "missing hyphenation package for locale: "
-                           << g_pBreakIt->GetLocale(eTmp).Language);
+        SfxViewFrame* pFrame = m_pFrame->GetDoc().GetDocShell()->GetView()->GetFrame();
+        pFrame->AppendInfoBar("hyphenationmissing", SwResId(STR_HYPH_MISSING),
+                              SwResId(STR_HYPH_MISSING_DETAIL)
+                                  .replaceFirst("%1", g_pBreakIt->GetLocale(eTmp).Language),
+                              InfobarType::WARNING);
     }
 
     return xHyph->hasLocale( g_pBreakIt->GetLocale(eTmp) );
