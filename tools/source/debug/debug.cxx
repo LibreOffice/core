@@ -110,7 +110,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
     }
     if ( exception.Context.is() )
     {
-        const char* pContext = typeid( *exception.Context ).name();
+        const char* pContext = typeid( exception.Context ).name();
 #if defined __GLIBCXX__
         // demangle the type name, not necessary under windows, we already get demangled names there
         int status;
