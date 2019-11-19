@@ -38,7 +38,7 @@ public:
                  ParaWin& rParaWin, sal_uInt16 nArgCount);
 
 protected:
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
 
 private:
     ArgEdit* pEdPrev;
