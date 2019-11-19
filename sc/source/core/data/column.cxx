@@ -89,7 +89,7 @@ ScColumn::ScColumn() :
     maCells.resize(MAXROWCOUNT);
 }
 
-ScColumn::~ScColumn()
+ScColumn::~ScColumn() COVERITY_NOEXCEPT_FALSE
 {
     FreeAll();
 }
