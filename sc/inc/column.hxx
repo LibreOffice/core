@@ -174,7 +174,7 @@ public:
     };
 
     ScColumn();
-    ~ScColumn();
+    ~ScColumn() COVERITY_NOEXCEPT_FALSE;
 
     void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyAttrArray);
 
