@@ -899,7 +899,7 @@ bool FakeBool::VisitVarDecl(VarDecl const * decl) {
         l = compiler.getSourceManager().getImmediateMacroCallerLoc(l);
     }
     if (compiler.getSourceManager().isMacroBodyExpansion(l)
-        && isSharedCAndCppCode(compiler.getSourceManager().getImmediateMacroCallerLoc(l)))
+        && isSharedCAndCppCode(l))
     {
         return true;
     }
