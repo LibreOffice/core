@@ -745,6 +745,13 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_bStartedCharSdt = false;
     }
 
+    if (m_bPageBreakAfter)
+    {
+        // tdf#128889 Trailing page break
+        SectionBreak(msword::PageBreak, false);
+        m_bPageBreakAfter = false;
+    }
+
     m_pSerializer->endElementNS( XML_w, XML_p );
     // on export sdt blocks are never nested ATM
     if( !m_bAnchorLinkedToNode && !m_bStartedParaSdt )
@@ -5981,7 +5988,7 @@ void DocxAttributeOutput::PageBreakBefore( bool bBreak )
                 FSNS( XML_w, XML_val ), "false" );
 }
 
-void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo )
+void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo )
 {
     switch ( nC )
     {
@@ -6043,9 +6050,15 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
             }
             else if ( m_bParagraphOpened )
             {
-                m_pSerializer->startElementNS(XML_w, XML_r);
-                m_pSerializer->singleElementNS(XML_w, XML_br, FSNS(XML_w, XML_type), "page");
-                m_pSerializer->endElementNS( XML_w, XML_r );
+                if (bBreakAfter)
+                    // tdf#128889
+                    m_bPageBreakAfter = true;
+                else
+                {
+                    m_pSerializer->startElementNS(XML_w, XML_r);
+                    m_pSerializer->singleElementNS(XML_w, XML_br, FSNS(XML_w, XML_type), "page");
+                    m_pSerializer->endElementNS(XML_w, XML_r);
+                }
             }
             else
                 m_bPostponedPageBreak = true;
