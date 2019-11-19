@@ -444,7 +444,7 @@ ProfileItem gid_Brand_Profileitem_Soffice_CrashDump
     ModuleID = gid_Module_Root_Brand;
     Section = "Bootstrap";
     Key = "CrashDumpEnable";
-    Value = "true";
+    Value = "${CRASHDUMPENABLE}";
 End
 
 
