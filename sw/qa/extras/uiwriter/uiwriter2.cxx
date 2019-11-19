@@ -1307,8 +1307,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126206)
     auto xText = getParagraph(1)->getText();
     CPPUNIT_ASSERT(xText.is());
     {
-        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 2)));
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 4)));
         CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("ipsum"), xCursor->getString());
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
     }
 
@@ -1319,8 +1320,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126206)
     xText = getParagraph(1)->getText();
     CPPUNIT_ASSERT(xText.is());
     {
-        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 2)));
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 3)));
         CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("ipsum"), xCursor->getString());
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
     }
 }
