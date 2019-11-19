@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/infobar.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sal/types.h>
 #include <vcl/errcode.hxx>
@@ -192,6 +193,8 @@ private:
 
     enum TriState               {undefined, yes, no};
     TriState                    mbContinueImportOnFilterExceptions = undefined; // try to import as much as possible
+    /// Holds Infobars until View is fully loaded
+    std::vector<InfobarData>    m_aPendingInfobars;
 
     bool                        CloseInternal();
 
@@ -650,6 +653,13 @@ public:
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash );
 
     static bool IsOwnStorageFormat(const SfxMedium &);
+
+    /** Append Infobar once the frame is ready.
+        Useful when you want to register an Infobar before the doc/frame is fully loaded. */
+    void AppendInfoBarWhenReady(const OUString& sId, const OUString& sPrimaryMessage,
+                                const OUString& sSecondaryMessage, InfobarType aInfobarType,
+                                bool bShowCloseButton = true);
+    std::vector<InfobarData>& getPendingInfobars() { return m_aPendingInfobars; }
 
     SAL_DLLPRIVATE std::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl(bool bFullContent) const;
 
