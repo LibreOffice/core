@@ -424,7 +424,7 @@ SwUndoTableToText::SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh )
             nTableStt <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nTableEnd )
         {
-            pHistory->Add( *pFormat );
+            pHistory->AddChangeFlyAnchor(*pFormat);
         }
     }
 
