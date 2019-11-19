@@ -129,14 +129,15 @@ fi
 endef
 
 # AsmObject class
-
 gb_AsmObject_get_source = $(1)/$(2).asm
 
 define gb_AsmObject__command
 $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	"$(ML_EXE)" /safeseh /c /Cp $(gb_AFLAGS) -D$(COM) /Fo$(1) $(3)) && \
+	"$(ML_EXE)" \
+	$(if $(filter X86_64,$(CPUNAME)),, /safeseh) \
+	/c /Cp $(gb_AFLAGS) -D$(COM) /Fo$(1) $(3)) && \
 	echo "$(1) : $(3)" > $(4)
 endef
 
