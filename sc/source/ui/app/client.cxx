@@ -21,6 +21,7 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <sfx2/objsh.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
@@ -189,9 +190,9 @@ void ScClient::ViewChanged()
     awt::Size aSz;
     try {
         aSz = xObj->getVisualAreaSize( GetAspect() );
-    } catch ( embed::NoVisualAreaSizeException& )
-    {
-        OSL_FAIL("The visual area size must be available!");
+    } catch (const uno::Exception&) {
+        TOOLS_WARN_EXCEPTION("sc", "The visual area size must be available!");
+        return; // leave it unchanged on failure
     }
 
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
