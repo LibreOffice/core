@@ -64,7 +64,7 @@ static bool launchSoffice( )
         aStartupInfo.cb = sizeof(aStartupInfo);
         aStartupInfo.wShowWindow = SW_SHOW;
         PROCESS_INFORMATION aProcessInfo;
-        BOOL bSuccess = CreateProcessW(filename, imagename, nullptr, nullptr, TRUE, 0, nullptr, nullptr, &aStartupInfo, &aProcessInfo);
+        bool bSuccess = CreateProcessW(filename, imagename, nullptr, nullptr, TRUE, 0, nullptr, nullptr, &aStartupInfo, &aProcessInfo);
         if ( !bSuccess )
             return false;
 

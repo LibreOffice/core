@@ -300,8 +300,8 @@ static LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
             {
                 case WM_LBUTTONDOWN:
                 {
-                    BOOL const ret = PostMessageW(aExecuterWindow, WM_COMMAND, IDM_STARTCENTER, reinterpret_cast<LPARAM>(hWnd));
-                    SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
+                    bool const ret = PostMessageW(aExecuterWindow, WM_COMMAND, IDM_STARTCENTER, reinterpret_cast<LPARAM>(hWnd));
+                    SAL_WARN_IF(!ret, "sfx.appl", "ERROR: PostMessage() failed!");
                     break;
                 }
 
@@ -319,8 +319,8 @@ static LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
                     EnableMenuItem( popupMenu, IDM_TEMPLATE, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, nullptr );
-                    BOOL const ret = PostMessageW( hWnd, 0, 0, 0 );
-                    SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
+                    bool const ret = PostMessageW( hWnd, 0, 0, 0 );
+                    SAL_WARN_IF(!ret, "sfx.appl", "ERROR: PostMessage() failed!");
                     switch( m )
                     {
                         case IDM_OPEN:
@@ -345,8 +345,8 @@ static LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
                             break;
                     }
 
-                    BOOL const ret2 = PostMessageW(aExecuterWindow, WM_COMMAND, m, reinterpret_cast<LPARAM>(hWnd));
-                    SAL_WARN_IF(0 == ret2, "sfx.appl", "ERROR: PostMessage() failed!");
+                    bool const ret2 = PostMessageW(aExecuterWindow, WM_COMMAND, m, reinterpret_cast<LPARAM>(hWnd));
+                    SAL_WARN_IF(!ret2, "sfx.appl", "ERROR: PostMessage() failed!");
                 }
                 break;
             }
@@ -371,8 +371,8 @@ static LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
                 nid.uID = ID_QUICKSTART;
                 Shell_NotifyIconW(NIM_DELETE, &nid);
 
-                BOOL const ret = PostMessageW(aExecuterWindow, WM_COMMAND, IDM_EXIT, reinterpret_cast<LPARAM>(hWnd));
-                SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
+                bool const ret = PostMessageW(aExecuterWindow, WM_COMMAND, IDM_EXIT, reinterpret_cast<LPARAM>(hWnd));
+                SAL_WARN_IF(!ret, "sfx.appl", "ERROR: PostMessage() failed!");
             }
             else
                 return DefWindowProcW(hWnd, uMsg, wParam, lParam);
@@ -578,8 +578,8 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     HFONT hfntOld;
     HBRUSH hbrOld;
     int x, y;
-    BOOL    fSelected = lpdis->itemState & ODS_SELECTED;
-    BOOL    fDisabled = lpdis->itemState & (ODS_DISABLED | ODS_GRAYED);
+    bool    fSelected = lpdis->itemState & ODS_SELECTED;
+    bool    fDisabled = lpdis->itemState & (ODS_DISABLED | ODS_GRAYED);
 
     // Set the appropriate foreground and background colors.
 
@@ -720,7 +720,7 @@ static HRESULT WINAPI SHCoCreateInstance( LPVOID lpszReserved, REFCLSID clsid, L
     return hResult;
 }
 
-static BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
+static bool CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
     const OUString& rAbsShortcut, const OUString& rDescription, const OUString& rParameter )
 {
     HRESULT hres;

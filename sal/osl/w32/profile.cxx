@@ -335,7 +335,7 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
 static bool writeProfileImpl(osl_TFile* pFile)
 {
     DWORD BytesWritten=0;
-    BOOL bRet;
+    bool bRet;
 
     if ( pFile == nullptr || pFile->m_Handle == INVALID_HANDLE_VALUE || ( pFile->m_pWriteBuf == nullptr ) )
     {
@@ -344,7 +344,7 @@ static bool writeProfileImpl(osl_TFile* pFile)
 
     bRet=WriteFile(pFile->m_Handle, pFile->m_pWriteBuf, pFile->m_nWriteBufLen - pFile->m_nWriteBufFree,&BytesWritten,nullptr);
 
-    if ( bRet == 0 || BytesWritten == 0 )
+    if ( !bRet || BytesWritten == 0 )
     {
         OSL_ENSURE(bRet,"WriteFile failed!!!");
         SAL_WARN("sal.osl", "write failed " << strerror(errno));
@@ -404,7 +404,7 @@ DWORD GetPrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
 }
 
 // Use Unicode version of WritePrivateProfileString, to work with Multi-language paths
-BOOL WritePrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
+bool WritePrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
     const sal_Char* pszSection, const sal_Char* pszEntry,
     const sal_Char* pszString)
 {
@@ -427,7 +427,7 @@ BOOL WritePrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
             pWEntry   = (pEntry   ? o3tl::toW(rtl_uString_getStr(pEntry))   : nullptr),
             pWString  = (pString  ? o3tl::toW(rtl_uString_getStr(pString))  : nullptr);
 
-    BOOL bResult = WritePrivateProfileStringW(pWSection, pWEntry, pWString, o3tl::toW(rtl_uString_getStr(pProfile->m_strFileName)));
+    bool bResult = WritePrivateProfileStringW(pWSection, pWEntry, pWString, o3tl::toW(rtl_uString_getStr(pProfile->m_strFileName)));
 
     if (pString)
         rtl_uString_release(pString);

@@ -267,7 +267,7 @@ void SAL_CALL Window::update(  )
 
 sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
 {
-        boolean bRet = false;
+        bool bRet = false;
 
         if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel &&
             media::ZoomLevel_NOT_AVAILABLE != eZoomLevel )

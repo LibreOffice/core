@@ -549,7 +549,7 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 
 LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, bool& rDef )
 {
-    const BOOL bIsOtherThreadMessage = InSendMessage();
+    const bool bIsOtherThreadMessage = InSendMessage();
     LRESULT nRet = 0;
     WinSalInstance *pInst = GetSalData()->mpInstance;
     WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );

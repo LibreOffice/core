@@ -1464,8 +1464,8 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     // As the Telecom Balloon Fax driver tends to send messages repeatedly
     // we try to process first all, and then insert a dummy message
     for (int i = 0; Application::Reschedule( true ) && i <= 15; ++i);
-    BOOL const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0);
-    SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+    bool const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0);
+    SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
 
     // bring up a file chooser if printing to file port but no file name given
     OUString aOutFileName;

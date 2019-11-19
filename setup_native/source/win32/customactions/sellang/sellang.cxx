@@ -38,7 +38,7 @@
 
 #include <spellchecker_selection.hxx>
 
-static BOOL GetMsiPropA( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
+static bool GetMsiPropA( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
 {
     DWORD sz = 0;
     if ( MsiGetPropertyA( hMSI, pPropName, const_cast<char *>(""), &sz ) == ERROR_MORE_DATA ) {
@@ -183,7 +183,7 @@ enum_ui_lang_proc (LPTSTR language, LONG_PTR /* unused_lParam */)
     return TRUE;
 }
 
-static BOOL
+static bool
 present_in_ui_langs(const char *lang)
 {
     for (int i = 0; i < num_ui_langs; i++)

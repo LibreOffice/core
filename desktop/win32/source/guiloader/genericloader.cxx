@@ -77,7 +77,7 @@ static int GenericMain()
     }
     desktop_win32::commandLineAppend(p, MY_STRING(L"\""));
 
-    BOOL fSuccess = CreateProcessW(
+    bool fSuccess = CreateProcessW(
         szTargetFileName,
         cl2,
         nullptr,

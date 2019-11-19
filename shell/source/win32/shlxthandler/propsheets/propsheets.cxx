@@ -220,7 +220,7 @@ UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
 }
 
 
-BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
+bool CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
     switch (uiMsg)
     {

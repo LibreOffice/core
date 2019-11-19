@@ -40,7 +40,7 @@ BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime)
     SYSTEMTIME  BaseSysTime;
     FILETIME    BaseFileTime;
     FILETIME    FTime;
-    BOOL        fSuccess = FALSE;
+    bool        fSuccess = FALSE;
 
     BaseSysTime.wYear         = 1970;
     BaseSysTime.wMonth        = 1;
@@ -71,7 +71,7 @@ BOOL FileTimeToTimeValue(const FILETIME *cpFTime, TimeValue *pTimeVal)
 {
     SYSTEMTIME  BaseSysTime;
     FILETIME    BaseFileTime;
-    BOOL        fSuccess = FALSE;   /* Assume failure */
+    bool        fSuccess = FALSE;   /* Assume failure */
 
     BaseSysTime.wYear         = 1970;
     BaseSysTime.wMonth        = 1;
@@ -275,9 +275,9 @@ static HANDLE WINAPI OpenLogicalDrivesEnum()
     return pEnum ? static_cast<HANDLE>(pEnum) : INVALID_HANDLE_VALUE;
 }
 
-static BOOL WINAPI EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
+static bool WINAPI EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
 {
-    BOOL        fSuccess = FALSE;
+    bool        fSuccess = FALSE;
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(hEnum);
 
     if ( pEnum )
@@ -299,9 +299,9 @@ static BOOL WINAPI EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
     return fSuccess;
 }
 
-static BOOL WINAPI CloseLogicalDrivesEnum(HANDLE hEnum)
+static bool WINAPI CloseLogicalDrivesEnum(HANDLE hEnum)
 {
-    BOOL        fSuccess = FALSE;
+    bool        fSuccess = FALSE;
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(hEnum);
 
     if ( pEnum )
@@ -368,14 +368,14 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
     return static_cast<HANDLE>(pDirectory);
 }
 
-static BOOL WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData)
+static bool WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData)
 {
-    BOOL        fSuccess = FALSE;
+    bool        fSuccess = FALSE;
     LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(hDirectory);
 
     if ( pDirectory )
     {
-        BOOL    fValid;
+        bool    fValid;
 
         do
         {
@@ -403,9 +403,9 @@ static BOOL WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData
     return fSuccess;
 }
 
-static BOOL WINAPI CloseDirectory(HANDLE hDirectory)
+static bool WINAPI CloseDirectory(HANDLE hDirectory)
 {
-    BOOL        fSuccess = FALSE;
+    bool        fSuccess = FALSE;
     LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(hDirectory);
 
     if (pDirectory)
@@ -587,7 +587,7 @@ static DWORD create_dir_with_callback(
     // user specified callback function. On success
     // the function returns ERROR_SUCCESS else a Win32 error code.
 
-    BOOL bCreated = CreateDirectoryW( o3tl::toW(rtl_uString_getStr( dir_path )), nullptr );
+    bool bCreated = CreateDirectoryW( o3tl::toW(rtl_uString_getStr( dir_path )), nullptr );
 
     if ( bCreated )
     {
@@ -687,7 +687,7 @@ oslFileError osl_createDirectoryWithFlags(rtl_uString * strPath, sal_uInt32)
 
     if ( osl_File_E_None == error )
     {
-        BOOL bCreated = CreateDirectoryW( o3tl::toW(rtl_uString_getStr( strSysPath )), nullptr );
+        bool bCreated = CreateDirectoryW( o3tl::toW(rtl_uString_getStr( strSysPath )), nullptr );
 
         if ( !bCreated )
         {
@@ -812,7 +812,7 @@ static oslFileError osl_getNextDrive(
 {
     Directory_Impl      *pDirImpl = static_cast<Directory_Impl *>(Directory);
     DirectoryItem_Impl  *pItemImpl = nullptr;
-    BOOL                fSuccess;
+    bool                fSuccess;
 
     if ( !pItem )
         return osl_File_E_INVAL;
@@ -853,7 +853,7 @@ static oslFileError osl_getNextFileItem(
 {
     Directory_Impl      *pDirImpl = static_cast<Directory_Impl *>(Directory);
     DirectoryItem_Impl  *pItemImpl = nullptr;
-    BOOL                fFound;
+    bool                fFound;
 
     if ( !pItem )
         return osl_File_E_INVAL;
@@ -1306,7 +1306,7 @@ static bool is_volume_space_info_request(sal_uInt32 field_mask)
 static void get_volume_space_information(
     const OUString& path, oslVolumeInfo *pInfo)
 {
-    BOOL ret = GetDiskFreeSpaceExW(
+    bool ret = GetDiskFreeSpaceExW(
         o3tl::toW(path.getStr()),
         reinterpret_cast<PULARGE_INTEGER>(&pInfo->uFreeSpace),
         reinterpret_cast<PULARGE_INTEGER>(&pInfo->uTotalSpace),
@@ -1693,7 +1693,7 @@ oslFileError SAL_CALL osl_setFileAttributes(
     oslFileError    error;
     rtl_uString     *ustrSysPath = nullptr;
     DWORD           dwFileAttributes;
-    BOOL            fSuccess;
+    bool            fSuccess;
 
     // Converts the normalized path into a systempath
     error = osl_getSystemPathFromFileURL_( ustrFileURL, &ustrSysPath, false );
@@ -1743,7 +1743,7 @@ oslFileError SAL_CALL osl_setFileTime(
     FILETIME ftLastAccessTime;
     FILETIME ftLastWriteTime;
     HANDLE hFile;
-    BOOL fSuccess;
+    bool fSuccess;
 
     error=osl_getSystemPathFromFileURL_(filePath, &sysPath, false);
 

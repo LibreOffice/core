@@ -41,7 +41,7 @@
 static bool GetSpecialFolder(rtl_uString **strPath, REFKNOWNFOLDERID rFolder);
 // We use LPCTSTR here, because we use it with SE_foo_NAME constants
 // which are defined in winnt.h as UNICODE-dependent TEXT("PrivilegeName")
-static BOOL Privilege(LPCTSTR pszPrivilege, BOOL bEnable);
+static bool Privilege(LPCTSTR pszPrivilege, bool bEnable);
 static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName, bool bIncludeDomain);
 
 oslSecurity SAL_CALL osl_getCurrentSecurity(void)
@@ -296,7 +296,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                 PSID pSid = reinterpret_cast<PTOKEN_USER>(pInfoBuffer)->User.Sid;
 
                 LPWSTR pSidStr = nullptr;
-                BOOL bResult = ConvertSidToStringSidW(pSid, &pSidStr);
+                bool bResult = ConvertSidToStringSidW(pSid, &pSidStr);
                 if (bResult)
                 {
                     rtl_uString_newFromStr(strIdent, o3tl::toU(pSidStr));
@@ -312,7 +312,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
 
                 free(pInfoBuffer);
 
-                return bResult != FALSE;
+                return bResult;
             }
         }
         else
@@ -440,7 +440,7 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
     RegCloseKey(HKEY_CURRENT_USER);
 
-    if (Privilege(SE_RESTORE_NAME, TRUE))
+    if (Privilege(SE_RESTORE_NAME, true))
     {
         HANDLE                  hAccessToken        = static_cast<oslSecurityImpl*>(Security)->m_hToken;
 
@@ -529,7 +529,7 @@ static bool GetSpecialFolder(rtl_uString **strPath, REFKNOWNFOLDERID rFolder)
 
 // We use LPCTSTR here, because we use it with SE_foo_NAME constants
 // which are defined in winnt.h as UNICODE-dependent TEXT("PrivilegeName")
-static BOOL Privilege(LPCTSTR strPrivilege, BOOL bEnable)
+static bool Privilege(LPCTSTR strPrivilege, bool bEnable)
 {
     HANDLE           hToken;
     TOKEN_PRIVILEGES tp;

@@ -1381,7 +1381,7 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 
         IAccessible* pChild = nullptr;
         Reference< XAccessible > pXChild = pRContext->getAccessibleChild(dChildID-1);
-        BOOL isGet = get_IAccessibleFromXAccessible(pXChild.get(), &pChild);
+        bool isGet = get_IAccessibleFromXAccessible(pXChild.get(), &pChild);
 
         if(!isGet)
         {
@@ -1405,7 +1405,7 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 * need to process specifically when navigate
 * @return  BOOL, if it is descendantmanager, return true.
 */
-BOOL CMAccessible::IsDescendantManage()
+bool CMAccessible::IsDescendantManage()
 {
 
     return (m_iRole==ROLE_SYSTEM_LIST)||(m_iRole==ROLE_SYSTEM_OUTLINE)||(m_iRole==ROLE_SYSTEM_TABLE);
@@ -2021,7 +2021,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FA
         }
 
         int level = 0;
-        BOOL isFound = FALSE;
+        bool isFound = FALSE;
         while( pParentAcc.is() && !isFound)
         {
             level++;
@@ -2493,7 +2493,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_ActionDescription( const OLE
         LEAVE_PROTECTED_BLOCK
 }
 
-BOOL CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface** ppXI, int index)
+bool CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface** ppXI, int index)
 {
     Reference< XAccessibleContext > pRContext;
 
@@ -2599,7 +2599,7 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
             SolarMutexGuard g;
 
             XInterface* pXI = nullptr;
-            BOOL bFound = GetXInterfaceFromXAccessible(m_xAccessible.get(),
+            bool bFound = GetXInterfaceFromXAccessible(m_xAccessible.get(),
                                 &pXI, pMap->XIFIndex);
             if(!bFound)
             {
@@ -2650,7 +2650,7 @@ CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **
         {
             return FALSE;
         }
-        BOOL isGet = FALSE;
+        bool isGet = FALSE;
         if(g_pAgent)
             isGet = g_pAgent->GetIAccessibleFromXAccessible(pXAcc, ppIA);
 

@@ -69,7 +69,7 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     DWORD const dwAccessFlags = (PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION
                                     | PROCESS_VM_WRITE | PROCESS_VM_READ);
 
-    BOOL bHaveDuplHdl = DuplicateHandle(GetCurrentProcess(),    // handle to process that has handle
+    bool bHaveDuplHdl = DuplicateHandle(GetCurrentProcess(),    // handle to process that has handle
                                     hProcess,                   // handle to be duplicated
                                     GetCurrentProcess(),        // process that will get the dup handle
                                     &hDupProcess,               // store duplicate process handle here

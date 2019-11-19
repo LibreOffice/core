@@ -76,7 +76,7 @@ Test::Test() : documentName(), pStream(nullptr)
 
     LPVOID pvData = GlobalLock(hGlobal);
     DWORD dwBytesRead = 0;
-    BOOL bRead = ReadFile(hFile, pvData, dwFileSize, &dwBytesRead, nullptr);
+    bool bRead = ReadFile(hFile, pvData, dwFileSize, &dwBytesRead, nullptr);
     CPPUNIT_ASSERT_MESSAGE("FileStream: ReadFile error.", bRead);
     GlobalUnlock(hGlobal);
     CloseHandle(hFile);

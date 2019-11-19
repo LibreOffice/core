@@ -206,7 +206,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     }
     else
     {
-        BOOL bPipeAvailable;
+        bool bPipeAvailable;
 
         do
         {

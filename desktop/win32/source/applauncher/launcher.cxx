@@ -54,7 +54,7 @@ extern "C" int APIENTRY wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 
     PROCESS_INFORMATION aProcessInfo;
 
-    BOOL fSuccess = CreateProcessW(
+    bool fSuccess = CreateProcessW(
         szApplicationName,
         lpCommandLine,
         nullptr,

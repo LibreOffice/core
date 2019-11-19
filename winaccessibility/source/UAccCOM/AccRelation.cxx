@@ -118,7 +118,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_target(long targetIndex, IUn
     Reference<XAccessible> xRAcc(xTargets[targetIndex], UNO_QUERY);
     IAccessible* pRet = nullptr;
 
-    BOOL isGet = CMAccessible::get_IAccessibleFromXAccessible(xRAcc.get(), &pRet);
+    bool isGet = CMAccessible::get_IAccessibleFromXAccessible(xRAcc.get(), &pRet);
     if(isGet)
     {
         *target = /*(IAccessible2 *)*/static_cast<IUnknown*>(pRet);

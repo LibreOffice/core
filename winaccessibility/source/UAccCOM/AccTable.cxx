@@ -73,7 +73,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_accessibleAt(long row, long col
 
     IAccessible* pRet = nullptr;
 
-    BOOL isTRUE = CMAccessible::get_IAccessibleFromXAccessible(pRAcc.get(), &pRet);
+    bool isTRUE = CMAccessible::get_IAccessibleFromXAccessible(pRAcc.get(), &pRet);
     if(isTRUE)
     {
         *accessible = static_cast<IAccessible2 *>(pRet);

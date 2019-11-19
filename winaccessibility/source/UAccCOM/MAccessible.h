@@ -188,7 +188,7 @@ private:
     CEnumVariant* m_pEnumVar;
 
     // specify if the XAccessible is invalid
-    BOOL m_isDestroy;
+    bool m_isDestroy;
 
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     // initially m_xAction and m_xContext are the same object
@@ -205,7 +205,7 @@ private:
     HRESULT GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
     HRESULT GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
     HRESULT GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
-    BOOL IsDescendantManage();//identify whether the current COM belongs to manage_descendant roles
+    bool IsDescendantManage();//identify whether the current COM belongs to manage_descendant roles
 
     // the following private methods are used to implement accSelect method
     HRESULT SelectChild(css::accessibility::XAccessible* pItem);
@@ -218,7 +218,7 @@ private:
             css::accessibility::XAccessible* pXAcc);
     css::uno::Reference<css::accessibility::XAccessibleSelection> GetSelection();
     // end accSelect implementation methods
-    static BOOL GetXInterfaceFromXAccessible(css::accessibility::XAccessible*,
+    static bool GetXInterfaceFromXAccessible(css::accessibility::XAccessible*,
             css::uno::XInterface**, int);
     HRESULT WINAPI SmartQI(void* pv, REFIID iid, void** ppvObject);
 

@@ -53,7 +53,7 @@ class DocumentHolder :
 private:
     ::osl::Mutex                m_aMutex;
 
-    BOOL                        m_bAllowInPlace;
+    bool                        m_bAllowInPlace;
     LPOLEINPLACESITE            m_pIOleIPSite;
     LPOLEINPLACEFRAME           m_pIOleIPFrame;
     LPOLEINPLACEUIWINDOW        m_pIOleIPUIWindow;

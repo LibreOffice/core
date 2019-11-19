@@ -223,7 +223,7 @@ static int afxHandleSize = 0;
 
 void Tracker::Construct()
 {
-    static BOOL bInitialized = false;
+    static bool bInitialized = false;
     if (!bInitialized)
     {
         if (afxHatchBrush == nullptr)
@@ -385,7 +385,7 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
     }
 
     RECT rectOld;
-    BOOL bMoved = FALSE;
+    bool bMoved = FALSE;
 
     // get messages until capture lost or cancelled/accepted
     for (;;)

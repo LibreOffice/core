@@ -65,7 +65,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
     {
         Reference< XAccessible > pRXAcc = m_pXAccessibleSelection->getSelectedAccessibleChild(l1);
         IAccessible* pChild = nullptr;
-        BOOL isGet = CMAccessible::get_IAccessibleFromXAccessible(pRXAcc.get(),
+        bool isGet = CMAccessible::get_IAccessibleFromXAccessible(pRXAcc.get(),
                         &pChild);
         if(isGet)
         {

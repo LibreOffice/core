@@ -30,7 +30,7 @@
 #include "seterror.hxx"
 
 
-static BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
+static bool GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
     if ( MsiGetPropertyW( hMSI, pPropName, const_cast<wchar_t *>(L""), &sz ) == ERROR_MORE_DATA )

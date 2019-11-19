@@ -347,7 +347,7 @@ int wmain( int, wchar_t** )
     // Create process with same command line, environment and stdio handles which
     // are directed to the created pipes
 
-    BOOL fSuccess = CreateProcessW(
+    bool fSuccess = CreateProcessW(
         szTargetFileName,
         GetCommandLineW(),
         nullptr,

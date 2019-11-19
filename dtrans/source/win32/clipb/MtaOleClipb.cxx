@@ -62,8 +62,8 @@ namespace /* private */
     const sal_uInt32 MAX_WAITTIME                   = 10000;  // msec
     const sal_uInt32 MAX_WAIT_SHUTDOWN              = 10000; // msec
 
-    const BOOL MANUAL_RESET = TRUE;
-    const BOOL INIT_NONSIGNALED = FALSE;
+    const bool MANUAL_RESET = TRUE;
+    const bool INIT_NONSIGNALED = FALSE;
 
     /*  Cannot use osl conditions because they are blocking
         without waking up on messages sent by another thread
@@ -516,8 +516,8 @@ LRESULT CMtaOleClipboard::sendMessage( UINT msg, WPARAM wParam, LPARAM lParam )
 
 bool CMtaOleClipboard::postMessage( UINT msg, WPARAM wParam, LPARAM lParam )
 {
-    BOOL const ret = PostMessageW(m_hwndMtaOleReqWnd, msg, wParam, lParam);
-    SAL_WARN_IF(0 == ret, "dtrans", "ERROR: PostMessage() failed!");
+    bool const ret = PostMessageW(m_hwndMtaOleReqWnd, msg, wParam, lParam);
+    SAL_WARN_IF(!ret, "dtrans", "ERROR: PostMessage() failed!");
     return ret;
 }
 

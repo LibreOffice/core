@@ -24,7 +24,7 @@
 #include <systools/win32/uwinapi.h>
 #include "../tools/seterror.hxx"
 
-static BOOL RemoveCompleteDirectoryW(const std::wstring& rPath)
+static bool RemoveCompleteDirectoryW(const std::wstring& rPath)
 {
     bool bDirectoryRemoved = true;
 

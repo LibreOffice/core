@@ -146,22 +146,22 @@ public:
         return m_pInterface;
     }
 
-    BOOL operator==( const ComSmart<T>& rObj ) const
+    bool operator==( const ComSmart<T>& rObj ) const
     {
         return ( m_pInterface == rObj.m_pInterface );
     }
 
-    BOOL operator!=( const ComSmart<T>& rObj ) const
+    bool operator!=( const ComSmart<T>& rObj ) const
     {
         return ( m_pInterface != rObj.m_pInterface );
     }
 
-    BOOL operator==( const T* pInterface ) const
+    bool operator==( const T* pInterface ) const
     {
         return ( m_pInterface == pInterface );
     }
 
-    BOOL operator!=( const T* pInterface ) const
+    bool operator!=( const T* pInterface ) const
     {
         return ( m_pInterface != pInterface );
     }
@@ -647,7 +647,7 @@ bool OleComponent::InitializeObject_Impl()
     HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IOleLink, reinterpret_cast<void**>(&pOleLink) );
     OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
     if ( m_pUnoOleObject )
-        m_pUnoOleObject->SetObjectIsLink_Impl( bool( pOleLink != nullptr ) );
+        m_pUnoOleObject->SetObjectIsLink_Impl( pOleLink != nullptr );
 
 
     hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IViewObject2, reinterpret_cast<void**>(&m_pNativeImpl->m_pViewObject2) );

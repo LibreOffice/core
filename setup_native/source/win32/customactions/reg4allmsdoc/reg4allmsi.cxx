@@ -89,9 +89,9 @@ static void OutputDebugStringFormatW( LPCWSTR, ... )
 }
 #endif
 
-static BOOL CheckExtensionInRegistry( LPCWSTR lpSubKey )
+static bool CheckExtensionInRegistry( LPCWSTR lpSubKey )
 {
-    BOOL    bRet = false;
+    bool    bRet = false;
     HKEY    hKey = nullptr;
     LONG    lResult = RegOpenKeyExW( HKEY_CLASSES_ROOT, lpSubKey, 0, KEY_QUERY_VALUE, &hKey );
 
@@ -216,14 +216,14 @@ static void saveOldRegistration( LPCWSTR lpSubKey )
     }
 }
 
-static void registerForExtensions( MSIHANDLE handle, BOOL bRegisterAll )
+static void registerForExtensions( MSIHANDLE handle, bool bRegisterAll )
 { // Check all file extensions
     int nIndex = 0;
     while ( g_Extensions[nIndex] != nullptr )
     {
         saveOldRegistration( g_Extensions[nIndex] );
 
-        BOOL bRegister = bRegisterAll || CheckExtensionInRegistry( g_Extensions[nIndex] );
+        bool bRegister = bRegisterAll || CheckExtensionInRegistry( g_Extensions[nIndex] );
         if ( bRegister )
             registerForExtension( handle, nIndex, true );
         ++nIndex;

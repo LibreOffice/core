@@ -602,7 +602,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
 
     pChainContext = nullptr ;
 
-    BOOL bChain = FALSE;
+    bool bChain = FALSE;
     if( pCertContext != nullptr )
     {
         HCERTSTORE hAdditionalStore = nullptr;
@@ -786,7 +786,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
 
     HCERTSTORE hCollectionStore = nullptr;
     HCERTSTORE hIntermediateCertsStore = nullptr;
-    BOOL bChain = FALSE;
+    bool bChain = FALSE;
     if( pCertContext != nullptr )
     {
         hIntermediateCertsStore =

@@ -490,7 +490,7 @@ DWORD WINAPI GetPACProxyThread(_In_ LPVOID lpParameter)
     // autologon prevents caching, and so causes repetitive network traffic.
     AutoProxyOptions.fAutoLogonIfChallenged = FALSE;
     WINHTTP_PROXY_INFO ProxyInfo{};
-    BOOL bResult
+    bool bResult
         = WinHttpGetProxyForUrl(hInternet, o3tl::toW(url.getStr()), &AutoProxyOptions, &ProxyInfo);
     nError = GetLastError();
     if (!bResult && nError == ERROR_WINHTTP_LOGIN_FAILURE)
@@ -540,7 +540,7 @@ InternetProxyServer GetPACProxy(const OUString& rProtocol, const OUString& rHost
     // if configured to do so
     {
         WINHTTP_CURRENT_USER_IE_PROXY_CONFIG aProxyConfig{};
-        BOOL bResult = WinHttpGetIEProxyConfigForCurrentUser(&aProxyConfig);
+        bool bResult = WinHttpGetIEProxyConfigForCurrentUser(&aProxyConfig);
         if (aProxyConfig.lpszProxy)
             GlobalFree(aProxyConfig.lpszProxy);
         if (aProxyConfig.lpszProxyBypass)

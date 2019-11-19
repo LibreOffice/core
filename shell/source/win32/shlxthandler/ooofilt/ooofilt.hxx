@@ -144,8 +144,8 @@ private:
     ULONG                     m_ulPropertyNum;          // Number of properties that has been processed
     ULONG                     m_ulCurrentPropertyNum;   // Current Property that is processing;
     ULONG                     m_ulChunkID;              // Current chunk id
-    BOOL                      m_fContents;              // TRUE if contents requested
-    BOOL                      m_fEof;                   // TRUE if end of file reached
+    bool                      m_fContents;              // TRUE if contents requested
+    bool                      m_fEof;                   // TRUE if end of file reached
     ::std::wstring            m_pwsBuffer;              // Buffer to save UNICODE content from ChunkBuffer.
     ULONG                     m_ChunkPosition;          // Chunk pointer to specify the current Chunk;
     ULONG                     m_cAttributes;            // Count of attributes
