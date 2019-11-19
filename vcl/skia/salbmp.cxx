@@ -164,15 +164,11 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
     // TODO copy data
     SAL_INFO("vcl.skia", "copy(" << this << "): (" << &src << ")");
     abort();
-    return true;
 }
 
-bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
-                           Size& rSize, bool bMask)
+bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>&, Size&, bool)
 {
-    (void)rBitmapCanvas;
-    (void)rSize;
-    (void)bMask;
+    // TODO?
     return false;
 }
 
@@ -187,9 +183,9 @@ Size SkiaSalBitmap::GetSize() const { return mSize; }
 
 sal_uInt16 SkiaSalBitmap::GetBitCount() const { return mBitCount; }
 
-BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
+BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
 {
-    (void)nMode; // TODO
+    //(void)nMode; // TODO
     if (mBitmap.drawsNothing() && !mBuffer)
         return nullptr;
     BitmapBuffer* buffer = new BitmapBuffer;
@@ -257,27 +253,23 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
     delete pBuffer;
 }
 
-bool SkiaSalBitmap::GetSystemData(BitmapSystemData& rData)
+bool SkiaSalBitmap::GetSystemData(BitmapSystemData&)
 {
-    (void)rData;
+    // TODO?
     return false;
 }
 
 bool SkiaSalBitmap::ScalingSupported() const { return false; }
 
-bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag)
+bool SkiaSalBitmap::Scale(const double&, const double&, BmpScaleFlag)
 {
-    (void)rScaleX;
-    (void)rScaleY;
-    (void)nScaleFlag;
+    // TODO?
     return false;
 }
 
-bool SkiaSalBitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol)
+bool SkiaSalBitmap::Replace(const Color&, const Color&, sal_uInt8)
 {
-    (void)rSearchColor;
-    (void)rReplaceColor;
-    (void)nTol;
+    // TODO?
     return false;
 }
 
@@ -298,10 +290,10 @@ const SkBitmap& SkiaSalBitmap::GetSkBitmap() const
             // Convert 24bpp RGB/BGR to 32bpp RGBA/BGRA.
             std::unique_ptr<sal_uInt8[]> data(new sal_uInt8[mSize.Height() * mSize.Width() * 4]);
             sal_uInt8* dest = data.get();
-            for (int y = 0; y < mSize.Height(); ++y)
+            for (long y = 0; y < mSize.Height(); ++y)
             {
                 const sal_uInt8* src = mBuffer.get() + mScanlineSize * y;
-                for (int x = 0; x < mSize.Width(); ++x)
+                for (long x = 0; x < mSize.Width(); ++x)
                 {
                     *dest++ = *src++;
                     *dest++ = *src++;
