@@ -106,6 +106,7 @@ OString exceptionToString(const css::uno::Any & caught)
         sMessage += " message: ";
         sMessage += toOString(exception.Message);
     }
+/*  TODO FIXME (see https://gerrit.libreoffice.org/#/c/83245/)
     if ( exception.Context.is() )
     {
         const char* pContext = typeid( *exception.Context.get() ).name();
@@ -120,6 +121,7 @@ OString exceptionToString(const css::uno::Any & caught)
         std::free(const_cast<char *>(pContext));
 #endif
     }
+*/
     {
         css::configuration::CorruptedConfigurationException specialized;
         if ( caught >>= specialized )
