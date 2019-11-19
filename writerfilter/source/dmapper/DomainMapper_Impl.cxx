@@ -503,7 +503,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         // (but only for paste/insert, not load; otherwise it can happen that
         // flys anchored at the disposed paragraph are deleted (fdo47036.rtf))
         bool const bEndOfDocument(m_aTextAppendStack.size() == 1);
-        if ((IsInHeaderFooter() || (bEndOfDocument && !m_bIsNewDoc))
+        if ((IsInHeaderFooter() || (bEndOfDocument && !(m_bIsNewDoc && GetIsPreviousParagraphFramed())))
             && xEnumerationAccess.is())
         {
             uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();

@@ -525,7 +525,7 @@ DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
     ::sw::mark::IDateFieldmark* pFieldmark
           = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
@@ -686,7 +686,7 @@ DECLARE_OOXMLEXPORT_TEST( testDateFieldInShape, "date_field_in_shape.docx" )
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
     ::sw::mark::IDateFieldmark* pFieldmark
           = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
@@ -702,7 +702,7 @@ DECLARE_OOXMLEXPORT_TEST( testDateFieldAtEndOfParagraph, "date_field_at_end_of_p
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
     ::sw::mark::IDateFieldmark* pFieldmark
           = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
