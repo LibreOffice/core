@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_0b51b80e",
+        "filename": "sc/source/filter/excel/xistring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-11-19T15:05:03Z",
+      "side": 1,
+      "message": "Meh, no such thing. I\u0027m adding something.",
+      "range": {
+        "startLine": 123,
+        "startChar": 14,
+        "endLine": 123,
+        "endChar": 22
+      },
+      "revId": "702c1520b3dbbfffcb8143ca06366800014062cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
