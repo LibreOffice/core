@@ -320,6 +320,7 @@
 #define UNO_NAME_EDIT_CHAR_LOCALE_COMPLEX       "CharLocaleComplex"
 
 #define UNO_NAME_EDIT_CHAR_COLOR                "CharColor"
+#define UNO_NAME_EDIT_CHAR_TRANSPARENCE         "CharTransparence"
 #define UNO_NAME_EDIT_CHAR_CROSSEDOUT           "CharCrossedOut"
 #define UNO_NAME_EDIT_CHAR_STRIKEOUT            "CharStrikeout"
 #define UNO_NAME_EDIT_CHAR_CASEMAP              "CharCaseMap"
