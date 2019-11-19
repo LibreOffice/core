@@ -330,8 +330,7 @@ const sc::CellStoreType* ScDBQueryDataIterator::GetColumnCellStore(ScDocument& r
 
 const ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SCTAB nTab, SCCOL nCol)
 {
-    if (nTab >= rDoc.GetTableCount())
-        OSL_FAIL("try to access index out of bounds, FIX IT");
+    assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     ScColumn* pCol = &rDoc.maTabs[nTab]->aCol[nCol];
     return pCol->pAttrArray.get();
 }
@@ -339,8 +338,7 @@ const ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SC
 bool ScDBQueryDataIterator::IsQueryValid(
     ScDocument& rDoc, const ScQueryParam& rParam, SCTAB nTab, SCROW nRow, const ScRefCellValue* pCell)
 {
-    if (nTab >= rDoc.GetTableCount())
-        OSL_FAIL("try to access index out of bounds, FIX IT");
+    assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, pCell);
 }
 
@@ -895,7 +893,7 @@ void ScCellIterator::init()
 
     if (!mpDoc->maTabs[maCurPos.Tab()])
     {
-        OSL_FAIL("Table not found");
+        assert(!"Table not found");
         maStartPos = ScAddress(mpDoc->MaxCol()+1, mpDoc->MaxRow()+1, MAXTAB+1); // -> Abort on GetFirst.
         maCurPos = maStartPos;
     }
@@ -1103,8 +1101,7 @@ void ScQueryCellIterator::IncBlock()
 
 bool ScQueryCellIterator::GetThis()
 {
-    if (nTab >= pDoc->GetTableCount())
-        OSL_FAIL("try to access index out of bounds, FIX IT");
+    assert(nTab < pDoc->GetTableCount() && "index out of bounds, FIX IT");
     const ScQueryEntry& rEntry = mpParam->GetEntry(0);
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
@@ -1226,8 +1223,7 @@ bool ScQueryCellIterator::GetThis()
 
 bool ScQueryCellIterator::GetFirst()
 {
-    if (nTab >= pDoc->GetTableCount())
-        OSL_FAIL("try to access index out of bounds, FIX IT");
+    assert(nTab < pDoc->GetTableCount() && "index out of bounds, FIX IT");
     nCol = mpParam->nCol1;
     InitPos();
     return GetThis();
@@ -1255,7 +1251,7 @@ void ScQueryCellIterator::AdvanceQueryParamEntryField()
                 rEntry.nField++;
             else
             {
-                OSL_FAIL( "AdvanceQueryParamEntryField: ++rEntry.nField > MAXCOL" );
+                assert(!"AdvanceQueryParamEntryField: ++rEntry.nField > MAXCOL");
             }
         }
         else
@@ -1792,8 +1788,7 @@ bool ScQueryCellIterator::BinarySearch()
 {
     // TODO: This will be extremely slow with mdds::multi_type_vector.
 
-    if (nTab >= pDoc->GetTableCount())
-        OSL_FAIL("try to access index out of bounds, FIX IT");
+    assert(nTab < pDoc->GetTableCount() && "index out of bounds, FIX IT");
     nCol = mpParam->nCol1;
     ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     if (pCol->IsEmptyData())
@@ -2069,8 +2064,7 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
     mnRow( nRow1 ),
     mbMore( false )
 {
-    if (mnTab >= pDoc->GetTableCount())
-        OSL_FAIL("try to access index out of bounds, FIX IT");
+    assert(mnTab < pDoc->GetTableCount() && "index out of bounds, FIX IT");
 
     nEndCol = pDoc->maTabs[mnTab]->ClampToAllocatedColumns(nEndCol);
     if (nEndCol < nStartCol) // E.g., somewhere completely outside allocated area
@@ -2383,9 +2377,8 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     nEndCol( nCol2 ),
     nEndRow( nRow2 )
 {
-    if (nTab >= pDoc->GetTableCount())
-        OSL_FAIL("try to access index out of bounds, FIX IT");
-    OSL_ENSURE( pDoc->maTabs[nTab], "Table does not exist" );
+    assert(nTab < pDoc->GetTableCount() && "index out of bounds, FIX IT");
+    assert(pDoc->maTabs[nTab]);
 
     nEndCol = pDoc->maTabs[nTab]->ClampToAllocatedColumns(nEndCol);
 
@@ -2417,7 +2410,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
         if ( bInitialization || pNextEnd[nPos] < nRow )
         {
             const ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray.get();
-            OSL_ENSURE( pArray, "pArray == 0" );
+            assert(pArray);
 
             SCSIZE nIndex;
             if (bInitialization)
@@ -2427,7 +2420,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
                 else
                     nIndex = 0;
                 pIndices[nPos] = nIndex;
-                pHorizEnd[nPos] = pDoc->MaxCol()+1; // only for OSL_ENSURE
+                pHorizEnd[nPos] = pDoc->MaxCol()+1; // only for assert()
             }
             else
                 nIndex = ++pIndices[nPos];
@@ -2435,7 +2428,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
             if ( !nIndex && !pArray->Count() )
             {
                 pNextEnd[nPos] = pDoc->MaxRow();
-                OSL_ENSURE( pNextEnd[nPos] >= nRow, "Sequence out of order" );
+                assert( pNextEnd[nPos] >= nRow && "Sequence out of order" );
                 ppPatterns[nPos] = nullptr;
             }
             else if ( nIndex < pArray->Count() )
@@ -2449,12 +2442,12 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
                     bEmpty = false; // Found attributes
 
                 pNextEnd[nPos] = nThisEnd;
-                OSL_ENSURE( pNextEnd[nPos] >= nRow, "Sequence out of order" );
+                assert( pNextEnd[nPos] >= nRow && "Sequence out of order" );
                 ppPatterns[nPos] = pPattern;
             }
             else
             {
-                OSL_FAIL("AttrArray does not range to MAXROW");
+                assert(!"AttrArray does not range to MAXROW");
                 pNextEnd[nPos] = pDoc->MaxRow();
                 ppPatterns[nPos] = nullptr;
             }
@@ -2484,7 +2477,7 @@ bool ScHorizontalAttrIterator::InitForNextAttr()
 {
     if ( !ppPatterns[nCol-nStartCol] ) // Skip default items
     {
-        OSL_ENSURE( pHorizEnd[nCol-nStartCol] < pDoc->MaxCol()+1, "missing stored data" );
+        assert( pHorizEnd[nCol-nStartCol] < pDoc->MaxCol()+1 && "missing stored data" );
         nCol = pHorizEnd[nCol-nStartCol] + 1;
         if ( nCol > nEndCol )
             return false;
@@ -2495,8 +2488,7 @@ bool ScHorizontalAttrIterator::InitForNextAttr()
 
 const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow )
 {
-    if (nTab >= pDoc->GetTableCount())
-        OSL_FAIL("try to access index out of bounds, FIX IT");
+    assert(nTab < pDoc->GetTableCount() && "index out of bounds, FIX IT");
     for (;;)
     {
         if ( !bRowEmpty && nCol <= nEndCol && InitForNextAttr() )
@@ -2504,7 +2496,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             const ScPatternAttr* pPat = ppPatterns[nCol-nStartCol];
             rRow = nRow;
             rCol1 = nCol;
-            OSL_ENSURE( pHorizEnd[nCol-nStartCol] < pDoc->MaxCol()+1, "missing stored data" );
+            assert( pHorizEnd[nCol-nStartCol] < pDoc->MaxCol()+1 && "missing stored data" );
             nCol = pHorizEnd[nCol-nStartCol];
             rCol2 = nCol;
             ++nCol; // Count up for next call
