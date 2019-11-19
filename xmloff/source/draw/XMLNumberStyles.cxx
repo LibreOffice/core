@@ -31,6 +31,8 @@
 
 using namespace ::xmloff::token;
 
+namespace {
+
 struct SdXMLDataStyleNumber
 {
     enum XMLTokenEnum const meNumberStyle;
@@ -38,8 +40,11 @@ struct SdXMLDataStyleNumber
     bool const    mbTextual;
     bool const    mbDecimal02;
     const char* mpText;
+};
+
 }
-const aSdXMLDataStyleNumbers[] =
+
+SdXMLDataStyleNumber const aSdXMLDataStyleNumbers[] =
 {
     { XML_DAY,          false,      false,      false,      nullptr },
     { XML_DAY,          true,       false,      false,      nullptr },

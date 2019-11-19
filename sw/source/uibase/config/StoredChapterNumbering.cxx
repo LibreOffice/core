@@ -158,6 +158,8 @@ public:
     }
 };
 
+namespace {
+
 class StoredChapterNumberingExport
     : public SvXMLExport
 {
@@ -381,6 +383,8 @@ public:
         return SvXMLImport::CreateFastContext(Element, xAttrList);
     }
 };
+
+}
 
 void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
         SvStream & rStream, OUString const& rFileName)

@@ -59,6 +59,7 @@
 
 using namespace ::com::sun::star;
 
+namespace {
 
 class SwParaSelection
 {
@@ -67,6 +68,8 @@ public:
     explicit SwParaSelection(SwCursor & rCursor);
     ~SwParaSelection();
 };
+
+}
 
 SwParaSelection::SwParaSelection(SwCursor & rCursor)
     : m_rCursor(rCursor)

@@ -63,6 +63,8 @@ using namespace ::com::sun::star;
 
 const short RET_EDIT = 100;
 
+namespace {
+
 struct TextBlockInfo_Impl
 {
     OUString const sTitle;
@@ -71,6 +73,8 @@ struct TextBlockInfo_Impl
     TextBlockInfo_Impl(OUString const& rTitle, OUString const& rLongName, OUString const& rGroupName)
         : sTitle(rTitle), sLongName(rLongName), sGroupName(rGroupName) {}
 };
+
+}
 
 // Dialog for edit templates
 void SwGlossaryHdl::GlossaryDlg()

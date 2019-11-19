@@ -96,6 +96,7 @@ static OUString makeStrings(
     return buf.makeStringAndClear();
 }
 
+namespace {
 
 class SocketPermission : public Permission
 {
@@ -119,6 +120,8 @@ public:
     virtual bool implies( Permission const & perm ) const override;
     virtual OUString toString() const override;
 };
+
+}
 
 char const * SocketPermission::s_actions [] = { "accept", "connect", "listen", "resolve", nullptr };
 
@@ -263,6 +266,7 @@ OUString SocketPermission::toString() const
     return buf.makeStringAndClear();
 }
 
+namespace {
 
 class FilePermission : public Permission
 {
@@ -279,6 +283,8 @@ public:
     virtual bool implies( Permission const & perm ) const override;
     virtual OUString toString() const override;
 };
+
+}
 
 char const * FilePermission::s_actions [] = { "read", "write", "execute", "delete", nullptr };
 
@@ -406,6 +412,7 @@ OUString FilePermission::toString() const
     return buf.makeStringAndClear();
 }
 
+namespace {
 
 class RuntimePermission : public Permission
 {
@@ -421,6 +428,8 @@ public:
     virtual bool implies( Permission const & perm ) const override;
     virtual OUString toString() const override;
 };
+
+}
 
 bool RuntimePermission::implies( Permission const & perm ) const
 {

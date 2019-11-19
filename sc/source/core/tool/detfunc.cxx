@@ -114,6 +114,8 @@ public:
     sal_uInt16      GetMaxLevel() const             { return nMaxLevel; }
 };
 
+namespace {
+
 class ScCommentData
 {
 public:
@@ -125,6 +127,8 @@ public:
 private:
     SfxItemSet          aCaptionSet;
 };
+
+}
 
 Color ScDetectiveFunc::nArrowColor = Color(0);
 Color ScDetectiveFunc::nErrorColor = Color(0);

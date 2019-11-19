@@ -43,6 +43,8 @@ using namespace store;
  *======================================================================*/
 #define STORE_MAGIC_SUPERBLOCK sal_uInt32(0x484D5343)
 
+namespace {
+
 struct OStoreSuperBlock
 {
     typedef OStorePageGuard      G;
@@ -138,6 +140,8 @@ struct OStoreSuperBlock
             return store_E_None;
     }
 };
+
+}
 
 /*========================================================================
  *

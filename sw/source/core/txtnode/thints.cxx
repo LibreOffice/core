@@ -2029,6 +2029,8 @@ static void lcl_MergeAttr_ExpandChrFormat( SfxItemSet& rSet, const SfxPoolItem& 
     rSet.Put( rAttr );
 }
 
+namespace {
+
 struct SwPoolItemEndPair
 {
 public:
@@ -2037,6 +2039,8 @@ public:
 
     SwPoolItemEndPair() : mpItem( nullptr ), mnEndPos( 0 ) {};
 };
+
+}
 
 static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
                                             SfxItemSet& rSet )

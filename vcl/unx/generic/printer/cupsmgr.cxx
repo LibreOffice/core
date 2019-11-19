@@ -44,6 +44,8 @@
 using namespace psp;
 using namespace osl;
 
+namespace {
+
 struct GetPPDAttribs
 {
     osl::Condition      m_aCondition;
@@ -115,6 +117,8 @@ struct GetPPDAttribs
         return aRetval;
     }
 };
+
+}
 
 extern "C" {
     static void getPPDWorker(void* pData)
@@ -593,11 +597,15 @@ FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand 
     return fp;
 }
 
+namespace {
+
 struct less_ppd_key
 {
     bool operator()(const PPDKey* left, const PPDKey* right)
     { return left->getOrderDependency() < right->getOrderDependency(); }
 };
+
+}
 
 void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions )
 {

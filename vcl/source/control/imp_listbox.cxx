@@ -581,6 +581,8 @@ void ImplListBoxWindow::SetUserItemSize( const Size& rSz )
     ImplCalcMetrics();
 }
 
+namespace {
+
 struct ImplEntryMetrics
 {
     bool    bText;
@@ -591,6 +593,8 @@ struct ImplEntryMetrics
     long    nImgWidth;
     long    nImgHeight;
 };
+
+}
 
 long ImplEntryType::getHeightWithMargin() const
 {

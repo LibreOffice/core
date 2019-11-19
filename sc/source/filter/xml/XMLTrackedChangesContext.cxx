@@ -39,6 +39,8 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
+namespace {
+
 class ScXMLChangeInfoContext : public ScXMLImportContext
 {
     ScMyActionInfo                      aInfo;
@@ -347,6 +349,8 @@ public:
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
+
+}
 
 ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
                                               const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,

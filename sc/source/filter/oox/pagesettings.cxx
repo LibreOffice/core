@@ -353,8 +353,6 @@ enum HFPortionId
     HF_COUNT
 };
 
-}
-
 struct HFPortionInfo
 {
     Reference<text::XText>  mxText;                 /// XText interface of this portion.
@@ -365,6 +363,8 @@ struct HFPortionInfo
 
     bool                initialize( const Reference<text::XText>& rxText );
 };
+
+}
 
 bool HFPortionInfo::initialize( const Reference<text::XText>& rxText )
 {

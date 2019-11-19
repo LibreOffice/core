@@ -243,6 +243,8 @@ namespace sfx2
 
 // struct IndexEntry_Impl ------------------------------------------------
 
+namespace {
+
 struct IndexEntry_Impl
 {
     bool const        m_bSubEntry;
@@ -262,6 +264,8 @@ struct ContentEntry_Impl
     ContentEntry_Impl( const OUString& rURL, bool bFolder ) :
         aURL( rURL ), bIsFolder( bFolder ) {}
 };
+
+}
 
 // ContentListBox_Impl ---------------------------------------------------
 

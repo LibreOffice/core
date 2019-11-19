@@ -75,6 +75,8 @@
 #define THREADIMPL_FLAGS_ATTACHED   0x00010
 #define THREADIMPL_FLAGS_DESTROYED  0x00020
 
+namespace {
+
 typedef struct osl_thread_impl_st
 {
     pthread_t           m_hThread;
@@ -95,8 +97,12 @@ struct osl_thread_priority_st
     int m_Lowest;
 };
 
+}
+
 #define OSL_THREAD_PRIORITY_INITIALIZER { 127, 96, 64, 32, 0 }
 static void osl_thread_priority_init_Impl();
+
+namespace {
 
 struct osl_thread_textencoding_st
 {
@@ -104,8 +110,12 @@ struct osl_thread_textencoding_st
     rtl_TextEncoding m_default; /* the default text encoding */
 };
 
+}
+
 #define OSL_THREAD_TEXTENCODING_INITIALIZER { 0, RTL_TEXTENCODING_DONTKNOW }
 static void osl_thread_textencoding_init_Impl();
+
+namespace {
 
 struct osl_thread_global_st
 {
@@ -113,6 +123,8 @@ struct osl_thread_global_st
     struct osl_thread_priority_st     m_priority;
     struct osl_thread_textencoding_st m_textencoding;
 };
+
+}
 
 static struct osl_thread_global_st g_thread =
 {
@@ -555,12 +567,16 @@ void SAL_CALL osl_setThreadName(char const * name)
 
 /* osl_getThreadIdentifier @@@ see TODO @@@ */
 
+namespace {
+
 struct HashEntry
 {
     pthread_t            Handle;
     oslThreadIdentifier  Ident;
     HashEntry *          Next;
 };
+
+}
 
 static HashEntry* HashTable[31];
 static const int HashSize = SAL_N_ELEMENTS(HashTable);
@@ -951,11 +967,15 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     return Priority;
 }
 
+namespace {
+
 struct wrapper_pthread_key
 {
     pthread_key_t m_key;
     oslThreadKeyCallbackFunction pfnCallback;
 };
+
+}
 
 oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallback )
 {

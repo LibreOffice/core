@@ -324,11 +324,15 @@ namespace DOM
         m_streamListeners.erase(aListener);
     }
 
+    namespace {
+
     // IO context functions for libxml2 interaction
     typedef struct {
         Reference< XOutputStream > stream;
         bool const allowClose;
     } IOContext;
+
+    }
 
     extern "C" {
     // write callback

@@ -704,6 +704,8 @@ IMPL_LINK(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
     }
 }
 
+namespace {
+
 struct ImplDelayedDispatch
 {
     Reference< XDispatch >      xDispatch;
@@ -719,6 +721,8 @@ struct ImplDelayedDispatch
     {
     }
 };
+
+}
 
 static void implDispatchDelayed( void*, void* pArg )
 {

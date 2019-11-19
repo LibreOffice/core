@@ -1848,6 +1848,8 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
     return nullptr;    //TODO: exception?
 }
 
+namespace {
+
 class ScDPGlobalMembersOrder
 {
     ScDPLevel&  rLevel;
@@ -1861,6 +1863,8 @@ public:
 
     bool operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
 };
+
+}
 
 bool ScDPGlobalMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
 {

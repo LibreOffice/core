@@ -83,8 +83,6 @@ namespace svt
             }
             return selectedDataSource;
         }
-    }
-
 
     // = IAssigmentData
 
@@ -111,6 +109,7 @@ namespace svt
         virtual void    setCommand(const OUString& _rCommand) = 0;
     };
 
+    }
 
     IAssigmentData::~IAssigmentData()
     {
@@ -118,6 +117,8 @@ namespace svt
 
 
     // = AssigmentTransientData
+
+    namespace {
 
     class AssigmentTransientData : public IAssigmentData
     {
@@ -145,6 +146,7 @@ namespace svt
         virtual void    setCommand(const OUString& _rCommand) override;
     };
 
+    }
 
     AssigmentTransientData::AssigmentTransientData(
             const OUString& _rDataSourceName, const OUString& _rTableName,
@@ -232,6 +234,8 @@ namespace svt
 
     // = AssignmentPersistentData
 
+    namespace {
+
     class AssignmentPersistentData
             :public ::utl::ConfigItem
             ,public IAssigmentData
@@ -268,6 +272,7 @@ namespace svt
         void            clearFieldAssignment(const OUString& _rLogicalName);
     };
 
+    }
 
 void AssignmentPersistentData::Notify( const css::uno::Sequence<OUString>& )
 {

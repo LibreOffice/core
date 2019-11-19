@@ -122,6 +122,8 @@ void IndexerPreProcessor::processDocument
     }
 }
 
+namespace {
+
 struct Data
 {
     std::vector<std::string> _idList;
@@ -139,6 +141,8 @@ struct Data
         return ret;
     }
 };
+
+}
 
 static void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::string& aValueStr )
 {
@@ -163,6 +167,8 @@ static void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const
     if (fprintf( pFile, "%c", cLF ) < 0)
         fprintf(stderr, "fwrite to db failed\n");
 }
+
+namespace {
 
 class HelpKeyword
 {
@@ -189,6 +195,8 @@ public:
         fclose( pFile );
     }
 };
+
+}
 
 namespace URLEncoder
 {

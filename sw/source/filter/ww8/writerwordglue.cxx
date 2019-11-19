@@ -321,6 +321,8 @@ namespace myImplHelpers
         return GetSubsFontName(rFont, SubsFontFlags::ONLYONE | SubsFontFlags::MS);
     }
 
+    namespace {
+
     //Utility to remove entries before a given starting position
     class IfBeforeStart
     {
@@ -333,6 +335,8 @@ namespace myImplHelpers
             return rEntry.mnEndPos < mnStart;
         }
     };
+
+    }
 }
 
 /// Count what Word calls left/right margin from a format's LRSpace + Box.

@@ -26,6 +26,8 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
 class SvXMLSectionListContext : public SvXMLImportContext
 {
 private:
@@ -73,6 +75,7 @@ public:
     }
 };
 
+}
 
 SwXMLSectionList::SwXMLSectionList(const css::uno::Reference< css::uno::XComponentContext >& rContext, std::vector<OUString> &rNewSectionList)
 : SvXMLImport(rContext, "")

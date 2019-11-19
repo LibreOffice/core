@@ -94,8 +94,12 @@ struct UndoTableCpyTable_Entry
     explicit UndoTableCpyTable_Entry( const SwTableBox& rBox );
 };
 
+namespace {
+
 class SaveBox;
 class SaveLine;
+
+}
 
 class SaveTable
 {
@@ -129,9 +133,11 @@ public:
     bool IsNewModel() const { return m_bNewModel; }
 };
 
+namespace {
+
 class SaveLine
 {
-    friend class SaveTable;
+    friend SaveTable;
     friend class SaveBox;
 
     SaveLine* pNext;
@@ -174,6 +180,8 @@ public:
 
     void CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTable );
 };
+
+}
 
 #if OSL_DEBUG_LEVEL > 0
 #include <shellio.hxx>
@@ -2177,6 +2185,8 @@ void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     pPam->GetPoint()->nContent.Assign( pTextNd, 0 );
 }
 
+namespace {
+
 /** switch the RedlineFlags on the given document, using
  * SetRedlineFlags_intern. This class set the mode in the constructor,
  * and changes it back in the destructor, i.e. it uses the
@@ -2195,6 +2205,8 @@ public:
 
     ~RedlineFlagsInternGuard();
 };
+
+}
 
 RedlineFlagsInternGuard::RedlineFlagsInternGuard(
     SwDoc& rDoc,

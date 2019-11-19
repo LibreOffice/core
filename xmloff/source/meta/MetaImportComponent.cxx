@@ -28,6 +28,8 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
 class XMLMetaImportComponent : public SvXMLImport
 {
 private:
@@ -47,6 +49,8 @@ protected:
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 };
+
+}
 
 // global functions to support the component
 

@@ -62,6 +62,8 @@
 #undef      DEL_ONLY_EMPTY_LINES
 #undef      DEL_EMPTY_BOXES_AT_START_AND_END
 
+namespace {
+
 struct CmpLPt
 {
     Point aPos;
@@ -82,8 +84,11 @@ struct CmpLPt
     long Y() const { return aPos.Y(); }
 };
 
+}
+
 typedef o3tl::sorted_vector<CmpLPt> MergePos;
 
+namespace {
 
 struct Sort_CellFrame
 {
@@ -92,6 +97,8 @@ struct Sort_CellFrame
     explicit Sort_CellFrame( const SwCellFrame& rCFrame )
         : pFrame( &rCFrame ) {}
 };
+
+}
 
 static const SwLayoutFrame *lcl_FindCellFrame( const SwLayoutFrame *pLay )
 {

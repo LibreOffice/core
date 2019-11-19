@@ -34,6 +34,8 @@
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
+namespace {
+
 /// Popup menu to select the selection type
 class SelectionTypePopup
 {
@@ -47,6 +49,8 @@ public:
     sal_uInt16 GetState() const { return id_to_state(m_xMenu->GetCurItemIdent()); }
     sal_uInt16 Execute(vcl::Window* pWindow, const Point& rPopupPos) { return m_xMenu->Execute(pWindow, rPopupPos); }
 };
+
+}
 
 sal_uInt16 SelectionTypePopup::id_to_state(const OString& rIdent)
 {

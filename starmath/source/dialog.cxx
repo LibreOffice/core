@@ -67,8 +67,6 @@ void lclGetSettingColors(Color& rBackgroundColor, Color& rTextColor)
     }
 }
 
-} // end anonymous namespace
-
 // Since it's better to set/query the FontStyle via its attributes rather
 // than via the StyleName we create a way to translate
 // Attribute <-> StyleName
@@ -87,6 +85,8 @@ public:
     const OUString& GetStyleName(const vcl::Font& rFont) const;
     const OUString& GetStyleName(sal_uInt16 nIdx) const;
 };
+
+} // end anonymous namespace
 
 SmFontStyles::SmFontStyles()
     : aNormal(SmResId(RID_FONTREGULAR))
@@ -340,6 +340,8 @@ SmFontDialog::~SmFontDialog()
 {
 }
 
+namespace {
+
 class SaveDefaultsQuery : public weld::MessageDialogController
 {
 public:
@@ -349,6 +351,8 @@ public:
     {
     }
 };
+
+}
 
 IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, weld::Button&, void )
 {
@@ -530,10 +534,14 @@ void SmFontTypeDialog::WriteTo(SmFormat &rFormat) const
 
 /**************************************************************************/
 
+namespace {
+
 struct FieldMinMax
 {
     sal_uInt16 nMin, nMax;
 };
+
+}
 
 // Data for min and max values of the 4 metric fields
 // for each of the 10 categories

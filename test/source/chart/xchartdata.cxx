@@ -23,6 +23,8 @@ using namespace css;
 
 namespace apitest
 {
+namespace
+{
 class MockedChartDataChangeEventListener
     : public ::cppu::WeakImplHelper<chart::XChartDataChangeEventListener>
 {
@@ -40,6 +42,7 @@ public:
 
     virtual void SAL_CALL disposing(const lang::EventObject& /* xEvent */) override {}
 };
+}
 
 void XChartData::testGetNotANumber()
 {

@@ -3015,6 +3015,8 @@ void WW8PLCFx::SetIdx2(sal_uInt32)
 {
 }
 
+namespace {
+
 class SamePos
 {
 private:
@@ -3024,6 +3026,8 @@ public:
     bool operator()(const std::unique_ptr<WW8PLCFx_Fc_FKP::WW8Fkp>& pFkp)
         {return mnPo == pFkp->GetFilePos();}
 };
+
+}
 
 bool WW8PLCFx_Fc_FKP::NewFkp()
 {
@@ -7031,7 +7035,6 @@ std::unique_ptr<WW8_STD> WW8Style::Read1Style(sal_uInt16& rSkip, OUString* pStri
 
 namespace {
 const sal_uInt16 maxStrSize = 65;
-}
 
 struct WW8_FFN_Ver6
 {
@@ -7061,6 +7064,8 @@ struct WW8_FFN_Ver8 : public WW8_FFN_BASE
                         // name of an alternate font to use if the first named
                         // font does not exist on this system.
 };
+
+}
 
 // #i43762# check font name for illegal characters
 static void lcl_checkFontname( OUString& sString )

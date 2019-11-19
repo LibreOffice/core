@@ -191,6 +191,8 @@ private:
     DECL_STATIC_LINK(SvxStyleBox_Impl, ShowMoreHdl, void*, void);
 };
 
+namespace {
+
 class SvxFontNameBox_Impl : public FontNameBox
 {
     using Window::Update;
@@ -259,11 +261,15 @@ public:
 
 };
 
+}
+
 void SvxFrmValueSet_Impl::MouseButtonUp( const MouseEvent& rMEvt )
 {
     nModifier = rMEvt.GetModifier();
     ValueSet::MouseButtonUp(rMEvt);
 }
+
+namespace {
 
 class SvxFrameWindow_Impl : public svtools::ToolbarPopup
 {
@@ -290,8 +296,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
-namespace
-{
     class LineListBox final : public ListBox
     {
     public:
@@ -606,6 +610,8 @@ namespace
     }
 }
 
+namespace {
+
 class SvxLineWindow_Impl : public svtools::ToolbarPopup
 {
 private:
@@ -644,6 +650,8 @@ public:
     virtual ~SvxCurrencyList_Impl() override { disposeOnce(); }
     virtual void dispose() override;
 };
+
+}
 
 class SvxStyleToolBoxControl;
 
@@ -3308,6 +3316,8 @@ VclPtr<vcl::Window> SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pPare
     return pBox.get();
 }
 
+namespace {
+
 class SvxFontNameToolBoxControl : public cppu::ImplInheritanceHelper< svt::ToolboxController,
                                                                       css::lang::XServiceInfo >
 {
@@ -3331,6 +3341,8 @@ public:
 private:
     VclPtr<SvxFontNameBox_Impl> m_pBox;
 };
+
+}
 
 SvxFontNameToolBoxControl::SvxFontNameToolBoxControl()
 {
@@ -3640,6 +3652,8 @@ com_sun_star_comp_svx_ColorToolBoxControl_get_implementation(
 
 // class SvxFrameToolBoxControl --------------------------------------------
 
+namespace {
+
 class SvxFrameToolBoxControl : public svt::PopupWindowController
 {
 public:
@@ -3656,6 +3670,8 @@ private:
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
     using svt::ToolboxController::createPopupWindow;
 };
+
+}
 
 SvxFrameToolBoxControl::SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )

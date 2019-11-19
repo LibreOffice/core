@@ -64,8 +64,6 @@ enum PathSegmentType {
     PS_CLOSEPATH = 4
 };
 
-}
-
 struct PSPathElement
 {
     PathSegmentType type;
@@ -106,6 +104,8 @@ struct GlyphOffsets {
     sal_uInt32 nGlyphs;           /* number of glyphs in the font + 1 */
     sal_uInt32 *offs;             /* array of nGlyphs offsets */
 };
+
+}
 
 static void *smalloc(size_t size)
 {
@@ -1042,12 +1042,16 @@ static sal_uInt32 getGlyph0(const sal_uInt8* cmap, sal_uInt32, sal_uInt32 c) {
     }
 }
 
+namespace {
+
 struct subHeader2 {
     sal_uInt16 const firstCode;
     sal_uInt16 const entryCount;
     sal_uInt16 const idDelta;
     sal_uInt16 idRangeOffset;
 };
+
+}
 
 static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize, sal_uInt32 c) {
     sal_uInt16 const *CMAP2 = reinterpret_cast<sal_uInt16 const *>(cmap);

@@ -35,8 +35,12 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
+namespace {
+
 class SvtSaveOptions_Impl;
 class SvtLoadOptions_Impl;
+
+}
 
 #define CFG_READONLY_DEFAULT    false
 
@@ -48,6 +52,8 @@ struct SvtLoadSaveOptions_Impl
 
 static std::unique_ptr<SvtLoadSaveOptions_Impl> pOptions;
 static sal_Int32           nRefCount = 0;
+
+namespace {
 
 class SvtSaveOptions_Impl : public utl::ConfigItem
 {
@@ -127,6 +133,8 @@ public:
 
     bool                IsReadOnly( SvtSaveOptions::EOption eOption ) const;
 };
+
+}
 
 void SvtSaveOptions_Impl::SetAutoSaveTime( sal_Int32 n )
 {
@@ -686,6 +694,8 @@ void SvtSaveOptions_Impl::Notify( const Sequence<OUString>& )
 {
 }
 
+namespace {
+
 class SvtLoadOptions_Impl : public utl::ConfigItem
 {
 private:
@@ -701,6 +711,8 @@ public:
     void                    SetLoadUserSettings(bool b){bLoadUserDefinedSettings = b; SetModified();}
     bool                IsLoadUserSettings() const {return bLoadUserDefinedSettings;}
 };
+
+}
 
 const sal_Char cUserDefinedSettings[] = "UserDefinedSettings";
 

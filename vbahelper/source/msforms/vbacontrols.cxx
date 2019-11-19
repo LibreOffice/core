@@ -42,6 +42,8 @@ using namespace ooo::vba;
 
 typedef  std::unordered_map< OUString, sal_Int32 > ControlIndexMap;
 
+namespace {
+
 class ControlArrayWrapper : public ::cppu::WeakImplHelper< container::XNameAccess, container::XIndexAccess >
 {
     uno::Reference< awt::XControlContainer > mxDialog;
@@ -190,6 +192,7 @@ public:
 
 };
 
+}
 
 static uno::Reference<container::XIndexAccess >
 lcl_controlsWrapper( const uno::Reference< awt::XControl >& xDlg )

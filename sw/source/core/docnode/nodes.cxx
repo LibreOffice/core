@@ -1395,11 +1395,15 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
     }
 }
 
+namespace {
+
 struct HighLevel
 {
     sal_uInt16 nLevel, nTop;
     explicit HighLevel( sal_uInt16 nLv ) : nLevel( nLv ), nTop( nLv ) {}
 };
+
+}
 
 static bool lcl_HighestLevel( const SwNodePtr& rpNode, void * pPara )
 {

@@ -77,6 +77,8 @@ using namespace ::dbtools;
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 
+namespace {
+
 class ScriptEventListenerWrapper : public cppu::WeakImplHelper< XScriptListener >
 {
 public:
@@ -163,6 +165,8 @@ struct PropertySetInfo
     bool            bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
                                             // sal_False -> the set has _no_ such property or its value isn't empty
 };
+
+}
 
 typedef std::map<Reference< XPropertySet >, PropertySetInfo> PropertySetInfoCache;
 

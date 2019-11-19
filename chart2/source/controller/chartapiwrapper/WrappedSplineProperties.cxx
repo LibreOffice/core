@@ -40,6 +40,9 @@ namespace chart
 namespace wrapper
 {
 
+namespace
+{
+
 //PROPERTYTYPE is the type of the outer property
 
 template< typename PROPERTYTYPE >
@@ -167,8 +170,6 @@ public:
     virtual css::uno::Any convertOuterToInnerValue( const css::uno::Any& rOuterValue ) const override;
 };
 
-namespace
-{
 enum
 {
     //spline properties

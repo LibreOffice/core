@@ -263,6 +263,8 @@ IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl, SvtValueSet*, voi
     m_xDialog->response(RET_OK);
 }
 
+namespace {
+
 class FontworkAlignmentWindow : public ToolbarMenu
 {
 public:
@@ -277,6 +279,8 @@ private:
 
     void    implSetAlignment( int nAlignmentMode, bool bEnabled );
 };
+
+}
 
 static const OUStringLiteral gsFontworkAlignment(".uno:FontworkAlignment");
 
@@ -348,6 +352,8 @@ IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl, ToolbarMenu*, void)
     }
 }
 
+namespace {
+
 class FontworkAlignmentControl : public svt::PopupWindowController
 {
 public:
@@ -365,6 +371,7 @@ public:
     using  svt::PopupWindowController::createPopupWindow;
 };
 
+}
 
 FontworkAlignmentControl::FontworkAlignmentControl( const Reference< XComponentContext >& rxContext )
 : svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), ".uno:FontworkAlignment" )
@@ -412,6 +419,7 @@ com_sun_star_comp_svx_FontworkAlignmentControl_get_implementation(
     return cppu::acquire(new FontworkAlignmentControl(xContext));
 }
 
+namespace {
 
 class FontworkCharacterSpacingWindow : public ToolbarMenu
 {
@@ -428,6 +436,9 @@ private:
     void    implSetKernCharacterPairs( bool bEnabled );
 
 };
+
+}
+
 static const OUStringLiteral gsFontworkCharacterSpacing(".uno:FontworkCharacterSpacing");
 static const OUStringLiteral gsFontworkKernCharacterPairs(".uno:FontworkKernCharacterPairs");
 
@@ -561,6 +572,8 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
     }
 }
 
+namespace {
+
 class FontworkCharacterSpacingControl : public svt::PopupWindowController
 {
 public:
@@ -578,6 +591,7 @@ public:
     using svt::PopupWindowController::createPopupWindow;
 };
 
+}
 
 FontworkCharacterSpacingControl::FontworkCharacterSpacingControl( const Reference< XComponentContext >& rxContext )
 : svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), ".uno:FontworkCharacterSpacingFloater" )

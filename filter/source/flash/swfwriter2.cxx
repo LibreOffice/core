@@ -531,6 +531,7 @@ void FillStyle::addTo( Tag* pTag ) const
     }
 }
 
+namespace {
 
 struct GradRecord
 {
@@ -539,6 +540,8 @@ struct GradRecord
 
     GradRecord( sal_uInt8 nRatio, const Color& rColor ) : mnRatio( nRatio ), maColor( rColor ) {}
 };
+
+}
 
 // TODO: better emulation of our gradients
 void FillStyle::Impl_addGradient( Tag* pTag ) const

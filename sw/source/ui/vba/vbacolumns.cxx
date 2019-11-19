@@ -28,6 +28,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 class ColumnsEnumWrapper : public EnumerationHelper_BASE
 {
     uno::WeakReference< XHelperInterface > mxParent;
@@ -55,6 +57,8 @@ public:
         throw container::NoSuchElementException();
     }
 };
+
+}
 
 SwVbaColumns::SwVbaColumns( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextTable >& xTextTable, const uno::Reference< table::XTableColumns >& xTableColumns ) : SwVbaColumns_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableColumns, uno::UNO_QUERY_THROW ) ), mxTextTable( xTextTable )
 {

@@ -133,6 +133,8 @@ using namespace ::svt;
 namespace dbaui
 {
 
+namespace {
+
 // OParameterContinuation
 class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
 {
@@ -146,6 +148,8 @@ public:
 // XInteractionSupplyParameters
     virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) override;
 };
+
+}
 
 void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues )
 {

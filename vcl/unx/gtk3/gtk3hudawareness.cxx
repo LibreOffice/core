@@ -11,6 +11,8 @@
 
 #include <unx/gtk/hudawareness.h>
 
+namespace {
+
 struct HudAwarenessHandle
 {
   GDBusConnection *connection;
@@ -18,6 +20,8 @@ struct HudAwarenessHandle
   gpointer user_data;
   GDestroyNotify notify;
 };
+
+}
 
 static void
 hud_awareness_method_call (GDBusConnection       * /* connection */,

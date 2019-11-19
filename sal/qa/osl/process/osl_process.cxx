@@ -80,6 +80,8 @@ static OUString getExecutablePath()
 
 #if !defined _WIN32
 
+namespace {
+
 class exclude
 {
 public:
@@ -118,8 +120,6 @@ private:
     std::vector<OString> exclude_list_;
 };
 
-namespace
-{
     void tidy_container(std::vector<OString> &env_container)
     {
         //sort them because there are no guarantees to ordering

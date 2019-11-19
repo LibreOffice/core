@@ -31,6 +31,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 class BookmarksEnumeration : public EnumerationHelperImpl
 {
     uno::Reference< frame::XModel > mxModel;
@@ -107,6 +109,8 @@ public:
         return mxIndexAccess->getByIndex( Index );
     }
 };
+
+}
 
 SwVbaBookmarks::SwVbaBookmarks( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xBookmarks, const uno::Reference< frame::XModel >& xModel ): SwVbaBookmarks_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new BookmarkCollectionHelper( xBookmarks ) ) ), mxModel( xModel )
 {

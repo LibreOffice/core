@@ -22,6 +22,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 
+namespace {
+
 class NumberingToolBoxControl;
 
 class NumberingPopup : public svtools::ToolbarMenu
@@ -58,6 +60,8 @@ public:
 
     using svt::ToolboxController::createPopupWindow;
 };
+
+}
 
 //class NumberingPopup
 NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,

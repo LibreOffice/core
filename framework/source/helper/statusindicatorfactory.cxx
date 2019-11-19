@@ -50,7 +50,12 @@
 namespace framework{
 
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  ///< static counter for rescheduling
+
+namespace {
+
 struct RescheduleLock: public rtl::Static<osl::Mutex, RescheduleLock> {}; ///< mutex to guard the m_nInReschedule
+
+}
 
 const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";
 

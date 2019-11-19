@@ -30,6 +30,8 @@
 * PriorityMergedHBox is a VclHBox which hides its own children if there is no sufficient space.
 */
 
+namespace
+{
 class PriorityMergedHBox : public PriorityHBox
 {
 private:
@@ -69,6 +71,7 @@ public:
         PriorityHBox::dispose();
     }
 };
+}
 
 IMPL_LINK(PriorityMergedHBox, PBClickHdl, Button*, /*pButton*/, void)
 {

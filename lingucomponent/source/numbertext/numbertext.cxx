@@ -66,6 +66,8 @@ static osl::Mutex& GetNumberTextMutex()
     return aMutex;
 }
 
+namespace
+{
 class NumberText_Impl : public ::cppu::WeakImplHelper<XNumberText, XServiceInfo>
 {
 #if ENABLE_LIBNUMBERTEXT
@@ -92,6 +94,7 @@ public:
                                             const ::css::lang::Locale& rLocale) override;
     virtual css::uno::Sequence<css::lang::Locale> SAL_CALL getAvailableLanguages() override;
 };
+}
 
 NumberText_Impl::NumberText_Impl()
     : m_bInitialized(false)

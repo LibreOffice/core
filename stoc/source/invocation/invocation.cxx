@@ -81,6 +81,7 @@ static Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< 
     return xRefl->forName( rType.getTypeName() );
 }
 
+namespace {
 
 class Invocation_Impl
     : public OWeakObject
@@ -214,6 +215,7 @@ private:
     bool const                          mbFromOLE;
 };
 
+}
 
 Invocation_Impl::Invocation_Impl
 (
@@ -694,6 +696,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
     throw aExc;
 }
 
+namespace {
 
 // Struct to optimize sorting
 struct MemberItem
@@ -707,6 +710,8 @@ struct MemberItem
     // (Index to NameAccess sequence for eMode==NAMEACCESS etc.)
     sal_Int32 nIndex;
 };
+
+}
 
 // Implementation of getting name or info
 // String sequence will be filled when pStringSeq != NULL
@@ -1004,6 +1009,7 @@ Sequence< sal_Int8 > SAL_CALL Invocation_Impl::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
+namespace {
 
 class InvocationService
     : public WeakImplHelper< XSingleServiceFactory, XServiceInfo >
@@ -1027,6 +1033,8 @@ private:
     Reference<XIntrospection> xIntrospection;
     Reference<XIdlReflection> xCoreReflection;
 };
+
+}
 
 InvocationService::InvocationService( const Reference<XComponentContext> & xCtx )
     : mxCtx( xCtx )

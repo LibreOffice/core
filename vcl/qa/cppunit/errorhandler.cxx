@@ -12,9 +12,13 @@
 
 #include <vcl/errinf.hxx>
 
+class ErrorHandlerTest;
+
+namespace {
+
 class MockErrorHandler : private ErrorHandler
 {
-    friend class ErrorHandlerTest;
+    friend ErrorHandlerTest;
 
 protected:
     virtual bool CreateString(const ErrorInfo *pErrInfo, OUString &rErrString) const override
@@ -28,6 +32,7 @@ protected:
     }
 };
 
+}
 
 class ErrorHandlerTest : public test::BootstrapFixture
 {

@@ -33,6 +33,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 // little helper class to forbid follow formatting for the given text frame
 class SwForbidFollowFormat
 {
@@ -56,6 +58,8 @@ public:
         }
     }
 };
+
+}
 
 SwObjectFormatterTextFrame::SwObjectFormatterTextFrame( SwTextFrame& _rAnchorTextFrame,
                                                   const SwPageFrame& _rPageFrame,

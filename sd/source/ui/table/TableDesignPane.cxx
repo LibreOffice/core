@@ -419,6 +419,8 @@ IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
     }
 }
 
+namespace {
+
 struct CellInfo
 {
     Color maCellColor;
@@ -427,6 +429,8 @@ struct CellInfo
 
     explicit CellInfo( const Reference< XStyle >& xStyle );
 };
+
+}
 
 CellInfo::CellInfo( const Reference< XStyle >& xStyle )
 : maBorder(std::make_shared<SvxBoxItem>(SDRATTR_TABLE_BORDER))
@@ -457,6 +461,8 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
 typedef std::vector< std::shared_ptr< CellInfo > > CellInfoVector;
 typedef std::shared_ptr< CellInfo > CellInfoMatrix[nPreviewColumns * nPreviewRows];
 
+namespace {
+
 struct TableStyleSettings
 {
     bool mbUseFirstRow;
@@ -474,6 +480,8 @@ struct TableStyleSettings
         , mbUseRowBanding(true)
         , mbUseColumnBanding(false) {}
 };
+
+}
 
 static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, CellInfoVector& rVector )
 {

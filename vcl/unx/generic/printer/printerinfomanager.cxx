@@ -671,10 +671,17 @@ OUString SystemQueueInfo::getCommand() const
     return aRet;
 }
 
+namespace {
+
 struct SystemCommandParameters;
+
+}
+
 typedef void(* tokenHandler)(const std::vector< OString >&,
                 std::vector< PrinterInfoManager::SystemPrintQueue >&,
                 const SystemCommandParameters*);
+
+namespace {
 
 struct SystemCommandParameters
 {
@@ -685,6 +692,8 @@ struct SystemCommandParameters
     unsigned int const    nForeTokenCount;
     tokenHandler const    pHandler;
 };
+
+}
 
 #if ! (defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD))
 static void lpgetSysQueueTokenHandler(

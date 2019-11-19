@@ -155,6 +155,8 @@ using ::com::sun::star::document::XUndoManager;
 using ::com::sun::star::document::XUndoAction;
 using ::com::sun::star::frame::XModel;
 
+namespace {
+
 /** This Listener is used to get notified when the XDocumentProperties of the
     XModel change.
  */
@@ -172,6 +174,8 @@ public:
     virtual void SAL_CALL disposing( const lang::EventObject& ) override;
     virtual void SAL_CALL modified( const lang::EventObject& ) override;
 };
+
+}
 
 void SAL_CALL SfxDocInfoListener_Impl::modified( const lang::EventObject& )
 {
@@ -316,6 +320,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 // static member initialization.
 sal_Int64 IMPL_SfxBaseModel_DataContainer::g_nInstanceCounter = 0;
 
+namespace {
 
 // Listener that forwards notifications from the PrintHelper to the "real" listeners
 class SfxPrintHelperListener_Impl : public ::cppu::WeakImplHelper< view::XPrintJobListener >
@@ -329,6 +334,8 @@ public:
     virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) override ;
     virtual void SAL_CALL printJobEvent( const view::PrintJobEvent& rEvent ) override;
 };
+
+}
 
 void SAL_CALL SfxPrintHelperListener_Impl::disposing( const lang::EventObject& )
 {
@@ -346,6 +353,8 @@ void SAL_CALL SfxPrintHelperListener_Impl::printJobEvent( const view::PrintJobEv
     }
 }
 
+namespace {
+
 // SfxOwnFramesLocker ====================================================================================
 // allows to lock all the frames related to the provided SfxObjectShell
 class SfxOwnFramesLocker
@@ -357,6 +366,8 @@ public:
     explicit SfxOwnFramesLocker( SfxObjectShell const * ObjechShell );
     ~SfxOwnFramesLocker();
 };
+
+}
 
 SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell const * pObjectShell )
 {
@@ -440,6 +451,8 @@ vcl::Window* SfxOwnFramesLocker::GetVCLWindow( const Reference< frame::XFrame >&
     return pWindow;
 }
 
+namespace {
+
 // SfxSaveGuard ====================================================================================
 class SfxSaveGuard
 {
@@ -456,6 +469,8 @@ class SfxSaveGuard
                            IMPL_SfxBaseModel_DataContainer* pData);
         ~SfxSaveGuard();
 };
+
+}
 
 SfxSaveGuard::SfxSaveGuard(const Reference< frame::XModel >&             xModel                      ,
                                  IMPL_SfxBaseModel_DataContainer* pData)

@@ -155,6 +155,8 @@ struct DB_Column
     }
 };
 
+namespace {
+
 struct DB_ColumnConfigData
 {
     SwInsDBColumns aDBColumns;
@@ -176,6 +178,8 @@ struct DB_ColumnConfigData
         bIsField = bIsEmptyHeadln = false;
     }
 };
+
+}
 
 bool SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
 {

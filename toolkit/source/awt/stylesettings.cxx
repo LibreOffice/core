@@ -79,6 +79,8 @@ namespace toolkit
 
     //= StyleMethodGuard
 
+    namespace {
+
     class StyleMethodGuard
     {
     public:
@@ -92,6 +94,7 @@ namespace toolkit
         SolarMutexGuard const  m_aGuard;
     };
 
+    }
 
     //= WindowStyleSettings
 

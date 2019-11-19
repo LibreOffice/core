@@ -41,6 +41,8 @@ using namespace ::com::sun::star::uno;
 
 namespace dp_gui {
 
+namespace {
+
 struct LicenseDialogImpl : public weld::GenericDialogController
 {
     bool m_bLicenseRead;
@@ -73,6 +75,8 @@ struct LicenseDialogImpl : public weld::GenericDialogController
 
     bool IsEndReached() const;
 };
+
+}
 
 LicenseDialogImpl::LicenseDialogImpl(
     weld::Window * pParent,

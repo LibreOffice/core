@@ -35,6 +35,8 @@
 
 namespace vcl
 {
+namespace {
+
 struct PDFExtOutDevDataSync
 {
     enum Action{    CreateNamedDest,
@@ -74,6 +76,8 @@ struct PDFLinkDestination
     sal_Int32               mPageNr;
     PDFWriter::DestAreaType mAreaType;
 };
+
+}
 
 struct GlobalSyncData
 {

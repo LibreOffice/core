@@ -45,6 +45,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
+namespace {
+
 class ButtonsImpl
 {
 public:
@@ -59,6 +61,8 @@ public:
 private:
     Reference< XStorage > mxStorage;
 };
+
+}
 
 ButtonsImpl::ButtonsImpl( const OUString& rURL )
 {

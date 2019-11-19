@@ -163,6 +163,8 @@ static Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params
 
 typedef Sequence< Any > (*Translator)(const Sequence< Any >&);
 
+namespace {
+
 //expand the "TranslateInfo" struct to support more kinds of events
 struct TranslateInfo
 {
@@ -172,11 +174,13 @@ struct TranslateInfo
     void const *pPara;            //Parameters for the above approve method
 };
 
+}
 
 typedef std::unordered_map<
     OUString,
     std::list< TranslateInfo > > EventInfoHash;
 
+namespace {
 
 struct TranslatePropMap
 {
@@ -184,16 +188,22 @@ struct TranslatePropMap
     TranslateInfo const aTransInfo;
 };
 
+}
+
 static bool ApproveAll(const ScriptEvent& evt, void const * pPara); //allow all types of controls to execute the event
 static bool ApproveType(const ScriptEvent& evt, void const * pPara); //certain types of controls should execute the event, those types are given by pPara
 static bool DenyType(const ScriptEvent& evt, void const * pPara);    //certain types of controls should not execute the event, those types are given by pPara
 static bool DenyMouseDrag(const ScriptEvent& evt, void const * pPara); //used for VBA MouseMove event when "Shift" key is pressed
+
+namespace {
 
 struct TypeList
 {
     uno::Type const * pTypeList;
     int const nListLength;
 };
+
+}
 
 Type const typeXFixedText = cppu::UnoType<awt::XFixedText>::get();
 Type const typeXTextComponent = cppu::UnoType<awt::XTextComponent>::get();
@@ -286,6 +296,8 @@ static EventInfoHash& getEventTransInfo()
 
 // Helper class
 
+namespace {
+
 class ScriptEventHelper
 {
 public:
@@ -299,6 +311,8 @@ private:
     Reference< XInterface > m_xControl;
     bool const m_bDispose;
 };
+
+}
 
 static bool
 eventMethodToDescriptor( const OUString& rEventMethod, ScriptEventDescriptor& evtDesc, const OUString& sCodeName )
@@ -426,6 +440,8 @@ ScriptEventHelper::createEvents( const OUString& sCodeName )
 
 typedef ::cppu::WeakImplHelper< container::XNameContainer > NameContainer_BASE;
 
+namespace {
+
 class ReadOnlyEventsNameContainer : public NameContainer_BASE
 {
 public:
@@ -466,6 +482,8 @@ typedef std::unordered_map< OUString, Any > EventSupplierHash;
     EventSupplierHash m_hEvents;
 };
 
+}
+
 ReadOnlyEventsNameContainer::ReadOnlyEventsNameContainer( const Sequence< OUString >& eventMethods, const OUString& sCodeName )
 {
     for ( const OUString& rSrc : eventMethods )
@@ -503,6 +521,8 @@ ReadOnlyEventsNameContainer::hasByName( const OUString& aName )
     return true;
 }
 
+namespace {
+
 class ReadOnlyEventsSupplier : public ::cppu::WeakImplHelper< XScriptEventsSupplier >
 {
 public:
@@ -515,10 +535,14 @@ private:
     Reference< container::XNameContainer > m_xNameContainer;
 };
 
+}
+
 typedef ::cppu::WeakImplHelper< XScriptListener, util::XCloseListener, lang::XInitialization, css::lang::XServiceInfo > EventListener_BASE;
 
 #define EVENTLSTNR_PROPERTY_ID_MODEL         1
 #define EVENTLSTNR_PROPERTY_MODEL            "Model"
+
+namespace {
 
 class EventListener : public EventListener_BASE
     ,public ::comphelper::OMutexAndBroadcastHelper
@@ -604,6 +628,8 @@ private:
     bool m_bDocClosed;
     SfxObjectShell* mpShell;
 };
+
+}
 
 EventListener::EventListener() :
 OPropertyContainer(GetBroadcastHelper()), m_bDocClosed(false), mpShell( nullptr )
@@ -909,6 +935,8 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
     }
 }
 
+namespace {
+
 class VBAToOOEventDescGen : public ::cppu::WeakImplHelper< XVBAToOOEventDescGen, css::lang::XServiceInfo >
 {
 public:
@@ -934,6 +962,8 @@ public:
     }
 
 };
+
+}
 
 VBAToOOEventDescGen::VBAToOOEventDescGen() {}
 

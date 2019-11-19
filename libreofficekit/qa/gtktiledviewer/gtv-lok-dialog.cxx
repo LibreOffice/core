@@ -28,6 +28,8 @@
 #include <map>
 #include <boost/property_tree/json_parser.hpp>
 
+namespace {
+
 struct GtvLokDialogPrivate
 {
     LOKDocView* lokdocview;
@@ -53,6 +55,8 @@ struct GtvLokDialogPrivate
 
     guint dialogid;
 };
+
+}
 
 #if defined __clang__
 #if __has_warning("-Wdeprecated-volatile")

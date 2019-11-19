@@ -21,6 +21,8 @@ namespace writerperfect
 {
 namespace exp
 {
+namespace
+{
 /// Handler for <table:table-row>.
 class XMLTableRowContext : public XMLImportContext
 {
@@ -60,6 +62,7 @@ public:
 private:
     XMLTableRowContext& m_rRow;
 };
+}
 
 XMLTableCellContext::XMLTableCellContext(XMLImport& rImport, XMLTableRowContext& rRow)
     : XMLImportContext(rImport)
@@ -102,6 +105,8 @@ void XMLTableCellContext::endElement(const OUString& /*rName*/)
     GetImport().GetGenerator().closeTableCell();
 }
 
+namespace
+{
 /// Handler for <table:table-column>.
 class XMLTableColumnContext : public XMLImportContext
 {
@@ -115,6 +120,7 @@ public:
 private:
     librevenge::RVNGPropertyListVector& m_rColumns;
 };
+}
 
 XMLTableColumnContext::XMLTableColumnContext(XMLImport& rImport,
                                              librevenge::RVNGPropertyListVector& rColumns)

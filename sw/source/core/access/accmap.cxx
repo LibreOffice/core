@@ -81,6 +81,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::sw::access;
 
+namespace {
+
 struct SwFrameFunc
 {
     bool operator()( const SwFrame * p1, const SwFrame * p2) const
@@ -88,6 +90,8 @@ struct SwFrameFunc
         return p1 < p2;
     }
 };
+
+}
 
 class SwAccessibleContextMap_Impl
 {
@@ -122,6 +126,8 @@ public:
     iterator erase(const_iterator const & pos) { return maMap.erase(pos); }
 };
 
+namespace {
+
 class SwDrawModellListener_Impl : public SfxListener,
     public ::cppu::WeakImplHelper< document::XShapeEventBroadcaster >
 {
@@ -145,6 +151,8 @@ public:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     void Dispose();
 };
+
+}
 
 SwDrawModellListener_Impl::SwDrawModellListener_Impl( SdrModel *pDrawModel ) :
     maEventListeners( maListenerMutex ),
@@ -252,6 +260,8 @@ void SwDrawModellListener_Impl::Dispose()
     mpDrawModel = nullptr;
 }
 
+namespace {
+
 struct SwShapeFunc
 {
     bool operator()( const SdrObject * p1, const SdrObject * p2) const
@@ -259,6 +269,9 @@ struct SwShapeFunc
         return p1 < p2;
     }
 };
+
+}
+
 typedef std::pair < const SdrObject *, ::rtl::Reference < ::accessibility::AccessibleShape > > SwAccessibleObjShape_Impl;
 
 class SwAccessibleShapeMap_Impl
@@ -599,6 +612,8 @@ void SwAccessibleEventList_Impl::MoveMissingXAccToEnd()
     assert(size() == nSize);
 }
 
+namespace {
+
 struct SwAccessibleChildFunc
 {
     bool operator()( const SwAccessibleChild& r1,
@@ -618,6 +633,8 @@ struct SwAccessibleChildFunc
     }
 };
 
+}
+
 class SwAccessibleEventMap_Impl
 {
 public:
@@ -636,6 +653,8 @@ public:
     std::pair<iterator,bool> emplace(Args&&... args) { return maMap.emplace(std::forward<Args>(args)...); }
     iterator erase(const_iterator const & pos) { return maMap.erase(pos); }
 };
+
+namespace {
 
 struct SwAccessibleParaSelection
 {
@@ -657,6 +676,8 @@ struct SwXAccWeakRefComp
         return _rXAccWeakRef1.get() < _rXAccWeakRef2.get();
     }
 };
+
+}
 
 class SwAccessibleSelectedParas_Impl
 {
@@ -791,6 +812,8 @@ void SwAccPreviewData::InvalidateSelection( const SwPageFrame* _pSelectedPageFra
     assert(mpSelPage);
 }
 
+namespace {
+
 struct ContainsPredicate
 {
     const Point& mrPoint;
@@ -801,6 +824,7 @@ struct ContainsPredicate
     }
 };
 
+}
 
 void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
                                       const Point& rPoint ) const

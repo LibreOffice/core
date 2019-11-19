@@ -70,6 +70,8 @@ static const SvXMLEnumMapEntry<sal_uInt16> aXMLAxisTypeMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
+namespace {
+
 class SchXMLCategoriesContext : public SvXMLImportContext
 {
 private:
@@ -95,6 +97,8 @@ public:
 private:
     Reference< beans::XPropertySet > m_xAxisProps;
 };
+
+}
 
 SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport, const OUString& rLocalName,

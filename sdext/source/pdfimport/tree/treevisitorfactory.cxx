@@ -24,6 +24,8 @@
 
 namespace pdfi
 {
+    namespace {
+
     struct WriterTreeVisitorFactory : public TreeVisitorFactory
     {
         WriterTreeVisitorFactory() {}
@@ -93,6 +95,8 @@ namespace pdfi
                                                                             ));
         }
     };
+
+    }
 
     TreeVisitorFactorySharedPtr createWriterTreeVisitorFactory()
     {

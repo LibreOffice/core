@@ -27,6 +27,8 @@
 
 using ::std::numeric_limits;
 
+namespace {
+
 template<typename ValueType_, typename ExtValueType_ = ValueType_>
 class ScFlatSegmentsImpl
 {
@@ -71,6 +73,8 @@ private:
 
     bool mbTreeSearchEnabled:1;
 };
+
+}
 
 template<typename ValueType_, typename ExtValueType_>
 ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ScFlatSegmentsImpl(SCCOLROW nMax, ValueType nDefault) :

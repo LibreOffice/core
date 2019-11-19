@@ -29,6 +29,8 @@
 #include <string.h>
 #include <stdio.h>
 
+namespace {
+
 /**
     @internal
 */
@@ -37,6 +39,8 @@ struct rtl_arena_list_st
     rtl_memory_lock_type m_lock;
     rtl_arena_type       m_arena_head;
 };
+
+}
 
 static rtl_arena_list_st g_arena_list;
 

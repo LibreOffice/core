@@ -39,6 +39,7 @@ using namespace ::com::sun::star;
 // OBJECTDESCRIPTOR -> see oleidl.h
 // (MS platform sdk)
 
+namespace {
 
 struct OleObjectDescriptor
 {
@@ -51,6 +52,8 @@ struct OleObjectDescriptor
     sal_uInt32  dwFullUserTypeName;
     sal_uInt32  dwSrcOfCopy;
 };
+
+}
 
 /********************** SvObjectServerList ********************************
 **************************************************************************/

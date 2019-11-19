@@ -1677,6 +1677,8 @@ static void checkMatrixElements(const ScMatrix& rMat)
     }
 }
 
+namespace {
+
 struct AllZeroMatrix
 {
     void operator() (SCSIZE /*nCol*/, SCSIZE /*nRow*/, const ScMatrixValue& rVal) const
@@ -1742,6 +1744,8 @@ struct PartiallyFilledEmptyMatrix
         }
     }
 };
+
+}
 
 void Test::testMatrix()
 {

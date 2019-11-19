@@ -76,6 +76,7 @@ namespace sd {
 
 bool DrawViewShell::mbPipette = false;
 
+namespace {
 
 class ScannerEventListener : public ::cppu::WeakImplHelper< lang::XEventListener >
 {
@@ -92,6 +93,8 @@ public:
 
     void                    ParentDestroyed() { mpParent = nullptr; }
 };
+
+}
 
 void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& /*rEventObject*/ )
 {
