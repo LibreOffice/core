@@ -582,6 +582,16 @@ namespace sw { namespace mark
             return nullptr;
         }
 
+        if ((eType == MarkType::TEXT_FIELDMARK || eType == MarkType::DATE_FIELDMARK)
+            // can't check for Copy - it asserts - but it's also obviously unnecessary
+            && eMode == InsertMode::New
+            && sw::mark::IsFieldmarkOverlap(rPaM))
+        {
+            SAL_WARN("sw.core", "MarkManager::makeMark(..)"
+                " - invalid range on fieldmark, overlaps existing fieldmark or meta-field");
+            return nullptr;
+        }
+
         // create mark
         std::unique_ptr<::sw::mark::MarkBase> pMark;
         switch(eType)

@@ -339,6 +339,9 @@ namespace sw {
 
         /// return position of the CH_TXT_ATR_FIELDSEP for rMark
         SwPosition FindFieldSep(IFieldmark const& rMark);
+
+        /// check if rPaM is valid range of new fieldmark
+        bool IsFieldmarkOverlap(SwPaM const& rPaM);
     }
 }
 #endif

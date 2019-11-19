@@ -60,6 +60,7 @@
 #include <UndoAttribute.hxx>
 #include <rolbck.hxx>
 #include <acorrect.hxx>
+#include <bookmrk.hxx>
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
 #include <hints.hxx>
@@ -1796,6 +1797,16 @@ namespace //local functions originally from docfmt.cxx
 namespace sw
 {
 
+namespace mark
+{
+    bool IsFieldmarkOverlap(SwPaM const& rPaM)
+    {
+        std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
+        lcl_CalcBreaks(Breaks, rPaM);
+        return !Breaks.empty();
+    }
+}
+
 DocumentContentOperationsManager::DocumentContentOperationsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc )
 {
 }
@@ -1947,9 +1958,16 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
     }
 
     {
-        std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
-        lcl_CalcBreaks(Breaks, rPam);
-        if (!Breaks.empty())
+        SwPaM temp(rPam, nullptr);
+        if (SwTextNode *const pNode = temp.Start()->nNode.GetNode().GetTextNode())
+        { // rPam may not have nContent set but IsFieldmarkOverlap requires it
+            pNode->MakeStartIndex(&temp.Start()->nContent);
+        }
+        if (SwTextNode *const pNode = temp.End()->nNode.GetNode().GetTextNode())
+        {
+            pNode->MakeEndIndex(&temp.End()->nContent);
+        }
+        if (sw::mark::IsFieldmarkOverlap(temp))
         {   // a bit of a problem: we want to completely remove the nodes
             // but then how can the CH_TXT_ATR survive?
             return false;
@@ -2100,13 +2118,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     if( !rPaM.HasMark() || *pStt >= *pEnd || (*pStt <= rPos && rPos < *pEnd))
         return false;
 
-#ifndef NDEBUG
-    {
-        std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
-        lcl_CalcBreaks(Breaks, rPaM);
-        assert(Breaks.empty()); // probably an invalid redline was created?
-    }
-#endif
+    assert(!sw::mark::IsFieldmarkOverlap(rPaM)); // probably an invalid redline was created?
 
     // Save the paragraph anchored Flys, so that they can be moved.
     SaveFlyArr aSaveFlyArr;
