@@ -24,6 +24,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lspcitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <sal/log.hxx>
 
 #include <drawdoc.hxx>
@@ -2058,6 +2059,7 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
     , m_nBottom(0)
     , m_nGetTopLine(0)
     , m_nGetBottomLine(0)
+    , m_nLineSpacing(0)
 {
     // #i96772#
     const SwTextFrame* pTextFrame = dynamic_cast<const SwTextFrame*>(pConstructor);
@@ -2075,6 +2077,9 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
     // everything needs to be calculated at least once:
     m_bTopLine = m_bBottomLine = m_bLeftLine = m_bRightLine =
     m_bTop     = m_bBottom     = m_bLine   = true;
+
+    // except this one: calculate line spacing before cell border only for text frames
+    m_bLineSpacing = bool(pTextFrame);
 
     m_bCacheGetLine = m_bCachedGetTopLine = m_bCachedGetBottomLine = false;
     // OD 21.05.2003 #108789# - init cache status for values <m_bJoinedWithPrev>
@@ -2411,6 +2416,18 @@ void SwBorderAttrs::GetBottomLine_( const SwFrame& _rFrame )
     m_bCachedGetBottomLine = m_bCacheGetLine;
 
     m_nGetBottomLine = nRet;
+}
+
+void SwBorderAttrs::CalcLineSpacing_()
+{
+    // tdf#125300 compatibility option AddParaSpacingToTableCells needs also line spacing
+    const SvxLineSpacingItem &rSpace = m_rAttrSet.GetLineSpacing();
+    if ( rSpace.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop && rSpace.GetPropLineSpace() > 100 )
+    {
+        sal_Int32 nFontSize = m_rAttrSet.Get(RES_CHRATR_FONTSIZE).GetHeight();
+        m_nLineSpacing = nFontSize * (rSpace.GetPropLineSpace() - 100) * 1.15 / 100;
+    }
+    m_bLineSpacing = false;
 }
 
 static SwModify const* GetCacheOwner(SwFrame const& rFrame)

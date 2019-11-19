@@ -134,7 +134,7 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
                         {
                             SwBorderAttrAccess aAccess( SwFrame::GetCache(), pLastFrame );
                             const SwBorderAttrs& rAttrs = *aAccess.Get();
-                            nNewTop -= rAttrs.GetULSpace().GetLower();
+                            nNewTop -= rAttrs.GetULSpace().GetLower() + rAttrs.CalcLineSpacing();
                         }
                     }
                 }
@@ -2150,7 +2150,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
         if ( bRet && IsInTab() &&
              pNewUpper->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
         {
-            nSpace -= rAttrs.GetULSpace().GetLower();
+            nSpace -= rAttrs.GetULSpace().GetLower() + rAttrs.CalcLineSpacing();
             if ( nSpace < 0 )
             {
                 bRet = false;

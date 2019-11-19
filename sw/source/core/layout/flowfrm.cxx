@@ -1734,7 +1734,7 @@ SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
         }
 
         if (_pAttrs)
-            nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower();
+            nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower() + _pAttrs->CalcLineSpacing();
     }
 
     return nAdditionalLowerSpace;
