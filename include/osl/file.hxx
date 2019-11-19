@@ -1350,7 +1350,6 @@ public:
         @retval E_IO on I/O errors
         @retval E_BUSY device or resource busy
         @retval E_INTR function call was interrupted
-        @retval E_LOOP too many symbolic links encountered
         @retval E_MULTIHOP multihop attempted
         @retval E_NOLINK link has been severed
         @retval E_TXTBSY text file busy
@@ -1881,7 +1880,6 @@ public:
         @retval E_BUSY device or resource busy
         @retval E_ROFS read-only file system
         @retval E_LOOP too many symbolic links encountered
-        @retval E_BUSY device or resource busy
         @retval E_EXIST file exists
         @retval E_IO on I/O errors
         @retval E_MULTIHOP multihop attempted
