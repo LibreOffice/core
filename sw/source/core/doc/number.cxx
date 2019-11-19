@@ -795,6 +795,18 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
     return aRefNumStr;
 }
 
+OUString SwNumRule::MakeParagraphStyleListString() const
+{
+    OUString aParagraphStyleListString;
+    for (const auto& rParagraphStyle : maParagraphStyleList)
+    {
+        if (!aParagraphStyleListString.isEmpty())
+            aParagraphStyleListString += ", ";
+        aParagraphStyleListString += rParagraphStyle->GetName();
+    }
+    return aParagraphStyleListString;
+}
+
 /** Copy method of SwNumRule
 
     A kind of copy constructor, so that the num formats are attached to the
