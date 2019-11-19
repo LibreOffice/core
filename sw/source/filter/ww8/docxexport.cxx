@@ -547,7 +547,7 @@ ErrCode DocxExport::ExportDocument_Impl()
 
 void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum )
 {
-    AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
+    AttrOutput().SectionBreak( msword::PageBreak, false, m_pSections->CurrentSectionInfo() );
     m_pSections->AppendSection( pPageDesc, pFormat, nLnNum, m_pAttrOutput->IsFirstParagraph() );
 }
 
@@ -622,7 +622,7 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
 {
     // tell the attribute output that we are ready to write the section
     // break [has to be output inside paragraph properties]
-    AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
+    AttrOutput().SectionBreak( msword::PageBreak, false, m_pSections->CurrentSectionInfo() );
 
     const SwSectionFormat* pFormat = GetSectionFormat( rNd );
     const sal_uLong nLnNm = GetSectionLineNo( pSet, rNd );
