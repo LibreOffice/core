@@ -213,6 +213,7 @@ public:
     void testCropToShape();
     void testTdf127964();
     void testTdf106638();
+    void testTdf113198();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -313,6 +314,7 @@ public:
     CPPUNIT_TEST(testTdf127964);
     CPPUNIT_TEST(testTdf106638);
     CPPUNIT_TEST(testTdf128684);
+    CPPUNIT_TEST(testTdf113198);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3008,7 +3010,6 @@ void SdImportTest::testTdf106638()
     CPPUNIT_ASSERT(aCharFontName != "Wingdings");
 }
 
-
 void SdImportTest::testTdf128684()
 {
     sd::DrawDocShellRef xDocShRef
@@ -3033,6 +3034,17 @@ void SdImportTest::testTdf128684()
         }
     }
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90), nRotateAngle);
+}
+
+void SdImportTest::testTdf113198()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf113198.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    sal_Int16 nParaAdjust = -1;
+    xShape->getPropertyValue("ParaAdjust") >>= nParaAdjust;
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
