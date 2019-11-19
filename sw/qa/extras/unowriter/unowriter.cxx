@@ -12,6 +12,8 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/AutoTextContainer.hpp>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
+#include <com/sun/star/text/XTextPortionAppend.hpp>
+#include <com/sun/star/text/XTextContentAppend.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
@@ -113,6 +115,95 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDefaultCharStyle)
     xCursorProps->setPropertyValue("CharStyleName", uno::makeAny(OUString("Standard")));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
                          getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertStringExpandsHints)
+{
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XTextDocument> const xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> const xText(xTextDocument->getText());
+    uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
+    uno::Reference<beans::XPropertySet> const xProps(xCursor, uno::UNO_QUERY);
+
+    xText->insertString(xCursor, "ab", false);
+    xCursor->gotoStart(false);
+    xCursor->goRight(1, true);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+    xProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_ITALIC));
+    xCursor->collapseToEnd();
+    xText->insertString(xCursor, "x", false);
+    xCursor->goLeft(1, true);
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextPortionNotExpandsHints)
+{
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XTextDocument> const xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> const xText(xTextDocument->getText());
+    uno::Reference<text::XTextPortionAppend> const xTextA(xText, uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
+    uno::Reference<beans::XPropertySet> const xProps(xCursor, uno::UNO_QUERY);
+
+    xText->insertString(xCursor, "ab", false);
+    xCursor->gotoStart(false);
+    xCursor->goRight(1, true);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+    xProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_ITALIC));
+    xCursor->collapseToEnd();
+    xTextA->insertTextPortion("x", uno::Sequence<beans::PropertyValue>(), xCursor);
+    xCursor->goLeft(1, true);
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentExpandsHints)
+{
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XTextDocument> const xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XMultiServiceFactory> const xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> const xText(xTextDocument->getText());
+    uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
+    uno::Reference<beans::XPropertySet> const xProps(xCursor, uno::UNO_QUERY);
+
+    xText->insertString(xCursor, "ab", false);
+    xCursor->gotoStart(false);
+    xCursor->goRight(1, true);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+    xProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_ITALIC));
+    xCursor->collapseToEnd();
+    uno::Reference<text::XTextContent> const xContent(
+        xFactory->createInstance("com.sun.star.text.Footnote"), uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, false);
+    xCursor->goLeft(1, true);
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentWithPropertiesNotExpandsHints)
+{
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XTextDocument> const xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XMultiServiceFactory> const xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> const xText(xTextDocument->getText());
+    uno::Reference<text::XTextContentAppend> const xTextA(xText, uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
+    uno::Reference<beans::XPropertySet> const xProps(xCursor, uno::UNO_QUERY);
+
+    xText->insertString(xCursor, "ab", false);
+    xCursor->gotoStart(false);
+    xCursor->goRight(1, true);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+    xProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_ITALIC));
+    xCursor->collapseToEnd();
+    uno::Reference<text::XTextContent> const xContent(
+        xFactory->createInstance("com.sun.star.text.Footnote"), uno::UNO_QUERY);
+    xTextA->insertTextContentWithProperties(xContent, uno::Sequence<beans::PropertyValue>(),
+                                            xCursor);
+    xCursor->goLeft(1, true);
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDesciptorURL)
