@@ -1709,7 +1709,8 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_COLOR_ALPHA:
         {
-            rVal <<= mColor.GetTransparency();
+            auto fTransparency = static_cast<double>(mColor.GetTransparency()) * 100 / 255;
+            rVal <<= static_cast<sal_Int16>(basegfx::fround(fTransparency));
             break;
         }
         default:
@@ -1732,7 +1733,8 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             bool bRet = rVal >>= nTransparency;
             if (bRet)
             {
-                mColor.SetTransparency(nTransparency);
+                auto fTransparency = static_cast<double>(nTransparency) * 255 / 100;
+                mColor.SetTransparency(static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
             }
             return bRet;
         }

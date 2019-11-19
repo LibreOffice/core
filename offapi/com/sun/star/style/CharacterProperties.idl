@@ -460,6 +460,14 @@ published service CharacterProperties
      */
     [optional, property] short RubyPosition;
 
+    /** This is the transparency of the character text.
+
+        @since LibreOffice 6.5
+
+        <p>The value 100 means entirely transparent, while 0 means not transparent at all.</p>
+    */
+    [optional, property] short CharTransparence;
+
 };
 
 }; }; }; };
