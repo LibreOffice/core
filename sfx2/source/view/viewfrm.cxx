@@ -1432,6 +1432,16 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     aHelper.UpdateInfobar(*this);
                 }
 
+                // Add pending infobars
+                while (!m_aPendingInfobars.empty())
+                {
+                    InfobarData aInfobarData = m_aPendingInfobars.back();
+                    AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
+                                  aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
+                                  aInfobarData.mbShowCloseButton);
+                    m_aPendingInfobars.pop_back();
+                }
+
                 break;
             }
             default: break;
@@ -3283,6 +3293,19 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
     SfxGetpApp()->SetViewFrame_Impl( pFrame );
 }
 
+void SfxViewFrame::AppendInfoBarWhenReady(const OUString& sId, const OUString& sPrimaryMessage,
+                                          const OUString& sSecondaryMessage,
+                                          InfobarType aInfobarType, bool bShowCloseButton)
+{
+    InfobarData aInfobarData;
+    aInfobarData.msId = sId;
+    aInfobarData.msPrimaryMessage = sPrimaryMessage;
+    aInfobarData.msSecondaryMessage = sSecondaryMessage;
+    aInfobarData.maInfobarType = aInfobarType;
+    aInfobarData.mbShowCloseButton = bShowCloseButton;
+    m_aPendingInfobars.emplace_back(aInfobarData);
+}
+
 VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
                                                const OUString& sPrimaryMessage,
                                                const OUString& sSecondaryMessage,
@@ -3290,6 +3313,9 @@ VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
 {
     SfxChildWindow* pChild = GetChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     if (!pChild)
+        return nullptr;
+
+    if (HasInfoBarWithID(sId))
         return nullptr;
 
     SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
