@@ -24,7 +24,6 @@
 #include <cppuhelper/compbase.hxx>
 
 #include "MutexContainer.hxx"
-#include "charttoolsdllapi.hxx"
 
 #include <vector>
 #include <algorithm>

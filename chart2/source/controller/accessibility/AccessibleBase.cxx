@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/unohelp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -43,7 +44,6 @@
 #include <o3tl/functional.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <unotools/localedatawrapper.hxx>
 
 #include <algorithm>
 #include <iterator>

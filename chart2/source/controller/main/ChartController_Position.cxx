@@ -32,10 +32,8 @@
 #include <svx/ActionDescriptionProvider.hxx>
 
 #include <comphelper/servicehelper.hxx>
-#include <sal/log.hxx>
 #include <svx/svxids.hrc>
 #include <svx/rectenum.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <tools/diagnose_ex.h>

@@ -19,11 +19,10 @@
 
 #include <ConfigAccess.hxx>
 
-#include <unotools/syslocale.hxx>
 #include <unotools/configitem.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <o3tl/any.hxx>
 #include <rtl/instance.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace chart
 {

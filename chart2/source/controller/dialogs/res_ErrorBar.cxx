@@ -26,7 +26,6 @@
 #include <vcl/weld.hxx>
 
 #include <rtl/math.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <svl/stritem.hxx>

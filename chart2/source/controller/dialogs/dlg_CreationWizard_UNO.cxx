@@ -22,7 +22,6 @@
 #include <servicenames.hxx>
 #include <TimerTriggeredControllerLock.hxx>
 #include <vcl/svapp.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>

@@ -20,7 +20,6 @@
 #include "ShapeController.hxx"
 #include <ShapeController.h>
 #include <ChartController.hxx>
-#include <ChartWindow.hxx>
 #include <ViewElementListProvider.hxx>
 #include <dlg_ShapeFont.hxx>
 #include <dlg_ShapeParagraph.hxx>

@@ -71,7 +71,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include <memory>
 

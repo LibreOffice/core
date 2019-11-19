@@ -27,7 +27,6 @@
 #include <ChartTypeDialogController.hxx>
 #include <ChartTypeTemplateProvider.hxx>
 #include <TimerTriggeredControllerLock.hxx>
-#include <TitleHelper.hxx>
 
 namespace com
 {

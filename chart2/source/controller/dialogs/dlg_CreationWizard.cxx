@@ -22,7 +22,6 @@
 #include <strings.hrc>
 #include <helpids.h>
 #include <ChartModel.hxx>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include "tp_ChartType.hxx"
 #include "tp_RangeChooser.hxx"

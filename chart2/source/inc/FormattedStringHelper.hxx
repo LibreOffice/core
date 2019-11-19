@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_FORMATTEDSTRINGHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_FORMATTEDSTRINGHELPER_HXX
 
-#include "charttoolsdllapi.hxx"
 #include <com/sun/star/uno/Sequence.h>
 
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
