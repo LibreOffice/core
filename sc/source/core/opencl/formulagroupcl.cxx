@@ -267,6 +267,8 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
 /// automatically disables use of OpenCL for a formula group. If at some point there are resources
 /// to drain the OpenCL swamp, this should go away.
 
+namespace {
+
 class ConstStringArgument : public DynamicKernelArgument
 {
 public:
@@ -797,6 +799,8 @@ public:
     virtual size_t Marshal( cl_kernel, int, int, cl_program ) override;
 };
 
+}
+
 /// Marshal a string vector reference
 size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_program )
 {
@@ -885,6 +889,8 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
     return 1;
 }
+
+namespace {
 
 /// A mixed string/numberic vector
 class DynamicKernelMixedArgument : public VectorRef
@@ -1230,6 +1236,8 @@ private:
     std::vector<DynamicKernelArgumentRef> mParams;
 };
 
+}
+
 void SymbolTable::Marshal( cl_kernel k, int nVectorWidth, cl_program pProgram )
 {
     int i = 1; //The first argument is reserved for results
@@ -1238,6 +1246,8 @@ void SymbolTable::Marshal( cl_kernel k, int nVectorWidth, cl_program pProgram )
         i += argument->Marshal(k, i, nVectorWidth, pProgram);
     }
 }
+
+namespace {
 
 /// Handling a Double Vector that is used as a sliding window input
 /// Performs parallel reduction based on given operator
@@ -2234,7 +2244,7 @@ public:
     }
     virtual std::string BinFuncName() const override { return "fsop"; }
 };
-namespace {
+
 struct SumIfsArgs
 {
     explicit SumIfsArgs(cl_mem x) : mCLMem(x), mConst(0.0) { }
@@ -2242,7 +2252,6 @@ struct SumIfsArgs
     cl_mem mCLMem;
     double mConst;
 };
-}
 
 /// Helper functions that have multiple buffers
 class DynamicKernelSoPArguments : public DynamicKernelArgument
@@ -2532,6 +2541,8 @@ private:
     std::shared_ptr<SlidingFunctionBase> mpCodeGen;
     cl_mem mpClmem2;
 };
+
+}
 
 static DynamicKernelArgumentRef SoPHelper( const ScCalcConfig& config,
     const std::string& ts, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen,
@@ -3667,6 +3678,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
     }
 }
 
+namespace {
+
 class DynamicKernel : public CompiledFormula
 {
 public:
@@ -3706,6 +3719,8 @@ private:
 
     int const mnResultSize;
 };
+
+}
 
 DynamicKernel::DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize ) :
     mCalcConfig(config),
