@@ -933,7 +933,6 @@ chart2/source/controller/dialogs/DialogModel.hxx
 chart2/source/controller/dialogs/ObjectNameProvider.cxx
 chart2/source/controller/dialogs/RangeSelectionHelper.cxx
 chart2/source/controller/dialogs/RangeSelectionListener.cxx
-chart2/source/controller/dialogs/TabPageIds.h
 chart2/source/controller/dialogs/TextDirectionListBox.cxx
 chart2/source/controller/dialogs/TimerTriggeredControllerLock.cxx
 chart2/source/controller/dialogs/TitleDialogData.cxx

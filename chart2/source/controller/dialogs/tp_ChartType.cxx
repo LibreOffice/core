@@ -18,13 +18,11 @@
  */
 
 #include "tp_ChartType.hxx"
-#include <ChartResourceGroupDlgs.hxx>
 #include <ChartResourceGroups.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
-#include <res_BarGeometry.hxx>
 #include <unonames.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -33,7 +31,6 @@
 
 #include <vcl/weld.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 namespace chart
 {

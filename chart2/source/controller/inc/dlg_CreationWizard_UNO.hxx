@@ -28,8 +28,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
-#include <tools/link.hxx>
-#include <vcl/vclptr.hxx>
 #include "dlg_CreationWizard.hxx"
 
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }

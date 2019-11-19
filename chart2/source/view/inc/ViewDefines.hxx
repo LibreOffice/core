@@ -19,6 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_VIEWDEFINES_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_VIEWDEFINES_HXX
 
+#include <sal/types.h>
+
 namespace chart
 {
 

@@ -25,7 +25,6 @@
 #include "BarPositionHelper.hxx"
 #include <DateHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 

@@ -18,7 +18,6 @@
  */
 
 #include <Linear3DTransformation.hxx>
-#include <algorithm>
 
 using namespace ::com::sun::star;
 

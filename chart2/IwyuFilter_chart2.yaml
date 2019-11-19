@@ -200,6 +200,9 @@ blacklist:
     - com/sun/star/io/XActiveDataSource.hpp
     - com/sun/star/lang/XMultiServiceFactory.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/model/filter/XMLFilter.cxx:
+    # Actually used
+    - com/sun/star/lang/XMultiComponentFactory.hpp
     chart2/source/model/main/DataPoint.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XChild.hpp
@@ -225,6 +228,8 @@ blacklist:
     # Needed for template
     - com/sun/star/chart2/RelativePosition.hpp
     - com/sun/star/chart2/RelativeSize.hpp
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
     chart2/source/model/main/FormattedString.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XDataPointCustomLabelField.hpp
@@ -292,9 +297,65 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/chart2/XDataInterpreter.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/model/template/AreaChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/BubbleChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/BarChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/ChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/ChartTypeManager.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/ColumnLineChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/NetChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/LineChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/ScatterChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/StockChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/PieChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
     chart2/source/model/template/XYDataInterpreter.cxx:
     # Used after #ifdef
     - sal/log.hxx
+    chart2/source/tools/AxisHelper.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/tools/BaseGFXHelper.cxx:
+    # Actually used
+    - com/sun/star/drawing/PolyPolygonShape3D.hpp
+    - com/sun/star/awt/Rectangle.hpp
+    chart2/source/tools/CommonConverters.cxx:
+    # Actually used
+    - com/sun/star/awt/Rectangle.hpp
+    - com/sun/star/drawing/PolyPolygonBezierCoords.hpp
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    chart2/source/tools/ErrorBar.cxx:
+    # Actually used
+    - com/sun/star/drawing/LineStyle.hpp
+    - com/sun/star/util/Color.hpp
+    - com/sun/star/drawing/LineJoint.hpp
+    chart2/source/tools/CharacterProperties.cxx:
+    # Actually used
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    chart2/source/tools/DataSourceHelper.cxx:
+    # Actually used
+    - com/sun/star/chart2/data/XLabeledDataSequence.hpp
     chart2/source/tools/RegressionCurveModel.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XRegressionCurve.hpp
@@ -306,21 +367,36 @@ blacklist:
     chart2/source/tools/ImplOPropertySet.cxx:
     # Needed for template
     - com/sun/star/style/XStyle.hpp
+    chart2/source/tools/LegendHelper.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
     chart2/source/tools/LinePropertiesHelper.cxx:
     # Needed for template
     - com/sun/star/drawing/LineDash.hpp
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
     chart2/source/tools/LifeTime.cxx:
     # Has to be complete type
     - com/sun/star/util/CloseVetoException.hpp
     chart2/source/tools/MediaDescriptorHelper.cxx:
     # Needed for template
     - com/sun/star/embed/XStorage.hpp
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
     chart2/source/tools/ObjectIdentifier.cxx:
     # Needed for template
     - com/sun/star/drawing/XShape.hpp
     chart2/source/tools/RangeHighlighter.cxx:
     # Needed for template
     - com/sun/star/drawing/XShape.hpp
+    # Actually used
+    - com/sun/star/view/XSelectionSupplier.hpp
+    chart2/source/tools/ReferenceSizeProvider.cxx:
+    # Actually used
+    - com/sun/star/chart2/XTitle.hpp
+    chart2/source/tools/RegressionCurveHelper.cxx:
+    # Actually used
+    - com/sun/star/chart2/XRegressionCurveCalculator.hpp
     chart2/source/tools/RegressionEquation.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XTitle.hpp
@@ -332,11 +408,33 @@ blacklist:
     # Needed for template
     - com/sun/star/awt/Size.hpp
     - com/sun/star/chart2/RelativePosition.hpp
+    chart2/source/tools/RelativePositionHelper.cxx:
+    # Actually used
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/chart2/RelativeSize.hpp
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    chart2/source/tools/RelativeSizeHelper.cxx:
+    # Actually used
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/tools/PropertyHelper.cxx:
+    # Actually used
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    chart2/source/tools/StatisticsHelper.cxx:
+    # Actually used
+    - com/sun/star/chart2/data/XDataProvider.hpp
+    chart2/source/tools/UncachedDataSequence.cxx:
+    # Actually used
+    - com/sun/star/chart2/XInternalDataProvider.hpp
     chart2/source/tools/UserDefinedProperties.cxx:
     # Needs a complete type
     - com/sun/star/beans/Property.hpp
     # Needed for template
     - com/sun/star/container/XNameContainer.hpp
+    chart2/source/tools/WrappedProperty.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertyState.hpp
     chart2/source/view/inc/3DChartObjects.hxx:
     # base class has to be a complete type
     - boost/shared_array.hpp
@@ -355,58 +453,64 @@ blacklist:
     - com/sun/star/chart2/XScaling.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XServiceName.hpp
-    # TODO: in view/axes iwyu actually runs without
-    # -I/$SRCDIR/chart2/source/view/inc
-    # thus gives way more false positives
-    chart2/source/view/axes/VAxisOrGridBase.hxx:
-    # False positives
-    - ThreeDHelper.hxx
-    - basegfx/matrix/b3dhommatrix.hxx
-    chart2/source/view/axes/VAxisProperties.hxx:
-    # False positives
-    - com/sun/star/awt/Rectangle.hpp
-    - com/sun/star/awt/Size.hpp
-    - com/sun/star/chart/ChartAxisMarkPosition.hpp
-    - com/sun/star/chart/ChartAxisPosition.hpp
-    - com/sun/star/uno/Any.hxx
-    - vector
-    - TickmarkProperties.hxx
+    chart2/source/view/axes/VAxisBase.cxx:
+    # Needed for direct member access
+    - com/sun/star/drawing/XShapes.hpp
+    chart2/source/view/axes/VAxisProperties.cxx:
+    # Actually used
+    - com/sun/star/chart2/XAxis.hpp
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    chart2/source/view/axes/VCartesianCoordinateSystem.cxx:
+    # Actually used
+    - com/sun/star/chart2/XCoordinateSystem.hpp
+    chart2/source/view/axes/VPolarCoordinateSystem.cxx:
+    # Actually used
+    - com/sun/star/chart2/XCoordinateSystem.hpp
     chart2/source/view/axes/VCartesianGrid.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
-    chart2/source/view/axes/VPolarAxis.hxx:
-    # False positives
-    - memory
-    chart2/source/view/axes/VPolarGrid.hxx:
-    # False positives
-    - memory
-    chart2/source/view/axes/VPolarGrid.hxx:
-    # False positives
-    - com/sun/star/drawing/PointSequenceSequence.hpp
-    chart2/source/view/axes/VPolarRadiusAxis.hxx:
-    # False positives
-    - memory
-    chart2/source/view/axes/VPolarGrid.hxx:
-    # False positives
-    - memory
-    - com/sun/star/drawing/PointSequenceSequence.hpp
-    chart2/source/view/charttypes/BarChart.hxx:
-    # False positives
-    - memory
-    chart2/source/view/charttypes/CandleStickChart.hxx:
-    # False positives
-    - memory
-    chart2/source/view/charttypes/AreaChart.hxx:
-    # False positives
-    - memory
-    chart2/source/view/charttypes/NetChart.hxx:
-    # False positives
-    - memory
-    chart2/source/view/charttypes/PieChart.hxx:
-    # False positives
-    - memory
-    - basegfx/vector/b2ivector.hxx
-    - com/sun/star/awt/Point.hpp
+    chart2/source/view/charttypes/Splines.cxx:
+    # Actually used
+    - com/sun/star/drawing/PolyPolygonShape3D.hpp
+    chart2/source/view/charttypes/AreaChart.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShapes.hpp
+    chart2/source/view/charttypes/NetChart.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShapes.hpp
+    chart2/source/view/charttypes/BarChart.cxx:
+    # comphelper::ScopeGuard being used
+    - comphelper/scopeguard.hxx
+    chart2/source/view/main/LabelPositionHelper.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/drawing/XShape.hpp
+    chart2/source/view/main/VButton.cxx:
+    # Actually used
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    chart2/source/view/main/PlottingPositionHelper.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShapes.hpp
+    chart2/source/view/main/PropertyMapper.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/view/main/ShapeFactory.cxx:
+    # Needed for template
+    - com/sun/star/graphic/XGraphic.hpp
+    # Actually used
+    - com/sun/star/chart2/XFormattedString.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    chart2/source/view/main/ChartView.cxx:
+    # comphelper::ScopeGuard being used
+    - comphelper/scopeguard.hxx
+    chart2/source/view/main/VLineProperties.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/view/main/VTitle.cxx:
+    # Actually used
+    - com/sun/star/chart2/XTitle.hpp
+    - com/sun/star/drawing/XShape.hpp
     chart2/source/controller/inc/AccessibleTextHelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleContext.hpp
@@ -484,18 +588,81 @@ blacklist:
     # base class has to be a complete type
     - AccessibleBase.hxx
     - com/sun/star/accessibility/XAccessibleExtendedComponent.hpp
+    chart2/source/controller/accessibility/AccessibleChartView.cxx:
+    # Actually used
+    - com/sun/star/view/XSelectionSupplier.hpp
+    chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     chart2/source/controller/chartapiwrapper/DiagramWrapper.cxx:
     # Needed for complex variable type
     - com/sun/star/util/XRefreshable.hpp
     chart2/source/controller/chartapiwrapper/WrappedAddInProperty.cxx:
     # Needed for complex variable type
     - com/sun/star/util/XRefreshable.hpp
+    chart2/source/controller/chartapiwrapper/WrappedCharacterHeightProperty.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    chart2/source/controller/chartapiwrapper/ChartDocumentWrapper.cxx:
+    # Actually used
+    - vector
+    chart2/source/controller/dialogs/ChartTypeDialogController.cxx:
+    # Actually used
+    - com/sun/star/chart2/XChartDocument.hpp
     chart2/source/controller/dialogs/DataBrowser.cxx:
     # Needed for complex variable type
+    - com/sun/star/chart2/XChartDocument.hpp
+    chart2/source/controller/dialogs/DialogModel.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
     - com/sun/star/chart2/XChartDocument.hpp
     chart2/source/controller/dialogs/dlg_ChartType_UNO.cxx:
     # Needed for complex variable type
     - com/sun/star/frame/XModel.hpp
+    chart2/source/controller/dialogs/dlg_DataEditor.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XWindow.hpp
+    chart2/source/controller/dialogs/RangeSelectionHelper.cxx:
+    # Actually used
+    - com/sun/star/chart2/XChartDocument.hpp
+    chart2/source/controller/dialogs/res_ErrorBar.cxx:
+    # Actually used
+    - com/sun/star/chart2/XChartDocument.hpp
+    chart2/source/controller/dialogs/tp_AxisPositions.cxx:
+    # Actually used
+    - rtl/math.hxx
+    chart2/source/controller/dialogs/tp_3D_SceneIllumination.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/dialogs/tp_ChartType.cxx:
+    # Actually used
+    - com/sun/star/chart2/XChartDocument.hpp
+    chart2/source/controller/itemsetwrapper/ItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/itemsetwrapper/LegendItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/itemsetwrapper/TitleItemConverter.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    chart2/source/controller/itemsetwrapper/RegressionEquationItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/itemsetwrapper/CharacterPropertyItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/itemsetwrapper/GraphicPropertyItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    chart2/source/controller/itemsetwrapper/DataPointItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/itemsetwrapper/AxisItemConverter.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     chart2/source/controller/main/ChartModelClone.hxx:
     # Needed for implicit dtor
     - com/sun/star/uno/Any.hxx
@@ -503,11 +670,20 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/frame/XSynchronousFrameLoader.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/main/ChartFrameloader.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/controller/main/ChartDropTargetHelper.cxx:
+    # Actually used
+    - com/sun/star/chart2/XChartDocument.hpp
     chart2/source/controller/main/CommandDispatch.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XDispatch.hpp
     - com/sun/star/util/XModifyListener.hpp
     - comphelper/interfacecontainer2.hxx
+    chart2/source/controller/main/CommandDispatchContainer.cxx:
+    # Actually used
+    - com/sun/star/frame/XModel.hpp
     chart2/source/controller/main/ControllerCommandDispatch.hxx:
     # base class has to be a complete type
     - CommandDispatch.hxx
@@ -515,9 +691,9 @@ blacklist:
     chart2/source/controller/main/ElementSelector.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
-    chart2/source/view/main/ShapeFactory.cxx:
-    # Needed for template
-    - com/sun/star/graphic/XGraphic.hpp
+    chart2/source/controller/main/ObjectHierarchy.cxx:
+    # Actually used
+    - com/sun/star/awt/KeyEvent.hpp
     chart2/source/controller/main/StatusBarCommandDispatch.hxx:
     # base class has to be a complete type
     - CommandDispatch.hxx
@@ -534,6 +710,15 @@ blacklist:
     chart2/source/controller/main/ChartController_Tools.cxx:
     # Needed for template
     - com/sun/star/graphic/XGraphic.hpp
+    chart2/source/controller/main/PositionAndSizeHelper.cxx:
+    # Actually used
+    - com/sun/star/awt/Rectangle.hpp
+    chart2/source/controller/main/StatusBarCommandDispatch.cxx:
+    # Actually used
+    - com/sun/star/view/XSelectionSupplier.hpp
+    chart2/source/controller/main/UndoGuard.cxx:
+    # Actually used
+    - com/sun/star/document/XUndoManager.hpp
     chart2/source/controller/main/UndoActions.hxx:
     # base class has to be a complete type
     - com/sun/star/document/XUndoAction.hpp
@@ -641,9 +826,6 @@ blacklist:
     chart2/source/controller/chartapiwrapper/WrappedSplineProperties.hxx:
     # Needed for css namespace shortcut
     - sal/types.h
-    chart2/source/controller/chartapiwrapper/WrappedSplineProperties.hxx:
-    # Needed for css namespace shortcut
-    - sal/types.h
     chart2/source/controller/chartapiwrapper/WrappedSymbolProperties.hxx:
     # Needed for css namespace shortcut
     - sal/types.h
@@ -656,4 +838,3 @@ blacklist:
     chart2/source/controller/itemsetwrapper/MultipleChartConverters.cxx:
     # Needed for compound type declaration
     - com/sun/star/chart2/XAxis.hpp
-    

@@ -21,10 +21,6 @@
 #include "DataBrowser.hxx"
 #include <comphelper/stl_types.hxx>
 
-#include <osl/diagnose.h>
-#include <vcl/taskpanelist.hxx>
-#include <svtools/miscopt.hxx>
-
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 

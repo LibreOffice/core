@@ -19,6 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_REGRESSIONCALCULATIONHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_REGRESSIONCALCULATIONHELPER_HXX
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 #include <rtl/math.hxx>
 
 #include <utility>

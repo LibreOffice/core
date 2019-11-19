@@ -20,7 +20,6 @@
 #include <VLineProperties.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace chart

@@ -19,8 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_TRUEGUARD_HXX
 #define INCLUDED_CHART2_SOURCE_INC_TRUEGUARD_HXX
 
-#include "charttoolsdllapi.hxx"
-
 namespace chart
 {
 /** This guard sets the given boolean reference to true in the constructor and to false in the destructor

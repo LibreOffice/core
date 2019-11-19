@@ -19,7 +19,6 @@
 
 #include <VPolarTransformation.hxx>
 #include <CommonConverters.hxx>
-#include <algorithm>
 
 using namespace ::com::sun::star;
 

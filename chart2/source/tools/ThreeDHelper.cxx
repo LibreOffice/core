@@ -31,7 +31,6 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
-#include <sal/log.hxx>
 
 namespace chart
 {

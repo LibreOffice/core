@@ -39,7 +39,6 @@
 #include <osl/diagnose.h>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>

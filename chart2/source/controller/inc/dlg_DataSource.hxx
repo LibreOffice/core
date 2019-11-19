@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATASOURCE_HXX
 
 #include <vcl/weld.hxx>
-#include <vcl/vclptr.hxx>
 
 #include "TabPageNotifiable.hxx"
 

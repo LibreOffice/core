@@ -18,39 +18,20 @@
  */
 
 #include "ChartTypePanel.hxx"
+#include <TimerTriggeredControllerLock.hxx>
 
-#include <bitmaps.hlst>
 #include <ChartController.hxx>
-#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartResourceGroupDlgs.hxx>
 #include <ChartResourceGroups.hxx>
 #include <ChartTypeDialogController.hxx>
-#include <ChartTypeHelper.hxx>
 #include <DiagramHelper.hxx>
-#include <ResId.hxx>
-#include <strings.hrc>
 #include <unonames.hxx>
 
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
-
-#include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/button.hxx>
-
-#include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
-
-#include <comphelper/processfactory.hxx>
 #include <svtools/valueset.hxx>
 #include <tools/diagnose_ex.h>
 

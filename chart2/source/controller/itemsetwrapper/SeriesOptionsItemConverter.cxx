@@ -33,7 +33,6 @@
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

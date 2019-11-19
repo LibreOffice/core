@@ -26,8 +26,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
-#include <charttoolsdllapi.hxx>
-
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 
 namespace chart

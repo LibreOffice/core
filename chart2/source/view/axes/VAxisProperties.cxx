@@ -28,7 +28,6 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/math.hxx>
 

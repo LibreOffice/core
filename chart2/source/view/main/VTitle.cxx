@@ -23,7 +23,6 @@
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace chart

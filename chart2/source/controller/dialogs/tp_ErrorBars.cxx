@@ -18,8 +18,6 @@
  */
 
 #include "tp_ErrorBars.hxx"
-#include <vcl/event.hxx>
-#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star;
 

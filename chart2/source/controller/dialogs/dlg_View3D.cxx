@@ -19,7 +19,6 @@
 
 #include <dlg_View3D.hxx>
 #include <strings.hrc>
-#include "TabPageIds.h"
 #include <ResId.hxx>
 #include "tp_3D_SceneGeometry.hxx"
 #include "tp_3D_SceneAppearance.hxx"

@@ -46,7 +46,6 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/document/GraphicStorageHandler.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

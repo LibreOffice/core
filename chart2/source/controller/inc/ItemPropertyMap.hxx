@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include "ItemConverter.hxx"
+
 #include <map>
 
 namespace chart { namespace wrapper {

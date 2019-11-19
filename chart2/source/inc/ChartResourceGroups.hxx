@@ -23,10 +23,7 @@
 #include "res_BarGeometry.hxx"
 #include "ChangingResource.hxx"
 #include "ChartTypeDialogController.hxx"
-
-#include <vcl/tabpage.hxx>
-
-#include <com/sun/star/chart2/XChartDocument.hpp>
+#include "ChartResourceGroupDlgs.hxx"
 
 namespace chart
 {

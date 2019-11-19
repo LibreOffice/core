@@ -19,6 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_AXISINDEXDEFINES_HXX
 #define INCLUDED_CHART2_SOURCE_INC_AXISINDEXDEFINES_HXX
 
+#include <sal/types.h>
+
 namespace chart
 {
 

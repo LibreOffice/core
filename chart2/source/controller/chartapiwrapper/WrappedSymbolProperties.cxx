@@ -32,7 +32,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;

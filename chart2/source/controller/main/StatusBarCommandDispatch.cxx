@@ -19,7 +19,6 @@
 
 #include "StatusBarCommandDispatch.hxx"
 #include <ObjectNameProvider.hxx>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/util/XModifiable.hpp>

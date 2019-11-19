@@ -35,7 +35,6 @@
 #include <tools/color.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
-#include <sal/log.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

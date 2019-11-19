@@ -21,6 +21,7 @@
 
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Any.hxx>
 
 #include <map>
 #include <vector>
