@@ -62,9 +62,11 @@ class OutputDevice;
 class Color;
 class Fraction;
 class SvGlobalName;
+class InfobarData;
 
 enum class SfxModelFlags;
 enum class SfxEventHintId;
+enum class InfobarType;
 
 // These values presumably must match exactly the corresponding
 // css::embed::Aspects ones (in offapi/com/sun/star/embed/Aspects.idl)
@@ -650,6 +652,13 @@ public:
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash );
 
     static bool IsOwnStorageFormat(const SfxMedium &);
+
+    /** Append Infobar once the frame is ready.
+        Useful when you want to register an Infobar before the doc/frame is fully loaded. */
+    void AppendInfoBarWhenReady(const OUString& sId, const OUString& sPrimaryMessage,
+                                const OUString& sSecondaryMessage, InfobarType aInfobarType,
+                                bool bShowCloseButton = true);
+    std::vector<InfobarData>& getPendingInfobars();
 
     SAL_DLLPRIVATE std::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl(bool bFullContent) const;
 
