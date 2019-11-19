@@ -100,7 +100,7 @@ namespace {
 
                 int nGuidLen = GetStringFromClassID( *guidList[nInd], &pSubKey[23], 38 );
 
-                BOOL bLocalSuccess = FALSE;
+                bool bLocalSuccess = FALSE;
                 if ( nGuidLen == 38 )
                 {
                     if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_LOCAL_MACHINE, pSubKey, &hKey ) )

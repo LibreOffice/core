@@ -635,7 +635,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
         & ~static_cast<sal_uInt64>(ExceptionInfos::allocationGranularity - 1);
 
     DWORD old_protect;
-    BOOL success =
+    bool success =
         VirtualProtect(pCode, codeSize, PAGE_EXECUTE_READWRITE, &old_protect);
     (void) success;
     assert(success && "VirtualProtect() failed!");

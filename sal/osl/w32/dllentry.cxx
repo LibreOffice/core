@@ -153,7 +153,7 @@ static DWORD GetParentProcessId()
     if ( IsValidHandle( hSnapshot ) )
     {
         PROCESSENTRY32  pe;
-        BOOL            fSuccess;
+        bool            fSuccess;
 
         ZeroMemory( &pe, sizeof(pe) );
         pe.dwSize = sizeof(pe);

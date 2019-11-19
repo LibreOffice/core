@@ -116,7 +116,7 @@ WinInetBackend::WinInetBackend()
             INTERNET_PROXY_INFO pi;
             LPINTERNET_PROXY_INFO lpi = &pi;
             DWORD dwLength = sizeof (pi);
-            BOOL ok = lpfnInternetQueryOption(
+            bool ok = lpfnInternetQueryOption(
                 nullptr,
                 INTERNET_OPTION_PROXY,
                 lpi,

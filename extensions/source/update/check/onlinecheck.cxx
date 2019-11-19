@@ -33,7 +33,7 @@ extern "C" bool WNT_hasInternetConnection()
     WCHAR   szConnectionName[1024];
 
     __try {
-    BOOL fIsConnected = InternetGetConnectedStateExW(
+    bool fIsConnected = InternetGetConnectedStateExW(
         &dwFlags,
         szConnectionName,
         SAL_N_ELEMENTS(szConnectionName),

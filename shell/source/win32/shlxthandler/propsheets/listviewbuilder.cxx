@@ -39,7 +39,7 @@
 
 #if !defined ListView_SetItemW
 #define ListView_SetItemW(hwnd, pitem) \
-    static_cast<BOOL>(SNDMSG((hwnd), LVM_SETITEMW, 0, reinterpret_cast<LPARAM>(pitem)))
+    static_cast<bool>(SNDMSG((hwnd), LVM_SETITEMW, 0, reinterpret_cast<LPARAM>(pitem)))
 #endif
 
 

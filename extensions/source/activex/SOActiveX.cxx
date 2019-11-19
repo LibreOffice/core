@@ -212,7 +212,7 @@ HRESULT CSOActiveX::Cleanup()
 
     if( mpDispFrame )
     {
-        BOOL bCloserActivated = FALSE;
+        bool bCloserActivated = FALSE;
 
         CComPtr<IDispatch> pDispDocumentCloser;
         CComVariant aDocCloser( L"com.sun.star.embed.DocumentCloser" );
@@ -715,8 +715,8 @@ void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* /*
     if ( mbReadyForActivation )
         return;
 
-    BOOL bSuccess = FALSE;
-    BOOL bFinishDownload = FALSE;
+    bool bSuccess = FALSE;
+    bool bFinishDownload = FALSE;
     if ( !pBytes )
     {
         // means the download is finished, dwSize contains hresult

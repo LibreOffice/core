@@ -34,7 +34,7 @@ extern "C" JNIEXPORT jboolean JNICALL
     Java_com_sun_star_lib_loader_WinRegKey_winreg_1RegOpenClassesRoot(
     JNIEnv *env, jclass, jlongArray hkresult)
 {
-    jboolean ret = JNI_FALSE;
+    bool ret = JNI_FALSE;
     auto phkey = env->GetLongArrayElements(hkresult, nullptr);
     if (RegOpenKeyEx(HKEY_CLASSES_ROOT, nullptr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey))
         == ERROR_SUCCESS)
@@ -47,7 +47,7 @@ extern "C" JNIEXPORT jboolean JNICALL
     Java_com_sun_star_lib_loader_WinRegKey_winreg_1RegOpenCurrentConfig(
     JNIEnv *env, jclass, jlongArray hkresult)
 {
-    jboolean ret = JNI_FALSE;
+    bool ret = JNI_FALSE;
     auto phkey = env->GetLongArrayElements(hkresult, nullptr);
     if (RegOpenKeyEx(HKEY_CURRENT_CONFIG, nullptr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey))
         == ERROR_SUCCESS)
@@ -60,7 +60,7 @@ extern "C" JNIEXPORT jboolean JNICALL
     Java_com_sun_star_lib_loader_WinRegKey_winreg_1RegOpenCurrentUser(
     JNIEnv *env, jclass, jlongArray hkresult)
 {
-    jboolean ret = JNI_FALSE;
+    bool ret = JNI_FALSE;
     auto phkey = env->GetLongArrayElements(hkresult, nullptr);
     if (RegOpenKeyEx(HKEY_CURRENT_USER, nullptr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey))
         == ERROR_SUCCESS)
@@ -73,7 +73,7 @@ extern "C" JNIEXPORT jboolean JNICALL
     Java_com_sun_star_lib_loader_WinRegKey_winreg_1RegOpenLocalMachine(
     JNIEnv *env, jclass, jlongArray hkresult)
 {
-    jboolean ret = JNI_FALSE;
+    bool ret = JNI_FALSE;
     auto phkey = env->GetLongArrayElements(hkresult, nullptr);
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, nullptr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey))
         == ERROR_SUCCESS)
@@ -86,7 +86,7 @@ extern "C" JNIEXPORT jboolean JNICALL
     Java_com_sun_star_lib_loader_WinRegKey_winreg_1RegOpenUsers(
     JNIEnv *env, jclass, jlongArray hkresult)
 {
-    jboolean ret = JNI_FALSE;
+    bool ret = JNI_FALSE;
     auto phkey = env->GetLongArrayElements(hkresult, nullptr);
     if (RegOpenKeyEx(HKEY_USERS, nullptr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey)) == ERROR_SUCCESS)
         ret = JNI_TRUE;
@@ -98,7 +98,7 @@ extern "C" JNIEXPORT jboolean JNICALL
     Java_com_sun_star_lib_loader_WinRegKey_winreg_1RegOpenKeyEx(
     JNIEnv *env, jclass, jlong parent, jstring name, jlongArray hkresult)
 {
-    jboolean ret = JNI_FALSE;
+    bool ret = JNI_FALSE;
     const char *namestr = env->GetStringUTFChars(name, nullptr);
     auto phkey = env->GetLongArrayElements(hkresult, nullptr);
     if (RegOpenKeyEx(reinterpret_cast<HKEY>(parent), namestr, 0, KEY_READ, reinterpret_cast<PHKEY>(phkey))
@@ -114,7 +114,7 @@ extern "C" JNIEXPORT jboolean JNICALL
     Java_com_sun_star_lib_loader_WinRegKey_winreg_1RegCloseKey(
     JNIEnv *, jclass, jlong hkey)
 {
-    jboolean ret = JNI_FALSE;
+    bool ret = JNI_FALSE;
     if (RegCloseKey(reinterpret_cast<HKEY>(hkey)) == ERROR_SUCCESS)
         ret = JNI_TRUE;
     return ret;
@@ -125,7 +125,7 @@ extern "C" JNIEXPORT jboolean
     JNIEnv *env, jclass, jlong hkey, jstring value, jlongArray type,
     jbyteArray data, jlongArray size)
 {
-    jboolean ret = JNI_FALSE;
+    bool ret = JNI_FALSE;
     const char* valuestr = env->GetStringUTFChars(value, nullptr);
     auto ptype = env->GetLongArrayElements(type, nullptr);
     auto pdata = env->GetByteArrayElements(data, nullptr);
@@ -146,7 +146,7 @@ extern "C" JNIEXPORT jboolean JNICALL
     jlongArray maxSubkeyLen, jlongArray values, jlongArray maxValueNameLen,
     jlongArray maxValueLen, jlongArray secDescriptor)
 {
-    jboolean ret = JNI_FALSE;
+    bool ret = JNI_FALSE;
     auto psubkeys = env->GetLongArrayElements(subkeys, nullptr);
     auto pmaxSubkeyLen = env->GetLongArrayElements(maxSubkeyLen, nullptr);
     auto pvalues = env->GetLongArrayElements(values, nullptr);

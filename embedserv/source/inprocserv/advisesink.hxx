@@ -70,7 +70,7 @@ public:
     void SetRegID( DWORD nRegID ) { m_nRegID = nRegID; }
     DWORD GetRegID() { return m_nRegID; }
 
-    BOOL IsOleAdvise() { return m_bObjectAdvise; }
+    bool IsOleAdvise() { return m_bObjectAdvise; }
     DWORD GetDataAdviseFlag() { return m_nDataRegFlag; }
     DWORD GetViewAdviseFlag() { return m_nViewRegFlag; }
 

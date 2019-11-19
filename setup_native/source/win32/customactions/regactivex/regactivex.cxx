@@ -37,7 +37,7 @@
 typedef int ( __stdcall * DllNativeRegProc ) ( int, BOOL, BOOL, const wchar_t* );
 typedef int ( __stdcall * DllNativeUnregProc ) ( int, BOOL, BOOL );
 
-static BOOL UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
+static bool UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
 {
     if ( pStr1 == nullptr && pStr2 == nullptr )
         return TRUE;
@@ -54,7 +54,7 @@ static BOOL UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
 }
 
 
-static void RegisterActiveXNative( const wchar_t* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
+static void RegisterActiveXNative( const wchar_t* pActiveXPath, int nMode, bool InstallForAllUser, bool InstallFor64Bit )
 {
     HINSTANCE hModule = LoadLibraryExW( pActiveXPath, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( hModule )
@@ -82,7 +82,7 @@ static void RegisterActiveXNative( const wchar_t* pActiveXPath, int nMode, BOOL 
 }
 
 
-static void UnregisterActiveXNative( const wchar_t* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
+static void UnregisterActiveXNative( const wchar_t* pActiveXPath, int nMode, bool InstallForAllUser, bool InstallFor64Bit )
 {
     HINSTANCE hModule = LoadLibraryExW( pActiveXPath, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( hModule )
@@ -96,7 +96,7 @@ static void UnregisterActiveXNative( const wchar_t* pActiveXPath, int nMode, BOO
 }
 
 
-static BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
+static bool GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
     if ( MsiGetPropertyW( hMSI, pPropName, const_cast<wchar_t *>(L""), &sz ) == ERROR_MORE_DATA )
@@ -116,7 +116,7 @@ static BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppV
 }
 
 
-static BOOL GetActiveXControlPath( MSIHANDLE hMSI, wchar_t** ppActiveXPath )
+static bool GetActiveXControlPath( MSIHANDLE hMSI, wchar_t** ppActiveXPath )
 {
     wchar_t* pProgPath = nullptr;
     if ( GetMsiPropW( hMSI, L"INSTALLLOCATION", &pProgPath ) && pProgPath )
@@ -136,7 +136,7 @@ static BOOL GetActiveXControlPath( MSIHANDLE hMSI, wchar_t** ppActiveXPath )
 }
 
 
-static BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDeinstallMode )
+static bool GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDeinstallMode )
 {
     // for now the chart is always installed
     nOldInstallMode = CHART_COMPONENT;
@@ -235,9 +235,9 @@ static BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, i
 }
 
 
-static BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
+static bool MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
-    BOOL bResult = FALSE;
+    bool bResult = FALSE;
     wchar_t* pVal = nullptr;
     if ( GetMsiPropW( hMSI, L"ALLUSERS", &pVal ) && pVal )
     {
@@ -249,9 +249,9 @@ static BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 }
 
 
-static BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
+static bool MakeInstallFor64Bit( MSIHANDLE hMSI )
 {
-    BOOL bResult = FALSE;
+    bool bResult = FALSE;
     wchar_t* pVal = nullptr;
     if ( GetMsiPropW( hMSI, L"VersionNT64", &pVal ) && pVal )
     {
@@ -272,8 +272,8 @@ extern "C" __declspec(dllexport) UINT __stdcall InstallActiveXControl( MSIHANDLE
         int nOldInstallMode = 0;
         int nInstallMode = 0;
         int nDeinstallMode = 0;
-        BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );
-        BOOL bInstallFor64Bit = MakeInstallFor64Bit( hMSI );
+        bool bInstallForAllUser = MakeInstallForAllUsers( hMSI );
+        bool bInstallFor64Bit = MakeInstallFor64Bit( hMSI );
 
         wchar_t* pActiveXPath = nullptr;
         if ( GetActiveXControlPath( hMSI, &pActiveXPath ) && pActiveXPath
@@ -319,8 +319,8 @@ extern "C" __declspec(dllexport) UINT __stdcall DeinstallActiveXControl( MSIHAND
         wchar_t* pActiveXPath = nullptr;
         if ( current_state == INSTALLSTATE_LOCAL && GetActiveXControlPath( hMSI, &pActiveXPath ) && pActiveXPath )
         {
-            BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );
-            BOOL bInstallFor64Bit = MakeInstallFor64Bit( hMSI );
+            bool bInstallForAllUser = MakeInstallForAllUsers( hMSI );
+            bool bInstallFor64Bit = MakeInstallFor64Bit( hMSI );
 
             {
                 UnregisterActiveXNative( pActiveXPath,

@@ -1053,9 +1053,9 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool WinSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    BOOL const ret = PostMessageW(mhWnd, SAL_MSG_USEREVENT, 0, reinterpret_cast<LPARAM>(pData.release()));
-    SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
-    return static_cast<bool>(ret);
+    bool const ret = PostMessageW(mhWnd, SAL_MSG_USEREVENT, 0, reinterpret_cast<LPARAM>(pData.release()));
+    SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
+    return ret;
 }
 
 void WinSalFrame::SetTitle( const OUString& rTitle )
@@ -1202,8 +1202,8 @@ void WinSalFrame::Show( bool bVisible, bool bNoActivate )
     // We post this message to avoid deadlocks
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
     {
-        BOOL const ret = PostMessageW(mhWnd, SAL_MSG_SHOW, WPARAM(bVisible), LPARAM(bNoActivate));
-        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        bool const ret = PostMessageW(mhWnd, SAL_MSG_SHOW, WPARAM(bVisible), LPARAM(bNoActivate));
+        SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else
         ImplSalShow( mhWnd, bVisible, bNoActivate );
@@ -1987,8 +1987,8 @@ void WinSalFrame::ToTop( SalFrameToTop nFlags )
     // We post this message to avoid deadlocks
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
     {
-        BOOL const ret = PostMessageW( mhWnd, SAL_MSG_TOTOP, static_cast<WPARAM>(nFlags), 0 );
-        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        bool const ret = PostMessageW( mhWnd, SAL_MSG_TOTOP, static_cast<WPARAM>(nFlags), 0 );
+        SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else
         ImplSalToTop( mhWnd, nFlags );
@@ -2959,8 +2959,8 @@ static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         vcl::Window *pWin = pFrame->GetWindow();
         if( pWin && pWin->ImplGetWindowImpl()->mpFrameData->mnFocusId )
         {
-            BOOL const ret = PostMessageW( hWnd, nMsg, wParam, lParam );
-            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+            bool const ret = PostMessageW( hWnd, nMsg, wParam, lParam );
+            SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
             return true;
         }
     }
@@ -3472,7 +3472,7 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             SalKeyEvent     aKeyEvt;
             SalEvent        nEvent;
             MSG             aCharMsg;
-            BOOL            bCharPeek = FALSE;
+            bool            bCharPeek = FALSE;
             UINT            nCharMsg = WM_CHAR;
             bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
@@ -3696,8 +3696,8 @@ static WinSalFrame* ProcessOrDeferMessage( HWND hWnd, INT nMsg, WPARAM pWParam =
             ImplSalYieldMutexRelease();
         if ( DeferPolicy::Allowed == eCanDefer )
         {
-            BOOL const ret = PostMessageW(hWnd, nMsg, pWParam, 0);
-            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+            bool const ret = PostMessageW(hWnd, nMsg, pWParam, 0);
+            SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
         }
     }
 
@@ -4128,13 +4128,13 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
             bReleaseMutex = true;
         else if ( nMsg == WM_QUERYNEWPALETTE )
         {
-            BOOL const ret = PostMessageW(hWnd, SAL_MSG_POSTQUERYNEWPAL, wParam, lParam);
-            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+            bool const ret = PostMessageW(hWnd, SAL_MSG_POSTQUERYNEWPAL, wParam, lParam);
+            SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
         }
         else /* ( nMsg == WM_PALETTECHANGED ) */
         {
-            BOOL const ret = PostMessageW(hWnd, SAL_MSG_POSTPALCHANGED, wParam, lParam);
-            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+            bool const ret = PostMessageW(hWnd, SAL_MSG_POSTPALCHANGED, wParam, lParam);
+            SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
         }
     }
 
@@ -4751,8 +4751,8 @@ static bool ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
     if ( pFrame->mbFullScreen )
     {
-        BOOL    bMaximize = IsZoomed( pFrame->mhWnd );
-        BOOL    bMinimize = IsIconic( pFrame->mhWnd );
+        bool    bMaximize = IsZoomed( pFrame->mhWnd );
+        bool    bMinimize = IsIconic( pFrame->mhWnd );
         if ( (nCommand == SC_SIZE) ||
              (!bMinimize && (nCommand == SC_MOVE)) ||
              (!bMaximize && (nCommand == SC_MAXIMIZE)) ||

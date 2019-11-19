@@ -22,9 +22,9 @@
 static int ArgStrLen(const wchar_t *s)
 {
     int i = wcslen(s);
-    BOOL hasDoubleQuote = wcschr(s, L'"') != nullptr;
+    bool hasDoubleQuote = wcschr(s, L'"') != nullptr;
     // Only add doublequotes if the string contains a space or a tab
-    BOOL addDoubleQuotes = wcspbrk(s, L" \t") != nullptr;
+    bool addDoubleQuotes = wcspbrk(s, L" \t") != nullptr;
 
     if (addDoubleQuotes)
     {
@@ -69,9 +69,9 @@ static int ArgStrLen(const wchar_t *s)
  */
 static wchar_t* ArgToString(wchar_t *d, const wchar_t *s)
 {
-    BOOL hasDoubleQuote = wcschr(s, L'"') != nullptr;
+    bool hasDoubleQuote = wcschr(s, L'"') != nullptr;
     // Only add doublequotes if the string contains a space or a tab
-    BOOL addDoubleQuotes = wcspbrk(s, L" \t") != nullptr;
+    bool addDoubleQuotes = wcspbrk(s, L" \t") != nullptr;
 
     if (addDoubleQuotes)
     {
@@ -171,7 +171,7 @@ WinLaunchChild(const wchar_t *exePath,
                HANDLE *hProcess)
 {
     wchar_t *cl;
-    BOOL ok;
+    bool ok;
 
     cl = MakeCommandLine(argc, argv);
     if (!cl)

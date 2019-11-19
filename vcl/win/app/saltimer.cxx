@@ -110,9 +110,9 @@ void WinSalTimer::Start( sal_uInt64 nMS )
     WinSalInstance *pInst = GetSalData()->mpInstance;
     if ( pInst && !pInst->IsMainThread() )
     {
-        BOOL const ret = PostMessageW(pInst->mhComWnd,
+        bool const ret = PostMessageW(pInst->mhComWnd,
             SAL_MSG_STARTTIMER, 0, static_cast<LPARAM>(tools::Time::GetSystemTicks()) + nMS);
-        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else
         ImplStart( nMS );
@@ -123,9 +123,9 @@ void WinSalTimer::Stop()
     WinSalInstance *pInst = GetSalData()->mpInstance;
     if ( pInst && !pInst->IsMainThread() )
     {
-        BOOL const ret = PostMessageW(pInst->mhComWnd,
+        bool const ret = PostMessageW(pInst->mhComWnd,
             SAL_MSG_STOPTIMER, 0, 0);
-        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else
         ImplStop();
@@ -140,11 +140,11 @@ void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
     __try
     {
         WinSalTimer *pTimer = static_cast<WinSalTimer*>( data );
-        BOOL const ret = PostMessageW(
+        bool const ret = PostMessageW(
             GetSalData()->mpInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK,
             static_cast<WPARAM>(pTimer->GetNextEventVersion()), 0 );
 #if OSL_DEBUG_LEVEL > 0
-        if (0 == ret) // SEH prevents using SAL_WARN here?
+        if (!ret) // SEH prevents using SAL_WARN here?
             fputs("ERROR: PostMessage() failed!\n", stderr);
 #endif
     }

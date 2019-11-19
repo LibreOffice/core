@@ -161,7 +161,7 @@ public:
 
 private:
     HGLOBAL m_hGlob;
-    BOOL    m_bIsLocked;
+    bool    m_bIsLocked;
     LPVOID  m_pGlobMem;
 };
 

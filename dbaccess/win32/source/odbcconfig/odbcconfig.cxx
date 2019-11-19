@@ -51,7 +51,7 @@ static int displayLastError()
 
 /** registers the window class for our application's main window
 */
-static BOOL registerWindowClass( HINSTANCE _hAppInstance )
+static bool registerWindowClass( HINSTANCE _hAppInstance )
 {
     WNDCLASSEXW wcx;
 

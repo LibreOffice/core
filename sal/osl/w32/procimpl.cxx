@@ -198,7 +198,7 @@ namespace /* private */
         sa.lpSecurityDescriptor = p_security_descriptor;
         sa.bInheritHandle       = b_read_pipe_inheritable || b_write_pipe_inheritable;
 
-        BOOL   bRet  = FALSE;
+        bool   bRet  = FALSE;
         HANDLE hTemp = nullptr;
 
         if (!b_read_pipe_inheritable && b_write_pipe_inheritable)
@@ -520,7 +520,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     OUString cmdline = command_line.makeStringAndClear();
     PROCESS_INFORMATION process_info;
-    BOOL bRet = FALSE;
+    bool bRet = FALSE;
 
     if ((Security != nullptr) && (static_cast<oslSecurityImpl*>(Security)->m_hToken != nullptr))
     {

@@ -32,8 +32,8 @@ namespace
 {
 void PostMessageToComWnd(UINT nMsg)
 {
-    BOOL const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd, nMsg, 0, 0);
-    SAL_WARN_IF(0 == ret, "vcl.schedule", "ERROR: PostMessage() failed!");
+    bool const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd, nMsg, 0, 0);
+    SAL_WARN_IF(!ret, "vcl.schedule", "ERROR: PostMessage() failed!");
 }
 }
 

@@ -287,7 +287,7 @@ static LSTATUS createKey(HKEY hkey,
 }
 
 EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
-static HRESULT DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess, const wchar_t* pProgramPath, const wchar_t* pLibName )
+static HRESULT DllRegisterServerNative_Impl( int nMode, bool bForAllUsers, REGSAM nKeyAccess, const wchar_t* pProgramPath, const wchar_t* pLibName )
 {
     char        aSubKey[513];
     int         ind;
@@ -483,7 +483,7 @@ static HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
     return REG_DELETE_KEY_A( hkey, pPath, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ) );
 }
 
-static HRESULT DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
+static HRESULT DllUnregisterServerNative_Impl( int nMode, bool bForAllUsers, REGSAM nKeyAccess )
 {
     char aSubKey[513];
     const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
@@ -586,7 +586,7 @@ const char* const aMSMimeType[] = { "application/msword",
 const int nForMSModes[] = { 1, 1, 2, 2, 4, 4, 4 };
 
 EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
-static HRESULT DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
+static HRESULT DllRegisterServerDoc_Impl( int nMode, bool bForAllUsers, REGSAM nKeyAccess )
 {
     char aSubKey[513];
     int         ind;
@@ -669,7 +669,7 @@ EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllRegisterServerDoc( int 
 
 // DllUnregisterServerDoc - Removes entries from the system registry
 
-static HRESULT DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
+static HRESULT DllUnregisterServerDoc_Impl( int nMode, bool bForAllUsers, REGSAM nKeyAccess )
 {
     char aSubKey[513];
     const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
