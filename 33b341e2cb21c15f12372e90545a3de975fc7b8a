@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_ed8fb420",
+        "filename": "sc/uiconfig/scalc/ui/optcalculatepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-19T07:50:55Z",
+      "side": 1,
+      "message": "No good reason for a spacing between related controls. That\u0027s up to the system theme.",
+      "range": {
+        "startLine": 98,
+        "startChar": 45,
+        "endLine": 98,
+        "endChar": 46
+      },
+      "revId": "33b341e2cb21c15f12372e90545a3de975fc7b8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_ad99bc6e",
+        "filename": "sc/uiconfig/scalc/ui/optcalculatepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-19T07:50:55Z",
+      "side": 1,
+      "message": "Didn\u0027t we agree on 24? ...nope, we said 18.",
+      "range": {
+        "startLine": 278,
+        "startChar": 50,
+        "endLine": 278,
+        "endChar": 52
+      },
+      "revId": "33b341e2cb21c15f12372e90545a3de975fc7b8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
