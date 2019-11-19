@@ -26,6 +26,16 @@ enum class InfobarType {
     DANGER = 3
 };
 
+class InfobarData
+{
+    public:
+    OUString msId;
+    OUString msPrimaryMessage;
+    OUString msSecondaryMessage;
+    InfobarType maInfobarType;
+    bool mbShowCloseButton;
+};
+
 /** SfxChildWindow for positioning the InfoBar in the view.
   */
 class SFX2_DLLPUBLIC SfxInfoBarContainerChild final : public SfxChildWindow

@@ -99,6 +99,7 @@
 #include <sfx2/sfxuno.hxx>
 #include <shellimpl.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <sfx2/infobar.hxx>
 
 #include <basic/basicmanagerrepository.hxx>
 

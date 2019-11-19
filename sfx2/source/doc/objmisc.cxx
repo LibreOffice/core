@@ -112,6 +112,7 @@
 #include <sfx2/strings.hrc>
 #include <workwin.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <sfx2/infobar.hxx>
 #include <appbaslib.hxx>
 #include <openflag.hxx>
 #include "objstor.hxx"
@@ -200,6 +201,24 @@ void SfxObjectShell::FlushDocInfo()
     sal_Int32 delay(xDocProps->getAutoloadSecs());
     SetAutoLoad( INetURLObject(url), delay * 1000,
                  (delay > 0) || !url.isEmpty() );
+}
+
+void SfxObjectShell::AppendInfoBarWhenReady(const OUString& sId, const OUString& sPrimaryMessage,
+                                          const OUString& sSecondaryMessage,
+                                          InfobarType aInfobarType, bool bShowCloseButton)
+{
+    InfobarData aInfobarData;
+    aInfobarData.msId = sId;
+    aInfobarData.msPrimaryMessage = sPrimaryMessage;
+    aInfobarData.msSecondaryMessage = sSecondaryMessage;
+    aInfobarData.maInfobarType = aInfobarType;
+    aInfobarData.mbShowCloseButton = bShowCloseButton;
+    Get_Impl()->m_aPendingInfobars.emplace_back(aInfobarData);
+}
+
+std::vector<InfobarData>& SfxObjectShell::getPendingInfobars()
+{
+    return Get_Impl()->m_aPendingInfobars;
 }
 
 void SfxObjectShell::SetError(ErrCode lErr)
