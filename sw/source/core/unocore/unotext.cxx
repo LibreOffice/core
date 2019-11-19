@@ -534,9 +534,6 @@ SwXText::insertTextContent(
         aIllegal.Message = "first parameter invalid";
         throw aIllegal;
     }
-    // Any direct formatting ending at the insert position (xRange) should not
-    // be expanded to cover the inserted content (xContent)
-    GetDoc()->DontExpandFormat( *aPam.Start() );
 
     // first test if the range is at the right position, then call
     // xContent->attach
@@ -1434,10 +1431,21 @@ SwXText::insertTextContentWithProperties(
         throw  uno::RuntimeException();
     }
 
+    SwUnoInternalPaM aPam(*GetDoc());
+    if (!::sw::XTextRangeToSwPaM(aPam, xInsertPosition))
+    {
+        throw lang::IllegalArgumentException("invalid position", nullptr, 2);
+    }
+
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SwResId(STR_UNDO_INSERT_TEXTBOX));
 
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, &aRewriter);
+
+    // Any direct formatting ending at the insert position (xRange) should not
+    // be expanded to cover the inserted content (xContent)
+    // (insertTextContent() shouldn't do this, only ...WithProperties()!)
+    GetDoc()->DontExpandFormat( *aPam.Start() );
 
     // now attach the text content here
     insertTextContent( xInsertPosition, xTextContent, false );
