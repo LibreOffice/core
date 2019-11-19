@@ -495,7 +495,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
     {
         PTLS    pTls = static_cast<PTLS>(Key);
         void*   pOldData = nullptr;
-        BOOL    fSuccess;
+        bool    fSuccess;
 
         if ( pTls->pfnCallback )
             pOldData = TlsGetValue( pTls->dwIndex );
@@ -505,7 +505,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
         if ( fSuccess && pTls->pfnCallback && pOldData )
             pTls->pfnCallback( pOldData );
 
-        return fSuccess != FALSE;
+        return fSuccess;
     }
 
     return false;
@@ -517,7 +517,7 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void)
 {
     DWORD_PTR           dwEncoding;
     rtl_TextEncoding    _encoding;
-    BOOL                gotACP;
+    bool                gotACP;
 
     if ( DWORD(-1) == g_dwTLSTextEncodingIndex )
         g_dwTLSTextEncodingIndex = TlsAlloc();
