@@ -814,6 +814,10 @@ bool SwFieldFormCheckboxPortion::Format( SwTextFormatInfo & rInf )
     OSL_ENSURE(pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX, "Where is my form field bookmark???");
     if (pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
     {
+        // the width of the checkbox portion is the same as its height since it's a square
+        // and that size depends on the font size.
+        // See:
+        // http://document-foundation-mail-archive.969070.n3.nabble.com/Wrong-copy-paste-in-SwFieldFormCheckboxPortion-Format-td4269112.html
         Width( rInf.GetTextHeight(  ) );
         Height( rInf.GetTextHeight(  ) );
         SetAscent( rInf.GetAscent(  ) );
