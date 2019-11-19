@@ -577,6 +577,7 @@ case "$host_os" in
 solaris*)
     build_gstreamer_1_0=yes
     test_freetype=yes
+    build_skia=yes
     _os=SunOS
 
     dnl ===========================================================
@@ -603,6 +604,7 @@ linux-gnu*|k*bsd*-gnu*)
     build_gstreamer_1_0=yes
     test_kf5=yes
     test_gtk3_kde5=yes
+    build_skia=yes
     test_gdb_index=yes
     test_split_debug=yes
     if test "$enable_fuzzers" != yes; then
@@ -641,6 +643,7 @@ cygwin*|interix*)
     test_xrender=no
     test_freetype=no
     test_fontconfig=no
+    build_skia=yes
     _os=WINNT
 
     DLLPOST=".dll"
@@ -695,6 +698,7 @@ freebsd*)
     test_kf5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
+    build_skia=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
         OSVERSION="$with_os_version"
@@ -722,6 +726,7 @@ freebsd*)
     test_kf5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
+    build_skia=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
     ;;
@@ -745,6 +750,7 @@ dragonfly*)
     test_kf5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
+    build_skia=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
     ;;
@@ -10866,7 +10872,7 @@ AC_SUBST(POPPLER_LIBS)
 # Skia?
 AC_MSG_CHECKING([whether to build Skia])
 ENABLE_SKIA=
-if test "$enable_skia" != "no"; then
+if test "$enable_skia" != "no" -a "$build_skia" = "yes"; then
     AC_MSG_RESULT([yes])
     ENABLE_SKIA=TRUE
     AC_DEFINE(HAVE_FEATURE_SKIA)
