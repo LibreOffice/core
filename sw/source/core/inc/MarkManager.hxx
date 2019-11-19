@@ -130,7 +130,9 @@ namespace sw {
             // additional container for bookmarks
             container_t m_vBookmarks;
             // additional container for fieldmarks
-            container_t m_vFieldmarks;
+            container_t m_vFieldmarkByStart;
+            // additional container for fieldmarks, sorted by end-mark
+            container_t m_vFieldmarkByEnd;
 
             mutable MarkBasenameMapUniqueOffset_t m_aMarkBasenameMapUniqueOffset;
 
