@@ -1432,6 +1432,17 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     aHelper.UpdateInfobar(*this);
                 }
 
+                // Add pending infobars
+                std::vector<InfobarData>& aPendingInfobars = m_xObjSh->getPendingInfobars();
+                while (!aPendingInfobars.empty())
+                {
+                    InfobarData& aInfobarData = aPendingInfobars.back();
+                    AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
+                                  aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
+                                  aInfobarData.mbShowCloseButton);
+                    aPendingInfobars.pop_back();
+                }
+
                 break;
             }
             default: break;
@@ -3290,6 +3301,9 @@ VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
 {
     SfxChildWindow* pChild = GetChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     if (!pChild)
+        return nullptr;
+
+    if (HasInfoBarWithID(sId))
         return nullptr;
 
     SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
