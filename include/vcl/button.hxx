@@ -103,7 +103,6 @@ protected:
 enum class PushButtonDropdownStyle
 {
     NONE            = 0x0000,
-    Toolbox         = 0x0001,
     MenuButton      = 0x0002, //visual down arrow
     SplitMenuButton = 0x0003, //visual down arrow and separator line
 };

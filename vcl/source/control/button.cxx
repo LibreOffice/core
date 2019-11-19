@@ -728,32 +728,6 @@ DrawTextFlags PushButton::ImplGetTextStyle( DrawFlags nDrawFlags ) const
     return nTextStyle;
 }
 
-static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
-                                      long nX, long nY,
-                                      Color const & rColor, bool bBlack )
-{
-    Color aOldLineColor = pDev->GetLineColor();
-    Color aOldFillColor = pDev->GetFillColor();
-
-    pDev->SetLineColor();
-    if ( bBlack )
-        pDev->SetFillColor( COL_BLACK );
-    else
-        pDev->SetFillColor( rColor );
-    pDev->DrawRect( tools::Rectangle( nX+0, nY+0, nX+6, nY+0 ) );
-    pDev->DrawRect( tools::Rectangle( nX+1, nY+1, nX+5, nY+1 ) );
-    pDev->DrawRect( tools::Rectangle( nX+2, nY+2, nX+4, nY+2 ) );
-    pDev->DrawRect( tools::Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
-    if ( bBlack )
-    {
-        pDev->SetFillColor( rColor );
-        pDev->DrawRect( tools::Rectangle( nX+2, nY+1, nX+4, nY+1 ) );
-        pDev->DrawRect( tools::Rectangle( nX+3, nY+2, nX+3, nY+2 ) );
-    }
-    pDev->SetLineColor( aOldLineColor );
-    pDev->SetFillColor( aOldFillColor );
-}
-
 void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
                                            const tools::Rectangle& rRect, bool bMenuBtnSep,
                                            DrawButtonFlags nButtonFlags)
@@ -853,26 +827,6 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
         {
             DecorationView aDecoView( pDev );
             aDecoView.DrawSymbol( aSymbolRect, meSymbol, aColor, nStyle );
-        }
-
-        if ( mnDDStyle == PushButtonDropdownStyle::Toolbox )
-        {
-            bool bBlack = false;
-            Color   aArrowColor( COL_BLACK );
-
-            if ( !(nDrawFlags & DrawFlags::Mono) )
-            {
-                if ( !IsEnabled() )
-                    aArrowColor = rStyleSettings.GetShadowColor();
-                else
-                {
-                    aArrowColor = COL_LIGHTGREEN;
-                    bBlack = true;
-                }
-            }
-
-            ImplDrawBtnDropDownArrow( pDev, aInRect.Right()-6, aInRect.Top()+1,
-                                      aArrowColor, bBlack );
         }
     }
 
