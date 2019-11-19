@@ -81,6 +81,10 @@ interface ISOComWindowPeer : IDispatch
                 HRESULT Bridge_implementedInterfaces([out, retval] SAFEARRAY(BSTR) *pVal);
 };
 
+struct WrapperIDispatch{
+    IDispatch * iobject;
+};
+
 [
     object,
     uuid(9337694C-B27D-4384-95A4-9D8E0EABC9E5),
@@ -113,7 +117,7 @@ interface ISODispatchInterceptor : IDispatch
                                        [out,retval] IDispatch** retVal );
 
     [id(6), helpstring("method queryDispatches")]
-                HRESULT queryDispatches( [in] SAFEARRAY(IDispatch*) aDescripts,
+                HRESULT queryDispatches( [in] SAFEARRAY(struct WrapperIDispatch*)* aDescripts,
                                          [out,retval] SAFEARRAY(VARIANT)* retVal );
 
 
