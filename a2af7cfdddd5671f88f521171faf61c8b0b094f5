@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_70d05b20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-19T11:01:01Z",
+      "side": 1,
+      "message": "Hmm... I suppose that nested sections would rather work like nested containers - i.e., when inner one is transparent, we should see its immediate parent, not right the topmost page container?",
+      "parentUuid": "7f7f9b97_90e2d700",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "a2af7cfdddd5671f88f521171faf61c8b0b094f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_30f183ce",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-11-19T10:51:56Z",
       "side": 1,
       "message": "what happens in older versions that didn\u0027t have fill-style items? like 4.1 or 4.2 - i forgot when that was added...",
+      "range": {
+        "startLine": 50,
+        "startChar": 33,
+        "endLine": 51,
+        "endChar": 29
+      },
+      "revId": "a2af7cfdddd5671f88f521171faf61c8b0b094f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_50c51f5a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-19T11:01:01Z",
+      "side": 1,
+      "message": "That is the great idea; and returning false supportsFullDrawingLayerFillAttributeSet makes it work just like in 4.0 (which I just tested). And yes, seeing through all parent sections was also already there. Will implement the supportsFullDrawingLayerFillAttributeSet for now. Thanks!",
+      "parentUuid": "7f7f9b97_30f183ce",
       "range": {
         "startLine": 50,
         "startChar": 33,
