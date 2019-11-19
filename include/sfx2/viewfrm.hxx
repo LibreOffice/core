@@ -40,6 +40,7 @@ class Size;
 class SfxChildWindow;
 class SfxInfoBarWindow;
 enum class InfobarType;
+class InfobarData;
 
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
@@ -49,6 +50,8 @@ class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
     std::unique_ptr<SfxDispatcher> m_pDispatcher;
     SfxBindings*                m_pBindings;
     sal_uInt16                  m_nAdjustPosPixelLock;
+    /// Holds Infobars until View is fully loaded
+    std::vector<InfobarData>    m_aPendingInfobars;
 
 private:
     SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh );
@@ -157,6 +160,11 @@ public:
                                     const OUString& sSecondaryMessage,
                                     InfobarType aInfobarType,
                                     bool bShowCloseButton=true);
+    /** Like AppendInfoBar, but delays Infobar creation until the frame is ready.
+        Useful when you want to register an Infobar before the doc/frame is fully loaded. */
+    void AppendInfoBarWhenReady(const OUString& sId, const OUString& sPrimaryMessage,
+                                const OUString& sSecondaryMessage, InfobarType aInfobarType,
+                                bool bShowCloseButton = true);
     void              RemoveInfoBar(const OUString& sId);
     void              UpdateInfoBar(const OUString& sId, const OUString& sPrimaryMessage,
                                     const OUString& sSecondaryMessage,
