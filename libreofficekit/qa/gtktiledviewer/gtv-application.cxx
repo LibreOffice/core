@@ -14,10 +14,14 @@
 
 #include <string>
 
+namespace {
+
 struct GtvApplicationPrivate
 {
     GtvRenderingArgs* m_pRenderingArgs;
 };
+
+}
 
 #if defined __clang__
 #if __has_warning("-Wdeprecated-volatile")

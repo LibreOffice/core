@@ -67,6 +67,8 @@ typedef std::map< OUString, sal_Int32 > CellStyleNameMap;
 
 typedef ::cppu::WeakComponentImplHelper< XStyle, XNameReplace, XServiceInfo, XIndexAccess, XModifyBroadcaster, XModifyListener > TableDesignStyleBase;
 
+namespace {
+
 class TableDesignStyle : private ::cppu::BaseMutex, public TableDesignStyleBase
 {
 public:
@@ -122,7 +124,11 @@ public:
     Reference< XStyle > maCellStyles[style_count];
 };
 
+}
+
 typedef std::vector< Reference< XStyle > > TableDesignStyleVector;
+
+namespace {
 
 class TableDesignFamily : public ::cppu::WeakImplHelper< XNameContainer, XNamed, XIndexAccess, XSingleServiceFactory,  XServiceInfo, XComponent, XPropertySet >
 {
@@ -176,6 +182,8 @@ public:
 
     TableDesignStyleVector  maDesigns;
 };
+
+}
 
 TableDesignStyle::TableDesignStyle()
 : TableDesignStyleBase(m_aMutex)

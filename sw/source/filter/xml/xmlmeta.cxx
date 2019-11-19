@@ -87,14 +87,14 @@ enum SvXMLTokenMapAttrs
     XML_TOK_META_STAT_END=XML_TOK_UNKNOWN
 };
 
-}
-
 struct statistic {
     SvXMLTokenMapAttrs const token;
     const char* name;
     sal_uInt16 SwDocStat::* target16;
     sal_uLong  SwDocStat::* target32; /* or 64, on LP64 platforms */
 };
+
+}
 
 static const struct statistic s_stats [] = {
     { XML_TOK_META_STAT_TABLE, "TableCount",     &SwDocStat::nTable, nullptr  },

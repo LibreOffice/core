@@ -59,6 +59,8 @@ using ::com::sun::star::container::XIndexAccess;
 
 namespace swf {
 
+namespace {
+
 class OslOutputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XOutputStream>
 {
     osl::File maFile;
@@ -75,6 +77,8 @@ public:
     virtual void SAL_CALL flush(  ) override;
     virtual void SAL_CALL closeOutput(  ) override;
 };
+
+}
 
 void SAL_CALL OslOutputStreamWrapper::writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
 {
@@ -132,6 +136,7 @@ void SAL_CALL OslOutputStreamWrapper::closeOutput(  )
     }
 }
 
+namespace {
 
 class FlashExportFilter : public cppu::WeakImplHelper
 <
@@ -172,6 +177,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxContext)
     : mxDoc()

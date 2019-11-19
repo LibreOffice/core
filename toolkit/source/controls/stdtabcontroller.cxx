@@ -226,11 +226,15 @@ Sequence< Reference< XControl > > StdTabController::getControls(  )
     return aSeq;
 }
 
+namespace {
+
 struct ComponentEntry
 {
     css::awt::XWindow*  pComponent;
     ::Point             aPos;
 };
+
+}
 
 void StdTabController::autoTabOrder(  )
 {

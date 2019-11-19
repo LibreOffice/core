@@ -1670,6 +1670,8 @@ void WatchWindow::Resize()
     Invalidate();
 }
 
+namespace {
+
 struct WatchItem
 {
     OUString        maName;
@@ -1699,6 +1701,8 @@ struct WatchItem
     WatchItem* GetRootItem();
     SbxDimArray* GetRootArray();
 };
+
+}
 
 WatchItem* WatchItem::GetRootItem()
 {

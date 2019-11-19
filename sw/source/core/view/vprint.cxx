@@ -90,6 +90,8 @@ public:
 
 SwQueuedPaint *SwPaintQueue::s_pPaintQueue = nullptr;
 
+namespace {
+
 // saves some settings from the draw view
 class SwDrawViewSave
 {
@@ -99,6 +101,8 @@ public:
     explicit SwDrawViewSave( SdrView* pSdrView );
     ~SwDrawViewSave();
 };
+
+}
 
 void SwPaintQueue::Add( SwViewShell *pNew, const SwRect &rNew )
 {

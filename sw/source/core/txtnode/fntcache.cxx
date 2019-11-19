@@ -246,6 +246,8 @@ static bool lcl_IsFontAdjustNecessary( const vcl::RenderContext& rOutDev,
              OUTDEV_PRINTER != rOutDev.GetOutDevType() );
 }
 
+namespace {
+
 struct CalcLinePosData
 {
     SwDrawTextInfo& rInf;
@@ -273,6 +275,8 @@ struct CalcLinePosData
     {
     }
 };
+
+}
 
 // Computes the start and end position of an underline. This function is called
 // from the DrawText-method (for underlining misspelled words or smarttag terms).

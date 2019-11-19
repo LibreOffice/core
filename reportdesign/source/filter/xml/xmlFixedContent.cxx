@@ -36,6 +36,8 @@ namespace rptxml
 {
     using namespace ::com::sun::star;
 
+namespace {
+
 class OXMLCharContent: public XMLCharContext
 {
     OXMLFixedContent* m_pFixedContent;
@@ -62,6 +64,9 @@ public:
     virtual void InsertControlCharacter(sal_Int16   _nControl) override;
     virtual void InsertString(const OUString& _sString) override;
 };
+
+}
+
 OXMLCharContent::OXMLCharContent(
         SvXMLImport& rImport,
         OXMLFixedContent* _pFixedContent,

@@ -249,6 +249,8 @@ XMLAutoStylePoolParent::~XMLAutoStylePoolParent()
 {
 }
 
+namespace {
+
 struct ComparePartial
 {
     const XMLAutoStyleFamily& rFamilyData;
@@ -264,6 +266,8 @@ struct ComparePartial
         return rFamilyData.mxMapper->LessPartial(lhs->GetProperties(), rhs);
     }
 };
+
+}
 
 // Adds an array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.

@@ -71,11 +71,15 @@ using namespace ::com::sun::star::xml::sax;
 namespace framework
 {
 
+namespace {
+
 struct ImageXMLEntryProperty
 {
     OReadImagesDocumentHandler::Image_XML_Namespace nNamespace;
     char                                            aEntryName[20];
 };
+
+}
 
 ImageXMLEntryProperty const ImagesEntries[OReadImagesDocumentHandler::IMG_XML_ENTRY_COUNT] =
 {

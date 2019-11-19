@@ -34,6 +34,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
+namespace {
+
 class IfContext
     : public LayoutNodeContext
 {
@@ -168,6 +170,8 @@ public:
 private:
     LayoutNode::VarMap & mVariables;
 };
+
+}
 
 // CT_LayoutNode
 LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper const & rParent,

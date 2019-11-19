@@ -59,6 +59,8 @@ using namespace ::com::sun::star::ucb;
 using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
+namespace {
+
 class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task::XInteractionHandler >
 {
     css::uno::Reference< css::task::XInteractionHandler > m_xInter;
@@ -75,6 +77,8 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task:
 
     virtual void SAL_CALL   handle( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
 };
+
+}
 
 void SdGRFFilter_ImplInteractionHdl::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
 {

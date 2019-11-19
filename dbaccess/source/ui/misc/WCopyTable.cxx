@@ -387,6 +387,8 @@ OUString NamedTableCopySource::getSelectStatement() const
     return const_cast< NamedTableCopySource* >( this )->impl_ensureStatement_throw();
 }
 
+namespace {
+
 // DummyCopySource
 class DummyCopySource : public ICopyTableSourceObject
 {
@@ -409,6 +411,8 @@ public:
     virtual ::utl::SharedUNOComponent< XPreparedStatement >
                                 getPreparedSelectStatement() const override;
 };
+
+}
 
 const DummyCopySource& DummyCopySource::Instance()
 {

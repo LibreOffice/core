@@ -31,12 +31,16 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 struct BuiltinStyleTable
 {
     sal_Int32 const wdBuiltinStyle;
     const sal_Char* pOOoStyleName;
     sal_Int32 const wdStyleType;
 };
+
+}
 
 static const BuiltinStyleTable aBuiltinStyleTable[] =
 {
@@ -146,17 +150,23 @@ static const BuiltinStyleTable aBuiltinStyleTable[] =
     { 0, nullptr, 0 }
 };
 
+namespace {
+
 struct MSOStyleNameTable
 {
     const sal_Char* pMSOStyleName;
     const sal_Char* pOOoStyleName;
 };
 
+}
+
 static const MSOStyleNameTable aMSOStyleNameTable[] =
 {
     { "Normal", "Default" },
     { nullptr, nullptr }
 };
+
+namespace {
 
 class StyleCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAccess,
                                                              container::XIndexAccess,
@@ -263,6 +273,8 @@ public:
         throw container::NoSuchElementException();
     }
 };
+
+}
 
 SwVbaStyles::SwVbaStyles( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
     : SwVbaStyles_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new StyleCollectionHelper( xModel )  ) ), mxModel( xModel )

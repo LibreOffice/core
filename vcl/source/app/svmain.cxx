@@ -232,6 +232,8 @@ static Application *        pOwnSvApp = nullptr;
 // Exception handler. pExceptionHandler != NULL => VCL already inited
 static oslSignalHandler pExceptionHandler = nullptr;
 
+namespace {
+
 class DesktopEnvironmentContext: public cppu::WeakImplHelper< css::uno::XCurrentContext >
 {
 public:
@@ -244,6 +246,8 @@ public:
 private:
     css::uno::Reference< css::uno::XCurrentContext > m_xNextContext;
 };
+
+}
 
 uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Name)
 {
@@ -586,6 +590,8 @@ void DeInitVCL()
     EmbeddedFontsHelper::clearTemporaryFontFiles();
 }
 
+namespace {
+
 // only one call is allowed
 struct WorkerThreadData
 {
@@ -597,6 +603,8 @@ struct WorkerThreadData
     {
     }
 };
+
+}
 
 #ifdef _WIN32
 static HANDLE hThreadID = nullptr;

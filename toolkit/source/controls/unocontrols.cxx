@@ -1994,6 +1994,8 @@ stardiv_Toolkit_UnoGroupBoxControl_get_implementation(
 
 // = UnoControlListBoxModel_Data
 
+namespace {
+
 struct ListItem
 {
     OUString ItemText;
@@ -2015,7 +2017,11 @@ struct ListItem
     }
 };
 
+}
+
 typedef beans::Pair< OUString, OUString > UnoListItem;
+
+namespace {
 
 struct StripItemData
 {
@@ -2024,6 +2030,8 @@ struct StripItemData
         return UnoListItem( i_rItem.ItemText, i_rItem.ItemImageURL );
     }
 };
+
+}
 
 struct UnoControlListBoxModel_Data
 {

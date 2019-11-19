@@ -74,6 +74,8 @@ struct OptPath_Impl
     }
 };
 
+namespace {
+
 struct PathUserData_Impl
 {
     sal_uInt16      nRealId;
@@ -95,6 +97,8 @@ struct Handle2CfgNameMapping_Impl
     sal_uInt16      m_nHandle;
     const char* m_pCfgName;
 };
+
+}
 
 static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
 {

@@ -130,12 +130,16 @@ static OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
     return aUserData;
 }
 
+namespace {
+
 struct ModuleToGroupNameMap_Impl
 {
     const char* m_pModule;
     OUString    m_sGroupName;
     sal_uInt16  m_nNodeId;
 };
+
+}
 
 static ModuleToGroupNameMap_Impl ModuleMap[] =
 {
@@ -232,6 +236,8 @@ static sal_uInt16 getGroupNodeId( const OUString& rModule )
     return nNodeId;
 }
 
+namespace {
+
 class MailMergeCfg_Impl : public utl::ConfigItem
 {
 private:
@@ -249,6 +255,8 @@ public:
     bool IsEmailSupported() const {return bIsEmailSupported;}
 
 };
+
+}
 
 MailMergeCfg_Impl::MailMergeCfg_Impl() :
     utl::ConfigItem("Office.Writer/MailMergeWizard"),
@@ -314,12 +322,16 @@ static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, weld::Co
     return fnCreate ? (*fnCreate)( pPage, pController, &rSet ) : nullptr;
 }
 
+namespace {
+
 struct OptionsMapping_Impl
 {
     const char* m_pGroupName;
     const char* m_pPageName;
     sal_uInt16      m_nPageId;
 };
+
+}
 
 static OptionsMapping_Impl const OptionsMap_Impl[] =
 {
@@ -450,6 +462,8 @@ struct OptionsPageInfo
     explicit OptionsPageInfo( sal_uInt16 nId ) : m_nPageId( nId ) {}
 };
 
+namespace {
+
 struct OptionsGroupInfo
 {
     std::unique_ptr<SfxItemSet> m_pInItemSet;
@@ -462,6 +476,8 @@ struct OptionsGroupInfo
         m_pShell( pSh ),
         m_pModule( pMod ), m_nDialogId( nId ) {}
 };
+
+}
 
 #define INI_LIST() \
     , m_pParent           ( pParent )\

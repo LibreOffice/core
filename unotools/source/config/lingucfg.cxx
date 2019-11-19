@@ -208,12 +208,18 @@ void SvtLinguConfigItem::ImplCommit()
     SaveOptions( GetPropertyNames() );
 }
 
-static struct NamesToHdl
+namespace {
+
+struct NamesToHdl
 {
     const char   *pFullPropName;      // full qualified name as used in configuration
     const char   *pPropName;          // property name only (atom) of above
     sal_Int32 const   nHdl;               // numeric handle representing the property
-} const aNamesToHdl[] =
+};
+
+}
+
+static NamesToHdl const aNamesToHdl[] =
 {
 {/*  0 */    "General/DefaultLocale",                         UPN_DEFAULT_LOCALE,                    UPH_DEFAULT_LOCALE},
 {/*  1 */    "General/DictionaryList/ActiveDictionaries",     UPN_ACTIVE_DICTIONARIES,               UPH_ACTIVE_DICTIONARIES},

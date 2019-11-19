@@ -70,6 +70,8 @@ namespace XSLT
 
     const sal_Int32 Reader::INPUT_BUFFER_SIZE = 4096;
 
+    namespace {
+
     /**
      * ParserInputBufferCallback forwards IO call-backs to libxml stream IO.
      */
@@ -200,6 +202,8 @@ namespace XSLT
             xmlXPathFreeObject(streamName);
         }
     };
+
+    }
 
     Reader::Reader(LibXSLTTransformer* transformer) :
         Thread("LibXSLTTransformer"), m_transformer(transformer),

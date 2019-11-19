@@ -26,6 +26,8 @@
 
 const sal_uInt16 MN_ST_INSERT_START = 500;
 
+namespace {
+
 class SmartTagMenuController : public svt::PopupMenuControllerBase
 {
 public:
@@ -53,6 +55,8 @@ private:
     std::vector< InvokeAction > m_aInvokeActions;
     std::unique_ptr< const SvxSmartTagItem > m_pSmartTagItem;
 };
+
+}
 
 SmartTagMenuController::SmartTagMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : svt::PopupMenuControllerBase( rxContext )

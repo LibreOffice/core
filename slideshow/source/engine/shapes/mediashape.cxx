@@ -39,6 +39,8 @@ namespace slideshow
 {
     namespace internal
     {
+        namespace {
+
         /** Represents a media shape.
 
             This implementation offers support for media shapes.
@@ -89,6 +91,7 @@ namespace slideshow
             bool                                             mbIsPlaying;
         };
 
+        }
 
         MediaShape::MediaShape( const uno::Reference< drawing::XShape >& xShape,
                                   double                                     nPrio,

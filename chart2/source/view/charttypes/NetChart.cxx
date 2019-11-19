@@ -293,8 +293,6 @@ void lcl_reorderSeries( std::vector< std::vector< VDataSeriesGroup > >&  rZSlots
     rZSlots = std::move(aRet);
 }
 
-}//anonymous namespace
-
 //better performance for big data
 struct FormerPoint
 {
@@ -312,6 +310,8 @@ struct FormerPoint
     double m_fY;
     double m_fZ;
 };
+
+}//anonymous namespace
 
 void NetChart::createShapes()
 {

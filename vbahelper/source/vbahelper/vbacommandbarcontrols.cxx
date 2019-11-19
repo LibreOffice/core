@@ -23,6 +23,8 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
+namespace {
+
 class CommandBarControlEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     //uno::Reference< uno::XComponentContext > m_xContext;
@@ -44,6 +46,8 @@ public:
         return m_pCommandBarControls->createCollectionObject( uno::makeAny( m_nCurrentPosition++ ) );
     }
 };
+
+}
 
 ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef const & pHelper, const uno::Reference< container::XIndexAccess>& xBarSettings, const OUString& sResourceUrl ) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl )
 {
@@ -243,6 +247,7 @@ ScVbaCommandBarControls::getServiceNames()
     return aServiceNames;
 }
 
+namespace {
 
 class VbaDummyIndexAccess : public ::cppu::WeakImplHelper< container::XIndexAccess >
 {
@@ -260,6 +265,7 @@ public:
         { return false; }
 };
 
+}
 
 VbaDummyCommandBarControls::VbaDummyCommandBarControls(
         const uno::Reference< XHelperInterface >& xParent,

@@ -110,6 +110,8 @@ void implSetZoom( const uno::Reference< frame::XModel >& xModel, sal_Int16 nZoom
 
 const OUString REPLACE_CELLS_WARNING( "ReplaceCellsWarning");
 
+namespace {
+
 class PasteCellsWarningReseter
 {
 private:
@@ -153,6 +155,8 @@ public:
         }
     }
 };
+
+}
 
 void
 implnPaste( const uno::Reference< frame::XModel>& xModel )

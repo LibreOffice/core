@@ -56,6 +56,8 @@ using namespace psp;
 
 // ----- Implementation of PrinterBmp by means of SalBitmap/BitmapBuffer ---------------
 
+namespace {
+
 class SalPrinterBmp : public psp::PrinterBmp
 {
 private:
@@ -76,8 +78,6 @@ public:
     virtual sal_uInt32  GetDepth () const override;
 };
 
-namespace
-{
     bool Bitmap32IsPreMultipled()
     {
         auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
@@ -533,6 +533,8 @@ void GenPspGraphics::invert(long,long,long,long,SalInvert)
     OSL_FAIL("Warning: PrinterGfx::Invert() not implemented");
 }
 
+namespace {
+
 class ImplPspFontData : public FreetypeFontFace
 {
 private:
@@ -543,10 +545,14 @@ public:
     virtual sal_IntPtr      GetFontId() const override { return mnFontId; }
 };
 
+}
+
 ImplPspFontData::ImplPspFontData(const psp::FastPrintFontInfo& rInfo)
 :   FreetypeFontFace(nullptr, GenPspGraphics::Info2FontAttributes(rInfo)),
     mnFontId( rInfo.m_nID )
 {}
+
+namespace {
 
 class PspSalLayout : public GenericSalLayout
 {
@@ -564,6 +570,8 @@ private:
     bool                mbArtItalic;
     bool                mbArtBold;
 };
+
+}
 
 PspSalLayout::PspSalLayout(::psp::PrinterGfx& rGfx, const FreetypeFont& rFont)
 :   GenericSalLayout(*rFont.GetFontInstance())

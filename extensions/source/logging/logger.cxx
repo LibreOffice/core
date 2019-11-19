@@ -49,6 +49,8 @@ namespace logging
     using ::com::sun::star::logging::XLogHandler;
     using ::com::sun::star::logging::LogRecord;
 
+    namespace {
+
     class EventLogger : public cppu::BaseMutex,
                         public cppu::WeakImplHelper<css::logging::XLogger>
     {
@@ -109,6 +111,8 @@ namespace logging
         virtual Reference< XLogger > SAL_CALL getNamedLogger( const OUString& Name ) override;
         virtual Reference< XLogger > SAL_CALL getDefaultLogger(  ) override;
     };
+
+    }
 
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const OUString& _rName )
         :m_aHandlers( m_aMutex )

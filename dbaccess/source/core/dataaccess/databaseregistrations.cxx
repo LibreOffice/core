@@ -70,6 +70,9 @@ namespace dbaccess
     // DatabaseRegistrations - declaration
     typedef ::cppu::WeakAggImplHelper1  <   XDatabaseRegistrations
                                         >   DatabaseRegistrations_Base;
+
+    namespace {
+
     class DatabaseRegistrations :public ::cppu::BaseMutex
                                 ,public DatabaseRegistrations_Base
     {
@@ -136,6 +139,8 @@ namespace dbaccess
         ::utl::OConfigurationTreeRoot       m_aConfigurationRoot;
         ::comphelper::OInterfaceContainerHelper2  m_aRegistrationListeners;
     };
+
+    }
 
     // DatabaseRegistrations - implementation
     DatabaseRegistrations::DatabaseRegistrations( const Reference<XComponentContext> & _rxContext )

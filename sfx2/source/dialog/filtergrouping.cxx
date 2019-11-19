@@ -134,12 +134,16 @@ namespace sfx2
     // which a given filter may belong to
     typedef ::std::map< OUString, FilterGroup::iterator >    FilterGroupEntryReferrer;
 
+    namespace {
+
     /// a descriptor for a filter class (which in the final dialog is represented by one filter entry)
     struct FilterClass
     {
         OUString             sDisplayName;       // the display name
         Sequence< FilterName >      aSubFilters;        // the (logical) names of the filter which belong to the class
     };
+
+    }
 
     typedef ::std::list< FilterClass >                                  FilterClassList;
     typedef ::std::map< OUString, FilterClassList::iterator >    FilterClassReferrer;
@@ -159,6 +163,7 @@ namespace sfx2
         aClassDesc.getNodeValue( "Filters" ) >>= _rClass.aSubFilters;
     }
 
+    namespace {
 
     struct CreateEmptyClassRememberPos
     {
@@ -219,6 +224,7 @@ namespace sfx2
         }
     };
 
+    }
 
     static void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rGlobalClasses, std::vector<OUString>& _rGlobalClassNames )
     {
@@ -258,6 +264,7 @@ namespace sfx2
         );
     }
 
+    namespace {
 
     struct ReadLocalFilter
     {
@@ -284,6 +291,7 @@ namespace sfx2
         }
     };
 
+    }
 
     static void lcl_ReadLocalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rLocalClasses )
     {
@@ -326,6 +334,7 @@ namespace sfx2
 
 // = grouping and classifying
 
+    namespace {
 
     // a struct which adds helps remembering a reference to a class entry
     struct ReferToFilterEntry
@@ -390,6 +399,7 @@ namespace sfx2
         }
     };
 
+    }
 
     static const sal_Unicode s_cWildcardSeparator( ';' );
 
@@ -398,6 +408,7 @@ namespace sfx2
         return ";";
     }
 
+    namespace {
 
     struct CheckAppendSingleWildcard
     {
@@ -455,6 +466,7 @@ namespace sfx2
         }
     };
 
+    }
 
     AppendWildcardToDescriptor::AppendWildcardToDescriptor( const OUString& _rWildCard )
     {
@@ -519,6 +531,8 @@ namespace sfx2
             MapGroupEntry2GroupEntry;
             // this is not really a map - it's just called this way because it is used as a map
 
+    namespace {
+
     struct FindGroupEntry
     {
         FilterGroupEntryReferrer::mapped_type const aLookingFor;
@@ -551,6 +565,7 @@ namespace sfx2
         }
     };
 
+    }
 
     static void lcl_GroupAndClassify( TSortedFilterList& _rFilterMatcher, GroupedFilterList& _rAllFilters )
     {
@@ -703,6 +718,7 @@ namespace sfx2
         rGlobalFilters.swap( aNonEmptyGlobalFilters );
     }
 
+    namespace {
 
     struct AppendFilter
     {
@@ -734,6 +750,7 @@ namespace sfx2
             }
     };
 
+    }
 
 // = handling for the "all files" entry
 
@@ -773,6 +790,7 @@ namespace sfx2
 
 // = filling an XFilterManager
 
+    namespace {
 
     struct AppendFilterGroup
     {
@@ -830,6 +848,7 @@ namespace sfx2
         }
     };
 
+    }
 
     TSortedFilterList::TSortedFilterList(const css::uno::Reference< css::container::XEnumeration >& xFilterList)
         : m_nIterator(0)
@@ -927,6 +946,8 @@ namespace sfx2
         }
     }
 
+    namespace {
+
     struct ExportFilter
     {
         ExportFilter( const OUString& _aUIName, const OUString& _aWildcard ) :
@@ -936,6 +957,7 @@ namespace sfx2
         OUString aWildcard;
     };
 
+    }
 
     void appendExportFilters( TSortedFilterList& _rFilterMatcher,
                               const Reference< XFilterManager >& _rxFilterManager,

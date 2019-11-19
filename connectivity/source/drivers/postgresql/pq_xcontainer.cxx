@@ -66,6 +66,8 @@ using com::sun::star::lang::XEventListener;
 namespace pq_sdbc_driver
 {
 
+namespace {
+
 class ReplacedBroadcaster : public EventBroadcastHelper
 {
     ContainerEvent m_event;
@@ -130,6 +132,8 @@ public:
         return cppu::UnoType<XContainerListener>::get();
     }
 };
+
+}
 
 Container::Container(
     const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
@@ -201,6 +205,7 @@ sal_Int32 Container::getCount()
     return m_values.size();
 }
 
+namespace {
 
 class ContainerEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
@@ -218,6 +223,8 @@ public:
     virtual css::uno::Any SAL_CALL nextElement(  ) override;
 
 };
+
+}
 
 sal_Bool ContainerEnumeration::hasMoreElements()
 {

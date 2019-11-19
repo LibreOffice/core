@@ -1154,6 +1154,8 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
     }
 }
 
+namespace {
+
 class KeepSlideSorterInSyncWithPageChanges
 {
     sd::slidesorter::view::SlideSorterView::DrawLock m_aDrawLock;
@@ -1170,6 +1172,8 @@ public:
     {
     }
 };
+
+}
 
 void ViewShell::ImpSidUndo(SfxRequest& rReq)
 {

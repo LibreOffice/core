@@ -46,6 +46,8 @@ namespace drawinglayer
 {
     namespace unorenderer
     {
+        namespace {
+
         class XPrimitive2DRenderer:
             public cppu::WeakAggImplHelper2<
                 css::graphic::XPrimitive2DRenderer, css::lang::XServiceInfo>
@@ -70,6 +72,8 @@ namespace drawinglayer
             virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
             virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
         };
+
+        }
     } // end of namespace unorenderer
 } // end of namespace drawinglayer
 

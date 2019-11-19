@@ -47,6 +47,8 @@
 
 using namespace vcl;
 
+namespace {
+
 class ImplPageCache
 {
     struct CacheEntry
@@ -121,6 +123,8 @@ public:
         }
     }
 };
+
+}
 
 class vcl::ImplPrinterControllerData
 {
@@ -271,6 +275,8 @@ static OUString queryFile( Printer const * pPrinter )
     return aResult;
 }
 
+namespace {
+
 struct PrintJobAsync
 {
     std::shared_ptr<PrinterController>  mxController;
@@ -283,6 +289,8 @@ struct PrintJobAsync
 
     DECL_LINK( ExecJob, void*, void );
 };
+
+}
 
 IMPL_LINK_NOARG(PrintJobAsync, ExecJob, void*, void)
 {

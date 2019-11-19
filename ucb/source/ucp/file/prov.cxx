@@ -262,6 +262,8 @@ FileProvider::createContentIdentifier(
 
 //XPropertySetInfoImpl
 
+namespace {
+
 class XPropertySetInfoImpl2
     : public cppu::OWeakObject,
       public XPropertySetInfo
@@ -296,6 +298,7 @@ private:
     Sequence< Property > m_seq;
 };
 
+}
 
 XPropertySetInfoImpl2::XPropertySetInfoImpl2()
     : m_seq( 3 )

@@ -43,6 +43,8 @@ using ::std::shared_ptr;
 
 const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
 
+namespace {
+
 class ScDPGroupNumFilter : public ScDPFilteredCache::FilterBase
 {
 public:
@@ -54,6 +56,8 @@ private:
     std::vector<ScDPItemData> const maValues;
     ScDPNumGroupInfo const maNumInfo;
 };
+
+}
 
 ScDPGroupNumFilter::ScDPGroupNumFilter(const std::vector<ScDPItemData>& rValues, const ScDPNumGroupInfo& rInfo) :
     maValues(rValues), maNumInfo(rInfo) {}
@@ -99,6 +103,8 @@ std::vector<ScDPItemData> ScDPGroupNumFilter::getMatchValues() const
     return std::vector<ScDPItemData>();
 }
 
+namespace {
+
 class ScDPGroupDateFilter : public ScDPFilteredCache::FilterBase
 {
 public:
@@ -113,6 +119,8 @@ private:
     Date const             maNullDate;
     ScDPNumGroupInfo const maNumInfo;
 };
+
+}
 
 ScDPGroupDateFilter::ScDPGroupDateFilter(
     const std::vector<ScDPItemData>& rValues, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo) :

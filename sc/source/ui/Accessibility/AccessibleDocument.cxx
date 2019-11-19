@@ -86,6 +86,8 @@ using namespace ::com::sun::star::accessibility;
 
     //=====  internal  ========================================================
 
+namespace {
+
 struct ScAccessibleShapeData
 {
     ScAccessibleShapeData(css::uno::Reference< css::drawing::XShape > xShape_);
@@ -99,6 +101,8 @@ struct ScAccessibleShapeData
     boost::optional<sal_Int16> mxLayerID;
     boost::optional<sal_Int32> mxZOrder;
 };
+
+}
 
 ScAccessibleShapeData::ScAccessibleShapeData(css::uno::Reference< css::drawing::XShape > xShape_)
     : xShape(xShape_),
@@ -127,6 +131,8 @@ ScAccessibleShapeData::~ScAccessibleShapeData()
         pAccShape->dispose();
     }
 }
+
+namespace {
 
 struct ScShapeDataLess
 {
@@ -192,6 +198,8 @@ struct ScShapeDataLess
         return bResult;
     }
 };
+
+}
 
 class ScChildrenShapes : public SfxListener,
     public ::accessibility::IAccessibleParent

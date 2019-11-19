@@ -49,6 +49,8 @@ using namespace oox;
 
 // External names =============================================================
 
+namespace {
+
 /** This is a base class for any external name (i.e. add-in names or DDE links).
     @descr  Derived classes implement creation and export of the external names. */
 class XclExpExtNameBase : public XclExpRecord, protected XclExpRoot
@@ -190,7 +192,7 @@ private:
     SCROW               mnScRow;    /// Row index of the external cells.
 };
 
-namespace { class XclExpCrnList; }
+class XclExpCrnList;
 
 /** Represents the record XCT which is the header record of a CRN record list.
  */
@@ -387,7 +389,7 @@ struct XclExpXti
                             { rStrm << mnSupbook << mnFirstSBTab << mnLastSBTab; }
 };
 
-static bool operator==( const XclExpXti& rLeft, const XclExpXti& rRight )
+bool operator==( const XclExpXti& rLeft, const XclExpXti& rRight )
 {
     return
         (rLeft.mnSupbook    == rRight.mnSupbook)    &&
@@ -483,6 +485,8 @@ private:
     sal_uInt16          mnAddInSB;          /// Index to add-in SUPBOOK.
 };
 
+}
+
 // Export link manager ========================================================
 
 /** Abstract base class for implementation classes of the link manager. */
@@ -534,6 +538,8 @@ public:
 protected:
     explicit            XclExpLinkManagerImpl( const XclExpRoot& rRoot );
 };
+
+namespace {
 
 /** Implementation of the link manager for BIFF5/BIFF7. */
 class XclExpLinkManagerImpl5 : public XclExpLinkManagerImpl
@@ -657,6 +663,8 @@ private:
     XclExpSupbookBuffer maSBBuffer;     /// List of all SUPBOOK records.
     XclExpXtiVec        maXtiVec;       /// List of XTI structures for the EXTERNSHEET record.
 };
+
+}
 
 // *** Implementation ***
 
@@ -869,6 +877,8 @@ void XclExpTabInfo::CalcXclIndexes()
 
 typedef ::std::pair< OUString, SCTAB > XclExpTabName;
 
+namespace {
+
 struct XclExpTabNameSort {
     bool operator ()( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
     {
@@ -876,6 +886,8 @@ struct XclExpTabNameSort {
         return ScGlobal::GetCollator()->compareString( rArg1.first, rArg2.first ) < 0;
     }
 };
+
+}
 
 void XclExpTabInfo::CalcSortedIndexes()
 {

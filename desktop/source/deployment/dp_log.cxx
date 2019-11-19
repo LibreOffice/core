@@ -46,6 +46,7 @@ namespace dp_log {
 
 typedef ::cppu::WeakComponentImplHelper<ucb::XProgressHandler> t_log_helper;
 
+namespace {
 
 class ProgressLogImpl : public ::dp_misc::MutexHolder, public t_log_helper
 {
@@ -65,6 +66,7 @@ public:
     virtual void SAL_CALL pop() override;
 };
 
+}
 
 ProgressLogImpl::~ProgressLogImpl()
 {

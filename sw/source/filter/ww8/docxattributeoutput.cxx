@@ -180,6 +180,8 @@ static const sal_Int32 Tag_TableDefinition = 15;
 static const sal_Int32 Tag_OutputFlyFrame = 16;
 static const sal_Int32 Tag_StartSection = 17;
 
+namespace {
+
 class FFDataWriterHelper
 {
     ::sax_fastparser::FSHelperPtr m_pSerializer;
@@ -289,6 +291,9 @@ class FieldMarkParamsHelper
         return bResult;
     }
 };
+
+}
+
 void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
 {
     if (bIsRTL)
@@ -5762,6 +5767,8 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
     return m_rDrawingML;
 }
 
+namespace {
+
 /// Functor to do case-insensitive ordering of OUString instances.
 struct OUStringIgnoreCase
 {
@@ -5770,6 +5777,8 @@ struct OUStringIgnoreCase
         return lhs.compareToIgnoreAsciiCase(rhs) < 0;
     }
 };
+
+}
 
 /// Guesses if a style created in Writer (no grab-bag) should be qFormat or not.
 static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)

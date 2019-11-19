@@ -92,6 +92,8 @@ using namespace ::com::sun::star::task;
 
 namespace XSLT
 {
+    namespace {
+
     /*
      * XSLTFilter reads flat XML streams from the XML filter framework and passes
      * them to an XSLT transformation service. XSLT transformation errors are
@@ -162,6 +164,8 @@ namespace XSLT
         virtual void SAL_CALL
         endDocument() override;
     };
+
+    }
 
     XSLTFilter::XSLTFilter(const css::uno::Reference<XComponentContext> &r):
         m_xContext(r), m_bTerminated(false), m_bError(false)

@@ -43,6 +43,9 @@ namespace utl
 
     typedef ::cppu::WeakImplHelper <   XCloseListener
                                     >   CloseListener_Base;
+
+    namespace {
+
     class CloseListener_Impl : public CloseListener_Base
     {
     public:
@@ -68,6 +71,8 @@ namespace utl
     private:
         bool    m_bHasOwnership;
     };
+
+    }
 
     void SAL_CALL CloseListener_Impl::queryClosing( const EventObject&, sal_Bool i_deliverOwnership )
     {

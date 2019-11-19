@@ -35,6 +35,8 @@ const short nVisualData = 5;
 
 typedef std::map< sal_Int16, OUString > IdToString;
 
+namespace {
+
 class MSOWordCommandConvertor : public MSOCommandConvertor
 {
    IdToString msoToOOcmd;
@@ -45,6 +47,8 @@ public:
     virtual OUString MSOCommandToOOCommand( sal_Int16 msoCmd ) override;
     virtual OUString MSOTCIDToOOCommand( sal_Int16 key ) override;
 };
+
+}
 
 MSOWordCommandConvertor::MSOWordCommandConvertor()
 {

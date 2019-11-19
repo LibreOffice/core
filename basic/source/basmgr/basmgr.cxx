@@ -1586,6 +1586,7 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, OUStri
     return SbxBase::GetError();
 }
 
+namespace {
 
 class ModuleInfo_Impl : public ModuleInfoHelper
 {
@@ -1692,6 +1693,8 @@ public:
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 };
 
+}
+
 // Methods XElementAccess
 uno::Type ModuleContainer_Impl::getElementType()
 {
@@ -1794,6 +1797,7 @@ static SbxObject* implCreateDialog( const uno::Sequence< sal_Int8 >& aData )
 // which we can't include here, we have to use the value directly
 #define SBXID_DIALOG        101
 
+namespace {
 
 class DialogContainer_Impl : public NameContainerHelper
 {
@@ -1819,6 +1823,8 @@ public:
     virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 };
+
+}
 
 // Methods XElementAccess
 uno::Type DialogContainer_Impl::getElementType()

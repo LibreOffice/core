@@ -31,6 +31,8 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
+namespace {
+
 struct ContainerStats {
     int m_nAlive;
     int m_nDisposed;
@@ -49,6 +51,8 @@ public:
         m_pStats->m_nDisposed++;
     }
 };
+
+}
 
 namespace comphelper_ifcontainer
 {

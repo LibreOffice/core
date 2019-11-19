@@ -1243,6 +1243,8 @@ ScRangePairList* ScRangePairList::Clone() const
     return pNew;
 }
 
+namespace {
+
 class ScRangePairList_sortNameCompare
 {
 public:
@@ -1318,6 +1320,8 @@ public:
 private:
     ScDocument * const mpDoc;
 };
+
+}
 
 void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
 {

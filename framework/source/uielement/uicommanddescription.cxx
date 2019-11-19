@@ -63,6 +63,8 @@ namespace framework
 
 //  Configuration access class for PopupMenuControllerFactory implementation
 
+namespace {
+
 class ConfigurationAccess_UICommand : // Order is necessary for right initialization!
                                         public  ::cppu::WeakImplHelper<XNameAccess,XContainerListener>
 {
@@ -147,6 +149,9 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         bool                          m_bCacheFilled;
         bool                          m_bGenericDataRetrieved;
 };
+
+}
+
 
 //  XInterface, XTypeProvider
 

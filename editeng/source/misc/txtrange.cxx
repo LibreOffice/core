@@ -88,6 +88,8 @@ void TextRanger::SetVertical( bool bNew )
     }
 }
 
+namespace {
+
 //! SvxBoundArgs is used to perform temporary calculations on a range array.
 //! Temporary instances are created in TextRanger::GetTextRanges()
 class SvxBoundArgs
@@ -139,6 +141,8 @@ public:
     void SetConcat( const bool bNew ){ bConcat = bNew; }
     bool IsConcat() const { return bConcat; }
 };
+
+}
 
 SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, LongDqPtr pLong,
     const Range& rRange )

@@ -30,6 +30,8 @@
 #include <view.hxx>
 #include <svx/svdobj.hxx>
 
+namespace {
+
 class XmlPortionDumper:public SwPortionHandler
 {
   private:
@@ -226,8 +228,6 @@ class XmlPortionDumper:public SwPortionHandler
 
 };
 
-namespace
-{
     xmlTextWriterPtr lcl_createDefaultWriter()
     {
         xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );

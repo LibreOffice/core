@@ -114,6 +114,8 @@ const SwMailDescriptor* SwSendMailDialog_Impl::GetNextDescriptor()
     return nullptr;
 }
 
+namespace {
+
 class SwMailDispatcherListener_Impl : public IMailDispatcherListener
 {
     SwSendMailDialog& m_rSendMailDialog;
@@ -128,6 +130,8 @@ public:
 
     static void DeleteAttachments( uno::Reference< mail::XMailMessage > const & xMessage );
 };
+
+}
 
 SwMailDispatcherListener_Impl::SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg)
     : m_rSendMailDialog(rParentDlg)
@@ -178,6 +182,8 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
     }
 }
 
+namespace {
+
 class SwSendWarningBox_Impl : public weld::MessageDialogController
 {
     std::unique_ptr<weld::TextView> m_xDetailED;
@@ -191,6 +197,8 @@ public:
         m_xDetailED->set_text(rDetails);
     }
 };
+
+}
 
 SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem& rConfigItem)
     : GenericDialogController(pParent, "modules/swriter/ui/mmsendmails.ui", "SendMailsDialog")

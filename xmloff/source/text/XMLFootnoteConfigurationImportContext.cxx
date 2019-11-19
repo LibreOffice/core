@@ -51,6 +51,7 @@ using namespace ::xmloff::token;
 
 //  XMLFootnoteConfigHelper
 
+namespace {
 
 /// local helper class for import of quo-vadis and ergo-sum elements
 class XMLFootnoteConfigHelper : public SvXMLImportContext
@@ -73,6 +74,7 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
+}
 
 XMLFootnoteConfigHelper::XMLFootnoteConfigHelper(
     SvXMLImport& rImport,

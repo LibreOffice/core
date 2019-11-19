@@ -257,6 +257,8 @@ void SwXMLExport::ExportMasterStyles_()
     GetPageExport()->exportMasterStyles( false );
 }
 
+namespace {
+
 class SwXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 {
     SvXMLExport& rExport;
@@ -277,6 +279,8 @@ public:
 
     explicit SwXMLAutoStylePoolP( SvXMLExport& rExport );
 };
+
+}
 
 void SwXMLAutoStylePoolP::exportStyleAttributes(
             SvXMLAttributeList& rAttrList,

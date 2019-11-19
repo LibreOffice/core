@@ -35,6 +35,8 @@
 
 using namespace com::sun::star;
 
+namespace {
+
 /// Helper for sorting properties
 struct ScSolverOptionsEntry
 {
@@ -48,6 +50,8 @@ struct ScSolverOptionsEntry
         return (ScGlobal::GetCollator()->compareString( aDescription, rOther.aDescription ) < 0);
     }
 };
+
+}
 
 ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
                         const uno::Sequence<OUString>& rImplNames,

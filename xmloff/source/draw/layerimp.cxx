@@ -46,6 +46,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using ::xmloff::token::IsXMLToken;
 
+namespace {
+
 class SdXMLLayerContext : public SvXMLImportContext
 {
 public:
@@ -62,6 +64,8 @@ private:
     OUString msDisplay;
     OUString msProtected;
 };
+
+}
 
 SdXMLLayerContext::SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager )
 : SvXMLImportContext(rImport, nPrefix, rLocalName)

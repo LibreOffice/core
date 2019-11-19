@@ -62,6 +62,8 @@ namespace ucbhelper
 namespace proxydecider_impl
 {
 
+namespace {
+
 // A simple case ignoring wildcard matcher.
 class WildCard
 {
@@ -77,8 +79,11 @@ public:
     bool Matches( const OUString & rStr ) const;
 };
 
+}
 
 typedef std::pair< WildCard, WildCard > NoProxyListEntry;
+
+namespace {
 
 class HostnameCache
 {
@@ -111,6 +116,7 @@ public:
     }
 };
 
+}
 
 class InternetProxyDecider_Impl :
     public cppu::WeakImplHelper< util::XChangesListener >

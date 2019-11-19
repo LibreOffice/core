@@ -47,6 +47,8 @@ using namespace ::com::sun::star;
 
 using std::vector;
 
+namespace {
+
 class SwCompareLine
 {
     const SwNode& rNode;
@@ -307,7 +309,12 @@ struct CmpOptionsContainer
     int nIgnoreLen;
     bool bUseRsid;
 };
+
+}
+
 static CmpOptionsContainer CmpOptions;
+
+namespace {
 
 class CommonSubseq
 {
@@ -371,6 +378,8 @@ public:
                                                 0, rCmp.GetLen2() );
     }
 };
+
+}
 
 CompareData::~CompareData()
 {

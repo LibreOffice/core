@@ -52,6 +52,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::frame;
 
+namespace {
 
 class XMLFilterDialogComponentBase
 {
@@ -108,6 +109,8 @@ private:
 
     std::shared_ptr<XMLFilterSettingsDialog> mxDialog;
 };
+
+}
 
 XMLFilterDialogComponent::XMLFilterDialogComponent(const css::uno::Reference< XComponentContext >& rxContext)
     : OComponentHelper(maMutex)

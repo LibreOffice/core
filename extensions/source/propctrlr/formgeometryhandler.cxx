@@ -96,6 +96,8 @@ namespace pcr
 
     //= BroadcastHelperBase
 
+    namespace {
+
     class BroadcastHelperBase
     {
     protected:
@@ -111,6 +113,7 @@ namespace pcr
         ::cppu::OBroadcastHelper    maBHelper;
     };
 
+    }
 
     //= ShapeGeometryChangeNotifier - declaration
 
@@ -120,6 +123,8 @@ namespace pcr
     typedef ::comphelper::ComponentBase ShapeGeometryChangeNotifier_CBase;
     typedef ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener
                                     >   ShapeGeometryChangeNotifier_IBase;
+
+    namespace {
 
     class ShapeGeometryChangeNotifier   :public BroadcastHelperBase
                                         ,public ShapeGeometryChangeNotifier_CBase
@@ -195,13 +200,22 @@ namespace pcr
         Reference< XShape >                 m_xShape;
     };
 
+    }
 
     //= FormGeometryHandler - declaration
 
+    namespace {
+
     class FormGeometryHandler;
+
+    }
+
     typedef HandlerComponentBase< FormGeometryHandler > FormGeometryHandler_Base;
     /** a property handler for any virtual string properties
     */
+
+    namespace {
+
     class FormGeometryHandler : public FormGeometryHandler_Base
     {
     public:
@@ -247,6 +261,7 @@ namespace pcr
         ::rtl::Reference< ShapeGeometryChangeNotifier > m_xChangeNotifier;
     };
 
+    }
 
     //= FormGeometryHandler - implementation
 

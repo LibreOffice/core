@@ -68,8 +68,6 @@ namespace pcr
         ACTIVATE_NEXT
     };
 
-    }
-
     struct ControlEvent : public ::comphelper::AnyEvent
     {
         Reference< XPropertyControl >   xControl;
@@ -95,6 +93,7 @@ namespace pcr
             getNotifier();
     };
 
+    }
 
     ::rtl::Reference< ::comphelper::AsyncEventNotifier > SharedNotifier::s_pNotifier;
 

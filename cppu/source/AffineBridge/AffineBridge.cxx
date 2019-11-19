@@ -29,6 +29,7 @@
 #include <cppu/helper/purpenv/Mapping.hxx>
 #include <memory>
 
+namespace {
 
 class InnerThread;
 class OuterThread;
@@ -86,6 +87,8 @@ public:
         }
 };
 
+}
+
 void InnerThread::run()
 {
     osl_setThreadName("UNO AffineBridge InnerThread");
@@ -94,6 +97,8 @@ void InnerThread::run()
     m_pAffineBridge->innerDispatch();
     m_pAffineBridge->leave();
 }
+
+namespace {
 
 class OuterThread : public osl::Thread
 {
@@ -104,6 +109,8 @@ class OuterThread : public osl::Thread
 public:
     explicit OuterThread(AffineBridge * threadEnvironment);
 };
+
+}
 
 OuterThread::OuterThread(AffineBridge * threadEnvironment)
     : m_pAffineBridge(threadEnvironment)

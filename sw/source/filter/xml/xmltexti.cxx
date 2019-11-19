@@ -70,6 +70,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace xml::sax;
 
+namespace {
+
 struct XMLServiceMapEntry_Impl
 {
     const sal_Char *sFilterService;
@@ -79,6 +81,8 @@ struct XMLServiceMapEntry_Impl
     sal_uInt16  n2, n3;
     sal_uInt8   n4, n5, n6, n7, n8, n9, n10, n11;
 };
+
+}
 
 #define SERVICE_MAP_ENTRY( app, s ) \
     { XML_IMPORT_FILTER_##app, sizeof(XML_IMPORT_FILTER_##app)-1, \

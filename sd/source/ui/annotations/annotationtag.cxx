@@ -86,6 +86,8 @@ static OUString getInitials( const OUString& rName )
     return sInitials.makeStringAndClear();
 }
 
+namespace {
+
 class AnnotationDragMove : public SdrDragMove
 {
 public:
@@ -99,6 +101,8 @@ private:
     rtl::Reference <AnnotationTag > mxTag;
     Point maOrigin;
 };
+
+}
 
 AnnotationDragMove::AnnotationDragMove(SdrDragView& rNewView, const rtl::Reference <AnnotationTag >& xTag)
 : SdrDragMove(rNewView)
@@ -147,6 +151,8 @@ void AnnotationDragMove::CancelSdrDrag()
     Hide();
 }
 
+namespace {
+
 class AnnotationHdl : public SmartHdl
 {
 public:
@@ -159,6 +165,8 @@ private:
     Reference< XAnnotation > mxAnnotation;
     rtl::Reference< AnnotationTag > mxTag;
 };
+
+}
 
 AnnotationHdl::AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt )
 : SmartHdl( xTag, rPnt, SdrHdlKind::SmartTag )

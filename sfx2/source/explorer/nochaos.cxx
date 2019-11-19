@@ -32,6 +32,7 @@
 
 // class CntStaticPoolDefaults_Impl
 
+namespace {
 
 class CntItemPool;
 
@@ -69,6 +70,7 @@ public:
     static sal_uInt16       Release();
 };
 
+}
 
 // static
 SfxItemPool* NoChaos::GetItemPool()

@@ -41,6 +41,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 // Userdata-struct for tree-entries
 struct TargetData
 {
@@ -54,6 +56,8 @@ struct TargetData
             aUStrLinkname = aUStrLName;
     }
 };
+
+}
 
 //*** Window-Class ***
 // Constructor / Destructor

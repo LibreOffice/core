@@ -26,6 +26,8 @@
 #include <memory>
 #include <unordered_map>
 
+namespace {
+
 struct locale_deleter
 {
     void operator() (rtl_Locale* p) noexcept
@@ -36,6 +38,8 @@ struct locale_deleter
         delete p;
     }
 };
+
+}
 
 using locale_unique_ptr = std::unique_ptr<rtl_Locale, locale_deleter>;
 

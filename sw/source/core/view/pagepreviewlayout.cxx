@@ -867,6 +867,8 @@ void SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     _orNewStartPos = aNewStartPos;
 }
 
+namespace {
+
 /** checks, if given position is inside a shown document page */
 struct PreviewPosInsidePagePred
 {
@@ -884,6 +886,8 @@ struct PreviewPosInsidePagePred
         return false;
     }
 };
+
+}
 
 bool SwPagePreviewLayout::IsPreviewPosInDocPreviewPage( const Point&  rPreviewPos,
                                                     Point&       _orDocPos,
@@ -1302,6 +1306,8 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
 
 // helper methods
 
+namespace {
+
 /** get preview page by physical page number
 
     OD 17.12.2002 #103492#
@@ -1317,6 +1323,8 @@ struct EqualsPageNumPred
         return _pPreviewPage->pPage->GetPhyPageNum() == mnPageNum;
     }
 };
+
+}
 
 const PreviewPage* SwPagePreviewLayout::GetPreviewPageByPageNum( const sal_uInt16 _nPageNum ) const
 {

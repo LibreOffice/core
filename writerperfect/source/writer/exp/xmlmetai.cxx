@@ -17,6 +17,8 @@ namespace writerperfect
 {
 namespace exp
 {
+namespace
+{
 /// Handler for <dc:title>.
 class XMLDcTitleContext : public XMLImportContext
 {
@@ -28,6 +30,7 @@ public:
 private:
     XMLMetaDocumentContext& mrMeta;
 };
+}
 
 XMLDcTitleContext::XMLDcTitleContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta)
     : XMLImportContext(rImport)
@@ -42,6 +45,8 @@ void XMLDcTitleContext::characters(const OUString& rChars)
         mrMeta.GetPropertyList().insert("dc:title", librevenge::RVNGString(sCharU8.getStr()));
 }
 
+namespace
+{
 /// Handler for <dc:language>.
 class XMLDcLanguageContext : public XMLImportContext
 {
@@ -53,6 +58,7 @@ public:
 private:
     XMLMetaDocumentContext& mrMeta;
 };
+}
 
 XMLDcLanguageContext::XMLDcLanguageContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta)
     : XMLImportContext(rImport)
@@ -67,6 +73,8 @@ void XMLDcLanguageContext::characters(const OUString& rChars)
         mrMeta.GetPropertyList().insert("dc:language", librevenge::RVNGString(sCharU8.getStr()));
 }
 
+namespace
+{
 /// Handler for <dc:date>.
 class XMLDcDateContext : public XMLImportContext
 {
@@ -78,6 +86,7 @@ public:
 private:
     XMLMetaDocumentContext& mrMeta;
 };
+}
 
 XMLDcDateContext::XMLDcDateContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta)
     : XMLImportContext(rImport)
@@ -92,6 +101,8 @@ void XMLDcDateContext::characters(const OUString& rChars)
         mrMeta.GetPropertyList().insert("dc:date", librevenge::RVNGString(sCharU8.getStr()));
 }
 
+namespace
+{
 /// Handler for <meta:generator>.
 class XMLMetaGeneratorContext : public XMLImportContext
 {
@@ -103,6 +114,7 @@ public:
 private:
     XMLMetaDocumentContext& mrMeta;
 };
+}
 
 XMLMetaGeneratorContext::XMLMetaGeneratorContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta)
     : XMLImportContext(rImport)
@@ -116,6 +128,8 @@ void XMLMetaGeneratorContext::characters(const OUString& rChars)
     mrMeta.GetPropertyList().insert("meta:generator", librevenge::RVNGString(sCharU8.getStr()));
 }
 
+namespace
+{
 /// Handler for <meta:initial-creator>.
 class XMLMetaInitialCreatorContext : public XMLImportContext
 {
@@ -127,6 +141,7 @@ public:
 private:
     XMLMetaDocumentContext& mrMeta;
 };
+}
 
 XMLMetaInitialCreatorContext::XMLMetaInitialCreatorContext(XMLImport& rImport,
                                                            XMLMetaDocumentContext& rMeta)

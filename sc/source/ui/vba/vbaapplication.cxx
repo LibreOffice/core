@@ -115,6 +115,8 @@ ScVbaAppSettings::ScVbaAppSettings() :
 {
 }
 
+namespace {
+
 struct ScVbaStaticAppSettings : public ::rtl::Static< ScVbaAppSettings, ScVbaStaticAppSettings > {};
 
 class ScVbaApplicationOutgoingConnectionPoint : public cppu::WeakImplHelper<XConnectionPoint>
@@ -129,6 +131,8 @@ public:
     sal_uInt32 SAL_CALL Advise(const uno::Reference< XSink >& Sink ) override;
     void SAL_CALL Unadvise( sal_uInt32 Cookie ) override;
 };
+
+}
 
 sal_uInt32
 ScVbaApplication::AddSink( const uno::Reference< XSink >& xSink )

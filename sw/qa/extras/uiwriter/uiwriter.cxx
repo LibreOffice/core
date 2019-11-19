@@ -4057,6 +4057,8 @@ void SwUiWriterTest::testDde()
 #endif
 }
 
+namespace {
+
 //IdleTask class to add a low priority Idle task
 class IdleTask
 {
@@ -4068,6 +4070,8 @@ class IdleTask
     bool flag;
     Idle maIdle;
 };
+
+}
 
 //constructor of IdleTask Class
 IdleTask::IdleTask() : flag( false )
@@ -4254,6 +4258,8 @@ void SwUiWriterTest::testTdf87922()
 }
 
 #if HAVE_MORE_FONTS
+namespace {
+
 struct PortionItem
 {
     PortionItem(OUString const & sItemType, sal_Int32 nLength,
@@ -4310,6 +4316,8 @@ class PortionHandler : public SwPortionHandler
         mPortionItems.emplace_back("finish", 0, PortionType::NONE);
     }
 };
+
+}
 #endif
 
 void SwUiWriterTest::testTdf77014()

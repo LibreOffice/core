@@ -49,6 +49,8 @@ namespace toolkit
 
     //= AccessibleDummyFactory
 
+    namespace {
+
     class AccessibleDummyFactory:
         public IAccessibleFactory
     {
@@ -129,6 +131,7 @@ namespace toolkit
         }
     };
 
+    }
 
     AccessibleDummyFactory::AccessibleDummyFactory()
     {

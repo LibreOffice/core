@@ -54,6 +54,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        namespace {
+
         class SdrCellPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
@@ -84,6 +86,8 @@ namespace drawinglayer
             // provide unique ID
             DeclPrimitive2DIDBlock()
         };
+
+        }
 
         void SdrCellPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {

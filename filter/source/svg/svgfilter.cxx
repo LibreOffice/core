@@ -616,6 +616,8 @@ void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc 
     mxDstDoc = xDoc;
 }
 
+namespace {
+
 // There is already another SVG-Type_Detector, see
 // vcl/source/filter/graphicfilter.cxx ("DOCTYPE svg"),
 // but since these start from different preconditions it is not
@@ -787,6 +789,8 @@ public:
         return false;
     }
 };
+
+}
 
 OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
 {

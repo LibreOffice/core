@@ -632,11 +632,15 @@ PrinterJob::EndPage ()
     pPageBody->close();
 }
 
+namespace {
+
 struct less_ppd_key
 {
     bool operator()(const PPDKey* left, const PPDKey* right)
     { return left->getOrderDependency() < right->getOrderDependency(); }
 };
+
+}
 
 static bool writeFeature( osl::File* pFile, const PPDKey* pKey, const PPDValue* pValue, bool bUseIncluseFeature )
 {

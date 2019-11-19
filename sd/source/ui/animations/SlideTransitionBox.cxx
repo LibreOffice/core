@@ -27,6 +27,8 @@
 namespace sd
 {
 
+namespace {
+
 class SlideTransitionBox : public VclVBox
 {
     VclPtr<SlideTransitionPane> m_pPane;
@@ -39,6 +41,8 @@ public:
     virtual void dispose() override;
     virtual void StateChanged(StateChangedType nStateChange) override;
 };
+
+}
 
 VCL_BUILDER_FACTORY(SlideTransitionBox);
 

@@ -71,6 +71,7 @@ template <> struct default_delete<PRArenaPool>
 static X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert ) ;
 static X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
 
+namespace {
 
 struct UsageDescription
 {
@@ -88,6 +89,7 @@ struct UsageDescription
     {}
 };
 
+}
 
 static char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 {

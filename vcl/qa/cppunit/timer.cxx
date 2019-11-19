@@ -27,6 +27,8 @@
 // Enables timer tests that appear to provoke windows under load unduly.
 //#define TEST_TIMERPRECISION
 
+namespace {
+
 /// Avoid our timer tests just wedging the build if they fail.
 class WatchDog : public osl::Thread
 {
@@ -46,6 +48,8 @@ public:
         CPPUNIT_ASSERT_MESSAGE("watchdog triggered", false);
     }
 };
+
+}
 
 static WatchDog * aWatchDog = new WatchDog( 120 ); // random high number in secs
 
@@ -102,6 +106,7 @@ void TimerTest::testWatchdog()
 }
 #endif
 
+namespace {
 
 class IdleBool : public Idle
 {
@@ -120,6 +125,8 @@ public:
         Application::EndYield();
     }
 };
+
+}
 
 void TimerTest::testIdle()
 {
@@ -147,6 +154,8 @@ void TimerTest::testIdleMainloop()
     CPPUNIT_ASSERT_MESSAGE("mainloop idle triggered", bTriggered);
 }
 
+namespace {
+
 class TimerBool : public Timer
 {
     bool &mrBool;
@@ -165,6 +174,8 @@ public:
     }
 };
 
+}
+
 void TimerTest::testDurations()
 {
     static const sal_uLong aDurations[] = { 0, 1, 500, 1000 };
@@ -180,6 +191,7 @@ void TimerTest::testDurations()
     }
 }
 
+namespace {
 
 class AutoTimerCount : public AutoTimer
 {
@@ -206,6 +218,8 @@ public:
             Stop();
     }
 };
+
+}
 
 #ifdef TEST_TIMERPRECISION
 
@@ -321,6 +335,7 @@ void TimerTest::testAutoTimerStop()
     CPPUNIT_ASSERT( !Application::Reschedule() );
 }
 
+namespace {
 
 class YieldTimer : public Timer
 {
@@ -337,6 +352,8 @@ public:
     }
 };
 
+}
+
 void TimerTest::testNestedTimer()
 {
     sal_Int32 nCount = 0;
@@ -347,6 +364,7 @@ void TimerTest::testNestedTimer()
         Application::Yield();
 }
 
+namespace {
 
 class SlowCallbackTimer : public Timer
 {
@@ -366,6 +384,8 @@ public:
     }
 };
 
+}
+
 void TimerTest::testSlowTimerCallback()
 {
     bool bBeenSlow = false;
@@ -380,6 +400,7 @@ void TimerTest::testSlowTimerCallback()
         Application::Yield();
 }
 
+namespace {
 
 class TriggerIdleFromIdle : public Idle
 {
@@ -401,6 +422,8 @@ public:
     }
 };
 
+}
+
 void TimerTest::testTriggerIdleFromIdle()
 {
     bool bTriggered1 = false;
@@ -413,6 +436,7 @@ void TimerTest::testTriggerIdleFromIdle()
     CPPUNIT_ASSERT_MESSAGE("idle not triggered", bTriggered2);
 }
 
+namespace {
 
 class IdleInvokedReStart : public Idle
 {
@@ -431,6 +455,8 @@ public:
     }
 };
 
+}
+
 void TimerTest::testInvokedReStart()
 {
     sal_Int32 nCount = 0;
@@ -439,6 +465,7 @@ void TimerTest::testInvokedReStart()
     CPPUNIT_ASSERT_EQUAL( sal_Int32(2), nCount );
 }
 
+namespace {
 
 class IdleSerializer : public Idle
 {
@@ -460,6 +487,8 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Ignored prio", mnPosition, mrProcesed );
     }
 };
+
+}
 
 void TimerTest::testPriority()
 {
@@ -487,6 +516,7 @@ void TimerTest::testPriority()
     }
 }
 
+namespace {
 
 class TestAutoIdleRR : public AutoIdle
 {
@@ -505,6 +535,8 @@ public:
         Start();
     }
 };
+
+}
 
 IMPL_LINK_NOARG(TestAutoIdleRR, IdleRRHdl, Timer *, void)
 {

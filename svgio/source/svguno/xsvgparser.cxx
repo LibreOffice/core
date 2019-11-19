@@ -43,6 +43,8 @@ namespace svgio
 {
     namespace svgreader
     {
+        namespace {
+
         class XSvgParser : public ::cppu::WeakAggImplHelper2< graphic::XSvgParser, lang::XServiceInfo >
         {
         private:
@@ -71,6 +73,8 @@ namespace svgio
             virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
             virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
         };
+
+        }
     } // end of namespace svgreader
 } // end of namespace svgio
 

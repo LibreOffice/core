@@ -115,6 +115,8 @@ XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
     while (rNames.find(sName) != rNames.end());
 }
 
+namespace {
+
 struct XMLTextListAutoStylePoolEntryCmp_Impl
 {
     bool operator()(
@@ -137,6 +139,9 @@ struct XMLTextListAutoStylePoolEntryCmp_Impl
         }
     }
 };
+
+}
+
 class XMLTextListAutoStylePool_Impl : public o3tl::sorted_vector<std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl>, XMLTextListAutoStylePoolEntryCmp_Impl> {};
 
 XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :

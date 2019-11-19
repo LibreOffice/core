@@ -241,11 +241,15 @@ static bool ImplCallCommand( const VclPtr<vcl::Window>& pChild, CommandEventId n
 *   necessary if there already was a popup menu running.
 */
 
+namespace {
+
 struct ContextMenuEvent
 {
     VclPtr<vcl::Window>  pWindow;
     Point           aChildPos;
 };
+
+}
 
 static void ContextMenuEventLink( void* pCEvent, void* )
 {
@@ -1313,6 +1317,8 @@ static bool shouldReusePreviousMouseWindow(const SalWheelMouseEvent& rPrevEvt, c
     return (rEvt.mnX == rPrevEvt.mnX && rEvt.mnY == rPrevEvt.mnY && rEvt.mnTime-rPrevEvt.mnTime < 500/*ms*/);
 }
 
+namespace {
+
 class HandleGestureEventBase
 {
 protected:
@@ -1333,6 +1339,8 @@ public:
     virtual bool CallCommand(vcl::Window *pWindow, const Point &rMousePos) = 0;
     virtual ~HandleGestureEventBase() {}
 };
+
+}
 
 bool HandleGestureEventBase::Setup()
 {
@@ -1423,6 +1431,8 @@ vcl::Window *HandleGestureEventBase::Dispatch(vcl::Window* pMouseWindow)
     return pDispatchedTo;
 }
 
+namespace {
+
 class HandleWheelEvent : public HandleGestureEventBase
 {
 private:
@@ -1457,6 +1467,8 @@ public:
     bool HandleEvent(const SalWheelMouseEvent& rEvt);
 };
 
+}
+
 bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
 {
     if (!Setup())
@@ -1482,6 +1494,8 @@ bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
     return pSVData->maWinData.mpLastWheelWindow.get();
 }
 
+namespace {
+
 class HandleGestureEvent : public HandleGestureEventBase
 {
 public:
@@ -1491,6 +1505,8 @@ public:
     }
     bool HandleEvent();
 };
+
+}
 
 bool HandleGestureEvent::HandleEvent()
 {
@@ -1509,6 +1525,8 @@ static bool ImplHandleWheelEvent(vcl::Window* pWindow, const SalWheelMouseEvent&
     return aHandler.HandleEvent(rEvt);
 }
 
+namespace {
+
 class HandleSwipeEvent : public HandleGestureEvent
 {
 private:
@@ -1525,11 +1543,15 @@ public:
     }
 };
 
+}
+
 static bool ImplHandleSwipe(vcl::Window *pWindow, const SalSwipeEvent& rEvt)
 {
     HandleSwipeEvent aHandler(pWindow, rEvt);
     return aHandler.HandleEvent();
 }
+
+namespace {
 
 class HandleLongPressEvent : public HandleGestureEvent
 {
@@ -1547,11 +1569,15 @@ public:
     }
 };
 
+}
+
 static bool ImplHandleLongPress(vcl::Window *pWindow, const SalLongPressEvent& rEvt)
 {
     HandleLongPressEvent aHandler(pWindow, rEvt);
     return aHandler.HandleEvent();
 }
+
+namespace {
 
 class HandleGeneralGestureEvent : public HandleGestureEvent
 {
@@ -1570,6 +1596,8 @@ public:
         return ImplCallCommand(pWindow, CommandEventId::Gesture, &m_aGestureData);
     }
 };
+
+}
 
 static bool ImplHandleGestureEvent(vcl::Window* pWindow, const SalGestureEvent& rEvent)
 {
@@ -1877,10 +1905,14 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
         pFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
 }
 
+namespace {
+
 struct DelayedCloseEvent
 {
     VclPtr<vcl::Window> pWindow;
 };
+
+}
 
 static void DelayedCloseEventLink( void* pCEvent, void* )
 {

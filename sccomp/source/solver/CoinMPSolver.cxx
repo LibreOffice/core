@@ -35,6 +35,8 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace com::sun::star;
 
+namespace {
+
 class CoinMPSolver : public SolverComponent
 {
 public:
@@ -51,6 +53,8 @@ private:
         return SolverComponent::GetResourceString( RID_COINMP_SOLVER_COMPONENT );
     }
 };
+
+}
 
 void SAL_CALL CoinMPSolver::solve()
 {

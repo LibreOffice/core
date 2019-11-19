@@ -1147,6 +1147,8 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
     return tabs;
 }
 
+namespace {
+
 struct IndexCompare
 {
     const PropertyValue* pValues;
@@ -1156,6 +1158,8 @@ struct IndexCompare
         return (pValues[a].Name < pValues[b].Name);
     }
 };
+
+}
 
 OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
 {
@@ -2694,6 +2698,8 @@ void SwAccessibleParagraph::deselectAccessibleChild(
 
 // XAccessibleHypertext
 
+namespace {
+
 class SwHyperlinkIter_Impl
 {
     SwTextFrame const& m_rFrame;
@@ -2708,6 +2714,8 @@ public:
     TextFrameIndex startIdx() const { return m_nStt; }
     TextFrameIndex endIdx() const { return m_nEnd; }
 };
+
+}
 
 SwHyperlinkIter_Impl::SwHyperlinkIter_Impl(const SwTextFrame & rTextFrame)
     : m_rFrame(rTextFrame)

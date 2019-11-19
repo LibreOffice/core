@@ -94,9 +94,13 @@ namespace writerfilter
 
 #endif
 
+namespace {
+
 struct TheTagLogger:
     public rtl::Static<TagLogger, TheTagLogger>
 {};
+
+}
 
     TagLogger& TagLogger::getInstance()
     {

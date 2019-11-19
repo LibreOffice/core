@@ -208,6 +208,8 @@ SplitCategoriesProvider::~SplitCategoriesProvider()
 {
 }
 
+namespace {
+
 class SplitCategoriesProvider_ForLabeledDataSequences : public SplitCategoriesProvider
 {
 public:
@@ -229,6 +231,8 @@ private:
 
     ChartModel& mrModel;
 };
+
+}
 
 sal_Int32 SplitCategoriesProvider_ForLabeledDataSequences::getLevelCount() const
 {
