@@ -38,6 +38,7 @@
 
 namespace accessibility
 {
+    namespace {
 
     /** This class simply wraps a SvxTextEditSource, forwarding all
         methods except the GetBroadcaster() call
@@ -163,6 +164,7 @@ namespace accessibility
 
     };
 
+    }
 
     // Implementing AccessibleProxyEditSource_Impl
 

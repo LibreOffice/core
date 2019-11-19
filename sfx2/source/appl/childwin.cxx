@@ -64,6 +64,7 @@ struct SfxChildWindow_Impl
     SfxWorkWindow*      pWorkWin;
 };
 
+namespace {
 
 class DisposeListener : public ::cppu::WeakImplHelper< css::lang::XEventListener >
 {
@@ -107,6 +108,7 @@ class DisposeListener : public ::cppu::WeakImplHelper< css::lang::XEventListener
         SfxChildWindow_Impl* m_pData ;
 };
 
+}
 
 bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
 {

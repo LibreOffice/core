@@ -142,6 +142,8 @@ struct SvxShapeImpl
     }
 };
 
+namespace {
+
 class ShapePositionProvider : public PropertyValueProvider
 {
 public:
@@ -172,6 +174,8 @@ protected:
         _out_rCurrentValue <<= static_cast< SvxShape& >( getContext() ).getSize();
     }
 };
+
+}
 
 SvxShape::SvxShape( SdrObject* pObject )
 :   maSize(100,100)

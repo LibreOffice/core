@@ -140,6 +140,8 @@ static void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
     rBindings.Invalidate( aInval );
 }
 
+namespace {
+
 // At first the zoom dialog
 class SwPreviewZoomDlg : public weld::GenericDialogController
 {
@@ -166,6 +168,8 @@ public:
         }
     }
 };
+
+}
 
 // all for SwPagePreviewWin
 SwPagePreviewWin::SwPagePreviewWin( vcl::Window *pParent, SwPagePreview& rPView )

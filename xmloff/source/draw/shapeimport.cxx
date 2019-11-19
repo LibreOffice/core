@@ -47,11 +47,17 @@
 #include <map>
 #include <vector>
 
+namespace {
+
 class ShapeGroupContext;
+
+}
 
 using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+
+namespace {
 
 struct ConnectionHint
 {
@@ -69,6 +75,8 @@ struct XShapeCompareHelper
     return x1.get() < x2.get();
   }
 };
+
+}
 
 /** this map store all glue point id mappings for shapes that had user defined glue points. This
     is needed because on insertion the glue points will get a new and unique id */
@@ -694,6 +702,8 @@ void XMLShapeImportHelper::finishShape(
     }
 }
 
+namespace {
+
 // helper functions for z-order sorting
 struct ZOrderHint
 {
@@ -724,6 +734,8 @@ public:
 private:
     void moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos );
 };
+
+}
 
 ShapeGroupContext::ShapeGroupContext( uno::Reference< drawing::XShapes > const & rShapes, std::shared_ptr<ShapeGroupContext> pParentContext )
 :   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( std::move(pParentContext) )

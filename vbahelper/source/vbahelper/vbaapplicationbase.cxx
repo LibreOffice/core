@@ -60,6 +60,8 @@ using namespace ::ooo::vba;
 
 typedef ::std::pair< OUString, ::std::pair< double, double > > VbaTimerInfo;
 
+namespace {
+
 class VbaTimer
 {
     Timer m_aTimer;
@@ -115,6 +117,8 @@ public:
     DECL_LINK( MacroCallHdl, Timer*, void );
 };
 
+}
+
 IMPL_LINK_NOARG(VbaTimer, MacroCallHdl, Timer *, void)
 {
     if ( m_aTimerInfo.second.second == 0 || GetNow() < m_aTimerInfo.second.second )
@@ -136,6 +140,8 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl, Timer *, void)
     {}
 }
 
+namespace {
+
 struct VbaTimerInfoHash
 {
     size_t operator()( const VbaTimerInfo& rTimerInfo ) const
@@ -147,6 +153,8 @@ struct VbaTimerInfoHash
         return seed;
     }
 };
+
+}
 
 typedef std::unordered_map< VbaTimerInfo, std::unique_ptr<VbaTimer>, VbaTimerInfoHash > VbaTimerHashMap;
 

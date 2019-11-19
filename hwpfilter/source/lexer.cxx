@@ -89,7 +89,11 @@
 /* Size of default input buffer. */
 #define YY_BUF_SIZE 16384
 
+namespace {
+
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
+
+}
 
 #define EOB_ACT_CONTINUE_SCAN 0
 #define EOB_ACT_END_OF_FILE 1
@@ -103,6 +107,7 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
  */
 typedef unsigned int yy_size_t;
 
+namespace {
 
 struct yy_buffer_state
     {
@@ -160,6 +165,8 @@ struct yy_buffer_state
      */
 #define YY_BUFFER_EOF_PENDING 2
     };
+
+}
 
 static YY_BUFFER_STATE yy_current_buffer = nullptr;
 

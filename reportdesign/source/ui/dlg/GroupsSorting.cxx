@@ -77,6 +77,9 @@ using namespace ::comphelper;
   * Separated out from OFieldExpressionControl to prevent collision of ref-counted base classes
   */
 class OFieldExpressionControl;
+
+namespace {
+
 class OFieldExpressionControlContainerListener : public ::cppu::WeakImplHelper< container::XContainerListener >
 {
     VclPtr<OFieldExpressionControl> mpParent;
@@ -90,6 +93,8 @@ public:
     virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) override;
     virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) override;
 };
+
+}
 
 class OFieldExpressionControl : public ::svt::EditBrowseBox
 {

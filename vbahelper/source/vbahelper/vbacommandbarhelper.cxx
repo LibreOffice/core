@@ -41,6 +41,8 @@ using namespace ooo::vba;
 
 typedef std::map< OUString, OUString > MSO2OOCommandbarMap;
 
+namespace {
+
 class MSO2OOCommandbarHelper final
 {
 private:
@@ -82,6 +84,8 @@ public:
         return OUString();
     }
 };
+
+}
 
 MSO2OOCommandbarHelper* MSO2OOCommandbarHelper::pMSO2OOCommandbarHelper = nullptr;
 

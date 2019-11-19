@@ -57,8 +57,6 @@ namespace {
             static_cast<double>(aValue.Nanosec) / (1000*1000*1000);
     }
 
-}
-
 class MyWorkWindow : public WorkWindow
 {
     double mnStartTime;
@@ -77,6 +75,8 @@ public:
     virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
     virtual void Resize() override;
 };
+
+}
 
 MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle )
     : WorkWindow(pParent, nWinStyle)
@@ -133,6 +133,8 @@ void MyWorkWindow::Resize()
     SAL_INFO("vcl.icontest", "Resize " << GetSizePixel());
 }
 
+namespace {
+
 class IconTestApp : public Application
 {
 public:
@@ -146,6 +148,8 @@ private:
 
     void DoItWithVcl(const OUString& sImageFile);
 };
+
+}
 
 void IconTestApp::Init()
 {

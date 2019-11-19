@@ -110,11 +110,15 @@ std::weak_ptr<SvtDefaultOptions_Impl> g_pOptions;
 
 typedef OUString SvtDefaultOptions_Impl:: *PathStrPtr;
 
+namespace {
+
 struct PathToDefaultMapping_Impl
 {
     SvtPathOptions::Paths const   _ePath;
     PathStrPtr const              _pDefaultPath;
 };
+
+}
 
 static PathToDefaultMapping_Impl const PathMap_Impl[] =
 {

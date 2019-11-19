@@ -255,7 +255,11 @@ BulletsTypeMgr::BulletsTypeMgr()
     Init();
 }
 
+namespace {
+
 class theBulletsTypeMgr : public rtl::Static<BulletsTypeMgr, theBulletsTypeMgr> {};
+
+}
 
 BulletsTypeMgr& BulletsTypeMgr::GetInstance()
 {
@@ -401,7 +405,11 @@ static const char* RID_SVXSTR_SINGLENUM_DESCRIPTIONS[] =
     RID_SVXSTR_SINGLENUM_DESCRIPTION_7
 };
 
+namespace {
+
 class theNumberingTypeMgr : public rtl::Static<NumberingTypeMgr, theNumberingTypeMgr> {};
+
+}
 
 NumberingTypeMgr& NumberingTypeMgr::GetInstance()
 {
@@ -574,7 +582,11 @@ OutlineTypeMgr::OutlineTypeMgr()
     ImplLoad("standard.syc");
 }
 
+namespace {
+
 class theOutlineTypeMgr : public rtl::Static<OutlineTypeMgr, theOutlineTypeMgr> {};
+
+}
 
 OutlineTypeMgr& OutlineTypeMgr::GetInstance()
 {

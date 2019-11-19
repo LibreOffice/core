@@ -66,6 +66,7 @@ namespace pcr
     {
     }
 
+    namespace {
 
     // Compare PropertyInfo
     struct PropertyInfoLessByName
@@ -76,6 +77,7 @@ namespace pcr
         }
     };
 
+    }
 
     //= OPropertyInfoService
 

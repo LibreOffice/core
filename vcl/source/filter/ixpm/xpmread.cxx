@@ -56,6 +56,8 @@ enum ReadState
 class BitmapWriteAccess;
 class Graphic;
 
+namespace {
+
 class XPMReader : public GraphicReader
 {
 private:
@@ -107,6 +109,8 @@ public:
 
     ReadState           ReadXPM( Graphic& rGraphic );
 };
+
+}
 
 XPMReader::XPMReader(SvStream& rStm)
     : mrIStm(rStm)

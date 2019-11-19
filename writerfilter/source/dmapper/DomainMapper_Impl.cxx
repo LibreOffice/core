@@ -166,11 +166,15 @@ static void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rx
     }
 }
 
+namespace {
+
 struct FieldConversion
 {
     const sal_Char*     cFieldServiceName;
     FieldId const       eFieldId;
 };
+
+}
 
 typedef std::unordered_map<OUString, FieldConversion> FieldConversionMap_t;
 

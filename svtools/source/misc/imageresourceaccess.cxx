@@ -40,6 +40,8 @@ using namespace css;
 
 typedef ::cppu::WeakImplHelper<io::XStream, io::XSeekable> StreamSupplier_Base;
 
+namespace {
+
 class StreamSupplier : public StreamSupplier_Base
 {
 private:
@@ -60,6 +62,8 @@ protected:
     virtual sal_Int64 SAL_CALL getPosition() override;
     virtual sal_Int64 SAL_CALL getLength() override;
 };
+
+}
 
 StreamSupplier::StreamSupplier(uno::Reference<io::XInputStream> const & rxInput, uno::Reference<io::XOutputStream> const & rxOutput)
     : m_xInput(rxInput)

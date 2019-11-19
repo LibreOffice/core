@@ -76,6 +76,8 @@ static OUString loader_getImplementationName()
     return "com.sun.star.comp.stoc.JavaComponentLoader";
 }
 
+namespace {
+
 class JavaComponentLoader : public WeakImplHelper<XImplementationLoader, XServiceInfo>
 {
     css::uno::Reference<XComponentContext> m_xComponentContext;
@@ -110,6 +112,8 @@ public:
         const css::uno::Reference<XRegistryKey>& xKey,
         const OUString& implementationLoaderUrl, const OUString& locationUrl) override;
 };
+
+}
 
 const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaLoader()
 {

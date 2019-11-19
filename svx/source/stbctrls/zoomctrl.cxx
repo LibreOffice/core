@@ -43,6 +43,8 @@
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 
+namespace {
+
 class ZoomPopup_Impl
 {
 public:
@@ -61,6 +63,8 @@ private:
     VclPtr<PopupMenu>   m_xMenu;
     sal_uInt16          nZoom;
 };
+
+}
 
 ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, SvxZoomEnableFlags nValueSet )
     : m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/zoommenu.ui", "")

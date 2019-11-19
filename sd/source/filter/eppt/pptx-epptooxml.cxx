@@ -152,14 +152,14 @@ enum PPTXLayout
     LAYOUT_SIZE
 };
 
-}
-
 struct PPTXLayoutInfo
 {
     int const nType;
     const char* sName;
     const char* sType;
 };
+
+}
 
 static const PPTXLayoutInfo aLayoutInfo[LAYOUT_SIZE] =
 {

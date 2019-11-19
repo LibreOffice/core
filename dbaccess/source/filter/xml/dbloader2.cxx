@@ -90,6 +90,8 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 namespace dbaxml
 {
 
+namespace {
+
 class DBTypeDetection : public ::cppu::WeakImplHelper< XExtendedFilterDetection, XServiceInfo>
 {
     const Reference< XComponentContext >  m_aContext;
@@ -113,6 +115,8 @@ public:
 
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 };
+
+}
 
 DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContext)
     :m_aContext( _rxContext )
@@ -220,6 +224,8 @@ extern "C" void createRegistryInfo_DBTypeDetection()
 namespace dbaxml
 {
 
+namespace {
+
 class DBContentLoader : public ::cppu::WeakImplHelper< XFrameLoader, XServiceInfo>
 {
 private:
@@ -256,6 +262,7 @@ private:
     bool impl_executeNewDatabaseWizard( Reference< XModel > const & _rxModel, bool& _bShouldStartTableWizard );
 };
 
+}
 
 DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxFactory)
     :m_aContext( _rxFactory )

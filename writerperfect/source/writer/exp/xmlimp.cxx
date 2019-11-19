@@ -198,7 +198,6 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext>& xContext,
         return;
     }
 }
-}
 
 /// Handler for <office:body>.
 class XMLBodyContext : public XMLImportContext
@@ -210,6 +209,7 @@ public:
     CreateChildContext(const OUString& rName,
                        const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/) override;
 };
+}
 
 XMLBodyContext::XMLBodyContext(XMLImport& rImport)
     : XMLImportContext(rImport)
@@ -225,6 +225,8 @@ XMLBodyContext::CreateChildContext(const OUString& rName,
     return nullptr;
 }
 
+namespace
+{
 /// Handler for <office:document>.
 class XMLOfficeDocContext : public XMLImportContext
 {
@@ -238,6 +240,7 @@ public:
     // Handles metafile for a single page.
     void HandleFixedLayoutPage(const FixedLayoutPage& rPage, bool bFirst);
 };
+}
 
 XMLOfficeDocContext::XMLOfficeDocContext(XMLImport& rImport)
     : XMLImportContext(rImport)

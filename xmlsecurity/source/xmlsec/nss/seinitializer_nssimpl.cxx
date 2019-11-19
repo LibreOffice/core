@@ -104,6 +104,8 @@ uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNam
     return seqServiceNames;
 }
 
+namespace {
+
 class NSSInitializer_NssImpl : public SEInitializer_NssImpl
 {
 public:
@@ -111,6 +113,8 @@ public:
     OUString SAL_CALL getImplementationName() override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 NSSInitializer_NssImpl::NSSInitializer_NssImpl(const uno::Reference<uno::XComponentContext>& xContext)
     : SEInitializer_NssImpl(xContext)

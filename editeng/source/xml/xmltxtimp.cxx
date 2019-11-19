@@ -55,6 +55,7 @@ using namespace com::sun::star::text;
 using namespace cppu;
 using namespace xmloff::token;
 
+namespace {
 
 class SvxXMLTextImportContext : public SvXMLImportContext
 {
@@ -67,6 +68,7 @@ private:
     const uno::Reference< XText > mxText;
 };
 
+}
 
 SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XText >& xText )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxText( xText )
@@ -97,6 +99,7 @@ SvXMLImportContextRef SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nP
     return pContext;
 }
 
+namespace {
 
 class SvxXMLXTextImportComponent : public SvXMLImport
 {
@@ -111,6 +114,8 @@ public:
 private:
     const uno::Reference< XText > mxText;
 };
+
+}
 
 SvXMLImportContext *SvxXMLXTextImportComponent::CreateDocumentContext(
         sal_uInt16 const nPrefix, const OUString& rLocalName,

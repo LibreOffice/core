@@ -61,6 +61,8 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
+namespace {
+
 struct FWCharacterData                  // representing a single character
 {
     std::vector< tools::PolyPolygon >   vOutlines;
@@ -89,6 +91,7 @@ struct FWData                           // representing the whole text
     bool                                bScaleX;
 };
 
+}
 
 static bool InitializeFontWorkData(
     const SdrObjCustomShape& rSdrObjCustomShape,

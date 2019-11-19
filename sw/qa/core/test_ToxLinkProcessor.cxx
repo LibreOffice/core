@@ -87,6 +87,8 @@ ToxLinkProcessorTest::AddingAndClosingTwoOverlappingLinksResultsInOneClosedLink(
     CPPUNIT_ASSERT_EQUAL(URL_1, sut.m_ClosedLinks[0]->mINetFormat.GetValue());
 }
 
+namespace {
+
 class ToxLinkProcessorWithOverriddenObtainPoolId : public ToxLinkProcessor {
 public:
     virtual sal_uInt16
@@ -100,6 +102,8 @@ public:
         return 0;
     }
 };
+
+}
 
 void
 ToxLinkProcessorTest::LinkIsCreatedCorrectly()

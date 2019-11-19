@@ -386,6 +386,8 @@ void SbiCodeGen::Save()
     rMod.EndDefinitions();
 }
 
+namespace {
+
 template < class T >
 class PCodeVisitor
 {
@@ -399,8 +401,12 @@ public:
     virtual bool processParams() = 0;
 };
 
+}
+
 template <class T> PCodeVisitor< T >::~PCodeVisitor()
 {}
+
+namespace {
 
 template <class T>
 class PCodeBufferWalker
@@ -543,6 +549,8 @@ public:
         return aVisitor.offset();
     }
 };
+
+}
 
 sal_uInt32
 SbiCodeGen::calcNewOffSet( sal_uInt8 const * pCode, sal_uInt16 nOffset )

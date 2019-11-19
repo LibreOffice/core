@@ -25,6 +25,8 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
+namespace {
+
 class XMLPersTextTContext_Impl : public XMLTransformerContext
 {
     OUString m_aCharacters;
@@ -44,6 +46,8 @@ public:
     virtual bool IsPersistent() const override;
     virtual void Export() override;
 };
+
+}
 
 XMLPersTextTContext_Impl::XMLPersTextTContext_Impl(
         XMLTransformerBase& rImp,

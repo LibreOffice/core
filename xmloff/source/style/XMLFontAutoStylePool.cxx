@@ -47,6 +47,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
+namespace {
+
 class XMLFontAutoStylePoolEntry_Impl
 {
     OUString const    sName;
@@ -81,6 +83,7 @@ public:
     rtl_TextEncoding GetEncoding() const { return eEnc; }
 };
 
+}
 
 inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
         const OUString& rName,
@@ -112,6 +115,8 @@ inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
 {
 }
 
+namespace {
+
 struct XMLFontAutoStylePoolEntryCmp_Impl {
     bool operator()(
         std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> const& r1,
@@ -135,6 +140,8 @@ struct XMLFontAutoStylePoolEntryCmp_Impl {
         }
     }
 };
+
+}
 
 class XMLFontAutoStylePool_Impl : public o3tl::sorted_vector<std::unique_ptr<XMLFontAutoStylePoolEntry_Impl>, XMLFontAutoStylePoolEntryCmp_Impl>
 {

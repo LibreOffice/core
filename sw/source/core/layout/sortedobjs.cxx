@@ -70,7 +70,6 @@ namespace
             return 1;
         return 2;
     }
-}
 
 struct ObjAnchorOrder
 {
@@ -197,6 +196,8 @@ struct ObjAnchorOrder
         return pAnchorListed->GetOrder() < pAnchorNew->GetOrder();
     }
 };
+
+}
 
 bool SwSortedObjs::is_sorted() const
 {

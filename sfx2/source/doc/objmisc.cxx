@@ -130,6 +130,8 @@ using namespace ::com::sun::star::container;
 
 // class SfxHeaderAttributes_Impl ----------------------------------------
 
+namespace {
+
 class SfxHeaderAttributes_Impl : public SvKeyValueIterator
 {
 private:
@@ -152,6 +154,7 @@ public:
     void SetAttribute( const SvKeyValue& rKV );
 };
 
+}
 
 sal_uInt16 const aTitleMap_Impl[3][2] =
 {

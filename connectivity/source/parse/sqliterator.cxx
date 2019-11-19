@@ -109,6 +109,7 @@ namespace connectivity
         }
     };
 
+    namespace {
 
     /** helper class for temporarily adding a query name to a list of forbidden query names
     */
@@ -132,6 +133,8 @@ namespace connectivity
             m_rpAllForbiddenNames->erase( m_sForbiddenQueryName );
         }
     };
+
+    }
 }
 
 OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XConnection >& _rxConnection,

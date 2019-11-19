@@ -33,6 +33,7 @@ using namespace ::com::sun::star::uno;
 namespace sfx2
 {
 
+namespace {
 
 class SvLinkSourceTimer : public Timer
 {
@@ -41,6 +42,8 @@ class SvLinkSourceTimer : public Timer
 public:
     explicit SvLinkSourceTimer( SvLinkSource * pOwn );
 };
+
+}
 
 SvLinkSourceTimer::SvLinkSourceTimer( SvLinkSource * pOwn )
     : pOwner( pOwn )
@@ -65,6 +68,7 @@ static void StartTimer( std::unique_ptr<SvLinkSourceTimer>& pTimer, SvLinkSource
     }
 }
 
+namespace {
 
 struct SvLinkSource_Entry_Impl
 {
@@ -118,6 +122,8 @@ public:
     SvLinkSource_Entry_Impl* Next();
     bool IsValidCurrValue( SvLinkSource_Entry_Impl const * pEntry );
 };
+
+}
 
 SvLinkSource_EntryIter_Impl::SvLinkSource_EntryIter_Impl(
         const SvLinkSource_Array_Impl& rArr )

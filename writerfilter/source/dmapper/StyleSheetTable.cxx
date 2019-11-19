@@ -251,6 +251,7 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
     return pProps;
 }
 
+namespace {
 
 struct ListCharStylePropertyMap_t
 {
@@ -262,6 +263,9 @@ struct ListCharStylePropertyMap_t
         aPropertyValues( rPropertyValues )
         {}
 };
+
+}
+
 typedef std::vector< ListCharStylePropertyMap_t > ListCharStylePropertyVector_t;
 
 
@@ -854,6 +858,8 @@ void StyleSheetTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t r
 /*-------------------------------------------------------------------------
     sorting helper
   -----------------------------------------------------------------------*/
+namespace {
+
 class PropValVector
 {
     std::vector<beans::PropertyValue> m_aValues;
@@ -865,6 +871,8 @@ public:
     uno::Sequence< OUString > getNames();
     const std::vector<beans::PropertyValue>& getProperties() const { return m_aValues; };
 };
+
+}
 
 void PropValVector::Insert(const beans::PropertyValue& rVal)
 {

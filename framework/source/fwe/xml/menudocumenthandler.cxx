@@ -93,11 +93,15 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
+namespace {
+
 struct MenuStyleItem
 {
     sal_Int16 nBit;
     const char* attrName;
 };
+
+}
 
 const MenuStyleItem MenuItemStyles[ ] = {
     { css::ui::ItemStyle::ICON, ATTRIBUTE_ITEMSTYLE_IMAGE },

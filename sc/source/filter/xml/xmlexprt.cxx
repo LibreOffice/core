@@ -303,6 +303,8 @@ Calc_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* co
     return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisSettingsExporter", SvXMLExportFlags::SETTINGS|SvXMLExportFlags::OASIS));
 }
 
+namespace {
+
 class ScXMLShapeExport : public XMLShapeExport
 {
 public:
@@ -311,6 +313,8 @@ public:
     /** is called before a shape element for the given XShape is exported */
     virtual void onExport( const uno::Reference < drawing::XShape >& xShape ) override;
 };
+
+}
 
 void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShape )
 {

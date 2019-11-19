@@ -62,6 +62,8 @@ using namespace ::com::sun::star::util;
 // we probably will need both a hash of control models and hash of controls
 // => use some template magic
 
+namespace {
+
 template< typename T >
 class SimpleNamedThingContainer : public ::cppu::WeakImplHelper< container::XNameContainer >
 {
@@ -122,8 +124,6 @@ public:
         return ( !things.empty() );
     }
 };
-
-namespace {
 
 class UnoControlDialogModel :   public ControlModelContainerBase
 {

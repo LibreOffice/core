@@ -537,6 +537,7 @@ void SAL_CALL OButtonControl::removeActionListener(const Reference<XActionListen
     m_aActionListeners.removeInterface(_rxListener);
 }
 
+namespace {
 
 class DoPropertyListening
 {
@@ -555,6 +556,7 @@ public:
     void    handleListening( const OUString& _rPropertyName );
 };
 
+}
 
 DoPropertyListening::DoPropertyListening(
         const Reference< XInterface >& _rxComponent, const Reference< XPropertyChangeListener >& _rxListener,

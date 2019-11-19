@@ -64,6 +64,8 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace com::sun::star;
 
+namespace {
+
 class LpsolveSolver : public SolverComponent
 {
 public:
@@ -80,6 +82,8 @@ private:
         return SolverComponent::GetResourceString( RID_SOLVER_COMPONENT );
     }
 };
+
+}
 
 void SAL_CALL LpsolveSolver::solve()
 {

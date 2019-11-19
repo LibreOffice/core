@@ -29,12 +29,16 @@
 #include <osl/conditn.h>
 #include <osl/time.h>
 
+namespace {
+
 struct oslConditionImpl
 {
     pthread_cond_t  m_Condition;
     pthread_mutex_t m_Lock;
     bool            m_State;
 };
+
+}
 
 oslCondition SAL_CALL osl_createCondition()
 {

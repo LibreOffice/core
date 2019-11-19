@@ -192,6 +192,8 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
     getIDocumentState().SetModified();
 }
 
+namespace {
+
 /// Travel between table of content Marks
 class CompareNodeContent
 {
@@ -218,6 +220,8 @@ public:
         { return nNode > rCmp.nNode ||
             ( nNode == rCmp.nNode && nContent >= rCmp.nContent); }
 };
+
+}
 
 const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
                                     SwTOXSearch eDir, bool bInReadOnly )

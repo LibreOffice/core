@@ -55,6 +55,8 @@ using namespace container;
 #define REPORT_ID           2
 #define TASKPANE_ID         3
 
+namespace {
+
 class OTaskWindow : public vcl::Window
 {
     VclPtr<PropBrw> m_pPropWin;
@@ -76,6 +78,7 @@ public:
     }
 };
 
+}
 
 // class ODesignView
 

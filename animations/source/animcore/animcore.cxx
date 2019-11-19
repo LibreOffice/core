@@ -101,6 +101,8 @@ using namespace ::com::sun::star::animations::AnimationNodeType;
 namespace animcore
 {
 
+namespace {
+
 class AnimationNodeBase :   public XAnimateMotion,
                             public XAnimateColor,
                             public XTransitionFilter,
@@ -364,6 +366,8 @@ private:
     /** our first, last and only protection from multi-threads! */
     Mutex                   maMutex;
 };
+
+}
 
 TimeContainerEnumeration::TimeContainerEnumeration( const std::vector< Reference< XAnimationNode > > &rChildren )
 : maChildren( rChildren )

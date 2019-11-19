@@ -29,6 +29,8 @@
 #include <tools/config.hxx>
 #include <sal/log.hxx>
 
+namespace {
+
 struct ImplKeyData
 {
     ImplKeyData*    mpNext;
@@ -36,6 +38,8 @@ struct ImplKeyData
     OString         maValue;
     bool            mbIsComment;
 };
+
+}
 
 struct ImplGroupData
 {

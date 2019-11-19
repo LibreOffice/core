@@ -33,6 +33,8 @@ namespace slideshow
 {
     namespace internal
     {
+        namespace {
+
         /** Activity for intrinsic shape animations
 
             This is an Activity interface implementation for intrinsic
@@ -108,6 +110,7 @@ namespace slideshow
             IntrinsicAnimationActivity& mrActivity;
         };
 
+        }
 
         IntrinsicAnimationActivity::IntrinsicAnimationActivity( const SlideShowContext&         rContext,
                                                                 const DrawShapeSharedPtr&       rDrawShape,

@@ -46,6 +46,8 @@
 using namespace sfx2;
 using namespace ::com::sun::star;
 
+namespace {
+
 class SvBaseLinkMemberList {
 private:
     std::vector<SvBaseLink*> mLinks;
@@ -70,6 +72,8 @@ public:
         p->AddFirstRef();
     }
 };
+
+}
 
 SvBaseLinksDlg::SvBaseLinksDlg(weld::Window * pParent, LinkManager* pMgr, bool bHtmlMode)
     : GenericDialogController(pParent, "cui/ui/baselinksdialog.ui", "BaseLinksDialog")

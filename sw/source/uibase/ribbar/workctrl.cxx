@@ -443,6 +443,8 @@ void SwScrollNaviPopup::statusChanged( const css::frame::FeatureStateEvent& rEve
     }
 }
 
+namespace {
+
 class SwZoomBox_Impl : public ComboBox
 {
     sal_uInt16 const nSlotId;
@@ -460,6 +462,8 @@ protected:
     void ReleaseFocus();
 
 };
+
+}
 
 SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     : ComboBox(pParent, WB_HIDE | WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL)
@@ -605,6 +609,8 @@ VclPtr<vcl::Window> SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent
     return pRet.get();
 }
 
+namespace {
+
 class SwJumpToSpecificBox_Impl : public NumericField
 {
     sal_uInt16 const nSlotId;
@@ -616,6 +622,8 @@ protected:
     void            Select();
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 };
+
+}
 
 SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     : NumericField(pParent, WB_HIDE | WB_BORDER)
@@ -658,6 +666,8 @@ VclPtr<vcl::Window> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Window *
     VclPtrInstance<SwJumpToSpecificBox_Impl> pRet( pParent, GetSlotId() );
     return pRet.get();
 }
+
+namespace {
 
 class NavElementBox_Impl;
 class NavElementToolBoxControl : public svt::ToolboxController,
@@ -718,6 +728,8 @@ private:
 
     void                ReleaseFocus_Impl();
 };
+
+}
 
 NavElementBox_Impl::NavElementBox_Impl(
     vcl::Window*                                      _pParent,
@@ -961,6 +973,8 @@ lo_writer_NavElementToolBoxController_get_implementation(
     return cppu::acquire( new NavElementToolBoxControl( rxContext ) );
 }
 
+namespace {
+
 class PrevNextScrollToolboxController : public svt::ToolboxController,
                                       public css::lang::XServiceInfo
 {
@@ -992,6 +1006,8 @@ public:
 private:
     Type const                 meType;
 };
+
+}
 
 PrevNextScrollToolboxController::PrevNextScrollToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
     : svt::ToolboxController( rxContext,

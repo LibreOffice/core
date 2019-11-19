@@ -65,8 +65,6 @@ struct ColumnInfo
     OUString msDefaultCellStyleName;
 };
 
-}
-
 class XMLProxyContext : public SvXMLImportContext
 {
 public:
@@ -88,6 +86,8 @@ struct MergeInfo
     MergeInfo( sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
         : mnStartColumn( nStartColumn ), mnStartRow( nStartRow ), mnEndColumn( nStartColumn + nColumnSpan - 1 ), mnEndRow( nStartRow + nRowSpan - 1 ) {};
 };
+
+}
 
 typedef std::vector< std::shared_ptr< MergeInfo > > MergeInfoVector;
 
@@ -123,6 +123,8 @@ public:
 
     MergeInfoVector maMergeInfos;
 };
+
+namespace {
 
 class XMLCellImportContext : public SvXMLImportContext
 {
@@ -165,6 +167,8 @@ private:
     XMLTableTemplate maTableTemplate;
     OUString msTemplateStyleName;
 };
+
+}
 
 // class XMLProxyContext
 

@@ -52,6 +52,8 @@ using namespace ::com::sun::star::lang;
 
 namespace io_stm {
 
+namespace {
+
 /***********************
 *
 * OMarkableOutputStream.
@@ -121,6 +123,8 @@ private:
 
     Mutex m_mutex;
 };
+
+}
 
 OMarkableOutputStream::OMarkableOutputStream( )
     : m_bValidStream(false)
@@ -386,6 +390,7 @@ Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames()
 
 // XMarkableInputStream
 
+namespace {
 
 class OMarkableInputStream :
     public WeakImplHelper
@@ -447,6 +452,8 @@ private:
 
     Mutex m_mutex;
 };
+
+}
 
 OMarkableInputStream::OMarkableInputStream()
     : m_bValidStream(false)

@@ -10,6 +10,8 @@
 #include <unx/gendata.hxx>
 #include <headless/svpinst.hxx>
 
+namespace {
+
 class SvpSalData : public GenericUnixSalData
 {
 public:
@@ -17,6 +19,8 @@ public:
     virtual void ErrorTrapPush() override {}
     virtual bool ErrorTrapPop( bool /*bIgnoreError*/ = true ) override { return false; }
 };
+
+}
 
 // plugin factory function
 SalInstance* svp_create_SalInstance()

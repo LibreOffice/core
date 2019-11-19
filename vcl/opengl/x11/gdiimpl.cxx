@@ -35,6 +35,8 @@
 static std::vector<GLXContext> g_vShareList;
 static bool g_bAnyCurrent;
 
+namespace {
+
 class X11OpenGLContext : public OpenGLContext
 {
 public:
@@ -55,9 +57,6 @@ private:
     virtual void resetCurrent() override;
     virtual void swapBuffers() override;
 };
-
-namespace
-{
 
 #ifdef DBG_UTIL
     int unxErrorHandler(Display* dpy, XErrorEvent* event)

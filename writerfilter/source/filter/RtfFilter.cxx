@@ -41,6 +41,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 /// Invokes the RTF tokenizer + dmapper or RtfExportFilter in sw via UNO.
 class RtfFilter : public cppu::WeakImplHelper
     <
@@ -76,6 +78,8 @@ public:
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 };
+
+}
 
 RtfFilter::RtfFilter(uno::Reference<uno::XComponentContext> xContext)
     : m_xContext(std::move(xContext))

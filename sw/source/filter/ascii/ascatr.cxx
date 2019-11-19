@@ -45,6 +45,8 @@
  * For all nodes, attributes, formats and chars.
  */
 
+namespace {
+
 class SwASC_AttrIter
 {
     SwASCWriter& rWrt;
@@ -68,6 +70,8 @@ public:
 
     bool OutAttr( sal_Int32 nSwPos );
 };
+
+}
 
 SwASC_AttrIter::SwASC_AttrIter(
     SwASCWriter& rWr,
@@ -168,6 +172,8 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
     return bRet;
 }
 
+namespace {
+
 class SwASC_RedlineIter
 {
 private:
@@ -235,6 +241,8 @@ public:
         return std::make_pair(nRedlineStart, nRedlineEnd);
     }
 };
+
+}
 
 // Output of the node
 

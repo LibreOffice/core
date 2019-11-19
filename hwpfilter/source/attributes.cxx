@@ -22,6 +22,8 @@
 #include <vector>
 #include "attributes.hxx"
 
+namespace {
+
 struct TagAttribute
 {
     TagAttribute( const OUString &rName, const OUString &rType , const OUString &rValue )
@@ -35,6 +37,8 @@ struct TagAttribute
     OUString sType;
     OUString sValue;
 };
+
+}
 
 struct AttributeListImpl_impl
 {

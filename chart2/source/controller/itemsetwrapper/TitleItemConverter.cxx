@@ -44,8 +44,6 @@ ItemPropertyMapType & lcl_GetTitlePropertyMap()
     return aTitlePropertyMap;
 };
 
-} // anonymous namespace
-
 class FormattedStringsConverter : public MultipleItemConverter
 {
 public:
@@ -58,6 +56,8 @@ public:
 protected:
     virtual const sal_uInt16 * GetWhichPairs() const override;
 };
+
+} // anonymous namespace
 
 FormattedStringsConverter::FormattedStringsConverter(
     const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,

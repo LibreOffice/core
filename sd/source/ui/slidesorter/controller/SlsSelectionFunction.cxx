@@ -174,6 +174,8 @@ private:
     const bool mbIsMouseOverIndicatorAllowed;
 };
 
+namespace {
+
 /** This is the default handler for processing events.  It activates the
     multi selection or drag-and-drop when the right conditions are met.
 */
@@ -279,6 +281,8 @@ protected:
 private:
     std::unique_ptr<DragAndDropContext, o3tl::default_delete<DragAndDropContext>> mpDragAndDropContext;
 };
+
+}
 
 //===== SelectionFunction =====================================================
 

@@ -38,6 +38,8 @@ using namespace com::sun::star::ui::dialogs;
 #include <pres.hxx>
 #include <sdabstdlg.hxx>
 
+namespace {
+
 class SdHtmlOptionsDialog : public cppu::WeakImplHelper
 <
     XExporter,
@@ -79,6 +81,8 @@ public:
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
 };
+
+}
 
 SdHtmlOptionsDialog::SdHtmlOptionsDialog() :
     meDocType   ( DocumentType::Draw )

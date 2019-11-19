@@ -61,6 +61,7 @@ using css::xml::sax::InputSource;
 
 namespace DOM
 {
+    namespace {
 
     class CDefaultEntityResolver : public cppu::WeakImplHelper< XEntityResolver >
     {
@@ -87,6 +88,8 @@ namespace DOM
         }
 
     };
+
+    }
 
     CDocumentBuilder::CDocumentBuilder()
         : m_xEntityResolver(new CDefaultEntityResolver)
@@ -169,12 +172,16 @@ namespace DOM
     // -- c-linkage, so the callbacks can be used by libxml
     extern "C" {
 
+    namespace {
+
     // context struct passed to IO functions
     typedef struct context {
         Reference< XInputStream > rInputStream;
         bool close;
         bool freeOnClose;
     } context_t;
+
+    }
 
     static int xmlIO_read_func( void *context, char *buffer, int len)
     {

@@ -52,6 +52,8 @@ const sal_uInt16 majorVersion = 0x0001;
 
 **************************************************************************/
 
+namespace {
+
 class BlopObject
 {
 public:
@@ -148,6 +150,8 @@ public:
     }
 };
 
+}
+
 BlopObject::BlopObject(const sal_uInt8* buffer, sal_uInt32 len)
     : m_bufferLen(len)
 {
@@ -160,6 +164,8 @@ BlopObject::BlopObject(const sal_uInt8* buffer, sal_uInt32 len)
 
 **************************************************************************/
 
+namespace {
+
 class StringCache
 {
 public:
@@ -171,6 +177,8 @@ public:
     const sal_Unicode*  getString(sal_uInt16 index) const;
     sal_uInt16 createString(const sal_uInt8* buffer); // throws std::bad_alloc
 };
+
+}
 
 StringCache::StringCache(sal_uInt16 size)
     : m_stringTable(size)
@@ -208,6 +216,8 @@ sal_uInt16 StringCache::createString(const sal_uInt8* buffer)
 
 **************************************************************************/
 
+namespace {
+
 class ConstantPool : public BlopObject
 {
 public:
@@ -241,6 +251,8 @@ public:
     const sal_Unicode*  readStringConstant(sal_uInt16 index) const;
         // throws std::bad_alloc
 };
+
+}
 
 sal_uInt32 ConstantPool::parseIndex()
 {
@@ -524,6 +536,8 @@ const sal_Unicode* ConstantPool::readStringConstant(sal_uInt16 index) const
 
 **************************************************************************/
 
+namespace {
+
 class FieldList : public BlopObject
 {
 public:
@@ -558,6 +572,7 @@ public:
     const sal_Char* getFieldFileName(sal_uInt16 index) const;
 };
 
+}
 
 const sal_Char* FieldList::getFieldName(sal_uInt16 index) const
 {
@@ -708,6 +723,8 @@ const sal_Char* FieldList::getFieldFileName(sal_uInt16 index) const
 
 **************************************************************************/
 
+namespace {
+
 class ReferenceList : public BlopObject
 {
 public:
@@ -737,6 +754,7 @@ public:
     RTFieldAccess   getReferenceAccess(sal_uInt16 index) const;
 };
 
+}
 
 const sal_Char* ReferenceList::getReferenceName(sal_uInt16 index) const
 {
@@ -808,6 +826,8 @@ RTFieldAccess ReferenceList::getReferenceAccess(sal_uInt16 index) const
 
 **************************************************************************/
 
+namespace {
+
 class MethodList : public BlopObject
 {
 public:
@@ -849,6 +869,8 @@ public:
 private:
     sal_uInt16 calcMethodParamIndex( const sal_uInt16 index ) const;
 };
+
+}
 
 sal_uInt16 MethodList::calcMethodParamIndex( const sal_uInt16 index ) const
 {
@@ -1069,6 +1091,8 @@ const sal_Char* MethodList::getMethodDoku(sal_uInt16 index) const
 
 **************************************************************************/
 
+namespace {
+
 class TypeRegistryEntry: public BlopObject {
 public:
     std::unique_ptr<ConstantPool> m_pCP;
@@ -1085,6 +1109,8 @@ public:
 
     typereg_Version getVersion() const;
 };
+
+}
 
 TypeRegistryEntry::TypeRegistryEntry(
     const sal_uInt8* buffer, sal_uInt32 len):

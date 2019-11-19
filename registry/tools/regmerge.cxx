@@ -30,6 +30,8 @@
 
 using namespace registry::tools;
 
+namespace {
+
 class Options_Impl : public Options
 {
     bool m_bVerbose;
@@ -44,6 +46,8 @@ protected:
     virtual void printUsage_Impl() const override;
     virtual bool initOptions_Impl(std::vector< std::string > & rArgs) override;
 };
+
+}
 
 void Options_Impl::printUsage_Impl() const
 {

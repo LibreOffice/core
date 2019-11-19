@@ -78,6 +78,8 @@
 
 typedef std::vector<SfxShell*> SfxShellStack_Impl;
 
+namespace {
+
 struct SfxToDo_Impl
 {
     SfxShell*  pCluster;
@@ -103,6 +105,8 @@ struct SfxObjectBars_Impl
 
     SfxObjectBars_Impl() : eId(ToolbarId::None), nPos(0), nFlags(SfxVisibilityFlags::Invisible) {}
 };
+
+}
 
 struct SfxDispatcher_Impl
 {

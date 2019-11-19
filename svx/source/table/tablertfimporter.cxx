@@ -49,6 +49,8 @@ using namespace ::com::sun::star::beans;
 
 namespace sdr { namespace table {
 
+namespace {
+
 struct RTFCellDefault
 {
     SfxItemSet          maItemSet;
@@ -59,7 +61,11 @@ struct RTFCellDefault
     explicit RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnRowSpan(1), mnColSpan(1), mnCellX(0) {}
 };
 
+}
+
 typedef std::vector< std::shared_ptr< RTFCellDefault > > RTFCellDefaultVector;
+
+namespace {
 
 struct RTFCellInfo
 {
@@ -72,6 +78,8 @@ struct RTFCellInfo
 
     explicit RTFCellInfo( SfxItemPool& rPool ) : maItemSet(  rPool ), mnStartPara(0), mnParaCount(0), mnCellX(0), mnRowSpan(1) {}
 };
+
+}
 
 typedef std::shared_ptr< RTFCellInfo > RTFCellInfoPtr;
 typedef std::vector< RTFCellInfoPtr > RTFColumnVector;

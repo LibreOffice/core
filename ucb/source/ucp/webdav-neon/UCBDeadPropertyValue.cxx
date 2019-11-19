@@ -37,6 +37,7 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
+namespace {
 
 struct UCBDeadPropertyValueParseContext
 {
@@ -45,6 +46,8 @@ struct UCBDeadPropertyValueParseContext
 
     UCBDeadPropertyValueParseContext() {}
 };
+
+}
 
 static const char aTypeString[] = "string";
 static const char aTypeLong[] = "long";

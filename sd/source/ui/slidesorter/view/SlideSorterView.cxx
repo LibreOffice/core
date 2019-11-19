@@ -82,6 +82,8 @@ namespace {
     };
 }
 
+namespace {
+
 class BackgroundPainter
     : public ILayerPainter
 {
@@ -105,6 +107,7 @@ private:
     Color maBackgroundColor;
 };
 
+}
 
 SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     : ::sd::View (

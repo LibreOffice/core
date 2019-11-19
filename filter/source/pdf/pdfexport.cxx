@@ -284,6 +284,8 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
     return bRet;
 }
 
+namespace {
+
 class PDFExportStreamDoc : public vcl::PDFOutputStream
 {
 private:
@@ -300,6 +302,8 @@ public:
 
     virtual void write( const Reference< XOutputStream >& xStream ) override;
 };
+
+}
 
 void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
 {
