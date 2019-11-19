@@ -1070,7 +1070,7 @@ namespace sw { namespace mark
         }
 
         {
-            // fdo#61016 delay the deletion of the fieldmark characters
+            // fdo`61016 delay the deletion of the fieldmark characters
             // to prevent that from deleting the marks on that position
             // which would invalidate the iterators in vMarksToDelete
             std::vector< std::unique_ptr<ILazyDeleter> > vDelay;
@@ -1280,6 +1280,16 @@ namespace sw { namespace mark
 
     IFieldmark* MarkManager::getFieldmarkAt(const SwPosition& rPos) const
     {
+        // do a quick search first, and the slower, more complete search second
+
+        auto it = std::lower_bound( m_vFieldmarks.begin(),m_vFieldmarks.end(), rPos,
+            [] (const sw::mark::IMark* pMark, SwPosition const& rPos2)
+            {
+                return pMark->GetMarkStart() <= rPos2;
+            });
+        if (it == m_vFieldmarks.end())
+            return nullptr;
+
         auto const pFieldmark = find_if(
             m_vFieldmarks.begin(),
             m_vFieldmarks.end(),
