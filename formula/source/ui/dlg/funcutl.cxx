@@ -55,7 +55,7 @@ void ArgEdit::Init(ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
 }
 
 // Cursor control for Edit Fields in Argument Dialog
-IMPL_LINK(ArgEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+bool ArgEdit::KeyInput(const KeyEvent& rKEvt)
 {
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
     bool bUp = (aCode.GetCode() == KEY_UP);
@@ -127,7 +127,7 @@ IMPL_LINK(ArgEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
         }
         return true;
     }
-    return false;
+    return RefEdit::KeyInput(rKEvt);
 }
 
 // class ArgInput
@@ -272,7 +272,7 @@ RefEdit::RefEdit(std::unique_ptr<weld::Entry> xControl)
 {
     xEntry->connect_focus_in(LINK(this, RefEdit, GetFocus));
     xEntry->connect_focus_out(LINK(this, RefEdit, LoseFocus));
-    xEntry->connect_key_press(LINK(this, RefEdit, KeyInput));
+    xEntry->connect_key_press(LINK(this, RefEdit, KeyInputHdl));
     xEntry->connect_changed(LINK(this, RefEdit, Modify));
     aIdle.SetInvokeHandler( LINK( this, RefEdit, UpdateHdl ) );
 }
@@ -330,7 +330,12 @@ IMPL_LINK_NOARG(RefEdit, Modify, weld::Entry&, void)
         pAnyRefDlg->HideReference();
 }
 
-IMPL_LINK(RefEdit, KeyInput, const KeyEvent&, rKEvt, bool)
+IMPL_LINK(RefEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return KeyInput(rKEvt);
+}
+
+bool RefEdit::KeyInput(const KeyEvent& rKEvt)
 {
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if (pAnyRefDlg && !rKeyCode.GetModifier() && rKeyCode.GetCode() == KEY_F2)
