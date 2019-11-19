@@ -262,7 +262,7 @@ TestResult OutputDeviceTestCommon::checkAALines(Bitmap& rBitmap)
     return checkHorizontalVerticalDiagonalLines(rBitmap, constLineColor, 30); // 30 color values threshold delta
 }
 
-void checkResult(TestResult eResult, TestResult & eTotal)
+static void checkResult(TestResult eResult, TestResult & eTotal)
 {
     if (eTotal == TestResult::Failed)
         return;
