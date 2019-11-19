@@ -2191,7 +2191,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             SwSection *pParent = rSect.GetParent();
                             WW8_SepInfo rInfo(&GetExport( ).m_pDoc->GetPageDesc(0),
                                 pParent ? pParent->GetFormat() : nullptr, 0/*nRstLnNum*/);
-                            GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, &rInfo );
+                            GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, false, &rInfo );
                         }
 
                         sStr += "\\c \"" + OUString::number( nCol ) + "\"";
@@ -2499,7 +2499,7 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect,bool bCareEnd )
             if ( 0 < nCol )
             {
                 WW8_SepInfo rInfo( &GetExport( ).m_pDoc->GetPageDesc( 0 ), rSect.GetFormat(), 0/*nRstLnNum*/ );
-                GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, &rInfo );
+                GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, false, &rInfo );
             }
         }
     }
@@ -3880,13 +3880,13 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
             }
             if ( !bFollowPageDescWritten )
             {
-                SectionBreak( nC );
+                SectionBreak(nC, !bBefore);
             }
         }
     }
 }
 
-void WW8AttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* /*pSectionInfo*/ )
+void WW8AttributeOutput::SectionBreak( sal_uInt8 nC, bool /*bBreakAfter*/, const WW8_SepInfo* /*pSectionInfo*/ )
 {
     m_rWW8Export.ReplaceCr( nC );
 }
