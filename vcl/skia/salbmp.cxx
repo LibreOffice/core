@@ -164,7 +164,6 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
     // TODO copy data
     SAL_INFO("vcl.skia", "copy(" << this << "): (" << &src << ")");
     abort();
-    return true;
 }
 
 bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
