@@ -22,6 +22,30 @@
       "revId": "e8873d2c048f5c625d8676b5067a13ca0dec1271",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_6dcc046a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-11-19T07:54:35Z",
+      "side": 1,
+      "message": "So when a custom paragraph style is in use it can be deleted and the style will revert to the parent",
+      "parentUuid": "7f7f9b97_2d784c28",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "e8873d2c048f5c625d8676b5067a13ca0dec1271",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
