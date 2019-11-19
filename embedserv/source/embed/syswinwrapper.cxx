@@ -117,7 +117,7 @@ BOOL winwrap::HatchWindowRegister(HINSTANCE hInst)
     wc.lpszMenuName  = nullptr;
     wc.lpszClassName = SZCLASSHATCHWIN;
 
-    return RegisterClassW(&wc);
+    return RegisterClassW(&wc) != 0;
 }
 
 
