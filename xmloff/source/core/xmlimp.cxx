@@ -778,11 +778,14 @@ rName
 
 #ifdef DBG_UTIL
         // Non product only: check if endElement call matches startELement call.
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-        SAL_WARN_IF( xContext->GetPrefix() != nPrefix,  "xmloff.core", "SvXMLImport::endElement: popped context has wrong prefix" );
-        SAL_WARN_IF( xContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname" );
+        if (!xContext->GetLocalName().isEmpty()) // prefix+localname are only valid in the non-FastParser case
+        {
+            OUString aLocalName;
+            sal_uInt16 nPrefix =
+                mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
+            SAL_WARN_IF( xContext->GetPrefix() != nPrefix,  "xmloff.core", "SvXMLImport::endElement: popped context has wrong prefix" );
+            SAL_WARN_IF( xContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname" );
+        }
 #endif
 
         // Call a EndElement at the current context.
