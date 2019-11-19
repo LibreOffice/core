@@ -143,6 +143,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
                              .Position);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123642, "docxopenhyperlinkbookmark.docx")
+{
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Bookmark1"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

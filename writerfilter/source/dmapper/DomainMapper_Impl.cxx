@@ -502,9 +502,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         // a table before the cursor position would be deleted
         // (but only for paste/insert, not load; otherwise it can happen that
         // flys anchored at the disposed paragraph are deleted (fdo47036.rtf))
-        bool const bEndOfDocument(m_aTextAppendStack.size() == 1);
-        if ((IsInHeaderFooter() || (bEndOfDocument && !m_bIsNewDoc))
-            && xEnumerationAccess.is())
+        if (xEnumerationAccess.is())
         {
             uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
             uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
