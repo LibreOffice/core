@@ -68,7 +68,7 @@ namespace vcl { struct FontCapabilities; }
   * FreetypeFontInfo therefore is embedded in the Freetype subclass of PhysicalFontFace.
   * FreetypeFont is embedded in the Freetype subclass of LogicalFontInstance.
   *
-  * Nowadays there is not really a reason to have seperate files for the classes, as the FreetypeManager
+  * Nowadays there is not really a reason to have separate files for the classes, as the FreetypeManager
   * is just about handling of Freetype based fonts, not some abstract glyphs.
   *
   * One additional note: the byte-size based garbage collection of unused fonts can currently be assumed
