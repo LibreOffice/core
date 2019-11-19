@@ -314,6 +314,53 @@ bool DropListBox_Impl::EventNotify( NotifyEvent& rNEvt )
     return bRet;
 }
 
+void DropListBox_Impl::RequestHelp(const HelpEvent& rHEvt)
+{
+    if (rHEvt.GetMode() & HelpEventMode::QUICK)
+    {
+        Point aPos(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
+        SvTreeListEntry* pEntry = GetEntry(aPos);
+        if (pEntry)
+        {
+            const OUString aTemplName(GetEntryText(pEntry));
+            OUString sQuickHelpText(aTemplName);
+
+            const SfxStyleFamilyItem* pItem = pDialog->GetFamilyItem_Impl();
+            SfxStyleSheetBase* pStyle = pDialog->pStyleSheetPool->Find(aTemplName, pItem->GetFamily());
+
+            if (pStyle && pStyle->IsUsed())  // pStyle is in use in the document?
+            {
+                OUString sUsedBy;
+                if (pStyle->GetFamily() == SfxStyleFamily::Pseudo)
+                {
+                    sUsedBy = pStyle->GetUsedBy();
+                }
+
+                if (!sUsedBy.isEmpty())
+                {
+                    const sal_Int32 nMaxLen = 80;
+                    if (sUsedBy.getLength() > nMaxLen)
+                    {
+                        sUsedBy = sUsedBy.copy(0, nMaxLen) + "...";
+                    }
+
+                    OUString aMessage = SfxResId(STR_STYLEUSEDBY);
+                    aMessage = aMessage.replaceFirst("%STYLELIST", sUsedBy);
+                    sQuickHelpText = aTemplName + " " + aMessage;
+                }
+            }
+
+            Size aSize(GetOutputSizePixel().Width(), GetEntryHeight());
+            tools::Rectangle aScreenRect(OutputToScreenPixel(GetEntryPosition(pEntry)), aSize);
+
+            Help::ShowQuickHelp(this, aScreenRect,
+                                 sQuickHelpText, QuickHelpFlags::Left | QuickHelpFlags::VCenter);
+            return;
+        }
+    }
+    SvTreeListBox::RequestHelp(rHEvt);
+}
+
 /** ListBox class that starts a PopupMenu (designer specific) in the
     command handler.
 */

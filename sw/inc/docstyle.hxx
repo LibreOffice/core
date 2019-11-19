@@ -127,6 +127,8 @@ public:
     virtual bool            HasClearParentSupport() const override;
     virtual OUString        GetDescription(MapUnit eUnit) override;
 
+    virtual OUString GetUsedBy() override;
+
     SwCharFormat*              GetCharFormat();
     SwTextFormatColl*           GetCollection();
     SwFrameFormat*               GetFrameFormat();

@@ -83,6 +83,7 @@ public:
     }
 
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
+    virtual void RequestHelp(const HelpEvent& rHEvt) override;
 };
 
 

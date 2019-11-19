@@ -2259,6 +2259,11 @@ bool  SwDocStyleSheet::IsUsed() const
     return rDoc.IsUsed( *pMod );
 }
 
+OUString SwDocStyleSheet::GetUsedBy()
+{
+    return pNumRule ? pNumRule->MakeParagraphStyleListString() : OUString();
+}
+
 sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
 {
     sal_uInt16 nId = 0;
