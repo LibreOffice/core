@@ -103,8 +103,9 @@ static bool initRenderMethodToUse()
 SkiaHelper::RenderMethod SkiaHelper::renderMethodToUse()
 {
     static bool methodToUseInited = initRenderMethodToUse();
-    (void)methodToUseInited; // Used just to ensure thread-safe one-time init.
-    return methodToUse;
+    if (methodToUseInited) // Used just to ensure thread-safe one-time init.
+        return methodToUse;
+    abort();
 }
 
 void SkiaHelper::disableRenderMethod(RenderMethod method)
