@@ -251,7 +251,8 @@ protected:
     friend inline std::basic_ostream<charT, traits>&
     operator<<(std::basic_ostream<charT, traits>& stream, const SkiaSalGraphicsImpl* graphics)
     { // O - offscreen, G - GPU-based, R - raster
-        return stream << (void*)graphics << " " << Size(graphics->GetWidth(), graphics->GetHeight())
+        return stream << static_cast<const void*>(graphics) << " "
+                      << Size(graphics->GetWidth(), graphics->GetHeight())
                       << (graphics->isOffscreen() ? "O" : "") << (graphics->isGPU() ? "G" : "R");
     }
 

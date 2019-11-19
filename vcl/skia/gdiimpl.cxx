@@ -439,10 +439,9 @@ void SkiaSalGraphicsImpl::SetFillColor() { mFillColor = SALCOLOR_NONE; }
 
 void SkiaSalGraphicsImpl::SetFillColor(Color nColor) { mFillColor = nColor; }
 
-void SkiaSalGraphicsImpl::SetXORMode(bool bSet, bool bInvertOnly)
+void SkiaSalGraphicsImpl::SetXORMode(bool, bool)
 {
-    (void)bSet;
-    (void)bInvertOnly;
+    // TODO
 }
 
 void SkiaSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor)
@@ -631,9 +630,9 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
                                        const basegfx::B2DVector& rLineWidths,
                                        basegfx::B2DLineJoin eLineJoin,
                                        css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
-                                       bool bPixelSnapHairline)
+                                       bool /*bPixelSnapHairline*/)
 {
-    (void)bPixelSnapHairline;
+    //(void)bPixelSnapHairline; // TODO
 
     if (rPolyLine.count() == 0 || fTransparency < 0.0 || fTransparency >= 1.0
         || mLineColor == SALCOLOR_NONE)
@@ -720,32 +719,22 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     return true;
 }
 
-bool SkiaSalGraphicsImpl::drawPolyLineBezier(sal_uInt32 nPoints, const SalPoint* pPtAry,
-                                             const PolyFlags* pFlgAry)
+bool SkiaSalGraphicsImpl::drawPolyLineBezier(sal_uInt32, const SalPoint*, const PolyFlags*)
 {
-    (void)nPoints;
-    (void)pPtAry;
-    (void)pFlgAry;
+    // TODO?
     return false;
 }
 
-bool SkiaSalGraphicsImpl::drawPolygonBezier(sal_uInt32 nPoints, const SalPoint* pPtAry,
-                                            const PolyFlags* pFlgAry)
+bool SkiaSalGraphicsImpl::drawPolygonBezier(sal_uInt32, const SalPoint*, const PolyFlags*)
 {
-    (void)nPoints;
-    (void)pPtAry;
-    (void)pFlgAry;
+    // TODO?
     return false;
 }
 
-bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                                const SalPoint* const* pPtAry,
-                                                const PolyFlags* const* pFlgAry)
+bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*,
+                                                const SalPoint* const*, const PolyFlags* const*)
 {
-    (void)nPoly;
-    (void)pPoints;
-    (void)pPtAry;
-    (void)pFlgAry;
+    // TODO?
     return false;
 }
 
@@ -1005,15 +994,9 @@ void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPointArray
     invert(aPolygon, eFlags);
 }
 
-bool SkiaSalGraphicsImpl::drawEPS(long nX, long nY, long nWidth, long nHeight, void* pPtr,
-                                  sal_uInt32 nSize)
+bool SkiaSalGraphicsImpl::drawEPS(long, long, long, long, void*, sal_uInt32)
 {
-    (void)nX;
-    (void)nY;
-    (void)nWidth;
-    (void)nHeight;
-    (void)pPtr;
-    (void)nSize;
+    // TODO?
     return false;
 }
 
@@ -1122,11 +1105,9 @@ bool SkiaSalGraphicsImpl::drawAlphaRect(long nX, long nY, long nWidth, long nHei
     return true;
 }
 
-bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolygon,
-                                       const Gradient& rGradient)
+bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon&, const Gradient&)
 {
-    (void)rPolygon;
-    (void)rGradient;
+    // TODO?
     return false;
 }
 
