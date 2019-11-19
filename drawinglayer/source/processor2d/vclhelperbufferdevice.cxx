@@ -170,7 +170,7 @@ namespace
             if (maDeviceTemplates[pRetval]->isDisposed())
             {
                 maDeviceTemplates.erase(pRetval);
-                pRetval = nullptr;
+                pRetval.disposeAndClear();
             }
             else
             {
