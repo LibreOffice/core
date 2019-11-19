@@ -696,16 +696,18 @@ namespace emfio
                     }
                     else if( nCommentId == EMR_COMMENT_PUBLIC && nRecSize >= 12 )
                     {
+                        SAL_WARN("emfio", "\t\tEMR_COMMENT_PUBLIC not implemented, id: 0x" << std::hex << nCommentId << std::dec);
                         // TODO: ReadGDIComment()
                     }
                     else if( nCommentId == EMR_COMMENT_EMFSPOOL && nRecSize >= 12 )
                     {
+                        SAL_WARN("emfio", "\t\tEMFSPOOL not implemented, id: 0x" << std::hex << nCommentId << std::dec);
                         // TODO Implement reading EMFSPOOL comment
 
                     }
                     else
                     {
-                        SAL_INFO ("emfio", "\t\tunknown id: 0x" << std::hex << nCommentId << std::dec);
+                        SAL_WARN("emfio", "\t\tunknown id: 0x" << std::hex << nCommentId << std::dec);
                     }
                 }
             }
