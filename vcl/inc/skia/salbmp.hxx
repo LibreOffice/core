@@ -83,8 +83,8 @@ private:
     operator<<(std::basic_ostream<charT, traits>& stream, const SkiaSalBitmap* bitmap)
     { // TODO GPU-based, once it's done
         // B - has SkBitmap, A - has alpha SkBitmap, D - has data buffer
-        return stream << (void*)bitmap << " " << bitmap->GetSize() << "/" << bitmap->mBitCount
-                      << (!bitmap->mBitmap.drawsNothing() ? "B" : "")
+        return stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "/"
+                      << bitmap->mBitCount << (!bitmap->mBitmap.drawsNothing() ? "B" : "")
                       << (!bitmap->mAlphaBitmap.drawsNothing() ? "A" : "")
                       << (bitmap->mBuffer.get() ? "D" : "");
     }
