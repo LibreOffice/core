@@ -1403,7 +1403,7 @@ SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd,
 
     if( rAFormat.IsFont() || rAFormat.IsJustify() )
     {
-        // than also go over the ContentNodes of the EndBoxes and collect
+        // then also go over the ContentNodes of the EndBoxes and collect
         // all paragraph attributes
         pSaveTable->SaveContentAttrs( const_cast<SwDoc*>(rTableNd.GetDoc()) );
         bSaveContentAttr = true;
