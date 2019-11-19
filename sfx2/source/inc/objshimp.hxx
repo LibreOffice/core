@@ -131,6 +131,9 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     bool m_bSavingForSigning;
     bool m_bAllowModifiedBackAfterSigning;
 
+    /// Holds Infobars until View is fully loaded
+    std::vector<InfobarData> m_aPendingInfobars;
+
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();
 
