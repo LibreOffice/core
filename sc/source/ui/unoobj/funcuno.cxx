@@ -57,6 +57,8 @@ using namespace com::sun::star;
 
 // helper to use cached document if not in use, temporary document otherwise
 
+namespace {
+
 class ScTempDocSource
 {
 private:
@@ -71,6 +73,8 @@ public:
 
     ScDocument*     GetDocument();
 };
+
+}
 
 ScDocument* ScTempDocSource::CreateDocument()
 {
@@ -312,6 +316,8 @@ static void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, lo
     rArray.AddDoubleReference(aRef);
 }
 
+namespace {
+
 class SimpleVisitor
 {
 protected:
@@ -438,6 +444,8 @@ static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArr
     rOverflow = aContainer.getOverflow();
 }
 };
+
+}
 
 uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                             const uno::Sequence<uno::Any>& aArguments )

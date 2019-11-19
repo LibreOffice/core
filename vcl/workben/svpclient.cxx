@@ -91,6 +91,8 @@ SAL_IMPLEMENT_MAIN()
     return 0;
 }
 
+namespace {
+
 class MyWin : public WorkWindow
 {
     VclPtr<PushButton>   m_aListButton;
@@ -111,6 +113,8 @@ public:
     DECL_LINK( SelectHdl, ListBox&, void );
     DECL_STATIC_LINK( MyWin, QuitHdl, Button*, void );
 };
+
+}
 
 void Main()
 {

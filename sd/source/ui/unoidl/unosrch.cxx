@@ -52,6 +52,8 @@ static const SfxItemPropertyMapEntry* ImplGetSearchPropertyMap()
     return aSearchPropertyMap_Impl;
 }
 
+namespace {
+
 class SearchContext_impl
 {
     uno::Reference< drawing::XShapes > mxShapes;
@@ -78,6 +80,8 @@ public:
         return xShape;
     }
 };
+
+}
 
 /* ================================================================= */
 /** this class implements a search or replace operation on a given

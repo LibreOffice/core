@@ -27,6 +27,8 @@ class FilterConfigItem;
 
 //============================ PCXReader ==================================
 
+namespace {
+
 class PCXReader {
 
 private:
@@ -58,6 +60,8 @@ public:
     bool                ReadPCX(Graphic & rGraphic );
                         // Reads a PCX file from the stream and fills the GDIMetaFile
 };
+
+}
 
 //=================== methods of PCXReader ==============================
 

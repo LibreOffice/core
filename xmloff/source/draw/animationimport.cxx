@@ -1205,6 +1205,8 @@ SvXMLImportContextRef AnimationNodeContext::CreateChildContext( sal_uInt16 nPref
         return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
+namespace {
+
 class AnimationsImport: public SvXMLImport, public XAnimationNodeSupplier
 {
 public:
@@ -1223,6 +1225,8 @@ public:
 private:
     Reference< XAnimationNode > mxRootNode;
 };
+
+}
 
 AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxContext )
 : SvXMLImport( rxContext, AnimationsImport_getImplementationName(), SvXMLImportFlags::META )

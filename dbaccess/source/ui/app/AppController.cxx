@@ -179,6 +179,12 @@ Reference< XInterface > OApplicationController::Create(const Reference<XMultiSer
     return *(new OApplicationController( comphelper::getComponentContext(_rxFactory)));
 }
 
+namespace {
+
+class SelectionGuard;
+
+}
+
 // OApplicationController
 class SelectionNotifier
 {
@@ -243,6 +249,8 @@ public:
     }
 };
 
+namespace {
+
 class SelectionGuard
 {
 public:
@@ -263,6 +271,8 @@ public:
 private:
     SelectionNotifier&  m_rNotifier;
 };
+
+}
 
 // OApplicationController
 OApplicationController::OApplicationController(const Reference< XComponentContext >& _rxORB)

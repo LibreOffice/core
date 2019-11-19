@@ -136,8 +136,6 @@ bool isPrimaryAxes(sal_Int32 nIndex)
     return nIndex != 1;
 }
 
-}
-
 class lcl_MatchesRole
 {
 public:
@@ -160,6 +158,8 @@ public:
 private:
     OUString const m_aRole;
 };
+
+}
 
 static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram )
 {

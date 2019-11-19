@@ -39,6 +39,8 @@
 
 typedef ::std::pair< MetaAction*, int > Component; // MetaAction plus index in metafile
 
+namespace {
+
 // List of (intersecting) actions, plus overall bounds
 struct ConnectedComponents
 {
@@ -56,6 +58,8 @@ struct ConnectedComponents
     bool            bIsSpecial;
     bool            bIsFullyTransparent;
 };
+
+}
 
 typedef ::std::vector< ConnectedComponents > ConnectedComponentsList;
 

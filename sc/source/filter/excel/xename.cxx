@@ -40,6 +40,8 @@ using namespace ::oox;
 
 // *** Helper classes ***
 
+namespace {
+
 /** Represents an internal defined name, supports writing it to a NAME record. */
 class XclExpName : public XclExpRecord, protected XclExpRoot
 {
@@ -106,6 +108,8 @@ private:
     sal_uInt16          mnExtSheet;     /// The 1-based index to a global EXTERNSHEET record.
     sal_uInt16          mnXclTab;       /// The 1-based Excel sheet index for local names.
 };
+
+}
 
 /** Implementation class of the name manager. */
 class XclExpNameManagerImpl : protected XclExpRoot

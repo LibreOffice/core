@@ -74,6 +74,8 @@ using namespace com::sun::star::uno;
 namespace ucbhelper
 {
 
+namespace {
+
 class EmptyInputStream : public ::cppu::WeakImplHelper< XInputStream >
 {
 public:
@@ -85,6 +87,8 @@ public:
     virtual sal_Int32 SAL_CALL available() override;
     virtual void SAL_CALL closeInput() override;
 };
+
+}
 
 sal_Int32 EmptyInputStream::readBytes(
     Sequence< sal_Int8 > & data, sal_Int32 )
@@ -116,6 +120,7 @@ void EmptyInputStream::closeInput()
 
 // class ContentEventListener_Impl.
 
+namespace {
 
 class ContentEventListener_Impl : public cppu::OWeakObject,
                                       public XContentEventListener
@@ -140,6 +145,7 @@ public:
     virtual void SAL_CALL disposing( const EventObject& Source ) override;
 };
 
+}
 
 // class Content_Impl.
 

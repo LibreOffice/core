@@ -213,6 +213,8 @@ enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 
 //============================ OS2METReader ==================================
 
+namespace {
+
 struct OSPalette {
     OSPalette * pSucc;
     sal_uInt32 * p0RGB; // May be NULL!
@@ -419,6 +421,8 @@ public:
         // Reads from the stream an OS2MET file and fills up the GDIMetaFile
 
 };
+
+}
 
 //=================== Methods of OS2METReader ==============================
 

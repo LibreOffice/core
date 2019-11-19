@@ -42,6 +42,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 class GalApp : public Application
 {
     bool mbInBuildTree;
@@ -57,6 +59,8 @@ protected:
     void Init() override;
     void DeInit() override;
 };
+
+}
 
 static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL,
                          const OUString& aDestDir, std::vector<INetURLObject> &rFiles,

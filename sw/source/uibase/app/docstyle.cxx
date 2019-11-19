@@ -89,6 +89,8 @@ using namespace com::sun::star;
 // In addition now there is the Bit bPhysical. In case this Bit is
 // TRUE, the Pool-Formatnames are not being submitted.
 
+namespace {
+
 class SwImplShellAction
 {
     SwWrtShell* pSh;
@@ -99,6 +101,8 @@ public:
     SwImplShellAction(const SwImplShellAction&) = delete;
     SwImplShellAction& operator=(const SwImplShellAction&) = delete;
 };
+
+}
 
 SwImplShellAction::SwImplShellAction( SwDoc& rDoc )
 {

@@ -270,11 +270,15 @@ struct ImpMeasureRec : public SdrDragStatUserData
     long                        nTextAutoAngleView;
 };
 
+namespace {
+
 struct ImpLineRec
 {
     Point                       aP1;
     Point                       aP2;
 };
+
+}
 
 struct ImpMeasurePoly
 {

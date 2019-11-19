@@ -58,10 +58,14 @@ using namespace com::sun::star::linguistic2;
 namespace linguistic
 {
 
+namespace {
+
 //!! multi-thread safe mutex for all platforms !!
 struct LinguMutex : public rtl::Static< osl::Mutex, LinguMutex >
 {
 };
+
+}
 
 osl::Mutex &    GetLinguMutex()
 {
@@ -115,6 +119,8 @@ static sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
     return std::min(std::min(n1, n2), n3);
 }
 
+namespace {
+
 class IntArray2D
 {
 private:
@@ -126,6 +132,8 @@ public:
 
     sal_Int32 & Value( int i, int k  );
 };
+
+}
 
 IntArray2D::IntArray2D( int nDim1, int nDim2 )
 {

@@ -38,6 +38,7 @@
 #define CHECK_TABLE(t)
 #endif
 
+namespace {
 
 // Structure for the mapping from old and new frame formats to the
 // boxes and lines of a table
@@ -49,6 +50,8 @@ struct MapTableFrameFormat
         : pOld( pOldFormat ), pNew( pNewFormat )
     {}
 };
+
+}
 
 typedef std::vector<MapTableFrameFormat> MapTableFrameFormats;
 
@@ -118,6 +121,8 @@ static bool lcl_SrchNew( const MapTableFrameFormat& rMap, SwFrameFormat** pPara 
     return false;
 }
 
+namespace {
+
 struct CopyTable
 {
     SwDoc* m_pDoc;
@@ -134,6 +139,8 @@ struct CopyTable
           m_pInsLine(nullptr), m_pInsBox(nullptr), m_pTableNd(&rTableNd), m_pOldTable(pOldTable)
     {}
 };
+
+}
 
 static void lcl_CopyTableLine( const SwTableLine* pLine, CopyTable* pCT );
 

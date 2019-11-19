@@ -20,6 +20,8 @@
 
 #include <utility>
 
+namespace {
+
 struct MarkTestData  // To represent a single rectangle part of a multiselection
 {
     ScRange aRange;
@@ -79,6 +81,8 @@ struct MultiMarkTestData
     std::vector<std::pair<SCCOL,SCCOL>> aColsWithEqualMarksList;
     std::vector<std::pair<SCCOL,SCCOL>> aColsWithUnequalMarksList;
 };
+
+}
 
 class Test : public CppUnit::TestFixture
 {

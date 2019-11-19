@@ -58,6 +58,8 @@ using namespace com::sun::star::configuration::backend;
 namespace migration
 {
 
+namespace {
+
 class JavaMigration : public ::cppu::WeakImplHelper<
     css::lang::XServiceInfo,
     css::lang::XInitialization,
@@ -139,6 +141,8 @@ private:
     TElementStack m_aStack;
 
 };
+
+}
 
 JavaMigration::~JavaMigration()
 {

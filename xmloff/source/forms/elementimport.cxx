@@ -76,6 +76,8 @@ namespace xmloff
 #define PROPID_MIN_VALUE        3
 #define PROPID_MAX_VALUE        4
 
+    namespace {
+
     struct PropertyValueLess
     {
         bool operator()(const PropertyValue& _rLeft, const PropertyValue& _rRight)
@@ -83,6 +85,8 @@ namespace xmloff
             return _rLeft.Name < _rRight.Name;
         }
     };
+
+    }
 
     //= OElementNameMap
     OElementNameMap::MapString2Element  OElementNameMap::s_sElementTranslations;
@@ -1349,6 +1353,8 @@ namespace xmloff
             simulateDefaultedAttribute(OAttributeMetaData::getDatabaseAttributeName(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, "false");
     }
 
+    namespace {
+
     struct EqualHandle
     {
         const sal_Int32 m_nHandle;
@@ -1359,6 +1365,8 @@ namespace xmloff
             return _rProp.Handle == m_nHandle;
         }
     };
+
+    }
 
     void OTextLikeImport::removeRedundantCurrentValue()
     {
@@ -1402,6 +1410,8 @@ namespace xmloff
         // since this is the default of this property, anyway.
     }
 
+    namespace {
+
     struct EqualName
     {
         const OUString & m_sName;
@@ -1412,6 +1422,8 @@ namespace xmloff
             return _rProp.Name == m_sName;
         }
     };
+
+    }
 
     void OTextLikeImport::adjustDefaultControlProperty()
     {

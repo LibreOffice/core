@@ -919,8 +919,6 @@ bool lcl_exportDomainForThisSequence( const Reference< chart2::data::XDataSequen
     return bDomainExported;
 }
 
-} // anonymous namespace
-
 struct SchXMLDataPointStruct
 {
     OUString   maStyleName;
@@ -928,6 +926,8 @@ struct SchXMLDataPointStruct
 
     SchXMLDataPointStruct() : mnRepeat( 1 ) {}
 };
+
+} // anonymous namespace
 
 // class SchXMLExportHelper
 

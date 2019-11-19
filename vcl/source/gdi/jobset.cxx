@@ -29,6 +29,8 @@
 #define JOBSET_FILE364_SYSTEM   (sal_uInt16(0xFFFF))
 #define JOBSET_FILE605_SYSTEM   (sal_uInt16(0xFFFE))
 
+namespace {
+
 struct ImplOldJobSetupData
 {
     char    cPrinterName[64];
@@ -48,6 +50,8 @@ struct Impl364JobSetupData
     SVBT32  nPaperWidth;
     SVBT32  nPaperHeight;
 };
+
+}
 
 ImplJobSetup::ImplJobSetup()
 {

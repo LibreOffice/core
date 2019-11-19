@@ -68,6 +68,7 @@ static sal_Int16 GetConversionTypeFromText( const OUString &rText )
     return nRes;
 }
 
+namespace {
 
 class ConvDicXMLImportContext :
     public SvXMLImportContext
@@ -154,6 +155,7 @@ public:
     const OUString &    GetLeftText() const     { return rEntryContext.GetLeftText(); }
 };
 
+}
 
 void ConvDicXMLImportContext::Characters(const OUString & /*rChars*/)
 {

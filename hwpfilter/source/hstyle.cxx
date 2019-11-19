@@ -30,12 +30,16 @@ enum
 
 #define DATA static_cast<StyleData *>(style)
 
+namespace {
+
 struct StyleData
 {
     char name[MAXSTYLENAME + 1];
     CharShape cshape;
     ParaShape pshape;
 };
+
+}
 
 static char buffer[MAXSTYLENAME + 1];
 

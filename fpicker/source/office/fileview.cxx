@@ -116,9 +116,6 @@ namespace
         virtual void SAL_CALL onShot() override;
     };
 
-
-}
-
 class ViewTabListBox_Impl
 {
 private:
@@ -225,6 +222,8 @@ public:
 
     void            ExecuteContextMenuAction(const OString& rSelectedPopentry);
 };
+
+}
 
 //= SvtFileView_Impl
 class SvtFileView_Impl  :public ::svt::IEnumerationResultHandler

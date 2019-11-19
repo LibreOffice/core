@@ -21,6 +21,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 /// Invokes the MathType importer via UNO.
 class MathTypeFilter : public cppu::WeakImplHelper
     <
@@ -46,6 +48,8 @@ public:
     sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 MathTypeFilter::MathTypeFilter() = default;
 

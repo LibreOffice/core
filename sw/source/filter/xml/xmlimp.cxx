@@ -135,6 +135,8 @@ static const SvXMLTokenMapEntry aDocTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+namespace {
+
 class SwXMLBodyContext_Impl : public SvXMLImportContext
 {
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
@@ -148,6 +150,8 @@ public:
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
+
+}
 
 SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName) :
@@ -187,6 +191,8 @@ SvXMLImportContextRef SwXMLBodyContext_Impl::CreateChildContext(
     return GetSwImport().CreateBodyContentContext( rLocalName );
 }
 
+namespace {
+
 // #i69629#
 // enhance class <SwXMLDocContext_Impl> in order to be able to create subclasses
 // NB: virtually inherit so we can multiply inherit properly
@@ -211,6 +217,8 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
+
+}
 
 SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName ) :
@@ -286,6 +294,8 @@ SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
     return pContext;
 }
 
+namespace {
+
 // #i69629# - new subclass <SwXMLOfficeDocContext_Impl> of class <SwXMLDocContext_Impl>
 class SwXMLOfficeDocContext_Impl :
          public SwXMLDocContext_Impl, public SvXMLMetaDocumentContext
@@ -298,6 +308,8 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 };
+
+}
 
 SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
                 SwXMLImport& rImport,
@@ -331,6 +343,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLOfficeDocContext_I
     }
 }
 
+namespace {
+
 // #i69629# - new subclass <SwXMLDocStylesContext_Impl> of class <SwXMLDocContext_Impl>
 class SwXMLDocStylesContext_Impl : public SwXMLDocContext_Impl
 {
@@ -342,6 +356,8 @@ public:
 
     virtual void EndElement() override;
 };
+
+}
 
 SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl(
                     SwXMLImport& rImport,
@@ -1154,6 +1170,8 @@ void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
     }
 }
 
+namespace {
+
 // Locally derive XMLTextShapeImportHelper, so we can take care of the
 // form import This is Writer, but not text specific, so it should go
 // here!
@@ -1174,6 +1192,8 @@ public:
     explicit SvTextShapeImportHelper(SvXMLImport& rImp);
     virtual ~SvTextShapeImportHelper() override;
 };
+
+}
 
 SvTextShapeImportHelper::SvTextShapeImportHelper(SvXMLImport& rImp) :
     XMLTextShapeImportHelper(rImp)

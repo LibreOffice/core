@@ -45,6 +45,8 @@ namespace framework
 
 //  Configuration access class for WindowState supplier implementation
 
+namespace {
+
 class GlobalSettings_Access : public ::cppu::WeakImplHelper<
                                   css::lang::XComponent,
                                   css::lang::XEventListener>
@@ -77,6 +79,8 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
         css::uno::Reference< css::container::XNameAccess >        m_xConfigAccess;
         css::uno::Reference< css::uno::XComponentContext>         m_xContext;
 };
+
+}
 
 GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
     m_bDisposed( false ),
@@ -222,7 +226,12 @@ void GlobalSettings_Access::impl_initConfigAccess()
 
 //  global class
 
+namespace {
+
 struct mutexGlobalSettings : public rtl::Static< osl::Mutex, mutexGlobalSettings > {};
+
+}
+
 static GlobalSettings_Access* pStaticSettings = nullptr;
 
 static GlobalSettings_Access* GetGlobalSettings( const css::uno::Reference< css::uno::XComponentContext >& rxContext )

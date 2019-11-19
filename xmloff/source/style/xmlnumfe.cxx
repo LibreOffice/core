@@ -55,6 +55,8 @@ using namespace ::svt;
 
 typedef std::set< sal_uInt32 >  SvXMLuInt32Set;
 
+namespace {
+
 struct SvXMLEmbeddedTextEntry
 {
     sal_uInt16 const  nSourcePos;     // position in NumberFormat (to skip later)
@@ -64,6 +66,8 @@ struct SvXMLEmbeddedTextEntry
     SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, const OUString& rT ) :
         nSourcePos(nSP), nFormatPos(nFP), aText(rT) {}
 };
+
+}
 
 class SvXMLEmbeddedTextEntryArr
 {

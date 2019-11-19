@@ -639,6 +639,8 @@ void ImplPolygon::ImplCreateFlagArray()
     }
 }
 
+namespace {
+
 class ImplPointFilter
 {
 public:
@@ -670,6 +672,8 @@ public:
     ImplPolygon&    get() { return maPoly; }
 };
 
+}
+
 void ImplPolygonPointFilter::Input( const Point& rPoint )
 {
     if ( !mnSize || (rPoint != maPoly.mxPointAry[mnSize-1]) )
@@ -686,6 +690,8 @@ void ImplPolygonPointFilter::LastPoint()
     if ( mnSize < maPoly.mnPoints )
         maPoly.ImplSetSize( mnSize );
 };
+
+namespace {
 
 class ImplEdgePointFilter : public ImplPointFilter
 {
@@ -720,6 +726,8 @@ public:
     virtual void        Input( const Point& rPoint ) override;
     virtual void        LastPoint() override;
 };
+
+}
 
 inline int ImplEdgePointFilter::VisibleSide( const Point& rPoint ) const
 {
@@ -1219,6 +1227,8 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
     }
 }
 
+namespace {
+
 class Vector2D
 {
 private:
@@ -1233,6 +1243,9 @@ public:
     bool         IsPositive( Vector2D const & rVec ) const { return ( mfX * rVec.mfY - mfY * rVec.mfX ) >= 0.0; }
     bool         IsNegative( Vector2D const & rVec ) const { return !IsPositive( rVec ); }
 };
+
+}
+
 Vector2D& Vector2D::Normalize()
 {
     double fLen = Scalar( *this );

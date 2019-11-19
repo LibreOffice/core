@@ -32,6 +32,8 @@ using namespace ::com::sun::star::lang ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
+namespace {
+
 class XMLSecurityContext_NssImpl
     : public ::cppu::WeakImplHelper<xml::crypto::XXMLSecurityContext, lang::XServiceInfo>
 {
@@ -66,6 +68,8 @@ public:
 
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 XMLSecurityContext_NssImpl::XMLSecurityContext_NssImpl()
     : m_nDefaultEnvIndex(-1)

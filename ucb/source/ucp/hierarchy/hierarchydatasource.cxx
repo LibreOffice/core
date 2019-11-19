@@ -61,6 +61,7 @@ namespace hcp_impl
 
 // HierarchyDataReadAccess Implementation.
 
+namespace {
 
 class HierarchyDataAccess : public cppu::OWeakObject,
                             public lang::XServiceInfo,
@@ -170,6 +171,8 @@ private:
     template<class T>
     css::uno::Reference<T> ensureOrigInterface(css::uno::Reference<T>& x);
 };
+
+}
 
 } // namespace hcp_impl
 

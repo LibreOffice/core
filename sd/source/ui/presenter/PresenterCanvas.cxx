@@ -46,7 +46,7 @@ namespace {
     typedef ::cppu::WeakComponentImplHelper <
         css::rendering::XCustomSprite
     > PresenterCustomSpriteInterfaceBase;
-}
+
 class PresenterCustomSprite
     : protected ::cppu::BaseMutex,
       public PresenterCustomSpriteInterfaceBase
@@ -91,6 +91,8 @@ private:
     /// @throws css::lang::DisposedException
     void ThrowIfDisposed();
 };
+
+}
 
 //===== PresenterCanvas =======================================================
 

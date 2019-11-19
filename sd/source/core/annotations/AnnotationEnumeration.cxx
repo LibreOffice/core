@@ -33,6 +33,8 @@ using namespace ::com::sun::star::lang;
 
 namespace sd {
 
+namespace {
+
 class AnnotationEnumeration: public ::cppu::WeakImplHelper< css::office::XAnnotationEnumeration >
 {
 public:
@@ -50,6 +52,8 @@ private:
     AnnotationVector maAnnotations;
     AnnotationVector::iterator maIter;
 };
+
+}
 
 Reference< XAnnotationEnumeration > createAnnotationEnumeration( const sd::AnnotationVector& rAnnotations )
 {

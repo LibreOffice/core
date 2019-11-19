@@ -93,8 +93,6 @@ enum RenderStyle {
     RENDER_EXPANDED, // expanded view of this renderer
 };
 
-}
-
 class DemoRenderer
 {
     Bitmap   maIntroBW;
@@ -1527,6 +1525,8 @@ public:
     }
 };
 
+}
+
 #if FIXME_BOUNCE_BUTTON
 IMPL_LINK_NOARG(DemoRenderer,BounceTimerCb,Timer*,void)
 {
@@ -1715,6 +1715,8 @@ int DemoRenderer::selectNextRenderer()
     return mnSelectedRenderer;
 }
 
+namespace {
+
 class DemoWin : public WorkWindow
 {
     DemoRenderer &mrRenderer;
@@ -1830,6 +1832,9 @@ struct PointerData {
     PointerStyle eStyle;
     const char * name;
 };
+
+}
+
 static const PointerData gvPointerData [] = {
     { PointerStyle::Null, "Null" },
     { PointerStyle::Magnify, "Magnify" },
@@ -1895,6 +1900,9 @@ static const PointerData gvPointerData [] = {
     { PointerStyle::HideWhitespace, "HideWhitespace" },
     { PointerStyle::ShowWhitespace, "ShowWhitespace" },
 };
+
+namespace {
+
 class DemoWidgets : public WorkWindow
 {
     VclPtr<MenuBar> mpBar;
@@ -2027,6 +2035,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(DemoWidgets, GLTestClick, Button*, void)
 {
     sal_Int32 nSelected = mpGLCombo->GetSelectedEntryPos();
@@ -2068,6 +2078,8 @@ IMPL_LINK(DemoWidgets, CursorButtonClick, Button*, pButton, void)
     }
     assert(false);
 }
+
+namespace {
 
 class DemoPopup : public FloatingWindow
 {
@@ -2112,6 +2124,8 @@ class DemoPopup : public FloatingWindow
         Application::Quit();
     }
 };
+
+}
 
 class OpenGLTests
 {
@@ -2280,6 +2294,8 @@ include/vcl/outdev.hxx:                                              DrawTextFla
     }
 };
 
+namespace {
+
 class DemoApp : public Application
 {
     static int showHelp(DemoRenderer &rRenderer)
@@ -2417,6 +2433,8 @@ protected:
         ::comphelper::setProcessServiceFactory(nullptr);
     }
 };
+
+}
 
 void vclmain::createApplication()
 {

@@ -26,6 +26,8 @@ namespace connectivity
 {
     namespace odbc
     {
+        namespace {
+
         class ORealObdcDriver : public ODBCDriver
         {
         protected:
@@ -35,6 +37,7 @@ namespace connectivity
             explicit ORealObdcDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
         };
 
+        }
 
 oslGenericFunction ORealObdcDriver::getOdbcFunction(ODBC3SQLFunctionId _nIndex) const
 {

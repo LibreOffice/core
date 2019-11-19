@@ -102,6 +102,7 @@ static OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElemen
     return sName.makeStringAndClear();
 }
 
+namespace {
 
 class NavigatorTree :   public ::cppu::BaseMutex
                     ,   public SvTreeListBox
@@ -204,6 +205,8 @@ public:
 private:
     using SvTreeListBox::ExecuteDrop;
 };
+
+}
 
 NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rController )
         :SvTreeListBox( pParent, WB_TABSTOP| WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )

@@ -244,6 +244,8 @@ VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow( vcl::Window *p
     return VclPtr<SvxMetricField>::Create( pParent, m_xFrame ).get();
 }
 
+namespace {
+
 class SvxLineEndWindow : public svtools::ToolbarPopup
 {
 private:
@@ -266,6 +268,8 @@ public:
     virtual void dispose() override;
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
+
+}
 
 static constexpr sal_uInt16 gnCols = 2;
 
@@ -458,6 +462,8 @@ void SvxLineEndWindow::GetFocus()
     }
 }
 
+namespace {
+
 class SvxLineEndToolBoxControl : public svt::PopupWindowController
 {
 public:
@@ -474,6 +480,8 @@ private:
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
     using svt::ToolboxController::createPopupWindow;
 };
+
+}
 
 SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )

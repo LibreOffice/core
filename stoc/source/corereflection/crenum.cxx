@@ -31,6 +31,7 @@ using namespace css::uno;
 namespace stoc_corefl
 {
 
+namespace {
 
 class IdlEnumFieldImpl
     : public IdlMemberImpl
@@ -66,6 +67,8 @@ public:
     // XIdlField2: getType, getAccessMode and get are equal to XIdlField
     virtual void SAL_CALL set( Any & rObj, const Any & rValue ) override;
 };
+
+}
 
 // XInterface
 

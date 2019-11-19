@@ -1188,6 +1188,8 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
 
 }
 
+    namespace {
+
 /// unary_function Functor object for class ZZ returntype is void
     struct SbaGridControlPrec
     {
@@ -1204,6 +1206,9 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
             return false;
         }
     };
+
+    }
+
 sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 {
     sal_Int8 nAction = DND_ACTION_NONE;

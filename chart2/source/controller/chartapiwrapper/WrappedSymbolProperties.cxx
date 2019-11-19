@@ -44,6 +44,9 @@ namespace chart
 namespace wrapper
 {
 
+namespace
+{
+
 class WrappedSymbolTypeProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
 {
 public:
@@ -99,8 +102,6 @@ public:
                                            tSeriesOrDiagramPropertyType ePropertyType);
 };
 
-namespace
-{
 enum
 {
     //symbol properties

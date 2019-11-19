@@ -23,12 +23,16 @@
 
 using namespace formula;
 
+namespace {
+
 struct DataPoint
 {
     double X, Y;
 
     DataPoint( double rX, double rY ) : X( rX ), Y( rY ) {};
 };
+
+}
 
 static bool lcl_SortByX( const DataPoint &lhs, const DataPoint &rhs ) { return lhs.X < rhs.X; }
 
@@ -70,6 +74,9 @@ static bool lcl_SortByX( const DataPoint &lhs, const DataPoint &rhs ) { return l
  * Intervals for Future Values
  *
  */
+
+namespace {
+
 class ScETSForecastCalculation
 {
 private:
@@ -127,6 +134,8 @@ public:
     void GetEDSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel );
     void GetETSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel );
 };
+
+}
 
 ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter )
     : mpFormatter(pFormatter)

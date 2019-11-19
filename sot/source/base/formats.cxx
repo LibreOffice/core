@@ -49,6 +49,8 @@ using namespace ::com::sun::star::datatransfer;
  *  it appears in the list.
  */
 
+namespace {
+
 struct SotDestinationEntry_Impl
 {
     SotExchangeDest const   nDestination;
@@ -58,8 +60,6 @@ struct SotDestinationEntry_Impl
     const SotAction_Impl*   aLinkActions;
 };
 
-namespace
-{
 /*
  *  Via this table, the destination, existing data formats and the desired action
  *  are assigned to an action and the data format to be used in it. The table is

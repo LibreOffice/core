@@ -33,12 +33,16 @@ struct SbiParseStack {              // "Stack" for statement-blocks
     sal_uInt32  nChain;                 // JUMP-Chain
 };
 
+namespace {
+
 struct SbiStatement {
     SbiToken eTok;
     void( SbiParser::*Func )();
     bool  bMain;                    // true: OK outside the SUB
     bool  bSubr;                    // true: OK inside the SUB
 };
+
+}
 
 #define Y   true
 #define N   false

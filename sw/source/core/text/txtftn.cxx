@@ -1241,6 +1241,8 @@ void SwTextFormatter::MakeDummyLine()
     }
 }
 
+namespace {
+
 class SwFootnoteSave
 {
     SwTextSizeInfo *pInf;
@@ -1257,6 +1259,8 @@ public:
                const SwFontScript nGivenScriptType );
     ~SwFootnoteSave() COVERITY_NOEXCEPT_FALSE;
 };
+
+}
 
 SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
                       const SwTextFootnote* pTextFootnote,

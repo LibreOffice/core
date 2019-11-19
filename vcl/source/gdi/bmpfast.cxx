@@ -26,6 +26,8 @@
 
 typedef unsigned char PIXBYTE;
 
+namespace {
+
 class BasePixelPtr
 {
 public:
@@ -49,6 +51,8 @@ public:
     void    SetColor( PIXBYTE r, PIXBYTE g, PIXBYTE b ) const;
     void    SetAlpha( PIXBYTE a ) const;
 };
+
+}
 
 // template specializations for truecolor pixel formats
 template <>

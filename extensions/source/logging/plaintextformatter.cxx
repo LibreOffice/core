@@ -38,6 +38,8 @@ namespace logging
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::XInterface;
 
+    namespace {
+
     class PlainTextFormatter : public cppu::WeakImplHelper<css::logging::XLogFormatter, css::lang::XServiceInfo>
     {
     public:
@@ -54,6 +56,8 @@ namespace logging
         virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
     };
+
+    }
 
     PlainTextFormatter::PlainTextFormatter()
     {

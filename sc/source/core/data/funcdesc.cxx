@@ -38,6 +38,8 @@
 
 #include <memory>
 
+namespace {
+
 struct ScFuncDescCore
 {
     /*
@@ -87,6 +89,8 @@ struct ScFuncDescCore
      */
     sal_uInt8 const aOptionalArgs[7];
 };
+
+}
 
 static void ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc*, bool& rbSuppressed);
 

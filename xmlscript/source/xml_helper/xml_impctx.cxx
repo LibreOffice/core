@@ -56,6 +56,8 @@ OUString getImplementationName_DocumentHandlerImpl()
 
 typedef std::unordered_map< OUString, sal_Int32 > t_OUString2LongMap;
 
+namespace {
+
 struct PrefixEntry
 {
     ::std::vector< sal_Int32 > m_Uids;
@@ -64,8 +66,12 @@ struct PrefixEntry
         { m_Uids.reserve( 4 ); }
 };
 
+}
+
 typedef std::unordered_map<
     OUString, std::unique_ptr<PrefixEntry> > t_OUString2PrefixMap;
+
+namespace {
 
 struct ElementEntry
 {
@@ -162,6 +168,8 @@ public:
     virtual sal_Int32 SAL_CALL getUidByUri( OUString const & Uri ) override;
     virtual OUString SAL_CALL getUriByUid( sal_Int32 Uid ) override;
 };
+
+}
 
 static OUString const g_sXMLNS_PREFIX_UNKNOWN( "<<< unknown prefix >>>" );
 static OUString const g_sXMLNS( "xmlns" );
@@ -293,6 +301,8 @@ inline void DocumentHandlerImpl::getElementName(
         nColonPos >= 0 ? rQName.copy( 0, nColonPos ) : OUString() );
 }
 
+namespace {
+
 class ExtendedAttributes :
     public ::cppu::WeakImplHelper< xml::input::XAttributes >
 {
@@ -329,6 +339,8 @@ public:
     virtual OUString SAL_CALL getTypeByIndex(
         sal_Int32 nIndex ) override;
 };
+
+}
 
 inline ExtendedAttributes::ExtendedAttributes(
     sal_Int32 nAttributes,

@@ -55,6 +55,8 @@ namespace emfio
 {
     namespace emfreader
     {
+        namespace {
+
         class XEmfParser : public ::cppu::WeakAggImplHelper2< graphic::XEmfParser, lang::XServiceInfo >
         {
         private:
@@ -78,6 +80,8 @@ namespace emfio
             virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
             virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
         };
+
+        }
     } // end of namespace emfreader
 } // end of namespace emfio
 

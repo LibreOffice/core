@@ -433,6 +433,8 @@ static void implHandleAnyException( const Any& _rCaughtException )
     }
 }
 
+namespace {
+
 // NativeObjectWrapper handling
 struct ObjectItem
 {
@@ -443,8 +445,15 @@ struct ObjectItem
     {}
 };
 
+}
+
 typedef std::vector< ObjectItem > NativeObjectWrapperVector;
+
+namespace {
+
 class GaNativeObjectWrapperVector : public rtl::Static<NativeObjectWrapperVector, GaNativeObjectWrapperVector> {};
+
+}
 
 void clearNativeObjectWrapperVector()
 {
@@ -3770,6 +3779,7 @@ void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
+namespace {
 
 // Implementation of an EventAttacher-drawn AllListener, which
 // solely transmits several events to a general AllListener
@@ -3791,6 +3801,7 @@ public:
     virtual void SAL_CALL disposing(const EventObject& Source) override;
 };
 
+}
 
 BasicAllListener_Impl::BasicAllListener_Impl(const OUString& aPrefixName_)
     : aPrefixName( aPrefixName_ )
@@ -3872,6 +3883,8 @@ void BasicAllListener_Impl ::disposing(const EventObject& )
 //  class InvocationToAllListenerMapper
 //  helper class to map XInvocation to XAllListener (also in project eventattacher!)
 
+namespace {
+
 class InvocationToAllListenerMapper : public WeakImplHelper< XInvocation >
 {
 public:
@@ -3892,6 +3905,7 @@ private:
     Any                          m_Helper;
 };
 
+}
 
 // Function to replace AllListenerAdapterService::createAllListerAdapter
 static Reference< XInterface > createAllListenerAdapter
@@ -4158,6 +4172,7 @@ void RTL_Impl_CreateUnoValue( SbxArray& rPar )
     refVar->PutObject( xUnoAnyObject.get() );
 }
 
+namespace {
 
 class ModuleInvocationProxy : public WeakImplHelper< XInvocation, XComponent >
 {
@@ -4188,6 +4203,8 @@ public:
     virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) override;
 };
+
+}
 
 ModuleInvocationProxy::ModuleInvocationProxy( OUString const & aPrefix, SbxObjectRef const & xScopeObj )
     : m_aMutex()
@@ -4400,6 +4417,8 @@ Reference< XInterface > createComListener( const Any& aControlAny, const OUStrin
 
 typedef std::vector< WeakReference< XComponent > >  ComponentRefVector;
 
+namespace {
+
 struct StarBasicDisposeItem
 {
     StarBASIC*              m_pBasic;
@@ -4412,6 +4431,8 @@ struct StarBasicDisposeItem
     {
     }
 };
+
+}
 
 typedef std::vector< StarBasicDisposeItem* > DisposeItemVector;
 

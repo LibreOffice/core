@@ -1787,8 +1787,6 @@ enum Interval
     INTERVAL_S
 };
 
-}
-
 struct IntervalInfo
 {
     Interval    meInterval;
@@ -1796,6 +1794,8 @@ struct IntervalInfo
     double      mdValue;
     bool        mbSimple;
 };
+
+}
 
 static IntervalInfo const * getIntervalInfo( const OUString& rStringCode )
 {

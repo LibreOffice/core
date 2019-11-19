@@ -68,12 +68,16 @@ enum { SCRIPT_NONE, SCRIPT_SUB, SCRIPT_SUP, SCRIPT_ALL};
 static int  eq_word(MzString& outs, istream *strm, int script = SCRIPT_NONE);
 static bool eq_sentence(MzString& outs, istream *strm, const char *end = nullptr);
 
+namespace {
+
 struct hwpeq {
   const char    *key;       // hwp math keyword
   const char    *latex;     // corresponding latex keyword
   int           nargs;      // # of argument
   unsigned char flag;       // case sensitive?
 };
+
+}
 
 static const hwpeq eq_tbl[] = {
   { "!=",         "\\equiv ", 0,  0   },
@@ -452,6 +456,8 @@ static void make_keyword( char *keyword, const char *token)
     }
 }
 
+namespace {
+
 // token reading function
 struct eq_stack {
   MzString  white;
@@ -464,6 +470,8 @@ struct eq_stack {
     return token.length() != 0;
   }
 };
+
+}
 
 static eq_stack *stk = nullptr;
 

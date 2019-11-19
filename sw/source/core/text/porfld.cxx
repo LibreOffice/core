@@ -133,6 +133,8 @@ sal_uInt16 SwFieldPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
     return m_nViewWidth;
 }
 
+namespace {
+
 /**
  * Never just use SetLen(0)
  */
@@ -149,6 +151,8 @@ public:
     SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pPor );
     ~SwFieldSlot();
 };
+
+}
 
 SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pPor )
     : pOldText(nullptr)

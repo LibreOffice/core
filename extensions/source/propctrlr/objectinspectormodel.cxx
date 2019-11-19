@@ -42,6 +42,8 @@ namespace pcr
 
     //= ObjectInspectorModel
 
+    namespace {
+
     class ObjectInspectorModel : public ImplInspectorModel
     {
     private:
@@ -81,6 +83,7 @@ namespace pcr
         void    impl_verifyArgument_throw( bool _bCondition, sal_Int16 _nArgumentPosition );
     };
 
+    }
 
     //= ObjectInspectorModel
 

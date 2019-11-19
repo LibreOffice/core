@@ -46,6 +46,8 @@
     if ((z) < 0) (z) += 30307; \
 }
 
+namespace {
+
 struct RandomData_Impl
 {
     sal_Int16 m_nX;
@@ -53,11 +55,15 @@ struct RandomData_Impl
     sal_Int16 m_nZ;
 };
 
+}
+
 static double data (RandomData_Impl *pImpl);
 
 #define RTL_RANDOM_DIGEST      rtl_Digest_AlgorithmMD5
 #define RTL_RANDOM_SIZE_DIGEST RTL_DIGEST_LENGTH_MD5
 #define RTL_RANDOM_SIZE_POOL   1023
+
+namespace {
 
 struct RandomPool_Impl
 {
@@ -68,6 +74,8 @@ struct RandomPool_Impl
     sal_uInt32 m_nIndex;
     sal_uInt32 m_nCount;
 };
+
+}
 
 static bool initPool(RandomPool_Impl *pImpl);
 

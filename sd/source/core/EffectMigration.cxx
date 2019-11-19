@@ -47,13 +47,17 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::beans::NamedValue;
 
+namespace {
+
 struct deprecated_FadeEffect_conversion_table_entry
 {
     FadeEffect const  meFadeEffect;
     const sal_Char* mpPresetId;
+};
+
 }
 
-const deprecated_FadeEffect_conversion_table[] =
+deprecated_FadeEffect_conversion_table_entry const deprecated_FadeEffect_conversion_table[] =
 {
 // OOo 1.x transitions
     { FadeEffect_FADE_FROM_LEFT,            "wipe-right" },
@@ -213,13 +217,18 @@ FadeEffect EffectMigration::GetFadeEffect( const SdPage* pPage )
     return FadeEffect_NONE;
 }
 
+namespace {
+
 struct deprecated_AnimationEffect_conversion_table_entry
 {
     AnimationEffect const meEffect;
     const sal_Char* mpPresetId;
     const sal_Char* mpPresetSubType;
+};
+
 }
-const deprecated_AnimationEffect_conversion_table[] =
+
+deprecated_AnimationEffect_conversion_table_entry const deprecated_AnimationEffect_conversion_table[] =
 {
 // OOo 1.x entrance effects
     { AnimationEffect_APPEAR, "ooo-entrance-appear",nullptr },

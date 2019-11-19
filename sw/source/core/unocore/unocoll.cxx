@@ -92,6 +92,8 @@ using namespace ::com::sun::star::lang;
 
 #if HAVE_FEATURE_SCRIPTING
 
+namespace {
+
 class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper< document::XCodeNameQuery >
 {
     SwDocShell* const mpDocShell;
@@ -168,7 +170,11 @@ public:
     }
 };
 
+}
+
 typedef std::unordered_map< OUString, OUString > StringHashMap;
+
+namespace {
 
 class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper< container::XNameContainer >
 {
@@ -268,13 +274,19 @@ public:
 
 };
 
+}
+
 #endif
+
+namespace {
 
 struct  ProvNamesId_Type
 {
     const char *    pName;
     SwServiceType const   nType;
 };
+
+}
 
 // note: this thing is indexed as an array, so do not insert/remove entries!
 const ProvNamesId_Type aProvNamesId[] =

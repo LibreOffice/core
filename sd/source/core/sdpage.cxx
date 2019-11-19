@@ -178,6 +178,8 @@ SdPage::~SdPage()
     ClearSdrObjList();
 }
 
+namespace {
+
 struct OrdNumSorter
 {
     bool operator()( SdrObject const * p1, SdrObject const * p2 )
@@ -185,6 +187,8 @@ struct OrdNumSorter
         return p1->GetOrdNum() < p2->GetOrdNum();
     }
 };
+
+}
 
 /** returns the nIndex'th object from the given PresObjKind, index starts with 1 */
 SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearch /* = false */ )
@@ -1199,6 +1203,8 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
 const int MAX_PRESOBJS = 7; // maximum number of presentation objects per layout
 const int VERTICAL = 0x8000;
 
+namespace {
+
 struct LayoutDescriptor
 {
     PresObjKind meKind[MAX_PRESOBJS];
@@ -1206,6 +1212,8 @@ struct LayoutDescriptor
 
     LayoutDescriptor( int k0 = 0, int k1 = 0, int k2 = 0, int k3 = 0, int k4 = 0, int k5 = 0, int k6 = 0 );
 };
+
+}
 
 LayoutDescriptor::LayoutDescriptor( int k0, int k1, int k2, int k3, int k4, int k5, int k6 )
 {

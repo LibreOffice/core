@@ -37,6 +37,8 @@ using namespace ::com::sun::star;
 
 namespace xmloff {
 
+namespace {
+
 /** a bit of context for parsing RDFa attributes */
 class RDFaReader
 {
@@ -101,6 +103,8 @@ public:
 
     void InsertRDFaEntry(struct RDFaEntry const & i_rEntry);
 };
+
+}
 
 /** store parsed RDFa attributes */
 struct ParsedRDFaAttributes

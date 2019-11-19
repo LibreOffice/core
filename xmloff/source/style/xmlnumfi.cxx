@@ -47,6 +47,8 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
 struct SvXMLNumFmtEntry
 {
     OUString const    aName;
@@ -56,6 +58,8 @@ struct SvXMLNumFmtEntry
     SvXMLNumFmtEntry( const OUString& rN, sal_uInt32 nK, bool bR ) :
         aName(rN), nKey(nK), bRemoveAfterUse(bR) {}
 };
+
+}
 
 class SvXMLNumImpData
 {
@@ -108,6 +112,8 @@ struct SvXMLNumberInfo
     OUString    aIntegerFractionDelimiter;
     std::map<sal_Int32, OUString> m_EmbeddedElements;
 };
+
+namespace {
 
 class SvXMLNumFmtElementContext : public SvXMLImportContext
 {
@@ -191,8 +197,6 @@ public:
     virtual void Characters( const OUString& rChars ) override;
     virtual void EndElement() override;
 };
-
-namespace {
 
 enum SvXMLStyleTokens
 {
@@ -307,6 +311,8 @@ static const SvXMLEnumMapEntry<bool> aFormatSourceMap[] =
     { XML_TOKEN_INVALID,    false }
 };
 
+namespace {
+
 struct SvXMLDefaultDateFormat
 {
     NfIndexTableOffset const          eFormat;
@@ -319,6 +325,8 @@ struct SvXMLDefaultDateFormat
     SvXMLDateElementAttributes const  eSecs;
     bool const                        bSystem;
 };
+
+}
 
 static const SvXMLDefaultDateFormat aDefaultDateFormats[] =
 {

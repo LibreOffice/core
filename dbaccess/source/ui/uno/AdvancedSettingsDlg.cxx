@@ -35,6 +35,8 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
+    namespace {
+
     // OAdvancedSettingsDialog
     class OAdvancedSettingsDialog
             :public ODatabaseAdministrationDialog
@@ -70,6 +72,8 @@ namespace dbaui
     // OGenericUnoDialog overridables
         virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
     };
+
+    }
 
     OAdvancedSettingsDialog::OAdvancedSettingsDialog(const Reference< XComponentContext >& _rxORB)
         :ODatabaseAdministrationDialog(_rxORB)

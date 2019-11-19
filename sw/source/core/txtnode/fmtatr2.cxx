@@ -786,6 +786,8 @@ MetaFieldManager::makeMetaField(SwFormatMeta * const i_pFormat,
     return pMetaField;
 }
 
+namespace {
+
 struct IsInUndo
 {
     bool operator()(std::weak_ptr<MetaField> const & pMetaField) {
@@ -801,6 +803,8 @@ struct MakeUnoObject
                 pMetaField.lock()->MakeUnoObject(), uno::UNO_QUERY);
     }
 };
+
+}
 
 std::vector< uno::Reference<text::XTextField> >
 MetaFieldManager::getMetaFields()

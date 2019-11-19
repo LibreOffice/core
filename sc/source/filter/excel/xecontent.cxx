@@ -63,6 +63,8 @@ using ::com::sun::star::sheet::XAreaLink;
 
 // Shared string table ========================================================
 
+namespace {
+
 /** A single string entry in the hash table. */
 struct XclExpHashEntry
 {
@@ -78,6 +80,8 @@ struct XclExpHashEntrySWO
     bool         operator()( const XclExpHashEntry& rLeft, const XclExpHashEntry& rRight ) const
                             { return *rLeft.mpString < *rRight.mpString; }
 };
+
+}
 
 /** Implementation of the SST export.
     @descr  Stores all passed strings in a hash table and prevents repeated

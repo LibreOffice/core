@@ -55,6 +55,8 @@ using std::endl;
 using ::std::pair;
 using ::std::advance;
 
+namespace {
+
 /**
  * Custom string trait struct to tell mdds::multi_type_matrix about the
  * custom string type and how to handle blocks storing them.
@@ -66,6 +68,8 @@ struct matrix_trait
 
     typedef mdds::mtv::custom_block_func1<sc::string_block> element_block_func;
 };
+
+}
 
 typedef mdds::multi_type_matrix<matrix_trait> MatrixImplType;
 
@@ -2194,11 +2198,15 @@ void ScMatrixImpl::MergeDoubleArrayMultiply( std::vector<double>& rArray ) const
 
 namespace Op {
 
+namespace {
+
 template<typename T>
 struct return_type
 {
     typedef T type;
 };
+
+}
 
 template<>
 struct return_type<bool>
@@ -2213,6 +2221,8 @@ struct return_type<char>
 };
 
 }
+
+namespace {
 
 template<typename T, typename U, typename return_type>
 struct wrapped_iterator
@@ -2320,8 +2330,6 @@ public:
     }
 };
 
-namespace {
-
 MatrixImplType::position_type increment_position(const MatrixImplType::position_type& pos, size_t n)
 {
     MatrixImplType::position_type ret = pos;
@@ -2341,8 +2349,6 @@ MatrixImplType::position_type increment_position(const MatrixImplType::position_
     }
     while (n > 0);
     return ret;
-}
-
 }
 
 template<typename T>
@@ -2418,6 +2424,8 @@ public:
         pos = increment_position(pos, node.size);
     }
 };
+
+}
 
 template<typename T>
 void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
@@ -3281,12 +3289,16 @@ void ScMatrix::MergeDoubleArrayMultiply( std::vector<double>& rArray ) const
 
 namespace matop {
 
+namespace {
+
 /**
  * COp struct is used in MatOp class to provide (through template specialization)
  * different actions for empty entries in a matrix.
  */
 template <typename T, typename S>
 struct COp {};
+
+}
 
 template <typename T>
 struct COp<T, svl::SharedString>
@@ -3305,6 +3317,8 @@ struct COp<T, double>
         return aOp( a, b);
     }
 };
+
+namespace {
 
 /** A template for operations where operands are supposed to be numeric.
     A non-numeric (string) operand leads to the configured conversion to number
@@ -3368,6 +3382,8 @@ public:
         return true;
     }
 };
+
+}
 
 }
 

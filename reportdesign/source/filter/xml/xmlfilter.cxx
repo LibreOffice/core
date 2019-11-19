@@ -83,6 +83,8 @@ using namespace ::com::sun::star::xml::sax;
 using namespace xmloff;
 using namespace ::com::sun::star::util;
 
+namespace {
+
 class RptMLMasterStylesContext_Impl:
     public XMLTextMasterStylesContext
 {
@@ -100,6 +102,8 @@ public:
     RptMLMasterStylesContext_Impl& operator=(const RptMLMasterStylesContext_Impl&) = delete;
     virtual void EndElement() override;
 };
+
+}
 
 RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
         ORptFilter& rImport, sal_uInt16 nPrfx,
@@ -576,6 +580,8 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     return bRet;
 }
 
+namespace {
+
 class RptXMLDocumentSettingsContext : public SvXMLImportContext
 {
 public:
@@ -651,6 +657,8 @@ public:
     }
 };
 
+}
+
 SvXMLImportContextRef RptXMLDocumentBodyContext::CreateChildContext(
         sal_uInt16 const nPrefix,
         const OUString& rLocalName,
@@ -677,6 +685,8 @@ SvXMLImportContextRef RptXMLDocumentBodyContext::CreateChildContext(
         return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
     }
 }
+
+namespace {
 
 class RptXMLDocumentContentContext : public SvXMLImportContext
 {
@@ -719,6 +729,8 @@ public:
         return pContext;
     }
 };
+
+}
 
 SvXMLImportContext* ORptFilter::CreateDocumentContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,

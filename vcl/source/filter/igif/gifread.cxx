@@ -53,6 +53,8 @@ class GIFLZWDecompressor;
 
 class SvStream;
 
+namespace {
+
 class GIFReader : public GraphicReader
 {
     Animation           aAnimation;
@@ -116,6 +118,8 @@ public:
 
     explicit            GIFReader( SvStream& rStm );
 };
+
+}
 
 GIFReader::GIFReader( SvStream& rStm )
     : nAnimationByteSize(0)

@@ -149,6 +149,8 @@ void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* /*pPFF*/, bool /*bVerti
 {
 }
 
+namespace
+{
 class Qt5CommonSalLayout : public GenericSalLayout
 {
 public:
@@ -159,6 +161,7 @@ public:
 
     void SetOrientation(int nOrientation) { mnOrientation = nOrientation; }
 };
+}
 
 std::unique_ptr<GenericSalLayout> Qt5Graphics::GetTextLayout(int nFallbackLevel)
 {

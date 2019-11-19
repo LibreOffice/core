@@ -506,8 +506,15 @@ void StyleTreeListBox_Impl::Recalc()
 }
 
 /** Internal structure for the establishment of the hierarchical view */
+namespace {
+
 class StyleTree_Impl;
+
+}
+
 typedef std::vector<std::unique_ptr<StyleTree_Impl>> StyleTreeArr_Impl;
+
+namespace {
 
 class StyleTree_Impl
 {
@@ -527,6 +534,7 @@ public:
     StyleTreeArr_Impl& getChildren() { return pChildren; }
 };
 
+}
 
 static void MakeTree_Impl(StyleTreeArr_Impl& rArr)
 {

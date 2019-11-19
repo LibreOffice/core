@@ -71,6 +71,8 @@ using namespace ::com::sun::star::io;
 
 class SvxXMLListLevelStyleContext_Impl;
 
+namespace {
+
 class SvxXMLListLevelStyleAttrContext_Impl : public SvXMLImportContext
 {
     SvxXMLListLevelStyleContext_Impl&   rListLevel;
@@ -98,8 +100,6 @@ public:
             const Reference< xml::sax::XAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
 };
-
-namespace {
 
 enum SvxXMLTextListLevelStyleAttrTokens
 {

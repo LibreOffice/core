@@ -59,6 +59,8 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
+namespace {
+
 // LocalNameApproval
 class LocalNameApproval : public IContainerApprove
 {
@@ -67,6 +69,8 @@ class LocalNameApproval : public IContainerApprove
 public:
     void approveElement( const OUString& _rName ) override;
 };
+
+}
 
 void LocalNameApproval::approveElement( const OUString& _rName )
 {

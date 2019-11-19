@@ -1794,6 +1794,8 @@ void DesktopLOKTest::testRedlineCalc()
         CPPUNIT_ASSERT_EQUAL(std::string("Cell B4 changed from '5' to 't'"), rRedline.second.get<std::string>("description"));
 }
 
+namespace {
+
 class ViewCallback
 {
     LibLODocument_Impl* mpDocument;
@@ -1863,6 +1865,8 @@ public:
         }
     }
 };
+
+}
 
 void DesktopLOKTest::testPaintPartTile()
 {

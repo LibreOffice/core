@@ -75,8 +75,6 @@ namespace
         static Sequence<OUString> s_aLanguageDependentProperties{ "HelpText", "Title" };
         return s_aLanguageDependentProperties;
     }
-}
-
 
 // functor for disposing a control model
 struct DisposeControlModel
@@ -94,6 +92,7 @@ struct DisposeControlModel
     }
 };
 
+}
 
 // functor for searching control model by name
 struct FindControlModel

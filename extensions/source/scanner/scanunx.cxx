@@ -76,6 +76,7 @@ Sequence< sal_Int8 > BitmapTransporter::getDIB()
     return aValue;
 }
 
+namespace {
 
 struct SaneHolder
 {
@@ -88,9 +89,6 @@ struct SaneHolder
     SaneHolder() : m_nError(ScanError_ScanErrorNone), m_bBusy(false) {}
 };
 
-
-namespace
-{
     typedef std::vector< std::shared_ptr<SaneHolder> > sanevec;
     class allSanes
     {
@@ -119,8 +117,6 @@ namespace
 
     struct theSaneProtector : public rtl::Static<osl::Mutex, theSaneProtector> {};
     struct theSanes : public rtl::Static<allSanes, theSanes> {};
-}
-
 
 class ScannerThread : public osl::Thread
 {
@@ -138,6 +134,7 @@ public:
     virtual ~ScannerThread() override;
 };
 
+}
 
 ScannerThread::ScannerThread(const std::shared_ptr<SaneHolder>& pHolder,
                              const Reference< css::lang::XEventListener >& listener,

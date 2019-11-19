@@ -95,6 +95,8 @@ std::map<OUString, librevenge::RVNGPropertyList>& XMLStylesContext::GetCurrentMa
     return m_rMasterStyles;
 }
 
+namespace
+{
 /// Handler for <style:font-face>.
 class XMLFontFaceContext : public XMLImportContext
 {
@@ -161,6 +163,7 @@ public:
 private:
     XMLFontFaceUriContext& mrFontFaceUri;
 };
+}
 
 XMLFontFaceFormatContext::XMLFontFaceFormatContext(XMLImport& rImport,
                                                    XMLFontFaceUriContext& rFontFaceUri)

@@ -51,7 +51,11 @@ using namespace ::com::sun::star::uno;
 
 namespace sd {
 
+namespace {
+
 class ImageButtonHdl;
+
+}
 
 static const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 static const char* gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
@@ -108,6 +112,8 @@ static BitmapEx* getButtonImage( int index, bool large )
 
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
 
+namespace {
+
 class ChangePlaceholderTag : public SmartTag
 {
     friend class ImageButtonHdl;
@@ -153,6 +159,8 @@ private:
     int mnHighlightId;
     Size maImageSize;
 };
+
+}
 
 ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
 : SmartHdl( xTag, rPnt, SdrHdlKind::SmartTag )

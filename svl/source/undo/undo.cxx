@@ -212,6 +212,8 @@ namespace svl { namespace undo { namespace impl
     typedef void ( SfxUndoListener::*UndoListenerVoidMethod )();
     typedef void ( SfxUndoListener::*UndoListenerStringMethod )( const OUString& );
 
+    namespace {
+
     struct NotifyUndoListener
     {
         explicit NotifyUndoListener( UndoListenerVoidMethod i_notificationMethod )
@@ -251,6 +253,8 @@ namespace svl { namespace undo { namespace impl
         UndoListenerStringMethod    m_altNotificationMethod;
         OUString                    m_sActionComment;
     };
+
+    }
 
     class UndoManagerGuard
     {

@@ -117,7 +117,7 @@ public:
             || type.Class("weak_ptr").StdNamespace() // not owning
             || type.Class("ImplWallpaper").GlobalNamespace() // very odd static instance here
             || type.Class("Application").GlobalNamespace() // numerous odd subclasses in vclmain::createApplication()
-            || type.Class("DemoMtfApp").GlobalNamespace() // one of these Application with own VclPtr
+            || type.Class("DemoMtfApp").AnonymousNamespace().GlobalNamespace() // one of these Application with own VclPtr
            )
         {
             return std::make_pair(false, std::vector<FieldDecl const*>());

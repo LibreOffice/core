@@ -79,6 +79,9 @@ static int nOpenStreams=0;
 #endif
 
 typedef ::cppu::WeakImplHelper < XInputStream, XSeekable > FileInputStreamWrapper_Base;
+
+namespace {
+
 class FileStreamWrapper_Impl : public FileInputStreamWrapper_Base
 {
 protected:
@@ -104,6 +107,7 @@ protected:
     void checkError();
 };
 
+}
 
 FileStreamWrapper_Impl::FileStreamWrapper_Impl( const OUString& rName )
     : m_aURL( rName )

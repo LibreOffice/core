@@ -64,6 +64,12 @@ namespace basic
 
     typedef std::vector< BasicManagerCreationListener* >  CreationListeners;
 
+    namespace {
+
+    struct CreateImplRepository;
+
+    }
+
     class ImplRepository : public ::utl::OEventListenerAdapter, public SfxListener
     {
     private:
@@ -192,6 +198,7 @@ namespace basic
         StarBASIC* impl_getDefaultAppBasicLibrary();
     };
 
+    namespace {
 
     struct CreateImplRepository
     {
@@ -202,6 +209,7 @@ namespace basic
         }
     };
 
+    }
 
     ImplRepository::ImplRepository()
     {

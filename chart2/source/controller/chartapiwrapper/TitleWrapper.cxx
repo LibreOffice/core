@@ -50,6 +50,8 @@ using ::com::sun::star::uno::Sequence;
 
 namespace chart
 {
+namespace {
+
 class WrappedTitleStringProperty : public WrappedProperty
 {
 public:
@@ -62,6 +64,8 @@ public:
 protected:
     Reference< uno::XComponentContext > m_xContext;
 };
+
+}
 
 WrappedTitleStringProperty::WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext )
     : ::chart::WrappedProperty( "String", OUString() )
@@ -101,11 +105,15 @@ Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPro
     return uno::Any( OUString() );//default title is an empty String
 }
 
+namespace {
+
 class WrappedStackedTextProperty : public WrappedProperty
 {
 public:
     WrappedStackedTextProperty();
 };
+
+}
 
 WrappedStackedTextProperty::WrappedStackedTextProperty()
     : ::chart::WrappedProperty( "StackedText", "StackCharacters" )

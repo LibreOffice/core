@@ -175,6 +175,8 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
     osl_setEnvironment(envVar.pData, envValue.pData);
 }
 
+namespace {
+
 struct PythonInit
 {
 PythonInit() {
@@ -236,6 +238,8 @@ PythonInit() {
     }
 }
 };
+
+}
 
 static Reference<XInterface> CreateInstance(const Reference<XComponentContext> & ctx)
 {

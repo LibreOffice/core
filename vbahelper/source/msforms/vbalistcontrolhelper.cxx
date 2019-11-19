@@ -26,6 +26,8 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
+namespace {
+
 class ListPropListener : public PropListener
 {
 private:
@@ -39,6 +41,8 @@ public:
     virtual void setValueEvent( const css::uno::Any& value ) override;
     virtual css::uno::Any getValueEvent() override;
 };
+
+}
 
 ListPropListener::ListPropListener( const uno::Reference< beans::XPropertySet >& xProps, const uno::Any& pvargIndex, const uno::Any& pvarColumn ) : m_xProps( xProps ), m_pvargIndex( pvargIndex ), m_pvarColumn( pvarColumn )
 {

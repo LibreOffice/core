@@ -24,6 +24,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 // I assume there is only one headersfooters in Writer
 class HeadersFootersIndexAccess : public ::cppu::WeakImplHelper<container::XIndexAccess >
 {
@@ -77,6 +79,8 @@ public:
         throw container::NoSuchElementException();
     }
 };
+
+}
 
 SwVbaHeadersFooters::SwVbaHeadersFooters( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xPageStyleProps, bool isHeader ): SwVbaHeadersFooters_BASE( xParent, xContext, new HeadersFootersIndexAccess( xParent, xContext, xModel, xPageStyleProps, isHeader ) ),  mxModel( xModel ), mxPageStyleProps( xPageStyleProps ), mbHeader( isHeader )
 {

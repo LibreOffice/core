@@ -35,6 +35,7 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
+namespace {
 
 struct LockEntrySequenceParseContext
 {
@@ -45,6 +46,8 @@ struct LockEntrySequenceParseContext
     LockEntrySequenceParseContext()
     : hasScope( false ), hasType( false ) {}
 };
+
+}
 
 #define STATE_TOP (1)
 

@@ -76,6 +76,8 @@ using namespace css::form::binding;
 
 namespace frm
 {
+namespace {
+
 class StandardFormatsSupplier : protected SvNumberFormatsSupplierObj, public ::utl::ITerminationListener
 {
 protected:
@@ -90,6 +92,9 @@ protected:
     virtual bool    queryTermination() const override;
     virtual void    notifyTermination() override;
 };
+
+}
+
 WeakReference< XNumberFormatsSupplier > StandardFormatsSupplier::s_xDefaultFormatsSupplier;
 StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XComponentContext > & _rxContext,LanguageType _eSysLanguage)
     :SvNumberFormatsSupplierObj()

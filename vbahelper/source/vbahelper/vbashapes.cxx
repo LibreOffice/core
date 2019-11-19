@@ -51,6 +51,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 class VbShapeEnumHelper : public EnumerationHelper_BASE
 {
         uno::Reference<msforms::XShapes > m_xParent;
@@ -71,6 +73,8 @@ public:
         }
 
 };
+
+}
 
 void ScVbaShapes::initBaseCollection()
 {

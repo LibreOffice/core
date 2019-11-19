@@ -320,6 +320,7 @@ std::vector<OUString> FilterFactory::impl_queryMatchByDocumentService(const Quer
     return lResult;
 }
 
+namespace {
 
 class stlcomp_removeIfMatchFlags
 {
@@ -361,6 +362,7 @@ class stlcomp_removeIfMatchFlags
         }
 };
 
+}
 
 std::vector<OUString> FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lTokens) const
 {
