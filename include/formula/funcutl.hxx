@@ -49,15 +49,17 @@ private:
     DECL_LINK( UpdateHdl, Timer*, void );
 
 protected:
-    DECL_LINK(KeyInput, const KeyEvent&, bool);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(GetFocus, weld::Widget&, void);
     DECL_LINK(LoseFocus, weld::Widget&, void);
     DECL_LINK(Modify, weld::Entry&, void);
 
+    virtual bool KeyInput(const KeyEvent& rKEvt);
+
 public:
     RefEdit(std::unique_ptr<weld::Entry> xControl);
     weld::Entry* GetWidget() const { return xEntry.get(); }
-    ~RefEdit();
+    virtual ~RefEdit();
 
     void SetRefString( const OUString& rStr );
 
