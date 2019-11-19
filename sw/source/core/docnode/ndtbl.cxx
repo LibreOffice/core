@@ -3664,7 +3664,7 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
     else
     {
         // Not sure how this situation can occur, but apparently we have some kind of table in table.
-        // I am guessing at how to best handle singlerow in this situation.
+        // I am guessing how to best handle singlerow in this situation.
         const bool bOrigSingleRowTable = pSetPara->bSingleRowTable;
         pSetPara->bSingleRowTable = rBox.GetLines().size() == 1;
         for (auto const& rpFndLine : rBox.GetLines())
