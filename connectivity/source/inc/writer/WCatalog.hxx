@@ -32,7 +32,6 @@ class OWriterCatalog : public file::OFileCatalog
 public:
     void refreshTables() override;
 
-public:
     OWriterCatalog(OWriterConnection* pConnection);
 };
 
