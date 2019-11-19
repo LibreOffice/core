@@ -87,7 +87,7 @@ ITag* CContentReader::chooseTagReader( const std::wstring& tag_name, const XmlTa
         // if style:style | style:name is exist,, fill the style field, otherwise do nothing;
         if  ( XmlAttributes.find(CONTENT_STYLE_STYLE_NAME) != XmlAttributes.end())
             return new CAutoStyleTag(XmlAttributes);
-       else
+        else
             return new CDummyTag;
     }
     else if ( ( tag_name == CONTENT_STYLE_PROPERTIES ) || ( tag_name == CONTENT_TEXT_STYLE_PROPERTIES ) )
