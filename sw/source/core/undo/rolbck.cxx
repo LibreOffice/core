@@ -744,11 +744,13 @@ void SwHistoryTextFieldmark::SetInDoc(SwDoc* pDoc, bool)
 
     SwPaM const pam(*rNds[m_nStartNode]->GetContentNode(), m_nStartContent,
                     *rNds[m_nEndNode]->GetContentNode(),
+                        // subtract 1 for the CH_TXT_ATR_FIELDEND itself,
+                        // plus more if same node as other CH_TXT_ATR
                         m_nStartNode == m_nEndNode
-                            ? (m_nEndContent - 2)
+                            ? (m_nEndContent - 3)
                             : m_nSepNode == m_nEndNode
-                                ? (m_nEndContent - 1)
-                                : m_nEndContent);
+                                ? (m_nEndContent - 2)
+                                : (m_nEndContent - 1));
     SwPosition const sepPos(*rNds[m_nSepNode]->GetContentNode(),
             m_nStartNode == m_nSepNode ? (m_nSepContent - 1) : m_nSepContent);
 
