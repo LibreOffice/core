@@ -108,6 +108,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         sMessage.append(" message: ");
         sMessage.append(toOString(exception.Message));
     }
+/*  TODO FIXME (see https://gerrit.libreoffice.org/#/c/83245/)
     if ( exception.Context.is() )
     {
         const char* pContext = typeid( *exception.Context ).name();
@@ -122,6 +123,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         std::free(const_cast<char *>(pContext));
 #endif
     }
+*/
     {
         css::configuration::CorruptedConfigurationException specialized;
         if ( caught >>= specialized )
