@@ -35,6 +35,8 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 
 #ifdef DBG_UTIL
 #include "PropertyMapHelper.hxx"
@@ -1108,6 +1110,26 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 // OOXML table style may container paragraph properties, apply these now.
                 ApplyParaProperty(aTableInfo.aTableProperties, PROP_PARA_BOTTOM_MARGIN);
                 ApplyParaProperty(aTableInfo.aTableProperties, PROP_PARA_LINE_SPACING);
+
+                // there is no line spacing before bottom cell border in Writer
+                // keep this by adding its value to bottom margin
+                for (const auto& rParaProp : m_rDMapper_Impl.m_aParagraphsToEndTable)
+                {
+                    if (rParaProp.m_bCellEnd)
+                    {
+                        style::LineSpacing aSpacing;
+                        rParaProp.m_rPropertySet->getPropertyValue("ParaLineSpacing") >>= aSpacing;
+                        if (aSpacing.Mode == style::LineSpacingMode::PROP && aSpacing.Height > 100)
+                        {
+                            sal_Int32 nBottomMargin;
+                            double fHeight;
+                            rParaProp.m_rPropertySet->getPropertyValue("CharHeight") >>= fHeight;
+                            rParaProp.m_rPropertySet->getPropertyValue("ParaBottomMargin") >>= nBottomMargin;
+                            rParaProp.m_rPropertySet->setPropertyValue("ParaBottomMargin",
+                                            uno::makeAny(nBottomMargin + ConversionHelper::convertTwipToMM100((aSpacing.Height - 100) * fHeight * 20 / 100)));
+                        }
+                    }
+                }
             }
         }
         catch ( const lang::IllegalArgumentException & )
@@ -1260,6 +1282,10 @@ void DomainMapperTableHandler::endCell(const css::uno::Reference< css::text::XTe
         xEnd = end->getEnd();
     m_aCellRange.push_back(xEnd);
     m_aRowRanges.push_back(comphelper::containerToSequence(m_aCellRange));
+
+    // label last paragraph in cell
+    if (!m_rDMapper_Impl.m_aParagraphsToEndTable.empty())
+        m_rDMapper_Impl.m_aParagraphsToEndTable.back().m_bCellEnd = true;
 }
 
 void DomainMapperTableHandler::setHadFootOrEndnote(bool bHadFootOrEndnote)

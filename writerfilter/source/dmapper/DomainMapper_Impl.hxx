@@ -409,6 +409,7 @@ struct TableParagraph
 {
     PropertyMapPtr m_pPropertyMap;
     css::uno::Reference<css::beans::XPropertySet> m_rPropertySet;
+    bool m_bCellEnd = false;
 };
 
 class DomainMapper;

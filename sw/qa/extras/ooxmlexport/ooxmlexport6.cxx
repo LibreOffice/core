@@ -480,6 +480,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119054, "tdf119054.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "line", "240");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf125300, "tdf125300.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    // use bottom margin to emulate line spacing before bottom cell border
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "after", "240");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
 {
     /*
