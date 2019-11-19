@@ -62,6 +62,10 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <com/sun/star/frame/status/FontHeight.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 
 bool SwFlowFrame::m_bMoveBwdJump = false;
 
@@ -1734,7 +1738,24 @@ SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
         }
 
         if (_pAttrs)
+        {
             nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower();
+            // tdf#125300 compatibility needs also line spacing
+            uno::Any aSpacing;
+            style::LineSpacing aLSp;
+            const SvxLineSpacingItem aSpacingItem = _pAttrs->GetAttrSet().GetLineSpacing();
+            aSpacingItem.QueryValue(aSpacing, 0);
+            aSpacing >>= aLSp;
+            if ( aLSp.Mode == style::LineSpacingMode::PROP && aLSp.Height > 100 )
+            {
+                uno::Any aHeight;
+                css::frame::status::FontHeight aFntHeight;
+                const SvxFontHeightItem& rFontHeightItem = _pAttrs->GetAttrSet().GetSize();
+                rFontHeightItem.QueryValue(aHeight, CONVERT_TWIPS);
+                aHeight >>= aFntHeight;
+                nAdditionalLowerSpace += aFntHeight.Height * 20 * 1.15 * (aLSp.Height - 100) / 100;
+            }
+        }
     }
 
     return nAdditionalLowerSpace;
