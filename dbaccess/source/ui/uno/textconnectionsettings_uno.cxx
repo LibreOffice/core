@@ -51,11 +51,18 @@ namespace dbaui
 
     // OTextConnectionSettingsDialog
 
+    namespace {
+
     class OTextConnectionSettingsDialog;
+
+    }
+
     typedef ::cppu::ImplInheritanceHelper<   ODatabaseAdministrationDialog
                                          ,   css::sdb::XTextConnectionSettings
                                          >   OTextConnectionSettingsDialog_BASE;
     typedef ::comphelper::OPropertyArrayUsageHelper< OTextConnectionSettingsDialog >    OTextConnectionSettingsDialog_PBASE;
+
+    namespace {
 
     class OTextConnectionSettingsDialog
             :public OTextConnectionSettingsDialog_BASE
@@ -107,6 +114,8 @@ namespace dbaui
         virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
         using OTextConnectionSettingsDialog_BASE::getFastPropertyValue;
     };
+
+    }
 
     // OTextConnectionSettingsDialog
     OTextConnectionSettingsDialog::OTextConnectionSettingsDialog( const Reference<XComponentContext>& _rContext )

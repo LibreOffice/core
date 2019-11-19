@@ -62,6 +62,8 @@ namespace comp_EventAttacher {
 //  class InvocationToAllListenerMapper
 //  helper class to map XInvocation to XAllListener
 
+namespace {
+
 class InvocationToAllListenerMapper : public WeakImplHelper< XInvocation >
 {
 public:
@@ -82,6 +84,7 @@ private:
     Any                          m_Helper;
 };
 
+}
 
 // Function to replace AllListenerAdapterService::createAllListerAdapter
 static Reference< XInterface > createAllListenerAdapter
@@ -199,6 +202,8 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
 //  class EventAttacherImpl
 //  represents an implementation of the EventAttacher service
 
+namespace {
+
 class EventAttacherImpl : public WeakImplHelper < XEventAttacher2, XInitialization, XServiceInfo >
 {
 public:
@@ -269,6 +274,7 @@ private:
     Reference< XInvocationAdapterFactory2 >  getInvocationAdapterService();
 };
 
+}
 
 EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxContext )
     : m_xContext( rxContext )
@@ -403,6 +409,7 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter()
     return m_xConverter;
 }
 
+namespace {
 
 // Implementation of an EventAttacher-related AllListeners, which brings
 // a few Events to a general AllListener
@@ -430,6 +437,7 @@ private:
     Reference< XAllListener >   m_AllListener;
 };
 
+}
 
 FilterAllListenerImpl::FilterAllListenerImpl( EventAttacherImpl * pEA_, const OUString& EventMethod_,
                                               const Reference< XAllListener >& AllListener_ )

@@ -22,6 +22,8 @@
 using namespace sal::detail::textenc;
 using namespace rtl::textenc;
 
+namespace {
+
 struct IsciiDevanagariToUnicode
 {
     sal_uInt8 m_cPrevChar;
@@ -56,6 +58,8 @@ struct UnicodeToIsciiDevanagari
         char* pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
         sal_uInt32 * pInfo, sal_Size * pSrcCvtChars);
 };
+
+}
 
 static const sal_Unicode IsciiDevanagariMap[256] =
 {

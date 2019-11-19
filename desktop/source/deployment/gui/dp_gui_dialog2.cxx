@@ -87,6 +87,7 @@ namespace dp_gui {
 #define SHARED_PACKAGE_MANAGER  "shared"
 #define BUNDLED_PACKAGE_MANAGER "bundled"
 
+namespace {
 
 struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
 {
@@ -96,6 +97,8 @@ struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
         return Translate::get(STR_FILTERNAME_ALL, loc);
     }
 };
+
+}
 
 // ExtBoxWithBtns_Impl
 class ExtBoxWithBtns_Impl : public ExtensionBox_Impl

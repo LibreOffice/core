@@ -59,6 +59,8 @@
 // Tolerance in formatting and text output
 #define SLOPPY_TWIPS    5
 
+namespace {
+
 class FormatLevel
 {
     static sal_uInt16 nLevel;
@@ -68,6 +70,9 @@ public:
     static sal_uInt16 GetLevel() { return nLevel; }
     static bool LastLevel() { return 10 < nLevel; }
 };
+
+}
+
 sal_uInt16 FormatLevel::nLevel = 0;
 
 void ValidateText( SwFrame *pFrame )     // Friend of frame

@@ -59,6 +59,8 @@ namespace ucb { namespace ucp { namespace ext
 
     //= ResultListEntry
 
+    namespace {
+
     struct ResultListEntry
     {
         OUString                 sId;
@@ -66,6 +68,8 @@ namespace ucb { namespace ucp { namespace ext
         ::rtl::Reference< Content >     pContent;
         Reference< XRow >               xRow;
     };
+
+    }
 
     typedef ::std::vector< ResultListEntry >    ResultList;
 

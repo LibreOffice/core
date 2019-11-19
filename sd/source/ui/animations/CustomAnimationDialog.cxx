@@ -88,6 +88,8 @@ using ::com::sun::star::beans::XPropertySet;
 
 namespace sd {
 
+namespace {
+
 class PresetPropertyBox  : public PropertySubControl
 {
 public:
@@ -104,6 +106,8 @@ private:
     DECL_LINK(OnSelect, ListBox&, void);
     Link<LinkParamNone*,void> const maModifyLink;
 };
+
+}
 
 PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link<LinkParamNone*,void>& rModifyHdl )
 : PropertySubControl( nControlType ), maModifyLink(rModifyHdl)
@@ -174,6 +178,8 @@ SdPropertySubControl::~SdPropertySubControl()
 {
 }
 
+namespace {
+
 class SdPresetPropertyBox  : public SdPropertySubControl
 {
 public:
@@ -189,6 +195,8 @@ private:
 
     DECL_LINK(OnSelect, weld::ComboBox&, void);
 };
+
+}
 
 SdPresetPropertyBox::SdPresetPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const OUString& aPresetId, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
@@ -253,6 +261,8 @@ Any SdPresetPropertyBox::getValue()
     return makeAny(maPropertyValues[nIndex]);
 }
 
+namespace {
+
 class ColorPropertyBox  : public PropertySubControl
 {
 public:
@@ -268,6 +278,8 @@ private:
     DECL_LINK(OnSelect, SvxColorListBox&, void);
     Link<LinkParamNone*,void> const maModifyLink;
 };
+
+}
 
 ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
 : PropertySubControl( nControlType ), maModifyLink(rModifyHdl)
@@ -314,6 +326,8 @@ Control* ColorPropertyBox::getControl()
     return mpControl;
 }
 
+namespace {
+
 class SdColorPropertyBox  : public SdPropertySubControl
 {
 public:
@@ -328,6 +342,8 @@ private:
 
     DECL_LINK(OnSelect, ColorListBox&, void);
 };
+
+}
 
 SdColorPropertyBox::SdColorPropertyBox(weld::Label* pLabel, weld::Container* pParent, weld::Window* pTopLevel, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
@@ -366,6 +382,8 @@ Any SdColorPropertyBox::getValue()
     return makeAny(sal_Int32(mxControl->GetSelectEntryColor().GetRGBColor()));
 }
 
+namespace {
+
 class FontPropertyBox : public PropertySubControl
 {
 public:
@@ -382,6 +400,8 @@ private:
     Link<LinkParamNone*,void> const   maModifyHdl;
     DECL_LINK(ControlSelectHdl, ComboBox&, void);
 };
+
+}
 
 FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
 : PropertySubControl( nControlType ), maModifyHdl(rModifyHdl)
@@ -446,6 +466,8 @@ Control* FontPropertyBox::getControl()
     return mpControl;
 }
 
+namespace {
+
 class SdFontPropertyBox : public SdPropertySubControl
 {
 public:
@@ -460,6 +482,8 @@ private:
 
     DECL_LINK(ControlSelectHdl, weld::ComboBox&, void);
 };
+
+}
 
 SdFontPropertyBox::SdFontPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
@@ -524,6 +548,8 @@ Any SdFontPropertyBox::getValue()
     return makeAny(aFontName);
 }
 
+namespace {
+
 class DropdownMenuBox : public Edit
 {
 public:
@@ -541,6 +567,8 @@ private:
     VclPtr<MenuButton>  mpDropdownButton;
     VclPtr<PopupMenu>   mpMenu;
 };
+
+}
 
 DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu )
 :   Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
@@ -606,6 +634,8 @@ bool DropdownMenuBox::PreNotify( NotifyEvent& rNEvt )
     return bResult;
 }
 
+namespace {
+
 class CharHeightPropertyBox : public PropertySubControl
 {
 public:
@@ -627,6 +657,8 @@ private:
     VclPtr<MetricField> mpMetric;
     Link<LinkParamNone*,void> const maModifyHdl;
 };
+
+}
 
 CharHeightPropertyBox::CharHeightPropertyBox(sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : PropertySubControl(nControlType)
@@ -685,6 +717,8 @@ Control* CharHeightPropertyBox::getControl()
     return mpControl;
 }
 
+namespace {
+
 class SdCharHeightPropertyBox : public SdPropertySubControl
 {
 public:
@@ -702,6 +736,8 @@ private:
 
     DECL_LINK(EditModifyHdl, weld::MetricSpinButton&, void);
 };
+
+}
 
 SdCharHeightPropertyBox::SdCharHeightPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
@@ -748,6 +784,8 @@ Any SdCharHeightPropertyBox::getValue()
     return makeAny(static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0);
 }
 
+namespace {
+
 class TransparencyPropertyBox : public PropertySubControl
 {
 public:
@@ -770,6 +808,8 @@ private:
     VclPtr<MetricField>       mpMetric;
     Link<LinkParamNone*,void> const maModifyHdl;
 };
+
+}
 
 TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
 : PropertySubControl( nControlType )
@@ -847,6 +887,8 @@ Control* TransparencyPropertyBox::getControl()
     return mpControl;
 }
 
+namespace {
+
 class SdTransparencyPropertyBox : public SdPropertySubControl
 {
 public:
@@ -866,6 +908,8 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxMetric;
     std::unique_ptr<weld::MenuButton> mxControl;
 };
+
+}
 
 SdTransparencyPropertyBox::SdTransparencyPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
@@ -932,6 +976,8 @@ Any SdTransparencyPropertyBox::getValue()
     return makeAny(static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0);
 }
 
+namespace {
+
 class RotationPropertyBox : public PropertySubControl
 {
 public:
@@ -955,6 +1001,8 @@ private:
     VclPtr<MetricField>       mpMetric;
     Link<LinkParamNone*,void> const maModifyHdl;
 };
+
+}
 
 RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
     : PropertySubControl(nControlType)
@@ -1051,6 +1099,8 @@ Control* RotationPropertyBox::getControl()
     return mpControl;
 }
 
+namespace {
+
 class SdRotationPropertyBox : public SdPropertySubControl
 {
 public:
@@ -1070,6 +1120,8 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxMetric;
     std::unique_ptr<weld::MenuButton> mxControl;
 };
+
+}
 
 SdRotationPropertyBox::SdRotationPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
@@ -1150,6 +1202,8 @@ Any SdRotationPropertyBox::getValue()
     return makeAny(static_cast<double>(mxMetric->get_value(FieldUnit::DEGREE)));
 }
 
+namespace {
+
 class ScalePropertyBox : public PropertySubControl
 {
 public:
@@ -1174,6 +1228,8 @@ private:
     Link<LinkParamNone*,void> maModifyHdl;
     int                       mnDirection;
 };
+
+}
 
 ScalePropertyBox::ScalePropertyBox(sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : PropertySubControl( nControlType )
@@ -1328,6 +1384,8 @@ Control* ScalePropertyBox::getControl()
     return mpControl;
 }
 
+namespace {
+
 class SdScalePropertyBox : public SdPropertySubControl
 {
 public:
@@ -1348,6 +1406,8 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxMetric;
     std::unique_ptr<weld::MenuButton> mxControl;
 };
+
+}
 
 SdScalePropertyBox::SdScalePropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
@@ -1487,6 +1547,8 @@ Any SdScalePropertyBox::getValue()
     return makeAny( aValues );
 }
 
+namespace {
+
 class FontStylePropertyBox : public PropertySubControl
 {
 public:
@@ -1513,6 +1575,8 @@ private:
     awt::FontSlant meFontSlant;
     sal_Int16 mnFontUnderline;
 };
+
+}
 
 FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
     : PropertySubControl(nControlType)
@@ -1607,6 +1671,8 @@ Control* FontStylePropertyBox::getControl()
     return mpControl;
 }
 
+namespace {
+
 class SdFontStylePropertyBox : public SdPropertySubControl
 {
 public:
@@ -1628,6 +1694,8 @@ private:
     std::unique_ptr<weld::Entry> mxEdit;
     std::unique_ptr<weld::MenuButton> mxControl;
 };
+
+}
 
 SdFontStylePropertyBox::SdFontStylePropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
     : SdPropertySubControl(pParent)

@@ -105,6 +105,8 @@ namespace {
     }
 }
 
+namespace {
+
 //For SwFlyFrame::GetCursorOfst
 class SwCursorOszControl
 {
@@ -139,6 +141,8 @@ public:
                 pEntry = pStack1 = pStack2 = nullptr;
         }
 };
+
+}
 
 static SwCursorOszControl g_OszCtrl = { nullptr, nullptr, nullptr };
 

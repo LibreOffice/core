@@ -3035,6 +3035,8 @@ void PPTWriter::WriteCString( SvStream& rSt, const OUString& rString, sal_uInt32
     }
 }
 
+namespace {
+
 class ContainerGuard
 {
 private:
@@ -3050,6 +3052,8 @@ public:
         m_pPptEscherEx->CloseContainer();
     }
 };
+
+}
 
 void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt )

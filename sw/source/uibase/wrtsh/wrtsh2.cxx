@@ -213,6 +213,8 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
     }
 }
 
+namespace {
+
 // Listener class: will close InputField dialog if input field(s)
 // is(are) deleted (for instance, by an extension) after the dialog shows up.
 // Otherwise, the for loop in SwWrtShell::UpdateInputFields will crash when doing:
@@ -267,6 +269,8 @@ class FieldDeletionModify : public SwModify
         VclPtr<AbstractFieldInputDlg> mpInputFieldDlg;
         SwFormatField* mpFormatField;
 };
+
+}
 
 // Start input dialog for a specific field
 bool SwWrtShell::StartInputFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton,

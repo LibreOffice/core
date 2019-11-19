@@ -133,9 +133,6 @@ public:
 
     bool VisitTagDecl(TagDecl* decl)
     {
-        /*TODO:*/
-        if (!isa<EnumDecl>(decl))
-            return true; // in general, moving classes into an unnamed namespace can break ADL
         if (isa<ClassTemplateSpecializationDecl>(decl))
         {
             return true;
@@ -266,8 +263,6 @@ public:
 
     bool VisitClassTemplateDecl(ClassTemplateDecl* decl)
     {
-        /*TODO:*/
-        return true; // in general, moving classes or enumerations into an unnamed namespace can break ADL
         if (!decl->isThisDeclarationADefinition())
         {
             return true;
@@ -329,6 +324,7 @@ private:
         }
         else
         {
+            //TODO: Derived types are also affected!
             CXXRecordDecl const* rec;
             if (auto const d = dyn_cast<ClassTemplateDecl>(decl))
             {
@@ -400,6 +396,10 @@ private:
                 if (auto const d1 = dyn_cast<FriendDecl>(d))
                 {
                     d = d1->getFriendDecl();
+                    if (d == nullptr) // happens for 'friend struct S;'
+                    {
+                        continue;
+                    }
                 }
                 FunctionDecl const* f;
                 if (auto const d1 = dyn_cast<FunctionTemplateDecl>(d))

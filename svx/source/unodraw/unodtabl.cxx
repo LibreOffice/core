@@ -33,6 +33,8 @@
 using namespace ::com::sun::star;
 using namespace ::cppu;
 
+namespace {
+
 class SvxUnoDashTable : public SvxUnoNameItemTable
 {
 public:
@@ -47,6 +49,8 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override;
 };
+
+}
 
 SvxUnoDashTable::SvxUnoDashTable( SdrModel* pModel ) throw()
 : SvxUnoNameItemTable( pModel, XATTR_LINEDASH, MID_LINEDASH )

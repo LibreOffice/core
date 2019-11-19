@@ -36,6 +36,8 @@ class SfxBroadcasterTest : public CppUnit::TestFixture
     CPPUNIT_TEST_SUITE_END();
 };
 
+namespace {
+
 class MockedSfxListener : public SfxListener
 {
 public:
@@ -53,6 +55,8 @@ public:
 private:
     bool mNotifyWasCalled;
 };
+
+}
 
 void
 SfxBroadcasterTest::AddingListenersIncreasesCount()

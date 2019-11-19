@@ -109,6 +109,8 @@ Connection::~Connection()
         close();
 }
 
+namespace {
+
 struct ConnectionGuard
 {
     oslInterlockedCount& m_refCount;
@@ -122,6 +124,8 @@ struct ConnectionGuard
         osl_atomic_decrement(&m_refCount);
     }
 };
+
+}
 
 void Connection::construct(const OUString& url, const Sequence< PropertyValue >& info)
 {

@@ -4403,6 +4403,8 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
     return nBlibId;
 }
 
+namespace {
+
 struct EscherConnectorRule
 {
     sal_uInt32  nRuleId;
@@ -4412,6 +4414,8 @@ struct EscherConnectorRule
     sal_uInt32  ncptiA;         // Connection site Index of shape A
     sal_uInt32  ncptiB;         // Connection site Index of shape B
 };
+
+}
 
 struct EscherShapeListEntry
 {
@@ -4892,6 +4896,8 @@ SvStream* EscherExGlobal::ImplQueryPictureStream()
     return nullptr;
 }
 
+namespace {
+
 // Implementation of an empty stream that silently succeeds, but does nothing.
 //
 // In fact, this is a hack.  The right solution is to abstract EscherEx to be
@@ -4909,6 +4915,8 @@ protected:
 public:
     SvNullStream() : SvStream() {}
 };
+
+}
 
 EscherEx::EscherEx(const std::shared_ptr<EscherExGlobal>& rxGlobal, SvStream* pOutStrm, bool bOOXML)
     : mxGlobal(rxGlobal)

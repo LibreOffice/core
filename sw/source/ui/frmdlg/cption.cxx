@@ -49,6 +49,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 class SwSequenceOptionDialog : public weld::GenericDialogController
 {
     SwView&         m_rView;
@@ -85,6 +87,8 @@ public:
         return nRet;
     }
 };
+
+}
 
 OUString SwCaptionDialog::our_aSepTextSave(": "); // Caption separator text
 

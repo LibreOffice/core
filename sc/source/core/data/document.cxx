@@ -143,8 +143,6 @@ void collectUIInformation(const std::map<OUString, OUString>& aParameters, const
     UITestLogger::getInstance().logEvent(aDescription);
 }
 
-}
-
 struct ScDefaultAttr
 {
     const ScPatternAttr*    pAttr;
@@ -160,6 +158,8 @@ struct ScLessDefaultAttr
         return rValue1.pAttr < rValue2.pAttr;
     }
 };
+
+}
 
 typedef std::set<ScDefaultAttr, ScLessDefaultAttr>  ScDefaultAttrSet;
 

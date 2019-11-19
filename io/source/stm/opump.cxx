@@ -46,6 +46,8 @@ using namespace com::sun::star::io;
 
 namespace io_stm {
 
+    namespace {
+
     class Pump : public WeakImplHelper<
           XActiveDataSource, XActiveDataSink, XActiveDataControl, XConnectable, XServiceInfo >
     {
@@ -97,6 +99,8 @@ namespace io_stm {
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
         virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) override;
     };
+
+    }
 
 Pump::Pump() : m_aThread( nullptr ),
                m_cnt( m_aMutex ),

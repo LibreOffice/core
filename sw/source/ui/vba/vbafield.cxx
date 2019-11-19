@@ -68,6 +68,8 @@ SwVbaField::getServiceNames()
     return aServiceNames;
 }
 
+namespace {
+
 // FIXME? copy and paste code
 // the codes are copied from ww8par5.cxx
 class SwVbaReadFieldParams
@@ -86,6 +88,8 @@ public:
     OUString GetResult() const;
     const OUString& GetFieldName()const { return aFieldName; }
 };
+
+}
 
 SwVbaReadFieldParams::SwVbaReadFieldParams( const OUString& _rData )
     : aData( _rData ), nLen( _rData.getLength() ), nNext( 0 )
@@ -222,6 +226,8 @@ static uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xPare
     return uno::makeAny( xField );
 }
 
+namespace {
+
 class FieldEnumeration : public ::cppu::WeakImplHelper< css::container::XEnumeration >
 {
     uno::Reference< XHelperInterface > mxParent;
@@ -298,6 +304,8 @@ public:
     }
 };
 
+}
+
 SwVbaFields::SwVbaFields( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel ) : SwVbaFields_BASE( xParent, xContext , uno::Reference< container::XIndexAccess >( new FieldCollectionHelper( xParent, xContext, xModel ) ) ), mxModel( xModel )
 {
     mxMSF.set( mxModel, uno::UNO_QUERY_THROW );
@@ -372,11 +380,15 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUS
     return xTextField;
 }
 
+namespace {
+
 struct DocPropertyTable
 {
     const char* sDocPropertyName;
     const char* sFieldService;
 };
+
+}
 
 static const DocPropertyTable aDocPropertyTables[] =
 {

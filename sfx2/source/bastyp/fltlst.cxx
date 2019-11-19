@@ -34,6 +34,7 @@
 
 using namespace ::com::sun::star;
 
+namespace {
 
 class SfxRefreshListener : public ::cppu::WeakImplHelper<css::util::XRefreshListener>
 {
@@ -58,6 +59,8 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper<css::util::XRefreshList
             m_pOwner->disposing(rEvent);
         }
 };
+
+}
 
 /*-************************************************************************************************************
     @short          ctor

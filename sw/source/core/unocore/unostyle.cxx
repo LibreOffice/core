@@ -114,11 +114,11 @@
 #include <set>
 #include <limits>
 
+namespace {
+
 class SwXStyle;
 class SwStyleProperties_Impl;
 
-namespace
-{
     struct StyleFamilyEntry
     {
         using GetCountOrName_t = std::function<sal_Int32 (const SwDoc&, OUString*, sal_Int32)>;
@@ -184,6 +184,8 @@ using namespace ::com::sun::star;
 
 namespace sw
 {
+    namespace {
+
     class XStyleFamily : public cppu::WeakImplHelper
     <
         container::XNameContainer,
@@ -281,7 +283,10 @@ namespace sw
             { return { "com.sun.star.style.StyleFamily" }; }
     };
 
+    }
 }
+
+namespace {
 
 class SwStyleBase_Impl;
 class SwXStyle : public cppu::WeakImplHelper
@@ -454,6 +459,7 @@ public:
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
+}
 
 using sw::XStyleFamily;
 
@@ -1114,6 +1120,8 @@ static const std::vector<ParagraphStyleCategoryEntry>* lcl_GetParagraphStyleCate
     return our_pParagraphStyleCategoryEntries;
 }
 
+namespace {
+
 class SwStyleProperties_Impl
 {
     const PropertyEntryVector_t aPropertyEntries;
@@ -1167,6 +1175,8 @@ public:
         rAny = rxPropertySet->getPropertyValue( rPropertyName );
     }
 };
+
+}
 
 static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
 {
@@ -1463,6 +1473,8 @@ void SwXStyle::ApplyDescriptorProperties()
     m_pPropertiesImpl->Apply(*this);
 }
 
+namespace {
+
 class SwStyleBase_Impl
 {
 private:
@@ -1528,8 +1540,6 @@ public:
     };
 };
 
-namespace
-{
     const char* STR_POOLPAGE_ARY[] =
     {
         // Page styles

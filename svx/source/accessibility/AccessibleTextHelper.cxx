@@ -329,6 +329,8 @@ namespace accessibility
         return maEditSource;
     }
 
+    namespace {
+
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
     class AccessibleTextHelper_OffsetChildIndex
     {
@@ -342,6 +344,8 @@ namespace accessibility
     private:
         const sal_Int32 mnDifference;
     };
+
+    }
 
     void AccessibleTextHelper_Impl::SetStartIndex( sal_Int32 nOffset )
     {
@@ -796,6 +800,8 @@ namespace accessibility
         }
     }
 
+    namespace {
+
     // functor for checking changes in paragraph bounding boxes (no stand-alone function, maybe not inlined)
     class AccessibleTextHelper_UpdateChildBounds
     {
@@ -829,6 +835,8 @@ namespace accessibility
         }
     };
 
+    }
+
     void AccessibleTextHelper_Impl::UpdateBoundRect()
     {
         // send BOUNDRECT_CHANGED to affected children
@@ -847,6 +855,8 @@ namespace accessibility
     }
 #endif
 
+    namespace {
+
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
     class AccessibleTextHelper_LostChildEvent
     {
@@ -864,6 +874,8 @@ namespace accessibility
     private:
         AccessibleTextHelper_Impl&  mrImpl;
     };
+
+    }
 
     void AccessibleTextHelper_Impl::ParagraphsMoved( sal_Int32 nFirst, sal_Int32 nMiddle, sal_Int32 nLast )
     {
@@ -941,6 +953,8 @@ namespace accessibility
             // should be no need for UpdateBoundRect, since all affected children are cleared.
         }
     }
+
+    namespace {
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
     class AccessibleTextHelper_ChildrenTextChanged
@@ -1020,6 +1034,8 @@ namespace accessibility
         /// TextHint ID (removed/inserted) of last interesting event
         SfxHintId mnHintId;
     };
+
+    }
 
     void AccessibleTextHelper_Impl::ProcessQueue()
     {

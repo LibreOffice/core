@@ -97,6 +97,8 @@ ScVbaControl::getWindowPeer()
     return xWinPeer;
 }
 
+namespace {
+
 //ScVbaControlListener
 class ScVbaControlListener: public cppu::WeakImplHelper< lang::XEventListener >
 {
@@ -107,6 +109,8 @@ public:
 
     virtual void SAL_CALL disposing( const lang::EventObject& rEventObject ) override;
 };
+
+}
 
 ScVbaControlListener::ScVbaControlListener( ScVbaControl *pTmpControl ): pControl( pTmpControl )
 {
@@ -430,12 +434,15 @@ void SAL_CALL ScVbaControl::setTag( const OUString& aTag )
     return OORGBToXLRGB( nForeColor );
 }
 
+namespace {
 
 struct PointerStyles
 {
    long const msoPointerStyle;
    PointerStyle const loPointStyle;
 };
+
+}
 
 // 1 -> 1 map of styles ( some dubious choices in there though )
 PointerStyles const styles[] = {
@@ -759,6 +766,8 @@ void ScVbaControl::setLocked( bool bLocked )
     m_xProps->setPropertyValue( "ReadOnly" , uno::makeAny( bLocked ) );
 }
 
+namespace {
+
 class ControlProviderImpl : public cppu::WeakImplHelper< XControlProvider >
 {
     uno::Reference< uno::XComponentContext > m_xCtx;
@@ -766,6 +775,8 @@ public:
     explicit ControlProviderImpl( const uno::Reference< uno::XComponentContext >& xCtx ) : m_xCtx( xCtx ) {}
     virtual uno::Reference< msforms::XControl > SAL_CALL createControl( const uno::Reference< drawing::XControlShape >& xControl, const uno::Reference< frame::XModel >& xDocOwner ) override;
 };
+
+}
 
 uno::Reference< msforms::XControl > SAL_CALL
 ControlProviderImpl::createControl( const uno::Reference< drawing::XControlShape >& xControlShape, const uno::Reference< frame::XModel >& xDocOwner )

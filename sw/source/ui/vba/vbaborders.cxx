@@ -41,6 +41,8 @@ static const sal_Int16 supportedIndexTable[] = { word::WdBorderType::wdBorderBot
 //  Equiv widths in 1/100 mm
 const static sal_Int32 OOLineHairline = 2;
 
+namespace {
+
 class SwVbaBorder : public SwVbaBorder_Base
 {
 private:
@@ -273,11 +275,15 @@ public:
     }
 };
 
+}
+
 static uno::Reference< container::XIndexAccess >
 rangeToBorderIndexAccess( const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, VbaPalette const & rPalette )
 {
     return new RangeBorders( xRange, xContext, rPalette );
 }
+
+namespace {
 
 class RangeBorderEnumWrapper : public EnumerationHelper_BASE
 {
@@ -297,6 +303,8 @@ public:
         throw container::NoSuchElementException();
     }
 };
+
+}
 
 // for Table borders
 SwVbaBorders::SwVbaBorders( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< table::XCellRange >& xRange, VbaPalette const & rPalette  ):  SwVbaBorders_BASE( xParent, xContext, rangeToBorderIndexAccess( xRange ,xContext, rPalette ) )

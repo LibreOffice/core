@@ -46,6 +46,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+namespace {
 
 // ProposalList: list of proposals for misspelled words
 // The order of strings in the array should be left unchanged because the
@@ -73,6 +74,7 @@ public:
     std::vector< OUString > GetVector() const;
 };
 
+}
 
 bool ProposalList::HasEntry( const OUString &rText ) const
 {

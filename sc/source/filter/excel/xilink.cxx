@@ -38,6 +38,8 @@
 
 // Cached external cells ======================================================
 
+namespace {
+
 /**
  * Contains the address and value of an external referenced cell.
  * Note that this is non-copyable, so cannot be used in most stl/boost containers.
@@ -79,6 +81,8 @@ private:
     XclImpCrnList       maCrnList;      /// List of CRN records (cached cell values).
     OUString            maTabName;      /// Name of the external sheet.
 };
+
+}
 
 // External document (SUPBOOK) ================================================
 
@@ -134,6 +138,8 @@ private:
 
 // Import link manager ========================================================
 
+namespace {
+
 /** Contains the SUPBOOK index and sheet indexes of an external link.
     @descr  It is possible to enter a formula like =SUM(Sheet1:Sheet3!A1),
     therefore here occurs a sheet range. */
@@ -145,12 +151,14 @@ struct XclImpXti
     explicit     XclImpXti() : mnSupbook( SAL_MAX_UINT16 ), mnSBTabFirst( SAL_MAX_UINT16 ), mnSBTabLast( SAL_MAX_UINT16 ) {}
 };
 
-static XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
+XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
 {
     rXti.mnSupbook = rStrm.ReaduInt16();
     rXti.mnSBTabFirst = rStrm.ReaduInt16();
     rXti.mnSBTabLast = rStrm.ReaduInt16();
     return rStrm;
+}
+
 }
 
 /** Implementation of the link manager. */

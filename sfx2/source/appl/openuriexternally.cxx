@@ -31,6 +31,8 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/strings.hrc>
 
+namespace {
+
 class URITools
 {
 private:
@@ -46,6 +48,8 @@ public:
     }
     void openURI(const OUString& sURI, bool bHandleSystemShellExecuteException);
 };
+
+}
 
 void URITools::openURI(const OUString& sURI, bool bHandleSystemShellExecuteException)
 {

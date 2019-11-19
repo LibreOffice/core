@@ -347,6 +347,7 @@ void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStre
         lcl_restoreEvents( aSave, m_xEventAttacher );
 }
 
+namespace {
 
 struct TransformEventTo52Format
 {
@@ -370,6 +371,7 @@ struct TransformEventTo52Format
     }
 };
 
+}
 
 void OInterfaceContainer::transformEvents()
 {

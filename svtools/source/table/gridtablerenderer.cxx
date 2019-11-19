@@ -51,6 +51,8 @@ namespace svt { namespace table
 
     //= CachedSortIndicator
 
+    namespace {
+
     class CachedSortIndicator
     {
     public:
@@ -69,6 +71,8 @@ namespace svt { namespace table
         BitmapEx m_sortAscending;
         BitmapEx m_sortDescending;
     };
+
+    }
 
     BitmapEx const & CachedSortIndicator::getBitmapFor(vcl::RenderContext const& i_device, long const i_headerHeight,
         StyleSettings const & i_style, bool const i_sortAscending )

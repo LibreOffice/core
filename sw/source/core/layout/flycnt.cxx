@@ -201,6 +201,8 @@ void SwFlyAtContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
 //We need some helper classes to monitor the oscillation and a few functions
 //to not get lost.
 
+namespace {
+
 // #i3317# - re-factoring of the position stack
 class SwOszControl
 {
@@ -219,6 +221,8 @@ public:
     bool ChkOsz();
     static bool IsInProgress( const SwFlyFrame *pFly );
 };
+
+}
 
 const SwFlyFrame *SwOszControl::pStack1 = nullptr;
 const SwFlyFrame *SwOszControl::pStack2 = nullptr;
@@ -539,6 +543,8 @@ bool SwFlyAtContentFrame::IsFormatPossible() const
            !SwOszControl::IsInProgress( this );
 }
 
+namespace {
+
 class SwDistance
 {
 public:
@@ -551,6 +557,8 @@ public:
         { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && ( !nSub ||
           !rTwo.nSub || nSub <= rTwo.nSub ) ); }
 };
+
+}
 
 static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                                          const Point &rPt,

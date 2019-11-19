@@ -66,6 +66,9 @@ namespace pcr
 
     typedef ::cppu::WeakImplHelper <   css::inspection::XObjectInspectorUI
                                     >   CachedInspectorUI_Base;
+
+    namespace {
+
     struct CachedInspectorUI : public CachedInspectorUI_Base
     {
     private:
@@ -167,6 +170,7 @@ namespace pcr
         };
     };
 
+    }
 
     CachedInspectorUI::CachedInspectorUI( ComposedPropertyUIUpdate& _rMaster, FNotifySingleUIChange _pUIChangeNotification )
         :m_bDisposed( false )

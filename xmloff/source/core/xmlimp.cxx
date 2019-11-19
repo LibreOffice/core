@@ -89,6 +89,8 @@ const OUString SvXMLImport::aDefaultNamespace = OUString("");
 const OUString SvXMLImport::aNamespaceSeparator = OUString(":");
 bool SvXMLImport::bIsNSMapsInitialized = false;
 
+namespace {
+
 class SvXMLImportEventListener : public cppu::WeakImplHelper< css::lang::XEventListener >
 {
 private:
@@ -100,6 +102,8 @@ public:
                             // XEventListener
     virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) override;
 };
+
+}
 
 SvXMLImportEventListener::SvXMLImportEventListener(SvXMLImport* pTempImport)
     : pImport(pTempImport)

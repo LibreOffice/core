@@ -59,6 +59,7 @@ namespace rptui
     using namespace container;
     using namespace report;
 
+namespace {
 
 struct PropertyInfo
 {
@@ -70,7 +71,11 @@ struct PropertyInfo
     }
 };
 
+}
+
 typedef std::unordered_map< OUString, PropertyInfo >    PropertiesInfo;
+
+namespace {
 
 struct ObjectInfo
 {
@@ -83,6 +88,8 @@ struct ObjectInfo
     {
     }
 };
+
+}
 
 typedef ::std::map< Reference< XPropertySet >, ObjectInfo >    PropertySetInfoCache;
 

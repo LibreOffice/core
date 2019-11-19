@@ -56,6 +56,8 @@ getWorkbook( const uno::Reference< uno::XComponentContext >& xContext,
     return uno::Any( uno::Reference< excel::XWorkbook > (pWb) );
 }
 
+namespace {
+
 class WorkBookEnumImpl : public EnumerationHelperImpl
 {
 public:
@@ -69,6 +71,8 @@ public:
     }
 
 };
+
+}
 
 ScVbaWorkbooks::ScVbaWorkbooks( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext ) : ScVbaWorkbooks_BASE( xParent, xContext, VbaDocumentsBase::EXCEL_DOCUMENT )
 {

@@ -277,6 +277,8 @@ private:
     bool mbSkipTriggersNextEffect;
 };
 
+namespace {
+
 /** Base class to share some common code between
     ShapeClickEventHandler and MouseMoveHandler
 
@@ -372,6 +374,8 @@ private:
     EventQueue&         mrEventQueue;
     ImpShapeEventMap    maShapeEventMap;
 };
+
+}
 
 class ShapeClickEventHandler : public MouseHandlerBase
 {

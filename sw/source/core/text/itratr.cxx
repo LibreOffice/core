@@ -782,6 +782,8 @@ TextFrameIndex SwAttrIter::GetNextAttr() const
     }
 }
 
+namespace {
+
 class SwMinMaxArgs
 {
 public:
@@ -799,6 +801,8 @@ public:
     void Minimum( long nNew ) const { if( static_cast<long>(rMin) < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
+
+}
 
 static bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &rText,
     sal_Int32 nIdx, sal_Int32 nEnd )
@@ -848,6 +852,8 @@ bool SwTextNode::IsSymbolAt(const sal_Int32 nBegin) const
     return aIter.GetFnt()->IsSymbol( getIDocumentLayoutAccess().GetCurrentViewShell() );
 }
 
+namespace {
+
 class SwMinMaxNodeArgs
 {
 public:
@@ -860,6 +866,8 @@ public:
     sal_uLong nIndx;        // index of the node
     void Minimum( long nNew ) { if( nNew > nMinWidth ) nMinWidth = nNew; }
 };
+
+}
 
 static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
 {

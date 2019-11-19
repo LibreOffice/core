@@ -408,6 +408,8 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     return bRet;
 }
 
+namespace {
+
 class DBXMLDocumentSettingsContext : public SvXMLImportContext
 {
 public:
@@ -540,6 +542,8 @@ public:
         return pContext;
     }
 };
+
+}
 
 SvXMLImportContext* ODBFilter::CreateDocumentContext(sal_uInt16 const nPrefix,
                                       const OUString& rLocalName,

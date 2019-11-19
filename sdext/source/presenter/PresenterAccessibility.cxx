@@ -198,7 +198,6 @@ namespace {
 typedef ::cppu::WeakComponentImplHelper <
     css::accessibility::XAccessibleStateSet
     > AccessibleStateSetInterfaceBase;
-}
 
 class AccessibleStateSet
     : public ::cppu::BaseMutex,
@@ -225,11 +224,9 @@ private:
 
 //===== AccessibleRelationSet =================================================
 
-namespace {
 typedef ::cppu::WeakComponentImplHelper <
     css::accessibility::XAccessibleRelationSet
     > AccessibleRelationSetInterfaceBase;
-}
 
 class AccessibleRelationSet
     : public ::cppu::BaseMutex,
@@ -258,7 +255,6 @@ private:
 
 //===== PresenterAccessibleParagraph ==========================================
 
-namespace {
 typedef ::cppu::ImplInheritanceHelper <
     PresenterAccessible::AccessibleObject,
     css::accessibility::XAccessibleText
@@ -339,6 +335,8 @@ private:
 };
 
 //===== AccessibleConsole =====================================================
+
+namespace {
 
 class AccessibleConsole
 {
@@ -452,6 +450,8 @@ private:
 
     AccessibleFocusManager();
 };
+
+}
 
 //===== PresenterAccessible ===================================================
 

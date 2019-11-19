@@ -34,6 +34,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
+namespace {
+
 class TextualDataProvider : public ::cppu::WeakImplHelper<
         css::chart2::data::XTextualDataSequence
         >
@@ -53,6 +55,8 @@ public:
 private: //member
     uno::Sequence< OUString > m_aTextSequence;
 };
+
+}
 
 VCartesianCoordinateSystem::VCartesianCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
     : VCoordinateSystem(xCooSys)

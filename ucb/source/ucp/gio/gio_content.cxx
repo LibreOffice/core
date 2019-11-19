@@ -304,6 +304,8 @@ css::uno::Any Content::getBadArgExcept()
         static_cast< cppu::OWeakObject * >( this ), -1) );
 }
 
+namespace {
+
 class MountOperation
 {
     ucb::ucp::gio::glib::MainContextRef mContext;
@@ -316,6 +318,8 @@ public:
     ~MountOperation();
     GError *Mount(GFile *pFile);
 };
+
+}
 
 MountOperation::MountOperation(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv) : mpError(nullptr)
 {

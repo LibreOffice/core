@@ -319,12 +319,15 @@ void make_stc_char(FILE *sfp, FILE *cfp)
     fprintf (cfp, "\tconst sal_Unicode* getSTC_CharData_T2S() { return STC_CharData_T2S; }\n");
 }
 
+namespace {
 
 struct Index {
     sal_uInt16 address;
     sal_Int32 len;
     sal_Unicode *data;
 };
+
+}
 
 extern "C" {
 static int Index_comp(const void* s1, const void* s2)

@@ -1777,6 +1777,8 @@ SwXText::convertToTextFrame(
     return xRet;
 }
 
+namespace {
+
 // Move previously imported paragraphs into a new text table.
 struct VerticallyMergedCell
 {
@@ -1792,6 +1794,8 @@ struct VerticallyMergedCell
         aCells.push_back( rxCell );
     }
 };
+
+}
 
 #define COL_POS_FUZZY 2
 

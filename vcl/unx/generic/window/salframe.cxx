@@ -2823,6 +2823,8 @@ bool X11SalFrame::HandleMouseEvent( XEvent *pEvent )
     return nRet;
 }
 
+namespace {
+
 // F10 means either KEY_F10 or KEY_MENU, which has to be decided
 // in the independent part.
 struct KeyAlternate
@@ -2832,6 +2834,8 @@ struct KeyAlternate
     KeyAlternate() : nKeyCode( 0 ), nCharCode( 0 ) {}
     KeyAlternate( sal_uInt16 nKey, sal_Unicode nChar = 0 ) : nKeyCode( nKey ), nCharCode( nChar ) {}
 };
+
+}
 
 static KeyAlternate
 GetAlternateKeyCode( const sal_uInt16 nKeyCode )

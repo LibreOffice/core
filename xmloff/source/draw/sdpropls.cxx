@@ -752,6 +752,8 @@ static SvXMLEnumMapEntry<sal_Int32> const pXML_Caption_Type_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
+namespace {
+
 class XMLCaptionEscapeRelative : public XMLPropertyHandler
 {
 public:
@@ -764,6 +766,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 };
+
+}
 
 bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -790,6 +794,8 @@ bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any& rVa
     return true;
 }
 
+namespace {
+
 class XMLMoveSizeProtectHdl : public XMLPropertyHandler
 {
 public:
@@ -806,6 +812,8 @@ public:
 private:
     const sal_Int32 mnType;
 };
+
+}
 
 bool XMLMoveSizeProtectHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -831,12 +839,16 @@ bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rValue
     return true;
 }
 
+namespace {
+
 class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
 {
 public:
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
+
+}
 
 bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
         const OUString& rStrImpValue,
@@ -871,12 +883,16 @@ bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
     return bRet;
 }
 
+namespace {
+
 class XMLSdRotationAngleTypeHdl : public XMLPropertyHandler
 {
 public:
     virtual bool importXML(const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
     virtual bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
 };
+
+}
 
 bool XMLSdRotationAngleTypeHdl::importXML(
     const OUString& rStrImpValue,
@@ -917,6 +933,8 @@ bool XMLSdRotationAngleTypeHdl::exportXML(
     return bRet;
 }
 
+namespace {
+
 class XMLFitToSizeEnumPropertyHdl : public XMLEnumPropertyHdl
 {
 public:
@@ -948,6 +966,7 @@ public:
     }
 };
 
+}
 
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > const & xModel, SvXMLImport& rImport )
 : mxModel( xModel ), mpExport(nullptr), mpImport( &rImport )

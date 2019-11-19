@@ -2535,6 +2535,8 @@ void SdGenericDrawPage::setNavigationOrder( const Any& rValue )
     throw IllegalArgumentException();
 }
 
+namespace {
+
 class SdNavigationOrderAccess : public ::cppu::WeakImplHelper< XIndexAccess >
 {
 public:
@@ -2551,6 +2553,8 @@ public:
 private:
     std::vector< Reference< XShape > > maShapes;
 };
+
+}
 
 SdNavigationOrderAccess::SdNavigationOrderAccess( SdrPage const * pPage )
 : maShapes( pPage ? pPage->GetObjCount() : 0 )

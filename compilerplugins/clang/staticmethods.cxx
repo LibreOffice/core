@@ -173,7 +173,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     // used in a function-pointer-table
     if ((cdc.Class("SbiRuntime").GlobalNamespace()
          && startsWith(pCXXMethodDecl->getNameAsString(), "Step"))
-        || (cdc.Class("OoxFormulaParserImpl").Namespace("xls").Namespace("oox")
+        || (cdc.Class("OoxFormulaParserImpl").AnonymousNamespace().Namespace("xls").Namespace("oox")
             .GlobalNamespace())
         || cdc.Class("SwTableFormula").GlobalNamespace()
         || (cdc.Class("BiffFormulaParserImpl").Namespace("xls").Namespace("oox")

@@ -48,6 +48,8 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
 class SdXMLBodyContext_Impl : public SvXMLImportContext
 {
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
@@ -63,6 +65,8 @@ public:
                 const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
 
+}
+
 SdXMLBodyContext_Impl::SdXMLBodyContext_Impl( SdXMLImport& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
                 const uno::Reference< xml::sax::XAttributeList > & ) :
@@ -77,6 +81,8 @@ SvXMLImportContextRef SdXMLBodyContext_Impl::CreateChildContext(
 {
     return GetSdImport().CreateBodyContext(rLocalName, xAttrList);
 }
+
+namespace {
 
 // NB: virtually inherit so we can multiply inherit properly
 //     in SdXMLFlatDocContext_Impl
@@ -102,6 +108,8 @@ public:
 
     virtual void SAL_CALL endFastElement( sal_Int32 /*nElement*/ ) override {}
 };
+
+}
 
 SdXMLDocContext_Impl::SdXMLDocContext_Impl(
     SdXMLImport& rImport )
@@ -198,6 +206,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::c
     return new SvXMLImportContext( GetImport() );
 }
 
+namespace {
+
 // context for flat file xml format
 class SdXMLFlatDocContext_Impl
     : public SdXMLDocContext_Impl, public SvXMLMetaDocumentContext
@@ -216,6 +226,8 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
+
+}
 
 SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps) :

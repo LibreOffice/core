@@ -62,6 +62,8 @@ static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
         rWrtSh.EnterStdMode();
 }
 
+namespace {
+
 class SwKeepConversionDirectionStateContext
 {
 public:
@@ -78,6 +80,8 @@ public:
         editeng::HangulHanjaConversion::SetUseSavedConversionDirectionState( false );
     }
 };
+
+}
 
 SwHHCWrapper::SwHHCWrapper(
         SwView* pSwView,

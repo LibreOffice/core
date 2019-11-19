@@ -18,6 +18,8 @@
 
 #include <opengl/PackedTextureAtlas.hxx>
 
+namespace {
+
 struct Node
 {
     tools::Rectangle const mRectangle;
@@ -31,6 +33,8 @@ struct Node
     bool isLeaf() const;
     Node* insert(int nWidth, int nHeight, int nPadding);
 };
+
+}
 
 Node::Node(int nWidth, int nHeight)
     : mRectangle(tools::Rectangle(Point(), Size(nWidth, nHeight)))

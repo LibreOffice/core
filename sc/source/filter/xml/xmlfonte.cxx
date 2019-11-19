@@ -30,6 +30,8 @@
 #include <stlpool.hxx>
 #include <attrib.hxx>
 
+namespace {
+
 class ScXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
 private:
@@ -42,6 +44,8 @@ public:
     ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport, bool bEmbedFonts);
     virtual ~ScXMLFontAutoStylePool_Impl() override;
 };
+
+}
 
 void ScXMLFontAutoStylePool_Impl::AddFontItems(const sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const bool bExportDefaults)
 {

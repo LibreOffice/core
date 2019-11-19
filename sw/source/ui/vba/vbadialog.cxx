@@ -22,11 +22,15 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 struct WordDialogTable
 {
     sal_Int32 const wdDialog;
     const sal_Char* ooDialog;
 };
+
+}
 
 static const WordDialogTable aWordDialogTable[] =
 {

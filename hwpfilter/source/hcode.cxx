@@ -653,12 +653,17 @@ static const hchar jamo_to_unicode[] =
     0x11f6, 0x11f7, 0x11f8, 0x11f9
 };
 
+namespace {
+
 struct JamoComp{
     int size;
     hchar v1;
     hchar v2;
     hchar v3;
 };
+
+}
+
 /* 704 + 12 = 706 */
 static const JamoComp jamocomp1_to_unicode[] =
 {

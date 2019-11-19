@@ -70,6 +70,8 @@ static OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos
     return sRet;
 }
 
+namespace {
+
 class BibPosListener    :public cppu::WeakImplHelper <sdbc::XRowSetListener>
 {
     VclPtr<BibGeneralPage>     pParentPage;
@@ -85,6 +87,8 @@ public:
     virtual void SAL_CALL disposing(const lang::EventObject& Source) override;
 
 };
+
+}
 
 BibPosListener::BibPosListener(BibGeneralPage* pParent) :
     pParentPage(pParent)

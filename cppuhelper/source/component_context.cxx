@@ -72,6 +72,8 @@ static void try_dispose( Reference< lang::XComponent > const & xComp )
     }
 }
 
+namespace {
+
 class DisposingForwarder
     : public WeakImplHelper< lang::XEventListener >
 {
@@ -91,6 +93,8 @@ public:
     virtual void SAL_CALL disposing( lang::EventObject const & rSource ) override;
 };
 
+}
+
 inline void DisposingForwarder::listen(
     Reference< lang::XComponent > const & xSource,
     Reference< lang::XComponent > const & xTarget )
@@ -107,6 +111,7 @@ void DisposingForwarder::disposing( lang::EventObject const & )
     m_xTarget.clear();
 }
 
+namespace {
 
 struct MutexHolder
 {
@@ -166,6 +171,8 @@ public:
     virtual Type SAL_CALL getElementType() override;
     virtual sal_Bool SAL_CALL hasElements() override;
 };
+
+}
 
 // XNameContainer
 

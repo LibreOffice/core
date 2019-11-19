@@ -235,6 +235,8 @@ SalMenuItem::~SalMenuItem()
 
 class SalInstanceBuilder;
 
+namespace {
+
 class SalInstanceWidget : public virtual weld::Widget
 {
 protected:
@@ -735,6 +737,8 @@ public:
     }
 };
 
+}
+
 void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
 {
     if (rEvent.GetId() == VclEventId::WindowGetFocus)
@@ -856,6 +860,8 @@ namespace
     }
 }
 
+namespace {
+
 class SalInstanceMenu : public weld::Menu
 {
 private:
@@ -927,11 +933,15 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceMenu, SelectMenuHdl, ::Menu*, bool)
 {
     signal_activate(m_xMenu->GetCurItemIdent());
     return true;
 }
+
+namespace {
 
 class SalInstanceToolbar : public SalInstanceWidget, public virtual weld::Toolbar
 {
@@ -1062,6 +1072,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceToolbar, ClickHdl, ToolBox*, void)
 {
     sal_uInt16 nItemId = m_xToolBox->GetCurItemId();
@@ -1073,6 +1085,8 @@ IMPL_LINK_NOARG(SalInstanceToolbar, DropdownClick, ToolBox*, void)
     sal_uInt16 nItemId = m_xToolBox->GetCurItemId();
     set_item_active(m_xToolBox->GetItemCommand(nItemId).toUtf8(), true);
 }
+
+namespace {
 
 class SalInstanceSizeGroup : public weld::SizeGroup
 {
@@ -1156,6 +1170,8 @@ public:
     }
 };
 
+}
+
 std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
 {
     vcl::Window* pParent = m_xWidget->GetParent();
@@ -1163,6 +1179,8 @@ std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
         return nullptr;
     return std::make_unique<SalInstanceContainer>(pParent, m_pBuilder, false);
 }
+
+namespace {
 
 class SalInstanceBox : public SalInstanceContainer, public virtual weld::Box
 {
@@ -1179,8 +1197,6 @@ public:
     }
 };
 
-namespace
-{
     void CollectChildren(const vcl::Window& rCurrent, const basegfx::B2IPoint& rTopLeft, weld::ScreenShotCollection& rControlDataCollection)
     {
         if (rCurrent.IsVisible())
@@ -1205,7 +1221,6 @@ namespace
             }
         }
     }
-}
 
 class SalInstanceWindow : public SalInstanceContainer, public virtual weld::Window
 {
@@ -1395,6 +1410,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceWindow, HelpHdl, vcl::Window&, bool)
 {
     help();
@@ -1424,7 +1441,6 @@ namespace
             }
         }
     }
-}
 
 class SalInstanceDialog : public SalInstanceWindow, public virtual weld::Dialog
 {
@@ -1616,6 +1632,8 @@ public:
 
 };
 
+}
+
 IMPL_LINK(SalInstanceDialog, PopupScreenShotMenuHdl, const CommandEvent&, rCEvt, bool)
 {
     if (CommandEventId::ContextMenu == rCEvt.GetCommand())
@@ -1656,6 +1674,8 @@ IMPL_LINK(SalInstanceDialog, PopupScreenShotMenuHdl, const CommandEvent&, rCEvt,
 
     return false;
 }
+
+namespace {
 
 class SalInstanceMessageDialog : public SalInstanceDialog, public virtual weld::MessageDialog
 {
@@ -1929,6 +1949,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceAssistant, OnRoadmapItemSelected, LinkParamNone*, void)
 {
     if (notify_events_disabled())
@@ -1960,6 +1982,8 @@ IMPL_LINK_NOARG(SalInstanceAssistant, UpdateRoadmap_Hdl, Timer*, void)
 
     enable_notify_events();
 }
+
+namespace {
 
 class SalInstanceFrame : public SalInstanceContainer, public virtual weld::Frame
 {
@@ -2201,6 +2225,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK(SalInstanceScrolledWindow, VscrollHdl, ScrollBar*, pScrollBar, void)
 {
     signal_vadjustment_changed();
@@ -2214,6 +2240,8 @@ IMPL_LINK_NOARG(SalInstanceScrolledWindow, HscrollHdl, ScrollBar*, void)
     if (!m_bUserManagedScrolling)
         m_aOrigHScrollHdl.Call(&m_xScrolledWindow->getHorzScrollBar());
 }
+
+namespace {
 
 class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::Notebook
 {
@@ -2330,6 +2358,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceNotebook, DeactivatePageHdl, TabControl*, bool)
 {
     return !m_aLeavePageHdl.IsSet() || m_aLeavePageHdl.Call(get_current_page_ident());
@@ -2339,6 +2369,8 @@ IMPL_LINK_NOARG(SalInstanceNotebook, ActivatePageHdl, TabControl*, void)
 {
     m_aEnterPageHdl.Call(get_current_page_ident());
 }
+
+namespace {
 
 class SalInstanceVerticalNotebook : public SalInstanceContainer, public virtual weld::Notebook
 {
@@ -2436,6 +2468,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceVerticalNotebook, DeactivatePageHdl, VerticalTabControl*, bool)
 {
     return !m_aLeavePageHdl.IsSet() || m_aLeavePageHdl.Call(get_current_page_ident());
@@ -2445,6 +2479,8 @@ IMPL_LINK_NOARG(SalInstanceVerticalNotebook, ActivatePageHdl, VerticalTabControl
 {
     m_aEnterPageHdl.Call(get_current_page_ident());
 }
+
+namespace {
 
 class SalInstanceButton : public SalInstanceContainer, public virtual weld::Button
 {
@@ -2508,6 +2544,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK(SalInstanceButton, ClickHdl, ::Button*, pButton, void)
 {
     //if there's no handler set, disengage our intercept and
@@ -2546,6 +2584,8 @@ weld::Button* SalInstanceAssistant::weld_widget_for_response(int nResponse)
         return new SalInstanceButton(pButton, nullptr, false);
     return nullptr;
 }
+
+namespace {
 
 class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::MenuButton
 {
@@ -2676,6 +2716,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceMenuButton, MenuSelectHdl, ::MenuButton*, void)
 {
     signal_selected(m_xMenuButton->GetCurItemIdent());
@@ -2687,6 +2729,8 @@ IMPL_LINK_NOARG(SalInstanceMenuButton, ActivateHdl, ::MenuButton*, void)
         return;
     signal_toggled();
 }
+
+namespace {
 
 class SalInstanceLinkButton : public SalInstanceContainer, public virtual weld::LinkButton
 {
@@ -2730,12 +2774,16 @@ public:
     }
 };
 
+}
+
 IMPL_LINK(SalInstanceLinkButton, ClickHdl, FixedHyperlink&, rButton, void)
 {
     bool bConsumed = signal_activate_link();
     if (!bConsumed)
         m_aOrigClickHdl.Call(rButton);
 }
+
+namespace {
 
 class SalInstanceRadioButton : public SalInstanceButton, public virtual weld::RadioButton
 {
@@ -2800,12 +2848,16 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceRadioButton, ToggleHdl, ::RadioButton&, void)
 {
     if (notify_events_disabled())
         return;
     signal_toggled();
 }
+
+namespace {
 
 class SalInstanceToggleButton : public SalInstanceButton, public virtual weld::ToggleButton
 {
@@ -2859,6 +2911,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK(SalInstanceToggleButton, ToggleListener, VclWindowEvent&, rEvent, void)
 {
     if (notify_events_disabled())
@@ -2866,6 +2920,8 @@ IMPL_LINK(SalInstanceToggleButton, ToggleListener, VclWindowEvent&, rEvent, void
     if (rEvent.GetId() == VclEventId::PushbuttonToggle)
         signal_toggled();
 }
+
+namespace {
 
 class SalInstanceCheckButton : public SalInstanceButton, public virtual weld::CheckButton
 {
@@ -2913,6 +2969,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceCheckButton, ToggleHdl, CheckBox&, void)
 {
     if (notify_events_disabled())
@@ -2920,6 +2978,8 @@ IMPL_LINK_NOARG(SalInstanceCheckButton, ToggleHdl, CheckBox&, void)
     m_xCheckButton->EnableTriState(false);
     signal_toggled();
 }
+
+namespace {
 
 class SalInstanceScale : public SalInstanceWidget, public virtual weld::Scale
 {
@@ -2957,10 +3017,14 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceScale, SlideHdl, Slider*, void)
 {
     signal_value_changed();
 }
+
+namespace {
 
 class SalInstanceSpinner : public SalInstanceWidget, public virtual weld::Spinner
 {
@@ -3075,6 +3139,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceCalendar, SelectHdl, ::Calendar*, void)
 {
     if (notify_events_disabled())
@@ -3113,7 +3179,6 @@ namespace
             return sText;
         }
     };
-}
 
 class SalInstanceEntry : public SalInstanceWidget, public virtual weld::Entry
 {
@@ -3282,6 +3347,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceEntry, ChangeHdl, Edit&, void)
 {
     signal_changed();
@@ -3300,6 +3367,8 @@ IMPL_LINK_NOARG(SalInstanceEntry, ActivateHdl, Edit&, bool)
     return m_aActivateHdl.Call(*this);
 }
 
+namespace {
+
 struct SalInstanceTreeIter : public weld::TreeIter
 {
     SalInstanceTreeIter(const SalInstanceTreeIter* pOrig)
@@ -3317,8 +3386,6 @@ struct SalInstanceTreeIter : public weld::TreeIter
     SvTreeListEntry* iter;
 };
 
-namespace
-{
     TriState get_toggle(SvTreeListEntry* pEntry, int col)
     {
         ++col; //skip dummy/expander column
@@ -4939,6 +5006,8 @@ IMPL_LINK_NOARG(SalInstanceIconView, DoubleClickHdl, SvTreeListBox*, bool)
     return !signal_item_activated();
 }
 
+namespace {
+
 class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton
 {
 private:
@@ -5046,6 +5115,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceSpinButton, ActivateHdl, Edit&, bool)
 {
     // tdf#122348 return pressed to end dialog
@@ -5076,6 +5147,8 @@ IMPL_LINK(SalInstanceSpinButton, InputHdl, sal_Int64*, pResult, TriState)
         *pResult = nResult;
     return eRet;
 }
+
+namespace {
 
 class SalInstanceFormattedSpinButton : public SalInstanceEntry, public virtual weld::FormattedSpinButton
 {
@@ -5181,6 +5254,8 @@ public:
     }
 };
 
+}
+
 std::unique_ptr<weld::Label> SalInstanceFrame::weld_label_widget() const
 {
     FixedText* pLabel = dynamic_cast<FixedText*>(m_xFrame->get_label_widget());
@@ -5188,6 +5263,8 @@ std::unique_ptr<weld::Label> SalInstanceFrame::weld_label_widget() const
         return nullptr;
     return std::make_unique<SalInstanceLabel>(pLabel, m_pBuilder, false);
 }
+
+namespace {
 
 class SalInstanceTextView : public SalInstanceContainer, public virtual weld::TextView
 {
@@ -5312,6 +5389,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK(SalInstanceTextView, VscrollHdl, ScrollBar*, pScrollBar, void)
 {
     signal_vadjustment_changed();
@@ -5330,6 +5409,8 @@ IMPL_LINK(SalInstanceTextView, CursorListener, VclWindowEvent&, rEvent, void)
     if (rEvent.GetId() == VclEventId::EditSelectionChanged || rEvent.GetId() == VclEventId::EditCaretChanged)
         signal_cursor_position();
 }
+
+namespace {
 
 class SalInstanceExpander : public SalInstanceContainer, public virtual weld::Expander
 {
@@ -5362,10 +5443,14 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceExpander, ExpandedHdl, VclExpander&, void)
 {
     signal_expanded();
 }
+
+namespace {
 
 class SalInstanceDrawingArea : public SalInstanceWidget, public virtual weld::DrawingArea
 {
@@ -5522,6 +5607,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK(SalInstanceDrawingArea, PaintHdl, target_and_area, aPayload, void)
 {
     m_aDrawHdl.Call(aPayload);
@@ -5574,6 +5661,8 @@ IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea,
 {
     return m_aQueryTooltipHdl.Call(rHelpArea);
 }
+
+namespace {
 
 //ComboBox and ListBox have similar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes
 //don't. This distinction isn't there in Gtk. Use a template to sort this problem out.
@@ -5831,10 +5920,14 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(SalInstanceComboBoxWithoutEdit, SelectHdl, ListBox&, void)
 {
     return signal_changed();
 }
+
+namespace {
 
 class SalInstanceComboBoxWithEdit : public SalInstanceComboBox<ComboBox>
 {
@@ -5940,6 +6033,8 @@ public:
         m_xComboBox->SetModifyHdl(Link<Edit&, void>());
     }
 };
+
+}
 
 IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, ChangeHdl, Edit&, void)
 {

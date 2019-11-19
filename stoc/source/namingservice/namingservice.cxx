@@ -57,6 +57,7 @@ static OUString ns_getImplementationName()
 
 typedef std::unordered_map< OUString, Reference<XInterface > > HashMap_OWString_Interface;
 
+namespace {
 
 class NamingService_Impl
     : public WeakImplHelper < XServiceInfo, XNamingService >
@@ -76,6 +77,7 @@ public:
     virtual void SAL_CALL revokeObject( const OUString& Name ) override;
 };
 
+}
 
 static Reference<XInterface> NamingService_Impl_create(
     SAL_UNUSED_PARAMETER const Reference<XComponentContext> & )

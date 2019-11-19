@@ -38,6 +38,8 @@
 #include <string.h>
 
 #ifdef DBG_UTIL
+namespace {
+
 class DbgStyleSheetReferences
 {
 public:
@@ -53,6 +55,8 @@ public:
     sal_uInt32 mnStyles;
     sal_uInt32 mnPools;
 };
+
+}
 
 static DbgStyleSheetReferences aDbgStyleSheetReferences;
 #endif

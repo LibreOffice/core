@@ -28,6 +28,8 @@
 #include <paragr.hxx>
 #include <sdattr.hrc>
 
+namespace {
+
 class SdParagraphNumTabPage : public SfxTabPage
 {
 public:
@@ -47,6 +49,8 @@ private:
 
     DECL_LINK( ImplNewStartHdl, weld::Button&, void );
 };
+
+}
 
 SdParagraphNumTabPage::SdParagraphNumTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
     : SfxTabPage(pPage, pController, "modules/sdraw/ui/paranumberingtab.ui", "DrawParaNumbering", &rAttr)

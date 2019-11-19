@@ -3484,6 +3484,8 @@ const SwFrame* FindPage( const SwRect &rRect, const SwFrame *pPage )
     return pPage;
 }
 
+namespace {
+
 class SwFrameHolder : private SfxListener
 {
     SwFrame* pFrame;
@@ -3496,6 +3498,8 @@ public:
     void Reset();
     bool IsSet() const { return bSet; }
 };
+
+}
 
 void SwFrameHolder::SetFrame( SwFrame* pHold )
 {

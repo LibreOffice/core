@@ -56,6 +56,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 class SwHTMLWrtTable : public SwWriteTable
 {
     static void Pixelize( sal_uInt16& rValue );
@@ -87,6 +89,8 @@ public:
                 const OUString *pCaption=nullptr, bool bTopCaption=false,
                 sal_uInt16 nHSpace=0, sal_uInt16 nVSpace=0 ) const;
 };
+
+}
 
 SwHTMLWrtTable::SwHTMLWrtTable( const SwTableLines& rLines, long nWidth,
                                 sal_uInt32 nBWidth, bool bRel,

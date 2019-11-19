@@ -206,6 +206,8 @@ namespace svxform
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
+namespace {
+
 struct ColumnInfo
 {
     // information about the column itself
@@ -240,6 +242,8 @@ struct ColumnInfo
     {
     }
 };
+
+}
 
 class ColumnInfoCache
 {
@@ -415,6 +419,8 @@ const ColumnInfo& ColumnInfoCache::getColumnInfo( size_t _pos )
     return m_aColumns[ _pos ];
 }
 
+namespace {
+
 class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
 {
     Sequence< PropertyValue >       m_aValues;
@@ -428,6 +434,7 @@ public:
     virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) override;
 };
 
+}
 
 void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues )
 {
@@ -449,6 +456,8 @@ struct FmFieldInfo
     {xField->getPropertyValue(FM_PROP_NAME) >>= aFieldName;}
 };
 
+namespace {
+
 class FmXAutoControl: public UnoControl
 
 {
@@ -464,6 +473,7 @@ protected:
     virtual void ImplSetPeerProperty( const OUString& rPropName, const Any& rVal ) override;
 };
 
+}
 
 void FmXAutoControl::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer )
 {
@@ -493,6 +503,7 @@ IMPL_LINK_NOARG( FormController, OnActivateTabOrder, Timer*, void )
     activateTabOrder();
 }
 
+namespace {
 
 struct UpdateAllListeners
 {
@@ -503,6 +514,8 @@ struct UpdateAllListeners
         return true;
     }
 };
+
+}
 
 IMPL_LINK_NOARG( FormController, OnInvalidateFeatures, Timer*, void )
 {

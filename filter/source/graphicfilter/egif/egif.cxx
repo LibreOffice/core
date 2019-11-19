@@ -30,6 +30,7 @@
 #include "giflzwc.hxx"
 #include <memory>
 
+namespace {
 
 class GIFWriter
 {
@@ -72,6 +73,7 @@ public:
     bool WriteGIF( const Graphic& rGraphic, FilterConfigItem* pConfigItem );
 };
 
+}
 
 GIFWriter::GIFWriter(SvStream &rStream)
     : m_rGIF(rStream)

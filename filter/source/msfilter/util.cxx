@@ -558,11 +558,15 @@ EquationResult ParseCombinedChars(const OUString& rStr)
     return aResult;
 }
 
+namespace {
+
 struct CustomShapeTypeTranslationTable
 {
     const char* sOOo;
     const char* sMSO;
 };
+
+}
 
 static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] =
 {

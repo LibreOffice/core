@@ -31,11 +31,16 @@ static ::osl::Mutex& getHashMapMutex()
     return s_aHashMapProtection;
 }
 
+namespace {
+
 struct NameTypeTable
 {
     const char* pS;
     MSO_SPT const     pE;
 };
+
+}
+
 static const NameTypeTable pNameTypeTableArray[] =
 {
     { "non-primitive", mso_sptMin },
@@ -309,11 +314,16 @@ OUString EnhancedCustomShapeTypeNames::Get( const MSO_SPT eShapeType )
 typedef std::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> TypeACCNameHashMap;
 
 static TypeACCNameHashMap* pACCHashMap = nullptr;
+
+namespace {
+
 struct ACCNameTypeTable
 {
     const char* pS;
     const char* pE;
 };
+
+}
 
 static const ACCNameTypeTable pACCNameTypeTableArray[] =
 {

@@ -39,6 +39,8 @@ using namespace ::com::sun::star;
 
 namespace comphelper {
 
+namespace {
+
 // this helper class is designed to allow to parse ContentType- and Relationship-related information from OfficeOpenXML format
 class OFOPXMLHelper_Impl
     : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
@@ -65,6 +67,7 @@ public:
     virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 };
 
+}
 
 namespace OFOPXMLHelper {
 

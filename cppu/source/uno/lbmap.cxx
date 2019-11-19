@@ -53,6 +53,8 @@ using namespace com::sun::star::uno;
 namespace cppu
 {
 
+namespace {
+
 class Mapping
 {
     uno_Mapping * _pMapping;
@@ -79,6 +81,8 @@ public:
     bool is() const
         { return (_pMapping != nullptr); }
 };
+
+}
 
 inline Mapping::Mapping( uno_Mapping * pMapping )
     : _pMapping( pMapping )
@@ -110,6 +114,7 @@ inline Mapping & Mapping::operator = ( uno_Mapping * pMapping )
     return *this;
 }
 
+namespace {
 
 struct MappingEntry
 {
@@ -134,6 +139,8 @@ struct FctPtrHash
         { return reinterpret_cast<size_t>(pKey); }
 };
 
+}
+
 typedef std::unordered_map<
     OUString, MappingEntry * > t_OUString2Entry;
 typedef std::unordered_map<
@@ -141,6 +148,7 @@ typedef std::unordered_map<
 
 typedef set< uno_getMappingFunc > t_CallbackSet;
 
+namespace {
 
 struct MappingsData
 {
@@ -155,6 +163,8 @@ struct MappingsData
     set<OUString>       aNegativeLibs;
 };
 
+}
+
 static MappingsData & getMappingsData()
 {
     //TODO  This memory is leaked; see #i63473# for when this should be
@@ -163,6 +173,8 @@ static MappingsData & getMappingsData()
 
     return *s_p;
 }
+
+namespace {
 
 /**
  * This class mediates two different mapping via uno, e.g. form any language to uno,
@@ -185,6 +197,9 @@ struct uno_Mediate_Mapping : public uno_Mapping
         const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
         const OUString & rAddPurpose );
 };
+
+}
+
 extern "C"
 {
 

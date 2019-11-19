@@ -178,6 +178,8 @@ bool WeldEditView::Command(const CommandEvent& rCEvt)
 
 class WeldEditAccessible;
 
+namespace
+{
 class WeldViewForwarder : public SvxViewForwarder
 {
     WeldEditAccessible& m_rEditAcc;
@@ -195,8 +197,12 @@ public:
     virtual Point LogicToPixel(const Point& rPoint, const MapMode& rMapMode) const override;
     virtual Point PixelToLogic(const Point& rPoint, const MapMode& rMapMode) const override;
 };
+}
 
 class WeldEditAccessible;
+
+namespace
+{
 class WeldEditSource;
 
 /* analog to SvxEditEngineForwarder */
@@ -349,6 +355,7 @@ public:
         return const_cast<WeldEditSource*>(this)->m_aBroadCaster;
     }
 };
+}
 
 typedef cppu::WeakImplHelper<
     css::accessibility::XAccessible, css::accessibility::XAccessibleComponent,

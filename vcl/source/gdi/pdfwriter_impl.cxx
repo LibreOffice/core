@@ -5519,6 +5519,8 @@ bool PDFWriterImpl::emitTrailer()
     return writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
+namespace {
+
 struct AnnotationSortEntry
 {
     sal_Int32 nTabOrder;
@@ -5569,6 +5571,8 @@ struct AnnotSorterLess
         return false;
     }
 };
+
+}
 
 void PDFWriterImpl::sortWidgets()
 {

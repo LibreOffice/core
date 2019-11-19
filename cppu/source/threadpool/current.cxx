@@ -81,6 +81,7 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
     return s_type_XCurrentContext;
 }
 
+namespace {
 
 class ThreadKey
 {
@@ -118,6 +119,8 @@ public:
         }
     }
 };
+
+}
 
 extern "C" {
 

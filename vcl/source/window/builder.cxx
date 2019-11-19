@@ -1593,12 +1593,16 @@ void VclBuilder::cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Wind
 
 extern "C" { static void thisModule() {} }
 
+namespace {
+
 // Don't unload the module on destruction
 class NoAutoUnloadModule : public osl::Module
 {
 public:
     ~NoAutoUnloadModule() { release(); }
 };
+
+}
 
 typedef std::map<OUString, std::shared_ptr<NoAutoUnloadModule>> ModuleMap;
 static ModuleMap g_aModuleMap;

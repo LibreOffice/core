@@ -243,12 +243,15 @@ static void ConvertObjectToHomogenMatric( E3dObject const * pObject, Any& rValue
     rValue <<= aHomMat;
 }
 
+namespace {
 
 struct ImpRememberTransAndRect
 {
     basegfx::B3DHomMatrix                   maMat;
     tools::Rectangle                   maRect;
 };
+
+}
 
 bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
 {

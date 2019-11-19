@@ -970,6 +970,8 @@ void LibPage::implExportLib( const OUString& aLibName, const OUString& aTargetUR
 
 // Implementation XCommandEnvironment
 
+namespace {
+
 class OLibCommandEnvironment : public cppu::WeakImplHelper< XCommandEnvironment >
 {
     Reference< task::XInteractionHandler > mxInteraction;
@@ -983,6 +985,8 @@ public:
     virtual Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler() override;
     virtual Reference< XProgressHandler > SAL_CALL getProgressHandler() override;
 };
+
+}
 
 Reference< task::XInteractionHandler > OLibCommandEnvironment::getInteractionHandler()
 {

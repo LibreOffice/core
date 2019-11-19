@@ -686,6 +686,8 @@ namespace sw
             maStack.emplace_back(new SwFltStackEntry(rPos, std::unique_ptr<SfxPoolItem>(rAttr.Clone())));
         }
 
+        namespace {
+
         class SameOpenRedlineType
         {
         private:
@@ -699,6 +701,8 @@ namespace sw
                 return (pEntry->bOpen && (pTest->eType == meType));
             }
         };
+
+        }
 
         bool RedlineStack::close(const SwPosition& rPos, RedlineType eType)
         {

@@ -74,6 +74,8 @@ static sal_uInt16 GetNextPnt(sal_uInt16 nPnt, sal_uInt16 nPntMax, bool bClosed)
     return nPnt;
 }
 
+namespace {
+
 struct ImpSdrPathDragData  : public SdrDragStatUserData
 {
     XPolygon                    aXP;            // section of the original polygon
@@ -111,6 +113,8 @@ public:
     void ResetPoly(const SdrPathObj& rPO);
     bool IsMultiPointDrag() const { return mbMultiPointDrag; }
 };
+
+}
 
 ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl, bool bMuPoDr, const SdrDragStat& rDrag)
     : aXP(5)
@@ -224,6 +228,8 @@ void ImpSdrPathDragData::ResetPoly(const SdrPathObj& rPO)
     aXP[4]=aTmpXP[nNextNextPnt0];  aXP.SetFlags(4,aTmpXP.GetFlags(nNextNextPnt0));
 }
 
+namespace {
+
 struct ImpPathCreateUser  : public SdrDragStatUserData
 {
     Point                   aBezControl0;
@@ -272,6 +278,8 @@ public:
     void CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView);
     XPolygon GetRectPoly() const;
 };
+
+}
 
 XPolygon ImpPathCreateUser::GetFormPoly() const
 {

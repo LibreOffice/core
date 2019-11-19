@@ -256,6 +256,8 @@ static sal_uInt16 const aBorderWidths[] =
 #undef SBORDER_ENTRY
 #undef DBORDER_ENTRY
 
+namespace {
+
 struct SvxCSS1ItemIds
 {
     sal_uInt16 nFont;
@@ -294,6 +296,8 @@ struct SvxCSS1ItemIds
     sal_uInt16 nLanguageCTL;
     sal_uInt16 nDirection;
 };
+
+}
 
 static SvxCSS1ItemIds aItemIds;
 
@@ -3062,12 +3066,16 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
     }
 }
 
+namespace {
+
 // the assignment of property to parsing function
 struct CSS1PropEntry
 {
     const char * pName;
     FnParseCSS1Prop pFunc;
 };
+
+}
 
 #define CSS1_PROP_ENTRY(p) \
     { sCSS1_P_##p, ParseCSS1_##p }

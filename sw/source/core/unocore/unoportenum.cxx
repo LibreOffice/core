@@ -685,6 +685,8 @@ static void lcl_ExportSoftPageBreak(
     }
 }
 
+namespace {
+
 struct SwXRedlinePortion_Impl
 {
     const SwRangeRedline*    m_pRedline;
@@ -703,8 +705,12 @@ struct SwXRedlinePortion_Impl
     }
 };
 
+}
+
 typedef std::shared_ptr < SwXRedlinePortion_Impl >
     SwXRedlinePortion_ImplSharedPtr;
+
+namespace {
 
 struct RedlineCompareStruct
 {
@@ -719,6 +725,8 @@ struct RedlineCompareStruct
         return getPosition ( r1 ) < getPosition ( r2 );
     }
 };
+
+}
 
 typedef std::multiset < SwXRedlinePortion_ImplSharedPtr, RedlineCompareStruct >
 SwXRedlinePortion_ImplList;
