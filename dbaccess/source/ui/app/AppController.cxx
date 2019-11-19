@@ -179,6 +179,12 @@ Reference< XInterface > OApplicationController::Create(const Reference<XMultiSer
     return *(new OApplicationController( comphelper::getComponentContext(_rxFactory)));
 }
 
+namespace {
+
+class SelectionGuard;
+
+}
+
 // OApplicationController
 class SelectionNotifier
 {
@@ -214,7 +220,7 @@ public:
         m_aSelectionListeners.disposeAndClear( aEvent );
     }
 
-    struct SelectionGuardAccess { friend class SelectionGuard; private: SelectionGuardAccess() { }  };
+    struct SelectionGuardAccess { friend SelectionGuard; private: SelectionGuardAccess() { }  };
 
     /** enters a block which modifies the selection of our owner.
 
@@ -243,6 +249,8 @@ public:
     }
 };
 
+namespace {
+
 class SelectionGuard
 {
 public:
@@ -263,6 +271,8 @@ public:
 private:
     SelectionNotifier&  m_rNotifier;
 };
+
+}
 
 // OApplicationController
 OApplicationController::OApplicationController(const Reference< XComponentContext >& _rxORB)

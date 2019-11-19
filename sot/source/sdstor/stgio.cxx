@@ -154,6 +154,7 @@ bool StgIo::CommitAll()
     return false;
 }
 
+namespace {
 
 class EasyFat
 {
@@ -170,6 +171,8 @@ public:
     FatError Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect );
     bool HasUnrefChains() const;
 };
+
+}
 
 EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
 {
@@ -236,6 +239,8 @@ FatError EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
     return FatError::Ok;
 }
 
+namespace {
+
 class Validator
 {
     FatError nError;
@@ -254,6 +259,8 @@ public:
     explicit Validator( StgIo &rIo );
     bool IsError() const { return nError != FatError::Ok; }
 };
+
+}
 
 Validator::Validator( StgIo &rIoP )
     : aSmallFat( rIoP, rIoP.m_pDataFAT, 1 << rIoP.m_aHdr.GetDataPageSize() ),

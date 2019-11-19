@@ -1099,6 +1099,8 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
     }
 }
 
+        namespace {
+
         struct ScMyRememberItem
         {
             sal_Int32 const   nIndex;
@@ -1107,6 +1109,8 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
             ScMyRememberItem(const SfxItemSet& rItemSet, sal_Int32 nTempIndex) :
                 nIndex(nTempIndex), aItemSet(rItemSet) {}
         };
+
+        }
 
         typedef ::std::vector<std::unique_ptr<ScMyRememberItem>> ScMyRememberItemVector;
 

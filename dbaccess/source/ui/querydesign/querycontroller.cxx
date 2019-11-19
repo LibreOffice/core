@@ -96,6 +96,8 @@ namespace dbaui
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::lang;
 
+    namespace {
+
     class OViewController : public OQueryController
     {
         virtual OUString SAL_CALL getImplementationName() override
@@ -127,6 +129,8 @@ namespace dbaui
             return *(new OViewController(comphelper::getComponentContext(_rM)));
         }
     };
+
+    }
 }
 
 extern "C" void createRegistryInfo_OViewControl()

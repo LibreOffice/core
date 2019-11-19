@@ -131,6 +131,8 @@ namespace sdr { namespace contact {
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::uno::Any;
 
+    namespace {
+
     class ControlHolder
     {
     private:
@@ -202,15 +204,16 @@ namespace sdr { namespace contact {
         const Reference< XControl >&    getControl() const  { return m_xControl; }
     };
 
-
-    static bool operator==( const ControlHolder& _rControl, const Reference< XInterface >& _rxCompare )
+    bool operator==( const ControlHolder& _rControl, const Reference< XInterface >& _rxCompare )
     {
         return _rControl.getControl() == _rxCompare;
     }
 
-    static bool operator==( const ControlHolder& _rControl, const Any& _rxCompare )
+    bool operator==( const ControlHolder& _rControl, const Any& _rxCompare )
     {
         return _rControl == Reference< XInterface >( _rxCompare, UNO_QUERY );
+    }
+
     }
 
     void ControlHolder::setPosSize( const tools::Rectangle& _rPosSize ) const
@@ -334,6 +337,8 @@ namespace sdr { namespace contact {
 
     }
 
+    namespace {
+
     /** interface encapsulating access to an SdrPageView, stripped down to the methods we really need
      */
     class IPageViewAccess
@@ -372,6 +377,7 @@ namespace sdr { namespace contact {
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const override;
     };
 
+    }
 
     bool SdrPageViewAccess::isDesignMode() const
     {
@@ -392,6 +398,8 @@ namespace sdr { namespace contact {
     {
         return m_rPageView.GetVisibleLayers().IsSet( _nLayerID );
     }
+
+    namespace {
 
     /** is a ->IPageViewAccess implementation which can be used to create an invisible control for
         an arbitrary window
@@ -414,6 +422,7 @@ namespace sdr { namespace contact {
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const override;
     };
 
+    }
 
     bool InvisibleControlViewAccess::isDesignMode() const
     {
@@ -439,6 +448,7 @@ namespace sdr { namespace contact {
         return false;
     }
 
+    namespace {
 
     //= DummyPageViewAccess
 
@@ -464,6 +474,7 @@ namespace sdr { namespace contact {
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const override;
     };
 
+    }
 
     bool DummyPageViewAccess::isDesignMode() const
     {
@@ -771,6 +782,8 @@ namespace sdr { namespace contact {
         const OutputDevice& impl_getOutputDevice_throw() const;
     };
 
+    namespace {
+
     class LazyControlCreationPrimitive2D : public ::drawinglayer::primitive2d::BufferedDecompositionPrimitive2D
     {
     private:
@@ -823,6 +836,8 @@ namespace sdr { namespace contact {
         */
         ::basegfx::B2DHomMatrix                                 m_aTransformation;
     };
+
+    }
 
     ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl )
         :m_pAntiImpl( _pAntiImpl )

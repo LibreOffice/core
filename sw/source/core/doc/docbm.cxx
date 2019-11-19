@@ -1117,6 +1117,8 @@ namespace sw { namespace mark
         lcl_DebugMarks(m_vAllMarks);
     }
 
+    namespace {
+
     struct LazyFieldmarkDeleter : public IDocumentMarkAccess::ILazyDeleter
     {
         std::unique_ptr<Fieldmark> m_pFieldmark;
@@ -1135,6 +1137,8 @@ namespace sw { namespace mark
             m_pFieldmark->ReleaseDoc(m_pDoc);
         }
     };
+
+    }
 
     std::unique_ptr<IDocumentMarkAccess::ILazyDeleter>
         MarkManager::deleteMark(const const_iterator_t& ppMark)

@@ -177,11 +177,15 @@ static void SetLastExceptionMsg(const OUString& s = OUString())
         gImpl->maLastExceptionMsg = s;
 }
 
+namespace {
+
 struct ExtensionMap
 {
     const char *extn;
     const char *filterName;
 };
+
+}
 
 static const ExtensionMap aWriterExtensionMap[] =
 {
@@ -3237,6 +3241,8 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
     return 0;
 }
 
+namespace {
+
 /** Class to react on finishing of a dispatched command.
 
     This will call a LOK_COMMAND_FINISHED callback when postUnoCommand was
@@ -3278,6 +3284,8 @@ public:
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
 };
+
+}
 
 static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWindowId, const char* pArguments)
 {
@@ -5410,6 +5418,8 @@ static void preloadData()
     rtl::Bootstrap::set("UserInstallation", sUserPath);
 }
 
+namespace {
+
 class ProfileZoneDumper : public AutoTimer
 {
     static const int dumpTimeoutMS = 5000;
@@ -5434,6 +5444,8 @@ public:
             gImpl->mpCallback(LOK_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
     }
 };
+
+}
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
 {

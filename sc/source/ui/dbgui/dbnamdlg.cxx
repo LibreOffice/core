@@ -36,7 +36,11 @@
 #include <dbnamdlg.hxx>
 #include <dbdocfun.hxx>
 
+namespace {
+
 class DBSaveData;
+
+}
 
 static DBSaveData* pSaveObj = nullptr;
 
@@ -49,7 +53,6 @@ namespace
                                                   rString));
         xBox->run();
     }
-}
 
 //  class DBSaveData
 
@@ -93,6 +96,8 @@ private:
     bool        bStrip:1;
     bool        bDirty:1;
 };
+
+}
 
 void DBSaveData::Save()
 {

@@ -100,6 +100,9 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
     }
 
     typedef ::boost::optional< OUString >    OptionalString;
+
+    namespace {
+
     struct TableInfo
     {
         OptionalString  sComposedName;
@@ -123,6 +126,9 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
         {
         }
     };
+
+    }
+
     typedef std::vector< TableInfo >    TableInfos;
 
     static void lcl_ensureComposedName( TableInfo& _io_tableInfo, const Reference< XDatabaseMetaData >& _metaData )

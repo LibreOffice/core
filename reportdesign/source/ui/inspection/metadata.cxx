@@ -63,6 +63,7 @@ namespace rptui
     {
     }
 
+    namespace {
 
     // compare PropertyInfo
     struct PropertyInfoLessByName
@@ -73,6 +74,7 @@ namespace rptui
         }
     };
 
+    }
 
     //= OPropertyInfoService
 

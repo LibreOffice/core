@@ -40,6 +40,8 @@ XPropertySet::PropsToTest::PropsToTest()
 {
 }
 
+namespace
+{
 class MockedPropertyChangeListener : public ::cppu::WeakImplHelper<beans::XPropertyChangeListener>
 {
 public:
@@ -75,6 +77,7 @@ public:
 
     virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
 };
+}
 
 void XPropertySet::testPropertyChangeListener()
 {

@@ -411,6 +411,8 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
     }
 }
 
+namespace {
+
 /**
     An instance of this class is created for the life span of the
     printer dialogue, to create in its click handler for the additions by the
@@ -434,6 +436,8 @@ public:
     const SfxItemSet*   GetOptions() const { return _pOptions.get(); }
     void                DisableHelp() { _bHelpDisabled = true; }
 };
+
+}
 
 SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog& rParent ) :
 

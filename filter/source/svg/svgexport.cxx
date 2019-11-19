@@ -103,6 +103,8 @@ static const char    constSvgNamespace[] = "http://www.w3.org/2000/svg";
     This is a set of classes for exporting text field meta info.
   */
 
+namespace {
+
 class TextField
 {
 protected:
@@ -310,11 +312,12 @@ public:
 };
 
 
-static bool operator==( const TextField & aLhsTextField, const TextField & aRhsTextField )
+bool operator==( const TextField & aLhsTextField, const TextField & aRhsTextField )
 {
     return aLhsTextField.equalTo( aRhsTextField );
 }
 
+}
 
 SVGExport::SVGExport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,

@@ -38,6 +38,8 @@ class FilterConfigItem;
 
 //============================ RASReader ==================================
 
+namespace {
+
 class RASReader {
 
 private:
@@ -60,6 +62,8 @@ public:
     explicit RASReader(SvStream &rRAS);
     bool                ReadRAS(Graphic & rGraphic);
 };
+
+}
 
 //=================== Methods of RASReader ==============================
 

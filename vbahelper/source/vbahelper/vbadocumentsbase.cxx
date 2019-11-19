@@ -56,6 +56,8 @@ typedef std::vector < uno::Reference< frame::XModel > > Documents;
 // #FIXME clearly this is a candidate for some sort of helper base class as
 // this is a copy of SelectedSheetsEnum ( vbawindow.cxx )
 
+namespace {
+
 class DocumentsEnumImpl : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     uno::Reference< uno::XComponentContext > m_xContext;
@@ -97,6 +99,8 @@ public:
     }
 };
 
+}
+
 // #FIXME clearly this is also a candidate for some sort of helper base class as
 // a very similar one is used in vbawindow ( SelectedSheetsEnumAccess )
 // Maybe a template base class that does all of the operations on the hashmap
@@ -107,6 +111,8 @@ typedef ::cppu::WeakImplHelper< container::XEnumerationAccess
     , css::container::XIndexAccess
     , css::container::XNameAccess
     > DocumentsAccessImpl_BASE;
+
+namespace {
 
 class DocumentsAccessImpl : public DocumentsAccessImpl_BASE
 {
@@ -186,6 +192,8 @@ public:
     }
 
 };
+
+}
 
 VbaDocumentsBase::VbaDocumentsBase( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType ) : VbaDocumentsBase_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new DocumentsAccessImpl( xContext, eDocType ) ) ), meDocType( eDocType )
 {

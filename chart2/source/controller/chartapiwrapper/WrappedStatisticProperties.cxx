@@ -168,8 +168,6 @@ void lcl_ConvertRangeToXML(
     }
 }
 
-}//anonymous namespace
-
 template< typename PROPERTYTYPE >
 class WrappedStatisticProperty : public WrappedSeriesOrDiagramProperty< PROPERTYTYPE >
 {
@@ -217,6 +215,8 @@ private:
     mutable Any m_aOuterValue;
 };
 
+}//anonymous namespace
+
 WrappedConstantErrorLowProperty::WrappedConstantErrorLowProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
@@ -253,6 +253,8 @@ void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_CONST_ERROR_HIGH
 class WrappedConstantErrorHighProperty : public WrappedStatisticProperty< double >
 {
@@ -266,6 +268,8 @@ public:
 private:
     mutable Any m_aOuterValue;
 };
+
+}
 
 WrappedConstantErrorHighProperty::WrappedConstantErrorHighProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -303,6 +307,8 @@ void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans:
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_MEAN_VALUE
 class WrappedMeanValueProperty : public WrappedStatisticProperty< bool >
 {
@@ -313,6 +319,8 @@ public:
     explicit WrappedMeanValueProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                        tSeriesOrDiagramPropertyType ePropertyType );
 };
+
+}
 
 WrappedMeanValueProperty::WrappedMeanValueProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -342,6 +350,8 @@ void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XProper
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_ERROR_CATEGORY
 // deprecated, replaced by ErrorBarStyle
 class WrappedErrorCategoryProperty : public WrappedStatisticProperty< css::chart::ChartErrorCategory >
@@ -353,6 +363,8 @@ public:
     explicit WrappedErrorCategoryProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                            tSeriesOrDiagramPropertyType ePropertyType );
 };
+
+}
 
 WrappedErrorCategoryProperty::WrappedErrorCategoryProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -437,6 +449,8 @@ void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPr
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_PERCENT_ERROR
 class WrappedPercentageErrorProperty : public WrappedStatisticProperty< double >
 {
@@ -450,6 +464,8 @@ public:
 private:
     mutable Any m_aOuterValue;
 };
+
+}
 
 WrappedPercentageErrorProperty::WrappedPercentageErrorProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -487,6 +503,8 @@ void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::X
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_ERROR_MARGIN
 class WrappedErrorMarginProperty : public WrappedStatisticProperty< double >
 {
@@ -500,6 +518,8 @@ public:
 private:
     mutable Any m_aOuterValue;
 };
+
+}
 
 WrappedErrorMarginProperty::WrappedErrorMarginProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -537,6 +557,8 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_ERROR_INDICATOR
 class WrappedErrorIndicatorProperty : public WrappedStatisticProperty< css::chart::ChartErrorIndicatorType >
 {
@@ -547,6 +569,8 @@ public:
     explicit WrappedErrorIndicatorProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                             tSeriesOrDiagramPropertyType ePropertyType );
 };
+
+}
 
 WrappedErrorIndicatorProperty::WrappedErrorIndicatorProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -605,6 +629,8 @@ void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XP
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_ERROR_BAR_STYLE
 // this is the new constant group that replaces the deprecated enum ChartErrorCategory
 class WrappedErrorBarStyleProperty : public WrappedStatisticProperty< sal_Int32 >
@@ -616,6 +642,8 @@ public:
     explicit WrappedErrorBarStyleProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact1,
                                            tSeriesOrDiagramPropertyType ePropertyType );
 };
+
+}
 
 WrappedErrorBarStyleProperty::WrappedErrorBarStyleProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -648,6 +676,8 @@ void WrappedErrorBarStyleProperty::setValueToSeries( const Reference< beans::XPr
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_ERROR_RANGE_POSITIVE
 class WrappedErrorBarRangePositiveProperty : public WrappedStatisticProperty< OUString >
 {
@@ -658,6 +688,8 @@ public:
     explicit WrappedErrorBarRangePositiveProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                    tSeriesOrDiagramPropertyType ePropertyType );
 };
+
+}
 
 WrappedErrorBarRangePositiveProperty::WrappedErrorBarRangePositiveProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -708,6 +740,8 @@ void WrappedErrorBarRangePositiveProperty::setValueToSeries( const Reference< be
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_ERROR_RANGE_NEGATIVE
 class WrappedErrorBarRangeNegativeProperty : public WrappedStatisticProperty< OUString >
 {
@@ -718,6 +752,8 @@ public:
     explicit WrappedErrorBarRangeNegativeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                    tSeriesOrDiagramPropertyType ePropertyType );
 };
+
+}
 
 WrappedErrorBarRangeNegativeProperty::WrappedErrorBarRangeNegativeProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -768,6 +804,8 @@ void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< be
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_REGRESSION_CURVES
 class WrappedRegressionCurvesProperty : public WrappedStatisticProperty< css::chart::ChartRegressionCurveType >
 {
@@ -778,6 +816,8 @@ public:
     explicit WrappedRegressionCurvesProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                               tSeriesOrDiagramPropertyType ePropertyType );
 };
+
+}
 
 WrappedRegressionCurvesProperty::WrappedRegressionCurvesProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -815,6 +855,8 @@ void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::
     }
 }
 
+namespace {
+
 //PROP_CHART_STATISTIC_REGRESSION_PROPERTIES
 //PROP_CHART_STATISTIC_ERROR_PROPERTIES
 //PROP_CHART_STATISTIC_MEAN_VALUE_PROPERTIES
@@ -839,6 +881,8 @@ public:
 private:
     PropertySetType m_eType;
 };
+
+}
 
 WrappedStatisticPropertySetProperty::WrappedStatisticPropertySetProperty(
     PropertySetType ePropertySetType

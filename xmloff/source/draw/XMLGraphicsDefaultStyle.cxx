@@ -84,6 +84,8 @@ SvXMLImportContextRef XMLGraphicsDefaultStyle::CreateChildContext( sal_uInt16 nP
     return xContext;
 }
 
+namespace {
+
 struct XMLPropertyByIndex {
     sal_Int32 const m_nIndex;
     explicit XMLPropertyByIndex(sal_Int32 const nIndex) : m_nIndex(nIndex) {}
@@ -91,6 +93,8 @@ struct XMLPropertyByIndex {
         return m_nIndex == rProp.mnIndex;
     }
 };
+
+}
 
 // This method is called for every default style
 void XMLGraphicsDefaultStyle::SetDefaults()

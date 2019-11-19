@@ -51,6 +51,8 @@ static const Color spnDefColorTable8[] =
 
 typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
 
+namespace {
+
 class DefaultPalette : public XIndexAccess_BASE
 {
 public:
@@ -80,6 +82,8 @@ public:
     }
 
 };
+
+}
 
 ScVbaPalette::ScVbaPalette( const uno::Reference< frame::XModel >& rxModel ) :
     m_pShell( excel::getDocShell( rxModel ) )

@@ -83,6 +83,8 @@ static ::osl::Mutex& getListMutex()
     return s_aListProtection;
 }
 
+namespace {
+
 class ImpFilterOutputStream : public ::cppu::WeakImplHelper< css::io::XOutputStream >
 {
     SvStream&               mrStm;
@@ -97,6 +99,8 @@ public:
 
     explicit ImpFilterOutputStream( SvStream& rStm ) : mrStm( rStm ) {}
 };
+
+}
 
 static bool DirEntryExists( const INetURLObject& rObj )
 {
@@ -642,6 +646,8 @@ static OUString ImpCreateFullFilterPath( const OUString& rPath, const OUString& 
     return aSystemPath;
 }
 
+namespace {
+
 class ImpFilterLibCache;
 
 struct ImpFilterLibCacheEntry
@@ -659,6 +665,8 @@ struct ImpFilterLibCacheEntry
 
     PFilterCall             GetImportFunction();
 };
+
+}
 
 ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const OUString& rPathname, const OUString& rFiltername, const OUString& rFormatName ) :
         mpNext          ( nullptr ),
@@ -746,6 +754,8 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
     return mpfnImport;
 }
 
+namespace {
+
 class ImpFilterLibCache
 {
     ImpFilterLibCacheEntry* mpFirst;
@@ -757,6 +767,8 @@ public:
 
     ImpFilterLibCacheEntry* GetFilter( const OUString& rFilterPath, const OUString& rFiltername, const OUString& rFormatName );
 };
+
+}
 
 ImpFilterLibCache::ImpFilterLibCache() :
     mpFirst     ( nullptr ),
@@ -1028,6 +1040,8 @@ ErrCode GraphicFilter::ImportGraphic(
     return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, nullptr, pExtHeader );
 }
 
+namespace {
+
 /// Contains a stream and other associated data to import pixels into a
 /// Graphic.
 struct GraphicImportContext
@@ -1058,6 +1072,8 @@ public:
     /// Shared code between threaded and non-threaded version.
     static void doImport(GraphicImportContext& rContext);
 };
+
+}
 
 GraphicImportTask::GraphicImportTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, GraphicImportContext& rContext)
     : comphelper::ThreadTask(pTag),

@@ -48,6 +48,8 @@ namespace slideshow
 {
     namespace internal
     {
+        namespace {
+
         /** Representation of a draw document's background shape.
 
             This class implements the Shape interface for the
@@ -114,6 +116,7 @@ namespace slideshow
             ViewBackgroundShapeVector   maViewShapes;
         };
 
+        }
 
         BackgroundShape::BackgroundShape( const uno::Reference< drawing::XDrawPage >& xDrawPage,
                                           const uno::Reference< drawing::XDrawPage >& xMasterPage,

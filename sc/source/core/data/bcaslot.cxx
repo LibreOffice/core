@@ -53,6 +53,8 @@ constexpr int BCA_SLOTS  = BCA_SLOTS_COL * BCA_SLOTS_ROW;
 // anyway, once you reached these values...
 static_assert(BCA_SLOTS <= 268435456, "DOOMed");
 
+namespace {
+
 struct ScSlotData
 {
     SCROW const  nStartRow;   // first row of this segment
@@ -62,6 +64,9 @@ struct ScSlotData
 
     ScSlotData( SCROW r1, SCROW r2, SCSIZE s, SCSIZE c ) : nStartRow(r1), nStopRow(r2), nSlice(s), nCumulated(c) {}
 };
+
+}
+
 typedef ::std::vector< ScSlotData > ScSlotDistribution;
 // Logarithmic or any other distribution.
 // Upper sheet part usually is more populated and referenced and gets fine

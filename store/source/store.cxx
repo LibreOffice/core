@@ -35,6 +35,9 @@ using rtl::Reference;
 
 namespace store
 {
+
+namespace {
+
 /** Template helper class as type safe Reference to store_handle_type.
  */
 template<class store_handle_type>
@@ -52,6 +55,9 @@ public:
             static_cast<store_handle_type*>(0));
     }
 };
+
+}
+
 }
 
 using namespace store;

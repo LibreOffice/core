@@ -1366,6 +1366,8 @@ void ExcXmlRecord::Save( XclExpStream& )
     // Do nothing; ignored for BIFF output.
 }
 
+namespace {
+
 class EndXmlElement : public ExcXmlRecord
 {
     sal_Int32           mnElement;
@@ -1373,6 +1375,8 @@ public:
     explicit            EndXmlElement( sal_Int32 nElement ) : mnElement( nElement) {}
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 };
+
+}
 
 void EndXmlElement::SaveXml( XclExpXmlStream& rStrm )
 {

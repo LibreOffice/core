@@ -30,6 +30,8 @@ static uno::Any DataPilotToPivotTable( const uno::Any& aSource, const uno::Refer
     return uno::makeAny( uno::Reference< excel::XPivotTable > ( new ScVbaPivotTable( xContext, xTable ) ) );
 }
 
+namespace {
+
 class PivotTableEnumeration : public EnumerationHelperImpl
 {
 public:
@@ -42,6 +44,8 @@ public:
     }
 
 };
+
+}
 
 ScVbaPivotTables::ScVbaPivotTables( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaPivotTables_BASE( xParent, xContext, xIndexAccess )
 {

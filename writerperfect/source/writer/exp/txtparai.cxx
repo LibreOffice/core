@@ -54,6 +54,8 @@ namespace writerperfect
 {
 namespace exp
 {
+namespace
+{
 /// Handler for <text:sequence>.
 class XMLTextSequenceContext : public XMLImportContext
 {
@@ -65,6 +67,7 @@ public:
 private:
     librevenge::RVNGPropertyList m_aPropertyList;
 };
+}
 
 XMLTextSequenceContext::XMLTextSequenceContext(XMLImport& rImport,
                                                const librevenge::RVNGPropertyList& rPropertyList)
@@ -86,6 +89,8 @@ void XMLTextSequenceContext::characters(const OUString& rChars)
     GetImport().GetGenerator().closeSpan();
 }
 
+namespace
+{
 /// Handler for <text:span>.
 class XMLSpanContext : public XMLImportContext
 {
@@ -104,6 +109,7 @@ public:
 private:
     librevenge::RVNGPropertyList m_aPropertyList;
 };
+}
 
 XMLSpanContext::XMLSpanContext(XMLImport& rImport,
                                const librevenge::RVNGPropertyList& rPropertyList)
@@ -150,6 +156,8 @@ void XMLSpanContext::characters(const OUString& rChars)
     GetImport().GetGenerator().closeSpan();
 }
 
+namespace
+{
 /// Handler for <text:ruby>.
 class XMLRubyContext : public XMLImportContext
 {
@@ -203,6 +211,7 @@ public:
 private:
     XMLRubyContext& m_rParent;
 };
+}
 
 XMLRubyContext::XMLRubyContext(XMLImport& rImport,
                                const librevenge::RVNGPropertyList& rPropertyList)
@@ -235,6 +244,8 @@ void XMLRubyContext::endElement(const OUString& /*rName*/)
     GetImport().GetGenerator().closeSpan();
 }
 
+namespace
+{
 /// Base class for contexts that represent a single character only.
 class XMLCharContext : public XMLImportContext
 {
@@ -246,6 +257,7 @@ public:
 private:
     librevenge::RVNGPropertyList m_aPropertyList;
 };
+}
 
 XMLCharContext::XMLCharContext(XMLImport& rImport,
                                const librevenge::RVNGPropertyList& rPropertyList)
@@ -257,6 +269,8 @@ XMLCharContext::XMLCharContext(XMLImport& rImport,
         m_aPropertyList.insert(itProp.key(), itProp()->clone());
 }
 
+namespace
+{
 /// Handler for <text:line-break>.
 class XMLLineBreakContext : public XMLCharContext
 {
@@ -267,6 +281,7 @@ public:
     startElement(const OUString& rName,
                  const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
+}
 
 XMLLineBreakContext::XMLLineBreakContext(XMLImport& rImport,
                                          const librevenge::RVNGPropertyList& rPropertyList)
@@ -283,6 +298,8 @@ void XMLLineBreakContext::startElement(
     GetImport().GetGenerator().closeSpan();
 }
 
+namespace
+{
 /// Handler for <text:s>.
 class XMLSpaceContext : public XMLCharContext
 {
@@ -293,6 +310,7 @@ public:
     startElement(const OUString& rName,
                  const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
+}
 
 XMLSpaceContext::XMLSpaceContext(XMLImport& rImport,
                                  const librevenge::RVNGPropertyList& rPropertyList)
@@ -309,6 +327,8 @@ void XMLSpaceContext::startElement(
     GetImport().GetGenerator().closeSpan();
 }
 
+namespace
+{
 /// Handler for <text:tab>.
 class XMLTabContext : public XMLCharContext
 {
@@ -319,6 +339,7 @@ public:
     startElement(const OUString& rName,
                  const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
+}
 
 XMLTabContext::XMLTabContext(XMLImport& rImport, const librevenge::RVNGPropertyList& rPropertyList)
     : XMLCharContext(rImport, rPropertyList)
@@ -334,6 +355,8 @@ void XMLTabContext::startElement(
     GetImport().GetGenerator().closeSpan();
 }
 
+namespace
+{
 /// Handler for <draw:a>.
 class XMLTextFrameHyperlinkContext : public XMLImportContext
 {
@@ -354,6 +377,7 @@ private:
     librevenge::RVNGPropertyList m_aPropertyList;
     PopupState m_ePopupState = PopupState::NONE;
 };
+}
 
 XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
     XMLImport& rImport, const librevenge::RVNGPropertyList& rPropertyList)
@@ -419,6 +443,8 @@ void XMLTextFrameHyperlinkContext::characters(const OUString& rChars)
     GetImport().GetGenerator().closeSpan();
 }
 
+namespace
+{
 /// Handler for <text:a>.
 class XMLHyperlinkContext : public XMLImportContext
 {
@@ -438,6 +464,7 @@ private:
     librevenge::RVNGPropertyList m_aPropertyList;
     PopupState m_ePopupState = PopupState::NONE;
 };
+}
 
 XMLHyperlinkContext::XMLHyperlinkContext(XMLImport& rImport,
                                          const librevenge::RVNGPropertyList& rPropertyList)

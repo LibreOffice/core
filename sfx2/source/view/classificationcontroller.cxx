@@ -36,8 +36,15 @@ using namespace com::sun::star;
 namespace sfx2
 {
 
+namespace {
+
 class ClassificationCategoriesController;
+
+}
+
 using ClassificationPropertyListenerBase = comphelper::ConfigurationListenerProperty<OUString>;
+
+namespace {
 
 /// Listens to configuration changes, so no restart is needed after setting the classification path.
 class ClassificationPropertyListener : public ClassificationPropertyListenerBase
@@ -49,7 +56,11 @@ public:
     void setProperty(const uno::Any& rProperty) override;
 };
 
+}
+
 using ClassificationCategoriesControllerBase = cppu::ImplInheritanceHelper<svt::ToolboxController, lang::XServiceInfo>;
+
+namespace {
 
 class ClassificationControl;
 
@@ -103,9 +114,6 @@ public:
     void toggleInteractivityOnOrigin();
     void setCategoryStateFromPolicy(const SfxClassificationHelper & rHelper);
 };
-
-namespace
-{
 
 OUString const & getCategoryType()
 {

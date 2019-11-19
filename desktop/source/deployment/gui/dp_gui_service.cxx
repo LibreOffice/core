@@ -49,6 +49,7 @@ namespace sdecl = comphelper::service_decl;
 
 namespace dp_gui {
 
+namespace {
 
 class MyApp : public Application
 {
@@ -62,6 +63,8 @@ public:
     virtual int Main() override;
     virtual void DeInit() override;
 };
+
+}
 
 MyApp::MyApp()
 {
@@ -133,6 +136,7 @@ static OUString ReplaceProductNameHookProc( const OUString& rStr )
     return sRet;
 }
 
+namespace {
 
 class ServiceImpl
     : public ::cppu::WeakImplHelper<ui::dialogs::XAsynchronousExecutableDialog,
@@ -157,6 +161,7 @@ public:
     virtual void SAL_CALL trigger( OUString const & event ) override;
 };
 
+}
 
 ServiceImpl::ServiceImpl( Sequence<Any> const& args,
                           Reference<XComponentContext> const& xComponentContext)

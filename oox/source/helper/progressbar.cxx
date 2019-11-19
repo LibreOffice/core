@@ -72,6 +72,8 @@ void ProgressBar::setPosition( double fPosition )
 
 namespace prv {
 
+namespace {
+
 class SubSegment : public ISegmentProgressBar
 {
 public:
@@ -90,6 +92,8 @@ private:
     double              mfPosition;
     double              mfFreeStart;
 };
+
+}
 
 SubSegment::SubSegment( IProgressBar& rParentProgress, double fStartPos, double fLength ) :
     mrParentProgress( rParentProgress ),

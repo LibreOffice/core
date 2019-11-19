@@ -59,6 +59,8 @@ using namespace ::com::sun::star;
 
 static bool bInitFont = true;
 
+namespace {
+
 class SwExtraPainter
 {
     SwSaveClip m_aClip;
@@ -92,6 +94,8 @@ public:
     void PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed );
     void PaintRedline( SwTwips nY, long nMax );
 };
+
+}
 
 SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
                                 const SwLineNumberInfo &rLnInf, const SwRect &rRct,

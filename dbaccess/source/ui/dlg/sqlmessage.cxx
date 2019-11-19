@@ -260,6 +260,8 @@ namespace
     }
 }
 
+namespace {
+
 class OExceptionChainDialog : public weld::GenericDialogController
 {
     std::unique_ptr<weld::TreeView> m_xExceptionList;
@@ -276,6 +278,8 @@ public:
 protected:
     DECL_LINK(OnExceptionSelected, weld::TreeView&, void);
 };
+
+}
 
 OExceptionChainDialog::OExceptionChainDialog(weld::Window* pParent, const ExceptionDisplayChain& rExceptions)
     : GenericDialogController(pParent, "dbaccess/ui/sqlexception.ui", "SQLExceptionDialog")

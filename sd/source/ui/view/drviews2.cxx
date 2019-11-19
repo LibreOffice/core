@@ -230,8 +230,6 @@ OUString getWeightString(SfxItemSet const & rItemSet)
     return sWeightString;
 }
 
-} // end anonymous namespace
-
 class ClassificationCommon
 {
 protected:
@@ -539,8 +537,6 @@ public:
     }
 };
 
-namespace
-{
     void lcl_convertStringArguments(sal_uInt16 nSlot, std::unique_ptr<SfxItemSet>& pArgs)
     {
         Color aColor;

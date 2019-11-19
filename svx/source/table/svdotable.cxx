@@ -84,6 +84,8 @@ using namespace ::com::sun::star::style;
 
 namespace sdr { namespace table {
 
+namespace {
+
 class TableProperties : public TextProperties
 {
 protected:
@@ -102,6 +104,8 @@ public:
 
     virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 };
+
+}
 
 TableProperties::TableProperties(SdrObject& rObj)
 : TextProperties(rObj)
@@ -143,11 +147,15 @@ std::unique_ptr<SfxItemSet> TableProperties::CreateObjectSpecificItemSet(SfxItem
         EE_ITEMS_START, EE_ITEMS_END>{});
 }
 
+namespace {
+
 class TableObjectGeoData : public SdrTextObjGeoData
 {
 public:
     tools::Rectangle   maLogicRect;
 };
+
+}
 
 TableStyleSettings::TableStyleSettings()
 : mbUseFirstRow(true)

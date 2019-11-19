@@ -61,6 +61,8 @@ static sal_Int8 lcl_toMSOPropType( const uno::Type& aType )
     return msoType;
 }
 
+namespace {
+
 class PropertGetSetHelper
 {
 protected:
@@ -386,7 +388,11 @@ public:
     }
 };
 
+}
+
 typedef std::unordered_map< sal_Int32, DocPropInfo > MSOIndexToOODocPropInfo;
+
+namespace {
 
 class BuiltInIndexHelper
 {
@@ -433,7 +439,11 @@ public:
     MSOIndexToOODocPropInfo& getDocPropInfoMap() { return m_docPropInfoMap; }
 };
 
+}
+
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::XDocumentProperty > SwVbaDocumentProperty_BASE;
+
+namespace {
 
 class SwVbaBuiltInDocumentProperty : public SwVbaDocumentProperty_BASE
 {
@@ -476,6 +486,8 @@ public:
     virtual void SAL_CALL setType( ::sal_Int8 Type ) override;
 
 };
+
+}
 
 SwVbaCustomDocumentProperty::SwVbaCustomDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const DocPropInfo& rInfo ) : SwVbaBuiltInDocumentProperty( xParent, xContext, rInfo )
 {
@@ -630,6 +642,8 @@ typedef ::cppu::WeakImplHelper< css::container::XIndexAccess
 
 typedef std::unordered_map< sal_Int32, uno::Reference< XDocumentProperty > > DocProps;
 
+namespace {
+
 class DocPropEnumeration : public ::cppu::WeakImplHelper< css::container::XEnumeration >
 {
     DocProps mDocProps;
@@ -649,7 +663,11 @@ public:
     }
 };
 
+}
+
 typedef std::unordered_map< OUString, uno::Reference< XDocumentProperty > > DocPropsByName;
+
+namespace {
 
 class BuiltInPropertiesImpl : public PropertiesImpl_BASE
 {
@@ -725,6 +743,8 @@ protected:
     }
 };
 
+}
+
 SwVbaBuiltinDocumentProperties::SwVbaBuiltinDocumentProperties( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : SwVbaDocumentproperties_BASE( xParent, xContext,  uno::Reference< container::XIndexAccess >( new BuiltInPropertiesImpl( xParent, xContext, xModel ) ) )
 {
 }
@@ -773,6 +793,8 @@ SwVbaBuiltinDocumentProperties::getServiceNames()
     };
     return aServiceNames;
 }
+
+namespace {
 
 class CustomPropertiesImpl : public PropertiesImpl_BASE
 {
@@ -861,6 +883,8 @@ public:
     }
 
 };
+
+}
 
 SwVbaCustomDocumentProperties::SwVbaCustomDocumentProperties( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : SwVbaBuiltinDocumentProperties( xParent, xContext, xModel )
 {

@@ -22,6 +22,8 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
 
+namespace {
+
 struct GtvMainToolbarPrivateImpl
 {
     GtkWidget* toolbar1;
@@ -65,6 +67,8 @@ struct GtvMainToolbarPrivate
         return m_pImpl;
     }
 };
+
+}
 
 #if defined __clang__
 #if __has_warning("-Wdeprecated-volatile")

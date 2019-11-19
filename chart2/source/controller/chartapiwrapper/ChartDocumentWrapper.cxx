@@ -248,6 +248,8 @@ namespace chart
 namespace wrapper
 {
 
+namespace {
+
 //PROP_DOCUMENT_LABELS_IN_FIRST_ROW
 class WrappedDataSourceLabelsInFirstRowProperty : public WrappedProperty
 {
@@ -264,6 +266,8 @@ private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
+
+}
 
 WrappedDataSourceLabelsInFirstRowProperty::WrappedDataSourceLabelsInFirstRowProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("DataSourceLabelsInFirstRow",OUString())
@@ -335,6 +339,8 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( const Referen
     return aRet;
 }
 
+namespace {
+
 //PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN
 class WrappedDataSourceLabelsInFirstColumnProperty : public WrappedProperty
 {
@@ -351,6 +357,8 @@ private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
+
+}
 
 WrappedDataSourceLabelsInFirstColumnProperty::WrappedDataSourceLabelsInFirstColumnProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("DataSourceLabelsInFirstColumn",OUString())
@@ -422,6 +430,8 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( const Refe
     return aRet;
 }
 
+namespace {
+
 //PROP_DOCUMENT_HAS_LEGEND
 class WrappedHasLegendProperty : public WrappedProperty
 {
@@ -437,6 +447,8 @@ public:
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
 };
+
+}
 
 WrappedHasLegendProperty::WrappedHasLegendProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
     : WrappedProperty("HasLegend",OUString())
@@ -495,6 +507,8 @@ Any WrappedHasLegendProperty::getPropertyDefault( const Reference< beans::XPrope
     return aRet;
 }
 
+namespace {
+
 //PROP_DOCUMENT_HAS_MAIN_TITLE
 class WrappedHasMainTitleProperty : public WrappedProperty
 {
@@ -510,6 +524,8 @@ public:
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
 };
+
+}
 
 WrappedHasMainTitleProperty::WrappedHasMainTitleProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
     : WrappedProperty("HasMainTitle",OUString())
@@ -557,6 +573,8 @@ Any WrappedHasMainTitleProperty::getPropertyDefault( const Reference< beans::XPr
     return aRet;
 }
 
+namespace {
+
 //PROP_DOCUMENT_HAS_SUB_TITLE
 class WrappedHasSubTitleProperty : public WrappedProperty
 {
@@ -572,6 +590,8 @@ public:
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
 };
+
+}
 
 WrappedHasSubTitleProperty::WrappedHasSubTitleProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("HasSubTitle",OUString())

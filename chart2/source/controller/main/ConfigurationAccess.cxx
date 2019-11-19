@@ -38,7 +38,6 @@ bool lcl_IsMetric()
 
     return ( eSys == MeasurementSystem::Metric );
 }
-}//end anonymous namespace
 
 class CalcConfigItem : public ::utl::ConfigItem
 {
@@ -51,6 +50,8 @@ public:
     FieldUnit getFieldUnit();
     virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) override;
 };
+
+}//end anonymous namespace
 
 CalcConfigItem::CalcConfigItem()
     : ConfigItem( "Office.Calc/Layout" )

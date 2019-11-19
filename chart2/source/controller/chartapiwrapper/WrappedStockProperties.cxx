@@ -37,6 +37,8 @@ namespace chart
 namespace wrapper
 {
 
+namespace {
+
 class WrappedStockProperty : public WrappedProperty
 {
 public:
@@ -55,6 +57,8 @@ protected:
     mutable css::uno::Any                   m_aOuterValue;
     css::uno::Any                           m_aDefaultValue;
 };
+
+}
 
 WrappedStockProperty::WrappedStockProperty( const OUString& rOuterName
     , const css::uno::Any& rDefaulValue
@@ -107,6 +111,8 @@ css::uno::Any WrappedStockProperty::getPropertyDefault( const css::uno::Referenc
     return m_aDefaultValue;
 }
 
+namespace {
+
 class WrappedVolumeProperty : public WrappedStockProperty
 {
 public:
@@ -116,6 +122,8 @@ public:
 
     uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const override;
 };
+
+}
 
 WrappedVolumeProperty::WrappedVolumeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
         : WrappedStockProperty( "Volume", uno::Any(false) , spChart2ModelContact )
@@ -172,6 +180,8 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTempla
     return xTemplate;
 }
 
+namespace {
+
 class WrappedUpDownProperty : public WrappedStockProperty
 {
 public:
@@ -181,6 +191,8 @@ public:
 
     uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const override;
 };
+
+}
 
 WrappedUpDownProperty::WrappedUpDownProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
         : WrappedStockProperty( "UpDown", uno::Any(false) , spChart2ModelContact )

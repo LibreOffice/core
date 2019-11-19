@@ -41,6 +41,7 @@ namespace io_acceptor {
     typedef std::unordered_set< css::uno::Reference< css::io::XStreamListener> >
             XStreamListener_hash_set;
 
+    namespace {
 
     class SocketConnection : public ::cppu::WeakImplHelper<
         css::connection::XConnection,
@@ -75,6 +76,8 @@ namespace io_acceptor {
         XStreamListener_hash_set _listeners;
     };
 
+    }
+
     template<class T>
     static void notifyListeners(SocketConnection * pCon, bool * notified, T t)
     {
@@ -98,6 +101,8 @@ namespace io_acceptor {
         xStreamListener->started();
     }
 
+    namespace {
+
     struct callError {
         const Any & any;
 
@@ -105,6 +110,8 @@ namespace io_acceptor {
 
         void operator () (const Reference<XStreamListener>& xStreamListener);
     };
+
+    }
 
     callError::callError(const Any & aAny)
         : any(aAny)

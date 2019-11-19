@@ -52,6 +52,7 @@
 using namespace boost::spirit;
 using namespace pdfparse;
 
+namespace {
 
 class StringEmitContext : public EmitContext
 {
@@ -547,6 +548,8 @@ public:
             m_aObjectStack.pop_back();
     }
 };
+
+}
 
 #ifdef _WIN32
 std::unique_ptr<PDFEntry> PDFReader::read( const char* pBuffer, unsigned int nLen )

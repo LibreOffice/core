@@ -15,6 +15,8 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
+namespace {
+
 class MenuBarEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     uno::Reference< XHelperInterface > m_xParent;
@@ -40,6 +42,8 @@ public:
         return uno::makeAny( xMenuBar );
     }
 };
+
+}
 
 ScVbaMenuBars::ScVbaMenuBars( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< XCommandBars >& xCommandBars ) : MenuBars_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() ), m_xCommandBars( xCommandBars )
 {

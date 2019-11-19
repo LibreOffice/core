@@ -81,6 +81,8 @@ namespace dbaui
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::frame::XUntitledNumbers;
 
+    namespace {
+
     class DataSourceHolder
     {
     public:
@@ -115,6 +117,8 @@ namespace dbaui
         Reference< XPropertySet >               m_xDataSourceProps;
         Reference< XOfficeDatabaseDocument >    m_xDocument;
     };
+
+    }
 
     struct DBSubComponentController_Impl
     {

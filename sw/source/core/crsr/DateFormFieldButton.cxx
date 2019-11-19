@@ -15,6 +15,8 @@
 #include <tools/date.hxx>
 #include <svl/zforlist.hxx>
 
+namespace
+{
 class SwDatePickerDialog : public FloatingWindow
 {
 private:
@@ -30,6 +32,7 @@ public:
     virtual ~SwDatePickerDialog() override;
     virtual void dispose() override;
 };
+}
 
 SwDatePickerDialog::SwDatePickerDialog(SwEditWin* parent, sw::mark::DateFieldmark* pFieldmark,
                                        SvNumberFormatter* pNumberFormatter)

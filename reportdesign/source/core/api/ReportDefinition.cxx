@@ -229,10 +229,18 @@ static void lcl_extractAndStartStatusIndicator( const utl::MediaDescriptor& _rDe
 }
 
 typedef ::comphelper::OPropertyStateContainer       OStyle_PBASE;
+
+namespace {
+
 class OStyle;
+
+}
+
 typedef ::comphelper::OPropertyArrayUsageHelper <   OStyle
                                                 >   OStyle_PABASE;
 typedef ::cppu::WeakImplHelper< style::XStyle, beans::XMultiPropertyStates> TStyleBASE;
+
+namespace {
 
 class OStyle :   public ::comphelper::OMutexAndBroadcastHelper
                 ,public TStyleBASE
@@ -274,6 +282,8 @@ public:
     void SAL_CALL setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames ) override;
     uno::Sequence< uno::Any > SAL_CALL getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames ) override;
 };
+
+}
 
 OStyle::OStyle()
 :OStyle_PBASE(m_aBHelper)
@@ -2216,6 +2226,9 @@ OUString SAL_CALL OReportDefinition::getShapeType(  )
 typedef ::cppu::WeakImplHelper< container::XNameContainer,
                              container::XIndexAccess
                             > TStylesBASE;
+
+namespace {
+
 class OStylesHelper:
     public cppu::BaseMutex, public TStylesBASE
 {
@@ -2250,6 +2263,8 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 };
+
+}
 
 OStylesHelper::OStylesHelper(const uno::Type& rType)
     : cppu::BaseMutex()

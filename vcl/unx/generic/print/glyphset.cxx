@@ -183,6 +183,8 @@ void GlyphSet::DrawGlyph(PrinterGfx& rGfx,
     rGfx.PSShowGlyph(nGlyphID);
 }
 
+namespace {
+
 struct EncEntry
 {
     unsigned char  aEnc;
@@ -193,6 +195,8 @@ struct EncEntry
     bool operator<( const EncEntry& rRight ) const
     { return aEnc < rRight.aEnc; }
 };
+
+}
 
 static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
     const char* pGlyphSetName, int nGlyphCount,

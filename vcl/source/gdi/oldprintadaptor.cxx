@@ -32,11 +32,15 @@ using namespace com::sun::star::beans;
 
 namespace vcl
 {
+    namespace {
+
     struct AdaptorPage
     {
         GDIMetaFile          maPage;
         css::awt::Size       maPageSize;
     };
+
+    }
 
     struct ImplOldStyleAdaptorData
     {

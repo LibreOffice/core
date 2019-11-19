@@ -56,6 +56,8 @@ namespace dbaccess
         const DocumentEvents_Data& operator=(const DocumentEvents_Data&) = delete;
     };
 
+    namespace {
+
     // helper
     struct DocumentEventData
     {
@@ -63,8 +65,6 @@ namespace dbaccess
         bool            bNeedsSyncNotify;
     };
 
-    namespace
-    {
         const DocumentEventData* lcl_getDocumentEventData()
         {
             static const DocumentEventData s_aData[] = {

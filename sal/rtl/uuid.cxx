@@ -55,6 +55,8 @@
                      ( (  static_cast<sal_uInt32>(p[3])) & 0xff);\
                }
 
+namespace {
+
 struct UUID
 {
       sal_uInt32          time_low;
@@ -64,6 +66,8 @@ struct UUID
       sal_uInt8           clock_seq_low;
       sal_uInt8           node[6];
 };
+
+}
 
 static void write_v3( sal_uInt8 *pUuid  )
 {

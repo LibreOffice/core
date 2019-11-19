@@ -60,6 +60,7 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
+namespace {
 
 struct DispatchInfo
 {
@@ -73,6 +74,8 @@ struct CacheDispatchInfo
     sal_Int16     nGroupId;
     bool      bActiveConnection;
 };
+
+}
 
 // Attention: commands must be sorted by command groups. Implementation is dependent
 // on this!!

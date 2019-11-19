@@ -96,6 +96,8 @@ namespace framework {
 
 using namespace com::sun::star;
 
+namespace {
+
 class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventListener      ,
                                                         css::frame::XDispatchResultListener >
 {
@@ -123,6 +125,8 @@ class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventLis
         // lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 };
+
+}
 
 LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext(xContext)

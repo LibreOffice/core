@@ -32,6 +32,8 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Reference;
 
+namespace {
+
 class XMLAxisOASISContext : public XMLPersElemContentTContext
 {
 public:
@@ -52,6 +54,8 @@ private:
     ::rtl::Reference< XMLPersAttrListTContext > &   m_rCategoriesContext;
     bool                                            m_bHasCategories;
 };
+
+}
 
 XMLAxisOASISContext::XMLAxisOASISContext(
     XMLTransformerBase& rTransformer,

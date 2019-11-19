@@ -59,6 +59,8 @@ typedef void ExtEnv_releaseInterface       (uno_ExtEnvironment                 *
                                                      void                               * pInterface);
 }
 
+namespace {
+
 class Base : public cppu::Enterable
 {
 public:
@@ -116,6 +118,8 @@ protected:
 
     virtual  ~Base() override;
 };
+
+}
 
 extern "C" {
 static void s_acquire(uno_Environment * pEnv) //SAL_THROW_EXTERN_C()

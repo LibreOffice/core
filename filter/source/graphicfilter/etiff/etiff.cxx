@@ -44,6 +44,7 @@
 #define ResolutionUnit              296
 #define ColorMap                    320
 
+namespace {
 
 struct TIFFLZWCTreeNode
 {
@@ -112,6 +113,7 @@ public:
     bool WriteTIFF( const Graphic& rGraphic, FilterConfigItem const * pFilterConfigItem );
 };
 
+}
 
 TIFFWriter::TIFFWriter(SvStream &rStream)
     : m_rOStm(rStream)

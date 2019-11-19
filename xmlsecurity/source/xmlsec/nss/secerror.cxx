@@ -24,11 +24,14 @@
 #include <certt.h>
 #include <sal/log.hxx>
 
+namespace {
+
 struct ErrDesc {
     PRErrorCode const errNum;
     const char * errString;
 };
 
+}
 
 const ErrDesc allDesc[] = {
 

@@ -47,11 +47,12 @@ namespace package_ucp
 
 // class Package.
 
+namespace {
 
 class Package : public cppu::OWeakObject,
                 public container::XHierarchicalNameAccess
 {
-    friend class ContentProvider;
+    friend ContentProvider;
 
     OUString const                                       m_aName;
     uno::Reference< container::XHierarchicalNameAccess > m_xNA;
@@ -84,6 +85,7 @@ public:
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
 
+}
 
 class Packages : public std::unordered_map<OUString, Package*> {};
 

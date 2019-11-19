@@ -26,7 +26,6 @@ namespace
     typedef ::cppu::WeakComponentImplHelper <
         css::ui::test::XUITest, css::lang::XServiceInfo
         > UITestBase;
-}
 
 class UITestUnoObj : public cppu::BaseMutex,
     public UITestBase
@@ -55,6 +54,8 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 UITestUnoObj::UITestUnoObj():
     UITestBase(m_aMutex),

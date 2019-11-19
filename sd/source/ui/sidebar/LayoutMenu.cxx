@@ -68,6 +68,8 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace sidebar {
 
+namespace {
+
 struct snewfoil_value_info
 {
     const char* msBmpResId;
@@ -75,6 +77,8 @@ struct snewfoil_value_info
     WritingMode const meWritingMode;
     AutoLayout const maAutoLayout;
 };
+
+}
 
 static const snewfoil_value_info notes[] =
 {

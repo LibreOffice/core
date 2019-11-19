@@ -34,6 +34,8 @@ namespace chart
 namespace wrapper
 {
 
+namespace {
+
 class WrappedAxisAndGridExistenceProperty : public WrappedProperty
 {
 public:
@@ -52,6 +54,8 @@ private: //member
     bool        m_bMain;
     sal_Int32   m_nDimensionIndex;
 };
+
+}
 
 void WrappedAxisAndGridExistenceProperties::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
             , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
@@ -190,6 +194,8 @@ Any WrappedAxisAndGridExistenceProperty::getPropertyDefault( const Reference< be
     return aRet;
 }
 
+namespace {
+
 class WrappedAxisTitleExistenceProperty : public WrappedProperty
 {
 public:
@@ -206,6 +212,8 @@ private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     TitleHelper::eTitleType             m_eTitleType;
 };
+
+}
 
 void WrappedAxisTitleExistenceProperties::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
             , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
@@ -292,6 +300,8 @@ Any WrappedAxisTitleExistenceProperty::getPropertyDefault( const Reference< bean
     return aRet;
 }
 
+namespace {
+
 class WrappedAxisLabelExistenceProperty : public WrappedProperty
 {
 public:
@@ -309,6 +319,8 @@ private: //member
     bool        m_bMain;
     sal_Int32   m_nDimensionIndex;
 };
+
+}
 
 void WrappedAxisLabelExistenceProperties::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
             , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )

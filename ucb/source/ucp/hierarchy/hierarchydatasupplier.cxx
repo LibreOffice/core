@@ -42,6 +42,7 @@ namespace hierarchy_ucp
 
 // struct ResultListEntry.
 
+namespace {
 
 struct ResultListEntry
 {
@@ -54,6 +55,7 @@ struct ResultListEntry
     explicit ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
 };
 
+}
 
 // ResultList.
 

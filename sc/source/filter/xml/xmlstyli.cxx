@@ -260,6 +260,8 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     // don't access pointers to rProperties elements after push_back!
 }
 
+namespace {
+
 class XMLTableCellPropsContext : public SvXMLPropertySetContext
 {
     using SvXMLPropertySetContext::CreateChildContext;
@@ -278,6 +280,8 @@ class XMLTableCellPropsContext : public SvXMLPropertySetContext
            ::std::vector< XMLPropertyState > &rProperties,
            const XMLPropertyState& rProp ) override;
 };
+
+}
 
 XMLTableCellPropsContext::XMLTableCellPropsContext(
              SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -329,6 +333,8 @@ SvXMLImportContextRef XMLTableCellPropsContext::CreateChildContext( sal_uInt16 n
     return SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName, xAttrList, rProperties, rProp );
 }
 
+namespace {
+
 class ScXMLMapContext : public SvXMLImportContext
 {
     OUString msApplyStyle;
@@ -345,6 +351,8 @@ public:
 
     ScCondFormatEntry* CreateConditionEntry();
 };
+
+}
 
 ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName, const uno::Reference< xml::sax::XAttributeList > & xAttrList )

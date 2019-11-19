@@ -837,6 +837,8 @@ namespace accessibility
         return aNames;
     }
 
+    namespace {
+
     struct IndexCompare
     {
         const PropertyValue* pValues;
@@ -846,6 +848,8 @@ namespace accessibility
             return pValues[a].Name < pValues[b].Name;
         }
     };
+
+    }
 }
 
 namespace

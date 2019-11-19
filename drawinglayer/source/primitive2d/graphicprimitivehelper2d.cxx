@@ -45,6 +45,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        namespace {
+
         class AnimatedGraphicPrimitive2D : public AnimatedSwitchPrimitive2D
         {
         private:
@@ -338,6 +340,8 @@ namespace drawinglayer
             /// override to deliver the correct expected frame dependent of timing
             virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
         };
+
+        }
 
         AnimatedGraphicPrimitive2D::AnimatedGraphicPrimitive2D(
             const Graphic& rGraphic,

@@ -71,6 +71,8 @@ SwVbaParagraph::getServiceNames()
     return aServiceNames;
 }
 
+namespace {
+
 class ParagraphCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAccess,
                                                                  container::XEnumerationAccess >
 {
@@ -132,6 +134,8 @@ public:
         return getEnumeration();
     }
 };
+
+}
 
 SwVbaParagraphs::SwVbaParagraphs( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xDocument ) : SwVbaParagraphs_BASE( xParent, xContext, new ParagraphCollectionHelper( xDocument ) ), mxTextDocument( xDocument )
 {

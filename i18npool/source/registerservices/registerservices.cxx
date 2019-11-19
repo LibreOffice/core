@@ -247,11 +247,17 @@ IMPL_CREATEINSTANCE( halfwidthKatakanaToFullwidthKatakana )
 IMPL_CREATEINSTANCE( fullwidthToHalfwidthLikeASC )
 IMPL_CREATEINSTANCE( halfwidthToFullwidthLikeJIS )
 
-static const struct InstancesArray {
+namespace {
+
+struct InstancesArray {
         const sal_Char* pServiceNm;
         const sal_Char* pImplementationNm;
         FN_CreateInstance pFn;
-} aInstances[] = {
+};
+
+}
+
+static const InstancesArray aInstances[] = {
     {   "com.sun.star.i18n.IndexEntrySupplier",
         "com.sun.star.i18n.IndexEntrySupplier",
         &IndexEntrySupplier_CreateInstance },

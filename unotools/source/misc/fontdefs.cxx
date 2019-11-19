@@ -22,11 +22,15 @@
 #include <rtl/ustrbuf.hxx>
 #include <unordered_map>
 
+namespace {
+
 struct ImplLocalizedFontName
 {
     const char*         mpEnglishName;
     const sal_Unicode*  mpLocalizedNames;
 };
+
+}
 
 // TODO: where did the 0,0 delimiters come from? A single 0 should suffice...
 static sal_Unicode const aBatang[] = { 0xBC14, 0xD0D5, 0, 0 };

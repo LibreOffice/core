@@ -37,6 +37,8 @@ using namespace ::cppu;
 
 const sal_uInt16 NON_USER_DEFINED_GLUE_POINTS = 4;
 
+namespace {
+
 class SvxUnoGluePointAccess : public WeakImplHelper< container::XIndexContainer, container::XIdentifierContainer >
 {
 private:
@@ -74,6 +76,8 @@ public:
     virtual uno::Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 };
+
+}
 
 static void convert( const SdrGluePoint& rSdrGlue, drawing::GluePoint2& rUnoGlue ) throw()
 {

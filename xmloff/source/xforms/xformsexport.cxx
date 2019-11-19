@@ -103,6 +103,9 @@ static void exportXFormsSchemas( SvXMLExport&, const Reference<css::xforms::XMod
 
 
 typedef OUString (*convert_t)( const Any& );
+
+namespace {
+
 struct ExportTable
 {
     const sal_Char* pPropertyName;
@@ -110,6 +113,9 @@ struct ExportTable
     sal_uInt16 const nToken;
     convert_t const aConverter;
 };
+
+}
+
 static void lcl_export( const Reference<XPropertySet>& rPropertySet,
                  SvXMLExport& rExport,
                  const ExportTable* pTable );

@@ -60,6 +60,9 @@ namespace logging
     typedef ::cppu::WeakComponentImplHelper    <   XLogHandler
                                                 ,   XServiceInfo
                                                 >   FileHandler_Base;
+
+    namespace {
+
     class FileHandler   :public ::cppu::BaseMutex
                         ,public FileHandler_Base
     {
@@ -121,6 +124,8 @@ namespace logging
         */
         void    impl_doStringsubstitution_nothrow( OUString& _inout_rURL );
     };
+
+    }
 
     FileHandler::FileHandler(const css::uno::Reference<XComponentContext> &context,
             const css::uno::Sequence<css::uno::Any> &arguments)

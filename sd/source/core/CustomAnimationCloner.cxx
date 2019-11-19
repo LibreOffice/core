@@ -51,6 +51,8 @@ using ::com::sun::star::beans::NamedValue;
 
 namespace sd
 {
+    namespace {
+
     class CustomAnimationClonerImpl
     {
     public:
@@ -68,6 +70,8 @@ namespace sd
         std::vector< Reference< XAnimationNode > > maSourceNodeVector;
         std::vector< Reference< XAnimationNode > > maCloneNodeVector;
     };
+
+    }
 
     CustomAnimationClonerImpl::CustomAnimationClonerImpl()
     {

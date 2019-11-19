@@ -817,12 +817,16 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
     }
 }
 
+namespace {
+
 class SwMetaPortion : public SwTextPortion
 {
 public:
     SwMetaPortion() { SetWhichPor( PortionType::Meta ); }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 };
+
+}
 
 void SwMetaPortion::Paint( const SwTextPaintInfo &rInf ) const
 {

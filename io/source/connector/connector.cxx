@@ -45,6 +45,8 @@ using namespace ::com::sun::star::connection;
 
 namespace stoc_connector
 {
+    namespace {
+
     class OConnector : public WeakImplHelper< XConnector, XServiceInfo >
     {
         Reference< XMultiComponentFactory > _xSMgr;
@@ -61,6 +63,8 @@ namespace stoc_connector
                 virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
                 virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
     };
+
+    }
 
     OConnector::OConnector(const Reference< XComponentContext > &xCtx)
         : _xSMgr( xCtx->getServiceManager() )

@@ -69,6 +69,8 @@ using namespace com::sun::star::uno;
 #define CHECK_TABLE(t)
 #endif
 
+namespace {
+
 // In order to set the Frame Formats for the Boxes, it's enough to look
 // up the current one in the array. If it's already there return the new one.
 struct CpyTabFrame
@@ -121,6 +123,8 @@ struct CR_SetBoxWidth
     }
 };
 
+}
+
 static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                          SwTwips nDist, bool bCheck );
 static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
@@ -161,6 +165,8 @@ typedef bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, bool 
 
 #endif // DBG_UTIL
 
+namespace {
+
 struct CR_SetLineHeight
 {
     SwTableNode* pTableNd;
@@ -183,6 +189,8 @@ struct CR_SetLineHeight
     {}
 };
 
+}
+
 static bool lcl_SetSelLineHeight( SwTableLine* pLine, const CR_SetLineHeight& rParam,
                          SwTwips nDist, bool bCheck );
 static bool lcl_SetOtherLineHeight( SwTableLine* pLine, const CR_SetLineHeight& rParam,
@@ -191,6 +199,8 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, const CR_SetLineHeight& 
 typedef bool (*FN_lcl_SetLineHeight)(SwTableLine*, CR_SetLineHeight&, SwTwips, bool );
 
 typedef o3tl::sorted_vector<CpyTabFrame> CpyTabFrames;
+
+namespace {
 
 struct CpyPara
 {
@@ -232,6 +242,8 @@ struct CpyPara
         nDelBorderFlag( rPara.nDelBorderFlag ), bCpyContent( rPara.bCpyContent )
         {}
 };
+
+}
 
 static void lcl_CopyRow(FndLine_ & rFndLine, CpyPara *const pCpyPara);
 
@@ -1306,6 +1318,8 @@ static void lcl_CalcWidth( SwTableBox* pBox )
     pFormat->ResetFormatAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
 }
 
+namespace {
+
 struct InsULPara
 {
     SwTableNode* pTableNd;
@@ -1330,6 +1344,8 @@ struct InsULPara
     void SetLower( SwTableLine* pLine )
         { bUL_LR = true;    bUL = false; if( pLine ) pInsLine = pLine; }
 };
+
+}
 
 static void lcl_Merge_MoveLine(FndLine_ & rFndLine, InsULPara *const pULPara);
 

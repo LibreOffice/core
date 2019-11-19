@@ -69,6 +69,8 @@ namespace pcr
 
     //= OFontPropertyExtractor
 
+    namespace {
+
     class OFontPropertyExtractor
     {
     protected:
@@ -95,6 +97,7 @@ namespace pcr
                             bool _bForceInvalidation = false);
     };
 
+    }
 
     OFontPropertyExtractor::OFontPropertyExtractor(const Reference< XPropertySet >& _rxProps)
         :m_xPropValueAccess(_rxProps)

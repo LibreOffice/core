@@ -46,6 +46,8 @@ SalSession::~SalSession()
 {
 }
 
+namespace {
+
 class VCLSession:
     private cppu::BaseMutex,
     public cppu::WeakComponentImplHelper < XSessionManagerClient >
@@ -93,6 +95,8 @@ class VCLSession:
 public:
     VCLSession();
 };
+
+}
 
 VCLSession::VCLSession()
         : cppu::WeakComponentImplHelper< XSessionManagerClient >( m_aMutex ),

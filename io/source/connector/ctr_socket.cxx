@@ -53,6 +53,8 @@ namespace stoc_connector {
         xStreamListener->started();
     }
 
+    namespace {
+
     struct callError {
         const Any & any;
 
@@ -60,6 +62,8 @@ namespace stoc_connector {
 
         void operator () (const Reference<XStreamListener>& xStreamListener);
     };
+
+    }
 
     callError::callError(const Any & aAny)
         : any(aAny)

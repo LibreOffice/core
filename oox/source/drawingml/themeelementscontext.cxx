@@ -38,6 +38,8 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox {
 namespace drawingml {
 
+namespace {
+
 class FillStyleListContext : public ContextHandler2
 {
 public:
@@ -47,6 +49,8 @@ public:
 private:
     FillStyleList& mrFillStyleList;
 };
+
+}
 
 FillStyleListContext::FillStyleListContext( ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList ) :
     ContextHandler2( rParent ),
@@ -70,6 +74,8 @@ ContextHandlerRef FillStyleListContext::onCreateContext( sal_Int32 nElement, con
     return nullptr;
 }
 
+namespace {
+
 class LineStyleListContext : public ContextHandler2
 {
 public:
@@ -79,6 +85,8 @@ public:
 private:
     LineStyleList& mrLineStyleList;
 };
+
+}
 
 LineStyleListContext::LineStyleListContext( ContextHandler2Helper const & rParent, LineStyleList& rLineStyleList ) :
     ContextHandler2( rParent ),
@@ -97,6 +105,8 @@ ContextHandlerRef LineStyleListContext::onCreateContext( sal_Int32 nElement, con
     return nullptr;
 }
 
+namespace {
+
 class EffectStyleListContext : public ContextHandler2
 {
 public:
@@ -106,6 +116,8 @@ public:
 private:
     EffectStyleList& mrEffectStyleList;
 };
+
+}
 
 EffectStyleListContext::EffectStyleListContext( ContextHandler2Helper const & rParent, EffectStyleList& rEffectStyleList ) :
     ContextHandler2( rParent ),
@@ -129,6 +141,8 @@ ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, c
     return nullptr;
 }
 
+namespace {
+
 class FontSchemeContext : public ContextHandler2
 {
 public:
@@ -140,6 +154,8 @@ private:
     FontScheme& mrFontScheme;
     TextCharacterPropertiesPtr mxCharProps;
 };
+
+}
 
 FontSchemeContext::FontSchemeContext( ContextHandler2Helper const & rParent, FontScheme& rFontScheme ) :
     ContextHandler2( rParent ),

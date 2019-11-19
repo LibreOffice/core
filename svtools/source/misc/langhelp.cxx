@@ -64,6 +64,8 @@ OUString getInstalledLocaleForLanguage(css::uno::Sequence<OUString> const & inst
 
 static std::unique_ptr<Idle> xLangpackInstaller;
 
+namespace {
+
 class InstallLangpack : public Idle
 {
     std::vector<OUString> const m_aPackages;
@@ -98,6 +100,8 @@ public:
         xLangpackInstaller.reset();
     }
 };
+
+}
 
 OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString>& rLocaleElementNames, bool bRequestInstallIfMissing, const OUString& rPreferredLocale)
 {

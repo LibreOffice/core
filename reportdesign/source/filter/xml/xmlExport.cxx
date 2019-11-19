@@ -154,6 +154,7 @@ namespace rptxml
         return aSupported;
     }
 
+    namespace {
 
     class OSpecialHandleXMLExportPropertyMapper : public SvXMLExportPropertyMapper
     {
@@ -174,6 +175,8 @@ namespace rptxml
             // nothing to do here
         }
     };
+
+    }
 
 static void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
 {

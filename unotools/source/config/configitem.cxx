@@ -76,6 +76,8 @@ namespace utl{
     };
 }
 
+namespace {
+
 class ValueCounter_Impl
 {
     sal_Int16& rCnt;
@@ -91,6 +93,8 @@ public:
         rCnt--;
     }
 };
+
+}
 
 ConfigChangeListener_Impl::ConfigChangeListener_Impl(
              ConfigItem& rItem, const Sequence< OUString >& rNames) :

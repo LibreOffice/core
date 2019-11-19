@@ -1376,12 +1376,16 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
     }
 }
 
+namespace {
+
 // TabPage for Redlining
 struct CharAttr
 {
     sal_uInt16 const nItemId;
     sal_uInt16 const nAttr;
 };
+
+}
 
 // Edit corresponds to Paste-attributes
 static CharAttr const aRedlineAttr[] =

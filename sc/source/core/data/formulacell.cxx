@@ -4247,8 +4247,6 @@ int splitup(int N, int K, int& A)
     return num_parts;
 }
 
-} // anonymous namespace
-
 struct ScDependantsCalculator
 {
     ScDocument& mrDoc;
@@ -4557,6 +4555,8 @@ struct ScDependantsCalculator
         return !bHasSelfReferences;
     }
 };
+
+} // anonymous namespace
 
 bool ScFormulaCell::InterpretFormulaGroup(SCROW nStartOffset, SCROW nEndOffset)
 {

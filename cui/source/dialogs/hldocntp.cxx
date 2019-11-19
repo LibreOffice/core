@@ -55,6 +55,8 @@ using namespace ::com::sun::star;
 |*
 |************************************************************************/
 
+namespace {
+
 struct DocumentTypeData
 {
     OUString aStrURL;
@@ -62,6 +64,8 @@ struct DocumentTypeData
     DocumentTypeData (const OUString& aURL, const OUString& aExt) : aStrURL(aURL), aStrExt(aExt)
     {}
 };
+
+}
 
 bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const
 {

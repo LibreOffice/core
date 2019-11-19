@@ -75,6 +75,8 @@ OConnectionPool::~OConnectionPool()
     clear(false);
 }
 
+namespace {
+
 struct TRemoveEventListenerFunctor
 {
     OConnectionPool* m_pConnectionPool;
@@ -124,6 +126,8 @@ struct TConnectionPoolFunctor
         std::for_each(_aValue.second.aConnections.begin(),_aValue.second.aConnections.end(),TRemoveEventListenerFunctor(m_pConnectionPool,true));
     }
 };
+
+}
 
 void OConnectionPool::clear(bool _bDispose)
 {

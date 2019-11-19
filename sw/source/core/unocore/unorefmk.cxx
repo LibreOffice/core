@@ -187,6 +187,8 @@ SwXReferenceMark::getSupportedServiceNames()
     };
 }
 
+namespace {
+
 template<typename T> struct NotContainedIn
 {
     std::vector<T> const& m_rVector;
@@ -197,6 +199,8 @@ template<typename T> struct NotContainedIn
                     == m_rVector.end();
     }
 };
+
+}
 
 void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
         SwXTextCursor const*const pCursor)
@@ -492,6 +496,8 @@ void SAL_CALL SwXReferenceMark::removeVetoableChangeListener(
     OSL_FAIL("SwXReferenceMark::removeVetoableChangeListener(): not implemented");
 }
 
+namespace {
+
 class SwXMetaText : public cppu::OWeakObject, public SwXText
 {
 private:
@@ -529,6 +535,8 @@ public:
             const uno::Reference< text::XTextRange > & xTextPosition) override;
 
 };
+
+}
 
 SwXMetaText::SwXMetaText(SwDoc & rDoc, SwXMeta & rMeta)
     : SwXText(&rDoc, CursorType::Meta)

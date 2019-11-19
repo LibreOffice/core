@@ -26,6 +26,8 @@
 #include <shellres.hxx>
 #include <tautofmt.hxx>
 
+namespace {
+
 class SwStringInputDlg : public SfxDialogController
 {
 private:
@@ -51,6 +53,8 @@ public:
         return m_xEdInput->get_text();
     }
 };
+
+}
 
 // AutoFormat-Dialogue:
 SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell,

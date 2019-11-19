@@ -23,6 +23,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 // I assume there is only one pane in Writer
 class PanesIndexAccess : public ::cppu::WeakImplHelper<container::XIndexAccess >
 {
@@ -73,6 +75,8 @@ public:
         throw container::NoSuchElementException();
     }
 };
+
+}
 
 SwVbaPanes::SwVbaPanes( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel ): SwVbaPanes_BASE( xParent, xContext, new PanesIndexAccess( xParent, xContext, xModel ) )
 {

@@ -2031,6 +2031,8 @@ Reference< XInterface > ODatabaseDocument::getThis() const
     return *const_cast< ODatabaseDocument* >( this );
 }
 
+namespace {
+
 struct CreateAny
 {
     Any operator() (const Reference<XController>& lhs) const
@@ -2038,6 +2040,8 @@ struct CreateAny
         return makeAny(lhs);
     }
 };
+
+}
 
 // XModel2
 Reference< XEnumeration > SAL_CALL ODatabaseDocument::getControllers(  )

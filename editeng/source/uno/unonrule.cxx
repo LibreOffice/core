@@ -494,11 +494,15 @@ css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxN
     }
 }
 
+namespace {
+
 class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< XAnyCompare >
 {
 public:
     virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) override;
 };
+
+}
 
 sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const Any& Any1, const Any& Any2 )
 {

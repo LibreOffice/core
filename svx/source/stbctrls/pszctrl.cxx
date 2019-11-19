@@ -94,6 +94,8 @@ OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxPosSizeStatusBarControl, SvxSizeItem);
 
+namespace {
+
 class FunctionPopup_Impl
 {
     VclBuilder        m_aBuilder;
@@ -106,6 +108,8 @@ public:
     sal_uInt16 Execute(vcl::Window* pWindow, const Point& rPopupPos) { return m_xMenu->Execute(pWindow, rPopupPos); }
     sal_uInt32 GetSelected() const;
 };
+
+}
 
 sal_uInt16 FunctionPopup_Impl::id_to_function(const OString& rIdent)
 {

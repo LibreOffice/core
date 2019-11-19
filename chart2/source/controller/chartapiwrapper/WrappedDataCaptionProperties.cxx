@@ -36,6 +36,9 @@ namespace chart
 namespace wrapper
 {
 
+namespace
+{
+
 class WrappedDataCaptionProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
 {
 public:
@@ -46,8 +49,6 @@ public:
                                         tSeriesOrDiagramPropertyType ePropertyType );
 };
 
-namespace
-{
 enum
 {
     //data caption properties

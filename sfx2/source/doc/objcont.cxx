@@ -300,11 +300,15 @@ SfxStyleSheetBasePool* SfxObjectShell::GetStyleSheetPool()
     return nullptr;
 }
 
+namespace {
+
 struct Styles_Impl
 {
     SfxStyleSheetBase *pSource;
     SfxStyleSheetBase *pDest;
 };
+
+}
 
 void SfxObjectShell::LoadStyles
 (

@@ -34,6 +34,8 @@ using namespace com::sun::star;
 
 typedef std::vector < uno::Sequence< beans::PropertyValue > > IndexedPropertyValues;
 
+namespace {
+
 class IndexedPropertyValuesContainer : public cppu::WeakImplHelper< container::XIndexContainer, lang::XServiceInfo >
 {
 public:
@@ -62,6 +64,8 @@ public:
 private:
     IndexedPropertyValues maProperties;
 };
+
+}
 
 IndexedPropertyValuesContainer::IndexedPropertyValuesContainer() throw()
 {

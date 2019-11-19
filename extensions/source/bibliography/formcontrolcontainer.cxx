@@ -71,6 +71,8 @@ namespace bib
         m_xForm = _rxForm;
     }
 
+    namespace {
+
     struct ControlModeSwitch
     {
         bool bDesign;
@@ -82,6 +84,8 @@ namespace bib
                 _rxControl->setDesignMode( bDesign );
         }
     };
+
+    }
 
     void FormControlContainer::implSetDesignMode( bool _bDesign )
     {

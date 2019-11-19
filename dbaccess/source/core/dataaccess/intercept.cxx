@@ -89,11 +89,15 @@ OInterceptor::~OInterceptor()
 {
 }
 
+namespace {
+
 struct DispatchHelper
 {
     URL aURL;
     Sequence<PropertyValue > aArguments;
 };
+
+}
 
 //XDispatch
 void SAL_CALL OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValue >& Arguments )

@@ -40,6 +40,8 @@ using namespace ::com::sun::star;
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 
+namespace {
+
 class SwIntrnlRefLink : public SwBaseLink
 {
     SwDDEFieldType& rFieldType;
@@ -56,6 +58,8 @@ public:
     virtual const SwNode* GetAnchor() const override;
     virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const override;
 };
+
+}
 
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const OUString& rMimeType,
                                 const uno::Any & rValue )

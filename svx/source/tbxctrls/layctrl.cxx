@@ -47,6 +47,8 @@ using namespace ::com::sun::star::frame;
 SFX_IMPL_TOOLBOX_CONTROL(SvxTableToolBoxControl,SfxUInt16Item);
 SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
 
+namespace {
+
 class TableWindow : public SfxPopupWindow
 {
 private:
@@ -92,6 +94,8 @@ private:
     void                    TableDialog( const Sequence< PropertyValue >& rArgs );
     void                    CloseAndShowTableDialog();
 };
+
+}
 
 const long TableWindow::TABLE_CELLS_HORIZ = 10;
 const long TableWindow::TABLE_CELLS_VERT = 15;
@@ -401,6 +405,8 @@ bool TableWindow::EventNotify( NotifyEvent& rNEvt )
     return SfxPopupWindow::EventNotify( rNEvt );
 }
 
+namespace {
+
 class ColumnsWindow : public SfxPopupWindow
 {
 private:
@@ -431,6 +437,7 @@ public:
     virtual void            PopupModeEnd() override;
 };
 
+}
 
 ColumnsWindow::ColumnsWindow( sal_uInt16 nId, vcl::Window* pParent, const OUString& rCmd,
                               const OUString& rText, const Reference< XFrame >& rFrame ) :

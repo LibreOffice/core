@@ -25,6 +25,8 @@
 #include <rtlproto.hxx>
 #include <memory>
 
+namespace {
+
 class SvRTLInputBox : public weld::GenericDialogController
 {
     std::unique_ptr<weld::Entry> m_xEdit;
@@ -44,6 +46,8 @@ public:
         const OUString& rDefault, long nXTwips, long nYTwips );
     OUString const & GetText() const { return m_aText; }
 };
+
+}
 
 SvRTLInputBox::SvRTLInputBox(weld::Window* pParent, const OUString& rPrompt,
         const OUString& rTitle, const OUString& rDefault,

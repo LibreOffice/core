@@ -365,6 +365,8 @@ const uno::Reference< script::XEventAttacherManager >&
     return m_xFormEventManager;
 }
 
+namespace {
+
 class SwHTMLImageWatcher :
     public cppu::WeakImplHelper< awt::XImageConsumer, XEventListener >
 {
@@ -407,6 +409,8 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing( const EventObject& Source ) override;
 };
+
+}
 
 SwHTMLImageWatcher::SwHTMLImageWatcher(
         const uno::Reference< drawing::XShape >& rShape,

@@ -37,6 +37,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 class NamesEnumeration : public EnumerationHelperImpl
 {
     uno::Reference< frame::XModel > m_xModel;
@@ -52,6 +54,8 @@ public:
     }
 
 };
+
+}
 
 ScVbaNames::ScVbaNames(const css::uno::Reference< ov::XHelperInterface >& xParent,
             const css::uno::Reference< css::uno::XComponentContext >& xContext,

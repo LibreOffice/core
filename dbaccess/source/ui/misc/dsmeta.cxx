@@ -31,6 +31,8 @@ namespace dbaui
     using namespace dbaccess;
     using namespace ::com::sun::star;
 
+    namespace {
+
     struct FeatureSupport
     {
         // authentication mode of the data source
@@ -53,6 +55,8 @@ namespace dbaui
         ItemID          nItemID;
         const sal_Char* pAsciiFeatureName;
     };
+
+    }
 
     // global tables
     static const FeatureMapping* lcl_getFeatureMappings()

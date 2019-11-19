@@ -76,7 +76,6 @@ namespace svx
                 m_rDev.Pop();
             }
         };
-    }
 
     /** a class which allows to draw two texts in a pseudo-ruby way (which basically
         means one text above or below the other, and a little bit smaller)
@@ -104,6 +103,8 @@ namespace svx
         void Paint( vcl::RenderContext& _rDevice, const ::tools::Rectangle& _rRect,
             ::tools::Rectangle* _pPrimaryLocation, ::tools::Rectangle* _pSecondaryLocation );
     };
+
+    }
 
     PseudoRubyText::PseudoRubyText()
         : m_ePosition(eAbove)

@@ -16,6 +16,8 @@
 
 #include <svx/uiobject.hxx>
 
+namespace {
+
 class ImpressSdrObject : public SdrUIObject
 {
 public:
@@ -28,8 +30,6 @@ private:
 
     OUString const maName;
 };
-
-namespace {
 
 sd::DrawViewShell* getViewShell(const VclPtr<sd::Window>& xWindow)
 {

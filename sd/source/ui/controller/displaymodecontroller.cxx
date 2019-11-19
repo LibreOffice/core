@@ -29,6 +29,8 @@ namespace sd
 // Composed of a dropdown button in the toolbar and a
 // popup menu to select the value
 
+namespace {
+
 class DisplayModeController : public svt::PopupWindowController
 {
 public:
@@ -73,6 +75,8 @@ struct snewfoil_value_info
     const char* mpStrResId;
     const char* msUnoCommand;
 };
+
+}
 
 static const snewfoil_value_info editmodes[] =
 {

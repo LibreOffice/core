@@ -34,6 +34,8 @@ namespace svgio
 {
     namespace svgreader
     {
+        namespace {
+
         class pathTextBreakupHelper : public drawinglayer::primitive2d::TextBreakupHelper
         {
         private:
@@ -70,6 +72,8 @@ namespace svgio
             // read access to evtl. advanced position
             double getPosition() const { return mfPosition; }
         };
+
+        }
 
         void pathTextBreakupHelper::freeB2DCubicBezierHelper()
         {

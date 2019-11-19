@@ -39,6 +39,8 @@ namespace logging
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::logging::LogRecord;
 
+    namespace {
+
     // formats for csv files as defined by RFC4180
     class CsvFormatter : public cppu::WeakImplHelper<css::logging::XCsvLogFormatter, css::lang::XServiceInfo>
     {
@@ -79,6 +81,8 @@ namespace logging
         bool m_MultiColumn;
         css::uno::Sequence< OUString > m_Columnnames;
     };
+
+    }
 } // namespace logging
 
 // private helpers

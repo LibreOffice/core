@@ -40,6 +40,8 @@ PrinterBmp::~PrinterBmp()
 
 /* virtual base class */
 
+namespace {
+
 class ByteEncoder
 {
 private:
@@ -50,11 +52,15 @@ public:
     virtual         ~ByteEncoder () = 0;
 };
 
+}
+
 ByteEncoder::~ByteEncoder()
 {
 }
 
 /* HexEncoder */
+
+namespace {
 
 class HexEncoder : public ByteEncoder
 {
@@ -73,6 +79,8 @@ public:
     virtual void    EncodeByte (sal_uInt8 nByte) override;
     void            FlushLine ();
 };
+
+}
 
 HexEncoder::HexEncoder (osl::File* pFile) :
         mpFile (pFile),
@@ -122,6 +130,8 @@ HexEncoder::FlushLine ()
 /* Ascii85 encoder, is abi compatible with HexEncoder but writes a ~> to
    indicate end of data EOD */
 
+namespace {
+
 class Ascii85Encoder : public ByteEncoder
 {
 private:
@@ -146,6 +156,8 @@ public:
     virtual void    EncodeByte (sal_uInt8 nByte) override;
     void            WriteAscii (sal_uInt8 nByte);
 };
+
+}
 
 Ascii85Encoder::Ascii85Encoder (osl::File* pFile) :
         mpFile (pFile),
@@ -272,6 +284,8 @@ Ascii85Encoder::~Ascii85Encoder ()
 
 /* LZW encoder */
 
+namespace {
+
 class LZWEncoder : public Ascii85Encoder
 {
 private:
@@ -304,6 +318,8 @@ public:
 
     virtual void    EncodeByte (sal_uInt8 nByte) override;
 };
+
+}
 
 LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
         Ascii85Encoder (pOutputFile),

@@ -47,6 +47,8 @@ using namespace ::com::sun::star::uno;
 namespace sfx2
 {
 
+namespace {
+
 class SvDDELinkEditDialog : public weld::GenericDialogController
 {
     std::unique_ptr<weld::Entry> m_xEdDdeApp;
@@ -59,6 +61,8 @@ public:
     SvDDELinkEditDialog(weld::Window* pParent, SvBaseLink const*);
     OUString GetCmd() const;
 };
+
+}
 
 SvDDELinkEditDialog::SvDDELinkEditDialog(weld::Window* pParent, SvBaseLink const * pLink)
     : GenericDialogController(pParent, "sfx/ui/linkeditdialog.ui", "LinkEditDialog")

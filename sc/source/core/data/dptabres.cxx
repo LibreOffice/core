@@ -129,8 +129,6 @@ public:
     }
 };
 
-}
-
 // function objects for sorting of the column and row members:
 
 class ScDPRowMembersOrder
@@ -164,6 +162,8 @@ public:
 
     bool operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
 };
+
+}
 
 static bool lcl_IsLess( const ScDPDataMember* pDataMember1, const ScDPDataMember* pDataMember2, long nMeasure, bool bAscending )
 {
@@ -2677,6 +2677,8 @@ void ScDPDataMember::Dump(int nIndent) const
 //  Helper class to select the members to include in
 //  ScDPResultDimension::InitFrom or LateInitFrom if groups are used
 
+namespace {
+
 class ScDPGroupCompare
 {
 private:
@@ -2692,6 +2694,8 @@ public:
     bool    IsIncluded( const ScDPMember& rMember )     { return bIncludeAll || TestIncluded( rMember ); }
     bool    TestIncluded( const ScDPMember& rMember );
 };
+
+}
 
 ScDPGroupCompare::ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, long nDimension ) :
     pResultData( pData ),

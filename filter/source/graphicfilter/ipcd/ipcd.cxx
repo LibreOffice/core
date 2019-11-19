@@ -42,8 +42,6 @@ enum PCDResolution {
     PCDRES_16BASE   // 3072 x 3072
 };
 
-}
-
 class PCDReader {
 
 private:
@@ -94,6 +92,8 @@ public:
 
     bool ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem );
 };
+
+}
 
 //=================== Methods of PCDReader ==============================
 

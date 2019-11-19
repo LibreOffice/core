@@ -37,6 +37,8 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SwTemplateControl, SfxStringItem );
 
+namespace {
+
 class SwTemplatePopup_Impl : public PopupMenu
 {
 public:
@@ -49,6 +51,8 @@ private:
 
     virtual void    Select() override;
 };
+
+}
 
 SwTemplatePopup_Impl::SwTemplatePopup_Impl() :
     PopupMenu(),

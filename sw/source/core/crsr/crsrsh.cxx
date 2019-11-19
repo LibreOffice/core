@@ -1530,6 +1530,8 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
         rPos = SwPosition( aTmp, SwIndex( pTextNd, 0 ) );
 }
 
+namespace {
+
 // #i27301# - helper class that notifies the accessibility about invalid text
 // selections in its destructor
 class SwNotifyAccAboutInvalidTextSelections
@@ -1547,6 +1549,8 @@ class SwNotifyAccAboutInvalidTextSelections
             mrCursorSh.InvalidateAccessibleParaTextSelection();
         }
 };
+
+}
 
 void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 {

@@ -546,6 +546,8 @@ void UndoManager::AddUndoAction(std::unique_ptr<SfxUndoAction> pAction, bool bTr
     }
 }
 
+namespace {
+
 class CursorGuard
 {
 public:
@@ -569,6 +571,8 @@ private:
     SwEditShell & m_rShell;
     bool const m_bSaveCursor;
 };
+
+}
 
 bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo)
 {

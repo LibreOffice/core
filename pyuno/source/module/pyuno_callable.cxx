@@ -31,6 +31,8 @@ using com::sun::star::script::XInvocation2;
 
 namespace pyuno
 {
+namespace {
+
 struct PyUNO_callable_Internals
 {
     Reference<XInvocation2> xInvocation;
@@ -43,6 +45,8 @@ struct PyUNO_callable
     PyObject_HEAD
     PyUNO_callable_Internals* members;
 };
+
+}
 
 static void PyUNO_callable_del (PyObject* self)
 {

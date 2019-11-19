@@ -109,6 +109,7 @@ OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )
 
 namespace dp_gui {
 
+namespace {
 
 class ProgressCmdEnv
     : public ::cppu::WeakImplHelper< ucb::XCommandEnvironment,
@@ -198,6 +199,8 @@ struct ExtensionCmd
           m_bWarnUser( false ),
           m_vExtensionList( vExtensionList ) {};
 };
+
+}
 
 typedef std::shared_ptr< ExtensionCmd > TExtensionCmd;
 

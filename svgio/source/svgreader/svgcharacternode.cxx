@@ -154,6 +154,8 @@ namespace svgio
 {
     namespace svgreader
     {
+        namespace {
+
         class localTextBreakupHelper : public drawinglayer::primitive2d::TextBreakupHelper
         {
         private:
@@ -173,6 +175,8 @@ namespace svgio
             {
             }
         };
+
+        }
 
         bool localTextBreakupHelper::allowChange(sal_uInt32 /*nCount*/, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 /*nIndex*/, sal_uInt32 /*nLength*/)
         {

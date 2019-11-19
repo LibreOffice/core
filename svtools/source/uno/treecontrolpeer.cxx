@@ -52,6 +52,8 @@ using namespace css::container;
 using namespace css::util;
 using namespace css::graphic;
 
+namespace {
+
 struct LockGuard
 {
 public:
@@ -81,6 +83,8 @@ public:
 };
 
 
+}
+
 class UnoTreeListBoxImpl : public SvTreeListBox
 {
 public:
@@ -104,6 +108,8 @@ private:
 };
 
 
+namespace {
+
 class UnoTreeListItem : public SvLBoxString
 {
 public:
@@ -122,6 +128,7 @@ private:
     Image           maImage;
 };
 
+}
 
 class UnoTreeListEntry : public SvTreeListEntry
 {
@@ -562,6 +569,7 @@ sal_Int32 SAL_CALL TreeControlPeer::getSelectionCount()
     return getTreeListBoxOrThrow().GetSelectionCount();
 }
 
+namespace {
 
 class TreeSelectionEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
@@ -574,6 +582,7 @@ public:
     std::list< Any >::iterator maIter;
 };
 
+}
 
 TreeSelectionEnumeration::TreeSelectionEnumeration( std::list< Any >& rSelection )
 {

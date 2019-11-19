@@ -37,6 +37,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 /// helper class for correct notification due to the positioning of
 /// the anchored drawing object
 class SwPosNotify
@@ -52,6 +54,8 @@ class SwPosNotify
         // #i32795#
         Point const & LastObjPos() const;
 };
+
+}
 
 SwPosNotify::SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj ) :
     mpAnchoredDrawObj( _pAnchoredDrawObj )
@@ -130,6 +134,8 @@ Point const & SwPosNotify::LastObjPos() const
     return maOldObjRect.Pos();
 }
 
+namespace {
+
 // #i32795#
 /// helper class for oscillation control on object positioning
 class SwObjPosOscillationControl
@@ -144,6 +150,8 @@ class SwObjPosOscillationControl
 
         bool OscillationDetected();
 };
+
+}
 
 SwObjPosOscillationControl::SwObjPosOscillationControl(
                                 const SwAnchoredDrawObject& _rAnchoredDrawObj )

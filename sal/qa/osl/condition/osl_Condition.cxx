@@ -31,8 +31,6 @@ enum ConditionType
     thread_type_wait
 };
 
-}
-
 /** thread for testing Condition.
  */
 class ConditionThread : public Thread
@@ -60,6 +58,8 @@ protected:
         }
     }
 };
+
+}
 
 namespace osl_Condition
 {

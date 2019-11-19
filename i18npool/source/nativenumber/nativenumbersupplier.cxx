@@ -38,6 +38,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
+namespace {
+
 struct Number {
     sal_Int16 number;
     const sal_Unicode *multiplierChar;
@@ -46,6 +48,7 @@ struct Number {
     const sal_Int16 *multiplierExponent;
 };
 
+}
 
 #define NUMBER_OMIT_ZERO (1 << 0)
 #define NUMBER_OMIT_ONLY_ZERO  (1 << 1)
@@ -65,7 +68,11 @@ struct Number {
 
 namespace i18npool {
 
+namespace {
+
 struct theNatNumMutex : public rtl::Static<osl::Mutex, theNatNumMutex> {};
+
+}
 
 static OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh);
 
@@ -981,10 +988,16 @@ sal_Int16 SAL_CALL NativeNumberSupplierService::convertFromXmlAttributes( const 
 // see numerical system in the Hebrew Numbering System in following link for details,
 // http://smontagu.org/writings/HebrewNumbers.html
 
+namespace {
+
 struct HebrewNumberChar {
     sal_Unicode code;
     sal_Int16 value;
-} const HebrewNumberCharArray[] = {
+};
+
+}
+
+HebrewNumberChar const HebrewNumberCharArray[] = {
     { 0x05ea, 400 },
     { 0x05ea, 400 },
     { 0x05e9, 300 },
@@ -1089,10 +1102,16 @@ static const sal_Unicode cyrillicThousandsMark = 0x0482;
 static const sal_Unicode cyrillicTitlo = 0x0483;
 static const sal_Unicode cyrillicTen = 0x0456;
 
+namespace {
+
 struct CyrillicNumberChar {
     sal_Unicode code;
     sal_Int16 value;
-} const CyrillicNumberCharArray[] = {
+};
+
+}
+
+CyrillicNumberChar const CyrillicNumberCharArray[] = {
     { 0x0446, 900 },
     { 0x047f, 800 },
     { 0x0471, 700 },

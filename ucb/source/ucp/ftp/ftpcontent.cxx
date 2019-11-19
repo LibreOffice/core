@@ -626,6 +626,7 @@ OUString FTPContent::getParentURL()
     return m_aFTPURL.parent();
 }
 
+namespace {
 
 class InsertData
     : public CurlInput {
@@ -644,6 +645,7 @@ private:
     Reference<XInputStream> m_xInputStream;
 };
 
+}
 
 sal_Int32 InsertData::read(sal_Int8 *dest,sal_Int32 nBytesRequested)
 {

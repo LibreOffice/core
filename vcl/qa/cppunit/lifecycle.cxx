@@ -143,6 +143,8 @@ void LifecycleTest::testParentedWidgets()
     testWidgets(xWin);
 }
 
+namespace {
+
 class DisposableChild : public vcl::Window
 {
 public:
@@ -152,6 +154,8 @@ public:
         disposeOnce();
     }
 };
+
+}
 
 void LifecycleTest::testChildDispose()
 {
@@ -178,6 +182,8 @@ void LifecycleTest::testPostDispose()
     CPPUNIT_ASSERT(!xWin->GetWindow(GetWindowType::Parent));
 }
 
+namespace {
+
 class FocusCrashPostDispose : public TabControl
 {
 public:
@@ -203,6 +209,8 @@ public:
     }
 };
 
+}
+
 void LifecycleTest::testFocus()
 {
     ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
@@ -214,6 +222,8 @@ void LifecycleTest::testFocus()
     // FIXME: really awful to test focus issues without showing windows.
     // CPPUNIT_ASSERT(xChild->HasFocus());
 }
+
+namespace {
 
 template <class vcl_type>
 class LeakTestClass : public vcl_type
@@ -271,6 +281,8 @@ public:
         }
     }
 };
+
+}
 
 void LifecycleTest::testLeakage()
 {

@@ -46,6 +46,7 @@ using std::vector;
 
 using namespace com::sun::star::xml::dom;
 
+namespace {
 
 class DomVisitor
 {
@@ -56,6 +57,8 @@ public:
     virtual void character( const Reference<XCharacterData>& ) {}
     virtual void endElement( const Reference<XElement>& ) {}
 };
+
+}
 
 static void visit( DomVisitor&, const Reference<XDocument>& );
 static void visit( DomVisitor&, const Reference<XNode>& );
@@ -115,6 +118,7 @@ void visit( DomVisitor& rVisitor, const Reference<XNode>& xNode )
         rVisitor.endElement( Reference<XElement>( xNode, UNO_QUERY_THROW ) );
 }
 
+namespace {
 
 class DomExport: public DomVisitor
 {
@@ -138,6 +142,8 @@ public:
     virtual void endElement( const Reference<XElement>& ) override;
     virtual void character( const Reference<XCharacterData>& ) override;
 };
+
+}
 
 DomExport::DomExport( SvXMLExport& rExport ) :
     mrExport( rExport )

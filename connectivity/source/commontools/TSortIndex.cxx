@@ -24,6 +24,8 @@
 
 using namespace connectivity;
 
+namespace {
+
 /// Functor object for class OSortIndex::TIntValuePairVector::value_type returntype is bool
 struct TKeyValueFunc
 {
@@ -76,6 +78,7 @@ struct TKeyValueFunc
     }
 };
 
+}
 
 ::rtl::Reference<OKeySet> OSortIndex::CreateKeySet()
 {

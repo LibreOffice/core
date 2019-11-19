@@ -26,10 +26,14 @@
 // for all keysyms with byte1 and byte2 equal zero, and of course only for
 // keysyms that have a unicode counterpart
 
+namespace {
+
 struct keymap_t {
     const int first; const int last;
     const sal_Unicode *map;
 };
+
+}
 
 // Latin-1      Byte 3 = 0x00
 const sal_Unicode keymap00_map[] = {

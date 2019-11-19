@@ -16,6 +16,8 @@
 namespace rtl_ref
 {
 
+namespace {
+
 class MoveTestClass
 {
 private:
@@ -44,6 +46,8 @@ public:
 
     void set_inc_flag() { m_bIncFlag = true; }
 };
+
+}
 
 static rtl::Reference< MoveTestClass > get_reference( MoveTestClass* pcTestClass )
 {

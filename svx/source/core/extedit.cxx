@@ -71,6 +71,8 @@ void ExternalToolEdit::StartListeningEvent()
             m_aFileName, [this] () { return HandleCloseEvent(this); }));
 }
 
+namespace {
+
 // self-destructing thread to make shell execute async
 class ExternalToolEditThread
     : public ::salhelper::Thread
@@ -86,6 +88,8 @@ public:
         , m_aFileName(rFileName)
     {}
 };
+
+}
 
 void ExternalToolEditThread::execute()
 {

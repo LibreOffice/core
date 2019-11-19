@@ -643,11 +643,15 @@ static sal_uInt16 parseChar( sal_Unicode c )
     return nVclKey;
 }
 
+namespace {
+
 struct KeyCodeEntry
 {
    const char* sName;
    sal_uInt16 nCode;
 };
+
+}
 
 KeyCodeEntry const aMSKeyCodesData[] = {
     { "BACKSPACE", KEY_BACKSPACE },

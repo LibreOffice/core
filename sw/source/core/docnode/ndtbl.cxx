@@ -1485,6 +1485,8 @@ bool SwDoc::TableToText( const SwTableNode* pTableNd, sal_Unicode cCh )
     return bRet;
 }
 
+namespace {
+
 /**
  * Use the ForEach method from PtrArray to recreate Text from a Table.
  * The Boxes can also contain Lines!
@@ -1499,6 +1501,8 @@ struct DelTabPara
     DelTabPara( SwNodes& rNodes, sal_Unicode cChar, SwUndoTableToText* pU ) :
         pLastNd(nullptr), rNds( rNodes ), pUndo( pU ), cCh( cChar ) {}
 };
+
+}
 
 // Forward declare so that the Lines and Boxes can use recursion
 static void lcl_DelBox( SwTableBox* pBox, DelTabPara* pDelPara );
@@ -2500,10 +2504,14 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
 
 #define ROWFUZZY 25
 
+namespace {
+
 struct FuzzyCompare
 {
     bool operator() ( long s1, long s2 ) const;
 };
+
+}
 
 bool FuzzyCompare::operator() ( long s1, long s2 ) const
 {
@@ -3239,6 +3247,8 @@ static bool lcl_ChgTableSize( SwTable& rTable )
     return true;
 }
 
+namespace {
+
 class SplitTable_Para
 {
     std::map<SwFrameFormat const *, SwFrameFormat*> aSrcDestMap;
@@ -3264,6 +3274,8 @@ public:
         pNewTableNd->GetTable().GetTabSortBoxes().insert( pBox );
     }
 };
+
+}
 
 static void lcl_SplitTable_CpyBox( SwTableBox* pBox, SplitTable_Para* pPara );
 
@@ -3583,6 +3595,8 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
     return true;
 }
 
+namespace {
+
 // Use the PtrArray's ForEach method
 struct SetAFormatTabPara
 {
@@ -3597,6 +3611,8 @@ struct SetAFormatTabPara
         nEndBox( 0 ), nCurBox( 0 ), nAFormatLine( 0 ), nAFormatBox( 0 ), bSingleRowTable(false)
     {}
 };
+
+}
 
 // Forward declare so that the Lines and Boxes can use recursion
 static bool lcl_SetAFormatBox(FndBox_ &, SetAFormatTabPara *pSetPara, bool bResetDirect);

@@ -41,6 +41,8 @@ using vcl::unx::GtkPrintWrapper;
 
 using uno::UNO_QUERY;
 
+namespace {
+
 class GtkPrintDialog
 {
 public:
@@ -93,6 +95,8 @@ private:
     std::map<GtkWidget*, sal_Int32> m_aControlToNumValMap;
     std::shared_ptr<GtkPrintWrapper> m_xWrapper;
 };
+
+}
 
 struct GtkSalPrinter_Impl
 {

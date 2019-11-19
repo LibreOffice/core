@@ -283,6 +283,8 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
 /*                                                                   */
 /*********************************************************************/
 
+namespace {
+
 struct ImpUserData
 {
     OUString  *pString;
@@ -320,8 +322,6 @@ public:
 /*  use TabPage autoformat                                           */
 /*                                                                   */
 /*********************************************************************/
-
-namespace {
 
 enum OfaAutoFmtOptions
 {
@@ -2139,6 +2139,8 @@ std::unique_ptr<SfxTabPage> OfaSmartTagOptionsTabPage::Create(weld::Container* p
     return std::make_unique<OfaSmartTagOptionsTabPage>(pPage, pController, *rSet);
 }
 
+namespace {
+
 /** This struct is used to associate list box entries with smart tag data
 */
 struct ImplSmartTagLBUserData
@@ -2154,6 +2156,8 @@ struct ImplSmartTagLBUserData
         mxRec( xRec ),
         mnSmartTagIdx( nSmartTagIdx ) {}
 };
+
+}
 
 /** Clears m_xSmartTagTypesLB
 */

@@ -158,6 +158,8 @@ bool osl_systemPathIsLocalOrParentDirectoryEntry(
             dirent == "..");
 }
 
+namespace {
+
 /** Simple iterator for a path list separated by the specified character
 */
 class path_list_iterator
@@ -224,6 +226,8 @@ private:
     const sal_Unicode*  m_path_segment_begin;
     const sal_Unicode*  m_path_segment_end;
 };
+
+}
 
 bool osl_searchPath(
     const rtl_uString* pustrFilePath,

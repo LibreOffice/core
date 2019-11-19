@@ -1304,11 +1304,15 @@ AtkAttributeSet* attribute_set_prepend_tracked_change_formatchange( AtkAttribute
 
 /*****************************************************************************/
 
+namespace {
+
 struct AtkTextAttrMapping
 {
     const char *          name;
     TextPropertyValueFunc const toPropertyValue;
 };
+
+}
 
 const AtkTextAttrMapping g_TextAttrMap[] =
 {

@@ -38,6 +38,8 @@ typedef std::vector< RoadmapItem* > HL_Vector;
 
 //= ColorChanger
 
+namespace {
+
 class IDLabel :  public FixedText
 {
 public:
@@ -45,6 +47,8 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 };
+
+}
 
 class RoadmapItem : public RoadmapTypes
 {

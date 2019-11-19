@@ -193,6 +193,7 @@ rtl::Bootstrap * getBootstrap()
             InitBootstrap(), ::osl::GetGlobalMutex(), InitBootstrapData());
 }
 
+namespace {
 
 class FileHandleGuard
 {
@@ -211,6 +212,8 @@ private:
     oslFileHandle & m_rHandle;
 };
 
+}
+
 inline FileHandleGuard::~FileHandleGuard()
 {
     if (m_rHandle != nullptr)
@@ -222,6 +225,7 @@ inline FileHandleGuard::~FileHandleGuard()
     }
 }
 
+namespace {
 
 class FileHandleReader
 {
@@ -247,6 +251,8 @@ private:
     int m_nIndex;
     bool m_bLf;
 };
+
+}
 
 FileHandleReader::Result
 FileHandleReader::readLine(OString * pLine)
@@ -304,6 +310,8 @@ FileHandleReader::readLine(OString * pLine)
     }
 }
 
+namespace {
+
 class AsynchReader: public salhelper::Thread
 {
     size_t  m_nDataSize;
@@ -325,6 +333,8 @@ public:
      */
     OString getData();
 };
+
+}
 
 AsynchReader::AsynchReader(oslFileHandle & rHandle):
     Thread("jvmfwkAsyncReader"), m_nDataSize(0),

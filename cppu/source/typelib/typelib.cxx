@@ -46,6 +46,8 @@ using namespace osl;
 #pragma pack(push, 8)
 #endif
 
+namespace {
+
 /**
  * The double member determines the alignment.
  * Under OS2 and MS-Windows the Alignment is min( 8, sizeof( type ) ).
@@ -64,6 +66,8 @@ struct AlignSize_Impl
     double dDouble;
 #endif
 };
+
+}
 
 #ifdef _WIN32
 #pragma pack(pop)
@@ -138,6 +142,7 @@ static sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
     return nSize;
 }
 
+namespace {
 
 struct equalStr_Impl
 {
@@ -152,6 +157,7 @@ struct hashStr_Impl
         { return rtl_ustr_hashCode( s ); }
 };
 
+}
 
 // Heavy hack, the const sal_Unicode * is hold by the typedescription reference
 typedef std::unordered_map< const sal_Unicode *, typelib_TypeDescriptionReference *,
@@ -163,6 +169,8 @@ typedef list< typelib_TypeDescription * > TypeDescriptionList_Impl;
 
 // # of cached elements
 static sal_Int32 nCacheSize = 256;
+
+namespace {
 
 struct TypeDescriptor_Init_Impl
 {
@@ -205,6 +213,8 @@ struct TypeDescriptor_Init_Impl
 
     ~TypeDescriptor_Init_Impl();
 };
+
+}
 
 inline Mutex & TypeDescriptor_Init_Impl::getMutex()
 {

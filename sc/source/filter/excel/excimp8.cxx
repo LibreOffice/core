@@ -65,6 +65,8 @@ using namespace ::comphelper;
 
 //OleNameOverrideContainer
 
+namespace {
+
 class OleNameOverrideContainer : public ::cppu::WeakImplHelper< container::XNameContainer >
 {
 private:
@@ -126,8 +128,6 @@ public:
         IdToOleNameHash[ aName ] = xElement;
     }
 };
-
-namespace {
 
 /** Future Record Type header.
     @return whether read rt matches nRecordID

@@ -31,11 +31,15 @@
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
+namespace {
+
 struct FontWeightMapper
 {
     float const fWeight;
     sal_uInt16 const nValue;
 };
+
+}
 
 FontWeightMapper const aFontWeightMap[] =
 {

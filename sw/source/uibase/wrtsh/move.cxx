@@ -39,6 +39,8 @@
 
 const long nReadOnlyScrollOfst = 10;
 
+namespace {
+
 class ShellMoveCursor
 {
     SwWrtShell* pSh;
@@ -62,6 +64,8 @@ public:
         }
     }
 };
+
+}
 
 void SwWrtShell::MoveCursor( bool bWithSelect )
 {

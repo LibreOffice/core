@@ -21,6 +21,8 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
+namespace {
+
 class FileDialogItemEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     std::vector< OUString > m_sItems;
@@ -39,6 +41,8 @@ public:
         return uno::makeAny( sPath );
     }
 };
+
+}
 
 ScVbaFileDialogSelectedItems::ScVbaFileDialogSelectedItems(
         const css::uno::Reference< ov::XHelperInterface >& xParent

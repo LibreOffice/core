@@ -26,6 +26,8 @@ const mdds::mtv::element_t element_type_string = mdds::mtv::element_type_user_st
 // String block
 typedef mdds::mtv::default_element_block<element_type_string, OUString> string_block;
 
+namespace {
+
 struct matrix_trait
 {
     typedef string_block string_element_block;
@@ -33,6 +35,8 @@ struct matrix_trait
 
     typedef mdds::mtv::custom_block_func1<string_block> element_block_func;
 };
+
+}
 
 }
 

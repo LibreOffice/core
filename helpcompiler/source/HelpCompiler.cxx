@@ -240,6 +240,8 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
     return root;
 }
 
+namespace {
+
 class myparser
 {
 public:
@@ -264,6 +266,8 @@ public:
 private:
     std::string dump(xmlNodePtr node);
 };
+
+}
 
 std::string myparser::dump(xmlNodePtr node)
 {

@@ -35,6 +35,8 @@
 
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_ROLLABLE )
 
+namespace {
+
 class ImplDockFloatWin2 : public FloatingWindow
 {
 private:
@@ -62,6 +64,8 @@ public:
     virtual void    Resizing( Size& rSize ) override;
     virtual bool    Close() override;
 };
+
+}
 
 ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                                     ImplDockingWindowWrapper* pDockingWin ) :

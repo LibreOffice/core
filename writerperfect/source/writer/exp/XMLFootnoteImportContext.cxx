@@ -20,6 +20,8 @@ namespace writerperfect
 {
 namespace exp
 {
+namespace
+{
 /// Handler for <text:note-citation>.
 class XMLTextNoteCitationContext : public XMLImportContext
 {
@@ -33,6 +35,7 @@ private:
     librevenge::RVNGPropertyList& m_rProperties;
     OUString m_aCharacters;
 };
+}
 
 XMLTextNoteCitationContext::XMLTextNoteCitationContext(XMLImport& rImport,
                                                        librevenge::RVNGPropertyList& rProperties)
@@ -51,6 +54,8 @@ void XMLTextNoteCitationContext::characters(const OUString& rCharacters)
     m_aCharacters += rCharacters;
 }
 
+namespace
+{
 /// Handler for <text:note-body>.
 class XMLFootnoteBodyImportContext : public XMLImportContext
 {
@@ -70,6 +75,7 @@ public:
 private:
     const librevenge::RVNGPropertyList& m_rProperties;
 };
+}
 
 XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
     XMLImport& rImport, const librevenge::RVNGPropertyList& rProperties)

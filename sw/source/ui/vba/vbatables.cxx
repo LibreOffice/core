@@ -61,6 +61,8 @@ static bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTab
 
 typedef std::vector< uno::Reference< text::XTextTable > > XTextTableVec;
 
+namespace {
+
 class TableCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAccess,
                                                              container::XNameAccess >
 {
@@ -153,6 +155,8 @@ public:
     }
 
 };
+
+}
 
 SwVbaTables::SwVbaTables( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xDocument ) : SwVbaTables_BASE( xParent, xContext , uno::Reference< container::XIndexAccess >( new TableCollectionHelper( xDocument ) ) ), mxDocument( xDocument )
 {

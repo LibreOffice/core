@@ -30,11 +30,15 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 
+namespace {
+
 class SwXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
 public:
     SwXMLFontAutoStylePool_Impl(SwXMLExport& rExport, bool bFontEmbedding);
 };
+
+}
 
 SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, bool bFontEmbedding)
     : XMLFontAutoStylePool(_rExport, bFontEmbedding)

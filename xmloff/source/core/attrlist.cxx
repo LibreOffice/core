@@ -29,6 +29,8 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
 struct SvXMLTagAttribute_Impl
 {
     SvXMLTagAttribute_Impl( const OUString &rName,
@@ -47,6 +49,8 @@ struct SvXMLTagAttribute_Impl
     OUString sName;
     OUString sValue;
 };
+
+}
 
 struct SvXMLAttributeList_Impl
 {

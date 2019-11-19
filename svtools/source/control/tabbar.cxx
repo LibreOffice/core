@@ -367,6 +367,8 @@ void ImplTabSizer::Paint( vcl::RenderContext& rRenderContext, const tools::Recta
     aDecoView.DrawHandle(aOutputRect);
 }
 
+namespace {
+
 // Is not named Impl. as it may be both instantiated and derived from
 class TabBarEdit : public Edit
 {
@@ -388,6 +390,8 @@ public:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual void    LoseFocus() override;
 };
+
+}
 
 TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
     Edit( pParent, nWinStyle )

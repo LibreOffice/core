@@ -45,8 +45,6 @@ Point ImplTaskPaneListGetPos( const vcl::Window *w )
     return pos;
 }
 
-}
-
 // compares window pos left-to-right
 struct LTRSort
 {
@@ -74,6 +72,8 @@ struct LTRSortBackward
             return ( pos1.X() < pos2.X() );
     }
 };
+
+}
 
 static void ImplTaskPaneListGrabFocus( vcl::Window *pWindow, bool bForward )
 {

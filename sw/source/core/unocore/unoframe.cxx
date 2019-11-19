@@ -962,6 +962,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     return bRet;
 }
 
+namespace {
+
 class SwFrameProperties_Impl : public BaseFrameProperties_Impl
 {
 public:
@@ -969,6 +971,8 @@ public:
 
     bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrameSet, SfxItemSet& rSet, bool& rSizeFound) override;
 };
+
+}
 
 SwFrameProperties_Impl::SwFrameProperties_Impl():
     BaseFrameProperties_Impl(/*aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME)*/ )
@@ -1026,6 +1030,8 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
     return bRet;
 }
 
+namespace {
+
 class SwGraphicProperties_Impl : public BaseFrameProperties_Impl
 {
 public:
@@ -1033,6 +1039,8 @@ public:
 
     virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrameSet, SfxItemSet& rSet, bool& rSizeFound) override;
 };
+
+}
 
 SwGraphicProperties_Impl::SwGraphicProperties_Impl( ) :
     BaseFrameProperties_Impl(/*aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_GRAPHIC)*/ )
@@ -1125,6 +1133,8 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     return bRet;
 }
 
+namespace {
+
 class SwOLEProperties_Impl : public SwFrameProperties_Impl
 {
 public:
@@ -1133,6 +1143,8 @@ public:
 
     virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrameSet, SfxItemSet& rSet, bool& rSizeFound) override;
 };
+
+}
 
 bool SwOLEProperties_Impl::AnyToItemSet(
         SwDoc* pDoc, SfxItemSet& rFrameSet, SfxItemSet& rSet, bool& rSizeFound)

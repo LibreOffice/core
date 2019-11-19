@@ -67,6 +67,8 @@ using namespace ::com::sun::star;
 
 namespace dbaxml
 {
+    namespace {
+
     class ODBExportHelper
     {
     public:
@@ -85,6 +87,8 @@ namespace dbaxml
         static Sequence< OUString > getSupportedServiceNames_Static(  );
         static Reference< XInterface > Create(const Reference< css::lang::XMultiServiceFactory >&);
     };
+
+    }
 }
 
 extern "C" void createRegistryInfo_ODBFilterExport( )
@@ -165,6 +169,8 @@ namespace dbaxml
         }
     }
 
+    namespace {
+
     class OSpecialHandleXMLExportPropertyMapper : public SvXMLExportPropertyMapper
     {
     public:
@@ -184,6 +190,9 @@ namespace dbaxml
             // nothing to do here
         }
     };
+
+    }
+
 ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag)
 : SvXMLExport( util::MeasureUnit::MM_10TH, _rxContext, implementationName, XML_DATABASE,
         SvXMLExportFlags::OASIS | nExportFlag)

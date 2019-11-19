@@ -744,6 +744,8 @@ namespace osl_StreamPipe
     }
     // test read/write & send/recv data to pipe
 
+    namespace {
+
     class Pipe_DataSink_Thread : public Thread
     {
     public:
@@ -837,6 +839,8 @@ namespace osl_StreamPipe
                 }
             }
     };
+
+    }
 
     /** testing the method: read/write/send/recv and Pipe::accept
      */

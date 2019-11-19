@@ -1147,6 +1147,8 @@ namespace sdr
 {
     namespace contact
     {
+        namespace {
+
         class ObjectContactOfScDrawView final : public ObjectContactOfPageView
         {
         private:
@@ -1167,6 +1169,8 @@ namespace sdr
                 basegfx::B2DVector& rTarget,
                 const basegfx::B2DRange& rB2DRange) const override;
         };
+
+        }
 
         ObjectContactOfScDrawView::ObjectContactOfScDrawView(
             const ScDrawView& rScDrawView,

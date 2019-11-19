@@ -72,6 +72,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
+namespace {
+
 class SfxTerminateListener_Impl : public ::cppu::WeakImplHelper< XTerminateListener, XServiceInfo >
 {
 public:
@@ -86,6 +88,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& )
 {

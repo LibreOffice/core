@@ -28,6 +28,8 @@ using createFactoryFunc = uno::Reference<lang::XSingleServiceFactory> (*)(
     const OUString& rComponentName, ::cppu::ComponentInstantiation pCreateFunction,
     const uno::Sequence<OUString>& rServiceNames, rtl_ModuleCount*);
 
+namespace
+{
 struct ProviderRequest
 {
 private:
@@ -60,6 +62,7 @@ public:
 
     uno::XInterface* getProvider() const { return xRet.get(); }
 };
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT void*
 connectivity_writer_component_getFactory(const sal_Char* pImplementationName, void* pServiceManager,

@@ -93,6 +93,8 @@ void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
     }
 }
 
+namespace {
+
 class PopupCallback : public cppu::WeakImplHelper<css::awt::XCallback>
 {
     ScTabViewShell* m_pViewShell;
@@ -133,6 +135,8 @@ public:
         }
     }
 };
+
+}
 
 void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {

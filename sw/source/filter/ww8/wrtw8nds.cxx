@@ -169,6 +169,8 @@ MSWordAttrIter::~MSWordAttrIter()
     m_rExport.m_pChpIter = pOld;
 }
 
+namespace {
+
 class sortswflys
 {
 public:
@@ -177,6 +179,8 @@ public:
         return rOne.GetPosition() < rTwo.GetPosition();
     }
 };
+
+}
 
 void SwWW8AttrIter::IterToCurrent()
 {
@@ -1936,6 +1940,8 @@ bool MSWordExportBase::GetAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int3
     return ( !rArr.empty() );
 }
 
+namespace {
+
 class CompareMarksEnd
 {
 public:
@@ -1947,6 +1953,8 @@ public:
         return nOEnd < nTEnd;
     }
 };
+
+}
 
 bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nCurrentPos, bool bNextPositionOnly )
 {

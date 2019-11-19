@@ -206,6 +206,8 @@ protected:
 
 // XmlIdRegistryDocument ---------------------------------------------
 
+namespace {
+
 /** non-clipboard documents */
 class XmlIdRegistryDocument : public XmlIdRegistry
 {
@@ -248,6 +250,8 @@ private:
     struct XmlIdRegistry_Impl;
     ::std::unique_ptr<XmlIdRegistry_Impl> m_pImpl;
 };
+
+}
 
 // MetadatableUndo ---------------------------------------------------
 
@@ -300,6 +304,8 @@ public:
 
 // XmlIdRegistryClipboard --------------------------------------------
 
+namespace {
+
 class XmlIdRegistryClipboard : public XmlIdRegistry
 {
 
@@ -338,6 +344,7 @@ private:
     ::std::unique_ptr<XmlIdRegistry_Impl> m_pImpl;
 };
 
+}
 
 // XmlIdRegistry
 
@@ -422,6 +429,8 @@ typedef ::std::vector< Metadatable* > XmlIdVector_t;
 typedef std::unordered_map< OUString,
     ::std::pair< XmlIdVector_t, XmlIdVector_t > > XmlIdMap_t;
 
+namespace {
+
 /// pointer hash template
 template<typename T> struct PtrHash
 {
@@ -430,6 +439,8 @@ template<typename T> struct PtrHash
         return reinterpret_cast<size_t>(i_pT);
     }
 };
+
+}
 
 /// element -> (stream name, idref)
 typedef std::unordered_map< const Metadatable*,
@@ -876,6 +887,8 @@ XmlIdRegistryDocument::JoinMetadatables(
 
 // Clipboard XML ID Registry (_Impl)
 
+namespace {
+
 struct RMapEntry
 {
     RMapEntry() : m_xLink() { }
@@ -890,6 +903,8 @@ struct RMapEntry
     // this would have been an auto_ptr, if only that would have compiled...
     std::shared_ptr<MetadatableClipboard> m_xLink;
 };
+
+}
 
 /// element -> (stream name, idref, source)
 typedef std::unordered_map< const Metadatable*,

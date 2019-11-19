@@ -58,6 +58,8 @@ BreakIterator_Unicode::~BreakIterator_Unicode()
 {
 }
 
+namespace {
+
 /*
     Wrapper class to provide public access to the icu::RuleBasedBreakIterator's
     setbreakType method.
@@ -78,6 +80,8 @@ class OOoRuleBasedBreakIterator : public icu::RuleBasedBreakIterator
         { };
 
 };
+
+}
 
 // loading ICU breakiterator on demand.
 void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocale,

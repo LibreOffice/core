@@ -85,11 +85,15 @@ SalX11Display* X11SalInstance::CreateDisplay() const
 
 // AnyInput from sv/mow/source/app/svapp.cxx
 
+namespace {
+
 struct PredicateReturn
 {
     VclInputFlags nType;
     bool          bRet;
 };
+
+}
 
 extern "C" {
 static Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )

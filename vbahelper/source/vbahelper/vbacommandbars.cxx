@@ -31,6 +31,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
+namespace {
 
 class CommandBarEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
@@ -70,6 +71,8 @@ public:
             return nextElement();
     }
 };
+
+}
 
 ScVbaCommandBars::ScVbaCommandBars( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess, const uno::Reference< frame::XModel >& xModel ) : CommandBars_BASE( xParent, xContext, xIndexAccess )
 {

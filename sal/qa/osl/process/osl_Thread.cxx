@@ -48,6 +48,8 @@
 
 using namespace osl;
 
+namespace {
+
 // Small stopwatch
 class StopWatch {
     TimeValue t1,t2;                                // Start and stoptime
@@ -68,6 +70,8 @@ public:
     double getSeconds() const;
     double getTenthSec() const;
 };
+
+}
 
 // ================================= Stop Watch =================================
 
@@ -145,6 +149,8 @@ double StopWatch::getTenthSec() const
     return nValue ;
 }
 
+namespace {
+
 template <class T>
 class ThreadSafeValue
 {
@@ -167,6 +173,8 @@ public:
     void acquire() {m_aMutex.acquire();}
     void release() {m_aMutex.release();}
 };
+
+}
 
 namespace ThreadHelper
 {
@@ -204,6 +212,8 @@ namespace ThreadHelper
         }
     }
 }
+
+namespace {
 
 /** Simple thread for testing Thread-create.
 
@@ -392,6 +402,8 @@ public:
         }
 
 };
+
+}
 
 namespace osl_Thread
 {
@@ -1671,6 +1683,8 @@ static void destroyCallback(void * data)
 
 static ThreadData myThreadData(destroyCallback);
 
+namespace {
+
 class myKeyThread : public Thread
 {
 public:
@@ -1708,7 +1722,11 @@ public:
         }
 };
 
+}
+
 static ThreadData idData;
+
+namespace {
 
 class idThread: public Thread
 {
@@ -1734,6 +1752,8 @@ public:
             }
         }
 };
+
+}
 
 namespace osl_ThreadData
 {

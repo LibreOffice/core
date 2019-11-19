@@ -62,6 +62,8 @@ typedef ::cppu::WeakImplHelper< container::XEnumerationAccess
     , css::container::XNameAccess
     > SelectedSheets_BASE;
 
+namespace {
+
 class SelectedSheetsEnum : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
 public:
@@ -181,6 +183,8 @@ public:
     }
 
 };
+
+}
 
 ScVbaWindow::ScVbaWindow(
         const uno::Reference< XHelperInterface >& xParent,

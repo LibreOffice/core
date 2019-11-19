@@ -146,9 +146,6 @@ OUString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
 
 #endif
 
-} // namespace
-
-
 class SfxModelListener_Impl : public ::cppu::WeakImplHelper< css::util::XCloseListener >
 {
     SfxObjectShell* mpDoc;
@@ -159,6 +156,8 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override ;
 
 };
+
+} // namespace
 
 void SAL_CALL SfxModelListener_Impl::queryClosing( const css::lang::EventObject& , sal_Bool )
 {
@@ -513,6 +512,7 @@ bool SfxObjectShell::IsInPrepareClose() const
     return pImpl->bInPrepareClose;
 }
 
+namespace {
 
 struct BoolEnv_Impl
 {
@@ -522,6 +522,7 @@ struct BoolEnv_Impl
     ~BoolEnv_Impl() { rImpl.bInPrepareClose = false; }
 };
 
+}
 
 bool SfxObjectShell::PrepareClose
 (

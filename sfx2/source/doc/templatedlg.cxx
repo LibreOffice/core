@@ -89,6 +89,8 @@ static bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
 
 static std::vector<OUString> lcl_getAllFactoryURLs ();
 
+namespace {
+
 class SearchView_Keyword
 {
 public:
@@ -136,6 +138,8 @@ private:
     OUString const maKeyword;
     FILTER_APPLICATION const meApp;
 };
+
+}
 
 /***
  *

@@ -36,6 +36,7 @@ namespace factory {
 typedef ::cppu::WeakComponentImplHelper<
     deployment::XPackageManagerFactory > t_pmfac_helper;
 
+namespace {
 
 class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
 {
@@ -63,6 +64,7 @@ public:
         OUString const & context ) override;
 };
 
+}
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<PackageManagerFactoryImpl> const servicePMFI;

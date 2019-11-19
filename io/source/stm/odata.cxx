@@ -49,6 +49,8 @@ using namespace ::com::sun::star::lang;
 
 namespace io_stm {
 
+namespace {
+
 class ODataInputStream :
     public WeakImplHelper <
                               XDataInputStream,
@@ -105,6 +107,8 @@ protected:
     Reference < XInputStream >  m_input;
     bool m_bValidStream;
 };
+
+}
 
 // XInputStream
 sal_Int32 ODataInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
@@ -428,6 +432,7 @@ Sequence<OUString> ODataInputStream_getSupportedServiceNames()
     return aRet;
 }
 
+namespace {
 
 class ODataOutputStream :
     public WeakImplHelper <
@@ -479,6 +484,8 @@ protected:
     Reference<  XOutputStream > m_output;
     bool m_bValidStream;
 };
+
+}
 
 // XOutputStream
 void ODataOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
@@ -732,6 +739,7 @@ Sequence<OUString> ODataOutputStream_getSupportedServiceNames()
     return aRet;
 }
 
+namespace {
 
 struct equalObjectContainer_Impl
 {
@@ -751,6 +759,8 @@ struct hashObjectContainer_Impl
     }
 };
 
+}
+
 typedef std::unordered_map
 <
     Reference< XInterface >,
@@ -758,6 +768,8 @@ typedef std::unordered_map
     hashObjectContainer_Impl,
     equalObjectContainer_Impl
 > ObjectContainer_Impl;
+
+namespace {
 
 class OObjectOutputStream:
     public ImplInheritanceHelper<
@@ -826,6 +838,8 @@ private:
     Reference< XMarkableStream >        m_rMarkable;
     bool                            m_bValidMarkable;
 };
+
+}
 
 void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj )
 {
@@ -998,6 +1012,8 @@ Sequence< OUString > OObjectOutputStream::getSupportedServiceNames()
     return OObjectOutputStream_getSupportedServiceNames();
 }
 
+namespace {
+
 class OObjectInputStream:
     public ImplInheritanceHelper<
         ODataInputStream, /* parent */
@@ -1072,6 +1088,8 @@ private:
     vector < Reference<  XPersistObject > > m_aPersistVector;
 
 };
+
+}
 
 Reference< XPersistObject >  OObjectInputStream::readObject()
 {

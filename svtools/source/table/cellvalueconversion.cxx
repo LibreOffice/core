@@ -74,11 +74,12 @@ namespace svt
         {
             return tools::Time( i_hours, i_minutes, i_seconds, i_100thSeconds ).GetTimeInDays();
         }
-    }
-
 
     //= CellValueConversion_Data
     class StandardFormatNormalizer;
+
+    }
+
     struct CellValueConversion_Data
     {
         typedef std::unordered_map< OUString, std::shared_ptr< StandardFormatNormalizer > >    NormalizerCache;
@@ -97,6 +98,8 @@ namespace svt
 
 
     //= StandardFormatNormalizer
+
+    namespace {
 
     class StandardFormatNormalizer
     {
@@ -284,9 +287,6 @@ namespace svt
 
 
     //= operations
-
-    namespace
-    {
 
         bool lcl_ensureNumberFormatter( CellValueConversion_Data & io_data )
         {

@@ -55,8 +55,12 @@ static void VECT_PROGRESS( const Link<long, void>* pProgress, long _def_nVal )
       pProgress->Call(_def_nVal);
 }
 
+namespace {
+
 class ImplVectMap;
 class ImplChain;
+
+}
 
 namespace ImplVectorizer
 {
@@ -67,7 +71,11 @@ namespace ImplVectorizer
     static void     ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
 }
 
+namespace {
+
 struct ChainMove { long nDX; long nDY; };
+
+}
 
 static const ChainMove aImplMove[ 8 ] =   {
                                         { 1, 0 },
@@ -102,12 +110,16 @@ static const ChainMove aImplMoveOuter[ 8 ] =  {
                                             { 0, -1 }
                                         };
 
+namespace {
+
 struct ImplColorSet
 {
     BitmapColor maColor;
     sal_uInt16      mnIndex = 0;
     bool        mbSet = false;
 };
+
+}
 
 static bool ImplColorSetCmpFnc( const ImplColorSet& lhs, const ImplColorSet& rhs)
 {
@@ -119,6 +131,8 @@ static bool ImplColorSetCmpFnc( const ImplColorSet& lhs, const ImplColorSet& rhs
     }
     return lhs.mbSet < rhs.mbSet;
 }
+
+namespace {
 
 class ImplPointArray
 {
@@ -139,6 +153,8 @@ public:
     inline const Point& operator[]( sal_uLong nPos ) const;
 
 };
+
+}
 
 ImplPointArray::ImplPointArray() :
     mnSize      ( 0 ),
@@ -174,6 +190,8 @@ void ImplPointArray::ImplCreatePoly( tools::Polygon& rPoly ) const
     rPoly = tools::Polygon( sal::static_int_cast<sal_uInt16>(mnRealSize), mpArray.get() );
 }
 
+namespace {
+
 class ImplVectMap
 {
 private:
@@ -199,6 +217,8 @@ public:
     inline bool     IsDone( long nY, long nX ) const;
 
 };
+
+}
 
 ImplVectMap::ImplVectMap( long nWidth, long nHeight ) :
     mpBuf ( static_cast<Scanline>(rtl_allocateZeroMemory(nWidth * nHeight)) ),
@@ -246,6 +266,8 @@ inline bool ImplVectMap::IsDone( long nY, long nX ) const
     return( VECT_DONE_INDEX == Get( nY, nX ) );
 }
 
+namespace {
+
 class ImplChain
 {
 private:
@@ -274,6 +296,8 @@ public:
 
     const tools::Polygon& ImplGetPoly() const { return maPoly; }
 };
+
+}
 
 ImplChain::ImplChain() :
     mnArraySize ( 1024 ),

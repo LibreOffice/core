@@ -684,11 +684,15 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
     }
 }
 
+namespace {
+
 struct ButtonOrder
 {
     const char* m_aType;
     int const m_nPriority;
 };
+
+}
 
 static int getButtonPriority(const OString &rType)
 {
@@ -733,6 +737,8 @@ static int getButtonPriority(const OString &rType)
     return -1;
 }
 
+namespace {
+
 class sortButtons
 {
     bool const m_bVerticalContainer;
@@ -743,6 +749,8 @@ public:
     }
     bool operator()(const vcl::Window *pA, const vcl::Window *pB) const;
 };
+
+}
 
 bool sortButtons::operator()(const vcl::Window *pA, const vcl::Window *pB) const
 {
@@ -791,6 +799,8 @@ void VclButtonBox::sort_native_button_order()
     BuilderUtils::reorderWithinParent(aChilds, true);
 }
 
+namespace {
+
 struct GridEntry
 {
     VclPtr<vcl::Window> pChild;
@@ -807,6 +817,8 @@ struct GridEntry
     {
     }
 };
+
+}
 
 typedef boost::multi_array<GridEntry, 2> array_type;
 

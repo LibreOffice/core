@@ -67,6 +67,8 @@ namespace toolkit
 
     //= AnimatedImagesPeer_Data
 
+    namespace {
+
     struct CachedImage
     {
         OUString                 sImageURL;
@@ -84,6 +86,8 @@ namespace toolkit
         {
         }
     };
+
+    }
 
     struct AnimatedImagesPeer_Data
     {

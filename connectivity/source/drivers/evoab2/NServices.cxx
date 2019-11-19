@@ -37,6 +37,7 @@ typedef Reference< XSingleServiceFactory > (*createFactoryFunc)
             rtl_ModuleCount*
         );
 
+namespace {
 
 struct ProviderRequest
 {
@@ -77,6 +78,7 @@ struct ProviderRequest
     void* getProvider() const { return xRet.get(); }
 };
 
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* evoab2_component_getFactory(
                     const sal_Char* pImplementationName,

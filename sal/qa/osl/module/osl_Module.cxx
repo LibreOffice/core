@@ -44,6 +44,7 @@ static OUString getDllURL()
 
 namespace osl_Module
 {
+    namespace {
 
     /** class and member function that is available for module test :
     */
@@ -56,6 +57,8 @@ namespace osl_Module
             printf("#Sun Microsystem\n");
         };
     };
+
+    }
 
     /** testing the methods:
         Module();

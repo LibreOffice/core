@@ -16,6 +16,8 @@
 
 using namespace oox;
 
+namespace {
+
 /** (So far) dummy implementation of table export for BIFF5/BIFF7. */
 class XclExpTablesImpl5 : public XclExpTables
 {
@@ -36,6 +38,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
+}
 
 XclExpTablesImpl5::XclExpTablesImpl5( const XclExpRoot& rRoot ) :
     XclExpTables( rRoot )

@@ -72,6 +72,8 @@ static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
     return xRes;
 }
 
+namespace {
+
 //! Dummy implementation in order to avoid loading of lingu DLL
 //! when only the XSupportedLocales interface is used.
 //! The dummy accesses the real implementation (and thus loading the DLL)
@@ -103,6 +105,7 @@ public:
                 const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
 
+}
 
 void ThesDummy_Impl::GetCfgLocales()
 {
@@ -186,6 +189,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
     return aRes;
 }
 
+namespace {
 
 //! Dummy implementation in order to avoid loading of lingu DLL.
 //! The dummy accesses the real implementation (and thus loading the DLL)
@@ -214,6 +218,7 @@ public:
                 const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
 
+}
 
 void SpellDummy_Impl::GetSpell_Impl()
 {
@@ -270,6 +275,7 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
     return xRes;
 }
 
+namespace {
 
 //! Dummy implementation in order to avoid loading of lingu DLL.
 //! The dummy accesses the real implementation (and thus loading the DLL)
@@ -311,6 +317,7 @@ public:
                 const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
 
+}
 
 void HyphDummy_Impl::GetHyph_Impl()
 {

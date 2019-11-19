@@ -1694,6 +1694,8 @@ void SectionPropertyMap::ClearHeaderFooterLinkToPrevious( bool bHeader, PageType
     }
 }
 
+namespace {
+
 class NamedPropertyValue
 {
 private:
@@ -1710,6 +1712,8 @@ public:
         return aVal.Name == m_aName;
     }
 };
+
+}
 
 void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropertySet >& xStyle )
 {

@@ -766,6 +766,8 @@ OUString SwCustomizeAddressBlockDialog::GetAddress() const
     return sAddress;
 }
 
+namespace {
+
 struct SwAssignFragment
 {
     std::unique_ptr<weld::Builder> m_xBuilder;
@@ -789,6 +791,8 @@ struct SwAssignFragment
         m_xPreview->set_grid_top_attach(nLine);
     }
 };
+
+}
 
 class SwAssignFieldsControl
 {

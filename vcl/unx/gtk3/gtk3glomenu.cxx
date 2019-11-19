@@ -32,11 +32,15 @@ G_DEFINE_TYPE (GLOMenu, g_lo_menu, G_TYPE_MENU_MODEL);
 #pragma GCC diagnostic pop
 #endif
 
+namespace {
+
 struct item
 {
     GHashTable*     attributes;     // Item attributes.
     GHashTable*     links;          // Item links.
 };
+
+}
 
 static void
 g_lo_menu_struct_item_init (struct item *menu_item)

@@ -55,6 +55,8 @@ namespace sdbtools
     namespace CommandType = ::com::sun::star::sdb::CommandType;
     namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
+    namespace {
+
     // INameValidation
     class INameValidation
     {
@@ -64,7 +66,12 @@ namespace sdbtools
 
         virtual ~INameValidation() { }
     };
+
+    }
+
     typedef std::shared_ptr< INameValidation >   PNameValidation;
+
+    namespace {
 
     // PlainExistenceCheck
     class PlainExistenceCheck : public INameValidation
@@ -262,6 +269,8 @@ namespace sdbtools
     private:
         static  void    verifyCommandType( sal_Int32 _nCommandType );
     };
+
+    }
 
     void NameCheckFactory::verifyCommandType( sal_Int32 _nCommandType )
     {

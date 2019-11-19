@@ -163,6 +163,8 @@ static OUString ConstructTempDir_Impl( const OUString* pParent )
     return aName;
 }
 
+namespace {
+
 class Tokens {
 public:
     virtual bool next(OUString *) = 0;
@@ -225,6 +227,8 @@ private:
 
     sal_uInt32 m_count;
 };
+
+}
 
 sal_uInt32 UniqueTokens::globalValue = SAL_MAX_UINT32;
 

@@ -81,11 +81,15 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
     }
 }
 
+namespace {
+
 struct ToolboxStyleItem
 {
     sal_Int16 nBit;
     const char* attrName;
 };
+
+}
 
 const ToolboxStyleItem Styles[ ] = {
     { css::ui::ItemStyle::RADIO_CHECK,   ATTRIBUTE_ITEMSTYLE_RADIO },
@@ -100,11 +104,15 @@ const ToolboxStyleItem Styles[ ] = {
 
 sal_Int32 const nStyleItemEntries = SAL_N_ELEMENTS(Styles);
 
+namespace {
+
 struct ToolBarEntryProperty
 {
     OReadToolBoxDocumentHandler::ToolBox_XML_Namespace  nNamespace;
     char                                                aEntryName[20];
 };
+
+}
 
 ToolBarEntryProperty const ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_COUNT] =
 {

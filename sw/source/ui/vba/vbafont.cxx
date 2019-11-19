@@ -32,11 +32,15 @@ using namespace ::com::sun::star;
 const uno::Any aLongAnyTrue( sal_Int16(-1) );
 const uno::Any aLongAnyFalse( sal_Int16( 0 ) );
 
+namespace {
+
 struct MapPair
 {
     sal_Int32 nMSOConst;
     sal_Int32 nOOOConst;
 };
+
+}
 
 static MapPair const UnderLineTable[] = {
         { word::WdUnderline::wdUnderlineNone, css::awt::FontUnderline::NONE },
@@ -60,6 +64,9 @@ static MapPair const UnderLineTable[] = {
 };
 
 typedef std::unordered_map< sal_Int32, sal_Int32 > ConstToConst;
+
+namespace {
+
 class UnderLineMapper
 {
     ConstToConst MSO2OOO;
@@ -102,6 +109,8 @@ public:
         return it->second;
     }
 };
+
+}
 
 SwVbaFont::SwVbaFont( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xPalette, uno::Reference< css::beans::XPropertySet > const & xPropertySet ) : SwVbaFont_BASE( xParent, xContext, xPalette, xPropertySet )
 {

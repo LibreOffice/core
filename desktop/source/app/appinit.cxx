@@ -175,6 +175,8 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
     }
 }
 
+namespace {
+
 class enable
 {
     private:
@@ -189,6 +191,8 @@ class enable
         }
     }
 };
+
+}
 
 // enable acceptors
 IMPL_STATIC_LINK_NOARG(Desktop, EnableAcceptors_Impl, void*, void)

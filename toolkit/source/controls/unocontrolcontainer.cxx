@@ -40,6 +40,8 @@ using namespace ::com::sun::star;
 
 //  class UnoControlHolder
 
+namespace {
+
 struct UnoControlHolder
 {
     uno::Reference< awt::XControl > mxControl;
@@ -55,6 +57,8 @@ public:
     const OUString&                   getName() const { return msName; }
     const uno::Reference< awt::XControl >&   getControl() const { return mxControl; }
 };
+
+}
 
 class UnoControlHolderList
 {
@@ -324,6 +328,8 @@ static void implUpdateVisibility
 
 typedef ::cppu::WeakImplHelper< beans::XPropertyChangeListener > PropertyChangeListenerHelper;
 
+namespace {
+
 class DialogStepChangedListener: public PropertyChangeListenerHelper
 {
 private:
@@ -340,6 +346,8 @@ public:
     virtual void SAL_CALL propertyChange( const  beans::PropertyChangeEvent& evt ) override;
 
 };
+
+}
 
 void SAL_CALL DialogStepChangedListener::disposing( const  lang::EventObject& /*_rSource*/)
 {

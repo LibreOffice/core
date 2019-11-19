@@ -77,11 +77,15 @@ public:
 
 using namespace vcl_sal;
 
+namespace {
+
 struct WMAdaptorProtocol
 {
     const char* pProtocol;
     int             nProtocol;
 };
+
+}
 
 /*
  *  table must be sorted ascending in strings

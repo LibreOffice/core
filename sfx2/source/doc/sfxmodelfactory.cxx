@@ -57,6 +57,9 @@ namespace sfx2
     typedef ::cppu::WeakImplHelper <   XSingleServiceFactory
                                     ,   XServiceInfo
                                     >   SfxModelFactory_Base;
+
+    namespace {
+
     /** implements a XSingleServiceFactory which can be used to created instances
         of classes derived from SfxBaseModel
 
@@ -93,6 +96,7 @@ namespace sfx2
         const SfxModelFactoryFunc                   m_pComponentFactoryFunc;
     };
 
+    }
 
     //= SfxModelFactory - implementation
 

@@ -32,11 +32,15 @@ static ::osl::Mutex& getHashMapMutex()
     return s_aHashMapProtection;
 }
 
+namespace {
+
 struct TokenTable
 {
     const char*                         pS;
     PPPOptimizerTokenEnum const         pE;
 };
+
+}
 
 static const TokenTable pTokenTableArray[] =
 {

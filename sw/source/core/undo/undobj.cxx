@@ -187,6 +187,8 @@ SwUndo::~SwUndo()
 {
 }
 
+namespace {
+
 class UndoRedoRedlineGuard
 {
 public:
@@ -209,6 +211,8 @@ private:
     IDocumentRedlineAccess & m_rRedlineAccess;
     RedlineFlags const m_eMode;
 };
+
+}
 
 void SwUndo::Undo()
 {

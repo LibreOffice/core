@@ -140,12 +140,16 @@ oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 
 #endif
 
+namespace {
+
 struct CommandArgs_Impl
 {
     pthread_mutex_t m_mutex;
     sal_uInt32      m_nCount;
     rtl_uString **  m_ppArgs;
 };
+
+}
 
 static struct CommandArgs_Impl g_command_args =
 {
@@ -409,11 +413,15 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
     return result;
 }
 
+namespace {
+
 struct ProcessLocale_Impl
 {
     pthread_mutex_t m_mutex;
     rtl_Locale *    m_pLocale;
 };
+
+}
 
 static struct ProcessLocale_Impl g_process_locale =
 {

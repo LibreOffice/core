@@ -64,6 +64,8 @@ using namespace ::com::sun::star::uno;
 
 // -----------------------------field-types------------------------------
 
+namespace {
+
 struct StackMember
 {
     struct      StackMember * pSucc;
@@ -230,6 +232,8 @@ public:
     bool            WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* );
     PSWriter();
 };
+
+}
 
 //========================== methods from PSWriter ==========================
 

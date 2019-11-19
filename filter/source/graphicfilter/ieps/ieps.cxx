@@ -269,12 +269,16 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     return bRet;
 }
 
+namespace {
+
 struct WriteData
 {
     oslFileHandle   m_pFile;
     const sal_uInt8 *m_pBuf;
     sal_uInt32      m_nBytesToWrite;
 };
+
+}
 
 extern "C" {
 

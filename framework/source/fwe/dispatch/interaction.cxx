@@ -26,6 +26,8 @@ using namespace ::com::sun::star;
 
 namespace framework{
 
+namespace {
+
 /*-************************************************************************************************************
     @short          declaration of special continuation for filter selection
     @descr          Sometimes filter detection during loading document failed. Then we need a possibility
@@ -62,6 +64,8 @@ class ContinuationFilterSelect : public comphelper::OInteraction< css::document:
         OUString m_sFilter;
 
 };  // class ContinuationFilterSelect
+
+}
 
 // initialize continuation with right start values
 
@@ -180,6 +184,8 @@ uno::Reference < task::XInteractionRequest > RequestFilterSelect::GetRequest()
     return mxImpl.get();
 }
 
+namespace {
+
 class InteractionRequest_Impl : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
     uno::Any m_aRequest;
@@ -196,6 +202,8 @@ public:
     virtual uno::Any SAL_CALL getRequest() override;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 };
+
+}
 
 uno::Any SAL_CALL InteractionRequest_Impl::getRequest()
 {

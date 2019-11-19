@@ -300,6 +300,8 @@ guint GtkSalFrame::GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, gu
     return updated_keyval;
 }
 
+namespace {
+
 // F10 means either KEY_F10 or KEY_MENU, which has to be decided
 // in the independent part.
 struct KeyAlternate
@@ -309,6 +311,8 @@ struct KeyAlternate
     KeyAlternate() : nKeyCode( 0 ), nCharCode( 0 ) {}
     KeyAlternate( sal_uInt16 nKey, sal_Unicode nChar = 0 ) : nKeyCode( nKey ), nCharCode( nChar ) {}
 };
+
+}
 
 static KeyAlternate
 GetAlternateKeyCode( const sal_uInt16 nKeyCode )
@@ -3289,6 +3293,8 @@ namespace
 static bool g_DropSuccessSet = false;
 static bool g_DropSuccess = false;
 
+namespace {
+
 class GtkDropTargetDropContext : public cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
 {
     GdkDragContext *m_pContext;
@@ -3321,6 +3327,8 @@ public:
         }
     }
 };
+
+}
 
 class GtkDnDTransferable : public GtkTransferable
 {
@@ -3467,6 +3475,7 @@ gboolean GtkDropTarget::signalDragDrop(GtkWidget* pWidget, GdkDragContext* conte
     return true;
 }
 
+namespace {
 
 class GtkDropTargetDragContext : public cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDragContext>
 {
@@ -3489,6 +3498,8 @@ public:
         gdk_drag_status(m_pContext, static_cast<GdkDragAction>(0), m_nTime);
     }
 };
+
+}
 
 void GtkSalFrame::signalDragDropReceived(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, GtkSelectionData* data, guint ttype, guint time, gpointer frame)
 {

@@ -62,6 +62,7 @@ using namespace osl;
 namespace comphelper
 {
 
+namespace {
 
 struct AttachedObject_Impl
 {
@@ -149,6 +150,7 @@ public:
     virtual void SAL_CALL disposing(const EventObject& Source) override;
 };
 
+}
 
 AttacherAllListener_Impl::AttacherAllListener_Impl
 (

@@ -161,6 +161,8 @@ static const char* pDictEscs[] = {
     "nFDArray",             "nFDSelect",        "sFontName"
 };
 
+namespace {
+
 struct TYPE1OP
 {
     enum OPS
@@ -344,6 +346,8 @@ private:
 
     ValType maCharWidth;
 };
+
+}
 
 CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     : mpBasePtr( pBasePtr)
@@ -1575,6 +1579,8 @@ const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
     return pGlyphName;
 }
 
+namespace {
+
 class Type1Emitter
 {
 public:
@@ -1600,6 +1606,8 @@ public:
     bool const  mbPfbSubset;
     int         mnHexLineCol;
 };
+
+}
 
 Type1Emitter::Type1Emitter( FILE* pOutFile, bool bPfbSubset)
 :   mpFileOut( pOutFile)

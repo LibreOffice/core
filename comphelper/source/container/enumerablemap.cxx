@@ -76,9 +76,16 @@ namespace comphelper
     using ::com::sun::star::uno::TypeDescription;
     using ::com::sun::star::lang::DisposedException;
 
+    namespace {
+
     class MapEnumerator;
 
+    }
+
     typedef std::map< Any, Any, LessPredicateAdapter > KeyedValues;
+
+    namespace {
+
     struct MapData
     {
         Type                                        m_aKeyType;
@@ -106,6 +113,7 @@ namespace comphelper
         MapData& operator=( const MapData& _source ) = delete;
     };
 
+    }
 
     static void lcl_registerMapModificationListener( MapData& _mapData, MapEnumerator& _listener )
     {
@@ -140,6 +148,8 @@ namespace comphelper
                                                 ,   XEnumerableMap
                                                 ,   XServiceInfo
                                                 > Map_IFace;
+
+    namespace {
 
     class EnumerableMap: public Map_IFace, public ComponentBase
     {
@@ -194,14 +204,10 @@ namespace comphelper
         MapData             m_aData;
     };
 
-    namespace {
-
     enum EnumerationType
     {
         eKeys, eValues, eBoth
     };
-
-    }
 
     class MapEnumerator final
     {
@@ -249,6 +255,8 @@ namespace comphelper
         bool                        m_disposed;
     };
 
+    }
+
     static void lcl_notifyMapDataListeners_nothrow( const MapData& _mapData )
     {
         for ( MapEnumerator* loop : _mapData.m_aModListeners )
@@ -259,6 +267,9 @@ namespace comphelper
 
     typedef ::cppu::WeakImplHelper <   XEnumeration
                                    >   MapEnumeration_Base;
+
+    namespace {
+
     class MapEnumeration :public ComponentBase
                          ,public MapEnumeration_Base
     {
@@ -294,6 +305,7 @@ namespace comphelper
         MapEnumerator               m_aEnumerator;
     };
 
+    }
 
     EnumerableMap::EnumerableMap()
         :Map_IFace( m_aMutex )

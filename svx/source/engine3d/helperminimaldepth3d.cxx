@@ -34,6 +34,8 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        namespace {
+
         class MinimalDephInViewExtractor : public BaseProcessor3D
         {
         private:
@@ -53,6 +55,8 @@ namespace drawinglayer
             // data access
             double getMinimalDepth() const { return mfMinimalDepth; }
         };
+
+        }
 
         void MinimalDephInViewExtractor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
         {

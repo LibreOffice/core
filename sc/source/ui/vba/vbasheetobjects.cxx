@@ -267,6 +267,8 @@ void ScVbaObjectContainer::implOnShapeCreated( const uno::Reference< drawing::XS
 {
 }
 
+namespace {
+
 class ScVbaObjectEnumeration : public SimpleEnumerationBase
 {
 public:
@@ -276,6 +278,8 @@ public:
 private:
     ScVbaObjectContainerRef mxContainer;
 };
+
+}
 
 ScVbaObjectEnumeration::ScVbaObjectEnumeration( const ScVbaObjectContainerRef& rxContainer ) :
     SimpleEnumerationBase( rxContainer.get() ),
@@ -362,6 +366,8 @@ uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno
 
 // Drawing controls
 
+namespace {
+
 class ScVbaControlContainer : public ScVbaObjectContainer
 {
 public:
@@ -390,6 +396,8 @@ protected:
     OUString const maModelServiceName;
     sal_Int16 /* css::form::FormComponentType */ meType;
 };
+
+}
 
 ScVbaControlContainer::ScVbaControlContainer(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -475,6 +483,8 @@ void ScVbaControlContainer::implOnShapeCreated( const uno::Reference< drawing::X
 
 // Push button
 
+namespace {
+
 class ScVbaButtonContainer : public ScVbaControlContainer
 {
     bool mbOptionButtons;
@@ -491,6 +501,8 @@ protected:
     virtual ScVbaSheetObjectBase* implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) override;
     virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const override;
 };
+
+}
 
 ScVbaButtonContainer::ScVbaButtonContainer(
         const uno::Reference< XHelperInterface >& rxParent,

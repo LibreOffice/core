@@ -1768,6 +1768,8 @@ ScHTMLTable* ScHTMLTableMap::CreateTable( const HtmlImportInfo& rInfo, bool bPre
     return pTable;
 }
 
+namespace {
+
 /** Simplified forward iterator for convenience.
 
     Before the iterator can be dereferenced, it must be tested with the is()
@@ -1790,6 +1792,8 @@ private:
     ScHTMLTableMap::const_iterator maEnd;
     const ScHTMLTableMap* mpTableMap;
 };
+
+}
 
 ScHTMLTableIterator::ScHTMLTableIterator( const ScHTMLTableMap* pTableMap ) :
     mpTableMap(pTableMap)

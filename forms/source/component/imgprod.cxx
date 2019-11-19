@@ -34,6 +34,7 @@
 #include <svtools/imageresourceaccess.hxx>
 #include <comphelper/processfactory.hxx>
 
+namespace {
 
 class ImgProdLockBytes : public SvLockBytes
 {
@@ -52,6 +53,7 @@ public:
     virtual ErrCode     Stat( SvLockBytesStat* ) const override;
 };
 
+}
 
 ImgProdLockBytes::ImgProdLockBytes( SvStream* pStm, bool bOwner ) :
         SvLockBytes( pStm, bOwner )

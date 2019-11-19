@@ -47,6 +47,8 @@ using namespace ::com::sun::star::beans;
 
 #define PROPERTYNAME_CMD                                "Command"
 
+namespace {
+
 /*-****************************************************************************************************************
     @descr  support simple command option structures and operations on it
 ****************************************************************************************************************-*/
@@ -82,6 +84,8 @@ class SvtCmdOptions
 
         CommandHashMap m_aCommandHashMap;
 };
+
+}
 
 typedef ::std::vector< css::uno::WeakReference< css::frame::XFrame > > SvtFrameVector;
 

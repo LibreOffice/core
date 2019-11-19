@@ -50,6 +50,9 @@ namespace logging
     typedef ::cppu::WeakComponentImplHelper    <   XConsoleHandler
                                                 ,   XServiceInfo
                                                 >   ConsoleHandler_Base;
+
+    namespace {
+
     class ConsoleHandler    :public ::cppu::BaseMutex
                             ,public ConsoleHandler_Base
     {
@@ -90,6 +93,8 @@ namespace logging
         void    enterMethod( MethodGuard::Access );
         void    leaveMethod( MethodGuard::Access );
     };
+
+    }
 
     ConsoleHandler::ConsoleHandler(const Reference<XComponentContext> &context,
             const css::uno::Sequence<css::uno::Any> &arguments)

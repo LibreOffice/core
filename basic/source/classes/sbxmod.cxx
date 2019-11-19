@@ -83,6 +83,8 @@ using namespace com::sun::star::uno;
 typedef ::cppu::WeakImplHelper< XInvocation > DocObjectWrapper_BASE;
 typedef std::map< sal_Int16, Any > OutParamMap;
 
+namespace {
+
 class DocObjectWrapper : public DocObjectWrapper_BASE
 {
     Reference< XAggregation >  m_xAggProxy;
@@ -114,6 +116,8 @@ public:
 
     virtual Sequence< Type > SAL_CALL getTypes() override;
 };
+
+}
 
 DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar )
 {
@@ -1674,6 +1678,8 @@ bool SbModule::ExceedsLegacyModuleSize()
     return pImage && pImage->ExceedsLegacyLimits();
 }
 
+namespace {
+
 class ErrorHdlResetter
 {
     Link<StarBASIC*,bool> mErrHandler;
@@ -1694,6 +1700,8 @@ public:
     DECL_LINK( BasicErrorHdl, StarBASIC *, bool );
     bool HasError() const { return mbError; }
 };
+
+}
 
 IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
 {

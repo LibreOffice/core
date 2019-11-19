@@ -25,6 +25,8 @@
 
 class SwDocShell;
 
+namespace {
+
 struct SwProgress
 {
     long nStartValue,
@@ -32,6 +34,8 @@ struct SwProgress
     SwDocShell  *pDocShell;
     std::unique_ptr<SfxProgress> pProgress;
 };
+
+}
 
 static std::vector<std::unique_ptr<SwProgress>> *pProgressContainer = nullptr;
 

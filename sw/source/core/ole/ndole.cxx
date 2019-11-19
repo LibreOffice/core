@@ -64,6 +64,8 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
+namespace {
+
 class SwOLELRUCache
     : private utl::ConfigItem
 {
@@ -85,6 +87,8 @@ public:
     void InsertObj( SwOLEObj& rObj );
     void RemoveObj( SwOLEObj& rObj );
 };
+
+}
 
 static std::shared_ptr<SwOLELRUCache> g_pOLELRU_Cache;
 

@@ -83,6 +83,8 @@ namespace document = ::com::sun::star::document;
 namespace desktop
 {
 
+namespace {
+
 struct DispatchHolder
 {
     DispatchHolder( const URL& rURL, Reference< XDispatch > const & rDispatch ) :
@@ -91,9 +93,6 @@ struct DispatchHolder
     URL aURL;
     Reference< XDispatch > xDispatch;
 };
-
-namespace
-{
 
 std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( const OUString& rUrl, const OUString& rFactory )
 {

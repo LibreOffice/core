@@ -28,6 +28,9 @@ namespace pyuno
 {
 
 static bool g_destructorsOfStaticObjectsHaveBeenCalled;
+
+namespace {
+
 class StaticDestructorGuard
 {
 public:
@@ -36,6 +39,9 @@ public:
         g_destructorsOfStaticObjectsHaveBeenCalled = true;
     }
 };
+
+}
+
 static StaticDestructorGuard guard;
 
 static bool isAfterUnloadOrPy_Finalize()
@@ -43,6 +49,8 @@ static bool isAfterUnloadOrPy_Finalize()
     return g_destructorsOfStaticObjectsHaveBeenCalled ||
         !Py_IsInitialized();
 }
+
+namespace {
 
 class GCThread: public salhelper::Thread {
 public:
@@ -56,6 +64,8 @@ private:
     PyObject *mPyObject;
     PyInterpreterState *mPyInterpreter;
 };
+
+}
 
 GCThread::GCThread( PyInterpreterState *interpreter, PyObject * object ) :
     Thread( "pyunoGCThread" ), mPyObject( object ),

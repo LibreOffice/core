@@ -28,6 +28,7 @@
 
 #include <rtl/math.hxx>
 
+namespace {
 
 struct tolerance
 {
@@ -95,6 +96,7 @@ private:
     std::string fileName;
 };
 
+}
 
 XMLDiff::XMLDiff( const char* pFileName, const char* pContent, int size, const char* pToleranceFile)
     : xmlFile1(xmlParseFile(pFileName))

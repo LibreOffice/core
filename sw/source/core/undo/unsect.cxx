@@ -414,6 +414,8 @@ void SwUndoDelSection::RedoImpl(::sw::UndoRedoContext & rContext)
     rDoc.DelSectionFormat( pNd->GetSection().GetFormat() );
 }
 
+namespace {
+
 class SwUndoUpdateSection
     : public SwUndo
 {
@@ -430,6 +432,8 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
+
+}
 
 std::unique_ptr<SwUndo>
 MakeUndoUpdateSection(SwSectionFormat const& rFormat, bool const bOnlyAttr)

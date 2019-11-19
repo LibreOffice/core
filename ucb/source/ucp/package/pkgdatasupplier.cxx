@@ -47,6 +47,7 @@ namespace package_ucp
 
 // struct ResultListEntry.
 
+namespace {
 
 struct ResultListEntry
 {
@@ -57,6 +58,8 @@ struct ResultListEntry
 
     explicit ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
 };
+
+}
 
 // struct DataSupplier_Impl.
 

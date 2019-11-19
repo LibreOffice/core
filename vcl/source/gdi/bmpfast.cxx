@@ -26,6 +26,8 @@
 
 typedef unsigned char PIXBYTE;
 
+namespace {
+
 class BasePixelPtr
 {
 public:
@@ -186,6 +188,8 @@ template <>
 class TrueColorPixelPtr<ScanlineFormat::N8BitPal>
 : public TrueColorPixelPtr<ScanlineFormat::N8BitTcMask>
 {};
+
+}
 
 // converting truecolor formats
 template <ScanlineFormat SRCFMT, ScanlineFormat DSTFMT>

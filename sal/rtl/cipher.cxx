@@ -105,6 +105,8 @@ typedef rtlCipherError(cipher_update_t) (
 
 typedef void (cipher_delete_t) (rtlCipher Cipher);
 
+namespace {
+
 struct Cipher_Impl
 {
     rtlCipherAlgorithm  m_algorithm;
@@ -116,6 +118,8 @@ struct Cipher_Impl
     cipher_update_t    *m_decode;
     cipher_delete_t    *m_delete;
 };
+
+}
 
 rtlCipher SAL_CALL rtl_cipher_create(
     rtlCipherAlgorithm Algorithm,
@@ -192,6 +196,8 @@ void SAL_CALL rtl_cipher_destroy(rtlCipher Cipher) SAL_THROW_EXTERN_C()
         pImpl->m_delete(Cipher);
 }
 
+namespace {
+
 #if !defined LIBO_CIPHER_OPENSSL_BACKEND
 #define CIPHER_ROUNDS_BF 16
 
@@ -222,6 +228,8 @@ struct CipherBF_Impl
     Cipher_Impl     m_cipher;
     CipherContextBF m_context;
 };
+
+}
 
 #if !defined LIBO_CIPHER_OPENSSL_BACKEND
 static rtlCipherError BF_init(
@@ -1150,6 +1158,8 @@ void SAL_CALL rtl_cipher_destroyBF(rtlCipher Cipher) SAL_THROW_EXTERN_C()
 #define CIPHER_CBLOCK_ARCFOUR 256
 #endif
 
+namespace {
+
 struct ContextARCFOUR_Impl
 {
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
@@ -1165,6 +1175,8 @@ struct CipherARCFOUR_Impl
     Cipher_Impl         m_cipher;
     ContextARCFOUR_Impl m_context;
 };
+
+}
 
 static rtlCipherError rtl_cipherARCFOUR_update_Impl(
     ContextARCFOUR_Impl *ctx,

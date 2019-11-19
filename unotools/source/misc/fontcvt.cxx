@@ -1027,6 +1027,8 @@ const char * const aSymbolNames[] =
     "Wingdings 3", "MT Extra", "Times New Roman"
 };
 
+namespace {
+
 struct SymbolEntry
 {
     sal_uInt8 cIndex;
@@ -1043,6 +1045,8 @@ public:
 };
 
 struct ExtraTable { sal_Unicode cStar; sal_uInt8 cMS;};
+
+}
 
 ExtraTable const aWingDingsExtraTab[] =
 {
@@ -1304,7 +1308,11 @@ void ConvertChar::RecodeString( OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen
     rStr = aTmpStr.makeStringAndClear();
 }
 
+namespace {
+
 struct RecodeTable { const char* pOrgName; ConvertChar aCvt;};
+
+}
 
 static const RecodeTable aStarSymbolRecodeTable[] =
 {

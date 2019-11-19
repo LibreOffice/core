@@ -52,6 +52,8 @@ namespace frm
 
     namespace ImageType = ::com::sun::star::ui::ImageType;
 
+    namespace {
+
     class DocumentCommandImageProvider : public ICommandImageProvider
     {
     public:
@@ -71,6 +73,7 @@ namespace frm
         Reference< XImageManager >    m_xModuleImageManager;
     };
 
+    }
 
     void DocumentCommandImageProvider::impl_init_nothrow( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
     {

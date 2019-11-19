@@ -75,6 +75,8 @@ namespace sdr
 {
     namespace contact
     {
+        namespace {
+
         /**
          * @see #i95264#
          *
@@ -99,6 +101,8 @@ namespace sdr
             {
             }
         };
+
+        }
 
         drawinglayer::primitive2d::Primitive2DContainer VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence() const
         {
@@ -148,6 +152,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        namespace {
+
         class SwVirtFlyDrawObjPrimitive : public BufferedDecompositionPrimitive2D
         {
         private:
@@ -182,6 +188,8 @@ namespace drawinglayer
             /// provide unique ID
             DeclPrimitive2DIDBlock()
         };
+
+        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -252,6 +260,8 @@ namespace sdr
 {
     namespace contact
     {
+        namespace {
+
         class VCOfSwVirtFlyDrawObj : public ViewContactOfVirtObj
         {
         protected:
@@ -274,6 +284,8 @@ namespace sdr
                 return static_cast<SwVirtFlyDrawObj&>(mrObject);
             }
         };
+
+        }
     } // end of namespace contact
 } // end of namespace sdr
 

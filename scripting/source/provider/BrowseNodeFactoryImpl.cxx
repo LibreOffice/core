@@ -54,6 +54,7 @@ using namespace ::sf_misc;
 
 namespace browsenodefactory
 {
+namespace {
 class BrowseNodeAggregator :
     public ::cppu::WeakImplHelper< browse::XBrowseNode >
 {
@@ -257,9 +258,6 @@ private:
     }
 };
 
-namespace
-{
-
 std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference< XComponentContext >& xCtx )
 {
     const Sequence< OUString > openDocs =
@@ -325,6 +323,8 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
 
 typedef ::std::vector< Reference< browse::XBrowseNode > > vXBrowseNodes;
 
+namespace {
+
 struct alphaSortForBNodes
 {
     bool operator()( const Reference< browse::XBrowseNode >& a, const Reference< browse::XBrowseNode >& b )
@@ -333,7 +333,12 @@ struct alphaSortForBNodes
     }
 };
 
+}
+
 typedef ::cppu::WeakImplHelper< browse::XBrowseNode > t_BrowseNodeBase;
+
+namespace {
+
 class DefaultBrowseNode :
     public t_BrowseNodeBase
 {
@@ -574,6 +579,8 @@ public:
         return browse::BrowseNodeTypes::CONTAINER;
     }
 };
+
+}
 
 BrowseNodeFactoryImpl::BrowseNodeFactoryImpl(
     Reference< XComponentContext > const & xComponentContext )

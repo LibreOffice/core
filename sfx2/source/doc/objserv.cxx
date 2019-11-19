@@ -150,6 +150,8 @@ void SfxObjectShell::InitInterface_Impl()
 {
 }
 
+namespace {
+
 class SfxClosePreventer_Impl : public ::cppu::WeakImplHelper< css::util::XCloseListener >
 {
     bool m_bGotOwnership;
@@ -169,6 +171,8 @@ public:
     virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) override ;
 
 } ;
+
+}
 
 SfxClosePreventer_Impl::SfxClosePreventer_Impl()
 : m_bGotOwnership( false )
@@ -193,6 +197,7 @@ void SAL_CALL SfxClosePreventer_Impl::notifyClosing( const lang::EventObject& )
 void SAL_CALL SfxClosePreventer_Impl::disposing( const lang::EventObject& )
 {}
 
+namespace {
 
 class SfxInstanceCloseGuard_Impl
 {
@@ -206,6 +211,8 @@ public:
 
     bool Init_Impl( const uno::Reference< util::XCloseable >& xCloseable );
 };
+
+}
 
 bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XCloseable >& xCloseable )
 {

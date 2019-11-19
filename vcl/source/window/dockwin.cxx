@@ -50,6 +50,8 @@ DockingWindow::ImplData::ImplData()
     maMaxOutSize = Size( SHRT_MAX, SHRT_MAX );
 }
 
+namespace {
+
 class ImplDockFloatWin : public FloatingWindow
 {
 private:
@@ -74,6 +76,8 @@ public:
     virtual void    Resizing( Size& rSize ) override;
     virtual bool    Close() override;
 };
+
+}
 
 ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                                     DockingWindow* pDockingWin ) :

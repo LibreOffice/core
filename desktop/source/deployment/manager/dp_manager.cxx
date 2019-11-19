@@ -90,6 +90,8 @@ extern comphelper::service_decl::ServiceDecl const serviceDecl;
 
 namespace dp_manager {
 
+namespace {
+
 struct MatchTempDir
 {
     OUString m_str;
@@ -99,8 +101,6 @@ struct MatchTempDir
     }
 };
 
-
-namespace {
 OUString getExtensionFolder(OUString const &  parentFolder,
                             Reference<ucb::XCommandEnvironment> const & xCmdEnv,
                             Reference<uno::XComponentContext> const & xContext)

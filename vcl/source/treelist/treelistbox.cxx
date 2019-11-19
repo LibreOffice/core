@@ -58,6 +58,8 @@ static VclPtr<SvTreeListBox> g_pDDTarget;
 
 // ***************************************************************
 
+namespace {
+
 class MyEdit_Impl : public Edit
 {
     SvInplaceEdit2* pOwner;
@@ -68,6 +70,8 @@ public:
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void LoseFocus() override;
 };
+
+}
 
 MyEdit_Impl::MyEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* _pOwner ) :
 

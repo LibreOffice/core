@@ -177,6 +177,8 @@ public:
     virtual void Leave();           // message when leaving
 };
 
+namespace {
+
 class SwSizeEnterLeave : public SwImplEnterLeave
 {
     long nFrameHeight;
@@ -208,6 +210,8 @@ public:
     virtual void Enter() override;           // no message
     virtual void Leave() override;           // message when resizing the Frame area
 };
+
+}
 
 void SwProtocol::Record( const SwFrame* pFrame, PROT nFunction, DbgAction nAct, void* pParam )
 {

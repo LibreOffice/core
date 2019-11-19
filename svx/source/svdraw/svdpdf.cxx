@@ -110,10 +110,13 @@ long lcl_ToLogic(double value)
 double sqrt2(double a, double b) { return sqrt(a * a + b * b); }
 }
 
+namespace
+{
 struct FPDFBitmapDeleter
 {
     void operator()(FPDF_BITMAP bitmap) { FPDFBitmap_Destroy(bitmap); }
 };
+}
 
 using namespace com::sun::star;
 

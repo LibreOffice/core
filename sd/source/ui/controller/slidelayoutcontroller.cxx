@@ -48,6 +48,8 @@ using namespace ::com::sun::star::beans;
 namespace sd
 {
 
+namespace {
+
 class LayoutToolbarMenu : public svtools::ToolbarMenu
 {
 public:
@@ -72,6 +74,8 @@ struct snewfoil_value_info_layout
     const char* mpStrResId;
     AutoLayout const maAutoLayout;
 };
+
+}
 
 static const snewfoil_value_info_layout notes[] =
 {

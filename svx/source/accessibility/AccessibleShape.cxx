@@ -1151,6 +1151,7 @@ sal_Int16 SAL_CALL AccessibleShape::getAccessibleRole()
     return nAccessibleRole;
 }
 
+namespace {
 
 //sort the drawing objects from up to down, from left to right
 struct XShapePosCompareHelper
@@ -1166,6 +1167,8 @@ struct XShapePosCompareHelper
             return false;
     }
 };
+
+}
 //end of group position
 
 // XAccessibleGroupPosition

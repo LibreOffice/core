@@ -55,6 +55,7 @@ namespace webdav_ucp
 
 // struct ResultListEntry.
 
+namespace {
 
 struct ResultListEntry
 {
@@ -69,6 +70,7 @@ struct ResultListEntry
     {}
 };
 
+}
 
 // ResultList.
 

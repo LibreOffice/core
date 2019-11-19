@@ -50,6 +50,8 @@ SfxCompareSlots_bsearch( const void* pSmaller, const void* pBigger )
 
 }
 
+namespace {
+
 struct SfxObjectUI_Impl
 {
     sal_uInt16 const         nPos;
@@ -67,6 +69,8 @@ struct SfxObjectUI_Impl
     {
     }
 };
+
+}
 
 struct SfxInterface_Impl
 {

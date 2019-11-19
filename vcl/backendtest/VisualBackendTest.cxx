@@ -83,6 +83,8 @@ static void assertAndSetBackground(vcl::test::TestResult eResult, tools::Rectang
         drawBackgroundRect(rRect, COL_RED, rRenderContext);
 }
 
+namespace {
+
 class VisualBackendTestWindow : public WorkWindow
 {
 private:
@@ -481,6 +483,8 @@ public:
     }
 };
 
+}
+
 IMPL_LINK_NOARG(VisualBackendTestWindow, updateHdl, Timer *, void)
 {
     if (mbAnimate)
@@ -490,6 +494,8 @@ IMPL_LINK_NOARG(VisualBackendTestWindow, updateHdl, Timer *, void)
         Invalidate();
     }
 }
+
+namespace {
 
 class VisualBackendTestApp : public Application
 {
@@ -548,6 +554,8 @@ protected:
         comphelper::setProcessServiceFactory(nullptr);
     }
 };
+
+}
 
 void vclmain::createApplication()
 {

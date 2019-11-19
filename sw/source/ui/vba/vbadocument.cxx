@@ -67,6 +67,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 class SwVbaDocumentOutgoingConnectionPoint : public cppu::WeakImplHelper<XConnectionPoint>
 {
 private:
@@ -79,6 +81,8 @@ public:
     sal_uInt32 SAL_CALL Advise(const uno::Reference< XSink >& Sink ) override;
     void SAL_CALL Unadvise( sal_uInt32 Cookie ) override;
 };
+
+}
 
 SwVbaDocument::SwVbaDocument( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< frame::XModel > const & xModel ): SwVbaDocument_BASE( xParent, xContext, xModel )
 {

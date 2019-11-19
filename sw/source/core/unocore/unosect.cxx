@@ -67,6 +67,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 struct SwTextSectionProperties_Impl
 {
     uno::Sequence<sal_Int8> m_Password;
@@ -102,6 +104,8 @@ struct SwTextSectionProperties_Impl
     }
 
 };
+
+}
 
 class SwXTextSection::Impl
     : public SvtListener

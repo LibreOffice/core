@@ -58,6 +58,7 @@ using namespace ::com::sun::star::reflection;
 
 namespace dlgprov
 {
+  namespace {
 
   class DialogSFScriptListenerImpl : public DialogScriptListenerImpl
     {
@@ -105,6 +106,8 @@ namespace dlgprov
         public:
         DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, const OUString& sDialogLibName );
     };
+
+  }
 
     DialogVBAScriptListenerImpl::DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, const OUString& sDialogLibName ) : DialogScriptListenerImpl( rxContext ), msDialogLibName( sDialogLibName )
     {

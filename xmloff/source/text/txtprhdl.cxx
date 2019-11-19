@@ -245,6 +245,8 @@ static SvXMLEnumMapEntry<drawing::TextVerticalAdjust> const pXML_VerticalAlign_E
     { XML_TOKEN_INVALID, drawing::TextVerticalAdjust(0) }
 };
 
+namespace {
+
 class XMLDropCapPropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -262,6 +264,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLDropCapPropHdl_Impl::equals(
         const Any& r1,
@@ -295,6 +299,8 @@ bool XMLDropCapPropHdl_Impl::exportXML(
     return false;
 }
 
+namespace {
+
 class XMLOpaquePropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -307,6 +313,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLOpaquePropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -339,6 +347,8 @@ bool XMLOpaquePropHdl_Impl::exportXML(
     return true;
 }
 
+namespace {
+
 class XMLContourModePropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -351,6 +361,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLContourModePropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -383,6 +395,8 @@ bool XMLContourModePropHdl_Impl::exportXML(
     return true;
 }
 
+namespace {
+
 class XMLParagraphOnlyPropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -395,6 +409,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLParagraphOnlyPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -441,6 +457,8 @@ SvXMLEnumMapEntry<WrapTextMode> const pXML_Wrap_Enum[] =
     { XML_TOKEN_INVALID, WrapTextMode(0) }
 };
 
+namespace {
+
 class XMLWrapPropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -453,6 +471,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLWrapPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -486,6 +506,8 @@ bool XMLWrapPropHdl_Impl::exportXML(
     return bRet;
 }
 
+namespace {
+
 class XMLFrameProtectPropHdl_Impl : public XMLPropertyHandler
 {
     const OUString sVal;
@@ -502,6 +524,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLFrameProtectPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -661,6 +685,8 @@ bool XMLTextColumnsPropertyHandler::exportXML(
     return false;
 }
 
+namespace {
+
 class XMLHoriMirrorPropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -673,6 +699,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLHoriMirrorPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -701,6 +729,8 @@ bool XMLHoriMirrorPropHdl_Impl::exportXML(
     return false;
 }
 
+namespace {
+
 class XMLGrfMirrorPropHdl_Impl : public XMLPropertyHandler
 {
     const OUString sVal;
@@ -720,6 +750,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLGrfMirrorPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -795,6 +827,9 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_Emphasize_Enum[] =
     { XML_ACCENT,   FontEmphasis::ACCENT_ABOVE },
     { XML_TOKEN_INVALID, 0 }
 };
+
+namespace {
+
 class XMLTextEmphasizePropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -809,6 +844,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLTextEmphasizePropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -891,6 +928,8 @@ bool XMLTextEmphasizePropHdl_Impl::exportXML(
     return bRet;
 }
 
+namespace {
+
 class XMLTextCombineCharPropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -905,6 +944,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLTextCombineCharPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -930,6 +971,8 @@ bool XMLTextCombineCharPropHdl_Impl::exportXML(
     return (1 == rStrExpValue.getLength());
 }
 
+namespace {
+
 class XMLTextRelWidthHeightPropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -944,6 +987,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLTextRelWidthHeightPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -977,6 +1022,8 @@ bool XMLTextRelWidthHeightPropHdl_Impl::exportXML(
     return bRet;
 }
 
+namespace {
+
 class XMLTextSyncWidthHeightPropHdl_Impl : public XMLPropertyHandler
 {
     const OUString sValue;
@@ -994,6 +1041,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLTextSyncWidthHeightPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -1020,6 +1069,8 @@ bool XMLTextSyncWidthHeightPropHdl_Impl::exportXML(
     return bRet;
 }
 
+namespace {
+
 class XMLTextRotationAnglePropHdl_Impl : public XMLPropertyHandler
 {
 
@@ -1035,6 +1086,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLTextRotationAnglePropHdl_Impl::importXML(
         const OUString& rStrImpValue,
@@ -1077,6 +1130,8 @@ bool XMLTextRotationAnglePropHdl_Impl::exportXML(
     return bRet;
 }
 
+namespace {
+
 class XMLNumber8OneBasedHdl : public XMLPropertyHandler
 {
 
@@ -1092,6 +1147,8 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
+
+}
 
 bool XMLNumber8OneBasedHdl::importXML(
         const OUString& rStrImpValue,
@@ -1119,6 +1176,8 @@ bool XMLNumber8OneBasedHdl::exportXML(
     return bRet;
 }
 
+namespace {
+
 class XMLGraphicPropertyHandler : public XMLPropertyHandler
 {
 public:
@@ -1138,6 +1197,8 @@ public:
 
     virtual bool equals(const css::uno::Any& rAny1, const css::uno::Any& rAny2) const override;
 };
+
+}
 
 bool XMLGraphicPropertyHandler::equals(const Any& rAny1, const Any& rAny2) const
 {

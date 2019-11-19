@@ -126,11 +126,15 @@ static void ExtractStatusbarItemParameters(
     }
 }
 
+namespace {
+
 struct StatusBarEntryProperty
 {
     OReadStatusBarDocumentHandler::StatusBar_XML_Namespace  nNamespace;
     char                                                    aEntryName[20];
 };
+
+}
 
 StatusBarEntryProperty const StatusBarEntries[OReadStatusBarDocumentHandler::SB_XML_ENTRY_COUNT] =
 {

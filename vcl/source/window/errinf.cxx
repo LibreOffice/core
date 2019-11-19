@@ -28,7 +28,12 @@
 #include <vector>
 
 class ErrorHandler;
+
+namespace {
+
 class TheErrorRegistry: public rtl::Static<ErrorRegistry, TheErrorRegistry> {};
+
+}
 
 class ErrorStringFactory
 {

@@ -182,6 +182,8 @@ void lru_map_test::testLruRemoval()
     CPPUNIT_ASSERT_EQUAL(700, lru.find(7)->second);
 }
 
+namespace {
+
 struct TestClassKey
 {
     int mA;
@@ -209,6 +211,8 @@ struct TestClassKeyHashFunction
         return seed;
     }
 };
+
+}
 
 void lru_map_test::testCustomHash()
 {

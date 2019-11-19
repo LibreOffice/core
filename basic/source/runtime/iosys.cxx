@@ -47,6 +47,7 @@ using namespace com::sun::star::bridge;
 
 #include <iosys.hxx>
 
+namespace {
 
 class SbiInputDialog : public weld::GenericDialogController
 {
@@ -61,6 +62,8 @@ public:
     SbiInputDialog(weld::Window*, const OUString&);
     const OUString& GetInput() const { return m_aText; }
 };
+
+}
 
 SbiInputDialog::SbiInputDialog(weld::Window* pParent, const OUString& rPrompt)
     : GenericDialogController(pParent, "svt/ui/inputbox.ui", "InputBox")
@@ -156,6 +159,7 @@ bool hasUno()
     return bRetVal;
 }
 
+namespace {
 
 class OslStream : public SvStream
 {
@@ -170,6 +174,8 @@ public:
     virtual void        FlushData() override;
     virtual void        SetSize( sal_uInt64 nSize) override;
 };
+
+}
 
 OslStream::OslStream( const OUString& rName, StreamMode nStrmMode )
     : maFile( rName )
@@ -251,6 +257,7 @@ void OslStream::SetSize( sal_uInt64 nSize )
     maFile.setSize( nSize );
 }
 
+namespace {
 
 class UCBStream : public SvStream
 {
@@ -267,6 +274,8 @@ public:
     virtual void        FlushData() override;
     virtual void        SetSize( sal_uInt64 nSize ) override;
 };
+
+}
 
 UCBStream::UCBStream( Reference< XInputStream > const & rStm )
     : xIS( rStm )

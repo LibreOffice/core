@@ -1207,6 +1207,8 @@ void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
     HandleAppEvent( rAppEvent );
 }
 
+namespace {
+
 struct ExecuteGlobals
 {
     Reference < css::document::XDocumentEventListener > xGlobalBroadcaster;
@@ -1220,6 +1222,8 @@ struct ExecuteGlobals
     , bUseSystemFileDialog( true )
     {}
 };
+
+}
 
 static ExecuteGlobals* pExecGlobals = nullptr;
 
@@ -1888,6 +1892,7 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
     rSettings.SetStyleSettings ( hStyleSettings );
 }
 
+namespace {
 
 class ExitTimer : public Timer
 {
@@ -1902,6 +1907,8 @@ class ExitTimer : public Timer
         _exit(42);
     }
 };
+
+}
 
 IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
 {

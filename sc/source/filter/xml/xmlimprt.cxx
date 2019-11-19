@@ -222,6 +222,8 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
     return *pTableRowCellAttrTokenMap;
 }
 
+namespace {
+
 // NB: virtually inherit so we can multiply inherit properly
 //     in ScXMLFlatDocContext_Impl
 class ScXMLDocContext_Impl : public virtual SvXMLImportContext
@@ -248,10 +250,14 @@ public:
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
+}
+
 ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport ) :
 SvXMLImportContext( rImport )
 {
 }
+
+namespace {
 
 // context for flat file xml format
 class ScXMLFlatDocContext_Impl
@@ -273,6 +279,8 @@ public:
         createFastChildContext( sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
+
+}
 
 ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
                                                    const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
@@ -308,6 +316,8 @@ void SAL_CALL ScXMLFlatDocContext_Impl::characters(const OUString& rChars)
     SvXMLMetaDocumentContext::characters(rChars);
 }
 
+namespace {
+
 class ScXMLBodyContext_Impl : public ScXMLImportContext
 {
 public:
@@ -317,6 +327,8 @@ public:
         createFastChildContext( sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
+
+}
 
 ScXMLBodyContext_Impl::ScXMLBodyContext_Impl( ScXMLImport& rImport ) :
 ScXMLImportContext( rImport )

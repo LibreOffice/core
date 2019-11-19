@@ -27,6 +27,8 @@
 namespace osl
 {
 
+namespace {
+
 class OGlobalTimer
 {
 
@@ -37,6 +39,8 @@ public:
     }
 
 };
+
+}
 
 static OGlobalTimer aGlobalTimer;
 

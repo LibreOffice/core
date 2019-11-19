@@ -548,6 +548,8 @@ bool SvXMLImportPropertyMapper::FillPropertySet_(
 typedef pair<const OUString*, const Any* > PropertyPair;
 typedef vector<PropertyPair> PropertyPairs;
 
+namespace {
+
 struct PropertyPairLessFunctor
 {
     bool operator()( const PropertyPair& a, const PropertyPair& b ) const
@@ -555,6 +557,8 @@ struct PropertyPairLessFunctor
         return (*a.first < *b.first);
     }
 };
+
+}
 
 void SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(
     const vector<XMLPropertyState> & rProperties,

@@ -54,6 +54,8 @@ TableObjectListFacade::~TableObjectListFacade()
 {
 }
 
+namespace {
+
 class TableListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
@@ -83,6 +85,8 @@ private:
     virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) override;
     virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) override;
 };
+
+}
 
 TableListFacade::~TableListFacade()
 {
@@ -233,6 +237,8 @@ bool TableListFacade::isLeafSelected() const
     return bEntry && !rTableList.iter_has_child(*xEntry);
 }
 
+namespace {
+
 class QueryListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
@@ -260,6 +266,8 @@ private:
     virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) override;
     virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) override;
 };
+
+}
 
 QueryListFacade::~QueryListFacade()
 {

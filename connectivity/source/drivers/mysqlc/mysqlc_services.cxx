@@ -35,6 +35,8 @@ typedef Reference<XSingleServiceFactory> (*createFactoryFunc)(
     ::cppu::ComponentInstantiation pCreateFunction, const Sequence<OUString>& rServiceNames,
     rtl_ModuleCount*);
 
+namespace
+{
 struct ProviderRequest
 {
     Reference<XSingleServiceFactory> xRet;
@@ -65,6 +67,7 @@ struct ProviderRequest
 
     void* getProvider() const { return xRet.get(); }
 };
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* component_getFactory(const sal_Char* pImplementationName,
                                                            void* pServiceManager,

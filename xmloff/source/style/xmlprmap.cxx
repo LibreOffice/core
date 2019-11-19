@@ -36,6 +36,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using ::xmloff::token::GetXMLToken;
 
+namespace {
+
 /** Helper-class for XML-im/export:
     - Holds a pointer to a given array of XMLPropertyMapEntry
     - Provides several methods to access data from this array
@@ -68,6 +70,8 @@ struct XMLPropertySetMapperEntry_Impl
 
     sal_uInt32 GetPropType() const { return nType & XML_TYPE_PROP_MASK; }
 };
+
+}
 
 XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     const XMLPropertyMapEntry& rMapEntry,

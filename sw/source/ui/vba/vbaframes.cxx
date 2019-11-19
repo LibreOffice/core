@@ -27,6 +27,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 class FramesEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
 private:
@@ -54,6 +56,8 @@ public:
     }
 
 };
+
+}
 
 SwVbaFrames::SwVbaFrames( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xFrames, const uno::Reference< frame::XModel >& xModel ): SwVbaFrames_BASE( xParent, xContext, xFrames ), mxModel( xModel )
 {

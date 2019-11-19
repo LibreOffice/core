@@ -36,6 +36,8 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
+namespace {
+
 struct LockSequenceParseContext
 {
     std::unique_ptr<ucb::Lock> pLock;
@@ -49,6 +51,8 @@ struct LockSequenceParseContext
     : hasLockScope( false ), hasLockType( false ),
       hasDepth( false ), hasHREF( false ), hasTimeout( false ) {}
 };
+
+}
 
 #define STATE_TOP (1)
 

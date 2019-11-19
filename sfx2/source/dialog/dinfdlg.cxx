@@ -1153,6 +1153,8 @@ CustomPropertiesYesNoButton::~CustomPropertiesYesNoButton()
 {
 }
 
+namespace {
+
 class DurationDialog_Impl : public weld::GenericDialogController
 {
     std::unique_ptr<weld::CheckButton> m_xNegativeCB;
@@ -1168,6 +1170,8 @@ public:
     DurationDialog_Impl(weld::Widget* pParent, const util::Duration& rDuration);
     util::Duration  GetDuration() const;
 };
+
+}
 
 DurationDialog_Impl::DurationDialog_Impl(weld::Widget* pParent, const util::Duration& rDuration)
     : GenericDialogController(pParent, "sfx/ui/editdurationdialog.ui", "EditDurationDialog")

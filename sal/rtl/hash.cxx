@@ -26,11 +26,15 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 
+namespace {
+
 struct StringHashTableImpl {
     sal_uInt32    nEntries;
     sal_uInt32    nSize;
     rtl_uString **pData;
 };
+
+}
 
 typedef StringHashTableImpl StringHashTable;
 

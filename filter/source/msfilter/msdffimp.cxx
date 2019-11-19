@@ -191,6 +191,8 @@ using namespace container           ;
 static sal_uInt32 nMSOleObjCntr = 0;
 #define MSO_OLE_Obj "MSO_OLE_Obj"
 
+namespace {
+
 struct SvxMSDffBLIPInfo
 {
     sal_uLong  nFilePos;    ///< offset of the BLIP in data stream
@@ -199,6 +201,8 @@ struct SvxMSDffBLIPInfo
     {
     }
 };
+
+}
 
 /// the following will be sorted by the order of their appearance:
 struct SvxMSDffBLIPInfos : public std::vector<SvxMSDffBLIPInfo> {};
@@ -1123,6 +1127,8 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         rSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
 }
 
+namespace {
+
 struct ShadeColor
 {
     Color       aColor;
@@ -1130,6 +1136,8 @@ struct ShadeColor
 
     ShadeColor( const Color& rC, double fR ) : aColor( rC ), fDist( fR ) {};
 };
+
+}
 
 static void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& rProperties, SvStream& rIn, std::vector< ShadeColor >& rShadeColors )
 {
@@ -6800,11 +6808,16 @@ bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile &
     return xStm->GetError() == ERRCODE_NONE;
 }
 
+namespace {
+
 struct ClsIDs {
     sal_uInt32      nId;
     const sal_Char* pSvrName;
     const sal_Char* pDspName;
 };
+
+}
+
 static const ClsIDs aClsIDs[] = {
 
     { 0x000212F0, "MSWordArt",          "Microsoft Word Art"            },

@@ -40,8 +40,11 @@ using namespace ::com::sun::star::uno;
 namespace sfx2
 {
 
+namespace {
 
 class  ImplDdeItem;
+
+}
 
 struct BaseLink_Impl
 {
@@ -89,6 +92,7 @@ struct ImplBaseLinkData
     }
 };
 
+namespace {
 
 class ImplDdeItem : public DdeGetPutItem
 {
@@ -119,6 +123,7 @@ public:
     bool IsInDTOR() const { return bIsInDTOR; }
 };
 
+}
 
 SvBaseLink::SvBaseLink()
     : pImpl ( new BaseLink_Impl ),

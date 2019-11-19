@@ -37,6 +37,8 @@
 
 namespace sw { namespace sidebarwindows {
 
+namespace {
+
 // declaration and implementation of <SvxEditSource>
 // for <::accessibility::AccessibleTextHelper> instance
 class SidebarTextEditSource : public SvxEditSource,
@@ -62,6 +64,8 @@ class SidebarTextEditSource : public SvxEditSource,
         SvxOutlinerForwarder mTextForwarder;
         SvxDrawOutlinerViewForwarder mViewForwarder;
 };
+
+}
 
 SidebarTextEditSource::SidebarTextEditSource( SidebarTextControl& rSidebarTextControl )
     : SvxEditSource()
@@ -123,6 +127,8 @@ IMPL_LINK(SidebarTextEditSource, NotifyHdl, EENotify&, rNotify, void)
     }
 }
 
+namespace {
+
 // declaration and implementation of accessible context for <SidebarTextControl> instance
 class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
 {
@@ -151,6 +157,8 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
 
         void defunc();
 };
+
+}
 
 SidebarTextControlAccessibleContext::SidebarTextControlAccessibleContext( SidebarTextControl& rSidebarTextControl )
     : VCLXAccessibleComponent( rSidebarTextControl.GetWindowPeer() )

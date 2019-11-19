@@ -45,6 +45,8 @@ static utl::TempFile createTempCopy(OUString const& url)
     return tmp;
 }
 
+namespace
+{
 struct TempFileBase
 {
     utl::TempFile m_TempFile;
@@ -53,6 +55,7 @@ struct TempFileBase
     {
     }
 };
+}
 
 class ScDDELinkObj : public CalcUnoApiTest,
                      public TempFileBase,

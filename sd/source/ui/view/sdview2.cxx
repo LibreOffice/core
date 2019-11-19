@@ -60,6 +60,7 @@ namespace sd {
 
 using namespace ::com::sun::star;
 
+namespace {
 
 struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
@@ -72,6 +73,8 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
           mpTargetWindow( pTargetWindow )
     {}
 };
+
+}
 
 css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDataObject()
 {

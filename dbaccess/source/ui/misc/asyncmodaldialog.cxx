@@ -32,6 +32,8 @@ namespace dbaui
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::Exception;
 
+    namespace {
+
     // AsyncDialogExecutor
     class DialogExecutor_Impl
     {
@@ -56,6 +58,8 @@ namespace dbaui
     private:
         DECL_LINK( onExecute, void*, void );
     };
+
+    }
 
     IMPL_LINK_NOARG( DialogExecutor_Impl, onExecute, void*, void )
     {

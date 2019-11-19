@@ -41,8 +41,6 @@ enum ReadState
     XBMREAD_NEED_MORE
 };
 
-}
-
 class XBMReader : public GraphicReader
 {
     SvStream&           rIStm;
@@ -68,6 +66,8 @@ public:
 
     ReadState       ReadXBM( Graphic& rGraphic );
 };
+
+}
 
 XBMReader::XBMReader( SvStream& rStm ) :
             rIStm           ( rStm ),

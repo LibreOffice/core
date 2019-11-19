@@ -177,6 +177,8 @@ Image FmFilterItem::GetImage() const
 
 // Hints for communication between model and view
 
+namespace {
+
 class FmFilterHint : public SfxHint
 {
     FmFilterData* const   m_pData;
@@ -224,6 +226,8 @@ class FmFilterCurrentChangedHint : public SfxHint
 public:
     FmFilterCurrentChangedHint(){}
 };
+
+}
 
 // class FmFilterAdapter, listener at the FilterControls
 class FmFilterAdapter : public ::cppu::WeakImplHelper< XFilterControllerListener >
@@ -935,6 +939,8 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
     }
 }
 
+namespace {
+
 class FmFilterItemsString : public SvLBoxString
 {
 public:
@@ -947,6 +953,8 @@ public:
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
     virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData = nullptr) override;
 };
+
+}
 
 const int nxDBmp = 12;
 
@@ -994,6 +1002,8 @@ void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pE
     pViewData->mnHeight = aSize.Height();
 }
 
+namespace {
+
 class FmFilterString : public SvLBoxString
 {
     OUString m_aName;
@@ -1010,6 +1020,8 @@ public:
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
     virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData = nullptr) override;
 };
+
+}
 
 const int nxD = 4;
 

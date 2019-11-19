@@ -55,6 +55,8 @@ namespace connectivity
 {
 namespace mysql
 {
+namespace
+{
 class OMySQLKeysHelper : public OKeysHelper
 {
 protected:
@@ -67,6 +69,7 @@ public:
     {
     }
 };
+}
 }
 }
 

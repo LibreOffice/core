@@ -143,6 +143,8 @@ storeError ILockBytes::flush()
 namespace store
 {
 
+namespace {
+
 struct FileHandle
 {
     oslFileHandle m_handle;
@@ -315,6 +317,8 @@ protected:
     virtual ~FileLockBytes() override;
 };
 
+}
+
 } // namespace store
 
 FileLockBytes::FileLockBytes (FileHandle const & rFile)
@@ -442,6 +446,8 @@ storeError FileLockBytes::flush_Impl()
 namespace store
 {
 
+namespace {
+
 struct FileMapping
 {
     sal_uInt8 * m_pAddr;
@@ -543,6 +549,8 @@ protected:
     virtual ~MappedLockBytes() override;
 };
 
+}
+
 } // namespace store
 
 MappedLockBytes::MappedLockBytes (FileMapping const & rMapping)
@@ -641,6 +649,8 @@ storeError MappedLockBytes::flush_Impl()
 namespace store
 {
 
+namespace {
+
 class MemoryLockBytes :
     public store::OStoreObject,
     public store::ILockBytes
@@ -679,6 +689,8 @@ protected:
      */
     virtual ~MemoryLockBytes() override;
 };
+
+}
 
 } // namespace store
 
@@ -804,6 +816,8 @@ storeError MemoryLockBytes::flush_Impl()
 namespace store
 {
 
+namespace {
+
 template< class T > struct ResourceHolder
 {
     typedef typename T::destructor_type destructor_type;
@@ -837,6 +851,8 @@ template< class T > struct ResourceHolder
         return *this;
     }
 };
+
+}
 
 storeError
 FileLockBytes_createInstance (

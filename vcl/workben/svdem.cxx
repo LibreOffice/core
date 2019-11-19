@@ -71,11 +71,15 @@ SAL_IMPLEMENT_MAIN()
     return 0;
 }
 
+namespace {
+
 class MyWin : public WorkWindow
 {
 public:
                 MyWin( vcl::Window* pParent, WinBits nWinStyle );
 };
+
+}
 
 void Main()
 {

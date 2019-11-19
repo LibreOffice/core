@@ -47,6 +47,8 @@ namespace io_TextOutputStream
 
 // Implementation XTextOutputStream
 
+namespace {
+
 class OTextOutputStream : public WeakImplHelper< XTextOutputStream2, XServiceInfo >
 {
     Reference< XOutputStream > mxStream;
@@ -82,6 +84,8 @@ public:
         virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
         virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
 };
+
+}
 
 OTextOutputStream::OTextOutputStream()
     : mbEncodingInitialized(false)

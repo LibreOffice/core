@@ -502,6 +502,7 @@ void SmXMLImport::endDocument()
     SvXMLImport::endDocument();
 }
 
+namespace {
 
 class SmXMLImportContext: public SvXMLImportContext
 {
@@ -534,6 +535,8 @@ public:
     }
 };
 
+}
+
 void SmXMLImportContext::TCharacters(const OUString & /*rChars*/)
 {
 }
@@ -559,6 +562,7 @@ SvXMLImportContextRef SmXMLImportContext::CreateChildContext(sal_uInt16 /*nPrefi
     return nullptr;
 }
 
+namespace {
 
 struct SmXMLContext_Helper
 {
@@ -581,6 +585,8 @@ struct SmXMLContext_Helper
     void RetrieveAttrs(const uno::Reference< xml::sax::XAttributeList > &xAttrList );
     void ApplyAttrs();
 };
+
+}
 
 bool SmXMLContext_Helper::IsFontNodeNeeded() const
 {
@@ -742,6 +748,7 @@ void SmXMLContext_Helper::ApplyAttrs()
     }
 }
 
+namespace {
 
 class SmXMLTokenAttrHelper
 {
@@ -759,6 +766,8 @@ public:
     void RetrieveAttrs(const uno::Reference<xml::sax::XAttributeList>& xAttrList);
     void ApplyAttrs(MathMLMathvariantValue eDefaultMv);
 };
+
+}
 
 void SmXMLTokenAttrHelper::RetrieveAttrs(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
@@ -867,6 +876,7 @@ void SmXMLTokenAttrHelper::ApplyAttrs(MathMLMathvariantValue eDefaultMv)
     }
 }
 
+namespace {
 
 class SmXMLDocContext_Impl : public SmXMLImportContext
 {
@@ -915,6 +925,8 @@ public:
     void EndElement() override;
 };
 
+}
+
 void SmXMLEncloseContext_Impl::EndElement()
 {
     /*
@@ -926,6 +938,7 @@ void SmXMLEncloseContext_Impl::EndElement()
         SmXMLRowContext_Impl::EndElement();
 }
 
+namespace {
 
 class SmXMLFracContext_Impl : public SmXMLRowContext_Impl
 {
@@ -976,6 +989,8 @@ public:
     void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) override;
 };
 
+}
+
 void SmXMLStyleContext_Impl::StartElement(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList )
 {
@@ -996,6 +1011,7 @@ void SmXMLStyleContext_Impl::EndElement()
     aStyleHelper.ApplyAttrs();
 }
 
+namespace {
 
 class SmXMLPaddedContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1008,6 +1024,8 @@ public:
     void EndElement() override;
 };
 
+}
+
 void SmXMLPaddedContext_Impl::EndElement()
 {
     /*
@@ -1019,6 +1037,7 @@ void SmXMLPaddedContext_Impl::EndElement()
         SmXMLRowContext_Impl::EndElement();
 }
 
+namespace {
 
 class SmXMLPhantomContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1030,6 +1049,8 @@ public:
 
     void EndElement() override;
 };
+
+}
 
 void SmXMLPhantomContext_Impl::EndElement()
 {
@@ -1052,6 +1073,7 @@ void SmXMLPhantomContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pPhantom));
 }
 
+namespace {
 
 class SmXMLFencedContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1069,6 +1091,7 @@ public:
     void EndElement() override;
 };
 
+}
 
 void SmXMLFencedContext_Impl::StartElement(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList )
@@ -1145,6 +1168,7 @@ void SmXMLFencedContext_Impl::EndElement()
     GetSmImport().GetNodeStack().push_front(std::move(pSNode));
 }
 
+namespace {
 
 class SmXMLErrorContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1155,6 +1179,8 @@ public:
 
     void EndElement() override;
 };
+
+}
 
 void SmXMLErrorContext_Impl::EndElement()
 {
@@ -1172,6 +1198,7 @@ void SmXMLErrorContext_Impl::EndElement()
     }
 }
 
+namespace {
 
 class SmXMLNumberContext_Impl : public SmXMLImportContext
 {
@@ -1193,6 +1220,8 @@ public:
     void EndElement() override;
 };
 
+}
+
 void SmXMLNumberContext_Impl::TCharacters(const OUString &rChars)
 {
     aToken.aText = rChars;
@@ -1203,6 +1232,7 @@ void SmXMLNumberContext_Impl::EndElement()
     GetSmImport().GetNodeStack().push_front(std::make_unique<SmTextNode>(aToken,FNT_NUMBER));
 }
 
+namespace {
 
 class SmXMLAnnotationContext_Impl : public SmXMLImportContext
 {
@@ -1217,6 +1247,8 @@ public:
 
     void StartElement(const uno::Reference<xml::sax::XAttributeList > & xAttrList ) override;
 };
+
+}
 
 void SmXMLAnnotationContext_Impl::StartElement(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList )
@@ -1249,6 +1281,7 @@ void SmXMLAnnotationContext_Impl::Characters(const OUString &rChars)
         GetSmImport().SetText( GetSmImport().GetText() + rChars );
 }
 
+namespace {
 
 class SmXMLTextContext_Impl : public SmXMLImportContext
 {
@@ -1270,6 +1303,8 @@ public:
     void EndElement() override;
 };
 
+}
+
 void SmXMLTextContext_Impl::TCharacters(const OUString &rChars)
 {
     aToken.aText = rChars;
@@ -1280,6 +1315,7 @@ void SmXMLTextContext_Impl::EndElement()
     GetSmImport().GetNodeStack().push_front(std::make_unique<SmTextNode>(aToken,FNT_TEXT));
 }
 
+namespace {
 
 class SmXMLStringContext_Impl : public SmXMLImportContext
 {
@@ -1301,6 +1337,8 @@ public:
     void EndElement() override;
 };
 
+}
+
 void SmXMLStringContext_Impl::TCharacters(const OUString &rChars)
 {
     /*
@@ -1321,6 +1359,7 @@ void SmXMLStringContext_Impl::EndElement()
     GetSmImport().GetNodeStack().push_front(std::make_unique<SmTextNode>(aToken,FNT_FIXED));
 }
 
+namespace {
 
 class SmXMLIdentifierContext_Impl : public SmXMLImportContext
 {
@@ -1348,6 +1387,8 @@ public:
     };
     void EndElement() override;
 };
+
+}
 
 void SmXMLIdentifierContext_Impl::EndElement()
 {
@@ -1384,6 +1425,7 @@ void SmXMLIdentifierContext_Impl::TCharacters(const OUString &rChars)
     aToken.aText = rChars;
 }
 
+namespace {
 
 class SmXMLOperatorContext_Impl : public SmXMLImportContext
 {
@@ -1406,6 +1448,8 @@ public:
     void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) override;
     void EndElement() override;
 };
+
+}
 
 void SmXMLOperatorContext_Impl::TCharacters(const OUString &rChars)
 {
@@ -1455,6 +1499,7 @@ void SmXMLOperatorContext_Impl::StartElement(const uno::Reference<
     }
 }
 
+namespace {
 
 class SmXMLSpaceContext_Impl : public SmXMLImportContext
 {
@@ -1465,8 +1510,6 @@ public:
 
     void StartElement(const uno::Reference< xml::sax::XAttributeList >& xAttrList ) override;
 };
-
-namespace {
 
 bool lcl_CountBlanks(const MathMLAttributeLengthValue &rLV,
                      sal_Int32 *pWide, sal_Int32 *pNarrow)
@@ -1542,6 +1585,7 @@ void SmXMLSpaceContext_Impl::StartElement(
     GetSmImport().GetNodeStack().push_front(std::move(pBlank));
 }
 
+namespace {
 
 class SmXMLSubContext_Impl : public SmXMLRowContext_Impl
 {
@@ -1559,6 +1603,7 @@ public:
     }
 };
 
+}
 
 void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup)
 {
@@ -1586,6 +1631,7 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
     rNodeStack.push_front(std::move(pNode));
 }
 
+namespace {
 
 class SmXMLSupContext_Impl : public SmXMLSubContext_Impl
 {
@@ -1617,6 +1663,8 @@ public:
     }
 };
 
+}
+
 void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
         SmSubSup aSub,SmSubSup aSup)
 {
@@ -1645,6 +1693,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
     rNodeStack.push_front(std::move(pNode));
 }
 
+namespace {
 
 class SmXMLUnderContext_Impl : public SmXMLSubContext_Impl
 {
@@ -1662,6 +1711,8 @@ public:
     void EndElement() override;
     void HandleAccent();
 };
+
+}
 
 void SmXMLUnderContext_Impl::StartElement(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList )
@@ -1707,6 +1758,7 @@ void SmXMLUnderContext_Impl::EndElement()
         HandleAccent();
 }
 
+namespace {
 
 class SmXMLOverContext_Impl : public SmXMLSubContext_Impl
 {
@@ -1723,6 +1775,7 @@ public:
     void HandleAccent();
 };
 
+}
 
 void SmXMLOverContext_Impl::StartElement(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList )
@@ -1762,6 +1815,7 @@ void SmXMLOverContext_Impl::HandleAccent()
 
 }
 
+namespace {
 
 class SmXMLUnderOverContext_Impl : public SmXMLSubSupContext_Impl
 {
@@ -1806,6 +1860,7 @@ public:
     void EndElement() override;
 };
 
+}
 
 void SmXMLNoneContext_Impl::EndElement()
 {
@@ -1818,6 +1873,7 @@ void SmXMLNoneContext_Impl::EndElement()
         std::make_unique<SmTextNode>(aToken,FNT_VARIABLE));
 }
 
+namespace {
 
 class SmXMLPrescriptsContext_Impl : public SmXMLImportContext
 {
@@ -1919,6 +1975,8 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
+}
+
 SvXMLImportContextRef SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList)
@@ -1948,6 +2006,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLOfficeContext_Impl
     return new SvXMLImportContext( GetImport() );
 }
 
+namespace {
 
 // context for flat file xml format
 class SmXMLFlatDocContext_Impl
@@ -1967,6 +2026,8 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
+
+}
 
 SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps) :

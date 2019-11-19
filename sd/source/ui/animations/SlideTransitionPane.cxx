@@ -369,6 +369,8 @@ size_t getPresetOffset( const sd::impl::TransitionEffect &rEffect )
 namespace sd
 {
 
+namespace {
+
 class TransitionPane : public ValueSet
 {
 public:
@@ -388,6 +390,8 @@ public:
         return LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont));
     }
 };
+
+}
 
 // SlideTransitionPane
 SlideTransitionPane::SlideTransitionPane(

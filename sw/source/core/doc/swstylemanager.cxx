@@ -26,6 +26,8 @@
 typedef std::unordered_map< OUString,
                             std::shared_ptr<SfxItemSet> > SwStyleNameCache;
 
+namespace {
+
 class SwStyleCache
 {
     SwStyleNameCache mMap;
@@ -36,6 +38,8 @@ public:
     void addCompletePool( StylePool& rPool );
     std::shared_ptr<SfxItemSet> getByName( const OUString& rName ) { return mMap[rName]; }
 };
+
+}
 
 void SwStyleCache::addCompletePool( StylePool& rPool )
 {
@@ -48,6 +52,8 @@ void SwStyleCache::addCompletePool( StylePool& rPool )
         pStyle = pIter->getNext();
     }
 }
+
+namespace {
 
 class SwStyleManager : public IStyleAccess
 {
@@ -73,6 +79,8 @@ public:
                                                                SwAutoStyleFamily eFamily ) override;
     virtual void clearCaches() override;
 };
+
+}
 
 std::unique_ptr<IStyleAccess> createStyleManager( SfxItemSet const * pIgnorableParagraphItems )
 {

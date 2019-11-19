@@ -757,6 +757,8 @@ basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPol
     }
 }
 
+namespace {
+
 // for distribution dialog function
 struct ImpDistributeEntry
 {
@@ -764,6 +766,8 @@ struct ImpDistributeEntry
     sal_Int32                       mnPos;
     sal_Int32                       mnLength;
 };
+
+}
 
 typedef vector<ImpDistributeEntry> ImpDistributeEntryList;
 

@@ -53,6 +53,8 @@ using namespace ::com::sun::star::office;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::geometry;
 
+namespace {
+
 class DrawAnnotationContext : public SvXMLImportContext
 {
 
@@ -70,6 +72,8 @@ private:
     OUStringBuffer maInitialsBuffer;
     OUStringBuffer maDateBuffer;
 };
+
+}
 
 DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess )
 : SvXMLImportContext( rImport, nPrfx, rLocalName )
@@ -510,6 +514,8 @@ void SdXMLGenericPageContext::SetPageMaster( OUString const & rsPageMasterName )
     }
 }
 
+namespace {
+
 class XoNavigationOrderAccess : public ::cppu::WeakImplHelper< XIndexAccess >
 {
 public:
@@ -526,6 +532,8 @@ public:
 private:
     std::vector< Reference< XShape > > maShapes;
 };
+
+}
 
 XoNavigationOrderAccess::XoNavigationOrderAccess( std::vector< Reference< XShape > >& rShapes )
 {

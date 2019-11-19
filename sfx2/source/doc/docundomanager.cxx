@@ -139,6 +139,8 @@ namespace sfx2
 
     //= SolarMutexFacade
 
+    namespace {
+
     /** a facade for the SolarMutex, implementing ::framework::IMutex
     */
     class SolarMutexFacade : public ::framework::IMutex
@@ -197,6 +199,7 @@ namespace sfx2
         SolarMutexFacade    m_solarMutexFacade;
     };
 
+    }
 
     //= DocumentUndoManager
 

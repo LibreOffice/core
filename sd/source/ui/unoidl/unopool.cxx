@@ -42,6 +42,8 @@ static LanguageType SdUnoGetLanguage( const lang::Locale& rLocale )
     return eRet;
 }
 
+namespace {
+
 class SdUnoDrawPool : public SvxUnoDrawPool
 {
 public:
@@ -53,6 +55,8 @@ protected:
 private:
     SdDrawDocument* mpDrawModel;
 };
+
+}
 
 SdUnoDrawPool::SdUnoDrawPool(SdDrawDocument* pModel)
 : SvxUnoDrawPool( pModel ), mpDrawModel( pModel )

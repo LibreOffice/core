@@ -138,6 +138,8 @@
 
 using namespace com::sun::star;
 
+namespace {
+
 class ScNamedEntry
 {
     OUString  aName;
@@ -150,6 +152,8 @@ public:
     const OUString& GetName() const     { return aName; }
     const ScRange&  GetRange() const    { return aRange; }
 };
+
+}
 
 //  The names in the maps must be sorted according to strcmp!
 //! Instead of Which-ID 0 use special IDs and do not compare via names!
@@ -9071,6 +9075,8 @@ void ScUniqueCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 //  Fill the list of formats from the document
 
+namespace {
+
 // hash code to access the range lists by ScPatternAttr pointer
 struct ScPatternHashCode
 {
@@ -9080,10 +9086,14 @@ struct ScPatternHashCode
     }
 };
 
+}
+
 // Hash map to find a range by its start row
 typedef std::unordered_map< SCROW, ScRange > ScRowRangeHashMap;
 
 typedef std::vector<ScRange> ScRangeVector;
+
+namespace {
 
 // Hash map entry.
 // The Join method depends on the column-wise order of ScAttrRectIterator
@@ -9104,6 +9114,8 @@ public:
     const ScRangeList&  GetRanges();
     void                Clear() { aReturnRanges.clear(); }  // aJoinedRanges and aCompletedRanges are cleared in GetRanges
 };
+
+}
 
 void ScUniqueFormatsEntry::Join( const ScRange& rNewRange )
 {
@@ -9192,6 +9204,8 @@ const ScRangeList& ScUniqueFormatsEntry::GetRanges()
 
 typedef std::unordered_map< const ScPatternAttr*, ScUniqueFormatsEntry, ScPatternHashCode > ScUniqueFormatsHashMap;
 
+namespace {
+
 // function object to sort the range lists by start of first range
 struct ScUniqueFormatsOrder
 {
@@ -9204,6 +9218,8 @@ struct ScUniqueFormatsOrder
         return ( rList1[ 0 ].aStart < rList2[ 0 ].aStart );
     }
 };
+
+}
 
 ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rRange) :
     pDocShell( pDocSh ),

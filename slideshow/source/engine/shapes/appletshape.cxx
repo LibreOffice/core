@@ -36,6 +36,8 @@ namespace slideshow
 {
     namespace internal
     {
+        namespace {
+
         /** Represents an applet shape.
 
             This implementation offers support for applet shapes (both
@@ -104,6 +106,8 @@ namespace slideshow
             ViewAppletShapeVector                           maViewAppletShapes;
             bool                                             mbIsPlaying;
         };
+
+        }
 
         AppletShape::AppletShape( const uno::Reference< drawing::XShape >& xShape,
                                   double                                   nPrio,

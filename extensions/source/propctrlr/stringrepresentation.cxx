@@ -66,6 +66,8 @@ namespace pcr{
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace {
+
 class StringRepresentation:
     public ::cppu::WeakImplHelper<
         lang::XServiceInfo,
@@ -140,6 +142,8 @@ private:
     uno::Sequence< uno::Reference< reflection::XConstantTypeDescription> >  m_aConstants;
 
 };
+
+}
 
 StringRepresentation::StringRepresentation(uno::Reference< uno::XComponentContext > const & context) :
     m_xContext(context)

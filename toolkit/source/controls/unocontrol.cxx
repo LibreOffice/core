@@ -53,11 +53,15 @@ using namespace ::com::sun::star::util;
 using ::com::sun::star::accessibility::XAccessibleContext;
 using ::com::sun::star::accessibility::XAccessible;
 
+namespace {
+
 struct LanguageDependentProp
 {
     const char* pPropName;
     sal_Int32 const nPropNameLength;
 };
+
+}
 
 static const LanguageDependentProp aLanguageDependentProp[] =
 {
@@ -86,6 +90,7 @@ static Sequence< OUString> lcl_ImplGetPropertyNames( const Reference< XMultiProp
     return aNames;
 }
 
+namespace {
 
 class VclListenerLock
 {
@@ -107,6 +112,8 @@ public:
     VclListenerLock(const VclListenerLock&) = delete;
     VclListenerLock& operator=(const VclListenerLock&) = delete;
 };
+
+}
 
 typedef ::std::map< OUString, sal_Int32 >    MapString2Int;
 struct UnoControl_Data

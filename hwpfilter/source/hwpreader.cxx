@@ -927,6 +927,7 @@ void HwpReader::makeAutoStyles()
     rendEl("office:automatic-styles");
 }
 
+namespace {
 
 struct PageSetting
 {
@@ -950,6 +951,8 @@ struct PageSetting
     ShowPageNum *pagenumber;
     bool bIsSet;
 };
+
+}
 
 void HwpReader::makeMasterStyles()
 {

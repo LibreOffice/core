@@ -29,6 +29,8 @@
 #include <memory>
 #include <vector>
 
+namespace {
+
 struct CoordinateData2D : public basegfx::B2DPoint
 {
 public:
@@ -551,6 +553,8 @@ public:
         return *mpB2DRange;
     }
 };
+
+}
 
 class ImplB2DPolygon
 {

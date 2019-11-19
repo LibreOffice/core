@@ -51,6 +51,9 @@ static uno::Any ComponentToWindow( const uno::Any& aSource, const uno::Reference
 }
 
 typedef std::vector < uno::Reference< sheet::XSpreadsheetDocument > > Components;
+
+namespace {
+
 // #TODO more or less the same as class in workwindows ( code sharing needed )
 class WindowComponentEnumImpl : public EnumerationHelper_BASE
 {
@@ -106,10 +109,14 @@ public:
     }
 };
 
+}
+
 typedef ::cppu::WeakImplHelper< container::XEnumerationAccess
     , css::container::XIndexAccess
     , css::container::XNameAccess
     > WindowsAccessImpl_BASE;
+
+namespace {
 
 class WindowsAccessImpl : public WindowsAccessImpl_BASE
 {
@@ -191,6 +198,8 @@ public:
     }
 
 };
+
+}
 
 ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : ScVbaWindows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess > ( new WindowsAccessImpl( xContext ) ) )
 {

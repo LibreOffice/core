@@ -39,11 +39,15 @@ namespace vcl
         list   tables;                      /**< List of table tags and pointers */
     };
 
+namespace {
+
 struct TableEntry {
     sal_uInt32 tag;
     sal_uInt32 length;
     sal_uInt8  *data;
 };
+
+}
 
 /*- Data access macros for data stored in big-endian or little-endian format */
 static sal_Int16 GetInt16( const sal_uInt8* ptr, sal_uInt32 offset)
@@ -307,6 +311,8 @@ SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
 #define CMAP_PAIR_INIT 500
 #define CMAP_PAIR_INCR 500
 
+namespace {
+
 struct CmapSubTable {
     sal_uInt32  id;                         /* subtable ID (platform/encoding ID)    */
     sal_uInt32  n;                          /* number of used translation pairs      */
@@ -340,6 +346,8 @@ struct tdata_post {
     sal_uInt32 isFixedPitch;
     void   *ptr;                        /* format-specific pointer */
 };
+
+}
 
 /* allocate memory for a TT table */
 static sal_uInt8 *ttmalloc(sal_uInt32 nbytes)

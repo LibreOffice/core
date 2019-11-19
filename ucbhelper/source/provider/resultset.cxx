@@ -38,6 +38,8 @@ using namespace com::sun::star;
 namespace ucbhelper_impl
 {
 
+namespace {
+
 struct PropertyInfo
 {
     const char* pName;
@@ -45,6 +47,8 @@ struct PropertyInfo
     sal_Int16 const   nAttributes;
     const uno::Type& (*pGetCppuType)();
 };
+
+}
 
 static const uno::Type& sal_Int32_getCppuType()
 {
@@ -80,6 +84,7 @@ static const PropertyInfo aPropertyTable[] =
 
 // class PropertySetInfo
 
+namespace {
 
 class PropertySetInfo :
         public cppu::OWeakObject,
@@ -115,8 +120,12 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 };
 
+}
+
 typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
     PropertyChangeListenerContainer;
+
+namespace {
 
 class PropertyChangeListeners : public PropertyChangeListenerContainer
 {
@@ -124,6 +133,8 @@ public:
     explicit PropertyChangeListeners( osl::Mutex& rMtx )
         : PropertyChangeListenerContainer( rMtx ) {}
 };
+
+}
 
 } // namespace ucbhelper_impl
 

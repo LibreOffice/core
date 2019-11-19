@@ -113,6 +113,8 @@ inline XMLTextFrameContextHyperlink_Impl::XMLTextFrameContextHyperlink_Impl(
 {
 }
 
+namespace {
+
 // Implement Title/Description Elements UI (#i73249#)
 class XMLTextFrameTitleOrDescContext_Impl : public SvXMLImportContext
 {
@@ -129,6 +131,7 @@ public:
     virtual void Characters( const OUString& rText ) override;
 };
 
+}
 
 XMLTextFrameTitleOrDescContext_Impl::XMLTextFrameTitleOrDescContext_Impl(
         SvXMLImport& rImport,
@@ -145,6 +148,8 @@ void XMLTextFrameTitleOrDescContext_Impl::Characters( const OUString& rText )
     mrTitleOrDesc += rText;
 }
 
+namespace {
+
 class XMLTextFrameParam_Impl : public SvXMLImportContext
 {
 public:
@@ -155,6 +160,8 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             ParamMap &rParamMap);
 };
+
+}
 
 XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -189,6 +196,9 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
     if (!sName.isEmpty() && bFoundValue )
         rParamMap[sName] = sValue;
 }
+
+namespace {
+
 class XMLTextFrameContourContext_Impl : public SvXMLImportContext
 {
     Reference < XPropertySet > xPropSet;
@@ -203,6 +213,7 @@ public:
             bool bPath );
 };
 
+}
 
 XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         SvXMLImport& rImport,
@@ -325,6 +336,8 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
     }
 }
 
+namespace {
+
 class XMLTextFrameContext_Impl : public SvXMLImportContext
 {
     css::uno::Reference < css::text::XTextCursor > xOldTextCursor;
@@ -416,6 +429,7 @@ public:
     const css::uno::Reference < css::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
 };
 
+}
 
 void XMLTextFrameContext_Impl::Create()
 {

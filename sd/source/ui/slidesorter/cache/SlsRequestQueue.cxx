@@ -25,6 +25,8 @@
 
 namespace sd { namespace slidesorter { namespace cache {
 
+namespace {
+
 /** This class extends the actual request data with additional information
     that is used by the priority queues.
 */
@@ -75,6 +77,8 @@ public:
     sal_Int32 const mnPriorityInClass;
     RequestPriorityClass const meClass;
 };
+
+}
 
 class RequestQueue::Container
     : public ::std::set<

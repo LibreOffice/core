@@ -487,6 +487,7 @@
             m_nPropertyMapId = aPropMapIdPos->second;
     }
 
+    namespace {
 
     struct PropertyNameLess
     {
@@ -508,6 +509,7 @@
         }
     };
 
+    }
 
     ::cppu::IPropertyArrayHelper* OCommonGeometryControlModel::createArrayHelper( sal_Int32 _nId ) const
     {
@@ -569,6 +571,7 @@
         return css::uno::Sequence<sal_Int8>();
     }
 
+    namespace {
 
     struct Int32Equal
     {
@@ -581,6 +584,7 @@
         }
     };
 
+    }
 
     void SAL_CALL OCommonGeometryControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
     {

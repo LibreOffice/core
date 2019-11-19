@@ -44,6 +44,8 @@ namespace cppu_threadpool
         rtl::Reference<ORequestThread> const & theThread): thread(theThread)
     {}
 
+    namespace {
+
     struct theDisposedCallerAdmin :
         public rtl::StaticWithInit< DisposedCallerAdminHolder, theDisposedCallerAdmin >
     {
@@ -51,6 +53,8 @@ namespace cppu_threadpool
             return std::make_shared<DisposedCallerAdmin>();
         }
     };
+
+    }
 
     DisposedCallerAdminHolder const & DisposedCallerAdmin::getInstance()
     {
@@ -328,6 +332,8 @@ namespace cppu_threadpool
 
 using namespace cppu_threadpool;
 
+namespace {
+
 struct uno_ThreadPool_Equal
 {
     bool operator () ( const uno_ThreadPool &a , const uno_ThreadPool &b ) const
@@ -344,6 +350,7 @@ struct uno_ThreadPool_Hash
         }
 };
 
+}
 
 typedef std::unordered_map< uno_ThreadPool, ThreadPoolHolder, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
 

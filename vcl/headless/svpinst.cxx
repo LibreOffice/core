@@ -575,6 +575,8 @@ std::shared_ptr<vcl::BackendCapabilities> SvpSalInstance::GetBackendCapabilities
 
 #if HAVE_FEATURE_UI
 
+namespace {
+
 class SvpOpenGLContext : public OpenGLContext
 {
     GLWindow m_aGLWin;
@@ -582,6 +584,8 @@ private:
     virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
     virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
 };
+
+}
 
 OpenGLContext* SvpSalInstance::CreateOpenGLContext()
 {

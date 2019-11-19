@@ -128,6 +128,7 @@ static sal_Int32 LastDayOfHebrewMonth(sal_Int32 month, sal_Int32 year) {
         return 30;
 }
 
+namespace {
 
 class HebrewDate {
 private:
@@ -187,6 +188,8 @@ public:
 
 };
 
+}
+
 //  Gregorian dates
 
 static int LastDayOfGregorianMonth(int month, int year) {
@@ -206,6 +209,8 @@ static int LastDayOfGregorianMonth(int month, int year) {
     default: return 31;
     }
 }
+
+namespace {
 
 class GregorianDate {
 private:
@@ -245,6 +250,8 @@ public:
     int GetYear() const { return year; }
 
 };
+
+}
 
 // map field value from gregorian calendar to other calendar, it can be overwritten by derived class.
 void Calendar_jewish::mapFromGregorian()

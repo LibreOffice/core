@@ -741,6 +741,8 @@ bool SwTextFrame::RightMargin(SwPaM *pPam, bool bAPI) const
 // to the base class.
 // The Cursor's horizontal justification is done afterwards by the CursorShell.
 
+namespace {
+
 class SwSetToRightMargin
 {
     bool bRight;
@@ -749,6 +751,8 @@ public:
     ~SwSetToRightMargin() { SwTextCursor::SetRightMargin( bRight ); }
     void SetRight( const bool bNew ) { bRight = bNew; }
 };
+
+}
 
 bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
                         bool bSetInReadOnly ) const

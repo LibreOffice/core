@@ -88,6 +88,8 @@ using namespace ::com::sun::star::linguistic2;
 
 #define WRONG_SHOW_MIN       5
 
+namespace {
+
 struct TabInfo
 {
     bool        bValid;
@@ -105,6 +107,8 @@ struct TabInfo
         { }
 
 };
+
+}
 
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
 {

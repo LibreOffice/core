@@ -66,6 +66,8 @@ using namespace css::lang;
 using namespace css::security;
 using namespace css::xml::crypto;
 
+namespace {
+
 class DocumentDigitalSignatures
     : public cppu::WeakImplHelper<css::security::XDocumentDigitalSignatures,
                                   css::lang::XInitialization, css::lang::XServiceInfo>
@@ -189,6 +191,8 @@ public:
         mxParentWindow = rParentwindow;
     }
 };
+
+}
 
 DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx ):
     mxCtx(rxCtx),

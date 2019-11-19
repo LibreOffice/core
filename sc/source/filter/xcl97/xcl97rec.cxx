@@ -565,6 +565,8 @@ void XclObjComment::Save( XclExpStream& rStrm )
     XclObj::Save( rStrm );
 }
 
+namespace {
+
 class VmlCommentExporter : public VMLExport
 {
     ScAddress           maScPos;
@@ -582,6 +584,8 @@ protected:
     using VMLExport::EndShape;
     virtual void        EndShape( sal_Int32 nShapeElement ) override;
 };
+
+}
 
 VmlCommentExporter::VmlCommentExporter( const sax_fastparser::FSHelperPtr& p, const ScAddress& aScPos, SdrCaptionObj* pCaption,
                                         bool bVisible, const tools::Rectangle &aFrom, const tools::Rectangle &aTo )
@@ -1537,11 +1541,15 @@ std::size_t ExcEScenarioManager::GetLen() const
     return 8;
 }
 
+namespace {
+
 struct XclExpTabProtectOption
 {
     ScTableProtection::Option   eOption;
     sal_uInt16                  nMask;
 };
+
+}
 
 XclExpSheetProtectOptions::XclExpSheetProtectOptions( const XclExpRoot& rRoot, SCTAB nTab ) :
     XclExpRecord( 0x0867, 23 )

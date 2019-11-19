@@ -54,6 +54,8 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
+namespace {
+
 struct HitItem
 {
     OUString   m_aURL;
@@ -68,6 +70,8 @@ struct HitItem
         return rHitItem.m_fScore < m_fScore;
     }
 };
+
+}
 
 ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentContext >& rxContext,
                                       const uno::Reference< XContentProvider >&  xProvider,

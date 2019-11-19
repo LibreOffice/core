@@ -52,6 +52,8 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace io_stm{
 
+namespace {
+
 class OPipeImpl :
     public WeakImplHelper< XPipe , XConnectable , XServiceInfo >
 {
@@ -98,6 +100,7 @@ private:
     std::unique_ptr<MemFIFO> m_pFIFO;
 };
 
+}
 
 OPipeImpl::OPipeImpl()
     : m_nBytesToSkip(0 )

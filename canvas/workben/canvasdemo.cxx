@@ -53,6 +53,8 @@ static void PrintHelp()
     fprintf( stdout, "canvasdemo - Exercise the new canvas impl\n" );
 }
 
+namespace {
+
 class TestWindow : public WorkWindow
 {
     public:
@@ -533,6 +535,7 @@ class DemoRenderer
         }
 };
 
+}
 
 void TestWindow::Paint(vcl::RenderContext&, const tools::Rectangle&)
 {
@@ -595,6 +598,8 @@ void TestWindow::Paint(vcl::RenderContext&, const tools::Rectangle&)
     }
 }
 
+namespace {
+
 class DemoApp : public Application
 {
 public:
@@ -605,6 +610,8 @@ protected:
     void Init() override;
     void DeInit() override;
 };
+
+}
 
 int DemoApp::Main()
 {

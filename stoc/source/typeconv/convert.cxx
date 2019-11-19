@@ -208,6 +208,7 @@ static bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
     return false;
 }
 
+namespace {
 
 class TypeConverter_Impl : public WeakImplHelper< XTypeConverter, XServiceInfo >
 {
@@ -230,6 +231,8 @@ public:
     virtual Any SAL_CALL convertTo( const Any& aFrom, const Type& DestinationType ) override;
     virtual Any SAL_CALL convertToSimpleType( const Any& aFrom, TypeClass aDestinationType ) override;
 };
+
+}
 
 TypeConverter_Impl::TypeConverter_Impl() {}
 

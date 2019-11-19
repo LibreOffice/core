@@ -126,6 +126,8 @@ char const sXML_import_draw_styles_ooo_service[] = "com.sun.star.comp.Draw.XMLSt
 char const sXML_import_draw_content_ooo_service[] = "com.sun.star.comp.Draw.XMLContentImporter";
 char const sXML_import_draw_settings_ooo_service[] = "com.sun.star.comp.Draw.XMLSettingsImporter";
 
+namespace {
+
 struct XML_SERVICEMAP
 {
     const sal_Char* mpService;
@@ -139,6 +141,8 @@ struct XML_SERVICES
     const sal_Char* mpContent;
     const sal_Char* mpSettings;
 };
+
+}
 
 static XML_SERVICES const * getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
 {

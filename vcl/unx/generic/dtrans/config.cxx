@@ -28,6 +28,8 @@
 namespace x11
 {
 
+namespace {
+
 class DtransX11ConfigItem : public ::utl::ConfigItem
 {
     sal_Int32           m_nSelectionTimeout;
@@ -40,6 +42,8 @@ public:
 
     sal_Int32 getSelectionTimeout() const { return m_nSelectionTimeout; }
 };
+
+}
 
 }
 

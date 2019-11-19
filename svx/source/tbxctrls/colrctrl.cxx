@@ -49,6 +49,7 @@
 
 using namespace com::sun::star;
 
+namespace {
 
 class SvxColorValueSetData : public TransferableHelper
 {
@@ -67,6 +68,8 @@ public:
         : m_Data(rProps)
     {}
 };
+
+}
 
 void SvxColorValueSetData::AddSupportedFormats()
 {

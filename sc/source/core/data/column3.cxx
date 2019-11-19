@@ -93,6 +93,8 @@ void ScColumn::BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint )
     BroadcastCells(aRows, nHint);
 }
 
+namespace {
+
 struct DirtyCellInterpreter
 {
     void operator() (size_t, ScFormulaCell* p)
@@ -101,6 +103,8 @@ struct DirtyCellInterpreter
             p->Interpret();
     }
 };
+
+}
 
 void ScColumn::InterpretDirtyCells( SCROW nRow1, SCROW nRow2 )
 {

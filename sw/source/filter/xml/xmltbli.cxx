@@ -378,6 +378,8 @@ void SwXMLTableRow_Impl::Dispose()
     }
 }
 
+namespace {
+
 class SwXMLTableCellContext_Impl : public SvXMLImportContext
 {
     OUString m_aStyleName;
@@ -421,6 +423,8 @@ public:
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
+
+}
 
 SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -708,6 +712,8 @@ void SwXMLTableCellContext_Impl::EndElement()
     GetImport().GetTextImport()->SetCellParaStyleDefault(m_sSaveParaDefault);
 }
 
+namespace {
+
 class SwXMLTableColContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef const   xMyTable;
@@ -723,6 +729,8 @@ public:
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
+
+}
 
 SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -793,6 +801,8 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
     }
 }
 
+namespace {
+
 class SwXMLTableColsContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef const   xMyTable;
@@ -812,6 +822,8 @@ public:
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
+
+}
 
 SwXMLTableColsContext_Impl::SwXMLTableColsContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -841,6 +853,8 @@ SvXMLImportContextRef SwXMLTableColsContext_Impl::CreateChildContext(
     return pContext;
 }
 
+namespace {
+
 class SwXMLTableRowContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef const xMyTable;
@@ -864,6 +878,8 @@ public:
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
+
+}
 
 SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -957,6 +973,8 @@ SvXMLImportContextRef SwXMLTableRowContext_Impl::CreateChildContext(
     return pContext;
 }
 
+namespace {
+
 class SwXMLTableRowsContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef const   xMyTable;
@@ -978,6 +996,8 @@ public:
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
+
+}
 
 SwXMLTableRowsContext_Impl::SwXMLTableRowsContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nPrfx,

@@ -249,11 +249,15 @@ void ScPreviewViewForwarder::SetInvalid()
     mpViewShell = nullptr;
 }
 
+namespace {
+
 class ScPreviewHeaderFooterViewForwarder : public ScPreviewViewForwarder
 {
 public:
                         ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell);
 };
+
+}
 
 ScPreviewHeaderFooterViewForwarder::ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell)
     :
@@ -261,11 +265,15 @@ ScPreviewHeaderFooterViewForwarder::ScPreviewHeaderFooterViewForwarder(ScPreview
 {
 }
 
+namespace {
+
 class ScPreviewCellViewForwarder : public ScPreviewViewForwarder
 {
 public:
                         ScPreviewCellViewForwarder(ScPreviewShell* pViewShell);
 };
+
+}
 
 ScPreviewCellViewForwarder::ScPreviewCellViewForwarder(ScPreviewShell* pViewShell)
     :
@@ -273,11 +281,15 @@ ScPreviewCellViewForwarder::ScPreviewCellViewForwarder(ScPreviewShell* pViewShel
 {
 }
 
+namespace {
+
 class ScPreviewHeaderCellViewForwarder : public ScPreviewViewForwarder
 {
 public:
                         ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell);
 };
+
+}
 
 ScPreviewHeaderCellViewForwarder::ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell)
     :
@@ -285,11 +297,15 @@ ScPreviewHeaderCellViewForwarder::ScPreviewHeaderCellViewForwarder(ScPreviewShel
 {
 }
 
+namespace {
+
 class ScPreviewNoteViewForwarder : public ScPreviewViewForwarder
 {
 public:
                         ScPreviewNoteViewForwarder(ScPreviewShell* pViewShell);
 };
+
+}
 
 ScPreviewNoteViewForwarder::ScPreviewNoteViewForwarder(ScPreviewShell* pViewShell)
     :

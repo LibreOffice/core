@@ -28,6 +28,8 @@
 #include <memory>
 #include <vector>
 
+namespace {
+
 class AutoOGuardArray
 {
     std::vector<std::unique_ptr< osl::Guard< comphelper::SolarMutex > >>  maGuardArray;
@@ -37,6 +39,8 @@ public:
 
     std::unique_ptr< osl::Guard< comphelper::SolarMutex > > &  operator[] ( sal_Int32 i ) { return maGuardArray[i]; }
 };
+
+}
 
 AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements ) : maGuardArray(nNumElements)
 {

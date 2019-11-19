@@ -41,6 +41,8 @@ using namespace ::com::sun::star::lang;
 
 namespace svx
 {
+    namespace {
+
     /** implements a component to export namespaces of all SvXMLAttrContainerItem inside
         one or two pools with a variable count of which ids.
     */
@@ -68,6 +70,8 @@ namespace svx
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
     };
 
+    }
+
     Reference< XInterface > NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool )
     {
         return static_cast<XWeak*>(new NamespaceMap( pWhichIds, pPool ));
@@ -86,6 +90,7 @@ namespace svx
         return "com.sun.star.comp.Svx.NamespaceMap";
     }
 
+    namespace {
 
     class NamespaceIteratorImpl
     {
@@ -106,6 +111,8 @@ namespace svx
 
         bool next( OUString& rPrefix, OUString& rURL );
     };
+
+    }
 }
 
 using namespace ::svx;

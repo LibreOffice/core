@@ -347,6 +347,8 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     mbLocked = rReferencedShape.mbLocked;
 }
 
+namespace {
+
 struct ActionLockGuard
 {
     explicit ActionLockGuard(Reference<drawing::XShape> const& xShape)
@@ -365,6 +367,8 @@ struct ActionLockGuard
 private:
     Reference<document::XActionLockable> m_xLockable;
 };
+
+}
 
 // for group shapes, the following method is also adding each child
 void Shape::addChildren(

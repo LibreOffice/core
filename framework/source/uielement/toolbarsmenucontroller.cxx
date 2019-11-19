@@ -77,6 +77,8 @@ namespace framework
 
 typedef std::unordered_map< OUString, OUString > ToolbarHashMap;
 
+namespace {
+
 struct ToolBarEntry
 {
     OUString           aUIName;
@@ -85,6 +87,8 @@ struct ToolBarEntry
     bool                bContextSensitive;
     const CollatorWrapper*  pCollatorWrapper;
 };
+
+}
 
 static bool CompareToolBarEntry( const ToolBarEntry& aOne, const ToolBarEntry& aTwo )
 {
@@ -109,11 +113,15 @@ static Reference< XLayoutManager > getLayoutManagerFromFrame( const Reference< X
     return xLayoutManager;
 }
 
+namespace {
+
 struct ToolBarInfo
 {
     OUString aToolBarResName;
     OUString aToolBarUIName;
 };
+
+}
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ToolbarsMenuController                  ,
                                             OWeakObject                             ,

@@ -89,6 +89,8 @@ void ControlModelLock::addPropertyNotification( const sal_Int32 _nHandle, const 
     m_aNewValues.push_back( _rNewValue );
 }
 
+namespace {
+
 class FieldChangeNotifier
 {
 public:
@@ -111,6 +113,8 @@ private:
     OBoundControlModel&         m_rModel;
     Reference< XPropertySet >   m_xOldField;
 };
+
+}
 
 // base class for form layer controls
 OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUString& _rAggregateService, const bool _bSetDelegator )

@@ -34,6 +34,8 @@
 
 namespace sw { namespace sidebarwindows {
 
+namespace {
+
 // helper class: Primitive for discrete visualisation
 class AnchorPrimitive : public drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D
 {
@@ -81,6 +83,8 @@ public:
 
     DeclPrimitive2DIDBlock()
 };
+
+}
 
 void AnchorPrimitive::create2DDecomposition(
     drawinglayer::primitive2d::Primitive2DContainer& rContainer,

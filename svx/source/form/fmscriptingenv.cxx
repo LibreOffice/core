@@ -71,13 +71,18 @@ namespace svxform
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::beans::XPropertySet;
 
+    namespace {
+
     class FormScriptingEnvironment;
 
+    }
 
     //= FormScriptListener
 
     typedef ::cppu::WeakImplHelper <   XScriptListener
                                     >   FormScriptListener_Base;
+
+    namespace {
 
     /** implements the XScriptListener interface, is used by FormScriptingEnvironment
     */
@@ -168,6 +173,8 @@ namespace svxform
     private:
         void impl_registerOrRevoke_throw( const Reference< XEventAttacherManager >& _rxManager, bool _bRegister );
     };
+
+    }
 
     FormScriptListener::FormScriptListener( FormScriptingEnvironment* pScriptExecutor )
         :m_pScriptExecutor( pScriptExecutor )
@@ -770,6 +777,8 @@ namespace svxform
         m_pScriptExecutor = nullptr;
     }
 
+    namespace {
+
     // tdf#88985 If LibreOffice tries to exit during the execution of a macro
     // then: detect the effort, stop basic execution, block until the macro
     // returns due to that stop, then restart the quit. This avoids the app
@@ -868,6 +877,8 @@ namespace svxform
             mxListener->stop();
         }
     };
+
+    }
 
     IMPL_LINK( FormScriptListener, OnAsyncScriptEvent, void*, p, void )
     {

@@ -52,6 +52,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace filter {
     namespace odfflatxml {
+        namespace {
+
         /*
          * OdfFlatXml export and imports ODF flat XML documents by plugging a pass-through
          * filter implementation into XmlFilterAdaptor.
@@ -102,6 +104,8 @@ namespace filter {
 
             static Reference< XInterface > SAL_CALL impl_createInstance(const Reference< XMultiServiceFactory >& fact);
         };
+
+        }
     }
 }
 

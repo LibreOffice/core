@@ -396,6 +396,8 @@ basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const
     return basegfx::B2DPolyPolygon(aCircPolygon);
 }
 
+namespace {
+
 struct ImpCircUser : public SdrDragStatUserData
 {
     tools::Rectangle                   aR;
@@ -415,6 +417,8 @@ public:
     {}
     void SetCreateParams(SdrDragStat const & rStat);
 };
+
+}
 
 sal_uInt32 SdrCircObj::GetHdlCount() const
 {

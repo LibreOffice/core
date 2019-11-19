@@ -63,6 +63,8 @@
 
 #ifndef NDEBUG
 
+namespace {
+
 struct DebugData
 {
     DbgTestSolarMutexProc   pDbgTestSolarMutex;
@@ -73,6 +75,8 @@ struct DebugData
     {
     }
 };
+
+}
 
 static DebugData aDebugData;
 

@@ -84,6 +84,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 
+namespace {
+
 // - class PrepareListener_Impl ------------------------------------------
 class PrepareListener_Impl : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
@@ -99,6 +101,8 @@ public:
 
         bool IsSet() const {return m_bState;}
 };
+
+}
 
 PrepareListener_Impl::PrepareListener_Impl() :
     m_bState( false )

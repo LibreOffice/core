@@ -597,6 +597,8 @@ void SwView::StartThesaurus()
 
 // Offer online suggestions
 
+namespace {
+
 //!! Start of extra code for context menu modifying extensions
 struct ExecuteInfo
 {
@@ -610,6 +612,8 @@ class AsyncExecute
 public:
     DECL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, void*, void );
 };
+
+}
 
 IMPL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, void*, p, void )
 {

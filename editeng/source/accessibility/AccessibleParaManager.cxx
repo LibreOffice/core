@@ -267,6 +267,8 @@ namespace accessibility
                                                            nStateId ) );
     }
 
+    namespace {
+
     // not generic yet, no arguments...
     class AccessibleParaManager_DisposeChildren
     {
@@ -278,6 +280,8 @@ namespace accessibility
         }
     };
 
+    }
+
     void AccessibleParaManager::Dispose()
     {
         AccessibleParaManager_DisposeChildren aFunctor;
@@ -285,6 +289,8 @@ namespace accessibility
         std::for_each( begin(), end(),
                          WeakChildAdapter< AccessibleParaManager_DisposeChildren > (aFunctor) );
     }
+
+    namespace {
 
     // not generic yet, too many method arguments...
     class StateChangeEvent
@@ -307,6 +313,8 @@ namespace accessibility
         const uno::Any& mrNewValue;
         const uno::Any& mrOldValue;
     };
+
+    }
 
     void AccessibleParaManager::FireEvent( sal_Int32 nStartPara,
                                            sal_Int32 nEndPara,
@@ -337,6 +345,8 @@ namespace accessibility
         }
     }
 
+    namespace {
+
     class ReleaseChild
     {
     public:
@@ -348,6 +358,8 @@ namespace accessibility
             return AccessibleParaManager::WeakChild();
         }
     };
+
+    }
 
     void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
     {

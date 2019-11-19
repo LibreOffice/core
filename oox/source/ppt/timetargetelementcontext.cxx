@@ -39,6 +39,8 @@ using namespace ::oox::core;
 
 namespace oox { namespace ppt {
 
+    namespace {
+
     // CT_TLShapeTargetElement
     class ShapeTargetElementContext
         : public FragmentHandler2
@@ -96,6 +98,8 @@ namespace oox { namespace ppt {
         bool bTargetSet;
         ShapeTargetElement & maShapeTarget;
     };
+
+    }
 
     TimeTargetElementContext::TimeTargetElementContext( FragmentHandler2 const & rParent, const AnimTargetElementPtr & pValue )
         : FragmentHandler2( rParent ),

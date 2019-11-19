@@ -789,6 +789,7 @@ static std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
     return avRet;
 }
 
+namespace {
 
 class NameClashQueryBox
 {
@@ -826,6 +827,8 @@ public:
     }
     short run() { return m_xQueryBox->run(); }
 };
+
+}
 
 bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName)
 {

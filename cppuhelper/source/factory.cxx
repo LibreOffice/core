@@ -54,6 +54,8 @@ using namespace com::sun::star::registry;
 namespace cppu
 {
 
+namespace {
+
 class OSingleFactoryHelper
     : public XServiceInfo
     , public XSingleServiceFactory
@@ -113,6 +115,9 @@ protected:
     Sequence< OUString >             aServiceNames;
     OUString                         aImplementationName;
 };
+
+}
+
 OSingleFactoryHelper::~OSingleFactoryHelper()
 {
 }
@@ -222,6 +227,8 @@ Sequence< OUString > OSingleFactoryHelper::getSupportedServiceNames()
     return aServiceNames;
 }
 
+namespace {
+
 struct OFactoryComponentHelper_Mutex
 {
     Mutex   aMutex;
@@ -285,6 +292,7 @@ protected:
     bool isInstance() const {return xTheInstance.is();}
 };
 
+}
 
 Any SAL_CALL OFactoryComponentHelper::queryInterface( const Type & rType )
 {
@@ -426,6 +434,8 @@ sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification()
     return true;
 }
 
+namespace {
+
 class ORegistryFactoryHelper : public OFactoryComponentHelper,
                                public OPropertySetHelper
 
@@ -494,6 +504,8 @@ private:
 protected:
     using OPropertySetHelper::getTypes;
 };
+
+}
 
 // XInterface
 
@@ -800,6 +812,8 @@ sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification()
     return retVal;
 }
 
+namespace {
+
 class OFactoryProxyHelper : public WeakImplHelper< XServiceInfo, XSingleServiceFactory,
                                                     XUnloadingPreference >
 {
@@ -823,6 +837,8 @@ public:
     sal_Bool SAL_CALL releaseOnNotification() override;
 
 };
+
+}
 
 // XSingleServiceFactory
 Reference<XInterface > OFactoryProxyHelper::createInstance()

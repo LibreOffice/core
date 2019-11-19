@@ -38,6 +38,8 @@
 namespace svt
 {
 
+namespace {
+
 class AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
 {
     private:
@@ -77,6 +79,7 @@ class AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
         DECL_LINK(impl_ts_asyncCallback, LinkParamNone*, void);
 };
 
+}
 
 AcceleratorExecute::AcceleratorExecute()
     : TMutexInit()

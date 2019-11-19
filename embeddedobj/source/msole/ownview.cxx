@@ -49,6 +49,8 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
+namespace {
+
 class DummyHandler_Impl : public ::cppu::WeakImplHelper< task::XInteractionHandler >
 {
 public:
@@ -57,6 +59,7 @@ public:
     virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& xRequest ) override;
 };
 
+}
 
 void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractionRequest >& )
 {

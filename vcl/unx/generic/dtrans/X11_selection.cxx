@@ -104,6 +104,8 @@ extern "C"
 
 static const long nXdndProtocolRevision = 5;
 
+namespace {
+
 // mapping between mime types (or what the office thinks of mime types)
 // and X convention types
 struct NativeTypeEntry
@@ -113,6 +115,8 @@ struct NativeTypeEntry
     const char*     pNativeType;        // string corresponding to nAtom for the case of nAtom being uninitialized
     int const       nFormat;            // the corresponding format
 };
+
+}
 
 // the convention for Xdnd is mime types as specified by the corresponding
 // RFC's with the addition that text/plain without charset tag contains iso8859-1

@@ -55,6 +55,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 class SwNumNamesDlg : public weld::GenericDialogController
 {
     std::unique_ptr<weld::Entry> m_xFormEdit;
@@ -71,6 +73,8 @@ public:
     OUString GetName() const { return m_xFormEdit->get_text(); }
     int GetCurEntryPos() const { return m_xFormBox->get_selected_index(); }
 };
+
+}
 
 // remember selected entry
 IMPL_LINK( SwNumNamesDlg, SelectHdl, weld::TreeView&, rBox, void )

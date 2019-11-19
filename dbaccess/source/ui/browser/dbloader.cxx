@@ -62,6 +62,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace dbaui;
 
+namespace {
+
 class DBContentLoader : public ::cppu::WeakImplHelper< XFrameLoader, XServiceInfo>
 {
 private:
@@ -92,6 +94,7 @@ public:
     virtual void SAL_CALL cancel() override;
 };
 
+}
 
 DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxContext)
     :m_xContext(_rxContext)

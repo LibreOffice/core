@@ -125,6 +125,8 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 {
 }
 
+namespace {
+
 class ResultSetForRootFactory
     : public ResultSetFactory
 {
@@ -198,6 +200,8 @@ public:
                                       m_pDatabases );
     }
 };
+
+}
 
 // virtual
 uno::Any SAL_CALL Content::execute(

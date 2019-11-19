@@ -1011,6 +1011,8 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
 
 //Arrange all created extrude objects by depth
 
+namespace {
+
 struct E3dDepthNeighbour
 {
     E3dExtrudeObj*              mpObj;
@@ -1033,6 +1035,8 @@ struct E3dDepthLayer
     {
     }
 };
+
+}
 
 void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
 {

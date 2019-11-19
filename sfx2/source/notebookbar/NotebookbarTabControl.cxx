@@ -119,6 +119,8 @@ public:
     }
 };
 
+namespace {
+
 class ShortcutsToolBox : public sfx2::sidebar::SidebarToolBox
 {
 public:
@@ -143,6 +145,8 @@ public:
         return sfx2::sidebar::SidebarToolBox::KeyInput( rKEvt );
     }
 };
+
+}
 
 NotebookbarTabControl::NotebookbarTabControl( Window* pParent )
 : NotebookbarTabControlBase( pParent )

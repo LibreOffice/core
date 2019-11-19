@@ -43,6 +43,8 @@ static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaP
     xParaProps->setPropertyValue("ParaTabStops", uno::makeAny( aSeq ) );
 }
 
+namespace {
+
 class TabStopsEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference< container::XIndexAccess > mxIndexAccess;
@@ -107,6 +109,8 @@ public:
         return new TabStopsEnumWrapper( this );
     }
 };
+
+}
 
 SwVbaTabStops::SwVbaTabStops( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& xParaProps ) : SwVbaTabStops_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new TabStopCollectionHelper( xParent, xContext, xParaProps ) ) ), mxParaProps( xParaProps )
 {

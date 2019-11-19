@@ -34,6 +34,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
+namespace {
+
 class CertificateContainer
     : public ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::security::XCertificateContainer>
 {
@@ -61,6 +63,8 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 bool
 CertificateContainer::searchMap( const OUString & url, const OUString & certificate_name, Map &_certMap )

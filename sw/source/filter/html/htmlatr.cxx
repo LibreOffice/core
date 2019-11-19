@@ -201,6 +201,8 @@ sal_uInt16 SwHTMLWriter::GetCSS1ScriptForScriptType( sal_uInt16 nScriptType )
  *   Otherwise, attributes of the format are output as well.
  */
 
+namespace {
+
 struct SwHTMLTextCollOutputInfo
 {
     OString aToken;        // End token to be output
@@ -222,6 +224,8 @@ struct SwHTMLTextCollOutputInfo
     bool HasParaToken() const { return aToken.getLength()==1 && aToken[0]=='P'; }
     bool ShouldOutputToken() const { return bOutPara || !HasParaToken(); }
 };
+
+}
 
 SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTemplate,
                               bool bOutStyles,
@@ -1029,6 +1033,8 @@ static void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& r
     }
 }
 
+namespace {
+
 class HTMLStartEndPos
 {
     sal_Int32 nStart;
@@ -1047,6 +1053,8 @@ public:
     sal_Int32 GetEnd() const { return nEnd; }
     void SetEnd( sal_Int32 nE ) { nEnd = nE; }
 };
+
+}
 
 HTMLStartEndPos::HTMLStartEndPos( const SfxPoolItem& rItem, sal_Int32 nStt,
                                                         sal_Int32 nE ) :
@@ -1068,8 +1076,6 @@ enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // unsupported Attribute
                       HTML_STYLE_VALUE,     // Attribute must be exported as style
                       HTML_DROPCAP_VALUE,   // DropCap-Attribute
                       HTML_AUTOFMT_VALUE }; // Attribute for automatic character styles
-
-}
 
 class HTMLEndPosLst
 {
@@ -1152,6 +1158,8 @@ public:
 
     bool IsHTMLMode( sal_uLong nMode ) const { return (nHTMLMode & nMode) != 0; }
 };
+
+}
 
 void HTMLEndPosLst::InsertItem_( HTMLStartEndPos *pPos, HTMLStartEndPositions::size_type nEndPos )
 {

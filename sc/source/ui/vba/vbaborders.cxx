@@ -49,6 +49,8 @@ const static sal_Int32 OOLineMedium = 88;
 const static sal_Int32 OOLineThick = 141;
 const static sal_Int32 OOLineHairline = 2;
 
+namespace {
+
 class ScVbaBorder : public ScVbaBorder_Base
 {
 private:
@@ -350,11 +352,15 @@ public:
     }
 };
 
+}
+
 static uno::Reference< container::XIndexAccess >
 rangeToBorderIndexAccess( const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, const ScVbaPalette& rPalette )
 {
     return new RangeBorders( xRange, xContext, rPalette );
 }
+
+namespace {
 
 class RangeBorderEnumWrapper : public EnumerationHelper_BASE
 {
@@ -374,6 +380,8 @@ public:
         throw container::NoSuchElementException();
     }
 };
+
+}
 
 ScVbaBorders::ScVbaBorders( const uno::Reference< XHelperInterface >& xParent,
                             const uno::Reference< uno::XComponentContext > & xContext,

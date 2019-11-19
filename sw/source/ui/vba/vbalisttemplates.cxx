@@ -22,6 +22,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 class ListTemplatesEnumWrapper : public EnumerationHelper_BASE
 {
     SwVbaListTemplates* pListTemplates;
@@ -40,6 +42,8 @@ public:
         throw container::NoSuchElementException();
     }
 };
+
+}
 
 SwVbaListTemplates::SwVbaListTemplates( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xTextDoc, sal_Int32 nType ) : SwVbaListTemplates_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ),  mxTextDocument( xTextDoc ), mnGalleryType( nType )
 {

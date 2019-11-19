@@ -41,6 +41,8 @@ typedef cppu::ImplInheritanceHelper< svt::ToolboxController,
                                      css::awt::XDockableWindowListener,
                                      css::lang::XServiceInfo > ToolBarBase;
 
+namespace {
+
 class SubToolBarController : public ToolBarBase
 {
     OUString m_aSubTbName;
@@ -87,6 +89,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 SubToolBarController::SubToolBarController( const css::uno::Sequence< css::uno::Any >& rxArgs )
 {

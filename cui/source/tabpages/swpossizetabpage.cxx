@@ -55,6 +55,8 @@ struct FrmMap
     LB                              nLBRelations;
 };
 
+namespace {
+
 struct RelationMap
 {
     SvxSwFramePosString::StringId   eStrId;
@@ -67,8 +69,6 @@ struct StringIdPair_Impl
     SvxSwFramePosString::StringId eHori;
     SvxSwFramePosString::StringId eVert;
 };
-
-namespace {
 
 enum class LB {
     NONE                = 0x000000,

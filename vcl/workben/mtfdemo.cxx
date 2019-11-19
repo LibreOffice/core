@@ -32,6 +32,8 @@
 
 using namespace css;
 
+namespace {
+
 class DemoMtfWin : public WorkWindow
 {
     GDIMetaFile maMtf;
@@ -55,12 +57,16 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)  override;
 };
 
+}
+
 void DemoMtfWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     maMtf.Play(this, maMtf.GetActionSize());
 
     WorkWindow::Paint(rRenderContext, rRect);
 }
+
+namespace {
 
 class DemoMtfApp : public Application
 {
@@ -149,6 +155,7 @@ private:
 
 };
 
+}
 
 void vclmain::createApplication()
 {

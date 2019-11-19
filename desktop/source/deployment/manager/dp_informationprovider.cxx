@@ -61,6 +61,8 @@ namespace xml = com::sun::star::xml ;
 
 namespace dp_info {
 
+namespace {
+
 class PackageInformationProvider :
         public ::cppu::WeakImplHelper< deployment::XPackageInformationProvider >
 
@@ -83,6 +85,7 @@ private:
     uno::Reference< deployment::XUpdateInformationProvider > mxUpdateInformation;
 };
 
+}
 
 PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XComponentContext > const& xContext) :
     mxContext( xContext ),

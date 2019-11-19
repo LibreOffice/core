@@ -28,6 +28,8 @@
 
 namespace sw { namespace sidebarwindows {
 
+namespace {
+
 // declaration and implementation of accessible context for <SidebarWinAccessible> instance
 class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 {
@@ -88,6 +90,8 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
         ::osl::Mutex maMutex;
 };
+
+}
 
 // implementation of accessible for <SwAnnotationWin> instance
 SidebarWinAccessible::SidebarWinAccessible( sw::annotation::SwAnnotationWin& rSidebarWin,

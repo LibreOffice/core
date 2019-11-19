@@ -59,6 +59,8 @@ using namespace ::com::sun::star::beans;
 
 #define PATHPREFIX_SETUP                                "m"
 
+namespace {
+
 /*-****************************************************************************************************************
     @descr  struct to hold information about one menu entry.
 ****************************************************************************************************************-*/
@@ -138,6 +140,8 @@ class SvtDynMenu
         vector< SvtDynMenuEntry > lSetupEntries;
         vector< SvtDynMenuEntry > lUserEntries;
 };
+
+}
 
 class SvtDynamicMenuOptions_Impl : public ConfigItem
 {
@@ -440,6 +444,8 @@ Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt
 
 //  private helper
 
+namespace {
+
 class CountWithPrefixSort
 {
     public:
@@ -466,6 +472,8 @@ class SelectByPrefix
             return s.startsWith( PATHPREFIX_SETUP );
         }
 };
+
+}
 
 //  private method
 

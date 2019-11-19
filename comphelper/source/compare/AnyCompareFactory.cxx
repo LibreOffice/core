@@ -31,6 +31,8 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
 
+namespace {
+
 class AnyCompare : public ::cppu::WeakImplHelper< XAnyCompare >
 {
     Reference< XCollator > m_xCollator;
@@ -67,6 +69,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
+
+}
 
 sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 )
 {

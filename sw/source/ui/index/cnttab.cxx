@@ -120,6 +120,8 @@ static OUString lcl_CreateAutoMarkFileDlg(weld::Window* pParent, const OUString&
     return sRet;
 }
 
+namespace {
+
 struct AutoMarkEntry
 {
     OUString sSearch;
@@ -135,7 +137,11 @@ struct AutoMarkEntry
         bWord(false){}
 };
 
+}
+
 typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;
+
+namespace {
 
 class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 {
@@ -199,6 +205,8 @@ public:
                        bool bCreate);
     virtual ~SwAutoMarkDlg_Impl() override;
 };
+
+}
 
 sal_uInt16 CurTOXType::GetFlatIndex() const
 {
@@ -475,6 +483,8 @@ bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
         ! rSh.GetTextCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle();
 }
 
+namespace {
+
 class SwAddStylesDlg_Impl : public SfxDialogController
 {
     OUString*       pStyleArr;
@@ -494,6 +504,8 @@ class SwAddStylesDlg_Impl : public SfxDialogController
 public:
     SwAddStylesDlg_Impl(weld::Window* pParent, SwWrtShell const & rWrtSh, OUString rStringArr[]);
 };
+
+}
 
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
             SwWrtShell const & rWrtSh, OUString rStringArr[])

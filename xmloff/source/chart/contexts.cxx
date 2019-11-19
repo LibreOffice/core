@@ -31,6 +31,8 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
 class SchXMLBodyContext_Impl : public SvXMLImportContext
 {
 private:
@@ -46,6 +48,8 @@ public:
             const OUString& rLocalName,
                 const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
+
+}
 
 SchXMLBodyContext_Impl::SchXMLBodyContext_Impl(
         SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,

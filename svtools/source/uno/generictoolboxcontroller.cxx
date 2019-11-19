@@ -38,12 +38,16 @@ using namespace css::util;
 namespace svt
 {
 
+namespace {
+
 struct ExecuteInfo
 {
     css::uno::Reference< css::frame::XDispatch >     xDispatch;
     css::util::URL                                                aTargetURL;
     css::uno::Sequence< css::beans::PropertyValue >  aArgs;
 };
+
+}
 
 GenericToolboxController::GenericToolboxController( const Reference< XComponentContext >& rxContext,
                                                     const Reference< XFrame >&            rFrame,

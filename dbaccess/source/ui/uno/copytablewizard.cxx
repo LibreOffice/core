@@ -142,6 +142,9 @@ namespace dbaui
     typedef ::cppu::ImplInheritanceHelper<   CopyTableWizard_DialogBase
                                          ,   XCopyTableWizard
                                          >   CopyTableWizard_Base;
+
+    namespace {
+
     class CopyTableWizard
             :public CopyTableWizard_Base
             ,public ::comphelper::OPropertyArrayUsageHelper< CopyTableWizard >
@@ -371,6 +374,8 @@ public:
 private:
     CopyTableWizard&    m_rWizard;
 };
+
+}
 
 CopyTableWizard::CopyTableWizard( const Reference< XComponentContext >& _rxORB )
     :CopyTableWizard_Base( _rxORB )

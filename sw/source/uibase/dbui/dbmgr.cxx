@@ -234,6 +234,8 @@ public:
 
 };
 
+namespace {
+
 /// Listens to removed data sources, and if it's one that's embedded into this document, triggers embedding removal.
 class SwDataSourceRemovedListener : public cppu::WeakImplHelper<sdb::XDatabaseRegistrationsListener>
 {
@@ -249,6 +251,8 @@ public:
     virtual void SAL_CALL disposing(const lang::EventObject& rObject) override;
     void Dispose();
 };
+
+}
 
 SwDataSourceRemovedListener::SwDataSourceRemovedListener(SwDBManager& rDBManager)
     : m_pDBManager(&rDBManager)

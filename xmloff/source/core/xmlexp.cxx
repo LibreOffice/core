@@ -145,6 +145,8 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     { nullptr, 0, nullptr, 0 }
 };
 
+namespace {
+
 class SettingsExportFacade : public ::xmloff::XMLSettingsExportContext
 {
 public:
@@ -173,6 +175,8 @@ private:
     SvXMLExport&                    m_rExport;
     ::std::stack< OUString > m_aElements;
 };
+
+}
 
 void SettingsExportFacade::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue )
 {
@@ -208,6 +212,8 @@ Reference< XComponentContext > SettingsExportFacade::GetComponentContext() const
     return m_rExport.getComponentContext();
 }
 
+namespace {
+
 class SvXMLExportEventListener : public cppu::WeakImplHelper<
                             css::lang::XEventListener >
 {
@@ -220,6 +226,8 @@ public:
                             // XEventListener
     virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) override;
 };
+
+}
 
 SvXMLExportEventListener::SvXMLExportEventListener(SvXMLExport* pTempExport)
     : pExport(pTempExport)

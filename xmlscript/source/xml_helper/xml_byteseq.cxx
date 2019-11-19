@@ -32,6 +32,8 @@ using namespace com::sun::star::uno;
 namespace xmlscript
 {
 
+namespace {
+
 class BSeqInputStream
     : public ::cppu::WeakImplHelper< io::XInputStream >
 {
@@ -54,6 +56,8 @@ public:
     virtual sal_Int32 SAL_CALL available() override;
     virtual void SAL_CALL closeInput() override;
 };
+
+}
 
 sal_Int32 BSeqInputStream::readBytes(
     Sequence< sal_Int8 > & rData, sal_Int32 nBytesToRead )
@@ -91,6 +95,8 @@ void BSeqInputStream::closeInput()
 {
 }
 
+namespace {
+
 class BSeqOutputStream
     : public ::cppu::WeakImplHelper< io::XOutputStream >
 {
@@ -107,6 +113,8 @@ public:
     virtual void SAL_CALL flush() override;
     virtual void SAL_CALL closeOutput() override;
 };
+
+}
 
 void BSeqOutputStream::writeBytes( Sequence< sal_Int8 > const & rData )
 {

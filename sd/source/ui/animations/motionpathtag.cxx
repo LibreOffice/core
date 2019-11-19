@@ -67,6 +67,8 @@ namespace sd
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
 static const int DRGPIX     = 2;                               // Drag MinMove in Pixel
 
+namespace {
+
 class PathDragMove : public SdrDragMove
 {
 private:
@@ -96,6 +98,8 @@ public:
 
     rtl::Reference <MotionPathTag > mxTag;
 };
+
+}
 
 void PathDragMove::createSdrDragEntries()
 {
@@ -130,6 +134,8 @@ bool PathDragMove::EndSdrDrag(bool /*bCopy*/)
     return true;
 }
 
+namespace {
+
 class PathDragResize : public SdrDragResize
 {
 private:
@@ -157,6 +163,8 @@ public:
     virtual bool EndSdrDrag(bool bCopy) override;
     rtl::Reference <MotionPathTag > mxTag;
 };
+
+}
 
 void PathDragResize::createSdrDragEntries()
 {
@@ -189,6 +197,8 @@ bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
     return true;
 }
 
+namespace {
+
 class PathDragObjOwn : public SdrDragObjOwn
 {
 private:
@@ -211,6 +221,8 @@ public:
 
     virtual bool EndSdrDrag(bool bCopy) override;
 };
+
+}
 
 void PathDragObjOwn::createSdrDragEntries()
 {
@@ -241,6 +253,8 @@ bool PathDragObjOwn::EndSdrDrag(bool /*bCopy*/)
     }
 }
 
+namespace {
+
 class SdPathHdl : public SmartHdl
 {
 public:
@@ -252,6 +266,8 @@ public:
 private:
     SdrPathObj* const mpPathObj;
 };
+
+}
 
 SdPathHdl::SdPathHdl( const SmartTagReference& xTag, SdrPathObj* pPathObj )
 : SmartHdl( xTag, pPathObj->GetCurrentBoundRect().TopLeft(), SdrHdlKind::SmartTag )

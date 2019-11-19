@@ -114,6 +114,8 @@ const char * const pButtonNames[] =
 #define BTN_MORE    10
 #define BTN_LESS    11
 
+namespace {
+
 // Helper class for the simple creation of files local/remote
 class EasyFile
 {
@@ -130,6 +132,8 @@ public:
     void      createFileName(  const OUString& rUrl, OUString& rFileName );
     void      close();
 };
+
+}
 
 // Helper class for the embedding of text attributes into the html output
 class HtmlState

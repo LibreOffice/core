@@ -69,8 +69,6 @@ namespace {
 
 enum class SvxXMLTableImportContextEnum { Color, Marker, Dash, Hatch, Gradient, Bitmap };
 
-}
-
 class SvxXMLTableImportContext : public SvXMLImportContext
 {
 public:
@@ -93,6 +91,7 @@ private:
     bool const mbOOoFormat;
 };
 
+}
 
 SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, bool bOOoFormat )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxTable( xTable ), meContext( eContext ),

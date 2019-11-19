@@ -55,6 +55,7 @@ std::size_t multipleOf16(std::size_t n) {
 namespace stoc_corefl
 {
 
+namespace {
 
 class IdlAttributeFieldImpl
     : public IdlMemberImpl
@@ -94,6 +95,8 @@ private:
     void checkException(
         uno_Any * exception, Reference< XInterface > const & context) const;
 };
+
+}
 
 // XInterface
 
@@ -313,6 +316,7 @@ void IdlAttributeFieldImpl::checkException(
     cppu::throwException(e);
 }
 
+namespace {
 
 class IdlInterfaceMethodImpl
     : public IdlMemberImpl
@@ -351,6 +355,8 @@ public:
     virtual MethodMode SAL_CALL getMode() override;
     virtual Any SAL_CALL invoke( const Any & rObj, Sequence< Any > & rArgs ) override;
 };
+
+}
 
 // XInterface
 

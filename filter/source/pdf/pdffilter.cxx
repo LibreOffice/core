@@ -172,6 +172,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     return bRet;
 }
 
+namespace {
 
 class FocusWindowWaitCursor
 {
@@ -202,6 +203,7 @@ public:
     DECL_LINK( DestroyedLink, VclWindowEvent&, void );
 };
 
+}
 
 IMPL_LINK( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent&, rEvent, void )
 {

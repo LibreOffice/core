@@ -33,6 +33,8 @@
 namespace svx {
 namespace frame {
 
+namespace {
+
 class Cell
 {
 private:
@@ -80,6 +82,8 @@ public:
 
     basegfx::B2DHomMatrix CreateCoordinateSystem(const Array& rArray, size_t nCol, size_t nRow, bool bExpandMerged) const;
 };
+
+}
 
 typedef std::vector< Cell >     CellVec;
 
@@ -365,6 +369,8 @@ bool ArrayImpl::HasCellRotation() const
     return false;
 }
 
+namespace {
+
 class MergedCellIterator
 {
 public:
@@ -385,6 +391,7 @@ private:
     size_t              mnRow;
 };
 
+}
 
 MergedCellIterator::MergedCellIterator( const Array& rArray, size_t nCol, size_t nRow )
 {

@@ -35,6 +35,8 @@ namespace chart
 namespace wrapper
 {
 
+namespace {
+
 class WrappedAutomaticPositionProperty : public WrappedProperty
 {
 public:
@@ -44,6 +46,8 @@ public:
     virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
     virtual Any getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const override;
 };
+
+}
 
 WrappedAutomaticPositionProperty::WrappedAutomaticPositionProperty()
     : ::chart::WrappedProperty( "AutomaticPosition" , OUString() )

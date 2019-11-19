@@ -599,6 +599,8 @@ void Test::testSharedFormulasRefUpdateRange()
     m_pDoc->DeleteTab(0);
 }
 
+namespace {
+
 struct SortByArea
 {
     bool operator ()( const sc::AreaListener& rLeft, const sc::AreaListener& rRight ) const
@@ -621,6 +623,8 @@ struct SortByArea
         return rLeft.maArea.aEnd.Row() < rRight.maArea.aEnd.Row();
     }
 };
+
+}
 
 void Test::testSharedFormulasRefUpdateRangeDeleteRow()
 {

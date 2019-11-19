@@ -215,6 +215,8 @@ SvXMLImportItemMapper::finished(SfxItemSet &, SvXMLUnitConverter const&) const
     // nothing to do here
 }
 
+namespace {
+
 struct BoxHolder
 {
     std::unique_ptr<SvxBorderLine> pTop;
@@ -237,6 +239,8 @@ struct BoxHolder
             pRight.reset(new SvxBorderLine( *rBox.GetRight() ));
     }
 };
+
+}
 
 // put an XML-string value into an item
 bool SvXMLImportItemMapper::PutXMLValue(

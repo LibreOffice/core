@@ -39,6 +39,8 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
+namespace {
+
 struct GridLinePoints
 {
     Sequence< double > P0;
@@ -53,6 +55,8 @@ struct GridLinePoints
 
     sal_Int32 m_nDimensionIndex;
 };
+
+}
 
 GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_Int32 nDimensionIndex
                 , CuboidPlanePosition eLeftWallPos

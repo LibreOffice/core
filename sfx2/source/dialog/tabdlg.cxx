@@ -56,6 +56,8 @@ struct TabPageImpl
     TabPageImpl() : mbStandard(false), mpSfxDialogController(nullptr) {}
 };
 
+namespace {
+
 struct Data_Impl
 {
     OString const sId;                  // The ID
@@ -75,6 +77,8 @@ struct Data_Impl
     {
     }
 };
+
+}
 
 SfxTabDialogItem::SfxTabDialogItem( const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool )
     : SfxSetItem( rAttr, pItemPool )

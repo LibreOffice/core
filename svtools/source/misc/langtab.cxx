@@ -37,6 +37,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 class SvtLanguageTableImpl
 {
 private:
@@ -71,7 +73,6 @@ public:
     }
 };
 
-namespace {
 struct theLanguageTable : public rtl::Static< SvtLanguageTableImpl, theLanguageTable > {};
 }
 

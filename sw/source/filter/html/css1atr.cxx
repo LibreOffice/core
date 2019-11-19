@@ -210,6 +210,8 @@ OString GetCSS1_Color(const Color& rColor)
     return "#" + lclConvToHex(rColor.GetRed()) + lclConvToHex(rColor.GetGreen()) + lclConvToHex(rColor.GetBlue());
 }
 
+namespace {
+
 class SwCSS1OutMode
 {
     SwHTMLWriter& rWrt;
@@ -233,6 +235,8 @@ public:
         rWrt.m_nCSS1OutMode = nOldMode;
     }
 };
+
+}
 
 void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
                                      const sal_Char *pVal,

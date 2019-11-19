@@ -38,6 +38,8 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
+namespace {
+
 class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
 {
     css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler;
@@ -59,6 +61,7 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
+}
 
 XMLEmbeddedObjectImportContext_Impl::XMLEmbeddedObjectImportContext_Impl(
         SvXMLImport& rImport, sal_uInt16 nPrfx,

@@ -79,8 +79,6 @@ namespace pcr
         return sImageId;
     }
 
-    }
-
     //= OSimpleTabModel
 
     class OSimpleTabModel : public ::cppu::WeakImplHelper< XTabControllerModel>
@@ -103,6 +101,8 @@ namespace pcr
         virtual sal_Bool SAL_CALL getGroupControl() override {return false;} ;
         virtual void SAL_CALL setGroupControl(sal_Bool /*GroupControl*/) override {};
     };
+
+    }
 
     //= TabOrderDialog
     TabOrderDialog::TabOrderDialog(weld::Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,

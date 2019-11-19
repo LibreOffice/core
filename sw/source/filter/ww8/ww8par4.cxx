@@ -60,6 +60,8 @@
 #include "ww8par.hxx"
 #include "ww8par2.hxx"
 
+namespace {
+
 struct OLE_MFP
 {
     sal_Int16 mm;       // 0x6  int
@@ -67,6 +69,8 @@ struct OLE_MFP
     sal_Int16 yExt;     // 0xa  int in 1/100 mm
     sal_Int16 hMF;      // 0xc  int
 };
+
+}
 
 using namespace ::com::sun::star;
 

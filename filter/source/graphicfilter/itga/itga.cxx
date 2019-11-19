@@ -27,6 +27,8 @@ class FilterConfigItem;
 
 //============================ TGAReader ==================================
 
+namespace {
+
 struct TGAFileHeader
 {
     sal_uInt8       nImageIDLength;
@@ -109,6 +111,8 @@ public:
     explicit TGAReader(SvStream &rTGA);
     bool                ReadTGA(Graphic &rGraphic);
 };
+
+}
 
 //=================== Methods of TGAReader ==============================
 

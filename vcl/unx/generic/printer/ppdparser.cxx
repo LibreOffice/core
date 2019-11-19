@@ -251,7 +251,6 @@ using namespace psp;
 namespace
 {
     struct thePPDCache : public rtl::Static<PPDCache, thePPDCache> {};
-}
 
 class PPDDecompressStream
 {
@@ -274,6 +273,8 @@ public:
     void Close();
     const OUString& GetFileName() const { return maFileName; }
 };
+
+}
 
 PPDDecompressStream::PPDDecompressStream( const OUString& i_rFile )
 {

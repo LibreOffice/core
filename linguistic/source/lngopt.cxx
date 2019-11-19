@@ -78,11 +78,15 @@ LinguOptions::~LinguOptions()
     }
 }
 
+namespace {
+
 struct WID_Name
 {
     sal_Int32        nWID;
     const char  *pPropertyName;
 };
+
+}
 
 //! order of entries is import (see LinguOptions::GetName)
 //! since the WID is used as index in this table!

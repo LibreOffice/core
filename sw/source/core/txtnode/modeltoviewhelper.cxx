@@ -34,6 +34,8 @@
 #include <set>
 #include <vector>
 
+namespace {
+
 struct FieldResult
 {
     sal_Int32 const m_nFieldPos;
@@ -53,7 +55,11 @@ public:
     }
 };
 
+}
+
 typedef std::set<FieldResult, sortfieldresults> FieldResultSet;
+
+namespace {
 
 struct block
 {
@@ -79,6 +85,8 @@ struct containsPos
         return m_nPos >= rIn.m_nStart && m_nPos < rIn.m_nStart + rIn.m_nLen;
     }
 };
+
+}
 
 ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
         SwRootFrame const*const pLayout, ExpandMode eMode)

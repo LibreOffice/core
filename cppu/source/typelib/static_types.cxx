@@ -40,6 +40,8 @@ extern "C"
 #pragma pack(push, 8)
 #endif
 
+namespace {
+
 /**
  * The double member determines the alignment.
  * Under OS2 and MS-Windows the Alignment is min( 8, sizeof( type ) ).
@@ -58,6 +60,8 @@ struct AlignSize_Impl
     double dDouble;
 #endif
 };
+
+}
 
 #ifdef _WIN32
 #pragma pack(pop)

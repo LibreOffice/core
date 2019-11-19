@@ -721,6 +721,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
     return aRet;
 }
 
+namespace {
+
 class SwHyphArgs : public SwInterHyphInfo
 {
     const SwNode *pStart;
@@ -743,6 +745,8 @@ public:
     sal_uInt16 *GetPageCnt() { return pPageCnt; }
     sal_uInt16 *GetPageSt() { return pPageSt; }
 };
+
+}
 
 SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCursorPos,
                          sal_uInt16* pPageCount, sal_uInt16* pPageStart )

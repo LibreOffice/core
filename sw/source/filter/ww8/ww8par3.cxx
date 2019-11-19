@@ -327,6 +327,8 @@ typedef sal_uInt16 WW8aIdSty[WW8ListManager::nMaxLevel];
 // Character Style Pointer
 typedef SwCharFormat* WW8aCFormat[WW8ListManager::nMaxLevel];
 
+namespace {
+
 struct WW8LST   // only THOSE entries, WE need!
 {
     WW8aIdSty aIdSty;     // Style Id's for each level,
@@ -338,7 +340,11 @@ struct WW8LST   // only THOSE entries, WE need!
                                                         //   true if the list should start numbering over
 };                                                      //   at the beginning of each section
 
+}
+
 const sal_uInt32 cbLSTF=28;
+
+namespace {
 
 struct WW8LFO   // only THOSE entries, WE need!
 {
@@ -387,6 +393,8 @@ struct WW8LFOLVL
     WW8LFOLVL() :
         nStartAt(1), nLevel(0), bStartAt(true), bFormat(false) {}
 };
+
+}
 
 // Data to be saved in ListInfo
 
@@ -457,6 +465,8 @@ SprmResult WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     return maSprmParser.findSprmData(nId, &rSprms, nLen);
 }
 
+namespace {
+
 class ListWithId
 {
 private:
@@ -466,6 +476,8 @@ public:
     bool operator() (const std::unique_ptr<WW8LSTInfo>& pEntry) const
         { return (pEntry->nIdLst == mnIdLst); }
 };
+
+}
 
 // Access via List-Id of LST Entry
 WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const

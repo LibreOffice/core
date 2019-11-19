@@ -907,6 +907,8 @@ void PspSalPrinter::EndPage()
     SAL_INFO( "vcl.unx.print", "PspSalPrinter::EndPage");
 }
 
+namespace {
+
 struct PDFNewJobParameters
 {
     Size        maPageSize;
@@ -942,6 +944,8 @@ struct PDFPrintFile
     : maTmpURL( i_rURL )
     , maParameters( i_rNewParameters ) {}
 };
+
+}
 
 bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJobName, const OUString& i_rAppName,
                               ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
@@ -1196,6 +1200,8 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     return true;
 }
 
+namespace {
+
 class PrinterUpdate
 {
     static Idle*  pPrinterUpdateIdle;
@@ -1208,6 +1214,8 @@ public:
     static void jobStarted() { nActiveJobs++; }
     static void jobEnded();
 };
+
+}
 
 Idle* PrinterUpdate::pPrinterUpdateIdle = nullptr;
 int PrinterUpdate::nActiveJobs = 0;

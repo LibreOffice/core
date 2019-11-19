@@ -138,6 +138,8 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
 
 } // namespace sw
 
+namespace {
+
 struct FrameClientSortListLess
 {
     bool operator() (FrameClientSortListEntry const& r1,
@@ -148,8 +150,6 @@ struct FrameClientSortListLess
     }
 };
 
-namespace
-{
     void lcl_CollectFrameAtNodeWithLayout(const SwContentFrame* pCFrame,
             FrameClientSortList_t& rFrames,
             const RndStdIds nAnchorType)
@@ -399,6 +399,8 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
     }
 }
 
+namespace {
+
 struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 {
     uno::Reference< text::XText > const m_xParentText;
@@ -484,6 +486,8 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
      */
     bool IgnoreLastElement(SwUnoCursor& rCursor, bool bMovedFromTable);
 };
+
+}
 
 SwXParagraphEnumeration* SwXParagraphEnumeration::Create(
     uno::Reference< text::XText > const& xParent,
@@ -1418,6 +1422,8 @@ SwXTextRange::makeRedline(
     SwUnoCursorHelper::makeRedline( aPaM, rRedlineType, rRedlineProperties );
 }
 
+namespace {
+
 struct SwXTextRangesImpl final : public SwXTextRanges
 {
 
@@ -1461,6 +1467,8 @@ struct SwXTextRangesImpl final : public SwXTextRanges
     std::vector< uno::Reference< text::XTextRange > > m_Ranges;
     sw::UnoCursorPointer m_pUnoCursor;
 };
+
+}
 
 void SwXTextRangesImpl::MakeRanges()
 {
@@ -1540,6 +1548,8 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
 }
 
+namespace {
+
 struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
 {
     // XServiceInfo
@@ -1584,6 +1594,7 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
     ::sw::UnoCursorPointer m_pUnoCursor;
 };
 
+}
 
 SwXParaFrameEnumeration* SwXParaFrameEnumeration::Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat)
     { return new SwXParaFrameEnumerationImpl(rPaM, eParaFrameMode, pFormat); }

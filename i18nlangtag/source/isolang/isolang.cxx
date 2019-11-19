@@ -104,6 +104,8 @@ struct Bcp47CountryEntry
     css::lang::Locale getLocale() const;
 };
 
+namespace {
+
 struct IsoLangEngEntry
 {
     LanguageType        mnLang;
@@ -123,6 +125,7 @@ struct IsoLangOtherEntry
     const sal_Char*     mpLanguage;
 };
 
+}
 
 // Entries for languages are lower case, for countries upper case, as
 // recommended by rfc5646 (obsoletes rfc4646 (obsoletes rfc3066 (obsoletes
@@ -1412,6 +1415,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OString& rLa
     return convertIsoNamesToLanguage( aLang, aCountry, false);
 }
 
+namespace {
 
 struct IsoLangGLIBCModifiersEntry
 {
@@ -1420,6 +1424,8 @@ struct IsoLangGLIBCModifiersEntry
     sal_Char      maCountry[3];
     sal_Char      maAtString[9];
 };
+
+}
 
 static IsoLangGLIBCModifiersEntry const aImplIsoLangGLIBCModifiersEntries[] =
 {

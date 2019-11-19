@@ -102,6 +102,8 @@ static bool Impl_matchString( const char* pCompStr, const char* pMatchStr )
 
 /* ======================================================================= */
 
+namespace {
+
 struct ImplStrCharsetDef
 {
     const char*             mpCharsetStr;
@@ -113,6 +115,8 @@ struct ImplStrFirstPartCharsetDef
     const char*             mpCharsetStr;
     const ImplStrCharsetDef*    mpSecondPartTab;
 };
+
+}
 
 /* ======================================================================= */
 

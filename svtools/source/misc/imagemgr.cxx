@@ -43,6 +43,8 @@
 #define NO_INDEX        (-1)
 #define CONTENT_HELPER  ::utl::UCBContentHelper
 
+namespace {
+
 struct SvtExtensionResIdMapping_Impl
 {
     const char* _pExt;
@@ -50,6 +52,8 @@ struct SvtExtensionResIdMapping_Impl
     const char* pStrId;
     SvImageId const   _nImgId;
 };
+
+}
 
 static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
 {
@@ -166,11 +170,15 @@ static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { nullptr, false, nullptr, SvImageId::NONE }
 };
 
+namespace {
+
 struct SvtFactory2ExtensionMapping_Impl
 {
     const char*   _pFactory;
     const char*   _pExtension;
 };
+
+}
 
 // mapping from "private:factory" url to extension
 

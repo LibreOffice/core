@@ -52,6 +52,8 @@ WdColor::wdColorGray25,           // 16
 
 typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
 
+namespace {
+
 class DefaultPalette : public XIndexAccess_BASE
 {
 public:
@@ -81,6 +83,8 @@ public:
     }
 
 };
+
+}
 
 VbaPalette::VbaPalette()
 {

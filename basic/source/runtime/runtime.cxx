@@ -1695,6 +1695,7 @@ void SbiRuntime::StepPUT()
         refVar->SetFlags( n );
 }
 
+namespace {
 
 // VBA Dim As New behavior handling, save init object information
 struct DimAsNewRecoverItem
@@ -1726,10 +1727,16 @@ struct SbxVariablePtrHash
         { return reinterpret_cast<size_t>(pVar); }
 };
 
+}
+
 typedef std::unordered_map< SbxVariable*, DimAsNewRecoverItem,
                               SbxVariablePtrHash >  DimAsNewRecoverHash;
 
+namespace {
+
 class GaDimAsNewRecoverHash : public rtl::Static<DimAsNewRecoverHash, GaDimAsNewRecoverHash> {};
+
+}
 
 void removeDimAsNewRecoverItem( SbxVariable* pVar )
 {

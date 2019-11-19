@@ -37,6 +37,8 @@ namespace logging
 using css::logging::LogRecord;
 using namespace css::uno;
 
+namespace
+{
 class SimpleTextFormatter
     : public cppu::WeakImplHelper<css::logging::XLogFormatter, css::lang::XServiceInfo>
 {
@@ -54,6 +56,7 @@ private:
     virtual sal_Bool SAL_CALL supportsService(const OUString& _rServiceName) override;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
+}
 
 SimpleTextFormatter::SimpleTextFormatter() {}
 

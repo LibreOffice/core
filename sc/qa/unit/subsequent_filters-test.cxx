@@ -1015,6 +1015,8 @@ void ScFiltersTest::testBorderODS()
     xDocSh->DoClose();
 }
 
+namespace {
+
 struct Border
 {
     sal_Int16 column;
@@ -1048,6 +1050,8 @@ struct Border
     bDistance(bDist),
     lStyle(static_cast<SvxBorderLineStyle>(lSt)), tStyle(static_cast<SvxBorderLineStyle>(tSt)), rStyle(static_cast<SvxBorderLineStyle>(rSt)), bStyle(static_cast<SvxBorderLineStyle>(bSt)) {};
 };
+
+}
 
 void ScFiltersTest::testBordersOoo33()
 {

@@ -66,6 +66,8 @@ using namespace ::com::sun::star::i18n;
 
 namespace sd
 {
+    namespace {
+
     class DocumentSettings : public WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >,
                              public comphelper::PropertySetHelper,
                              public DocumentSettingsSerializer
@@ -120,6 +122,8 @@ namespace sd
         void ExtractURL( XPropertyListType t, Any* pValue );
         rtl::Reference<SdXImpressDocument> mxModel;
     };
+
+    }
 
     Reference< XInterface > DocumentSettings_createInstance( SdXImpressDocument* pModel )
         throw ()

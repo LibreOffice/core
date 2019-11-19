@@ -156,6 +156,9 @@ namespace dbaccess
 
     // OEmbedObjectHolder
     typedef ::cppu::WeakComponentImplHelper<   embed::XStateChangeListener > TEmbedObjectHolder;
+
+    namespace {
+
     class OEmbedObjectHolder :   public ::cppu::BaseMutex
                                 ,public TEmbedObjectHolder
     {
@@ -183,6 +186,8 @@ namespace dbaccess
         virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
         virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
     };
+
+    }
 
     void SAL_CALL OEmbedObjectHolder::disposing()
     {
@@ -235,6 +240,8 @@ namespace dbaccess
         }
     };
 
+    namespace {
+
     // LockModifiable
     class LockModifiable
     {
@@ -267,9 +274,14 @@ namespace dbaccess
         Reference< XModifiable2 >   m_xModifiable;
     };
 
+    }
+
     // LifetimeCoupler
     typedef ::cppu::WeakImplHelper<   css::lang::XEventListener
                                   >   LifetimeCoupler_Base;
+
+    namespace {
+
     /** helper class which couples the lifetime of a component to the lifetime
         of another component
 
@@ -309,10 +321,14 @@ namespace dbaccess
     protected:
     };
 
+    }
+
     void SAL_CALL LifetimeCoupler::disposing( const css::lang::EventObject& /*Source*/ )
     {
         m_xClient.clear();
     }
+
+    namespace {
 
     // ODocumentSaveContinuation
     class ODocumentSaveContinuation : public OInteraction< XInteractionDocumentSave >
@@ -329,6 +345,8 @@ namespace dbaccess
         // XInteractionDocumentSave
         virtual void SAL_CALL setName( const OUString& _sName,const Reference<XContent>& _xParent) override;
     };
+
+    }
 
     void SAL_CALL ODocumentSaveContinuation::setName( const OUString& _sName,const Reference<XContent>& _xParent)
     {
@@ -531,6 +549,8 @@ IPropertyArrayHelper* ODocumentDefinition::createArrayHelper( ) const
     return new OPropertyArrayHelper( ::comphelper::concatSequences( aProps, aManualProps ) );
 }
 
+namespace {
+
 class OExecuteImpl
 {
     bool& m_rbSet;
@@ -539,8 +559,6 @@ public:
     ~OExecuteImpl(){ m_rbSet = false; }
 };
 
-namespace
-{
     bool lcl_extractOpenMode( const Any& _rValue, sal_Int32& _out_rMode )
     {
         OpenCommandArgument aOpenCommand;

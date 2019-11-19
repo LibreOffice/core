@@ -1570,6 +1570,8 @@ bool X11SalGraphicsImpl::drawFilledTriangles(
     return true;
 }
 
+namespace {
+
 class SystemDependentData_Triangulation : public basegfx::SystemDependentData
 {
 private:
@@ -1600,6 +1602,8 @@ public:
 
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
+
+}
 
 SystemDependentData_Triangulation::SystemDependentData_Triangulation(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,

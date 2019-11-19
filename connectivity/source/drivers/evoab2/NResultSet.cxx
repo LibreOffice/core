@@ -375,8 +375,6 @@ bool isBookBackend( EBookClient *pBook, const char *backendname)
     return isSourceBackend(pSource, backendname);
 }
 
-}
-
 class OEvoabVersion36Helper : public OEvoabVersionHelper
 {
 private:
@@ -490,8 +488,6 @@ protected:
     }
 };
 
-namespace {
-
 ESource * findSource( const char *id )
 {
     ESourceList *pSourceList = nullptr;
@@ -517,8 +513,6 @@ bool isAuthRequired( EBook *pBook )
 {
     return e_source_get_property( e_book_get_source( pBook ),
                                   "auth" ) != nullptr;
-}
-
 }
 
 class OEvoabVersion35Helper : public OEvoabVersionHelper
@@ -609,6 +603,8 @@ public:
             const_cast< gpointer >( static_cast< gconstpointer >( &_rCompData ) ) );
     }
 };
+
+}
 
 OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pConnection )
     :OResultSet_BASE(m_aMutex)

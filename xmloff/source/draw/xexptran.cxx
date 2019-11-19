@@ -178,6 +178,8 @@ struct ImpSdXMLExpTransObj2DBase
 
 // classes of objects, different sizes
 
+namespace {
+
 struct ImpSdXMLExpTransObj2DRotate : public ImpSdXMLExpTransObj2DBase
 {
     double const                mfRotate;
@@ -214,6 +216,8 @@ struct ImpSdXMLExpTransObj2DMatrix : public ImpSdXMLExpTransObj2DBase
     explicit ImpSdXMLExpTransObj2DMatrix(const ::basegfx::B2DHomMatrix& rNew)
     :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_MATRIX), maMatrix(rNew) {}
 };
+
+}
 
 // add members
 
@@ -548,6 +552,8 @@ struct ImpSdXMLExpTransObj3DBase
 
 // classes of objects, different sizes
 
+namespace {
+
 struct ImpSdXMLExpTransObj3DRotateX : public ImpSdXMLExpTransObj3DBase
 {
     double const                mfRotateX;
@@ -584,6 +590,8 @@ struct ImpSdXMLExpTransObj3DMatrix : public ImpSdXMLExpTransObj3DBase
     explicit ImpSdXMLExpTransObj3DMatrix(const ::basegfx::B3DHomMatrix& rNew)
     :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_MATRIX), maMatrix(rNew) {}
 };
+
+}
 
 // add members
 

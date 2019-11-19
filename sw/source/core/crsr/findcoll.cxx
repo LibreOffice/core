@@ -26,6 +26,8 @@
 #include <SwRewriter.hxx>
 #include <strings.hrc>
 
+namespace {
+
 /// parameters for a search for FormatCollections
 struct SwFindParaFormatColl : public SwFindParas
 {
@@ -42,6 +44,8 @@ struct SwFindParaFormatColl : public SwFindParas
     virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly) override;
     virtual bool IsReplaceMode() const override;
 };
+
+}
 
 int SwFindParaFormatColl::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
         const SwPaM & rRegion, bool bInReadOnly)

@@ -98,6 +98,8 @@ using namespace ::comphelper;
 namespace dbaccess
 {
 
+namespace {
+
 /** helper class which implements a XFlushListener, and forwards all
     notification events to another XFlushListener
 
@@ -132,6 +134,8 @@ protected:
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 };
+
+}
 
 FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener )
     :m_aBroadcaster( _rxBroadcaster )
@@ -255,6 +259,8 @@ void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentic
     SAL_WARN("dbaccess","OAuthenticationContinuation::setRememberAccount: not supported!");
 }
 
+namespace {
+
 /** The class OSharedConnectionManager implements a structure to share connections.
     It owns the master connections which will be disposed when the last connection proxy is gone.
 */
@@ -268,6 +274,8 @@ struct TDigestHolder
     }
 
 };
+
+}
 
 class OSharedConnectionManager : public ::cppu::WeakImplHelper< XEventListener >
 {

@@ -48,6 +48,8 @@ using namespace ::com::sun::star;
 #define COLFUZZY 20
 #define MAX_TABWIDTH (USHRT_MAX - 2001)
 
+namespace {
+
 class SwHTMLTableLayoutConstraints
 {
     sal_uInt16 const nRow;                    // start row
@@ -71,6 +73,8 @@ public:
     sal_uInt16 GetColSpan() const { return nColSpan; }
     sal_uInt16 GetColumn() const { return nCol; }
 };
+
+}
 
 SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts(const SwStartNode *pSttNd,
                                              std::shared_ptr<SwHTMLTableLayout> const& rTab,

@@ -60,6 +60,8 @@
 #include <android/asset_manager.h>
 #endif
 
+namespace {
+
 struct FileHandle_Impl
 {
     pthread_mutex_t m_mutex;
@@ -154,6 +156,8 @@ struct FileHandle_Impl
         ~Guard();
     };
 };
+
+}
 
 FileHandle_Impl::Guard::Guard(pthread_mutex_t * pMutex)
     : m_mutex(pMutex)

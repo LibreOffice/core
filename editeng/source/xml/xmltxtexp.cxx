@@ -248,6 +248,7 @@ void SAL_CALL SvxSimpleUnoModel::removeEventListener( const css::uno::Reference<
 {
 }
 
+namespace {
 
 class SvxXMLTextExportComponent : public SvXMLExport
 {
@@ -268,6 +269,7 @@ private:
     css::uno::Reference< css::text::XText > mxText;
 };
 
+}
 
 SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,

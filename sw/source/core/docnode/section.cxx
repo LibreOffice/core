@@ -65,6 +65,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 class SwIntrnlSectRefLink : public SwBaseLink
 {
     SwSectionFormat& rSectFormat;
@@ -88,6 +90,7 @@ public:
     }
 };
 
+}
 
 SwSectionData::SwSectionData(SectionType const eType, OUString const& rName)
     : m_eType(eType)

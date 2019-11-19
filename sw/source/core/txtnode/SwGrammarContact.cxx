@@ -27,6 +27,8 @@
 #include <rootfrm.hxx>
 #include <viewsh.hxx>
 
+namespace {
+
 /*
  * This class is responsible for the delayed display of grammar checks when a paragraph is edited
  * It's a client of the paragraph the cursor points to.
@@ -58,6 +60,8 @@ protected:
     // virtual function of SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
+
+}
 
 SwGrammarContact::SwGrammarContact() : mbFinished( false )
 {

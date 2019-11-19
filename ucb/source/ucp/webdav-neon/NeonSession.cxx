@@ -79,6 +79,8 @@ using namespace webdav_ucp;
 #    define EOL "\r\n"
 #endif
 
+namespace {
+
 struct RequestData
 {
     // POST
@@ -106,6 +108,8 @@ struct hashPtr
         return reinterpret_cast<size_t>(p);
     }
 };
+
+}
 
 typedef std::unordered_map
 <
@@ -148,6 +152,8 @@ static bool noKeepAlive( const uno::Sequence< beans::NamedValue >& rFlags )
             [] (beans::NamedValue const& rNV) { return rNV.Name == "KeepAlive"; } ));
     return pValue != rFlags.end() && !pValue->Value.get<bool>();
 }
+
+namespace {
 
 struct NeonRequestContext
 {
@@ -192,6 +198,8 @@ struct NeonRequestContext
     }
 
 };
+
+}
 
 // A simple Neon response_block_reader for use with an XInputStream
 extern "C" {

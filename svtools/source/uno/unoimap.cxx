@@ -63,6 +63,8 @@ const sal_Int32 HANDLE_RADIUS = 8;
 const sal_Int32 HANDLE_BOUNDARY = 9;
 const sal_Int32 HANDLE_TITLE = 10;
 
+namespace {
+
 class SvUnoImageMapObject : public OWeakAggObject,
                             public XEventsSupplier,
                             public XServiceInfo,
@@ -119,6 +121,8 @@ private:
     sal_Int32 mnRadius;
     PointSequence maPolygon;
 };
+
+}
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMapObject );
 
@@ -496,6 +500,7 @@ Reference< XNameReplace > SAL_CALL SvUnoImageMapObject::getEvents()
     return mxEvents.get();
 }
 
+namespace {
 
 class SvUnoImageMap : public WeakImplHelper< XIndexContainer, XServiceInfo, XUnoTunnel >
 {
@@ -534,6 +539,8 @@ private:
 
     std::vector< rtl::Reference<SvUnoImageMapObject> > maObjectList;
 };
+
+}
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMap );
 

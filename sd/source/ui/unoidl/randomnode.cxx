@@ -66,6 +66,9 @@ namespace sd
 {
 
 typedef ::cppu::WeakImplHelper< XTimeContainer, XEnumerationAccess, XCloneable, XServiceInfo, XInitialization > RandomAnimationNodeBase;
+
+namespace {
+
 class RandomAnimationNode : public RandomAnimationNodeBase
 {
 public:
@@ -150,6 +153,8 @@ private:
 
     Reference< XAnimate > mxFirstNode;
 };
+
+}
 
 Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetClass )
 {

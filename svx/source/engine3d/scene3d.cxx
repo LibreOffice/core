@@ -47,6 +47,7 @@
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdmodel.hxx>
 
+namespace {
 
 class ImpRemap3DDepth
 {
@@ -66,6 +67,8 @@ public:
     sal_uInt32 GetOrdNum() const { return mnOrdNum; }
     bool IsScene() const { return mbIsScene; }
 };
+
+}
 
 ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth)
 :   mnOrdNum(nOrdNum),

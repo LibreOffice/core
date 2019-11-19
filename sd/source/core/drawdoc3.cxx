@@ -60,6 +60,8 @@ using namespace ::com::sun::star;
     every page in the bookmark document/list
  */
 
+namespace {
+
 class InsertBookmarkAsPage_FindDuplicateLayouts
 {
 public:
@@ -69,6 +71,8 @@ public:
 private:
     std::vector<OUString> &mrLayoutsToTransfer;
 };
+
+}
 
 void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage const * pBMMPage, bool bRenameDuplicates, SdDrawDocument* pBookmarkDoc )
 {

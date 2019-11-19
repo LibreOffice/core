@@ -140,6 +140,8 @@ static const sal_uInt16 aElemActionMaps[XML_PROP_TYPE_END] =
     PROP_OOO_CHART_ELEM_ACTIONS
 };
 
+namespace {
+
 class XMLTypedPropertiesOOoTContext_Impl : public XMLPersElemContentTContext
 {
     css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
@@ -158,6 +160,8 @@ public:
 
     virtual void Export() override;
 };
+
+}
 
 XMLTypedPropertiesOOoTContext_Impl::XMLTypedPropertiesOOoTContext_Impl(
     XMLTransformerBase& rImp,
@@ -202,6 +206,8 @@ void XMLTypedPropertiesOOoTContext_Impl::Export()
     }
 }
 
+namespace {
+
 class XMLPropertiesOOoTContext_Impl : public XMLTransformerContext
 {
     ::rtl::Reference < XMLTypedPropertiesOOoTContext_Impl >
@@ -243,6 +249,8 @@ public:
 
     virtual bool IsPersistent() const override;
 };
+
+}
 
 XMLTypedPropertiesOOoTContext_Impl
     *XMLPropertiesOOoTContext_Impl::GetPropContext(

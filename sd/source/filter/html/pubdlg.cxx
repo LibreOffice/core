@@ -335,6 +335,8 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
     return rOut;
 }
 
+namespace {
+
 // Dialog for the entry of the name of the design
 class SdDesignNameDlg : public weld::GenericDialogController
 {
@@ -347,6 +349,8 @@ public:
     OUString GetDesignName() const;
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 };
+
+}
 
 // SdPublishingDlg Methods
 

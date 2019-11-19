@@ -48,6 +48,7 @@ namespace backend
 namespace sfwk
 {
 
+namespace {
 
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
@@ -102,6 +103,8 @@ public:
     getSupportedPackageTypes() override;
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType) override;
 };
+
+}
 
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {

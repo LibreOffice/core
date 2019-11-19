@@ -559,6 +559,8 @@ void SwIndexMarkPane::UpdateKeyBoxes()
     }
 }
 
+namespace {
+
 class SwNewUserIdxDlg : public weld::GenericDialogController
 {
     SwIndexMarkPane* m_pDlg;
@@ -581,6 +583,8 @@ public:
     }
     OUString GetName() const { return m_xNameED->get_text(); }
 };
+
+}
 
 IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, weld::Entry&, rEdit, void)
 {
@@ -991,6 +995,8 @@ short SwIndexMarkModalDlg::run()
     return nRet;
 }
 
+namespace {
+
 class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
 {
     std::vector<std::unique_ptr<weld::Builder>> m_aBuilders;
@@ -1034,6 +1040,8 @@ struct TextInfo
     ToxAuthorityField nToxField;
     const char* pHelpId;
 };
+
+}
 
 static const TextInfo aTextInfoArr[] =
 {

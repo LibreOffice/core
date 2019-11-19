@@ -40,6 +40,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
+namespace {
+
 // CT_TextParagraph
 class TextParagraphContext : public ContextHandler2
 {
@@ -51,6 +53,8 @@ public:
 protected:
     TextParagraph& mrParagraph;
 };
+
+}
 
 TextParagraphContext::TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara )
 : ContextHandler2( rParent )

@@ -2131,6 +2131,8 @@ namespace detail
         virtual ~IValueSource() { }
     };
 
+    namespace {
+
     class RowValue : public IValueSource
     {
     public:
@@ -2192,6 +2194,8 @@ namespace detail
     private:
         const Reference< XColumn >  m_xColumn;
     };
+
+    }
 }
 
 

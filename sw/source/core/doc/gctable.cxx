@@ -319,6 +319,8 @@ static void lcl_GC_Box_Border( const SwTableBox* pBox, SwGCLineBorder* pPara )
     }
 }
 
+namespace {
+
 struct GCLinePara
 {
     SwTableLines* pLns;
@@ -328,6 +330,8 @@ struct GCLinePara
         : pLns( &rLns ), pShareFormats( pPara ? pPara->pShareFormats : nullptr )
     {}
 };
+
+}
 
 static bool lcl_MergeGCLine(SwTableLine* pLine, GCLinePara* pPara);
 

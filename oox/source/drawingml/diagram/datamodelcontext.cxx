@@ -31,6 +31,8 @@ using namespace ::com::sun::star::uno;
 
 namespace oox { namespace drawingml {
 
+namespace {
+
 // CT_CxnList
 class CxnListContext
     : public ContextHandler2
@@ -319,6 +321,8 @@ public:
 private:
     DiagramDataPtr mpDataModel;
 };
+
+}
 
 DataModelContext::DataModelContext( ContextHandler2Helper const & rParent,
                                     const DiagramDataPtr & pDataModel )

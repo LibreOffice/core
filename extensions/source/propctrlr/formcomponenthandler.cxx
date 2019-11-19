@@ -173,6 +173,7 @@ namespace pcr
         return aSupported;
     }
 
+    namespace {
 
     // TODO: -> export from toolkit
     struct LanguageDependentProp
@@ -180,6 +181,8 @@ namespace pcr
         const char* pPropName;
         sal_Int32   nPropNameLength;
     };
+
+    }
 
     static const LanguageDependentProp aLanguageDependentProp[] =
     {

@@ -45,6 +45,8 @@ void ClrMap::setColorMap( sal_Int32 nClrToken, sal_Int32 nMappedClrToken )
     maClrMap[ nClrToken ] = nMappedClrToken;
 }
 
+namespace {
+
 struct find_by_token
 {
     explicit find_by_token(sal_Int32 token):
@@ -60,6 +62,8 @@ struct find_by_token
 private:
     sal_Int32 const m_token;
 };
+
+}
 
 bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, ::Color& rColor ) const
 {

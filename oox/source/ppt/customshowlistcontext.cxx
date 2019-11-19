@@ -29,6 +29,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
+namespace {
+
 class CustomShowContext : public ::oox::core::FragmentHandler2
 {
     CustomShow mrCustomShow;
@@ -40,6 +42,8 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 };
+
+}
 
 CustomShowContext::CustomShowContext( FragmentHandler2 const & rParent,
     const Reference< XFastAttributeList >& rxAttribs,

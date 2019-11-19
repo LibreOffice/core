@@ -46,6 +46,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
+namespace {
+
 class SwXMLTableItemMapper_Impl: public SvXMLExportItemMapper
 {
     SwXMLBrushItemExport aBrushItemExport;
@@ -78,6 +80,8 @@ public:
 
     inline void SetAbsWidth( sal_uInt32 nAbs );
 };
+
+}
 
 SwXMLTableItemMapper_Impl::SwXMLTableItemMapper_Impl(
         SvXMLItemMapEntriesRef rMapEntries,

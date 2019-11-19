@@ -705,6 +705,8 @@ static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
     return true;
 }
 
+namespace {
+
 struct Convention_A1 : public ScCompiler::Convention
 {
     explicit Convention_A1( FormulaGrammar::AddressConvention eConv ) : ScCompiler::Convention( eConv ) { }
@@ -737,6 +739,8 @@ struct Convention_A1 : public ScCompiler::Convention
     }
 };
 
+}
+
 void Convention_A1::MakeColStr( OUStringBuffer& rBuffer, SCCOL nCol )
 {
     if ( !ValidCol( nCol) )
@@ -752,6 +756,8 @@ void Convention_A1::MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow )
     else
         rBuffer.append(sal_Int32(nRow + 1));
 }
+
+namespace {
 
 struct ConventionOOO_A1 : public Convention_A1
 {
@@ -1549,6 +1555,8 @@ struct ConventionXL_OOX : public ConventionXL_A1
     }
 };
 
+}
+
 static void
 r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress& rAbsRef )
 {
@@ -1576,6 +1584,8 @@ r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress
     else
         rBuf.append( OUString::number( rAbsRef.Row() + 1 ) );
 }
+
+namespace {
 
 struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 {
@@ -1763,6 +1773,8 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         return nFlags;
     }
 };
+
+}
 
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
                         bool bComputeII, bool bMatrixFlag, const ScInterpreterContext* pContext )

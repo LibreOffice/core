@@ -30,6 +30,8 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
+namespace {
+
 class PathService : public ::cppu::WeakImplHelper< css::frame::XConfigManager, css::lang::XServiceInfo >
 {
     SvtPathOptions const m_aOptions;
@@ -73,6 +75,7 @@ public:
         {}
 };
 
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svl_PathService_get_implementation(css::uno::XComponentContext*,

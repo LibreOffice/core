@@ -5437,10 +5437,14 @@ void Test::testFuncVLOOKUP()
     m_pDoc->DeleteTab(0);
 }
 
+namespace {
+
 struct StrStrCheck {
     const char* pVal;
     const char* pRes;
 };
+
+}
 
 template<size_t DataSize, size_t FormulaSize, int Type>
 static void runTestMATCH(ScDocument* pDoc, const char* aData[DataSize], const StrStrCheck aChecks[FormulaSize])

@@ -345,8 +345,6 @@ enum XMLActionKind
     XMLE_PLAY
 };
 
-}
-
 class XMLAnimationsEffectContext : public SvXMLImportContext
 {
 public:
@@ -387,6 +385,7 @@ public:
     XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent );
 };
 
+}
 
 XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent )
 : SvXMLImportContext( rImport, nPrfx, rLocalName )

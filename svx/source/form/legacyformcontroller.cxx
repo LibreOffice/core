@@ -55,6 +55,9 @@ namespace svxform
     typedef ::cppu::WeakImplHelper <   form::XFormController
                                     ,   XServiceInfo
                                     >   LegacyFormController_Base;
+
+    namespace {
+
     /** is an implementation of the legacy form controller service, namely css.form.FormController, supporting the
         css.form.XFormController interface.
 
@@ -100,6 +103,7 @@ namespace svxform
         const Reference< form::runtime::XFormController >   m_xDelegator;
     };
 
+    }
 
     Reference< XControl > SAL_CALL LegacyFormController::getCurrentControl(  )
     {

@@ -63,13 +63,14 @@ enum FormularCommand
     FC_VAL
 };
 
-}
-
 struct FormularCommandNameTable
 {
     const char*     pS;
     FormularCommand const pE;
 };
+
+}
+
 static const FormularCommandNameTable pFormularCommandNameTable[] =
 {
     { "*/",     FC_MULDIV },
@@ -426,6 +427,8 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
     return aRet;
 }
 
+namespace {
+
 // CT_GeomGuideList
 class GeomGuideListContext : public ContextHandler2
 {
@@ -437,6 +440,8 @@ protected:
     std::vector< CustomShapeGuide >&    mrGuideList;
     CustomShapeProperties&              mrCustomShapeProperties;
 };
+
+}
 
 GeomGuideListContext::GeomGuideListContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList )
 : ContextHandler2( rParent )
@@ -628,6 +633,8 @@ static const OUString& GetGeomGuideName( const OUString& rValue )
     return rValue;
 }
 
+namespace {
+
 // CT_AdjPoint2D
 class AdjPoint2DContext : public ContextHandler2
 {
@@ -635,12 +642,16 @@ public:
     AdjPoint2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
 };
 
+}
+
 AdjPoint2DContext::AdjPoint2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
 : ContextHandler2( rParent )
 {
     rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_x ).get() );
     rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_y ).get() );
 }
+
+namespace {
 
 // CT_XYAdjustHandle
 class XYAdjustHandleContext : public ContextHandler2
@@ -653,6 +664,8 @@ protected:
     AdjustHandle& mrAdjustHandle;
     CustomShapeProperties& mrCustomShapeProperties;
 };
+
+}
 
 XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
 : ContextHandler2( rParent )
@@ -692,6 +705,8 @@ ContextHandlerRef XYAdjustHandleContext::onCreateContext( sal_Int32 aElementToke
     return nullptr;
 }
 
+namespace {
+
 // CT_PolarAdjustHandle
 class PolarAdjustHandleContext : public ContextHandler2
 {
@@ -703,6 +718,8 @@ protected:
     AdjustHandle& mrAdjustHandle;
     CustomShapeProperties& mrCustomShapeProperties;
 };
+
+}
 
 PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
 : ContextHandler2( rParent )
@@ -745,6 +762,8 @@ ContextHandlerRef PolarAdjustHandleContext::onCreateContext( sal_Int32 aElementT
     return nullptr;
 }
 
+namespace {
+
 // CT_AdjustHandleList
 class AdjustHandleListContext : public ContextHandler2
 {
@@ -756,6 +775,8 @@ protected:
     std::vector< AdjustHandle >& mrAdjustHandleList;
     CustomShapeProperties& mrCustomShapeProperties;
 };
+
+}
 
 AdjustHandleListContext::AdjustHandleListContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList )
 : ContextHandler2( rParent )
@@ -781,6 +802,8 @@ ContextHandlerRef AdjustHandleListContext::onCreateContext( sal_Int32 aElementTo
     return nullptr;
 }
 
+namespace {
+
 // CT_ConnectionSite
 class ConnectionSiteContext : public ContextHandler2
 {
@@ -792,6 +815,8 @@ protected:
     ConnectionSite& mrConnectionSite;
     CustomShapeProperties& mrCustomShapeProperties;
 };
+
+}
 
 ConnectionSiteContext::ConnectionSiteContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite )
 : ContextHandler2( rParent )
@@ -808,6 +833,8 @@ ContextHandlerRef ConnectionSiteContext::onCreateContext( sal_Int32 aElementToke
     return nullptr;
 }
 
+namespace {
+
 // CT_Path2DMoveTo
 class Path2DMoveToContext : public ContextHandler2
 {
@@ -819,6 +846,8 @@ protected:
     EnhancedCustomShapeParameterPair& mrAdjPoint2D;
     CustomShapeProperties& mrCustomShapeProperties;
 };
+
+}
 
 Path2DMoveToContext::Path2DMoveToContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
 : ContextHandler2( rParent )
@@ -834,6 +863,8 @@ ContextHandlerRef Path2DMoveToContext::onCreateContext( sal_Int32 aElementToken,
     return nullptr;
 }
 
+namespace {
+
 // CT_Path2DLineTo
 class Path2DLineToContext : public ContextHandler2
 {
@@ -845,6 +876,8 @@ protected:
     EnhancedCustomShapeParameterPair& mrAdjPoint2D;
     CustomShapeProperties& mrCustomShapeProperties;
 };
+
+}
 
 Path2DLineToContext::Path2DLineToContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
 : ContextHandler2( rParent )
@@ -860,6 +893,8 @@ ContextHandlerRef Path2DLineToContext::onCreateContext( sal_Int32 aElementToken,
     return nullptr;
 }
 
+namespace {
+
 // CT_Path2DQuadBezierTo
 class Path2DQuadBezierToContext : public ContextHandler2
 {
@@ -873,6 +908,8 @@ protected:
     int nCount;
     CustomShapeProperties& mrCustomShapeProperties;
 };
+
+}
 
 Path2DQuadBezierToContext::Path2DQuadBezierToContext( ContextHandler2Helper const & rParent,
     CustomShapeProperties& rCustomShapeProperties,
@@ -893,6 +930,8 @@ ContextHandlerRef Path2DQuadBezierToContext::onCreateContext( sal_Int32 aElement
     return nullptr;
 }
 
+namespace {
+
 // CT_Path2DCubicBezierTo
 class Path2DCubicBezierToContext : public ContextHandler2
 {
@@ -908,6 +947,8 @@ protected:
     EnhancedCustomShapeParameterPair& mrEndPt;
     int nCount;
 };
+
+}
 
 Path2DCubicBezierToContext::Path2DCubicBezierToContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties,
     EnhancedCustomShapeParameterPair& rControlPt1,
@@ -930,6 +971,8 @@ ContextHandlerRef Path2DCubicBezierToContext::onCreateContext( sal_Int32 aElemen
     return nullptr;
 }
 
+namespace {
+
 // CT_Path2DContext
 class Path2DContext : public ContextHandler2
 {
@@ -944,6 +987,8 @@ protected:
     std::vector< css::drawing::EnhancedCustomShapeSegment >& mrSegments;
     CustomShapeProperties& mrCustomShapeProperties;
 };
+
+}
 
 Path2DContext::Path2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< css::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D )
 : ContextHandler2( rParent )
@@ -1127,6 +1172,8 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
     return nullptr;
 }
 
+namespace {
+
 // CT_Path2DList
 class Path2DListContext : public ContextHandler2
 {
@@ -1142,6 +1189,8 @@ protected:
     std::vector< css::drawing::EnhancedCustomShapeSegment >& mrSegments;
     std::vector< Path2D >& mrPath2DList;
 };
+
+}
 
 Path2DListContext:: Path2DListContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
                                         std::vector< Path2D >& rPath2DList )

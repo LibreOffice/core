@@ -94,6 +94,7 @@ static const SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+namespace {
 
 class XMLImageMapObjectContext : public SvXMLImportContext
 {
@@ -141,6 +142,7 @@ protected:
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet);
 };
 
+}
 
 XMLImageMapObjectContext::XMLImageMapObjectContext(
     SvXMLImport& rImport,
@@ -275,6 +277,7 @@ void XMLImageMapObjectContext::Prepare(
     rPropertySet->setPropertyValue( "Name", Any( sNam ) );
 }
 
+namespace {
 
 class XMLImageMapRectangleContext : public XMLImageMapObjectContext
 {
@@ -302,6 +305,7 @@ protected:
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
 
+}
 
 XMLImageMapRectangleContext::XMLImageMapRectangleContext(
     SvXMLImport& rImport,
@@ -372,6 +376,7 @@ void XMLImageMapRectangleContext::Prepare(
     XMLImageMapObjectContext::Prepare(rPropertySet);
 }
 
+namespace {
 
 class XMLImageMapPolygonContext : public XMLImageMapObjectContext
 {
@@ -398,6 +403,7 @@ protected:
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
 
+}
 
 XMLImageMapPolygonContext::XMLImageMapPolygonContext(
     SvXMLImport& rImport,
@@ -455,6 +461,8 @@ void XMLImageMapPolygonContext::Prepare(Reference<XPropertySet> & rPropertySet)
     XMLImageMapObjectContext::Prepare(rPropertySet);
 }
 
+namespace {
+
 class XMLImageMapCircleContext : public XMLImageMapObjectContext
 {
     awt::Point aCenter;
@@ -481,6 +489,7 @@ protected:
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
 
+}
 
 XMLImageMapCircleContext::XMLImageMapCircleContext(
     SvXMLImport& rImport,

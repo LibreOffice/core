@@ -142,6 +142,8 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
     return bSelected;
 }
 
+namespace {
+
 /*-************************************************************************************************************
     @short      helper class to calculate length of given string
     @descr      Instances of it can be used as callback for INetURLObject::getAbbreviated() method to build
@@ -167,6 +169,8 @@ class StringCalculator : public ::cppu::WeakImplHelper< css::util::XStringWidth 
     private:
         weld::Widget* const m_pDevice;
 };
+
+}
 
 /*-************************************************************************************************************
     @short      try to build short name of given URL to show it n GUI

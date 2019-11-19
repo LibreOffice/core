@@ -84,11 +84,15 @@ namespace sd {
 |*
 \************************************************************************/
 
+namespace {
+
 struct ImpRememberOrigAndClone
 {
     SdrObject*      pOrig;
     SdrObject*      pClone;
 };
+
+}
 
 static SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone>& aConnectorContainer, SdrObject const * pConnObj)
 {

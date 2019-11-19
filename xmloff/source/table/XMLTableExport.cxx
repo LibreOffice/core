@@ -98,6 +98,8 @@ const XMLPropertyMapEntry* getCellPropertiesMap()
     return &aXMLCellProperties[0];
 }
 
+namespace {
+
 class StringStatisticHelper
 {
 private:
@@ -109,6 +111,8 @@ public:
 
     sal_Int32 getModeString( /* out */ OUString& rModeString );
 };
+
+}
 
 void StringStatisticHelper::add( const OUString& rStyleName )
 {

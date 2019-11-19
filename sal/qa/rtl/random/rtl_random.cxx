@@ -139,6 +139,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class addBytes
 
+namespace {
+
 class Statistics
 {
     int m_nDispensation[256];
@@ -207,6 +209,8 @@ public:
     sal_Int32 getMaxDeviation() const {return m_nMaxDeviation;}
 
 };
+
+}
 
 class getBytes : public CppUnit::TestFixture
 {

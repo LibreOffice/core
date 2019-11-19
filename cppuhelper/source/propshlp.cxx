@@ -67,6 +67,8 @@ static int compare_OUString_Property_Impl( const void *arg1, const void *arg2 )
  * The class which implements the PropertySetInfo interface.
  */
 
+namespace {
+
 class OPropertySetHelperInfo_Impl
     : public WeakImplHelper< css::beans::XPropertySetInfo >
 {
@@ -81,6 +83,7 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) override;
 };
 
+}
 
 /**
  * Create an object that implements XPropertySetInfo IPropertyArrayHelper.

@@ -45,6 +45,8 @@ using namespace ::osl;
 namespace comphelper
 {
 
+namespace {
+
 class UNOMemoryStream : public WeakImplHelper<XServiceInfo, XStream, XSeekableInputStream, XOutputStream, XTruncate>
 {
 public:
@@ -83,6 +85,8 @@ private:
     std::vector< sal_Int8 > maData;
     sal_Int32 mnCursor;
 };
+
+}
 
 UNOMemoryStream::UNOMemoryStream()
 : mnCursor(0)

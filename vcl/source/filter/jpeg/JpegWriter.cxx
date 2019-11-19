@@ -32,12 +32,16 @@
 
 #define BUFFER_SIZE  4096
 
+namespace {
+
 struct DestinationManagerStruct
 {
     jpeg_destination_mgr pub;         /* public fields */
     SvStream* stream;                 /* target stream */
     JOCTET * buffer;                  /* start of buffer */
 };
+
+}
 
 extern "C" {
 

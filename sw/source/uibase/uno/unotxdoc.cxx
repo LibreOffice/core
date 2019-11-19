@@ -1366,6 +1366,8 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage()
     return mxXDrawPage;
 }
 
+namespace {
+
 class SwDrawPagesObj : public cppu::WeakImplHelper<
     css::drawing::XDrawPages,
     css::lang::XServiceInfo>
@@ -1419,6 +1421,8 @@ public:
         return { "com.sun.star.drawing.DrawPages" };
     }
 };
+
+}
 
 // XDrawPagesSupplier
 

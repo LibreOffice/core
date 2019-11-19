@@ -48,6 +48,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 
+namespace {
+
 struct SwAddressFragment
 {
     std::unique_ptr<weld::Builder> m_xBuilder;
@@ -66,6 +68,8 @@ struct SwAddressFragment
         m_xEntry->set_grid_top_attach(nLine);
     }
 };
+
+}
 
 class SwAddressControl_Impl
 {

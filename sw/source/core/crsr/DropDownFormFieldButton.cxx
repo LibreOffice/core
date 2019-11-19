@@ -18,6 +18,8 @@
 #include <docsh.hxx>
 #include <strings.hrc>
 
+namespace
+{
 /**
  * Popup dialog for drop-down form field showing the list items of the field.
  * The user can select the item using this popup while filling in a form.
@@ -35,6 +37,7 @@ public:
     virtual ~SwFieldDialog() override;
     virtual void dispose() override;
 };
+}
 
 SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, long nMinListWidth)
     : FloatingWindow(parent, WB_BORDER | WB_SYSTEMWINDOW)

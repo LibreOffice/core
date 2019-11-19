@@ -30,6 +30,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
+namespace {
+
 class XMLParagraphTransformerContext : public XMLTransformerContext
 {
 public:
@@ -43,6 +45,8 @@ public:
                                    const OUString& rQName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
+
+}
 
 XMLParagraphTransformerContext::XMLParagraphTransformerContext(
         XMLTransformerBase& rImp,
@@ -61,6 +65,8 @@ rtl::Reference<XMLTransformerContext> XMLParagraphTransformerContext::CreateChil
                                                 rQName, true );
 }
 
+namespace {
+
 class XMLPersTextContentRNGTransformTContext : public XMLPersTextContentTContext
 {
 public:
@@ -72,6 +78,8 @@ public:
 
     virtual void Characters( const OUString& rChars ) override;
 };
+
+}
 
 XMLPersTextContentRNGTransformTContext::XMLPersTextContentRNGTransformTContext(
     XMLTransformerBase& rTransformer,

@@ -51,6 +51,8 @@ using namespace formula;
 const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental
 const double fMachEps = ::std::numeric_limits<double>::epsilon();
 
+namespace {
+
 class ScDistFunc
 {
 public:
@@ -59,6 +61,8 @@ public:
 protected:
     ~ScDistFunc() {}
 };
+
+}
 
 //  iteration for inverse distributions
 
@@ -4765,6 +4769,8 @@ static SCSIZE lcl_bitReverse(SCSIZE nIn, SCSIZE nBound)
     return nOut;
 }
 
+namespace {
+
 // Computes and stores twiddle factors for computing DFT later.
 struct ScTwiddleFactors
 {
@@ -4789,6 +4795,8 @@ struct ScTwiddleFactors
     SCSIZE mnN;
     bool mbInverse;
 };
+
+}
 
 void ScTwiddleFactors::Compute()
 {
@@ -4905,6 +4913,8 @@ void ScTwiddleFactors::Compute()
     }
 }
 
+namespace {
+
 // A radix-2 decimation in time FFT algorithm for complex valued input.
 class ScComplexFFT2
 {
@@ -4994,6 +5004,8 @@ private:
     bool mbDisableNormalize:1;
     bool mbSubSampleTFs:1;
 };
+
+}
 
 void ScComplexFFT2::prepare()
 {
@@ -5094,6 +5106,8 @@ void ScComplexFFT2::Compute()
         lcl_normalize(mrArray, mbPolar);
 }
 
+namespace {
+
 // Bluestein's algorithm or chirp z-transform algorithm that can be used to
 // compute DFT of a complex valued input of any length N in O(N lgN) time.
 class ScComplexBluesteinFFT
@@ -5122,6 +5136,8 @@ private:
     bool mbPolar:1;
     bool mbDisableNormalize:1;
 };
+
+}
 
 void ScComplexBluesteinFFT::Compute()
 {
@@ -5213,6 +5229,8 @@ void ScComplexBluesteinFFT::Compute()
         lcl_normalize(mrArray, mbPolar);
 }
 
+namespace {
+
 // Computes DFT of an even length(N) real-valued input by using a
 // ScComplexFFT2 if N == 2^k for some k or else by using a ScComplexBluesteinFFT
 // with a complex valued input of length = N/2.
@@ -5238,6 +5256,8 @@ private:
     bool mbInverse:1;
     bool mbPolar:1;
 };
+
+}
 
 void ScRealFFT::Compute()
 {
@@ -5338,6 +5358,8 @@ void ScRealFFT::Compute()
 
 using ScMatrixGenerator = ScMatrixRef(SCSIZE, SCSIZE, std::vector<double>&);
 
+namespace {
+
 // Generic FFT class that decides which FFT implementation to use.
 class ScFFT
 {
@@ -5360,6 +5382,8 @@ private:
     bool mbInverse:1;
     bool mbPolar:1;
 };
+
+}
 
 ScMatrixRef ScFFT::Compute(const std::function<ScMatrixGenerator>& rMatGenFunc)
 {

@@ -13,6 +13,8 @@
 #include <cstdlib>
 #include <stdio.h>
 
+namespace {
+
 struct Encoder
 {
     rtl_UnicodeToTextConverter const m_aConverter;
@@ -54,6 +56,8 @@ struct Encoder
     }
 
 };
+
+}
 
 int main()
 {

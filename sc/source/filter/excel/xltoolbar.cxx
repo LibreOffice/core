@@ -21,6 +21,8 @@ using namespace com::sun::star;
 
 typedef std::map< sal_Int16, OUString > IdToString;
 
+namespace {
+
 class MSOExcelCommandConvertor : public MSOCommandConvertor
 {
    IdToString msoToOOcmd;
@@ -30,6 +32,8 @@ public:
     virtual OUString MSOCommandToOOCommand( sal_Int16 msoCmd ) override;
     virtual OUString MSOTCIDToOOCommand( sal_Int16 key ) override;
 };
+
+}
 
 MSOExcelCommandConvertor::MSOExcelCommandConvertor()
 {

@@ -176,6 +176,8 @@ void collectUIInformation(const OUString& rAction, const OUString& aParameters)
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 
+namespace {
+
 class SwTransferDdeLink : public ::sfx2::SvBaseLink
 {
     OUString sName;
@@ -205,6 +207,8 @@ public:
     void Disconnect( bool bRemoveDataAdvise );
 };
 
+}
+
 /// Tracks the boundaries of pasted content and notifies listeners.
 class SwPasteContext
 {
@@ -220,6 +224,8 @@ private:
     std::unique_ptr<SwPaM> m_pPaM;
     sal_Int32 m_nStartContent = 0;
 };
+
+namespace {
 
 // helper class for Action and Undo enclosing
 class SwTrnsfrActionAndUndo
@@ -246,6 +252,8 @@ public:
         pSh->EndAllAction();
     }
 };
+
+}
 
 SwTransferable::SwTransferable( SwWrtShell& rSh )
     : m_pWrtShell( &rSh ),

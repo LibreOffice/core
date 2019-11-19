@@ -60,6 +60,8 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
+namespace {
+
 struct XShapePosCompareHelper
 {
     bool operator() ( const uno::Reference<drawing::XShape>& xshape1,
@@ -74,6 +76,9 @@ struct XShapePosCompareHelper
             return false;
     }
 };
+
+}
+
 //=====  internal  ============================================================
 
 AccessibleDrawDocumentView::AccessibleDrawDocumentView (

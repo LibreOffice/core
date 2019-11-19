@@ -1345,6 +1345,8 @@ void SwPostItMgr::RemoveSidebarWin()
     PreparePageContainer();
 }
 
+namespace {
+
 class FilterFunctor
 {
 public:
@@ -1509,6 +1511,8 @@ public:
         return p;
     }
 };
+
+}
 
 // copy to new vector, otherwise RemoveItem would operate and delete stuff on mvPostItFields as well
 // RemoveItem will clean up the core field and visible postit if necessary

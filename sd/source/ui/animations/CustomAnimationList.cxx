@@ -351,6 +351,8 @@ std::unique_ptr<SvLBoxItem> CustomAnimationListEntryItem::Clone(SvLBoxItem const
     return nullptr;
 }
 
+namespace {
+
 class CustomAnimationListEntry : public SvTreeListEntry
 {
 public:
@@ -363,6 +365,8 @@ private:
     CustomAnimationEffectPtr const mpEffect;
 };
 
+}
+
 CustomAnimationListEntry::CustomAnimationListEntry()
 {
 }
@@ -371,6 +375,8 @@ CustomAnimationListEntry::CustomAnimationListEntry(const CustomAnimationEffectPt
 : mpEffect( pEffect )
 {
 }
+
+namespace {
 
 class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
@@ -386,6 +392,8 @@ private:
     OUString const        msDescription;
     static const long nIconWidth = 19;
 };
+
+}
 
 CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( const OUString& aDescription )
 : SvLBoxString( aDescription ), msDescription( aDescription )

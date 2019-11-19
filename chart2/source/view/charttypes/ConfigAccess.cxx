@@ -28,6 +28,8 @@ namespace chart
 {
 using namespace ::com::sun::star;
 
+namespace
+{
 class ChartConfigItem : public ::utl::ConfigItem
 {
 private:
@@ -39,6 +41,7 @@ public:
     bool getUseErrorRectangle();
     virtual void Notify(const uno::Sequence<OUString>& aPropertyNames) override;
 };
+}
 
 ChartConfigItem::ChartConfigItem()
     : ConfigItem("Office.Chart/ErrorProperties")

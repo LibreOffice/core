@@ -52,6 +52,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace {
+
 class SwXMLImportTableItemMapper_Impl: public SvXMLImportItemMapper
 {
 
@@ -84,6 +86,8 @@ private:
     enum { LEFT = 0, RIGHT = 1, TOP = 2, BOTTOM = 3 };
     bool m_bHaveMargin[4];
 };
+
+}
 
 SwXMLImportTableItemMapper_Impl::SwXMLImportTableItemMapper_Impl(
                                         const SvXMLItemMapEntriesRef& rMapEntries ) :
@@ -229,6 +233,8 @@ void SwXMLImportTableItemMapper_Impl::finished(
     }
 }
 
+namespace {
+
 class SwXMLItemSetContext_Impl : public SvXMLItemSetContext
 {
     SvXMLImportContextRef xBackground;
@@ -251,6 +257,8 @@ public:
                    const SvXMLItemMapEntry& rEntry,
                    const SvXMLUnitConverter& rUnitConv ) override;
 };
+
+}
 
 SwXMLItemSetContext_Impl::SwXMLItemSetContext_Impl(
                  SwXMLImport& rImport, sal_uInt16 nPrfx,

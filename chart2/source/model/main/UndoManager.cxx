@@ -122,6 +122,8 @@ namespace chart
                 throw DisposedException( OUString(), getThis() );
         }
 
+        namespace {
+
         /** guard for public UNO methods of the UndoManager
 
             The only purpose of this guard is to check for the instance being disposed already. Everything else,
@@ -154,6 +156,8 @@ namespace chart
             virtual void acquire() override { }
             virtual void release() override { }
         };
+
+        }
 
         ::framework::IMutex& UndoManagerMethodGuard::getGuardedMutex()
         {

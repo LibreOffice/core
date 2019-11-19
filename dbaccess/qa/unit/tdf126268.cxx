@@ -43,11 +43,14 @@ void Tdf126268Test::setUp()
     osl_setEnvironment(OUString{ "DBACCESS_HSQL_MIGRATION" }.pData, OUString{ "1" }.pData);
 }
 
+namespace
+{
 struct expect_t
 {
     sal_Int16 id;
     OUString number;
 };
+}
 
 static const expect_t expect[] = {
     { 1, "0.00" },   { 2, "25.00" },  { 3, "26.00" }, { 4, "30.4" },  { 5, "45.8" },

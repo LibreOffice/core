@@ -38,6 +38,8 @@ namespace rng
 // http://en.wikipedia.org/wiki/Mersenne_twister
 #define STD_RNG_ALGO  std::mt19937
 
+namespace {
+
 struct RandomNumberGenerator
 {
     std::mutex mutex;
@@ -76,6 +78,8 @@ struct RandomNumberGenerator
 };
 
 class theRandomNumberGenerator : public rtl::Static<RandomNumberGenerator, theRandomNumberGenerator> {};
+
+}
 
 // uniform ints [a,b] distribution
 int uniform_int_distribution(int a, int b)

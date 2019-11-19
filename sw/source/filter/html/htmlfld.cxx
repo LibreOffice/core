@@ -38,11 +38,15 @@
 using namespace nsSwDocInfoSubType;
 using namespace ::com::sun::star;
 
+namespace {
+
 struct HTMLNumFormatTableEntry
 {
     const sal_Char *pName;
     NfIndexTableOffset const eFormat;
 };
+
+}
 
 static HTMLOptionEnum<SwFieldIds> const aHTMLFieldTypeTable[] =
 {

@@ -65,6 +65,8 @@ using namespace cppu;
 
 using com::sun::star::embed::XTransactedObject;
 
+namespace {
+
 class SvxXMLTableEntryExporter
 {
 public:
@@ -134,6 +136,7 @@ public:
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 };
 
+}
 
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,

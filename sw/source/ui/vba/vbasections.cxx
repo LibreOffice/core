@@ -30,6 +30,8 @@ using namespace ::com::sun::star;
 
 typedef std::vector< uno::Reference< beans::XPropertySet > > XSectionVec;
 
+namespace {
+
 class SectionEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     XSectionVec mxSections;
@@ -131,6 +133,8 @@ public:
         return uno::makeAny( uno::Reference< word::XSection > ( new SwVbaSection( m_xParent, m_xContext, mxModel, xPageProps ) ) );
     }
 };
+
+}
 
 SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel ): SwVbaSections_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new SectionCollectionHelper( xParent, xContext, xModel ) ) ),  mxModel( xModel )
 {

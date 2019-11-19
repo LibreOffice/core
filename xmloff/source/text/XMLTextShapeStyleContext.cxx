@@ -41,6 +41,8 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
+namespace {
+
 class XMLTextShapePropertySetContext_Impl : public XMLShapePropertySetContext
 {
 public:
@@ -58,6 +60,8 @@ public:
         ::std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp) override;
 };
+
+}
 
 XMLTextShapePropertySetContext_Impl::XMLTextShapePropertySetContext_Impl(
                  SvXMLImport& rImport, sal_uInt16 nPrfx,

@@ -44,6 +44,8 @@ using namespace ::com::sun::star::awt;
 namespace vcl
 {
 
+namespace {
+
 class FontIdentificator : public ::cppu::WeakAggImplHelper3< XMaterialHolder, XInitialization, XServiceInfo >
 {
     Font        m_aFont;
@@ -62,6 +64,8 @@ FontIdentificator() {}
     virtual Any SAL_CALL getMaterial() override;
 
 };
+
+}
 
 void SAL_CALL FontIdentificator::initialize( const Sequence<Any>& i_rArgs )
 {

@@ -52,6 +52,8 @@ typedef rtlDigestError (Digest_update_t) (
 typedef rtlDigestError (Digest_get_t) (
     void *ctx, sal_uInt8 *Buffer, sal_uInt32 BufLen);
 
+namespace {
+
 struct Digest_Impl
 {
     rtlDigestAlgorithm  m_algorithm;
@@ -62,6 +64,8 @@ struct Digest_Impl
     Digest_update_t    *m_update;
     Digest_get_t       *m_get;
 };
+
+}
 
 static void swapLong(sal_uInt32 *pData, sal_uInt32 nDatLen)
 {
@@ -175,6 +179,8 @@ void SAL_CALL rtl_digest_destroy(rtlDigest Digest) SAL_THROW_EXTERN_C()
 #define DIGEST_CBLOCK_MD2 16
 #define DIGEST_LBLOCK_MD2 16
 
+namespace {
+
 struct DigestContextMD2
 {
     sal_uInt32 m_nDatLen;
@@ -188,6 +194,8 @@ struct DigestMD2_Impl
     Digest_Impl      m_digest;
     DigestContextMD2 m_context;
 };
+
+}
 
 static void initMD2   (DigestContextMD2 *ctx);
 static void updateMD2 (DigestContextMD2 *ctx);
@@ -437,6 +445,8 @@ void SAL_CALL rtl_digest_destroyMD2(rtlDigest Digest) SAL_THROW_EXTERN_C()
 #define DIGEST_CBLOCK_MD5 64
 #define DIGEST_LBLOCK_MD5 16
 
+namespace {
+
 struct DigestContextMD5
 {
     sal_uInt32 m_nDatLen;
@@ -450,6 +460,8 @@ struct DigestMD5_Impl
     Digest_Impl      m_digest;
     DigestContextMD5 m_context;
 };
+
+}
 
 static void initMD5 (DigestContextMD5 *ctx);
 static void updateMD5 (DigestContextMD5 *ctx);
@@ -824,6 +836,8 @@ typedef sal_uInt32 DigestSHA_update_t(sal_uInt32 x);
 static sal_uInt32 updateSHA_0(sal_uInt32 x);
 static sal_uInt32 updateSHA_1(sal_uInt32 x);
 
+namespace {
+
 struct DigestContextSHA
 {
     DigestSHA_update_t *m_update;
@@ -838,6 +852,8 @@ struct DigestSHA_Impl
     Digest_Impl      m_digest;
     DigestContextSHA m_context;
 };
+
+}
 
 static void initSHA(
     DigestContextSHA *ctx, DigestSHA_update_t *fct);
@@ -1390,6 +1406,8 @@ void SAL_CALL rtl_digest_destroySHA1(rtlDigest Digest) SAL_THROW_EXTERN_C()
 
 #define DIGEST_CBLOCK_HMAC_MD5 64
 
+namespace {
+
 struct ContextHMAC_MD5
 {
     DigestMD5_Impl m_hash;
@@ -1401,6 +1419,8 @@ struct DigestHMAC_MD5_Impl
     Digest_Impl     m_digest;
     ContextHMAC_MD5 m_context;
 };
+
+}
 
 static void initHMAC_MD5(ContextHMAC_MD5 * ctx);
 static void ipadHMAC_MD5(ContextHMAC_MD5 * ctx);
@@ -1586,6 +1606,8 @@ void SAL_CALL rtl_digest_destroyHMAC_MD5(rtlDigest Digest) SAL_THROW_EXTERN_C()
 
 #define DIGEST_CBLOCK_HMAC_SHA1 64
 
+namespace {
+
 struct ContextHMAC_SHA1
 {
     DigestSHA_Impl m_hash;
@@ -1597,6 +1619,8 @@ struct DigestHMAC_SHA1_Impl
     Digest_Impl      m_digest;
     ContextHMAC_SHA1 m_context;
 };
+
+}
 
 static void initHMAC_SHA1(ContextHMAC_SHA1 * ctx);
 static void ipadHMAC_SHA1(ContextHMAC_SHA1 * ctx);

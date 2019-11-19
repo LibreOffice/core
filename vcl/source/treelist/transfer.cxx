@@ -1051,6 +1051,8 @@ const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
     return theTransferableHelperUnoTunnelId::get().getSeq();
 }
 
+namespace {
+
 class TransferableClipboardNotifier : public ::cppu::WeakImplHelper< XClipboardListener >
 {
 private:
@@ -1075,6 +1077,7 @@ public:
     void    dispose();
 };
 
+}
 
 TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener, ::osl::Mutex& _rMutex )
     :mrMutex( _rMutex )

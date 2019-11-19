@@ -126,6 +126,8 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::sd;
 
+namespace {
+
 class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
                                  public SfxListener
 {
@@ -141,6 +143,8 @@ protected:
 private:
     SdrModel*   mpModel;
 };
+
+}
 
 SdUnoForbiddenCharsTable::SdUnoForbiddenCharsTable( SdrModel* pModel )
 : SvxUnoForbiddenCharsTable( pModel->GetForbiddenCharsTable() ), mpModel( pModel )
@@ -1484,6 +1488,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
     return aRenderer;
 }
 
+namespace {
+
 class ImplRenderPaintProc : public sdr::contact::ViewObjectContactRedirector
 {
     const SdrLayerAdmin&    rLayerAdmin;
@@ -1504,6 +1510,8 @@ public:
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo) override;
 };
+
+}
 
 ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData )
 :   ViewObjectContactRedirector(),

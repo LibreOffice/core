@@ -316,6 +316,8 @@ void SidebarToolBox::InitToolBox(VclBuilder::stringmap& rMap)
     }
 }
 
+namespace {
+
 class NotebookbarToolBox : public SidebarToolBox
 {
 public:
@@ -330,6 +332,8 @@ public:
         return SvtMiscOptions().GetNotebookbarIconSize();
     }
 };
+
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeSidebarToolBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {

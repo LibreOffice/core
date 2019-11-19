@@ -75,6 +75,8 @@ using namespace ::com::sun::star::frame;
 
 static Reference< XInterface > BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr );
 
+namespace {
+
 class BibliographyLoader : public cppu::WeakImplHelper
                             < XServiceInfo, XNameAccess, XPropertySet, XFrameLoader >
 {
@@ -130,7 +132,7 @@ public:
     static Sequence<OUString> getSupportedServiceNames_Static() throw(  );
 
     /// @throws Exception
-    friend  Reference< XInterface > BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr );
+    friend  Reference< XInterface > (::BibliographyLoader_CreateInstance)( const Reference< XMultiServiceFactory > & rSMgr );
 
     // XLoader
     virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const OUString& aURL,
@@ -138,6 +140,8 @@ public:
                                 const Reference< XLoadEventListener > & aListener) override;
     virtual void            SAL_CALL cancel() override;
 };
+
+}
 
 BibliographyLoader::BibliographyLoader() :
     m_pBibMod(nullptr)

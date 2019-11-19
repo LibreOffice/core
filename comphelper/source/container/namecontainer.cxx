@@ -31,6 +31,8 @@ typedef std::map<OUString, css::uno::Any> SvGenericNameContainerMapImpl;
 
 namespace comphelper
 {
+    namespace {
+
     /** this is the base helper class for NameContainer that's also declared in this header. */
     class NameContainer : public ::cppu::WeakImplHelper< css::container::XNameContainer >
     {
@@ -58,6 +60,8 @@ namespace comphelper
         const css::uno::Type maType;
         osl::Mutex maMutex;
     };
+
+    }
 }
 
 using namespace ::comphelper;

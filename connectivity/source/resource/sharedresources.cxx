@@ -29,7 +29,7 @@
 
 namespace connectivity
 {
-
+    namespace {
 
     class SharedResources_Impl
     {
@@ -58,6 +58,8 @@ namespace connectivity
             return s_aMutex;
         }
     };
+
+    }
 
     SharedResources_Impl*   SharedResources_Impl::s_pInstance( nullptr );
     oslInterlockedCount     SharedResources_Impl::s_nClients( 0 );

@@ -153,6 +153,8 @@ static void lcl_UpdateEmailSettingsFromGlobalConfig(SwMailMergeConfigItem& rConf
     rConfigItem.SetInServerPassword(aConfigItem.GetInServerPassword());
 }
 
+namespace {
+
 class SwSaveWarningBox_Impl : public SwMessageAndEditDialog
 {
     DECL_LINK( ModifyHdl, weld::Entry&, void);
@@ -191,6 +193,8 @@ public:
     }
 };
 
+}
+
 SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(weld::Window* pParent, const OUString& rFileName)
     : SwMessageAndEditDialog(pParent, "AlreadyExistsDialog",
         "modules/swriter/ui/alreadyexistsdialog.ui")
@@ -224,6 +228,8 @@ IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, weld::Entry&, rEdit, void)
     m_xOKPB->set_sensitive(bIsEmptyAllowed  || !rEdit.get_text().isEmpty());
 }
 
+namespace {
+
 class SwCopyToDialog : public SfxDialogController
 {
     std::unique_ptr<weld::Entry> m_xCCED;
@@ -243,6 +249,8 @@ public:
     OUString GetBCC() const {return m_xBCCED->get_text();}
     void SetBCC(const OUString& rSet) {m_xBCCED->set_text(rSet);}
 };
+
+}
 
 SwMMResultSaveDialog::SwMMResultSaveDialog(weld::Window* pParent)
     : SfxDialogController(pParent, "modules/swriter/ui/mmresultsavedialog.ui", "MMResultSaveDialog")

@@ -82,6 +82,8 @@ static HTMLOptionEnum<sal_Int16> const aHTMLTableVAlignTable[] =
 
 // table tags options
 
+namespace {
+
 struct HTMLTableOptions
 {
     sal_uInt16 nCols;
@@ -165,6 +167,8 @@ public:
     size_t GetContextStAttrMin() const { return nContextStAttrMin; }
 };
 
+}
+
 // Cell content is a linked list with SwStartNodes and
 // HTMLTables.
 
@@ -207,6 +211,8 @@ public:
 
     const std::shared_ptr<SwHTMLTableLayoutCnts>& CreateLayoutInfo();
 };
+
+namespace {
 
 // Cell of a HTML table
 class HTMLTableCell
@@ -271,8 +277,12 @@ public:
     bool IsCovered() const { return mbCovered; }
 };
 
+}
+
 // Row of a HTML table
 typedef std::vector<HTMLTableCell> HTMLTableCells;
+
+namespace {
 
 class HTMLTableRow
 {
@@ -364,6 +374,8 @@ public:
 
     std::unique_ptr<SwHTMLTableLayoutColumn> CreateLayoutInfo();
 };
+
+}
 
 // HTML table
 typedef std::vector<HTMLTableRow> HTMLTableRows;
@@ -3874,6 +3886,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
     xSaveStruct.reset();
 }
 
+namespace {
+
 class RowSaveStruct : public SwPendingData
 {
 public:
@@ -3885,6 +3899,8 @@ public:
         eAdjust( SvxAdjust::End ), eVertOri( text::VertOrientation::TOP ), bHasCells( false )
     {}
 };
+
+}
 
 void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                                   SvxAdjust eGrpAdjust,
@@ -4245,6 +4261,8 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
     // now we stand (perhaps) in front of <TBODY>,... or </TABLE>
 }
 
+namespace {
+
 struct TableColGrpSaveStruct : public SwPendingData
 {
     sal_uInt16 nColGrpSpan;
@@ -4257,6 +4275,8 @@ struct TableColGrpSaveStruct : public SwPendingData
 
     inline void CloseColGroup( HTMLTable *pTable );
 };
+
+}
 
 inline TableColGrpSaveStruct::TableColGrpSaveStruct() :
     nColGrpSpan( 1 ), nColGrpWidth( 0 ),
@@ -4677,6 +4697,8 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     *m_pPam->GetPoint() = xSaveStruct->GetPos();
 }
 
+namespace {
+
 class TableSaveStruct : public SwPendingData
 {
 public:
@@ -4691,6 +4713,8 @@ public:
     // needed. If it returns true, we need to insert a paragraph.
     void MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc );
 };
+
+}
 
 void TableSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc )
 {

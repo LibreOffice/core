@@ -1037,6 +1037,8 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     releaseCairoContext(cr, false, extents);
 }
 
+namespace {
+
 class SystemDependentData_CairoPath : public basegfx::SystemDependentData
 {
 private:
@@ -1062,6 +1064,8 @@ public:
 
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
+
+}
 
 SystemDependentData_CairoPath::SystemDependentData_CairoPath(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,

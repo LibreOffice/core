@@ -33,11 +33,14 @@
 
 using namespace com::sun::star;
 
+namespace {
 
 struct oslThreadIdentifier_equal
 {
     bool operator()(oslThreadIdentifier s1, oslThreadIdentifier s2) const;
 };
+
+}
 
 bool oslThreadIdentifier_equal::operator()(oslThreadIdentifier s1, oslThreadIdentifier s2) const
 {
@@ -46,11 +49,14 @@ bool oslThreadIdentifier_equal::operator()(oslThreadIdentifier s1, oslThreadIden
     return result;
 }
 
+namespace {
 
 struct oslThreadIdentifier_hash
 {
     size_t operator()(oslThreadIdentifier s1) const;
 };
+
+}
 
 size_t oslThreadIdentifier_hash::operator()(oslThreadIdentifier s1) const
 {

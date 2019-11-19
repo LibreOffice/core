@@ -40,6 +40,8 @@ class FilterConfigItem;
 #define PSD_DUOTONE         8
 #define PSD_LAB             9
 
+namespace {
+
 struct PSDFileHeader
 {
     sal_uInt32  nSignature;
@@ -81,6 +83,8 @@ public:
     explicit PSDReader(SvStream &rStream);
     bool ReadPSD(Graphic & rGraphic);
 };
+
+}
 
 //=================== Methods of PSDReader ==============================
 

@@ -63,6 +63,8 @@ namespace pcr
     using ::com::sun::star::awt::XActionListener;
     using ::com::sun::star::awt::ActionEvent;
 
+    namespace {
+
     class EnumRepresentation : public IPropertyEnumRepresentation
     {
     private:
@@ -83,6 +85,8 @@ namespace pcr
     private:
         void            impl_getValues( Sequence< sal_Int32 >& _out_rValues ) const;
     };
+
+    }
 
     EnumRepresentation::EnumRepresentation( const Reference< XComponentContext >& _rxContext, const Type& _rEnumType )
         :m_aEnumType( _rEnumType )
@@ -177,6 +181,9 @@ namespace pcr
 
     typedef ::cppu::WeakImplHelper <   XActionListener
                                     >   UrlClickHandler_Base;
+
+    namespace {
+
     class UrlClickHandler : public UrlClickHandler_Base
     {
         Reference<XComponentContext>    m_xContext;
@@ -196,6 +203,7 @@ namespace pcr
         void impl_dispatch_throw( const OUString& _rURL );
     };
 
+    }
 
     UrlClickHandler::UrlClickHandler( const Reference<XComponentContext>& _rContext, const Reference< XHyperlinkControl >& _rxControl )
         :m_xContext( _rContext )

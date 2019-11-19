@@ -61,6 +61,8 @@ using namespace ::com::sun::star::accessibility;
 
 typedef std::vector< uno::Reference< XAccessible > > ScXAccVector;
 
+namespace {
+
 struct ScAccNote
 {
     OUString    maNoteText;
@@ -77,6 +79,8 @@ struct ScAccNote
     {
     }
 };
+
+}
 
 class ScNotesChildren
 {
@@ -120,6 +124,8 @@ ScNotesChildren::ScNotesChildren(ScPreviewShell* pViewShell, ScAccessibleDocumen
 {
 }
 
+namespace {
+
 struct DeleteAccNote
 {
     void operator()(ScAccNote& rNote)
@@ -128,6 +134,8 @@ struct DeleteAccNote
             DELETEZ( rNote.mpTextHelper);
     }
 };
+
+}
 
 ScNotesChildren::~ScNotesChildren()
 {
@@ -196,6 +204,8 @@ void ScNotesChildren::Init(const tools::Rectangle& rVisRect, sal_Int32 nOffset)
     }
 }
 
+namespace {
+
 struct ScParaFound
 {
     sal_Int32 mnIndex;
@@ -210,6 +220,8 @@ struct ScParaFound
         return bResult;
     }
 };
+
+}
 
 uno::Reference<XAccessible> ScNotesChildren::GetChild(sal_Int32 nIndex) const
 {
@@ -252,6 +264,8 @@ uno::Reference<XAccessible> ScNotesChildren::GetChild(sal_Int32 nIndex) const
     return xAccessible;
 }
 
+namespace {
+
 struct ScPointFound
 {
     tools::Rectangle const maPoint;
@@ -267,6 +281,8 @@ struct ScPointFound
         return bResult;
     }
 };
+
+}
 
 uno::Reference<XAccessible> ScNotesChildren::GetAt(const awt::Point& rPoint) const
 {
@@ -410,6 +426,8 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
     return nParagraphs;
 }
 
+namespace {
+
 struct ScChildGone
 {
     ScAccessibleDocumentPagePreview* const mpAccDoc;
@@ -446,6 +464,8 @@ struct ScChildNew
     }
 };
 
+}
+
 void ScNotesChildren::DataChanged(const tools::Rectangle& rVisRect)
 {
     if (mpViewShell && mpAccDoc)
@@ -472,6 +492,8 @@ inline ScDocument* ScNotesChildren::GetDocument() const
     return pDoc;
 }
 
+namespace {
+
 class ScIAccessibleViewForwarder : public ::accessibility::IAccessibleViewForwarder
 {
 public:
@@ -491,6 +513,8 @@ private:
     ScAccessibleDocumentPagePreview*    mpAccDoc;
     MapMode                             maMapMode;
 };
+
+}
 
 ScIAccessibleViewForwarder::ScIAccessibleViewForwarder()
     : mpViewShell(nullptr), mpAccDoc(nullptr)
@@ -548,6 +572,8 @@ Size ScIAccessibleViewForwarder::LogicToPixel (const Size& rSize) const
     return aSize;
 }
 
+namespace {
+
 struct ScShapeChild
 {
     ScShapeChild()
@@ -560,6 +586,8 @@ struct ScShapeChild
     sal_Int32 mnRangeId;
 };
 
+}
+
 ScShapeChild::~ScShapeChild()
 {
     if (mpAccShape.is())
@@ -567,6 +595,8 @@ ScShapeChild::~ScShapeChild()
         mpAccShape->dispose();
     }
 }
+
+namespace {
 
 struct ScShapeChildLess
 {
@@ -579,7 +609,11 @@ struct ScShapeChildLess
     }
 };
 
+}
+
 typedef std::vector<ScShapeChild> ScShapeChildVec;
+
+namespace {
 
 struct ScShapeRange
 {
@@ -588,6 +622,8 @@ struct ScShapeRange
     ScShapeChildVec maControls;
     ScIAccessibleViewForwarder maViewForwarder;
 };
+
+}
 
 typedef std::vector<ScShapeRange> ScShapeRangeVec;
 
@@ -856,6 +892,8 @@ uno::Reference<XAccessible> ScShapeChildren::GetControl(sal_Int32 nIndex) const
     return xAccessible;
 }
 
+namespace {
+
 struct ScShapePointFound
 {
     Point const maPoint;
@@ -868,6 +906,8 @@ struct ScShapePointFound
         return bResult;
     }
 };
+
+}
 
 uno::Reference<XAccessible> ScShapeChildren::GetForegroundShapeAt(const awt::Point& rPoint) const //inclusive Controls
 {
@@ -1016,6 +1056,8 @@ SdrPage* ScShapeChildren::GetDrawPage() const
     return pDrawPage;
 }
 
+namespace {
+
 struct ScPagePreviewCountData
 {
     //  order is background shapes, header, table or notes, footer, foreground shapes, controls
@@ -1037,6 +1079,8 @@ struct ScPagePreviewCountData
         return nBackShapes + nHeaders + nTables + nNoteParagraphs + nFooters + nForeShapes + nControls;
     }
 };
+
+}
 
 ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rData,
                                 const vcl::Window* pSizeWindow, const ScNotesChildren* pNotesChildren,

@@ -189,6 +189,8 @@ void XMLCharContext::InsertString(const OUString& _sString)
     GetImport().GetTextImport()->InsertString( _sString );
 }
 
+namespace {
+
 /** import start of reference (<text:reference-start>) */
 class XMLStartReferenceContext_Impl : public SvXMLImportContext
 {
@@ -208,6 +210,7 @@ public:
         OUString& rName);
 };
 
+}
 
 XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
     SvXMLImport& rImport,
@@ -258,6 +261,8 @@ bool XMLStartReferenceContext_Impl::FindName(
     return bNameOK;
 }
 
+namespace {
+
 /** import end of reference (<text:reference-end>) */
 class XMLEndReferenceContext_Impl : public SvXMLImportContext
 {
@@ -272,6 +277,7 @@ public:
         const Reference<xml::sax::XAttributeList> & xAttrList);
 };
 
+}
 
 XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
     SvXMLImport& rImport,
@@ -302,6 +308,8 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
         // else: no start (in this paragraph) -> ignore
     }
 }
+
+namespace {
 
 class XMLImpSpanContext_Impl : public SvXMLImportContext
 {
@@ -369,6 +377,7 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
+}
 
 XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
     SvXMLImport& rImport,
@@ -475,6 +484,8 @@ void XMLImpHyperlinkContext_Impl::Characters( const OUString& rChars )
     GetImport().GetTextImport()->InsertString( rChars, mrbIgnoreLeadingSpace );
 }
 
+namespace {
+
 class XMLImpRubyBaseContext_Impl : public SvXMLImportContext
 {
     XMLHints_Impl&  m_rHints;
@@ -499,6 +510,7 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
+}
 
 XMLImpRubyBaseContext_Impl::XMLImpRubyBaseContext_Impl(
         SvXMLImport& rImport,
@@ -530,6 +542,8 @@ void XMLImpRubyBaseContext_Impl::Characters( const OUString& rChars )
 {
     GetImport().GetTextImport()->InsertString( rChars, rIgnoreLeadingSpace );
 }
+
+namespace {
 
 class XMLImpRubyContext_Impl : public SvXMLImportContext
 {
@@ -580,6 +594,7 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
+}
 
 XMLImpRubyTextContext_Impl::XMLImpRubyTextContext_Impl(
         SvXMLImport& rImport,
@@ -692,6 +707,8 @@ SvXMLImportContextRef XMLImpRubyContext_Impl::CreateChildContext(
     return xContext;
 }
 
+namespace {
+
 /** for text:meta and text:meta-field
  */
 class XMLMetaImportContextBase : public SvXMLImportContext
@@ -733,6 +750,7 @@ public:
         = 0;
 };
 
+}
 
 XMLMetaImportContextBase::XMLMetaImportContextBase(
         SvXMLImport& i_rImport,
@@ -807,6 +825,8 @@ void XMLMetaImportContextBase::ProcessAttribute(sal_uInt16 const i_nPrefix,
     }
 }
 
+namespace {
+
 /** text:meta */
 class XMLMetaImportContext : public XMLMetaImportContextBase
 {
@@ -832,6 +852,7 @@ public:
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) override;
 };
 
+}
 
 XMLMetaImportContext::XMLMetaImportContext(
         SvXMLImport& i_rImport,
@@ -904,6 +925,8 @@ void XMLMetaImportContext::InsertMeta(
     }
 }
 
+namespace {
+
 /** text:meta-field */
 class XMLMetaFieldImportContext : public XMLMetaImportContextBase
 {
@@ -924,6 +947,7 @@ public:
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) override;
 };
 
+}
 
 XMLMetaFieldImportContext::XMLMetaFieldImportContext(
         SvXMLImport& i_rImport,
@@ -993,6 +1017,8 @@ void XMLMetaFieldImportContext::InsertMeta(
     }
 }
 
+namespace {
+
 /**
  * Process index marks.
  *
@@ -1043,6 +1069,7 @@ protected:
                         const OUString& rServiceName);
 };
 
+}
 
 XMLIndexMarkImportContext_Impl::XMLIndexMarkImportContext_Impl(
     SvXMLImport& rImport,
@@ -1249,6 +1276,8 @@ bool XMLIndexMarkImportContext_Impl::CreateMark(
     return false;
 }
 
+namespace {
+
 class XMLTOCMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
 {
 public:
@@ -1269,6 +1298,7 @@ protected:
                                   Reference<beans::XPropertySet>& rPropSet) override;
 };
 
+}
 
 XMLTOCMarkImportContext_Impl::XMLTOCMarkImportContext_Impl(
     SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1308,6 +1338,8 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
     }
 }
 
+namespace {
+
 class XMLUserIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
 {
 public:
@@ -1328,6 +1360,7 @@ protected:
                                   Reference<beans::XPropertySet>& rPropSet) override;
 };
 
+}
 
 XMLUserIndexMarkImportContext_Impl::XMLUserIndexMarkImportContext_Impl(
     SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1374,6 +1407,8 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
     }
 }
 
+namespace {
+
 class XMLAlphaIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
 {
 public:
@@ -1394,6 +1429,7 @@ protected:
                                   Reference<beans::XPropertySet>& rPropSet) override;
 };
 
+}
 
 XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
     SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,

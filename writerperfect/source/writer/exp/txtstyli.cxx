@@ -17,6 +17,8 @@ namespace writerperfect
 {
 namespace exp
 {
+namespace
+{
 /// Handler for <style:paragraph-properties>.
 class XMLParagraphPropertiesContext : public XMLImportContext
 {
@@ -30,6 +32,7 @@ public:
 private:
     XMLStyleContext& mrStyle;
 };
+}
 
 XMLParagraphPropertiesContext::XMLParagraphPropertiesContext(XMLImport& rImport,
                                                              XMLStyleContext& rStyle)
@@ -49,6 +52,8 @@ void XMLParagraphPropertiesContext::startElement(
     }
 }
 
+namespace
+{
 /// Handler for <style:text-properties>.
 class XMLTextPropertiesContext : public XMLImportContext
 {
@@ -62,6 +67,7 @@ public:
 private:
     XMLStyleContext& mrStyle;
 };
+}
 
 XMLTextPropertiesContext::XMLTextPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle)
     : XMLImportContext(rImport)
@@ -80,6 +86,8 @@ void XMLTextPropertiesContext::startElement(
     }
 }
 
+namespace
+{
 /// Handler for <style:graphic-properties>.
 class XMLGraphicPropertiesContext : public XMLImportContext
 {
@@ -93,6 +101,7 @@ public:
 private:
     XMLStyleContext& mrStyle;
 };
+}
 
 XMLGraphicPropertiesContext::XMLGraphicPropertiesContext(XMLImport& rImport,
                                                          XMLStyleContext& rStyle)
@@ -112,6 +121,8 @@ void XMLGraphicPropertiesContext::startElement(
     }
 }
 
+namespace
+{
 /// Handler for <style:page-layout-properties>.
 class XMLPageLayoutPropertiesContext : public XMLImportContext
 {
@@ -125,6 +136,7 @@ public:
 private:
     XMLStyleContext& mrStyle;
 };
+}
 
 XMLPageLayoutPropertiesContext::XMLPageLayoutPropertiesContext(XMLImport& rImport,
                                                                XMLStyleContext& rStyle)
@@ -148,6 +160,8 @@ void XMLPageLayoutPropertiesContext::startElement(
     }
 }
 
+namespace
+{
 /// Handler for <style:table-properties>.
 class XMLTablePropertiesContext : public XMLImportContext
 {
@@ -161,6 +175,7 @@ public:
 private:
     XMLStyleContext& mrStyle;
 };
+}
 
 XMLTablePropertiesContext::XMLTablePropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle)
     : XMLImportContext(rImport)
@@ -184,6 +199,8 @@ void XMLTablePropertiesContext::startElement(
     }
 }
 
+namespace
+{
 /// Handler for <style:table-row-properties>.
 class XMLTableRowPropertiesContext : public XMLImportContext
 {
@@ -197,6 +214,7 @@ public:
 private:
     XMLStyleContext& mrStyle;
 };
+}
 
 XMLTableRowPropertiesContext::XMLTableRowPropertiesContext(XMLImport& rImport,
                                                            XMLStyleContext& rStyle)
@@ -216,6 +234,8 @@ void XMLTableRowPropertiesContext::startElement(
     }
 }
 
+namespace
+{
 /// Handler for <style:table-column-properties>.
 class XMLTableColumnPropertiesContext : public XMLImportContext
 {
@@ -229,6 +249,7 @@ public:
 private:
     XMLStyleContext& mrStyle;
 };
+}
 
 XMLTableColumnPropertiesContext::XMLTableColumnPropertiesContext(XMLImport& rImport,
                                                                  XMLStyleContext& rStyle)
@@ -248,6 +269,8 @@ void XMLTableColumnPropertiesContext::startElement(
     }
 }
 
+namespace
+{
 /// Handler for <style:table-cell-properties>.
 class XMLTableCellPropertiesContext : public XMLImportContext
 {
@@ -261,6 +284,7 @@ public:
 private:
     XMLStyleContext& mrStyle;
 };
+}
 
 XMLTableCellPropertiesContext::XMLTableCellPropertiesContext(XMLImport& rImport,
                                                              XMLStyleContext& rStyle)

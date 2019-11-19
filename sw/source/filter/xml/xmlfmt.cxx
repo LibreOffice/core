@@ -64,6 +64,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
+namespace {
+
 class SwXMLConditionParser_Impl
 {
     OUString const sInput;
@@ -88,6 +90,8 @@ public:
     Master_CollCondition GetCondition() const { return nCondition; }
     sal_uInt32 GetSubCondition() const { return nSubCondition; }
 };
+
+}
 
 inline bool SwXMLConditionParser_Impl::SkipWS()
 {
@@ -197,6 +201,8 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
     }
 }
 
+namespace {
+
 class SwXMLConditionContext_Impl : public SvXMLImportContext
 {
     Master_CollCondition nCondition;
@@ -217,6 +223,8 @@ public:
     sal_uInt32 getSubCondition() const { return nSubCondition; }
     OUString const &getApplyStyle() const { return sApplyStyle; }
 };
+
+}
 
 SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
             SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -258,6 +266,8 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
 
 typedef std::vector<rtl::Reference<SwXMLConditionContext_Impl>> SwXMLConditions_Impl;
 
+namespace {
+
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {
     std::unique_ptr<SwXMLConditions_Impl> pConditions;
@@ -283,6 +293,7 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
 
+}
 
 uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
 {
@@ -388,6 +399,8 @@ SvXMLImportContextRef SwXMLTextStyleContext_Impl::CreateChildContext(
     return xContext;
 }
 
+namespace {
+
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 {
     OUString                    sMasterPageName;
@@ -441,6 +454,8 @@ public:
 
     bool ResolveDataStyleName();
 };
+
+}
 
 void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
                                            const OUString& rLocalName,
@@ -665,6 +680,8 @@ bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
     }
 }
 
+namespace {
+
 class SwXMLStylesContext_Impl : public SvXMLStylesContext
 {
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
@@ -705,6 +722,8 @@ public:
 
     virtual void EndElement() override;
 };
+
+}
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -887,6 +906,8 @@ void SwXMLStylesContext_Impl::EndElement()
     GetSwImport().InsertStyles( IsAutomaticStyle() );
 }
 
+namespace {
+
 class SwXMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
 {
 protected:
@@ -907,6 +928,7 @@ public:
     virtual void EndElement() override;
 };
 
+}
 
 SwXMLMasterStylesContext_Impl::SwXMLMasterStylesContext_Impl(
         SwXMLImport& rImport,

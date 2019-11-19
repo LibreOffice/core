@@ -68,6 +68,8 @@ public:
     virtual ~SwTestAccountSettingsDialog() override;
 };
 
+namespace {
+
 class SwAuthenticationSettingsDialog : public SfxDialogController
 {
     SwMailMergeConfigItem& m_rConfigItem;
@@ -102,6 +104,8 @@ class SwAuthenticationSettingsDialog : public SfxDialogController
 public:
     SwAuthenticationSettingsDialog(weld::Window* pParent, SwMailMergeConfigItem& rItem);
 };
+
+}
 
 SwMailConfigPage::SwMailConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/mailconfigpage.ui", "MailConfigPage", &rSet)

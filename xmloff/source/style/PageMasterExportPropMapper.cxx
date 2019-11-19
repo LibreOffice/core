@@ -62,6 +62,8 @@ static void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int3
 
 // helper struct to handle equal XMLPropertyState's for page, header and footer
 
+namespace {
+
 struct XMLPropertyStateBuffer
 {
     XMLPropertyState*       pPMMarginAll;
@@ -87,6 +89,8 @@ struct XMLPropertyStateBuffer
                             XMLPropertyStateBuffer();
     void                    ContextFilter( ::std::vector< XMLPropertyState >& rPropState );
 };
+
+}
 
 XMLPropertyStateBuffer::XMLPropertyStateBuffer()
     :   pPMMarginAll( nullptr )

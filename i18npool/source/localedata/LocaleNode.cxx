@@ -1966,10 +1966,15 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) const
     of.writeFunction("getTransliterations_", "nbOfTransliterations", "LCTransliterationsArray");
 }
 
+namespace {
+
 struct NameValuePair {
     const sal_Char *name;
     const sal_Char *value;
 };
+
+}
+
 static const NameValuePair ReserveWord[] = {
     { "trueWord", "true" },
     { "falseWord", "false" },

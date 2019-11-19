@@ -98,6 +98,8 @@ namespace {
 
 namespace oox { namespace ppt {
 
+    namespace {
+
     struct AnimColor
     {
         AnimColor(sal_Int16 cs, sal_Int32 o, sal_Int32 t, sal_Int32 th )
@@ -896,6 +898,8 @@ namespace oox { namespace ppt {
     private:
         Any maProgress;
     };
+
+    }
 
     TimeNodeContext * TimeNodeContext::makeContext(
             FragmentHandler2 const & rParent, sal_Int32  aElement,

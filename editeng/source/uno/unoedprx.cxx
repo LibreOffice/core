@@ -45,6 +45,7 @@
 
 using namespace ::com::sun::star;
 
+namespace {
 
 class SvxAccessibleTextIndex
 {
@@ -119,6 +120,8 @@ private:
     sal_Int32 mnBulletLen;
     bool  mbInBullet;
 };
+
+}
 
 static ESelection MakeEESelection( const SvxAccessibleTextIndex& rStart, const SvxAccessibleTextIndex& rEnd )
 {

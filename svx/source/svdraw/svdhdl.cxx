@@ -70,6 +70,8 @@
 #include <memory>
 #include <bitmaps.hlst>
 
+namespace {
+
 // #i15222#
 // Due to the resource problems in Win95/98 with bitmap resources I
 // will change this handle bitmap providing class. Old version was splitting
@@ -95,6 +97,7 @@ public:
     const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd);
 };
 
+}
 
 #define KIND_COUNT          (14)
 #define INDEX_COUNT         (6)
@@ -1912,6 +1915,7 @@ static bool ImpSdrHdlListSorter(std::unique_ptr<SdrHdl> const& lhs, std::unique_
     }
 }
 
+namespace {
 
 // Helper struct for re-sorting handles
 struct ImplHdlAndIndex
@@ -1919,6 +1923,8 @@ struct ImplHdlAndIndex
     SdrHdl*                     mpHdl;
     sal_uInt32                  mnIndex;
 };
+
+}
 
 extern "C" {
 

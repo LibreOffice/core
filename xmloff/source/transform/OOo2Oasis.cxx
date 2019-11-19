@@ -1090,6 +1090,8 @@ static XMLTokenEnum const aTokenMap[] =
     XML_TOKEN_END
 };
 
+namespace {
+
 class XMLDocumentTransformerContext_Impl : public XMLTransformerContext
 {
     OUString const m_aElemQName;
@@ -1106,6 +1108,8 @@ public:
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
+
+}
 
 XMLDocumentTransformerContext_Impl::XMLDocumentTransformerContext_Impl(
         XMLTransformerBase& rImp,
@@ -1229,6 +1233,8 @@ void XMLDocumentTransformerContext_Impl::EndElement()
     GetTransformer().SetClass( m_aOldClass );
 }
 
+namespace {
+
 class XMLBodyTransformerContext_Impl : public XMLTransformerContext
 {
     OUString m_aClassQName;
@@ -1240,6 +1246,8 @@ public:
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
+
+}
 
 XMLBodyTransformerContext_Impl::XMLBodyTransformerContext_Impl(
         XMLTransformerBase& rImp,
@@ -1283,6 +1291,8 @@ void XMLBodyTransformerContext_Impl::EndElement()
     XMLTransformerContext::EndElement();
 }
 
+namespace {
+
 class XMLTabStopOOoTContext_Impl : public XMLPersElemContentTContext
 {
 public:
@@ -1291,6 +1301,8 @@ public:
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
+
+}
 
 XMLTabStopOOoTContext_Impl::XMLTabStopOOoTContext_Impl(
         XMLTransformerBase& rImp,
@@ -1370,6 +1382,8 @@ void XMLTabStopOOoTContext_Impl::StartElement(
     XMLPersElemContentTContext::StartElement( xAttrList );
 }
 
+namespace {
+
 class XMLTrackedChangesOOoTContext_Impl : public XMLTransformerContext
 {
     sal_uInt16 const m_nPrefix;
@@ -1383,6 +1397,8 @@ public:
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
+
+}
 
 XMLTrackedChangesOOoTContext_Impl::XMLTrackedChangesOOoTContext_Impl(
         XMLTransformerBase& rImp,
@@ -1435,6 +1451,8 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
     XMLTransformerContext::StartElement( rAttrList );
 }
 
+namespace {
+
 class XMLTableOOoTransformerContext_Impl : public XMLTransformerContext
 {
     OUString const m_aElemQName;
@@ -1446,6 +1464,8 @@ public:
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
+
+}
 
 XMLTableOOoTransformerContext_Impl::XMLTableOOoTransformerContext_Impl(
         XMLTransformerBase& rImp,

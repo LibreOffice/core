@@ -63,11 +63,15 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace {
+
 struct ResIdToResName
 {
     ToolbarId const   eId;
     const char* pName;
 };
+
+}
 
 static const ResIdToResName pToolBarResToName[] =
 {

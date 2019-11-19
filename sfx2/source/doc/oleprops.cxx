@@ -42,6 +42,8 @@ using namespace ::com::sun::star;
 /// Invalid value for date to create invalid instance of TimeStamp.
 #define TIMESTAMP_INVALID_UTILDATE  (util::Date(1, 1, 1601))
 
+namespace {
+
 /** Property representing a signed 32-bit integer value. */
 class SfxOleInt32Property : public SfxOlePropertyBase
 {
@@ -221,6 +223,7 @@ private:
     uno::Sequence<sal_Int8> const    mData;
 };
 
+}
 
 sal_uInt16 SfxOleTextEncoding::GetCodePage() const
 {

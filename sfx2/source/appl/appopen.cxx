@@ -117,6 +117,7 @@ void SetTemplate_Impl( const OUString &rFileName,
     pDoc->ResetFromTemplate( rLongName, rFileName );
 }
 
+namespace {
 
 class SfxDocPasswordVerifier : public ::comphelper::IDocPasswordVerifier
 {
@@ -134,6 +135,7 @@ private:
     Reference< embed::XStorage > mxStorage;
 };
 
+}
 
 ::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyPassword( const OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {

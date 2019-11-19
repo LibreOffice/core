@@ -54,6 +54,8 @@
 using namespace ::com::sun::star;
 using namespace util;
 
+namespace {
+
 /// because the Find may be called on the View or the Model, we need an index
 /// afflicted by multiple personality disorder
 struct AmbiguousIndex
@@ -173,6 +175,8 @@ public:
         return nullptr;
     }
 };
+
+}
 
 static OUString
 lcl_CleanStr(const SwTextNode& rNd,
@@ -891,6 +895,8 @@ bool DoSearch(SwPaM & rSearchPam,
     return bFound;
 }
 
+namespace {
+
 /// parameters for search and replace in text
 struct SwFindParaText : public SwFindParas
 {
@@ -914,6 +920,8 @@ struct SwFindParaText : public SwFindParas
     virtual bool IsReplaceMode() const override;
     virtual ~SwFindParaText();
 };
+
+}
 
 SwFindParaText::~SwFindParaText()
 {

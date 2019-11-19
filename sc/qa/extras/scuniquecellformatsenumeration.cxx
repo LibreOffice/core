@@ -30,6 +30,8 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
+namespace
+{
 struct RGBColor
 {
     int m_nRed;
@@ -45,6 +47,7 @@ struct RGBColor
 
     sal_Int32 hashCode() const { return (255 << 24) | (m_nRed << 16) | (m_nGreen << 8) | m_nBlue; }
 };
+}
 
 class ScUniqueCellFormatsEnumeration : public CalcUnoApiTest, public apitest::XEnumeration
 {

@@ -157,8 +157,6 @@ enum ScUnoCollectMode
     SC_UNO_COLLECT_FINDPOS
 };
 
-}
-
 /**
  * This class exists solely to allow searching through field items.  TODO:
  * Look into providing the same functionality directly in EditEngine, to
@@ -188,6 +186,8 @@ public:
     sal_Int32       GetFieldPar() const     { return nFieldPar; }
     sal_Int32       GetFieldPos() const     { return nFieldPos; }
 };
+
+}
 
 ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource)
     : ScEditEngineDefaulter(*pSource)

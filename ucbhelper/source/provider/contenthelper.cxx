@@ -48,6 +48,8 @@ using namespace com::sun::star;
 namespace ucbhelper_impl
 {
 
+namespace {
+
 class PropertyEventSequence
 {
     uno::Sequence< beans::PropertyChangeEvent > m_aSeq;
@@ -64,7 +66,11 @@ public:
     { m_aSeq.realloc( m_nPos ); return m_aSeq; }
 };
 
+}
+
 typedef void* XPropertiesChangeListenerPtr; // -> Compiler problems!
+
+namespace {
 
 struct equalPtr
 {
@@ -82,6 +88,8 @@ struct hashPtr
         return reinterpret_cast<size_t>(rp);
     }
 };
+
+}
 
 typedef std::unordered_map
 <

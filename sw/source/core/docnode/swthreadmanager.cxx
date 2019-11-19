@@ -39,7 +39,11 @@ SwThreadManager::~SwThreadManager()
 {
 }
 
+namespace {
+
 struct InitInstance : public rtl::Static<SwThreadManager, InitInstance> {};
+
+}
 
 SwThreadManager& SwThreadManager::GetThreadManager()
 {

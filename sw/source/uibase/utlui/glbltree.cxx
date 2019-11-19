@@ -114,6 +114,8 @@ static const char* aHelpForMenu[] =
     HID_GLBLTREEUPD_ALL         //CTX_UPDATE_ALL
 };
 
+namespace {
+
 class SwGlobalFrameListener_Impl : public SfxListener
 {
     bool bValid;
@@ -128,6 +130,8 @@ public:
 
     bool                IsValid() const {return bValid;}
 };
+
+}
 
 void SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {

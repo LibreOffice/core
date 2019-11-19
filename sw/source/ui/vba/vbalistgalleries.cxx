@@ -23,6 +23,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 class ListGalleriesEnumWrapper : public EnumerationHelper_BASE
 {
     SwVbaListGalleries* pListGalleries;
@@ -41,6 +43,8 @@ public:
         throw container::NoSuchElementException();
     }
 };
+
+}
 
 SwVbaListGalleries::SwVbaListGalleries( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xTextDoc ) : SwVbaListGalleries_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ),  mxTextDocument( xTextDoc )
 {

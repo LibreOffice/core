@@ -48,6 +48,9 @@ static double getTimeNow()
 }
 
 static double origin;
+
+namespace {
+
 struct TimeRecord {
     const char *mpName;
     double mfTime;
@@ -59,6 +62,9 @@ struct TimeRecord {
         fprintf(stderr, "%3.3fs - %s\n", (mfTime - origin), mpName);
     }
 };
+
+}
+
 static std::vector< TimeRecord > aTimes;
 
 /// Dump an array (or sub-array) of RGBA or BGRA to an RGB PPM file.

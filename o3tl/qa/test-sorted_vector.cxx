@@ -17,6 +17,7 @@
 
 using namespace ::o3tl;
 
+namespace {
 
 // helper class
 class SwContent
@@ -31,6 +32,8 @@ public:
         return x < rCmp.x;
     }
 };
+
+}
 
 class sorted_vector_test : public CppUnit::TestFixture
 {

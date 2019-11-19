@@ -128,11 +128,15 @@ static const sal_uInt16 aDocInfoSubTypeFromService[] =
     DI_DOCNO                    //PROPERTY_MAP_FLDTYP_DOCINFO_REVISION
 };
 
+namespace {
+
 struct ServiceIdResId
 {
     SwFieldIds const    nResId;
     SwServiceType const nServiceId;
 };
+
+}
 
 static const ServiceIdResId aServiceToRes[] =
 {
@@ -1071,6 +1075,8 @@ OUString SwXFieldMaster::LocalizeFormula(
     return rFormula;
 }
 
+namespace {
+
 struct SwFieldProperties_Impl
 {
     OUString    sPar1;
@@ -1111,6 +1117,8 @@ struct SwFieldProperties_Impl
         bBool4(true) //Automatic language
         {}
 };
+
+}
 
 class SwXTextField::Impl
     : public SvtListener

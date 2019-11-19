@@ -383,6 +383,8 @@ void Bridge::call_java(
     }
 }
 
+namespace {
+
 // a UNO proxy wrapping a Java interface
 struct UNO_proxy : public uno_Interface
 {
@@ -405,6 +407,7 @@ struct UNO_proxy : public uno_Interface
         JNI_interface_type_info const * info );
 };
 
+}
 
 inline UNO_proxy::UNO_proxy(
     JNI_context const & jni, Bridge const * bridge,

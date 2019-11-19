@@ -105,6 +105,8 @@ ThreadPool::~ThreadPool()
     assert(maTasks.empty());
 }
 
+namespace {
+
 struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPool >,
                                                       ThreadPoolStatic >
 {
@@ -113,6 +115,8 @@ struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPoo
         return std::make_shared< ThreadPool >( nThreads );
     };
 };
+
+}
 
 ThreadPool& ThreadPool::getSharedOptimalPool()
 {

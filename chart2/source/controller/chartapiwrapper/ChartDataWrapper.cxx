@@ -106,6 +106,8 @@ struct lcl_Operator
     }
 };
 
+namespace {
+
 struct lcl_AllOperator : public lcl_Operator
 {
     explicit lcl_AllOperator( const Reference< XChartData >& xDataToApply )
@@ -364,6 +366,8 @@ struct lcl_DateCategoriesOperator : public lcl_Operator
 
     const Sequence< double >& m_rDates;
 };
+
+}
 
 ChartDataWrapper::ChartDataWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
     : m_spChart2ModelContact(spChart2ModelContact)

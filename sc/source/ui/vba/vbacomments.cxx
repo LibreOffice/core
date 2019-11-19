@@ -38,6 +38,8 @@ static uno::Any AnnotationToComment( const uno::Any& aSource, const uno::Referen
         new ScVbaComment( uno::Reference< XHelperInterface >(), xContext, xModel, xCellRange ) ) );
 }
 
+namespace {
+
 class CommentEnumeration : public EnumerationHelperImpl
 {
     css::uno::Reference< css::frame::XModel > mxModel;
@@ -58,6 +60,8 @@ public:
     }
 
 };
+
+}
 
 ScVbaComments::ScVbaComments(
         const uno::Reference< XHelperInterface >& xParent,

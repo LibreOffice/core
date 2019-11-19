@@ -279,6 +279,7 @@ void URLParameter::readHelpDataFile()
 
 // Class encapsulating the transformation of the XInputStream to XHTML
 
+namespace {
 
 class InputStreamTransformer
     : public OWeakObject,
@@ -323,6 +324,7 @@ private:
     OStringBuffer buffer;
 };
 
+}
 
 void URLParameter::open( const Reference< XOutputStream >& xDataSink )
 {
@@ -513,6 +515,8 @@ bool URLParameter::query()
     return ret;
 }
 
+namespace {
+
 struct UserData {
 
     UserData( URLParameter*           pInitial,
@@ -525,6 +529,8 @@ struct UserData {
     Databases*                          m_pDatabases;
     URLParameter*                       m_pInitial;
 };
+
+}
 
 static UserData *ugblData = nullptr;
 

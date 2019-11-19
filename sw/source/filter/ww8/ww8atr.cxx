@@ -4872,6 +4872,8 @@ void WW8AttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
     m_rWW8Export.pO->push_back( rWidows.GetValue() ? 1 : 0 );
 }
 
+namespace {
+
 class SwWW8WrTabu
 {
     std::unique_ptr<sal_uInt8[]> pDel;            // DelArray
@@ -4890,6 +4892,8 @@ public:
     void Del(const SvxTabStop &rTS, long nAdjustment);
     void PutAll(WW8Export& rWW8Wrt);
 };
+
+}
 
 SwWW8WrTabu::SwWW8WrTabu(sal_uInt16 nDelMax, sal_uInt16 nAddMax)
     : nAdd(0), nDel(0)

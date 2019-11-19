@@ -49,6 +49,8 @@
 
 #define ASC_BUFFLEN 4096
 
+namespace {
+
 class SwASCIIParser
 {
     SwDoc* pDoc;
@@ -73,6 +75,8 @@ public:
 
     ErrCode CallParser();
 };
+
+}
 
 // Call for the general reader interface
 ErrCode AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OUString & )

@@ -711,6 +711,8 @@ bool FreetypeFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
 
 // outline stuff
 
+namespace {
+
 class PolyArgs
 {
 public:
@@ -739,6 +741,8 @@ private:
     PolyArgs(const PolyArgs&) = delete;
     PolyArgs& operator=(const PolyArgs&) = delete;
 };
+
+}
 
 PolyArgs::PolyArgs( tools::PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
 :   mrPolyPoly(rPolyPoly),

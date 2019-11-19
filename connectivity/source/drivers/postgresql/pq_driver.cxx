@@ -158,6 +158,7 @@ static Reference< XInterface > DriverCreateInstance( const Reference < XComponen
     return ret;
 }
 
+namespace {
 
 class OOneInstanceComponentFactory :
     public MutexHolder,
@@ -211,6 +212,8 @@ private:
     Reference< XInterface >        m_theInstance;
     Reference< XComponentContext > m_defaultContext;
 };
+
+}
 
 Reference< XInterface > OOneInstanceComponentFactory::createInstanceWithArgumentsAndContext(
     Sequence< Any > const &, const Reference< XComponentContext > & ctx )

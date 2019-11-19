@@ -461,6 +461,8 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
     getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DatabaseName)->UpdateFields();
 }
 
+namespace {
+
 struct PostItField_ : public SetGetExpField
 {
     PostItField_( const SwNodeIndex& rNdIdx, const SwTextField* pField )
@@ -475,6 +477,8 @@ struct PostItField_ : public SetGetExpField
         return static_cast<const SwPostItField*>( GetTextField()->GetFormatField().GetField() );
     }
 };
+
+}
 
 sal_uInt16 PostItField_::GetPageNo(
     const StringRangeEnumerator &rRangeEnum,

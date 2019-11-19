@@ -144,6 +144,8 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
     }
 }
 
+namespace {
+
 union largest
 {
     sal_Int64 n;
@@ -152,6 +154,7 @@ union largest
     uno_Any a;
 };
 
+}
 
 jobject Bridge::call_uno(
     JNI_context const & jni,

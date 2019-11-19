@@ -46,6 +46,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 
+namespace {
 
 /************
  * Sequence of bytes -> InputStream
@@ -88,6 +89,7 @@ public:
     Sequence< sal_Int8> m_seq;
 };
 
+}
 
 // Helper : create an input stream from a file
 
@@ -135,6 +137,7 @@ static Reference< XInputStream > createStreamFromFile(
     return r;
 }
 
+namespace {
 
 class TestDocumentHandler :
     public WeakImplHelper< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
@@ -292,6 +295,7 @@ public:
     OFileWriter of;
 };
 
+}
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {

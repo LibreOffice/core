@@ -64,6 +64,8 @@ namespace o3tl {
     template<> struct typed_flags<ConfigFlags> : is_typed_flags<ConfigFlags, 0xe7fff3f> {};
 }
 
+namespace {
+
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
 {
 private:
@@ -98,6 +100,8 @@ public:
                             }
 };
 
+}
+
 SvtAppFilterOptions_Impl::~SvtAppFilterOptions_Impl()
 {
     assert(!IsModified()); // should have been committed
@@ -130,6 +134,8 @@ void    SvtAppFilterOptions_Impl::Load()
         bSaveVBA = *o3tl::doAccess<bool>(pValues[1]);
 }
 
+namespace {
+
 class SvtWriterFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
 private:
@@ -152,6 +158,8 @@ public:
                                 bLoadExecutable = bSet;
                             }
 };
+
+}
 
 void SvtWriterFilterOptions_Impl::ImplCommit()
 {
@@ -176,6 +184,8 @@ void SvtWriterFilterOptions_Impl::Load()
         bLoadExecutable = *o3tl::doAccess<bool>(pValues[0]);
 }
 
+namespace {
+
 class SvtCalcFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
 private:
@@ -198,6 +208,8 @@ public:
                                 bLoadExecutable = bSet;
                             }
 };
+
+}
 
 void SvtCalcFilterOptions_Impl::ImplCommit()
 {

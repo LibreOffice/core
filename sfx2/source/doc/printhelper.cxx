@@ -96,6 +96,8 @@ static Size impl_Size_Struct2Object( const awt::Size& aSize )
     return aReturnValue ;
 }
 
+namespace {
+
 class SfxPrintJob_Impl : public cppu::WeakImplHelper
 <
     css::view::XPrintJob
@@ -110,6 +112,8 @@ public:
     virtual Reference< css::view::XPrintable > SAL_CALL getPrintable(  ) override;
     virtual void SAL_CALL cancelJob() override;
 };
+
+}
 
 SfxPrintJob_Impl::SfxPrintJob_Impl( IMPL_PrintListener_DataContainer* pData )
     : m_pData( pData )
@@ -457,6 +461,7 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
 
 //  ImplPrintWatch thread for asynchronous printing with moving temp. file to ucb location
 
+namespace {
 
 /* This implements a thread which will be started to wait for asynchronous
    print jobs to temp. locally files. If they finish we move the temp. files
@@ -569,6 +574,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         }
 };
 
+}
 
 //  XPrintable
 

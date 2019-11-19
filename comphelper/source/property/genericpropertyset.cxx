@@ -42,6 +42,8 @@ using namespace ::com::sun::star::lang;
 
 namespace comphelper
 {
+    namespace {
+
     struct IMPL_GenericPropertySet_MutexContainer
     {
         Mutex maMutex;
@@ -84,6 +86,7 @@ namespace comphelper
         virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     };
 
+    }
 }
 
 

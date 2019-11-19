@@ -597,6 +597,7 @@ static void typelib_callback(
 }
 }
 
+namespace {
 
 class EventListenerImpl
     : public WeakImplHelper< lang::XEventListener >
@@ -612,6 +613,8 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing( lang::EventObject const & rEvt ) override;
 };
+
+}
 
 void EventListenerImpl::disposing( lang::EventObject const & rEvt )
 {

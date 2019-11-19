@@ -28,6 +28,8 @@ using namespace ::com::sun::star::lang;
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase3.hxx>
 
+namespace {
+
 class PropertySetMergerImpl : public ::cppu::WeakAggImplHelper3< XPropertySet, XPropertyState, XPropertySetInfo >
 {
 private:
@@ -62,6 +64,8 @@ public:
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) override;
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 };
+
+}
 
 // Interface implementation
 

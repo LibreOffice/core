@@ -33,6 +33,7 @@
 
 using namespace com::sun::star;
 
+namespace {
 
 // Helper to ensure lt_error_t is free'd
 struct myLtError
@@ -43,7 +44,6 @@ struct myLtError
 };
 
 // "statics" to be returned as const reference to an empty locale and string.
-namespace {
 struct theEmptyLocale : public rtl::Static< lang::Locale, theEmptyLocale > {};
 struct theEmptyBcp47 : public rtl::Static< OUString, theEmptyBcp47 > {};
 }
@@ -141,6 +141,7 @@ bool LanguageTag::isOnTheFlyID( LanguageType nLang )
         LANGUAGE_ON_THE_FLY_SUB_START <= nSub && nSub <= LANGUAGE_ON_THE_FLY_SUB_END;
 }
 
+namespace {
 
 /** A reference holder for liblangtag data de/initialization, one static
     instance. Currently implemented such that the first "ref" inits and dtor
@@ -165,7 +166,6 @@ private:
     static void teardown();
 };
 
-namespace {
 struct theDataRef : public rtl::Static< LiblangtagDataRef, theDataRef > {};
 }
 

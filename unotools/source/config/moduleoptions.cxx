@@ -82,6 +82,8 @@
 
 #define FACTORYCOUNT                        11
 
+namespace {
+
 /*-************************************************************************************************************
     @descr  This struct hold information about one factory. We declare a complete array which can hold infos
             for all well known factories. Values of enum "EFactory" (see header!) are directly used as index!
@@ -223,6 +225,8 @@ struct FactoryInfo
 
         css::uno::Reference< css::util::XStringSubstitution >  xSubstVars;
 };
+
+}
 
 class SvtModuleOptions_Impl : public ::utl::ConfigItem
 {

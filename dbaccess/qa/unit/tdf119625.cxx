@@ -44,11 +44,14 @@ void Tdf119625Test::setUp()
     osl_setEnvironment(OUString{ "DBACCESS_HSQL_MIGRATION" }.pData, OUString{ "1" }.pData);
 }
 
+namespace
+{
 struct expect_t
 {
     sal_Int16 id;
     sal_Int16 h, m, s;
 };
+}
 
 /* The values here assume that our results are in UTC.  However,
    tdf#119675 "Firebird: Migration: User dialog to set treatment of

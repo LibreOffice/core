@@ -94,6 +94,7 @@ using com::sun::star::sdbc::XDatabaseMetaData;
 namespace pq_sdbc_driver
 {
 
+namespace {
 
 // Helper class for statement lifetime management
 class ClosableReference : public cppu::WeakImplHelper< css::uno::XReference >
@@ -115,6 +116,8 @@ public:
         }
     }
 };
+
+}
 
 static OUString    ConnectionGetImplementationName()
 {
@@ -393,6 +396,8 @@ void Connection::clearWarnings()
 {
 }
 
+namespace {
+
 class cstr_vector
 {
     std::vector<char*> values;
@@ -425,6 +430,8 @@ public:
     // for a return type of "char const*const*".
     char const** c_array() const { return const_cast <const char**>(values.data()); }
 };
+
+}
 
 static void properties2arrays( const Sequence< PropertyValue > & args,
                                const Reference< XTypeConverter> &tc,

@@ -36,6 +36,8 @@ namespace basegfx
         // class for this since holding the pointers is more effective and also can be
         // used as baseclass for the traversing edges
 
+        namespace {
+
         class TrDeSimpleEdge
         {
         protected:
@@ -58,6 +60,8 @@ namespace basegfx
             const B2DPoint& getEnd() const { return *mpEnd; }
         };
 
+        }
+
         // define vector of simple edges
 
         typedef std::vector< TrDeSimpleEdge > TrDeSimpleEdges;
@@ -66,6 +70,8 @@ namespace basegfx
         // distance in YPos. The slope (in a numerically useful form, see comments) is
         // hold and used in SortValue to allow sorting traversing edges by Y, X and slope
         // (in that order)
+
+        namespace {
 
         class TrDeEdgeEntry : public TrDeSimpleEdge
         {
@@ -179,6 +185,8 @@ namespace basegfx
             }
         };
 
+        }
+
         // define double linked list of edges (for fast random insert)
 
         typedef std::list< TrDeEdgeEntry > TrDeEdgeEntries;
@@ -191,6 +199,8 @@ namespace basegfx
     namespace trapezoidhelper
     {
         // FIXME: templatize this and use it for TrDeEdgeEntries too ...
+
+        namespace {
 
         /// Class to allow efficient allocation and release of B2DPoints
         class PointBlockAllocator
@@ -883,6 +893,8 @@ namespace basegfx
                 }
             }
         };
+
+        }
     } // end of anonymous namespace
 } // end of namespace basegfx
 

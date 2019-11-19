@@ -2149,6 +2149,8 @@ void XclExpRowBuffer::CreateRows( SCROW nFirstFreeScRow )
         GetOrCreateRow(  ::std::max ( nFirstFreeScRow - 1, GetMaxPos().Row() ), true );
 }
 
+namespace {
+
 class RowFinalizeTask : public comphelper::ThreadTask
 {
     bool mbProgress;
@@ -2169,6 +2171,8 @@ public:
             p->Finalize( mrColXFIndexes, mbProgress );
     }
 };
+
+}
 
 void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt16Vec& rColXFIndexes )
 {

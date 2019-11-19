@@ -67,6 +67,8 @@ namespace framework
 
     //= UndoActionWrapper
 
+    namespace {
+
     class UndoActionWrapper : public SfxUndoAction
     {
     public:
@@ -83,6 +85,8 @@ namespace framework
     private:
         const Reference< XUndoAction >  m_xUndoAction;
     };
+
+    }
 
     UndoActionWrapper::UndoActionWrapper( Reference< XUndoAction > const& i_undoAction )
         :SfxUndoAction()
@@ -136,6 +140,8 @@ namespace framework
 
     //= UndoManagerRequest
 
+    namespace {
+
     class UndoManagerRequest : public ::comphelper::AnyEvent
     {
     public:
@@ -186,6 +192,8 @@ namespace framework
         Any                         m_caughtException;
         ::osl::Condition            m_finishCondition;
     };
+
+    }
 
     //= UndoManagerHelper_Impl
 

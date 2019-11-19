@@ -87,6 +87,8 @@ typedef std::unordered_map< sal_Int16, sal_Int16 > CommandHashMap;
 namespace dbaui
 {
 
+namespace {
+
 // UserDefinedFeatures
 class UserDefinedFeatures
 {
@@ -98,6 +100,8 @@ public:
 private:
     css::uno::WeakReference< XController > m_aController;
 };
+
+}
 
 UserDefinedFeatures::UserDefinedFeatures( const Reference< XController >& _rxController )
     :m_aController( _rxController )

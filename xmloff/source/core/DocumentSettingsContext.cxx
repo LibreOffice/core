@@ -51,6 +51,8 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
 class XMLMyList
 {
     std::vector<beans::PropertyValue> aProps;
@@ -66,6 +68,8 @@ public:
     uno::Reference<container::XNameContainer> GetNameContainer();
     uno::Reference<container::XIndexContainer> GetIndexContainer();
 };
+
+}
 
 XMLMyList::XMLMyList(const uno::Reference<uno::XComponentContext>& rxContext)
 :   nCount(0),
@@ -114,6 +118,8 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 
     return xIndexContainer;
 }
+
+namespace {
 
 class XMLConfigBaseContext : public SvXMLImportContext
 {
@@ -205,6 +211,8 @@ public:
 
     virtual void EndElement() override;
 };
+
+}
 
 static SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, sal_uInt16 p_nPrefix,
                         const OUString& rLocalName,

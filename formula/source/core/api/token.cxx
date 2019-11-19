@@ -1023,6 +1023,8 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp )
     }
 }
 
+namespace {
+
 class FormulaMissingContext
 {
     public:
@@ -1035,6 +1037,8 @@ class FormulaMissingContext
                     bool    AddMissing( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const;
                     void    AddMoreArgs( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const;
 };
+
+}
 
 void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const
 {

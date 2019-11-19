@@ -117,6 +117,7 @@ static void assign( TestData & rData,
     rData.Sequence = rSequence;
 }
 
+namespace {
 
 class Test_Impl :
     public osl::DebugBase<Test_Impl>,
@@ -454,6 +455,8 @@ public:
      Dummy(): WeakComponentImplHelperBase(*Mutex::getGlobalMutex()){}
 
 };
+
+}
 
 Any Test_Impl::transportAny( const Any & value )
 {

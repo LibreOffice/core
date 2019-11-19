@@ -58,6 +58,8 @@
 
 using namespace com::sun::star;
 
+namespace {
+
 class SwSdrHdl : public SdrHdl
 {
 public:
@@ -65,6 +67,8 @@ public:
         SdrHdl( rPnt, bTopRight ? SdrHdlKind::Anchor_TR : SdrHdlKind::Anchor ) {}
     virtual bool IsFocusHdl() const override;
 };
+
+}
 
 bool SwSdrHdl::IsFocusHdl() const
 {

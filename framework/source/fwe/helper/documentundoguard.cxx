@@ -43,6 +43,9 @@ namespace framework
 
     typedef ::cppu::WeakImplHelper <   XUndoManagerListener
                                     >   UndoManagerContextListener_Base;
+
+    namespace {
+
     class UndoManagerContextListener : public UndoManagerContextListener_Base
     {
     public:
@@ -96,6 +99,8 @@ namespace framework
         oslInterlockedCount             m_nRelativeContextDepth;
         bool                            m_documentDisposed;
     };
+
+    }
 
     void SAL_CALL UndoManagerContextListener::undoActionAdded( const UndoManagerEvent& )
     {

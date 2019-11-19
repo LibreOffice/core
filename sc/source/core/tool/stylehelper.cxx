@@ -44,11 +44,15 @@
 #define SC_PIVOT_STYLE_PROG_FIELDNAME              "Pivot Table Field"
 #define SC_PIVOT_STYLE_PROG_TOP                    "Pivot Table Corner"
 
+namespace {
+
 struct ScDisplayNameMap
 {
     OUString  aDispName;
     OUString  aProgName;
 };
+
+}
 
 static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
 {

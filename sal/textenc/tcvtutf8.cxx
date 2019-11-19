@@ -30,6 +30,8 @@
 #include "tenchelp.hxx"
 #include "unichars.hxx"
 
+namespace {
+
 struct ImplUtf8ToUnicodeContext
 {
     sal_uInt32 nUtf32;
@@ -42,6 +44,8 @@ struct ImplUnicodeToUtf8Context
 {
     sal_Unicode nHighSurrogate; /* 0xFFFF: write BOM */
 };
+
+}
 
 void * ImplCreateUtf8ToUnicodeContext()
 {

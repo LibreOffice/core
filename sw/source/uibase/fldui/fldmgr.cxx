@@ -288,6 +288,8 @@ static const char* FMT_USERVAR_ARY[] =
     FMT_USERVAR_CMD
 };
 
+namespace {
+
 // field types and subtypes
 struct SwFieldPack
 {
@@ -299,6 +301,8 @@ struct SwFieldPack
     const char**       pFormatResIds;
     size_t const       nFormatLength;
 };
+
+}
 
 // strings and formats
 static const SwFieldPack aSwFields[] =

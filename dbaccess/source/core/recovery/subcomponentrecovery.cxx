@@ -165,6 +165,8 @@ namespace dbaccess
         static const char sCurrentQueryDesignName[] = "ooo:current-query-design";
     }
 
+    namespace {
+
     // SettingsExportContext
     class SettingsExportContext : public ::xmloff::XMLSettingsExportContext
     {
@@ -201,6 +203,8 @@ namespace dbaccess
         const StorageXMLOutputStream&           m_rDelegator;
         const OUString m_aNamespace;
     };
+
+    }
 
     void SettingsExportContext::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue )
     {
@@ -239,6 +243,9 @@ namespace dbaccess
     // SettingsDocumentHandler
     typedef ::cppu::WeakImplHelper<   XDocumentHandler
                                   >   SettingsDocumentHandler_Base;
+
+    namespace {
+
     class SettingsDocumentHandler : public SettingsDocumentHandler_Base
     {
     public:
@@ -268,6 +275,8 @@ namespace dbaccess
         std::stack< ::rtl::Reference< SettingsImport > >  m_aStates;
         ::comphelper::NamedValueCollection                  m_aSettings;
     };
+
+    }
 
     void SAL_CALL SettingsDocumentHandler::startDocument(  )
     {

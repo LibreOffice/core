@@ -62,6 +62,8 @@ namespace svt { namespace table
 
     //= SuppressCursor
 
+    namespace {
+
     class SuppressCursor
     {
     private:
@@ -211,6 +213,8 @@ namespace svt { namespace table
             return Any();
         }
     };
+
+    }
 
     TableControl_Impl::TableControl_Impl( TableControl& _rAntiImpl )
         :m_rAntiImpl            ( _rAntiImpl                    )

@@ -57,6 +57,8 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
+namespace {
+
 class Annotation : private ::cppu::BaseMutex,
                    public ::cppu::WeakComponentImplHelper< XAnnotation>,
                    public ::cppu::PropertySetMixin< XAnnotation >
@@ -180,6 +182,8 @@ protected:
     AnnotationData maUndoData;
     AnnotationData maRedoData;
 };
+
+}
 
 void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage )
 {

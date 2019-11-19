@@ -50,7 +50,6 @@ struct Gregorian : public rtl::StaticWithInit<OUString, Gregorian> {
         return CONST_TEST_STRING;
     }
 };
-}
 
 /** Simple thread for testing Thread-create.
  * Just add 1 of value 0, and after running, result is 1.
@@ -107,6 +106,8 @@ public:
             }
         }
 };
+
+}
 
 namespace rtl_DoubleLocking
 {

@@ -143,6 +143,8 @@ namespace cairocanvas
         return nTransparency;
     }
 
+    namespace {
+
     class DeviceSettingsGuard
     {
     private:
@@ -167,6 +169,8 @@ namespace cairocanvas
             cairo_restore(mpCairo);
         }
     };
+
+    }
 
     static bool setupTextOutput( OutputDevice&                                     rOutDev,
                           const rendering::XCanvas*                         pOwner,

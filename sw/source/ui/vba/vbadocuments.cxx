@@ -51,6 +51,8 @@ getDocument( uno::Reference< uno::XComponentContext > const & xContext, const un
     return uno::Any( uno::Reference< word::XDocument > (pWb) );
 }
 
+namespace {
+
 class DocumentEnumImpl : public EnumerationHelperImpl
 {
     uno::Any const m_aApplication;
@@ -64,6 +66,8 @@ public:
         return getDocument( m_xContext, xDoc, m_aApplication );
     }
 };
+
+}
 
 SwVbaDocuments::SwVbaDocuments( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : SwVbaDocuments_BASE( xParent, xContext, VbaDocumentsBase::WORD_DOCUMENT )
 {

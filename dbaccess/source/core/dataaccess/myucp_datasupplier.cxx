@@ -42,6 +42,8 @@ using namespace dbaccess;
 namespace dbaccess
 {
 
+namespace {
+
 // struct ResultListEntry.
 struct ResultListEntry
 {
@@ -53,6 +55,8 @@ struct ResultListEntry
 
     explicit ResultListEntry(const ContentProperties& rEntry) : rData( rEntry ) {}
 };
+
+}
 
 // struct DataSupplier_Impl.
 struct DataSupplier_Impl

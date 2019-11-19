@@ -335,6 +335,8 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         maData.maVerPageBreaks.push_back(rColBreak);
 }
 
+namespace {
+
 class XclExpXmlStartHeaderFooterElementRecord : public XclExpXmlElementRecord
 {
 public:
@@ -343,6 +345,8 @@ public:
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 };
+
+}
 
 void XclExpXmlStartHeaderFooterElementRecord::SaveXml(XclExpXmlStream& rStrm)
 {

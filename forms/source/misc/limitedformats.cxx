@@ -76,6 +76,7 @@ namespace frm
         return s_aSystem;
     }
 
+    namespace {
 
     struct FormatEntry
     {
@@ -84,6 +85,7 @@ namespace frm
         LocaleType      eLocale;
     };
 
+    }
 
     static FormatEntry* lcl_getFormatTable(sal_Int16 nTableId)
     {

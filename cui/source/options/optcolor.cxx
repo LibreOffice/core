@@ -159,8 +159,6 @@ const vEntryInfo[] =
     #undef IDS
 };
 
-} // namespace
-
 // ColorConfigWindow_Impl
 
 class ColorConfigWindow_Impl
@@ -259,6 +257,8 @@ private:
 
     bool IsGroupVisible (Group) const;
 };
+
+} // namespace
 
 // ColorConfigWindow_Impl::Chapter
 

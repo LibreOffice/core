@@ -98,9 +98,6 @@ bool checkEmpty(OUString const & string, char const * message) {
     return ok;
 }
 
-}
-
-
 class TestBridgeImpl : public osl::DebugBase<TestBridgeImpl>,
                        public WeakImplHelper< XMain, XServiceInfo >
 {
@@ -120,6 +117,7 @@ public:
     virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) override;
 };
 
+}
 
 static bool equals( const TestElement & rData1, const TestElement & rData2 )
 {
@@ -302,6 +300,8 @@ static bool performSequenceOfCallTest( const Reference < XBridgeTest > &xLBT )
     return xLBT->sequenceOfCallTestPassed();
 }
 
+namespace {
+
 class ORecursiveCall : public WeakImplHelper< XRecursiveCall >
 {
 private:
@@ -322,6 +322,7 @@ public:
         }
 };
 
+}
 
 static bool performRecursiveCallTest( const Reference < XBridgeTest > & xLBT )
 {
@@ -330,12 +331,15 @@ static bool performRecursiveCallTest( const Reference < XBridgeTest > & xLBT )
     return true;
 }
 
+namespace {
+
 class MyClass : public osl::DebugBase<MyClass>, public OWeakObject
 {
 public:
     MyClass();
 };
 
+}
 
 MyClass::MyClass()
 {

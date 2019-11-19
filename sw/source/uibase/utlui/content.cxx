@@ -3808,6 +3808,8 @@ bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
     return bRet;
 }
 
+namespace {
+
 class SwContentLBoxString : public SvLBoxString
 {
 public:
@@ -3816,6 +3818,8 @@ public:
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 };
+
+}
 
 void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
         const OUString& rStr ,const Image& rImg1,const Image& rImg2)

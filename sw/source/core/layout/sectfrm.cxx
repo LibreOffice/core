@@ -1190,6 +1190,8 @@ void SwSectionFrame::SimpleFormat()
     UnlockJoin();
 }
 
+namespace {
+
 // #i40147# - helper class to perform extra section format
 // to position anchored objects and to keep the position of whose objects locked.
 class ExtraFormatToPositionObjs
@@ -1321,6 +1323,8 @@ class ExtraFormatToPositionObjs
 
         }
 };
+
+}
 
 /// "formats" the frame; Frame and PrtArea
 void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttr )

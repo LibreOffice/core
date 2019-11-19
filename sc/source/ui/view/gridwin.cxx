@@ -306,6 +306,8 @@ void ScFilterListBox::SelectHdl()
     }
 }
 
+namespace {
+
 // use a System floating window for the above filter listbox
 class ScFilterFloatingWindow : public FloatingWindow
 {
@@ -314,6 +316,8 @@ public:
     virtual ~ScFilterFloatingWindow() override;
     virtual void dispose() override;
 };
+
+}
 
 ScFilterFloatingWindow::ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle ) :
     FloatingWindow( pParent, nStyle|WB_SYSTEMWINDOW ) // make it a system floater

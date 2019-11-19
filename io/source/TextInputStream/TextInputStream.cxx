@@ -55,6 +55,8 @@ namespace io_TextInputStream
 #define INITIAL_UNICODE_BUFFER_CAPACITY     0x100
 #define READ_BYTE_COUNT                     0x100
 
+namespace {
+
 class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo >
 {
     Reference< XInputStream > mxStream;
@@ -104,6 +106,8 @@ public:
         virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
         virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
 };
+
+}
 
 OTextInputStream::OTextInputStream()
     : mbEncodingInitialized(false)

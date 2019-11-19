@@ -551,6 +551,8 @@ void X11SalData::Timeout()
         pSVData->maSchedCtx.mpSalTimer->CallCallback();
 }
 
+namespace {
+
 struct YieldEntry
 {
     int         fd;         // file descriptor for reading
@@ -563,6 +565,8 @@ struct YieldEntry
     int  IsEventQueued()     const { return queued( fd, data ); }
     void HandleNextEvent()   const { handle( fd, data ); }
 };
+
+}
 
 #define MAX_NUM_DESCRIPTORS 128
 

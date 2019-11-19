@@ -810,6 +810,7 @@ static bool lcl_HasRotation(const SwTextAttr& rAttr,
 }
 
 namespace sw {
+    namespace {
 
     // need to use a very special attribute iterator here that returns
     // both the hints and the nodes, so that GetMultiCreator() can handle
@@ -832,6 +833,8 @@ namespace sw {
             m_First = rOther.m_First;
         }
     };
+
+    }
 
     SwTextAttr const* MergedAttrIterMulti::NextAttr(SwTextNode const*& rpNode)
     {
@@ -1400,6 +1403,8 @@ std::unique_ptr<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &
     return nullptr;
 }
 
+namespace {
+
 // A little helper class to manage the spaceadd-arrays of the text adjustment
 // during a PaintMultiPortion.
 // The constructor prepares the array for the first line of multiportion,
@@ -1421,6 +1426,8 @@ public:
     void SecondLine();
     long GetSpaceAdd() const { return nSpaceAdd; }
 };
+
+}
 
 SwSpaceManipulator::SwSpaceManipulator( SwTextPaintInfo& rInf,
                                         SwMultiPortion& rMult )

@@ -77,6 +77,8 @@ OUString ShapeFilterBase::getImplementationName()
     return OUString();
 }
 
+namespace {
+
 /// Graphic helper for shapes, that can manage color schemes.
 class ShapeGraphicHelper : public GraphicHelper
 {
@@ -86,6 +88,8 @@ public:
 private:
     const ShapeFilterBase& mrFilter;
 };
+
+}
 
 ShapeGraphicHelper::ShapeGraphicHelper( const ShapeFilterBase& rFilter ) :
     GraphicHelper( rFilter.getComponentContext(), rFilter.getTargetFrame(), rFilter.getStorage() ),

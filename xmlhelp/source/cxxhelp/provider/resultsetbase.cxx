@@ -328,6 +328,7 @@ ResultSetBase::queryContent()
         return uno::Reference< ucb::XContent >();
 }
 
+namespace {
 
 class XPropertySetInfoImpl
     : public cppu::OWeakObject,
@@ -385,6 +386,7 @@ private:
     uno::Sequence< beans::Property > m_aSeq;
 };
 
+}
 
 // XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL

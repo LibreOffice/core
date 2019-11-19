@@ -50,6 +50,8 @@ ScExtTabSettings::ScExtTabSettings() :
 {
 }
 
+namespace {
+
 /** A container for ScExtTabSettings objects.
     @descr  Internally, a std::map with shared pointers to ScExtTabSettings is
     used. The copy constructor and assignment operator make deep copies of the
@@ -75,6 +77,8 @@ private:
 
     ScExtTabSettingsMap maMap;
 };
+
+}
 
 ScExtTabSettingsCont::ScExtTabSettingsCont()
 {

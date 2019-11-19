@@ -113,6 +113,8 @@ static bool KillFile_Impl( const OUString& rURL )
 #define TYPE_HYPH       sal_uInt8(3)
 #define TYPE_THES       sal_uInt8(4)
 
+namespace {
+
 class ModuleUserData_Impl
 {
     bool bParent;
@@ -156,6 +158,7 @@ public:
     bool        IsDeletable() const         { return static_cast<bool>((nVal >> 10) & 0x01); }
 };
 
+}
 
 DicUserData::DicUserData(
         sal_uInt16 nEID,
@@ -211,6 +214,8 @@ static OUString lcl_GetPropertyName( EID_OPTIONS eEntryId )
     DBG_ASSERT( static_cast<unsigned int>(eEntryId) < SAL_N_ELEMENTS(aEidToPropName), "index out of range" );
     return OUString::createFromAscii( aEidToPropName[ static_cast<int>(eEntryId) ] );
 }
+
+namespace {
 
 class OptionsBreakSet : public weld::GenericDialogController
 {
@@ -273,6 +278,8 @@ public:
     void        SetNumericValue( sal_uInt8 nNumVal );
 };
 
+}
+
 OptionsUserData::OptionsUserData( sal_uInt16 nEID,
         bool bHasNV, sal_uInt16 nNumVal,
         bool bCheckable, bool bChecked )
@@ -298,6 +305,8 @@ void OptionsUserData::SetNumericValue( sal_uInt8 nNumVal )
 
 // ServiceInfo_Impl ----------------------------------------------------
 
+namespace {
+
 struct ServiceInfo_Impl
 {
     OUString                    sDisplayName;
@@ -313,6 +322,8 @@ struct ServiceInfo_Impl
 
     ServiceInfo_Impl() : bConfigured(false) {}
 };
+
+}
 
 typedef std::vector< ServiceInfo_Impl >                   ServiceInfoArr;
 typedef std::map< LanguageType, Sequence< OUString > >    LangImplNameTable;

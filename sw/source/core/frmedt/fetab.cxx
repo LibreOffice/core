@@ -68,6 +68,8 @@ using namespace ::com::sun::star;
 
 static bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
 
+namespace {
+
 class TableWait
 {
     const std::unique_ptr<SwWait> m_pWait;
@@ -80,6 +82,8 @@ public:
         : m_pWait( ShouldWait(nCnt, pFrame, nCnt2) ? std::make_unique<SwWait>( rDocShell, true ) : nullptr )
     { }
 };
+
+}
 
 void SwFEShell::ParkCursorInTab()
 {

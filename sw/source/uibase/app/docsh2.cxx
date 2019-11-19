@@ -1442,6 +1442,8 @@ void SwDocShell::UpdateChildWindows()
         pRed->ReInitDlg( this );
 }
 
+namespace {
+
 // #i48748#
 class SwReloadFromHtmlReader : public SwReader
 {
@@ -1454,6 +1456,8 @@ class SwReloadFromHtmlReader : public SwReader
             SetBaseURL( _rFilename );
         }
 };
+
+}
 
 void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcView )
 {

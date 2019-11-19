@@ -68,14 +68,20 @@ static OUString invadp_getImplementationName()
     return IMPLNAME;
 }
 
+namespace {
+
 struct hash_ptr
 {
     size_t operator() ( void * p ) const
         { return reinterpret_cast<size_t>(p); }
 };
+
+}
+
 typedef std::unordered_set< void *, hash_ptr > t_ptr_set;
 typedef std::unordered_map< void *, t_ptr_set, hash_ptr > t_ptr_map;
 
+namespace {
 
 class FactoryImpl
     : public ::cppu::WeakImplHelper< lang::XServiceInfo,
@@ -160,6 +166,8 @@ struct AdapterImpl
     AdapterImpl (const AdapterImpl &) = delete;
     AdapterImpl & operator= (const AdapterImpl &) = delete;
 };
+
+}
 
 inline AdapterImpl::~AdapterImpl()
 {

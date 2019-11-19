@@ -43,6 +43,8 @@ using namespace css::xml::sax;
 class SwXMLBlockListImport;
 class SwXMLTextBlockImport;
 
+namespace {
+
 class SwXMLBlockListContext : public SvXMLImportContext
 {
 private:
@@ -112,6 +114,8 @@ public:
 
     virtual ~SwXMLTextBlockParContext() override;
 };
+
+}
 
 SwXMLTextBlockTokenHandler::SwXMLTextBlockTokenHandler()
 {

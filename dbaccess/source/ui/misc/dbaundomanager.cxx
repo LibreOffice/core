@@ -78,6 +78,8 @@ namespace dbaui
         return static_cast< XUndoManager* >( &rAntiImpl );
     }
 
+    namespace {
+
     // OslMutexFacade
     class OslMutexFacade : public ::framework::IMutex
     {
@@ -96,6 +98,8 @@ namespace dbaui
         ::osl::Mutex&   m_rMutex;
     };
 
+    }
+
     void OslMutexFacade::acquire()
     {
         m_rMutex.acquire();
@@ -105,6 +109,8 @@ namespace dbaui
     {
         m_rMutex.release();
     }
+
+    namespace {
 
     // UndoManagerMethodGuard
     /** guard for public UNO methods of the UndoManager
@@ -132,6 +138,8 @@ namespace dbaui
         osl::ClearableMutexGuard m_aGuard;
         OslMutexFacade              m_aMutexFacade;
     };
+
+    }
 
     ::framework::IMutex& UndoManagerMethodGuard::getGuardedMutex()
     {

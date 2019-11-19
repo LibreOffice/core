@@ -1249,6 +1249,8 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
     return pTextNd;
 }
 
+namespace {
+
 struct RefIdsMap
 {
 private:
@@ -1271,6 +1273,8 @@ public:
 
     const OUString& GetName() const { return aName; }
 };
+
+}
 
 /// Get a sorted list of the field IDs from a document.
 /// @param[in]     rDoc The document to search.

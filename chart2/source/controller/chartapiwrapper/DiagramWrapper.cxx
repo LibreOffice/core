@@ -1096,6 +1096,8 @@ void SAL_CALL DiagramWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
+namespace {
+
 //PROP_DIAGRAM_DATAROW_SOURCE
 class WrappedDataRowSourceProperty : public WrappedProperty
 {
@@ -1112,6 +1114,8 @@ private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
+
+}
 
 WrappedDataRowSourceProperty::WrappedDataRowSourceProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("DataRowSource",OUString())
@@ -1184,6 +1188,8 @@ Any WrappedDataRowSourceProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
+namespace {
+
 //PROP_DIAGRAM_STACKED
 //PROP_DIAGRAM_DEEP
 //PROP_DIAGRAM_PERCENT_STACKED
@@ -1206,6 +1212,8 @@ std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     const StackMode                         m_eStackMode;
     mutable Any                             m_aOuterValue;
 };
+
+}
 
 WrappedStackingProperty::WrappedStackingProperty(StackMode eStackMode, const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty(OUString(),OUString())
@@ -1285,6 +1293,8 @@ Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
+namespace {
+
 //PROP_DIAGRAM_THREE_D
 class WrappedDim3DProperty : public WrappedProperty
 {
@@ -1301,6 +1311,8 @@ private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
+
+}
 
 WrappedDim3DProperty::WrappedDim3DProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("Dim3D",OUString())
@@ -1345,6 +1357,8 @@ Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyS
     return aRet;
 }
 
+namespace {
+
 //PROP_DIAGRAM_VERTICAL
 class WrappedVerticalProperty : public WrappedProperty
 {
@@ -1361,6 +1375,8 @@ private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
+
+}
 
 WrappedVerticalProperty::WrappedVerticalProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("Vertical",OUString())
@@ -1410,6 +1426,8 @@ Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
+namespace {
+
 //PROP_DIAGRAM_NUMBER_OF_LINES
 class WrappedNumberOfLinesProperty : public WrappedProperty
 {
@@ -1429,6 +1447,8 @@ private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
+
+}
 
 WrappedNumberOfLinesProperty::WrappedNumberOfLinesProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("NumberOfLines",OUString())
@@ -1553,6 +1573,8 @@ Any WrappedNumberOfLinesProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
+namespace {
+
 //PROP_DIAGRAM_ATTRIBUTED_DATA_POINTS
 class WrappedAttributedDataPointsProperty : public WrappedProperty
 {
@@ -1569,6 +1591,8 @@ private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
+
+}
 
 WrappedAttributedDataPointsProperty::WrappedAttributedDataPointsProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("AttributedDataPoints",OUString())
@@ -1654,6 +1678,8 @@ Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< be
     return aRet;
 }
 
+namespace {
+
 //PROP_DIAGRAM_SOLIDTYPE
 class WrappedSolidTypeProperty : public WrappedProperty
 {
@@ -1670,6 +1696,8 @@ private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
+
+}
 
 WrappedSolidTypeProperty::WrappedSolidTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty( "SolidType", OUString() )
@@ -1717,6 +1745,8 @@ Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPrope
     return uno::Any( css::chart::ChartSolidType::RECTANGULAR_SOLID );
 }
 
+namespace {
+
 class WrappedAutomaticSizeProperty : public WrappedProperty
 {
 public:
@@ -1728,6 +1758,8 @@ public:
 
     virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 };
+
+}
 
 WrappedAutomaticSizeProperty::WrappedAutomaticSizeProperty()
             : WrappedProperty( "AutomaticSize", OUString() )
@@ -1777,6 +1809,8 @@ Any WrappedAutomaticSizeProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
+namespace {
+
 //PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS
 class WrappedIncludeHiddenCellsProperty : public WrappedProperty
 {
@@ -1789,6 +1823,8 @@ public:
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 };
+
+}
 
 WrappedIncludeHiddenCellsProperty::WrappedIncludeHiddenCellsProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("IncludeHiddenCells","IncludeHiddenCells")

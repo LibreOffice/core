@@ -664,6 +664,8 @@ void FrameworkHelper::RunOnResourceActivation(
     }
 }
 
+namespace {
+
 /** A callback that sets a flag to a specified value when the callback is
     called.
 */
@@ -675,6 +677,8 @@ public:
 private:
     bool& mrFlag;
 };
+
+}
 
 void FrameworkHelper::RequestSynchronousUpdate()
 {

@@ -149,6 +149,8 @@ View::~View()
     }
 }
 
+namespace {
+
 class ViewRedirector : public sdr::contact::ViewObjectContactRedirector
 {
 public:
@@ -160,6 +162,8 @@ public:
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo) override;
 };
+
+}
 
 ViewRedirector::ViewRedirector()
 {

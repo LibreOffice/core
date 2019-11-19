@@ -26,6 +26,8 @@
 #include <cppu/helper/purpenv/Environment.hxx>
 #include <cppu/helper/purpenv/Mapping.hxx>
 
+namespace {
+
 class UnsafeBridge : public cppu::Enterable
 {
     osl::Mutex          m_mutex;
@@ -45,6 +47,8 @@ public:
 
     virtual bool v_isValid(OUString * pReason) override;
 };
+
+}
 
 UnsafeBridge::UnsafeBridge()
     : m_count   (0),

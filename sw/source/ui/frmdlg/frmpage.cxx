@@ -82,11 +82,15 @@ using namespace ::sfx2;
 
 #define SwFPos SvxSwFramePosString
 
+namespace {
+
 struct StringIdPair_Impl
 {
     SvxSwFramePosString::StringId const eHori;
     SvxSwFramePosString::StringId const eVert;
 };
+
+}
 
 #define MAX_PERCENT_WIDTH   254
 #define MAX_PERCENT_HEIGHT  254
@@ -128,6 +132,8 @@ namespace o3tl {
     template<> struct typed_flags<LB> : is_typed_flags<LB, 0x00773fffL> {};
 }
 
+namespace {
+
 struct RelationMap
 {
     SvxSwFramePosString::StringId const eStrId;
@@ -135,6 +141,8 @@ struct RelationMap
     LB const         nLBRelation;
     sal_Int16 const  nRelation;
 };
+
+}
 
 struct FrameMap
 {

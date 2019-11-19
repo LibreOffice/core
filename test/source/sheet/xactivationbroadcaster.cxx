@@ -26,6 +26,8 @@ using namespace com::sun::star::uno;
 
 namespace apitest
 {
+namespace
+{
 class MockedActivationEventListener : public ::cppu::WeakImplHelper<sheet::XActivationEventListener>
 {
 public:
@@ -41,6 +43,7 @@ public:
     }
     virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
 };
+}
 
 void XActivationBroadcaster::testAddRemoveActivationEventListener()
 {

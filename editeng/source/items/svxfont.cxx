@@ -571,6 +571,8 @@ SvxFont& SvxFont::operator=( const SvxFont& rFont )
     return *this;
 }
 
+namespace {
+
 class SvxDoGetCapitalSize : public SvxDoCapitals
 {
 protected:
@@ -591,6 +593,8 @@ public:
 
     const Size &GetSize() const { return aTxtSize; };
 };
+
+}
 
 void SvxDoGetCapitalSize::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
                               const sal_Int32 _nLen, const bool bUpper )
@@ -633,6 +637,8 @@ Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
     return aTxtSize;
 }
 
+namespace {
+
 class SvxDoDrawCapital : public SvxDoCapitals
 {
 protected:
@@ -655,6 +661,8 @@ public:
     virtual void Do( const OUString &rTxt, const sal_Int32 nIdx,
                      const sal_Int32 nLen, const bool bUpper ) override;
 };
+
+}
 
 void SvxDoDrawCapital::DoSpace( const bool bDraw )
 {

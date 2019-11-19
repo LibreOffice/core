@@ -3559,6 +3559,8 @@ void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
     }
 }
 
+namespace {
+
 struct XclImpDrawObjClientData : public SvxMSDffClientData
 {
     const XclImpDrawObjBase* m_pTopLevelObj;
@@ -3569,6 +3571,8 @@ struct XclImpDrawObjClientData : public SvxMSDffClientData
     }
     virtual void NotifyFreeObj(SdrObject*) override {}
 };
+
+}
 
 SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffObjData,
         SvxMSDffClientData& rClientData, tools::Rectangle& /*rTextRect*/, SdrObject* pOldSdrObj )

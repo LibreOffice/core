@@ -4997,6 +4997,8 @@ namespace osl_Directory
         }
     }
 
+    namespace {
+
     class DirCreatedObserver : public DirectoryCreationObserver
     {
     public:
@@ -5008,6 +5010,8 @@ namespace osl_Directory
     private:
         int i;
     };
+
+    }
 
     class createPath : public CppUnit::TestFixture
     {
@@ -5149,6 +5153,8 @@ OUString getCurrentPID()
     return OUString::number(nPID);
 }
 
+namespace {
+
 //~ do some clean up work after all test completed.
 class GlobalObject
 {
@@ -5196,6 +5202,8 @@ public:
         }
     }
 };
+
+}
 
 static GlobalObject theGlobalObject;
 

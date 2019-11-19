@@ -70,9 +70,11 @@ const sal_IntPtr FontList::aStdSizeAry[] =
     0
 };
 
+namespace {
+
 class ImplFontListFontMetric : public FontMetric
 {
-    friend class FontList;
+    friend FontList;
 
 private:
     VclPtr<OutputDevice>    mpDevice;
@@ -88,8 +90,6 @@ public:
 
     OutputDevice*           GetDevice() const { return mpDevice; }
 };
-
-namespace {
 
 enum class FontListFontNameType
 {

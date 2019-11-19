@@ -38,6 +38,8 @@ using namespace ::xmloff::token;
 
 // XMLScriptChildContext: context for <office:script> element
 
+namespace {
+
 class XMLScriptChildContext : public SvXMLImportContext
 {
 private:
@@ -55,6 +57,8 @@ public:
 
     virtual void EndElement() override;
 };
+
+}
 
 XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< frame::XModel >& rxModel, const OUString& rLanguage )

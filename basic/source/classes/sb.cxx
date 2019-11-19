@@ -268,12 +268,16 @@ SbxVariable* StarBASIC::VBAFind( const OUString& rName, SbxClassType t )
     return nullptr;
 }
 
+namespace {
+
 // Create array for conversion SFX <-> VB error code
 struct SFX_VB_ErrorItem
 {
     sal_uInt16  nErrorVB;
     ErrCode nErrorSFX;
 };
+
+}
 
 const SFX_VB_ErrorItem SFX_VB_ErrorTab[] =
 {

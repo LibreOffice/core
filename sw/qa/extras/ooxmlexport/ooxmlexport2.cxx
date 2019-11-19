@@ -332,6 +332,8 @@ DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
     assertXPath(pXmlDocCT, "//w:style[@w:styleId='Normal']/w:qFormat", 1);
 }
 
+namespace {
+
 struct SingleLineBorders {
     sal_Int16 top, bottom, left, right;
     SingleLineBorders(int t=0, int b=0, int l=0, int r=0)
@@ -347,6 +349,8 @@ struct SingleLineBorders {
         }
     }
 };
+
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
 {

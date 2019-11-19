@@ -98,6 +98,8 @@ using namespace ::com::sun::star::util;
 namespace frm
 {
 
+namespace {
+
 class DocumentModifyGuard
 {
 public:
@@ -128,6 +130,8 @@ private:
 private:
     Reference< XModifiable2 >   m_xDocumentModify;
 };
+
+}
 
 // submitting and resetting html-forms asynchronously
 class OFormSubmitResetThread: public OComponentEventThread

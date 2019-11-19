@@ -952,6 +952,8 @@ static bool checkEncryption( const OUString&                               i_rPa
     return bSuccess;
 }
 
+namespace {
+
 class Buffering
 {
     static const int SIZE = 64*1024;
@@ -990,6 +992,8 @@ public:
         return osl_File_E_None;
     }
 };
+
+}
 
 bool xpdf_ImportFromFile(const OUString& rURL,
                          const ContentSinkSharedPtr& rSink,

@@ -28,6 +28,8 @@ using namespace ::com::sun::star;
 
 typedef std::vector< uno::Reference< beans::XPropertySet > > RevisionMap;
 
+namespace {
+
 class RedlinesEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     RevisionMap mRevisionMap;
@@ -75,6 +77,8 @@ RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const u
     }
 };
 
+}
+
 RevisionCollectionHelper::RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange )
     {
         uno::Reference< text::XTextRangeCompare > xTRC( xTextRange->getText(), uno::UNO_QUERY_THROW );
@@ -91,6 +95,9 @@ RevisionCollectionHelper::RevisionCollectionHelper( const uno::Reference< frame:
             }
         }
     }
+
+namespace {
+
 class RevisionsEnumeration : public EnumerationHelperImpl
 {
     uno::Reference< frame::XModel > m_xModel;
@@ -105,6 +112,8 @@ public:
     }
 
 };
+
+}
 
 SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ): SwVbaRevisions_BASE( xParent, xContext, new RevisionCollectionHelper( xModel, xTextRange ) ),  mxModel( xModel )
 {

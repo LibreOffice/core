@@ -89,6 +89,8 @@ namespace writerfilter {
 namespace dmapper
 {
 
+namespace {
+
 class XInputStreamHelper : public cppu::WeakImplHelper<io::XInputStream>
 {
     const sal_uInt8* m_pBuffer;
@@ -103,6 +105,8 @@ public:
     virtual ::sal_Int32 SAL_CALL available(  ) override;
     virtual void SAL_CALL closeInput(  ) override;
 };
+
+}
 
 XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len) :
         m_pBuffer( buf ),
@@ -155,6 +159,7 @@ void XInputStreamHelper::closeInput(  )
 {
 }
 
+namespace {
 
 struct GraphicBorderLine
 {
@@ -172,6 +177,8 @@ struct GraphicBorderLine
     }
 
 };
+
+}
 
 class GraphicImport_Impl
 {

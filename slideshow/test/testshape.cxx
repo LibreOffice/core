@@ -37,6 +37,9 @@ using namespace ::com::sun::star;
 
 // our test shape subject
 typedef ::cppu::WeakComponentImplHelper< drawing::XShape > ShapeBase;
+
+namespace {
+
 class ImplTestShape : public TestShape,
                       private cppu::BaseMutex,
                       public ShapeBase
@@ -193,6 +196,7 @@ private:
     }
 };
 
+}
 
 TestShapeSharedPtr createTestShape(const basegfx::B2DRange& rRect,
                                    double                   nPrio)

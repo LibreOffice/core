@@ -80,6 +80,8 @@ using namespace ::com::sun::star;
 typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
 typedef ::std::vector< Color > ColorVec;
 
+namespace {
+
 class PaletteIndex : public XIndexAccess_BASE
 {
 public:
@@ -110,6 +112,8 @@ public:
 private:
     ColorVec        maColor;
 };
+
+}
 
 void
 XclImpPalette::ExportPalette()

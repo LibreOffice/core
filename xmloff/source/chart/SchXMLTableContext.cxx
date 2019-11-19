@@ -559,6 +559,8 @@ SvXMLImportContextRef SchXMLTableRowContext::CreateChildContext(
     return pContext;
 }
 
+namespace {
+
 class SchXMLRangeSomewhereContext : public SvXMLImportContext
 {
 //#i113950# previously the range was exported to attribute text:id,
@@ -582,6 +584,8 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
+
+}
 
 // classes for cells and their content
 // class SchXMLTableCellContext

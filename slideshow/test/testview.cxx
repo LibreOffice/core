@@ -46,6 +46,9 @@ using namespace ::com::sun::star;
 
 // our test view subject
 typedef ::cppu::WeakComponentImplHelper< presentation::XSlideShowView > ViewBase;
+
+namespace {
+
 class ImplTestView : public TestView,
                      private cppu::BaseMutex,
                      public ViewBase
@@ -270,6 +273,7 @@ public:
     }
 };
 
+}
 
 TestViewSharedPtr createTestView()
 {

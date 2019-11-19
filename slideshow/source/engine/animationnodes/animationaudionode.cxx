@@ -99,6 +99,8 @@ void AnimationAudioNode::activate_st()
 // TODO(F2): generate deactivation event, when sound
 // is over
 
+namespace {
+
 // libc++ and MSVC std::bind doesn't cut it here, and it's not possible to use
 // a lambda because the preprocessor thinks that comma in capture list
 // separates macro parameters
@@ -115,6 +117,8 @@ struct NotifyAudioStopped
         m_rEventMultiplexer.notifyAudioStopped(m_pSelf);
     }
 };
+
+}
 
 void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
 {

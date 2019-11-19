@@ -24,12 +24,16 @@
 #include <algorithm>
 #include <string.h>
 
+namespace {
+
 // the table is still to be sorted
 struct RTF_TokenEntry
 {
     OUStringLiteral sToken;
     int nToken;
 };
+
+}
 
 // Flag: RTF-token table has been sorted
 static bool bSortKeyWords = false;

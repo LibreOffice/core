@@ -26,6 +26,8 @@
 
 namespace canvas
 {
+    namespace {
+
     class SurfaceProxyManager : public ISurfaceProxyManager
     {
     public:
@@ -59,6 +61,8 @@ namespace canvas
     private:
         PageManagerSharedPtr mpPageManager;
     };
+
+    }
 
     std::shared_ptr<ISurfaceProxyManager> createSurfaceProxyManager( const std::shared_ptr<IRenderModule>& rRenderModule )
     {

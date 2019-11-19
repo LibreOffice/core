@@ -203,6 +203,8 @@ double ScInterpreter::GetGammaDist( double fX, double fAlpha, double fLambda )
         return GetLowRegIGamma( fAlpha, fX / fLambda);
 }
 
+namespace {
+
 class NumericCellAccumulator
 {
     double mfFirst;
@@ -398,6 +400,8 @@ public:
     double getSum() const { return mfSum; }
     sal_uInt32 getNumberFormat() const { return mnNumFmt; }
 };
+
+}
 
 static void IterateMatrix(
     const ScMatrixRef& pMat, ScIterFunc eFunc, bool bTextAsZero,

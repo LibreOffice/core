@@ -58,6 +58,8 @@ using namespace com::sun::star;
 
 namespace svt {
 
+namespace {
+
 class EmbedEventListener_Impl : public ::cppu::WeakImplHelper < embed::XStateChangeListener,
                                                                  document::XEventListener,
                                                                  util::XModifyListener,
@@ -82,6 +84,8 @@ public:
     virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) override;
     virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
 };
+
+}
 
 rtl::Reference<EmbedEventListener_Impl> EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
 {

@@ -510,6 +510,8 @@ namespace basegfx
             return aRetval;
         }
 
+        namespace {
+
         /*
         * let a plane be defined as
         *
@@ -535,6 +537,8 @@ namespace basegfx
             double d;               // [-] minimum distance from origin
             sal_uInt32 clipmask;    // clipping mask, e.g. 1000 1000
         };
+
+        }
 
         /*
         *

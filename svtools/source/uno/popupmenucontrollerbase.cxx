@@ -39,6 +39,8 @@ using namespace css::util;
 namespace svt
 {
 
+namespace {
+
 struct PopupMenuControllerBaseDispatchInfo
 {
     Reference< XDispatch > mxDispatch;
@@ -48,6 +50,8 @@ struct PopupMenuControllerBaseDispatchInfo
     PopupMenuControllerBaseDispatchInfo( const Reference< XDispatch >& xDispatch, const URL& rURL, const Sequence< PropertyValue >& rArgs )
         : mxDispatch( xDispatch ), maURL( rURL ), maArgs( rArgs ) {}
 };
+
+}
 
 PopupMenuControllerBase::PopupMenuControllerBase( const Reference< XComponentContext >& xContext ) :
     ::cppu::BaseMutex(),

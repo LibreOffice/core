@@ -25,12 +25,17 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 
+namespace {
+
 template<typename T>
 struct TokenEntry
 {
     OUStringLiteral sToken;
     T nToken;
 };
+
+}
+
 template<typename T>
 static bool sortCompare(const TokenEntry<T> & lhs, const TokenEntry<T> & rhs)
 {

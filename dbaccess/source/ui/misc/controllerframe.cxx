@@ -64,6 +64,9 @@ namespace dbaui
     // FrameWindowActivationListener
     typedef ::cppu::WeakImplHelper<   XTopWindowListener
                                   >   FrameWindowActivationListener_Base;
+
+    namespace {
+
     class FrameWindowActivationListener : public FrameWindowActivationListener_Base
     {
     public:
@@ -93,6 +96,8 @@ namespace dbaui
     private:
         ControllerFrame_Data*   m_pData;
     };
+
+    }
 
     // ControllerFrame_Data
     struct ControllerFrame_Data

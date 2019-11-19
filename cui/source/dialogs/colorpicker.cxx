@@ -144,6 +144,8 @@ static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& f
     }
 }
 
+namespace {
+
 class ColorPreviewControl : public weld::CustomWidgetController
 {
 private:
@@ -172,6 +174,8 @@ public:
     }
 };
 
+}
+
 void ColorPreviewControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetFillColor(m_aColor);
@@ -186,6 +190,8 @@ enum ColorMode { HUE, SATURATION, BRIGHTNESS, RED, GREEN, BLUE };
 }
 
 const ColorMode DefaultMode = HUE;
+
+namespace {
 
 class ColorFieldControl : public weld::CustomWidgetController
 {
@@ -242,6 +248,8 @@ private:
     std::vector<sal_uInt8>  maRGB_Vert;
     std::vector<sal_uInt16> maPercent_Vert;
 };
+
+}
 
 void ColorFieldControl::UpdateBitmap()
 {
@@ -506,6 +514,8 @@ void ColorFieldControl::UpdatePosition()
     ShowPosition(Point(static_cast<long>(mdX * aSize.Width()), static_cast<long>((1.0 - mdY) * aSize.Height())), false);
 }
 
+namespace {
+
 class ColorSliderControl : public weld::CustomWidgetController
 {
 public:
@@ -539,6 +549,8 @@ private:
     sal_Int16 mnLevel;
     double mdValue;
 };
+
+}
 
 ColorSliderControl::ColorSliderControl()
     : meMode( DefaultMode )
@@ -714,6 +726,8 @@ void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double d
     }
 }
 
+namespace {
+
 class ColorPickerDialog : public weld::GenericDialogController
 {
 private:
@@ -773,6 +787,8 @@ private:
     double mdHue, mdSat, mdBri;
     double mdCyan, mdMagenta, mdYellow, mdKey;
 };
+
+}
 
 ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nDialogMode)
     : GenericDialogController(pParent, "cui/ui/colorpickerdialog.ui", "ColorPicker")
@@ -1192,6 +1208,8 @@ void ColorPickerDialog::setColorComponent( ColorComponent nComp, double dValue )
 
 typedef ::cppu::WeakComponentImplHelper< XServiceInfo, XExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
 
+namespace {
+
 class ColorPicker : protected ::cppu::BaseMutex,    // Struct for right initialization of mutex member! Must be first of baseclasses.
                     public ColorPickerBase
 {
@@ -1219,6 +1237,8 @@ private:
     sal_Int16 mnMode;
     Reference<css::awt::XWindow> mxParent;
 };
+
+}
 
 OUString ColorPicker_getImplementationName()
 {

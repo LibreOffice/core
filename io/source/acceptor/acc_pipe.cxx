@@ -37,6 +37,7 @@ using namespace ::com::sun::star::io;
 
 namespace io_acceptor
 {
+    namespace {
 
     class PipeConnection :
         public WeakImplHelper< XConnection >
@@ -55,6 +56,7 @@ namespace io_acceptor
         OUString m_sDescription;
     };
 
+    }
 
     PipeConnection::PipeConnection( const OUString &sConnectionDescription) :
         m_nStatus( 0 ),

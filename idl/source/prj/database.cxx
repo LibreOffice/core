@@ -500,6 +500,8 @@ void SvIdlDataBase::AddDepFile(OUString const& rFileName)
     m_DepFiles.insert(rFileName);
 }
 
+namespace {
+
 struct WriteDep
 {
     SvFileStream & m_rStream;
@@ -523,6 +525,8 @@ struct WriteDummy
         m_rStream.WriteCharPtr( " :\n\n" );
     }
 };
+
+}
 
 void SvIdlDataBase::WriteDepFile(
         SvFileStream & rStream, OUString const& rTarget)

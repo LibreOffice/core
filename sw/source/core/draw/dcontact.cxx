@@ -1992,6 +1992,8 @@ namespace sdr
 {
     namespace contact
     {
+        namespace {
+
         class VOCOfDrawVirtObj : public ViewObjectContactOfSdrObj
         {
         protected:
@@ -2035,6 +2037,8 @@ namespace sdr
                 return static_cast<SwDrawVirtObj&>(mrObject);
             }
         };
+
+        }
     } // end of namespace contact
 } // end of namespace sdr
 

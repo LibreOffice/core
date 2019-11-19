@@ -73,6 +73,8 @@ using namespace ::com::sun::star::lang;
 #define TOOLBOX_NAME                "colorbar"
 #define RID_SVXSTR_UNDO_GRAFCROP    RID_SVXSTR_GRAFCROP
 
+namespace {
+
 class ImplGrafMetricField : public MetricField
 {
     using Window::Update;
@@ -93,6 +95,8 @@ public:
 
     void            Update( const SfxPoolItem* pItem );
 };
+
+}
 
 ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame ) :
     MetricField( pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_3DLOOK ),
@@ -184,11 +188,15 @@ void ImplGrafMetricField::Update( const SfxPoolItem* pItem )
         SetText( OUString() );
 }
 
+namespace {
+
 struct CommandToRID
 {
     const char* pCommand;
     const char* sResId;
 };
+
+}
 
 static OUString ImplGetRID( const OUString& aCommand )
 {
@@ -220,6 +228,8 @@ static OUString ImplGetRID( const OUString& aCommand )
     return sRID;
 }
 
+namespace {
+
 class ImplGrafControl : public Control
 {
     using Window::Update;
@@ -241,6 +251,8 @@ public:
     void                    SetText( const OUString& rStr ) override { maField->SetText( rStr ); }
     virtual void            Resize() override;
 };
+
+}
 
 ImplGrafControl::ImplGrafControl(
     vcl::Window* pParent,
@@ -315,6 +327,8 @@ void ImplGrafControl::Resize()
     Control::Resize();
 }
 
+namespace {
+
 class ImplGrafModeControl : public ListBox
 {
     using Window::Update;
@@ -332,6 +346,8 @@ public:
 
     void            Update( const SfxPoolItem* pItem );
 };
+
+}
 
 ImplGrafModeControl::ImplGrafModeControl( vcl::Window* pParent, const Reference< XFrame >& rFrame ) :
     ListBox( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL ),

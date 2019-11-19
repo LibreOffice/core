@@ -110,6 +110,8 @@ static OUString makeHierarchalNameSegment( const OUString & rIn  )
 // PropertySetMap_Impl.
 typedef std::unordered_map< OUString, PersistentPropertySet*> PropertySetMap_Impl;
 
+namespace {
+
 // class PropertySetInfo_Impl
 class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
 {
@@ -129,6 +131,7 @@ public:
     void reset() { m_pProps.reset(); }
 };
 
+}
 
 // UcbStore_Impl.
 

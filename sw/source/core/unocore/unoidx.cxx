@@ -245,6 +245,8 @@ public:
 
 };
 
+namespace {
+
 class SwDocIndexDescriptorProperties_Impl
 {
 private:
@@ -258,6 +260,8 @@ public:
     const OUString& GetTypeName() const { return m_sUserTOXTypeName; }
     void  SetTypeName(const OUString& rSet) { m_sUserTOXTypeName = rSet; }
 };
+
+}
 
 SwDocIndexDescriptorProperties_Impl::SwDocIndexDescriptorProperties_Impl(
         SwTOXType const*const pType)
@@ -1884,6 +1888,8 @@ SwXDocumentIndexMark::attach(
     m_pImpl->m_bIsDescriptor = false;
 }
 
+namespace {
+
 template<typename T> struct NotContainedIn
 {
     std::vector<T> const& m_rVector;
@@ -1894,6 +1900,8 @@ template<typename T> struct NotContainedIn
                     == m_rVector.end();
     }
 };
+
+}
 
 void SwXDocumentIndexMark::Impl::InsertTOXMark(
         SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
@@ -2639,10 +2647,14 @@ SwXDocumentIndex::TokenAccess_Impl::getSupportedServiceNames()
     return { "com.sun.star.text.DocumentIndexLevelFormat" };
 }
 
+namespace {
+
 struct TokenType_ {
     const char *pName;
     enum FormTokenType const eTokenType;
 };
+
+}
 
 static const struct TokenType_ g_TokenTypes[] =
 {

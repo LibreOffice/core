@@ -52,6 +52,8 @@ namespace drawinglayer
             return (getPrimitive2DID() == rPrimitive.getPrimitive2DID());
         }
 
+        namespace {
+
         // Visitor class to get the B2D range from a tree of Primitive2DReference's
         //
         class B2DRangeVisitor : public Primitive2DDecompositionVisitor {
@@ -69,6 +71,9 @@ namespace drawinglayer
                 maRetval.expand(r.getB2DRange(mrViewInformation));
             }
         };
+
+        }
+
         basegfx::B2DRange BasePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             B2DRangeVisitor aVisitor(rViewInformation);

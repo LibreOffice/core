@@ -218,6 +218,8 @@ protected:
         InsertPosition& rPosition) const;
 };
 
+namespace {
+
 /** The vertical layouter has one column and as many rows as there are
     pages.
 */
@@ -284,6 +286,8 @@ protected:
     virtual Size CalculateTargetSize (
         const Size& rWindowSize) const override;
 };
+
+}
 
 //===== Layouter ==============================================================
 

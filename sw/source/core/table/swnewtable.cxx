@@ -2091,12 +2091,16 @@ void SwTable::CleanUpBottomRowSpan( sal_uInt16 nDelLines )
 
 #ifdef DBG_UTIL
 
+namespace {
+
 struct RowSpanCheck
 {
     long nRowSpan;
     SwTwips nLeft;
     SwTwips nRight;
 };
+
+}
 
 void SwTable::CheckConsistency() const
 {

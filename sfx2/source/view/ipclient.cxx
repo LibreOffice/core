@@ -78,6 +78,7 @@
 
 using namespace com::sun::star;
 
+namespace {
 
 // SfxEmbedResizeGuard
 class SfxBooleanFlagGuard
@@ -96,6 +97,7 @@ public:
     }
 };
 
+}
 
 // SfxInPlaceClient_Impl
 

@@ -81,6 +81,8 @@ static bool isInVBAMode( ScDocShell& rDocSh )
 
 #endif
 
+namespace {
+
 class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container::XNameAccess >
 {
     uno::Any maWorkbook;
@@ -239,8 +241,6 @@ public:
         return OUString();
     }
 };
-
-namespace {
 
 using Type = ScServiceProvider::Type;
 

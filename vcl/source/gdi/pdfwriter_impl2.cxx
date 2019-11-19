@@ -1665,12 +1665,16 @@ void PDFWriterImpl::putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStre
     }
 }
 
+namespace {
+
 struct PixelCode
 {
     sal_uInt32 const      mnEncodedPixels;
     sal_uInt32 const      mnCodeBits;
     sal_uInt32 const      mnCode;
 };
+
+}
 
 static const PixelCode WhitePixelCodes[] =
 {

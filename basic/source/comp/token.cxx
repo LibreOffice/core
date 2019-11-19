@@ -26,7 +26,11 @@
 #include <basiccharclass.hxx>
 #include <token.hxx>
 
+namespace {
+
 struct TokenTable { SbiToken t; const char *s; };
+
+}
 
 static const TokenTable aTokTable_Basic [] = {
     { CAT,      "&" },
@@ -174,6 +178,8 @@ static const TokenTable aTokTable_Basic [] = {
     { XOR,      "Xor" },
 };
 
+namespace {
+
 // #i109076
 class TokenLabelInfo
 {
@@ -187,6 +193,8 @@ public:
 };
 
 class StaticTokenLabelInfo: public ::rtl::Static< TokenLabelInfo, StaticTokenLabelInfo >{};
+
+}
 
 // #i109076
 TokenLabelInfo::TokenLabelInfo()

@@ -28,6 +28,8 @@ using ::com::sun::star::uno::Reference;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
 class SchXMLListItemContext : public SvXMLImportContext
 {
 public:
@@ -44,6 +46,8 @@ public:
 private:
     OUString& m_rText;
 };
+
+}
 
 SchXMLListItemContext::SchXMLListItemContext(
         SvXMLImport& rImport

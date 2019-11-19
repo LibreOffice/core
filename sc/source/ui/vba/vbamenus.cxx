@@ -17,6 +17,8 @@ using namespace ooo::vba;
 
 typedef ::cppu::WeakImplHelper< container::XEnumeration > MenuEnumeration_BASE;
 
+namespace {
+
 class MenuEnumeration : public MenuEnumeration_BASE
 {
     uno::Reference< XHelperInterface > m_xParent;
@@ -48,6 +50,8 @@ public:
         return uno::Any();
     }
 };
+
+}
 
 ScVbaMenus::ScVbaMenus( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< XCommandBarControls >& xCommandBarControls ) : Menus_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() ), m_xCommandBarControls( xCommandBarControls )
 {

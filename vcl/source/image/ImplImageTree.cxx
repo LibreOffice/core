@@ -631,6 +631,8 @@ OUString const & ImplImageTree::getRealImageName(OUString const & rIconName)
     return rIconName;
 }
 
+namespace {
+
 class FolderFileAccess : public ::cppu::WeakImplHelper<css::container::XNameAccess>
 {
 public:
@@ -657,6 +659,8 @@ public:
         return osl::File::E_None == aBaseFile.open(osl_File_OpenFlag_Read);
     }
 };
+
+}
 
 bool ImplImageTree::checkPathAccess()
 {

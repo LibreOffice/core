@@ -52,6 +52,8 @@ static void printHelp( const char* pExe )
     , pExe, pExe, pExe, pExe, pExe );
 }
 
+namespace {
+
 class FileEmitContext : public EmitContext
 {
     oslFileHandle m_aHandle;
@@ -69,6 +71,8 @@ class FileEmitContext : public EmitContext
     virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw() override;
     virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) throw() override;
 };
+
+}
 
 FileEmitContext::FileEmitContext( const char* pFileName, const char* pOrigName, const PDFContainer* pTop )
     : EmitContext( pTop ),

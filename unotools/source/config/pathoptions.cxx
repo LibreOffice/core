@@ -151,6 +151,8 @@ class SvtPathOptions_Impl
 
 static std::weak_ptr<SvtPathOptions_Impl> g_pOptions;
 
+namespace {
+
 // functions -------------------------------------------------------------
 struct PropertyStruct
 {
@@ -162,6 +164,8 @@ struct VarNameAttribute
 {
     const char*             pVarName;       // The name of the path variable
 };
+
+}
 
 static const PropertyStruct aPropNames[] =
 {

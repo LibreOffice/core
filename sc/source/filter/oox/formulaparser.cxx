@@ -1168,6 +1168,8 @@ OUString FormulaParserImpl::resolveDefinedName( sal_Int32 nTokenIndex ) const
 
 // OOXML/BIFF12 parser implementation =========================================
 
+namespace {
+
 class OoxFormulaParserImpl : public FormulaParserImpl
 {
 public:
@@ -1218,6 +1220,8 @@ private:
     sal_Int64           mnAddDataPos;       /// Current stream position for additional data (tExp, tArray, tMemArea).
     bool                mbNeedExtRefs;      /// True = parser needs initialization of external reference info.
 };
+
+}
 
 OoxFormulaParserImpl::OoxFormulaParserImpl( const FormulaParser& rParent ) :
     FormulaParserImpl( rParent ),

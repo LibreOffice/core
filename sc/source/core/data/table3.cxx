@@ -219,11 +219,15 @@ static short Compare( const OUString &sInput1, const OUString &sInput2,
 
 }
 
+namespace {
+
 struct ScSortInfo final
 {
     ScRefCellValue maCell;
     SCCOLROW        nOrg;
 };
+
+}
 
 class ScSortInfoArray
 {
@@ -1894,6 +1898,8 @@ static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
     }
 }
 
+namespace {
+
 struct RowEntry
 {
     sal_uInt16  nGroupNo;
@@ -1903,6 +1909,7 @@ struct RowEntry
     SCROW   nFuncEnd;
 };
 
+}
 
 static const char* lcl_GetSubTotalStrId(int id)
 {

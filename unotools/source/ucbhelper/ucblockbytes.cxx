@@ -68,6 +68,8 @@ using namespace ::com::sun::star::beans;
 namespace utl
 {
 
+namespace {
+
 /**
     Helper class for getting a XInputStream when opening a content
  */
@@ -159,6 +161,8 @@ public:
     virtual void SAL_CALL   propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) override;
 };
 
+}
+
 void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent)
 {
     for (const auto& rPropChangeEvent : rEvent)
@@ -169,6 +173,8 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
         }
     }
 }
+
+namespace {
 
 class Moderator
     : public osl::Thread
@@ -337,6 +343,8 @@ private:
     Reference<XInputStream> m_xStream;
 };
 
+}
+
 ModeratorsActiveDataSink::ModeratorsActiveDataSink(Moderator &theModerator)
     : m_aModerator(theModerator)
 {
@@ -371,6 +379,8 @@ ModeratorsActiveDataStreamer::setStream (
     m_xStream = rxStream;
 }
 
+namespace {
+
 class ModeratorsInteractionHandler
     : public ::cppu::WeakImplHelper<XInteractionHandler>
 {
@@ -385,6 +395,8 @@ private:
 
     Moderator& m_aModerator;
 };
+
+}
 
 ModeratorsInteractionHandler::ModeratorsInteractionHandler(
     Moderator &aModerator)

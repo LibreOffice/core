@@ -112,6 +112,8 @@ namespace o3tl
 
 namespace sdr { namespace table {
 
+namespace {
+
 class SvxTableControllerModifyListener : public ::cppu::WeakImplHelper< css::util::XModifyListener >
 {
 public:
@@ -127,6 +129,7 @@ public:
     SvxTableController* mpController;
 };
 
+}
 
 // XModifyListener
 

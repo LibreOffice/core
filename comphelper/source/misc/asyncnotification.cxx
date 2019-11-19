@@ -38,6 +38,8 @@ namespace comphelper
     {
     }
 
+    namespace {
+
     struct ProcessableEvent
     {
         AnyEventRef                         aEvent;
@@ -54,9 +56,11 @@ namespace comphelper
         }
     };
 
+    }
 
     typedef std::deque< ProcessableEvent >    EventQueue;
 
+    namespace {
 
     struct EqualProcessor
     {
@@ -68,6 +72,8 @@ namespace comphelper
             return _rEvent.xProcessor.get() == rProcessor.get();
         }
     };
+
+    }
 
     struct EventNotifierImpl
     {
@@ -178,7 +184,12 @@ namespace comphelper
         return AsyncEventNotifierBase::terminate();
     }
 
+    namespace {
+
     struct theNotifiersMutex : public rtl::Static<osl::Mutex, theNotifiersMutex> {};
+
+    }
+
     static std::vector<std::weak_ptr<AsyncEventNotifierAutoJoin>> g_Notifiers;
 
     void JoinAsyncEventNotifiers()

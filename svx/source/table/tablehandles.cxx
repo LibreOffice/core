@@ -41,6 +41,7 @@
 
 namespace sdr { namespace table {
 
+namespace {
 
 class OverlayTableEdge : public sdr::overlay::OverlayObject
 {
@@ -55,6 +56,7 @@ public:
     OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible );
 };
 
+}
 
 TableEdgeHdl::TableEdgeHdl( const Point& rPnt, bool bHorizontal, sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nEdges )
 : SdrHdl( rPnt, SdrHdlKind::User )

@@ -230,6 +230,8 @@ static void removeShapesAtWrongRhythm( TickIter& rIter
     }
 }
 
+namespace {
+
 /**
  * If the labels are staggered and bInnerLine is true we iterate through
  * only those labels that are closer to the diagram.
@@ -254,6 +256,8 @@ private: //member
     const AxisLabelStaggering   m_eAxisLabelStaggering;
     bool m_bInnerLine;
 };
+
+}
 
 LabelIterator::LabelIterator( TickInfoArrayType& rTickInfoVector
             , const AxisLabelStaggering eAxisLabelStaggering
@@ -448,6 +452,8 @@ static void getAxisLabelProperties(
         rPropValues, rPropNames, rAxisProp.maLabelAlignment.meAlignment);
 }
 
+namespace {
+
 /**
  * Iterate through only 3 ticks including the one that has the longest text
  * length.  When the first tick has the longest text, it iterates through
@@ -467,6 +473,8 @@ private:
     std::vector<size_t> m_aValidIndices;
     size_t m_nCurrentIndex;
 };
+
+}
 
 MaxLabelTickIter::MaxLabelTickIter(
     TickInfoArrayType& rTickInfoVector, size_t nLongestLabelIndex ) :
@@ -1152,6 +1160,9 @@ VCartesianAxis::ScreenPosAndLogicPos VCartesianAxis::getScreenPosAndLogicPos( do
 }
 
 typedef std::vector< VCartesianAxis::ScreenPosAndLogicPos > tScreenPosAndLogicPosList;
+
+namespace {
+
 struct lcl_LessXPos
 {
     bool operator() ( const VCartesianAxis::ScreenPosAndLogicPos& rPos1, const VCartesianAxis::ScreenPosAndLogicPos& rPos2 )
@@ -1167,6 +1178,8 @@ struct lcl_GreaterYPos
         return ( rPos1.aScreenPos.getY() > rPos2.aScreenPos.getY() );
     }
 };
+
+}
 
 void VCartesianAxis::get2DAxisMainLine(
     B2DVector& rStart, B2DVector& rEnd, AxisLabelAlignment& rAlignment, double fCrossesOtherAxis ) const

@@ -49,6 +49,8 @@
 #include <editutil.hxx>
 // *** edit engine ***
 
+namespace {
+
 struct Func_SetType
 {
     sal_Int32 const      mnType;
@@ -64,6 +66,8 @@ struct Func_Select
     void                 operator()( ScCsvColState& rState ) const
         { rState.Select( mbSelect ); }
 };
+
+}
 
 ScCsvGrid::ScCsvGrid(const ScCsvLayoutData& rData, std::unique_ptr<weld::Menu> xPopup, ScCsvTableBox* pTableBox)
     : ScCsvControl(rData)

@@ -69,6 +69,8 @@ const char cDataCommandType[]        = "DataSource/DataCommandType";
 #define IMAP_PORT           143
 #define IMAP_SECURE_PORT    993
 
+namespace {
+
 struct DBAddressDataAssignment
 {
     SwDBData                            aDBData;
@@ -82,6 +84,8 @@ struct DBAddressDataAssignment
         bColumnAssignmentsChanged(false)
         {}
 };
+
+}
 
 class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 {
@@ -1593,6 +1597,8 @@ SwView* SwMailMergeConfigItem::GetSourceView()
     return m_pSourceView;
 }
 
+namespace {
+
 //This implements XSelectionChangeListener and XDispatch because the
 //broadcaster uses this combo to determine if to send the database-changed
 //update. Its probably that listening to statusChanged at some other level is
@@ -1630,6 +1636,8 @@ public:
     {
     }
 };
+
+}
 
 void SwMailMergeConfigItem::SetSourceView(SwView* pView)
 {

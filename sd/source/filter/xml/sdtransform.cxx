@@ -34,6 +34,8 @@
 
 using namespace ::com::sun::star::style;
 
+namespace {
+
 class SdTransformOOo2xDocument
 {
 public:
@@ -64,6 +66,8 @@ public:
     SdDrawDocument& mrDocument;
     SdrOutliner& mrOutliner;
 };
+
+}
 
 /** transforms the given model from OOo 2.x to OOo 3.x. This maps
     the deprecated EE_PARA_BULLETSTATE and clears the EE_PARA_LRSPACE

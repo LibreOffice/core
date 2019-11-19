@@ -54,6 +54,8 @@ template <> struct default_delete<xmlSecDSigCtx>
 };
 }
 
+namespace {
+
 class XMLSignature_NssImpl
     : public ::cppu::WeakImplHelper<xml::crypto::XXMLSignature, lang::XServiceInfo>
 {
@@ -76,6 +78,8 @@ public:
 
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 XMLSignature_NssImpl::XMLSignature_NssImpl() {
 }

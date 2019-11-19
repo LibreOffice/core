@@ -360,6 +360,8 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
     }
 }
 
+namespace {
+
 class BasicProjImportHelper
 {
     SwDocShell& mrDocShell;
@@ -372,6 +374,8 @@ public:
     bool import( const uno::Reference< io::XInputStream >& rxIn );
     OUString getProjectName() const;
 };
+
+}
 
 bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rxIn )
 {
@@ -412,6 +416,8 @@ OUString BasicProjImportHelper::getProjectName() const
     return sProjName;
 }
 
+namespace {
+
 class Sttb : public TBBase
 {
 struct SBBItem
@@ -435,6 +441,8 @@ public:
     bool Read(SvStream &rS) override;
     OUString getStringAtIndex( sal_uInt32 );
 };
+
+}
 
 Sttb::Sttb()
     : fExtend(0)
@@ -4870,6 +4878,8 @@ static void lcl_createTemplateToProjectEntry( const uno::Reference< container::X
     }
 }
 
+namespace {
+
 class WW8Customizations
 {
     SvStream* mpTableStream;
@@ -4878,6 +4888,8 @@ public:
     WW8Customizations( SvStream*, WW8Fib const & );
     void  Import( SwDocShell* pShell );
 };
+
+}
 
 WW8Customizations::WW8Customizations( SvStream* pTableStream, WW8Fib const & rFib ) : mpTableStream(pTableStream), mWw8Fib( rFib )
 {

@@ -16,9 +16,19 @@
 #include <markdata.hxx>
 #include "../../source/core/data/markarr.cxx"
 #include "../../source/core/data/markmulti.cxx"
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsubobject-linkage"
+    // automatically suppressed in the main .cxx, but not in this included one
+#endif
 #include "../../source/core/data/segmenttree.cxx"
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic push
+#endif
 
 #include <utility>
+
+namespace {
 
 struct MarkTestData  // To represent a single rectangle part of a multiselection
 {
@@ -79,6 +89,8 @@ struct MultiMarkTestData
     std::vector<std::pair<SCCOL,SCCOL>> aColsWithEqualMarksList;
     std::vector<std::pair<SCCOL,SCCOL>> aColsWithUnequalMarksList;
 };
+
+}
 
 class Test : public CppUnit::TestFixture
 {

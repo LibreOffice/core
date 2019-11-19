@@ -32,6 +32,8 @@ using namespace ::com::sun::star::frame;
 namespace xmlscript
 {
 
+namespace {
+
 class InputStreamProvider
     : public ::cppu::WeakImplHelper< io::XInputStreamProvider >
 {
@@ -46,6 +48,9 @@ public:
     // XInputStreamProvider
     virtual uno::Reference< io::XInputStream > SAL_CALL createInputStream() override;
 };
+
+}
+
 uno::Reference< io::XInputStream > InputStreamProvider::createInputStream()
 {
     return ::xmlscript::createInputStream( _bytes );

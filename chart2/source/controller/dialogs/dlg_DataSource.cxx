@@ -37,6 +37,8 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
+namespace {
+
 class DocumentChartTypeTemplateProvider : public ChartTypeTemplateProvider
 {
 public:
@@ -49,6 +51,8 @@ public:
 private:
     Reference< chart2::XChartTypeTemplate > m_xTemplate;
 };
+
+}
 
 DocumentChartTypeTemplateProvider::DocumentChartTypeTemplateProvider(
     const Reference< chart2::XChartDocument > & xDoc )

@@ -46,6 +46,8 @@ namespace pdfi
 
 // TODO(T3): locking/thread safety
 
+namespace {
+
 class FileEmitContext : public pdfparse::EmitContext
 {
 private:
@@ -68,6 +70,8 @@ public:
 
     const uno::Reference< io::XStream >& getContextStream() const { return m_xContextStream; }
 };
+
+}
 
 FileEmitContext::FileEmitContext( const OUString&                            rOrigFile,
                                   const uno::Reference< uno::XComponentContext >& xContext,

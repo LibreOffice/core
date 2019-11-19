@@ -298,6 +298,8 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(
     return maSheets.back().get();
 }
 
+namespace {
+
 class FindSheetByIndex
 {
     SCTAB const mnTab;
@@ -308,6 +310,8 @@ public:
         return rSheet->getIndex() == mnTab;
     }
 };
+
+}
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* sheet_name, size_t sheet_name_length)
 {

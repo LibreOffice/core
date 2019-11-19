@@ -28,6 +28,8 @@
 #include <set>
 #include <vector>
 
+namespace {
+
 //rhbz#1007697 do this in two loops, one to collect the candidates
 //and another to update them because updating a candidate can
 //trigger the candidate to be deleted, so asking for its
@@ -41,6 +43,8 @@ public:
     void PaintTransparentChildren(vcl::Window const & rWindow, tools::Rectangle const& rPixelRect);
     ~CandidateMgr();
 };
+
+}
 
 IMPL_LINK(CandidateMgr, WindowEventListener, VclWindowEvent&, rEvent, void)
 {

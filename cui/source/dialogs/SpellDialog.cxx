@@ -1805,6 +1805,8 @@ void SentenceEditWindow_Impl::SetText( const OUString& rStr )
     m_xEditEngine->SetText(rStr);
 }
 
+namespace {
+
 struct LanguagePosition_Impl
 {
     sal_Int32       nPosition;
@@ -1815,6 +1817,9 @@ struct LanguagePosition_Impl
         eLanguage(eLang)
         {}
 };
+
+}
+
 typedef std::vector<LanguagePosition_Impl> LanguagePositions_Impl;
 
 static void lcl_InsertBreakPosition_Impl(

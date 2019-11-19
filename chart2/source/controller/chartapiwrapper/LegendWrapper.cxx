@@ -49,6 +49,8 @@ using ::com::sun::star::uno::Sequence;
 
 namespace chart
 {
+namespace {
+
 class WrappedLegendAlignmentProperty : public WrappedProperty
 {
 public:
@@ -61,6 +63,8 @@ protected:
     virtual Any convertInnerToOuterValue( const Any& rInnerValue ) const override;
     virtual Any convertOuterToInnerValue( const Any& rOuterValue ) const override;
 };
+
+}
 
 WrappedLegendAlignmentProperty::WrappedLegendAlignmentProperty()
     : ::chart::WrappedProperty( "Alignment", "AnchorPosition" )

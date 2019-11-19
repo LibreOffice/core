@@ -20,12 +20,16 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>
 
+namespace {
+
 class UIPreviewApp : public Application
 {
 public:
     virtual void Init() override;
     virtual int Main() override;
 };
+
+}
 
 using namespace com::sun::star;
 

@@ -1619,6 +1619,8 @@ static void lcl_MoveToEnd( ScDPSaveDimension& rDim, const OUString& rItemName )
     // puts it to the end of the list even if it was in the list before.
 }
 
+namespace {
+
 struct ScOUStringCollate
 {
     CollatorWrapper* const mpCollator;
@@ -1630,6 +1632,8 @@ struct ScOUStringCollate
         return ( mpCollator->compareString(rStr1, rStr2) < 0 );
     }
 };
+
+}
 
 void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending, const sal_uInt16* pUserListId)
 {

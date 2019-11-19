@@ -788,6 +788,8 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process)
 }
 
 #if defined(LINUX)
+namespace {
+
 struct osl_procStat
 {
    /* from 'stat' */
@@ -847,6 +849,8 @@ struct osl_procStat
     unsigned long vm_exe;     /* executable size */
     unsigned long vm_lib;     /* library size */
 };
+
+}
 
 static bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
 {

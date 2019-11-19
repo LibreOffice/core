@@ -25,6 +25,8 @@ using namespace com::sun::star::uno;
 
 namespace apitest
 {
+namespace
+{
 class MockedRefreshListener : public ::cppu::WeakImplHelper<util::XRefreshListener>
 {
 public:
@@ -40,6 +42,7 @@ public:
     }
     virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
 };
+}
 
 void XRefreshable::testRefreshListener()
 {

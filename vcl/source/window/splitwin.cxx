@@ -43,6 +43,8 @@
 #define SPLIT_WINDOW            (sal_uInt16(0x0004))
 #define SPLIT_NOSPLIT           (sal_uInt16(0x8000))
 
+namespace {
+
 class ImplSplitItem
 {
 public:
@@ -73,6 +75,7 @@ public:
     long                mnMaxSize;
 };
 
+}
 
 class ImplSplitSet
 {

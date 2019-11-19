@@ -44,11 +44,15 @@ using namespace com::sun::star::beans;
 const sal_Char cIsKernAsianPunctuation[] = "IsKernAsianPunctuation";
 const sal_Char cCharacterCompressionType[] = "CharacterCompressionType";
 
+namespace {
+
 struct SvxForbiddenChars_Impl
 {
     bool                                  bRemoved;
     std::unique_ptr<ForbiddenCharacters>  pCharacters;
 };
+
+}
 
 struct SvxAsianLayoutPage_Impl
 {

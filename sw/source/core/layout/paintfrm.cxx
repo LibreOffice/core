@@ -127,9 +127,9 @@ using ::drawinglayer::primitive2d::BorderLine;
 using std::pair;
 using std::make_pair;
 
-struct SwPaintProperties;
-
 namespace {
+
+struct SwPaintProperties;
 
 //Class declaration; here because they are only used in this file
 enum class SubColFlags {
@@ -144,6 +144,8 @@ enum class SubColFlags {
 namespace o3tl {
     template<> struct typed_flags<SubColFlags> : is_typed_flags<SubColFlags, 0x39> {};
 }
+
+namespace {
 
 // Classes collecting the border lines and help lines
 class SwLineRect : public SwRect
@@ -174,6 +176,8 @@ public:
     bool MakeUnion( const SwRect &rRect, SwPaintProperties const &properties );
 };
 
+}
+
 #ifdef IOS
 static void dummy_function()
 {
@@ -181,6 +185,8 @@ static void dummy_function()
     (void) pid;
 }
 #endif
+
+namespace {
 
 class SwLineRects
 {
@@ -232,6 +238,8 @@ public:
     }
 };
 
+}
+
 // Default zoom factor
 const static double aEdgeScale = 0.5;
 
@@ -245,6 +253,8 @@ Color* GetActiveRetoucheColor()
     return &aGlobalRetoucheColor;
 }
 }
+
+namespace {
 
 /**
  * Container for static properties
@@ -311,6 +321,8 @@ struct SwPaintProperties {
     }
 
 };
+
+}
 
 static SwPaintProperties gProp;
 
@@ -420,6 +432,8 @@ void SwCalcPixStatics( vcl::RenderContext const *pOut )
     gProp.aSScaleY = double(rMap.GetScaleY());
 }
 
+namespace {
+
 /**
  * To be able to save the statics so the paint is more or less reentrant
  */
@@ -429,6 +443,8 @@ public:
     SwSavePaintStatics();
     ~SwSavePaintStatics();
 };
+
+}
 
 SwSavePaintStatics::SwSavePaintStatics()
 {
@@ -2221,6 +2237,8 @@ static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const vcl::RenderCont
 
 // FUNCTIONS USED FOR COLLAPSING TABLE BORDER LINES START
 
+namespace {
+
 struct SwLineEntry
 {
     SwTwips mnKey;
@@ -2239,6 +2257,8 @@ public:
 
     OverlapType Overlaps( const SwLineEntry& rComp ) const;
 };
+
+}
 
 SwLineEntry::SwLineEntry( SwTwips nKey,
                           SwTwips nStartPos,
@@ -2300,6 +2320,8 @@ SwLineEntry::OverlapType SwLineEntry::Overlaps( const SwLineEntry& rNew )  const
     return eRet;
 }
 
+namespace {
+
 struct lt_SwLineEntry
 {
     bool operator()( const SwLineEntry& e1, const SwLineEntry& e2 ) const
@@ -2308,8 +2330,12 @@ struct lt_SwLineEntry
     }
 };
 
+}
+
 typedef std::set< SwLineEntry, lt_SwLineEntry > SwLineEntrySet;
 typedef std::map< SwTwips, SwLineEntrySet > SwLineEntryMap;
+
+namespace {
 
 class SwTabFramePainter
 {
@@ -2330,6 +2356,8 @@ public:
 
     void PaintLines( OutputDevice& rDev, const SwRect& rRect ) const;
 };
+
+}
 
 SwTabFramePainter::SwTabFramePainter( const SwTabFrame& rTabFrame )
     : mrTabFrame( rTabFrame )
@@ -3284,6 +3312,8 @@ static void lcl_EmergencyFormatFootnoteCont( SwFootnoteContFrame *pCont )
     }
 }
 
+namespace {
+
 class SwShortCut
 {
     SwRectDist fnCheck;
@@ -3293,6 +3323,8 @@ public:
     bool Stop( const SwRect& rRect ) const
         { return (rRect.*fnCheck)( nLimit ) > 0; }
 };
+
+}
 
 SwShortCut::SwShortCut( const SwFrame& rFrame, const SwRect& rRect )
 {
@@ -3854,6 +3886,8 @@ void SwCellFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         SwLayoutFrame::PaintSwFrame( rRenderContext, rRect );
 }
 
+namespace {
+
 struct BorderLinesGuard
 {
     explicit BorderLinesGuard() : m_pBorderLines(std::move(gProp.pBLines))
@@ -3867,6 +3901,8 @@ struct BorderLinesGuard
 private:
     std::unique_ptr<BorderLines> m_pBorderLines;
 };
+
+}
 
 void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
@@ -4483,6 +4519,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        namespace {
+
         class SwBorderRectanglePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
@@ -4526,6 +4564,8 @@ namespace drawinglayer
             /// provide unique ID
             DeclPrimitive2DIDBlock()
         };
+
+        }
 
         void SwBorderRectanglePrimitive2D::create2DDecomposition(
             Primitive2DContainer& rContainer,

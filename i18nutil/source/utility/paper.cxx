@@ -39,6 +39,8 @@
 #endif
 #endif
 
+namespace {
+
 struct PageDesc
 {
     long m_nWidth;
@@ -46,6 +48,8 @@ struct PageDesc
     const char *m_pPSName;
     const char *m_pAltPSName;
 };
+
+}
 
 #define PT2MM100( v ) \
     long(((v) * 35.27777778) + 0.5)

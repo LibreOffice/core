@@ -51,6 +51,8 @@ using com::sun::star::beans::Property;
 namespace pq_sdbc_driver
 {
 
+namespace {
+
 struct DefColumnMetaData
 {
     const sal_Char * columnName;
@@ -82,6 +84,8 @@ struct PropertyDefEx : public PropertyDef
     {}
     sal_Int32 attribute;
 };
+
+}
 
 static cppu::IPropertyArrayHelper * createPropertyArrayHelper(
     PropertyDef const *props, int count , sal_Int16 attr )

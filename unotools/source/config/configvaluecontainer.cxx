@@ -140,6 +140,8 @@ namespace utl
 
     //= functors on NodeValueAccessor instances
 
+    namespace {
+
     /// base class for functors synchronizing between exchange locations and config sub nodes
     struct SubNodeAccess
     {
@@ -178,6 +180,8 @@ namespace utl
             m_rRootNode.setNodeValue( _rAccessor.getPath( ), aNewValue );
         }
     };
+
+    }
 
     //= OConfigurationValueContainerImpl
 

@@ -50,6 +50,8 @@ using namespace dbaui;
 using namespace ucbhelper;
 using namespace comphelper;
 
+namespace {
+
 class OPasswordDialog : public weld::GenericDialogController
 {
     std::unique_ptr<weld::Frame> m_xUser;
@@ -67,6 +69,8 @@ public:
     OUString        GetOldPassword() const { return m_xEDOldPassword->get_text(); }
     OUString        GetNewPassword() const { return m_xEDPassword->get_text(); }
 };
+
+}
 
 OPasswordDialog::OPasswordDialog(weld::Window* _pParent,const OUString& rUserName)
     : GenericDialogController(_pParent, "dbaccess/ui/password.ui", "PasswordDialog")

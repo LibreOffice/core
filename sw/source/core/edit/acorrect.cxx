@@ -36,6 +36,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 class PaMIntoCursorShellRing
 {
     SwCursorShell& rSh;
@@ -48,6 +50,8 @@ public:
     PaMIntoCursorShellRing( SwCursorShell& rSh, SwPaM& rCursor, SwPaM& rPam );
     ~PaMIntoCursorShellRing();
 };
+
+}
 
 PaMIntoCursorShellRing::PaMIntoCursorShellRing( SwCursorShell& rCSh,
                                             SwPaM& rShCursor, SwPaM& rPam )

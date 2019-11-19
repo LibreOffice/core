@@ -24,6 +24,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 
+namespace {
+
 class SwXMLBodyContentContext_Impl : public SvXMLImportContext
 {
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
@@ -40,6 +42,8 @@ public:
     // we must have the correct object shell already.
     virtual void EndElement() override;
 };
+
+}
 
 SwXMLBodyContentContext_Impl::SwXMLBodyContentContext_Impl( SwXMLImport& rImport,
                                                    const OUString& rLName ) :

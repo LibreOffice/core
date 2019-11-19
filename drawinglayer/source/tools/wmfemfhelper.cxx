@@ -58,6 +58,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        namespace {
+
         /** NonOverlappingFillGradientPrimitive2D class
 
         This is a special version of the FillGradientPrimitive2D which decomposes
@@ -84,6 +86,8 @@ namespace drawinglayer
             {
             }
         };
+
+        }
 
         void NonOverlappingFillGradientPrimitive2D::create2DDecomposition(
             Primitive2DContainer& rContainer,

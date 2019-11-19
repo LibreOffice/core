@@ -497,6 +497,8 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     }
 }
 
+namespace {
+
 struct DomainInfo
 {
     DomainInfo( const OUString& rRole, const OUString& rRange, sal_Int32 nIndex )
@@ -507,6 +509,8 @@ struct DomainInfo
     OUString aRange;
     sal_Int32 nIndexForLocalData;
 };
+
+}
 
 void SchXMLSeries2Context::EndElement()
 {

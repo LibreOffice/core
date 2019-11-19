@@ -37,6 +37,8 @@
 #define GLOS_TIMEOUT 30000   // update every 30 seconds
 #define FIND_MAX_GLOS 20
 
+namespace {
+
 struct TripleString
 {
     OUString sGroup;
@@ -57,6 +59,8 @@ public:
 
     weld::TreeView& GetTreeView() {return *m_xListLB;}
 };
+
+}
 
 SwGlossDecideDlg::SwGlossDecideDlg(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/swriter/ui/selectautotextdialog.ui", "SelectAutoTextDialog")

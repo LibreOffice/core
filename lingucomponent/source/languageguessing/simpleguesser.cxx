@@ -68,6 +68,8 @@ static int startsAsciiCaseInsensitive(const std::string &s1, const std::string &
             return ret;
  }
 
+namespace {
+
 /**
  * This following structure is from textcat.c
  */
@@ -82,6 +84,8 @@ typedef struct textcat_t{
 
 } textcat_t;
 // end of the 3 structs
+
+}
 
 SimpleGuesser::SimpleGuesser()
 {

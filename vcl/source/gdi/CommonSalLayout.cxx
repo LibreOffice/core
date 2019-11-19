@@ -80,6 +80,8 @@ void GenericSalLayout::ParseFeatures(const OUString& aName)
     }
 }
 
+namespace {
+
 struct SubRun
 {
     int32_t mnMin;
@@ -88,7 +90,11 @@ struct SubRun
     hb_direction_t maDirection;
 };
 
+}
+
 namespace vcl {
+    namespace {
+
     struct Run
     {
         int32_t const nStart;
@@ -100,6 +106,8 @@ namespace vcl {
             , nCode(nCode_)
         {}
     };
+
+    }
 
     class TextLayoutCache
     {

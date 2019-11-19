@@ -29,6 +29,8 @@
 
 using namespace com::sun::star;
 
+namespace {
+
 class Mapping : public uno_Mapping
 {
     uno::Environment   m_from;
@@ -54,6 +56,8 @@ public:
     void acquire();
     void release();
 };
+
+}
 
 static void s_mapInterface(
     uno_Mapping                       * puno_Mapping,

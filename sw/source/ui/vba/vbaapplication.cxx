@@ -55,6 +55,8 @@ using namespace ::ooo;
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+namespace {
+
 class SwVbaApplicationOutgoingConnectionPoint : public cppu::WeakImplHelper<XConnectionPoint>
 {
 private:
@@ -130,6 +132,8 @@ public:
     virtual void SAL_CALL AppShow(  const css::uno::Any& WindowName ) override;
     virtual css::uno::Any SAL_CALL AppCount() override;
 };
+
+}
 
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ):
     SwVbaApplication_BASE( xContext )

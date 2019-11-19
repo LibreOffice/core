@@ -37,6 +37,8 @@ const int MAX_SIGNATURE_CONTENT_LENGTH = 50000;
 
 class PDFTrailerElement;
 
+namespace
+{
 /// A one-liner comment.
 class PDFCommentElement : public PDFElement
 {
@@ -47,9 +49,12 @@ public:
     explicit PDFCommentElement(PDFDocument& rDoc);
     bool Read(SvStream& rStream) override;
 };
+}
 
 class PDFReferenceElement;
 
+namespace
+{
 /// End of a dictionary: '>>'.
 class PDFEndDictionaryElement : public PDFElement
 {
@@ -102,6 +107,7 @@ class PDFNullElement : public PDFElement
 public:
     bool Read(SvStream& rStream) override;
 };
+}
 
 /// The trailer singleton is at the end of the doc.
 class PDFTrailerElement : public PDFElement

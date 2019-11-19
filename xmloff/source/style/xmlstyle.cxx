@@ -200,6 +200,8 @@ bool SvXMLStyleContext::IsTransient() const
     return false;
 }
 
+namespace {
+
 class SvXMLStyleIndex_Impl
 {
     OUString const              sName;
@@ -242,6 +244,8 @@ struct SvXMLStyleIndexCmp_Impl
         return nRet < 0;
     }
 };
+
+}
 
 class SvXMLStylesContext_Impl
 {

@@ -36,6 +36,8 @@
 using namespace ::com::sun::star;
 using namespace ::cppu;
 
+namespace {
+
 class SvxUnoBitmapTable : public SvxUnoNameItemTable
 {
 public:
@@ -51,6 +53,8 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override;
 };
+
+}
 
 SvxUnoBitmapTable::SvxUnoBitmapTable( SdrModel* pModel ) throw()
 : SvxUnoNameItemTable( pModel, XATTR_FILLBITMAP, MID_BITMAP )

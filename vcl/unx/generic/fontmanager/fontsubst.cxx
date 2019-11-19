@@ -24,6 +24,8 @@
 
 // platform specific font substitution hooks
 
+namespace {
+
 class FcPreMatchSubstitution
 :   public ImplPreMatchFontSubstitution
 {
@@ -42,6 +44,8 @@ class FcGlyphFallbackSubstitution
 public:
     bool FindFontSubstitute(FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString& rMissingCodes) const override;
 };
+
+}
 
 void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection )
 {

@@ -38,6 +38,8 @@ typedef Reference< XSingleServiceFactory > (*createFactoryFunc)
             rtl_ModuleCount* _pTemp
         );
 
+namespace {
+
 struct ProviderRequest
 {
     Reference< XSingleServiceFactory > xRet;
@@ -76,6 +78,7 @@ struct ProviderRequest
     void* getProvider() const { return xRet.get(); }
 };
 
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* firebird_sdbc_component_getFactory(
                     const sal_Char* pImplementationName,

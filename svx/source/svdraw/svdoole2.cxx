@@ -108,6 +108,8 @@ static uno::Reference < beans::XPropertySet > lcl_getFrame_throw(const SdrOle2Ob
     return xFrame;
 }
 
+namespace {
+
 class SdrLightEmbeddedClient_Impl : public ::cppu::WeakImplHelper
                                                             < embed::XStateChangeListener
                                                             , document::XEventListener
@@ -174,6 +176,8 @@ private:
     // XWindowSupplier
     virtual uno::Reference< awt::XWindow > SAL_CALL getWindow() override;
 };
+
+}
 
 SdrLightEmbeddedClient_Impl::SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj )
 : mpObj( pObj )

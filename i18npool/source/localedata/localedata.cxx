@@ -1318,6 +1318,8 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
 
 // OutlineNumbering helper class
 
+namespace {
+
 struct OutlineNumberingLevel_Impl
 {
     OUString        sPrefix;
@@ -1350,6 +1352,8 @@ public:
     virtual Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 };
+
+}
 
 Sequence< Reference<container::XIndexAccess> >
 LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )

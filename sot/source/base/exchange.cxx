@@ -34,6 +34,8 @@
 using namespace::com::sun::star::uno;
 using namespace::com::sun::star::datatransfer;
 
+namespace {
+
 /*
  *  These tables contain all MimeTypes, format identifiers, and types used in
  *  the Office. The table is sorted by the format string ID, and each ID is
@@ -47,8 +49,6 @@ struct DataFlavorRepresentation
     const css::uno::Type*  pType;
 };
 
-namespace
-{
     struct ImplFormatArray_Impl
     {
         const DataFlavorRepresentation* operator()()

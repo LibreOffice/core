@@ -40,8 +40,6 @@ template< typename T > T BYTESWAP(T nByte) {
         ( ( nByte & 128 ) >> 7 );
 }
 
-}
-
 //============================ TIFFReader ==================================
 
 class TIFFReader
@@ -187,6 +185,8 @@ public:
 
     bool ReadTIFF( SvStream & rTIFF, Graphic & rGraphic );
 };
+
+}
 
 //=================== Methods of TIFFReader ==============================
 

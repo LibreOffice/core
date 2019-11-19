@@ -55,6 +55,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
+namespace {
+
 class SdXMLDrawingPagePropertySetContext : public SvXMLPropertySetContext
 {
 public:
@@ -74,6 +76,7 @@ public:
                                    const XMLPropertyState& rProp) override;
 };
 
+}
 
 SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
                  SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -124,6 +127,8 @@ SvXMLImportContextRef SdXMLDrawingPagePropertySetContext::CreateChildContext(
     return xContext;
 }
 
+namespace {
+
 class SdXMLDrawingPageStyleContext : public XMLPropStyleContext
 {
 public:
@@ -147,6 +152,7 @@ public:
     virtual void FillPropertySet( const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
 };
 
+}
 
 SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
     SvXMLImport& rImport,

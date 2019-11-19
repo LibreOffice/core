@@ -39,6 +39,8 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SwBookmarkControl, SfxStringItem );
 
+namespace {
+
 class BookmarkPopup_Impl : public PopupMenu
 {
 public:
@@ -51,6 +53,8 @@ private:
 
     virtual void    Select() override;
 };
+
+}
 
 BookmarkPopup_Impl::BookmarkPopup_Impl() :
     PopupMenu(),

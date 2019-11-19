@@ -179,6 +179,8 @@ static Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
     return xReturn;
 }
 
+namespace {
+
 class MappingDialog_Impl : public weld::GenericDialogController
 {
     BibDataManager* pDatMan;
@@ -226,6 +228,8 @@ class MappingDialog_Impl : public weld::GenericDialogController
 public:
     MappingDialog_Impl(weld::Window* pParent, BibDataManager* pDatMan);
 };
+
+}
 
 static sal_uInt16 lcl_FindLogicalName(BibConfig const * pConfig ,
                                       const OUString& rLogicalColumnName)
@@ -397,6 +401,8 @@ IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl, weld::Button&, void)
     m_xDialog->response(bModified ? RET_OK : RET_CANCEL);
 }
 
+namespace {
+
 class DBChangeDialog_Impl : public weld::GenericDialogController
 {
     DBChangeDialogConfig_Impl aConfig;
@@ -410,6 +416,8 @@ public:
 
     OUString     GetCurrentURL()const;
 };
+
+}
 
 DBChangeDialog_Impl::DBChangeDialog_Impl(weld::Window* pParent, BibDataManager* pMan )
     : GenericDialogController(pParent, "modules/sbibliography/ui/choosedatasourcedialog.ui", "ChooseDataSourceDialog")

@@ -99,6 +99,8 @@ enum
 typedef cppu::WeakImplHelper<sheet::XSolver, sheet::XSolverDescription, lang::XServiceInfo>
     SwarmSolver_Base;
 
+namespace
+{
 class SwarmSolver : public comphelper::OMutexAndBroadcastHelper,
                     public comphelper::OPropertyContainer,
                     public comphelper::OPropertyArrayUsageHelper<SwarmSolver>,
@@ -278,6 +280,7 @@ public:
     double clampVariable(size_t nVarIndex, double fValue);
     double boundVariable(size_t nVarIndex, double fValue);
 };
+}
 
 OUString SwarmSolver::getResourceString(const char* pId)
 {
@@ -448,6 +451,8 @@ bool SwarmSolver::doesViolateConstraints()
     return false;
 }
 
+namespace
+{
 template <typename SwarmAlgorithm> class SwarmRunner
 {
 private:
@@ -494,6 +499,7 @@ public:
         return mrAlgorithm.getResult();
     }
 };
+}
 
 void SAL_CALL SwarmSolver::solve()
 {

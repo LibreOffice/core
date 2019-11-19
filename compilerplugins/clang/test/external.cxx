@@ -20,6 +20,7 @@ int const n2 = 0; // no warning, internal linkage
 
 constexpr int n3 = 0; // no warning, internal linkage
 
+// expected-error@+1 {{externally available entity 'S1' is not previously declared in an included file (if it is only used in this translation unit, put it in an unnamed namespace; otherwise, provide a declaration of it in an included file) [loplugin:external]}}
 struct S1
 {
     friend void f1() {} // no warning for injected function (no place where to mark it `static`)
@@ -28,6 +29,7 @@ struct S1
     friend void f2() {}
 };
 
+// expected-error@+1 {{externally available entity 'S2' is not previously declared in an included file (if it is only used in this translation unit, put it in an unnamed namespace; otherwise, provide a declaration of it in an included file) [loplugin:external]}}
 struct S2
 {
     friend void f1();
@@ -76,11 +78,21 @@ extern "C++" {
 void fc(E const*);
 }
 
+// expected-error@+1 {{externally available entity 'S1' is not previously declared in an included file (if it is only used in this translation unit, put it in an unnamed namespace; otherwise, provide a declaration of it in an included file) [loplugin:external]}}
 struct S1
 {
     struct S2;
     // No note about associating function; injected friend function not found by ADL:
     friend void f2(E const*);
+    // expected-note@+1 {{a function associating 'N::S1' is declared here [loplugin:external]}}
+    friend void h(S1);
+};
+
+// expected-error@+1 {{externally available entity 'S3' is not previously declared in an included file (if it is only used in this translation unit, put it in an unnamed namespace; otherwise, provide a declaration of it in an included file) [loplugin:external]}}
+struct S3
+{
+    // expected-note@+1 {{another declaration is here [loplugin:external]}}
+    friend void h(S1);
 };
 
 inline namespace I2

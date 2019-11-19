@@ -58,6 +58,8 @@ sal_Int16 lcl_GetZoomType(Id nType)
 
 namespace dmapper
 {
+    namespace {
+
     /** Document protection restrictions
      *
      * This element specifies the set of document protection restrictions which have been applied to the contents of a
@@ -114,6 +116,8 @@ namespace dmapper
 
         bool isNone()           const { return m_nEdit == NS_ooxml::LN_Value_doc_ST_DocProtect_none; };
     };
+
+    }
 
     css::uno::Sequence<css::beans::PropertyValue> DocumentProtection_Impl::toSequence() const
     {

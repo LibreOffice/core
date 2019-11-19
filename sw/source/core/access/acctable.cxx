@@ -59,6 +59,8 @@ typedef std::pair < sal_Int32, sal_Int32 > Int32Pair_Impl;
 
 const unsigned int SELECTION_WITH_NUM = 10;
 
+namespace {
+
 class SwAccTableSelHander_Impl
 {
 public:
@@ -67,6 +69,8 @@ public:
 protected:
     ~SwAccTableSelHander_Impl() {}
 };
+
+}
 
 class SwAccessibleTableData_Impl
 {
@@ -474,6 +478,8 @@ void SwAccessibleTableData_Impl::GetRowColumnAndExtent(
     rColumnExtent = nColumnEnd - rColumn;
 }
 
+namespace {
+
 class SwAccSingleTableSelHander_Impl : public SwAccTableSelHander_Impl
 {
     bool m_bSelected;
@@ -489,6 +495,8 @@ public:
     virtual void Unselect( sal_Int32, sal_Int32 ) override;
 };
 
+}
+
 inline SwAccSingleTableSelHander_Impl::SwAccSingleTableSelHander_Impl() :
     m_bSelected( true )
 {
@@ -498,6 +506,8 @@ void SwAccSingleTableSelHander_Impl::Unselect( sal_Int32, sal_Int32 )
 {
     m_bSelected = false;
 }
+
+namespace {
 
 class SwAccAllTableSelHander_Impl : public SwAccTableSelHander_Impl
 
@@ -517,6 +527,8 @@ public:
     virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt ) override;
     virtual ~SwAccAllTableSelHander_Impl();
 };
+
+}
 
 SwAccAllTableSelHander_Impl::~SwAccAllTableSelHander_Impl()
 {

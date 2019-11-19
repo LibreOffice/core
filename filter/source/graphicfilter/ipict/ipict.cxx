@@ -37,6 +37,8 @@
     // complete FilterConfigItem for GraphicImport under -fsanitize=function
 
 namespace PictReaderInternal {
+  namespace {
+
   //! utilitary class to store a pattern, ...
   class Pattern {
   public:
@@ -85,6 +87,8 @@ namespace PictReaderInternal {
     // flag to know if the pattern came from reading the picture, or if it is the default pattern
     bool isRead;
   };
+
+  }
 
   sal_uLong Pattern::read(SvStream &stream) {
     unsigned char nbyte[8];
@@ -144,8 +148,6 @@ enum class PictDrawingMethod {
     FRAME, PAINT, ERASE, INVERT, FILL,
     TEXT, UNDEFINED
 };
-
-}
 
 class PictReader {
   typedef class PictReaderInternal::Pattern Pattern;
@@ -265,6 +267,8 @@ public:
         // reads a pict file from the stream and fills the GDIMetaFile
 
 };
+
+}
 
 static void SetByte(sal_uInt16& nx, sal_uInt16 ny, vcl::bitmap::RawBitmap& rBitmap, sal_uInt16 nPixelSize, sal_uInt8 nDat, sal_uInt16 nWidth, std::vector<Color> const & rvPalette)
 {

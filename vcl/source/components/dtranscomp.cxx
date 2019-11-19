@@ -45,6 +45,8 @@ using namespace com::sun::star::lang;
 
 namespace vcl
 {
+namespace {
+
 // generic implementation to satisfy SalInstance
 class GenericClipboard :
         public cppu::WeakComponentImplHelper<
@@ -102,6 +104,8 @@ public:
     virtual void SAL_CALL removeClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 };
+
+}
 
 Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 {
@@ -177,6 +181,8 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
 }
 
+namespace {
+
 class ClipboardFactory : public ::cppu::WeakComponentImplHelper<
     css::lang::XSingleServiceFactory
 >
@@ -191,6 +197,8 @@ public:
     virtual Reference< XInterface > SAL_CALL createInstance() override;
     virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& rArgs ) override;
 };
+
+}
 
 ClipboardFactory::ClipboardFactory() :
         cppu::WeakComponentImplHelper<
@@ -233,6 +241,8 @@ Reference< XSingleServiceFactory > Clipboard_createFactory()
     return Reference< XSingleServiceFactory >( new ClipboardFactory() );
 }
 
+namespace {
+
 /*
 *   generic DragSource dummy
 */
@@ -274,6 +284,8 @@ public:
         return aRet;
     }
 };
+
+}
 
 sal_Bool GenericDragSource::isDragImageSupported()
 {
@@ -334,6 +346,8 @@ Reference< XInterface > DragSource_createInstance( const Reference< XMultiServic
 *   generic DragSource dummy
 */
 
+namespace {
+
 class GenericDropTarget : public cppu::WeakComponentImplHelper<
                                            datatransfer::dnd::XDropTarget,
                                            XInitialization,
@@ -371,6 +385,8 @@ public:
         return aRet;
     }
 };
+
+}
 
 void GenericDropTarget::initialize( const Sequence< Any >& )
 {

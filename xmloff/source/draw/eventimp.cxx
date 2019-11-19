@@ -75,6 +75,8 @@ SdXMLEventContextData::SdXMLEventContextData(const Reference< XShape >& rxShape)
 {
 }
 
+namespace {
+
 class SdXMLEventContext : public SvXMLImportContext
 {
 public:
@@ -95,6 +97,7 @@ public:
     XMLEventSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent );
 };
 
+}
 
 XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent )
 : SvXMLImportContext( rImp, nPrfx, rLocalName )

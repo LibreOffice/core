@@ -1050,6 +1050,8 @@ void SwNumRule::SetGrabBagItem(const uno::Any& rVal)
 
 namespace numfunc
 {
+    namespace {
+
     /** class containing default bullet list configuration data */
     class SwDefBulletConfig : private utl::ConfigItem
     {
@@ -1112,8 +1114,6 @@ namespace numfunc
             std::unique_ptr<vcl::Font> mpFont;
     };
 
-    namespace
-    {
         class theSwDefBulletConfig
             : public rtl::Static<SwDefBulletConfig, theSwDefBulletConfig>{};
     }
@@ -1276,6 +1276,8 @@ namespace numfunc
         return SwDefBulletConfig::getInstance().GetChar( nLevel );
     }
 
+    namespace {
+
     /** class containing configuration data about user interface behavior
         regarding lists and list items.
         configuration item about behavior of <TAB>/<SHIFT-TAB>-key at first
@@ -1312,8 +1314,6 @@ namespace numfunc
             bool mbChangeIndentOnTabAtFirstPosOfFirstListItem;
     };
 
-    namespace
-    {
         class theSwNumberingUIBehaviorConfig : public rtl::Static<SwNumberingUIBehaviorConfig, theSwNumberingUIBehaviorConfig>{};
     }
 

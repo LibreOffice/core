@@ -60,6 +60,8 @@ using ::com::sun::star::util::XCloseable;
 namespace sfx2
 {
 
+namespace {
+
 class SvxInternalLink : public sfx2::SvLinkSource
 {
 public:
@@ -67,6 +69,8 @@ public:
 
     virtual bool Connect( sfx2::SvBaseLink* ) override;
 };
+
+}
 
 LinkManager::LinkManager(SfxObjectShell* p)
     : pPersist( p )

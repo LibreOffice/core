@@ -2665,6 +2665,8 @@ void WW8Export::SectionBreaksAndFrames( const SwTextNode& rNode )
     OutputSectionBreaks( rNode.GetpSwAttrSet(), rNode );
 }
 
+namespace {
+
 class TrackContentToExport
 {
 private:
@@ -2706,6 +2708,8 @@ public:
         return false;
     }
 };
+
+}
 
 void MSWordExportBase::WriteText()
 {

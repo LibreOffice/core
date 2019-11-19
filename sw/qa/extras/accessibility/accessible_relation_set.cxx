@@ -38,6 +38,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 using namespace css::lang;
 
+namespace
+{
 class AccessibilityTools
 {
 public:
@@ -45,6 +47,7 @@ public:
     getAccessibleObjectForRole(const css::uno::Reference<css::accessibility::XAccessible>& xacc,
                                sal_Int16 role);
 };
+}
 
 css::uno::Reference<css::accessibility::XAccessibleContext>
 AccessibilityTools::getAccessibleObjectForRole(

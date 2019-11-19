@@ -55,6 +55,8 @@ static OUString resolver_getImplementationName()
     return IMPLNAME;
 }
 
+namespace {
+
 class ResolverImpl : public WeakImplHelper< XServiceInfo, XUnoUrlResolver >
 {
     Reference< XMultiComponentFactory > _xSMgr;
@@ -71,6 +73,8 @@ public:
     // XUnoUrlResolver
     virtual Reference< XInterface > SAL_CALL resolve( const OUString & rUnoUrl ) override;
 };
+
+}
 
 ResolverImpl::ResolverImpl( const Reference< XComponentContext > & xCtx )
     : _xSMgr( xCtx->getServiceManager() )

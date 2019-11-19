@@ -574,6 +574,8 @@ static void lcl_StripFields(OUString &rString, WW8_CP &rNewStartCp)
     }
 }
 
+namespace {
+
 class Chunk
 {
 private:
@@ -595,8 +597,6 @@ public:
     }
 };
 
-namespace
-{
     bool IsValidSel(const EditEngine& rEngine, const ESelection& rSel)
     {
         const auto nParaCount = rEngine.GetParagraphCount();

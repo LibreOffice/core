@@ -42,6 +42,8 @@ using namespace ::com::sun::star::container;
 
 namespace sd {
 
+namespace {
+
 class UndoTextAPIChanged : public SdrUndoAction
 {
 public:
@@ -55,6 +57,8 @@ protected:
     std::unique_ptr<OutlinerParaObject> mpNewText;
     rtl::Reference< TextApiObject > mxTextObj;
 };
+
+}
 
 UndoTextAPIChanged::UndoTextAPIChanged(SdrModel& rModel, TextApiObject* pTextObj )
 : SdrUndoAction( rModel )
@@ -79,12 +83,16 @@ void UndoTextAPIChanged::Redo()
     }
 }
 
+namespace {
+
 struct TextAPIEditSource_Impl
 {
     SdDrawDocument*                 mpDoc;
     Outliner*                       mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
 };
+
+}
 
 class TextAPIEditSource : public SvxEditSource
 {

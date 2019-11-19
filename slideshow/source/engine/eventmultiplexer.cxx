@@ -129,6 +129,8 @@ struct slideshow::internal::ListenerOperations<ViewEventHandlerWeakPtrWrapper>
 namespace slideshow {
 namespace internal {
 
+namespace {
+
 template <typename HandlerT>
 class PrioritizedHandlerEntry
 {
@@ -161,10 +163,13 @@ public:
     }
 };
 
+}
 
 typedef cppu::WeakComponentImplHelper<
     awt::XMouseListener,
     awt::XMouseMotionListener > Listener_UnoBase;
+
+namespace {
 
 /** Listener class, to decouple UNO lifetime from EventMultiplexer
 
@@ -208,6 +213,7 @@ private:
     EventMultiplexerImpl* mpEventMultiplexer;
 };
 
+}
 
 struct EventMultiplexerImpl
 {

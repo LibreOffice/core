@@ -57,6 +57,8 @@ void LightButton::switchLightOn(bool bOn)
         m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
 }
 
+namespace {
+
 struct LightSource
 {
     Color nDiffuseColor;
@@ -69,6 +71,8 @@ struct LightSource
             bIsEnabled( false )
     {}
 };
+
+}
 
 struct LightSourceInfo
 {

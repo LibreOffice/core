@@ -62,6 +62,8 @@ using namespace ::com::sun::star;
 // - Add new slot definitions to sfx.sdi
 static const int NUM_OF_DOCKINGWINDOWS = 10;
 
+namespace {
+
 class SfxTitleDockingWindow : public SfxDockingWindow
 {
     VclPtr<vcl::Window>   m_pWrappedWindow;
@@ -83,8 +85,6 @@ public:
     virtual void        Resizing( Size& rSize ) override;
 };
 
-namespace
-{
     struct WindowState
     {
         OUString sTitle;

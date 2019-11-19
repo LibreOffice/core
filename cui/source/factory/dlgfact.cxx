@@ -1375,6 +1375,8 @@ VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialo
     return VclPtr<AbstractSvxPostItDialog_Impl>::Create(std::make_unique<SvxPostItDialog>(pParent, rCoreSet, bPrevNext));
 }
 
+namespace {
+
 class SvxMacroAssignDialog : public VclAbstractDialog
 {
 public:
@@ -1392,6 +1394,8 @@ private:
     SfxItemSet                              m_aItems;
     std::unique_ptr<SvxMacroAssignDlg>      m_xDialog;
 };
+
+}
 
 short SvxMacroAssignDialog::Execute()
 {

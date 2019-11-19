@@ -861,10 +861,14 @@ sal_uInt32 UHashMap::getId( const OUString& rCompareString )
         return it->second;
 }
 
+namespace {
+
 struct theSvxMapProvider :
     public rtl::Static<SvxUnoPropertyMapProvider, theSvxMapProvider>
 {
 };
+
+}
 
 SvxUnoPropertyMapProvider& getSvxMapProvider()
 {

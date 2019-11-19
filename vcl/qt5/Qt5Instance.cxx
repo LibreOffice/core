@@ -54,6 +54,8 @@
 #include <mutex>
 #include <condition_variable>
 
+namespace
+{
 /// TODO: not much Qt5 specific here? could be generalised, esp. for OSX...
 /// this subclass allows for the transfer of a closure for running on the main
 /// thread, to handle all the thread affine stuff in Qt5; the SolarMutex is
@@ -83,6 +85,7 @@ public:
     virtual void doAcquire(sal_uInt32 nLockCount) override;
     virtual sal_uInt32 doRelease(bool const bUnlockAll) override;
 };
+}
 
 bool Qt5YieldMutex::IsCurrentThread() const
 {

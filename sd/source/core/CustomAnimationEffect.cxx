@@ -2692,6 +2692,8 @@ void EffectSequenceHelper::setTextGroupingAuto( const CustomAnimationTextGroupPt
     notify_listeners();
 }
 
+namespace {
+
 struct ImplStlTextGroupSortHelper
 {
     explicit ImplStlTextGroupSortHelper( bool bReverse ) : mbReverse( bReverse ) {};
@@ -2699,6 +2701,8 @@ struct ImplStlTextGroupSortHelper
     bool const mbReverse;
     sal_Int32 getTargetParagraph( const CustomAnimationEffectPtr& p1 );
 };
+
+}
 
 sal_Int32 ImplStlTextGroupSortHelper::getTargetParagraph( const CustomAnimationEffectPtr& p1 )
 {
@@ -2772,11 +2776,15 @@ void EffectSequenceHelper::removeListener( ISequenceListener* pListener )
     maListeners.remove( pListener );
 }
 
+namespace {
+
 struct stl_notify_listeners_func
 {
     stl_notify_listeners_func() {}
     void operator()(ISequenceListener* pListener) { pListener->notify_change(); }
 };
+
+}
 
 void EffectSequenceHelper::notify_listeners()
 {
@@ -2928,6 +2936,8 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
     }
 }
 
+namespace {
+
 class AnimationChangeListener : public cppu::WeakImplHelper< XChangesListener >
 {
 public:
@@ -2938,6 +2948,8 @@ public:
 private:
     MainSequence* mpMainSequence;
 };
+
+}
 
 void SAL_CALL AnimationChangeListener::changesOccurred( const css::util::ChangesEvent& )
 {

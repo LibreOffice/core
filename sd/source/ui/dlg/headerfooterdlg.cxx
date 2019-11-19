@@ -52,6 +52,8 @@
 namespace sd
 {
 
+namespace {
+
 class PresLayoutPreview : public weld::CustomWidgetController
 {
 private:
@@ -76,16 +78,24 @@ public:
 
 }
 
+}
+
 // tab page for slide & header'n'notes
 
 namespace sd
 {
 
 const int nDateTimeFormatsCount = 12;
+
+namespace {
+
 struct DateAndTimeFormat {
     SvxDateFormat const meDateFormat;
     SvxTimeFormat const meTimeFormat;
 };
+
+}
+
 DateAndTimeFormat const nDateTimeFormats[nDateTimeFormatsCount] =
 {
     { SvxDateFormat::A, SvxTimeFormat::AppDefault },

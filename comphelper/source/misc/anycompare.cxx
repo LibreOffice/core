@@ -49,6 +49,8 @@ namespace comphelper
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
 
+    namespace {
+
     class DatePredicateLess : public IKeyPredicateLess
     {
     public:
@@ -158,6 +160,7 @@ namespace comphelper
         }
     };
 
+    }
 
     std::unique_ptr< IKeyPredicateLess > getStandardLessPredicate( Type const & i_type, Reference< XCollator > const & i_collator )
     {

@@ -45,6 +45,8 @@ using ::com::sun::star::graphic::XGraphic;
 
 using namespace com::sun::star;
 
+namespace {
+
 struct ImplPropertyInfo
 {
     OUString                 aName;
@@ -64,6 +66,8 @@ struct ImplPropertyInfo
      }
 
 };
+
+}
 
 #define DECL_PROP_1( asciiname, id, type, attrib1 ) \
     ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 )
@@ -268,6 +272,7 @@ static ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
     return aImplPropertyInfos;
 }
 
+namespace {
 
 struct ImplPropertyInfoCompareFunctor
 {
@@ -280,6 +285,8 @@ struct ImplPropertyInfoCompareFunctor
         return lhs.aName.compareTo(rhs) < 0;
     }
 };
+
+}
 
 static void ImplAssertValidPropertyArray()
 {

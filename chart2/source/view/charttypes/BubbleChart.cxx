@@ -136,6 +136,8 @@ drawing::Direction3D BubbleChart::getPreferredDiagramAspectRatio() const
     return drawing::Direction3D(-1,-1,-1);
 }
 
+namespace {
+
 //better performance for big data
 struct FormerPoint
 {
@@ -153,6 +155,8 @@ struct FormerPoint
     double m_fY;
     double m_fZ;
 };
+
+}
 
 void BubbleChart::createShapes()
 {

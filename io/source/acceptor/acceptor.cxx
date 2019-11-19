@@ -46,6 +46,8 @@ using namespace ::com::sun::star::connection;
 
 namespace io_acceptor
 {
+    namespace {
+
     class OAcceptor : public WeakImplHelper< XAcceptor, XServiceInfo >
     {
     public:
@@ -73,6 +75,7 @@ namespace io_acceptor
         Reference<XAcceptor>         _xAcceptor;
     };
 
+    }
 
     OAcceptor::OAcceptor( const Reference< XComponentContext > & xCtx )
         : m_bInAccept( false )
@@ -84,6 +87,8 @@ namespace io_acceptor
     {
         m_pPipe.reset();
     }
+
+    namespace {
 
     struct BeingInAccept
     {
@@ -101,6 +106,8 @@ namespace io_acceptor
             }
         bool *m_pFlag;
     };
+
+    }
 
     Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescription )
     {

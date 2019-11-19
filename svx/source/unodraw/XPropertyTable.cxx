@@ -43,6 +43,8 @@
 using namespace com::sun::star;
 using namespace ::cppu;
 
+namespace {
+
 class SvxUnoXPropertyTable : public WeakImplHelper< container::XNameContainer, lang::XServiceInfo >
 {
 private:
@@ -78,6 +80,8 @@ public:
     // XElementAccess
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 };
+
+}
 
 SvxUnoXPropertyTable::SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) throw()
 : mpList( pList ), mnWhich( nWhich )
@@ -230,6 +234,7 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasElements(  )
     return getCount() != 0;
 }
 
+namespace {
 
 class SvxUnoXColorTable : public SvxUnoXPropertyTable
 {
@@ -247,6 +252,8 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
+
+}
 
 uno::Reference< uno::XInterface > SvxUnoXColorTable_createInstance( XPropertyList* pList ) throw()
 {
@@ -285,6 +292,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(
     return { "com.sun.star.drawing.ColorTable" };
 }
 
+namespace {
 
 class SvxUnoXLineEndTable : public SvxUnoXPropertyTable
 {
@@ -302,6 +310,8 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
+
+}
 
 uno::Reference< uno::XInterface > SvxUnoXLineEndTable_createInstance( XPropertyList* pTable ) throw()
 {
@@ -350,6 +360,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceName
     return { "com.sun.star.drawing.LineEndTable" };
 }
 
+namespace {
 
 class SvxUnoXDashTable : public SvxUnoXPropertyTable
 {
@@ -367,6 +378,8 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
+
+}
 
 uno::Reference< uno::XInterface > SvxUnoXDashTable_createInstance( XPropertyList* pTable ) throw()
 {
@@ -425,6 +438,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames( 
     return { "com.sun.star.drawing.DashTable" };
 }
 
+namespace {
 
 class SvxUnoXHatchTable : public SvxUnoXPropertyTable
 {
@@ -442,6 +456,8 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
+
+}
 
 uno::Reference< uno::XInterface > SvxUnoXHatchTable_createInstance( XPropertyList* pTable ) throw()
 {
@@ -495,6 +511,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(
     return { "com.sun.star.drawing.HatchTable" };
 }
 
+namespace {
 
 class SvxUnoXGradientTable : public SvxUnoXPropertyTable
 {
@@ -512,6 +529,8 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
+
+}
 
 uno::Reference< uno::XInterface > SvxUnoXGradientTable_createInstance( XPropertyList* pTable ) throw()
 {
@@ -577,6 +596,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNam
     return { "com.sun.star.drawing.GradientTable" };
 }
 
+namespace {
 
 class SvxUnoXBitmapTable : public SvxUnoXPropertyTable
 {
@@ -594,6 +614,8 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
+
+}
 
 uno::Reference< uno::XInterface > SvxUnoXBitmapTable_createInstance( XPropertyList* pTable ) throw()
 {

@@ -37,6 +37,8 @@ namespace chart
 namespace wrapper
 {
 
+namespace {
+
 class WrappedScaleTextProperty : public WrappedProperty
 {
 public:
@@ -49,6 +51,8 @@ public:
 private:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 };
+
+}
 
 WrappedScaleTextProperty::WrappedScaleTextProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
     : ::chart::WrappedProperty( "ScaleText" , OUString() )

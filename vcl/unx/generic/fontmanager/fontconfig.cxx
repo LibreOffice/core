@@ -52,7 +52,6 @@ using namespace osl;
 namespace
 {
     typedef std::pair<FcChar8*, FcChar8*> lang_and_element;
-}
 
 class FontCfgWrapper
 {
@@ -82,6 +81,8 @@ private:
 
     std::unique_ptr<LanguageTag> m_pLanguageTag;
 };
+
+}
 
 FontCfgWrapper::FontCfgWrapper()
     : m_pFontSet( nullptr )

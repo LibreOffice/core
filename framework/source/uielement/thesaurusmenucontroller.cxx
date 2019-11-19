@@ -29,6 +29,8 @@
 
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 
+namespace {
+
 class ThesaurusMenuController : public svt::PopupMenuControllerBase
 {
 public:
@@ -49,6 +51,8 @@ private:
     css::uno::Reference< css::linguistic2::XThesaurus > m_xThesaurus;
     OUString m_aLastWord;
 };
+
+}
 
 ThesaurusMenuController::ThesaurusMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
     svt::PopupMenuControllerBase( rxContext ),

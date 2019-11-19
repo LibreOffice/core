@@ -33,6 +33,8 @@
 #include <controldata.hxx>
 #include <comphelper/lok.hxx>
 
+namespace {
+
 struct ComboBoxBounds
 {
     Point aSubEditPos;
@@ -41,6 +43,8 @@ struct ComboBoxBounds
     Point aButtonPos;
     Size aButtonSize;
 };
+
+}
 
 struct ComboBox::Impl
 {

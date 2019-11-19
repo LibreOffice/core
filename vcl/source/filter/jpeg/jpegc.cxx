@@ -43,11 +43,15 @@ extern "C" {
 #pragma warning (disable: 4324) /* disable to __declspec(align()) aligned warning */
 #endif
 
+namespace {
+
 struct ErrorManagerStruct
 {
     jpeg_error_mgr pub;
     jmp_buf setjmp_buffer;
 };
+
+}
 
 #ifdef _MSC_VER
 #pragma warning(pop)
@@ -99,6 +103,8 @@ static void emitMessage (j_common_ptr cinfo, int msg_level)
 
 }
 
+namespace {
+
 class JpegDecompressOwner
 {
 public:
@@ -144,6 +150,8 @@ struct JpegStuff
     std::vector<sal_uInt8> pScanLineBuffer;
     std::vector<sal_uInt8> pCYMKBuffer;
 };
+
+}
 
 static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
               Size const & previewSize, GraphicFilterImportFlags nImportFlags,

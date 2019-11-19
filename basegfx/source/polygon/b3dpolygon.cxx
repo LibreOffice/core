@@ -27,6 +27,8 @@
 #include <vector>
 #include <algorithm>
 
+namespace {
+
 class CoordinateData3D
 {
     basegfx::B3DPoint                               maPoint;
@@ -671,6 +673,8 @@ public:
         }
     }
 };
+
+}
 
 class ImplB3DPolygon
 {

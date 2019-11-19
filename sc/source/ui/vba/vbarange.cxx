@@ -269,6 +269,8 @@ void ScVbaRange::fireChangeEvent()
     }
 }
 
+namespace {
+
 class SingleRangeEnumeration : public EnumerationHelper_BASE
 {
     uno::Reference< table::XCellRange > m_xRange;
@@ -346,6 +348,8 @@ public:
     virtual uno::Sequence< OUString > getServiceNames() override { return uno::Sequence< OUString >(); }
 
 };
+
+}
 
 uno::Reference< container::XEnumeration > SAL_CALL
 ScVbaRangeAreas::createEnumeration()
@@ -472,6 +476,8 @@ const ScRangeList& ScVbaRange::getScRangeList( const uno::Reference< excel::XRan
     throw uno::RuntimeException("Cannot obtain VBA range implementation object" );
 }
 
+namespace {
+
 class NumFormatHelper
 {
     uno::Reference< util::XNumberFormatsSupplier > mxSupplier;
@@ -576,8 +582,12 @@ sal_Int32 const m_nCol;
 sal_Int32 const m_nArea;
 };
 
+}
+
 typedef ::cppu::WeakImplHelper< container::XEnumeration > CellsEnumeration_BASE;
 typedef ::std::vector< CellPos > vCellPos;
+
+namespace {
 
 // #FIXME - QUICK
 // we could probably could and should modify CellsEnumeration below
@@ -661,6 +671,8 @@ public:
     }
 };
 
+}
+
 static const char ISVISIBLE[] = "IsVisible";
 static const char EQUALS[] = "=";
 static const char NOTEQUALS[] = "<>";
@@ -670,6 +682,8 @@ static const char LESSTHAN[] = "<";
 static const char LESSTHANEQUALS[] = "<=";
 static const char STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY[] = "The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again";
 static const char CELLSTYLE[] = "CellStyle";
+
+namespace {
 
 class CellValueSetter : public ValueSetter
 {
@@ -681,6 +695,8 @@ public:
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override;
 
 };
+
+}
 
 CellValueSetter::CellValueSetter( const uno::Any& aValue ): maValue( aValue ) {}
 
@@ -765,6 +781,8 @@ CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< tab
 
 }
 
+namespace {
+
 class CellValueGetter : public ValueGetter
 {
 protected:
@@ -776,6 +794,8 @@ public:
     const uno::Any& getValue() const override { return maValue; }
 
 };
+
+}
 
 void
 CellValueGetter::processValue(  const uno::Any& aValue )
@@ -832,6 +852,8 @@ void CellValueGetter::visitNode( sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Re
     }
     processValue( aValue );
 }
+
+namespace {
 
 class CellFormulaValueSetter : public CellValueSetter
 {
@@ -946,7 +968,11 @@ public:
 
 };
 
+}
+
 static const char sNA[] = "#N/A";
+
+namespace {
 
 class Dim1ArrayValueSetter : public ArrayVisitor
 {
@@ -1116,6 +1142,8 @@ public:
     }
 
 };
+
+}
 
 bool
 ScVbaRange::getCellRangesForAddress( ScRefFlags& rResFlags, const OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention eConv, char cDelimiter )

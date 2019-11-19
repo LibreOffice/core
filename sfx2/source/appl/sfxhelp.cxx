@@ -102,6 +102,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
 
+namespace {
+
 class NoHelpErrorBox
 {
 private:
@@ -121,6 +123,8 @@ public:
         m_xErrBox->run();
     }
 };
+
+}
 
 IMPL_STATIC_LINK_NOARG(NoHelpErrorBox, HelpRequestHdl, weld::Widget&, bool)
 {
@@ -329,11 +333,15 @@ static bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
     return bRet;
 }
 
+namespace {
+
 class SfxHelp_Impl
 {
 public:
     static OUString GetHelpText( const OUString& aCommandURL, const OUString& rModule );
 };
+
+}
 
 OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString& rModule )
 {
@@ -994,6 +1002,8 @@ namespace
     }
 }
 
+namespace {
+
 class HelpManualMessage : public weld::MessageDialogController
 {
 private:
@@ -1012,6 +1022,8 @@ public:
 
     bool GetOfflineHelpPopUp() const { return !m_xHideOfflineHelpCB->get_active(); }
 };
+
+}
 
 bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword)
 {

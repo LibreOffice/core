@@ -32,6 +32,8 @@ using namespace com::sun::star;
 
 typedef std::map< OUString, uno::Sequence<beans::PropertyValue> > NamedPropertyValues;
 
+namespace {
+
 class NamedPropertyValuesContainer : public cppu::WeakImplHelper< container::XNameContainer, lang::XServiceInfo >
 {
 public:
@@ -61,6 +63,8 @@ public:
 private:
     NamedPropertyValues maProperties;
 };
+
+}
 
 NamedPropertyValuesContainer::NamedPropertyValuesContainer() throw()
 {

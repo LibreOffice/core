@@ -1289,6 +1289,8 @@ void StringResourcePersistenceImpl::implWriteLocaleBinary
 
 // BinaryOutput, helper class for exportBinary
 
+namespace {
+
 class BinaryInput
 {
     Sequence< sal_Int8 > const              m_aData;
@@ -1312,6 +1314,8 @@ public:
     sal_Unicode readUnicodeChar();
     OUString readString();
 };
+
+}
 
 BinaryInput::BinaryInput( const Sequence< ::sal_Int8 >& aData, Reference< XComponentContext > const & xContext )
         : m_aData( aData )

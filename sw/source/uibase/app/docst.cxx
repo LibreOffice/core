@@ -544,6 +544,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
     }
 }
 
+namespace {
+
 class ApplyStyle
 {
 public:
@@ -575,6 +577,8 @@ private:
     rtl::Reference< SfxStyleSheetBasePool > m_xBasePool;
     bool const m_bModified;
 };
+
+}
 
 IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
 {

@@ -77,11 +77,15 @@ private:
     bool mbIsPrecious;
 };
 
+namespace {
+
 class CacheHash {
 public:
     size_t operator()(const BitmapCache::CacheKey& p) const
     { return reinterpret_cast<size_t>(p); }
 };
+
+}
 
 class BitmapCache::CacheBitmapContainer
     : public std::unordered_map<CacheKey, CacheEntry, CacheHash>

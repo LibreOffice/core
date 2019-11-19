@@ -30,6 +30,8 @@
 
 using namespace com::sun::star;
 
+namespace {
+
 class MediatorMapping : public uno_Mapping
 {
     oslInterlockedCount m_refCount;
@@ -52,6 +54,8 @@ public:
                     uno_Environment * pInterm,
                     uno_Environment * pTo);
 };
+
+}
 
 extern "C" {
 static void s_acquire(uno_Mapping * mapping)

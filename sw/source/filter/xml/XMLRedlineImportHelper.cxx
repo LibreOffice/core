@@ -86,6 +86,8 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> const & rRange )
 // the matter that (e.g in section import) we delete a few characters,
 // which may cause bookmarks (as used by XTextRange) to be deleted.
 
+namespace {
+
 class XTextRangeOrNodeIndexPosition
 {
     Reference<XTextRange> xRange;
@@ -103,6 +105,8 @@ public:
 
     bool IsValid() const;
 };
+
+}
 
 XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition()
 {

@@ -1309,6 +1309,8 @@ size_t XclExpFontBuffer::Find( const XclFontData& rFontData )
 
 // FORMAT record - number formats =============================================
 
+namespace {
+
 /** Predicate for search algorithm. */
 struct XclExpNumFmtPred
 {
@@ -1317,6 +1319,8 @@ struct XclExpNumFmtPred
     bool         operator()( const XclExpNumFmt& rFormat ) const
                             { return rFormat.mnScNumFmt == mnScNumFmt; }
 };
+
+}
 
 void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -2346,6 +2350,8 @@ XclExpXFBuffer::XclExpBuiltInInfo::XclExpBuiltInInfo() :
 {
 }
 
+namespace {
+
 /** Predicate for search algorithm. */
 struct XclExpBorderPred
 {
@@ -2354,6 +2360,8 @@ struct XclExpBorderPred
     explicit     XclExpBorderPred( const XclExpCellBorder& rBorder ) : mrBorder( rBorder ) {}
     bool                operator()( const XclExpCellBorder& rBorder ) const;
 };
+
+}
 
 bool XclExpBorderPred::operator()( const XclExpCellBorder& rBorder ) const
 {
@@ -2377,6 +2385,8 @@ bool XclExpBorderPred::operator()( const XclExpCellBorder& rBorder ) const
         mrBorder.mnDiagColorId   == rBorder.mnDiagColorId;
 }
 
+namespace {
+
 struct XclExpFillPred
 {
     const XclExpCellArea&
@@ -2384,6 +2394,8 @@ struct XclExpFillPred
     explicit     XclExpFillPred( const XclExpCellArea& rFill ) : mrFill( rFill ) {}
     bool                operator()( const XclExpCellArea& rFill ) const;
 };
+
+}
 
 bool XclExpFillPred::operator()( const XclExpCellArea& rFill ) const
 {

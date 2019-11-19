@@ -60,6 +60,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
+namespace {
+
 class SwLinguIter
 {
     SwEditShell *pSh;
@@ -101,7 +103,11 @@ struct SpellContentPosition
     sal_Int32 nRight;
 };
 
+}
+
 typedef std::vector<SpellContentPosition>  SpellContentPositions;
+
+namespace {
 
 class SwSpellIter : public SwLinguIter
 {
@@ -171,6 +177,8 @@ public:
     void InsertSoftHyph( const sal_Int32 nHyphPos );
     void ShowSelection();
 };
+
+}
 
 static SwSpellIter* g_pSpellIter = nullptr;
 static SwConvIter*  g_pConvIter = nullptr;

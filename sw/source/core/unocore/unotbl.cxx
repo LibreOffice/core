@@ -1805,6 +1805,8 @@ void SwXTextTableCursor::Notify( const SfxHint& rHint )
 
 // SwXTextTable ===========================================================
 
+namespace {
+
 class SwTableProperties_Impl
 {
     SwUnoCursorHelper::SwAnyMapHelper aAnyMap;
@@ -1818,6 +1820,8 @@ public:
 
     void ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc);
 };
+
+}
 
 SwTableProperties_Impl::SwTableProperties_Impl()
     { }

@@ -448,11 +448,15 @@ static const char* const aImplKillTrailingWithExceptionsList[] =
     nullptr
 };
 
+namespace {
+
 struct ImplFontAttrWeightSearchData
 {
     const char*             mpStr;
     FontWeight const              meWeight;
 };
+
+}
 
 static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {
@@ -474,11 +478,15 @@ static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {   nullptr,                   WEIGHT_DONTKNOW },
 };
 
+namespace {
+
 struct ImplFontAttrWidthSearchData
 {
     const char*             mpStr;
     FontWidth const               meWidth;
 };
+
+}
 
 static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 {
@@ -495,11 +503,15 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 {   nullptr,                   WIDTH_DONTKNOW },
 };
 
+namespace {
+
 struct ImplFontAttrTypeSearchData
 {
     const char*             mpStr;
     ImplFontAttrs const           mnType;
 };
+
+}
 
 static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {
@@ -734,11 +746,15 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
     }
 }
 
+namespace {
+
 struct StrictStringSort
 {
     bool operator()( const FontNameAttr& rLeft, const FontNameAttr& rRight )
     { return rLeft.Name.compareTo( rRight.Name ) < 0; }
 };
+
+}
 
 // The entries in this table must match the bits in the ImplFontAttrs enum.
 
@@ -778,11 +794,15 @@ static const char* const pAttribNames[] =
     "other"
 };
 
+namespace {
+
 struct enum_convert
 {
     const char* pName;
     int const          nEnum;
 };
+
+}
 
 static const enum_convert pWeightNames[] =
 {

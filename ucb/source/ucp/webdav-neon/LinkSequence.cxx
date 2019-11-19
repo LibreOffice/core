@@ -36,6 +36,7 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
+namespace {
 
 struct LinkSequenceParseContext
 {
@@ -46,6 +47,8 @@ struct LinkSequenceParseContext
     LinkSequenceParseContext()
     : hasSource( false ), hasDestination( false ) {}
 };
+
+}
 
 #define STATE_TOP (1)
 

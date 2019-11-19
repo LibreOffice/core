@@ -33,6 +33,8 @@ using namespace ::com::sun::star;
 namespace stoc_impreg
 {
 
+namespace {
+
 struct Link
 {
     OUString const m_name;
@@ -43,6 +45,9 @@ struct Link
         , m_target( target )
         {}
 };
+
+}
+
 typedef ::std::vector< Link > t_links;
 
 

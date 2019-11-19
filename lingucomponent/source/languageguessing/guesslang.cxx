@@ -72,6 +72,8 @@ static osl::Mutex &  GetLangGuessMutex()
     return aMutex;
 }
 
+namespace {
+
 class LangGuess_Impl :
     public ::cppu::WeakImplHelper<
         XLanguageGuessing,
@@ -106,6 +108,8 @@ public:
     /// @throws RuntimeException
     void SetFingerPrintsDB( const OUString &fileName );
 };
+
+}
 
 LangGuess_Impl::LangGuess_Impl() :
     m_bInitialized( false )

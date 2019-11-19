@@ -51,6 +51,8 @@ public:
 
 };
 
+namespace {
+
 struct MockedSortTab : public SwTOXSortTabBase {
     MockedSortTab()
     : SwTOXSortTabBase(TOX_SORT_INDEX,nullptr,nullptr,nullptr) {}
@@ -62,6 +64,8 @@ struct MockedSortTab : public SwTOXSortTabBase {
         return 0;
     }
 };
+
+}
 
 void
 ToxTextGeneratorTest::EmptyStringIsReturnedForPageNumberPlaceholderOfZeroItems()
@@ -109,6 +113,8 @@ ToxTextGeneratorTest::EmptyStringIsReturnedAsNumStringIfToxSourcesIsEmpty()
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
 
+namespace {
+
 class MockedToxTabStopTokenHandler : public ToxTabStopTokenHandler {
 public:
     virtual HandledTabStopToken
@@ -139,6 +145,8 @@ private:
     SwChapterFieldType mChapterFieldType;
     SwChapterField mChapterField;
 };
+
+}
 
 void
 ToxTextGeneratorTest::ChapterNumberWithoutTextIsGeneratedForNoprepstTitle()

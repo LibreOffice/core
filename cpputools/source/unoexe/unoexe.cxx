@@ -223,6 +223,8 @@ static Reference< XInterface > loadComponent(
     return xInstance;
 }
 
+namespace {
+
 class OInstanceProvider
     : public WeakImplHelper< XInstanceProvider >
 {
@@ -259,6 +261,8 @@ public:
     // XInstanceProvider
     virtual Reference< XInterface > SAL_CALL getInstance( const OUString & rName ) override;
 };
+
+}
 
 inline Reference< XInterface > OInstanceProvider::createInstance()
 {
@@ -318,6 +322,8 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
         "no such element \"" + rName + "\"!" );
 }
 
+namespace {
+
 struct ODisposingListener : public WeakImplHelper< XEventListener >
 {
     Condition cDisposed;
@@ -327,6 +333,8 @@ struct ODisposingListener : public WeakImplHelper< XEventListener >
 
     static void waitFor( const Reference< XComponent > & xComp );
 };
+
+}
 
 void ODisposingListener::disposing( const EventObject & )
 {

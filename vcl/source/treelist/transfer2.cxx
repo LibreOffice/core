@@ -302,6 +302,7 @@ bool DropTargetHelper::IsDropFormatSupported( SotClipboardFormatId nFormat )
 
 // TransferDataContainer
 
+namespace {
 
 struct TDataCntnrEntry_Impl
 {
@@ -309,6 +310,7 @@ struct TDataCntnrEntry_Impl
     SotClipboardFormatId nId;
 };
 
+}
 
 typedef ::std::vector< TDataCntnrEntry_Impl > TDataCntnrEntryList;
 

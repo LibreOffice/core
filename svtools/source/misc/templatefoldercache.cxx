@@ -93,10 +93,17 @@ namespace svt
 
     //= TemplateContent
 
+    namespace {
+
     struct TemplateContent;
+
+    }
+
     typedef ::std::vector< ::rtl::Reference< TemplateContent > >    TemplateFolderContent;
     typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
     typedef TemplateFolderContent::iterator                 FolderIterator;
+
+    namespace {
 
     /** a struct describing one content in one of the template dirs (or at least it's relevant aspects)
     */
@@ -138,6 +145,7 @@ namespace svt
                                                         { m_aSubContents.push_back( _rxNewElement ); }
     };
 
+    }
 
     TemplateContent::TemplateContent( const INetURLObject& _rURL )
         :m_aURL( _rURL )
@@ -154,6 +162,7 @@ namespace svt
 
     //= stl helpers
 
+    namespace {
 
     /// compares two TemplateContent by URL
     struct TemplateContentURLLess
@@ -365,6 +374,7 @@ namespace svt
         }
     };
 
+    }
 
     //= TemplateFolderCacheImpl
 

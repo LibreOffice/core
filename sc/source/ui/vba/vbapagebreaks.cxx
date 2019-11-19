@@ -29,6 +29,8 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
+namespace {
+
 class RangePageBreaks : public ::cppu::WeakImplHelper<container::XIndexAccess >
 {
 private:
@@ -101,6 +103,8 @@ public:
         return true;
     }
 };
+
+}
 
 /** @TODO Unlike MS Excel this method only considers the pagebreaks that intersect the used range
 *  To become completely compatible the print area has to be considered. As far as I found out this printarea
@@ -184,6 +188,8 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before )
     return uno::makeAny( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
 }
 
+namespace {
+
 class RangePageBreaksEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference<container::XIndexAccess > m_xIndexAccess;
@@ -202,6 +208,8 @@ public:
         throw container::NoSuchElementException();
     }
 };
+
+}
 
 ScVbaHPageBreaks::ScVbaHPageBreaks( const uno::Reference< XHelperInterface >& xParent,
                                     const uno::Reference< uno::XComponentContext >& xContext,

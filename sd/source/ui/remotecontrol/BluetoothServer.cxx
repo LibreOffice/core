@@ -57,6 +57,8 @@ using namespace sd;
 
 #ifdef LINUX_BLUETOOTH
 
+namespace {
+
 struct DBusObject {
     OString maBusName;
     OString maPath;
@@ -82,6 +84,8 @@ struct DBusObject {
         return pObject;
     }
 };
+
+}
 
 static std::unique_ptr<DBusObject> getBluez5Adapter(DBusConnection *pConnection);
 

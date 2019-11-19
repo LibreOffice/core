@@ -55,6 +55,8 @@
 #define RWPROP_     0x4300  // mask Read/Write-Property
 #define CPROP_      0x4900  // mask for constant
 
+namespace {
+
 struct Methods {
     const char* pName;
     SbxDataType eType;
@@ -62,6 +64,8 @@ struct Methods {
     RtlCall     pFunc;
     sal_uInt16      nHash;
 };
+
+}
 
 static Methods aMethods[] = {
 

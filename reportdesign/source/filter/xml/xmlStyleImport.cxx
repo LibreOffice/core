@@ -44,6 +44,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
 
+namespace {
 
 class OSpecialHanldeXMLImportPropertyMapper : public SvXMLImportPropertyMapper
 {
@@ -64,6 +65,7 @@ public:
     }
 };
 
+}
 
 OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,

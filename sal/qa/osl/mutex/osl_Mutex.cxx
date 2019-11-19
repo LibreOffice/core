@@ -49,6 +49,8 @@ namespace ThreadHelper
 
 // Beginning of the test cases for osl_Mutex class
 
+namespace {
+
 /** mutually exclusive data
 */
 struct resource {
@@ -228,6 +230,8 @@ protected:
         pGlobalMutex->release( );
     }
 };
+
+}
 
 namespace osl_Mutex
 {
@@ -524,6 +528,8 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::getGlobalMutex, "osl_Mutex");
 
 // Beginning of the test cases for osl_Guard class
 
+namespace {
+
 class GuardThread : public Thread
 {
 public:
@@ -544,6 +550,8 @@ protected:
         ThreadHelper::thread_sleep_tenth_sec( 2 );
     }
 };
+
+}
 
 namespace osl_Guard
 {
@@ -607,6 +615,8 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Guard::ctor, "osl_Guard");
 
 // Beginning of the test cases for osl_ClearableGuard class
 
+namespace {
+
 /** Thread for test ClearableGuard
  */
 class ClearGuardThread : public Thread
@@ -634,6 +644,8 @@ protected:
         ThreadHelper::thread_sleep( 2 );
     }
 };
+
+}
 
 namespace osl_ClearableGuard
 {
@@ -748,6 +760,8 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_ClearableGuard::clear, "osl_Clearable
 
 // Beginning of the test cases for osl_ResettableGuard class
 
+namespace {
+
 /** Thread for test ResettableGuard
  */
 class ResetGuardThread : public Thread
@@ -773,6 +787,8 @@ protected:
         ThreadHelper::thread_sleep_tenth_sec( 2 );
     }
 };
+
+}
 
 namespace osl_ResettableGuard
 {

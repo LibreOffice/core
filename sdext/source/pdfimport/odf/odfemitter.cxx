@@ -31,6 +31,8 @@ using namespace com::sun::star;
 namespace pdfi
 {
 
+namespace {
+
 class OdfEmitter : public XmlEmitter
 {
 private:
@@ -45,6 +47,8 @@ public:
     virtual void write( const OUString& rString ) override;
     virtual void endTag( const char* pTag ) override;
 };
+
+}
 
 OdfEmitter::OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput ) :
     m_xOutput( xOutput ),

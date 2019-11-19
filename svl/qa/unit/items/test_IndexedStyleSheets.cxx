@@ -20,6 +20,8 @@
 
 using namespace svl;
 
+namespace {
+
 class MockedStyleSheet : public SfxStyleSheetBase
 {
     public:
@@ -34,6 +36,8 @@ struct DummyPredicate : public StyleSheetPredicate {
         return true;
     }
 };
+
+}
 
 class IndexedStyleSheetsTest : public CppUnit::TestFixture
 {

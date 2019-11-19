@@ -266,12 +266,16 @@ static OUString CreateMD5FromString( const OUString& aMsg )
     return OUString();
 }
 
+namespace {
+
 class ProcessEventsClass_Impl
 {
 public:
     DECL_STATIC_LINK( ProcessEventsClass_Impl, CallEvent, void*, void );
     DECL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, void );
 };
+
+}
 
 IMPL_STATIC_LINK( ProcessEventsClass_Impl, CallEvent, void*, pEvent, void )
 {
@@ -1300,12 +1304,16 @@ static void AddConversionsToDispatchList(
     }
 }
 
+namespace {
+
 struct ConditionSetGuard
 {
     osl::Condition* m_pCondition;
     ConditionSetGuard(osl::Condition* pCondition) : m_pCondition(pCondition) {}
     ~ConditionSetGuard() { if (m_pCondition) m_pCondition->set(); }
 };
+
+}
 
 bool RequestHandler::ExecuteCmdLineRequests(
     ProcessDocumentsRequest& aRequest, bool noTerminate)

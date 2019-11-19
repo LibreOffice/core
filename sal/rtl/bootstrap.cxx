@@ -55,10 +55,10 @@
 using osl::DirectoryItem;
 using osl::FileStatus;
 
-struct Bootstrap_Impl;
-
 namespace
 {
+
+struct Bootstrap_Impl;
 
 static char const VND_SUN_STAR_PATHNAME[] = "vnd.sun.star.pathname:";
 
@@ -111,8 +111,6 @@ OUString recursivelyExpandMacros(
     return expandMacros(file, text, mode, &link);
 }
 
-} // end namespace
-
 struct rtl_bootstrap_NameValue
 {
     OUString sName;
@@ -125,6 +123,8 @@ struct rtl_bootstrap_NameValue
           sValue( value )
         {}
 };
+
+} // end namespace
 
 typedef std::vector<rtl_bootstrap_NameValue> NameValueVector;
 
@@ -281,6 +281,8 @@ static void EnsureNoFinalSlash (OUString & url)
         url = url.copy(0, i - 1);
 }
 
+namespace {
+
 struct Bootstrap_Impl
 {
     sal_Int32 _nRefCount;
@@ -312,6 +314,8 @@ struct Bootstrap_Impl
         Bootstrap_Impl const * requestFile, OUString const & requestKey,
         ExpandRequestLink const * requestStack) const;
 };
+
+}
 
 Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     : _nRefCount( 0 ),

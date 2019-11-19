@@ -174,6 +174,8 @@ static bool lcl_SearchAttr( const SwTextNode& rTextNd, SwPaM& rPam,
     return false;
 }
 
+namespace {
+
 /// search for multiple text attributes
 struct SwSrchChrAttr
 {
@@ -220,6 +222,8 @@ public:
     bool SetAttrFwd( const SwTextAttr& rAttr );
     bool SetAttrBwd( const SwTextAttr& rAttr );
 };
+
+}
 
 SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
                                 bool bNoCollections )
@@ -1200,6 +1204,8 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
     return bFound;
 }
 
+namespace {
+
 /// parameters for search for attributes
 struct SwFindParaAttr : public SwFindParas
 {
@@ -1226,6 +1232,8 @@ struct SwFindParaAttr : public SwFindParas
     virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly) override;
     virtual bool IsReplaceMode() const override;
 };
+
+}
 
 int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
         const SwPaM & rRegion, bool bInReadOnly)

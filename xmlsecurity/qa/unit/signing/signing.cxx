@@ -1198,6 +1198,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                    SignatureState::NOSIGNATURES, ODFVER_012_TEXT);
 }
 
+namespace
+{
 class Resetter
 {
 private:
@@ -1221,6 +1223,7 @@ public:
         }
     }
 };
+}
 
 /// Test if a macro signature from a OTT 1.0 template is preserved for ODT 1.0
 CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)

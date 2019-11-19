@@ -31,6 +31,7 @@
 
 using namespace com::sun::star;
 
+namespace {
 
 class ImplPairDephAndObject
 {
@@ -54,6 +55,7 @@ public:
     const E3dCompoundObject* getObject() const { return mpObject; }
 };
 
+}
 
 static void getAllHit3DObjectWithRelativePoint(
     const basegfx::B3DPoint& rFront,

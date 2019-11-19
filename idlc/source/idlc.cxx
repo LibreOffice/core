@@ -282,6 +282,8 @@ static void lcl_writeString(::osl::File & rFile, ::osl::FileBase::RC & o_rRC,
     }
 }
 
+namespace {
+
 struct WriteDep
 {
     ::osl::File& m_rFile;
@@ -309,6 +311,8 @@ struct WriteDummy
         lcl_writeString(m_rFile, m_rRC, ":\n\n");
     }
 };
+
+}
 
 bool
 Idlc::dumpDeps(OString const& rDepFile, OString const& rTarget)

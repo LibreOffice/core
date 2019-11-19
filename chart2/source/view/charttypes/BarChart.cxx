@@ -385,6 +385,8 @@ void BarChart::addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 zSlot,
     VSeriesPlotter::addSeries( std::move(pSeries), zSlot, xSlot, ySlot );
 }
 
+namespace {
+
 //better performance for big data
 struct FormerBarPoint
 {
@@ -404,6 +406,8 @@ struct FormerBarPoint
     double m_fLowerY;
     double m_fZ;
 };
+
+}
 
 void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
 {

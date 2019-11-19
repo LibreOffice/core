@@ -35,6 +35,8 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
+namespace {
+
 class ChartObjectEnumerationImpl : public EnumerationHelperImpl
 {
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier;
@@ -75,6 +77,8 @@ public:
         return ret;
     }
 };
+
+}
 
 ScVbaChartObjects::ScVbaChartObjects( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier ) : ChartObjects_BASE(_xParent, _xContext, css::uno::Reference< css::container::XIndexAccess >( _xTableCharts, css::uno::UNO_QUERY ) ), xTableCharts( _xTableCharts ) , xDrawPageSupplier( _xDrawPageSupplier )
 {

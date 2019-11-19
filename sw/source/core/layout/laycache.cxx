@@ -944,6 +944,8 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
     return bRet;
 }
 
+namespace {
+
 struct SdrObjectCompare
 {
   bool operator()( const SdrObject* pF1, const SdrObject* pF2 ) const
@@ -959,6 +961,8 @@ struct FlyCacheCompare
     return pC1->nOrdNum < pC2->nOrdNum;
   }
 };
+
+}
 
 /**
  * If a new page is inserted, the last page is analysed.

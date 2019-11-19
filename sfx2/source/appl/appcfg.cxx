@@ -76,6 +76,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 
+namespace {
 
 class SfxEventAsyncer_Impl : public SfxListener
 {
@@ -89,6 +90,7 @@ public:
     DECL_LINK( IdleHdl, Timer*, void );
 };
 
+}
 
 void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {

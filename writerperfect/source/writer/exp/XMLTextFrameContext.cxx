@@ -22,6 +22,8 @@ namespace writerperfect
 {
 namespace exp
 {
+namespace
+{
 /// Handler for <draw:text-box>.
 class XMLTextBoxContext : public XMLImportContext
 {
@@ -37,6 +39,7 @@ public:
                  const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL endElement(const OUString& rName) override;
 };
+}
 
 XMLTextBoxContext::XMLTextBoxContext(XMLImport& rImport)
     : XMLImportContext(rImport)
@@ -61,6 +64,8 @@ void XMLTextBoxContext::endElement(const OUString& /*rName*/)
     GetImport().GetGenerator().closeTextBox();
 }
 
+namespace
+{
 /// Handler for <draw:image>.
 class XMLTextImageContext : public XMLImportContext
 {
@@ -80,6 +85,7 @@ private:
     OString m_aMimeType;
     rtl::Reference<XMLBase64ImportContext> m_xBinaryData;
 };
+}
 
 XMLTextImageContext::XMLTextImageContext(XMLImport& rImport)
     : XMLImportContext(rImport)

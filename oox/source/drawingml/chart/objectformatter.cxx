@@ -570,6 +570,8 @@ void lclConvertPictureOptions( FillProperties& orFillProps, const PictureOptions
 
 struct ObjectFormatterData;
 
+namespace {
+
 class DetailFormatterBase
 {
 public:
@@ -699,6 +701,8 @@ private:
     ModelObjectHelper&  mrModelObjHelper;   /// Helper for named drawing formatting.
     const ObjectTypeFormatEntry& mrEntry;   /// Additional settings.
 };
+
+}
 
 struct ObjectFormatterData
 {

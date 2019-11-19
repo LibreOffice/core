@@ -51,6 +51,8 @@ using namespace ::cppu;
 
 typedef std::vector<std::unique_ptr<SfxItemSet>> ItemPoolVector;
 
+namespace {
+
 class SvxUnoMarkerTable : public WeakImplHelper< container::XNameContainer, lang::XServiceInfo >,
                           public SfxListener
 {
@@ -92,6 +94,8 @@ public:
     virtual uno::Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 };
+
+}
 
 SvxUnoMarkerTable::SvxUnoMarkerTable( SdrModel* pModel ) throw()
 : mpModel( pModel ),

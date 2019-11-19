@@ -32,6 +32,8 @@
 using namespace ::com::sun::star;
 using namespace ::cppu;
 
+namespace {
+
 class SvxUnoTransGradientTable : public SvxUnoNameItemTable
 {
 public:
@@ -46,6 +48,8 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override;
 };
+
+}
 
 SvxUnoTransGradientTable::SvxUnoTransGradientTable( SdrModel* pModel ) throw()
 : SvxUnoNameItemTable( pModel, XATTR_FILLFLOATTRANSPARENCE, MID_FILLGRADIENT )

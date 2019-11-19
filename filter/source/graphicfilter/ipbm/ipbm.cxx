@@ -26,6 +26,8 @@
 
 //============================ PBMReader ==================================
 
+namespace {
+
 class PBMReader {
 
 private:
@@ -48,6 +50,8 @@ public:
     explicit PBMReader(SvStream & rPBM);
     bool                ReadPBM(Graphic & rGraphic );
 };
+
+}
 
 //=================== Methods of PBMReader ==============================
 

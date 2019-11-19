@@ -106,6 +106,8 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 #define THROW_WHERE ""
 #endif
 
+namespace {
+
 class ActiveDataStreamer : public ::cppu::WeakImplHelper< XActiveDataStreamer >
 {
     uno::Reference< XStream > mStream;
@@ -135,6 +137,8 @@ class DummyInputStream : public ::cppu::WeakImplHelper< XInputStream >
     virtual void SAL_CALL closeInput() override
         {}
 };
+
+}
 
 ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
 : m_aMutexHolder( new comphelper::RefCountedMutex )

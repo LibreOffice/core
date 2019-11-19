@@ -82,6 +82,8 @@ SAL_IMPLEMENT_MAIN()
     return 0;
 }
 
+namespace {
+
 class MyWin : public WorkWindow
 {
     Bitmap      m_aBitmap;
@@ -90,6 +92,8 @@ public:
 
     virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
 };
+
+}
 
 void Main()
 {

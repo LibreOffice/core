@@ -1433,6 +1433,8 @@ void RtfExport::WriteHeaderFooter(const SwFrameFormat& rFormat, bool bHeader, co
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
 
+namespace
+{
 /// Glue class to call RtfExport as an internal filter, needed by copy&paste support.
 class SwRTFWriter : public Writer
 {
@@ -1444,6 +1446,7 @@ public:
 
     ErrCode WriteStream() override;
 };
+}
 
 SwRTFWriter::SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL)
 {

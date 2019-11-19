@@ -57,6 +57,8 @@ using namespace ::com::sun::star;
 
 static bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
 
+namespace {
+
 // SwTableLine::ChgFrameFormat may delete old format which doesn't have writer listeners anymore.
 // This may invalidate my pointers, and lead to use-after-free. For this reason, I register myself
 // as a writer listener for the old format here, and take care to delete formats without listeners
@@ -74,6 +76,8 @@ private:
     SwFrameFormat *pOld, *pNew;
     sal_Int16 const nType;
 };
+
+}
 
 SwTableFormatCmp::SwTableFormatCmp( SwFrameFormat *pO, SwFrameFormat *pN, sal_Int16 nT )
     : pOld ( pO ), pNew ( pN ), nType( nT )
@@ -174,6 +178,8 @@ static bool lcl_IsAnLower( const SwTableLine *pLine, const SwTableLine *pAssumed
     return false;
 }
 
+namespace {
+
 struct LinesAndTable
 {
     std::vector<SwTableLine*> &m_rLines;
@@ -183,6 +189,8 @@ struct LinesAndTable
     LinesAndTable(std::vector<SwTableLine*> &rL, const SwTable &rTable) :
           m_rLines(rL), m_rTable(rTable), m_bInsertLines(true) {}
 };
+
+}
 
 static bool FindLine_( FndLine_ & rLine, LinesAndTable* pPara );
 

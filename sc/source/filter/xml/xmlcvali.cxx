@@ -33,6 +33,8 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 using namespace ::formula;
 
+namespace {
+
 class ScXMLContentValidationContext : public ScXMLImportContext
 {
     OUString      sName;
@@ -135,6 +137,8 @@ public:
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
+
+}
 
 ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport )

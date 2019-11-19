@@ -64,6 +64,8 @@ static bool lcl_IsDropFlyInter( const SwTextFormatInfo &rInf,
     return false;
 }
 
+namespace {
+
 class SwDropSave
 {
     SwTextPaintInfo* pInf;
@@ -76,6 +78,8 @@ public:
     explicit SwDropSave( const SwTextPaintInfo &rInf );
     ~SwDropSave();
 };
+
+}
 
 SwDropSave::SwDropSave( const SwTextPaintInfo &rInf ) :
         pInf( const_cast<SwTextPaintInfo*>(&rInf) ), nIdx( rInf.GetIdx() ),

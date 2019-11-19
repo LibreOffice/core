@@ -296,6 +296,9 @@ namespace pcr
 
     typedef ::cppu::WeakImplHelper <   css::container::XNameReplace
                                     >   EventHolder_Base;
+
+    namespace {
+
     /* A UNO component holding assigned event descriptions, for use with a SvxMacroAssignDlg */
     class EventHolder : public EventHolder_Base
     {
@@ -331,6 +334,7 @@ namespace pcr
         ScriptEventDescriptor const & impl_getDescriptor_throw( const OUString& _rEventName ) const;
     };
 
+    }
 
     EventHolder::EventHolder()
     {

@@ -88,6 +88,8 @@ struct WW8_PdAttrDesc
         { }
 };
 
+namespace {
+
 struct WW8_SED
 {
     SVBT16 aBits1;      // orientation change + internal, Default: 6
@@ -98,6 +100,8 @@ struct WW8_SED
                         // Default: 0xffffffff ( nothing )
                         //  cbSED is 12 (decimal)), C (hex).
 };
+
+}
 
 // class WW8_WrPlc0 is only used for header and footer positioning
 // ie there is no content support structure

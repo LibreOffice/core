@@ -30,6 +30,8 @@
 
 #include "list.h"
 
+namespace {
+
 /*- private data types */
 struct lnode {
     struct lnode *next;
@@ -38,6 +40,8 @@ struct lnode {
     void *value;
 
 };
+
+}
 
 struct list_ {
     lnode *head, *tail, *cptr;

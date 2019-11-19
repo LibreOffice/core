@@ -104,9 +104,15 @@ using namespace ::ucbhelper;
 
 #define COMMAND_TRANSFER        "transfer"
 
+namespace {
+
 class RegionData_Impl;
 
+}
+
 namespace DocTempl {
+
+namespace {
 
 class DocTempl_EntryData_Impl
 {
@@ -140,8 +146,11 @@ public:
 
 }
 
+}
+
 using namespace ::DocTempl;
 
+namespace {
 
 class RegionData_Impl
 {
@@ -179,6 +188,7 @@ public:
     int                 Compare( RegionData_Impl const * pCompareWith ) const;
 };
 
+}
 
 class SfxDocTemplate_Impl : public SvRefBase
 {
@@ -229,6 +239,7 @@ public:
     const uno::Reference< XDocumentTemplates >& getDocTemplates() const { return mxTemplates; }
 };
 
+namespace {
 
 class DocTemplLocker_Impl
 {
@@ -245,6 +256,8 @@ public:
         m_aDocTempl.DecrementLock();
     }
 };
+
+}
 
 static SfxDocTemplate_Impl *gpTemplateData = nullptr;
 

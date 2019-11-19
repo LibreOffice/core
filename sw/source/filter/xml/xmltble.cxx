@@ -84,6 +84,8 @@ public:
     sal_uInt32 GetRelWidth() const { return nRelWidth; }
 };
 
+namespace {
+
 struct SwXMLTableColumnCmpWidth_Impl
 {
     bool operator()( SwXMLTableColumn_Impl* const& lhs, SwXMLTableColumn_Impl* const& rhs ) const
@@ -97,6 +99,8 @@ struct SwXMLTableColumnCmpWidth_Impl
 
 class SwXMLTableColumns_Impl : public o3tl::sorted_vector<std::unique_ptr<SwXMLTableColumn_Impl>, o3tl::less_uniqueptr_to<SwXMLTableColumn_Impl> > {
 };
+
+}
 
 class SwXMLTableColumnsSortByWidth_Impl : public o3tl::sorted_vector<SwXMLTableColumn_Impl*, SwXMLTableColumnCmpWidth_Impl> {};
 

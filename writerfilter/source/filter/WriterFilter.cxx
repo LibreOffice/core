@@ -83,6 +83,8 @@ static OUString lcl_GetExceptionMessageRec(xml::sax::SAXException const& e)
     return OUString();
 }
 
+namespace {
+
 /// Common DOCX filter, calls DocxExportFilter via UNO or does the DOCX import.
 class WriterFilter : public cppu::WeakImplHelper
     <
@@ -120,6 +122,8 @@ public:
     sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescriptor)
 {

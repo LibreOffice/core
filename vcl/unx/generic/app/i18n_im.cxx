@@ -40,6 +40,8 @@ using namespace vcl;
 // kinput2 IME needs special key handling since key release events are filtered in
 // preeditmode and XmbResetIC does not work
 
+namespace {
+
 class XKeyEventOp : public XKeyEvent
 {
     private:
@@ -52,6 +54,8 @@ class XKeyEventOp : public XKeyEvent
         void            erase ();
         bool            match (const XKeyEvent &rEvent) const;
 };
+
+}
 
 void
 XKeyEventOp::init()

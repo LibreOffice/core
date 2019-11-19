@@ -36,6 +36,8 @@
 
 using namespace ::com::sun::star::i18n;
 
+namespace {
+
 // The information encapsulated in SwCapitalInfo is required
 // by the ::Do functions. They contain the information about
 // the original string, whereas rDo.GetInf() contains information
@@ -49,6 +51,8 @@ public:
     TextFrameIndex nIdx;
     TextFrameIndex nLen;
 };
+
+}
 
 // rFnt: required for CalcCaseMap
 // rOrigString: The original string
@@ -105,6 +109,8 @@ public:
     void SetCapInf( SwCapitalInfo& rNew ) { pCapInf = &rNew; }
 };
 
+namespace {
+
 class SwDoGetCapitalSize : public SwDoCapitals
 {
 protected:
@@ -116,6 +122,8 @@ public:
     virtual void Do() override;
     const Size &GetSize() const { return aTextSize; }
 };
+
+}
 
 void SwDoGetCapitalSize::Init( SwFntObj *, SwFntObj * )
 {
@@ -152,6 +160,8 @@ Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
     return aTextSize;
 }
 
+namespace {
+
 class SwDoGetCapitalBreak : public SwDoCapitals
 {
 protected:
@@ -169,6 +179,8 @@ public:
     virtual void Do() override;
     TextFrameIndex getBreak() const { return m_nBreak; }
 };
+
+}
 
 void SwDoGetCapitalBreak::Init( SwFntObj *, SwFntObj * )
 {
@@ -231,6 +243,8 @@ TextFrameIndex SwFont::GetCapitalBreak( SwViewShell const * pSh, const OutputDev
     return aDo.getBreak();
 }
 
+namespace {
+
 class SwDoDrawCapital : public SwDoCapitals
 {
 protected:
@@ -245,6 +259,8 @@ public:
     virtual void Do() override;
     void DrawSpace( Point &rPos );
 };
+
+}
 
 void SwDoDrawCapital::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
 {
@@ -313,6 +329,8 @@ void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
     DoOnCapitals( aDo );
 }
 
+namespace {
+
 class SwDoCapitalCursorOfst : public SwDoCapitals
 {
 protected:
@@ -330,6 +348,8 @@ public:
 
     TextFrameIndex GetCursor() const { return nCursor; }
 };
+
+}
 
 void SwDoCapitalCursorOfst::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
 {
@@ -386,6 +406,8 @@ TextFrameIndex SwSubFont::GetCapitalCursorOfst( SwDrawTextInfo& rInf )
     return aDo.GetCursor();
 }
 
+namespace {
+
 class SwDoDrawStretchCapital : public SwDoDrawCapital
 {
     const TextFrameIndex nStrLen;
@@ -401,6 +423,8 @@ public:
               nOrgWidth( rInfo.GetWidth() )
         { }
 };
+
+}
 
 void SwDoDrawStretchCapital::Do()
 {

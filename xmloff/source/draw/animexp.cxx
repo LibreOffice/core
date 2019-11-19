@@ -47,15 +47,19 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
 using namespace ::xmloff::token;
 
+namespace {
 
-const struct Effect
+struct Effect
 {
     XMLEffect const meKind;
     XMLEffectDirection const meDirection;
     sal_Int16 const mnStartScale;
     bool const mbIn;
+};
+
 }
-    AnimationEffectMap[] =
+
+const Effect AnimationEffectMap[] =
 {
     { EK_none, ED_none,             -1, true }, // AnimationEffect_NONE
     { EK_fade, ED_from_left,        -1, true }, // AnimationEffect_FADE_FROM_LEFT
@@ -196,8 +200,6 @@ enum XMLActionKind
     XMLE_PLAY
 };
 
-}
-
 struct XMLEffectHint
 {
     XMLActionKind   meKind;
@@ -223,6 +225,8 @@ struct XMLEffectHint
         mnPresId( 0 )
         {}
 };
+
+}
 
 class AnimExpImpl
 {

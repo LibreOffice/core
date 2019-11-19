@@ -171,6 +171,8 @@ static void reschedule()
     }
 }
 
+namespace {
+
 class SfxStatusIndicator : public ::cppu::WeakImplHelper< task::XStatusIndicator, lang::XEventListener >
 {
 friend class SfxBaseController;
@@ -200,6 +202,8 @@ public:
 
     virtual void SAL_CALL   disposing( const lang::EventObject& Source ) override;
 };
+
+}
 
 void SAL_CALL SfxStatusIndicator::start(const OUString& aText, sal_Int32 nRange)
 {
@@ -289,6 +293,7 @@ void SAL_CALL SfxStatusIndicator::disposing( const lang::EventObject& /*Source*/
 
 //  declaration IMPL_SfxBaseController_ListenerHelper
 
+namespace {
 
 class IMPL_SfxBaseController_ListenerHelper : public ::cppu::WeakImplHelper< frame::XFrameActionListener >
 {
@@ -318,6 +323,8 @@ private:
     SfxBaseController* const      m_pController;
 
 } ; // class IMPL_SfxBaseController_ListenerContainer
+
+}
 
 IMPL_SfxBaseController_CloseListenerHelper::IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController )
         : m_pController ( pController   )

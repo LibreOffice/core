@@ -25,12 +25,18 @@ using namespace ::xmloff::token;
 
 // note: keep this in sync with the list of conditions in sw/source/uibase/chrdlg/ccoll.cxx
 
-static const struct ConditionMap
+namespace {
+
+struct ConditionMap
 {
         char const* aInternal;
         XMLTokenEnum const nExternal;
         int const         aValue;
-} g_ConditionMap[] =
+};
+
+}
+
+static const ConditionMap g_ConditionMap[] =
 {
     { "TableHeader",            XML_TABLE_HEADER,   -1 },
     { "Table",                  XML_TABLE,          -1 },

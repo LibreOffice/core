@@ -64,6 +64,8 @@ namespace accessibility
 {
     typedef std::vector< beans::PropertyValue > PropertyValueVector;
 
+    namespace {
+
     class PropertyValueEqualFunctor
     {
         const beans::PropertyValue& m_rPValue;
@@ -77,6 +79,9 @@ namespace accessibility
             return ( m_rPValue.Name == rhs.Name && m_rPValue.Value == rhs.Value );
         }
     };
+
+    }
+
     sal_Unicode const cNewLine(0x0a);
 
 

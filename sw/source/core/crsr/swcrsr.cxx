@@ -58,6 +58,8 @@ using namespace ::com::sun::star::i18n;
 
 static const sal_uInt16 coSrchRplcThreshold = 60000;
 
+namespace {
+
 struct PercentHdl
 {
     SwDocShell* const pDSh;
@@ -114,6 +116,8 @@ struct PercentHdl
             ::SetProgressState( bBack ? nActPos - nPos : nPos, pDSh );
         }
 };
+
+}
 
 SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing )
     : SwPaM( rPos, pRing )

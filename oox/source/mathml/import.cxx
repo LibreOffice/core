@@ -28,6 +28,8 @@ FormulaImportBase::FormulaImportBase()
 
 namespace formulaimport {
 
+namespace {
+
 class LazyMathBufferingContext : public core::ContextHandler
 {
 private:
@@ -46,6 +48,8 @@ public:
     virtual void SAL_CALL characters(const OUString& rChars) override;
 
 };
+
+}
 
 LazyMathBufferingContext::LazyMathBufferingContext(
         core::ContextHandler const& rParent, drawingml::TextParagraph & rPara)

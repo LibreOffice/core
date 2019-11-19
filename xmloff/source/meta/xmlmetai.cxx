@@ -39,6 +39,8 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
 /// builds a DOM tree from SAX events, by forwarding to SAXDocumentBuilder
 class XMLDocumentBuilderContext : public SvXMLImportContext
 {
@@ -66,6 +68,8 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 };
+
+}
 
 XMLDocumentBuilderContext::XMLDocumentBuilderContext(SvXMLImport& rImport,
         sal_Int32 /*nElement*/, const uno::Reference<xml::sax::XFastAttributeList>&,

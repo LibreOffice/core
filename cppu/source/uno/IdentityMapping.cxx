@@ -28,6 +28,8 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
 struct IdentityMapping : public uno_Mapping
 {
     sal_Int32        m_nRef;
@@ -35,6 +37,8 @@ struct IdentityMapping : public uno_Mapping
 
     explicit IdentityMapping(uno::Environment const & rEnv);
 };
+
+}
 
 extern "C"
 {
