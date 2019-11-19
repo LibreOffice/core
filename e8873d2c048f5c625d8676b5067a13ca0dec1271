@@ -46,6 +46,30 @@
       "revId": "e8873d2c048f5c625d8676b5067a13ca0dec1271",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_6dfac475",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-19T07:59:53Z",
+      "side": 1,
+      "message": "Ah, I wouldn\u0027t easily guess - would like that be mentioned in the commit message.",
+      "parentUuid": "7f7f9b97_6dcc046a",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "e8873d2c048f5c625d8676b5067a13ca0dec1271",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
