@@ -1200,7 +1200,8 @@ void RtfAttributeOutput::PageBreakBefore(bool bBreak)
     }
 }
 
-void RtfAttributeOutput::SectionBreak(sal_uInt8 nC, const WW8_SepInfo* pSectionInfo)
+void RtfAttributeOutput::SectionBreak(sal_uInt8 nC, bool /*bBreakAfter*/,
+                                      const WW8_SepInfo* pSectionInfo)
 {
     switch (nC)
     {

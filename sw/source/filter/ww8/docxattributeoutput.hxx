@@ -270,7 +270,8 @@ public:
 
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
-    virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = nullptr ) override;
+    /// bBreakAfter: the break must be scheduled for insertion in the end of current paragraph
+    virtual void SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo = nullptr ) override;
 
     // preserve DOCX page vertical alignment
     virtual void TextVerticalAdjustment( const css::drawing::TextVerticalAdjust ) override;
@@ -840,6 +841,9 @@ private:
     // Remember that a page break has to be opened at the
     // beginning of the next paragraph
     bool m_bPostponedPageBreak;
+
+    // This paragraph must end with page break
+    bool m_bPageBreakAfter = false;
 
     std::vector<ww8::Frame> m_aFramesOfParagraph;
     std::set<const SwFrameFormat*> m_aFloatingTablesOfParagraph;

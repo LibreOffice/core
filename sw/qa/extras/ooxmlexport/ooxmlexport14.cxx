@@ -168,6 +168,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128820, "tdf128820.fodt")
                 "a:graphic/a:graphicData/wpg:wgp/wps:wsp");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128889, "tdf128889.fodt")
+{
+    xmlDocPtr pXml = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXml);
+    // There was an w:r (with w:br) as an invalid child of first paragraph's w:pPr
+    assertXPath(pXml, "/w:document/w:body/w:p[1]/w:pPr/w:r", 0);
+    assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r", 2);
+    // Check that the break is in proper - last - position
+    assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
