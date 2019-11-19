@@ -2184,6 +2184,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineNumberInNumbering)
     assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[not(@color='#000000')]", 6);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125300)
+{
+    SwDoc* pDoc = createDoc("tdf125300.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Keep line spacing before bottom cell border (it was 1892)
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[5]/polyline/point[@y='2092']", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116830)
 {
     SwDoc* pDoc = createDoc("tdf116830.odt");
