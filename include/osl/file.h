@@ -1298,7 +1298,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectoryPath(
     @retval osl_File_E_IO on I/O errors
     @retval osl_File_E_BUSY device or resource busy
     @retval osl_File_E_INTR function call was interrupted
-    @retval osl_File_E_LOOP too many symbolic links encountered
     @retval osl_File_E_MULTIHOP multihop attempted
     @retval osl_File_E_NOLINK link has been severed
     @retval osl_File_E_TXTBSY text file busy
