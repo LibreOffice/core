@@ -54,6 +54,7 @@
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <editeng/outlobj.hxx>
@@ -354,6 +355,14 @@ namespace
                 rInfo.mbFilled,
                 rInfo.mnWidthToFill,
                 aTextFillColor);
+        }
+
+        if (aFontColor.GetTransparency() != 0)
+        {
+            // Handle semi-transparent text for both the decorated and simple case here.
+            pNewPrimitive = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                drawinglayer::primitive2d::Primitive2DContainer{ pNewPrimitive },
+                aFontColor.GetTransparency() / 255.0);
         }
 
         if(rInfo.mbEndOfBullet)
