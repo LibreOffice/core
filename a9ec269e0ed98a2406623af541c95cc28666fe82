@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_0d7a3087",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-20T06:22:23Z",
+      "side": 1,
+      "message": "Yes - even though it might NOT be technically correct to allow all of the radioboxes to be unchecked by default, I wouldn\u0027t want to change the current behaviour and force one to be checked without any user involvement. However, once the user has entered a radio group (which likely forces the enter point to be checked) I expect that one radiobutton must always be checked from that point onwards - and no ability to return to a state where all of them are unchecked.",
+      "parentUuid": "7f7f9b97_442fa8a0",
+      "range": {
+        "startLine": 18,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_384dfa99",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "My error. What I tried to describe is the case, that you can tab into and out of a option group without doing a selection. Currently you can\u0027t even tab into the group to select anything.",
       "parentUuid": "7f7f9b97_384dfa99",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 20,
+        "endChar": 42
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_8d65e0e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-20T06:22:23Z",
+      "side": 1,
+      "message": "I would not let a user tab out of a group without any selection being made. As soon as a user accesses a radio group, they should be forced to set a valid response.",
+      "parentUuid": "7f7f9b97_642ae490",
       "range": {
         "startLine": 20,
         "startChar": 26,
@@ -213,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_ad7e9c68",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-20T06:22:23Z",
+      "side": 1,
+      "message": "I think the current situation of auto-selecting the first radio-button (when all default to unchecked) is perfect.",
+      "parentUuid": "7f7f9b97_241e2c70",
+      "range": {
+        "startLine": 23,
+        "startChar": 51,
+        "endLine": 23,
+        "endChar": 61
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_98552e20",
         "filename": "vcl/source/control/button.cxx",
         "patchSetId": 1
@@ -253,6 +325,75 @@
         "startChar": 44,
         "endLine": 1815,
         "endChar": 50
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_0609addb",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1819,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-20T06:22:23Z",
+      "side": 1,
+      "message": "if IsChecked(), you want to break I THINK;  Otherwise you only check if the last button is checked.",
+      "range": {
+        "startLine": 1819,
+        "startChar": 12,
+        "endLine": 1819,
+        "endChar": 24
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e60591c3",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1825,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-20T06:22:23Z",
+      "side": 1,
+      "message": "check this first.  If IsChecked, then the group does not need to be evaluated. Set WB_TABSTOP, then call uncheckallothers if RadioCheckEnabled.",
+      "range": {
+        "startLine": 1825,
+        "startChar": 4,
+        "endLine": 1825,
+        "endChar": 47
+      },
+      "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_b0283334",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1826,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-20T06:22:23Z",
+      "side": 1,
+      "message": "Be careful here - you can hit an infinite loop when ImplUncheckAllOther adds WB_TABSTOP to the nStyle but it isn\u0027t set on the copy of nStyle used here.\nI imagine this scenario: another button is checked and so is this one (which can easily happen as the group is being built up one by one). So this function will not set WB_TABSTOP, but ImplUncheckAllOther will set the WB_TABSTOP. Then we return this nStyle (which still doesn\u0027t have WB_TABSTOP) and so a StateChanged occurs and it loops again. \nIn summary, mnStyle in ImplUncheckAllOther is different from this nStyle - so don\u0027t make the same mistake I made in thinking that changing one changed the other...\n\nmultichecked grammalect extension (attachment 152284 from bug 125609 comment 12) crashes due to statechanged loop.",
+      "range": {
+        "startLine": 1826,
+        "startChar": 27,
+        "endLine": 1826,
+        "endChar": 29
       },
       "revId": "a9ec269e0ed98a2406623af541c95cc28666fe82",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
