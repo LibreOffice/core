@@ -188,7 +188,7 @@ void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> const& xProp
 }
 
 void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
-                                 const OUString& aKey, const OUString& aValue)
+                                 const OUString& aKey, const OUString& aValue) const
 {
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     sal_Int16 nHoriOrient = 0;

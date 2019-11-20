@@ -391,7 +391,7 @@ public:
     void setSprm(Id nId, Id nValue);
     bool hasProperties() const;
     /// If we got tokens indicating we're in a frame.
-    bool inFrame();
+    bool inFrame() const;
 };
 
 /// State of the parser, which gets saved / restored when changing groups.

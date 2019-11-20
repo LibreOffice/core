@@ -91,7 +91,7 @@ private:
     void createShape(const OUString& rService, css::uno::Reference<css::drawing::XShape>& xShape,
                      css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
     void applyProperty(css::uno::Reference<css::drawing::XShape> const& xShape,
-                       const OUString& aKey, const OUString& aValue);
+                       const OUString& aKey, const OUString& aValue) const;
     int initShape(css::uno::Reference<css::drawing::XShape>& o_xShape,
                   css::uno::Reference<css::beans::XPropertySet>& o_xPropSet, bool& o_rIsCustomShape,
                   RTFShape const& rShape, bool bClose, ShapeOrPict shapeOrPict);
