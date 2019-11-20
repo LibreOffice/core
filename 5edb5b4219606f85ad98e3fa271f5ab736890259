@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_01ed1724",
+        "filename": "solenv/gbuild/platform/com_MSC_class.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-11-20T10:54:25Z",
+      "side": 1,
+      "message": "looks like this variable is set on both 32-bit and 64-bit builds nowadays so better check $(CPUNAME) instead; the asm-objects aren\u0027t used for the weird special snowflakes that rely on CXX_X64_BINARY and CXX_X32_BINARY so $(CPUNAME) should work",
+      "revId": "5edb5b4219606f85ad98e3fa271f5ab736890259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
