@@ -25,14 +25,82 @@
  * Definition of Properties Interface
 */
 
-IMPL_CHAIN_PROP_INTERFACE(CursorEvent, CursorChainingEvent)
-IMPL_CHAIN_PROP_INTERFACE(NilChainingEvent, bool)
-IMPL_CHAIN_PROP_INTERFACE(PreChainingSel, ESelection)
-IMPL_CHAIN_PROP_INTERFACE(PostChainingSel, ESelection)
-IMPL_CHAIN_PROP_INTERFACE(IsPartOfLastParaInNextLink, bool)
-IMPL_CHAIN_PROP_INTERFACE(PendingOverflowCheck, bool)
-IMPL_CHAIN_PROP_INTERFACE(SwitchingToNextBox, bool)
+CursorChainingEvent const & TextChain::GetCursorEvent(const SdrTextObj *pTarget)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->aCursorEvent;
+}
+void TextChain::SetCursorEvent(const SdrTextObj *pTarget, CursorChainingEvent const & rPropParam)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->aCursorEvent = rPropParam;
+}
 
+bool TextChain::GetNilChainingEvent(const SdrTextObj *pTarget)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->aNilChainingEvent;
+}
+void TextChain::SetNilChainingEvent(const SdrTextObj *pTarget, bool b)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->aNilChainingEvent = b;
+}
+
+ESelection const & TextChain::GetPreChainingSel(const SdrTextObj *pTarget)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->aPreChainingSel;
+}
+void TextChain::SetPreChainingSel(const SdrTextObj *pTarget, ESelection const & rPropParam)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->aPreChainingSel = rPropParam;
+}
+
+ESelection const & TextChain::GetPostChainingSel(const SdrTextObj *pTarget)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->aPostChainingSel;
+}
+void TextChain::SetPostChainingSel(const SdrTextObj *pTarget, ESelection const & rPropParam)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->aPostChainingSel = rPropParam;
+}
+
+bool TextChain::GetIsPartOfLastParaInNextLink(const SdrTextObj *pTarget)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->aIsPartOfLastParaInNextLink;
+}
+void TextChain::SetIsPartOfLastParaInNextLink(const SdrTextObj *pTarget, bool b)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->aIsPartOfLastParaInNextLink = b;
+}
+
+bool TextChain::GetPendingOverflowCheck(const SdrTextObj *pTarget)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->aPendingOverflowCheck;
+}
+void TextChain::SetPendingOverflowCheck(const SdrTextObj *pTarget, bool b)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->aPendingOverflowCheck = b;
+}
+
+bool TextChain::GetSwitchingToNextBox(const SdrTextObj *pTarget)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->aSwitchingToNextBox;
+}
+void TextChain::SetSwitchingToNextBox(const SdrTextObj *pTarget, bool b)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->aSwitchingToNextBox = b;
+}
 
 /* End Definition of Properties Interface */
 
