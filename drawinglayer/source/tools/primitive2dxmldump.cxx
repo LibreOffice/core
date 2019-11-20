@@ -34,6 +34,7 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 
 using namespace drawinglayer::primitive2d;
 
@@ -155,7 +156,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
         if (!pBasePrimitive)
             continue;
         sal_uInt32 nId = pBasePrimitive->getPrimitive2DID();
-        if (maFilter[nId])
+        if (nId < maFilter.size() && maFilter[nId])
             continue;
 
         OUString sCurrentElementTag = drawinglayer::primitive2d::idToString(nId);
@@ -335,6 +336,66 @@ void Primitive2dXmlDump::decomposeAndWrite(
             }
 
             break;
+
+            case PRIMITIVE2D_ID_SDRRECTANGLEPRIMITIVE2D:
+            {
+                // SdrRectanglePrimitive2D is private to us.
+                rWriter.startElement("sdrrectangle");
+                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                                   drawinglayer::geometry::ViewInformation2D());
+                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.endElement();
+                break;
+            }
+
+            case PRIMITIVE2D_ID_SDRBLOCKTEXTPRIMITIVE2D:
+            {
+                // SdrBlockTextPrimitive2D is private to us.
+                rWriter.startElement("sdrblocktext");
+                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                                   drawinglayer::geometry::ViewInformation2D());
+                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.endElement();
+                break;
+            }
+
+            case PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D:
+            {
+                // TextHierarchyBlockPrimitive2D.
+                rWriter.startElement("texthierarchyblock");
+                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                                   drawinglayer::geometry::ViewInformation2D());
+                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.endElement();
+                break;
+            }
+
+            case PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D:
+            {
+                // TextHierarchyParagraphPrimitive2D.
+                rWriter.startElement("texthierarchyparagraph");
+                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                                   drawinglayer::geometry::ViewInformation2D());
+                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.endElement();
+                break;
+            }
+
+            case PRIMITIVE2D_ID_TEXTHIERARCHYLINEPRIMITIVE2D:
+            {
+                // TextHierarchyLinePrimitive2D.
+                rWriter.startElement("texthierarchyline");
+                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                                   drawinglayer::geometry::ViewInformation2D());
+                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.endElement();
+                break;
+            }
 
             default:
             {
