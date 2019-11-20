@@ -446,6 +446,28 @@ void ScInputWindow::PixelInvalidate(const tools::Rectangle* pRectangle)
     }
 }
 
+void ScInputWindow::SetSizePixel( const Size& rNewSize )
+{
+    const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier();
+    if (pNotifier)
+    {
+        if (vcl::Window* pFrameWindowImpl = GetParent())
+        {
+            if (vcl::Window* pWorkWindow = pFrameWindowImpl->GetParent())
+            {
+                if (vcl::Window* pImplBorderWindow = pWorkWindow->GetParent())
+                {
+                    Size aSize = pImplBorderWindow->GetSizePixel();
+                    aSize.setWidth(rNewSize.getWidth());
+                    pImplBorderWindow->SetSizePixel(aSize);
+                }
+            }
+        }
+    }
+
+    ToolBox::SetSizePixel(rNewSize);
+}
+
 void ScInputWindow::Resize()
 {
     ToolBox::Resize();
