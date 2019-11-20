@@ -86,7 +86,7 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
 #ifdef DBG_UTIL
         // fill with random garbage
         sal_uInt8* buffer = static_cast<sal_uInt8*>(mBitmap.getPixels());
-        size_t size = mBitmap.rowBytes() & mBitmap.height();
+        size_t size = mBitmap.rowBytes() * mBitmap.height();
         for (size_t i = 0; i < size; i++)
             buffer[i] = (i & 0xFF);
 #endif
