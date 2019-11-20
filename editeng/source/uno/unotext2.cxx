@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <initializer_list>
+
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
 
@@ -24,7 +28,6 @@
 #include <editeng/flditem.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/unotext.hxx>
-#include <comphelper/OUStringLiteralList.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -365,11 +368,11 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames(),
-        comphelper::OUStringLiteralList({ "com.sun.star.style.ParagraphProperties",
+        std::initializer_list<OUStringLiteral>{ "com.sun.star.style.ParagraphProperties",
                                           "com.sun.star.style.ParagraphPropertiesComplex",
                                           "com.sun.star.style.ParagraphPropertiesAsian",
                                           "com.sun.star.text.TextContent",
-                                          "com.sun.star.text.Paragraph" }));
+                                          "com.sun.star.text.Paragraph" });
 }
 
 
@@ -646,10 +649,10 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextCursor::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames(),
-        comphelper::OUStringLiteralList({ "com.sun.star.style.ParagraphProperties",
+        std::initializer_list<OUStringLiteral>{ "com.sun.star.style.ParagraphProperties",
                                           "com.sun.star.style.ParagraphPropertiesComplex",
                                           "com.sun.star.style.ParagraphPropertiesAsian",
-                                          "com.sun.star.text.TextCursor" }));
+                                          "com.sun.star.text.TextCursor" });
 }
 
 

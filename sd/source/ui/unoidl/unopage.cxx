@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <initializer_list>
+
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -47,7 +51,6 @@
 #include <svx/unoshape.hxx>
 #include <svl/style.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/OUStringLiteralList.hxx>
 #include <comphelper/sequence.hxx>
 #include <svx/svditer.hxx>
 #include <vcl/wmf.hxx>
@@ -1489,9 +1492,9 @@ Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxFmDrawPage::getSupportedServiceNames(),
-        comphelper::OUStringLiteralList({ "com.sun.star.drawing.GenericDrawPage",
+        std::initializer_list<OUStringLiteral>{ "com.sun.star.drawing.GenericDrawPage",
                                           "com.sun.star.document.LinkTarget",
-                                          "com.sun.star.document.LinkTargetSupplier" }));
+                                          "com.sun.star.document.LinkTargetSupplier" });
 }
 
 // XLinkTargetSupplier
