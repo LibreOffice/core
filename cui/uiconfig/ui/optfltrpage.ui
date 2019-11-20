@@ -23,7 +23,6 @@
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="wo_basic">
                     <property name="label" translatable="yes" context="optfltrpage|wo_basic">Load Basic _code</property>
@@ -47,7 +46,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -84,7 +82,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optfltrpage|label1">Microsoft Word 97/2000/XP</property>
+            <property name="label" translatable="yes" context="optfltrpage|label1">Microsoft Word</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -113,7 +111,6 @@
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="ex_basic">
                     <property name="label" translatable="yes" context="optfltrpage|ex_basic">Lo_ad Basic code</property>
@@ -137,7 +134,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -174,7 +170,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optfltrpage|label2">Microsoft Excel 97/2000/XP</property>
+            <property name="label" translatable="yes" context="optfltrpage|label2">Microsoft Excel</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -203,7 +199,6 @@
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="pp_basic">
                     <property name="label" translatable="yes" context="optfltrpage|pp_basic">Load Ba_sic code</property>
@@ -246,7 +241,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optfltrpage|label3">Microsoft PowerPoint 97/2000/XP</property>
+            <property name="label" translatable="yes" context="optfltrpage|label3">Microsoft PowerPoint</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
