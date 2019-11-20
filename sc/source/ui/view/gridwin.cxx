@@ -122,6 +122,7 @@
 #include <uiobject.hxx>
 #include <undoblk.hxx>
 #include <datamapper.hxx>
+#include <warnbox.hxx>
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -3211,6 +3212,42 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
     else if( rKeyCode.GetCode() == KEY_RETURN && pViewData->IsPasteMode() )
     {
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
+
+        // Check if cell is empty. If true, display replace warning
+        bool bIsEmpty = true;
+
+        auto pDoc=pViewData->GetDocument();
+
+        ScMarkData& rMark = pViewData->GetMarkData();
+
+        // having trouble in initializing rDestRanges with a constructor
+        ScRangeList rDestRanges;
+        rMark.MarkToSimple();
+        rMark.FillRangeListWithMarks(&rDestRanges, false);
+
+        size_t nRangeSize = rDestRanges.size();
+        auto pParent = ScDocShell::GetActiveDialogParent();
+        for (const auto& rTab : rMark)
+        {
+            for (size_t i = 0; i < nRangeSize && bIsEmpty; ++i)
+            {
+                const ScRange& rRange = rDestRanges[i];
+                bIsEmpty = pDoc->IsBlockEmpty(
+                    rTab, rRange.aStart.Col(), rRange.aStart.Row(),
+                    rRange.aEnd.Col(), rRange.aEnd.Row());
+            }
+            if (!bIsEmpty)
+                break;
+        }
+        if (!bIsEmpty)
+        {
+            ScReplaceWarnBox aBox(pParent);
+            if (aBox.run() != RET_YES)
+            {
+                //  changing the configuration is within the ScReplaceWarnBox
+                return;
+            }
+        }
         ScClipUtil::PasteFromClipboard( pViewData, pTabViewShell, false );
 
         // Clear clipboard content.
