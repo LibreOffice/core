@@ -25,6 +25,7 @@
 #include "global.hxx"
 #include "scdllapi.h"
 #include "cellvalue.hxx"
+#include "queryparam.hxx"
 #include "mtvelements.hxx"
 #include <vcl/vclptr.hxx>
 
@@ -363,6 +364,31 @@ public:
                         number format!
                       */
     bool            FindEqualOrSortedLastInRange( SCCOL& nFoundCol, SCROW& nFoundRow );
+};
+
+// Used by ScInterpreter::ScCountIf.
+// Walk through all non-empty cells in an area.
+class ScCountIfCellIterator
+{
+    typedef sc::CellStoreType::const_position_type PositionType;
+    PositionType    maCurPos;
+    ScQueryParam    maParam;
+    ScDocument*     pDoc;
+    const ScInterpreterContext& mrContext;
+    SCTAB           nTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+
+    /** Initialize position for new column. */
+    void            InitPos();
+    void            IncPos();
+    void            IncBlock();
+    void            AdvanceQueryParamEntryField();
+
+public:
+                    ScCountIfCellIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+                                        const ScQueryParam& aParam);
+    int             GetCount();
 };
 
 class ScDocAttrIterator             // all attribute areas
