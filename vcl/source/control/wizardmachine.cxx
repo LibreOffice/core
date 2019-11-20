@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <vcl/event.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -937,9 +939,11 @@ namespace vcl
     {
         m_pImpl->sTitleBase = m_xAssistant->get_title();
 
+        const bool bHideHelp = comphelper::LibreOfficeKit::isActive() &&
+            officecfg::Office::Common::Help::HelpRootURL::get().isEmpty();
         // create the buttons according to the wizard button flags
         // the help button
-        if (nButtonFlags & WizardButtonFlags::HELP)
+        if (nButtonFlags & WizardButtonFlags::HELP && !bHideHelp)
             m_xHelp->show();
         else
             m_xHelp->hide();
