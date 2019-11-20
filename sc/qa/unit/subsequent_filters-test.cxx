@@ -250,6 +250,7 @@ public:
     void testVBAMacroFunctionODS();
     void testAutoheight2Rows();
     void testXLSDefColWidth();
+    void testPreviewMissingObjLink();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -391,6 +392,7 @@ public:
     CPPUNIT_TEST(testVBAMacroFunctionODS);
     CPPUNIT_TEST(testAutoheight2Rows);
     CPPUNIT_TEST(testXLSDefColWidth);
+    CPPUNIT_TEST(testPreviewMissingObjLink);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4316,6 +4318,23 @@ void ScFiltersTest::testXLSDefColWidth()
     int nWidth = rDoc.GetColWidth(MAXCOL, 0, false);
     // This was 1280
     CPPUNIT_ASSERT_EQUAL(1005, nWidth);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPreviewMissingObjLink()
+{
+    ScDocShellRef xDocSh = loadDoc("keep-preview-missing-obj-link.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load keep-preview-missing-obj-link.ods.", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Retrieve the ole object
+    const SdrOle2Obj* pOleObj = getSingleOleObject(rDoc, 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve an ole object from the 2nd sheet.", pOleObj);
+
+    const Graphic* pGraphic = pOleObj->GetGraphic();
+    CPPUNIT_ASSERT_MESSAGE("the ole object links to a missing file, but we should retain its preview", pGraphic);
 
     xDocSh->DoClose();
 }
