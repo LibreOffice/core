@@ -2181,6 +2181,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
     }
     catch ( const uno::Exception& )
     {
+        TOOLS_WARN_EXCEPTION("editeng", "when loading " << sShareAutoCorrFile);
     }
 
     // Set time stamp
