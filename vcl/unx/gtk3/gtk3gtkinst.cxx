@@ -49,6 +49,7 @@
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -12357,6 +12358,9 @@ private:
 
     void postprocess_widget(GtkWidget* pWidget)
     {
+        const bool bHideHelp = comphelper::LibreOfficeKit::isActive() &&
+            officecfg::Office::Common::Help::HelpRootURL::get().isEmpty();
+
         //fixup icons
         //wanted: better way to do this, e.g. make gtk use gio for
         //loading from a filename and provide gio protocol handler
@@ -12408,16 +12412,21 @@ private:
         //set helpids
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
         size_t nLen = pStr ? strlen(pStr) : 0;
-        if (!nLen)
-            return;
-        OString sHelpId = m_aUtf8HelpRoot + OString(pStr, nLen);
-        set_help_id(pWidget, sHelpId);
-        //hook up for extended help
-        const ImplSVData* pSVData = ImplGetSVData();
-        if (pSVData->maHelpData.mbBalloonHelp && !GTK_IS_DIALOG(pWidget) && !GTK_IS_ASSISTANT(pWidget))
+        if (nLen)
         {
-            gtk_widget_set_has_tooltip(pWidget, true);
-            g_signal_connect(pWidget, "query-tooltip", G_CALLBACK(signalTooltipQuery), nullptr);
+            OString sBuildableName(pStr, nLen);
+            OString sHelpId = m_aUtf8HelpRoot + sBuildableName;
+            set_help_id(pWidget, sHelpId);
+            //hook up for extended help
+            const ImplSVData* pSVData = ImplGetSVData();
+            if (pSVData->maHelpData.mbBalloonHelp && !GTK_IS_DIALOG(pWidget) && !GTK_IS_ASSISTANT(pWidget))
+            {
+                gtk_widget_set_has_tooltip(pWidget, true);
+                g_signal_connect(pWidget, "query-tooltip", G_CALLBACK(signalTooltipQuery), nullptr);
+            }
+
+            if (bHideHelp && sBuildableName == "help")
+                gtk_widget_hide(pWidget);
         }
 
         // expand placeholder and collect potentially missing mnemonics
