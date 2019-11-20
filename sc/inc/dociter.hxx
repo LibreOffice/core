@@ -270,7 +270,7 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
     typedef sc::CellStoreType::const_position_type PositionType;
     PositionType maCurPos;
 
-    std::unique_ptr<ScQueryParam> mpParam;
+    ScQueryParam    maParam;
     ScDocument*     pDoc;
     const ScInterpreterContext& mrContext;
     SCTAB           nTab;
