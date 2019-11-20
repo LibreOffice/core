@@ -238,6 +238,7 @@ public:
 #ifdef UNX
     void testUnicodeFileNameGnumeric();
 #endif
+    void testPreviewMissingObjLink();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -364,6 +365,7 @@ public:
 #ifdef UNX
     CPPUNIT_TEST(testUnicodeFileNameGnumeric);
 #endif
+    CPPUNIT_TEST(testPreviewMissingObjLink);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3736,6 +3738,23 @@ void ScFiltersTest::testtdf120301_xmlSpaceParsingXLSX()
     OUString sCaption;
     XPropSet->getPropertyValue("Label") >>= sCaption;
     CPPUNIT_ASSERT_EQUAL(OUString("Check Box 1"), sCaption);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPreviewMissingObjLink()
+{
+    ScDocShellRef xDocSh = loadDoc("keep-preview-missing-obj-link.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load keep-preview-missing-obj-link.ods.", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Retrieve the ole object
+    const SdrOle2Obj* pOleObj = getSingleOleObject(rDoc, 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve an ole object from the 2nd sheet.", pOleObj);
+
+    const Graphic* pGraphic = pOleObj->GetGraphic();
+    CPPUNIT_ASSERT_MESSAGE("the ole object links to a missing file, but we should retain its preview", pGraphic);
+
     xDocSh->DoClose();
 }
 
