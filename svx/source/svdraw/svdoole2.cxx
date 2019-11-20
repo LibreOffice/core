@@ -1855,11 +1855,19 @@ bool SdrOle2Obj::IsChart() const
 void SdrOle2Obj::SetGraphicToObj( const Graphic& aGraphic )
 {
     mpImpl->mxObjRef.SetGraphic( aGraphic, OUString() );
+    // if the object isn't valid, e.g. link to something that doesn't exist, set the fallback
+    // graphic as mxGraphic so SdrOle2Obj::GetGraphic will show the fallback
+    if (const Graphic* pObjGraphic = mpImpl->mxObjRef.is() ? nullptr : mpImpl->mxObjRef.GetGraphic())
+        mpImpl->mxGraphic.reset(new Graphic(*pObjGraphic));
 }
 
 void SdrOle2Obj::SetGraphicToObj( const uno::Reference< io::XInputStream >& xGrStream, const OUString& aMediaType )
 {
     mpImpl->mxObjRef.SetGraphicStream( xGrStream, aMediaType );
+    // if the object isn't valid, e.g. link to something that doesn't exist, set the fallback
+    // graphic as mxGraphic so SdrOle2Obj::GetGraphic will show the fallback
+    if (const Graphic* pObjGraphic = mpImpl->mxObjRef.is() ? nullptr : mpImpl->mxObjRef.GetGraphic())
+        mpImpl->mxGraphic.reset(new Graphic(*pObjGraphic));
 }
 
 bool SdrOle2Obj::IsCalc() const
