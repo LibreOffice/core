@@ -9,7 +9,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,svx_unit))
 
-$(eval $(call gb_CppunitTest_use_external,svx_unit,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,svx_unit,\
+    boost_headers \
+    libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,svx_unit))
 
@@ -22,6 +25,7 @@ $(eval $(call gb_CppunitTest_set_include,svx_unit,\
 $(eval $(call gb_CppunitTest_add_exception_objects,svx_unit, \
 	svx/qa/unit/svdraw/test_SdrTextObject \
 	svx/qa/unit/customshapes \
+	svx/qa/unit/svdraw \
 	svx/qa/unit/unodraw \
 	svx/qa/unit/xoutdev \
 	svx/qa/unit/XTableImportExportTest \
@@ -29,6 +33,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svx_unit, \
 
 $(eval $(call gb_CppunitTest_use_libraries,svx_unit, \
 	basegfx \
+	drawinglayer \
 	sal \
 	sfx \
 	svxcore \
