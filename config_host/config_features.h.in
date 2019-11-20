@@ -146,4 +146,10 @@
  */
 #define HAVE_FEATURE_UPDATE_MAR 0
 
+/*
+ * Whether we are avoiding the tweaks needed for the Android app from the
+ * android/ subdir.
+ */
+#define HAVE_FEATURE_ANDROID_LOK 0
+
 #endif
