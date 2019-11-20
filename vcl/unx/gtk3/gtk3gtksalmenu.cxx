@@ -386,7 +386,14 @@ void GtkSalMenu::Update()
     const GtkSalMenu* pMenu = this;
     while (pMenu->mpParentSalMenu)
         pMenu = pMenu->mpParentSalMenu;
-    ImplUpdate(false, !pMenu->mbMenuBar);
+
+    bool bAlwaysShowDisabledEntries;
+    if (pMenu->mbMenuBar)
+        bAlwaysShowDisabledEntries = true;
+    else
+        bAlwaysShowDisabledEntries = bool(mpVCLMenu->GetMenuFlags() & MenuFlags::AlwaysShowDisabledEntries);
+
+    ImplUpdate(false, !bAlwaysShowDisabledEntries);
 }
 
 static void MenuPositionFunc(GtkMenu* menu, gint* x, gint* y, gboolean* push_in, gpointer user_data)
