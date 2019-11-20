@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <initializer_list>
 #include <memory>
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -63,7 +66,6 @@
 #include <crstate.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/profilezone.hxx>
-#include <comphelper/OUStringLiteralList.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/scene3d.hxx>
@@ -2149,7 +2151,7 @@ uno::Sequence< OUString > SwXShape::getSupportedServiceNames()
     if (SvxShape* pSvxShape = GetSvxShape())
         aSeq = pSvxShape->getSupportedServiceNames();
     return comphelper::concatSequences(
-        aSeq, comphelper::OUStringLiteralList({ "com.sun.star.drawing.Shape" }));
+        aSeq, std::initializer_list<OUStringLiteral>{ "com.sun.star.drawing.Shape" });
 }
 
 SvxShape*   SwXShape::GetSvxShape()

@@ -105,6 +105,13 @@ public:
             // something useful
             if (t1.getCanonicalType().getTypePtr() != paramClassOrStructType)
                 continue;
+            // Don't warn about (necessary) cast from braced-init-list in non-deduced contexts:
+            if (lvalueType->getPointeeType()->getAs<SubstTemplateTypeParmType>() != nullptr
+                && loplugin::TypeCheck(t1).ClassOrStruct("initializer_list").StdNamespace()
+                && isa<CXXStdInitializerListExpr>(compat::getSubExprAsWritten(functionalCast)))
+            {
+                continue;
+            }
 
             if (m_Seen.insert(arg->getExprLoc()).second)
             {
