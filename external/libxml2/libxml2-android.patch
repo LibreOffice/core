@@ -4,7 +4,7 @@
  	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
  check: $(BUILT_SOURCES)
  	$(MAKE) $(AM_MAKEFLAGS) check-recursive
--all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) $(MANS) $(DATA) \
+-all-am: Makefile $(PROGRAMS) $(LTLIBRARIES) $(SCRIPTS) $(MANS) $(DATA) \
 +all-am: Makefile $(LTLIBRARIES) \
  		config.h
  install-binPROGRAMS: install-libLTLIBRARIES
