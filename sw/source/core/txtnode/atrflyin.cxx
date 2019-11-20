@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <cntfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -29,7 +28,6 @@
 #include <fmtflcnt.hxx>
 #include <txtflcnt.hxx>
 #include <fmtanchr.hxx>
-#include <swfont.hxx>
 #include <txtfrm.hxx>
 #include <flyfrms.hxx>
 #include <objectformatter.hxx>

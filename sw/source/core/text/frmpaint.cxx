@@ -19,10 +19,8 @@
 
 #include <memory>
 #include <com/sun/star/text/HoriOrientation.hpp>
-#include <hintids.hxx>
 #include <editeng/pgrditem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <paratr.hxx>
 
@@ -32,10 +30,8 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <viewsh.hxx>
-#include <viewimp.hxx>
 #include <viewopt.hxx>
 #include <frmatr.hxx>
-#include <frmtool.hxx>
 #include <txtfrm.hxx>
 #include "itrpaint.hxx"
 #include "txtpaint.hxx"
@@ -45,7 +41,6 @@
 #include <swmodule.hxx>
 #include <tabfrm.hxx>
 #include <numrule.hxx>
-#include <SwGrammarMarkUp.hxx>
 #include <wrong.hxx>
 
 #include <EnhancedPDFExportHelper.hxx>

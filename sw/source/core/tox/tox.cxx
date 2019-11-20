@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 #include <swtypes.hxx>
-#include <txtatr.hxx>
 #include <ndtxt.hxx>
 #include <txttxmrk.hxx>
 #include <tox.hxx>
@@ -28,9 +27,7 @@
 #include <docary.hxx>
 #include <paratr.hxx>
 #include <editeng/tstpitem.hxx>
-#include <SwStyleNameMapper.hxx>
 #include <hints.hxx>
-#include <functional>
 #include <calbck.hxx>
 
 #include <boost/optional.hpp>

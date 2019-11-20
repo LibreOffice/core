@@ -23,9 +23,7 @@
 
 #include <hintids.hxx>
 #include <editeng/charscaleitem.hxx>
-#include <txtatr.hxx>
 #include <svl/itemiter.hxx>
-#include <sfx2/printer.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtanchr.hxx>
@@ -38,14 +36,12 @@
 #include <frmfmt.hxx>
 #include <fmtfld.hxx>
 #include <doc.hxx>
-#include <IDocumentSettingAccess.hxx>
-#include <IDocumentDeviceAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <txatbase.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
-#include <dcontact.hxx>
 #include <fldbas.hxx>
 #include <pam.hxx>
 #include "itratr.hxx"

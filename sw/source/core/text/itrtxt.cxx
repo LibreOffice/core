@@ -18,7 +18,6 @@
  */
 
 #include <ndtxt.hxx>
-#include <flyfrm.hxx>
 #include <txatbase.hxx>
 #include <paratr.hxx>
 #include <vcl/outdev.hxx>
@@ -26,13 +25,11 @@
 
 #include "pormulti.hxx"
 #include <pagefrm.hxx>
-#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include "porfld.hxx"
 
 #include "itrtxt.hxx"
 #include <txtfrm.hxx>
-#include "porfly.hxx"
 
 void SwTextIter::CtorInitTextIter( SwTextFrame *pNewFrame, SwTextInfo *pNewInf )
 {

@@ -21,17 +21,6 @@
 #include <fntcache.hxx>
 #include <swfntcch.hxx>
 #include <txtfrm.hxx>
-#include "txtcache.hxx"
-#include "porlay.hxx"
-#include "porglue.hxx"
-#include "porexp.hxx"
-#include "porrst.hxx"
-#include "portab.hxx"
-#include "porfly.hxx"
-#include "portox.hxx"
-#include "porref.hxx"
-#include "porftn.hxx"
-#include "porhyph.hxx"
 #include "pordrop.hxx"
 #include <blink.hxx>
 #include <init.hxx>

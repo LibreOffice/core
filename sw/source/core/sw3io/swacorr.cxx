@@ -20,10 +20,8 @@
 #include <swacorr.hxx>
 #include <swblocks.hxx>
 #include <SwXMLTextBlocks.hxx>
-#include <swerror.h>
 #include <docsh.hxx>
 #include <editsh.hxx>
-#include <sot/storage.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;

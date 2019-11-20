@@ -31,8 +31,8 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <tools/urlobj.hxx>
+#include <svl/languageoptions.hxx>
 #include <svl/zforlist.hxx>
 #include <swatrset.hxx>
 #include <frmatr.hxx>

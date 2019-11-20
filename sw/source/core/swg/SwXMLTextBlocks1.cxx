@@ -23,13 +23,11 @@
 #include <svl/macitem.hxx>
 #include <svtools/unoevent.hxx>
 #include <sfx2/docfile.hxx>
-#include <unotools/streamwrap.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
@@ -44,7 +42,6 @@
 #include <SwXMLBlockExport.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <sfx2/event.hxx>
-#include <swevent.hxx>
 #include <swerror.h>
 
 const char XMLN_BLOCKLIST[] = "BlockList.xml";

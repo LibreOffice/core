@@ -20,7 +20,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/file.hxx>
@@ -43,8 +42,6 @@
 #include <shellio.hxx>
 #include <poolfmt.hxx>
 #include <SwXMLTextBlocks.hxx>
-#include <SwXMLBlockImport.hxx>
-#include <SwXMLBlockExport.hxx>
 #include <swerror.h>
 
 using namespace ::com::sun::star;

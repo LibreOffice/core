@@ -24,8 +24,6 @@
 #include <ndtxt.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <txtfrm.hxx>
-#include <rootfrm.hxx>
-#include <viewsh.hxx>
 
 /*
  * This class is responsible for the delayed display of grammar checks when a paragraph is edited

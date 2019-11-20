@@ -32,15 +32,12 @@
 #include <viewopt.hxx>
 #include <flyfrm.hxx>
 #include <viewimp.hxx>
-#include <txtatr.hxx>
 #include <swfont.hxx>
 #include <swmodule.hxx>
-#include <fntcache.hxx>
 #include "porfld.hxx"
 #include "porftn.hxx"
 #include "porref.hxx"
 #include "portox.hxx"
-#include "porhyph.hxx"
 #include "porfly.hxx"
 #include "itrform2.hxx"
 #include <chpfld.hxx>
@@ -48,7 +45,6 @@
 #include <expfld.hxx>
 #include <docufld.hxx>
 #include <pagedesc.hxx>
-#include "pormulti.hxx"
 #include <fmtmeta.hxx>
 #include <reffld.hxx>
 #include <flddat.hxx>
