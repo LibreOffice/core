@@ -365,13 +365,6 @@ void DialControl::SetRotation( sal_Int32 nAngle )
     SetRotation( nAngle, false );
 }
 
-void DialControl::LinkedFieldModifyHdl()
-{
-    if( mpImpl->mpLinkField )
-        SetRotation( static_cast< sal_Int32 >( mpImpl->mpLinkField->GetValue() * mpImpl->mnLinkedFieldValueMultiplyer ), false );
-}
-
-
 void DialControl::SetModifyHdl( const Link<DialControl*,void>& rLink )
 {
     mpImpl->maModifyHdl = rLink;
