@@ -14,7 +14,9 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
+#include <comphelper/lok.hxx>
 #include <i18nutil/unicode.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
@@ -771,6 +773,14 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         SAL_WARN_IF(nButtons && !bHasDefButton, "vcl.layout", "No default button defined in " << sUIFile);
     }
 #endif
+
+    const bool bHideHelp = comphelper::LibreOfficeKit::isActive() &&
+        officecfg::Office::Common::Help::HelpRootURL::get().isEmpty();
+    if (bHideHelp)
+    {
+        if (vcl::Window *pHelpButton = get<vcl::Window>("help"))
+            pHelpButton->Hide();
+    }
 }
 
 VclBuilder::~VclBuilder()
