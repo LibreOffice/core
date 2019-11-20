@@ -316,6 +316,7 @@ friend class ScDBQueryDataIterator;
 friend class ScFormulaGroupIterator;
 friend class ScCellIterator;
 friend class ScQueryCellIterator;
+friend class ScCountIfCellIterator;
 friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 friend class ScDocAttrIterator;
