@@ -1690,11 +1690,6 @@ Color SvtLineListBox::GetColorDist( sal_Int32 nPos )
     return pData->GetColorDist( GetColor( ), rResult );
 }
 
-IMPL_LINK_NOARG(SvtLineListBox, StyleUpdated, weld::Widget&, void)
-{
-    UpdateEntries();
-}
-
 IMPL_LINK_NOARG(SvtLineListBox, ValueSelectHdl, SvtValueSet*, void)
 {
     maSelectHdl.Call(*this);

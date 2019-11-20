@@ -365,11 +365,6 @@ void DialControl::SetRotation( sal_Int32 nAngle )
     SetRotation( nAngle, false );
 }
 
-IMPL_LINK_NOARG( DialControl, LinkedFieldModifyHdl, Edit&, void )
-{
-    LinkedFieldModifyHdl();
-}
-
 void DialControl::LinkedFieldModifyHdl()
 {
     if( mpImpl->mpLinkField )

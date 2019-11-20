@@ -127,7 +127,6 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(RatioHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(EditModifyHdl_Impl, weld::Entry&, void);
-    DECL_LINK(SameLevelHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(BulColorHdl_Impl, ColorListBox&, void);
     DECL_LINK(BulRelSizeHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(PreviewInvalidateHdl_Impl, Timer*, void);

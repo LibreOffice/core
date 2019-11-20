@@ -329,7 +329,6 @@ private:
     /// XFrame to be able to extract labels and other properties of the UNO commands (like of .uno:Bold).
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
-    DECL_LINK(ResponseHdl, ::Button*, void);
 private:
     VclPtr<vcl::Window> insertObject(vcl::Window *pParent,
                     const OString &rClass, const OString &rID,

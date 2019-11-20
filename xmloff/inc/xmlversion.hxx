@@ -87,8 +87,6 @@ public:
 class XMLVersionContext: public SvXMLImportContext
 {
 private:
-    XMLVersionListImport&  GetImport() { return static_cast<XMLVersionListImport&>(SvXMLImportContext::GetImport()); }
-
     static bool         ParseISODateTimeString(
                                 const OUString& rString,
                                 css::util::DateTime& rDateTime );

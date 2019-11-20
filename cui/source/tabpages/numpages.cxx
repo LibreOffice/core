@@ -2069,11 +2069,6 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl, weld::ComboBox&, void)
     SetModified(false);
 };
 
-IMPL_LINK_NOARG(SvxNumOptionsTabPage, EditListBoxHdl_Impl, weld::ComboBox&, void)
-{
-    EditModifyHdl_Impl(nullptr);
-}
-
 IMPL_LINK(SvxNumOptionsTabPage, EditModifyHdl_Impl, weld::Entry&, rEdit, void)
 {
     EditModifyHdl_Impl(&rEdit);

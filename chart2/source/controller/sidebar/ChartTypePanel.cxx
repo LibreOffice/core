@@ -267,19 +267,6 @@ void ChartTypePanel::updateData()
     }
 }
 
-VclPtr<vcl::Window> ChartTypePanel::Create(vcl::Window* pParent,
-                                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                           ChartController* pController)
-{
-    if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to ChartTypePanel::Create",
-                                             nullptr, 0);
-    if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ChartTypePanel::Create", nullptr,
-                                             1);
-    return VclPtr<ChartTypePanel>::Create(pParent, rxFrame, pController);
-}
-
 void ChartTypePanel::DataChanged(const DataChangedEvent&) { updateData(); }
 
 void ChartTypePanel::HandleContextChange(const vcl::EnumContext& rContext)

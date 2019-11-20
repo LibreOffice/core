@@ -40,7 +40,6 @@ private:
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<SfxTabPage> m_xPage;
 
-    DECL_LINK(HelpRequestHdl, weld::Widget&, bool);
 public:
                             SfxPrintOptionsDialog(weld::Window *pParent,
                                                   SfxViewShell *pViewShell,

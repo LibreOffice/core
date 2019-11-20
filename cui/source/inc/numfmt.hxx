@@ -141,7 +141,6 @@ private:
     DECL_LINK(EditModifyHdl_Impl, weld::Entry&, void);
     DECL_LINK(OptEditHdl_Impl, weld::SpinButton&, void);
     DECL_LINK(OptClickHdl_Impl, weld::Button&, void);
-    DECL_LINK(TimeHdl_Impl, Timer*, void);
     void EditHdl_Impl(const weld::Entry*);
     void OptHdl_Impl(const weld::Widget*);
 

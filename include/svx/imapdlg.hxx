@@ -110,7 +110,6 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialogController
     DECL_LINK( GraphSizeHdl, GraphCtrl*, void );
     DECL_LINK( URLModifyHdl, weld::ComboBox&, void );
     DECL_LINK( EntryModifyHdl, weld::Entry&, void );
-    DECL_LINK( URLModifyComboBoxHdl, weld::ComboBox&, void );
     DECL_LINK( URLLoseFocusHdl, weld::Widget&, void );
     DECL_LINK( UpdateHdl, Timer *, void );
     DECL_LINK( StateHdl, GraphCtrl*, void );

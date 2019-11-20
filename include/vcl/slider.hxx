@@ -56,8 +56,6 @@ private:
     Link<Slider*,void>   maSlideHdl;
     Link<Slider*,void>   maEndSlideHdl;
 
-    DECL_LINK(LinkedFieldModifyHdl, Edit&, void);
-
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );

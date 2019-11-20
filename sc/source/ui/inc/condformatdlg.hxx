@@ -68,7 +68,6 @@ public:
     DECL_LINK( RemoveBtnHdl, weld::Button&, void );
     DECL_LINK( UpBtnHdl, weld::Button&, void );
     DECL_LINK( DownBtnHdl, weld::Button&, void );
-    DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry&, void );
 
     DECL_LINK( TypeListHdl, weld::ComboBox&, void );

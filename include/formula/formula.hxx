@@ -92,7 +92,6 @@ public:
 private:
     std::unique_ptr<FormulaDlg_Impl, o3tl::default_delete<FormulaDlg_Impl>> m_pImpl;
 
-    DECL_LINK( UpdateFocusHdl, Timer*, void );
 protected:
     void            disableOk();
 

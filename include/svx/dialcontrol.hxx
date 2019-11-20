@@ -135,7 +135,6 @@ protected:
 private:
     void                InvalidateControl();
 
-    DECL_LINK( LinkedFieldModifyHdl, Edit&, void );
     void LinkedFieldModifyHdl();
 };
 

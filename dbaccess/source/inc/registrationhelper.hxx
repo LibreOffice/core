@@ -42,7 +42,7 @@ class OModuleRegistration
         s_pFactoryFunctionPointers;
 
     // no direct instantiation, only static members/methods
-    OModuleRegistration() { }
+    OModuleRegistration() = delete;
 
 public:
     /** register a component implementing a service with the given data.
