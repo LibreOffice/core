@@ -42,6 +42,7 @@ namespace emfio
         ~EmfReader();
 
         bool ReadEnhWMF();
+        void ReadGDIComment(sal_uInt32 nCommentId);
 
     private:
         template <class T> void ReadAndDrawPolyPolygon(sal_uInt32 nNextPos);
