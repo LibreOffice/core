@@ -400,10 +400,10 @@ ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
 
 void SwXMLTextBlocks::ReadInfo()
 {
-    try
-    {
     const OUString sDocName( XMLN_BLOCKLIST );
-    if ( xBlkRoot.is() && xBlkRoot->hasByName( sDocName ) && xBlkRoot->isStreamElement( sDocName ) )
+    if ( !xBlkRoot.is() || !xBlkRoot->hasByName( sDocName ) || !xBlkRoot->isStreamElement( sDocName ) )
+        return;
+    try
     {
         uno::Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();
@@ -425,26 +425,12 @@ void SwXMLTextBlocks::ReadInfo()
         xParser->setTokenHandler( xTokenHandler );
 
         // parse
-        try
-        {
-            xParser->parseStream( aParserInput );
-        }
-        catch( xml::sax::SAXParseException&  )
-        {
-            // re throw ?
-        }
-        catch( xml::sax::SAXException&  )
-        {
-            // re throw ?
-        }
-        catch( io::IOException& )
-        {
-            // re throw ?
-        }
-    }
+        xParser->parseStream( aParserInput );
     }
     catch ( uno::Exception& )
     {
+        TOOLS_WARN_EXCEPTION("sw", "when loading " << sDocName);
+        // re throw ?
     }
 }
 void SwXMLTextBlocks::WriteInfo()
