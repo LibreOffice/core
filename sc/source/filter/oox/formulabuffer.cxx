@@ -120,7 +120,7 @@ void applySharedFormulas(
             if (pArray)
             {
                 aComp.CompileTokenArray(); // Generate RPN tokens.
-                aGroups.set(nId, std::move(pArray));
+                aGroups.set(nId, std::move(pArray), aPos);
             }
         }
     }
@@ -131,11 +131,26 @@ void applySharedFormulas(
         for (const FormulaBuffer::SharedFormulaDesc& rDesc : rCells)
         {
             const ScAddress& aPos = rDesc.maAddress;
-            const ScTokenArray* pArray = aGroups.get(rDesc.mnSharedId);
-            if (!pArray)
+            const sc::SharedFormulaGroupEntry* pEntry = aGroups.getEntry(rDesc.mnSharedId);
+            if (!pEntry)
                 continue;
 
-            ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, *pArray);
+            const ScTokenArray* pArray = pEntry->getTokenArray();
+            assert(pArray);
+            const ScAddress& rOrigin = pEntry->getOrigin();
+            assert(rOrigin.IsValid());
+
+            ScFormulaCell* pCell;
+            // In case of shared-formula along a row, do not let
+            // these cells share the same token objects.
+            // If we do, any reference-updates on these cells
+            // (while editing) will mess things up. Pass the cloned array as a
+            // pointer and not as reference to avoid any further allocation.
+            if (rOrigin.Col() != aPos.Col())
+                pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, pArray->Clone());
+            else
+                pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, *pArray);
+
             rDoc.setFormulaCell(aPos, pCell);
             if (rDesc.maCellValue.isEmpty())
             {
