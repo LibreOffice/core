@@ -55,7 +55,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/goo/gfile \
 	UnpackedTarball/poppler/goo/GooTimer \
 	UnpackedTarball/poppler/goo/GooString \
-	UnpackedTarball/poppler/goo/FixedPoint \
 	UnpackedTarball/poppler/goo/NetPBMWriter \
 	UnpackedTarball/poppler/goo/PNGWriter \
 	UnpackedTarball/poppler/goo/TiffWriter \
