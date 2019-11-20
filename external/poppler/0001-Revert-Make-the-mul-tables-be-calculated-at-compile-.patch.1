@@ -1,0 +1,169 @@
+Revert "Make the mul tables be calculated at compile time with constexpr"
+
+This reverts commit e0ef346c0f669140076c4cf443f07ea0770996da.
+---
+ poppler/Decrypt.cc | 134 ++++++++++++---------------------------------
+ 1 file changed, 35 insertions(+), 99 deletions(-)
+
+diff --git a/poppler/Decrypt.cc b/poppler/Decrypt.cc
+index 57945778..f5062929 100644
+--- a/poppler/Decrypt.cc
++++ b/poppler/Decrypt.cc
+@@ -763,119 +763,55 @@ static inline void invShiftRows(unsigned char *state) {
+ }
+ 
+ // {02} \cdot s
+-struct Mul02Table
+-{
+-  constexpr Mul02Table() : values()
+-  {
+-    for(int s = 0; s < 256; s++) {
+-      values[s] = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
+-    }
+-  }
+-
+-  constexpr unsigned char operator()(uint8_t i) const { return values[i]; }
+-
+-  unsigned char values[256];
+-};
+-
+-static constexpr Mul02Table mul02;
++static inline unsigned char mul02(unsigned char s) {
++  return (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
++}
+ 
+ // {03} \cdot s
+-struct Mul03Table
+-{
+-  constexpr Mul03Table() : values()
+-  {
+-    for(int s=0; s<256; s++) {
+-      const unsigned char s2 = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
+-      values[s] = s ^ s2;
+-    }
+-  }
+-
+-  constexpr unsigned char operator()(uint8_t i) const { return values[i]; }
+-
+-  unsigned char values[256];
+-};
+-
+-static constexpr Mul03Table mul03;
++static inline unsigned char mul03(unsigned char s) {
++  unsigned char s2 = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
++  return s ^ s2;
++}
+ 
+ // {09} \cdot s
+-struct Mul09Table
+-{
+-  constexpr Mul09Table() : values()
+-  {
+-    for(int s=0; s<256; s++) {
+-      const unsigned char s2 = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
+-      const unsigned char s4 = (s2 & 0x80) ? ((s2 << 1) ^ 0x1b) : (s2 << 1);
+-      const unsigned char s8 = (s4 & 0x80) ? ((s4 << 1) ^ 0x1b) : (s4 << 1);
+-      values[s] = s ^ s8;
+-    }
+-  }
+-
+-  constexpr unsigned char operator()(uint8_t i) const { return values[i]; }
+-
+-  unsigned char values[256];
+-};
++static inline unsigned char mul09(unsigned char s) {
++  unsigned char s2, s4, s8;
+ 
+-static constexpr Mul09Table mul09;
++  s2 = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
++  s4 = (s2 & 0x80) ? ((s2 << 1) ^ 0x1b) : (s2 << 1);
++  s8 = (s4 & 0x80) ? ((s4 << 1) ^ 0x1b) : (s4 << 1);
++  return s ^ s8;
++}
+ 
+ // {0b} \cdot s
+-struct Mul0bTable
+-{
+-  constexpr Mul0bTable() : values()
+-  {
+-    for(int s=0; s<256; s++) {
+-      const unsigned char s2 = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
+-      const unsigned char s4 = (s2 & 0x80) ? ((s2 << 1) ^ 0x1b) : (s2 << 1);
+-      const unsigned char s8 = (s4 & 0x80) ? ((s4 << 1) ^ 0x1b) : (s4 << 1);
+-      values[s] = s ^ s2 ^ s8;
+-    }
+-  }
+-
+-  constexpr unsigned char operator()(uint8_t i) const { return values[i]; }
++static inline unsigned char mul0b(unsigned char s) {
++  unsigned char s2, s4, s8;
+ 
+-  unsigned char values[256];
+-};
+-
+-static constexpr Mul0bTable mul0b;
++  s2 = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
++  s4 = (s2 & 0x80) ? ((s2 << 1) ^ 0x1b) : (s2 << 1);
++  s8 = (s4 & 0x80) ? ((s4 << 1) ^ 0x1b) : (s4 << 1);
++  return s ^ s2 ^ s8;
++}
+ 
+ // {0d} \cdot s
+-struct Mul0dTable
+-{
+-  constexpr Mul0dTable() : values()
+-  {
+-    for(int s=0; s<256; s++) {
+-      const unsigned char s2 = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
+-      const unsigned char s4 = (s2 & 0x80) ? ((s2 << 1) ^ 0x1b) : (s2 << 1);
+-      const unsigned char s8 = (s4 & 0x80) ? ((s4 << 1) ^ 0x1b) : (s4 << 1);
+-      values[s] = s ^ s4 ^ s8;
+-    }
+-  }
++static inline unsigned char mul0d(unsigned char s) {
++  unsigned char s2, s4, s8;
+ 
+-  constexpr unsigned char operator()(uint8_t i) const { return values[i]; }
+-
+-  unsigned char values[256];
+-};
+-
+-static constexpr Mul0dTable mul0d;
++  s2 = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
++  s4 = (s2 & 0x80) ? ((s2 << 1) ^ 0x1b) : (s2 << 1);
++  s8 = (s4 & 0x80) ? ((s4 << 1) ^ 0x1b) : (s4 << 1);
++  return s ^ s4 ^ s8;
++}
+ 
+ // {0e} \cdot s
+-struct Mul0eTable
+-{
+-  constexpr Mul0eTable() : values()
+-  {
+-    for(int s=0; s<256; s++) {
+-      const unsigned char s2 = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
+-      const unsigned char s4 = (s2 & 0x80) ? ((s2 << 1) ^ 0x1b) : (s2 << 1);
+-      const unsigned char s8 = (s4 & 0x80) ? ((s4 << 1) ^ 0x1b) : (s4 << 1);
+-      values[s] = s2 ^ s4 ^ s8;
+-    }
+-  }
+-
+-  constexpr unsigned char operator()(uint8_t i) const { return values[i]; }
++static inline unsigned char mul0e(unsigned char s) {
++  unsigned char s2, s4, s8;
+ 
+-  unsigned char values[256];
+-};
+-
+-static constexpr Mul0eTable mul0e;
++  s2 = (s & 0x80) ? ((s << 1) ^ 0x1b) : (s << 1);
++  s4 = (s2 & 0x80) ? ((s2 << 1) ^ 0x1b) : (s2 << 1);
++  s8 = (s4 & 0x80) ? ((s4 << 1) ^ 0x1b) : (s4 << 1);
++  return s2 ^ s4 ^ s8;
++}
+ 
+ static inline void mixColumns(unsigned char *state) {
+   int c;
+-- 
+2.21.0
+
