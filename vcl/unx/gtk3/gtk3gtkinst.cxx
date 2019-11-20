@@ -8813,9 +8813,11 @@ public:
 
     virtual void set_cursor(int pos) override
     {
+        disable_notify_events();
         GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
         gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
         gtk_tree_path_free(path);
+        enable_notify_events();
     }
 
     virtual void scroll_to_row(int pos) override
@@ -9307,11 +9309,13 @@ public:
 
     virtual void set_cursor(const weld::TreeIter& rIter) override
     {
+        disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
         gtk_tree_path_free(path);
+        enable_notify_events();
     }
 
     virtual bool get_iter_first(weld::TreeIter& rIter) const override
@@ -10170,11 +10174,13 @@ public:
 
     virtual void set_cursor(const weld::TreeIter& rIter) override
     {
+        disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         gtk_icon_view_set_cursor(m_pIconView, path, nullptr, false);
         gtk_tree_path_free(path);
+        enable_notify_events();
     }
 
     virtual bool get_iter_first(weld::TreeIter& rIter) const override
