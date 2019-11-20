@@ -84,15 +84,6 @@ namespace accessibility
             xComponent->addEventListener(static_cast< XEventListener *> (this));
     }
 
-    void AccessibleBrowseBoxTableCell::nameChanged( const OUString& rNewName, const OUString& rOldName )
-    {
-        implSetName( rNewName );
-        Any aOldValue, aNewValue;
-        aOldValue <<= rOldName;
-        aNewValue <<= rNewName;
-        commitEvent( AccessibleEventId::NAME_CHANGED, aNewValue, aOldValue );
-    }
-
     // XInterface -------------------------------------------------------------
 
     /** Queries for a new interface. */

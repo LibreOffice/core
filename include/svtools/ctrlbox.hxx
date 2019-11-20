@@ -252,7 +252,6 @@ private:
                                     SvxBorderLineStyle nStyle, BitmapEx& rBmp );
 
     void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
-    DECL_LINK(StyleUpdated, weld::Widget&, void);
     DECL_LINK(ValueSelectHdl, SvtValueSet*, void);
     DECL_LINK(FocusHdl, weld::Widget&, void);
     DECL_LINK(NoneHdl, weld::Button&, void);

@@ -269,7 +269,6 @@ class SvxNumOptionsTabPage : public SfxTabPage
     DECL_LINK(RatioHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(CharFmtHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(EditModifyHdl_Impl, weld::Entry&, void);
-    DECL_LINK(EditListBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(AllLevelHdl_Impl, weld::SpinButton&, void);
     DECL_LINK(OrientHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(SameLevelHdl_Impl, weld::ToggleButton&, void);
@@ -351,7 +350,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK(LevelHdl, void *, void);
     DECL_LINK(EditModifyHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(DistanceHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(DistanceFocusHdl_Impl, Control&, void);
     DECL_LINK(RelativeHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(StandardHdl_Impl, weld::Button&, void);
 

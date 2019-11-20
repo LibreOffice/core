@@ -96,7 +96,6 @@ public:
                    ColorSelectFunction const& rColorSelectFunction);
     virtual ~SvxColorWindow() override;
     virtual void        dispose() override;
-    void                ShowNoneButton();
     void                StartSelection();
     void                SetNoSelection();
     bool                IsNoSelection() const;

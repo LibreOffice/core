@@ -112,8 +112,6 @@ namespace dbaui
 
         OFieldDescription*      pActFieldDescr;
 
-        DECL_LINK(OnScroll, weld::ScrolledWindow&, void);
-
         DECL_LINK(FormatClickHdl, weld::Button&, void);
         DECL_LINK(ChangeHdl, weld::ComboBox&, void);
 

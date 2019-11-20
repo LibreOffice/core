@@ -1128,11 +1128,6 @@ IMPL_LINK(SvxCharNamePage, FontModifyComboBoxHdl_Impl, weld::ComboBox&, rBox, vo
     FontModifyHdl_Impl(rBox);
 }
 
-IMPL_LINK(SvxCharNamePage, FontModifyEditHdl_Impl, weld::Entry&, rBox, void)
-{
-    FontModifyHdl_Impl(rBox);
-}
-
 IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, weld::Button&, rButton, void)
 {
     OUString sFontName;
@@ -1632,16 +1627,6 @@ void SvxCharEffectsPage::SelectHdl_Impl(const weld::ComboBox* pBox)
         auto nSPos = m_xStrikeoutLB->get_active();
         m_xIndividualWordsBtn->set_sensitive( bUEnable || bOEnable || nSPos > 0);
     }
-    UpdatePreview_Impl();
-}
-
-IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl, weld::ComboBox&, void)
-{
-    bool bEnable = ( ( m_xUnderlineLB->get_active() > 0 ) ||
-                     ( m_xOverlineLB->get_active()  > 0 ) ||
-                     ( m_xStrikeoutLB->get_active() > 0 ) );
-    m_xIndividualWordsBtn->set_sensitive( bEnable );
-
     UpdatePreview_Impl();
 }
 

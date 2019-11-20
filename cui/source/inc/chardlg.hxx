@@ -127,7 +127,6 @@ private:
     bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
 
     DECL_LINK(UpdateHdl_Impl, Timer *, void );
-    DECL_LINK(FontModifyEditHdl_Impl, weld::Entry&, void);
     DECL_LINK(FontModifyComboBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(FontFeatureButtonClicked, weld::Button&, void);
 
@@ -205,7 +204,6 @@ private:
     DECL_LINK(SelectListBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(CbClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(TristClickHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(UpdatePreview_Impl, weld::ComboBox&, void);
     DECL_LINK(ColorBoxSelectHdl_Impl, ColorListBox&, void);
 
 public:
@@ -272,7 +270,6 @@ private:
     DECL_LINK(RotationHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(AutoPositionHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(FitToLineHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(KerningSelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(KerningModifyHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ValueChangedHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ScaleWidthModifyHdl_Impl, weld::MetricSpinButton&, void);

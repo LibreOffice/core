@@ -1875,11 +1875,6 @@ IMPL_LINK_NOARG(ColorWindow, FocusHdl, weld::Widget&, void)
     mxColorSet->GrabFocus();
 }
 
-void SvxColorWindow::ShowNoneButton()
-{
-    mpButtonNoneColor->Show();
-}
-
 void ColorWindow::ShowNoneButton()
 {
     mxButtonNoneColor->show();

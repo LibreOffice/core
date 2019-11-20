@@ -29,7 +29,6 @@ class SvxMenuConfigPage : public SvxConfigPage
 private:
     bool m_bIsMenuBar;
 
-    DECL_LINK( SelectMenu, weld::ComboBox&, void );
     DECL_LINK( SelectMenuEntry, weld::TreeView&, void );
 
     DECL_LINK( GearHdl, const OString&, void );

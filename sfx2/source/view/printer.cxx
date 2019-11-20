@@ -199,11 +199,6 @@ short SfxPrintOptionsDialog::run()
     return nRet;
 }
 
-IMPL_LINK_NOARG(SfxPrintOptionsDialog, HelpRequestHdl, weld::Widget&, bool)
-{
-    return !pDlgImpl->mbHelpDisabled;
-}
-
 void SfxPrintOptionsDialog::DisableHelp()
 {
     pDlgImpl->mbHelpDisabled = true;

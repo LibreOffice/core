@@ -30,7 +30,6 @@ class SvxToolbarConfigPage : public SvxConfigPage
 {
 private:
 
-    DECL_LINK( SelectToolbar, weld::ComboBox&, void );
     DECL_LINK( SelectToolbarEntry, weld::TreeView&, void );
     DECL_LINK( MoveHdl, weld::Button&, void );
 

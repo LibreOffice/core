@@ -84,8 +84,6 @@ public:
 private:
     OUString getPropertyTypeName( sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/ ) const;
 
-    DECL_LINK(ResizeHdl, const Size&, void);
-
 public:
     css::uno::Reference<css::linguistic2::XConversionDictionary>  m_xDictionary;
 

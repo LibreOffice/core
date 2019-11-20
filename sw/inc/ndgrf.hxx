@@ -67,9 +67,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
 
     void InsertLink( const OUString& rGrfName, const OUString& rFltName );
 
-    DECL_LINK( SwapGraphic, const GraphicObject*, SvStream* );
-    DECL_STATIC_LINK( SwGrfNode, SwapReplacement, const GraphicObject*, SvStream* );
-
     /// allow reaction on change of content of GraphicObject, so always call
     /// when GraphicObject content changes
     void onGraphicChanged();

@@ -841,12 +841,6 @@ void Slider::Resize()
     Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
 }
 
-IMPL_LINK_NOARG(Slider, LinkedFieldModifyHdl, Edit&, void)
-{
-    if (mpLinkedField)
-        SetThumbPos(mpLinkedField->GetValue());
-}
-
 void Slider::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );

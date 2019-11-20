@@ -90,21 +90,4 @@ void TemplateDefaultView::createContextMenu()
     Invalidate();
 }
 
-IMPL_LINK(TemplateDefaultView, ContextMenuSelectHdl, Menu*, pMenu, void)
-{
-    sal_uInt16 nMenuId = pMenu->GetCurItemId();
-
-    switch(nMenuId)
-    {
-    case MNI_OPEN:
-        maOpenTemplateHdl.Call(maSelectedItem);
-        break;
-    case MNI_EDIT:
-        maEditTemplateHdl.Call(maSelectedItem);
-        break;
-    default:
-        break;
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

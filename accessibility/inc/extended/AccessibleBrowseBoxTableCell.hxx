@@ -51,8 +51,6 @@ namespace accessibility
                                     sal_uInt16 _nColId,
                                     sal_Int32 _nOffset );
 
-        void    nameChanged( const OUString& rNewName, const OUString& rOldName );
-
         // XInterface -------------------------------------------------------------
 
         /** Queries for a new interface. */

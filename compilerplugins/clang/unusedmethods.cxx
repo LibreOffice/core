@@ -130,14 +130,19 @@ private:
 
 MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
 {
-    if (functionDecl->getInstantiatedFromMemberFunction())
-        functionDecl = functionDecl->getInstantiatedFromMemberFunction();
+    for(;;)
+    {
+        if (functionDecl->getInstantiatedFromMemberFunction())
+            functionDecl = functionDecl->getInstantiatedFromMemberFunction();
 #if CLANG_VERSION < 90000
-    else if (functionDecl->getClassScopeSpecializationPattern())
-        functionDecl = functionDecl->getClassScopeSpecializationPattern();
+        else if (functionDecl->getClassScopeSpecializationPattern())
+            functionDecl = functionDecl->getClassScopeSpecializationPattern();
 #endif
-    else if (functionDecl->getTemplateInstantiationPattern())
-        functionDecl = functionDecl->getTemplateInstantiationPattern();
+        else if (functionDecl->getTemplateInstantiationPattern())
+            functionDecl = functionDecl->getTemplateInstantiationPattern();
+        else
+            break;
+    }
 
     MyFuncInfo aInfo;
     switch (functionDecl->getAccess())

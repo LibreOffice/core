@@ -71,10 +71,6 @@ class ChartTypePanel : public ResourceChangeListener,
                        public ChartTypeTemplateProvider
 {
 public:
-    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                      ChartController* pController);
-
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(const vcl::EnumContext& rContext) override;

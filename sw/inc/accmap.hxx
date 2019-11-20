@@ -303,9 +303,6 @@ private:
 public:
     virtual bool IsDocumentSelAll() override;
 
-    const css::uno::WeakReference < css::accessibility::XAccessible >&
-        GetCursorContext() const { return mxCursorContext; }
-
     //Para Container for InvalidateCursorPosition
     typedef std::set< SwAccessibleParagraph* >  SET_PARA;
     SET_PARA m_setParaAdd;

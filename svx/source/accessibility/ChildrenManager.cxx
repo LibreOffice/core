@@ -60,11 +60,6 @@ css::uno::Reference<XAccessible> ChildrenManager::GetChild (long nIndex)
     return mpImpl->GetChild (nIndex);
 }
 
-Reference<XAccessible> ChildrenManager::GetChild (const Reference<drawing::XShape>& xShape)
-{
-    return mpImpl->GetChild (xShape);
-}
-
 css::uno::Reference<css::drawing::XShape> ChildrenManager::GetChildShape(long nIndex)
 {
     return mpImpl->GetChildShape(nIndex);
