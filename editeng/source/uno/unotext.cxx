@@ -45,13 +45,13 @@
 #include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unoipset.hxx>
-#include <comphelper/OUStringLiteralList.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <editeng/unonames.hxx>
 
+#include <initializer_list>
 #include <memory>
 
 using namespace ::cppu;
@@ -2166,7 +2166,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Stat
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames_Static(),
-        comphelper::OUStringLiteralList({ "com.sun.star.text.Text" }));
+        std::initializer_list<OUStringLiteral>{ "com.sun.star.text.Text" });
 }
 
 namespace
