@@ -22,9 +22,7 @@
 
 #include "porlin.hxx"
 #include "inftxt.hxx"
-#include "portxt.hxx"
 #include "pormulti.hxx"
-#include "porglue.hxx"
 #include <blink.hxx>
 #if OSL_DEBUG_LEVEL > 0
 

@@ -18,7 +18,6 @@
  */
 
 #include <algorithm>
-#include <functional>
 #include <SwNumberTree.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

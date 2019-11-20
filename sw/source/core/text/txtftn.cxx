@@ -23,19 +23,15 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <ndtxt.hxx>
-#include <txtatr.hxx>
 #include <SwPortionHandler.hxx>
 #include <txtftn.hxx>
 #include <flyfrm.hxx>
 #include <fmtftn.hxx>
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
-#include <dflyobj.hxx>
 #include <rowfrm.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/charrotateitem.hxx>
-#include <breakit.hxx>
-#include <com/sun/star/i18n/ScriptType.hpp>
 #include <tabfrm.hxx>
 #include <sortedobjs.hxx>
 

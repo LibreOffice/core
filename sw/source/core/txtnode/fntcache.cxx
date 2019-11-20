@@ -21,11 +21,9 @@
 #include <sal/config.h>
 
 #include <cstdint>
-#include <cstdlib>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/print.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
@@ -41,10 +39,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <swfont.hxx>
 #include <wrong.hxx>
-#include <dbg_lay.hxx>
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
-#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <scriptinfo.hxx>
 #include <editeng/brushitem.hxx>

@@ -26,7 +26,6 @@
 #include <sfx2/printer.hxx>
 #include <sal/log.hxx>
 #include <editeng/hyphenzoneitem.hxx>
-#include <editeng/escapementitem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -36,13 +35,9 @@
 #include <editeng/shaditem.hxx>
 
 #include <SwSmartTagMgr.hxx>
-#include <linguistic/lngprops.hxx>
-#include <editeng/unolingu.hxx>
 #include <breakit.hxx>
 #include <editeng/forbiddenruleitem.hxx>
 #include <paintfrm.hxx>
-#include <txatbase.hxx>
-#include <fmtinfmt.hxx>
 #include <swmodule.hxx>
 #include <vcl/svapp.hxx>
 #include <viewsh.hxx>
@@ -64,12 +59,8 @@
 #include <wrong.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
-#include <SwGrammarMarkUp.hxx>
 #include <numrule.hxx>
 #include <EnhancedPDFExportHelper.hxx>
-#include <docufld.hxx>
-#include <frmfmt.hxx>
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
