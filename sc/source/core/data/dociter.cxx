@@ -1449,6 +1449,146 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
     return (nFoundCol <= MAXCOL) && (nFoundRow <= MAXROW);
 }
 
+ScCountIfCellIterator::ScCountIfCellIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+             const ScQueryParam& rParam ) :
+    maParam(rParam),
+    pDoc( pDocument ),
+    mrContext( rContext ),
+    nTab( nTable)
+{
+    nCol = maParam.nCol1;
+    nRow = maParam.nRow1;
+}
+
+void ScCountIfCellIterator::InitPos()
+{
+    nRow = maParam.nRow1;
+    if (maParam.bHasHeader && maParam.bByRow)
+        ++nRow;
+    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
+    maCurPos = pCol->maCells.position(nRow);
+}
+
+void ScCountIfCellIterator::IncPos()
+{
+    if (maCurPos.second + 1 < maCurPos.first->size)
+    {
+        // Move within the same block.
+        ++maCurPos.second;
+        ++nRow;
+    }
+    else
+        // Move to the next block.
+        IncBlock();
+}
+
+void ScCountIfCellIterator::IncBlock()
+{
+    ++maCurPos.first;
+    maCurPos.second = 0;
+
+    nRow = maCurPos.first->position;
+}
+
+int ScCountIfCellIterator::GetCount()
+{
+    assert(nTab < pDoc->GetTableCount() && "try to access index out of bounds, FIX IT");
+    nCol = maParam.nCol1;
+    InitPos();
+
+    const ScQueryEntry& rEntry = maParam.GetEntry(0);
+    const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    const bool bSingleQueryItem = rEntry.GetQueryItems().size() == 1;
+    int count = 0;
+
+    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
+    while (true)
+    {
+        bool bNextColumn = maCurPos.first == pCol->maCells.end();
+        if (!bNextColumn)
+        {
+            if (nRow > maParam.nRow2)
+                bNextColumn = true;
+        }
+
+        if (bNextColumn)
+        {
+            do
+            {
+                ++nCol;
+                if (nCol > maParam.nCol2 || nCol >= pDoc->maTabs[nTab]->GetAllocatedColumnsCount())
+                    return count; // Over and out
+                AdvanceQueryParamEntryField();
+                pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
+            }
+            while (!rItem.mbMatchEmpty && pCol->IsEmptyData());
+
+            InitPos();
+        }
+
+        if (maCurPos.first->type == sc::element_type_empty)
+        {
+            if (rItem.mbMatchEmpty && bSingleQueryItem)
+            {
+                // This shortcut, instead of determining if any SC_OR query
+                // exists or this query is SC_AND'ed (which wouldn't make
+                // sense, but..) and evaluating them in ValidQuery(), is
+                // possible only because the interpreter is the only caller
+                // that sets mbMatchEmpty and there is only one item in those
+                // cases.
+                // XXX this would have to be reworked if other filters used it
+                // in different manners and evaluation would have to be done in
+                // ValidQuery().
+                count++;
+                IncPos();
+                continue;
+            }
+            else
+            {
+                IncBlock();
+                continue;
+            }
+        }
+
+        ScRefCellValue aCell = sc::toRefCell(maCurPos.first, maCurPos.second);
+
+        if ( pDoc->maTabs[nTab]->ValidQuery( nRow, maParam,
+                (nCol == static_cast<SCCOL>(rEntry.nField) ? &aCell : nullptr),
+                nullptr,
+                &mrContext) )
+        {
+            if (aCell.isEmpty())
+                return count;
+            count++;
+            IncPos();
+            continue;
+        }
+        else
+            IncPos();
+    }
+    return count;
+}
+
+void ScCountIfCellIterator::AdvanceQueryParamEntryField()
+{
+    SCSIZE nEntries = maParam.GetEntryCount();
+    for ( SCSIZE j = 0; j < nEntries; j++  )
+    {
+        ScQueryEntry& rEntry = maParam.GetEntry( j );
+        if ( rEntry.bDoQuery )
+        {
+            if ( rEntry.nField < MAXCOL )
+                rEntry.nField++;
+            else
+            {
+                OSL_FAIL( "AdvanceQueryParamEntryField: ++rEntry.nField > MAXCOL" );
+            }
+        }
+        else
+            break;  // for
+    }
+}
+
 namespace {
 
 /**
