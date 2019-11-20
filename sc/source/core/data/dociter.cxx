@@ -1044,7 +1044,7 @@ bool ScCellIterator::next()
 
 ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, SCTAB nTable,
              const ScQueryParam& rParam, bool bMod ) :
-    mpParam(new ScQueryParam(rParam)),
+    maParam(rParam),
     pDoc( pDocument ),
     mrContext( rContext ),
     nTab( nTable),
@@ -1053,15 +1053,15 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, const ScInterpre
     bAdvanceQuery( false ),
     bIgnoreMismatchOnLeadingStrings( false )
 {
-    nCol = mpParam->nCol1;
-    nRow = mpParam->nRow1;
+    nCol = maParam.nCol1;
+    nRow = maParam.nRow1;
     SCSIZE i;
     if (bMod) // Or else it's already inserted
     {
-        SCSIZE nCount = mpParam->GetEntryCount();
-        for (i = 0; (i < nCount) && (mpParam->GetEntry(i).bDoQuery); ++i)
+        SCSIZE nCount = maParam.GetEntryCount();
+        for (i = 0; (i < nCount) && (maParam.GetEntry(i).bDoQuery); ++i)
         {
-            ScQueryEntry& rEntry = mpParam->GetEntry(i);
+            ScQueryEntry& rEntry = maParam.GetEntry(i);
             ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
             sal_uInt32 nIndex = 0;
             bool bNumber = mrContext.GetFormatTable()->IsNumberFormat(
@@ -1073,8 +1073,8 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, const ScInterpre
 
 void ScQueryCellIterator::InitPos()
 {
-    nRow = mpParam->nRow1;
-    if (mpParam->bHasHeader && mpParam->bByRow)
+    nRow = maParam.nRow1;
+    if (maParam.bHasHeader && maParam.bByRow)
         ++nRow;
     ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     maCurPos = pCol->maCells.position(nRow);
@@ -1105,16 +1105,16 @@ bool ScQueryCellIterator::GetThis()
 {
     if (nTab >= pDoc->GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
-    const ScQueryEntry& rEntry = mpParam->GetEntry(0);
+    const ScQueryEntry& rEntry = maParam.GetEntry(0);
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
     SCCOLROW nFirstQueryField = rEntry.nField;
     bool bAllStringIgnore = bIgnoreMismatchOnLeadingStrings &&
         rItem.meType != ScQueryEntry::ByString;
     bool bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
-        !mpParam->bHasHeader && rItem.meType == ScQueryEntry::ByString &&
-        ((mpParam->bByRow && nRow == mpParam->nRow1) ||
-         (!mpParam->bByRow && nCol == mpParam->nCol1));
+        !maParam.bHasHeader && rItem.meType == ScQueryEntry::ByString &&
+        ((maParam.bByRow && nRow == maParam.nRow1) ||
+         (!maParam.bByRow && nCol == maParam.nCol1));
 
     ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     while (true)
@@ -1122,7 +1122,7 @@ bool ScQueryCellIterator::GetThis()
         bool bNextColumn = maCurPos.first == pCol->maCells.end();
         if (!bNextColumn)
         {
-            if (nRow > mpParam->nRow2)
+            if (nRow > maParam.nRow2)
                 bNextColumn = true;
         }
 
@@ -1131,7 +1131,7 @@ bool ScQueryCellIterator::GetThis()
             do
             {
                 ++nCol;
-                if (nCol > mpParam->nCol2 || nCol >= pDoc->maTabs[nTab]->GetAllocatedColumnsCount())
+                if (nCol > maParam.nCol2 || nCol >= pDoc->maTabs[nTab]->GetAllocatedColumnsCount())
                     return false; // Over and out
                 if ( bAdvanceQuery )
                 {
@@ -1145,8 +1145,8 @@ bool ScQueryCellIterator::GetThis()
             InitPos();
 
             bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
-                !mpParam->bHasHeader && rItem.meType == ScQueryEntry::ByString &&
-                mpParam->bByRow;
+                !maParam.bHasHeader && rItem.meType == ScQueryEntry::ByString &&
+                maParam.bByRow;
         }
 
         if (maCurPos.first->type == sc::element_type_empty)
@@ -1178,7 +1178,7 @@ bool ScQueryCellIterator::GetThis()
         else
         {
             bool bTestEqualCondition = false;
-            if ( pDoc->maTabs[nTab]->ValidQuery( nRow, *mpParam,
+            if ( pDoc->maTabs[nTab]->ValidQuery( nRow, maParam,
                     (nCol == static_cast<SCCOL>(nFirstQueryField) ? &aCell : nullptr),
                     (nTestEqualCondition ? &bTestEqualCondition : nullptr),
                     &mrContext) )
@@ -1228,7 +1228,7 @@ bool ScQueryCellIterator::GetFirst()
 {
     if (nTab >= pDoc->GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
-    nCol = mpParam->nCol1;
+    nCol = maParam.nCol1;
     InitPos();
     return GetThis();
 }
@@ -1245,10 +1245,10 @@ bool ScQueryCellIterator::GetNext()
 
 void ScQueryCellIterator::AdvanceQueryParamEntryField()
 {
-    SCSIZE nEntries = mpParam->GetEntryCount();
+    SCSIZE nEntries = maParam.GetEntryCount();
     for ( SCSIZE j = 0; j < nEntries; j++  )
     {
-        ScQueryEntry& rEntry = mpParam->GetEntry( j );
+        ScQueryEntry& rEntry = maParam.GetEntry( j );
         if ( rEntry.bDoQuery )
         {
             if ( rEntry.nField < pDoc->MaxCol() )
@@ -1275,18 +1275,18 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         bool const  mb;
         BoolResetter( bool& r, bool b ) : mr(r), mb(r) { r = b; }
         ~BoolResetter() { mr = mb; }
-    } aRangeLookupResetter( mpParam->mbRangeLookup, true);
+    } aRangeLookupResetter( maParam.mbRangeLookup, true);
 
     nFoundCol = pDoc->MaxCol()+1;
     nFoundRow = pDoc->MaxRow()+1;
     SetStopOnMismatch( true ); // assume sorted keys
     SetTestEqualCondition( true );
     bIgnoreMismatchOnLeadingStrings = true;
-    bool bLiteral = mpParam->eSearchType == utl::SearchParam::SearchType::Normal &&
-        mpParam->GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString;
-    bool bBinary = mpParam->bByRow &&
-        (bLiteral || mpParam->GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue) &&
-        (mpParam->GetEntry(0).eOp == SC_LESS_EQUAL || mpParam->GetEntry(0).eOp == SC_GREATER_EQUAL);
+    bool bLiteral = maParam.eSearchType == utl::SearchParam::SearchType::Normal &&
+        maParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString;
+    bool bBinary = maParam.bByRow &&
+        (bLiteral || maParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue) &&
+        (maParam.GetEntry(0).eOp == SC_LESS_EQUAL || maParam.GetEntry(0).eOp == SC_GREATER_EQUAL);
     bool bFound = false;
     if (bBinary)
     {
@@ -1294,7 +1294,7 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         {
             // BinarySearch() already positions correctly and only needs real
             // query comparisons afterwards, skip the verification check below.
-            mpParam->mbRangeLookup = false;
+            maParam.mbRangeLookup = false;
             bFound = GetThis();
         }
     }
@@ -1325,19 +1325,19 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
             nCol = nFoundCol;
             nRow = nFoundRow;
             maCurPos = aPosSave;
-            if (mpParam->mbRangeLookup)
+            if (maParam.mbRangeLookup)
             {
                 // Verify that the found entry does not only fulfill the range
                 // lookup but also the real query, i.e. not numeric was found
                 // if query is ByString and vice versa.
-                mpParam->mbRangeLookup = false;
+                maParam.mbRangeLookup = false;
                 // Step back the last field advance if GetNext() did one.
                 if (bAdvanceQuery && nColDiff)
                 {
-                    SCSIZE nEntries = mpParam->GetEntryCount();
+                    SCSIZE nEntries = maParam.GetEntryCount();
                     for (SCSIZE j=0; j < nEntries; ++j)
                     {
-                        ScQueryEntry& rEntry = mpParam->GetEntry( j );
+                        ScQueryEntry& rEntry = maParam.GetEntry( j );
                         if (rEntry.bDoQuery)
                         {
                             if (rEntry.nField - nColDiff >= 0)
@@ -1363,10 +1363,10 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
     if ( IsEqualConditionFulfilled() )
     {
         // Position on last equal entry.
-        SCSIZE nEntries = mpParam->GetEntryCount();
+        SCSIZE nEntries = maParam.GetEntryCount();
         for ( SCSIZE j = 0; j < nEntries; j++  )
         {
-            ScQueryEntry& rEntry = mpParam->GetEntry( j );
+            ScQueryEntry& rEntry = maParam.GetEntry( j );
             if ( rEntry.bDoQuery )
             {
                 switch ( rEntry.eOp )
@@ -1400,15 +1400,15 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         maCurPos = aPosSave;
         return true;
     }
-    if ( (mpParam->eSearchType != utl::SearchParam::SearchType::Normal) &&
+    if ( (maParam.eSearchType != utl::SearchParam::SearchType::Normal) &&
             StoppedOnMismatch() )
     {
         // Assume found entry to be the last value less than respectively
         // greater than the query. But keep on searching for an equal match.
-        SCSIZE nEntries = mpParam->GetEntryCount();
+        SCSIZE nEntries = maParam.GetEntryCount();
         for ( SCSIZE j = 0; j < nEntries; j++  )
         {
-            ScQueryEntry& rEntry = mpParam->GetEntry( j );
+            ScQueryEntry& rEntry = maParam.GetEntry( j );
             if ( rEntry.bDoQuery )
             {
                 switch ( rEntry.eOp )
@@ -1794,24 +1794,24 @@ bool ScQueryCellIterator::BinarySearch()
 
     if (nTab >= pDoc->GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
-    nCol = mpParam->nCol1;
+    nCol = maParam.nCol1;
     ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     if (pCol->IsEmptyData())
         return false;
 
-    CollatorWrapper* pCollator = (mpParam->bCaseSens ? ScGlobal::GetCaseCollator() :
+    CollatorWrapper* pCollator = (maParam.bCaseSens ? ScGlobal::GetCaseCollator() :
         ScGlobal::GetCollator());
     SvNumberFormatter& rFormatter = *(mrContext.GetFormatTable());
-    const ScQueryEntry& rEntry = mpParam->GetEntry(0);
+    const ScQueryEntry& rEntry = maParam.GetEntry(0);
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     bool bLessEqual = rEntry.eOp == SC_LESS_EQUAL;
     bool bByString = rItem.meType == ScQueryEntry::ByString;
     bool bAllStringIgnore = bIgnoreMismatchOnLeadingStrings && !bByString;
     bool bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
-        !mpParam->bHasHeader && bByString;
+        !maParam.bHasHeader && bByString;
 
-    nRow = mpParam->nRow1;
-    if (mpParam->bHasHeader)
+    nRow = maParam.nRow1;
+    if (maParam.bHasHeader)
         ++nRow;
 
     ScRefCellValue aCell;
@@ -1832,7 +1832,7 @@ bool ScQueryCellIterator::BinarySearch()
         }
     }
 
-    NonEmptyCellIndexer aIndexer(pCol->maCells, nRow, mpParam->nRow2, bAllStringIgnore);
+    NonEmptyCellIndexer aIndexer(pCol->maCells, nRow, maParam.nRow2, bAllStringIgnore);
     if (!aIndexer.isValid())
         return false;
 
@@ -2040,7 +2040,7 @@ bool ScQueryCellIterator::BinarySearch()
     }
 
     aCellData = aIndexer.getCell(nLo);
-    if (nLo <= nHi && aCellData.second <= mpParam->nRow2)
+    if (nLo <= nHi && aCellData.second <= maParam.nRow2)
     {
         nRow = aCellData.second;
         maCurPos = aIndexer.getPosition(nLo);
@@ -2048,7 +2048,7 @@ bool ScQueryCellIterator::BinarySearch()
     }
     else
     {
-        nRow = mpParam->nRow2 + 1;
+        nRow = maParam.nRow2 + 1;
         // Set current position to the last possible row.
         maCurPos.first = pCol->maCells.end();
         --maCurPos.first;
