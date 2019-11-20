@@ -27,10 +27,8 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include "vclhelperbufferdevice.hxx"
@@ -41,10 +39,8 @@
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
-#include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <vcl/metric.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
@@ -56,11 +52,9 @@
 
 // control support
 
-#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <basegfx/polygon/b2dtrapezoid.hxx>
 
 // for support of Title/Description in all apps when embedding pictures
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>

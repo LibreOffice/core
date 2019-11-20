@@ -22,7 +22,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/texture/texture.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 

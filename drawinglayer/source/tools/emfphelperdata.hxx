@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPHELPERDATA_HXX
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPHELPERDATA_HXX
 
-#include <emfplushelper.hxx>
+#include <wmfemfhelper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/stream.hxx>
 #include <basegfx/point/b2dpoint.hxx>

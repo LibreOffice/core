@@ -18,11 +18,7 @@
  */
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DRAWINGLAYER_INC_EMFPLUSHELPER_HXX
 #define INCLUDED_DRAWINGLAYER_INC_EMFPLUSHELPER_HXX
 
-#include <sal/types.h>
 #include <sal/config.h>
 #include <memory>
 #include "wmfemfhelper.hxx"

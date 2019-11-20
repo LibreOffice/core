@@ -18,13 +18,10 @@
  */
 
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
-#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/texture/texture.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitivehelper2d.hxx>
