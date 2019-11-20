@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c1e07ffd",
+        "filename": "emfio/source/reader/emfreader.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2019-11-20T11:40:02Z",
+      "side": 1,
+      "message": "to silent windows error, you could use std::error here.",
+      "revId": "52e6b9f3dd7b3a5bf22458935eedf6eb2d6e6a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
