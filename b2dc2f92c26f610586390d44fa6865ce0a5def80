@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_21adb387",
+        "filename": "cui/uiconfig/ui/optfltrpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-20T12:17:20Z",
+      "side": 1,
+      "message": "I believe the wording has some meaning, maybe this doesn\u0027t apply to W365. So changing the label without discussion on BZ is a no-go for me.",
+      "range": {
+        "startLine": 85,
+        "startChar": 83,
+        "endLine": 85,
+        "endChar": 98
+      },
+      "revId": "b2dc2f92c26f610586390d44fa6865ce0a5def80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
