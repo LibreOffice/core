@@ -288,7 +288,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,2,3,1,2)), rRange3);
 }
 
-const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)
+const SdrOle2Obj* getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage)
 {
     // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
@@ -324,14 +324,23 @@ const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)
         return nullptr;
     }
 
-    const SdrOle2Obj& rOleObj = static_cast<const SdrOle2Obj&>(*pObj);
-    if (!rOleObj.IsChart())
+    return static_cast<const SdrOle2Obj*>(pObj);
+}
+
+const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)
+{
+    const SdrOle2Obj* pObj = getSingleOleObject(rDoc, nPage);
+
+    if (!pObj)
+        return pObj;
+
+    if (!pObj->IsChart())
     {
         cout << "This should be a chart object." << endl;
         return nullptr;
     }
 
-    return &rOleObj;
+    return pObj;
 }
 
 std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj)
