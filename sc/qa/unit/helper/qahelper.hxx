@@ -129,6 +129,8 @@ SCQAHELPER_DLLPUBLIC void testFile(const OUString& aFileName, ScDocument& rDoc, 
 //need own handler because conditional formatting strings must be generated
 SCQAHELPER_DLLPUBLIC void testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
 
+SCQAHELPER_DLLPUBLIC const SdrOle2Obj* getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage);
+
 SCQAHELPER_DLLPUBLIC const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage);
 
 SCQAHELPER_DLLPUBLIC std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj);
