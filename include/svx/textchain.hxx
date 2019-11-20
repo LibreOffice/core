@@ -23,53 +23,6 @@
 #include <editeng/editdata.hxx>
 #include <map>
 
-/*
- * Properties can be accessed and set from a TextChain with:
- * - T TextChain::GetPROPNAME(SdrTextObj *)
- * - void TextChain::SetPROPNAME(SdrTextObj *, T)
- * where T and PROPNAME are respectively type and name of a property.
- *
- * To add a property PROPNAME of type T (and its interface) in TextChain:
- * 1) Add
- *      "DECL_CHAIN_PROP(PROPNAME, T)"
- *    in class ImpChainLinkProperties;
- * 2) Add
- *      "INIT_CHAIN_PROP(PROPNAME, V)"
- *    in constructor of ImpChainLinkProperties below
- *    (V is the initialization value for PROPNAME)
- *
- * 3) Add
- *      "DECL_CHAIN_PROP_INTERFACE(PROPNAME, T)"
- *    in class TextChain (under "public:");
- * 4)  Add
- *       "IMPL_CHAIN_PROP_INTERFACE(PROPNAME, T)"
- *    in file "svx/source/svdraw/textchain.cxx"
-*/
-
-#define DECL_CHAIN_PROP(PropName, PropType) \
-    PropType a##PropName;
-
-#define INIT_CHAIN_PROP(PropName, PropDefault) \
-    a##PropName = (PropDefault);
-
-#define DECL_CHAIN_PROP_INTERFACE(PropName, PropType) \
-    PropType const & Get##PropName (const SdrTextObj *); \
-    void Set##PropName (const SdrTextObj *, PropType);
-
-#define IMPL_CHAIN_PROP_INTERFACE(PropName, PropType) \
-    PropType const & TextChain::Get##PropName (const SdrTextObj *pTarget) { \
-        ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget); \
-        return pLinkProperties->a##PropName; \
-    } \
-    void TextChain::Set##PropName (const SdrTextObj *pTarget, PropType aPropParam) \
-    { \
-        ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget); \
-        pLinkProperties->a##PropName = aPropParam; \
-    }
-
-/* End Special Properties Macro */
-
-
 class ImpChainLinkProperties;
 class SdrTextObj;
 class SdrModel;
@@ -94,24 +47,24 @@ protected:
     friend class TextChain;
 
     ImpChainLinkProperties() {
-        INIT_CHAIN_PROP(NilChainingEvent, false)
-        INIT_CHAIN_PROP(CursorEvent, CursorChainingEvent::NULL_EVENT)
-        INIT_CHAIN_PROP(PreChainingSel, ESelection(0,0,0,0));
-        INIT_CHAIN_PROP(PostChainingSel, ESelection(0,0,0,0));
-        INIT_CHAIN_PROP(IsPartOfLastParaInNextLink, false) // XXX: Should come from file
-        INIT_CHAIN_PROP(PendingOverflowCheck, false)
-        INIT_CHAIN_PROP(SwitchingToNextBox, false)
+        aNilChainingEvent = false;
+        aCursorEvent = CursorChainingEvent::NULL_EVENT;
+        aPreChainingSel = ESelection(0,0,0,0);
+        aPostChainingSel = ESelection(0,0,0,0);
+        aIsPartOfLastParaInNextLink = false; // XXX: Should come from file
+        aPendingOverflowCheck = false;
+        aSwitchingToNextBox = false;
     }
 
 private:
     // NOTE: Remember to set default value in constructor when adding field
-    DECL_CHAIN_PROP(NilChainingEvent, bool)
-    DECL_CHAIN_PROP(CursorEvent, CursorChainingEvent)
-    DECL_CHAIN_PROP(PreChainingSel, ESelection)
-    DECL_CHAIN_PROP(PostChainingSel, ESelection)
-    DECL_CHAIN_PROP(IsPartOfLastParaInNextLink, bool)
-    DECL_CHAIN_PROP(PendingOverflowCheck, bool)
-    DECL_CHAIN_PROP(SwitchingToNextBox, bool)
+    bool aNilChainingEvent;
+    CursorChainingEvent aCursorEvent;
+    ESelection aPreChainingSel;
+    ESelection aPostChainingSel;
+    bool aIsPartOfLastParaInNextLink;
+    bool aPendingOverflowCheck;
+    bool aSwitchingToNextBox;
 };
 
 
@@ -129,16 +82,29 @@ public:
     ImpChainLinkProperties *GetLinkProperties(const SdrTextObj *);
 
     // Specific Link Properties
-    DECL_CHAIN_PROP_INTERFACE(CursorEvent, CursorChainingEvent)
-    DECL_CHAIN_PROP_INTERFACE(NilChainingEvent, bool)
-    DECL_CHAIN_PROP_INTERFACE(PreChainingSel, ESelection)
-    DECL_CHAIN_PROP_INTERFACE(PostChainingSel, ESelection)
+    CursorChainingEvent const & GetCursorEvent(const SdrTextObj *);
+    void SetCursorEvent(const SdrTextObj *, CursorChainingEvent const &);
+
+    bool GetNilChainingEvent(const SdrTextObj *);
+    void SetNilChainingEvent(const SdrTextObj *, bool);
+
+    ESelection const & GetPreChainingSel(const SdrTextObj *);
+    void SetPreChainingSel(const SdrTextObj *, ESelection const &);
+
+    ESelection const & GetPostChainingSel(const SdrTextObj *);
+    void SetPostChainingSel(const SdrTextObj *, ESelection const &);
+
     // return whether a paragraph is split between this box and the next
-    DECL_CHAIN_PROP_INTERFACE(IsPartOfLastParaInNextLink, bool)
+    bool GetIsPartOfLastParaInNextLink(const SdrTextObj *);
+    void SetIsPartOfLastParaInNextLink(const SdrTextObj *, bool );
+
     // return whether there is a pending overflow check (usually when we move cursor after an overflow in the prev link)
-    DECL_CHAIN_PROP_INTERFACE(PendingOverflowCheck, bool)
+    bool GetPendingOverflowCheck(const SdrTextObj *);
+    void SetPendingOverflowCheck(const SdrTextObj *, bool );
+
     // return whether we are currently moving the cursor to the next box (useful to know whether we should prevent SetOutlinerParaObject invocations in SdrTextObj::EndTextEdit)
-    DECL_CHAIN_PROP_INTERFACE(SwitchingToNextBox, bool)
+    bool GetSwitchingToNextBox(const SdrTextObj *);
+    void SetSwitchingToNextBox(const SdrTextObj *, bool);
 
 protected:
     TextChain();
