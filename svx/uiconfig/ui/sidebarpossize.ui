@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">-180</property>
-    <property name="upper">359.99</property>
+    <property name="upper">359.99000000000001</property>
     <property name="step_increment">5</property>
     <property name="page_increment">20</property>
   </object>
@@ -38,15 +39,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="sidebarpossize|horizontallabel">Position _X:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -60,15 +59,13 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="horizontalpos:0in-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|horizontalpos-atkobject">Horizontal</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|horizontalpos">Horizontal</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -76,15 +73,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="sidebarpossize|verticallabel">Position _Y:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -98,15 +93,13 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="verticalpos:0in-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|verticalpos-atkobject">Vertical</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|verticalpos">Vertical</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -114,15 +107,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="sidebarpossize|widthlabel">_Width:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -137,15 +128,13 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="selectwidth:0in-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|selectwidth-atkobject">Width</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|selectwidth">Width</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -153,15 +142,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="sidebarpossize|heightlabel">H_eight:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -176,15 +163,13 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="selectheight:0in-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|selectheight-atkobject">Height</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|selectheight">Height</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -216,9 +201,9 @@
               <object class="GtkLabel" id="rotationlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="sidebarpossize|rotationlabel">_Rotation:</property>
                 <property name="use_underline">True</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -243,7 +228,7 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="orientationcontrol-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|orientationcontrol-atkobject">Rotation</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|orientationcontrol">Rotation</property>
                       </object>
                     </child>
                   </object>
@@ -285,10 +270,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="sidebarpossize|fliplabel">_Flip:</property>
                             <property name="use_underline">True</property>
                             <property name="justify">right</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -301,9 +286,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">end</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="fliplabel"/>
-                            </accessibility>
                             <child>
                               <object class="GtkToolButton" id="flipvertical">
                                 <property name="visible">True</property>
@@ -332,6 +314,9 @@
                                 <property name="homogeneous">True</property>
                               </packing>
                             </child>
+                            <accessibility>
+                              <relation type="labelled-by" target="fliplabel"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -448,6 +433,19 @@
                 <property name="position">4</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkButton" id="btnEditChart">
+                <property name="label" translatable="yes" context="sidebarpossize|btnEditChart">Edit Chart</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -459,8 +457,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>

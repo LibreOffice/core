@@ -107,6 +107,9 @@ private:
     VclPtr<FixedText>        mpFtFlip;
     VclPtr<ToolBox>          mpFlipTbx;
 
+    //edit charts button for online's mobile view
+    VclPtr<PushButton>       mpBtnEditChart;
+
     // Internal variables
     basegfx::B2DRange                       maRect;
     basegfx::B2DRange                       maWorkArea;
@@ -153,6 +156,7 @@ private:
     DECL_LINK( AngleModifiedHdl, Edit&, void );
     DECL_LINK( RotationHdl, svx::DialControl*, void );
     DECL_LINK( FlipHdl, ToolBox *, void );
+    DECL_LINK( ClickChartEditHdl, Button*, void );
 
     void Initialize();
     void executeSize();
