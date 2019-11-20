@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_86f4ddd0",
+        "filename": "tools/source/debug/debug.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-11-20T06:09:22Z",
+      "side": 1,
+      "message": "yeah, that\u0027s no longer useful, because it will return \"css::uno::Reference\" instead of the context object\n\nPerhaps try\n   const char* pContext \u003d typeid( *exception.Context.get() ).name();",
+      "revId": "3978ff02e879d126018e0354557f795e9d826a65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
