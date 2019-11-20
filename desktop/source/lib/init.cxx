@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
 #include <config_folders.h>
 
 #include <stdio.h>
@@ -2957,13 +2958,6 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
     }
 }
 
-#if defined(ANDROID)
-/// For the distinction if the LOK is used for the 'old' (JNI-based) or the
-/// 'new' (loolwsd-based) app.  Default to the 'new', ie. not used from JNI as
-/// implemented in sal/android/libreofficekit-jni.c.
-bool android_lok_from_jni = false;
-#endif
-
 static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
@@ -3001,15 +2995,12 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #else
     ScopedVclPtrInstance< VirtualDevice > pDevice(DeviceFormat::DEFAULT);
 
-#if defined(ANDROID)
-    if (!android_lok_from_jni)
+#if HAVE_FEATURE_ANDROID_LOK
+    // Set background to transparent by default.
+    // [Unless it is the 'old' (JNI-based) Android app - no idea why it
+    // needs avoiding this.]
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 #endif
-    {
-        // Set background to transparent by default.
-        // [Unless it is the 'old' (JNI-based) Android app - no idea why it
-        // needs avoiding this.]
-        pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    }
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),

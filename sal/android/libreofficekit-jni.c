@@ -37,7 +37,6 @@ extern const char* data_dir;
 extern const char* cache_dir;
 extern void* apk_file;
 extern int apk_file_size;
-extern bool android_lok_from_jni; ///< for the distinction if the LOK is used for the 'old' (JNI-based) or the 'new' (loolwsd-based) app
 AAssetManager* native_asset_manager;
 
 extern void Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env, jobject clazz, jstring string);
@@ -163,10 +162,6 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
     size_t data_dir_len;
 
     (void) clazz;
-
-    // the 'old' app needs to avoid setting the virtual device to transparent
-    // in paintTile(), so indicate we are using the 'old' app
-    android_lok_from_jni = true;
 
     libreofficekit_initialize(env, dataDir, cacheDir, apkFile, assetManager);
 
