@@ -10,21 +10,43 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_SHAREDFORMULAGROUPS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_SHAREDFORMULAGROUPS_HXX
 
+#include <address.hxx>
+
 #include <memory>
 #include <map>
+
 class ScTokenArray;
 
 namespace sc {
 
+class SharedFormulaGroupEntry
+{
+private:
+    std::unique_ptr<ScTokenArray> mpArray;
+    ScAddress maOrigin;
+
+public:
+    SharedFormulaGroupEntry(ScTokenArray* pArray, const ScAddress& rOrigin)
+        : mpArray(pArray)
+        , maOrigin(rOrigin)
+    {
+    }
+
+    const ScTokenArray* getTokenArray() const { return mpArray.get(); }
+    const ScAddress& getOrigin() const { return maOrigin; }
+};
+
 class SharedFormulaGroups
 {
 private:
-    typedef std::map<size_t, std::unique_ptr<ScTokenArray>> StoreType;
+    typedef std::map<size_t, SharedFormulaGroupEntry> StoreType;
     StoreType m_Store;
 
 public:
     void set( size_t nSharedId, ScTokenArray* pArray );
+    void set( size_t nSharedId, ScTokenArray* pArray, const ScAddress& rOrigin );
     const ScTokenArray* get( size_t nSharedId ) const;
+    const SharedFormulaGroupEntry* getEntry( size_t nSharedId ) const;
 };
 
 }
