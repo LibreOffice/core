@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-
 #include <layfrm.hxx>
 #include <ftnboss.hxx>
 #include <ndtxt.hxx>

@@ -14,8 +14,6 @@
 #include <ndtxt.hxx>
 #include <sal/log.hxx>
 
-#include <stdexcept>
-
 namespace sw {
 
 void

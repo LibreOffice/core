@@ -17,22 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
-#include <frmfmt.hxx>
 #include <paratr.hxx>
 #include <flyfrm.hxx>
 #include <pam.hxx>
 #include <swselectionlist.hxx>
 #include <sortedobjs.hxx>
-#include <editeng/protitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/borderline.hxx>
 #include <frmatr.hxx>
-#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <pagefrm.hxx>
@@ -40,7 +35,6 @@
 #include "itrtxt.hxx"
 #include <txtfrm.hxx>
 #include <flyfrms.hxx>
-#include "porglue.hxx"
 #include "porfld.hxx"
 #include "porfly.hxx"
 #include "pordrop.hxx"

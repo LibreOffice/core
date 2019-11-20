@@ -22,7 +22,6 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <txtrfmrk.hxx>
-#include <swfont.hxx>
 
 SwFormatRefMark::~SwFormatRefMark( )
 {

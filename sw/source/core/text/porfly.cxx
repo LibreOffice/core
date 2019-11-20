@@ -27,14 +27,10 @@
 #include <viewsh.hxx>
 #include <textboxhelper.hxx>
 
-#include <vcl/outdev.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <sal/log.hxx>
 #include <fmtanchr.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtornt.hxx>
-#include <frmatr.hxx>
 #include <flyfrms.hxx>
 #include <txatbase.hxx>
 #include "porfly.hxx"

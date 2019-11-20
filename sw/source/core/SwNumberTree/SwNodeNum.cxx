@@ -18,7 +18,6 @@
  */
 
 #include <osl/diagnose.h>
-#include <editeng/svxenum.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <numrule.hxx>
