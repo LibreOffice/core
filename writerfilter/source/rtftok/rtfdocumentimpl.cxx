@@ -1294,7 +1294,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     return RTFError::OK;
 }
 
-bool RTFFrame::inFrame() { return m_nW > 0 || m_nH > 0 || m_nX > 0 || m_nY > 0; }
+bool RTFFrame::inFrame() const { return m_nW > 0 || m_nH > 0 || m_nX > 0 || m_nY > 0; }
 
 void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
 {

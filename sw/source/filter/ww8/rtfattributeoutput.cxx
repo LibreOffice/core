@@ -1578,7 +1578,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         m_rExport.Strm().WriteChar('}');
 }
 
-void RtfAttributeOutput::WriteField_Impl(const SwField* const pField, ww::eField,
+void RtfAttributeOutput::WriteField_Impl(const SwField* const pField, ww::eField /*eType*/,
                                          const OUString& rFieldCmd, FieldFlags nMode)
 {
     // If there are no field instructions, don't export it as a field.
