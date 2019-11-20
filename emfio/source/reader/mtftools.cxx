@@ -305,7 +305,11 @@ namespace emfio
         sal_uInt32 nColor;
 
         mpInputStream->ReadUInt32( nColor );
-        return Color( static_cast<sal_uInt8>(nColor), static_cast<sal_uInt8>( nColor >> 8 ), static_cast<sal_uInt8>( nColor >> 16 ) );
+        Color aColor(static_cast<sal_uInt8>(nColor), static_cast<sal_uInt8>(nColor >> 8), static_cast<sal_uInt8>(nColor >> 16));
+
+        SAL_INFO("emfio", "\t\tColor: " << aColor);
+
+        return aColor;
     };
 
     Point MtfTools::ImplScale(const Point& rPoint) // Hack to set varying defaults for incompletely defined files.
