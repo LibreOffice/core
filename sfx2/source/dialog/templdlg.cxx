@@ -2129,6 +2129,7 @@ VclPtr<PopupMenu> const & SfxCommonTemplateDialog_Impl::CreateContextMenu()
     mxMenu.disposeAndClear();
     mxBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "sfx/ui/stylecontextmenu.ui", ""));
     mxMenu.set(mxBuilder->get_menu("menu"));
+    mxMenu->SetMenuFlags(MenuFlags::AlwaysShowDisabledEntries);
     mxMenu->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectHdl ) );
     mxMenu->EnableItem(mxMenu->GetItemId("edit"), bCanEdit);
     mxMenu->EnableItem(mxMenu->GetItemId("delete"), bCanDel);
