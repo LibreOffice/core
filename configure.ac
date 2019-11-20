@@ -545,6 +545,25 @@ if test -n "$with_android_sdk"; then
 fi
 AC_SUBST(ANDROID_SDK_HOME)
 
+AC_ARG_ENABLE([android-lok],
+    AS_HELP_STRING([--enable-android-lok],
+        [The Android app from the android/ subdir needs several tweaks all
+         over the place that break the LOK when used in the Online-based
+         Android app.  This switch indicates that the intent of this build is
+         actually the Online-based, non-modified LOK.])
+)
+ENABLE_ANDROID_LOK=
+if test -n "$ANDROID_NDK_HOME" ; then
+    if test "$enable_android_lok" = yes; then
+        ENABLE_ANDROID_LOK=TRUE
+        AC_DEFINE(HAVE_FEATURE_ANDROID_LOK)
+        AC_MSG_NOTICE([building the Android version... for the Online-based Android app])
+    else
+        AC_MSG_NOTICE([building the Android version... for the app from the android/ subdir])
+    fi
+fi
+AC_SUBST([ENABLE_ANDROID_LOK])
+
 libo_FUZZ_ARG_ENABLE([android-editing],
     AS_HELP_STRING([--enable-android-editing],
         [Enable the experimental editing feature on Android.])

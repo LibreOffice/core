@@ -23,7 +23,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 ))
 endif
 
-ifeq ($(OS),ANDROID)
+# To be applied only when ENABLE_ANDROID_LOK is not defined
+ifeq ($(OS)$(ENABLE_ANDROID_LOK),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo.GL_RGBA.patch \
 ))

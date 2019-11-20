@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <memory>
 #ifndef IOS
 #include <headless/svpgdi.hxx>
@@ -228,7 +230,7 @@ namespace
             sal_uInt8* pD = pDst->mpBits + y * pDst->mnScanlineSize;
             for (long x = 0; x < nWidth; ++x)
             {
-#if defined ANDROID
+#if defined(ANDROID) && !HAVE_FEATURE_ANDROID_LOK
                 static_assert((SVP_CAIRO_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcRgba, "Expected SVP_CAIRO_FORMAT set to N32BitTcBgra");
                 static_assert((SVP_24BIT_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N24BitTcRgb, "Expected SVP_24BIT_FORMAT set to N24BitTcRgb");
                 pD[0] = pS[0];
