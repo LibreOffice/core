@@ -24,8 +24,6 @@
 #include <ndtxt.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <txtfrm.hxx>
-#include <rootfrm.hxx>
-#include <viewsh.hxx>
 
 namespace {
 

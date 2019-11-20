@@ -21,12 +21,9 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/outdev.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/blinkitem.hxx>
-#include <editeng/nhypitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/langitem.hxx>

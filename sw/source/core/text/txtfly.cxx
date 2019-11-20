@@ -18,46 +18,39 @@
  */
 
 #include <vcl/outdev.hxx>
-#include <vcl/virdev.hxx>
 
-#include <dcontact.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <pam.hxx>
+#include <swfont.hxx>
 #include <swregion.hxx>
 #include <dflyobj.hxx>
+#include <drawfont.hxx>
 #include <flyfrm.hxx>
+#include <flyfrms.hxx>
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
-#include "porfly.hxx"
-#include "porfld.hxx"
+#include <ndtxt.hxx>
 #include <txtfly.hxx>
 #include "txtpaint.hxx"
-#include <txtatr.hxx>
 #include <notxtfrm.hxx>
 #include <fmtcnct.hxx>
-#include "inftxt.hxx"
 #include <svx/obj3d.hxx>
 #include <editeng/txtrange.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/lspcitem.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <pagedesc.hxx>
-#include <tgrditem.hxx>
 #include <sortedobjs.hxx>
-#include <layouter.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <svx/svdoedge.hxx>
 
 #ifdef DBG_UTIL
 #include <viewsh.hxx>
-#include <viewopt.hxx>
 #include <doc.hxx>
 #endif
 

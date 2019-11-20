@@ -28,7 +28,6 @@
 #include <viewopt.hxx>
 #include <viewsh.hxx>
 #include <frmfmt.hxx>
-#include <IDocumentSettingAccess.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
@@ -36,12 +35,8 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svx/svdobj.hxx>
-#include <pam.hxx>
 #include <environmentofanchoredobject.hxx>
 #include <frmatr.hxx>
-#include <frmtool.hxx>
-#include <ndtxt.hxx>
-#include <dflyobj.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <sortedobjs.hxx>
 #include <textboxhelper.hxx>

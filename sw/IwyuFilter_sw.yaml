@@ -224,9 +224,6 @@ blacklist:
     sw/inc/textboxhelper.hxx:
     # used as a template parameter
     - class SwFormatContent
-    sw/qa/extras/rtfimport/rtfimport.cxx:
-    # complete type is wanted
-    - com/sun/star/text/XDocumentIndexMark.hpp
     sw/qa/extras/rtfexport/rtfexport.cxx:
     # complete type is wanted
     - com/sun/star/awt/XBitmap.hpp
@@ -474,3 +471,18 @@ blacklist:
     # Needed for macros to work
     - editeng/unoprnms.hxx
     - com/sun/star/lang/Locale.hpp
+    sw/source/core/swg/SwXMLBlockExport.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XDocumentHandler.hpp
+    sw/source/core/swg/SwXMLSectionList.cxx:
+    # Actually used
+    - vector
+    sw/source/core/SwNumberTree/SwNodeNum.cxx:
+    # Needed for TypedWhichId macro to work
+    - svl/intitem.hxx
+    sw/source/core/text/itratr.cxx:
+    # Needed for TypedWhichId macro to work
+    - editeng/rsiditem.hxx
+    sw/source/core/text/txtfrm.cxx:
+    # Needed for TypedWhichId macro to work
+    - editeng/rsiditem.hxx
