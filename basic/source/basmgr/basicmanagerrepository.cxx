@@ -538,12 +538,16 @@ namespace basic
         OSL_PRECOND( _pos != m_aStore.end(), "ImplRepository::impl_removeFromRepository: invalid position!" );
 
         std::unique_ptr<BasicManager> pManager = std::move(_pos->second);
+        Reference<XModel> xModel(_pos->first, UNO_QUERY);
 
         // *first* remove from map (else Notify won't work properly)
         m_aStore.erase( _pos );
 
-        // *then* delete the BasicManager
         EndListening( *pManager );
+
+        assert(xModel.is());
+        if (xModel.is())
+            stopComponentListening(xModel);
     }
 
 
