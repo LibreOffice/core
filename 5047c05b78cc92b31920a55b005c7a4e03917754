@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_41722f13",
+        "filename": "sfx2/source/doc/guisaveas.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-11-20T13:15:58Z",
+      "side": 1,
+      "message": "Can you please talk about what are those ; characters for?\n\nIn a sense, why wouldn\u0027t simple search of aSelectedFilter in aSupportedFilters string work?",
+      "revId": "5047c05b78cc92b31920a55b005c7a4e03917754",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
