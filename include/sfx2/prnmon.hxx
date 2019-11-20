@@ -30,11 +30,9 @@ class SfxTabPage;
 class SfxItemSet;
 
 
-struct SfxPrintOptDlg_Impl;
 class SfxPrintOptionsDialog final : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<SfxPrintOptDlg_Impl>   pDlgImpl;
     std::unique_ptr<SfxItemSet>            pOptions;
     std::unique_ptr<weld::Widget>    m_xHelpBtn;
     std::unique_ptr<weld::Container> m_xContainer;

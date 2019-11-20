@@ -91,7 +91,6 @@ class SvtMatchContext_Impl: public salhelper::Thread
     std::vector<OUString>           aCompletions;
     std::vector<OUString>           aURLs;
     svtools::AsynchronLink          aLink;
-    OUString const                  aBaseURL;
     OUString const                  aText;
     VclPtr<SvtURLBox>               pBox;
 
@@ -879,9 +878,7 @@ void SvtMatchContext_Impl::doExecute()
 
     OUString aMatch;
     INetProtocol eProt = INetURLObject::CompareProtocolScheme( aText );
-    INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );
-    if ( aBaseURL.isEmpty() )
-        eBaseProt = INetURLObject::CompareProtocolScheme( SvtPathOptions().GetWorkPath() );
+    INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( SvtPathOptions().GetWorkPath() );
     INetProtocol eSmartProt = pBox->GetSmartProtocol();
 
     // if the user input is a valid URL, go on with it
@@ -893,7 +890,7 @@ void SvtMatchContext_Impl::doExecute()
         if( schedule() )
         {
             if ( eProt == INetProtocol::NotValid )
-                aMatch = SvtURLBox::ParseSmart( aText, aBaseURL );
+                aMatch = SvtURLBox::ParseSmart( aText, "" );
             else
                 aMatch = aText;
             if ( !aMatch.isEmpty() )

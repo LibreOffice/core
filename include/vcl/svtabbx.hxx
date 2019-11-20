@@ -35,16 +35,6 @@ enum class SvTabJustify
     AdjustCenter = static_cast<int>(SvLBoxTabFlags::ADJUST_CENTER)
 };
 
-struct TabListBoxEventData
-{
-    SvTreeListEntry* const    m_pEntry;
-    sal_uInt16 const          m_nColumn;
-    OUString const            m_sOldText;
-
-    TabListBoxEventData( SvTreeListEntry* pEntry, sal_uInt16 nColumn, const OUString& rOldText ) :
-        m_pEntry( pEntry ), m_nColumn( nColumn ), m_sOldText( rOldText ) {}
-};
-
 class VCL_DLLPUBLIC SvTabListBox : public SvTreeListBox
 {
 private:
