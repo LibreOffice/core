@@ -21,9 +21,11 @@
 
 #include <algorithm>
 
+#include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/unique_disposing_ptr.hxx>
+#include <osl/diagnose.h>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/timer.hxx>
@@ -31,9 +33,7 @@
 #include <vcl/font.hxx>
 #include <vcl/metric.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <vcl/svapp.hxx>
-#include <o3tl/deleter.hxx>
 
 
 // VDev RevDevice provider

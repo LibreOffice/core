@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DRAWINGLAYER_INC_CONVERTERS_HXX
 #define INCLUDED_DRAWINGLAYER_INC_CONVERTERS_HXX
 
-#include <drawinglayer/drawinglayerdllapi.h>
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 

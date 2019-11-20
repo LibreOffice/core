@@ -18,7 +18,6 @@
  */
 
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 
 

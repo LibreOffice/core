@@ -20,8 +20,6 @@
 #ifndef INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include "vclprocessor2d.hxx"
 #include <vcl/outdev.hxx>
 

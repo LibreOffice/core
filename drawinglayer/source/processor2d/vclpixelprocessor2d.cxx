@@ -25,7 +25,6 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
-#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
@@ -42,21 +41,11 @@
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vcl/hatch.hxx>
-#include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
-#include <cstdio>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
-#include <vcl/window.hxx>
-#include <svtools/borderhelper.hxx>
-#include <editeng/borderline.hxx>
-
-#include <com/sun/star/table/BorderLineStyle.hpp>
 
 using namespace com::sun::star;
 

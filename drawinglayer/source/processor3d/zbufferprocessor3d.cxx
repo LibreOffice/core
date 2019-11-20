@@ -22,11 +22,8 @@
 #include <basegfx/raster/rasterconvert3d.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <drawinglayer/texture/texture.hxx>
-#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-#include <drawinglayer/primitive3d/textureprimitive3d.hxx>
-#include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
-#include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <basegfx/polygon/b3dpolygon.hxx>
+#include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>

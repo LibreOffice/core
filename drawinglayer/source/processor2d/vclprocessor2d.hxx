@@ -20,8 +20,6 @@
 #ifndef INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPROCESSOR2D_HXX
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolormodifier.hxx>

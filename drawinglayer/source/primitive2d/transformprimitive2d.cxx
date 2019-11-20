@@ -18,7 +18,6 @@
  */
 
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 

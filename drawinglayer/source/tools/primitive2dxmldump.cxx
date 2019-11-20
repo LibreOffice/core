@@ -9,9 +9,7 @@
 
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 
-#include <vcl/metaact.hxx>
 #include <rtl/string.hxx>
-#include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 

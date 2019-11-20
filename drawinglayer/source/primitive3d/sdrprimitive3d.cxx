@@ -19,7 +19,6 @@
 
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 
 

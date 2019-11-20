@@ -18,11 +18,9 @@
  */
 
 #include <drawinglayer/geometry/viewinformation3d.hxx>
-#include <basegfx/range/b3drange.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/geometry/AffineMatrix3D.hpp>
-#include <com/sun/star/geometry/RealRectangle3D.hpp>
 #include <basegfx/utils/canvastools.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

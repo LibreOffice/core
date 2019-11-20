@@ -22,8 +22,6 @@
 
 #include <stack>
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include "vclprocessor2d.hxx"
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

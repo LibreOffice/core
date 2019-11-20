@@ -40,7 +40,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/metaact.hxx>
 
 namespace drawinglayer
 {

@@ -8,7 +8,6 @@
  */
 
 #include "EnhancedShapeDumper.hxx"
-#include <rtl/strbuf.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace com::sun::star;

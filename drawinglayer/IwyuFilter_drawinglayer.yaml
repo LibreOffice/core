@@ -1,0 +1,18 @@
+---
+assumeFilename: drawinglayer/source/primitive2d/svggradientprimitive2d.cxx
+blacklist:
+    drawinglayer/source/drawinglayeruno/xprimitive2drenderer.cxx:
+    # Actually used
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    drawinglayer/source/dumper/EnhancedShapeDumper.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    drawinglayer/source/geometry/viewinformation2d.cxx:
+    # Actually used
+    - com/sun/star/drawing/XDrawPage.hpp
+    drawinglayer/source/primitive2d/sceneprimitive2d.cxx:
+    # Needed for direct member access
+    - drawinglayer/attribute/sdrlightattribute3d.hxx
+    drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:
+    # Needed for direct member access
+    - basegfx/matrix/b2dhommatrix.hxx

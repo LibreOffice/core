@@ -29,7 +29,6 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
@@ -44,7 +43,6 @@
 #include <vcl/graphictools.hxx>
 #include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/awt/XControl.hpp>
@@ -57,11 +55,9 @@
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
-#include <vcl/dibtools.hxx>
 
 // for PDFExtOutDevData Graphic support
 #include <vcl/graph.hxx>
-#include <vcl/svapp.hxx>
 #include <toolkit/helper/formpdfexport.hxx>
 
 // for Control printing

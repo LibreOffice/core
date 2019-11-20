@@ -18,16 +18,13 @@
  */
 
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
-#include <basegfx/polygon/b3dpolygon.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
-#include <vcl/vclenum.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/textureprimitive3d.hxx>
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
