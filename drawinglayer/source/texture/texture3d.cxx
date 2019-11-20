@@ -23,6 +23,7 @@
 
 #include <drawinglayer/texture/texture3d.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
 #include <sal/log.hxx>
 
@@ -76,6 +77,8 @@ namespace drawinglayer
             mbIsAlpha(false),
             mbIsTransparent(maBitmapEx.IsTransparent())
         {
+            if(vcl::bitmap::convertBitmap32To24Plus8(maBitmapEx,maBitmapEx))
+                mbIsTransparent = maBitmapEx.IsTransparent();
             // #121194# Todo: use alpha channel, too (for 3d)
             maBitmap = maBitmapEx.GetBitmap();
 
