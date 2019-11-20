@@ -381,7 +381,7 @@ static ImplUniToDBCSHighTab const aKSC5601DBCSHighTab[256] =
     { 0x06, 0xFA, aImplUniToDBCSTab_KSC5601_56 },               /* 0x56 */
     { 0x03, 0xFC, aImplUniToDBCSTab_KSC5601_57 },               /* 0x57 */
     { 0x00, 0xFD, aImplUniToDBCSTab_KSC5601_58 },               /* 0x58 */
-    { 0x07, 0xFF, aImplUniToDBCSTab_KSC5601_59 },               /* 0x59 */
+    { 0x0F, 0xFF, aImplUniToDBCSTab_KSC5601_59 },               /* 0x59 */
     { 0x01, 0xE9, aImplUniToDBCSTab_KSC5601_5A },               /* 0x5A */
     { 0x05, 0xFA, aImplUniToDBCSTab_KSC5601_5B },               /* 0x5B */
     { 0x01, 0xFD, aImplUniToDBCSTab_KSC5601_5C },               /* 0x5C */
