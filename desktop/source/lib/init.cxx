@@ -936,6 +936,8 @@ ITiledRenderable* getTiledRenderable(LibreOfficeKitDocument* pThis)
     return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
 }
 
+#ifndef IOS
+
 /*
  * Unfortunately clipboard creation using UNO is insanely baroque.
  * we also need to ensure that this works for the first view which
@@ -952,6 +954,9 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 
     return xClip;
 }
+
+#endif
+
 } // anonymous namespace
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
@@ -1037,7 +1042,9 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
     }
     pClass = m_pDocumentClass.get();
 
+#ifndef IOS
     forceSetClipboardForCurrentView(this);
+#endif
 }
 
 LibLODocument_Impl::~LibLODocument_Impl()
@@ -1620,10 +1627,12 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
             return false;
         }
 
+#ifndef IOS
         auto xClip = forceSetClipboardForCurrentView(m_pDocument);
 
         uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(xClip.get());
         pWindow->SetClipboard(xClipboard);
+#endif
     }
     else if (aAction == "size_changed")
     {
@@ -3929,6 +3938,13 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
                             const size_t  *pInSizes,
                             const char   **pInStreams)
 {
+#ifdef IOS
+    (void) pThis;
+    (void) nInCount;
+    (void) pInMimeTypes;
+    (void) pInSizes;
+    (void) pInStreams;
+#else
     comphelper::ProfileZone aZone("doc_setClipboard");
 
     SolarMutexGuard aGuard;
@@ -3953,7 +3969,7 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
         SetLastExceptionMsg("Document doesn't support this mime type");
         return false;
     }
-
+#endif
     return true;
 }
 
@@ -4629,7 +4645,11 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
 
     int nId = SfxLokHelper::createView();
 
+#ifdef IOS
+    (void) pThis;
+#else
     forceSetClipboardForCurrentView(pThis);
+#endif
 
     return nId;
 }
