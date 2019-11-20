@@ -236,9 +236,9 @@ dbaccess/source/ui/inc/RelationController.hxx:33
     dbaui::ORelationController m_pWaitObject std::unique_ptr<WaitObject>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:223
     DesktopLOKTest m_bModified _Bool
-desktop/source/app/app.cxx:1211
+desktop/source/app/app.cxx:1215
     desktop::ExecuteGlobals pLanguageOptions std::unique_ptr<SvtLanguageOptions>
-desktop/source/app/app.cxx:1212
+desktop/source/app/app.cxx:1216
     desktop::ExecuteGlobals pPathOptions std::unique_ptr<SvtPathOptions>
 desktop/source/deployment/gui/dp_gui_extlistbox.hxx:136
     dp_gui::ExtensionBox_Impl m_vRemovedEntries std::vector<TEntry_Impl>
@@ -268,8 +268,6 @@ drawinglayer/source/attribute/sdrfillgraphicattribute.cxx:47
     drawinglayer::attribute::ImpSdrFillGraphicAttribute mbLogSize _Bool
 drawinglayer/source/attribute/sdrsceneattribute3d.cxx:32
     drawinglayer::attribute::ImpSdrSceneAttribute mfDistance double
-drawinglayer/source/tools/emfpcustomlinecap.hxx:34
-    emfplushelper::EMFPCustomLineCap mbIsFilled _Bool
 embeddedobj/source/inc/oleembobj.hxx:132
     OleEmbeddedObject m_nTargetState sal_Int32
 embeddedobj/source/inc/oleembobj.hxx:144
@@ -354,9 +352,9 @@ include/editeng/adjustitem.hxx:37
     SvxAdjustItem bLeft _Bool
 include/editeng/outlobj.hxx:43
     OutlinerParaObjData mbIsEditDoc _Bool
-include/editeng/unotext.hxx:415
+include/editeng/unotext.hxx:416
     SvxUnoTextBase xParentText css::uno::Reference<css::text::XText>
-include/editeng/unotext.hxx:584
+include/editeng/unotext.hxx:585
     SvxUnoTextContentEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/framework/addonsoptions.hxx:74
     framework::MergeNotebookBarInstruction aMergePoint class rtl::OUString
@@ -486,11 +484,11 @@ registry/source/reflread.cxx:466
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b2 sal_uInt32
 reportdesign/inc/RptObject.hxx:72
     rptui::OObjectBase m_xKeepShapeAlive css::uno::Reference<css::uno::XInterface>
-sal/qa/osl/file/osl_File.cxx:4156
-    osl_Directory::isOpen nError1 osl::class FileBase::RC
-sal/qa/osl/file/osl_File.cxx:4156
+sal/qa/osl/file/osl_File.cxx:4160
     osl_Directory::isOpen nError2 osl::class FileBase::RC
-sal/qa/osl/file/osl_File.cxx:4214
+sal/qa/osl/file/osl_File.cxx:4160
+    osl_Directory::isOpen nError1 osl::class FileBase::RC
+sal/qa/osl/file/osl_File.cxx:4218
     osl_Directory::close nError2 osl::class FileBase::RC
 sal/rtl/alloc_arena.hxx:35
     rtl_arena_stat_type m_mem_total sal_Size
@@ -538,7 +536,7 @@ sc/source/core/data/column.cxx:1398
     (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
 sc/source/core/data/column.cxx:1399
     (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags const enum ScCloneFlags
-sc/source/core/data/table2.cxx:3684
+sc/source/core/data/table2.cxx:3687
     (anonymous namespace)::OutlineArrayFinder mpArray class ScOutlineArray *
 sc/source/filter/excel/xltoolbar.hxx:25
     TBCCmd A _Bool
@@ -678,6 +676,8 @@ sfx2/source/inc/splitwin.hxx:51
     SfxSplitWindow pActive VclPtr<class SfxDockingWindow>
 sfx2/source/view/classificationcontroller.cxx:61
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
+sfx2/source/view/printer.cxx:40
+    SfxPrintOptDlg_Impl mbHelpDisabled _Bool
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
@@ -772,7 +772,7 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:104
     svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:105
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
-svx/source/svdraw/svdibrow.cxx:95
+svx/source/svdraw/svdibrow.cxx:98
     ImpItemListRow pType const std::type_info *
 svx/source/svdraw/svdpdf.hxx:196
     ImpSdrPdfImport mdPageWidthPts double
@@ -984,7 +984,7 @@ vcl/source/filter/jpeg/Exif.hxx:51
     Exif::ExifIFD tag sal_uInt8 [2]
 vcl/source/filter/wmf/wmfwr.hxx:95
     WMFWriter aDstClipRegion vcl::Region
-vcl/source/fontsubset/sft.cxx:88
+vcl/source/fontsubset/sft.cxx:92
     vcl::TTGlyphMetrics lsb sal_Int16
 vcl/source/fontsubset/ttcr.cxx:341
     vcl::tdata_post ptr void *
@@ -1014,17 +1014,15 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:75
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/a11y/gtk3atkutil.cxx:138
     DocumentFocusListener m_aRefList std::set<uno::Reference<uno::XInterface> >
-vcl/unx/gtk3/gtk3gloactiongroup.cxx:26
-    GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1596
+vcl/unx/gtk3/gtk3gtkinst.cxx:1602
      in char *
 vcl/unx/gtk3/gtk3hudawareness.cxx:16
     HudAwarenessHandle connection GDBusConnection *
 vcl/unx/gtk3/gtk3hudawareness.cxx:19
     HudAwarenessHandle notify GDestroyNotify
-vcl/workben/vcldemo.cxx:1744
+vcl/workben/vcldemo.cxx:1748
     DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/PropertyMap.hxx:204
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

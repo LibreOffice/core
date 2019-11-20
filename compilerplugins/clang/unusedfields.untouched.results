@@ -24,7 +24,7 @@ canvas/workben/canvasdemo.cxx:83
     DemoRenderer maColorWhite uno::Sequence<double>
 chart2/source/controller/inc/RangeSelectionListener.hxx:63
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
-comphelper/source/container/enumerablemap.cxx:290
+comphelper/source/container/enumerablemap.cxx:292
     comphelper::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
 connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
@@ -50,7 +50,7 @@ include/basegfx/DrawCommands.hxx:142
     gfx::DrawPath mpFillGradient std::shared_ptr<GradientInfo>
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:58
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
-include/editeng/unotext.hxx:604
+include/editeng/unotext.hxx:605
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
@@ -83,11 +83,11 @@ include/sfx2/msg.hxx:133
 include/sfx2/msg.hxx:134
     SfxType3 pType const std::type_info *
 include/sfx2/msg.hxx:134
-    SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:134
     SfxType3 nAttribs sal_uInt16
 include/sfx2/msg.hxx:134
     SfxType3 aAttrib struct SfxTypeAttrib [3]
+include/sfx2/msg.hxx:134
+    SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:135
     SfxType4 aAttrib struct SfxTypeAttrib [4]
 include/sfx2/msg.hxx:135
@@ -208,12 +208,18 @@ include/vcl/NotebookBarAddonsMerger.hxx:45
     AddonsParams sControlType class rtl::OUString
 include/vcl/NotebookBarAddonsMerger.hxx:46
     AddonsParams nWidth sal_uInt16
+include/vcl/svtabbx.hxx:40
+    TabListBoxEventData m_pEntry class SvTreeListEntry *const
+include/vcl/svtabbx.hxx:41
+    TabListBoxEventData m_nColumn const sal_uInt16
+include/vcl/svtabbx.hxx:42
+    TabListBoxEventData m_sOldText const class rtl::OUString
 include/vcl/uitest/uiobject.hxx:272
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:172
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
-libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:35
-    GtvApplicationWindowPrivate lokDialog GtkWidget *
+libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:37
+    (anonymous namespace)::GtvApplicationWindowPrivate lokDialog GtkWidget *
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:52
     GtvApplicationWindow parent_instance GtkApplicationWindow
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:56
@@ -264,23 +270,23 @@ sal/osl/unx/thread.cxx:95
     osl_thread_priority_st m_Lowest int
 sal/osl/unx/thread.cxx:113
     osl_thread_global_st m_priority struct osl_thread_priority_st
-sal/qa/osl/condition/osl_Condition.cxx:68
+sal/qa/osl/condition/osl_Condition.cxx:72
     osl_Condition::ctors bRes1 _Bool
-sal/qa/osl/condition/osl_Condition.cxx:198
+sal/qa/osl/condition/osl_Condition.cxx:202
     osl_Condition::wait bRes2 _Bool
-sal/qa/osl/condition/osl_Condition.cxx:269
+sal/qa/osl/condition/osl_Condition.cxx:273
     osl_Condition::check bRes2 _Bool
-sal/qa/osl/file/osl_File.cxx:1586
-    osl_FileStatus::getFileType m_aFifoItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1586
+sal/qa/osl/file/osl_File.cxx:1590
     osl_FileStatus::getFileType m_aVolumeItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1587
-    osl_FileStatus::getFileType m_aLinkItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1587
-    osl_FileStatus::getFileType m_aSocketItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1587
+sal/qa/osl/file/osl_File.cxx:1590
+    osl_FileStatus::getFileType m_aFifoItem class osl::DirectoryItem
+sal/qa/osl/file/osl_File.cxx:1591
     osl_FileStatus::getFileType m_aSpecialItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:3419
+sal/qa/osl/file/osl_File.cxx:1591
+    osl_FileStatus::getFileType m_aLinkItem class osl::DirectoryItem
+sal/qa/osl/file/osl_File.cxx:1591
+    osl_FileStatus::getFileType m_aSocketItem class osl::DirectoryItem
+sal/qa/osl/file/osl_File.cxx:3423
     osl_File::setAttributes rItem_hidden class osl::DirectoryItem
 sal/qa/osl/module/osl_Module.cxx:67
     osl_Module::ctors bRes1 _Bool
@@ -314,8 +320,6 @@ sal/qa/osl/security/osl_Security.cxx:154
     osl_Security::getUserName bRes1 _Bool
 sal/qa/osl/security/osl_Security.cxx:188
     osl_Security::getConfigDir bRes1 _Bool
-sc/inc/markmulti.hxx:38
-    ScMultiSel mnMaxCol SCCOL
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
 sc/source/core/data/document.cxx:1237
@@ -388,8 +392,8 @@ svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
 svx/source/dialog/weldeditview.cxx:306
     WeldEditSource m_rEditAcc class WeldEditAccessible &
-sw/qa/extras/layout/layout.cxx:2592
-      class SvtSysLocaleOptions &
+sw/qa/extras/uiwriter/uiwriter2.cxx:68
+      class SwUiWriterTest2 *
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:73
@@ -454,7 +458,9 @@ vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink
-vcl/unx/gtk3/gtk3gtkinst.cxx:4831
-    CrippledViewport viewport GtkViewport
+vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
+    (anonymous namespace)::GLOAction parent_instance GObject
+vcl/unx/gtk3/gtk3gtkinst.cxx:4850
+    (anonymous namespace)::CrippledViewport viewport GtkViewport
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>

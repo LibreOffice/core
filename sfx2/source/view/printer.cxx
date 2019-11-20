@@ -33,16 +33,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/tabdlg.hxx>
 
-// struct SfxPrinter_Impl ------------------------------------------------
-
-struct SfxPrintOptDlg_Impl
-{
-    bool        mbHelpDisabled;
-
-    SfxPrintOptDlg_Impl() :
-        mbHelpDisabled  ( false ) {}
-};
-
 // class SfxPrinter ------------------------------------------------------
 
 VclPtr<SfxPrinter> SfxPrinter::Create( SvStream& rStream, std::unique_ptr<SfxItemSet>&& pOptions )
@@ -167,7 +157,6 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(weld::Window *pParent,
                                              SfxViewShell *pViewShell,
                                              const SfxItemSet *pSet)
     : GenericDialogController(pParent, "sfx/ui/printeroptionsdialog.ui", "PrinterOptionsDialog")
-    , pDlgImpl(new SfxPrintOptDlg_Impl)
     , pOptions(pSet->Clone())
     , m_xHelpBtn(m_xBuilder->weld_widget("help"))
     , m_xContainer(m_xDialog->weld_content_area())
@@ -201,7 +190,6 @@ short SfxPrintOptionsDialog::run()
 
 void SfxPrintOptionsDialog::DisableHelp()
 {
-    pDlgImpl->mbHelpDisabled = true;
     m_xHelpBtn->set_sensitive(false);
 }
 
