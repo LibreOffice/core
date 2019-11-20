@@ -1477,6 +1477,8 @@ void SAL_CALL SfxBaseController::appendInfobar(const OUString& sId, const OUStri
                                                const Sequence<StringPair>& actionButtons,
                                                sal_Bool bShowCloseButton)
 {
+    SolarMutexGuard aGuard;
+
     if (aInfobarType < static_cast<sal_Int32>(InfobarType::INFO)
         || aInfobarType > static_cast<sal_Int32>(InfobarType::DANGER))
         throw lang::IllegalArgumentException("Undefined InfobarType: "
@@ -1510,6 +1512,8 @@ void SAL_CALL SfxBaseController::updateInfobar(const OUString& sId, const OUStri
                                                const OUString& sSecondaryMessage,
                                                sal_Int32 aInfobarType)
 {
+    SolarMutexGuard aGuard;
+
     if (aInfobarType < static_cast<sal_Int32>(InfobarType::INFO)
         || aInfobarType > static_cast<sal_Int32>(InfobarType::DANGER))
         throw lang::IllegalArgumentException("Undefined InfobarType: "
@@ -1525,6 +1529,8 @@ void SAL_CALL SfxBaseController::updateInfobar(const OUString& sId, const OUStri
 
 void SAL_CALL SfxBaseController::removeInfobar(const OUString& sId)
 {
+    SolarMutexGuard aGuard;
+
     SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
     if (!pViewFrame->HasInfoBarWithID(sId))
         throw css::container::NoSuchElementException("Infobar with ID '" + sId + "' not found.");
