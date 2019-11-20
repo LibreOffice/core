@@ -18,7 +18,6 @@
  */
 
 #include <breakit.hxx>
-#include <hintids.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -29,7 +28,6 @@
 #include "inftxt.hxx"
 #include "itrform2.hxx"
 #include "guess.hxx"
-#include <splargs.hxx>
 #include <rootfrm.hxx>
 
 using namespace ::com::sun::star;

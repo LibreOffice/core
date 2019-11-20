@@ -20,23 +20,15 @@
 #include <algorithm>
 
 #include <osl/diagnose.h>
-#include <sfx2/docfilt.hxx>
-#include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/fstathelper.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
-#include <frmfmt.hxx>
 #include <doc.hxx>
-#include <docary.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
 #include <swblocks.hxx>
-#include <ndtxt.hxx>
-#include <mdiexp.hxx>
 #include <SwXMLTextBlocks.hxx>
-#include <docsh.hxx>
-#include <swunohelper.hxx>
 
 #include <swerror.h>
 

@@ -20,19 +20,14 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <DocumentSettingManager.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <hintids.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/rsiditem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itemiter.hxx>
-#include <svl/stylepool.hxx>
-#include <editeng/fontitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/emphasismarkitem.hxx>
-#include <editeng/charscaleitem.hxx>
-#include <editeng/charrotateitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <txtinet.hxx>
 #include <txtflcnt.hxx>
@@ -50,7 +45,6 @@
 #include <txtftn.hxx>
 #include <txtfld.hxx>
 #include <txtannotationfld.hxx>
-#include <charatr.hxx>
 #include <charfmt.hxx>
 #include <frmfmt.hxx>
 #include <ftnidx.hxx>
@@ -73,9 +67,7 @@
 #include <expfld.hxx>
 #include <usrfld.hxx>
 #include <poolfmt.hxx>
-#include <swfont.hxx>
 #include <istyleaccess.hxx>
-#include <dcontact.hxx>
 #include <docsh.hxx>
 #include <algorithm>
 #include <map>

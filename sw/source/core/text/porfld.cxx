@@ -35,12 +35,10 @@
 #include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <viewsh.hxx>
-#include <docsh.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <rootfrm.hxx>
 #include <breakit.hxx>
-#include "porrst.hxx"
 #include "porftn.hxx"
 #include <accessibilityoptions.hxx>
 #include <editeng/lrspitem.hxx>
