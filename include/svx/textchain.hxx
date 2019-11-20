@@ -52,7 +52,6 @@ protected:
         aPreChainingSel = ESelection(0,0,0,0);
         aPostChainingSel = ESelection(0,0,0,0);
         aIsPartOfLastParaInNextLink = false; // XXX: Should come from file
-        aPendingOverflowCheck = false;
         aSwitchingToNextBox = false;
     }
 
@@ -63,7 +62,6 @@ private:
     ESelection aPreChainingSel;
     ESelection aPostChainingSel;
     bool aIsPartOfLastParaInNextLink;
-    bool aPendingOverflowCheck;
     bool aSwitchingToNextBox;
 };
 
@@ -72,12 +70,6 @@ class TextChain
 {
 public:
     ~TextChain();
-
-    //void AppendLink(SdrTextObj *);
-    //bool IsLinkInChain(SdrTextObj *) const;
-
-    //SdrTextObj *GetNextLink(const SdrTextObj *) const;
-    //SdrTextObj *GetPrevLink(const SdrTextObj *) const;
 
     ImpChainLinkProperties *GetLinkProperties(const SdrTextObj *);
 
@@ -98,10 +90,6 @@ public:
     bool GetIsPartOfLastParaInNextLink(const SdrTextObj *);
     void SetIsPartOfLastParaInNextLink(const SdrTextObj *, bool );
 
-    // return whether there is a pending overflow check (usually when we move cursor after an overflow in the prev link)
-    bool GetPendingOverflowCheck(const SdrTextObj *);
-    void SetPendingOverflowCheck(const SdrTextObj *, bool );
-
     // return whether we are currently moving the cursor to the next box (useful to know whether we should prevent SetOutlinerParaObject invocations in SdrTextObj::EndTextEdit)
     bool GetSwitchingToNextBox(const SdrTextObj *);
     void SetSwitchingToNextBox(const SdrTextObj *, bool);
@@ -113,8 +101,6 @@ private:
     std::map< ChainLinkId, ImpChainLinkProperties *> maLinkPropertiesMap;
 
     friend class SdrModel;
-    //SdrTextObj *impGetNextLink(const SdrTextObj *) const;
-    //SdrTextObj *impGetPrevLink(const SdrTextObj *) const;
 };
 
 #endif // INCLUDED_SVX_TEXTCHAIN_HXX

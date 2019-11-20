@@ -190,13 +190,6 @@ void TextChainCursorManager::impChangeEditingTextObj(SdrTextObj *pTargetTextObj,
 {
     assert(pTargetTextObj);
 
-    // To ensure that we check for overflow in the next box // This is handled in SdrTextObj::EndTextEdit
-    SdrTextObj *pNextLink = mpTextObj->GetNextLinkInChain();
-    TextChain *pTextChain = mpTextObj->GetTextChain();
-    // If we are moving forward
-    if (pNextLink && pTargetTextObj == pNextLink)
-        pTextChain->SetPendingOverflowCheck(pNextLink, true);
-
     mpEditView->SdrEndTextEdit();
     mpEditView->SdrBeginTextEdit(pTargetTextObj);
     // OutlinerView has changed, so we update the pointer
