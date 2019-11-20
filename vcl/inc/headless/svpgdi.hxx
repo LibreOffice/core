@@ -24,6 +24,8 @@
 #error This file is not for iOS
 #endif
 
+#include <config_features.h>
+
 #include <osl/endian.h>
 #include <vcl/sysdata.hxx>
 #include <config_cairo_canvas.h>
@@ -40,7 +42,7 @@
 //cairo then matches the OpenGL GL_RGBA format so we can use it there
 //where we don't have GL_BGRA support.
 // SVP_24BIT_FORMAT is used to store 24-bit images in 3-byte pixels to conserve memory.
-#if defined ANDROID
+#if defined(ANDROID) && !HAVE_FEATURE_ANDROID_LOK
 #   define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown)
 #   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcRgba | ScanlineFormat::TopDown)
 #   define SVP_CAIRO_BLUE 1
