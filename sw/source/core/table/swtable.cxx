@@ -25,7 +25,6 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/colritem.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <editeng/boxitem.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>

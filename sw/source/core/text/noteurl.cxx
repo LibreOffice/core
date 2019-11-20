@@ -19,12 +19,6 @@
 
 #include <noteurl.hxx>
 
-#include <swtypes.hxx>
-#include <osl/diagnose.h>
-#include <vcl/outdev.hxx>
-#include <vcl/imaprect.hxx>
-#include <vcl/imap.hxx>
-
 // Global variable
 SwNoteURL *pNoteURL = nullptr;
 

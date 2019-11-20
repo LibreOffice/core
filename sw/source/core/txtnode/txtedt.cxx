@@ -20,19 +20,17 @@
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/languageoptions.hxx>
 #include <editeng/splwrap.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/hangulhanja.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <SwSmartTagMgr.hxx>
-#include <linguistic/lngprops.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>
-#include <dlelstnr.hxx>
 #include <swmodule.hxx>
 #include <splargs.hxx>
 #include <viewopt.hxx>
@@ -42,10 +40,8 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
 #include <txtfld.hxx>
-#include <fmtfld.hxx>
 #include <txatbase.hxx>
 #include <charatr.hxx>
-#include <fldbas.hxx>
 #include <pam.hxx>
 #include <hints.hxx>
 #include <ndtxt.hxx>
@@ -55,7 +51,6 @@
 #include <swscanner.hxx>
 
 #include <breakit.hxx>
-#include <crstate.hxx>
 #include <UndoOverwrite.hxx>
 #include <txatritr.hxx>
 #include <redline.hxx>
@@ -69,8 +64,6 @@
 #include <istyleaccess.hxx>
 #include <unicode/uchar.h>
 #include <DocumentSettingManager.hxx>
-
-#include <unomid.h>
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

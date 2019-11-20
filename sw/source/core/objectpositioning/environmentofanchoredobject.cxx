@@ -20,7 +20,6 @@
 #include <environmentofanchoredobject.hxx>
 #include <frame.hxx>
 #include <pagefrm.hxx>
-#include <flyfrm.hxx>
 
 using namespace objectpositioning;
 

@@ -25,14 +25,10 @@
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <vcl/outdev.hxx>
-#include <fmtfld.hxx>
-#include <fldbas.hxx>
 #include <txatbase.hxx>
 #include <fmtruby.hxx>
 #include <txtatr.hxx>
 #include <charfmt.hxx>
-#include <txtinet.hxx>
-#include <fchrfmt.hxx>
 #include <layfrm.hxx>
 #include <SwPortionHandler.hxx>
 #include "pormulti.hxx"
@@ -42,10 +38,8 @@
 #include "itrform2.hxx"
 #include "porfld.hxx"
 #include "porglue.hxx"
-#include <breakit.hxx>
 #include <pagefrm.hxx>
 #include <rowfrm.hxx>
-#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <swtable.hxx>
 #include <fmtfsize.hxx>

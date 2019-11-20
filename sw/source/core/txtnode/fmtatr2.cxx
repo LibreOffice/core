@@ -22,10 +22,8 @@
 #include <poolfmt.hxx>
 #include <unomid.h>
 
-#include <basic/sbxvar.hxx>
 #include <o3tl/any.hxx>
 #include <svl/macitem.hxx>
-#include <svl/stritem.hxx>
 #include <svl/stylepool.hxx>
 #include <fmtautofmt.hxx>
 #include <fchrfmt.hxx>
@@ -34,7 +32,6 @@
 #include <fmtruby.hxx>
 #include <charfmt.hxx>
 #include <hints.hxx>
-#include <unostyle.hxx>
 #include <unoevent.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
@@ -42,7 +39,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <cmdid.h>
 #include <com/sun/star/uno/Any.h>
 #include <SwStyleNameMapper.hxx>
 
@@ -51,7 +47,6 @@
 #include <doc.hxx>
 #include <unometa.hxx>
 #include <docsh.hxx>
-#include <svl/zforlist.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>

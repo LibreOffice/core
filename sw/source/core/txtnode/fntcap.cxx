@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <editeng/cmapitem.hxx>
 #include <editeng/svxfont.hxx>
 
 #include <vcl/outdev.hxx>
@@ -26,7 +24,6 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
-#include <vcl/print.hxx>
 #include <fntcache.hxx>
 #include <swfont.hxx>
 #include <breakit.hxx>

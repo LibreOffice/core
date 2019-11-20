@@ -28,7 +28,6 @@
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
 #include <ftninfo.hxx>
-#include <swfont.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <ftnfrm.hxx>

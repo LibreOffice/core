@@ -17,13 +17,10 @@
 #include <cellfrm.hxx>
 #include <hffrm.hxx>
 #include <rootfrm.hxx>
-#include <editsh.hxx>
 #include <ndtxt.hxx>
-#include "porlin.hxx"
-#include "porlay.hxx"
-#include "portxt.hxx"
 #include <sortedobjs.hxx>
 #include <swfont.hxx>
+#include <txttypes.hxx>
 #include <anchoredobject.hxx>
 #include <libxml/xmlwriter.h>
 #include <SwPortionHandler.hxx>

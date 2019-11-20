@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <sfx2/printer.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/escapementitem.hxx>
@@ -39,7 +37,6 @@
 #include <pagedesc.hxx>
 #include <frmatr.hxx>
 #include "redlnitr.hxx"
-#include "porfly.hxx"
 #include "atrhndl.hxx"
 #include <rootfrm.hxx>
 

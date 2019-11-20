@@ -26,7 +26,6 @@
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
-#include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>

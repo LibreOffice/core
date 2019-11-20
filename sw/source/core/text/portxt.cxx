@@ -27,17 +27,11 @@
 #include "porlay.hxx"
 #include "inftxt.hxx"
 #include "guess.hxx"
-#include "porglue.hxx"
-#include "portab.hxx"
 #include "porfld.hxx"
 #include <pagefrm.hxx>
 #include <tgrditem.hxx>
-#include <wrong.hxx>
-#include <viewsh.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <viewopt.hxx>
-#include <editeng/borderline.hxx>
 
 #include <IMark.hxx>
 #include <pam.hxx>

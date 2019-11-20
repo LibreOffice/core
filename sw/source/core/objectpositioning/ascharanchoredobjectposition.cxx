@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <anchoreddrawobject.hxx>
 #include <ascharanchoredobjectposition.hxx>
 #include <frame.hxx>
 #include <txtfrm.hxx>
 #include <flyfrms.hxx>
 #include <svx/svdobj.hxx>
-#include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
 #include <editeng/lrspitem.hxx>

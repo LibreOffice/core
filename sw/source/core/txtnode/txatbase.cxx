@@ -22,7 +22,6 @@
 #include <svl/itempool.hxx>
 #include <txatbase.hxx>
 #include <fmtfld.hxx>
-#include <docufld.hxx>
 
 SwTextAttr::SwTextAttr( SfxPoolItem& rAttr, sal_Int32 nStart )
     : m_pAttr( &rAttr )

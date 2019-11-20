@@ -17,17 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/outdev.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <doc.hxx>
 
-#include <frame.hxx>
-#include <paratr.hxx>
 #include "itrtxt.hxx"
 #include "porglue.hxx"
 #include "porlay.hxx"
 #include "porfly.hxx"
-#include "pordrop.hxx"
 #include "pormulti.hxx"
 #include "portab.hxx"
 #include <memory>

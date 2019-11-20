@@ -28,14 +28,10 @@
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <fmtinfmt.hxx>
 #include <ndtxt.hxx>
-#include <pagedesc.hxx>
 #include <tox.hxx>
 #include <txmsrt.hxx>
 #include <fmtautofmt.hxx>
-#include <DocumentSettingManager.hxx>
-#include <SwStyleNameMapper.hxx>
 #include <swatrset.hxx>
 #include <ToxWhitespaceStripper.hxx>
 #include <ToxLinkProcessor.hxx>

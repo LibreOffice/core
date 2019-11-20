@@ -18,33 +18,27 @@
  */
 
 #include <unotools/charclass.hxx>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <editeng/unolingu.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <docary.hxx>
 #include <cntfrm.hxx>
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
 #include <modeltoviewhelper.hxx>
 #include <node.hxx>
-#include <frmatr.hxx>
 #include <pam.hxx>
 #include <txttxmrk.hxx>
 #include <frmfmt.hxx>
 #include <fmtfld.hxx>
 #include <txmsrt.hxx>
 #include <ndtxt.hxx>
-#include <txtatr.hxx>
 #include <swtable.hxx>
 #include <expfld.hxx>
 #include <authfld.hxx>
 #include <toxwrap.hxx>
 
 #include <strings.hrc>
-#include <numrule.hxx>
 #include <reffld.hxx>
 
 using namespace ::com::sun::star;

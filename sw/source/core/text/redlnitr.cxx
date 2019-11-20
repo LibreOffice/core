@@ -27,7 +27,7 @@
 #include <scriptinfo.hxx>
 #include <swmodule.hxx>
 #include <redline.hxx>
-#include <txtatr.hxx>
+#include <txatbase.hxx>
 #include <docary.hxx>
 #include "itratr.hxx"
 #include <ndtxt.hxx>
@@ -36,7 +36,6 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <breakit.hxx>
-#include <vcl/keycodes.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 #include <txtfrm.hxx>
@@ -44,7 +43,6 @@
 #include <vcl/svapp.hxx>
 #include "redlnitr.hxx"
 #include <extinput.hxx>
-#include <sfx2/printer.hxx>
 
 using namespace ::com::sun::star;
 

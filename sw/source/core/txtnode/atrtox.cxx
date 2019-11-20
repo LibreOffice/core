@@ -19,9 +19,7 @@
 
 #include <doc.hxx>
 #include <txttxmrk.hxx>
-#include <swfont.hxx>
 #include <tox.hxx>
-#include <ndtxt.hxx>
 
 SwTextTOXMark::SwTextTOXMark( SwTOXMark& rAttr,
             sal_Int32 const nStartPos, sal_Int32 const*const pEnd)

@@ -18,9 +18,7 @@
  */
 
 #include <swrect.hxx>
-#include <paratr.hxx>
 #include <viewopt.hxx>
-#include <SwPortionHandler.hxx>
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "porlay.hxx"
