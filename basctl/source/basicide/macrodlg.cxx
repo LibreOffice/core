@@ -152,7 +152,8 @@ void MacroChooser::RestoreMacroDescription()
             aDesc = pData->GetLastEntryDescriptor();
     }
 
-    m_xBasicBox->SetCurrentEntry( aDesc );
+    m_xBasicBox->SetCurrentEntry(aDesc);
+    BasicSelectHdl(m_xBasicBox->get_widget());
 
     OUString aLastMacro( aDesc.GetMethodName() );
     if (!aLastMacro.isEmpty())
