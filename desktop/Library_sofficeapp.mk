@@ -158,7 +158,8 @@ ifneq ($(filter $(OS),ANDROID iOS MACOSX WNT),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 	desktop/source/lib/lokinteractionhandler \
-	desktop/source/lib/lokclipboard \
+	$(if $(filter-out $(OS),IOS), \
+		desktop/source/lib/lokclipboard) \
 	$(if $(filter $(OS),ANDROID), \
 		desktop/source/lib/lokandroid) \
 ))
