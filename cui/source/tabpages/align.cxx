@@ -187,6 +187,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
                 eJustify = SvxCellHorJustify::Right;
                 break;
             case ALIGNDLG_HORALIGN_BLOCK:
+            case ALIGNDLG_HORALIGN_DISTRIBUTED:
                 eJustify = SvxCellHorJustify::Block;
                 break;
             case ALIGNDLG_HORALIGN_FILL:
@@ -221,6 +222,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
                 eJustify = SvxCellVerJustify::Bottom;
                 break;
             case ALIGNDLG_VERALIGN_BLOCK:
+            case ALIGNDLG_VERALIGN_DISTRIBUTED:
                 eJustify = SvxCellVerJustify::Block;
                 break;
         }
