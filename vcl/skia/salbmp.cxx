@@ -49,7 +49,9 @@ SkiaSalBitmap::SkiaSalBitmap(const SkImage& image)
     {
         SkCanvas canvas(mBitmap);
         // TODO makeNonTextureImage() ?
-        canvas.drawImage(&image, 0, 0);
+        SkPaint paint;
+        paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+        canvas.drawImage(&image, 0, 0, &paint);
     }
 }
 
