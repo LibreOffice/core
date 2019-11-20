@@ -33,7 +33,6 @@
 #include <ddefld.hxx>
 #include <usrfld.hxx>
 #include <expfld.hxx>
-#include <swfont.hxx>
 #include <ndtxt.hxx>
 #include <calc.hxx>
 #include <hints.hxx>
@@ -42,6 +41,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <fieldhint.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 
 // constructor for default item in attribute-pool

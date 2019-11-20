@@ -19,12 +19,10 @@
 
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <doc.hxx>
-#include <frmatr.hxx>
 #include <SwPortionHandler.hxx>
 
 #include <viewopt.hxx>
@@ -32,7 +30,6 @@
 #include "inftxt.hxx"
 #include "itrform2.hxx"
 #include <txtfrm.hxx>
-#include <numrule.hxx>
 #include "porfld.hxx"
 #include <memory>
 
