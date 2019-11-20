@@ -15,7 +15,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	$(if $(filter MSC-120,$(COM)-$(VCVER)),external/poppler/poppler-snprintf.patch.1) \
 	external/poppler/poppler-config.patch.1 \
 	external/poppler/poppler-c++11.patch.1 \
-	external/poppler/0001-ImageStream-getLine-fix-crash-on-broken-files.patch.1 \
+	external/poppler/0001-Revert-Make-the-mul-tables-be-calculated-at-compile-.patch.1 \
 ))
 
 # std::make_unique is only available in C++14
@@ -24,7 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 # be happy with std::make_unique so just skip it
 ifneq ($(OS_FOR_BUILD),MACOSX)
 $(eval $(call gb_UnpackedTarball_set_post_action,poppler,\
-	env -i PATH="$(PATH)" $(FIND) . -name '*.cc' -exec sed -i -e 's/std::make_unique/o3tl::make_unique/' {} \\; \
+	env -i PATH="$(if $(filter WNT,$(OS)),/usr/bin,$(PATH))" $(FIND) . -name '*.cc' -exec sed -i -e 's/std::make_unique/o3tl::make_unique/' {} \\; \
 ))
 endif
 
