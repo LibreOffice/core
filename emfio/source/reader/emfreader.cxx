@@ -425,14 +425,14 @@ namespace emfio
             mpInputStream->ReadUInt16( type ).ReadUInt16( flags ).ReadUInt32( size ).ReadUInt32( dataSize );
             nRemainder -= nRequiredHeaderSize;
 
-            SAL_INFO ("emfio", "\t\tEMF+ record type: " << std::hex << type << std::dec);
+            SAL_INFO ("emfio", "EMF+ record type: " << std::hex << type << std::dec);
 
             // Get Device Context
             // TODO We should use  EmfPlusRecordType::GetDC instead
             if( type == 0x4004 )
             {
                 bHaveDC = true;
-                SAL_INFO ("emfio", "\t\tEMF+ lock DC (device context)");
+                SAL_INFO ("emfio", "EMF+ lock DC (device context)");
             }
 
             // look for the "dual mode" in header
@@ -679,14 +679,14 @@ namespace emfio
 
                 mpInputStream->ReadUInt32( length );
 
-                SAL_INFO("emfio", "\tGDI comment, length: " << length);
+                SAL_INFO("emfio", "GDI comment, length: " << length);
 
                 if( mpInputStream->good() && length >= 4 && length <= mpInputStream->remainingSize() ) {
                     sal_uInt32 nCommentId;
 
                     mpInputStream->ReadUInt32( nCommentId );
 
-                    SAL_INFO ("emfio", "\t\tbegin " << static_cast<char>(nCommentId & 0xff) << static_cast<char>((nCommentId & 0xff00) >> 8) << static_cast<char>((nCommentId & 0xff0000) >> 16) << static_cast<char>((nCommentId & 0xff000000) >> 24) << " id: 0x" << std::hex << nCommentId << std::dec);
+                    SAL_INFO ("emfio", "begin " << static_cast<char>(nCommentId & 0xff) << static_cast<char>((nCommentId & 0xff00) >> 8) << static_cast<char>((nCommentId & 0xff0000) >> 16) << static_cast<char>((nCommentId & 0xff000000) >> 24) << " id: 0x" << std::hex << nCommentId << std::dec);
 
                     if( nCommentId == EMR_COMMENT_EMFPLUS && nRecSize >= 12 )
                     {
@@ -705,7 +705,7 @@ namespace emfio
                     }
                     else
                     {
-                        SAL_INFO ("emfio", "\t\tunknown id: 0x" << std::hex << nCommentId << std::dec);
+                        SAL_INFO ("emfio", "unknown id: 0x" << std::hex << nCommentId << std::dec);
                     }
                 }
             }
@@ -1862,7 +1862,7 @@ namespace emfio
         // and 2.1.14 FormatSignature Enumeration
         if (nSignature != 0x464d4520)
         {
-            SAL_WARN("emfio", "EMF\t\tSignature is not 0x464d4520 (\"FME\") - possibly corrupted file?");
+            SAL_WARN("emfio", "Signature is not 0x464d4520 (\"FME\") - possibly corrupted file?");
             return false;
         }
 
@@ -1871,7 +1871,7 @@ namespace emfio
                                        // Microsoft note that not even Windows checks this...
         if (nVersion != 0x00010000)
         {
-            SAL_WARN("emfio", "EMF\t\tThis really should be 0x00010000, though not absolutely essential...");
+            SAL_WARN("emfio", "This really should be 0x00010000, though not absolutely essential...");
         }
 
         mpInputStream->ReadUInt32(mnEndPos); // size of metafile
@@ -1882,7 +1882,7 @@ namespace emfio
 
         if ( nActualFileSize < mnEndPos )
         {
-            SAL_WARN("emfio", "EMF\t\tEMF Header object records number of bytes as " << mnEndPos
+            SAL_WARN("emfio", "EMF Header object records number of bytes as " << mnEndPos
                                 << ", however the file size is actually " << nActualFileSize
                                 << " bytes. Possible file corruption?");
             mnEndPos = nActualFileSize;
@@ -1892,7 +1892,7 @@ namespace emfio
 
         if (mnRecordCount <= 0)
         {
-            SAL_WARN("emfio", "EMF\t\tEMF Header object shows record counter as <= 0! This shouldn't "
+            SAL_WARN("emfio", "EMF Header object shows record counter as <= 0! This shouldn't "
                                 "be possible... indicator of possible file corruption?");
             return false;
         }
@@ -1911,7 +1911,7 @@ namespace emfio
 
         if ( nReserved != 0x0000 )
         {
-            SAL_WARN("emfio", "EMF\t\tEMF Header object's reserved field is NOT 0x0000... possible "
+            SAL_WARN("emfio", "EMF Header object's reserved field is NOT 0x0000... possible "
                                 "corruption?");
         }
 
