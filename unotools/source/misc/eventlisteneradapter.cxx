@@ -84,7 +84,6 @@ namespace utl
     {
         Reference< XEventListener > xDeleteUponLeaving = m_xKeepMeAlive;
         m_xKeepMeAlive.clear();
-        m_xComponent.clear();
 
         m_pAdapter->_disposing(_rSource);
     }
@@ -118,7 +117,7 @@ namespace utl
         do
         {
             rtl::Reference<OEventListenerImpl>& pListenerImpl = *it;
-            if ( pListenerImpl->getComponent().get() == _rxComp.get() )
+            if (pListenerImpl->getComponent() == _rxComp)
             {
                 pListenerImpl->dispose();
                 it = m_pImpl->aListeners.erase( it );
