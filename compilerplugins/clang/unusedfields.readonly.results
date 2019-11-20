@@ -236,11 +236,11 @@ framework/inc/dispatch/dispatchprovider.hxx:77
     framework::DispatchProvider m_aProtocolHandlerCache class framework::HandlerCache
 framework/inc/helper/uiconfigelementwrapperbase.hxx:128
     framework::UIConfigElementWrapperBase m_bConfigListening _Bool
-framework/inc/xml/menudocumenthandler.hxx:132
+framework/inc/xml/menudocumenthandler.hxx:131
     framework::OReadMenuBarHandler m_bMenuMode _Bool
-framework/inc/xml/menudocumenthandler.hxx:159
+framework/inc/xml/menudocumenthandler.hxx:158
     framework::OReadMenuHandler m_bMenuPopupMode _Bool
-framework/inc/xml/menudocumenthandler.hxx:189
+framework/inc/xml/menudocumenthandler.hxx:188
     framework::OReadMenuPopupHandler m_bMenuMode _Bool
 framework/source/fwe/classes/addonsoptions.cxx:343
     framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
@@ -322,12 +322,6 @@ include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:32
     MultiLineEditSyntaxHighlight m_aColorConfig const svtools::ColorConfig
-include/svtools/inettbc.hxx:40
-    SvtURLBox aBaseURL class rtl::OUString
-include/svtools/inettbc.hxx:46
-    SvtURLBox bOnlyDirectories _Bool
-include/svtools/inettbc.hxx:48
-    SvtURLBox bNoSelection _Bool
 include/svx/dialcontrol.hxx:112
     svx::DialControl::DialControl_Impl mnLinkedFieldValueMultiplyer sal_Int32
 include/svx/graphctl.hxx:52
@@ -390,8 +384,8 @@ io/source/stm/odata.cxx:571
     io_stm::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:51
     GtvLokDialogPrivate m_nChildKeyModifier guint32
-libreofficekit/source/gtk/lokdocview.cxx:84
-    LOKDocViewPrivateImpl m_bIsLoading gboolean
+libreofficekit/source/gtk/lokdocview.cxx:86
+    (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading _Bool
 lingucomponent/source/languageguessing/simpleguesser.cxx:76
     textcat_t fprint void **
 lingucomponent/source/languageguessing/simpleguesser.cxx:78
@@ -550,6 +544,8 @@ svl/source/misc/strmadpt.cxx:51
     SvDataPipe_Impl::Page m_aBuffer sal_Int8 [1]
 svl/source/uno/pathservice.cxx:35
     PathService m_aOptions const class SvtPathOptions
+svtools/source/control/inettbc.cxx:94
+    SvtMatchContext_Impl aBaseURL const class rtl::OUString
 svtools/source/control/tabbar.cxx:200
     ImplTabBarItem maHelpId const class rtl::OString
 svtools/source/dialogs/insdlg.cxx:45
@@ -910,11 +906,11 @@ vcl/source/filter/jpeg/transupp.h:148
     (anonymous) crop_xoffset_set JCROP_CODE
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
-vcl/source/fontsubset/sft.cxx:1038
+vcl/source/fontsubset/sft.cxx:1046
     vcl::subHeader2 firstCode const sal_uInt16
-vcl/source/fontsubset/sft.cxx:1039
+vcl/source/fontsubset/sft.cxx:1047
     vcl::subHeader2 entryCount const sal_uInt16
-vcl/source/fontsubset/sft.cxx:1040
+vcl/source/fontsubset/sft.cxx:1048
     vcl::subHeader2 idDelta const sal_uInt16
 vcl/source/gdi/dibtools.cxx:52
     (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
@@ -962,11 +958,9 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:47
     AtkObjectWrapper aParent const AtkObject
 vcl/unx/gtk3/a11y/atkwrapper.hxx:75
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
-vcl/unx/gtk3/gtk3gloactiongroup.cxx:26
-    GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1596
+vcl/unx/gtk3/gtk3gtkinst.cxx:1602
      out gpointer *
 writerfilter/inc/ooxml/QNameToString.hxx:41
     writerfilter::QNameToString mMap writerfilter::QNameToString::Map

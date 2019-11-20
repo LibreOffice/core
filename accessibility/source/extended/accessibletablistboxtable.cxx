@@ -192,10 +192,6 @@ namespace accessibility
                     break;
                 }
 
-                case VclEventId::TableCellNameChanged :
-                {
-                    break;
-                }
                 default: break;
             }
         }

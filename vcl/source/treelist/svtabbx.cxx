@@ -292,9 +292,6 @@ void SvTabListBox::SetEntryText(const OUString& rStr, SvTreeListEntry* pEntry, s
         }
     }
     GetModel()->InvalidateEntry( pEntry );
-
-    std::unique_ptr<TabListBoxEventData> pData( new TabListBoxEventData( pEntry, nTextColumn, sOldText ) );
-    CallEventListeners( VclEventId::TableCellNameChanged, pData.get() );
 }
 
 OUString SvTabListBox::GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const

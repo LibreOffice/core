@@ -114,7 +114,6 @@ enum class VclEventId
     TabbarPageRemoved,      // pData = pageid
     TabbarPageSelected,     // pData = pageid
     TabbarPageTextChanged,  // pData = pageid
-    TableCellNameChanged,   // pData = struct(Entry, Column, oldText)
     TableRowSelect,
     TabpageActivate,        // pData = pageid
     TabpageDeactivate,      // pData = pageid
