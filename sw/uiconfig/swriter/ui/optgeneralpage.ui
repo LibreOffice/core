@@ -13,7 +13,7 @@
     <property name="lower">0.5</property>
     <property name="upper">100</property>
     <property name="value">1.25</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkBox" id="OptGeneralPage">
@@ -40,7 +40,6 @@
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="updatefields">
                     <property name="label" translatable="yes" context="optgeneralpage|updatefields">_Fields</property>
@@ -109,7 +108,6 @@
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="always">
                     <property name="label" translatable="yes" context="optgeneralpage|always">_Always</property>
@@ -192,70 +190,19 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkGrid" id="grid5">
+              <object class="GtkGrid" id="grid7">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkGrid" id="grid7">
+                  <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label5">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="optgeneralpage|label5">_Measurement unit:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">metric</property>
-                        <property name="xalign">1</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="metric">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="tablabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="optgeneralpage|tablabel">_Tab stops:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">tab</property>
-                        <property name="xalign">1</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="tab">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="halign">start</property>
-                        <property name="activates_default">True</property>
-                        <property name="text">1.25</property>
-                        <property name="adjustment">adjustment1</property>
-                        <property name="digits">2</property>
-                        <property name="value">1.25</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
+                    <property name="label" translatable="yes" context="optgeneralpage|label5">_Measurement unit:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">metric</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -263,10 +210,49 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkComboBoxText" id="metric">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="tablabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="optgeneralpage|tablabel">_Tab stops:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">tab</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="tab">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">start</property>
+                    <property name="activates_default">True</property>
+                    <property name="text">1.25</property>
+                    <property name="adjustment">adjustment1</property>
+                    <property name="digits">2</property>
+                    <property name="value">1.25</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkGrid" id="grid8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="usecharunit">
                         <property name="label" translatable="yes" context="optgeneralpage|usecharunit">_Enable char unit</property>
@@ -295,15 +281,18 @@
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -359,7 +348,7 @@
                         <property name="label" translatable="yes" context="optgeneralpage|label7">_Additional separators:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">wordcount</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -407,7 +396,7 @@
                       <object class="GtkAlignment" id="alignment5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
+                        <property name="left_padding">18</property>
                         <child>
                           <object class="GtkGrid" id="grid11">
                             <property name="visible">True</property>

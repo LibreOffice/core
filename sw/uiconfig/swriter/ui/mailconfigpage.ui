@@ -77,10 +77,11 @@
                   <object class="GtkLabel" id="displayname_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="mailconfigpage|displayname_label">_Your name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">displayname</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -91,10 +92,11 @@
                   <object class="GtkLabel" id="address_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="mailconfigpage|address_label">_Email address:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">address</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -120,10 +122,11 @@
                   <object class="GtkLabel" id="replyto_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="mailconfigpage|replyto_label">_Reply address:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">replyto</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -232,10 +235,11 @@
                   <object class="GtkLabel" id="server_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="mailconfigpage|server_label">_Server name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">server</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -246,10 +250,11 @@
                   <object class="GtkLabel" id="port_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes" context="mailconfigpage|port_label">_Port:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">port</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -327,5 +332,14 @@
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel">
+    <widgets>
+      <widget name="displayname_label"/>
+      <widget name="address_label"/>
+      <widget name="replyto_label"/>
+      <widget name="server_label"/>
+      <widget name="port_label"/>
+    </widgets>
   </object>
 </interface>

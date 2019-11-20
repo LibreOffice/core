@@ -26,7 +26,7 @@
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="column_spacing">12</property>
+        <property name="column_spacing">24</property>
         <child>
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
@@ -52,9 +52,8 @@
                       <object class="GtkGrid" id="grid3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
+                        <property name="row_spacing">3</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
@@ -62,7 +61,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|label7">Category:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">category</property>
-                            <property name="xalign">1</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -76,7 +75,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|numberingft">_Numbering:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">numbering</property>
-                            <property name="xalign">1</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -90,7 +89,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|numseparatorft">Numbering separator:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">numseparator</property>
-                            <property name="xalign">1</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -104,7 +103,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|separatorft">Separator:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">separator</property>
-                            <property name="xalign">1</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -118,7 +117,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|label18">Position:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">position</property>
-                            <property name="xalign">1</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -129,8 +128,6 @@
                           <object class="GtkComboBoxText" id="position">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="hexpand">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -141,8 +138,6 @@
                           <object class="GtkEntry" id="separator">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="valign">center</property>
-                            <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                           </object>
                           <packing>
@@ -154,8 +149,6 @@
                           <object class="GtkEntry" id="numseparator">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="valign">center</property>
-                            <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="text" translatable="yes" context="optcaptionpage|numseparator">. </property>
                           </object>
@@ -168,8 +161,6 @@
                           <object class="GtkComboBoxText" id="numbering">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="hexpand">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -233,9 +224,8 @@
                       <object class="GtkGrid" id="grid4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
+                        <property name="row_spacing">3</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
@@ -243,7 +233,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|label4">Level:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">level</property>
-                            <property name="xalign">1</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -257,7 +247,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|label6">Separator:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">chapseparator</property>
-                            <property name="xalign">1</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -268,8 +258,6 @@
                           <object class="GtkEntry" id="chapseparator">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="valign">center</property>
-                            <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                           </object>
                           <packing>
@@ -281,8 +269,6 @@
                           <object class="GtkComboBoxText" id="level">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="hexpand">True</property>
                             <items>
                               <item translatable="yes" context="optcaptionpage|level">None</item>
                             </items>
@@ -330,9 +316,8 @@
                       <object class="GtkGrid" id="grid5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
+                        <property name="row_spacing">3</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
@@ -340,7 +325,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|label3">Character style:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">charstyle</property>
-                            <property name="xalign">1</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -351,7 +336,6 @@
                           <object class="GtkComboBoxText" id="charstyle">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
                             <items>
                               <item translatable="yes" context="optcaptionpage|charstyle">None</item>
                             </items>
@@ -496,35 +480,6 @@ when inserting:</property>
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="halign">center</property>
-                <property name="valign">start</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="vscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkDrawingArea" id="preview">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="valign">start</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkFrame" id="frame5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -579,8 +534,64 @@ when inserting:</property>
         <property name="position">0</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkFrame" id="preview1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkAlignment">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
+            <property name="right_padding">12</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="valign">end</property>
+                <property name="hexpand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="preview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="preview4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="optcaptionpage|preview4">Preview</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
+  <object class="GtkSizeGroup" id="sizegroupLabel">
     <widgets>
       <widget name="label7"/>
       <widget name="numberingft"/>
@@ -590,6 +601,18 @@ when inserting:</property>
       <widget name="label4"/>
       <widget name="label6"/>
       <widget name="label3"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget">
+    <widgets>
+      <widget name="category"/>
+      <widget name="numbering"/>
+      <widget name="numseparator"/>
+      <widget name="separator"/>
+      <widget name="position"/>
+      <widget name="level"/>
+      <widget name="chapseparator"/>
+      <widget name="charstyle"/>
     </widgets>
   </object>
 </interface>
