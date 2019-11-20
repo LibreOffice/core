@@ -3694,6 +3694,7 @@ public:
 
     virtual void set_cursor(int pos) override
     {
+        disable_notify_events();
         if (pos == -1)
             m_xTreeView->SetCurEntry(nullptr);
         else
@@ -3701,6 +3702,7 @@ public:
             SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
             m_xTreeView->SetCurEntry(pEntry);
         }
+        enable_notify_events();
     }
 
     virtual void scroll_to_row(int pos) override
