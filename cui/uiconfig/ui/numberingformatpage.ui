@@ -59,30 +59,101 @@
     <property name="row_spacing">6</property>
     <property name="column_spacing">12</property>
     <child>
-      <object class="GtkFrame" id="formatcode">
+      <object class="GtkFrame" id="categoryframe">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="vexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment1">
+          <object class="GtkAlignment" id="alignment3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="vexpand">True</property>
             <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
             <child>
-              <object class="GtkGrid" id="grid7">
+              <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
+                <property name="can_focus">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkEntry" id="formatted">
+                  <object class="GtkTreeView" id="categorylb">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="valign">center</property>
+                    <property name="has_focus">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="categoryft">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="numberingformatpage|categoryft">C_ategory:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">categorylb</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="formatframe">
+        <property name="height_request">0</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkAlignment" id="alignment4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="top_padding">6</property>
+            <child>
+              <object class="GtkGrid" id="grid2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="row_spacing">6</property>
+                <child>
+                  <object class="GtkComboBoxText" id="currencylb">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="activates_default">True</property>
+                    <items>
+                      <item translatable="yes" context="numberingformatpage|liststore2">Automatically</item>
+                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -90,72 +161,42 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="add">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|add|tooltip_text">Add</property>
-                    <property name="valign">center</property>
-                    <property name="image">image2</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="edit">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|edit|tooltip_text">Edit Comment</property>
-                    <property name="valign">center</property>
-                    <property name="image">image3</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="delete">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|delete|tooltip_text">Remove</property>
-                    <property name="valign">center</property>
-                    <property name="image">image1</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="commentft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="formatlb">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">liststore3</property>
+                        <property name="headers_visible">False</property>
+                        <property name="headers_clickable">False</property>
+                        <property name="search_column">0</property>
+                        <property name="show_expanders">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection2"/>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                                <attribute name="foreground-rgba">2</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="commented">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|commented|tooltip_text">Comment</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">4</property>
                   </packing>
                 </child>
               </object>
@@ -163,21 +204,17 @@
           </object>
         </child>
         <child type="label">
-          <object class="GtkLabel" id="formatf">
+          <object class="GtkLabel" id="formatft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="numberingformatpage|formatf">_Format code</property>
+            <property name="label" translatable="yes" context="numberingformatpage|formatft">Fo_rmat:</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">formatted</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
           </object>
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
@@ -191,24 +228,22 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="row_spacing">3</property>
                 <child>
                   <object class="GtkBox" id="box2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="border_width">0</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkSpinButton" id="denominatored">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="halign">start</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -221,6 +256,7 @@
                       <object class="GtkSpinButton" id="decimalsed">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="halign">start</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -231,19 +267,20 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="leadzerosed">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="halign">start</property>
                     <property name="adjustment">adjustment3</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -253,14 +290,13 @@
                     <property name="valign">center</property>
                     <property name="border_width">0</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="denominatorft">
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="numberingformatpage|denominatorft">Den_ominator places:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">denominatored</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -275,7 +311,7 @@
                         <property name="label" translatable="yes" context="numberingformatpage|decimalsft">_Decimal places:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">decimalsed</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -296,11 +332,11 @@
                     <property name="label" translatable="yes" context="numberingformatpage|leadzerosft">Leading _zeroes:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">leadzerosed</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -314,8 +350,8 @@
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -358,8 +394,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
                   </packing>
                 </child>
               </object>
@@ -370,7 +406,226 @@
           <object class="GtkLabel" id="optionsft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="numberingformatpage|optionsft">Options</property>
+            <property name="label" translatable="yes" context="numberingformatpage|optionsft">Options:</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="formatcode">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel" id="formatf">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="numberingformatpage|formatf">_Format code:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">formatted</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="formatted">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="valign">center</property>
+            <property name="hexpand">True</property>
+            <property name="activates_default">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="add">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_text" translatable="yes" context="numberingformatpage|add|tooltip_text">Add</property>
+            <property name="image">image2</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="edit">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_text" translatable="yes" context="numberingformatpage|edit|tooltip_text">Edit Comment</property>
+            <property name="image">image3</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="delete">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_text" translatable="yes" context="numberingformatpage|delete|tooltip_text">Remove</property>
+            <property name="image">image1</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">6</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="language">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel" id="languageft">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="numberingformatpage|languageft">_Language:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">languagelb</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="languagelb">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="sourceformat">
+            <property name="label" translatable="yes" context="numberingformatpage|sourceformat">So_urce format</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="commentft">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="hexpand">True</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="commented">
+            <property name="can_focus">True</property>
+            <property name="no_show_all">True</property>
+            <property name="tooltip_text" translatable="yes" context="numberingformatpage|commented|tooltip_text">Comment</property>
+            <property name="halign">end</property>
+            <property name="hexpand">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="preview1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkAlignment" id="prev">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
+            <property name="right_padding">12</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="preview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="previewlb">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="numberingformatpage|previewlb">Preview</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -379,279 +634,8 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkGrid" id="grid3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <property name="row_spacing">12</property>
-        <property name="column_spacing">12</property>
-        <child>
-          <object class="GtkFrame" id="categoryframe">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="vexpand">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
-            <child>
-              <object class="GtkAlignment" id="alignment3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="vexpand">True</property>
-                <property name="top_padding">6</property>
-                <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <object class="GtkTreeView" id="categorylb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="has_focus">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="model">liststore1</property>
-                        <property name="headers_visible">False</property>
-                        <property name="headers_clickable">False</property>
-                        <property name="search_column">0</property>
-                        <property name="show_expanders">False</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection1"/>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                            <child>
-                              <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="categoryft">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="numberingformatpage|categoryft">C_ategory</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">categorylb</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="formatframe">
-            <property name="height_request">0</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
-            <child>
-              <object class="GtkAlignment" id="alignment4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="top_padding">6</property>
-                <child>
-                  <object class="GtkGrid" id="grid2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <child>
-                      <object class="GtkComboBoxText" id="currencylb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">start</property>
-                        <property name="hexpand">True</property>
-                        <items>
-                          <item translatable="yes" context="numberingformatpage|liststore2">Automatically</item>
-                        </items>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="formatlb">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="model">liststore3</property>
-                            <property name="headers_visible">False</property>
-                            <property name="headers_clickable">False</property>
-                            <property name="search_column">0</property>
-                            <property name="show_expanders">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection2"/>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                    <attribute name="foreground-rgba">2</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="formatft">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="numberingformatpage|formatft">Fo_rmat</property>
-                <property name="use_underline">True</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="languageframe">
-            <property name="height_request">0</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="vexpand">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
-            <child>
-              <object class="GtkAlignment" id="alignment5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="vexpand">True</property>
-                <property name="top_padding">6</property>
-                <child>
-                  <object class="GtkGrid" id="grid1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="vexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <child>
-                      <object class="GtkComboBoxText" id="languagelb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">start</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="sourceformat">
-                        <property name="label" translatable="yes" context="numberingformatpage|sourceformat">So_urce format</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="valign">end</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <object class="GtkViewport">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkDrawingArea" id="preview">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="languageft">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="numberingformatpage|languageft">_Language</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">languagelb</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="top_attach">3</property>
+        <property name="width">3</property>
       </packing>
     </child>
   </object>
@@ -659,8 +643,8 @@
     <property name="mode">both</property>
     <property name="ignore_hidden">True</property>
     <widgets>
-      <widget name="categoryframe"/>
-      <widget name="formatframe"/>
+      <widget name="languageft"/>
+      <widget name="formatf"/>
     </widgets>
   </object>
 </interface>
