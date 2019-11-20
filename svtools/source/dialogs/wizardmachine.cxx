@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svtools/wizardmachine.hxx>
 #include <svtools/helpids.h>
 #include <tools/debug.hxx>
@@ -119,9 +121,12 @@ namespace svt
     {
         m_pImpl->sTitleBase = GetText();
 
+        const bool bHideHelp = comphelper::LibreOfficeKit::isActive() &&
+                officecfg::Office::Common::Help::HelpRootURL::get().isEmpty();
+
         // create the buttons according to the wizard button flags
         // the help button
-        if (_nButtonFlags & WizardButtonFlags::HELP)
+        if (_nButtonFlags & WizardButtonFlags::HELP && !bHideHelp)
         {
             m_pHelp= VclPtr<HelpButton>::Create(this, WB_TABSTOP);
             m_pHelp->SetSizePixel(LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)));
