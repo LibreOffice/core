@@ -31,7 +31,6 @@
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="auto">
                     <property name="label" translatable="yes" context="optcomparison|auto">A_uto</property>
@@ -117,7 +116,6 @@
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="ignore">
