@@ -1,13 +1,13 @@
 --- xslt/libxslt/libxslt.syms.orig	2017-09-05 16:25:50.504966267 +0200
 +++ xslt/libxslt/libxslt.syms	2017-09-05 16:41:00.256895709 +0200
 @@ -497,5 +497,10 @@
- # xsltInternals
-   xsltFlagRVTs;
-   xsltDecimalFormatGetByQName;
+ 
+ # pattern
+   xsltCompMatchClearCache;
 +
 +# Solaris ld needs explicit auto-reduction (or, alternatively, "-B local")
 +    local:
 +  *;
 +
- } LIBXML2_1.1.27;
+ } LIBXML2_1.1.30;
  
