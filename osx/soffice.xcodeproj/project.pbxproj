@@ -7,6 +7,89 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		BE026468237973D7008D3E52 /* viewshe3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewshe3.cxx; path = ../sd/source/ui/view/viewshe3.cxx; sourceTree = "<group>"; };
+		BE026469237973D7008D3E52 /* drtxtob.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drtxtob.cxx; path = ../sd/source/ui/view/drtxtob.cxx; sourceTree = "<group>"; };
+		BE02646A237973D7008D3E52 /* ViewShellBase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ViewShellBase.cxx; path = ../sd/source/ui/view/ViewShellBase.cxx; sourceTree = "<group>"; };
+		BE02646B237973D7008D3E52 /* drviewsj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewsj.cxx; path = ../sd/source/ui/view/drviewsj.cxx; sourceTree = "<group>"; };
+		BE02646C237973D7008D3E52 /* ToolBarManager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ToolBarManager.cxx; path = ../sd/source/ui/view/ToolBarManager.cxx; sourceTree = "<group>"; };
+		BE02646D237973D7008D3E52 /* ViewShellHint.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ViewShellHint.cxx; path = ../sd/source/ui/view/ViewShellHint.cxx; sourceTree = "<group>"; };
+		BE02646E237973D7008D3E52 /* ViewShellManager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ViewShellManager.cxx; path = ../sd/source/ui/view/ViewShellManager.cxx; sourceTree = "<group>"; };
+		BE02646F237973D7008D3E52 /* viewoverlaymanager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewoverlaymanager.cxx; path = ../sd/source/ui/view/viewoverlaymanager.cxx; sourceTree = "<group>"; };
+		BE026470237973D7008D3E52 /* WindowUpdater.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WindowUpdater.cxx; path = ../sd/source/ui/view/WindowUpdater.cxx; sourceTree = "<group>"; };
+		BE026471237973D7008D3E52 /* zoomlist.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = zoomlist.cxx; path = ../sd/source/ui/view/zoomlist.cxx; sourceTree = "<group>"; };
+		BE026472237973D7008D3E52 /* drviewsi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewsi.cxx; path = ../sd/source/ui/view/drviewsi.cxx; sourceTree = "<group>"; };
+		BE026473237973D7008D3E52 /* drviewsd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewsd.cxx; path = ../sd/source/ui/view/drviewsd.cxx; sourceTree = "<group>"; };
+		BE026474237973D7008D3E52 /* OutlinerIterator.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OutlinerIterator.cxx; path = ../sd/source/ui/view/OutlinerIterator.cxx; sourceTree = "<group>"; };
+		BE026475237973D7008D3E52 /* ViewTabBar.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ViewTabBar.cxx; path = ../sd/source/ui/view/ViewTabBar.cxx; sourceTree = "<group>"; };
+		BE026476237973D7008D3E52 /* drviewsa.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewsa.cxx; path = ../sd/source/ui/view/drviewsa.cxx; sourceTree = "<group>"; };
+		BE026477237973D7008D3E52 /* outlnvs2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outlnvs2.cxx; path = ../sd/source/ui/view/outlnvs2.cxx; sourceTree = "<group>"; };
+		BE026478237973D7008D3E52 /* OutlineViewShellBase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OutlineViewShellBase.cxx; path = ../sd/source/ui/view/OutlineViewShellBase.cxx; sourceTree = "<group>"; };
+		BE026479237973D7008D3E52 /* tabcontr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabcontr.cxx; path = ../sd/source/ui/view/tabcontr.cxx; sourceTree = "<group>"; };
+		BE02647A237973D7008D3E52 /* drviews1.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviews1.cxx; path = ../sd/source/ui/view/drviews1.cxx; sourceTree = "<group>"; };
+		BE02647B237973D7008D3E52 /* ViewClipboard.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ViewClipboard.cxx; path = ../sd/source/ui/view/ViewClipboard.cxx; sourceTree = "<group>"; };
+		BE02647C237973D7008D3E52 /* drviews6.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviews6.cxx; path = ../sd/source/ui/view/drviews6.cxx; sourceTree = "<group>"; };
+		BE02647D237973D8008D3E52 /* drtxtob1.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drtxtob1.cxx; path = ../sd/source/ui/view/drtxtob1.cxx; sourceTree = "<group>"; };
+		BE02647E237973D8008D3E52 /* frmview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = frmview.cxx; path = ../sd/source/ui/view/frmview.cxx; sourceTree = "<group>"; };
+		BE02647F237973D8008D3E52 /* drviewsk.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewsk.cxx; path = ../sd/source/ui/view/drviewsk.cxx; sourceTree = "<group>"; };
+		BE026480237973D8008D3E52 /* drbezob.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drbezob.cxx; path = ../sd/source/ui/view/drbezob.cxx; sourceTree = "<group>"; };
+		BE026481237973D8008D3E52 /* sdview2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdview2.cxx; path = ../sd/source/ui/view/sdview2.cxx; sourceTree = "<group>"; };
+		BE026482237973D8008D3E52 /* sdview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdview.cxx; path = ../sd/source/ui/view/sdview.cxx; sourceTree = "<group>"; };
+		BE026483237973D8008D3E52 /* drviews8.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviews8.cxx; path = ../sd/source/ui/view/drviews8.cxx; sourceTree = "<group>"; };
+		BE026484237973D8008D3E52 /* Outliner.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Outliner.cxx; path = ../sd/source/ui/view/Outliner.cxx; sourceTree = "<group>"; };
+		BE026485237973D8008D3E52 /* drviews3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviews3.cxx; path = ../sd/source/ui/view/drviews3.cxx; sourceTree = "<group>"; };
+		BE026486237973D8008D3E52 /* drviewsg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewsg.cxx; path = ../sd/source/ui/view/drviewsg.cxx; sourceTree = "<group>"; };
+		BE026487237973D8008D3E52 /* drviews5.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviews5.cxx; path = ../sd/source/ui/view/drviews5.cxx; sourceTree = "<group>"; };
+		BE026488237973D8008D3E52 /* drviews4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviews4.cxx; path = ../sd/source/ui/view/drviews4.cxx; sourceTree = "<group>"; };
+		BE026489237973D8008D3E52 /* sdview5.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdview5.cxx; path = ../sd/source/ui/view/sdview5.cxx; sourceTree = "<group>"; };
+		BE02648A237973D8008D3E52 /* drviews7.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviews7.cxx; path = ../sd/source/ui/view/drviews7.cxx; sourceTree = "<group>"; };
+		BE02648B237973D8008D3E52 /* outlview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outlview.cxx; path = ../sd/source/ui/view/outlview.cxx; sourceTree = "<group>"; };
+		BE02648C237973D8008D3E52 /* PresentationViewShellBase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PresentationViewShellBase.cxx; path = ../sd/source/ui/view/PresentationViewShellBase.cxx; sourceTree = "<group>"; };
+		BE02648D237973D8008D3E52 /* ViewShellImplementation.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ViewShellImplementation.cxx; path = ../sd/source/ui/view/ViewShellImplementation.cxx; sourceTree = "<group>"; };
+		BE02648E237973D8008D3E52 /* FormShellManager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FormShellManager.cxx; path = ../sd/source/ui/view/FormShellManager.cxx; sourceTree = "<group>"; };
+		BE02648F237973D8008D3E52 /* drviewsb.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewsb.cxx; path = ../sd/source/ui/view/drviewsb.cxx; sourceTree = "<group>"; };
+		BE026490237973D8008D3E52 /* unmodpg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unmodpg.cxx; path = ../sd/source/ui/view/unmodpg.cxx; sourceTree = "<group>"; };
+		BE026491237973D8008D3E52 /* drvwshrg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drvwshrg.cxx; path = ../sd/source/ui/view/drvwshrg.cxx; sourceTree = "<group>"; };
+		BE026492237973D8008D3E52 /* drviewsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewsh.cxx; path = ../sd/source/ui/view/drviewsh.cxx; sourceTree = "<group>"; };
+		BE026493237973D8008D3E52 /* drviews9.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviews9.cxx; path = ../sd/source/ui/view/drviews9.cxx; sourceTree = "<group>"; };
+		BE026494237973D8008D3E52 /* MediaObjectBar.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MediaObjectBar.cxx; path = ../sd/source/ui/view/MediaObjectBar.cxx; sourceTree = "<group>"; };
+		BE026495237973D8008D3E52 /* viewshe2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewshe2.cxx; path = ../sd/source/ui/view/viewshe2.cxx; sourceTree = "<group>"; };
+		BE026496237973D9008D3E52 /* DocumentRenderer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DocumentRenderer.cxx; path = ../sd/source/ui/view/DocumentRenderer.cxx; sourceTree = "<group>"; };
+		BE026497237973D9008D3E52 /* drviewsf.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewsf.cxx; path = ../sd/source/ui/view/drviewsf.cxx; sourceTree = "<group>"; };
+		BE026498237973D9008D3E52 /* sdview3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdview3.cxx; path = ../sd/source/ui/view/sdview3.cxx; sourceTree = "<group>"; };
+		BE026499237973D9008D3E52 /* GraphicObjectBar.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicObjectBar.cxx; path = ../sd/source/ui/view/GraphicObjectBar.cxx; sourceTree = "<group>"; };
+		BE02649A237973D9008D3E52 /* GraphicViewShellBase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicViewShellBase.cxx; path = ../sd/source/ui/view/GraphicViewShellBase.cxx; sourceTree = "<group>"; };
+		BE02649B237973D9008D3E52 /* grviewsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = grviewsh.cxx; path = ../sd/source/ui/view/grviewsh.cxx; sourceTree = "<group>"; };
+		BE02649C237973D9008D3E52 /* clview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clview.cxx; path = ../sd/source/ui/view/clview.cxx; sourceTree = "<group>"; };
+		BE02649D237973D9008D3E52 /* ImpressViewShellBase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ImpressViewShellBase.cxx; path = ../sd/source/ui/view/ImpressViewShellBase.cxx; sourceTree = "<group>"; };
+		BE02649E237973D9008D3E52 /* sdwindow.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdwindow.cxx; path = ../sd/source/ui/view/sdwindow.cxx; sourceTree = "<group>"; };
+		BE02649F237973D9008D3E52 /* SlideSorterViewShellBase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SlideSorterViewShellBase.cxx; path = ../sd/source/ui/view/SlideSorterViewShellBase.cxx; sourceTree = "<group>"; };
+		BE0264A0237973D9008D3E52 /* sdruler.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdruler.cxx; path = ../sd/source/ui/view/sdruler.cxx; sourceTree = "<group>"; };
+		BE0264A1237973D9008D3E52 /* viewshel.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewshel.cxx; path = ../sd/source/ui/view/viewshel.cxx; sourceTree = "<group>"; };
+		BE0264A2237973D9008D3E52 /* drviews2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviews2.cxx; path = ../sd/source/ui/view/drviews2.cxx; sourceTree = "<group>"; };
+		BE0264A3237973D9008D3E52 /* drviewse.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewse.cxx; path = ../sd/source/ui/view/drviewse.cxx; sourceTree = "<group>"; };
+		BE0264A4237973D9008D3E52 /* drviewsc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drviewsc.cxx; path = ../sd/source/ui/view/drviewsc.cxx; sourceTree = "<group>"; };
+		BE0264A5237973D9008D3E52 /* drawview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drawview.cxx; path = ../sd/source/ui/view/drawview.cxx; sourceTree = "<group>"; };
+		BE0264A6237973D9008D3E52 /* outlnvsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outlnvsh.cxx; path = ../sd/source/ui/view/outlnvsh.cxx; sourceTree = "<group>"; };
+		BE0264A7237973D9008D3E52 /* sdview4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdview4.cxx; path = ../sd/source/ui/view/sdview4.cxx; sourceTree = "<group>"; };
+		BE0264A8237973D9008D3E52 /* presvish.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = presvish.cxx; path = ../sd/source/ui/view/presvish.cxx; sourceTree = "<group>"; };
+		BE0264AA237975E7008D3E52 /* iconviewimpl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = iconviewimpl.hxx; path = ../vcl/source/treelist/iconviewimpl.hxx; sourceTree = "<group>"; };
+		BE0264AB237975E8008D3E52 /* svlbitm.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svlbitm.cxx; path = ../vcl/source/treelist/svlbitm.cxx; sourceTree = "<group>"; };
+		BE0264AC237975E8008D3E52 /* svtabbx.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svtabbx.cxx; path = ../vcl/source/treelist/svtabbx.cxx; sourceTree = "<group>"; };
+		BE0264AD237975E8008D3E52 /* iconviewimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = iconviewimpl.cxx; path = ../vcl/source/treelist/iconviewimpl.cxx; sourceTree = "<group>"; };
+		BE0264AE237975E8008D3E52 /* uiobject.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uiobject.cxx; path = ../vcl/source/treelist/uiobject.cxx; sourceTree = "<group>"; };
+		BE0264AF237975E8008D3E52 /* inetimg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = inetimg.cxx; path = ../vcl/source/treelist/inetimg.cxx; sourceTree = "<group>"; };
+		BE0264B0237975E8008D3E52 /* viewdataentry.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewdataentry.cxx; path = ../vcl/source/treelist/viewdataentry.cxx; sourceTree = "<group>"; };
+		BE0264B1237975E8008D3E52 /* imap3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imap3.cxx; path = ../vcl/source/treelist/imap3.cxx; sourceTree = "<group>"; };
+		BE0264B2237975E8008D3E52 /* transfer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transfer.cxx; path = ../vcl/source/treelist/transfer.cxx; sourceTree = "<group>"; };
+		BE0264B3237975E8008D3E52 /* transfer2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transfer2.cxx; path = ../vcl/source/treelist/transfer2.cxx; sourceTree = "<group>"; };
+		BE0264B4237975E8008D3E52 /* imap2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imap2.cxx; path = ../vcl/source/treelist/imap2.cxx; sourceTree = "<group>"; };
+		BE0264B5237975E8008D3E52 /* iconview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = iconview.cxx; path = ../vcl/source/treelist/iconview.cxx; sourceTree = "<group>"; };
+		BE0264B6237975E8008D3E52 /* headbar.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = headbar.cxx; path = ../vcl/source/treelist/headbar.cxx; sourceTree = "<group>"; };
+		BE0264B7237975E8008D3E52 /* imap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imap.cxx; path = ../vcl/source/treelist/imap.cxx; sourceTree = "<group>"; };
+		BE0264B8237975E8008D3E52 /* treelistbox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = treelistbox.cxx; path = ../vcl/source/treelist/treelistbox.cxx; sourceTree = "<group>"; };
+		BE0264B9237975E8008D3E52 /* svimpbox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svimpbox.cxx; path = ../vcl/source/treelist/svimpbox.cxx; sourceTree = "<group>"; };
+		BE0264BA237975E8008D3E52 /* treelist.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = treelist.cxx; path = ../vcl/source/treelist/treelist.cxx; sourceTree = "<group>"; };
+		BE0264BB237975E8008D3E52 /* treelistentry.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = treelistentry.cxx; path = ../vcl/source/treelist/treelistentry.cxx; sourceTree = "<group>"; };
 		BE02FCE5171328D20069F37F /* javacontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = javacontext.cxx; path = ../svtools/source/java/javacontext.cxx; sourceTree = "<group>"; };
 		BE02FCE6171328D20069F37F /* javainteractionhandler.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = javainteractionhandler.cxx; path = ../svtools/source/java/javainteractionhandler.cxx; sourceTree = "<group>"; };
 		BE02FCE7171335B80069F37F /* otherjre.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = otherjre.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/otherjre.cxx; sourceTree = "<group>"; };
@@ -280,6 +363,119 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		BE02646523797385008D3E52 /* sd */ = {
+			isa = PBXGroup;
+			children = (
+				BE02646623797395008D3E52 /* ui */,
+			);
+			name = sd;
+			sourceTree = "<group>";
+		};
+		BE02646623797395008D3E52 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				BE0264672379739E008D3E52 /* view */,
+			);
+			name = ui;
+			sourceTree = "<group>";
+		};
+		BE0264672379739E008D3E52 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				BE02649C237973D9008D3E52 /* clview.cxx */,
+				BE026496237973D9008D3E52 /* DocumentRenderer.cxx */,
+				BE0264A5237973D9008D3E52 /* drawview.cxx */,
+				BE026480237973D8008D3E52 /* drbezob.cxx */,
+				BE026469237973D7008D3E52 /* drtxtob.cxx */,
+				BE02647D237973D8008D3E52 /* drtxtob1.cxx */,
+				BE02647A237973D7008D3E52 /* drviews1.cxx */,
+				BE0264A2237973D9008D3E52 /* drviews2.cxx */,
+				BE026485237973D8008D3E52 /* drviews3.cxx */,
+				BE026488237973D8008D3E52 /* drviews4.cxx */,
+				BE026487237973D8008D3E52 /* drviews5.cxx */,
+				BE02647C237973D7008D3E52 /* drviews6.cxx */,
+				BE02648A237973D8008D3E52 /* drviews7.cxx */,
+				BE026483237973D8008D3E52 /* drviews8.cxx */,
+				BE026493237973D8008D3E52 /* drviews9.cxx */,
+				BE026476237973D7008D3E52 /* drviewsa.cxx */,
+				BE02648F237973D8008D3E52 /* drviewsb.cxx */,
+				BE0264A4237973D9008D3E52 /* drviewsc.cxx */,
+				BE026473237973D7008D3E52 /* drviewsd.cxx */,
+				BE0264A3237973D9008D3E52 /* drviewse.cxx */,
+				BE026497237973D9008D3E52 /* drviewsf.cxx */,
+				BE026486237973D8008D3E52 /* drviewsg.cxx */,
+				BE026492237973D8008D3E52 /* drviewsh.cxx */,
+				BE026472237973D7008D3E52 /* drviewsi.cxx */,
+				BE02646B237973D7008D3E52 /* drviewsj.cxx */,
+				BE02647F237973D8008D3E52 /* drviewsk.cxx */,
+				BE026491237973D8008D3E52 /* drvwshrg.cxx */,
+				BE02648E237973D8008D3E52 /* FormShellManager.cxx */,
+				BE02647E237973D8008D3E52 /* frmview.cxx */,
+				BE026499237973D9008D3E52 /* GraphicObjectBar.cxx */,
+				BE02649A237973D9008D3E52 /* GraphicViewShellBase.cxx */,
+				BE02649B237973D9008D3E52 /* grviewsh.cxx */,
+				BE02649D237973D9008D3E52 /* ImpressViewShellBase.cxx */,
+				BE026494237973D8008D3E52 /* MediaObjectBar.cxx */,
+				BE026484237973D8008D3E52 /* Outliner.cxx */,
+				BE026474237973D7008D3E52 /* OutlinerIterator.cxx */,
+				BE026478237973D7008D3E52 /* OutlineViewShellBase.cxx */,
+				BE026477237973D7008D3E52 /* outlnvs2.cxx */,
+				BE0264A6237973D9008D3E52 /* outlnvsh.cxx */,
+				BE02648B237973D8008D3E52 /* outlview.cxx */,
+				BE02648C237973D8008D3E52 /* PresentationViewShellBase.cxx */,
+				BE0264A8237973D9008D3E52 /* presvish.cxx */,
+				BE0264A0237973D9008D3E52 /* sdruler.cxx */,
+				BE026482237973D8008D3E52 /* sdview.cxx */,
+				BE026481237973D8008D3E52 /* sdview2.cxx */,
+				BE026498237973D9008D3E52 /* sdview3.cxx */,
+				BE0264A7237973D9008D3E52 /* sdview4.cxx */,
+				BE026489237973D8008D3E52 /* sdview5.cxx */,
+				BE02649E237973D9008D3E52 /* sdwindow.cxx */,
+				BE02649F237973D9008D3E52 /* SlideSorterViewShellBase.cxx */,
+				BE026479237973D7008D3E52 /* tabcontr.cxx */,
+				BE02646C237973D7008D3E52 /* ToolBarManager.cxx */,
+				BE026490237973D8008D3E52 /* unmodpg.cxx */,
+				BE02647B237973D7008D3E52 /* ViewClipboard.cxx */,
+				BE02646F237973D7008D3E52 /* viewoverlaymanager.cxx */,
+				BE026495237973D8008D3E52 /* viewshe2.cxx */,
+				BE026468237973D7008D3E52 /* viewshe3.cxx */,
+				BE0264A1237973D9008D3E52 /* viewshel.cxx */,
+				BE02646A237973D7008D3E52 /* ViewShellBase.cxx */,
+				BE02646D237973D7008D3E52 /* ViewShellHint.cxx */,
+				BE02648D237973D8008D3E52 /* ViewShellImplementation.cxx */,
+				BE02646E237973D7008D3E52 /* ViewShellManager.cxx */,
+				BE026475237973D7008D3E52 /* ViewTabBar.cxx */,
+				BE026470237973D7008D3E52 /* WindowUpdater.cxx */,
+				BE026471237973D7008D3E52 /* zoomlist.cxx */,
+			);
+			name = view;
+			sourceTree = "<group>";
+		};
+		BE0264A923797594008D3E52 /* treelist */ = {
+			isa = PBXGroup;
+			children = (
+				BE0264B6237975E8008D3E52 /* headbar.cxx */,
+				BE0264B5237975E8008D3E52 /* iconview.cxx */,
+				BE0264AD237975E8008D3E52 /* iconviewimpl.cxx */,
+				BE0264AA237975E7008D3E52 /* iconviewimpl.hxx */,
+				BE0264B7237975E8008D3E52 /* imap.cxx */,
+				BE0264B4237975E8008D3E52 /* imap2.cxx */,
+				BE0264B1237975E8008D3E52 /* imap3.cxx */,
+				BE0264AF237975E8008D3E52 /* inetimg.cxx */,
+				BE0264B9237975E8008D3E52 /* svimpbox.cxx */,
+				BE0264AB237975E8008D3E52 /* svlbitm.cxx */,
+				BE0264AC237975E8008D3E52 /* svtabbx.cxx */,
+				BE0264B2237975E8008D3E52 /* transfer.cxx */,
+				BE0264B3237975E8008D3E52 /* transfer2.cxx */,
+				BE0264BA237975E8008D3E52 /* treelist.cxx */,
+				BE0264B8237975E8008D3E52 /* treelistbox.cxx */,
+				BE0264BB237975E8008D3E52 /* treelistentry.cxx */,
+				BE0264AE237975E8008D3E52 /* uiobject.cxx */,
+				BE0264B0237975E8008D3E52 /* viewdataentry.cxx */,
+			);
+			name = treelist;
+			sourceTree = "<group>";
+		};
 		BE09705B20B2E19A00A6C26A /* sal */ = {
 			isa = PBXGroup;
 			children = (
@@ -526,6 +722,7 @@
 				BE82C3C818C86D8B0050EB79 /* gdi */,
 				BE60B5761DB7D76C00D3E1E4 /* osx */,
 				BE2DAD29182FABD200A4D2F7 /* quartz */,
+				BE0264A923797594008D3E52 /* treelist */,
 				BE2DACF9182FAB3800A4D2F7 /* window */,
 			);
 			name = vcl;
@@ -681,6 +878,7 @@
 				BE82BE5A18298E2E00A447B5 /* vcl */,
 				BE82BE5918298DFB00A447B5 /* java */,
 				BE82BE5818298DEB00A447B5 /* sc */,
+				BE02646523797385008D3E52 /* sd */,
 			);
 			sourceTree = "<group>";
 		};
