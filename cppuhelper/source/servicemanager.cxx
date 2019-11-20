@@ -1788,6 +1788,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     std::vector<OUString> aReported;
     std::vector<OUString> aDisabled;
     OUStringBuffer aDisabledMsg;
+    OUStringBuffer aMissingMsg;
 
     /// Allow external callers & testers to disable certain components
     const char *pDisable = getenv("UNODISABLELIBRARY");
@@ -1810,6 +1811,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             rEntry.second->status == Data::Implementation::STATUS_LOADED)
             continue;
 
+        OUString simplified;
         try
         {
             const OUString &aLibrary = rEntry.second->info->uri;
@@ -1817,7 +1819,8 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             if (aLibrary.isEmpty())
                 continue;
 
-            OUString simplified = simplifyModule(aLibrary);
+            simplified = simplifyModule(aLibrary);
+
             bool bDisabled =
                 std::find(aDisabled.begin(), aDisabled.end(), simplified) != aDisabled.end();
 
@@ -1854,8 +1857,8 @@ void cppuhelper::ServiceManager::preloadImplementations() {
 
         if (!aModule.is())
         {
-            std::cerr << ":failed" << std::endl;
-            std::cerr.flush();
+            aMissingMsg.append(simplified);
+            aMissingMsg.append(" ");
         }
 
         if (aModule.is() &&
@@ -1948,6 +1951,11 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     }
     std::cerr << std::endl;
 
+    if (aMissingMsg.getLength() > 0)
+    {
+        OUString aMsg = aMissingMsg.makeStringAndClear();
+        std::cerr << "Absent (often optional): " << aMsg << "\n";
+    }
     if (aDisabledMsg.getLength() > 0)
     {
         OUString aMsg = aDisabledMsg.makeStringAndClear();
