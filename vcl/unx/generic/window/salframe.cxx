@@ -261,6 +261,7 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
 
         if( aIcon.IsEmpty())
             continue;
+        vcl::bitmap::convertBitmap32To24Plus8(aIcon, aIcon);
         Bitmap icon = aIcon.GetBitmap();
         AlphaMask mask;
         switch( aIcon.GetTransparentType())
