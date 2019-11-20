@@ -84,7 +84,7 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void Characters( const OUString &rChars ) override;
+    virtual void SAL_CALL characters( const OUString &rChars ) override;
     virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
@@ -148,14 +148,14 @@ public:
 
     // SvXMLImportContext
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
-    virtual void Characters( const OUString &rChars ) override;
+    virtual void SAL_CALL characters( const OUString &rChars ) override;
 
     const OUString &    GetRightText() const    { return aRightText; }
     const OUString &    GetLeftText() const     { return rEntryContext.GetLeftText(); }
 };
 
 
-void ConvDicXMLImportContext::Characters(const OUString & /*rChars*/)
+void ConvDicXMLImportContext::characters(const OUString & /*rChars*/)
 {
     /*
     Whitespace occurring within the content of token elements is "trimmed"
@@ -250,7 +250,7 @@ void ConvDicXMLEntryTextContext_Impl::startFastElement(
 }
 
 
-void ConvDicXMLRightTextContext_Impl::Characters( const OUString &rChars )
+void ConvDicXMLRightTextContext_Impl::characters( const OUString &rChars )
 {
     aRightText += rChars;
 }
