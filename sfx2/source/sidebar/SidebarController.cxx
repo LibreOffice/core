@@ -131,7 +131,7 @@ SidebarController::SidebarController (
               this)),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(),
-      mnRequestedForceFlags(SwitchFlag_NoForce),
+      mnRequestedForceFlags(SwitchFlag_ForceNewDeck | SwitchFlag_ForceNewPanels),
       msCurrentDeckId(gsDefaultDeckId),
       maPropertyChangeForwarder([this](){ return this->BroadcastPropertyChange(); }),
       maContextChangeUpdate([this](){ return this->UpdateConfigurations(); }),
@@ -515,7 +515,7 @@ void SidebarController::UpdateConfigurations()
     if (!maRequestedContext.msApplication.isEmpty() &&
             (maCurrentContext.msApplication != maRequestedContext.msApplication))
     {
-        OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck( maRequestedContext );
+        const OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck(maRequestedContext);
         if (!sLastActiveDeck.isEmpty())
             msCurrentDeckId = sLastActiveDeck;
     }
@@ -567,12 +567,7 @@ void SidebarController::UpdateConfigurations()
     // with the deck.
     mpTabBar->HighlightDeck(sNewDeckId);
 
-    std::shared_ptr<DeckDescriptor> xDescriptor = mpResourceManager->GetDeckDescriptor(sNewDeckId);
-
-    if (xDescriptor)
-    {
-        SwitchToDeck(*xDescriptor, maCurrentContext);
-    }
+    SwitchToDeck(sNewDeckId);
 }
 
 namespace {

@@ -290,7 +290,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         // DocWinActivate : both frames belong to the same TopWindow
         // TopWinActivate : both frames belong to different TopWindows
 
-        bool bTaskActivate = pOldFrame != pFrame;
+        const bool bTaskActivate = pOldFrame != pFrame;
 
         if ( pOldFrame )
         {
