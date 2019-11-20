@@ -23,13 +23,13 @@ Hack the xslt-config to return paths into WORKDIR.
  
  usage()
  {
-@@ -89,7 +95,8 @@
-     shift
- done
+@@ -92,7 +98,8 @@
+             libs="@XSLT_LIBDIR@ $libs"
+         fi
  
--the_libs="@XSLT_LIBDIR@ @XSLT_LIBS@ @EXTRA_LIBS@"
-+#the_libs="@XSLT_LIBDIR@ @XSLT_LIBS@ @EXTRA_LIBS@"
-+the_libs="-L${libdir}/libxslt/.libs -L${libdir}/libexslt/.libs -lxslt -lm"
- if test "$includedir" != "/usr/include"; then
-     the_flags="$the_flags -I$includedir `@XML_CONFIG@ --cflags`"
- else
+-        libs="$libs @EXTRA_LIBS@"
++        #libs="$libs @EXTRA_LIBS@"
++        libs="-L${libdir}/libxslt/.libs -L${libdir}/libexslt/.libs -lxslt -lm"
+        	;;
+ 
+     *)
