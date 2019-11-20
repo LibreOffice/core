@@ -29,9 +29,6 @@
 
 #include <sot/exchange.hxx>
 #include <tools/globname.hxx>
-#include <hintids.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <vcl/outdev.hxx>
@@ -42,7 +39,6 @@
 #include <pam.hxx>
 #include <section.hxx>
 #include <cntfrm.hxx>
-#include <frmatr.hxx>
 #include <ndole.hxx>
 #include <viewsh.hxx>
 #include <DocumentSettingManager.hxx>
@@ -52,7 +48,6 @@
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <strings.hrc>
 #include <svx/charthelper.hxx>
 #include <comphelper/threadpool.hxx>

@@ -19,7 +19,6 @@
 
 #include <anchoredobjectposition.hxx>
 #include <environmentofanchoredobject.hxx>
-#include <doc.hxx>
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>

@@ -22,7 +22,6 @@
 #include <memory>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/lspcitem.hxx>
-#include <dcontact.hxx>
 #include <txtflcnt.hxx>
 #include <txtftn.hxx>
 #include <flyfrms.hxx>
@@ -45,12 +44,9 @@
 #include "porftn.hxx"
 #include "porhyph.hxx"
 #include "pordrop.hxx"
-#include "guess.hxx"
 #include <blink.hxx>
-#include <ftnfrm.hxx>
 #include "redlnitr.hxx"
 #include <pagefrm.hxx>
-#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <doc.hxx>
 #include "pormulti.hxx"
@@ -59,7 +55,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IMark.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <svl/zforlist.hxx>
 
 #include <vector>
 

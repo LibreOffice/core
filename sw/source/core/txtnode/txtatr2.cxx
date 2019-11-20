@@ -20,9 +20,6 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <osl/diagnose.h>
-#include <sfx2/objsh.hxx>
-#include <editeng/xmlcnitm.hxx>
-#include <editeng/twolinesitem.hxx>
 #include <txtinet.hxx>
 #include <txtatr.hxx>
 #include <fchrfmt.hxx>
