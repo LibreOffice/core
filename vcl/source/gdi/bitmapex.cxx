@@ -689,6 +689,8 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
     {
         if (nX >= 0 && nX < GetSizePixel().Width() && nY >= 0 && nY < GetSizePixel().Height())
         {
+            if (maBitmap.GetBitCount() == 32)
+                return GetPixelColor(nX, nY).GetTransparency();
             switch(meTransparent)
             {
                 case TransparentType::NONE:
