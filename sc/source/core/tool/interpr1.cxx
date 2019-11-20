@@ -5816,16 +5816,8 @@ void ScInterpreter::ScCountIf()
                 }
                 else
                 {
-                    ScQueryCellIterator aCellIter(pDok, mrContext, nTab1, rParam, false);
-                    // Keep Entry.nField in iterator on column change
-                    aCellIter.SetAdvanceQueryParamEntryField( true );
-                    if ( aCellIter.GetFirst() )
-                    {
-                        do
-                        {
-                            fCount++;
-                        } while ( aCellIter.GetNext() );
-                    }
+                    ScCountIfCellIterator aCellIter(pDok, mrContext, nTab1, rParam);
+                    fCount += aCellIter.GetCount();
                 }
             }
             else
