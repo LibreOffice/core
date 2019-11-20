@@ -80,17 +80,6 @@ void TextChain::SetIsPartOfLastParaInNextLink(const SdrTextObj *pTarget, bool b)
     pLinkProperties->aIsPartOfLastParaInNextLink = b;
 }
 
-bool TextChain::GetPendingOverflowCheck(const SdrTextObj *pTarget)
-{
-    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
-    return pLinkProperties->aPendingOverflowCheck;
-}
-void TextChain::SetPendingOverflowCheck(const SdrTextObj *pTarget, bool b)
-{
-    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
-    pLinkProperties->aPendingOverflowCheck = b;
-}
-
 bool TextChain::GetSwitchingToNextBox(const SdrTextObj *pTarget)
 {
     ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
