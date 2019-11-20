@@ -27,6 +27,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
@@ -48,6 +49,7 @@
 #include <svx/transfrmhelper.hxx>
 
 #include <svtools/unitconv.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -106,6 +108,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     get( mpDial,      "orientationcontrol" );
     get( mpFtFlip,    "fliplabel" );
     get( mpFlipTbx,   "selectrotationtype" );
+    get( mpBtnEditChart,   "btnEditChart" );
     Initialize();
 
     mpBindings->Update( SID_ATTR_METRIC );
@@ -135,6 +138,7 @@ void PosSizePropertyPanel::dispose()
     mpDial.clear();
     mpFtFlip.clear();
     mpFlipTbx.clear();
+    mpBtnEditChart.clear();
 
     maTransfPosXControl.dispose();
     maTransfPosYControl.dispose();
@@ -204,6 +208,8 @@ void PosSizePropertyPanel::Initialize()
     //flip:
     mpFlipTbx->SetSelectHdl( LINK( this, PosSizePropertyPanel, FlipHdl) );
 
+    mpBtnEditChart->SetClickHdl( LINK( this, PosSizePropertyPanel, ClickChartEditHdl ) );
+
     mpMtrAngle->InsertValue(0, FieldUnit::CUSTOM);
     mpMtrAngle->InsertValue(4500, FieldUnit::CUSTOM);
     mpMtrAngle->InsertValue(9000, FieldUnit::CUSTOM);
@@ -269,6 +275,8 @@ void PosSizePropertyPanel::HandleContextChange(
     bool bShowPosition = false;
     bool bShowAngle = false;
     bool bShowFlip = false;
+    bool bShowEditChart = false;
+    bool bIsMobile = comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView());
 
     switch (maContext.GetCombinedContext_DI())
     {
@@ -294,14 +302,24 @@ void PosSizePropertyPanel::HandleContextChange(
             bShowFlip = true;
             break;
 
+        case CombinedEnumContext(Application::WriterVariants, Context::OLE):
+            if (bIsMobile)
+                bShowEditChart = true;
+            break;
+
+        case CombinedEnumContext(Application::Calc, Context::OLE):
+        case CombinedEnumContext(Application::DrawImpress, Context::OLE):
+            bShowPosition = true;
+            if (bIsMobile)
+                bShowEditChart = true;
+            break;
+
         case CombinedEnumContext(Application::Calc, Context::Chart):
         case CombinedEnumContext(Application::Calc, Context::Form):
         case CombinedEnumContext(Application::Calc, Context::Media):
-        case CombinedEnumContext(Application::Calc, Context::OLE):
         case CombinedEnumContext(Application::Calc, Context::MultiObject):
         case CombinedEnumContext(Application::DrawImpress, Context::Media):
         case CombinedEnumContext(Application::DrawImpress, Context::Form):
-        case CombinedEnumContext(Application::DrawImpress, Context::OLE):
         case CombinedEnumContext(Application::DrawImpress, Context::ThreeDObject):
         case CombinedEnumContext(Application::DrawImpress, Context::MultiObject):
             bShowPosition = true;
@@ -322,6 +340,9 @@ void PosSizePropertyPanel::HandleContextChange(
     // Flip
     mpFtFlip->Show(bShowFlip);
     mpFlipTbx->Show(bShowFlip);
+
+    // Edit Chart
+    mpBtnEditChart->Show(bShowEditChart);
 
     if (mxSidebar.is())
         mxSidebar->requestLayout();
@@ -494,6 +515,15 @@ IMPL_LINK( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
         SfxVoidItem aVertItem(SID_FLIP_VERTICAL);
         GetBindings()->GetDispatcher()->ExecuteList(SID_FLIP_VERTICAL,
                 SfxCallMode::RECORD, { &aVertItem });
+    }
+}
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ClickChartEditHdl, Button*, void )
+{
+    SfxViewShell* pCurSh = SfxViewShell::Current();
+    if ( pCurSh)
+    {
+        pCurSh->DoVerb( -1 );
     }
 }
 
