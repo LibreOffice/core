@@ -179,17 +179,6 @@ uno::Reference<XAccessible>
 }
 
 
-uno::Reference<XAccessible>
-    ChildrenManagerImpl::GetChild (const uno::Reference<drawing::XShape>& xShape)
-{
-    auto I = std::find_if(maVisibleChildren.begin(), maVisibleChildren.end(),
-        [&xShape](const ChildDescriptor& rChild) { return rChild.mxShape.get() == xShape.get(); });
-    if (I != maVisibleChildren.end())
-        return I->mxAccessibleShape;
-    return uno::Reference<XAccessible> ();
-}
-
-
 /** Find all shapes among the specified shapes that lie fully or partially
     inside the visible area.  Put those shapes into the cleared cache. The
     corresponding accessible objects will be created on demand.

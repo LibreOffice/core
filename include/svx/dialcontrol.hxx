@@ -134,8 +134,6 @@ protected:
 
 private:
     void                InvalidateControl();
-
-    void LinkedFieldModifyHdl();
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDialControl final : public weld::CustomWidgetController
