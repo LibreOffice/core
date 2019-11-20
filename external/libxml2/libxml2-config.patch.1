@@ -25,45 +25,19 @@ Hack the xml2-config to return paths into WORKDIR.
  	;;
  
      --cflags)
--       	echo @XML_INCLUDEDIR@ @XML_CFLAGS@
-+        echo -I${includedir}
-+#       	echo @XML_INCLUDEDIR@ @XML_CFLAGS@
+-        cflags="@XML_INCLUDEDIR@ @XML_CFLAGS@"
++        #cflags="@XML_INCLUDEDIR@ @XML_CFLAGS@"
++        cflags="-I${includedir}"
         	;;
  
      --libtool-libs)
-@@ -82,19 +88,24 @@
-        	;;
+@@ -91,7 +96,8 @@
+             libs="@XML_LIBDIR@ $libs"
+         fi
  
-     --libs)
--        if [ "`uname`" = "Linux" ]
--	then
--	    if [ "@XML_LIBDIR@" = "-L/usr/lib" -o "@XML_LIBDIR@" = "-L/usr/lib64" ]
--	    then
--		echo @XML_LIBS@ @MODULE_PLATFORM_LIBS@
--	    else
--		echo @XML_LIBDIR@ @XML_LIBS@ @MODULE_PLATFORM_LIBS@
--	    fi
--	else
--	    echo @XML_LIBDIR@ @XML_LIBS@ @MODULE_PLATFORM_LIBS@ @WIN32_EXTRA_LIBADD@
--	fi
-+        echo -L${libdir} -lxml2 -lm
-+#        if [ "`uname`" = "Linux" ]
-+#	then
-+#	    if [ "@XML_LIBDIR@" = "-L/usr/lib" -o "@XML_LIBDIR@" = "-L/usr/lib64" ]
-+#	    then
-+#		echo @XML_LIBS@ @MODULE_PLATFORM_LIBS@
-+#	    else
-+#		echo @XML_LIBDIR@ @XML_LIBS@ @MODULE_PLATFORM_LIBS@
-+#	    fi
-+#	else
-+#	    echo @XML_LIBDIR@ @XML_LIBS@ @MODULE_PLATFORM_LIBS@ @WIN32_EXTRA_LIBADD@
-+#	fi
-        	;;
+-        libs="$libs @WIN32_EXTRA_LIBADD@"
++        #libs="$libs @WIN32_EXTRA_LIBADD@"
++        libs="-L${libdir} -lxml2 -lm"
+         ;;
  
-+    print) # ugly configure hack
-+        exit 0
-+        ;;
-+ 
      *)
- 	usage
- 	exit 1
