@@ -701,29 +701,29 @@ awt::Point lcl_calculatePositionAndRemainingSpace(
     switch( ePos )
     {
         case LegendPosition_LINE_START:
-            {
-                sal_Int32 nExtent = aLegendSize.Width;
-                rRemainingSpace.Width -= ( nExtent + nXDistance );
-                rRemainingSpace.X += ( nExtent + nXDistance );
-            }
+        {
+            sal_Int32 nExtent = aLegendSize.Width;
+            rRemainingSpace.Width -= ( nExtent + nXDistance );
+            rRemainingSpace.X += ( nExtent + nXDistance );
+        }
         break;
         case LegendPosition_LINE_END:
-            {
-                rRemainingSpace.Width -= ( aLegendSize.Width + nXDistance );
-            }
-            break;
+        {
+            rRemainingSpace.Width -= ( aLegendSize.Width + nXDistance );
+        }
+        break;
         case LegendPosition_PAGE_START:
-            {
-                sal_Int32 nExtent = aLegendSize.Height;
-                rRemainingSpace.Height -= ( nExtent + nYDistance );
-                rRemainingSpace.Y += ( nExtent + nYDistance );
-            }
+        {
+            sal_Int32 nExtent = aLegendSize.Height;
+            rRemainingSpace.Height -= ( nExtent + nYDistance );
+            rRemainingSpace.Y += ( nExtent + nYDistance );
+        }
         break;
         case LegendPosition_PAGE_END:
-            {
-                rRemainingSpace.Height -= ( aLegendSize.Height + nYDistance );
-            }
-            break;
+        {
+            rRemainingSpace.Height -= ( aLegendSize.Height + nYDistance );
+        }
+        break;
 
         default:
             // nothing
