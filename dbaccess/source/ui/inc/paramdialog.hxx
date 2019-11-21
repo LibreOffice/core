@@ -98,7 +98,7 @@ namespace dbaui
         DECL_LINK(OnEntryListBoxSelected, weld::TreeView&, void);
         DECL_LINK(OnButtonClicked, weld::Button&, void);
         DECL_LINK(OnValueLoseFocusHdl, weld::Widget&, void);
-        bool CheckValueForError(bool bShowDialog);
+        bool CheckValueForError();
         bool OnEntrySelected();
     };
 
