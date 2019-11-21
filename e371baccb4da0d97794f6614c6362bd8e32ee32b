@@ -1,0 +1,418 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_667c1e1f",
+        "filename": "sw/uiconfig/swriter/ui/mailconfigpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "We defined a distance of 3 between controls within a section.",
+      "range": {
+        "startLine": 38,
+        "startChar": 45,
+        "endLine": 38,
+        "endChar": 46
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_06752a32",
+        "filename": "sw/uiconfig/swriter/ui/mailconfigpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "The spinner has set horizontal\u003dfill instead of start.",
+      "range": {
+        "startLine": 220,
+        "startChar": 52,
+        "endLine": 220,
+        "endChar": 56
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_2672a64a",
+        "filename": "sw/uiconfig/swriter/ui/mailconfigpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "Don\u0027t see a reason for two buttonboxes both with just one item. Move the second button into the first not only for improving the ui file but also to get a cleaner layout.",
+      "range": {
+        "startLine": 277,
+        "startChar": 51,
+        "endLine": 277,
+        "endChar": 61
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_86961a3e",
+        "filename": "sw/uiconfig/swriter/ui/optcaptionpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "I wonder if this relates to the categoryframe. If not it has to be outside without indention.",
+      "range": {
+        "startLine": 365,
+        "startChar": 61,
+        "endLine": 365,
+        "endChar": 72
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e6beeeb2",
+        "filename": "sw/uiconfig/swriter/ui/optcomparison.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "Missing the row spacing of 3.",
+      "range": {
+        "startLine": 31,
+        "startChar": 42,
+        "endLine": 31,
+        "endChar": 47
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_86affa7b",
+        "filename": "sw/uiconfig/swriter/ui/optcomparison.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "Here as well.",
+      "range": {
+        "startLine": 117,
+        "startChar": 42,
+        "endLine": 117,
+        "endChar": 47
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_a6b476d2",
+        "filename": "sw/uiconfig/swriter/ui/optcomparison.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "It has a widget spacing of horizontal fill.",
+      "range": {
+        "startLine": 154,
+        "startChar": 52,
+        "endLine": 154,
+        "endChar": 61
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e6e34ed8",
+        "filename": "sw/uiconfig/swriter/ui/optformataidspage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "All grids have no row spacing of 3 (looks weird here, 3 was your take).",
+      "range": {
+        "startLine": 37,
+        "startChar": 50,
+        "endLine": 37,
+        "endChar": 55
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_66f89e7a",
+        "filename": "sw/uiconfig/swriter/ui/optgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "Row spacing !\u003d 3",
+      "range": {
+        "startLine": 40,
+        "startChar": 42,
+        "endLine": 40,
+        "endChar": 47
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_a602366e",
+        "filename": "sw/uiconfig/swriter/ui/optgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "Row spacing !\u003d 3",
+      "range": {
+        "startLine": 109,
+        "startChar": 42,
+        "endLine": 109,
+        "endChar": 47
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_46fb2278",
+        "filename": "sw/uiconfig/swriter/ui/optgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "Row spacing !\u003d 3\nResizing in Glade is not working properly so I have to do a life test - when everything is done.",
+      "range": {
+        "startLine": 200,
+        "startChar": 46,
+        "endLine": 200,
+        "endChar": 51
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_c6073282",
+        "filename": "sw/uiconfig/swriter/ui/optgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "The spacing of 6 is too much.",
+      "range": {
+        "startLine": 344,
+        "startChar": 42,
+        "endLine": 344,
+        "endChar": 47
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_86329a5d",
+        "filename": "sw/uiconfig/swriter/ui/opttablepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "All grids have no row spacing.",
+      "range": {
+        "startLine": 56,
+        "startChar": 46,
+        "endLine": 56,
+        "endChar": 51
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_a637964d",
+        "filename": "sw/uiconfig/swriter/ui/opttablepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "Column spacing \u003d 6 puts the labels close to the longest radio button. Maybe 12, though 6 has been defined in the guideline.\nAnd since those labels are static text (descriptive without a buddy relation) we could make them italic. What do you think?",
+      "range": {
+        "startLine": 264,
+        "startChar": 46,
+        "endLine": 264,
+        "endChar": 51
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_464002a6",
+        "filename": "sw/uiconfig/swriter/ui/printoptionspage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "All grids missing the row spacing.",
+      "range": {
+        "startLine": 12,
+        "startChar": 34,
+        "endLine": 12,
+        "endChar": 39
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_663dfe29",
+        "filename": "sw/uiconfig/swriter/ui/viewoptionspage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "All grids missing row spacing of 3.",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_264386b1",
+        "filename": "sw/uiconfig/swriter/ui/viewoptionspage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "Row spacing should be 3 not 6.",
+      "range": {
+        "startLine": 315,
+        "startChar": 50,
+        "endLine": 315,
+        "endChar": 55
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_06468ac1",
+        "filename": "sw/uiconfig/swriter/ui/viewoptionspage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T08:35:42Z",
+      "side": 0,
+      "message": "This is also too much. And perhaps you could get rid of one grid.",
+      "range": {
+        "startLine": 339,
+        "startChar": 57,
+        "endLine": 339,
+        "endChar": 58
+      },
+      "revId": "e371baccb4da0d97794f6614c6362bd8e32ee32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
