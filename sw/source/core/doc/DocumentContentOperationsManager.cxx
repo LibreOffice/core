@@ -484,10 +484,10 @@ namespace
 }
 
 //local functions originally from sw/source/core/doc/docedt.cxx
-namespace
+namespace sw
 {
-    void
-    lcl_CalcBreaks(std::vector<std::pair<sal_uLong, sal_Int32>> & rBreaks, SwPaM const & rPam, bool const isOnlyFieldmarks = false)
+    void CalcBreaks(std::vector<std::pair<sal_uLong, sal_Int32>> & rBreaks,
+            SwPaM const & rPam, bool const isOnlyFieldmarks)
     {
         sal_uLong const nStartNode(rPam.Start()->nNode.GetIndex());
         sal_uLong const nEndNode(rPam.End()->nNode.GetIndex());
@@ -589,13 +589,17 @@ namespace
             rBreaks.insert(it, pos);
         }
     }
+}
+
+namespace
+{
 
     bool lcl_DoWithBreaks(::sw::DocumentContentOperationsManager & rDocumentContentOperations, SwPaM & rPam,
             bool (::sw::DocumentContentOperationsManager::*pFunc)(SwPaM&, bool), const bool bForceJoinNext = false)
     {
         std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
 
-        lcl_CalcBreaks(Breaks, rPam);
+        sw::CalcBreaks(Breaks, rPam);
 
         if (Breaks.empty())
         {
@@ -1802,7 +1806,7 @@ namespace mark
     bool IsFieldmarkOverlap(SwPaM const& rPaM)
     {
         std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
-        lcl_CalcBreaks(Breaks, rPaM);
+        sw::CalcBreaks(Breaks, rPaM);
         return !Breaks.empty();
     }
 }
@@ -3181,7 +3185,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     }
     OSL_ENSURE((aPam.GetPoint()->nNode == aPam.GetMark()->nNode), "invalid pam?");
 
-    lcl_CalcBreaks(Breaks, aPam);
+    sw::CalcBreaks(Breaks, aPam);
 
     while (!Breaks.empty() // skip over prefix of dummy chars
             && (aPam.GetMark()->nNode.GetIndex() == Breaks.begin()->first)
@@ -4444,7 +4448,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
 {
     std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
 
-    lcl_CalcBreaks(Breaks, rPam, true);
+    sw::CalcBreaks(Breaks, rPam, true);
 
     if (Breaks.empty())
     {

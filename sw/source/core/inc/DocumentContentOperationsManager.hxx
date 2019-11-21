@@ -180,6 +180,9 @@ private:
 
 void CopyBookmarks(const SwPaM& rPam, SwPosition& rTarget);
 
+void CalcBreaks(std::vector<std::pair<sal_uLong, sal_Int32>> & rBreaks,
+        SwPaM const & rPam, bool const isOnlyFieldmarks = false);
+
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTCONTENTOPERATIONSMANAGER_HXX
