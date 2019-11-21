@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_0cc30b3a",
+        "filename": "fpicker/source/win32/IVistaFilePickerInternalNotify.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-21T18:54:17Z",
+      "side": 0,
+      "message": "Seems unrelated?",
+      "range": {
+        "startLine": 47,
+        "startChar": 16,
+        "endLine": 47,
+        "endChar": 62
+      },
+      "revId": "bfc1d485bba882bf00ac8824fd0c72e633f155d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_6ccabf4e",
+        "filename": "fpicker/source/win32/VistaFilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-21T18:54:17Z",
+      "side": 0,
+      "message": "Seems unrelated?",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 48
+      },
+      "revId": "bfc1d485bba882bf00ac8824fd0c72e633f155d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_4ccd8364",
+        "filename": "fpicker/source/win32/VistaFilePickerEventHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-21T18:54:17Z",
+      "side": 0,
+      "message": "Seems unrelated?",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 145,
+        "endChar": 5
+      },
+      "revId": "bfc1d485bba882bf00ac8824fd0c72e633f155d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_8caf1b7c",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-21T18:54:17Z",
+      "side": 0,
+      "message": "Seems unrelated?",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 70
+      },
+      "revId": "bfc1d485bba882bf00ac8824fd0c72e633f155d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
