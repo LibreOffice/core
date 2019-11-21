@@ -29,6 +29,7 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <tools/mapunit.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 class IntlWrapper;
 
@@ -180,6 +181,7 @@ public:
     sal_uInt32               GetRefCount() const { return m_nRefCount; }
     SfxItemKind       GetKind() const { return m_nKind; }
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    virtual boost::property_tree::ptree dumpAsJSON() const;
 
     /** Only SfxVoidItem shall and must return true for this.
 
