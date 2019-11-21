@@ -193,6 +193,7 @@ namespace dbaui
                     bRet = true;
                 }
                 m_xParam->set_tooltip_text(sToolTip);
+                m_xOKBtn->set_sensitive(bValid);
             }
         }
 
