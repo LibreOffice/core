@@ -106,8 +106,6 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool         operator==( const SfxPoolItem& ) const override;
-
-    const OUString &GetFax() const              { return m_sFaxName; }
 };
 
 // Item for settings dialog, ShadowCursorPage
