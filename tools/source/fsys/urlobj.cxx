@@ -1445,6 +1445,17 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
     m_aAbsURIRef = aSynAbsURIRef;
 
+    // At this point references of type "\\server\paths" have
+    // been converted to file:://server/path".
+#ifdef LINUX
+    if (m_eScheme==INetProtocol::File && !m_aHost.isEmpty()) {
+        // Change "file:://server/path" URIs to "smb:://server/path" on
+        // Linux
+        // Leave "file::path" URIs unchanged.
+        changeScheme(INetProtocol::Smb);
+    }
+#endif
+
     return true;
 }
 

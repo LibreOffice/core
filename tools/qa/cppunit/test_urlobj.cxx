@@ -49,7 +49,11 @@ namespace tools_urlobj
         void urlobjTest_001(  )
         {
             INetURLObject aUrl( OUString( "file://10.10.1.1/sampledir/sample.file" ) );
-            CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
+#ifdef LINUX
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://10.10.1.1/sampledir/sample.file"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
+#endif
             CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
             CPPUNIT_ASSERT_EQUAL(OUString("/sampledir/sample.file"),
@@ -63,7 +67,11 @@ namespace tools_urlobj
         void urlobjTest_004(  )
         {
             INetURLObject aUrl( OUString( "smb://10.10.1.1/sampledir/sample.file" ) );
+#ifdef LINUX
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://10.10.1.1/sampledir/sample.file"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             CPPUNIT_ASSERT_EQUAL( INetProtocol::Smb, aUrl.GetProtocol(  ) );
+#endif
             CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
             CPPUNIT_ASSERT_EQUAL(OUString("/sampledir/sample.file"),
