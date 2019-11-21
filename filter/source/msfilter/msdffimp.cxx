@@ -6241,7 +6241,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
             // search for the Blip Property!
             sal_uLong  nPropRead = 0;
             nLenShapePropTbl = nLength;
-            long nStartShapePropTbl = rSt.Tell();
+            auto nStartShapePropTbl = rSt.Tell();
             do
             {
                 sal_uInt16 nPropId(0);
@@ -6324,7 +6324,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
                     break;
                 }
             }
-            while( nPropRead < nLenShapePropTbl );
+            while (rSt.good() && nPropRead < nLenShapePropTbl);
             rSt.Seek( nStartShapePropTbl + nLenShapePropTbl );
             nReadSpCont += nLenShapePropTbl;
         }
