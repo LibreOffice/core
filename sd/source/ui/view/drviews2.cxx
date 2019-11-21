@@ -1108,6 +1108,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     break;
                     case SID_CONVERT_TO_BITMAP:
                     {
+                        // Disable spelling during conversion
+                        bool bOnlineSpell = GetDoc()->GetOnlineSpell();
+                        GetDoc()->SetOnlineSpell(false);
+
                         // switch on undo for the next operations
                         mpDrawView->BegUndo(SdResId(STR_UNDO_CONVERT_TO_BITMAP));
                         bool bDone(false);
@@ -1134,6 +1138,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             aGraphic = Graphic(mpDrawView->GetMarkedObjBitmapEx());
                         }
+                        // Restore online spelling
+                        GetDoc()->SetOnlineSpell(bOnlineSpell);
                     }
                     break;
                 }
