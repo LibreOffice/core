@@ -97,8 +97,6 @@ public:
 // Item for settings dialog - printer/add-ons
 class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
-    friend class SwAddPrinterTabPage;
-
     using  SwPrintData::operator ==;
 
 public:
