@@ -220,14 +220,4 @@ std::unique_ptr<GenPspGraphics> X11SalInstance::CreatePrintGraphics()
     return std::make_unique<GenPspGraphics>();
 }
 
-std::shared_ptr<vcl::BackendCapabilities> X11SalInstance::GetBackendCapabilities()
-{
-    auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
-#if HAVE_FEATURE_SKIA
-    if( SkiaHelper::isVCLSkiaEnabled())
-        pBackendCapabilities->mbSupportsBitmap32 = true;
-#endif
-    return pBackendCapabilities;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
