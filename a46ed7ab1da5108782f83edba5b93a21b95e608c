@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_a686b612",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3347,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-11-21T08:03:18Z",
+      "side": 1,
+      "message": "Do we really want to use the previous value of the bLabelIsNumberFormat instead of the default true in this loop? If not, use\n \n else \n     bLabelIsNumberFormat \u003d true;",
+      "range": {
+        "startLine": 3347,
+        "startChar": 0,
+        "endLine": 3347,
+        "endChar": 0
+      },
+      "revId": "a46ed7ab1da5108782f83edba5b93a21b95e608c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
