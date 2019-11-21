@@ -16,6 +16,24 @@
       "revId": "24cd0db7abe12218676973f06d484041fc85edee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_49b33599",
+        "filename": "sw/source/core/text/frmform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-21T14:36:08Z",
+      "side": 1,
+      "message": "[...]\n \u003e ... there are some places that might need adapting for consistency,\n \u003e let me try to dig those out again...\n\nI stopped working on this change because it was unclear to me whether I should wait for you to dig out more, or whether the following is all there is to dig out, or whether the following is just a sample of what still needs to be dug out?\n\n \u003e SwTextFrame::WouldFit() has 2 of these conditions:\n[...]",
+      "parentUuid": "bf659307_bed641f1",
+      "revId": "24cd0db7abe12218676973f06d484041fc85edee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
