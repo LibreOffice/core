@@ -287,6 +287,9 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(const ScDocShell* pDocShell, S
 
 void ScFormulaDlg::Close()
 {
+    if (IsClosing())
+        return;
+
     DoEnter();
 }
 
