@@ -83,6 +83,9 @@
 #include <sal/log.hxx>
 
 #include <sfx2/lokhelper.hxx>
+#include <boost/property_tree/json_parser.hpp>
+#include <sfx2/dispatch.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #define DRGPIX    2     // Drag MinMove in Pixel
 
@@ -1273,29 +1276,28 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         if ( !xPopupController.is() || !xPopupMenu.is() )
             return;
 
+        xPopupController->setPopupMenu( xPopupMenu );
+
         if (comphelper::LibreOfficeKit::isActive())
         {
-            PopupMenu* pPopupMenu = static_cast<PopupMenu*>(comphelper::getUnoTunnelImplementation<VCLXMenu>(xPopupMenu)->GetMenu());
-            pPopupMenu->SetLOKNotifier(SfxViewShell::Current());
-
-            // the context menu expects a position related to the document window,
-            // not to the chart window
-            SfxInPlaceClient* pIPClient = SfxViewShell::Current()->GetIPClient();
-            if (pIPClient)
+            if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {
-                vcl::Window* pRootWin = pIPClient->GetEditWin();
-                if (pRootWin)
-                {
-                    Point aOffset = pChartWindow->GetOffsetPixelFrom(*pRootWin);
-                    aPos += aOffset;
-                }
+                PopupMenu* pPopupMenu = static_cast<PopupMenu*>(comphelper::getUnoTunnelImplementation<VCLXMenu>(xPopupMenu)->GetMenu());
+                boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(pPopupMenu);
+                boost::property_tree::ptree aRoot;
+                aRoot.add_child("menu", aMenu);
+
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, aRoot, true);
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
             }
         }
-
-        xPopupController->setPopupMenu( xPopupMenu );
-        xPopupMenu->execute( css::uno::Reference< css::awt::XWindowPeer >( m_xFrame->getContainerWindow(), css::uno::UNO_QUERY ),
-                             css::awt::Rectangle( aPos.X(), aPos.Y(), 0, 0 ),
-                             css::awt::PopupMenuDirection::EXECUTE_DEFAULT );
+        else
+        {
+            xPopupMenu->execute( css::uno::Reference< css::awt::XWindowPeer >( m_xFrame->getContainerWindow(), css::uno::UNO_QUERY ),
+                                 css::awt::Rectangle( aPos.X(), aPos.Y(), 0, 0 ),
+                                 css::awt::PopupMenuDirection::EXECUTE_DEFAULT );
+        }
 
         css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
         if ( xComponent.is() )
