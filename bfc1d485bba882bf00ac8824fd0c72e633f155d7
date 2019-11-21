@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_0cd8eb1b",
+        "filename": "fpicker/source/win32/IVistaFilePickerInternalNotify.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-11-21T19:17:02Z",
+      "side": 0,
+      "message": "Yeah - the function always returns true, so I replaced it, instead of just adding a new one.",
+      "parentUuid": "7f7f9b97_0cc30b3a",
+      "range": {
+        "startLine": 47,
+        "startChar": 16,
+        "endLine": 47,
+        "endChar": 62
+      },
+      "revId": "bfc1d485bba882bf00ac8824fd0c72e633f155d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_6ccabf4e",
         "filename": "fpicker/source/win32/VistaFilePicker.cxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-11-21T18:54:17Z",
       "side": 0,
       "message": "Seems unrelated?",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 48
+      },
+      "revId": "bfc1d485bba882bf00ac8824fd0c72e633f155d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_2cd5a7e5",
+        "filename": "fpicker/source/win32/VistaFilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-11-21T19:17:02Z",
+      "side": 0,
+      "message": "Nope.\n\nAll this PROP_FORCE handling is just there, because of the default setDefaultFolder usage, instead of setFolder. The force value just enforces usage of setFolder instead of setDefaultFolder, and my patch switches to setFolder and drops setDefaultFolder at all, so this force code doesn\u0027t do anything anymore and can be removed.",
+      "parentUuid": "7f7f9b97_6ccabf4e",
       "range": {
         "startLine": 172,
         "startChar": 0,
@@ -71,6 +119,47 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_ec0c8fa6",
+        "filename": "fpicker/source/win32/VistaFilePickerEventHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-11-21T19:17:02Z",
+      "side": 0,
+      "message": "Yeah - that function always returns true, literally, so I removed it.",
+      "parentUuid": "7f7f9b97_4ccd8364",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 145,
+        "endChar": 5
+      },
+      "revId": "bfc1d485bba882bf00ac8824fd0c72e633f155d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_2cee07b4",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-11-21T19:17:02Z",
+      "side": 0,
+      "message": "The function I replaced just returns true and there is no one else implementing that pseudo interface anyway.",
+      "revId": "bfc1d485bba882bf00ac8824fd0c72e633f155d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_8caf1b7c",
         "filename": "fpicker/source/win32/VistaFilePickerImpl.hxx",
         "patchSetId": 1
@@ -82,6 +171,30 @@
       "writtenOn": "2019-11-21T18:54:17Z",
       "side": 0,
       "message": "Seems unrelated?",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 70
+      },
+      "revId": "bfc1d485bba882bf00ac8824fd0c72e633f155d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_4cfb4378",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-11-21T19:17:02Z",
+      "side": 0,
+      "message": "Nope. See the other comment.",
+      "parentUuid": "7f7f9b97_8caf1b7c",
       "range": {
         "startLine": 74,
         "startChar": 0,
