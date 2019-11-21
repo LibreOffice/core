@@ -38,6 +38,13 @@
 #include <svx/chrtitem.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xfillit0.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
+#include <com/sun/star/drawing/FillStyle.hpp>
+
+using namespace com::sun::star::drawing;
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
@@ -247,6 +254,56 @@ namespace
             pArgs->Put(aItem);
         }
     }
+
+    OUString lcl_fillStyleEnumToString(FillStyle eStyle)
+    {
+        switch (eStyle)
+        {
+            case FillStyle_NONE:
+                return "NONE";
+
+            case FillStyle_SOLID:
+                return "SOLID";
+
+            case FillStyle_GRADIENT:
+                return "GRADIENT";
+
+            case FillStyle_HATCH:
+                return "HATCH";
+
+            case FillStyle_BITMAP:
+                return "BITMAP";
+
+            default:
+                return "";
+        }
+    }
+
+    void lcl_sendAttrUpdatesForLOK(SfxViewShell* pShell, const SfxItemSet& rSet)
+    {
+        if (!pShell)
+            return;
+
+        OUString sPayload;
+        const SfxPoolItem* pItem = rSet.GetItem(SID_ATTR_FILL_STYLE);
+
+        if (pItem)
+        {
+            const XFillStyleItem* pFillStyleItem = static_cast<const XFillStyleItem*>(pItem);
+            FillStyle eStyle;
+            css::uno::Any aAny;
+
+            pFillStyleItem->QueryValue(aAny);
+            aAny >>= eStyle;
+            sPayload = ".uno:FillStyle=" + lcl_fillStyleEnumToString(eStyle);
+        }
+
+        if (!sPayload.isEmpty())
+        {
+            pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
+        }
+    }
 }
 
 void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
@@ -315,6 +372,10 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
     }
     else
         rSet.Put(pSdrView->GetDefaultAttr());
+
+    SfxViewShell* pViewShell = GetShell().GetSfxViewShell();
+    if (pViewShell && comphelper::LibreOfficeKit::isActive())
+        lcl_sendAttrUpdatesForLOK( pViewShell, rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
