@@ -61,6 +61,8 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/gradient.hxx>
+#include <svx/svxids.hrc>
+#include <string>
 
 #include <libxml/xmlwriter.h>
 
@@ -1915,6 +1917,35 @@ bool XSecondaryFillColorItem::GetPresentation
     return true;
 }
 
+std::string XGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
+{
+    switch (eStyle)
+    {
+        case css::awt::GradientStyle::GradientStyle_LINEAR:
+            return "Linear";
+
+        case css::awt::GradientStyle::GradientStyle_AXIAL:
+            return "Axial";
+
+        case css::awt::GradientStyle::GradientStyle_RADIAL:
+            return "Radial";
+
+        case css::awt::GradientStyle::GradientStyle_ELLIPTICAL:
+            return "Elliptical";
+
+        case css::awt::GradientStyle::GradientStyle_SQUARE:
+            return "Square";
+
+        case css::awt::GradientStyle::GradientStyle_RECT:
+            return "Rect";
+
+        case css::awt::GradientStyle::GradientStyle_MAKE_FIXED_SIZE:
+            return "FixedSize";
+    }
+
+    return "";
+}
+
 XGradient::XGradient() :
     eStyle( css::awt::GradientStyle_LINEAR ),
     aStartColor( COL_BLACK ),
@@ -1961,6 +1992,23 @@ bool XGradient::operator==(const XGradient& rGradient) const
              nStepCount     == rGradient.nStepCount );
 }
 
+boost::property_tree::ptree XGradient::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree;
+
+    aTree.put("style", XGradient::GradientStyleToString(eStyle));
+    aTree.put("startcolor", std::to_string((int)aStartColor));
+    aTree.put("endcolor", std::to_string((int)aEndColor));
+    aTree.put("angle", std::to_string(nAngle));
+    aTree.put("border", std::to_string(nBorder));
+    aTree.put("x", std::to_string(nOfsX));
+    aTree.put("y", std::to_string(nOfsY));
+    aTree.put("intensstart", std::to_string(nIntensStart));
+    aTree.put("intensend", std::to_string(nIntensEnd));
+    aTree.put("stepcount", std::to_string(nStepCount));
+
+    return aTree;
+}
 
 SfxPoolItem* XFillGradientItem::CreateDefault() { return new XFillGradientItem; }
 
@@ -2267,6 +2315,18 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
     }
 
     return nullptr;
+}
+
+boost::property_tree::ptree XFillGradientItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+
+    if (Which() == XATTR_FILLGRADIENT)
+        aTree.put("which", ".uno:FillGradient");
+
+    aTree.push_back(std::make_pair("data", GetGradientValue().dumpAsJSON()));
+
+    return aTree;
 }
 
 
