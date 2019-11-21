@@ -390,6 +390,64 @@ namespace emfplushelper
         }
     }
 
+    void EmfPlusHelperData::FillPolygon(const ::basegfx::B2DPolyPolygon& rPolygon, const basegfx::BColor& color, const double fTransparency) const
+    {
+        if (fTransparency < 255)
+        {
+            if (fTransparency == 0)
+            {
+                mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                                rPolygon,
+                                color));
+            }
+            else
+            {
+                const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
+                            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                                rPolygon,
+                                color));
+
+                mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                                drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
+                                fTransparency));
+            }
+        }
+    }
+
+    void EmfPlusHelperData::StrokePolygon(const ::basegfx::B2DPolyPolygon& rPpolygon,
+                                          const drawinglayer::attribute::LineAttribute& rLineAttribute,
+                                          const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute,
+                                          const double fTransparency) const
+    {
+        if (fTransparency < 255)
+        {
+            if (fTransparency == 0)
+            {
+
+                const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
+                            new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                                rPpolygon,
+                                rLineAttribute,
+                                rStrokeAttribute));
+
+                mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                                drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
+                                fTransparency));
+            }
+            else
+            {
+                mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
+                                rPpolygon,
+                                rLineAttribute,
+                                rStrokeAttribute));
+            }
+        }
+    }
+
     void EmfPlusHelperData::EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex)
     {
         const EMFPPen* pen = dynamic_cast<EMFPPen*>(maEMFPObjects[penIndex & 0xff].get());
@@ -459,27 +517,7 @@ namespace emfplushelper
                 aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(aPattern);
             }
 
-            if (pen->GetColor().GetTransparency() == 0)
-            {
-                mrTargetHolders.Current().append(
-                    std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
-                        polygon,
-                        lineAttribute,
-                        aStrokeAttribute));
-            }
-            else
-            {
-                const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
-                            new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                                polygon,
-                                lineAttribute,
-                                aStrokeAttribute));
-
-                mrTargetHolders.Current().append(
-                            std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
-                                drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
-                                pen->GetColor().GetTransparency() / 255.0));
-            }
+            StrokePolygon(polygon, lineAttribute, aStrokeAttribute, pen->GetColor().GetTransparency() / 255.0);
 
             if ((pen->penDataFlags & 0x00000800) && (pen->customStartCap->polygon.begin()->count() > 1))
             {
@@ -505,24 +543,17 @@ namespace emfplushelper
 
                 startCapPolygon.transform(maMapTransform);
 
-                basegfx::B2DHomMatrix tran(pen->penWidth, 0.0, polygon.begin()->getB2DPoint(0).getX(),
-                                           0.0, pen->penWidth, polygon.begin()->getB2DPoint(0).getY());
+                basegfx::B2DHomMatrix tran(pen->penWidth, 0.0, x1,
+                                           0.0, pen->penWidth, y1);
                 startCapPolygon.transform(tran);
 
                 if (pen->customStartCap->mbIsFilled)
                 {
-                    mrTargetHolders.Current().append(
-                                std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
-                                    startCapPolygon,
-                                    pen->GetColor().getBColor()));
+                    FillPolygon(startCapPolygon, pen->GetColor().getBColor(), pen->GetColor().GetTransparency() / 255.0);
                 }
                 else
                 {
-                    mrTargetHolders.Current().append(
-                                std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
-                                    startCapPolygon,
-                                    lineAttribute,
-                                    aStrokeAttribute));
+                    StrokePolygon(startCapPolygon, lineAttribute, aStrokeAttribute, pen->GetColor().GetTransparency() / 255.0);
                 }
             }
 
@@ -550,24 +581,17 @@ namespace emfplushelper
                 }
 
                 endCapPolygon.transform(maMapTransform);
-                basegfx::B2DHomMatrix tran(pen->penWidth, 0.0, polygon.begin()->getB2DPoint(polygon.begin()->count() - 1).getX(),
-                                           0.0, pen->penWidth, polygon.begin()->getB2DPoint(polygon.begin()->count() - 1).getY());
+                basegfx::B2DHomMatrix tran(pen->penWidth, 0.0, x1,
+                                           0.0, pen->penWidth, y1);
                 endCapPolygon.transform(tran);
 
                 if (pen->customEndCap->mbIsFilled)
                 {
-                    mrTargetHolders.Current().append(
-                                std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
-                                    endCapPolygon,
-                                    pen->GetColor().getBColor()));
+                    FillPolygon(endCapPolygon, pen->GetColor().getBColor(), pen->GetColor().GetTransparency() / 255.0);
                 }
                 else
                 {
-                    mrTargetHolders.Current().append(
-                                std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
-                                    endCapPolygon,
-                                    lineAttribute,
-                                    aStrokeAttribute));
+                    StrokePolygon(endCapPolygon, lineAttribute, aStrokeAttribute, pen->GetColor().GetTransparency() / 255.0);
                 }
             }
 
@@ -589,29 +613,7 @@ namespace emfplushelper
             // EMF Alpha (1 byte): An 8-bit unsigned integer that specifies the transparency of the background,
             // ranging from 0 for completely transparent to 0xFF for completely opaque.
             const Color color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff);
-            if (color.GetTransparency() < 255)
-            {
-                if (color.GetTransparency() == 0)
-                {
-                    // not transparent
-                    mrTargetHolders.Current().append(
-                                std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
-                                    polygon,
-                                    color.getBColor()));
-                }
-                else
-                {
-                    const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
-                                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                                    polygon,
-                                    color.getBColor()));
-
-                    mrTargetHolders.Current().append(
-                                std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
-                                    drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
-                                    color.GetTransparency() / 255.0));
-                }
-            }
+            FillPolygon(polygon, color.getBColor(), color.GetTransparency() / 255.0);
 
             mrPropertyHolders.Current().setFillColor(color.getBColor());
             mrPropertyHolders.Current().setFillColorActive(true);

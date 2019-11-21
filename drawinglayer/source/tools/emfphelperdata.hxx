@@ -21,6 +21,8 @@
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPHELPERDATA_HXX
 
 #include <emfplushelper.hxx>
+#include <drawinglayer/attribute/strokeattribute.hxx>
+#include <drawinglayer/attribute/lineattribute.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/stream.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -188,6 +190,11 @@ namespace emfplushelper
 
         // helper functions
         Color EMFPGetBrushColorOrARGBColor(const sal_uInt16 flags, const sal_uInt32 brushIndexOrColor) const;
+        void FillPolygon(const ::basegfx::B2DPolyPolygon& rPolygon, const basegfx::BColor& color, const double fTransparency) const;
+        void StrokePolygon(const ::basegfx::B2DPolyPolygon& rPpolygon,
+                           const drawinglayer::attribute::LineAttribute& rLineAttribute,
+                           const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute,
+                           const double fTransparency) const;
 
     public:
         EmfPlusHelperData(
