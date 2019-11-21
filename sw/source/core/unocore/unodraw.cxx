@@ -719,7 +719,11 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     pDoc->getIDocumentContentOperations().InsertDrawObj( *pTemp, *pObj, aSet );
     SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
     if(pFormat)
+    {
+        if (pFormat->GetName().isEmpty())
+            pFormat->SetName(pDoc->GetUniqueFrameName(), false);
         pFormat->Add(pShape);
+    }
     pShape->m_bDescriptor = false;
 
     pPam.reset();
