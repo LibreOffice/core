@@ -80,8 +80,16 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
     }
     if (colorType != kUnknown_SkColorType)
     {
+        // TODO
+        // As long as vcl::BackendCapabilities::mbSupportsBitmap32 is not set, we must use
+        // unpremultiplied alpha. This is because without mbSupportsBitmap32 set VCL uses
+        // an extra bitmap for the alpha channel and then merges the channels together
+        // into colors. kPremul_SkAlphaType would provide better performance, but
+        // without mbSupportsBitmap32 BitmapReadAccess::ImplSetAccessPointers() would use
+        // functions that merely read RGB without A, so the premultiplied values would
+        // not be converted back to unpremultiplied values.
         if (!mBitmap.tryAllocPixels(
-                SkImageInfo::Make(rSize.Width(), rSize.Height(), colorType, kPremul_SkAlphaType)))
+                SkImageInfo::Make(rSize.Width(), rSize.Height(), colorType, kUnpremul_SkAlphaType)))
         {
             return false;
         }
