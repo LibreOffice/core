@@ -265,8 +265,16 @@ PasswordVerifier::PasswordVerifier( DocumentDecryption& aDecryptor ) :
 
 comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const OUString& rPassword, Sequence<NamedValue>& rEncryptionData )
 {
-    if(mDecryptor.generateEncryptionKey(rPassword))
-        rEncryptionData = mDecryptor.createEncryptionData(rPassword);
+    try
+    {
+        if (mDecryptor.generateEncryptionKey(rPassword))
+            rEncryptionData = mDecryptor.createEncryptionData(rPassword);
+    }
+    catch (...)
+    {
+        // Any exception is a reason to abort
+        return comphelper::DocPasswordVerifierResult::Abort;
+    }
 
     return rEncryptionData.hasElements() ? comphelper::DocPasswordVerifierResult::OK : comphelper::DocPasswordVerifierResult::WrongPassword;
 }
