@@ -169,22 +169,9 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
 {
     ensureInit();
 
-    bool bChanged = officecfg::Office::Common::Path::Info::WorkPathChanged::get(
-        comphelper::getComponentContext(m_xSMGR));
-    if (bChanged )
-    {
-        std::shared_ptr< comphelper::ConfigurationChanges > batch(
-            comphelper::ConfigurationChanges::create(
-                comphelper::getComponentContext(m_xSMGR)));
-        officecfg::Office::Common::Path::Info::WorkPathChanged::set(
-            false, batch);
-        batch->commit();
-    }
-
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_SET_DIRECTORY);
     rRequest->setArgument(PROP_DIRECTORY, sDirectory);
-    rRequest->setArgument(PROP_FORCE, bChanged);
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
 }
