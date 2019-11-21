@@ -63,9 +63,67 @@
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
 #include <memory>
+#include <svx/xfillit0.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <com/sun/star/drawing/FillStyle.hpp>
+
+using namespace com::sun::star::drawing;
 using namespace svx::sidebar;
 using namespace ::com::sun::star;
+
+namespace {
+    OUString lcl_fillStyleEnumToString(FillStyle eStyle)
+    {
+        switch (eStyle)
+        {
+            case FillStyle_NONE:
+                return "NONE";
+
+            case FillStyle_SOLID:
+                return "SOLID";
+
+            case FillStyle_GRADIENT:
+                return "GRADIENT";
+
+            case FillStyle_HATCH:
+                return "HATCH";
+
+            case FillStyle_BITMAP:
+                return "BITMAP";
+
+            default:
+                return "";
+        }
+    }
+
+    void lcl_sendAttrUpdatesForLOK(SfxViewShell* pShell, const SfxItemSet& rSet)
+    {
+        if (!pShell)
+            return;
+
+        OUString sPayload;
+        const SfxPoolItem* pItem = rSet.GetItem(SID_ATTR_FILL_STYLE);
+
+        if (pItem)
+        {
+            const XFillStyleItem* pFillStyleItem = static_cast<const XFillStyleItem*>(pItem);
+            FillStyle eStyle;
+            css::uno::Any aAny;
+
+            pFillStyleItem->QueryValue(aAny);
+            aAny >>= eStyle;
+            sPayload = ".uno:FillStyle=" + lcl_fillStyleEnumToString(eStyle);
+        }
+
+        if (!sPayload.isEmpty())
+        {
+            pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
+        }
+    }
+}
 
 namespace sd {
 
@@ -697,6 +755,10 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 }
                 nWhich = aNewIter.NextWhich();
             }
+
+            SfxViewShell* pViewShell = GetDrawView()->GetSfxViewShell();
+            if (pViewShell && comphelper::LibreOfficeKit::isActive())
+                lcl_sendAttrUpdatesForLOK( pViewShell, *pSet );
         }
 
         SfxItemState eState = pSet->GetItemState( EE_PARA_LRSPACE );
