@@ -2029,6 +2029,12 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:ref name="string"/>
       </rng:attribute>
     </rng:optional>
+    <!-- TODO no proposal -->
+    <rng:optional>
+      <rng:attribute name="loext:opacity">
+        <rng:ref name="zeroToHundredPercent"/>
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
 
   <rng:define name="style-text-properties-attlist" combine="interleave">
