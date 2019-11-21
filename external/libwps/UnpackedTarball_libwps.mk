@@ -21,13 +21,13 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwps,\
 	$(if $(SYSTEM_REVENGE),,external/libwps/rpath.patch.0) \
 	external/libwps/libtool.patch.0 \
 	external/libwps/0001-Make-comparison-operator-member-functions-const.patch \
+	external/libwps/libwps-lotus-version-tdf127887-upstream.patch \
 ))
 
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,libwps,\
 	external/libwps/libwps-bundled-soname.patch.0 \
-	external/libwps/libwps-lotus-version-tdf127887.patch.1 \
 ))
 endif
 endif
