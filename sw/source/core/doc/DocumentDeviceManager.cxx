@@ -34,6 +34,7 @@
 #include <printdata.hxx>
 #include <vcl/mapmod.hxx>
 #include <svl/itemset.hxx>
+#include <cfgitems.hxx>
 #include <cmdid.h>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>
@@ -297,6 +298,14 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
             FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>{});
 
     VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( std::move(pSet) );
+
+    // assign PrintData to newly created printer
+    const SwPrintData& rPrtData = getPrintData();
+    SwAddPrinterItem aAddPrinterItem(rPrtData);
+    SfxItemSet aOptions(pNewPrt->GetOptions());
+    aOptions.Put(aAddPrinterItem);
+    pNewPrt->SetOptions(aOptions);
+
     const_cast<DocumentDeviceManager*>(this)->setPrinter( pNewPrt, true, true );
     return *mpPrt;
 }
