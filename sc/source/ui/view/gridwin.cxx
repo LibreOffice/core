@@ -3211,7 +3211,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
     else if( rKeyCode.GetCode() == KEY_RETURN && pViewData->IsPasteMode() )
     {
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
-        ScClipUtil::PasteFromClipboard( pViewData, pTabViewShell, false );
+        ScClipUtil::PasteFromClipboard( pViewData, pTabViewShell, true );
 
         // Clear clipboard content.
         uno::Reference<datatransfer::clipboard::XClipboard> xSystemClipboard =
