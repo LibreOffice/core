@@ -144,10 +144,10 @@ namespace dbaui
 
     IMPL_LINK_NOARG(OParameterDialog, OnValueLoseFocusHdl, weld::Widget&, void)
     {
-        CheckValueForError(false);
+        CheckValueForError();
     }
 
-    bool OParameterDialog::CheckValueForError(bool bShowDialog)
+    bool OParameterDialog::CheckValueForError()
     {
         if (m_nCurrentlySelected != -1)
         {
@@ -155,6 +155,8 @@ namespace dbaui
                 // nothing to do, the value isn't dirty
                 return false;
         }
+
+        bool bRet = false;
 
         Reference< XPropertySet >  xParamAsSet;
         m_xParams->getByIndex(m_nCurrentlySelected) >>= xParamAsSet;
@@ -166,6 +168,7 @@ namespace dbaui
                 bool bValid = m_aPredicateInput.normalizePredicateString( sParamValue, xParamAsSet );
                 m_xParam->set_text(sParamValue);
                 m_xParam->set_message_type(bValid ? weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
+                OUString sToolTip;
                 if ( bValid )
                 {
                     // with this the value isn't dirty anymore
@@ -184,22 +187,16 @@ namespace dbaui
                         DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
 
-                    if (bShowDialog)
-                    {
-                        OUString sMessage(DBA_RES(STR_COULD_NOT_CONVERT_PARAM));
-                        sMessage = sMessage.replaceAll( "$name$", sName );
-                        std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(m_xDialog.get(),
-                                                                     VclMessageType::Warning, VclButtonsType::Ok,
-                                                                     sMessage));
-                        xDialog->run();
-                        m_xParam->grab_focus();
-                    }
-                    return true;
+                    OUString sMessage(DBA_RES(STR_COULD_NOT_CONVERT_PARAM));
+                    sToolTip = sMessage.replaceAll( "$name$", sName );
+                    m_xParam->grab_focus();
+                    bRet = true;
                 }
+                m_xParam->set_tooltip_text(sToolTip);
             }
         }
 
-        return false;
+        return bRet;
     }
 
     IMPL_LINK(OParameterDialog, OnButtonClicked, weld::Button&, rButton, void)
@@ -280,7 +277,7 @@ namespace dbaui
         if (m_nCurrentlySelected != -1)
         {
             // do the transformation of the current text
-            if (CheckValueForError(true))
+            if (CheckValueForError())
             {   // there was an error interpreting the text
                 m_xAllParams->select(m_nCurrentlySelected);
                 return true;
