@@ -111,6 +111,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnFolderChanging(IFileDialog* /*pDialo
 STDMETHODIMP VistaFilePickerEventHandler::OnFolderChange(IFileDialog* /*pDialog*/)
 {
     impl_sendEvent(E_DIRECTORY_CHANGED, 0);
+    m_pInternalNotify->onDirectoryChanged();
     return S_OK;
 }
 
@@ -139,10 +140,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnTypeChange(IFileDialog* pDialog)
     HRESULT hResult = pDialog->GetFileTypeIndex( &nFileTypeIndex );
 
     if ( hResult == S_OK )
-    {
-        if ( m_pInternalNotify->onFileTypeChanged( nFileTypeIndex ))
-            impl_sendEvent(E_CONTROL_STATE_CHANGED, css::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER);
-    }
+        impl_sendEvent(E_CONTROL_STATE_CHANGED, css::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER);
 
     return S_OK;
 }

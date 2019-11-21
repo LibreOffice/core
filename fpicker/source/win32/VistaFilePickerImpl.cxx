@@ -756,7 +756,6 @@ void VistaFilePickerImpl::impl_sta_SetFileName(const RequestRef& rRequest)
 void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
 {
     OUString sDirectory = rRequest->getArgumentOrDefault(PROP_DIRECTORY, OUString());
-    bool     bForce     = rRequest->getArgumentOrDefault(PROP_FORCE, false);
 
     if( !m_bInExecute)
     {
@@ -778,27 +777,25 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
     if ( !createFolderItem(sDirectory, pFolder) )
         return;
 
-    if ( m_bInExecute || bForce )
-        iDialog->SetFolder(pFolder);
-    else
-    {
-        // Use set default folder as Microsoft recommends in the IFileDialog documentation.
-        iDialog->SetDefaultFolder(pFolder);
-    }
+    iDialog->SetFolder(pFolder);
 }
 
-void VistaFilePickerImpl::impl_sta_GetDirectory(const RequestRef& rRequest)
+OUString VistaFilePickerImpl::GetDirectory()
 {
     TFileDialog iDialog = impl_getBaseDialogInterface();
     ComPtr< IShellItem > pFolder;
     HRESULT hResult = iDialog->GetFolder( &pFolder );
     if ( FAILED(hResult) )
-        return;
-    OUString sFolder = lcl_getURLFromShellItem ( pFolder );
-    if( sFolder.getLength())
-        rRequest->setArgument( PROP_DIRECTORY, sFolder );
+        return OUString();
+    return lcl_getURLFromShellItem(pFolder);
 }
 
+void VistaFilePickerImpl::impl_sta_GetDirectory(const RequestRef& rRequest)
+{
+    const OUString sFolder = m_sDirectory.isEmpty() ? GetDirectory() : m_sDirectory;
+    if (!sFolder.isEmpty())
+        rRequest->setArgument(PROP_DIRECTORY, sFolder);
+}
 
 void VistaFilePickerImpl::impl_sta_SetDefaultName(const RequestRef& rRequest)
 {
@@ -1319,9 +1316,9 @@ void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
     iDialog->SetDefaultExtension( pExt );
 }
 
-bool VistaFilePickerImpl::onFileTypeChanged( UINT /*nTypeIndex*/ )
+void VistaFilePickerImpl::onDirectoryChanged()
 {
-    return true;
+    m_sDirectory = GetDirectory();
 }
 
 } // namespace vista

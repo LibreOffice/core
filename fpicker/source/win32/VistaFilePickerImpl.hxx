@@ -71,7 +71,6 @@ static const OUString PROP_FEATURES("features"           ); // [sal_Int32]
 static const OUString PROP_TEMPLATE_DESCR("templatedescription"); // [sal_Int32]
 static const OUString PROP_FILTER_TITLE("filter_title"       ); // [OUString]
 static const OUString PROP_FILTER_VALUE("filter_value"       ); // [OUString]
-static const OUString PROP_FORCE("force"              ); // [sal_Bool]
 static const OUString PROP_FILTER_GROUP("filter-group"       ); // [seq< css:beans::StringPair >] contains a group of filters
 
 static const OUString PROP_CONTROL_ID("control_id"         ); // [sal_Int16]
@@ -146,10 +145,10 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         // IVistaFilePickerInternalNotify
 
         virtual void onAutoExtensionChanged (bool bChecked) override;
-        virtual bool onFileTypeChanged( UINT nTypeIndex ) override;
+        virtual void onDirectoryChanged() override;
 
     private:
-
+        OUString GetDirectory();
 
         /// implementation of request E_ADD_FILEPICKER_LISTENER
         void impl_sta_addFilePickerListener(const RequestRef& rRequest);

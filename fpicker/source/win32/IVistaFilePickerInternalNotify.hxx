@@ -44,7 +44,7 @@ class IVistaFilePickerInternalNotify
 
         virtual void onAutoExtensionChanged (bool bChecked) = 0;
 
-        virtual bool onFileTypeChanged( UINT nTypeIndex ) = 0;
+        virtual void onDirectoryChanged() = 0;
 
     protected:
         ~IVistaFilePickerInternalNotify() {}
