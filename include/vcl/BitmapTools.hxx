@@ -33,8 +33,8 @@ typedef sal_uInt8 (*lookup_table)[256];
 lookup_table VCL_DLLPUBLIC get_premultiply_table();
 lookup_table VCL_DLLPUBLIC get_unpremultiply_table();
 
-VCL_DLLPUBLIC sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a);
-VCL_DLLPUBLIC sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a);
+sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a);
+sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a);
 
 /**
  * Intended to be used to feed into CreateFromData to create a BitmapEx. RGB data format.
