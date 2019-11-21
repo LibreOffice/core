@@ -108,6 +108,9 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxItemSet& rOldSet,
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
 {
+    assert(m_sFormatName.getLength());
+    SAL_WARN_IF(m_sFormatName.isEmpty(), "sw.undo", "Format is missing name. Undo/redo could work incorrectly");
+
     Init( rChgFormat );
 }
 
@@ -120,6 +123,9 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxPoolItem& rItem, SwFormat& rChgForm
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
 {
+    assert(m_sFormatName.getLength());
+    SAL_WARN_IF(m_sFormatName.isEmpty(), "sw.undo", "Format is missing name. Undo/redo could work incorrectly");
+
     m_pOldSet->Put( rItem );
     Init( rChgFormat );
 }
@@ -444,14 +450,14 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         // format.
         const SwPosition *pPos = rOldAnch.GetContentAnchor();
         SwTextNode *pTextNode = static_cast<SwTextNode*>(&pPos->nNode.GetNode());
-        OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
+        SAL_WARN_IF( !pTextNode->HasHints(), "sw.undo", "Missing FlyInCnt-Hint." );
         const sal_Int32 nIdx = pPos->nContent.GetIndex();
         SwTextAttr * const pHint =
             pTextNode->GetTextAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         assert(pHint && "Missing Hint.");
-        OSL_ENSURE( pHint->Which() == RES_TXTATR_FLYCNT,
+        SAL_WARN_IF( pHint->Which() != RES_TXTATR_FLYCNT, "sw.undo",
                     "Missing FlyInCnt-Hint." );
-        OSL_ENSURE( pHint->GetFlyCnt().GetFrameFormat() == pFrameFormat,
+        SAL_WARN_INF( pHint->GetFlyCnt().GetFrameFormat() != pFrameFormat, "sw.undo",
                     "Wrong TextFlyCnt-Hint." );
         const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt()).SetFlyFormat();
 
@@ -485,7 +491,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     if (RndStdIds::FLY_AS_CHAR == aNewAnchor.GetAnchorId()) {
         const SwPosition* pPos = aNewAnchor.GetContentAnchor();
         SwTextNode* pTextNd = pPos->nNode.GetNode().GetTextNode();
-        OSL_ENSURE( pTextNd, "no Text Node at position." );
+        SAL_WARN_IF( !pTextNd, "sw.undo", "no Text Node at position." );
         SwFormatFlyCnt aFormat( pFrameFormat );
         pTextNd->InsertItem( aFormat, pPos->nContent.GetIndex(), 0 );
     }
