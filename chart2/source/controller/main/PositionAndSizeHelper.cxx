@@ -72,7 +72,6 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     }
     else if(eObjectType==OBJECTTYPE_LEGEND)
     {
-        xObjectProp->setPropertyValue( "AnchorPosition", uno::Any(LegendPosition_CUSTOM));
         xObjectProp->setPropertyValue( "Expansion", uno::Any(css::chart::ChartLegendExpansion_CUSTOM));
         chart2::RelativePosition aRelativePosition;
         chart2::RelativeSize aRelativeSize;
