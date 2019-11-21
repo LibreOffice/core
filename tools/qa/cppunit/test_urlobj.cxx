@@ -49,7 +49,11 @@ namespace tools_urlobj
         void urlobjTest_001(  )
         {
             INetURLObject aUrl( OUString( "file://10.10.1.1/sampledir/sample.file" ) );
-            CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
+#ifdef LINUX
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://10.10.1.1/sampledir/sample.file"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
+#endif
             CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
             CPPUNIT_ASSERT_EQUAL(OUString("/sampledir/sample.file"),
@@ -66,7 +70,11 @@ namespace tools_urlobj
             aUrl.
                 setFSysPath( "\\\\137.65.170.24\\c$\\Img0001.jpg",
                              FSysStyle::Detect );
-            CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
+#ifdef LINUX
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://137.65.170.24/c$/Img0001.jpg"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
+#endif
             CPPUNIT_ASSERT_EQUAL(OUString("137.65.170.24"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
             CPPUNIT_ASSERT_EQUAL(OUString("/c$/Img0001.jpg"),
@@ -83,7 +91,11 @@ namespace tools_urlobj
             aUrl.
                 setFSysPath( "\\\\hive-winxp-x86\\pmladek\\test2.odt",
                              FSysStyle::Detect );
-            CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
+#ifdef LINUX
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://hive-winxp-x86/pmladek/test2.odt"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
+#endif
             CPPUNIT_ASSERT_EQUAL(OUString("hive-winxp-x86"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
             CPPUNIT_ASSERT_EQUAL(OUString("/pmladek/test2.odt"),
@@ -93,7 +105,11 @@ namespace tools_urlobj
         void urlobjTest_004(  )
         {
             INetURLObject aUrl( OUString( "smb://10.10.1.1/sampledir/sample.file" ) );
+#ifdef LINUX
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://10.10.1.1/sampledir/sample.file"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             CPPUNIT_ASSERT_EQUAL( INetProtocol::Smb, aUrl.GetProtocol(  ) );
+#endif
             CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
             CPPUNIT_ASSERT_EQUAL(OUString("/sampledir/sample.file"),
@@ -108,7 +124,11 @@ namespace tools_urlobj
             INetURLObject aUrl;
             aUrl.setFSysPath( "//137.65.170.24/c$/Img0001.jpg",
                               FSysStyle::Detect );
-            CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
+#ifdef LINUX
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://137.65.170.24/c$/Img0001.jpg"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
+#endif
             CPPUNIT_ASSERT_EQUAL(OUString("137.65.170.24"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
             CPPUNIT_ASSERT_EQUAL(OUString("/c$/Img0001.jpg"),
@@ -124,7 +144,11 @@ namespace tools_urlobj
             INetURLObject aUrl;
             aUrl.setFSysPath( "//hive-winxp-x86/pmladek/test2.odt",
                               FSysStyle::Detect );
-            CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
+#ifdef LINUX
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://hive-winxp-x86/pmladek/test2.odt"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
+#endif
             CPPUNIT_ASSERT_EQUAL(OUString("hive-winxp-x86"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
             CPPUNIT_ASSERT_EQUAL(OUString("/pmladek/test2.odt"),
