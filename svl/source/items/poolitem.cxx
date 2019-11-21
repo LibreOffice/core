@@ -552,6 +552,12 @@ void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+boost::property_tree::ptree SfxPoolItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree;
+    return aTree;
+}
+
 std::unique_ptr<SfxPoolItem> SfxPoolItem::CloneSetWhich( sal_uInt16 nNewWhich ) const
 {
     std::unique_ptr<SfxPoolItem> pItem(Clone());

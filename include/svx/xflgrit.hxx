@@ -56,6 +56,8 @@ public:
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     std::unique_ptr<XFillGradientItem> checkForUniqueItem( SdrModel* pModel ) const;
+
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 #endif
