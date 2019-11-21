@@ -108,6 +108,7 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxItemSet& rOldSet,
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
 {
+    OSL_ENSURE(!m_sFormatName.isEmpty(), "Format is missing name. Undo/redo could break");
     Init( rChgFormat );
 }
 
@@ -120,6 +121,7 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxPoolItem& rItem, SwFormat& rChgForm
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
 {
+    OSL_ENSURE(!m_sFormatName.isEmpty(), "Format is missing name. Undo/redo could break");
     m_pOldSet->Put( rItem );
     Init( rChgFormat );
 }
