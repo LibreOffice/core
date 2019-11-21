@@ -22,6 +22,30 @@
       "revId": "40aba8c8776b3ffceb59db6c47437f8d066b3952",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_0690caec",
+        "filename": "sw/source/uibase/docvw/FrameControlsManager.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-11-21T09:32:48Z",
+      "side": 1,
+      "message": "IIRC: If I click on empty header footer, focus is changed to the header footer window. After that I went to different application windows and returned to LO Writer.exe to find that the header footer window still has the focus. Please refer to the attachment: https://imgur.com/a/tV3bgJB",
+      "parentUuid": "7f7f9b97_46fa42bd",
+      "range": {
+        "startLine": 112,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 26
+      },
+      "revId": "40aba8c8776b3ffceb59db6c47437f8d066b3952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
