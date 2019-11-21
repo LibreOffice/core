@@ -82,6 +82,7 @@ CharPostureComplex
 CharShadowed
 CharStrikeout
 CharStyleName
+CharTransparence
 CharUnderline
 CharUnderlineColor
 CharUnderlineHasColor
