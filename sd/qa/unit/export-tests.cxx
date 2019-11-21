@@ -57,6 +57,7 @@ public:
     void testTransparentBackground();
     void testEmbeddedPdf();
     void testEmbeddedText();
+    void testTransparenText();
     void testTdf98477();
     void testAuthorField();
     void testTdf50499();
@@ -88,6 +89,7 @@ public:
     CPPUNIT_TEST(testTransparentBackground);
     CPPUNIT_TEST(testEmbeddedPdf);
     CPPUNIT_TEST(testEmbeddedText);
+    CPPUNIT_TEST(testTransparenText);
     CPPUNIT_TEST(testTdf98477);
     CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST(testTdf50499);
@@ -820,6 +822,26 @@ void SdExportTest::testEmbeddedText()
     xPortion->getPropertyValue("TextPortionType") >>= type;
     CPPUNIT_ASSERT_EQUAL(OUString("Text"), type);
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), xRange->getString()); //tdf#112547
+
+    xShell->DoClose();
+}
+
+void SdExportTest::testTransparenText()
+{
+    sd::DrawDocShellRef xShell
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/transparent-text.fodg"), FODG);
+    xShell = saveAndReload(xShell.get(), ODG);
+
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int16 nCharTransparence = 0;
+    xShape->getPropertyValue("CharTransparence") >>= nCharTransparence;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 75
+    // - Actual  : 0
+    // i.e. the 75% transparent text was turned into a "not transparent at all" text.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(75), nCharTransparence);
 
     xShell->DoClose();
 }
