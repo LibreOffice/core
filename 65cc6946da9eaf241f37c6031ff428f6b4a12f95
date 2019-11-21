@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_06aa0a70",
+        "filename": "include/vcl/Scanline.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-11-21T08:14:52Z",
+      "side": 1,
+      "message": "Noel: I think there was a mistake in the previous version of the patch but am not sure.\nCould you please double check my version here?",
+      "range": {
+        "startLine": 51,
+        "startChar": 83,
+        "endLine": 51,
+        "endChar": 93
+      },
+      "revId": "65cc6946da9eaf241f37c6031ff428f6b4a12f95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
