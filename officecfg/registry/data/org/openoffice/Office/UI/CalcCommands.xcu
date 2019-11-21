@@ -1928,7 +1928,7 @@
       </node>
       <node oor:name=".uno:RenameTable" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Rename Sheet...</value>
+          <value xml:lang="en-US">Rename S~heet...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
