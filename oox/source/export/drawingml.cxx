@@ -1428,13 +1428,23 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         sal_uInt32 color = *o3tl::doAccess<sal_uInt32>(mAny);
         SAL_INFO("oox.shape", "run color: " << color << " auto: " << COL_AUTO);
 
+        // WriteSolidFill() handles MAX_PERCENT as "no transparency".
+        sal_Int32 nTransparency = MAX_PERCENT;
+        if (rXPropSet->getPropertySetInfo()->hasPropertyByName("CharTransparence"))
+        {
+            rXPropSet->getPropertyValue("CharTransparence") >>= nTransparency;
+            // UNO scale is 0..100, OOXML scale is 0..100000; also UNO tracks transparency, OOXML
+            // tracks opacity.
+            nTransparency = MAX_PERCENT - (nTransparency * PER_PERCENT);
+        }
+
         // tdf#104219 In LibreOffice and MS Office, there are two types of colors:
         // Automatic and Fixed. OOXML is setting automatic color, by not providing color.
         if( color != COL_AUTO )
         {
             color &= 0xffffff;
             // TODO: special handle embossed/engraved
-            WriteSolidFill( color );
+            WriteSolidFill(color, nTransparency);
         }
     }
 
