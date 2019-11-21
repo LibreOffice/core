@@ -46,6 +46,8 @@ class IVistaFilePickerInternalNotify
 
         virtual bool onFileTypeChanged( UINT nTypeIndex ) = 0;
 
+        virtual void onDirectoryChanged() = 0;
+
     protected:
         ~IVistaFilePickerInternalNotify() {}
 };

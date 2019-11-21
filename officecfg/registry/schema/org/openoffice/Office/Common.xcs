@@ -1560,18 +1560,6 @@
         <desc>Contains the current and default path settings used by the
         Office.</desc>
       </info>
-      <group oor:name="Info">
-        <info>
-          <desc>Contains various properties information purpose only.</desc>
-        </info>
-        <prop oor:name="WorkPathChanged" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>A flag which is set by the tools options dialog whenever a
-            user changed the work path.</desc>
-          </info>
-          <value>true</value>
-        </prop>
-      </group>
       <group oor:name="Current">
         <info>
           <desc>Contains the global path settings, mainly those of the Options

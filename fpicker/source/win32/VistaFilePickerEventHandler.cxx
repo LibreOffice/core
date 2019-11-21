@@ -111,6 +111,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnFolderChanging(IFileDialog* /*pDialo
 STDMETHODIMP VistaFilePickerEventHandler::OnFolderChange(IFileDialog* /*pDialog*/)
 {
     impl_sendEvent(E_DIRECTORY_CHANGED, 0);
+    m_pInternalNotify->onDirectoryChanged();
     return S_OK;
 }
 
