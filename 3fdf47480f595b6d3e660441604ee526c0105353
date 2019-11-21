@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_ad577c02",
+        "filename": "oox/source/vml/vmltextbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-21T07:37:09Z",
+      "side": 1,
+      "message": "get rid of initially.",
+      "revId": "3fdf47480f595b6d3e660441604ee526c0105353",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_0d51d00e",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2469,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-21T07:37:09Z",
+      "side": 1,
+      "message": "UNO_QUERY_THROW. It will be caught by the outside try-catch.",
+      "range": {
+        "startLine": 2469,
+        "startChar": 114,
+        "endLine": 2469,
+        "endChar": 123
+      },
+      "revId": "3fdf47480f595b6d3e660441604ee526c0105353",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
