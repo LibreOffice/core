@@ -2269,6 +2269,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf75659)
     // These failed, if the legend names are empty strings.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf115630)
+{
+    SwDoc* pDoc = createDoc("tdf115630.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Test end point position of the chart.
+    sal_Int32 nX = getXPath(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/polyline/point[1]", "x").toInt32();
+    CPPUNIT_ASSERT(nX > 9409 && nX < 9413);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf108021)
 {
     SwDoc* pDoc = createDoc("tdf108021.odt");
