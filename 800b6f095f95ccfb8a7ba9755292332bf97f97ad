@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c663b241",
+        "filename": "cui/uiconfig/ui/charnamepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T09:09:38Z",
+      "side": 0,
+      "message": "Unfortunate situation with labels above controls. How about making it a table with Family, Style, Size, and Language as column header and Simple or Default (have to be added), Western, Asian, and CTL at row headings?",
+      "revId": "800b6f095f95ccfb8a7ba9755292332bf97f97ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_66541e54",
+        "filename": "cui/uiconfig/ui/effectspage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T09:09:38Z",
+      "side": 0,
+      "message": "Would like to retest in life as Glade positions elements badly.",
+      "revId": "800b6f095f95ccfb8a7ba9755292332bf97f97ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e6682e1e",
+        "filename": "cui/uiconfig/ui/effectspage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T09:09:38Z",
+      "side": 0,
+      "message": "Row spacing !\u003d 3",
+      "range": {
+        "startLine": 68,
+        "startChar": 42,
+        "endLine": 68,
+        "endChar": 47
+      },
+      "revId": "800b6f095f95ccfb8a7ba9755292332bf97f97ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_86593a8f",
+        "filename": "cui/uiconfig/ui/effectspage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T09:09:38Z",
+      "side": 0,
+      "message": "Row spacing !\u003d 3",
+      "range": {
+        "startLine": 305,
+        "startChar": 42,
+        "endLine": 305,
+        "endChar": 47
+      },
+      "revId": "800b6f095f95ccfb8a7ba9755292332bf97f97ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_a65eb673",
+        "filename": "cui/uiconfig/ui/effectspage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T09:09:38Z",
+      "side": 0,
+      "message": "Row spacing !\u003d 3",
+      "range": {
+        "startLine": 539,
+        "startChar": 42,
+        "endLine": 539,
+        "endChar": 47
+      },
+      "revId": "800b6f095f95ccfb8a7ba9755292332bf97f97ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_4657a259",
+        "filename": "cui/uiconfig/ui/effectspage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T09:09:38Z",
+      "side": 0,
+      "message": "Does it has to be in the same sizegroup as the dropdowns?",
+      "range": {
+        "startLine": 636,
+        "startChar": 20,
+        "endLine": 636,
+        "endChar": 31
+      },
+      "revId": "800b6f095f95ccfb8a7ba9755292332bf97f97ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_06e20aa1",
+        "filename": "cui/uiconfig/ui/numberingformatpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T09:09:38Z",
+      "side": 0,
+      "message": "Why not left of the spinner? Of course it would take some space but what\u0027s special in this particular situation?",
+      "range": {
+        "startLine": 293,
+        "startChar": 47,
+        "endLine": 293,
+        "endChar": 58
+      },
+      "revId": "800b6f095f95ccfb8a7ba9755292332bf97f97ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_26df06d7",
+        "filename": "cui/uiconfig/ui/numberingformatpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-11-21T09:09:38Z",
+      "side": 0,
+      "message": "Frame labels are not bold.",
+      "range": {
+        "startLine": 443,
+        "startChar": 43,
+        "endLine": 443,
+        "endChar": 53
+      },
+      "revId": "800b6f095f95ccfb8a7ba9755292332bf97f97ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
