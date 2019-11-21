@@ -53,7 +53,7 @@ class tdf126627(UITestCase):
 
         controller.removeInfobar("my")
 
-        # Removing an already removed infobar shoud throw an exception
+        # Removing an already removed infobar should throw an exception
         with self.assertRaises(NoSuchElementException):
             controller.removeInfobar("my")
 
