@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_46fa42bd",
+        "filename": "sw/source/uibase/docvw/FrameControlsManager.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-11-21T05:47:04Z",
+      "side": 1,
+      "message": "This causes focus to always be grabbed back to Writer. To see this, select a different application window when pWin has focus.",
+      "range": {
+        "startLine": 112,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 26
+      },
+      "revId": "40aba8c8776b3ffceb59db6c47437f8d066b3952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
