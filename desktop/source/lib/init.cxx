@@ -4652,11 +4652,10 @@ static void preloadData()
     rtl::Bootstrap::set("UserInstallation", aTempDir.GetURL());
 
     // Register the bundled extensions
-    desktop::Desktop::SynchronizeExtensionRepositories(true);
-    bool bAbort = desktop::Desktop::CheckExtensionDependencies();
-    if(bAbort)
-        std::cerr << "CheckExtensionDependencies failed" << std::endl;
+    //desktop::Desktop::SynchronizeExtensionRepositories(true);
+    //bool bAbort = desktop::Desktop::CheckExtensionDependencies();
 
+#if 0
     // preload all available dictionaries
     css::uno::Reference<css::linguistic2::XLinguServiceManager> xLngSvcMgr =
         css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
@@ -4724,7 +4723,8 @@ static void preloadData()
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), COMPLEX);
         OutputDevice::GetDefaultFont(DefaultFontType::CTL_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
     }
-
+#endif
+    
     // Set user profile's path back to the original one
     rtl::Bootstrap::set("UserInstallation", sUserPath);
 }

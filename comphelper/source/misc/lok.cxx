@@ -47,7 +47,7 @@ void setActive(bool bActive)
 
 bool isActive()
 {
-    return g_bActive;
+    return false;
 }
 
 void setPartInInvalidation(bool bPartInInvalidation)

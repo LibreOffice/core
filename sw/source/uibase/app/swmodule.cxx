@@ -178,7 +178,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     StartListening( *SfxGetpApp() );
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (false)
     {
         // init color configuration
         // member <pColorConfig> is created and the color configuration is applied

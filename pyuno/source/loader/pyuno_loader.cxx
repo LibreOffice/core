@@ -245,6 +245,8 @@ static Reference<XInterface> CreateInstance(const Reference<XComponentContext> &
 
     Reference< XInterface > ret;
 
+    return ret;
+    
     PyThreadAttach attach( PyInterpreterState_Head() );
     {
         // note: this can't race against getComponentContext() because

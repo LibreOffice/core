@@ -172,6 +172,9 @@ static oslSignalHandler pSignalHandler = nullptr;
 
 namespace {
 
+#undef HAVE_FEATURE_EXTENSIONS
+#define HAVE_FEATURE_EXTENSIONS 0
+    
 #if HAVE_FEATURE_EXTENSIONS
 
 // Remove any existing UserInstallation's extensions cache data remaining from
@@ -1436,7 +1439,7 @@ int Desktop::Main()
         */
         Application::GetDefaultDevice();
 
-#if HAVE_FEATURE_EXTENSIONS
+#if 0
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
         // the extension dependencies!
