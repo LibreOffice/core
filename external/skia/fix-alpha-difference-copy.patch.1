@@ -1,0 +1,13 @@
+diff --git a/src/core/SkBlitter_Sprite.cpp b/src/core/SkBlitter_Sprite.cpp
+index 89b107b939..042d8e65aa 100644
+--- a/src/core/SkBlitter_Sprite.cpp
++++ b/src/core/SkBlitter_Sprite.cpp
+@@ -178,7 +178,7 @@ SkBlitter* SkBlitter::ChooseSprite(const SkPixmap& dst, const SkPaint& paint,
+     */
+     SkASSERT(allocator != nullptr);
+ 
+-    if (source.alphaType() == kUnpremul_SkAlphaType) {
++    if (source.alphaType() != dst.alphaType()) {
+         return nullptr;
+     }
+ 
