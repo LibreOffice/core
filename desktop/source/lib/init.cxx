@@ -3470,7 +3470,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             }
         }
 
-        if (aChartHelper.GetWindow())
+        if (aChartHelper.GetWindow() && aPropertyValuesVector.size() > 0)
         {
             if (aPropertyValuesVector[0].Name != "Action")
             {
@@ -3502,7 +3502,17 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
 
     bool bResult = false;
-    if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers.count(nView))
+    LokChartHelper aChartHelper(SfxViewShell::Current());
+
+    if (aChartHelper.GetWindow() )
+    {
+        util::URL aCommandURL;
+        aCommandURL.Path = aCommand.copy(5);
+        css::uno::Reference<css::frame::XDispatch>& aChartDispatcher = aChartHelper.GetXDispatcher();
+        aChartDispatcher->dispatch(aCommandURL, comphelper::containerToSequence(aPropertyValuesVector));
+        return;
+    }
+    else if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers.count(nView))
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
                 new DispatchResultListener(pCommand, pDocument->mpCallbackFlushHandlers[nView]));
