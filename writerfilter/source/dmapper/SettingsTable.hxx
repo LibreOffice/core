@@ -78,6 +78,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     bool GetNoColumnBalance() const;
     bool GetProtectForm() const;
     bool GetLongerSpaceSequence() const;
+    bool GetNoHyphenateCaps() const;
     sal_Int16 GetHypenationZone() const;
 
     css::uno::Sequence<css::beans::PropertyValue> const & GetThemeFontLangProperties() const;

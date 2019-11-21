@@ -129,6 +129,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121661, "tdf121661.docx")
     assertXPath(pXmlSettings, "/w:settings/w:hyphenationZone", "val", "851");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf121658, "tdf121658.docx")
+{
+    xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
+    if (!pXmlSettings)
+        return;
+    assertXPath(pXmlSettings, "/w:settings/w:doNotHyphenateCaps");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);

@@ -244,6 +244,7 @@ struct SettingsTable_Impl
     bool                m_bDoNotUseHTMLParagraphAutoSpacing;
     bool                m_bNoColumnBalance;
     bool                m_bAutoHyphenation;
+    bool                m_bNoHyphenateCaps;
     sal_Int16           m_nHyphenationZone;
     bool                m_bWidowControl;
     bool                m_bLongerSpaceSequence;
@@ -279,6 +280,7 @@ struct SettingsTable_Impl
     , m_bDoNotUseHTMLParagraphAutoSpacing(false)
     , m_bNoColumnBalance(false)
     , m_bAutoHyphenation(false)
+    , m_bNoHyphenateCaps(false)
     , m_nHyphenationZone(0)
     , m_bWidowControl(false)
     , m_bLongerSpaceSequence(false)
@@ -550,6 +552,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_autoHyphenation:
         m_pImpl->m_bAutoHyphenation = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Settings_doNotHyphenateCaps:
+        m_pImpl->m_bNoHyphenateCaps = nIntValue;
+        break;
     case NS_ooxml::LN_CT_Settings_widowControl:
         m_pImpl->m_bWidowControl = nIntValue;
         break;
@@ -653,10 +658,17 @@ bool SettingsTable::GetProtectForm() const
 {
     return m_pImpl->m_bProtectForm;
 }
+
+bool SettingsTable::GetNoHyphenateCaps() const
+{
+    return m_pImpl->m_bNoHyphenateCaps;
+}
+
 sal_Int16 SettingsTable::GetHypenationZone() const
 {
     return m_pImpl->m_nHyphenationZone;
 }
+
 uno::Sequence<beans::PropertyValue> const & SettingsTable::GetThemeFontLangProperties() const
 {
     return m_pImpl->m_pThemeFontLangProps;

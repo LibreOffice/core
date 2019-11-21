@@ -1154,6 +1154,13 @@ void DocxExport::WriteSettings()
                     pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
                                          OString::number(nHyphenationZone));
             }
+            else if (rProp.Name == "NoHyphenateCaps")
+            {
+                bool bNoHyphenateCaps;
+                rProp.Value >>= bNoHyphenateCaps;
+                if (bNoHyphenateCaps)
+                    pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
+            }
         }
     }
 
