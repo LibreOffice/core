@@ -105,8 +105,8 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter const * pNew, bool bWe
     {
         if( pIDDA )
             pIDDA->setPrintData( *pAddPrinterAttr );
-        if( !pAddPrinterAttr->GetFax().isEmpty() )
-            pOpt->SetFaxName(pAddPrinterAttr->GetFax());
+        if( !pAddPrinterAttr->GetFaxName().isEmpty() )
+            pOpt->SetFaxName(pAddPrinterAttr->GetFaxName());
     }
 }
 
