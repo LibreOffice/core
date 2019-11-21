@@ -692,7 +692,9 @@ void XMLTableTemplateContext::StartElement( const Reference< XAttributeList >& x
     {
         OUString sAttrName;
         sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &sAttrName );
-        if( (nAttrPrefix == XML_NAMESPACE_TEXT ) && IsXMLToken( sAttrName, XML_STYLE_NAME ) )
+        if( (nAttrPrefix == XML_NAMESPACE_TEXT && IsXMLToken( sAttrName, XML_STYLE_NAME ))
+            // Writer specific: according to oasis odf 1.2 prefix should be "table" and element name should be "name"
+            || (nAttrPrefix == XML_NAMESPACE_TABLE && IsXMLToken( sAttrName, XML_NAME )))
         {
             msTemplateStyleName = xAttrList->getValueByIndex( i );
             break;
