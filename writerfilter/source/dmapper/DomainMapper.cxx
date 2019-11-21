@@ -232,6 +232,9 @@ DomainMapper::~DomainMapper()
         // Add the saved w:hypenationZone setting
         aProperties["HyphenationZone"] <<= m_pImpl->GetSettingsTable()->GetHypenationZone();
 
+        // Add the saved w:doNotHyphenateCaps setting
+        aProperties["NoHyphenateCaps"] <<= m_pImpl->GetSettingsTable()->GetNoHyphenateCaps();
+
         uno::Reference<beans::XPropertySet> xDocProps(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
         if (xDocProps.is())
         {
