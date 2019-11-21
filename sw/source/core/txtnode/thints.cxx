@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <DocumentSettingManager.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <hintids.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/rsiditem.hxx>
@@ -259,6 +260,19 @@ MakeTextAttrNesting(SwTextNode & rNode, SwTextAttrNesting & rNesting,
 
 typedef std::vector<SwTextAttrNesting *> NestList_t;
 
+static NestList_t::iterator
+lcl_DoSplitImpl(NestList_t & rSplits, SwTextNode & rNode,
+    NestList_t::iterator const iter, sal_Int32 const nSplitPos,
+    bool const bSplitAtStart, bool const bOtherDummy)
+{
+    const sal_Int32 nStartPos( // skip other's dummy character!
+        (bSplitAtStart && bOtherDummy) ? nSplitPos + 1 : nSplitPos );
+    SwTextAttrNesting * const pNew( MakeTextAttrNesting(
+            rNode, **iter, nStartPos, *(*iter)->GetEnd() ) );
+    (*iter)->SetEnd(nSplitPos);
+    return rSplits.insert(iter + 1, pNew);
+}
+
 static void
 lcl_DoSplitNew(NestList_t & rSplits, SwTextNode & rNode,
     const sal_Int32 nNewStart,
@@ -274,12 +288,7 @@ lcl_DoSplitNew(NestList_t & rSplits, SwTextNode & rNode,
             } ) );
     if (iter != rSplits.end()) // already split here?
     {
-        const sal_Int32 nStartPos( // skip other's dummy character!
-            (bSplitAtStart && bOtherDummy) ? nSplitPos + 1 : nSplitPos );
-        SwTextAttrNesting * const pNew( MakeTextAttrNesting(
-                rNode, **iter, nStartPos, *(*iter)->GetEnd() ) );
-        (*iter)->SetEnd(nSplitPos);
-        rSplits.insert(iter + 1, pNew);
+        lcl_DoSplitImpl(rSplits, rNode, iter, nSplitPos, bSplitAtStart, bOtherDummy);
     }
 }
 
@@ -436,6 +445,33 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                         assert(SplitNew.front()->GetStart() == nNewStart);
                         SplitNew.front()->SetStart(nNewStart + 1);
                     }
+                }
+            }
+        }
+    }
+
+    // pass 1b: tragically need to check for fieldmarks here too
+    for (auto iter = SplitNew.begin(); iter != SplitNew.end(); ++iter)
+    {
+        SwPaM const temp(rNode, (*iter)->GetStart(), rNode, *(*iter)->GetEnd());
+        std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
+        sw::CalcBreaks(Breaks, temp, true);
+        if (!Breaks.empty())
+        {
+            if (!isSplittable(nNewWhich))
+            {
+                SAL_INFO("sw.core", "cannot insert hint: fieldmark overlap");
+                assert(SplitNew.size() == 1);
+                TextAttrDelete(*rNode.GetDoc(), &rNewHint);
+                return false;
+            }
+            else
+            {
+                for (auto const& rPos : Breaks)
+                {
+                    assert(rPos.first == rNode.GetIndex());
+                    iter = lcl_DoSplitImpl(SplitNew, rNode, iter,
+                        rPos.second, true, true);
                 }
             }
         }
