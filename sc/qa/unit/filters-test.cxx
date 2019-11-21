@@ -68,6 +68,7 @@ public:
     void testContentGnumeric();
     void testSharedFormulaXLS();
     void testSharedFormulaXLSX();
+    void testSharedFormulaRefUpdateXLSX();
     void testSheetNamesXLSX();
     void testLegacyCellAnchoredRotatedShape();
     void testEnhancedProtectionXLS();
@@ -92,6 +93,7 @@ public:
     CPPUNIT_TEST(testContentGnumeric);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSX);
+    CPPUNIT_TEST(testSharedFormulaRefUpdateXLSX);
     CPPUNIT_TEST(testSheetNamesXLSX);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
     CPPUNIT_TEST(testEnhancedProtectionXLS);
@@ -415,6 +417,35 @@ void ScFiltersTest::testSharedFormulaXLSX()
     ScFormulaCellGroupRef xGroup = pCell->GetCellGroup();
     CPPUNIT_ASSERT_MESSAGE("This cell should be a part of a cell group.", xGroup);
     CPPUNIT_ASSERT_MESSAGE("Incorrect group geometry.", xGroup->mpTopCell->aPos.Row() == 1 && xGroup->mnLength == 18);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSharedFormulaRefUpdateXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-formula/refupdate.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    sc::AutoCalcSwitch aACSwitch(rDoc, true); // turn auto calc on.
+    rDoc.DeleteRow(ScRange(0, 4, 0, rDoc.MaxCol(), 4, 0)); // delete row 5.
+
+    struct TestCase {
+        ScAddress aPos;
+        const char* pExpectedFormula;
+        const char* pErrorMsg;
+    };
+
+    TestCase aCases[4] = {
+        { ScAddress(1, 0, 0),  "B29+1", "Wrong formula in B1" },
+        { ScAddress(2, 0, 0),  "C29+1", "Wrong formula in C1" },
+        { ScAddress(3, 0, 0),  "D29+1", "Wrong formula in D1" },
+        { ScAddress(4, 0, 0),  "E29+1", "Wrong formula in E1" },
+    };
+
+    for (size_t nIdx = 0; nIdx < 4; ++nIdx)
+    {
+        TestCase& rCase = aCases[nIdx];
+        ASSERT_FORMULA_EQUAL(rDoc, rCase.aPos, rCase.pExpectedFormula, rCase.pErrorMsg);
+    }
 
     xDocSh->DoClose();
 }
