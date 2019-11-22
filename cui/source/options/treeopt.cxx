@@ -134,11 +134,10 @@ namespace {
 
 struct ModuleToGroupNameMap_Impl
 {
-    const char* m_pModule;
+    OUString    m_pModule;
     OUString    m_sGroupName;
     sal_uInt16  m_nNodeId;
 };
-
 }
 
 static ModuleToGroupNameMap_Impl ModuleMap[] =
@@ -155,40 +154,30 @@ static ModuleToGroupNameMap_Impl ModuleMap[] =
     { "Draw", OUString(), SID_SD_GRAPHIC_OPTIONS },
     { "Charts", OUString(), SID_SCH_EDITOPTIONS },
     { "Base", OUString(), SID_SB_STARBASEOPTIONS },
-
-    { nullptr, OUString(), 0xFFFF }
 };
 
 static void setGroupName( const OUString& rModule, const OUString& rGroupName )
 {
-    sal_uInt16 nIndex = 0;
-    while ( ModuleMap[ nIndex ].m_pModule )
+    for (ModuleToGroupNameMap_Impl& rEntry : ModuleMap)
     {
-        OUString sTemp =
-            OUString::createFromAscii( ModuleMap[ nIndex ].m_pModule );
-        if ( sTemp == rModule )
+        if ( rEntry.m_pModule == rModule )
         {
-            ModuleMap[ nIndex ].m_sGroupName = rGroupName;
+            rEntry.m_sGroupName = rGroupName;
             break;
         }
-        ++nIndex;
     }
 }
 
 static OUString getGroupName( const OUString& rModule, bool bForced )
 {
     OUString sGroupName;
-    sal_uInt16 nIndex = 0;
-    while ( ModuleMap[ nIndex ].m_pModule )
+    for (const ModuleToGroupNameMap_Impl& rEntry : ModuleMap)
     {
-        OUString sTemp =
-            OUString::createFromAscii( ModuleMap[ nIndex ].m_pModule );
-        if ( sTemp == rModule )
+        if ( rEntry.m_pModule == rModule )
         {
-            sGroupName = ModuleMap[ nIndex ].m_sGroupName;
+            sGroupName = rEntry.m_sGroupName;
             break;
         }
-        ++nIndex;
     }
 
     if ( sGroupName.isEmpty() && bForced )
@@ -213,24 +202,20 @@ static OUString getGroupName( const OUString& rModule, bool bForced )
 
 static void deleteGroupNames()
 {
-    sal_uInt16 nIndex = 0;
-    while ( ModuleMap[ nIndex ].m_pModule )
-        ModuleMap[ nIndex++ ].m_sGroupName.clear();
+    for (ModuleToGroupNameMap_Impl& rEntry : ModuleMap)
+        rEntry.m_sGroupName.clear();
 }
 
 static sal_uInt16 getGroupNodeId( const OUString& rModule )
 {
-    sal_uInt16 nNodeId = 0xFFFF, nIndex = 0;
-    while ( ModuleMap[ nIndex ].m_pModule )
+    sal_uInt16 nNodeId = 0xFFFF;
+    for (const ModuleToGroupNameMap_Impl& rEntry : ModuleMap)
     {
-        OUString sTemp =
-            OUString::createFromAscii( ModuleMap[ nIndex ].m_pModule );
-        if ( sTemp == rModule )
+        if ( rEntry.m_pModule == rModule )
         {
-            nNodeId = ModuleMap[ nIndex ].m_nNodeId;
+            nNodeId = rEntry.m_nNodeId;
             break;
         }
-        ++nIndex;
     }
 
     return nNodeId;
