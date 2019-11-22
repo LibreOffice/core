@@ -32,10 +32,6 @@
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
 
-static void impl_sleep( sal_uInt32 nSec )
-{
-    osl::Thread::wait( std::chrono::seconds(nSec) );
-}
 HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
     const fs::path &in_src, const fs::path &in_zipdir, const fs::path &in_resCompactStylesheet,
     const fs::path &in_resEmbStylesheet, const std::string &in_module, const std::string &in_lang,
@@ -124,10 +120,6 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
     if( bExtensionMode )
     {
         res = xmlParseFile(filePath.native_file_string().c_str());
-        if( !res ){
-            impl_sleep( 3 );
-            res = xmlParseFile(filePath.native_file_string().c_str());
-        }
     }
     else
     {
@@ -146,11 +138,6 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
             params[nbparams] = nullptr;
         }
         xmlDocPtr doc = xmlParseFile(filePath.native_file_string().c_str());
-        if( !doc )
-        {
-            impl_sleep( 3 );
-            doc = xmlParseFile(filePath.native_file_string().c_str());
-        }
 
         saveXhpForJar( doc, filePath );
 
@@ -454,14 +441,9 @@ void HelpCompiler::compile()
 
     if (!docResolvedOrg)
     {
-        impl_sleep( 3 );
-        docResolvedOrg = getSourceDocument(inputFile);
-        if( !docResolvedOrg )
-        {
-            std::stringstream aStrStream;
-            aStrStream << "ERROR: file not existing: " << inputFile.native_file_string().c_str() << std::endl;
-            throw HelpProcessingException( HelpProcessingErrorClass::General, aStrStream.str() );
-        }
+        std::stringstream aStrStream;
+        aStrStream << "ERROR: file not existing: " << inputFile.native_file_string().c_str() << std::endl;
+        throw HelpProcessingException( HelpProcessingErrorClass::General, aStrStream.str() );
     }
 
     std::string documentId;
