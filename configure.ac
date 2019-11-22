@@ -3404,6 +3404,13 @@ if test "$_os" = "WINNT"; then
                 regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin/amd64"
             fi
             MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
+        elif test $vcnum = "140"; then
+            if test "$BITNESS_OVERRIDE" = ""; then
+                regvalue="$VC_PRODUCT_DIR/../MSBuild/15.0/Bin"
+            else
+                regvalue="$VC_PRODUCT_DIR/../MSBuild/15.0/Bin/amd64"
+            fi
+            MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
         else
             AC_MSG_ERROR([No msbuild found, Visual Studio installation broken?])
         fi
@@ -3414,7 +3421,7 @@ if test "$_os" = "WINNT"; then
     # MSVC 2017 devenv does not start properly from a DOS 8.3 path
     DEVENV=$(cygpath -lm "$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe")
     if test ! -e "$DEVENV"; then
-        AC_MSG_ERROR([No devenv.exe found, Visual Studio installation broken?])
+        AC_MSG_WARN([No devenv.exe found, Visual Studio installation broken?])
     fi
 
     dnl ===========================================================
