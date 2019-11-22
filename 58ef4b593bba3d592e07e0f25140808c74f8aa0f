@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_158f8e75",
+        "filename": "cppuhelper/source/servicemanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-11-22T16:33:42Z",
+      "side": 1,
+      "message": "This requires C++17. I thought we don\u0027t allow that on this branch?",
+      "revId": "58ef4b593bba3d592e07e0f25140808c74f8aa0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
