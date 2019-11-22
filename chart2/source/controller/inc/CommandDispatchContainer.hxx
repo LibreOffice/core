@@ -103,6 +103,8 @@ public:
             const css::uno::Reference< css::frame::XController > & xChartController,
             const css::util::URL & rURL );
 
+    css::uno::Reference< css::frame::XDispatch > getChartDispatcher() { return m_xChartDispatcher; }
+
     void setDrawCommandDispatch( DrawCommandDispatch* pDispatch );
     DrawCommandDispatch* getDrawCommandDispatch() { return m_pDrawCommandDispatch; }
     void setShapeController( ShapeController* pController );
