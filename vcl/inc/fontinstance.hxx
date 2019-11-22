@@ -71,6 +71,7 @@ public: // TODO: make data members private
     const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 
     const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
+    PhysicalFontFace* GetFontFace() { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
 
     bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
