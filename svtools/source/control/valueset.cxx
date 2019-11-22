@@ -18,11 +18,15 @@
  */
 
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
+#include <comphelper/base64.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/cvtgrf.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
@@ -1440,6 +1444,9 @@ boost::property_tree::ptree ValueSet::DumpAsPropertyTree()
     boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
     boost::property_tree::ptree aEntries;
 
+    ErrCode nErrCode;
+    OUStringBuffer aBuffer;
+    SvMemoryStream aStream;
     const size_t nSize = mItemList.size();
 
     for ( size_t nIt = 0; nIt < nSize; ++nIt )
@@ -1447,8 +1454,32 @@ boost::property_tree::ptree ValueSet::DumpAsPropertyTree()
         boost::property_tree::ptree aEntry;
         ValueSetItem* pItem = mItemList[nIt].get();
         aEntry.put("id", pItem->mnId);
-        aEntry.put("image", pItem->maImage.GetStock());
-        if (mnSelItemId == pItem->mnId) {
+        if ( !pItem->maImage.GetStock().isEmpty() )
+        {
+            aEntry.put("image", pItem->maImage.GetStock());
+        }
+        else
+        {
+            Graphic aGraphic(pItem->maImage);
+
+            nErrCode = GraphicConverter::Export(aStream, aGraphic, ConvertDataFormat::PNG);
+            if ( nErrCode )
+            {
+                SAL_WARN("svtools", "GraphicConverter::Export() invalid Graphic? error: " << nErrCode );
+            }
+            else
+            {
+                css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const *>(aStream.GetData()), aStream.TellEnd());
+                aStream.Seek(0);
+
+                aBuffer.append("data:image/png;base64,");
+                ::comphelper::Base64::encode(aBuffer, aSeq);
+                aEntry.put("image64", aBuffer.makeStringAndClear().toUtf8());
+            }
+        }
+
+        if (mnSelItemId == pItem->mnId)
+        {
             aEntry.put("selected", true);
         }
 
