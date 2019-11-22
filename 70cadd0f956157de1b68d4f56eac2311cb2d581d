@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_4f3d75c2",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2019-11-22T06:13:49Z",
+      "side": 1,
+      "message": "Won\u0027t that change?",
+      "revId": "70cadd0f956157de1b68d4f56eac2311cb2d581d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_6f3ab1cc",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2019-11-22T06:13:49Z",
+      "side": 1,
+      "message": "won\u0027t these change?",
+      "revId": "70cadd0f956157de1b68d4f56eac2311cb2d581d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
