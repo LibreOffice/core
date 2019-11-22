@@ -401,7 +401,8 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
     switch (nType)
     {
         case Type::SHEET:
-            xRet.set(static_cast<sheet::XSpreadsheet*>(new ScTableSheetObj(pDocShell,0)));
+            //  not inserted yet - DocShell=Null
+            xRet.set(static_cast<sheet::XSpreadsheet*>(new ScTableSheetObj(nullptr,0)));
             break;
         case Type::URLFIELD:
         case Type::PAGEFIELD:
