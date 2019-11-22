@@ -34,7 +34,7 @@ class X11SalFrame;
 
 namespace vcl_sal {
 
-class VCLPLUG_GEN_PUBLIC WMAdaptor
+class WMAdaptor
 {
 public:
     enum WMAtom {

@@ -49,7 +49,7 @@ struct LineArrowProperties
     void                assignUsed( const LineArrowProperties& rSourceProps );
 };
 
-struct OOX_DLLPUBLIC LineProperties
+struct LineProperties
 {
     typedef ::std::pair< sal_Int32, sal_Int32 > DashStop;
     typedef ::std::vector< DashStop >           DashStopVector;

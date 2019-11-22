@@ -60,7 +60,7 @@ enum DrawingType
 
 
 /** Contains information about an OLE object embedded in a draw page. */
-struct OOX_DLLPUBLIC OleObjectInfo : public ::oox::ole::OleObjectInfo
+struct OleObjectInfo : public ::oox::ole::OleObjectInfo
 {
     OUString     maShapeId;          ///< Shape identifier for shape lookup.
     OUString     maName;             ///< Programmatical name of the OLE object.

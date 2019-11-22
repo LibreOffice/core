@@ -28,7 +28,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfE3dScene : public ViewObjectContactOfSdrObj
+        class ViewObjectContactOfE3dScene : public ViewObjectContactOfSdrObj
         {
         protected:
             // 2d primitive creator
