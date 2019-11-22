@@ -38,6 +38,7 @@ public:
     void testRhbz1390776();
     void testTdf104310();
     void testTdf31231();
+    void testTdf128951();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf64229);
@@ -53,6 +54,7 @@ public:
     CPPUNIT_TEST(testRhbz1390776);
     CPPUNIT_TEST(testTdf104310);
     CPPUNIT_TEST(testTdf31231);
+    CPPUNIT_TEST(testTdf128951);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -295,6 +297,32 @@ void ScFiltersTest::testTdf31231()
     CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", !xDocSh->IsModified());
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf128951()
+{
+    css::uno::Reference<css::frame::XDesktop2> xDesktop
+        = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    // 1. Create spreadsheet
+    css::uno::Sequence<css::beans::PropertyValue> aHiddenArgList(1);
+    aHiddenArgList[0].Name = "Hidden";
+    aHiddenArgList[0].Value <<= true;
+
+    css::uno::Reference<css::lang::XComponent> xComponent
+        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, aHiddenArgList);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // 2. Create a new sheet instance
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xComponent,
+                                                              css::uno::UNO_QUERY_THROW);
+    auto xSheet = xFac->createInstance("com.sun.star.sheet.Spreadsheet");
+
+    // 3. Insert sheet into the spreadsheet (was throwing IllegalArgumentException)
+    css::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(xComponent,
+                                                               css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_NO_THROW(xDoc->getSheets()->insertByName("mustNotThrow", css::uno::Any(xSheet)));
 }
 
 ScFiltersTest::ScFiltersTest()

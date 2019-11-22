@@ -6568,8 +6568,15 @@ sal_Int16 SAL_CALL ScCellObj::resetActionLocks()
     return nRet;
 }
 
+static ScRange MaxDocRange(ScDocShell* pDocSh, SCTAB nTab)
+{
+    const SCCOL nMaxcol = pDocSh ? pDocSh->GetDocument().MaxCol() : MAXCOL;
+    const SCROW nMaxRow = pDocSh ? pDocSh->GetDocument().MaxRow() : MAXROW;
+    return ScRange(0, 0, nTab, nMaxcol, nMaxRow, nTab);
+}
+
 ScTableSheetObj::ScTableSheetObj( ScDocShell* pDocSh, SCTAB nTab ) :
-    ScCellRangeObj( pDocSh, ScRange(0,0,nTab, pDocSh->GetDocument().MaxCol(), pDocSh->GetDocument().MaxRow(),nTab) ),
+    ScCellRangeObj( pDocSh, MaxDocRange(pDocSh, nTab) ),
     pSheetPropSet(lcl_GetSheetPropertySet())
 {
 }
