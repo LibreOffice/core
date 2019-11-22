@@ -44,6 +44,7 @@
 #include <servicenames_charttypes.hxx>
 #include "DrawCommandDispatch.hxx"
 #include <PopupRequest.hxx>
+#include "ControllerCommandDispatch.hxx"
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -1283,6 +1284,18 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {
                 PopupMenu* pPopupMenu = static_cast<PopupMenu*>(comphelper::getUnoTunnelImplementation<VCLXMenu>(xPopupMenu)->GetMenu());
+                ControllerCommandDispatch* pCommandDispatch = dynamic_cast<ControllerCommandDispatch*>(m_aDispatchContainer.getChartDispatcher().get());
+                if(pCommandDispatch)
+                {
+                    for (sal_uInt16 nPos = 0; nPos < pPopupMenu->GetItemCount(); nPos++)
+                    {
+                        const sal_uInt16 nItemId = pPopupMenu->GetItemId(nPos);
+                        OUString aCommandURL = pPopupMenu->GetItemCommand(nItemId);
+                        if(!pCommandDispatch->commandAvailable(aCommandURL))
+                            pPopupMenu->EnableItem(nItemId, false);
+                    }
+                }
+
                 boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(pPopupMenu);
                 boost::property_tree::ptree aRoot;
                 aRoot.add_child("menu", aMenu);
