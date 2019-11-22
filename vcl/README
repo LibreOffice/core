@@ -201,3 +201,42 @@ To de-compress the contents of a PDF file written by a release build or
 other programs, use the "pdfunzip" tool:
 
 bin/run pdfunzip input.pdf output.pdf
+
+=== SolarMutexGuard ===
+
+The solar mutex is the "big kernel lock" of LibreOffice, a global one. It's a
+recursive mutex, so it's allowed to take the lock on the same thread multiple
+times, and only the last unlock will actually release the mutex.
+
+UNO methods on components can be called from multiple threads, while the
+majority of the codebase is not prepared for multi-threading. One way to get
+around this mismatch is to create a SolarMutexGuard instance at the start of
+each & every UNO method implementation, but only when it is necessary:
+
+- Only acquire the SolarMutex if you actually need it (e.g., not in functions
+  that return static information).
+
+- Only around the code that actually needs it (i.e., never call out with it
+  locked).
+
+This way you ensure that code (not prepared for multithreading) is still
+executed only on a single thread.
+
+In case you expect that your caller takes the solar mutex, then you can use
+the DBG_TESTSOLARMUTEX() macro to assert that in dbgutil builds.
+
+Event listeners are a special (but frequent) case of the "never call out with
+a mutex (SolarMutex or other) locked" fundamental rule:
+
+- UNO methods can be called from multiple threads, so most implementations
+  take the solar mutex as their first action when necessary.
+
+- This can be problematic if later calling out (an event handler is called),
+  where the called function may be an UNO method implementation as well and
+  may be invoked on a different thread.
+
+- So we try to not own the solar mutex, whenever we call out (invoke event
+  listeners).
+
+In short, never hold any mutex unless necessary, especially not when calling
+out.
