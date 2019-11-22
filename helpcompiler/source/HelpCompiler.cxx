@@ -111,18 +111,20 @@ void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
     xmlFreeDoc(compacted);
 }
 
-
 xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
 {
-    static xsltStylesheetPtr cur = nullptr;
-
     xmlDocPtr res;
-    if( bExtensionMode )
+    if (bExtensionMode)
     {
+        // this is the mode when used within LibreOffice for importing help
+        // bundled with an extension
         res = xmlParseFile(filePath.native_file_string().c_str());
     }
     else
     {
+        // this is the mode when used at build time to generate LibreOffice
+        // help from its xhp source
+        static xsltStylesheetPtr cur = nullptr;
         static const char *params[2 + 1];
         if (!cur)
         {
