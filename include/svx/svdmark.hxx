@@ -224,7 +224,7 @@ public:
 
 namespace sdr
 {
-    class SVX_DLLPUBLIC ViewSelection
+    class ViewSelection
     {
         SdrMarkList                 maMarkedObjectList;
         SdrMarkList                 maEdgesOfMarkedNodes;
@@ -233,8 +233,8 @@ namespace sdr
 
         bool                        mbEdgesOfMarkedNodesDirty : 1;
 
-        SVX_DLLPRIVATE void ImpForceEdgesOfMarkedNodes();
-        SVX_DLLPRIVATE void ImplCollectCompleteSelection(SdrObject* pObj);
+        void ImpForceEdgesOfMarkedNodes();
+        void ImplCollectCompleteSelection(SdrObject* pObj);
 
     public:
         ViewSelection();

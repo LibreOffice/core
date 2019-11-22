@@ -26,7 +26,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayTriangle final : public OverlayObjectWithBasePosition
+        class OverlayTriangle final : public OverlayObjectWithBasePosition
         {
             // second and third position in pixel
             basegfx::B2DPoint const                       maSecondPosition;

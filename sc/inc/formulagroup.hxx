@@ -108,7 +108,7 @@ struct FormulaGroupContext
 /**
  * Abstract base class for a "compiled" formula
  */
-class SC_DLLPUBLIC CompiledFormula
+class CompiledFormula
 {
 public:
     CompiledFormula();
@@ -119,7 +119,7 @@ public:
  * Abstract base class for vectorised formula group interpreters,
  * plus a global instance factory.
  */
-class SC_DLLPUBLIC FormulaGroupInterpreter
+class FormulaGroupInterpreter
 {
     static FormulaGroupInterpreter *msInstance;
 

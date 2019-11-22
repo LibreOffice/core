@@ -32,7 +32,7 @@ namespace oox { namespace ole { class OleStorage; } }
 namespace oox {
 namespace core {
 
-class OOX_DLLPUBLIC DocumentDecryption
+class DocumentDecryption
 {
 private:
     enum CryptoType

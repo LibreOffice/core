@@ -25,7 +25,7 @@
 
 namespace sw
 {
-    struct SW_DLLPUBLIC UnoCursorHint final : public SfxHint
+    struct UnoCursorHint final : public SfxHint
     {
         UnoCursorHint() {}
         virtual ~UnoCursorHint() override;

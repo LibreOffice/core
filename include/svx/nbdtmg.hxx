@@ -146,7 +146,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
 };
 
 
-class SVX_DLLPUBLIC BulletsTypeMgr final : public NBOTypeMgrBase
+class BulletsTypeMgr final : public NBOTypeMgrBase
 {
     friend class OutlineTypeMgr;
     friend class NumberingTypeMgr;
@@ -168,7 +168,7 @@ class SVX_DLLPUBLIC BulletsTypeMgr final : public NBOTypeMgrBase
 };
 
 
-class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
+class NumberingTypeMgr: public NBOTypeMgrBase
 {
     private:
         NumberingTypeMgr(const NumberingTypeMgr&) = delete;
@@ -187,7 +187,7 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
         static NumberingTypeMgr& GetInstance();
 };
 
-class SVX_DLLPUBLIC OutlineTypeMgr: public NBOTypeMgrBase
+class OutlineTypeMgr: public NBOTypeMgrBase
 {
     private:
         OutlineTypeMgr(const OutlineTypeMgr&) = delete;

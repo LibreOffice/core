@@ -25,7 +25,7 @@ namespace svx { namespace sidebar {
 
 /** Provide some improvements over the standard DialControl.
 */
-class SVX_DLLPUBLIC SidebarDialControl final : public svx::DialControl
+class SidebarDialControl final : public svx::DialControl
 {
 public:
     SidebarDialControl (vcl::Window* pParent, WinBits nBits);

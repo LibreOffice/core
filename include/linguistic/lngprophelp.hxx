@@ -118,8 +118,8 @@ public:
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override;
 
     // non-UNO functions
-    void    LNG_DLLPUBLIC AddAsPropListener();
-    void    LNG_DLLPUBLIC RemoveAsPropListener();
+    void    AddAsPropListener();
+    void    RemoveAsPropListener();
     void    LaunchEvent( const css::linguistic2::LinguServiceEvent& rEvt );
 
     const css::uno::Sequence< OUString > &
@@ -167,7 +167,7 @@ public:
 };
 
 
-class LNG_DLLPUBLIC PropertyHelper_Spell :
+class PropertyHelper_Spell :
     public PropertyChgHelper
 {
     // default values

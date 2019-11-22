@@ -37,7 +37,7 @@ namespace property
 namespace impl
 { class ImplOPropertySet; }
 
-class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
+class OPropertySet :
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet
     public ::cppu::OPropertySetHelper,

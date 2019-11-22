@@ -50,7 +50,7 @@ namespace ole {
 
 class VbaModule;
 
-class OOX_DLLPUBLIC VbaFilterConfig
+class VbaFilterConfig
 {
 public:
     explicit            VbaFilterConfig(
