@@ -35,6 +35,7 @@
 #include <globals.hrc>
 #include <ndtxt.hxx>
 #include <strings.hrc>
+#include <svtools/miscopt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -334,6 +335,15 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
 
     m_xForbiddenChars->set_label(SwResId(STR_BOOKMARK_FORBIDDENCHARS) + " " + BookmarkTable::aForbiddenChars);
     m_xForbiddenChars->set_visible(false);
+
+    SvtMiscOptions aMiscOpt;
+    if ( !aMiscOpt.IsExperimentalMode() )
+    {
+        m_xHideCB->set_visible( false );
+        m_xConditionFT->set_visible( false );
+        m_xConditionED->set_visible( false );
+    }
+
 }
 
 IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
