@@ -1647,7 +1647,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     {
         SdrObject* pShape = GetSdrObjectFromXShape( rXShape );
         nRotation = pShape ? pShape->GetRotateAngle() : 0;
-        if ( nRotation != 0 && GetDocumentType() != DOCUMENT_DOCX )
+        if ( GetDocumentType() != DOCUMENT_DOCX )
         {
             int faccos=bFlipV ? -1 : 1;
             int facsin=bFlipH ? -1 : 1;
