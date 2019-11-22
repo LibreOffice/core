@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_da64e524",
+        "filename": "cui/uiconfig/ui/optgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-11-22T15:46:14Z",
+      "side": 1,
+      "message": "Out HIG recommends using title case. This button could be named thus: “Windows Default Apps”",
+      "revId": "17d185a94dbd533ba4d80fc8a77f1534727466b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
