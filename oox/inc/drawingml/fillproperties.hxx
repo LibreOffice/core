@@ -126,7 +126,7 @@ struct BlipFillProperties
     void                assignUsed( const BlipFillProperties& rSourceProps );
 };
 
-struct OOX_DLLPUBLIC FillProperties
+struct FillProperties
 {
     OptValue< sal_Int32 > moFillType;           /// Fill type (OOXML token).
     Color               maFillColor;            /// Solid fill color and transparence.

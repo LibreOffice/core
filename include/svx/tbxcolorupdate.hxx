@@ -42,7 +42,7 @@ namespace svx
 
         formerly known as SvxTbxButtonColorUpdater_Impl, residing in svx/source/tbxctrls/colorwindow.hxx.
     */
-    class SVX_DLLPUBLIC ToolboxButtonColorUpdater
+    class ToolboxButtonColorUpdater
     {
     public:
                     ToolboxButtonColorUpdater( sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton,

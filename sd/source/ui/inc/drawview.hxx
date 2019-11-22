@@ -30,7 +30,7 @@ class DrawViewShell;
 /**
  * Derivative of ::sd::View; contains also a pointer to the document
  */
-class SD_DLLPUBLIC DrawView : public ::sd::View
+class DrawView : public ::sd::View
 {
 public:
 

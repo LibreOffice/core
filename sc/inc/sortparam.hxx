@@ -81,7 +81,7 @@ struct SC_DLLPUBLIC ScSortParam
 
 namespace sc {
 
-struct SC_DLLPUBLIC ReorderParam
+struct ReorderParam
 {
     /**
      * This sort range already takes into account the presence or absence of

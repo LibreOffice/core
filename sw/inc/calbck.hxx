@@ -60,14 +60,14 @@ class SfxPoolItem;
 namespace sw
 {
     class ClientIteratorBase;
-    struct SW_DLLPUBLIC LegacyModifyHint final: SfxHint
+    struct LegacyModifyHint final: SfxHint
     {
         LegacyModifyHint(const SfxPoolItem* pOld, const SfxPoolItem* pNew) : m_pOld(pOld), m_pNew(pNew) {};
         virtual ~LegacyModifyHint() override;
         const SfxPoolItem* m_pOld;
         const SfxPoolItem* m_pNew;
     };
-    struct SW_DLLPUBLIC ModifyChangedHint final: SfxHint
+    struct ModifyChangedHint final: SfxHint
     {
         ModifyChangedHint(const SwModify* pNew) : m_pNew(pNew) {};
         virtual ~ModifyChangedHint() override;

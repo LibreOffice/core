@@ -26,7 +26,7 @@
 
 namespace vcl
 {
-class VCL_DLLPUBLIC BitmapScaleConvolutionFilter : public BitmapFilter
+class BitmapScaleConvolutionFilter : public BitmapFilter
 {
 protected:
     BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY, std::unique_ptr<Kernel> pKernel)

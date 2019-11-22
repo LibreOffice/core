@@ -36,7 +36,7 @@ namespace svxform
             @param _rxFrame
                 the frame to analyze
         */
-        SVX_DLLPUBLIC FormToolboxes(
+        FormToolboxes(
             const css::uno::Reference< css::frame::XFrame >& _rxFrame
         );
 

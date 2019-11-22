@@ -75,7 +75,7 @@ public:
     virtual ~Crypto();
 };
 
-class OOX_DLLPUBLIC Decrypt final : public Crypto
+class Decrypt final : public Crypto
 {
 public:
     Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);
@@ -93,7 +93,7 @@ public:
 
 };
 
-class OOX_DLLPUBLIC Encrypt final : public Crypto
+class Encrypt final : public Crypto
 {
 public:
     Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);

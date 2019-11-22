@@ -266,25 +266,25 @@ namespace sw
         DELETE_FRAMES,
         POST_RESTORE_FLY_ANCHOR,
     };
-    struct SW_DLLPUBLIC DrawFrameFormatHint final: SfxHint
+    struct DrawFrameFormatHint final: SfxHint
     {
         DrawFrameFormatHintId const m_eId;
         DrawFrameFormatHint(DrawFrameFormatHintId eId) : m_eId(eId) {};
         virtual ~DrawFrameFormatHint() override;
     };
-    struct SW_DLLPUBLIC CheckDrawFrameFormatLayerHint final: SfxHint
+    struct CheckDrawFrameFormatLayerHint final: SfxHint
     {
         bool* m_bCheckControlLayer;
         CheckDrawFrameFormatLayerHint(bool* bCheckControlLayer) : m_bCheckControlLayer(bCheckControlLayer) {};
         virtual ~CheckDrawFrameFormatLayerHint() override;
     };
-    struct SW_DLLPUBLIC ContactChangedHint final: SfxHint
+    struct ContactChangedHint final: SfxHint
     {
         SdrObject** m_ppObject;
         ContactChangedHint(SdrObject** ppObject) : m_ppObject(ppObject) {};
         virtual ~ContactChangedHint() override;
     };
-    struct SW_DLLPUBLIC DrawFormatLayoutCopyHint final : SfxHint
+    struct DrawFormatLayoutCopyHint final : SfxHint
     {
         SwDrawFrameFormat& m_rDestFormat;
         SwDoc& m_rDestDoc;
@@ -314,31 +314,31 @@ namespace sw
         WW8AnchorConvHint(WW8AnchorConvResult& rResult) : m_rResult(rResult) {};
         virtual ~WW8AnchorConvHint() override;
     };
-    struct SW_DLLPUBLIC RestoreFlyAnchorHint final : SfxHint
+    struct RestoreFlyAnchorHint final : SfxHint
     {
         const Point m_aPos;
         RestoreFlyAnchorHint(Point aPos) : m_aPos(aPos) {};
         virtual ~RestoreFlyAnchorHint() override;
     };
-    struct SW_DLLPUBLIC CreatePortionHint final : SfxHint
+    struct CreatePortionHint final : SfxHint
     {
         SwDrawContact** m_ppContact;
         CreatePortionHint(SwDrawContact** ppContact) : m_ppContact(ppContact) {};
         virtual ~CreatePortionHint() override;
     };
-    struct SW_DLLPUBLIC CollectTextObjectsHint final : SfxHint
+    struct CollectTextObjectsHint final : SfxHint
     {
         std::list<SdrTextObj*>& m_rTextObjects;
         CollectTextObjectsHint(std::list<SdrTextObj*>& rTextObjects) : m_rTextObjects(rTextObjects) {};
         virtual ~CollectTextObjectsHint() override;
     };
-    struct SW_DLLPUBLIC GetZOrderHint final : SfxHint
+    struct GetZOrderHint final : SfxHint
     {
         sal_uInt32& m_rnZOrder;
         GetZOrderHint(sal_uInt32& rnZOrder) : m_rnZOrder(rnZOrder) {};
         virtual ~GetZOrderHint() override;
     };
-    struct SW_DLLPUBLIC GetObjectConnectedHint final : SfxHint
+    struct GetObjectConnectedHint final : SfxHint
     {
         bool& m_risConnected;
         const SwRootFrame* m_pRoot;

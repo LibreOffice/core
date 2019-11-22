@@ -72,7 +72,7 @@ struct CellPos
 
 
 /// TableStyleSettings
-struct SVX_DLLPUBLIC TableStyleSettings
+struct TableStyleSettings
 {
     bool mbUseFirstRow;
     bool mbUseLastRow;

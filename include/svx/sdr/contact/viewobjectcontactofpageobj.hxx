@@ -29,7 +29,7 @@ namespace sdr { namespace contact {
 
 class PagePrimitiveExtractor;
 
-class SVX_DLLPUBLIC ViewObjectContactOfPageObj final : public ViewObjectContactOfSdrObj
+class ViewObjectContactOfPageObj final : public ViewObjectContactOfSdrObj
 {
 private:
     // the page painter helper
