@@ -2238,10 +2238,9 @@ void DomainMapper_Impl::PopPageHeaderFooter()
     }
 }
 
-
 void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
-    assert(!m_bInFootOrEndnote);
+    SAL_WARN_IF(m_bInFootOrEndnote, "writerfilter.dmapper", "PushFootOrEndnote() is called from another foot or endnote");
     m_bInFootOrEndnote = true;
     m_bCheckFirstFootnoteTab = true;
     m_bSaveFirstParagraphInCell = m_bFirstParagraphInCell;
