@@ -628,7 +628,8 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
                 aName = aBaseName + OUString::number(++nSuffix);
             }
         }
-        else if (!bFormatColl && m_rExport.m_pStyles->GetStyleId(nPos).startsWith("ListLabel"))
+        else if (!bFormatColl && m_rExport.GetExportFormat() == MSWordExportBase::DOCX &&
+                        m_rExport.m_pStyles->GetStyleId(nPos).startsWith("ListLabel"))
         {
             // tdf#92335 don't export redundant DOCX import style "ListLabel"
             return;
