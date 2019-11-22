@@ -31,7 +31,7 @@ namespace svxform { namespace charset_helper
     /** enumerates all supported charsets
         @return the number of charsets supported
     */
-    SVX_DLLPUBLIC sal_Int32 getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs );
+    sal_Int32 getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs );
 
 }
 }

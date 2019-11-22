@@ -28,7 +28,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfPageSubObject : public ViewObjectContact
+        class ViewObjectContactOfPageSubObject : public ViewObjectContact
         {
         protected:
             const SdrPage& getPage() const;
@@ -47,7 +47,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfPageBackground : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageBackground : public ViewObjectContactOfPageSubObject
         {
         protected:
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
@@ -65,7 +65,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfMasterPage : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfMasterPage : public ViewObjectContactOfPageSubObject
         {
         protected:
         public:
@@ -81,7 +81,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfPageFill : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageFill : public ViewObjectContactOfPageSubObject
         {
         protected:
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
@@ -99,7 +99,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfPageShadow : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageShadow : public ViewObjectContactOfPageSubObject
         {
         public:
             ViewObjectContactOfPageShadow(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -114,7 +114,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfOuterPageBorder : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfOuterPageBorder : public ViewObjectContactOfPageSubObject
         {
         public:
             ViewObjectContactOfOuterPageBorder(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -129,7 +129,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfInnerPageBorder : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfInnerPageBorder : public ViewObjectContactOfPageSubObject
         {
         public:
             ViewObjectContactOfInnerPageBorder(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -144,7 +144,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfPageHierarchy : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageHierarchy : public ViewObjectContactOfPageSubObject
         {
         public:
             ViewObjectContactOfPageHierarchy(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -159,7 +159,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfPageGrid : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageGrid : public ViewObjectContactOfPageSubObject
         {
         protected:
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
@@ -177,7 +177,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfPageHelplines : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageHelplines : public ViewObjectContactOfPageSubObject
         {
         protected:
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
@@ -195,7 +195,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfSdrPage : public ViewObjectContact
+        class ViewObjectContactOfSdrPage : public ViewObjectContact
         {
         public:
             ViewObjectContactOfSdrPage(ObjectContact& rObjectContact, ViewContact& rViewContact);

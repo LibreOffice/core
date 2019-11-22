@@ -41,8 +41,8 @@ public:
         the total number of calls to release() by a platform dependent amount
         (which, hopefully, is quite large).
      */
-    SD_DLLPUBLIC void acquire();
-    SD_DLLPUBLIC void release();
+    void acquire();
+    void release();
 
     void Dispose();
 

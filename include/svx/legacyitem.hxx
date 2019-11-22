@@ -37,21 +37,21 @@ namespace legacy
 {
     namespace SvxOrientation
     {
-        sal_uInt16 SVX_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void SVX_DLLPUBLIC Create(SvxOrientationItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        SVX_DLLPUBLIC SvStream& Store(const SvxOrientationItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion);
+        void Create(SvxOrientationItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        SvStream& Store(const SvxOrientationItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
     namespace SvxMargin
     {
-        sal_uInt16 SVX_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void SVX_DLLPUBLIC Create(SvxMarginItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        SVX_DLLPUBLIC SvStream& Store(const SvxMarginItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion);
+        void Create(SvxMarginItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        SvStream& Store(const SvxMarginItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
     namespace SvxRotateMode
     {
-        sal_uInt16 SVX_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void SVX_DLLPUBLIC Create(SvxRotateModeItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        SVX_DLLPUBLIC SvStream& Store(const SvxRotateModeItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion);
+        void Create(SvxRotateModeItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        SvStream& Store(const SvxRotateModeItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 }
 

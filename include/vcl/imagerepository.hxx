@@ -33,7 +33,7 @@ namespace vcl
     //= ImageRepository
 
     // provides access to the application's image repository (image.zip)
-    class VCL_DLLPUBLIC ImageRepository
+    class ImageRepository
     {
     public:
         /** loads an image from the application's image repository

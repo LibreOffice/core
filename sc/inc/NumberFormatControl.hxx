@@ -25,7 +25,7 @@
 
 namespace sc {
 
-class SC_DLLPUBLIC ScNumberFormatControl final : public SfxToolBoxControl
+class ScNumberFormatControl final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

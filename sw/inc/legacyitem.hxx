@@ -33,9 +33,9 @@ namespace legacy
 {
     namespace SwFormatVert
     {
-        sal_uInt16 SW_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void SW_DLLPUBLIC Create(SwFormatVertOrient& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        SW_DLLPUBLIC SvStream& Store(const SwFormatVertOrient& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion);
+        void Create(SwFormatVertOrient& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        SvStream& Store(const SwFormatVertOrient& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 }
 
