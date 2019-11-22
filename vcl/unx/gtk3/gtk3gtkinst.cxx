@@ -6195,7 +6195,7 @@ void GtkInstanceDialog::asyncresponse(gint ret)
         g_signal_handler_disconnect(m_pDialog, nResponseSignalId);
     if (nCancelSignalId)
         g_signal_handler_disconnect(m_pDialog, nCancelSignalId);
-    if (m_nSignalDeleteId)
+    if (nSignalDeleteId)
         g_signal_handler_disconnect(m_pDialog, nSignalDeleteId);
 
     xDialogController.reset();
