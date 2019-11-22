@@ -2089,7 +2089,7 @@ void checkMatrixRange(ScDocument& rDoc, const ScRange& rRange)
             const ScFormulaCell* pCell = rDoc.GetFormulaCell(aPos);
             CPPUNIT_ASSERT_MESSAGE("This must be a formula cell.", pCell);
 
-            bIsMatrix = pCell->GetMatrixOrigin(aMatOrigin);
+            bIsMatrix = pCell->GetMatrixOrigin(&rDoc, aMatOrigin);
             CPPUNIT_ASSERT_MESSAGE("Not a part of matrix formula.", bIsMatrix);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong matrix origin.", aMatRange.aStart, aMatOrigin);
         }
@@ -2792,7 +2792,7 @@ void ScExportTest::testSharedFormulaExportXLS()
                     return false;
                 }
 
-                OUString aFormula = pFC->GetCode()->CreateString(&rDoc, aCxt, aPos);
+                OUString aFormula = pFC->GetCode()->CreateString(aCxt, aPos);
                 aExpected = "Coefficients!RC[-1]";
                 if (aFormula != aExpected)
                 {

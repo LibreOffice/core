@@ -325,7 +325,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
                     if ( !bEnd )
                     {
-                        if ( ValidRow(nRow) )
+                        if ( rDoc.ValidRow(nRow) )
                         {
                             nCol = rParam.nCol1;
                             for (long i=0; i<nColCount; i++)

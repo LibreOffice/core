@@ -167,7 +167,7 @@ public:
      */
     bool IsValidReference(const ScDocument* pDoc) const;
 
-    formula::FormulaToken* CreateToken() const;   // create typified token
+    formula::FormulaToken* CreateToken(const ScDocument* pDoc) const;   // create typified token
 };
 
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
@@ -216,6 +216,7 @@ public:
                 const OUString& rName ) const = 0;
 
         virtual void makeExternalRefStr(
+            const ScDocument* pDoc,
             OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 nFileId, const OUString& rFileName,
             const OUString& rTabName, const ScSingleRefData& rRef ) const = 0;
 

@@ -110,7 +110,7 @@ bool ScMarkArray::GetMark( SCROW nRow ) const
 
 void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
 {
-    if (ValidRow(nStartRow) && ValidRow(nEndRow))
+    if (ValidRow(nStartRow, mnMaxRow) && ValidRow(nEndRow, mnMaxRow))
     {
         if ((nStartRow == 0) && (nEndRow == mnMaxRow))
         {
@@ -357,7 +357,7 @@ SCROW ScMarkArray::GetNextMarked( SCROW nRow, bool bUp ) const
         const_cast<ScMarkArray*>(this)->Reset();   // create pData for further processing
 
     SCROW nRet = nRow;
-    if (ValidRow(nRow))
+    if (ValidRow(nRow, mnMaxRow))
     {
         SCSIZE nIndex;
         Search(nRow, nIndex);

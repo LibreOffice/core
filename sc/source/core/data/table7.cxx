@@ -269,7 +269,7 @@ void ScTable::SplitFormulaGroups( SCCOL nCol, std::vector<SCROW>& rRows )
     if (!IsColValid(nCol))
         return;
 
-    sc::SharedFormulaUtil::splitFormulaCellGroups(aCol[nCol].maCells, rRows);
+    sc::SharedFormulaUtil::splitFormulaCellGroups(&GetDoc(), aCol[nCol].maCells, rRows);
 }
 
 void ScTable::UnshareFormulaCells( SCCOL nCol, std::vector<SCROW>& rRows )

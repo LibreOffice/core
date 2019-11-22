@@ -322,6 +322,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWKS(SvStream& rStream)
     aDocument.SetInsertingFromOtherDoc(true);
 
     LotusContext aContext;
+    aContext.pDoc = &aDocument;
     ImportLotus aLotusImport(aContext, rStream, &aDocument, RTL_TEXTENCODING_ASCII_US);
 
     ErrCode eRet = aLotusImport.parse();
