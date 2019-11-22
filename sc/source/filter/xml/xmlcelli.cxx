@@ -1070,7 +1070,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 else
                 {
                     ScAddress aTopLeftMatrixCell;
-                    if (pFCell && pFCell->GetMatrixOrigin(aTopLeftMatrixCell))
+                    if (pFCell && pFCell->GetMatrixOrigin(pDoc, aTopLeftMatrixCell))
                     {
                         ScFormulaCell* pMatrixCell = pDoc->GetFormulaCell(aTopLeftMatrixCell);
                         if (pMatrixCell)
@@ -1357,7 +1357,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
     if ( !aText.isEmpty() )
     {
         // temporary formula string as string tokens
-        std::unique_ptr<ScTokenArray> pCode(new ScTokenArray());
+        std::unique_ptr<ScTokenArray> pCode(new ScTokenArray(pDoc));
 
         // Check the special case of a single error constant without leading
         // '=' and create an error formula cell without tokens.

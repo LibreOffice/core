@@ -301,7 +301,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                             continue;
 
                         ScFormulaCell* pCell = aIter.getFormulaCell();
-                        ScDetectiveRefIter aRefIter(pCell);
+                        ScDetectiveRefIter aRefIter(&rDoc, pCell);
                         ScRange aRefRange;
                         while ( aRefIter.GetNextRef( aRefRange ) )
                         {
@@ -317,7 +317,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                     size_t nRanges = aErrorCells.size();
                     if ( nRanges )                          // found any?
                     {
-                        ScTokenArray aTokenArr;
+                        ScTokenArray aTokenArr(&rDoc);
                         aTokenArr.AddOpCode( ocNotAvail );
                         aTokenArr.AddOpCode( ocOpen );
                         aTokenArr.AddOpCode( ocClose );
