@@ -121,7 +121,7 @@ protected:
 public:
     void                Reset( const ScAddress& rEingPos );
 
-    virtual void        Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& nRest ) = 0;
+    virtual void        Convert( const ScDocument* pDoc, std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& nRest ) = 0;
 
     bool good() const { return aIn.good(); }
 

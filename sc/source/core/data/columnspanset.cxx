@@ -82,7 +82,7 @@ ColumnSpanSet::ColumnType& ColumnSpanSet::getColumn(const ScDocument& rDoc, SCTA
 
 void ColumnSpanSet::set(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nRow, bool bVal)
 {
-    if (!ValidTab(nTab) || !ValidCol(nCol) || !ValidRow(nRow))
+    if (!ValidTab(nTab) || !rDoc.ValidCol(nCol) || !rDoc.ValidRow(nRow))
         return;
 
     ColumnType& rCol = getColumn(rDoc, nTab, nCol);
@@ -91,7 +91,7 @@ void ColumnSpanSet::set(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nR
 
 void ColumnSpanSet::set(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, bool bVal)
 {
-    if (!ValidTab(nTab) || !ValidCol(nCol) || !ValidRow(nRow1) || !ValidRow(nRow2))
+    if (!ValidTab(nTab) || !rDoc.ValidCol(nCol) || !rDoc.ValidRow(nRow1) || !rDoc.ValidRow(nRow2))
         return;
 
     ColumnType& rCol = getColumn(rDoc, nTab, nCol);
@@ -121,7 +121,7 @@ void ColumnSpanSet::set( const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const S
 void ColumnSpanSet::scan(
     const ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bVal)
 {
-    if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
+    if (!rDoc.ValidColRow(nCol1, nRow1) || !rDoc.ValidColRow(nCol2, nRow2))
         return;
 
     if (nCol1 > nCol2 || nRow1 > nRow2)
@@ -191,7 +191,7 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
             if (!pTab)
                 continue;
 
-            if (!ValidCol(nCol) || nCol >= pTab->GetAllocatedColumnsCount())
+            if (!rDoc.ValidCol(nCol) || nCol >= pTab->GetAllocatedColumnsCount())
             {
                 // End the loop.
                 nCol = rTab.size();
@@ -345,7 +345,7 @@ void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet
         SCCOL nEndCol = pTab->ClampToAllocatedColumns(range.aEnd.Col());
         for (SCCOL nCol = range.aStart.Col(); nCol <= nEndCol; ++nCol)
         {
-            if (!ValidCol(nCol))
+            if (!rDoc.ValidCol(nCol))
                 break;
 
             ScColumn& rColumn = pTab->aCol[nCol];
@@ -366,7 +366,7 @@ void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet
         SCCOL nEndCol = pTab->ClampToAllocatedColumns(range.aEnd.Col());
         for (SCCOL nCol = range.aStart.Col(); nCol <= nEndCol; ++nCol)
         {
-            if (!ValidCol(nCol))
+            if (!rDoc.ValidCol(nCol))
                 break;
 
             ScColumn& rColumn = pTab->aCol[nCol];

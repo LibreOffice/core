@@ -113,10 +113,10 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
         SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
         SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
 
-        if (!ValidCol(nCol1)) nCol1 = m_aDocument.MaxCol();
-        if (!ValidRow(nRow1)) nRow1 = m_aDocument.MaxRow();
-        if (!ValidCol(nCol2)) nCol2 = m_aDocument.MaxCol();
-        if (!ValidRow(nRow2)) nRow2 = m_aDocument.MaxRow();
+        if (!m_aDocument.ValidCol(nCol1)) nCol1 = m_aDocument.MaxCol();
+        if (!m_aDocument.ValidRow(nRow1)) nRow1 = m_aDocument.MaxRow();
+        if (!m_aDocument.ValidCol(nCol2)) nCol2 = m_aDocument.MaxCol();
+        if (!m_aDocument.ValidRow(nRow2)) nRow2 = m_aDocument.MaxRow();
 
         if ( m_pPaintLockData )
         {

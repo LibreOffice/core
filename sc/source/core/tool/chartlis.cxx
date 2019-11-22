@@ -101,7 +101,7 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
     bUsed( false ),
     bDirty( false )
 {
-    ScRefTokenHelper::getTokensFromRangeList(*mpTokens, *rRangeList);
+    ScRefTokenHelper::getTokensFromRangeList(pDocP, *mpTokens, *rRangeList);
 }
 
 ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, std::unique_ptr<vector<ScTokenRef>> pTokens ) :
@@ -186,14 +186,14 @@ void ScChartListener::Update()
 ScRangeListRef ScChartListener::GetRangeList() const
 {
     ScRangeListRef aRLRef(new ScRangeList);
-    ScRefTokenHelper::getRangeListFromTokens(*aRLRef, *mpTokens, ScAddress());
+    ScRefTokenHelper::getRangeListFromTokens(mpDoc, *aRLRef, *mpTokens, ScAddress());
     return aRLRef;
 }
 
 void ScChartListener::SetRangeList( const ScRangeListRef& rNew )
 {
     vector<ScTokenRef> aTokens;
-    ScRefTokenHelper::getTokensFromRangeList(aTokens, *rNew);
+    ScRefTokenHelper::getTokensFromRangeList(mpDoc, aTokens, *rNew);
     mpTokens->swap(aTokens);
 }
 
@@ -230,7 +230,7 @@ public:
         else
         {
             ScRange aRange;
-            ScRefTokenHelper::getRangeFromToken(aRange, pToken, ScAddress(), bExternal);
+            ScRefTokenHelper::getRangeFromToken(mpDoc, aRange, pToken, ScAddress(), bExternal);
             if (mbStart)
                 startListening(aRange);
             else
@@ -292,9 +292,9 @@ void ScChartListener::ChangeListening( const ScRangeListRef& rRangeListRef,
 void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
 {
     ScTokenRef pToken;
-    ScRefTokenHelper::getTokenFromRange(pToken, rRange);
+    ScRefTokenHelper::getTokenFromRange(mpDoc, pToken, rRange);
 
-    if (ScRefTokenHelper::intersects(*mpTokens, pToken, ScAddress()))
+    if (ScRefTokenHelper::intersects(mpDoc, *mpTokens, pToken, ScAddress()))
     {
         // force update (chart has to be loaded), don't use ScChartListener::Update
         mpDoc->UpdateChart(GetName());

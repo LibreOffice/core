@@ -854,7 +854,7 @@ void CondFormatRule::finalizeImport()
             eOperator == ScConditionMode::ContainsText || eOperator == ScConditionMode::NotContainsText )
     {
         ScDocument& rDoc = getScDocument();
-        ScTokenArray aTokenArray;
+        ScTokenArray aTokenArray(&rDoc);
         svl::SharedStringPool& rSPool = rDoc.GetSharedStringPool();
         aTokenArray.AddString(rSPool.intern(maModel.maText));
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
@@ -867,12 +867,12 @@ void CondFormatRule::finalizeImport()
         std::unique_ptr<ScTokenArray> pTokenArray2;
         if( maModel.maFormulas.size() >= 2)
         {
-            pTokenArray2.reset(new ScTokenArray());
+            pTokenArray2.reset(new ScTokenArray(&rDoc));
             ScTokenConversion::ConvertToTokenArray(rDoc, *pTokenArray2, maModel.maFormulas[1]);
             rDoc.CheckLinkFormulaNeedingCheck(*pTokenArray2);
         }
 
-        ScTokenArray aTokenArray;
+        ScTokenArray aTokenArray(&rDoc);
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, maModel.maFormulas[ 0 ] );
         rDoc.CheckLinkFormulaNeedingCheck( aTokenArray);
@@ -884,7 +884,7 @@ void CondFormatRule::finalizeImport()
             eOperator == ScConditionMode::TopPercent || eOperator == ScConditionMode::BottomPercent )
     {
         ScDocument& rDoc = getScDocument();
-        ScTokenArray aTokenArray;
+        ScTokenArray aTokenArray(&rDoc);
         aTokenArray.AddDouble( maModel.mnRank );
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, nullptr, &rDoc, aPos, aStyleName );
@@ -895,7 +895,7 @@ void CondFormatRule::finalizeImport()
     {
         ScDocument& rDoc = getScDocument();
         // actually that is still unsupported
-        ScTokenArray aTokenArrayDev;
+        ScTokenArray aTokenArrayDev(&rDoc);
         aTokenArrayDev.AddDouble( maModel.mnStdDev );
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayDev, nullptr, &rDoc, aPos, aStyleName );

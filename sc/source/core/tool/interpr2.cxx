@@ -2465,12 +2465,12 @@ void ScInterpreter::ScIntersect()
         ScRefList* pRefList = xRes->GetRefList();
         for (const auto& rRef1 : *x1->GetRefList())
         {
-            const ScAddress& r11 = rRef1.Ref1.toAbs(aPos);
-            const ScAddress& r12 = rRef1.Ref2.toAbs(aPos);
+            const ScAddress& r11 = rRef1.Ref1.toAbs(pDok, aPos);
+            const ScAddress& r12 = rRef1.Ref2.toAbs(pDok, aPos);
             for (const auto& rRef2 : *x2->GetRefList())
             {
-                const ScAddress& r21 = rRef2.Ref1.toAbs(aPos);
-                const ScAddress& r22 = rRef2.Ref2.toAbs(aPos);
+                const ScAddress& r21 = rRef2.Ref1.toAbs(pDok, aPos);
+                const ScAddress& r22 = rRef2.Ref2.toAbs(pDok, aPos);
                 SCCOL nCol1 = ::std::max( r11.Col(), r21.Col());
                 SCROW nRow1 = ::std::max( r11.Row(), r21.Row());
                 SCTAB nTab1 = ::std::max( r11.Tab(), r21.Tab());
@@ -2494,9 +2494,9 @@ void ScInterpreter::ScIntersect()
         {
             const ScComplexRefData& rRef = (*pRefList)[0];
             if (rRef.Ref1 == rRef.Ref2)
-                PushTempToken( new ScSingleRefToken( rRef.Ref1));
+                PushTempToken( new ScSingleRefToken(pDok, rRef.Ref1));
             else
-                PushTempToken( new ScDoubleRefToken( rRef));
+                PushTempToken( new ScDoubleRefToken(pDok, rRef));
         }
         else
             PushTokenRef( xRes);
@@ -2516,14 +2516,14 @@ void ScInterpreter::ScIntersect()
                 case svDoubleRef:
                 {
                     {
-                        const ScAddress& r = pt[i]->GetSingleRef()->toAbs(aPos);
+                        const ScAddress& r = pt[i]->GetSingleRef()->toAbs(pDok, aPos);
                         nC1[i] = r.Col();
                         nR1[i] = r.Row();
                         nT1[i] = r.Tab();
                     }
                     if (sv[i] == svDoubleRef)
                     {
-                        const ScAddress& r = pt[i]->GetSingleRef2()->toAbs(aPos);
+                        const ScAddress& r = pt[i]->GetSingleRef2()->toAbs(pDok, aPos);
                         nC2[i] = r.Col();
                         nR2[i] = r.Row();
                         nT2[i] = r.Tab();
@@ -2568,7 +2568,7 @@ void ScInterpreter::ScRangeFunc()
     // We explicitly tell extendRangeReference() to not reuse the token,
     // casting const away spares two clones.
     FormulaTokenRef xRes = extendRangeReference(
-            const_cast<FormulaToken&>(*x1), const_cast<FormulaToken&>(*x2), aPos, false);
+            pDok, const_cast<FormulaToken&>(*x1), const_cast<FormulaToken&>(*x2), aPos, false);
     if (!xRes)
         PushIllegalArgument();
     else

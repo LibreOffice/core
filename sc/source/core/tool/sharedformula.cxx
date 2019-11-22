@@ -120,7 +120,7 @@ bool SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
     return true;
 }
 
-bool SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vector<SCROW>& rBounds)
+bool SharedFormulaUtil::splitFormulaCellGroups(const ScDocument* pDoc, CellStoreType& rCells, std::vector<SCROW>& rBounds)
 {
     if (rBounds.empty())
         return false;
@@ -141,7 +141,7 @@ bool SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vecto
     for (++it; it != itEnd; ++it)
     {
         nRow = *it;
-        if (ValidRow(nRow))
+        if (pDoc->ValidRow(nRow))
         {
             aPos = rCells.position(aPos.first, nRow);
             if (aPos.first == rCells.end())
@@ -379,7 +379,7 @@ void SharedFormulaUtil::unshareFormulaCells(const ScDocument* pDoc, CellStoreTyp
     // Remove duplicates again (the vector should still be sorted).
     aRows2.erase(std::unique(aRows2.begin(), aRows2.end()), aRows2.end());
 
-    splitFormulaCellGroups(rCells, aRows2);
+    splitFormulaCellGroups(pDoc, rCells, aRows2);
 }
 
 void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, ScFormulaCell** ppSharedTop )
@@ -411,7 +411,7 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
             case formula::svSingleRef:
             {
                 const ScSingleRefData* pRef = t->GetSingleRef();
-                ScAddress aPos = pRef->toAbs(rTopCell.aPos);
+                ScAddress aPos = pRef->toAbs(&rDoc, rTopCell.aPos);
                 ScFormulaCell** pp = ppSharedTop;
                 ScFormulaCell** ppEnd = ppSharedTop + xGroup->mnLength;
                 for (; pp != ppEnd; ++pp)
@@ -429,8 +429,8 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
             {
                 const ScSingleRefData& rRef1 = *t->GetSingleRef();
                 const ScSingleRefData& rRef2 = *t->GetSingleRef2();
-                ScAddress aPos1 = rRef1.toAbs(rTopCell.aPos);
-                ScAddress aPos2 = rRef2.toAbs(rTopCell.aPos);
+                ScAddress aPos1 = rRef1.toAbs(&rDoc, rTopCell.aPos);
+                ScAddress aPos2 = rRef2.toAbs(&rDoc, rTopCell.aPos);
 
                 ScRange aOrigRange(aPos1, aPos2);
                 ScRange aListenedRange = aOrigRange;

@@ -896,7 +896,7 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > c
     if( !pArray )
         return nDefCount;
 
-    ScTokenArray aArray;
+    ScTokenArray aArray(&GetRoot().GetDoc());
     sal_uInt32 nValueCount = 0;
     FormulaTokenArrayPlainIterator aIter(*pArray);
     for( const FormulaToken* pToken = aIter.First(); pToken; pToken = aIter.Next() )
@@ -917,8 +917,8 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > c
             {
                 // split 3-dimensional ranges into single sheets
                 const ScComplexRefData& rComplexRef = *pToken->GetDoubleRef();
-                ScAddress aAbs1 = rComplexRef.Ref1.toAbs(ScAddress());
-                ScAddress aAbs2 = rComplexRef.Ref2.toAbs(ScAddress());
+                ScAddress aAbs1 = rComplexRef.Ref1.toAbs(&GetRoot().GetDoc(), ScAddress());
+                ScAddress aAbs2 = rComplexRef.Ref2.toAbs(&GetRoot().GetDoc(), ScAddress());
                 for (SCTAB nScTab = aAbs1.Tab(); nScTab <= aAbs2.Tab(); ++nScTab)
                 {
                     // split 2-dimensional ranges into single columns

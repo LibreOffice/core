@@ -518,10 +518,10 @@ void ScTabView::InterpretVisible()
             ScHSplitPos eHWhich = WhichH( ScSplitPos(i) );
             ScVSplitPos eVWhich = WhichV( ScSplitPos(i) );
 
-            SCCOL   nX1 = SanitizeCol( aViewData.GetPosX( eHWhich ));
-            SCROW   nY1 = SanitizeRow( aViewData.GetPosY( eVWhich ));
-            SCCOL   nX2 = SanitizeCol( nX1 + aViewData.VisibleCellsX( eHWhich ));
-            SCROW   nY2 = SanitizeRow( nY1 + aViewData.VisibleCellsY( eVWhich ));
+            SCCOL   nX1 = pDoc->SanitizeCol( aViewData.GetPosX( eHWhich ));
+            SCROW   nY1 = pDoc->SanitizeRow( aViewData.GetPosY( eVWhich ));
+            SCCOL   nX2 = pDoc->SanitizeCol( nX1 + aViewData.VisibleCellsX( eHWhich ));
+            SCROW   nY2 = pDoc->SanitizeRow( nY1 + aViewData.VisibleCellsY( eVWhich ));
 
             pDoc->InterpretDirtyCells(ScRange(nX1, nY1, nTab, nX2, nY2, nTab));
         }

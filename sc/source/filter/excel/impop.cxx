@@ -398,7 +398,7 @@ void ImportExcel::Row25()
     nRow = aIn.ReaduInt16();
     aIn.Ignore( 4 );
 
-    if( ValidRow( nRow ) )
+    if( GetRoot().GetDoc().ValidRow( nRow ) )
     {
         nRowHeight = aIn.ReaduInt16();  // specify direct in Twips
         aIn.Ignore( 2 );
@@ -515,7 +515,7 @@ void ImportExcel::Array25()
 
     std::unique_ptr<ScTokenArray> pResult;
 
-    if (ValidColRow(nLastCol, nLastRow))
+    if (GetRoot().GetDoc().ValidColRow(nLastCol, nLastRow))
     {
         // the read mark is now on the formula, length in nFormLen
 
@@ -960,7 +960,7 @@ void ImportExcel::Row34()
 
     SCROW nScRow = static_cast< SCROW >( nRow );
 
-    if( ValidRow( nScRow ) )
+    if( GetRoot().GetDoc().ValidRow( nScRow ) )
     {
         nRowHeight = aIn.ReaduInt16();  // specify direct in Twips
         aIn.Ignore( 4 );
@@ -1013,7 +1013,7 @@ void ImportExcel::Array34()
 
     std::unique_ptr<ScTokenArray> pResult;
 
-    if( ValidColRow( nLastCol, nLastRow ) )
+    if( GetRoot().GetDoc().ValidColRow( nLastCol, nLastRow ) )
     {
         // the read mark is now on the formula, length in nFormLen
 
@@ -1070,7 +1070,7 @@ void ImportExcel::TableOp()
         nLastRow = std::min<sal_uInt16>(nLastRow, MAXROW_30);
     }
 
-    if( ValidColRow( nLastCol, nLastRow ) )
+    if( GetRoot().GetDoc().ValidColRow( nLastCol, nLastRow ) )
     {
         if( nFirstCol && nFirstRow )
         {

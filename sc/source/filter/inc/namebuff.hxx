@@ -95,15 +95,15 @@ private:
     std::vector<Entry> maEntries;
 
 public:
-    RangeNameBufferWK3();
+    RangeNameBufferWK3(const ScDocument* pDoc);
     ~RangeNameBufferWK3();
-    void                    Add( const OUString& rName, const ScComplexRefData& rCRD );
-    inline void             Add( const OUString& rName, const ScRange& aScRange );
+    void                    Add( const ScDocument* pDoc, const OUString& rName, const ScComplexRefData& rCRD );
+    inline void             Add( const ScDocument* pDoc, const OUString& rName, const ScRange& aScRange );
     bool                    FindRel( const OUString& rRef, sal_uInt16& rIndex );
     bool                    FindAbs( const OUString& rRef, sal_uInt16& rIndex );
 };
 
-inline void RangeNameBufferWK3::Add( const OUString& rName, const ScRange& aScRange )
+inline void RangeNameBufferWK3::Add( const ScDocument* pDoc, const OUString& rName, const ScRange& aScRange )
 {
     ScComplexRefData        aCRD;
     ScSingleRefData*        pSRD;
@@ -116,7 +116,7 @@ inline void RangeNameBufferWK3::Add( const OUString& rName, const ScRange& aScRa
     pSRD->InitAddress(aScRange.aEnd);
     pSRD->SetFlag3D(true);
 
-    Add( rName, aCRD );
+    Add( pDoc, rName, aCRD );
 }
 
 class ExtSheetBuffer : public ExcRoot

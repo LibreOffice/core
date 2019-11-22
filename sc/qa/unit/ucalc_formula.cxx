@@ -946,6 +946,8 @@ void Test::testFormulaTokenEquality()
 
 void Test::testFormulaRefData()
 {
+    std::unique_ptr<ScDocument> pDoc = std::make_unique<ScDocument>();
+
     ScAddress aAddr(4,5,3), aPos(2,2,2);
     ScSingleRefData aRef;
     aRef.InitAddress(aAddr);
@@ -957,7 +959,7 @@ void Test::testFormulaRefData()
     aRef.SetRowRel(true);
     aRef.SetColRel(true);
     aRef.SetTabRel(true);
-    aRef.SetAddress(aAddr, aPos);
+    aRef.SetAddress(pDoc.get(), aAddr, aPos);
     CPPUNIT_ASSERT_EQUAL(SCCOL(2), aRef.Col());
     CPPUNIT_ASSERT_EQUAL(SCROW(3), aRef.Row());
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aRef.Tab());
@@ -969,15 +971,15 @@ void Test::testFormulaRefData()
 
     aRef.InitAddress(ScAddress(6,5,0));
 
-    aDoubleRef.Extend(aRef, ScAddress());
-    ScRange aTest = aDoubleRef.toAbs(ScAddress());
+    aDoubleRef.Extend(pDoc.get(), aRef, ScAddress());
+    ScRange aTest = aDoubleRef.toAbs(pDoc.get(), ScAddress());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong start position of extended range.", ScAddress(2,2,0), aTest.aStart);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong end position of extended range.", ScAddress(6,5,0), aTest.aEnd);
 
     ScComplexRefData aDoubleRef2;
-    aDoubleRef2.InitRangeRel(ScRange(1,2,0,8,6,0), ScAddress(5,5,0));
-    aDoubleRef.Extend(aDoubleRef2, ScAddress(5,5,0));
-    aTest = aDoubleRef.toAbs(ScAddress(5,5,0));
+    aDoubleRef2.InitRangeRel(pDoc.get(), ScRange(1,2,0,8,6,0), ScAddress(5,5,0));
+    aDoubleRef.Extend(pDoc.get(), aDoubleRef2, ScAddress(5,5,0));
+    aTest = aDoubleRef.toAbs(pDoc.get(), ScAddress(5,5,0));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong start position of extended range.", ScAddress(1,2,0), aTest.aStart);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong end position of extended range.", ScAddress(8,6,0), aTest.aEnd);
@@ -1198,7 +1200,7 @@ void Test::testFormulaCompilerImplicitIntersection2Param()
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of token(third argument to SUMIF)", svDoubleRef, ppTokens[2]->GetType());
 
             ScComplexRefData aSumRangeData = *ppTokens[2]->GetDoubleRef();
-            ScRange aSumRange = aSumRangeData.toAbs(rCase.aCellAddress);
+            ScRange aSumRange = aSumRangeData.toAbs(m_pDoc, rCase.aCellAddress);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sum-range in RPN array", rCase.aSumRange, aSumRange);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong IsRel type for start column address in sum-range", rCase.bStartColRel, aSumRangeData.Ref1.IsColRel());
@@ -1379,7 +1381,7 @@ void Test::testFormulaCompilerImplicitIntersection1ParamWithChange()
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of RPN token(argument to COS)", svSingleRef, ppRPNTokens[0]->GetType());
 
             ScSingleRefData aArgAddrRPN = *ppRPNTokens[0]->GetSingleRef();
-            ScAddress aArgAddrActual = aArgAddrRPN.toAbs(rCase.aCellAddress);
+            ScAddress aArgAddrActual = aArgAddrRPN.toAbs(m_pDoc, rCase.aCellAddress);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Computed implicit intersection singleref is wrong", rCase.aArgAddr, aArgAddrActual);
         }
     }
@@ -3690,7 +3692,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
 
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
     const ScTokenArray* pCode = pName->GetCode();
-    OUString aExpr = pCode->CreateString(m_pDoc, aCxt, ScAddress(0,0,0));
+    OUString aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
 
     // Insert a new name 'MyAddress' to reference $B$3. Note absolute row.
@@ -3702,7 +3704,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
 
     sc::TokenStringContext aCxt2(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
     const ScTokenArray* pCode2 = pName2->GetCode();
-    OUString aExpr2 = pCode2->CreateString(m_pDoc, aCxt2, ScAddress(0,0,0));
+    OUString aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$3"), aExpr2);
 
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
@@ -3713,16 +3715,16 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     rFunc.DeleteCells(ScRange(0,2,0,m_pDoc->MaxCol(),2,0), &aMark, DelCellCmd::CellsUp, true);
 
     // The reference in the 'MyRange' name should get updated to B2:B3.
-    aExpr = pCode->CreateString(m_pDoc, aCxt, ScAddress(0,0,0));
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$3"), aExpr);
 
     // The reference in the 'MyAddress' name should get updated to $B$#REF!.
-    aExpr2 = pCode2->CreateString(m_pDoc, aCxt2, ScAddress(0,0,0));
+    aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$#REF!"), aExpr2);
 
     // Delete row 3 again.
     rFunc.DeleteCells(ScRange(0,2,0,m_pDoc->MaxCol(),2,0), &aMark, DelCellCmd::CellsUp, true);
-    aExpr = pCode->CreateString(m_pDoc, aCxt, ScAddress(0,0,0));
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$2"), aExpr);
 
     // Undo and check.
@@ -3735,7 +3737,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     CPPUNIT_ASSERT(pName);
     pCode = pName->GetCode();
 
-    aExpr = pCode->CreateString(m_pDoc, aCxt, ScAddress(0,0,0));
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$3"), aExpr);
 
     // Undo again and check.
@@ -3745,13 +3747,13 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     CPPUNIT_ASSERT(pName);
     pCode = pName->GetCode();
 
-    aExpr = pCode->CreateString(m_pDoc, aCxt, ScAddress(0,0,0));
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
 
     // Delete row 2-3.
     rFunc.DeleteCells(ScRange(0,1,0,m_pDoc->MaxCol(),2,0), &aMark, DelCellCmd::CellsUp, true);
 
-    aExpr = pCode->CreateString(m_pDoc, aCxt, ScAddress(0,0,0));
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$2"), aExpr);
 
     // Undo and check.
@@ -3761,14 +3763,14 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     CPPUNIT_ASSERT(pName);
     pCode = pName->GetCode();
 
-    aExpr = pCode->CreateString(m_pDoc, aCxt, ScAddress(0,0,0));
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
 
     pName2 = m_pDoc->GetRangeName()->findByUpperName("MYADDRESS");
     CPPUNIT_ASSERT(pName2);
     pCode2 = pName2->GetCode();
 
-    aExpr2 = pCode2->CreateString(m_pDoc, aCxt2, ScAddress(0,0,0));
+    aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$3"), aExpr2);
 
     m_pDoc->InsertTab(1, "test2");
@@ -3781,7 +3783,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     CPPUNIT_ASSERT(pName);
     pCode = pName->GetCode();
 
-    aExpr = pCode->CreateString(m_pDoc, aCxt, ScAddress(0,0,0));
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
 
     pName2 = m_pDoc->GetRangeName()->findByUpperName("MYADDRESS");
@@ -3794,7 +3796,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     // relative to its base position on sheet 0 (same for the 'MyRange' range,
     // which is the reason why it is not updated either).
     // This is a tad confusing...
-    aExpr2 = pCode2->CreateString(m_pDoc, aCxt2, ScAddress(0,0,0));
+    aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$3"), aExpr2);
 
     m_pDoc->DeleteTab(1);
@@ -4022,7 +4024,7 @@ void Test::testFormulaRefUpdateNameDelete()
     m_pDoc->DeleteCol(1, 0, 3, 0, 0, 1);
     const ScTokenArray* pCode = pName->GetCode();
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
-    OUString aExpr = pCode->CreateString(m_pDoc, aCxt, ScAddress(0,0,0));
+    OUString aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$1"), aExpr);
 
     m_pDoc->DeleteTab(0);
@@ -4181,7 +4183,7 @@ void Test::testTokenArrayRefUpdateMove()
         ScCompiler aComp(m_pDoc, aPos, m_pDoc->GetGrammar());
         std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(aTest));
 
-        OUString aStr = pArray->CreateString(m_pDoc, aCxt, aPos);
+        OUString aStr = pArray->CreateString(aCxt, aPos);
 
         CPPUNIT_ASSERT_EQUAL(aTest, aStr);
 
@@ -4189,7 +4191,7 @@ void Test::testTokenArrayRefUpdateMove()
         // string should not change.
         pArray->AdjustReferenceOnMove(aRefCxt, aPos, aPos);
 
-        aStr = pArray->CreateString(m_pDoc, aCxt, aPos);
+        aStr = pArray->CreateString(aCxt, aPos);
         CPPUNIT_ASSERT_EQUAL(aTest, aStr);
     }
 
@@ -8463,7 +8465,7 @@ void Test::testRefR1C1WholeCol()
     ScCompiler aComp(m_pDoc, aPos, FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
     std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString("=C[10]"));
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
-    OUString aFormula = pTokens->CreateString(m_pDoc, aCxt, aPos);
+    OUString aFormula = pTokens->CreateString(aCxt, aPos);
 
     CPPUNIT_ASSERT_EQUAL(OUString("L:L"), aFormula);
 
@@ -8478,7 +8480,7 @@ void Test::testRefR1C1WholeRow()
     ScCompiler aComp(m_pDoc, aPos, FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
     std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString("=R[3]"));
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
-    OUString aFormula = pTokens->CreateString(m_pDoc, aCxt, aPos);
+    OUString aFormula = pTokens->CreateString(aCxt, aPos);
 
     CPPUNIT_ASSERT_EQUAL(OUString("5:5"), aFormula);
 

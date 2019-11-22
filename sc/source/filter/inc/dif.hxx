@@ -140,7 +140,7 @@ class DifColumn
 
     DifColumn();
 
-    void SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat );
+    void SetNumFormat( const ScDocument* pDoc, SCROW nRow, const sal_uInt32 nNumFormat );
 
     void NewEntry( const SCROW nPos, const sal_uInt32 nNumFormat );
 
@@ -155,7 +155,7 @@ public:
 
     ~DifAttrCache();
 
-    void SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_uInt32 nNumFormat );
+    void SetNumFormat( const ScDocument* pDoc, const SCCOL nCol, const SCROW nRow, const sal_uInt32 nNumFormat );
 
     void Apply( ScDocument&, SCTAB nTab );
 

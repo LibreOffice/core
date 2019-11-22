@@ -1544,7 +1544,7 @@ void WorksheetHelper::putRichString( const ScAddress& rAddress, const RichString
 void WorksheetHelper::putFormulaTokens( const ScAddress& rAddress, const ApiTokenSequence& rTokens )
 {
     ScDocumentImport& rDoc = getDocImport();
-    std::unique_ptr<ScTokenArray> pTokenArray(new ScTokenArray);
+    std::unique_ptr<ScTokenArray> pTokenArray(new ScTokenArray(&rDoc.getDoc()));
     ScTokenConversion::ConvertToTokenArray(rDoc.getDoc(), *pTokenArray, rTokens);
     rDoc.setFormulaCell(rAddress, std::move(pTokenArray));
 }

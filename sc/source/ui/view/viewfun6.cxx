@@ -177,7 +177,7 @@ void ScViewFunc::DetectiveMarkPred()
         const OUString* pPath = pRefMgr->getExternalFileName(nFileId);
 
         ScRange aRange;
-        if (pPath && ScRefTokenHelper::getRangeFromToken(aRange, p, aCurPos, true))
+        if (pPath && ScRefTokenHelper::getRangeFromToken(&rDoc, aRange, p, aCurPos, true))
         {
             OUString aTabName = p->GetString().getString();
             OUString aRangeStr(aRange.Format(rDoc, ScRefFlags::VALID));
@@ -195,7 +195,7 @@ void ScViewFunc::DetectiveMarkPred()
     else
     {
         ScRange aRange;
-        ScRefTokenHelper::getRangeFromToken(aRange, p, aCurPos);
+        ScRefTokenHelper::getRangeFromToken(&rDoc, aRange, p, aCurPos);
         if (aRange.aStart.Tab() != aCurPos.Tab())
         {
             // The first precedent range is on a different sheet.  Jump to it
@@ -206,7 +206,7 @@ void ScViewFunc::DetectiveMarkPred()
     }
 
     ScRangeList aDestRanges;
-    ScRefTokenHelper::getRangeListFromTokens(aDestRanges, aRefTokens, aCurPos);
+    ScRefTokenHelper::getRangeListFromTokens(&rDoc, aDestRanges, aRefTokens, aCurPos);
     MarkAndJumpToRanges(aDestRanges);
 }
 
@@ -230,7 +230,7 @@ void ScViewFunc::DetectiveMarkSucc()
         return;
 
     ScRangeList aDestRanges;
-    ScRefTokenHelper::getRangeListFromTokens(aDestRanges, aRefTokens, aCurPos);
+    ScRefTokenHelper::getRangeListFromTokens(rView.GetDocument(), aDestRanges, aRefTokens, aCurPos);
     MarkAndJumpToRanges(aDestRanges);
 }
 

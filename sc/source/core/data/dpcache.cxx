@@ -523,7 +523,7 @@ void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     aDocData.mnEndRow = rRange.aEnd.Row();
 
     // Sanity check
-    if (!ValidRow(aDocData.mnStartRow) || !ValidRow(aDocData.mnEndRow) || aDocData.mnEndRow <= aDocData.mnStartRow)
+    if (!GetDoc()->ValidRow(aDocData.mnStartRow) || !GetDoc()->ValidRow(aDocData.mnEndRow) || aDocData.mnEndRow <= aDocData.mnStartRow)
         return;
 
     SCCOL nStartCol = rRange.aStart.Col();

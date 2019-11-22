@@ -102,7 +102,7 @@ private:
 class LotAttrCol
 {
 public:
-    void SetAttr (const SCROW nRow, const ScPatternAttr&);
+    void SetAttr (const ScDocument* pDoc, const SCROW nRow, const ScPatternAttr&);
 
     void Apply(LOTUS_ROOT* pLotRoot, const SCCOL nCol, const SCTAB nTab);
 private:
@@ -122,7 +122,7 @@ class LotAttrTable
 public:
     LotAttrTable(LOTUS_ROOT* pLotRoot);
 
-    void SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
+    void SetAttr(LOTUS_ROOT* pLotRoot, const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
 
     void Apply(LOTUS_ROOT* pLotRoot, const SCTAB nTabNum);
 

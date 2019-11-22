@@ -75,8 +75,8 @@ void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, s
     if (!pString)
         return;
 
-    nCol = SanitizeCol(nCol);
-    nRow = SanitizeRow(nRow);
+    nCol = rContext.pDoc->SanitizeCol(nCol);
+    nRow = rContext.pDoc->SanitizeRow(nRow);
     nTab = SanitizeTab(nTab);
 
     rContext.pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
@@ -87,8 +87,8 @@ void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, s
 
 void SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt)
 {
-    nCol = SanitizeCol(nCol);
-    nRow = SanitizeRow(nRow);
+    nCol = rContext.pDoc->SanitizeCol(nCol);
+    nRow = rContext.pDoc->SanitizeRow(nRow);
     nTab = SanitizeTab(nTab);
 
     //  PREC:   nSt = default number of decimal places
@@ -398,13 +398,13 @@ LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
     return ID_FAIL;
 }
 
-void LotusRangeList::Append( std::unique_ptr<LotusRange> pLR )
+void LotusRangeList::Append( const ScDocument* pDoc, std::unique_ptr<LotusRange> pLR )
 {
     assert( pLR );
     auto pLRTmp = pLR.get();
     maRanges.push_back(std::move(pLR));
 
-    ScTokenArray    aTokArray;
+    ScTokenArray    aTokArray(pDoc);
 
     ScSingleRefData*    pSingRef = &aComplRef.Ref1;
 
@@ -426,8 +426,8 @@ void LotusRangeList::Append( std::unique_ptr<LotusRange> pLR )
     nIdCnt++;
 }
 
-RangeNameBufferWK3::RangeNameBufferWK3()
-    : pScTokenArray( new ScTokenArray )
+RangeNameBufferWK3::RangeNameBufferWK3(const ScDocument* pDoc)
+    : pScTokenArray( new ScTokenArray(pDoc) )
 {
     nIntCount = 1;
 }
@@ -436,7 +436,7 @@ RangeNameBufferWK3::~RangeNameBufferWK3()
 {
 }
 
-void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& rCRD )
+void RangeNameBufferWK3::Add( const ScDocument* pDoc, const OUString& rOrgName, const ScComplexRefData& rCRD )
 {
     Entry aInsert( rOrgName, rCRD );
 
@@ -444,8 +444,8 @@ void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& 
 
     const ScSingleRefData& rRef1 = rCRD.Ref1;
     const ScSingleRefData& rRef2 = rCRD.Ref2;
-    ScAddress aAbs1 = rRef1.toAbs(ScAddress());
-    ScAddress aAbs2 = rRef2.toAbs(ScAddress());
+    ScAddress aAbs1 = rRef1.toAbs(pDoc, ScAddress());
+    ScAddress aAbs2 = rRef2.toAbs(pDoc, ScAddress());
     if (aAbs1 == aAbs2)
     {
         pScTokenArray->AddSingleReference( rCRD.Ref1 );

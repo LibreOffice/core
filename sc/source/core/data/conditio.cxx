@@ -352,7 +352,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
             if ( mpDoc->IsImportingXML() && !bTextToReal )
             {
                 //  temporary formula string as string tokens
-                pFormula1.reset( new ScTokenArray );
+                pFormula1.reset( new ScTokenArray(mpDoc) );
                 pFormula1->AssignXMLString( rExpr1, rExprNmsp1 );
                 // bRelRef1 is set when the formula is compiled again (CompileXML)
             }
@@ -371,7 +371,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
             if ( mpDoc->IsImportingXML() && !bTextToReal )
             {
                 //  temporary formula string as string tokens
-                pFormula2.reset( new ScTokenArray );
+                pFormula2.reset( new ScTokenArray(mpDoc) );
                 pFormula2->AssignXMLString( rExpr2, rExprNmsp2 );
                 // bRelRef2 is set when the formula is compiled again (CompileXML)
             }
@@ -1289,7 +1289,7 @@ std::unique_ptr<ScTokenArray> ScConditionEntry::CreateFlatCopiedTokenArray( sal_
             pRet.reset(new ScTokenArray( *pFormula1 ));
         else
         {
-            pRet.reset(new ScTokenArray());
+            pRet.reset(new ScTokenArray(mpDoc));
             if (bIsStr1)
             {
                 svl::SharedStringPool& rSPool = mpDoc->GetSharedStringPool();
@@ -1305,7 +1305,7 @@ std::unique_ptr<ScTokenArray> ScConditionEntry::CreateFlatCopiedTokenArray( sal_
             pRet.reset(new ScTokenArray( *pFormula2 ));
         else
         {
-            pRet.reset(new ScTokenArray());
+            pRet.reset(new ScTokenArray(mpDoc));
             if (bIsStr2)
             {
                 svl::SharedStringPool& rSPool = mpDoc->GetSharedStringPool();
@@ -1336,7 +1336,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
             for ( auto t: pFormula->References() )
             {
                 ScSingleRefData& rRef1 = *t->GetSingleRef();
-                ScAddress aAbs = rRef1.toAbs(aSrcPos);
+                ScAddress aAbs = rRef1.toAbs(mpDoc, aSrcPos);
                 if (!rRef1.IsTabDeleted())
                 {
                     if (aAbs.Tab() < nMinTab)
@@ -1347,7 +1347,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
                 if ( t->GetType() == svDoubleRef )
                 {
                     ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
-                    aAbs = rRef2.toAbs(aSrcPos);
+                    aAbs = rRef2.toAbs(mpDoc, aSrcPos);
                     if (!rRef2.IsTabDeleted())
                     {
                         if (aAbs.Tab() < nMinTab)

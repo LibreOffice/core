@@ -149,7 +149,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         SCCOL nCol = nStartCol + pE->nCol + nMergeColAdd;
         // Determine RowMerge
         // Pure ColMerge and ColMerge of the first MergeRow already done during parsing
-        if (nRow <= nOverlapRowMax && ValidCol(nCol))
+        if (nRow <= nOverlapRowMax && mpDoc->ValidCol(nCol))
         {
             while ( nCol <= mpDoc->MaxCol() && mpDoc->HasAttrib( nCol, nRow, nTab,
                 nCol, nRow, nTab, HasAttrFlags::Overlapped ) )
@@ -162,7 +162,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         // Add for second run
         pE->nCol = nCol;
         pE->nRow = nRow;
-        if ( ValidCol(nCol) && ValidRow(nRow) )
+        if ( mpDoc->ValidCol(nCol) && mpDoc->ValidRow(nRow) )
         {
             SfxItemSet aSet = mpEngine->GetAttribs( pE->aSel );
             // Remove default: we set left/right ourselves depending on Text or
@@ -471,7 +471,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             {
                 SCCOL nCol = pE->nCol;
                 SCROW nRow = pE->nRow;
-                if ( ValidCol(nCol) && ValidRow(nRow) )
+                if ( mpDoc->ValidCol(nCol) && mpDoc->ValidRow(nRow) )
                     InsertGraphic( nCol, nRow, nTab, pE );
             }
         }

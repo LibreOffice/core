@@ -189,6 +189,8 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
 
             if (pTabViewShell && pScTokA)
             {
+                const ScViewData& rViewData = pTabViewShell->GetViewData();
+                ScDocument* pDoc = rViewData.GetDocument();
                 pTabViewShell->DoneRefMode();
                 pTabViewShell->ClearHighlightRanges();
 
@@ -207,12 +209,12 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
                         if(bDoubleRef)
                         {
                             ScComplexRefData aRef( *pToken->GetDoubleRef() );
-                            aRange = aRef.toAbs(aPos);
+                            aRange = aRef.toAbs(pDoc, aPos);
                         }
                         else
                         {
                             ScSingleRefData aRef( *pToken->GetSingleRef() );
-                            aRange.aStart = aRef.toAbs(aPos);
+                            aRange.aStart = aRef.toAbs(pDoc, aPos);
                             aRange.aEnd = aRange.aStart;
                         }
                         Color aColName=ScRangeFindList::GetColorName(nIndex++);

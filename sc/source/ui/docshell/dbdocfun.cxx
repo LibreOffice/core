@@ -679,7 +679,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     {
         aLocalParam.MoveToDest();
         nDestTab = rQueryParam.nDestTab;
-        if ( !ValidColRow( aLocalParam.nCol2, aLocalParam.nRow2 ) )
+        if ( !rDoc.ValidColRow( aLocalParam.nCol2, aLocalParam.nRow2 ) )
         {
             if (!bApi)
                 rDocShell.ErrorMessage(STR_PASTE_FULL);
@@ -1210,7 +1210,7 @@ bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNe
         SCROW nDiff = aOldRange.aStart.Row() - rNewOut.aStart.Row();
         rNewOut.aStart.SetRow(aOldRange.aStart.Row());
         rNewOut.aEnd.IncRow(nDiff);
-        if (!ValidRow(rNewOut.aStart.Row()) || !ValidRow(rNewOut.aEnd.Row()))
+        if (!rDoc.ValidRow(rNewOut.aStart.Row()) || !rDoc.ValidRow(rNewOut.aEnd.Row()))
             bOverflow = true;
     }
 

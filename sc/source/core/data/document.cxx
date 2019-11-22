@@ -5416,7 +5416,7 @@ bool ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMat
         return false;
 
     ScAddress aOrigin = rCellPos;
-    if (!pFCell->GetMatrixOrigin(aOrigin))
+    if (!pFCell->GetMatrixOrigin(this, aOrigin))
         // Failed to get the address of the matrix origin.
         return false;
 
@@ -5438,7 +5438,7 @@ bool ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMat
         // from old file format).
         // Needs an "invalid" initialized address.
         aOrigin.SetInvalid();
-        pFCell->GetMatrixEdge(aOrigin);
+        pFCell->GetMatrixEdge(this, aOrigin);
         pFCell->GetMatColsRows(nSizeX, nSizeY);
     }
 
@@ -6388,9 +6388,9 @@ void ScDocument::RemoveSubTotalCell(ScFormulaCell* pCell)
 
 namespace {
 
-bool lcl_hasDirtyRange(ScFormulaCell* pCell, const ScRange& rDirtyRange)
+bool lcl_hasDirtyRange(const ScDocument* pDoc, ScFormulaCell* pCell, const ScRange& rDirtyRange)
 {
-    ScDetectiveRefIter aRefIter(pCell);
+    ScDetectiveRefIter aRefIter(pDoc, pCell);
     ScRange aRange;
     while (aRefIter.GetNextRef(aRange))
     {
@@ -6414,7 +6414,7 @@ void ScDocument::SetSubTotalCellsDirty(const ScRange& rDirtyRange)
         if (pCell->IsSubTotal())
         {
             aNewSet.insert(pCell);
-            if (lcl_hasDirtyRange(pCell, rDirtyRange))
+            if (lcl_hasDirtyRange(this, pCell, rDirtyRange))
                 pCell->SetDirty();
         }
     }

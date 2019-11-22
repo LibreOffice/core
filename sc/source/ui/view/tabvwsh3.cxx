@@ -381,7 +381,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
 
-                if ( !ValidRow(aScRange.aStart.Row()) || !ValidRow(aScRange.aEnd.Row()) )
+                if ( !pDoc->ValidRow(aScRange.aStart.Row()) || !pDoc->ValidRow(aScRange.aEnd.Row()) )
                     nResult = ScRefFlags::ZERO;
 
                 // we have found something

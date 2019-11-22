@@ -165,22 +165,22 @@ void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover
     SCCOL nOutCol2 = rRange.aStart.Col() - 1;
 
     CPPUNIT_ASSERT( aMark.IsCellMarked( nMidCol, nMidRow ) );
-    if ( ValidCol( nOutCol1 ) && ValidRow( nOutRow1 ) )
+    if ( ValidCol( nOutCol1, MAXCOL ) && ValidRow( nOutRow1, MAXROW ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nOutCol1, nOutRow1 ) );
 
-    if ( ValidCol( nOutCol2 ) && ValidRow( nOutRow2 ) )
+    if ( ValidCol( nOutCol2, MAXCOL ) && ValidRow( nOutRow2, MAXROW ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nOutCol2, nOutRow2 ) );
 
-    if ( ValidRow( nOutRow1 ) )
+    if ( ValidRow( nOutRow1, MAXROW ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nMidCol, nOutRow1 ) );
 
-    if ( ValidCol( nOutCol1 ) )
+    if ( ValidCol( nOutCol1, MAXCOL ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nOutCol1, nMidRow ) );
 
-    if ( ValidRow( nOutRow2 ) )
+    if ( ValidRow( nOutRow2, MAXROW ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nMidCol, nOutRow2 ) );
 
-    if ( ValidCol( nOutCol2 ) )
+    if ( ValidCol( nOutCol2, MAXCOL ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nOutCol2, nMidRow ) );
 
     if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )

@@ -2909,7 +2909,7 @@ void ScChangeTrack::Dependencies( ScChangeAction* pAct )
         if ( ScChangeActionContent::GetContentCellType(rCell) == SC_CACCT_MATREF )
         {
             ScAddress aOrg;
-            bool bOrgFound = rCell.mpFormula->GetMatrixOrigin(aOrg);
+            bool bOrgFound = rCell.mpFormula->GetMatrixOrigin(pDoc, aOrg);
             ScChangeActionContent* pContent = (bOrgFound ? SearchContentAt( aOrg, pAct ) : nullptr);
             if ( pContent && pContent->IsMatrixOrigin() )
             {

@@ -197,7 +197,7 @@ std::unique_ptr<ScTokenArray> ExcelToSc::GetDummy()
 {
     aPool.Store( "Dummy()" );
     aPool >> aStack;
-    return aPool.GetTokenArray( aStack.Get());
+    return aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
 }
 
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
@@ -223,7 +223,7 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
     {
         aPool.Store( "-/-" );
         aPool >> aStack;
-        pResult = aPool.GetTokenArray( aStack.Get());
+        pResult = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
         return ConvErr::OK;
     }
 
@@ -860,14 +860,14 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
     {
         aPool << ocBad;
         aPool >> aStack;
-        pResult = aPool.GetTokenArray( aStack.Get());
+        pResult = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
         eRet = ConvErr::Ni;
     }
     else if( aIn.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
-        pResult = aPool.GetTokenArray( aStack.Get());
+        pResult = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
         eRet = ConvErr::Count;
     }
     else if( bArrayFormula )
@@ -877,7 +877,7 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
     }
     else
     {
-        pResult = aPool.GetTokenArray( aStack.Get());
+        pResult = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
         eRet = ConvErr::OK;
     }
 
@@ -1050,7 +1050,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
 
                 ExcRelToScRel( nUINT16, nByte, aSRD, bRangeName );
 
-                rRangeList.Append(aSRD.toAbs(aEingPos), nTab);
+                rRangeList.Append(aSRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
                 break;
             }
             case 0x45:
@@ -1080,7 +1080,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                 else if( IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
-                rRangeList.Append(aCRD.toAbs(aEingPos), nTab);
+                rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
             }
                 break;
             case 0x46:
@@ -1117,7 +1117,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
 
                 ExcRelToScRel( nUINT16, nByte, aSRD, bRNorSF );
 
-                rRangeList.Append(aSRD.toAbs(aEingPos), nTab);
+                rRangeList.Append(aSRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
                 break;
             }
             case 0x4D:
@@ -1145,7 +1145,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                 else if( IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
-                rRangeList.Append(aCRD.toAbs(aEingPos), nTab);
+                rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
             }
                 break;
             case 0x49:
@@ -1215,10 +1215,10 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                         aCRD.Ref2.SetAbsTab(static_cast<SCTAB>(nTabLast));
                         b3D = ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() );
                         aCRD.Ref2.SetFlag3D( b3D );
-                        rRangeList.Append(aCRD.toAbs(aEingPos), nTab);
+                        rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
                     }
                     else
-                        rRangeList.Append(aSRD.toAbs(aEingPos), nTab);
+                        rRangeList.Append(aSRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
                 }
             }
 
@@ -1275,7 +1275,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                     else if( IsComplRowRange( nRowFirst, nRowLast ) )
                         SetComplRow( aCRD );
 
-                    rRangeList.Append(aCRD.toAbs(aEingPos), nTab);
+                    rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
                 }//END in current Workbook
             }
                 break;
@@ -1692,7 +1692,7 @@ std::unique_ptr<ScTokenArray> ExcelToSc::GetBoolErr( XclBoolError eType )
 
     aPool >> aStack;
 
-    std::unique_ptr<ScTokenArray> pResult = aPool.GetTokenArray( aStack.Get());
+    std::unique_ptr<ScTokenArray> pResult = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
     if( nError != FormulaError::NONE )
         pResult->SetCodeError( nError );
 

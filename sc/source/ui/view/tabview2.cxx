@@ -302,10 +302,10 @@ void moveCursorByMergedCell(
 void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
     auto pDoc = aViewData.GetDocument();
-    if (!ValidCol(nStartCol)) nStartCol = pDoc->MaxCol();
-    if (!ValidRow(nStartRow)) nStartRow = pDoc->MaxRow();
-    if (!ValidCol(nEndCol)) nEndCol = pDoc->MaxCol();
-    if (!ValidRow(nEndRow)) nEndRow = pDoc->MaxRow();
+    if (!pDoc->ValidCol(nStartCol)) nStartCol = pDoc->MaxCol();
+    if (!pDoc->ValidRow(nStartRow)) nStartRow = pDoc->MaxRow();
+    if (!pDoc->ValidCol(nEndCol)) nEndCol = pDoc->MaxCol();
+    if (!pDoc->ValidRow(nEndRow)) nEndRow = pDoc->MaxRow();
 
     bool bLeft = (nStartCol==0 && nEndCol==pDoc->MaxCol());
     bool bTop = (nStartRow==0 && nEndRow==pDoc->MaxRow());
@@ -355,8 +355,8 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
     if (!IsBlockMode())
     {
         auto pDoc = aViewData.GetDocument();
-        if (!ValidCol(nCurX)) nCurX = pDoc->MaxCol();
-        if (!ValidRow(nCurY)) nCurY = pDoc->MaxRow();
+        if (!pDoc->ValidCol(nCurX)) nCurX = pDoc->MaxCol();
+        if (!pDoc->ValidRow(nCurY)) nCurY = pDoc->MaxRow();
 
         ScMarkData& rMark = aViewData.GetMarkData();
         SCTAB nTab = aViewData.GetTabNo();
@@ -449,8 +449,8 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                             bool bCols, bool bRows, bool bCellSelection )
 {
     ScDocument* pDocument = aViewData.GetDocument();
-    if (!ValidCol(nCurX)) nCurX = pDocument->MaxCol();
-    if (!ValidRow(nCurY)) nCurY = pDocument->MaxRow();
+    if (!pDocument->ValidCol(nCurX)) nCurX = pDocument->MaxCol();
+    if (!pDocument->ValidRow(nCurY)) nCurY = pDocument->MaxRow();
 
     if (!IsBlockMode())
     {

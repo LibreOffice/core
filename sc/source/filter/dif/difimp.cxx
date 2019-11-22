@@ -151,20 +151,20 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
                     if( nColCnt == SCCOL_MAX )
                         nColCnt = nBaseCol;
 
-                    if( ValidCol(nColCnt) && ValidRow(nRowCnt) )
+                    if( pDoc->ValidCol(nColCnt) && pDoc->ValidRow(nRowCnt) )
                     {
                         pDoc->EnsureTable(nBaseTab);
 
                         if( DifParser::IsV( aData.getStr() ) )
                         {
                             pDoc->SetValue(aPos, aDifParser.fVal);
-                            aAttrCache.SetNumFormat( nColCnt, nRowCnt,
+                            aAttrCache.SetNumFormat( pDoc, nColCnt, nRowCnt,
                                     aDifParser.nNumFormat );
                         }
                         else if( aData == pKeyTRUE || aData == pKeyFALSE )
                         {
                             pDoc->SetValue(aPos, aDifParser.fVal);
-                            aAttrCache.SetNumFormat( nColCnt, nRowCnt,
+                            aAttrCache.SetNumFormat( pDoc, nColCnt, nRowCnt,
                                 aDifParser.nNumFormat );
                         }
                         else if( aData == pKeyNA || aData == pKeyERROR  )
@@ -186,7 +186,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
                     if( nColCnt == SCCOL_MAX )
                         nColCnt = nBaseCol;
 
-                    if( ValidCol(nColCnt) && ValidRow(nRowCnt) )
+                    if( pDoc->ValidCol(nColCnt) && pDoc->ValidRow(nRowCnt) )
                     {
                         if (!aData.isEmpty())
                         {
@@ -612,9 +612,9 @@ DifColumn::DifColumn ()
 {
 }
 
-void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
+void DifColumn::SetNumFormat( const ScDocument* pDoc, SCROW nRow, const sal_uInt32 nNumFormat )
 {
-    OSL_ENSURE( ValidRow(nRow), "*DifColumn::SetNumFormat(): Row too big!" );
+    OSL_ENSURE( pDoc->ValidRow(nRow), "*DifColumn::SetNumFormat(): Row too big!" );
 
     if( nNumFormat > 0 )
     {
@@ -672,14 +672,14 @@ DifAttrCache::~DifAttrCache()
 {
 }
 
-void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_uInt32 nNumFormat )
+void DifAttrCache::SetNumFormat( const ScDocument* pDoc, const SCCOL nCol, const SCROW nRow, const sal_uInt32 nNumFormat )
 {
-    OSL_ENSURE( ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col too big!" );
+    OSL_ENSURE( pDoc->ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col too big!" );
 
     if( !maColMap.count(nCol) )
         maColMap[ nCol ].reset( new DifColumn );
 
-    maColMap[ nCol ]->SetNumFormat( nRow, nNumFormat );
+    maColMap[ nCol ]->SetNumFormat( pDoc, nRow, nNumFormat );
 }
 
 void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )

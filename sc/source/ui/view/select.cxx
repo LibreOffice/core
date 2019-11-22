@@ -351,7 +351,7 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
             if (--nPosY >= 0)
             {
                 nPosY = pDoc->LastVisibleRow(0, nPosY, nTab);
-                if (!ValidRow(nPosY))
+                if (!pDoc->ValidRow(nPosY))
                     nPosY = -1;
             }
         }
@@ -571,7 +571,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
                 if (++nPosY < nStartY)
                 {
                     nPosY = pDoc->FirstVisibleRow(nPosY, nStartY-1, nTab);
-                    if (!ValidRow(nPosY))
+                    if (!pDoc->ValidRow(nPosY))
                         nPosY = nStartY;
                 }
                 nSizeY += pDoc->GetRowHeight( nPosY, nStartY-1, nTab );
