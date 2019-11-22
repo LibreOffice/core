@@ -252,7 +252,7 @@ namespace weld
             if (m_eSrcUnit == FieldUnit::INCH)
             {
                 OUString sDoublePrime = u"\u2033";
-                if (aSuffix != "\"" && aSuffix != sDoublePrime)
+                if (aSuffix != "\"" || aSuffix != sDoublePrime)
                     aStr += " ";
                 else
                     aSuffix = sDoublePrime;

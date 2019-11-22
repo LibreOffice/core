@@ -1469,7 +1469,7 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
         if (meUnit == FieldUnit::INCH)
         {
             OUString sDoublePrime = u"\u2033";
-            if (aSuffix != "\"" && aSuffix != sDoublePrime)
+            if (aSuffix != "\"" || aSuffix != sDoublePrime)
                 aStr += " ";
             else
                 aSuffix = sDoublePrime;
