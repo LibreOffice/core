@@ -1653,18 +1653,17 @@ std::unique_ptr<Module> OfaTreeOptionsDialog::LoadModule(
     Reference< XNameAccess > xSet(
         officecfg::Office::OptionsDialog::Modules::get());
 
-    Sequence< OUString > seqNames = xSet->getElementNames();
-    for ( int i = 0; i < seqNames.getLength(); ++i )
+    const Sequence< OUString > seqNames = xSet->getElementNames();
+    for ( const OUString& rModule : seqNames )
     {
-        OUString sModule( seqNames[i] );
-        if ( rModuleIdentifier == sModule )
+        if ( rModuleIdentifier == rModule )
         {
             // current active module found
             pModule.reset(new Module);
             pModule->m_bActive = true;
 
             Reference< XNameAccess > xModAccess;
-            xSet->getByName( seqNames[i] ) >>= xModAccess;
+            xSet->getByName( rModule ) >>= xModAccess;
             if ( xModAccess.is() )
             {
                 // load the nodes of this module
@@ -1672,19 +1671,19 @@ std::unique_ptr<Module> OfaTreeOptionsDialog::LoadModule(
                 xModAccess->getByName( "Nodes" ) >>= xNodeAccess;
                 if ( xNodeAccess.is() )
                 {
-                    Sequence< OUString > xTemp = xNodeAccess->getElementNames();
+                    const Sequence< OUString > xTemp = xNodeAccess->getElementNames();
                     Reference< XNameAccess > xAccess;
                     sal_Int32 nIndex = -1;
-                    for ( int x = 0; x < xTemp.getLength(); ++x )
+                    for ( const OUString& rNode : xTemp)
                     {
-                        xNodeAccess->getByName( xTemp[x] ) >>= xAccess;
+                        xNodeAccess->getByName( rNode ) >>= xAccess;
                         if ( xAccess.is() )
                         {
                             xAccess->getByName( "Index" ) >>= nIndex;
                             if ( nIndex < 0 )
                                 // append nodes with index < 0
                                 pModule->m_aNodeList.push_back(
-                                 std::unique_ptr<OrderedEntry>(new OrderedEntry(nIndex, xTemp[x])));
+                                 std::unique_ptr<OrderedEntry>(new OrderedEntry(nIndex, rNode)));
                             else
                             {
                                 // search position of the node
@@ -1698,7 +1697,7 @@ std::unique_ptr<Module> OfaTreeOptionsDialog::LoadModule(
                                 // and insert the node on this position
                                 pModule->m_aNodeList.insert(
                                     pModule->m_aNodeList.begin() + y,
-                                    std::unique_ptr<OrderedEntry>(new OrderedEntry( nIndex, xTemp[x] )) );
+                                    std::unique_ptr<OrderedEntry>(new OrderedEntry( nIndex, rNode )) );
                             }
                         }
                     }
