@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_f5ef721b",
+        "filename": "vcl/README",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-22T16:37:07Z",
+      "side": 1,
+      "message": "duplicate \"case\"",
+      "range": {
+        "startLine": 228,
+        "startChar": 43,
+        "endLine": 228,
+        "endChar": 47
+      },
+      "revId": "2d8c1639f2e25cab3f7b3fe215984027199f6959",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_d5ea760d",
+        "filename": "vcl/README",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-22T16:37:07Z",
+      "side": 1,
+      "message": "E*v*ent",
+      "revId": "2d8c1639f2e25cab3f7b3fe215984027199f6959",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
