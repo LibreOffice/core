@@ -620,16 +620,13 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     return true;
 }
 
-// TODO implement rObjectToDevice - need to take the matrix into account
 bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                                        const basegfx::B2DPolygon& rPolyLine, double fTransparency,
                                        const basegfx::B2DVector& rLineWidths,
                                        basegfx::B2DLineJoin eLineJoin,
                                        css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
-                                       bool /*bPixelSnapHairline*/)
+                                       bool bPixelSnapHairline)
 {
-    //(void)bPixelSnapHairline; // TODO
-
     if (rPolyLine.count() == 0 || fTransparency < 0.0 || fTransparency >= 1.0
         || mLineColor == SALCOLOR_NONE)
         return true;
@@ -637,27 +634,22 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     preDraw();
     SAL_INFO("vcl.skia", "drawpolyline(" << this << "): " << rPolyLine << ":" << mLineColor);
 
-    basegfx::B2DVector aLineWidths(rLineWidths);
-    const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
-    const basegfx::B2DVector aDeviceLineWidths(
-        bObjectToDeviceIsIdentity ? rLineWidths : rObjectToDevice * rLineWidths);
-    const bool bCorrectLineWidth(!bObjectToDeviceIsIdentity && aDeviceLineWidths.getX() < 1.0
-                                 && aLineWidths.getX() >= 1.0);
+    // need to check/handle LineWidth when ObjectToDevice transformation is used
+    const basegfx::B2DVector aDeviceLineWidths(rObjectToDevice * rLineWidths);
+    const bool bCorrectLineWidth(aDeviceLineWidths.getX() < 1.0 && rLineWidths.getX() >= 1.0);
+    const basegfx::B2DVector aLineWidths(bCorrectLineWidth ? rLineWidths : aDeviceLineWidths);
 
-    // on-demand inverse of ObjectToDevice transformation
-    basegfx::B2DHomMatrix aObjectToDeviceInv;
+    // Skia does not support B2DLineJoin::NONE; return false to use
+    // the fallback (own geometry preparation),
+    // linejoin-mode and thus the above only applies to "fat" lines.
+    if ((basegfx::B2DLineJoin::NONE == eLineJoin) && (aLineWidths.getX() > 1.3))
+        return false;
 
-    if (bCorrectLineWidth)
-    {
-        if (aObjectToDeviceInv.isIdentity())
-        {
-            aObjectToDeviceInv = rObjectToDevice;
-            aObjectToDeviceInv.invert();
-        }
-
-        // calculate-back logical LineWidth for a hairline
-        aLineWidths = aObjectToDeviceInv * basegfx::B2DVector(1.0, 1.0);
-    }
+    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
+    basegfx::B2DPolygon aPolyLine(rPolyLine);
+    aPolyLine.transform(rObjectToDevice);
+    if (bPixelSnapHairline)
+        aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine);
 
     // Setup Line Join
     SkPaint::Join eSkLineJoin = SkPaint::kMiter_Join;
@@ -704,7 +696,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
 
     SkPath aPath;
-    addPolygonToPath(rPolyLine, aPath);
+    addPolygonToPath(aPolyLine, aPath);
     aPath.setFillType(SkPath::kEvenOdd_FillType);
     // Apply the same adjustment as toSkX()/toSkY() do. Do it here even in the non-GPU
     // case as it seems to produce better results.
