@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d54ef66d",
+        "filename": "emfio/source/reader/emfreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2019-11-22T16:13:17Z",
+      "side": 1,
+      "message": "Maybe it will be useful to read GDI comments only for Debug mode, as it could impact performance.\nSometimes there is no need to read Commens, as there could be information from external applications. For example ChemDraw, could store some internal Chemistry names.",
+      "revId": "a6c42ac8cafcb645e2cca6b54b5bc19df38d32c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
