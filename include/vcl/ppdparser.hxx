@@ -54,7 +54,7 @@ struct VCL_DLLPUBLIC PPDValue
  * PPDKey - a container for the available options (=values) of a PPD keyword
  */
 
-class VCL_DLLPUBLIC PPDKey
+class PPDKey
 {
     friend class PPDParser;
     friend class CPDManager;
@@ -110,7 +110,7 @@ struct PPDKeyhash
  * PPDParser - parses a PPD file and contains all available keys from it
  */
 
-class VCL_DLLPUBLIC PPDParser
+class PPDParser
 {
     friend class PPDContext;
     friend class CUPSManager;
@@ -224,7 +224,7 @@ public:
  * contents of a PPDParser.
  */
 
-class VCL_DLLPUBLIC PPDContext
+class PPDContext
 {
     typedef std::unordered_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
     hash_type m_aCurrentValues;

@@ -155,7 +155,7 @@ template <> struct VCL_DLLPUBLIC hash<vcl::ControlTypeAndPart>
 
 namespace vcl
 {
-class VCL_DLLPUBLIC WidgetDefinitionState
+class WidgetDefinitionState
 {
 public:
     OString msEnabled;

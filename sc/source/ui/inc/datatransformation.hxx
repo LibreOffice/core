@@ -101,7 +101,7 @@ public:
     const std::set<SCCOL> & getColumns() const;
 };
 
-class SC_DLLPUBLIC SortTransformation : public DataTransformation
+class SortTransformation : public DataTransformation
 {
     ScSortParam const maSortParam;
 public:

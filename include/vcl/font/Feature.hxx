@@ -93,7 +93,7 @@ struct VCL_DLLPUBLIC FeatureID
     uint32_t m_aLanguageCode;
 };
 
-struct VCL_DLLPUBLIC Feature
+struct Feature
 {
     Feature();
     Feature(FeatureID const& rID, FeatureType eType);
@@ -105,7 +105,7 @@ struct VCL_DLLPUBLIC Feature
 
 // This is basically duplicates hb_feature_t to avoid including HarfBuzz
 // headers here, so the member types should remain compatible.
-struct VCL_DLLPUBLIC FeatureSetting
+struct FeatureSetting
 {
     FeatureSetting(OString feature);
 

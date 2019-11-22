@@ -31,7 +31,7 @@ namespace sdr
     {
         // OverlayObjectCell - used for cell cursor, selection and AutoFill handle
 
-        class SVX_DLLPUBLIC OverlayObjectCell final : public OverlayObject
+        class OverlayObjectCell final : public OverlayObject
         {
         public:
             typedef ::std::vector< basegfx::B2DRange > RangeVector;

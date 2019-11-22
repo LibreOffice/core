@@ -20,7 +20,7 @@ namespace vcl
 {
 namespace font
 {
-class VCL_DLLPUBLIC OpenTypeFeatureDefinitonListPrivate
+class OpenTypeFeatureDefinitonListPrivate
 {
 private:
     std::vector<FeatureDefinition> m_aFeatureDefinition;

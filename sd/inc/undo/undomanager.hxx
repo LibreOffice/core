@@ -26,7 +26,7 @@
 namespace sd
 {
 
-class SD_DLLPUBLIC UndoManager final : public SdrUndoManager
+class UndoManager final : public SdrUndoManager
 {
 public:
     UndoManager();

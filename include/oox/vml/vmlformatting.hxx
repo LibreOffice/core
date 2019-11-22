@@ -250,7 +250,7 @@ struct OOX_DLLPUBLIC ShadowModel
 };
 
 /** The shadow model structure contains all shape textpath properties. */
-struct OOX_DLLPUBLIC TextpathModel
+struct TextpathModel
 {
     OptValue<OUString> moString;                  ///< Specifies the string of the textpath.
     OptValue<OUString> moStyle;                   ///< Specifies the style of the textpath.
