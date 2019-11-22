@@ -80,6 +80,7 @@ public:
     void testParaMarginAndindentation();
     void testTdf111884();
     void testTdf112633();
+    void testTdf128952();
     void testCustomXml();
     void testTdf94238();
     void testPictureTransparency();
@@ -116,6 +117,7 @@ public:
     CPPUNIT_TEST(testParaMarginAndindentation);
     CPPUNIT_TEST(testTdf111884);
     CPPUNIT_TEST(testTdf112633);
+    CPPUNIT_TEST(testTdf128952);
     CPPUNIT_TEST(testCustomXml);
     CPPUNIT_TEST(testTdf94238);
     CPPUNIT_TEST(testTdf125554);
@@ -810,6 +812,21 @@ void SdOOXMLExportTest1::testTdf112633()
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
             comphelper::getComponentContext(m_xSFactory), tempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("ppt/media/hdphoto1.wdp")));
+}
+
+void SdOOXMLExportTest1::testTdf128952()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf128952.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm/a:off", "x", "360");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm/a:off", "y", "-360");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm/a:ext", "cx", "1919880");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm/a:ext", "cy", "1462680");
 }
 
 void SdOOXMLExportTest1::testCustomXml()
