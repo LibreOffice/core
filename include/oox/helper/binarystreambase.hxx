@@ -120,7 +120,7 @@ private:
 /** Base class for binary input and output streams wrapping a UNO stream,
     seekable via the com.sun.star.io.XSeekable interface.
  */
-class OOX_DLLPUBLIC BinaryXSeekableStream : public virtual BinaryStreamBase
+class BinaryXSeekableStream : public virtual BinaryStreamBase
 {
 public:
     virtual             ~BinaryXSeekableStream() override;

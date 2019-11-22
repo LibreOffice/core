@@ -52,7 +52,7 @@ namespace rptui
 
     /** Helper class to allow std::mem_fun for SAL_CALL
     */
-    class REPORTDESIGN_DLLPUBLIC OGroupHelper
+    class OGroupHelper
     {
         css::uno::Reference< css::report::XGroup > m_xGroup;
         OGroupHelper(const OGroupHelper&) = delete;
@@ -75,7 +75,7 @@ namespace rptui
 
     /** Helper class to allow std::mem_fun for SAL_CALL
     */
-    class REPORTDESIGN_DLLPUBLIC OReportHelper
+    class OReportHelper
     {
         css::uno::Reference< css::report::XReportDefinition > m_xReport;
     public:
@@ -159,7 +159,7 @@ namespace rptui
 
     // OUndoContainerAction
 
-    class REPORTDESIGN_DLLPUBLIC OUndoContainerAction: public OCommentUndoAction
+    class OUndoContainerAction: public OCommentUndoAction
     {
         OUndoContainerAction(OUndoContainerAction const &) = delete;
         void operator =(OUndoContainerAction const &) = delete;
@@ -191,7 +191,7 @@ namespace rptui
 
     // OUndoReportSectionAction
 
-    class REPORTDESIGN_DLLPUBLIC OUndoReportSectionAction : public OUndoContainerAction
+    class OUndoReportSectionAction : public OUndoContainerAction
     {
         OReportHelper                               m_aReportHelper;
         ::std::function<css::uno::Reference< css::report::XSection >(OReportHelper *)> m_pMemberFunction;
@@ -210,7 +210,7 @@ namespace rptui
 
 
     // OUndoGroupSectionAction
-    class REPORTDESIGN_DLLPUBLIC OUndoGroupSectionAction : public OUndoContainerAction
+    class OUndoGroupSectionAction : public OUndoContainerAction
     {
         OGroupHelper                                m_aGroupHelper;
         ::std::function<css::uno::Reference< css::report::XSection >(OGroupHelper *)> m_pMemberFunction;
@@ -228,7 +228,7 @@ namespace rptui
     };
 
     // ORptUndoPropertyAction
-    class REPORTDESIGN_DLLPUBLIC ORptUndoPropertyAction: public OCommentUndoAction
+    class ORptUndoPropertyAction: public OCommentUndoAction
     {
         css::uno::Reference< css::beans::XPropertySet> m_xObj;
         OUString const         m_aPropertyName;
@@ -255,7 +255,7 @@ namespace rptui
 
     // OUndoPropertyReportSectionAction
 
-    class REPORTDESIGN_DLLPUBLIC OUndoPropertyReportSectionAction : public ORptUndoPropertyAction
+    class OUndoPropertyReportSectionAction : public ORptUndoPropertyAction
     {
         OReportHelper                               m_aReportHelper;
         ::std::function<css::uno::Reference< css::report::XSection >(OReportHelper *)> m_pMemberFunction;
@@ -272,7 +272,7 @@ namespace rptui
 
     // OUndoPropertyGroupSectionAction
 
-    class REPORTDESIGN_DLLPUBLIC OUndoPropertyGroupSectionAction : public ORptUndoPropertyAction
+    class OUndoPropertyGroupSectionAction : public ORptUndoPropertyAction
     {
         OGroupHelper                                m_aGroupHelper;
         ::std::function<css::uno::Reference< css::report::XSection >(OGroupHelper *)> m_pMemberFunction;

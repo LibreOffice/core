@@ -108,7 +108,7 @@ struct FormulaGroupContext
 /**
  * Abstract base class for a "compiled" formula
  */
-class SC_DLLPUBLIC CompiledFormula
+class CompiledFormula
 {
 public:
     CompiledFormula();
