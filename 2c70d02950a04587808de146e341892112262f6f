@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_9a250d5f",
+        "filename": "vcl/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-22T14:13:32Z",
+      "side": 1,
+      "message": "only acquire the SolarMutex if you actually need it (e.g., not in functions that return static information), and only around the code that actually needs it (i.e., never call out with it locked)",
+      "range": {
+        "startLine": 210,
+        "startChar": 20,
+        "endLine": 211,
+        "endChar": 31
+      },
+      "revId": "2c70d02950a04587808de146e341892112262f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_fa0be1d2",
+        "filename": "vcl/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-22T14:13:32Z",
+      "side": 1,
+      "message": "event listeners are just a special case of the \"never call out with a mutex (SolarMutex or other) locked\" fundamental rule",
+      "revId": "2c70d02950a04587808de146e341892112262f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
