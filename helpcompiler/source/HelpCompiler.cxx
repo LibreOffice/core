@@ -130,6 +130,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
         {
             static std::string fsroot('\'' + src.toUTF8() + '\'');
 
+            // coverity[unsafe_xml_parse_config] - entity support is required in the build-time only utility
             xmlSubstituteEntitiesDefault(1);
             xmlLoadExtDtdDefaultValue = 1;
             cur = xsltParseStylesheetFile(reinterpret_cast<const xmlChar *>(resEmbStylesheet.native_file_string().c_str()));
