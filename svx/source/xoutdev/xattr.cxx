@@ -1834,6 +1834,40 @@ void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+
+    if (Which() == XATTR_FILLSTYLE)
+        aTree.put("which", ".uno:FillStyle");
+
+    OUString sValue;
+
+    switch( GetValue() )
+    {
+        case drawing::FillStyle_NONE:
+            sValue = "NONE";
+            break;
+        case drawing::FillStyle_SOLID:
+            sValue = "SOLID";
+            break;
+        case drawing::FillStyle_GRADIENT:
+            sValue = "GRADIENT";
+            break;
+        case drawing::FillStyle_HATCH:
+            sValue = "HATCH";
+            break;
+        case drawing::FillStyle_BITMAP:
+            sValue = "BITMAP";
+            break;
+        default: break;
+    }
+
+    aTree.put("data", sValue);
+
+    return aTree;
+}
+
 
 SfxPoolItem* XFillColorItem::CreateDefault() { return new XFillColorItem; }
 
