@@ -26,7 +26,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC ViewObjectContactOfGroup : public ViewObjectContactOfSdrObj
+        class ViewObjectContactOfGroup : public ViewObjectContactOfSdrObj
         {
         public:
             // basic constructor.

@@ -36,7 +36,7 @@ namespace oox {
 
 /** Interface for progress bar classes.
  */
-class OOX_DLLPUBLIC IProgressBar
+class IProgressBar
 {
 public:
     virtual             ~IProgressBar();
