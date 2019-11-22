@@ -187,6 +187,8 @@ private:
 
     std::unique_ptr<weld::Label> m_xFontColorFT;
     std::unique_ptr<ColorListBox> m_xFontColorLB;
+    std::unique_ptr<weld::Label> m_xFontTransparencyFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xFontTransparencyMtr;
     std::unique_ptr<weld::Label> m_xEffectsFT;
     std::unique_ptr<weld::ComboBox> m_xEffectsLB;
     std::unique_ptr<weld::Label> m_xReliefFT;
@@ -225,6 +227,7 @@ private:
     DECL_LINK(TristClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(UpdatePreview_Impl, weld::ComboBox&, void);
     DECL_LINK(ColorBoxSelectHdl_Impl, ColorListBox&, void);
+    DECL_LINK(ModifyFontTransparencyHdl_Impl, weld::MetricSpinButton&, void);
 
 public:
     virtual ~SvxCharEffectsPage() override;

@@ -145,6 +145,31 @@
           </packing>
         </child>
         <child>
+          <object class="GtkLabel" id="fonttransparencyft">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="effectspage|fonttransparencyft">_Transparency:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">fonttransparencymtr</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="fonttransparencymtr">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="activates_default">True</property>
+            <property name="adjustment">adjustmentPercent</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">7</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkComboBoxText" id="effectslb">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -524,5 +549,10 @@
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPercent">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>
