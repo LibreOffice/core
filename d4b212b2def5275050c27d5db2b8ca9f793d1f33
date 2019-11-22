@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_fad9a156",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-11-22T14:24:48Z",
+      "side": 1,
+      "message": "note that \n(a) std::vector results in load-time initialisation code\n(b) you can use range-based for over a static const array, works just fine",
+      "revId": "d4b212b2def5275050c27d5db2b8ca9f793d1f33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
