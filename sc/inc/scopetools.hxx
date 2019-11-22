@@ -29,7 +29,7 @@ public:
     ~AutoCalcSwitch();
 };
 
-class SC_DLLPUBLIC ExpandRefsSwitch
+class ExpandRefsSwitch
 {
     ScDocument& mrDoc;
     bool const mbOldValue;
@@ -47,7 +47,7 @@ public:
     ~UndoSwitch();
 };
 
-class SC_DLLPUBLIC IdleSwitch
+class IdleSwitch
 {
     ScDocument& mrDoc;
     bool const mbOldValue;
@@ -57,7 +57,7 @@ public:
 };
 
 /// Wrapper for ScDocument::DelayFormulaGrouping()
-class SC_DLLPUBLIC DelayFormulaGroupingSwitch
+class DelayFormulaGroupingSwitch
 {
     ScDocument& mrDoc;
     bool const mbOldValue;

@@ -26,7 +26,7 @@ class SvxFont;
 namespace svx
 {
 
-class SVX_DLLPUBLIC CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
+class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
 {
     std::unique_ptr<SvxFont> m_pFont;
     Color maFontColor;

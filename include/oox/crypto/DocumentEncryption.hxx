@@ -26,7 +26,7 @@ namespace oox { namespace ole { class OleStorage; } }
 namespace oox {
 namespace core {
 
-class OOX_DLLPUBLIC DocumentEncryption
+class DocumentEncryption
 {
 private:
     css::uno::Reference< css::io::XStream > mxDocumentStream;

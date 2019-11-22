@@ -54,7 +54,7 @@ template<> struct typed_flags<sfx2::ApplicationType> : is_typed_flags<sfx2::Appl
 namespace sfx2
 {
 
-class SFX2_DLLPUBLIC RecentDocsView final : public ThumbnailView
+class RecentDocsView final : public ThumbnailView
 {
 public:
     RecentDocsView( vcl::Window* pParent );
