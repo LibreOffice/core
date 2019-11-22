@@ -78,7 +78,7 @@ struct FormulaLogger::GroupScope::Impl
         if (mbOutputEnabled)
         {
             sc::TokenStringContext aCxt(&rDoc, rDoc.GetGrammar());
-            OUString aFormula = rCell.GetCode()->CreateString(&rDoc, aCxt, rCell.aPos);
+            OUString aFormula = rCell.GetCode()->CreateString(aCxt, rCell.aPos);
 
             mrLogger.write(maPrefix);
             mrLogger.writeNestLevel();

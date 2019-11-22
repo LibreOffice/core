@@ -393,7 +393,7 @@ void ScAccessibleCell::FillDependents(utl::AccessibleRelationSetHelper* pRelatio
             if (aCellIter.getType() == CELLTYPE_FORMULA)
             {
                 bool bFound = false;
-                ScDetectiveRefIter aIter(aCellIter.getFormulaCell());
+                ScDetectiveRefIter aIter(mpDoc, aCellIter.getFormulaCell());
                 ScRange aRef;
                 while ( !bFound && aIter.GetNextRef( aRef ) )
                 {
@@ -415,7 +415,7 @@ void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelatio
         if (aCell.meType == CELLTYPE_FORMULA)
         {
             ScFormulaCell* pCell = aCell.mpFormula;
-            ScDetectiveRefIter aIter(pCell);
+            ScDetectiveRefIter aIter(mpDoc, pCell);
             ScRange aRef;
             while ( aIter.GetNextRef( aRef ) )
             {
