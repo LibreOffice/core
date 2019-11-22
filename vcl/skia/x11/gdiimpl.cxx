@@ -41,12 +41,7 @@ void X11SkiaSalGraphicsImpl::Init()
 void X11SkiaSalGraphicsImpl::createWindowContext()
 {
     sk_app::DisplayParams displayParams;
-    // Use a macro to hide an unreachable code warning.
-    // TODO The Skia Xlib code actually requires the non-native color type to work properly.
-#define GET_FORMAT                                                                                 \
-    kN32_SkColorType == kBGRA_8888_SkColorType ? kRGBA_8888_SkColorType : kBGRA_8888_SkColorType
-    displayParams.fColorType = GET_FORMAT;
-#undef GET_FORMAT
+    displayParams.fColorType = kN32_SkColorType;
     sk_app::window_context_factory::XlibWindowInfo winInfo;
     winInfo.fDisplay = mX11Parent.GetXDisplay();
     winInfo.fWindow = mX11Parent.GetDrawable();
@@ -68,6 +63,10 @@ void X11SkiaSalGraphicsImpl::createWindowContext()
     switch (SkiaHelper::renderMethodToUse())
     {
         case SkiaHelper::RenderRaster:
+            // TODO The Skia Xlib code actually requires the non-native color type to work properly.
+            displayParams.fColorType
+                = (displayParams.fColorType == kBGRA_8888_SkColorType ? kRGBA_8888_SkColorType
+                                                                      : kBGRA_8888_SkColorType);
             mWindowContext
                 = sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
             mIsGPU = false;
