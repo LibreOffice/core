@@ -202,7 +202,7 @@ void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow
 
         if (nY > nDocHeightEndRow)
         {
-            if (ValidRow(nY))
+            if (pDoc->ValidRow(nY))
                 nDocHeight = pDoc->GetRowHeight( nY, nTab, nullptr, &nDocHeightEndRow );
             else
                 nDocHeight = ScGlobal::nStdRowHeight;
@@ -261,7 +261,7 @@ void initColWidths(RowInfo* pRowInfo, const ScDocument* pDoc, double fColScale, 
     for (SCCOL nArrCol=nCol2+3; nArrCol<=nRotMax+2; nArrCol++)    // Add remaining widths
     {
         SCCOL nX = nArrCol-1;
-        if ( ValidCol(nX) )
+        if ( pDoc->ValidCol(nX) )
         {
             if (!pDoc->ColHidden(nX, nTab))
             {

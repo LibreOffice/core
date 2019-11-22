@@ -94,8 +94,9 @@ sc::MultiDataCellState::StateType ScColumn::HasDataCellsInRange(
 void ScColumn::DeleteBeforeCopyFromClip(
     sc::CopyFromClipContext& rCxt, const ScColumn& rClipCol, sc::ColumnSpanSet& rBroadcastSpans )
 {
+    ScDocument* pDocument = GetDoc();
     sc::CopyFromClipContext::Range aRange = rCxt.getDestRange();
-    if (!ValidRow(aRange.mnRow1) || !ValidRow(aRange.mnRow2))
+    if (!pDocument->ValidRow(aRange.mnRow1) || !pDocument->ValidRow(aRange.mnRow2))
         return;
 
     ScRange aClipRange = rCxt.getClipDoc()->GetClipParam().getWholeRange();
@@ -114,7 +115,6 @@ void ScColumn::DeleteBeforeCopyFromClip(
         return;
 
     // Translate the clip column spans into the destination column, and repeat as needed.
-    ScDocument* pDocument = GetDoc();
     std::vector<sc::RowSpan> aDestSpans;
     SCROW nDestOffset = aRange.mnRow1 - nClipRow1;
     bool bContinue = true;
@@ -309,7 +309,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
 void ScColumn::SetValues( const SCROW nRow, const std::vector<double>& rVals )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     SCROW nLastRow = nRow + rVals.size() - 1;
@@ -339,7 +339,7 @@ void ScColumn::SetValues( const SCROW nRow, const std::vector<double>& rVals )
 
 void ScColumn::TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rDest )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     SCROW nLastRow = nRow + nLen - 1;
@@ -364,7 +364,7 @@ void ScColumn::TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rD
 
 void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     SCROW nLastRow = nRow + rSrc.size() - 1;
@@ -431,7 +431,7 @@ public:
 void ScColumn::ConvertFormulaToValue(
     sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, sc::TableValues* pUndo )
 {
-    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+    if (!GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2) || nRow1 > nRow2)
         return;
 
     std::vector<SCROW> aBounds;
@@ -614,7 +614,7 @@ void ScColumn::CloneFormulaCell(
 
 std::unique_ptr<ScPostIt> ScColumn::ReleaseNote( SCROW nRow )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return nullptr;
 
     ScPostIt* p = nullptr;
@@ -672,7 +672,7 @@ void ScColumn::ForgetNoteCaptions( SCROW nRow1, SCROW nRow2, bool bPreserveData 
     if (maCellNotes.empty())
         return;
 
-    if (!ValidRow(nRow1) || !ValidRow(nRow2))
+    if (!GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2))
         return;
 
     NoteCaptionCleaner aFunc(bPreserveData);
@@ -1065,7 +1065,7 @@ public:
 
 void ScColumn::UpdateScriptTypes( SCROW nRow1, SCROW nRow2 )
 {
-    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+    if (!GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2) || nRow1 > nRow2)
         return;
 
     ScriptTypeUpdater aFunc(*this);
@@ -1239,7 +1239,7 @@ public:
 
 void ScColumn::CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nRow1, SCROW nRow2 )
 {
-    if (nRow2 < nRow1 || !ValidRow(nRow1) || !ValidRow(nRow2))
+    if (nRow2 < nRow1 || !GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2))
         return;
 
     ListenerCollector aFunc(rListeners);
@@ -1248,7 +1248,7 @@ void ScColumn::CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nR
 
 void ScColumn::CollectFormulaCells( std::vector<ScFormulaCell*>& rCells, SCROW nRow1, SCROW nRow2 )
 {
-    if (nRow2 < nRow1 || !ValidRow(nRow1) || !ValidRow(nRow2))
+    if (nRow2 < nRow1 || !GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2))
         return;
 
     FormulaCellCollector aFunc(rCells);
@@ -1277,7 +1277,7 @@ bool ScColumn::HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const
     if (!mnBlkCountFormula)
         return false;
 
-    if (nRow2 < nRow1 || !ValidRow(nRow1) || !ValidRow(nRow2))
+    if (nRow2 < nRow1 || !GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2))
         return false;
 
     if (nRow1 == 0 && nRow2 == GetDoc()->MaxRow())
@@ -1493,7 +1493,7 @@ void ScColumn::EndListeningFormulaCells(
 void ScColumn::EndListeningIntersectedGroup(
     sc::EndListeningContext& rCxt, SCROW nRow, std::vector<ScAddress>* pGroupPos )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
@@ -1631,7 +1631,7 @@ void ScColumn::SetNeedsListeningGroup( SCROW nRow )
 
 std::unique_ptr<sc::ColumnIterator> ScColumn::GetColumnIterator( SCROW nRow1, SCROW nRow2 ) const
 {
-    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+    if (!GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2) || nRow1 > nRow2)
         return std::unique_ptr<sc::ColumnIterator>();
 
     return std::make_unique<sc::ColumnIterator>(maCells, nRow1, nRow2);
@@ -1829,7 +1829,7 @@ static void lcl_EvalDirty(sc::CellStoreType& rCells, SCROW nRow1, SCROW nRow2, S
 // Returns true if at least one FC is dirty.
 bool ScColumn::EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2, bool bSkipRunning )
 {
-    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+    if (!GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2) || nRow1 > nRow2)
         return false;
 
     if (!HasFormulaCell(nRow1, nRow2))

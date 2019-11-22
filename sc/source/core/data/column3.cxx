@@ -108,7 +108,7 @@ struct DirtyCellInterpreter
 
 void ScColumn::InterpretDirtyCells( SCROW nRow1, SCROW nRow2 )
 {
-    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+    if (!GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2) || nRow1 > nRow2)
         return;
 
     DirtyCellInterpreter aFunc;
@@ -425,7 +425,7 @@ void ScColumn::DetachFormulaCells(
     // Split formula grouping at the top and bottom boundaries.
     sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
 
-    if (nLength > 0 && ValidRow(nNextTopRow))
+    if (nLength > 0 && GetDoc()->ValidRow(nNextTopRow))
     {
         if (pNewSharedRows && !bLowerSplitOff && !GetDoc()->IsClipOrUndo())
         {
@@ -462,7 +462,7 @@ void ScColumn::AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1,
     sc::CellStoreType::iterator it = aPos.first;
 
     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
-    if (ValidRow(nRow2+1))
+    if (GetDoc()->ValidRow(nRow2+1))
     {
         aPos = maCells.position(it, nRow2+1);
         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
@@ -508,7 +508,7 @@ void ScColumn::DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, S
 
     // Split formula grouping at the top and bottom boundaries.
     sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, &rCxt);
-    if (ValidRow(nRow2+1))
+    if (GetDoc()->ValidRow(nRow2+1))
     {
         if (pNewSharedRows && !bLowerSplitOff && !GetDoc()->IsClipOrUndo())
         {
@@ -1836,7 +1836,7 @@ public:
 
                     // Merge with the next formula group (if any).
                     size_t nNextRow = nDestRow + rNewCell.size;
-                    if (ValidRow(nNextRow))
+                    if (mrDestColumn.GetDoc()->ValidRow(nNextRow))
                     {
                         aPos = rDestCells.position(aPos.first, nNextRow);
                         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
@@ -2182,7 +2182,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const OUString& rString,
                           formula::FormulaGrammar::AddressConvention eConv,
                           const ScSetStringParam* pParam )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return false;
 
     ScCellValue aNewCell;
@@ -2336,11 +2336,11 @@ void ScColumn::SetFormulaCell(
 
 bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return false;
 
     SCROW nEndRow = nRow + rCells.size() - 1;
-    if (!ValidRow(nEndRow))
+    if (!GetDoc()->ValidRow(nEndRow))
         return false;
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
@@ -2538,7 +2538,7 @@ public:
     StrCellIterator(const sc::CellStoreType& rCells, SCROW nStart, const ScDocument* pDoc) :
         miBeg(rCells.begin()), miEnd(rCells.end()), mpDoc(pDoc)
     {
-        if (ValidRow(nStart))
+        if (pDoc->ValidRow(nStart))
             maPos = rCells.position(nStart);
         else
             // Make this iterator invalid.
@@ -2799,7 +2799,7 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
 
 void ScColumn::SetError( SCROW nRow, const FormulaError nError)
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     ScFormulaCell* pCell = new ScFormulaCell(GetDoc(), ScAddress(nCol, nRow, nTab));
@@ -2817,7 +2817,7 @@ void ScColumn::SetError( SCROW nRow, const FormulaError nError)
 
 void ScColumn::SetRawString( SCROW nRow, const OUString& rStr )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     svl::SharedString aSS = GetDoc()->GetSharedStringPool().intern(rStr);
@@ -2829,7 +2829,7 @@ void ScColumn::SetRawString( SCROW nRow, const OUString& rStr )
 
 void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     std::vector<SCROW> aNewSharedRows;
@@ -2847,7 +2847,7 @@ void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr )
 void ScColumn::SetRawString(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const svl::SharedString& rStr, bool bBroadcast )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     std::vector<SCROW> aNewSharedRows;
@@ -2866,7 +2866,7 @@ void ScColumn::SetRawString(
 
 void ScColumn::SetValue( SCROW nRow, double fVal )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     std::vector<SCROW> aNewSharedRows;
@@ -2884,7 +2884,7 @@ void ScColumn::SetValue( SCROW nRow, double fVal )
 void ScColumn::SetValue(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow, double fVal, bool bBroadcast )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     std::vector<SCROW> aNewSharedRows;

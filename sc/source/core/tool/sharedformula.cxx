@@ -120,7 +120,7 @@ bool SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
     return true;
 }
 
-bool SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vector<SCROW>& rBounds)
+bool SharedFormulaUtil::splitFormulaCellGroups(const ScDocument* pDoc, CellStoreType& rCells, std::vector<SCROW>& rBounds)
 {
     if (rBounds.empty())
         return false;
@@ -141,7 +141,7 @@ bool SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vecto
     for (++it; it != itEnd; ++it)
     {
         nRow = *it;
-        if (ValidRow(nRow))
+        if (pDoc->ValidRow(nRow))
         {
             aPos = rCells.position(aPos.first, nRow);
             if (aPos.first == rCells.end())
@@ -379,7 +379,7 @@ void SharedFormulaUtil::unshareFormulaCells(const ScDocument* pDoc, CellStoreTyp
     // Remove duplicates again (the vector should still be sorted).
     aRows2.erase(std::unique(aRows2.begin(), aRows2.end()), aRows2.end());
 
-    splitFormulaCellGroups(rCells, aRows2);
+    splitFormulaCellGroups(pDoc, rCells, aRows2);
 }
 
 void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, ScFormulaCell** ppSharedTop )

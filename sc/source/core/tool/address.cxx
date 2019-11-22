@@ -2550,7 +2550,7 @@ bool AlphaToCol( const ScDocument* pDoc, SCCOL& rCol, const OUString& rStr)
         nResult += ScGlobal::ToUpperAlpha(c) - 'A';
         ++nPos;
     }
-    bool bOk = (ValidCol(nResult) && nPos > 0);
+    bool bOk = (pDoc->ValidCol(nResult) && nPos > 0);
     if (bOk)
         rCol = nResult;
     return bOk;

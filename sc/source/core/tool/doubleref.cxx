@@ -46,6 +46,7 @@ void lcl_uppercase(OUString& rStr)
 }
 
 bool lcl_createStarQuery(
+    const ScDocument* pDoc,
     svl::SharedStringPool& rPool, ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
     // A valid StarQuery must be at least 4 columns wide. To be precise it
@@ -96,7 +97,7 @@ bool lcl_createStarQuery(
             // field name in the 2nd column.
             aCellStr = pQueryRef->getString(1, nRow);
             SCCOL nField = pDBRef->findFieldColumn(aCellStr); // TODO: must be case insensitive comparison.
-            if (ValidCol(nField))
+            if (pDoc->ValidCol(nField))
             {
                 rEntry.nField = nField;
                 bValid = true;
@@ -147,6 +148,7 @@ bool lcl_createStarQuery(
 }
 
 bool lcl_createExcelQuery(
+    const ScDocument* pDoc,
     svl::SharedStringPool& rPool, ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
     bool bValid = true;
@@ -158,7 +160,7 @@ bool lcl_createExcelQuery(
     {
         OUString aQueryStr = pQueryRef->getString(nCol, 0);
         SCCOL nField = pDBRef->findFieldColumn(aQueryStr);
-        if (ValidCol(nField))
+        if (pDoc->ValidCol(nField))
             aFields[nCol] = nField;
         else
             bValid = false;
@@ -213,6 +215,7 @@ bool lcl_createExcelQuery(
 }
 
 bool lcl_fillQueryEntries(
+    const ScDocument* pDoc,
     svl::SharedStringPool& rPool, ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
     SCSIZE nCount = pParam->GetEntryCount();
@@ -220,10 +223,10 @@ bool lcl_fillQueryEntries(
         pParam->GetEntry(i).Clear();
 
     // Standard QueryTabelle
-    bool bValid = lcl_createStarQuery(rPool, pParam, pDBRef, pQueryRef);
+    bool bValid = lcl_createStarQuery(pDoc, rPool, pParam, pDBRef, pQueryRef);
     // Excel QueryTabelle
     if (!bValid)
-        bValid = lcl_createExcelQuery(rPool, pParam, pDBRef, pQueryRef);
+        bValid = lcl_createExcelQuery(pDoc, rPool, pParam, pDBRef, pQueryRef);
 
     nCount = pParam->GetEntryCount();
     if (bValid)
@@ -257,7 +260,7 @@ bool ScDBRangeBase::fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBa
     if (!pDBRef)
         return false;
 
-    return lcl_fillQueryEntries(getDoc()->GetSharedStringPool(), pParam, pDBRef, this);
+    return lcl_fillQueryEntries(getDoc(), getDoc()->GetSharedStringPool(), pParam, pDBRef, this);
 }
 
 void ScDBRangeBase::fillQueryOptions(ScQueryParamBase* pParam)

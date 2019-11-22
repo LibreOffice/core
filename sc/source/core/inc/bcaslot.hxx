@@ -296,10 +296,10 @@ private:
     ScBroadcastArea      *pEOUpdateChain;
     sal_uInt32            nInBulkBroadcast;
 
-    static inline SCSIZE ComputeSlotOffset( const ScAddress& rAddress );
-    static void          ComputeAreaPoints( const ScRange& rRange,
+    inline SCSIZE        ComputeSlotOffset( const ScAddress& rAddress ) const;
+    void                 ComputeAreaPoints( const ScRange& rRange,
                                             SCSIZE& nStart, SCSIZE& nEnd,
-                                            SCSIZE& nRowBreak );
+                                            SCSIZE& nRowBreak ) const;
 
 public:
                         ScBroadcastAreaSlotMachine( ScDocument* pDoc );

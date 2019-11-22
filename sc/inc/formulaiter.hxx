@@ -25,6 +25,7 @@
 #include "address.hxx"
 
 class ScFormulaCell;
+class ScDocument;
 
 /**
  * Iterator for references in a formula cell.
@@ -32,10 +33,11 @@ class ScFormulaCell;
 class ScDetectiveRefIter
 {
 private:
+    const ScDocument* mpDoc;
     formula::FormulaTokenArrayPlainIterator maIter;
     ScAddress const aPos;
 public:
-                ScDetectiveRefIter( ScFormulaCell* pCell );
+                ScDetectiveRefIter( const ScDocument* pDoc, ScFormulaCell* pCell );
     bool        GetNextRef( ScRange& rRange );
     formula::FormulaToken* GetNextRefToken();
 };

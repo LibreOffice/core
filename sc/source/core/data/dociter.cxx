@@ -117,10 +117,10 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
 {
     SCTAB nDocMaxTab = pDocument->GetTableCount() - 1;
 
-    if (!ValidCol(maStartPos.Col())) maStartPos.SetCol(pDoc->MaxCol());
-    if (!ValidCol(maEndPos.Col())) maEndPos.SetCol(pDoc->MaxCol());
-    if (!ValidRow(maStartPos.Row())) maStartPos.SetRow(pDoc->MaxRow());
-    if (!ValidRow(maEndPos.Row())) maEndPos.SetRow(pDoc->MaxRow());
+    if (!pDocument->ValidCol(maStartPos.Col())) maStartPos.SetCol(pDoc->MaxCol());
+    if (!pDocument->ValidCol(maEndPos.Col())) maEndPos.SetCol(pDoc->MaxCol());
+    if (!pDocument->ValidRow(maStartPos.Row())) maStartPos.SetRow(pDoc->MaxRow());
+    if (!pDocument->ValidRow(maEndPos.Row())) maEndPos.SetRow(pDoc->MaxRow());
     if (!ValidTab(maStartPos.Tab()) || maStartPos.Tab() > nDocMaxTab) maStartPos.SetTab(nDocMaxTab);
     if (!ValidTab(maEndPos.Tab()) || maEndPos.Tab() > nDocMaxTab) maEndPos.SetTab(nDocMaxTab);
 }
@@ -876,10 +876,10 @@ void ScCellIterator::init()
 
     PutInOrder(maStartPos, maEndPos);
 
-    if (!ValidCol(maStartPos.Col())) maStartPos.SetCol(mpDoc->MaxCol());
-    if (!ValidCol(maEndPos.Col())) maEndPos.SetCol(mpDoc->MaxCol());
-    if (!ValidRow(maStartPos.Row())) maStartPos.SetRow(mpDoc->MaxRow());
-    if (!ValidRow(maEndPos.Row())) maEndPos.SetRow(mpDoc->MaxRow());
+    if (!mpDoc->ValidCol(maStartPos.Col())) maStartPos.SetCol(mpDoc->MaxCol());
+    if (!mpDoc->ValidCol(maEndPos.Col())) maEndPos.SetCol(mpDoc->MaxCol());
+    if (!mpDoc->ValidRow(maStartPos.Row())) maStartPos.SetRow(mpDoc->MaxRow());
+    if (!mpDoc->ValidRow(maEndPos.Row())) maEndPos.SetRow(mpDoc->MaxRow());
     if (!ValidTab(maStartPos.Tab(), nDocMaxTab)) maStartPos.SetTab(nDocMaxTab);
     if (!ValidTab(maEndPos.Tab(), nDocMaxTab)) maEndPos.SetTab(nDocMaxTab);
 
@@ -2294,10 +2294,10 @@ ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
     PutInOrder( nStartRow, nEndRow);
     PutInOrder( nStartTab, nEndTab );
 
-    if (!ValidCol(nStartCol)) nStartCol = pDoc->MaxCol();
-    if (!ValidCol(nEndCol)) nEndCol = pDoc->MaxCol();
-    if (!ValidRow(nStartRow)) nStartRow = pDoc->MaxRow();
-    if (!ValidRow(nEndRow)) nEndRow = pDoc->MaxRow();
+    if (!pDoc->ValidCol(nStartCol)) nStartCol = pDoc->MaxCol();
+    if (!pDoc->ValidCol(nEndCol)) nEndCol = pDoc->MaxCol();
+    if (!pDoc->ValidRow(nStartRow)) nStartRow = pDoc->MaxRow();
+    if (!pDoc->ValidRow(nEndRow)) nEndRow = pDoc->MaxRow();
     if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
     if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
 

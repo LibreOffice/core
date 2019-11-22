@@ -85,7 +85,7 @@ public:
      * @return TRUE if there indeed was a split, else FALSE (e.g. split
      *         positions were only top or bottom cells or no formula group).
      */
-    static bool splitFormulaCellGroups(CellStoreType& rCells, std::vector<SCROW>& rBounds);
+    static bool splitFormulaCellGroups(const ScDocument* pDoc, CellStoreType& rCells, std::vector<SCROW>& rBounds);
 
     /**
      * See if two specified adjacent formula cells can be merged, and if they

@@ -988,7 +988,7 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
         if (bInSel)
         {
             nRow = rData.GetNextMarked(nCol, nRow, false);
-            if (!ValidRow(nRow))
+            if (!pDocument->ValidRow(nRow))
             {
                 nRow = GetDoc()->MaxRow()+1;
                 bStop = true;
@@ -2010,7 +2010,7 @@ void ScColumn::SetTextWidth(SCROW nRow, sal_uInt16 nWidth)
 
 SvtScriptType ScColumn::GetScriptType( SCROW nRow ) const
 {
-    if (!ValidRow(nRow) || maCellTextAttrs.is_empty(nRow))
+    if (!GetDoc()->ValidRow(nRow) || maCellTextAttrs.is_empty(nRow))
         return SvtScriptType::NONE;
 
     return maCellTextAttrs.get<sc::CellTextAttr>(nRow).mnScriptType;
@@ -2019,7 +2019,7 @@ SvtScriptType ScColumn::GetScriptType( SCROW nRow ) const
 SvtScriptType ScColumn::GetRangeScriptType(
     sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2, const sc::CellStoreType::iterator& itrCells_ )
 {
-    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+    if (!GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2) || nRow1 > nRow2)
         return SvtScriptType::NONE;
 
     SCROW nRow = nRow1;
@@ -2089,7 +2089,7 @@ SvtScriptType ScColumn::GetRangeScriptType(
 
 void ScColumn::SetScriptType( SCROW nRow, SvtScriptType nType )
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return;
 
     sc::CellTextAttrStoreType::position_type aPos = maCellTextAttrs.position(nRow);
@@ -2999,7 +2999,7 @@ void ScColumn::SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat )
 
 ScFormulaCell * const * ScColumn::GetFormulaCellBlockAddress( SCROW nRow, size_t& rBlockSize ) const
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
     {
         rBlockSize = 0;
         return nullptr;
@@ -3252,7 +3252,7 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
 
 void ScColumn::StartListening( sc::StartListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rLst )
 {
-    if (!ValidRow(rAddress.Row()))
+    if (!GetDoc()->ValidRow(rAddress.Row()))
         return;
 
     sc::ColumnBlockPosition* p = rCxt.getBlockPosition(rAddress.Tab(), rAddress.Col());

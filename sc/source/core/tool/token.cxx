@@ -350,7 +350,7 @@ bool ScRawToken::IsValidReference(const ScDocument* pDoc) const
     return false;
 }
 
-FormulaToken* ScRawToken::CreateToken() const
+FormulaToken* ScRawToken::CreateToken(const ScDocument* pDoc) const
 {
 #define IF_NOT_OPCODE_ERROR(o,c) SAL_WARN_IF((eOp!=o), "sc.core", #c "::ctor: OpCode " << static_cast<int>(eOp) << " lost, converted to " #o "; maybe inherit from FormulaToken instead!")
     switch ( GetType() )
@@ -370,14 +370,14 @@ FormulaToken* ScRawToken::CreateToken() const
         }
         case svSingleRef :
             if (eOp == ocPush)
-                return new ScSingleRefToken( aRef.Ref1 );
+                return new ScSingleRefToken(pDoc, aRef.Ref1 );
             else
-                return new ScSingleRefToken( aRef.Ref1, eOp );
+                return new ScSingleRefToken(pDoc, aRef.Ref1, eOp );
         case svDoubleRef :
             if (eOp == ocPush)
-                return new ScDoubleRefToken( aRef );
+                return new ScDoubleRefToken(pDoc, aRef );
             else
-                return new ScDoubleRefToken( aRef, eOp );
+                return new ScDoubleRefToken(pDoc, aRef, eOp );
         case svMatrix :
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
@@ -428,7 +428,7 @@ FormulaToken* ScRawToken::CreateToken() const
 namespace {
 
 //  TextEqual: if same formula entered (for optimization in sort)
-bool checkTextEqual( const FormulaToken& _rToken1, const FormulaToken& _rToken2 )
+bool checkTextEqual( const ScDocument* pDoc, const FormulaToken& _rToken1, const FormulaToken& _rToken2 )
 {
     assert(
         (_rToken1.GetType() == svSingleRef || _rToken1.GetType() == svDoubleRef)
@@ -455,7 +455,7 @@ bool checkTextEqual( const FormulaToken& _rToken1, const FormulaToken& _rToken2 
         aTemp2 = *_rToken2.GetDoubleRef();
 
     ScAddress aPos;
-    ScRange aRange1 = aTemp1.toAbs(aPos), aRange2 = aTemp2.toAbs(aPos);
+    ScRange aRange1 = aTemp1.toAbs(pDoc, aPos), aRange2 = aTemp2.toAbs(pDoc, aPos);
 
     //  memcmp doesn't work because of the alignment byte after bFlags.
     //  After SmartRelAbs only absolute parts have to be compared.
@@ -499,7 +499,7 @@ void DumpToken(formula::FormulaToken const & rToken)
 }
 #endif
 
-FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2,
+FormulaTokenRef extendRangeReference( const ScDocument* pDoc, FormulaToken & rTok1, FormulaToken & rTok2,
         const ScAddress & rPos, bool bReuseDoubleRef )
 {
 
@@ -545,11 +545,11 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
         ScComplexRefData aRef;
         aRef.Ref1 = aRef.Ref2 = *rTok1.GetSingleRef();
         aRef.Ref2.SetFlag3D( false);
-        aRef.Extend( rRef2, rPos);
+        aRef.Extend(pDoc, rRef2, rPos);
         if (bExternal)
             xRes = new ScExternalDoubleRefToken( rTok1.GetIndex(), rTok1.GetString(), aRef);
         else
-            xRes = new ScDoubleRefToken( aRef);
+            xRes = new ScDoubleRefToken(pDoc, aRef);
     }
     else
     {
@@ -575,7 +575,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
                 return nullptr;
             if (bExternal)
                 return nullptr;    // external reference list not possible
-            xRes = new ScDoubleRefToken( (*pRefList)[0] );
+            xRes = new ScDoubleRefToken(pDoc, (*pRefList)[0] );
         }
         if (!xRes)
             return nullptr;    // shouldn't happen...
@@ -587,10 +587,10 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
             switch (sv[i])
             {
                 case svSingleRef:
-                    rRef.Extend( *pt[i]->GetSingleRef(), rPos);
+                    rRef.Extend(pDoc, *pt[i]->GetSingleRef(), rPos);
                     break;
                 case svDoubleRef:
-                    rRef.Extend( *pt[i]->GetDoubleRef(), rPos);
+                    rRef.Extend(pDoc, *pt[i]->GetDoubleRef(), rPos);
                     break;
                 case svRefList:
                     {
@@ -599,7 +599,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
                             return nullptr;
                         for (const auto& rRefData : *p)
                         {
-                            rRef.Extend( rRefData, rPos);
+                            rRef.Extend(pDoc, rRefData, rPos);
                         }
                     }
                     break;
@@ -607,13 +607,13 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
                     if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
                         return nullptr;    // no other sheets with external refs
                     else
-                        rRef.Extend( *pt[i]->GetSingleRef(), rPos);
+                        rRef.Extend(pDoc, *pt[i]->GetSingleRef(), rPos);
                     break;
                 case svExternalDoubleRef:
                     if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
                         return nullptr;    // no other sheets with external refs
                     else
-                        rRef.Extend( *pt[i]->GetDoubleRef(), rPos);
+                        rRef.Extend(pDoc, *pt[i]->GetDoubleRef(), rPos);
                     break;
                 default:
                     ;   // nothing, prevent compiler warning
@@ -629,7 +629,7 @@ const ScSingleRefData*    ScSingleRefToken::GetSingleRef() const  { return &aSin
 ScSingleRefData*          ScSingleRefToken::GetSingleRef()        { return &aSingleRef; }
 bool ScSingleRefToken::TextEqual( const FormulaToken& _rToken ) const
 {
-    return FormulaToken::operator ==(_rToken) && checkTextEqual(*this, _rToken);
+    return FormulaToken::operator ==(_rToken) && checkTextEqual(mpDoc, *this, _rToken);
 }
 bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 {
@@ -644,7 +644,7 @@ const ScSingleRefData*    ScDoubleRefToken::GetSingleRef2() const { return &aDou
 ScSingleRefData*          ScDoubleRefToken::GetSingleRef2()       { return &aDoubleRef.Ref2; }
 bool ScDoubleRefToken::TextEqual( const FormulaToken& _rToken ) const
 {
-    return FormulaToken::operator ==(_rToken) && checkTextEqual(*this, _rToken);
+    return FormulaToken::operator ==(_rToken) && checkTextEqual(mpDoc, *this, _rToken);
 }
 bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 {
@@ -1678,7 +1678,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
     }
 }
 
-bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const
+bool ScTokenArray::ImplGetReference( const ScDocument* pDoc, ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const
 {
     bool bIs = false;
     if ( pCode && nLen == 1 )
@@ -1689,17 +1689,17 @@ bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, boo
             if ( pToken->GetType() == svSingleRef )
             {
                 const ScSingleRefData& rRef = *static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
-                rRange.aStart = rRange.aEnd = rRef.toAbs(rPos);
-                bIs = !bValidOnly || ValidAddress(rRange.aStart);
+                rRange.aStart = rRange.aEnd = rRef.toAbs(pDoc, rPos);
+                bIs = !bValidOnly || pDoc->ValidAddress(rRange.aStart);
             }
             else if ( pToken->GetType() == svDoubleRef )
             {
                 const ScComplexRefData& rCompl = *static_cast<const ScDoubleRefToken*>(pToken)->GetDoubleRef();
                 const ScSingleRefData& rRef1 = rCompl.Ref1;
                 const ScSingleRefData& rRef2 = rCompl.Ref2;
-                rRange.aStart = rRef1.toAbs(rPos);
-                rRange.aEnd   = rRef2.toAbs(rPos);
-                bIs = !bValidOnly || ValidRange(rRange);
+                rRange.aStart = rRef1.toAbs(pDoc, rPos);
+                rRange.aEnd   = rRef2.toAbs(pDoc, rPos);
+                bIs = !bValidOnly || pDoc->ValidRange(rRange);
             }
         }
     }
@@ -1852,12 +1852,12 @@ bool ScTokenArray::IsInvariant() const
 
 bool ScTokenArray::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 {
-    return ImplGetReference(rRange, rPos, false);
+    return ImplGetReference(pDoc, rRange, rPos, false);
 }
 
 bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) const
 {
-    return ImplGetReference(rRange, rPos, true);
+    return ImplGetReference(pDoc, rRange, rPos, true);
 }
 
 ScTokenArray::ScTokenArray() :
@@ -1966,7 +1966,7 @@ std::unique_ptr<ScTokenArray> ScTokenArray::Clone() const
 
 FormulaToken* ScTokenArray::AddRawToken( const ScRawToken& r )
 {
-    return Add( r.CreateToken() );
+    return Add( r.CreateToken(pDoc) );
 }
 
 // Utility function to ensure that there is strict alternation of values and
@@ -2186,17 +2186,17 @@ FormulaToken* ScTokenArray::AddOpCode( OpCode e )
 
 FormulaToken* ScTokenArray::AddSingleReference( const ScSingleRefData& rRef )
 {
-    return Add( new ScSingleRefToken( rRef ) );
+    return Add( new ScSingleRefToken(pDoc, rRef ) );
 }
 
 FormulaToken* ScTokenArray::AddMatrixSingleReference( const ScSingleRefData& rRef )
 {
-    return Add( new ScSingleRefToken( rRef, ocMatRef ) );
+    return Add( new ScSingleRefToken(pDoc, rRef, ocMatRef ) );
 }
 
 FormulaToken* ScTokenArray::AddDoubleReference( const ScComplexRefData& rRef )
 {
-    return Add( new ScDoubleRefToken( rRef ) );
+    return Add( new ScDoubleRefToken(pDoc, rRef ) );
 }
 
 FormulaToken* ScTokenArray::AddMatrix( const ScMatrixRef& p )
@@ -2233,7 +2233,7 @@ FormulaToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, cons
 
 FormulaToken* ScTokenArray::AddColRowName( const ScSingleRefData& rRef )
 {
-    return Add( new ScSingleRefToken( rRef, ocColRowName ) );
+    return Add( new ScSingleRefToken(pDoc, rRef, ocColRowName ) );
 }
 
 void ScTokenArray::AssignXMLString( const OUString &rText, const OUString &rFormulaNmsp )
@@ -2302,7 +2302,7 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( const ScDocument* pDoc, SCC
                         case svSingleRef :
                         {
                             ScSingleRefData& rRef = *p->GetSingleRef();
-                            ScAddress aAbs = rRef.toAbs(rPos);
+                            ScAddress aAbs = rRef.toAbs(pDoc, rPos);
                             switch ( eDir )
                             {
                                 case DIR_BOTTOM :
@@ -2339,7 +2339,7 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( const ScDocument* pDoc, SCC
                         case svDoubleRef :
                         {
                             ScComplexRefData& rRef = *p->GetDoubleRef();
-                            ScRange aAbs = rRef.toAbs(rPos);
+                            ScRange aAbs = rRef.toAbs(pDoc, rPos);
                             switch ( eDir )
                             {
                                 case DIR_BOTTOM :
@@ -2407,7 +2407,7 @@ bool SkipReference(formula::FormulaToken* pToken, const ScAddress& rPos, const S
 {
     ScRange aRange;
 
-    if (!ScRefTokenHelper::getRangeFromToken(aRange, pToken, rPos))
+    if (!ScRefTokenHelper::getRangeFromToken(pDoc, aRange, pToken, rPos))
         return true;
 
     if (bRangeName && aRange.aStart.Tab() == rPos.Tab())
@@ -3074,7 +3074,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        ScAddress aAbs = rRef.toAbs(pDoc, rOldPos);
 
                         if (rCxt.isDeleted() && aSelectedRange.In(aAbs))
                         {
@@ -3087,7 +3087,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         if (!rCxt.isDeleted() && rRef.IsDeleted())
                         {
                             // Check if the token has reference to previously deleted region.
-                            ScAddress aCheckPos = rRef.toAbs(aNewPos);
+                            ScAddress aCheckPos = rRef.toAbs(pDoc, aNewPos);
                             if (rCxt.maRange.In(aCheckPos))
                             {
                                 restoreDeletedRef(rRef, rCxt);
@@ -4512,6 +4512,7 @@ void ScTokenArray::ClearTabDeleted( const ScAddress& rPos, SCTAB nStartTab, SCTA
 namespace {
 
 void checkBounds(
+    const ScDocument* pDoc,
     const ScAddress& rPos, SCROW nGroupLen, const ScRange& rCheckRange,
     const ScSingleRefData& rRef, std::vector<SCROW>& rBounds, const ScRange* pDeletedRange )
 {
@@ -4547,7 +4548,7 @@ void checkBounds(
         SCROW nOffset = pDeletedRange->aStart.Row() - aAbs.aStart.Row();
         SCROW nRow = rPos.Row() + nOffset;
         // Unlike for rCheckRange, for pDeletedRange nRow can be anywhere>=0.
-        if (ValidRow(nRow))
+        if (pDoc->ValidRow(nRow))
             rBounds.push_back(nRow);
     }
 
@@ -4572,7 +4573,7 @@ void checkBounds(
         SCROW nOffset = pDeletedRange->aEnd.Row() + 1 - aAbs.aStart.Row();
         SCROW nRow = rPos.Row() + nOffset;
         // Unlike for rCheckRange, for pDeletedRange nRow can be ~anywhere.
-        if (ValidRow(nRow))
+        if (pDoc->ValidRow(nRow))
             rBounds.push_back(nRow);
     }
 }
@@ -4610,7 +4611,7 @@ void checkBounds(
         pDeletedRange = &aDeletedRange;
     }
 
-    checkBounds(rPos, nGroupLen, aCheckRange, rRef, rBounds, pDeletedRange);
+    checkBounds(pDoc, rPos, nGroupLen, aCheckRange, rRef, rBounds, pDeletedRange);
 }
 
 }
@@ -4669,14 +4670,14 @@ void ScTokenArray::CheckRelativeReferenceBounds(
                 case svSingleRef:
                     {
                         const ScSingleRefData& rRef = *p->GetSingleRef();
-                        checkBounds(rPos, nGroupLen, rRange, rRef, rBounds, nullptr);
+                        checkBounds(pDoc, rPos, nGroupLen, rRange, rRef, rBounds, nullptr);
                     }
                     break;
                 case svDoubleRef:
                     {
                         const ScComplexRefData& rRef = *p->GetDoubleRef();
-                        checkBounds(rPos, nGroupLen, rRange, rRef.Ref1, rBounds, nullptr);
-                        checkBounds(rPos, nGroupLen, rRange, rRef.Ref2, rBounds, nullptr);
+                        checkBounds(pDoc, rPos, nGroupLen, rRange, rRef.Ref1, rBounds, nullptr);
+                        checkBounds(pDoc, rPos, nGroupLen, rRange, rRef.Ref2, rBounds, nullptr);
                     }
                     break;
                 default:
@@ -4832,7 +4833,7 @@ void appendTokenByType( const ScDocument* pDoc, sc::TokenStringContext& rCxt, OU
             break;
             case svExternalSingleRef:
                 rCxt.mpRefConv->makeExternalRefStr(
-                       rBuf, rPos, nFileId, aFileName, aTabName, *rToken.GetSingleRef());
+                       pDoc, rBuf, rPos, nFileId, aFileName, aTabName, *rToken.GetSingleRef());
             break;
             case svExternalDoubleRef:
             {

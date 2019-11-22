@@ -641,11 +641,11 @@ ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
 }
 
 inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
-        const ScAddress& rAddress )
+        const ScAddress& rAddress ) const
 {
     SCROW nRow = rAddress.Row();
     SCCOL nCol = rAddress.Col();
-    if ( !ValidRow(nRow) || !ValidCol(nCol) )
+    if ( !pDoc->ValidRow(nRow) || !pDoc->ValidCol(nCol) )
     {
         OSL_FAIL( "Row/Col invalid, using first slot!" );
         return 0;
@@ -665,7 +665,7 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
 }
 
 void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
-        SCSIZE& rStart, SCSIZE& rEnd, SCSIZE& rRowBreak )
+        SCSIZE& rStart, SCSIZE& rEnd, SCSIZE& rRowBreak ) const
 {
     rStart = ComputeSlotOffset( rRange.aStart );
     rEnd = ComputeSlotOffset( rRange.aEnd );

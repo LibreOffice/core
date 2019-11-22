@@ -48,7 +48,7 @@ class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray final : public formula::FormulaT
 {
     friend class ScCompiler;
 
-    bool ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const;
+    bool ImplGetReference( const ScDocument* pDoc, ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const;
 
     size_t mnHashValue;
     ScFormulaVectorState meVectorState : 4; // Only 4 bits
