@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -44,6 +45,7 @@
 
 #include <rtl/character.hxx>
 
+#include <boost/functional/hash.hpp>
 #include <algorithm>
 
 #include <shlwapi.h>
@@ -327,15 +329,52 @@ float WinFontInstance::getHScale() const
     return nWidth / nHeight;
 }
 
+struct BlobReference
+{
+    hb_blob_t* mpBlob;
+    BlobReference(hb_blob_t* pBlob) : mpBlob(pBlob)
+    {
+        hb_blob_reference(mpBlob);
+    }
+    BlobReference(BlobReference const & other)
+        : mpBlob(other.mpBlob)
+    {
+        hb_blob_reference(mpBlob);
+    }
+    ~BlobReference() { hb_blob_destroy(mpBlob); }
+};
+using BlobCacheKey = std::pair<rtl::Reference<PhysicalFontFace>, hb_tag_t>;
+struct BlobCacheKeyHash
+{
+    std::size_t operator()(BlobCacheKey const& rKey) const
+    {
+        std::size_t seed = 0;
+        boost::hash_combine(seed, rKey.first.get());
+        boost::hash_combine(seed, rKey.second);
+        return seed;
+    }
+};
+
 static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
-    sal_uLong nLength = 0;
-    unsigned char* pBuffer = nullptr;
+    static o3tl::lru_map<BlobCacheKey, BlobReference, BlobCacheKeyHash> gCache(50);
+
     WinFontInstance* pFont = static_cast<WinFontInstance*>(pUserData);
     HDC hDC = pFont->GetGraphics()->getHDC();
     HFONT hFont = pFont->GetHFONT();
     assert(hDC);
     assert(hFont);
+
+    BlobCacheKey cacheKey { rtl::Reference<PhysicalFontFace>(pFont->GetFontFace()), nTableTag };
+    auto it = gCache.find(cacheKey);
+    if (it != gCache.end())
+    {
+        hb_blob_reference(it->second.mpBlob);
+        return it->second.mpBlob;
+    }
+
+    sal_uLong nLength = 0;
+    unsigned char* pBuffer = nullptr;
 
     HGDIOBJ hOrigFont = SelectObject(hDC, hFont);
     nLength = ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, nullptr, 0);
@@ -346,10 +385,14 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     }
     SelectObject(hDC, hOrigFont);
 
-    hb_blob_t* pBlob = nullptr;
-    if (pBuffer != nullptr)
-        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
+    if (!pBuffer)
+        return nullptr;
+
+    hb_blob_t* pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
                                pBuffer, [](void* data){ delete[] static_cast<unsigned char*>(data); });
+    if (!pBlob)
+        return pBlob;
+    gCache.insert({cacheKey, BlobReference(pBlob)});
     return pBlob;
 }
 

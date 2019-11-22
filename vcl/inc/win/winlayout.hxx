@@ -164,6 +164,7 @@ public:
     void SetHFONT(HFONT hFont) { m_hFont = hFont; }
 
     const WinFontFace * GetFontFace() const { return static_cast<const WinFontFace *>(LogicalFontInstance::GetFontFace()); }
+    WinFontFace * GetFontFace() { return static_cast<WinFontFace *>(LogicalFontInstance::GetFontFace()); }
 
     bool CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics, const GenericSalLayout& rLayout);
     OpenGLGlyphCache& GetOpenGLGlyphCache() { return maOpenGLGlyphCache; }
