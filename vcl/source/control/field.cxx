@@ -1045,7 +1045,7 @@ static OUString ImplMetricGetUnitText(const OUString& rStr)
     for (sal_Int32 i = rStr.getLength()-1; i >= 0; --i)
     {
         sal_Unicode c = rStr[i];
-        if ( (c == '\'') || (c == '\"') || (c == '%') || (c == 0x2033) || unicode::isAlpha(c) || unicode::isControl(c) )
+        if ( (c == '\'') || (c == '\"') || (c == '%') || (c == 0x2032) || (c == 0x2033) || unicode::isAlpha(c) || unicode::isControl(c) )
             aStr.insert(0, c);
         else
         {
@@ -1464,7 +1464,7 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
     else
     {
         OUString aSuffix = ImplMetricToString( meUnit );
-        if (meUnit != FieldUnit::NONE && meUnit != FieldUnit::DEGREE && meUnit != FieldUnit::INCH)
+        if (meUnit != FieldUnit::NONE && meUnit != FieldUnit::DEGREE && meUnit != FieldUnit::INCH && meUnit != FieldUnit::FOOT)
             aStr += " ";
         if (meUnit == FieldUnit::INCH)
         {
@@ -1474,6 +1474,15 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
             else
                 aSuffix = sDoublePrime;
         }
+        else if (meUnit == FieldUnit::FOOT)
+        {
+            OUString sPrime = u"\u2032";
+            if (aSuffix != "'" && aSuffix != sPrime)
+                aStr += " ";
+            else
+                aSuffix = sPrime;
+        }
+
         assert(meUnit != FieldUnit::PERCENT);
         aStr += aSuffix;
     }

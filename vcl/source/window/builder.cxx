@@ -247,7 +247,7 @@ namespace weld
         {
             aStr = rLocaleData.getNum(nValue, nDecimalDigits, true, true);
             OUString aSuffix = MetricToString(m_eSrcUnit);
-            if (m_eSrcUnit != FieldUnit::NONE && m_eSrcUnit != FieldUnit::DEGREE && m_eSrcUnit != FieldUnit::INCH)
+            if (m_eSrcUnit != FieldUnit::NONE && m_eSrcUnit != FieldUnit::DEGREE && m_eSrcUnit != FieldUnit::INCH && m_eSrcUnit != FieldUnit::FOOT)
                 aStr += " ";
             if (m_eSrcUnit == FieldUnit::INCH)
             {
@@ -257,6 +257,15 @@ namespace weld
                 else
                     aSuffix = sDoublePrime;
             }
+            else if (m_eSrcUnit == FieldUnit::FOOT)
+            {
+                OUString sPrime = u"\u2032";
+                if (aSuffix != "'" && aSuffix != sPrime)
+                    aStr += " ";
+                else
+                    aSuffix = sPrime;
+            }
+
             assert(m_eSrcUnit != FieldUnit::PERCENT);
             aStr += aSuffix;
         }

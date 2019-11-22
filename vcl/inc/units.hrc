@@ -38,6 +38,8 @@ std::pair<const char*, FieldUnit> SV_FUNIT_STRINGS[] =
     { NC_("SV_FUNIT_STRINGS", "\""), FieldUnit::INCH },
     { NC_("SV_FUNIT_STRINGS", "in"), FieldUnit::INCH },
     { NC_("SV_FUNIT_STRINGS", "inch"), FieldUnit::INCH },
+    /* To translators: prime symbol for foot */
+    { NC_("SV_FUNIT_STRINGS", "′"), FieldUnit::FOOT },
     { NC_("SV_FUNIT_STRINGS", "'"), FieldUnit::FOOT },
     { NC_("SV_FUNIT_STRINGS", "ft"), FieldUnit::FOOT },
     { NC_("SV_FUNIT_STRINGS", "foot"), FieldUnit::FOOT },
