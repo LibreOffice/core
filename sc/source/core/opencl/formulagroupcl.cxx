@@ -1626,7 +1626,7 @@ public:
         // set work group size and execute
         size_t global_work_size[] = { 256, static_cast<size_t>(w) };
         size_t const local_work_size[] = { 256, 1 };
-        SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
+        SAL_INFO("sc.opencl", "Enqueuing kernel " << redKernel);
         err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
             global_work_size, local_work_size, 0, nullptr, nullptr);
         if (CL_SUCCESS != err)
@@ -1684,7 +1684,7 @@ public:
             // set work group size and execute
             size_t global_work_size1[] = { 256, static_cast<size_t>(w) };
             size_t const local_work_size1[] = { 256, 1 };
-            SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
+            SAL_INFO("sc.opencl", "Enqueuing kernel " << redKernel);
             err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
                 global_work_size1, local_work_size1, 0, nullptr, nullptr);
             if (CL_SUCCESS != err)
@@ -2398,7 +2398,7 @@ public:
             // set work group size and execute
             size_t global_work_size[] = { 256, static_cast<size_t>(nVectorWidth) };
             size_t const local_work_size[] = { 256, 1 };
-            SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
+            SAL_INFO("sc.opencl", "Enqueuing kernel " << redKernel);
             err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
                 global_work_size, local_work_size, 0, nullptr, nullptr);
             if (CL_SUCCESS != err)
@@ -2481,7 +2481,7 @@ public:
                 // set work group size and execute
                 size_t global_work_size[] = { 256, static_cast<size_t>(nVectorWidth) };
                 size_t const local_work_size[] = { 256, 1 };
-                SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
+                SAL_INFO("sc.opencl", "Enqueuing kernel " << redKernel);
                 err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
                     global_work_size, local_work_size, 0, nullptr, nullptr);
                 if (CL_SUCCESS != err)
@@ -4083,7 +4083,7 @@ void DynamicKernel::Launch( size_t nr )
     // The rest of buffers
     mSyms.Marshal(mpKernel, nr, mpProgram);
     size_t global_work_size[] = { nr };
-    SAL_INFO("sc.opencl", "Enqueing kernel " << mpKernel);
+    SAL_INFO("sc.opencl", "Enqueuing kernel " << mpKernel);
     err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, nullptr,
         global_work_size, nullptr, 0, nullptr, nullptr);
     if (CL_SUCCESS != err)
