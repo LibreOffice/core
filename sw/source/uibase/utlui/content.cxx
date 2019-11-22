@@ -2272,12 +2272,8 @@ bool SwContentTree::HasContentChanged()
                     }
                     if(bRemoveChildren)
                     {
-                        for(size_t j = 0; j < nChildCount; ++j)
-                        {
-                            SvTreeListEntry *const pRemove = FirstChild(pEntry);
-                            assert(pRemove);
-                            GetModel()->Remove(pRemove);
-                        }
+                        while (SvTreeListEntry *const pRemove = FirstChild(pEntry))
+                            RemoveEntry(pRemove);
                     }
                     if(!nChildCount)
                     {
