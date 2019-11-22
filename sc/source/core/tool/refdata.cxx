@@ -37,23 +37,23 @@ void ScSingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
     mnTab = nTabP;
 }
 
-void ScSingleRefData::InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos )
+void ScSingleRefData::InitAddressRel( const ScDocument* pDoc, const ScAddress& rAdr, const ScAddress& rPos )
 {
     InitFlags();
     SetColRel(true);
     SetRowRel(true);
     SetTabRel(true);
-    SetAddress(rAdr, rPos);
+    SetAddress(pDoc, rAdr, rPos);
 }
 
-void ScSingleRefData::InitFromRefAddress( const ScRefAddress& rRef, const ScAddress& rPos )
+void ScSingleRefData::InitFromRefAddress( const ScDocument* pDoc, const ScRefAddress& rRef, const ScAddress& rPos )
 {
     InitFlags();
     SetColRel( rRef.IsRelCol());
     SetRowRel( rRef.IsRelRow());
     SetTabRel( rRef.IsRelTab());
     SetFlag3D( rRef.Tab() != rPos.Tab());
-    SetAddress( rRef.GetAddress(), rPos);
+    SetAddress( pDoc, rRef.GetAddress(), rPos);
 }
 
 void ScSingleRefData::SetAbsCol( SCCOL nVal )
@@ -185,7 +185,7 @@ bool ScSingleRefData::ValidExternal(const ScDocument* pDoc) const
     return ColValid(pDoc) && RowValid(pDoc) && mnTab >= -1;
 }
 
-ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
+ScAddress ScSingleRefData::toAbs( const ScDocument* pDoc, const ScAddress& rPos ) const
 {
     SCCOL nRetCol = Flags.bColRel ? mnCol + rPos.Col() : mnCol;
     SCROW nRetRow = Flags.bRowRel ? mnRow + rPos.Row() : mnRow;
@@ -193,10 +193,10 @@ ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
 
     ScAddress aAbs(ScAddress::INITIALIZE_INVALID);
 
-    if (ValidCol(nRetCol))
+    if (pDoc->ValidCol(nRetCol))
         aAbs.SetCol(nRetCol);
 
-    if (ValidRow(nRetRow))
+    if (pDoc->ValidRow(nRetRow))
         aAbs.SetRow(nRetRow);
 
     if (ValidTab(nRetTab))
@@ -205,14 +205,14 @@ ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
     return aAbs;
 }
 
-void ScSingleRefData::SetAddress( const ScAddress& rAddr, const ScAddress& rPos )
+void ScSingleRefData::SetAddress( const ScDocument* pDoc, const ScAddress& rAddr, const ScAddress& rPos )
 {
     if (Flags.bColRel)
         mnCol = rAddr.Col() - rPos.Col();
     else
         mnCol = rAddr.Col();
 
-    if (!ValidCol(rAddr.Col()))
+    if (!pDoc->ValidCol(rAddr.Col()))
         SetColDeleted(true);
 
     if (Flags.bRowRel)
@@ -220,7 +220,7 @@ void ScSingleRefData::SetAddress( const ScAddress& rAddr, const ScAddress& rPos 
     else
         mnRow = rAddr.Row();
 
-    if (!ValidRow(rAddr.Row()))
+    if (!pDoc->ValidRow(rAddr.Row()))
         SetRowDeleted(true);
 
     if (Flags.bTabRel)
@@ -372,7 +372,7 @@ void ScSingleRefData::Dump( int nIndent ) const
 }
 #endif
 
-void ScComplexRefData::InitFromRefAddresses( const ScRefAddress& rRef1, const ScRefAddress& rRef2, const ScAddress& rPos )
+void ScComplexRefData::InitFromRefAddresses( const ScDocument* pDoc, const ScRefAddress& rRef1, const ScRefAddress& rRef2, const ScAddress& rPos )
 {
     InitFlags();
     Ref1.SetColRel( rRef1.IsRelCol());
@@ -383,13 +383,13 @@ void ScComplexRefData::InitFromRefAddresses( const ScRefAddress& rRef1, const Sc
     Ref2.SetRowRel( rRef2.IsRelRow());
     Ref2.SetTabRel( rRef2.IsRelTab());
     Ref2.SetFlag3D( rRef1.Tab() != rRef2.Tab());
-    SetRange( ScRange( rRef1.GetAddress(), rRef2.GetAddress()), rPos);
+    SetRange( pDoc, ScRange( rRef1.GetAddress(), rRef2.GetAddress()), rPos);
 }
 
-ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const ScAddress & rPos )
+ScComplexRefData& ScComplexRefData::Extend( const ScDocument* pDoc, const ScSingleRefData & rRef, const ScAddress & rPos )
 {
     bool bInherit3D = (Ref1.IsFlag3D() && !Ref2.IsFlag3D() && !rRef.IsFlag3D());
-    ScRange aAbsRange = toAbs(rPos);
+    ScRange aAbsRange = toAbs(pDoc, rPos);
 
     ScSingleRefData aRef = rRef;
     // If no sheet was given in the extending part, let it point to the same
@@ -403,7 +403,7 @@ ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const 
         else
             aRef.SetAbsTab( Ref2.Tab());
     }
-    ScAddress aAbs = aRef.toAbs(rPos);
+    ScAddress aAbs = aRef.toAbs(pDoc, rPos);
 
     if (aAbs.Col() < aAbsRange.aStart.Col())
         aAbsRange.aStart.SetCol(aAbs.Col());
@@ -460,14 +460,14 @@ ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const 
     if (rRef.IsRelName())
         Ref2.SetRelName(true);
 
-    SetRange(aAbsRange, rPos);
+    SetRange(pDoc, aAbsRange, rPos);
 
     return *this;
 }
 
-ScComplexRefData& ScComplexRefData::Extend( const ScComplexRefData & rRef, const ScAddress & rPos )
+ScComplexRefData& ScComplexRefData::Extend( const ScDocument* pDoc, const ScComplexRefData & rRef, const ScAddress & rPos )
 {
-    return Extend( rRef.Ref1, rPos).Extend( rRef.Ref2, rPos);
+    return Extend( pDoc, rRef.Ref1, rPos).Extend( pDoc, rRef.Ref2, rPos);
 }
 
 bool ScComplexRefData::Valid(const ScDocument* pDoc) const
@@ -480,15 +480,15 @@ bool ScComplexRefData::ValidExternal(const ScDocument* pDoc) const
     return Ref1.ValidExternal(pDoc) && Ref2.ColValid(pDoc) && Ref2.RowValid(pDoc) && Ref1.Tab() <= Ref2.Tab();
 }
 
-ScRange ScComplexRefData::toAbs( const ScAddress& rPos ) const
+ScRange ScComplexRefData::toAbs( const ScDocument* pDoc, const ScAddress& rPos ) const
 {
-    return ScRange(Ref1.toAbs(rPos), Ref2.toAbs(rPos));
+    return ScRange(Ref1.toAbs(pDoc, rPos), Ref2.toAbs(pDoc, rPos));
 }
 
-void ScComplexRefData::SetRange( const ScRange& rRange, const ScAddress& rPos )
+void ScComplexRefData::SetRange( const ScDocument* pDoc, const ScRange& rRange, const ScAddress& rPos )
 {
-    Ref1.SetAddress(rRange.aStart, rPos);
-    Ref2.SetAddress(rRange.aEnd, rPos);
+    Ref1.SetAddress(pDoc, rRange.aStart, rPos);
+    Ref2.SetAddress(pDoc, rRange.aEnd, rPos);
 }
 
 void ScComplexRefData::PutInOrder( const ScAddress& rPos )

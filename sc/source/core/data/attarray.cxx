@@ -240,7 +240,7 @@ const ScPatternAttr* ScAttrArray::GetPattern( SCROW nRow ) const
 {
     if ( mvData.empty() )
     {
-        if ( !ValidRow( nRow ) )
+        if ( !pDocument->ValidRow(nRow) )
             return nullptr;
         return pDocument->GetDefPattern();
     }
@@ -256,7 +256,7 @@ const ScPatternAttr* ScAttrArray::GetPatternRange( SCROW& rStartRow,
 {
     if ( mvData.empty() )
     {
-        if ( !ValidRow( nRow ) )
+        if ( !pDocument->ValidRow( nRow ) )
             return nullptr;
         rStartRow = 0;
         rEndRow = pDocument->MaxRow();
@@ -277,7 +277,7 @@ const ScPatternAttr* ScAttrArray::GetPatternRange( SCROW& rStartRow,
 
 void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
 {
-    if(!ValidRow(nStartRow) || !ValidRow(nEndRow))
+    if(!pDocument->ValidRow(nStartRow) || !pDocument->ValidRow(nEndRow))
         return;
 
     if(nEndRow < nStartRow)
@@ -337,7 +337,7 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
 
 void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
 {
-    if(!ValidRow(nStartRow) || !ValidRow(nEndRow))
+    if(!pDocument->ValidRow(nStartRow) || !pDocument->ValidRow(nEndRow))
         return;
 
     if(nEndRow < nStartRow)
@@ -454,7 +454,7 @@ bool ScAttrArray::Reserve( SCSIZE nReserve )
 const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
                                  bool bPutToPool, ScEditDataArray* pDataArray, bool bPassingOwnership )
 {
-    if (ValidRow(nStartRow) && ValidRow(nEndRow))
+    if (pDocument->ValidRow(nStartRow) && pDocument->ValidRow(nEndRow))
     {
         if (bPutToPool)
         {
@@ -632,7 +632,7 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
 
 void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle )
 {
-    if (ValidRow(nStartRow) && ValidRow(nEndRow))
+    if (pDocument->ValidRow(nStartRow) && pDocument->ValidRow(nEndRow))
     {
         SetDefaultIfNotInit();
         SCSIZE nPos;
@@ -730,7 +730,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
     if ( bColorOnly && !pLine )
         return;
 
-    if (ValidRow(nStartRow) && ValidRow(nEndRow))
+    if (pDocument->ValidRow(nStartRow) && pDocument->ValidRow(nEndRow))
     {
         SCSIZE nPos;
         SCROW nStart=0;
@@ -853,7 +853,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
     TestData();
 #endif
 
-    if (ValidRow(nStartRow) && ValidRow(nEndRow))
+    if (pDocument->ValidRow(nStartRow) && pDocument->ValidRow(nEndRow))
     {
         SCSIZE nPos;
         SCROW nStart=0;
@@ -978,7 +978,7 @@ static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
 void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
                                     ScMergePatternState& rState, bool bDeep ) const
 {
-    if (ValidRow(nStartRow) && ValidRow(nEndRow))
+    if (pDocument->ValidRow(nStartRow) && pDocument->ValidRow(nEndRow))
     {
         SCSIZE nPos = 0;
         SCROW nStart=0;
@@ -1778,7 +1778,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
 SCROW ScAttrArray::GetNextUnprotected( SCROW nRow, bool bUp ) const
 {
     long nRet = nRow;
-    if (ValidRow(nRow))
+    if (pDocument->ValidRow(nRow))
     {
         if ( mvData.empty() )
         {
@@ -2529,7 +2529,7 @@ SCROW ScAttrArray::SearchStyle(
     if (pMarkArray)
     {
         nRow = pMarkArray->GetNextMarked( nRow, bUp );
-        if (!ValidRow(nRow))
+        if (!pDocument->ValidRow(nRow))
             return nRow;
     }
 
@@ -2587,7 +2587,7 @@ SCROW ScAttrArray::SearchStyle(
         }
     }
 
-    OSL_ENSURE( bFound || !ValidRow(nRow), "Internal failure in ScAttrArray::SearchStyle" );
+    OSL_ENSURE( bFound || !pDocument->ValidRow(nRow), "Internal failure in ScAttrArray::SearchStyle" );
 
     return nRow;
 }
@@ -2597,7 +2597,7 @@ bool ScAttrArray::SearchStyleRange(
     const ScMarkArray* pMarkArray) const
 {
     SCROW nStartRow = SearchStyle( rRow, pSearchStyle, bUp, pMarkArray );
-    if (ValidRow(nStartRow))
+    if (pDocument->ValidRow(nStartRow))
     {
         if ( mvData.empty() )
         {

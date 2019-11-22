@@ -82,7 +82,7 @@ void XclImpColRowSettings::SetWidthRange( SCCOL nCol1, SCCOL nCol2, sal_uInt16 n
 
 void XclImpColRowSettings::HideCol( SCCOL nCol )
 {
-    if (!ValidCol(nCol))
+    if (!GetDoc().ValidCol(nCol))
         return;
 
     ApplyColFlag(nCol, ExcColRowFlags::Hidden);
@@ -111,7 +111,7 @@ void XclImpColRowSettings::SetDefHeight( sal_uInt16 nDefHeight, sal_uInt16 nFlag
 
 void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
 {
-    if (!ValidRow(nScRow))
+    if (!GetDoc().ValidRow(nScRow))
         return;
 
     sal_uInt16 nRawHeight = nHeight & EXC_ROW_HEIGHTMASK;
@@ -132,7 +132,7 @@ void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
 
 void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal_uInt16 nFlags )
 {
-    if (!ValidRow(nScRow))
+    if (!GetDoc().ValidRow(nScRow))
         return;
 
     SetHeight(nScRow, nHeight);
@@ -152,7 +152,7 @@ void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal
 
 void XclImpColRowSettings::SetManualRowHeight( SCROW nScRow )
 {
-    if (!ValidRow(nScRow))
+    if (!GetDoc().ValidRow(nScRow))
         return;
 
     ExcColRowFlags nFlagVal = ExcColRowFlags::NONE;
@@ -167,7 +167,7 @@ void XclImpColRowSettings::SetDefaultXF( SCCOL nCol1, SCCOL nCol2, sal_uInt16 nX
 {
     /*  assign the default column formatting here to ensure that
         explicit cell formatting is not overwritten. */
-    OSL_ENSURE( (nCol1 <= nCol2) && ValidCol( nCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
+    OSL_ENSURE( (nCol1 <= nCol2) && GetDoc().ValidCol( nCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
     nCol2 = ::std::min( nCol2, GetDoc().MaxCol() );
     nCol1 = ::std::min( nCol1, nCol2 );
     XclImpXFRangeBuffer& rXFRangeBuffer = GetXFRangeBuffer();
