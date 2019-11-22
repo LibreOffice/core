@@ -1045,7 +1045,7 @@ static OUString ImplMetricGetUnitText(const OUString& rStr)
     for (sal_Int32 i = rStr.getLength()-1; i >= 0; --i)
     {
         sal_Unicode c = rStr[i];
-        if ( (c == '\'') || (c == '\"') || (c == '%' ) || unicode::isAlpha(c) || unicode::isControl(c) )
+        if ( (c == '\'') || (c == '\"') || (c == '%') || (c == 0x2033) || unicode::isAlpha(c) || unicode::isControl(c) )
             aStr.insert(0, c);
         else
         {
