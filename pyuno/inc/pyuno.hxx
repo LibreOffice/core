@@ -301,7 +301,7 @@ public:
 
     @see PyThreadAttach
 */
-class LO_DLLPUBLIC_PYUNO PyThreadDetach
+class PyThreadDetach
 {
     PyThreadState *tstate;
     PyThreadDetach ( const PyThreadDetach & ) = delete;

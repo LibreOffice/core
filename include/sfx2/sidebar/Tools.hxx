@@ -34,7 +34,7 @@ namespace com::sun::star::frame { class XFrame; }
 
 namespace sfx2 { namespace sidebar {
 
-class SFX2_DLLPUBLIC Tools
+class Tools
 {
 public:
     static Image GetImage (
