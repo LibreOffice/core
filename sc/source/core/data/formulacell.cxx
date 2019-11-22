@@ -228,42 +228,44 @@ namespace {
 // Allow for a year's calendar (366).
 const sal_uInt16 MAXRECURSION = 400;
 
-typedef SCCOLROW(*DimensionSelector)(const ScAddress&, const ScSingleRefData&);
+typedef SCCOLROW(*DimensionSelector)(const ScDocument*, const ScAddress&, const ScSingleRefData&);
 
-SCCOLROW lcl_GetCol(const ScAddress& rPos, const ScSingleRefData& rData)
+SCCOLROW lcl_GetCol(const ScDocument* pDoc, const ScAddress& rPos, const ScSingleRefData& rData)
 {
-    return rData.toAbs(rPos).Col();
+    return rData.toAbs(pDoc, rPos).Col();
 }
 
-SCCOLROW lcl_GetRow(const ScAddress& rPos, const ScSingleRefData& rData)
+SCCOLROW lcl_GetRow(const ScDocument* pDoc, const ScAddress& rPos, const ScSingleRefData& rData)
 {
-    return rData.toAbs(rPos).Row();
+    return rData.toAbs(pDoc, rPos).Row();
 }
 
-SCCOLROW lcl_GetTab(const ScAddress& rPos, const ScSingleRefData& rData)
+SCCOLROW lcl_GetTab(const ScDocument* pDoc, const ScAddress& rPos, const ScSingleRefData& rData)
 {
-    return rData.toAbs(rPos).Tab();
+    return rData.toAbs(pDoc, rPos).Tab();
 }
 
 /** Check if both references span the same range in selected dimension.
  */
 bool
 lcl_checkRangeDimension(
+    const ScDocument* pDoc,
     const ScAddress& rPos, const SingleDoubleRefProvider& rRef1, const SingleDoubleRefProvider& rRef2,
     const DimensionSelector aWhich)
 {
-    return aWhich(rPos, rRef1.Ref1) == aWhich(rPos, rRef2.Ref1) &&
-        aWhich(rPos, rRef1.Ref2) == aWhich(rPos, rRef2.Ref2);
+    return aWhich(pDoc, rPos, rRef1.Ref1) == aWhich(pDoc, rPos, rRef2.Ref1) &&
+        aWhich(pDoc, rPos, rRef1.Ref2) == aWhich(pDoc, rPos, rRef2.Ref2);
 }
 
 bool
 lcl_checkRangeDimensions(
+    const ScDocument* pDoc,
     const ScAddress& rPos, const SingleDoubleRefProvider& rRef1, const SingleDoubleRefProvider& rRef2,
     bool& bCol, bool& bRow, bool& bTab)
 {
-    const bool bSameCols(lcl_checkRangeDimension(rPos, rRef1, rRef2, lcl_GetCol));
-    const bool bSameRows(lcl_checkRangeDimension(rPos, rRef1, rRef2, lcl_GetRow));
-    const bool bSameTabs(lcl_checkRangeDimension(rPos, rRef1, rRef2, lcl_GetTab));
+    const bool bSameCols(lcl_checkRangeDimension(pDoc, rPos, rRef1, rRef2, lcl_GetCol));
+    const bool bSameRows(lcl_checkRangeDimension(pDoc, rPos, rRef1, rRef2, lcl_GetRow));
+    const bool bSameTabs(lcl_checkRangeDimension(pDoc, rPos, rRef1, rRef2, lcl_GetTab));
 
     // Test if exactly two dimensions are equal
     if (int(bSameCols) + int(bSameRows) + int(bSameTabs) == 2)
@@ -281,7 +283,7 @@ lcl_checkRangeDimensions(
  */
 bool
 lcl_checkRangeDimensions(
-    const ScAddress& rPos,
+    const ScDocument* pDoc, const ScAddress& rPos,
     const std::vector<formula::FormulaToken*>::const_iterator& rBegin,
     const std::vector<formula::FormulaToken*>::const_iterator& rEnd,
     bool& bCol, bool& bRow, bool& bTab)
@@ -292,7 +294,7 @@ lcl_checkRangeDimensions(
     bool bOk(false);
     {
         const SingleDoubleRefProvider aRefCur(**aCur);
-        bOk = lcl_checkRangeDimensions(rPos, aRef, aRefCur, bCol, bRow, bTab);
+        bOk = lcl_checkRangeDimensions(pDoc, rPos, aRef, aRefCur, bCol, bRow, bTab);
     }
     while (bOk && aCur != rEnd)
     {
@@ -300,7 +302,7 @@ lcl_checkRangeDimensions(
         bool bColTmp(false);
         bool bRowTmp(false);
         bool bTabTmp(false);
-        bOk = lcl_checkRangeDimensions(rPos, aRef, aRefCur, bColTmp, bRowTmp, bTabTmp);
+        bOk = lcl_checkRangeDimensions(pDoc, rPos, aRef, aRefCur, bColTmp, bRowTmp, bTabTmp);
         bOk = bOk && (bCol == bColTmp && bRow == bRowTmp && bTab == bTabTmp);
         ++aCur;
     }
@@ -310,17 +312,18 @@ lcl_checkRangeDimensions(
 
 class LessByReference
 {
+    const ScDocument* mpDoc;
     ScAddress const maPos;
     DimensionSelector const maFunc;
 public:
-    LessByReference(const ScAddress& rPos, const DimensionSelector& rFunc) :
-        maPos(rPos), maFunc(rFunc) {}
+    LessByReference(const ScDocument* pDoc, const ScAddress& rPos, const DimensionSelector& rFunc) :
+        mpDoc(pDoc), maPos(rPos), maFunc(rFunc) {}
 
     bool operator() (const formula::FormulaToken* pRef1, const formula::FormulaToken* pRef2)
     {
         const SingleDoubleRefProvider aRef1(*pRef1);
         const SingleDoubleRefProvider aRef2(*pRef2);
-        return maFunc(maPos, aRef1.Ref1) < maFunc(maPos, aRef2.Ref1);
+        return maFunc(mpDoc, maPos, aRef1.Ref1) < maFunc(mpDoc, maPos, aRef2.Ref1);
     }
 };
 
@@ -331,22 +334,24 @@ public:
  */
 class AdjacentByReference
 {
+    const ScDocument* mpDoc;
     ScAddress const maPos;
     DimensionSelector const maFunc;
 public:
-    AdjacentByReference(const ScAddress& rPos, DimensionSelector aFunc) :
-        maPos(rPos), maFunc(aFunc) {}
+    AdjacentByReference(const ScDocument* pDoc, const ScAddress& rPos, DimensionSelector aFunc) :
+        mpDoc(pDoc), maPos(rPos), maFunc(aFunc) {}
 
     bool operator() (const formula::FormulaToken* p1, const formula::FormulaToken* p2)
     {
         const SingleDoubleRefProvider aRef1(*p1);
         const SingleDoubleRefProvider aRef2(*p2);
-        return maFunc(maPos, aRef2.Ref1) - maFunc(maPos, aRef1.Ref2) == 1;
+        return maFunc(mpDoc, maPos, aRef2.Ref1) - maFunc(mpDoc, maPos, aRef1.Ref2) == 1;
     }
 };
 
 bool
 lcl_checkIfAdjacent(
+    const ScDocument* pDoc,
     const ScAddress& rPos, const std::vector<formula::FormulaToken*>& rReferences, const DimensionSelector aWhich)
 {
     auto aBegin(rReferences.cbegin());
@@ -354,36 +359,38 @@ lcl_checkIfAdjacent(
     auto aBegin1(aBegin);
     ++aBegin1;
     --aEnd;
-    return std::equal(aBegin, aEnd, aBegin1, AdjacentByReference(rPos, aWhich));
+    return std::equal(aBegin, aEnd, aBegin1, AdjacentByReference(pDoc, rPos, aWhich));
 }
 
 void
 lcl_fillRangeFromRefList(
+    const ScDocument* pDoc,
     const ScAddress& aPos, const std::vector<formula::FormulaToken*>& rReferences, ScRange& rRange)
 {
     const ScSingleRefData aStart(
             SingleDoubleRefProvider(*rReferences.front()).Ref1);
-    rRange.aStart = aStart.toAbs(aPos);
+    rRange.aStart = aStart.toAbs(pDoc, aPos);
     const ScSingleRefData aEnd(
             SingleDoubleRefProvider(*rReferences.back()).Ref2);
-    rRange.aEnd = aEnd.toAbs(aPos);
+    rRange.aEnd = aEnd.toAbs(pDoc, aPos);
 }
 
 bool
 lcl_refListFormsOneRange(
+        const ScDocument* pDoc,
         const ScAddress& rPos, std::vector<formula::FormulaToken*>& rReferences,
         ScRange& rRange)
 {
     if (rReferences.size() == 1)
     {
-        lcl_fillRangeFromRefList(rPos, rReferences, rRange);
+        lcl_fillRangeFromRefList(pDoc, rPos, rReferences, rRange);
         return true;
     }
 
     bool bCell(false);
     bool bRow(false);
     bool bTab(false);
-    if (lcl_checkRangeDimensions(rPos, rReferences.begin(), rReferences.end(), bCell, bRow, bTab))
+    if (lcl_checkRangeDimensions(pDoc, rPos, rReferences.begin(), rReferences.end(), bCell, bRow, bTab))
     {
         DimensionSelector aWhich;
         if (bCell)
@@ -405,10 +412,10 @@ lcl_refListFormsOneRange(
         }
 
         // Sort the references by start of range
-        std::sort(rReferences.begin(), rReferences.end(), LessByReference(rPos, aWhich));
-        if (lcl_checkIfAdjacent(rPos, rReferences, aWhich))
+        std::sort(rReferences.begin(), rReferences.end(), LessByReference(pDoc, rPos, aWhich));
+        if (lcl_checkIfAdjacent(pDoc, rPos, rReferences, aWhich))
         {
-            lcl_fillRangeFromRefList(rPos, rReferences, rRange);
+            lcl_fillRangeFromRefList(pDoc, rPos, rReferences, rRange);
             return true;
         }
     }
@@ -982,7 +989,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
              * Can we live without in all cases? */
             ScFormulaCell* pCell = nullptr;
             ScSingleRefData& rRef = *p->GetSingleRef();
-            ScAddress aAbs = rRef.toAbs(aPos);
+            ScAddress aAbs = rRef.toAbs(pDocument, aPos);
             if (pDocument->ValidAddress(aAbs))
                 pCell = pDocument->GetFormulaCell(aAbs);
 
@@ -1048,7 +1055,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, const ScInt
              * Can we live without in all cases? */
             ScFormulaCell* pCell = nullptr;
             ScSingleRefData& rRef = *p->GetSingleRef();
-            ScAddress aAbs = rRef.toAbs(aPos);
+            ScAddress aAbs = rRef.toAbs(pDocument, aPos);
             if (pDocument->ValidAddress(aAbs))
                 pCell = pDocument->GetFormulaCell(aAbs);
 
@@ -2800,7 +2807,7 @@ const ScMatrix* ScFormulaCell::GetMatrix()
     return aResult.GetMatrix().get();
 }
 
-bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
+bool ScFormulaCell::GetMatrixOrigin( const ScDocument* pDoc, ScAddress& rPos ) const
 {
     switch ( cMatrixFlag )
     {
@@ -2814,8 +2821,8 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
             if( t )
             {
                 ScSingleRefData& rRef = *t->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(aPos);
-                if (ValidAddress(aAbs))
+                ScAddress aAbs = rRef.toAbs(pDoc, aPos);
+                if (pDoc->ValidAddress(aAbs))
                 {
                     rPos = aAbs;
                     return true;
@@ -2828,7 +2835,7 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
     return false;
 }
 
-sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
+sc::MatrixEdge ScFormulaCell::GetMatrixEdge( const ScDocument* pDoc, ScAddress& rOrgPos ) const
 {
     switch ( cMatrixFlag )
     {
@@ -2838,7 +2845,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
             static thread_local SCCOL nC;
             static thread_local SCROW nR;
             ScAddress aOrg;
-            if ( !GetMatrixOrigin( aOrg ) )
+            if ( !GetMatrixOrigin( pDoc, aOrg ) )
                 return sc::MatrixEdge::Nothing;
             if ( aOrg != rOrgPos )
             {   // First time or a different matrix than last time.
@@ -2866,7 +2873,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                         {
                             pCell = pDocument->GetFormulaCell(aAdr);
                             if (pCell && pCell->cMatrixFlag == ScMatrixMode::Reference &&
-                                pCell->GetMatrixOrigin(aTmpOrg) && aTmpOrg == aOrg)
+                                pCell->GetMatrixOrigin(pDocument, aTmpOrg) && aTmpOrg == aOrg)
                             {
                                 nC++;
                                 aAdr.IncCol();
@@ -2881,7 +2888,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                         {
                             pCell = pDocument->GetFormulaCell(aAdr);
                             if (pCell && pCell->cMatrixFlag == ScMatrixMode::Reference &&
-                                pCell->GetMatrixOrigin(aTmpOrg) && aTmpOrg == aOrg)
+                                pCell->GetMatrixOrigin(pDocument, aTmpOrg) && aTmpOrg == aOrg)
                             {
                                 nR++;
                                 aAdr.IncRow();
@@ -2998,8 +3005,8 @@ bool ScFormulaCell::HasOneReference( ScRange& r ) const
     if( p && !aIter.GetNextReferenceRPN() )        // only one!
     {
         SingleDoubleRefProvider aProv( *p );
-        r.aStart = aProv.Ref1.toAbs(aPos);
-        r.aEnd = aProv.Ref2.toAbs(aPos);
+        r.aStart = aProv.Ref1.toAbs(pDocument, aPos);
+        r.aEnd = aProv.Ref2.toAbs(pDocument, aPos);
         return true;
     }
     else
@@ -3053,7 +3060,7 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
         if (pFunction && !aIter.GetNextReferenceRPN()
                 && (pFunction->GetParamCount() == aReferences.size()))
         {
-            return lcl_refListFormsOneRange(aPos, aReferences, rRange);
+            return lcl_refListFormsOneRange(pDocument, aPos, aReferences, rRange);
         }
     }
     return false;
@@ -3138,7 +3145,7 @@ bool checkCompileColRowName(
                 ScSingleRefData& rRef = *t->GetSingleRef();
                 if (rCxt.mnRowDelta > 0 && rRef.IsColRel())
                 {   // ColName
-                    ScAddress aAdr = rRef.toAbs(aPos);
+                    ScAddress aAdr = rRef.toAbs(&rDoc, aPos);
                     ScRangePair* pR = pColList->Find( aAdr );
                     if ( pR )
                     {   // defined
@@ -3153,7 +3160,7 @@ bool checkCompileColRowName(
                 }
                 if (rCxt.mnColDelta > 0 && rRef.IsRowRel())
                 {   // RowName
-                    ScAddress aAdr = rRef.toAbs(aPos);
+                    ScAddress aAdr = rRef.toAbs(&rDoc, aPos);
                     ScRangePair* pR = pRowList->Find( aAdr );
                     if ( pR )
                     {   // defined
@@ -3181,8 +3188,8 @@ bool checkCompileColRowName(
             for (; t; t = aIter.GetNextColRowName())
             {
                 const ScSingleRefData& rRef = *t->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(aPos);
-                if (ValidAddress(aAbs))
+                ScAddress aAbs = rRef.toAbs(&rDoc, aPos);
+                if (rDoc.ValidAddress(aAbs))
                 {
                     if (rCxt.maRange.In(aAbs))
                         return true;
@@ -3804,11 +3811,11 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         {
             SingleDoubleRefModifier aMod(*t);
             ScComplexRefData& rRef = aMod.Ref();
-            ScRange aAbs = rRef.toAbs(aOldPos);
+            ScRange aAbs = rRef.toAbs(pDocument, aOldPos);
             bool bMod = (ScRefUpdate::UpdateTranspose(pDocument, rSource, rDest, aAbs) != UR_NOTHING || bPosChanged);
             if (bMod)
             {
-                rRef.SetRange(aAbs, aPos); // based on the new anchor position.
+                rRef.SetRange(pDocument, aAbs, aPos); // based on the new anchor position.
                 bRefChanged = true;
             }
         }
@@ -3854,11 +3861,11 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         {
             SingleDoubleRefModifier aMod(*t);
             ScComplexRefData& rRef = aMod.Ref();
-            ScRange aAbs = rRef.toAbs(aPos);
+            ScRange aAbs = rRef.toAbs(pDocument, aPos);
             bool bMod = (ScRefUpdate::UpdateGrow(rArea, nGrowX, nGrowY, aAbs) != UR_NOTHING);
             if (bMod)
             {
-                rRef.SetRange(aAbs, aPos);
+                rRef.SetRange(pDocument, aAbs, aPos);
                 bRefChanged = true;
             }
         }
@@ -4428,7 +4435,7 @@ struct ScDependantsCalculator
                     ScSingleRefData aRef = *p->GetSingleRef(); // =Sheet1!A1
                     if( aRef.IsDeleted())
                         return false;
-                    ScAddress aRefPos = aRef.toAbs(mrPos);
+                    ScAddress aRefPos = aRef.toAbs(&mrDoc, mrPos);
 
                     if (!mrDoc.TableExists(aRefPos.Tab()))
                         return false; // or true?
@@ -4464,7 +4471,7 @@ struct ScDependantsCalculator
                     ScComplexRefData aRef = *p->GetDoubleRef();
                     if( aRef.IsDeleted())
                         return false;
-                    ScRange aAbs = aRef.toAbs(mrPos);
+                    ScRange aAbs = aRef.toAbs(&mrDoc, mrPos);
 
                     // Multiple sheet
                     if (aRef.Ref1.Tab() != aRef.Ref2.Tab())
@@ -5122,7 +5129,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
                 case svSingleRef:
                 {
                     ScSingleRefData aRef = *p->GetSingleRef();
-                    ScAddress aRefPos = aRef.toAbs(aPos);
+                    ScAddress aRefPos = aRef.toAbs(pDocument, aPos);
                     formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefPos);
                     if (!pNewToken)
                         return false;
@@ -5133,7 +5140,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
                 case svDoubleRef:
                 {
                     ScComplexRefData aRef = *p->GetDoubleRef();
-                    ScRange aRefRange = aRef.toAbs(aPos);
+                    ScRange aRefRange = aRef.toAbs(pDocument, aPos);
                     formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefRange);
                     if (!pNewToken)
                         return false;
@@ -5189,8 +5196,8 @@ void startListeningArea(
 {
     const ScSingleRefData& rRef1 = *rToken.GetSingleRef();
     const ScSingleRefData& rRef2 = *rToken.GetSingleRef2();
-    ScAddress aCell1 = rRef1.toAbs(rPos);
-    ScAddress aCell2 = rRef2.toAbs(rPos);
+    ScAddress aCell1 = rRef1.toAbs(&rDoc, rPos);
+    ScAddress aCell2 = rRef2.toAbs(&rDoc, rPos);
     if (aCell1.IsValid() && aCell2.IsValid())
     {
         if (rToken.GetOpCode() == ocColRowNameAuto)
@@ -5236,7 +5243,7 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
         {
             case svSingleRef:
             {
-                ScAddress aCell =  t->GetSingleRef()->toAbs(aPos);
+                ScAddress aCell =  t->GetSingleRef()->toAbs(pDocument, aPos);
                 if (aCell.IsValid())
                     pDoc->StartListeningCell(aCell, this);
             }
@@ -5279,7 +5286,7 @@ void ScFormulaCell::StartListeningTo( sc::StartListeningContext& rCxt )
         {
             case svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef()->toAbs(aPos);
+                ScAddress aCell = t->GetSingleRef()->toAbs(pDocument, aPos);
                 if (aCell.IsValid())
                     rDoc.StartListeningCell(rCxt, aCell, *this);
             }
@@ -5301,8 +5308,8 @@ void endListeningArea(
 {
     const ScSingleRefData& rRef1 = *rToken.GetSingleRef();
     const ScSingleRefData& rRef2 = *rToken.GetSingleRef2();
-    ScAddress aCell1 = rRef1.toAbs(rPos);
-    ScAddress aCell2 = rRef2.toAbs(rPos);
+    ScAddress aCell1 = rRef1.toAbs(&rDoc, rPos);
+    ScAddress aCell2 = rRef2.toAbs(&rDoc, rPos);
     if (aCell1.IsValid() && aCell2.IsValid())
     {
         if (rToken.GetOpCode() == ocColRowNameAuto)
@@ -5356,7 +5363,7 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
         {
             case svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef()->toAbs(aCellPos);
+                ScAddress aCell = t->GetSingleRef()->toAbs(pDocument, aCellPos);
                 if (aCell.IsValid())
                     pDoc->EndListeningCell(aCell, this);
             }
@@ -5403,7 +5410,7 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
         {
             case svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef()->toAbs(aCellPos);
+                ScAddress aCell = t->GetSingleRef()->toAbs(pDocument, aCellPos);
                 if (aCell.IsValid())
                     rDoc.EndListeningCell(rCxt, aCell, *this);
             }

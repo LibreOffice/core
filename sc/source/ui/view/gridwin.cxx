@@ -345,7 +345,7 @@ static bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 
     ScRefCellValue aCell(*pDoc, rRange.aEnd);
     ScAddress aPos;
-    return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(aPos) && aPos == rRange.aStart);
+    return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(pDoc, aPos) && aPos == rRange.aStart);
 }
 
 static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScViewData* pViewData )
@@ -4870,7 +4870,7 @@ static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uI
         bHiddenEdge = true;
     }
     nTmp = rDoc.FirstVisibleRow(0, nRow1, nTab1);
-    if (!ValidRow(nTmp))
+    if (!rDoc.ValidRow(nTmp))
         nTmp = 0;
     if (nTmp < nRow1)
     {
@@ -4878,7 +4878,7 @@ static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uI
         bHiddenEdge = true;
     }
     nTmp = rDoc.FirstVisibleRow(nRow2, rDoc.MaxRow(), nTab1);
-    if (!ValidRow(nTmp))
+    if (!rDoc.ValidRow(nTmp))
         nTmp = rDoc.MaxRow();
     if (nTmp > nRow2)
     {
@@ -6326,7 +6326,7 @@ void ScGridWindow::UpdateDragRectOverlay()
         bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
         long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-        if (ValidCol(nX2) && nX2>=nX1)
+        if (pDoc->ValidCol(nX2) && nX2>=nX1)
             for (i=nX1; i<=nX2; i++)
                 nSizeXPix += ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(i), nTab ), nPPTX );
         else
@@ -6335,7 +6335,7 @@ void ScGridWindow::UpdateDragRectOverlay()
             nSizeXPix   += 2;
         }
 
-        if (ValidRow(nY2) && nY2>=nY1)
+        if (pDoc->ValidRow(nY2) && nY2>=nY1)
             for (i=nY1; i<=nY2; i++)
                 nSizeYPix += ScViewData::ToPixel( pDoc->GetRowHeight( i, nTab ), nPPTY );
         else

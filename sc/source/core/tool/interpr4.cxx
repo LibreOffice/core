@@ -878,12 +878,12 @@ void ScInterpreter::SingleRefToVars( const ScSingleRefData & rRef,
     else
         rTab = rRef.Tab();
 
-    if( !ValidCol( rCol) || rRef.IsColDeleted() )
+    if( !pDok->ValidCol( rCol) || rRef.IsColDeleted() )
     {
         SetError( FormulaError::NoRef );
         rCol = 0;
     }
-    if( !ValidRow( rRow) || rRef.IsRowDeleted() )
+    if( !pDok->ValidRow( rRow) || rRef.IsRowDeleted() )
     {
         SetError( FormulaError::NoRef );
         rRow = 0;
@@ -1178,7 +1178,7 @@ void ScInterpreter::PopExternalSingleRef(
         return;
     }
 
-    ScAddress aAddr = rRef.toAbs(aPos);
+    ScAddress aAddr = rRef.toAbs(pDok, aPos);
     ScExternalRefCache::CellFormat aFmt;
     ScExternalRefCache::TokenRef xNew = pRefMgr->getSingleRefToken(
         rFileId, rTabName, aAddr, &aPos, nullptr, &aFmt);
@@ -1279,8 +1279,8 @@ void ScInterpreter::GetExternalDoubleRef(
     }
 
     ScComplexRefData aData(rData);
-    ScRange aRange = aData.toAbs(aPos);
-    if (!ValidColRow(aRange.aStart.Col(), aRange.aStart.Row()) || !ValidColRow(aRange.aEnd.Col(), aRange.aEnd.Row()))
+    ScRange aRange = aData.toAbs(pDok, aPos);
+    if (!pDok->ValidColRow(aRange.aStart.Col(), aRange.aStart.Row()) || !pDok->ValidColRow(aRange.aEnd.Col(), aRange.aEnd.Row()))
     {
         SetError(FormulaError::NoRef);
         return;
@@ -1858,8 +1858,8 @@ void ScInterpreter::PushSingleRef( const ScRefAddress& rRef )
     if (!IfErrorPushError())
     {
         ScSingleRefData aRef;
-        aRef.InitFromRefAddress( rRef, aPos);
-        PushTempTokenWithoutError( new ScSingleRefToken( pDok, aRef ) );
+        aRef.InitFromRefAddress( pDok, rRef, aPos);
+        PushTempTokenWithoutError( new ScSingleRefToken(pDok, aRef ) );
     }
 }
 
@@ -1868,8 +1868,8 @@ void ScInterpreter::PushDoubleRef( const ScRefAddress& rRef1, const ScRefAddress
     if (!IfErrorPushError())
     {
         ScComplexRefData aRef;
-        aRef.InitFromRefAddresses( rRef1, rRef2, aPos);
-        PushTempTokenWithoutError( new ScDoubleRefToken( pDok, aRef ) );
+        aRef.InitFromRefAddresses( pDok, rRef1, rRef2, aPos);
+        PushTempTokenWithoutError( new ScDoubleRefToken(pDok, aRef ) );
     }
 }
 
@@ -3665,8 +3665,8 @@ void ScInterpreter::ScDBArea()
         ScRange aRange;
         pDBData->GetArea(aRange);
         aRange.aEnd.SetTab(aRange.aStart.Tab());
-        aRefData.SetRange(aRange, aPos);
-        PushTempToken( new ScDoubleRefToken( pDok, aRefData ) );
+        aRefData.SetRange(pDok, aRange, aPos);
+        PushTempToken( new ScDoubleRefToken(pDok, aRefData ) );
     }
     else
         PushError( FormulaError::NoName);
@@ -3675,8 +3675,8 @@ void ScInterpreter::ScDBArea()
 void ScInterpreter::ScColRowNameAuto()
 {
     ScComplexRefData aRefData( *pCur->GetDoubleRef() );
-    ScRange aAbs = aRefData.toAbs(aPos);
-    if (!ValidRange(aAbs))
+    ScRange aAbs = aRefData.toAbs(pDok, aPos);
+    if (!pDok->ValidRange(aAbs))
     {
         PushError( FormulaError::NoRef );
         return;
@@ -3749,8 +3749,8 @@ void ScInterpreter::ScColRowNameAuto()
             }
         }
     }
-    aRefData.SetRange(aAbs, aPos);
-    PushTempToken( new ScDoubleRefToken( pDok, aRefData ) );
+    aRefData.SetRange(pDok, aAbs, aPos);
+    PushTempToken( new ScDoubleRefToken(pDok, aRefData ) );
 }
 
 // --- internals ------------------------------------------------------------

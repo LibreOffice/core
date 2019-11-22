@@ -311,7 +311,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     aRefData.SetColRel( true );
     aRefData.SetRowRel( true );
     aRefData.SetTabRel( true );
-    aRefData.SetAddress(aBasePos, aBasePos);
+    aRefData.SetAddress(this, aBasePos, aBasePos);
 
     ScTokenArray aArr(this); // consists only of one single reference token.
     formula::FormulaToken* t = aArr.AddMatrixSingleReference(aRefData);
@@ -342,7 +342,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                 // Token array must be cloned so that each formula cell receives its own copy.
                 aPos = ScAddress(nCol, nRow, nTab);
                 // Reference in each cell must point to the origin cell relative to the current cell.
-                aRefData.SetAddress(aBasePos, aPos);
+                aRefData.SetAddress(this, aBasePos, aPos);
                 *t->GetSingleRef() = aRefData;
                 std::unique_ptr<ScTokenArray> pTokArr(aArr.Clone());
                 pCell = new ScFormulaCell(this, aPos, *pTokArr, eGram, ScMatrixMode::Reference);
@@ -453,7 +453,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
 
 namespace {
 
-bool setCacheTableReferenced(formula::FormulaToken& rToken, ScExternalRefManager& rRefMgr, const ScAddress& rPos)
+bool setCacheTableReferenced(const ScDocument* pDoc, formula::FormulaToken& rToken, ScExternalRefManager& rRefMgr, const ScAddress& rPos)
 {
     switch (rToken.GetType())
     {
@@ -463,7 +463,7 @@ bool setCacheTableReferenced(formula::FormulaToken& rToken, ScExternalRefManager
         case svExternalDoubleRef:
         {
             const ScComplexRefData& rRef = *rToken.GetDoubleRef();
-            ScRange aAbs = rRef.toAbs(rPos);
+            ScRange aAbs = rRef.toAbs(pDoc, rPos);
             size_t nSheets = aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1;
             return rRefMgr.setCacheTableReferenced(
                     rToken.GetIndex(), rToken.GetString().getString(), nSheets);
@@ -498,7 +498,7 @@ bool ScDocument::MarkUsedExternalReferences( const ScTokenArray& rArr, const ScA
             if (!pRefMgr)
                 pRefMgr = GetExternalRefManager();
 
-            bAllMarked = setCacheTableReferenced(*t, *pRefMgr, rPos);
+            bAllMarked = setCacheTableReferenced(this, *t, *pRefMgr, rPos);
         }
         else if (t->GetType() == svIndex)
         {
@@ -518,7 +518,7 @@ bool ScDocument::MarkUsedExternalReferences( const ScTokenArray& rArr, const ScA
                 if (!pRefMgr)
                     pRefMgr = GetExternalRefManager();
 
-                bAllMarked = setCacheTableReferenced(*t, *pRefMgr, rPos);
+                bAllMarked = setCacheTableReferenced(this, *t, *pRefMgr, rPos);
             }
         }
     }

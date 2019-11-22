@@ -60,9 +60,10 @@ class ScSingleRefToken final : public formula::FormulaToken
 {
 private:
     ScSingleRefData   aSingleRef;
+    const ScDocument* mpDoc;
 public:
-                                ScSingleRefToken( const ScDocument* /*pDoc*/, const ScSingleRefData& r, OpCode e = ocPush ) :
-                                    FormulaToken( formula::svSingleRef, e ), aSingleRef( r ) {}
+                                ScSingleRefToken( const ScDocument* pDoc, const ScSingleRefData& r, OpCode e = ocPush ) :
+                                    FormulaToken( formula::svSingleRef, e ), aSingleRef( r ), mpDoc(pDoc) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
     virtual ScSingleRefData*      GetSingleRef() override;
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const override;
@@ -74,9 +75,10 @@ class ScDoubleRefToken final : public formula::FormulaToken
 {
 private:
     ScComplexRefData  aDoubleRef;
+    const ScDocument* mpDoc;
 public:
-                                ScDoubleRefToken( const ScDocument* /*pDoc*/, const ScComplexRefData& r, OpCode e = ocPush  ) :
-                                    FormulaToken( formula::svDoubleRef, e ), aDoubleRef( r ) {}
+                                ScDoubleRefToken( const ScDocument* pDoc, const ScComplexRefData& r, OpCode e = ocPush  ) :
+                                    FormulaToken( formula::svDoubleRef, e ), aDoubleRef( r ), mpDoc(pDoc) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
     virtual ScSingleRefData*      GetSingleRef() override;
     virtual const ScComplexRefData* GetDoubleRef() const override;

@@ -14,13 +14,13 @@
 
 #include <osl/diagnose.h>
 
-ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow) :
+ScColumnTextWidthIterator::ScColumnTextWidthIterator(const ScDocument& rDoc, ScColumn& rCol, SCROW nStartRow, SCROW nEndRow) :
     mnEnd(static_cast<size_t>(nEndRow)),
     mnCurPos(0)
 {
     miBlockCur = rCol.maCellTextAttrs.begin();
     miBlockEnd = rCol.maCellTextAttrs.end();
-    init(nStartRow, nEndRow);
+    init(rDoc, nStartRow, nEndRow);
 }
 
 ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScDocument& rDoc, const ScAddress& rStartPos, SCROW nEndRow) :
@@ -30,7 +30,7 @@ ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScDocument& rDoc, const ScA
     auto & rCellTextAttrs = rDoc.maTabs[rStartPos.Tab()]->aCol[rStartPos.Col()].maCellTextAttrs;
     miBlockCur = rCellTextAttrs.begin();
     miBlockEnd = rCellTextAttrs.end();
-    init(rStartPos.Row(), nEndRow);
+    init(rDoc, rStartPos.Row(), nEndRow);
 }
 
 void ScColumnTextWidthIterator::next()
@@ -87,9 +87,9 @@ void ScColumnTextWidthIterator::setValue(sal_uInt16 nVal)
     miDataCur->mnTextWidth = nVal;
 }
 
-void ScColumnTextWidthIterator::init(SCROW nStartRow, SCROW nEndRow)
+void ScColumnTextWidthIterator::init(const ScDocument& rDoc, SCROW nStartRow, SCROW nEndRow)
 {
-    if (!ValidRow(nStartRow) || !ValidRow(nEndRow))
+    if (!rDoc.ValidRow(nStartRow) || !rDoc.ValidRow(nEndRow))
         miBlockCur = miBlockEnd;
 
     size_t nStart = static_cast<size_t>(nStartRow);

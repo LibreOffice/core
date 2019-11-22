@@ -1070,7 +1070,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 else
                 {
                     ScAddress aTopLeftMatrixCell;
-                    if (pFCell && pFCell->GetMatrixOrigin(aTopLeftMatrixCell))
+                    if (pFCell && pFCell->GetMatrixOrigin(pDoc, aTopLeftMatrixCell))
                     {
                         ScFormulaCell* pMatrixCell = pDoc->GetFormulaCell(aTopLeftMatrixCell);
                         if (pMatrixCell)

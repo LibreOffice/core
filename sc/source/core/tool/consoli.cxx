@@ -474,7 +474,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 {
                                     // insert reference (absolute, 3d)
 
-                                    aSRef.SetAddress(ScAddress(aRef.nCol,aRef.nRow,aRef.nTab), ScAddress());
+                                    aSRef.SetAddress(pDestDoc, ScAddress(aRef.nCol,aRef.nRow,aRef.nTab), ScAddress());
 
                                     ScTokenArray aRefArr(pDestDoc);
                                     aRefArr.AddSingleReference(aSRef);
@@ -493,7 +493,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
                             ScRange aRange(sal::static_int_cast<SCCOL>(nCol+nArrX), nRow+nArrY, nTab);
                             aRange.aEnd.SetRow(nRow+nArrY+nNeeded-1);
-                            aCRef.SetRange(aRange, aDest);
+                            aCRef.SetRange(pDestDoc, aRange, aDest);
 
                             ScTokenArray aArr(pDestDoc);
                             aArr.AddOpCode(eOpCode);            // selected function

@@ -152,7 +152,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
     {
         aPool.Store( "-/-" );
         aPool >> aStack;
-        rpTokArray = aPool.GetTokenArray(&GetDocImport().getDoc(), aStack.Get());
+        rpTokArray = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
         return ConvErr::OK;
     }
 
@@ -318,7 +318,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                         else
                             aSRD.SetColRel(true);
 
-                        aSRD.SetAddress(aAddr, aEingPos);
+                        aSRD.SetAddress(&GetDocImport().getDoc(), aAddr, aEingPos);
 
                         aStack << aPool.StoreNlf( aSRD );
 
@@ -332,7 +332,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                         ScAddress aAddr(static_cast<SCCOL>(nCol & 0xFF), static_cast<SCROW>(nRow), aEingPos.Tab());
                         aSRD.InitAddress(aAddr);
                         aSRD.SetColRel(true);
-                        aSRD.SetAddress(aAddr, aEingPos);
+                        aSRD.SetAddress(&GetDocImport().getDoc(), aAddr, aEingPos);
 
                         aStack << aPool.StoreNlf( aSRD );
 
@@ -1066,7 +1066,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRangeName );
 
-                rRangeList.Append(aSRD.toAbs(aEingPos), nTab);
+                rRangeList.Append(aSRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
             }
                 break;
             case 0x45:
@@ -1096,7 +1096,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
                 else if( IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
-                rRangeList.Append(aCRD.toAbs(aEingPos), nTab);
+                rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
             }
                 break;
             case 0x46:
@@ -1140,7 +1140,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRNorSF );
 
-                rRangeList.Append(aSRD.toAbs(aEingPos), nTab);
+                rRangeList.Append(aSRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
             }
                 break;
             case 0x4D:
@@ -1168,7 +1168,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
                 else if( IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
-                rRangeList.Append(aCRD.toAbs(aEingPos), nTab);
+                rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
             }
                 break;
             case 0x4E:
@@ -1210,10 +1210,10 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
                         aCRD.Ref1 = aSRD;
                         aCRD.Ref2 = aSRD;
                         aCRD.Ref2.SetAbsTab(nLastScTab);
-                        rRangeList.Append(aCRD.toAbs(aEingPos), nTab);
+                        rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
                     }
                     else
-                        rRangeList.Append(aSRD.toAbs(aEingPos), nTab);
+                        rRangeList.Append(aSRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
                 }
             }
                 break;
@@ -1248,7 +1248,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
                     else if( IsComplRowRange( nRw1, nRw2 ) )
                         SetComplRow( aCRD );
 
-                    rRangeList.Append(aCRD.toAbs(aEingPos), nTab);
+                    rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
                 }
             }
                 break;

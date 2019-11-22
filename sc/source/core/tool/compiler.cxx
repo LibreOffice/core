@@ -710,8 +710,8 @@ namespace {
 struct Convention_A1 : public ScCompiler::Convention
 {
     explicit Convention_A1( FormulaGrammar::AddressConvention eConv ) : ScCompiler::Convention( eConv ) { }
-    static void MakeColStr( OUStringBuffer& rBuffer, SCCOL nCol );
-    static void MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow );
+    static void MakeColStr( const ScDocument* pDoc, OUStringBuffer& rBuffer, SCCOL nCol );
+    static void MakeRowStr( const ScDocument* pDoc, OUStringBuffer& rBuffer, SCROW nRow );
 
     ParseResult parseAnyToken( const OUString& rFormula,
                                sal_Int32 nSrcPos,
@@ -741,17 +741,17 @@ struct Convention_A1 : public ScCompiler::Convention
 
 }
 
-void Convention_A1::MakeColStr( OUStringBuffer& rBuffer, SCCOL nCol )
+void Convention_A1::MakeColStr( const ScDocument* pDoc, OUStringBuffer& rBuffer, SCCOL nCol )
 {
-    if ( !ValidCol( nCol) )
+    if ( !pDoc->ValidCol(nCol) )
         rBuffer.append(ScResId(STR_NO_REF_TABLE));
     else
         ::ScColToAlpha( rBuffer, nCol);
 }
 
-void Convention_A1::MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow )
+void Convention_A1::MakeRowStr( const ScDocument* pDoc, OUStringBuffer& rBuffer, SCROW nRow )
 {
-    if ( !ValidRow(nRow) )
+    if ( !pDoc->ValidRow(nRow) )
         rBuffer.append(ScResId(STR_NO_REF_TABLE));
     else
         rBuffer.append(sal_Int32(nRow + 1));
@@ -781,7 +781,7 @@ struct ConventionOOO_A1 : public Convention_A1
     };
 
     static void MakeOneRefStrImpl(
-        OUStringBuffer& rBuffer,
+        const ScDocument* pDoc, OUStringBuffer& rBuffer,
         const OUString& rErrRef, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, const ScAddress& rAbsRef,
         bool bForceTab, bool bODF, SingletonDisplay eSingletonDisplay )
@@ -815,20 +815,20 @@ struct ConventionOOO_A1 : public Convention_A1
         {
             if (!rRef.IsColRel())
                 rBuffer.append('$');
-            if (!ValidCol(rAbsRef.Col()) || rRef.IsColDeleted())
+            if (!pDoc->ValidCol(rAbsRef.Col()) || rRef.IsColDeleted())
                 rBuffer.append(rErrRef);
             else
-                MakeColStr(rBuffer, rAbsRef.Col());
+                MakeColStr(pDoc, rBuffer, rAbsRef.Col());
         }
 
         if (eSingletonDisplay != SINGLETON_COL)
         {
             if (!rRef.IsRowRel())
                 rBuffer.append('$');
-            if (!ValidRow(rAbsRef.Row()) || rRef.IsRowDeleted())
+            if (!pDoc->ValidRow(rAbsRef.Row()) || rRef.IsRowDeleted())
                 rBuffer.append(rErrRef);
             else
-                MakeRowStr(rBuffer, rAbsRef.Row());
+                MakeRowStr(pDoc, rBuffer, rAbsRef.Row());
         }
     }
 
@@ -836,8 +836,8 @@ struct ConventionOOO_A1 : public Convention_A1
             const ScComplexRefData& rRef, bool bFromRangeName )
     {
         // If any part is error, display as such.
-        if (!ValidCol(rAbs1.Col()) || rRef.Ref1.IsColDeleted() || !ValidRow(rAbs1.Row()) || rRef.Ref1.IsRowDeleted() ||
-            !ValidCol(rAbs2.Col()) || rRef.Ref2.IsColDeleted() || !ValidRow(rAbs2.Row()) || rRef.Ref2.IsRowDeleted())
+        if (!pDoc->ValidCol(rAbs1.Col()) || rRef.Ref1.IsColDeleted() || !pDoc->ValidRow(rAbs1.Row()) || rRef.Ref1.IsRowDeleted() ||
+            !pDoc->ValidCol(rAbs2.Col()) || rRef.Ref2.IsColDeleted() || !pDoc->ValidRow(rAbs2.Row()) || rRef.Ref2.IsRowDeleted())
             return SINGLETON_NONE;
 
         // A:A or $A:$A or A:$A or $A:A
@@ -875,17 +875,17 @@ struct ConventionOOO_A1 : public Convention_A1
     {
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
-        ScAddress aAbs1 = rRef.Ref1.toAbs(rPos), aAbs2;
+        ScAddress aAbs1 = rRef.Ref1.toAbs(pDoc, rPos), aAbs2;
         if( !bSingleRef )
-            aAbs2 = rRef.Ref2.toAbs(rPos);
+            aAbs2 = rRef.Ref2.toAbs(pDoc, rPos);
 
         SingletonDisplay eSingleton = bSingleRef ? SINGLETON_NONE :
             getSingletonDisplay( pDoc, aAbs1, aAbs2, rRef, bFromRangeName);
-        MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref1, aAbs1, false, false, eSingleton);
+        MakeOneRefStrImpl(pDoc, rBuffer, rErrRef, rTabNames, rRef.Ref1, aAbs1, false, false, eSingleton);
         if (!bSingleRef)
         {
             rBuffer.append(':');
-            MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), false,
+            MakeOneRefStrImpl(pDoc, rBuffer, rErrRef, rTabNames, rRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), false,
                     eSingleton);
         }
     }
@@ -917,10 +917,11 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     static bool makeExternalSingleRefStr(
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const OUString& rFileName, const OUString& rTabName,
         const ScSingleRefData& rRef, const ScAddress& rPos, bool bDisplayTabName, bool bEncodeUrl )
     {
-        ScAddress aAbsRef = rRef.toAbs(rPos);
+        ScAddress aAbsRef = rRef.toAbs(pDoc, rPos);
         if (bDisplayTabName)
         {
             OUString aFile;
@@ -940,15 +941,16 @@ struct ConventionOOO_A1 : public Convention_A1
 
         if (!rRef.IsColRel())
             rBuffer.append('$');
-        MakeColStr( rBuffer, aAbsRef.Col());
+        MakeColStr( pDoc, rBuffer, aAbsRef.Col());
         if (!rRef.IsRowRel())
             rBuffer.append('$');
-        MakeRowStr( rBuffer, aAbsRef.Row());
+        MakeRowStr( pDoc, rBuffer, aAbsRef.Row());
 
         return true;
     }
 
     static void makeExternalRefStrImpl(
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
         const OUString& rTabName, const ScSingleRefData& rRef, bool bODF )
     {
@@ -956,24 +958,26 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append( '[');
 
         bool bEncodeUrl = bODF;
-        makeExternalSingleRefStr(rBuffer, rFileName, rTabName, rRef, rPos, true, bEncodeUrl);
+        makeExternalSingleRefStr(pDoc, rBuffer, rFileName, rTabName, rRef, rPos, true, bEncodeUrl);
         if (bODF)
             rBuffer.append( ']');
     }
 
     virtual void makeExternalRefStr(
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const OUString& rTabName, const ScSingleRefData& rRef ) const override
     {
-        makeExternalRefStrImpl(rBuffer, rPos, rFileName, rTabName, rRef, false);
+        makeExternalRefStrImpl(pDoc, rBuffer, rPos, rFileName, rTabName, rRef, false);
     }
 
     static void makeExternalRefStrImpl(
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef, bool bODF )
     {
-        ScRange aAbsRange = rRef.toAbs(rPos);
+        ScRange aAbsRange = rRef.toAbs(pDoc, rPos);
 
         if (bODF)
             rBuffer.append( '[');
@@ -982,7 +986,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
         do
         {
-            if (!makeExternalSingleRefStr(rBuffer, rFileName, rTabName, rRef.Ref1, rPos, true, bEncodeUrl))
+            if (!makeExternalSingleRefStr(pDoc, rBuffer, rFileName, rTabName, rRef.Ref1, rPos, true, bEncodeUrl))
                 break;
 
             rBuffer.append(':');
@@ -1000,7 +1004,7 @@ struct ConventionOOO_A1 : public Convention_A1
             }
             else if (bODF)
                 rBuffer.append( '.');      // need at least the sheet separator in ODF
-            makeExternalSingleRefStr(
+            makeExternalSingleRefStr(pDoc,
                 rBuffer, rFileName, aLastTabName, rRef.Ref2, rPos, bDisplayTabName, bEncodeUrl);
         } while (false);
 
@@ -1009,12 +1013,12 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     virtual void makeExternalRefStr(
-        const ScDocument* /*pDoc*/,
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef ) const override
     {
-        makeExternalRefStrImpl(rBuffer, rPos, rFileName, rTabNames, rTabName, rRef, false);
+        makeExternalRefStrImpl(pDoc, rBuffer, rPos, rFileName, rTabNames, rTabName, rRef, false);
     }
 };
 
@@ -1035,12 +1039,12 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         rBuffer.append('[');
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
-        ScAddress aAbs1 = rRef.Ref1.toAbs(rPos), aAbs2;
+        ScAddress aAbs1 = rRef.Ref1.toAbs(pDoc, rPos), aAbs2;
         if( !bSingleRef )
-            aAbs2 = rRef.Ref2.toAbs(rPos);
+            aAbs2 = rRef.Ref2.toAbs(pDoc, rPos);
 
-        if (FormulaGrammar::isODFF(eGram) && (rRef.Ref1.IsDeleted() || !ValidAddress(aAbs1) ||
-                    (!bSingleRef && (rRef.Ref2.IsDeleted() || !ValidAddress(aAbs2)))))
+        if (FormulaGrammar::isODFF(eGram) && (rRef.Ref1.IsDeleted() || !pDoc->ValidAddress(aAbs1) ||
+                    (!bSingleRef && (rRef.Ref2.IsDeleted() || !pDoc->ValidAddress(aAbs2)))))
         {
             rBuffer.append(rErrRef);
             // For ODFF write [#REF!], but not for PODF so apps reading ODF
@@ -1051,11 +1055,11 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         {
             SingletonDisplay eSingleton = bSingleRef ? SINGLETON_NONE :
                 getSingletonDisplay( pDoc, aAbs1, aAbs2, rRef, bFromRangeName);
-            MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref1, aAbs1, false, true, eSingleton);
+            MakeOneRefStrImpl(pDoc, rBuffer, rErrRef, rTabNames, rRef.Ref1, aAbs1, false, true, eSingleton);
             if (!bSingleRef)
             {
                 rBuffer.append(':');
-                MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), true,
+                MakeOneRefStrImpl(pDoc, rBuffer, rErrRef, rTabNames, rRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), true,
                         eSingleton);
             }
         }
@@ -1069,19 +1073,20 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
     }
 
     virtual void makeExternalRefStr(
+        const ScDocument * pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const OUString& rTabName, const ScSingleRefData& rRef ) const override
     {
-        makeExternalRefStrImpl(rBuffer, rPos, rFileName, rTabName, rRef, true);
+        makeExternalRefStrImpl(pDoc, rBuffer, rPos, rFileName, rTabName, rRef, true);
     }
 
     virtual void makeExternalRefStr(
-        const ScDocument* /*pDoc*/,
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const std::vector<OUString>& rTabNames,
         const OUString& rTabName, const ScComplexRefData& rRef ) const override
     {
-        makeExternalRefStrImpl(rBuffer, rPos, rFileName, rTabNames, rTabName, rRef, true);
+        makeExternalRefStrImpl(pDoc, rBuffer, rPos, rFileName, rTabNames, rTabName, rRef, true);
     }
 };
 
@@ -1092,10 +1097,11 @@ struct ConventionXL
     }
 
     static void GetTab(
+        const ScDocument* pDoc,
         const ScAddress& rPos, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, OUString& rTabName )
     {
-        ScAddress aAbs = rRef.toAbs(rPos);
+        ScAddress aAbs = rRef.toAbs(pDoc, rPos);
         if (rRef.IsTabDeleted() || static_cast<size_t>(aAbs.Tab()) >= rTabNames.size())
         {
             rTabName = ScResId( STR_NO_REF_TABLE );
@@ -1104,7 +1110,7 @@ struct ConventionXL
         rTabName = rTabNames[aAbs.Tab()];
     }
 
-    static void MakeTabStr( OUStringBuffer& rBuf,
+    static void MakeTabStr( const ScDocument* pDoc, OUStringBuffer& rBuf,
                             const ScAddress& rPos,
                             const std::vector<OUString>& rTabNames,
                             const ScComplexRefData& rRef,
@@ -1114,11 +1120,11 @@ struct ConventionXL
         {
             OUString aStartTabName, aEndTabName;
 
-            GetTab(rPos, rTabNames, rRef.Ref1, aStartTabName);
+            GetTab(pDoc, rPos, rTabNames, rRef.Ref1, aStartTabName);
 
             if( !bSingleRef && rRef.Ref2.IsFlag3D() )
             {
-                GetTab(rPos, rTabNames, rRef.Ref2, aEndTabName);
+                GetTab(pDoc, rPos, rTabNames, rRef.Ref2, aEndTabName);
             }
 
             rBuf.append( aStartTabName );
@@ -1260,14 +1266,14 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     ConventionXL_A1() : Convention_A1( FormulaGrammar::CONV_XL_A1 ) { }
     explicit ConventionXL_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1( eConv ) { }
 
-    static void makeSingleCellStr( OUStringBuffer& rBuf, const ScSingleRefData& rRef, const ScAddress& rAbs )
+    static void makeSingleCellStr( const ScDocument* pDoc, OUStringBuffer& rBuf, const ScSingleRefData& rRef, const ScAddress& rAbs )
     {
         if (!rRef.IsColRel())
             rBuf.append('$');
-        MakeColStr(rBuf, rAbs.Col());
+        MakeColStr(pDoc, rBuf, rAbs.Col());
         if (!rRef.IsRowRel())
             rBuf.append('$');
-        MakeRowStr(rBuf, rAbs.Row());
+        MakeRowStr(pDoc, rBuf, rAbs.Row());
     }
 
     virtual void makeRefStr(
@@ -1284,11 +1290,11 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
         // Play fast and loose with invalid refs.  There is not much point in producing
         // Foo!A1:#REF! versus #REF! at this point
-        ScAddress aAbs1 = aRef.Ref1.toAbs(rPos), aAbs2;
+        ScAddress aAbs1 = aRef.Ref1.toAbs(pDoc, rPos), aAbs2;
 
-        MakeTabStr(rBuf, rPos, rTabNames, aRef, bSingleRef);
+        MakeTabStr(pDoc, rBuf, rPos, rTabNames, aRef, bSingleRef);
 
-        if (!ValidAddress(aAbs1))
+        if (!pDoc->ValidAddress(aAbs1))
         {
             rBuf.append(rErrRef);
             return;
@@ -1296,8 +1302,8 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
         if( !bSingleRef )
         {
-            aAbs2 = aRef.Ref2.toAbs(rPos);
-            if (!ValidAddress(aAbs2))
+            aAbs2 = aRef.Ref2.toAbs(pDoc, rPos);
+            if (!pDoc->ValidAddress(aAbs2))
             {
                 rBuf.append(rErrRef);
                 return;
@@ -1307,11 +1313,11 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             {
                 if (!aRef.Ref1.IsRowRel())
                     rBuf.append( '$' );
-                MakeRowStr(rBuf, aAbs1.Row());
+                MakeRowStr(pDoc, rBuf, aAbs1.Row());
                 rBuf.append( ':' );
                 if (!aRef.Ref2.IsRowRel())
                     rBuf.append( '$' );
-                MakeRowStr(rBuf, aAbs2.Row());
+                MakeRowStr(pDoc, rBuf, aAbs2.Row());
                 return;
             }
 
@@ -1319,20 +1325,20 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             {
                 if (!aRef.Ref1.IsColRel())
                     rBuf.append( '$' );
-                MakeColStr(rBuf, aAbs1.Col());
+                MakeColStr(pDoc, rBuf, aAbs1.Col());
                 rBuf.append( ':' );
                 if (!aRef.Ref2.IsColRel())
                     rBuf.append( '$' );
-                MakeColStr(rBuf, aAbs2.Col());
+                MakeColStr(pDoc, rBuf, aAbs2.Col());
                 return;
             }
         }
 
-        makeSingleCellStr(rBuf, aRef.Ref1, aAbs1);
+        makeSingleCellStr(pDoc, rBuf, aRef.Ref1, aAbs1);
         if (!bSingleRef)
         {
             rBuf.append( ':' );
-            makeSingleCellStr(rBuf, aRef.Ref2, aAbs2);
+            makeSingleCellStr(pDoc, rBuf, aRef.Ref2, aAbs2);
         }
     }
 
@@ -1377,6 +1383,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     }
 
     virtual void makeExternalRefStr(
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const OUString& rTabName, const ScSingleRefData& rRef ) const override
     {
@@ -1390,26 +1397,26 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append('!');
 
-        makeSingleCellStr(rBuffer, rRef, rRef.toAbs(rPos));
+        makeSingleCellStr(pDoc, rBuffer, rRef, rRef.toAbs(pDoc, rPos));
     }
 
     virtual void makeExternalRefStr(
-        const ScDocument* /*pDoc*/,
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef ) const override
     {
-        ScRange aAbsRef = rRef.toAbs(rPos);
+        ScRange aAbsRef = rRef.toAbs(pDoc, rPos);
 
         ConventionXL::makeExternalDocStr(rBuffer, rFileName);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, rTabNames, aAbsRef);
         rBuffer.append('!');
 
-        makeSingleCellStr(rBuffer, rRef.Ref1, aAbsRef.aStart);
+        makeSingleCellStr(pDoc, rBuffer, rRef.Ref1, aAbsRef.aStart);
         if (aAbsRef.aStart != aAbsRef.aEnd)
         {
             rBuffer.append(':');
-            makeSingleCellStr(rBuffer, rRef.Ref2, aAbsRef.aEnd);
+            makeSingleCellStr(pDoc, rBuffer, rRef.Ref2, aAbsRef.aEnd);
         }
     }
 };
@@ -1487,6 +1494,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
     }
 
     virtual void makeExternalRefStr(
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 nFileId, const OUString& /*rFileName*/,
         const OUString& rTabName, const ScSingleRefData& rRef ) const override
     {
@@ -1509,11 +1517,11 @@ struct ConventionXL_OOX : public ConventionXL_A1
         }
         rBuffer.append('!');
 
-        makeSingleCellStr(rBuffer, rRef, rRef.toAbs(rPos));
+        makeSingleCellStr(pDoc, rBuffer, rRef, rRef.toAbs(pDoc, rPos));
     }
 
     virtual void makeExternalRefStr(
-        const ScDocument* /*pDoc*/,
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 nFileId, const OUString& /*rFileName*/,
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef ) const override
@@ -1524,7 +1532,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
         // sheet names as well. The [N] having to be within the quoted sheet
         // name is ugly enough...
 
-        ScRange aAbsRef = rRef.toAbs(rPos);
+        ScRange aAbsRef = rRef.toAbs(pDoc, rPos);
 
         OUStringBuffer aBuf;
         ConventionXL::makeExternalTabNameRange( aBuf, rTabName, rTabNames, aAbsRef);
@@ -1541,11 +1549,11 @@ struct ConventionXL_OOX : public ConventionXL_A1
         }
         rBuffer.append('!');
 
-        makeSingleCellStr(rBuffer, rRef.Ref1, aAbsRef.aStart);
+        makeSingleCellStr(pDoc, rBuffer, rRef.Ref1, aAbsRef.aStart);
         if (aAbsRef.aStart != aAbsRef.aEnd)
         {
             rBuffer.append(':');
-            makeSingleCellStr(rBuffer, rRef.Ref2, aAbsRef.aEnd);
+            makeSingleCellStr(pDoc, rBuffer, rRef.Ref2, aAbsRef.aEnd);
         }
     }
 
@@ -1600,14 +1608,14 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                      bool bSingleRef,
                      bool /*bFromRangeName*/ ) const override
     {
-        ScRange aAbsRef = rRef.toAbs(rPos);
+        ScRange aAbsRef = rRef.toAbs(pDoc, rPos);
         ScComplexRefData aRef( rRef );
 
-        MakeTabStr(rBuf, rPos, rTabNames, aRef, bSingleRef);
+        MakeTabStr(pDoc, rBuf, rPos, rTabNames, aRef, bSingleRef);
 
         // Play fast and loose with invalid refs.  There is not much point in producing
         // Foo!A1:#REF! versus #REF! at this point
-        if (!ValidCol(aAbsRef.aStart.Col()) || !ValidRow(aAbsRef.aStart.Row()))
+        if (!pDoc->ValidCol(aAbsRef.aStart.Col()) || !pDoc->ValidRow(aAbsRef.aStart.Row()))
         {
             rBuf.append(rErrRef);
             return;
@@ -1615,7 +1623,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
         if( !bSingleRef )
         {
-            if (!ValidCol(aAbsRef.aEnd.Col()) || !ValidRow(aAbsRef.aEnd.Row()))
+            if (!pDoc->ValidCol(aAbsRef.aEnd.Col()) || !pDoc->ValidRow(aAbsRef.aEnd.Row()))
             {
                 rBuf.append(rErrRef);
                 return;
@@ -1699,6 +1707,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     }
 
     virtual void makeExternalRefStr(
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const OUString& rTabName, const ScSingleRefData& rRef ) const override
     {
@@ -1708,7 +1717,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         // whole file path with [] because the file name can contain any
         // characters.
 
-        ScAddress aAbsRef = rRef.toAbs(rPos);
+        ScAddress aAbsRef = rRef.toAbs(pDoc, rPos);
         ConventionXL::makeExternalDocStr(rBuffer, rFileName);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append('!');
@@ -1723,13 +1732,13 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef ) const override
     {
-        ScRange aAbsRef = rRef.toAbs(rPos);
+        ScRange aAbsRef = rRef.toAbs(pDoc, rPos);
 
         ConventionXL::makeExternalDocStr(rBuffer, rFileName);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, rTabNames, aAbsRef);
         rBuffer.append('!');
 
-        if (!ValidCol(aAbsRef.aEnd.Col()) || !ValidRow(aAbsRef.aEnd.Row()))
+        if (!pDoc->ValidCol(aAbsRef.aEnd.Col()) || !pDoc->ValidRow(aAbsRef.aEnd.Row()))
         {
             rBuffer.append(ScResId(STR_NO_REF_TABLE));
             return;
@@ -3183,7 +3192,7 @@ bool ScCompiler::IsDoubleReference( const OUString& rName, const OUString* pErrR
         if ( !(nFlags & ScRefFlags::TAB2_VALID) )
             aRef.Ref2.SetTabDeleted( true );        // #REF!
         aRef.Ref2.SetFlag3D( ( nFlags & ScRefFlags::TAB2_3D ) != ScRefFlags::ZERO );
-        aRef.SetRange(aRange, aPos);
+        aRef.SetRange(pDoc, aRange, aPos);
         if (aExtInfo.mbExternal)
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
@@ -3249,7 +3258,7 @@ bool ScCompiler::IsSingleReference( const OUString& rName, const OUString* pErrR
                 aRef.SetTabDeleted(true);
             nFlags |= ScRefFlags::VALID;
         }
-        aRef.SetAddress(aAddr, aPos);
+        aRef.SetAddress(pDoc, aAddr, aPos);
 
         if (aExtInfo.mbExternal)
         {
@@ -3583,7 +3592,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                                 aRef.SetColRel( true );     // ColName
                             else
                                 aRef.SetRowRel( true );     // RowName
-                            aRef.SetAddress(aIter.GetPos(), aPos);
+                            aRef.SetAddress(pDoc, aIter.GetPos(), aPos);
                             bInList = bFound = true;
                         }
                     }
@@ -3765,7 +3774,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                 aRef.SetRowRel( true );     // RowName
             else
                 aRef.SetColRel( true );     // ColName
-            aRef.SetAddress(aAdr, aPos);
+            aRef.SetAddress(pDoc, aAdr, aPos);
         }
     }
     if ( bFound )
@@ -5011,7 +5020,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
             rBuffer.append(pConv->makeExternalNameStr( nFileId, *pFileName, t->GetString().getString()));
         break;
         case svExternalSingleRef:
-            pConv->makeExternalRefStr(
+            pConv->makeExternalRefStr(pDoc,
                    rBuffer, GetPos(), nFileId, *pFileName, t->GetString().getString(),
                    *t->GetSingleRef());
         break;
@@ -5118,7 +5127,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
     aRef.Ref1 = aRef.Ref2 = rRef;
     if ( eOp == ocColRowName )
     {
-        ScAddress aAbs = rRef.toAbs(aPos);
+        ScAddress aAbs = rRef.toAbs(pDoc, aPos);
         if (pDoc->HasStringData(aAbs.Col(), aAbs.Row(), aAbs.Tab()))
         {
             OUString aStr = pDoc->GetString(aAbs, mpInterpreterContext);
@@ -5135,7 +5144,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
     else if (pArr && (p = maArrIterator.PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
     {
         OUString aStr;
-        ScAddress aAbs = rRef.toAbs(aPos);
+        ScAddress aAbs = rRef.toAbs(pDoc, aPos);
         const ScDBData* pData = pDoc->GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab(), ScDBDataPortion::AREA);
         SAL_WARN_IF( !pData, "sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef without ScDBData: " <<
                 aAbs.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, pDoc));
@@ -5323,8 +5332,8 @@ void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry
 bool ScCompiler::HandleColRowName()
 {
     ScSingleRefData& rRef = *mpToken->GetSingleRef();
-    const ScAddress aAbs = rRef.toAbs(aPos);
-    if (!ValidAddress(aAbs))
+    const ScAddress aAbs = rRef.toAbs(pDoc, aPos);
+    if (!pDoc->ValidAddress(aAbs))
     {
         SetError( FormulaError::NoRef );
         return true;
@@ -5497,7 +5506,7 @@ bool ScCompiler::HandleColRowName()
                     aRefData.SetColRel( true );
                 else
                     aRefData.SetRowRel( true );
-                aRefData.SetAddress(aRange.aStart, aPos);
+                aRefData.SetAddress(pDoc, aRange.aStart, aPos);
                 pNew->AddSingleReference( aRefData );
             }
             else
@@ -5514,7 +5523,7 @@ bool ScCompiler::HandleColRowName()
                     aRefData.Ref1.SetRowRel( true );
                     aRefData.Ref2.SetRowRel( true );
                 }
-                aRefData.SetRange(aRange, aPos);
+                aRefData.SetRange(pDoc, aRange, aPos);
                 if ( bInList )
                     pNew->AddDoubleReference( aRefData );
                 else
@@ -5543,7 +5552,7 @@ bool ScCompiler::HandleDbData()
         ScRange aRange;
         pDBData->GetArea(aRange);
         aRange.aEnd.SetTab(aRange.aStart.Tab());
-        aRefData.SetRange(aRange, aPos);
+        aRefData.SetRange(pDoc, aRange, aPos);
         ScTokenArray* pNew = new ScTokenArray(pDoc);
         pNew->AddDoubleReference( aRefData );
         PushTokenArray( pNew, true );
@@ -5760,7 +5769,7 @@ bool ScCompiler::HandleTableRef()
                 {
                     case svSingleRef:
                         {
-                            aColRange.aStart = aColRange.aEnd = mpToken->GetSingleRef()->toAbs( aPos);
+                            aColRange.aStart = aColRange.aEnd = mpToken->GetSingleRef()->toAbs(pDoc, aPos);
                             if (    GetTokenIfOpCode( ocTableRefClose) && (nLevel--) &&
                                     GetTokenIfOpCode( ocRange) &&
                                     GetTokenIfOpCode( ocTableRefOpen) && (++nLevel) &&
@@ -5770,7 +5779,7 @@ bool ScCompiler::HandleTableRef()
                                     aColRange = ScRange( ScAddress::INITIALIZE_INVALID);
                                 else
                                 {
-                                    aColRange.aEnd = mpToken->GetSingleRef()->toAbs( aPos);
+                                    aColRange.aEnd = mpToken->GetSingleRef()->toAbs(pDoc, aPos);
                                     aColRange.PutInOrder();
                                     bCol2Rel = mpToken->GetSingleRef()->IsColRel();
                                     bCol2RelName = mpToken->GetSingleRef()->IsRelName();
@@ -5807,14 +5816,14 @@ bool ScCompiler::HandleTableRef()
                     aRefData.SetFlag3D( true);
                     if (nError != FormulaError::NONE)
                     {
-                        aRefData.SetAddress( aRange.aStart, aRange.aStart);
+                        aRefData.SetAddress(pDoc, aRange.aStart, aRange.aStart);
                         pTR->SetAreaRefRPN( new ScSingleRefToken(pDoc, aRefData));   // set reference at TableRef
                         pNew->Add( new FormulaErrorToken( nError));             // set error in RPN
                     }
                     else
                     {
-                        aRefData.SetAddress( aRange.aStart, aPos);
-                        pTR->SetAreaRefRPN( pNew->AddSingleReference( aRefData));
+                        aRefData.SetAddress(pDoc, aRange.aStart, aPos);
+                        pTR->SetAreaRefRPN( pNew->AddSingleReference(aRefData));
                     }
                 }
                 else
@@ -5836,14 +5845,14 @@ bool ScCompiler::HandleTableRef()
                     aRefData.Ref1.SetFlag3D( true);
                     if (nError != FormulaError::NONE)
                     {
-                        aRefData.SetRange( aRange, aRange.aStart);
+                        aRefData.SetRange(pDoc, aRange, aRange.aStart);
                         pTR->SetAreaRefRPN( new ScDoubleRefToken(pDoc, aRefData));   // set reference at TableRef
                         pNew->Add( new FormulaErrorToken( nError));             // set error in RPN
                     }
                     else
                     {
-                        aRefData.SetRange( aRange, aPos);
-                        pTR->SetAreaRefRPN( pNew->AddDoubleReference( aRefData));
+                        aRefData.SetRange(pDoc, aRange, aPos);
+                        pTR->SetAreaRefRPN( pNew->AddDoubleReference(aRefData));
                     }
                 }
             }
@@ -6078,7 +6087,7 @@ void ScCompiler::ReplaceDoubleRefII(FormulaToken** ppDoubleRefTok)
     if (!rRange.Ref1.IsRowRel() && !rRange.Ref2.IsRowRel())
         return;
 
-    ScRange aAbsRange = rRange.toAbs(aPos);
+    ScRange aAbsRange = rRange.toAbs(pDoc, aPos);
     if (aAbsRange.aStart == aAbsRange.aEnd)
         return; // Nothing to do (trivial case).
 
@@ -6092,7 +6101,7 @@ void ScCompiler::ReplaceDoubleRefII(FormulaToken** ppDoubleRefTok)
     aSingleRef.SetColRel(rRange.Ref1.IsColRel());
     aSingleRef.SetRowRel(true);
     aSingleRef.SetTabRel(rRange.Ref1.IsTabRel());
-    aSingleRef.SetAddress(aAddr, aPos);
+    aSingleRef.SetAddress(pDoc, aAddr, aPos);
 
     // Replace the original doubleref token with computed singleref token
     FormulaToken* pNewSingleRefTok = new ScSingleRefToken(pDoc, aSingleRef);
@@ -6168,7 +6177,7 @@ static void lcl_GetColRowDeltas(const ScRange& rRange, SCCOL& rXDelta, SCROW& rY
 
 bool ScCompiler::AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange)
 {
-    ScRange aAbs = rSumRange.toAbs(aPos);
+    ScRange aAbs = rSumRange.toAbs(pDoc, aPos);
 
     // Current sum-range end col/row
     SCCOL nEndCol = aAbs.aEnd.Col();
@@ -6177,7 +6186,7 @@ bool ScCompiler::AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScCompl
     // Current behaviour is, we will get a #NAME? for the below case, so bail out.
     // Note that sum-range's End[Col,Row] are same as Start[Col,Row] if the original formula
     // has a single-ref as the sum-range.
-    if (!ValidCol(nEndCol) || !ValidRow(nEndRow))
+    if (!pDoc->ValidCol(nEndCol) || !pDoc->ValidRow(nEndRow))
         return false;
 
     SCCOL nXDeltaSum = 0;
@@ -6185,7 +6194,7 @@ bool ScCompiler::AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScCompl
 
     lcl_GetColRowDeltas(aAbs, nXDeltaSum, nYDeltaSum);
 
-    aAbs = rBaseRange.toAbs(aPos);
+    aAbs = rBaseRange.toAbs(pDoc, aPos);
     SCCOL nXDelta = 0;
     SCROW nYDelta = 0;
 

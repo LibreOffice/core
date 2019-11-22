@@ -428,7 +428,7 @@ FormulaToken* ScRawToken::CreateToken(const ScDocument* pDoc) const
 namespace {
 
 //  TextEqual: if same formula entered (for optimization in sort)
-bool checkTextEqual( const FormulaToken& _rToken1, const FormulaToken& _rToken2 )
+bool checkTextEqual( const ScDocument* pDoc, const FormulaToken& _rToken1, const FormulaToken& _rToken2 )
 {
     assert(
         (_rToken1.GetType() == svSingleRef || _rToken1.GetType() == svDoubleRef)
@@ -455,7 +455,7 @@ bool checkTextEqual( const FormulaToken& _rToken1, const FormulaToken& _rToken2 
         aTemp2 = *_rToken2.GetDoubleRef();
 
     ScAddress aPos;
-    ScRange aRange1 = aTemp1.toAbs(aPos), aRange2 = aTemp2.toAbs(aPos);
+    ScRange aRange1 = aTemp1.toAbs(pDoc, aPos), aRange2 = aTemp2.toAbs(pDoc, aPos);
 
     //  memcmp doesn't work because of the alignment byte after bFlags.
     //  After SmartRelAbs only absolute parts have to be compared.
@@ -545,7 +545,7 @@ FormulaTokenRef extendRangeReference( const ScDocument* pDoc, FormulaToken & rTo
         ScComplexRefData aRef;
         aRef.Ref1 = aRef.Ref2 = *rTok1.GetSingleRef();
         aRef.Ref2.SetFlag3D( false);
-        aRef.Extend(rRef2, rPos);
+        aRef.Extend(pDoc, rRef2, rPos);
         if (bExternal)
             xRes = new ScExternalDoubleRefToken( rTok1.GetIndex(), rTok1.GetString(), aRef);
         else
@@ -587,10 +587,10 @@ FormulaTokenRef extendRangeReference( const ScDocument* pDoc, FormulaToken & rTo
             switch (sv[i])
             {
                 case svSingleRef:
-                    rRef.Extend(*pt[i]->GetSingleRef(), rPos);
+                    rRef.Extend(pDoc, *pt[i]->GetSingleRef(), rPos);
                     break;
                 case svDoubleRef:
-                    rRef.Extend(*pt[i]->GetDoubleRef(), rPos);
+                    rRef.Extend(pDoc, *pt[i]->GetDoubleRef(), rPos);
                     break;
                 case svRefList:
                     {
@@ -599,7 +599,7 @@ FormulaTokenRef extendRangeReference( const ScDocument* pDoc, FormulaToken & rTo
                             return nullptr;
                         for (const auto& rRefData : *p)
                         {
-                            rRef.Extend(rRefData, rPos);
+                            rRef.Extend(pDoc, rRefData, rPos);
                         }
                     }
                     break;
@@ -607,13 +607,13 @@ FormulaTokenRef extendRangeReference( const ScDocument* pDoc, FormulaToken & rTo
                     if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
                         return nullptr;    // no other sheets with external refs
                     else
-                        rRef.Extend(*pt[i]->GetSingleRef(), rPos);
+                        rRef.Extend(pDoc, *pt[i]->GetSingleRef(), rPos);
                     break;
                 case svExternalDoubleRef:
                     if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
                         return nullptr;    // no other sheets with external refs
                     else
-                        rRef.Extend(*pt[i]->GetDoubleRef(), rPos);
+                        rRef.Extend(pDoc, *pt[i]->GetDoubleRef(), rPos);
                     break;
                 default:
                     ;   // nothing, prevent compiler warning
@@ -629,7 +629,7 @@ const ScSingleRefData*    ScSingleRefToken::GetSingleRef() const  { return &aSin
 ScSingleRefData*          ScSingleRefToken::GetSingleRef()        { return &aSingleRef; }
 bool ScSingleRefToken::TextEqual( const FormulaToken& _rToken ) const
 {
-    return FormulaToken::operator ==(_rToken) && checkTextEqual(*this, _rToken);
+    return FormulaToken::operator ==(_rToken) && checkTextEqual(mpDoc, *this, _rToken);
 }
 bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 {
@@ -644,7 +644,7 @@ const ScSingleRefData*    ScDoubleRefToken::GetSingleRef2() const { return &aDou
 ScSingleRefData*          ScDoubleRefToken::GetSingleRef2()       { return &aDoubleRef.Ref2; }
 bool ScDoubleRefToken::TextEqual( const FormulaToken& _rToken ) const
 {
-    return FormulaToken::operator ==(_rToken) && checkTextEqual(*this, _rToken);
+    return FormulaToken::operator ==(_rToken) && checkTextEqual(mpDoc, *this, _rToken);
 }
 bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 {
@@ -1689,7 +1689,7 @@ bool ScTokenArray::ImplGetReference( const ScDocument* pDoc, ScRange& rRange, co
             if ( pToken->GetType() == svSingleRef )
             {
                 const ScSingleRefData& rRef = *static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
-                rRange.aStart = rRange.aEnd = rRef.toAbs(rPos);
+                rRange.aStart = rRange.aEnd = rRef.toAbs(pDoc, rPos);
                 bIs = !bValidOnly || pDoc->ValidAddress(rRange.aStart);
             }
             else if ( pToken->GetType() == svDoubleRef )
@@ -1697,8 +1697,8 @@ bool ScTokenArray::ImplGetReference( const ScDocument* pDoc, ScRange& rRange, co
                 const ScComplexRefData& rCompl = *static_cast<const ScDoubleRefToken*>(pToken)->GetDoubleRef();
                 const ScSingleRefData& rRef1 = rCompl.Ref1;
                 const ScSingleRefData& rRef2 = rCompl.Ref2;
-                rRange.aStart = rRef1.toAbs(rPos);
-                rRange.aEnd   = rRef2.toAbs(rPos);
+                rRange.aStart = rRef1.toAbs(pDoc, rPos);
+                rRange.aEnd   = rRef2.toAbs(pDoc, rPos);
                 bIs = !bValidOnly || pDoc->ValidRange(rRange);
             }
         }
@@ -2303,7 +2303,7 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                         case svSingleRef :
                         {
                             ScSingleRefData& rRef = *p->GetSingleRef();
-                            ScAddress aAbs = rRef.toAbs(rPos);
+                            ScAddress aAbs = rRef.toAbs(mpDoc, rPos);
                             switch ( eDir )
                             {
                                 case DIR_BOTTOM :
@@ -2340,7 +2340,7 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                         case svDoubleRef :
                         {
                             ScComplexRefData& rRef = *p->GetDoubleRef();
-                            ScRange aAbs = rRef.toAbs(rPos);
+                            ScRange aAbs = rRef.toAbs(mpDoc, rPos);
                             switch ( eDir )
                             {
                                 case DIR_BOTTOM :
@@ -2408,7 +2408,7 @@ bool SkipReference(formula::FormulaToken* pToken, const ScAddress& rPos, const S
 {
     ScRange aRange;
 
-    if (!ScRefTokenHelper::getRangeFromToken(aRange, pToken, rPos))
+    if (!ScRefTokenHelper::getRangeFromToken(pOldDoc, aRange, pToken, rPos))
         return true;
 
     if (bRangeName && aRange.aStart.Tab() == rPos.Tab())
@@ -3075,7 +3075,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        ScAddress aAbs = rRef.toAbs(mpDoc, rOldPos);
 
                         if (rCxt.isDeleted() && aSelectedRange.In(aAbs))
                         {
@@ -3088,7 +3088,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         if (!rCxt.isDeleted() && rRef.IsDeleted())
                         {
                             // Check if the token has reference to previously deleted region.
-                            ScAddress aCheckPos = rRef.toAbs(aNewPos);
+                            ScAddress aCheckPos = rRef.toAbs(mpDoc, aNewPos);
                             if (rCxt.maRange.In(aCheckPos))
                             {
                                 restoreDeletedRef(rRef, rCxt);
@@ -3105,13 +3105,13 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             aRes.mbReferenceModified = true;
                         }
 
-                        rRef.SetAddress(aAbs, aNewPos);
+                        rRef.SetAddress(mpDoc, aAbs, aNewPos);
                     }
                     break;
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        ScRange aAbs = rRef.toAbs(rOldPos);
+                        ScRange aAbs = rRef.toAbs(mpDoc, rOldPos);
 
                         if (rCxt.isDeleted())
                         {
@@ -3128,7 +3128,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                                 if (eSR == SHRUNK)
                                 {
                                     // The reference range has been shrunk.
-                                    rRef.SetRange(aAbs, aNewPos);
+                                    rRef.SetRange(mpDoc, aAbs, aNewPos);
                                     aRes.mbValueChanged = true;
                                     aRes.mbReferenceModified = true;
                                     break;
@@ -3157,7 +3157,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         if (!rCxt.isDeleted() && rRef.IsDeleted())
                         {
                             // Check if the token has reference to previously deleted region.
-                            ScRange aCheckRange = rRef.toAbs(aNewPos);
+                            ScRange aCheckRange = rRef.toAbs(mpDoc, aNewPos);
                             if (aSelectedRange.In(aCheckRange))
                             {
                                 // This reference was previously in the deleted region. Restore it.
@@ -3172,7 +3172,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             if (expandRange(rCxt, aAbs, aSelectedRange, rRef))
                             {
                                 // The reference range has been expanded.
-                                rRef.SetRange(aAbs, aNewPos);
+                                rRef.SetRange(mpDoc, aAbs, aNewPos);
                                 aRes.mbValueChanged = true;
                                 aRes.mbReferenceModified = true;
                                 break;
@@ -3181,7 +3181,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             if (expandRangeByEdge(rCxt, aAbs, aSelectedRange, rRef))
                             {
                                 // The reference range has been expanded on the edge.
-                                rRef.SetRange(aAbs, aNewPos);
+                                rRef.SetRange(mpDoc, aAbs, aNewPos);
                                 aRes.mbValueChanged = true;
                                 aRes.mbReferenceModified = true;
                                 break;
@@ -3215,7 +3215,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             aRes.mbValueChanged = true;
                         }
 
-                        rRef.SetRange(aAbs, aNewPos);
+                        rRef.SetRange(mpDoc, aAbs, aNewPos);
                     }
                     break;
                 case svExternalSingleRef:
@@ -3223,16 +3223,16 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         // For external reference, just reset the reference with
                         // respect to the new cell position.
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        ScAddress aAbs = rRef.toAbs(rOldPos);
-                        rRef.SetAddress(aAbs, aNewPos);
+                        ScAddress aAbs = rRef.toAbs(mpDoc, rOldPos);
+                        rRef.SetAddress(mpDoc, aAbs, aNewPos);
                     }
                     break;
                 case svExternalDoubleRef:
                     {
                         // Same as above.
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        ScRange aAbs = rRef.toAbs(rOldPos);
-                        rRef.SetRange(aAbs, aNewPos);
+                        ScRange aAbs = rRef.toAbs(mpDoc, rOldPos);
+                        rRef.SetRange(mpDoc, aAbs, aNewPos);
                     }
                     break;
                 default:
@@ -3307,7 +3307,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        ScAddress aAbs = rRef.toAbs(mpDoc, rOldPos);
                         if (aOldRange.In(aAbs))
                         {
                             ScAddress aErrorPos( ScAddress::UNINITIALIZED );
@@ -3321,14 +3321,14 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                             aRes.mbValueChanged = true;
                         }
 
-                        rRef.SetAddress(aAbs, rNewPos);
+                        rRef.SetAddress(mpDoc, aAbs, rNewPos);
                         rRef.SetFlag3D(aAbs.Tab() != rNewPos.Tab() || !rRef.IsTabRel());
                     }
                     break;
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        ScRange aAbs = rRef.toAbs(rOldPos);
+                        ScRange aAbs = rRef.toAbs(mpDoc, rOldPos);
                         if (aOldRange.In(aAbs))
                         {
                             ScRange aErrorRange( ScAddress::UNINITIALIZED );
@@ -3342,7 +3342,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                             aRes.mbValueChanged = true;
                         }
 
-                        rRef.SetRange(aAbs, rNewPos);
+                        rRef.SetRange(mpDoc, aAbs, rNewPos);
                         // Absolute sheet reference => set 3D flag.
                         // More than one sheet referenced => has to have both 3D flags.
                         // If end part has 3D flag => start part must have it too.
@@ -3354,15 +3354,15 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                 case svExternalSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        ScAddress aAbs = rRef.toAbs(rOldPos);
-                        rRef.SetAddress(aAbs, rNewPos);
+                        ScAddress aAbs = rRef.toAbs(mpDoc, rOldPos);
+                        rRef.SetAddress(mpDoc, aAbs, rNewPos);
                     }
                     break;
                 case svExternalDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        ScRange aAbs = rRef.toAbs(rOldPos);
-                        rRef.SetRange(aAbs, rNewPos);
+                        ScRange aAbs = rRef.toAbs(mpDoc, rOldPos);
+                        rRef.SetRange(mpDoc, aAbs, rNewPos);
                     }
                     break;
                 default:
@@ -3416,7 +3416,7 @@ void ScTokenArray::MoveReferenceColReorder(
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(rPos);
+                ScAddress aAbs = rRef.toAbs(mpDoc, rPos);
 
                 if (aAbs.Tab() == nTab && nRow1 <= aAbs.Row() && aAbs.Row() <= nRow2)
                 {
@@ -3427,7 +3427,7 @@ void ScTokenArray::MoveReferenceColReorder(
                         // This column is reordered.
                         SCCOL nNewCol = it->second;
                         aAbs.SetCol(nNewCol);
-                        rRef.SetAddress(aAbs, rPos);
+                        rRef.SetAddress(mpDoc, aAbs, rPos);
                     }
                 }
             }
@@ -3436,7 +3436,7 @@ void ScTokenArray::MoveReferenceColReorder(
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rPos);
+                ScRange aAbs = rRef.toAbs(mpDoc, rPos);
 
                 if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
                     // Must be a single-sheet reference.
@@ -3456,7 +3456,7 @@ void ScTokenArray::MoveReferenceColReorder(
                         SCCOL nNewCol = it->second;
                         aAbs.aStart.SetCol(nNewCol);
                         aAbs.aEnd.SetCol(nNewCol);
-                        rRef.SetRange(aAbs, rPos);
+                        rRef.SetRange(mpDoc, aAbs, rPos);
                     }
                 }
             }
@@ -3479,7 +3479,7 @@ void ScTokenArray::MoveReferenceRowReorder( const ScAddress& rPos, SCTAB nTab, S
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(rPos);
+                ScAddress aAbs = rRef.toAbs(mpDoc, rPos);
 
                 if (aAbs.Tab() == nTab && nCol1 <= aAbs.Col() && aAbs.Col() <= nCol2)
                 {
@@ -3490,7 +3490,7 @@ void ScTokenArray::MoveReferenceRowReorder( const ScAddress& rPos, SCTAB nTab, S
                         // This column is reordered.
                         SCROW nNewRow = it->second;
                         aAbs.SetRow(nNewRow);
-                        rRef.SetAddress(aAbs, rPos);
+                        rRef.SetAddress(mpDoc, aAbs, rPos);
                     }
                 }
             }
@@ -3499,7 +3499,7 @@ void ScTokenArray::MoveReferenceRowReorder( const ScAddress& rPos, SCTAB nTab, S
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rPos);
+                ScRange aAbs = rRef.toAbs(mpDoc, rPos);
 
                 if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
                     // Must be a single-sheet reference.
@@ -3519,7 +3519,7 @@ void ScTokenArray::MoveReferenceRowReorder( const ScAddress& rPos, SCTAB nTab, S
                         SCROW nNewRow = it->second;
                         aAbs.aStart.SetRow(nNewRow);
                         aAbs.aEnd.SetRow(nNewRow);
-                        rRef.SetRange(aAbs, rPos);
+                        rRef.SetRange(mpDoc, aAbs, rPos);
                     }
                 }
             }
@@ -3536,7 +3536,7 @@ bool adjustSingleRefInName(
     ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt, const ScAddress& rPos,
     ScComplexRefData* pEndOfComplex )
 {
-    ScAddress aAbs = rRef.toAbs(rPos);
+    ScAddress aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
 
     if (aAbs.Tab() < rCxt.maRange.aStart.Tab() || rCxt.maRange.aEnd.Tab() < aAbs.Tab())
     {
@@ -3544,7 +3544,7 @@ bool adjustSingleRefInName(
         return false;
     }
 
-    if (!rCxt.maRange.In(rRef.toAbs(rPos)))
+    if (!rCxt.maRange.In(rRef.toAbs(&rCxt.mrDoc, rPos)))
         return false;
 
     bool bChanged = false;
@@ -3603,7 +3603,7 @@ bool adjustDoubleRefInName(
     {
         if (rCxt.mnRowDelta > 0 && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel())
         {
-            ScRange aAbs = rRef.toAbs(rPos);
+            ScRange aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
             // Expand only if at least two rows tall.
             if (aAbs.aStart.Row() < aAbs.aEnd.Row())
             {
@@ -3620,7 +3620,7 @@ bool adjustDoubleRefInName(
         }
         if (rCxt.mnColDelta > 0 && !rRef.Ref1.IsColRel() && !rRef.Ref2.IsColRel())
         {
-            ScRange aAbs = rRef.toAbs(rPos);
+            ScRange aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
             // Expand only if at least two columns wide.
             if (aAbs.aStart.Col() < aAbs.aEnd.Col())
             {
@@ -3713,7 +3713,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                                 // Don't modify relative references in names.
                                 break;
 
-                            ScAddress aAbs = rRef.toAbs(rPos);
+                            ScAddress aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
 
                             if (aAbs.Col() < rCxt.maRange.aStart.Col() || rCxt.maRange.aEnd.Col() < aAbs.Col())
                                 // column of the reference is not in the deleted column range.
@@ -3742,7 +3742,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                                 // Don't modify relative references in names.
                                 break;
 
-                            ScAddress aAbs = rRef.toAbs(rPos);
+                            ScAddress aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
 
                             if (aAbs.Row() < rCxt.maRange.aStart.Row() || rCxt.maRange.aEnd.Row() < aAbs.Row())
                                 // row of the reference is not in the deleted row range.
@@ -3771,7 +3771,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        ScRange aAbs = rRef.toAbs(rPos);
+                        ScRange aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
 
                         if (aAbs.aStart.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.aEnd.Tab() < rCxt.maRange.aStart.Tab())
                             // Sheet references not affected.
@@ -3983,7 +3983,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                         if (rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel())
                             continue;
 
-                        ScAddress aAbs = rRef.toAbs(rPos);
+                        ScAddress aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
                         if (aOldRange.In(aAbs))
                         {
                             ScAddress aErrorPos( ScAddress::UNINITIALIZED );
@@ -3992,7 +3992,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                             aRes.mbReferenceModified = true;
                         }
 
-                        rRef.SetAddress(aAbs, rPos);
+                        rRef.SetAddress(&rCxt.mrDoc, aAbs, rPos);
                     }
                     break;
                 case svDoubleRef:
@@ -4002,7 +4002,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                                 rRef.Ref2.IsColRel() || rRef.Ref2.IsRowRel() || rRef.Ref2.IsTabRel())
                             continue;
 
-                        ScRange aAbs = rRef.toAbs(rPos);
+                        ScRange aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
                         if (aOldRange.In(aAbs))
                         {
                             ScRange aErrorRange( ScAddress::UNINITIALIZED );
@@ -4011,7 +4011,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                             aRes.mbReferenceModified = true;
                         }
 
-                        rRef.SetRange(aAbs, rPos);
+                        rRef.SetRange(&rCxt.mrDoc, aAbs, rPos);
                     }
                     break;
                 default:
@@ -4025,9 +4025,9 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
 
 namespace {
 
-bool adjustSingleRefOnDeletedTab( ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
+bool adjustSingleRefOnDeletedTab( const ScDocument* pDoc, ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
 {
-    ScAddress aAbs = rRef.toAbs(rOldPos);
+    ScAddress aAbs = rRef.toAbs(pDoc, rOldPos);
     if (nDelPos <= aAbs.Tab() && aAbs.Tab() < nDelPos + nSheets)
     {
         rRef.SetTabDeleted(true);
@@ -4038,45 +4038,45 @@ bool adjustSingleRefOnDeletedTab( ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nS
     {
         // Reference sheet needs to be adjusted.
         aAbs.IncTab(-1*nSheets);
-        rRef.SetAddress(aAbs, rNewPos);
+        rRef.SetAddress(pDoc, aAbs, rNewPos);
         return true;
     }
     else if (rOldPos.Tab() != rNewPos.Tab())
     {
         // Cell itself has moved.
-        rRef.SetAddress(aAbs, rNewPos);
+        rRef.SetAddress(pDoc, aAbs, rNewPos);
         return true;
     }
 
     return false;
 }
 
-bool adjustSingleRefOnInsertedTab( ScSingleRefData& rRef, SCTAB nInsPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
+bool adjustSingleRefOnInsertedTab( const ScDocument* pDoc, ScSingleRefData& rRef, SCTAB nInsPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
 {
-    ScAddress aAbs = rRef.toAbs(rOldPos);
+    ScAddress aAbs = rRef.toAbs(pDoc, rOldPos);
     if (nInsPos <= aAbs.Tab())
     {
         // Reference sheet needs to be adjusted.
         aAbs.IncTab(nSheets);
-        rRef.SetAddress(aAbs, rNewPos);
+        rRef.SetAddress(pDoc, aAbs, rNewPos);
         return true;
     }
     else if (rOldPos.Tab() != rNewPos.Tab())
     {
         // Cell itself has moved.
-        rRef.SetAddress(aAbs, rNewPos);
+        rRef.SetAddress(pDoc, aAbs, rNewPos);
         return true;
     }
 
     return false;
 }
 
-bool adjustDoubleRefOnDeleteTab(ScComplexRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos)
+bool adjustDoubleRefOnDeleteTab(const ScDocument* pDoc, ScComplexRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos)
 {
     ScSingleRefData& rRef1 = rRef.Ref1;
     ScSingleRefData& rRef2 = rRef.Ref2;
-    ScAddress aStartPos = rRef1.toAbs(rOldPos);
-    ScAddress aEndPos = rRef2.toAbs(rOldPos);
+    ScAddress aStartPos = rRef1.toAbs(pDoc, rOldPos);
+    ScAddress aEndPos = rRef2.toAbs(pDoc, rOldPos);
     bool bMoreThanOneTab = aStartPos.Tab() != aEndPos.Tab();
     bool bModified = false;
     if (bMoreThanOneTab && aStartPos.Tab() == nDelPos && nDelPos + nSheets <= aEndPos.Tab())
@@ -4089,7 +4089,7 @@ bool adjustDoubleRefOnDeleteTab(ScComplexRefData& rRef, SCTAB nDelPos, SCTAB nSh
     }
     else
     {
-        bModified = adjustSingleRefOnDeletedTab(rRef1, nDelPos, nSheets, rOldPos, rNewPos);
+        bModified = adjustSingleRefOnDeletedTab(pDoc, rRef1, nDelPos, nSheets, rOldPos, rNewPos);
     }
 
     if (bMoreThanOneTab && aEndPos.Tab() == nDelPos && aStartPos.Tab() <= nDelPos - nSheets)
@@ -4102,7 +4102,7 @@ bool adjustDoubleRefOnDeleteTab(ScComplexRefData& rRef, SCTAB nDelPos, SCTAB nSh
     }
     else
     {
-        bModified |= adjustSingleRefOnDeletedTab(rRef2, nDelPos, nSheets, rOldPos, rNewPos);
+        bModified |= adjustSingleRefOnDeletedTab(pDoc, rRef2, nDelPos, nSheets, rOldPos, rNewPos);
     }
     return bModified;
 }
@@ -4132,14 +4132,14 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpda
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        if (adjustSingleRefOnDeletedTab(rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
+                        if (adjustSingleRefOnDeletedTab(mpDoc, rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
                             aRes.mbReferenceModified = true;
                     }
                     break;
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        aRes.mbReferenceModified |= adjustDoubleRefOnDeleteTab(rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos);
+                        aRes.mbReferenceModified |= adjustDoubleRefOnDeleteTab(mpDoc, rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos);
                     }
                     break;
                 default:
@@ -4205,16 +4205,16 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( const sc::RefUpd
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        if (adjustSingleRefOnInsertedTab(rRef, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
+                        if (adjustSingleRefOnInsertedTab(mpDoc, rRef, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
                             aRes.mbReferenceModified = true;
                     }
                     break;
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        if (adjustSingleRefOnInsertedTab(rRef.Ref1, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
+                        if (adjustSingleRefOnInsertedTab(mpDoc, rRef.Ref1, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
                             aRes.mbReferenceModified = true;
-                        if (adjustSingleRefOnInsertedTab(rRef.Ref2, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
+                        if (adjustSingleRefOnInsertedTab(mpDoc, rRef.Ref2, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
                             aRes.mbReferenceModified = true;
                     }
                     break;
@@ -4294,21 +4294,21 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( const sc::RefUpdate
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        ScAddress aAbs = rRef.toAbs(mpDoc, rOldPos);
                         if (adjustTabOnMove(aAbs, rCxt))
                             aRes.mbReferenceModified = true;
-                        rRef.SetAddress(aAbs, aNewPos);
+                        rRef.SetAddress(mpDoc, aAbs, aNewPos);
                     }
                     break;
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        ScRange aAbs = rRef.toAbs(rOldPos);
+                        ScRange aAbs = rRef.toAbs(mpDoc, rOldPos);
                         if (adjustTabOnMove(aAbs.aStart, rCxt))
                             aRes.mbReferenceModified = true;
                         if (adjustTabOnMove(aAbs.aEnd, rCxt))
                             aRes.mbReferenceModified = true;
-                        rRef.SetRange(aAbs, aNewPos);
+                        rRef.SetRange(mpDoc, aAbs, aNewPos);
                     }
                     break;
                 default:
@@ -4368,16 +4368,16 @@ void ScTokenArray::AdjustReferenceOnMovedOrigin( const ScAddress& rOldPos, const
                 case svExternalSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        ScAddress aAbs = rRef.toAbs(rOldPos);
-                        rRef.SetAddress(aAbs, rNewPos);
+                        ScAddress aAbs = rRef.toAbs(mpDoc, rOldPos);
+                        rRef.SetAddress(mpDoc, aAbs, rNewPos);
                     }
                     break;
                 case svDoubleRef:
                 case svExternalDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        ScRange aAbs = rRef.toAbs(rOldPos);
-                        rRef.SetRange(aAbs, rNewPos);
+                        ScRange aAbs = rRef.toAbs(mpDoc, rOldPos);
+                        rRef.SetRange(mpDoc, aAbs, rNewPos);
                     }
                     break;
                 default:
@@ -4409,11 +4409,11 @@ void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rO
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        ScAddress aAbs = rRef.toAbs(mpDoc, rOldPos);
                         if (!bAdjust)
                             bAdjust = (aAbs.Tab() != rOldPos.Tab());
                         if (bAdjust)
-                            rRef.SetAddress(aAbs, rNewPos);
+                            rRef.SetAddress(mpDoc, aAbs, rNewPos);
                     }
                     break;
                 case svExternalDoubleRef:
@@ -4422,11 +4422,11 @@ void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rO
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        ScRange aAbs = rRef.toAbs(rOldPos);
+                        ScRange aAbs = rRef.toAbs(mpDoc, rOldPos);
                         if (!bAdjust)
                             bAdjust = (rOldPos.Tab() < aAbs.aStart.Tab() || aAbs.aEnd.Tab() < rOldPos.Tab());
                         if (bAdjust)
-                            rRef.SetRange(aAbs, rNewPos);
+                            rRef.SetRange(mpDoc, aAbs, rNewPos);
                     }
                     break;
                 default:
@@ -4466,12 +4466,12 @@ void ScTokenArray::AdjustReferenceOnCopy( const ScAddress& rNewPos )
 
 namespace {
 
-void clearTabDeletedFlag( ScSingleRefData& rRef, const ScAddress& rPos, SCTAB nStartTab, SCTAB nEndTab )
+void clearTabDeletedFlag( const ScDocument* pDoc, ScSingleRefData& rRef, const ScAddress& rPos, SCTAB nStartTab, SCTAB nEndTab )
 {
     if (!rRef.IsTabDeleted())
         return;
 
-    ScAddress aAbs = rRef.toAbs(rPos);
+    ScAddress aAbs = rRef.toAbs(pDoc, rPos);
     if (nStartTab <=  aAbs.Tab() && aAbs.Tab() <= nEndTab)
         rRef.SetTabDeleted(false);
 }
@@ -4493,15 +4493,15 @@ void ScTokenArray::ClearTabDeleted( const ScAddress& rPos, SCTAB nStartTab, SCTA
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
-                clearTabDeletedFlag(rRef, rPos, nStartTab, nEndTab);
+                clearTabDeletedFlag(mpDoc, rRef, rPos, nStartTab, nEndTab);
             }
             break;
             case svDoubleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                clearTabDeletedFlag(rRef.Ref1, rPos, nStartTab, nEndTab);
-                clearTabDeletedFlag(rRef.Ref2, rPos, nStartTab, nEndTab);
+                clearTabDeletedFlag(mpDoc, rRef.Ref1, rPos, nStartTab, nEndTab);
+                clearTabDeletedFlag(mpDoc, rRef.Ref2, rPos, nStartTab, nEndTab);
             }
             break;
             default:
@@ -4520,7 +4520,7 @@ void checkBounds(
     if (!rRef.IsRowRel())
         return;
 
-    ScRange aAbs(rRef.toAbs(rPos));
+    ScRange aAbs(rRef.toAbs(pDoc, rPos));
     aAbs.aEnd.IncRow(nGroupLen-1);
     if (!rCheckRange.Intersects(aAbs) && (!pDeletedRange || !pDeletedRange->Intersects(aAbs)))
         return;
@@ -4717,10 +4717,10 @@ void ScTokenArray::CheckExpandReferenceBounds(
                         if (!bStartRowRelative && !bEndRowRelative)
                             break;  // switch
 
-                        ScRange aAbsStart(rRef.toAbs(rPos));
+                        ScRange aAbsStart(rRef.toAbs(mpDoc, rPos));
                         ScAddress aPos(rPos);
                         aPos.IncRow(nGroupLen);
-                        ScRange aAbsEnd(rRef.toAbs(aPos));
+                        ScRange aAbsEnd(rRef.toAbs(mpDoc, aPos));
                         // References must be at least two rows to be expandable.
                         if ((aAbsStart.aEnd.Row() - aAbsStart.aStart.Row() < 1) &&
                                 (aAbsEnd.aEnd.Row() - aAbsEnd.aStart.Row() < 1))
@@ -4834,7 +4834,7 @@ void appendTokenByType( const ScDocument* pDoc, sc::TokenStringContext& rCxt, OU
             break;
             case svExternalSingleRef:
                 rCxt.mpRefConv->makeExternalRefStr(
-                       rBuf, rPos, nFileId, aFileName, aTabName, *rToken.GetSingleRef());
+                       pDoc, rBuf, rPos, nFileId, aFileName, aTabName, *rToken.GetSingleRef());
             break;
             case svExternalDoubleRef:
             {
@@ -5176,16 +5176,16 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(rPos);
+                ScAddress aAbs = rRef.toAbs(mpDoc, rPos);
                 wrapAddress(aAbs, nMaxCol, nMaxRow);
-                rRef.SetAddress(aAbs, rPos);
+                rRef.SetAddress(mpDoc, aAbs, rPos);
             }
             break;
             case svDoubleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rPos);
+                ScRange aAbs = rRef.toAbs(mpDoc, rPos);
                 // Entire columns/rows are sticky.
                 if (!rRef.IsEntireCol() && !rRef.IsEntireRow())
                 {
@@ -5198,7 +5198,7 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
                     wrapRowRange( aAbs, nMaxRow);
                 // else nothing if both, column and row, are entire.
                 aAbs.PutInOrder();
-                rRef.SetRange(aAbs, rPos);
+                rRef.SetRange(mpDoc, aAbs, rPos);
             }
             break;
             default:
@@ -5219,7 +5219,7 @@ bool ScTokenArray::NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCR
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(rPos);
+                ScAddress aAbs = rRef.toAbs(mpDoc, rPos);
                 if (aAbs.Col() > nMaxCol || aAbs.Row() > nMaxRow)
                    return true;
             }
@@ -5228,7 +5228,7 @@ bool ScTokenArray::NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCR
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rPos);
+                ScRange aAbs = rRef.toAbs(mpDoc, rPos);
                 // Entire columns/rows are sticky.
                 if (    (!rRef.IsEntireCol() && (aAbs.aStart.Row() > nMaxRow || aAbs.aEnd.Row() > nMaxRow)) ||
                         (!rRef.IsEntireRow() && (aAbs.aStart.Col() > nMaxCol || aAbs.aEnd.Col() > nMaxCol)))
