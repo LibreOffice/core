@@ -20,6 +20,7 @@ skia_patches := \
     fix-shader-locale.patch.1 \
     no-trace-resources-on-exit.patch.1 \
     fix-alpha-difference-copy.patch.1 \
+    libvulkan-name.patch.1 \
     share-grcontext.patch.1
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
