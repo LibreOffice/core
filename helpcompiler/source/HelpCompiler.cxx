@@ -491,12 +491,6 @@ void HelpCompiler::compile()
 
 namespace fs
 {
-    rtl_TextEncoding getThreadTextEncoding()
-    {
-        static rtl_TextEncoding nThreadTextEncoding = osl_getThreadTextEncoding();
-        return nThreadTextEncoding;
-    }
-
     void create_directory(const fs::path& indexDirName)
     {
         HCDBG(

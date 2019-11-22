@@ -73,11 +73,11 @@ static std::string getEncodedPath( const std::string& Path )
 {
     OString aOStr_Path( Path.c_str() );
     OUString aOUStr_Path( OStringToOUString
-        ( aOStr_Path, fs::getThreadTextEncoding() ) );
+        ( aOStr_Path, osl_getThreadTextEncoding() ) );
     OUString aPathURL;
     osl::File::getFileURLFromSystemPath( aOUStr_Path, aPathURL );
     OString aOStr_PathURL( OUStringToOString
-        ( aPathURL, fs::getThreadTextEncoding() ) );
+        ( aPathURL, osl_getThreadTextEncoding() ) );
     std::string aStdStr_PathURL( aOStr_PathURL.getStr() );
     return aStdStr_PathURL;
 }
@@ -748,7 +748,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         OUString aIdxCaptionPathFileURL = *pOfficeHelpPath + "/idxcaption.xsl";
 
         OString aOStr_IdxCaptionPathFileURL( OUStringToOString
-            ( aIdxCaptionPathFileURL, fs::getThreadTextEncoding() ) );
+            ( aIdxCaptionPathFileURL, osl_getThreadTextEncoding() ) );
         std::string aStdStr_IdxCaptionPathFileURL( aOStr_IdxCaptionPathFileURL.getStr() );
 
         idxCaptionStylesheet = fs::path( aStdStr_IdxCaptionPathFileURL );
@@ -772,7 +772,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         OUString aIdxContentPathFileURL = *pOfficeHelpPath + "/idxcontent.xsl";
 
         OString aOStr_IdxContentPathFileURL( OUStringToOString
-            ( aIdxContentPathFileURL, fs::getThreadTextEncoding() ) );
+            ( aIdxContentPathFileURL, osl_getThreadTextEncoding() ) );
         std::string aStdStr_IdxContentPathFileURL( aOStr_IdxContentPathFileURL.getStr() );
 
         idxContentStylesheet = fs::path( aStdStr_IdxContentPathFileURL );
@@ -835,9 +835,9 @@ HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpPr
 {
     m_eErrorClass = e.m_eErrorClass;
     OString tmpErrorMsg( e.m_aErrorMsg.c_str() );
-    m_aErrorMsg = OStringToOUString( tmpErrorMsg, fs::getThreadTextEncoding() );
+    m_aErrorMsg = OStringToOUString( tmpErrorMsg, osl_getThreadTextEncoding() );
     OString tmpXMLParsingFile( e.m_aXMLParsingFile.c_str() );
-    m_aXMLParsingFile = OStringToOUString( tmpXMLParsingFile, fs::getThreadTextEncoding() );
+    m_aXMLParsingFile = OStringToOUString( tmpXMLParsingFile, osl_getThreadTextEncoding() );
     m_nXMLParsingLine = e.m_nXMLParsingLine;
     return *this;
 }
@@ -859,21 +859,21 @@ bool compileExtensionHelp
     std::vector<std::string> args;
     args.reserve(nXhpFileCount + 2);
     args.push_back(std::string("-mod"));
-    OString aOExtensionName = OUStringToOString( aExtensionName, fs::getThreadTextEncoding() );
+    OString aOExtensionName = OUStringToOString( aExtensionName, osl_getThreadTextEncoding() );
     args.push_back(std::string(aOExtensionName.getStr()));
 
     for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
     {
         OUString aXhpFile = pXhpFiles[iXhp];
 
-        OString aOXhpFile = OUStringToOString( aXhpFile, fs::getThreadTextEncoding() );
+        OString aOXhpFile = OUStringToOString( aXhpFile, osl_getThreadTextEncoding() );
         args.push_back(std::string(aOXhpFile.getStr()));
     }
 
-    OString aOExtensionLanguageRoot = OUStringToOString( aExtensionLanguageRoot, fs::getThreadTextEncoding() );
+    OString aOExtensionLanguageRoot = OUStringToOString( aExtensionLanguageRoot, osl_getThreadTextEncoding() );
     const char* pExtensionPath = aOExtensionLanguageRoot.getStr();
     std::string aStdStrExtensionPath = pExtensionPath;
-    OString aODestination = OUStringToOString(aDestination, fs::getThreadTextEncoding());
+    OString aODestination = OUStringToOString(aDestination, osl_getThreadTextEncoding());
     const char* pDestination = aODestination.getStr();
     std::string aStdStrDestination = pDestination;
 

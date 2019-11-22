@@ -34,6 +34,7 @@
 #include <rtl/character.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
+#include <osl/thread.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <helpcompiler/compilehelp.hxx>
@@ -47,8 +48,6 @@
 
 namespace fs
 {
-    rtl_TextEncoding getThreadTextEncoding();
-
     enum convert { native };
     class path
     {
@@ -61,20 +60,20 @@ namespace fs
             OUString sWorkingDir;
             osl_getProcessWorkingDir(&sWorkingDir.pData);
             OString tmp(in.c_str());
-            OUString ustrSystemPath(OStringToOUString(tmp, getThreadTextEncoding()));
+            OUString ustrSystemPath(OStringToOUString(tmp, osl_getThreadTextEncoding()));
             osl::File::getFileURLFromSystemPath(ustrSystemPath, data);
             (void)osl::File::getAbsoluteFileURL(sWorkingDir, data, data);
         }
         path(const std::string &FileURL)
         {
             OString tmp(FileURL.c_str());
-            data = OStringToOUString(tmp, getThreadTextEncoding());
+            data = OStringToOUString(tmp, osl_getThreadTextEncoding());
         }
         std::string native_file_string() const
         {
             OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            OString tmp(OUStringToOString(ustrSystemPath, getThreadTextEncoding()));
+            OString tmp(OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding()));
             HCDBG(std::cerr << "native_file_string is " << tmp.getStr() << std::endl);
             return std::string(tmp.getStr());
         }
@@ -98,7 +97,7 @@ namespace fs
             HCDBG(std::cerr << "orig was " <<
                 OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
             OString tmp(in.c_str());
-            OUString ustrSystemPath(OStringToOUString(tmp, getThreadTextEncoding()));
+            OUString ustrSystemPath(OStringToOUString(tmp, osl_getThreadTextEncoding()));
             ret.data += "/" + ustrSystemPath;
             HCDBG(std::cerr << "final is " <<
                 OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
@@ -107,7 +106,7 @@ namespace fs
         void append(const char *in)
         {
             OString tmp(in);
-            OUString ustrSystemPath(OStringToOUString(tmp, getThreadTextEncoding()));
+            OUString ustrSystemPath(OStringToOUString(tmp, osl_getThreadTextEncoding()));
             data += ustrSystemPath;
         }
         void append(const std::string &in) { append(in.c_str()); }
