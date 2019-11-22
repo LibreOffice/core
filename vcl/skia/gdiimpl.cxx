@@ -245,26 +245,22 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
         {
             mOffscreenGrContext = sk_app::VulkanWindowContext::getSharedGrContext();
             GrContext* grContext = mOffscreenGrContext.getGrContext();
-            // We may not get a GrContext if called before any onscreen window is created,
-            // but that happens very early, so this should be rare and insignificant.
-            // Unittests are an exception, they usually do not create any windows,
-            // so in that case do create GrContext that has no window associated.
+            // We may not get a GrContext if called before any onscreen window is created.
             if (!grContext)
             {
-                static bool isUnitTest = (getenv("LO_TESTNAME") != nullptr);
-                if (isUnitTest)
-                {
-                    // Create temporary WindowContext with no window. That will fail,
-                    // but it will initialize the shared GrContext.
-                    createWindowContext();
-                    // Keep a reference.
-                    sk_app::VulkanWindowContext::SharedGrContext context
-                        = sk_app::VulkanWindowContext::getSharedGrContext();
-                    // Destroy the temporary WindowContext.
-                    destroySurface();
-                    mOffscreenGrContext = context;
-                    grContext = mOffscreenGrContext.getGrContext();
-                }
+                SAL_INFO("vcl.skia",
+                         "creating Vulkan offscreen GPU surface before any window exists");
+                // Create temporary WindowContext with no window. That will fail,
+                // but it will initialize the shared GrContext.
+                createWindowContext();
+                // Keep a reference.
+                sk_app::VulkanWindowContext::SharedGrContext context
+                    = sk_app::VulkanWindowContext::getSharedGrContext();
+                // Destroy the temporary WindowContext.
+                destroySurface();
+                // Keep a reference until the surface is destroyed.
+                mOffscreenGrContext = context;
+                grContext = mOffscreenGrContext.getGrContext();
             }
             if (grContext)
             {
