@@ -95,6 +95,7 @@ public:
 
     ScDocument* getUndoDoc();
     ScDocument* getClipDoc();
+    ScDocument* getDestDoc() { return &mrDestDoc; }
     InsertDeleteFlags getInsertFlag() const;
 
     void setDeleteFlag( InsertDeleteFlags nFlag );

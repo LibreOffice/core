@@ -23,8 +23,6 @@
 #include <refdata.hxx>
 #include <types.hxx>
 
-struct LOTUS_ROOT;
-
 typedef sal_uInt16  LR_ID;
 
 #define ID_FAIL 0xFFFF
@@ -97,7 +95,7 @@ public:
     inline LR_ID        GetIndex( SCCOL nCol, SCROW nRow );
     inline LR_ID        GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
     LR_ID               GetIndex( const LotusRange& );
-    void                Append( std::unique_ptr<LotusRange> pLR );
+    void                Append( const ScDocument* pDoc, std::unique_ptr<LotusRange> pLR );
 };
 
 inline LR_ID LotusRangeList::GetIndex( SCCOL nCol, SCROW nRow )

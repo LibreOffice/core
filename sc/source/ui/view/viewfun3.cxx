@@ -1129,7 +1129,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         nEndTab = nStartTab;
     }
 
-    bool bOffLimits = !ValidCol(nEndCol) || !ValidRow(nEndRow);
+    bool bOffLimits = !pDoc->ValidCol(nEndCol) || !pDoc->ValidRow(nEndRow);
 
     //  target-range, as displayed:
     ScRange aUserRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
@@ -1500,7 +1500,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         nRowSize = static_cast<SCROW>(nTempColSize);
     }
 
-    if (!ValidCol(rCurPos.Col()+nColSize-1) || !ValidRow(rCurPos.Row()+nRowSize-1))
+    if (!pDoc->ValidCol(rCurPos.Col()+nColSize-1) || !pDoc->ValidRow(rCurPos.Row()+nRowSize-1))
     {
         ErrorMessage(STR_PASTE_FULL);
         return false;
@@ -1668,7 +1668,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     SCROW nRowSize = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
     SCCOL nColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
 
-    if (!ValidCol(rCurPos.Col()+nColSize-1) || !ValidRow(rCurPos.Row()+nRowSize-1))
+    if (!pDoc->ValidCol(rCurPos.Col()+nColSize-1) || !pDoc->ValidRow(rCurPos.Row()+nRowSize-1))
     {
         ErrorMessage(STR_PASTE_FULL);
         return false;

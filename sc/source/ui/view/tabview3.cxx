@@ -1170,11 +1170,11 @@ void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
     if (!bKeepOld)
         aViewData.ResetOldCursor();
 
+    ScDocument* pDoc = aViewData.GetDocument();
     // #i123629#
     if( aViewData.GetViewShell()->GetForceFocusOnCurCell() )
-        aViewData.GetViewShell()->SetForceFocusOnCurCell( !ValidColRow(nCurX, nCurY) );
+        aViewData.GetViewShell()->SetForceFocusOnCurCell( !pDoc->ValidColRow(nCurX, nCurY) );
 
-    ScDocument* pDoc = aViewData.GetDocument();
     if (nCurX < 0) nCurX = 0;
     if (nCurY < 0) nCurY = 0;
     if (nCurX > pDoc->MaxCol()) nCurX = pDoc->MaxCol();
@@ -1288,10 +1288,10 @@ void ScTabView::MoveCursorRel( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
 
     aViewData.ResetOldCursor();
 
-    if (nMovX != 0 && ValidColRow(nCurX,nCurY))
+    if (nMovX != 0 && pDoc->ValidColRow(nCurX,nCurY))
         SkipCursorHorizontal(nCurX, nCurY, nOldX, nMovX);
 
-    if (nMovY != 0 && ValidColRow(nCurX,nCurY))
+    if (nMovY != 0 && pDoc->ValidColRow(nCurX,nCurY))
         SkipCursorVertical(nCurX, nCurY, nOldY, nMovY);
 
     MoveCursorAbs( nCurX, nCurY, eMode, bShift, false, true, bKeepSel );
@@ -2438,7 +2438,7 @@ void ScTabView::PaintRangeFinderEntry (const ScRangeFindData* pData, const SCTAB
             bHiddenEdge = true;
         }
         nTmp = pDoc->LastVisibleRow(0, nRow1, nTab);
-        if (!ValidRow(nTmp))
+        if (!pDoc->ValidRow(nTmp))
             nTmp = 0;
         if (nTmp < nRow1)
         {
@@ -2446,7 +2446,7 @@ void ScTabView::PaintRangeFinderEntry (const ScRangeFindData* pData, const SCTAB
             bHiddenEdge = true;
         }
         nTmp = pDoc->FirstVisibleRow(nRow2, pDoc->MaxRow(), nTab);
-        if (!ValidRow(nTmp))
+        if (!pDoc->ValidRow(nTmp))
             nTmp = pDoc->MaxRow();
         if (nTmp > nRow2)
         {

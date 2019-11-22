@@ -318,7 +318,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     }
 
     //! check CanFitBlock only if bDoInsert is set?
-    bool bCanDo = ValidColRow( aNewRange.aEnd.Col(), aNewRange.aEnd.Row() ) &&
+    bool bCanDo = rDoc.ValidColRow( aNewRange.aEnd.Col(), aNewRange.aEnd.Row() ) &&
                   rDoc.CanFitBlock( aOldRange, aNewRange );
     if (bCanDo)
     {

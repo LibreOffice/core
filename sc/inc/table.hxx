@@ -315,12 +315,15 @@ public:
     }
     [[nodiscard]] bool IsColRowValid( const SCCOL nScCol, const SCROW nScRow ) const
     {
-        return IsColValid( nScCol ) && ValidRow( nScRow );
+        return IsColValid( nScCol ) && GetDoc().ValidRow( nScRow );
     }
     [[nodiscard]] bool IsColRowTabValid( const SCCOL nScCol, const SCROW nScRow, const SCTAB nScTab ) const
     {
-        return IsColValid( nScCol ) && ValidRow( nScRow ) && ValidTab( nScTab );
+        return IsColValid( nScCol ) && GetDoc().ValidRow( nScRow ) && ValidTab( nScTab );
     }
+    [[nodiscard]] bool ValidCol(SCCOL nCol) const { return GetDoc().ValidCol(nCol); }
+    [[nodiscard]] bool ValidRow(SCROW nRow) const { return GetDoc().ValidRow(nRow); }
+    [[nodiscard]] bool ValidColRow(SCCOL nCol, SCROW nRow) const { return GetDoc().ValidColRow(nCol, nRow); }
 
     bool        IsPendingRowHeights() const                  { return bPendingRowHeights; }
     void        SetPendingRowHeights( bool bSet );
@@ -446,7 +449,7 @@ public:
 
     CellType    GetCellType( const ScAddress& rPos ) const
                     {
-                        if (!ValidColRow(rPos.Col(),rPos.Row()))
+                        if (!GetDoc().ValidColRow(rPos.Col(),rPos.Row()))
                             return CELLTYPE_NONE;
                         if (rPos.Col() >= aCol.size())
                             return CELLTYPE_NONE;

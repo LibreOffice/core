@@ -1718,7 +1718,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     SCROW nEndRow = aTargetRange.aEnd.Row();
     SCTAB nEndTab = aTargetRange.aEnd.Tab();
 
-    if ( !ValidRow(nStartRow) || !ValidRow(nEndRow) )
+    if ( !rDoc.ValidRow(nStartRow) || !rDoc.ValidRow(nEndRow) )
     {
         OSL_FAIL("invalid row in InsertCells");
         return false;
@@ -2232,7 +2232,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     SCROW nEndRow = rRange.aEnd.Row();
     SCTAB nEndTab = rRange.aEnd.Tab();
 
-    if ( !ValidRow(nStartRow) || !ValidRow(nEndRow) )
+    if ( !rDoc.ValidRow(nStartRow) || !rDoc.ValidRow(nEndRow) )
     {
         OSL_FAIL("invalid row in DeleteCells");
         return false;
@@ -2805,7 +2805,8 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     SCROW nDestRow = rDestPos.Row();
     SCTAB nDestTab = rDestPos.Tab();
 
-    if ( !ValidRow(nStartRow) || !ValidRow(nEndRow) || !ValidRow(nDestRow) )
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if ( !rDoc.ValidRow(nStartRow) || !rDoc.ValidRow(nEndRow) || !rDoc.ValidRow(nDestRow) )
     {
         OSL_FAIL("invalid row in MoveBlock");
         return false;
@@ -2813,7 +2814,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     //  adjust related scenarios too - but only when moved within one sheet
     bool bScenariosAdded = false;
-    ScDocument& rDoc = rDocShell.GetDocument();
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
@@ -2881,7 +2881,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         nUndoEndRow = nDestEndRow + nUndoAdd;
     }
 
-    if (!ValidCol(nUndoEndCol) || !ValidRow(nUndoEndRow))
+    if (!rDoc.ValidCol(nUndoEndCol) || !rDoc.ValidRow(nUndoEndRow))
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_PASTE_FULL);
@@ -4320,7 +4320,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         }
         else if ( rDoc.IsImportingXML() )
         {
-            ScTokenArray aCode;
+            ScTokenArray aCode(&rDoc);
             aCode.AssignXMLString( rString,
                     ((eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) ? rFormulaNmsp : OUString()));
             rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,

@@ -811,7 +811,7 @@ class TransClipHandler
         aRef.InitAddress(aSrcPos); // Absolute reference.
         aRef.SetFlag3D(true);
 
-        ScTokenArray aArr;
+        ScTokenArray aArr(&mrClipTab.GetDoc());
         aArr.AddSingleReference(aRef);
         return new ScFormulaCell(&mrClipTab.GetDoc(), rDestPos, aArr);
     }
@@ -910,7 +910,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 ScSingleRefData aRef;
                 aRef.InitAddress(ScAddress(nCol,nRow,nTab));
                 aRef.SetFlag3D(true);
-                ScTokenArray aArr;
+                ScTokenArray aArr(pDestDoc);
                 aArr.AddSingleReference( aRef );
 
                 pTransClip->SetFormulaCell(
@@ -2378,7 +2378,7 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
 {
     if ( !ValidColRow( nCol2, nRow2 ) )
     {
-        OSL_FAIL("IsBlockEditable: invalid column or row");
+        SAL_WARN("sc", "IsBlockEditable: invalid column or row " << nCol2 << " " << nRow2);
         if (pOnlyNotBecauseOfMatrix)
             *pOnlyNotBecauseOfMatrix = false;
         return false;
@@ -3178,7 +3178,7 @@ sal_uInt16 ScTable::GetCommonWidth( SCCOL nEndCol ) const
 
 sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
 {
-    OSL_ENSURE(ValidRow(nRow),"Invalid row number");
+    SAL_WARN_IF(!ValidRow(nRow), "sc", "Invalid row number " << nRow);
 
     if (ValidRow(nRow) && mpRowHeights)
     {

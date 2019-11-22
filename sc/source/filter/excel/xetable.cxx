@@ -167,7 +167,7 @@ XclExpArrayRef XclExpArrayBuffer::FindArray( const ScTokenArray& rScTokArr, cons
         return xRec;
 
     const ScSingleRefData& rRef = *pToken->GetSingleRef();
-    ScAddress aAbsPos = rRef.toAbs(rBasePos);
+    ScAddress aAbsPos = rRef.toAbs(&GetRoot().GetDoc(), rBasePos);
     XclExpArrayMap::const_iterator it = maRecMap.find(aAbsPos);
 
     return (it == maRecMap.end()) ? xRec : xRec = it->second;
@@ -454,7 +454,7 @@ XclExpTableopRef XclExpTableopBuffer::CreateOrExtendTableop(
 
     // try to extract cell references of a multiple operations formula
     XclMultipleOpRefs aRefs;
-    if (XclTokenArrayHelper::GetMultipleOpRefs(aRefs, rScTokArr, rScPos))
+    if (XclTokenArrayHelper::GetMultipleOpRefs(&GetDoc(), aRefs, rScTokArr, rScPos))
     {
         // try to find an existing TABLEOP record for this cell position
         for( size_t nPos = 0, nSize = maTableopList.GetSize(); !xRec && (nPos < nSize); ++nPos )
@@ -968,7 +968,7 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                 rStrm.GetRoot().GetAddressConverter().ValidateRange( aMatScRange, true );
 
                 OStringBuffer sFmlaCellRange;
-                if (ValidRange(aMatScRange))
+                if (rStrm.GetRoot().GetDoc().ValidRange(aMatScRange))
                 {
                     // calculate the cell range.
                     sFmlaCellRange.append( XclXmlUtils::ToOString(
