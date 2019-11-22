@@ -1314,6 +1314,9 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_bUnderlineColorDisabled(false)
     , m_xFontColorFT(m_xBuilder->weld_label("fontcolorft"))
     , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button("fontcolorlb"), pController->getDialog()))
+    , m_xFontTransparencyFT(m_xBuilder->weld_label("fonttransparencyft"))
+    , m_xFontTransparencyMtr(
+          m_xBuilder->weld_metric_spin_button("fonttransparencymtr", FieldUnit::PERCENT))
     , m_xEffectsFT(m_xBuilder->weld_label("effectsft"))
     , m_xEffectsLB(m_xBuilder->weld_combo_box("effectslb"))
     , m_xReliefFT(m_xBuilder->weld_label("reliefft"))
@@ -1365,6 +1368,7 @@ SvxCharEffectsPage::~SvxCharEffectsPage()
 {
     m_xUnderlineColorLB.reset();
     m_xOverlineColorLB.reset();
+    m_xFontTransparencyMtr.reset();
     m_xFontColorLB.reset();
 }
 
@@ -1388,6 +1392,8 @@ void SvxCharEffectsPage::Initialize()
     }
 
     m_xFontColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
+    m_xFontTransparencyMtr->connect_value_changed(
+        LINK(this, SvxCharEffectsPage, ModifyFontTransparencyHdl_Impl));
 
     // handler
     Link<weld::ComboBox&,void> aLink = LINK( this, SvxCharEffectsPage, SelectListBoxHdl_Impl );
@@ -1553,7 +1559,19 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
 
             m_aPreviewWin.Invalidate();
 
-            m_xFontColorLB->SelectEntry(aColor);
+            Color aRGBColor = aColor;
+            if (aRGBColor.GetTransparency())
+            {
+                aRGBColor.SetTransparency(0);
+            }
+            m_xFontColorLB->SelectEntry(aRGBColor);
+
+            if (m_xFontTransparencyMtr->get_visible() && aColor != COL_AUTO)
+            {
+                double fTransparency = aColor.GetTransparency() * 100.0 / 255;
+                m_xFontTransparencyMtr->set_value(basegfx::fround(fTransparency),
+                                                  FieldUnit::PERCENT);
+            }
 
             m_aOrigFontColor = aColor;
             m_bOrigFontColor = true;
@@ -1574,6 +1592,14 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
     if (bChanged)
     {
         aSelectedColor = m_xFontColorLB->GetSelectEntryColor();
+
+        if (m_xFontTransparencyMtr->get_value_changed_from_saved())
+        {
+            double fTransparency
+                = m_xFontTransparencyMtr->get_value(FieldUnit::PERCENT) * 255.0 / 100;
+            aSelectedColor.SetTransparency(static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
+        }
+
         if (m_bOrigFontColor)
             bChanged = aSelectedColor != m_aOrigFontColor;
         if (m_bEnableNoneFontColor && bChanged && aSelectedColor == COL_NONE_COLOR)
@@ -1645,6 +1671,11 @@ IMPL_LINK(SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ColorListBox&, rBox, void)
     if (m_xFontColorLB.get() == &rBox)
         m_bNewFontColor = true;
     UpdatePreview_Impl();
+}
+
+IMPL_LINK_NOARG(SvxCharEffectsPage, ModifyFontTransparencyHdl_Impl, weld::MetricSpinButton&, void)
+{
+    m_bNewFontColor = true;
 }
 
 DeactivateRC SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
@@ -2049,6 +2080,7 @@ void SvxCharEffectsPage::ChangesApplied()
     m_xShadowBtn->save_state();
     m_xBlinkingBtn->save_state();
     m_xHiddenBtn->save_state();
+    m_xFontTransparencyMtr->save_value();
 }
 
 bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
@@ -2412,6 +2444,12 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
             // the writer uses SID_ATTR_BRUSH as font background
             m_bPreviewBackgroundToCharacter = true;
+        if ((nFlags & SVX_ENABLE_CHAR_TRANSPARENCY) != SVX_ENABLE_CHAR_TRANSPARENCY)
+        {
+            // Only show these in case client code explicitly wants this.
+            m_xFontTransparencyFT->hide();
+            m_xFontTransparencyMtr->hide();
+        }
     }
 }
 
