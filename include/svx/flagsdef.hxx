@@ -67,6 +67,7 @@ namespace o3tl
 #define SVX_RELATIVE_MODE       0x02
 // flags for SvxCharEffectsPage
 #define SVX_ENABLE_FLASH    0x04
+#define SVX_ENABLE_CHAR_TRANSPARENCY 0x08
 
 
 // Default values for Number Format Category List and Preview
