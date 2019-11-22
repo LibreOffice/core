@@ -1,3 +1,4 @@
+'
 ' This file is part of the LibreOffice project.
 '
 ' This Source Code Form is subject to the terms of the Mozilla Public
@@ -6,7 +7,10 @@
 '
 
 Function doUnitTest as Integer
-    ' FREELIBRARY
-    FreeLibrary("")
-    doUnitTest = 1
+  ' COLLECTION class
+  If .. Then
+    doUnitTest = 0
+  Else
+    doUnitTest = 1 ' Ok
+  En If
 End Function
