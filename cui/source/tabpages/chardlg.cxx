@@ -1340,6 +1340,8 @@ SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& 
 {
     get(m_pFontColorFT, "fontcolorft");
     get(m_pFontColorLB, "fontcolorlb");
+    get(m_pFontTransparencyFT, "fonttransparencyft");
+    get(m_pFontTransparencyMtr, "fonttransparencymtr");
     m_pFontColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
     get(m_pEffectsFT, "effectsft");
     get(m_pEffectsLB, "effectslb");
@@ -1393,6 +1395,8 @@ void SvxCharEffectsPage::dispose()
 {
     m_pFontColorFT.clear();
     m_pFontColorLB.clear();
+    m_pFontTransparencyFT.clear();
+    m_pFontTransparencyMtr.clear();
     m_pEffectsFT.clear();
     m_pEffectsLB.clear();
     m_pReliefFT.clear();
@@ -1438,6 +1442,8 @@ void SvxCharEffectsPage::Initialize()
     }
 
     m_pFontColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
+    m_pFontTransparencyMtr->SetModifyHdl(
+        LINK(this, SvxCharEffectsPage, ModifyFontTransparencyHdl_Impl));
 
     // handler
     Link<ListBox&,void> aLink = LINK( this, SvxCharEffectsPage, SelectListBoxHdl_Impl );
@@ -1609,7 +1615,19 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
 
             m_pPreviewWin->Invalidate();
 
-            m_pFontColorLB->SelectEntry(aColor);
+            Color aRGBColor = aColor;
+            if (aRGBColor.GetTransparency())
+            {
+                aRGBColor.SetTransparency(0);
+            }
+            m_pFontColorLB->SelectEntry(aRGBColor);
+
+            if (m_pFontTransparencyMtr->IsVisible() && aColor != COL_AUTO)
+            {
+                double fTransparency = aColor.GetTransparency() * 100.0 / 255;
+                m_pFontTransparencyMtr->SetValue(basegfx::fround(fTransparency),
+                                                  FUNIT_PERCENT);
+            }
 
             m_aOrigFontColor = aColor;
             m_bOrigFontColor = true;
@@ -1630,6 +1648,14 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
     if (bChanged)
     {
         aSelectedColor = m_pFontColorLB->GetSelectEntryColor();
+
+        if (m_pFontTransparencyMtr->IsValueChangedFromSaved())
+        {
+            double fTransparency
+                = m_pFontTransparencyMtr->GetValue() * 255.0 / 100;
+            aSelectedColor.SetTransparency(static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
+        }
+
         if (m_bOrigFontColor)
             bChanged = aSelectedColor != m_aOrigFontColor;
         if (m_bEnableNoneFontColor && bChanged && aSelectedColor == COL_NONE_COLOR)
@@ -1709,6 +1735,11 @@ IMPL_LINK(SvxCharEffectsPage, ColorBoxSelectHdl_Impl, SvxColorListBox&, rBox, vo
     if (m_pFontColorLB == &rBox)
         m_bNewFontColor = true;
     UpdatePreview_Impl();
+}
+
+IMPL_LINK_NOARG(SvxCharEffectsPage, ModifyFontTransparencyHdl_Impl, Edit&, void)
+{
+    m_bNewFontColor = true;
 }
 
 DeactivateRC SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
@@ -2142,6 +2173,7 @@ void SvxCharEffectsPage::ChangesApplied()
     m_pShadowBtn->SaveValue();
     m_pBlinkingBtn->SaveValue();
     m_pHiddenBtn->SaveValue();
+    m_pFontTransparencyMtr->SaveValue();
 }
 
 bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
@@ -2504,6 +2536,12 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
             // the writer uses SID_ATTR_BRUSH as font background
             m_bPreviewBackgroundToCharacter = true;
+        if ((nFlags & SVX_ENABLE_CHAR_TRANSPARENCY) != SVX_ENABLE_CHAR_TRANSPARENCY)
+        {
+            // Only show these in case client code explicitly wants this.
+            m_pFontTransparencyFT->Hide();
+            m_pFontTransparencyMtr->Hide();
+        }
     }
 }
 

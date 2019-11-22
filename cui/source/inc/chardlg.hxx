@@ -179,6 +179,8 @@ private:
     Color                      m_aOrigFontColor;
     VclPtr<FixedText>          m_pFontColorFT;
     VclPtr<SvxColorListBox>    m_pFontColorLB;
+    VclPtr<FixedText>          m_pFontTransparencyFT;
+    VclPtr<MetricField>        m_pFontTransparencyMtr;
 
     VclPtr<FixedText>          m_pEffectsFT;
     VclPtr<ListBox>            m_pEffectsLB;
@@ -229,6 +231,7 @@ private:
     DECL_LINK(TristClickHdl_Impl, Button*, void);
     DECL_LINK(UpdatePreview_Impl, ListBox&, void);
     DECL_LINK(ColorBoxSelectHdl_Impl, SvxColorListBox&, void);
+    DECL_LINK(ModifyFontTransparencyHdl_Impl, Edit&, void);
 
 public:
     virtual ~SvxCharEffectsPage() override;

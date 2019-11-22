@@ -61,6 +61,8 @@ void SdCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == mnCharEffects)
     {
+        // Opt in for character transparency.
+        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE, SVX_ENABLE_CHAR_TRANSPARENCY));
         rPage.PageCreated(aSet);
     }
     else if (nId == mnCharBackground)
