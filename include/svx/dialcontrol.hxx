@@ -74,7 +74,7 @@ private:
     -   Shows the value entered/modified in the numeric field.
     -   Enables/disables/shows/hides the field according to own state changes.
  */
-class SAL_WARN_UNUSED SVX_DLLPUBLIC DialControl : public Control
+class SAL_WARN_UNUSED DialControl : public Control
 {
 public:
     explicit            DialControl( vcl::Window* pParent, WinBits nBits );

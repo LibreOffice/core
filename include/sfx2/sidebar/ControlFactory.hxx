@@ -33,7 +33,7 @@ namespace sfx2 { namespace sidebar {
     directly is that this way the sidebar has a little more control
     over look and feel of its controls.
 */
-class SFX2_DLLPUBLIC ControlFactory
+class ControlFactory
 {
 public:
     /** Create the menu button for the task bar.

@@ -29,7 +29,7 @@ namespace vcl { class Window; }
 
 namespace svx {
 
-class SVX_DLLPUBLIC ParaULSpacingControl : public SfxToolBoxControl
+class ParaULSpacingControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -60,7 +60,7 @@ public:
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };
 
-class SVX_DLLPUBLIC ParaLRSpacingControl : public SfxToolBoxControl,
+class ParaLRSpacingControl : public SfxToolBoxControl,
                                     public css::ui::XContextChangeEventListener
 {
 public:

@@ -117,7 +117,7 @@ struct CharacterMetric;
  *      vcl/unx/source/gdi/salgdi2.cxx
  */
 
-class VCL_DLLPUBLIC PrinterBmp
+class PrinterBmp
 {
 public:
 
@@ -155,7 +155,7 @@ struct GraphicsStatus
     GraphicsStatus();
 };
 
-class VCL_DLLPUBLIC PrinterGfx
+class PrinterGfx
 {
 private:
 

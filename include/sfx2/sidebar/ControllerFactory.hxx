@@ -33,7 +33,7 @@ namespace sfx2 { namespace sidebar {
 
 /** Convenience class for the easy creation of toolbox controllers.
 */
-class SFX2_DLLPUBLIC ControllerFactory
+class ControllerFactory
 {
 public:
     static css::uno::Reference<css::frame::XToolbarController> CreateToolBoxController(

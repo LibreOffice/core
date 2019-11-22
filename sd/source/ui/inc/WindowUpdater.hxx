@@ -47,8 +47,7 @@ namespace sd {
     <member>RegisterWindow()</member> method.  When a document is given then
     this document is reformatted when the monitored option changes.</p>
 */
-class SD_DLLPUBLIC WindowUpdater
-    : public utl::ConfigurationListener
+class WindowUpdater : public utl::ConfigurationListener
 {
 public:
     explicit WindowUpdater();
@@ -115,7 +114,7 @@ private:
             The output device to update.  When it is <null/> then the call
             is ignored.
     */
-    SAL_DLLPRIVATE void UpdateWindow (OutputDevice* pDevice) const;
+    void UpdateWindow (OutputDevice* pDevice) const;
 };
 
 } // end of namespace sd
