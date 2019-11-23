@@ -55,7 +55,7 @@
 
 #include <vcl/wmf.hxx>
 #include <vcl/gdimetafiletools.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaTextArrayAction.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/vcllayout.hxx>
 

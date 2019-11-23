@@ -17,18 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
+#include <osl/diagnose.h>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <tools/stream.hxx>
+
 #include <vcl/canvastools.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/gfxlink.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <sal/log.hxx>
-#include <osl/diagnose.h>
-#include <tools/stream.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
 
 #include <memory>
 #include <map>

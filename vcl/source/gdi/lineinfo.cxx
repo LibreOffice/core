@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <vcl/lineinfo.hxx>
@@ -131,6 +132,19 @@ bool LineInfo::IsDefault() const
     return( !mpImplLineInfo->mnWidth
         && ( LineStyle::Solid == mpImplLineInfo->meStyle )
         && ( css::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
+}
+
+void LineInfo::Scale( double fScaleX, double fScaleY )
+{
+    if( !IsDefault() )
+    {
+        const double fScale = ( fabs(fScaleX) + fabs(fScaleY) ) * 0.5;
+
+        SetWidth( FRound( fScale * GetWidth() ) );
+        SetDashLen( FRound( fScale * GetDashLen() ) );
+        SetDotLen( FRound( fScale * GetDotLen() ) );
+        SetDistance( FRound( fScale * GetDistance() ) );
+    }
 }
 
 SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )

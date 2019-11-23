@@ -19,22 +19,23 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
 #include <osl/diagnose.h>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
+
+#include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/MetaISectRectClipRegionAction.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <memory>
 
+#include <memory>
+#include <algorithm>
 
 using namespace css;
 using com::sun::star::uno::Reference;

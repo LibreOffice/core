@@ -23,6 +23,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/hatch.hxx>
+#include <vcl/MetaCommentAction.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -41,7 +43,7 @@
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <vcl/graphictools.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaPolyLineAction.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>

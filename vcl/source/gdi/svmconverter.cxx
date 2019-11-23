@@ -17,20 +17,60 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
-#include <string.h>
+#include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
+
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/metaact.hxx>
-#include <sal/log.hxx>
-#include <osl/diagnose.h>
+#include <vcl/MetaPixelAction.hxx>
+#include <vcl/MetaPointAction.hxx>
+#include <vcl/MetaLineAction.hxx>
+#include <vcl/MetaRectAction.hxx>
+#include <vcl/MetaRoundRectAction.hxx>
+#include <vcl/MetaEllipseAction.hxx>
+#include <vcl/MetaArcAction.hxx>
+#include <vcl/MetaPieAction.hxx>
+#include <vcl/MetaPolyLineAction.hxx>
+#include <vcl/MetaPolygonAction.hxx>
+#include <vcl/MetaPolyPolygonAction.hxx>
+#include <vcl/MetaTextAction.hxx>
+#include <vcl/MetaTextArrayAction.hxx>
+#include <vcl/MetaStretchTextAction.hxx>
+#include <vcl/MetaTextLineAction.hxx>
+#include <vcl/MetaBmpAction.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpScalePartAction.hxx>
+#include <vcl/MetaGradientAction.hxx>
+#include <vcl/MetaGradientExAction.hxx>
+#include <vcl/MetaHatchAction.hxx>
+#include <vcl/MetaClipRegionAction.hxx>
+#include <vcl/MetaISectRectClipRegionAction.hxx>
+#include <vcl/MetaMoveClipRegionAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaCommentAction.hxx>
+#include <vcl/MetaRefPointAction.hxx>
+#include <vcl/MetaFloatTransparentAction.hxx>
+#include <vcl/MetaTransparentAction.hxx>
+#include <vcl/MetaRasterOpAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaPopAction.hxx>
+#include <vcl/MetaFontAction.hxx>
+#include <vcl/MetaMapModeAction.hxx>
+#include <vcl/MetaTextAlignAction.hxx>
+#include <vcl/MetaTextLineColorAction.hxx>
+#include <vcl/MetaTextFillColorAction.hxx>
+#include <vcl/MetaTextColorAction.hxx>
 
 #include <TypeSerializer.hxx>
 #include <svmconverter.hxx>
+
+#include <algorithm>
+#include <string.h>
 #include <memory>
 #include <stack>
 

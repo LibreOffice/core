@@ -30,7 +30,6 @@
 
 #include <tools/contnr.hxx>
 #include <tools/fract.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/xdash.hxx>

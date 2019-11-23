@@ -17,26 +17,72 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdlib>
-#include <memory>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/processfactory.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
+
 #include <vcl/BitmapPalette.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphictools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/mtfxmldump.hxx>
+#include <vcl/MetaPixelAction.hxx>
+#include <vcl/MetaPointAction.hxx>
+#include <vcl/MetaLineAction.hxx>
+#include <vcl/MetaRectAction.hxx>
+#include <vcl/MetaRoundRectAction.hxx>
+#include <vcl/MetaEllipseAction.hxx>
+#include <vcl/MetaPieAction.hxx>
+#include <vcl/MetaArcAction.hxx>
+#include <vcl/MetaChordAction.hxx>
+#include <vcl/MetaPolyLineAction.hxx>
+#include <vcl/MetaPolygonAction.hxx>
+#include <vcl/MetaPolyPolygonAction.hxx>
+#include <vcl/MetaTextAction.hxx>
+#include <vcl/MetaTextArrayAction.hxx>
+#include <vcl/MetaStretchTextAction.hxx>
+#include <vcl/MetaTextRectAction.hxx>
+#include <vcl/MetaTextLineAction.hxx>
+#include <vcl/MetaBmpAction.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpScalePartAction.hxx>
+#include <vcl/MetaBmpExAction.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
+#include <vcl/MetaBmpExScalePartAction.hxx>
+#include <vcl/MetaMaskAction.hxx>
+#include <vcl/MetaMaskScaleAction.hxx>
+#include <vcl/MetaMaskScalePartAction.hxx>
+#include <vcl/MetaGradientAction.hxx>
+#include <vcl/MetaGradientExAction.hxx>
+#include <vcl/MetaHatchAction.hxx>
+#include <vcl/MetaWallpaperAction.hxx>
+#include <vcl/MetaClipRegionAction.hxx>
+#include <vcl/MetaISectRectClipRegionAction.hxx>
+#include <vcl/MetaISectRegionClipRegionAction.hxx>
+#include <vcl/MetaMoveClipRegionAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaCommentAction.hxx>
+#include <vcl/MetaRefPointAction.hxx>
+#include <vcl/MetaEPSAction.hxx>
+#include <vcl/MetaFloatTransparentAction.hxx>
+#include <vcl/MetaTransparentAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaFontAction.hxx>
+#include <vcl/MetaOverlineColorAction.hxx>
+#include <vcl/MetaTextLineColorAction.hxx>
+#include <vcl/MetaTextFillColorAction.hxx>
+#include <vcl/MetaTextColorAction.hxx>
 
 #include <svmconverter.hxx>
 #include <TypeSerializer.hxx>
@@ -45,7 +91,9 @@
 #include <com/sun/star/rendering/MtfRenderer.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <comphelper/processfactory.hxx>
+
+#include <cstdlib>
+#include <memory>
 
 using namespace com::sun::star;
 

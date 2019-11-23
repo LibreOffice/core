@@ -17,19 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-#include <cassert>
-
 #include <tools/poly.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/metaact.hxx>
+
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/MetaPolygonAction.hxx>
+#include <vcl/MetaPolyPolygonAction.hxx>
+#include <vcl/MetaGradientAction.hxx>
+#include <vcl/MetaGradientExAction.hxx>
+#include <vcl/MetaISectRectClipRegionAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaCommentAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaPopAction.hxx>
 
 #include <salgdi.hxx>
+
+#include <memory>
+#include <cassert>
 
 #define GRADIENT_DEFAULT_STEPCOUNT  0
 

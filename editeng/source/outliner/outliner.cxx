@@ -45,7 +45,6 @@
 #include <editeng/adjustitem.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/window.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <editeng/svxfont.hxx>

@@ -19,12 +19,16 @@
 
 #include <sal/config.h>
 #include <osl/diagnose.h>
-
 #include <tools/debug.hxx>
-#include <vcl/metaact.hxx>
+
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/MetaClipRegionAction.hxx>
+#include <vcl/MetaISectRectClipRegionAction.hxx>
+#include <vcl/MetaISectRegionClipRegionAction.hxx>
+#include <vcl/MetaMoveClipRegionAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
 
 #include <salgdi.hxx>
 

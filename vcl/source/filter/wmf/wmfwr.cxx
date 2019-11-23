@@ -19,25 +19,65 @@
 
 #include <sal/config.h>
 #include <osl/diagnose.h>
-
-#include <algorithm>
-
-#include "wmfwr.hxx"
-#include "emfwr.hxx"
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
+
 #include <vcl/dibtools.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/FilterConfigItem.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <memory>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/FilterConfigItem.hxx>
+#include <vcl/MetaPixelAction.hxx>
+#include <vcl/MetaPointAction.hxx>
+#include <vcl/MetaLineAction.hxx>
+#include <vcl/MetaRectAction.hxx>
+#include <vcl/MetaRoundRectAction.hxx>
+#include <vcl/MetaEllipseAction.hxx>
+#include <vcl/MetaPieAction.hxx>
+#include <vcl/MetaChordAction.hxx>
+#include <vcl/MetaArcAction.hxx>
+#include <vcl/MetaPolyLineAction.hxx>
+#include <vcl/MetaPolygonAction.hxx>
+#include <vcl/MetaPolyPolygonAction.hxx>
+#include <vcl/MetaTextAction.hxx>
+#include <vcl/MetaTextArrayAction.hxx>
+#include <vcl/MetaStretchTextAction.hxx>
+#include <vcl/MetaTextRectAction.hxx>
+#include <vcl/MetaBmpAction.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpScalePartAction.hxx>
+#include <vcl/MetaBmpExAction.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
+#include <vcl/MetaBmpExScalePartAction.hxx>
+#include <vcl/MetaGradientAction.hxx>
+#include <vcl/MetaHatchAction.hxx>
+#include <vcl/MetaWallpaperAction.hxx>
+#include <vcl/MetaISectRectClipRegionAction.hxx>
+#include <vcl/MetaISectRegionClipRegionAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaLayoutModeAction.hxx>
+#include <vcl/MetaEPSAction.hxx>
+#include <vcl/MetaFloatTransparentAction.hxx>
+#include <vcl/MetaTransparentAction.hxx>
+#include <vcl/MetaRasterOpAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaFontAction.hxx>
+#include <vcl/MetaMapModeAction.hxx>
+#include <vcl/MetaTextAlignAction.hxx>
+#include <vcl/MetaTextFillColorAction.hxx>
+#include <vcl/MetaTextColorAction.hxx>
+
+#include "wmfwr.hxx"
+#include "emfwr.hxx"
+
+#include <memory>
+#include <algorithm>
 
 // MS Windows defines
 

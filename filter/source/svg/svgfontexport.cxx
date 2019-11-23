@@ -17,14 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "svgfontexport.hxx"
 #include "svgfilter.hxx"
 #include "svgwriter.hxx"
 
 #include <vcl/unohelp.hxx>
 #include <vcl/font.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/MetaTextAction.hxx>
+#include <vcl/MetaTextArrayAction.hxx>
+#include <vcl/MetaStretchTextAction.hxx>
+#include <vcl/MetaTextRectAction.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>

@@ -17,22 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/WaveLine.hxx>
+#include <tools/helpers.hxx>
 
 #include <sal/types.h>
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-
-#include <tools/helpers.hxx>
+#include <vcl/MetaTextLineAction.hxx>
+#include <vcl/MetaOverlineColorAction.hxx>
+#include <vcl/MetaTextLineColorAction.hxx>
 
 #include <salgdi.hxx>
 #include <impglyphitem.hxx>
 
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/WaveLine.hxx>
+#include <cassert>
 
 #define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X

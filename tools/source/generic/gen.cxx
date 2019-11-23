@@ -85,6 +85,17 @@ void tools::Rectangle::SaturatingSetY(long y)
     nTop = y;
 }
 
+void tools::Rectangle::Scale( double fScaleX, double fScaleY )
+{
+    Point aTL( TopLeft() );
+    Point aBR( BottomRight() );
+
+    aTL.Scale( fScaleX, fScaleY );
+    aBR.Scale( fScaleX, fScaleY );
+
+    Justify();
+}
+
 tools::Rectangle& tools::Rectangle::Union( const tools::Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )

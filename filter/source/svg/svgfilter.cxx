@@ -52,6 +52,7 @@
 
 #include <svx/unopage.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
@@ -845,7 +846,7 @@ namespace sdecl = comphelper::service_decl;
 
 // The C shared lib entry points
 extern "C" SAL_DLLPUBLIC_EXPORT void* svgfilter_component_getFactory(
-    char const* pImplName, void*, void*)
+    sal_Char const* pImplName, void*, void*)
 {
     if ( rtl_str_compare (pImplName, SVG_FILTER_IMPL_NAME) == 0 )
     {

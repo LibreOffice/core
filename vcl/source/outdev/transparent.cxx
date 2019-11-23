@@ -17,23 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <sal/types.h>
 #include <tools/helpers.hxx>
 
-#include <memory>
-
+#include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/MetaFloatTransparentAction.hxx>
+#include <vcl/MetaTransparentAction.hxx>
 
 #include <outdata.hxx>
 #include <salgdi.hxx>
 #include <bitmapwriteaccess.hxx>
+
+#include <cassert>
+#include <memory>
 
 namespace
 {

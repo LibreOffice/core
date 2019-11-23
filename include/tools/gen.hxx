@@ -78,6 +78,8 @@ public:
 
     void                Move( long nHorzMove, long nVertMove );
     void                Move( Size const & s );
+    void                Scale( double fScaleX, double fScaleY );
+
     long                AdjustX( long nHorzMove ) { nA += nHorzMove; return nA; }
     long                AdjustY( long nVertMove ) { nB += nVertMove; return nB; }
 
@@ -406,6 +408,7 @@ public:
     /// Move the top and left edges by a delta, preserving width and height
     inline void         Move( long nHorzMoveDelta, long nVertMoveDelta );
     void                Move( Size const & s ) { Move(s.Width(), s.Height()); }
+    void                Scale( double fScaleX, double fScaleY );
     long                AdjustLeft( long nHorzMoveDelta ) { nLeft += nHorzMoveDelta; return nLeft; }
     long                AdjustRight( long nHorzMoveDelta );
     long                AdjustTop( long nVertMoveDelta ) { nTop += nVertMoveDelta; return nTop; }

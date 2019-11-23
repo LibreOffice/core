@@ -18,7 +18,19 @@
  */
 
 #include <vcl/event.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaPixelAction.hxx>
+#include <vcl/MetaBmpAction.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpScalePartAction.hxx>
+#include <vcl/MetaBmpExAction.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
+#include <vcl/MetaBmpExScalePartAction.hxx>
+#include <vcl/MetaWallpaperAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaFontAction.hxx>
+#include <vcl/MetaTextFillColorAction.hxx>
+#include <vcl/MetaTextColorAction.hxx>
 #include <vcl/field.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>

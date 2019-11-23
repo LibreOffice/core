@@ -27,9 +27,10 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vcl/gdimtf.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
+#include <vcl/MetaISectRectClipRegionAction.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/diagnose.h>
-#include <vcl/metaact.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/gdimetafiletools.hxx>
 #include <memory>

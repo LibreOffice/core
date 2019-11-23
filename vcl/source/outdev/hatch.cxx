@@ -17,21 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <osl/diagnose.h>
 #include <tools/line.hxx>
 #include <tools/helpers.hxx>
 
 #include <vcl/hatch.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/MetaLineAction.hxx>
+#include <vcl/MetaHatchAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaPopAction.hxx>
 
 #include <salgdi.hxx>
 
 #include <memory>
+#include <cassert>
 
 #define HATCH_MAXPOINTS             1024
 

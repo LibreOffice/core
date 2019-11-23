@@ -24,8 +24,9 @@
 
 #include <sal/log.hxx>
 #include <utility>
-#include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/MetaTextAction.hxx>
+#include <vcl/MetaCommentAction.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
 #include "drawshapesubsetting.hxx"

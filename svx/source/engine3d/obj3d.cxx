@@ -50,7 +50,6 @@
 #include <svx/xfltrit.hxx>
 #include <svx/svdpagv.hxx>
 #include <vcl/gradient.hxx>
-#include <vcl/metaact.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/colorcfg.hxx>

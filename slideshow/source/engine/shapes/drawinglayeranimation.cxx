@@ -30,7 +30,6 @@
 #include <sal/log.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/metaact.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
 #include <com/sun/star/drawing/TextAnimationDirection.hpp>

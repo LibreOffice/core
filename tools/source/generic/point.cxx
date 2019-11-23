@@ -18,6 +18,7 @@
  */
 
 #include <tools/gen.hxx>
+#include <tools/helpers.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
 void Point::RotateAround( Point& rPoint,
@@ -82,6 +83,12 @@ void Point::RotateAround( long& rX, long& rY,
         rX = + static_cast<long>(nCos*nX + nSin*nY) + nOriginX;
         rY = - static_cast<long>(nSin*nX - nCos*nY) + nOriginY;
     }
+}
+
+void Point::Scale( double fScaleX, double fScaleY )
+{
+    setX( FRound( fScaleX * X() ) );
+    setY( FRound( fScaleY * Y() ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

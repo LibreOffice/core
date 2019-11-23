@@ -294,7 +294,6 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>

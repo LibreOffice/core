@@ -37,6 +37,10 @@
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 
 #include <rtl/bootstrap.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
+#include <vcl/MetaCommentAction.hxx>
+#include <vcl/gradient.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoutl.hxx>

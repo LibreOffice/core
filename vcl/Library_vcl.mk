@@ -291,7 +291,60 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/jobset \
     vcl/source/gdi/lineinfo \
     vcl/source/gdi/mapmod \
-    vcl/source/gdi/metaact \
+    vcl/source/gdi/MetaAction \
+    vcl/source/gdi/MetaPixelAction \
+    vcl/source/gdi/MetaPointAction \
+    vcl/source/gdi/MetaLineAction \
+    vcl/source/gdi/MetaRectAction \
+    vcl/source/gdi/MetaRoundRectAction \
+    vcl/source/gdi/MetaEllipseAction \
+    vcl/source/gdi/MetaArcAction \
+    vcl/source/gdi/MetaPieAction \
+    vcl/source/gdi/MetaChordAction \
+    vcl/source/gdi/MetaPolyLineAction \
+    vcl/source/gdi/MetaPolygonAction \
+    vcl/source/gdi/MetaPolyPolygonAction \
+    vcl/source/gdi/MetaTextAction \
+    vcl/source/gdi/MetaTextArrayAction \
+    vcl/source/gdi/MetaStretchTextAction \
+    vcl/source/gdi/MetaTextRectAction \
+    vcl/source/gdi/MetaTextLineAction \
+    vcl/source/gdi/MetaBmpAction \
+    vcl/source/gdi/MetaBmpScaleAction \
+    vcl/source/gdi/MetaBmpScalePartAction \
+    vcl/source/gdi/MetaBmpExAction \
+    vcl/source/gdi/MetaBmpExScaleAction \
+    vcl/source/gdi/MetaBmpExScalePartAction \
+    vcl/source/gdi/MetaMaskAction \
+    vcl/source/gdi/MetaMaskScaleAction \
+    vcl/source/gdi/MetaMaskScalePartAction \
+    vcl/source/gdi/MetaGradientAction \
+    vcl/source/gdi/MetaGradientExAction \
+    vcl/source/gdi/MetaHatchAction \
+    vcl/source/gdi/MetaWallpaperAction \
+    vcl/source/gdi/MetaClipRegionAction \
+    vcl/source/gdi/MetaISectRectClipRegionAction \
+    vcl/source/gdi/MetaISectRegionClipRegionAction \
+    vcl/source/gdi/MetaMoveClipRegionAction \
+    vcl/source/gdi/MetaLineColorAction \
+    vcl/source/gdi/MetaFillColorAction \
+    vcl/source/gdi/MetaTextLanguageAction \
+    vcl/source/gdi/MetaLayoutModeAction \
+    vcl/source/gdi/MetaCommentAction \
+    vcl/source/gdi/MetaRefPointAction \
+    vcl/source/gdi/MetaEPSAction \
+    vcl/source/gdi/MetaFloatTransparentAction \
+    vcl/source/gdi/MetaTransparentAction \
+    vcl/source/gdi/MetaRasterOpAction \
+    vcl/source/gdi/MetaPushAction \
+    vcl/source/gdi/MetaPopAction \
+    vcl/source/gdi/MetaFontAction \
+    vcl/source/gdi/MetaMapModeAction \
+    vcl/source/gdi/MetaTextAlignAction \
+    vcl/source/gdi/MetaOverlineColorAction \
+    vcl/source/gdi/MetaTextLineColorAction \
+    vcl/source/gdi/MetaTextFillColorAction \
+    vcl/source/gdi/MetaTextColorAction \
     vcl/source/gdi/oldprintadaptor \
     vcl/source/gdi/pdfbuildin_fonts \
     vcl/source/gdi/pdfextoutdevdata \

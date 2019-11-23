@@ -40,7 +40,6 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/xoutbmp.hxx>
-#include <vcl/metaact.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>
 #include <tools/bigint.hxx>
