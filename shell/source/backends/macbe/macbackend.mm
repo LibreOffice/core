@@ -206,7 +206,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
             aDocDir = GetOUString( [pPaths objectAtIndex: 0] );
 
             OUString aDocURL;
-            if( aDocDir.getLength() > 0 &&
+            if( !aDocDir.isEmpty() &&
                 osl_getFileURLFromSystemPath( aDocDir.pData, &aDocURL.pData ) == osl_File_E_None )
             {
                 return css::uno::makeAny(
@@ -234,7 +234,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         if (retVal)
         {
             auto const Server = OUString::createFromAscii( host );
-            if( Server.getLength() > 0 )
+            if( !Server.isEmpty() )
             {
                 return css::uno::makeAny(
                     css::beans::Optional< css::uno::Any >(
@@ -268,7 +268,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         if (retVal)
         {
             auto const Server = OUString::createFromAscii( host );
-            if( Server.getLength() > 0 )
+            if( !Server.isEmpty() )
             {
                 return css::uno::makeAny(
                     css::beans::Optional< css::uno::Any >(
@@ -302,7 +302,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         if (retVal)
         {
             auto const Server = OUString::createFromAscii( host );
-            if( Server.getLength() > 0 )
+            if( !Server.isEmpty() )
             {
                 return css::uno::makeAny(
                     css::beans::Optional< css::uno::Any >(
@@ -360,7 +360,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
             CFRelease(rProxyDict);
 
         // fill proxy bypass list
-        if( aProxyBypassList.getLength() > 0 )
+        if( !aProxyBypassList.isEmpty() )
         {
             return css::uno::makeAny(
                 css::beans::Optional< css::uno::Any >(
