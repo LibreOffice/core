@@ -22,6 +22,30 @@
       "revId": "81970c2196cfb6d9d3ddccf1542d675199aa6b04",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_209cc668",
+        "filename": "basic/qa/basic_coverage/test_Property.GetLet.vb",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-11-23T15:54:20Z",
+      "side": 1,
+      "message": "I guess that\u0027s reversed version of \"OK\", which means NG.",
+      "parentUuid": "7f7f9b97_60963e4f",
+      "range": {
+        "startLine": 15,
+        "startChar": 23,
+        "endLine": 15,
+        "endChar": 27
+      },
+      "revId": "81970c2196cfb6d9d3ddccf1542d675199aa6b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
