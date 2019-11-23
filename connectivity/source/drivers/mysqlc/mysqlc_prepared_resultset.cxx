@@ -178,8 +178,8 @@ OPreparedResultSet::OPreparedResultSet(OConnection& rConn, OPreparedStatement* p
     , m_aStatement(static_cast<OWeakObject*>(pPrepared))
     , m_pStmt(pStmt)
     , m_encoding(rConn.getConnectionEncoding())
+    , m_nColumnCount(mysql_stmt_field_count(pStmt))
 {
-    m_nColumnCount = mysql_stmt_field_count(pStmt);
     m_pResult = mysql_stmt_result_metadata(m_pStmt);
     if (m_pResult != nullptr)
         mysql_stmt_store_result(m_pStmt);
