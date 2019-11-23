@@ -56,7 +56,16 @@ void WidgetDefinitionReaderTest::testReadSettings()
         vcl::WidgetDefinition aDefinition;
         vcl::WidgetDefinitionReader aReader(getFullUrl("definitionSettings3.xml"), getFullUrl(""));
         CPPUNIT_ASSERT(aReader.read(aDefinition));
+        CPPUNIT_ASSERT_EQUAL(OString("true"), aDefinition.mpSettings->msNoActiveTabTextRaise);
         CPPUNIT_ASSERT_EQUAL(OString("false"), aDefinition.mpSettings->msCenteredTabs);
+        CPPUNIT_ASSERT_EQUAL(OString("0"), aDefinition.mpSettings->msListBoxEntryMargin);
+        CPPUNIT_ASSERT_EQUAL(OString("10"), aDefinition.mpSettings->msDefaultFontSize);
+        CPPUNIT_ASSERT_EQUAL(OString("16"), aDefinition.mpSettings->msTitleHeight);
+        CPPUNIT_ASSERT_EQUAL(OString("12"), aDefinition.mpSettings->msFloatTitleHeight);
+        CPPUNIT_ASSERT_EQUAL(OString("15"),
+                             aDefinition.mpSettings->msListBoxPreviewDefaultLogicWidth);
+        CPPUNIT_ASSERT_EQUAL(OString("7"),
+                             aDefinition.mpSettings->msListBoxPreviewDefaultLogicHeight);
     }
 }
 
