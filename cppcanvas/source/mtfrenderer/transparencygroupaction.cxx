@@ -29,11 +29,12 @@
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
-#include <vcl/metaact.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/MetaAction.hxx>
 
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/point/b2dpoint.hxx>

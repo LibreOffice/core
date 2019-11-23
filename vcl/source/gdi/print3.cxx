@@ -17,17 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/types.h>
+#include <sal/log.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
+
 #include <vcl/weld.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/configsettings.hxx>
-#include <tools/urlobj.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
-#include <sal/types.h>
-#include <sal/log.hxx>
-#include <tools/debug.hxx>
+#include <vcl/MetaRectAction.hxx>
+#include <vcl/MetaClipRegionAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaPopAction.hxx>
+#include <vcl/MetaMapModeAction.hxx>
 
 #include <printdlg.hxx>
 #include <svdata.hxx>

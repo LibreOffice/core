@@ -50,7 +50,6 @@
 #include <editeng/flditem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
-#include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>

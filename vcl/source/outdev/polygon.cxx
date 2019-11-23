@@ -25,7 +25,8 @@
 #include <memory>
 #include <tools/poly.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaPolygonAction.hxx>
+#include <vcl/MetaPolyPolygonAction.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 

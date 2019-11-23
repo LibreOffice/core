@@ -17,24 +17,68 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pdfwriter_impl.hxx"
+#include <sal/log.hxx>
+#include <comphelper/fileformat.h>
+#include <comphelper/hash.hxx>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <tools/helpers.hxx>
+#include <tools/fract.hxx>
+#include <tools/stream.hxx>
+#include <unotools/streamwrap.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/MetaPixelAction.hxx>
+#include <vcl/MetaPointAction.hxx>
+#include <vcl/MetaLineAction.hxx>
+#include <vcl/MetaRectAction.hxx>
+#include <vcl/MetaRoundRectAction.hxx>
+#include <vcl/MetaEllipseAction.hxx>
+#include <vcl/MetaArcAction.hxx>
+#include <vcl/MetaChordAction.hxx>
+#include <vcl/MetaPolyLineAction.hxx>
+#include <vcl/MetaPolygonAction.hxx>
+#include <vcl/MetaPolyPolygonAction.hxx>
+#include <vcl/MetaTextAction.hxx>
+#include <vcl/MetaTextArrayAction.hxx>
+#include <vcl/MetaStretchTextAction.hxx>
+#include <vcl/MetaTextRectAction.hxx>
+#include <vcl/MetaTextLineAction.hxx>
+#include <vcl/MetaBmpAction.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpScalePartAction.hxx>
+#include <vcl/MetaBmpExAction.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
+#include <vcl/MetaBmpExScalePartAction.hxx>
+#include <vcl/MetaGradientAction.hxx>
+#include <vcl/MetaGradientExAction.hxx>
+#include <vcl/MetaHatchAction.hxx>
+#include <vcl/MetaWallpaperAction.hxx>
+#include <vcl/MetaClipRegionAction.hxx>
+#include <vcl/MetaISectRectClipRegionAction.hxx>
+#include <vcl/MetaISectRegionClipRegionAction.hxx>
+#include <vcl/MetaMoveClipRegionAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaTextLanguageAction.hxx>
+#include <vcl/MetaLayoutModeAction.hxx>
+#include <vcl/MetaCommentAction.hxx>
+#include <vcl/MetaEPSAction.hxx>
+#include <vcl/MetaFloatTransparentAction.hxx>
+#include <vcl/MetaTransparentAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaFontAction.hxx>
+#include <vcl/MetaTextAlignAction.hxx>
+#include <vcl/MetaOverlineColorAction.hxx>
+#include <vcl/MetaTextLineColorAction.hxx>
+#include <vcl/MetaTextFillColorAction.hxx>
+#include <vcl/MetaTextColorAction.hxx>
 
-#include <unotools/streamwrap.hxx>
-
-#include <tools/helpers.hxx>
-#include <tools/fract.hxx>
-#include <tools/stream.hxx>
-
-#include <comphelper/fileformat.h>
-#include <comphelper/hash.hxx>
-#include <comphelper/processfactory.hxx>
+#include "pdfwriter_impl.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -42,9 +86,6 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
-#include <cppuhelper/implbase.hxx>
-
-#include <sal/log.hxx>
 #include <memory>
 
 using namespace vcl;
