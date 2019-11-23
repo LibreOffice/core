@@ -31,6 +31,7 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <basegfx/DrawCommands.hxx>
@@ -86,6 +87,15 @@ std::shared_ptr<WidgetDefinition> getWidgetDefinitionForTheme(OUString const& rT
     return spDefinition;
 }
 
+int getSettingValueInteger(OString const& rValue, int nDefault)
+{
+    if (rValue.isEmpty())
+        return nDefault;
+    if (!comphelper::string::isdigitAsciiString(rValue))
+        return nDefault;
+    return rValue.toInt32();
+}
+
 bool getSettingValueBool(OString const& rValue, bool bDefault)
 {
     if (rValue.isEmpty())
@@ -110,16 +120,21 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
 
     if (m_pWidgetDefinition)
     {
+        auto& pSettings = m_pWidgetDefinition->mpSettings;
+
         ImplSVData* pSVData = ImplGetSVData();
         pSVData->maNWFData.mbNoFocusRects = true;
         pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
-        pSVData->maNWFData.mbNoActiveTabTextRaise = true;
-        pSVData->maNWFData.mbCenteredTabs
-            = getSettingValueBool(m_pWidgetDefinition->mpSettings->msCenteredTabs, true);
+        pSVData->maNWFData.mbNoActiveTabTextRaise
+            = getSettingValueBool(pSettings->msNoActiveTabTextRaise, true);
+        pSVData->maNWFData.mbCenteredTabs = getSettingValueBool(pSettings->msCenteredTabs, true);
         pSVData->maNWFData.mbProgressNeedsErase = true;
         pSVData->maNWFData.mnStatusBarLowerRightOffset = 10;
         pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
-        pSVData->maNWFData.mnListBoxEntryMargin = 20;
+
+        int nDefaultListboxEntryMargin = pSVData->maNWFData.mnListBoxEntryMargin;
+        pSVData->maNWFData.mnListBoxEntryMargin
+            = getSettingValueInteger(pSettings->msListBoxEntryMargin, nDefaultListboxEntryMargin);
 
         m_bIsActive = true;
     }
@@ -952,7 +967,7 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
 {
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
 
-    auto pDefinitionStyle = m_pWidgetDefinition->mpStyle;
+    auto& pDefinitionStyle = m_pWidgetDefinition->mpStyle;
 
     aStyleSet.SetFaceColor(pDefinitionStyle->maFaceColor);
     aStyleSet.SetCheckedColor(pDefinitionStyle->maCheckedColor);
@@ -1008,7 +1023,10 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
     aStyleSet.SetToolTextColor(pDefinitionStyle->maToolTextColor);
     aStyleSet.SetFontColor(pDefinitionStyle->maFontColor);
 
-    vcl::Font aFont(FAMILY_SWISS, Size(0, 10));
+    auto& pSettings = m_pWidgetDefinition->mpSettings;
+
+    int nFontSize = getSettingValueInteger(pSettings->msDefaultFontSize, 10);
+    vcl::Font aFont(FAMILY_SWISS, Size(0, nFontSize));
     aFont.SetCharSet(osl_getThreadTextEncoding());
     aFont.SetWeight(WEIGHT_NORMAL);
     aFont.SetFamilyName("Liberation Sans");
@@ -1028,9 +1046,17 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
     aStyleSet.SetFloatTitleFont(aFont);
     aStyleSet.SetTitleFont(aFont);
 
-    aStyleSet.SetTitleHeight(16);
-    aStyleSet.SetFloatTitleHeight(12);
-    aStyleSet.SetListBoxPreviewDefaultLogicSize(Size(16, 16));
+    int nTitleHeight = getSettingValueInteger(pSettings->msTitleHeight, aStyleSet.GetTitleHeight());
+    aStyleSet.SetTitleHeight(nTitleHeight);
+
+    int nFloatTitleHeight
+        = getSettingValueInteger(pSettings->msFloatTitleHeight, aStyleSet.GetFloatTitleHeight());
+    aStyleSet.SetFloatTitleHeight(nFloatTitleHeight);
+
+    int nLogicWidth = getSettingValueInteger(pSettings->msListBoxPreviewDefaultLogicWidth,
+                                             15); // See vcl/source/app/settings.cxx
+    int nLogicHeight = getSettingValueInteger(pSettings->msListBoxPreviewDefaultLogicHeight, 7);
+    aStyleSet.SetListBoxPreviewDefaultLogicSize(Size(nLogicWidth, nLogicHeight));
 
     rSettings.SetStyleSettings(aStyleSet);
 
