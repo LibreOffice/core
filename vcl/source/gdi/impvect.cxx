@@ -18,14 +18,20 @@
  */
 
 #include <sal/log.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <tools/link.hxx>
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
+
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/MetaPolyPolygonAction.hxx>
+#include <vcl/MetaMoveClipRegionAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+
 #include "impvect.hxx"
+
 #include <array>
 #include <memory>
 

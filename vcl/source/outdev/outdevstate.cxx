@@ -22,10 +22,20 @@
 
 #include <tools/debug.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaTextLanguageAction.hxx>
+#include <vcl/MetaLayoutModeAction.hxx>
+#include <vcl/MetaRasterOpAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaPopAction.hxx>
+#include <vcl/MetaFontAction.hxx>
+#include <vcl/MetaTextAlignAction.hxx>
+#include <vcl/MetaTextFillColorAction.hxx>
+#include <vcl/MetaTextColorAction.hxx>
 
 #include <outdev.h>
 #include <outdata.hxx>

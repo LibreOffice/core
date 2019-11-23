@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/servicedecl.hxx>
+#include <vcl/gradient.hxx>
 #include <uno/environment.h>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>

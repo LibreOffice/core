@@ -62,7 +62,6 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/graph.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>

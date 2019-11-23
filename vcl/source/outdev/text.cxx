@@ -17,20 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-
-#include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
-
-#include <comphelper/processfactory.hxx>
 #include <osl/file.h>
 #include <sal/log.hxx>
 #include <tools/lineend.hxx>
 #include <tools/debug.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <comphelper/processfactory.hxx>
+
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaTextAction.hxx>
+#include <vcl/MetaTextArrayAction.hxx>
+#include <vcl/MetaStretchTextAction.hxx>
+#include <vcl/MetaTextRectAction.hxx>
+#include <vcl/MetaTextAlignAction.hxx>
+#include <vcl/MetaTextFillColorAction.hxx>
+#include <vcl/MetaTextColorAction.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/textrectinfo.hxx>
 #include <vcl/virdev.hxx>
@@ -48,6 +49,12 @@
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
 #include <impglyphitem.hxx>
+
+#include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+
+#include <memory>
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 

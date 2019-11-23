@@ -17,33 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
-#include <vcl/image.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/imagerepository.hxx>
+#include <sal/log.hxx>
+#include <rtl/ref.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/fileformat.h>
+#include <comphelper/servicehelper.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/fract.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+
+#include <vcl/dibtools.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/image.hxx>
+#include <vcl/imagerepository.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+
+#include <graphic/UnoGraphicDescriptor.hxx>
+#include <graphic/UnoGraphic.hxx>
+
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphicProvider2.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/fileformat.h>
-#include <comphelper/servicehelper.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <sal/log.hxx>
 
-#include <graphic/UnoGraphicDescriptor.hxx>
-#include <graphic/UnoGraphic.hxx>
-#include <rtl/ref.hxx>
-#include <vcl/dibtools.hxx>
-#include <comphelper/sequence.hxx>
 #include <memory>
 
 using namespace com::sun::star;

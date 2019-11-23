@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 
-#include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
