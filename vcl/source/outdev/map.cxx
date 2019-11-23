@@ -17,22 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
+#include <osl/diagnose.h>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
+
 #include <vcl/cursor.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
-#include <sal/log.hxx>
-#include <osl/diagnose.h>
+#include <vcl/MetaMapModeAction.hxx>
 
 #include <svdata.hxx>
 #include <window.h>
 #include <outdev.h>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <o3tl/enumarray.hxx>
 
 // we don't actually handle units beyond, hence the zeros in the arrays

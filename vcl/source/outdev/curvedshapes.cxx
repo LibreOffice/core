@@ -20,7 +20,10 @@
 #include <cassert>
 
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaEllipseAction.hxx>
+#include <vcl/MetaPieAction.hxx>
+#include <vcl/MetaArcAction.hxx>
+#include <vcl/MetaChordAction.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 

@@ -42,7 +42,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaCommentAction.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/FilterConfigItem.hxx>

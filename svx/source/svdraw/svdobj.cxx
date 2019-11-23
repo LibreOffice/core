@@ -52,7 +52,6 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/graphictools.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vector>

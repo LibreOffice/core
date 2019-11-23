@@ -17,15 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
+#include <vcl/bitmapex.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaMaskAction.hxx>
+#include <vcl/MetaMaskScaleAction.hxx>
+#include <vcl/MetaMaskScalePartAction.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
 #include <salgdi.hxx>
 #include <salbmp.hxx>
+
+#include <cassert>
 
 void OutputDevice::DrawMask( const Point& rDestPt,
                              const Bitmap& rBitmap, const Color& rMaskColor )
