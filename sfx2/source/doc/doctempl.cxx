@@ -1319,9 +1319,8 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
 
 RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
                                   const OUString& rTitle )
+                                  : mpParent(pParent), maTitle(rTitle)
 {
-    maTitle     = rTitle;
-    mpParent    = pParent;
 }
 
 
