@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widgets>
     <settings>
+        <noActiveTabTextRaise value="true"/>
         <centeredTabs value="false"/>
+        <listBoxEntryMargin value="0"/>
+        <defaultFontSize value="10"/>
+        <titleHeight value="16"/>
+        <floatTitleHeight value="12"/>
+        <listBoxPreviewDefaultLogicWidth value="15"/>
+        <listBoxPreviewDefaultLogicHeight value="7"/>
     </settings>
 </widgets>

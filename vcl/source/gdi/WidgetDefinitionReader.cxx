@@ -425,7 +425,14 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
     auto pSettings = std::make_shared<WidgetDefinitionSettings>();
 
     std::unordered_map<OString, OString*> aSettingMap = {
+        { "noActiveTabTextRaise", &pSettings->msNoActiveTabTextRaise },
         { "centeredTabs", &pSettings->msCenteredTabs },
+        { "listBoxEntryMargin", &pSettings->msListBoxEntryMargin },
+        { "defaultFontSize", &pSettings->msDefaultFontSize },
+        { "titleHeight", &pSettings->msTitleHeight },
+        { "floatTitleHeight", &pSettings->msFloatTitleHeight },
+        { "listBoxPreviewDefaultLogicWidth", &pSettings->msListBoxPreviewDefaultLogicWidth },
+        { "listBoxPreviewDefaultLogicHeight", &pSettings->msListBoxPreviewDefaultLogicHeight },
     };
 
     rWidgetDefinition.mpSettings = pSettings;
