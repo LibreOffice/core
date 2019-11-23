@@ -174,7 +174,7 @@ WinInetBackend::WinInetBackend()
             valueProxyType_.Value <<= sal_Int32(1);
 
             // fill proxy bypass list
-            if( aProxyBypassList.getLength() > 0 )
+            if( !aProxyBypassList.isEmpty() )
             {
                 OUStringBuffer aReverseList;
                 sal_Int32 nIndex = 0;
@@ -200,7 +200,7 @@ WinInetBackend::WinInetBackend()
                 valueNoProxy_.Value <<= aProxyBypassList.replace( SPACE, SEMI_COLON );
             }
 
-            if( aProxyList.getLength() > 0 )
+            if( !aProxyList.isEmpty() )
             {
 
                 // this implementation follows the algorithm
@@ -245,42 +245,42 @@ WinInetBackend::WinInetBackend()
                 }
 
                 // http proxy name
-                if( aHttpProxy.Server.getLength() > 0 )
+                if( !aHttpProxy.Server.isEmpty() )
                 {
                     valueHttpProxyName_.IsPresent = true;
                     valueHttpProxyName_.Value <<= aHttpProxy.Server;
                 }
 
                 // http proxy port
-                if( aHttpProxy.Port.getLength() > 0 )
+                if( !aHttpProxy.Port.isEmpty() )
                 {
                     valueHttpProxyPort_.IsPresent = true;
                     valueHttpProxyPort_.Value <<= aHttpProxy.Port.toInt32();
                 }
 
                 // https proxy name
-                if( aHttpsProxy.Server.getLength() > 0 )
+                if( !aHttpsProxy.Server.isEmpty() )
                 {
                     valueHttpsProxyName_.IsPresent = true;
                     valueHttpsProxyName_.Value <<= aHttpsProxy.Server;
                 }
 
                 // https proxy port
-                if( aHttpsProxy.Port.getLength() > 0 )
+                if( !aHttpsProxy.Port.isEmpty() )
                 {
                     valueHttpsProxyPort_.IsPresent = true;
                     valueHttpsProxyPort_.Value <<= aHttpsProxy.Port.toInt32();
                 }
 
                 // ftp proxy name
-                if( aFtpProxy.Server.getLength() > 0 )
+                if( !aFtpProxy.Server.isEmpty() )
                 {
                     valueFtpProxyName_.IsPresent = true;
                     valueFtpProxyName_.Value <<= aFtpProxy.Server;
                 }
 
                 // ftp proxy port
-                if( aFtpProxy.Port.getLength() > 0 )
+                if( !aFtpProxy.Port.isEmpty() )
                 {
                     valueFtpProxyPort_.IsPresent = true;
                     valueFtpProxyPort_.Value <<= aFtpProxy.Port.toInt32();

@@ -209,7 +209,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     if ( xMessage.is() )
     {
         OUString sBody = xMessage->getBody();
-        if ( sBody.getLength() > 0 )
+        if ( !sBody.isEmpty() )
         {
             aBuffer.append(" --body ");
             appendShellWord(aBuffer, sBody, false);

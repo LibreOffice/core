@@ -612,7 +612,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     HICON   hIcon( nullptr );
     HMODULE hModule( GetModuleHandleW( nullptr ) );
 
-    if ( pMyItem->module.getLength() > 0 )
+    if ( !pMyItem->module.isEmpty() )
     {
         LPCWSTR pModuleName = o3tl::toW( pMyItem->module.getStr() );
         hModule = GetModuleHandleW( pModuleName );

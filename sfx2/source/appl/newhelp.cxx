@@ -218,7 +218,7 @@ namespace sfx2
                     sSearchToken += "*";
 
                 if ( sSearchToken.getLength() > 1 ||
-                     ( sSearchToken.getLength() > 0 && sSearchToken[ 0 ] != '*' ) )
+                     ( !sSearchToken.isEmpty() && sSearchToken[ 0 ] != '*' ) )
                 {
                     if ( !sSearchStr.isEmpty() )
                     {
@@ -669,7 +669,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     if ( aAnchorList.hasElements() && nRefListLen )
                     {
-                        if ( aAnchorList[0].getLength() > 0 )
+                        if ( !aAnchorList[0].isEmpty() )
                         {
                             aData.append( aRefList[0] ).append( '#' ).append( aAnchorList[0] );
                             m_pIndexCB->SetEntryData( nPos, new IndexEntry_Impl( aData.makeStringAndClear(), insert ) );
@@ -694,7 +694,7 @@ void IndexTabPage_Impl::InitializeIndex()
                         else
                             nPos = m_pIndexCB->InsertEntry(aTempString);
 
-                        if ( aAnchorList[j].getLength() > 0 )
+                        if ( !aAnchorList[j].isEmpty() )
                         {
                             aData.append( aRefList[j] ).append( '#' ).append( aAnchorList[j] );
                             m_pIndexCB->SetEntryData( nPos, new IndexEntry_Impl( aData.makeStringAndClear(), insert ) );
