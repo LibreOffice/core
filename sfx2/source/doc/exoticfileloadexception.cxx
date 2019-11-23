@@ -16,6 +16,8 @@ using namespace com::sun::star;
 
 ExoticFileLoadException::ExoticFileLoadException(const OUString& rURL,
                                                  const OUString& rFilterUIName)
+    : m_xAbort(new comphelper::OInteractionAbort)
+    , m_xApprove(new comphelper::OInteractionApprove)
 {
     document::ExoticFileLoadException aReq;
     aReq.URL = rURL;
@@ -23,8 +25,6 @@ ExoticFileLoadException::ExoticFileLoadException(const OUString& rURL,
 
     m_aRequest <<= aReq;
 
-    m_xAbort = new comphelper::OInteractionAbort;
-    m_xApprove = new comphelper::OInteractionApprove;
     m_lContinuations.realloc(2);
     m_lContinuations[0] = m_xApprove;
     m_lContinuations[1] = m_xAbort;

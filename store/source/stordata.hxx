@@ -551,10 +551,10 @@ struct OStoreDirectoryPageData : public store::PageData
         /** Construction.
         */
         ChunkDescriptor (sal_uInt32 nPosition, sal_uInt16 nCapacity)
+             : m_nPage(nPosition / nCapacity),
+               m_nOffset(static_cast<sal_uInt16>((nPosition % nCapacity) & 0xffff)),
+               m_nLength(nCapacity - m_nOffset)
         {
-            m_nPage   = nPosition / nCapacity;
-            m_nOffset = static_cast<sal_uInt16>((nPosition % nCapacity) & 0xffff);
-            m_nLength = nCapacity - m_nOffset;
         }
     };
 
