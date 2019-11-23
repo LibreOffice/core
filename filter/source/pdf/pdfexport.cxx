@@ -27,7 +27,6 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/bitmapaccess.hxx>

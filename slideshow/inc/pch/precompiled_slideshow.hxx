@@ -112,7 +112,6 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>

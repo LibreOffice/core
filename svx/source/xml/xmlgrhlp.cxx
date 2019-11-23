@@ -40,7 +40,8 @@
 #include <unotools/saveopt.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gfxlink.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaCommentAction.hxx>
+#include <vcl/MetaEPSAction.hxx>
 #include <tools/zcodec.hxx>
 
 #include <vcl/GraphicObject.hxx>

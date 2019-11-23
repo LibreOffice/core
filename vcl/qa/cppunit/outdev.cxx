@@ -9,15 +9,16 @@
 
 #include <test/bootstrapfixture.hxx>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+
 #include <vcl/print.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <bitmapwriteaccess.hxx>
 
 class VclOutdevTest : public test::BootstrapFixture
 {

@@ -27,7 +27,7 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <vcl/metaact.hxx>
+#include <vcl/MetaCommentAction.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 

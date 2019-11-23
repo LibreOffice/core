@@ -22,7 +22,7 @@
 
 #include <vcl/gdimtf.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaLineAction.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 

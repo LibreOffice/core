@@ -17,22 +17,59 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <utility>
-#include <list>
-#include <vector>
-
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <vcl/virdev.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/MetaPixelAction.hxx>
+#include <vcl/MetaPointAction.hxx>
+#include <vcl/MetaLineAction.hxx>
+#include <vcl/MetaRectAction.hxx>
+#include <vcl/MetaRoundRectAction.hxx>
+#include <vcl/MetaEllipseAction.hxx>
+#include <vcl/MetaPieAction.hxx>
+#include <vcl/MetaChordAction.hxx>
+#include <vcl/MetaArcAction.hxx>
+#include <vcl/MetaPolyLineAction.hxx>
+#include <vcl/MetaPolygonAction.hxx>
+#include <vcl/MetaPolyPolygonAction.hxx>
+#include <vcl/MetaTextAction.hxx>
+#include <vcl/MetaTextArrayAction.hxx>
+#include <vcl/MetaStretchTextAction.hxx>
+#include <vcl/MetaTextRectAction.hxx>
+#include <vcl/MetaBmpAction.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpScalePartAction.hxx>
+#include <vcl/MetaBmpExAction.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
+#include <vcl/MetaBmpExScalePartAction.hxx>
+#include <vcl/MetaMaskAction.hxx>
+#include <vcl/MetaMaskScaleAction.hxx>
+#include <vcl/MetaMaskScalePartAction.hxx>
+#include <vcl/MetaGradientAction.hxx>
+#include <vcl/MetaGradientExAction.hxx>
+#include <vcl/MetaHatchAction.hxx>
+#include <vcl/MetaWallpaperAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaCommentAction.hxx>
+#include <vcl/MetaEPSAction.hxx>
+#include <vcl/MetaFloatTransparentAction.hxx>
+#include <vcl/MetaTransparentAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaPopAction.hxx>
+#include <vcl/MetaMapModeAction.hxx>
 
 #include "pdfwriter_impl.hxx"
+
+#include <utility>
+#include <list>
+#include <vector>
 
 #define MAX_TILE_WIDTH  1024
 #define MAX_TILE_HEIGHT 1024

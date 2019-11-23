@@ -59,7 +59,6 @@
 #include <editeng/editeng.hxx>
 #include <svl/itemiter.hxx>
 #include <sdr/properties/textproperties.hxx>
-#include <vcl/metaact.hxx>
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
