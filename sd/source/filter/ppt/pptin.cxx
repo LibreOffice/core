@@ -2566,9 +2566,9 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
     return pRet;
 }
 
-SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, SvxMSDffClientData& rData, ::tools::Rectangle& rTextRect, SdrObject* pRet )
+SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rData, SvxMSDffClientData& rClientData, ::tools::Rectangle& rTextRect, SdrObject* pRet )
 {
-    SdrObject* pObj = SdrPowerPointImport::ProcessObj( rSt, rObjData, rData, rTextRect, pRet );
+    SdrObject* pObj = SdrPowerPointImport::ProcessObj( rSt, rData, rClientData, rTextRect, pRet );
 
     // read animation effect of object
     if ( pObj )
@@ -2576,7 +2576,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
         // further setup placeholder objects
         if (dynamic_cast<const SdrPageObj*>(pObj))
         {
-            const ProcessData& rProcessData=static_cast<const ProcessData&>(rData);
+            const ProcessData& rProcessData=static_cast<const ProcessData&>(rClientData);
             if(rProcessData.pPage.page)
                 static_cast<SdPage *>(rProcessData.pPage.page)->InsertPresObj(
                     pObj, PRESOBJ_PAGE );
@@ -2713,7 +2713,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                 if ( bInhabitanceChecked || bAnimationInfoFound )
                     break;
                 bInhabitanceChecked = true;
-                if ( ! ( IsProperty( DFF_Prop_hspMaster ) && SeekToShape( rSt, &rData, GetPropertyValue( DFF_Prop_hspMaster, 0 ) ) ) )
+                if ( ! ( IsProperty( DFF_Prop_hspMaster ) && SeekToShape( rSt, &rClientData, GetPropertyValue( DFF_Prop_hspMaster, 0 ) ) ) )
                     break;
                 ReadDffRecordHeader( rSt, aMasterShapeHd );
                 if ( !SeekToRec( rSt, DFF_msofbtClientData, aMasterShapeHd.GetRecEndFilePos(), &aMasterShapeHd ) )

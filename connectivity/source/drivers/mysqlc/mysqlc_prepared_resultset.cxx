@@ -170,21 +170,21 @@ sal_Bool SAL_CALL OPreparedResultSet::supportsService(const OUString& _rServiceN
 {
     return cppu::supportsService(this, _rServiceName);
 }
-OPreparedResultSet::OPreparedResultSet(OConnection& rConn, OPreparedStatement* pPrepared,
-                                       MYSQL_STMT* pStmt)
+OPreparedResultSet::OPreparedResultSet(OConnection& rConn, OPreparedStatement* pStmt,
+                                       MYSQL_STMT* pMyStmt)
     : OPreparedResultSet_BASE(m_aMutex)
     , OPropertySetHelper(OPreparedResultSet_BASE::rBHelper)
     , m_rConnection(rConn)
-    , m_aStatement(static_cast<OWeakObject*>(pPrepared))
-    , m_pStmt(pStmt)
+    , m_aStatement(static_cast<OWeakObject*>(pStmt))
+    , m_pStmt(pMyStmt)
     , m_encoding(rConn.getConnectionEncoding())
-    , m_nColumnCount(mysql_stmt_field_count(pStmt))
+    , m_nColumnCount(mysql_stmt_field_count(pMyStmt))
 {
     m_pResult = mysql_stmt_result_metadata(m_pStmt);
     if (m_pResult != nullptr)
         mysql_stmt_store_result(m_pStmt);
     m_aFields = mysql_fetch_fields(m_pResult);
-    m_nRowCount = mysql_stmt_num_rows(pStmt);
+    m_nRowCount = mysql_stmt_num_rows(pMyStmt);
 }
 
 void OPreparedResultSet::disposing()
