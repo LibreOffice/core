@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_604cfe41",
+        "filename": "basic/qa/basic_coverage/test_Property.GetLet.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-23T14:52:02Z",
+      "side": 1,
+      "message": "This would also work without any get/let things below. I\u0027d suppose that something interesting in Let should happen, so that Get returned something different than was put there?\n\nAnd for the first round, please make it fail unconditionally, to see Jenkins builds actually fail.",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 34
+      },
+      "revId": "d7c394aed88dddbb76951a2c1be392b9a4255e85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
