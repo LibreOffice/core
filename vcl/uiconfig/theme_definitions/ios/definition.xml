@@ -57,15 +57,44 @@
         <fontColor value="#000000"/>
     </style>
 
-    <!--  <state> attributes:
-            enabled="any"
-            focused="any"
-            pressed="any"
-            rollover="any"
-            default="any"
-            selected="any"
-            button-value="any"
-            extra="any"
+    <!--
+        Various setting for controls that aren't style colors.
+        Empty "value" attribute or if setting is not present means default will be used.
+    -->
+
+    <settings>
+        <noActiveTabTextRaise value="true"/>
+        <centeredTabs value="true"/>
+        <listBoxEntryMargin value="20"/>
+        <defaultFontSize value="10"/>
+        <titleHeight value="16"/>
+        <floatTitleHeight value="12"/>
+        <listBoxPreviewDefaultLogicWidth value="16"/>
+        <listBoxPreviewDefaultLogicHeight value="16"/>
+    </settings>
+
+    <!--
+    Follows the definitions od various controls.
+    The definition is always in form:
+
+    <{ControlType} attributes...>
+        <{ControlPart} attributes...>
+            <state attributes...>
+                {draw commands}
+                ...
+            </state>
+        </{ControlPart}>
+    </{ControlType}>
+
+    Supported <state> attributes are:
+        enabled="true|false|any"
+        focused="true|false|any"
+        pressed="true|false|any"
+        rollover="true|false|any"
+        default="true|false|any"
+        selected="true|false|any"
+        button-value="true|false|any"
+        extra="{various}"
     -->
 
     <pushbutton>
