@@ -214,6 +214,7 @@ static oslFileError osl_psz_getVolumeInformation (
     {
         OSL_detail_STATFS_STRUCT sfs;
         OSL_detail_STATFS_INIT(sfs);
+        // coverity[fs_check_call : FALSE]
         if ((OSL_detail_STATFS(pszDirectory, &sfs)) < (0))
         {
             oslFileError result = oslTranslateFileError(errno);
