@@ -204,7 +204,14 @@ public:
 class VCL_DLLPUBLIC WidgetDefinitionSettings
 {
 public:
+    OString msNoActiveTabTextRaise;
     OString msCenteredTabs;
+    OString msListBoxEntryMargin;
+    OString msDefaultFontSize;
+    OString msTitleHeight;
+    OString msFloatTitleHeight;
+    OString msListBoxPreviewDefaultLogicWidth;
+    OString msListBoxPreviewDefaultLogicHeight;
 };
 
 class VCL_DLLPUBLIC WidgetDefinitionStyle
