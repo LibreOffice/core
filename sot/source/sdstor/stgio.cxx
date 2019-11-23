@@ -175,9 +175,8 @@ public:
 }
 
 EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
+   : nPages(pFatStream->GetSize() >> 2), nPageSize(nPSize)
 {
-    nPages = pFatStream->GetSize() >> 2;
-    nPageSize = nPSize;
     pFat.reset( new sal_Int32[ nPages ] );
     pFree.reset( new bool[ nPages ] );
 
