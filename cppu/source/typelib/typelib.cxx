@@ -909,8 +909,9 @@ private:
     sal_Int32 members;
 };
 
-BaseList::BaseList(typelib_InterfaceTypeDescription const * desc) {
-    members = 0;
+BaseList::BaseList(typelib_InterfaceTypeDescription const * desc)
+   : members(0)
+{
     for (sal_Int32 i = 0; i < desc->nBaseTypes; ++i) {
         Set directBaseSet;
         sal_Int32 directBaseMembers = 0;

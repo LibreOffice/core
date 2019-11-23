@@ -73,17 +73,9 @@ void manageDuplicateHeaders(macabfield **_headerNames, const sal_Int32 _length)
 }
 
 MacabRecords::MacabRecords(const ABAddressBookRef _addressBook, MacabHeader *_header, MacabRecord **_records, sal_Int32 _numRecords)
+   : recordsSize(_numRecords), currentRecord(_numRecords), recordType(kABPersonRecordType),
+     header(_header), records(_records), addressBook(_addressBook)
 {
-    /* Variables passed in... */
-    header = _header;
-    recordsSize = _numRecords;
-    currentRecord = _numRecords;
-    records = _records;
-    addressBook = _addressBook;
-
-    /* Default variables... */
-    recordType = kABPersonRecordType;
-
     /* Variables constructed... */
     bootstrap_CF_types();
     bootstrap_requiredProperties();
@@ -99,18 +91,10 @@ MacabRecords::MacabRecords(const ABAddressBookRef _addressBook, MacabHeader *_he
  * header.
  */
 MacabRecords::MacabRecords(const MacabRecords *_copy)
+    : recordsSize(_copy->recordsSize), currentRecord(0), recordType(kABPersonRecordType),
+      header(nullptr), records(new MacabRecord *[recordsSize]), addressBook(_copy->addressBook),
+      m_sName(_copy->m_sName)
 {
-    /* Variables passed in... */
-    recordsSize = _copy->recordsSize;
-    addressBook = _copy->addressBook;
-    m_sName = _copy->m_sName;
-
-    /* Default variables... */
-    currentRecord = 0;
-    header = nullptr;
-    records = new MacabRecord *[recordsSize];
-    recordType = kABPersonRecordType;
-
     /* Variables constructed... */
     bootstrap_CF_types();
     bootstrap_requiredProperties();
@@ -118,17 +102,9 @@ MacabRecords::MacabRecords(const MacabRecords *_copy)
 
 
 MacabRecords::MacabRecords(const ABAddressBookRef _addressBook)
+    : recordsSize(0), currentRecord(0), recordType(kABPersonRecordType),
+      header(nullptr), records(nullptr), addressBook(_addressBook)
 {
-    /* Variables passed in... */
-    addressBook = _addressBook;
-
-    /* Default variables... */
-    recordsSize = 0;
-    currentRecord = 0;
-    records = nullptr;
-    header = nullptr;
-    recordType = kABPersonRecordType;
-
     /* Variables constructed... */
     bootstrap_CF_types();
     bootstrap_requiredProperties();
