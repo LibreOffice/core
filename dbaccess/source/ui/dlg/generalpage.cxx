@@ -115,10 +115,6 @@ namespace dbaui
                     const OUString& sURLPrefix = aTypeLoop.getURLPrefix();
                     if ( !sURLPrefix.isEmpty() )
                     {
-                        // skip mysql connection variations. It is handled in another window.
-                        if(sURLPrefix.startsWith("sdbc:mysql:") && !sURLPrefix.startsWith("sdbc:mysql:jdbc:"))
-                            continue;
-
                         OUString sDisplayName = aTypeLoop.getDisplayName();
                         if (m_xDatasourceType->find_text(sDisplayName) == -1 &&
                             approveDatasourceType(sURLPrefix, sDisplayName))
