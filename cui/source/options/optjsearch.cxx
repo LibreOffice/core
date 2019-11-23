@@ -46,9 +46,9 @@ SvxJSearchOptionsPage::SvxJSearchOptionsPage(weld::Container* pPage, weld::Dialo
     , m_xIgnorePunctuation(m_xBuilder->weld_check_button("ignorepunctuation"))
     , m_xIgnoreWhitespace(m_xBuilder->weld_check_button("ignorewhitespace"))
     , m_xIgnoreMiddleDot(m_xBuilder->weld_check_button("ignoremiddledot"))
+    , nTransliterationFlags(TransliterationFlags::NONE)
+    , bSaveOptions(true)
 {
-    bSaveOptions = true;
-    nTransliterationFlags = TransliterationFlags::NONE;
 }
 
 SvxJSearchOptionsPage::~SvxJSearchOptionsPage()

@@ -26,10 +26,10 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
     , m_xManualButton(m_xBuilder->weld_button("add"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
     , m_xCertPathList(m_xBuilder->weld_tree_view("paths"))
+    , m_sAddDialogText(m_xBuilder->weld_label("certdir")->get_label())
+    , m_sManualLabel(m_xBuilder->weld_label("manual")->get_label())
 {
     // these are just used to get translated strings
-    m_sAddDialogText = m_xBuilder->weld_label("certdir")->get_label();
-    m_sManualLabel = m_xBuilder->weld_label("manual")->get_label();
 
     m_xCertPathList->set_size_request(m_xCertPathList->get_approximate_digit_width() * 70,
                                       m_xCertPathList->get_height_rows(6));
