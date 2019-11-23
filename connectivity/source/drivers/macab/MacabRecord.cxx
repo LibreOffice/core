@@ -33,13 +33,14 @@ using namespace com::sun::star::util;
 using namespace ::dbtools;
 
 
-MacabRecord::MacabRecord()
+MacabRecord::MacabRecord() : size(0)
 {
-    size = 0;
 }
 
 
 MacabRecord::MacabRecord(const sal_Int32 _size)
+   : size(_size),
+     fields(std::make_unique<macabfield *[]>(size))
 {
     size = _size;
     fields = std::make_unique<macabfield *[]>(size);

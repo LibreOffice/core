@@ -53,9 +53,9 @@ MacabResultSet::MacabResultSet(MacabCommonStatement* pStmt)
       m_xStatement(pStmt),
       m_aMacabRecords(),
       m_nRowPos(-1),
-      m_bWasNull(true)
+      m_bWasNull(true),
+      m_sTableName(MacabAddressBook::getDefaultTableName())
 {
-    m_sTableName = MacabAddressBook::getDefaultTableName();
 }
 
 MacabResultSet::~MacabResultSet()
