@@ -54,23 +54,18 @@
 using namespace svx;
 
 ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId, vcl::Window* pParent)
-    : SfxPopupWindow(nId, pParent, "ParaLineSpacingControl", "svx/ui/paralinespacingcontrol.ui")
+    : SfxPopupWindow(nId, pParent, "ParaLineSpacingControl", "svx/ui/paralinespacingcontrol.ui"),
+      meLNSpaceUnit(MapUnit::Map100thMM),
+      mpSpacing1Button(get<PushButton>("spacing_1")),
+      mpSpacing115Button(get<PushButton>("spacing_115")),
+      mpSpacing15Button(get<PushButton>("spacing_15")),
+      mpSpacing2Button(get<PushButton>("spacing_2")),
+      mpLineDist(get<ListBox>("line_dist")),
+      mpLineDistLabel(get<FixedText>("value_label")),
+      mpLineDistAtPercentBox(get<MetricField>("percent_box")),
+      mpLineDistAtMetricBox(get<MetricField>("metric_box")),
+      mpActLineDistFld(mpLineDistAtPercentBox.get())
 {
-    mpSpacing1Button = get<PushButton>("spacing_1");
-    mpSpacing115Button = get<PushButton>("spacing_115");
-    mpSpacing15Button = get<PushButton>("spacing_15");
-    mpSpacing2Button = get<PushButton>("spacing_2");
-
-    mpLineDist = get<ListBox>("line_dist");
-
-    mpLineDistLabel = get<FixedText>("value_label");
-    mpLineDistAtPercentBox = get<MetricField>("percent_box");
-    mpLineDistAtMetricBox = get<MetricField>("metric_box");
-
-    mpActLineDistFld = mpLineDistAtPercentBox.get();
-
-    meLNSpaceUnit = MapUnit::Map100thMM;
-
     Link<Button*,void> aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
     mpSpacing1Button->SetClickHdl(aLink);
     mpSpacing115Button->SetClickHdl(aLink);

@@ -37,8 +37,6 @@ public:
 private:
     MapUnit                        meLNSpaceUnit;
 
-    VclPtr<Edit>                   mpActLineDistFld;
-
     VclPtr<PushButton>             mpSpacing1Button;
     VclPtr<PushButton>             mpSpacing115Button;
     VclPtr<PushButton>             mpSpacing15Button;
@@ -49,6 +47,7 @@ private:
     VclPtr<FixedText>              mpLineDistLabel;
     VclPtr<MetricField>            mpLineDistAtPercentBox;
     VclPtr<MetricField>            mpLineDistAtMetricBox;
+    VclPtr<Edit>                   mpActLineDistFld;
 
 private:
     /// Setup the widgets with values from the document.

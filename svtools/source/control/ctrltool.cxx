@@ -83,9 +83,8 @@ private:
 public:
                             ImplFontListFontMetric( const FontMetric& rInfo,
                                                   OutputDevice* pDev ) :
-                                FontMetric( rInfo ), mpNext(nullptr)
+                                FontMetric( rInfo ), mpDevice(pDev), mpNext(nullptr)
                             {
-                                mpDevice = pDev;
                             }
 
     OutputDevice*           GetDevice() const { return mpDevice; }

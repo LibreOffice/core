@@ -84,16 +84,11 @@ public:
 
 public:
     ImpCaptParams()
+      : eType(SdrCaptionType::Type3),
+        nGap(0), nEscRel(5000), nEscAbs(0),
+        nLineLen(0), eEscDir(SdrCaptionEscDir::Horizontal),
+        bFitLineLen(true), bEscRel(true), bFixedAngle(false)
     {
-        eType      =SdrCaptionType::Type3;
-        bFixedAngle=false;
-        nGap       =0;
-        eEscDir    =SdrCaptionEscDir::Horizontal;
-        bEscRel    =true;
-        nEscRel    =5000;
-        nEscAbs    =0;
-        nLineLen   =0;
-        bFitLineLen=true;
     }
     void CalcEscPos(const Point& rTail, const tools::Rectangle& rRect, Point& rPt, EscDir& rDir) const;
 };

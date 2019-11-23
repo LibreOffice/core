@@ -63,10 +63,10 @@ public:
 };
 
 SvxUnoColorTable::SvxUnoColorTable()
+  : pList(XPropertyList::AsColorList(
+            XPropertyList::CreatePropertyList(
+              XPropertyListType::Color, SvtPathOptions().GetPalettePath(), "")))
 {
-    pList = XPropertyList::AsColorList(
-        XPropertyList::CreatePropertyList(
-            XPropertyListType::Color, SvtPathOptions().GetPalettePath(), ""));
 }
 
 sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceName )

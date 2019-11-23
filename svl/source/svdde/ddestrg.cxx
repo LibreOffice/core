@@ -23,10 +23,9 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 DdeString::DdeString( DWORD hDdeInst, const OUString& r)
-    : m_aString(r)
+    : m_aString(r), hString(DdeCreateStringHandleW( hDdeInst, o3tl::toW(r.getStr()), CP_WINUNICODE )),
+      hInst(hDdeInst)
 {
-    hString = DdeCreateStringHandleW( hDdeInst, o3tl::toW(r.getStr()), CP_WINUNICODE );
-    hInst = hDdeInst;
 }
 
 DdeString::~DdeString()

@@ -120,7 +120,7 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
 SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_SLIDESORTERBAR )
-
+    , m_seqPropertyNames(GetPropertyNames())
     , m_bVisibleImpressView( false )
     , m_bVisibleOutlineView( false )
     , m_bVisibleNotesView( false )
@@ -129,8 +129,6 @@ SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()
     , m_bVisibleDrawView( false )
 
 {
-    m_seqPropertyNames = GetPropertyNames( );
-
     // Use our static list of configuration keys to get his values.
     Sequence< Any > seqValues = GetProperties( m_seqPropertyNames  );
 
