@@ -34,7 +34,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaRectAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <AnnotationEnumeration.hxx>

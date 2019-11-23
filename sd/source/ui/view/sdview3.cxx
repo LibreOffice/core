@@ -40,7 +40,10 @@
 #include <svx/unomodel.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <unotools/streamwrap.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaBmpAction.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpExAction.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>

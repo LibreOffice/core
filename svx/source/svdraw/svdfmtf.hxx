@@ -22,18 +22,65 @@
 
 #include <sal/config.h>
 
-#include <memory>
-
 #include <tools/contnr.hxx>
 #include <tools/fract.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaBmpExAction.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/MetaClipRegionAction.hxx>
+#include <vcl/MetaISectRectClipRegionAction.hxx>
+#include <vcl/MetaISectRegionClipRegionAction.hxx>
+#include <vcl/MetaMoveClipRegionAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaTextLanguageAction.hxx>
+#include <vcl/MetaLayoutModeAction.hxx>
+#include <vcl/MetaRefPointAction.hxx>
+#include <vcl/MetaRasterOpAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaPopAction.hxx>
+#include <vcl/MetaFontAction.hxx>
+#include <vcl/MetaTextAlignAction.hxx>
+#include <vcl/MetaOverlineColorAction.hxx>
+#include <vcl/MetaTextFillColorAction.hxx>
+#include <vcl/MetaTextLineColorAction.hxx>
+#include <vcl/MetaTextColorAction.hxx>
+
 #include <svx/svdobj.hxx>
 #include <svx/xdash.hxx>
 
+#include <memory>
+
 // Forward Declarations
 
-
+class MetaLineAction;
+class MetaRectAction;
+class MetaRoundRectAction;
+class MetaEllipseAction;
+class MetaArcAction;
+class MetaPieAction;
+class MetaChordAction;
+class MetaPolyLineAction;
+class MetaPolygonAction;
+class MetaPolyPolygonAction;
+class MetaTextAction;
+class MetaTextArrayAction;
+class MetaStretchTextAction;
+class MetaTextRectAction;
+class MetaBmpAction;
+class MetaBmpScaleAction;
+class MetaBmpScalePartAction;
+class MetaBmpExScaleAction;
+class MetaBmpExScalePartAction;
+class MetaMaskAction;
+class MetaMaskScaleAction;
+class MetaMaskScalePartAction;
+class MetaGradientAction;
+class MetaGradientExAction;
+class MetaHatchAction;
+class MetaLineColorAction;
+class MetaCommentAction;
+class MetaFloatTransparentAction;
+class MetaTransparentAction;
+class MetaMapModeAction;
 class SfxItemSet;
 class SdrObjList;
 class SdrModel;

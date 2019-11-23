@@ -92,6 +92,8 @@ public:
 
     bool            IsDefault() const;
 
+    void            Scale( double fScaleX, double fScaleY );
+
     friend SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo );
     friend SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo );
 
