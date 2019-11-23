@@ -62,14 +62,15 @@ protected:
         SfxChildAlignment eRequestedAlignment) override;
 
 private:
+
+    /// Notify LOKit that we closed and release the LOKNotifier.
+    void LOKClose();
+
+private:
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;
     bool mbIsReadyToDrag;
     std::unique_ptr<svt::AcceleratorExecute> mpAccel;
 
-    void DoDispose();
-
-    const bool mbSidebarVisibleInLOK;
-    const SfxViewShell* mpOldViewShell;
     std::unique_ptr<SidebarNotifyIdle> mpIdleNotify;
 };
 
