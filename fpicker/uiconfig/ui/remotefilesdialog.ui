@@ -51,6 +51,42 @@
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkMenu" id="service_edit_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="add_service">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="remotefilesdialog|edit_service">_Add service</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="edit_service">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="remotefilesdialog|edit_service">_Edit service</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="delete_service">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="remotefilesdialog|delete_service">_Delete service</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="change_password">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="remotefilesdialog|change_password">_Change password</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkDialog" id="RemoteFilesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -174,38 +210,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkMenuButton" id="add_service_btn">
+                <property name="label" translatable="yes" context="remotefilesdialog|add_service_btn">_Manage services</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="valign">center</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="vscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
-                <property name="propagate_natural_width">True</property>
-                <property name="propagate_natural_height">True</property>
+                <property name="use_underline">True</property>
+                <property name="draw_indicator">True</property>
+                <property name="popup">service_edit_menu</property>
+                <property name="use_popover">False</property>
                 <child>
-                  <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkToolbar" id="add_service_bar">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkMenuToolButton" id="add_service_btn">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="remotefilesdialog|add_service_btn">Add service</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -454,8 +468,6 @@
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore2</property>
-                            <property name="pixbuf_column">0</property>
-                            <property name="text_column">1</property>
                           </object>
                         </child>
                       </object>
@@ -557,33 +569,5 @@
       <action-widget response="-5">open</action-widget>
       <action-widget response="-5">save</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkMenu" id="service_edit_menu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="edit_service">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="remotefilesdialog|edit_service">_Edit service</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="delete_service">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="remotefilesdialog|delete_service">_Delete service</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="change_password">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="remotefilesdialog|change_password">_Change password</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
   </object>
 </interface>
