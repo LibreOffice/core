@@ -196,8 +196,8 @@ public:
 };
 
 SvNumberFormatterRegistry_Impl::SvNumberFormatterRegistry_Impl()
+    : eSysLanguage(MsLangId::getRealLanguage( LANGUAGE_SYSTEM ))
 {
-    eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
     aSysLocaleOptions.AddListener( this );
 }
 

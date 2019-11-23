@@ -57,12 +57,9 @@ public:
 };
 
 ImplCFieldFloatWin::ImplCFieldFloatWin( vcl::Window* pParent ) :
-    FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW  )
+    FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW  ),
+    mpCalendar(nullptr), mpTodayBtn(nullptr), mpNoneBtn(nullptr), mpFixedLine(nullptr)
 {
-    mpCalendar  = nullptr;
-    mpTodayBtn  = nullptr;
-    mpNoneBtn   = nullptr;
-    mpFixedLine = nullptr;
 }
 
 ImplCFieldFloatWin::~ImplCFieldFloatWin()
