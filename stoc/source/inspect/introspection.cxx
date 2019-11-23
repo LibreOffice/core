@@ -773,13 +773,11 @@ public:
 
 ImplIntrospectionAccess::ImplIntrospectionAccess
     ( const Any& obj, rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ )
-        : maInspectedObject( obj ), mpStaticImpl( pStaticImpl_ ) //, maAdapter()
+        : maInspectedObject( obj ), mpStaticImpl( pStaticImpl_ ) ,
+          mnLastPropertyConcept(-1), mnLastMethodConcept(-1) //, maAdapter()
 {
     // Save object as an interface if possible
     maInspectedObject >>= mxIface;
-
-    mnLastPropertyConcept = -1;
-    mnLastMethodConcept = -1;
 }
 
 Reference<XElementAccess> ImplIntrospectionAccess::getXElementAccess()

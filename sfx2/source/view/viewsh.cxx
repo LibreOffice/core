@@ -152,9 +152,8 @@ private:
 };
 
 SfxClipboardChangeListener::SfxClipboardChangeListener( SfxViewShell* pView, const uno::Reference< datatransfer::clipboard::XClipboardNotifier >& xClpbrdNtfr )
-  : m_pViewShell( nullptr ), m_xClpbrdNtfr( xClpbrdNtfr )
+  : m_pViewShell( nullptr ), m_xClpbrdNtfr( xClpbrdNtfr ), m_xCtrl(pView->GetController())
 {
-    m_xCtrl = pView->GetController();
     if ( m_xCtrl.is() )
     {
         m_xCtrl->addEventListener( uno::Reference < lang::XEventListener > ( static_cast < lang::XEventListener* >( this ) ) );

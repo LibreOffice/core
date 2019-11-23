@@ -678,7 +678,9 @@ AdapterImpl::AdapterImpl(
 
 
 FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
-    : m_pInvokMethodTD( nullptr ),
+    : m_aUno2Cpp(Mapping( UNO_LB_UNO, CPPU_CURRENT_LANGUAGE_BINDING_NAME )),
+      m_aCpp2Uno(Mapping( CPPU_CURRENT_LANGUAGE_BINDING_NAME, UNO_LB_UNO)),
+      m_pInvokMethodTD( nullptr ),
       m_pSetValueTD( nullptr ),
       m_pGetValueTD( nullptr ),
       m_pAnySeqTD( nullptr ),
@@ -686,10 +688,6 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
       m_pConvertToTD( nullptr )
 {
     // C++/UNO bridge
-    OUString aCppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    OUString aUnoEnvTypeName = UNO_LB_UNO;
-    m_aUno2Cpp = Mapping( aUnoEnvTypeName, aCppEnvTypeName );
-    m_aCpp2Uno = Mapping( aCppEnvTypeName, aUnoEnvTypeName );
     OSL_ENSURE(
         m_aUno2Cpp.is() && m_aCpp2Uno.is(), "### no uno / C++ mappings!" );
 

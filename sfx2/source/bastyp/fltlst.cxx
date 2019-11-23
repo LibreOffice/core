@@ -82,9 +82,9 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper<css::util::XRefreshList
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 SfxFilterListener::SfxFilterListener()
+    : m_xFilterCache(document::FilterConfigRefresh::create( comphelper::getProcessComponentContext() ) ),
+      m_xFilterCacheListener(new SfxRefreshListener(this))
 {
-    m_xFilterCache = document::FilterConfigRefresh::create( comphelper::getProcessComponentContext() );
-    m_xFilterCacheListener = new SfxRefreshListener(this);
     m_xFilterCache->addRefreshListener( m_xFilterCacheListener );
 }
 
