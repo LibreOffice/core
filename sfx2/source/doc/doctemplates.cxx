@@ -1071,11 +1071,8 @@ bool SfxDocTplService_Impl::getProperty(Content& rContent, const OUString& rProp
 }
 
 SfxDocTplService_Impl::SfxDocTplService_Impl( const uno::Reference< XComponentContext > & xContext )
-    : maRelocator(xContext)
+    : mxContext(xContext), mbIsInitialized(false), mbLocaleSet(false), maRelocator(xContext)
 {
-    mxContext       = xContext;
-    mbIsInitialized = false;
-    mbLocaleSet     = false;
 }
 
 
@@ -2610,10 +2607,8 @@ void SfxDocTplService_Impl::removeFromHierarchy( GroupData_Impl const *pGroup )
 
 
 GroupData_Impl::GroupData_Impl( const OUString& rTitle )
+     : maTitle(rTitle), mbInUse(false), mbInHierarchy(false)
 {
-    maTitle = rTitle;
-    mbInUse = false;
-    mbInHierarchy = false;
 }
 
 
@@ -2670,12 +2665,8 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
 
 
 DocTemplates_EntryData_Impl::DocTemplates_EntryData_Impl( const OUString& rTitle )
+     : maTitle(rTitle), mbInHierarchy(false), mbInUse(false), mbUpdateType(false), mbUpdateLink(false)
 {
-    maTitle         = rTitle;
-    mbInUse         = false;
-    mbInHierarchy   = false;
-    mbUpdateType    = false;
-    mbUpdateLink    = false;
 }
 
 }
