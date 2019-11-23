@@ -37,9 +37,15 @@
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/MetaTextAction.hxx>
+#include <vcl/MetaTextArrayAction.hxx>
+#include <vcl/MetaStretchTextAction.hxx>
+#include <vcl/MetaBmpExAction.hxx>
+#include <vcl/MetaCommentAction.hxx>
+#include <vcl/MetaFloatTransparentAction.hxx>
+#include <vcl/MetaRasterOpAction.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/graph.hxx>
 

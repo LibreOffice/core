@@ -7,13 +7,59 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/mtfxmldump.hxx>
+#include <rtl/string.hxx>
 #include <tools/XmlWriter.hxx>
 #include <tools/fract.hxx>
 
-#include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
-#include <rtl/string.hxx>
+#include <vcl/mtfxmldump.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/MetaPixelAction.hxx>
+#include <vcl/MetaPointAction.hxx>
+#include <vcl/MetaLineAction.hxx>
+#include <vcl/MetaRectAction.hxx>
+#include <vcl/MetaRoundRectAction.hxx>
+#include <vcl/MetaEllipseAction.hxx>
+#include <vcl/MetaPieAction.hxx>
+#include <vcl/MetaArcAction.hxx>
+#include <vcl/MetaChordAction.hxx>
+#include <vcl/MetaPolyLineAction.hxx>
+#include <vcl/MetaPolygonAction.hxx>
+#include <vcl/MetaPolyPolygonAction.hxx>
+#include <vcl/MetaTextAction.hxx>
+#include <vcl/MetaTextArrayAction.hxx>
+#include <vcl/MetaStretchTextAction.hxx>
+#include <vcl/MetaTextRectAction.hxx>
+#include <vcl/MetaTextLineAction.hxx>
+#include <vcl/MetaBmpAction.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpScalePartAction.hxx>
+#include <vcl/MetaBmpExAction.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
+#include <vcl/MetaBmpExScalePartAction.hxx>
+#include <vcl/MetaMaskAction.hxx>
+#include <vcl/MetaMaskScaleAction.hxx>
+#include <vcl/MetaMaskScalePartAction.hxx>
+#include <vcl/MetaGradientAction.hxx>
+#include <vcl/MetaHatchAction.hxx>
+#include <vcl/MetaWallpaperAction.hxx>
+#include <vcl/MetaClipRegionAction.hxx>
+#include <vcl/MetaISectRectClipRegionAction.hxx>
+#include <vcl/MetaISectRegionClipRegionAction.hxx>
+#include <vcl/MetaMoveClipRegionAction.hxx>
+#include <vcl/MetaLineColorAction.hxx>
+#include <vcl/MetaFillColorAction.hxx>
+#include <vcl/MetaCommentAction.hxx>
+#include <vcl/MetaTransparentAction.hxx>
+#include <vcl/MetaRasterOpAction.hxx>
+#include <vcl/MetaPushAction.hxx>
+#include <vcl/MetaFontAction.hxx>
+#include <vcl/MetaMapModeAction.hxx>
+#include <vcl/MetaTextAlignAction.hxx>
+#include <vcl/MetaOverlineColorAction.hxx>
+#include <vcl/MetaTextLineColorAction.hxx>
+#include <vcl/MetaTextFillColorAction.hxx>
+#include <vcl/MetaTextColorAction.hxx>
 
 #include <sstream>
 

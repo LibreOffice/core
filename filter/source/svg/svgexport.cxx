@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/gradient.hxx>
+
 #include "svgwriter.hxx"
 #include "svgfontexport.hxx"
 #include "svgfilter.hxx"
@@ -58,6 +60,9 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/animationexport.hxx>
 #include <svx/svdograf.hxx>
+#include <vcl/MetaBmpScaleAction.hxx>
+#include <vcl/MetaBmpExScaleAction.hxx>
+#include <vcl/MetaCommentAction.hxx>
 
 #include <memory>
 

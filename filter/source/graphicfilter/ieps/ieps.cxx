@@ -25,7 +25,8 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaCommentAction.hxx>
+#include <vcl/MetaEPSAction.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/BitmapTools.hxx>

@@ -14,7 +14,7 @@
 #include <vcl/window.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/MetaAction.hxx>
 #include <bitmapwriteaccess.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
