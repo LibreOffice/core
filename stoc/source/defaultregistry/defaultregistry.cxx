@@ -137,11 +137,8 @@ protected:
 NestedKeyImpl::NestedKeyImpl( NestedRegistryImpl* pDefaultRegistry,
                               Reference<XRegistryKey>& localKey,
                               Reference<XRegistryKey>& defaultKey )
-    : m_xRegistry(pDefaultRegistry)
+    : m_state(m_xRegistry->m_state), m_xRegistry(pDefaultRegistry), m_localKey(localKey), m_defaultKey(defaultKey)
 {
-    m_localKey = localKey;
-    m_defaultKey = defaultKey;
-
     if (m_localKey.is())
     {
         m_name = m_localKey->getKeyName();
@@ -150,8 +147,6 @@ NestedKeyImpl::NestedKeyImpl( NestedRegistryImpl* pDefaultRegistry,
     {
         m_name = m_defaultKey->getKeyName();
     }
-
-    m_state = m_xRegistry->m_state;
 }
 
 
