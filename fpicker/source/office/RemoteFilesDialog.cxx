@@ -32,8 +32,7 @@ RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     , m_xMasterPasswd( PasswordContainer::create( m_xContext ) )
     , m_bIsInExecute( false )
     , m_xCancel_btn(m_xBuilder->weld_button("cancel"))
-    , m_xAddService_bar(m_xBuilder->weld_toolbar("add_service_bar"))
-    , m_xAddService_menu(m_xBuilder->weld_menu("service_edit_menu"))
+    , m_xManageServices(m_xBuilder->weld_menu_button("add_service_btn"))
     , m_xServices_lb(m_xBuilder->weld_combo_box("services_lb"))
     , m_xPathContainer(m_xBuilder->weld_container("breadcrumb_container"))
     , m_xNewFolder(m_xBuilder->weld_button("new_folder"))
@@ -42,8 +41,6 @@ RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     , m_xFilter_lb(m_xBuilder->weld_combo_box("filter_lb"))
     , m_xName_ed(new AutocompleteEdit(m_xBuilder->weld_entry("filename")))
 {
-    m_xAddService_bar->set_item_menu("add_service_btn", m_xAddService_menu.get());
-
     m_eMode = ( nBits & PickerFlags::SaveAs ) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
     m_eType = ( nBits & PickerFlags::PathDialog ) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
     bool bMultiselection = bool( nBits & PickerFlags::MultiSelection );
@@ -112,8 +109,7 @@ RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     m_xName_ed->connect_focus_in(LINK(this, RemoteFilesDialog, FileNameGetFocusHdl));
     m_xName_ed->connect_changed(LINK(this, RemoteFilesDialog, FileNameModifyHdl));
 
-    m_xAddService_bar->connect_clicked(LINK( this, RemoteFilesDialog, AddServiceHdl));
-    m_xAddService_menu->connect_activate(LINK(this, RemoteFilesDialog, EditServiceMenuHdl));
+    m_xManageServices->connect_selected(LINK(this, RemoteFilesDialog, EditServiceMenuHdl));
 
     FillServicesListbox();
 
@@ -167,6 +163,14 @@ RemoteFilesDialog::~RemoteFilesDialog()
     batch->commit();
 }
 
+void RemoteFilesDialog::EnableExtraMenuItems(bool bEnable)
+{
+    m_xManageServices->set_item_visible("change_password", bEnable);
+    m_xManageServices->set_item_visible("edit_service", bEnable);
+    m_xManageServices->set_item_visible("delete_service", bEnable);
+    m_xManageServices->set_item_visible("change_password", bEnable);
+}
+
 short RemoteFilesDialog::run()
 {
     if (m_xServices_lb->get_count() > 0)
@@ -177,7 +181,7 @@ short RemoteFilesDialog::run()
     if (!m_bIsConnected)
     {
         m_xServices_lb->set_active(-1);
-        m_xAddService_bar->set_item_menu("add_service_btn", nullptr);
+        EnableExtraMenuItems(false);
     }
 
     m_bIsInExecute = true;
@@ -287,10 +291,10 @@ void RemoteFilesDialog::FillServicesListbox()
     if (m_xServices_lb->get_count() > 0)
     {
         m_xServices_lb->set_active(nPos);
-        m_xAddService_bar->set_item_menu("add_service_btn", m_xAddService_menu.get());
+        EnableExtraMenuItems(true);
     }
     else
-        m_xAddService_bar->set_item_menu("add_service_btn", nullptr);
+        EnableExtraMenuItems(false);
 
     EnableControls();
 }
@@ -401,7 +405,7 @@ void RemoteFilesDialog::EnableControls()
 
         if (m_xServices_lb->get_active() != -1)
         {
-            m_xAddService_menu->set_sensitive("change_password", false);
+            m_xManageServices->set_item_sensitive("change_password", false);
 
             try
             {
@@ -417,7 +421,7 @@ void RemoteFilesDialog::EnableControls()
 
                         if( aURLEntries.UserList.hasElements() )
                         {
-                            m_xAddService_menu->set_sensitive("change_password", true);
+                            m_xManageServices->set_item_sensitive("change_password", true);
                         }
                     }
                 }
@@ -451,14 +455,14 @@ void RemoteFilesDialog::EnableControls()
     }
 
     m_xPath->EnableFields( true );
-    m_xAddService_bar->set_sensitive(true);
+    m_xManageServices->set_sensitive(true);
 }
 
 void RemoteFilesDialog::DisableControls()
 {
     m_xServices_lb->set_sensitive(false);
     m_xFilter_lb->set_sensitive(false);
-    m_xAddService_bar->set_sensitive(false);
+    m_xManageServices->set_sensitive(false);
     m_xName_ed->set_sensitive(false);
     m_xContainer->set_sensitive(false);
     m_xOk_btn->set_sensitive(false);
@@ -508,7 +512,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, ListViewHdl, weld::Button&, void )
     m_xFileView->SetViewMode( eDetailedList );
 }
 
-IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl, const OString&, void )
+void RemoteFilesDialog::AddService()
 {
     PlaceEditDialog aDlg(m_xDialog.get());
     aDlg.ShowPasswordControl();
@@ -536,7 +540,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl, const OString&, void )
 
             m_xServices_lb->append_text( sPrefix + newService->GetName() );
             m_xServices_lb->set_active( m_xServices_lb->get_count() - 1 );
-            m_xAddService_bar->set_item_menu("add_service_btn", m_xAddService_menu.get());
+            EnableExtraMenuItems(true);
             SelectServiceHdl( *m_xServices_lb );
 
             m_bIsUpdated = true;
@@ -558,7 +562,7 @@ IMPL_LINK_NOARG( RemoteFilesDialog, SelectServiceHdl, weld::ComboBox&, void )
     if( nPos >= 0 )
     {
         OUString sURL = m_aServices[nPos]->GetUrl();
-        m_xAddService_bar->set_item_menu("add_service_btn", m_xAddService_menu.get());
+        EnableExtraMenuItems(true);
 
         m_bServiceChanged = true;
         OpenURL( sURL );
@@ -648,7 +652,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OString&, rIdent, void 
                 m_xServices_lb->remove( nSelected );
 
                 m_xServices_lb->set_active(-1);
-                m_xAddService_bar->set_item_menu("add_service_btn", nullptr);
+                EnableExtraMenuItems(false);
 
                 m_bIsUpdated = true;
 
@@ -699,6 +703,8 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OString&, rIdent, void 
         catch( const Exception& )
         {}
     }
+    else if( sIdent == "add_service" )
+        AddService();
 
     EnableControls();
 }

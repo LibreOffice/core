@@ -125,8 +125,7 @@ private:
 
     std::unique_ptr<weld::Button> m_xOk_btn;
     std::unique_ptr<weld::Button> m_xCancel_btn;
-    std::unique_ptr<weld::Toolbar> m_xAddService_bar;
-    std::unique_ptr<weld::Menu> m_xAddService_menu;
+    std::unique_ptr<weld::MenuButton> m_xManageServices;
     std::unique_ptr<weld::ComboBox> m_xServices_lb;
     std::unique_ptr<weld::Container> m_xPathContainer;
     std::unique_ptr<Breadcrumb> m_xPath;
@@ -153,13 +152,15 @@ private:
 
     void AddFileExtension();
 
+    void EnableExtraMenuItems(bool bEnable);
     void EnableControls();
     void DisableControls();
 
     void SavePassword(const OUString& rURL, const OUString& rUser,
                       const OUString& rPassword, bool bPersistent);
 
-    DECL_LINK ( AddServiceHdl, const OString&, void );
+    void AddService();
+
     DECL_LINK ( SelectServiceHdl, weld::ComboBox&, void );
     DECL_LINK ( EditServiceMenuHdl, const OString&, void );
 
