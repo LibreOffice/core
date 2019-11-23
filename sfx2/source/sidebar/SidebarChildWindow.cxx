@@ -33,7 +33,6 @@ SFX_IMPL_DOCKINGWINDOW_WITHID(SidebarChildWindow, SID_SIDEBAR);
 SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nId,
                                        SfxBindings* pBindings, SfxChildWinInfo* pInfo)
     : SfxChildWindow(pParentWindow, nId)
-    , mbSidebarVisibleInLOK(pInfo && (pInfo->aModule == "scalc" || pInfo->aModule == "simpress" || pInfo->aModule == "swriter"))
 {
     auto pDockWin = VclPtr<SidebarDockingWindow>::Create(
         pBindings, *this, pParentWindow, WB_STDDOCKWIN | WB_OWNERDRAWDECORATION | WB_CLIPCHILDREN
