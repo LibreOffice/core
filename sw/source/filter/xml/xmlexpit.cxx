@@ -146,15 +146,13 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                 rAttrList.AddAttribute( sName, aValue );
             }
         }
-        if( dynamic_cast<const SvXMLAttrContainerItem*>( &rItem) !=  nullptr )
+
+        if (const SvXMLAttrContainerItem *pUnknown = dynamic_cast<const SvXMLAttrContainerItem*>(&rItem))
         {
             std::unique_ptr<SvXMLNamespaceMap> pNewNamespaceMap;
             const SvXMLNamespaceMap *pNamespaceMap = &rNamespaceMap;
 
-            const SvXMLAttrContainerItem *pUnknown =
-                dynamic_cast<const SvXMLAttrContainerItem*>( &rItem  );
-
-            const sal_uInt16 nCount = pUnknown ? pUnknown->GetAttrCount() : 0;
+            const sal_uInt16 nCount = pUnknown->GetAttrCount();
             for( sal_uInt16 i=0; i < nCount; i++ )
             {
                 const OUString sPrefix( pUnknown->GetAttrPrefix( i ) );
