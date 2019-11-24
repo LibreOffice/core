@@ -42,19 +42,23 @@ namespace sfx2 { namespace sidebar {
 
 class SidebarNotifyIdle : public Idle
 {
-    SidebarDockingWindow &mrSidebarDockingWin;
+    SidebarDockingWindow& m_rSidebarDockingWin;
+    std::string m_LastNotificationMessage;
+    vcl::LOKWindowId m_LastLOKWindowId;
 
 public:
     SidebarNotifyIdle(SidebarDockingWindow &rSidebarDockingWin) :
         Idle("Sidebar notify"),
-        mrSidebarDockingWin(rSidebarDockingWin)
+        m_rSidebarDockingWin(rSidebarDockingWin),
+        m_LastNotificationMessage(),
+        m_LastLOKWindowId(0)
     {
         SetPriority(TaskPriority::POST_PAINT);
     }
 
     void Invoke() override
     {
-        auto pNotifier = mrSidebarDockingWin.GetLOKNotifier();
+        auto pNotifier = m_rSidebarDockingWin.GetLOKNotifier();
         if (!pNotifier || !comphelper::LibreOfficeKit::isActive())
             return;
 
@@ -64,19 +68,36 @@ public:
             {
                 // Mobile.
                 std::stringstream aStream;
-                boost::property_tree::write_json(aStream, mrSidebarDockingWin.DumpAsPropertyTree());
-                pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aStream.str().c_str());
+                boost::property_tree::write_json(aStream, m_rSidebarDockingWin.DumpAsPropertyTree());
+                const std::string message = aStream.str();
+                if (message != m_LastNotificationMessage)
+                {
+                    m_LastNotificationMessage = message;
+                    pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+                }
             }
             else
             {
                 // On desktop use the classic notifications.
-                std::vector<vcl::LOKPayloadItem> aItems;
-                aItems.emplace_back("type", "deck");
-                const Point pos = Point(mrSidebarDockingWin.GetOutOffXPixel(),
-                                        mrSidebarDockingWin.GetOutOffYPixel());
-                aItems.emplace_back("position", pos.toString());
-                aItems.emplace_back("size", mrSidebarDockingWin.GetSizePixel().toString());
-                pNotifier->notifyWindow(mrSidebarDockingWin.GetLOKWindowId(), "created", aItems);
+                const Point pos(m_rSidebarDockingWin.GetOutOffXPixel(),
+                                m_rSidebarDockingWin.GetOutOffYPixel());
+                const OString posMessage = pos.toString();
+                const OString sizeMessage = m_rSidebarDockingWin.GetSizePixel().toString();
+
+                const std::string message = OString(posMessage + sizeMessage).getStr();
+                const vcl::LOKWindowId lokWindowId = m_rSidebarDockingWin.GetLOKWindowId();
+
+                if (lokWindowId != m_LastLOKWindowId || message != m_LastNotificationMessage)
+                {
+                    m_LastLOKWindowId = lokWindowId;
+                    m_LastNotificationMessage = message;
+
+                    std::vector<vcl::LOKPayloadItem> aItems;
+                    aItems.emplace_back("type", "deck");
+                    aItems.emplace_back("position", posMessage);
+                    aItems.emplace_back("size", sizeMessage);
+                    pNotifier->notifyWindow(lokWindowId, "created", aItems);
+                }
             }
         }
         catch (boost::property_tree::json_parser::json_parser_error& rError)
