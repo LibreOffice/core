@@ -96,16 +96,14 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
 //  XInterface, XTypeProvider
 
 ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XComponentContext >& rxContext ) :
-    m_aConfigCategoryAccess( "/org.openoffice.Office.UI." ),
+    // Create configuration hierarchical access name
+    m_aConfigCategoryAccess( "/org.openoffice.Office.UI." + aModuleName + "/Commands/Categories"),
     m_aPropUIName( "Name" ),
     m_xGenericUICategories( rGenericUICategories ),
+    m_xConfigProvider(theDefaultProvider::get( rxContext )),
     m_bConfigAccessInitialized( false ),
     m_bCacheFilled( false )
 {
-    // Create configuration hierarchical access name
-    m_aConfigCategoryAccess += aModuleName + "/Commands/Categories";
-
-    m_xConfigProvider = theDefaultProvider::get( rxContext );
 }
 
 ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()

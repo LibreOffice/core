@@ -71,11 +71,8 @@ inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nC
 
 
 GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 nLZWDataSize ) :
-        rStream(rGIF)
+        rStream(rGIF), nBlockBufSize(0), nBitsBuf(0), nBitsBufSize(0)
 {
-    nBlockBufSize = 0;
-    nBitsBufSize = 0;
-    nBitsBuf = 0;
     rStream.WriteUChar( nLZWDataSize );
 }
 

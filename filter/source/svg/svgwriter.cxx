@@ -1690,10 +1690,10 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mrCurrentState( maContextHandler.getCurrentState() ),
     maAttributeWriter( rExport, rFontExport, mrCurrentState ),
     maTextWriter( rExport, maAttributeWriter ),
+    mpVDev(VclPtr<VirtualDevice>::Create()),
     mbClipAttrChanged( false ),
     mbIsPlaceholderShape( false )
 {
-    mpVDev = VclPtr<VirtualDevice>::Create();
     mpVDev->EnableOutput( false );
     maTargetMapMode = MapMode(MapUnit::Map100thMM);
     maTextWriter.setVirtualDevice( mpVDev, maTargetMapMode );
