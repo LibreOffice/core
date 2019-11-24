@@ -281,10 +281,10 @@ struct TagAttribute
     TagAttribute( const OUString &s_Name,
                   const OUString &s_Type ,
                   const OUString &s_Value )
+      : sName(s_Name),
+        sType(s_Type),
+        sValue(s_Value)
     {
-        sName     = s_Name;
-        sType     = s_Type;
-        sValue    = s_Value;
     }
 
     OUString sName;

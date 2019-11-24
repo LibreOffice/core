@@ -236,9 +236,8 @@ class TestDocumentHandler :
 {
 public:
     TestDocumentHandler( const Reference < XMultiServiceFactory >  &r , sal_Bool bPrint )
+      : m_bPrint(bPrint), m_xSMgr(r)
     {
-        m_xSMgr = r;
-        m_bPrint = bPrint;
     }
 
     // Error handler

@@ -64,9 +64,9 @@ class OGetThread : public osl::Thread
 public:
     OGetThread()
             :m_nOK(0),
-             m_nFails(0)
+             m_nFails(0),
+             m_sConstStr(CONST_TEST_STRING)
         {
-            m_sConstStr = CONST_TEST_STRING;
         }
 
     sal_Int32 getOK() { osl::MutexGuard g(m_mutex); return m_nOK; }
