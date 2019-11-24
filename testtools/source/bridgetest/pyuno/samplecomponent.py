@@ -28,10 +28,10 @@ g_implName = "org.openoffice.comp.pyuno.PythonTestObject"
 
 g_attribs = "RuntimeException", "Bool", "Char", "Byte", "Short", "UShort", \
             "Long", "ULong", "Hyper", "UHyper", "Float", "Double", "Enum", \
-	    "String", "Interface", "Any" , "Sequence" , "Struct"
+            "String", "Interface", "Any" , "Sequence" , "Struct"
 
 def assign( rData, bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper,\
-	      nUHyper, fFloat, fDouble, eEnum, rStr, xTest, rAny  ):
+              nUHyper, fFloat, fDouble, eEnum, rStr, xTest, rAny  ):
     rData.Bool = bBool;
     rData.Char = cChar;
     rData.Byte = nByte;
@@ -50,96 +50,96 @@ def assign( rData, bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper,\
 
 class MyRecursiveCall( XRecursiveCall, unohelper.Base ):
       def callRecursivly( xCall, nToCall ):
-	  if nToCall:
-	     xCall.callRecursivly( self, nToCall -1 )	  
-    
+          if nToCall:
+             xCall.callRecursivly( self, nToCall -1 )
+
 class SampleUnoComponent( XBridgeTestBase,XServiceInfo ):
       def __init__(self,ctx):
-	  self.__dict__["callid"] = 0
-	  self.__dict__["sequenceBroken"] = 0
+          self.__dict__["callid"] = 0
+          self.__dict__["sequenceBroken"] = 0
 
       def transportAny( self, value ):
-	  return value
+          return value
 
       def raiseException( self, ArgumentPosition, Message, Context ):
-	  raise IllegalArgumentException( Message, Context, ArgumentPosition )
-	
+          raise IllegalArgumentException( Message, Context, ArgumentPosition )
+
       def raiseRuntimeExceptionOneway(self, Message, Context ):
-	  raise RuntimeException( Message, Context )
+          raise RuntimeException( Message, Context )
 
       def setValues( self, bBool, cChar, nByte, nShort, nUShort, nLong,\
-		     nULong, nHyper, nUHyper, fFloat, fDouble, eEnum, \
-		     aString, xInterface, aAny, aSequence, aStruct ):
+                     nULong, nHyper, nUHyper, fFloat, fDouble, eEnum, \
+                     aString, xInterface, aAny, aSequence, aStruct ):
          self.__dict__["data"] = TestDataElements( bBool, cChar, nByte, nShort, nUShort, nLong,
-	                  nULong, nHyper, nUHyper, fFloat, fDouble, eEnum, aStruct, xInterface,
-			  aAny, aSequence )
-         self.__dict__["Struct"] = aStruct			  	     
+                          nULong, nHyper, nUHyper, fFloat, fDouble, eEnum, aStruct, xInterface,
+                          aAny, aSequence )
+         self.__dict__["Struct"] = aStruct
 
       def setValues2( self, bBool, cChar, nByte, nShort, nUShort, nLong, nULong,\
-		      nHyper, nUHyper, fFloat, fDouble, eEnum,		\
-		      aString, xInterface, aAny, aSequence, aStruct ):
+                      nHyper, nUHyper, fFloat, fDouble, eEnum,          \
+                      aString, xInterface, aAny, aSequence, aStruct ):
           self.__dict__["Struct"] = TestData( cChar, nByte, nShort, nUShort, nLong, nULong, nHyper,\
-	                                      nUHyper, fFloat, fDouble, eEnum, aStruct, xInterface,\
-					      aAny, aSequence )
+                                              nUHyper, fFloat, fDouble, eEnum, aStruct, xInterface,\
+                                              aAny, aSequence )
           self.__dict__["Struct"] = aStruct
-	  return bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, nULong, \
-	         nHyper, nUHyper, fFloat, fDouble, eEnum, aStruct, xInterface, aAny,	       \
-		 (aSequence[1],aSequence[0]), aStruct
-      						 
+          return bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, nULong, \
+                 nHyper, nUHyper, fFloat, fDouble, eEnum, aStruct, xInterface, aAny,           \
+                 (aSequence[1],aSequence[0]), aStruct
+
       def getValues(self, a,b,c,d,e,f,g,h, i,j,k,l,m,n):
-	  v = self.__dict__["data"]
-	  return self.__dict__["Struct"],v.Bool, v.Char, v.Byte, v.Short, v.UShort, v.Long,	\
-	         v.ULong, v.Hyper, v.UHyper, v.Float, v.Double, v.Enum, v.String, v.Interface,	\
-		 v.Any, v.Sequence, self.__dict__["Struct"]
-		 
+          v = self.__dict__["data"]
+          return self.__dict__["Struct"],v.Bool, v.Char, v.Byte, v.Short, v.UShort, v.Long,     \
+                 v.ULong, v.Hyper, v.UHyper, v.Float, v.Double, v.Enum, v.String, v.Interface,  \
+                 v.Any, v.Sequence, self.__dict__["Struct"]
+
       def call( self, callid, nWaitMUSEC ):
-	  if self.__dict__["callid"] >= callid:
-	     self.__dict__["sequenceBroken"] = 1
-	  else:
-	     self.__dict__["callid"] = callid
+          if self.__dict__["callid"] >= callid:
+             self.__dict__["sequenceBroken"] = 1
+          else:
+             self.__dict__["callid"] = callid
 
       def callOneway( self, nCallId, nWaitMUSEC ):
-	  call( nCallId, nWaitMUSEC )
-	  
+          call( nCallId, nWaitMUSEC )
+
       def sequenceOfCallTestPassed():
-	  return self.__dict__["sequenceBroken"]
+          return self.__dict__["sequenceBroken"]
 
       def startRecursiveCall( xCall , nToCall ):
-	  if nToCall:
-	     xCall.callRecursivly( MyRecursiveCall(), nToCall -1 )
+          if nToCall:
+             xCall.callRecursivly( MyRecursiveCall(), nToCall -1 )
 
       def checkExistence( self, name ):
-	  found = 0
-	  for x in g_attribs:
-	      if x == name:
-		 found = 1
-		 break
-	  if not found:
-	     raise UnknownPropertyException( "Property "+name+" is unknown", self )
-	     	 
+          found = 0
+          for x in g_attribs:
+              if x == name:
+                 found = 1
+                 break
+          if not found:
+             raise UnknownPropertyException( "Property "+name+" is unknown", self )
+
       def __setattr__( self, name, value ):
-	  checkExistence( name )
-	  self.__dict__[name] = value
-	  
+          checkExistence( name )
+          self.__dict__[name] = value
+
       def __getattr__( self, name ):
-	  checkExistence( name )
-	  return self.__dict__[name]
+          checkExistence( name )
+          return self.__dict__[name]
 
       def getSupportedServices( self ):
-	  return g_ImplementationHelper.getSupportedServices(g_implName)
+          return g_ImplementationHelper.getSupportedServices(g_implName)
       def supportsService( self, ServiceName ):
-	  return g_ImplementationHelper.supportsService( g_implName, ServiceName )
+          return g_ImplementationHelper.supportsService( g_implName, ServiceName )
       def getImplementationName(self):
-	  return g_implName
+          return g_implName
 
 
 g_ImplementationHelper.addImplementation( \
-	SampleUnoComponent,g_implName,("com.sun.star.test.bridge.PythonTestObject",),)
-	
+        SampleUnoComponent,g_implName,("com.sun.star.test.bridge.PythonTestObject",),)
+
 #g_ImplementationEntries = \
-#    unohelper.ImplementationEntry(				\
-#	      "org.openoffice.comp.SamplePythonComponent",	\
-#	      ("com.sun.star.test.bridge.PythonTestObject",),	\
-#	      SampleUnoComponent)				\
-#	   ,
+#    unohelper.ImplementationEntry(                             \
+#             "org.openoffice.comp.SamplePythonComponent",      \
+#             ("com.sun.star.test.bridge.PythonTestObject",),   \
+#             SampleUnoComponent)                               \
+#          ,
 
