@@ -1668,10 +1668,15 @@ public:
     void                        EnableMapMode( bool bEnable = true );
     bool                        IsMapModeEnabled() const { return mbMap; }
 
-    void                        SetMapMode();
-    virtual void                SetMapMode( const MapMode& rNewMapMode );
-    void                        SetRelativeMapMode( const MapMode& rNewMapMode );
-    const MapMode&              GetMapMode() const { return maMapMode; }
+    void SetMapMode();
+    void SetMapMode(const MapMode& rNewMapMode);
+    void SetRelativeMapMode(const MapMode& rNewMapMode);
+    const MapMode& GetMapMode() const { return maMapMode; }
+
+protected:
+    virtual void ImplInitMapModeObjects();
+
+public:
 
      // #i75163#
     basegfx::B2DHomMatrix       GetViewTransformation() const;
