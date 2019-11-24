@@ -2923,7 +2923,13 @@ namespace
         Image aImage(rImage);
 
         std::unique_ptr<SvMemoryStream> xMemStm(new SvMemoryStream);
-        vcl::PNGWriter aWriter(aImage.GetBitmapEx());
+
+        css::uno::Sequence<css::beans::PropertyValue> aFilterData(1);
+        aFilterData[0].Name = "Compression";
+        // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
+        aFilterData[0].Value <<= 1;
+
+        vcl::PNGWriter aWriter(aImage.GetBitmapEx(), &aFilterData);
         aWriter.Write(*xMemStm);
 
         return load_icon_from_stream(*xMemStm);
