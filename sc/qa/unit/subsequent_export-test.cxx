@@ -229,6 +229,7 @@ public:
 
     void testXltxExport();
     void testRotatedImageODS();
+    void testTdf128976();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -359,6 +360,7 @@ public:
 
     CPPUNIT_TEST(testXltxExport);
     CPPUNIT_TEST(testRotatedImageODS);
+    CPPUNIT_TEST(testTdf128976);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4552,6 +4554,27 @@ void ScExportTest::testRotatedImageODS()
     const OUString sX(sTranslate.getToken(0, ' '));
     const OUString sY(sTranslate.getToken(1, ' '));
     CPPUNIT_ASSERT(sX.endsWith("mm") && sY.endsWith("mm"));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf128976()
+{
+    ScDocShellRef xShell = loadDoc("tdf128976.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLS);
+    xShell->DoClose();
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Trying to save very small fractional default column width to XLS (where only integer values
+    // between 0 and 255 are allowed as default) resulted in negative (-1) value after correction,
+    // and was written as 65535 (invalid default width). As the result, all columns had large width
+    // when reopened: 28415 (and Excel warned about invalid format).
+    const sal_uInt16 nColumn0Width = rDoc.GetColWidth(SCCOL(0), SCTAB(0), false);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(45), nColumn0Width);
 
     xDocSh->DoClose();
 }

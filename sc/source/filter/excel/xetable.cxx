@@ -1571,9 +1571,26 @@ bool XclExpDefcolwidth::IsDefWidth( sal_uInt16 nXclColWidth ) const
     return std::abs(defaultColumnWidth - nXclColWidth) < 256.0 * 1.0 / 16.0;
 }
 
-void XclExpDefcolwidth::SetDefWidth( sal_uInt16 nXclColWidth )
+void XclExpDefcolwidth::SetDefWidth( sal_uInt16 nXclColWidth, bool bXLS )
 {
-    SetValue(nXclColWidth / 256.0);
+    double fCCh = nXclColWidth / 256.0;
+    if (bXLS)
+    {
+        const double fCorrection = lclGetCChCorrection(GetRoot());
+        const double fCorrectedCCh = fCCh - fCorrection;
+        // Now get the value which would be stored in XLS DefColWidth struct
+        double fCChRound = std::round(fCorrectedCCh);
+        // If default width was set to a value that is not representable as integral CCh between 0
+        // and 255, then just ignore that value, and use an arbitrary default. That way, the stored
+        // default might not represent the most used column width (or any used column width), but
+        // that's OK, and it just means that those columns will explicitly store their width in
+        // 1/256ths of char, and have fUserSet in their ColInfo records.
+        if (fCChRound < 0.0 || fCChRound > 255.0 || std::abs(fCChRound - fCorrectedCCh) > 1.0 / 512)
+            fCChRound = 8.0;
+        fCCh = fCChRound + fCorrection;
+    }
+
+    SetValue(fCCh);
 }
 
 void XclExpDefcolwidth::Save(XclExpStream& rStrm)
@@ -1714,7 +1731,7 @@ void XclExpColinfoBuffer::Initialize( SCROW nLastScRow )
     }
 }
 
-void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
+void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes, bool bXLS )
 {
     rXFIndexes.clear();
     rXFIndexes.reserve( maColInfos.GetSize() );
@@ -1760,7 +1777,7 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
             nMaxUsedWidth = nWidth;
         }
     }
-    maDefcolwidth.SetDefWidth( nMaxUsedWidth );
+    maDefcolwidth.SetDefWidth( nMaxUsedWidth, bXLS );
 
     // remove all default COLINFO records
     nPos = 0;
@@ -2661,7 +2678,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     maRowBfr.CreateRows( ::std::max( nFirstUnflaggedScRow, nFirstUngroupedScRow ) );
 }
 
-void XclExpCellTable::Finalize()
+void XclExpCellTable::Finalize(bool bXLS)
 {
     // Finalize multiple operations.
     maTableopBfr.Finalize();
@@ -2669,7 +2686,7 @@ void XclExpCellTable::Finalize()
     /*  Finalize column buffer. This calculates column default XF indexes from
         the XF identifiers and fills a vector with these XF indexes. */
     ScfUInt16Vec aColXFIndexes;
-    maColInfoBfr.Finalize( aColXFIndexes );
+    maColInfoBfr.Finalize( aColXFIndexes, bXLS );
 
     /*  Finalize row buffer. This calculates all cell XF indexes from the XF
         identifiers. Then the XF index vector aColXFIndexes (filled above) is
