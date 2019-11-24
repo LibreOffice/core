@@ -20,6 +20,7 @@
 #include <vcl/window.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/button.hxx>
+#include <vcl/cursor.hxx>
 #include <window.h>
 
 WaitObject::~WaitObject()
@@ -71,6 +72,20 @@ void Window::ImplRefreshFontData(bool bNewFontLists)
     OutputDevice::ImplRefreshFontData(bNewFontLists);
     for (Window* pChild = mpWindowImpl->mpFirstChild; pChild; pChild = pChild->mpWindowImpl->mpNext)
         pChild->ImplRefreshFontData(bNewFontLists);
+}
+
+void Window::SetMapMode()
+{
+    if (mpWindowImpl->mpCursor)
+        mpWindowImpl->mpCursor->ImplNew();
+    OutputDevice::SetMapMode();
+}
+
+void Window::SetMapMode(const MapMode& rNewMapMode)
+{
+    if (mpWindowImpl->mpCursor)
+        mpWindowImpl->mpCursor->ImplNew();
+    OutputDevice::SetMapMode(rNewMapMode);
 }
 
 } /* namespace vcl */
