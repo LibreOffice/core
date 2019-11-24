@@ -134,10 +134,10 @@ struct DragAndDropInfo
     bool            bDragAccepted           : 1;
 
     DragAndDropInfo()
+      : nSensibleRange(0), nCursorWidth(0), nOutlinerDropDest(0), pBackground(nullptr),
+        pField(nullptr), bVisCursor(false), bDroppedInMe(false), bStarterOfDD(false),
+        bHasValidData(false), bUndoAction(false), bOutlinerMode(false), bDragAccepted(false)
     {
-            pBackground = nullptr; bVisCursor = false; bDroppedInMe = false; bStarterOfDD = false;
-            bHasValidData = false; bUndoAction = false; bOutlinerMode = false;
-            nSensibleRange = 0; nCursorWidth = 0; pField = nullptr; nOutlinerDropDest = 0; bDragAccepted = false;
     }
     ~DragAndDropInfo()
     {
@@ -174,8 +174,8 @@ struct SpellInfo
     bool        bMultipleDoc;
     svx::SpellPortions    aLastSpellPortions;
     SpellContentSelections  aLastSpellContentSelections;
-    SpellInfo()
-        { bSpellToEnd = true; eState = EESpellState::Ok; bMultipleDoc = false; }
+    SpellInfo() : eState(EESpellState::Ok), bSpellToEnd(true), bMultipleDoc(false)
+        { }
 };
 
 // used for text conversion
@@ -195,7 +195,7 @@ struct FormatterFontMetric
     sal_uInt16 nMaxAscent;
     sal_uInt16 nMaxDescent;
 
-    FormatterFontMetric()               { nMaxAscent = 0; nMaxDescent = 0; /* nMinLeading = 0xFFFF; */ }
+    FormatterFontMetric() : nMaxAscent(0), nMaxDescent(0) { /* nMinLeading = 0xFFFF; */ }
     sal_uInt16  GetHeight() const       { return nMaxAscent+nMaxDescent; }
 };
 
