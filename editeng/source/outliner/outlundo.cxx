@@ -37,11 +37,8 @@ OutlinerUndoBase::OutlinerUndoBase( sal_uInt16 _nId, Outliner* pOutliner )
 }
 
 OutlinerUndoChangeParaFlags::OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_Int32 nPara, ParaFlag nOldFlags, ParaFlag nNewFlags )
-: OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
+: OutlinerUndoBase( OLUNDO_DEPTH, pOutliner ), mnPara(nPara), mnOldFlags(nOldFlags), mnNewFlags(nNewFlags)
 {
-    mnPara = nPara;
-    mnOldFlags = nOldFlags;
-    mnNewFlags = nNewFlags;
 }
 
 void OutlinerUndoChangeParaFlags::Undo()
@@ -99,11 +96,8 @@ void OutlinerUndoChangeParaNumberingRestart::ImplApplyData( const ParaRestartDat
 }
 
 OutlinerUndoChangeDepth::OutlinerUndoChangeDepth( Outliner* pOutliner, sal_Int32 nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth )
-    : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
+    : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner ), mnPara(nPara), mnOldDepth(nOldDepth), mnNewDepth(nNewDepth)
 {
-    mnPara = nPara;
-    mnOldDepth = nOldDepth;
-    mnNewDepth = nNewDepth;
 }
 
 void OutlinerUndoChangeDepth::Undo()
@@ -137,11 +131,9 @@ void OutlinerUndoCheckPara::Redo()
 }
 
 OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
-    : EditUndo( _nId, nullptr )
+    : EditUndo( _nId, nullptr ), pOutliner(pOut), nCount(0)
 {
     DBG_ASSERT(pOut,"Undo:No Outliner");
-    pOutliner = pOut;
-    nCount = 0;
 }
 
 
