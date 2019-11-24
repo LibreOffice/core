@@ -218,8 +218,8 @@ Reference< XInterface > Acceptor::impl_getInstance( const Reference< XMultiServi
 
 // InstanceProvider
 AccInstanceProvider::AccInstanceProvider(const Reference<XComponentContext>& rxContext)
+  : m_rContext(rxContext)
 {
-    m_rContext = rxContext;
 }
 
 AccInstanceProvider::~AccInstanceProvider()

@@ -66,26 +66,25 @@ static void lcl_AllignToPixel( Point& rPoint, OutputDevice const * pOutDev, shor
 //  class ImpEditView
 
 ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindow ) :
-    aOutArea( Point(), pEng->GetPaperSize() )
+    pEditView(pView),
+    mpViewShell(nullptr),
+    mpOtherShell(nullptr),
+    pEditEngine(pEng),
+    pOutWin(pWindow),
+    nInvMore(1),
+    nControl(EVControlBits::AUTOSCROLL | EVControlBits::ENABLEPASTE),
+    nTravelXPos(TRAVEL_X_DONTKNOW),
+    nExtraCursorFlags(GetCursorFlags::NONE),
+    nCursorBidiLevel(CURSOR_BIDILEVEL_DONTKNOW),
+    nScrollDiffX(0),
+    bReadOnly(false),
+    bClickedInSelection(false),
+    bActiveDragAndDropListener(false),
+    aOutArea( Point(), pEng->GetPaperSize() ),
+    eSelectionMode(EESelectionMode::Std),
+    eAnchorMode(EEAnchorMode::TopLeft),
+    mpEditViewCallbacks(nullptr)
 {
-    pEditView           = pView;
-    pEditEngine         = pEng;
-    pOutWin             = pWindow;
-    mpViewShell         = nullptr;
-    mpOtherShell        = nullptr;
-    nScrollDiffX        = 0;
-    nExtraCursorFlags   = GetCursorFlags::NONE;
-    nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
-    bReadOnly           = false;
-    bClickedInSelection = false;
-    eSelectionMode      = EESelectionMode::Std;
-    eAnchorMode         = EEAnchorMode::TopLeft;
-    mpEditViewCallbacks = nullptr;
-    nInvMore            = 1;
-    nTravelXPos         = TRAVEL_X_DONTKNOW;
-    nControl            = EVControlBits::AUTOSCROLL | EVControlBits::ENABLEPASTE;
-    bActiveDragAndDropListener = false;
-
     aEditSelection.Min() = pEng->GetEditDoc().GetStartPaM();
     aEditSelection.Max() = pEng->GetEditDoc().GetEndPaM();
 

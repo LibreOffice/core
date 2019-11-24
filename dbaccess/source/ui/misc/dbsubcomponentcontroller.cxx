@@ -91,8 +91,8 @@ namespace dbaui
         }
 
         explicit DataSourceHolder(const Reference< XDataSource >& _rxDataSource)
+              : m_xDataSource(_rxDataSource)
         {
-            m_xDataSource = _rxDataSource;
             Reference< XDocumentDataSource > xDocDS( m_xDataSource, UNO_QUERY );
             if ( xDocDS.is() )
                 m_xDocument = xDocDS->getDatabaseDocument();
