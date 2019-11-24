@@ -20,6 +20,7 @@
 #include <vcl/window.hxx>
 #include <vcl/waitobj.hxx>
 #include <window.h>
+#include <vcl/cursor.hxx>
 
 WaitObject::~WaitObject()
 {
@@ -55,7 +56,13 @@ void Window::ImplRefreshFontData(bool bNewFontLists)
         pChild->ImplRefreshFontData(bNewFontLists);
 }
 
-} /* namespace vcl */
+void Window::ImplInitMapModeObjects()
+{
+    OutputDevice::ImplInitMapModeObjects();
+    if (mpWindowImpl->mpCursor)
+        mpWindowImpl->mpCursor->ImplNew();
+}
 
+} /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
