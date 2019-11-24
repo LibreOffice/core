@@ -147,9 +147,9 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aArrowSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
     aToTabSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
     aFromTabSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
-    aCircleSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} )
+    aCircleSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
+    nMaxLevel(0)
 {
-    nMaxLevel = 0;
 
     aBoxSet.Put( XLineColorItem( EMPTY_OUSTRING, ScDetectiveFunc::GetArrowColor() ) );
     aBoxSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );

@@ -208,9 +208,8 @@ Section::Section( const Section& rSection )
         maEntries.push_back(std::make_unique<PropEntry>(*rEntry));
 }
 
-Section::Section( const sal_uInt8* pFMTID )
+Section::Section( const sal_uInt8* pFMTID ) : mnTextEnc(RTL_TEXTENCODING_MS_1252)
 {
-    mnTextEnc = RTL_TEXTENCODING_MS_1252;
     for ( int i = 0; i < 16; i++ )
         aFMTID[ i ] = pFMTID[ i ];
 }

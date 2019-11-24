@@ -407,9 +407,9 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmen
     mxProgressBar( rxProgressBar ),
     mbFastRowProgress( false ),
     meSheetType( eSheetType ),
+    mxSheet(getSheetFromDoc( nSheet )),
     mbHasDefWidth( false )
 {
-    mxSheet = getSheetFromDoc( nSheet );
     if( !mxSheet.is() )
         maUsedArea.aStart.SetTab( -1 );
 

@@ -40,9 +40,9 @@ using namespace xmloff::token;
 ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
+    nColCount(1),
     sVisibility(GetXMLToken(XML_VISIBLE))
 {
-    nColCount = 1;
     if ( rAttrList.is() )
     {
         for (auto &aIter : *rAttrList)
