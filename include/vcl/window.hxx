@@ -1577,6 +1577,9 @@ public:
     void SetHelpHdl(const Link<vcl::Window&, bool>& rLink);
     void SetMnemonicActivateHdl(const Link<vcl::Window&, bool>& rLink);
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);
+
+    void SetMapMode() override;
+    void SetMapMode(const MapMode& rNewMapMode) override;
 };
 
 }

@@ -1668,7 +1668,7 @@ public:
     void                        EnableMapMode( bool bEnable = true );
     bool                        IsMapModeEnabled() const { return mbMap; }
 
-    void                        SetMapMode();
+    virtual void                SetMapMode();
     virtual void                SetMapMode( const MapMode& rNewMapMode );
     void                        SetRelativeMapMode( const MapMode& rNewMapMode );
     const MapMode&              GetMapMode() const { return maMapMode; }
