@@ -897,7 +897,7 @@ uno::Reference< XSpellAlternatives >
     SwCursorMoveState eTmpState( MV_SETONLYTEXT );
     SwTextNode *pNode = nullptr;
     SwWrongList *pWrong = nullptr;
-    if (pPt && GetLayout()->GetCursorOfst( &aPos, *(const_cast<Point*>(pPt)), &eTmpState ))
+    if (pPt && GetLayout()->GetCursorOfst( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
         pNode = aPos.nNode.GetNode().GetTextNode();
     if (nullptr == pNode)
         pNode = pCursor->GetNode().GetTextNode();
@@ -964,7 +964,7 @@ bool SwEditShell::GetGrammarCorrection(
     SwCursorMoveState eTmpState( MV_SETONLYTEXT );
     SwTextNode *pNode = nullptr;
     SwGrammarMarkUp *pWrong = nullptr;
-    if (pPt && GetLayout()->GetCursorOfst( &aPos, *(const_cast<Point*>(pPt)), &eTmpState ))
+    if (pPt && GetLayout()->GetCursorOfst( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
         pNode = aPos.nNode.GetNode().GetTextNode();
     if (nullptr == pNode)
         pNode = pCursor->GetNode().GetTextNode();
