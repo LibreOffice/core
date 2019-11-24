@@ -50,10 +50,10 @@ sal_Bool operator == ( const Locale &rL1, const Locale &rL2 )
 
 
 SpellChecker::SpellChecker() :
-    aEvtListeners   ( GetLinguMutex() )
+    aEvtListeners   ( GetLinguMutex() ),
+    pPropHelper(NULL),
+    bDisposing(sal_False)
 {
-    bDisposing = sal_False;
-    pPropHelper = NULL;
 }
 
 

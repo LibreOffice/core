@@ -277,10 +277,10 @@ GrammarCheckingIterator::GrammarCheckingIterator() :
     m_aCurCheckedDocId(),
     m_bGCServicesChecked( false ),
     m_nDocIdCounter( 0 ),
+    m_thread(nullptr),
     m_aEventListeners( MyMutex::get() ),
     m_aNotifyListeners( MyMutex::get() )
 {
-    m_thread = nullptr;
 }
 
 

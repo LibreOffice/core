@@ -149,23 +149,19 @@ ConvDic::ConvDic(
         sal_Int16 nConvType,
         bool bBiDirectional,
         const OUString &rMainURL) :
-    aFlushListeners( GetLinguMutex() )
-{
-    aName           = rName;
-    nLanguage       = nLang;
-    nConversionType = nConvType;
-    aMainURL        = rMainURL;
+    aFlushListeners( GetLinguMutex() ),
+    aMainURL(rMainURL), aName(rName), nLanguage(nLang),
+    nConversionType(nConvType),
+    nMaxLeftCharCount(0), nMaxRightCharCount(0),
+    bMaxCharCountIsValid(true),
+    bNeedEntries(true),
+    bIsModified(false), bIsActive(false)
 
+{
     if (bBiDirectional)
         pFromRight.reset( new ConvMap );
     if (nLang == LANGUAGE_CHINESE_SIMPLIFIED || nLang == LANGUAGE_CHINESE_TRADITIONAL)
         pConvPropType.reset( new PropTypeMap );
-
-    nMaxLeftCharCount = nMaxRightCharCount = 0;
-    bMaxCharCountIsValid = true;
-
-    bNeedEntries = true;
-    bIsModified  = bIsActive = false;
 
     if( !rMainURL.isEmpty() )
     {

@@ -142,9 +142,9 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, std::unique_ptr<LtcBenContaine
 class CBenIDListElmt : public CUtListElmt
 {
 public: // Internal methods
-    CBenIDListElmt(BenObjectID ID, CUtListElmt * pPrev) : CUtListElmt(pPrev)
-      { cID = ID; }
-    explicit CBenIDListElmt(BenObjectID ID) { cID = ID; }
+    CBenIDListElmt(BenObjectID ID, CUtListElmt * pPrev) : CUtListElmt(pPrev), cID(ID)
+      { }
+    explicit CBenIDListElmt(BenObjectID ID) : cID(ID) { }
     BenObjectID GetID() const { return cID; }
 
 private: // Data

@@ -55,9 +55,8 @@ class WriteToStreamThread :
 public:
 
     WriteToStreamThread( Reference< XOutputStream >  xOutput , int iMax )
+      : m_output(xOutput), m_iMax(iMax)
     {
-        m_output = xOutput;
-        m_iMax = iMax;
     }
 
     virtual ~WriteToStreamThread() {}

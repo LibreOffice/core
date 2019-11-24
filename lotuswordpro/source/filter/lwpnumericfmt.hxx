@@ -102,21 +102,15 @@ struct LwpCurrencyInfo
     bool bPost;
     bool bShowSpace;
     explicit LwpCurrencyInfo(const OUString& sSym)
+      : sSymbol(sSym), bPost(false), bShowSpace(false)
     {
-        sSymbol = sSym;
-        bPost = false;
-        bShowSpace = false;
     }
-    LwpCurrencyInfo()
+    LwpCurrencyInfo() : bPost(false), bShowSpace(false)
     {
-        bPost = false;
-        bShowSpace = false;
     }
     LwpCurrencyInfo(const OUString& sSym, bool bPost_, bool bShowSpace_)
+        : sSymbol(sSym), bPost(bPost_), bShowSpace(bShowSpace_)
     {
-        sSymbol = sSym;
-        bPost = bPost_;
-        bShowSpace = bShowSpace_;
     }
 };
 

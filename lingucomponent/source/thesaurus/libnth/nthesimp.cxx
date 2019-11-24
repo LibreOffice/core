@@ -72,11 +72,9 @@ static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 }
 
 Thesaurus::Thesaurus() :
-    aEvtListeners   ( GetLinguMutex() )
+    aEvtListeners   ( GetLinguMutex() ), pPropHelper(nullptr), bDisposing(false),
+    prevLocale(LANGUAGE_DONTKNOW)
 {
-    bDisposing = false;
-    pPropHelper = nullptr;
-    prevLocale = LANGUAGE_DONTKNOW;
 }
 
 Thesaurus::~Thesaurus()

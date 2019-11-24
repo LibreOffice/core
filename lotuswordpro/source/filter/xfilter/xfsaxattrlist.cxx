@@ -60,9 +60,8 @@
 #include "xfsaxattrlist.hxx"
 #include <xmloff/attrlist.hxx>
 
-XFSaxAttrList::XFSaxAttrList()
+XFSaxAttrList::XFSaxAttrList() : m_xSvAttrList(new SvXMLAttributeList())
 {
-    m_xSvAttrList = new SvXMLAttributeList();
 }
 
 XFSaxAttrList::~XFSaxAttrList()

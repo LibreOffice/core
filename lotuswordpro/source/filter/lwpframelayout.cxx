@@ -1133,10 +1133,8 @@ void LwpGroupFrame::XFConvert(XFContentContainer* /*pCont*/)
 }
 
 LwpDropcapLayout::LwpDropcapLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
-    : LwpFrameLayout(objHdr, pStrm)
+    : LwpFrameLayout(objHdr, pStrm), m_nLines(3), m_nChars(1)
 {
-    m_nChars = 1;
-    m_nLines = 3;
 }
 
 void LwpDropcapLayout::Read()

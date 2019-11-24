@@ -63,21 +63,17 @@
 #include <lwptools.hxx>
 
 LwpBorderStuff::LwpBorderStuff()
+  : m_nSides(0), m_nValid(0),
+    m_nBorderGroupIDLeft(0),
+    m_nBorderGroupIDRight(0),
+    m_nBorderGroupIDTop(0),
+    m_nBorderGroupIDBottom(0),
+    m_nGroupIndent(0),
+    m_nWidthLeft(0),
+    m_nWidthTop(0),
+    m_nWidthRight(0),
+    m_nWidthBottom(0)
 {
-    m_nSides = 0;
-    m_nValid = 0;
-
-    m_nBorderGroupIDLeft = 0;
-    m_nBorderGroupIDRight = 0;
-    m_nBorderGroupIDTop = 0;
-    m_nBorderGroupIDBottom = 0;
-
-    m_nGroupIndent = 0;
-
-    m_nWidthLeft = 0;
-    m_nWidthTop = 0;
-    m_nWidthRight = 0;
-    m_nWidthBottom = 0;
 }
 
 void    LwpBorderStuff::Read(LwpObjectStream *pStrm)

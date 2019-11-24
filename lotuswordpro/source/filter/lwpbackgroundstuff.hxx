@@ -139,9 +139,8 @@ class XFBGImage;
 class LwpBackgroundStuff
 {
 public:
-    LwpBackgroundStuff()
+    LwpBackgroundStuff() :  m_nID(0)
     {
-        m_nID = 0;
     }
 
 private:

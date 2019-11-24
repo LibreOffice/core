@@ -105,10 +105,8 @@ struct HwpReaderPrivate
     int nPnPos;
 };
 
-HwpReader::HwpReader()
+HwpReader::HwpReader() : mxList(new AttributeListImpl), d(new HwpReaderPrivate)
 {
-    mxList = new AttributeListImpl;
-    d.reset( new HwpReaderPrivate );
 }
 
 

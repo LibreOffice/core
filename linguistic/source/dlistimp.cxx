@@ -102,10 +102,9 @@ public:
 DicEvtListenerHelper::DicEvtListenerHelper(
         const uno::Reference< XDictionaryList > &rxDicList ) :
     aDicListEvtListeners    ( GetLinguMutex() ),
-    xMyDicList              ( rxDicList )
+    xMyDicList              ( rxDicList ),
+    nCondensedEvt(0), nNumCollectEvtListeners(0)
 {
-    nCondensedEvt   = 0;
-    nNumCollectEvtListeners = 0;
 }
 
 

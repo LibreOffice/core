@@ -137,7 +137,7 @@ private:
     sal_Int32 day;    // 1..LastDayOfHebrewMonth(month, year)
 
 public:
-    HebrewDate(sal_Int32 m, sal_Int32 d, sal_Int32 y) { month = m; day = d; year = y; }
+    HebrewDate(sal_Int32 m, sal_Int32 d, sal_Int32 y) : year(y), month(m), day(d) { }
 
     explicit HebrewDate(sal_Int32 d) { // Computes the Hebrew date from the absolute date.
     year = (d + HebrewEpoch) / 366; // Approximation from below.

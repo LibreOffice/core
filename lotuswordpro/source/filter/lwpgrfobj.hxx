@@ -77,13 +77,13 @@ struct ImageProcessingData
     bool bInvertImage;
 
     ImageProcessingData()
+      : nBrightness(50),
+        nContrast(50),
+        nEdgeEnchancement(0),
+        nSmoothing(0),
+        bAutoContrast(false),
+        bInvertImage(false)
     {
-        nBrightness = 50;
-        nContrast = 50;
-        nEdgeEnchancement = 0;
-        nSmoothing = 0;
-        bAutoContrast = false;
-        bInvertImage= false;
     }
 };
 

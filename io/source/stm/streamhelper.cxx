@@ -46,12 +46,8 @@ void MemFIFO::skip( sal_Int32 nBytesToSkip )
     forgetFromStart( nBytesToSkip );
 }
 
-MemRingBuffer::MemRingBuffer()
+MemRingBuffer::MemRingBuffer() : m_p(nullptr), m_nBufferLen(0), m_nStart(0), m_nOccupiedBuffer(0)
 {
-    m_nBufferLen            = 0;
-    m_p                     = nullptr;
-    m_nStart                = 0;
-    m_nOccupiedBuffer       = 0;
 }
 
 MemRingBuffer::~MemRingBuffer()
