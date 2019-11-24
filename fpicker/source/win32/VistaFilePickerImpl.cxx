@@ -187,10 +187,10 @@ VistaFilePickerImpl::VistaFilePickerImpl()
     , m_iEventHandler(new VistaFilePickerEventHandler(this))
     , m_bInExecute   (false)
     , m_bWasExecuted (false)
+    , m_hParentWindow(choose_parent_window())
     , m_sDirectory   ()
     , m_sFilename    ()
 {
-    m_hParentWindow = choose_parent_window();
 }
 
 

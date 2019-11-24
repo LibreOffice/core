@@ -153,20 +153,16 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 //  XInterface, XTypeProvider
 
 ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
-    m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS ),
-    m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS ),
+    // Create configuration hierarchical access name
+    m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS + aModuleName + "/UserInterface/Commands"),
+    m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS + aModuleName + "/UserInterface/Popups"),
     m_aPropProperties( "Properties" ),
     m_xGenericUICommands( rGenericUICommands ),
+    m_xConfigProvider( theDefaultProvider::get( rxContext ) ),
     m_bConfigAccessInitialized( false ),
     m_bCacheFilled( false ),
     m_bGenericDataRetrieved( false )
 {
-    // Create configuration hierarchical access name
-    m_aConfigCmdAccess += aModuleName + "/UserInterface/Commands";
-
-    m_xConfigProvider = theDefaultProvider::get( rxContext );
-
-    m_aConfigPopupAccess += aModuleName + "/UserInterface/Popups";
 }
 
 ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()

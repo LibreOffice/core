@@ -429,7 +429,7 @@ public:
 OS2METReader::OS2METReader()
     : ErrorCode(0)
     , pOS2MET(nullptr)
-    , pVirDev(nullptr)
+    , pVirDev(VclPtr<VirtualDevice>::Create())
     , aBoundingRect()
     , aCalcBndRect()
     , aGlobMapMode()
@@ -445,7 +445,6 @@ OS2METReader::OS2METReader()
     , aAttr()
     , pAttrStack(nullptr)
 {
-    pVirDev = VclPtr<VirtualDevice>::Create();
     pVirDev->EnableOutput(false);
 }
 
