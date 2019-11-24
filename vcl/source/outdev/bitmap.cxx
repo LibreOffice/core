@@ -675,6 +675,8 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
                         mpAlphaVDev->BlendBitmap(aTR, rAlpha);
                         return;
                     }
+                    else if (mpGraphics->DrawAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, this))
+                       return;
                 }
             }
             else
