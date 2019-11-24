@@ -105,10 +105,10 @@ struct FieldEntry
     OUString    aFieldUrl;
 
     FieldEntry( sal_uInt32 nType, sal_uInt32 nStart, sal_uInt32 nEnd )
+      : nFieldType(nType),
+        nFieldStartPos(nStart),
+        nFieldEndPos(nEnd)
     {
-        nFieldType = nType;
-        nFieldStartPos = nStart;
-        nFieldEndPos = nEnd;
     }
 };
 

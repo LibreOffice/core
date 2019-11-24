@@ -1260,11 +1260,11 @@ struct ImplTextObj
 };
 
 ImplTextObj::ImplTextObj( int nInstance )
-  : maList()
+  : mnTextSize(0),
+    mnInstance(nInstance),
+    maList(),
+    mbHasExtendedBullets(false)
 {
-    mnTextSize = 0;
-    mnInstance = nInstance;
-    mbHasExtendedBullets = false;
 }
 
 TextObj::TextObj( css::uno::Reference< css::text::XSimpleText > const & rXTextRef,

@@ -65,8 +65,8 @@ private:
 public:
 
     explicit BrowseNodeAggregator( const Reference< browse::XBrowseNode >& node )
+        : m_Name(node->getName())
     {
-        m_Name = node->getName();
         m_Nodes.resize( 1 );
         m_Nodes[ 0 ] = node;
     }
@@ -166,9 +166,8 @@ private:
 public:
 
     explicit LocationBrowseNode( const Reference< browse::XBrowseNode >& node )
+        : m_sNodeName(node->getName())
     {
-        m_sNodeName = node->getName();
-        m_hBNA = nullptr;
         m_origNode.set( node );
     }
 

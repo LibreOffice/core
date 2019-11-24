@@ -31,16 +31,16 @@ struct GroupEntry
     css::uno::Reference< css::container::XIndexAccess >           mXIndexAccess;
 
     explicit GroupEntry( css::uno::Reference< css::container::XIndexAccess > const & rIndex )
+      : mnCurrentPos(0),
+        mnCount(mXIndexAccess->getCount()),
+        mXIndexAccess(rIndex)
     {
-        mXIndexAccess = rIndex;
-        mnCount =mXIndexAccess->getCount();
-        mnCurrentPos = 0;
     };
 
     explicit GroupEntry( sal_uInt32 nCount )
+      :  mnCurrentPos(0),
+         mnCount(nCount)
     {
-        mnCount = nCount;
-        mnCurrentPos = 0;
     };
 };
 

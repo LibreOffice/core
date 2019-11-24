@@ -87,6 +87,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     mpQueryParam(new ScQueryParam),
     sDatabaseRangeName(STR_DB_LOCAL_NONAME),
     aSortSequence(),
+    nSourceType(sheet::DataImportMode_NONE),
     nRefresh(0),
     nSubTotalsUserListIndex(0),
     mbValidRange(true),
@@ -109,7 +110,6 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bByRow(false),
     meRangeType(ScDBCollection::GlobalNamed)
 {
-    nSourceType = sheet::DataImportMode_NONE;
     if( rAttrList.is() )
     {
         for( auto &aIter : *rAttrList )

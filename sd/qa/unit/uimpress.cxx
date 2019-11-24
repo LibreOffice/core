@@ -50,8 +50,8 @@ private:
 };
 
 Test::Test()
+    : m_xContext(cppu::defaultBootstrap_InitialComponentContext())
 {
-    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
 
     uno::Reference<lang::XMultiComponentFactory> xFactory(m_xContext->getServiceManager());
     uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);

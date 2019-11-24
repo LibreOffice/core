@@ -290,10 +290,10 @@ ScXMLConditionContext::ScXMLConditionContext(
     ScXMLImportContext( rImport ),
     mrQueryParam(rParam),
     pFilterContext(pTempFilterContext),
+    sDataType(GetXMLToken(XML_TEXT)),
     nField(0),
     bIsCaseSensitive(false)
 {
-    sDataType = GetXMLToken(XML_TEXT);
 
     if ( rAttrList.is() )
     {

@@ -177,14 +177,14 @@ OUString HtmlState::Flush()
 
 // c'tor with default color for the page
 HtmlState::HtmlState( Color aDefColor )
+  : mbColor(false),
+    mbWeight(false),
+    mbItalic(false),
+    mbUnderline(false),
+    mbStrike(false),
+    mbLink(false),
+    maDefColor(aDefColor)
 {
-    mbColor = false;
-    mbWeight = false;
-    mbItalic = false;
-    mbUnderline = false;
-    mbLink = false;
-    mbStrike = false;
-    maDefColor = aDefColor;
 }
 
 // enables/disables bold print
@@ -3097,10 +3097,8 @@ OUString HtmlExport::GetButtonName( int nButton )
     return OUString::createFromAscii(pButtonNames[nButton]);
 }
 
-EasyFile::EasyFile()
+EasyFile::EasyFile() : bOpen(false)
 {
-    pOStm = nullptr;
-    bOpen = false;
 }
 
 EasyFile::~EasyFile()
