@@ -1673,6 +1673,10 @@ public:
     void                        SetRelativeMapMode( const MapMode& rNewMapMode );
     const MapMode&              GetMapMode() const { return maMapMode; }
 
+protected:
+    virtual void ImplInitMapModeObjects();
+
+public:
      // #i75163#
     basegfx::B2DHomMatrix       GetViewTransformation() const;
     basegfx::B2DHomMatrix       GetInverseViewTransformation() const;

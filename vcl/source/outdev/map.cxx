@@ -666,11 +666,7 @@ void OutputDevice::SetMapMode()
         // create new objects (clip region are not re-scaled)
         mbNewFont   = true;
         mbInitFont  = true;
-        if ( GetOutDevType() == OUTDEV_WINDOW )
-        {
-            if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor )
-                static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor->ImplNew();
-        }
+        ImplInitMapModeObjects();
 
         // #106426# Adapt logical offset when changing mapmode
         mnOutOffLogicX = mnOutOffOrigX; // no mapping -> equal offsets
@@ -760,11 +756,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     // create new objects (clip region are not re-scaled)
     mbNewFont   = true;
     mbInitFont  = true;
-    if ( GetOutDevType() == OUTDEV_WINDOW )
-    {
-        if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor )
-            static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor->ImplNew();
-    }
+    ImplInitMapModeObjects();
 
     // #106426# Adapt logical offset when changing mapmode
     mnOutOffLogicX = ImplPixelToLogic( mnOutOffOrigX, mnDPIX,
@@ -777,6 +769,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     // #i75163#
     ImplInvalidateViewTransform();
 }
+
+void OutputDevice::ImplInitMapModeObjects() {}
 
 void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
 {
