@@ -357,15 +357,13 @@ OUString LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
     return OUString::number(m_dVal);
 }
 
-LwpFormulaText::LwpFormulaText( const OUString& aText)
+LwpFormulaText::LwpFormulaText( const OUString& aText) : m_aText(aText)
 {
-    m_aText = aText;
 }
 
 LwpFormulaCellAddr::LwpFormulaCellAddr(sal_Int16 aCol, sal_Int16 aRow)
+  : m_aCol(aCol), m_aRow(aRow)
 {
-    m_aCol = aCol;
-    m_aRow = aRow;
 }
 
 OUString LwpFormulaCellAddr::ToString(LwpTableLayout* pCellsMap)
@@ -378,11 +376,9 @@ LwpFormulaCellRangeAddr::LwpFormulaCellRangeAddr(sal_Int16 aStartCol,
                                                  sal_Int16 aStartRow,
                                                  sal_Int16 aEndCol,
                                                  sal_Int16 aEndRow)
+  : m_aStartCol(aStartCol), m_aStartRow(aStartRow),
+    m_aEndCol(aEndCol), m_aEndRow(aEndRow)
 {
-    m_aStartCol = aStartCol;
-    m_aStartRow = aStartRow;
-    m_aEndCol = aEndCol;
-    m_aEndRow = aEndRow;
 }
 
 /**
@@ -397,9 +393,8 @@ OUString LwpFormulaCellRangeAddr::ToString(LwpTableLayout* pCellsMap)
     return aCellAddr;
 }
 
-LwpFormulaFunc::LwpFormulaFunc(sal_uInt16 nTokenType)
+LwpFormulaFunc::LwpFormulaFunc(sal_uInt16 nTokenType) : m_nTokenType(nTokenType)
 {
-    m_nTokenType = nTokenType;
 }
 
 LwpFormulaFunc::~LwpFormulaFunc()

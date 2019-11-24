@@ -57,13 +57,13 @@ PropertyChgHelper::PropertyChgHelper(
 
 
 PropertyChgHelper::PropertyChgHelper( const PropertyChgHelper &rHelper ) :
-    aLngSvcEvtListeners (GetLinguMutex())
+    aPropNames(rHelper.aPropNames),
+    xMyEvtObj(rHelper.xMyEvtObj),
+    aLngSvcEvtListeners (GetLinguMutex()),
+    xPropSet(rHelper.xPropSet)
 {
-    xPropSet    = rHelper.xPropSet;
-    aPropNames  = rHelper.aPropNames;
     AddAsPropListener();
 
-    xMyEvtObj   = rHelper.xMyEvtObj;
 }
 
 

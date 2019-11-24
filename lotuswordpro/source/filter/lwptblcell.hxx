@@ -246,9 +246,8 @@ private:
 };
 
 inline
-LwpRowColumnQualifier::LwpRowColumnQualifier()
+LwpRowColumnQualifier::LwpRowColumnQualifier() : cFlags(0)
 {
-    cFlags = 0;
 }
 
 inline bool

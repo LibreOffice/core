@@ -394,14 +394,14 @@ void LwpLayoutShadow::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpLayoutRelativityGuts::LwpLayoutRelativityGuts()
+  : m_nRelType(LAY_PARENT_RELATIVE),
+    m_nRelFromWhere(LAY_UPPERLEFT),
+    m_nTether(LAY_UPPERLEFT),
+    m_nTetherWhere(LAY_BORDER),
+    m_nFlags(0)
 {
-    m_nRelType = LAY_PARENT_RELATIVE;
-    m_nRelFromWhere = LAY_UPPERLEFT;
     m_RelDistance.SetX(0);
     m_RelDistance.SetY(0);
-    m_nTether = LAY_UPPERLEFT;
-    m_nTetherWhere = LAY_BORDER;
-    m_nFlags = 0;
 }
 /**************************************************************************
  * @descr: Read LayoutRelativityGuts' information.

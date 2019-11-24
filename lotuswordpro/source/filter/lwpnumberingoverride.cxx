@@ -62,9 +62,8 @@
 #include <lwpobjstrm.hxx>
 
 LwpNumberingOverride::LwpNumberingOverride()
+  : m_nLevel(0), m_nPosition(0)
 {
-    m_nLevel = 0;
-    m_nPosition = 0;
 }
 
 LwpNumberingOverride::LwpNumberingOverride(LwpNumberingOverride const& rOther)

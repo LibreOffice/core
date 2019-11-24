@@ -99,10 +99,9 @@ class ConvDicXMLDictionaryContext_Impl :
 
 public:
     ConvDicXMLDictionaryContext_Impl( ConvDicXMLImport &rImport ) :
-        ConvDicXMLImportContext( rImport )
+        ConvDicXMLImportContext( rImport ),
+        nLanguage(LANGUAGE_NONE), nConversionType(-1)
     {
-        nLanguage = LANGUAGE_NONE;
-        nConversionType = -1;
     }
 
     // SvXMLImportContext
@@ -347,10 +346,8 @@ void ConvDicXMLExport::ExportContent_()
     //!!  see comment for pDic member
 ConvDicXMLImport::ConvDicXMLImport( ConvDic *pConvDic ) :
     SvXMLImport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLImport", SvXMLImportFlags::ALL ),
-    pDic        ( pConvDic )
+    pDic        ( pConvDic ), nLanguage(LANGUAGE_NONE), nConversionType(-1)
 {
-    nLanguage       = LANGUAGE_NONE;
-    nConversionType = -1;
     GetNamespaceMap().Add( GetXMLToken(XML_NP_TCD), GetXMLToken(XML_N_TCD), XML_NAMESPACE_TCD);
 }
 

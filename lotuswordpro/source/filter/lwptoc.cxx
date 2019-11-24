@@ -434,10 +434,9 @@ LwpTocLevelData * LwpTocSuperLayout::GetNextSearchLevelPtr(sal_uInt16 index, Lwp
     return nullptr;
 }
 
-LwpTocLevelData::LwpTocLevelData(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
+LwpTocLevelData::LwpTocLevelData(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+  : LwpDLVList(objHdr, pStrm), m_nFlags(0), m_nLevel(0)
 {
-    m_nFlags = 0;
-    m_nLevel = 0;
 }
 LwpTocLevelData::~LwpTocLevelData()
 {

@@ -27,10 +27,8 @@ namespace {
 struct TagAttribute
 {
     TagAttribute( const OUString &rName, const OUString &rType , const OUString &rValue )
+       : sName(rName), sType(rType), sValue(rValue)
     {
-        sName     = rName;
-        sType     = rType;
-        sValue    = rValue;
     }
 
     OUString sName;
