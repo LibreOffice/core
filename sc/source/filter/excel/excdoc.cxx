@@ -692,7 +692,7 @@ void ExcTable::Write( XclExpStream& rStrm )
 {
     SetCurrScTab( mnScTab );
     if( mxCellTable.get() )
-        mxCellTable->Finalize();
+        mxCellTable->Finalize(true);
     aRecList.Save( rStrm );
 }
 
@@ -703,7 +703,7 @@ void ExcTable::WriteXml( XclExpXmlStream& rStrm )
         // header export.
         SetCurrScTab(mnScTab);
         if (mxCellTable)
-            mxCellTable->Finalize();
+            mxCellTable->Finalize(false);
         aRecList.SaveXml(rStrm);
 
         return;
@@ -723,7 +723,7 @@ void ExcTable::WriteXml( XclExpXmlStream& rStrm )
 
     SetCurrScTab( mnScTab );
     if (mxCellTable)
-        mxCellTable->Finalize();
+        mxCellTable->Finalize(false);
     aRecList.SaveXml( rStrm );
 
     XclExpXmlPivotTables* pPT = GetXmlPivotTableManager().GetTablesBySheet(mnScTab);

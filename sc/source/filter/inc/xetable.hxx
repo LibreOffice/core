@@ -685,7 +685,7 @@ public:
     bool                IsDefWidth( sal_uInt16 nXclColWidth ) const;
 
     /** Sets the passed column width (in 1/256 character width) as default width. */
-    void                SetDefWidth( sal_uInt16 nXclColWidth );
+    void                SetDefWidth( sal_uInt16 nXclColWidth, bool bXLS );
 
     virtual void        Save(XclExpStream& rStrm) override;
 };
@@ -756,7 +756,7 @@ public:
     void                Initialize( SCROW nLastScRow );
     /** Converts the XF identifiers into the Excel XF indexes and merges equal columns.
         @param rXFIndexes  Returns the final XF indexes of all columns. */
-    void                Finalize( ScfUInt16Vec& rXFIndexes );
+    void                Finalize( ScfUInt16Vec& rXFIndexes, bool bXLS );
 
     /** Writes all COLINFO records of this buffer. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -978,7 +978,7 @@ public:
     explicit            XclExpCellTable( const XclExpRoot& rRoot );
 
     /** Converts all XF identifiers into the Excel XF indexes and calculates default formats. */
-    void                Finalize();
+    void                Finalize(bool bXLS);
 
     /** Returns the reference to an internal record specified by the passed record id.
         @param nRecId  The record identifier that specifies which record is
