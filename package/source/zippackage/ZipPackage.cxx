@@ -1157,9 +1157,8 @@ namespace
     private:
         rtlRandomPool m_aRandomPool;
     public:
-        RandomPool()
+        RandomPool() : m_aRandomPool(rtl_random_createPool ())
         {
-            m_aRandomPool = rtl_random_createPool ();
         }
         rtlRandomPool get()
         {

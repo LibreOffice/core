@@ -283,10 +283,9 @@ void SAL_CALL CallbackDocumentHandler::characters( const OUString& aChars )
         m_xDocumentHandler->characters( aChars );
 }
 
-SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new NamespaceHandler )
+SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new NamespaceHandler ),
+  m_xParser(FastParser::create(::comphelper::getProcessComponentContext() ))
 {
-    m_xParser = FastParser::create(
-        ::comphelper::getProcessComponentContext() );
     m_xParser->setNamespaceHandler( m_aNamespaceHandler.get() );
 }
 

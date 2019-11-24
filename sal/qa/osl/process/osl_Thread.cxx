@@ -263,9 +263,8 @@ class OCountThread : public Thread
 {
     ThreadSafeValue<sal_Int32> m_aFlag;
 public:
-    OCountThread()
+    OCountThread() : m_nWaitSec(0)
         {
-            m_nWaitSec = 0;
             t_print("new OCountThread thread %u!\n", static_cast<unsigned>(getIdentifier()));
         }
     sal_Int32 getValue() { return m_aFlag.getValue(); }

@@ -161,10 +161,9 @@ public:
 
     // ctor
     Test_osl_executeProcess() :
-        env_param_(OUString("-env"))
+        env_param_(OUString("-env")), suCWD(getExecutablePath())
     {
         parameters_[0] = env_param_.pData;
-        suCWD = getExecutablePath();
 
 #if defined(_WIN32)
         suExecutableFileURL = suCWD + "/" "osl_process_child.exe";
