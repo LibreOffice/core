@@ -3480,6 +3480,69 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
     CPPUNIT_ASSERT_EQUAL(nExpected, aPosition.nNode.GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf105481)
+{
+    createDoc("tdf105481.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the accompanying fix in place, this test would have failed
+    // because the vertical position of the as-char shape object and the
+    // as-char math object will be wrong (below/beyond the text frame's bottom).
+
+    SwTwips nTxtTop = getXPath(pXmlDoc,
+                               "/root/page/anchored/fly/txt[2]"
+                               "/infos/bounds",
+                               "top")
+                          .toInt32();
+    SwTwips nTxtBottom = nTxtTop
+                         + getXPath(pXmlDoc,
+                                    "/root/page/anchored/fly/txt[2]"
+                                    "/infos/bounds",
+                                    "height")
+                               .toInt32();
+
+    SwTwips nFormula1Top = getXPath(pXmlDoc,
+                                    "/root/page/anchored/fly/txt[2]"
+                                    "/anchored/fly[1]/infos/bounds",
+                                    "top")
+                               .toInt32();
+    SwTwips nFormula1Bottom = nFormula1Top
+                              + getXPath(pXmlDoc,
+                                         "/root/page/anchored/fly/txt[2]"
+                                         "/anchored/fly[1]/infos/bounds",
+                                         "height")
+                                    .toInt32();
+
+    SwTwips nFormula2Top = getXPath(pXmlDoc,
+                                    "/root/page/anchored/fly/txt[2]"
+                                    "/anchored/fly[2]/infos/bounds",
+                                    "top")
+                               .toInt32();
+    SwTwips nFormula2Bottom = nFormula2Top
+                              + getXPath(pXmlDoc,
+                                         "/root/page/anchored/fly/txt[2]"
+                                         "/anchored/fly[2]/infos/bounds",
+                                         "height")
+                                    .toInt32();
+
+    // Ensure that the two formula positions are at least between top and bottom of the text frame.
+    // The below two are satisfied even without the fix.
+    CPPUNIT_ASSERT_GREATEREQUAL(nTxtTop, nFormula1Top);
+    CPPUNIT_ASSERT_GREATEREQUAL(nTxtTop, nFormula2Top);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than or equal to : 14423
+    // - Actual  : 14828
+    // that is, the formula is below the text-frame's y bound.
+    CPPUNIT_ASSERT_LESSEQUAL(nTxtBottom, nFormula1Bottom);
+    // Similarly for formula # 2 :
+    // - Expected less than or equal to : 14423
+    // - Actual  : 15035
+    // that is, the formula is below the text-frame's y bound.
+    CPPUNIT_ASSERT_LESSEQUAL(nTxtBottom, nFormula2Bottom);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
