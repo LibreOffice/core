@@ -194,9 +194,8 @@ class InteractionRequest_Impl : public ::cppu::WeakImplHelper< css::task::XInter
 public:
     InteractionRequest_Impl( const css::uno::Any& aRequest,
         const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations )
+        : m_aRequest(aRequest), m_lContinuations(lContinuations)
     {
-        m_aRequest = aRequest;
-        m_lContinuations = lContinuations;
     }
 
     virtual uno::Any SAL_CALL getRequest() override;

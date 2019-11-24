@@ -214,15 +214,12 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
 };
 
 ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const OUString& aModuleName, const Reference< XComponentContext >& rxContext ) :
-    m_aConfigWindowAccess( "/org.openoffice.Office.UI." ),
+    // Create configuration hierarchical access name
+    m_aConfigWindowAccess( "/org.openoffice.Office.UI." + aModuleName + "/UIElements/States"),
+    m_xConfigProvider(theDefaultProvider::get( rxContext )),
     m_bConfigAccessInitialized( false ),
     m_bModified( false )
 {
-    // Create configuration hierarchical access name
-    m_aConfigWindowAccess += aModuleName
-                          +  "/UIElements/States";
-    m_xConfigProvider = theDefaultProvider::get( rxContext );
-
     // Initialize access array with property names.
     sal_Int32 n = 0;
     while ( CONFIGURATION_PROPERTIES[n] )
