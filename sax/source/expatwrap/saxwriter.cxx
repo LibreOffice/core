@@ -38,6 +38,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
+#include <sal/log.hxx>
 
 using namespace ::std;
 using namespace ::osl;
@@ -578,7 +579,7 @@ void CheckValidName(OUString const& rName)
         auto const c(rName[i]);
         if (c == ':')
         {
-            assert(!hasColon && "only one colon allowed");
+            SAL_WARN_IF(hasColon, "sax", "only one colon allowed");
             hasColon = true;
         }
         else if (!rtl::isAsciiAlphanumeric(c) && c != '_' && c != '-' && c != '.' &&
