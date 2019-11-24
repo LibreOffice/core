@@ -614,7 +614,7 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
         for(int i = 0; i < aSuggestions.getLength(); ++i)
         {
             sal_uInt16 nItemId = MN_SUGGESTION_START + i;
-            OUString sCommandString = OUString(".uno:SpellCheckApplySuggestion?ApplyRule:string=");
+            OUString sCommandString = ".uno:SpellCheckApplySuggestion?ApplyRule:string=";
             if(m_bGrammarResults)
                 sCommandString += "Grammar_";
             else if (m_xSpellAlt.is())
@@ -626,9 +626,9 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
         PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
         if(pMenu)
         {
-            for (auto item : m_aLangTable_Text)
+            for (const auto& item : m_aLangTable_Text)
             {
-                OUString sCommandString = OUString(".uno:LanguageStatus?Language:string=Current_") + item.second;
+                OUString sCommandString = ".uno:LanguageStatus?Language:string=Current_" + item.second;
                 pMenu->SetItemCommand(item.first, sCommandString);
             }
 
@@ -640,9 +640,9 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
         pMenu = m_xPopupMenu->GetPopupMenu(m_nLangParaMenuId);
         if(pMenu)
         {
-            for (auto item : m_aLangTable_Paragraph)
+            for (const auto& item : m_aLangTable_Paragraph)
             {
-                OUString sCommandString = OUString(".uno:LanguageStatus?Language:string=Paragraph_") + item.second;
+                OUString sCommandString = ".uno:LanguageStatus?Language:string=Paragraph_" + item.second;
                 pMenu->SetItemCommand(item.first, sCommandString);
             }
 
