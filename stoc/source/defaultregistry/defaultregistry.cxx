@@ -127,8 +127,8 @@ protected:
     OUString    computeName(const OUString& name);
 
     OUString                    m_name;
-    sal_uInt32                  m_state;
     rtl::Reference<NestedRegistryImpl> m_xRegistry;
+    sal_uInt32                  m_state;
     Reference<XRegistryKey>     m_localKey;
     Reference<XRegistryKey>     m_defaultKey;
 };
@@ -137,7 +137,7 @@ protected:
 NestedKeyImpl::NestedKeyImpl( NestedRegistryImpl* pDefaultRegistry,
                               Reference<XRegistryKey>& localKey,
                               Reference<XRegistryKey>& defaultKey )
-    : m_state(m_xRegistry->m_state), m_xRegistry(pDefaultRegistry), m_localKey(localKey), m_defaultKey(defaultKey)
+    : m_xRegistry(pDefaultRegistry), m_state(m_xRegistry->m_state), m_localKey(localKey), m_defaultKey(defaultKey)
 {
     if (m_localKey.is())
     {
