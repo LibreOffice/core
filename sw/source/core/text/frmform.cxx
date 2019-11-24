@@ -436,8 +436,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
                 MakePos();
                 if ( aOldPos != getFrameArea().Pos() )
                 {
-                    // i#28701 - No format is performed for the floating screen objects.
-                    InvalidateObjs();
+                    InvalidateObjs(false);
                 }
             }
             nChgHeight = 0;
