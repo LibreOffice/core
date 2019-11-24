@@ -176,18 +176,16 @@ static HRESULT UnmarshalIDataObjectAndReleaseStream( LPSTREAM lpStream, IDataObj
 class CAutoComInit
 {
 public:
-    CAutoComInit( )
+   /*
+       to be safe we call CoInitialize
+       although it is not necessary if
+       the calling thread was created
+       using osl_CreateThread because
+       this function calls CoInitialize
+       for every thread it creates
+    */
+    CAutoComInit( ) : m_hResult( CoInitialize( nullptr ) )
     {
-        /*
-            to be safe we call CoInitialize
-            although it is not necessary if
-            the calling thread was created
-            using osl_CreateThread because
-            this function calls CoInitialize
-            for every thread it creates
-        */
-        m_hResult = CoInitialize( nullptr );
-
         if ( S_OK == m_hResult )
             OSL_FAIL(
             "com was not yet initialized, the thread was not created using osl_createThread" );
@@ -221,7 +219,8 @@ private:
 CMtaOleClipboard::CMtaOleClipboard( ) :
     m_hOleThread( nullptr ),
     m_uOleThreadId( 0 ),
-    m_hEvtThrdReady( nullptr ),
+    // signals that the thread was successfully setup
+    m_hEvtThrdReady(CreateEventW( nullptr, MANUAL_RESET, INIT_NONSIGNALED, nullptr )),
     m_hwndMtaOleReqWnd( nullptr ),
     // signals that the window is destroyed - to stop waiting any winproc result
     m_hEvtWndDisposed(CreateEventW(nullptr, MANUAL_RESET, INIT_NONSIGNALED, nullptr)),
@@ -232,9 +231,6 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_hTerminateClipboardChangedNotifierEvent( m_hClipboardChangedNotifierEvents[1] ),
     m_ClipboardChangedEventCount( 0 )
 {
-    // signals that the thread was successfully setup
-    m_hEvtThrdReady  = CreateEventW( nullptr, MANUAL_RESET, INIT_NONSIGNALED, nullptr );
-
     OSL_ASSERT( nullptr != m_hEvtThrdReady );
     SAL_WARN_IF(!m_hEvtWndDisposed, "dtrans", "CreateEventW failed: m_hEvtWndDisposed is nullptr");
 

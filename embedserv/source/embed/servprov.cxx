@@ -56,9 +56,8 @@ class CurThreadData
         oslThreadKey m_hKey;
 };
 
-CurThreadData::CurThreadData()
+CurThreadData::CurThreadData() : m_hKey(osl_createThreadKey( nullptr ))
 {
-    m_hKey = osl_createThreadKey( nullptr );
 }
 
 CurThreadData::~CurThreadData()

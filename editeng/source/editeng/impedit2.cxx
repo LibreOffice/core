@@ -95,7 +95,21 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     aMinAutoPaperSize( 0x0, 0x0 ),
     aMaxAutoPaperSize( 0x7FFFFFFF, 0x7FFFFFFF ),
     aEditDoc( pItemPool ),
+    pEditEngine(pEE),
+    pActiveView(nullptr),
+    pStylePool(nullptr),
+    pTextObjectPool(nullptr),
+    pUndoManager(nullptr),
     aWordDelimiters(" .,;:-`'?!_=\"{}()[]"),
+    maBackgroundColor(COL_AUTO),
+    nStretchX(100),
+    nStretchY(100),
+    nAsianCompressionMode(CharCompressType::NONE),
+    eDefaultHorizontalTextDirection(EEHorizontalTextDirection::Default),
+    nBigTextObjectStart(20),
+    eDefLanguage(LANGUAGE_DONTKNOW),
+    nCurTextHeight(0),
+    nCurTextHeightNTP(0),
     bKernAsianPunctuation(false),
     bAddExtLeading(false),
     bIsFormatting(false),
@@ -113,29 +127,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     mbReplaceLeadingSingleQuotationMark(true),
     mbNbspRunNext(false)
 {
-    pEditEngine         = pEE;
-    pActiveView         = nullptr;
-    pConvInfo           = nullptr;
-    pTextObjectPool     = nullptr;
-    pStylePool          = nullptr;
-    pUndoManager        = nullptr;
-    pUndoMarkSelection  = nullptr;
-
-    nCurTextHeight      = 0;
-    nCurTextHeightNTP   = 0;
-    nBigTextObjectStart = 20;
-
-    nStretchX           = 100;
-    nStretchY           = 100;
-
-    eDefLanguage        = LANGUAGE_DONTKNOW;
-    maBackgroundColor   = COL_AUTO;
-
-    nAsianCompressionMode = CharCompressType::NONE;
-
-    eDefaultHorizontalTextDirection = EEHorizontalTextDirection::Default;
-
-
     aStatus.GetControlWord() =  EEControlBits::USECHARATTRIBS | EEControlBits::DOIDLEFORMAT |
                                 EEControlBits::PASTESPECIAL | EEControlBits::UNDOATTRIBS |
                                 EEControlBits::ALLOWBIGOBJS | EEControlBits::RTFSTYLESHEETS |

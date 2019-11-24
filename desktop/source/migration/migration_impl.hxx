@@ -98,11 +98,9 @@ struct MigrationItem
         const OUString& sPrevSibling,
         const OUString& sCommandURL,
         const css::uno::Reference< css::container::XIndexContainer > & xPopupMenu)
+          : m_sParentNodeName(sParentNodeName), m_sPrevSibling(sPrevSibling),
+            m_sCommandURL(sCommandURL), m_xPopupMenu(xPopupMenu)
     {
-        m_sParentNodeName = sParentNodeName;
-        m_sPrevSibling    = sPrevSibling;
-        m_sCommandURL     = sCommandURL;
-        m_xPopupMenu      = xPopupMenu;
     }
 
     bool operator==(const MigrationItem& aMigrationItem)
