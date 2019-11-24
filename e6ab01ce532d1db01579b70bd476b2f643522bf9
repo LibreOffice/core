@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_5b99b7c1",
+        "filename": "stoc/source/defaultregistry/defaultregistry.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-11-24T07:50:10Z",
+      "side": 1,
+      "message": "using m_xRegistry before assigning to it",
+      "revId": "e6ab01ce532d1db01579b70bd476b2f643522bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
