@@ -20,19 +20,17 @@
 #include <vcl/window.hxx>
 #include <vcl/waitobj.hxx>
 #include <window.h>
+#include <vcl/cursor.hxx>
 
 WaitObject::~WaitObject()
 {
-    if ( mpWindow )
+    if (mpWindow)
         mpWindow->LeaveWait();
 }
 
-namespace vcl {
-
-Size Window::GetOptimalSize() const
+namespace vcl
 {
-    return Size();
-}
+Size Window::GetOptimalSize() const { return Size(); }
 
 void Window::ImplAdjustNWFSizes()
 {
@@ -55,7 +53,13 @@ void Window::ImplRefreshFontData(bool bNewFontLists)
         pChild->ImplRefreshFontData(bNewFontLists);
 }
 
-} /* namespace vcl */
+void Window::ImplInitMapModeObjects()
+{
+    OutputDevice::ImplInitMapModeObjects();
+    if (mpWindowImpl->mpCursor)
+        mpWindowImpl->mpCursor->ImplNew();
+}
 
+} /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
