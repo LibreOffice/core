@@ -880,16 +880,25 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             {
                                 case SID_OBJECT_ALIGN_UP :
                                 case FN_FRAME_ALIGN_VERT_TOP:
-                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(".uno:AlignTop", aModuleName);
+                                {
+                                    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignTop", aModuleName);
+                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
                                     break;
+                                }
                                 case SID_OBJECT_ALIGN_MIDDLE:
                                 case FN_FRAME_ALIGN_VERT_CENTER:
-                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(".uno:AlignVerticalCenter", aModuleName);
+                                {
+                                    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignVerticalCenter", aModuleName);
+                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
                                     break;
+                                }
                                 case SID_OBJECT_ALIGN_DOWN:
                                 case FN_FRAME_ALIGN_VERT_BOTTOM:
-                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(".uno:AlignBottom", aModuleName);
+                                {
+                                    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignBottom", aModuleName);
+                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
                                     break;
+                                }
                             }
                         }
                         if ( !sNewLabel.isEmpty() )
