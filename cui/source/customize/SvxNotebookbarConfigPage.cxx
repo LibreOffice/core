@@ -474,6 +474,9 @@ void SvxNotebookbarConfigPage::SelectElement()
     aEntries = aTempEntries;
     aTempEntries.clear();
 
+    weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
+    rTreeView.freeze();
+
     sal_Int64 nId = 0;
     for (std::size_t nIdx = 0; nIdx < aEntries.size(); nIdx++)
     {
@@ -494,6 +497,9 @@ void SvxNotebookbarConfigPage::SelectElement()
                                         aEntries[nIdx].sActionName, nIdx, 1);
         ++nId;
     }
+
+    rTreeView.thaw();
+
     aEntries.clear();
 
     if (pDoc != nullptr)
