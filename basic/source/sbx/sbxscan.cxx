@@ -293,7 +293,7 @@ ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle
     if( bSingle )
     {
         SbxValues aValues( nVal );
-        nVal = static_cast<double>(ImpGetSingle( &aValues ));    // here error at overflow
+        nVal = static_cast<double>(ImpGetSingle( &aValues, true ));    // here error at overflow
     }
     return nRetError;
 }
@@ -419,7 +419,7 @@ bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
     {
         double n;
         SbxDataType t;
-        eRes = ImpScan( rSrc, n, t, pLen, true );
+        eRes = ImpScan( rSrc, n, t, pLen, false );
         if( eRes == ERRCODE_NONE )
         {
             if( !IsFixed() )

@@ -37,7 +37,7 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal
 
 // SBXINT.CXX
 
-sal_Int16   ImpGetInteger( const SbxValues* );
+sal_Int16   ImpGetInteger( const SbxValues*, bool bUseLocale );
 void        ImpPutInteger( SbxValues*, sal_Int16 );
 
 sal_Int64   ImpGetInt64( const SbxValues* );
@@ -51,17 +51,17 @@ double      ImpSalUInt64ToDouble( sal_uInt64 n );
 
 // SBXLNG.CXX
 
-sal_Int32   ImpGetLong( const SbxValues* );
+sal_Int32   ImpGetLong( const SbxValues*, bool bUseLocale );
 void    ImpPutLong( SbxValues*, sal_Int32 );
 
 // SBXSNG.CXX
 
-float   ImpGetSingle( const SbxValues* );
+float   ImpGetSingle( const SbxValues*, bool bUseLocale );
 void    ImpPutSingle( SbxValues*, float );
 
 // SBXDBL.CXX
 
-double  ImpGetDouble( const SbxValues* );
+double  ImpGetDouble( const SbxValues*, bool bUseLocale );
 void    ImpPutDouble( SbxValues*, double, bool bCoreString=false );
 
 // SBXCURR.CXX
@@ -104,7 +104,7 @@ sal_Unicode ImpGetChar( const SbxValues* );
 void        ImpPutChar( SbxValues*, sal_Unicode );
 
 // SBXBYTE.CXX
-sal_uInt8   ImpGetByte( const SbxValues* );
+sal_uInt8   ImpGetByte( const SbxValues*, bool bUseLocale );
 void    ImpPutByte( SbxValues*, sal_uInt8 );
 
 // SBXUINT.CXX
