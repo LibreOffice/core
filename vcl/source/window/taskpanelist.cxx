@@ -59,19 +59,6 @@ struct LTRSort
             return ( pos1.X() < pos2.X() );
     }
 };
-struct LTRSortBackward
-{
-    bool operator()( const vcl::Window* w2, const vcl::Window* w1 ) const
-    {
-        Point pos1(ImplTaskPaneListGetPos( w1 ));
-        Point pos2(ImplTaskPaneListGetPos( w2 ));
-
-        if( pos1.X() == pos2.X() )
-            return ( pos1.Y() < pos2.Y() );
-        else
-            return ( pos1.X() < pos2.X() );
-    }
-};
 
 }
 
@@ -258,10 +245,10 @@ vcl::Window* TaskPaneList::FindNextSplitter( vcl::Window *pWindow )
 // returns first valid item (regardless of type) if pWindow==0, otherwise returns next valid float
 vcl::Window* TaskPaneList::FindNextFloat( vcl::Window *pWindow, bool bForward )
 {
-    if( bForward )
-        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
-    else
-        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
+    ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
+
+    if ( !bForward )
+        ::std::reverse( mTaskPanes.begin(), mTaskPanes.end() );
 
     auto p = mTaskPanes.begin();
     if( pWindow )
@@ -289,6 +276,9 @@ vcl::Window* TaskPaneList::FindNextFloat( vcl::Window *pWindow, bool bForward )
         if( !pWindow )  // increment after test, otherwise first element is skipped
             ++p;
     }
+
+    if ( !bForward )
+        ::std::reverse( mTaskPanes.begin(), mTaskPanes.end() );
 
     return pWindow;
 }
