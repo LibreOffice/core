@@ -263,22 +263,21 @@ short SvxMenuConfigPage::QueryReset()
 
 void SvxMenuConfigPage::SelectElement()
 {
-    m_xContentsListBox->clear();
+    weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
 
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
-
-    if ( pMenuData )
+    if (!pMenuData)
+        rTreeView.clear();
+    else
     {
         SvxEntries* pEntries = pMenuData->GetEntries();
 
-        int i = 0;
-        for (auto const& entry : *pEntries)
-        {
+        rTreeView.bulk_insert_for_each(pEntries->size(), [this, &rTreeView, pEntries](weld::TreeIter& rIter, int nIdx) {
+            auto const& entry = (*pEntries)[nIdx];
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(entry)));
-            m_xContentsListBox->insert(i, sId);
-            InsertEntryIntoUI(entry, i, 0);
-            ++i;
-        }
+            rTreeView.set_id(rIter, sId);
+            InsertEntryIntoUI(entry, rTreeView, rIter, 0);
+        });
     }
 
     UpdateButtonStates();
@@ -364,9 +363,10 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandHdl, weld::Button&, void )
     int nPos = AddFunction(-1, /*bAllowDuplicates*/false);
     if (nPos == -1)
         return;
+    weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     SvxConfigEntry* pEntry =
-        reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nPos).toInt64());
-    InsertEntryIntoUI(pEntry, nPos, 0);
+        reinterpret_cast<SvxConfigEntry*>(rTreeView.get_id(nPos).toInt64());
+    InsertEntryIntoUI(pEntry, rTreeView, nPos, 0);
 }
 
 IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveCommandHdl, weld::Button&, void )
@@ -380,12 +380,13 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveCommandHdl, weld::Button&, void )
 
 IMPL_LINK(SvxMenuConfigPage, InsertHdl, const OString&, rIdent, void)
 {
+    weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     if (rIdent == "insertseparator")
     {
         SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
         pNewEntryData->SetUserDefined();
         int nPos = AppendEntry(pNewEntryData, -1);
-        InsertEntryIntoUI(pNewEntryData, nPos, 0);
+        InsertEntryIntoUI(pNewEntryData, rTreeView, nPos, 0);
     }
     else if (rIdent == "insertsubmenu")
     {
@@ -406,7 +407,7 @@ IMPL_LINK(SvxMenuConfigPage, InsertHdl, const OString&, rIdent, void)
             pNewEntryData->SetUserDefined();
 
             int nPos = AppendEntry(pNewEntryData, -1);
-            InsertEntryIntoUI(pNewEntryData, nPos, 0);
+            InsertEntryIntoUI(pNewEntryData, rTreeView, nPos, 0);
 
             ReloadTopLevelListBox();
 

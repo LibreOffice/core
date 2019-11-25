@@ -325,6 +325,8 @@ public:
     SvxMenuEntriesListBox(std::unique_ptr<weld::TreeView> xControl, SvxConfigPage* pPage);
     virtual ~SvxMenuEntriesListBox();
 
+    VirtualDevice& get_dropdown_image() const { return *m_xDropDown; }
+
     int get_selected_index() const { return m_xControl->get_selected_index(); }
     OUString get_id(int nPos) const { return m_xControl->get_id(nPos); }
     void remove(int nPos) { m_xControl->remove(nPos); }
@@ -451,7 +453,12 @@ protected:
                                         SvxConfigEntry const * pParentData );
 
     void                InsertEntryIntoUI(SvxConfigEntry* pNewEntryData,
-                                          int nPos, int nStartCol);
+                                          weld::TreeView& rTreeView, int nPos,
+                                          int nStartCol);
+    void                InsertEntryIntoUI(SvxConfigEntry* pNewEntryData,
+                                          weld::TreeView& rTreeView, weld::TreeIter& rIter,
+                                          int nStartCol);
+
     void InsertEntryIntoNotebookbarTabUI(const OUString& sClassId, const OUString& sUIItemId,
                                          const OUString& sUIItemCommand,
                                          weld::TreeView& rTreeView, weld::TreeIter& rIter,
