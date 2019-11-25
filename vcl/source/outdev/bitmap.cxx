@@ -1277,7 +1277,8 @@ void OutputDevice::DrawTransformedBitmapEx(
             basegfx::B2DVector aFullScale, aFullTranslate;
             double fFullRotate, fFullShearX;
             aFullTransform.decompose(aFullScale, aFullTranslate, fFullRotate, fFullShearX);
-            if (aFullScale.getX() != 0 && aFullScale.getY() != 0)
+            // Require positive scaling, negative scaling would loose horizontal or vertical flip.
+            if (aFullScale.getX() > 0 && aFullScale.getY() > 0)
             {
                 basegfx::B2DHomMatrix aTransform = basegfx::utils::createScaleB2DHomMatrix(
                     rOriginalSizePixel.getWidth() / aFullScale.getX(),
