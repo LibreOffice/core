@@ -30,7 +30,6 @@
 #include <unotools/confignode.hxx>
 #include <libxml/parser.h>
 
-#define aUIItemIDLength 255
 #define aUIPropertiesCount 3
 
 using namespace css;
@@ -197,7 +196,6 @@ void CustomNotebookbarGenerator::modifyCustomizedUIFile(const Sequence<OUString>
         {
             int nIdx = int(aIndex);
             sal_Int32 rPos = aIndex;
-            pProperties[nIdx] = new char[aUIItemIDLength];
             pProperties[nIdx] = convertToCharPointer(aValue.getToken(rPos, ',', rPos));
         }
         xmlDocPtr doc;
