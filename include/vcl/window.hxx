@@ -34,6 +34,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
+#include <boost/property_tree/ptree_fwd.hpp>
+
 class VirtualDevice;
 struct ImplSVEvent;
 struct ImplWinData;
@@ -1086,6 +1088,7 @@ public:
     bool                                HasActiveChildFrame() const;
     GetFocusFlags                       GetGetFocusFlags() const;
     void                                GrabFocusToDocument();
+    VclPtr<vcl::Window>                 GetFocusedWindow() const;
 
     /**
      * Set this when you need to act as if the window has focus even if it
@@ -1144,16 +1147,6 @@ public:
     void                                SetHelpId( const OString& );
     const OString&                      GetHelpId() const;
 
-    /** String ID of this window for the purpose of creating a screenshot
-
-        In default implementation this ID is the same as HelpId. Override this method
-        in windows (dialogs,tabpages) that need different IDs for different configurations
-        they can be in
-
-        @return screenshot ID of this window
-    */
-    virtual OString                     GetScreenshotId() const;
-
     vcl::Window*                        FindWindow( const Point& rPos ) const;
 
     sal_uInt16                          GetChildCount() const;
@@ -1191,7 +1184,6 @@ public:
                                                        const Point& rPos, const Size& rSize, const Size&) const override;
 
     virtual const SystemEnvData*        GetSystemData() const;
-    css::uno::Any                       GetSystemDataAny() const;
 
     // API to set/query the component interfaces
     virtual css::uno::Reference< css::awt::XWindowPeer >
@@ -1213,8 +1205,8 @@ public:
     /// Find an existing Window based on the LOKWindowId.
     static VclPtr<vcl::Window>          FindLOKWindow(vcl::LOKWindowId nWindowId);
 
-    /// Dialog / window tunneling related methods.
-    Size PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
+    /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.
+    virtual boost::property_tree::ptree DumpAsPropertyTree();
 
     /// Same as MouseButtonDown(), but coordinates are in logic unit. used for LOK
     virtual void LogicMouseButtonDown(const MouseEvent&) {};
