@@ -198,6 +198,16 @@ public:
         return (ret.second) ? ret.first : m_vector.end();
     }
 
+    bool operator==(const sorted_vector & other) const
+    {
+        return m_vector == other.m_vector;
+    }
+
+    bool operator!=(const sorted_vector & other) const
+    {
+        return m_vector != other.m_vector;
+    }
+
     void insert(sorted_vector<Value,Compare,Find> const& rOther)
     {
        // optimization for the rather common case that we are overwriting this with the contents
