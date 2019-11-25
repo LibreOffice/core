@@ -290,16 +290,14 @@ void SvxNotebookbarConfigPage::getNodeValue(xmlNode* pNodePtr, NotebookbarEntrie
             {
                 xmlChar* aValue = xmlNodeGetContent(pNodePtr);
                 const char* cVisibleValue = reinterpret_cast<const char*>(aValue);
-                OUString sVisibleValue = charToString(cVisibleValue);
-                aNodeEntries.sVisibleValue = sVisibleValue;
+                aNodeEntries.sVisibleValue = charToString(cVisibleValue);
                 xmlFree(aValue);
             }
             if (!(xmlStrcmp(UriValue, reinterpret_cast<const xmlChar*>("action_name"))))
             {
                 xmlChar* aValue = xmlNodeGetContent(pNodePtr);
                 const char* cActionName = reinterpret_cast<const char*>(aValue);
-                OUString sActionName = charToString(cActionName);
-                aNodeEntries.sActionName = sActionName;
+                aNodeEntries.sActionName = charToString(cActionName);
                 xmlFree(aValue);
             }
             xmlFree(UriValue);
