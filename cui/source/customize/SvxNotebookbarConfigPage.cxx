@@ -431,31 +431,28 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
     }
 }
 
-void SvxNotebookbarConfigPage::FillFunctionsList(std::vector<NotebookbarEntries>& aEntries,
+void SvxNotebookbarConfigPage::FillFunctionsList(xmlNodePtr pRootNodePtr,
+                                                 std::vector<NotebookbarEntries>& aEntries,
                                                  std::vector<CategoriesEntries>& aCategoryList,
                                                  OUString& sActiveCategory)
+{
+    CategoriesEntries aCurItemEntry;
+    searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, aCurItemEntry, pRootNodePtr,
+                           false);
+}
+
+void SvxNotebookbarConfigPage::SelectElement()
 {
     OString sUIFileUIPath = CustomNotebookbarGenerator::getSystemPath(
         CustomNotebookbarGenerator::getCustomizedUIPath());
     xmlDocPtr pDoc = xmlParseFile(sUIFileUIPath.getStr());
     xmlNodePtr pNodePtr = xmlDocGetRootElement(pDoc);
 
-    CategoriesEntries aCurItemEntry;
-    searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, aCurItemEntry, pNodePtr,
-                           false);
-    if (pDoc != nullptr)
-    {
-        xmlFreeDoc(pDoc);
-    }
-}
-
-void SvxNotebookbarConfigPage::SelectElement()
-{
     m_xContentsListBox->clear();
     std::vector<NotebookbarEntries> aEntries;
     std::vector<CategoriesEntries> aCategoryList;
     OUString sActiveCategory = m_xTopLevelListBox->get_active_id();
-    FillFunctionsList(aEntries, aCategoryList, sActiveCategory);
+    FillFunctionsList(pNodePtr, aEntries, aCategoryList, sActiveCategory);
 
     if (m_xTopLevelListBox->get_count() == 1)
     {
@@ -477,7 +474,7 @@ void SvxNotebookbarConfigPage::SelectElement()
             std::vector<NotebookbarEntries> aGtkEntries;
             sal_Int32 rPos = 1;
             sActiveCategory = aEntries[nIdx].sUIItemId.getToken(rPos, ':', rPos);
-            FillFunctionsList(aGtkEntries, aCategoryList, sActiveCategory);
+            FillFunctionsList(pNodePtr, aGtkEntries, aCategoryList, sActiveCategory);
             for (std::size_t Idx = 0; Idx < aGtkEntries.size(); Idx++)
                 aTempEntries.push_back(aGtkEntries[Idx]);
             aGtkEntries.clear();
@@ -510,6 +507,11 @@ void SvxNotebookbarConfigPage::SelectElement()
         ++nId;
     }
     aEntries.clear();
+
+    if (pDoc != nullptr)
+    {
+        xmlFreeDoc(pDoc);
+    }
 }
 
 SvxNotebookbarEntriesListBox::SvxNotebookbarEntriesListBox(std::unique_ptr<weld::TreeView> xParent,
