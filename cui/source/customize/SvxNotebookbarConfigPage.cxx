@@ -217,8 +217,9 @@ short SvxNotebookbarConfigPage::QueryReset()
 
 void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
                                                     const OUString& sUIItemId,
-                                                    const OUString& sUIItemCommand, int nPos,
-                                                    int nStartCol)
+                                                    const OUString& sUIItemCommand,
+                                                    weld::TreeView& rTreeView,
+                                                    weld::TreeIter& rIter, int nStartCol)
 {
     css::uno::Reference<css::container::XNameAccess> m_xCommandToLabelMap,
         m_xGlobalCommandToLabelMap;
@@ -264,7 +265,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
     if (sClassId == "GtkSeparatorMenuItem" || sClassId == "GtkSeparator")
     {
         OUString sDataInTree = "--------------------------------------------";
-        m_xContentsListBox->set_text(nPos, sDataInTree, nStartCol + 1);
+        rTreeView.set_text(rIter, sDataInTree, nStartCol + 1);
     }
     else
     {
@@ -272,9 +273,9 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
             aName = sUIItemId;
         auto xImage = GetSaveInData()->GetImage(sUIItemCommand);
         if (xImage.is())
-            m_xContentsListBox->set_image(nPos, xImage, nStartCol);
-        m_xContentsListBox->set_text(nPos, aName, nStartCol + 1);
-        m_xContentsListBox->set_id(nPos, sUIItemId);
+            rTreeView.set_image(rIter, xImage, nStartCol);
+        rTreeView.set_text(rIter, aName, nStartCol + 1);
+        rTreeView.set_id(rIter, sUIItemId);
     }
 }
 
@@ -434,7 +435,6 @@ void SvxNotebookbarConfigPage::SelectElement()
     xmlDocPtr pDoc = xmlParseFile(sUIFileUIPath.getStr());
     xmlNodePtr pNodePtr = xmlDocGetRootElement(pDoc);
 
-    m_xContentsListBox->clear();
     std::vector<NotebookbarEntries> aEntries;
     std::vector<CategoriesEntries> aCategoryList;
     OUString sActiveCategory = m_xTopLevelListBox->get_active_id();
@@ -473,30 +473,24 @@ void SvxNotebookbarConfigPage::SelectElement()
     aTempEntries.clear();
 
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
-    rTreeView.freeze();
-
-    sal_Int64 nId = 0;
-    for (std::size_t nIdx = 0; nIdx < aEntries.size(); nIdx++)
-    {
-        OUString sId(OUString::number(nId));
-        m_xContentsListBox->insert(nIdx, sId);
-        if (aEntries[nIdx].sActionName != "Null")
-        {
-            if (aEntries[nIdx].sVisibleValue == "True")
+    rTreeView.bulk_insert_for_each(
+        aEntries.size(), [this, &rTreeView, &aEntries](weld::TreeIter& rIter, int nIdx) {
+            OUString sId(OUString::number(nIdx));
+            rTreeView.set_id(rIter, sId);
+            if (aEntries[nIdx].sActionName != "Null")
             {
-                m_xContentsListBox->set_toggle(nIdx, TRISTATE_TRUE, 0);
+                if (aEntries[nIdx].sVisibleValue == "True")
+                {
+                    rTreeView.set_toggle(rIter, TRISTATE_TRUE, 0);
+                }
+                else
+                {
+                    rTreeView.set_toggle(rIter, TRISTATE_FALSE, 0);
+                }
             }
-            else
-            {
-                m_xContentsListBox->set_toggle(nIdx, TRISTATE_FALSE, 0);
-            }
-        }
-        InsertEntryIntoNotebookbarTabUI(aEntries[nIdx].sClassId, aEntries[nIdx].sDisplayName,
-                                        aEntries[nIdx].sActionName, nIdx, 1);
-        ++nId;
-    }
-
-    rTreeView.thaw();
+            InsertEntryIntoNotebookbarTabUI(aEntries[nIdx].sClassId, aEntries[nIdx].sDisplayName,
+                                            aEntries[nIdx].sActionName, rTreeView, rIter, 1);
+        });
 
     aEntries.clear();
 
