@@ -35,13 +35,13 @@ Function doUnitTest() As Integer
 
     ' Negative floating-point with leading and trailing spaces
     StartTest()
-    nVal = " -123.45 "
-    AssertTest(nVal = -123.45)
+    nVal = " -123.456 "
+    AssertTest(nVal = -123.456)
 
-    ' Wrong decimal separator
+    ' Wrong decimal separator (interpreted as group separator)
     StartTest()
-    nVal = " -123,45 "
-    AssertTest(nVal = -123)
+    nVal = " -123,456 "
+    AssertTest(nVal = -123456)
 
     If ((nFailCount > 0) Or (nPassCount <> nTotalCount)) Then
         doUnitTest = 0

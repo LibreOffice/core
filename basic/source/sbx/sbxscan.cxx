@@ -571,7 +571,7 @@ bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
     {
         double n;
         SbxDataType t;
-        eRes = ImpScan( rSrc, n, t, pLen, false );
+        eRes = ImpScan( rSrc, n, t, pLen, true );
         if( eRes == ERRCODE_NONE )
         {
             if( !IsFixed() )
