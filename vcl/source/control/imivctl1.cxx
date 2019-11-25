@@ -52,6 +52,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     SvtIconChoiceCtrl* pCurView,
     WinBits nWinStyle
 ) :
+    bChooseWithCursor(false),
     aVerSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_VSCROLL) ),
     aHorSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_HSCROLL) ),
     aScrBarBox( VclPtr<ScrollBarBox>::Create(pCurView) ),
@@ -59,29 +60,16 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aDocRectChangedIdle ( "svtools contnr SvxIconChoiceCtrl_Impl DocRectChanged" ),
     aVisRectChangedIdle ( "svtools contnr SvxIconChoiceCtrl_Impl VisRectChanged" ),
     aCallSelectHdlIdle ( "svtools contnr SvxIconChoiceCtrl_Impl CallSelectHdl" ),
-    aImageSize( 32 * pCurView->GetDPIScaleFactor(), 32 * pCurView->GetDPIScaleFactor())
+    aImageSize( 32 * pCurView->GetDPIScaleFactor(), 32 * pCurView->GetDPIScaleFactor()),
+    pView(pCurView), nMaxVirtWidth(DEFAULT_MAX_VIRT_WIDTH), nMaxVirtHeight(DEFAULT_MAX_VIRT_HEIGHT),
+    nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
+    pCurHighlightFrame(nullptr), bHighlightFramePressed(false), pHead(nullptr), pCursor(nullptr),
+    pHdlEntry(nullptr), pDDDev(nullptr), pDDBufDev(nullptr), pDDTempDev(nullptr), pEntryPaintDev(nullptr),
+    pAnchor(nullptr), eTextMode(SvxIconChoiceCtrlTextMode::Short),
+    eSelectionMode(SelectionMode::Multiple), ePositionMode(SvxIconChoiceCtrlPositionMode::Free),
+    bUpdateMode(true)
 {
-    bChooseWithCursor = false;
-    pEntryPaintDev = nullptr;
-    pCurHighlightFrame = nullptr;
-    pAnchor = nullptr;
-    pHdlEntry = nullptr;
-    pHead = nullptr;
-    pCursor = nullptr;
-    bUpdateMode = true;
-    bHighlightFramePressed = false;
-    eSelectionMode = SelectionMode::Multiple;
-    pView = pCurView;
-    ePositionMode = SvxIconChoiceCtrlPositionMode::Free;
     SetStyle( nWinStyle );
-    nFlags = IconChoiceFlags::NONE;
-    nUserEventAdjustScrBars = nullptr;
-    nMaxVirtWidth = DEFAULT_MAX_VIRT_WIDTH;
-    nMaxVirtHeight = DEFAULT_MAX_VIRT_HEIGHT;
-    pDDDev = nullptr;
-    pDDBufDev = nullptr;
-    pDDTempDev = nullptr;
-    eTextMode = SvxIconChoiceCtrlTextMode::Short;
     pImpCursor.reset( new IcnCursor_Impl( this ) );
     pGridMap.reset( new IcnGridMap_Impl( this ) );
 

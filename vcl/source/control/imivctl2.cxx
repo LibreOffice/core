@@ -475,10 +475,8 @@ void IcnCursor_Impl::SetDeltas()
 }
 
 IcnGridMap_Impl::IcnGridMap_Impl(SvxIconChoiceCtrl_Impl* pView)
+ : _pView(pView), _nGridCols(0), _nGridRows(0)
 {
-    _pView = pView;
-    _nGridCols = 0;
-    _nGridRows = 0;
 }
 
 IcnGridMap_Impl::~IcnGridMap_Impl()

@@ -2499,11 +2499,11 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
                                   sal_uInt16& nX,
                                   TextFrameIndex const nCurrStart,
                                   long nSpaceAdd )
+  : pTextCursor(pCursor),
+    pCurr(pCursor->m_pCurr),
+    nStart(pCursor->m_nStart)
 {
-    pTextCursor = pCursor;
-    nStart = pCursor->m_nStart;
     pCursor->m_nStart = nCurrStart;
-    pCurr = pCursor->m_pCurr;
     pCursor->m_pCurr = &pMulti->GetRoot();
     while( pCursor->Y() + pCursor->GetLineHeight() < nY &&
         pCursor->Next() )
