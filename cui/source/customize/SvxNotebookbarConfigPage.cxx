@@ -65,12 +65,7 @@ static bool isCategoryAvailable(const OUString& sClassId, const OUString& sUIIte
 
 static OUString charToString(const char* cString)
 {
-    OUStringBuffer aString;
-    for (std::size_t i = 0; i < strlen(cString); i++)
-    {
-        aString.append(cString[i]);
-    }
-    return aString.makeStringAndClear();
+    return OUString(cString, strlen(cString), RTL_TEXTENCODING_UTF8);
 }
 
 static OUString getFileName(const OUString& aFileName)
