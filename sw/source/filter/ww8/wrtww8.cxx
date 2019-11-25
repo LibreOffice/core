@@ -816,10 +816,10 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
 }
 
 WW8_WrPlc1::WW8_WrPlc1( sal_uInt16 nStructSz )
-    : nStructSiz( nStructSz )
+    : pData( new sal_uInt8[ 16 * nStructSz ] ),
+      nDataLen(16 * nStructSz),
+      nStructSiz( nStructSz )
 {
-    nDataLen = 16 * nStructSz;
-    pData.reset( new sal_uInt8[ nDataLen ] );
 }
 
 WW8_WrPlc1::~WW8_WrPlc1()

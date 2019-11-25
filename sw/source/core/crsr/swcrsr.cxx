@@ -67,9 +67,8 @@ struct PercentHdl
     bool bBack, bNodeIdx;
 
     PercentHdl( sal_uLong nStt, sal_uLong nEnd, SwDocShell* pSh )
-        : pDSh(pSh), bBack(false), bNodeIdx(false)
+        : pDSh(pSh), nActPos(nStt), bBack(false), bNodeIdx(false)
     {
-        nActPos = nStt;
         if( ( bBack = (nStt > nEnd )) )
         {
             sal_uLong n = nStt; nStt = nEnd; nEnd = n;

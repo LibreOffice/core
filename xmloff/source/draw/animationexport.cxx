@@ -462,8 +462,8 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
 : mbHasTransition(false)
 , mxExport( &rExport )
 , mxPageProps( xPageProps )
+, mxSdPropHdlFactory(new XMLSdPropHdlFactory( rExport.GetModel(), rExport ))
 {
-    mxSdPropHdlFactory = new XMLSdPropHdlFactory( rExport.GetModel(), rExport );
 }
 
 

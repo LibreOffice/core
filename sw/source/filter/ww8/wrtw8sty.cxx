@@ -1969,13 +1969,12 @@ WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt, WW8_CP nRangeStart,
 WW8_Annotation::WW8_Annotation(const SwRedlineData* pRedline)
     :
         mpRichText(nullptr),
-        maDateTime( DateTime::EMPTY ),
+        msSimpleText(pRedline->GetComment()),
+        msOwner(SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor())),
+        maDateTime(pRedline->GetTimeStamp()),
         m_nRangeStart(0),
         m_nRangeEnd(0)
 {
-    msSimpleText = pRedline->GetComment();
-    msOwner = SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor());
-    maDateTime = pRedline->GetTimeStamp();
 }
 
 bool WW8_Annotation::HasRange() const
