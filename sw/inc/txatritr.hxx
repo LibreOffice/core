@@ -48,14 +48,14 @@ public:
 
 class SwLanguageIterator
 {
-    SwScriptIterator    aSIter;
+    SwScriptIterator    m_aScriptIter;
     std::deque<const SwTextAttr*>
-                        aStack;
-    const SwTextNode&   rTextNd;
-    const SfxPoolItem*  pParaItem;
-    const SfxPoolItem*  pCurItem;
-    size_t              nAttrPos;
-    sal_Int32           nChgPos;
+                        m_aStack;
+    const SwTextNode&   m_rTextNode;
+    const SfxPoolItem*  m_pParaItem;
+    const SfxPoolItem*  m_pCurrentItem;
+    size_t              m_nAttrPos;
+    sal_Int32           m_nChgPos;
 
     void AddToStack( const SwTextAttr& rAttr );
     void SearchNextChg();
@@ -64,9 +64,9 @@ public:
     SwLanguageIterator( const SwTextNode& rTextNd, sal_Int32 nStart );
 
     bool               Next();
-    sal_Int32          GetChgPos() const        { return nChgPos; }
+    sal_Int32          GetChgPos() const        { return m_nChgPos; }
     LanguageType       GetLanguage() const
-        { return static_cast<const SvxLanguageItem&>(*pCurItem).GetValue(); }
+        { return static_cast<const SvxLanguageItem&>(*m_pCurrentItem).GetValue(); }
 };
 
 #endif
