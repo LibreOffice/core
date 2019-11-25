@@ -131,7 +131,8 @@ public:
     SbxDataType GetFullType() const { return aData.eType;}
     bool SetType( SbxDataType );
 
-    bool Get( SbxValues& ) const;
+    bool Get( SbxValues& r ) const { return GetImpl( r, false ); };
+    bool GetUsingLocale( SbxValues& r ) const { return GetImpl( r, true ); };
     const SbxValues& GetValues_Impl() const { return aData; }
     bool Put( const SbxValues& );
 
@@ -139,7 +140,9 @@ public:
 
     sal_Unicode GetChar() const { return Get(SbxCHAR).nChar; }
     sal_Int16 GetInteger() const { return Get(SbxINTEGER).nInteger; }
+    sal_Int16 GetIntegerUsingLocale() const { return GetUsingLocale(SbxINTEGER).nInteger; }
     sal_Int32 GetLong() const { return Get(SbxLONG).nLong; }
+    sal_Int32 GetLongUsingLocale() const { return GetUsingLocale(SbxLONG).nLong; }
     sal_Int64 GetInt64() const { return Get(SbxSALINT64).nInt64; }
     sal_uInt64 GetUInt64() const { return Get(SbxSALUINT64).uInt64; }
 
@@ -147,7 +150,9 @@ public:
     SbxDecimal* GetDecimal() const { return Get(SbxDECIMAL).pDecimal; }
 
     float GetSingle() const { return Get(SbxSINGLE).nSingle; }
+    float GetSingleUsingLocale() const { return GetUsingLocale(SbxSINGLE).nSingle; }
     double GetDouble() const { return Get(SbxDOUBLE).nDouble; }
+    double GetDoubleUsingLocale() const { return GetUsingLocale(SbxDOUBLE).nDouble; }
     double GetDate() const { return Get(SbxDATE).nDouble; }
 
     bool GetBool() const { return Get(SbxBOOL).nUShort != 0; }
@@ -156,6 +161,7 @@ public:
 
     SbxBase* GetObject() const { return Get(SbxOBJECT).pObj; }
     sal_uInt8 GetByte() const { return Get(SbxBYTE).nByte; }
+    sal_uInt8 GetByteUsingLocale() const { return GetUsingLocale(SbxBYTE).nByte; }
     sal_uInt16 GetUShort() const { return Get(SbxUSHORT).nUShort; }
     sal_uInt32 GetULong() const { return Get(SbxULONG).nULong; }
 
@@ -206,7 +212,10 @@ public:
     inline SbxValue& operator -=( const SbxValue& );
 
 private:
-    SbxValues Get(SbxDataType t) const;
+    bool GetImpl( SbxValues&, bool bUseLocale ) const;
+    SbxValues GetImpl(SbxDataType t, bool bUseLocale ) const;
+    SbxValues Get(SbxDataType t ) const { return GetImpl(t, false); };
+    SbxValues GetUsingLocale(SbxDataType t ) const { return GetImpl(t, true); };
 };
 
 inline bool SbxValue::operator<=( const SbxValue& r ) const

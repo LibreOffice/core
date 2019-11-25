@@ -175,23 +175,23 @@ void ImpPutString( SbxValues* p, const OUString* n )
         case SbxCHAR:
             p->nChar = ImpGetChar( &aTmp ); break;
         case SbxBYTE:
-            p->nByte = ImpGetByte( &aTmp ); break;
+            p->nByte = ImpGetByte( &aTmp, false ); break;
         case SbxINTEGER:
         case SbxBOOL:
-            p->nInteger = ImpGetInteger( &aTmp ); break;
+            p->nInteger = ImpGetInteger( &aTmp, false ); break;
         case SbxLONG:
-            p->nLong = ImpGetLong( &aTmp ); break;
+            p->nLong = ImpGetLong( &aTmp, false ); break;
         case SbxULONG:
             p->nULong = ImpGetULong( &aTmp ); break;
         case SbxERROR:
         case SbxUSHORT:
             p->nUShort = ImpGetUShort( &aTmp ); break;
         case SbxSINGLE:
-            p->nSingle = ImpGetSingle( &aTmp ); break;
+            p->nSingle = ImpGetSingle( &aTmp, false ); break;
         case SbxDATE:
             p->nDouble = ImpGetDate( &aTmp ); break;
         case SbxDOUBLE:
-            p->nDouble = ImpGetDouble( &aTmp ); break;
+            p->nDouble = ImpGetDouble( &aTmp, false ); break;
         case SbxCURRENCY:
             p->nInt64 = ImpGetCurrency( &aTmp ); break;
         case SbxDECIMAL:
@@ -231,9 +231,9 @@ void ImpPutString( SbxValues* p, const OUString* n )
         case SbxBYREF | SbxCHAR:
             *p->pChar = ImpGetChar( p ); break;
         case SbxBYREF | SbxBYTE:
-            *p->pByte = ImpGetByte( p ); break;
+            *p->pByte = ImpGetByte( p, false ); break;
         case SbxBYREF | SbxINTEGER:
-            *p->pInteger = ImpGetInteger( p ); break;
+            *p->pInteger = ImpGetInteger( p, false ); break;
         case SbxBYREF | SbxBOOL:
             *p->pUShort = sal::static_int_cast< sal_uInt16 >( ImpGetBool( p ) );
             break;
@@ -241,15 +241,15 @@ void ImpPutString( SbxValues* p, const OUString* n )
         case SbxBYREF | SbxUSHORT:
             *p->pUShort = ImpGetUShort( p ); break;
         case SbxBYREF | SbxLONG:
-            *p->pLong = ImpGetLong( p ); break;
+            *p->pLong = ImpGetLong( p, false ); break;
         case SbxBYREF | SbxULONG:
             *p->pULong = ImpGetULong( p ); break;
         case SbxBYREF | SbxSINGLE:
-            *p->pSingle = ImpGetSingle( p ); break;
+            *p->pSingle = ImpGetSingle( p, false ); break;
         case SbxBYREF | SbxDATE:
             *p->pDouble = ImpGetDate( p ); break;
         case SbxBYREF | SbxDOUBLE:
-            *p->pDouble = ImpGetDouble( p ); break;
+            *p->pDouble = ImpGetDouble( p, false ); break;
         case SbxBYREF | SbxCURRENCY:
             *p->pnInt64 = ImpGetCurrency( p ); break;
         case SbxBYREF | SbxSALINT64:
