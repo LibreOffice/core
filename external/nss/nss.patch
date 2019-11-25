@@ -12,19 +12,19 @@
 --- a/nss.orig/nspr/pr/src/misc/prnetdb.c	2017-08-29 23:44:13.690045031 +0530
 +++ b/nss/nspr/pr/src/misc/prnetdb.c	2017-08-29 23:47:03.810814019 +0530
 @@ -438,7 +438,7 @@
- 	char *buf = *bufp;
- 	PRIntn buflen = *buflenp;
- 
--	if (align && ((long)buf & (align - 1))) {
-+	if (align && ((ptrdiff_t)buf & (align - 1))) {
- 		PRIntn skip = align - ((ptrdiff_t)buf & (align - 1));
- 		if (buflen < skip) {
- 			return 0;
+     char *buf = *bufp;
+     PRIntn buflen = *buflenp;
+
+-    if (align && ((long)buf & (align - 1))) {
++    if (align && ((ptrdiff_t)buf & (align - 1))) {
+         PRIntn skip = align - ((ptrdiff_t)buf & (align - 1));
+         if (buflen < skip) {
+             return 0;
 --- a/a/nss/cmd/platlibs.mk	2017-08-29 23:44:13.554044416 +0530
 +++ b/b/nss/cmd/platlibs.mk	2017-08-29 23:46:09.638569150 +0530
 @@ -10,17 +10,22 @@
- 
- ifeq ($(OS_ARCH), SunOS) 
+
+ ifeq ($(OS_ARCH), SunOS)
  ifeq ($(USE_64), 1)
 -EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib:/usr/lib/mps/secv1/64:/usr/lib/mps/64'
 +#In OOo we would probable put the executables next to libs
@@ -34,7 +34,7 @@
 +EXTRA_SHARED_LIBS += -R '$$ORIGIN'
  endif
  endif
- 
+
 +ifeq ($(OS_ARCH), FreeBSD)
 +EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
 +endif
@@ -48,7 +48,7 @@
 +EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
  endif
  endif
- 
+
 --- a/nss.org/nss/coreconf/arch.mk	2017-08-29 23:44:13.646044832 +0530
 +++ b/nss/nss/coreconf/arch.mk	2017-08-29 23:45:51.494487134 +0530
 @@ -305,11 +305,17 @@
@@ -56,14 +56,14 @@
  endif
  OBJDIR_NAME_BASE = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(OBJDIR_NAME_COMPILER)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG)
 -OBJDIR_NAME = $(OBJDIR_NAME_BASE).OBJ
-+# OBJDIR_NAME is used to build the directory containing the built objects, for 
++# OBJDIR_NAME is used to build the directory containing the built objects, for
 +# example mozilla/dist/Linux2.6_x86_glibc_PTH_DBG.OBJ
-+# We need to deliver the contents of that folder into instdir. To make that 
-+# easier in the makefile we rename this directory to "out". 
++# We need to deliver the contents of that folder into instdir. To make that
++# easier in the makefile we rename this directory to "out".
 +#OBJDIR_NAME = $(OBJDIR_NAME_BASE).OBJ
 +OBJDIR_NAME = out
- 
- 
+
+
  ifeq (,$(filter-out WIN%,$(OS_TARGET)))
 -ifndef BUILD_OPT
 +ifdef THIS_HAS_BEEN_DISABLED_TO_GET_out
@@ -74,11 +74,11 @@
 --- a/nss.org/nss/coreconf/FreeBSD.mk	2017-08-29 23:44:13.642044814 +0530
 +++ b/nss/nss/coreconf/FreeBSD.mk	2017-08-29 23:45:20.850348615 +0530
 @@ -25,6 +25,7 @@
- 
+
  DSO_CFLAGS		= -fPIC
  DSO_LDOPTS		= -shared -Wl,-soname -Wl,$(notdir $@)
 +DSO_LDOPTS		+= -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
- 
+
  #
  # The default implementation strategy for FreeBSD is pthreads.
 --- a/nss.org/nss/coreconf/Linux.mk	2017-08-29 23:44:13.642044814 +0530
@@ -90,12 +90,12 @@
 -DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG))
 +DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) $(if $(filter-out $(OS),ANDROID),-Wl$(COMMA)-z$(COMMA)origin '-Wl$(COMMA)-rpath$(COMMA)$$ORIGIN')
  LDFLAGS			+= $(ARCHFLAG) -z noexecstack
- 
+
  # On Maemo, we need to use the -rpath-link flag for even the standard system
 @@ -177,8 +177,13 @@
  endif
  endif
- 
+
 +ifneq ($(SYSTEM_ZLIB),)
 +# Currently (3.12.4) only the tools modutil and signtool are linked with libz
 +# If USE_SYSTEM_ZLIB is not set then the tools link statically libzlib.a which
@@ -103,7 +103,7 @@
  USE_SYSTEM_ZLIB = 1
  ZLIB_LIBS = -lz
 +endif
- 
+
  # The -rpath '$$ORIGIN' linker option instructs this library to search for its
  # dependencies in the same directory where it resides.
 --- a/nss.org/nss/coreconf/rules.mk	2017-08-29 23:44:13.646044832 +0530
@@ -116,7 +116,7 @@
 +	$(AR) cr $@ $(OBJS)
  endif
  	$(RANLIB) $@
- 
+
 --- a/nss.org/nss/coreconf/SunOS5.mk	2017-08-29 23:44:13.646044832 +0530
 +++ b/nss/nss/coreconf/SunOS5.mk	2017-08-29 23:45:00.902258445 +0530
 @@ -48,8 +48,11 @@
@@ -137,7 +137,7 @@
 +++ b/nss/nss/coreconf/Werror.mk	2017-08-29 23:44:23.994091608 +0530
 @@ -94,7 +94,8 @@
      endif #ndef NSS_ENABLE_WERROR
- 
+
      ifeq ($(NSS_ENABLE_WERROR),1)
 -      WARNING_CFLAGS += -Werror
 +      # We do not treat warnings as errors.
@@ -153,3 +153,12 @@
  #! gmake
  #
  # This Source Code Form is subject to the terms of the Mozilla Public
+@@ -140,7 +140,6 @@
+
+ build_nspr: $(NSPR_CONFIG_STATUS)
+    $(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)
+-   $(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)/pr/tests
+
+ install_nspr: build_nspr
+    $(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME) install
+
