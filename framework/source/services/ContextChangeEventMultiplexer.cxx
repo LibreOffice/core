@@ -32,6 +32,7 @@
 #include <algorithm>
 #include <map>
 #include <vector>
+#include <sal/log.hxx>
 
 namespace cssl = css::lang;
 namespace cssu = css::uno;
@@ -163,11 +164,29 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
     // the current context.
     if (rxEventFocus.is() && pFocusDescriptor!=nullptr)
     {
+        if (pFocusDescriptor->msCurrentApplicationName.isEmpty() && pFocusDescriptor->msCurrentContextName.isEmpty()
+                && rxEventFocus.is())
+        {
+            Reference< lang::XServiceInfo > xServInfo( rxEventFocus, uno::UNO_QUERY_THROW );
+            if( xServInfo.is() || xServInfo->getImplementationName() == "com.sun.star.comp.chart2.ChartController")
+            {
+                css::ui::ContextChangeEventObject aEvent (
+                            rxEventFocus,
+                            "com.sun.star.chart2.ChartDocument",
+                            "Chart");
+                rxListener->notifyContextChangeEvent(aEvent);
+
+                return;
+            }
+
+        }
+
         css::ui::ContextChangeEventObject aEvent (
-            nullptr,
-            pFocusDescriptor->msCurrentApplicationName,
-            pFocusDescriptor->msCurrentContextName);
+                    nullptr,
+                    pFocusDescriptor->msCurrentApplicationName,
+                    pFocusDescriptor->msCurrentContextName);
         rxListener->notifyContextChangeEvent(aEvent);
+
     }
 }
 
