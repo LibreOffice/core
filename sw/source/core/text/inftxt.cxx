@@ -1521,50 +1521,48 @@ SwTextFormatInfo::SwTextFormatInfo(OutputDevice* pRenderContext, SwTextFrame *pF
  * and the bMulti and bFirstMulti-flag has to be set correctly.
  */
 SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
-    SwLineLayout& rLay, SwTwips nActWidth ) : SwTextPaintInfo( rInf ),
-    m_bTabOverflow( false )
+    SwLineLayout& rLay, SwTwips nActWidth ) :
+    SwTextPaintInfo( rInf ),
+    m_pRoot(&rLay),
+    m_pLast(&rLay),
+    m_pFly(nullptr),
+    m_pUnderflow(nullptr),
+    m_pRest(nullptr),
+    m_pLastTab(nullptr),
+    m_nSoftHyphPos(TextFrameIndex(0)),
+    m_nLineStart(rInf.GetIdx()),
+    m_nUnderScorePos(TextFrameIndex(COMPLETE_STRING)),
+    m_nLeft(rInf.m_nLeft),
+    m_nRight(rInf.m_nRight),
+    m_nFirst(rInf.m_nLeft),
+    m_nRealWidth(sal_uInt16(nActWidth)),
+    m_nWidth(m_nRealWidth),
+    m_nLineHeight(0),
+    m_nLineNetHeight(0),
+    m_nForcedLeftMargin(0),
+    m_bFull(false),
+    m_bFootnoteDone(true),
+    m_bErgoDone(true),
+    m_bNumDone(true),
+    m_bArrowDone(true),
+    m_bStop(false),
+    m_bNewLine(true),
+    m_bShift(false),
+    m_bUnderflow(false),
+    m_bInterHyph(false),
+    m_bAutoHyph(false),
+    m_bDropInit(false),
+    m_bQuick(rInf.m_bQuick),
+    m_bNoEndHyph(false),
+    m_bNoMidHyph(false),
+    m_bIgnoreFly(false),
+    m_bFakeLineStart(false),
+    m_bTabOverflow( false ),
+    m_bTestFormat(rInf.m_bTestFormat),
+    m_cTabDecimal(0),
+    m_cHookChar(0),
+    m_nMaxHyph(0)
 {
-    m_pRoot = &rLay;
-    m_pLast = &rLay;
-    m_pFly = nullptr;
-    m_pUnderflow = nullptr;
-    m_pRest = nullptr;
-    m_pLastTab = nullptr;
-
-    m_nSoftHyphPos = TextFrameIndex(0);
-    m_nUnderScorePos = TextFrameIndex(COMPLETE_STRING);
-    m_nLineStart = rInf.GetIdx();
-    m_nLeft = rInf.m_nLeft;
-    m_nRight = rInf.m_nRight;
-    m_nFirst = rInf.m_nLeft;
-    m_nRealWidth = sal_uInt16(nActWidth);
-    m_nWidth = m_nRealWidth;
-    m_nLineHeight = 0;
-    m_nLineNetHeight = 0;
-    m_nForcedLeftMargin = 0;
-
-    m_bFull = false;
-    m_bFootnoteDone = true;
-    m_bErgoDone = true;
-    m_bNumDone = true;
-    m_bArrowDone = true;
-    m_bStop = false;
-    m_bNewLine = true;
-    m_bShift = false;
-    m_bUnderflow = false;
-    m_bInterHyph = false;
-    m_bAutoHyph = false;
-    m_bDropInit = false;
-    m_bQuick  = rInf.m_bQuick;
-    m_bNoEndHyph = false;
-    m_bNoMidHyph = false;
-    m_bIgnoreFly = false;
-    m_bFakeLineStart = false;
-
-    m_cTabDecimal = 0;
-    m_cHookChar = 0;
-    m_nMaxHyph = 0;
-    m_bTestFormat = rInf.m_bTestFormat;
     SetMulti( true );
     SetFirstMulti( rInf.IsFirstMulti() );
 }

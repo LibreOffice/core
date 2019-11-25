@@ -287,8 +287,8 @@ const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
 }
 
 SvXMLExportItemMapper::SvXMLExportItemMapper( SvXMLItemMapEntriesRef rMapEntries )
+   : mrMapEntries(std::move(rMapEntries))
 {
-    mrMapEntries = std::move(rMapEntries);
 }
 
 SvXMLExportItemMapper::~SvXMLExportItemMapper()

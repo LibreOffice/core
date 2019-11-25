@@ -2775,25 +2775,23 @@ public:
 };
 
 SectionSaveStruct::SectionSaveStruct( SwHTMLParser& rParser ) :
-    m_nBaseFontStMinSave(0), m_nFontStMinSave(0), m_nFontStHeadStartSave(0),
-    m_nDefListDeepSave(0), m_nContextStMinSave(0), m_nContextStAttrMinSave(0)
+    m_nBaseFontStMinSave(rParser.m_nBaseFontStMin),
+    m_nFontStMinSave(rParser.m_nFontStMin),
+    m_nFontStHeadStartSave(rParser.m_nFontStHeadStart),
+    m_nDefListDeepSave(rParser.m_nDefListDeep),
+    m_nContextStMinSave(rParser.m_nContextStMin),
+    m_nContextStAttrMinSave(rParser.m_nContextStAttrMin)
 {
     // Freeze font stacks
-    m_nBaseFontStMinSave = rParser.m_nBaseFontStMin;
     rParser.m_nBaseFontStMin = rParser.m_aBaseFontStack.size();
 
-    m_nFontStMinSave = rParser.m_nFontStMin;
-    m_nFontStHeadStartSave = rParser.m_nFontStHeadStart;
     rParser.m_nFontStMin = rParser.m_aFontStack.size();
 
     // Freeze context stack
-    m_nContextStMinSave = rParser.m_nContextStMin;
-    m_nContextStAttrMinSave = rParser.m_nContextStAttrMin;
     rParser.m_nContextStMin = rParser.m_aContexts.size();
     rParser.m_nContextStAttrMin = rParser.m_nContextStMin;
 
     // And remember a few counters
-    m_nDefListDeepSave = rParser.m_nDefListDeep;
     rParser.m_nDefListDeep = 0;
 }
 
