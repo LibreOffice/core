@@ -106,8 +106,6 @@ public:
     self_type&  operator++() { ++m_pos; return *this; }
     bool        operator!=(self_type const & other) const { return &m_buf != &other.m_buf || m_pos != other.m_pos; }
     bool        operator==(self_type const & other) const { return &m_buf == &other.m_buf && m_pos == other.m_pos; }
-    enumarray_iterator&
-                operator=(self_type const & other) { m_buf = other.m_buf; m_pos = other.m_pos; return *this; }
 };
 
 template<typename EA>
@@ -133,8 +131,6 @@ public:
     self_type&  operator++() { ++m_pos; return *this; }
     bool        operator!=(self_type const & other) const { return &m_buf != &other.m_buf || m_pos != other.m_pos; }
     bool        operator==(self_type const & other) const { return &m_buf == &other.m_buf && m_pos == other.m_pos; }
-    enumarray_const_iterator&
-                operator=(self_type const & other) { m_buf = other.m_buf; m_pos = other.m_pos; return *this; }
 };
 
 }; // namespace o3tl
