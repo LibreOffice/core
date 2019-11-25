@@ -21,6 +21,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <svx/unopage.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
@@ -170,7 +171,10 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         aGrabBag["mso-pStyle"] <<= sParaStyle;
         xPropertySet->setPropertyValue("CharInteropGrabBag", uno::makeAny(aGrabBag.getAsConstPropertyValueList()));
     }
-    catch (uno::Exception&) {}
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "oox.vml","convert() grabbag exception" );
+    }
 
     // Remove the last character of the shape text, if it would be a newline.
     uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
