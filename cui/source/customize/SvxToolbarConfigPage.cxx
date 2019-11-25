@@ -463,7 +463,7 @@ IMPL_LINK(SvxToolbarConfigPage, InsertHdl, const OString&, rIdent, void)
         pNewEntryData->SetUserDefined();
 
         int nPos = AppendEntry(pNewEntryData, -1);
-        InsertEntryIntoUI(pNewEntryData, nPos, 1);
+        InsertEntryIntoUI(pNewEntryData, m_xContentsListBox->get_widget(), nPos, 1);
 
         static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
 
@@ -561,7 +561,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
                     m_xContentsListBox->insert(nActEntry, sId);
                     m_xContentsListBox->set_toggle(nActEntry, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-                    InsertEntryIntoUI(pEntry, nActEntry, 1);
+                    InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nActEntry, 1);
 
                     m_xContentsListBox->select(nActEntry);
                     m_xContentsListBox->scroll_to_row(nActEntry);
@@ -601,7 +601,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
             m_xContentsListBox->insert(nActEntry, sId);
             m_xContentsListBox->set_toggle(nActEntry, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-            InsertEntryIntoUI(pEntry, nActEntry, 1);
+            InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nActEntry, 1);
 
             m_xContentsListBox->select(nActEntry);
             m_xContentsListBox->scroll_to_row(nActEntry);
@@ -658,7 +658,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
             m_xContentsListBox->insert(nActEntry, sId);
             m_xContentsListBox->set_toggle(nActEntry,
                 pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-            InsertEntryIntoUI(pEntry, nActEntry, 1);
+            InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nActEntry, 1);
 
             m_xContentsListBox->select(nActEntry);
             m_xContentsListBox->scroll_to_row(nActEntry);
@@ -790,7 +790,7 @@ void SvxToolbarConfigPage::SelectElement()
         m_xContentsListBox->insert(i, sId);
         if (entry->IsBinding() && !entry->IsSeparator())
             m_xContentsListBox->set_toggle(i,  entry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-        InsertEntryIntoUI(entry, i, 1);
+        InsertEntryIntoUI(entry, m_xContentsListBox->get_widget(), i, 1);
         ++i;
     }
 
@@ -819,7 +819,7 @@ void SvxToolbarConfigPage::AddFunction(int nTarget)
         m_xContentsListBox->set_toggle(nNewLBEntry, TRISTATE_TRUE, 0);
     }
 
-    InsertEntryIntoUI(pEntry, nNewLBEntry, 1);
+    InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nNewLBEntry, 1);
 
     // Changes are not visible on the toolbar until this point
     // TODO: Figure out a way to show the changes on the toolbar, but revert if
