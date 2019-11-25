@@ -41,17 +41,12 @@
 
 using namespace ::com::sun::star;
 
-namespace {
-
+namespace
+{
 /// Invokes the RTF tokenizer + dmapper or RtfExportFilter in sw via UNO.
-class RtfFilter : public cppu::WeakImplHelper
-    <
-    document::XFilter,
-    document::XImporter,
-    document::XExporter,
-    lang::XInitialization,
-    lang::XServiceInfo
-    >
+class RtfFilter
+    : public cppu::WeakImplHelper<document::XFilter, document::XImporter, document::XExporter,
+                                  lang::XInitialization, lang::XServiceInfo>
 {
     uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<lang::XComponent> m_xSrcDoc, m_xDstDoc;
@@ -76,9 +71,7 @@ public:
     OUString SAL_CALL getImplementationName() override;
     sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
 };
-
 }
 
 RtfFilter::RtfFilter(uno::Reference<uno::XComponentContext> xContext)
@@ -86,15 +79,17 @@ RtfFilter::RtfFilter(uno::Reference<uno::XComponentContext> xContext)
 {
 }
 
-sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescriptor)
+sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     sal_uInt32 nStartTime = osl_getGlobalTimer();
     if (m_xSrcDoc.is())
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-        uno::Reference< uno::XInterface > xIfc(xMSF->createInstance("com.sun.star.comp.Writer.RtfExport"), uno::UNO_SET_THROW);
-        uno::Reference< document::XExporter > xExporter(xIfc, uno::UNO_QUERY_THROW);
-        uno::Reference< document::XFilter > xFilter(xIfc, uno::UNO_QUERY_THROW);
+        uno::Reference<lang::XMultiServiceFactory> xMSF(m_xContext->getServiceManager(),
+                                                        uno::UNO_QUERY_THROW);
+        uno::Reference<uno::XInterface> xIfc(
+            xMSF->createInstance("com.sun.star.comp.Writer.RtfExport"), uno::UNO_SET_THROW);
+        uno::Reference<document::XExporter> xExporter(xIfc, uno::UNO_QUERY_THROW);
+        uno::Reference<document::XFilter> xFilter(xIfc, uno::UNO_QUERY_THROW);
         xExporter->setSourceDocument(m_xSrcDoc);
         return xFilter->filter(rDescriptor);
     }
@@ -107,17 +102,20 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescrip
         utl::MediaDescriptor aMediaDesc(rDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
         bool bIsNewDoc = !aMediaDesc.getUnpackedValueOrDefault("InsertMode", false);
-        uno::Reference< io::XInputStream > xInputStream;
+        uno::Reference<io::XInputStream> xInputStream;
 
         aMediaDesc.addInputStream();
-        aMediaDesc[ utl::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xInputStream;
+        aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
 
         // If this is set, write to this file, instead of the real document during paste.
         char* pEnv = getenv("SW_DEBUG_RTF_PASTE_TO");
         OUString aOutStr;
-        if (!bIsNewDoc && pEnv && osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pEnv), aOutStr) == osl::FileBase::E_None)
+        if (!bIsNewDoc && pEnv
+            && osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pEnv), aOutStr)
+                   == osl::FileBase::E_None)
         {
-            std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(aOutStr, StreamMode::WRITE));
+            std::unique_ptr<SvStream> pOut(
+                utl::UcbStreamHelper::CreateStream(aOutStr, StreamMode::WRITE));
             std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xInputStream));
             pOut->WriteStream(*pIn);
             return true;
@@ -129,34 +127,36 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescrip
         {
             OUString aInStr;
             osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pEnv), aInStr);
-            std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(aInStr, StreamMode::READ);
+            std::unique_ptr<SvStream> pStream
+                = utl::UcbStreamHelper::CreateStream(aInStr, StreamMode::READ);
             uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
             xInputStream.set(xStream, uno::UNO_QUERY);
         }
 
-        uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FRAME(),
-                                               uno::Reference<frame::XFrame>());
+        uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_FRAME(), uno::Reference<frame::XFrame>());
 
-        xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(),
-                           uno::Reference<task::XStatusIndicator>());
+        xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_STATUSINDICATOR(), uno::Reference<task::XStatusIndicator>());
 
         writerfilter::Stream::Pointer_t pStream(
             writerfilter::dmapper::DomainMapperFactory::createMapper(
                 m_xContext, xInputStream, m_xDstDoc, bRepairStorage,
                 writerfilter::dmapper::SourceDocumentType::RTF, aMediaDesc));
         writerfilter::rtftok::RTFDocument::Pointer_t pDocument(
-            writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator, aMediaDesc));
+            writerfilter::rtftok::RTFDocumentFactory::createDocument(
+                m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator, aMediaDesc));
         pDocument->resolve(*pStream);
         bResult = true;
         sal_uInt32 nEndTime = osl_getGlobalTimer();
-        SAL_INFO("writerfilter.profile", "RtfFilter::filter: finished in " << nEndTime - nStartTime << " ms");
+        SAL_INFO("writerfilter.profile",
+                 "RtfFilter::filter: finished in " << nEndTime - nStartTime << " ms");
     }
     catch (const io::WrongFormatException&)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         // cannot throw WrongFormatException directly :(
-        throw lang::WrappedTargetRuntimeException("",
-                static_cast<OWeakObject*>(this), anyEx);
+        throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this), anyEx);
     }
     catch (const uno::Exception&)
     {
@@ -168,30 +168,25 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescrip
     return bResult;
 }
 
-void RtfFilter::cancel()
-{
-}
+void RtfFilter::cancel() {}
 
-void RtfFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc)
+void RtfFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)
 {
     m_xSrcDoc = xDoc;
 }
 
-void RtfFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc)
+void RtfFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDoc)
 {
     m_xDstDoc = xDoc;
 }
 
-void RtfFilter::initialize(const uno::Sequence< uno::Any >& /*aArguments*/)
+void RtfFilter::initialize(const uno::Sequence<uno::Any>& /*aArguments*/)
 {
     // The DOCX exporter here extracts 'type' of the filter, ie 'Word' or
     // 'Word Template' but we don't need it for RTF.
 }
 
-OUString RtfFilter::getImplementationName()
-{
-    return "com.sun.star.comp.Writer.RtfFilter";
-}
+OUString RtfFilter::getImplementationName() { return "com.sun.star.comp.Writer.RtfFilter"; }
 
 sal_Bool RtfFilter::supportsService(const OUString& rServiceName)
 {
@@ -200,15 +195,14 @@ sal_Bool RtfFilter::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> RtfFilter::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet =
-    {
-        OUString("com.sun.star.document.ImportFilter"),
-        OUString("com.sun.star.document.ExportFilter")
-    };
+    uno::Sequence<OUString> aRet = { OUString("com.sun.star.document.ImportFilter"),
+                                     OUString("com.sun.star.document.ExportFilter") };
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* com_sun_star_comp_Writer_RtfFilter_get_implementation(uno::XComponentContext* pComponent, uno::Sequence<uno::Any> const& /*rSequence*/)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Writer_RtfFilter_get_implementation(uno::XComponentContext* pComponent,
+                                                      uno::Sequence<uno::Any> const& /*rSequence*/)
 {
     return cppu::acquire(new RtfFilter(pComponent));
 }
