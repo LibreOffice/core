@@ -583,6 +583,15 @@ namespace sw { namespace mark
         }
 
         if ((eType == MarkType::TEXT_FIELDMARK || eType == MarkType::DATE_FIELDMARK)
+            && (rPaM.GetPoint()->nNode.GetNode().StartOfSectionNode() != rPaM.GetMark()->nNode.GetNode().StartOfSectionNode()
+                || (pSepPos && rPaM.GetPoint()->nNode.GetNode().StartOfSectionNode() != pSepPos->nNode.GetNode().StartOfSectionNode())))
+        {
+            SAL_WARN("sw.core", "MarkManager::makeMark(..)"
+                " - invalid range on fieldmark, different nodes array sections");
+            return nullptr;
+        }
+
+        if ((eType == MarkType::TEXT_FIELDMARK || eType == MarkType::DATE_FIELDMARK)
             // can't check for Copy - it asserts - but it's also obviously unnecessary
             && eMode == InsertMode::New
             && sw::mark::IsFieldmarkOverlap(rPaM))
