@@ -80,14 +80,6 @@ ScPivotField::ScPivotField(SCCOL nNewCol) :
     mnDupCount(0)
 {}
 
-ScPivotField::ScPivotField( const ScPivotField& rPivotField ) :
-    maFieldRef(rPivotField.maFieldRef),
-    mnOriginalDim(rPivotField.mnOriginalDim),
-    nFuncMask(rPivotField.nFuncMask),
-    nCol(rPivotField.nCol),
-    mnDupCount(rPivotField.mnDupCount)
-{}
-
 long ScPivotField::getOriginalDim() const
 {
     return mnOriginalDim >= 0 ? mnOriginalDim : static_cast<long>(nCol);

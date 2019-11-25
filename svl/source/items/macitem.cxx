@@ -55,18 +55,6 @@ OUString SvxMacro::GetLanguage()const
     return aLibName;
 }
 
-SvxMacro& SvxMacro::operator=( const SvxMacro& rBase )
-{
-    if( this != &rBase )
-    {
-        aMacName = rBase.aMacName;
-        aLibName = rBase.aLibName;
-        eType = rBase.eType;
-    }
-    return *this;
-}
-
-
 SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 {
     if (this != &rTbl)

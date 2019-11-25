@@ -149,9 +149,6 @@ public:
 
         IterateResult(double fFirst, double fRest, size_t nCount) :
             mfFirst(fFirst), mfRest(fRest), mnCount(nCount) {}
-
-        IterateResult(const IterateResult& r) :
-            mfFirst(r.mfFirst), mfRest(r.mfRest), mnCount(r.mnCount) {}
     };
 
     /** Checks nC or nR for zero and uses GetElementsMax() whether a matrix of
