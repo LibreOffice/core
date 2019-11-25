@@ -170,12 +170,10 @@ void SvxNotebookbarConfigPage::Init()
     m_xContentsListBox->clear();
     m_xSaveInListBox->clear();
     CustomNotebookbarGenerator::createCustomizedUIFile();
-    OUString sAppName, sFileName;
-    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sFileName);
-    OUString sNotebookbarInterface = getFileName(sFileName);
+    OUString sNotebookbarInterface = getFileName(m_sFileName);
 
     OUString sScopeName
-        = utl::ConfigManager::getProductName() + " " + sAppName + " -  " + sNotebookbarInterface;
+        = utl::ConfigManager::getProductName() + " " + m_sAppName + " -  " + sNotebookbarInterface;
     OUString sSaveInListBoxID = notebookbarTabScope;
 
     m_xSaveInListBox->append(sSaveInListBoxID, sScopeName);
@@ -213,12 +211,10 @@ short SvxNotebookbarConfigPage::QueryReset()
         OUString sOriginalUIPath = CustomNotebookbarGenerator::getOriginalUIPath();
         OUString sCustomizedUIPath = CustomNotebookbarGenerator::getCustomizedUIPath();
         osl::File::copy(sOriginalUIPath, sCustomizedUIPath);
-        OUString sAppName, sFileName;
-        CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sFileName);
-        OUString sNotebookbarInterface = getFileName(sFileName);
+        OUString sNotebookbarInterface = getFileName(m_sFileName);
         Sequence<OUString> sSequenceEntries;
         CustomNotebookbarGenerator::setCustomizedUIItem(sSequenceEntries, sNotebookbarInterface);
-        OUString sUIPath = "modules/s" + sAppName.toAsciiLowerCase() + "/ui/";
+        OUString sUIPath = "modules/s" + m_sAppName.toAsciiLowerCase() + "/ui/";
         sfx2::SfxNotebookBar::ReloadNotebookBar(sUIPath);
     }
     return nValue;
@@ -229,9 +225,6 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
                                                     const OUString& sUIItemCommand, int nPos,
                                                     int nStartCol)
 {
-    OUString sAppName, sFileName;
-    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sFileName);
-
     css::uno::Reference<css::container::XNameAccess> m_xCommandToLabelMap,
         m_xGlobalCommandToLabelMap;
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
@@ -241,7 +234,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
     uno::Sequence<beans::PropertyValue> aPropSeq, aGlobalPropSeq;
 
     xNameAccess->getByName("com.sun.star.text.GlobalDocument") >>= m_xGlobalCommandToLabelMap;
-    xNameAccess->getByName(getModuleId(sAppName)) >>= m_xCommandToLabelMap;
+    xNameAccess->getByName(getModuleId(m_sAppName)) >>= m_xCommandToLabelMap;
 
     try
     {
@@ -559,10 +552,7 @@ static void EditRegistryFile(const OUString& sUIItemId, const OUString& sSetEntr
 void SvxNotebookbarEntriesListBox::ChangedVisibility(int nRow)
 {
     OUString sUIItemId = m_xControl->get_selected_id();
-    OUString sAppName;
-    OUString sFileName;
-    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sFileName);
-    OUString sNotebookbarInterface = getFileName(sFileName);
+    OUString sNotebookbarInterface = getFileName(m_pPage->GetFileName());
 
     OUString sVisible;
     if (m_xControl->get_toggle(nRow, 0) == TRISTATE_TRUE)
@@ -574,7 +564,7 @@ void SvxNotebookbarEntriesListBox::ChangedVisibility(int nRow)
     sSeqOfEntries[0] = sSetEntries;
     EditRegistryFile(sUIItemId, sSetEntries, sNotebookbarInterface);
     CustomNotebookbarGenerator::modifyCustomizedUIFile(sSeqOfEntries);
-    OUString sUIPath = "modules/s" + sAppName.toAsciiLowerCase() + "/ui/";
+    OUString sUIPath = "modules/s" + m_pPage->GetAppName().toAsciiLowerCase() + "/ui/";
     sfx2::SfxNotebookBar::ReloadNotebookBar(sUIPath);
 }
 
