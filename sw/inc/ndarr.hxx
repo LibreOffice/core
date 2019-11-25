@@ -181,8 +181,6 @@ public:
     void SectionUp( SwNodeRange *);
     void SectionDown( SwNodeRange *pRange, SwStartNodeType = SwNormalStartNode );
 
-    bool CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd ) const;
-
     static void GoStartOfSection(SwNodeIndex *);
     static void GoEndOfSection(SwNodeIndex *);
 

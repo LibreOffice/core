@@ -893,8 +893,10 @@ void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
 {
     if( pRange->aStart >= pRange->aEnd ||
         pRange->aEnd >= Count() ||
-        !CheckNodesRange( pRange->aStart, pRange->aEnd ))
+        !::CheckNodesRange(pRange->aStart, pRange->aEnd, false))
+    {
         return;
+    }
 
     // If the beginning of a range is before or at a start node position, so
     // delete it, otherwise empty S/E or E/S nodes would be created.
@@ -945,9 +947,11 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
 {
     if( pRange->aStart >= pRange->aEnd ||
         pRange->aEnd >= Count() ||
-        !CheckNodesRange( pRange->aStart, pRange->aEnd ) ||
+        !::CheckNodesRange(pRange->aStart, pRange->aEnd, false) ||
         ( HighestLevel( *this, *pRange ) <= 1 ))
+    {
         return;
+    }
 
     // If the beginning of a range is before or at a start node position, so
     // delete it, otherwise empty S/E or E/S nodes would be created.
@@ -1073,8 +1077,10 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
     // check if [rIndex..rIndex + nCnt] is larger than the range
     if( ( !aRg.aStart.GetNode().StartOfSectionIndex() &&
             !aRg.aStart.GetIndex() ) ||
-            ! CheckNodesRange( aRg.aStart, aRg.aEnd ) )
+            !::CheckNodesRange(aRg.aStart, aRg.aEnd, false))
+    {
         return;
+    }
 
     // if aEnd is not on a ContentNode, search the previous one
     while( ( pCurrentNode = &aRg.aEnd.GetNode())->GetStartNode() ||
@@ -1300,37 +1306,6 @@ SwContentNode* SwNodes::GoPrevious(SwNodeIndex *pIdx)
     else
         (*pIdx) = aTmp;
     return static_cast<SwContentNode*>(pNd);
-}
-
-static bool TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, sal_uLong nStt, sal_uLong nEnd )
-{
-    return nStt < nSttIdx && nEnd >= nSttIdx &&
-            nStt < nEndIdx && nEnd >= nEndIdx;
-}
-
-/** Check if the given range is inside one of the defined top-level sections.
- *
- * The top-level sections are Content, AutoText, PostIts, Inserts, and Redlines.
- *
- * @param rStt start index of the range
- * @param rEnd end index of the range
- * @return <true> if valid range
- */
-bool SwNodes::CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd ) const
-{
-    sal_uLong nStt = rStt.GetIndex(), nEnd = rEnd.GetIndex();
-    if( TstIdx( nStt, nEnd, m_pEndOfContent->StartOfSectionIndex(),
-                m_pEndOfContent->GetIndex() )) return true;
-    if( TstIdx( nStt, nEnd, m_pEndOfAutotext->StartOfSectionIndex(),
-                m_pEndOfAutotext->GetIndex() )) return true;
-    if( TstIdx( nStt, nEnd, m_pEndOfPostIts->StartOfSectionIndex(),
-                m_pEndOfPostIts->GetIndex() )) return true;
-    if( TstIdx( nStt, nEnd, m_pEndOfInserts->StartOfSectionIndex(),
-                m_pEndOfInserts->GetIndex() )) return true;
-    if( TstIdx( nStt, nEnd, m_pEndOfRedlines->StartOfSectionIndex(),
-                m_pEndOfRedlines->GetIndex() )) return true;
-
-    return false;       // is somewhere in the middle, ERROR
 }
 
 /** Delete a number of nodes
