@@ -30,7 +30,7 @@ Expr const * ignoreParenAndTemporaryMaterialization(Expr const * expr) {
         if (e == nullptr) {
             return expr;
         }
-        expr = e->GetTemporaryExpr();
+        expr = compat::getSubExpr(e);
     }
 }
 
@@ -908,7 +908,7 @@ bool ImplicitBoolConversion::VisitMaterializeTemporaryExpr(
     if (ignoreLocation(expr)) {
         return true;
     }
-    if (auto const sub = dyn_cast<ExplicitCastExpr>(expr->GetTemporaryExpr())) {
+    if (auto const sub = dyn_cast<ExplicitCastExpr>(compat::getSubExpr(expr))) {
         auto const subsub = compat::getSubExprAsWritten(sub);
         if (subsub->getType().IgnoreParens() == expr->getType().IgnoreParens()
             && isBool(subsub))

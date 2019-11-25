@@ -40,7 +40,7 @@ Expr const* ignoreImplicit(Expr const* expr)
 #endif
         else if (auto const e3 = dyn_cast<MaterializeTemporaryExpr>(e))
         {
-            e = e3->GetTemporaryExpr();
+            e = compat::getSubExpr(e3);
         }
         else if (auto const e4 = dyn_cast<CXXBindTemporaryExpr>(e))
         {
