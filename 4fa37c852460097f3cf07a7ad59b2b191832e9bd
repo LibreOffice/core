@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_30bdf501",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-11-25T14:15:37Z",
+      "side": 1,
+      "message": "This is not correct. We attempt to draw a alpha bitmap to a (virtual) device with alpha here and when we fail using the fast-path, we need to let the slow-path do it. \n\nWith a call to DrawAlphaBitmap we ignore the alpha device compeltely and just blend it to the current \"color\" device. So in case we have a transparent virtual device, the alpha of the bitmap won\u0027t be applied to the alpha of the virtual device (if DrawAlphaBitmap succeeds).",
+      "revId": "4fa37c852460097f3cf07a7ad59b2b191832e9bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
