@@ -1020,6 +1020,19 @@ void ImplicitBoolConversion::checkCXXConstructExpr(
 
 void ImplicitBoolConversion::reportWarning(ImplicitCastExpr const * expr) {
     if (compiler.getLangOpts().CPlusPlus) {
+        if (expr->getCastKind() == CK_ConstructorConversion) {
+            auto const t1 = expr->getType();
+            if (auto const t2 = t1->getAs<TemplateSpecializationType>()) {
+                assert(t2->getNumArgs() >= 1);
+                auto const a = t2->getArg(0);
+                if (a.getKind() == TemplateArgument::Type && a.getAsType()->isBooleanType()
+                    && (loplugin::TypeCheck(t1).TemplateSpecializationClass()
+                        .ClassOrStruct("atomic").StdNamespace()))
+                {
+                    return;
+                }
+            }
+        }
         report(
             DiagnosticsEngine::Warning,
             "implicit conversion (%0) from %1 to %2", compat::getBeginLoc(expr))
