@@ -311,6 +311,12 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
             sEntryName = rAttrName.copy( nColonPos + 1 );
         }
 
+        if (sEntryName.indexOf(':') != -1)
+        {
+            SAL_INFO("xmloff", "invalid attribute name with multiple ':'");
+            return XML_NAMESPACE_UNKNOWN;
+        }
+
         if( pPrefix )
             *pPrefix = sEntryPrefix;
         if( pLocalName )
