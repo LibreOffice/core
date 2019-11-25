@@ -221,8 +221,27 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
              //properties that it rises to the top and is exported first."
              //In bug 119649, it is in such situation, so we need to ignore the link style when doing ms word filter exports and
              //add the second judgement for #i24291# definition.
-             if ( nWhich == RES_TXTATR_INETFMT && ( rItems.begin()->second->Which() == RES_TXTATR_CHARFMT ) )
-                 continue;
+             if (nWhich == RES_TXTATR_CHARFMT)
+             {
+                 const SfxPoolItem* pINetItem = SearchPoolItems(rItems, RES_TXTATR_INETFMT);
+                 if (pINetItem)
+                 {
+                     const SwCharFormat* pFormat = static_cast<const SwFormatCharFormat&>(*pItem).GetCharFormat();
+                     const SwCharFormat* pINetFormat = m_pDoc->FindCharFormatByName(
+                         static_cast<const SwFormatINetFormat&>(*pINetItem).GetINetFormat());
+                     ww8::PoolItems aCharItems, aINetItems;
+                     GetPoolItems(pFormat->GetAttrSet(), aCharItems, false);
+                     GetPoolItems(pINetFormat->GetAttrSet(), aINetItems, false);
+                     for (const auto& rCharItem : aCharItems)
+                     {
+                         const SfxPoolItem* pCharItem = rCharItem.second;
+                         sal_uInt16 nCharWhich = pCharItem->Which();
+                         if (!SearchPoolItems(aINetItems, nCharWhich) && !SearchPoolItems(rItems, nCharWhich))
+                             AttrOutput().OutputItem(*pCharItem);
+                     }
+                     continue;
+                 }
+             }
 
              // tdf#38778 Fix output of the font in DOC run for fields
              if (pFont &&
