@@ -452,7 +452,9 @@ protected:
 
     void                InsertEntryIntoUI(SvxConfigEntry* pNewEntryData,
                                           int nPos, int nStartCol);
-    void InsertEntryIntoNotebookbarTabUI(const OUString& sClassId, const OUString& sUIItemId, const OUString& sUIItemCommand, int nPos,
+    void InsertEntryIntoNotebookbarTabUI(const OUString& sClassId, const OUString& sUIItemId,
+                                         const OUString& sUIItemCommand,
+                                         weld::TreeView& rTreeView, weld::TreeIter& rIter,
                                          int nStartCol);
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
