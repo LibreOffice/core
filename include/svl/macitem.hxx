@@ -60,8 +60,6 @@ public:
     ScriptType GetScriptType() const        { return eType; }
 
     bool HasMacro() const { return !aMacName.isEmpty(); }
-
-    SvxMacro& operator=( const SvxMacro& rBase );
 };
 
 inline SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLibName,

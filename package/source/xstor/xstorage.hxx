@@ -104,12 +104,6 @@ struct StorageHolder_Impl
     css::uno::WeakReference< css::embed::XStorage > m_xWeakRef;
 
     explicit inline StorageHolder_Impl( OStorage* pStorage );
-
-    StorageHolder_Impl( const StorageHolder_Impl& aSH )
-    : m_pPointer( aSH.m_pPointer )
-    , m_xWeakRef( aSH.m_xWeakRef )
-    {
-    }
 };
 
 class SwitchablePersistenceStream;
