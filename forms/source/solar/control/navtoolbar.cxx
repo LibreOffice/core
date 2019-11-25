@@ -286,8 +286,9 @@ namespace frm
                 {
                     OUString sCommandURL( lcl_getCommandURL( pSupportedFeatures->nId ) );
                     m_pToolbar->SetItemCommand( pSupportedFeatures->nId, sCommandURL );
-                    m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId,
-                            vcl::CommandInfoProvider::GetLabelForCommand(sCommandURL, m_sModuleId) );
+                    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommandURL, m_sModuleId);
+                    m_pToolbar->SetQuickHelpText(pSupportedFeatures->nId,
+                            vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
                 }
 
                 if ( pSupportedFeatures->bItemWindow )

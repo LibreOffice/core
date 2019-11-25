@@ -722,9 +722,9 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                         uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
 
                         OUStringBuffer aBuffer( 60 );
-                        aBuffer.append( vcl::CommandInfoProvider::GetLabelForCommand(
-                            ".uno:PrintDefault",
-                            vcl::CommandInfoProvider::GetModuleIdentifier( xFrame ) ) );
+                        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:PrintDefault",
+                            vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
+                        aBuffer.append(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
                         aBuffer.append( " (" );
                         aBuffer.append( aPrinterName );
                         aBuffer.append(')');

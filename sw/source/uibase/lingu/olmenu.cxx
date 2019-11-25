@@ -293,11 +293,16 @@ SwSpellPopup::SwSpellPopup(
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
 
-    OUString aIgnoreSelection( SwResId( STR_IGNORE_SELECTION ) );
-    m_xPopupMenu->SetItemText(m_nSpellDialogId,
-        vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:SpellingAndGrammarDialog", aModuleName));
-    m_xPopupMenu->SetItemText(m_nCorrectDialogId,
-        vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:AutoCorrectDlg", aModuleName));
+    {
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:SpellingAndGrammarDialog", aModuleName);
+        m_xPopupMenu->SetItemText(m_nSpellDialogId,
+            vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties));
+    }
+    {
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AutoCorrectDlg", aModuleName);
+        m_xPopupMenu->SetItemText(m_nCorrectDialogId,
+            vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties));
+    }
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -307,6 +312,7 @@ SwSpellPopup::SwSpellPopup(
         m_xPopupMenu->HideItem(m_nCorrectMenuId);
     }
     sal_uInt16 nItemPos = m_xPopupMenu->GetItemPos(m_nIgnoreWordId);
+    OUString aIgnoreSelection( SwResId( STR_IGNORE_SELECTION ) );
     m_xPopupMenu->InsertItem(MN_IGNORE_SELECTION, aIgnoreSelection, MenuItemBits::NONE, OString(), nItemPos);
     m_xPopupMenu->SetHelpId(MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
 
@@ -516,8 +522,9 @@ SwSpellPopup::SwSpellPopup(
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
 
     OUString aIgnoreSelection( SwResId( STR_IGNORE_SELECTION ) );
+    auto aCommandProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:SpellingAndGrammarDialog", aModuleName);
     m_xPopupMenu->SetItemText(m_nSpellDialogId,
-        vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:SpellingAndGrammarDialog", aModuleName));
+        vcl::CommandInfoProvider::GetPopupLabelForCommand(aCommandProperties));
     sal_uInt16 nItemPos = m_xPopupMenu->GetItemPos(m_nIgnoreWordId);
     m_xPopupMenu->InsertItem(MN_IGNORE_SELECTION, aIgnoreSelection, MenuItemBits::NONE, OString(), nItemPos);
     m_xPopupMenu->SetHelpId(MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
