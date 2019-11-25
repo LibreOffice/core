@@ -704,7 +704,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
         std::unique_ptr<ScFlatBoolRowSegments> pCurColMarkedRows;
         std::unordered_map<SCROW,ScFlatBoolColSegments> aRowToColSegmentsInTopEnvelope;
         std::unordered_map<SCROW,ScFlatBoolColSegments> aRowToColSegmentsInBottomEnvelope;
-        ScFlatBoolRowSegments aNoRowsMarked;
+        ScFlatBoolRowSegments aNoRowsMarked(mnMaxRow);
         aNoRowsMarked.setFalse( 0, mnMaxRow );
 
         bool bPrevColUnMarked = false;
@@ -715,7 +715,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
             bool bCurColUnMarked = !aMultiSel.HasMarks( nCol );
             if ( !bCurColUnMarked )
             {
-                pCurColMarkedRows.reset( new ScFlatBoolRowSegments() );
+                pCurColMarkedRows.reset( new ScFlatBoolRowSegments(mnMaxRow) );
                 pCurColMarkedRows->setFalse( 0, mnMaxRow );
                 ScMultiSelIter aMultiIter( aMultiSel, nCol );
                 ScFlatBoolRowSegments::ForwardIterator aPrevItr(
@@ -803,14 +803,20 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                         ScRange aAddRange( nCol, nTop - 1, aMultiRange.aStart.Tab(),
                                            nCol, nTop - 1, aMultiRange.aStart.Tab());
                         lcl_AddRanges( rRange, aAddRange ); // Top envelope
-                        aRowToColSegmentsInTopEnvelope[nTop - 1].setTrue( nCol, nCol );
+                        auto it = aRowToColSegmentsInTopEnvelope.find(nTop - 1);
+                        if (it == aRowToColSegmentsInTopEnvelope.end())
+                            it = aRowToColSegmentsInTopEnvelope.emplace(nTop - 1, ScFlatBoolColSegments(mnMaxCol)).first;
+                        it->second.setTrue( nCol, nCol );
                     }
                     if( nBottom < mnMaxRow )
                     {
                         ScRange aAddRange(nCol, nBottom + 1, aMultiRange.aStart.Tab(),
                                           nCol, nBottom + 1, aMultiRange.aStart.Tab());
                         lcl_AddRanges( rRange, aAddRange ); // Bottom envelope
-                        aRowToColSegmentsInBottomEnvelope[nBottom + 1].setTrue( nCol, nCol );
+                        auto it = aRowToColSegmentsInBottomEnvelope.find(nBottom + 1);
+                        if (it == aRowToColSegmentsInBottomEnvelope.end())
+                            it = aRowToColSegmentsInBottomEnvelope.emplace(nBottom + 1, ScFlatBoolColSegments(mnMaxCol)).first;
+                        it->second.setTrue( nCol, nCol );
                     }
                 }
 

@@ -351,8 +351,8 @@ bool ScFlatBoolRowSegments::RangeIterator::getNext(RangeData& rRange)
     return true;
 }
 
-ScFlatBoolRowSegments::ScFlatBoolRowSegments() :
-    mpImpl(new ScFlatBoolSegmentsImpl(static_cast<SCCOLROW>(MAXROW)))
+ScFlatBoolRowSegments::ScFlatBoolRowSegments(SCROW nMaxRow) :
+    mpImpl(new ScFlatBoolSegmentsImpl(nMaxRow))
 {
 }
 
@@ -414,8 +414,8 @@ SCROW ScFlatBoolRowSegments::findLastTrue() const
     return mpImpl->findLastTrue(false);
 }
 
-ScFlatBoolColSegments::ScFlatBoolColSegments() :
-    mpImpl(new ScFlatBoolSegmentsImpl(static_cast<SCCOLROW>(MAXCOL)))
+ScFlatBoolColSegments::ScFlatBoolColSegments(SCCOL nMaxCol) :
+    mpImpl(new ScFlatBoolSegmentsImpl(nMaxCol))
 {
 }
 
@@ -486,8 +486,8 @@ bool ScFlatUInt16RowSegments::ForwardIterator::getValue(SCROW nPos, sal_uInt16& 
     return true;
 }
 
-ScFlatUInt16RowSegments::ScFlatUInt16RowSegments(sal_uInt16 nDefault) :
-    mpImpl(new ScFlatUInt16SegmentsImpl(static_cast<SCCOLROW>(MAXROW), nDefault))
+ScFlatUInt16RowSegments::ScFlatUInt16RowSegments(SCROW nMaxRow, sal_uInt16 nDefault) :
+    mpImpl(new ScFlatUInt16SegmentsImpl(nMaxRow, nDefault))
 {
 }
 

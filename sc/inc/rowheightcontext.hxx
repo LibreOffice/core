@@ -35,7 +35,7 @@ class SC_DLLPUBLIC RowHeightContext
 
 public:
     RowHeightContext(
-        double fPPTX, double fPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
+        SCROW nMaxRow, double fPPTX, double fPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
         OutputDevice* pOutDev );
 
     ~RowHeightContext();

@@ -2662,8 +2662,8 @@ const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCRO
     return nullptr;  // Nothing anymore
 }
 
-ScDocRowHeightUpdater::TabRanges::TabRanges(SCTAB nTab) :
-    mnTab(nTab)
+ScDocRowHeightUpdater::TabRanges::TabRanges(SCTAB nTab, SCROW nMaxRow) :
+    mnTab(nTab), maRanges(nMaxRow)
 {
 }
 
@@ -2709,7 +2709,7 @@ void ScDocRowHeightUpdater::update()
         if (!ValidTab(nTab) || nTab >= mrDoc.GetTableCount() || !mrDoc.maTabs[nTab])
             continue;
 
-        sc::RowHeightContext aCxt(mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
+        sc::RowHeightContext aCxt(mrDoc.MaxRow(), mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
         ScFlatBoolRowSegments::RangeData aData;
         ScFlatBoolRowSegments::RangeIterator aRangeItr(rTabRanges.maRanges);
         for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
@@ -2739,7 +2739,7 @@ void ScDocRowHeightUpdater::updateAll()
     ScProgress aProgress(mrDoc.GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nCellCount, true);
 
     Fraction aZoom(1, 1);
-    sc::RowHeightContext aCxt(mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
+    sc::RowHeightContext aCxt(mrDoc.MaxRow(), mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
     sal_uLong nProgressStart = 0;
     for (SCTAB nTab = 0; nTab < mrDoc.GetTableCount(); ++nTab)
     {

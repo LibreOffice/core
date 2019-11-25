@@ -209,7 +209,7 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
                         std::vector<ScDocRowHeightUpdater::TabRanges>& rRecalcRanges = rXMLImport.GetRecalcRowRanges();
                         while (static_cast<SCTAB>(rRecalcRanges.size()) <= nSheet)
                         {
-                            rRecalcRanges.emplace_back(0);
+                            rRecalcRanges.emplace_back(0, pDoc->MaxRow());
                         }
                         rRecalcRanges.at(nSheet).mnTab = nSheet;
                         rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
