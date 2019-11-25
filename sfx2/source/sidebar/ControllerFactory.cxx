@@ -124,9 +124,10 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
         // Add tooltip.
         if (xController.is())
         {
+            auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rsCommandName,
+                vcl::CommandInfoProvider::GetModuleIdentifier(rxFrame));
             const OUString sTooltip (vcl::CommandInfoProvider::GetTooltipForCommand(
-                    rsCommandName,
-                    rxFrame));
+                    rsCommandName, aProperties, rxFrame));
             if (pToolBox->GetQuickHelpText(nItemId).isEmpty())
                 pToolBox->SetQuickHelpText(nItemId, sTooltip);
             pToolBox->EnableItem(nItemId);

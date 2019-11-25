@@ -954,7 +954,7 @@ enum
                series, if false, it is for the whole diagram, i.e. for all
                series
  */
-void lcl_addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void lcl_addWrappedProperties( std::vector< WrappedPropertyPtr >& rList
             , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact
             , tSeriesOrDiagramPropertyType ePropertyType )
 {
@@ -1057,13 +1057,13 @@ void WrappedStatisticProperties::addProperties( std::vector< Property > & rOutPr
                   | beans::PropertyAttribute::MAYBEVOID );
 }
 
-void WrappedStatisticProperties::addWrappedPropertiesForSeries( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedStatisticProperties::addWrappedPropertiesForSeries( std::vector< WrappedPropertyPtr >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
-void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< WrappedPropertyPtr >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM  );

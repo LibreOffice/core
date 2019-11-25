@@ -31,7 +31,7 @@ namespace chart
 namespace wrapper
 {
 
-void WrappedSceneProperty::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedSceneProperty::addWrappedProperties( std::vector< WrappedPropertyPtr >& rList
                 , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     rList.emplace_back( new WrappedD3DTransformMatrixProperty( spChart2ModelContact ) );

@@ -271,7 +271,7 @@ void WrappedStockProperties::addProperties( std::vector< Property > & rOutProper
                   | beans::PropertyAttribute::MAYBEVOID );
 }
 
-void WrappedStockProperties::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedStockProperties::addWrappedProperties( std::vector< WrappedPropertyPtr >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     rList.emplace_back( new WrappedVolumeProperty( spChart2ModelContact ) );

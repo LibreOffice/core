@@ -653,9 +653,9 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const OUString& rProper
             Reference< beans::XPropertySet > xInnerPropertySet( getDataSeries(), uno::UNO_QUERY );
             if( xInnerPropertySet.is() )
             {
-                const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
-                if( pWrappedProperty )
-                    aRet = pWrappedProperty->getPropertyValue(xInnerPropertySet);
+                WrappedPropertyPtr xWrappedProperty = getWrappedProperty( rPropertyName );
+                if( xWrappedProperty )
+                    aRet = xWrappedProperty->getPropertyValue(xInnerPropertySet);
                 else
                     aRet = xInnerPropertySet->getPropertyValue( rPropertyName );
             }
@@ -683,9 +683,9 @@ const Sequence< beans::Property >& DataSeriesPointWrapper::getPropertySequence()
         return *StaticPointWrapperPropertyArray::get();
 }
 
-std::vector< std::unique_ptr<WrappedProperty> > DataSeriesPointWrapper::createWrappedProperties()
+std::vector< WrappedPropertyPtr > DataSeriesPointWrapper::createWrappedProperties()
 {
-    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
+    std::vector< WrappedPropertyPtr > aWrappedProperties;
 
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
 

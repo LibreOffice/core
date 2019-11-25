@@ -115,7 +115,7 @@ void WrappedAutomaticPositionProperties::addProperties( std::vector< Property > 
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
-void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList )
+void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< WrappedPropertyPtr >& rList )
 {
     rList.emplace_back( new WrappedAutomaticPositionProperty() );
 }

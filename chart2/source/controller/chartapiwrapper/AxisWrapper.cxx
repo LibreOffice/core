@@ -601,9 +601,9 @@ const Sequence< beans::Property >& AxisWrapper::getPropertySequence()
     return *StaticAxisWrapperPropertyArray::get();
 }
 
-std::vector< std::unique_ptr<WrappedProperty> > AxisWrapper::createWrappedProperties()
+std::vector<WrappedPropertyPtr> AxisWrapper::createWrappedProperties()
 {
-    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
+    std::vector<WrappedPropertyPtr> aWrappedProperties;
 
     aWrappedProperties.emplace_back( new WrappedTextRotationProperty() );
     aWrappedProperties.emplace_back( new WrappedProperty("Marks","MajorTickmarks") );

@@ -34,7 +34,7 @@ namespace wrapper
 class WrappedSceneProperty
 {
 public:
-    static void addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
+    static void addWrappedProperties( std::vector< WrappedPropertyPtr >& rList
         , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 

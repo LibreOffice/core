@@ -202,7 +202,7 @@ void WrappedSplineProperties::addProperties( std::vector< Property > & rOutPrope
                   | beans::PropertyAttribute::MAYBEVOID );
 }
 
-void WrappedSplineProperties::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedPropertyPtr >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     rList.emplace_back( new WrappedSplineTypeProperty( spChart2ModelContact ) );

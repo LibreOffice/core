@@ -289,10 +289,10 @@ void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue
     Reference< beans::XFastPropertySet > xFastProp( xProp, uno::UNO_QUERY );
     if(xProp.is())
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
-        if( pWrappedProperty )
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( nHandle );
+        if( xWrappedProperty )
         {
-            rValue = pWrappedProperty->getPropertyValue( xProp );
+            rValue = xWrappedProperty->getPropertyValue( xProp );
         }
         else if( xFastProp.is() )
         {
@@ -312,15 +312,15 @@ void TitleWrapper::setFastCharacterPropertyValue(
     if( xTitle.is())
     {
         Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( nHandle );
 
         for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
         {
             Reference< beans::XFastPropertySet > xFastPropertySet( aStrings[ i ], uno::UNO_QUERY );
             Reference< beans::XPropertySet > xPropSet( xFastPropertySet, uno::UNO_QUERY );
 
-            if( pWrappedProperty )
-                pWrappedProperty->setPropertyValue( rValue, xPropSet );
+            if( xWrappedProperty )
+                xWrappedProperty->setPropertyValue( rValue, xPropSet );
             else if( xFastPropertySet.is() )
                 xFastPropertySet->setFastPropertyValue( nHandle, rValue );
         }
@@ -361,9 +361,9 @@ beans::PropertyState SAL_CALL TitleWrapper::getPropertyState( const OUString& rP
         Reference< beans::XPropertyState > xPropState( getFirstCharacterPropertySet(), uno::UNO_QUERY );
         if( xPropState.is() )
         {
-            const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
-            if( pWrappedProperty )
-                aState = pWrappedProperty->getPropertyState( xPropState );
+            WrappedPropertyPtr xWrappedProperty = getWrappedProperty( rPropertyName );
+            if( xWrappedProperty )
+                aState = xWrappedProperty->getPropertyState( xPropState );
             else
                 aState = xPropState->getPropertyState( rPropertyName );
         }
@@ -394,9 +394,9 @@ Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
         Reference< beans::XPropertyState > xPropState( getFirstCharacterPropertySet(), uno::UNO_QUERY );
         if( xPropState.is() )
         {
-            const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
-            if( pWrappedProperty )
-                aRet = pWrappedProperty->getPropertyDefault(xPropState);
+            WrappedPropertyPtr xWrappedProperty = getWrappedProperty( rPropertyName );
+            if( xWrappedProperty )
+                aRet = xWrappedProperty->getPropertyDefault(xPropState);
             else
                 aRet = xPropState->getPropertyDefault( rPropertyName );
         }
@@ -474,9 +474,9 @@ const Sequence< beans::Property >& TitleWrapper::getPropertySequence()
     return *StaticTitleWrapperPropertyArray::get();
 }
 
-std::vector< std::unique_ptr<WrappedProperty> > TitleWrapper::createWrappedProperties()
+std::vector< WrappedPropertyPtr > TitleWrapper::createWrappedProperties()
 {
-    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
+    std::vector< WrappedPropertyPtr > aWrappedProperties;
 
     aWrappedProperties.emplace_back( new WrappedTitleStringProperty( m_spChart2ModelContact->m_xContext ) );
     aWrappedProperties.emplace_back( new WrappedTextRotationProperty( true ) );

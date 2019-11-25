@@ -87,7 +87,7 @@ chart2::DataPointLabel lcl_CaptionToLabel( sal_Int32 nCaption )
     return aLabel;
 }
 
-void lcl_addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void lcl_addWrappedProperties( std::vector< WrappedPropertyPtr >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact
                                     , tSeriesOrDiagramPropertyType ePropertyType )
 {
@@ -108,13 +108,13 @@ void WrappedDataCaptionProperties::addProperties( std::vector< Property > & rOut
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
-void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< WrappedPropertyPtr >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
-void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< WrappedPropertyPtr >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );

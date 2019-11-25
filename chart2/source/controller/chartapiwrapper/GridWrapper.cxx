@@ -155,9 +155,9 @@ const Sequence< beans::Property >& GridWrapper::getPropertySequence()
     return *StaticGridWrapperPropertyArray::get();
 }
 
-std::vector< std::unique_ptr<WrappedProperty> > GridWrapper::createWrappedProperties()
+std::vector< WrappedPropertyPtr > GridWrapper::createWrappedProperties()
 {
-    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
+    std::vector< WrappedPropertyPtr > aWrappedProperties;
 
     aWrappedProperties.emplace_back( new WrappedDefaultProperty( "LineColor", "LineColor", uno::Any( sal_Int32( 0x000000) ) ) ); // black
 

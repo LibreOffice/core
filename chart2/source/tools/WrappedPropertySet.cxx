@@ -81,10 +81,10 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
     try
     {
         sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( nHandle );
         Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
-        if( pWrappedProperty )
-            pWrappedProperty->setPropertyValue( rValue, xInnerPropertySet );
+        if( xWrappedProperty )
+            xWrappedProperty->setPropertyValue( rValue, xInnerPropertySet );
         else if( xInnerPropertySet.is() )
             xInnerPropertySet->setPropertyValue( rPropertyName, rValue );
         else
@@ -126,10 +126,10 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
     try
     {
         sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( nHandle );
         Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
-        if( pWrappedProperty )
-            aRet = pWrappedProperty->getPropertyValue( xInnerPropertySet );
+        if( xWrappedProperty )
+            aRet = xWrappedProperty->getPropertyValue( xInnerPropertySet );
         else if( xInnerPropertySet.is() )
             aRet = xInnerPropertySet->getPropertyValue( rPropertyName );
         else
@@ -164,9 +164,9 @@ void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPr
     Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
-        if( pWrappedProperty )
-            xInnerPropertySet->addPropertyChangeListener( pWrappedProperty->getInnerName(), xListener );
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( rPropertyName );
+        if( xWrappedProperty )
+            xInnerPropertySet->addPropertyChangeListener( xWrappedProperty->getInnerName(), xListener );
         else
             xInnerPropertySet->addPropertyChangeListener( rPropertyName, xListener );
     }
@@ -176,9 +176,9 @@ void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& 
     Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
-        if( pWrappedProperty )
-            xInnerPropertySet->removePropertyChangeListener( pWrappedProperty->getInnerName(), aListener );
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( rPropertyName );
+        if( xWrappedProperty )
+            xInnerPropertySet->removePropertyChangeListener( xWrappedProperty->getInnerName(), aListener );
         else
             xInnerPropertySet->removePropertyChangeListener( rPropertyName, aListener );
     }
@@ -188,9 +188,9 @@ void SAL_CALL WrappedPropertySet::addVetoableChangeListener( const OUString& rPr
     Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
-        if( pWrappedProperty )
-            xInnerPropertySet->addVetoableChangeListener( pWrappedProperty->getInnerName(), aListener );
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( rPropertyName );
+        if( xWrappedProperty )
+            xInnerPropertySet->addVetoableChangeListener( xWrappedProperty->getInnerName(), aListener );
         else
             xInnerPropertySet->addVetoableChangeListener( rPropertyName, aListener );
     }
@@ -200,9 +200,9 @@ void SAL_CALL WrappedPropertySet::removeVetoableChangeListener( const OUString& 
     Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
-        if( pWrappedProperty )
-            xInnerPropertySet->removeVetoableChangeListener( pWrappedProperty->getInnerName(), aListener );
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( rPropertyName );
+        if( xWrappedProperty )
+            xInnerPropertySet->removeVetoableChangeListener( xWrappedProperty->getInnerName(), aListener );
         else
             xInnerPropertySet->removeVetoableChangeListener( rPropertyName, aListener );
     }
@@ -280,27 +280,27 @@ beans::PropertyState SAL_CALL WrappedPropertySet::getPropertyState( const OUStri
     Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
-        if( pWrappedProperty )
-            aState = pWrappedProperty->getPropertyState( xInnerPropertyState );
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( rPropertyName );
+        if( xWrappedProperty )
+            aState = xWrappedProperty->getPropertyState( xInnerPropertyState );
         else
             aState = xInnerPropertyState->getPropertyState( rPropertyName );
     }
     return aState;
 }
 
-const WrappedProperty* WrappedPropertySet::getWrappedProperty( const OUString& rOuterName )
+const WrappedPropertyPtr& WrappedPropertySet::getWrappedProperty( const OUString& rOuterName )
 {
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rOuterName );
     return getWrappedProperty( nHandle );
 }
 
-const WrappedProperty* WrappedPropertySet::getWrappedProperty( sal_Int32 nHandle )
+const WrappedPropertyPtr& WrappedPropertySet::getWrappedProperty( sal_Int32 nHandle )
 {
     tWrappedPropertyMap::const_iterator aFound( getWrappedPropertyMap().find( nHandle ) );
     if( aFound != getWrappedPropertyMap().end() )
-        return (*aFound).second.get();
-    return nullptr;
+        return (*aFound).second;
+    return m_aEmpty;
 }
 
 Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates( const Sequence< OUString >& rNameSeq )
@@ -323,9 +323,9 @@ void SAL_CALL WrappedPropertySet::setPropertyToDefault( const OUString& rPropert
     Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
-        if( pWrappedProperty )
-            pWrappedProperty->setPropertyToDefault( xInnerPropertyState );
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( rPropertyName );
+        if( xWrappedProperty )
+            xWrappedProperty->setPropertyToDefault( xInnerPropertyState );
         else
             xInnerPropertyState->setPropertyToDefault( rPropertyName );
     }
@@ -336,9 +336,9 @@ Any SAL_CALL WrappedPropertySet::getPropertyDefault( const OUString& rPropertyNa
     Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
-        if( pWrappedProperty )
-            aRet = pWrappedProperty->getPropertyDefault(xInnerPropertyState);
+        WrappedPropertyPtr xWrappedProperty = getWrappedProperty( rPropertyName );
+        if( xWrappedProperty )
+            aRet = xWrappedProperty->getPropertyDefault(xInnerPropertyState);
         else
             aRet = xInnerPropertyState->getPropertyDefault( rPropertyName );
     }
@@ -408,7 +408,7 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
         p = m_pWrappedPropertyMap.get();
         if(!p)
         {
-            std::vector< std::unique_ptr<WrappedProperty> > aPropList( createWrappedProperties() );
+            std::vector<WrappedPropertyPtr> aPropList( createWrappedProperties() );
             p = new tWrappedPropertyMap;
 
             for (auto & elem : aPropList)

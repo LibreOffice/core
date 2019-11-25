@@ -93,7 +93,7 @@ protected: //methods
     The base class 'WrappedPropertySet' will take ownership on the contained pointer.
     It is not allowed to have duplicate entries in this list.
     */
-    virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties()=0;
+    virtual std::vector<WrappedPropertyPtr> createWrappedProperties()=0;
 
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() = 0;
     SAL_DLLPRIVATE css::uno::Reference< css::beans::XPropertyState > getInnerPropertyState();
@@ -101,8 +101,8 @@ protected: //methods
     ::cppu::IPropertyArrayHelper&   getInfoHelper();
     SAL_DLLPRIVATE tWrappedPropertyMap&            getWrappedPropertyMap();
 
-    const WrappedProperty*          getWrappedProperty( const OUString& rOuterName );
-    const WrappedProperty*          getWrappedProperty( sal_Int32 nHandle );
+    const WrappedPropertyPtr&         getWrappedProperty( const OUString& rOuterName );
+    const WrappedPropertyPtr&         getWrappedProperty( sal_Int32 nHandle );
 
 protected: //member
     css::uno::Reference< css::beans::XPropertySetInfo >     m_xInfo;//outer PropertySetInfo
@@ -110,6 +110,8 @@ protected: //member
     std::unique_ptr<::cppu::OPropertyArrayHelper>       m_pPropertyArrayHelper;//holds all possible outer properties
 
     std::unique_ptr<tWrappedPropertyMap>                m_pWrappedPropertyMap;//holds all wrapped properties (containing the special mapping from inner to outer properties)
+
+    WrappedPropertyPtr m_aEmpty;
 
     //Container for the XPropertyChangedListener. The listeners are inserted by handle.
     //OMultiTypeInterfaceContainerHelperInt32             m_aBoundListenerContainer;

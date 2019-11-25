@@ -1870,9 +1870,9 @@ const Sequence< beans::Property >& DiagramWrapper::getPropertySequence()
     return *StaticDiagramWrapperPropertyArray::get();
 }
 
-std::vector< std::unique_ptr<WrappedProperty> > DiagramWrapper::createWrappedProperties()
+std::vector<WrappedPropertyPtr> DiagramWrapper::createWrappedProperties()
 {
-    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
+    std::vector<WrappedPropertyPtr> aWrappedProperties;
 
     WrappedAxisAndGridExistenceProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedAxisTitleExistenceProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );

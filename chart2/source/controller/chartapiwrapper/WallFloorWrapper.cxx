@@ -132,9 +132,9 @@ const Sequence< beans::Property >& WallFloorWrapper::getPropertySequence()
     return *StaticWallFloorWrapperPropertyArray::get();
 }
 
-std::vector< std::unique_ptr<WrappedProperty> > WallFloorWrapper::createWrappedProperties()
+std::vector< WrappedPropertyPtr > WallFloorWrapper::createWrappedProperties()
 {
-    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
+    std::vector< WrappedPropertyPtr > aWrappedProperties;
 
     // use direct state always, so that in XML the value is always
     // exported. Because in the old chart the defaults is as follows:

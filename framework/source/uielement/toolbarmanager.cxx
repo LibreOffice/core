@@ -681,7 +681,8 @@ void ToolBarManager::CreateControllers()
 
         OUString aCommandURL( m_pToolBar->GetItemCommand( nId ) );
         // Command can be just an alias to another command.
-        OUString aRealCommandURL( vcl::CommandInfoProvider::GetRealCommandForCommand( aCommandURL, m_aModuleIdentifier ) );
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, m_aModuleIdentifier);
+        OUString aRealCommandURL( vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties) );
         if ( !aRealCommandURL.isEmpty() )
             aCommandURL = aRealCommandURL;
 
@@ -1018,15 +1019,16 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    OUString aString(vcl::CommandInfoProvider::GetLabelForCommand(aCommandURL, m_aModuleIdentifier));
+                    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, m_aModuleIdentifier);
+                    OUString aString(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
                     if ( !aTooltip.isEmpty() )
-                        m_pToolBar->SetQuickHelpText( nId, aTooltip );
+                        m_pToolBar->SetQuickHelpText(nId, aTooltip);
                     else
-                        m_pToolBar->SetQuickHelpText( nId, vcl::CommandInfoProvider::GetTooltipForCommand(aCommandURL, m_xFrame) );
+                        m_pToolBar->SetQuickHelpText(nId, vcl::CommandInfoProvider::GetTooltipForCommand(aCommandURL, aProperties, m_xFrame));
 
                     if ( !aLabel.isEmpty() )
                     {

@@ -57,7 +57,7 @@ private: //member
 
 }
 
-void WrappedAxisAndGridExistenceProperties::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedAxisAndGridExistenceProperties::addWrappedProperties( std::vector< WrappedPropertyPtr >& rList
             , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     rList.emplace_back( new WrappedAxisAndGridExistenceProperty( true, true, 0, spChart2ModelContact ) );//x axis
@@ -215,7 +215,7 @@ private: //member
 
 }
 
-void WrappedAxisTitleExistenceProperties::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedAxisTitleExistenceProperties::addWrappedProperties( std::vector< WrappedPropertyPtr >& rList
             , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     rList.emplace_back( new WrappedAxisTitleExistenceProperty( 0, spChart2ModelContact ) );//x axis title
@@ -322,7 +322,7 @@ private: //member
 
 }
 
-void WrappedAxisLabelExistenceProperties::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedAxisLabelExistenceProperties::addWrappedProperties( std::vector< WrappedPropertyPtr >& rList
             , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     rList.emplace_back( new WrappedAxisLabelExistenceProperty( true, 0, spChart2ModelContact ) );//x axis

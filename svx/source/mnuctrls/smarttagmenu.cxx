@@ -186,7 +186,8 @@ void SmartTagMenuController::FillMenu()
     {
         const OUString aCommand = ".uno:AutoCorrectDlg?OpenSmartTag:bool=true";
         pVCLMenu->InsertSeparator();
-        pVCLMenu->InsertItem( nMenuId, vcl::CommandInfoProvider::GetPopupLabelForCommand( aCommand, m_aModuleName ) );
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, m_aModuleName);
+        pVCLMenu->InsertItem( nMenuId, vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties) );
         pVCLMenu->SetItemCommand( nMenuId, aCommand );
     }
 }

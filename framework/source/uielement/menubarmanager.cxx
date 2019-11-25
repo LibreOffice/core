@@ -935,12 +935,13 @@ bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< XURLT
 
 OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
 {
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCmdURL, m_aModuleIdentifier);
     if ( !m_bHasMenuBar )
     {
         // This is a context menu, prefer "PopupLabel" over "Label".
-        return vcl::CommandInfoProvider::GetPopupLabelForCommand(rCmdURL, m_aModuleIdentifier);
+        return vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
     }
-    return vcl::CommandInfoProvider::GetMenuLabelForCommand(rCmdURL, m_aModuleIdentifier);
+    return vcl::CommandInfoProvider::GetMenuLabelForCommand(aProperties);
 }
 
 bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler )
@@ -1035,7 +1036,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         }
 
         // Command can be just an alias to another command.
-        OUString aRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand( aItemCommand, m_aModuleIdentifier );
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aItemCommand, m_aModuleIdentifier);
+        OUString aRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
         if ( !aRealCommand.isEmpty() )
             aItemCommand = aRealCommand;
 

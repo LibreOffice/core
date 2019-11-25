@@ -80,7 +80,9 @@ protected:
     OUString             m_aInnerName;
 };
 
-typedef std::map< sal_Int32, std::unique_ptr<const WrappedProperty> > tWrappedPropertyMap;
+typedef std::shared_ptr<WrappedProperty> WrappedPropertyPtr;
+
+typedef std::map<sal_Int32, WrappedPropertyPtr> tWrappedPropertyMap;
 
 } //namespace chart
 

@@ -43,7 +43,7 @@ WrappedCharacterHeightProperty_Base::~WrappedCharacterHeightProperty_Base()
 {
 }
 
-void WrappedCharacterHeightProperty::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
+void WrappedCharacterHeightProperty::addWrappedProperties( std::vector< WrappedPropertyPtr >& rList
             , ReferenceSizePropertyProvider* pRefSizePropProvider  )
 {
     rList.emplace_back( new WrappedCharacterHeightProperty( pRefSizePropProvider ) );

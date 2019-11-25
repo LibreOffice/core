@@ -21,10 +21,10 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDAUTOMATICPOSITIONPROPERTIES_HXX
 
 #include <sal/types.h>
+#include "WrappedProperty.hxx"
 #include <memory>
 #include <vector>
 
-namespace chart { class WrappedProperty; }
 namespace com { namespace sun { namespace star { namespace beans { struct Property; } } } }
 
 namespace chart
@@ -36,7 +36,7 @@ class WrappedAutomaticPositionProperties
 {
 public:
     static void addProperties( std::vector< css::beans::Property >& rOutProperties );
-    static void addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList );
+    static void addWrappedProperties( std::vector< WrappedPropertyPtr >& rList );
 };
 
 } //namespace wrapper

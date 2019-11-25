@@ -146,9 +146,9 @@ const Sequence< beans::Property >& AreaWrapper::getPropertySequence()
     return *StaticAreaWrapperPropertyArray::get();
 }
 
-std::vector< std::unique_ptr<WrappedProperty> > AreaWrapper::createWrappedProperties()
+std::vector<WrappedPropertyPtr> AreaWrapper::createWrappedProperties()
 {
-    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
+    std::vector<WrappedPropertyPtr> aWrappedProperties;
 
     aWrappedProperties.emplace_back( new WrappedDirectStateProperty("LineStyle","LineStyle") );
 

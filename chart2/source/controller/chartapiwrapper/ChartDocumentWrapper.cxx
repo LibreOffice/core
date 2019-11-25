@@ -1405,9 +1405,9 @@ const Sequence< beans::Property >& ChartDocumentWrapper::getPropertySequence()
     return *StaticChartDocumentWrapperPropertyArray::get();
 }
 
-std::vector< std::unique_ptr<WrappedProperty> > ChartDocumentWrapper::createWrappedProperties()
+std::vector<WrappedPropertyPtr> ChartDocumentWrapper::createWrappedProperties()
 {
-    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
+    std::vector<WrappedPropertyPtr> aWrappedProperties;
     aWrappedProperties.emplace_back( new WrappedDataSourceLabelsInFirstRowProperty( m_spChart2ModelContact ) );
     aWrappedProperties.emplace_back( new WrappedDataSourceLabelsInFirstColumnProperty( m_spChart2ModelContact ) );
     aWrappedProperties.emplace_back( new WrappedHasLegendProperty( m_spChart2ModelContact ) );

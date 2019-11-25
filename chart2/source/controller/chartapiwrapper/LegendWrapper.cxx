@@ -384,9 +384,9 @@ const Sequence< beans::Property >& LegendWrapper::getPropertySequence()
     return *StaticLegendWrapperPropertyArray::get();
 }
 
-std::vector< std::unique_ptr<WrappedProperty> > LegendWrapper::createWrappedProperties()
+std::vector<WrappedPropertyPtr> LegendWrapper::createWrappedProperties()
 {
-    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
+    std::vector<WrappedPropertyPtr> aWrappedProperties;
 
     aWrappedProperties.emplace_back( new WrappedLegendAlignmentProperty() );
     aWrappedProperties.emplace_back( new WrappedProperty( "Expansion", "Expansion"));

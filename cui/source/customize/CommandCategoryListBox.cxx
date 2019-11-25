@@ -216,11 +216,13 @@ void CommandCategoryListBox::FillFunctionsList(
 
     for (const auto & rInfo : xCommands)
     {
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rInfo.Command, m_sModuleLongName);
+
         OUString sUIName    = getCommandName(rInfo.Command);
-        OUString sLabel     = vcl::CommandInfoProvider::GetLabelForCommand(rInfo.Command, m_sModuleLongName);
-        OUString sTooltipLabel = vcl::CommandInfoProvider::GetTooltipForCommand( rInfo.Command, m_xFrame);
+        OUString sLabel     = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
+        OUString sTooltipLabel = vcl::CommandInfoProvider::GetTooltipForCommand(rInfo.Command, aProperties, m_xFrame);
         OUString sPopupLabel =
-                (vcl::CommandInfoProvider::GetPopupLabelForCommand(rInfo.Command, m_sModuleLongName))
+                (vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties))
                 .replaceFirst("~", "");
 
         // Apply the search filter

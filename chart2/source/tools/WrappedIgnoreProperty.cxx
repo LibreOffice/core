@@ -68,7 +68,7 @@ beans::PropertyState WrappedIgnoreProperty::getPropertyState( const Reference< b
              : beans::PropertyState_DIRECT_VALUE );
 }
 
-void WrappedIgnoreProperties::addIgnoreLineProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList )
+void WrappedIgnoreProperties::addIgnoreLineProperties( std::vector< WrappedPropertyPtr >& rList )
 {
     rList.emplace_back( new WrappedIgnoreProperty( "LineStyle", uno::Any( drawing::LineStyle_SOLID ) ) );
     rList.emplace_back( new WrappedIgnoreProperty( "LineDashName", uno::Any( OUString() ) ) );
@@ -78,13 +78,13 @@ void WrappedIgnoreProperties::addIgnoreLineProperties( std::vector< std::unique_
     rList.emplace_back( new WrappedIgnoreProperty( "LineJoint", uno::Any( drawing::LineJoint_ROUND ) ) );
 }
 
-void WrappedIgnoreProperties::addIgnoreFillProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList )
+void WrappedIgnoreProperties::addIgnoreFillProperties( std::vector< WrappedPropertyPtr >& rList )
 {
     addIgnoreFillProperties_without_BitmapProperties( rList );
     addIgnoreFillProperties_only_BitmapProperties( rList );
 }
 
-void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList )
+void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( std::vector< WrappedPropertyPtr >& rList )
 {
     rList.emplace_back( new WrappedIgnoreProperty( "FillStyle", uno::Any( drawing::FillStyle_SOLID ) ) );
     rList.emplace_back( new WrappedIgnoreProperty( "FillColor", uno::Any( sal_Int32(-1) ) ) );
@@ -95,7 +95,7 @@ void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( 
     rList.emplace_back( new WrappedIgnoreProperty( "FillBackground", uno::Any( false ) ) );
 }
 
-void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList )
+void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( std::vector< WrappedPropertyPtr >& rList )
 {
     rList.emplace_back( new WrappedIgnoreProperty( "FillBitmapOffsetX", uno::Any( sal_Int16(0) ) ) );
     rList.emplace_back( new WrappedIgnoreProperty( "FillBitmapOffsetY", uno::Any( sal_Int16(0) ) ) );
