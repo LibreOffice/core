@@ -150,7 +150,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                               rNamespaceMap );
             }
         }
-        else if( USHRT_MAX != nUnknownWhich )
+        else if (USHRT_MAX != nUnknownWhich && !aLocalName.isEmpty())
         {
             if( !pUnknownItem )
             {

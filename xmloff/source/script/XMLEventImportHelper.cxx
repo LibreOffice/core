@@ -113,7 +113,7 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
     // translate event name from xml to api
     OUString sMacroName;
     sal_uInt16 nMacroPrefix =
-        rImport.GetNamespaceMap().GetKeyByAttrName( rXmlEventName,
+        rImport.GetNamespaceMap().GetKeyByAttrValueQName(rXmlEventName,
                                                         &sMacroName );
     XMLEventName aEventName( nMacroPrefix, sMacroName );
     NameMap::iterator aNameIter = pEventNameMap->find(aEventName);
@@ -121,7 +121,7 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
     {
         OUString aScriptLanguage;
         sal_uInt16 nScriptPrefix = rImport.GetNamespaceMap().
-                GetKeyByAttrName( rLanguage, &aScriptLanguage );
+                GetKeyByAttrValueQName(rLanguage, &aScriptLanguage);
         if( XML_NAMESPACE_OOO != nScriptPrefix )
             aScriptLanguage = rLanguage ;
 

@@ -578,6 +578,7 @@ void CheckValidName(OUString const& rName)
         auto const c(rName[i]);
         if (c == ':')
         {
+            // see https://www.w3.org/TR/REC-xml-names/#ns-qualnames
             assert(!hasColon && "only one colon allowed");
             hasColon = true;
         }

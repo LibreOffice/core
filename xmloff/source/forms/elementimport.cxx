@@ -147,7 +147,7 @@ namespace xmloff
         if ( !sControlImplementation.isEmpty() )
         {
             OUString sOOoImplementationName;
-            const sal_uInt16 nImplPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sControlImplementation, &sOOoImplementationName );
+            const sal_uInt16 nImplPrefix = GetImport().GetNamespaceMap().GetKeyByAttrValueQName( sControlImplementation, &sOOoImplementationName );
             m_sServiceName = ( nImplPrefix == XML_NAMESPACE_OOO ) ? sOOoImplementationName : sControlImplementation;
         }
 

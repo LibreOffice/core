@@ -169,8 +169,9 @@ RDFaReader::ReadCURIE(OUString const & i_rCURIE) const
         OUString Prefix;
         OUString LocalName;
         OUString Namespace;
-        sal_uInt16 nKey( GetImport().GetNamespaceMap().GetKeyByAttrName_(
-            i_rCURIE, &Prefix, &LocalName, &Namespace) );
+        // LocalName may contain ':', see "ipchar" in RFC 3987
+        sal_uInt16 nKey( GetImport().GetNamespaceMap().GetKeyByQName(
+            i_rCURIE, &Prefix, &LocalName, &Namespace, SvXMLNamespaceMap::QNameMode::AttrValue) );
         if ( Prefix == "_" )
         {
             // eeek, it's a bnode!

@@ -1206,7 +1206,7 @@ bool XMLTransformerBase::RemoveNamespacePrefix( OUString& rName,
 {
     OUString aLocalName;
     sal_uInt16 nPrefix =
-        GetNamespaceMap().GetKeyByAttrName_( rName, &aLocalName );
+        GetNamespaceMap().GetKeyByAttrValueQName(rName, &aLocalName);
     bool bRet = XML_NAMESPACE_UNKNOWN != nPrefix &&
                     (USHRT_MAX == nPrefixOnly || nPrefix == nPrefixOnly);
     if( bRet )

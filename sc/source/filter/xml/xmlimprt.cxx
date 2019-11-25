@@ -1903,7 +1903,7 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
 {
     // parse the attribute value, extract namespace ID, literal namespace, and formula string
     rFormulaNmsp.clear();
-    sal_uInt16 nNsId = GetNamespaceMap().GetKeyByAttrName_( rAttrValue, nullptr, &rFormula, &rFormulaNmsp, false );
+    sal_uInt16 nNsId = GetNamespaceMap().GetKeyByQName(rAttrValue, nullptr, &rFormula, &rFormulaNmsp, SvXMLNamespaceMap::QNameMode::AttrValue);
 
     // check if we have an ODF formula namespace
     if( !bRestrictToExternalNmsp ) switch( nNsId )
