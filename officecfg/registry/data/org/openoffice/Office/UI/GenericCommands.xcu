@@ -5028,10 +5028,10 @@
           <value xml:lang="en-US">~Tip of the day</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Show Tip-Of-The-Day</value>
+          <value xml:lang="en-US">Show Tip-of-the-Day</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Show the Tip-Of-The-Day dialog</value>
+          <value xml:lang="en-US">Show the Tip-of-the-Day dialog</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
