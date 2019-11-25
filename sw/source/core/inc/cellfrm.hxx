@@ -55,6 +55,9 @@ public:
     SwCellFrame* GetFollowCell() const;
     SwCellFrame* GetPreviousCell() const;
 
+    virtual bool IsLeaveUpperAllowed() const override;
+    virtual bool IsCoveredCell() const override;
+
     // used for rowspan stuff:
     const SwCellFrame& FindStartEndOfRowSpanCell( bool bStart ) const;
     long GetLayoutRowSpan() const;
