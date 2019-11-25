@@ -6800,7 +6800,6 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
     const char* pExistingValue(nullptr);
     if (m_pColorAttrList.is() && m_pColorAttrList->getAsChar(FSNS(XML_w, XML_val), pExistingValue))
     {
-        assert(aColorString.equalsL(pExistingValue, rtl_str_getLength(pExistingValue)));
         return;
     }
 
