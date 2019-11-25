@@ -153,6 +153,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         m_pTopLevel = new Qt5MainWindow(*this, pParentWidget, aWinFlags);
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
         m_pTopLevel->setCentralWidget(m_pQWidget);
+        m_pTopLevel->setFocusProxy(m_pQWidget);
     }
     else
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
