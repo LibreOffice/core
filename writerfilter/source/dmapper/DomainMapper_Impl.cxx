@@ -2629,11 +2629,17 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                                         xSyncedPropertySet->setPropertyValue( sPropName, aProp );
                                 }
                             }
-                            catch (uno::Exception&) {}
+                            catch (const uno::Exception&)
+                            {
+                                TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "PushShapeContext() text stylesheet property exception" );
+                            }
                         }
                     }
                 }
-                catch (uno::Exception&) {}
+                catch (const uno::Exception&)
+                {
+                    TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "PushShapeContext()" );
+                }
             }
 
             // A GroupShape doesn't implement text::XTextRange, but appending
