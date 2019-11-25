@@ -235,7 +235,7 @@ void SbRtl_CByte(StarBASIC *, SbxArray & rPar, bool) // JSM
     if ( rPar.Count32() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get32(1);
-        nByte = pSbxVariable->GetByte();
+        nByte = pSbxVariable->GetByteUsingLocale();
     }
     else
     {
@@ -315,7 +315,7 @@ void SbRtl_CDbl(StarBASIC *, SbxArray & rPar, bool)  // JSM
         }
         else
         {
-            nVal = pSbxVariable->GetDouble();
+            nVal = pSbxVariable->GetDoubleUsingLocale();
         }
     }
     else
@@ -332,7 +332,7 @@ void SbRtl_CInt(StarBASIC *, SbxArray & rPar, bool)  // JSM
     if ( rPar.Count32() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get32(1);
-        nVal = pSbxVariable->GetInteger();
+        nVal = pSbxVariable->GetIntegerUsingLocale();
     }
     else
     {
@@ -347,7 +347,7 @@ void SbRtl_CLng(StarBASIC *, SbxArray & rPar, bool)  // JSM
     if ( rPar.Count32() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get32(1);
-        nVal = pSbxVariable->GetLong();
+        nVal = pSbxVariable->GetLongUsingLocale();
     }
     else
     {
@@ -376,7 +376,7 @@ void SbRtl_CSng(StarBASIC *, SbxArray & rPar, bool)  // JSM
         }
         else
         {
-            nVal = pSbxVariable->GetSingle();
+            nVal = pSbxVariable->GetSingleUsingLocale();
         }
     }
     else

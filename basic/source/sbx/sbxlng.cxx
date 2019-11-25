@@ -26,7 +26,7 @@
 
 #include <rtl/math.hxx>
 
-sal_Int32 ImpGetLong( const SbxValues* p )
+sal_Int32 ImpGetLong( const SbxValues* p, bool bUseLocale )
 {
     SbxValues aTmp;
     sal_Int32 nRes;
@@ -121,7 +121,7 @@ start:
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
+                if( ImpScan( *p->pOUString, d, t, nullptr, bUseLocale ) != ERRCODE_NONE )
                     nRes = 0;
                 else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SbxMAXLNG) )
                 {

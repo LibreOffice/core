@@ -263,7 +263,7 @@ SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
     return p;
 }
 
-bool SbxValue::Get( SbxValues& rRes ) const
+bool SbxValue::GetImpl( SbxValues& rRes, bool bUseLocale ) const
 {
     bool bRes = false;
     ErrCode eOld = GetError();
@@ -289,12 +289,12 @@ bool SbxValue::Get( SbxValues& rRes ) const
                 case SbxVOID:
                 case SbxNULL:    break;
                 case SbxVARIANT: rRes = p->aData; break;
-                case SbxINTEGER: rRes.nInteger = ImpGetInteger( &p->aData ); break;
-                case SbxLONG:    rRes.nLong = ImpGetLong( &p->aData ); break;
+                case SbxINTEGER: rRes.nInteger = ImpGetInteger( &p->aData, bUseLocale ); break;
+                case SbxLONG:    rRes.nLong = ImpGetLong( &p->aData, bUseLocale ); break;
                 case SbxSALINT64:   rRes.nInt64 = ImpGetInt64( &p->aData ); break;
                 case SbxSALUINT64:  rRes.uInt64 = ImpGetUInt64( &p->aData ); break;
-                case SbxSINGLE:  rRes.nSingle = ImpGetSingle( &p->aData ); break;
-                case SbxDOUBLE:  rRes.nDouble = ImpGetDouble( &p->aData ); break;
+                case SbxSINGLE:  rRes.nSingle = ImpGetSingle( &p->aData, bUseLocale ); break;
+                case SbxDOUBLE:  rRes.nDouble = ImpGetDouble( &p->aData, bUseLocale ); break;
                 case SbxCURRENCY:rRes.nInt64 = ImpGetCurrency( &p->aData ); break;
                 case SbxDECIMAL: rRes.pDecimal = ImpGetDecimal( &p->aData ); break;
                 case SbxDATE:    rRes.nDouble = ImpGetDate( &p->aData ); break;
@@ -303,7 +303,7 @@ bool SbxValue::Get( SbxValues& rRes ) const
                         ImpGetBool( &p->aData ) );
                     break;
                 case SbxCHAR:    rRes.nChar = ImpGetChar( &p->aData ); break;
-                case SbxBYTE:    rRes.nByte = ImpGetByte( &p->aData ); break;
+                case SbxBYTE:    rRes.nByte = ImpGetByte( &p->aData, bUseLocale ); break;
                 case SbxUSHORT:  rRes.nUShort = ImpGetUShort( &p->aData ); break;
                 case SbxULONG:   rRes.nULong = ImpGetULong( &p->aData ); break;
                 case SbxLPSTR:
@@ -312,7 +312,7 @@ bool SbxValue::Get( SbxValues& rRes ) const
                 case SbxCoreSTRING: p->aPic = ImpGetCoreString( &p->aData );
                                     rRes.pOUString = &p->aPic; break;
                 case SbxINT:
-                    rRes.nInt = static_cast<int>(ImpGetLong( &p->aData ));
+                    rRes.nInt = static_cast<int>(ImpGetLong( &p->aData, bUseLocale ));
                     break;
                 case SbxUINT:
                     rRes.nUInt = static_cast<int>(ImpGetULong( &p->aData ));
@@ -352,10 +352,10 @@ bool SbxValue::Get( SbxValues& rRes ) const
     return bRes;
 }
 
-SbxValues SbxValue::Get(SbxDataType t) const
+SbxValues SbxValue::GetImpl(SbxDataType t, bool useLocale) const
 {
     SbxValues aRes(t);
-    Get(aRes);
+    GetImpl(aRes, useLocale);
     return aRes;
 }
 
@@ -1322,7 +1322,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 RTL_TEXTENCODING_ASCII_US);
             double d;
             SbxDataType t;
-            if( ImpScan( aVal, d, t, nullptr, true ) != ERRCODE_NONE || t == SbxDOUBLE )
+            if( ImpScan( aVal, d, t, nullptr, false ) != ERRCODE_NONE || t == SbxDOUBLE )
             {
                 aData.nSingle = 0.0F;
                 return false;
@@ -1337,7 +1337,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             OUString aVal = read_uInt16_lenPrefixed_uInt8s_ToOUString(r,
                 RTL_TEXTENCODING_ASCII_US);
             SbxDataType t;
-            if( ImpScan( aVal, aData.nDouble, t, nullptr, true ) != ERRCODE_NONE )
+            if( ImpScan( aVal, aData.nDouble, t, nullptr, false ) != ERRCODE_NONE )
             {
                 aData.nDouble = 0.0;
                 return false;
