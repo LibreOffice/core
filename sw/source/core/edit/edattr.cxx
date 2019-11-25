@@ -52,7 +52,7 @@
 // => no attributes
 static sal_uInt16 getMaxLookup()
 {
-    return 1000;
+    return 10000;
 }
 
 bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
