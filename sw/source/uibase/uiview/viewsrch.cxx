@@ -752,8 +752,8 @@ void SwView::Replace()
 }
 
 SwSearchOptions::SwSearchOptions( SwWrtShell const * pSh, bool bBackward )
+   : eStart(SwDocPositions::Curr)
 {
-    eStart = SwDocPositions::Curr;
     if( bBackward )
     {
         eEnd = SwDocPositions::Start;

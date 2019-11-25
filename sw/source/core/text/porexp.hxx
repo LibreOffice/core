@@ -43,7 +43,7 @@ class SwBlankPortion : public SwExpandPortion
 public:
     SwBlankPortion( sal_Unicode cCh, bool bMult = false )
         : m_cChar( cCh ), m_bMulti( bMult )
-        { m_cChar = cCh; SetLen(TextFrameIndex(1)); SetWhichPor( PortionType::Blank ); }
+        { SetLen(TextFrameIndex(1)); SetWhichPor( PortionType::Blank ); }
 
     virtual SwLinePortion *Compress() override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;

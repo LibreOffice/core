@@ -79,9 +79,8 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    TabStopCollectionHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ): mxParent( xParent ), mxContext( xContext )
+    TabStopCollectionHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ): mxParent( xParent ), mxContext( xContext ), mnTabStops(lcl_getTabStops( xParaProps ).getLength())
     {
-        mnTabStops = lcl_getTabStops( xParaProps ).getLength();
     }
 
     virtual sal_Int32 SAL_CALL getCount(  ) override

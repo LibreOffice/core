@@ -796,8 +796,9 @@ public:
     long nWordAdd;
     sal_Int32 nNoLineBreak;
     SwMinMaxArgs( OutputDevice* pOutI, SwViewShell const * pShI, sal_uLong& rMinI, sal_uLong &rAbsI )
-        : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rAbsMin( rAbsI )
-        { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = COMPLETE_STRING; }
+        : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rAbsMin( rAbsI ), nRowWidth(0),
+          nWordWidth(0), nWordAdd(0), nNoLineBreak(COMPLETE_STRING)
+        { }
     void Minimum( long nNew ) const { if( static_cast<long>(rMin) < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
