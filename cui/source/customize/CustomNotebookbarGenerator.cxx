@@ -23,6 +23,7 @@
 #include <config_folders.h>
 #include <CustomNotebookbarGenerator.hxx>
 #include <osl/file.hxx>
+#include <osl/thread.h>
 #include <vcl/builder.hxx>
 #include <vcl/EnumContext.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -126,13 +127,19 @@ static OUString getUIDirPath()
     return sUIDirPath;
 }
 
-char* CustomNotebookbarGenerator::convertToCharPointer(const OUString& sString)
+OString CustomNotebookbarGenerator::getSystemPath(OUString const& sURL)
 {
-    char* cString = new char[sString.getLength() + 1];
-    for (int nIdx = 0; nIdx < sString.getLength(); nIdx++)
-        *(cString + nIdx) = char(sString[nIdx]);
-    *(cString + sString.getLength()) = '\0';
-    return cString;
+    if (sURL.isEmpty())
+        return OString();
+    OUString sSystemPathSettings;
+    if (osl_getSystemPathFromFileURL(sURL.pData, &sSystemPathSettings.pData) != osl_File_E_None)
+    {
+        SAL_WARN("cui.customnotebookbar", "Cannot get system path for :" << sURL);
+        return OString();
+    }
+    OString osSystemPathSettings
+        = OUStringToOString(sSystemPathSettings, osl_getThreadTextEncoding());
+    return osSystemPathSettings;
 }
 
 static void changeNodeValue(xmlNode* pNodePtr, const char* pProperty, const char* pValue)
@@ -173,48 +180,36 @@ static void searchNodeAndAttribute(xmlNode* pNodePtr, const char* pUIItemID, con
     }
 }
 
-static xmlDocPtr notebookbarXMLParser(const char* pDocName, char* pUIItemID, char* pProperty,
-                                      char* pValue)
+static xmlDocPtr notebookbarXMLParser(const OString& rDocName, const OString& rUIItemID,
+                                      const OString& rProperty, const OString& rValue)
 {
-    xmlDocPtr pDocPtr;
-    xmlNodePtr pNodePtr;
-
-    pDocPtr = xmlParseFile(pDocName);
-    pNodePtr = xmlDocGetRootElement(pDocPtr);
-    searchNodeAndAttribute(pNodePtr, pUIItemID, pProperty, pValue);
+    xmlDocPtr pDocPtr = xmlParseFile(rDocName.getStr());
+    xmlNodePtr pNodePtr = xmlDocGetRootElement(pDocPtr);
+    searchNodeAndAttribute(pNodePtr, rUIItemID.getStr(), rProperty.getStr(), rValue.getStr());
     return pDocPtr;
 }
 
 void CustomNotebookbarGenerator::modifyCustomizedUIFile(const Sequence<OUString>& sUIItemProperties)
 {
-    OUString sCustomizedUIPath = getCustomizedUIPath();
-    char* cCustomizedUIPath = convertToCharPointer(sCustomizedUIPath);
+    OString sCustomizedUIPath = getSystemPath(getCustomizedUIPath());
     for (auto const& aValue : sUIItemProperties)
     {
-        char** pProperties = new char*[aUIPropertiesCount];
+        std::vector<OString> aProperties(aUIPropertiesCount);
         for (sal_Int32 aIndex = 0; aIndex < aUIPropertiesCount; aIndex++)
         {
-            int nIdx = int(aIndex);
-            sal_Int32 rPos = aIndex;
-            pProperties[nIdx] = convertToCharPointer(aValue.getToken(rPos, ',', rPos));
+            sal_Int32 nPos = aIndex;
+            OUString sToken = aValue.getToken(nPos, ',', nPos);
+            aProperties[aIndex] = OUStringToOString(sToken, RTL_TEXTENCODING_UTF8);
         }
-        xmlDocPtr doc;
-        doc = notebookbarXMLParser(cCustomizedUIPath, pProperties[0], pProperties[1],
-                                   pProperties[2]);
-
-        for (int nIdx = 0; nIdx < aUIPropertiesCount; nIdx++)
-        {
-            delete[] pProperties[nIdx];
-        }
-        delete[] pProperties;
+        xmlDocPtr doc = notebookbarXMLParser(sCustomizedUIPath, aProperties[0], aProperties[1],
+                                             aProperties[2]);
 
         if (doc != nullptr)
         {
-            xmlSaveFormatFile(cCustomizedUIPath, doc, 1);
+            xmlSaveFormatFile(sCustomizedUIPath.getStr(), doc, 1);
             xmlFreeDoc(doc);
         }
     }
-    delete[] cCustomizedUIPath;
 }
 
 void CustomNotebookbarGenerator::getFileNameAndAppName(OUString& sAppName,

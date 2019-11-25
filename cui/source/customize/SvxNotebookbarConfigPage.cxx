@@ -435,12 +435,10 @@ void SvxNotebookbarConfigPage::FillFunctionsList(std::vector<NotebookbarEntries>
                                                  std::vector<CategoriesEntries>& aCategoryList,
                                                  OUString& sActiveCategory)
 {
-    xmlDocPtr pDoc;
-    xmlNodePtr pNodePtr;
-    OUString sUIFilePath = CustomNotebookbarGenerator::getCustomizedUIPath();
-    char* cUIFileUIPath = CustomNotebookbarGenerator::convertToCharPointer(sUIFilePath);
-    pDoc = xmlParseFile(cUIFileUIPath);
-    pNodePtr = xmlDocGetRootElement(pDoc);
+    OString sUIFileUIPath = CustomNotebookbarGenerator::getSystemPath(
+        CustomNotebookbarGenerator::getCustomizedUIPath());
+    xmlDocPtr pDoc = xmlParseFile(sUIFileUIPath.getStr());
+    xmlNodePtr pNodePtr = xmlDocGetRootElement(pDoc);
 
     CategoriesEntries aCurItemEntry;
     searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, aCurItemEntry, pNodePtr,
@@ -449,7 +447,6 @@ void SvxNotebookbarConfigPage::FillFunctionsList(std::vector<NotebookbarEntries>
     {
         xmlFreeDoc(pDoc);
     }
-    delete[] cUIFileUIPath;
 }
 
 void SvxNotebookbarConfigPage::SelectElement()
