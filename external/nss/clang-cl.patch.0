@@ -22,7 +22,7 @@
 +     defined(_M_ARM64)) && !defined __clang__
  # include <intrin.h>
  # pragma  intrinsic(_BitScanForward,_BitScanReverse)
-   __forceinline static int __prBitScanForward32(unsigned int val)
+ __forceinline static int __prBitScanForward32(unsigned int val)
 @@ -32,7 +32,7 @@
  # define pr_bitscan_ctz32(val)  __prBitScanForward32(val)
  # define pr_bitscan_clz32(val)  __prBitScanReverse32(val)

@@ -22,7 +22,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss.vs2015.patch) \
     external/nss/ubsan.patch.0 \
     external/nss/clang-cl.patch.0 \
-    external/nss/nss.fix-freebl-add-lcc-support.patch.1 \
     $(if $(filter iOS,$(OS)), \
         external/nss/nss-ios.patch) \
 	$(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)), \
@@ -30,7 +29,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	$(if $(filter WNT,$(OS)), \
 		external/nss/nss.vs2015.pdb.patch) \
 	$(if $(filter WNT,$(OS)), \
-    	external/nss/nss.utf8bom.patch.1) \
+		external/nss/nss.utf8bom.patch.1) \
 	$(if $(filter ANDROID,$(OS)), \
 		external/nss/nss-android.patch.1) \
 ))

@@ -18,5 +18,5 @@ diff -ru nss.orig/nss/coreconf/WIN32.mk nss/nss/coreconf/WIN32.mk
 -	OPTIMIZER += -Zi -Fd$(OBJDIR)/ -Od
 +	OPTIMIZER += -Zi -Fd./ -Od
  	NULLSTRING :=
- 	SPACE      := $(NULLSTRING) # end of the line
- 	USERNAME   := $(subst $(SPACE),_,$(USERNAME))
+ 	DEFINES    += -DDEBUG -UNDEBUG
+ 	DLLFLAGS   += -DEBUG -OUT:$@
