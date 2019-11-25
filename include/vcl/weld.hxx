@@ -870,7 +870,6 @@ public:
     virtual void collapse_row(const TreeIter& rIter) = 0;
     virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
     virtual void set_sensitive(const TreeIter& rIter, bool bSensitive, int col = -1) = 0;
-    virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
     virtual void set_toggle(const TreeIter& rIter, TriState bOn, int col) = 0;
@@ -878,8 +877,10 @@ public:
     virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
     virtual void set_id(const TreeIter& rIter, const OUString& rId) = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
+    virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
+    virtual void set_image(const TreeIter& rIter, VirtualDevice& rImage, int col = -1) = 0;
     virtual void set_image(const TreeIter& rIter,
-                           const css::uno::Reference<css::graphic::XGraphic>& rImage, int col)
+                           const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
         = 0;
     virtual void set_font_color(const TreeIter& rIter, const Color& rColor) const = 0;
     virtual void scroll_to_row(const TreeIter& rIter) = 0;
