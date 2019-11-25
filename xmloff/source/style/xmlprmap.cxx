@@ -65,9 +65,6 @@ struct XMLPropertySetMapperEntry_Impl
         const XMLPropertyMapEntry& rMapEntry,
         const rtl::Reference< XMLPropertyHandlerFactory >& rFactory );
 
-    XMLPropertySetMapperEntry_Impl(
-        const XMLPropertySetMapperEntry_Impl& rEntry );
-
     sal_uInt32 GetPropType() const { return nType & XML_TYPE_PROP_MASK; }
 };
 
@@ -85,20 +82,6 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     nEarliestODFVersionForExport( rMapEntry.mnEarliestODFVersionForExport ),
     bImportOnly( rMapEntry.mbImportOnly),
     pHdl( rFactory->GetPropertyHandler( rMapEntry.mnType & MID_FLAG_MASK ) )
-{
-    assert(pHdl);
-}
-
-XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
-        const XMLPropertySetMapperEntry_Impl& rEntry ) :
-    sXMLAttributeName( rEntry.sXMLAttributeName),
-    sAPIPropertyName( rEntry.sAPIPropertyName),
-    nType( rEntry.nType),
-    nXMLNameSpace( rEntry.nXMLNameSpace),
-    nContextId( rEntry.nContextId),
-    nEarliestODFVersionForExport( rEntry.nEarliestODFVersionForExport ),
-    bImportOnly( rEntry.bImportOnly),
-    pHdl( rEntry.pHdl)
 {
     assert(pHdl);
 }
