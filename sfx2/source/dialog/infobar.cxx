@@ -135,8 +135,12 @@ void SfxCloseButton::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     aPolygon.append(B2DPoint(aRect.Left(), aRect.Bottom()));
     aPolygon.setClosed(true);
 
+    Color aBackgroundColor(m_aBackgroundColor);
+    if (IsMouseOver() || HasFocus())
+        aBackgroundColor.ApplyTintOrShade(-2000);
+
     PolyPolygonColorPrimitive2D* pBack =
-        new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), m_aBackgroundColor);
+        new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aBackgroundColor.getBColor());
     aSeq[0] = pBack;
 
     LineAttribute aLineAttribute(m_aForegroundColor, 2.0);
@@ -180,7 +184,7 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
        InfobarType ibType,
        bool bShowCloseButton,
        WinBits nMessageStyle = WB_LEFT|WB_VCENTER) :
-    Window(pParent, 0),
+    Window(pParent, WB_DIALOGCONTROL),
     m_sId(sId),
     m_eType(ibType),
     m_pImage(VclPtr<FixedImage>::Create(this, nMessageStyle)),
@@ -189,6 +193,7 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     m_pCloseBtn(VclPtr<SfxCloseButton>::Create(this)),
     m_aActionBtns()
 {
+    m_pCloseBtn->SetStyle(WB_DEFBUTTON | WB_TABSTOP);
     SetForeAndBackgroundColors(m_eType);
     float fScaleFactor = GetDPIScaleFactor();
     long nWidth = pParent->GetSizePixel().getWidth();
@@ -363,7 +368,7 @@ IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, Button*, void)
 }
 
 SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(SfxInfoBarContainerChild* pChildWin ) :
-    Window(pChildWin->GetParent(), 0),
+    Window(pChildWin->GetParent(), WB_DIALOGCONTROL),
     m_pChildWin(pChildWin),
     m_pInfoBars()
 {
