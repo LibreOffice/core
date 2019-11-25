@@ -4,7 +4,7 @@ diff -ur nss.org/nspr/build/autoconf/config.sub nss/nspr/build/autoconf/config.s
 @@ -111,6 +111,11 @@
      exit 1;;
  esac
- 
+
 +if test $1 = "arm-unknown-linux-androideabi"; then echo $1; exit; fi
 +if test $1 = "aarch64-unknown-linux-android"; then echo $1; exit; fi
 +if test $1 = "i686-pc-linux-android"; then echo $1; exit; fi
@@ -18,7 +18,7 @@ diff -ur nss.org/nspr/configure nss/nspr/configure
 +++ nss/nspr/configure	2017-09-07 15:31:47.604075663 +0200
 @@ -2737,18 +2739,15 @@
      esac
- 
+
          AS="$android_toolchain"/bin/"$android_tool_prefix"-as
 -    CC="$android_toolchain"/bin/"$android_tool_prefix"-gcc
 -    CXX="$android_toolchain"/bin/"$android_tool_prefix"-g++
@@ -30,14 +30,14 @@ diff -ur nss.org/nspr/configure nss/nspr/configure
      AR="$android_toolchain"/bin/"$android_tool_prefix"-ar
      RANLIB="$android_toolchain"/bin/"$android_tool_prefix"-ranlib
      STRIP="$android_toolchain"/bin/"$android_tool_prefix"-strip
- 
+
      CPPFLAGS="-I$android_platform/usr/include $CPPFLAGS"
 -    CFLAGS="-mandroid -I$android_platform/usr/include -fno-short-enums -fno-exceptions $CFLAGS"
 -    CXXFLAGS="-mandroid -I$android_platform/usr/include -fpic -fno-short-enums -fno-exceptions $CXXFLAGS"
 -    LDFLAGS="-mandroid -L$android_platform/usr/lib -Wl,-rpath-link=$android_platform/usr/lib --sysroot=$android_platform $LDFLAGS"
- 
+
      $as_echo "#define ANDROID 1" >>confdefs.h
- 
+
 diff -ur nss.org/nss/Makefile nss/nss/Makefile
 --- nss.org/nss/Makefile	2017-09-07 15:29:44.933245745 +0200
 +++ nss/nss/Makefile	2017-09-07 15:32:04.347181076 +0200
