@@ -102,49 +102,49 @@ struct Word2CHPX
     sal_uInt32 fcPic;
 
     Word2CHPX()
-    {
-        fBold = 0;
-        fItalic = 0;
-        fRMarkDel = 0;
-        fOutline = 0;
-        fFieldVanish = 0;
-        fSmallCaps = 0;
-        fCaps = 0;
-        fVanish = 0;
-        fRMark = 0;
-        fSpec = 0;
-        fStrike = 0;
-        fObj = 0;
-        fBoldBi = 0;
-        fItalicBi = 0;
-        fBiDi = 0;
-        fDiacUSico = 0;
-        fsIco = 0;
-        fsFtc = 0;
-        fsHps = 0;
-        fsKul = 0;
-        fsPos = 0;
-        fsSpace = 0;
-        fsLid = 0;
-        fsIcoBi = 0;
-        fsFtcBi = 0;
-        fsHpsBi = 0;
-        fsLidBi = 0;
+      : fBold(0),
+        fItalic(0),
+        fRMarkDel(0),
+        fOutline(0),
+        fFieldVanish(0),
+        fSmallCaps(0),
+        fCaps(0),
+        fVanish(0),
+        fRMark(0),
+        fSpec(0),
+        fStrike(0),
+        fObj(0),
+        fBoldBi(0),
+        fItalicBi(0),
+        fBiDi(0),
+        fDiacUSico(0),
+        fsIco(0),
+        fsFtc(0),
+        fsHps(0),
+        fsKul(0),
+        fsPos(0),
+        fsSpace(0),
+        fsLid(0),
+        fsIcoBi(0),
+        fsFtcBi(0),
+        fsHpsBi(0),
+        fsLidBi(0),
 
-        ftc = 0;
-        hps = 0;
-        qpsSpace = 0;
-        fSysVanish = 0;
-        fNumRun = 0;
-        ico = 0;
-        kul = 0;
-        hpsPos = 0;
-        icoBi = 0;
-        lid = 0;
-        ftcBi = 0;
-        hpsBi = 0;
-        lidBi = 0;
-        fcPic = 0;
+        ftc(0),
+        hps(0),
+        qpsSpace(0),
+        fSysVanish(0),
+        fNumRun(0),
+        ico(0),
+        kul(0),
+        hpsPos(0),
+        icoBi(0),
+        lid(0),
+        ftcBi(0),
+        hpsBi(0),
+        lidBi(0),
+        fcPic(0)
+    {
     }
 };
 

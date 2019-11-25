@@ -139,9 +139,8 @@ namespace
     class WriterSpecificAutoFormatBlock
     {
     public:
-        explicit WriterSpecificAutoFormatBlock(SvStream &rStream) : _rStream(rStream)
+        explicit WriterSpecificAutoFormatBlock(SvStream &rStream) : _rStream(rStream), _whereToWriteEndOfBlock(BeginSwBlock(rStream))
         {
-            _whereToWriteEndOfBlock = BeginSwBlock(rStream);
         }
 
         ~WriterSpecificAutoFormatBlock()

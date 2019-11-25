@@ -295,15 +295,15 @@ struct WW8PicDesc
 };
 
 WW8PicDesc::WW8PicDesc( const WW8_PIC& rPic )
+  : nCL(rPic.dxaCropLeft),
+    nCR(rPic.dxaCropRight),
+    nCT(rPic.dyaCropTop),
+    nCB(rPic.dyaCropBottom)
 {
     //See #i21190# before fiddling with this method
     long nOriWidth = rPic.dxaGoal;        //Size in 1/100 mm before crop
     long nOriHeight = rPic.dyaGoal;
 
-    nCL = rPic.dxaCropLeft;
-    nCR = rPic.dxaCropRight;
-    nCT = rPic.dyaCropTop;
-    nCB = rPic.dyaCropBottom;
 
     long nCurrentWidth  = nOriWidth - (nCL + nCR);  // Size after crop
     long nCurrentHeight = nOriHeight - (nCT + nCB);

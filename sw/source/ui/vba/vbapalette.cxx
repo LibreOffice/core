@@ -87,8 +87,8 @@ public:
 }
 
 VbaPalette::VbaPalette()
+  : mxPalette(new DefaultPalette())
 {
-    mxPalette = new DefaultPalette();
 }
 
 
