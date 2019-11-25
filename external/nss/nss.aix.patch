@@ -38,7 +38,7 @@ diff -ru a/nspr/pr/src/Makefile.in b/nspr/pr/src/Makefile.in
 --- a/a/nspr/pr/src/Makefile.in	2014-09-29 16:46:35.281395079 +0100
 +++ b/b/nspr/pr/src/Makefile.in	2014-09-29 16:50:33.909375948 +0100
 @@ -74,7 +74,6 @@
- endif
+ endif	# SunOS
  
  ifeq ($(OS_ARCH),AIX)
 -DSO_LDOPTS	+= -binitfini::_PR_Fini
