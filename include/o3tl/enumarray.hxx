@@ -85,7 +85,7 @@ public:
 
 template<typename EA>
 class enumarray_iterator {
-    EA&         m_buf;
+    EA*         m_buf;
     size_t      m_pos;
 public:
     typedef enumarray_iterator<EA>  self_type;
@@ -100,19 +100,17 @@ public:
     typedef typename EA::value_type&   reference;
 
     enumarray_iterator(EA& b, size_t start_pos)
-         : m_buf(b), m_pos(start_pos) {}
-    value_type& operator*()  const { return m_buf[static_cast<key_type>(m_pos)]; }
+         : m_buf(&b), m_pos(start_pos) {}
+    value_type& operator*()  const { return (*m_buf)[static_cast<key_type>(m_pos)]; }
     value_type* operator->() const { return &(operator*()); }
     self_type&  operator++() { ++m_pos; return *this; }
-    bool        operator!=(self_type const & other) const { return &m_buf != &other.m_buf || m_pos != other.m_pos; }
-    bool        operator==(self_type const & other) const { return &m_buf == &other.m_buf && m_pos == other.m_pos; }
-    enumarray_iterator&
-                operator=(self_type const & other) { m_buf = other.m_buf; m_pos = other.m_pos; return *this; }
+    bool        operator!=(self_type const & other) const { return m_buf != other.m_buf || m_pos != other.m_pos; }
+    bool        operator==(self_type const & other) const { return m_buf == other.m_buf && m_pos == other.m_pos; }
 };
 
 template<typename EA>
 class enumarray_const_iterator {
-    EA const &  m_buf;
+    EA const *  m_buf;
     size_t      m_pos;
 public:
     typedef enumarray_const_iterator<EA>    self_type;
@@ -127,14 +125,12 @@ public:
     typedef typename EA::value_type const & reference;
 
     enumarray_const_iterator(EA const & b, size_t start_pos)
-         : m_buf(b), m_pos(start_pos) {}
-    value_type& operator*()  const { return m_buf[static_cast<key_type>(m_pos)]; }
+         : m_buf(&b), m_pos(start_pos) {}
+    value_type& operator*()  const { return (*m_buf)[static_cast<key_type>(m_pos)]; }
     value_type* operator->() const { return &(operator*()); }
     self_type&  operator++() { ++m_pos; return *this; }
-    bool        operator!=(self_type const & other) const { return &m_buf != &other.m_buf || m_pos != other.m_pos; }
-    bool        operator==(self_type const & other) const { return &m_buf == &other.m_buf && m_pos == other.m_pos; }
-    enumarray_const_iterator&
-                operator=(self_type const & other) { m_buf = other.m_buf; m_pos = other.m_pos; return *this; }
+    bool        operator!=(self_type const & other) const { return m_buf != other.m_buf || m_pos != other.m_pos; }
+    bool        operator==(self_type const & other) const { return m_buf == other.m_buf && m_pos == other.m_pos; }
 };
 
 }; // namespace o3tl
