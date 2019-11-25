@@ -39,6 +39,7 @@ private:
 
     std::unique_ptr<weld::SpinButton> m_xEdNSheets;
     std::unique_ptr<weld::Entry> m_xEdSheetPrefix;
+    std::unique_ptr<weld::CheckButton> m_xEdJumboSheets;
 };
 
 #endif
