@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_1096b940",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2019-11-25T15:55:06Z",
+      "side": 1,
+      "message": "No need to check for RTL when the paragraph is centered.",
+      "range": {
+        "startLine": 217,
+        "startChar": 111,
+        "endLine": 217,
+        "endChar": 128
+      },
+      "revId": "b603fa208a35c1ff8dcc0cea66011745aa9b5c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
