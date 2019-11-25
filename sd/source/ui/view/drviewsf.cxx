@@ -71,54 +71,29 @@ using namespace svx::sidebar;
 using namespace ::com::sun::star;
 
 namespace {
-    OUString lcl_fillStyleEnumToString(FillStyle eStyle)
-    {
-        switch (eStyle)
-        {
-            case FillStyle_NONE:
-                return "NONE";
-
-            case FillStyle_SOLID:
-                return "SOLID";
-
-            case FillStyle_GRADIENT:
-                return "GRADIENT";
-
-            case FillStyle_HATCH:
-                return "HATCH";
-
-            case FillStyle_BITMAP:
-                return "BITMAP";
-
-            default:
-                return "";
-        }
-    }
-
     void lcl_sendAttrUpdatesForLOK(SfxViewShell* pShell, const SfxItemSet& rSet)
     {
         if (!pShell)
             return;
 
-        OUString sPayload;
-        const SfxPoolItem* pItem = rSet.GetItem(SID_ATTR_FILL_STYLE);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::ptree anArray;
 
-        if (pItem)
+        for(int i = 0; i < rSet.Count(); i++)
         {
-            const XFillStyleItem* pFillStyleItem = static_cast<const XFillStyleItem*>(pItem);
-            FillStyle eStyle;
-            css::uno::Any aAny;
-
-            pFillStyleItem->QueryValue(aAny);
-            aAny >>= eStyle;
-            sPayload = ".uno:FillStyle=" + lcl_fillStyleEnumToString(eStyle);
+            sal_uInt16 nWhich = rSet.GetWhichByPos(i);
+            if (rSet.HasItem(nWhich) && SfxItemState::SET >= rSet.GetItemState(nWhich))
+            {
+                boost::property_tree::ptree aItem = rSet.Get(nWhich).dumpAsJSON();
+                if (!aItem.empty())
+                    anArray.push_back(std::make_pair("", aItem));
+            }
         }
+        aTree.add_child("items", anArray);
 
-        if (!sPayload.isEmpty())
-        {
-            pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
-        }
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aStream.str().c_str());
     }
 }
 
