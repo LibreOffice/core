@@ -523,7 +523,7 @@ SwXBookmark::removeVetoableChangeListener(
 
 SwXFieldmark::SwXFieldmark(bool _isReplacementObject, SwDoc* pDc)
     : SwXFieldmark_Base(pDc)
-    , isReplacementObject(_isReplacementObject)
+    , m_bReplacementObject(_isReplacementObject)
 { }
 
 void SwXFieldmarkParameters::insertByName(const OUString& aName, const uno::Any& aElement)
@@ -604,7 +604,7 @@ void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTe
 {
 
     attachToRangeEx( xTextRange,
-                     ( isReplacementObject ? IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK : IDocumentMarkAccess::MarkType::TEXT_FIELDMARK ) );
+                     ( m_bReplacementObject ? IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK : IDocumentMarkAccess::MarkType::TEXT_FIELDMARK ) );
 }
 
 OUString SwXFieldmark::getFieldType()

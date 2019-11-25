@@ -39,8 +39,8 @@ class SwFrame;
 
 class SwSelectionList
 {
-    std::list< SwPaM* > aList;  // container for the selected text portions
-    const SwFrame* pContext;      // the context of these text portions
+    std::list< SwPaM* > m_aList;  // container for the selected text portions
+    const SwFrame* m_pContext;      // the context of these text portions
 public:
     /** Ctor to create an empty list for a given context
 
@@ -52,24 +52,24 @@ public:
 
     /** Start of the container for the selected text portions
     */
-    std::list<SwPaM*>::iterator getStart() { return aList.begin(); }
+    std::list<SwPaM*>::iterator getStart() { return m_aList.begin(); }
 
     /** End of the container for the selected text portions
     */
-    std::list<SwPaM*>::iterator getEnd() { return aList.end(); }
+    std::list<SwPaM*>::iterator getEnd() { return m_aList.end(); }
 
     /** Adds a text portion to the selection list
 
         @param pPam
         represents a text portion to select
     */
-    void insertPaM( SwPaM* pPam ) { aList.push_front( pPam ); }
+    void insertPaM( SwPaM* pPam ) { m_aList.push_front( pPam ); }
 
     /** Reports if the list does not contain any text portion
 
         @return true, if list is empty
     */
-    bool isEmpty() const { return aList.empty(); }
+    bool isEmpty() const { return m_aList.empty(); }
 
     /** Checks if the context of the list is equal to the context of the frame
 

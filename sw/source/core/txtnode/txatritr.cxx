@@ -86,11 +86,11 @@ void SwScriptIterator::Next()
 
 SwLanguageIterator::SwLanguageIterator( const SwTextNode& rTNd,
                                         sal_Int32 nStt )
-    : aSIter( rTNd.GetText(), nStt ),
-      rTextNd( rTNd ),
-      pParaItem( nullptr ),
-      nAttrPos( 0 ),
-      nChgPos( nStt )
+    : m_aScriptIter( rTNd.GetText(), nStt ),
+      m_rTextNode( rTNd ),
+      m_pParaItem( nullptr ),
+      m_nAttrPos( 0 ),
+      m_nChgPos( nStt )
 {
     SearchNextChg();
 }
@@ -98,43 +98,43 @@ SwLanguageIterator::SwLanguageIterator( const SwTextNode& rTNd,
 bool SwLanguageIterator::Next()
 {
     bool bRet = false;
-    if (nChgPos < aSIter.GetText().getLength())
+    if (m_nChgPos < m_aScriptIter.GetText().getLength())
     {
         bRet = true;
-        if( !aStack.empty() )
+        if( !m_aStack.empty() )
         {
             do {
-                const SwTextAttr* pHt = aStack.front();
+                const SwTextAttr* pHt = m_aStack.front();
                 const sal_Int32 nEndPos = *pHt->End();
-                if( nChgPos >= nEndPos )
-                    aStack.pop_front();
+                if( m_nChgPos >= nEndPos )
+                    m_aStack.pop_front();
                 else
                     break;
-            } while( !aStack.empty() );
+            } while( !m_aStack.empty() );
         }
 
-        if( !aStack.empty() )
+        if( !m_aStack.empty() )
         {
-            const size_t nSavePos = nAttrPos;
+            const size_t nSavePos = m_nAttrPos;
             SearchNextChg();
-            if( !aStack.empty() )
+            if( !m_aStack.empty() )
             {
-                const SwTextAttr* pHt = aStack.front();
+                const SwTextAttr* pHt = m_aStack.front();
                 const sal_Int32 nEndPos = *pHt->End();
-                if( nChgPos >= nEndPos )
+                if( m_nChgPos >= nEndPos )
                 {
-                    nChgPos = nEndPos;
-                    nAttrPos = nSavePos;
+                    m_nChgPos = nEndPos;
+                    m_nAttrPos = nSavePos;
 
                     if( RES_TXTATR_CHARFMT == pHt->Which() )
                     {
-                        const sal_uInt16 nWId = GetWhichOfScript( RES_CHRATR_LANGUAGE, aSIter.GetCurrScript() );
-                        pCurItem = &pHt->GetCharFormat().GetCharFormat()->GetFormatAttr(nWId);
+                        const sal_uInt16 nWId = GetWhichOfScript( RES_CHRATR_LANGUAGE, m_aScriptIter.GetCurrScript() );
+                        m_pCurrentItem = &pHt->GetCharFormat().GetCharFormat()->GetFormatAttr(nWId);
                     }
                     else
-                        pCurItem = &pHt->GetAttr();
+                        m_pCurrentItem = &pHt->GetAttr();
 
-                    aStack.pop_front();
+                    m_aStack.pop_front();
                 }
             }
         }
@@ -148,53 +148,53 @@ void SwLanguageIterator::AddToStack( const SwTextAttr& rAttr )
 {
     size_t nIns = 0;
     const sal_Int32 nEndPos = *rAttr.End();
-    for( ; nIns < aStack.size(); ++nIns )
-        if( *aStack[ nIns ]->End() > nEndPos )
+    for( ; nIns < m_aStack.size(); ++nIns )
+        if( *m_aStack[ nIns ]->End() > nEndPos )
             break;
 
-    aStack.insert( aStack.begin() + nIns, &rAttr );
+    m_aStack.insert( m_aStack.begin() + nIns, &rAttr );
 }
 
 void SwLanguageIterator::SearchNextChg()
 {
     sal_uInt16 nWh = 0;
-    if( nChgPos == aSIter.GetScriptChgPos() )
+    if( m_nChgPos == m_aScriptIter.GetScriptChgPos() )
     {
-        aSIter.Next();
-        pParaItem = nullptr;
-        nAttrPos = 0;       // must be restart at the beginning, because
+        m_aScriptIter.Next();
+        m_pParaItem = nullptr;
+        m_nAttrPos = 0;       // must be restart at the beginning, because
                             // some attributes can start before or inside
                             // the current scripttype!
-        aStack.clear();
+        m_aStack.clear();
     }
-    if( !pParaItem )
+    if( !m_pParaItem )
     {
-        nWh = GetWhichOfScript( RES_CHRATR_LANGUAGE, aSIter.GetCurrScript() );
-        pParaItem = &rTextNd.GetSwAttrSet().Get( nWh );
+        nWh = GetWhichOfScript( RES_CHRATR_LANGUAGE, m_aScriptIter.GetCurrScript() );
+        m_pParaItem = &m_rTextNode.GetSwAttrSet().Get( nWh );
     }
 
-    sal_Int32 nStt = nChgPos;
-    nChgPos = aSIter.GetScriptChgPos();
-    pCurItem = pParaItem;
+    sal_Int32 nStt = m_nChgPos;
+    m_nChgPos = m_aScriptIter.GetScriptChgPos();
+    m_pCurrentItem = m_pParaItem;
 
-    const SwpHints* pHts = rTextNd.GetpSwpHints();
+    const SwpHints* pHts = m_rTextNode.GetpSwpHints();
     if( pHts )
     {
         if( !nWh )
         {
-            nWh = GetWhichOfScript( RES_CHRATR_LANGUAGE, aSIter.GetCurrScript() );
+            nWh = GetWhichOfScript( RES_CHRATR_LANGUAGE, m_aScriptIter.GetCurrScript() );
         }
 
         const SfxPoolItem* pItem = nullptr;
-        for( ; nAttrPos < pHts->Count(); ++nAttrPos )
+        for( ; m_nAttrPos < pHts->Count(); ++m_nAttrPos )
         {
-            const SwTextAttr* pHt = pHts->Get( nAttrPos );
+            const SwTextAttr* pHt = pHts->Get( m_nAttrPos );
             const sal_Int32* pEnd = pHt->End();
             const sal_Int32 nHtStt = pHt->GetStart();
             if( nHtStt < nStt && ( !pEnd || *pEnd <= nStt ))
                 continue;
 
-            if( nHtStt >= nChgPos )
+            if( nHtStt >= m_nChgPos )
                 break;
 
             pItem = CharFormat::GetItem( *pHt, nWh );
@@ -202,14 +202,14 @@ void SwLanguageIterator::SearchNextChg()
             {
                 if( nHtStt > nStt )
                 {
-                    if( nChgPos > nHtStt )
-                        nChgPos = nHtStt;
+                    if( m_nChgPos > nHtStt )
+                        m_nChgPos = nHtStt;
                     break;
                 }
                 AddToStack( *pHt );
-                pCurItem = pItem;
-                if( *pEnd < nChgPos )
-                    nChgPos = *pEnd;
+                m_pCurrentItem = pItem;
+                if( *pEnd < m_nChgPos )
+                    m_nChgPos = *pEnd;
             }
         }
     }
