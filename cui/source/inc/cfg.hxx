@@ -381,6 +381,7 @@ protected:
     OUString                                   m_aURLToSelect;
 
     css::uno::Reference< css::frame::XFrame >  m_xFrame;
+    OUString                                   m_aModuleId;
 
     // Left side of the dialog where command categories and the available
     // commands in them are displayed as a searchable list
