@@ -237,6 +237,16 @@ static bool lcl_ChkOneRange( CHKSECTION eSec, bool bChkSections,
            nSttIdx <= nEnd && nEnd <= nEndIdx;
 }
 
+/** Check if the given range is inside one of the defined top-level sections.
+ *
+ * The top-level sections are Content, AutoText, PostIts, Inserts, and Redlines.
+ *
+ * @param bChkSection   if true, also check that the given range is inside
+ *                      a single second-level section inside any of the
+ *                      top-level sections, except for the Content section.
+ *
+ * @return <true> if valid range
+ */
 bool CheckNodesRange( const SwNodeIndex& rStt,
                       const SwNodeIndex& rEnd, bool bChkSection )
 {
