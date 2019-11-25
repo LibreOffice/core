@@ -135,7 +135,7 @@ char* CustomNotebookbarGenerator::convertToCharPointer(const OUString& sString)
     return cString;
 }
 
-static void changeNodeValue(xmlNode* pNodePtr, char* pProperty, char* pValue)
+static void changeNodeValue(xmlNode* pNodePtr, const char* pProperty, const char* pValue)
 {
     pNodePtr = pNodePtr->xmlChildrenNode;
     while (pNodePtr)
@@ -152,8 +152,8 @@ static void changeNodeValue(xmlNode* pNodePtr, char* pProperty, char* pValue)
     }
 }
 
-static void searchNodeAndAttribute(xmlNode* pNodePtr, char* pUIItemID, char* pProperty,
-                                   char* pValue)
+static void searchNodeAndAttribute(xmlNode* pNodePtr, const char* pUIItemID, const char* pProperty,
+                                   const char* pValue)
 {
     pNodePtr = pNodePtr->xmlChildrenNode;
     while (pNodePtr)
