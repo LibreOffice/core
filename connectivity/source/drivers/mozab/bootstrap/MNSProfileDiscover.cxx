@@ -133,6 +133,11 @@ namespace connectivity
 
                 }
 
+                if (profileName == "default-release")
+                {
+                    rProduct.mCurrentProfileName = profileName;
+                    break;
+                }
             }
         }
 
