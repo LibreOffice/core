@@ -1352,7 +1352,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 RTL_TEXTENCODING_ASCII_US);
             double d;
             SbxDataType t;
-            if( ImpScan( aVal, d, t, nullptr, false ) != ERRCODE_NONE || t == SbxDOUBLE )
+            if( ImpScan( aVal, d, t, nullptr, true ) != ERRCODE_NONE || t == SbxDOUBLE )
             {
                 aData.nSingle = 0.0F;
                 return false;
@@ -1367,7 +1367,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             OUString aVal = read_uInt16_lenPrefixed_uInt8s_ToOUString(r,
                 RTL_TEXTENCODING_ASCII_US);
             SbxDataType t;
-            if( ImpScan( aVal, aData.nDouble, t, nullptr, false ) != ERRCODE_NONE )
+            if( ImpScan( aVal, aData.nDouble, t, nullptr, true ) != ERRCODE_NONE )
             {
                 aData.nDouble = 0.0;
                 return false;

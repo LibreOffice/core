@@ -80,7 +80,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                     double n;
                     SbxDataType t;
                     sal_uInt16 nLen = 0;
-                    if( ImpScan( *p->pOUString, n, t, &nLen, false ) == ERRCODE_NONE )
+                    if( ImpScan( *p->pOUString, n, t, &nLen, true ) == ERRCODE_NONE )
                     {
                         if( nLen == p->pOUString->getLength() )
                         {

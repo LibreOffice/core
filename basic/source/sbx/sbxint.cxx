@@ -157,7 +157,7 @@ start:
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr, false ) != ERRCODE_NONE )
+                if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
                     nRes = 0;
                 else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SbxMAXINT) )
                 {
@@ -442,7 +442,7 @@ start:
                     // Check if really 0 or invalid conversion
                     double d;
                     SbxDataType t;
-                    if( ImpScan( *p->pOUString, d, t, nullptr, false ) != ERRCODE_NONE )
+                    if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
                         nRes = 0;
                     else
                         nRes = static_cast<sal_Int64>(d);
@@ -703,7 +703,7 @@ start:
                     // Check if really 0 or invalid conversion
                     double d;
                     SbxDataType t;
-                    if( ImpScan( *p->pOUString, d, t, nullptr, false ) != ERRCODE_NONE )
+                    if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
                         nRes = 0;
                     else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SAL_MAX_UINT64) )
                     {

@@ -11,6 +11,7 @@ Dim nTotalCount As Integer
 Dim nPassCount As Integer
 Dim nFailCount As Integer
 
+' For the following tests the en-US (English - United States) locale is required
 Function doUnitTest() As Integer
     nTotalCount = 0
     nPassCount = 0
@@ -35,13 +36,13 @@ Function doUnitTest() As Integer
 
     ' Negative floating-point with leading and trailing spaces
     StartTest()
-    nVal = " -123.45 "
-    AssertTest(nVal = -123.45)
+    nVal = " -123.456 "
+    AssertTest(nVal = -123.456)
 
-    ' Wrong decimal separator
+    ' Wrong decimal separator (interpreted as group separator)
     StartTest()
-    nVal = " -123,45 "
-    AssertTest(nVal = -123)
+    nVal = " -123,456 "
+    AssertTest(nVal = -123456)
 
     If ((nFailCount > 0) Or (nPassCount <> nTotalCount)) Then
         doUnitTest = 0

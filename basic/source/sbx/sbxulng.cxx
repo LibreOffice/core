@@ -121,7 +121,7 @@ start:
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr, false ) != ERRCODE_NONE )
+                if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
                     nRes = 0;
                 else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SbxMAXULNG) )
                 {
