@@ -4098,13 +4098,19 @@ public:
         set_image(m_xTreeView->GetEntry(nullptr, pos), createImage(rImage), col);
     }
 
+    virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage, int col) override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        set_image(rVclIter.iter, createImage(rImage), col);
+    }
+
     virtual void set_image(const weld::TreeIter& rIter, const css::uno::Reference<css::graphic::XGraphic>& rImage, int col) override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         set_image(rVclIter.iter, Image(rImage), col);
     }
 
-    virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage, int col) override
+    virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage, int col) override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         set_image(rVclIter.iter, createImage(rImage), col);
