@@ -21,15 +21,11 @@
 
 using namespace ::com::sun::star;
 
-namespace {
-
+namespace
+{
 /// Invokes the MathType importer via UNO.
-class MathTypeFilter : public cppu::WeakImplHelper
-    <
-    document::XFilter,
-    document::XImporter,
-    lang::XServiceInfo
-    >
+class MathTypeFilter
+    : public cppu::WeakImplHelper<document::XFilter, document::XImporter, lang::XServiceInfo>
 {
     uno::Reference<lang::XComponent> m_xDstDoc;
 
@@ -48,7 +44,6 @@ public:
     sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
-
 }
 
 MathTypeFilter::MathTypeFilter() = default;
@@ -94,19 +89,14 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
     return bSuccess;
 }
 
-void MathTypeFilter::cancel()
-{
-}
+void MathTypeFilter::cancel() {}
 
-void MathTypeFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc)
+void MathTypeFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDoc)
 {
     m_xDstDoc = xDoc;
 }
 
-OUString MathTypeFilter::getImplementationName()
-{
-    return "com.sun.star.comp.Math.MathTypeFilter";
-}
+OUString MathTypeFilter::getImplementationName() { return "com.sun.star.comp.Math.MathTypeFilter"; }
 
 sal_Bool MathTypeFilter::supportsService(const OUString& rServiceName)
 {
@@ -115,14 +105,13 @@ sal_Bool MathTypeFilter::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> MathTypeFilter::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet =
-    {
-        OUString("com.sun.star.document.ImportFilter")
-    };
+    uno::Sequence<OUString> aRet = { OUString("com.sun.star.document.ImportFilter") };
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* com_sun_star_comp_Math_MathTypeFilter_get_implementation(uno::XComponentContext* /*pCtx*/, uno::Sequence<uno::Any> const& /*rSeq*/)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Math_MathTypeFilter_get_implementation(uno::XComponentContext* /*pCtx*/,
+                                                         uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new MathTypeFilter);
 }

@@ -13358,7 +13358,6 @@ starmath/source/typemap.cxx
 starmath/source/uiobject.cxx
 starmath/source/uiobject.hxx
 starmath/source/unodoc.cxx
-starmath/source/unofilter.cxx
 starmath/source/unomodel.cxx
 starmath/source/utility.cxx
 starmath/source/view.cxx
@@ -18373,8 +18372,6 @@ writerfilter/source/dmapper/WrapPolygonHandler.hxx
 writerfilter/source/dmapper/domainmapperfactory.cxx
 writerfilter/source/dmapper/util.cxx
 writerfilter/source/dmapper/util.hxx
-writerfilter/source/filter/RtfFilter.cxx
-writerfilter/source/filter/WriterFilter.cxx
 writerfilter/source/ooxml/Handler.cxx
 writerfilter/source/ooxml/Handler.hxx
 writerfilter/source/ooxml/OOXMLBinaryObjectReference.cxx
