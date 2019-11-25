@@ -318,10 +318,10 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
         if (pNodePtr->type == XML_ELEMENT_NODE)
         {
             const char* cNodeName = reinterpret_cast<const char*>(pNodePtr->name);
-            OUString sNodeName = charToString(cNodeName);
-            OUString sSecondVal;
-            if (sNodeName == "object")
+            if (strcmp(cNodeName, "object") == 0)
             {
+                OUString sSecondVal;
+
                 xmlChar* UriValue = xmlGetProp(pNodePtr, reinterpret_cast<const xmlChar*>("id"));
                 const char* cUIItemID = reinterpret_cast<const char*>(UriValue);
                 OUString sUIItemId = charToString(cUIItemID);
