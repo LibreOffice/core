@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_4d8c9a7e",
+        "filename": "sd/source/filter/eppt/grouptable.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001483
+      },
+      "writtenOn": "2019-11-25T07:35:24Z",
+      "side": 1,
+      "message": "mXIndexAccess is initialized after mnCount\nThis should be mnCount(rIndex-\u003egetCount())",
+      "revId": "9d63592d530e9ad5ab2d6aee0aba5bc0c117aae3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
