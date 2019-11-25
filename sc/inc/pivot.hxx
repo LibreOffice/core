@@ -122,7 +122,6 @@ struct ScPivotField
     sal_uInt8   mnDupCount;
 
     explicit ScPivotField( SCCOL nNewCol = 0 );
-    ScPivotField( const ScPivotField& r );
 
     long getOriginalDim() const;
 };
