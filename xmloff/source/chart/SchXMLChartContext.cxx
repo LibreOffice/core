@@ -337,7 +337,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 {
                     OUString sClassName;
                     sal_uInt16 nClassPrefix =
-                        GetImport().GetNamespaceMap().GetKeyByAttrName(
+                        GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
                                 aValue, &sClassName );
                     if( XML_NAMESPACE_CHART == nClassPrefix )
                     {

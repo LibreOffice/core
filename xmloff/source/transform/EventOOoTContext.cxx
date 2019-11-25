@@ -82,7 +82,8 @@ XMLEventOOoTransformerContext::XMLEventOOoTransformerContext(
         const OUString& rQName,
         bool bPersistent ) :
     XMLPersElemContentTContext( rImp, rQName,
-        rImp.GetNamespaceMap().GetKeyByAttrName( rQName ), XML_EVENT_LISTENER ),
+        rImp.GetNamespaceMap().GetKeyByAttrValueQName(rQName, nullptr),
+        XML_EVENT_LISTENER),
     m_bPersistent( bPersistent )
 {
 }

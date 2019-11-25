@@ -194,7 +194,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             {
                 sEventName = sValue;
                 sal_uInt16 nScriptPrefix =
-                    GetImport().GetNamespaceMap().GetKeyByAttrName( sValue, &sEventName );
+                    GetImport().GetNamespaceMap().GetKeyByAttrValueQName(sValue, &sEventName);
                 maData.mbValid = XML_NAMESPACE_DOM == nScriptPrefix && sEventName == "click";
             }
             else if( IsXMLToken( aAttrLocalName, XML_LANGUAGE ) )
@@ -203,7 +203,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                 OUString aScriptLanguage;
                 maData.msLanguage = sValue;
                 sal_uInt16 nScriptPrefix = rImp.GetNamespaceMap().
-                    GetKeyByAttrName( maData.msLanguage, &aScriptLanguage );
+                    GetKeyByAttrValueQName(maData.msLanguage, &aScriptLanguage);
                 if( XML_NAMESPACE_OOO == nScriptPrefix )
                     maData.msLanguage = aScriptLanguage;
             }

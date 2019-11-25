@@ -330,7 +330,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 {
                     OUString aClassName;
                     sal_uInt16 nClassPrefix =
-                        GetImport().GetNamespaceMap().GetKeyByAttrName(
+                        GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
                             aValue, &aClassName );
                     if( XML_NAMESPACE_CHART == nClassPrefix )
                         maSeriesChartTypeName = SchXMLTools::GetChartTypeByClassName( aClassName, false /* bUseOldNames */ );

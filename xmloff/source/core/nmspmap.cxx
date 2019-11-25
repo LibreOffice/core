@@ -260,24 +260,29 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
     }
 }
 
-sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_(
-                            const OUString& rAttrName,
+sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrValueQName(
+                            const OUString& rAttrValue,
                             OUString *pLocalName) const
 {
-    return GetKeyByAttrName_( rAttrName, nullptr, pLocalName, nullptr, false/*bCache*/ );
+    return GetKeyByQName(rAttrValue, nullptr, pLocalName, nullptr, QNameMode::AttrValue);
 }
 
-sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
+/**
+ @param rQName           either attribute name or qualified/namespaced attribute value
+ @param bCacheAttrName   true: rQName is element or attribute name, cache it
+                         false: rQName is attribute value, may contain extra ':', don't cache it
+ */
+sal_uInt16 SvXMLNamespaceMap::GetKeyByQName(const OUString& rQName,
                                             OUString *pPrefix,
                                             OUString *pLocalName,
                                             OUString *pNamespace,
-                                            bool bCache) const
+                                            QNameMode const eMode) const
 {
     sal_uInt16 nKey;
 
     NameSpaceHash::const_iterator it;
-    if (bCache)
-        it = aNameCache.find ( rAttrName );
+    if (eMode == QNameMode::AttrNameCached)
+        it = aNameCache.find ( rQName );
     else
         it = aNameCache.end();
     if ( it != aNameCache.end() )
@@ -298,17 +303,23 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
     {
         OUString sEntryPrefix, sEntryName;
 
-        sal_Int32 nColonPos = rAttrName.indexOf( ':' );
+        sal_Int32 nColonPos = rQName.indexOf( ':' );
         if( -1 == nColonPos )
         {
             // case: no ':' found -> default namespace
-            sEntryName = rAttrName;
+            sEntryName = rQName;
         }
         else
         {
             // normal case: ':' found -> get prefix/suffix
-            sEntryPrefix = rAttrName.copy( 0L, nColonPos );
-            sEntryName = rAttrName.copy( nColonPos + 1 );
+            sEntryPrefix = rQName.copy( 0L, nColonPos );
+            sEntryName = rQName.copy( nColonPos + 1 );
+        }
+
+        if (eMode == QNameMode::AttrNameCached && sEntryName.indexOf(':') != -1)
+        {
+            SAL_INFO("xmloff", "invalid attribute name with multiple ':'");
+            return XML_NAMESPACE_UNKNOWN;
         }
 
         if( pPrefix )
@@ -333,13 +344,13 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
         else
             nKey = XML_NAMESPACE_UNKNOWN;
 
-        if (bCache)
+        if (eMode == QNameMode::AttrNameCached)
         {
             rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry);
             xEntry->sPrefix = std::move(sEntryPrefix);
             xEntry->sName = std::move(sEntryName);
             xEntry->nKey = std::move(nKey);
-            aNameCache.emplace(rAttrName, std::move(xEntry));
+            aNameCache.emplace(rQName, std::move(xEntry));
         }
     }
 
@@ -420,7 +431,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName(
                             const OUString& rAttrName,
                             OUString *pLocalName) const
 {
-    return GetKeyByAttrName_( rAttrName, nullptr, pLocalName );
+    return GetKeyByQName(rAttrName, nullptr, pLocalName, nullptr, QNameMode::AttrNameCached);
 }
 
 sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
@@ -428,7 +439,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
                                             OUString *pLocalName,
                                             OUString *pNamespace ) const
 {
-    return GetKeyByAttrName_ ( rAttrName, pPrefix, pLocalName, pNamespace );
+    return GetKeyByQName(rAttrName, pPrefix, pLocalName, pNamespace, QNameMode::AttrNameCached);
 }
 
 bool SvXMLNamespaceMap::NormalizeURI( OUString& rName )

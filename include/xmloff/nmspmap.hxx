@@ -104,15 +104,14 @@ public:
 
     OUString GetAttrNameByKey( sal_uInt16 nKey ) const;
 
-    /* This will replace the version with the unused 5th default parameter */
-    sal_uInt16 GetKeyByAttrName_( const OUString& rAttrName,
+    enum class QNameMode { AttrNameCached, AttrValue };
+    sal_uInt16 GetKeyByQName(const OUString& rQName,
                              OUString *pPrefix,
                              OUString *pLocalName,
-                             OUString *pNamespace = nullptr,
-                             bool bCache = true) const;
+                             OUString *pNamespace,
+                             QNameMode eMode) const;
 
-    /* This will replace the version with the unused 3rd default parameter */
-    sal_uInt16 GetKeyByAttrName_( const OUString& rAttrName,
+    sal_uInt16 GetKeyByAttrValueQName(const OUString& rAttrName,
                              OUString *pLocalName) const;
 
     sal_uInt16 GetFirstKey() const;
@@ -138,7 +137,7 @@ public:
 /* deprecated */ OUString GetAttrNameByIndex( sal_uInt16 nIdx ) const;
 /* deprecated */ OUString GetQNameByIndex( sal_uInt16 nIdx,
                             const OUString& rLocalName ) const;
-/* deprecated */ sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
+                 sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
                              OUString *pPrefix,
                              OUString *pLocalName,
                              OUString *pNamespace ) const;

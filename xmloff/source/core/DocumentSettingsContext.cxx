@@ -320,7 +320,7 @@ SvXMLImportContextRef XMLDocumentSettingsContext::CreateChildContext( sal_uInt16
         {
             OUString aLocalConfigName;
             sal_uInt16 nConfigPrefix =
-                GetImport().GetNamespaceMap().GetKeyByAttrName(
+                GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
                                             sName, &aLocalConfigName );
 
             if( XML_NAMESPACE_OOO == nConfigPrefix )
