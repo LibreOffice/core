@@ -1974,7 +1974,15 @@
             <desc>Option to set the prefix name for new sheet tabs</desc>
           </info>
         </prop>
-      </group>
+        <prop oor:name="JumboSheets" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
+          <info>
+            <desc>Enable very large spreadsheets (16m rows, 16384 cols)</desc>
+            <label>Jumbo sheets</label>
+          </info>
+          <value>false</value>
+        </prop>
+    </group>
     </group>
     <group oor:name="DataStream">
         <info>

@@ -13,15 +13,19 @@
 #include <sc.hrc>
 #include <defaultsoptions.hxx>
 #include <document.hxx>
+#include <svtools/miscopt.hxx>
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rCoreSet)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/optdefaultpage.ui", "OptDefaultPage", &rCoreSet)
     , m_xEdNSheets(m_xBuilder->weld_spin_button("sheetsnumber"))
     , m_xEdSheetPrefix(m_xBuilder->weld_entry("sheetprefix"))
+    , m_xEdJumboSheets(m_xBuilder->weld_check_button("jumbo_sheets"))
 {
     m_xEdNSheets->connect_changed( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
     m_xEdSheetPrefix->connect_changed( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
     m_xEdSheetPrefix->connect_focus_in( LINK(this, ScTpDefaultsOptions, PrefixEditOnFocusHdl) );
+    if (!SvtMiscOptions().IsExperimentalMode())
+        m_xEdJumboSheets->hide();
 }
 
 ScTpDefaultsOptions::~ScTpDefaultsOptions()
@@ -40,12 +44,15 @@ bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)
 
     SCTAB nTabCount = static_cast<SCTAB>(m_xEdNSheets->get_value());
     OUString aSheetPrefix = m_xEdSheetPrefix->get_text();
+    bool bJumboSheets = m_xEdJumboSheets->get_state();
 
     if ( m_xEdNSheets->get_value_changed_from_saved()
-         || m_xEdSheetPrefix->get_saved_value() != aSheetPrefix )
+         || m_xEdSheetPrefix->get_saved_value() != aSheetPrefix
+         || m_xEdJumboSheets->get_saved_state() != (bJumboSheets ? TRISTATE_TRUE : TRISTATE_FALSE) )
     {
         aOpt.SetInitTabCount( nTabCount );
         aOpt.SetInitTabPrefix( aSheetPrefix );
+        aOpt.SetInitJumboSheets( bJumboSheets );
 
         rCoreSet->Put( ScTpDefaultsItem( aOpt ) );
         bRet = true;
@@ -63,8 +70,10 @@ void ScTpDefaultsOptions::Reset(const SfxItemSet* rCoreSet)
 
     m_xEdNSheets->set_value(aOpt.GetInitTabCount());
     m_xEdSheetPrefix->set_text( aOpt.GetInitTabPrefix() );
+    m_xEdJumboSheets->set_state( aOpt.GetInitJumboSheets() ? TRISTATE_TRUE : TRISTATE_FALSE );
     m_xEdNSheets->save_value();
     m_xEdSheetPrefix->save_value();
+    m_xEdJumboSheets->save_state();
 }
 
 DeactivateRC ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)
