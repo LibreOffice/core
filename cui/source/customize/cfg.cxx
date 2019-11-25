@@ -1040,12 +1040,12 @@ void SvxConfigPage::Reset( const SfxItemSet* )
             ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
 
         m_xFrame = GetFrame();
-        OUString aModuleId = GetFrameWithDefaultAndIdentify( m_xFrame );
+        m_aModuleId = GetFrameWithDefaultAndIdentify( m_xFrame );
 
         // replace %MODULENAME in the label with the correct module name
         uno::Reference< css::frame::XModuleManager2 > xModuleManager(
             css::frame::ModuleManager::create( xContext ));
-        OUString aModuleName = SvxConfigPageHelper::GetUIModuleName( aModuleId, xModuleManager );
+        OUString aModuleName = SvxConfigPageHelper::GetUIModuleName( m_aModuleId, xModuleManager );
 
         uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier >
             xModuleCfgSupplier( css::ui::theModuleUIConfigurationManagerSupplier::get(xContext) );
@@ -1056,11 +1056,11 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         try
         {
             xCfgMgr =
-                xModuleCfgSupplier->getUIConfigurationManager( aModuleId );
+                xModuleCfgSupplier->getUIConfigurationManager( m_aModuleId );
 
             pModuleData = CreateSaveInData( xCfgMgr,
                                             uno::Reference< css::ui::XUIConfigurationManager >(),
-                                            aModuleId,
+                                            m_aModuleId,
                                             false );
         }
         catch ( container::NoSuchElementException& )
@@ -1077,7 +1077,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         OUString aTitle;
         uno::Reference< frame::XController > xController =
             m_xFrame->getController();
-        if ( CanConfig( aModuleId ) && xController.is() )
+        if ( CanConfig( m_aModuleId ) && xController.is() )
         {
             uno::Reference< frame::XModel > xModel( xController->getModel() );
             if ( xModel.is() )
@@ -1096,7 +1096,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         SaveInData* pDocData = nullptr;
         if ( xDocCfgMgr.is() )
         {
-            pDocData = CreateSaveInData( xDocCfgMgr, xCfgMgr, aModuleId, true );
+            pDocData = CreateSaveInData( xDocCfgMgr, xCfgMgr, m_aModuleId, true );
 
             if ( !pDocData->IsReadOnly() )
             {
@@ -1144,7 +1144,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         DBG_ASSERT( pCurrentSaveInData, "SvxConfigPage::Reset(): no SaveInData" );
 #endif
 
-        if ( CanConfig( aModuleId ) )
+        if ( CanConfig( m_aModuleId ) )
         {
             // Load configuration for other open documents which have
             // same module type
@@ -1178,7 +1178,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
                     } catch(const uno::Exception&)
                         { aCheckId.clear(); }
 
-                    if ( aModuleId == aCheckId )
+                    if ( m_aModuleId == aCheckId )
                     {
                         // try to get the document based ui configuration manager
                         OUString aTitle2;
@@ -1207,7 +1207,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
 
                         if ( xDocCfgMgr.is() )
                         {
-                            SaveInData* pData = CreateSaveInData( xDocCfgMgr, xCfgMgr, aModuleId, true );
+                            SaveInData* pData = CreateSaveInData( xDocCfgMgr, xCfgMgr, m_aModuleId, true );
 
                             if ( pData && !pData->IsReadOnly() )
                             {
@@ -1406,9 +1406,8 @@ int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
     }
 
     OUString aDisplayName;
-    OUString aModuleId = vcl::CommandInfoProvider::GetModuleIdentifier( m_xFrame );
 
-    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aURL, aModuleId);
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aURL, m_aModuleId);
 
     if ( typeid(*pCurrentSaveInData) == typeid(ContextMenuSaveInData) )
         aDisplayName = vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
