@@ -5532,19 +5532,19 @@
       <prop oor:name="ShowTipOfTheDay" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools - Options - General -->
         <info>
-          <desc>Determines whether the Tip-Of-The-Day dialog is shown on startup.</desc>
+          <desc>Determines whether the Tip-of-the-Day dialog is shown on startup.</desc>
         </info>
         <value>true</value>
       </prop>
       <prop oor:name="LastTipOfTheDayShown" oor:type="xs:int" oor:nillable="false">
           <info>
-              <desc>The last time when the Tip-of-the-day dialog was shown.</desc>
+              <desc>The last time when the Tip-of-the-Day dialog was shown.</desc>
           </info>
           <value>-1</value> <!-- +1 every 24h -->
       </prop>
       <prop oor:name="LastTipOfTheDayID" oor:type="xs:int" oor:nillable="false">
           <info>
-              <desc>The last shown Tip-of-the-day.</desc>
+              <desc>The last shown Tip-of-the-Day.</desc>
           </info>
           <value>0</value>
       </prop>
