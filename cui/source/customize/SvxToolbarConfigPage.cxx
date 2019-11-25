@@ -290,8 +290,7 @@ void SvxToolbarConfigPage::Init()
 
     m_xCommandCategoryListBox->Init(
         comphelper::getProcessComponentContext(),
-        m_xFrame,
-        vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
+        m_xFrame, m_aModuleId);
     m_xCommandCategoryListBox->categorySelected(m_xFunctions.get(), OUString(), GetSaveInData());
 }
 
