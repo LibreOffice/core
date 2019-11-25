@@ -112,6 +112,7 @@ ifneq ($(OS),WNT)
 # Currently only Clang PCH is supported (which should usually be the case, as Clang is usually self-built).
 ifneq ($(findstring clang,$(COMPILER_PLUGINS_CXX)),)
 LO_CLANG_USE_PCH=1
+LO_CLANG_PCH_FLAGS:=-Xclang -fno-pch-timestamp
 endif
 endif
 endif
@@ -326,6 +327,7 @@ $(CLANGOUTDIR)/clang.pch: $(CLANGINDIR)/precompiled_clang.hxx \
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),PCH,1)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) -x c++-header $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGWERROR) \
         $(CLANGINCLUDES) -I$(BUILDDIR)/config_host -I$(CLANGINDIR) -DPCH_LEVEL=$(gb_ENABLE_PCH) \
+        $(LO_CLANG_PCH_FLAGS) \
         -fPIC -c $< -o $@ -MMD -MT $@ -MP -MF $(CLANGOUTDIR)/clang.pch.d
 endif
 -include $(CLANGOUTDIR)/clang.pch.d
@@ -343,7 +345,7 @@ $(CLANGOUTDIR)/sharedvisitor/clang.pch: $(CLANGINDIR)/sharedvisitor/precompiled_
         | $(CLANGOUTDIR)/sharedvisitor
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),PCH,1)
 	$(QUIET)$(CLANGDIR)/bin/clang -x c++-header $(LO_CLANG_ANALYZER_PCH_CXXFLAGS) \
-        $(COMPILER_PLUGINS_TOOLING_ARGS) -c $< -o $@ -MMD -MT $@ -MP \
+        $(LO_CLANG_PCH_FLAGS) $(COMPILER_PLUGINS_TOOLING_ARGS) -c $< -o $@ -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/clang.pch.d
 
 -include $(CLANGOUTDIR)/sharedvisitor/clang.pch.d
