@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_8d3dd22c",
+        "filename": "vcl/source/edit/texteng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-11-25T11:06:07Z",
+      "side": 1,
+      "message": "the short-circuit return looks useful, often those are for performance",
+      "revId": "bff61e73f58f32675b5507039ffd0531fa47dba9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
