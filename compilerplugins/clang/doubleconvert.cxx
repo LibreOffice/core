@@ -53,7 +53,7 @@ bool DoubleConvert::VisitMaterializeTemporaryExpr(MaterializeTemporaryExpr const
     if (ignoreLocation(materializetemp))
         return true;
     auto cxxConstruct
-        = dyn_cast<CXXConstructExpr>(materializetemp->GetTemporaryExpr()->IgnoreParenCasts());
+        = dyn_cast<CXXConstructExpr>(compat::getSubExpr(materializetemp)->IgnoreParenCasts());
     if (!cxxConstruct)
         return true;
     if (cxxConstruct->getNumArgs() == 0)

@@ -10,6 +10,7 @@
 #ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -52,7 +53,7 @@ bool UnoAny::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr)
         return true;
     }
     if (auto expr2 = dyn_cast<MaterializeTemporaryExpr>(expr->getArg(1))) {
-        if (auto expr3 = dyn_cast<CXXBindTemporaryExpr>(expr2->GetTemporaryExpr())) {
+        if (auto expr3 = dyn_cast<CXXBindTemporaryExpr>(compat::getSubExpr(expr2))) {
             if (auto expr4 = dyn_cast<CallExpr>(expr3->getSubExpr())) {
                 if (loplugin::DeclCheck(expr4->getDirectCallee()).Function("makeAny").
                     Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()) {
@@ -66,7 +67,7 @@ bool UnoAny::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr)
                 }
             }
         }
-        if (isa<CXXFunctionalCastExpr>(expr2->GetTemporaryExpr())) {
+        if (isa<CXXFunctionalCastExpr>(compat::getSubExpr(expr2))) {
             //expr->getArg(1)->dump();
             report(
                     DiagnosticsEngine::Warning,

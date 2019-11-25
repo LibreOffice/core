@@ -10,6 +10,7 @@
 #ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 // TODO it would be better if we were running some kind of nullability analysis here, where we marked
@@ -63,7 +64,7 @@ bool UnoQuery::VisitCXXMemberCallExpr(CXXMemberCallExpr const* memberCallExpr)
     Expr const* expr = operatorCallExpr->getArg(0)->IgnoreImplicit();
     // depending on the version of clang, the IgnoreImplicit may or may not look through these nodes
     if (auto matTemp = dyn_cast<MaterializeTemporaryExpr>(expr))
-        expr = matTemp->GetTemporaryExpr();
+        expr = compat::getSubExpr(matTemp);
     if (auto bindTemp = dyn_cast<CXXBindTemporaryExpr>(expr))
         expr = bindTemp->getSubExpr();
 

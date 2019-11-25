@@ -18,6 +18,7 @@
 #include <clang/Basic/FileManager.h>
 #include <clang/Lex/Lexer.h>
 
+#include "compat.hxx"
 #include "pluginhandler.hxx"
 
 /*
@@ -30,7 +31,7 @@ namespace {
 
 Expr const * skipImplicit(Expr const * expr) {
     if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-        expr = e->GetTemporaryExpr()->IgnoreImpCasts();
+        expr = compat::getSubExpr(e)->IgnoreImpCasts();
     }
     if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
         expr = e->getSubExpr();

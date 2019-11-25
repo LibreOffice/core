@@ -44,7 +44,7 @@ Expr const * ignoreAllImplicit(Expr const * expr) {
             }
         }
         else if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-            expr = e->GetTemporaryExpr();
+            expr = compat::getSubExpr(e);
         }
         else if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
             expr = e->getSubExpr();

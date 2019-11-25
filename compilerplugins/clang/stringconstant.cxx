@@ -86,7 +86,7 @@ bool hasOverloads(FunctionDecl const * decl, unsigned arguments) {
 
 CXXConstructExpr const * lookForCXXConstructExpr(Expr const * expr) {
     if (auto e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-        expr = e->GetTemporaryExpr();
+        expr = compat::getSubExpr(e);
     }
     if (auto e = dyn_cast<CXXFunctionalCastExpr>(expr)) {
         expr = e->getSubExpr();
@@ -1072,7 +1072,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
             for (auto i(argsBeg); i != argsEnd; ++i) {
                 Expr const * e = (*i)->IgnoreParenImpCasts();
                 if (isa<MaterializeTemporaryExpr>(e)) {
-                    e = cast<MaterializeTemporaryExpr>(e)->GetTemporaryExpr()
+                    e = compat::getSubExpr(cast<MaterializeTemporaryExpr>(e))
                         ->IgnoreParenImpCasts();
                 }
                 if (isa<CXXFunctionalCastExpr>(e)) {

@@ -9,6 +9,7 @@
 
 #include <cassert>
 
+#include "compat.hxx"
 #include "plugin.hxx"
 #include "clang/AST/CXXInheritance.h"
 
@@ -21,7 +22,7 @@ Expr const * ignoreAllImplicit(Expr const * expr) {
         expr = e->getSubExpr();
     }
     if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-        expr = e->GetTemporaryExpr();
+        expr = compat::getSubExpr(e);
     }
     if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
         expr = e->getSubExpr();

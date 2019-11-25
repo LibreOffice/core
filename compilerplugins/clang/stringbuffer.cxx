@@ -9,6 +9,7 @@
 #ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 #include <vector>
 
@@ -57,7 +58,7 @@ bool StringBuffer::VisitCXXMemberCallExpr(CXXMemberCallExpr const* memberCallExp
     auto matTemp = dyn_cast<MaterializeTemporaryExpr>(memberCallExpr->getArg(0));
     if (!matTemp)
         return true;
-    if (!isa<CXXOperatorCallExpr>(matTemp->GetTemporaryExpr()))
+    if (!isa<CXXOperatorCallExpr>(compat::getSubExpr(matTemp)))
         return true;
     report(DiagnosticsEngine::Warning,
            "appending added result of OUString to OUStringBuffer, rather do .append(x).append(y)",
