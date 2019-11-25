@@ -12,14 +12,14 @@
 --- a/nss.orig/nspr/pr/src/misc/prnetdb.c	2017-08-29 23:44:13.690045031 +0530
 +++ b/nss/nspr/pr/src/misc/prnetdb.c	2017-08-29 23:47:03.810814019 +0530
 @@ -438,7 +438,7 @@
- 	char *buf = *bufp;
- 	PRIntn buflen = *buflenp;
+     char *buf = *bufp;
+     PRIntn buflen = *buflenp;
  
--	if (align && ((long)buf & (align - 1))) {
-+	if (align && ((ptrdiff_t)buf & (align - 1))) {
- 		PRIntn skip = align - ((ptrdiff_t)buf & (align - 1));
- 		if (buflen < skip) {
- 			return 0;
+-    if (align && ((long)buf & (align - 1))) {
++    if (align && ((ptrdiff_t)buf & (align - 1))) {
+         PRIntn skip = align - ((ptrdiff_t)buf & (align - 1));
+         if (buflen < skip) {
+             return 0;
 --- a/a/nss/cmd/platlibs.mk	2017-08-29 23:44:13.554044416 +0530
 +++ b/b/nss/cmd/platlibs.mk	2017-08-29 23:46:09.638569150 +0530
 @@ -10,17 +10,22 @@
@@ -153,3 +153,4 @@
  #! gmake
  #
  # This Source Code Form is subject to the terms of the Mozilla Public
+
