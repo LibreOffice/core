@@ -12,6 +12,7 @@
 #include <set>
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 /** Look for static OUString and OUString[], they can be more efficiently declared as:
@@ -100,7 +101,7 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
                 expr = castExpr->getSubExpr();
             }
             else if (MaterializeTemporaryExpr const * materializeExpr = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-                expr = materializeExpr->GetTemporaryExpr();
+                expr = compat::getSubExpr(materializeExpr);
             }
             else if (CXXBindTemporaryExpr const * bindExpr = dyn_cast<CXXBindTemporaryExpr>(expr)) {
                 expr = bindExpr->getSubExpr();

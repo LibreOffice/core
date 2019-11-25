@@ -168,6 +168,14 @@ inline bool EvaluateAsInt(clang::Expr const * expr, llvm::APSInt& intRes, const 
 #endif
 }
 
+inline clang::Expr * getSubExpr(clang::MaterializeTemporaryExpr const * expr) {
+#if CLANG_VERSION >= 100000
+    return expr->getSubExpr();
+#else
+    return expr->GetTemporaryExpr();
+#endif
+}
+
 // Work around <http://reviews.llvm.org/D22128>:
 //
 // SfxErrorHandler::GetClassString (svtools/source/misc/ehdl.cxx):
@@ -202,7 +210,7 @@ namespace detail {
     // Skip through reference binding to temporary.
     if (clang::MaterializeTemporaryExpr *Materialize
                                   = clang::dyn_cast<clang::MaterializeTemporaryExpr>(expr))
-      expr = Materialize->GetTemporaryExpr();
+      expr = compat::getSubExpr(Materialize);
 
     // Skip any temporary bindings; they're implicit.
     if (clang::CXXBindTemporaryExpr *Binder = clang::dyn_cast<clang::CXXBindTemporaryExpr>(expr))

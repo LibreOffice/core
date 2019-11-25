@@ -10,6 +10,7 @@
  */
 #ifndef LO_CLANG_SHARED_PLUGINS
 
+#include "compat.hxx"
 #include "plugin.hxx"
 #include "check.hxx"
 #include <iostream>
@@ -111,7 +112,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
         }
         if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(constructorArg0))
         {
-            constructorArg0 = matTempExpr->GetTemporaryExpr();
+            constructorArg0 = compat::getSubExpr(matTempExpr);
             continue;
         }
         if (auto bindTempExpr = dyn_cast<CXXBindTemporaryExpr>(constructorArg0))
@@ -223,7 +224,7 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
         }
         if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(arg0))
         {
-            arg0 = matTempExpr->GetTemporaryExpr();
+            arg0 = compat::getSubExpr(matTempExpr);
             continue;
         }
         if (auto bindTempExpr = dyn_cast<CXXBindTemporaryExpr>(arg0))

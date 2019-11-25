@@ -42,7 +42,7 @@ public:
             expr = cxxConstructExpr->getArg(0);
         }
         if (auto materializeTemporaryExpr = dyn_cast<MaterializeTemporaryExpr>(expr))
-            expr = materializeTemporaryExpr->GetTemporaryExpr();
+            expr = compat::getSubExpr(materializeTemporaryExpr);
         auto cxxFunctionalCastExpr = dyn_cast<CXXFunctionalCastExpr>(expr);
         if (!cxxFunctionalCastExpr)
             return true;
@@ -94,7 +94,7 @@ public:
             if (!materializeTemporaryExpr)
                 continue;
             auto functionalCast = dyn_cast<CXXFunctionalCastExpr>(
-                materializeTemporaryExpr->GetTemporaryExpr()->IgnoreImpCasts());
+                compat::getSubExpr(materializeTemporaryExpr)->IgnoreImpCasts());
             if (!functionalCast)
                 continue;
             auto const t1 = functionalCast->getTypeAsWritten();
