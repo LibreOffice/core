@@ -2442,17 +2442,20 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
     ScopedVclPtrInstance<PopupMenu> pMenu;
     OUString sTextDoc("com.sun.star.text.TextDocument");
 
-    OUString sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:StyleNewByExample", sTextDoc);
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:StyleNewByExample", sTextDoc);
+    OUString sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
     pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
     pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-    sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:StyleUpdateByExample", sTextDoc);
+    aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:StyleUpdateByExample", sTextDoc);
+    sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
     pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
     pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
     pMenu->InsertSeparator();
 
-    sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:LoadStyles", sTextDoc);
+    aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:LoadStyles", sTextDoc);
+    sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
     pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
     pMenu->SetHelpId(SID_TEMPLATE_LOAD, ".uno:LoadStyles");
 

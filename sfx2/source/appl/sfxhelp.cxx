@@ -602,7 +602,8 @@ static SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* pWindow )
 {
     OUString sModuleName = GetHelpModuleName_Impl(aCommandURL);
-    OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand( aCommandURL, getCurrentModuleIdentifier_Impl() );
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, getCurrentModuleIdentifier_Impl());
+    OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
     OUString sHelpText = SfxHelp_Impl::GetHelpText( sRealCommand.isEmpty() ? aCommandURL : sRealCommand, sModuleName );
 
     OString aNewHelpId;
@@ -643,7 +644,8 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
 OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* pWidget)
 {
     OUString sModuleName = GetHelpModuleName_Impl(aCommandURL);
-    OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand( aCommandURL, getCurrentModuleIdentifier_Impl() );
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, getCurrentModuleIdentifier_Impl());
+    OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
     OUString sHelpText = SfxHelp_Impl::GetHelpText( sRealCommand.isEmpty() ? aCommandURL : sRealCommand, sModuleName );
 
     OString aNewHelpId;
@@ -1058,8 +1060,11 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
             OUString aRealCommand;
 
             if ( nProtocol == INetProtocol::Uno )
+            {
                 // Command can be just an alias to another command.
-                aRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand( rURL, getCurrentModuleIdentifier_Impl() );
+                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rURL, getCurrentModuleIdentifier_Impl());
+                aRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
+            }
 
             // no URL, just a HelpID (maybe empty in case of keyword search)
             aHelpURL = CreateHelpURL_Impl( aRealCommand.isEmpty() ? rURL : aRealCommand, aHelpModuleName );
@@ -1233,8 +1238,11 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
             OUString aRealCommand;
 
             if ( nProtocol == INetProtocol::Uno )
+            {
                 // Command can be just an alias to another command.
-                aRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand( rURL, getCurrentModuleIdentifier_Impl() );
+                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rURL, getCurrentModuleIdentifier_Impl());
+                aRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
+            }
 
             // no URL, just a HelpID (maybe empty in case of keyword search)
             aHelpURL = CreateHelpURL_Impl( aRealCommand.isEmpty() ? rURL : aRealCommand, aHelpModuleName );

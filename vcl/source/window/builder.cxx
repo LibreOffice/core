@@ -1222,11 +1222,12 @@ namespace
             return;
 
         OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
-        OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(aCommand, aModuleName));
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, aModuleName);
+        OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
         if (!aLabel.isEmpty())
             pButton->SetText(aLabel);
 
-        OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(aCommand, rFrame));
+        OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(aCommand, aProperties, rFrame));
         if (!aTooltip.isEmpty())
             pButton->SetQuickHelpText(aTooltip);
 

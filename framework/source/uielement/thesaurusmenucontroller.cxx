@@ -107,7 +107,8 @@ void ThesaurusMenuController::fillPopupMenu()
 
         pVCLMenu->InsertSeparator();
         OUString aThesaurusDialogCmd( ".uno:ThesaurusDialog" );
-        pVCLMenu->InsertItem( nId, vcl::CommandInfoProvider::GetPopupLabelForCommand( aThesaurusDialogCmd, m_aModuleName ) );
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aThesaurusDialogCmd, m_aModuleName);
+        pVCLMenu->InsertItem( nId, vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties) );
         pVCLMenu->SetItemCommand( nId, aThesaurusDialogCmd );
     }
 }

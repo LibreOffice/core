@@ -117,9 +117,11 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(Toolbar& rToolbar,
     {
         OUString sCommand = OUString::fromUtf8(rToolbar.get_item_ident(i));
 
-        OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(sCommand, aModuleName));
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommand, aModuleName);
+        OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
         rToolbar.set_item_label(i, aLabel);
-        OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(sCommand, rFrame));
+        OUString aTooltip(
+            vcl::CommandInfoProvider::GetTooltipForCommand(sCommand, aProperties, rFrame));
         rToolbar.set_item_tooltip_text(i, aTooltip);
         auto xImage(vcl::CommandInfoProvider::GetXGraphicForCommand(sCommand, rFrame, eSize));
         rToolbar.set_item_icon(i, xImage);
