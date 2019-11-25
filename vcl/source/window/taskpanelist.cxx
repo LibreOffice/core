@@ -275,7 +275,12 @@ vcl::Window* TaskPaneList::FindNextFloat( vcl::Window *pWindow, bool bForward )
             break; // do not wrap, send focus back to document at end of list
         /* #i83908# do not use the menubar if it is native and invisible
         */
-        if( (*p)->IsReallyVisible() && !(*p)->ImplIsSplitter() &&
+
+        bool bSkip = false; // used to skip infobar when it has no children
+        if( (*p)->GetType() == WindowType::WINDOW && (*p)->GetChildCount() == 0 )
+            bSkip = true;
+
+        if( !bSkip && (*p)->IsReallyVisible() && !(*p)->ImplIsSplitter() &&
             ( (*p)->GetType() != WindowType::MENUBARWINDOW || static_cast<MenuBarWindow*>(p->get())->CanGetFocus() ) )
         {
             pWindow = (*p).get();
