@@ -16,6 +16,24 @@
       "revId": "bff61e73f58f32675b5507039ffd0531fa47dba9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_30197521",
+        "filename": "vcl/source/edit/texteng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-11-25T15:08:11Z",
+      "side": 1,
+      "message": "I introduced this myself because of the original comment about an \"infinite invalidation loop\", which I didn\u0027t try to reproduce back then. Still this bug is caused by this font \"caching\" and removing that fixes the bug and doesn\u0027t produce any busy loop or visual problem for me.\n\nAlternatively we could revert my whole commit cc223fa12a61ba0e580b884386a7f5d7efd0541f, which looks minimal enough for a clean revert.",
+      "parentUuid": "7f7f9b97_8d3dd22c",
+      "revId": "bff61e73f58f32675b5507039ffd0531fa47dba9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
