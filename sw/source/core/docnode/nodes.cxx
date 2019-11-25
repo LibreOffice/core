@@ -1308,9 +1308,9 @@ static bool TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, sal_uLong nStt, sal_uL
             nStt < nEndIdx && nEnd >= nEndIdx;
 }
 
-/** Check if the given range is inside the defined ranges
+/** Check if the given range is inside one of the defined top-level sections.
  *
- * The defined ranges are Content, AutoText, PostIts, Inserts, and Redlines.
+ * The top-level sections are Content, AutoText, PostIts, Inserts, and Redlines.
  *
  * @param rStt start index of the range
  * @param rEnd end index of the range
