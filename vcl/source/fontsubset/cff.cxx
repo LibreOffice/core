@@ -1631,14 +1631,7 @@ void Type1Emitter::setSubsetName( const char* pSubsetName)
 {
     maSubsetName[0] = '\0';
     if( pSubsetName)
-#if defined __GNUC__ && (__GNUC__ == 8 || __GNUC__ == 9) && !defined __clang__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstringop-truncation"
-#endif
-        strncpy( maSubsetName, pSubsetName, sizeof(maSubsetName));
-#if defined __GNUC__ && (__GNUC__ == 8 || __GNUC__ == 9) && !defined __clang__
-#pragma GCC diagnostic pop
-#endif
+        strncpy( maSubsetName, pSubsetName, sizeof(maSubsetName) - 1);
     maSubsetName[sizeof(maSubsetName)-1] = '\0';
 }
 
