@@ -1267,17 +1267,7 @@ OUString SvxConfigPage::GetFrameWithDefaultAndIdentify( uno::Reference< frame::X
             return sModuleID;
         }
 
-        uno::Reference< css::frame::XModuleManager2 > xModuleManager(
-                css::frame::ModuleManager::create( xContext ) );
-
-        try
-        {
-            sModuleID = xModuleManager->identify( _inout_rxFrame );
-        }
-        catch ( const frame::UnknownModuleException& )
-        {
-        }
-
+        sModuleID = vcl::CommandInfoProvider::GetModuleIdentifier(_inout_rxFrame);
     }
     catch( const uno::Exception& )
     {
