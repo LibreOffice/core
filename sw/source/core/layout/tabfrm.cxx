@@ -5694,14 +5694,22 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
 
 bool SwFrame::IsLeaveUpperAllowed() const
 {
-    const SwCellFrame* pThisCell = dynamic_cast<const SwCellFrame*>(this);
-    return pThisCell && pThisCell->GetLayoutRowSpan() > 1;
+    return false;
+}
+
+bool SwCellFrame::IsLeaveUpperAllowed() const
+{
+    return GetLayoutRowSpan() > 1;
 }
 
 bool SwFrame::IsCoveredCell() const
 {
-    const SwCellFrame* pThisCell = dynamic_cast<const SwCellFrame*>(this);
-    return pThisCell && pThisCell->GetLayoutRowSpan() < 1;
+    return false;
+}
+
+bool SwCellFrame::IsCoveredCell() const
+{
+    return GetLayoutRowSpan() < 1;
 }
 
 bool SwFrame::IsInCoveredCell() const
