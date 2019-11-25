@@ -533,12 +533,6 @@ sal_uInt16 SwWW8ImplReader::End_Field()
         case ww::eFORMTEXT:
         if (bUseEnhFields && m_pPaM!=nullptr && m_pPaM->GetPoint()!=nullptr) {
             SwPosition aEndPos = *m_pPaM->GetPoint();
-            if (!::CheckNodesRange(m_aFieldStack.back().GetPtNode(),
-                        aEndPos.nNode, true))
-            {   // example ofz7322-1.doc
-                SAL_INFO("sw.ww8", "skipping field with invalid node range");
-                break;
-            }
             SwPaM aFieldPam( m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(), aEndPos.nNode, aEndPos.nContent.GetIndex());
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = pMarksAccess->makeFieldBookmark(
