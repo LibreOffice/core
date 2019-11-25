@@ -24,7 +24,7 @@
 #include "sbxconv.hxx"
 #include <runtime.hxx>
 
-double ImpGetDouble( const SbxValues* p )
+double ImpGetDouble( const SbxValues* p, bool bUseLocale )
 {
     double nRes;
     switch( +p->eType )
@@ -81,7 +81,7 @@ double ImpGetDouble( const SbxValues* p )
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
+                if( ImpScan( *p->pOUString, d, t, nullptr, bUseLocale ) != ERRCODE_NONE )
                 {
                     nRes = 0;
 #if HAVE_FEATURE_SCRIPTING

@@ -9,14 +9,12 @@
 Option Explicit
 
 Function doUnitTest() as String
-    Dim A As String
-    Dim B As Double
-    Dim Expected As String
-    A = "222.222"
-    ' in da-DK locale ',' is the decimal separator
-    Expected = "222222"
-    B = Cdbl(A)
-    If B <> Expected Then
+    Dim A As Double
+    ' In the da-DK locale the comma is the decimal separator and the
+    ' period is the grouping separator. The CDbl function is
+    ' expected to use the locale. Verify that.
+    A = CDbl("222.222")
+    If A <> 222222 Then
         doUnitTest = "FAIL"
     Else
         doUnitTest = "OK"

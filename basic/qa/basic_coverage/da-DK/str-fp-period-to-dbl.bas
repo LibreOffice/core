@@ -10,9 +10,10 @@ Option Explicit
 
 Function doUnitTest() as String
     Dim A As Double
-    ' In the da-DK locale ',' is the decimal separator and the CDbl
-    ' function is expected to use the locale.
-    A = CDbl("222,222")
+    A = "222.222"
+    ' In the da-DK locale the comma is the decimal separator and the
+    ' period is the grouping separator but we don't do
+    ' locale-dependent conversion for an implicit conversion as above.
     If A <> 222.222 Then
         doUnitTest = "FAIL"
     Else

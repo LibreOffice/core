@@ -8,12 +8,9 @@
 
 Option Explicit
 
-Function doUnitTest() as String
-    Dim A As Double
-    ' In the da-DK locale ',' is the decimal separator and the CDbl
-    ' function is expected to use the locale.
-    A = CDbl("222,222")
-    If A <> 222.222 Then
+Function doUnitTest as String
+    ' Verify that in the default locale the comma is the grouping separator.
+     If (CInt("10,123") <> 10123) Then
         doUnitTest = "FAIL"
     Else
         doUnitTest = "OK"

@@ -27,7 +27,7 @@
 
 #include <rtl/math.hxx>
 
-sal_uInt8 ImpGetByte( const SbxValues* p )
+sal_uInt8 ImpGetByte( const SbxValues* p, bool bUseLocale )
 {
     SbxValues aTmp;
     sal_uInt8 nRes;
@@ -165,7 +165,7 @@ start:
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
+                if( ImpScan( *p->pOUString, d, t, nullptr, bUseLocale ) != ERRCODE_NONE )
                     nRes = 0;
                 else if( d > SbxMAXBYTE )
                 {

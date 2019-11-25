@@ -9,10 +9,11 @@
 Option Explicit
 
 Function doUnitTest() as String
-    Dim A As Double
-    ' In the da-DK locale ',' is the decimal separator and the CDbl
-    ' function is expected to use the locale.
-    A = CDbl("222,222")
+    Dim A As Single
+    ' In the da-DK locale the comma is the decimal separator and the
+    ' period is the grouping separator. The CSng function is
+    ' expected to use the locale. Verify that.
+    A = CSng("222,222")
     If A <> 222.222 Then
         doUnitTest = "FAIL"
     Else
