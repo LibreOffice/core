@@ -1028,6 +1028,11 @@ bool lcl_hasSingleToken(const OUString& s, sal_Unicode c)
 
 void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        return;
+    }
+
     ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
     const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     const sal_Unicode cSheetSep = lcl_getSheetSeparator(&pDocSh->GetDocument());
@@ -1282,6 +1287,58 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
 
 void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (pViewShell && rFuncStrVec.size())
+        {
+            OUString aFuncNameStr;
+            OUString aDescFuncNameStr;
+            OStringBuffer aPayload;
+            aPayload.append("[ ");
+            for (const OUString& rFunc : rFuncStrVec)
+            {
+                if ( rFunc[rFunc.getLength()-1] == cParenthesesReplacement )
+                {
+                    aFuncNameStr = rFunc.copy(0, rFunc.getLength()-1);
+                }
+                else
+                {
+                    aFuncNameStr = rFunc;
+                }
+
+                FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
+                aDescFuncNameStr = aFuncNameStr + "()";
+                sal_Int32 nNextFStart = 0;
+                const IFunctionDescription* ppFDesc;
+                ::std::vector< OUString > aArgs;
+                OUString eqPlusFuncName = "=" + aDescFuncNameStr;
+                if ( aHelper.GetNextFunc( eqPlusFuncName, false, nNextFStart, nullptr, &ppFDesc, &aArgs ) )
+                {
+                    if ( !ppFDesc->getFunctionName().isEmpty() )
+                    {
+                        aPayload.append("{");
+                        aPayload.append("\"signature\": \"");
+                        OUString aSignature = ppFDesc->getSignature();
+                        aPayload.append(OUStringToOString(aSignature, RTL_TEXTENCODING_UTF8));
+                        aPayload.append("\", ");
+                        aPayload.append("\"description\": \"");
+                        OUString aFuncDescr = ppFDesc->getDescription();
+                        aPayload.append(OUStringToOString(aFuncDescr, RTL_TEXTENCODING_UTF8));
+                        aPayload.append("\"}, ");
+                    }
+                }
+            }
+            sal_Int32 nLen = aPayload.getLength();
+            aPayload[nLen - 2] = ' ';
+            aPayload[nLen - 1] = ']';
+
+            OString s = aPayload.makeStringAndClear();
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s.getStr());
+        }
+        return;
+    }
+
     OUStringBuffer aTipStr;
     OUString aFuncNameStr;
     OUString aDescFuncNameStr;

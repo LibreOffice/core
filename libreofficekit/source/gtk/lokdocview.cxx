@@ -1381,6 +1381,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
     case LOK_CALLBACK_TABLE_SELECTED:
     case LOK_CALLBACK_JSDIALOG:
+    case LOK_CALLBACK_CALC_FUNCTION_LIST:
     {
         // TODO: Implement me
         break;
