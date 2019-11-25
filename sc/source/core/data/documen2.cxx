@@ -35,6 +35,7 @@
 #include <comphelper/threadpool.hxx>
 #include <sal/log.hxx>
 
+#include <scmod.hxx>
 #include <document.hxx>
 #include <table.hxx>
 #include <patattr.hxx>
@@ -50,6 +51,7 @@
 #include <markdata.hxx>
 #include <validat.hxx>
 #include <detdata.hxx>
+#include <defaultsoptions.hxx>
 #include <sc.hrc>
 #include <ddelink.hxx>
 #include <chgtrack.hxx>
@@ -168,6 +170,15 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mbDocShellRecalc(false),
         mnMutationGuardFlags(0)
 {
+    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+    if (rOpt.GetInitJumboSheets())
+    {
+        mnMaxCol = 16384;
+        mnMaxRow = 16 * 1000 * 1000;
+    }
+    maPreviewSelection = { mnMaxRow, mnMaxCol };
+    aCurTextWidthCalcPos = { MaxCol(), 0, 0 };
+
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
 
     eSrcSet = osl_getThreadTextEncoding();
