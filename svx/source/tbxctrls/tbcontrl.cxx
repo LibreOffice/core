@@ -3466,7 +3466,8 @@ void SvxColorToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>
         // Sidebar uses wide buttons for those.
         m_bSplitButton = typeid( *pToolBox ) != typeid( sfx2::sidebar::SidebarToolBox );
 
-    OUString aCommandLabel = vcl::CommandInfoProvider::GetLabelForCommand( getCommandURL(), getModuleName() );
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(getCommandURL(), getModuleName());
+    OUString aCommandLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
 
     m_xBtnUpdater.reset( new svx::ToolboxButtonColorUpdater( m_nSlotId, nId, pToolBox, !m_bSplitButton,  aCommandLabel ) );
     pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ( m_bSplitButton ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
@@ -3529,7 +3530,8 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
                             false,
                             m_aColorSelectFunction);
 
-    OUString aWindowTitle = vcl::CommandInfoProvider::GetLabelForCommand( m_aCommandURL, m_sModuleName );
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(m_aCommandURL, m_sModuleName);
+    OUString aWindowTitle = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
     pColorWin->SetText( aWindowTitle );
     pColorWin->StartSelection();
     if ( m_bSplitButton )

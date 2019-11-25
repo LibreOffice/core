@@ -181,7 +181,7 @@ static bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCom
     return false;
 }
 
-static Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCommandName, const OUString& rsModuleName)
+Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCommandName, const OUString& rsModuleName)
 {
     Sequence<beans::PropertyValue> aProperties;
 
@@ -202,12 +202,11 @@ static Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCom
     return aProperties;
 }
 
-static OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName, const OUString& rsModuleName)
+static OUString GetCommandProperty(const OUString& rsProperty, const Sequence<beans::PropertyValue> &rProperties)
 {
-    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rsModuleName));
-    auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
+    auto pProp = std::find_if(rProperties.begin(), rProperties.end(),
         [&rsProperty](const beans::PropertyValue& rProp) { return rProp.Name == rsProperty; });
-    if (pProp != aProperties.end())
+    if (pProp != rProperties.end())
     {
         OUString sLabel;
         pProp->Value >>= sLabel;
@@ -216,40 +215,34 @@ static OUString GetCommandProperty(const OUString& rsProperty, const OUString& r
     return OUString();
 }
 
-OUString GetLabelForCommand (
-    const OUString& rsCommandName,
-    const OUString& rsModuleName)
+OUString GetLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
 {
-    return GetCommandProperty("Name", rsCommandName, rsModuleName);
+    return GetCommandProperty("Name", rProperties);
 }
 
-OUString GetMenuLabelForCommand (
-    const OUString& rsCommandName,
-    const OUString& rsModuleName)
+OUString GetMenuLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
 {
     // Here we want to use "Label", not "Name". "Name" is a stripped-down version of "Label" without accelerators
     // and ellipsis. In the menu, we want to have those accelerators and ellipsis.
-    return GetCommandProperty("Label", rsCommandName, rsModuleName);
+    return GetCommandProperty("Label", rProperties);
 }
 
-OUString GetPopupLabelForCommand (
-    const OUString& rsCommandName,
-    const OUString& rsModuleName)
+OUString GetPopupLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
 {
-    OUString sPopupLabel(GetCommandProperty("PopupLabel", rsCommandName, rsModuleName));
+    OUString sPopupLabel(GetCommandProperty("PopupLabel", rProperties));
     if (!sPopupLabel.isEmpty())
         return sPopupLabel;
-    return GetCommandProperty("Label", rsCommandName, rsModuleName);
+    return GetCommandProperty("Label", rProperties);
 }
 
-OUString GetTooltipForCommand (
+OUString GetTooltipForCommand(
     const OUString& rsCommandName,
+    const css::uno::Sequence<css::beans::PropertyValue>& rProperties,
     const Reference<frame::XFrame>& rxFrame)
 {
-    OUString sModuleName(GetModuleIdentifier(rxFrame));
-    OUString sLabel (GetCommandProperty("TooltipLabel", rsCommandName, sModuleName));
+    OUString sLabel(GetCommandProperty("TooltipLabel", rProperties));
     if (sLabel.isEmpty()) {
-        sLabel = GetPopupLabelForCommand(rsCommandName, sModuleName);
+        sLabel = GetPopupLabelForCommand(rProperties);
         // Remove '...' at the end and mnemonics (we don't want those in tooltips)
         sLabel = comphelper::string::stripEnd(sLabel, '.');
         sLabel = MnemonicGenerator::EraseAllMnemonicChars(sLabel);
@@ -257,7 +250,7 @@ OUString GetTooltipForCommand (
 
     // Command can be just an alias to another command,
     // so need to get the shortcut of the "real" command.
-    const OUString sRealCommand(GetRealCommandForCommand(rsCommandName, sModuleName));
+    const OUString sRealCommand(GetRealCommandForCommand(rProperties));
     const OUString sShortCut(GetCommandShortcut(!sRealCommand.isEmpty() ? sRealCommand : rsCommandName, rxFrame));
     if (!sShortCut.isEmpty())
         return sLabel + " (" + sShortCut + ")";
@@ -285,10 +278,9 @@ OUString GetCommandShortcut (const OUString& rsCommandName,
     return OUString();
 }
 
-OUString GetRealCommandForCommand(const OUString& rCommandName,
-                                  const OUString& rsModuleName)
+OUString GetRealCommandForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
 {
-    return GetCommandProperty("TargetURL", rCommandName, rsModuleName);
+    return GetCommandProperty("TargetURL", rProperties);
 }
 
 Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName,

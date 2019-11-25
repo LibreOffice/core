@@ -358,7 +358,8 @@ void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
     {
         removeStatusListener( m_aCommandURL );
 
-        OUString aRealCommand( vcl::CommandInfoProvider::GetRealCommandForCommand( rCommand, m_sModuleName ) );
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCommand, m_sModuleName);
+        OUString aRealCommand( vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties) );
         m_aCommandURL = aRealCommand.isEmpty() ? rCommand : aRealCommand;
         addStatusListener( m_aCommandURL );
 
@@ -368,8 +369,8 @@ void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
         {
             pToolBox->SetItemCommand( nId, rCommand );
             pToolBox->SetHelpText( nId, OUString() ); // Will retrieve the new one from help.
-            pToolBox->SetItemText( nId, vcl::CommandInfoProvider::GetLabelForCommand( rCommand, m_sModuleName ) );
-            pToolBox->SetQuickHelpText( nId, vcl::CommandInfoProvider::GetTooltipForCommand( rCommand, m_xFrame ) );
+            pToolBox->SetItemText(nId, vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
+            pToolBox->SetQuickHelpText(nId, vcl::CommandInfoProvider::GetTooltipForCommand(rCommand, aProperties, m_xFrame));
 
             Image aImage = vcl::CommandInfoProvider::GetImageForCommand(rCommand, m_xFrame, pToolBox->GetImageSize());
             if ( !!aImage )
@@ -519,8 +520,11 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
     m_bReadOnly = m_xStorable.is() && m_xStorable->isReadonly();
     if ( bLastReadOnly != m_bReadOnly )
     {
+        OUString sCommand = m_bReadOnly ? OUString( ".uno:SaveAs" ) : m_aCommandURL;
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommand,
+            vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
         pToolBox->SetQuickHelpText( nId,
-            vcl::CommandInfoProvider::GetTooltipForCommand( m_bReadOnly ? OUString( ".uno:SaveAs" ) : m_aCommandURL, m_xFrame ) );
+            vcl::CommandInfoProvider::GetTooltipForCommand(sCommand, aProperties, m_xFrame) );
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~( m_bReadOnly ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) |  ( m_bReadOnly ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN ) );
         updateImage();
