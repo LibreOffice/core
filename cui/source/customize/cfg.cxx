@@ -1418,12 +1418,14 @@ int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
     OUString aDisplayName;
     OUString aModuleId = vcl::CommandInfoProvider::GetModuleIdentifier( m_xFrame );
 
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aURL, aModuleId);
+
     if ( typeid(*pCurrentSaveInData) == typeid(ContextMenuSaveInData) )
-        aDisplayName = vcl::CommandInfoProvider::GetPopupLabelForCommand( aURL, aModuleId );
+        aDisplayName = vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
     else if ( typeid(*pCurrentSaveInData) == typeid(MenuSaveInData) )
-        aDisplayName = vcl::CommandInfoProvider::GetMenuLabelForCommand( aURL, aModuleId );
+        aDisplayName = vcl::CommandInfoProvider::GetMenuLabelForCommand(aProperties);
     else
-        aDisplayName = vcl::CommandInfoProvider::GetLabelForCommand( aURL, aModuleId );
+        aDisplayName = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
 
     SvxConfigEntry* pNewEntryData =
         new SvxConfigEntry( aDisplayName, aURL, false, /*bParentData*/false );

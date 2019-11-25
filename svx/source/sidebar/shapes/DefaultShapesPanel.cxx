@@ -127,7 +127,9 @@ void DefaultShapesPanel::populateShapes()
         {
             sSlotStr = aSet.second[i];
             aSlotImage = vcl::CommandInfoProvider::GetImageForCommand(sSlotStr, mxFrame);
-            sLabel = vcl::CommandInfoProvider::GetTooltipForCommand(sSlotStr, mxFrame);
+            auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sSlotStr,
+                vcl::CommandInfoProvider::GetModuleIdentifier(mxFrame));
+            sLabel = vcl::CommandInfoProvider::GetTooltipForCommand(sSlotStr, aProperties, mxFrame);
             aSet.first->InsertItem(i, aSlotImage, sLabel);
         }
     }

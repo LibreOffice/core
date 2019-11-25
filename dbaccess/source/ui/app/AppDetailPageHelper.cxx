@@ -193,8 +193,10 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     m_aBorder->SetBorderStyle(WindowBorderStyle::MONO);
 
     m_aTBPreview->SetOutStyle(TOOLBOX_STYLE_FLAT);
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:DBDisablePreview",
+        "com.sun.star.sdb.OfficeDatabaseDocument");
     m_aTBPreview->InsertItem(SID_DB_APP_DISABLE_PREVIEW,
-                             vcl::CommandInfoProvider::GetLabelForCommand(".uno:DBDisablePreview", "com.sun.star.sdb.OfficeDatabaseDocument"),
+                             vcl::CommandInfoProvider::GetLabelForCommand(aProperties),
                              ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWNONLY|ToolBoxItemBits::AUTOSIZE|ToolBoxItemBits::RADIOCHECK);
     m_aTBPreview->SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview->SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
@@ -974,7 +976,8 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
                 break;
         }
 
-        OUString aCommandLabel = vcl::CommandInfoProvider::GetLabelForCommand(aCommand, "com.sun.star.sdb.OfficeDatabaseDocument");
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, "com.sun.star.sdb.OfficeDatabaseDocument");
+        OUString aCommandLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
         m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, stripTrailingDots(aCommandLabel));
         Resize();
 
