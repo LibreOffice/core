@@ -167,10 +167,6 @@ void TextEngine::SetActiveView( TextView* pTextView )
 
 void TextEngine::SetFont( const vcl::Font& rFont )
 {
-    if (rFont == maOrigFont)
-        return;
-    maOrigFont = rFont;
-
     maFont = rFont;
     // #i40221# As the font's color now defaults to transparent (since i35764)
     //  we have to choose a useful textcolor in this case.

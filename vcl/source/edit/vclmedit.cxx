@@ -935,7 +935,8 @@ void VclMultiLineEdit::ApplyBackgroundSettings(vcl::RenderContext& rRenderContex
     }
 }
 
-void VclMultiLineEdit::ApplyFontSettings(vcl::RenderContext& rRenderContext, const StyleSettings& rStyleSettings)
+void VclMultiLineEdit::ApplyFontSettings(vcl::RenderContext& rRenderContext, const StyleSettings& rStyleSettings,
+                                         bool bSkipTextEngineFont)
 {
     // The Font has to be adjusted, as the TextEngine does not take care of
     // TextColor/Background
@@ -958,7 +959,9 @@ void VclMultiLineEdit::ApplyFontSettings(vcl::RenderContext& rRenderContext, con
         TheFont.SetFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
 
     pImpVclMEdit->GetTextWindow()->SetFont(TheFont);
-    pImpVclMEdit->GetTextWindow()->GetTextEngine()->SetFont(TheFont);
+    // FIXME: next call causes infinite invalidation loop in dbgutil build, rethink how to properly fix this situation
+    if (!bSkipTextEngineFont)
+        pImpVclMEdit->GetTextWindow()->GetTextEngine()->SetFont(TheFont);
     pImpVclMEdit->GetTextWindow()->SetTextColor(aTextColor);
 }
 
@@ -966,7 +969,7 @@ void VclMultiLineEdit::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    ApplyFontSettings(rRenderContext, rStyleSettings);
+    ApplyFontSettings(rRenderContext, rStyleSettings, true);
     ApplyBackgroundSettings(rRenderContext, rStyleSettings);
 }
 
@@ -974,7 +977,7 @@ void VclMultiLineEdit::ImplInitSettings(bool bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    ApplyFontSettings(*this, rStyleSettings);
+    ApplyFontSettings(*this, rStyleSettings, false);
 
     if (bBackground)
         ApplyBackgroundSettings(*this, rStyleSettings);

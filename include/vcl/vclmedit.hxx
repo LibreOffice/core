@@ -99,7 +99,7 @@ protected:
 
     void ApplySettings(vcl::RenderContext&) override;
     void ApplyBackgroundSettings(vcl::RenderContext&, const StyleSettings&);
-    void ApplyFontSettings(vcl::RenderContext&, const StyleSettings&);
+    void ApplyFontSettings(vcl::RenderContext&, const StyleSettings&, bool bSkipTextEngineFont);
 
 public:
                     VclMultiLineEdit( vcl::Window* pParent,
