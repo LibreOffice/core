@@ -407,7 +407,7 @@ bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
 {
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
-    sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
+    sc::RowHeightContext aCxt(m_aDocument.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
     bool bChange = m_aDocument.SetOptimalHeight(aCxt, nStartRow,nEndRow, nTab);
 
     if (bChange)
@@ -427,7 +427,7 @@ void ScDocShell::UpdateAllRowHeights( const ScMarkData* pTabMark )
 
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
-    sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
+    sc::RowHeightContext aCxt(m_aDocument.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
     m_aDocument.UpdateAllRowHeights(aCxt, pTabMark);
 }
 

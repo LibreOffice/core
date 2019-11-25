@@ -421,7 +421,7 @@ ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
 
     if (bHasMarks1 && bHasMarks2)
     {
-        pRowSegs.reset( new ScFlatBoolRowSegments);
+        pRowSegs.reset( new ScFlatBoolRowSegments(rMultiSel.mnMaxRow) );
         pRowSegs->setFalse( 0, rMultiSel.mnMaxRow );
         {
             ScMarkArrayIter aMarkIter( &rMultiSel.aRowSel );

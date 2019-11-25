@@ -2157,7 +2157,7 @@ void ScViewFunc::SetWidthOrHeight(
                         aZoomX = aZoomY = Fraction( 1, 1 );
                     }
 
-                    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
+                    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
                     aCxt.setForceAutoSize(bAll);
                     aCxt.setExtraHeight(nSizeTwips);
                     rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab);

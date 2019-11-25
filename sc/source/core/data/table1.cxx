@@ -241,10 +241,10 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     nRepeatStartY( SCROW_REPEAT_NONE ),
     nRepeatEndY( SCROW_REPEAT_NONE ),
     mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(nullptr) ),
-    mpHiddenCols(new ScFlatBoolColSegments),
-    mpHiddenRows(new ScFlatBoolRowSegments),
-    mpFilteredCols(new ScFlatBoolColSegments),
-    mpFilteredRows(new ScFlatBoolRowSegments),
+    mpHiddenCols(new ScFlatBoolColSegments(pDoc->MaxCol())),
+    mpHiddenRows(new ScFlatBoolRowSegments(pDoc->MaxRow())),
+    mpFilteredCols(new ScFlatBoolColSegments(pDoc->MaxCol())),
+    mpFilteredRows(new ScFlatBoolRowSegments(pDoc->MaxRow())),
     nTableAreaX( 0 ),
     nTableAreaY( 0 ),
     nTab( nNewTab ),
@@ -279,7 +279,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
 
     if (bRowInfo)
     {
-        mpRowHeights.reset(new ScFlatUInt16RowSegments(ScGlobal::nStdRowHeight));
+        mpRowHeights.reset(new ScFlatUInt16RowSegments(pDocument->MaxRow(), ScGlobal::nStdRowHeight));
         pRowFlags.reset(new ScBitMaskCompressedArray<SCROW, CRFlags>( pDocument->MaxRow(), CRFlags::NONE));
     }
 
@@ -1962,7 +1962,7 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
 
     // First, mark those columns that we need to skip i.e. hidden and empty columns.
 
-    ScFlatBoolColSegments aSkipCols;
+    ScFlatBoolColSegments aSkipCols(pDocument->MaxCol());
     aSkipCols.setFalse(0, pDocument->MaxCol());
     for (SCCOL i = 0; i <= pDocument->MaxCol(); ++i)
     {

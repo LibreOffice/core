@@ -2820,11 +2820,11 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRem
                                 double nPPTX, double nPPTY,
                                 const Fraction& rZoomX, const Fraction& rZoomY )
 {
-    ScFlatBoolRowSegments aUsedRows;
+    ScFlatBoolRowSegments aUsedRows(pDocument->MaxRow());
     for (SCCOL i = 0; i < aCol.size(); ++i)
         aCol[i].FindStyleSheet(pStyleSheet, aUsedRows, bRemoved);
 
-    sc::RowHeightContext aCxt(nPPTX, nPPTY, rZoomX, rZoomY, pDev);
+    sc::RowHeightContext aCxt(pDocument->MaxRow(), nPPTX, nPPTY, rZoomX, rZoomY, pDev);
     SCROW nRow = 0;
     while (nRow <= pDocument->MaxRow())
     {

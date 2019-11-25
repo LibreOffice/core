@@ -63,7 +63,7 @@ public:
         ScFlatBoolRowSegments const & mrSegs;
     };
 
-    ScFlatBoolRowSegments();
+    ScFlatBoolRowSegments(SCROW nMaxRow);
     ScFlatBoolRowSegments(const ScFlatBoolRowSegments& r);
     ~ScFlatBoolRowSegments();
 
@@ -89,7 +89,7 @@ public:
         SCCOL   mnCol2;
         bool    mbValue;
     };
-    ScFlatBoolColSegments();
+    ScFlatBoolColSegments(SCCOL nMaxCol);
     ScFlatBoolColSegments(const ScFlatBoolColSegments& r);
     ~ScFlatBoolColSegments();
 
@@ -131,7 +131,7 @@ public:
         sal_uInt16  mnCurValue;
     };
 
-    ScFlatUInt16RowSegments(sal_uInt16 nDefault);
+    ScFlatUInt16RowSegments(SCROW nMaxRow, sal_uInt16 nDefault);
     ScFlatUInt16RowSegments(const ScFlatUInt16RowSegments& r);
     ~ScFlatUInt16RowSegments();
 

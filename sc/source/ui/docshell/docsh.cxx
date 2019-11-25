@@ -1362,7 +1362,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_850 );
             }
 
-            ScDocRowHeightUpdater::TabRanges aRecalcRanges(0);
+            ScDocRowHeightUpdater::TabRanges aRecalcRanges(0, m_aDocument.MaxRow());
             ErrCode eError = DBaseImport( rMedium.GetPhysicalName(),
                     ScGlobal::GetCharsetValue(sItStr), aColWidthParam, aRecalcRanges.maRanges );
             aRecalcRowRangesArray.push_back(aRecalcRanges);

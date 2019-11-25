@@ -153,7 +153,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
     ScSizeDeviceProvider aProv( &rDocShell );
     Fraction aOne(1,1);
 
-    sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
+    sc::RowHeightContext aCxt(rDoc.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
     bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab);
     // tdf#76183: recalculate objects' positions
     if (bChanged)
@@ -3671,7 +3671,7 @@ bool ScDocFunc::SetWidthOrHeight(
 
                 ScSizeDeviceProvider aProv( &rDocShell );
                 Fraction aOne(1,1);
-                sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
+                sc::RowHeightContext aCxt(rDoc.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
                 aCxt.setForceAutoSize(bAll);
                 rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab);
 

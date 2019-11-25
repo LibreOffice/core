@@ -596,7 +596,7 @@ public:
         SCTAB mnTab;
         ScFlatBoolRowSegments maRanges;
 
-        TabRanges(SCTAB nTab);
+        TabRanges(SCTAB nTab, SCROW nMaxRow);
     };
 
     /**
