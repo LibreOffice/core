@@ -27,8 +27,8 @@ namespace
 class SwFieldDialog : public FloatingWindow
 {
 private:
-    VclPtr<ListBox> aListBox;
-    sw::mark::IFieldmark* pFieldmark;
+    VclPtr<ListBox> m_aListBox;
+    sw::mark::IFieldmark* m_pFieldmark;
 
     DECL_LINK(MyListBoxHandler, ListBox&, void);
 
@@ -41,8 +41,8 @@ public:
 
 SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, long nMinListWidth)
     : FloatingWindow(parent, WB_BORDER | WB_SYSTEMWINDOW)
-    , aListBox(VclPtr<ListBox>::Create(this))
-    , pFieldmark(fieldBM)
+    , m_aListBox(VclPtr<ListBox>::Create(this))
+    , m_pFieldmark(fieldBM)
 {
     if (fieldBM != nullptr)
     {
@@ -56,12 +56,12 @@ SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, l
         {
             pListEntries->second >>= vListEntries;
             for (OUString const& i : std::as_const(vListEntries))
-                aListBox->InsertEntry(i);
+                m_aListBox->InsertEntry(i);
         }
 
         if (!vListEntries.hasElements())
         {
-            aListBox->InsertEntry(SwResId(STR_DROP_DOWN_EMPTY_LIST));
+            m_aListBox->InsertEntry(SwResId(STR_DROP_DOWN_EMPTY_LIST));
         }
 
         // Select the current one
@@ -72,17 +72,17 @@ SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, l
         {
             sal_Int32 nSelection = -1;
             pResult->second >>= nSelection;
-            aListBox->SelectEntryPos(nSelection);
+            m_aListBox->SelectEntryPos(nSelection);
         }
     }
 
-    Size lbSize(aListBox->GetOptimalSize());
+    Size lbSize(m_aListBox->GetOptimalSize());
     lbSize.AdjustWidth(50);
     lbSize.AdjustHeight(20);
     lbSize.setWidth(std::max(lbSize.Width(), nMinListWidth));
-    aListBox->SetSizePixel(lbSize);
-    aListBox->SetSelectHdl(LINK(this, SwFieldDialog, MyListBoxHandler));
-    aListBox->Show();
+    m_aListBox->SetSizePixel(lbSize);
+    m_aListBox->SetSelectHdl(LINK(this, SwFieldDialog, MyListBoxHandler));
+    m_aListBox->Show();
 
     SetSizePixel(lbSize);
 }
@@ -91,7 +91,7 @@ SwFieldDialog::~SwFieldDialog() { disposeOnce(); }
 
 void SwFieldDialog::dispose()
 {
-    aListBox.disposeAndClear();
+    m_aListBox.disposeAndClear();
     FloatingWindow::dispose();
 }
 
@@ -110,8 +110,8 @@ IMPL_LINK(SwFieldDialog, MyListBoxHandler, ListBox&, rBox, void)
         if (nSelection >= 0)
         {
             OUString sKey = ODF_FORMDROPDOWN_RESULT;
-            (*pFieldmark->GetParameters())[sKey] <<= nSelection;
-            pFieldmark->Invalidate();
+            (*m_pFieldmark->GetParameters())[sKey] <<= nSelection;
+            m_pFieldmark->Invalidate();
             SwView& rView = static_cast<SwEditWin*>(GetParent())->GetView();
             rView.GetDocShell()->SetModified();
         }

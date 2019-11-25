@@ -68,16 +68,16 @@ namespace {
 }
 
 SwSelectionList::SwSelectionList( const SwFrame* pInitCxt ) :
-    pContext( getContext( pInitCxt ) )
+    m_pContext( getContext( pInitCxt ) )
 {
 }
 
 bool SwSelectionList::checkContext( const SwFrame* pCheck )
 {
     pCheck = getContext( pCheck );
-    if( !pContext )
-        pContext = pCheck;
-    return pContext == pCheck;
+    if( !m_pContext )
+        m_pContext = pCheck;
+    return m_pContext == pCheck;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
