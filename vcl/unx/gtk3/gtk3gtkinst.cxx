@@ -9116,6 +9116,12 @@ public:
         set_image(rGtkIter.iter, col, getPixbuf(rImage));
     }
 
+    virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage, int col) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        set_image(rGtkIter.iter, col, getPixbuf(rImage));
+    }
+
     virtual OUString get_id(int pos) const override
     {
         return get(pos, m_nIdCol);
