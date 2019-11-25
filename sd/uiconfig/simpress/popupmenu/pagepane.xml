@@ -14,6 +14,9 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertSlide"/>
   <menu:menuitem menu:id=".uno:DuplicateSlide"/>
+  <menu:menuitem menu:id=".uno:RenameSlide"/>
+  <menu:menuitem menu:id=".uno:HideSlide"/>
+  <menu:menuitem menu:id=".uno:ShowSlide"/>
   <menu:menuitem menu:id=".uno:DeleteSlide"/>
   <menu:menuseparator/>
   <menu:menu menu:id=".uno:SlideLayoutMenu">
@@ -38,12 +41,6 @@
       <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=30"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuitem menu:id=".uno:SlideSetup"/>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:HideSlide"/>
-  <menu:menuitem menu:id=".uno:ShowSlide"/>
-  <menu:menuitem menu:id=".uno:RenameSlide"/>
-  <menu:menuseparator/>
   <menu:menu menu:id=".uno:NavigateMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:FirstSlide"/>
@@ -59,5 +56,7 @@
       <menu:menuitem menu:id=".uno:MoveSlideDown"/>
       <menu:menuitem menu:id=".uno:MoveSlideLast"/>
     </menu:menupopup>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:SlideSetup"/>
   </menu:menu>
 </menu:menupopup>
