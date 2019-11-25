@@ -32,12 +32,14 @@ void ScDefaultsOptions::SetDefaults()
 {
     nInitTabCount  = 1;
     aInitTabPrefix = ScResId(STR_TABLE_DEF); // Default Prefix "Sheet"
+    bJumboSheets = false;
 }
 
 bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
 {
     return rOpt.nInitTabCount  == nInitTabCount
-        && rOpt.aInitTabPrefix == aInitTabPrefix;
+        && rOpt.aInitTabPrefix == aInitTabPrefix
+        && rOpt.bJumboSheets == bJumboSheets;
 }
 
 ScTpDefaultsItem::ScTpDefaultsItem( const ScDefaultsOptions& rOpt ) :
@@ -67,17 +69,21 @@ SfxPoolItem* ScTpDefaultsItem::Clone( SfxItemPool * ) const
 
 #define SCDEFAULTSOPT_TAB_COUNT  0
 #define SCDEFAULTSOPT_TAB_PREFIX 1
+#define SCDEFAULTSOPT_JUMBO_SHEETS 2
 
 Sequence<OUString> ScDefaultsCfg::GetPropertyNames()
 {
     return {"Sheet/SheetCount",   // SCDEFAULTSOPT_TAB_COUNT
-            "Sheet/SheetPrefix"}; // SCDEFAULTSOPT_TAB_PREFIX
+            "Sheet/SheetPrefix",  // SCDEFAULTSOPT_TAB_PREFIX
+            "Sheet/JumboSheets"};  // SCDEFAULTSOPT_JUMBO_SHEETS
+
 }
 
 ScDefaultsCfg::ScDefaultsCfg() :
     ConfigItem( CFGPATH_FORMULA )
 {
     OUString aPrefix;
+    bool bValue;
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -100,6 +106,10 @@ ScDefaultsCfg::ScDefaultsCfg() :
                     if (pValues[nProp] >>= aPrefix)
                         SetInitTabPrefix(aPrefix);
                     break;
+                case SCDEFAULTSOPT_JUMBO_SHEETS:
+                    if (pValues[nProp] >>= bValue)
+                        SetInitJumboSheets(bValue);
+                    break;
                 }
             }
         }
@@ -121,6 +131,9 @@ void ScDefaultsCfg::ImplCommit()
         break;
         case SCDEFAULTSOPT_TAB_PREFIX:
             pValues[nProp] <<= GetInitTabPrefix();
+        break;
+        case SCDEFAULTSOPT_JUMBO_SHEETS:
+            pValues[nProp] <<= GetInitJumboSheets();
         break;
         }
     }
