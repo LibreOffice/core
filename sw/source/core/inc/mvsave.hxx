@@ -165,13 +165,6 @@ class ZSortFly
 public:
     ZSortFly( const SwFrameFormat* pFrameFormat, const SwFormatAnchor* pFlyAnchor,
                 sal_uInt32 nArrOrdNum );
-    ZSortFly& operator=( const ZSortFly& rCpy )
-    {
-        pFormat = rCpy.pFormat;
-        pAnchor = rCpy.pAnchor;
-        nOrdNum = rCpy.nOrdNum;
-        return *this;
-    }
 
     bool operator==( const ZSortFly& ) const { return false; }
     bool operator<( const ZSortFly& rCmp ) const

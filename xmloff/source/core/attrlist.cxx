@@ -38,12 +38,6 @@ struct SvXMLTagAttribute_Impl
     {
     }
 
-    SvXMLTagAttribute_Impl( const SvXMLTagAttribute_Impl& r ) :
-        sName(r.sName),
-        sValue(r.sValue)
-    {
-    }
-
     OUString sName;
     OUString sValue;
 };
