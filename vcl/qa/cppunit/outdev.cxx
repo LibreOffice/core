@@ -31,6 +31,7 @@ public:
     void testGetReadableFontColorPrinter();
     void testGetReadableFontColorWindow();
     void testDrawTransformedBitmapEx();
+    void testDrawTransformedBitmapExFlip();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -40,6 +41,7 @@ public:
     CPPUNIT_TEST(testGetReadableFontColorPrinter);
     CPPUNIT_TEST(testGetReadableFontColorWindow);
     CPPUNIT_TEST(testDrawTransformedBitmapEx);
+    CPPUNIT_TEST(testDrawTransformedBitmapExFlip);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -199,6 +201,57 @@ void VclOutdevTest::testDrawTransformedBitmapEx()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(ss.str(), aExpected, Color(aColor));
         }
     }
+}
+
+void VclOutdevTest::testDrawTransformedBitmapExFlip()
+{
+    // Create a virtual device, and connect a metafile to it.
+    // Also create a 16x16 bitmap.
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(16, 16), 24);
+    {
+        // Fill the top left quarter with black.
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(COL_WHITE);
+        for (int i = 0; i < 8; ++i)
+        {
+            for (int j = 0; j < 8; ++j)
+            {
+                pWriteAccess->SetPixel(j, i, COL_BLACK);
+            }
+        }
+    }
+    BitmapEx aBitmapEx(aBitmap);
+    basegfx::B2DHomMatrix aMatrix;
+    // Negative y scale: bitmap should be upside down, so the black part goes to the bottom left.
+    aMatrix.scale(8, -8);
+    // Rotate 90 degrees clockwise, so the black part goes back to the top left.
+    aMatrix.rotate(M_PI / 2);
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    // Draw the scaled and rotated bitmap on the vdev.
+    pVDev->DrawTransformedBitmapEx(aMatrix, aBitmapEx);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aMtf.GetActionSize());
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPEXSCALE, pAction->GetType());
+    auto pBitmapAction = static_cast<MetaBmpExScaleAction*>(pAction);
+    const BitmapEx& rBitmapEx = pBitmapAction->GetBitmapEx();
+
+    aBitmap = rBitmapEx.GetBitmap();
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    int nX = 8 * 0.25;
+    int nY = 8 * 0.25;
+    BitmapColor aColor = pAccess->GetPixel(nY, nX);
+    std::stringstream ss;
+    ss << "Color is expected to be black, is " << aColor.AsRGBHexString();
+    ss << " (row " << nY << ", col " << nX << ")";
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: c[00000000]
+    // - Actual  : c[ffffff00]
+    // - Color is expected to be black, is ffffff (row 2, col 2)
+    // i.e. the top left quarter of the image was not black, due to a missing flip.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(ss.str(), COL_BLACK, Color(aColor));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
