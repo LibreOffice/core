@@ -891,8 +891,8 @@ public:
     // NEW TABLES
     // Some functions for covered/covering table cells. This way unnecessary
     // includes can be avoided
-    bool IsLeaveUpperAllowed() const;
-    bool IsCoveredCell() const;
+    virtual bool IsLeaveUpperAllowed() const;
+    virtual bool IsCoveredCell() const;
     bool IsInCoveredCell() const;
 
     // #i81146# new loop control
