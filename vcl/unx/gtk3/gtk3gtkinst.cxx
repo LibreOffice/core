@@ -2922,6 +2922,10 @@ namespace
     {
         Image aImage(rImage);
 
+        OUString sStock(aImage.GetStock());
+        if (!sStock.isEmpty())
+            return load_icon_by_name(sStock);
+
         std::unique_ptr<SvMemoryStream> xMemStm(new SvMemoryStream);
 
         css::uno::Sequence<css::beans::PropertyValue> aFilterData(1);
