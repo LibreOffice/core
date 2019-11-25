@@ -24,7 +24,7 @@
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
 
-float ImpGetSingle( const SbxValues* p )
+float ImpGetSingle( const SbxValues* p, bool bUseLocale )
 {
     SbxValues aTmp;
     float nRes;
@@ -109,7 +109,7 @@ start:
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
+                if( ImpScan( *p->pOUString, d, t, nullptr, bUseLocale ) != ERRCODE_NONE )
                     nRes = 0;
                 else if( d > SbxMAXSNG )
                 {
