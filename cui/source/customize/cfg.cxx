@@ -48,6 +48,7 @@
 
 #include <acccfg.hxx>
 #include <cfg.hxx>
+#include <CustomNotebookbarGenerator.hxx>
 #include <SvxMenuConfigPage.hxx>
 #include <SvxToolbarConfigPage.hxx>
 #include <SvxNotebookbarConfigPage.hxx>
@@ -992,6 +993,8 @@ SvxConfigPage::SvxConfigPage(weld::Container* pPage, weld::DialogController* pCo
     , m_xAddCommandButton(m_xBuilder->weld_button("add"))
     , m_xRemoveCommandButton(m_xBuilder->weld_button("remove"))
 {
+    CustomNotebookbarGenerator::getFileNameAndAppName(m_sAppName, m_sFileName);
+
     m_xTopLevelListBox->connect_changed(LINK(this, SvxConfigPage, SelectElementHdl));
 
     weld::TreeView& rTreeView = m_xFunctions->get_widget();
