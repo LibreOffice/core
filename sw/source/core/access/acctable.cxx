@@ -77,14 +77,12 @@ class SwAccessibleTableData_Impl
     SwAccessibleMap& mrAccMap;
     Int32Set_Impl   maRows;
     Int32Set_Impl   maColumns;
-    std::vector < Int32Pair_Impl > maExtents;     // cell extends for event processing only
     Point   maTabFramePos;
     const SwTabFrame *mpTabFrame;
     bool const mbIsInPagePreview;
     bool const mbOnlyTableColumnHeader;
 
     void CollectData( const SwFrame *pFrame );
-    void CollectExtents( const SwFrame *pFrame );
 
     bool FindCell( const Point& rPos, const SwFrame *pFrame ,
                            bool bExact, const SwFrame *& rFrame ) const;
@@ -130,11 +128,6 @@ public:
     void CheckRowAndCol( sal_Int32 nRow, sal_Int32 nCol,
                          SwAccessibleTable *pThis ) const;
 
-    void GetRowColumnAndExtent( const SwRect& rBox,
-                                  sal_Int32& rRow, sal_Int32& rColumn,
-                                  sal_Int32& rRowExtent,
-                                  sal_Int32& rColumnExtent ) const;
-
     const Point& GetTablePos() const { return maTabFramePos; }
     void SetTablePos( const Point& rPos ) { maTabFramePos = rPos; }
 };
@@ -167,42 +160,6 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrame *pFrame )
             else
             {
                 CollectData( pLower );
-            }
-        }
-        ++aIter;
-    }
-}
-
-void SwAccessibleTableData_Impl::CollectExtents( const SwFrame *pFrame )
-{
-    const SwAccessibleChildSList aList( *pFrame, mrAccMap );
-    SwAccessibleChildSList::const_iterator aIter( aList.begin() );
-    SwAccessibleChildSList::const_iterator aEndIter( aList.end() );
-    while( aIter != aEndIter )
-    {
-        const SwAccessibleChild& rLower = *aIter;
-        const SwFrame *pLower = rLower.GetSwFrame();
-        if( pLower )
-        {
-            if( pLower->IsCellFrame() &&
-                rLower.IsAccessible( mbIsInPagePreview ) )
-            {
-                sal_Int32 nRow, nCol;
-                Int32Pair_Impl aCellExtents;
-                GetRowColumnAndExtent( pLower->getFrameArea(), nRow, nCol,
-                                       aCellExtents.first,
-                                       aCellExtents.second );
-
-                maExtents.push_back( aCellExtents );
-            }
-            else
-            {
-                // #i77106#
-                if ( !pLower->IsRowFrame() ||
-                     IncludeRow( *pLower ) )
-                {
-                    CollectExtents( pLower );
-                }
             }
         }
         ++aIter;
@@ -396,10 +353,8 @@ inline sal_Int32 SwAccessibleTableData_Impl::GetColumnCount() const
 bool SwAccessibleTableData_Impl::CompareExtents(
                                 const SwAccessibleTableData_Impl& rCmp ) const
 {
-    if( maExtents.size() != rCmp.maExtents.size() )
-        return false;
-
-    return std::equal(maExtents.begin(), maExtents.end(), rCmp.maExtents.begin());
+    return maRows == rCmp.maRows
+        && maColumns == rCmp.maColumns;
 }
 
 SwAccessibleTableData_Impl::SwAccessibleTableData_Impl( SwAccessibleMap& rAccMap,
@@ -413,7 +368,6 @@ SwAccessibleTableData_Impl::SwAccessibleTableData_Impl( SwAccessibleMap& rAccMap
     , mbOnlyTableColumnHeader( bOnlyTableColumnHeader )
 {
     CollectData( mpTabFrame );
-    CollectExtents( mpTabFrame );
 }
 
 inline Int32Set_Impl::const_iterator SwAccessibleTableData_Impl::GetRowIter(
@@ -452,30 +406,6 @@ void SwAccessibleTableData_Impl::CheckRowAndCol(
                xThis );
         throw aExcept;
     }
-}
-
-void SwAccessibleTableData_Impl::GetRowColumnAndExtent(
-        const SwRect& rBox,
-        sal_Int32& rRow, sal_Int32& rColumn,
-        sal_Int32& rRowExtent, sal_Int32& rColumnExtent ) const
-{
-    Int32Set_Impl::const_iterator aStt(
-                maRows.lower_bound( rBox.Top() - maTabFramePos.Y() ) );
-    Int32Set_Impl::const_iterator aEnd(
-                maRows.upper_bound( rBox.Bottom() - maTabFramePos.Y() ) );
-    rRow =
-         static_cast< sal_Int32 >( std::distance( maRows.begin(), aStt ) );
-    sal_Int32 nRowEnd =
-         static_cast< sal_Int32 >( std::distance( maRows.begin(), aEnd ) );
-    rRowExtent = nRowEnd - rRow;
-
-    aStt = maColumns.lower_bound( rBox.Left() - maTabFramePos.X() );
-    aEnd = maColumns.upper_bound( rBox.Right() - maTabFramePos.X() );
-    rColumn =
-         static_cast< sal_Int32 >( std::distance( maColumns.begin(), aStt ) );
-    sal_Int32 nColumnEnd =
-         static_cast< sal_Int32 >( std::distance( maColumns.begin(), aEnd ) );
-    rColumnExtent = nColumnEnd - rColumn;
 }
 
 namespace {
