@@ -20,6 +20,7 @@ class SC_DLLPUBLIC ScDefaultsOptions
 private:
     SCTAB nInitTabCount;             // number of Tabs for new Spreadsheet doc
     OUString aInitTabPrefix;  // The Tab prefix name in new Spreadsheet doc
+    bool     bJumboSheets;
 
 public:
     ScDefaultsOptions();
@@ -30,6 +31,8 @@ public:
     void   SetInitTabCount( SCTAB nTabs) { nInitTabCount = nTabs; }
     void   SetInitTabPrefix(const OUString& aPrefix) { aInitTabPrefix = aPrefix; }
     const OUString& GetInitTabPrefix() const { return aInitTabPrefix; }
+    bool   GetInitJumboSheets() const           { return bJumboSheets; }
+    void   SetInitJumboSheets( bool b) { bJumboSheets = b; }
 
     bool                operator== ( const ScDefaultsOptions& rOpt ) const;
 
