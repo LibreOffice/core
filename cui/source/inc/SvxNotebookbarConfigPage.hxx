@@ -60,7 +60,8 @@ public:
     SaveInData* CreateSaveInData(const css::uno::Reference<css::ui::XUIConfigurationManager>&,
                                  const css::uno::Reference<css::ui::XUIConfigurationManager>&,
                                  const OUString& aModuleId, bool docConfig) override;
-    static void FillFunctionsList(std::vector<NotebookbarEntries>& aEntries,
+    static void FillFunctionsList(xmlNodePtr pRootNodePtr,
+                                  std::vector<NotebookbarEntries>& aEntries,
                                   std::vector<CategoriesEntries>& aCategoryList,
                                   OUString& sActiveCategory);
     static void searchNodeandAttribute(std::vector<NotebookbarEntries>& aEntries,
