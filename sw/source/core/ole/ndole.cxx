@@ -984,6 +984,18 @@ bool SwOLEObj::UnloadObject()
     return bRet;
 }
 
+PurgeGuard::PurgeGuard(const SwDoc& rDoc)
+    : m_rManager(const_cast<SwDoc&>(rDoc).GetDocumentSettingManager())
+    , m_bOrigPurgeOle(m_rManager.get(DocumentSettingId::PURGE_OLE))
+{
+    m_rManager.set(DocumentSettingId::PURGE_OLE, false);
+}
+
+PurgeGuard::~PurgeGuard()
+{
+    m_rManager.set(DocumentSettingId::PURGE_OLE, m_bOrigPurgeOle);
+}
+
 bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > const & xObj, const SwDoc* pDoc, sal_Int64 nAspect )
 {
     if ( !pDoc )
@@ -1010,6 +1022,8 @@ bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > const & xO
                     {
                         uno::Reference < embed::XEmbedPersist > xPers( xObj, uno::UNO_QUERY );
                         assert(xPers.is() && "Modified object without persistence in cache!");
+
+                        PurgeGuard aGuard(*pDoc);
                         xPers->storeOwn();
                     }
 
