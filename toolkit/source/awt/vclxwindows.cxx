@@ -1716,19 +1716,24 @@ void VCLXListBox::selectItemsPos( const css::uno::Sequence<sal_Int16>& aPosition
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
+        std::vector<sal_Int32> aPositionVec;
+        aPositionVec.reserve(aPositions.getLength());
+
         bool bChanged = false;
         for ( auto n = aPositions.getLength(); n; )
         {
             const auto nPos = aPositions.getConstArray()[--n];
             if ( pBox->IsEntryPosSelected( nPos ) != bool(bSelect) )
             {
-                pBox->SelectEntryPos( nPos, bSelect );
+                aPositionVec.push_back(nPos);
                 bChanged = true;
             }
         }
 
         if ( bChanged )
         {
+            pBox->SelectEntriesPos(aPositionVec, bSelect);
+
             // VCL doesn't call select handler after API call.
             // ImplCallItemListeners();
 
