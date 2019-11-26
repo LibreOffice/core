@@ -315,6 +315,7 @@ protected:
                     GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
+    void            ImplAdjustNWFSizes() override;
 
 public:
     explicit        RadioButton( vcl::Window* pParent, WinBits nWinStyle = 0 );
@@ -418,6 +419,7 @@ protected:
     virtual void                FillLayoutData() const override;
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
+    void                        ImplAdjustNWFSizes() override;
 
     virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE const tools::Rectangle& GetStateRect() const { return maStateRect; }
