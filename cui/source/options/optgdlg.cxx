@@ -447,7 +447,7 @@ IMPL_LINK_NOARG(OfaMiscTabPage, FileAssocClick, weld::Button&, void)
 {
     const bool bUninit = SUCCEEDED(CoInitialize(nullptr));
     IApplicationAssociationRegistrationUI* pIf = nullptr;
-    HRESULT res = CoCreateInstance(CLSID_ApplicationAssociationRegistrationUI, 0,
+    HRESULT res = CoCreateInstance(CLSID_ApplicationAssociationRegistrationUI, nullptr,
                                    CLSCTX_INPROC_SERVER, IID_IApplicationAssociationRegistrationUI,
                                    reinterpret_cast<LPVOID*>(&pIf));
 
