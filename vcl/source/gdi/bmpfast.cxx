@@ -179,7 +179,6 @@ class TrueColorPixelPtr<ScanlineFormat::N8BitTcMask> : public BasePixelPtr
 public:
     void    operator++()                    { mpPixel += 1; }
     PIXBYTE GetAlpha() const                { return mpPixel[0]; }
-    void    SetAlpha( PIXBYTE a ) const     { mpPixel[0] = a; }
 };
 
 // TODO: for some reason many Alpha maps are ScanlineFormat::N8BitPal
