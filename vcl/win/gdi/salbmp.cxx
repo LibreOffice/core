@@ -470,7 +470,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
 
 bool WinSalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
 {
-    bool bRet = TRUE;
+    bool bRet = true;
 
     if( bDIB )
         mhDIB = static_cast<HGLOBAL>( bCopyHandle ? ImplCopyDIBOrDDB( hBitmap, true ) : hBitmap );
@@ -508,18 +508,18 @@ bool WinSalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
         else
         {
             mhDDB = nullptr;
-            bRet = FALSE;
+            bRet = false;
         }
     }
     else
-        bRet = FALSE;
+        bRet = false;
 
     return bRet;
 }
 
 bool WinSalBitmap::Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
 {
-    bool bRet = FALSE;
+    bool bRet = false;
 
     mhDIB = ImplCreateDIB( rSize, nBitCount, rPal );
 
@@ -527,7 +527,7 @@ bool WinSalBitmap::Create( const Size& rSize, sal_uInt16 nBitCount, const Bitmap
     {
         maSize = rSize;
         mnBitCount = nBitCount;
-        bRet = TRUE;
+        bRet = true;
     }
 
     return bRet;
@@ -535,7 +535,7 @@ bool WinSalBitmap::Create( const Size& rSize, sal_uInt16 nBitCount, const Bitmap
 
 bool WinSalBitmap::Create( const SalBitmap& rSSalBitmap )
 {
-    bool bRet = FALSE;
+    bool bRet = false;
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
     if ( rSalBitmap.mhDIB || rSalBitmap.mhDDB )
@@ -553,7 +553,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBitmap )
             maSize = rSalBitmap.maSize;
             mnBitCount = rSalBitmap.mnBitCount;
 
-            bRet = TRUE;
+            bRet = true;
         }
     }
 
@@ -562,7 +562,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBitmap )
 
 bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 {
-    bool bRet = FALSE;
+    bool bRet = false;
 
     const WinSalBitmap& rSalBmp = static_cast<const WinSalBitmap&>(rSSalBmp);
     WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
@@ -594,7 +594,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
             maSize = Size( aDDBInfo.bmWidth, aDDBInfo.bmHeight );
             mnBitCount = aDDBInfo.bmPlanes * aDDBInfo.bmBitsPixel;
 
-            bRet = TRUE;
+            bRet = true;
         }
         else if( hNewDDB )
             DeleteObject( hNewDDB );
@@ -605,7 +605,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 
 bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
 {
-    bool bRet = FALSE;
+    bool bRet = false;
 
     const WinSalBitmap& rSalBmp = static_cast<const WinSalBitmap&>(rSSalBmp);
 
@@ -634,7 +634,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
                 GlobalUnlock( mhDIB );
                 maSize = rSalBmp.maSize;
                 mnBitCount = nNewBitCount;
-                bRet = TRUE;
+                bRet = true;
             }
             else
             {
@@ -950,7 +950,7 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
     sal_uLong       nRunByte;
     sal_uLong       i;
     BYTE            cTmp;
-    bool            bEndDecoding = FALSE;
+    bool            bEndDecoding = false;
 
     if( pRLE && pDIB )
     {
@@ -996,7 +996,7 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
                     nX = 0;
                 }
                 else if( nRunByte == 1 )
-                    bEndDecoding = TRUE;
+                    bEndDecoding = true;
                 else
                 {
                     nX += *pRLE++;

@@ -254,7 +254,7 @@ void Tracker::Construct()
         static const WCHAR szWindows[] = L"windows";
         static const WCHAR szInplaceBorderWidth[] = L"oleinplaceborderwidth";
         afxHandleSize = GetProfileIntW(szWindows, szInplaceBorderWidth, 4);
-        bInitialized = TRUE;
+        bInitialized = true;
 
         afxCursors[0] = afxCursors[2] = LoadCursor(nullptr,IDC_SIZENWSE);
         afxCursors[4] = afxCursors[6] = LoadCursor(nullptr,IDC_SIZENS);
@@ -385,7 +385,7 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
     }
 
     RECT rectOld;
-    bool bMoved = FALSE;
+    bool bMoved = false;
 
     // get messages until capture lost or cancelled/accepted
     for (;;)
@@ -428,7 +428,7 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
                 }
                 OnChangedRect(rectOld);
                 if (msg.message != WM_LBUTTONUP)
-                    bMoved = TRUE;
+                    bMoved = true;
             }
             if (m_bFinalErase)
                 goto ExitLoop;

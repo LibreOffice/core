@@ -749,10 +749,10 @@ static bool CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObje
         {
             hres = ppf->Save( o3tl::toW(rAbsShortcut.getStr()), TRUE );
             ppf->Release();
-        } else return FALSE;
+        } else return false;
         psl->Release();
-    } else return FALSE;
-    return TRUE;
+    } else return false;
+    return true;
 }
 
 

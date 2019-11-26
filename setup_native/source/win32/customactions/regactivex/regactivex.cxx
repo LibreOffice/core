@@ -40,9 +40,9 @@ typedef int ( __stdcall * DllNativeUnregProc ) ( int, BOOL, BOOL );
 static bool UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
 {
     if ( pStr1 == nullptr && pStr2 == nullptr )
-        return TRUE;
+        return true;
     else if ( pStr1 == nullptr || pStr2 == nullptr )
-        return FALSE;
+        return false;
 
     while( *pStr1 == *pStr2 && *pStr1 && *pStr2 )
     {
@@ -109,10 +109,10 @@ static bool GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppV
         MsiGetPropertyW( hMSI, pPropName, buff, &sz );
         *ppValue = buff;
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -129,10 +129,10 @@ static bool GetActiveXControlPath( MSIHANDLE hMSI, wchar_t** ppActiveXPath )
 
         free(pProgPath);
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -231,13 +231,13 @@ static bool GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, i
         // assert( FALSE );
     }
 
-    return TRUE;
+    return true;
 }
 
 
 static bool MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
-    bool bResult = FALSE;
+    bool bResult = false;
     wchar_t* pVal = nullptr;
     if ( GetMsiPropW( hMSI, L"ALLUSERS", &pVal ) && pVal )
     {
@@ -251,11 +251,11 @@ static bool MakeInstallForAllUsers( MSIHANDLE hMSI )
 
 static bool MakeInstallFor64Bit( MSIHANDLE hMSI )
 {
-    bool bResult = FALSE;
+    bool bResult = false;
     wchar_t* pVal = nullptr;
     if ( GetMsiPropW( hMSI, L"VersionNT64", &pVal ) && pVal )
     {
-        bResult = TRUE;
+        bResult = true;
         free( pVal );
     }
 

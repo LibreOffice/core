@@ -153,7 +153,7 @@ void ImplInitSalGDI()
         HBITMAP     hBmpOld = static_cast<HBITMAP>(::SelectObject( hMemDC, hMemBmp ));
         HBRUSH      hMemBrush = ::CreateSolidBrush( PALETTERGB( 175, 171, 169 ) );
         HBRUSH      hBrushOld = static_cast<HBRUSH>(::SelectObject( hMemDC, hMemBrush ));
-        bool        bDither16 = TRUE;
+        bool        bDither16 = true;
 
         ::PatBlt( hMemDC, 0, 0, 8, 8, PATCOPY );
         const COLORREF aCol( ::GetPixel( hMemDC, 0, 0 ) );
@@ -161,7 +161,7 @@ void ImplInitSalGDI()
         for( int nY = 0; ( nY < 8 ) && bDither16; nY++ )
             for( int nX = 0; ( nX < 8 ) && bDither16; nX++ )
                 if( ::GetPixel( hMemDC, nX, nY ) != aCol )
-                    bDither16 = FALSE;
+                    bDither16 = false;
 
         ::SelectObject( hMemDC, hBrushOld );
         ::DeleteObject( hMemBrush );
@@ -828,7 +828,7 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE const * pDest, sal_uLong nComp
 
 static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 {
-    bool    bRetValue = FALSE;
+    bool    bRetValue = false;
     BYTE* pDest = ImplSearchEntry( pSource, reinterpret_cast<BYTE const *>("%%BoundingBox:"), nSize, 14 );
     if ( pDest )
     {
@@ -843,9 +843,9 @@ static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
         for ( i = 0; ( i < 4 ) && nSizeLeft; i++ )
         {
             int     nDivision = 1;
-            bool    bDivision = FALSE;
-            bool    bNegative = FALSE;
-            bool    bValid = TRUE;
+            bool    bDivision = false;
+            bool    bNegative = false;
+            bool    bValid = true;
 
             while ( ( --nSizeLeft ) && ( ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) ) pDest++;
             BYTE nByte = *pDest;
@@ -855,12 +855,12 @@ static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
                 {
                     case '.' :
                         if ( bDivision )
-                            bValid = FALSE;
+                            bValid = false;
                         else
-                            bDivision = TRUE;
+                            bDivision = true;
                         break;
                     case '-' :
-                        bNegative = TRUE;
+                        bNegative = true;
                         break;
                     default :
                         if ( ( nByte < '0' ) || ( nByte > '9' ) )
@@ -883,7 +883,7 @@ static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
                 nNumb[i] /= nDivision;
         }
         if ( i == 4 )
-            bRetValue = TRUE;
+            bRetValue = true;
     }
     return bRetValue;
 }
@@ -1032,7 +1032,7 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                              "b4_Inc_state_salWin restore\n\n" );
                 *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
                 Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
-                bRetValue = TRUE;
+                bRetValue = true;
             }
         }
     }

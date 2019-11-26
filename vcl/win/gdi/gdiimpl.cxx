@@ -470,7 +470,7 @@ void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
                     hOldClipRgn = CreateRectRgn( 0, 0, 0, 0 );
                     nOldClipRgnType = GetClipRgn( mrParent.getHDC(), hOldClipRgn );
 
-                    bRestoreClipRgn = TRUE; // indicate changed clipregion and force invalidate
+                    bRestoreClipRgn = true; // indicate changed clipregion and force invalidate
                     ExtSelectClipRgn( mrParent.getHDC(), hInvalidateRgn, RGN_DIFF );
                 }
             }
@@ -810,7 +810,7 @@ std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( long nX, long nY, long
     {
         pSalBitmap = std::make_shared<WinSalBitmap>();
 
-        if( !pSalBitmap->Create( hBmpBitmap, FALSE, FALSE ) )
+        if( !pSalBitmap->Create( hBmpBitmap, false, false ) )
         {
             pSalBitmap.reset();
         }
@@ -1285,8 +1285,8 @@ void WinSalGraphicsImpl::SetLineColor()
     ResetPen(GetStockPen(NULL_PEN));
 
     // set new data
-    mbPen       = FALSE;
-    mbStockPen  = TRUE;
+    mbPen       = false;
+    mbStockPen  = true;
 }
 
 void WinSalGraphicsImpl::SetLineColor(Color nColor)
@@ -1307,7 +1307,7 @@ void WinSalGraphicsImpl::SetLineColor(Color nColor)
     // set new data
     mnPenColor  = nPenColor;
     maLineColor = nColor;
-    mbPen       = TRUE;
+    mbPen       = true;
     mbStockPen  = bStockPen;
 }
 
@@ -1369,8 +1369,8 @@ void WinSalGraphicsImpl::SetFillColor()
     ResetBrush(GetStockBrush(NULL_BRUSH));
 
     // set new data
-    mbBrush     = FALSE;
-    mbStockBrush = TRUE;
+    mbBrush     = false;
+    mbStockBrush = true;
 }
 
 void WinSalGraphicsImpl::SetFillColor(Color nColor)
@@ -1391,7 +1391,7 @@ void WinSalGraphicsImpl::SetFillColor(Color nColor)
     // set new data
     mnBrushColor = nBrushColor;
     maFillColor = nColor;
-    mbBrush     = TRUE;
+    mbBrush     = true;
     mbStockBrush = bStockBrush;
 }
 

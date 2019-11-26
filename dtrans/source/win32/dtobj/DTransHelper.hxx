@@ -27,7 +27,7 @@
 #include <objidl.h>
 #include <WinClip.hxx>
 
-#define AUTO_INIT                 TRUE
+#define AUTO_INIT                 true
 
 // a helper class to manage a global memory area, the clients can write
 // into the global memory area and extract the handle to the global mem
@@ -95,7 +95,7 @@ public:
 
     explicit CRawHGlobalPtr( HGLOBAL hGlob ) :
         m_hGlob( hGlob ),
-        m_bIsLocked( FALSE ),
+        m_bIsLocked( false ),
         m_pGlobMem( nullptr )
     {
     }
@@ -104,7 +104,7 @@ public:
 
     explicit CRawHGlobalPtr( const CStgTransferHelper& theHGlobalHelper ) :
         m_hGlob( theHGlobalHelper.getHGlobal( ) ),
-        m_bIsLocked( FALSE ),
+        m_bIsLocked( false ),
         m_pGlobMem( nullptr )
     {
     }
@@ -137,7 +137,7 @@ public:
     BOOL Unlock( )
     {
         GlobalUnlock( m_hGlob );
-        m_bIsLocked = FALSE;
+        m_bIsLocked = false;
         m_pGlobMem = nullptr;
 
         return ( NO_ERROR == GetLastError( ) );

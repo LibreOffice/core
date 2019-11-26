@@ -36,9 +36,9 @@ static DWORD myerr=0;
 bool SalData::IsKnownMenuHandle( HMENU hMenu )
 {
     if( mhMenuSet.find( hMenu ) == mhMenuSet.end() )
-        return FALSE;
+        return false;
     else
-        return TRUE;
+        return true;
 }
 
 // WinSalInst factory methods
@@ -115,7 +115,7 @@ static void ImplDrawMenuBar( SalMenu *pMenu )
 WinSalMenu::WinSalMenu()
 {
     mhMenu       = nullptr;
-    mbMenuBar    = FALSE;
+    mbMenuBar    = false;
     mhWnd        = nullptr;
     mpParentMenu = nullptr;
 }
@@ -139,7 +139,7 @@ bool WinSalMenu::VisibleMenuBar()
     // and the application will properly react to all native
     // menu messages.
 
-    return FALSE;
+    return false;
 }
 
 void WinSalMenu::SetFrame( const SalFrame *pFrame )
