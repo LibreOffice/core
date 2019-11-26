@@ -296,7 +296,6 @@ namespace accessibility
     class StateChangeEvent
     {
     public:
-        typedef void return_type;
         StateChangeEvent( const sal_Int16 nEventId,
                           const uno::Any& rNewValue,
                           const uno::Any& rOldValue ) :
