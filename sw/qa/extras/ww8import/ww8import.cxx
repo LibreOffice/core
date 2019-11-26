@@ -94,6 +94,17 @@ DECLARE_WW8IMPORT_TEST(testTdf124601, "tdf124601.doc")
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 19"), "IsFollowingTextFlow"));
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf128605, "tdf128605.doc")
+{
+    OUString aPara1PageStyleName = getProperty<OUString>(getParagraph(1), "PageStyleName");
+    OUString aPara2PageStyleName = getProperty<OUString>(getParagraph(2), "PageStyleName");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Standard
+    // - Actual  : Convert 1
+    // i.e. the continuous section break resulted in an unwanted page break.
+    CPPUNIT_ASSERT_EQUAL(aPara1PageStyleName, aPara2PageStyleName);
+}
+
 DECLARE_WW8IMPORT_TEST(testTdf112535, "tdf112535.doc")
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
