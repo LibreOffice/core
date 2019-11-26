@@ -3447,6 +3447,11 @@ private:
     DECL_LINK(CompareHdl, const SvSortData&, sal_Int32);
     DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
 
+    bool IsDummyEntry(SvTreeListEntry* pEntry) const
+    {
+        return m_xTreeView->GetEntryText(pEntry).trim() == "<dummy>";
+    }
+
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, pBuilder, bTakeOwnership)
@@ -4215,7 +4220,7 @@ public:
     {
         SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
         rVclIter.iter = m_xTreeView->Next(rVclIter.iter);
-        if (rVclIter.iter && m_xTreeView->GetEntryText(rVclIter.iter) == "<dummy>")
+        if (rVclIter.iter && IsDummyEntry(rVclIter.iter))
             return iter_next(rVclIter);
         return rVclIter.iter != nullptr;
     }
@@ -4228,7 +4233,7 @@ public:
         if (bRet)
         {
             //on-demand dummy entry doesn't count
-            return m_xTreeView->GetEntryText(rVclIter.iter) != "<dummy>";
+            return !IsDummyEntry(rVclIter.iter);
         }
         return bRet;
     }
@@ -4736,7 +4741,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
     {
         auto pChild = m_xTreeView->FirstChild(pEntry);
         assert(pChild);
-        if (m_xTreeView->GetEntryText(pChild) == "<dummy>")
+        if (IsDummyEntry(pChild))
         {
             m_xTreeView->RemoveEntry(pChild);
             bPlaceHolder = true;
