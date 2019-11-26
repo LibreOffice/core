@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_f72f6f3c",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-11-26T23:59:59Z",
+      "side": 1,
+      "message": "scope for this is global, to make that clear, I suggest moving the declaration to the global scope.",
+      "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_97f71bd4",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-11-26T23:59:59Z",
+      "side": 1,
+      "message": "do you expect more than one match here?",
+      "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_370087ab",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-11-26T23:59:59Z",
+      "side": 1,
+      "message": "if not, then this loop is pointless",
+      "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_77fa7fbd",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-11-26T23:59:59Z",
+      "side": 1,
+      "message": "convention in this file is lowercase/underscore - so better all_pdbs",
+      "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_d7111306",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-11-26T23:59:59Z",
+      "side": 1,
+      "message": "That\u0027s just noise, no?",
+      "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
