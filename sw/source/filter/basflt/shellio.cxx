@@ -58,6 +58,7 @@
 #include <poolfmt.hxx>
 #include <fltini.hxx>
 #include <docsh.hxx>
+#include <ndole.hxx>
 #include <ndtxt.hxx>
 #include <redline.hxx>
 #include <swerror.h>
@@ -854,8 +855,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         pESh->StartAllAction();
     }
 
-    const bool bOrigPurgeOle = pOutDoc->getIDocumentSettingAccess().get(DocumentSettingId::PURGE_OLE);
-    pOutDoc->getIDocumentSettingAccess().set(DocumentSettingId::PURGE_OLE, false);
+    auto xGuard = std::make_unique<PurgeGuard>(*pOutDoc);
 
     ErrCode nError = ERRCODE_NONE;
     if( pMedium )
@@ -865,7 +865,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
     else if( xStg.is() )
         nError = rxWriter->Write( *pPam, xStg, pRealFileName );
 
-    pOutDoc->getIDocumentSettingAccess().set(DocumentSettingId::PURGE_OLE, bOrigPurgeOle );
+    xGuard.reset();
 
     if( pESh )
     {
