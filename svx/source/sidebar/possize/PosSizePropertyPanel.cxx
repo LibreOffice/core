@@ -70,7 +70,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mlRotY(0),
     maUIScale(),
     mePoolUnit(),
-    meDlgUnit(FieldUnit::INCH), // #i124409# init with fallback default
+    meDlgUnit(FieldUnit::MM_100TH), // #i124409# init with fallback default
     maTransfPosXControl(SID_ATTR_TRANSFORM_POS_X, *pBindings, *this),
     maTransfPosYControl(SID_ATTR_TRANSFORM_POS_Y, *pBindings, *this),
     maTransfWidthControl(SID_ATTR_TRANSFORM_WIDTH, *pBindings, *this),
@@ -889,7 +889,6 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
     SetFieldUnit( *mpMtrPosY, meDlgUnit, true );
     if(bPosYBlank)
         mpMtrPosY->SetText(OUString());
-    SetPosSizeMinMax();
 
     if (mpMtrWidth->GetText().isEmpty())
         bWidthBlank = true;
@@ -902,6 +901,7 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
     SetFieldUnit( *mpMtrHeight, meDlgUnit, true );
     if(bHeightBlank)
         mpMtrHeight->SetText(OUString());
+    SetPosSizeMinMax();
 }
 
 
