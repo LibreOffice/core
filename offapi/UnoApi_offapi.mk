@@ -1634,6 +1634,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/accessibility,\
 	XAccessibleComponent \
 	XAccessibleContext \
 	XAccessibleContext2 \
+	XAccessibleContext3 \
 	XAccessibleEditableText \
 	XAccessibleEventBroadcaster \
 	XAccessibleEventListener \

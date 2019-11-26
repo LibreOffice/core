@@ -1,0 +1,45 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __com_sun_star_accessibility_XAccessibleContext3_idl__
+#define __com_sun_star_accessibility_XAccessibleContext3_idl__
+
+module com { module sun { module star { module accessibility {
+
+ interface XAccessible;
+
+/** Implement this interface to speed up operations when iterating over large amounts of children.
+ *
+    @since LibreOffice 6.4
+*/
+interface XAccessibleContext3 : ::com::sun::star::uno::XInterface
+{
+    /** Return the children.
+
+        <p>The order in which the children are enumerated is implementation
+        dependent.</p>
+    */
+    sequence<XAccessible> getAccessibleChildren();
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
