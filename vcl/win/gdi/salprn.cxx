@@ -1399,7 +1399,7 @@ void WinSalPrinter::markInvalid()
 }
 
 // need wrappers for StarTocW/A to use structured exception handling
-// since SEH does not mix with standard exception handling's cleanup
+// since SHE does not mix with standard exception handling's cleanup
 static int lcl_StartDocW( HDC hDC, DOCINFOW const * pInfo, WinSalPrinter* pPrt )
 {
     int nRet = 0;
