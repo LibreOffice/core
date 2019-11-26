@@ -22,6 +22,30 @@
       "revId": "374599f8c26713905a310673d2b429083321186a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f700cf03",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1894,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-11-26T20:44:27Z",
+      "side": 1,
+      "message": "yeah, c-style inheritance, where the GtkScrolledWindow expects a GtkViewport child. If you were to remove it and use insert-\u003especial character you\u0027ll see an empty character area.\n\nI imagine making it\n\nstruct CrippledViewport : public GtkViewport\n\nshould work ?",
+      "parentUuid": "7f7f9b97_bc431e6c",
+      "range": {
+        "startLine": 1894,
+        "startChar": 4,
+        "endLine": 1894,
+        "endChar": 25
+      },
+      "revId": "374599f8c26713905a310673d2b429083321186a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
