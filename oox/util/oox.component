@@ -40,12 +40,8 @@
     constructor="com_sun_star_comp_oox_ShapeContextHandler_get_implementation">
     <service name="com.sun.star.xml.sax.FastShapeContextHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.oox.crypto.Standard2007Engine"
-    constructor="com_sun_star_comp_oox_crypto_Standard2007_get_implementation">
-    <service name="com.sun.star.packages.XPackageEncryption"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.oox.crypto.AgileEngine"
-    constructor="com_sun_star_comp_oox_crypto_Agile_get_implementation">
+  <implementation name="com.sun.star.comp.oox.crypto.StrongEncryptionDataSpace"
+    constructor="com_sun_star_comp_oox_crypto_StrongEncryptionDataSpace_get_implementation">
     <service name="com.sun.star.packages.XPackageEncryption"/>
   </implementation>
 </component>

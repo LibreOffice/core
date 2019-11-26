@@ -19,7 +19,7 @@
 #include <oox/ole/olestorage.hxx>
 
 namespace oox {
-namespace core {
+namespace crypto {
 
 using namespace css::io;
 using namespace css::uno;
@@ -43,7 +43,7 @@ DocumentEncryption::DocumentEncryption(const Reference< XComponentContext >& rxC
             rMediaEncData[i].Value >>= sCryptoType;
 
             if (sCryptoType == "Standard")
-                sCryptoType = "Standard2007Engine";
+                sCryptoType = "StrongEncryptionDataSpace";
 
             Sequence<Any> aArguments;
             mxPackageEncryption.set(
@@ -96,7 +96,7 @@ bool DocumentEncryption::encrypt()
     return true;
 }
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -12,7 +12,7 @@
 #define INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
 
 #include <oox/dllapi.h>
-#include <com/sun/star/packages/XPackageEncryption.hpp>
+#include <oox/crypto/CryptoEngine.hxx>
 #include <filter/msfilter/mscodec.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -22,47 +22,40 @@ namespace oox {
     class BinaryXOutputStream;
 }
 
-namespace com::sun::star::uno { class XComponentContext; }
-
 namespace oox {
-namespace core {
+namespace crypto {
 
-class OOX_DLLPUBLIC Standard2007Engine final : public cppu::WeakImplHelper<css::packages::XPackageEncryption>
+class OOX_DLLPUBLIC Standard2007Engine final : public CryptoEngine
 {
     msfilter::StandardEncryptionInfo mInfo;
-    std::vector<sal_uInt8> mKey;
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
     bool generateVerifier();
     bool calculateEncryptionKey(const OUString& rPassword);
 
-    css::uno::Reference<css::io::XInputStream> getStream(const css::uno::Sequence<css::beans::NamedValue> & rStreams, const OUString sStreamName);
-    css::uno::Sequence<sal_Int8> writeEncryptionInfo();
-    css::uno::Sequence<sal_Int8> writeEncryptedDocument(const css::uno::Reference<css::io::XInputStream>& rxInputStream);
-
 public:
-    Standard2007Engine(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    Standard2007Engine() = default;
 
-    // Decryption
+    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
 
-    virtual sal_Bool SAL_CALL generateEncryptionKey(const OUString & rPassword) override;
-    virtual sal_Bool SAL_CALL readEncryptionInfo(const css::uno::Sequence<css::beans::NamedValue>& aStreams) override;
-    virtual sal_Bool SAL_CALL decrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
-                 css::uno::Reference<css::io::XOutputStream>& rxOutputStream) override;
+    virtual bool generateEncryptionKey(OUString const & rPassword) override;
 
+    virtual bool decrypt(
+                    BinaryXInputStream& aInputStream,
+                    BinaryXOutputStream& aOutputStream) override;
 
-    virtual sal_Bool SAL_CALL checkDataIntegrity() override;
+    bool checkDataIntegrity() override;
 
-    // Encryption
+    void encrypt(const css::uno::Reference<css::io::XInputStream>&  rxInputStream,
+                 css::uno::Reference<css::io::XOutputStream>& rxOutputStream,
+                 sal_uInt32 nSize) override;
 
-    virtual css::uno::Sequence<css::beans::NamedValue> SAL_CALL encrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream) override;
+    virtual void writeEncryptionInfo(BinaryXOutputStream& rStream) override;
 
-    virtual sal_Bool SAL_CALL setupEncryption(const css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
+    virtual bool setupEncryption(OUString const & rPassword) override;
 
-    virtual css::uno::Sequence<css::beans::NamedValue> SAL_CALL createEncryptionData(const OUString& rPassword) override;
 };
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 #endif
