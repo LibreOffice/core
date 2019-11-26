@@ -97,6 +97,10 @@ public:
      * */
     static PageMargins getPageMarginsForCalc(css::uno::Reference<css::frame::XModel>& xModel);
 
+    /*
+     * Used to find the text portions to be redacted. Returns a list of rectangles to cover those
+     * areas to be redacted. Probably the most crucial part of the auto-redaction process.
+     * */
     static void searchInMetaFile(const RedactionTarget* pRedactionTarget, const GDIMetaFile& rMtf,
                                  std::vector<tools::Rectangle>& aRedactionRectangles,
                                  uno::Reference<XComponent>& xComponent);
