@@ -168,6 +168,21 @@ inline const SwOLENode *SwNode::GetOLENode() const
      return SwNodeType::Ole == m_nNodeType ? static_cast<const SwOLENode*>(this) : nullptr;
 }
 
+namespace sw
+{
+    class DocumentSettingManager;
+}
+
+class SW_DLLPUBLIC PurgeGuard
+{
+private:
+    ::sw::DocumentSettingManager &m_rManager;
+    bool m_bOrigPurgeOle;
+public:
+    PurgeGuard(const SwDoc& rDoc);
+    ~PurgeGuard();
+};
+
 #endif  // _ INCLUDED_SW_INC_NDOLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
