@@ -7047,22 +7047,6 @@ struct WW8_FFN_Ver6
                         // name of an alternate font to use if the first named
                         // font does not exist on this system.
 };
-struct WW8_FFN_Ver8 : public WW8_FFN_BASE
-{
-    // from Ver8 two more fields are present,
-    // we ignore this.
-    sal_Char panose[ 10 ];  //  0x6   PANOSE
-    sal_Char fs[ 24     ];  //  0x10  FONTSIGNATURE
-
-    // from Ver8 as unicode
-    sal_uInt16 szFfn[65];   // 0x6 from 0x40 on Ver8 zero terminated string that
-                        // records name of font.
-                        // Maximal size of szFfn is 65 characters.
-                        // Attention: This array can be smaller!!!
-                        // Possibly followed by a second sz which records the
-                        // name of an alternate font to use if the first named
-                        // font does not exist on this system.
-};
 
 }
 
