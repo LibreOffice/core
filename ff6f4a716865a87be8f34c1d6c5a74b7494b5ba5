@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_437b09bd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-26T06:56:16Z",
+      "side": 1,
+      "message": "I didn\u0027t quite get that. You have introduced the m_sDirectory to hold dynamically changing selected directory updated in VistaFilePickerEventHandler::OnFolderChange handler using GetDirectory, which calls just that GetFolder. I must miss something: why is it possible to use GetFolder on each OnFolderChange to store current path into a member, but not possible to use it once when it\u0027s asked in impl_sta_GetDirectory (where it\u0027s used as the fallback)?\n\nSorry for being slow.",
+      "range": {
+        "startLine": 19,
+        "startChar": 40,
+        "endLine": 21,
+        "endChar": 41
+      },
+      "revId": "ff6f4a716865a87be8f34c1d6c5a74b7494b5ba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
