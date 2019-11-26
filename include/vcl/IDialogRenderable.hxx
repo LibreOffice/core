@@ -18,6 +18,8 @@
 
 #include <vector>
 
+class SfxItemSet;
+
 namespace vcl
 {
 
@@ -31,6 +33,7 @@ public:
     virtual ~ILibreOfficeKitNotifier() {}
 
     /// Callbacks
+    virtual void sendUnoStatus(const SfxItemSet* pSet) const = 0;
     virtual void notifyWindow(vcl::LOKWindowId nLOKWindowId,
                               const OUString& rAction,
                               const std::vector<LOKPayloadItem>& rPayload = std::vector<LOKPayloadItem>()) const = 0;
