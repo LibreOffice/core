@@ -357,10 +357,10 @@ void BitmapTest::testConvert()
         //it would be nice to find and change the stride for quartz to be the same as everyone else
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(10), pReadAccess->GetScanlineSize());
 #else
+        if (!SkiaHelper::isVCLSkiaEnabled())
 #if HAVE_FEATURE_OPENGL
-        if (!OpenGLHelper::isVCLOpenGLEnabled())
+            if (!OpenGLHelper::isVCLOpenGLEnabled())
 #endif
-            if (!SkiaHelper::isVCLSkiaEnabled())
                 CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(12), pReadAccess->GetScanlineSize());
 #endif
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
