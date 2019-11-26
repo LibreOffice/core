@@ -70,16 +70,13 @@ public:
             nProp = 100;
         }
         else
+        {
+            nProp = DFLT_ESC_PROP;
             if( SvxEscapement::Superscript == eNew )
-            {
                 nEsc = DFLT_ESC_SUPER;
-                nProp = DFLT_ESC_PROP;
-            }
             else
-            {
                 nEsc = DFLT_ESC_SUB;
-                nProp = DFLT_ESC_PROP;
-            }
+        }
     }
     SvxEscapement GetEscapement() const { return static_cast< SvxEscapement >( GetEnumValue() ); }
 

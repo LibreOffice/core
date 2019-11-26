@@ -511,7 +511,7 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
     {
         short nTmpEsc;
         if( DFLT_ESC_AUTO_SUPER == nEsc )
-            nTmpEsc = 33;
+            nTmpEsc = DFLT_ESC_SUPER;
         else if( DFLT_ESC_AUTO_SUB == nEsc )
             nTmpEsc = -20;
         else

@@ -1707,7 +1707,7 @@ SvxEscapementItem::SvxEscapementItem( const SvxEscapement eEscape,
 {
     SetEscapement( eEscape );
     if( nEsc )
-        nProp = 58;
+        nProp = DFLT_ESC_PROP;
 }
 
 
@@ -1817,8 +1817,7 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_ESC:
         {
             sal_Int16 nVal = sal_Int16();
-            // tdf#120412 up to 14400% (eg. 1584 pt with 11 pt letters)
-            if( (rVal >>= nVal) && (std::abs(nVal) <= 14400))
+            if( (rVal >>= nVal) && (std::abs(nVal) <= MAX_ESC_POS+1))
                 nEsc = nVal;
             else
                 return false;

@@ -2258,7 +2258,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_EG_RPrBase_vertAlign:
     {
         sal_Int16 nEscapement = 0;
-        sal_Int8 nProp  = 58;
+        sal_Int8 nProp = DFLT_ESC_PROP;
         if ( sStringValue == "superscript" )
                 nEscapement = DFLT_ESC_AUTO_SUPER;
         else if ( sStringValue == "subscript" )
@@ -2879,7 +2879,6 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
                 else
                     nEscapement = nIntValue > 0 ? DFLT_ESC_SUPER : DFLT_ESC_SUB;
             }
-            // tdf#120412 up to 14400% (eg. 1584 pt with 11 pt letters)
             if ( nEscapement > MAX_ESC_POS )
                 nEscapement = MAX_ESC_POS;
             else if ( nEscapement < -MAX_ESC_POS )
