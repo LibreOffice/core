@@ -154,9 +154,10 @@ gb_LinkTarget_INCLUDE :=\
 	-I$(BUILDDIR)/config_$(gb_Side) \
 
 # We must name the .pdb like libname.pdb, not libname.\(dll\|exe\|pyd\).pdb,
-# otherwise WinDbg does not find it.
+# otherwise WinDbg does not find it, now it is no longer a problem,
+# rename the .bin to .bin.pdb
 define gb_LinkTarget__get_pdb_filename
-$(patsubst %.dll,%.pdb,$(patsubst %.exe,%.pdb,$(patsubst %.pyd,%.pdb,$(1))))
+$(patsubst %.dll,%.pdb,$(patsubst %.exe,%.pdb,$(patsubst %.bin,%.bin.pdb,$(patsubst %.pyd,%.pdb,$(1)))))
 endef
 
 gb_LinkTarget_get_pdbfile_in = \
