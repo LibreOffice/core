@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_a343fd6b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-11-26T07:05:50Z",
+      "side": 1,
+      "message": "Does this mean something like \"This fixes the bug, so it works, at least when using kwin (didn\u0027t try other window managers, or they don\u0027t work)\" or \"There is a bug in kwin, but it still works with this change/workaround in LibreOffice?\"",
+      "range": {
+        "startLine": 16,
+        "startChar": 16,
+        "endLine": 16,
+        "endChar": 42
+      },
+      "revId": "e8d03625ee2bb69dc1fb6faf37d48fb534cc52e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
