@@ -10,13 +10,11 @@
 #include "rtfdocumentimpl.hxx"
 #include <algorithm>
 #include <memory>
-#include <string_view>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/ucbstreamhelper.hxx>
