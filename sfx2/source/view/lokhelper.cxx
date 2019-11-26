@@ -183,6 +183,31 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
+void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxItemSet* pSet)
+{
+    if (!pShell || !pSet)
+        return;
+
+    boost::property_tree::ptree aTree;
+    boost::property_tree::ptree anArray;
+
+    for(int i = 0; i < pSet->Count(); i++)
+    {
+        sal_uInt16 nWhich = pSet->GetWhichByPos(i);
+        if (pSet->HasItem(nWhich) && SfxItemState::SET >= pSet->GetItemState(nWhich))
+        {
+            boost::property_tree::ptree aItem = pSet->Get(nWhich).dumpAsJSON();
+            if (!aItem.empty())
+                anArray.push_back(std::make_pair("", aItem));
+        }
+    }
+    aTree.add_child("items", anArray);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aStream.str().c_str());
+}
+
 void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
                                 vcl::LOKWindowId nLOKWindowId,
                                 const OUString& rAction,
