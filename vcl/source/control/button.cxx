@@ -2739,7 +2739,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
     return pSVData->maCtrlData.maRadioImgList[nIndex];
 }
 
-void RadioButton::ImplSetMinimumNWFSize()
+void RadioButton::ImplAdjustNWFSizes()
 {
     Push( PushFlags::MAPMODE );
     SetMapMode(MapMode(MapUnit::MapPixel));
@@ -3579,7 +3579,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
     return pSVData->maCtrlData.maCheckImgList[nIndex];
 }
 
-void CheckBox::ImplSetMinimumNWFSize()
+void CheckBox::ImplAdjustNWFSizes()
 {
     Push( PushFlags::MAPMODE );
     SetMapMode(MapMode(MapUnit::MapPixel));
