@@ -52,6 +52,8 @@ class SharedStringPool;
 
 }
 
+enum class TextRotation { NONE, TOPTOBOTTOM, BOTTOMTOTOP };
+
 class EditTextObjectImpl;
 
 class EDITENG_DLLPUBLIC EditTextObject final : public SfxItemPoolUser
@@ -83,8 +85,11 @@ public:
     void SetUserType( OutlinerMode n );
 
     bool IsVertical() const;
+    bool GetDirectVertical() const;
     bool IsTopToBottom() const;
-    void SetVertical( bool bVertical, bool bTopToBottom = true);
+    void SetVertical( bool bVertical );
+    void SetRotation( TextRotation nRotation );
+    TextRotation    GetRotation() const;
 
     SvtScriptType GetScriptType() const;
 

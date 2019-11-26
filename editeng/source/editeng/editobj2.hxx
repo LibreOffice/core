@@ -189,7 +189,7 @@ private:
 
     bool                    bOwnerOfPool:1;
     bool                    bVertical:1;
-    bool                    bIsTopToBottomVert : 1;
+    TextRotation            mnRotation;
 
     bool ImpChangeStyleSheets( const OUString& rOldName, SfxStyleFamily eOldFamily,
                                const OUString& rNewName, SfxStyleFamily eNewFamily );
@@ -209,8 +209,11 @@ public:
     std::vector<svl::SharedString> GetSharedStrings() const;
 
     bool                    IsVertical() const;
+    bool                    GetDirectVertical() const;
     bool                    IsTopToBottom() const;
-    void                    SetVertical( bool bVert, bool bTopToBottom);
+    void                    SetVertical( bool bVert);
+    void                    SetRotation(TextRotation nRotation);
+    TextRotation            GetRotation() const;
 
     SvtScriptType           GetScriptType() const { return nScriptType;}
     void                    SetScriptType( SvtScriptType nType );
