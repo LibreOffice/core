@@ -267,7 +267,7 @@ void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    MYSQL_TIME my_time;
+    MYSQL_TIME my_time = {};
 
     my_time.hour = aVal.Hours;
     my_time.minute = aVal.Minutes;
