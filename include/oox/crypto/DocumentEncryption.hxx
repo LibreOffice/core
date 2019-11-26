@@ -26,7 +26,7 @@ namespace com { namespace sun { namespace star {
 namespace oox { namespace ole { class OleStorage; } }
 
 namespace oox {
-namespace core {
+namespace crypto {
 
 class OOX_DLLPUBLIC DocumentEncryption
 {
@@ -47,7 +47,7 @@ public:
 
 };
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 #endif

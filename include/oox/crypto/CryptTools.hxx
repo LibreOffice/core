@@ -28,7 +28,7 @@
 #include <memory>
 
 namespace oox {
-namespace core {
+namespace crypto {
 
 /** Rounds up the input to the nearest multiple
  *
@@ -115,7 +115,7 @@ public:
 };
 
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 #endif
