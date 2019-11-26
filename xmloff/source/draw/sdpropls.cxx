@@ -1383,35 +1383,13 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                 }
                 break;
             case CTF_WRITINGMODE:
-                {
-                    pShapeWritingMode = property;
-                    text::WritingMode eWritingMode;
-                    if( property->maValue >>= eWritingMode )
-                    {
-                        if( text::WritingMode_LR_TB == eWritingMode )
-                        {
-                            property->mnIndex = -1;
-                            pShapeWritingMode = nullptr;
-                        }
-                    }
-                }
+                pShapeWritingMode = property;
                 break;
             case CTF_CONTROLWRITINGMODE:
                 pControlWritingMode = property;
                 break;
             case CTF_TEXTWRITINGMODE:
-                {
-                    pTextWritingMode = property;
-                    sal_Int32 eWritingMode;
-                    if (property->maValue >>= eWritingMode)
-                    {
-                        if (text::WritingMode2::LR_TB == eWritingMode)
-                        {
-                            property->mnIndex = -1;
-                            pTextWritingMode = nullptr;
-                        }
-                    }
-                }
+                pTextWritingMode = property;
                 break;
             case CTF_REPEAT_OFFSET_X:
                 pRepeatOffsetX = property;
@@ -1504,10 +1482,30 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             pTextWritingMode->mnIndex = -1;
         if( pControlWritingMode )
             pControlWritingMode->mnIndex = -1;
+
+        text::WritingMode eWritingMode;
+        if( pShapeWritingMode->maValue >>= eWritingMode )
+        {
+            if( text::WritingMode_LR_TB == eWritingMode )
+            {
+                pShapeWritingMode->mnIndex = -1;
+                pShapeWritingMode = nullptr;
+            }
+        }
     }
     else if( pTextWritingMode && pControlWritingMode )
     {
         pControlWritingMode->mnIndex = -1;
+
+        sal_Int32 eWritingMode;
+        if (pTextWritingMode->maValue >>= eWritingMode)
+        {
+            if (text::WritingMode2::LR_TB == eWritingMode)
+            {
+                pTextWritingMode->mnIndex = -1;
+                pTextWritingMode = nullptr;
+            }
+        }
     }
 
     // do not export visual area for internal ole objects
