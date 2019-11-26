@@ -2196,32 +2196,6 @@ void ScMatrixImpl::MergeDoubleArrayMultiply( std::vector<double>& rArray ) const
     maMat.walk(std::move(aFunc));
 }
 
-namespace Op {
-
-namespace {
-
-template<typename T>
-struct return_type
-{
-    typedef T type;
-};
-
-template<>
-struct return_type<bool>
-{
-    typedef double type;
-};
-
-template<>
-struct return_type<char>
-{
-    typedef svl::SharedString type;
-};
-
-}
-
-}
-
 namespace {
 
 template<typename T, typename U, typename return_type>
