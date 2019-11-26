@@ -507,31 +507,24 @@ void Test::testSortInFormulaGroup()
 
     m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
-    static const struct {
-        SCCOL nCol;
-        SCROW nRow;
-        double fValue;
-    } aResults[] = {
-        { 0, 0, 1.0 },   { 1, 0, 1.0 },
-        { 0, 1, 2.0 },   { 1, 1, 3.0 },
-        { 0, 2, 3.0 },   { 1, 2, 3.0 },
-        { 0, 3, 10.0 },  { 1, 3, 11.0 },
-        { 0, 4, 20.0 },  { 1, 4, 20.0 },
-        { 0, 5, 100.0 }, { 1, 5, 100.0 },
-        { 0, 6, 101.0 }, { 1, 6, 101.0 },
-        { 0, 7, 102.0 }, { 1, 7, 102.0 },
-        { 0, 8, 103.0 }, { 1, 8, 103.0 },
-        { 0, 9, 104.0 }, { 1, 9, 104.0 },
+    static const double aResults[] = {
+        1.0,   1.0,
+        2.0,   3.0,
+        3.0,   3.0,
+        10.0,  11.0,
+        20.0,  20.0,
+        100.0, 100.0,
+        101.0, 101.0,
+        102.0, 102.0,
+        103.0, 103.0,
+        104.0, 104.0
     };
 
     for ( SCROW i = 0; i < SCROW(SAL_N_ELEMENTS( aEntries )); ++i )
     {
         double val = m_pDoc->GetValue( aEntries[i].nCol, aEntries[i].nRow, 0 );
-//        fprintf(stderr, "value at %d %d is %g = %g\n",
-//                (int)aResults[i].nRow, (int)aResults[i].nCol,
-//                val, aResults[i].fValue);
         CPPUNIT_ASSERT_MESSAGE("Mis-matching value after sort.",
-                               rtl::math::approxEqual(val, aResults[i].fValue));
+                               rtl::math::approxEqual(val, aResults[i]));
     }
 
     m_pDoc->DeleteTab( 0 );
