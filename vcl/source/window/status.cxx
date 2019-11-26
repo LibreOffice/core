@@ -133,7 +133,8 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
 }
 
 StatusBar::StatusBar( vcl::Window* pParent, WinBits nStyle ) :
-    Window( WindowType::STATUSBAR )
+    Window( WindowType::STATUSBAR ),
+    mnLastProgressPaint_ms(osl_getGlobalTimer())
 {
     ImplInit( pParent, nStyle );
 }
@@ -1347,8 +1348,15 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
 
     if (bInvalidate)
     {
-        Invalidate(maPrgsFrameRect);
-        Update();
+        // Rate limit how often we paint, otherwise in some loading scenerios we can spend significant
+        // time just painting progress bars.
+        sal_uInt32 nTime_ms = osl_getGlobalTimer();
+        if ((nTime_ms - mnLastProgressPaint_ms) > 100)
+        {
+            Invalidate(maPrgsFrameRect);
+            Update();
+            mnLastProgressPaint_ms = nTime_ms;
+        }
     }
 }
 
