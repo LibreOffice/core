@@ -16,6 +16,24 @@
       "revId": "9d63592d530e9ad5ab2d6aee0aba5bc0c117aae3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_03ce712d",
+        "filename": "sd/source/filter/eppt/grouptable.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-26T06:05:58Z",
+      "side": 1,
+      "message": "I would even advise to avoid dependency on the initialization order in cases like this (it\u0027s simple here: just use rIndex in all initializers); or - where it\u0027s required (like when a reference is initialized by some function) - put a comment into the class definition, that the order of members is significant wrt initialization.",
+      "parentUuid": "7f7f9b97_4d8c9a7e",
+      "revId": "9d63592d530e9ad5ab2d6aee0aba5bc0c117aae3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
