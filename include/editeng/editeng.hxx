@@ -229,9 +229,12 @@ public:
     void            SetPaperSize( const Size& rSize );
     const Size&     GetPaperSize() const;
 
-    void            SetVertical( bool bVertical, bool bTopToBottom = true );
+    void            SetVertical( bool bVertical );
     bool            IsVertical() const;
     bool            IsTopToBottom() const;
+    bool            GetDirectVertical() const;
+    void            SetRotation(TextRotation nRotation);
+    TextRotation    GetRotation() const;
 
     void            SetFixedCellHeight( bool bUseFixedCellHeight );
 

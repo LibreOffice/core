@@ -2612,11 +2612,11 @@ void ImpEditEngine::SetTextRanger( std::unique_ptr<TextRanger> pRanger )
         pActiveView->ShowCursor(false, false);
 }
 
-void ImpEditEngine::SetVertical( bool bVertical, bool bTopToBottom)
+void ImpEditEngine::SetVertical( bool bVertical)
 {
-    if ( IsVertical() != bVertical || IsTopToBottom() != (bVertical && bTopToBottom))
+    if ( IsVertical() != bVertical)
     {
-        GetEditDoc().SetVertical( bVertical, bTopToBottom);
+        GetEditDoc().SetVertical(bVertical);
         bool bUseCharAttribs = bool(aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS);
         GetEditDoc().CreateDefFont( bUseCharAttribs );
         if ( IsFormatted() )
@@ -2624,6 +2624,18 @@ void ImpEditEngine::SetVertical( bool bVertical, bool bTopToBottom)
             FormatFullDoc();
             UpdateViews( GetActiveView() );
         }
+    }
+}
+
+void ImpEditEngine::SetRotation(TextRotation nRotation)
+{
+    GetEditDoc().SetRotation(nRotation);
+    bool bUseCharAttribs = bool(aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS);
+    GetEditDoc().CreateDefFont( bUseCharAttribs );
+    if ( IsFormatted() )
+    {
+        FormatFullDoc();
+        UpdateViews( GetActiveView() );
     }
 }
 

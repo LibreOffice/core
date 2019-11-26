@@ -30,6 +30,7 @@
 
 class EditTextObject;
 enum class OutlinerMode;
+enum class TextRotation;
 
 /**
  * This is the guts of OutlinerParaObject, refcounted and shared among
@@ -88,8 +89,11 @@ public:
 
     // vertical access
     bool IsVertical() const;
+    bool GetDirectVertical() const;
     bool IsTopToBottom() const;
-    void SetVertical(bool bNew, bool bTopToBottom = true);
+    void SetVertical(bool bNew);
+    void SetRotation(TextRotation nRotation);
+    TextRotation GetRotation() const;
 
     // data read access
     sal_Int32 Count() const;

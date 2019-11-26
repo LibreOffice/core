@@ -75,6 +75,7 @@ enum class TransliterationFlags;
 class SvxFieldData;
 enum class PointerStyle;
 class SvxNumRule;
+enum class TextRotation;
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;
@@ -653,7 +654,8 @@ public:
     void            Init( OutlinerMode nOutlinerMode );
     OutlinerMode    GetMode() const { return nOutlinerMode; }
 
-    void            SetVertical( bool bVertical, bool bTopToBottom = true);
+    void            SetVertical( bool bVertical);
+    void            SetRotation(TextRotation nRotation);
     bool            IsVertical() const;
     bool            IsTopToBottom() const;
 
