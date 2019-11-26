@@ -75,8 +75,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     };
     friend class ExecutablePackageImpl;
 
-    typedef std::unordered_map< OUString, Reference<XInterface> > t_string2object;
-
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType, bool bRemoved,
