@@ -370,12 +370,12 @@ struct WW8LVL   // only THE entries, WE need!
     sal_uInt8   nLenGrpprlChpx; // length, in bytes, of the LVL's grpprlChpx
     sal_uInt8   nLenGrpprlPapx; // length, in bytes, of the LVL's grpprlPapx
     sal_uInt8   nAlign: 2;  // alignment (left, right, centered) of the number
-    sal_uInt8 bLegal:    1;  // doesn't matter
-    sal_uInt8 bNoRest:1; // doesn't matter
+    sal_uInt8:    1;  // doesn't matter ("bLegal")
+    sal_uInt8: 1; // doesn't matter ("bNoRest")
     sal_uInt8 bV6Prev:1; // Ver6-Compatible: number will include previous levels
     sal_uInt8 bV6PrSp:1; // Ver6-Compatible: doesn't matter
     sal_uInt8 bV6:       1;  // if true, pay attention to the V6-Compatible Entries!
-    sal_uInt8   bDummy: 1;  // (fills the byte)
+    sal_uInt8: 1;  // (fills the byte)
 
 };
 
