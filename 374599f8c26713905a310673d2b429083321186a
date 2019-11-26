@@ -46,6 +46,30 @@
       "revId": "374599f8c26713905a310673d2b429083321186a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_b75497ff",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1894,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-26T21:29:51Z",
+      "side": 1,
+      "message": "I guess the current situation is just as fine.  I came across it with a preliminary version of an upcoming loplugin:unusedmember, the final version of which now filters it out anyway due to some heuristic (sizeof, offsetof, certain casts, ...).  Just wanted to make sure it hadn\u0027t been a true positive after all.",
+      "parentUuid": "7f7f9b97_f700cf03",
+      "range": {
+        "startLine": 1894,
+        "startChar": 4,
+        "endLine": 1894,
+        "endChar": 25
+      },
+      "revId": "374599f8c26713905a310673d2b429083321186a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
