@@ -16,6 +16,7 @@
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="optionsdialog|OptionsDialog">Options</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
