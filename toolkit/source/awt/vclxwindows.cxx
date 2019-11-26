@@ -1732,7 +1732,12 @@ void VCLXListBox::selectItemsPos( const css::uno::Sequence<sal_Int16>& aPosition
 
         if ( bChanged )
         {
+            bool bOrigUpdateMode = pBox->IsUpdateMode();
+            pBox->SetUpdateMode(false);
+
             pBox->SelectEntriesPos(aPositionVec, bSelect);
+
+            pBox->SetUpdateMode(bOrigUpdateMode);
 
             // VCL doesn't call select handler after API call.
             // ImplCallItemListeners();
