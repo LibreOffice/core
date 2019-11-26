@@ -134,12 +134,10 @@ void Test::testLocalhost3Authority() {
 }
 
 void Test::testNoAuthority() {
-#if !defined(_WIN32) //TODO
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL("file:" MY_PATH_IN, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
     CPPUNIT_ASSERT_EQUAL(OUString(MY_PATH_OUT), p);
-#endif
 }
 
 void Test::testEmptyPath() {
