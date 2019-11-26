@@ -1071,6 +1071,36 @@ void ListBox::SelectEntryPos( sal_Int32 nPos, bool bSelect )
     }
 }
 
+void ListBox::SelectEntriesPos( const std::vector<sal_Int32>& rPositions, bool bSelect )
+{
+    if (!mpImplLB)
+        return;
+
+    bool bCallListeners = false;
+
+    const sal_Int32 nCurrentPos = mpImplLB->GetCurrentPos();
+    const auto nEntryCount = mpImplLB->GetEntryList()->GetEntryCount();
+    const auto nMRUCount = mpImplLB->GetEntryList()->GetMRUCount();
+
+    for (auto nPos : rPositions)
+    {
+        if (0 <= nPos && nPos < nEntryCount)
+        {
+            mpImplLB->SelectEntry(nPos + nMRUCount, bSelect);
+            if (nCurrentPos != nPos && bSelect)
+                bCallListeners = true;
+        }
+    }
+
+    //Only when bSelect == true, send both Selection & Focus events
+    if (bCallListeners)
+    {
+        CallEventListeners(VclEventId::ListboxSelect);
+        if (HasFocus())
+            CallEventListeners(VclEventId::ListboxFocus);
+    }
+}
+
 void ListBox::SetEntryData( sal_Int32 nPos, void* pNewData )
 {
     mpImplLB->SetEntryData( nPos + mpImplLB->GetEntryList()->GetMRUCount(), pNewData );

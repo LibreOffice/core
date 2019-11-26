@@ -164,6 +164,7 @@ public:
 
     void                SelectEntry( const OUString& rStr, bool bSelect = true );
     void                SelectEntryPos( sal_Int32  nPos, bool bSelect = true );
+    void                SelectEntriesPos( const std::vector<sal_Int32>& rPositions, bool bSelect = true );
 
     sal_Int32           GetSelectedEntryCount() const;
     OUString            GetSelectedEntry( sal_Int32  nSelIndex = 0 ) const;
