@@ -1995,6 +1995,11 @@ Reference< view::XRenderable > SfxViewShell::GetRenderable()
     return xRender;
 }
 
+void SfxViewShell::sendUnoStatus(const SfxItemSet* pSet) const
+{
+    SfxLokHelper::sendUnoStatus(this, pSet);
+}
+
 void SfxViewShell::notifyWindow(vcl::LOKWindowId nDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload) const
 {
     SfxLokHelper::notifyWindow(this, nDialogId, rAction, rPayload);
