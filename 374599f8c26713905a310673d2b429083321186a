@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_bc431e6c",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1894,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-26T20:15:45Z",
+      "side": 1,
+      "message": "this data member isn\u0027t used anywhere directly, but is probably magically needed after all?",
+      "range": {
+        "startLine": 1894,
+        "startChar": 4,
+        "endLine": 1894,
+        "endChar": 25
+      },
+      "revId": "374599f8c26713905a310673d2b429083321186a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
