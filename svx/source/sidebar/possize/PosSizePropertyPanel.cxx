@@ -276,7 +276,6 @@ void PosSizePropertyPanel::HandleContextChange(
     bool bShowAngle = false;
     bool bShowFlip = false;
     bool bShowEditChart = false;
-    bool bIsMobile = comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView());
 
     switch (maContext.GetCombinedContext_DI())
     {
@@ -303,15 +302,13 @@ void PosSizePropertyPanel::HandleContextChange(
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::OLE):
-            if (bIsMobile)
-                bShowEditChart = true;
+            bShowEditChart = true;
             break;
 
         case CombinedEnumContext(Application::Calc, Context::OLE):
         case CombinedEnumContext(Application::DrawImpress, Context::OLE):
             bShowPosition = true;
-            if (bIsMobile)
-                bShowEditChart = true;
+            bShowEditChart = true;
             break;
 
         case CombinedEnumContext(Application::Calc, Context::Chart):
