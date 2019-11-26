@@ -5,7 +5,7 @@ import binascii
 import getopt
 import sys
 import os.path
-from subprocess import check_output
+from subprocess import check_output, Popen, PIPE
 
 try:
     myopts, args = getopt.getopt(sys.argv[1:], "i:o:")
@@ -22,7 +22,11 @@ for o, a in myopts:
         ofile = a
 
 with open(ofile, "a") as output:
-    input = check_output(["xgettext", "-C", "--add-comments", "--keyword=NC_:1c,2", "--keyword=NNC_:1c,2,3", "--from-code=UTF-8", "--no-wrap", ifile, "-o", "-"])
+    xgettext = Popen(["xgettext", "-C", "--add-comments", "--keyword=NC_:1c,2", "--keyword=NNC_:1c,2,3", "--from-code=UTF-8", "--no-wrap", ifile, "-o", "-"], stdout=PIPE)
+    # while overall format is c++, all of the strings use custom placeholders and don't follow c-format
+    # esp. plain percent sign never is escaped explicitly
+    input = check_output(['sed', '-e', '/^#, c-format$/d'], stdin=xgettext.stdout)
+    xgettext.wait()
     po = polib.pofile(input)
     if len(po) != 0:
         print >> output, ""
