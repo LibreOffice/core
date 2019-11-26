@@ -676,7 +676,7 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
 
     SAL_WARN_IF(
         strUTF8->length != strURL->length &&
-        0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( strURL->buffer, strURL->length, "file:\\\\", 7 )
+        0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( strURL->buffer, strURL->length, "file:\\", 6 )
         , "sal.osl"
         ,"osl_getSystemPathFromFileURL: \"" << OUString(strURL) << "\" is not encoded !!!");
 
@@ -695,8 +695,8 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
         const sal_Unicode *pDecodedURL = rtl_uString_getStr( strDecodedURL );
         nDecodedLen = rtl_uString_getLength( strDecodedURL );
 
-        /* Must start with "file://" */
-        if ( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\", 7 ) )
+        /* Must start with "file:/" */
+        if ( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\", 6 ) )
         {
             sal_uInt32  nSkip;
 
@@ -707,8 +707,10 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
                 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\127.0.0.1\\", 17 )
                       )
                 nSkip = 17;
-            else
+            else if ( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\", 7 ) )
                 nSkip = 5;
+            else
+                nSkip = 6;
 
             /* Indicates local root */
             if ( nDecodedLen == nSkip )
