@@ -249,7 +249,7 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    MYSQL_TIME my_time;
+    MYSQL_TIME my_time = {};
 
     my_time.year = aData.Year;
     my_time.month = aData.Month;
