@@ -50,7 +50,7 @@
 //#define FAKE_MAX_TEXTURE_SIZE (4096)
 
 #define VERTEX_BUFFER_SIZE (341*3) // 1023, the size of the internal
-                                   // vertex buffer (must be divisable
+                                   // vertex buffer (must be divisible
                                    // by 3, as each triangle primitive
                                    // has 3 vertices)
 
