@@ -106,7 +106,6 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
     std::unique_ptr<LocaleDataWrapper> mpLocaleDataWrapper;
 
     vcl::Font           maFont;
-    vcl::Font           maOrigFont;  // original font from SetFont
     Color               maTextColor;
 
     sal_Int32           mnMaxTextLen;
@@ -221,7 +220,7 @@ public:
     sal_Int32           GetTextLen( const TextSelection& rSel ) const;
 
     void                SetFont( const vcl::Font& rFont );
-    const vcl::Font&    GetFont() const { return maOrigFont; }
+    const vcl::Font&    GetFont() const { return maFont; }
 
     void                SetLeftMargin( sal_uInt16 n );
 
