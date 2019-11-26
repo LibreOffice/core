@@ -247,6 +247,8 @@ DomainMapper::~DomainMapper()
 #endif
 }
 
+sal_Int16 charHeight = 0;
+
 void DomainMapper::lcl_attribute(Id nName, Value & val)
 {
     if (m_pImpl->hasTableManager() && m_pImpl->getTableManager().attribute(nName, val))
@@ -446,6 +448,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             style::LineSpacing aSpacing;
             PropertyMapPtr pTopContext = m_pImpl->GetTopContext();
             boost::optional<PropertyMap::Property> aLineSpacingVal;
+
+            // If the spacing of a line is smaller than the size of a character
+            // then ignore the spacing and make it at least as tall as the
+            // characters. This way we don't clip tops and bottoms of text.
+            if (nIntValue / 20 <= charHeight)
+            {
+                nIntValue = charHeight * 20;
+            }
+
             if (pTopContext && (aLineSpacingVal = pTopContext->getProperty(PROP_PARA_LINE_SPACING)) )
             {
                 aLineSpacingVal->second >>= aSpacing;
@@ -1712,6 +1723,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 }
             }
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_ooxml::LN_EG_RPrBase_sz ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
+            charHeight = nIntValue / 2;
         }
         break;
     case NS_ooxml::LN_EG_RPrBase_position:
