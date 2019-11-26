@@ -101,7 +101,6 @@ void Test::testSetFormula()
 
     static struct aInputs
     {
-        const char* aName;
         SCROW const nRow;
         SCCOL const nCol;
         const char* aFormula1;      // Represents the formula that is input to SetFormula function.
@@ -109,10 +108,10 @@ void Test::testSetFormula()
         formula::FormulaGrammar::Grammar const eGram;
 
     } const aTest[] = {
-        { "Rock and Roll" ,5 , 4 , "=SUM($D$2:$F$3)"             ,"=SUM($D$2:$F$3)" , formula::FormulaGrammar::Grammar::GRAM_ENGLISH     },
-        { "Blues"         ,5 , 5 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE      },
-        { "Acoustic"      ,6 , 6 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE_XL_A1},
-        { "Nursery Rhymes",7 , 8 , "=[.A1]-[.$C2]+[.G$3]-[.$F$4]","=A1-$C2+G$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_ODFF        }
+        { 5 , 4 , "=SUM($D$2:$F$3)"             ,"=SUM($D$2:$F$3)" , formula::FormulaGrammar::Grammar::GRAM_ENGLISH     },
+        { 5 , 5 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE      },
+        { 6 , 6 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE_XL_A1},
+        { 7 , 8 , "=[.A1]-[.$C2]+[.G$3]-[.$F$4]","=A1-$C2+G$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_ODFF        }
     };
 
     for(size_t i = 0; i < SAL_N_ELEMENTS(aTest); ++i)
