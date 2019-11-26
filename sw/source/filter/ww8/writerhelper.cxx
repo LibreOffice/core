@@ -742,11 +742,14 @@ namespace sw
             std::for_each(maStack.begin(), maStack.end(), SetEndIfOpen(rPos));
         }
 
-        void RedlineStack::MoveAttrs( const SwPosition& rPos )
+        void RedlineStack::MoveAttrs(const SwPosition& rPos, MoveAttrsMode const eMode)
         {
             size_t nCnt = maStack.size();
+            sal_Int32 const nInserted = eMode == MoveAttrsMode::FieldmarkInserted
+                ? 2 // CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP
+                : 1;
             sal_uLong nPosNd = rPos.nNode.GetIndex();
-            sal_Int32 nPosCt = rPos.nContent.GetIndex() - 1;
+            sal_Int32 nPosCt = rPos.nContent.GetIndex() - nInserted;
 
             for (size_t i=0; i < nCnt; ++i)
             {
@@ -755,12 +758,12 @@ namespace sw
                 if ((rEntry.m_aMkPos.m_nNode.GetIndex()+1 == nPosNd) &&
                     (nPosCt <= rEntry.m_aMkPos.m_nContent))
                 {
-                    rEntry.m_aMkPos.m_nContent++;
+                    rEntry.m_aMkPos.m_nContent += nInserted;
                     SAL_WARN_IF(rEntry.m_aMkPos.m_nContent > rPos.nNode.GetNodes()[nPosNd]->GetContentNode()->Len(),
                             "sw.ww8", "redline ends after end of line");
                     if (isPoint) // sigh ... important special case...
                     {
-                        rEntry.m_aPtPos.m_nContent++;
+                        rEntry.m_aPtPos.m_nContent += nInserted;
                         continue;
                     }
                 }
@@ -769,7 +772,7 @@ namespace sw
                 if ((rEntry.m_aPtPos.m_nNode.GetIndex()+1 == nPosNd) &&
                     (nPosCt < rEntry.m_aPtPos.m_nContent))
                 {
-                    rEntry.m_aPtPos.m_nContent++;
+                    rEntry.m_aPtPos.m_nContent += nInserted;
                     SAL_WARN_IF(rEntry.m_aPtPos.m_nContent > rPos.nNode.GetNodes()[nPosNd]->GetContentNode()->Len(),
                             "sw.ww8", "redline ends after end of line");
                 }
