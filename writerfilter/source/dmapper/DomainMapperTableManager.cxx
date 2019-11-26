@@ -644,8 +644,16 @@ void DomainMapperTableManager::endOfRowAction()
         {
             if(nTableWidth > 100 || nTableWidth <= 0)
             {
-                pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH, m_nTableWidth);
-                pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX);
+                if(getTableDepth() > 1 && !m_bTableSizeTypeInserted)
+                {
+                    pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH, sal_Int32(100));
+                    pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE);
+                }
+                else
+                {
+                    pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH, m_nTableWidth);
+                    pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX);
+                }
             }
         }
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );

@@ -374,10 +374,13 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo73389,"fdo73389.docx")
 {
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    // This was 9340, i.e. the width of the inner table was too large.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2842), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
+    // The width of the inner table was too large. The first fix still converted
+    // the "auto" table width to a fixed one. The recent fix uses variable width.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","type","pct");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","w","5000");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
