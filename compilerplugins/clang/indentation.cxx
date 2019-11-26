@@ -47,9 +47,6 @@ public:
         // looks like lex/yacc output
         if (fn == SRCDIR "/hwpfilter/source/grammar.cxx")
             return false;
-        // TODO need to learn to handle attributes like "[[maybe_unused]]"
-        if (fn == SRCDIR "/binaryurp/source/bridge.cxx")
-            return false;
         // the QEMIT macros
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/qt5/")
             || loplugin::isSamePathname(fn, SRCDIR "/vcl/unx/gtk3_kde5/kde5_filepicker_ipc.cxx"))
