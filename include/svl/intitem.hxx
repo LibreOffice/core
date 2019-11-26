@@ -22,6 +22,7 @@
 
 #include <svl/svldllapi.h>
 #include <svl/cintitem.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 
 class SVL_DLLPUBLIC SfxByteItem: public CntByteItem
@@ -54,6 +55,8 @@ public:
                                                 OUString & rText,
                                                 const IntlWrapper&)
         const override;
+
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 
     virtual bool QueryValue( css::uno::Any& rVal,
                              sal_uInt8 nMemberId = 0 ) const override;

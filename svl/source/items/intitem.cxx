@@ -58,6 +58,14 @@ bool SfxInt16Item::GetPresentation(SfxItemPresentation,
 }
 
 
+boost::property_tree::ptree SfxInt16Item::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+    aTree.put("state", GetValue());
+    return aTree;
+}
+
+
 // virtual
 bool SfxInt16Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
