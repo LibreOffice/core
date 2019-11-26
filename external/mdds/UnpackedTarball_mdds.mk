@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,mdds,$(MDDS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,0))
 
+# external/mdds/Wdeprecated-copy.patch upstream at <https://gitlab.com/mdds/mdds/merge_requests/21>
+# "Remove redundantly user-declared private_data copy constructor":
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
     external/mdds/Wdeprecated-copy.patch \
 ))
