@@ -37,26 +37,9 @@ Size Window::GetOptimalSize() const
 
 void Window::ImplAdjustNWFSizes()
 {
-    switch( GetType() )
-    {
-    case WindowType::CHECKBOX:
-        static_cast<CheckBox*>(this)->ImplSetMinimumNWFSize();
-        break;
-    case WindowType::RADIOBUTTON:
-        static_cast<RadioButton*>(this)->ImplSetMinimumNWFSize();
-        break;
-    default:
-        {
-            // iterate over children
-            vcl::Window* pWin = GetWindow( GetWindowType::FirstChild );
-            while( pWin )
-            {
-                pWin->ImplAdjustNWFSizes();
-                pWin = pWin->GetWindow( GetWindowType::Next );
-            }
-        }
-        break;
-    }
+    for (Window* pWin = GetWindow(GetWindowType::FirstChild); pWin;
+         pWin = pWin->GetWindow(GetWindowType::Next))
+        pWin->ImplAdjustNWFSizes();
 }
 
 void Window::ImplClearFontData(bool bNewFontLists)
