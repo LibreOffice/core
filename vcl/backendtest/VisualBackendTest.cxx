@@ -103,7 +103,7 @@ public:
         , mpVDev(VclPtr<VirtualDevice>::Create())
     {
         maUpdateTimer.SetInvokeHandler(LINK(this, VisualBackendTestWindow, updateHdl));
-        maUpdateTimer.SetPriority(TaskPriority::REPAINT);
+        maUpdateTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
         if (mbAnimate)
         {
             maUpdateTimer.SetTimeout(1000.0);
