@@ -42,8 +42,6 @@ MacabRecord::MacabRecord(const sal_Int32 _size)
    : size(_size),
      fields(std::make_unique<macabfield *[]>(size))
 {
-    size = _size;
-    fields = std::make_unique<macabfield *[]>(size);
     sal_Int32 i;
     for(i = 0; i < size; i++)
         fields[i] = nullptr;
