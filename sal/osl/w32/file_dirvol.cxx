@@ -959,6 +959,8 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory Directory)
     return eError;
 }
 
+namespace {
+
 /* Different types of paths */
 enum PATHTYPE
 {
@@ -968,6 +970,8 @@ enum PATHTYPE
     PATHTYPE_VOLUME,
     PATHTYPE_FILE
 };
+
+}
 
 oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirectoryItem *pItem)
 {
