@@ -263,7 +263,7 @@ bool isMainSequenceRootNode_(
 class BaseNode::StateTransition
 {
 public:
-    enum Options { NONE, FORCE };
+    enum class Options { NONE, FORCE };
 
     explicit StateTransition( BaseNode * pNode )
         : mpNode(pNode), meToState(INVALID) {}
@@ -275,13 +275,13 @@ public:
     StateTransition(const StateTransition&) = delete;
     StateTransition& operator=(const StateTransition&) = delete;
 
-    bool enter( NodeState eToState, int options = NONE )
+    bool enter( NodeState eToState, Options options = Options::NONE )
     {
         OSL_ENSURE( meToState == INVALID,
                     "### commit() before enter()ing again!" );
         if (meToState != INVALID)
             return false;
-        bool const bForce = ((options & FORCE) != 0);
+        bool const bForce = options == Options::FORCE;
         if (!bForce && !mpNode->isTransition( mpNode->meCurrState, eToState ))
             return false;
         // recursion detection:
@@ -570,7 +570,7 @@ void BaseNode::deactivate()
     if (isTransition( meCurrState, FROZEN, false /* no OSL_ASSERT */ )) {
         // do transition to FROZEN:
         StateTransition st(this);
-        if (st.enter( FROZEN, StateTransition::FORCE )) {
+        if (st.enter( FROZEN, StateTransition::Options::FORCE )) {
 
             deactivate_st( FROZEN );
             st.commit();
@@ -607,7 +607,7 @@ void BaseNode::end()
                 "end state not reachable in transition table" );
 
     StateTransition st(this);
-    if (!st.enter( ENDED, StateTransition::FORCE ))
+    if (!st.enter( ENDED, StateTransition::Options::FORCE ))
         return;
 
     deactivate_st( ENDED );
