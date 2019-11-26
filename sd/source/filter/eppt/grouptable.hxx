@@ -32,7 +32,7 @@ struct GroupEntry
 
     explicit GroupEntry( css::uno::Reference< css::container::XIndexAccess > const & rIndex )
       : mnCurrentPos(0),
-        mnCount(mXIndexAccess->getCount()),
+        mnCount(rIndex->getCount()),
         mXIndexAccess(rIndex)
     {
     };
