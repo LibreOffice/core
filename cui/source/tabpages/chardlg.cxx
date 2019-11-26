@@ -2700,7 +2700,6 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         m_nSuperProp = static_cast<sal_uInt8>(sUser.getToken( 0, ';', nIdx ).toInt32());
         m_nSubProp = static_cast<sal_uInt8>(sUser.getToken( 0, ';', nIdx ).toInt32());
 
-        // tdf#120412 up to 14400% (eg. 1584 pt with 11 pt letters)
         m_xHighLowMF->set_max(MAX_ESC_POS, FieldUnit::PERCENT);
 
         //fdo#75307 validate all the entries and discard all of them if any are
