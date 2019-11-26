@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star {
 namespace oox { namespace ole { class OleStorage; } }
 
 namespace oox {
-namespace core {
+namespace crypto {
 
 class OOX_DLLPUBLIC DocumentDecryption
 {
@@ -39,8 +39,6 @@ private:
     css::uno::Sequence<css::beans::NamedValue> maStreamsSequence;
     css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
-
-    void readStrongEncryptionInfo();
 
 public:
     DocumentDecryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext, oox::ole::OleStorage& rOleStorage);
@@ -53,7 +51,7 @@ public:
 
 };
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 #endif

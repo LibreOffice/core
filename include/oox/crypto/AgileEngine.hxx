@@ -15,19 +15,17 @@
 
 #include <oox/dllapi.h>
 #include <oox/crypto/CryptTools.hxx>
+#include <oox/crypto/CryptoEngine.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <com/sun/star/packages/XPackageEncryption.hpp>
 
 namespace oox {
     class BinaryXInputStream;
     class BinaryXOutputStream;
 }
 
-namespace com::sun::star::uno { class XComponentContext; }
-
 namespace oox {
-namespace core {
+namespace crypto {
 
 struct OOX_DLLPUBLIC AgileEncryptionInfo
 {
@@ -76,15 +74,11 @@ enum class AgileEncryptionPreset
     AES_256_SHA512,
 };
 
-class OOX_DLLPUBLIC AgileEngine final : public cppu::WeakImplHelper<css::packages::XPackageEncryption>
+class OOX_DLLPUBLIC AgileEngine final : public CryptoEngine
 {
 private:
-    std::vector<sal_uInt8> mKey;
     AgileEncryptionInfo mInfo;
     AgileEncryptionPreset meEncryptionPreset;
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
-
-    css::uno::Reference<css::io::XInputStream> getStream(const css::uno::Sequence<css::beans::NamedValue> & rStreams, const OUString sStreamName);
 
     void calculateHashFinal(const OUString& rPassword, std::vector<sal_uInt8>& aHashFinal);
 
@@ -102,58 +96,52 @@ private:
 
     static Crypto::CryptoType cryptoType(const AgileEncryptionInfo& rInfo);
 
-    // Decryption
+public:
+    AgileEngine();
 
-    bool decryptHmacKey();
-    bool decryptHmacValue();
-
-    AgileEncryptionInfo& getInfo() { return mInfo; }
+    AgileEncryptionInfo& getInfo() { return mInfo;}
 
     void setPreset(AgileEncryptionPreset ePreset)
     {
         meEncryptionPreset = ePreset;
     }
 
+    // Decryption
+
     void decryptEncryptionKey(OUString const & rPassword);
     bool decryptAndCheckVerifierHash(OUString const & rPassword);
 
+    bool generateEncryptionKey(OUString const & rPassword) override;
+    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
+    bool decrypt(BinaryXInputStream& aInputStream,
+                 BinaryXOutputStream& aOutputStream) override;
+
+    bool checkDataIntegrity() override;
+
+    bool decryptHmacKey();
+    bool decryptHmacValue();
+
     // Encryption
+
+    void writeEncryptionInfo(BinaryXOutputStream& rStream) override;
+
+    void encrypt(const css::uno::Reference<css::io::XInputStream>&  rxInputStream,
+                 css::uno::Reference<css::io::XOutputStream>& rxOutputStream,
+                 sal_uInt32 nSize) override;
+
+    bool setupEncryption(OUString const & rPassword) override;
+
+    bool generateAndEncryptVerifierHash(OUString const & rPassword);
 
     bool encryptHmacKey();
     bool encryptHmacValue();
 
-    bool generateAndEncryptVerifierHash(OUString const & rPassword);
-
     bool encryptEncryptionKey(OUString const & rPassword);
     void setupEncryptionParameters(AgileEncryptionParameters const & rAgileEncryptionParameters);
     bool setupEncryptionKey(OUString const & rPassword);
-
-    css::uno::Sequence<sal_Int8> writeEncryptionInfo();
-    css::uno::Sequence<sal_Int8> writeEncryptedDocument(const css::uno::Reference<css::io::XInputStream>& rxInputStream);
-
-public:
-    AgileEngine(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
-
-    // Decryption
-
-    virtual sal_Bool SAL_CALL generateEncryptionKey(const OUString & rPassword) override;
-    virtual sal_Bool SAL_CALL readEncryptionInfo(const css::uno::Sequence<css::beans::NamedValue>& aStreams) override;
-    virtual sal_Bool SAL_CALL decrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
-                 css::uno::Reference<css::io::XOutputStream>& rxOutputStream) override;
-
-
-    virtual sal_Bool SAL_CALL checkDataIntegrity() override;
-
-    // Encryption
-
-    virtual css::uno::Sequence<css::beans::NamedValue> SAL_CALL encrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream) override;
-
-    virtual sal_Bool SAL_CALL setupEncryption(const css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
-
-    virtual css::uno::Sequence<css::beans::NamedValue> SAL_CALL createEncryptionData(const OUString& rPassword) override;
 };
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 #endif
