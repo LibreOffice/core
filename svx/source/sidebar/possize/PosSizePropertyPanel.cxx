@@ -1069,12 +1069,12 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     mpMtrPosY->SetMax(basegfx::fround64(fBottom));
     mpMtrPosY->SetLast(basegfx::fround64(fBottom));
 
-    double fMaxWidth = maWorkArea.getWidth() - (maRect.getMinX() - fLeft);
-    double fMaxHeight = maWorkArea.getHeight() - (maRect.getMinY() - fTop);
-    mpMtrWidth->SetMax(basegfx::fround64(fMaxWidth));
-    mpMtrWidth->SetLast(basegfx::fround64(fMaxWidth));
-    mpMtrHeight->SetMax(basegfx::fround64(fMaxHeight));
-    mpMtrHeight->SetLast(basegfx::fround64(fMaxHeight));
+    double fMaxWidth = maWorkArea.getWidth() - (maRect.getWidth() - fLeft);
+    double fMaxHeight = maWorkArea.getHeight() - (maRect.getHeight() - fTop);
+    mpMtrWidth->SetMax(basegfx::fround64(fMaxWidth*100));
+    mpMtrWidth->SetLast(basegfx::fround64(fMaxWidth*100));
+    mpMtrHeight->SetMax(basegfx::fround64(fMaxHeight*100));
+    mpMtrHeight->SetLast(basegfx::fround64(fMaxHeight*100));
 }
 
 void PosSizePropertyPanel::UpdateUIScale()
