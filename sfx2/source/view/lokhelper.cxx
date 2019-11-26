@@ -24,6 +24,9 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <editeng/outliner.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/msgpool.hxx>
 
 #include <shellimpl.hxx>
 
@@ -183,6 +186,24 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
+namespace {
+    OUString lcl_getNameForSlot(const SfxViewShell* pShell, sal_uInt16 nWhich)
+    {
+        if (pShell->GetFrame())
+        {
+            const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(pShell->GetFrame()).GetSlot(nWhich);
+            if (pSlot)
+            {
+                OUStringBuffer sUnoCommand(".uno:");
+                sUnoCommand.append(OStringToOUString(pSlot->GetUnoName(), RTL_TEXTENCODING_ASCII_US));
+                return sUnoCommand.makeStringAndClear();
+            }
+        }
+
+        return "";
+    }
+}
+
 void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxItemSet* pSet)
 {
     if (!pShell || !pSet)
@@ -197,6 +218,11 @@ void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxItemSet* p
         if (pSet->HasItem(nWhich) && SfxItemState::SET >= pSet->GetItemState(nWhich))
         {
             boost::property_tree::ptree aItem = pSet->Get(nWhich).dumpAsJSON();
+
+            OUString sCommand = lcl_getNameForSlot(pShell, nWhich);
+            if (!sCommand.isEmpty())
+                aItem.put("commandName", sCommand);
+
             if (!aItem.empty())
                 anArray.push_back(std::make_pair("", aItem));
         }
