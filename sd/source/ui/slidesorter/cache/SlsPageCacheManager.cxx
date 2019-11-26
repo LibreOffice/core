@@ -136,7 +136,6 @@ class PageCacheManager::RecentlyUsedPageCaches
 public:
     typedef DocumentKey                                 key_type;
     typedef RecentlyUsedQueue                           mapped_type;
-    typedef std::pair<const key_type,mapped_type>       value_type;
     typedef std::map<key_type,mapped_type>::iterator    iterator;
 private:
     std::map<key_type,mapped_type> maMap;
