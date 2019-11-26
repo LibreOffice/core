@@ -581,6 +581,9 @@ bool SfxFrame::OwnsBindings_Impl() const
 
 void SfxFrame::SetToolSpaceBorderPixel_Impl( const SvBorder& rBorder )
 {
+    if (pImpl->aBorder == rBorder)
+        return;
+
     pImpl->aBorder = rBorder;
     SfxViewFrame *pF = GetCurrentViewFrame();
     if ( !pF )
