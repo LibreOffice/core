@@ -70,33 +70,6 @@ using namespace com::sun::star::drawing;
 using namespace svx::sidebar;
 using namespace ::com::sun::star;
 
-namespace {
-    void lcl_sendAttrUpdatesForLOK(SfxViewShell* pShell, const SfxItemSet& rSet)
-    {
-        if (!pShell)
-            return;
-
-        boost::property_tree::ptree aTree;
-        boost::property_tree::ptree anArray;
-
-        for(int i = 0; i < rSet.Count(); i++)
-        {
-            sal_uInt16 nWhich = rSet.GetWhichByPos(i);
-            if (rSet.HasItem(nWhich) && SfxItemState::SET >= rSet.GetItemState(nWhich))
-            {
-                boost::property_tree::ptree aItem = rSet.Get(nWhich).dumpAsJSON();
-                if (!aItem.empty())
-                    anArray.push_back(std::make_pair("", aItem));
-            }
-        }
-        aTree.add_child("items", anArray);
-
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aStream.str().c_str());
-    }
-}
-
 namespace sd {
 
 /**
@@ -762,7 +735,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             SfxViewShell* pViewShell = GetDrawView()->GetSfxViewShell();
             if (pViewShell && comphelper::LibreOfficeKit::isActive())
-                lcl_sendAttrUpdatesForLOK( pViewShell, *pSet );
+                pViewShell->sendUnoStatus( &rSet );
         }
     }
 
