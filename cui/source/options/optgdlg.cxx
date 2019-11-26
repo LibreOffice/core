@@ -443,7 +443,7 @@ IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, weld::SpinButton&, void )
 }
 
 #if defined(_WIN32)
-IMPL_LINK_NOARG(OfaMiscTabPage, FileAssocClick, weld::Button&, void)
+IMPL_STATIC_LINK_NOARG(OfaMiscTabPage, FileAssocClick, weld::Button&, void)
 {
     const bool bUninit = SUCCEEDED(CoInitialize(nullptr));
     IApplicationAssociationRegistrationUI* pIf = nullptr;
