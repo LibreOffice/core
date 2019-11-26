@@ -153,7 +153,7 @@ int officeloader_impl(bool bAllowConsole)
 
     DWORD dwExitCode = DWORD(-1);
 
-    bool fSuccess = FALSE;
+    bool fSuccess = false;
     LPWSTR lpCommandLine = nullptr;
     bool bFirst = true;
     WCHAR cwd[MAX_PATH];
@@ -251,7 +251,7 @@ int officeloader_impl(bool bAllowConsole)
         bFirst = false;
 
         WCHAR szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
-        bool bHeadlessMode(FALSE);
+        bool bHeadlessMode(false);
 
         {
             // Check command line arguments for "--headless" parameter. We only
@@ -271,7 +271,7 @@ int officeloader_impl(bool bAllowConsole)
                     if (0 == wcsnicmp(argv2[n], L"-headless", 9)
                         || 0 == wcsnicmp(argv2[n], L"--headless", 10))
                     {
-                        bHeadlessMode = TRUE;
+                        bHeadlessMode = true;
                     }
                 }
             }

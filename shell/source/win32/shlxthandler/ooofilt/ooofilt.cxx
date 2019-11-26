@@ -84,8 +84,8 @@ COooFilter::COooFilter() :
     m_ulPropertyNum(0),
     m_ulCurrentPropertyNum(0),
     m_ulChunkID(1),
-    m_fContents(FALSE),
-    m_fEof(FALSE),
+    m_fContents(false),
+    m_fEof(false),
     m_ChunkPosition(0),
     m_cAttributes(0),
     m_pAttributes(nullptr),
@@ -203,7 +203,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
     *pFlags = IFILTER_FLAGS_OLE_PROPERTIES;
     try
     {
-        m_fContents = FALSE;
+        m_fContents = false;
         m_ulPropertyNum = 0;
         m_ulCurrentPropertyNum = 0;
         if ( m_cAttributes > 0 )
@@ -228,7 +228,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
                      pAttrib[ulNumAttr].GetPropertyPropid() == PID_STG_CONTENTS &&
                      pAttrib[ulNumAttr].GetPropSet() == guidStorage )
                 {
-                    m_fContents = TRUE;
+                    m_fContents = true;
                 }
                 // save the requested properties.
                 m_pAttributes[ulNumAttr] = pAttrib[ulNumAttr];
@@ -237,7 +237,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
         else if ( grfFlags & IFILTER_INIT_APPLY_INDEX_ATTRIBUTES )
         {
             // Filter contents and all pseudo-properties
-            m_fContents = TRUE;
+            m_fContents = true;
 
             m_pAttributes = new CFullPropSpec[COUNT_ATTRIBUTES];
             m_cAttributes = COUNT_ATTRIBUTES;
@@ -255,21 +255,21 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
         else if ( 0 == grfFlags )
         {
             // Filter only contents
-            m_fContents = TRUE;
+            m_fContents = true;
         }
         else
-            m_fContents = FALSE;
+            m_fContents = false;
         // Re-initialize
         if ( m_fContents )
         {
-            m_fEof = FALSE;
+            m_fEof = false;
             m_eState = FilterState::FilteringContent;
             m_ulUnicodeCharsRead = 0;
             m_ChunkPosition = 0;
         }
         else
         {
-            m_fEof = TRUE;
+            m_fEof = true;
             m_eState = FilterState::FilteringProperty;
         }
         m_ulChunkID = 1;
@@ -312,7 +312,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
             if( m_ChunkPosition == m_pContentReader ->getChunkBuffer().size() )
             {
                 m_ulUnicodeBufferLen=0;
-                m_fEof = TRUE;
+                m_fEof = true;
             }
 
             if ( !m_fContents || m_fEof )

@@ -51,7 +51,7 @@ static bool GetMsiPropA( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
         *ppValue = buff;
         return ( strlen(buff) > 0 );
     }
-    return FALSE;
+    return false;
 }
 
 static const char *
@@ -190,11 +190,11 @@ present_in_ui_langs(const char *lang)
     {
         if (strchr (lang, '_') != nullptr)
             if (memcmp (ui_langs[i], lang, std::min(strlen(ui_langs[i]), strlen(lang))) == 0)
-                return TRUE;
+                return true;
         if (strcmp (ui_langs[i], lang) == 0)
-            return TRUE;
+            return true;
     }
-    return FALSE;
+    return false;
 }
 
 namespace {

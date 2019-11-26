@@ -145,19 +145,19 @@ using namespace com::sun::star::accessibility::AccessibleRole;
 #define QUERYXINTERFACE(ainterface) \
 {                           \
     if(pXAcc == nullptr)    \
-    return FALSE;       \
+    return false;       \
     pRContext = pXAcc->getAccessibleContext();  \
     if( !pRContext.is() )   \
 {                       \
-    return FALSE;       \
+    return false;       \
 }                       \
     Reference<X##ainterface> pRXI(pRContext,UNO_QUERY);\
     if( !pRXI.is() )        \
 {                       \
-    return FALSE;       \
+    return false;       \
 }                       \
     *ppXI = pRXI.get(); \
-    return TRUE;            \
+    return true;            \
 }
 
 #define ISDESTROY() \
@@ -178,7 +178,7 @@ m_pIParent(nullptr),
 m_dChildID(0x00),
 m_dFocusChildID(UACC_NO_FOCUS),
 m_hwnd(nullptr),
-m_isDestroy(FALSE),
+m_isDestroy(false),
 m_bRequiresSave(FALSE)
 {
     m_sLocation.m_dLeft=0;
@@ -2021,14 +2021,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FA
         }
 
         int level = 0;
-        bool isFound = FALSE;
+        bool isFound = false;
         while( pParentAcc.is() && !isFound)
         {
             level++;
             pRParentContext = pParentAcc->getAccessibleContext();
             Role = pRParentContext->getAccessibleRole();
             if( (Role == TREE) || (Role == LIST) )
-                isFound = TRUE;
+                isFound = true;
             pParentAcc = pRParentContext->getAccessibleParent();
         }
 
@@ -2539,7 +2539,7 @@ bool CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface**
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
 template<typename T> static HRESULT
@@ -2650,7 +2650,7 @@ CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **
         {
             return FALSE;
         }
-        bool isGet = FALSE;
+        bool isGet = false;
         if(g_pAgent)
             isGet = g_pAgent->GetIAccessibleFromXAccessible(pXAcc, ppIA);
 

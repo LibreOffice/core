@@ -1568,7 +1568,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     OUString aSysPath;
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
-        return FALSE;
+        return false;
     const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
     const OString aToFile(OUStringToOString(aSysPath, aThreadEncoding));
 
@@ -1591,7 +1591,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     // get raw font file data
     const RawFontData xRawFontData( getHDC(), 0 );
     if( !xRawFontData.get() )
-        return FALSE;
+        return false;
 
     // open font file
     sal_uInt32 nFaceNum = 0;
@@ -1601,7 +1601,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     ScopedTrueTypeFont aSftTTF;
     SFErrCodes nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum );
     if( nRC != SFErrCodes::Ok )
-        return FALSE;
+        return false;
 
     TTGlobalFontInfo aTTInfo;
     ::GetTTGlobalFontInfo( aSftTTF.get(), &aTTInfo );
@@ -1647,7 +1647,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     std::unique_ptr<sal_uInt16[]> pMetrics =
         ::GetTTSimpleGlyphMetrics( aSftTTF.get(), aShortIDs, nGlyphCount, aIFSD.mbVertical );
     if( !pMetrics )
-        return FALSE;
+        return false;
     sal_uInt16 nNotDefAdv = pMetrics[0];
     pMetrics[0]         = pMetrics[nNotDef];
     pMetrics[nNotDef]   = nNotDefAdv;

@@ -212,7 +212,7 @@ HRESULT CSOActiveX::Cleanup()
 
     if( mpDispFrame )
     {
-        bool bCloserActivated = FALSE;
+        bool bCloserActivated = false;
 
         CComPtr<IDispatch> pDispDocumentCloser;
         CComVariant aDocCloser( L"com.sun.star.embed.DocumentCloser" );
@@ -715,14 +715,14 @@ void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* /*
     if ( mbReadyForActivation )
         return;
 
-    bool bSuccess = FALSE;
-    bool bFinishDownload = FALSE;
+    bool bSuccess = false;
+    bool bFinishDownload = false;
     if ( !pBytes )
     {
         // means the download is finished, dwSize contains hresult
-        bFinishDownload = TRUE;
+        bFinishDownload = true;
         if ( SUCCEEDED( dwSize ) )
-            bSuccess = TRUE;
+            bSuccess = true;
     }
     else
     {
@@ -757,7 +757,7 @@ void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* /*
                         CComVariant dummyResult;
                         hr = ExecuteFunc( mpDispTempFile, L"writeBytes", aArgs, 1, &dummyResult );
                         if( SUCCEEDED( hr ) )
-                            bSuccess = TRUE;
+                            bSuccess = true;
                     }
                 }
             }
@@ -767,7 +767,7 @@ void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* /*
     if ( !bSuccess )
     {
         // the download failed, let StarOffice download
-        bFinishDownload = TRUE;
+        bFinishDownload = true;
         mpDispTempFile = CComPtr< IDispatch >();
     }
 

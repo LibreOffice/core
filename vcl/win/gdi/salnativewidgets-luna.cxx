@@ -240,13 +240,13 @@ bool WinSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
             break;
         case ControlType::Scrollbar:
             if( nPart == ControlPart::DrawBackgroundHorz || nPart == ControlPart::DrawBackgroundVert )
-                return FALSE;   // no background painting needed
+                return false;   // no background painting needed
             if( nPart == ControlPart::Entire )
                 hTheme = getThemeHandle( mhWnd, L"Scrollbar");
             break;
         case ControlType::Combobox:
             if( nPart == ControlPart::HasBackgroundTexture )
-                return FALSE;   // we do not paint the inner part (ie the selection background/focus indication)
+                return false;   // we do not paint the inner part (ie the selection background/focus indication)
             if( nPart == ControlPart::Entire )
                 hTheme = getThemeHandle( mhWnd, L"Edit");
             else if( nPart == ControlPart::ButtonDown )
@@ -267,14 +267,14 @@ bool WinSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
         case ControlType::Editbox:
         case ControlType::MultilineEditbox:
             if( nPart == ControlPart::HasBackgroundTexture )
-                return FALSE;   // we do not paint the inner part (ie the selection background/focus indication)
+                return false;   // we do not paint the inner part (ie the selection background/focus indication)
                 //return TRUE;
             if( nPart == ControlPart::Entire )
                 hTheme = getThemeHandle( mhWnd, L"Edit");
             break;
         case ControlType::Listbox:
             if( nPart == ControlPart::HasBackgroundTexture )
-                return FALSE;   // we do not paint the inner part (ie the selection background/focus indication)
+                return false;   // we do not paint the inner part (ie the selection background/focus indication)
             if( nPart == ControlPart::Entire || nPart == ControlPart::ListboxWindow )
                 hTheme = getThemeHandle( mhWnd, L"Listview");
             else if( nPart == ControlPart::ButtonDown )
@@ -339,7 +339,7 @@ bool WinSalGraphics::hitTestNativeControl( ControlType,
                               const Point&,
                               bool& )
 {
-    return FALSE;
+    return false;
 }
 
 static bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr)
@@ -996,7 +996,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == ControlType::Progress )
     {
         if( nPart != ControlPart::Entire )
-            return FALSE;
+            return false;
 
         if( ! ImplDrawTheme( hTheme, hDC, PP_BAR, iState, rc, aCaption) )
             return false;
@@ -1051,7 +1051,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == ControlType::ListNode )
     {
         if( nPart != ControlPart::Entire )
-            return FALSE;
+            return false;
 
         ButtonValue aButtonValue = aValue.getTristateVal();
         iPart = TVP_GLYPH;
@@ -1064,7 +1064,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             iState = GLPS_CLOSED;
             break;
         default:
-            return FALSE;
+            return false;
         }
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption );
     }
@@ -1326,7 +1326,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 tools::Rectangle &rNativeBoundingRegion,
                                 tools::Rectangle &rNativeContentRegion )
 {
-    bool bRet = FALSE;
+    bool bRet = false;
 
     // FIXME: rNativeBoundingRegion has a different origin
     //        depending on which part is used; horrors.
@@ -1368,7 +1368,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                 rNativeContentRegion = aRect;
                 rNativeBoundingRegion = rNativeContentRegion;
                 if( !rNativeContentRegion.IsEmpty() )
-                    bRet = TRUE;
+                    bRet = true;
             }
         }
     }
@@ -1382,7 +1382,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             rNativeContentRegion = aRect;
             rNativeBoundingRegion = rNativeContentRegion;
             if( !rNativeContentRegion.IsEmpty() )
-                bRet = TRUE;
+                bRet = true;
         }
     }
     if( (nType == ControlType::Listbox || nType == ControlType::Combobox ) && nPart == ControlPart::Entire )
@@ -1400,7 +1400,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             rNativeContentRegion = aBoxRect;
             rNativeBoundingRegion = rNativeContentRegion;
             if( !aRect.IsEmpty() )
-                bRet = TRUE;
+                bRet = true;
         }
     }
 
@@ -1432,7 +1432,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                         aBoxRect.SetRight( aBoxRect.Left() + aRect.GetWidth() );
                     rNativeContentRegion = aBoxRect;
                     rNativeBoundingRegion = rNativeContentRegion;
-                    bRet = TRUE;
+                    bRet = true;
                 }
             }
         }
@@ -1455,7 +1455,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                 {
                     rNativeContentRegion = aRect;
                     rNativeBoundingRegion = rNativeContentRegion;
-                    bRet = TRUE;
+                    bRet = true;
                 }
             }
         }
@@ -1485,7 +1485,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                 rNativeContentRegion = aRect;
                 rNativeBoundingRegion = rNativeContentRegion;
             }
-            bRet = TRUE;
+            bRet = true;
         }
     }
 
@@ -1517,7 +1517,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             }
         }
         rNativeBoundingRegion = aControlRect;
-        bRet = TRUE;
+        bRet = true;
     }
 
     ReleaseDC( mhWnd, hDC );

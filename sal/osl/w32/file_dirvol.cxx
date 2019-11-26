@@ -40,7 +40,7 @@ BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime)
     SYSTEMTIME  BaseSysTime;
     FILETIME    BaseFileTime;
     FILETIME    FTime;
-    bool        fSuccess = FALSE;
+    bool        fSuccess = false;
 
     BaseSysTime.wYear         = 1970;
     BaseSysTime.wMonth        = 1;
@@ -71,7 +71,7 @@ BOOL FileTimeToTimeValue(const FILETIME *cpFTime, TimeValue *pTimeVal)
 {
     SYSTEMTIME  BaseSysTime;
     FILETIME    BaseFileTime;
-    bool        fSuccess = FALSE;   /* Assume failure */
+    bool        fSuccess = false;   /* Assume failure */
 
     BaseSysTime.wYear         = 1970;
     BaseSysTime.wMonth        = 1;
@@ -277,7 +277,7 @@ static HANDLE WINAPI OpenLogicalDrivesEnum()
 
 static bool WINAPI EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
 {
-    bool        fSuccess = FALSE;
+    bool        fSuccess = false;
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(hEnum);
 
     if ( pEnum )
@@ -288,7 +288,7 @@ static bool WINAPI EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
         {
             CopyMemory( lpBuffer, pEnum->lpCurrent, (nLen + 1) * sizeof(WCHAR) );
             pEnum->lpCurrent += nLen + 1;
-            fSuccess = TRUE;
+            fSuccess = true;
         }
         else
             SetLastError( ERROR_NO_MORE_FILES );
@@ -301,13 +301,13 @@ static bool WINAPI EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
 
 static bool WINAPI CloseLogicalDrivesEnum(HANDLE hEnum)
 {
-    bool        fSuccess = FALSE;
+    bool        fSuccess = false;
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(hEnum);
 
     if ( pEnum )
     {
         HeapFree( GetProcessHeap(), 0, pEnum );
-        fSuccess = TRUE;
+        fSuccess = true;
     }
     else
         SetLastError( ERROR_INVALID_HANDLE );
@@ -370,7 +370,7 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
 
 static bool WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData)
 {
-    bool        fSuccess = FALSE;
+    bool        fSuccess = false;
     LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(hDirectory);
 
     if ( pDirectory )
@@ -382,14 +382,14 @@ static bool WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData
             if ( pDirectory->aFirstData.cFileName[0] )
             {
                 *pFindData = pDirectory->aFirstData;
-                fSuccess = TRUE;
+                fSuccess = true;
                 pDirectory->aFirstData.cFileName[0] = 0;
             }
             else if ( IsValidHandle( pDirectory->hFind ) )
                 fSuccess = FindNextFileW( pDirectory->hFind, pFindData );
             else
             {
-                fSuccess = FALSE;
+                fSuccess = false;
                 SetLastError( ERROR_NO_MORE_FILES );
             }
 
@@ -405,7 +405,7 @@ static bool WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData
 
 static bool WINAPI CloseDirectory(HANDLE hDirectory)
 {
-    bool        fSuccess = FALSE;
+    bool        fSuccess = false;
     LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(hDirectory);
 
     if (pDirectory)
@@ -1717,7 +1717,7 @@ oslFileError SAL_CALL osl_setFileAttributes(
     }
     else
     {
-        fSuccess = FALSE;
+        fSuccess = false;
     }
 
     if ( !fSuccess )

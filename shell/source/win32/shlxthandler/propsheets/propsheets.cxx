@@ -229,11 +229,11 @@ bool CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM 
             LPPROPSHEETPAGE psp = reinterpret_cast<LPPROPSHEETPAGE>(lParam);
             CPropertySheet* pImpl = reinterpret_cast<CPropertySheet*>(psp->lParam);
             pImpl->InitPropPageSummary(hwnd, psp);
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 

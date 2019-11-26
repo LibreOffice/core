@@ -536,11 +536,11 @@ static bool Privilege(LPCTSTR strPrivilege, bool bEnable)
 
     // obtain the processes token
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_DUP_QUERY, &hToken))
-        return FALSE;
+        return false;
 
     // get the luid
     if (!LookupPrivilegeValue(nullptr, strPrivilege, &tp.Privileges[0].Luid))
-        return FALSE;
+        return false;
 
     tp.PrivilegeCount = 1;
 
@@ -551,12 +551,12 @@ static bool Privilege(LPCTSTR strPrivilege, bool bEnable)
 
     // enable or disable the privilege
     if (!AdjustTokenPrivileges(hToken, FALSE, &tp, 0, nullptr, nullptr))
-        return FALSE;
+        return false;
 
     if (!CloseHandle(hToken))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool bIncludeDomain)

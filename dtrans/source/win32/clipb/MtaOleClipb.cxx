@@ -62,8 +62,8 @@ namespace /* private */
     const sal_uInt32 MAX_WAITTIME                   = 10000;  // msec
     const sal_uInt32 MAX_WAIT_SHUTDOWN              = 10000; // msec
 
-    const bool MANUAL_RESET = TRUE;
-    const bool INIT_NONSIGNALED = FALSE;
+    const bool MANUAL_RESET = true;
+    const bool INIT_NONSIGNALED = false;
 
     /*  Cannot use osl conditions because they are blocking
         without waking up on messages sent by another thread

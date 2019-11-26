@@ -43,10 +43,10 @@ static bool GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppV
         MsiGetPropertyW( hMSI, pPropName, buff, &sz );
         *ppValue = buff;
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 

@@ -3472,7 +3472,7 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             SalKeyEvent     aKeyEvt;
             SalEvent        nEvent;
             MSG             aCharMsg;
-            bool            bCharPeek = FALSE;
+            bool            bCharPeek = false;
             UINT            nCharMsg = WM_CHAR;
             bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
@@ -3490,7 +3490,7 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                                              WM_CHAR, WM_CHAR, PM_NOREMOVE | PM_NOYIELD );
                 if ( bCharPeek && (nDeadChar == aCharMsg.wParam) )
                 {
-                    bCharPeek = FALSE;
+                    bCharPeek = false;
                     nDeadChar = 0;
 
                     if ( wParam == VK_BACK )

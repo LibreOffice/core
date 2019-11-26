@@ -26,22 +26,22 @@ struct ltComp
     bool operator()(REFGUID  rguid1, REFGUID  rguid2) const
     {
         if(reinterpret_cast<LONG const *>(&rguid1)[0] < reinterpret_cast<LONG const *>(&rguid2)[0])
-            return TRUE;
+            return true;
         else if(reinterpret_cast<LONG const *>(&rguid1)[0] > reinterpret_cast<LONG const *>(&rguid2)[0])
-            return FALSE;
+            return false;
         if(reinterpret_cast<LONG const *>(&rguid1)[1] < reinterpret_cast<LONG const *>(&rguid2)[1])
-            return TRUE;
+            return true;
         else if(reinterpret_cast<LONG const *>(&rguid1)[1] > reinterpret_cast<LONG const *>(&rguid2)[1])
-            return FALSE;
+            return false;
         if(reinterpret_cast<LONG const *>(&rguid1)[2] < reinterpret_cast<LONG const *>(&rguid2)[2])
-            return TRUE;
+            return true;
         else if(reinterpret_cast<LONG const *>(&rguid1)[2] > reinterpret_cast<LONG const *>(&rguid2)[2])
-            return FALSE;
+            return false;
         if(reinterpret_cast<LONG const *>(&rguid1)[3] < reinterpret_cast<LONG const *>(&rguid2)[3])
-            return TRUE;
+            return true;
         else if(reinterpret_cast<LONG const *>(&rguid1)[3] > reinterpret_cast<LONG const *>(&rguid2)[3])
-            return FALSE;
-        return FALSE;
+            return false;
+        return false;
     }
 };
 

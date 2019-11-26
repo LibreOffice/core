@@ -554,7 +554,7 @@ namespace dxcanvas
                               const_cast<vcl::Window *>(&rWindow), 0) );
 
             // system child window must not receive mouse events
-            mpWindow->SetMouseTransparent( TRUE );
+            mpWindow->SetMouseTransparent( true );
 
             // parent should receive paint messages as well
             mpWindow->SetParentClipMode(ParentClipMode::NoClip);

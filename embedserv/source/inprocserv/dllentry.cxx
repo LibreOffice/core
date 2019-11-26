@@ -100,13 +100,13 @@ namespace {
 
                 int nGuidLen = GetStringFromClassID( *guidList[nInd], &pSubKey[23], 38 );
 
-                bool bLocalSuccess = FALSE;
+                bool bLocalSuccess = false;
                 if ( nGuidLen == 38 )
                 {
                     if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_LOCAL_MACHINE, pSubKey, &hKey ) )
                     {
                         if ( ERROR_SUCCESS == RegSetValueExW( hKey, L"", 0, REG_SZ, reinterpret_cast<const BYTE*>(pLibrary), nLen*sizeof(wchar_t) ) )
-                            bLocalSuccess = TRUE;
+                            bLocalSuccess = true;
                     }
 
                     if ( hKey )

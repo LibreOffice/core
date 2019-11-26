@@ -290,11 +290,11 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
             HANDLE hPrn;
             LPWSTR pPrinterNameW = const_cast<LPWSTR>(o3tl::toW(pPrinter->maDeviceName.getStr()));
             if ( !OpenPrinterW( pPrinterNameW, &hPrn, nullptr ) )
-                return FALSE;
+                return false;
 
             // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
             if( hPrn == HGDI_ERROR )
-                return FALSE;
+                return false;
 
             nSysJobSize = DocumentPropertiesW( nullptr, hPrn,
                                                pPrinterNameW,
@@ -303,7 +303,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
             if( nSysJobSize < 0 )
             {
                 ClosePrinter( hPrn );
-                return FALSE;
+                return false;
             }
             DEVMODEW *pBuffer = static_cast<DEVMODEW*>(_alloca( nSysJobSize ));
             LONG nRet = DocumentPropertiesW( nullptr, hPrn,
@@ -312,7 +312,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
             if( nRet < 0 )
             {
                 ClosePrinter( hPrn );
-                return FALSE;
+                return false;
             }
 
             // the spec version differs between the windows platforms, ie 98,NT,2000/XP
@@ -333,7 +333,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
             if( pDevModeW &&
                 (dmSpecVersion == pDevModeW->dmSpecVersion) &&
                 (dmDriverVersion == pDevModeW->dmDriverVersion) )
-                return TRUE;
+                return true;
         }
         if ( bDelete )
         {
@@ -343,7 +343,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSetup* pSetupData,
@@ -352,10 +352,10 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     HANDLE hPrn;
     LPWSTR pPrinterNameW = const_cast<LPWSTR>(o3tl::toW(pPrinter->maDeviceName.getStr()));
     if ( !OpenPrinterW( pPrinterNameW, &hPrn, nullptr ) )
-        return FALSE;
+        return false;
     // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
     if( hPrn == HGDI_ERROR )
-        return FALSE;
+        return false;
 
     LONG            nRet;
     HWND            hWnd = nullptr;
@@ -369,7 +369,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     if ( nSysJobSize < 0 )
     {
         ClosePrinter( hPrn );
-        return FALSE;
+        return false;
     }
 
     // make Outputbuffer
@@ -412,7 +412,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     if( (nRet < 0) || (pVisibleDlgParent && (nRet == IDCANCEL)) )
     {
         std::free( pOutBuffer );
-        return FALSE;
+        return false;
     }
 
     // fill up string buffers with 0 so they do not influence a JobSetup's memcmp
@@ -436,7 +436,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     pSetupData->SetDriverData(reinterpret_cast<BYTE*>(pOutBuffer));
     pSetupData->SetSystem( JOBSETUP_SYSTEM_WINDOWS );
 
-    return TRUE;
+    return true;
 }
 
 static void ImplDevModeToJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSetup* pSetupData, JobSetFlags nFlags )
@@ -1039,7 +1039,7 @@ static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, const ImplJobSetup*
 {
     HDC hNewDC = ImplCreateSalPrnIC( pPrinter, pSetupData );
     if ( !hNewDC )
-        return FALSE;
+        return false;
 
     if ( pPrinter->mpGraphics )
     {
@@ -1051,7 +1051,7 @@ static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, const ImplJobSetup*
     pPrinter->mpGraphics = ImplCreateSalPrnGraphics( hNewDC );
     pPrinter->mhDC      = hNewDC;
 
-    return TRUE;
+    return true;
 }
 
 
@@ -1094,9 +1094,9 @@ void WinSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 WinSalInfoPrinter::WinSalInfoPrinter() :
     mpGraphics( nullptr ),
     mhDC( nullptr ),
-    mbGraphics( FALSE )
+    mbGraphics( false )
 {
-    m_bPapersInit = FALSE;
+    m_bPapersInit = false;
 }
 
 WinSalInfoPrinter::~WinSalInfoPrinter()
@@ -1151,14 +1151,14 @@ SalGraphics* WinSalInfoPrinter::AcquireGraphics()
         return nullptr;
 
     if ( mpGraphics )
-        mbGraphics = TRUE;
+        mbGraphics = true;
 
     return mpGraphics;
 }
 
 void WinSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 {
-    mbGraphics = FALSE;
+    mbGraphics = false;
 }
 
 bool WinSalInfoPrinter::Setup(weld::Window* pFrame, ImplJobSetup* pSetupData)
@@ -1169,13 +1169,13 @@ bool WinSalInfoPrinter::Setup(weld::Window* pFrame, ImplJobSetup* pSetupData)
         return ImplUpdateSalPrnIC( this, pSetupData );
     }
 
-    return FALSE;
+    return false;
 }
 
 bool WinSalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
 {
     if ( !ImplTestSalJobSetup( this, pSetupData, false ) )
-        return FALSE;
+        return false;
     return ImplUpdateSalPrnIC( this, pSetupData );
 }
 
@@ -1188,7 +1188,7 @@ bool WinSalInfoPrinter::SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData )
         return ImplUpdateSalPrnIC( this, pSetupData );
     }
 
-    return FALSE;
+    return false;
 }
 
 sal_uInt16 WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
@@ -1351,8 +1351,8 @@ WinSalPrinter::WinSalPrinter() :
     mhDC( nullptr ),
     mnError( SalPrinterError::NONE ),
     mnCopies( 0 ),
-    mbCollate( FALSE ),
-    mbAbort( FALSE ),
+    mbCollate( false ),
+    mbAbort( false ),
     mbValid( true )
 {
     SalData* pSalData = GetSalData();
@@ -1418,7 +1418,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
                            ImplJobSetup* pSetupData )
 {
     mnError     = SalPrinterError::NONE;
-    mbAbort     = FALSE;
+    mbAbort     = false;
     mnCopies        = nCopies;
     mbCollate   = bCollate;
 
@@ -1447,7 +1447,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     if ( !hDC )
     {
         mnError = SalPrinterError::General;
-        return FALSE;
+        return false;
     }
 
     // make sure mhDC is set before the printer driver may call our abortproc
@@ -1455,11 +1455,11 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     if ( SetAbortProc( hDC, SalPrintAbortProc ) <= 0 )
     {
         mnError = SalPrinterError::General;
-        return FALSE;
+        return false;
     }
 
     mnError = SalPrinterError::NONE;
-    mbAbort = FALSE;
+    mbAbort = false;
 
     // As the Telecom Balloon Fax driver tends to send messages repeatedly
     // we try to process first all, and then insert a dummy message
@@ -1484,7 +1484,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
         else
         {
             mnError = SalPrinterError::Abort;
-            return FALSE;
+            return false;
         }
     }
 
@@ -1513,10 +1513,10 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
             mnError = SalPrinterError::Abort;
         else
             mnError = SalPrinterError::General;
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 void WinSalPrinter::DoEndDoc(HDC hDC)
@@ -1553,7 +1553,7 @@ bool WinSalPrinter::EndJob()
         mhDC = nullptr;
     }
 
-    return TRUE;
+    return true;
 }
 
 SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobData )

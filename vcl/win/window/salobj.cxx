@@ -35,20 +35,20 @@
 static bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 {
     if ( hWndParent == hWndChild )
-        return TRUE;
+        return true;
 
     HWND hTempWnd = ::GetParent( hWndChild );
     while ( hTempWnd )
     {
         // stop searching if not a child window
         if ( !(GetWindowStyle( hTempWnd ) & WS_CHILD) )
-            return FALSE;
+            return false;
         if ( hTempWnd == hWndParent )
-            return TRUE;
+            return true;
         hTempWnd = ::GetParent( hTempWnd );
     }
 
-    return FALSE;
+    return false;
 }
 
 WinSalObject* ImplFindSalObject( HWND hWndChild )
@@ -174,20 +174,20 @@ bool ImplSalPreDispatchMsg( const MSG* pMsg )
         // process KeyEvents even if the control does not process them itself
         // SysKeys are processed as WM_SYSCOMMAND
         // Char-Events are not processed, as they are not accelerator-relevant
-        bool bWantedKeyCode = FALSE;
+        bool bWantedKeyCode = false;
         // A-Z, 0-9 only when combined with the Control-key
         if ( ((pMsg->wParam >= 65) && (pMsg->wParam <= 90)) ||
              ((pMsg->wParam >= 48) && (pMsg->wParam <= 57)) )
         {
             if ( GetKeyState( VK_CONTROL ) & 0x8000 )
-                bWantedKeyCode = TRUE;
+                bWantedKeyCode = true;
         }
         else if ( ((pMsg->wParam >= VK_F1) && (pMsg->wParam <= VK_F24)) ||
                   ((pMsg->wParam >= VK_SPACE) && (pMsg->wParam <= VK_HELP)) ||
                   (pMsg->wParam == VK_BACK) || (pMsg->wParam == VK_TAB) ||
                   (pMsg->wParam == VK_CLEAR) || (pMsg->wParam == VK_RETURN) ||
                   (pMsg->wParam == VK_ESCAPE) )
-            bWantedKeyCode = TRUE;
+            bWantedKeyCode = true;
         if ( bWantedKeyCode )
         {
             ImplSalYieldMutexAcquireWithWait();
@@ -208,7 +208,7 @@ bool ImplSalPreDispatchMsg( const MSG* pMsg )
              ((nKeyCode >= 65) && (nKeyCode <= 90)) ||
              ((nKeyCode >= 97) && (nKeyCode <= 122)) )
         {
-            bool bRet = FALSE;
+            bool bRet = false;
             ImplSalYieldMutexAcquireWithWait();
             pObject = ImplFindSalObject( pMsg->hwnd );
             if ( pObject )
@@ -219,19 +219,19 @@ bool ImplSalPreDispatchMsg( const MSG* pMsg )
                     if ( pFrame )
                     {
                         if ( ImplHandleSalObjSysCharMsg( pFrame->mhWnd, pMsg->wParam, pMsg->lParam ) )
-                            bRet = TRUE;
+                            bRet = true;
                     }
                 }
             }
             ImplSalYieldMutexRelease();
             if ( bRet )
-                return TRUE;
+                return true;
         }
     }
     else
         pSalData->mnSalObjWantKeyEvt = 0;
 
-    return FALSE;
+    return false;
 }
 
 void ImplSalPostDispatchMsg( const MSG* pMsg )
@@ -619,7 +619,7 @@ void WinSalObject::BeginSetClipRegion( sal_uInt32 nRectCount )
     mpClipRgnData->rdh.nRgnSize  = nRectBufSize;
     SetRectEmpty( &(mpClipRgnData->rdh.rcBound) );
     mpNextClipRect        = reinterpret_cast<RECT*>(&(mpClipRgnData->Buffer));
-    mbFirstClipRect       = TRUE;
+    mbFirstClipRect       = true;
 }
 
 void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
@@ -635,7 +635,7 @@ void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
         pBoundRect->top     = nY;
         pBoundRect->right   = nRight;
         pBoundRect->bottom  = nBottom;
-        mbFirstClipRect = FALSE;
+        mbFirstClipRect = false;
     }
     else
     {
