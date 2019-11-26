@@ -361,14 +361,29 @@ bool EditTextObject::IsVertical() const
     return mpImpl->IsVertical();
 }
 
+bool EditTextObject::GetDirectVertical() const
+{
+    return mpImpl->GetDirectVertical();
+}
+
 bool EditTextObject::IsTopToBottom() const
 {
     return mpImpl->IsTopToBottom();
 }
 
-void EditTextObject::SetVertical( bool bVertical, bool bTopToBottom )
+void EditTextObject::SetVertical( bool bVertical )
 {
-    return mpImpl->SetVertical(bVertical, bTopToBottom);
+    return mpImpl->SetVertical(bVertical);
+}
+
+void EditTextObject::SetRotation( TextRotation nRotation )
+{
+    mpImpl->SetRotation(nRotation);
+}
+
+TextRotation EditTextObject::GetRotation() const
+{
+    return mpImpl->GetRotation();
 }
 
 SvtScriptType EditTextObject::GetScriptType() const
@@ -493,7 +508,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
     , nUserType(OutlinerMode::DontKnow)
     , nScriptType(SvtScriptType::NONE)
     , bVertical(false)
-    , bIsTopToBottomVert(false)
+    , mnRotation(TextRotation::NONE)
 {
     // #i101239# ensure target is an EditEngineItemPool, else
     // fallback to pool ownership. This is needed to ensure that at
@@ -526,7 +541,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
     , nUserType(r.nUserType)
     , nScriptType(r.nScriptType)
     , bVertical(r.bVertical)
-    , bIsTopToBottomVert(r.bIsTopToBottomVert)
+    , mnRotation(r.mnRotation)
 {
     // Do not copy PortionInfo
 
@@ -606,22 +621,42 @@ std::vector<svl::SharedString> EditTextObjectImpl::GetSharedStrings() const
 
 bool EditTextObjectImpl::IsVertical() const
 {
-    return bVertical;
+    return (bVertical && mnRotation == TextRotation::NONE) ||
+        (!bVertical && mnRotation != TextRotation::NONE);
 }
 
 bool EditTextObjectImpl::IsTopToBottom() const
 {
-    return bIsTopToBottomVert;
+    return (bVertical && mnRotation == TextRotation::NONE) ||
+        (!bVertical && mnRotation == TextRotation::TOPTOBOTTOM);
 }
 
-void EditTextObjectImpl::SetVertical( bool bVert, bool bTopToBottom)
+void EditTextObjectImpl::SetVertical( bool bVert)
 {
-    if (bVert != bVertical || bTopToBottom != (bVert && bIsTopToBottomVert))
+    if (bVert != bVertical)
     {
         bVertical = bVert;
-        bIsTopToBottomVert = bVert && bTopToBottom;
         ClearPortionInfo();
     }
+}
+
+bool EditTextObjectImpl::GetDirectVertical() const
+{
+    return bVertical;
+}
+
+void EditTextObjectImpl::SetRotation(TextRotation nRotation)
+{
+    if (mnRotation != nRotation)
+    {
+        mnRotation = nRotation;
+        ClearPortionInfo();
+    }
+}
+
+TextRotation EditTextObjectImpl::GetRotation() const
+{
+    return mnRotation;
 }
 
 
@@ -1031,7 +1066,7 @@ bool EditTextObjectImpl::Equals( const EditTextObjectImpl& rCompare, bool bCompa
             ( nUserType!= rCompare.nUserType ) ||
             ( nScriptType != rCompare.nScriptType ) ||
             ( bVertical != rCompare.bVertical ) ||
-            ( bIsTopToBottomVert != rCompare.bIsTopToBottomVert ) )
+            ( mnRotation != rCompare.mnRotation ) )
         return false;
 
     for (size_t i = 0, n = aContents.size(); i < n; ++i)

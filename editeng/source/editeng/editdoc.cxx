@@ -1903,7 +1903,7 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
     pItemPool(pPool ? pPool : new EditEngineItemPool()),
     nDefTab(DEFTAB),
     bIsVertical(false),
-    bIsTopToBottomVert(false),
+    mnRotation(TextRotation::NONE),
     bIsFixedCellHeight(false),
     bOwnerOfPool(pPool == nullptr),
     bModified(false)
@@ -2049,6 +2049,23 @@ void EditDoc::CreateDefFont( bool bUseStyles )
         if ( bUseStyles )
             pNode->CreateDefFont();
     }
+}
+
+bool EditDoc::IsVertical() const
+{
+    return (bIsVertical && mnRotation == TextRotation::NONE) ||
+        (!bIsVertical && mnRotation != TextRotation::NONE);
+}
+
+bool EditDoc::IsTopToBottom() const
+{
+    return (bIsVertical && mnRotation == TextRotation::NONE) ||
+        (!bIsVertical && mnRotation == TextRotation::TOPTOBOTTOM);
+}
+
+bool EditDoc::GetDirectVertical() const
+{
+    return bIsVertical;
 }
 
 sal_Int32 EditDoc::GetPos(const ContentNode* p) const

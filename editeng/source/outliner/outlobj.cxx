@@ -135,19 +135,32 @@ bool OutlinerParaObject::IsVertical() const
     return mpImpl->mpEditTextObject->IsVertical();
 }
 
+bool OutlinerParaObject::GetDirectVertical() const
+{
+    return mpImpl->mpEditTextObject->GetDirectVertical();
+}
+
 bool OutlinerParaObject::IsTopToBottom() const
 {
     return mpImpl->mpEditTextObject->IsTopToBottom();
 }
 
-void OutlinerParaObject::SetVertical(bool bNew, bool bTopToBottom)
+void OutlinerParaObject::SetVertical(bool bNew)
 {
     const ::o3tl::cow_wrapper< OutlinerParaObjData >* pImpl = &mpImpl;
-    if ( ( *pImpl )->mpEditTextObject->IsVertical() != bNew ||
-        (*pImpl)->mpEditTextObject->IsTopToBottom() != (bNew && bTopToBottom))
+    if ( ( *pImpl )->mpEditTextObject->IsVertical() != bNew)
     {
-        mpImpl->mpEditTextObject->SetVertical(bNew, bTopToBottom);
+        mpImpl->mpEditTextObject->SetVertical(bNew);
     }
+}
+void OutlinerParaObject::SetRotation(TextRotation nRotation)
+{
+    mpImpl->mpEditTextObject->SetRotation(nRotation);
+}
+
+TextRotation OutlinerParaObject::GetRotation() const
+{
+    return mpImpl->mpEditTextObject->GetRotation();
 }
 
 sal_Int32 OutlinerParaObject::Count() const

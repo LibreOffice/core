@@ -341,7 +341,12 @@ namespace sdr
 
                 if (pParaObj)
                 {
-                    pParaObj->SetVertical(pRotateItem->IsVertical(), pRotateItem->IsTopToBottom());
+                    if(pRotateItem->IsVertical() && pRotateItem->IsTopToBottom())
+                        pParaObj->SetRotation(TextRotation::TOPTOBOTTOM);
+                    else if (pRotateItem->IsVertical())
+                        pParaObj->SetRotation(TextRotation::BOTTOMTOTOP);
+                    else
+                        pParaObj->SetRotation(TextRotation::NONE);
 
                     if (bOwnParaObj)
                         delete pParaObj;

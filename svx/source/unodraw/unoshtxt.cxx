@@ -575,7 +575,10 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
                 mpOutliner->SetStyleSheet( 0, pStyleSheet );
 
             if( bVertical )
-                mpOutliner->SetVertical( true, pOutlinerParaObject->IsTopToBottom());
+            {
+                mpOutliner->SetVertical( pOutlinerParaObject->GetDirectVertical());
+                mpOutliner->SetRotation( pOutlinerParaObject->GetRotation());
+            }
         }
 
         // maybe we have to set the border attributes

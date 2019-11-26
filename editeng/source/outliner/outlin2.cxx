@@ -517,9 +517,14 @@ const EditEngine& Outliner::GetEditEngine() const
     return *pEditEngine;
 }
 
-void Outliner::SetVertical( bool bVertical, bool bTopToBottom)
+void Outliner::SetVertical(bool bVertical)
 {
-    pEditEngine->SetVertical(bVertical, bTopToBottom);
+    pEditEngine->SetVertical(bVertical);
+}
+
+void Outliner::SetRotation(TextRotation nRotation)
+{
+    pEditEngine->SetRotation(nRotation);
 }
 
 bool Outliner::IsVertical() const

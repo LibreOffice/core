@@ -744,9 +744,12 @@ public:
     const Size&             GetPaperSize() const                    { return aPaperSize; }
     void                    SetPaperSize( const Size& rSz )         { aPaperSize = rSz; }
 
-    void                    SetVertical( bool bVertical, bool bTopToBottom);
+    void                    SetVertical( bool bVertical);
     bool                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
     bool                    IsTopToBottom() const                   { return GetEditDoc().IsTopToBottom(); }
+    bool                    GetDirectVertical() const               { return GetEditDoc().GetDirectVertical(); }
+    void                    SetRotation( TextRotation nRotation);
+    TextRotation            GetRotation() const                     { return GetEditDoc().GetRotation(); }
 
     bool IsPageOverflow( ) const;
 
