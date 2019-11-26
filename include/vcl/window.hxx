@@ -747,7 +747,7 @@ protected:
     void ImplRefreshFontData(bool bNewFontLists) override;
 
     // FIXME: this is a hack to workaround missing layout functionality
-    SAL_DLLPRIVATE void                 ImplAdjustNWFSizes();
+    virtual void                        ImplAdjustNWFSizes();
 
     virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate) override;
     virtual void                        ClipToPaintRegion( tools::Rectangle& rDstRect ) override;

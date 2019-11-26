@@ -2642,6 +2642,11 @@ Size RadioButton::ImplGetRadioImageSize() const
     return aSize;
 }
 
+void RadioButton::ImplAdjustNWFSizes()
+{
+    ImplSetMinimumNWFSize();
+}
+
 static void LoadThemedImageList(const StyleSettings &rStyleSettings,
                                 std::vector<Image>& rList, const std::vector<OUString> &rResources)
 {
@@ -2869,6 +2874,11 @@ WinBits CheckBox::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle 
          (!pPrevWindow || (pPrevWindow->GetType() != WindowType::CHECKBOX)) )
         nStyle |= WB_GROUP;
     return nStyle;
+}
+
+void CheckBox::ImplAdjustNWFSizes()
+{
+    ImplSetMinimumNWFSize();
 }
 
 const vcl::Font& CheckBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
