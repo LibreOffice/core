@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c106311d",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-11-26T12:29:07Z",
+      "side": 1,
+      "message": "Line spacing can be smaller, than the character height by standard, and sometimes it is a quite useful feature.\n\nTry to limit this change to the affected paragraphs. An example: https://gerrit.libreoffice.org/#/c/83211/",
+      "range": {
+        "startLine": 452,
+        "startChar": 0,
+        "endLine": 458,
+        "endChar": 13
+      },
+      "revId": "e23ba1f9f0d4daa18afc6862850ec66afa08ad75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
