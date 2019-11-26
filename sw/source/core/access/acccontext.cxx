@@ -620,6 +620,48 @@ uno::Reference< XAccessible> SAL_CALL
     return xChild;
 }
 
+css::uno::Sequence<uno::Reference<XAccessible>> SAL_CALL
+    SwAccessibleContext::getAccessibleChildren()
+{
+    SolarMutexGuard aGuard;
+
+    ThrowIfDisposed();
+
+    std::list< sw::access::SwAccessibleChild > aChildren;
+    GetChildren( *GetMap(), aChildren );
+
+    std::vector<uno::Reference<XAccessible>> aRet;
+    aRet.reserve(aChildren.size());
+    for (const auto & rSwChild : aChildren)
+    {
+        uno::Reference< XAccessible > xChild;
+        if( rSwChild.GetSwFrame() )
+        {
+            ::rtl::Reference < SwAccessibleContext > xChildImpl(
+                    GetMap()->GetContextImpl( rSwChild.GetSwFrame(), !m_isDisposing )  );
+            if( xChildImpl.is() )
+            {
+                xChildImpl->SetParent( this );
+                xChild = xChildImpl.get();
+            }
+        }
+        else if ( rSwChild.GetDrawObject() )
+        {
+            ::rtl::Reference < ::accessibility::AccessibleShape > xChildImpl(
+                    GetMap()->GetContextImpl( rSwChild.GetDrawObject(),
+                                              this, !m_isDisposing) );
+            if( xChildImpl.is() )
+                xChild = xChildImpl.get();
+        }
+        else if ( rSwChild.GetWindow() )
+        {
+            xChild = rSwChild.GetWindow()->GetAccessible();
+        }
+        aRet.push_back(xChild);
+    }
+    return comphelper::containerToSequence(aRet);
+}
+
 uno::Reference< XAccessible> SwAccessibleContext::getAccessibleParentImpl()
 {
     SolarMutexGuard aGuard;

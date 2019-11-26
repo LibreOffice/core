@@ -29,10 +29,12 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext3.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include "atklistener.hxx"
 #include "atkwrapper.hxx"
+#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sal/log.hxx>
@@ -129,30 +131,38 @@ void AtkListener::updateChildList(
     css::uno::Reference<css::accessibility::XAccessibleContext> const &
         pContext)
 {
-     m_aChildList.clear();
+    m_aChildList.clear();
 
-     uno::Reference< accessibility::XAccessibleStateSet > xStateSet = pContext->getAccessibleStateSet();
-     if( xStateSet.is()
-         && !xStateSet->contains(accessibility::AccessibleStateType::DEFUNC)
-         && !xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
-     {
-         sal_Int32 nChildren = pContext->getAccessibleChildCount();
-         m_aChildList.resize(nChildren);
-         for(sal_Int32 n = 0; n < nChildren; n++)
-         {
-             try
-             {
-                 m_aChildList[n] = pContext->getAccessibleChild(n);
-             }
-             catch (lang::IndexOutOfBoundsException const&)
-             {
-                 sal_Int32 nChildren2 = pContext->getAccessibleChildCount();
-                 assert(nChildren2 <= n && "consistency?");
-                 m_aChildList.resize(std::min(nChildren2, n));
-                 break;
-             }
-         }
-     }
+    uno::Reference< accessibility::XAccessibleStateSet > xStateSet = pContext->getAccessibleStateSet();
+    if( xStateSet.is()
+        && !xStateSet->contains(accessibility::AccessibleStateType::DEFUNC)
+        && !xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
+    {
+        css::uno::Reference<css::accessibility::XAccessibleContext3> xContext3(pContext, css::uno::UNO_QUERY);
+        if (xContext3.is())
+        {
+            m_aChildList = comphelper::sequenceToContainer<std::vector<css::uno::Reference< css::accessibility::XAccessible >>>(xContext3->getAccessibleChildren());
+        }
+        else
+        {
+            sal_Int32 nChildren = pContext->getAccessibleChildCount();
+            m_aChildList.resize(nChildren);
+            for(sal_Int32 n = 0; n < nChildren; n++)
+            {
+                try
+                {
+                    m_aChildList[n] = pContext->getAccessibleChild(n);
+                }
+                catch (lang::IndexOutOfBoundsException const&)
+                {
+                    sal_Int32 nChildren2 = pContext->getAccessibleChildCount();
+                    assert(nChildren2 <= n && "consistency?");
+                    m_aChildList.resize(std::min(nChildren2, n));
+                    break;
+                }
+            }
+        }
+    }
 }
 
 /*****************************************************************************/
