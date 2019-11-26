@@ -1840,7 +1840,7 @@ boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
     boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
 
     if (Which() == XATTR_FILLSTYLE)
-        aTree.put("which", ".uno:FillStyle");
+        aTree.put("commandName", ".uno:FillStyle");
 
     OUString sValue;
 
@@ -1864,7 +1864,7 @@ boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
         default: break;
     }
 
-    aTree.put("data", sValue);
+    aTree.put("state", sValue);
 
     return aTree;
 }
@@ -2356,9 +2356,9 @@ boost::property_tree::ptree XFillGradientItem::dumpAsJSON() const
     boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
 
     if (Which() == XATTR_FILLGRADIENT)
-        aTree.put("which", ".uno:FillGradient");
+        aTree.put("commandName", ".uno:FillGradient");
 
-    aTree.push_back(std::make_pair("data", GetGradientValue().dumpAsJSON()));
+    aTree.push_back(std::make_pair("state", GetGradientValue().dumpAsJSON()));
 
     return aTree;
 }
