@@ -170,7 +170,8 @@ void OutputDevice::InitClipRegion()
     {
         if ( mbClipRegionSet )
         {
-            mpGraphics->ResetClipRegion();
+            if (mpGraphics)
+                mpGraphics->ResetClipRegion();
             mbClipRegionSet = false;
         }
 
