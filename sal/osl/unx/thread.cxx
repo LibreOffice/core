@@ -88,6 +88,7 @@ typedef struct osl_thread_impl_st
     pthread_cond_t      m_Cond;
 } Thread_Impl;
 
+#if !defined NO_PTHREAD_PRIORITY
 struct osl_thread_priority_st
 {
     int m_Highest;
@@ -96,10 +97,14 @@ struct osl_thread_priority_st
     int m_Below_Normal;
     int m_Lowest;
 };
+#endif
 
 }
 
+#if !defined NO_PTHREAD_PRIORITY
 #define OSL_THREAD_PRIORITY_INITIALIZER { 127, 96, 64, 32, 0 }
+#endif
+
 static void osl_thread_priority_init_Impl();
 
 namespace {
@@ -120,7 +125,9 @@ namespace {
 struct osl_thread_global_st
 {
     pthread_once_t                    m_once;
+#if !defined NO_PTHREAD_PRIORITY
     struct osl_thread_priority_st     m_priority;
+#endif
     struct osl_thread_textencoding_st m_textencoding;
 };
 
@@ -129,7 +136,9 @@ struct osl_thread_global_st
 static struct osl_thread_global_st g_thread =
 {
     PTHREAD_ONCE_INIT,
+#if !defined NO_PTHREAD_PRIORITY
     OSL_THREAD_PRIORITY_INITIALIZER,
+#endif
     OSL_THREAD_TEXTENCODING_INITIALIZER
 };
 
