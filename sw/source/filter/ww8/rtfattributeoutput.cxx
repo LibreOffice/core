@@ -2325,6 +2325,7 @@ void RtfAttributeOutput::CharCrossedOut(const SvxCrossedOutItem& rCrossedOut)
 void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
 {
     short nEsc = rEscapement.GetEsc(), nProp = rEscapement.GetProportionalHeight();
+    sal_Int32 nProp100 = nProp * 100;
     if (DFLT_ESC_PROP == nProp || nProp < 1 || nProp > 100)
     {
         if (DFLT_ESC_SUB == nEsc || DFLT_ESC_AUTO_SUB == nEsc)
@@ -2336,10 +2337,12 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
     else if (DFLT_ESC_AUTO_SUPER == nEsc)
     {
         nEsc = .8 * (100 - nProp);
+        ++nProp100; // A 1 afterwards means 'automatic' according to editeng/rtf/rtfitem.cxx
     }
     else if (DFLT_ESC_AUTO_SUB == nEsc)
     {
         nEsc = .2 * -(100 - nProp);
+        ++nProp100;
     }
 
     const char* pUpDn;
@@ -2359,7 +2362,7 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
     m_aStyles.append('{');
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE);
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_UPDNPROP);
-    m_aStyles.append(static_cast<sal_Int32>(nProp * 100));
+    m_aStyles.append(nProp100);
     m_aStyles.append('}');
     m_aStyles.append(pUpDn);
 
