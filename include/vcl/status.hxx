@@ -79,6 +79,7 @@ private:
     sal_uInt16          mnCurItemId;
     sal_uInt16          mnPercent;
     sal_uInt16          mnPercentCount;
+    sal_uInt32          mnLastProgressPaint_ms;
     bool                mbFormat;
     bool                mbProgressMode;
     bool                mbInUserDraw;
