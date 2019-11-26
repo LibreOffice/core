@@ -1148,11 +1148,6 @@ OUString Application::GetHWOSConfInfo()
     aDetails.append( "; " );
 
     aDetails.append( VclResId(SV_APP_UIRENDER) );
-#if HAVE_FEATURE_OPENGL
-    if ( OpenGLWrapper::isVCLOpenGLEnabled() )
-        aDetails.append( VclResId(SV_APP_GL) );
-    else
-#endif
 #if HAVE_FEATURE_SKIA
     if ( SkiaHelper::isVCLSkiaEnabled() )
     {
@@ -1166,6 +1161,11 @@ OUString Application::GetHWOSConfInfo()
                 break;
         }
     }
+    else
+#endif
+#if HAVE_FEATURE_OPENGL
+    if ( OpenGLWrapper::isVCLOpenGLEnabled() )
+        aDetails.append( VclResId(SV_APP_GL) );
     else
 #endif
         aDetails.append( VclResId(SV_APP_DEFAULT) );
