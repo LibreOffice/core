@@ -3658,11 +3658,15 @@ bool ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
     return nRet;
 }
 
+namespace {
+
 enum class DeferPolicy
 {
     Blocked,
     Allowed
 };
+
+}
 
 // Remember to release the solar mutex on success!
 static WinSalFrame* ProcessOrDeferMessage( HWND hWnd, INT nMsg, WPARAM pWParam = 0,
@@ -3704,11 +3708,15 @@ static WinSalFrame* ProcessOrDeferMessage( HWND hWnd, INT nMsg, WPARAM pWParam =
     return pFrame;
 }
 
+namespace {
+
 enum class PostedState
 {
     IsPosted,
     IsInitial
 };
+
+}
 
 static bool ImplHandlePostPaintMsg( HWND hWnd, RECT* pRect,
                                     PostedState eProcessed = PostedState::IsPosted )

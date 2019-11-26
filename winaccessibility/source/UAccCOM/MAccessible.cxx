@@ -72,6 +72,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
+namespace {
+
 enum XInterfaceIndex {
     XI_COMPONENT    = 0x01,
     XI_TEXT         = 0x02,
@@ -88,6 +90,8 @@ enum XInterfaceIndex {
     XI_ATTRIBUTE    = 0x0D,
     XI_NULL         = -1
 };
+
+}
 
 // IA2 states mapping, and name
 // maintenance the consistency, change one array, change the three all

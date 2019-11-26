@@ -27,11 +27,15 @@
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
+namespace {
+
 enum DdeItemType
 {
     DDEITEM,
     DDEGETPUTITEM
 };
+
+}
 
 struct DdeItemImpData
 {

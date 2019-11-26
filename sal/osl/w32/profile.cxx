@@ -74,10 +74,14 @@ static void copy_ustr_n( void *dest, const void *source, size_t length ) { memcp
 
 typedef FILETIME osl_TStamp;
 
+namespace {
+
 enum osl_TLockMode
 {
     un_lock, read_lock, write_lock
 };
+
+}
 
 struct osl_TFile
 {
