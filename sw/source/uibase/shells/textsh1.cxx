@@ -1474,56 +1474,53 @@ void SwTextShell::Execute(SfxRequest &rReq)
     break;
     case SID_SPELLCHECK_IGNORE_ALL:
     {
-        if(!rWrtSh.HasSelection())
+        OUString sApplyText;
+        const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+        if (pItem2)
+            sApplyText = pItem2->GetValue();
+
+        const OUString sGrammarType("Grammar");
+        const OUString sSpellingType("Spelling");
+
+        if(sApplyText == sGrammarType)
         {
-            OUString sApplyText;
-            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
-            if (pItem2)
-                sApplyText = pItem2->GetValue();
-
-            const OUString sGrammarType("Grammar");
-            const OUString sSpellingType("Spelling");
-
-            if(sApplyText == sGrammarType)
+            linguistic2::ProofreadingResult aGrammarCheckRes;
+            sal_Int32 nErrorInResult = -1;
+            uno::Sequence< OUString > aSuggestions;
+            sal_Int32 nErrorPosInText = -1;
+            SwRect aToFill;
+            bool bCorrectionRes = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
+            if(bCorrectionRes)
             {
-                linguistic2::ProofreadingResult aGrammarCheckRes;
-                sal_Int32 nErrorInResult = -1;
-                uno::Sequence< OUString > aSuggestions;
-                sal_Int32 nErrorPosInText = -1;
-                SwRect aToFill;
-                bool bCorrectionRes = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
-                if(bCorrectionRes)
+                try {
+                    uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
+                    aGrammarCheckRes.xProofreader->ignoreRule(
+                        aGrammarCheckRes.aErrors[ nErrorInResult ].aRuleIdentifier,
+                            aGrammarCheckRes.aLocale );
+                    // refresh the layout of the actual paragraph (faster)
+                    SwPaM *pPaM = rWrtSh.GetCursor();
+                    if (pPaM)
+                        SwEditShell::IgnoreGrammarErrorAt( *pPaM );
+                    // refresh the layout of all paragraphs (workaround to launch a dictionary event)
+                    xDictionary->setActive(false);
+                    xDictionary->setActive(true);
+                }
+                catch( const uno::Exception& )
                 {
-                    try {
-                        uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
-                        aGrammarCheckRes.xProofreader->ignoreRule(
-                            aGrammarCheckRes.aErrors[ nErrorInResult ].aRuleIdentifier,
-                                aGrammarCheckRes.aLocale );
-                        // refresh the layout of the actual paragraph (faster)
-                        SwPaM *pPaM = rWrtSh.GetCursor();
-                        if (pPaM)
-                            SwEditShell::IgnoreGrammarErrorAt( *pPaM );
-                        // refresh the layout of all paragraphs (workaround to launch a dictionary event)
-                        xDictionary->setActive(false);
-                        xDictionary->setActive(true);
-                    }
-                    catch( const uno::Exception& )
-                    {
-                    }
                 }
             }
-            else if (sApplyText == sSpellingType)
+        }
+        else if (sApplyText == sSpellingType)
+        {
+            SwRect aToFill;
+            uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt( rWrtSh.GetCorrection(nullptr, aToFill) );
+            uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
+            OUString sWord(xSpellAlt->getWord());
+            linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic( xDictionary,
+                    sWord, false, OUString() );
+            if (linguistic::DictionaryError::NONE != nAddRes && !xDictionary->getEntry(sWord).is())
             {
-                SwRect aToFill;
-                uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt( rWrtSh.GetCorrection(nullptr, aToFill) );
-                uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
-                OUString sWord(xSpellAlt->getWord());
-                linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic( xDictionary,
-                        sWord, false, OUString() );
-                if (linguistic::DictionaryError::NONE != nAddRes && !xDictionary->getEntry(sWord).is())
-                {
-                    SvxDicError(rWrtSh.GetView().GetFrameWeld(), nAddRes);
-                }
+                SvxDicError(rWrtSh.GetView().GetFrameWeld(), nAddRes);
             }
         }
     }
