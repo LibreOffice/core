@@ -328,6 +328,8 @@ protected:
      */
     sal_uInt32 getTableDepthDifference() const { return mnTableDepthNew - mnTableDepth; }
 
+    sal_uInt32 getTableDepth() const { return mnTableDepthNew; }
+
     /**
        Action to be carried out at the end of the last paragraph of a
        cell.
