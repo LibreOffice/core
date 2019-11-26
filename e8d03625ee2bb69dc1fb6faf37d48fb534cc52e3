@@ -22,6 +22,30 @@
       "revId": "e8d03625ee2bb69dc1fb6faf37d48fb534cc52e3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_06919f4e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-11-26T09:35:15Z",
+      "side": 1,
+      "message": "I dropped that sentence, now that I squashed the previously seperate bug, which I couldn\u0027t reproduce anymore. It\u0027s not a kwin bug.",
+      "parentUuid": "7f7f9b97_a343fd6b",
+      "range": {
+        "startLine": 16,
+        "startChar": 16,
+        "endLine": 16,
+        "endChar": 42
+      },
+      "revId": "e8d03625ee2bb69dc1fb6faf37d48fb534cc52e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
