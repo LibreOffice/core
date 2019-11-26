@@ -38,6 +38,7 @@
 
 class ImpEditEngine;
 class SvxTabStop;
+enum class TextRotation;
 
 
 #define CHARPOSGROW     16
@@ -742,7 +743,7 @@ private:
     SvxFont         aDefFont;           //faster than ever from the pool!!
     sal_uInt16      nDefTab;
     bool            bIsVertical:1;
-    bool            bIsTopToBottomVert : 1;
+    TextRotation    mnRotation;
     bool            bIsFixedCellHeight:1;
 
     bool            bOwnerOfPool:1;
@@ -769,10 +770,12 @@ public:
     void            SetDefTab( sal_uInt16 nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
     sal_uInt16      GetDefTab() const           { return nDefTab; }
 
-    void            SetVertical( bool bVertical, bool bTopToBottom )
-                    { bIsVertical = bVertical; bIsTopToBottomVert = bVertical && bTopToBottom; }
-    bool            IsVertical() const              { return bIsVertical; }
-    bool            IsTopToBottom() const           { return bIsTopToBottomVert; }
+    void            SetVertical( bool bVertical )   { bIsVertical = bVertical; }
+    bool            IsVertical() const;
+    bool            IsTopToBottom() const;
+    bool            GetDirectVertical() const;
+    void            SetRotation( TextRotation nRotation )   { mnRotation = nRotation; }
+    TextRotation    GetRotation() const                     { return mnRotation; }
 
     void            SetFixedCellHeight( bool bUseFixedCellHeight )  { bIsFixedCellHeight = bUseFixedCellHeight; }
     bool            IsFixedCellHeight() const               { return bIsFixedCellHeight; }

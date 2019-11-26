@@ -431,9 +431,19 @@ const Size& EditEngine::GetPaperSize() const
     return pImpEditEngine->GetPaperSize();
 }
 
-void EditEngine::SetVertical( bool bVertical, bool bTopToBottom )
+void EditEngine::SetVertical(bool bVertical)
 {
-    pImpEditEngine->SetVertical( bVertical, bTopToBottom);
+    pImpEditEngine->SetVertical(bVertical);
+}
+
+void EditEngine::SetRotation(TextRotation nRotation)
+{
+    pImpEditEngine->SetRotation(nRotation);
+}
+
+TextRotation EditEngine::GetRotation() const
+{
+    return pImpEditEngine->GetRotation();
 }
 
 bool EditEngine::IsVertical() const
@@ -444,6 +454,11 @@ bool EditEngine::IsVertical() const
 bool EditEngine::IsTopToBottom() const
 {
     return pImpEditEngine->IsTopToBottom();
+}
+
+bool EditEngine::GetDirectVertical() const
+{
+    return pImpEditEngine->GetDirectVertical();
 }
 
 void EditEngine::SetFixedCellHeight( bool bUseFixedCellHeight )
