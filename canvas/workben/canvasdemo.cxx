@@ -82,7 +82,6 @@ class DemoRenderer
         rendering::ViewState   maViewState;
         rendering::RenderState maRenderState;
         uno::Sequence< double > maColorBlack;
-        uno::Sequence< double > maColorWhite;
         uno::Sequence< double > maColorRed;
         uno::Reference< rendering::XCanvas > mxCanvas;
         uno::Reference< rendering::XCanvasFont > mxDefaultFont;
@@ -96,7 +95,6 @@ class DemoRenderer
             maViewState(),
             maRenderState(),
             maColorBlack( vcl::unotools::colorToStdColorSpaceSequence( COL_BLACK) ),
-            maColorWhite( vcl::unotools::colorToStdColorSpaceSequence( COL_WHITE) ),
             maColorRed( vcl::unotools::colorToStdColorSpaceSequence( COL_RED) ),
             mxCanvas(xCanvas),
             mxDefaultFont(),
