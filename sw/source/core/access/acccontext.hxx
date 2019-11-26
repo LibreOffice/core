@@ -23,6 +23,7 @@
 #include "accframe.hxx"
 #include <accmap.hxx>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext3.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -46,6 +47,7 @@ class SwAccessibleContext :
     public ::cppu::WeakImplHelper<
                 css::accessibility::XAccessible,
                 css::accessibility::XAccessibleContext,
+                css::accessibility::XAccessibleContext3,
                 css::accessibility::XAccessibleComponent,
                 css::accessibility::XAccessibleEventBroadcaster,
                 css::lang::XServiceInfo
@@ -219,6 +221,9 @@ public:
     // Return the specified child or NULL if index is invalid.
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex) override;
+
+    virtual css::uno::Sequence<css::uno::Reference< css::accessibility::XAccessible>> SAL_CALL
+        getAccessibleChildren() override;
 
     // Return a reference to the parent.
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
