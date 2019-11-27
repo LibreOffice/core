@@ -748,7 +748,7 @@ bool ComboBox::EventNotify( NotifyEvent& rNEvt )
 
             case KEY_RETURN:
             {
-                if ((rNEvt.GetWindow() == m_pImpl->m_pSubEdit) && IsInDropDown())
+                if (rNEvt.GetWindow() == m_pImpl->m_pSubEdit)
                 {
                     m_pImpl->m_pImplLB->ProcessKeyInput( aKeyEvt );
                     bDone = true;
