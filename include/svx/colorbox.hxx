@@ -78,6 +78,8 @@ public:
     bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
 
     DECL_LINK(WindowEventListener, VclWindowEvent&, void);
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 class ListBoxColorWrapper
