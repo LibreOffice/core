@@ -12,7 +12,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sal_osl))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl,\
 	sal/qa/osl/condition/osl_Condition \
-	$(if $(filter $(OS),WNT),,sal/qa/osl/file/osl_File) \
+	sal/qa/osl/file/osl_File \
 	sal/qa/osl/file/osl_old_test_file \
 	sal/qa/osl/file/test_cpy_wrt_file \
 	sal/qa/osl/getsystempathfromfileurl/test-getsystempathfromfileurl \
@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl,\
 
 $(eval $(call gb_CppunitTest_use_libraries,sal_osl,\
 	sal \
+	tl \
 ))
 
 # the test uses the library created by Module_DLL
