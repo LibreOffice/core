@@ -202,7 +202,7 @@
 #define RID_SVXSTR_GRDT81_DEF                       "Neon Light"
 #define RID_SVXSTR_GRDT82_DEF                       "Sunshine"
 #define RID_SVXSTR_GRDT83_DEF                       "Present"
-#define RID_SVXSTR_GRDT84_DEF                       "Mahagoni"
+#define RID_SVXSTR_GRDT84_DEF                       "Mahogany"
 // Reference-strings for standard-hatch-table
 #define RID_SVXSTR_HATCH0_DEF                       "Black 45 Degrees Wide"
 #define RID_SVXSTR_HATCH1_DEF                       "Black 45 Degrees"
