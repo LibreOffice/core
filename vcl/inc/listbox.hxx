@@ -220,6 +220,7 @@ private:
     bool mbCenter : 1;           ///< center Text output
     bool mbRight : 1;            ///< right align Text output
     bool mbEdgeBlending : 1;
+    bool mbIsComboboxDropdown : 1;
 
     Link<ImplListBoxWindow*,void>  maScrollHdl;
     Link<LinkParamNone*,void>      maSelectHdl;
