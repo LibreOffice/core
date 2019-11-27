@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_57050013",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-11-27T22:00:14Z",
+      "side": 1,
+      "message": "while you read the object here, where is the data actually _used_?",
+      "revId": "d10fae7de246938772a241120a28a22fce45f406",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_b70c9441",
+        "filename": "drawinglayer/source/tools/emfpimageattributes.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-11-27T22:00:14Z",
+      "side": 1,
+      "message": "Not needed here",
+      "revId": "d10fae7de246938772a241120a28a22fce45f406",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
