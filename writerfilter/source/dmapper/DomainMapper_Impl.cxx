@@ -6384,7 +6384,11 @@ void DomainMapper_Impl::SetCurrentRedlineRevertProperties( const uno::Sequence<b
 // the context is destroyed.
 void DomainMapper_Impl::RemoveTopRedline( )
 {
-    assert( m_aRedlines.top().size( ) > 0 );
+    if (m_aRedlines.top().empty())
+    {
+        SAL_WARN("writerfilter.dmapper", "RemoveTopRedline called with empty stack");
+        throw uno::Exception("RemoveTopRedline failed", nullptr);
+    }
     m_aRedlines.top().pop_back( );
     m_currentRedline.clear();
 }
