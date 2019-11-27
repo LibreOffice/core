@@ -70,6 +70,8 @@ public:
     void EnsurePaletteManager();
 
     DECL_LINK(WindowEventListener, VclWindowEvent&, void);
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 class ListBoxColorWrapper

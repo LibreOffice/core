@@ -4108,6 +4108,13 @@ void SvxColorListBox::SelectEntry(const Color& rColor)
     ShowPreview(m_aSelectedColor);
 }
 
+boost::property_tree::ptree SvxColorListBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree = MenuButton::DumpAsPropertyTree();
+    aTree.put("type", "colorlistbox");
+    return aTree;
+}
+
 ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pTopLevel)
     : m_xButton(std::move(pControl))
     , m_pTopLevel(pTopLevel)
