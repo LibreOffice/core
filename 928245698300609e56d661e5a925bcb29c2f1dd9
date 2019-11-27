@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_72b36d99",
+        "filename": "core/basic/qa/basic_coverage/test_StarDesktop.vb",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-27T11:35:04Z",
+      "side": 1,
+      "message": "This will fail; you likely forgot to change to\n\n   \n StarDesktop.supportsService(\"com.sun.star.frame.Desktop\")",
+      "range": {
+        "startLine": 12,
+        "startChar": 6,
+        "endLine": 12,
+        "endChar": 47
+      },
+      "revId": "928245698300609e56d661e5a925bcb29c2f1dd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
