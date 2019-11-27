@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_3248955a",
+        "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2340,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-11-27T08:52:58Z",
+      "side": 1,
+      "message": "editeng/rtfitem.cxx: yes - I had found that out as well and changed the code comment to point to that as the more authoritative place.  The commit message lists the other place which copies the export routine.\n\nP.S. The original comment was supposed to be impedit4 anyway...",
+      "range": {
+        "startLine": 2340,
+        "startChar": 69,
+        "endLine": 2340,
+        "endChar": 92
+      },
+      "revId": "f59aefbd4339153ef0b236ef59cd4387d8a956f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
