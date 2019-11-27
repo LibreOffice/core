@@ -287,6 +287,8 @@ public:
     static ReferenceMark GetReferenceMark( ScViewData& rViewData, ScDocShell* pDocSh,
                                     long nX1, long nX2, long nY1, long nY2,
                                     long nTab, const Color& rColor );
+
+    void            LOKPasteFunctionData( sal_uInt32 nIndex );
 };
 
 //  ScInputHdlState
