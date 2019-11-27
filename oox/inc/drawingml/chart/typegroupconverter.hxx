@@ -86,7 +86,6 @@ struct TypeGroupInfo
     bool                mbCategoryAxis;         /// True = X axis contains categories.
     bool                mbSwappedAxesSet;       /// True = X axis and Y axis are swapped.
     bool                mbSupportsStacking;     /// True = data points can be stacked on each other.
-    bool                mbReverseSeries;        /// True = insert unstacked series in reverse order.
     bool                mbPictureOptions;       /// True = bitmaps support options from c:pictureOptions.
 };
 
