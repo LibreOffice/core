@@ -483,6 +483,7 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
     mbCenter            = ( nWinStyle & WB_CENTER );
     mbSimpleMode        = ( nWinStyle & WB_SIMPLEMODE );
     mbSort              = ( nWinStyle & WB_SORT );
+    mbIsComboboxDropdown = ( nWinStyle & WB_DROPDOWN );
     mbEdgeBlending      = false;
 
     // pb: #106948# explicit mirroring for calc
@@ -1637,7 +1638,9 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
         mnCurrentPos = nSelect;
         if(SelectEntries( nSelect, eLET, bShift, bCtrl, bCurPosChange))
         {
-            mbTravelSelect = true;
+            // tdf#129043 Correctly deliver events when changing values with arrow keys in combobox
+            if (mbIsComboboxDropdown && IsReallyVisible())
+                mbTravelSelect = true;
             mnSelectModifier = rKEvt.GetKeyCode().GetModifier();
             ImplCallSelect();
             mbTravelSelect = false;
