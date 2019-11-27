@@ -45,6 +45,9 @@
 #include <oox/helper/propertyset.hxx>
 #include <boost/logic/tribool.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/svdobj.hxx>
+
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include "rtfdocumentimpl.hxx"
 
@@ -1045,6 +1048,22 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 xPropertySet->setPropertyValue(
                     "CustomShapeGeometry",
                     uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
+            }
+            else if (SdrObject* pObject = GetSdrObjectFromXShape(xShape))
+            {
+                Point aRef1 = pObject->GetSnapRect().Center();
+                Point aRef2(aRef1);
+                if (obFlipH == true)
+                {
+                    // Horizontal mirror means a vertical reference line.
+                    aRef2.AdjustY(1);
+                }
+                if (obFlipV == true)
+                {
+                    // Vertical mirror means a horizontal reference line.
+                    aRef2.AdjustX(1);
+                }
+                pObject->Mirror(aRef1, aRef2);
             }
         }
 
