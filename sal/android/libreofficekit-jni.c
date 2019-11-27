@@ -104,6 +104,9 @@ jboolean libreofficekit_initialize(JNIEnv* env,
         close(fd);
         LOGI("Setting FONTCONFIG_FILE to %s", fontsConfPath);
         setenv("FONTCONFIG_FILE", fontsConfPath, 1);
+        // DEBUG:
+        //setenv("FC_DEBUG", "8191", 1); // log everything
+        //Java_org_libreoffice_android_Bootstrap_redirect_1stdio(NULL, NULL, JNI_TRUE);
     }
     free(fontsConfPath);
 
