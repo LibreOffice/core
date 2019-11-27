@@ -2654,7 +2654,8 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
     if( !xXText.is() )
         return;
 
-    sal_Int32 nTextRotateAngle = 0;
+    sal_Int32 nTextPreRotateAngle = 0;
+    double nTextRotateAngle = 0;
     bool bIsFontworkShape(presetWarp.startsWith("text") && (presetWarp != "textNoShape"));
 
 #define DEFLRINS 254
@@ -2705,14 +2706,14 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         {
             for ( const auto& rProp : std::as_const(aProps) )
             {
-                if ( rProp.Name == "TextPreRotateAngle" && ( rProp.Value >>= nTextRotateAngle ) )
+                if ( rProp.Name == "TextPreRotateAngle" && ( rProp.Value >>= nTextPreRotateAngle ) )
                 {
-                    if ( nTextRotateAngle == -90 )
+                    if ( nTextPreRotateAngle == -90 )
                     {
                         sWritingMode = "vert";
                         bVertical = true;
                     }
-                    else if ( nTextRotateAngle == -270 )
+                    else if ( nTextPreRotateAngle == -270 )
                     {
                         sWritingMode = "vert270";
                         bVertical = true;
@@ -2722,6 +2723,8 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                 }
                 else if (rProp.Name == "AdjustmentValues")
                     rProp.Value >>= aAdjustmentSeq;
+                else if( rProp.Name == "TextRotateAngle" )
+                    rProp.Value >>= nTextRotateAngle;
                 else if (rProp.Name == "TextPath")
                 {
                     rProp.Value >>= aTextPathSeq;
@@ -2779,7 +2782,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                                XML_anchor, sVerticalAlignment,
                                XML_anchorCtr, bHorizontalCenter ? "1" : nullptr,
                                XML_vert, sWritingMode,
-                               XML_rot, (nTextRotateAngle != 0) ? oox::drawingml::calcRotationValue( nTextRotateAngle * 100 ).getStr() : nullptr );
+                               XML_rot, ((nTextPreRotateAngle + nTextRotateAngle) != 0) ? oox::drawingml::calcRotationValue( (nTextPreRotateAngle + nTextRotateAngle) * 100 ).getStr() : nullptr );
         if (bIsFontworkShape)
         {
             if (aAdjustmentSeq.hasElements())
