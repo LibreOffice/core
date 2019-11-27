@@ -788,7 +788,7 @@
 #define RID_SVXSTR_GRDT81                                   NC_("RID_SVXSTR_GRDT81", "Neon Light")
 #define RID_SVXSTR_GRDT82                                   NC_("RID_SVXSTR_GRDT82", "Sunshine")
 #define RID_SVXSTR_GRDT83                                   NC_("RID_SVXSTR_GRDT83", "Present")
-#define RID_SVXSTR_GRDT84                                   NC_("RID_SVXSTR_GRDT84", "Mahagoni")
+#define RID_SVXSTR_GRDT84                                   NC_("RID_SVXSTR_GRDT84", "Mahogany")
 // /gradients
 #define RID_SVXSTR_HATCH0                                   NC_("RID_SVXSTR_HATCH0", "Black 45 Degrees Wide")
 #define RID_SVXSTR_HATCH1                                   NC_("RID_SVXSTR_HATCH1", "Black 45 Degrees")
