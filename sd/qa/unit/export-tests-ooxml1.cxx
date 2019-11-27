@@ -81,6 +81,7 @@ public:
     void testTdf111884();
     void testTdf112633();
     void testTdf128952();
+    void testTdf127090();
     void testCustomXml();
     void testTdf94238();
     void testPictureTransparency();
@@ -118,6 +119,7 @@ public:
     CPPUNIT_TEST(testTdf111884);
     CPPUNIT_TEST(testTdf112633);
     CPPUNIT_TEST(testTdf128952);
+    CPPUNIT_TEST(testTdf127090);
     CPPUNIT_TEST(testCustomXml);
     CPPUNIT_TEST(testTdf94238);
     CPPUNIT_TEST(testTdf125554);
@@ -827,6 +829,18 @@ void SdOOXMLExportTest1::testTdf128952()
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm/a:off", "y", "-360");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm/a:ext", "cx", "1919880");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm/a:ext", "cy", "1462680");
+}
+
+void SdOOXMLExportTest1::testTdf127090()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf127090.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr", "rot", "-5400000");
 }
 
 void SdOOXMLExportTest1::testCustomXml()
