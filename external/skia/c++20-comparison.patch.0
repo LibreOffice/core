@@ -1,0 +1,19 @@
+--- src/shaders/SkLights.h
++++ src/shaders/SkLights.h
+@@ -80,14 +80,14 @@
+             return *this;
+         }
+ 
+-        bool operator==(const Light& other) {
++        bool operator==(const Light& other) const {
+             return (fType      == other.fType) &&
+                    (fColor     == other.fColor) &&
+                    (fDirOrPos  == other.fDirOrPos) &&
+                    (fIntensity == other.fIntensity);
+         }
+ 
+-        bool operator!=(const Light& other) { return !(this->operator==(other)); }
++        bool operator!=(const Light& other) const { return !(this->operator==(other)); }
+ 
+     private:
+         friend class SkLights;

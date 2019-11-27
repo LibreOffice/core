@@ -21,7 +21,8 @@ skia_patches := \
     no-trace-resources-on-exit.patch.1 \
     fix-alpha-difference-copy.patch.1 \
     libvulkan-name.patch.1 \
-    share-grcontext.patch.1
+    share-grcontext.patch.1 \
+    c++20-comparison.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
