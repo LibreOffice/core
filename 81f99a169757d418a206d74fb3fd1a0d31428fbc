@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_97cf1b55",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-11-27T06:51:35Z",
+      "side": 1,
+      "message": "No this variable is only local, only need in this function.\nmanual:\nThe -g option forces variables to be created or modified at the global scope, even when declare is executed in a shell function. It is ignored in all other cases.",
+      "parentUuid": "7f7f9b97_f72f6f3c",
+      "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_97f71bd4",
         "filename": "bin/symstore.sh",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-11-26T23:59:59Z",
       "side": 1,
       "message": "do you expect more than one match here?",
+      "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_77d27f02",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-11-27T06:51:35Z",
+      "side": 1,
+      "message": "In good case is found one file, but look to my EMail in some case found more, then ist better save all",
+      "parentUuid": "7f7f9b97_97f71bd4",
       "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_f7076f81",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-11-27T06:51:35Z",
+      "side": 1,
+      "message": "jop it is wrong, but i think is uppercase look to TEMPFILE, MAX_KEEP, change to ALL_PDBS",
+      "parentUuid": "7f7f9b97_77fa7fbd",
+      "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_d7111306",
         "filename": "bin/symstore.sh",
         "patchSetId": 1
@@ -81,6 +135,24 @@
       "writtenOn": "2019-11-26T23:59:59Z",
       "side": 1,
       "message": "That\u0027s just noise, no?",
+      "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_57d503e4",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-11-27T06:51:35Z",
+      "side": 1,
+      "message": "symstore.exe made only output at the end",
+      "parentUuid": "7f7f9b97_d7111306",
       "revId": "81f99a169757d418a206d74fb3fd1a0d31428fbc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
