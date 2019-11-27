@@ -898,7 +898,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
         addPolygonToPath(rPoly, aPath);
         aPath.setFillType(SkPath::kEvenOdd_FillType);
         // TrackFrame is not supposed to paint outside of the polygon (usually rectangle),
-        // but wider stoke width usually results in that, so ensure the requirement
+        // but wider stroke width usually results in that, so ensure the requirement
         // by clipping.
         SkAutoCanvasRestore autoRestore(mSurface->getCanvas(), true);
         mSurface->getCanvas()->clipRect(aPath.getBounds(), SkClipOp::kIntersect, false);
