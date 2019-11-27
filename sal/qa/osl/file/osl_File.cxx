@@ -282,6 +282,7 @@ namespace {
 /** Check for the file and directory access right.
 */
 enum class oslCheckMode {
+    Exist,
     OpenAccess,
     ReadAccess,
     WriteAccess
@@ -334,6 +335,10 @@ static bool checkDirectory(const OUString& str, oslCheckMode nCheckMode)
     {
         switch (nCheckMode)
         {
+            case oslCheckMode::Exist:
+                if (rc == ::osl::FileBase::E_None)
+                    bCheckResult = true;
+                break;
             case oslCheckMode::OpenAccess:
                 if (rc == osl::FileBase::E_None)
                     bCheckResult = true;
@@ -4125,6 +4130,7 @@ namespace osl_Directory
 
         void open_004()
         {
+#if !defined(_WIN32)
             Directory testDirectory(aTmpName4);
 
             nError1 = testDirectory.open();
@@ -4136,6 +4142,7 @@ namespace osl_Directory
 
             CPPUNIT_ASSERT_MESSAGE("test for open function: open a file instead of a directory",
                                      (osl::FileBase::E_NOTDIR == nError1) || (osl::FileBase::E_ACCES == nError1));
+#endif
         }
 
         CPPUNIT_TEST_SUITE(open);
@@ -5169,11 +5176,11 @@ public:
                 deleteTestFile(aTmpName6);
             if (ifFileExist(aTmpName4) == sal_True)
                 deleteTestFile(aTmpName4);
-            if (checkDirectory(aTmpName4, osl_Check_Mode_Exist) == sal_True)
+            if (checkDirectory(aTmpName4, oslCheckMode::Exist) == sal_True)
                 deleteTestDirectory(aTmpName4);
             if (ifFileExist(aTmpName3) == sal_True)
                 deleteTestFile(aTmpName3);
-            if (checkDirectory(aTmpName3, osl_Check_Mode_Exist) == sal_True)
+            if (checkDirectory(aTmpName3, oslCheckMode::Exist) == sal_True)
                 deleteTestDirectory(aTmpName3);
 
             OUString aUStr(aUserDirectoryURL);
