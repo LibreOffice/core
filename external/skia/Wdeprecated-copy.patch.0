@@ -1,0 +1,24 @@
+--- include/core/SkSurfaceProps.h
++++ include/core/SkSurfaceProps.h
+@@ -63,7 +63,6 @@
+     };
+     SkSurfaceProps(InitType);
+     SkSurfaceProps(uint32_t flags, InitType);
+-    SkSurfaceProps(const SkSurfaceProps& other);
+ 
+     uint32_t flags() const { return fFlags; }
+     SkPixelGeometry pixelGeometry() const { return fPixelGeometry; }
+--- src/image/SkSurface.cpp
++++ src/image/SkSurface.cpp
+@@ -52,11 +52,6 @@
+     : fFlags(flags), fPixelGeometry(pg)
+ {}
+ 
+-SkSurfaceProps::SkSurfaceProps(const SkSurfaceProps& other)
+-    : fFlags(other.fFlags)
+-    , fPixelGeometry(other.fPixelGeometry)
+-{}
+-
+ ///////////////////////////////////////////////////////////////////////////////
+ 
+ SkSurface_Base::SkSurface_Base(int width, int height, const SkSurfaceProps* props)

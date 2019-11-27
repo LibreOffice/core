@@ -23,6 +23,7 @@ skia_patches := \
     libvulkan-name.patch.1 \
     share-grcontext.patch.1 \
     c++20-comparison.patch.0 \
+    Wdeprecated-copy.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
