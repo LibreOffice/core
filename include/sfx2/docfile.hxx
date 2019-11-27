@@ -69,35 +69,22 @@ class SFX2_DLLPUBLIC SfxMedium final : public SvRefBase
 public:
 
                         SfxMedium();
-                        /**
-                         * @param pSet Takes ownership
-                         */
                         SfxMedium( const OUString &rName,
                                    StreamMode nOpenMode,
                                    std::shared_ptr<const SfxFilter> pFilter = nullptr,
-                                   std::unique_ptr<SfxItemSet> pSet = nullptr );
-                        /**
-                         * @param pSet Takes ownership
-                         */
+                                   const std::shared_ptr<SfxItemSet>& pSet = nullptr );
                         SfxMedium( const OUString &rName,
                                    const OUString &rReferer,
                                    StreamMode nOpenMode,
                                    std::shared_ptr<const SfxFilter> pFilter = nullptr,
-                                   std::unique_ptr<SfxItemSet> pSet = nullptr );
-
-                        /**
-                         * @param pSet does NOT take ownership
-                         */
+                                   const std::shared_ptr<SfxItemSet>& pSet = nullptr );
                         SfxMedium( const css::uno::Reference< css::embed::XStorage >& xStorage,
-                                    const OUString& rBaseURL,
-                                    const SfxItemSet* pSet=nullptr );
-                        /**
-                         * @param pSet does NOT take ownership
-                         */
+                                   const OUString& rBaseURL,
+                                   const std::shared_ptr<SfxItemSet>& pSet = nullptr  );
                         SfxMedium( const css::uno::Reference< css::embed::XStorage >& xStorage,
-                                    const OUString& rBaseURL,
-                                    const OUString& rTypeName,
-                                    const SfxItemSet* pSet=nullptr );
+                                   const OUString& rBaseURL,
+                                   const OUString& rTypeName,
+                                   const std::shared_ptr<SfxItemSet>& pSet = nullptr );
                         SfxMedium( const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
 
                         virtual ~SfxMedium() override;

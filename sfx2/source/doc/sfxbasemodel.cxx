@@ -3739,11 +3739,11 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     if ( !m_pData->m_pObjectShell.is() )
         throw io::IOException(); // TODO:
 
-    SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
-    TransformParameters( SID_SAVEASDOC, aMediaDescriptor, aSet );
+    std::shared_ptr<SfxAllItemSet> xSet( new SfxAllItemSet(m_pData->m_pObjectShell->GetPool()) );
+    TransformParameters( SID_SAVEASDOC, aMediaDescriptor, *xSet );
 
     // TODO/LATER: maybe a special URL "private:storage" should be used
-    const SfxStringItem* pItem = aSet.GetItem<SfxStringItem>(SID_FILTER_NAME, false);
+    const SfxStringItem* pItem = xSet->GetItem<SfxStringItem>(SID_FILTER_NAME, false);
     sal_Int32 nVersion = SOFFICE_FILEFORMAT_CURRENT;
     if( pItem )
     {
@@ -3765,7 +3765,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
         m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion, false );
 
         // BaseURL is part of the ItemSet
-        SfxMedium aMedium( xStorage, OUString(), &aSet );
+        SfxMedium aMedium( xStorage, OUString(), xSet );
         aMedium.CanDisposeStorage_Impl( false );
         if ( aMedium.GetFilter() )
         {
