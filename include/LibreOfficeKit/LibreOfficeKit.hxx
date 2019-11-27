@@ -757,6 +757,16 @@ public:
         mpDoc->pClass->removeTextContext(mpDoc, nWindowId, nBefore, nAfter);
     }
 
+    /**
+     * Select the Calc function to be pasted into the formula input box
+     *
+     * @param nIndex is the index of the selected function
+     */
+    void completeFunction(int nIndex)
+    {
+        mpDoc->pClass->completeFunction(mpDoc, nIndex);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
