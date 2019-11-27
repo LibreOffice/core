@@ -1348,7 +1348,7 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
 
     if (bInvalidate)
     {
-        // Rate limit how often we paint, otherwise in some loading scenerios we can spend significant
+        // Rate limit how often we paint, otherwise in some loading scenarios we can spend significant
         // time just painting progress bars.
         sal_uInt32 nTime_ms = osl_getGlobalTimer();
         if ((nTime_ms - mnLastProgressPaint_ms) > 100)
