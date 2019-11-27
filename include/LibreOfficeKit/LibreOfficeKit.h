@@ -427,6 +427,9 @@ struct _LibreOfficeKitDocumentClass
                        int* pFontHeight,
                        int pOrientation);
 
+    /// @see lok::Document::completeFunction().
+    void (*completeFunction) (LibreOfficeKitDocument* pThis, int nIndex);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
