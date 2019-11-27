@@ -36,10 +36,15 @@ void MenuButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
 void MenuButton::ExecuteMenu()
 {
+    mbInPopupMode = true;
+
     Activate();
 
     if (!mpMenu && !mpFloatingWindow)
+    {
+        mbInPopupMode = false;
         return;
+    }
 
     Size aSize = GetSizePixel();
     SetPressed( true );
@@ -53,6 +58,7 @@ void MenuButton::ExecuteMenu()
         if (IsDisposed())
             return;
 
+        mbInPopupMode = false;
         mnCurItemId = mpMenu->GetCurItemId();
         msCurItemIdent = mpMenu->GetCurItemIdent();
     }
@@ -69,6 +75,7 @@ void MenuButton::ExecuteMenu()
             vcl::Window::GetDockingManager()->StartPopupMode(mpFloatingWindow, aRect, nFlags);
         }
     }
+    mbInPopupMode = false;
     SetPressed(false);
     if (mnCurItemId)
     {
@@ -96,26 +103,16 @@ void MenuButton::CancelMenu()
     }
 }
 
-bool MenuButton::MenuShown() const
+bool MenuButton::InPopupMode() const
 {
-    if (!mpMenu && !mpFloatingWindow)
-        return false;
-
-    if (mpMenu)
-       return PopupMenu::GetActivePopupMenu() == mpMenu;
-    else
-    {
-        if (mpFloatingWindow->GetType() == WindowType::FLOATINGWINDOW)
-            return static_cast<const FloatingWindow*>(mpFloatingWindow.get())->IsInPopupMode();
-        else
-            return vcl::Window::GetDockingManager()->IsInPopupMode(mpFloatingWindow);
-    }
+    return mbInPopupMode;
 }
 
 MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
     : PushButton(WindowType::MENUBUTTON)
     , mnCurItemId(0)
     , mbDelayMenu(false)
+    , mbInPopupMode(false)
 {
     mnDDStyle = PushButtonDropdownStyle::MenuButton;
     ImplInit(pParent, nWinBits);

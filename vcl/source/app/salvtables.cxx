@@ -2624,7 +2624,7 @@ public:
 
     virtual bool get_active() const override
     {
-        return m_xMenuButton->MenuShown();
+        return m_xMenuButton->InPopupMode();
     }
 
     virtual void set_inconsistent(bool /*inconsistent*/) override
