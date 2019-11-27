@@ -104,6 +104,9 @@ private:
     void createColorWindow();
     void LockWidthRequest();
     ColorWindow* getColorWindow() const;
+
+    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+
 public:
     ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pWindow);
     ~ColorListBox();

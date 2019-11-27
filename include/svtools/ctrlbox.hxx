@@ -254,6 +254,7 @@ private:
     void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
     DECL_LINK(ValueSelectHdl, SvtValueSet*, void);
     DECL_LINK(FocusHdl, weld::Widget&, void);
+    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
     DECL_LINK(NoneHdl, weld::Button&, void);
 
     void            UpdateEntries();

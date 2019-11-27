@@ -154,7 +154,6 @@ private:
     DECL_LINK(SelectPaletteHdl, weld::ComboBox&, void);
     DECL_LINK(AutoColorClickHdl, weld::Button&, void);
     DECL_LINK(OpenPickerClickHdl, weld::Button&, void);
-    DECL_LINK(FocusHdl, weld::Widget&, void);
 
     static bool SelectValueSetEntry(ColorValueSet* pColorSet, const Color& rColor);
     static NamedColor GetSelectEntryColor(SvtValueSet const * pColorSet);
@@ -175,6 +174,8 @@ public:
     void                SelectEntry(const NamedColor& rColor);
     void                SelectEntry(const Color& rColor);
     NamedColor          GetSelectEntryColor() const;
+
+    DECL_LINK(FocusHdl, weld::Widget&, void);
 
     virtual void        statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 

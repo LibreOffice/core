@@ -1880,7 +1880,10 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
 
 IMPL_LINK_NOARG(ColorWindow, FocusHdl, weld::Widget&, void)
 {
-    mxColorSet->GrabFocus();
+    if (mxColorSet->IsNoSelection() && mpDefaultButton)
+        mpDefaultButton->grab_focus();
+    else
+        mxColorSet->GrabFocus();
 }
 
 void ColorWindow::ShowNoneButton()
@@ -2081,7 +2084,9 @@ IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)
 {
     NamedColor aNamedColor = &rButton == mxButtonAutoColor.get() ? GetAutoColor() : GetNoneColor();
 
+    mxColorSet->SetNoSelection();
     mxRecentColorSet->SetNoSelection();
+    mpDefaultButton = &rButton;
 
     if (maMenuButton.get_active())
         maMenuButton.set_active(false);
@@ -2265,14 +2270,12 @@ void ColorWindow::SelectEntry(const NamedColor& rNamedColor)
     if (mxButtonAutoColor->get_visible() && (rColor == COL_TRANSPARENT || rColor == COL_AUTO))
     {
         mpDefaultButton = mxButtonAutoColor.get();
-        mxButtonAutoColor->grab_focus();
         return;
     }
 
     if (mxButtonNoneColor->get_visible() && rColor == COL_NONE_COLOR)
     {
         mpDefaultButton = mxButtonNoneColor.get();
-        mxButtonNoneColor->grab_focus();
         return;
     }
 
@@ -4123,9 +4126,16 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Win
     , m_nSlotId(0)
     , m_bShowNoneButton(false)
 {
+    m_xButton->connect_toggled(LINK(this, ColorListBox, ToggleHdl));
     m_aSelectedColor = GetAutoColor(m_nSlotId);
     LockWidthRequest();
     ShowPreview(m_aSelectedColor);
+}
+
+IMPL_LINK(ColorListBox, ToggleHdl, weld::ToggleButton&, rButton, void)
+{
+    if (rButton.get_active())
+        getColorWindow()->FocusHdl(*m_xButton);
 }
 
 ColorListBox::~ColorListBox()

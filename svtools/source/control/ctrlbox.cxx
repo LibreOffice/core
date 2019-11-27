@@ -1536,6 +1536,7 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
 
     m_xTopLevel->connect_focus_in(LINK(this, SvtLineListBox, FocusHdl));
     m_xControl->set_popover(m_xTopLevel.get());
+    m_xControl->connect_toggled(LINK(this, SvtLineListBox, ToggleHdl));
 
     // lock size to these maxes height/width so it doesn't jump around in size
     m_xControl->set_label(GetLineStyleName(SvxBorderLineStyle::NONE));
@@ -1561,6 +1562,12 @@ IMPL_LINK_NOARG(SvtLineListBox, FocusHdl, weld::Widget&, void)
         m_xNoneButton->grab_focus();
     else
         m_xLineSet->GrabFocus();
+}
+
+IMPL_LINK(SvtLineListBox, ToggleHdl, weld::ToggleButton&, rButton, void)
+{
+    if (rButton.get_active())
+        FocusHdl(*m_xTopLevel);
 }
 
 IMPL_LINK_NOARG(SvtLineListBox, NoneHdl, weld::Button&, void)
@@ -1595,15 +1602,9 @@ sal_Int32 SvtLineListBox::GetStylePos( sal_Int32 nListPos )
 void SvtLineListBox::SelectEntry(SvxBorderLineStyle nStyle)
 {
     if (nStyle == SvxBorderLineStyle::NONE)
-    {
         m_xLineSet->SetNoSelection();
-        m_xNoneButton->grab_focus();
-    }
     else
-    {
         m_xLineSet->SelectItem(static_cast<sal_Int16>(nStyle) + 1);
-        m_xLineSet->GrabFocus();
-    }
     UpdatePreview();
 }
 
