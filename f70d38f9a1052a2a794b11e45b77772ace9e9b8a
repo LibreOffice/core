@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_b787b4b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-27T21:27:10Z",
+      "side": 1,
+      "message": "You mean open_004?  There is two tests named open_004 in sal/qa/osl/file/osl_File.cxx.  Which one was broken, and how?",
+      "revId": "f70d38f9a1052a2a794b11e45b77772ace9e9b8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
