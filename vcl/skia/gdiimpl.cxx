@@ -301,7 +301,7 @@ void SkiaSalGraphicsImpl::destroySurface()
     // otherwise destroying the surface will reference the context. This is
     // handled by calling destroySurface() before destroying the context.
     // However we also need to flush the surface before destroying it,
-    // otherwise when destroing the context later there still could be queued
+    // otherwise when destroying the context later there still could be queued
     // commands referring to the surface data. This is probably a Skia bug,
     // but work around it here.
     if (mSurface)
