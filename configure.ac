@@ -8492,7 +8492,11 @@ if test  "$test_freetype" = "yes"; then
     SYSTEM_FREETYPE=TRUE
 else
     FREETYPE_CFLAGS="${ISYSTEM}${WORKDIR}/UnpackedTarball/freetype/include"
-    FREETYPE_LIBS="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
+    if test "x$ac_config_site_64bit_host" = xYES; then
+        FREETYPE_LIBS="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib64 -lfreetype"
+    else
+        FREETYPE_LIBS="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
+    fi
 fi
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)
