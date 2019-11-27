@@ -287,7 +287,7 @@ public:
     OUString m_aLogicName;
     OUString m_aLongName;
 
-    mutable std::unique_ptr<SfxItemSet> m_pSet;
+    mutable std::shared_ptr<SfxItemSet> m_pSet;
     mutable std::unique_ptr<INetURLObject> m_pURLObj;
 
     std::shared_ptr<const SfxFilter> m_pFilter;
@@ -3210,20 +3210,20 @@ void SfxMedium::CompleteReOpen()
     pImpl->bUseInteractionHandler = bUseInteractionHandler;
 }
 
-SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, std::unique_ptr<SfxItemSet> pInSet) :
+SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, const std::shared_ptr<SfxItemSet>& pInSet) :
     pImpl(new SfxMedium_Impl)
 {
-    pImpl->m_pSet = std::move( pInSet );
+    pImpl->m_pSet = pInSet;
     pImpl->m_pFilter = std::move(pFilter);
     pImpl->m_aLogicName = rName;
     pImpl->m_nStorOpenMode = nOpenMode;
     Init_Impl();
 }
 
-SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, std::unique_ptr<SfxItemSet> pInSet) :
+SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, const std::shared_ptr<SfxItemSet>& pInSet) :
     pImpl(new SfxMedium_Impl)
 {
-    pImpl->m_pSet = std::move(pInSet);
+    pImpl->m_pSet = pInSet;
     SfxItemSet * s = GetItemSet();
     if (s->GetItem(SID_REFERER) == nullptr) {
         s->Put(SfxStringItem(SID_REFERER, rReferer));
@@ -3302,7 +3302,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
 }
 
 
-SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const SfxItemSet* p ) :
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const std::shared_ptr<SfxItemSet>& p ) :
     pImpl(new SfxMedium_Impl)
 {
     OUString aType = SfxFilter::GetTypeFromStorage(rStor);
@@ -3320,7 +3320,7 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
 }
 
 
-SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const OUString &rTypeName, const SfxItemSet* p ) :
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const OUString &rTypeName, const std::shared_ptr<SfxItemSet>& p ) :
     pImpl(new SfxMedium_Impl)
 {
     pImpl->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4EA( rTypeName );
