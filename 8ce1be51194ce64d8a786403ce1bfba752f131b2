@@ -22,6 +22,30 @@
       "revId": "8ce1be51194ce64d8a786403ce1bfba752f131b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_72a4cda6",
+        "filename": "basic/qa/basic_coverage/test_types_conversion.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2019-11-27T10:37:24Z",
+      "side": 1,
+      "message": "Tests including locales are present in https://opengrok.libreoffice.org/xref/core/basic/qa/basic_coverage/da-DK/ for instance and the locale for these tests are set in https://opengrok.libreoffice.org/xref/core/basic/qa/cppunit/test_vba.cxx?r\u003d1b83d562#147 imho ...",
+      "parentUuid": "7f7f9b97_72992dc2",
+      "range": {
+        "startLine": 41,
+        "startChar": 30,
+        "endLine": 41,
+        "endChar": 62
+      },
+      "revId": "8ce1be51194ce64d8a786403ce1bfba752f131b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
