@@ -38,6 +38,7 @@ private:
     OString         msCurItemIdent;
     sal_uInt16      mnCurItemId;
     bool            mbDelayMenu;
+    bool            mbStartingMenu;
     Link<MenuButton*,void> maActivateHdl;
     Link<MenuButton*,void> maSelectHdl;
 
@@ -62,7 +63,7 @@ public:
     virtual void    Select();
 
     void            ExecuteMenu();
-    bool            MenuShown() const;
+    bool            InPopupMode() const;
     void            CancelMenu();
 
     //if false then the whole button launches the menu
