@@ -51,6 +51,24 @@
       "revId": "17d185a94dbd533ba4d80fc8a77f1534727466b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f46f6af9",
+        "filename": "cui/uiconfig/ui/optgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-27T16:04:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f7f9b97_d4b58e7f",
+      "revId": "17d185a94dbd533ba4d80fc8a77f1534727466b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
