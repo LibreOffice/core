@@ -652,6 +652,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
     {
         uno::Reference<XCoordinateSystem> xCooSys = pVCooSys->getModel();
         sal_Int32 nDimCount = xCooSys->getDimension();
+        bool bComplexCategoryAllowed = ChartTypeHelper::isSupportingComplexCategory(AxisHelper::getChartTypeByIndex(xCooSys, 0));
 
         for (sal_Int32 nDimIndex = 0; nDimIndex < nDimCount; ++nDimIndex)
         {
@@ -676,7 +677,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
                     if (nDimIndex == 0)
                         AxisHelper::checkDateAxis( aSourceScale, pCatProvider, bDateAxisAllowed );
 
-                    bool bHasComplexCat = pCatProvider && pCatProvider->hasComplexCategories();
+                    bool bHasComplexCat = pCatProvider && pCatProvider->hasComplexCategories() && bComplexCategoryAllowed;
                     aSourceScale.ShiftedCategoryPosition = isCategoryPositionShifted(aSourceScale, bHasComplexCat);
 
                     m_aAxisUsageList[xAxis].aAutoScaling = ScaleAutomatism(aSourceScale, rNullDate);

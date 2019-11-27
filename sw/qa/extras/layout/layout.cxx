@@ -2447,6 +2447,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124796)
         "15");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129054)
+{
+    SwDoc* pDoc = createDoc("tdf129054.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Test the size of diameter of Pie chart.
+    sal_Int32 nYTop
+        = getXPath(pXmlDoc,
+                   "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[4]/polyline[1]/point[1]",
+                   "y")
+              .toInt32();
+    sal_Int32 nYBottom
+        = getXPath(
+              pXmlDoc,
+              "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[4]/polyline[1]/point[31]",
+              "y")
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4810), nYTop - nYBottom);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116925)
 {
     SwDoc* pDoc = createDoc("tdf116925.docx");
