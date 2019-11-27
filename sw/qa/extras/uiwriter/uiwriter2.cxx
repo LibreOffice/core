@@ -19,6 +19,8 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/scheduler.hxx>
@@ -29,6 +31,8 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <flyfrm.hxx>
 #include <fmtanchr.hxx>
+//#include <format.hxx>
+//#include <frmfmt.hxx>
 #include <UndoManager.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
@@ -40,6 +44,7 @@
 #include <svl/stritem.hxx>
 #include <svx/svxids.hrc>
 #include <comphelper/lok.hxx>
+#include <tblafmt.hxx>
 #include <txtfrm.hxx>
 #include <redline.hxx>
 #include <view.hxx>
@@ -679,6 +684,58 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
     CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf115026_tableAutoFormat_lostPageBreak)
+{
+    SwDoc* pDoc = createDoc(); //"tdf115026_tableAutoFormat_lostPageBreak.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->Insert("TableStyles - testing pagebreak");
+    pWrtShell->SplitNode();
+
+    SwTableAutoFormat* pStyle = pDoc->MakeTableStyle("PageBreak TableStyle");
+    SvxFormatBreakItem aBreak(SvxBreak::PageAfter, 0);
+    //SAL_WARN("JCL","DefaultStyle by default had break["<<(int)pStyle->GetBreak().GetBreak()<<"] but is now setting break["<<(int)aBreak.GetBreak()<<"]");
+    pStyle->SetBreak(aBreak);
+    SvxBrushItem aBackground(Color(0xFF00FF), RES_BACKGROUND);
+    pStyle->GetBoxFormat(0).SetBackground(aBackground);
+    CPPUNIT_ASSERT_MESSAGE("PageBreak was applied to autoformat style",
+                           pStyle->GetBreak() == aBreak);
+
+    SwInsertTableOptions tableOpt(SwInsertTableFlags::NONE, 0);
+    //does this actually get me a modifiable version of the table???
+    SwTable& rTable = const_cast<SwTable&>(pWrtShell->InsertTable(tableOpt, 4, 4)); //, pStyle));
+    //SwTable &rTable = const_cast<SwTable&>(*pDoc->InsertTable(tableOpt, aPos, 4, 4, 0, pStyle ));
+
+    SwTable* pTable = SwTable::FindTable(rTable.GetFrameFormat());
+    CPPUNIT_ASSERT_MESSAGE("A Table Exists", pTable);
+    pStyle->RestoreTableProperties(*pTable);
+
+    /*
+RestoreTableProperties is not actually doing anything. Probably the table really is const - or else this is working on a copy and not
+on the actual table. But how to get an editable copy of the table - for some bizarre reason all of the inserttable
+commands return a const SwTable...  Yet, even the creation using the autoformatstyle fails to affect the break,
+(although background IS set) so I am at a bit of a loss here... No unit test examples to copy to get a non-const SwTable*
+*/
+    pStyle->RestoreTableProperties(rTable);
+
+    //SwTableFormat* pFormat = rTable.GetFrameFormat();
+    //I can never get this to work. Always undefined compile error.... SvxFormatBreakItem tableBreak(pFormat->GetBreak());
+    //SAL_WARN("JCL","The table itself now has break["<<(int)tableBreak.GetBreak()<<"]");
+
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"]
+        <<= OUString("Office Open XML Text"); //IOException if saving as writer8
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE("table fits on one page(but autostyle should have added a pagebreak)", 2, getPages());
+
+    pStyle = pDoc->MakeTableStyle("Default TableStyle");
+    pStyle->RestoreTableProperties(rTable);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("TableStyle does not remove pagebreak", 2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
