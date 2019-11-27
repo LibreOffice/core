@@ -419,6 +419,17 @@ bool ChartTypeHelper::isSupportingDateAxis( const uno::Reference< chart2::XChart
     return true;
 }
 
+bool ChartTypeHelper::isSupportingComplexCategory( const uno::Reference< chart2::XChartType >& xChartType )
+{
+    if( xChartType.is() )
+    {
+        OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+            return false;
+    }
+    return true;
+}
+
 bool ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( const uno::Reference< chart2::XChartType >& xChartType )
 {
     if(xChartType.is())
