@@ -795,13 +795,13 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     OUString entryForAuto = sAutoStr + " (" +
                                 autoIconTheme.GetDisplayName() +
                                 ")";
-    m_xIconStyleLB->append_text(entryForAuto);
+    m_xIconStyleLB->append("auto", entryForAuto); // index 0 means choose style automatically
 
     // separate auto and other icon themes
     m_xIconStyleLB->append_separator("");
 
     for (auto const& installIconTheme : mInstalledIconThemes)
-        m_xIconStyleLB->append_text(installIconTheme.GetDisplayName());
+        m_xIconStyleLB->append(installIconTheme.GetThemeId(), installIconTheme.GetDisplayName());
 
     m_xIconStyleLB->set_active(0);
 
@@ -918,15 +918,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     const sal_Int32 nStyleLB_NewSelection = m_xIconStyleLB->get_active();
     if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
     {
-        // 0 means choose style automatically
-        if (nStyleLB_NewSelection == 0)
-            aMiscOptions.SetIconTheme("auto");
-        else
-        {
-            const sal_Int32 pos = m_xIconStyleLB->get_active();
-            const vcl::IconThemeInfo& iconThemeId = mInstalledIconThemes.at(pos-1);
-            aMiscOptions.SetIconTheme(iconThemeId.GetThemeId());
-        }
+        aMiscOptions.SetIconTheme(m_xIconStyleLB->get_active_id());
         nStyleLB_InitialSelection = nStyleLB_NewSelection;
     }
 
