@@ -857,6 +857,24 @@ DECLARE_RTFIMPORT_TEST(testOleInline, "ole-inline.rtf")
                          getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf128611, "tdf128611.rtf")
+{
+    auto aPolyPolySequence
+        = getProperty<uno::Sequence<uno::Sequence<awt::Point>>>(getShape(1), "PolyPolygon");
+    CPPUNIT_ASSERT(aPolyPolySequence.hasElements());
+    uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(1), rPolygon.getLength());
+    sal_Int32 nY1 = rPolygon[0].Y;
+    sal_Int32 nY2 = rPolygon[1].Y;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 6242
+    // - Actual  : 3438
+    // i.e. the vertical flip was missing, and the y1 > y2 assert failed, because the line pointed
+    // from top left to bottom right, not bottom left to top right.
+    CPPUNIT_ASSERT_GREATER(nY2, nY1);
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo80742, "fdo80742.rtf")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(
