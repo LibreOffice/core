@@ -21,6 +21,7 @@
 #include <rtl/ustring.hxx>
 
 #include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -280,8 +281,12 @@ void SdExportTest::testTransparentBackground()
 
 void SdExportTest::testMediaEmbedding()
 {
-    if (!OpenGLWrapper::isVCLOpenGLEnabled())
+#ifdef _WIN32
+    // This seems broken. This test should not be disabled for all cases except when OpenGL
+    // is found to be working, just because in some OpenGL setups this breaks (per the commit log message).
+    if (!OpenGLWrapper::isVCLOpenGLEnabled() && !SkiaHelper::isVCLSkiaEnabled())
         return;
+#endif
 
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"), ODP);
 
