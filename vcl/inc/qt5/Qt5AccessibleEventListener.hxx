@@ -17,7 +17,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-class Qt5AccessibleEventListener
+class Qt5AccessibleEventListener final
     : public cppu::WeakImplHelper<css::accessibility::XAccessibleEventListener>
 {
 public:

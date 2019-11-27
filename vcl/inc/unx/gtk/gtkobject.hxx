@@ -25,7 +25,7 @@
 #include <salobj.hxx>
 #include <unx/gtk/gtkframe.hxx>
 
-class GtkSalObject : public SalObject
+class GtkSalObject final : public SalObject
 {
     SystemEnvData     m_aSystemData;
     GtkWidget*          m_pSocket;

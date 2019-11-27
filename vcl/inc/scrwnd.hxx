@@ -39,7 +39,7 @@ namespace o3tl {
     template<> struct typed_flags<WheelMode> : is_typed_flags<WheelMode, 0x003f> {};
 }
 
-class ImplWheelWindow : public FloatingWindow
+class ImplWheelWindow final : public FloatingWindow
 {
 private:
 
@@ -62,8 +62,6 @@ private:
     void                ImplRecalcScrollValues();
 
                         DECL_LINK(ImplScrollHdl, Timer *, void);
-
-protected:
 
     virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;

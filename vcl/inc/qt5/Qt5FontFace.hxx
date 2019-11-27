@@ -31,7 +31,7 @@ class FontAttributes;
 class FontSelectPattern;
 class QFont;
 
-class Qt5FontFace : public PhysicalFontFace
+class Qt5FontFace final : public PhysicalFontFace
 {
 public:
     static Qt5FontFace* fromQFont(const QFont& rFont);
@@ -49,11 +49,10 @@ public:
     rtl::Reference<LogicalFontInstance>
     CreateFontInstance(const FontSelectPattern& rFSD) const override;
 
-protected:
+private:
     Qt5FontFace(const Qt5FontFace&);
     Qt5FontFace(const FontAttributes& rFA, const QString& rFontID);
 
-private:
     const QString m_aFontId;
     mutable FontCharMapRef m_xCharMap;
     mutable vcl::FontCapabilities m_aFontCapabilities;

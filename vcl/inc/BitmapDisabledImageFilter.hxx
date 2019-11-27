@@ -13,7 +13,7 @@
 
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapDisabledImageFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapDisabledImageFilter final : public BitmapFilter
 {
 public:
     BitmapDisabledImageFilter() {}

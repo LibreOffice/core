@@ -34,12 +34,11 @@ class SalXLib;
 class X11SalGraphics;
 class SalX11Display;
 
-class X11SalInstance : public SalGenericInstance
+class X11SalInstance final : public SalGenericInstance
 {
 private:
     std::unordered_map< Atom, css::uno::Reference< css::datatransfer::clipboard::XClipboard > > m_aInstances;
 
-protected:
     SalXLib *mpXLib;
 
     virtual SalX11Display* CreateDisplay() const;

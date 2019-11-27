@@ -91,7 +91,7 @@ struct ImplFontSubstEntry
     ImplFontSubstEntry(  const OUString& rFontName, const OUString& rSubstFontName, AddFontSubstituteFlags nSubstFlags );
 };
 
-class ImplDirectFontSubstitution
+class ImplDirectFontSubstitution final
 :   public ImplFontSubstitution
 {
 private:

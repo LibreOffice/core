@@ -23,7 +23,7 @@
 #include <unx/gensys.h>
 #include <vclpluginapi.h>
 
-class X11SalSystem : public SalGenericSystem
+class X11SalSystem final : public SalGenericSystem
 {
 public:
     X11SalSystem() {}

@@ -17,7 +17,7 @@
 
 namespace vcl
 {
-class FileDefinitionWidgetDraw : public vcl::WidgetDrawInterface
+class FileDefinitionWidgetDraw final : public vcl::WidgetDrawInterface
 {
 private:
     SalGraphics& m_rGraphics;

@@ -29,7 +29,7 @@
 
 namespace vcl {
 
-class DisplayConnectionDispatch :
+class DisplayConnectionDispatch final :
     public cppu::WeakImplHelper< css::awt::XDisplayConnection >
 {
     ::osl::Mutex                    m_aMutex;

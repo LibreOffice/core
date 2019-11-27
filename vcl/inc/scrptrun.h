@@ -56,7 +56,7 @@ struct ParenStackEntry
     }
 };
 
-class ScriptRun : public icu::UObject {
+class ScriptRun final : public icu::UObject {
 public:
 
     ScriptRun(const UChar chars[], int32_t length);

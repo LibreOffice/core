@@ -26,7 +26,7 @@
 
 class SalGraphics;
 
-class SvpSalObject : public SalObject
+class SvpSalObject final : public SalObject
 {
 public:
     SystemEnvData m_aSystemChildData;
@@ -45,7 +45,7 @@ public:
     virtual const SystemEnvData*    GetSystemData() const override;
 };
 
-class SvpSalSystem : public SalGenericSystem
+class SvpSalSystem final : public SalGenericSystem
 {
 public:
     SvpSalSystem() {}

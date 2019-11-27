@@ -44,7 +44,7 @@ private:
     double const mrScaleY;
 };
 
-class VCL_DLLPUBLIC BitmapScaleBilinearFilter : public BitmapScaleConvolutionFilter
+class VCL_DLLPUBLIC BitmapScaleBilinearFilter final : public BitmapScaleConvolutionFilter
 {
 public:
     BitmapScaleBilinearFilter(const double& rScaleX, const double& rScaleY)
@@ -53,7 +53,7 @@ public:
     }
 };
 
-class VCL_DLLPUBLIC BitmapScaleBicubicFilter : public BitmapScaleConvolutionFilter
+class VCL_DLLPUBLIC BitmapScaleBicubicFilter final : public BitmapScaleConvolutionFilter
 {
 public:
     BitmapScaleBicubicFilter(const double& rScaleX, const double& rScaleY)
@@ -62,7 +62,7 @@ public:
     }
 };
 
-class VCL_DLLPUBLIC BitmapScaleLanczos3Filter : public BitmapScaleConvolutionFilter
+class VCL_DLLPUBLIC BitmapScaleLanczos3Filter final : public BitmapScaleConvolutionFilter
 {
 public:
     BitmapScaleLanczos3Filter(const double& rScaleX, const double& rScaleY)

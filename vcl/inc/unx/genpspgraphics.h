@@ -37,7 +37,7 @@ class FontAttributes;
 class SalInfoPrinter;
 class ImplFontMetricData;
 
-class VCL_DLLPUBLIC GenPspGraphics : public SalGraphics
+class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphics
 {
     psp::JobData*           m_pJobData;
     psp::PrinterGfx*        m_pPrinterGfx;

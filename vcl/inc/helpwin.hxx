@@ -25,7 +25,7 @@
 
 enum class QuickHelpFlags;
 
-class HelpTextWindow : public FloatingWindow
+class HelpTextWindow final : public FloatingWindow
 {
 private:
     tools::Rectangle           maHelpArea; // If next Help for the same rectangle w/ same text, then keep window

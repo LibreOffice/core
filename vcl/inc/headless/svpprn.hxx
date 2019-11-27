@@ -22,13 +22,13 @@
 
 #include <unx/genprn.h>
 
-class SvpSalInfoPrinter : public PspSalInfoPrinter
+class SvpSalInfoPrinter final : public PspSalInfoPrinter
 {
 public:
     virtual bool Setup( weld::Window* pFrame, ImplJobSetup* pSetupData ) override;
 };
 
-class SvpSalPrinter : public PspSalPrinter
+class SvpSalPrinter final : public PspSalPrinter
 {
 public:
     SvpSalPrinter( SalInfoPrinter* pInfoPrinter );

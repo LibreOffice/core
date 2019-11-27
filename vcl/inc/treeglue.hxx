@@ -15,7 +15,7 @@
 //the configured drag drop mode would make more sense to me, but I'm not
 //going to change the baseclass
 
-class LclHeaderTabListBox : public SvHeaderTabListBox
+class LclHeaderTabListBox final : public SvHeaderTabListBox
 {
 private:
     Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
@@ -53,7 +53,7 @@ public:
     }
 };
 
-class LclTabListBox : public SvTabListBox
+class LclTabListBox final : public SvTabListBox
 {
     Link<SvTreeListBox*, void> m_aModelChangedHdl;
     Link<SvTreeListBox*, void> m_aStartDragHdl;

@@ -36,7 +36,7 @@ public:
     virtual double  Calculate( double x ) const = 0;
 };
 
-class Lanczos3Kernel : public Kernel
+class Lanczos3Kernel final : public Kernel
 {
 public:
     Lanczos3Kernel() : Kernel () {}
@@ -62,7 +62,7 @@ private:
         boost::math::policies::promote_double<false> > SincPolicy;
 };
 
-class BicubicKernel : public Kernel
+class BicubicKernel final : public Kernel
 {
 public:
     BicubicKernel() : Kernel () {}
@@ -88,7 +88,7 @@ private:
     }
 };
 
-class BilinearKernel : public Kernel
+class BilinearKernel final : public Kernel
 {
 public:
     BilinearKernel() : Kernel () {}

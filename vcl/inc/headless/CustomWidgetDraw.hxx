@@ -19,7 +19,7 @@
 
 namespace vcl
 {
-class CustomWidgetDraw : public vcl::WidgetDrawInterface
+class CustomWidgetDraw final : public vcl::WidgetDrawInterface
 {
 private:
     static WidgetThemeLibrary* s_pWidgetImplementation;

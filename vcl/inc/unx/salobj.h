@@ -53,7 +53,7 @@ private:
     int         maxClipRectangles;
 };
 
-class X11SalObject : public SalObject
+class X11SalObject final : public SalObject
 {
 public:
     SystemEnvData maSystemChildData;

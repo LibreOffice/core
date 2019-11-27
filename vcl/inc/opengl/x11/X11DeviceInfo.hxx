@@ -14,7 +14,7 @@
 
 #include <rtl/string.hxx>
 
-class X11OpenGLDeviceInfo : public OpenGLDeviceInfo
+class X11OpenGLDeviceInfo final : public OpenGLDeviceInfo
 {
 private:
     bool mbIsMesa;
