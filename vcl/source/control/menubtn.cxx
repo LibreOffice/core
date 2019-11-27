@@ -36,10 +36,15 @@ void MenuButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
 void MenuButton::ExecuteMenu()
 {
+    mbStartingMenu = true;
+
     Activate();
 
     if (!mpMenu && !mpFloatingWindow)
+    {
+        mbStartingMenu = false;
         return;
+    }
 
     Size aSize = GetSizePixel();
     SetPressed( true );
@@ -69,6 +74,9 @@ void MenuButton::ExecuteMenu()
             vcl::Window::GetDockingManager()->StartPopupMode(mpFloatingWindow, aRect, nFlags);
         }
     }
+
+    mbStartingMenu = false;
+
     SetPressed(false);
     if (mnCurItemId)
     {
@@ -96,8 +104,11 @@ void MenuButton::CancelMenu()
     }
 }
 
-bool MenuButton::MenuShown() const
+bool MenuButton::InPopupMode() const
 {
+    if (mbStartingMenu)
+        return true;
+
     if (!mpMenu && !mpFloatingWindow)
         return false;
 
@@ -116,6 +127,7 @@ MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
     : PushButton(WindowType::MENUBUTTON)
     , mnCurItemId(0)
     , mbDelayMenu(false)
+    , mbStartingMenu(false)
 {
     mnDDStyle = PushButtonDropdownStyle::MenuButton;
     ImplInit(pParent, nWinBits);
