@@ -869,11 +869,9 @@ namespace osl_FileBase
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_51()
     {
-#if 0
         OString sURL("file://c:/tmp");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:/tmp"); // this is may be a BUG
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
-#endif
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_52()
@@ -885,7 +883,6 @@ namespace osl_FileBase
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_53()
     {
-// is this a legal file path?
         OString sURL("file:///c|/tmp");
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c|/tmp");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp");
@@ -908,7 +905,7 @@ namespace osl_FileBase
     void SystemPath_FileURL::getSystemPathFromFileURL_001_7()
     {
         OString sURL("file:///tmp/../second");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/../second"); // may be a BUG
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/../second");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
 
@@ -954,11 +951,9 @@ namespace osl_FileBase
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_92()
     {
-#if 0
         OString sURL("ca@#;+.,$///78no%01ni..name");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "");
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
-#endif
     }
 
     // normal legal case
