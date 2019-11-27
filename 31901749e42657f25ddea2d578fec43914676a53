@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_54009eab",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-11-27T13:45:42Z",
+      "side": 1,
+      "message": "Uhm, can you please talk about this change? It may be a default unit in your locale but not somewhere else, in a different locale ...",
+      "revId": "31901749e42657f25ddea2d578fec43914676a53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
