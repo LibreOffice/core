@@ -684,11 +684,13 @@ void SwTableAutoFormat::RestoreTableProperties(SwTable &table) const
 
     SfxItemSet rSet(pDoc->GetAttrPool(), aTableSetRange);
 
-    rSet.Put(*m_aBreak);
+    if ( m_aBreak->GetBreak() != SvxBreak::NONE )
+        rSet.Put(*m_aBreak);
     rSet.Put(m_aPageDesc);
     rSet.Put(SwFormatLayoutSplit(m_bLayoutSplit));
     rSet.Put(SfxBoolItem(RES_COLLAPSING_BORDERS, m_bCollapsingBorders));
-    rSet.Put(*m_aKeepWithNextPara);
+    if ( m_aKeepWithNextPara->GetValue() )
+        rSet.Put(*m_aKeepWithNextPara);
     rSet.Put(*m_aShadow);
 
     pFormat->SetFormatAttr(rSet);
@@ -881,7 +883,7 @@ OUString SwTableAutoFormat::GetTableTemplateCellSubName(const SwBoxAutoFormat& r
  *      +-----------------------------------------------------------------------+
  *   4  |           |           |           |           |           |           |
  *      +-----------------------------------------------------------------------+
- *   5  |   LRSC    |  LR       |  LRENC    |           |           |  LRENC    |
+ *   5  |   LRSC    |  LR       |  LREC     |           |           |  LRENC    |
  *      +-----------+-----------+-----------+-----------+-----------+-----------+
  * ODD  = 1, 3, 5, ...
  * EVEN = 2, 4, 6, ...
