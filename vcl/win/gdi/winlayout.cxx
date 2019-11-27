@@ -36,7 +36,6 @@
 #include <win/saldata.hxx>
 #include <win/wingdiimpl.hxx>
 #include <outdev.h>
-#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #if HAVE_FEATURE_SKIA
 #include <skia/win/winlayout.hxx>
