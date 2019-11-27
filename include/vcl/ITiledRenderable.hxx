@@ -284,6 +284,11 @@ public:
      * bDuplicate: to copy (true), or to move (false).
      */
     virtual void moveSelectedParts(int /*nPosition*/, bool /*bDuplicate*/) {}
+
+    /// @see lok::Document::completeFunction().
+    virtual void completeFunction(int /*nIndex*/)
+    {
+    }
 };
 } // namespace vcl
 

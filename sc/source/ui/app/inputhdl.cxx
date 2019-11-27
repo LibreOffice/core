@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <iterator>
 #include <memory>
 #include <string_view>
 
@@ -1574,6 +1575,21 @@ void ScInputHandler::PasteFunctionData()
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (pActiveView)
         pActiveView->ShowCursor();
+}
+
+void ScInputHandler::LOKPasteFunctionData( sal_uInt32 nIndex )
+{
+    if (pFormulaData  && miAutoPosFormula != pFormulaData->end() && nIndex < pFormulaData->size())
+    {
+        auto aPos = pFormulaData->begin();
+        sal_uInt32 nCurIndex = std::distance(aPos, miAutoPosFormula);
+        nIndex += nCurIndex;
+        if (nIndex >= pFormulaData->size())
+            nIndex -= pFormulaData->size();
+        std::advance(aPos, nIndex);
+        miAutoPosFormula = aPos;
+        PasteFunctionData();
+    }
 }
 
 // Calculate selection and display as tip help

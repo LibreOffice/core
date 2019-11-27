@@ -1133,6 +1133,7 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
 static void doc_resizeWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
                              const int nWidth, const int nHeight);
 
+static void doc_completeFunction(LibreOfficeKitDocument* pThis, int nIndex);
 } // extern "C"
 
 namespace {
@@ -1244,6 +1245,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->postWindowGestureEvent = doc_postWindowGestureEvent;
 
         m_pDocumentClass->createViewWithOptions = doc_createViewWithOptions;
+        m_pDocumentClass->completeFunction = doc_completeFunction;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -5439,6 +5441,21 @@ static void doc_resizeWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWin
     }
 
     pWindow->SetSizePixel(Size(nWidth, nHeight));
+}
+
+static void doc_completeFunction(LibreOfficeKitDocument* pThis, int nIndex)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return;
+    }
+
+    pDoc->completeFunction(nIndex);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)

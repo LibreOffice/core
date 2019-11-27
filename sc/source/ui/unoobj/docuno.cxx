@@ -1069,6 +1069,16 @@ OUString ScModelObj::getPostItsPos()
     return OUString::fromUtf8(aStream.str().c_str());
 }
 
+void ScModelObj::completeFunction(int nIndex)
+{
+    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    if (pHdl)
+    {
+        assert(nIndex >= 0);
+        pHdl->LOKPasteFunctionData(nIndex);
+    }
+}
+
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
     SolarMutexGuard aGuard;
