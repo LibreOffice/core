@@ -15,7 +15,7 @@
 
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapColorizeFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapColorizeFilter final : public BitmapFilter
 {
 public:
     BitmapColorizeFilter(Color aColor)

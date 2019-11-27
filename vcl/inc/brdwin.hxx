@@ -234,7 +234,7 @@ public:
     static long             ImplCalcTitleWidth( const ImplBorderFrameData* pData );
 };
 
-class ImplNoBorderWindowView : public ImplBorderWindowView
+class ImplNoBorderWindowView final : public ImplBorderWindowView
 {
 public:
                             ImplNoBorderWindowView();

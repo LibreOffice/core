@@ -23,7 +23,7 @@
 #include <saltimer.hxx>
 
 class SalXLib;
-class X11SalTimer : public SalTimer
+class X11SalTimer final : public SalTimer
 {
     SalXLib *mpXLib;
 public:

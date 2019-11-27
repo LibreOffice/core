@@ -69,11 +69,11 @@ public:
 };
 
 template<typename TYPE>
-class VertexBufferObject : public BufferObject<TYPE, GL_ARRAY_BUFFER>
+class VertexBufferObject final : public BufferObject<TYPE, GL_ARRAY_BUFFER>
 {
 };
 
-class IndexBufferObject : public BufferObject<GLuint, GL_ELEMENT_ARRAY_BUFFER>
+class IndexBufferObject final : public BufferObject<GLuint, GL_ELEMENT_ARRAY_BUFFER>
 {
 };
 

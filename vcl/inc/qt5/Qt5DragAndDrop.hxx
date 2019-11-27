@@ -18,7 +18,7 @@
 
 class Qt5Frame;
 
-class Qt5DragSource
+class Qt5DragSource final
     : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
                                            css::lang::XInitialization, css::lang::XServiceInfo>
 {
@@ -57,7 +57,7 @@ public:
     void fire_dragEnd(sal_Int8 nAction, bool bSuccessful);
 };
 
-class Qt5DropTarget
+class Qt5DropTarget final
     : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
                                            css::datatransfer::dnd::XDropTargetDragContext,
                                            css::datatransfer::dnd::XDropTargetDropContext,

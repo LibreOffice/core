@@ -35,7 +35,7 @@ namespace vcl
     class Kernel;
 }
 
-class VCL_PLUGIN_PUBLIC OpenGLSalBitmap : public SalBitmap
+class VCL_PLUGIN_PUBLIC OpenGLSalBitmap final : public SalBitmap
 {
 private:
     OpenGLTexture                       maTexture;

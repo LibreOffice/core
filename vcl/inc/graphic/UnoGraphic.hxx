@@ -31,7 +31,7 @@
 
 namespace unographic {
 
-class Graphic : public css::graphic::XGraphic,
+class Graphic final : public css::graphic::XGraphic,
                 public css::awt::XBitmap,
                 public css::lang::XUnoTunnel,
                 public ::unographic::GraphicDescriptor,
@@ -44,7 +44,7 @@ public:
     using ::unographic::GraphicDescriptor::init;
     void init( const ::Graphic& rGraphic ) throw();
 
-protected:
+private:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
@@ -71,8 +71,6 @@ protected:
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
-
-private:
 
     ::Graphic maGraphic;
 };

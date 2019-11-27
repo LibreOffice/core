@@ -30,7 +30,7 @@ class SalXLib;
 class SalDisplay;
 class SalPrinter;
 
-class X11SalData : public GenericUnixSalData
+class X11SalData final : public GenericUnixSalData
 {
     struct XErrorStackEntry
     {
@@ -41,7 +41,6 @@ class X11SalData : public GenericUnixSalData
     std::vector< XErrorStackEntry > m_aXErrorHandlerStack;
     XIOErrorHandler m_aOrigXIOErrorHandler;
 
-protected:
     std::unique_ptr<SalXLib>  pXLib_;
 
 public:

@@ -208,7 +208,7 @@ extern "C" {
     typedef Bool(*X_if_predicate)(Display*,XEvent*,XPointer);
 }
 
-class GLX11Window : public GLWindow
+class GLX11Window final : public GLWindow
 {
 public:
     Display*           dpy;
@@ -396,7 +396,7 @@ public:
 inline  Display *SalColormap::GetXDisplay() const
 { return m_pDisplay->GetDisplay(); }
 
-class SalX11Display : public SalDisplay
+class SalX11Display final : public SalDisplay
 {
 public:
              SalX11Display( Display* pDisp );

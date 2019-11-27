@@ -23,7 +23,7 @@
 
 class SalFrame;
 
-class Qt5Printer : public PspSalPrinter
+class Qt5Printer final : public PspSalPrinter
 {
 public:
     Qt5Printer(SalInfoPrinter* pInfoPrinter);

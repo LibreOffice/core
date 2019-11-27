@@ -37,7 +37,7 @@ class Qt5FontFace;
 class Qt5Frame;
 class Qt5Painter;
 
-class Qt5Graphics : public SalGraphics
+class Qt5Graphics final : public SalGraphics
 {
     friend class Qt5Bitmap;
     friend class Qt5Painter;
@@ -61,7 +61,6 @@ class Qt5Graphics : public SalGraphics
 
     void drawScaledImage(const SalTwoRect& rPosAry, const QImage& rImage);
 
-protected:
     void handleDamage(const tools::Rectangle&) override;
 
 public:

@@ -18,7 +18,7 @@
 
 namespace vcl
 {
-class AboutDialog : public Dialog
+class AboutDialog final : public Dialog
 {
 private:
     BitmapEx m_aBackgroundBitmap;
@@ -34,7 +34,6 @@ private:
 
     void StyleControls();
 
-protected:
     virtual void Paint(vcl::RenderContext& rRenderContext,
                        const ::tools::Rectangle& rRect) override;
     virtual bool set_property(const OString& rKey, const OUString& rValue) override;

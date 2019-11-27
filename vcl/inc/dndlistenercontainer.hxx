@@ -29,7 +29,7 @@
 
 #include <vcl/unohelp2.hxx>
 
-class DNDListenerContainer :    public vcl::unohelper::MutexHelper,
+class DNDListenerContainer final : public vcl::unohelper::MutexHelper,
                                 public ::cppu::WeakComponentImplHelper<
     css::datatransfer::dnd::XDragGestureRecognizer,
     css::datatransfer::dnd::XDropTargetDragContext,

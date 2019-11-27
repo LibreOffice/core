@@ -40,7 +40,7 @@
 #endif
 
 class SvpSalInstance;
-class SvpSalTimer : public SalTimer
+class SvpSalTimer final : public SalTimer
 {
     SvpSalInstance* m_pInstance;
 public:
@@ -62,7 +62,7 @@ enum class SvpRequest
     MainThreadDispatchAllEvents,
 };
 
-class SvpSalYieldMutex : public SalYieldMutex
+class SvpSalYieldMutex final : public SalYieldMutex
 {
 private:
     // note: these members might as well live in SvpSalInstance, but there is
@@ -78,7 +78,6 @@ private:
     bool                    m_wakeUpMain = false;
     SvpRequest              m_Request = SvpRequest::NONE;
 
-protected:
     virtual void            doAcquire( sal_uInt32 nLockCount ) override;
     virtual sal_uInt32      doRelease( bool bUnlockAll ) override;
 

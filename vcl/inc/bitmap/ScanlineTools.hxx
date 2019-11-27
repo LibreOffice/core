@@ -27,7 +27,7 @@ public:
     virtual ~ScanlineTransformer() = default;
 };
 
-class ScanlineTransformer_ARGB : public ScanlineTransformer
+class ScanlineTransformer_ARGB final : public ScanlineTransformer
 {
 private:
     sal_uInt8* pData;
@@ -53,7 +53,7 @@ public:
     }
 };
 
-class ScanlineTransformer_BGR : public ScanlineTransformer
+class ScanlineTransformer_BGR final : public ScanlineTransformer
 {
 private:
     sal_uInt8* pData;
@@ -78,7 +78,7 @@ public:
     }
 };
 
-class ScanlineTransformer_8BitPalette : public ScanlineTransformer
+class ScanlineTransformer_8BitPalette final : public ScanlineTransformer
 {
 private:
     sal_uInt8* pData;
@@ -110,7 +110,7 @@ public:
     }
 };
 
-class ScanlineTransformer_4BitPalette : public ScanlineTransformer
+class ScanlineTransformer_4BitPalette final : public ScanlineTransformer
 {
 private:
     sal_uInt8* pData;
@@ -164,7 +164,7 @@ public:
     }
 };
 
-class ScanlineTransformer_1BitPalette : public ScanlineTransformer
+class ScanlineTransformer_1BitPalette final : public ScanlineTransformer
 {
 private:
     sal_uInt8* pData;

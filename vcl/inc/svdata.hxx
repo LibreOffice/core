@@ -115,7 +115,7 @@ namespace basegfx
     class SystemDependentDataManager;
 }
 
-class LocaleConfigurationListener : public utl::ConfigurationListener
+class LocaleConfigurationListener final : public utl::ConfigurationListener
 {
 public:
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;

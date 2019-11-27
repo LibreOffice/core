@@ -30,7 +30,7 @@ class Qt5Graphics;
 class QImage;
 enum class DeviceFormat;
 
-class Qt5VirtualDevice : public SalVirtualDevice
+class Qt5VirtualDevice final : public SalVirtualDevice
 {
     std::list<Qt5Graphics*> m_aGraphics;
     std::unique_ptr<QImage> m_pImage;

@@ -13,7 +13,7 @@
 
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapLightenFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapLightenFilter final : public BitmapFilter
 {
 public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;

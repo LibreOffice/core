@@ -31,7 +31,7 @@ namespace vcl
 {
 namespace unotools
 {
-    class VCL_DLLPUBLIC VclCanvasBitmap :
+    class VCL_DLLPUBLIC VclCanvasBitmap final :
         public cppu::WeakImplHelper< css::rendering::XIntegerReadOnlyBitmap,
                                      css::rendering::XBitmapPalette,
                                      css::rendering::XIntegerBitmapColorSpace >

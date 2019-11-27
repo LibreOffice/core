@@ -16,7 +16,7 @@
 
 struct GtkSalPrinter_Impl;
 
-class GtkSalPrinter : public PspSalPrinter
+class GtkSalPrinter final : public PspSalPrinter
 {
 public:
     GtkSalPrinter(SalInfoPrinter* i_pInfoPrinter);
@@ -40,7 +40,7 @@ private:
     std::unique_ptr<GtkSalPrinter_Impl> m_xImpl;
 };
 
-class GtkSalInfoPrinter : public PspSalInfoPrinter
+class GtkSalInfoPrinter final : public PspSalInfoPrinter
 {
 public:
     sal_uInt32 GetCapabilities(const ImplJobSetup* i_pSetupData, PrinterCapType i_nType) override;

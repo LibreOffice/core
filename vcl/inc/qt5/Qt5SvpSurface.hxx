@@ -18,7 +18,7 @@ class OutputDevice;
 
 namespace cairo
 {
-class Qt5SvpSurface : public Surface
+class Qt5SvpSurface final : public Surface
 {
     const Qt5SvpGraphics* m_pGraphics;
     cairo_t* const m_pCairoContext;

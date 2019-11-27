@@ -22,7 +22,7 @@
 
 #include <vcl/BitmapFilter.hxx>
 
-class BitmapScaleSuperFilter : public BitmapFilter
+class BitmapScaleSuperFilter final : public BitmapFilter
 {
 public:
     BitmapScaleSuperFilter(const double& rScaleX, const double& rScaleY);

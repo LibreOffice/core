@@ -73,7 +73,7 @@ public:
     sal_uLong    m_nTimeoutMS;
 };
 
-class GtkSalData : public GenericUnixSalData
+class GtkSalData final : public GenericUnixSalData
 {
     GSource*        m_pUserEvent;
     osl::Mutex      m_aDispatchMutex;

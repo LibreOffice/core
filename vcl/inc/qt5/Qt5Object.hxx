@@ -29,7 +29,7 @@
 class Qt5Frame;
 class QWidget;
 
-class Qt5Object : public QObject, public SalObject
+class Qt5Object final : public QObject, public SalObject
 {
     Q_OBJECT
 
@@ -60,7 +60,7 @@ public:
     virtual const SystemEnvData* GetSystemData() const override { return &m_aSystemData; }
 };
 
-class Qt5ObjectWindow : public QWindow
+class Qt5ObjectWindow final : public QWindow
 {
     Qt5Object& m_rParent;
 

@@ -65,7 +65,7 @@ namespace basegfx {
     class B2DTrapezoid;
 }
 
-class X11SalGraphics : public SalGraphics
+class X11SalGraphics final : public SalGraphics
 {
     friend class X11SalGraphicsImpl;
     friend class X11OpenGLSalGraphicsImpl;
@@ -281,7 +281,7 @@ public:
     static void releaseCairoContext(cairo_t* cr);
 
 
-protected:
+private:
     using SalGraphics::SetClipRegion;
     void                            SetClipRegion( GC pGC, Region pXReg = nullptr ) const;
     bool                            GetDitherPixmap ( Color nColor );
@@ -290,7 +290,6 @@ protected:
 
     void                            freeResources();
 
-protected:
     SalFrame*                       m_pFrame; // the SalFrame which created this Graphics or NULL
     SalVirtualDevice*               m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 

@@ -14,7 +14,7 @@
 
 class SvpSalGraphics;
 
-class SvpCairoTextRender : public CairoTextRender
+class SvpCairoTextRender final : public CairoTextRender
 {
     SvpSalGraphics& mrParent;
 

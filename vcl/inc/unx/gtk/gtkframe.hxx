@@ -62,7 +62,7 @@ class GtkDnDTransferable;
 
 class GtkSalMenu;
 
-class GtkSalFrame : public SalFrame
+class GtkSalFrame final : public SalFrame
                   , public NativeWindowHandleProvider
 {
     struct IMHandler

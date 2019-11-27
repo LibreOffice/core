@@ -14,7 +14,7 @@
 #include <unx/saltype.h>
 #include <deque>
 
-class GtkSalSystem : public SalGenericSystem
+class GtkSalSystem final : public SalGenericSystem
 {
     typedef std::deque<std::pair<GdkScreen*, int> > ScreenMonitors_t;
 

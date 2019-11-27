@@ -11,7 +11,7 @@
 
 #include <unx/gensys.h>
 
-class Qt5System : public SalGenericSystem
+class Qt5System final : public SalGenericSystem
 {
 public:
     virtual unsigned int GetDisplayScreenCount() override;

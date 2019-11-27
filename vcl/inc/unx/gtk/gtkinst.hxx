@@ -47,7 +47,7 @@ class GtkPrintWrapper;
 vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale);
 
 class GenPspGraphics;
-class GtkYieldMutex : public SalYieldMutex
+class GtkYieldMutex final : public SalYieldMutex
 {
     thread_local static std::stack<sal_uInt32> yieldCounts;
 
@@ -85,7 +85,7 @@ public:
 
 class GtkDnDTransferable;
 
-class GtkDropTarget : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
+class GtkDropTarget final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
                                                            css::lang::XInitialization,
                                                            css::lang::XServiceInfo>
 {
@@ -134,7 +134,7 @@ public:
     void signalDragLeave(GtkWidget* pWidget, GdkDragContext* context, guint time);
 };
 
-class GtkDragSource : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
+class GtkDragSource final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
                                                            css::lang::XInitialization,
                                                            css::lang::XServiceInfo>
 {
@@ -182,7 +182,7 @@ public:
 };
 
 class GtkSalTimer;
-class GtkInstance : public SvpSalInstance
+class GtkInstance final : public SvpSalInstance
 {
     typedef SvpSalInstance Superclass_t;
 public:
@@ -252,7 +252,7 @@ private:
 
 typedef cppu::WeakComponentImplHelper<css::awt::XWindow> SalGtkXWindow_Base;
 
-class SalGtkXWindow : public SalGtkXWindow_Base
+class SalGtkXWindow final : public SalGtkXWindow_Base
 {
 private:
     osl::Mutex m_aHelperMtx;

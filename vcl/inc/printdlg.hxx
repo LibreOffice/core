@@ -33,7 +33,7 @@ namespace vcl {
 
 namespace vcl
 {
-    class MoreOptionsDialog : public weld::GenericDialogController
+    class MoreOptionsDialog final : public weld::GenericDialogController
     {
         PrintDialog*                            mpParent;
         std::unique_ptr<weld::Button>           mxOKButton;
@@ -53,7 +53,7 @@ namespace vcl
         friend class MoreOptionsDialog;
     public:
 
-        class PrintPreviewWindow : public weld::CustomWidgetController
+        class PrintPreviewWindow final : public weld::CustomWidgetController
         {
             PrintDialog*        mpDialog;
             GDIMetaFile         maMtf;
@@ -87,7 +87,7 @@ namespace vcl
                             );
         };
 
-        class ShowNupOrderWindow : public weld::CustomWidgetController
+        class ShowNupOrderWindow final : public weld::CustomWidgetController
         {
             NupOrderType mnOrderMode;
             int mnRows;
@@ -260,7 +260,7 @@ namespace vcl
 
     };
 
-    class PrintProgressDialog : public weld::GenericDialogController
+    class PrintProgressDialog final : public weld::GenericDialogController
     {
         OUString            maStr;
         bool                mbCanceled;
