@@ -903,6 +903,25 @@ CPPUNIT_TEST_FIXTURE(Test, testOleInline)
                          getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf128611)
+{
+    load(mpTestDocumentPath, "tdf128611.rtf");
+    auto aPolyPolySequence
+        = getProperty<uno::Sequence<uno::Sequence<awt::Point>>>(getShape(1), "PolyPolygon");
+    CPPUNIT_ASSERT(aPolyPolySequence.hasElements());
+    uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_uInt32>(1), rPolygon.size());
+    sal_Int32 nY1 = rPolygon[0].Y;
+    sal_Int32 nY2 = rPolygon[1].Y;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 6242
+    // - Actual  : 3438
+    // i.e. the vertical flip was missing, and the y1 > y2 assert failed, because the line pointed
+    // from top left to bottom right, not bottom left to top right.
+    CPPUNIT_ASSERT_GREATER(nY2, nY1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFdo80742)
 {
     load(mpTestDocumentPath, "fdo80742.rtf");
