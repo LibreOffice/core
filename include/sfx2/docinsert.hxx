@@ -50,7 +50,7 @@ private:
 
     std::unique_ptr<sfx2::FileDialogHelper>
                             m_pFileDlg;
-    std::unique_ptr<SfxItemSet> m_xItemSet;
+    std::shared_ptr<SfxItemSet> m_xItemSet;
     std::vector<OUString>   m_pURLList;
 
     DECL_LINK(DialogClosedHdl, sfx2::FileDialogHelper*, void);

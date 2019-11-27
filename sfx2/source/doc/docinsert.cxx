@@ -105,12 +105,9 @@ std::unique_ptr<SfxMedium> DocumentInserter::CreateMedium(char const*const pFall
     if (!m_nError && m_xItemSet && !m_pURLList.empty())
     {
         DBG_ASSERT( m_pURLList.size() == 1, "DocumentInserter::CreateMedium(): invalid URL list count" );
-        std::unique_ptr<SfxItemSet> xItemSet;
-        if (m_xItemSet)
-            xItemSet = std::make_unique<SfxItemSet>(*m_xItemSet);
         pMedium.reset(new SfxMedium(
                 m_pURLList[0], SFX_STREAM_READONLY,
-                SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), std::move(xItemSet) ));
+                SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_xItemSet ));
         pMedium->UseInteractionHandler( true );
         std::unique_ptr<SfxFilterMatcher> pMatcher;
         if ( !m_sDocFactory.isEmpty() )
@@ -145,12 +142,9 @@ SfxMediumList DocumentInserter::CreateMediumList()
     {
         for (auto const& url : m_pURLList)
         {
-            std::unique_ptr<SfxItemSet> xItemSet;
-            if (m_xItemSet)
-                xItemSet = std::make_unique<SfxItemSet>(*m_xItemSet);
             std::unique_ptr<SfxMedium> pMedium(new SfxMedium(
                     url, SFX_STREAM_READONLY,
-                    SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), std::move(xItemSet) ));
+                    SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_xItemSet ));
 
             pMedium->UseInteractionHandler( true );
 
