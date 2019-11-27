@@ -1021,8 +1021,8 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
         }
         else
             pMed.reset(xReadStorage.is() ?
-                new SfxMedium(xReadStorage, sBaseURL, nullptr ) :
-                new SfxMedium(sFileName, StreamMode::READ, nullptr, nullptr ));
+                new SfxMedium(xReadStorage, sBaseURL ) :
+                new SfxMedium(sFileName, StreamMode::READ ));
         if( !sBaseURL.isEmpty() )
             pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
 
@@ -1044,7 +1044,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
         {
             if( xReadStorage.is() )
             {
-                pMed.reset(new SfxMedium(xReadStorage, sBaseURL, nullptr ));
+                pMed.reset(new SfxMedium(xReadStorage, sBaseURL ));
                 pMed->SetFilter( pFilter );
             }
             else
