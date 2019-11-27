@@ -104,19 +104,26 @@ namespace vcl
 
     void RoadmapWizard::ImplCalcSize( Size& rSize )
     {
-        // calculate ButtonBar height
+        // calculate ButtonBar height and width
         long                nMaxHeight = 0;
+        long                nBarWidth = WIZARDDIALOG_BUTTON_DLGOFFSET_X * 2 + LogicalCoordinateToPixel(6);
         ImplWizButtonData*  pBtnData = mpFirstBtn;
-        while ( pBtnData )
+        while (pBtnData)
         {
-            long nBtnHeight = pBtnData->mpButton->GetSizePixel().Height();
+            auto nBtnHeight = pBtnData->mpButton->GetSizePixel().Height();
+            auto nBtnWidth = pBtnData->mpButton->GetSizePixel().Width();
+            if (pBtnData->mpButton->IsVisible())
+            {
+                nBarWidth += nBtnWidth;
+                nBarWidth += pBtnData->mnOffset;
+            }
             if ( nBtnHeight > nMaxHeight )
                 nMaxHeight = nBtnHeight;
             pBtnData = pBtnData->mpNext;
         }
         if ( nMaxHeight )
             nMaxHeight += WIZARDDIALOG_BUTTON_OFFSET_Y*2;
-        rSize.AdjustHeight(nMaxHeight );
+        rSize.AdjustHeight(nMaxHeight);
 
         // add in the view window size
         if ( mpViewWindow && mpViewWindow->IsVisible() )
@@ -131,6 +138,9 @@ namespace vcl
             else if ( meViewAlign == WindowAlign::Right )
                 rSize.AdjustWidth(aViewSize.Width() );
         }
+
+        if (nBarWidth > rSize.Width())
+            rSize.setWidth(nBarWidth);
     }
 
     void RoadmapWizard::queue_resize(StateChangedType /*eReason*/)
