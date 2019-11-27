@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_32e4153c",
+        "filename": "toolkit/source/awt/vclxwindows.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1736,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-27T09:20:41Z",
+      "side": 1,
+      "message": "Shouldn\u0027t setting update mode have been in the SelectEntriesPos (in case it is used elsewhere sometime)?",
+      "range": {
+        "startLine": 1736,
+        "startChar": 18,
+        "endLine": 1736,
+        "endChar": 31
+      },
+      "revId": "85578a6f9ca9dfb1e384d8d1f6edd8219a2ac493",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
