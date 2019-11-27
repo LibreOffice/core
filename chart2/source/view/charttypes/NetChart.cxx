@@ -36,6 +36,7 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <officecfg/Office/Compatibility.hxx>
 
 namespace chart
 {
@@ -318,7 +319,8 @@ void NetChart::createShapes()
     if( m_aZSlots.empty() ) //no series
         return;
 
-    if( m_bArea )
+    //tdf#127813 Don't reverse the series in OOXML-heavy environments
+    if (officecfg::Office::Compatibility::View::ReverseSeriesOrderAreaAndNetChart::get() && m_bArea)
         lcl_reorderSeries( m_aZSlots );
 
     OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"NetChart is not proper initialized");
