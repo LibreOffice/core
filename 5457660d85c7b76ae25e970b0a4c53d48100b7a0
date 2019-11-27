@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_92264915",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-11-27T10:57:08Z",
+      "side": 1,
+      "message": "Writer-specific member IDs can be found in sw/inc/unomid.h. Shared member IDs can be found in shared modules like include/svx/unomid.hxx and include/editeng/memberids.h, possibly there are other places. So right, no central place. (There is some benefit to this; adding a Writer-specific MID should not cause a large rebuild.)",
+      "revId": "5457660d85c7b76ae25e970b0a4c53d48100b7a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
