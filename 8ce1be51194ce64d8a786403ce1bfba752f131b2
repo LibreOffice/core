@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_72992dc2",
+        "filename": "basic/qa/basic_coverage/test_types_conversion.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-27T09:05:46Z",
+      "side": 1,
+      "message": "I suppose this test needs some commenting (at the top of the test) about expected locale it runs with (en_US?); e.g. \"C\" locale does not have a thousand separator (and the test below should return 123? or fail?); other locales have different decimal/thousand separators.",
+      "range": {
+        "startLine": 41,
+        "startChar": 30,
+        "endLine": 41,
+        "endChar": 62
+      },
+      "revId": "8ce1be51194ce64d8a786403ce1bfba752f131b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
