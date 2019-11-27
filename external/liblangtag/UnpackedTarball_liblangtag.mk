@@ -17,6 +17,8 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,liblangtag,\
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liblangtag))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,liblangtag,0))
+
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,liblangtag,\
@@ -29,6 +31,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liblangtag, \
 	$(if $(SYSTEM_LIBXML),,external/liblangtag/langtag-libtool-rpath.patch.0) \
     external/liblangtag/clang-cl.patch.0 \
     external/liblangtag/langtag-valencia.patch.0 \
+    external/liblangtag/Wformat-overflow.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
