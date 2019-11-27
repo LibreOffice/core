@@ -1,0 +1,17 @@
+--- liblangtag/lt-script-db.c
++++ liblangtag/lt-script-db.c
+@@ -134,8 +134,12 @@
+ 			cnode = cnode->next;
+ 		}
+ 		if (!subtag) {
+-			lt_warning("No subtag node: description = '%s'",
+-				   desc);
++			if (!desc) {
++				lt_warning("No subtag nor description node");
++			} else {
++				lt_warning("No subtag node: description = '%s'",
++					   desc);
++			}
+ 			goto bail1;
+ 		}
+ 		if (!desc) {
