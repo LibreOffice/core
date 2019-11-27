@@ -34,6 +34,23 @@
       "revId": "17d185a94dbd533ba4d80fc8a77f1534727466b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_d4b58e7f",
+        "filename": "cui/uiconfig/ui/optgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-11-27T15:56:01Z",
+      "side": 1,
+      "message": "^^^ remove this line GtkButton doesn\u0027t have a draw_indicator property, GtkCheckButton does, but not GtkButton",
+      "revId": "17d185a94dbd533ba4d80fc8a77f1534727466b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
