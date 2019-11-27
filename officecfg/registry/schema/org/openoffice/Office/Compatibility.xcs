@@ -171,6 +171,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ReverseSeriesOrderAreaAndNetChart" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <!-- See tdf#127813 for rationale -->
+          <desc>Specifies the data series order of filled net and normal area charts.</desc>
+          <label>Reverse the data series order of filled net and normal area charts. Disable for better OOXML interoperability.</label>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
