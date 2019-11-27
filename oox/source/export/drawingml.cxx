@@ -2537,7 +2537,8 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
     if( !xXText.is() )
         return;
 
-    sal_Int32 nTextRotateAngle = 0;
+    double nTextRotateAngle = 0;
+    sal_Int32 nTextPreRotateAngle = 0;
 
 #define DEFLRINS 254
 #define DEFTBINS 127
@@ -2578,20 +2579,21 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         {
             for ( sal_Int32 i = 0, nElems = aProps.getLength(); i < nElems; ++i )
             {
-                if ( aProps[ i ].Name == "TextPreRotateAngle" && ( aProps[ i ].Value >>= nTextRotateAngle ) )
+                if ( aProps[ i ].Name == "TextPreRotateAngle" && ( aProps[ i ].Value >>= nTextPreRotateAngle ) )
                 {
-                    if ( nTextRotateAngle == -90 )
+                    if ( nTextPreRotateAngle == -90 )
                     {
                         sWritingMode = "vert";
                         bVertical = true;
                     }
-                    else if ( nTextRotateAngle == -270 )
+                    else if ( nTextPreRotateAngle == -270 )
                     {
                         sWritingMode = "vert270";
                         bVertical = true;
                     }
-                    break;
                 }
+                else if( aProps[ i ].Name == "TextRotateAngle" )
+                    aProps[ i ].Value >>= nTextRotateAngle;
             }
         }
     }
@@ -2634,7 +2636,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                                XML_anchor, sVerticalAlignment,
                                XML_anchorCtr, bHorizontalCenter ? "1" : nullptr,
                                XML_vert, sWritingMode,
-                               XML_rot, (nTextRotateAngle != 0) ? oox::drawingml::calcRotationValue( nTextRotateAngle * 100 ).getStr() : nullptr,
+                               XML_rot, (nTextPreRotateAngle + nTextRotateAngle != 0) ? oox::drawingml::calcRotationValue( (nTextPreRotateAngle + nTextRotateAngle) * 100 ).getStr() : nullptr,
                                FSEND );
         if( !presetWarp.isEmpty())
         {
