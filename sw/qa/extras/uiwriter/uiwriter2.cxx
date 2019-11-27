@@ -19,6 +19,7 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/scheduler.hxx>
@@ -40,6 +41,7 @@
 #include <svl/stritem.hxx>
 #include <svx/svxids.hrc>
 #include <comphelper/lok.hxx>
+#include <tblafmt.hxx>
 #include <txtfrm.hxx>
 #include <redline.hxx>
 #include <view.hxx>
@@ -679,6 +681,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
     CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf115026_tableAutoFormat_lostPageBreak)
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("TableStyles - testing pagebreak");
+    pWrtShell->SplitNode();
+
+    SwInsertTableOptions tableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    SwTable rTable = pWrtShell->InsertTable(tableOpt, 1, 1);
+
+    SwTableAutoFormat* pStyle = pDoc->MakeTableStyle("PageBreak TableStyle");
+    SvxFormatBreakItem aBreak(SvxBreak::PageBefore, 0);
+    pStyle->SetBreak(aBreak);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("table fits on one page", 1, getPages());
+
+    pStyle->RestoreTableProperties(rTable);
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer8");
+    //xStorable->storeToURL("file:///tmp/jl.odt", aMediaDescriptor.getAsConstPropertyValueList());
+
+    //reload("writer8", OUString(maTempFile.GetURL()));//"tdf115026_tableAutoFormat_lostPageBreak.odt");
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE("TableStyle applies pagebreak before table", 2, getPages());
+
+    pStyle = pDoc->MakeTableStyle("Default TableStyle");
+    pStyle->RestoreTableProperties(rTable);
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE("TableStyle does not remove pagebreak", 2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
