@@ -164,6 +164,7 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_PARA_SCRIPTSPACE, true },       // EE_PARA_ASIANCJKSPACING
         { SID_ATTR_NUMBERING_RULE, true },         // EE_PARA_NUMBULL
         { 0, true },                               // EE_PARA_HYPHENATE
+        { 0, true },                               // EE_PARA_HYPHENATE_NO_CAPS
         { 0, true },                               // EE_PARA_BULLETSTATE
         { 0, true },                               // EE_PARA_OUTLLRSPACE
         { SID_ATTR_PARA_OUTLLEVEL, true },         // EE_PARA_OUTLLEVEL
