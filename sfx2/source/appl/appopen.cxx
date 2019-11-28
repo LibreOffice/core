@@ -59,6 +59,7 @@
 #include <svl/urihelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <osl/file.hxx>

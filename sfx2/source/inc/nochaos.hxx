@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_NOCHAOS_HXX
 #define INCLUDED_SFX2_SOURCE_INC_NOCHAOS_HXX
 
+#include <sal/types.h>
+
 class SfxItemPool;
 
 class NoChaos

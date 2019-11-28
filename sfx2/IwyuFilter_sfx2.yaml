@@ -1,6 +1,9 @@
 ---
 assumeFilename: sfx2/source/appl/app.cxx
 blacklist:
+    sfx2/source/doc/syspathw32.hxx:
+    # Needed on WIN32
+    - sal/types.h
     sfx2/source/appl/appdde.cxx:
     # Needed on WIN32
     - config_features.h

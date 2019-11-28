@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builderfactory.hxx>
+#include <vcl/IPrioritable.hxx>
 #include <vcl/layout.hxx>
-#include <sfx2/dllapi.h>
-#include <sfx2/viewfrm.hxx>
-#include "DropdownBox.hxx"
 
 #include <vector>
 

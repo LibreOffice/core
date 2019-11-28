@@ -24,7 +24,6 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
-#include <com/sun/star/frame/XTerminateListener2.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
@@ -32,7 +31,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>

@@ -13,7 +13,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <sal/types.h>

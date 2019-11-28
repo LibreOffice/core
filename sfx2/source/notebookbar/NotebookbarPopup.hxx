@@ -21,8 +21,6 @@
 #define INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARPOPUP_HXX
 
 #include <vcl/layout.hxx>
-#include <sfx2/dllapi.h>
-#include <sfx2/viewfrm.hxx>
 #include <vcl/floatwin.hxx>
 
 /*

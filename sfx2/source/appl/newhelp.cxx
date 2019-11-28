@@ -94,6 +94,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/taskpanelist.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 

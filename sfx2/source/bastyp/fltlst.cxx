@@ -23,6 +23,7 @@
 #include <com/sun/star/document/FilterConfigRefresh.hpp>
 #include <comphelper/processfactory.hxx>
 
+#include <sfx2/fcontnr.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfac.hxx>
 

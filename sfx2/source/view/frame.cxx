@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

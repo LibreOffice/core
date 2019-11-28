@@ -26,6 +26,7 @@
 
 #include <svl/eitem.hxx>
 #include <tools/time.hxx>
+#include <tools/debug.hxx>
 #include <sal/log.hxx>
 
 #include <appdata.hxx>

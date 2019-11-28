@@ -24,7 +24,6 @@
 #include <rtl/ref.hxx>
 #include <tools/datetime.hxx>
 
-#include <unotools/securityoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docmacromode.hxx>
 #include <bitset.hxx>

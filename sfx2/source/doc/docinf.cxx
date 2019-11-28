@@ -30,6 +30,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/string.hxx>
 #include <sot/storage.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/dibtools.hxx>
 #include "oleprops.hxx"

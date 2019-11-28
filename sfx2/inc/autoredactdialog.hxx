@@ -12,12 +12,8 @@
 
 #include <memory>
 #include <sal/config.h>
-#include <sfx2/dllapi.h>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/objsh.hxx>
-
-#include <vcl/idle.hxx>
-#include <o3tl/typed_flags_set.hxx>
 
 namespace weld
 {

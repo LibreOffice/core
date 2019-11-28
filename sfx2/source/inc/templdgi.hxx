@@ -37,6 +37,7 @@ class SfxTemplateControllerItem;
 #include <svl/style.hxx>
 
 #include <sfx2/childwin.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/templdlg.hxx>
 
