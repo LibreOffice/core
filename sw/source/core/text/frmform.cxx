@@ -55,6 +55,7 @@
 #include <editeng/tstpitem.hxx>
 #include <redline.hxx>
 #include <comphelper/lok.hxx>
+#include <editeng/fhgtitem.hxx>
 
 // Tolerance in formatting and text output
 #define SLOPPY_TWIPS    5
@@ -1949,6 +1950,31 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
     CalcBaseOfstForFly();
     CalcHeightOfLastLine(); // i#11860 - Adjust spacing implementation for
                              // object positioning - Compatibility to MS Word
+     /***
+     BUGFIX: TDF#117982 -- Fix cell spacing hides content
+     ***/
+    SwLayoutFrame* pThisLayFrm = this->GetUpper();
+    //check if there is a nullptr, what can cause problem...
+    if (pThisLayFrm)
+    {
+        //Check if the cell's content has greater size than the row height
+        if ((pThisLayFrm->getFramePrintArea().Height() < this->getFramePrintArea().Height())
+            || (this->getFramePrintArea().Height() <= 0))
+        {
+            OSL_ENSURE(0, "Warn: Cell content has greater size than cell height!"); //A warn
+            //get font size...
+            SwTwips aTmpHeight = this->getFrameArea().Height();
+            //...and push it into the text frame
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            //if only bottom margin what we have:
+            if ( this->GetTopMargin() == 0)
+                //set the frame to its original location
+                aPrt.SetTopAndHeight(0, aTmpHeight);
+            else
+                //else leave it alone
+                aPrt.SetTopAndHeight(this->GetPrtTop(),aTmpHeight);
+        }
+    }
 }
 
 // bForceQuickFormat is set if GetFormatted() has been called during the
