@@ -522,6 +522,7 @@ void PropertyHelper_Hyphen::SetDefaultValues()
     nResHyphMinLeading      = nHyphMinLeading       = 2;
     nResHyphMinTrailing     = nHyphMinTrailing      = 2;
     nResHyphMinWordLength   = nHyphMinWordLength    = 0;
+    bResNoHyphenateCaps = bNoHyphenateCaps = false;
 }
 
 
@@ -536,6 +537,8 @@ void PropertyHelper_Hyphen::GetCurrentValues()
         {
             sal_Int16  *pnVal    = nullptr,
                    *pnResVal = nullptr;
+            bool *pbVal = nullptr;
+            bool *pbResVal = nullptr;
 
             if ( rPropName == UPN_HYPH_MIN_LEADING )
             {
@@ -552,11 +555,21 @@ void PropertyHelper_Hyphen::GetCurrentValues()
                 pnVal    = &nHyphMinWordLength;
                 pnResVal = &nResHyphMinWordLength;
             }
+            else if ( rPropName == UPN_HYPH_NO_CAPS )
+            {
+                pbVal    = &bNoHyphenateCaps;
+                pbResVal = &bResNoHyphenateCaps;
+            }
 
             if (pnVal && pnResVal)
             {
                 GetPropSet()->getPropertyValue( rPropName ) >>= *pnVal;
                 *pnResVal = *pnVal;
+            }
+            else if (pbVal && pbResVal)
+            {
+                GetPropSet()->getPropertyValue( rPropName ) >>= *pbVal;
+                *pbResVal = *pbVal;
             }
         }
     }
@@ -570,18 +583,22 @@ bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt
     if (!bRes  &&  GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
         sal_Int16   *pnVal = nullptr;
+        bool *pbVal = nullptr;
         switch (rEvt.PropertyHandle)
         {
             case UPH_HYPH_MIN_LEADING     : pnVal = &nHyphMinLeading; break;
             case UPH_HYPH_MIN_TRAILING    : pnVal = &nHyphMinTrailing; break;
             case UPH_HYPH_MIN_WORD_LENGTH : pnVal = &nHyphMinWordLength; break;
+            case UPH_HYPH_NO_CAPS : pbVal = &bNoHyphenateCaps; break;
             default:
                 SAL_WARN( "linguistic", "unknown property" );
         }
         if (pnVal)
             rEvt.NewValue >>= *pnVal;
+        else if (pbVal)
+            rEvt.NewValue >>= *pbVal;
 
-        bRes = (pnVal != nullptr);
+        bRes = (pnVal != nullptr || pbVal != nullptr);
         if (bRes)
         {
             LinguServiceEvent aEvt(GetEvtObj(), LinguServiceEventFlags::HYPHENATE_AGAIN);
@@ -610,10 +627,12 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
     nResHyphMinLeading      = nHyphMinLeading;
     nResHyphMinTrailing     = nHyphMinTrailing;
     nResHyphMinWordLength   = nHyphMinWordLength;
+    bResNoHyphenateCaps = bNoHyphenateCaps;
 
     for (const PropertyValue& rVal : rPropVals)
     {
         sal_Int16 *pnResVal = nullptr;
+        bool *pbResVal = nullptr;
 
         if ( rVal.Name == UPN_HYPH_MIN_LEADING )
             pnResVal = &nResHyphMinLeading;
@@ -621,11 +640,15 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
             pnResVal = &nResHyphMinTrailing;
         else if ( rVal.Name == UPN_HYPH_MIN_WORD_LENGTH )
             pnResVal = &nResHyphMinWordLength;
+        else if ( rVal.Name == UPN_HYPH_NO_CAPS )
+            pbResVal = &bResNoHyphenateCaps;
 
-        DBG_ASSERT( pnResVal, "unknown property" );
+        DBG_ASSERT( pnResVal || pbResVal, "unknown property" );
 
         if (pnResVal)
             rVal.Value >>= *pnResVal;
+        else if (pbResVal)
+            rVal.Value >>= *pbResVal;
     }
 }
 
@@ -694,6 +717,11 @@ sal_Int16 PropertyHelper_Hyphenation::GetMinTrailing() const
 sal_Int16 PropertyHelper_Hyphenation::GetMinWordLength() const
 {
     return mxPropHelper->GetMinWordLength();
+}
+
+bool PropertyHelper_Hyphenation::IsNoHyphenateCaps() const
+{
+    return mxPropHelper->IsNoHyphenateCaps();
 }
 
 bool PropertyHelper_Hyphenation::addLinguServiceEventListener(

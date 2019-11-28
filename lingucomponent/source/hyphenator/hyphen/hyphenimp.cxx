@@ -42,6 +42,7 @@
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
 #include <svtools/strings.hrc>
+#include <unotools/charclass.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/lingucfg.hxx>
@@ -254,6 +255,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     sal_Int16 minTrail = rHelper.GetMinTrailing();
     sal_Int16 minLead = rHelper.GetMinLeading();
     sal_Int16 minLen = rHelper.GetMinWordLength();
+    bool bNoHyphenateCaps = rHelper.IsNoHyphenateCaps();
 
     HyphenDict *dict = nullptr;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
@@ -285,6 +287,12 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         dict = mvDicts[k].aPtr;
         eEnc = mvDicts[k].eEnc;
         CharClass * pCC =  mvDicts[k].apCC.get();
+
+        // Don't hyphenate uppercase words if requested
+        if (bNoHyphenateCaps && aWord == makeUpperCase(aWord, pCC))
+        {
+            return nullptr;
+        }
 
         // we don't want to work with a default text encoding since following incorrect
         // results may occur only for specific text and thus may be hard to notice.

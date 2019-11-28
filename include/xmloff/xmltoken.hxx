@@ -1005,6 +1005,7 @@ namespace xmloff { namespace token {
         XML_HYPHENATION_LADDER_COUNT,
         XML_HYPHENATION_PUSH_CHAR_COUNT,
         XML_HYPHENATION_REMAIN_CHAR_COUNT,
+        XML_HYPHENATION_NO_CAPS,
         XML_I,
         XML_ICON,
         XML_ICON_SET,

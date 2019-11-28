@@ -111,6 +111,7 @@
 #define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01 \
         { OUString(UNO_NAME_PARRSID),                             RES_PARATR_RSID,               cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, 0                                      }, \
         { OUString(UNO_NAME_PARA_IS_HYPHENATION),                 RES_PARATR_HYPHENZONE,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_IS_HYPHEN                          }, \
+        { OUString(UNO_NAME_PARA_HYPHENATION_NO_CAPS),            RES_PARATR_HYPHENZONE,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_HYPHEN_NO_CAPS                     }, \
         { OUString(UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS),  RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD                    }, \
         { OUString(UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS), RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL                   }, \
         { OUString(UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS),        RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS                 }, \
@@ -429,6 +430,7 @@
                     { OUString(UNO_NAME_TOP_BORDER_DISTANCE), RES_BOX,              cppu::UnoType<sal_Int32>::get(),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },\
                     { OUString(UNO_NAME_BOTTOM_BORDER_DISTANCE), RES_BOX,               cppu::UnoType<sal_Int32>::get(),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },\
                     { OUString(UNO_NAME_PARA_IS_HYPHENATION), RES_PARATR_HYPHENZONE,      cppu::UnoType<bool>::get(),  PropertyAttribute::MAYBEVOID, MID_IS_HYPHEN         },\
+                    { OUString(UNO_NAME_PARA_HYPHENATION_NO_CAPS), RES_PARATR_HYPHENZONE,      cppu::UnoType<bool>::get(),  PropertyAttribute::MAYBEVOID, MID_HYPHEN_NO_CAPS },\
                     { OUString(UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS), RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD   },\
                     { OUString(UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS), RES_PARATR_HYPHENZONE,        cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL  },\
                     { OUString(UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS), RES_PARATR_HYPHENZONE,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS},\

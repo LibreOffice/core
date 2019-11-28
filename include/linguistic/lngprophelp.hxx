@@ -244,11 +244,13 @@ class PropertyHelper_Hyphen :
     sal_Int16   nHyphMinLeading,
             nHyphMinTrailing,
             nHyphMinWordLength;
+    bool bNoHyphenateCaps;
 
     // return values, will be set to default value or current temporary value
     sal_Int16   nResHyphMinLeading,
             nResHyphMinTrailing,
             nResHyphMinWordLength;
+    bool bResNoHyphenateCaps;
 
     PropertyHelper_Hyphen( const PropertyHelper_Hyphen & ) = delete;
     PropertyHelper_Hyphen & operator = ( const PropertyHelper_Hyphen & ) = delete;
@@ -275,6 +277,7 @@ public:
     sal_Int16   GetMinLeading() const               { return nResHyphMinLeading; }
     sal_Int16   GetMinTrailing() const              { return nResHyphMinTrailing; }
     sal_Int16   GetMinWordLength() const            { return nResHyphMinWordLength; }
+    bool IsNoHyphenateCaps() const { return bResNoHyphenateCaps; }
 };
 
 class LNG_DLLPUBLIC PropertyHelper_Hyphenation
@@ -297,6 +300,7 @@ public:
     sal_Int16   GetMinLeading() const;
     sal_Int16   GetMinTrailing() const;
     sal_Int16   GetMinWordLength() const;
+    bool IsNoHyphenateCaps() const;
     /// @throws css::uno::RuntimeException
     bool addLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
