@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 #include "root.hxx"
 #include "xiroot.hxx"
+#include <refdata.hxx>
 
 #include <unordered_map>
 

@@ -86,7 +86,7 @@ ErrCode ImportLotus::parse()
                 if( nRecLen > 2 )
                 {
                     Bof();
-                    switch (rContext.pLotusRoot->eFirstType)
+                    switch (rContext.eFirstType)
                     {
                         case Lotus123Typ::WK3: eCurrent = S_WK3; break;
                         case Lotus123Typ::WK4: eCurrent = S_WK4; break;
@@ -290,7 +290,7 @@ ErrCode ImportLotus::Read(SvStream& rIn)
 
                 case 195:
                     if( nExtTab >= 0 )
-                        rContext.pLotusRoot->maAttrTable.Apply(rContext.pLotusRoot, static_cast<SCTAB>(nExtTab));
+                        rContext.maAttrTable.Apply(rContext, static_cast<SCTAB>(nExtTab));
                     nExtTab++;
                     break;
                 case 197:
@@ -305,7 +305,7 @@ ErrCode ImportLotus::Read(SvStream& rIn)
         }
     }
 
-    rContext.pLotusRoot->maAttrTable.Apply(rContext.pLotusRoot, static_cast<SCTAB>(nExtTab));
+    rContext.maAttrTable.Apply(rContext, static_cast<SCTAB>(nExtTab));
 
     return eRet;
 }
@@ -321,7 +321,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWKS(SvStream& rStream)
     aDocument.EnableExecuteLink(false);
     aDocument.SetInsertingFromOtherDoc(true);
 
-    LotusContext aContext;
+    LotusContext aContext(&aDocument, RTL_TEXTENCODING_ASCII_US);
     ImportLotus aLotusImport(aContext, rStream, &aDocument, RTL_TEXTENCODING_ASCII_US);
 
     ErrCode eRet = aLotusImport.parse();

@@ -38,7 +38,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
 
     pStream->SetBufferSize( 32768 );
 
-    LotusContext aContext;
+    LotusContext aContext(pDocument, eSrc);
 
     ImportLotus aLotusImport(aContext, *pStream, pDocument, eSrc);
 
@@ -61,7 +61,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
     if( eRet != ERRCODE_NONE )
         return eRet;
 
-    if (aContext.pLotusRoot->eFirstType == Lotus123Typ::WK3)
+    if (aContext.eFirstType == Lotus123Typ::WK3)
     {
         // try to load *.FM3 file
         INetURLObject aURL( rMedium.GetURLObject() );
@@ -79,5 +79,25 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
 
     return eRet;
 }
+
+LotusContext::LotusContext(ScDocument* pDocP, rtl_TextEncoding eQ)
+    : eTyp(eWK_UNKNOWN)
+    , bEOF(false)
+    , eCharset(eQ)
+    , pDoc(pDocP)
+    , pAttrRight(nullptr)
+    , pAttrLeft(nullptr)
+    , pAttrCenter(nullptr)
+    , pAttrRepeat(nullptr)
+    , pAttrStandard(nullptr)
+    , pValueFormCache(nullptr)
+    , maRangeNames()
+    , eFirstType( Lotus123Typ::X)
+    , eActType( Lotus123Typ::X)
+    , pRngNmBffWK3( new RangeNameBufferWK3() )
+    , maAttrTable( *this )
+{
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
