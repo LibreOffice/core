@@ -53,8 +53,6 @@ void SalLayoutGlyphs::Invalidate()
         m_pImpl->Invalidate();
 }
 
-SalLayoutGlyphsImpl::~SalLayoutGlyphsImpl() {}
-
 SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::clone(SalLayoutGlyphs& rGlyphs) const
 {
     SalLayoutGlyphsImpl* pNew = new SalLayoutGlyphsImpl(rGlyphs, *m_rFontInstance);
