@@ -307,7 +307,7 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
             CPPUNIT_ASSERT( aMark.IsAllMarked( rRange ) );
             SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
             SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
-            for ( SCROW nColIter = nCol1; nColIter <= nCol2; ++nColIter )
+            for ( SCCOL nColIter = nCol1; nColIter <= nCol2; ++nColIter )
                 CPPUNIT_ASSERT( aMultiSel.IsAllMarked( nColIter, nRow1, nRow2 ) );
         }
 
