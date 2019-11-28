@@ -35,6 +35,8 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 
 #ifdef DBG_UTIL
 #include "PropertyMapHelper.hxx"
@@ -1115,6 +1117,36 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 // OOXML table style may container paragraph properties, apply these now.
                 ApplyParaProperty(aTableInfo.aTableProperties, PROP_PARA_BOTTOM_MARGIN);
                 ApplyParaProperty(aTableInfo.aTableProperties, PROP_PARA_LINE_SPACING);
+
+                // tdf#117488 Line spacing made text half invisible when opened in Writer (in tables),
+                // when it was set to "Exactly".
+                // So when exact line spacing is smaller than char height, set line spacing to be
+                // equal to char height.
+                m_rDMapper_Impl.m_aParagraphsToEndTable = m_rDMapper_Impl.m_aParagraphsToEndTableKeep;
+                for (const auto& rParaProp : m_rDMapper_Impl.m_aParagraphsToEndTable)
+                {
+                    style::LineSpacing aSpacing;
+                    if (rParaProp.m_rPropertySet->getPropertyValue("ParaLineSpacing") >>= aSpacing)
+                    {
+                        // Mode 3 = "Exactly"
+                        if (aSpacing.Mode == 3)
+                        {
+                            double charHeight;
+                            boost::optional<PropertyMap::Property> charProps = rParaProp.m_pPropertyMap->getProperty(PROP_CHAR_HEIGHT);
+                            charProps->second >>= charHeight;
+                            charHeight = charHeight * 20;
+
+                            sal_Int16 spacingHeight = convertMm100ToTwip(aSpacing.Height);
+
+                            if (charHeight > spacingHeight)
+                                aSpacing.Height = convertTwipToMm100(charHeight);
+
+                            rParaProp.m_rPropertySet->setPropertyValue("ParaLineSpacing",  uno::makeAny(aSpacing));
+                        }
+                    }
+                }
+                // We don't need this anymore.
+                m_rDMapper_Impl.m_aParagraphsToEndTableKeep.clear();
             }
         }
         catch ( const lang::IllegalArgumentException & )
