@@ -107,6 +107,13 @@ void SfxUInt16Item::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+boost::property_tree::ptree SfxUInt16Item::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+    aTree.put("state", GetValue());
+    return aTree;
+}
+
 
 //  class SfxInt32Item
 
