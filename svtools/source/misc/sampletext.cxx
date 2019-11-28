@@ -530,7 +530,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
     return sSampleText;
 }
 
-OUString makeRepresentativeTextForScript(UScriptCode eScript)
+static OUString makeRepresentativeTextForScript(UScriptCode eScript)
 {
     OUString sSampleText;
     switch (eScript)
@@ -602,7 +602,7 @@ OUString makeShortMinimalTextForScript(UScriptCode eScript)
     return sSampleText;
 }
 
-OUString makeMinimalTextForScript(UScriptCode eScript)
+static OUString makeMinimalTextForScript(UScriptCode eScript)
 {
     return makeShortMinimalTextForScript(eScript);
 }
@@ -615,7 +615,7 @@ OUString makeMinimalTextForScript(UScriptCode eScript)
 
 //Currently we fall back to makeShortRepresentativeTextForScript when we don't
 //have suitable strings
-OUString makeRepresentativeTextForLanguage(LanguageType eLang)
+static OUString makeRepresentativeTextForLanguage(LanguageType eLang)
 {
     OUString sRet;
     LanguageType pri = primary(eLang);

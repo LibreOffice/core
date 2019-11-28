@@ -35,7 +35,7 @@ class SfxDockingWindow_Impl;
 enum class SplitWindowItemFlags;
 
 void SfxDockingWindowFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName );
-bool SFX2_DLLPUBLIC IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName );
+bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName );
 
 class SFX2_DLLPUBLIC SfxDockingWindow : public DockingWindow
 {
