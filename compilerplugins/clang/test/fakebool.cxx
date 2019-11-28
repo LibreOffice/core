@@ -17,6 +17,20 @@ struct S {
     sal_Bool b; // expected-error {{FieldDecl, use "bool" instead of 'sal_Bool' (aka 'unsigned char') [loplugin:fakebool]}}
 };
 
+struct S2 {
+    sal_Bool & b_;
+    // The following should arguably not warn, but currently does (and does find cases that actually
+    // can be cleaned up; if it ever produces false warnings for cases that cannot, we need to fix
+    // it):
+    S2(sal_Bool & b): // expected-error {{ParmVarDecl, use "bool" instead of 'sal_Bool' (aka 'unsigned char') [loplugin:fakebool]}}
+        b_(b) {}
+};
+
 }
+
+struct S3 {
+    sal_Bool b_;
+    void f() { S2 s(b_); }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
