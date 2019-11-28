@@ -1325,13 +1325,13 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
 }
 
 static void lcl_InitHyphValues( PropertyValues &rVals,
-            sal_Int16 nMinLeading, sal_Int16 nMinTrailing )
+            sal_Int16 nMinLeading, sal_Int16 nMinTrailing, bool bNoCapsHyphenation )
 {
     sal_Int32 nLen = rVals.getLength();
 
     if (0 == nLen)  // yet to be initialized?
     {
-        rVals.realloc( 2 );
+        rVals.realloc( 3 );
         PropertyValue *pVal = rVals.getArray();
 
         pVal[0].Name    = UPN_HYPH_MIN_LEADING;
@@ -1341,12 +1341,17 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
         pVal[1].Name    = UPN_HYPH_MIN_TRAILING;
         pVal[1].Handle  = UPH_HYPH_MIN_TRAILING;
         pVal[1].Value   <<= nMinTrailing;
+
+        pVal[2].Name    = UPN_HYPH_NO_CAPS;
+        pVal[2].Handle  = UPH_HYPH_NO_CAPS;
+        pVal[2].Value   <<= bNoCapsHyphenation;
     }
-    else if (2 == nLen) // already initialized once?
+    else if (3 == nLen) // already initialized once?
     {
         PropertyValue *pVal = rVals.getArray();
         pVal[0].Value <<= nMinLeading;
         pVal[1].Value <<= nMinTrailing;
+        pVal[2].Value <<= bNoCapsHyphenation;
     }
     else {
         OSL_FAIL( "unexpected size of sequence" );
@@ -1355,7 +1360,7 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
 
 const PropertyValues & SwTextFormatInfo::GetHyphValues() const
 {
-    OSL_ENSURE( 2 == m_aHyphVals.getLength(),
+    OSL_ENSURE( 3 == m_aHyphVals.getLength(),
             "hyphenation values not yet initialized" );
     return m_aHyphVals;
 }
@@ -1373,7 +1378,8 @@ bool SwTextFormatInfo::InitHyph( const bool bAutoHyphen )
     {
         const sal_Int16 nMinimalLeading  = std::max(rAttr.GetMinLead(), sal_uInt8(2));
         const sal_Int16 nMinimalTrailing = rAttr.GetMinTrail();
-        lcl_InitHyphValues( m_aHyphVals, nMinimalLeading, nMinimalTrailing);
+        const bool bNoCapsHyphenation = rAttr.IsNoCapsHyphenation();
+        lcl_InitHyphValues( m_aHyphVals, nMinimalLeading, nMinimalTrailing, bNoCapsHyphenation);
     }
     return bAuto;
 }

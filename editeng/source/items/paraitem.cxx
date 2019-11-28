@@ -565,6 +565,7 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     bHyphen(bHyph),
     bPageEnd(true),
+    bNoCapsHyphenation(false),
     nMinLead(0),
     nMinTrail(0),
     nMaxHyphens(255)
@@ -589,6 +590,9 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
         case MID_HYPHEN_MAX_HYPHENS:
             rVal <<= static_cast<sal_Int16>(nMaxHyphens);
         break;
+        case MID_HYPHEN_NO_CAPS:
+            rVal <<= bNoCapsHyphenation;
+        break;
     }
     return true;
 }
@@ -598,7 +602,7 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int16 nNewVal = 0;
 
-    if( nMemberId != MID_IS_HYPHEN )
+    if( nMemberId != MID_IS_HYPHEN && nMemberId != MID_HYPHEN_NO_CAPS )
         if(!(rVal >>= nNewVal))
             return false;
 
@@ -616,6 +620,9 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_HYPHEN_MAX_HYPHENS:
             nMaxHyphens = static_cast<sal_uInt8>(nNewVal);
         break;
+        case MID_HYPHEN_NO_CAPS:
+            bNoCapsHyphenation = Any2Bool(rVal);
+        break;
     }
     return true;
 }
@@ -627,6 +634,7 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxHyphenZoneItem& rItem = static_cast<const SvxHyphenZoneItem&>(rAttr);
     return ( rItem.bHyphen == bHyphen
+            && rItem.bNoCapsHyphenation == bNoCapsHyphenation
             && rItem.bPageEnd == bPageEnd
             && rItem.nMinLead == nMinLead
             && rItem.nMinTrail == nMinTrail
