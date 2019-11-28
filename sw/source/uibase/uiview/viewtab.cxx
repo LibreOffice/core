@@ -62,8 +62,6 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <editeng/itemtype.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 
@@ -1584,24 +1582,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aUL.SetWhich( nWhich );
                     rSet.Put( aUL );
                 }
-
-                if (comphelper::LibreOfficeKit::isActive())
-                {
-                    // TODO: set correct unit
-                    MapUnit eTargetUnit = MapUnit::MapInch;
-
-                    OUString sUpper = GetMetricText(aUL.GetUpper(),
-                                        MapUnit::MapTwip, eTargetUnit, nullptr);
-
-                    OUString sLower = GetMetricText(aUL.GetLower(),
-                                        MapUnit::MapTwip, eTargetUnit, nullptr);
-
-                    OUString sPayload = ".uno:ULSpacing={\"upper\": \"" + sUpper +
-                        "\", \"lower\": \"" + sLower + "\"}";
-
-                    GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                        OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
-                }
             }
             else
             {
@@ -2455,6 +2435,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         }
         nWhich = aIter.NextWhich();
     }
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell && comphelper::LibreOfficeKit::isActive())
+        pViewShell->sendUnoStatus( &rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

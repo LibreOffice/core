@@ -74,7 +74,9 @@ public:
     bool GetContext() const { return bContext; }
     sal_uInt16 GetPropUpper() const { return nPropUpper; }
     sal_uInt16 GetPropLower() const { return nPropLower; }
+
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 inline void SvxULSpaceItem::SetUpper( const sal_uInt16 nU, const sal_uInt16 nProp )
