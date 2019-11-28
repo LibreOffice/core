@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include <svtools/acceleratorexecute.hxx>
 #include <vcl/combobox.hxx>
 
 class SvtURLBox;

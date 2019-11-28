@@ -10,7 +10,8 @@
 #ifndef INCLUDED_SFX2_EXOTICFILELOADEXCEPTION_HXX
 #define INCLUDED_SFX2_EXOTICFILELOADEXCEPTION_HXX
 
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionContinuation.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase.hxx>
 
 class ExoticFileLoadException : public cppu::WeakImplHelper<css::task::XInteractionRequest>

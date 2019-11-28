@@ -21,16 +21,12 @@
 #define INCLUDED_SFX2_SOURCE_VIEW_VIEWIMP_HXX
 
 #include <memory>
-#include <basic/sbxobj.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <svtools/acceleratorexecute.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/print.hxx>
-#include <queue>
 #include <vector>
 
 class SfxBaseController;

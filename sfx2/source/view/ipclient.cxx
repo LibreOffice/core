@@ -62,6 +62,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>

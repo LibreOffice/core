@@ -20,25 +20,20 @@
 #define INCLUDED_SFX2_SOURCE_INC_WORKWIN_HXX
 
 #include <vector>
-#include <deque>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
+#include <sfx2/frame.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/ctrlitem.hxx>
 #include <sfx2/toolbarids.hxx>
-#include <sfx2/viewfrm.hxx>
 
 class SfxSplitWindow;
 class SfxWorkWindow;

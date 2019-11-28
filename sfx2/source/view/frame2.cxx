@@ -32,6 +32,8 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

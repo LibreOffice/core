@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_INC_SRCHDLG_HXX
 #define INCLUDED_SFX2_INC_SRCHDLG_HXX
 
-#include <sfx2/basedlgs.hxx>
+#include <vcl/weld.hxx>
 
 namespace sfx2 {
 

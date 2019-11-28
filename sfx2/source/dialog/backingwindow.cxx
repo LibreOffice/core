@@ -35,6 +35,7 @@
 #include <svtools/langhelp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/templatecontaineritem.hxx>
+#include <sfx2/templateviewitem.hxx>
 #include <vcl/toolbox.hxx>
 
 #include <vcl/menubtn.hxx>
@@ -48,6 +49,7 @@
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

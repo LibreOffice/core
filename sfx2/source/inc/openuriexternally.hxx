@@ -12,6 +12,8 @@
 
 #include <sal/config.h>
 
+#include <rtl/ustring.hxx>
+
 namespace sfx2
 {
 /** Open a URI via com.sun.star.system.SystemShellExecute

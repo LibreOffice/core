@@ -25,8 +25,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <rtl/ustring.hxx>
-
 SFX2_DLLPUBLIC void RefreshToolbars(
     css::uno::Reference< css::frame::XFrame > const & rFrame
 );
