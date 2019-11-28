@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_APPL_PANELIST_HXX
 #define INCLUDED_SFX2_SOURCE_APPL_PANELIST_HXX
 
-#include <vcl/taskpanelist.hxx>
+#include <vcl/keycod.hxx>
 
 namespace sfx2
 {

@@ -25,7 +25,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <sfx2/fcontnr.hxx>

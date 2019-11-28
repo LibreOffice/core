@@ -22,11 +22,8 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#include <svtools/asynclink.hxx>
 #include <tools/svborder.hxx>
 #include <vcl/window.hxx>
-
-#include <o3tl/optional.hxx>
 
 struct SfxViewFrame_Impl
 {

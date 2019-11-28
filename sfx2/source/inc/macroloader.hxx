@@ -31,13 +31,10 @@
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/util/URL.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <vcl/errcode.hxx>
 
 class SfxObjectShell;

@@ -22,17 +22,13 @@
 
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <sfx2/dllapi.h>
 #include <tools/link.hxx>
 #include <memory>
 

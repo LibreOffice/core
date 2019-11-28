@@ -72,6 +72,7 @@
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <sfxtypes.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfile.hxx>

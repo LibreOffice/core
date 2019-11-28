@@ -23,15 +23,8 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 
-class SfxViewFrame;
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <cppuhelper/weak.hxx>
 #include <tools/svborder.hxx>
-
-#include <sfx2/viewsh.hxx>
-#include <sfx2/sfxuno.hxx>
+#include <vcl/window.hxx>
 
 class SfxFrame_Impl : public SfxBroadcaster
 {
