@@ -505,7 +505,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     // tdf#119804: If there is a header row/column, it won't be affected by
     // sorting; so we can exclude it from the test.
     SCROW nStartingRowToEdit = aLocalParam.nRow1;
-    SCROW nStartingColToEdit = aLocalParam.nCol1;
+    SCCOL nStartingColToEdit = aLocalParam.nCol1;
     if ( aLocalParam.bHasHeader )
     {
         if ( aLocalParam.bByRow )
