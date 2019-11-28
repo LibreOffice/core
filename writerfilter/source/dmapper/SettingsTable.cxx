@@ -726,7 +726,7 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
 
     // Auto hyphenation: turns on hyphenation by default, <w:suppressAutoHyphens/> may still disable it at a paragraph level.
     // Situation is similar for RTF_WIDOWCTRL, which turns on widow / orphan control by default.
-    if (m_pImpl->m_bAutoHyphenation || m_pImpl->m_bWidowControl)
+    if (m_pImpl->m_bAutoHyphenation || m_pImpl->m_bNoHyphenateCaps || m_pImpl->m_bWidowControl)
     {
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDoc, uno::UNO_QUERY);
         if (!xStyleFamiliesSupplier.is())
@@ -740,6 +740,11 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
         {
             uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
             xPropertySet->setPropertyValue("ParaIsHyphenation", uno::makeAny(true));
+        }
+        if (m_pImpl->m_bNoHyphenateCaps)
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
+            xPropertySet->setPropertyValue("ParaHyphenationNoCaps", uno::makeAny(true));
         }
         if (m_pImpl->m_bWidowControl && lcl_isDefault(xPropertyState, "ParaWidows") && lcl_isDefault(xPropertyState, "ParaOrphans"))
         {
