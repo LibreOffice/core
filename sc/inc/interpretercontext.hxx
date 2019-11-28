@@ -30,7 +30,7 @@ enum class SvNumFormatType : sal_Int16;
 // SetNumberFormat() is not thread-safe, so calls to it need to be delayed to the main thread.
 struct DelayedSetNumberFormat
 {
-    SCROW mCol;
+    SCCOL mCol;
     SCROW mRow;
     sal_uInt32 mnNumberFormat;
 };

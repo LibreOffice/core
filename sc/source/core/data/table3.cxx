@@ -3443,7 +3443,7 @@ bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
     }
 
     // First column all text cells, any non-text cell in second column => headers.
-    SCROW nTestCol = nStartCol + 1;
+    SCCOL nTestCol = nStartCol + 1;
     for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
     {
         CellType eType = GetCellType( nRow, nTestCol );

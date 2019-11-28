@@ -277,7 +277,7 @@ void ScDataTableView::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 {
     Size aSize = GetSizePixel();
     SCCOL nMaxVisibleCol = findColFromPos(aSize.Width() - nScrollBarSize, mpDoc.get(), mnFirstVisibleCol);
-    SCCOL nMaxVisibleRow = findRowFromPos(aSize.Height(), mpDoc.get(), mnFirstVisibleRow);
+    SCROW nMaxVisibleRow = findRowFromPos(aSize.Height(), mpDoc.get(), mnFirstVisibleRow);
 
     ScTableInfo aTableInfo;
     mpDoc->FillInfo(aTableInfo, mnFirstVisibleCol, mnFirstVisibleRow, nMaxVisibleCol, nMaxVisibleRow, 0, 0.06666, 0.06666, false, false);
