@@ -262,7 +262,7 @@ void NotebookBar::UpdatePersonaSettings()
     AllSettings aAllSettings( GetSettings() );
     StyleSettings aStyleSet( aAllSettings.GetStyleSettings() );
 
-    ::Color aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or(COL_BLACK );
+    ::Color aTextColor = aStyleSet.GetPersonaMenuBarTextColor().value_or(COL_BLACK );
     aStyleSet.SetDialogTextColor( aTextColor );
     aStyleSet.SetButtonTextColor( aTextColor );
     aStyleSet.SetRadioCheckTextColor( aTextColor );

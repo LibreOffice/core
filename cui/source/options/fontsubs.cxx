@@ -225,7 +225,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     NonPropFontsHdl(*m_xNonPropFontsOnlyCB);
     OUString sFontName(
         officecfg::Office::Common::Font::SourceViewFont::FontName::get().
-        get_value_or(OUString()));
+        value_or(OUString()));
     if(!sFontName.isEmpty())
         m_xFontNameLB->set_active_text(sFontName);
     else

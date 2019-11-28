@@ -3145,13 +3145,13 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 
     style_context_set_state(mpMenuBarItemStyle, GTK_STATE_FLAG_NORMAL);
     gtk_style_context_get_color( mpMenuBarItemStyle, gtk_style_context_get_state(mpMenuBarItemStyle), &text_color );
-    aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( text_color ) );
+    aTextColor = aStyleSet.GetPersonaMenuBarTextColor().value_or( getColor( text_color ) );
     aStyleSet.SetMenuBarTextColor( aTextColor );
     aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
 
     style_context_set_state(mpMenuBarItemStyle, GTK_STATE_FLAG_PRELIGHT);
     gtk_style_context_get_color( mpMenuBarItemStyle, gtk_style_context_get_state(mpMenuBarItemStyle), &text_color );
-    aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( text_color ) );
+    aTextColor = aStyleSet.GetPersonaMenuBarTextColor().value_or( getColor( text_color ) );
     aStyleSet.SetMenuBarHighlightTextColor( aTextColor );
 
     // menu items

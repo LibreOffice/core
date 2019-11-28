@@ -350,7 +350,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                             SfxUInt16Item(
                                 rPool.GetWhich(SID_INET_PROXY_TYPE),
                                 (officecfg::Inet::Settings::ooInetProxyType::
-                                 get().get_value_or(0)))))
+                                 get().value_or(0)))))
                     {
                         bRet = true;
                     }
@@ -370,7 +370,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                             SfxInt32Item(
                                 rPool.GetWhich(SID_INET_HTTP_PROXY_PORT),
                                 (officecfg::Inet::Settings::
-                                 ooInetHTTPProxyPort::get().get_value_or(0)))))
+                                 ooInetHTTPProxyPort::get().value_or(0)))))
                     {
                         bRet = true;
                     }
@@ -390,7 +390,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                             SfxInt32Item(
                                 rPool.GetWhich(SID_INET_FTP_PROXY_PORT),
                                 (officecfg::Inet::Settings::ooInetFTPProxyPort::
-                                 get().get_value_or(0)))))
+                                 get().value_or(0)))))
                     {
                         bRet = true;
                     }

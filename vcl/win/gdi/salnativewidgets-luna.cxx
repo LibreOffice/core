@@ -1538,7 +1538,7 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     pSVData->maNWFData.mbDockingAreaAvoidTBFrames = true;
 
     // FIXME get the color directly from the theme, not from the settings
-    Color aMenuBarTextColor = aStyleSettings.GetPersonaMenuBarTextColor().get_value_or( aStyleSettings.GetMenuTextColor() );
+    Color aMenuBarTextColor = aStyleSettings.GetPersonaMenuBarTextColor().value_or( aStyleSettings.GetMenuTextColor() );
     // in aero menuitem highlight text is drawn in the same color as normal
     aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
     aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarTextColor );
