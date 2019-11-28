@@ -82,7 +82,7 @@ void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, s
     rContext.pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
     ScSetStringParam aParam;
     aParam.setTextInput();
-    rContext.pDoc->SetString(ScAddress(nCol,nRow,nTab), OUString(pString, strlen(pString), rContext.pLotusRoot->eCharsetQ), &aParam);
+    rContext.pDoc->SetString(ScAddress(nCol,nRow,nTab), OUString(pString, strlen(pString), rContext.eCharset), &aParam);
 }
 
 void SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt)
