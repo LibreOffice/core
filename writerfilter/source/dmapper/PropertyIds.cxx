@@ -91,6 +91,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_PARA_CONTEXT_MARGIN:       sName = "ParaContextMargin"; break;
         case PROP_PARA_BOTTOM_MARGIN:       sName = "ParaBottomMargin"; break;
         case PROP_PARA_IS_HYPHENATION:     sName = "ParaIsHyphenation"; break;
+        case PROP_PARA_HYPHENATION_NO_CAPS: sName = "ParaHyphenationNoCaps"; break;
         case PROP_PARA_LINE_NUMBER_COUNT:     sName = "ParaLineNumberCount"; break;
         case PROP_PARA_IS_HANGING_PUNCTUATION: sName = "ParaIsHangingPunctuation"; break;
         case PROP_PARA_LINE_SPACING:     sName = "ParaLineSpacing"; break;

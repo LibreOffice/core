@@ -2307,5 +2307,13 @@ DECLARE_ODFEXPORT_TEST(tdf128504, "tdf128504.docx")
     CPPUNIT_ASSERT(!visitedStyleName.equalsIgnoreAsciiCase("Visited Internet Link"));
 }
 
+DECLARE_ODFEXPORT_TEST(tdf121658, "tdf121658.odt")
+{
+    uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
+    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
+            "Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle1, "ParaHyphenationNoCaps"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
