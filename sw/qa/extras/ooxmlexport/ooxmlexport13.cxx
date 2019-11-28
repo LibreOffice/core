@@ -263,6 +263,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript, "tdf99602_charStyleSub
     CPPUNIT_ASSERT_EQUAL( sal_Int16(DFLT_ESC_PROP), getProperty<sal_Int16>(getRun(xPara, 2), "CharEscapementHeight") );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript2, "tdf99602_charStyleSubscript2.odt")
+{
+    // *_In styles_*, don't let the proportionality/escapement affect the fontsize - otherwise it starts doubling up,
+    // so instead just throw away the values and use the default settings instead - meaning fontsize is unaffected.
+    // subscript custom: Proprtional size is 80%, lower by 25%.
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName("subscript custom"), uno::UNO_QUERY);
+    float fCharHeight = getProperty<float>(xStyle, "CharHeight");
+    // a bug from LO 4.3 means that character styles round-trip with the wrong fontsize (10) instead of 12.
+    CPPUNIT_ASSERT_MESSAGE("CharStyle has 12pt font size", 12.f == fCharHeight || 10.f == fCharHeight );
+    // subscript larger font: Proportional size is 80%, lowered by DFLT_ESC_SUB_AUTO
+    xStyle.set(getStyles("CharacterStyles")->getByName("subscript larger font"), uno::UNO_QUERY);
+    fCharHeight = getProperty<float>(xStyle, "CharHeight");
+    CPPUNIT_ASSERT_MESSAGE("Auto CharStyle has 12pt font size", 12.f == fCharHeight || 10.f == fCharHeight );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf124637_sectionMargin, "tdf124637_sectionMargin.docx")
 {
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
