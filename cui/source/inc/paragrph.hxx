@@ -226,6 +226,7 @@ private:
 
     // hyphenation
     std::unique_ptr<weld::CheckButton> m_xHyphenBox;
+    std::unique_ptr<weld::CheckButton> m_xHyphenNoCapsBox;
     std::unique_ptr<weld::Label> m_xBeforeText;
     std::unique_ptr<weld::SpinButton> m_xExtHyphenBeforeBox;
     std::unique_ptr<weld::Label> m_xAfterText;
