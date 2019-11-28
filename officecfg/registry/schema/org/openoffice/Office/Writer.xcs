@@ -4288,7 +4288,7 @@
               <desc>Specifies whether character strings which could represent a URL are converted to a hyperlink.</desc>
               <label>Detect URL</label>
             </info>
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="ChangeOrdinalNumber" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Writer/AutoFormat/Options -->

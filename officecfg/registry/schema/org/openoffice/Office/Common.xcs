@@ -1295,7 +1295,7 @@
           should be converted to a hyperlink.</desc>
           <label>Detect URL</label>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="ChangeOrdinalNumber" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
