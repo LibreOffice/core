@@ -56,7 +56,7 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     get(mpMtrContrast, "setcontrast");
     get(mpLBColorMode, "setcolormode");
     mpLBColorMode->set_width_request(mpLBColorMode->get_preferred_size().Width());
-    get(mpMtrTrans, "settransparency");
+    get(mpMtrTrans, "setgraphtransparency");
     get(mpMtrRed, "setred");
     get(mpMtrGreen, "setgreen");
     get(mpMtrBlue, "setblue");

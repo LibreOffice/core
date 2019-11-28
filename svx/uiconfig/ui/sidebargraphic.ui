@@ -147,7 +147,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="sidebargraphic|transparencylabel">_Transparency:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">settransparency:%</property>
+                <property name="mnemonic_widget">setgraphtransparency:%</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -156,18 +156,18 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="settransparency:%">
+              <object class="GtkSpinButton" id="setgraphtransparency:%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes" context="sidebargraphic|settransparency|tooltip_text">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgraphtransparency|tooltip_text">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="adjustment">0to100adjustment</property>
                 <accessibility>
                   <relation type="labelled-by" target="transparencylabel"/>
                 </accessibility>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="settransparency:%-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|settransparency-atkobject">Transparency</property>
+                  <object class="AtkObject" id="setgraphtransparency:%-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setgraphtransparency-atkobject">Transparency</property>
                   </object>
                 </child>
               </object>
