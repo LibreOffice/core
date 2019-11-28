@@ -328,7 +328,7 @@ static bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& n
 }
 
 static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow,
-                                SCTAB nTab, SCCOLROW& nExtend, SCROW nMinCol )
+                                SCTAB nTab, SCCOLROW& nExtend, SCCOL nMinCol )
 {
     const SCCOL nTmp = nCol;
     ScAutoSum eSkip = ScAutoSumNone;
@@ -1512,7 +1512,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
         std::vector<std::vector<MisspellRangesType>> aSourceSpellRanges(nRowRepeatSize, std::vector<MisspellRangesType>(nColRepeatSize));
 
         for ( SCROW nRowIdx = 0; nRowIdx < nRowRepeatSize; ++nRowIdx )
-            for ( SCROW nColIdx = 0; nColIdx < nColRepeatSize; ++nColIdx )
+            for ( SCCOL nColIdx = 0; nColIdx < nColRepeatSize; ++nColIdx )
                 aSourceSpellRanges[nRowIdx][nColIdx] = pWin->GetAutoSpellData( nStartCol + nColIdx, nStartRow + nRowIdx );
 
         switch( eDir )
