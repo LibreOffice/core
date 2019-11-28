@@ -3515,7 +3515,7 @@ void ScTokenArray::MoveReferenceRowReorder( const ScAddress& rPos, SCTAB nTab, S
                     if (it != rRowMap.end())
                     {
                         // This row is reordered.
-                        SCCOL nNewRow = it->second;
+                        SCROW nNewRow = it->second;
                         aAbs.aStart.SetRow(nNewRow);
                         aAbs.aEnd.SetRow(nNewRow);
                         rRef.SetRange(aAbs, rPos);
