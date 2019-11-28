@@ -6836,6 +6836,14 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
 {
     OString sIss;
     short nEsc = rEscapement.GetEsc(), nProp = rEscapement.GetProportionalHeight();
+
+    // Simplify styles to avoid impossible complexity. Import and export as defaults only
+    if ( m_rExport.m_bStyDef && nEsc )
+    {
+        nProp = DFLT_ESC_PROP;
+        nEsc = (nEsc > 0) ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB;
+    }
+
     if ( !nEsc )
     {
         sIss = OString( "baseline" );
