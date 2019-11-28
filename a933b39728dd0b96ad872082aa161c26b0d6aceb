@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_9ad17f26",
+        "filename": "core/basic/qa/basic_coverage/test_StarDesktop.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-28T08:24:06Z",
+      "side": 1,
+      "message": "There\u0027s still inconsistency in the indentation (two spaces before If and above; four spaces before Else and EndIf)",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 2
+      },
+      "revId": "a933b39728dd0b96ad872082aa161c26b0d6aceb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
