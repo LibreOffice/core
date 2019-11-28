@@ -91,6 +91,9 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <svdobjplusdata.hxx>
 #include "presetooxhandleadjustmentrelations.hxx"
 
@@ -2918,6 +2921,69 @@ void SdrObjCustomShape::RestGeoData(const SdrObjGeoData& rGeo)
     SetMergedItem( rGeometryItem );
 
     InvalidateRenderGeometry();
+}
+
+void SdrObjCustomShape::AdjustToMaxRect(const tools::Rectangle& rMaxRect, bool bShrinkOnly /* = false */)
+{
+    SAL_INFO_IF(bShrinkOnly, "svx", "Case bShrinkOnly == true is not implemented yet.");
+
+    if (rMaxRect.IsEmpty() || rMaxRect == GetSnapRect())
+        return;
+
+    // Get a matrix, that would produce the existing shape, when applied to a unit square
+    basegfx::B2DPolyPolygon aPolyPolygon; //not used, but formal needed
+    basegfx::B2DHomMatrix aMatrix;
+    TRGetBaseGeometry(aMatrix, aPolyPolygon);
+    // Using TRSetBaseGeometry(aMatrix, aPolyPolygon) would regenerate the current shape. But
+    // applying aMatrix to a unit square will not generate the current shape. Scaling,
+    // rotation and translation are correct, but shear angle has wrong sign. So break up
+    // matrix and create a mathematically correct new one.
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate, fShearX;
+    aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+    basegfx::B2DHomMatrix aMathMatrix;
+    aMathMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+            aScale,
+            basegfx::fTools::equalZero(fShearX) ? 0.0 : -fShearX,
+            basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
+            aTranslate);
+
+    // Calculate scaling factors from size of the transformed unit polygon as ersatz for the not
+    // usable current snap rectangle.
+    basegfx::B2DPolygon aB2DPolygon(basegfx::utils::createUnitPolygon());
+    aB2DPolygon.transform(aMathMatrix);
+    basegfx::B2DRange aB2DRange(aB2DPolygon.getB2DRange());
+    double fPolygonWidth = aB2DRange.getWidth();
+    if (fPolygonWidth == 0)
+        fPolygonWidth = 1;
+    double fPolygonHeight = aB2DRange.getHeight();
+    if (fPolygonHeight == 0)
+        fPolygonHeight = 1;
+    const double aFactorX = static_cast<double>(rMaxRect.GetWidth()) / fPolygonWidth;
+    const double aFactorY = static_cast<double>(rMaxRect.GetHeight()) / fPolygonHeight;
+
+    // Generate matrix, that would produce the desired rMaxRect when applied to unit square
+    aMathMatrix.scale(aFactorX, aFactorY);
+    aB2DPolygon = basegfx::utils::createUnitPolygon();
+    aB2DPolygon.transform(aMathMatrix);
+    aB2DRange = aB2DPolygon.getB2DRange();
+    const double fPolygonLeft = aB2DRange.getMinX();
+    const double fPolygonTop = aB2DRange.getMinY();
+    aMathMatrix.translate(rMaxRect.getX() - fPolygonLeft, rMaxRect.getY() - fPolygonTop);
+
+    // Create a Matrix from aMathMatrix, which is usable with TRSetBaseGeometry
+    aMathMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+    aMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+            aScale,
+            basegfx::fTools::equalZero(fShearX) ? 0.0 : -fShearX,
+            basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
+            aTranslate);
+
+    // Now use TRSetBaseGeometry to actually perform scale, shear, rotate and translate
+    // on the shape. That considers gluepoints, interaction handles and text area, and includes
+    // setting rectangles dirty and broadcoast.
+    TRSetBaseGeometry(aMatrix, aPolyPolygon);
 }
 
 void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
