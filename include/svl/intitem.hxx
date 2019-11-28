@@ -90,6 +90,7 @@ public:
     { return new SfxUInt16Item(*this); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 
@@ -105,6 +106,7 @@ public:
     { return new SfxInt32Item(*this); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 
@@ -120,6 +122,7 @@ public:
     { return new SfxUInt32Item(*this); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 #endif // INCLUDED_SVL_INTITEM_HXX
