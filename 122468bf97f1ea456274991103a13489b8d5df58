@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_dac937ac",
+        "filename": "sfx2/source/doc/guisaveas.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-28T06:23:07Z",
+      "side": 1,
+      "message": "Redundant test (the range-based for loop below effectively checks this), and also includes three costly operations (sequence ctor, comparison of two sequences, and sequence dtor) where simple aEncryptionData.hasElements() could be used.",
+      "range": {
+        "startLine": 753,
+        "startChar": 8,
+        "endLine": 753,
+        "endChar": 76
+      },
+      "revId": "122468bf97f1ea456274991103a13489b8d5df58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
