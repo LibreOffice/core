@@ -16,6 +16,47 @@
       "revId": "31901749e42657f25ddea2d578fec43914676a53",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_3a0dcba0",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-11-28T09:07:49Z",
+      "side": 1,
+      "message": "Sure. As far as I see this does not seem to be locale-specific. I tested with en-US and hu_HU, can you think of others worth checking?\n\nWhile debugging I noticed the variable values \"look like\" as if they were in MM_100TH units. And the bibisect in the bug pointed to the addition of this inch unit.\n\nThe MapUnit in mePoolUnit that is used for internal size calculations all over this file comes from the Initialize() method which calls maTransfWidthControl.GetCoreMetric() - this gives back the 0.th item of the MapUnit enum, which is Map100thMM.\n\nI think this is why setting the meDlgUnit to MM_100TH solved the rounding issue.",
+      "parentUuid": "7f7f9b97_54009eab",
+      "revId": "31901749e42657f25ddea2d578fec43914676a53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_dafdb76e",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-11-28T09:07:49Z",
+      "side": 1,
+      "message": "Also: moving this call was necessary because when I set the UI measurement unit to meters in the Impress General settings, the displayed size values of a few cm became 0 instead of 0.x meters.\nFor units smaller than meter the values were correct without this, but for larger ones they became 0.",
+      "range": {
+        "startLine": 904,
+        "startChar": 4,
+        "endLine": 904,
+        "endChar": 23
+      },
+      "revId": "31901749e42657f25ddea2d578fec43914676a53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
