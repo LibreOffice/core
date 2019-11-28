@@ -27,8 +27,9 @@
 #include <unotools/options.hxx>
 #include <memory>
 
+#include <boost/optional.hpp>
+
 namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace boost { template <class T> class optional; }
 
 // The method GetList() returns a list of property values.
 // Use follow defines to separate values by names.

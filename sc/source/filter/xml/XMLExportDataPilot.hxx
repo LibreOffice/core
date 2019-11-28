@@ -20,12 +20,14 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDATAPILOT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDATAPILOT_HXX
 
+#include <sal/config.h>
+
+#include <boost/optional.hpp>
+
 #include <rtl/ustring.hxx>
 #include <global.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <unotools/textsearch.hxx>
-
-namespace boost { template <class T> class optional; }
 
 class ScXMLExport;
 class ScDocument;

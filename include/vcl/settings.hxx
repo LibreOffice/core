@@ -29,14 +29,11 @@
 #include <memory>
 #include <vector>
 
+#include <boost/optional.hpp>
+
 class BitmapEx;
 class LanguageTag;
 class SvtSysLocale;
-
-namespace boost
-{
-    template<typename T> class optional;
-}
 
 class LocaleDataWrapper;
 struct ImplMouseData;
