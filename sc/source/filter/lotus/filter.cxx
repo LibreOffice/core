@@ -189,7 +189,7 @@ ErrCode ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocumen
     // make document pointer global
     rContext.pDoc = pDocument;
     rContext.bEOF = false;
-    rContext.eCharVon = eSrc;
+    rContext.eCharset = eSrc;
 
     // allocate memory
     if( !MemNew(rContext) )

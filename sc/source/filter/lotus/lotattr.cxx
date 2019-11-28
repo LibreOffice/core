@@ -30,6 +30,7 @@
 #include <docpool.hxx>
 #include <document.hxx>
 #include <lotfntbf.hxx>
+#include "lotfilter.hxx"
 #include <patattr.hxx>
 #include <root.hxx>
 #include <scitems.hxx>
@@ -46,10 +47,10 @@ LotAttrCache::ENTRY::~ENTRY ()
 {
 }
 
-LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)
-    : mpLotusRoot(pLotRoot)
+LotAttrCache::LotAttrCache (LotusContext& rContext)
+    : mrContext(rContext)
 {
-    pDocPool = mpLotusRoot->pDoc->GetPool();
+    pDocPool = rContext.pDoc->GetPool();
 
     pColTab.reset( new Color [ 8 ] );
     pColTab[ 0 ] = COL_WHITE;
@@ -95,7 +96,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 
     pCurrent->nHash0 = nRefHash;
 
-    mpLotusRoot->maFontBuff.Fill( rAttr.nFont, rItemSet );
+    mrContext.maFontBuff.Fill( rAttr.nFont, rItemSet );
 
     sal_uInt8 nLine = rAttr.nLineStyle;
     if( nLine )
@@ -211,9 +212,9 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
     }
 }
 
-void LotAttrCol::Apply(LOTUS_ROOT* pLotusRoot, const SCCOL nColNum, const SCTAB nTabNum)
+void LotAttrCol::Apply(LotusContext& rContext, const SCCOL nColNum, const SCTAB nTabNum)
 {
-    ScDocument*     pDoc = pLotusRoot->pDoc;
+    ScDocument*     pDoc = rContext.pDoc;
 
     for (const auto& rxEntry : aEntries)
     {
@@ -222,8 +223,8 @@ void LotAttrCol::Apply(LOTUS_ROOT* pLotusRoot, const SCCOL nColNum, const SCTAB 
     }
 }
 
-LotAttrTable::LotAttrTable(LOTUS_ROOT* pLotRoot):
-    aAttrCache(pLotRoot)
+LotAttrTable::LotAttrTable(LotusContext& rContext):
+    aAttrCache(rContext)
 {
 }
 
@@ -240,11 +241,11 @@ void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const S
         pCols[ nColCnt ].SetAttr( nRow, rPattAttr );
 }
 
-void LotAttrTable::Apply(LOTUS_ROOT* pLotusRoot, const SCTAB nTabNum)
+void LotAttrTable::Apply(LotusContext& rContext, const SCTAB nTabNum)
 {
     SCCOL nColCnt;
-    for( nColCnt = 0 ; nColCnt <= aAttrCache.mpLotusRoot->pDoc->MaxCol() ; nColCnt++ )
-        pCols[ nColCnt ].Apply(pLotusRoot, nColCnt, nTabNum);     // does a Clear() at end
+    for( nColCnt = 0 ; nColCnt <= aAttrCache.mrContext.pDoc->MaxCol() ; nColCnt++ )
+        pCols[ nColCnt ].Apply(rContext, nColCnt, nTabNum);     // does a Clear() at end
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
