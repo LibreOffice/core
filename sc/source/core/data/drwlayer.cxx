@@ -1038,7 +1038,10 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 // order of these lines is important, modify rData.maLastRect carefully it is used as both
                 // a value and a flag for initialisation
                 rData.setShapeRect(GetDocument(), lcl_makeSafeRectangle(rData.getShapeRect()), pObj->IsVisible());
-                pObj->SetSnapRect(rData.getShapeRect());
+                if (pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
+                    pObj->AdjustToMaxRect(rData.getShapeRect());
+                else
+                    pObj->SetSnapRect(rData.getShapeRect());
                 // update 'unrotated anchor' it's the anchor we persist, it must be kept in sync
                 // with the normal Anchor
                 ResizeLastRectFromAnchor( pObj, rNoRotatedAnchor, true, bNegativePage, bCanResize );
