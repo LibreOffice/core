@@ -22,6 +22,29 @@
       "revId": "122468bf97f1ea456274991103a13489b8d5df58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_1a39efa2",
+        "filename": "sfx2/source/doc/guisaveas.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-28T06:45:45Z",
+      "side": 1,
+      "message": "This comment seems inconsistent with what happens. If all filters are supported, then it should be equivalent to\n\n    (aSupportedFilters.indexOf(aSearchToken) \u003e\u003d 0)\n\nright? then bAsk should become false (even if it was true)?\n\nOr possibly \"only consider non-empty supported filters list\" is meant?",
+      "range": {
+        "startLine": 764,
+        "startChar": 8,
+        "endLine": 764,
+        "endChar": 80
+      },
+      "revId": "122468bf97f1ea456274991103a13489b8d5df58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
