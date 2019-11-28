@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <memory>
 
-namespace boost { template <class T> class optional; }
+#include <boost/optional.hpp>
 
 enum class ScSheetEventId {
     FOCUS, UNFOCUS, SELECT, DOUBLECLICK, RIGHTCLICK, CHANGE, CALCULATE, COUNT,

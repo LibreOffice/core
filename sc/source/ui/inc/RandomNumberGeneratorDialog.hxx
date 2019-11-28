@@ -11,11 +11,13 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_RANDOMNUMBERGENERATORDIALOG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_RANDOMNUMBERGENERATORDIALOG_HXX
 
+#include <sal/config.h>
+
+#include <boost/optional.hpp>
+
 #include <address.hxx>
 #include "anyrefdg.hxx"
 #include "viewdata.hxx"
-
-namespace boost { template <typename T> class optional; }
 
 class ScRandomNumberGeneratorDialog : public ScAnyRefDlgController
 {

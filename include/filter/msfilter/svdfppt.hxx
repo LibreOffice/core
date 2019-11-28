@@ -25,6 +25,8 @@
 #include <memory>
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
@@ -45,10 +47,6 @@
 #include <tools/solar.h>
 #include <vcl/graph.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-
-namespace boost {
-    template <class T> class optional;
-}
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Size; }

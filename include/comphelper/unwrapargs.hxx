@@ -20,13 +20,15 @@
 #ifndef INCLUDED_COMPHELPER_UNWRAPARGS_HXX
 #define INCLUDED_COMPHELPER_UNWRAPARGS_HXX
 
+#include <sal/config.h>
+
+#include <boost/optional.hpp>
+
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppu/unotype.hxx>
-
-namespace boost { template <class T> class optional; }
 
 namespace comphelper {
 

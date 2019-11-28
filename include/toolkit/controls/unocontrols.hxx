@@ -54,7 +54,8 @@
 #include <memory>
 #include <vector>
 
-namespace boost { template <class T> class optional; }
+#include <boost/optional.hpp>
+
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphicObject; } } } }
 

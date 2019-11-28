@@ -22,6 +22,9 @@
 
 #include <memory>
 #include <vector>
+
+#include <boost/optional.hpp>
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -41,7 +44,6 @@
 #include <vcl/errcode.hxx>
 #include <functional>
 
-namespace boost { template <class T> class optional; }
 template <typename Arg, typename Ret> class Link;
 
 namespace com { namespace sun { namespace star {

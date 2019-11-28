@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SAX_TOOLS_CONVERTER_HXX
 #define INCLUDED_SAX_TOOLS_CONVERTER_HXX
 
+#include <sal/config.h>
+
+#include <boost/optional.hpp>
+
 #include <sax/saxdllapi.h>
 
 #include <sal/types.h>
@@ -27,8 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <tools/color.hxx>
-
-namespace boost { template <class T> class optional; }
 
 namespace com { namespace sun { namespace star {
     namespace uno {
