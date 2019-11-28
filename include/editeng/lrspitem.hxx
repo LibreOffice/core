@@ -118,7 +118,9 @@ public:
                     { return nPropFirstLineOfst; }
     void SetTextFirstLineOfstValue( const short nValue )
                     { nFirstLineOfst = nValue; }
+
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 inline SvxLRSpaceItem &SvxLRSpaceItem::operator=( const SvxLRSpaceItem &rCpy )
