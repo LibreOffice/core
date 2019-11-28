@@ -21,7 +21,7 @@
 #define INCLUDED_SFX2_SOURCE_INC_APPOPEN_HXX
 
 #include <sal/config.h>
-#include <sal/types.h>
+#include <vcl/errcode.hxx>
 
 class SfxItemPool;
 class SfxMedium;

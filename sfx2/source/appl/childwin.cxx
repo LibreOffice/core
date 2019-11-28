@@ -27,7 +27,9 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
 #include <sfx2/childwin.hxx>

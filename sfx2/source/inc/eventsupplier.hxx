@@ -22,21 +22,13 @@
 
 #include <sal/types.h>
 
+#include <com/sun/star/document/DocumentEvent.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/document/XDocumentEventListener.hpp>
-#include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <sfx2/sfxuno.hxx>
-
-#include <cppuhelper/interfacecontainer.hxx>
-#include <svl/lstner.hxx>
-#include <unotools/eventcfg.hxx>
 
 namespace comphelper
 {

@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <rtl/ustring.hxx>
+#include <tools/gen.hxx>
 
 class SvMemoryStream;
 class GDIMetaFile;

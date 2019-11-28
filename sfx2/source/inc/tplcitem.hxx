@@ -22,6 +22,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <tools/link.hxx>
 
+struct ImplSVEvent;
 class SfxCommonTemplateDialog_Impl;
 
 class SfxTemplateControllerItem : public SfxControllerItem {
