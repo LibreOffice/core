@@ -34,6 +34,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem final : public SfxPoolItem
 {
     bool      bHyphen  : 1;
     bool      bPageEnd : 1;
+    bool      bNoCapsHyphenation : 1;
     sal_uInt8 nMinLead;
     sal_uInt8 nMinTrail;
     sal_uInt8 nMaxHyphens;
@@ -61,6 +62,9 @@ public:
 
     void SetPageEnd( const bool bNew ) { bPageEnd = bNew; }
     bool IsPageEnd() const { return bPageEnd; }
+
+    void SetNoCapsHyphenation( const bool bNew ) { bNoCapsHyphenation = bNew; }
+    bool IsNoCapsHyphenation() const { return bNoCapsHyphenation; }
 
     sal_uInt8 &GetMinLead() { return nMinLead; }
     sal_uInt8 GetMinLead() const { return nMinLead; }

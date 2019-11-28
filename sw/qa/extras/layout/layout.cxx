@@ -22,6 +22,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
@@ -3553,6 +3554,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117982)
     assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[1]/text", "FOO AAA");
     //The first cell must be "FOO AAA". If not, this means the first cell content not visible in
     //the source document.
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf121658)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    createDoc("tdf121658.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // Only 2 hyphenated words should appear in the document (in the lowercase words).
+    // Uppercase words should not be hyphenated.
+    assertXPath(pXmlDoc, "//Special[@nType='PortionType::Hyphen']", 2);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
