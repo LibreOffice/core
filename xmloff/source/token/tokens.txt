@@ -925,6 +925,7 @@ hyphenation-keep
 hyphenation-ladder-count
 hyphenation-push-char-count
 hyphenation-remain-char-count
+hyphenation-no-caps
 i
 icon
 icon-set

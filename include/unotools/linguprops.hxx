@@ -35,6 +35,7 @@
 #define UPN_HYPH_MIN_LEADING                "HyphMinLeading"
 #define UPN_HYPH_MIN_TRAILING               "HyphMinTrailing"
 #define UPN_HYPH_MIN_WORD_LENGTH            "HyphMinWordLength"
+#define UPN_HYPH_NO_CAPS                    "HyphNoCaps"
 
 // UNO property names for Lingu
 // (those not covered by the SpellChecker and Hyphenator
@@ -100,6 +101,7 @@
 #define UPH_IS_REVERSE_MAPPING              33
 #define UPH_IS_GRAMMAR_AUTO                 34
 #define UPH_IS_GRAMMAR_INTERACTIVE          35
+#define UPH_HYPH_NO_CAPS                    36
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

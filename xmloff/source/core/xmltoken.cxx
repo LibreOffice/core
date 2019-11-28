@@ -1007,6 +1007,7 @@ namespace xmloff { namespace token {
         TOKEN( "hyphenation-ladder-count",        XML_HYPHENATION_LADDER_COUNT ),
         TOKEN( "hyphenation-push-char-count",     XML_HYPHENATION_PUSH_CHAR_COUNT ),
         TOKEN( "hyphenation-remain-char-count",       XML_HYPHENATION_REMAIN_CHAR_COUNT ),
+        TOKEN( "hyphenation-no-caps",             XML_HYPHENATION_NO_CAPS ),
         TOKEN( "i",                               XML_I ),
         TOKEN( "icon",                            XML_ICON ),
         TOKEN( "icon-set",                        XML_ICON_SET ),
