@@ -89,8 +89,8 @@ programfiles=$(echo ${files} | grep -o '/program/[^/]* ' | xargs -n 1 basename)
 # allow extending the whitelist using the environment variable to be able to work
 # on the installer stuff without the need for a baseline setup
 globalwhitelist="ld-linux-x86-64.so.2 ld-linux.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.1 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml2.so.2 libxslt.so.1 libexslt.so.0 ${LO_ELFCHECK_WHITELIST-}"
-x11whitelist="libX11.so.6 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 libXrender.so.1 libXrandr.so.2 libcairo.so.2"
-openglwhitelist="libGL.so.1"
+x11whitelist="libX11.so.6 libX11-xcb.so.1 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 libXrender.so.1 libXrandr.so.2 libcairo.so.2"
+openglwhitelist="libGL.so.1 libGLX.so.0"
 giowhitelist="libgio-2.0.so.0 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
 gstreamerwhitelist="libgstaudio-1.0.so.0 libgstpbutils-1.0.so.0 libgstvideo-1.0.so.0 libgstbase-1.0.so.0 libgstreamer-1.0.so.0"
 gtk3whitelist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libgio-2.0.so.0 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3 libharfbuzz.so.0"
@@ -164,6 +164,9 @@ local file="$1"
         ;;
         */libsdlo.so)
             whitelist="${whitelist} ${avahiwhitelist}"
+        ;;
+        */libskialo.so)
+            whitelist="${whitelist} ${openglwhitelist} ${x11whitelist}"
         ;;
         */libofficebean.so)
             whitelist="${whitelist} libjawt.so"
