@@ -134,7 +134,7 @@ namespace {
 
 struct ModuleToGroupNameMap_Impl
 {
-    OUString    m_pModule;
+    OUStringLiteral m_pModule;
     OUString    m_sGroupName;
     sal_uInt16  m_nNodeId;
 };
