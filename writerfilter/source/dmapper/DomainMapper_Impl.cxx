@@ -1713,6 +1713,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 {
                     TableParagraph aPending{pParaContext, xParaProps};
                     m_aParagraphsToEndTable.push_back(aPending);
+                    m_aParagraphsToEndTableKeep.push_back(aPending);
                 }
 
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style

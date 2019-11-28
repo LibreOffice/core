@@ -1044,6 +1044,8 @@ public:
 
     /// Table paragraph properties may need style update based on table style
     std::vector<TableParagraph> m_aParagraphsToEndTable;
+    /// Keeping this to apply paragraph properties in cells
+    std::vector<TableParagraph> m_aParagraphsToEndTableKeep;
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
