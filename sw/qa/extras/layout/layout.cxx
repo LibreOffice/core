@@ -3413,6 +3413,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
     CPPUNIT_ASSERT_EQUAL(nExpected, aPosition.nNode.GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117982)
+{
+    SwDoc* pDocument = createDoc("tdf117982.docx");
+    SwRootFrame* pMainLayoutFrm = pDocument->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pTestTable = pMainLayoutFrm->GetLower()->GetLower()->GetLower();
+    int nCellFrmHeight = pTestTable->GetLower()->GetLower()->getFramePrintArea().Height();
+    CPPUNIT_ASSERT_GREATER(0, nCellFrmHeight); //Expected: nCellFrmHeight > 0
+    //If this fails, that means the first cell of the test file, has hidden content, see tdf117982
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
