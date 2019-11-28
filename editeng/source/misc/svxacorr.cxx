@@ -2699,7 +2699,8 @@ const SvxAutocorrWord* SvxAutocorrWordList::Insert(SvxAutocorrWord aWord) const
     else
     {
         auto it = std::lower_bound(mpImpl->maSortedVector.begin(), mpImpl->maSortedVector.end(), aWord, CompareSvxAutocorrWordList());
-        if (it != mpImpl->maSortedVector.end() && !CompareSvxAutocorrWordList()(aWord, *it))
+        CollatorWrapper& rCmp = ::GetCollatorWrapper();
+        if (it == mpImpl->maSortedVector.end() || rCmp.compareString( aWord.GetShort(), it->GetShort() ) != 0)
         {
             it = mpImpl->maSortedVector.insert(it, std::move(aWord));
             return &*it;
