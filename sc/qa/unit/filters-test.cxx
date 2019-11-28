@@ -77,6 +77,7 @@ public:
     void testSortWithSheetExternalReferencesODS();
     void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef const & xDocShRef, SCROW nRow1, SCROW nRow2,
             bool bCheckRelativeInSheet );
+    void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testEnhancedProtectionXLSX);
     CPPUNIT_TEST(testSortWithSharedFormulasODS);
     CPPUNIT_TEST(testSortWithSheetExternalReferencesODS);
+    CPPUNIT_TEST(testCustomShapeCellAnchoredRotatedShape);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -790,6 +792,31 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef c
             CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(nCol,nRow,0)));
         }
     }
+}
+
+void ScFiltersTest::testCustomShapeCellAnchoredRotatedShape()
+{
+    // The local method impl_testLegacyCellAnchoredRotatedShape does exactly
+    // what I need for testing, so I put the test here.
+    // The example doc contains a cell anchored custom shape that is rotated
+    // and sheared. Error was, that the shape lost position and size on
+    // loading.
+    ScDocShellRef xDocSh = loadDoc("tdf119191_transformedShape.", FORMAT_ODS, true);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    tools::Rectangle aRect( 2401, 757, 5774, 3693 ); // expected snap rect
+    // expected anchor
+    ScDrawObjData aAnchor;
+    aAnchor.maStart.SetRow( 1 );
+    aAnchor.maStart.SetCol( 1 );
+    aAnchor.maEnd.SetRow( 8 );
+    aAnchor.maEnd.SetCol( 2 );
+    rDoc.SetDrawPageSize(0); // trigger recalcpos
+
+    // Inaccuracy, because lot of double <-> int conversions and trigonometric
+    // on rounded Hmm values, but default tolerance of 30 should be enough.
+    impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor);
+
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
