@@ -40,6 +40,7 @@
 #include <editeng/editstat.hxx>
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <document.hxx>
 #include <docpool.hxx>
 #include <docuno.hxx>

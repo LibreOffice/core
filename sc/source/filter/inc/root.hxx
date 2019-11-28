@@ -22,9 +22,6 @@
 
 #include <address.hxx>
 #include "flttypes.hxx"
-#include "lotattr.hxx"
-#include "lotfntbf.hxx"
-#include "lotrange.hxx"
 #include <memory>
 
 class ScRangeName;
@@ -78,24 +75,6 @@ protected:
     RootData*       pExcRoot;
     ExcRoot( RootData* pNexExcRoot ) : pExcRoot( pNexExcRoot ) {}
     ExcRoot( const ExcRoot& rCopy ) : pExcRoot( rCopy.pExcRoot ) {}
-};
-
-// Lotus Imp~/Exp~ -
-
-struct LOTUS_ROOT
-{
-    ScDocument*         pDoc;
-    LotusRangeList      maRangeNames;
-    rtl_TextEncoding const    eCharsetQ;
-    Lotus123Typ         eFirstType;
-    Lotus123Typ         eActType;
-    ScRange             aActRange;
-    std::unique_ptr<RangeNameBufferWK3> pRngNmBffWK3;
-    LotusFontBuffer     maFontBuff;
-    LotAttrTable        maAttrTable;
-
-                        LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ );
-                        ~LOTUS_ROOT();
 };
 
 #endif

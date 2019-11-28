@@ -144,8 +144,8 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
     sal_Int32 nBytesLeft = nFormulaSize;
     ScAddress aAddress(nCol, nRow, 0);
 
-    svl::SharedStringPool& rSPool = rContext.pLotusRoot->pDoc->GetSharedStringPool();
-    LotusToSc aConv(rContext, r, rSPool, rContext.pLotusRoot->eCharsetQ, false);
+    svl::SharedStringPool& rSPool = rContext.pDoc->GetSharedStringPool();
+    LotusToSc aConv(rContext, r, rSPool, rContext.eCharset, false);
     aConv.Reset( aAddress );
     aConv.Convert( pResult, nBytesLeft );
     if (!aConv.good())
@@ -153,7 +153,7 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
 
     if (ValidColRow(nCol, nRow))
     {
-        ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, std::move(pResult));
+        ScFormulaCell* pCell = new ScFormulaCell(rContext.pDoc, aAddress, std::move(pResult));
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.pDoc->EnsureTable(0);
         rContext.pDoc->SetFormulaCell(ScAddress(nCol, nRow, 0), pCell);
@@ -218,11 +218,11 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
         else
             strcpy( cBuf, cBuffer );           // #100211# - checked
 
-        OUString      aTmp( cBuf, strlen(cBuf), rContext.pLotusRoot->eCharsetQ );
+        OUString      aTmp( cBuf, strlen(cBuf), rContext.eCharset );
 
         aTmp = ScfTools::ConvertToScDefinedName( aTmp );
 
-        rContext.pLotusRoot->maRangeNames.Append( std::move(pRange) );
+        rContext.maRangeNames.Append( std::move(pRange) );
     }
 }
 
@@ -257,10 +257,10 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
         else
             strcpy( cBuf, cBuffer );           // #100211# - checked
 
-        OUString  aTmp( cBuf, strlen(cBuf), rContext.pLotusRoot->eCharsetQ );
+        OUString  aTmp( cBuf, strlen(cBuf), rContext.eCharset );
         aTmp = ScfTools::ConvertToScDefinedName( aTmp );
 
-        rContext.pLotusRoot->maRangeNames.Append( std::move(pRange) );
+        rContext.maRangeNames.Append( std::move(pRange) );
     }
 }
 
@@ -402,8 +402,8 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     sal_Int32 nBytesLeft = (n > 12) ? n - 12 : 0;
     ScAddress aAddress( nCol, nRow, nTab );
 
-    svl::SharedStringPool& rSPool = rContext.pLotusRoot->pDoc->GetSharedStringPool();
-    LotusToSc aConv(rContext, r, rSPool, rContext.pLotusRoot->eCharsetQ, true);
+    svl::SharedStringPool& rSPool = rContext.pDoc->GetSharedStringPool();
+    LotusToSc aConv(rContext, r, rSPool, rContext.eCharset, true);
     aConv.Reset( aAddress );
     aConv.Convert( pResult, nBytesLeft );
     if (!aConv.good())
@@ -411,7 +411,7 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     if (ValidColRow(nCol, nRow) && nTab <= rContext.pDoc->GetMaxTableNumber())
     {
-        ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, std::move(pResult));
+        ScFormulaCell* pCell = new ScFormulaCell(rContext.pDoc, aAddress, std::move(pResult));
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.pDoc->EnsureTable(nTab);
         rContext.pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
@@ -450,7 +450,7 @@ void OP_Note123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     r.ReadBytes(pText.get(), n);
     pText[ n ] = 0;
 
-    OUString aNoteText(pText.get(), strlen(pText.get()), rContext.pLotusRoot->eCharsetQ);
+    OUString aNoteText(pText.get(), strlen(pText.get()), rContext.eCharset);
     pText.reset();
 
     ScAddress aPos(nCol, nRow, nTab);
@@ -595,7 +595,7 @@ void OP_SheetName123(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLeng
     rContext.pDoc->MakeTable(nSheetNum);
     if (!sSheetName.empty())
     {
-        OUString aName(sSheetName.data(), strlen(sSheetName.data()), rContext.eCharVon);
+        OUString aName(sSheetName.data(), strlen(sSheetName.data()), rContext.eCharset);
         rContext.pDoc->RenameTab(nSheetNum, aName);
     }
 }
