@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_fa167355",
+        "filename": "sw/source/core/unocore/unomapproperties.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-11-28T10:33:46Z",
+      "side": 0,
+      "message": "i think it\u0027s missing around here for para styles.",
+      "revId": "508dce40f8fda55767b9f78251725e225db2bd2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
