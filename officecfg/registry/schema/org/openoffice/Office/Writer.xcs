@@ -4268,7 +4268,7 @@
               <desc>Specifies whether the letter at the beginning of a sentence is capitalized automatically.</desc>
               <label>Capitalize first letter of every sentence</label>
             </info>
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="ChangeUnderlineWeight" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Writer/AutoFormat/Options -->
