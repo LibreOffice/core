@@ -3480,6 +3480,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
     CPPUNIT_ASSERT_EQUAL(nExpected, aPosition.nNode.GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf121658)
+{
+    createDoc("tdf121658.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // Only 4 hyphenated words should appear in the document (in the lowercase words).
+    // Uppercase words should not be hyphenated.
+    assertXPath(pXmlDoc, "//Special[@nType='PortionType::Hyphen']", 4);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
