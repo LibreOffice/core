@@ -63,6 +63,7 @@
 #define UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS "ParaHyphenationMaxLeadingChars"
 #define UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS "ParaHyphenationMaxTrailingChars"
 #define UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS "ParaHyphenationMaxHyphens"
+#define UNO_NAME_PARA_HYPHENATION_NO_CAPS "ParaHyphenationNoCaps"
 #define UNO_NAME_LEFT_MARGIN "LeftMargin"
 #define UNO_NAME_RIGHT_MARGIN "RightMargin"
 #define UNO_NAME_HEADER_LEFT_MARGIN "HeaderLeftMargin"
