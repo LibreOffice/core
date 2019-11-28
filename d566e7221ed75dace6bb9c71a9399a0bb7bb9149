@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_5a7e87af",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-11-28T10:19:36Z",
+      "side": 1,
+      "message": "I\u0027m getting UnknownPropertyException here, anything obvious I\u0027m missing?",
+      "range": {
+        "startLine": 744,
+        "startChar": 8,
+        "endLine": 748,
+        "endChar": 9
+      },
+      "revId": "d566e7221ed75dace6bb9c71a9399a0bb7bb9149",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
