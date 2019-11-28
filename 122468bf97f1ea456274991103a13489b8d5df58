@@ -45,6 +45,30 @@
       "revId": "122468bf97f1ea456274991103a13489b8d5df58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_da3e178a",
+        "filename": "sfx2/source/doc/guisaveas.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-28T06:52:04Z",
+      "side": 1,
+      "message": "Or possibly I actually misunderstand what is the goal. Is this check in lines 749-773 meant to *additionally* warn when encryption is not supported, *in addition* to the pre-existing warning when \"the default filter is acceptable and the old filter is alien one\"? And so, is it expected to keep warning when the pre-existing warn condition is true, but encryption is supported? (Because now with this change it will stop warning in that case.)",
+      "parentUuid": "7f7f9b97_1a39efa2",
+      "range": {
+        "startLine": 764,
+        "startChar": 8,
+        "endLine": 764,
+        "endChar": 80
+      },
+      "revId": "122468bf97f1ea456274991103a13489b8d5df58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
