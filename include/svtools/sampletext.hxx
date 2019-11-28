@@ -35,9 +35,6 @@ OUString makeShortMinimalTextForScript(UScriptCode eScript);
 
 //These ones are typically for use in the font preview window in format character
 SVT_DLLPUBLIC OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &rFont);
-SVT_DLLPUBLIC OUString makeRepresentativeTextForLanguage(LanguageType eLang);
-SVT_DLLPUBLIC OUString makeRepresentativeTextForScript(UScriptCode eScript);
-SVT_DLLPUBLIC OUString makeMinimalTextForScript(UScriptCode eScript);
 
 
 #endif

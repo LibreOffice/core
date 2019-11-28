@@ -23,10 +23,10 @@
 #include <xsecxmlsecdllapi.h>
 
 // Only used for logging
-XSECXMLSEC_DLLPUBLIC void setErrorRecorder();
+void setErrorRecorder();
 //ToDo
 //void setErrorRecorder(const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
-XSECXMLSEC_DLLPUBLIC void clearErrorRecorder();
+void clearErrorRecorder();
 
 #endif
 
