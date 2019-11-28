@@ -34,6 +34,24 @@
       "revId": "b0c570110e0408289e4e28f3cbe3ba1a957aecd6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_9ac73f97",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-11-28T06:24:12Z",
+      "side": 1,
+      "message": "The symstore.exe save no duplicates",
+      "parentUuid": "7f7f9b97_7ae1032a",
+      "revId": "b0c570110e0408289e4e28f3cbe3ba1a957aecd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
