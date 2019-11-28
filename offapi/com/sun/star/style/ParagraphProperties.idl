@@ -407,6 +407,13 @@ published service ParagraphProperties
          */
         [optional, property, readonly] string ListLabelString;
 
+        /** Specifies whether words written in CAPS will be hyphenated.
+            Setting to `true` will disable hyphenation of words written in CAPS for this paragraph.
+
+            @since LibreOffice 6.5
+         */
+        [optional, property] boolean ParaHyphenationNoCaps;
+
 };
 
 
