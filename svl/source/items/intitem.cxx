@@ -137,6 +137,13 @@ void SfxUInt16Item::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+boost::property_tree::ptree SfxUInt16Item::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+    aTree.put("state", GetValue());
+    return aTree;
+}
+
 
 //  class SfxInt32Item
 
@@ -145,6 +152,13 @@ SfxPoolItem* SfxInt32Item::CreateDefault()
 {
     return new SfxInt32Item();
 };
+
+boost::property_tree::ptree SfxInt32Item::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+    aTree.put("state", GetValue());
+    return aTree;
+}
 
 
 //  class SfxUInt32Item
@@ -155,6 +169,12 @@ SfxPoolItem* SfxUInt32Item::CreateDefault()
     return new SfxUInt32Item();
 };
 
+boost::property_tree::ptree SfxUInt32Item::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+    aTree.put("state", GetValue());
+    return aTree;
+}
 
 SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_uInt32 nValue):
     SfxInt32Item(which, nValue)
