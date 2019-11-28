@@ -625,6 +625,34 @@ void SvxLRSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 
+boost::property_tree::ptree SvxLRSpaceItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+
+    boost::property_tree::ptree aState;
+
+    MapUnit eTargetUnit = MapUnit::MapInch;
+
+    OUString sLeft = GetMetricText(GetLeft(),
+                        MapUnit::MapTwip, eTargetUnit, nullptr);
+
+    OUString sRight = GetMetricText(GetRight(),
+                        MapUnit::MapTwip, eTargetUnit, nullptr);
+
+    OUString sFirstline = GetMetricText(GetTextFirstLineOfst(),
+                        MapUnit::MapTwip, eTargetUnit, nullptr);
+
+    aState.put("left", sLeft);
+    aState.put("right", sRight);
+    aState.put("firstline", sFirstline);
+    aState.put("unit", "inch");
+
+    aTree.push_back(std::make_pair("state", aState));
+
+    return aTree;
+}
+
+
 SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nId )
     : SfxPoolItem(nId)
     , nUpper(0)
