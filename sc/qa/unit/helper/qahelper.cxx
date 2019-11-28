@@ -343,7 +343,7 @@ const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)
     return pObj;
 }
 
-std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj)
+static std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj)
 {
     std::vector<OUString> aRangeReps;
 

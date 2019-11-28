@@ -38,7 +38,7 @@ BASIC_DLLPUBLIC void createAllObjectProperties( SbxObject* pObj );
 BASIC_DLLPUBLIC void SetSbUnoObjectDfltPropName( SbxObject* pObj );
 
 BASIC_DLLPUBLIC css::uno::Any sbxToUnoValue( const SbxValue* pVar );
-BASIC_DLLPUBLIC css::uno::Any sbxToUnoValue( const SbxValue* pVar, const css::uno::Type& rType, css::beans::Property const * pUnoProperty = nullptr );
+css::uno::Any sbxToUnoValue( const SbxValue* pVar, const css::uno::Type& rType, css::beans::Property const * pUnoProperty = nullptr );
 
 BASIC_DLLPUBLIC void unoToSbxValue( SbxVariable* pVar, const css::uno::Any& aValue );
 

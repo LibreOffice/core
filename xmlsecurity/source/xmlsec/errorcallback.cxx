@@ -54,12 +54,12 @@ static void errorCallback(const char* file,
 
 }
 
-XSECXMLSEC_DLLPUBLIC void setErrorRecorder()
+void setErrorRecorder()
 {
     xmlSecErrorsSetCallback(errorCallback);
 }
 
-XSECXMLSEC_DLLPUBLIC void clearErrorRecorder()
+void clearErrorRecorder()
 {
     xmlSecErrorsSetCallback(nullptr);
 }
