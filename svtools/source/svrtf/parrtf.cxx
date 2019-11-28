@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
@@ -557,7 +558,9 @@ void SvRTFParser::SkipGroup()
         if (nToken == RTF_BIN)
         {
             rInput.SeekRel(-1);
-            rInput.SeekRel(nTokenValue);
+            SAL_WARN_IF(nTokenValue < 0, "svtools", "negative value argument for rtf \\bin keyword");
+            if (nTokenValue > 0)
+                rInput.SeekRel(nTokenValue);
             nNextCh = GetNextChar();
         }
         while (nNextCh==0xa || nNextCh==0xd)
