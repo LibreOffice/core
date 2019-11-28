@@ -1013,6 +1013,8 @@ void DocxExport::WriteSettings()
     {
         pFS->singleElementNS(XML_w, XML_autoHyphenation,
                              FSNS(XML_w, XML_val), OString::boolean(static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen()));
+        if (static_cast<const SvxHyphenZoneItem*>(pItem)->IsNoCapsHyphenation())
+            pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
     }
 
     // Even and Odd Headers
@@ -1153,13 +1155,6 @@ void DocxExport::WriteSettings()
                 if (nHyphenationZone > 0)
                     pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
                                          OString::number(nHyphenationZone));
-            }
-            else if (rProp.Name == "NoHyphenateCaps")
-            {
-                bool bNoHyphenateCaps;
-                rProp.Value >>= bNoHyphenateCaps;
-                if (bNoHyphenateCaps)
-                    pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
             }
         }
     }
