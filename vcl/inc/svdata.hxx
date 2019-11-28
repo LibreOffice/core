@@ -387,7 +387,7 @@ BlendFrameCache*    ImplGetBlendFrameCache();
 VCL_DLLPUBLIC bool        ImplCallPreNotify( NotifyEvent& rEvt );
 
 VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData();
-VCL_PLUGIN_PUBLIC void ImplHideSplash();
+void ImplHideSplash();
 
 #ifdef _WIN32
 bool ImplInitAccessBridge();

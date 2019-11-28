@@ -115,7 +115,7 @@ SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const OpCode&
 // eventually perhaps iOS) special cases here, too)?  Please move this to osl,
 // it sure looks generally useful. Or am I missing something?
 
-SCQAHELPER_DLLPUBLIC void loadFile(const OUString& aFileName, std::string& aContent);
+void loadFile(const OUString& aFileName, std::string& aContent);
 
 SCQAHELPER_DLLPUBLIC void testFile(const OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat = StringType::StringValue);
 
@@ -126,17 +126,15 @@ SCQAHELPER_DLLPUBLIC const SdrOle2Obj* getSingleOleObject(ScDocument& rDoc, sal_
 
 SCQAHELPER_DLLPUBLIC const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage);
 
-SCQAHELPER_DLLPUBLIC std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj);
-
 SCQAHELPER_DLLPUBLIC ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj);
 
-SCQAHELPER_DLLPUBLIC bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);
+bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);
 
-SCQAHELPER_DLLPUBLIC bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos);
-SCQAHELPER_DLLPUBLIC bool checkFormulaPositions(
+bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos);
+bool checkFormulaPositions(
     ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const SCROW* pRows, size_t nRowCount);
 
-SCQAHELPER_DLLPUBLIC std::unique_ptr<ScTokenArray> compileFormula(
+std::unique_ptr<ScTokenArray> compileFormula(
     ScDocument* pDoc, const OUString& rFormula,
     formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE );
 
@@ -144,7 +142,7 @@ SCQAHELPER_DLLPUBLIC bool checkOutput(
     const ScDocument* pDoc, const ScRange& aOutRange,
     const std::vector<std::vector<const char*>>& aCheck, const char* pCaption );
 
-SCQAHELPER_DLLPUBLIC void clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange );
+void clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange );
 
 /**
  * Check if the cell at specified position is a formula cell that doesn't

@@ -212,7 +212,7 @@ void DestroySalInstance( SalInstance* pInst );
 
 void SalAbort( const OUString& rErrorText, bool bDumpCore );
 
-VCL_DLLPUBLIC const OUString& SalGetDesktopEnvironment();
+const OUString& SalGetDesktopEnvironment();
 
 #endif // INCLUDED_VCL_INC_SALINST_HXX
 

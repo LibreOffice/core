@@ -24,7 +24,7 @@
 #include "scdllapi.h"
 
 OUString SC_DLLPUBLIC ScResId(const char* pId);
-OUString SC_DLLPUBLIC ScResId(const char* pId, int nCardinality);
+OUString ScResId(const char* pId, int nCardinality);
 
 #endif // SC_SCRESMGR_HXX
 

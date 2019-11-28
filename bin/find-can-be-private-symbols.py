@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 #
 # Find exported symbols that can be made non-exported.
 #
@@ -22,6 +22,21 @@ import re
 
 exported_symbols = set()
 imported_symbols = set()
+# standalone functions that are exported but not imported
+unused_function_exports = set()
+classes_with_exported_symbols = set()
+classes_with_imported_symbols = set()
+# all names that exist in the source code
+all_source_names = set()
+
+
+# look for imported symbols in executables
+subprocess_find_all_source_names = subprocess.Popen("git grep -oh -P '\\b\\w\\w\\w+\\b' -- '*.h*'", stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+with subprocess_find_all_source_names.stdout as txt:
+    for line in txt:
+        line = line.strip()
+        all_source_names.add(line)
+subprocess_find_all_source_names.terminate()
 
 subprocess_find = subprocess.Popen("find ./instdir -name *.so && find ./workdir/LinkTarget/CppunitTest -name *.so", stdout=subprocess.PIPE, shell=True)
 with subprocess_find.stdout as txt:
@@ -76,11 +91,6 @@ print("exported = " + str(len(exported_symbols)))
 print("imported = " + str(len(imported_symbols)))
 print("diff     = " + str(len(diff)))
 
-# standalone functions that are exported but not imported
-unused_function_exports = set()
-classes_with_exported_symbols = set()
-classes_with_imported_symbols = set()
-
 for sym in exported_symbols:
     filtered_sym = subprocess.check_output(["c++filt", sym]).strip()
     if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
@@ -105,6 +115,11 @@ for sym in imported_symbols:
     if i != -1:
         classname = filtered_sym[:i]
         classes_with_imported_symbols.add(classname)
+
+def extractFunctionNameFromSignature(sym):
+    i = sym.find("(")
+    if i == -1: return sym
+    return sym[:i]
 
 with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
     for sym in sorted(unused_function_exports):
@@ -189,6 +204,8 @@ with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
         elif sym.startswith("typelib_"): continue
         elif sym.startswith("typereg_"): continue
         elif sym.startswith("uno_"): continue
+        # remove things we found that do not exist in our source code, they're not ours
+        if not(extractFunctionNameFromSignature(sym) in all_source_names): continue
         f.write(sym + "\n")
 
 with open("bin/find-can-be-private-symbols.classes.results", "wt") as f:
