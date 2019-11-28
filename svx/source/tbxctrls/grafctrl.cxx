@@ -53,6 +53,9 @@
 #include <svx/tbxcolor.hxx>
 #include <bitmaps.hlst>
 
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -1010,6 +1013,10 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
 
         nWhich = aIter.NextWhich();
     }
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell && comphelper::LibreOfficeKit::isActive())
+        pViewShell->sendUnoStatus( &rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
