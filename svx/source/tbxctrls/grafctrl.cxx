@@ -60,6 +60,8 @@
 #include <bitmaps.hlst>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -1015,6 +1017,10 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
 
         nWhich = aIter.NextWhich();
     }
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell && comphelper::LibreOfficeKit::isActive())
+        pViewShell->sendUnoStatus( &rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
