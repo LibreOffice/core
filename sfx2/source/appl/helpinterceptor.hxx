@@ -28,8 +28,8 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
+#include "newhelp.hxx"
 #include <vector>
-#include <memory>
 
 class SfxHelpWindow_Impl;
 class HelpInterceptor_Impl : public ::cppu::WeakImplHelper<

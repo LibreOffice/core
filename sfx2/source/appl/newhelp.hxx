@@ -33,7 +33,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/treelistbox.hxx>
-#include <unotools/moduleoptions.hxx>
 
 #include <srchdlg.hxx>
 

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_SFXURLRELOCATOR_HXX
 #define INCLUDED_SFX2_SOURCE_INC_SFXURLRELOCATOR_HXX
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 

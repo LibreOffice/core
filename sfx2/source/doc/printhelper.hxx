@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <sal/config.h>
-#include <sfx2/dllapi.h>
 #include <sfx2/viewsh.hxx>
 #include <sal/types.h>
 

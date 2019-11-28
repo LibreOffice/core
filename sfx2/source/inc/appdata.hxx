@@ -23,10 +23,8 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <svl/lstner.hxx>
 #include <svl/svdde.hxx>
 #include <svtools/ehdl.hxx>
-#include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
 #include <o3tl/enumarray.hxx>
 

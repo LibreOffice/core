@@ -25,6 +25,7 @@
 
 #include <unotools/viewoptions.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/menu.hxx>

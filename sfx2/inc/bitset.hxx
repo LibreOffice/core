@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SFX2_INC_BITSET_HXX
 #define INCLUDED_SFX2_INC_BITSET_HXX
 
+#include <sal/types.h>
+
 #include <memory>
 
 class IndexBitSet

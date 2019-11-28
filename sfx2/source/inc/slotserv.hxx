@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_SLOTSERV_HXX
 #define INCLUDED_SFX2_SOURCE_INC_SLOTSERV_HXX
 
+#include <sal/types.h>
+
 class SfxSlot;
 
 class SfxSlotServer

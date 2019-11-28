@@ -18,8 +18,10 @@
  */
 
 
+#include <osl/diagnose.h>
 #include <svl/whiter.hxx>
 #include <svl/eitem.hxx>
+#include <tools/debug.hxx>
 
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
@@ -33,6 +35,7 @@
 #include <sfxtypes.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/viewfrm.hxx>
 
 
 void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, std::unique_ptr<SfxChildWinFactory> pFact )

@@ -25,8 +25,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 
@@ -42,6 +44,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>
 
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

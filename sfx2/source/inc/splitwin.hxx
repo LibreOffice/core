@@ -21,6 +21,7 @@
 
 #include <vcl/splitwin.hxx>
 #include <sfx2/childwin.hxx>
+#include <sfx2/dockwin.hxx>
 
 #include <vector>
 #include <memory>
