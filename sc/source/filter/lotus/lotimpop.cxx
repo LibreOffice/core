@@ -37,21 +37,6 @@
 
 #include <unotools/configmgr.hxx>
 
-LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ )
-    :
-        pDoc( pDocP),
-        maRangeNames(),
-        eCharsetQ( eQ),
-        eFirstType( Lotus123Typ::X),
-        eActType( Lotus123Typ::X),
-        pRngNmBffWK3( new RangeNameBufferWK3() ),
-        maAttrTable( this )
-{
-}
-
-LOTUS_ROOT::~LOTUS_ROOT()
-{
-}
 
 static osl::Mutex aLotImpSemaphore;
 
@@ -64,16 +49,10 @@ ImportLotus::ImportLotus(LotusContext &rContext, SvStream& aStream, ScDocument* 
 {
     // good point to start locking of import lotus
     aLotImpSemaphore.acquire();
-
-    rContext.pLotusRoot = new LOTUS_ROOT(pDoc, eQ);
 }
 
 ImportLotus::~ImportLotus()
 {
-    LotusContext &rContext = aConv.getContext();
-    delete rContext.pLotusRoot;
-    rContext.pLotusRoot = nullptr;
-
     // no need 4 pLotusRoot anymore
     aLotImpSemaphore.release();
 }
@@ -86,7 +65,7 @@ void ImportLotus::Bof()
     Read( nFileCode );
     Read( nFileSub );
     LotusContext &rContext = aConv.getContext();
-    Read( rContext.pLotusRoot->aActRange );
+    Read( rContext.aActRange );
     Read( nSaveCnt );
     Read( nMajorId );
     Read( nMinorId );
@@ -97,11 +76,11 @@ void ImportLotus::Bof()
     {
         if( nFileCode == 0x1000 )
         {// <= WK3
-            rContext.pLotusRoot->eFirstType = rContext.pLotusRoot->eActType = Lotus123Typ::WK3;
+            rContext.eFirstType = rContext.eActType = Lotus123Typ::WK3;
         }
         else if( nFileCode == 0x1002 )
         {// WK4
-            rContext.pLotusRoot->eFirstType = rContext.pLotusRoot->eActType = Lotus123Typ::WK4;
+            rContext.eFirstType = rContext.eActType = Lotus123Typ::WK4;
         }
     }
 }
@@ -188,7 +167,7 @@ void ImportLotus::Userrange()
     Read( aScRange );
 
     LotusContext &rContext = aConv.getContext();
-    rContext.pLotusRoot->pRngNmBffWK3->Add( aName, aScRange );
+    rContext.pRngNmBffWK3->Add( aName, aScRange );
 }
 
 void ImportLotus::Errcell()
@@ -353,7 +332,7 @@ void ImportLotus::Font_Face()
     Read( aName );
 
     LotusContext &rContext = aConv.getContext();
-    rContext.pLotusRoot->maFontBuff.SetName( nNum, aName );
+    rContext.maFontBuff.SetName( nNum, aName );
 }
 
 void ImportLotus::Font_Type()
@@ -363,7 +342,7 @@ void ImportLotus::Font_Type()
     {
         sal_uInt16 nType;
         Read( nType );
-        rContext.pLotusRoot->maFontBuff.SetType( nCnt, nType );
+        rContext.maFontBuff.SetType( nCnt, nType );
     }
 }
 
@@ -374,7 +353,7 @@ void ImportLotus::Font_Ysize()
     {
         sal_uInt16 nSize;
         Read( nSize );
-        rContext.pLotusRoot->maFontBuff.SetHeight( nCnt, nSize );
+        rContext.maFontBuff.SetHeight( nCnt, nSize );
     }
 }
 
@@ -411,7 +390,7 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
         Read( nRepeats );
 
         if( aAttr.HasStyles() )
-            rContext.pLotusRoot->maAttrTable.SetAttr(
+            rContext.maAttrTable.SetAttr(
                 nColCnt, static_cast<SCCOL> ( nColCnt + nRepeats ), nRow, aAttr );
 
         // Do this here and NOT in class LotAttrTable, as we only add attributes if the other

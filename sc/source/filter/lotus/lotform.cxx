@@ -392,7 +392,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
     TokenId             nBuf0;
     DefTokenId          eOc;
     const sal_Char*     pExtName = nullptr;
-    RangeNameBufferWK3& rRangeNameBufferWK3 = *m_rContext.pLotusRoot->pRngNmBffWK3;
+    RangeNameBufferWK3& rRangeNameBufferWK3 = *m_rContext.pRngNmBffWK3;
 
     ScComplexRefData        aCRD;
     aCRD.InitFlags();
@@ -401,7 +401,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
     LR_ID               nId;
     TokenId             nNewId;
 
-    LotusRangeList&     rRangeList = m_rContext.pLotusRoot->maRangeNames;
+    LotusRangeList&     rRangeList = m_rContext.maRangeNames;
 
     FuncType1*          pIndexToType;
     FuncType2*          pIndexToToken;
