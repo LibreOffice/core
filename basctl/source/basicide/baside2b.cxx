@@ -1208,7 +1208,7 @@ void EditorWindow::UpdateSyntaxHighlighting ()
 
 void EditorWindow::ImplSetFont()
 {
-    OUString sFontName(officecfg::Office::Common::Font::SourceViewFont::FontName::get().get_value_or(OUString()));
+    OUString sFontName(officecfg::Office::Common::Font::SourceViewFont::FontName::get().value_or(OUString()));
     if (sFontName.isEmpty())
     {
         vcl::Font aTmpFont(OutputDevice::GetDefaultFont(DefaultFontType::FIXED,

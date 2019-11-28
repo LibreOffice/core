@@ -434,7 +434,7 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
             xSet->setPropertyValue(s_sFilter, uno::makeAny(sFilter));
             xSet->setPropertyValue(s_sTitle, uno::makeAny(sTitle));
             xSet->setPropertyValue(s_sPassword, uno::makeAny(OUString()));
-            xSet->setPropertyValue(s_sThumbnail, uno::makeAny(sThumbnail.get_value_or(OUString())));
+            xSet->setPropertyValue(s_sThumbnail, uno::makeAny(sThumbnail.value_or(OUString())));
 
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
         }

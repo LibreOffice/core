@@ -92,7 +92,7 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
 
     try
     {
-        AddManualCertPath(officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(OUString()));
+        AddManualCertPath(officecfg::Office::Common::Security::Scripting::CertDir::get().value_or(OUString()));
         if (m_sManualPath.isEmpty())
             AddManualCertPath(officecfg::Office::Common::Security::Scripting::ManualCertDir::get(), false);
     }

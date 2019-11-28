@@ -231,7 +231,7 @@ void OSqlEdit::ImplSetFont()
     StyleSettings aStyleSettings = aSettings.GetStyleSettings();
     OUString sFontName(
         officecfg::Office::Common::Font::SourceViewFont::FontName::get().
-        get_value_or( OUString() ) );
+        value_or( OUString() ) );
     if ( sFontName.isEmpty() )
     {
         vcl::Font aTmpFont( OutputDevice::GetDefaultFont( DefaultFontType::FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), GetDefaultFontFlags::NONE, this ) );

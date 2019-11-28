@@ -1296,7 +1296,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     OUString sSetupVersion = utl::ConfigManager::getProductVersion();
                     sal_Int32 iCurrent = sSetupVersion.getToken(0,'.').toInt32() * 10 + sSetupVersion.getToken(1,'.').toInt32();
                     OUString sLastVersion
-                        = officecfg::Setup::Product::ooSetupLastVersion::get().get_value_or("0.0");
+                        = officecfg::Setup::Product::ooSetupLastVersion::get().value_or("0.0");
                     sal_Int32 iLast = sLastVersion.getToken(0,'.').toInt32() * 10 + sLastVersion.getToken(1,'.').toInt32();
                     if ((iCurrent > iLast) && !Application::IsHeadlessModeEnabled() && !bIsUITest)
                     {

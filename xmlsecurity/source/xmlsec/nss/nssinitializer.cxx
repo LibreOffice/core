@@ -250,7 +250,7 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
     try
     {
         OUString sUserSetCertPath =
-            officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(OUString());
+            officecfg::Office::Common::Security::Scripting::CertDir::get().value_or(OUString());
 
         if (!sUserSetCertPath.isEmpty())
         {
