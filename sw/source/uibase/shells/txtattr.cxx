@@ -40,8 +40,6 @@
 #include <editeng/cmapitem.hxx>
 #include <paratr.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <editeng/itemtype.hxx>
 
 #include <fmtinfmt.hxx>
 #include <docsh.hxx>
@@ -755,28 +753,6 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     SvxLRSpaceItem aLR = aCoreSet.Get( RES_LR_SPACE );
                     aLR.SetWhich(nSlot);
                     rSet.Put(aLR);
-
-                    if (comphelper::LibreOfficeKit::isActive())
-                    {
-                        // TODO: set correct unit
-                        MapUnit eTargetUnit = MapUnit::MapInch;
-
-                        OUString sLeft = GetMetricText(aLR.GetLeft(),
-                                            MapUnit::MapTwip, eTargetUnit, nullptr);
-
-                        OUString sRight = GetMetricText(aLR.GetRight(),
-                                            MapUnit::MapTwip, eTargetUnit, nullptr);
-
-                        OUString sFirstline = GetMetricText(aLR.GetTextFirstLineOfst(),
-                                            MapUnit::MapTwip, eTargetUnit, nullptr);
-
-                        OUString sPayload = ".uno:LeftRightParaMargin={\"left\": \"" + sLeft +
-                            "\", \"right\": \"" + sRight +
-                            "\", \"firstline\": \"" + sFirstline + "\"}";
-
-                        GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                            OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
-                    }
                 }
                 else
                     rSet.InvalidateItem(nSlot);
@@ -870,6 +846,10 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     }
 
     rSet.Put(aCoreSet,false);
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell && comphelper::LibreOfficeKit::isActive())
+        pViewShell->sendUnoStatus( &rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
