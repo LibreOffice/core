@@ -104,6 +104,7 @@ public:
     { return new SfxUInt16Item(*this); }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 
