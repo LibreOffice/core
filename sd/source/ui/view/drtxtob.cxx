@@ -45,8 +45,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <editeng/itemtype.hxx>
 
 #include <sfx2/objface.hxx>
 
@@ -593,28 +591,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         aLRSpace.SetWhich(SID_ATTR_PARA_LRSPACE);
         rSet.Put(aLRSpace);
         Invalidate(SID_ATTR_PARA_LRSPACE);
-
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            // TODO: set correct unit
-            MapUnit eTargetUnit = MapUnit::MapInch;
-
-            OUString sLeft = GetMetricText(aLRSpace.GetLeft(),
-                                MapUnit::MapTwip, eTargetUnit, nullptr);
-
-            OUString sRight = GetMetricText(aLRSpace.GetRight(),
-                                MapUnit::MapTwip, eTargetUnit, nullptr);
-
-            OUString sFirstline = GetMetricText(aLRSpace.GetTextFirstLineOfst(),
-                                MapUnit::MapTwip, eTargetUnit, nullptr);
-
-            OUString sPayload = ".uno:LeftRightParaMargin={\"left\": \"" + sLeft +
-                "\", \"right\": \"" + sRight +
-                "\", \"firstline\": \"" + sFirstline + "\"}";
-
-            GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
-        }
 
         //Added by xuxu
         SfxItemState eState = aAttrSet.GetItemState( EE_PARA_LRSPACE );
