@@ -1070,8 +1070,17 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                CH_TAB != (cChar = m_Text[sal_Int32(nStop)]) &&
                CH_BREAK != cChar && CHAR_HARDBLANK != cChar &&
                CHAR_HARDHYPHEN != cChar && CHAR_SOFTHYPHEN != cChar &&
+               CH_TXT_ATR_INPUTFIELDSTART != cChar &&
+               CH_TXT_ATR_INPUTFIELDEND != cChar &&
+               CH_TXT_ATR_FORMELEMENT != cChar &&
+               CH_TXT_ATR_FIELDSTART != cChar &&
+               CH_TXT_ATR_FIELDSEP != cChar &&
+               CH_TXT_ATR_FIELDEND != cChar &&
                !pHint )
         {
+            // this looks like some defensive programming to handle dummy char
+            // with missing hint? but it's rather silly because it may pass the
+            // dummy char to lcl_MinMaxString in that case...
             if( ( CH_TXTATR_BREAKWORD != cChar && CH_TXTATR_INWORD != cChar )
                 || ( nullptr == ( pHint = aIter.GetAttr( nStop ) ) ) )
                 ++nStop;
@@ -1193,6 +1202,16 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                 aIter.SeekAndChgAttrIter( ++nIdx, pOut );
             }
             break;
+            case CH_TXT_ATR_INPUTFIELDSTART:
+            case CH_TXT_ATR_INPUTFIELDEND:
+            case CH_TXT_ATR_FORMELEMENT:
+            case CH_TXT_ATR_FIELDSTART:
+            case CH_TXT_ATR_FIELDSEP:
+            case CH_TXT_ATR_FIELDEND:
+            {   // just skip it and continue with the content...
+                aIter.SeekAndChgAttrIter( ++nIdx, pOut );
+            }
+            break;
         }
     }
     if( static_cast<long>(rMax) < aArg.nRowWidth )
@@ -1305,6 +1324,12 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
                 CHAR_HARDBLANK == cChar ||
                 CHAR_HARDHYPHEN == cChar ||
                 CHAR_SOFTHYPHEN == cChar ||
+                CH_TXT_ATR_INPUTFIELDSTART == cChar ||
+                CH_TXT_ATR_INPUTFIELDEND == cChar ||
+                CH_TXT_ATR_FORMELEMENT == cChar ||
+                CH_TXT_ATR_FIELDSTART == cChar ||
+                CH_TXT_ATR_FIELDSEP == cChar ||
+                CH_TXT_ATR_FIELDEND == cChar ||
                 (
                   (CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar) &&
                   (nullptr == (pHint = aIter.GetAttr(nStop)))
@@ -1380,8 +1405,17 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
                 }
             } // end of switch
             nIdx++;
-        } // end of while
-    }
+        }
+        else if (CH_TXT_ATR_INPUTFIELDSTART == cChar ||
+                 CH_TXT_ATR_INPUTFIELDEND == cChar ||
+                 CH_TXT_ATR_FORMELEMENT == cChar ||
+                 CH_TXT_ATR_FIELDSTART == cChar ||
+                 CH_TXT_ATR_FIELDSEP == cChar ||
+                 CH_TXT_ATR_FIELDEND == cChar)
+        {   // just skip it and continue with the content...
+            ++nIdx;
+        }
+    } // end of while
 
     nWidth = std::max( nWidth, nProWidth );
 
