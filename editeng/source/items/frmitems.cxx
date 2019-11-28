@@ -843,6 +843,29 @@ void SvxULSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+boost::property_tree::ptree SvxULSpaceItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+
+    boost::property_tree::ptree aState;
+
+    MapUnit eTargetUnit = MapUnit::MapInch;
+
+    OUString sUpper = GetMetricText(GetUpper(),
+                        MapUnit::MapTwip, eTargetUnit, nullptr);
+
+    OUString sLower = GetMetricText(GetLower(),
+                        MapUnit::MapTwip, eTargetUnit, nullptr);
+
+    aState.put("upper", sUpper);
+    aState.put("lower", sLower);
+    aState.put("unit", "inch");
+
+    aTree.push_back(std::make_pair("state", aState));
+
+    return aTree;
+}
+
 
 SfxPoolItem* SvxPrintItem::Clone( SfxItemPool* ) const
 {

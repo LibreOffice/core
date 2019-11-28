@@ -482,38 +482,15 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
             }
             long nUpper = 0;
-            OUString sUpper, sLower;
-            // TODO: set correct unit
-            MapUnit eTargetUnit = MapUnit::MapInch;
 
             for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
             {
                 const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( nPara );
                 const SvxULSpaceItem& rItem = rItems.Get( EE_PARA_ULSPACE );
                 nUpper = std::max( nUpper, static_cast<long>(rItem.GetUpper()) );
-
-                if (nPara == nStartPara)
-                {
-                    sUpper = GetMetricText(rItem.GetUpper(),
-                        MapUnit::MapTwip, eTargetUnit, nullptr);
-                }
-                if (nPara == nEndPara)
-                {
-                    sLower = GetMetricText(rItem.GetLower(),
-                        MapUnit::MapTwip, eTargetUnit, nullptr);
-                }
             }
             if( nUpper == 0 )
                 rSet.DisableItem( SID_PARASPACE_DECREASE );
-
-            if (comphelper::LibreOfficeKit::isActive())
-            {
-                OUString sPayload = ".uno:ULSpacing={\"upper\": \"" + sUpper +
-                    "\", \"lower\": \"" + sLower + "\"}";
-
-                GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                    OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
-            }
         }
         else
         {
