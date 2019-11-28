@@ -119,7 +119,6 @@ class SalLayoutGlyphsImpl : public std::vector<GlyphItem>
     friend class GenericSalLayout;
 
 public:
-    ~SalLayoutGlyphsImpl();
     SalLayoutGlyphsImpl* clone(SalLayoutGlyphs& rGlyphs) const;
     LogicalFontInstance& GetFont() const { return *m_rFontInstance; }
     bool IsValid() const;
