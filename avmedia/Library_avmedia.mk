@@ -21,6 +21,10 @@ $(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
 
 $(eval $(call gb_Library_use_sdk_api,avmedia,))
 
+$(eval $(call gb_Library_use_externals,avmedia,\
+	boost_headers \
+))
+
 ifeq ($(USE_AVMEDIA_DUMMY),TRUE)
 $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/avmediadummy \
@@ -32,10 +36,6 @@ else
 
 $(eval $(call gb_Library_add_defs,avmedia,\
 	-DAVMEDIA_DLLIMPLEMENTATION \
-))
-
-$(eval $(call gb_Library_use_externals,avmedia,\
-	boost_headers \
 ))
 
 ifeq ($(DISABLE_GUI),)
