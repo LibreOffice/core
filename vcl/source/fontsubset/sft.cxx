@@ -32,6 +32,7 @@
 #ifdef UNX
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #endif
 #include <sft.hxx>
 #include "ttcr.hxx"
