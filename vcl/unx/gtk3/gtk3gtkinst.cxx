@@ -22,6 +22,7 @@
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
 #include <vcl/inputtypes.hxx>
+#include <vcl/transfer.hxx>
 #include <unx/genpspgraphics.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
@@ -7945,6 +7946,18 @@ namespace
         return -1;
     }
 
+    GdkDragAction VclToGdk(sal_Int8 dragOperation)
+    {
+        GdkDragAction eRet(static_cast<GdkDragAction>(0));
+        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+            eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_COPY);
+        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+            eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_MOVE);
+        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
+            eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_LINK);
+        return eRet;
+    }
+
 struct GtkInstanceTreeIter : public weld::TreeIter
 {
     GtkInstanceTreeIter(const GtkInstanceTreeIter* pOrig)
@@ -7993,6 +8006,7 @@ private:
     std::vector<int> m_aSavedSortColumns;
     std::vector<int> m_aViewColToModelCol;
     std::vector<int> m_aModelColToViewCol;
+    rtl::Reference<GtkDragSource> m_xDragSource;
     bool m_bWorkAroundBadDragRegion;
     bool m_bInDrag;
     gint m_nTextCol;
@@ -8008,6 +8022,9 @@ private:
     gulong m_nPopupMenuSignalId;
     gulong m_nDragBeginSignalId;
     gulong m_nDragEndSignalId;
+    gulong m_nDragFailedSignalId;
+    gulong m_nDragDataDeleteignalId;
+    gulong m_nDragGetSignalId;
     gulong m_nKeyPressSignalId;
     ImplSVEvent* m_pChangeEvent;
 
@@ -8392,15 +8409,63 @@ private:
         return default_sort_func(pModel, a, b, m_xSorter.get());
     }
 
-    static void signalDragBegin(GtkWidget*, GdkDragContext*, gpointer widget)
+    static void signalDragBegin(GtkWidget*, GdkDragContext* context, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
-        g_DragSource = pThis;
+        pThis->signal_drag_begin(context);
     }
 
-    static void signalDragEnd(GtkWidget*, GdkDragContext*, gpointer)
+    void ensure_drag_source()
+    {
+        if (!m_xDragSource)
+        {
+            m_xDragSource.set(new GtkDragSource);
+
+            m_nDragFailedSignalId = g_signal_connect(m_pWidget, "drag-failed", G_CALLBACK(signalDragFailed), this);
+            m_nDragDataDeleteignalId = g_signal_connect(m_pWidget, "drag-data-delete", G_CALLBACK(signalDragDelete), this);
+            m_nDragGetSignalId = g_signal_connect(m_pWidget, "drag-data-get", G_CALLBACK(signalDragDataGet), this);
+        }
+    }
+
+    void signal_drag_begin(GdkDragContext* context)
+    {
+        if (m_aDragBeginHdl.Call(*this))
+        {
+            gtk_drag_cancel(context);
+            return;
+        }
+        g_DragSource = this;
+        if (!m_xDragSource)
+            return;
+        m_xDragSource->setActiveDragSource();
+    }
+
+    static void signalDragEnd(GtkWidget* /*widget*/, GdkDragContext* context, gpointer widget)
     {
         g_DragSource = nullptr;
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        if (pThis->m_xDragSource.is())
+            pThis->m_xDragSource->dragEnd(context);
+    }
+
+    static gboolean signalDragFailed(GtkWidget* /*widget*/, GdkDragContext* /*context*/, GtkDragResult /*result*/, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        pThis->m_xDragSource->dragFailed();
+        return false;
+    }
+
+    static void signalDragDelete(GtkWidget* /*widget*/, GdkDragContext* /*context*/, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        pThis->m_xDragSource->dragDelete();
+    }
+
+    static void signalDragDataGet(GtkWidget* /*widget*/, GdkDragContext* /*context*/, GtkSelectionData *data, guint info,
+                                  guint /*time*/, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        pThis->m_xDragSource->dragDataGet(data, info);
     }
 
     bool signal_key_press(GdkEventKey* pEvent)
@@ -8463,6 +8528,9 @@ public:
         , m_nPopupMenuSignalId(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nDragBeginSignalId(g_signal_connect(pTreeView, "drag-begin", G_CALLBACK(signalDragBegin), this))
         , m_nDragEndSignalId(g_signal_connect(pTreeView, "drag-end", G_CALLBACK(signalDragEnd), this))
+        , m_nDragFailedSignalId(0)
+        , m_nDragDataDeleteignalId(0)
+        , m_nDragGetSignalId(0)
         , m_nKeyPressSignalId(g_signal_connect(pTreeView, "key-press-event", G_CALLBACK(signalKeyPress), this))
         , m_pChangeEvent(nullptr)
     {
@@ -9649,6 +9717,24 @@ public:
         gtk_widget_hide(m_pWidget);
     }
 
+    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants) override
+    {
+        css::uno::Reference<css::datatransfer::XTransferable> xTrans(rHelper.get());
+        css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> xListener(rHelper.get());
+
+        ensure_drag_source();
+
+        auto aFormats = xTrans->getTransferDataFlavors();
+        std::vector<GtkTargetEntry> aGtkTargets(m_xDragSource->FormatsToGtk(aFormats));
+
+        gtk_tree_view_enable_model_drag_source(m_pTreeView, GDK_BUTTON1_MASK, aGtkTargets.data(), aGtkTargets.size(), VclToGdk(eDNDConstants));
+
+        for (auto &a : aGtkTargets)
+            g_free(a.target);
+
+        m_xDragSource->set_datatransfer(xTrans, xListener);
+    }
+
     virtual void set_selection_mode(SelectionMode eMode) override
     {
         disable_notify_events();
@@ -9876,6 +9962,12 @@ public:
         g_signal_handler_disconnect(m_pTreeView, m_nKeyPressSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nDragEndSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nDragBeginSignalId);
+        if (m_nDragFailedSignalId)
+            g_signal_handler_disconnect(m_pTreeView, m_nDragFailedSignalId);
+        if (m_nDragDataDeleteignalId)
+            g_signal_handler_disconnect(m_pTreeView, m_nDragDataDeleteignalId);
+        if (m_nDragGetSignalId)
+            g_signal_handler_disconnect(m_pTreeView, m_nDragGetSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nPopupMenuSignalId);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         g_signal_handler_disconnect(pModel, m_nRowDeletedSignalId);
