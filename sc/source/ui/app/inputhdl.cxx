@@ -1421,48 +1421,29 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
 
 namespace {
 
-bool needToExtendSelection(const OUString& rSelectedText, const OUString& rInsertText)
-{
-    return !ScGlobal::GetpTransliteration()->isMatch( rSelectedText, rInsertText);
-}
-
 void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInserted )
 {
     if (pView)
     {
         ESelection aSel = pView->GetSelection();
-        --aSel.nStartPos;
-        --aSel.nEndPos;
-        pView->SetSelection(aSel);
-        pView->SelectCurrentWord();
 
-        // a dot and underscore are word separators so we need special
-        // treatment for any formula containing a dot or underscore
-        if(rInsert.indexOf(".") != -1 || rInsert.indexOf("_") != -1)
         {
-            // need to make sure that we replace also the part before the dot
-            // go through the word to find the match with the insert string
-            aSel = pView->GetSelection();
-            ESelection aOldSelection = aSel;
-            OUString aSelectedText = pView->GetSelected();
-            if ( needToExtendSelection( aSelectedText, rInsert ) )
+            const sal_Int32 nMinLen = std::max(aSel.nEndPos - aSel.nStartPos, sal_Int32(1));
+            // Since transliteration service is used to test for match, the replaced string could be
+            // longer than rInsert, so in order to find longest match before the cursor, test whole
+            // string from start to current cursor position (don't limit to length of rInsert)
+            aSel.nStartPos = 0;
+            pView->SetSelection(aSel);
+            const OUString aAll = pView->GetSelected();
+            OUString aMatch;
+            for (sal_Int32 n = aAll.getLength(); n >= nMinLen && aMatch.isEmpty(); --n)
             {
-                while(needToExtendSelection(aSelectedText, rInsert))
-                {
-                    assert(aSel.nStartPos > 0);
-                    --aSel.nStartPos;
-                    aSel.nEndPos = aSel.nStartPos;
-                    pView->SetSelection(aSel);
-                    pView->SelectCurrentWord();
-                    aSelectedText = pView->GetSelected();
-                }
-                aSel.nStartPos = aSel.nEndPos - ( aSelectedText.getLength() - 1 );
+                const OUString aTest = aAll.copy(aAll.getLength() - n); // n trailing chars
+                if (ScGlobal::GetpTransliteration()->isMatch(aTest, rInsert))
+                    aMatch = aTest; // Found => break the loop
             }
-            else
-            {
-                aSel.nStartPos = aSel.nEndPos - aSelectedText.getLength();
-            }
-            aSel.nEndPos = aOldSelection.nEndPos;
+
+            aSel.nStartPos = aSel.nEndPos - aMatch.getLength();
             pView->SetSelection(aSel);
         }
 
