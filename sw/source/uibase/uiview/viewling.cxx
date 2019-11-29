@@ -781,7 +781,6 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                         }
                         else
                         {
-                            boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(&xPopup->GetMenu());
                             xPopup->Execute(aToFill.SVRect(), m_pEditWin);
                         }
                     }
