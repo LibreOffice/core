@@ -44,6 +44,7 @@
 #include <com/sun/star/awt/XToolkitExperimental.hpp>
 #include <com/sun/star/awt/XToolkitRobot.hpp>
 
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>

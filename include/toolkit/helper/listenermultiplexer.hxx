@@ -42,7 +42,7 @@
 #include <com/sun/star/awt/tree/XTreeEditListener.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
@@ -51,8 +51,9 @@
 //  class ListenerMultiplexerBase
 
 
+template<class T>
 class TOOLKIT_DLLPUBLIC ListenerMultiplexerBase : public MutexHelper,
-                                public ::comphelper::OInterfaceContainerHelper2,
+                                public ::comphelper::OInterfaceContainerHelper3<T>,
                                 public css::uno::XInterface
 {
 private:
@@ -63,7 +64,7 @@ protected:
 
 public:
     ListenerMultiplexerBase( ::cppu::OWeakObject& rSource );
-    virtual ~ListenerMultiplexerBase();
+    virtual ~ListenerMultiplexerBase() {}
 
     // css::uno::XInterface
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;

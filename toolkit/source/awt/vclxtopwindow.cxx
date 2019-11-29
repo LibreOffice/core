@@ -31,6 +31,7 @@
 
 #include <vcl/sysdata.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
