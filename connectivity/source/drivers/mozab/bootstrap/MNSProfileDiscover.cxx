@@ -133,6 +133,16 @@ namespace connectivity
 
                 }
 
+                // Depending on TB versions, some generate "default" profile
+                // others "default-release" profile
+                // See https://support.mozilla.org/gl/questions/1264072
+                // for some background info (the link quotes Firefox but it seems
+                // the same for TB).
+                if (profileName == "default-release")
+                {
+                    rProduct.mCurrentProfileName = profileName;
+                    break;
+                }
             }
         }
 
