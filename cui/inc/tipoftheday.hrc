@@ -55,7 +55,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Find all expressions in brackets per Edit > Find & Replace > Find > \\([^)]+\\) (check ‘Regular expressions’)"), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Select a different icon set from Tools > Options > %PRODUCTNAME > View > User Interface > Icon style."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can display a number as a fraction (0.125 = 1/8): Format > Cells, Number > Fraction."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "To remove a hyperlink but keep its text, right click on the hyperlink, and use 'Remove Hyperlink'."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "To remove a hyperlink but keep its text, right-click on the hyperlink, and use 'Remove Hyperlink'."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To remove several hyperlinks at once, select the text with the hyperlinks, then right-click and use ‘Remove Hyperlink’."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To quickly zoom in the selection, press / (divide key) on the number pad. Press * to restore entire page in screen."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Click a column field (row) PivotTable and press F12 to group data. Choices adapt to content: Date (month, quarter, year), number (classes)"), "", "tipoftheday_c.png"},
@@ -233,7 +233,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Click at the beginning (end) of a section and press Alt+Enter to insert a paragraph before (after) the section."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME has a template center to create good looking documents - check it out."), "http://templates.libreoffice.org/template-center", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Calculate loan repayments with Calc: eg. PMT(2%/12;36;2500) interest rate per payment period 2%/12, 36 months, loan amount 2500."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/04060119.html?DbPAR=CALC#bm_id3149577", "tipoftheday_c.png"}, //local help missing
-     { NC_("RID_CUI_TIPOFTHEDAY", "Can not find what you want with the VLOOKUP Calc function? With INDEX and MATCH you can do everything!"), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/04060109.html", "tipoftheday_c.png"}, //local help missing
+     { NC_("RID_CUI_TIPOFTHEDAY", "Cannot find what you want with the VLOOKUP function in Calc? With INDEX and MATCH you can do everything!"), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/04060109.html", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to show hidden column A? Click a cell in column B, press the left mouse button, move the mouse to the left, release. Then switch it on via Format > Columns > Show."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To change the number of a page in Writer, go to the properties of the first paragraph and at the Text Flow tab check Break > Insert and enter the number."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Run %PRODUCTNAME in any browser via rollApp."), "https://www.rollapp.com/app/lowriter", ""},
