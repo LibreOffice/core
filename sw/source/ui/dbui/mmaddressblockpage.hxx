@@ -236,7 +236,7 @@ public:
     void UpdateFields();
 
     // for dragging from the TreeViews, return the active source
-    virtual weld::TreeView* get_drag_source() const { return m_xAddressElementsLB->get_drag_source(); }
+    weld::TreeView* get_drag_source() const { return m_xAddressElementsLB->get_drag_source(); }
     bool            HasItem(sal_Int32 nUserData);
 
     void SetAddress(const OUString& rAddress);
