@@ -71,18 +71,10 @@ namespace svxform
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::beans::XPropertySet;
 
-    namespace {
-
-    class FormScriptingEnvironment;
-
-    }
-
     //= FormScriptListener
 
     typedef ::cppu::WeakImplHelper <   XScriptListener
                                     >   FormScriptListener_Base;
-
-    namespace {
 
     /** implements the XScriptListener interface, is used by FormScriptingEnvironment
     */
@@ -144,37 +136,6 @@ namespace svxform
     private:
         DECL_LINK( OnAsyncScriptEvent, void*, void );
     };
-
-    class FormScriptingEnvironment:
-        public IFormScriptingEnvironment
-    {
-    private:
-        typedef rtl::Reference<FormScriptListener> ListenerImplementation;
-
-    private:
-        ::osl::Mutex            m_aMutex;
-        ListenerImplementation  m_pScriptListener;
-        FmFormModel&            m_rFormModel;
-        bool                    m_bDisposed;
-
-    public:
-        explicit FormScriptingEnvironment( FmFormModel& _rModel );
-        FormScriptingEnvironment(const FormScriptingEnvironment&) = delete;
-        FormScriptingEnvironment& operator=(const FormScriptingEnvironment&) = delete;
-
-        // callback for FormScriptListener
-        void doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSynchronousResult );
-
-        // IFormScriptingEnvironment
-        virtual void registerEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) override;
-        virtual void revokeEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) override;
-        virtual void dispose() override;
-
-    private:
-        void impl_registerOrRevoke_throw( const Reference< XEventAttacherManager >& _rxManager, bool _bRegister );
-    };
-
-    }
 
     FormScriptListener::FormScriptListener( FormScriptingEnvironment* pScriptExecutor )
         :m_pScriptExecutor( pScriptExecutor )
@@ -906,7 +867,7 @@ namespace svxform
         :m_rFormModel( _rModel )
         ,m_bDisposed( false )
     {
-        m_pScriptListener = ListenerImplementation( new FormScriptListener( this ) );
+        m_pScriptListener = new FormScriptListener( this );
         // note that this is a cyclic reference between the FormScriptListener and the FormScriptingEnvironment
         // This cycle is broken up when our instance is disposed.
     }
@@ -945,12 +906,6 @@ namespace svxform
     {
         impl_registerOrRevoke_throw( _rxManager, false );
     }
-
-
-    IFormScriptingEnvironment::~IFormScriptingEnvironment()
-    {
-    }
-
 
     namespace
     {
@@ -1079,13 +1034,6 @@ namespace svxform
         m_pScriptListener->dispose();
         m_pScriptListener.clear();
     }
-
-
-    PFormScriptingEnvironment createDefaultFormScriptingEnvironment( FmFormModel& _rModel )
-    {
-        return new FormScriptingEnvironment( _rModel );
-    }
-
 
 }
 

@@ -28,16 +28,21 @@ class FmFormModel;
 
 namespace svxform
 {
-
+    class FormScriptListener;
 
     //= IFormScriptingEnvironment
 
     /** describes the interface implemented by a component which handles scripting requirements
         in a form/control environment.
     */
-    class SAL_NO_VTABLE IFormScriptingEnvironment : public ::salhelper::SimpleReferenceObject
+    class FormScriptingEnvironment : public ::salhelper::SimpleReferenceObject
     {
+    friend class FormScriptListener;
     public:
+        explicit FormScriptingEnvironment( FmFormModel& _rModel );
+        FormScriptingEnvironment(const FormScriptingEnvironment&) = delete;
+        FormScriptingEnvironment& operator=(const FormScriptingEnvironment&) = delete;
+
         /** registers an XEventAttacherManager whose events should be monitored and handled
 
             @param _rxManager
@@ -50,8 +55,8 @@ namespace svxform
             @throws css::uno::RuntimeException
                 if attaching as script listener to the manager fails with a RuntimeException itself
         */
-        virtual void registerEventAttacherManager(
-            const css::uno::Reference< css::script::XEventAttacherManager >& _rxManager ) = 0;
+        void registerEventAttacherManager(
+            const css::uno::Reference< css::script::XEventAttacherManager >& _rxManager );
 
         /** registers an XEventAttacherManager whose events should not be monitored and handled anymore
 
@@ -65,22 +70,24 @@ namespace svxform
             @throws css::uno::RuntimeException
                 if removing as script listener from the manager fails with a RuntimeException itself
         */
-        virtual void revokeEventAttacherManager(
-            const css::uno::Reference< css::script::XEventAttacherManager >& _rxManager ) = 0;
+        void revokeEventAttacherManager(
+            const css::uno::Reference< css::script::XEventAttacherManager >& _rxManager );
 
         /** disposes the scripting environment instance
         */
-        virtual void dispose() = 0;
+        void dispose();
 
-        virtual ~IFormScriptingEnvironment() override;
+    private:
+        ::osl::Mutex            m_aMutex;
+        rtl::Reference<FormScriptListener> m_pScriptListener;
+        FmFormModel&            m_rFormModel;
+        bool                    m_bDisposed;
+
+        void impl_registerOrRevoke_throw( const css::uno::Reference< css::script::XEventAttacherManager >& _rxManager, bool _bRegister );
+        // callback for FormScriptListener
+        void doFireScriptEvent( const css::script::ScriptEvent& _rEvent, css::uno::Any* _pSynchronousResult );
+
     };
-    typedef ::rtl::Reference< IFormScriptingEnvironment >   PFormScriptingEnvironment;
-
-
-    /** creates a default component implementing the IFormScriptingEnvironment interface
-    */
-    PFormScriptingEnvironment   createDefaultFormScriptingEnvironment( FmFormModel& _rFormModel );
-
 
 }
 

@@ -186,7 +186,7 @@ private:
 
     FmFormModel&                            rModel;
     void*                                   m_pPropertySetCache;
-    ::svxform::PFormScriptingEnvironment    m_pScriptingEnv;
+    ::rtl::Reference<svxform::FormScriptingEnvironment> m_pScriptingEnv;
     oslInterlockedCount                     m_Locks;
     ::osl::Mutex                            m_aMutex;
     bool                                    bReadOnly;
