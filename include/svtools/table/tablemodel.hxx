@@ -32,6 +32,7 @@
 
 #include <boost/optional.hpp>
 #include <memory>
+#include <vector>
 #include <o3tl/typed_flags_set.hxx>
 
 namespace svt { namespace table { class ITableDataSort; } }
