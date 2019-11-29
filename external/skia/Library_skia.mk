@@ -62,7 +62,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,skia,\
     -lm \
     -ldl \
-    -lGLX \
     -lGL \
     -lX11-xcb \
     -lX11 \
