@@ -113,10 +113,10 @@ const char* PRICING_FUNCDESC_OptProbInMoney[] =
     NC_("PRICING_FUNCDESC_OptProbInMoney", "Lower barrier (set to 0 for no lower barrier)"),
     NC_("PRICING_FUNCDESC_OptProbInMoney", "barrier_up"),
     NC_("PRICING_FUNCDESC_OptProbInMoney", "Upper barrier (set to 0 for no upper barrier)"),
-    NC_("PRICING_FUNCDESC_OptProbInMoney", "put/call"),
-    NC_("PRICING_FUNCDESC_OptProbInMoney", "Optional (p)ut/(c)all indicator"),
     NC_("PRICING_FUNCDESC_OptProbInMoney", "strike"),
-    NC_("PRICING_FUNCDESC_OptProbInMoney", "Optional strike level")
+    NC_("PRICING_FUNCDESC_OptProbInMoney", "Optional strike level"),
+    NC_("PRICING_FUNCDESC_OptProbInMoney", "put/call"),
+    NC_("PRICING_FUNCDESC_OptProbInMoney", "Optional (p)ut/(c)all indicator")
 };
 
 #endif
