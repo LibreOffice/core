@@ -2232,6 +2232,11 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             // #i119492# During loading, some OLE objects like chart will be set
             // modified flag, so needs to reset the flag to false after loading
             bool bRtn = xLoader->filter( aArgs );
+
+            SfxAllItemSet aSet(SfxGetpApp()->GetPool());
+            TransformParameters(SID_OPENDOC, aArgs, aSet);
+            pMedium->GetItemSet()->Put(aSet);
+
             const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
             for ( const auto& rName : aNames )
             {
