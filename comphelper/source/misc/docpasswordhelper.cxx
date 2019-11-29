@@ -354,6 +354,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         bool* pbIsDefaultPassword )
 {
     css::uno::Sequence< css::beans::NamedValue > aEncData;
+    OUString aPassword;
     DocPasswordVerifierResult eResult = DocPasswordVerifierResult::WrongPassword;
 
     // first, try provided default passwords
@@ -367,8 +368,12 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
             if( !aIt->isEmpty() )
             {
                 eResult = rVerifier.verifyPassword( *aIt, aEncData );
-                if( pbIsDefaultPassword )
-                    *pbIsDefaultPassword = eResult == DocPasswordVerifierResult::OK;
+                if (eResult == DocPasswordVerifierResult::OK)
+                {
+                    aPassword = *aIt;
+                    if (pbIsDefaultPassword)
+                        *pbIsDefaultPassword = true;
+                }
             }
         }
     }
@@ -388,7 +393,11 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     if( eResult == DocPasswordVerifierResult::WrongPassword )
     {
         if( !rMediaPassword.isEmpty() )
+        {
             eResult = rVerifier.verifyPassword( rMediaPassword, aEncData );
+            if (eResult == DocPasswordVerifierResult::OK)
+                aPassword = rMediaPassword;
+        }
     }
 
     // request a password (skip, if result is OK or ABORT)
@@ -404,6 +413,8 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
             {
                 if( !pRequest->getPassword().isEmpty() )
                     eResult = rVerifier.verifyPassword( pRequest->getPassword(), aEncData );
+                if (eResult == DocPasswordVerifierResult::OK)
+                    aPassword = pRequest->getPassword();
             }
             else
             {
@@ -414,6 +425,21 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     }
     catch( Exception& )
     {
+    }
+
+    if (eResult == DocPasswordVerifierResult::OK && !aPassword.isEmpty())
+    {
+        if (std::find_if(std::cbegin(aEncData), std::cend(aEncData),
+                         [](const css::beans::NamedValue& val) {
+                             return val.Name == PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
+                         })
+            == std::cend(aEncData))
+        {
+            // tdf#118639: We need ODF encryption data for autorecovery, where password
+            // will already be unavailable, so generate and append it here
+            aEncData = comphelper::concatSequences(
+                aEncData, OStorageHelper::CreatePackageEncryptionData(aPassword));
+        }
     }
 
     return (eResult == DocPasswordVerifierResult::OK) ? aEncData : uno::Sequence< beans::NamedValue >();
