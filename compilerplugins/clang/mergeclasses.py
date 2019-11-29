@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 import sys
 
@@ -61,7 +61,7 @@ with open("compilerplugins/clang/mergeclasses.results", "wt") as f:
         if (clazz not in parentChildDict) or (len(parentChildDict[clazz]) != 1):
             continue
         # exclude some common false positives
-        a = ['Dialog', 'Dlg', 'com::sun', 'Base']
+        a = ['Dialog', 'Dlg', 'com::sun']
         if any(x in clazz for x in a):
             continue
         # ignore base class that contain the word "mutex", they are normally there to
