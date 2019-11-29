@@ -320,6 +320,15 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar3, "calendar3.docx")
     CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(getRun(xCell,1), "CharHeight"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCalendar4, "calendar4.docx")
+{
+    // TableStyle:fontsize - overrides DocDefaults, but not Style.
+    // In this case the style does not define anything (but does copy-inherit the DocDefaults size 36)
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(14.f, getProperty<float>(getRun(xCell,1), "CharHeight"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTcBorders, "testTcBorders.docx")
 {
     //fdo#76635 : Table borders are not getting preserved.

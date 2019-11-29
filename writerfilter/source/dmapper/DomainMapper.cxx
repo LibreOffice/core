@@ -1684,7 +1684,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             }
             else
             {
-                bool bIgnore = false;
                 const   RubyInfo    &aInfo = m_pImpl->GetRubyInfo();
                 if (aInfo.nSprmId == NS_ooxml::LN_CT_Ruby_rt && aInfo.nHps > 0 )
                 {
@@ -1696,23 +1695,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                     fVal = double(aInfo.nHpsBaseText) / 2.;
                     aVal <<= fVal;
                 }
-                else if (m_pImpl->m_bInTableStyleRunProps)
-                {
-                    // If the default para style contains PROP_CHAR_HEIGHT, that should have priority over the table style.
-                    StyleSheetEntryPtr pTable = m_pImpl->GetStyleSheetTable()->FindDefaultParaStyle();
-                    if (pTable && pTable->pProperties->isSet(PROP_CHAR_HEIGHT) )
-                        bIgnore = true;
-                }
-                if (!bIgnore)
-                {
-                    //Asian get the same value as Western
-                    rContext->Insert( PROP_CHAR_HEIGHT, aVal );
-                    rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
+                //Asian get the same value as Western
+                rContext->Insert( PROP_CHAR_HEIGHT, aVal );
+                rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
 
-                    uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
-                    if (xCharStyle.is())
-                        xCharStyle->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), aVal);
-                }
+                uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
+                if (xCharStyle.is())
+                    xCharStyle->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), aVal);
             }
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_ooxml::LN_EG_RPrBase_sz ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
         }
