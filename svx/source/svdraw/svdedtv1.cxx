@@ -906,6 +906,11 @@ SfxItemSet SdrEditView::GetAttrFromMarked(bool bOnlyHardAttr) const
     aSet.ClearItem(EE_FEATURE_LINEBR);
     aSet.ClearItem(EE_FEATURE_NOTCONV);
     aSet.ClearItem(EE_FEATURE_FIELD);
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell && comphelper::LibreOfficeKit::isActive())
+        pViewShell->sendUnoStatus( &aSet );
+
     return aSet;
 }
 
