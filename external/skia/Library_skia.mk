@@ -41,10 +41,11 @@ $(eval $(call gb_Library_use_system_win32_libs,skia,\
     gdi32 \
 ))
 else
-# TODO SKIA
+ifeq ($(BUILD_PLATFORM),x86_64-pc-linux-gnu)
 $(eval $(call gb_Library_add_cxxflags,skia, \
-    -mssse3 \
+    -msse2 \
 ))
+endif
 
 $(eval $(call gb_Library_use_externals,skia,\
     freetype \
