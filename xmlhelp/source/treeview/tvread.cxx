@@ -825,23 +825,18 @@ void TVChildTarget::subst( OUString& instpath )
     instpath = aOptions.SubstituteVariable( instpath );
 }
 
-// class ExtensionIteratorBase
+// class TreeFileIterator
 
 static const char aHelpMediaType[] = "application/vnd.sun.star.help";
 
-ExtensionIteratorBase::ExtensionIteratorBase( const OUString& aLanguage )
+TreeFileIterator::TreeFileIterator( const OUString& aLanguage )
         : m_eState( IteratorState::UserExtensions )
         , m_aLanguage( aLanguage )
-{
-    init();
-}
-
-void ExtensionIteratorBase::init()
 {
     m_xContext = ::comphelper::getProcessComponentContext();
     if( !m_xContext.is() )
     {
-        throw RuntimeException( "ExtensionIteratorBase::init(), no XComponentContext" );
+        throw RuntimeException( "TreeFileIterator::TreeFileIterator(), no XComponentContext" );
     }
 
     m_xSFA = ucb::SimpleFileAccess::create(m_xContext);
@@ -854,7 +849,7 @@ void ExtensionIteratorBase::init()
     m_iBundledPackage = 0;
 }
 
-Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromPackage
+Reference< deployment::XPackage > TreeFileIterator::implGetHelpPackageFromPackage
     ( const Reference< deployment::XPackage >& xPackage, Reference< deployment::XPackage >& o_xParentPackageBundle )
 {
     o_xParentPackageBundle.clear();
@@ -903,7 +898,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     return xHelpPackage;
 }
 
-Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPackage
+Reference< deployment::XPackage > TreeFileIterator::implGetNextUserHelpPackage
     ( Reference< deployment::XPackage >& o_xParentPackageBundle )
 {
     Reference< deployment::XPackage > xHelpPackage;
@@ -926,14 +921,14 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
     {
         const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage++ ];
-        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextUserHelpPackage(): Invalid package" );
+        OSL_ENSURE( xPackage.is(), "TreeFileIterator::implGetNextUserHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
     return xHelpPackage;
 }
 
-Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPackage
+Reference< deployment::XPackage > TreeFileIterator::implGetNextSharedHelpPackage
     ( Reference< deployment::XPackage >& o_xParentPackageBundle )
 {
     Reference< deployment::XPackage > xHelpPackage;
@@ -956,14 +951,14 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     {
         const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage++ ];
-        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextSharedHelpPackage(): Invalid package" );
+        OSL_ENSURE( xPackage.is(), "TreeFileIterator::implGetNextSharedHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
     return xHelpPackage;
 }
 
-Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpPackage
+Reference< deployment::XPackage > TreeFileIterator::implGetNextBundledHelpPackage
     ( Reference< deployment::XPackage >& o_xParentPackageBundle )
 {
     Reference< deployment::XPackage > xHelpPackage;
@@ -986,7 +981,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
     {
         const Reference< deployment::XPackage >* pBundledPackages = m_aBundledPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage++ ];
-        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextBundledHelpPackage(): Invalid package" );
+        OSL_ENSURE( xPackage.is(), "TreeFileIterator::implGetNextBundledHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
@@ -998,7 +993,7 @@ static bool isLetter( sal_Unicode c )
     return rtl::isAsciiAlpha(c);
 }
 
-void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
+void TreeFileIterator::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
     const css::uno::Reference< css::deployment::XPackage >& xPackage )
 {
     rv.clear();
