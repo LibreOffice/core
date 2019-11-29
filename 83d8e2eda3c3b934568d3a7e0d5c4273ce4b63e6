@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_081685a9",
+        "filename": "connectivity/source/drivers/mozab/bootstrap/MNSProfileDiscover.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2019-11-29T07:56:11Z",
+      "side": 1,
+      "message": "The same as Stephan, I cannot gie you advice on that. However, even if these diffs are related it would be advisable to split them in different changes. If one of them needs to be reverted, the other one would still be in place.",
+      "revId": "83d8e2eda3c3b934568d3a7e0d5c4273ce4b63e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
