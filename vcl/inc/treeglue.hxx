@@ -56,7 +56,7 @@ public:
 class LclTabListBox final : public SvTabListBox
 {
     Link<SvTreeListBox*, void> m_aModelChangedHdl;
-    Link<SvTreeListBox*, void> m_aStartDragHdl;
+    Link<SvTreeListBox*, bool> m_aStartDragHdl;
     Link<SvTreeListBox*, void> m_aEndDragHdl;
     Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
     Link<std::pair<SvTreeListEntry*, OUString>, bool> m_aEditedEntryHdl;
@@ -68,7 +68,7 @@ public:
     }
 
     void SetModelChangedHdl(const Link<SvTreeListBox*, void>& rLink) { m_aModelChangedHdl = rLink; }
-    void SetStartDragHdl(const Link<SvTreeListBox*, void>& rLink) { m_aStartDragHdl = rLink; }
+    void SetStartDragHdl(const Link<SvTreeListBox*, bool>& rLink) { m_aStartDragHdl = rLink; }
     void SetEndDragHdl(const Link<SvTreeListBox*, void>& rLink) { m_aEndDragHdl = rLink; }
     void SetEditingEntryHdl(const Link<SvTreeListEntry*, bool>& rLink)
     {
@@ -86,7 +86,8 @@ public:
 
     virtual void StartDrag(sal_Int8 nAction, const Point& rPosPixel) override
     {
-        m_aStartDragHdl.Call(this);
+        if (m_aStartDragHdl.Call(this))
+            return;
         SvTabListBox::StartDrag(nAction, rPosPixel);
     }
 

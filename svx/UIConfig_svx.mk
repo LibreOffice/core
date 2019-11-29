@@ -49,6 +49,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/fontworkgallerydialog \
 	svx/uiconfig/ui/fontworkspacingdialog \
 	svx/uiconfig/ui/formdatamenu \
+	svx/uiconfig/ui/formfielddialog \
 	svx/uiconfig/ui/formlinkwarndialog \
 	svx/uiconfig/ui/formnavimenu \
 	svx/uiconfig/ui/functionmenu \

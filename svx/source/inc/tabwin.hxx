@@ -23,6 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
+#include <svx/dbaexchange.hxx>
 #include <com/sun/star/form/XForm.hpp>
 
 #include <comphelper/propmultiplex.hxx>
@@ -30,61 +31,34 @@
 #include <connectivity/dbtools.hxx>
 
 
-class FmFieldWin;
-class FmFieldWinListBox
-                    :public SvTreeListBox
-{
-    VclPtr<FmFieldWin> pTabWin;
-
-protected:
-//  virtual void Command( const CommandEvent& rEvt );
-
-public:
-    FmFieldWinListBox( FmFieldWin* pParent );
-    virtual ~FmFieldWinListBox() override;
-    virtual void dispose() override;
-
-    sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-
-protected:
-    // DragSourceHelper
-    virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
-
-    // SvTreeListBox
-    virtual bool DoubleClickHdl() override;
-
-    using SvTreeListBox::ExecuteDrop;
-};
-
-
 class FmFormShell;
+struct ColumnInfo;
 
-
-class FmFieldWin :public SfxFloatingWindow
-                    ,public SfxControllerItem
-                    ,public ::comphelper::OPropertyChangeListener
+class FmFieldWin : public SfxModelessDialogController
+                 , public SfxControllerItem
+                 , public ::comphelper::OPropertyChangeListener
 {
     ::osl::Mutex        m_aMutex;
-    VclPtr<FmFieldWinListBox> pListBox;
+    std::unique_ptr<weld::TreeView> m_xListBox;
+    std::vector<std::unique_ptr<ColumnInfo>> m_aListBoxData;
     ::dbtools::SharedConnection
                        m_aConnection;
     OUString    m_aDatabaseName,
                        m_aObjectName;
     sal_Int32          m_nObjectType;
 
-    rtl::Reference<::comphelper::OPropertyChangeMultiplexer>  m_pChangeListener;
+    rtl::Reference<comphelper::OPropertyChangeMultiplexer>  m_xChangeListener;
+    rtl::Reference<svx::OColumnTransferable> m_xHelper;
 
+    void addToList(const css::uno::Reference<css::container::XNameAccess>& i_xColumns);
+
+    DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
+    DECL_LINK(DragBeginHdl, weld::TreeView&, bool);
 public:
-    FmFieldWin(SfxBindings *pBindings,
-               SfxChildWindow *pMgr, vcl::Window* pParent);
+    FmFieldWin(SfxBindings *pBindings, SfxChildWindow *pMgr, weld::Window* pParent);
 
     virtual ~FmFieldWin() override;
-    virtual void dispose() override;
-    virtual void Resize() override;
-    using SfxFloatingWindow::Close;
-    virtual void GetFocus() override;
-    virtual bool PreNotify( NotifyEvent& _rNEvt ) override;
+
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
 
@@ -92,10 +66,10 @@ public:
     void UpdateContent(const css::uno::Reference< css::form::XForm > &);
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
 
-    const OUString&      GetDatabaseName() const { return m_aDatabaseName; }
+    const OUString& GetDatabaseName() const { return m_aDatabaseName; }
     const ::dbtools::SharedConnection& GetConnection() const { return m_aConnection; }
-    const OUString&      GetObjectName() const { return m_aObjectName; }
-    sal_Int32                   GetObjectType() const { return m_nObjectType; }
+    const OUString& GetObjectName() const { return m_aObjectName; }
+    sal_Int32 GetObjectType() const { return m_nObjectType; }
 
     bool    createSelectionControls( );
 
@@ -105,7 +79,6 @@ protected:
 
 protected:
     using SfxControllerItem::GetBindings;
-    using SfxFloatingWindow::StateChanged;
 };
 
 

@@ -3438,7 +3438,7 @@ private:
     DECL_LINK(HeaderBarClickedHdl, HeaderBar*, void);
     DECL_LINK(ToggleHdl, SvLBoxButtonData*, void);
     DECL_LINK(ModelChangedHdl, SvTreeListBox*, void);
-    DECL_LINK(StartDragHdl, SvTreeListBox*, void);
+    DECL_LINK(StartDragHdl, SvTreeListBox*, bool);
     DECL_STATIC_LINK(SalInstanceTreeView, FinishDragHdl, SvTreeListBox*, void);
     DECL_LINK(EditingEntryHdl, SvTreeListEntry*, bool);
     typedef std::pair<SvTreeListEntry*, OUString> IterString;
@@ -4350,6 +4350,11 @@ public:
         set_id(rVclIter.iter, rId);
     }
 
+    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants) override
+    {
+        m_xTreeView->SetDragHelper(rHelper, eDNDConstants);
+    }
+
     virtual void set_selection_mode(SelectionMode eMode) override
     {
         m_xTreeView->SetSelectionMode(eMode);
@@ -4582,7 +4587,7 @@ public:
         else
         {
             static_cast<LclTabListBox&>(*m_xTreeView).SetEndDragHdl(Link<SvTreeListBox*, void>());
-            static_cast<LclTabListBox&>(*m_xTreeView).SetStartDragHdl(Link<SvTreeListBox*, void>());
+            static_cast<LclTabListBox&>(*m_xTreeView).SetStartDragHdl(Link<SvTreeListBox*, bool>());
             static_cast<LclTabListBox&>(*m_xTreeView).SetModelChangedHdl(Link<SvTreeListBox*, void>());
         }
         m_xTreeView->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
@@ -4651,9 +4656,12 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ModelChangedHdl, SvTreeListBox*, void)
     signal_model_changed();
 }
 
-IMPL_LINK_NOARG(SalInstanceTreeView, StartDragHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SalInstanceTreeView, StartDragHdl, SvTreeListBox*, bool)
 {
+    if (m_aDragBeginHdl.Call(*this))
+        return true;
     g_DragSource = this;
+    return false;
 }
 
 IMPL_STATIC_LINK_NOARG(SalInstanceTreeView, FinishDragHdl, SvTreeListBox*, void)

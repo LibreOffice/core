@@ -373,6 +373,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mbQuickSearch(false),
     eSelMode(SelectionMode::NONE),
     nMinWidthInChars(0),
+    mnDragAction(DND_ACTION_COPYMOVE | DND_ACTION_LINK),
     mbCenterAndClipText(false)
 {
     nImpFlags = SvTreeListBoxFlags::NONE;
@@ -1152,7 +1153,6 @@ void SvTreeListBox::SetupDragOrigin()
 
 void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
 {
-
     Point aEventPos( rPosPixel );
     MouseEvent aMouseEvt( aEventPos, 1, MouseEventModifiers::SELECT, MOUSE_LEFT );
     MouseButtonUp( aMouseEvt );
@@ -1170,8 +1170,17 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
         return;
     }
 
-    rtl::Reference<TransferDataContainer> pContainer = new TransferDataContainer;
-    nDragDropMode = NotifyStartDrag( *pContainer, pEntry );
+    rtl::Reference<TransferDataContainer> xContainer = m_xTransferHelper;
+
+    if (!xContainer)
+    {
+        xContainer.set(new TransferDataContainer);
+        // apparently some (unused) content is needed
+        xContainer->CopyAnyData( SotClipboardFormatId::TREELISTBOX,
+                                    "unused", SAL_N_ELEMENTS("unused") );
+    }
+
+    nDragDropMode = NotifyStartDrag( *xContainer, pEntry );
     if( nDragDropMode == DragDropMode::NONE || 0 == GetSelectionCount() )
     {
         nDragDropMode = nOldDragMode;
@@ -1180,10 +1189,6 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     }
 
     SetupDragOrigin();
-
-    // apparently some (unused) content is needed
-    pContainer->CopyAnyData( SotClipboardFormatId::TREELISTBOX,
-                             "unused", SAL_N_ELEMENTS("unused") );
 
     bool bOldUpdateMode = Control::IsUpdateMode();
     Control::SetUpdateMode( true );
@@ -1196,7 +1201,13 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     // (GetSourceListBox()->EnableSelectionAsDropTarget( true, true );)
     EnableSelectionAsDropTarget( false );
 
-    pContainer->StartDrag( this, DND_ACTION_COPYMOVE | DND_ACTION_LINK, GetDragFinishedHdl() );
+    xContainer->StartDrag(this, mnDragAction, GetDragFinishedHdl());
+}
+
+void SvTreeListBox::SetDragHelper(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
+{
+    m_xTransferHelper = rHelper;
+    mnDragAction = eDNDConstants;
 }
 
 void SvTreeListBox::DragFinished( sal_Int8

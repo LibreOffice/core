@@ -4231,18 +4231,38 @@ sal_uIntPtr GtkSalFrame::GetNativeWindowHandle()
     return GetNativeWindowHandle(m_pWindow);
 }
 
+void GtkDragSource::set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+                                     const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
+{
+    m_xListener = rListener;
+    m_xTrans = rTrans;
+}
+
+void GtkDragSource::setActiveDragSource()
+{
+   // For LibreOffice internal D&D we provide the Transferable without Gtk
+   // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
+   g_ActiveDragSource = this;
+   g_DropSuccessSet = false;
+   g_DropSuccess = false;
+}
+
+std::vector<GtkTargetEntry> GtkDragSource::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
+{
+    return m_aConversionHelper.FormatsToGtk(rFormats);
+}
+
 void GtkDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEvent,
                               sal_Int8 sourceActions, sal_Int32 /*cursor*/, sal_Int32 /*image*/,
                               const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                               const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
 {
-    m_xListener = rListener;
-    m_xTrans = rTrans;
+    set_datatransfer(rTrans, rListener);
 
     if (m_pFrame)
     {
-        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = rTrans->getTransferDataFlavors();
-        std::vector<GtkTargetEntry> aGtkTargets(m_aConversionHelper.FormatsToGtk(aFormats));
+        auto aFormats = m_xTrans->getTransferDataFlavors();
+        std::vector<GtkTargetEntry> aGtkTargets(FormatsToGtk(aFormats));
         GtkTargetList *pTargetList = gtk_target_list_new(aGtkTargets.data(), aGtkTargets.size());
 
         gint nDragButton = 1; // default to left button
@@ -4257,11 +4277,7 @@ void GtkDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEvent,
                 nDragButton = 2;
         }
 
-        // For LibreOffice internal D&D we provide the Transferable without Gtk
-        // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
-        g_ActiveDragSource = this;
-        g_DropSuccessSet = false;
-        g_DropSuccess = false;
+        setActiveDragSource();
 
         m_pFrame->startDrag(nDragButton, rEvent.DragOriginX, rEvent.DragOriginY,
                             VclToGdk(sourceActions), pTargetList);

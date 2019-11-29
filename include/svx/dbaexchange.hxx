@@ -51,15 +51,17 @@ namespace svx
 
     //= OColumnTransferable
 
-    class SAL_WARN_UNUSED SVX_DLLPUBLIC OColumnTransferable final : public TransferableHelper
+    class SAL_WARN_UNUSED SVX_DLLPUBLIC OColumnTransferable final : public TransferDataContainer
     {
     public:
+        OColumnTransferable(ColumnTransferFormatFlags nFormats);
+
         /** construct the transferable from a data access descriptor
 
             Note that some of the aspects, in particular all which cannot be represented
             as string, can only be transported via the CTF_COLUMN_DESCRIPTOR format.
 
-        @param _rDescriptor
+        @param rDescriptor
             The descriptor for the column. It must contain at least
             <ul><li>information sufficient to create a connection, that is, either one of DataSource, DatabaseLocation,
                     ConnectionResource, and DataAccessDescriptorProperty::Connection</li>
@@ -68,10 +70,8 @@ namespace svx
                 <li>a ColumnName or ColumnObject</li>
             </ul>
         */
-        OColumnTransferable(
-            const ODataAccessDescriptor& _rDescriptor,
-            ColumnTransferFormatFlags    _nFormats
-        );
+        void setDescriptor(const ODataAccessDescriptor& rDescriptor);
+
 
         /** construct the transferable from a DatabaseForm component and a field name
 
