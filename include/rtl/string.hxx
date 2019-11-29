@@ -121,7 +121,6 @@ public:
         rtl_string_acquire( pData );
     }
 
-#ifndef _MSC_VER // TODO?
 #if defined LIBO_INTERNAL_ONLY
     /**
       Move constructor.
@@ -135,7 +134,6 @@ public:
         str.pData = nullptr;
         rtl_string_new( &str.pData );
     }
-#endif
 #endif
 
     /**
@@ -314,7 +312,6 @@ public:
         return *this;
     }
 
-#ifndef _MSC_VER // TODO?
 #if defined LIBO_INTERNAL_ONLY
     /**
       Move assign a new string.
@@ -330,7 +327,6 @@ public:
         rtl_string_new( &str.pData );
         return *this;
     }
-#endif
 #endif
 
     /**
