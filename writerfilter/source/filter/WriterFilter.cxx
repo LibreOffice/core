@@ -264,6 +264,8 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
 
         pStream.clear();
 
+        *const_cast< uno::Sequence < beans::PropertyValue>* >(&rDescriptor) = aMediaDesc.getAsConstPropertyValueList();
+
         return true;
     }
     return false;
