@@ -114,6 +114,13 @@ enum BreakType
     COLUMN_BREAK
 };
 
+enum SkipFootnoteSeparator
+{
+    OFF,
+    ON,
+    SKIPPING
+};
+
 /**
  * Storage for state that is relevant outside a header/footer, but not inside it.
  *
@@ -505,8 +512,8 @@ private:
     PropertyMapPtr m_pFootnoteContext;
     bool m_bHasFootnoteStyle;
     bool m_bCheckFootnoteStyle;
-    /// Did we get a <w:separator/> for this footnote already?
-    bool                            m_bSeenFootOrEndnoteSeparator;
+    /// Skip paragraphs from the <w:separator/> footnote
+    SkipFootnoteSeparator           m_eSkipFootnoteState;
 
     bool                            m_bLineNumberingSet;
     bool                            m_bIsInFootnoteProperties;
@@ -777,8 +784,9 @@ public:
     void SetCheckFootnoteStyle(bool bVal) { m_bCheckFootnoteStyle = bVal; }
 
     const PropertyMapPtr& GetFootnoteContext() const { return m_pFootnoteContext; }
-    /// Got a <w:separator/>.
-    void SeenFootOrEndnoteSeparator();
+
+    SkipFootnoteSeparator GetSkipFootnoteState() const { return m_eSkipFootnoteState; }
+    void SetSkipFootnoteState(SkipFootnoteSeparator eId) { m_eSkipFootnoteState =  eId; }
 
     void PushAnnotation();
     void PopAnnotation();
@@ -983,8 +991,6 @@ public:
     /// If the current section has a footnote separator.
     bool m_bHasFtnSep;
 
-    /// If the next newline should be ignored, used by the special footnote separator paragraph.
-    bool m_bIgnoreNextPara;
     /// If the next tab should be ignored, used for footnotes.
     bool m_bCheckFirstFootnoteTab;
     bool m_bIgnoreNextTab;

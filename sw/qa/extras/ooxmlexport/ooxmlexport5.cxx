@@ -524,6 +524,24 @@ DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Paragraph starts with W(87), not tab(9)", u'W', sFootnotePara[0] );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123262_textFootnoteSeparators, "tdf123262_textFootnoteSeparators.docx")
+{
+    //Everything easily fits on one page
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 1, getPages() );
+
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
+    uno::Reference<text::XText> xFootnoteText(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+
+    // The text in the separator footnote should not be added to the footnotes
+    OUString sText = " Microsoft Office.";
+    CPPUNIT_ASSERT_EQUAL(sText, xFootnoteText->getString());
+
+    // Ensure that paragraph markers are not lost.
+    xFootnoteText.set(xFootnotes->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in second footnote", 2, getParagraphs(xFootnoteText) );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo79668,"fdo79668.docx")
 {
     // fdo#79668: Document was Crashing on DebugUtil build while Saving

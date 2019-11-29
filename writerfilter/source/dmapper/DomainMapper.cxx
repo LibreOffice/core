@@ -1078,9 +1078,20 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_FtnEdn_type:
-            // This is the "separator" footnote, ignore its linebreak.
+            // This is the "separator" footnote, ignore its linebreaks/text.
             if (static_cast<sal_uInt32>(nIntValue) == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator)
-                m_pImpl->SeenFootOrEndnoteSeparator();
+                m_pImpl->SetSkipFootnoteState( SkipFootnoteSeparator::ON );
+            else
+                m_pImpl->SetSkipFootnoteState( SkipFootnoteSeparator::OFF );
+        break;
+        case NS_ooxml::LN_CT_FtnEdn_id:
+        {
+            SkipFootnoteSeparator eSkip = m_pImpl->GetSkipFootnoteState();
+            if ( eSkip == SkipFootnoteSeparator::ON )
+                m_pImpl->SetSkipFootnoteState( SkipFootnoteSeparator::SKIPPING );
+            else if ( eSkip == SkipFootnoteSeparator::SKIPPING )
+                m_pImpl->SetSkipFootnoteState( SkipFootnoteSeparator::OFF );
+        }
         break;
         case NS_ooxml::LN_CT_DataBinding_prefixMappings:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_prefixMappings", sStringValue);
@@ -3368,18 +3379,19 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     if (!m_pImpl->hasTableManager())
         return;
 
+    SkipFootnoteSeparator eSkip = m_pImpl->GetSkipFootnoteState();
+    if ( eSkip == SkipFootnoteSeparator::ON || eSkip == SkipFootnoteSeparator::SKIPPING )
+    {
+        m_pImpl->SetSkipFootnoteState( SkipFootnoteSeparator::SKIPPING );
+        return;
+    }
+
     try
     {
         m_pImpl->getTableManager().utext(data_, len);
 
         if (bNewLine)
         {
-            if (m_pImpl->m_bIgnoreNextPara)
-            {
-                m_pImpl->m_bIgnoreNextPara = false;
-                return;
-            }
-
             const bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
             const bool bSingleParagraphAfterRedline = m_pImpl->GetIsFirstParagraphInSection(true) && m_pImpl->GetIsLastParagraphInSection();
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
