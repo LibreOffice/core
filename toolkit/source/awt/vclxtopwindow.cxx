@@ -46,38 +46,14 @@ using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 
-VCLXTopWindow_Base::VCLXTopWindow_Base()
-{
-}
 
-VCLXTopWindow_Base::~VCLXTopWindow_Base()
-{
-}
-
-Any VCLXTopWindow_Base::queryInterface( const Type & rType )
-{
-    css::uno::Any aRet( VCLXTopWindow_XBase::queryInterface( rType ) );
-
-    if (!aRet.hasValue())
-        aRet = VCLXTopWindow_SBase::queryInterface( rType );
-
-    return aRet;
-}
-
-Sequence< Type > VCLXTopWindow_Base::getTypes()
-{
-    Sequence< Type > aTypes( VCLXTopWindow_XBase::getTypes() );
-    aTypes = ::comphelper::concatSequences( aTypes, VCLXTopWindow_SBase::getTypes() );
-    return aTypes;
-}
-
-css::uno::Any VCLXTopWindow_Base::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
+css::uno::Any VCLXTopWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
 {
     SolarMutexGuard aGuard;
 
     // TODO, check the process id
     css::uno::Any aRet;
-    vcl::Window* pWindow = GetWindowImpl();
+    vcl::Window* pWindow = VCLXContainer::GetWindow().get();
     if ( pWindow )
     {
         const SystemEnvData* pSysData = static_cast<SystemWindow *>(pWindow)->GetSystemData();
@@ -113,38 +89,38 @@ css::uno::Any VCLXTopWindow_Base::getWindowHandle( const css::uno::Sequence< sal
     return aRet;
 }
 
-void VCLXTopWindow_Base::addTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener )
+void VCLXTopWindow::addTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
-    GetTopWindowListenersImpl().addInterface( rxListener );
+    GetTopWindowListeners().addInterface( rxListener );
 }
 
-void VCLXTopWindow_Base::removeTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener )
+void VCLXTopWindow::removeTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
-    GetTopWindowListenersImpl().removeInterface( rxListener );
+    GetTopWindowListeners().removeInterface( rxListener );
 }
 
-void VCLXTopWindow_Base::toFront(  )
+void VCLXTopWindow::toFront(  )
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindowImpl();
+    vcl::Window* pWindow = VCLXContainer::GetWindow().get();
     if ( pWindow )
         static_cast<WorkWindow*>(pWindow)->ToTop( ToTopFlags::RestoreWhenMin );
 }
 
-void VCLXTopWindow_Base::toBack(  )
+void VCLXTopWindow::toBack(  )
 {
 }
 
-void VCLXTopWindow_Base::setMenuBar( const css::uno::Reference< css::awt::XMenuBar >& rxMenu )
+void VCLXTopWindow::setMenuBar( const css::uno::Reference< css::awt::XMenuBar >& rxMenu )
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = GetWindowImpl();
+    vcl::Window* pWindow = VCLXContainer::GetWindow().get();
     if ( pWindow )
     {
         SystemWindow* pSystemWindow = static_cast<SystemWindow*>( pWindow );
@@ -159,11 +135,11 @@ void VCLXTopWindow_Base::setMenuBar( const css::uno::Reference< css::awt::XMenuB
 }
 
 
-sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMaximized()
+sal_Bool SAL_CALL VCLXTopWindow::getIsMaximized()
 {
     SolarMutexGuard aGuard;
 
-    const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( GetWindowImpl() );
+    const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( VCLXContainer::GetWindow().get() );
     if ( !pWindow )
         return false;
 
@@ -171,11 +147,11 @@ sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMaximized()
 }
 
 
-void SAL_CALL VCLXTopWindow_Base::setIsMaximized( sal_Bool _ismaximized )
+void SAL_CALL VCLXTopWindow::setIsMaximized( sal_Bool _ismaximized )
 {
     SolarMutexGuard aGuard;
 
-    WorkWindow* pWindow = dynamic_cast< WorkWindow* >( GetWindowImpl() );
+    WorkWindow* pWindow = dynamic_cast< WorkWindow* >( VCLXContainer::GetWindow().get() );
     if ( !pWindow )
         return;
 
@@ -183,11 +159,11 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( sal_Bool _ismaximized )
 }
 
 
-sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMinimized()
+sal_Bool SAL_CALL VCLXTopWindow::getIsMinimized()
 {
     SolarMutexGuard aGuard;
 
-    const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( GetWindowImpl() );
+    const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( VCLXContainer::GetWindow().get() );
     if ( !pWindow )
         return false;
 
@@ -195,11 +171,11 @@ sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMinimized()
 }
 
 
-void SAL_CALL VCLXTopWindow_Base::setIsMinimized( sal_Bool _isMinimized )
+void SAL_CALL VCLXTopWindow::setIsMinimized( sal_Bool _isMinimized )
 {
     SolarMutexGuard aGuard;
 
-    WorkWindow* pWindow = dynamic_cast< WorkWindow* >( GetWindowImpl() );
+    WorkWindow* pWindow = dynamic_cast< WorkWindow* >( VCLXContainer::GetWindow().get() );
     if ( !pWindow )
         return;
 
@@ -207,11 +183,11 @@ void SAL_CALL VCLXTopWindow_Base::setIsMinimized( sal_Bool _isMinimized )
 }
 
 
-::sal_Int32 SAL_CALL VCLXTopWindow_Base::getDisplay()
+::sal_Int32 SAL_CALL VCLXTopWindow::getDisplay()
 {
     SolarMutexGuard aGuard;
 
-    const SystemWindow* pWindow = dynamic_cast< const SystemWindow* >( GetWindowImpl() );
+    const SystemWindow* pWindow = dynamic_cast< const SystemWindow* >( VCLXContainer::GetWindow().get() );
     if ( !pWindow )
         return 0;
 
@@ -219,14 +195,14 @@ void SAL_CALL VCLXTopWindow_Base::setIsMinimized( sal_Bool _isMinimized )
 }
 
 
-void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display )
+void SAL_CALL VCLXTopWindow::setDisplay( ::sal_Int32 _display )
 {
     SolarMutexGuard aGuard;
 
     if ( ( _display < 0 ) || ( _display >= static_cast<sal_Int32>(Application::GetScreenCount()) ) )
         throw IndexOutOfBoundsException();
 
-    SystemWindow* pWindow = dynamic_cast< SystemWindow* >( GetWindowImpl() );
+    SystemWindow* pWindow = dynamic_cast< SystemWindow* >( VCLXContainer::GetWindow().get() );
     if ( !pWindow )
         return;
 
@@ -250,21 +226,13 @@ VCLXTopWindow::~VCLXTopWindow()
 {
 }
 
-vcl::Window* VCLXTopWindow::GetWindowImpl()
-{
-    return VCLXContainer::GetWindow();
-}
-
-::comphelper::OInterfaceContainerHelper2& VCLXTopWindow::GetTopWindowListenersImpl()
-{
-    return GetTopWindowListeners();
-}
-
 // css::uno::XInterface
 css::uno::Any VCLXTopWindow::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet( VCLXTopWindow_Base::queryInterface( rType ) );
+    css::uno::Any aRet( VCLXTopWindow_XBase::queryInterface( rType ) );
 
+    if (!aRet.hasValue())
+        aRet = VCLXTopWindow_XBase::queryInterface( rType );
     if ( !aRet.hasValue() )
         aRet = VCLXContainer::queryInterface( rType );
 
@@ -278,7 +246,8 @@ css::uno::Sequence< sal_Int8 > VCLXTopWindow::getImplementationId()
 
 css::uno::Sequence< css::uno::Type > VCLXTopWindow::getTypes()
 {
-    return ::comphelper::concatSequences( VCLXTopWindow_Base::getTypes(), VCLXContainer::getTypes() );
+    return ::comphelper::concatSequences( VCLXTopWindow_XBase::getTypes(), VCLXContainer::getTypes() );
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
