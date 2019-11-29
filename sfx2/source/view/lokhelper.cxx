@@ -30,6 +30,8 @@
 
 #include <shellimpl.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 using namespace com::sun::star;
 
 int SfxLokHelper::createView()
