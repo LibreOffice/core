@@ -2673,6 +2673,8 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
     {
         if ( pPasswordRequest->getPassword().getLength() )
         {
+            css::uno::Sequence< css::beans::NamedValue > aEncryptionData;
+
             // TODO/LATER: The filters should show the password dialog themself in future
             if ( bMSType )
             {
@@ -2681,7 +2683,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
                 {
                     ::comphelper::SequenceAsHashMap aHashData;
                     aHashData[ OUString( "OOXPassword"  ) ] <<= pPasswordRequest->getPassword();
-                    pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
+                    aEncryptionData = aHashData.getAsConstNamedValueList();
                 }
                 else
                 {
@@ -2694,7 +2696,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
                         aHashData[ OUString( "STD97EncryptionKey"  ) ] <<= aEncryptionKey;
                         aHashData[ OUString( "STD97UniqueID"  ) ] <<= aUniqueID;
 
-                        pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
+                        aEncryptionData = aHashData.getAsConstNamedValueList();
                     }
                     else
                     {
@@ -2702,10 +2704,14 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
                     }
                 }
             }
-            else
-            {
-                pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( ::comphelper::OStorageHelper::CreatePackageEncryptionData( pPasswordRequest->getPassword() ) ) ) );
-            }
+
+            // tdf#118639: We need ODF encryption data for autorecovery where password will already
+            // be unavailable, even for non-ODF documents, so append it here unconditionally
+            pSet->Put(SfxUnoAnyItem(
+                SID_ENCRYPTIONDATA,
+                uno::makeAny(comphelper::concatSequences(
+                    aEncryptionData, comphelper::OStorageHelper::CreatePackageEncryptionData(
+                                         pPasswordRequest->getPassword())))));
         }
 
         if ( pPasswordRequest->getRecommendReadOnly() )
