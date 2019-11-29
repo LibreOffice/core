@@ -32,8 +32,6 @@ namespace svx {
 class ParaULSpacingControl : public SfxToolBoxControl
 {
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
     ParaULSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~ParaULSpacingControl() override;
 
@@ -64,8 +62,6 @@ class ParaLRSpacingControl : public SfxToolBoxControl,
                                     public css::ui::XContextChangeEventListener
 {
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
     ParaLRSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~ParaLRSpacingControl() override;
 
