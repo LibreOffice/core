@@ -42,18 +42,22 @@ namespace svx
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::datatransfer;
 
-    OColumnTransferable::OColumnTransferable(const ODataAccessDescriptor& _rDescriptor, ColumnTransferFormatFlags _nFormats )
-        :m_nFormatFlags(_nFormats)
+    OColumnTransferable::OColumnTransferable(ColumnTransferFormatFlags nFormats)
+        : m_nFormatFlags(nFormats)
+    {
+    }
+
+    void OColumnTransferable::setDescriptor(const ODataAccessDescriptor& rDescriptor)
     {
         OUString sDataSource, sDatabaseLocation, sConnectionResource, sCommand, sFieldName;
-        if ( _rDescriptor.has( DataAccessDescriptorProperty::DataSource ) )         _rDescriptor[ DataAccessDescriptorProperty::DataSource ] >>= sDataSource;
-        if ( _rDescriptor.has( DataAccessDescriptorProperty::DatabaseLocation ) )   _rDescriptor[ DataAccessDescriptorProperty::DatabaseLocation ] >>= sDatabaseLocation;
-        if ( _rDescriptor.has( DataAccessDescriptorProperty::ConnectionResource ) ) _rDescriptor[ DataAccessDescriptorProperty::ConnectionResource ] >>= sConnectionResource;
-        if ( _rDescriptor.has( DataAccessDescriptorProperty::Command ) )            _rDescriptor[ DataAccessDescriptorProperty::Command ] >>= sCommand;
-        if ( _rDescriptor.has( DataAccessDescriptorProperty::ColumnName ) )         _rDescriptor[ DataAccessDescriptorProperty::ColumnName ] >>= sFieldName;
+        if ( rDescriptor.has( DataAccessDescriptorProperty::DataSource ) )         rDescriptor[ DataAccessDescriptorProperty::DataSource ] >>= sDataSource;
+        if ( rDescriptor.has( DataAccessDescriptorProperty::DatabaseLocation ) )   rDescriptor[ DataAccessDescriptorProperty::DatabaseLocation ] >>= sDatabaseLocation;
+        if ( rDescriptor.has( DataAccessDescriptorProperty::ConnectionResource ) ) rDescriptor[ DataAccessDescriptorProperty::ConnectionResource ] >>= sConnectionResource;
+        if ( rDescriptor.has( DataAccessDescriptorProperty::Command ) )            rDescriptor[ DataAccessDescriptorProperty::Command ] >>= sCommand;
+        if ( rDescriptor.has( DataAccessDescriptorProperty::ColumnName ) )         rDescriptor[ DataAccessDescriptorProperty::ColumnName ] >>= sFieldName;
 
         sal_Int32 nCommandType = CommandType::TABLE;
-        OSL_VERIFY( _rDescriptor[ DataAccessDescriptorProperty::CommandType ] >>= nCommandType );
+        OSL_VERIFY( rDescriptor[ DataAccessDescriptorProperty::CommandType ] >>= nCommandType );
 
 
         implConstruct(
@@ -62,13 +66,12 @@ namespace svx
 
         if ( m_nFormatFlags & ColumnTransferFormatFlags::COLUMN_DESCRIPTOR )
         {
-            if ( _rDescriptor.has( DataAccessDescriptorProperty::Connection ) )
-                m_aDescriptor[ DataAccessDescriptorProperty::Connection ] = _rDescriptor[ DataAccessDescriptorProperty::Connection ];
-            if ( _rDescriptor.has( DataAccessDescriptorProperty::ColumnObject ) )
-                m_aDescriptor[ DataAccessDescriptorProperty::ColumnObject ] = _rDescriptor[ DataAccessDescriptorProperty::ColumnObject ];
+            if ( rDescriptor.has( DataAccessDescriptorProperty::Connection ) )
+                m_aDescriptor[ DataAccessDescriptorProperty::Connection ] = rDescriptor[ DataAccessDescriptorProperty::Connection ];
+            if ( rDescriptor.has( DataAccessDescriptorProperty::ColumnObject ) )
+                m_aDescriptor[ DataAccessDescriptorProperty::ColumnObject ] = rDescriptor[ DataAccessDescriptorProperty::ColumnObject ];
         }
     }
-
 
     OColumnTransferable::OColumnTransferable(const Reference< XPropertySet >& _rxForm,
             const OUString& _rFieldName, const Reference< XPropertySet >& _rxColumn,

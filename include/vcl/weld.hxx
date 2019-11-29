@@ -63,6 +63,7 @@ enum class PointerStyle;
 class SvNumberFormatter;
 class KeyEvent;
 class MouseEvent;
+class TransferDataContainer;
 class OutputDevice;
 class VirtualDevice;
 struct SystemEnvData;
@@ -686,7 +687,10 @@ protected:
     Link<const TreeIter&, bool> m_aExpandingHdl;
     Link<TreeView&, void> m_aVisibleRangeChangedHdl;
     Link<TreeView&, void> m_aModelChangedHdl;
+    // if handler returns true, then menu has been show and event is consumed
     Link<const CommandEvent&, bool> m_aPopupMenuHdl;
+    // if handler returns true, drag is disallowed
+    Link<TreeView&, bool> m_aDragBeginHdl;
     std::function<int(const weld::TreeIter&, const weld::TreeIter&)> m_aCustomSort;
 
     std::vector<int> m_aRadioIndexes;
@@ -936,6 +940,12 @@ public:
     {
         m_aPopupMenuHdl = rLink;
     }
+
+    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferrable,
+                                    sal_uInt8 eDNDConstants)
+        = 0;
+
+    void connect_drag_begin(const Link<TreeView&, bool>& rLink) { m_aDragBeginHdl = rLink; }
 
     //all of them
     void select_all() { unselect(-1); }
