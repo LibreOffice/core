@@ -35,10 +35,10 @@ namespace crypto {
 class OOX_DLLPUBLIC DocumentDecryption
 {
 private:
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
     oox::ole::OleStorage&                      mrOleStorage;
     css::uno::Sequence<css::beans::NamedValue> maStreamsSequence;
     css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
 public:
     DocumentDecryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext, oox::ole::OleStorage& rOleStorage);
