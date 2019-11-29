@@ -1956,25 +1956,25 @@ std::string XGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
     switch (eStyle)
     {
         case css::awt::GradientStyle::GradientStyle_LINEAR:
-            return "Linear";
+            return "LINEAR";
 
         case css::awt::GradientStyle::GradientStyle_AXIAL:
-            return "Axial";
+            return "AXIAL";
 
         case css::awt::GradientStyle::GradientStyle_RADIAL:
-            return "Radial";
+            return "RADIAL";
 
         case css::awt::GradientStyle::GradientStyle_ELLIPTICAL:
-            return "Elliptical";
+            return "ELLIPTICAL";
 
         case css::awt::GradientStyle::GradientStyle_SQUARE:
-            return "Square";
+            return "SQUARE";
 
         case css::awt::GradientStyle::GradientStyle_RECT:
-            return "Rect";
+            return "RECT";
 
         case css::awt::GradientStyle::GradientStyle_MAKE_FIXED_SIZE:
-            return "FixedSize";
+            return "MAKE_FIXED_SIZE";
     }
 
     return "";
@@ -2467,6 +2467,14 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
     }
 
     return nullptr;
+}
+
+boost::property_tree::ptree XFillFloatTransparenceItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = XFillGradientItem::dumpAsJSON();
+    aTree.put("commandName", ".uno:FillFloatTransparence");
+
+    return aTree;
 }
 
 XHatch::XHatch(const Color& rCol, css::drawing::HatchStyle eTheStyle, long nTheDistance,
