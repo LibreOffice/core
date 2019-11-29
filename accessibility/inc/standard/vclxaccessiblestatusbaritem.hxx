@@ -124,6 +124,8 @@ public:
     virtual sal_Int32 SAL_CALL getCharacterCount() override;
     virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;
     virtual OUString SAL_CALL getTextRange(sal_Int32 nStartIndex, sal_Int32 nEndIndex) override;
+    virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int16 aScrollType) override;
+    virtual sal_Bool SAL_CALL scrollSubstringToPoint( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const css::awt::Point& aPoint ) override;
 
 };
 

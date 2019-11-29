@@ -582,4 +582,14 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
 }
 
 
+sal_Bool VCLXAccessibleStatusBarItem::scrollSubstringTo( sal_Int32, sal_Int32, sal_Int16 )
+{
+    return false;
+}
+
+sal_Bool VCLXAccessibleStatusBarItem::scrollSubstringToPoint( sal_Int32, sal_Int32, const css::awt::Point& )
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

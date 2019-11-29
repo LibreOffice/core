@@ -610,6 +610,16 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::copyText( sal_Int32 /* nStartIndex */, s
     return false;
 }
 
+sal_Bool SAL_CALL ScAccessibleCsvRuler::scrollSubstringTo( sal_Int32 /* nStartIndex */, sal_Int32/* nEndIndex */, sal_Int16 /* aScrollType */ )
+{
+    return false;
+}
+
+sal_Bool SAL_CALL ScAccessibleCsvRuler::scrollSubstringToPoint( sal_Int32 /* nStartIndex */, sal_Int32 /* nEndIndex */, const css::awt::Point& /* rPoint */ )
+{
+    return false;
+}
+
 // XInterface -----------------------------------------------------------------
 
 Any SAL_CALL ScAccessibleCsvRuler::queryInterface( const css::uno::Type& rType )

@@ -23,6 +23,7 @@
 
 #include <osl/diagnose.h>
 
+#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
@@ -53,6 +54,34 @@ text_type_from_boundary(AtkTextBoundary boundary_type)
             return -1;
     }
 }
+
+/*****************************************************************************/
+
+#if ATK_CHECK_VERSION(2,32,0)
+static sal_Int16
+scroll_type_from_scroll_type(AtkScrollType type)
+{
+    switch(type)
+    {
+        case ATK_SCROLL_TOP_LEFT:
+            return accessibility::AccessibleScrollType::SCROLL_TOP_LEFT;
+        case ATK_SCROLL_BOTTOM_RIGHT:
+            return accessibility::AccessibleScrollType::SCROLL_BOTTOM_RIGHT;
+        case ATK_SCROLL_TOP_EDGE:
+            return accessibility::AccessibleScrollType::SCROLL_TOP_EDGE;
+        case ATK_SCROLL_BOTTOM_EDGE:
+            return accessibility::AccessibleScrollType::SCROLL_BOTTOM_EDGE;
+        case ATK_SCROLL_LEFT_EDGE:
+            return accessibility::AccessibleScrollType::SCROLL_LEFT_EDGE;
+        case ATK_SCROLL_RIGHT_EDGE:
+            return accessibility::AccessibleScrollType::SCROLL_RIGHT_EDGE;
+        case ATK_SCROLL_ANYWHERE:
+            return accessibility::AccessibleScrollType::SCROLL_ANYWHERE;
+        default:
+            return -1;
+    }
+}
+#endif
 
 /*****************************************************************************/
 
@@ -812,6 +841,66 @@ text_wrapper_set_selection (AtkText *text,
     return FALSE;
 }
 
+#if ATK_CHECK_VERSION(2,32,0)
+static gboolean
+text_wapper_scroll_substring_to(AtkText       *text,
+                                gint           start_offset,
+                                gint           end_offset,
+                                AtkScrollType  scroll_type)
+{
+    sal_Int16 type = scroll_type_from_scroll_type(scroll_type);
+    if (type == -1)
+        return FALSE;
+
+    try {
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+
+        if( pText.is() )
+            return pText->scrollSubstringTo( start_offset, end_offset , type );
+    }
+    catch(const uno::Exception&) {
+        g_warning( "Exception in scrollSubstringTo()" );
+    }
+
+    return FALSE;
+}
+
+static gboolean
+text_wapper_scroll_substring_to_point(AtkText      *text,
+                                      gint          start_offset,
+                                      gint          end_offset,
+                                      AtkCoordType  coords,
+                                      gint          x,
+                                      gint          y)
+{
+    try {
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
+        {
+            gint origin_x = 0;
+            gint origin_y = 0;
+
+            if( coords == ATK_XY_SCREEN )
+            {
+                g_return_val_if_fail( ATK_IS_COMPONENT( text ), -1 );
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
+                atk_component_get_position( ATK_COMPONENT( text ), &origin_x, &origin_y, coords);
+                SAL_WNODEPRECATED_DECLARATIONS_POP
+            }
+
+            return pText->scrollSubstringToPoint( start_offset, end_offset , awt::Point(x - origin_x, y - origin_y) );
+        }
+    }
+    catch(const uno::Exception&) {
+        g_warning( "Exception in scrollSubstringToPoint()" );
+    }
+
+    return FALSE;
+}
+#endif
+
 } // extern "C"
 
 void
@@ -836,6 +925,11 @@ textIfaceInit (AtkTextIface *iface)
   iface->get_default_attributes = text_wrapper_get_default_attributes;
   iface->get_character_extents = text_wrapper_get_character_extents;
   iface->get_offset_at_point = text_wrapper_get_offset_at_point;
+#if ATK_CHECK_VERSION(2,32,0)
+  iface->scroll_substring_to = text_wapper_scroll_substring_to;
+  iface->scroll_substring_to_point = text_wapper_scroll_substring_to_point;
+  g_warning( "%s: installing scroll interface", __func__ );
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

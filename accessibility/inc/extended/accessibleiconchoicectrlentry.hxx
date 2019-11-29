@@ -157,6 +157,8 @@ namespace accessibility
         virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+        virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int16 aScrollType) override;
+        virtual sal_Bool SAL_CALL scrollSubstringToPoint( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const css::awt::Point& aPoint ) override;
 
         // XAccessibleEventBroadcaster
         virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;

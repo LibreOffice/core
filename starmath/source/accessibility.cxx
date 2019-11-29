@@ -718,6 +718,16 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
     return bReturn;
 }
 
+sal_Bool SAL_CALL SmGraphicAccessible::scrollSubstringTo( sal_Int32, sal_Int32, sal_Int16 )
+{
+    return false;
+}
+
+sal_Bool SAL_CALL SmGraphicAccessible::scrollSubstringToPoint( sal_Int32, sal_Int32, const css::awt::Point& )
+{
+    return false;
+}
+
 OUString SAL_CALL SmGraphicAccessible::getImplementationName()
 {
     return "SmGraphicAccessible";

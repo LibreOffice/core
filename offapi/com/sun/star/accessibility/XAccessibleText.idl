@@ -491,6 +491,35 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
     boolean copyText ([in] long nStartIndex, [in] long nEndIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
+    /** Scroll ...
+
+        @param nIndex
+
+        @return
+            Returns `TRUE` if ...
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the indices are invalid
+    */
+    boolean
+        scrollSubstringTo ([in] long nStartIndex, [in] long nEndIndex,
+            [in] short aScrollType)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Scroll ...
+
+        @param nIndex
+
+        @return
+            Returns `TRUE` if ...
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the indices are invalid
+    */
+    boolean
+        scrollSubstringToPoint ([in] long nStartIndex, [in] long nEndIndex,
+            [in] ::com::sun::star::awt::Point aPoint)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
 };
 
 }; }; }; };

@@ -322,6 +322,14 @@ namespace accessibility
         //!!! don't know how to put a string into the clipboard
         return false;
     }
+    sal_Bool SAL_CALL AccessibleBrowseBoxTableCell::scrollSubstringTo( sal_Int32, sal_Int32, sal_Int16 )
+    {
+        return false;
+    }
+    sal_Bool SAL_CALL AccessibleBrowseBoxTableCell::scrollSubstringToPoint( sal_Int32, sal_Int32, const css::awt::Point& )
+    {
+        return false;
+    }
     void AccessibleBrowseBoxTableCell::disposing( const EventObject& _rSource )
     {
             if ( _rSource.Source == mxParent )

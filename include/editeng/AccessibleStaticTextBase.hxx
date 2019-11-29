@@ -198,6 +198,8 @@ namespace accessibility
         virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         /// This will only work with a functional SvxEditViewForwarder, i.e. an EditEngine/Outliner in edit mode
         virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+        virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int16 aScrollType) override;
+        virtual sal_Bool SAL_CALL scrollSubstringToPoint( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const css::awt::Point& aPoint ) override;
 
         // XAccessibleTextAttributes
         virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const css::uno::Sequence< OUString >& RequestedAttributes ) override;

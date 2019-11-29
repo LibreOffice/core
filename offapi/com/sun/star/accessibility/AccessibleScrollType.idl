@@ -1,0 +1,65 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __com_sun_star_accessibility_AccessibleScrollType_idl__
+#define __com_sun_star_accessibility_AccessibleScrollType_idl__
+
+module com { module sun { module star { module accessibility {
+
+/** Scroll types
+
+    <p>Describes the type of scrolling that are available for the methods of
+    the XAccessibleScrollableText interface.</p>
+*/
+constants AccessibleScrollType
+{
+    /**
+    */
+    const short SCROLL_TOP_LEFT = 0;
+
+    /**
+    */
+    const short SCROLL_BOTTOM_RIGHT = 1;
+
+    /**
+    */
+    const short SCROLL_TOP_EDGE = 2;
+
+    /**
+    */
+    const short SCROLL_BOTTOM_EDGE = 3;
+
+    /**
+    */
+    const short SCROLL_LEFT_EDGE = 4;
+
+    /**
+    */
+    const short SCROLL_RIGHT_EDGE = 5;
+
+    /**
+    */
+    const short SCROLL_ANYWHERE = 6;
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
