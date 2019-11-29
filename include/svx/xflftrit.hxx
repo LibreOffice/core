@@ -22,6 +22,7 @@
 
 #include <svx/xflgrit.hxx>
 #include <svx/svxdllapi.h>
+#include <boost/property_tree/json_parser.hpp>
 
 
 // class XFillFloatTransparenceItem -
@@ -54,6 +55,8 @@ public:
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     std::unique_ptr<XFillFloatTransparenceItem> checkForUniqueItem( SdrModel* pModel ) const;
+
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 #endif
