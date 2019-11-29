@@ -22,6 +22,7 @@
 
 #include <toolkit/dllapi.h>
 #include <toolkit/awt/vclxdevice.hxx>
+#include <toolkit/helper/listenermultiplexer.hxx>
 #include <vcl/window.hxx>
 
 #include <com/sun/star/awt/XWindow2.hpp>
@@ -98,8 +99,8 @@ protected:
                                         bool bWithDefaults = false );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds );
 
-    ::comphelper::OInterfaceContainerHelper2&  GetContainerListeners();
-    ::comphelper::OInterfaceContainerHelper2&  GetTopWindowListeners();
+    VclContainerListenerMultiplexer&  GetContainerListeners();
+    TopWindowListenerMultiplexer&  GetTopWindowListeners();
 
 public:
     typedef ::std::function<void ()>  Callback;
