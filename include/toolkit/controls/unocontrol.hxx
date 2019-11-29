@@ -31,6 +31,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase9.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
