@@ -17,20 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <rtl/instance.hxx>
 #include <osl/diagnose.h>
+#include <osl/doublecheckedlocking.h>
+#include <sal/log.hxx>
 #include <uno/dispatcher.hxx>
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 #include <cppuhelper/detail/XExceptionThrower.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
-
-#ifdef IOS
-#include <ios/ios.hxx>
-#endif
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -172,6 +173,46 @@ ExceptionThrower::ExceptionThrower()
 
 class theExceptionThrower : public rtl::Static<ExceptionThrower, theExceptionThrower> {};
 
+#if defined(IOS) || HAVE_FEATURE_ANDROID_LOK
+// In the native iOS / Android app, where we don't have any Java, Python,
+// BASIC, or other scripting, the only thing that would use the C++/UNO bridge
+// functionality that invokes codeSnippet() was cppu::throwException().
+//
+// codeSnippet() is part of what corresponds to the code that uses
+// run-time-generated machine code on other platforms. We can't generate code
+// at run-time on iOS, that has been known forever.
+//
+// Instead of digging in and trying to understand what is wrong, another
+// solution was chosen. It turns out that the number of types of exception
+// objects thrown by cppu::throwException() is fairly small. During startup of
+// the LibreOffice code, and loading of an .odt document, only one kind of
+// exception is thrown this way... (The lovely
+// css::ucb:InteractiveAugmentedIOException.)
+//
+// So we can simply have code that checks what the type of object being thrown
+// is, and explicitgly throws such an object then with a normal C++ throw
+// statement. Seems to work.
+template <class E> void tryThrow(css::uno::Any const& aException)
+{
+    E aSpecificException;
+    if (aException >>= aSpecificException)
+        throw aSpecificException;
+}
+
+void lo_mobile_throwException(css::uno::Any const& aException)
+{
+    assert(aException.getValueTypeClass() == css::uno::TypeClass_EXCEPTION);
+
+    tryThrow<css::ucb::InteractiveAugmentedIOException>(aException);
+    tryThrow<css::ucb::NameClashException>(aException);
+    tryThrow<css::uno::RuntimeException>(aException);
+
+    SAL_WARN("cppuhelper", "lo_mobile_throwException: Unhandled exception type: " << aException.getValueTypeName());
+
+    assert(false);
+}
+#endif // defined(IOS) || HAVE_FEATURE_ANDROID_LOK
+
 } // anonymous namespace
 
 
@@ -188,8 +229,8 @@ void SAL_CALL throwException( Any const & exc )
             "(must be derived from com::sun::star::uno::Exception)!" );
     }
 
-#ifdef IOS
-    lo_ios_throwException(exc);
+#if defined(IOS) || HAVE_FEATURE_ANDROID_LOK
+    lo_mobile_throwException(exc);
 #else
     Mapping uno2cpp(Environment(UNO_LB_UNO), Environment::getCurrent());
     if (! uno2cpp.is())
@@ -211,6 +252,9 @@ void SAL_CALL throwException( Any const & exc )
 
 Any SAL_CALL getCaughtException()
 {
+#if HAVE_FEATURE_ANDROID_LOK
+    return Any();
+#else
     Mapping cpp2uno(Environment::getCurrent(), Environment(UNO_LB_UNO));
     if (! cpp2uno.is())
     {
@@ -258,6 +302,7 @@ Any SAL_CALL getCaughtException()
         &ret, exc->pData, exc->pType, uno2cpp.get() );
     uno_any_destruct( exc, nullptr );
     return ret;
+#endif
 }
 
 }

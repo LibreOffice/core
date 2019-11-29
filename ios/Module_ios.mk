@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,ios))
 ifeq ($(OS),iOS)
 
 $(eval $(call gb_Module_add_targets,ios,\
-	StaticLibrary_ios \
 	CustomTarget_iOS_setup \
 ))
 

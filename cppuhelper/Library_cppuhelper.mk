@@ -15,6 +15,7 @@ $(eval $(call gb_Library_set_soversion_script,cppuhelper,$(SRCDIR)/cppuhelper/so
 $(eval $(call gb_Library_use_internal_comprehensive_api,cppuhelper,\
 	cppuhelper \
 	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_defs,cppuhelper,\
