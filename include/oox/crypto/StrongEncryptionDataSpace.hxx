@@ -12,6 +12,7 @@
 #define INCLUDED_OOX_CRYPTO_STRONGENCRYPTINDATASPACE_HXX
 
 #include <oox/dllapi.h>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <oox/crypto/CryptoEngine.hxx>

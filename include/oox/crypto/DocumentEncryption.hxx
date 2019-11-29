@@ -20,6 +20,7 @@
 namespace com { namespace sun { namespace star {
     namespace io { class XStream; }
     namespace packages { class XPackageEncryption; }
+    namespace beans { struct NamedValue; }
 } } }
 
 namespace oox { namespace ole { class OleStorage; } }
@@ -30,11 +31,11 @@ namespace crypto {
 class OOX_DLLPUBLIC DocumentEncryption
 {
 private:
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::io::XStream > mxDocumentStream;
     oox::ole::OleStorage& mrOleStorage;
     css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
     const css::uno::Sequence< css::beans::NamedValue >& mMediaEncData;
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
 public:
     DocumentEncryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
