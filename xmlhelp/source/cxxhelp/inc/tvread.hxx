@@ -239,18 +239,17 @@ namespace treeview {
         EndReached
     };
 
-    class ExtensionIteratorBase
+    class TreeFileIterator
     {
     public:
-        ExtensionIteratorBase( const OUString& aLanguage );
-        void init();
+        TreeFileIterator( const OUString& aLanguage );
+        OUString nextTreeFile( sal_Int32& rnFileSize );
 
     private:
         static css::uno::Reference< css::deployment::XPackage > implGetHelpPackageFromPackage
             ( const css::uno::Reference< css::deployment::XPackage >& xPackage,
               css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
 
-    protected:
         css::uno::Reference< css::deployment::XPackage > implGetNextUserHelpPackage
             ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
         css::uno::Reference< css::deployment::XPackage > implGetNextSharedHelpPackage
@@ -284,18 +283,6 @@ namespace treeview {
         int                                                                         m_iSharedPackage;
         int                                                                         m_iBundledPackage;
 
-    }; // end class ExtensionIteratorBase
-
-    class TreeFileIterator : public ExtensionIteratorBase
-    {
-    public:
-        TreeFileIterator( const OUString& aLanguage )
-            : ExtensionIteratorBase( aLanguage )
-        {}
-
-        OUString nextTreeFile( sal_Int32& rnFileSize );
-
-    private:
         OUString expandURL( const OUString& aURL );
         OUString implGetTreeFileFromPackage( sal_Int32& rnFileSize,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );
