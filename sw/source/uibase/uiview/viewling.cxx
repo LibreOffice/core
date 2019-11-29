@@ -798,7 +798,8 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 }
             }
 
-            m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+            if (!comphelper::LibreOfficeKit::isActive())
+                m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
             m_pWrtShell->LockView( bOldViewLock );
         }
     }
