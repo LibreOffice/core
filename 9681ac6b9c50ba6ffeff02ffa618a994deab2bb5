@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_03c0a6e0",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2409,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-11-29T16:53:36Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 2409,
+        "startChar": 44,
+        "endLine": 2409,
+        "endChar": 50
+      },
+      "revId": "9681ac6b9c50ba6ffeff02ffa618a994deab2bb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
