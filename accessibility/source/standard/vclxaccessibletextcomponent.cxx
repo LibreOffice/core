@@ -368,5 +368,14 @@ sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32
     return bReturn;
 }
 
+sal_Bool VCLXAccessibleTextComponent::scrollSubstringTo( sal_Int32, sal_Int32, sal_Int16 )
+{
+    return false;
+}
+
+sal_Bool VCLXAccessibleTextComponent::scrollSubstringToPoint( sal_Int32, sal_Int32, const css::awt::Point& )
+{
+    return false;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

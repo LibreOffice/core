@@ -474,6 +474,16 @@ namespace accessibility
         return true;
     }
 
+    sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::scrollSubstringTo( sal_Int32, sal_Int32, sal_Int16 )
+    {
+        return false;
+    }
+
+    sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::scrollSubstringToPoint( sal_Int32, sal_Int32, const css::awt::Point& )
+    {
+        return false;
+    }
+
     // XAccessibleEventBroadcaster
 
     void SAL_CALL AccessibleIconChoiceCtrlEntry::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )

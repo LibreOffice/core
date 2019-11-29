@@ -175,6 +175,9 @@ public:
     /** Copies the specified text range into the clipboard (ruler does nothing). */
     virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
 
+    virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int16 aScrollType) override;
+    virtual sal_Bool SAL_CALL scrollSubstringToPoint( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const css::awt::Point& aPoint ) override;
+
     // XInterface -------------------------------------------------------------
 
     DECLARE_XINTERFACE()
