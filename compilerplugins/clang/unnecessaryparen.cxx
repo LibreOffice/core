@@ -107,6 +107,26 @@ public:
     bool VisitBinaryConditionalOperator(BinaryConditionalOperator const * expr);
     bool VisitMemberExpr(const MemberExpr *f);
     bool VisitCXXDeleteExpr(const CXXDeleteExpr *);
+
+    bool VisitImplicitCastExpr(ImplicitCastExpr const * expr) {
+        if (ignoreLocation(expr)) {
+            return true;
+        }
+        if (expr->getCastKind() != CK_UserDefinedConversion) {
+            return true;
+        }
+        // Filter out a MemberExpr (resp. a ParenExpr sub-expr, if any, as would be found by
+        // VisitMemberExpr) that is part of a CXXMemberCallExpr which in turn is part of an
+        // ImplicitCastExpr, so that VisitMemberExpr doesn't erroneously pick it up (and note that
+        // CXXMemberCallExpr's getImplicitObjectArgument() skips past the underlying MemberExpr):
+        if (auto const e1 = dyn_cast<CXXMemberCallExpr>(expr->getSubExpr())) {
+            if (auto const e2 = dyn_cast<ParenExpr>(e1->getImplicitObjectArgument())) {
+                handled_.insert(e2);
+            }
+        }
+        return true;
+    }
+
 private:
     void VisitSomeStmt(Stmt const * stmt, const Expr* cond, StringRef stmtName);
 

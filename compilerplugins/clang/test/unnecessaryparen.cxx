@@ -115,13 +115,26 @@ int main()
     (void)nBits;
 };
 
+struct B { operator bool(); };
+
+struct N { bool operator !(); };
+
 class Foo2
 {
     int* p;
+    B b;
+    N n;
 
     int foo2()
     {
         return (p) ? 1 : 0; // expected-error {{unnecessary parentheses around member expr [loplugin:unnecessaryparen]}}
+    }
+
+    static int foo3(Foo2 & foo) {
+        (void) !(foo.p);
+        (void) !(foo.b);
+        (void) !(foo.n);
+        return (foo.p) ? 1 : 0;
     }
 };
 
