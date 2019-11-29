@@ -91,6 +91,7 @@
 #include <svx/svxids.hrc>
 #include <string>
 
+#include <boost/property_tree/json_parser.hpp>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;

@@ -90,6 +90,8 @@
 #include <o3tl/safeint.hxx>
 #include <vcl/GraphicLoader.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 using namespace ::editeng;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

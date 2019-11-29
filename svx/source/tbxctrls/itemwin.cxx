@@ -48,6 +48,8 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/unitconv.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

@@ -23,7 +23,7 @@
 #include <tools/color.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/awt/GradientStyle.hpp>
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 class Gradient;
 

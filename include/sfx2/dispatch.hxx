@@ -29,7 +29,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/span.hxx>
 
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #include <vcl/menu.hxx>
 #include <initializer_list>
 

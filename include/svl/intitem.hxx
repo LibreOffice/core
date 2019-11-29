@@ -22,7 +22,7 @@
 
 #include <svl/svldllapi.h>
 #include <svl/cintitem.hxx>
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 
 class SVL_DLLPUBLIC SfxByteItem: public CntByteItem
