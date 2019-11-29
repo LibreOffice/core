@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_437e9eaf",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 6803,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-11-29T17:15:18Z",
+      "side": 0,
+      "message": "it seems, removed accidentally",
+      "range": {
+        "startLine": 6803,
+        "startChar": 6,
+        "endLine": 6803,
+        "endChar": 88
+      },
+      "revId": "a6238c3fba80889f9090d997e2a4979b78b34ac7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

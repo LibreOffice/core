@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_034e6696",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-11-29T17:15:18Z",
+      "side": 1,
+      "message": "not necessary, you can use also aINetItems as a function argument",
+      "range": {
+        "startLine": 235,
+        "startChar": 21,
+        "endLine": 235,
+        "endChar": 67
+      },
+      "revId": "8c3f7fb08839a751d6e7cfa1d62b6ac905f26428",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
