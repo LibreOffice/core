@@ -177,7 +177,7 @@ static OUString static_STR_UNDO_PROPERTY;
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    :rModel( _rModel )
                    ,m_pPropertySetCache( nullptr )
-                   ,m_pScriptingEnv( ::svxform::createDefaultFormScriptingEnvironment( _rModel ) )
+                   ,m_pScriptingEnv( new svxform::FormScriptingEnvironment( _rModel ) )
                    ,m_Locks( 0 )
                    ,bReadOnly( false )
                    ,m_bDisposed( false )
