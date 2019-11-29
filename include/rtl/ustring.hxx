@@ -924,7 +924,7 @@ public:
       This function can't be used for language specific comparison.
 
       @param    str         the object (substring) to be compared.
-      @param    fromIndex   the index to start the comparion from.
+      @param    fromIndex   the index to start the comparison from.
                             The index must be greater than or equal to 0
                             and less or equal as the string length.
       @return   true if str match with the characters in the string
@@ -993,7 +993,7 @@ public:
       This function can't be used for language specific comparison.
 
       @param    str         the object (substring) to be compared.
-      @param    fromIndex   the index to start the comparion from.
+      @param    fromIndex   the index to start the comparison from.
                             The index must be greater than or equal to 0
                             and less than or equal to the string length.
       @return   true if str match with the characters in the string
@@ -1265,7 +1265,7 @@ public:
 
       @param    asciiStr    the object (substring) to be compared.
       @param    asciiStrLength the length of asciiStr.
-      @param    fromIndex   the index to start the comparion from.
+      @param    fromIndex   the index to start the comparison from.
                             The index must be greater than or equal to 0
                             and less than or equal to the string length.
       @return   true if str match with the characters in the string
@@ -1303,7 +1303,7 @@ public:
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
       @param    asciiStrLength  the length of the ascii string
-      @param    fromIndex       the index to start the comparion from.
+      @param    fromIndex       the index to start the comparison from.
                                 The index must be greater than or equal to 0
                                 and less than or equal to the string length.
       @return   true if str match with the characters in the string
