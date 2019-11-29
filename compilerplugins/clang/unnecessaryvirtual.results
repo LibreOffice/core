@@ -220,8 +220,6 @@ sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
 sw/source/core/inc/dflyobj.hxx:55
     void SwFlyDrawObj::SetTextBox(_Bool,)
-sw/source/ui/dbui/mmaddressblockpage.hxx:239
-    class weld::TreeView * SwCustomizeAddressBlockDialog::get_drag_source()const
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:191
