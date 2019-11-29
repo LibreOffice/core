@@ -34,6 +34,11 @@ public:
     SvxFrameDirectionItem( SvxFrameDirection nValue, sal_uInt16 nWhich  );
     virtual ~SvxFrameDirectionItem() override;
 
+    SvxFrameDirectionItem(SvxFrameDirectionItem const &) = default;
+    SvxFrameDirectionItem(SvxFrameDirectionItem &&) = default;
+    SvxFrameDirectionItem & operator =(SvxFrameDirectionItem const &) = default;
+    SvxFrameDirectionItem & operator =(SvxFrameDirectionItem &&) = default;
+
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            GetPresentation( SfxItemPresentation ePres,

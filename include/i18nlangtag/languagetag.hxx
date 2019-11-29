@@ -109,6 +109,11 @@ public:
 
     ~LanguageTag();
 
+    LanguageTag(LanguageTag const &) = default;
+    LanguageTag(LanguageTag &&) = default;
+    LanguageTag & operator =(LanguageTag const &) = default;
+    LanguageTag & operator =(LanguageTag &&) = default;
+
     /** Obtain BCP 47 language tag.
 
         @param bResolveSystem
