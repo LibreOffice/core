@@ -283,6 +283,7 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Default-Grow">
+                                <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Grow</property>
                               </object>
@@ -293,6 +294,7 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-Shrink">
+                                <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:Shrink</property>
@@ -8109,6 +8111,7 @@
                 </child>
                 <child>
                   <object class="sfxlo-PriorityMergedHBox" id="PrintContainer">
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
                       <object class="sfxlo-OptionalBox" id="Print-Section-ShowSinglePage">
