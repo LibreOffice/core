@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_2e0d89a0",
+        "filename": "solenv/gbuild/platform/com_MSC_defs.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-11-30T08:16:02Z",
+      "side": 0,
+      "message": "Possibly better just change this to\n\n    $(0) :\u003d $${PIPESTATUS[0]}\n\nas described in [1], to properly return the result instead of exiting?\n\nBut actually no objections wrt your change (I assume that filtering of other output also doesn\u0027t use functions, and is done inline?) - just was interested if there\u0027s a correct way to return a value from a define\u0027d function in the makefile :-)\n\n[1] https://stackoverflow.com/questions/29091370",
+      "range": {
+        "startLine": 283,
+        "startChar": 61,
+        "endLine": 283,
+        "endChar": 83
+      },
+      "revId": "ecc56435094e23165eb30db4d7f6a7e6aab0b47e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
