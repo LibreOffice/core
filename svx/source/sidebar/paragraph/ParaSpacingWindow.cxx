@@ -116,6 +116,11 @@ ParaAboveSpacingWindow::ParaAboveSpacingWindow(vcl::Window* pParent, css::uno::R
     m_pBelowContainer->Hide();
 }
 
+void ParaAboveSpacingWindow::GetFocus()
+{
+    m_pAboveSpacing->GrabFocus();
+}
+
 // ParaBelowSpacingWindow
 
 ParaBelowSpacingWindow::ParaBelowSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame)
@@ -123,6 +128,11 @@ ParaBelowSpacingWindow::ParaBelowSpacingWindow(vcl::Window* pParent, css::uno::R
 {
     m_pAboveContainer->Hide();
     m_pBelowContainer->Show();
+}
+
+void ParaBelowSpacingWindow::GetFocus()
+{
+    m_pBelowSpacing->GrabFocus();
 }
 
 // ParaLRSpacingWindow
@@ -304,6 +314,11 @@ ParaLeftSpacingWindow::ParaLeftSpacingWindow(vcl::Window* pParent, css::uno::Ref
     m_pFirstLineContainer->Hide();
 }
 
+void ParaLeftSpacingWindow::GetFocus()
+{
+    m_pBeforeSpacing->GrabFocus();
+}
+
 // ParaRightSpacingWindow
 
 ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame)
@@ -314,6 +329,11 @@ ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent, css::uno::R
     m_pFirstLineContainer->Hide();
 }
 
+void ParaRightSpacingWindow::GetFocus()
+{
+    m_pAfterSpacing->GrabFocus();
+}
+
 // ParaFirstLineSpacingWindow
 
 ParaFirstLineSpacingWindow::ParaFirstLineSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame)
@@ -322,6 +342,11 @@ ParaFirstLineSpacingWindow::ParaFirstLineSpacingWindow(vcl::Window* pParent, css
     m_pBeforeContainer->Hide();
     m_pAfterContainer->Hide();
     m_pFirstLineContainer->Show();
+}
+
+void ParaFirstLineSpacingWindow::GetFocus()
+{
+    m_pFLSpacing->GrabFocus();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
