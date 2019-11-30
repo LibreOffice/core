@@ -79,15 +79,14 @@ namespace desktop {
         static void callback(const int type, const char* payload, void* data);
         void queue(const int type, const char* data);
 
-        /// When enabled events are queued but callback not invoked.
-        void setEventLatch(const bool bEventLatch)
-        {
-            m_bEventLatch = bEventLatch;
-        }
-
-        bool isEventLatchOn() const { return m_bEventLatch; }
-        void setPartTilePainting(const bool bPartPainting) { m_bPartTilePainting = bPartPainting; }
-        bool isPartTilePainting() const { return m_bPartTilePainting; }
+        /// Disables callbacks on this handler. Must match with identical count
+        /// of enableCallbacks. Used during painting and changing views.
+        void disableCallbacks() { ++m_nDisableCallbacks; }
+        /// Enables callbacks on this handler. Must match with identical count
+        /// of disableCallbacks. Used during painting and changing views.
+        void enableCallbacks() { --m_nDisableCallbacks; }
+        /// Returns true iff callbacks are disabled.
+        bool callbacksDisabled() const { return m_nDisableCallbacks != 0; }
 
         void addViewStates(int viewId);
         void removeViewStates(int viewId);
@@ -140,7 +139,7 @@ namespace desktop {
         LibreOfficeKitDocument* m_pDocument;
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
-        bool m_bPartTilePainting;
+        int m_nDisableCallbacks;
         bool m_bEventLatch;
         std::mutex m_mutex;
     };
