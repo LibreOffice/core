@@ -14,13 +14,13 @@
 BEGIN {
     creatinglibrary_prefix = ENVIRON["CREATINGLIBRARY_PREFIX"];
     if (!creatinglibrary_prefix) {
-        creatinglibrary_prefix = "   Creating library "
+        creatinglibrary_prefix = "\\.lib.*\\.exp"
     }
     firstline = 1
 }
 
 {
-    if (firstline && index($0, creatinglibrary_prefix) == 1) {
+    if (firstline && match($0, creatinglibrary_prefix)) {
         # ignore
     } else {
         # because MSVC stupidly prints errors on stdout, it's
