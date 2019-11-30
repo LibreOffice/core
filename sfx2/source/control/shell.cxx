@@ -30,6 +30,7 @@
 #include <svtools/asynclink.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/configmgr.hxx>
+#include <comphelper/lok.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/bindings.hxx>
@@ -706,6 +707,12 @@ void SfxShell::SetViewShell_Impl( SfxViewShell* pView )
 
 void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
 {
+    // Avoids activation and de-activation (can be seen on switching view) from causing
+    // the sidebar to re-build. Such switching can happen as we change view to render
+    // using LOK for example, and is un-necessary for Online.
+    if (comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
     SfxViewFrame* pViewFrame = GetFrame();
     if (pViewFrame != nullptr)
     {
