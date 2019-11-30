@@ -46,11 +46,11 @@ namespace basegfx
             double fShift)
         {
             B2DPolyPolygon aRetval;
-            assert((rCandidate.count() > 1) && "createAreaGeometryForLineStartEnd: Line polygon has too less points (!)");
-            assert((rArrow.count() > 0) && "createAreaGeometryForLineStartEnd: Empty arrow utils::PolyPolygon (!)");
-            assert((fWidth > 0.0) && "createAreaGeometryForLineStartEnd: Width too small (!)");
+            assert((rCandidate.count() > 1) && "createAreaGeometryForLineStartEnd: Line polygon has too few points");
+            assert((rArrow.count() > 0) && "createAreaGeometryForLineStartEnd: Empty arrow utils::PolyPolygon");
+            assert((fWidth > 0.0) && "createAreaGeometryForLineStartEnd: Width too small");
             assert((fDockingPosition >= 0.0 && fDockingPosition <= 1.0) &&
-                "createAreaGeometryForLineStartEnd: fDockingPosition out of range [0.0 .. 1.0] (!)");
+                "createAreaGeometryForLineStartEnd: fDockingPosition out of range [0.0 .. 1.0]");
 
             if(fWidth < 0.0)
             {
