@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROBJ_HXX
 
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <boost/optional.hpp>
 
 class SdrObject;
 class SdrLayerIDSet;
@@ -56,7 +55,7 @@ public:
 
         This method cares for this, by retrieving the very original OutputDevice.
     */
-    boost::optional<const OutputDevice&> getPageViewOutputDevice() const;
+    const OutputDevice* getPageViewOutputDevice() const;
 };
 
 }}

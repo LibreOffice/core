@@ -60,12 +60,12 @@ vcl::Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 {
     vcl::Window* pRetval = nullptr;
 
-    boost::optional<const OutputDevice&> oPageOutputDev = getPageViewOutputDevice();
+    const OutputDevice* oPageOutputDev = getPageViewOutputDevice();
     if( oPageOutputDev )
     {
         if(OUTDEV_WINDOW == oPageOutputDev->GetOutDevType())
         {
-            pRetval = static_cast< vcl::Window* >(&const_cast<OutputDevice&>(oPageOutputDev.get()));
+            pRetval = static_cast< vcl::Window* >(&const_cast<OutputDevice&>(*oPageOutputDev));
         }
     }
 

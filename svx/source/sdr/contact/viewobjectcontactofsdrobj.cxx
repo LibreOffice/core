@@ -171,7 +171,7 @@ bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayIn
     return true;
 }
 
-boost::optional<const OutputDevice&> ViewObjectContactOfSdrObj::getPageViewOutputDevice() const
+const OutputDevice* ViewObjectContactOfSdrObj::getPageViewOutputDevice() const
 {
     ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &GetObjectContact() );
     if ( pPageViewContact )
@@ -182,11 +182,11 @@ boost::optional<const OutputDevice&> ViewObjectContactOfSdrObj::getPageViewOutpu
         // #i72429# / 2007-02-20 / frank.schoenheit (at) sun.com
         SdrPageWindow& rPageWindow( pPageViewContact->GetPageWindow() );
         if ( rPageWindow.GetOriginalPaintWindow() )
-            return rPageWindow.GetOriginalPaintWindow()->GetOutputDevice();
+            return &rPageWindow.GetOriginalPaintWindow()->GetOutputDevice();
 
-        return rPageWindow.GetPaintWindow().GetOutputDevice();
+        return &rPageWindow.GetPaintWindow().GetOutputDevice();
     }
-    return boost::optional<const OutputDevice&>();
+    return nullptr;
 }
 
 }}
