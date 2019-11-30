@@ -135,11 +135,10 @@ static void SetTableStyleProperties(const std::unique_ptr<TableStyle> &pTableSty
     pTableStyle->getBand1V().getFillProperties() = pBand1HFillProperties;
 
     //tet bold for 1st row/last row/column
-    ::boost::optional< sal_Bool > textBoldStyle(true);
-    pTableStyle->getFirstRow().getTextBoldStyle() = textBoldStyle;
-    pTableStyle->getLastRow().getTextBoldStyle() = textBoldStyle;
-    pTableStyle->getFirstCol().getTextBoldStyle() = textBoldStyle;
-    pTableStyle->getLastCol().getTextBoldStyle() = textBoldStyle;
+    pTableStyle->getFirstRow().getTextBoldStyle() = true;
+    pTableStyle->getLastRow().getTextBoldStyle() = true;
+    pTableStyle->getFirstCol().getTextBoldStyle() = true;
+    pTableStyle->getLastCol().getTextBoldStyle() = true;
 }
 
 static std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
