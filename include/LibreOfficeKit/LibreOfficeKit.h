@@ -427,6 +427,15 @@ struct _LibreOfficeKitDocumentClass
                        int* pFontHeight,
                        int pOrientation);
 
+    /// Switches view to viewId if viewId >= 0, and paints window
+    /// @see lok::Document::paintWindowDPI().
+    void (*paintWindowForView) (LibreOfficeKitDocument* pThis, unsigned nWindowId,
+                                unsigned char* pBuffer,
+                                const int x, const int y,
+                                const int width, const int height,
+                                const double dpiscale,
+                                int viewId);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
