@@ -59,6 +59,8 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, con
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
     , mnXNoteId(0)
+    , mbHasParsedEndnoteSeparator(false)
+    , mbHasParsedFootnoteSeparator(false)
     , mbIsSubstream(false)
     , mbSkipImages(bSkipImages)
     , mnPercentSize(0)
@@ -237,6 +239,23 @@ sal_Int32 OOXMLDocumentImpl::getXNoteId() const
     return mnXNoteId;
 }
 
+bool OOXMLDocumentImpl::GetHasParsedXNoteSeparator(const sal_Int32 nType) const
+{
+    if ( nType == OOXMLStream::ENDNOTES )
+        return mbHasParsedEndnoteSeparator;
+    else if ( nType == OOXMLStream::FOOTNOTES )
+        return mbHasParsedFootnoteSeparator;
+    return false;
+}
+
+void OOXMLDocumentImpl::SetHasParsedXNoteSeparator(const sal_Int32 nType)
+{
+    if ( nType == OOXMLStream::ENDNOTES )
+        mbHasParsedEndnoteSeparator = true;
+    else if ( nType == OOXMLStream::FOOTNOTES )
+        mbHasParsedFootnoteSeparator = true;
+}
+
 const OUString & OOXMLDocumentImpl::getTarget() const
 {
     return mpStream->getTarget();
@@ -268,6 +287,10 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const sal_Int
     pDocument->setModel(getModel());
     pDocument->setDrawPage(getDrawPage());
 
+    if ( GetHasParsedXNoteSeparator( nType ) )
+        pDocument->SetHasParsedXNoteSeparator( nType );
+    else
+        SetHasParsedXNoteSeparator( nType );
     return writerfilter::Reference<Stream>::Pointer_t(pDocument);
 }
 

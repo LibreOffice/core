@@ -38,6 +38,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
     OOXMLStream::Pointer_t mpStream;
     css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
     sal_Int32 mnXNoteId;
+    bool mbHasParsedEndnoteSeparator;
+    bool mbHasParsedFootnoteSeparator;
 
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
@@ -120,6 +122,8 @@ public:
     virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) override;
     virtual void setXNoteId(const sal_Int32 nId) override;
     virtual sal_Int32 getXNoteId() const override;
+    bool GetHasParsedXNoteSeparator(const sal_Int32 nType) const;
+    void SetHasParsedXNoteSeparator(const sal_Int32 nType);
     virtual const OUString & getTarget() const override;
     virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) override;
     virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) override;

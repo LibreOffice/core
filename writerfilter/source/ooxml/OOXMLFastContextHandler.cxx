@@ -1294,8 +1294,13 @@ void OOXMLFastContextHandlerXNote::lcl_startFastElement
 {
     mbForwardEventsSaved = isForwardEvents();
 
-    // If this is the note we're looking for or this is the footnote separator one.
-    if (mnMyXNoteId == getXNoteId() || static_cast<sal_uInt32>(mnMyXNoteType) == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator)
+    // If this is the note we're looking for or (for the first parsing of the footnotes) this is the footnote separator one.
+    // Slight hack: In this function there is no indication whether this is a footnote or endnote stream.
+    // But, since it is a substream, it can never have the wrong GetHasParsedXNoteSeparator, so both can be checked
+    bool bParseSeparator = mnMyXNoteType == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator
+                        && !getDocument()->GetHasParsedXNoteSeparator( OOXMLStream::FOOTNOTES )
+                        && !getDocument()->GetHasParsedXNoteSeparator( OOXMLStream::ENDNOTES );
+    if (mnMyXNoteId == getXNoteId() || bParseSeparator)
         setForwardEvents(true);
     else
         setForwardEvents(false);
