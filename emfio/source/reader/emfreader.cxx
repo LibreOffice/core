@@ -1748,6 +1748,7 @@ namespace emfio
                             }
 
                             SAL_INFO("emfio", "\t\tText: " << aText);
+                            SAL_INFO("emfio", "\t\tDxBuffer:");
 
                             std::unique_ptr<long[]> pDXAry, pDYAry;
 
@@ -1789,6 +1790,7 @@ namespace emfio
                                         }
                                     }
 
+                                    SAL_INFO("emfio", "\t\t\tSpacing " << i << ": " << nDx);
                                     pDXAry[i] = nDx;
                                     if (nOptions & ETO_PDY)
                                     {
