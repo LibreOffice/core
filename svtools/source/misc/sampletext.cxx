@@ -705,7 +705,7 @@ static OUString makeRepresentativeTextForLanguage(LanguageType eLang)
 namespace
 {
 #if OSL_DEBUG_LEVEL > 0
-    void lcl_dump_unicode_coverage(const boost::optional<std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM>> &roIn)
+    void lcl_dump_unicode_coverage(const o3tl::optional<std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM>> &roIn)
     {
         if (!roIn)
         {
@@ -976,7 +976,7 @@ namespace
             SAL_INFO("svtools", "RESERVED5");
     }
 
-    void lcl_dump_codepage_coverage(const boost::optional<std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM>> &roIn)
+    void lcl_dump_codepage_coverage(const o3tl::optional<std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM>> &roIn)
     {
         if (!roIn)
         {

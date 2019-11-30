@@ -25,7 +25,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <svx/svdouno.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <map>
 
@@ -158,7 +158,7 @@ private:
     DlgEditor& rDlgEditor;
     std::vector<DlgEdObj*> pChildren;
 
-    mutable ::boost::optional< css::awt::DeviceInfo >   mpDeviceInfo;
+    mutable ::o3tl::optional< css::awt::DeviceInfo >   mpDeviceInfo;
 
 private:
     explicit DlgEdForm(

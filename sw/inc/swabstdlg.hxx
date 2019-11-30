@@ -23,7 +23,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include "dbmgr.hxx"
 #include <cnttab.hxx>
 #include "tblenum.hxx"
@@ -232,7 +232,7 @@ protected:
 public:
     virtual OUString                        GetTemplateName() = 0;
     virtual sal_uInt16                      GetKind() = 0;
-    virtual ::boost::optional<sal_uInt16>   GetPageNumber() = 0;
+    virtual ::o3tl::optional<sal_uInt16>   GetPageNumber() = 0;
 
 };
 

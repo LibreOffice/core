@@ -27,7 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
 #include <libxml/parser.h>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 struct JavaInfo;
 
@@ -159,28 +159,28 @@ private:
         If /java/enabled@xsi:nil == true then the value will be uninitialized
         after a call to load().
     */
-    boost::optional<sal_Bool> m_enabled;
+    o3tl::optional<sal_Bool> m_enabled;
 
     /** User configurable option. /java/userClassPath
         If /java/userClassPath@xsi:nil == true then the value is uninitialized
         after a call to load().
     */
-    boost::optional< OUString> m_userClassPath;
+    o3tl::optional< OUString> m_userClassPath;
     /** User configurable option.  /java/javaInfo
         If /java/javaInfo@xsi:nil == true then the value is uninitialized
         after a call to load.
      */
-    boost::optional<CNodeJavaInfo> m_javaInfo;
+    o3tl::optional<CNodeJavaInfo> m_javaInfo;
     /** User configurable option. /java/vmParameters
         If /java/vmParameters@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
-    boost::optional< ::std::vector< OUString> > m_vmParameters;
+    o3tl::optional< ::std::vector< OUString> > m_vmParameters;
     /** User configurable option. /java/jreLocations
         If /java/jreLocaltions@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
-    boost::optional< ::std::vector< OUString> > m_JRELocations;
+    o3tl::optional< ::std::vector< OUString> > m_JRELocations;
 
 public:
 
@@ -225,22 +225,22 @@ public:
 
     /** returns the value of the element /java/enabled
      */
-    const boost::optional<sal_Bool> & getEnabled() const { return m_enabled;}
+    const o3tl::optional<sal_Bool> & getEnabled() const { return m_enabled;}
     /** returns the value of the element /java/userClassPath.
      */
-    const boost::optional< OUString> & getUserClassPath() const { return m_userClassPath;}
+    const o3tl::optional< OUString> & getUserClassPath() const { return m_userClassPath;}
 
     /** returns the value of the element /java/javaInfo.
      */
-    const boost::optional<CNodeJavaInfo> & getJavaInfo() const { return m_javaInfo;}
+    const o3tl::optional<CNodeJavaInfo> & getJavaInfo() const { return m_javaInfo;}
 
     /** returns the parameters from the element /java/vmParameters/param.
      */
-    const boost::optional< ::std::vector< OUString> > & getVmParameters() const { return m_vmParameters;}
+    const o3tl::optional< ::std::vector< OUString> > & getVmParameters() const { return m_vmParameters;}
 
     /** returns the parameters from the element /java/jreLocations/location.
      */
-    const boost::optional< ::std::vector< OUString> > & getJRELocations() const { return m_JRELocations;}
+    const o3tl::optional< ::std::vector< OUString> > & getJRELocations() const { return m_JRELocations;}
 };
 
 /** merges the settings for shared, user and installation during construction.

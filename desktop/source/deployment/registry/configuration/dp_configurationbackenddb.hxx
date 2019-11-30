@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <vector>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <dp_backenddb.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -69,7 +69,7 @@ public:
 
     void addEntry(OUString const & url, Data const & data);
 
-    ::boost::optional<Data> getEntry(OUString const & url);
+    ::o3tl::optional<Data> getEntry(OUString const & url);
     std::vector< OUString> getAllDataUrls();
 };
 

@@ -378,7 +378,7 @@ namespace
     }
 }
 
-void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< OUString >& i_rObjectName )
+void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::o3tl::optional< OUString >& i_rObjectName )
 {
     // ensure we're connected
     if ( !isConnected() )
@@ -460,7 +460,7 @@ Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArgu
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
-    impl_validateObjectTypeAndName_throw( i_nObjectType, ::boost::optional< OUString >() );
+    impl_validateObjectTypeAndName_throw( i_nObjectType, ::o3tl::optional< OUString >() );
 
     Reference< XComponent > xComponent( newElement(
         lcl_objectType2ElementType( i_nObjectType ),

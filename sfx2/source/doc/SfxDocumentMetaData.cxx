@@ -79,7 +79,7 @@
 #include <sfx2/docfile.hxx>
 #include <sax/tools/converter.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <utility>
 #include <vector>
@@ -454,7 +454,7 @@ OUString getNameSpace(const char* i_qname) throw ()
 
 bool
 textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
-        bool & o_rIsDateTime, boost::optional<sal_Int16> & o_rTimeZone,
+        bool & o_rIsDateTime, o3tl::optional<sal_Int16> & o_rTimeZone,
         const OUString& i_text) throw ()
 {
     if (::sax::Converter::parseDateOrDateTime(
@@ -1188,7 +1188,7 @@ void SfxDocumentMetaData::init(
             bool isDateTime;
             css::util::Date d;
             css::util::DateTime dt;
-            boost::optional<sal_Int16> nTimeZone;
+            o3tl::optional<sal_Int16> nTimeZone;
             if (textToDateOrDateTime(d, dt, isDateTime, nTimeZone, text)) {
                 if (isDateTime) {
                     if (nTimeZone) {

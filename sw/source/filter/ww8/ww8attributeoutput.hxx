@@ -180,7 +180,7 @@ public:
 
     /// The style of the page numbers.
     ///
-    virtual void SectionPageNumbering( sal_uInt16 nNumType, const ::boost::optional<sal_uInt16>& oPageRestartNumber ) override;
+    virtual void SectionPageNumbering( sal_uInt16 nNumType, const ::o3tl::optional<sal_uInt16>& oPageRestartNumber ) override;
 
     /// The type of breaking.
     virtual void SectionType( sal_uInt8 nBreakCode ) override;

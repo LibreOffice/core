@@ -27,7 +27,7 @@
 #include <memory>
 #include <vector>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <com/sun/star/awt/XUserInputInterception.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
@@ -94,7 +94,7 @@ namespace dbaui
     class ODataView;
 
     template< typename T >
-    inline bool SAL_CALL operator >>= (const css::uno::Any& _any, boost::optional< T >& _value)
+    inline bool SAL_CALL operator >>= (const css::uno::Any& _any, o3tl::optional< T >& _value)
     {
         _value.reset();  // de-init the optional value
 
@@ -118,10 +118,10 @@ namespace dbaui
     {
         bool                        bEnabled;
 
-        boost::optional<bool> bChecked;
-        boost::optional<bool> bInvisible;
+        o3tl::optional<bool> bChecked;
+        o3tl::optional<bool> bInvisible;
         css::uno::Any               aValue;
-        boost::optional<OUString> sTitle;
+        o3tl::optional<OUString> sTitle;
 
         FeatureState() : bEnabled(false) { }
     };

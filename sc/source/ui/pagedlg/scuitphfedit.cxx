@@ -184,8 +184,8 @@ void ScHFEditPage::InitPreDefinedList()
 {
     SvtUserOptions aUserOpt;
 
-    boost::optional<Color> pTxtColour;
-    boost::optional<Color> pFldColour;
+    o3tl::optional<Color> pTxtColour;
+    o3tl::optional<Color> pFldColour;
 
     // Get the all field values at the outset.
     OUString aPageFieldValue(m_xWndLeft->GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour));

@@ -2538,7 +2538,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
 #if BOOST_VERSION < 105600
             std::list<SwFrameDeleteGuard> g;
 #else
-            ::boost::optional<SwFrameDeleteGuard> g;
+            ::o3tl::optional<SwFrameDeleteGuard> g;
 #endif
             if (m_rThis.GetUpper()->IsCellFrame())
             {

@@ -22,7 +22,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 
@@ -364,8 +364,8 @@ public:
 class EditCharAttribField: public EditCharAttrib
 {
     OUString   aFieldValue;
-    boost::optional<Color>  mxTxtColor;
-    boost::optional<Color>  mxFldColor;
+    o3tl::optional<Color>  mxTxtColor;
+    o3tl::optional<Color>  mxFldColor;
 
     EditCharAttribField& operator = ( const EditCharAttribField& rAttr ) = delete;
 
@@ -379,8 +379,8 @@ public:
                                     { return !(operator == ( rAttr ) ); }
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-    boost::optional<Color>&   GetTextColor()      { return mxTxtColor; }
-    boost::optional<Color>&   GetFieldColor()     { return mxFldColor; }
+    o3tl::optional<Color>&   GetTextColor()      { return mxTxtColor; }
+    o3tl::optional<Color>&   GetFieldColor()     { return mxFldColor; }
 
     const OUString& GetFieldValue() const { return aFieldValue;}
     void SetFieldValue(const OUString& rVal);

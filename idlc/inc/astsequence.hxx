@@ -38,7 +38,7 @@ public:
     virtual const sal_Char* getRelativName() const override;
 private:
     AstType const * m_pMemberType;
-    mutable boost::optional<OString> m_xRelativName;
+    mutable o3tl::optional<OString> m_xRelativName;
 };
 
 #endif // INCLUDED_IDLC_INC_ASTSEQUENCE_HXX

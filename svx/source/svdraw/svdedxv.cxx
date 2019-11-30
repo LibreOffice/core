@@ -1012,8 +1012,8 @@ IMPL_LINK(SdrObjEditView, ImpOutlinerCalcFieldValueHdl, EditFieldInfo*, pFI, voi
     SdrTextObj* pTextObj = mxTextEditObj.get();
     if (pTextObj != nullptr)
     {
-        boost::optional<Color> pTxtCol;
-        boost::optional<Color> pFldCol;
+        o3tl::optional<Color> pTxtCol;
+        o3tl::optional<Color> pFldCol;
         bOk = pTextObj->CalcFieldValue(pFI->GetField(), pFI->GetPara(), pFI->GetPos(), true,
                                        pTxtCol, pFldCol, rStr);
         if (bOk)

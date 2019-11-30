@@ -335,7 +335,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     }
     else if ( dynamic_cast< const SdrMeasureField* >(pField))
     {
-        pInfo->SetFieldColor(boost::optional<Color>()); // clear the field color
+        pInfo->SetFieldColor(o3tl::optional<Color>()); // clear the field color
     }
     else if ((pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pField)) != nullptr)
     {

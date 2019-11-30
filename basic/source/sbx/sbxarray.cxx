@@ -24,14 +24,14 @@
 #include <basic/sbx.hxx>
 #include <runtime.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 using namespace std;
 
 struct SbxVarEntry
 {
     SbxVariableRef mpVar;
-    boost::optional<OUString> maAlias;
+    o3tl::optional<OUString> maAlias;
 };
 
 

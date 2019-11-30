@@ -25,7 +25,7 @@
 #include <svl/itemset.hxx>
 #include <editeng/editdata.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <memory>
 #include <vector>
 
@@ -62,10 +62,10 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     typedef std::vector<std::unique_ptr<Field> > FieldsType;
     typedef std::pair<OUString, OUString> FormulaWithNamespace;
 
-    boost::optional<FormulaWithNamespace> maFormula; /// table:formula attribute
-    boost::optional<OUString> maStringValue;         /// office:string-value attribute
-    boost::optional<OUString> maContentValidationName;
-    boost::optional<OUString> maFirstParagraph; /// unformatted first paragraph, for better performance.
+    o3tl::optional<FormulaWithNamespace> maFormula; /// table:formula attribute
+    o3tl::optional<OUString> maStringValue;         /// office:string-value attribute
+    o3tl::optional<OUString> maContentValidationName;
+    o3tl::optional<OUString> maFirstParagraph; /// unformatted first paragraph, for better performance.
 
     ScEditEngineDefaulter* mpEditEngine;
     OUStringBuffer maParagraph{32};
@@ -109,10 +109,10 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
     void SetFormulaCell             ( ScFormulaCell* pFCell ) const;
     void PutTextCell                ( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
-                                      const ::boost::optional< OUString >& pOUText );
+                                      const ::o3tl::optional< OUString >& pOUText );
     void PutValueCell               ( const ScAddress& rScCurrentPos );
     void AddTextAndValueCell       ( const ScAddress& rScCellPos,
-                                      const ::boost::optional< OUString >& pOUText, ScAddress& rScCurrentPos );
+                                      const ::o3tl::optional< OUString >& pOUText, ScAddress& rScCurrentPos );
     void AddNonFormulaCell         ( const ScAddress& rScCellPos );
     void PutFormulaCell             ( const ScAddress& rScCurrentPos );
     void AddFormulaCell             ( const ScAddress& rScCellPos );

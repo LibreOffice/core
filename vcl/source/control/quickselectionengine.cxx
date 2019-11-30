@@ -25,7 +25,7 @@
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 namespace vcl
 {
@@ -34,7 +34,7 @@ namespace vcl
     {
         ISearchableStringList&              rEntryList;
         OUString                            sCurrentSearchString;
-        ::boost::optional< sal_Unicode >    aSingleSearchChar;
+        ::o3tl::optional< sal_Unicode >    aSingleSearchChar;
         Timer                               aSearchTimeout;
 
         explicit QuickSelectionEngine_Data( ISearchableStringList& _entryList )

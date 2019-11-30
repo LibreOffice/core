@@ -87,7 +87,7 @@
 #include <comphelper/string.hxx>
 #include <oox/ole/olehelper.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <cassert>
 #include <memory>
@@ -583,7 +583,7 @@ bool ImplSdPPTImport::Import()
                     pPage->SetAutoLayout( AUTOLAYOUT_NOTES, true );
                 if ( nMasterNum )
                 {
-                    boost::optional< sal_Int16 > oStartNumbering;
+                    o3tl::optional< sal_Int16 > oStartNumbering;
                     SfxStyleSheet* pSheet;
                     if ( nMasterNum == 1 )
                     {

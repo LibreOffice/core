@@ -868,7 +868,7 @@ ScDPShowDetailDlg::ScDPShowDetailDlg(weld::Window* pParent, ScDPObject& rDPObj, 
             {
                 if (pDimension)
                 {
-                    const boost::optional<OUString> & pLayoutName = pDimension->GetLayoutName();
+                    const o3tl::optional<OUString> & pLayoutName = pDimension->GetLayoutName();
                     if (pLayoutName)
                         aName = *pLayoutName;
                 }

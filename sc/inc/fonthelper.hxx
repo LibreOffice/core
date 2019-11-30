@@ -11,7 +11,7 @@
 #define INCLUDED_SC_INC_FONTHELPER_HXX
 
 #include "scdllapi.h"
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/color.hxx>
 #include <vcl/fntstyle.hxx>
@@ -21,20 +21,20 @@ class SvxFontItem;
 
 struct SC_DLLPUBLIC ScDxfFont
 {
-    boost::optional<const SvxFontItem*> pFontAttr;
-    boost::optional<sal_uInt32> nFontHeight;
-    boost::optional<FontWeight> eWeight;
-    boost::optional<FontItalic> eItalic;
-    boost::optional<FontLineStyle> eUnder;
-    boost::optional<FontLineStyle> eOver;
-    boost::optional<bool> bWordLine;
-    boost::optional<FontStrikeout> eStrike;
-    boost::optional<bool> bOutline;
-    boost::optional<bool> bShadow;
-    boost::optional<FontEmphasisMark> eEmphasis;
-    boost::optional<FontRelief> eRelief;
-    boost::optional<Color> aColor;
-    boost::optional<LanguageType> eLang;
+    o3tl::optional<const SvxFontItem*> pFontAttr;
+    o3tl::optional<sal_uInt32> nFontHeight;
+    o3tl::optional<FontWeight> eWeight;
+    o3tl::optional<FontItalic> eItalic;
+    o3tl::optional<FontLineStyle> eUnder;
+    o3tl::optional<FontLineStyle> eOver;
+    o3tl::optional<bool> bWordLine;
+    o3tl::optional<FontStrikeout> eStrike;
+    o3tl::optional<bool> bOutline;
+    o3tl::optional<bool> bShadow;
+    o3tl::optional<FontEmphasisMark> eEmphasis;
+    o3tl::optional<FontRelief> eRelief;
+    o3tl::optional<Color> aColor;
+    o3tl::optional<LanguageType> eLang;
 
     bool isEmpty() const
     {

@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/Any.h>
 #include "PropertyIds.hxx"
 #include <memory>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <map>
 #include <vector>
 #include "TagLogger.hxx"
@@ -149,7 +149,7 @@ public:
     void InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite = true );
 
     // Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
-    boost::optional< Property > getProperty( PropertyIds eId ) const;
+    o3tl::optional< Property > getProperty( PropertyIds eId ) const;
 
     // Has the property named been set (via Insert)?
     bool isSet( PropertyIds eId ) const;
@@ -215,7 +215,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > m_aFirstPageStyle;
     css::uno::Reference< css::beans::XPropertySet > m_aFollowPageStyle;
 
-    boost::optional< css::table::BorderLine2 >      m_oBorderLines[4];
+    o3tl::optional< css::table::BorderLine2 >      m_oBorderLines[4];
     sal_Int32                                       m_nBorderDistances[4];
     BorderApply                                     m_eBorderApply;
     BorderOffsetFrom                                m_eBorderOffsetFrom;

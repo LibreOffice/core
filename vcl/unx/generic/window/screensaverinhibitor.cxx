@@ -47,7 +47,7 @@
 #include <sal/log.hxx>
 
 void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
-                                    bool bIsX11, const boost::optional<unsigned int>& xid, boost::optional<Display*> pDisplay )
+                                    bool bIsX11, const o3tl::optional<unsigned int>& xid, o3tl::optional<Display*> pDisplay )
 {
     const char* appname = SalGenericSystem::getFrameClassName();
     const OString aReason = OUStringToOString( sReason, RTL_TEXTENCODING_UTF8 );
@@ -77,7 +77,7 @@ static void dbusInhibit( bool bInhibit,
                   const gchar* service, const gchar* path, const gchar* interface,
                   const std::function<GVariant*( GDBusProxy*, GError*& )>& fInhibit,
                   const std::function<GVariant*( GDBusProxy*, const guint, GError*& )>& fUnInhibit,
-                  boost::optional<guint>& rCookie )
+                  o3tl::optional<guint>& rCookie )
 {
     if ( ( !bInhibit && !rCookie ) ||
          (  bInhibit &&  rCookie ) )

@@ -96,7 +96,7 @@ void ConfigurationBackendDb::addEntry(OUString const & url, Data const & data)
 }
 
 
-::boost::optional<ConfigurationBackendDb::Data>
+::o3tl::optional<ConfigurationBackendDb::Data>
 ConfigurationBackendDb::getEntry(OUString const & url)
 {
     try
@@ -110,9 +110,9 @@ ConfigurationBackendDb::getEntry(OUString const & url)
         }
         else
         {
-            return ::boost::optional<Data>();
+            return ::o3tl::optional<Data>();
         }
-        return ::boost::optional<Data>(retData);
+        return ::o3tl::optional<Data>(retData);
     }
     catch ( const css::deployment::DeploymentException& )
     {

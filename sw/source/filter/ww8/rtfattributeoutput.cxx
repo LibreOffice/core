@@ -1292,7 +1292,7 @@ void RtfAttributeOutput::SectionBiDi(bool bBiDi)
 }
 
 void RtfAttributeOutput::SectionPageNumbering(
-    sal_uInt16 nNumType, const ::boost::optional<sal_uInt16>& oPageRestartNumber)
+    sal_uInt16 nNumType, const ::o3tl::optional<sal_uInt16>& oPageRestartNumber)
 {
     if (oPageRestartNumber)
     {
@@ -3214,7 +3214,7 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
     {
         // See DocxSdrExport::startDMLAnchorInline() for SwFormatSurround -> WR / WRK mappings.
         sal_Int32 nWr = -1;
-        boost::optional<sal_Int32> oWrk;
+        o3tl::optional<sal_Int32> oWrk;
         switch (rSurround.GetValue())
         {
             case css::text::WrapTextMode_NONE:

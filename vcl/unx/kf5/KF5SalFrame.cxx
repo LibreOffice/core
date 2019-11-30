@@ -40,7 +40,7 @@
 
 #include <svdata.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 KF5SalFrame::KF5SalFrame(KF5SalFrame* pParent, SalFrameStyleFlags nState, bool bUseCairo)
     : Qt5Frame(pParent, nState, bUseCairo)

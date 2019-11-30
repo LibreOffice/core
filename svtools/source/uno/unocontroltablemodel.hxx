@@ -68,16 +68,16 @@ namespace svt { namespace table
         virtual void                            getCellContent( ColPos const i_col, RowPos const i_row, css::uno::Any& o_cellContent ) override;
         virtual void                            getCellToolTip( ColPos const i_col, RowPos const i_row, css::uno::Any & o_cellToolTip ) override;
         virtual css::uno::Any      getRowHeading( RowPos const i_rowPos ) const override;
-        virtual ::boost::optional< ::Color >    getLineColor() const override;
-        virtual ::boost::optional< ::Color >    getHeaderBackgroundColor() const override;
-        virtual ::boost::optional< ::Color >    getHeaderTextColor() const override;
-        virtual ::boost::optional< ::Color >    getActiveSelectionBackColor() const override;
-        virtual ::boost::optional< ::Color >    getInactiveSelectionBackColor() const override;
-        virtual ::boost::optional< ::Color >    getActiveSelectionTextColor() const override;
-        virtual ::boost::optional< ::Color >    getInactiveSelectionTextColor() const override;
-        virtual ::boost::optional< ::Color >    getTextColor() const override;
-        virtual ::boost::optional< ::Color >    getTextLineColor() const override;
-        virtual ::boost::optional< ::std::vector< ::Color > >
+        virtual ::o3tl::optional< ::Color >    getLineColor() const override;
+        virtual ::o3tl::optional< ::Color >    getHeaderBackgroundColor() const override;
+        virtual ::o3tl::optional< ::Color >    getHeaderTextColor() const override;
+        virtual ::o3tl::optional< ::Color >    getActiveSelectionBackColor() const override;
+        virtual ::o3tl::optional< ::Color >    getInactiveSelectionBackColor() const override;
+        virtual ::o3tl::optional< ::Color >    getActiveSelectionTextColor() const override;
+        virtual ::o3tl::optional< ::Color >    getInactiveSelectionTextColor() const override;
+        virtual ::o3tl::optional< ::Color >    getTextColor() const override;
+        virtual ::o3tl::optional< ::Color >    getTextLineColor() const override;
+        virtual ::o3tl::optional< ::std::vector< ::Color > >
                                                 getRowBackgroundColors() const override;
         virtual css::style::VerticalAlignment
                                                 getVerticalAlign() const override;

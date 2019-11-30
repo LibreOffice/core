@@ -27,7 +27,7 @@
 #include <vector>
 
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -412,7 +412,7 @@ void UpdateDialog::Thread::prepareUpdateData(
         out_du.unsatisfiedDependencies[i] = dp_misc::Dependencies::getErrorText(ds[i]);
     }
 
-    const ::boost::optional< OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
+    const ::o3tl::optional< OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
 
     out_du.name = getUpdateDisplayString(out_data, infoset.getVersion());
 
@@ -841,7 +841,7 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
         {
             DisabledUpdate &rData = m_disabledUpdates[ index->m_nIndex ];
             dp_misc::DescriptionInfoset aInfoset( m_context, rData.aUpdateInfo );
-            ::boost::optional< OUString > aID( aInfoset.getIdentifier() );
+            ::o3tl::optional< OUString > aID( aInfoset.getIdentifier() );
             if ( aID )
                 aExtensionID = *aID;
             aVersion = aInfoset.getVersion();

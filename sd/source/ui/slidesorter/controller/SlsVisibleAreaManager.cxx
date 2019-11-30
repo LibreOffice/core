@@ -107,7 +107,7 @@ void VisibleAreaManager::MakeVisible()
         return;
     const Point aCurrentTopLeft (pWindow->PixelToLogic(Point(0,0)));
 
-    const ::boost::optional<Point> aNewVisibleTopLeft (GetRequestedTopLeft());
+    const ::o3tl::optional<Point> aNewVisibleTopLeft (GetRequestedTopLeft());
     maVisibleRequests.clear();
     if ( ! aNewVisibleTopLeft)
         return;
@@ -121,11 +121,11 @@ void VisibleAreaManager::MakeVisible()
     aAnimation(1.0);
 }
 
-::boost::optional<Point> VisibleAreaManager::GetRequestedTopLeft() const
+::o3tl::optional<Point> VisibleAreaManager::GetRequestedTopLeft() const
 {
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if ( ! pWindow)
-        return ::boost::optional<Point>();
+        return ::o3tl::optional<Point>();
 
     // Get the currently visible area and the model area.
     const ::tools::Rectangle aVisibleArea (pWindow->PixelToLogic(
@@ -166,9 +166,9 @@ void VisibleAreaManager::MakeVisible()
 
     const Point aRequestedTopLeft (nVisibleLeft, nVisibleTop);
     if (aRequestedTopLeft == aVisibleArea.TopLeft())
-        return ::boost::optional<Point>();
+        return ::o3tl::optional<Point>();
     else
-        return ::boost::optional<Point>(aRequestedTopLeft);
+        return ::o3tl::optional<Point>(aRequestedTopLeft);
 }
 
 //===== VisibleAreaManager::TemporaryDisabler =================================

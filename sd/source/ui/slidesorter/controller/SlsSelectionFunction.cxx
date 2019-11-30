@@ -51,7 +51,7 @@
 #include <o3tl/deleter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <sdmod.hxx>
 
 namespace {
@@ -198,7 +198,7 @@ protected:
     virtual bool ProcessDragEvent (SelectionFunction::EventDescriptor& rDescriptor) override;
 
 private:
-    ::boost::optional<Point> maButtonDownLocation;
+    ::o3tl::optional<Point> maButtonDownLocation;
 
     /** Select all pages between and including the selection anchor and the
         specified page.
@@ -1183,7 +1183,7 @@ void NormalModeHandler::RangeSelect (const model::SharedPageDescriptor& rpDescri
 
 void NormalModeHandler::ResetButtonDownLocation()
 {
-    maButtonDownLocation = ::boost::optional<Point>();
+    maButtonDownLocation = ::o3tl::optional<Point>();
 }
 
 //===== MultiSelectionModeHandler =============================================

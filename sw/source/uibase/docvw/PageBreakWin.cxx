@@ -329,7 +329,7 @@ void SwPageBreakWin::Activate( )
     MenuButton::Activate();
 }
 
-void SwPageBreakWin::UpdatePosition(const boost::optional<Point>& xEvtPt)
+void SwPageBreakWin::UpdatePosition(const o3tl::optional<Point>& xEvtPt)
 {
     if ( xEvtPt )
     {

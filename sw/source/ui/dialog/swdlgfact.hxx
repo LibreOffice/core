@@ -75,7 +75,7 @@ class SwTOXMark;
 class SwSplitTableDlg;
 
 #include <itabenum.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <o3tl/deleter.hxx>
 
 namespace sw
@@ -183,7 +183,7 @@ public:
     virtual short Execute() override;
     virtual OUString                        GetTemplateName() override;
     virtual sal_uInt16                      GetKind() override;
-    virtual ::boost::optional<sal_uInt16>   GetPageNumber() override;
+    virtual ::o3tl::optional<sal_uInt16>   GetPageNumber() override;
 };
 
 class AbstractSwTableWidthDlg_Impl : public VclAbstractDialog

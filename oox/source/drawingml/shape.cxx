@@ -1167,7 +1167,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     xPropertySet->setPropertyValue(aGrabBagPropName, uno::makeAny(aGrabBag));
                 }
                 // TextFrames have ShadowFormat, not individual shadow properties.
-                boost::optional<sal_Int32> oShadowDistance;
+                o3tl::optional<sal_Int32> oShadowDistance;
                 if (aShapeProps.hasProperty(PROP_ShadowXDistance))
                 {
                     oShadowDistance = aShapeProps.getProperty(PROP_ShadowXDistance).get<sal_Int32>();
@@ -1178,7 +1178,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     // There is a single 'dist' attribute, so no need to count the avg of x and y.
                     aShapeProps.erase(PROP_ShadowYDistance);
                 }
-                boost::optional<sal_Int32> oShadowColor;
+                o3tl::optional<sal_Int32> oShadowColor;
                 if (aShapeProps.hasProperty(PROP_ShadowColor))
                 {
                     oShadowColor = aShapeProps.getProperty(PROP_ShadowColor).get<sal_Int32>();
