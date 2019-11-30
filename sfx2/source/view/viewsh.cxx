@@ -1094,7 +1094,11 @@ SfxViewShell::SfxViewShell
     rViewArr.push_back(this);
 
     if (comphelper::LibreOfficeKit::isActive())
-        pViewFrame->GetWindow().SetLOKNotifier(this, true);
+    {
+        vcl::Window* pFrameWin = pViewFrame->GetWindow().GetFrameWindow();
+        if (pFrameWin)
+            pFrameWin->SetLOKNotifier(this, true);
+    }
 }
 
 
@@ -1119,8 +1123,9 @@ SfxViewShell::~SfxViewShell()
         pImpl->m_pController.clear();
     }
 
-    if (GetViewFrame()->GetWindow().GetLOKNotifier())
-        GetViewFrame()->GetWindow().ReleaseLOKNotifier();
+    vcl::Window* pFrameWin = GetViewFrame()->GetWindow().GetFrameWindow();
+    if (pFrameWin && pFrameWin->GetLOKNotifier())
+        pFrameWin->ReleaseLOKNotifier();
 }
 
 bool SfxViewShell::PrepareClose
