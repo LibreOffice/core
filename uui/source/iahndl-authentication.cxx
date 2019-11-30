@@ -672,7 +672,6 @@ UUIInteractionHelper::handlePasswordRequest(
         {
             nMode               = aDocumentPasswordRequest.Mode;
             aDocumentName       = aDocumentPasswordRequest.Name;
-            OSL_ENSURE( !bIsPasswordToModify, "bIsPasswordToModify should be false" );
 
             bDoHandleRequest = true;
             break;  // do
@@ -696,7 +695,6 @@ UUIInteractionHelper::handlePasswordRequest(
             nMode               = aDocumentMSPasswordRequest.Mode;
             aDocumentName       = aDocumentMSPasswordRequest.Name;
             nMaxPasswordLen     = 15;
-            OSL_ENSURE( !bIsPasswordToModify, "bIsPasswordToModify should be false" );
 
             bDoHandleRequest = true;
             break;  // do
