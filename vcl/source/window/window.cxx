@@ -551,6 +551,8 @@ void Window::dispose()
         mpWindowImpl->mpFrameData = nullptr;
     }
 
+    ReleaseLOKNotifier();
+
     // should be the last statements
     mpWindowImpl.reset();
 
