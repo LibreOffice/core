@@ -1084,7 +1084,7 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
       m_pDocument(pDocument),
       m_pCallback(pCallback),
       m_pData(pData),
-      m_bPartTilePainting(false),
+      m_nDisableCallbacks(0),
       m_bEventLatch(false)
 {
     SetPriority(TaskPriority::POST_PAINT);
@@ -1134,7 +1134,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         bIsChartActive = aChartHelper.GetWindow() != nullptr;
     }
 
-    if (m_bPartTilePainting && !bIsChartActive)
+    if (callbacksDisabled() && !bIsChartActive)
     {
         // We drop notifications when this is set, except for important ones.
         // When we issue a complex command (such as .uno:InsertAnnotation)
@@ -2854,9 +2854,9 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     // Disable callbacks while we are painting.
     if (nOrigViewId >= 0)
     {
-        auto findIt = pDocument->mpCallbackFlushHandlers.find(nOrigViewId);
-        if (findIt != pDocument->mpCallbackFlushHandlers.end())
-            findIt->second->setPartTilePainting(true);
+        const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nOrigViewId);
+        if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
+            handlerIt->second->disableCallbacks();
     }
 
     try
@@ -2909,9 +2909,9 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
     if (nOrigViewId >= 0)
     {
-        auto findIt = pDocument->mpCallbackFlushHandlers.find(nOrigViewId);
-        if (findIt != pDocument->mpCallbackFlushHandlers.end())
-            findIt->second->setPartTilePainting(false);
+        const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nOrigViewId);
+        if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
+            handlerIt->second->enableCallbacks();
     }
 }
 
@@ -4672,14 +4672,28 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis
     SfxLokHelper::destroyView(nId);
 }
 
-static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
+static void doc_setView(LibreOfficeKitDocument* pThis, int nId)
 {
     comphelper::ProfileZone aZone("doc_setView");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SfxLokHelper::setView(nId);
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nId);
+    if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
+        handlerIt->second->disableCallbacks();
+
+    try
+    {
+        SfxLokHelper::setView(nId);
+    }
+    catch (const std::exception&)
+    {
+    }
+
+    if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
+        handlerIt->second->enableCallbacks();
 }
 
 static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)

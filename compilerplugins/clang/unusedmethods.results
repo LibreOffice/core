@@ -128,12 +128,6 @@ dbaccess/source/ui/inc/SqlNameEdit.hxx:105
     void dbaui::OSQLNameEntry::set_sensitive(_Bool)
 dbaccess/source/ui/inc/WTypeSelect.hxx:76
     void dbaui::OWizTypeSelectList::show()
-desktop/inc/lib/init.hxx:83
-    void desktop::CallbackFlushHandler::setEventLatch(const _Bool)
-desktop/inc/lib/init.hxx:88
-    _Bool desktop::CallbackFlushHandler::isEventLatchOn() const
-desktop/inc/lib/init.hxx:90
-    _Bool desktop::CallbackFlushHandler::isPartTilePainting() const
 desktop/source/lib/lokclipboard.hxx:96
      LOKClipboardFactory::LOKClipboardFactory()
 drawinglayer/source/tools/emfpcustomlinecap.hxx:38
