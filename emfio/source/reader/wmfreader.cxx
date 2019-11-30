@@ -21,7 +21,7 @@
 #include <emfreader.hxx>
 
 #include <memory>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
@@ -1489,10 +1489,10 @@ namespace emfio
         auto nEnd = nPos + pStm->remainingSize();
 
         Point aWinOrg(0,0);
-        boost::optional<Size>  aWinExt;
+        o3tl::optional<Size>  aWinExt;
 
         Point aViewportOrg(0,0);
-        boost::optional<Size>  aViewportExt;
+        o3tl::optional<Size>  aViewportExt;
 
         if (nEnd - nPos)
         {

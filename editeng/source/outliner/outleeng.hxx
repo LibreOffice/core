@@ -71,7 +71,7 @@ public:
     // for text conversion
     virtual bool        ConvertNextDocument() override;
 
-    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor ) override;
+    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, o3tl::optional<Color>& rTxtColor, o3tl::optional<Color>& rFldColor ) override;
 
     virtual tools::Rectangle   GetBulletArea( sal_Int32 nPara ) override;
 

@@ -109,7 +109,7 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
     }
 }
 
-void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const boost::optional<OUString> & pCurrency)
+void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const o3tl::optional<OUString> & pCurrency)
 {
     if (!pCurrencyList)
         pCurrencyList.reset( new ScMyCurrencyStylesSet );
@@ -327,8 +327,8 @@ void ScMyStylesImportHelper::SetRowStyle(const OUString& sStyleName)
     aRowDefaultStyle = GetIterator(sStyleName);
 }
 
-void ScMyStylesImportHelper::SetAttributes(boost::optional<OUString> pStyleNameP,
-    boost::optional<OUString> pCurrencyP, const sal_Int16 nCellTypeP)
+void ScMyStylesImportHelper::SetAttributes(o3tl::optional<OUString> pStyleNameP,
+    o3tl::optional<OUString> pCurrencyP, const sal_Int16 nCellTypeP)
 {
     pStyleName = std::move(pStyleNameP);
     pCurrency = std::move(pCurrencyP);

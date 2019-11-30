@@ -15,7 +15,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <sax/fastattribs.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -525,8 +525,8 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(
     uno::Sequence<beans::PropertyValue> aTableInd;
     uno::Sequence<beans::PropertyValue> aTableBorders;
     uno::Sequence<beans::PropertyValue> aTableCellMar;
-    boost::optional<sal_Int32> oTableStyleRowBandSize;
-    boost::optional<sal_Int32> oTableStyleColBandSize;
+    o3tl::optional<sal_Int32> oTableStyleRowBandSize;
+    o3tl::optional<sal_Int32> oTableStyleColBandSize;
     for (const auto& rProp : rTablePr)
     {
         if (rProp.Name == "tblStyleRowBandSize")

@@ -38,7 +38,7 @@
 
 #include <vcl/graph.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <cstddef>
@@ -179,11 +179,11 @@ struct WW8_SepInfo
     const SwSectionFormat* pSectionFormat;
     const SwNode* pPDNd;
     sal_uLong const  nLnNumRestartNo;
-    ::boost::optional<sal_uInt16> const oPgRestartNo;
+    ::o3tl::optional<sal_uInt16> const oPgRestartNo;
     bool const bIsFirstParagraph;
 
     WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFormat* pFormat,
-                 sal_uLong nLnRestart, ::boost::optional<sal_uInt16> oPgRestart = boost::none,
+                 sal_uLong nLnRestart, ::o3tl::optional<sal_uInt16> oPgRestart = o3tl::nullopt,
                  const SwNode* pNd = nullptr, bool bIsFirstPara = false )
         : pPageDesc( pPD ), pSectionFormat( pFormat ), pPDNd( pNd ),
           nLnNumRestartNo( nLnRestart ), oPgRestartNo( oPgRestart ),

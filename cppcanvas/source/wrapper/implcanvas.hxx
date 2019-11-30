@@ -24,7 +24,7 @@
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <cppcanvas/canvas.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
@@ -77,7 +77,7 @@ namespace cppcanvas
 
         private:
             mutable css::rendering::ViewState                    maViewState;
-            boost::optional<basegfx::B2DPolyPolygon>             maClipPolyPolygon;
+            o3tl::optional<basegfx::B2DPolyPolygon>             maClipPolyPolygon;
             const css::uno::Reference< css::rendering::XCanvas > mxCanvas;
         };
 

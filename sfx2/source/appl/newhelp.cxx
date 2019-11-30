@@ -1174,7 +1174,7 @@ void BookmarksBox_Impl::dispose()
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         OUString* pURL = static_cast<OUString*>(GetEntryData(i));
-        aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, "", GetEntry(i), boost::none);
+        aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, "", GetEntry(i), o3tl::nullopt);
         delete pURL;
     }
     ListBox::dispose();

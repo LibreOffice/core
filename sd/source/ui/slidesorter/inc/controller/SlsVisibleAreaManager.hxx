@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSVISIBLEAREAMANAGER_HXX
 
 #include <model/SlsSharedPageDescriptor.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <tools/gen.hxx>
 #include <vector>
 
@@ -81,7 +81,7 @@ private:
     int  mnDisableCount;
 
     void MakeVisible();
-    ::boost::optional<Point> GetRequestedTopLeft() const;
+    ::o3tl::optional<Point> GetRequestedTopLeft() const;
 };
 
 } } } // end of namespace ::sd::slidesorter::view

@@ -37,7 +37,7 @@ using namespace com::sun::star;
 namespace slideshow {
 namespace internal {
 
-SlideChangeBase::SlideChangeBase( boost::optional<SlideSharedPtr> const & leavingSlide,
+SlideChangeBase::SlideChangeBase( o3tl::optional<SlideSharedPtr> const & leavingSlide,
                                   const SlideSharedPtr&                   pEnteringSlide,
                                   const SoundPlayerSharedPtr&             pSoundPlayer,
                                   const UnoViewContainer&                 rViewContainer,
@@ -76,13 +76,13 @@ SlideBitmapSharedPtr SlideChangeBase::getEnteringBitmap( const ViewEntry& rViewE
 {
     if( !rViewEntry.mpEnteringBitmap )
         rViewEntry.mpEnteringBitmap = createBitmap( rViewEntry.mpView,
-                                                    boost::optional<SlideSharedPtr>(mpEnteringSlide) );
+                                                    o3tl::optional<SlideSharedPtr>(mpEnteringSlide) );
 
     return rViewEntry.mpEnteringBitmap;
 }
 
 SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&                rView,
-                                                    const boost::optional<SlideSharedPtr>& rSlide ) const
+                                                    const o3tl::optional<SlideSharedPtr>& rSlide ) const
 {
     SlideBitmapSharedPtr pRet;
     if( !rSlide )

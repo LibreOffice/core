@@ -175,7 +175,7 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
     double parameter1 = parameterInteger1 / static_cast<double>(PRECISION);
     double parameter2 = parameterInteger2 / static_cast<double>(PRECISION);
 
-    boost::optional<sal_Int8> aDecimalPlaces;
+    o3tl::optional<sal_Int8> aDecimalPlaces;
     if (mxEnableRounding->get_active())
     {
         aDecimalPlaces = static_cast<sal_Int8>(mxDecimalPlaces->get_value());
@@ -250,7 +250,7 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
 }
 
 template<class RNG>
-void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const char* pDistributionStringId, boost::optional<sal_Int8> aDecimalPlaces)
+void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const char* pDistributionStringId, o3tl::optional<sal_Int8> aDecimalPlaces)
 {
     OUString aUndo = ScResId(STR_UNDO_DISTRIBUTION_TEMPLATE);
     OUString aDistributionName = ScResId(pDistributionStringId);

@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include "dp_misc_api.hxx"
@@ -47,7 +47,7 @@ namespace dp_misc {
    on the given file name
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateIdentifier(
-    ::boost::optional< OUString > const & optional,
+    ::o3tl::optional< OUString > const & optional,
     OUString const & fileName);
 
 /**

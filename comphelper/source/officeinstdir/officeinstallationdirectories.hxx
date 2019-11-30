@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -72,8 +72,8 @@ private:
     void initDirs();
 
     css::uno::Reference< css::uno::XComponentContext >    m_xCtx;
-    boost::optional<OUString>                  m_xOfficeBrandDir;
-    boost::optional<OUString>                  m_xUserDir;
+    o3tl::optional<OUString>                  m_xOfficeBrandDir;
+    o3tl::optional<OUString>                  m_xUserDir;
 };
 
 } // namespace comphelper

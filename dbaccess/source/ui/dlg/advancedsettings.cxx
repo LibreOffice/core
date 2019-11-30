@@ -203,7 +203,7 @@ namespace dbaui
 
             bool bTriState = false;
 
-            boost::optional<bool> aValue;
+            o3tl::optional<bool> aValue;
 
             const SfxPoolItem* pItem = _rSet.GetItem<SfxPoolItem>(booleanSetting.nItemId);
             if (const SfxBoolItem *pBoolItem = dynamic_cast<const SfxBoolItem*>( pItem) )

@@ -28,7 +28,7 @@
 #include <algorithm>
 #include <atomic>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <libxslt/security.h>
 
@@ -201,9 +201,9 @@ public:
     {
         OString const value;
         OString const language;
-        ::boost::optional<OString> const type;
+        ::o3tl::optional<OString> const type;
         Literal(OString const& i_rValue, OString const& i_rLanguage,
-                ::boost::optional<OString> const& i_rType)
+                ::o3tl::optional<OString> const& i_rType)
             : value(i_rValue)
             , language(i_rLanguage)
             , type(i_rType)
@@ -2221,7 +2221,7 @@ librdf_TypeConverter::extractNode_NoLock(
         OUStringToOString(xLiteral->getLanguage(),
         RTL_TEXTENCODING_UTF8) );
     const uno::Reference< rdf::XURI > xType(xLiteral->getDatatype());
-    boost::optional<OString> type;
+    o3tl::optional<OString> type;
     if (xType.is())
     {
         type =

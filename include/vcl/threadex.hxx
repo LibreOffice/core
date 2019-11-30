@@ -24,7 +24,7 @@
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <memory>
 
 namespace vcl
@@ -84,9 +84,9 @@ private:
 #else
     FuncT const m_func;
 #endif
-    // using boost::optional here omits the need that ResultT is default
+    // using o3tl::optional here omits the need that ResultT is default
     // constructable:
-    ::boost::optional<ResultT> m_result;
+    ::o3tl::optional<ResultT> m_result;
 };
 
 template <typename FuncT>

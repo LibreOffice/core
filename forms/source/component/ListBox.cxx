@@ -55,7 +55,7 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -739,7 +739,7 @@ namespace frm
             return;
         }
 
-        ::boost::optional< sal_Int16 > aBoundColumn(boost::none);
+        ::o3tl::optional< sal_Int16 > aBoundColumn(o3tl::nullopt);
         if ( m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT )
         {
             sal_Int16 nBoundColumn( 0 );

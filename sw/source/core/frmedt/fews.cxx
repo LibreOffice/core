@@ -408,7 +408,7 @@ sal_uInt16 SwFEShell::GetPageOffset() const
         {
             if ( pFlow->IsInTab() )
                 pFlow = pFlow->FindTabFrame();
-            ::boost::optional<sal_uInt16> oNumOffset = pFlow->GetPageDescItem().GetNumOffset();
+            ::o3tl::optional<sal_uInt16> oNumOffset = pFlow->GetPageDescItem().GetNumOffset();
             if ( oNumOffset )
                 return *oNumOffset;
         }

@@ -91,7 +91,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     if ( rAttribs.hasAttribute( XML_indent ) )
     {
         sValue = rAttribs.getString( XML_indent ).get();
-        mrTextParagraphProperties.getFirstLineIndentation() = boost::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
+        mrTextParagraphProperties.getFirstLineIndentation() = o3tl::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
   // ST_TextIndentLevelType
@@ -114,7 +114,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     if ( rAttribs.hasAttribute( XML_marL ) )
     {
         sValue = rAttribs.getString( XML_marL ).get();
-        mrTextParagraphProperties.getParaLeftMargin() = boost::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
+        mrTextParagraphProperties.getParaLeftMargin() = o3tl::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
     // ParaRightMargin

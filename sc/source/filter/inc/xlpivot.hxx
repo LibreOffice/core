@@ -26,7 +26,7 @@
 #include "xladdress.hxx"
 #include <dpobject.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 class XclImpStream;
 class XclExpStream;
@@ -624,7 +624,7 @@ struct XclPTFieldExtInfo
     sal_uInt16          mnSortField;    /// Index to data field sorting bases on.
     sal_uInt16          mnShowField;    /// Index to data field AutoShow bases on.
     sal_uInt16          mnNumFmt;
-    boost::optional<OUString> mpFieldTotalName;
+    o3tl::optional<OUString> mpFieldTotalName;
 
     explicit            XclPTFieldExtInfo();
 

@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <vector>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 namespace chart { class ExplicitCategoriesProvider; }
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
@@ -101,8 +101,8 @@ struct AxisProperties final
     css::chart::ChartAxisLabelPosition m_eLabelPos;
     css::chart::ChartAxisMarkPosition  m_eTickmarkPos;
 
-    boost::optional<double> m_pfMainLinePositionAtOtherAxis;
-    boost::optional<double> m_pfExrtaLinePositionAtOtherAxis;
+    o3tl::optional<double> m_pfMainLinePositionAtOtherAxis;
+    o3tl::optional<double> m_pfExrtaLinePositionAtOtherAxis;
 
     bool        m_bCrossingAxisHasReverseDirection;
     bool        m_bCrossingAxisIsCategoryAxes;

@@ -43,7 +43,7 @@ public:
     void setVisualizedPage(const SdrPage* pPage) { if(pPage != mpVisualizedPage) mpVisualizedPage = pPage; }
     const SdrPage* getVisualizedPage() const { return mpVisualizedPage; }
 
-    virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor) override;
+    virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, o3tl::optional<Color>& rpTxtColor, o3tl::optional<Color>& rpFldColor) override;
 
     bool hasEditViewCallbacks() const;
 };

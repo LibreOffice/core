@@ -489,8 +489,8 @@ constexpr sal_uInt32 T_CFF  = 0x43464620;
 #endif
 
     bool VCL_DLLPUBLIC getTTCoverage(
-        boost::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> & rUnicodeCoverage,
-        boost::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> & rCodePageCoverage,
+        o3tl::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> & rUnicodeCoverage,
+        o3tl::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> & rCodePageCoverage,
         const unsigned char* pTable, size_t nLength);
 
 /**

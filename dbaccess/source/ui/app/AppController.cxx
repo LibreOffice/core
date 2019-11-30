@@ -393,7 +393,7 @@ void SAL_CALL OApplicationController::disposing()
                             aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
                             aFilter,
                             getStrippedDatabaseName(),
-                            boost::none);
+                            o3tl::nullopt);
 
                     // add to recent document list
                     if ( aURL.GetProtocol() == INetProtocol::File )

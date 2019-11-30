@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -67,7 +67,7 @@ namespace detail {
     template< typename T, typename... Args >
     inline void unwrapArgs(
         const css::uno::Sequence< css::uno::Any >& seq,
-        sal_Int32 nArg, ::boost::optional< T >& v, Args&... args );
+        sal_Int32 nArg, ::o3tl::optional< T >& v, Args&... args );
 
     template< typename T, typename... Args >
     inline void unwrapArgs(
@@ -95,7 +95,7 @@ namespace detail {
     template< typename T, typename... Args >
     inline void unwrapArgs(
         const css::uno::Sequence< css::uno::Any >& seq,
-        sal_Int32 nArg, ::boost::optional< T >& v, Args&... args )
+        sal_Int32 nArg, ::o3tl::optional< T >& v, Args&... args )
     {
         if( nArg < seq.getLength() )
         {

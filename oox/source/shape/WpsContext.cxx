@@ -24,7 +24,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/shape.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 using namespace com::sun::star;
 
@@ -96,7 +96,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 {
                     // Handle inset attributes for Writer textframes.
                     sal_Int32 aInsets[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
-                    boost::optional<sal_Int32> oInsets[4];
+                    o3tl::optional<sal_Int32> oInsets[4];
                     for (std::size_t i = 0; i < SAL_N_ELEMENTS(aInsets); ++i)
                     {
                         OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);

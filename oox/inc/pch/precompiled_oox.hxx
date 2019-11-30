@@ -40,7 +40,7 @@
 #include <utility>
 #include <vector>
 #include <boost/algorithm/string.hpp>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>

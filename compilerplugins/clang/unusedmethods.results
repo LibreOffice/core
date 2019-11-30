@@ -533,7 +533,7 @@ include/framework/addonsoptions.hxx:219
 include/i18nlangtag/languagetag.hxx:263
     enum LanguageTag::ScriptType LanguageTag::getScriptType() const
 include/o3tl/any.hxx:155
-    class boost::optional<const struct o3tl::detail::Void> o3tl::tryAccess(const class com::sun::star::uno::Any &)
+    class o3tl::optional<const struct o3tl::detail::Void> o3tl::tryAccess(const class com::sun::star::uno::Any &)
 include/o3tl/cow_wrapper.hxx:323
     type-parameter-?-? * o3tl::cow_wrapper::get()
 include/o3tl/enumarray.hxx:105
@@ -1185,7 +1185,7 @@ sc/source/ui/inc/datatableview.hxx:114
 sc/source/ui/inc/impex.hxx:93
      ScImportExport::ScImportExport(class ScDocument *,const class rtl::OUString &)
 sc/source/ui/inc/RandomNumberGeneratorDialog.hxx:64
-    void ScRandomNumberGeneratorDialog::GenerateNumbers(type-parameter-?-? &,const char *,const class boost::optional<signed char>)
+    void ScRandomNumberGeneratorDialog::GenerateNumbers(type-parameter-?-? &,const char *,const class o3tl::optional<signed char>)
 sc/source/ui/inc/TableFillingAndNavigationTools.hxx:121
     unsigned long DataRangeIterator::size()
 sc/source/ui/inc/viewdata.hxx:410

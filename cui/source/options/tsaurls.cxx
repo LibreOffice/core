@@ -35,7 +35,7 @@ TSAURLsDialog::TSAURLsDialog(weld::Window* pParent)
 
     try
     {
-        boost::optional<css::uno::Sequence<OUString>> aUserSetTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
+        o3tl::optional<css::uno::Sequence<OUString>> aUserSetTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
         if (aUserSetTSAURLs)
         {
             const css::uno::Sequence<OUString>& rUserSetTSAURLs = *aUserSetTSAURLs;

@@ -165,7 +165,7 @@ void OResultColumn::disposing()
 namespace
 {
     template< typename T >
-    void obtain( Any& _out_rValue, ::boost::optional< T > & _rCache, const sal_Int32 _nPos, const Reference < XResultSetMetaData >& _rxResultMeta, T (SAL_CALL XResultSetMetaData::*Getter)( sal_Int32 ) )
+    void obtain( Any& _out_rValue, ::o3tl::optional< T > & _rCache, const sal_Int32 _nPos, const Reference < XResultSetMetaData >& _rxResultMeta, T (SAL_CALL XResultSetMetaData::*Getter)( sal_Int32 ) )
     {
         if ( !_rCache )
             _rCache = (_rxResultMeta.get()->*Getter)(_nPos);

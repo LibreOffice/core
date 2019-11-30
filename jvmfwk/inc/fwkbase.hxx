@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <rtl/ustring.hxx>
 #include "libxmlutil.hxx"
@@ -40,7 +40,7 @@ class VendorSettings
 public:
     VendorSettings();
 
-    boost::optional<VersionInfo> getVersionInformation(const OUString & sVendor) const;
+    o3tl::optional<VersionInfo> getVersionInformation(const OUString & sVendor) const;
 };
 
 /* The class offers functions to retrieve verified bootstrap parameters.

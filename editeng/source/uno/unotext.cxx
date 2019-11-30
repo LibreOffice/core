@@ -634,8 +634,8 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
             uno::Reference< text::XTextRange > xAnchor( this );
 
             // get presentation string for field
-            boost::optional<Color> pTColor;
-            boost::optional<Color> pFColor;
+            o3tl::optional<Color> pTColor;
+            o3tl::optional<Color> pFColor;
 
             SvxTextForwarder* pForwarder = mpEditSource->GetTextForwarder();
             OUString aPresentation( pForwarder->CalcFieldValue( SvxFieldItem(*pData, EE_FEATURE_FIELD), maSelection.nStartPara, maSelection.nStartPos, pTColor, pFColor ) );
@@ -2359,7 +2359,7 @@ void SvxDummyTextSource::QuickInsertLineBreak( const ESelection& )
 {
 };
 
-OUString SvxDummyTextSource::CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, boost::optional<Color>&, boost::optional<Color>& )
+OUString SvxDummyTextSource::CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, o3tl::optional<Color>&, o3tl::optional<Color>& )
 {
     return OUString();
 }

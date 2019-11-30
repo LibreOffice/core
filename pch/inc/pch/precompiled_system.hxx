@@ -33,8 +33,8 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 #include <boost/operators.hpp>
-#include <boost/optional.hpp>
-#include <boost/optional/optional.hpp>
+#include <o3tl/optional.hxx>
+#include <o3tl/optional.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/rational.hpp>
 #include <boost/version.hpp>

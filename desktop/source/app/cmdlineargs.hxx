@@ -25,7 +25,7 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 namespace desktop
 {
@@ -46,7 +46,7 @@ class CommandLineArgs
             };
 
             virtual ~Supplier();
-            virtual boost::optional< OUString > getCwdUrl() = 0;
+            virtual o3tl::optional< OUString > getCwdUrl() = 0;
             virtual bool next(OUString * argument) = 0;
         };
 
@@ -56,7 +56,7 @@ class CommandLineArgs
         CommandLineArgs(const CommandLineArgs&) = delete;
         const CommandLineArgs& operator=(const CommandLineArgs&) = delete;
 
-        const boost::optional< OUString >& getCwdUrl() const { return m_cwdUrl; }
+        const o3tl::optional< OUString >& getCwdUrl() const { return m_cwdUrl; }
 
         // Access to bool parameters
         bool                IsMinimized() const { return m_minimized;}
@@ -127,7 +127,7 @@ class CommandLineArgs
         void                    ParseCommandLine_Impl( Supplier& supplier );
         void                    InitParamValues();
 
-        boost::optional< OUString > m_cwdUrl;
+        o3tl::optional< OUString > m_cwdUrl;
 
         bool m_minimized;
         bool m_invisible;

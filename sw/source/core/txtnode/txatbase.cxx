@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <libxml/xmlwriter.h>
 #include <svl/itempool.hxx>
 #include <txatbase.hxx>
@@ -96,7 +96,7 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("end"), BAD_CAST(OString::number(*End()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     const char* pWhich = nullptr;
-    boost::optional<OString> oValue;
+    o3tl::optional<OString> oValue;
     switch (Which())
     {
     case RES_TXTATR_AUTOFMT:

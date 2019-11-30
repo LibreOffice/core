@@ -997,7 +997,7 @@ bool SmTextForwarder::IsValid() const
     return pEditEngine && pEditEngine->GetUpdateMode();
 }
 
-OUString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor )
+OUString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, o3tl::optional<Color>& rpTxtColor, o3tl::optional<Color>& rpFldColor )
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->CalcFieldValue(rField, nPara, nPos, rpTxtColor, rpFldColor) : OUString();

@@ -551,7 +551,7 @@ namespace slideshow
             // shape needs repaint - setup all that's needed
 
 
-            boost::optional<basegfx::B2DPolyPolygon> aClip;
+            o3tl::optional<basegfx::B2DPolyPolygon> aClip;
 
             if( pAttr )
             {

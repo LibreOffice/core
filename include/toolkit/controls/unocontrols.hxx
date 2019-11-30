@@ -54,7 +54,7 @@
 #include <memory>
 #include <vector>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphicObject; } } } }
@@ -804,15 +804,15 @@ protected:
 private:
     void    impl_notifyItemListEvent_nolck(
                 const sal_Int32 i_nItemPosition,
-                const ::boost::optional< OUString >& i_rItemText,
-                const ::boost::optional< OUString >& i_rItemImageURL,
+                const ::o3tl::optional< OUString >& i_rItemText,
+                const ::o3tl::optional< OUString >& i_rItemImageURL,
                 void ( SAL_CALL css::awt::XItemListListener::*NotificationMethod )( const css::awt::ItemListEvent& )
             );
 
     void    impl_handleInsert(
                 const sal_Int32 i_nItemPosition,
-                const ::boost::optional< OUString >& i_rItemText,
-                const ::boost::optional< OUString >& i_rItemImageURL,
+                const ::o3tl::optional< OUString >& i_rItemText,
+                const ::o3tl::optional< OUString >& i_rItemImageURL,
                 ::osl::ClearableMutexGuard& i_rClearBeforeNotify
             );
 
@@ -823,8 +823,8 @@ private:
 
     void    impl_handleModify(
                 const sal_Int32 i_nItemPosition,
-                const ::boost::optional< OUString >& i_rItemText,
-                const ::boost::optional< OUString >& i_rItemImageURL,
+                const ::o3tl::optional< OUString >& i_rItemText,
+                const ::o3tl::optional< OUString >& i_rItemImageURL,
                 ::osl::ClearableMutexGuard& i_rClearBeforeNotify
             );
 

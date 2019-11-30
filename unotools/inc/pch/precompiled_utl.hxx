@@ -32,7 +32,7 @@
 #include <vector>
 #include <boost/locale.hpp>
 #include <boost/locale/gnu_gettext.hpp>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/detail/file.h>

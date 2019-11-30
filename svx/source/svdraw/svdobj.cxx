@@ -138,7 +138,7 @@
 
 #include <unordered_set>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <libxml/xmlwriter.h>
 #include <memory>
 
@@ -207,9 +207,9 @@ struct SdrObject::Impl
 {
     sdr::ObjectUserVector maObjectUsers;
 
-    boost::optional<double> mnRelativeWidth;
+    o3tl::optional<double> mnRelativeWidth;
     sal_Int16               meRelativeWidthRelation;
-    boost::optional<double> mnRelativeHeight;
+    o3tl::optional<double> mnRelativeHeight;
     sal_Int16               meRelativeHeightRelation;
 
     std::shared_ptr<DiagramDataInterface> mpDiagramData;

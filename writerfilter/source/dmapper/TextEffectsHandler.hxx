@@ -21,7 +21,7 @@
 #include <oox/helper/grabbagstack.hxx>
 
 #include <memory>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 namespace writerfilter {
 namespace dmapper
@@ -31,7 +31,7 @@ namespace dmapper
 class TextEffectsHandler : public LoggedProperties
 {
 private:
-    boost::optional<PropertyIds>         maPropertyId;
+    o3tl::optional<PropertyIds>         maPropertyId;
     OUString                             maElementName;
     std::unique_ptr<oox::GrabBagStack> mpGrabBagStack;
 
@@ -45,7 +45,7 @@ public:
     explicit TextEffectsHandler(sal_uInt32 aElementId);
     virtual ~TextEffectsHandler() override;
 
-    const boost::optional<PropertyIds>& getGrabBagPropertyId() const { return maPropertyId;}
+    const o3tl::optional<PropertyIds>& getGrabBagPropertyId() const { return maPropertyId;}
 
     css::beans::PropertyValue getInteropGrabBag();
 

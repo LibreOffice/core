@@ -296,7 +296,7 @@ public:
     css::uno::Reference<css::container::XIndexContainer> mxFormComps; // current form
 
     rtl::Reference<SwDoc> m_xTemplate;               // HTML template
-    boost::optional<Color> m_xDfltColor;              // default colour
+    o3tl::optional<Color> m_xDfltColor;              // default colour
     SwNodeIndex *m_pStartNdIdx;       // index of first paragraph
     const SwPageDesc *m_pCurrPageDesc;// current page style
     const SwFormatFootnote *m_pFormatFootnote;

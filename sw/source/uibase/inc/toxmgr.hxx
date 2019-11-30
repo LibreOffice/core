@@ -24,7 +24,7 @@
 #include <tox.hxx>
 #include <authfld.hxx>
 #include <memory>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 class SwWrtShell;
 class SwForm;
@@ -38,9 +38,9 @@ class SW_DLLPUBLIC SwTOXDescription
     OUString            m_sSequenceName;
     OUString            m_sMainEntryCharStyle;
     OUString            m_sAutoMarkURL;
-    boost::optional<OUString>
+    o3tl::optional<OUString>
                         m_aTitle;
-    boost::optional<OUString>
+    o3tl::optional<OUString>
                         m_aTOUName;
     std::unique_ptr<SwForm>
                         m_pForm;
@@ -98,10 +98,10 @@ public:
     void            SetAutoMarkURL(const OUString& rSet) {m_sAutoMarkURL = rSet;}
 
     void            SetTitle(const OUString& rSet) { m_aTitle = rSet; }
-    boost::optional<OUString> const & GetTitle() const {return m_aTitle; }
+    o3tl::optional<OUString> const & GetTitle() const {return m_aTitle; }
 
     void            SetTOUName(const OUString& rSet) { m_aTOUName = rSet; }
-    boost::optional<OUString> const & GetTOUName() const { return m_aTOUName; }
+    o3tl::optional<OUString> const & GetTOUName() const { return m_aTOUName; }
 
     void            SetForm(const SwForm& rSet) { m_pForm.reset( new SwForm(rSet) );}
     const SwForm*   GetForm() const {return m_pForm.get();}
@@ -172,14 +172,14 @@ class SwTOXMarkDescription
     int         mnLevel;
     bool        mbMainEntry;
 
-    boost::optional<OUString>  maPrimKey;
-    boost::optional<OUString>  maSecKey;
-    boost::optional<OUString>  maAltStr;
-    boost::optional<OUString>  maTOUName;
+    o3tl::optional<OUString>  maPrimKey;
+    o3tl::optional<OUString>  maSecKey;
+    o3tl::optional<OUString>  maAltStr;
+    o3tl::optional<OUString>  maTOUName;
 
-    boost::optional<OUString>  maPhoneticReadingOfAltStr;
-    boost::optional<OUString>  maPhoneticReadingOfPrimKey;
-    boost::optional<OUString>  maPhoneticReadingOfSecKey;
+    o3tl::optional<OUString>  maPhoneticReadingOfAltStr;
+    o3tl::optional<OUString>  maPhoneticReadingOfPrimKey;
+    o3tl::optional<OUString>  maPhoneticReadingOfSecKey;
 
     SwTOXMarkDescription(SwTOXMarkDescription const &) = delete;
     SwTOXMarkDescription & operator= (SwTOXMarkDescription const &) = delete;
@@ -202,25 +202,25 @@ public:
     bool            IsMainEntry() const {return mbMainEntry;}
 
     void            SetPrimKey(const OUString& rSet) { maPrimKey = rSet; }
-    boost::optional<OUString> const & GetPrimKey() const { return maPrimKey; }
+    o3tl::optional<OUString> const & GetPrimKey() const { return maPrimKey; }
 
     void            SetSecKey(const OUString& rSet) { maSecKey = rSet; }
-    boost::optional<OUString> const & GetSecKey() const { return maSecKey; }
+    o3tl::optional<OUString> const & GetSecKey() const { return maSecKey; }
 
     void            SetAltStr(const OUString& rSet) { maAltStr = rSet; }
-    boost::optional<OUString> const & GetAltStr() const { return maAltStr; }
+    o3tl::optional<OUString> const & GetAltStr() const { return maAltStr; }
 
     void            SetTOUName(const OUString& rSet) { maTOUName = rSet; }
-    boost::optional<OUString> const & GetTOUName() const { return maTOUName; }
+    o3tl::optional<OUString> const & GetTOUName() const { return maTOUName; }
 
     void            SetPhoneticReadingOfAltStr(const OUString& rSet) { maPhoneticReadingOfAltStr = rSet; }
-    boost::optional<OUString> const & GetPhoneticReadingOfAltStr() const { return maPhoneticReadingOfAltStr; }
+    o3tl::optional<OUString> const & GetPhoneticReadingOfAltStr() const { return maPhoneticReadingOfAltStr; }
 
     void            SetPhoneticReadingOfPrimKey(const OUString& rSet) { maPhoneticReadingOfPrimKey = rSet; }
-    boost::optional<OUString> const & GetPhoneticReadingOfPrimKey() const { return maPhoneticReadingOfPrimKey; }
+    o3tl::optional<OUString> const & GetPhoneticReadingOfPrimKey() const { return maPhoneticReadingOfPrimKey; }
 
     void            SetPhoneticReadingOfSecKey(const OUString& rSet) { maPhoneticReadingOfSecKey = rSet; }
-    boost::optional<OUString> const & GetPhoneticReadingOfSecKey() const { return maPhoneticReadingOfSecKey; }
+    o3tl::optional<OUString> const & GetPhoneticReadingOfSecKey() const { return maPhoneticReadingOfSecKey; }
 };
 
 class SW_DLLPUBLIC SwTOXMgr

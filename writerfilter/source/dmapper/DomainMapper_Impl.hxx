@@ -32,7 +32,7 @@
 #include <tuple>
 #include <unordered_map>
 #include <vector>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <ooxml/resourceids.hxx>
 
@@ -144,7 +144,7 @@ class FieldContext : public virtual SvRefBase
 
     OUString m_sCommand;
     OUString m_sResult;
-    boost::optional<FieldId> m_eFieldId;
+    o3tl::optional<FieldId> m_eFieldId;
     bool m_bFieldLocked;
 
     css::uno::Reference<css::text::XTextField> m_xTextField;
@@ -174,7 +174,7 @@ public:
     const OUString&  GetCommand() const {return m_sCommand; }
 
     void SetFieldId(FieldId eFieldId ) { m_eFieldId = eFieldId; }
-    boost::optional<FieldId> const & GetFieldId() const { return m_eFieldId; }
+    o3tl::optional<FieldId> const & GetFieldId() const { return m_eFieldId; }
 
     void AppendResult(OUString const& rResult) { m_sResult += rResult; }
     const OUString&  GetResult() const { return m_sResult; }
@@ -428,7 +428,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     css::uno::Reference<css::container::XNameContainer> m_xPageStyles1;
     // cache next available number, expensive to repeatedly compute
-    boost::optional<int> m_xNextUnusedPageStyleNo;
+    o3tl::optional<int> m_xNextUnusedPageStyleNo;
     css::uno::Reference<css::text::XText> m_xBodyText;
     css::uno::Reference<css::text::XTextContent> m_xEmbedded;
 
@@ -960,7 +960,7 @@ public:
     tools::SvRef<SdtHelper> m_pSdtHelper;
 
     /// Document background color, applied to every page style.
-    boost::optional<sal_Int32> m_oBackgroundColor;
+    o3tl::optional<sal_Int32> m_oBackgroundColor;
 
     /**
      * This contains the raw table depth. m_nTableDepth > 0 is the same as
