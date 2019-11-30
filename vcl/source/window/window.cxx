@@ -562,6 +562,9 @@ void Window::dispose()
         mpWindowImpl->mpFrameData = nullptr;
     }
 
+    assert(mpWindowImpl->mnLOKWindowId == 0);
+    assert(mpWindowImpl->mpLOKNotifier == nullptr);
+
     // should be the last statements
     mpWindowImpl.reset();
 

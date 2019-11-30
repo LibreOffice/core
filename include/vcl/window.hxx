@@ -556,6 +556,7 @@ public:
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetFrameWindow() const;
     weld::Window*                       GetFrameWeld() const;
+    vcl::Window*                        GetFrameWindow() const;
     SalFrame*                           ImplGetFrame() const;
     SAL_DLLPRIVATE ImplFrameData*       ImplGetFrameData();
 
