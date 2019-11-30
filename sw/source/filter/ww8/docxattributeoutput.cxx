@@ -2486,7 +2486,7 @@ const NameToId constNameToIdMapping[] =
     { OUString("styleSet"),     FSNS( XML_w14, XML_styleSet ) },
 };
 
-boost::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
+o3tl::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
 {
     for (auto const & i : constNameToIdMapping)
     {
@@ -2495,7 +2495,7 @@ boost::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
             return i.maId;
         }
     }
-    return boost::optional<sal_Int32>();
+    return o3tl::optional<sal_Int32>();
 }
 
 void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<css::beans::PropertyValue>& rElements, sax_fastparser::FSHelperPtr const & pSerializer)
@@ -2525,7 +2525,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
             aValue =  OUStringToOString(aAny.get<OUString>(), RTL_TEXTENCODING_ASCII_US);
         }
 
-        boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rAttribute.Name);
+        o3tl::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rAttribute.Name);
         if(aSubElementId)
             pAttributes->add(*aSubElementId, aValue.getStr());
     }
@@ -2538,7 +2538,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
     {
         css::uno::Sequence<css::beans::PropertyValue> aSumElements;
 
-        boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rElement.Name);
+        o3tl::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rElement.Name);
         if(aSubElementId)
         {
             rElement.Value >>= aSumElements;
@@ -2585,7 +2585,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
     for (const beans::PropertyValue & i : m_aTextEffectsGrabBag)
     {
-        boost::optional<sal_Int32> aElementId = lclGetElementIdForName(i.Name);
+        o3tl::optional<sal_Int32> aElementId = lclGetElementIdForName(i.Name);
         if(aElementId)
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
@@ -6320,13 +6320,13 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
 }
 
 
-void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::boost::optional<sal_uInt16>& oPageRestartNumber )
+void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::o3tl::optional<sal_uInt16>& oPageRestartNumber )
 {
     // FIXME Not called properly with page styles like "First Page"
 
     FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
 
-    // boost::none means no restart: then don't output that attribute if it is negative
+    // o3tl::nullopt means no restart: then don't output that attribute if it is negative
     if ( oPageRestartNumber )
        pAttr->add( FSNS( XML_w, XML_start ), OString::number( *oPageRestartNumber ) );
 
@@ -8285,9 +8285,9 @@ void DocxAttributeOutput::FormatAnchor( const SwFormatAnchor& )
     // Fly frames: anchors here aren't matching the anchors in docx
 }
 
-static boost::optional<sal_Int32> lcl_getDmlAlpha(const SvxBrushItem& rBrush)
+static o3tl::optional<sal_Int32> lcl_getDmlAlpha(const SvxBrushItem& rBrush)
 {
-    boost::optional<sal_Int32> oRet;
+    o3tl::optional<sal_Int32> oRet;
     sal_Int32 nTransparency = rBrush.GetColor().GetTransparency();
     if (nTransparency)
     {
@@ -8306,7 +8306,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 {
     const Color aColor = rBrush.GetColor();
     OString sColor = msfilter::util::ConvertColor( aColor.GetRGBColor() );
-    boost::optional<sal_Int32> oAlpha = lcl_getDmlAlpha(rBrush);
+    o3tl::optional<sal_Int32> oAlpha = lcl_getDmlAlpha(rBrush);
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
         // Handle 'Opacity'

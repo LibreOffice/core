@@ -22,7 +22,7 @@
 
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 // Code in fontbuff.cxx (excel)
 
@@ -31,7 +31,7 @@ class LotusFontBuffer
 private:
     struct ENTRY
     {
-        boost::optional<OUString>           xTmpName;
+        o3tl::optional<OUString>           xTmpName;
         std::unique_ptr<SvxFontItem>        pFont;
         std::unique_ptr<SvxFontHeightItem>  pHeight;
         sal_Int32                           nType = -1; // < 0 -> undefined

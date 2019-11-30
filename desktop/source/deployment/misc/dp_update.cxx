@@ -112,7 +112,7 @@ void getOwnUpdateInfos(
                     Reference< xml::dom::XNode >(infos[j], UNO_QUERY_THROW));
                 if (!infoset.hasDescription())
                     continue;
-                boost::optional< OUString > result_id(infoset.getIdentifier());
+                o3tl::optional< OUString > result_id(infoset.getIdentifier());
                 if (!result_id)
                     continue;
                 SAL_INFO( "extensions.update", "  found version "
@@ -153,7 +153,7 @@ void getDefaultUpdateInfos(
     {
         Reference< xml::dom::XNode > node(infos[i], UNO_QUERY_THROW);
         dp_misc::DescriptionInfoset infoset(xContext, node);
-        boost::optional< OUString > id(infoset.getIdentifier());
+        o3tl::optional< OUString > id(infoset.getIdentifier());
         if (!id) {
             continue;
         }

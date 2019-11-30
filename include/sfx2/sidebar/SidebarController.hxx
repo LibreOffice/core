@@ -36,7 +36,7 @@
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
@@ -196,8 +196,8 @@ private:
         mbIsDeckRequestedOpen.  Normally both flags have the same
         value.  A document being read-only can prevent the deck from opening.
     */
-    ::boost::optional<bool> mbIsDeckRequestedOpen;
-    ::boost::optional<bool> mbIsDeckOpen;
+    ::o3tl::optional<bool> mbIsDeckRequestedOpen;
+    ::o3tl::optional<bool> mbIsDeckOpen;
 
     bool mbFloatingDeckClosed;
 

@@ -27,7 +27,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <memory>
 #include <vector>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 // predefines
 namespace svgio
@@ -95,10 +95,10 @@ namespace svgio
             std::vector< std::unique_ptr<SvgNode> >  maChildren;
 
             /// Id svan value
-            boost::optional<OUString>   mpId;
+            o3tl::optional<OUString>   mpId;
 
             /// Class svan value
-            boost::optional<OUString>   mpClass;
+            o3tl::optional<OUString>   mpClass;
 
             /// XmlSpace value
             XmlSpace                    maXmlSpace;
@@ -168,11 +168,11 @@ namespace svgio
             double getCurrentXHeight() const;
 
             /// Id access
-            boost::optional<OUString> const & getId() const { return mpId; }
+            o3tl::optional<OUString> const & getId() const { return mpId; }
             void setId(OUString const &);
 
             /// Class access
-            boost::optional<OUString> const & getClass() const { return mpClass; }
+            o3tl::optional<OUString> const & getClass() const { return mpClass; }
             void setClass(OUString const &);
 
             /// XmlSpace access

@@ -55,7 +55,7 @@
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbtools.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <memory>
 #include <iterator>
 
@@ -350,7 +350,7 @@ void ODBExport::exportDataSource()
             {
                 const OUString                       sPropertyName;
                 const XMLTokenEnum                          eAttributeToken;
-                const ::boost::optional< OUString >  aXMLDefault;
+                const ::o3tl::optional< OUString >  aXMLDefault;
 
                 PropertyMap( const OUString& _rPropertyName, const XMLTokenEnum _eToken )
                     :sPropertyName( _rPropertyName )

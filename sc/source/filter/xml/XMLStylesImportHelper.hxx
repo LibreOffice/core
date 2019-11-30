@@ -29,7 +29,7 @@
 #include <set>
 #include <map>
 #include <vector>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 class ScXMLImport;
 
@@ -101,7 +101,7 @@ public:
     ScMyStyleRanges();
     ~ScMyStyleRanges();
     void AddRange(const ScRange& rRange, const sal_Int16 nType);
-    void AddCurrencyRange(const ScRange& rRange, const boost::optional<OUString> & pCurrency);
+    void AddCurrencyRange(const ScRange& rRange, const o3tl::optional<OUString> & pCurrency);
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab);
     void SetStylesToRanges(const OUString* pStyleName, ScXMLImport& rImport);
 };
@@ -115,13 +115,13 @@ class ScMyStylesImportHelper
     std::vector<ScMyStylesMap::iterator>  aColDefaultStyles;
     ScMyStylesMap::iterator aRowDefaultStyle;
     ScXMLImport&        rImport;
-    boost::optional<OUString>
+    o3tl::optional<OUString>
                         pStyleName;
-    boost::optional<OUString>
+    o3tl::optional<OUString>
                         pPrevStyleName;
-    boost::optional<OUString>
+    o3tl::optional<OUString>
                         pCurrency;
-    boost::optional<OUString>
+    o3tl::optional<OUString>
                         pPrevCurrency;
     ScRange             aPrevRange;
     sal_Int16           nCellType;
@@ -138,8 +138,8 @@ public:
     ~ScMyStylesImportHelper();
     void AddColumnStyle(const OUString& rStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat);
     void SetRowStyle(const OUString& rStyleName);
-    void SetAttributes(boost::optional<OUString> pStyleName,
-        boost::optional<OUString> pCurrency, const sal_Int16 nCellType);
+    void SetAttributes(o3tl::optional<OUString> pStyleName,
+        o3tl::optional<OUString> pCurrency, const sal_Int16 nCellType);
     void AddRange(const ScRange& rRange);
     void AddCell(const ScAddress& rAddress);
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab); // a col is inserted before nCol

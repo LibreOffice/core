@@ -46,7 +46,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -83,8 +83,8 @@ PackageRegistryBackend::PackageRegistryBackend(
       m_eContext( Context::Unknown )
 {
     assert(xContext.is());
-    boost::optional<OUString> cachePath;
-    boost::optional<bool> readOnly;
+    o3tl::optional<OUString> cachePath;
+    o3tl::optional<bool> readOnly;
     comphelper::unwrapArgs( args, m_context, cachePath, readOnly );
     if (cachePath)
         m_cachePath = *cachePath;

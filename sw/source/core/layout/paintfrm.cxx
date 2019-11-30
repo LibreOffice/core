@@ -4766,7 +4766,7 @@ namespace drawinglayer
 
 namespace {
 
-editeng::SvxBorderLine const * get_ptr(boost::optional<editeng::SvxBorderLine> const & opt) {
+editeng::SvxBorderLine const * get_ptr(o3tl::optional<editeng::SvxBorderLine> const & opt) {
     return opt ? &*opt : nullptr;
 }
 

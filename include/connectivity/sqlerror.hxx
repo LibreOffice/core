@@ -22,7 +22,7 @@
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <memory>
 
 namespace connectivity
@@ -61,11 +61,11 @@ namespace connectivity
 
         // - optional
 
-        /** convenience wrapper around boost::optional, allowing implicit construction
+        /** convenience wrapper around o3tl::optional, allowing implicit construction
         */
-        class ParamValue : public ::boost::optional< OUString >
+        class ParamValue : public ::o3tl::optional< OUString >
         {
-            typedef ::boost::optional< OUString >  base_type;
+            typedef ::o3tl::optional< OUString >  base_type;
 
         public:
             ParamValue( ) : base_type( ) { }

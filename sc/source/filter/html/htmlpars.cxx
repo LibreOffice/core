@@ -2057,7 +2057,7 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
     {
         // read needed options from the <td> tag
         ScHTMLSize aSpanSize( 1, 1 );
-        boost::optional<OUString> pValStr, pNumStr;
+        o3tl::optional<OUString> pValStr, pNumStr;
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
         sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
         for (const auto& rOption : rOptions)

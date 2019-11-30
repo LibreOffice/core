@@ -89,7 +89,7 @@ void DomainMapperTableHandler::startTable(const TablePropertyMapPtr& pProps)
 
 static void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const PropertyMapPtr& pDest )
 {
-    boost::optional<PropertyMap::Property> pOrigVal = pOrig->getProperty(nId);
+    o3tl::optional<PropertyMap::Property> pOrigVal = pOrig->getProperty(nId);
 
     if ( pOrigVal )
     {
@@ -100,8 +100,8 @@ static void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const
 static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const PropertyMapPtr& pCellProps,
         sal_Int32 nCell, sal_Int32 nRow, bool bIsEndCol, bool bIsEndRow )
 {
-    boost::optional<PropertyMap::Property> pVerticalVal = pCellProps->getProperty(META_PROP_VERTICAL_BORDER);
-    boost::optional<PropertyMap::Property> pHorizontalVal = pCellProps->getProperty(META_PROP_HORIZONTAL_BORDER);
+    o3tl::optional<PropertyMap::Property> pVerticalVal = pCellProps->getProperty(META_PROP_VERTICAL_BORDER);
+    o3tl::optional<PropertyMap::Property> pHorizontalVal = pCellProps->getProperty(META_PROP_HORIZONTAL_BORDER);
 
     // Handle the vertical and horizontal borders
     uno::Any aVertProp;
@@ -246,7 +246,7 @@ bool lcl_extractTableBorderProperty(const PropertyMapPtr& pTableProperties, cons
     if (!pTableProperties)
         return false;
 
-    const boost::optional<PropertyMap::Property> aTblBorder = pTableProperties->getProperty(nId);
+    const o3tl::optional<PropertyMap::Property> aTblBorder = pTableProperties->getProperty(nId);
     if( aTblBorder )
     {
         OSL_VERIFY(aTblBorder->second >>= rLine);
@@ -380,7 +380,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             aGrabBag["TablePosition"] <<= aGrabBagTS;
         }
 
-        boost::optional<PropertyMap::Property> aTableStyleVal = m_aTableProperties->getProperty(META_PROP_TABLE_STYLE_NAME);
+        o3tl::optional<PropertyMap::Property> aTableStyleVal = m_aTableProperties->getProperty(META_PROP_TABLE_STYLE_NAME);
         if(aTableStyleVal)
         {
             // Apply table style properties recursively
@@ -448,7 +448,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         // This is the one preserving just all the table look attributes.
-        boost::optional<PropertyMap::Property> oTableLook = m_aTableProperties->getProperty(META_PROP_TABLE_LOOK);
+        o3tl::optional<PropertyMap::Property> oTableLook = m_aTableProperties->getProperty(META_PROP_TABLE_LOOK);
         if (oTableLook)
         {
             aGrabBag["TableStyleLook"] = oTableLook->second;
@@ -456,7 +456,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         // This is just the "val" attribute's numeric value.
-        const boost::optional<PropertyMap::Property> aTblLook = m_aTableProperties->getProperty(PROP_TBL_LOOK);
+        const o3tl::optional<PropertyMap::Property> aTblLook = m_aTableProperties->getProperty(PROP_TBL_LOOK);
         if(aTblLook)
         {
             aTblLook->second >>= rInfo.nTblLook;
@@ -564,7 +564,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if ( !m_aCellProperties.empty() && !m_aCellProperties[0].empty() )
         {
             // aLeftBorder already contains tblBorder; overwrite if cell is different.
-            boost::optional<PropertyMap::Property> aCellBorder
+            o3tl::optional<PropertyMap::Property> aCellBorder
                 = m_aCellProperties[0][0]->getProperty(PROP_LEFT_BORDER);
             if ( aCellBorder )
                 aCellBorder->second >>= aLeftBorder;
@@ -624,7 +624,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         // if table is only a single row, and row is set as don't split, set the same value for the whole table.
         if( m_aRowProperties.size() == 1 && m_aRowProperties[0].get() )
         {
-            boost::optional<PropertyMap::Property> oSplitAllowed = m_aRowProperties[0]->getProperty(PROP_IS_SPLIT_ALLOWED);
+            o3tl::optional<PropertyMap::Property> oSplitAllowed = m_aRowProperties[0]->getProperty(PROP_IS_SPLIT_ALLOWED);
             if( oSplitAllowed )
             {
                 bool bRowCanSplit = true;
@@ -770,8 +770,8 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     };
                     for (const PropertyIds& rBorder : pBorders)
                     {
-                        boost::optional<PropertyMap::Property> oStyleCellBorder = pStyleProps->getProperty(rBorder);
-                        boost::optional<PropertyMap::Property> oDirectCellBorder = (*aCellIterator)->getProperty(rBorder);
+                        o3tl::optional<PropertyMap::Property> oStyleCellBorder = pStyleProps->getProperty(rBorder);
+                        o3tl::optional<PropertyMap::Property> oDirectCellBorder = (*aCellIterator)->getProperty(rBorder);
                         if (oStyleCellBorder && oDirectCellBorder)
                         {
                             // We have a cell border from the table style and as direct formatting as well.
@@ -786,7 +786,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                             }
                             else
                             {
-                                boost::optional<PropertyMap::Property> oTableBorder = rInfo.pTableBorders->getProperty(rBorder);
+                                o3tl::optional<PropertyMap::Property> oTableBorder = rInfo.pTableBorders->getProperty(rBorder);
                                 if (oTableBorder)
                                 {
                                     table::BorderLine2 aTableBorder = oTableBorder->second.get<table::BorderLine2>();
@@ -843,7 +843,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                                                  uno::makeAny(rInfo.nBottomBorderDistance ), false);
 
                 // Horizontal merge is not a UNO property, extract that info here to rMerges, and then remove it from the map.
-                const boost::optional<PropertyMap::Property> aHorizontalMergeVal = (*aCellIterator)->getProperty(PROP_HORIZONTAL_MERGE);
+                const o3tl::optional<PropertyMap::Property> aHorizontalMergeVal = (*aCellIterator)->getProperty(PROP_HORIZONTAL_MERGE);
                 if (aHorizontalMergeVal)
                 {
                     if (aHorizontalMergeVal->second.get<bool>())

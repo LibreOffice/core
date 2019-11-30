@@ -256,7 +256,7 @@ OUString SubstitutePathVariables::GetWorkPath() const
 OUString SubstitutePathVariables::GetWorkVariableValue() const
 {
     OUString aWorkPath;
-    boost::optional<OUString> x(officecfg::Office::Paths::Variables::Work::get(m_xContext));
+    o3tl::optional<OUString> x(officecfg::Office::Paths::Variables::Work::get(m_xContext));
     if (!x)
     {
         // fallback to $HOME in case platform dependent config layer does not return

@@ -36,7 +36,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include <boost/optional/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <memory>
 
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -249,7 +249,7 @@ class CustomPropertiesDateField
 private:
     std::unique_ptr<SvtCalendarBox> m_xDateField;
 public:
-    ::boost::optional<sal_Int16> m_TZ;
+    ::o3tl::optional<sal_Int16> m_TZ;
 
     CustomPropertiesDateField(SvtCalendarBox* pDateField);
     void set_visible(bool bVisible) { m_xDateField->set_visible(bVisible); }

@@ -32,7 +32,7 @@
 
 #include <unordered_map>
 #include <unordered_set>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     class XDimensionsSupplier;
@@ -52,7 +52,7 @@ class ScDPSaveMember
 {
 private:
     OUString aName;
-    boost::optional<OUString> mpLayoutName; // custom name to be displayed in the table.
+    o3tl::optional<OUString> mpLayoutName; // custom name to be displayed in the table.
     sal_uInt16 nVisibleMode;
     sal_uInt16 nShowDetailsMode;
 
@@ -79,7 +79,7 @@ public:
     void SetName( const OUString& rNew ); // used if the source member was renamed (groups)
 
     SC_DLLPUBLIC void SetLayoutName( const OUString& rName );
-    SC_DLLPUBLIC const boost::optional<OUString> & GetLayoutName() const;
+    SC_DLLPUBLIC const o3tl::optional<OUString> & GetLayoutName() const;
     void RemoveLayoutName();
 
     void WriteToSource( const css::uno::Reference<css::uno::XInterface>& xMember,
@@ -94,8 +94,8 @@ class SC_DLLPUBLIC ScDPSaveDimension
 {
 private:
     OUString aName;
-    boost::optional<OUString> mpLayoutName;
-    boost::optional<OUString> mpSubtotalName;
+    o3tl::optional<OUString> mpLayoutName;
+    o3tl::optional<OUString> mpSubtotalName;
     bool bIsDataLayout;
     bool bDupFlag;
     css::sheet::DataPilotFieldOrientation nOrientation;
@@ -170,10 +170,10 @@ public:
         { return nUsedHierarchy; }
 
     void SetLayoutName(const OUString& rName);
-    const boost::optional<OUString> & GetLayoutName() const;
+    const o3tl::optional<OUString> & GetLayoutName() const;
     void RemoveLayoutName();
     void SetSubtotalName(const OUString& rName);
-    const boost::optional<OUString> & GetSubtotalName() const;
+    const o3tl::optional<OUString> & GetSubtotalName() const;
     void RemoveSubtotalName();
 
     bool IsMemberNameInUse(const OUString& rName) const;
@@ -252,7 +252,7 @@ private:
      *  created. */
     bool mbDimensionMembersBuilt;
 
-    boost::optional<OUString> mpGrandTotalName;
+    o3tl::optional<OUString> mpGrandTotalName;
     mutable std::unique_ptr<DimOrderType> mpDimOrder; // dimension order for row and column dimensions, to traverse result tree.
 
 public:
@@ -265,7 +265,7 @@ public:
     bool operator== ( const ScDPSaveData& r ) const;
 
     SC_DLLPUBLIC void SetGrandTotalName(const OUString& rName);
-    SC_DLLPUBLIC const boost::optional<OUString> & GetGrandTotalName() const;
+    SC_DLLPUBLIC const o3tl::optional<OUString> & GetGrandTotalName() const;
 
     const DimsType& GetDimensions() const { return m_DimList; }
 

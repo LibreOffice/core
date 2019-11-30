@@ -408,8 +408,8 @@ void SwFrame::PrepareCursor()
         std::list<FlowFrameJoinLockGuard> tabGuard;
         std::list<SwFrameDeleteGuard> rowGuard;
 #else
-        boost::optional<FlowFrameJoinLockGuard> tabGuard;
-        boost::optional<SwFrameDeleteGuard> rowGuard;
+        o3tl::optional<FlowFrameJoinLockGuard> tabGuard;
+        o3tl::optional<SwFrameDeleteGuard> rowGuard;
 #endif
         SwFlowFrame* pThis = bCnt ? static_cast<SwContentFrame*>(this) : nullptr;
 

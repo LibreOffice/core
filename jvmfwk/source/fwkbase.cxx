@@ -113,7 +113,7 @@ VendorSettings::VendorSettings():
     }
 }
 
-boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUString & sVendor) const
+o3tl::optional<VersionInfo> VendorSettings::getVersionInformation(const OUString & sVendor) const
 {
     OSL_ASSERT(!sVendor.isEmpty());
     OString osVendor = OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);

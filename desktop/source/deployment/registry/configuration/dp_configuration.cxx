@@ -137,7 +137,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
                           Reference<XCommandEnvironment> const & xCmdEnv );
 #endif
     void addDataToDb(OUString const & url, ConfigurationBackendDb::Data const & data);
-    ::boost::optional<ConfigurationBackendDb::Data> readDataFromDb(OUString const & url);
+    ::o3tl::optional<ConfigurationBackendDb::Data> readDataFromDb(OUString const & url);
     void revokeEntryFromDb(OUString const & url);
     bool hasActiveEntry(OUString const & url);
     bool activateEntry(OUString const & url);
@@ -247,10 +247,10 @@ void BackendImpl::addDataToDb(
         m_backendDb->addEntry(url, data);
 }
 
-::boost::optional<ConfigurationBackendDb::Data> BackendImpl::readDataFromDb(
+::o3tl::optional<ConfigurationBackendDb::Data> BackendImpl::readDataFromDb(
     OUString const & url)
 {
-    ::boost::optional<ConfigurationBackendDb::Data> data;
+    ::o3tl::optional<ConfigurationBackendDb::Data> data;
     if (m_backendDb)
         data = m_backendDb->getEntry(url);
     return data;
@@ -495,7 +495,7 @@ bool BackendImpl::removeFromConfigmgrIni(
         //url to the file in the user installation (e.g. $BUNDLED_EXTENSIONS_USER)
         //However, m_url (getURL()) contains the URL for the file in the actual
         //extension installation.
-        ::boost::optional<ConfigurationBackendDb::Data> data = readDataFromDb(url_);
+        ::o3tl::optional<ConfigurationBackendDb::Data> data = readDataFromDb(url_);
         if (data)
             i = std::find(rSet.begin(), rSet.end(), data->iniEntry);
     }
@@ -687,7 +687,7 @@ void BackendImpl::PackageImpl::processPackage_(
     {
         if (getMyBackend()->activateEntry(getURL()))
         {
-            ::boost::optional<ConfigurationBackendDb::Data> data = that->readDataFromDb(url);
+            ::o3tl::optional<ConfigurationBackendDb::Data> data = that->readDataFromDb(url);
             OSL_ASSERT(data);
             that->addToConfigmgrIni( m_isSchema, false, data->iniEntry, xCmdEnv );
         }
@@ -779,7 +779,7 @@ void BackendImpl::PackageImpl::processPackage_(
             }
         }
 #endif
-        ::boost::optional<ConfigurationBackendDb::Data> data = that->readDataFromDb(url);
+        ::o3tl::optional<ConfigurationBackendDb::Data> data = that->readDataFromDb(url);
         //If an xcu file was life deployed then always a data entry is written.
         //If the xcu file was already in the configmr.ini then there is also
         //a data entry

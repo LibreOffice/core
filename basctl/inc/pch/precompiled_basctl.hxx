@@ -52,7 +52,7 @@
 #include <utility>
 #include <vector>
 #include <boost/functional/hash.hpp>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2

@@ -34,7 +34,7 @@
 #include <libxml/parser.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <string.h>
 
 // For backwards compatibility, the nFeatures and nRequirements flag words are
@@ -236,9 +236,9 @@ void NodeJava::load()
                 CXmlCharPtr sEnabled( xmlNodeListGetString(
                     docUser, cur->children, 1));
                 if (xmlStrcmp(sEnabled, reinterpret_cast<xmlChar const *>("true")) == 0)
-                    m_enabled = boost::optional<sal_Bool>(true);
+                    m_enabled = o3tl::optional<sal_Bool>(true);
                 else if (xmlStrcmp(sEnabled, reinterpret_cast<xmlChar const *>("false")) == 0)
-                    m_enabled = boost::optional<sal_Bool>(false);
+                    m_enabled = o3tl::optional<sal_Bool>(false);
             }
         }
         else if (xmlStrcmp(cur->name, reinterpret_cast<xmlChar const *>("userClassPath")) == 0)
@@ -251,7 +251,7 @@ void NodeJava::load()
             {
                 CXmlCharPtr sUser(xmlNodeListGetString(
                     docUser, cur->children, 1));
-                m_userClassPath = boost::optional<OUString>(OUString(sUser));
+                m_userClassPath = o3tl::optional<OUString>(OUString(sUser));
             }
         }
         else if (xmlStrcmp(cur->name, reinterpret_cast<xmlChar const *>("javaInfo")) == 0)
@@ -264,7 +264,7 @@ void NodeJava::load()
             if (xmlStrcmp(sNil, reinterpret_cast<xmlChar const *>("false")) == 0)
             {
                 if (! m_javaInfo)
-                    m_javaInfo = boost::optional<CNodeJavaInfo>(CNodeJavaInfo());
+                    m_javaInfo = o3tl::optional<CNodeJavaInfo>(CNodeJavaInfo());
                 m_javaInfo->loadFromNode(docUser, cur);
             }
         }
@@ -277,7 +277,7 @@ void NodeJava::load()
             if (xmlStrcmp(sNil, reinterpret_cast<xmlChar const *>("false")) == 0)
             {
                 if ( ! m_vmParameters)
-                    m_vmParameters = boost::optional<std::vector<OUString> >(
+                    m_vmParameters = o3tl::optional<std::vector<OUString> >(
                         std::vector<OUString> ());
 
                 xmlNode * pOpt = cur->children;
@@ -302,7 +302,7 @@ void NodeJava::load()
             if (xmlStrcmp(sNil, reinterpret_cast<xmlChar const *>("false")) == 0)
             {
                 if (! m_JRELocations)
-                    m_JRELocations = boost::optional<std::vector<OUString> >(
+                    m_JRELocations = o3tl::optional<std::vector<OUString> >(
                         std::vector<OUString>());
 
                 xmlNode * pLoc = cur->children;
@@ -418,7 +418,7 @@ void NodeJava::write() const
                      reinterpret_cast<xmlChar const *>("nil"),
                      reinterpret_cast<xmlChar const *>("false"));
 
-        if (m_enabled == boost::optional<sal_Bool>(true))
+        if (m_enabled == o3tl::optional<sal_Bool>(true))
             xmlNodeSetContent(nodeEnabled,reinterpret_cast<xmlChar const *>("true"));
         else
             xmlNodeSetContent(nodeEnabled,reinterpret_cast<xmlChar const *>("false"));
@@ -531,19 +531,19 @@ void NodeJava::write() const
 
 void NodeJava::setEnabled(bool bEnabled)
 {
-    m_enabled =  boost::optional<sal_Bool>(bEnabled);
+    m_enabled =  o3tl::optional<sal_Bool>(bEnabled);
 }
 
 
 void NodeJava::setUserClassPath(const OUString & sClassPath)
 {
-    m_userClassPath = boost::optional<OUString>(sClassPath);
+    m_userClassPath = o3tl::optional<OUString>(sClassPath);
 }
 
 void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
 {
     if (!m_javaInfo)
-        m_javaInfo = boost::optional<CNodeJavaInfo>(CNodeJavaInfo());
+        m_javaInfo = o3tl::optional<CNodeJavaInfo>(CNodeJavaInfo());
     m_javaInfo->bAutoSelect = bAutoSelect;
     m_javaInfo->bNil = false;
 
@@ -571,13 +571,13 @@ void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
 
 void NodeJava::setVmParameters(std::vector<OUString> const & arOptions)
 {
-    m_vmParameters = boost::optional<std::vector<OUString> >(arOptions);
+    m_vmParameters = o3tl::optional<std::vector<OUString> >(arOptions);
 }
 
 void NodeJava::addJRELocation(OUString const & sLocation)
 {
     if (!m_JRELocations)
-        m_JRELocations = boost::optional<std::vector<OUString> >(
+        m_JRELocations = o3tl::optional<std::vector<OUString> >(
             std::vector<OUString> ());
      //only add the path if not already present
     std::vector<OUString>::const_iterator it =

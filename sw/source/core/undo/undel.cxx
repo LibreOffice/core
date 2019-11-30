@@ -779,7 +779,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
         }
         else
         {
-            boost::optional<OUString> aTmpStr;
+            o3tl::optional<OUString> aTmpStr;
             if (m_aSttStr)
                 aTmpStr = m_aSttStr;
             else if (m_aEndStr)

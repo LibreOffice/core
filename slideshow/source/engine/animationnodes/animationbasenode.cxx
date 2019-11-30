@@ -33,7 +33,7 @@
 #include <delayevent.hxx>
 #include <framerate.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <algorithm>
 
 using namespace com::sun::star;
@@ -401,7 +401,7 @@ AnimationBaseNode::fillCommonParameters() const
 
     const bool bAutoReverse( mxAnimateNode->getAutoReverse() );
 
-    boost::optional<double> aRepeats;
+    o3tl::optional<double> aRepeats;
     double nRepeats = 0;
     if( mxAnimateNode->getRepeatCount() >>= nRepeats ) {
         aRepeats = nRepeats;

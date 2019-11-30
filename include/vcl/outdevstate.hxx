@@ -28,7 +28,7 @@
 #include <tools/fontenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <i18nlangtag/lang.h>
 
 namespace vcl { class Font; }
@@ -81,17 +81,17 @@ struct OutDevState
     OutDevState(OutDevState&&);
     ~OutDevState();
 
-    boost::optional<MapMode>        mpMapMode;
+    o3tl::optional<MapMode>        mpMapMode;
     bool            mbMapActive;
     std::unique_ptr<vcl::Region>    mpClipRegion;
-    boost::optional<Color>          mpLineColor;
-    boost::optional<Color>          mpFillColor;
+    o3tl::optional<Color>          mpLineColor;
+    o3tl::optional<Color>          mpFillColor;
     std::unique_ptr<vcl::Font>      mpFont;
-    boost::optional<Color>          mpTextColor;
-    boost::optional<Color>          mpTextFillColor;
-    boost::optional<Color>          mpTextLineColor;
-    boost::optional<Color>          mpOverlineColor;
-    boost::optional<Point>          mpRefPoint;
+    o3tl::optional<Color>          mpTextColor;
+    o3tl::optional<Color>          mpTextFillColor;
+    o3tl::optional<Color>          mpTextLineColor;
+    o3tl::optional<Color>          mpOverlineColor;
+    o3tl::optional<Point>          mpRefPoint;
     TextAlign       meTextAlign;
     RasterOp        meRasterOp;
     ComplexTextLayoutFlags  mnTextLayoutMode;

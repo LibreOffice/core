@@ -68,7 +68,7 @@
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
@@ -628,7 +628,7 @@ bool BackendImpl::PackageImpl::checkLicense(
 {
     try
     {
-        ::boost::optional<SimpleLicenseAttributes> simplLicAttr
+        ::o3tl::optional<SimpleLicenseAttributes> simplLicAttr
             = info.getSimpleLicenseAttributes();
         if (! simplLicAttr)
             return true;
@@ -951,7 +951,7 @@ OUString BackendImpl::PackageImpl::getLicenseText()
     OUString sLicense;
     DescriptionInfoset aInfo = getDescriptionInfoset();
 
-    ::boost::optional< SimpleLicenseAttributes > aSimplLicAttr = aInfo.getSimpleLicenseAttributes();
+    ::o3tl::optional< SimpleLicenseAttributes > aSimplLicAttr = aInfo.getSimpleLicenseAttributes();
     if ( aSimplLicAttr )
     {
         OUString aLicenseURL = aInfo.getLocalizedLicenseURL();

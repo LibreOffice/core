@@ -104,7 +104,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOHeader;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOShrink;
 
-    boost::optional<tools::Rectangle> mpAutoFillRect;
+    o3tl::optional<tools::Rectangle> mpAutoFillRect;
 
     /// LibreOfficeKit needs a persistent FmFormView for tiled rendering,
     /// otherwise the invalidations from drawinglayer do not work.

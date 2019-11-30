@@ -24,7 +24,7 @@
 #include <swurl.hxx>
 #include <IMark.hxx>
 #include "navmgr.hxx"
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svx/swframetypes.hxx>
 #include <vcl/weld.hxx>
@@ -308,7 +308,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                     RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA);
 
     void    InsertByWord( const OUString & );
-    void    InsertPageBreak(const OUString *pPageDesc = nullptr, const ::boost::optional<sal_uInt16>& rPgNum = boost::none);
+    void    InsertPageBreak(const OUString *pPageDesc = nullptr, const ::o3tl::optional<sal_uInt16>& rPgNum = o3tl::nullopt);
     void    InsertLineBreak();
     void    InsertColumnBreak();
     void    InsertFootnote(const OUString &, bool bEndNote = false, bool bEdit = true );

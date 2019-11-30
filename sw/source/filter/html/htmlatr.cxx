@@ -1090,7 +1090,7 @@ class HTMLEndPosLst
 
     SwDoc *pDoc;            // the current document
     SwDoc* const pTemplate;       // the HTML template (or 0)
-    boost::optional<Color> xDfltColor;// the default foreground colors
+    o3tl::optional<Color> xDfltColor;// the default foreground colors
     std::set<OUString>& rScriptTextStyles;
 
     sal_uLong const nHTMLMode;
@@ -1134,7 +1134,7 @@ class HTMLEndPosLst
 
 public:
 
-    HTMLEndPosLst( SwDoc *pDoc, SwDoc* pTemplate, boost::optional<Color> xDfltColor,
+    HTMLEndPosLst( SwDoc *pDoc, SwDoc* pTemplate, o3tl::optional<Color> xDfltColor,
                    bool bOutStyles, sal_uLong nHTMLMode,
                    const OUString& rText, std::set<OUString>& rStyles );
     ~HTMLEndPosLst();
@@ -1582,7 +1582,7 @@ const SwHTMLFormatInfo *HTMLEndPosLst::GetFormatInfo( const SwFormat& rFormat,
     return pFormatInfo;
 }
 
-HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, boost::optional<Color> xDfltCol,
+HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, o3tl::optional<Color> xDfltCol,
                              bool bStyles, sal_uLong nMode, const OUString& rText,
                              std::set<OUString>& rStyles)
     : pDoc(pD)

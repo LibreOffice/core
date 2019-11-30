@@ -10,7 +10,7 @@
 #ifndef INCLUDED_VCL_FONTCAPABILITIES_HXX
 #define INCLUDED_VCL_FONTCAPABILITIES_HXX
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <bitset>
 
 //See OS/2 table, i.e. http://www.microsoft.com/typography/otspec/os2.htm#ur
@@ -193,8 +193,8 @@ namespace vcl
 
     struct FontCapabilities
     {
-        boost::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> oUnicodeRange;
-        boost::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> oCodePageRange;
+        o3tl::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> oUnicodeRange;
+        o3tl::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> oCodePageRange;
     };
 }
 
