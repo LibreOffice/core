@@ -1707,14 +1707,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                 css::uno::Reference<css::beans::XPropertySet> xParaProps(xTextRange, uno::UNO_QUERY);
 
-                // table style has got bigger precedence than docDefault style
-                // collect these pending paragraph properties to process in endTable()
-                if (xParaProps && m_nTableDepth > 0)
-                {
-                    TableParagraph aPending{pParaContext, xParaProps};
-                    m_aParagraphsToEndTable.push_back(aPending);
-                }
-
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style
                 // if we already set the other margin with direct formatting
                 if (xParaProps)

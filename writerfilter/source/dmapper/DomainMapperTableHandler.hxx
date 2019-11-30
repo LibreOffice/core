@@ -91,8 +91,6 @@ public:
      */
     void startTable(const TablePropertyMapPtr& pProps);
 
-    void ApplyParaProperty(css::beans::PropertyValues aTableProperties, PropertyIds eId);
-
     /// Handle end of table.
     void endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart);
     /**
