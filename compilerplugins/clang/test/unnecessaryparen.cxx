@@ -115,7 +115,7 @@ int main()
     (void)nBits;
 };
 
-struct B { operator bool(); };
+struct B { operator bool() const; };
 
 struct N { bool operator !(); };
 
