@@ -279,10 +279,6 @@ define gb_create_deps
 endef
 endif
 
-define gb_filter_link_output
-| LC_ALL=C $(GBUILDDIR)/platform/filter-creatingLibrary.awk; exit $${PIPESTATUS[0]}
-endef
-
 gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
 
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
