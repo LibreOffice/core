@@ -1246,17 +1246,17 @@ ODatabaseModelImpl::EmbeddedMacros ODatabaseModelImpl::determineEmbeddedMacros()
     {
         if ( ::sfx2::DocumentMacroMode::storageHasMacros( getOrCreateRootStorage() ) )
         {
-            m_aEmbeddedMacros.reset( eDocumentWideMacros );
+            m_aEmbeddedMacros = eDocumentWideMacros;
         }
         else if (   lcl_hasObjectsWithMacros_nothrow( *this, E_FORM )
                 ||  lcl_hasObjectsWithMacros_nothrow( *this, E_REPORT )
                 )
         {
-            m_aEmbeddedMacros.reset( eSubDocumentMacros );
+            m_aEmbeddedMacros = eSubDocumentMacros;
         }
         else
         {
-            m_aEmbeddedMacros.reset( eNoMacros );
+            m_aEmbeddedMacros = eNoMacros;
         }
     }
     return *m_aEmbeddedMacros;

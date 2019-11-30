@@ -600,7 +600,7 @@ namespace ucb { namespace ucp { namespace ext
         {
             DBG_UNHANDLED_EXCEPTION("ucb.ucp.ext");
         }
-        m_aIsFolder.reset( bIsFolder );
+        m_aIsFolder = bIsFolder;
         return *m_aIsFolder;
     }
 
@@ -610,7 +610,7 @@ namespace ucb { namespace ucp { namespace ext
         if ( !!m_aContentType )
             return;
 
-        m_aContentType.reset( ContentProvider::getArtificialNodeContentType() );
+        m_aContentType = ContentProvider::getArtificialNodeContentType();
         if ( m_eExtContentType == E_EXTENSION_CONTENT )
         {
             try
@@ -618,7 +618,7 @@ namespace ucb { namespace ucp { namespace ext
                 Sequence< Property > aProps(1);
                 aProps[0].Name = "ContentType";
                 Reference< XRow > xRow( getPropertyValues( aProps, nullptr ), UNO_SET_THROW );
-                m_aContentType.reset( xRow->getString(1) );
+                m_aContentType = xRow->getString(1);
             }
             catch( const Exception& )
             {

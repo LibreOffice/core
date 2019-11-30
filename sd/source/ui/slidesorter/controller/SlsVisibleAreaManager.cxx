@@ -112,7 +112,7 @@ void VisibleAreaManager::MakeVisible()
     if ( ! aNewVisibleTopLeft)
         return;
 
-    maRequestedVisibleTopLeft = aNewVisibleTopLeft.get();
+    maRequestedVisibleTopLeft = *aNewVisibleTopLeft;
     VisibleAreaScroller aAnimation(
         mrSlideSorter,
         aCurrentTopLeft,

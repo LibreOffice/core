@@ -202,11 +202,11 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
         return true;
     }
 
-    switch (pOuter->GetFieldId().get())
+    switch (*pOuter->GetFieldId())
     {
         case FIELD_IF:
         {
-            switch (pInner->GetFieldId().get())
+            switch (*pInner->GetFieldId())
             {
                 case FIELD_MERGEFIELD:
                 {

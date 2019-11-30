@@ -65,7 +65,7 @@ namespace cppcanvas
         void ImplCanvas::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
         {
             // TODO(T3): not thread-safe. B2DPolyPolygon employs copy-on-write
-            maClipPolyPolygon.reset( rClipPoly );
+            maClipPolyPolygon = rClipPoly;
             maViewState.Clip.clear();
         }
 

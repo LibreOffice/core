@@ -865,7 +865,7 @@ inline sal_uInt16 SwFont::GetTopBorderSpace() const
     sal_uInt16 nRet = 0;
     if( m_aTopBorder )
     {
-        nRet += m_aTopBorder.get().GetScaledWidth() + m_nTopBorderDist;
+        nRet += m_aTopBorder->GetScaledWidth() + m_nTopBorderDist;
     }
     if( m_aShadowLocation == SvxShadowLocation::TopLeft ||
         m_aShadowLocation == SvxShadowLocation::TopRight )
@@ -880,7 +880,7 @@ inline sal_uInt16 SwFont::GetBottomBorderSpace() const
     sal_uInt16 nRet = 0;
     if( m_aBottomBorder )
     {
-        nRet += m_aBottomBorder.get().GetScaledWidth() + m_nBottomBorderDist;
+        nRet += m_aBottomBorder->GetScaledWidth() + m_nBottomBorderDist;
     }
     if( m_aShadowLocation == SvxShadowLocation::BottomLeft ||
         m_aShadowLocation == SvxShadowLocation::BottomRight )
@@ -895,7 +895,7 @@ inline sal_uInt16 SwFont::GetRightBorderSpace() const
     sal_uInt16 nRet = 0;
     if( m_aRightBorder )
     {
-        nRet += m_aRightBorder.get().GetScaledWidth() + m_nRightBorderDist;
+        nRet += m_aRightBorder->GetScaledWidth() + m_nRightBorderDist;
     }
     if( m_aShadowLocation == SvxShadowLocation::TopRight ||
         m_aShadowLocation == SvxShadowLocation::BottomRight )
@@ -910,7 +910,7 @@ inline sal_uInt16 SwFont::GetLeftBorderSpace() const
     sal_uInt16 nRet = 0;
     if( m_aLeftBorder )
     {
-        nRet += m_aLeftBorder.get().GetScaledWidth() + m_nLeftBorderDist;
+        nRet += m_aLeftBorder->GetScaledWidth() + m_nLeftBorderDist;
     }
     if( m_aShadowLocation == SvxShadowLocation::TopLeft ||
         m_aShadowLocation == SvxShadowLocation::BottomLeft )

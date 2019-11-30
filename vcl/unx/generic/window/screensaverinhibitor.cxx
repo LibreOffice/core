@@ -55,15 +55,15 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
     {
         if (pDisplay)
         {
-            inhibitXScreenSaver( bInhibit, pDisplay.get() );
-            inhibitXAutoLock( bInhibit, pDisplay.get() );
-            inhibitDPMS( bInhibit, pDisplay.get() );
+            inhibitXScreenSaver( bInhibit, *pDisplay );
+            inhibitXAutoLock( bInhibit, *pDisplay );
+            inhibitDPMS( bInhibit, *pDisplay );
         }
 
         if (xid)
         {
-            inhibitGSM( bInhibit, appname, aReason.getStr(), xid.get() );
-            inhibitMSM( bInhibit, appname, aReason.getStr(), xid.get() );
+            inhibitGSM( bInhibit, appname, aReason.getStr(), *xid );
+            inhibitMSM( bInhibit, appname, aReason.getStr(), *xid );
         }
     }
 }
@@ -132,7 +132,7 @@ static void dbusInhibit( bool bInhibit,
     }
     else
     {
-        res = fUnInhibit( proxy, rCookie.get(), error );
+        res = fUnInhibit( proxy, *rCookie, error );
         rCookie.reset();
 
         if (res != nullptr)
@@ -286,7 +286,7 @@ void ScreenSaverInhibitor::inhibitXScreenSaver( bool bInhibit, Display* pDisplay
     }
     else if ( !bInhibit && mnXScreenSaverTimeout )
     {
-        XSetScreenSaver( pDisplay, mnXScreenSaverTimeout.get(),
+        XSetScreenSaver( pDisplay, *mnXScreenSaverTimeout,
                          nInterval, bPreferBlanking,
                          bAllowExposures );
         mnXScreenSaverTimeout.reset();

@@ -565,7 +565,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
         {
             ParagraphAdjust eAdjust = ParagraphAdjust_LEFT;
             if (pParagraph->getProperties().getParaAdjust())
-                eAdjust = pParagraph->getProperties().getParaAdjust().get();
+                eAdjust = *pParagraph->getProperties().getParaAdjust();
             xSet->setPropertyValue( "ParaAdjust", uno::makeAny( eAdjust ) );
             SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
             assert(pShape);

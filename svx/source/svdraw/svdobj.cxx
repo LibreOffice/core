@@ -541,7 +541,7 @@ const double* SdrObject::GetRelativeWidth( ) const
     if (!mpImpl->mnRelativeWidth)
         return nullptr;
 
-    return &mpImpl->mnRelativeWidth.get();
+    return &*mpImpl->mnRelativeWidth;
 }
 
 sal_Int16 SdrObject::GetRelativeWidthRelation() const
@@ -554,7 +554,7 @@ const double* SdrObject::GetRelativeHeight( ) const
     if (!mpImpl->mnRelativeHeight)
         return nullptr;
 
-    return &mpImpl->mnRelativeHeight.get();
+    return &*mpImpl->mnRelativeHeight;
 }
 
 sal_Int16 SdrObject::GetRelativeHeightRelation() const

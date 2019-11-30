@@ -2610,16 +2610,16 @@ bool getTTCoverage(
     if (nLength >= OS2_Legacy_length)
     {
         rUnicodeRange = std::bitset<UnicodeCoverage::MAX_UC_ENUM>();
-        append(rUnicodeRange.get(),  0, GetUInt32(pTable, OS2_ulUnicodeRange1_offset));
-        append(rUnicodeRange.get(), 32, GetUInt32(pTable, OS2_ulUnicodeRange2_offset));
-        append(rUnicodeRange.get(), 64, GetUInt32(pTable, OS2_ulUnicodeRange3_offset));
-        append(rUnicodeRange.get(), 96, GetUInt32(pTable, OS2_ulUnicodeRange4_offset));
+        append(*rUnicodeRange,  0, GetUInt32(pTable, OS2_ulUnicodeRange1_offset));
+        append(*rUnicodeRange, 32, GetUInt32(pTable, OS2_ulUnicodeRange2_offset));
+        append(*rUnicodeRange, 64, GetUInt32(pTable, OS2_ulUnicodeRange3_offset));
+        append(*rUnicodeRange, 96, GetUInt32(pTable, OS2_ulUnicodeRange4_offset));
         bRet = true;
         if (nLength >= OS2_V1_length)
         {
             rCodePageRange = std::bitset<CodePageCoverage::MAX_CP_ENUM>();
-            append(rCodePageRange.get(),  0, GetUInt32(pTable, OS2_ulCodePageRange1_offset));
-            append(rCodePageRange.get(), 32, GetUInt32(pTable, OS2_ulCodePageRange2_offset));
+            append(*rCodePageRange,  0, GetUInt32(pTable, OS2_ulCodePageRange1_offset));
+            append(*rCodePageRange, 32, GetUInt32(pTable, OS2_ulCodePageRange2_offset));
         }
     }
     return bRet;

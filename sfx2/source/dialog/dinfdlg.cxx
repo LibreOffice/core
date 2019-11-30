@@ -1591,10 +1591,10 @@ void CustomPropertiesWindow::StoreCustomProperties()
                     aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
                     aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear(),
                     pLine->m_xTimeField->m_isUTC);
-                if (pLine->m_xDateField->m_TZ.is_initialized())
+                if (pLine->m_xDateField->m_TZ)
                 {
                     m_aCustomProperties[nDataModelPos + i]->m_aValue <<= util::DateTimeWithTimezone(
-                        aDateTime, pLine->m_xDateField->m_TZ.get());
+                        aDateTime, *pLine->m_xDateField->m_TZ);
                 }
                 else
                 {
@@ -1606,10 +1606,10 @@ void CustomPropertiesWindow::StoreCustomProperties()
                 Date aTmpDate = pLine->m_xDateField->get_date();
                 util::Date const aDate(aTmpDate.GetDay(), aTmpDate.GetMonth(),
                     aTmpDate.GetYear());
-                if (pLine->m_xDateField->m_TZ.is_initialized())
+                if (pLine->m_xDateField->m_TZ)
                 {
                     m_aCustomProperties[nDataModelPos + i]->m_aValue <<= util::DateWithTimezone(
-                        aDate, pLine->m_xDateField->m_TZ.get());
+                        aDate, *pLine->m_xDateField->m_TZ);
                 }
                 else
                 {

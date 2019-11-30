@@ -218,7 +218,7 @@ public:
 
     sal_Int32 getBottom() const { return m_nBottom; }
 
-    void setZ(sal_Int32 nZ) { m_oZ.reset(nZ); }
+    void setZ(sal_Int32 nZ) { m_oZ = nZ; }
 
     bool hasZ() const { return bool(m_oZ); }
 

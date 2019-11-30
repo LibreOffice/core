@@ -71,7 +71,7 @@ private:
     virtual void doIt() override
     {
         try {
-            m_result.reset( m_func() );
+            m_result = m_func();
         }
         catch (...) {
             m_exc = std::current_exception();

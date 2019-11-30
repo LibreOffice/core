@@ -1304,7 +1304,7 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
         if ( rDesc.GetNumOffset() )
         {
             ::boost::optional<sal_uInt16> oNumOffset = rDesc.GetNumOffset();
-            bWishedOdd = oNumOffset && (oNumOffset.get() % 2) != 0;
+            bWishedOdd = oNumOffset && (*oNumOffset % 2) != 0;
             // use the opportunity to set the flag at root
             pRoot->SetVirtPageNum( true );
         }

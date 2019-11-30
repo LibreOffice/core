@@ -1515,7 +1515,7 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, vo
             boost::optional<css::uno::Sequence<OUString>> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
             if (aTSAURLs)
             {
-                const css::uno::Sequence<OUString>& rTSAURLs = aTSAURLs.get();
+                const css::uno::Sequence<OUString>& rTSAURLs = *aTSAURLs;
                 for (auto const& elem : rTSAURLs)
                 {
                     mxLBSignTSA->append_text(elem);

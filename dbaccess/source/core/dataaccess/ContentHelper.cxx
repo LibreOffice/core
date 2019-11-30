@@ -133,7 +133,7 @@ OUString SAL_CALL OContentHelper::getContentType()
 
     if ( !m_pImpl->m_aProps.aContentType )
     {   // content type not yet retrieved
-        m_pImpl->m_aProps.aContentType.reset( determineContentType() );
+        m_pImpl->m_aProps.aContentType = determineContentType();
     }
 
     return *m_pImpl->m_aProps.aContentType;

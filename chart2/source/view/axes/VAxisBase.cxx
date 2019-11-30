@@ -118,7 +118,7 @@ sal_Int32 VAxisBase::estimateMaximumAutoMainIncrementCount()
 
 void VAxisBase::setExtraLinePositionAtOtherAxis( double fCrossingAt )
 {
-    m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis.reset(fCrossingAt);
+    m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis = fCrossingAt;
 }
 
 sal_Int32 VAxisBase::getDimensionCount() const

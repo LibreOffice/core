@@ -69,7 +69,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
         {
 
             boost::optional<OUString> x(officecfg::Office::TabBrowse::TaskCreatorService::ImplementationName::get(m_xContext));
-            if (x) sCreator = x.get();
+            if (x) sCreator = *x;
         }
 
         xCreator.set( m_xContext->getServiceManager()->createInstanceWithContext(sCreator, m_xContext), css::uno::UNO_QUERY_THROW);

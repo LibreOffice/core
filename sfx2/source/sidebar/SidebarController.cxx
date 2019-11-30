@@ -473,11 +473,11 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
     if ( ! mbIsDeckRequestedOpen)
         return;
 
-    if (mbIsDeckRequestedOpen.get())
+    if (*mbIsDeckRequestedOpen)
     {
         // Deck became large enough to be shown.  Show it.
         mnSavedSidebarWidth = nNewWidth;
-        if (!mbIsDeckOpen.get())
+        if (!*mbIsDeckOpen)
             RequestOpenDeck();
     }
     else
@@ -1237,12 +1237,12 @@ bool SidebarController::IsDeckOpen(const sal_Int32 nIndex)
         OUString asDeckId(mpTabBar->GetDeckIdForIndex(nIndex));
         return IsDeckVisible(asDeckId);
     }
-    return mbIsDeckOpen && mbIsDeckOpen.get();
+    return mbIsDeckOpen && *mbIsDeckOpen;
 }
 
 bool SidebarController::IsDeckVisible(const OUString& rsDeckId)
 {
-    return mbIsDeckOpen && mbIsDeckOpen.get() && msCurrentDeckId == rsDeckId;
+    return mbIsDeckOpen && *mbIsDeckOpen && msCurrentDeckId == rsDeckId;
 }
 
 void SidebarController::UpdateDeckOpenState()
@@ -1255,10 +1255,10 @@ void SidebarController::UpdateDeckOpenState()
 
     // Update (change) the open state when it either has not yet been initialized
     // or when its value differs from the requested state.
-    if ( mbIsDeckOpen && mbIsDeckOpen.get() == mbIsDeckRequestedOpen.get() )
+    if ( mbIsDeckOpen && *mbIsDeckOpen == *mbIsDeckRequestedOpen )
         return;
 
-    if (mbIsDeckRequestedOpen.get())
+    if (*mbIsDeckRequestedOpen)
     {
         if (!mpParentWindow->IsFloatingMode())
         {
@@ -1336,9 +1336,9 @@ void SidebarController::UpdateDeckOpenState()
         mpParentWindow->SetStyle(mpParentWindow->GetStyle() & ~WB_SIZEABLE);
     }
 
-    mbIsDeckOpen = mbIsDeckRequestedOpen.get();
-    if (mbIsDeckOpen.get() && mpCurrentDeck)
-        mpCurrentDeck->Show(mbIsDeckOpen.get());
+    mbIsDeckOpen = *mbIsDeckRequestedOpen;
+    if (*mbIsDeckOpen && mpCurrentDeck)
+        mpCurrentDeck->Show(*mbIsDeckOpen);
     NotifyResize();
 }
 
