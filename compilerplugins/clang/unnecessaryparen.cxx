@@ -120,7 +120,9 @@ public:
         // ImplicitCastExpr, so that VisitMemberExpr doesn't erroneously pick it up (and note that
         // CXXMemberCallExpr's getImplicitObjectArgument() skips past the underlying MemberExpr):
         if (auto const e1 = dyn_cast<CXXMemberCallExpr>(expr->getSubExpr())) {
-            if (auto const e2 = dyn_cast<ParenExpr>(e1->getImplicitObjectArgument())) {
+            if (auto const e2 = dyn_cast<ParenExpr>(
+                    e1->getImplicitObjectArgument()->IgnoreImpCasts()))
+            {
                 handled_.insert(e2);
             }
         }
