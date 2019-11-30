@@ -4764,6 +4764,14 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
+namespace {
+
+editeng::SvxBorderLine const * get_ptr(boost::optional<editeng::SvxBorderLine> const & opt) {
+    return opt ? &*opt : nullptr;
+}
+
+}
+
 void PaintCharacterBorder(
     const SwFont& rFont,
     const SwRect& rPaintArea,
@@ -4818,17 +4826,17 @@ void PaintCharacterBorder(
             aAlignedRect.Width(), aAlignedRect.Height(),
             aAlignedRect.Left(), aAlignedRect.Top()));
     const svx::frame::Style aStyleTop(
-        bTop ? rFont.GetAbsTopBorder(bVerticalLayout, bVerticalLayoutLRBT).get_ptr() : nullptr,
+        bTop ? get_ptr(rFont.GetAbsTopBorder(bVerticalLayout, bVerticalLayoutLRBT)) : nullptr,
         1.0);
     const svx::frame::Style aStyleRight(
-        bRight ? rFont.GetAbsRightBorder(bVerticalLayout, bVerticalLayoutLRBT).get_ptr() : nullptr,
+        bRight ? get_ptr(rFont.GetAbsRightBorder(bVerticalLayout, bVerticalLayoutLRBT)) : nullptr,
         1.0);
     const svx::frame::Style aStyleBottom(
-        bBottom ? rFont.GetAbsBottomBorder(bVerticalLayout, bVerticalLayoutLRBT).get_ptr()
+        bBottom ? get_ptr(rFont.GetAbsBottomBorder(bVerticalLayout, bVerticalLayoutLRBT))
                 : nullptr,
         1.0);
     const svx::frame::Style aStyleLeft(
-        bLeft ? rFont.GetAbsLeftBorder(bVerticalLayout, bVerticalLayoutLRBT).get_ptr() : nullptr,
+        bLeft ? get_ptr(rFont.GetAbsLeftBorder(bVerticalLayout, bVerticalLayoutLRBT)) : nullptr,
         1.0);
     drawinglayer::primitive2d::Primitive2DContainer aBorderLineTarget;
 
