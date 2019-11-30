@@ -139,7 +139,7 @@
 #include <svtools/embedhlp.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>
@@ -2339,7 +2339,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     rOutliner.QuickSetAttribs( aPortionAttribs, aSelection );
                     aSelection.nStartPos = aSelection.nEndPos;
                 }
-                boost::optional< sal_Int16 > oStartNumbering;
+                o3tl::optional< sal_Int16 > oStartNumbering;
                 SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
                 pPara->ApplyTo( aParagraphAttribs, oStartNumbering, *this, nDestinationInstance );
 
@@ -3400,7 +3400,7 @@ PPTNumberFormatCreator::~PPTNumberFormatCreator()
 
 bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const & rManager,
     SvxNumberFormat& rNumberFormat, sal_uInt32 nLevel, TSS_Type nInstance, TSS_Type nDestinationInstance,
-        boost::optional< sal_Int16 >& rStartNumbering, sal_uInt32 nFontHeight,  PPTParagraphObj const * pPara )
+        o3tl::optional< sal_Int16 >& rStartNumbering, sal_uInt32 nFontHeight,  PPTParagraphObj const * pPara )
 {
     bool bHardAttribute = ( nDestinationInstance == TSS_Type::Unknown );
 
@@ -3641,7 +3641,7 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             }
             break;
         }
-        rStartNumbering = boost::optional< sal_Int16 >( nAnmScheme >> 16 );
+        rStartNumbering = o3tl::optional< sal_Int16 >( nAnmScheme >> 16 );
         sal_Int16 nBuStart = *rStartNumbering;
         //The Seventh bit of nBuFlags that specifies whether fBulletHasAutoNumber exists,
         //and fBulletHasAutoNumber that specifies whether this paragraph has an automatic numbering scheme.
@@ -3669,7 +3669,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport const & rManag
     nTextOfs = rParaLevel.mnTextOfs;
     nBulletOfs = rParaLevel.mnBulletOfs;
 
-    boost::optional< sal_Int16 > oStartNumbering;
+    o3tl::optional< sal_Int16 > oStartNumbering;
     ImplGetExtNumberFormat( rManager, rNumberFormat, nLevel, nInstance, TSS_Type::Unknown, oStartNumbering, rCharLevel.mnFontHeight, nullptr );
     if ( ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP ) && ( nBulletHeight > 0x7fff ) )
         nBulletHeight = rCharLevel.mnFontHeight ? ((- static_cast<sal_Int16>(nBulletHeight)) * 100 ) / rCharLevel.mnFontHeight : 100;
@@ -3702,7 +3702,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport const & rManag
 }
 
 bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport const & rManager, SvxNumberFormat& rNumberFormat, PPTParagraphObj* pParaObj,
-                                                TSS_Type nDestinationInstance, boost::optional< sal_Int16 >& rStartNumbering )
+                                                TSS_Type nDestinationInstance, o3tl::optional< sal_Int16 >& rStartNumbering )
 {
     sal_uInt32 nHardCount = 0;
     nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet, nDestinationInstance ) ? 1 : 0;
@@ -6168,7 +6168,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
     return bIsHardAttribute;
 }
 
-void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport const & rManager, TSS_Type nDestinationInstance )
+void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  o3tl::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport const & rManager, TSS_Type nDestinationInstance )
 {
     sal_Int16   nVal2;
     sal_uInt32  nVal, nUpperDist, nLowerDist;

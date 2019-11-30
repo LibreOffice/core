@@ -24,7 +24,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
@@ -1595,7 +1595,7 @@ static bool lcl_parseDate(
 static bool lcl_parseDateTime(
                 util::Date *const pDate, util::DateTime & rDateTime,
                 bool & rbDateTime,
-                boost::optional<sal_Int16> *const pTimeZoneOffset,
+                o3tl::optional<sal_Int16> *const pTimeZoneOffset,
                 const OUString & rString,
                 bool const bIgnoreInvalidOrMissingDate)
 {
@@ -1831,7 +1831,7 @@ bool Converter::parseTimeOrDateTime(
 bool Converter::parseDateOrDateTime(
                 util::Date *const pDate, util::DateTime & rDateTime,
                 bool & rbDateTime,
-                boost::optional<sal_Int16> *const pTimeZoneOffset,
+                o3tl::optional<sal_Int16> *const pTimeZoneOffset,
                 const OUString & rString )
 {
     return lcl_parseDateTime(

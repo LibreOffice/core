@@ -20,14 +20,14 @@
 #ifndef INCLUDED_VCL_INC_WALL2_HXX
 #define INCLUDED_VCL_INC_WALL2_HXX
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 class ImplWallpaper
 {
     friend class Wallpaper;
 
 private:
-    boost::optional<tools::Rectangle>  mpRect;
+    o3tl::optional<tools::Rectangle>  mpRect;
     std::unique_ptr<BitmapEx>   mpBitmap;
     std::unique_ptr<Gradient>   mpGradient;
     std::unique_ptr<BitmapEx>   mpCache;

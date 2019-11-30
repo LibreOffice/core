@@ -51,7 +51,7 @@
 
 #include <map>
 #include <string>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <ControlCacheKey.hxx>
 
 using namespace std;

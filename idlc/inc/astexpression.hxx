@@ -24,7 +24,7 @@
 #include <memory>
 
 #include "idlc.hxx"
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 // Enum to define all the different operators to combine expressions
 enum class ExprComb
@@ -130,7 +130,7 @@ private:
                     m_subExpr2;
     std::unique_ptr<AstExprValue>
                     m_exprValue;
-    boost::optional<OString>
+    o3tl::optional<OString>
                     m_xSymbolicName;
 };
 

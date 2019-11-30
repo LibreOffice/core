@@ -68,7 +68,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
            )
         {
 
-            boost::optional<OUString> x(officecfg::Office::TabBrowse::TaskCreatorService::ImplementationName::get(m_xContext));
+            o3tl::optional<OUString> x(officecfg::Office::TabBrowse::TaskCreatorService::ImplementationName::get(m_xContext));
             if (x) sCreator = *x;
         }
 

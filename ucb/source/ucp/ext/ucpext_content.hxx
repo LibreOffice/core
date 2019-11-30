@@ -25,7 +25,7 @@
 
 #include <ucbhelper/contenthelper.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 
 namespace ucb { namespace ucp { namespace ext
@@ -122,8 +122,8 @@ namespace ucb { namespace ucp { namespace ext
 
     private:
         ExtensionContentType                    m_eExtContentType;
-        ::boost::optional< bool >               m_aIsFolder;
-        ::boost::optional< OUString >    m_aContentType;
+        ::o3tl::optional< bool >               m_aIsFolder;
+        ::o3tl::optional< OUString >    m_aContentType;
         OUString                         m_sExtensionId;
         OUString                         m_sPathIntoExtension;
     };

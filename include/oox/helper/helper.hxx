@@ -154,7 +154,7 @@ inline void setFlag( Type& ornBitField, Type nMask, bool bSet = true )
 }
 
 
-/** Optional value, similar to ::boost::optional<>, with convenience accessors.
+/** Optional value, similar to ::o3tl::optional<>, with convenience accessors.
  */
 template< typename Type >
 class OptValue

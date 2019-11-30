@@ -27,7 +27,7 @@
 #include <ostream>
 #include <unordered_map>
 #include <vector>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>

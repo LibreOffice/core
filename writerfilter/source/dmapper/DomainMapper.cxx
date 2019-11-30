@@ -448,7 +448,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         {
             style::LineSpacing aSpacing;
             PropertyMapPtr pTopContext = m_pImpl->GetTopContext();
-            boost::optional<PropertyMap::Property> aLineSpacingVal;
+            o3tl::optional<PropertyMap::Property> aLineSpacingVal;
             if (pTopContext && (aLineSpacingVal = pTopContext->getProperty(PROP_PARA_LINE_SPACING)) )
             {
                 aLineSpacingVal->second >>= aSpacing;
@@ -2635,7 +2635,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_cntxtAlts_cntxtAlts:
     {
         tools::SvRef<TextEffectsHandler> pTextEffectsHandlerPtr( new TextEffectsHandler(nSprmId) );
-        boost::optional<PropertyIds> aPropertyId = pTextEffectsHandlerPtr->getGrabBagPropertyId();
+        o3tl::optional<PropertyIds> aPropertyId = pTextEffectsHandlerPtr->getGrabBagPropertyId();
         if(aPropertyId)
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();

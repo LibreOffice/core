@@ -431,7 +431,7 @@ void ScXMLExportDataPilot::WriteLayoutInfo(const ScDPSaveDimension* pDim)
 void ScXMLExportDataPilot::WriteSubTotals(const ScDPSaveDimension* pDim)
 {
     sal_Int32 nSubTotalCount = pDim->GetSubTotalsCount();
-    boost::optional<OUString> pLayoutName;
+    o3tl::optional<OUString> pLayoutName;
     if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
         // Export display names only for 1.2 extended or later.
         pLayoutName = pDim->GetSubtotalName();
@@ -467,7 +467,7 @@ void ScXMLExportDataPilot::WriteMembers(const ScDPSaveDimension* pDim)
             if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
             {
                 // Export display names only for ODF 1.2 extended or later.
-                const boost::optional<OUString> & pLayoutName = rpMember->GetLayoutName();
+                const o3tl::optional<OUString> & pLayoutName = rpMember->GetLayoutName();
                 if (pLayoutName)
                     rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
             }
@@ -678,7 +678,7 @@ void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const S
     if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
     {
         // Export display names only for ODF 1.2 extended or later.
-        const boost::optional<OUString> & pLayoutName = pDim->GetLayoutName();
+        const o3tl::optional<OUString> & pLayoutName = pDim->GetLayoutName();
         if (pLayoutName)
             rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
     }
@@ -724,7 +724,7 @@ void ScXMLExportDataPilot::WriteDimensions(const ScDPSaveData* pDPSave)
     }
 }
 
-void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const boost::optional<OUString> & pGrandTotal)
+void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const o3tl::optional<OUString> & pGrandTotal)
 {
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, bVisible ? XML_TRUE : XML_FALSE);
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, eOrient);
@@ -812,7 +812,7 @@ void ScXMLExportDataPilot::WriteDataPilots()
 
         // grand total elements.
 
-        const boost::optional<OUString> & pGrandTotalName = pDPSave->GetGrandTotalName();
+        const o3tl::optional<OUString> & pGrandTotalName = pDPSave->GetGrandTotalName();
         if (pGrandTotalName && rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
         {
             // Use the new data-pilot-grand-total element.

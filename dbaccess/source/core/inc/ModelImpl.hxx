@@ -166,7 +166,7 @@ private:
     oslInterlockedCount                                 m_refCount;
 
     /// do we have any object (forms/reports) which contains macros?
-    ::boost::optional< EmbeddedMacros >                 m_aEmbeddedMacros;
+    ::o3tl::optional< EmbeddedMacros >                 m_aEmbeddedMacros;
 
     /// true if setting the Modified flag of the document is currently locked
     bool                                                m_bModificationLock;

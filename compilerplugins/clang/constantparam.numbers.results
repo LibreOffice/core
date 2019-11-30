@@ -2675,7 +2675,7 @@ slideshow/source/engine/transitions/checkerboardwipe.hxx:36
     int unitsPerEdge
     10
 slideshow/source/engine/transitions/combtransition.hxx:42
-    void slideshow::internal::CombTransition::CombTransition(const class boost::optional<class std::shared_ptr<class slideshow::internal::Slide> > &,const class std::shared_ptr<class slideshow::internal::Slide> &,const class std::shared_ptr<class slideshow::internal::SoundPlayer> &,const class slideshow::internal::UnoViewContainer &,class slideshow::internal::ScreenUpdater &,class slideshow::internal::EventMultiplexer &,const class basegfx::B2DVector &,int)
+    void slideshow::internal::CombTransition::CombTransition(const class o3tl::optional<class std::shared_ptr<class slideshow::internal::Slide> > &,const class std::shared_ptr<class slideshow::internal::Slide> &,const class std::shared_ptr<class slideshow::internal::SoundPlayer> &,const class slideshow::internal::UnoViewContainer &,class slideshow::internal::ScreenUpdater &,class slideshow::internal::EventMultiplexer &,const class basegfx::B2DVector &,int)
     int nNumStripes
     24
 slideshow/source/engine/transitions/snakewipe.hxx:55

@@ -20,7 +20,7 @@
 #include <vector>
 
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 void btn_clicked(GtkWidget* pButton, gpointer)
 {
@@ -89,7 +89,7 @@ void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
         g_free(pTargets);
     }
 
-    boost::optional<GdkAtom> oTarget;
+    o3tl::optional<GdkAtom> oTarget;
     std::string aTargetName;
 
     std::vector<std::string> aPreferredNames =

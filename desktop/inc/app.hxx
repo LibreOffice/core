@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_INC_APP_HXX
 #define INCLUDED_DESKTOP_INC_APP_HXX
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
@@ -175,7 +175,7 @@ class Desktop : public Application
 };
 
 OUString GetURL_Impl(
-    const OUString& rName, boost::optional< OUString > const & cwdUrl );
+    const OUString& rName, o3tl::optional< OUString > const & cwdUrl );
 
 OUString ReplaceStringHookProc(const OUString& rStr);
 

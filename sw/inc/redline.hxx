@@ -29,7 +29,7 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 
 class SfxItemSet;
@@ -158,7 +158,7 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     bool m_bIsVisible : 1;
     sal_uInt32 const m_nId;
 
-    boost::optional<long> m_oLOKLastNodeTop;
+    o3tl::optional<long> m_oLOKLastNodeTop;
 
     void MoveToSection();
     void CopyToSection();

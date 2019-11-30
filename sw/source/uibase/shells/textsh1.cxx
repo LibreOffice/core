@@ -627,7 +627,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_BREAK_DLG:
         {
             sal_uInt16 nKind=0;
-            ::boost::optional<sal_uInt16> oPageNumber;
+            ::o3tl::optional<sal_uInt16> oPageNumber;
             OUString aTemplateName;
             if ( pItem )
             {

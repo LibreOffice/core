@@ -268,7 +268,7 @@ public:
 
     virtual void SetParent(ScConditionalFormat* pParent) override;
 
-    boost::optional<Color> GetColor(const ScAddress& rAddr) const;
+    o3tl::optional<Color> GetColor(const ScAddress& rAddr) const;
     void AddEntry(ScColorScaleEntry* pEntry);
 
     virtual void UpdateReference( sc::RefUpdateContext& rCxt ) override;

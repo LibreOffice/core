@@ -22,7 +22,7 @@
 
 #if PCH_LEVEL >= 1
 #include <string.h>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/module.h>

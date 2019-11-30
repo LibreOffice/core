@@ -452,7 +452,7 @@ void SVTXGridControl::impl_checkTableModelInit()
 
 namespace
 {
-    void lcl_convertColor( ::boost::optional< ::Color > const & i_color, Any & o_colorValue )
+    void lcl_convertColor( ::o3tl::optional< ::Color > const & i_color, Any & o_colorValue )
     {
         if ( !i_color )
             o_colorValue.clear();
@@ -535,7 +535,7 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName )
 
     case BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS:
     {
-        ::boost::optional< ::std::vector< ::Color > > aColors( m_xTableModel->getRowBackgroundColors() );
+        ::o3tl::optional< ::std::vector< ::Color > > aColors( m_xTableModel->getRowBackgroundColors() );
         if ( !aColors )
             aPropertyValue.clear();
         else

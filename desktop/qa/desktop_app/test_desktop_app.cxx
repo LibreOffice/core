@@ -49,7 +49,7 @@ class TestSupplier : public desktop::CommandLineArgs::Supplier {
 public:
     explicit TestSupplier(const std::initializer_list<OUString>& args) : m_args(args) {}
 
-    virtual boost::optional< OUString > getCwdUrl() override { return boost::optional< OUString >(); }
+    virtual o3tl::optional< OUString > getCwdUrl() override { return o3tl::optional< OUString >(); }
     virtual bool next(OUString * argument) override {
         CPPUNIT_ASSERT(argument != nullptr);
         if (m_index < m_args.size()) {

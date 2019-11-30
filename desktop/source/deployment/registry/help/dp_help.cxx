@@ -42,7 +42,7 @@
 #include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -99,7 +99,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     void implCollectXhpFiles( const OUString& aDir,
         std::vector< OUString >& o_rXhpFileVector );
 
-    ::boost::optional<HelpBackendDb::Data> readDataFromDb(OUString const & url);
+    ::o3tl::optional<HelpBackendDb::Data> readDataFromDb(OUString const & url);
     bool hasActiveEntry(OUString const & url);
     bool activateEntry(OUString const & url);
 
@@ -204,10 +204,10 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-::boost::optional<HelpBackendDb::Data> BackendImpl::readDataFromDb(
+::o3tl::optional<HelpBackendDb::Data> BackendImpl::readDataFromDb(
     OUString const & url)
 {
-    ::boost::optional<HelpBackendDb::Data> data;
+    ::o3tl::optional<HelpBackendDb::Data> data;
     if (m_backendDb)
         data = m_backendDb->getEntry(url);
     return data;
@@ -337,7 +337,7 @@ beans::Optional< OUString > BackendImpl::PackageImpl::getRegistrationDataURL()
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
 
-    ::boost::optional<HelpBackendDb::Data> data =
+    ::o3tl::optional<HelpBackendDb::Data> data =
           getMyBackend()->readDataFromDb(getURL());
 
     if (data && getMyBackend()->hasActiveEntry(getURL()))

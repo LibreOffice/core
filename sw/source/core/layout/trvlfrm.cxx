@@ -1714,7 +1714,7 @@ bool SwFrame::WannaRightPage() const
 
     const SwFrame *pFlow = pPage->FindFirstBodyContent();
     const SwPageDesc *pDesc = nullptr;
-    ::boost::optional<sal_uInt16> oPgNum;
+    ::o3tl::optional<sal_uInt16> oPgNum;
     if ( pFlow )
     {
         if ( pFlow->IsInTab() )
@@ -1846,7 +1846,7 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
     }
     if ( pFrame )
     {
-        ::boost::optional<sal_uInt16> oNumOffset = pFrame->GetPageDescItem().GetNumOffset();
+        ::o3tl::optional<sal_uInt16> oNumOffset = pFrame->GetPageDescItem().GetNumOffset();
         if (oNumOffset)
         {
             return nPhyPage - pFrame->GetPhyPageNum() + *oNumOffset;

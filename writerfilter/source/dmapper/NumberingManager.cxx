@@ -293,7 +293,7 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
         PROP_FIRST_LINE_OFFSET, PROP_LEFT_MARGIN
     };
     for(PropertyIds const & rReadId : aReadIds) {
-        boost::optional<PropertyMap::Property> aProp = getProperty(rReadId);
+        o3tl::optional<PropertyMap::Property> aProp = getProperty(rReadId);
         if (aProp)
             aNumberingProperties.emplace_back( getPropertyName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE );
         else if (rReadId == PROP_FIRST_LINE_INDENT && bDefaults)
@@ -306,7 +306,7 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
                                               beans::PropertyState_DIRECT_VALUE);
     }
 
-    boost::optional<PropertyMap::Property> aPropFont = getProperty(PROP_CHAR_FONT_NAME);
+    o3tl::optional<PropertyMap::Property> aPropFont = getProperty(PROP_CHAR_FONT_NAME);
     if(aPropFont && !isOutlineNumbering())
         aNumberingProperties.emplace_back( getPropertyName(PROP_BULLET_FONT_NAME), 0, aPropFont->second, beans::PropertyState_DIRECT_VALUE );
 

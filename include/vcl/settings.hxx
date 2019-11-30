@@ -29,7 +29,7 @@
 #include <memory>
 #include <vector>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 class BitmapEx;
 class LanguageTag;
@@ -549,7 +549,7 @@ public:
 
     BitmapEx const &                GetPersonaFooter() const;
 
-    const boost::optional<Color>&   GetPersonaMenuBarTextColor() const;
+    const o3tl::optional<Color>&   GetPersonaMenuBarTextColor() const;
 
     // global switch to allow EdgeBlenging; currently possible for ValueSet and ListBox
     // when activated there using Get/SetEdgeBlending; default is true

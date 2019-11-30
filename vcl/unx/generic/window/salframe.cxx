@@ -57,7 +57,7 @@
 #include <svdata.hxx>
 #include <bitmaps.hlst>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <algorithm>
 

@@ -700,7 +700,7 @@ bool SwFormatPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_PAGEDESC_PAGENUMOFFSET:
             {
-                ::boost::optional<sal_uInt16> oOffset = GetNumOffset();
+                ::o3tl::optional<sal_uInt16> oOffset = GetNumOffset();
                 if (oOffset)
                 {
                     rVal <<= static_cast<sal_Int16>(*oOffset);
@@ -744,7 +744,7 @@ bool SwFormatPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nOffset = 0;
             if (!rVal.hasValue())
             {
-                SetNumOffset(boost::none);
+                SetNumOffset(o3tl::nullopt);
             }
             else if (rVal >>= nOffset)
                 SetNumOffset( nOffset );

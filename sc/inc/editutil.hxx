@@ -74,7 +74,7 @@ public:
     static std::unique_ptr<EditTextObject> Clone( const EditTextObject& rSrc, ScDocument& rDestDoc );
 
     static OUString GetCellFieldValue(
-        const SvxFieldData& rFieldData, const ScDocument* pDoc, boost::optional<Color>* ppTextColor );
+        const SvxFieldData& rFieldData, const ScDocument* pDoc, o3tl::optional<Color>* ppTextColor );
 
 public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
@@ -186,7 +186,7 @@ public:
     void SetExecuteURL(bool bSet)    { bExecuteURL = bSet; }
 
     virtual void    FieldClicked( const SvxFieldItem& rField ) override;
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor ) override;
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, o3tl::optional<Color>& rTxtColor, o3tl::optional<Color>& rFldColor ) override;
 };
 
 // 1/100 mm
@@ -223,7 +223,7 @@ private:
 
 public:
     ScHeaderEditEngine( SfxItemPool* pEnginePool );
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor ) override;
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, o3tl::optional<Color>& rTxtColor, o3tl::optional<Color>& rFldColor ) override;
 
     void SetNumType(SvxNumType eNew)                { aData.eNumType = eNew; }
     void SetData(const ScHeaderFieldData& rNew)     { aData = rNew; }

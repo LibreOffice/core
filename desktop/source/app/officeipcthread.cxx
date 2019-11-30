@@ -141,7 +141,7 @@ public:
         }
     }
 
-    virtual boost::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
+    virtual o3tl::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
 
     virtual bool next(OUString * argument) override { return next(argument, true); }
 
@@ -195,7 +195,7 @@ private:
         }
     }
 
-    boost::optional< OUString > m_cwdUrl;
+    o3tl::optional< OUString > m_cwdUrl;
     OString m_input;
     sal_Int32 m_index;
 };
@@ -671,7 +671,7 @@ void RequestHandler::EnableRequests()
             pGlobal->mState = State::RequestsEnabled;
         }
         // hit the compiler over the head
-        ProcessDocumentsRequest aEmptyReq { boost::optional< OUString >() };
+        ProcessDocumentsRequest aEmptyReq { o3tl::optional< OUString >() };
         // trigger already queued requests
         RequestHandler::ExecuteCmdLineRequests(aEmptyReq, true);
     }
@@ -1224,7 +1224,7 @@ void PipeIpcThread::execute()
 
 static void AddToDispatchList(
     std::vector<DispatchWatcher::DispatchRequest>& rDispatchList,
-    boost::optional< OUString > const & cwdUrl,
+    o3tl::optional< OUString > const & cwdUrl,
     std::vector< OUString > const & aRequestList,
     DispatchWatcher::RequestType nType,
     const OUString& aParam,
@@ -1238,7 +1238,7 @@ static void AddToDispatchList(
 
 static void AddConversionsToDispatchList(
     std::vector<DispatchWatcher::DispatchRequest>& rDispatchList,
-    boost::optional< OUString > const & cwdUrl,
+    o3tl::optional< OUString > const & cwdUrl,
     std::vector< OUString > const & rRequestList,
     const OUString& rParam,
     const OUString& rPrinterName,

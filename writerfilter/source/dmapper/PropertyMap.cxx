@@ -251,11 +251,11 @@ void PropertyMap::Erase( PropertyIds eId )
     Invalidate();
 }
 
-boost::optional< PropertyMap::Property > PropertyMap::getProperty( PropertyIds eId ) const
+o3tl::optional< PropertyMap::Property > PropertyMap::getProperty( PropertyIds eId ) const
 {
     std::map< PropertyIds, PropValue >::const_iterator aIter = m_vMap.find( eId );
     if ( aIter == m_vMap.end() )
-        return boost::optional<Property>();
+        return o3tl::optional<Property>();
     else
         return std::make_pair( eId, aIter->second.getValue() );
 }
@@ -662,7 +662,7 @@ void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XP
     {
         if ( xSection.is() )
         {
-            boost::optional< PropertyMap::Property > pProp = getProperty( PROP_WRITING_MODE );
+            o3tl::optional< PropertyMap::Property > pProp = getProperty( PROP_WRITING_MODE );
             if ( pProp )
                 xSection->setPropertyValue( "WritingMode", pProp->second );
         }
@@ -1299,7 +1299,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if ( pLastContext )
         {
             bool bIsLandscape = false;
-            boost::optional< PropertyMap::Property > pProp = getProperty( PROP_IS_LANDSCAPE );
+            o3tl::optional< PropertyMap::Property > pProp = getProperty( PROP_IS_LANDSCAPE );
             if ( pProp )
                 pProp->second >>= bIsLandscape;
 
@@ -1446,7 +1446,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         //prepare text grid properties
         sal_Int32 nHeight = 1;
-        boost::optional< PropertyMap::Property > pProp = getProperty( PROP_HEIGHT );
+        o3tl::optional< PropertyMap::Property > pProp = getProperty( PROP_HEIGHT );
         if ( pProp )
             pProp->second >>= nHeight;
 
@@ -1487,7 +1487,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( "Standard" );
         if ( pEntry.get() )
         {
-            boost::optional< PropertyMap::Property > pPropHeight = pEntry->pProperties->getProperty( PROP_CHAR_HEIGHT_ASIAN );
+            o3tl::optional< PropertyMap::Property > pPropHeight = pEntry->pProperties->getProperty( PROP_CHAR_HEIGHT_ASIAN );
             if ( pPropHeight )
             {
                 double fHeight = 0;

@@ -13,7 +13,7 @@
 
 #include <sal/config.h>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <address.hxx>
 #include "anyrefdg.hxx"
@@ -63,7 +63,7 @@ private:
 
     template<class RNG>
 
-    void GenerateNumbers(RNG& randomGenerator, const char* pDistributionStringId, const boost::optional<sal_Int8> aDecimalPlaces);
+    void GenerateNumbers(RNG& randomGenerator, const char* pDistributionStringId, const o3tl::optional<sal_Int8> aDecimalPlaces);
 
     void SelectGeneratorAndGenerateNumbers();
 

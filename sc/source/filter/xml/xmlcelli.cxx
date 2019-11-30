@@ -144,8 +144,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
 
-    boost::optional<OUString> xStyleName;
-    boost::optional<OUString> xCurrencySymbol;
+    o3tl::optional<OUString> xStyleName;
+    o3tl::optional<OUString> xCurrencySymbol;
     if ( rAttrList.is() )
     {
         for (auto &it : *rAttrList)
@@ -1034,7 +1034,7 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
 }
 
 void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
-        const SCCOL nCurrentCol, const ::boost::optional< OUString >& pOUText )
+        const SCCOL nCurrentCol, const ::o3tl::optional< OUString >& pOUText )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
     bool bDoIncrement = true;
@@ -1173,7 +1173,7 @@ bool isEmptyOrNote( const ScDocument* pDoc, const ScAddress& rCurrentPos )
 }
 
 void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
-        const ::boost::optional< OUString >& pOUText, ScAddress& rCurrentPos )
+        const ::o3tl::optional< OUString >& pOUText, ScAddress& rCurrentPos )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
     ScMyTables& rTables = rXMLImport.GetTables();
@@ -1309,7 +1309,7 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
 
 void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
 {
-    ::boost::optional< OUString > pOUText;
+    ::o3tl::optional< OUString > pOUText;
 
     ScDocument* pDoc = rXMLImport.GetDocument();
     if( nCellType == util::NumberFormat::TEXT )

@@ -39,7 +39,7 @@
 #include <sal/macros.h>
 #include <sal/log.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 
 namespace dbtools
@@ -72,8 +72,8 @@ namespace dbtools
         Reference< XDatabaseMetaData >  xConnectionMetaData;
         ::connectivity::DriversConfig   aDriverConfig;
 
-        ::boost::optional< OUString >    sCachedIdentifierQuoteString;
-        ::boost::optional< OUString >    sCachedCatalogSeparator;
+        ::o3tl::optional< OUString >    sCachedIdentifierQuoteString;
+        ::o3tl::optional< OUString >    sCachedCatalogSeparator;
 
         DatabaseMetaData_Impl()
             :xConnection()
@@ -155,7 +155,7 @@ namespace dbtools
 
 
         const OUString& lcl_getConnectionStringSetting(
-            const DatabaseMetaData_Impl& _metaData, ::boost::optional< OUString >& _cachedSetting,
+            const DatabaseMetaData_Impl& _metaData, ::o3tl::optional< OUString >& _cachedSetting,
             OUString (SAL_CALL XDatabaseMetaData::*_getter)() )
         {
             if ( !_cachedSetting )

@@ -1391,7 +1391,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                     // shall the license be suppressed?
                     DescriptionInfoset info =
                         dp_misc::getDescriptionInfoset(url);
-                    ::boost::optional<dp_misc::SimpleLicenseAttributes>
+                    ::o3tl::optional<dp_misc::SimpleLicenseAttributes>
                           attr = info.getSimpleLicenseAttributes();
                     ExtensionProperties props(url, xCmdEnv, m_xComponentContext);
                     bool bNoLicense = false;

@@ -20,7 +20,7 @@
 #define INCLUDED_SW_INC_ANCHOREDDRAWOBJECT_HXX
 
 #include "anchoredobject.hxx"
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 namespace tools { class Rectangle; }
 
@@ -33,7 +33,7 @@ class SwAnchoredDrawObject final : public SwAnchoredObject
         bool mbValidPos;
 
         // rectangle, keeping the last object rectangle after the positioning
-        boost::optional<tools::Rectangle> maLastObjRect;
+        o3tl::optional<tools::Rectangle> maLastObjRect;
 
         // boolean, indicating that anchored drawing object hasn't been attached
         // to an anchor frame yet. Once, it is attached to an anchor frame the
@@ -120,7 +120,7 @@ class SwAnchoredDrawObject final : public SwAnchoredObject
         // accessors to the object area and its position
         virtual SwRect GetObjRect() const override;
 
-        boost::optional<tools::Rectangle> const & GetLastObjRect() const { return maLastObjRect;}
+        o3tl::optional<tools::Rectangle> const & GetLastObjRect() const { return maLastObjRect;}
         void SetLastObjRect( const tools::Rectangle& _rNewObjRect );
 
         /** adjust positioning and alignment attributes for new anchor frame
