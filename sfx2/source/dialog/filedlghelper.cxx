@@ -2670,8 +2670,11 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
     uno::Reference<task::XInteractionHandler2> xInteractionHandler = task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), rParent);
     // TODO: need a save way to distinguish MS filters from other filters
     // for now MS-filters are the only alien filters that support encryption
-    bool bMSType = !pCurrentFilter->IsOwnFormat();
-    ::comphelper::DocPasswordRequestType eType = bMSType ?
+    const bool bMSType = !pCurrentFilter->IsOwnFormat();
+    // For OOXML we can use the standard password ("unlimited" characters)
+    // request, otherwise the MS limited password request is needed.
+    const bool bOOXML = bMSType && lclSupportsOOXMLEncryption( pCurrentFilter->GetFilterName());
+    const ::comphelper::DocPasswordRequestType eType = bMSType && !bOOXML ?
         ::comphelper::DocPasswordRequestType::MS :
         ::comphelper::DocPasswordRequestType::Standard;
 
@@ -2708,8 +2711,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
             // TODO/LATER: The filters should show the password dialog themself in future
             if ( bMSType )
             {
-                // Check if filter supports OOXML encryption
-                if ( lclSupportsOOXMLEncryption( pCurrentFilter->GetFilterName() ) )
+                if (bOOXML)
                 {
                     ::comphelper::SequenceAsHashMap aHashData;
                     aHashData[ OUString( "OOXPassword"  ) ] <<= pPasswordRequest->getPassword();
