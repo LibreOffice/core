@@ -22,6 +22,30 @@
       "revId": "ecc56435094e23165eb30db4d7f6a7e6aab0b47e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_491a3f6f",
+        "filename": "solenv/gbuild/platform/com_MSC_defs.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-11-30T17:51:40Z",
+      "side": 0,
+      "message": "So I just spend two hours trying to understanding this comment. The documentation says defines aren\u0027t functions but multi-line variables[1], but I find the whole terminology lacking, in this regard. Using $(call ...), the whole block acts like a macro / function. By using $(0), you need to use $(eval $(call ...)) to assign the value to the defined variable name.\n\nBut what would be the point of using $(0) here? You would need an RC\u003d$(gb_filter_link_output) later. IMHO at that point it would be better to just add a parameter and do $(1)\u003d$${PIPESTATUS[0]}, like in your linked stackoverflow example.\n\nStackoverflow claims you would need $(eval ...) in this case, but the following Makefile works for me. I guess because it doesn\u0027t use additional make variables. And I first tried using eval, but that opens a whole can of worms of \"makefile\"-syntax interpretation, and that completely failed for me. This works for me:\n\nSHELL :\u003d /bin/bash\n\ndefine test\n | LANG\u003dC cat; $(1)\u003d$${PIPESTATUS[0]}\nendef\n\nall:\n        @false $(call test,RC); echo $$RC\n\nStill I see no point for this \"function\" at all, as it doesn\u0027t use ifeq and friends, where it would be needed.\n\nAnd even make verbose\u003dt still works correct AFAI can tell.\n\n[1] https://www.gnu.org/software/make/manual/html_node/Multi_002dLine.html#Multi_002dLine",
+      "parentUuid": "7f7f9b97_2e0d89a0",
+      "range": {
+        "startLine": 283,
+        "startChar": 61,
+        "endLine": 283,
+        "endChar": 83
+      },
+      "revId": "ecc56435094e23165eb30db4d7f6a7e6aab0b47e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
