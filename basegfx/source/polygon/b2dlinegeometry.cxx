@@ -46,10 +46,10 @@ namespace basegfx
             double fShift)
         {
             B2DPolyPolygon aRetval;
-            OSL_ENSURE(rCandidate.count() > 1, "createAreaGeometryForLineStartEnd: Line polygon has too less points (!)");
-            OSL_ENSURE(rArrow.count() > 0, "createAreaGeometryForLineStartEnd: Empty arrow utils::PolyPolygon (!)");
-            OSL_ENSURE(fWidth > 0.0, "createAreaGeometryForLineStartEnd: Width too small (!)");
-            OSL_ENSURE(fDockingPosition >= 0.0 && fDockingPosition <= 1.0,
+            assert((rCandidate.count() > 1) && "createAreaGeometryForLineStartEnd: Line polygon has too less points (!)");
+            assert((rArrow.count() > 0) && "createAreaGeometryForLineStartEnd: Empty arrow utils::PolyPolygon (!)");
+            assert((fWidth > 0.0) && "createAreaGeometryForLineStartEnd: Width too small (!)");
+            assert((fDockingPosition >= 0.0 && fDockingPosition <= 1.0) &&
                 "createAreaGeometryForLineStartEnd: fDockingPosition out of range [0.0 .. 1.0] (!)");
 
             if(fWidth < 0.0)
@@ -698,8 +698,8 @@ namespace basegfx
             double fMiterMinimumAngle,
             basegfx::triangulator::B2DTriangleVector* pTriangles)
         {
-            OSL_ENSURE(fHalfLineWidth > 0.0, "createAreaGeometryForJoin: LineWidth too small (!)");
-            OSL_ENSURE(eJoin != B2DLineJoin::NONE, "createAreaGeometryForJoin: B2DLineJoin::NONE not allowed (!)");
+            assert((fHalfLineWidth > 0.0) && "createAreaGeometryForJoin: LineWidth too small (!)");
+            assert((eJoin != B2DLineJoin::NONE) && "createAreaGeometryForJoin: B2DLineJoin::NONE not allowed (!)");
 
             // LineJoin from tangent rPerpendPrev to tangent rPerpendEdge in rPoint
             B2DPolygon aEdgePolygon;
