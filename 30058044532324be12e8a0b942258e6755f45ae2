@@ -45,6 +45,23 @@
       "revId": "30058044532324be12e8a0b942258e6755f45ae2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_8efb7d77",
+        "filename": "include/toolkit/helper/macros.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-11-30T08:59:04Z",
+      "side": 1,
+      "message": "hah! good spotting mike, we\u0027re static_casting here, so no UNO_QUERY involved",
+      "revId": "30058044532324be12e8a0b942258e6755f45ae2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
