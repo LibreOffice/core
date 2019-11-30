@@ -177,10 +177,11 @@ public:
                      const int y,
                      const int width,
                      const int height,
-                     const double dpiscale = 1.0)
+                     const double dpiscale = 1.0,
+                     const int viewId = -1)
     {
-        return mpDoc->pClass->paintWindowDPI(mpDoc, nWindowId, pBuffer,
-                                             x, y, width, height, dpiscale);
+        return mpDoc->pClass->paintWindowForView(mpDoc, nWindowId, pBuffer, x, y,
+                                                 width, height, dpiscale, viewId);
     }
 
     /**
