@@ -588,7 +588,7 @@ namespace emfio
             T nX, nY;
             *mpInputStream >> nX >> nY;
 
-            SAL_INFO("emfio", "\t\t\tPoint " << i << " of " << nPoints << ": " << nX << ", " << nY);
+            SAL_INFO("emfio", "\t\t\tPoint " << i << " of " << nPoints - 1 << ": " << nX << ", " << nY);
 
             if (!mpInputStream->good())
             {
