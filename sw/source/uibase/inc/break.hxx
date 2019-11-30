@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_BREAK_HXX
 
 #include <vcl/weld.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 class SwWrtShell;
 
@@ -39,7 +39,7 @@ class SwBreakDlg : public weld::GenericDialogController
     SwWrtShell     &rSh;
     OUString        m_aTemplate;
     sal_uInt16      nKind;
-    ::boost::optional<sal_uInt16>      oPgNum;
+    ::o3tl::optional<sal_uInt16>      oPgNum;
 
     bool const            bHtmlMode;
 
@@ -56,7 +56,7 @@ public:
     virtual short run() override;
     const OUString& GetTemplateName() const { return m_aTemplate; }
     sal_uInt16 GetKind() const { return nKind; }
-    const ::boost::optional<sal_uInt16>&  GetPageNumber() const { return oPgNum; }
+    const ::o3tl::optional<sal_uInt16>&  GetPageNumber() const { return oPgNum; }
 };
 
 #endif

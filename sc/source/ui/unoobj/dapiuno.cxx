@@ -873,7 +873,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
             }
             else if ( aPropertyName == SC_UNO_DP_GRANDTOTAL_NAME )
             {
-                const boost::optional<OUString> & pGrandTotalName = aNewData.GetGrandTotalName();
+                const o3tl::optional<OUString> & pGrandTotalName = aNewData.GetGrandTotalName();
                 if (pGrandTotalName)
                     aRet <<= *pGrandTotalName;      // same behavior as in ScDPSource
             }
@@ -1672,7 +1672,7 @@ OUString SAL_CALL ScDataPilotFieldObj::getName()
             aName = SC_DATALAYOUT_NAME;
         else
         {
-            const boost::optional<OUString> & pLayoutName = pDim->GetLayoutName();
+            const o3tl::optional<OUString> & pLayoutName = pDim->GetLayoutName();
             if (pLayoutName)
                 aName = *pLayoutName;
             else

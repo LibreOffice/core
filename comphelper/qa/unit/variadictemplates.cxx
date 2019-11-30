@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <sal/types.h>
 #include <comphelper/unwrapargs.hxx>
 #include <cppunit/TestAssert.h>
@@ -56,7 +56,7 @@ void extract(
 template <typename T>
 void extract(
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> const& seq,
-    sal_Int32 nArg, ::boost::optional<T> & v,
+    sal_Int32 nArg, ::o3tl::optional<T> & v,
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
     const& xErrorContext )
 {
@@ -104,22 +104,22 @@ void VariadicTemplatesTest::testUnwrapArgs() {
     ::com::sun::star::uno::Any tmp9(
         ::com::sun::star::uno::makeAny( tmp4 )
         );
-    ::boost::optional< ::com::sun::star::uno::Any > tmp10(
+    ::o3tl::optional< ::com::sun::star::uno::Any > tmp10(
         ::com::sun::star::uno::makeAny( tmp5 )
         );
-    ::boost::optional< ::com::sun::star::uno::Any > tmp11(
+    ::o3tl::optional< ::com::sun::star::uno::Any > tmp11(
         ::com::sun::star::uno::makeAny( tmp1 )
         );
 
     // test equality with the baseline and template specialization with
-    // boost::optional< T >
+    // o3tl::optional< T >
     try {
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > seq1(
             static_cast< sal_uInt32 >( 5 ) );
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > seq2(
             static_cast< sal_uInt32 >( 5 ) );
 
-        // tmp11 should be ignored as it is ::boost::optional< T >
+        // tmp11 should be ignored as it is ::o3tl::optional< T >
         ::comphelper::unwrapArgs( seq1, tmp6, tmp7, tmp8, tmp9, tmp10, tmp11 );
         unwrapArgsBaseline( seq2, tmp6, tmp7, tmp8, tmp9, tmp10 );
         ::com::sun::star::uno::Any* p1 = seq1.getArray();

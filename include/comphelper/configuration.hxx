@@ -12,7 +12,7 @@
 
 #include <sal/config.h>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
@@ -158,18 +158,18 @@ private:
 };
 
 /// @internal
-template< typename T > struct Convert< boost::optional< T > >
+template< typename T > struct Convert< o3tl::optional< T > >
 {
-    static css::uno::Any toAny(boost::optional< T > const & value) {
+    static css::uno::Any toAny(o3tl::optional< T > const & value) {
         return value
             ? css::uno::makeAny(*value)
             : css::uno::Any();
     }
 
-    static boost::optional< T > fromAny(css::uno::Any const & value)
+    static o3tl::optional< T > fromAny(css::uno::Any const & value)
     {
         return value.hasValue()
-            ? boost::optional< T >(value.get< T >()) : boost::optional< T >();
+            ? o3tl::optional< T >(value.get< T >()) : o3tl::optional< T >();
     }
 
 private:
@@ -200,7 +200,7 @@ template< typename T, typename U > struct ConfigurationProperty
 
     /// Get the value of the given (non-localized) configuration property.
     ///
-    /// For nillable properties, U is of type boost::optional<U'>.
+    /// For nillable properties, U is of type o3tl::optional<U'>.
     static U get(
         css::uno::Reference< css::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
@@ -216,7 +216,7 @@ template< typename T, typename U > struct ConfigurationProperty
     /// Set the value of the given (non-localized) configuration property, via a
     /// given changes batch.
     ///
-    /// For nillable properties, U is of type boost::optional<U'>.
+    /// For nillable properties, U is of type o3tl::optional<U'>.
     static void set(
         U const & value,
         std::shared_ptr< ConfigurationChanges > const & batch)
@@ -244,7 +244,7 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty
     /// locale currently set at the
     /// com.sun.star.configuration.theDefaultProvider.
     ///
-    /// For nillable properties, U is of type boost::optional<U'>.
+    /// For nillable properties, U is of type o3tl::optional<U'>.
     static U get(css::uno::Reference< css::uno::XComponentContext > const & context)
     {
         // Folding this into one statement causes a bogus error at least with
@@ -260,7 +260,7 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty
     /// com.sun.star.configuration.theDefaultProvider, via a given changes
     /// batch.
     ///
-    /// For nillable properties, U is of type boost::optional<U'>.
+    /// For nillable properties, U is of type o3tl::optional<U'>.
     static void set(
         U const & value,
         std::shared_ptr< ConfigurationChanges > const & batch)

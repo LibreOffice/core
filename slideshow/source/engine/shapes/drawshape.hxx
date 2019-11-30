@@ -29,7 +29,7 @@
 #include "viewshape.hxx"
 #include <hyperlinkarea.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <set>
 #include <vector>
 
@@ -292,7 +292,7 @@ namespace slideshow
             mutable int                                                             mnCurrMtfLoadFlags;
 
             /// Contains the current shape bounds, in unit rect space
-            mutable ::boost::optional<basegfx::B2DRectangle>                        maCurrentShapeUnitBounds;
+            mutable ::o3tl::optional<basegfx::B2DRectangle>                        maCurrentShapeUnitBounds;
 
             // The attributes of this Shape
             const double                                                            mnPriority;

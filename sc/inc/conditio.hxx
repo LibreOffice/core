@@ -37,7 +37,7 @@
 #include <tools/date.hxx>
 #include <tools/link.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <map>
 #include <memory>
 #include <set>
@@ -216,7 +216,7 @@ struct ScCondFormatData
     ScCondFormatData(ScCondFormatData&&);
     ~ScCondFormatData();
 
-    boost::optional<Color> mxColorScale;
+    o3tl::optional<Color> mxColorScale;
     std::unique_ptr<ScDataBarInfo> pDataBar;
     std::unique_ptr<ScIconSetInfo> pIconSet;
     OUString aStyleName;

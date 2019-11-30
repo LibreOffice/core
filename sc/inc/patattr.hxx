@@ -51,7 +51,7 @@ enum ScAutoFontColorMode
 
 class SC_DLLPUBLIC ScPatternAttr final : public SfxSetItem
 {
-    boost::optional<OUString>  pName;
+    o3tl::optional<OUString>  pName;
     ScStyleSheet*              pStyle;
     sal_uInt64                 mnKey;
 public:

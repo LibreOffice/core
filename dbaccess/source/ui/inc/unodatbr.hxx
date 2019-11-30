@@ -108,7 +108,7 @@ namespace dbaui
         bool                m_bShowMenu;            // if sal_True the menu should be visible otherwise not
         bool                m_bInSuspend;
         bool                m_bEnableBrowser;
-        ::boost::optional< bool >
+        ::o3tl::optional< bool >
                                 m_aDocScriptSupport;    // relevant if and only if we are associated with exactly one DBDoc
 
         virtual OUString getPrivateTitle( ) const override;

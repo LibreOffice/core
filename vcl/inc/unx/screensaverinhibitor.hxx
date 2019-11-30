@@ -16,24 +16,24 @@
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 class VCL_PLUGIN_PUBLIC ScreenSaverInhibitor
 {
 public:
     void inhibit( bool bInhibit, const OUString& sReason,
-                  bool bIsX11, const boost::optional<unsigned int>& xid, boost::optional<Display*> pDisplay );
+                  bool bIsX11, const o3tl::optional<unsigned int>& xid, o3tl::optional<Display*> pDisplay );
 
 private:
     // These are all used as guint, however this header may be included
     // in kde/tde/etc backends, where we would ideally avoid having
     // any glib dependencies, hence the direct use of unsigned int.
-    boost::optional<unsigned int> mnFDOCookie; // FDO ScreenSaver Inhibit
-    boost::optional<unsigned int> mnFDOPMCookie; // FDO PowerManagement Inhibit
-    boost::optional<unsigned int> mnGSMCookie;
-    boost::optional<unsigned int> mnMSMCookie;
+    o3tl::optional<unsigned int> mnFDOCookie; // FDO ScreenSaver Inhibit
+    o3tl::optional<unsigned int> mnFDOPMCookie; // FDO PowerManagement Inhibit
+    o3tl::optional<unsigned int> mnGSMCookie;
+    o3tl::optional<unsigned int> mnMSMCookie;
 
-    boost::optional<int> mnXScreenSaverTimeout;
+    o3tl::optional<int> mnXScreenSaverTimeout;
 
 #if !defined(__sun) && !defined(AIX)
     BOOL mbDPMSWasEnabled;

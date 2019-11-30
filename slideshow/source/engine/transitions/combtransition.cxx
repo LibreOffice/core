@@ -68,7 +68,7 @@ basegfx::B2DPolyPolygon createClipPolygon(
 }
 
 CombTransition::CombTransition(
-    boost::optional<SlideSharedPtr> const & leavingSlide,
+    o3tl::optional<SlideSharedPtr> const & leavingSlide,
     const SlideSharedPtr&                   pEnteringSlide,
     const SoundPlayerSharedPtr&             pSoundPlayer,
     const UnoViewContainer&                 rViewContainer,

@@ -671,7 +671,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 {
     const SfxPoolItem* pItem = nullptr;
     OUString aName;
-    ::boost::optional<sal_uInt16> oNumOffset;
+    ::o3tl::optional<sal_uInt16> oNumOffset;
     bool bPut = true;
     switch( rCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
     {

@@ -373,14 +373,14 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
     sal_Int16 eWritingMode = text::WritingMode2::LR_TB;
     // Groupshape support
-    boost::optional<sal_Int32> oGroupLeft;
-    boost::optional<sal_Int32> oGroupTop;
-    boost::optional<sal_Int32> oGroupRight;
-    boost::optional<sal_Int32> oGroupBottom;
-    boost::optional<sal_Int32> oRelLeft;
-    boost::optional<sal_Int32> oRelTop;
-    boost::optional<sal_Int32> oRelRight;
-    boost::optional<sal_Int32> oRelBottom;
+    o3tl::optional<sal_Int32> oGroupLeft;
+    o3tl::optional<sal_Int32> oGroupTop;
+    o3tl::optional<sal_Int32> oGroupRight;
+    o3tl::optional<sal_Int32> oGroupBottom;
+    o3tl::optional<sal_Int32> oRelLeft;
+    o3tl::optional<sal_Int32> oRelTop;
+    o3tl::optional<sal_Int32> oRelRight;
+    o3tl::optional<sal_Int32> oRelBottom;
 
     // Importing these are not trivial, let the VML import do the hard work.
     oox::vml::FillModel aFillModel; // Gradient.
@@ -388,8 +388,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
     bool bOpaque = true;
 
-    boost::optional<sal_Int16> oRelativeWidth;
-    boost::optional<sal_Int16> oRelativeHeight;
+    o3tl::optional<sal_Int16> oRelativeWidth;
+    o3tl::optional<sal_Int16> oRelativeHeight;
     sal_Int16 nRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
     sal_Int16 nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
     boost::logic::tribool obRelFlipV(boost::logic::indeterminate);
@@ -727,7 +727,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             sal_Int16 nPercentage = rtl::math::round(rProperty.second.toDouble() / 10);
             if (nPercentage)
             {
-                boost::optional<sal_Int16>& rPercentage
+                o3tl::optional<sal_Int16>& rPercentage
                     = rProperty.first == "pctHoriz" ? oRelativeWidth : oRelativeHeight;
                 rPercentage = nPercentage;
             }

@@ -27,7 +27,7 @@
 #include <rtl/textenc.h>
 #include <editeng/svxenum.hxx>
 #include <tools/solar.h>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <swtypes.hxx>
@@ -339,7 +339,7 @@ public:
 
     /// The style of the page numbers.
     ///
-    virtual void SectionPageNumbering( sal_uInt16 nNumType, const ::boost::optional<sal_uInt16>& oPageRestartNumber ) = 0;
+    virtual void SectionPageNumbering( sal_uInt16 nNumType, const ::o3tl::optional<sal_uInt16>& oPageRestartNumber ) = 0;
 
     /// The type of breaking.
     virtual void SectionType( sal_uInt8 nBreakCode ) = 0;

@@ -34,7 +34,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 using namespace ::std;
 using namespace ::utl;
@@ -78,7 +78,7 @@ public:
 
     void AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const boost::optional<OUString>& sThumbnail);
+        const o3tl::optional<OUString>& sThumbnail);
 
     void DeleteItem(EHistoryType eHistory, const OUString& sURL);
 
@@ -317,7 +317,7 @@ Sequence< Sequence<PropertyValue> > SvtHistoryOptions_Impl::GetList(EHistoryType
 
 void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const boost::optional<OUString>& sThumbnail)
+        const o3tl::optional<OUString>& sThumbnail)
 {
     uno::Reference<container::XNameAccess> xListAccess(GetListAccess(eHistory));
     if (!xListAccess.is())
@@ -551,7 +551,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType e
 
 void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const boost::optional<OUString>& sThumbnail)
+        const o3tl::optional<OUString>& sThumbnail)
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 

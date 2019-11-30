@@ -26,7 +26,7 @@
 #include <tools/svborder.hxx>
 #include <vcl/window.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 struct SfxViewFrame_Impl
 {

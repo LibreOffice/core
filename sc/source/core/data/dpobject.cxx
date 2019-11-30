@@ -1314,7 +1314,7 @@ public:
     bool operator() (const ScDPSaveDimension* pDim) const
     {
         // Layout name takes precedence.
-        const boost::optional<OUString> & pLayoutName = pDim->GetLayoutName();
+        const o3tl::optional<OUString> & pLayoutName = pDim->GetLayoutName();
         if (pLayoutName && ScGlobal::pCharClass->uppercase(*pLayoutName) == maName)
             return true;
 

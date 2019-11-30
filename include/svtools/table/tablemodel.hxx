@@ -30,7 +30,7 @@
 
 #include <sal/types.h>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <memory>
 #include <vector>
 #include <o3tl/typed_flags_set.hxx>
@@ -365,55 +365,55 @@ namespace svt { namespace table
 
             If this value is not set, a default color from the style settings will be used.
         */
-        virtual ::boost::optional< ::Color >    getLineColor() const = 0;
+        virtual ::o3tl::optional< ::Color >    getLineColor() const = 0;
 
         /** returns the color to be used for rendering the header background.
 
             If this value is not set, a default color from the style settings will be used.
         */
-        virtual ::boost::optional< ::Color >    getHeaderBackgroundColor() const = 0;
+        virtual ::o3tl::optional< ::Color >    getHeaderBackgroundColor() const = 0;
 
         /** returns the color to be used for rendering the header text.
 
             If this value is not set, a default color from the style settings will be used.
         */
-        virtual ::boost::optional< ::Color >    getHeaderTextColor() const = 0;
+        virtual ::o3tl::optional< ::Color >    getHeaderTextColor() const = 0;
 
         /** returns the color to be used for the background of selected cells, when the control has the focus
 
             If this value is not set, a default color from the style settings will be used.
         */
-        virtual ::boost::optional< ::Color >    getActiveSelectionBackColor() const = 0;
+        virtual ::o3tl::optional< ::Color >    getActiveSelectionBackColor() const = 0;
 
         /** returns the color to be used for the background of selected cells, when the control does not have the focus
 
             If this value is not set, a default color from the style settings will be used.
         */
-        virtual ::boost::optional< ::Color >    getInactiveSelectionBackColor() const = 0;
+        virtual ::o3tl::optional< ::Color >    getInactiveSelectionBackColor() const = 0;
 
         /** returns the color to be used for the text of selected cells, when the control has the focus
 
             If this value is not set, a default color from the style settings will be used.
         */
-        virtual ::boost::optional< ::Color >    getActiveSelectionTextColor() const = 0;
+        virtual ::o3tl::optional< ::Color >    getActiveSelectionTextColor() const = 0;
 
         /** returns the color to be used for the text of selected cells, when the control does not have the focus
 
             If this value is not set, a default color from the style settings will be used.
         */
-        virtual ::boost::optional< ::Color >    getInactiveSelectionTextColor() const = 0;
+        virtual ::o3tl::optional< ::Color >    getInactiveSelectionTextColor() const = 0;
 
         /** returns the color to be used for rendering cell texts.
 
             If this value is not set, a default color from the style settings will be used.
         */
-        virtual ::boost::optional< ::Color >    getTextColor() const = 0;
+        virtual ::o3tl::optional< ::Color >    getTextColor() const = 0;
 
         /** returns the color to be used for text lines (underline, strikethrough) when rendering cell text.
 
             If this value is not set, a default color from the style settings will be used.
         */
-        virtual ::boost::optional< ::Color >    getTextLineColor() const = 0;
+        virtual ::o3tl::optional< ::Color >    getTextLineColor() const = 0;
 
         /** returns the colors to be used for the row backgrounds.
 
@@ -426,7 +426,7 @@ namespace svt { namespace table
             If value is a non-empty sequence, then rows will have the background colors as specified in the sequence,
             in alternating order.
         */
-        virtual ::boost::optional< ::std::vector< ::Color > >
+        virtual ::o3tl::optional< ::std::vector< ::Color > >
                                                 getRowBackgroundColors() const = 0;
 
         /** determines the vertical alignment of content within a cell

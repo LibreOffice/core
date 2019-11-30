@@ -199,7 +199,7 @@ struct ImplStyleData
 
     BitmapEx                        maPersonaHeaderBitmap; ///< Cache the header bitmap.
     BitmapEx                        maPersonaFooterBitmap; ///< Cache the footer bitmap.
-    boost::optional<Color>          maPersonaMenuBarTextColor; ///< Cache the menubar color.
+    o3tl::optional<Color>          maPersonaMenuBarTextColor; ///< Cache the menubar color.
 };
 
 struct ImplMiscData
@@ -2098,7 +2098,7 @@ enum WhichPersona { PERSONA_HEADER, PERSONA_FOOTER };
 }
 
 /** Update the setting of the Persona header / footer in ImplStyleData */
-static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFooter, BitmapEx& rHeaderFooterBitmap, boost::optional<Color>& rMenuBarTextColor )
+static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFooter, BitmapEx& rHeaderFooterBitmap, o3tl::optional<Color>& rMenuBarTextColor )
 {
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     if ( !xContext.is() )
@@ -2191,7 +2191,7 @@ BitmapEx const & StyleSettings::GetPersonaFooter() const
     return mxData->maPersonaFooterBitmap;
 }
 
-const boost::optional<Color>& StyleSettings::GetPersonaMenuBarTextColor() const
+const o3tl::optional<Color>& StyleSettings::GetPersonaMenuBarTextColor() const
 {
     GetPersonaHeader();
     return mxData->maPersonaMenuBarTextColor;

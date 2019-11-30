@@ -78,7 +78,7 @@
     <xsl:if test=".//prop or .//set">
       <xsl:if
           test=".//prop[count(@oor:nillable) = 0 or @oor:nillable = 'true']">
-        <xsl:text>#include "boost/optional.hpp"&#xA;</xsl:text>
+        <xsl:text>#include "o3tl/optional.hxx"&#xA;</xsl:text>
       </xsl:if>
       <xsl:if test=".//prop/@oor:type = 'oor:any'">
         <xsl:text>#include "com/sun/star/uno/Any.hxx"&#xA;</xsl:text>
@@ -198,7 +198,7 @@
     <xsl:value-of select="$name"/>
     <xsl:text>, </xsl:text>
     <xsl:if test="not(@oor:nillable = 'false')">
-      <xsl:text>boost::optional&lt;</xsl:text>
+      <xsl:text>o3tl::optional&lt;</xsl:text>
     </xsl:if>
     <xsl:choose>
       <xsl:when test="@oor:type='oor:any'">

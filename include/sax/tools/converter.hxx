@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #include <sax/saxdllapi.h>
 
@@ -196,7 +196,7 @@ public:
                     css::util::Date * pDate,
                     css::util::DateTime & rDateTime,
                     bool & rbDateTime,
-                    boost::optional<sal_Int16> * pTimeZoneOffset,
+                    o3tl::optional<sal_Int16> * pTimeZoneOffset,
                     const OUString & rString );
 
     /** gets the position of the first comma after npos in the string

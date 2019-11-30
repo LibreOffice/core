@@ -19,7 +19,7 @@
 
 #include <sheetevents.hxx>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 OUString ScSheetEvents::GetEventName(ScSheetEventId nEvent)
 {
@@ -88,7 +88,7 @@ ScSheetEvents& ScSheetEvents::operator=(const ScSheetEvents& rOther)
         Clear();
         if (rOther.mpScriptNames)
         {
-            mpScriptNames.reset( new boost::optional<OUString>[COUNT] );
+            mpScriptNames.reset( new o3tl::optional<OUString>[COUNT] );
             for (sal_Int32 nEvent=0; nEvent<COUNT; ++nEvent)
                 mpScriptNames[nEvent] = rOther.mpScriptNames[nEvent];
         }
@@ -100,7 +100,7 @@ const OUString* ScSheetEvents::GetScript(ScSheetEventId nEvent) const
 {
     if (mpScriptNames)
     {
-        boost::optional<OUString> const & r = mpScriptNames[static_cast<int>(nEvent)];
+        o3tl::optional<OUString> const & r = mpScriptNames[static_cast<int>(nEvent)];
         if (r)
             return &*r;
     }
@@ -112,7 +112,7 @@ void ScSheetEvents::SetScript(ScSheetEventId eEvent, const OUString* pNew)
     int nEvent = static_cast<int>(eEvent);
     if (!mpScriptNames)
     {
-        mpScriptNames.reset( new boost::optional<OUString>[COUNT] );
+        mpScriptNames.reset( new o3tl::optional<OUString>[COUNT] );
     }
     if (pNew)
         mpScriptNames[nEvent] = *pNew;

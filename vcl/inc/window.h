@@ -31,7 +31,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <list>
 #include <memory>
 #include <vector>
@@ -97,20 +97,20 @@ bool ImplWindowFrameProc( vcl::Window* pInst, SalEvent nEvent, const void* pEven
 
 struct ImplWinData
 {
-    boost::optional<OUString>
+    o3tl::optional<OUString>
                         mpExtOldText;
     std::unique_ptr<ExtTextInputAttr[]>
                         mpExtOldAttrAry;
-    boost::optional<tools::Rectangle>
+    o3tl::optional<tools::Rectangle>
                         mpCursorRect;
     long                mnCursorExtWidth;
     bool                mbVertical;
     std::unique_ptr<tools::Rectangle[]>
                         mpCompositionCharRects;
     long                mnCompositionCharRects;
-    boost::optional<tools::Rectangle>
+    o3tl::optional<tools::Rectangle>
                         mpFocusRect;
-    boost::optional<tools::Rectangle>
+    o3tl::optional<tools::Rectangle>
                         mpTrackRect;
     ShowTrackFlags      mnTrackFlags;
     sal_uInt16          mnIsTopWindow;
@@ -183,9 +183,9 @@ struct ImplFrameData
 struct ImplAccessibleInfos
 {
     sal_uInt16          nAccessibleRole;
-    boost::optional<OUString>
+    o3tl::optional<OUString>
                         pAccessibleName;
-    boost::optional<OUString>
+    o3tl::optional<OUString>
                         pAccessibleDescription;
     VclPtr<vcl::Window> pLabeledByWindow;
     VclPtr<vcl::Window> pLabelForWindow;

@@ -123,7 +123,7 @@ namespace dbaui
     struct DBSubComponentController_Impl
     {
     private:
-        ::boost::optional< bool >       m_aDocScriptSupport;
+        ::o3tl::optional< bool >       m_aDocScriptSupport;
 
     public:
         ::dbtools::SQLExceptionInfo     m_aCurrentError;
@@ -166,7 +166,7 @@ namespace dbaui
         {
             OSL_PRECOND( !m_aDocScriptSupport,
                 "DBSubComponentController_Impl::setDocumentScriptSupport: already initialized!" );
-            m_aDocScriptSupport = ::boost::optional< bool >( _bSupport );
+            m_aDocScriptSupport = ::o3tl::optional< bool >( _bSupport );
         }
     };
 

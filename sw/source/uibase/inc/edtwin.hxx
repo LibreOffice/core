@@ -92,7 +92,7 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
     std::unique_ptr<SdrDropMarkerOverlay> m_pUserMarker;
     SdrObject               *m_pUserMarkerObj;
     std::unique_ptr<SwShadowCursor, o3tl::default_delete<SwShadowCursor>> m_pShadCursor;
-    boost::optional<Point>                m_xRowColumnSelectionStart; // save position where table row/column selection has been started
+    o3tl::optional<Point>                m_xRowColumnSelectionStart; // save position where table row/column selection has been started
 
     SwView         &m_rView;
 

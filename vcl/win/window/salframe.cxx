@@ -2648,7 +2648,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetUseFlatBorders( false );
     aStyleSettings.SetUseFlatMenus( false );
     aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
-    if ( boost::optional<Color> aColor = aStyleSettings.GetPersonaMenuBarTextColor() )
+    if ( o3tl::optional<Color> aColor = aStyleSettings.GetPersonaMenuBarTextColor() )
     {
         aStyleSettings.SetMenuBarTextColor( *aColor );
         aStyleSettings.SetMenuBarRolloverTextColor( *aColor );

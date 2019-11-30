@@ -60,7 +60,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
         {
             RequestType aRequestType;
             OUString    aURL;
-            boost::optional< OUString > aCwdUrl;
+            o3tl::optional< OUString > aCwdUrl;
             OUString    aPrinterName;  // also conversion params
             OUString    aPreselectedFactory;
         };

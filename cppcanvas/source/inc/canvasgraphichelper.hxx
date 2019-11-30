@@ -26,7 +26,7 @@
 #include <cppcanvas/canvasgraphic.hxx>
 #include <cppcanvas/canvas.hxx>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
@@ -62,7 +62,7 @@ namespace cppcanvas
         private:
             mutable css::rendering::RenderState                                   maRenderState;
 
-            boost::optional<basegfx::B2DPolyPolygon>                              maClipPolyPolygon;
+            o3tl::optional<basegfx::B2DPolyPolygon>                              maClipPolyPolygon;
             CanvasSharedPtr                                                       mpCanvas;
         };
 

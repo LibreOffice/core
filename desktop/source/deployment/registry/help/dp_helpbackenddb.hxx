@@ -21,7 +21,7 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_HELP_DP_HELPBACKENDDB_HXX
 
 #include <rtl/ustring.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <dp_backenddb.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -64,7 +64,7 @@ public:
 
     void addEntry(OUString const & url, Data const & data);
 
-    ::boost::optional<Data> getEntry(OUString const & url);
+    ::o3tl::optional<Data> getEntry(OUString const & url);
     //must also return the data urls for entries with @active="false". That is,
     //those are currently revoked.
     std::vector< OUString> getAllDataUrls();

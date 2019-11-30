@@ -19,7 +19,7 @@
 
 #include <map>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 namespace {
 

@@ -112,10 +112,10 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, const PropertyMapP
         if ( nType == pTypesToFix[i] )
         {
             PropertyIds nChecked = pPropsToCheck[i];
-            boost::optional<PropertyMap::Property> pChecked = pProps->getProperty(nChecked);
+            o3tl::optional<PropertyMap::Property> pChecked = pProps->getProperty(nChecked);
 
             PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
-            boost::optional<PropertyMap::Property> pInside = pProps->getProperty(nInsideProp);
+            o3tl::optional<PropertyMap::Property> pInside = pProps->getProperty(nInsideProp);
 
             if ( pChecked && pProps )
             {
@@ -200,7 +200,7 @@ static void lcl_mergeProps( const PropertyMapPtr& pToFill, const PropertyMapPtr&
     for ( unsigned i = 0 ; i != SAL_N_ELEMENTS(pPropsToCheck); i++ )
     {
         PropertyIds nId = pPropsToCheck[i];
-        boost::optional<PropertyMap::Property> pProp = pToAdd->getProperty(nId);
+        o3tl::optional<PropertyMap::Property> pProp = pToAdd->getProperty(nId);
 
         if ( pProp )
         {

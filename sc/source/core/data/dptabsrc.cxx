@@ -110,7 +110,7 @@ ScDPSource::~ScDPSource()
     pResData.reset();
 }
 
-const boost::optional<OUString> & ScDPSource::GetGrandTotalName() const
+const o3tl::optional<OUString> & ScDPSource::GetGrandTotalName() const
 {
     return mpGrandTotalName;
 }
@@ -1288,12 +1288,12 @@ ScDPHierarchies* ScDPDimension::GetHierarchiesObject()
     return mxHierarchies.get();
 }
 
-const boost::optional<OUString> & ScDPDimension::GetLayoutName() const
+const o3tl::optional<OUString> & ScDPDimension::GetLayoutName() const
 {
     return mpLayoutName;
 }
 
-const boost::optional<OUString> & ScDPDimension::GetSubtotalName() const
+const o3tl::optional<OUString> & ScDPDimension::GetSubtotalName() const
 {
     return mpSubtotalName;
 }
@@ -2151,7 +2151,7 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
         if (!pDim)
             return aRet;
 
-        const boost::optional<OUString> & pLayoutName = pDim->GetLayoutName();
+        const o3tl::optional<OUString> & pLayoutName = pDim->GetLayoutName();
         if (!pLayoutName)
             return aRet;
 
@@ -2511,7 +2511,7 @@ ScDPItemData ScDPMember::FillItemData() const
     return (pData ? *pData : ScDPItemData());
 }
 
-const boost::optional<OUString> & ScDPMember::GetLayoutName() const
+const o3tl::optional<OUString> & ScDPMember::GetLayoutName() const
 {
     return mpLayoutName;
 }

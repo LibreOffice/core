@@ -159,7 +159,7 @@ public:
     virtual void        QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel ) = 0;
     virtual void        QuickInsertLineBreak( const ESelection& rSel ) = 0;
 
-    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor ) = 0;
+    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, o3tl::optional<Color>& rpTxtColor, o3tl::optional<Color>& rpFldColor ) = 0;
     virtual void        FieldClicked( const SvxFieldItem& rField ) = 0;
 
     virtual SfxItemPool* GetPool() const = 0;

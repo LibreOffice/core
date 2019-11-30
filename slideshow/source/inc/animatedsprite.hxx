@@ -29,7 +29,7 @@
 
 #include "viewlayer.hxx"
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include <memory>
 
 
@@ -148,8 +148,8 @@ namespace slideshow
 
             double const                                                mnSpritePrio;
             double                                                      mnAlpha;
-            ::boost::optional< ::basegfx::B2DPoint >                    maPosPixel;
-            ::boost::optional< ::basegfx::B2DPolyPolygon >              maClip;
+            ::o3tl::optional< ::basegfx::B2DPoint >                    maPosPixel;
+            ::o3tl::optional< ::basegfx::B2DPolyPolygon >              maClip;
 
             bool                                                        mbSpriteVisible;
         };

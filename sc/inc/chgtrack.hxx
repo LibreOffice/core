@@ -32,7 +32,7 @@
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <unotools/options.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include "global.hxx"
 #include "bigrange.hxx"
 #include "scdllapi.h"
@@ -849,7 +849,7 @@ class SAL_DLLPUBLIC_RTTI ScChangeTrack : public utl::ConfigurationListener
     ScChangeActionLinkEntry*    pLinkInsertRow;
     ScChangeActionLinkEntry*    pLinkInsertTab;
     ScChangeActionLinkEntry*    pLinkMove;
-    boost::optional<ScChangeTrackMsgInfo> xBlockModifyMsg;
+    o3tl::optional<ScChangeTrackMsgInfo> xBlockModifyMsg;
     ScDocument*             pDoc;
     sal_uLong               nActionMax;
     sal_uLong               nGeneratedMin;

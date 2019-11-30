@@ -550,7 +550,7 @@ basegfx::B2DPolyPolygon SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol)
 
 bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
     bool bEdit,
-    boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor, OUString& rRet) const
+    o3tl::optional<Color>& rpTxtColor, o3tl::optional<Color>& rpFldColor, OUString& rRet) const
 {
     const SvxFieldData* pField=rField.GetField();
     const SdrMeasureField* pMeasureField=dynamic_cast<const SdrMeasureField*>( pField );

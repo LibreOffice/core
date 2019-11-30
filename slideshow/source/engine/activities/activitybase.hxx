@@ -126,7 +126,7 @@ private:
     AnimatableShapeSharedPtr        mpShape; // only to pass on to animation
     ShapeAttributeLayerSharedPtr    mpAttributeLayer; // only to pass on to anim
 
-    ::boost::optional<double> const maRepeats;
+    ::o3tl::optional<double> const maRepeats;
     const double                    mnAccelerationFraction;
     const double                    mnDecelerationFraction;
 

@@ -36,7 +36,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 #include "license_dialog.hxx"
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
@@ -143,8 +143,8 @@ class ServiceImpl
                                      task::XJobExecutor>
 {
     Reference<XComponentContext> const m_xComponentContext;
-    boost::optional< Reference<awt::XWindow> > /* const */ m_parent;
-    boost::optional<OUString> m_extensionURL;
+    o3tl::optional< Reference<awt::XWindow> > /* const */ m_parent;
+    o3tl::optional<OUString> m_extensionURL;
     OUString m_initialTitle;
     bool m_bShowUpdateOnly;
 
@@ -169,8 +169,8 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
       m_bShowUpdateOnly( false )
 {
     /* if true then this service is running in a unopkg process and not in an office process */
-    boost::optional<sal_Bool> unopkg;
-    boost::optional<OUString> view;
+    o3tl::optional<sal_Bool> unopkg;
+    o3tl::optional<OUString> view;
     try {
         comphelper::unwrapArgs( args, m_parent, view, unopkg );
         return;

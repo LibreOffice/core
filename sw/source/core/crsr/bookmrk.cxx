@@ -55,7 +55,7 @@ namespace sw { namespace mark
         sal_uLong const nStartNode(rStartPos.nNode.GetIndex());
         sal_uLong const nEndNode(rEndPos.nNode.GetIndex());
         int nFields(0);
-        boost::optional<SwPosition> ret;
+        o3tl::optional<SwPosition> ret;
         for (sal_uLong n = nEndNode; nStartNode <= n; --n)
         {
             SwNode *const pNode(rNodes[n]);
