@@ -78,7 +78,7 @@ namespace dxcanvas
             aName[0] = "MaxTextureSize";
             aProps = GetProperties( aName );
             if( aProps.getLength() > 0 )
-                maMaxTextureSize.reset( aProps[0].get<sal_Int32>() );
+                maMaxTextureSize = aProps[0].get<sal_Int32>();
             else
                 maMaxTextureSize.reset();
         }
