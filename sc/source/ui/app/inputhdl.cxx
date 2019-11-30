@@ -1489,6 +1489,8 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
             // Since transliteration service is used to test for match, the replaced string could be
             // longer than rInsert, so in order to find longest match before the cursor, test whole
             // string from start to current cursor position (don't limit to length of rInsert)
+            // Disclaimer: I really don't know if a match longer than rInsert is actually possible,
+            // so the above is based on assumptions how "transliteration" might possibly work.
             aSel.nStartPos = 0;
             pView->SetSelection(aSel);
             const OUString aAll = pView->GetSelected();
