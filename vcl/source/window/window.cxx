@@ -150,6 +150,13 @@ void Window::dispose()
             !mpWindowImpl->mpParent->IsDisposed()) &&
             "vcl::Window child should have its parent disposed first" );
 
+    ReleaseLOKNotifier();
+    /*if (mpWindowImpl->mnLOKWindowId > 0)
+    {
+        GetLOKWindowsMap().erase(mpWindowImpl->mnLOKWindowId);
+        mpWindowImpl->mnLOKWindowId = 0;
+    }*/
+
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
     Application::RemoveMouseAndKeyEvents( this );
 

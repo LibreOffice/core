@@ -869,6 +869,12 @@ weld::Window* Window::GetFrameWeld() const
     return pFrame ? pFrame->GetFrameWeld() : nullptr;
 }
 
+vcl::Window* Window::GetFrameWindow() const
+{
+    SalFrame* pFrame = ImplGetFrame();
+    return pFrame ? pFrame->GetWindow() : nullptr;
+}
+
 vcl::Window* Window::ImplGetParent() const
 {
     return mpWindowImpl ? mpWindowImpl->mpParent.get() : nullptr;
