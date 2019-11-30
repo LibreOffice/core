@@ -670,7 +670,7 @@ bool SwLayHelper::CheckInsertPage()
         }
         bool bNextPageOdd = !mrpPage->OnRightPage();
         bool bInsertEmpty = false;
-        if( oPgNum && bNextPageOdd != ( ( oPgNum.get() % 2 ) != 0 ) )
+        if( oPgNum && bNextPageOdd != ( ( *oPgNum % 2 ) != 0 ) )
         {
             bNextPageOdd = !bNextPageOdd;
             bInsertEmpty = true;

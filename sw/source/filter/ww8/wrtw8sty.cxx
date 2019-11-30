@@ -1437,7 +1437,7 @@ void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::boos
 
         // sprmSPgnStart
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSPgnStart97 );
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, oPageRestartNumber.get() );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, *oPageRestartNumber );
     }
 }
 

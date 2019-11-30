@@ -6328,7 +6328,7 @@ void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::boo
 
     // boost::none means no restart: then don't output that attribute if it is negative
     if ( oPageRestartNumber )
-       pAttr->add( FSNS( XML_w, XML_start ), OString::number( oPageRestartNumber.get() ) );
+       pAttr->add( FSNS( XML_w, XML_start ), OString::number( *oPageRestartNumber ) );
 
     // nNumType corresponds to w:fmt. See WW8Export::GetNumId() for more precisions
     OString aFormat( impl_NumberingType( nNumType ) );

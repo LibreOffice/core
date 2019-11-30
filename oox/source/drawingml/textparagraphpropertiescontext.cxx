@@ -160,7 +160,7 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
     rPropertyMap.setProperty( PROP_NumberingIsNumber, true);
 
     if( mrTextParagraphProperties.getParaAdjust() )
-        rPropertyMap.setProperty( PROP_ParaAdjust, mrTextParagraphProperties.getParaAdjust().get());
+        rPropertyMap.setProperty( PROP_ParaAdjust, *mrTextParagraphProperties.getParaAdjust());
 }
 
 ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )

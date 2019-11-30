@@ -487,7 +487,7 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
     if ( !pDesc )
         pDesc = &pDoc->GetPageDesc( 0 );
 
-    const bool bOdd = !oPgNum || 0 != ( oPgNum.get() % 2 );
+    const bool bOdd = !oPgNum || 0 != ( *oPgNum % 2 );
     const bool bFirst = true;
     // Even page numbers are supposed to be printed as left pages.  So if a
     // page number has been explicitly set for this first page, then we must

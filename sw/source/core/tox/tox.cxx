@@ -912,7 +912,7 @@ SwFormTokensHelper::SwFormTokensHelper(const OUString & rPattern)
         boost::optional<SwFormToken> const oToken(
                 lcl_BuildToken(rPattern, nCurPatternPos));
         if (oToken)
-            m_Tokens.push_back(oToken.get());
+            m_Tokens.push_back(*oToken);
     }
 }
 

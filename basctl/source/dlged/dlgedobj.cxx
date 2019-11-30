@@ -1667,7 +1667,7 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
     if ( xDialogDevice.is() )
         aDeviceInfo = xDialogDevice->getInfo();
 
-    mpDeviceInfo.reset( aDeviceInfo );
+    mpDeviceInfo = aDeviceInfo;
 
     return aDeviceInfo;
 }

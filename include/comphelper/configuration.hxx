@@ -162,7 +162,7 @@ template< typename T > struct Convert< boost::optional< T > >
 {
     static css::uno::Any toAny(boost::optional< T > const & value) {
         return value
-            ? css::uno::makeAny(value.get())
+            ? css::uno::makeAny(*value)
             : css::uno::Any();
     }
 

@@ -81,7 +81,7 @@ public:
     {
         OUString url;
         if (utl::Bootstrap::getProcessWorkingDir(url)) {
-            m_cwdUrl.reset(url);
+            m_cwdUrl = url;
         }
     }
 

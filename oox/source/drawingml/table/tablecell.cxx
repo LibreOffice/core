@@ -195,9 +195,9 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
         aTextCharProps.maFillProperties.maFillColor = rTableStylePart.getTextColor();
         aTextCharProps.maFillProperties.moFillType.set(XML_solidFill);
     }
-    if( rTableStylePart.getTextBoldStyle().is_initialized() )
+    if( rTableStylePart.getTextBoldStyle() )
         aTextCharProps.moBold = *rTableStylePart.getTextBoldStyle();
-    if( rTableStylePart.getTextItalicStyle().is_initialized() )
+    if( rTableStylePart.getTextItalicStyle() )
         aTextCharProps.moItalic = *rTableStylePart.getTextItalicStyle();
 }
 

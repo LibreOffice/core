@@ -81,7 +81,7 @@ CharacterPropertyItemConverter::CharacterPropertyItemConverter(
         m_xRefSizePropSet( rRefSizePropSet.is() ? rRefSizePropSet : rPropertySet )
 {
     if (pRefSize)
-        m_pRefSize.reset(*pRefSize);
+        m_pRefSize = *pRefSize;
 }
 
 CharacterPropertyItemConverter::~CharacterPropertyItemConverter()

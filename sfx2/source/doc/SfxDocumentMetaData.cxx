@@ -1191,15 +1191,15 @@ void SfxDocumentMetaData::init(
             boost::optional<sal_Int16> nTimeZone;
             if (textToDateOrDateTime(d, dt, isDateTime, nTimeZone, text)) {
                 if (isDateTime) {
-                    if (nTimeZone.is_initialized()) {
+                    if (nTimeZone) {
                         any <<= css::util::DateTimeWithTimezone(dt,
-                                    nTimeZone.get());
+                                    *nTimeZone);
                     } else {
                         any <<= dt;
                     }
                 } else {
-                    if (nTimeZone.is_initialized()) {
-                        any <<= css::util::DateWithTimezone(d, nTimeZone.get());
+                    if (nTimeZone) {
+                        any <<= css::util::DateWithTimezone(d, *nTimeZone);
                     } else {
                         any <<= d;
                     }

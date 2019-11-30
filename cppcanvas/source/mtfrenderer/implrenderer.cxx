@@ -745,7 +745,7 @@ namespace cppcanvas
         {
             rendering::FontRequest aFontRequest;
 
-            if( rParms.mrParms.maFontName.is_initialized() )
+            if( rParms.mrParms.maFontName )
                 aFontRequest.FontDescription.FamilyName = *rParms.mrParms.maFontName;
             else
                 aFontRequest.FontDescription.FamilyName = rFont.GetFamilyName();
@@ -757,11 +757,11 @@ namespace cppcanvas
 
             // TODO(F2): improve vclenum->panose conversion
             aFontRequest.FontDescription.FontDescription.Weight =
-                rParms.mrParms.maFontWeight.is_initialized() ?
+                rParms.mrParms.maFontWeight ?
                 *rParms.mrParms.maFontWeight :
                 ::canvas::tools::numeric_cast<sal_Int8>( ::basegfx::fround( rFont.GetWeight() ) );
             aFontRequest.FontDescription.FontDescription.Letterform =
-                rParms.mrParms.maFontLetterForm.is_initialized() ?
+                rParms.mrParms.maFontLetterForm ?
                 *rParms.mrParms.maFontLetterForm :
                 (rFont.GetItalic() == ITALIC_NONE) ? 0 : 9;
             aFontRequest.FontDescription.FontDescription.Proportion =
@@ -1379,7 +1379,7 @@ namespace cppcanvas
                         break;
 
                     case MetaActionType::LINECOLOR:
-                        if( !rParms.maLineColor.is_initialized() )
+                        if( !rParms.maLineColor )
                         {
                             setStateColor( static_cast<MetaLineColorAction*>(pCurrAct),
                                            rStates.getState().isLineColorSet,
@@ -1396,7 +1396,7 @@ namespace cppcanvas
                         break;
 
                     case MetaActionType::FILLCOLOR:
-                        if( !rParms.maFillColor.is_initialized() )
+                        if( !rParms.maFillColor )
                         {
                             setStateColor( static_cast<MetaFillColorAction*>(pCurrAct),
                                            rStates.getState().isFillColorSet,
@@ -1414,7 +1414,7 @@ namespace cppcanvas
 
                     case MetaActionType::TEXTCOLOR:
                     {
-                        if( !rParms.maTextColor.is_initialized() )
+                        if( !rParms.maTextColor )
                         {
                             // Text color is set unconditionally, thus, no
                             // use of setStateColor here
@@ -1434,7 +1434,7 @@ namespace cppcanvas
                     break;
 
                     case MetaActionType::TEXTFILLCOLOR:
-                        if( !rParms.maTextColor.is_initialized() )
+                        if( !rParms.maTextColor )
                         {
                             setStateColor( static_cast<MetaTextFillColorAction*>(pCurrAct),
                                            rStates.getState().isTextFillColorSet,
@@ -1451,7 +1451,7 @@ namespace cppcanvas
                         break;
 
                     case MetaActionType::TEXTLINECOLOR:
-                        if( !rParms.maTextColor.is_initialized() )
+                        if( !rParms.maTextColor )
                         {
                             setStateColor( static_cast<MetaTextLineColorAction*>(pCurrAct),
                                            rStates.getState().isTextLineColorSet,
@@ -1468,7 +1468,7 @@ namespace cppcanvas
                         break;
 
                     case MetaActionType::OVERLINECOLOR:
-                        if( !rParms.maTextColor.is_initialized() )
+                        if( !rParms.maTextColor )
                         {
                             setStateColor( static_cast<MetaOverlineColorAction*>(pCurrAct),
                                            rStates.getState().isTextOverlineColorSet,
@@ -1504,7 +1504,7 @@ namespace cppcanvas
                         // TODO(Q2): define and use appropriate enumeration types
                         rState.textReliefStyle          = rFont.GetRelief();
                         rState.textOverlineStyle        = static_cast<sal_Int8>(rFont.GetOverline());
-                        rState.textUnderlineStyle       = rParms.maFontUnderline.is_initialized() ?
+                        rState.textUnderlineStyle       = rParms.maFontUnderline ?
                             (*rParms.maFontUnderline ? sal_Int8(LINESTYLE_SINGLE) : sal_Int8(LINESTYLE_NONE)) :
                             static_cast<sal_Int8>(rFont.GetUnderline());
                         rState.textStrikeoutStyle       = static_cast<sal_Int8>(rFont.GetStrikeout());
@@ -2916,19 +2916,19 @@ namespace cppcanvas
             }
 
             // apply overrides from the Parameters struct
-            if( rParams.maFillColor.is_initialized() )
+            if( rParams.maFillColor )
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
                 rState.isFillColorSet = true;
                 rState.fillColor = tools::intSRGBAToDoubleSequence( *rParams.maFillColor );
             }
-            if( rParams.maLineColor.is_initialized() )
+            if( rParams.maLineColor )
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
                 rState.isLineColorSet = true;
                 rState.lineColor = tools::intSRGBAToDoubleSequence( *rParams.maLineColor );
             }
-            if( rParams.maTextColor.is_initialized() )
+            if( rParams.maTextColor )
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
                 rState.isTextFillColorSet = true;
@@ -2939,10 +2939,10 @@ namespace cppcanvas
                     rState.textOverlineColor =
                     rState.textLineColor = tools::intSRGBAToDoubleSequence( *rParams.maTextColor );
             }
-            if( rParams.maFontName.is_initialized() ||
-                rParams.maFontWeight.is_initialized() ||
-                rParams.maFontLetterForm.is_initialized() ||
-                rParams.maFontUnderline.is_initialized() )
+            if( rParams.maFontName ||
+                rParams.maFontWeight ||
+                rParams.maFontLetterForm ||
+                rParams.maFontUnderline )
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
 

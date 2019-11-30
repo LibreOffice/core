@@ -696,7 +696,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 
     if (oNumOffset)
     {
-        SfxUInt16Item aPageNum( SID_ATTR_PARA_PAGENUM, oNumOffset.get() );
+        SfxUInt16Item aPageNum( SID_ATTR_PARA_PAGENUM, *oNumOffset );
         rCoreSet.Put( aPageNum );
     }
 

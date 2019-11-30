@@ -1743,7 +1743,7 @@ bool SwFrame::WannaRightPage() const
     OSL_ENSURE( pDesc, "No pagedescriptor" );
     bool bOdd;
     if( oPgNum )
-        bOdd = (oPgNum.get() % 2) != 0;
+        bOdd = (*oPgNum % 2) != 0;
     else
     {
         bOdd = pPage->OnRightPage();
@@ -1849,7 +1849,7 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
         ::boost::optional<sal_uInt16> oNumOffset = pFrame->GetPageDescItem().GetNumOffset();
         if (oNumOffset)
         {
-            return nPhyPage - pFrame->GetPhyPageNum() + oNumOffset.get();
+            return nPhyPage - pFrame->GetPhyPageNum() + *oNumOffset;
         }
         else
         {

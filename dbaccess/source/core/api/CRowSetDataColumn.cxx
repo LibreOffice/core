@@ -136,7 +136,7 @@ void SAL_CALL ORowSetDataColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHan
             {
                 bool bVal = false;
                 rValue >>= bVal;
-                m_isReadOnly.reset(bVal);
+                m_isReadOnly = bVal;
             }
             break;
         default:

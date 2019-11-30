@@ -281,7 +281,7 @@ namespace slideshow
 
                     // setup cached values to defaults (might fail to
                     // retrieve true bounds below)
-                    maCurrentShapeUnitBounds.reset( aDefaultBounds );
+                    maCurrentShapeUnitBounds = aDefaultBounds;
 
                     // TODO(P2): the subset of the master shape (that from
                     // which the subsets are subtracted) changes
@@ -345,7 +345,7 @@ namespace slideshow
                             ::basegfx::B2DRange( 0.0, 0.0,
                                                  1.0, 1.0 ));
 
-                        maCurrentShapeUnitBounds.reset( aTotalBounds );
+                        maCurrentShapeUnitBounds = aTotalBounds;
                     }
                 }
 

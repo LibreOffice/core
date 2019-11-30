@@ -1926,7 +1926,7 @@ void SwWW8ImplReader::AdjustLRWrapForWordMargins(
     sal_uInt32 nXRelTo = SvxMSDffImportRec::RELTO_DEFAULT;
     if ( rRecord.nXRelTo )
     {
-        nXRelTo = rRecord.nXRelTo.get();
+        nXRelTo = *rRecord.nXRelTo;
     }
 
     // Left adjustments - if horizontally aligned to left of
@@ -1964,7 +1964,7 @@ void SwWW8ImplReader::AdjustULWrapForWordMargins(
     sal_uInt32 nYRelTo = SvxMSDffImportRec::RELTO_DEFAULT;
     if ( rRecord.nYRelTo )
     {
-        nYRelTo = rRecord.nYRelTo.get();
+        nYRelTo = *rRecord.nYRelTo;
     }
 
     // Top adjustment - remove upper wrapping if aligned to page
@@ -2283,7 +2283,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
         // if X and Y Rel values are on default take it as a hint, that they have not been set
         // by <SwMSDffManager::ProcessObj(..)>
-        const bool bXYRelHaveDefaultValues = pRecord->nXRelTo.get() == 2 && pRecord->nYRelTo.get() == 2;
+        const bool bXYRelHaveDefaultValues = *pRecord->nXRelTo == 2 && *pRecord->nYRelTo == 2;
         if ( bXYRelHaveDefaultValues
              && m_nInTable > 0
              && !bCurSectionVertical )
@@ -2295,8 +2295,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         }
     }
 
-    sal_uInt32 nXRelTo = (pRecord->nXRelTo && nCntRelTo > pRecord->nXRelTo) ? pRecord->nXRelTo.get() : 1;
-    sal_uInt32 nYRelTo = (pRecord->nYRelTo && nCntRelTo > pRecord->nYRelTo) ? pRecord->nYRelTo.get() : 1;
+    sal_uInt32 nXRelTo = (pRecord->nXRelTo && nCntRelTo > pRecord->nXRelTo) ? *pRecord->nXRelTo : 1;
+    sal_uInt32 nYRelTo = (pRecord->nYRelTo && nCntRelTo > pRecord->nYRelTo) ? *pRecord->nYRelTo : 1;
 
     RndStdIds eAnchor = IsInlineEscherHack() ? RndStdIds::FLY_AS_CHAR : RndStdIds::FLY_AT_CHAR; // #i43718#
 

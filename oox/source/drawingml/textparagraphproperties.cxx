@@ -477,7 +477,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
 
     if ( moParaAdjust )
     {
-        aPropSet.setProperty( PROP_ParaAdjust, moParaAdjust.get());
+        aPropSet.setProperty( PROP_ParaAdjust, *moParaAdjust);
     }
     else
     {

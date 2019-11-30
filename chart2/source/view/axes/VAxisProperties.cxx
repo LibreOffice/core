@@ -218,10 +218,10 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
 
                 if( m_bCrossingAxisIsCategoryAxes )
                     fValue = ::rtl::math::round(fValue);
-                m_pfMainLinePositionAtOtherAxis.reset(fValue);
+                m_pfMainLinePositionAtOtherAxis = fValue;
             }
             else if( m_eCrossoverType == css::chart::ChartAxisPosition_ZERO )
-                m_pfMainLinePositionAtOtherAxis.reset(0.0);
+                m_pfMainLinePositionAtOtherAxis = 0.0;
 
             xAxisProp->getPropertyValue("LabelPosition") >>= m_eLabelPos;
             xAxisProp->getPropertyValue("MarkPosition") >>= m_eTickmarkPos;

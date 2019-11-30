@@ -265,7 +265,7 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
         aSecurity.getHomeDir( aWorkPath );
     }
     else
-        aWorkPath = x.get();
+        aWorkPath = *x;
     return aWorkPath;
 }
 

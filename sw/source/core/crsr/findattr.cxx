@@ -75,7 +75,7 @@ static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
         }
         else if (oNumOffset1 && oNumOffset2)
         {
-            bNumOffsetEqual = oNumOffset1.get() == oNumOffset2.get();
+            bNumOffsetEqual = *oNumOffset1 == *oNumOffset2;
         }
         else
         {

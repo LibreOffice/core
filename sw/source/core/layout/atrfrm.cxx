@@ -703,7 +703,7 @@ bool SwFormatPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 ::boost::optional<sal_uInt16> oOffset = GetNumOffset();
                 if (oOffset)
                 {
-                    rVal <<= static_cast<sal_Int16>(oOffset.get());
+                    rVal <<= static_cast<sal_Int16>(*oOffset);
                 }
                 else
                 {

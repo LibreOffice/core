@@ -987,10 +987,10 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
             {
                 ::boost::optional<sal_uInt16> oNumOffset = rPageDesc.GetNumOffset();
-                if (oNumOffset && oNumOffset.get() > 0)
+                if (oNumOffset && *oNumOffset > 0)
                 {
                     // #i114163# positiveInteger only!
-                    sal_Int32 const number(oNumOffset.get());
+                    sal_Int32 const number(*oNumOffset);
                     aOut.append(number);
                 }
                 else

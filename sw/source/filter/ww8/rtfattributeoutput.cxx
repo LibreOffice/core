@@ -1297,7 +1297,7 @@ void RtfAttributeOutput::SectionPageNumbering(
     if (oPageRestartNumber)
     {
         m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_PGNSTARTS);
-        m_aSectionBreaks.append(static_cast<sal_Int32>(oPageRestartNumber.get()));
+        m_aSectionBreaks.append(static_cast<sal_Int32>(*oPageRestartNumber));
         m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_PGNRESTART);
     }
 
@@ -3385,7 +3385,7 @@ void RtfAttributeOutput::FormatBackground(const SvxBrushItem& rBrush)
 
 void RtfAttributeOutput::FormatFillStyle(const XFillStyleItem& rFillStyle)
 {
-    m_oFillStyle.reset(rFillStyle.GetValue());
+    m_oFillStyle = rFillStyle.GetValue();
 }
 
 void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradient)

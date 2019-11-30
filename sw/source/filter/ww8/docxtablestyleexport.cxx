@@ -542,10 +542,10 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(
     }
     if (oTableStyleRowBandSize)
         m_pSerializer->singleElementNS(XML_w, XML_tblStyleRowBandSize, FSNS(XML_w, XML_val),
-                                       OString::number(oTableStyleRowBandSize.get()));
+                                       OString::number(*oTableStyleRowBandSize));
     if (oTableStyleColBandSize)
         m_pSerializer->singleElementNS(XML_w, XML_tblStyleColBandSize, FSNS(XML_w, XML_val),
-                                       OString::number(oTableStyleColBandSize.get()));
+                                       OString::number(*oTableStyleColBandSize));
     tableStyleTableInd(aTableInd);
     tableStyleTcBorders(aTableBorders, XML_tblBorders);
     tableStyleTableCellMar(aTableCellMar);

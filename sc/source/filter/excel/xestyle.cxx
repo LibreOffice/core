@@ -1097,39 +1097,39 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
     if (maDxfData.eWeight)
     {
         rStyleSheet->singleElement(XML_b,
-                XML_val, ToPsz10(maDxfData.eWeight.get() != WEIGHT_NORMAL));
+                XML_val, ToPsz10(*maDxfData.eWeight != WEIGHT_NORMAL));
     }
 
     if (maDxfData.eItalic)
     {
-        bool bItalic = (maDxfData.eItalic.get() == ITALIC_OBLIQUE) || (maDxfData.eItalic.get() == ITALIC_NORMAL);
+        bool bItalic = (*maDxfData.eItalic == ITALIC_OBLIQUE) || (*maDxfData.eItalic == ITALIC_NORMAL);
         rStyleSheet->singleElement(XML_i, XML_val, ToPsz10(bItalic));
     }
 
     if (maDxfData.eStrike)
     {
         bool bStrikeout =
-            (maDxfData.eStrike.get() == STRIKEOUT_SINGLE) || (maDxfData.eStrike.get() == STRIKEOUT_DOUBLE) ||
-            (maDxfData.eStrike.get() == STRIKEOUT_BOLD)   || (maDxfData.eStrike.get() == STRIKEOUT_SLASH)  ||
-            (maDxfData.eStrike.get() == STRIKEOUT_X);
+            (*maDxfData.eStrike == STRIKEOUT_SINGLE) || (*maDxfData.eStrike == STRIKEOUT_DOUBLE) ||
+            (*maDxfData.eStrike == STRIKEOUT_BOLD)   || (*maDxfData.eStrike == STRIKEOUT_SLASH)  ||
+            (*maDxfData.eStrike == STRIKEOUT_X);
 
         rStyleSheet->singleElement(XML_strike, XML_val, ToPsz10(bStrikeout));
     }
 
     if (maDxfData.bOutline)
     {
-        rStyleSheet->singleElement(XML_outline, XML_val, ToPsz10(maDxfData.bOutline.get()));
+        rStyleSheet->singleElement(XML_outline, XML_val, ToPsz10(*maDxfData.bOutline));
     }
 
     if (maDxfData.bShadow)
     {
-        rStyleSheet->singleElement(XML_shadow, XML_val, ToPsz10(maDxfData.bShadow.get()));
+        rStyleSheet->singleElement(XML_shadow, XML_val, ToPsz10(*maDxfData.bShadow));
     }
 
     if (maDxfData.aColor)
     {
         rStyleSheet->singleElement(XML_color,
-                XML_rgb, XclXmlUtils::ToOString(maDxfData.aColor.get()));
+                XML_rgb, XclXmlUtils::ToOString(*maDxfData.aColor));
     }
 
     if (maDxfData.nFontHeight)
@@ -1140,7 +1140,7 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
 
     if (maDxfData.eUnder)
     {
-        const char* pVal = getUnderlineOOXValue(maDxfData.eUnder.get());
+        const char* pVal = getUnderlineOOXValue(*maDxfData.eUnder);
         rStyleSheet->singleElement(XML_u, XML_val, pVal);
     }
 

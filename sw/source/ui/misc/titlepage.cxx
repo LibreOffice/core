@@ -39,7 +39,7 @@ namespace
             {
                 ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc *>(pItem)->GetNumOffset();
                 if (oNumOffset)
-                    rPageNo = oNumOffset.get();
+                    rPageNo = *oNumOffset;
                 if (ppPageFormatDesc)
                     ppPageFormatDesc->reset(static_cast<const SwFormatPageDesc *>(pItem->Clone()));
                 bRet = true;
@@ -71,7 +71,7 @@ namespace
                 ::boost::optional<sal_uInt16> oNumOffset = pPageFormatDesc->GetNumOffset();
                 if (oNumOffset)
                 {
-                    nPgNo = oNumOffset.get();
+                    nPgNo = *oNumOffset;
                 }
                 else
                 {

@@ -2073,7 +2073,7 @@ namespace cppcanvas
                         rCanvas->getUNOCanvas()->getDevice(),
                         aResultingPolyPolygon ) );
 
-                if( rParms.maTextTransformation.is_initialized() )
+                if( rParms.maTextTransformation )
                 {
                     return std::shared_ptr<Action>(
                         new OutlineAction(
@@ -2190,7 +2190,7 @@ namespace cppcanvas
                     rTextFillColor == aEmptyColor )
                 {
                     // nope
-                    if( rParms.maTextTransformation.is_initialized() )
+                    if( rParms.maTextTransformation )
                     {
                         ret = std::shared_ptr<Action>( new TextAction(
                                                     aStartPoint,
@@ -2215,7 +2215,7 @@ namespace cppcanvas
                 else
                 {
                     // at least one of the effects requested
-                    if( rParms.maTextTransformation.is_initialized() )
+                    if( rParms.maTextTransformation )
                         ret = std::shared_ptr<Action>( new EffectTextAction(
                                                     aStartPoint,
                                                     aReliefOffset,
@@ -2257,7 +2257,7 @@ namespace cppcanvas
                     rTextFillColor == aEmptyColor )
                 {
                     // nope
-                    if( rParms.maTextTransformation.is_initialized() )
+                    if( rParms.maTextTransformation )
                         ret = std::shared_ptr<Action>( new TextArrayAction(
                                                     aStartPoint,
                                                     rText,
@@ -2280,7 +2280,7 @@ namespace cppcanvas
                 else
                 {
                     // at least one of the effects requested
-                    if( rParms.maTextTransformation.is_initialized() )
+                    if( rParms.maTextTransformation )
                         ret = std::shared_ptr<Action>( new EffectTextArrayAction(
                                                     aStartPoint,
                                                     aReliefOffset,

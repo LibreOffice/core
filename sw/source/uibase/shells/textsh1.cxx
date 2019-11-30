@@ -656,7 +656,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     if (oPageNumber)
                     {
                         bIsNumberFilled = true;
-                        nPageNumber = oPageNumber.get();
+                        nPageNumber = *oPageNumber;
                     }
 
                     rReq.AppendItem( SfxInt16Item ( FN_INSERT_BREAK_DLG, nKind ) );

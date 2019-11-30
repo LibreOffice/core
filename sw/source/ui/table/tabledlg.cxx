@@ -1459,7 +1459,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 {
                     m_xPageNoCB->set_active(true);
                     m_xPageNoNF->set_sensitive(true);
-                    m_xPageNoNF->set_value(oNumOffset.get());
+                    m_xPageNoNF->set_value(*oNumOffset);
                 }
                 else
                 {

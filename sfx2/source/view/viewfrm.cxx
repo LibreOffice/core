@@ -2358,7 +2358,7 @@ static bool impl_maxOpenDocCountReached()
     // NIL means: count of allowed documents = infinite !
     if (!x)
         return false;
-    sal_Int32 nMaxDocs(x.get());
+    sal_Int32 nMaxDocs(*x);
     sal_Int32 nOpenDocs = 0;
 
     css::uno::Reference< css::frame::XDesktop2 >  xDesktop = css::frame::Desktop::create(xContext);

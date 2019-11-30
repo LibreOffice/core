@@ -156,7 +156,7 @@ namespace slideshow
 
         void AnimatedSprite::movePixel( const ::basegfx::B2DPoint& rNewPos )
         {
-            maPosPixel.reset( rNewPos );
+            maPosPixel = rNewPos;
             mpSprite->movePixel( rNewPos );
         }
 
@@ -168,7 +168,7 @@ namespace slideshow
 
         void AnimatedSprite::clip( const ::basegfx::B2DPolyPolygon& rClip )
         {
-            maClip.reset( rClip );
+            maClip = rClip;
             mpSprite->setClipPixel( rClip );
         }
 

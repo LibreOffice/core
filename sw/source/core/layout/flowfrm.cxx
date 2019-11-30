@@ -863,7 +863,7 @@ bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
             else if( !pDesc->GetLeftFormat() )
                 nTmp = 1;
             else if( rFormatDesc.GetNumOffset() )
-                nTmp = rFormatDesc.GetNumOffset().get();
+                nTmp = *rFormatDesc.GetNumOffset();
         }
     }
 
