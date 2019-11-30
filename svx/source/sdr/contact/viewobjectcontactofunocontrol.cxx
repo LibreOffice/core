@@ -962,7 +962,7 @@ namespace sdr { namespace contact {
         if ( pPageViewContact )
         {
             SdrPageViewAccess aPVAccess( pPageViewContact->GetPageWindow().GetPageView() );
-            const OutputDevice& rDevice( m_pAntiImpl->getPageViewOutputDevice().get() );
+            const OutputDevice& rDevice( *m_pAntiImpl->getPageViewOutputDevice() );
             impl_ensureControl_nothrow(
                 aPVAccess,
                 rDevice,
@@ -985,9 +985,9 @@ namespace sdr { namespace contact {
     {
         // do not use ObjectContact::TryToGetOutputDevice, it would not care for the PageWindow's
         // OriginalPaintWindow
-        boost::optional<const OutputDevice&> oPageOutputDev = m_pAntiImpl->getPageViewOutputDevice();
+        const OutputDevice* oPageOutputDev = m_pAntiImpl->getPageViewOutputDevice();
         if( oPageOutputDev )
-            return oPageOutputDev.get();
+            return *oPageOutputDev;
 
         const OutputDevice* pDevice = m_pAntiImpl->GetObjectContact().TryToGetOutputDevice();
         ENSURE_OR_THROW( pDevice, "no output device -> no control" );
