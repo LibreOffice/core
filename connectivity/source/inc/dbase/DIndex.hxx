@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEX_HXX
 
 #include <connectivity/sdbcx/VIndex.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <dbase/DTable.hxx>
 #include <dbase/dindexnode.hxx>
 

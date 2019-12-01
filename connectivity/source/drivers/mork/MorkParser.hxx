@@ -35,7 +35,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MORKPARSER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MORKPARSER_HXX
 
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 #include <string>

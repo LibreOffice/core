@@ -22,8 +22,6 @@
 
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#include <com/sun/star/sdbc/XMultipleResults.hpp>
-#include <com/sun/star/sdbc/XBatchExecution.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
@@ -32,9 +30,9 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <connectivity/CommonTools.hxx>
+#include <connectivity/sqlparse.hxx>
 #include <file/FConnection.hxx>
 #include <file/filedllapi.hxx>
-#include <list>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/propertycontainer.hxx>
 #include <file/fanalyzer.hxx>

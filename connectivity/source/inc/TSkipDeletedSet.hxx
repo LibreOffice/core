@@ -20,8 +20,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_TSKIPDELETEDSET_HXX
 
 #include "TResultSetHelper.hxx"
-#include <rtl/alloc.h>
-#include <unordered_map>
 #include <vector>
 #include <connectivity/dbtoolsdllapi.hxx>
 

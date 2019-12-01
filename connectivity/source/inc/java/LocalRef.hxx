@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LOCALREF_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LOCALREF_HXX
 
-#include <jvmaccess/virtualmachine.hxx>
+#include <jni.h>
 
 
 namespace connectivity { namespace jdbc

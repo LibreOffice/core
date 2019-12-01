@@ -25,7 +25,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <osl/module.h>
 
 #define EVOAB_DRIVER_IMPL_NAME  "com.sun.star.comp.sdbc.evoab.OEvoabDriver"
 

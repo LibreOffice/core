@@ -42,7 +42,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
 
 #include <cppuhelper/propshlp.hxx>
 
