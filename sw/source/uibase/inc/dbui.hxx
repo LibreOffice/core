@@ -23,7 +23,7 @@
 
 #include <swdllapi.h>
 
-class SW_DLLPUBLIC PrintMonitor: public weld::GenericDialogController
+class PrintMonitor: public weld::GenericDialogController
 {
 public:
     std::unique_ptr<weld::Label> m_xDocName;

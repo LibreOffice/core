@@ -162,7 +162,7 @@ private:
     SdOptionsLayout maOptionsLayout;
 };
 
-class SD_DLLPUBLIC SdOptionsContents : public SdOptionsGeneric
+class SdOptionsContents : public SdOptionsGeneric
 {
 private:
 protected:

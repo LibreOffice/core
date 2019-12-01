@@ -14,7 +14,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapInterpolateScaleFilter final : public BitmapFilter
+class BitmapInterpolateScaleFilter final : public BitmapFilter
 {
 public:
     explicit BitmapInterpolateScaleFilter(double fScaleX, double fScaleY)

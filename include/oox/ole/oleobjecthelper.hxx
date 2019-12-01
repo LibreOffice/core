@@ -40,7 +40,7 @@ namespace ole {
 
 
 /** Contains generic information about an OLE object. */
-struct OOX_DLLPUBLIC OleObjectInfo
+struct OleObjectInfo
 {
     StreamDataSequence  maEmbeddedData;     ///< Data of an embedded OLE object.
     OUString     maTargetLink;       ///< Path to external data for linked OLE object.
