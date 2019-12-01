@@ -38,7 +38,7 @@ using namespace ::ooo::vba::excel::XlPattern;
 static const char BACKCOLOR[] = "CellBackColor";
 static const char PATTERN[] = "Pattern";
 static const char PATTERNCOLOR[] = "PatternColor";
-
+/*
 static PatternMap lcl_getPatternMap()
 {
     PatternMap aPatternMap;
@@ -64,8 +64,30 @@ static PatternMap lcl_getPatternMap()
     aPatternMap.insert( PatternPair( xlPatternVertical, 6 ) );
     return aPatternMap;
 }
+*/
 
-static PatternMap aPatternMap( lcl_getPatternMap() );
+static PatternMap aPatternMap {
+    { xlPatternAutomatic, 0 },
+    { xlPatternChecker, 9 },
+    { xlPatternCrissCross, 16 },
+    { xlPatternDown, 7 },
+    { xlPatternGray16, 17 },
+    { xlPatternGray25, 4 },
+    { xlPatternGray50, 2 },
+    { xlPatternGray75, 3 },
+    { xlPatternGray8, 18 },
+    { xlPatternGrid, 15 },
+    { xlPatternHorizontal, 5 },
+    { xlPatternLightDown, 13 },
+    { xlPatternLightHorizontal, 11 },
+    { xlPatternLightUp, 14 },
+    { xlPatternLightVertical, 12 },
+    { xlPatternNone, 0 },
+    { xlPatternSemiGray75, 10 },
+    { xlPatternSolid, 0 },
+    { xlPatternUp, 8 },
+    { xlPatternVertical, 6 }
+};
 
 ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertySet >&  xProps, ScDocument* pScDoc ) : ScVbaInterior_BASE( xParent, xContext ), m_xProps(xProps), m_pScDoc( pScDoc )
 {
