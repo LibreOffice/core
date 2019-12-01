@@ -273,7 +273,7 @@ public:
     /**
      * Stores global anonymous database ranges.
      */
-    class AnonDBs
+    class SAL_DLLPRIVATE AnonDBs
     {
         typedef ::std::vector<std::unique_ptr<ScDBData>> DBsType;
         DBsType m_DBs;

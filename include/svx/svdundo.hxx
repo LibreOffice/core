@@ -514,7 +514,7 @@ public:
  * ABC for all UndoActions that have something to do with SdrPages.
  */
 
-class SVX_DLLPUBLIC SdrUndoPage : public SdrUndoAction
+class SdrUndoPage : public SdrUndoAction
 {
 protected:
     SdrPage&                    mrPage;
@@ -618,7 +618,7 @@ public:
  * Create Action before moving the Page.
  */
 
-class SVX_DLLPUBLIC SdrUndoSetPageNum final : public SdrUndoPage
+class SdrUndoSetPageNum final : public SdrUndoPage
 {
     sal_uInt16 const                      nOldPageNum;
     sal_uInt16 const                      nNewPageNum;
@@ -678,7 +678,7 @@ public:
  * Create Action before changing the MasterPageDescriptors.
  */
 
-class SVX_DLLPUBLIC SdrUndoPageChangeMasterPage final : public SdrUndoPageMasterPage
+class SdrUndoPageChangeMasterPage final : public SdrUndoPageMasterPage
 {
     bool                        mbNewHadMasterPage;
     SdrLayerIDSet                   maNewSet;
