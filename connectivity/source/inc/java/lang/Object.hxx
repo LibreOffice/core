@@ -19,15 +19,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LANG_OBJECT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LANG_OBJECT_HXX
 
-#include <cstdarg>
-#include <osl/thread.h>
-#include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <osl/diagnose.h>
 #include <jvmaccess/virtualmachine.hxx>
-#include <functional>
-#include <memory>
 
 #ifdef HAVE_64BIT_POINTERS
 #error "no 64 bit pointer"

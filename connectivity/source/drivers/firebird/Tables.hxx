@@ -10,7 +10,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_TABLES_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_TABLES_HXX
 
-#include "DatabaseMetaData.hxx"
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 #include <connectivity/sdbcx/VCollection.hxx>
 

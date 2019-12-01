@@ -23,6 +23,7 @@
 #include "StatementCommonBase.hxx"
 
 #include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/sdbc/XBatchExecution.hpp>
 
 namespace connectivity
 {

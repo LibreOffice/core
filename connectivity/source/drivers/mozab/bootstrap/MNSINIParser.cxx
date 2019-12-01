@@ -18,6 +18,8 @@
  */
 
 #include "MNSINIParser.hxx"
+#include <com/sun/star/io/IOException.hpp>
+#include <osl/process.h>
 #include <rtl/byteseq.hxx>
 #include <sal/log.hxx>
 

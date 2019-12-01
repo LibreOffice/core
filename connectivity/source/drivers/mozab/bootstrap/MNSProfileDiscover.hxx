@@ -21,10 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEDISCOVER_HXX
 
 #include <sal/types.h>
-#include <osl/diagnose.h>
-#include <osl/conditn.hxx>
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 

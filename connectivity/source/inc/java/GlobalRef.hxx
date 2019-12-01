@@ -23,8 +23,6 @@
 #include <java/LocalRef.hxx>
 #include <java/lang/Object.hxx>
 
-#include <jvmaccess/virtualmachine.hxx>
-
 
 namespace connectivity { namespace jdbc
 {

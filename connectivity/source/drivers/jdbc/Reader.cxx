@@ -19,6 +19,7 @@
 
 #include <java/io/Reader.hxx>
 #include <string.h>
+#include <osl/diagnose.h>
 using namespace connectivity;
 using ::com::sun::star::uno::Sequence;
 

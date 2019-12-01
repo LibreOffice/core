@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_UTIL_DATE_HXX
 
 #include <java/lang/Object.hxx>
-#include <com/sun/star/util/Date.hpp>
+//#include <com/sun/star/util/Date.hpp>
 
 namespace connectivity
 {

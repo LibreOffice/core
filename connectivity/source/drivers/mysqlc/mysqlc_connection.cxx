@@ -39,6 +39,7 @@
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace connectivity::mysqlc;
 

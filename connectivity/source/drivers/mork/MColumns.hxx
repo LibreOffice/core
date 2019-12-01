@@ -21,8 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCOLUMNS_HXX
 
 #include <connectivity/sdbcx/VCollection.hxx>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <connectivity/sdbcx/IRefreshable.hxx>
 #include "MTable.hxx"
 
 namespace connectivity
