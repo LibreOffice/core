@@ -53,7 +53,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/waitobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/container.hxx>
 #include <comphelper/property.hxx>
@@ -607,7 +606,7 @@ namespace frm
             case FormFeature::ReloadForm:
                 if ( m_xLoadableForm.is() )
                 {
-                    WaitObject aWO( nullptr );
+                    weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
                     m_xLoadableForm->reload();
 
                     // refresh all controls in the form (and sub forms) which can be refreshed
@@ -734,7 +733,7 @@ namespace frm
                     aValues[1] <<= OUString();
                     aValues[2] <<= OUString();
 
-                    WaitObject aWO( nullptr );
+                    weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
                     xProperties->setPropertyValues( aNames, aValues );
 
                     if ( m_xLoadableForm.is() )
@@ -752,7 +751,7 @@ namespace frm
                     m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( !bApplied ) );
 
                     // and reload
-                    WaitObject aWO( nullptr );
+                    weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
                     m_xLoadableForm->reload();
                 }
                 break;
@@ -1557,7 +1556,7 @@ namespace frm
             impl_appendOrderByColumn_throw aAction(this, xBoundField, _bUp);
             impl_doActionInSQLContext_throw(aAction, RID_STR_COULD_NOT_SET_ORDER );
 
-            WaitObject aWO( nullptr );
+            weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
             try
             {
                 m_xCursorProperties->setPropertyValue( PROPERTY_SORT, makeAny( m_xParser->getOrder() ) );
@@ -1628,7 +1627,7 @@ namespace frm
             impl_appendFilterByColumn_throw aAction(this, m_xParser, xBoundField);
             impl_doActionInSQLContext_throw( aAction, RID_STR_COULD_NOT_SET_FILTER );
 
-            WaitObject aWO( nullptr );
+            weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
             try
             {
                 m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       makeAny( m_xParser->getFilter() ) );
@@ -1715,7 +1714,7 @@ namespace frm
 
             if ( RET_OK == xDialog->execute() )
             {
-                WaitObject aWO( nullptr );
+                weld::WaitObject aWO(Application::GetFrameWeld(xDialogParent));
                 if ( _bFilter )
                 {
                     m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       makeAny( m_xParser->getFilter() ) );
