@@ -353,9 +353,12 @@ class invalid_hash : public std::exception
 public:
 
     invalid_hash(const OUString& rExpectedHash, const OUString& rReceivedHash)
+      : maMessage(
+          OUStringToOString(
+            OUString("Invalid hash found.\nExpected: " + rExpectedHash + ";\nReceived: " + rReceivedHash),
+            RTL_TEXTENCODING_UTF8)
+         )
     {
-        OUString aMsg = "Invalid hash found.\nExpected: " + rExpectedHash + ";\nReceived: " + rReceivedHash;
-        maMessage = OUStringToOString(aMsg, RTL_TEXTENCODING_UTF8);
     }
 
     const char* what() const noexcept override
@@ -370,9 +373,12 @@ class invalid_size : public std::exception
 public:
 
     invalid_size(const size_t nExpectedSize, const size_t nReceivedSize)
+      : maMessage(
+          OUStringToOString(
+            OUString("Invalid file size found.\nExpected: " + OUString::number(nExpectedSize) + ";\nReceived: " + OUString::number(nReceivedSize)),
+            RTL_TEXTENCODING_UTF8)
+         )
     {
-        OUString aMsg = "Invalid file size found.\nExpected: " + OUString::number(nExpectedSize) + ";\nReceived: " + OUString::number(nReceivedSize);
-        maMessage = OUStringToOString(aMsg, RTL_TEXTENCODING_UTF8);
     }
 
     const char* what() const noexcept override

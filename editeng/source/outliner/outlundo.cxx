@@ -68,10 +68,8 @@ void OutlinerUndoChangeParaFlags::ImplChangeFlags( ParaFlag nFlags )
 OutlinerUndoChangeParaNumberingRestart::OutlinerUndoChangeParaNumberingRestart( Outliner* pOutliner, sal_Int32 nPara,
         sal_Int16 nOldNumberingStartValue, sal_Int16 nNewNumberingStartValue,
         bool  bOldParaIsNumberingRestart, bool bNewParaIsNumberingRestart )
-: OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
+: OutlinerUndoBase( OLUNDO_DEPTH, pOutliner ), mnPara(nPara)
 {
-    mnPara = nPara;
-
     maUndoData.mnNumberingStartValue = nOldNumberingStartValue;
     maUndoData.mbParaIsNumberingRestart = bOldParaIsNumberingRestart;
     maRedoData.mnNumberingStartValue = nNewNumberingStartValue;
@@ -111,9 +109,8 @@ void OutlinerUndoChangeDepth::Redo()
 }
 
 OutlinerUndoCheckPara::OutlinerUndoCheckPara( Outliner* pOutliner, sal_Int32 nPara )
-    : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
+    : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner ), mnPara(nPara)
 {
-    mnPara = nPara;
 }
 
 void OutlinerUndoCheckPara::Undo()
