@@ -222,4 +222,5 @@ with open("bin/find-can-be-private-symbols.classes.results", "wt") as f:
         elif sym.startswith("libvisio"): continue
         elif sym.startswith("libzmf"): continue
         elif sym.startswith("lucene::"): continue
+        elif sym.startswith("Sk"): continue
         f.write(sym + "\n")
