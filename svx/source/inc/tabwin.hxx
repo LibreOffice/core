@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_TABWIN_HXX
 #define INCLUDED_SVX_SOURCE_INC_TABWIN_HXX
 
-#include <vcl/treelistbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -27,9 +26,7 @@
 #include <com/sun/star/form/XForm.hpp>
 
 #include <comphelper/propmultiplex.hxx>
-#include <vcl/transfer.hxx>
 #include <connectivity/dbtools.hxx>
-
 
 class FmFormShell;
 struct ColumnInfo;
