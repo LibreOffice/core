@@ -22,8 +22,6 @@
 
 // this define has to be set to split the names into different dll's or so's
 // every dll has his own set of property names
-#include <rtl/ustring.hxx>
-#include <map>
 
 namespace connectivity
 {

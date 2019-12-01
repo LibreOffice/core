@@ -19,6 +19,7 @@
 
 #include "Connection.hxx"
 #include "Driver.hxx"
+#include "SubComponent.hxx"
 
 #include <connectivity/dbexception.hxx>
 #include <strings.hrc>

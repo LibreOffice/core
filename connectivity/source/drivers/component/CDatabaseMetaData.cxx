@@ -18,7 +18,9 @@
  */
 
 #include <component/CDatabaseMetaData.hxx>
+#include <connectivity/sqliterator.hxx>
 #include <file/FConnection.hxx>
+#include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>

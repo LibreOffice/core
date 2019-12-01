@@ -22,9 +22,7 @@
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <vector>
 #include <rtl/ref.hxx>
-#include "MConnection.hxx"
 #include "MTable.hxx"
 
 namespace connectivity

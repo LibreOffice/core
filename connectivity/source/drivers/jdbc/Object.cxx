@@ -24,6 +24,7 @@
 #include <com/sun/star/logging/LogLevel.hpp>
 #include <java/tools.hxx>
 #include <java/sql/SQLException.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <java/LocalRef.hxx>
 #include <strings.hxx>

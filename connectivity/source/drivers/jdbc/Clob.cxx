@@ -21,6 +21,7 @@
 #include <java/tools.hxx>
 #include <java/io/Reader.hxx>
 #include <connectivity/dbexception.hxx>
+#include <osl/diagnose.h>
 
 using namespace connectivity;
 

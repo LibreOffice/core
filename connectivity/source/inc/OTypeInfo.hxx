@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_OTYPEINFO_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_OTYPEINFO_HXX
 
-#include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <connectivity/dbtoolsdllapi.hxx>
+
+#include <rtl/ustring.hxx>
 
 namespace connectivity
 {

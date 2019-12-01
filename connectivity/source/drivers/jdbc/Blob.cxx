@@ -21,6 +21,7 @@
 #include <java/tools.hxx>
 #include <java/io/InputStream.hxx>
 #include <connectivity/dbexception.hxx>
+#include <osl/diagnose.h>
 
 #include <string.h>
 

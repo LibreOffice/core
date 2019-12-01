@@ -22,6 +22,7 @@
 
 #include <connectivity/FValue.hxx>
 #include "MErrorResource.hxx"
+#include "MColumnAlias.hxx"
 
 namespace connectivity
 {

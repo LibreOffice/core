@@ -20,16 +20,11 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CONNECTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CONNECTION_HXX
 
-#include "Clob.hxx"
-#include "Blob.hxx"
-#include "SubComponent.hxx"
-
 #include <ibase.h>
 
 #include <connectivity/CommonTools.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <map>
 #include <memory>
 #include <OTypeInfo.hxx>
 #include <unotools/tempfile.hxx>
@@ -38,10 +33,9 @@
 #include <com/sun/star/document/DocumentEvent.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
+#include <com/sun/star/sdbc/XBlob.hpp>
+#include <com/sun/star/sdbc/XClob.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

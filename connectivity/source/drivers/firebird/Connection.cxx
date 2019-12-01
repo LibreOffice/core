@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "Blob.hxx"
 #include "Catalog.hxx"
+#include "Clob.hxx"
 #include "Connection.hxx"
 #include "DatabaseMetaData.hxx"
 #include "Driver.hxx"

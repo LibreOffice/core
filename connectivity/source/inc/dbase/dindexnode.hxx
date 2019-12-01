@@ -20,11 +20,8 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXNODE_HXX
 
 #include <file/fcode.hxx>
-#include <file/FTable.hxx>
 #include <connectivity/FValue.hxx>
-#include <rtl/ref.hxx>
 #include <memory>
-#include <vector>
 
 #define NODE_NOTFOUND 0xFFFF
 #define DINDEX_PAGE_SIZE 512
