@@ -17,7 +17,7 @@ class BitmapEx;
 
 /** Filter image based on a 3x3 convolution matrix
  */
-class VCL_DLLPUBLIC BitmapConvolutionMatrixFilter : public BitmapFilter
+class BitmapConvolutionMatrixFilter : public BitmapFilter
 {
 public:
     BitmapConvolutionMatrixFilter(const long (&rMatrix)[9])

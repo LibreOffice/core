@@ -80,7 +80,7 @@ private:
     SvXMLUnitConverter(const SvXMLUnitConverter&) = delete;
     SvXMLUnitConverter& operator=(const SvXMLUnitConverter&) = delete;
 
-    struct Impl;
+    struct SAL_DLLPRIVATE Impl;
     ::std::unique_ptr<Impl> m_pImpl;
 
 public:

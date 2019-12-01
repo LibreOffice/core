@@ -371,7 +371,7 @@ public:
      * link to a certain external file is updated, the notify() method gets
      * called.
      */
-    class LinkListener
+    class SAL_DLLPRIVATE LinkListener
     {
     public:
         LinkListener();
@@ -422,7 +422,7 @@ private:
 
 public:
     /** Source document meta-data container. */
-    struct SrcFileData
+    struct SAL_DLLPRIVATE SrcFileData
     {
         OUString maFileName;      /// original file name as loaded from the file.
         OUString maRealFileName;  /// file name created from the relative name.

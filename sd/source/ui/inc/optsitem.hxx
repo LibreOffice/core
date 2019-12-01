@@ -34,7 +34,7 @@ class FrameView;
 
 class SdOptionsGeneric;
 
-class SD_DLLPUBLIC SdOptionsItem : public ::utl::ConfigItem
+class SdOptionsItem : public ::utl::ConfigItem
 {
 
 private:
@@ -162,7 +162,7 @@ private:
     SdOptionsLayout maOptionsLayout;
 };
 
-class SD_DLLPUBLIC SdOptionsContents : public SdOptionsGeneric
+class SdOptionsContents : public SdOptionsGeneric
 {
 private:
 protected:
@@ -463,7 +463,7 @@ public:
     void                    SetOptions( SdOptions* pOpts ) const;
 };
 
-class SD_DLLPUBLIC SdOptionsPrint : public SdOptionsGeneric
+class SdOptionsPrint : public SdOptionsGeneric
 {
 private:
 

@@ -209,7 +209,7 @@ class VCL_DLLPUBLIC SvListView
 {
     friend class SvTreeList;
 
-    struct Impl;
+    struct SAL_DLLPRIVATE Impl;
     std::unique_ptr<Impl> m_pImpl;
 
 protected:

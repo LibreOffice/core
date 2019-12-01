@@ -60,7 +60,7 @@ public:
     void StopRefreshTimer();
 
     void SetRefreshDelay( sal_uLong nSeconds );
-    SC_DLLPUBLIC virtual void Invoke() override;
+    virtual void Invoke() override;
 
 private:
     void Launch();

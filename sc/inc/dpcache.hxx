@@ -53,7 +53,7 @@ public:
     typedef std::set<ScDPObject*> ScDPObjectSet;
     typedef std::vector<SCROW> IndexArrayType;
 
-    struct GroupItems
+    struct SAL_DLLPRIVATE GroupItems
     {
         ScDPItemDataVec maItems;
         ScDPNumGroupInfo maInfo;
@@ -65,7 +65,7 @@ public:
         GroupItems(const ScDPNumGroupInfo& rInfo, sal_Int32 nGroupType);
     };
 
-    struct Field
+    struct SAL_DLLPRIVATE Field
     {
         /**
          * Optional items for grouped field.
