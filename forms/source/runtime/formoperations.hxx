@@ -346,6 +346,9 @@ namespace frm
         FormOperations& operator=( const FormOperations& ) = delete;
 
     public:
+
+        css::uno::Reference<css::awt::XWindow> GetDialogParent() const;
+
         class MethodGuard
         {
             FormOperations& m_rOwner;
