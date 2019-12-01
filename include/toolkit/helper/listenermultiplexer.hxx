@@ -159,21 +159,21 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class ActionListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( ActionListenerMultiplexer, css::awt::XActionListener )
+DECL_LISTENERMULTIPLEXER_START( ActionListenerMultiplexer, css::awt::XActionListener )
     void SAL_CALL actionPerformed( const css::awt::ActionEvent& rEvent ) override;
 DECL_LISTENERMULTIPLEXER_END
 
 
 //  class ItemListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( ItemListenerMultiplexer, css::awt::XItemListener )
+DECL_LISTENERMULTIPLEXER_START( ItemListenerMultiplexer, css::awt::XItemListener )
     void SAL_CALL itemStateChanged( const css::awt::ItemEvent& rEvent ) override;
 DECL_LISTENERMULTIPLEXER_END
 
 
 //  class TabListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( TabListenerMultiplexer, css::awt::XTabListener )
+DECL_LISTENERMULTIPLEXER_START( TabListenerMultiplexer, css::awt::XTabListener )
     void SAL_CALL inserted( ::sal_Int32 ID ) override;
     void SAL_CALL removed( ::sal_Int32 ID ) override;
     void SAL_CALL changed( ::sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& Properties ) override;
@@ -253,7 +253,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class TabPageListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( TabPageListenerMultiplexer, css::awt::tab::XTabPageContainerListener )
+DECL_LISTENERMULTIPLEXER_START( TabPageListenerMultiplexer, css::awt::tab::XTabPageContainerListener )
     void SAL_CALL tabPageActivated( const css::awt::tab::TabPageActivatedEvent& aEvent ) override;
 DECL_LISTENERMULTIPLEXER_END
 

@@ -16,7 +16,7 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC BitmapGaussianSeparableBlurFilter final : public BitmapFilter
+class BitmapGaussianSeparableBlurFilter final : public BitmapFilter
 {
 public:
     BitmapGaussianSeparableBlurFilter(double fRadius)

@@ -181,7 +181,7 @@ public:
         EXTENDED_ERROR_DETECTION_NAME_NO_BREAK  // name error on unknown symbols, don't break, continue
     };
 
-    struct Convention
+    struct SAL_DLLPRIVATE Convention
     {
         const formula::FormulaGrammar::AddressConvention meConv;
 

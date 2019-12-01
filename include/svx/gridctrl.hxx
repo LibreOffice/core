@@ -170,7 +170,7 @@ public:
 
     // NavigationBar
 
-    class NavigationBar final : public Control
+    class SAL_DLLPRIVATE NavigationBar final : public Control
     {
         class AbsolutePos : public NumericField
         {

@@ -80,15 +80,15 @@ struct ComboBox::Impl
     ComboBoxBounds calcComboBoxDropDownComponentBounds(
         const Size &rOutSize, const Size &rBorderOutSize) const;
 
-    DECL_DLLPRIVATE_LINK( ImplSelectHdl, LinkParamNone*, void );
-    DECL_DLLPRIVATE_LINK( ImplCancelHdl, LinkParamNone*, void );
-    DECL_DLLPRIVATE_LINK( ImplDoubleClickHdl, ImplListBoxWindow*, void );
-    DECL_DLLPRIVATE_LINK( ImplClickBtnHdl, void*, void );
-    DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, FloatingWindow*, void );
-    DECL_DLLPRIVATE_LINK( ImplSelectionChangedHdl, sal_Int32, void );
-    DECL_DLLPRIVATE_LINK( ImplUserDrawHdl, UserDrawEvent*, void );
-    DECL_DLLPRIVATE_LINK( ImplAutocompleteHdl, Edit&, void );
-    DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl , LinkParamNone*, void );
+    DECL_LINK( ImplSelectHdl, LinkParamNone*, void );
+    DECL_LINK( ImplCancelHdl, LinkParamNone*, void );
+    DECL_LINK( ImplDoubleClickHdl, ImplListBoxWindow*, void );
+    DECL_LINK( ImplClickBtnHdl, void*, void );
+    DECL_LINK( ImplPopupModeEndHdl, FloatingWindow*, void );
+    DECL_LINK( ImplSelectionChangedHdl, sal_Int32, void );
+    DECL_LINK( ImplUserDrawHdl, UserDrawEvent*, void );
+    DECL_LINK( ImplAutocompleteHdl, Edit&, void );
+    DECL_LINK( ImplListItemSelectHdl , LinkParamNone*, void );
 };
 
 
