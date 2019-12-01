@@ -64,7 +64,7 @@ class SD_DLLPUBLIC SdPageObjsTLB final : public SvTreeListBox
 public:
 
     // nested class to implement the TransferableHelper
-    class SdPageObjsTransferable : public SdTransferable
+    class SAL_DLLPRIVATE SdPageObjsTransferable : public SdTransferable
     {
     public:
         SdPageObjsTransferable(
@@ -93,13 +93,13 @@ public:
         INetBookmark const      maBookmark;
         ::sd::DrawDocShell&     mrDocShell;
         NavigatorDragType const   meDragType;
-        SAL_DLLPRIVATE virtual               ~SdPageObjsTransferable() override;
+        virtual               ~SdPageObjsTransferable() override;
 
-        SAL_DLLPRIVATE virtual void      AddSupportedFormats() override;
-        SAL_DLLPRIVATE virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
-        SAL_DLLPRIVATE virtual void      DragFinished( sal_Int8 nDropAction ) override;
+        virtual void      AddSupportedFormats() override;
+        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+        virtual void      DragFinished( sal_Int8 nDropAction ) override;
 
-        SAL_DLLPRIVATE virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
     };
 
     friend class SdPageObjsTLB::SdPageObjsTransferable;
@@ -258,7 +258,7 @@ private:
     /** This inner class is defined in sdtreelb.cxx and is basically a
         container for the icons used in the list box for the entries.
     */
-    class IconProvider;
+    class SAL_DLLPRIVATE IconProvider;
 
     /** Add one list box entry for the parent of the given shapes and one child entry for
         each of the given shapes.
