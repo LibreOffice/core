@@ -57,7 +57,7 @@ public:
 };
 
 
-class SW_DLLPUBLIC SwColExample : public SwPageExample
+class SwColExample : public SwPageExample
 {
     SwColMgr*   pColMgr;
 

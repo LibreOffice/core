@@ -63,7 +63,7 @@ namespace o3tl
 
 class VCL_DLLPUBLIC StatusBar : public vcl::Window
 {
-    class   ImplData;
+    class SAL_DLLPRIVATE ImplData;
 private:
     std::vector<std::unique_ptr<ImplStatusItem>> mvItemList;
     std::unique_ptr<ImplData> mpImplData;

@@ -173,7 +173,7 @@ namespace sw
     class DocumentSettingManager;
 }
 
-class SW_DLLPUBLIC PurgeGuard
+class PurgeGuard
 {
 private:
     ::sw::DocumentSettingManager &m_rManager;

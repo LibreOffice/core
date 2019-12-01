@@ -34,7 +34,7 @@ struct SC_DLLPUBLIC ScQueryEntry
 {
     enum QueryType { ByValue, ByString, ByDate, ByEmpty };
 
-    struct Item
+    struct SAL_DLLPRIVATE Item
     {
         QueryType     meType;
         double        mfVal;

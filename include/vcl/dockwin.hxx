@@ -208,7 +208,7 @@ class VCL_DLLPUBLIC DockingWindow
     : public vcl::Window
     , public VclBuilderContainer
 {
-    class   ImplData;
+    class SAL_DLLPRIVATE ImplData;
 private:
     VclPtr<FloatingWindow> mpFloatWin;
     VclPtr<vcl::Window>    mpOldBorderWin;

@@ -25,7 +25,7 @@
 #include "swdllapi.h"
 
 /// If text in multi-column sections should be evenly distributed.
-class SW_DLLPUBLIC SwFormatNoBalancedColumns : public SfxBoolItem
+class SwFormatNoBalancedColumns : public SfxBoolItem
 {
 public:
     SwFormatNoBalancedColumns( bool bFlag = false )

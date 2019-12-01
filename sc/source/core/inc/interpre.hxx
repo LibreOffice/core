@@ -865,10 +865,10 @@ private:
     static double gauss(double x);
 
 public:
-    static SC_DLLPUBLIC double phi(double x);
-    static SC_DLLPUBLIC double integralPhi(double x);
-    static SC_DLLPUBLIC double gaussinv(double x);
-    static SC_DLLPUBLIC double GetPercentile( ::std::vector<double> & rArray, double fPercentile );
+    static double phi(double x);
+    static double integralPhi(double x);
+    static double gaussinv(double x);
+    static double GetPercentile( ::std::vector<double> & rArray, double fPercentile );
 
 
 private:

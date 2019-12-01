@@ -25,7 +25,7 @@
 #include <tools/solar.h>
 #include <svl/hint.hxx>
 
-class SC_DLLPUBLIC ScPaintHint final : public SfxHint
+class ScPaintHint final : public SfxHint
 {
     ScRange const         aRange;
     PaintPartFlags const  nParts;

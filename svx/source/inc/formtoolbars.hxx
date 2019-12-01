@@ -44,16 +44,16 @@ namespace svxform
         /** retrieves the URI for the toolbox associated with the given slot, depending
             on the type of our document
         */
-        SVX_DLLPUBLIC static OUString
+        static OUString
                 getToolboxResourceName( sal_uInt16 _nSlotId );
 
         /** toggles the toolbox associated with the given slot
         */
-        SVX_DLLPUBLIC void    toggleToolbox( sal_uInt16 _nSlotId ) const;
+        void    toggleToolbox( sal_uInt16 _nSlotId ) const;
 
         /** determines whether the toolbox associated with the given slot is currently visible
         */
-        SVX_DLLPUBLIC bool    isToolboxVisible( sal_uInt16 _nSlotId ) const;
+        bool    isToolboxVisible( sal_uInt16 _nSlotId ) const;
 
     };
 

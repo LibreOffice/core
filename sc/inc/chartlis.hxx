@@ -41,7 +41,7 @@ class ScChartUnoData;
 class SC_DLLPUBLIC ScChartListener final : public SvtListener
 {
 public:
-    class ExternalRefListener final : public ScExternalRefManager::LinkListener
+    class SAL_DLLPRIVATE ExternalRefListener final : public ScExternalRefManager::LinkListener
     {
     public:
         ExternalRefListener(ScChartListener& rParent, ScDocument* pDoc);

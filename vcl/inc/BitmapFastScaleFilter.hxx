@@ -14,7 +14,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapFastScaleFilter final : public BitmapFilter
+class BitmapFastScaleFilter final : public BitmapFilter
 {
 public:
     explicit BitmapFastScaleFilter(double fScaleX, double fScaleY)

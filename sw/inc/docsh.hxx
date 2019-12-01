@@ -320,7 +320,7 @@ public:
     void CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
     void RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
 
-    class LockAllViewsGuard
+    class SAL_DLLPRIVATE LockAllViewsGuard
     {
         std::vector<SwViewShell*> m_aViewWasUnLocked;
 

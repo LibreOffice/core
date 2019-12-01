@@ -27,7 +27,7 @@
 //  - its main purpose is theming support
 class VCL_DLLPUBLIC DockingAreaWindow final : public vcl::Window
 {
-    class ImplData;
+    class SAL_DLLPRIVATE ImplData;
 
 private:
     std::unique_ptr<ImplData> mpImplData;

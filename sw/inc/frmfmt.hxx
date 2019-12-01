@@ -347,7 +347,7 @@ namespace sw
     };
 }
 
-class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
+class SwDrawFrameFormat: public SwFrameFormat
 {
     friend class SwDoc;
 

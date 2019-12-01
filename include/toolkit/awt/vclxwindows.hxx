@@ -467,7 +467,7 @@ public:
 
 //  class VCLXFixedHyperlink
 
-class TOOLKIT_DLLPUBLIC VCLXFixedHyperlink final :
+class VCLXFixedHyperlink final :
     public css::awt::XFixedHyperlink,
     public VCLXWindow
 {

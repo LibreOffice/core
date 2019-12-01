@@ -34,7 +34,7 @@
 
 class SfxItemSet;
 
-class SW_DLLPUBLIC SwRedlineExtraData
+class SwRedlineExtraData
 {
     SwRedlineExtraData( const SwRedlineExtraData& ) = delete;
     SwRedlineExtraData& operator=( const SwRedlineExtraData& ) = delete;
@@ -50,7 +50,7 @@ public:
     virtual bool operator == ( const SwRedlineExtraData& ) const;
 };
 
-class SW_DLLPUBLIC SwRedlineExtraData_FormatColl final : public SwRedlineExtraData
+class SwRedlineExtraData_FormatColl final : public SwRedlineExtraData
 {
     OUString m_sFormatNm;
     std::unique_ptr<SfxItemSet> m_pSet;
@@ -265,7 +265,7 @@ public:
 void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc);
 
 /// Base object for 'Redlines' that are not of 'Ranged' type (like table row insert\delete)
-class SW_DLLPUBLIC SwExtraRedline
+class SwExtraRedline
 {
 private:
     SwExtraRedline(SwExtraRedline const&) = delete;
@@ -276,7 +276,7 @@ public:
 };
 
 /// Redline that holds information about a table-row that had some change
-class SW_DLLPUBLIC SwTableRowRedline : public SwExtraRedline
+class SwTableRowRedline : public SwExtraRedline
 {
 private:
     SwRedlineData m_aRedlineData;
@@ -297,7 +297,7 @@ public:
 };
 
 /// Redline that holds information about a table-cell that had some change
-class SW_DLLPUBLIC SwTableCellRedline : public SwExtraRedline
+class SwTableCellRedline : public SwExtraRedline
 {
 private:
     SwRedlineData m_aRedlineData;

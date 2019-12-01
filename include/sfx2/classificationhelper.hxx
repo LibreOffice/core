@@ -41,7 +41,7 @@ enum class SfxClassificationPolicyType
 /// Shared code to handle Business Authorization Identification and Labeling Scheme (BAILS) properties.
 class SFX2_DLLPUBLIC SfxClassificationHelper
 {
-    class Impl;
+    class SAL_DLLPRIVATE Impl;
     std::unique_ptr<Impl> m_pImpl;
 
 public:

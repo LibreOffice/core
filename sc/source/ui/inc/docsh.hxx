@@ -125,7 +125,7 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
 
     /** Do things that need to be done before saving to our own format and
         necessary clean ups in dtor. */
-    class PrepareSaveGuard
+    class SAL_DLLPRIVATE PrepareSaveGuard
     {
         public:
             explicit    PrepareSaveGuard( ScDocShell & rDocShell );

@@ -132,7 +132,7 @@ public:
 #ifdef DBG_UTIL
 
 // Item for settings dialog - test settings
-class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
+class SwTestItem : public SfxPoolItem
 {
     friend class SwModule;
     friend class SwTestTabPage;

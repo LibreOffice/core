@@ -206,7 +206,7 @@ class SwFltAnchorListener : public SvtListener
         virtual void Notify(const SfxHint&) override;
 };
 
-class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
+class SwFltRedline : public SfxPoolItem
 {
 public:
     DateTime const        aStamp;

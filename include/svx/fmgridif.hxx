@@ -366,7 +366,7 @@ private:
         // (I would like to have a vector here but including the stl in an exported file seems
         // very risky to me...)
 
-    class GridListenerDelegator;
+    class SAL_DLLPRIVATE GridListenerDelegator;
     friend class GridListenerDelegator;
     std::unique_ptr<GridListenerDelegator>  m_pGridListener;
 

@@ -21,7 +21,7 @@
 #include "swdllapi.h"
 #include "docsh.hxx"
 
-class SW_DLLPUBLIC SwWebDocShell : public SwDocShell
+class SwWebDocShell : public SwDocShell
 {
     sal_uInt16      m_nSourcePara;    ///< Active line in source view.
 

@@ -28,7 +28,7 @@ template <typename EnumT> struct SvXMLEnumMapEntry;
 /**
     PropertyHandler for a generic xml enumeration type:
 */
-class XMLOFF_DLLPUBLIC XMLEnumPropertyHdl : public XMLPropertyHandler
+class XMLEnumPropertyHdl : public XMLPropertyHandler
 {
 private:
     const SvXMLEnumMapEntry<sal_uInt16>* mpEnumMap;

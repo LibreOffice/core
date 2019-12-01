@@ -37,7 +37,7 @@ class ScPreviewLocationData;
 class CommandEvent;
 class SfxViewFactory;
 
-class SC_DLLPUBLIC ScPreviewShell: public SfxViewShell
+class ScPreviewShell: public SfxViewShell
 {
     ScDocShell*     pDocShell;
 

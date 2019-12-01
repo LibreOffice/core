@@ -127,7 +127,7 @@ inline SwRegisterItem::SwRegisterItem( const bool bRegister ) :
     SfxBoolItem( RES_PARATR_REGISTER, bRegister )
 {}
 
-class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
+class SwNumRuleItem : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();

@@ -36,7 +36,7 @@ enum class MirrorGraph
     Both
 };
 
-class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem<MirrorGraph>
+class SwMirrorGrf : public SfxEnumItem<MirrorGraph>
 {
     bool m_bGrfToggle; // Flip graphics on even pages.
 
@@ -108,7 +108,7 @@ public:
     const Size& GetUnrotatedSize() const            { return m_aUnrotatedSize; }
 };
 
-class SW_DLLPUBLIC SwLuminanceGrf : public SfxInt16Item
+class SwLuminanceGrf : public SfxInt16Item
 {
 public:
     SwLuminanceGrf( sal_Int16 nVal = 0 )
@@ -124,7 +124,7 @@ public:
                                   const IntlWrapper& rIntl ) const override;
 };
 
-class SW_DLLPUBLIC SwContrastGrf : public SfxInt16Item
+class SwContrastGrf : public SfxInt16Item
 {
 public:
     SwContrastGrf( sal_Int16 nVal = 0 )
@@ -181,7 +181,7 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
-class SW_DLLPUBLIC SwGammaGrf : public SfxPoolItem
+class SwGammaGrf : public SfxPoolItem
 {
     double m_nValue;
 public:
@@ -252,7 +252,7 @@ protected:
         SfxEnumItem(RES_GRFATR_DRAWMODE, nMode) {}
 };
 
-class SW_DLLPUBLIC SwDrawModeGrf : public SwDrawModeGrf_Base
+class SwDrawModeGrf : public SwDrawModeGrf_Base
 {
 public:
     SwDrawModeGrf( GraphicDrawMode nMode = GraphicDrawMode::Standard )

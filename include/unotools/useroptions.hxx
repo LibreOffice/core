@@ -90,11 +90,11 @@ public:
     void      SetBoolValue (UserOptToken nToken, bool bNewValue);
 
 private:
-    class Impl;
+    class SAL_DLLPRIVATE Impl;
     std::shared_ptr<Impl> xImpl;
     static std::weak_ptr<Impl> xSharedImpl;
 private:
-    class ChangeListener;
+    class SAL_DLLPRIVATE ChangeListener;
 };
 
 #endif // INCLUDED_UNOTOOLS_USEROPTIONS_HXX

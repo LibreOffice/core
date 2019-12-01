@@ -25,7 +25,7 @@
 #include <vcl/checksum.hxx>
 #include <vector>
 
-class VCL_DLLPUBLIC BitmapPalette
+class BitmapPalette
 {
     friend class SalBitmap;
     friend class BitmapAccess;
@@ -36,12 +36,12 @@ private:
 
 public:
 
-    SAL_DLLPRIVATE const BitmapColor* ImplGetColorBuffer() const
+    const BitmapColor* ImplGetColorBuffer() const
     {
         return maBitmapColor.data();
     }
 
-    SAL_DLLPRIVATE BitmapColor* ImplGetColorBuffer()
+    BitmapColor* ImplGetColorBuffer()
     {
         return maBitmapColor.data();
     }

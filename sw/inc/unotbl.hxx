@@ -187,7 +187,7 @@ typedef cppu::WeakImplHelper<
     css::text::XTextTableCursor,
     css::lang::XServiceInfo,
     css::beans::XPropertySet> SwXTextTableCursor_Base;
-class SW_DLLPUBLIC SwXTextTableCursor final
+class SwXTextTableCursor final
     : public SwXTextTableCursor_Base
     , public SvtListener
     , public OTextCursorHelper

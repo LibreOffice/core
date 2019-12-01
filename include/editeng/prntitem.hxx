@@ -32,7 +32,7 @@
 */
 
 
-class EDITENG_DLLPUBLIC SvxPrintItem final : public SfxBoolItem
+class SvxPrintItem final : public SfxBoolItem
 {
 public:
     explicit SvxPrintItem( const sal_uInt16 nId , const bool bPrt = true );

@@ -36,7 +36,7 @@ class VCL_DLLPUBLIC MapMode
     friend class        OutputDevice;
 
 public:
-    struct ImplMapMode;
+    struct SAL_DLLPRIVATE ImplMapMode;
 
     MapMode();
     MapMode( const MapMode& rMapMode );

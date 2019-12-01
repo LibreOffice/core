@@ -133,7 +133,7 @@ public:
     bool HasMore() const { return !sAddress.isEmpty(); }
 };
 
-class SW_DLLPUBLIC SwAuthenticator :
+class SwAuthenticator :
     public cppu::WeakImplHelper<css::mail::XAuthenticator>
 {
     OUString const m_aUserName;
@@ -174,7 +174,7 @@ public:
     osl::Mutex m_aMutex;
 };
 
-class SW_DLLPUBLIC SwConnectionListener :
+class SwConnectionListener :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper<css::mail::XConnectionListener>
 {

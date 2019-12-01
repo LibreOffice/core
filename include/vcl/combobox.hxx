@@ -34,7 +34,7 @@ class UserDrawEvent;
 class VCL_DLLPUBLIC ComboBox : public Edit
 {
 private:
-    struct Impl;
+    struct SAL_DLLPRIVATE Impl;
     std::unique_ptr<Impl> m_pImpl;
 
 protected:

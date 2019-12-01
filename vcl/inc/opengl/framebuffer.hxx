@@ -14,7 +14,7 @@
 
 #include <opengl/texture.hxx>
 
-class VCL_DLLPUBLIC OpenGLFramebuffer final
+class OpenGLFramebuffer final
 {
 private:
     GLuint      mnId;
@@ -33,7 +33,7 @@ public:
 
     static void Unbind(GLenum eTarget = GL_FRAMEBUFFER);
 
-    bool    IsFree() const;
+    VCL_DLLPUBLIC bool IsFree() const;
     bool    IsAttached( GLuint nTexture ) const;
     bool    IsAttached( const OpenGLTexture& rTexture ) const;
     void    AttachTexture( const OpenGLTexture& rTexture );

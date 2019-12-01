@@ -113,7 +113,7 @@ public:
                                     long* pX = nullptr, long* pY = nullptr );
 };
 
-class SW_DLLPUBLIC SwShellCursor : public virtual SwCursor, public SwSelPaintRects
+class SwShellCursor : public virtual SwCursor, public SwSelPaintRects
 {
 private:
     // Document positions of start/end characters of a SSelection.

@@ -110,7 +110,7 @@ public:
 };
 
 
-class MSFILTER_DLLPUBLIC WString final : public TBBase
+class WString final : public TBBase
 {
     OUString sString;
 
@@ -120,7 +120,7 @@ public:
     const OUString& getString() const { return sString; }
 };
 
-class MSFILTER_DLLPUBLIC TBCExtraInfo final : public TBBase
+class TBCExtraInfo final : public TBBase
 {
     WString wstrHelpFile;
     sal_Int32 idHelpContext;
@@ -141,7 +141,7 @@ public:
     OUString const & getOnAction() const;
 };
 
-class MSFILTER_DLLPUBLIC TBCGeneralInfo final : public TBBase
+class TBCGeneralInfo final : public TBBase
 {
     sal_uInt8 bFlags;
     WString customText;
@@ -156,7 +156,7 @@ public:
     OUString const & CustomText() { return customText.getString(); }
 };
 
-class MSFILTER_DLLPUBLIC TBCBitMap final : public TBBase
+class TBCBitMap final : public TBBase
 {
 friend class TBCBSpecific; // #FIXME hacky access, need to fix
     sal_Int32 cbDIB;
@@ -182,7 +182,7 @@ public:
     OUString Name();
 };
 
-class MSFILTER_DLLPUBLIC TBCCDData final : public TBBase
+class TBCCDData final : public TBBase
 {
     sal_Int16 cwstrItems; //Signed integer that specifies the number of items in wstrList. MUST be positive.
     std::vector< WString > wstrList;  // Zero-based index array of WString structures. Number of elements MUST be equal to cwstrItems.

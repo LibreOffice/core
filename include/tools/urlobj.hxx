@@ -923,7 +923,7 @@ public:
 private:
     // General Structure:
 
-    class SubString
+    class SAL_DLLPRIVATE SubString
     {
         sal_Int32 m_nBegin;
         sal_Int32 m_nLength;

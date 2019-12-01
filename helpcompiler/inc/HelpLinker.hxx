@@ -47,11 +47,11 @@ public:
     void processDocument( xmlDocPtr doc, const std::string& EncodedDocPath );
 };
 
-class L10N_DLLPUBLIC HelpLinker
+class HelpLinker
 {
 public:
     /// @throws HelpProcessingException
-    void main(std::vector<std::string> &args,
+    L10N_DLLPUBLIC void main(std::vector<std::string> &args,
               std::string const * pExtensionPath = nullptr,
               std::string const * pDestination = nullptr,
               const OUString* pOfficeHelpPath = nullptr );

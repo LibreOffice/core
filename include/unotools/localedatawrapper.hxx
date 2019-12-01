@@ -90,7 +90,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     bool                    bReservedWordValid;
     bool                    bSecondaryCalendarValid;
     mutable ::utl::ReadWriteMutex   aMutex;
-    struct Locale_Compare
+    struct SAL_DLLPRIVATE Locale_Compare
     {
         bool operator()(const css::lang::Locale& rLocale1, const css::lang::Locale& rLocale2) const;
     };

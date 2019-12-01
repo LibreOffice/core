@@ -22,7 +22,7 @@ class Qt5Widget;
 
 // Wrapper class to hold a css::accessibility::XAccessible object
 // while being able to pass it as a QObject
-class VCLPLUG_QT5_PUBLIC Qt5XAccessible : public QObject
+class Qt5XAccessible : public QObject
 {
     Q_OBJECT
 

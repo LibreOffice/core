@@ -142,7 +142,7 @@ private:
 
 class SVL_DLLPUBLIC SvNumberformat
 {
-    struct LocaleType
+    struct SAL_DLLPRIVATE LocaleType
     {
         enum class Substitute : sal_uInt8
         {
