@@ -715,6 +715,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:WordCountDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:AccessibilityCheck"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:AutoFormatMenu">
         <menu:menupopup>

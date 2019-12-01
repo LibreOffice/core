@@ -586,4 +586,10 @@ interface BaseTextSelection
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+
+    SID_ACCESSIBILITY_CHECK
+    [
+        ExecMethod = ExecDlg;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
 }
