@@ -20,11 +20,7 @@
 #ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_SUBCOMPONENT_HXX
 #define INCLUDED_MYSQLC_SOURCE_MYSQLC_SUBCOMPONENT_HXX
 
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/weak.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 

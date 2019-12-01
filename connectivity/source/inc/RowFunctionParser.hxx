@@ -24,7 +24,6 @@
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <memory>
-#include <vector>
 
 namespace connectivity
 {

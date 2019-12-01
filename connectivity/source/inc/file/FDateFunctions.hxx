@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FDATEFUNCTIONS_HXX
 
 #include <file/fcode.hxx>
-#include <file/filedllapi.hxx>
 
 namespace connectivity
 {

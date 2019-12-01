@@ -35,6 +35,7 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/thread.h>
 
 using namespace connectivity::mysqlc;

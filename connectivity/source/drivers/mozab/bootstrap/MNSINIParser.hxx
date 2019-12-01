@@ -20,8 +20,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSINIPARSER_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/io/IOException.hpp>
-#include <osl/process.h>
 
 #include <map>
 #include <vector>

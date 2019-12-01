@@ -18,6 +18,7 @@
  */
 
 #include <FDatabaseMetaDataResultSetMetaData.hxx>
+#include <FDatabaseMetaDataResultSet.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ProcedureResult.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>

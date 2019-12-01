@@ -22,10 +22,9 @@
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <map>
 #include <vector>
-#include "FDatabaseMetaDataResultSet.hxx"
 #include "OColumn.hxx"
-#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

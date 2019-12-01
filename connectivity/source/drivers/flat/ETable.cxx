@@ -30,6 +30,7 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <tools/solar.h>
+#include <tools/urlobj.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/numbers.hxx>
@@ -43,6 +44,7 @@
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <connectivity/dbconversion.hxx>
+#include <connectivity/sdbcx/VColumn.hxx>
 #include <file/quotedstring.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>

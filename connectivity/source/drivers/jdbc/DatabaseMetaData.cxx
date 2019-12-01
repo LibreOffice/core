@@ -21,6 +21,7 @@
 #include <java/sql/DatabaseMetaData.hxx>
 #include <java/sql/Connection.hxx>
 #include <java/sql/ResultSet.hxx>
+#include <java/sql/SQLException.hxx>
 #include <java/tools.hxx>
 #include <java/lang/String.hxx>
 #include <connectivity/CommonTools.hxx>

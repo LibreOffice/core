@@ -27,6 +27,7 @@
 #include "MacabDriver.hxx"
 #include <FDatabaseMetaDataResultSet.hxx>
 #include <OTypeInfo.hxx>
+#include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>

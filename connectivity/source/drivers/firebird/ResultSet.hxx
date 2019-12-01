@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_RESULTSET_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_RESULTSET_HXX
 
-#include "Statement.hxx"
+#include "Connection.hxx"
 
 #include <ibase.h>
 
@@ -30,9 +30,6 @@
 #include <comphelper/propertycontainer.hxx>
 
 #include <com/sun/star/util/XCancellable.hpp>
-#include <com/sun/star/sdbc/FetchDirection.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>

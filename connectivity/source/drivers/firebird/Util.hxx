@@ -13,10 +13,8 @@
 #include <ibase.h>
 
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 
 namespace connectivity
 {

@@ -8,7 +8,7 @@
  */
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_HCOLUMN_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_HCOLUMN_HXX
-#include <connectivity/TColumnsHelper.hxx>
+
 #include <connectivity/sdbcx/VColumn.hxx>
 
 namespace connectivity
