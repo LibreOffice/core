@@ -251,11 +251,11 @@ private:
 };
 
 
-class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
+class CurrencyFormatter : public NumericFormatter
 {
 protected:
                             CurrencyFormatter(Edit* pEdit);
-    SAL_DLLPRIVATE void     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
+    void                    ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
     virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
 
 public:

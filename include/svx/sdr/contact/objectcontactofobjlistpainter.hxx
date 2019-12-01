@@ -30,7 +30,7 @@ class SdrObject;
 
 namespace sdr { namespace contact {
 
-class SVX_DLLPUBLIC ObjectContactPainter : public ObjectContact
+class ObjectContactPainter : public ObjectContact
 {
 protected:
     // Hierarchy access methods

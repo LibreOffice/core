@@ -121,7 +121,7 @@ public:
     const Color&        GetColor() const { return maColor; }
 };
 
-class VCL_DLLPUBLIC MetaPointAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaPointAction final : public MetaAction
 {
 private:
     Point               maPt;
@@ -457,7 +457,7 @@ public:
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
 };
 
-class VCL_DLLPUBLIC MetaTextAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaTextAction final : public MetaAction
 {
 private:
 
@@ -529,7 +529,7 @@ public:
     long*           GetDXArray() const { return mpDXAry.get(); }
 };
 
-class VCL_DLLPUBLIC MetaStretchTextAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaStretchTextAction final : public MetaAction
 {
 private:
 
@@ -567,7 +567,7 @@ public:
     sal_Int32       GetLen() const { return mnLen; }
 };
 
-class VCL_DLLPUBLIC MetaTextRectAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaTextRectAction final : public MetaAction
 {
 private:
 
@@ -600,7 +600,7 @@ public:
     DrawTextFlags       GetStyle() const { return mnStyle; }
 };
 
-class VCL_DLLPUBLIC MetaTextLineAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaTextLineAction final : public MetaAction
 {
 private:
 
@@ -840,7 +840,7 @@ public:
     const Size&         GetSrcSize() const { return maSrcSz; }
 };
 
-class VCL_DLLPUBLIC MetaMaskAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaMaskAction final : public MetaAction
 {
 private:
 
@@ -874,7 +874,7 @@ public:
     const Point&        GetPoint() const { return maPt; }
 };
 
-class VCL_DLLPUBLIC MetaMaskScaleAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaMaskScaleAction final : public MetaAction
 {
 private:
 
@@ -910,7 +910,7 @@ public:
     const Size&         GetSize() const { return maSz; }
 };
 
-class VCL_DLLPUBLIC MetaMaskScalePartAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaMaskScalePartAction final : public MetaAction
 {
 private:
 
@@ -951,7 +951,7 @@ public:
     const Size&         GetSrcSize() const { return maSrcSz; }
 };
 
-class VCL_DLLPUBLIC MetaGradientAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaGradientAction final : public MetaAction
 {
 private:
 
@@ -1011,7 +1011,7 @@ public:
     const Gradient&     GetGradient() const { return maGradient; }
 };
 
-class VCL_DLLPUBLIC MetaHatchAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaHatchAction final : public MetaAction
 {
 private:
 
@@ -1494,7 +1494,7 @@ public:
     RasterOp            GetRasterOp() const { return meRasterOp; }
 };
 
-class VCL_DLLPUBLIC MetaTransparentAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaTransparentAction final : public MetaAction
 {
 private:
 
@@ -1524,7 +1524,7 @@ public:
     sal_uInt16              GetTransparence() const { return mnTransPercent; }
 };
 
-class VCL_DLLPUBLIC MetaFloatTransparentAction final : public MetaAction
+class SAL_DLLPUBLIC_RTTI MetaFloatTransparentAction final : public MetaAction
 {
 private:
 

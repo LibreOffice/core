@@ -33,7 +33,7 @@ class LogicalFontInstance;
 class PhysicalFontFace;
 class Size;
 
-class VCL_DLLPUBLIC FontSelectPattern : public FontAttributes
+class FontSelectPattern : public FontAttributes
 {
 public:
     FontSelectPattern(const vcl::Font&, const OUString& rSearchName,
