@@ -57,7 +57,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "You can display a number as a fraction (0.125 = 1/8): Format > Cells, Number > Fraction."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To remove a hyperlink but keep its text, right-click on the hyperlink, and use 'Remove Hyperlink'."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To remove several hyperlinks at once, select the text with the hyperlinks, then right-click and use ‘Remove Hyperlink’."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "To quickly zoom in the selection, press / (divide key) on the number pad. Press * to restore entire page in screen."), "", "tipoftheday_d.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "To zoom a selection to fit the entire window in Draw, use the / (divide key) on the number pad."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Click a column field (row) PivotTable and press F12 to group data. Choices adapt to content: Date (month, quarter, year), number (classes)"), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can restarts the slide show after a pause specified at Slide Show > Slide Show Settings > Loop and repeat."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To distribute some text in multi-columns select the text and apply Format > Columns."), "", "tipoftheday_w.png"},
@@ -65,6 +65,8 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Create different master pages in a presentation template: View > Master Slide and Slide > New Master (or per toolbar or right click in slide pane)."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a pivot table? Click on drop-list's arrow in the row/col header and select sort method: ascending, descending, or custom."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Page/Slide > Properties > 'Fit object to paper format' in Draw/Impress to resize the objects so that they fit on your chosen paper format."), "", "tipoftheday_d.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Fit the entire page in a Draw window, use * on the number pad."), "", "tipoftheday_d.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "In a Draw page, use '-' to zoom out; '+' to zoom in."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To automatically number your table rows in Writer, select the relevant column, then apply a numbering style from List Styles."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME allows you to use assistive tools, such as external screen readers, Braille devices or speech recognition input devices."), "https://www.libreoffice.org/get-help/accessibility/", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a series in %PRODUCTNAME Calc such as A1, A2, A3, A11, A15, not in alphabetical order but on the number? Enable natural sort in the Options tab."), "modules/scalc/ui/sortoptionspage/SortOptionsPage", "tipoftheday_c.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/12030200.html
@@ -88,6 +90,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to count words for just one particular paragraph style? Use Edit > Find & Replace > Paragraph Styles, select the style > Find All and read the number from the status bar."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Generate fully customized PDF documents with the exact format, image compression, comments, access rights, password, etc., via File > Export as PDF."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Writer includes LibreLogo: simple Logo-like programming environment with turtle vector graphics, DTP and graphic design."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/librelogo/LibreLogo.html", "tipoftheday_w.png"}, //local help missing
+     { NC_("RID_CUI_TIPOFTHEDAY", "Construct your own 2D shapes in Draw. Select two or more objects, and explore possibilities with Shape > Combine, Shape > Merge, Shape > Subtract, and Shape > Intersect."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/sdraw/guide/combine_etc.html", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Do you plan to change your computer and want to recover your customizations? See:"), "https://wiki.documentfoundation.org/UserProfile", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can toggle between the field names and the actual value with View > Fields Names (or Ctrl + F9)."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Show or hide comments in Writer by clicking the comment toggle button in the ruler."), "", "tipoftheday_w.png"},
