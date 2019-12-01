@@ -52,7 +52,7 @@ struct ScOrcusXMLTreeParam
      */
     UserDataStoreType m_UserDataStore;
 
-    static SC_DLLPUBLIC EntryData* getUserData(const weld::TreeView& rControl, const weld::TreeIter& rEntry);
+    static EntryData* getUserData(const weld::TreeView& rControl, const weld::TreeIter& rEntry);
 };
 
 struct ScOrcusImportXMLParam

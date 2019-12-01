@@ -26,7 +26,7 @@
 class VCL_DLLPUBLIC PopupMenuFloatingWindow : public FloatingWindow
 {
 private:
-    struct ImplData;
+    struct SAL_DLLPRIVATE ImplData;
     std::unique_ptr<ImplData> mpImplData;
 public:
     PopupMenuFloatingWindow( vcl::Window* pParent );
