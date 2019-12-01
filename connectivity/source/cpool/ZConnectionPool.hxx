@@ -24,13 +24,11 @@
 #include <map>
 #include <vector>
 
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
-#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <salhelper/timer.hxx>

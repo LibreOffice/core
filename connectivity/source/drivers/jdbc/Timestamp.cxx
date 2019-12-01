@@ -20,6 +20,7 @@
 #include <java/sql/Timestamp.hxx>
 #include <java/tools.hxx>
 #include <connectivity/dbconversion.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::comphelper;
 using namespace connectivity;

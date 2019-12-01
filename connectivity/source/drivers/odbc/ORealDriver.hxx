@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com { namespace sun { namespace star {

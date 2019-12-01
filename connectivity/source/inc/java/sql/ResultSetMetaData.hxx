@@ -22,7 +22,6 @@
 #include <java/lang/Object.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <java/sql/ConnectionLog.hxx>
 
 namespace connectivity
 {

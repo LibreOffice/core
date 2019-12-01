@@ -49,6 +49,7 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
+#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>

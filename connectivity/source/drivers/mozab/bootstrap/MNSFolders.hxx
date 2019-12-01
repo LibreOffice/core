@@ -20,9 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSFOLDERS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSFOLDERS_HXX
 
-#include <sal/types.h>
-#include <osl/diagnose.h>
-#include <osl/conditn.hxx>
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
 
 #include <rtl/ustring.hxx>

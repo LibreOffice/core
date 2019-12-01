@@ -12,6 +12,7 @@
 
 #include <memory>
 #include <TDatabaseMetaDataBase.hxx>
+#include "MConnection.hxx"
 
 namespace connectivity
 {

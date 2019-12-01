@@ -22,10 +22,8 @@
 #include <java/lang/Object.hxx>
 #include <TConnection.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <AutoRetrievingBase.hxx>
 #include <java/sql/ConnectionLog.hxx>
-#include <java/LocalRef.hxx>
 #include <java/GlobalRef.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>

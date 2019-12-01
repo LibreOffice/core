@@ -22,6 +22,7 @@
 #include <dbase/DConnection.hxx>
 #include <dbase/DTables.hxx>
 #include <dbase/DTable.hxx>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>

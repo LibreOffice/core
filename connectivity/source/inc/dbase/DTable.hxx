@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DTABLE_HXX
 
 #include <file/FTable.hxx>
-#include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <tools/urlobj.hxx>
 

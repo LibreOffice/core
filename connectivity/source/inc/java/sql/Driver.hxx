@@ -21,8 +21,8 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_DRIVER_HXX
 
 #include <com/sun/star/sdbc/XDriver.hpp>
-#include <java/lang/Object.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/logging.hxx>

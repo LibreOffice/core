@@ -24,7 +24,6 @@
 #include <unotools/confignode.hxx>
 
 #include <unordered_map>
-#include <vector>
 
 namespace connectivity
 {
