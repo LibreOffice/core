@@ -12201,3 +12201,20 @@ SfxVoidItem SpellCheckApplySuggestion SID_SPELLCHECK_APPLY_SUGGESTION
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Format;
 ]
+
+SfxVoidItem AccessibilityCheck SID_ACCESSIBILITY_CHECK
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Modify;
+]
