@@ -215,10 +215,13 @@ void CustomNotebookbarGenerator::modifyCustomizedUIFile(const Sequence<OUString>
 void CustomNotebookbarGenerator::getFileNameAndAppName(OUString& sAppName,
                                                        OUString& sNotebookbarUIFileName)
 {
+    SfxViewFrame* pFrame = SfxViewFrame::Current();
+    if (!pFrame)
+        return;
+
     const auto xContext = comphelper::getProcessComponentContext();
     utl::OConfigurationTreeRoot aRoot(xContext, "org.openoffice.Office.UI.ToolbarMode/", false);
-    const Reference<frame::XFrame>& xFrame
-        = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+    const Reference<frame::XFrame>& xFrame = pFrame->GetFrame().GetFrameInterface();
     const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create(xContext);
 
     vcl::EnumContext::Application eApp
