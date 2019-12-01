@@ -441,7 +441,8 @@ def filter_ignore(line, module):
             '_threads.h',
             'error.h',
             'CLucene/LuceneThreads.h',
-            'CLucene/config/_threads.h'
+            'CLucene/config/_threads.h',
+            ]
     if module == 'external/skia':
         ignore_list += [
             'skcms_internal.h',
@@ -462,7 +463,7 @@ def filter_ignore(line, module):
             'src/core/SkCubicSolver.h',
             'src/sksl/SkSLCPP.h',
             'src/gpu/vk/GrVkAMDMemoryAllocator.h',
-            'src/gpu/GrUtil.h'
+            'src/gpu/GrUtil.h',
             ]
 
     for i in ignore_list:
