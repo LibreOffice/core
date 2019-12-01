@@ -29,7 +29,6 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
-#include <vcl/waitobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>
 #include <vcl/svapp.hxx>
@@ -340,7 +339,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                         if (xQueryBox->run() == RET_YES )
                         {
                             // implicit transformation into bezier
-                            WaitObject aWait( GetActiveWindow() );
+                            weld::WaitObject aWait(GetFrameWeld());
                             mpDrawView->ConvertMarkedToPathObj(false);
                         }
                     }
@@ -383,7 +382,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                         if (xQueryBox->run() == RET_YES)
                         {
                             // implicit transformation into bezier
-                            WaitObject aWait( GetActiveWindow() );
+                            weld::WaitObject aWait(GetFrameWeld());
                             mpDrawView->ConvertMarkedToPathObj(false);
                         }
                     }
@@ -860,7 +859,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_PASTE:
         {
-            WaitObject aWait( GetActiveWindow() );
+            weld::WaitObject aWait(GetFrameWeld());
 
             if(HasCurrentFunction())
             {
@@ -918,7 +917,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_PASTE_UNFORMATTED:
         {
-            WaitObject aWait( GetActiveWindow() );
+            weld::WaitObject aWait(GetFrameWeld());
 
             if(HasCurrentFunction())
             {
@@ -942,7 +941,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_CLIPBOARD_FORMAT_ITEMS:
         {
-            WaitObject              aWait( GetActiveWindow() );
+            weld::WaitObject aWait(GetFrameWeld());
             TransferableDataHelper  aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
             const SfxItemSet*       pReqArgs = rReq.GetArgs();
             SotClipboardFormatId    nFormat = SotClipboardFormatId::NONE;

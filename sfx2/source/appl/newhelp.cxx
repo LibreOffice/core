@@ -98,7 +98,6 @@
 #include <vcl/weld.hxx>
 
 #include <ucbhelper/content.hxx>
-#include <vcl/waitobj.hxx>
 #include <unotools/ucbhelper.hxx>
 
 #include <sfx2/viewfrm.hxx>
@@ -581,7 +580,7 @@ namespace sfx2 {
 
 void IndexTabPage_Impl::InitializeIndex()
 {
-    WaitObject aWaitCursor( this );
+    weld::WaitObject aWaitCursor(GetFrameWeld());
 
     // By now more than 256 equal entries are not allowed
     sal_Unicode append[256];

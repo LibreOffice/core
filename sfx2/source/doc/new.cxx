@@ -37,7 +37,6 @@
 #include <preview.hxx>
 #include <sfx2/printer.hxx>
 #include <unotools/viewoptions.hxx>
-#include <vcl/waitobj.hxx>
 
 void SfxPreviewWin_Impl::SetObjectShell(SfxObjectShell const * pObj)
 {

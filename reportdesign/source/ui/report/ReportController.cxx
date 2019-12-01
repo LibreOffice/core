@@ -77,7 +77,6 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <vcl/svapp.hxx>
-#include <vcl/waitobj.hxx>
 
 #include <svx/fmview.hxx>
 #include <editeng/paperinf.hxx>
@@ -1721,7 +1720,7 @@ void OReportController::impl_initialize( )
 
 IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow& ,_rAddFieldDlg, void)
 {
-    WaitObject aObj( getDesignView() );
+    weld::WaitObject aObj(getFrameWeld());
     uno::Sequence< beans::PropertyValue > aArgs = _rAddFieldDlg.getSelectedFieldDescriptors();
     // we use this way to create undo actions
     if ( aArgs.hasElements() )
@@ -2879,7 +2878,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
             m_bInGeneratePreview = true;
             try
             {
-                WaitObject aWait(getView()); // cursor
+                weld::WaitObject aWait(getFrameWeld()); // cursor
                 if ( !m_xReportEngine.is() )
                     m_xReportEngine.set( report::ReportEngine::create(m_xContext) );
                 m_xReportEngine->setReportDefinition(m_xReportDefinition);

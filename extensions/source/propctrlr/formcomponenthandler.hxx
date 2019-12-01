@@ -32,7 +32,6 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <tools/fldunit.hxx>
-#include <vcl/waitobj.hxx>
 #include <connectivity/dbtools.hxx>
 
 #include <set>

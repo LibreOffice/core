@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <vcl/svapp.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
@@ -343,7 +342,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 else
                 {
                     // wait-mousepointer while deleting object
-                    WaitObject aWait( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) );
+                    weld::WaitObject aWait(mpViewShell->GetFrameWeld());
                     // delete object
                     mpView->DeleteMarked();
                 }

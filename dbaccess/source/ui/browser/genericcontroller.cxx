@@ -47,7 +47,6 @@
 #include <sfx2/sidebar/UnoSidebar.hxx>
 #include <sfx2/userinputinterception.hxx>
 
-#include <vcl/waitobj.hxx>
 #include <svl/urihelper.hxx>
 #include <datasourceconnector.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -899,7 +898,7 @@ void OGenericUnoController::stopConnectionListening(const Reference< XConnection
 
 Reference< XConnection > OGenericUnoController::connect( const Reference< XDataSource>& _xDataSource )
 {
-    WaitObject aWaitCursor( getView() );
+    weld::WaitObject aWaitCursor(getFrameWeld());
 
     ODatasourceConnector aConnector( getORB(), getFrameWeld(), OUString() );
     Reference< XConnection > xConnection = aConnector.connect( _xDataSource, nullptr );
@@ -911,7 +910,7 @@ Reference< XConnection > OGenericUnoController::connect( const Reference< XDataS
 Reference< XConnection > OGenericUnoController::connect( const OUString& _rDataSourceName,
     const OUString& _rContextInformation, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
-    WaitObject aWaitCursor( getView() );
+    weld::WaitObject aWaitCursor(getFrameWeld());
 
     ODatasourceConnector aConnector( getORB(), getFrameWeld(), _rContextInformation );
     Reference<XConnection> xConnection = aConnector.connect( _rDataSourceName, _pErrorInfo );

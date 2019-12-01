@@ -59,7 +59,6 @@
 #include <databaseobjectview.hxx>
 #include <imageprovider.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -727,7 +726,7 @@ DBTreeListBox* OAppDetailPageHelper::createSimpleTree( const OString& _sHelpId, 
 
 DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, const Image& _rImage )
 {
-    WaitObject aWaitCursor(this);
+    weld::WaitObject aWaitCursor(GetFrameWeld());
 
     _pTreeView->SetStyle(_pTreeView->GetStyle() | WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
     _pTreeView->GetModel()->SetSortMode(SortAscending);
@@ -1004,7 +1003,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
     {
         m_pTablePreview->Hide();
 
-        WaitObject aWaitCursor( this );
+        weld::WaitObject aWaitCursor(GetFrameWeld());
         try
         {
             Reference<XCommandProcessor> xContent(_xContent,UNO_QUERY);
@@ -1065,7 +1064,7 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
 {
     if ( isPreviewEnabled() )
     {
-        WaitObject aWaitCursor( this );
+        weld::WaitObject aWaitCursor(GetFrameWeld());
         m_aPreview->Hide();
         m_aDocumentInfo->Hide();
         m_pTablePreview->Show();

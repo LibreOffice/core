@@ -63,7 +63,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/waitobj.hxx>
 
 #include <svl/zforlist.hxx>
 #include <cppuhelper/queryinterface.hxx>

@@ -31,7 +31,6 @@
 #include <svl/itemset.hxx>
 #include <tools/multisel.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/deleter.hxx>
 
@@ -211,7 +210,7 @@ void ScPreview::TestLastPage()
 
 void ScPreview::CalcPages()
 {
-    WaitObject aWait( this );
+    weld::WaitObject aWait(GetFrameWeld());
 
     ScDocument& rDoc = pDocShell->GetDocument();
     nTabCount = rDoc.GetTableCount();

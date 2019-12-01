@@ -65,7 +65,6 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/waitobj.hxx>
 #include <osl/mutex.hxx>
 
 namespace dbaui
@@ -162,7 +161,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
-        WaitObject aWO(getView());
+        weld::WaitObject aWO(getFrameWeld());
 
         Sequence< Any > aArgs(3);
         sal_Int32 nArgPos = 0;
@@ -220,7 +219,7 @@ void OApplicationController::refreshTables()
 {
     if ( getContainer() && getContainer()->getDetailView() )
     {
-        WaitObject aWO(getView());
+        weld::WaitObject aWO(getFrameWeld());
         OSL_ENSURE(getContainer()->getElementType() == E_TABLE,"Only allowed when the tables container is selected!");
         try
         {

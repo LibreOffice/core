@@ -18,7 +18,6 @@
  */
 
 #include <fucon3d.hxx>
-#include <vcl/waitobj.hxx>
 
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
@@ -32,6 +31,8 @@
 #include <svx/lathe3d.hxx>
 #include <svx/camera3d.hxx>
 #include <svx/def3d.hxx>
+
+#include <vcl/weld.hxx>
 
 #include <app.hrc>
 
@@ -326,7 +327,7 @@ bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
         mpWindow->CaptureMouse();
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        WaitObject aWait( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) );
+        weld::WaitObject aWait(mpViewShell->GetFrameWeld());
 
         E3dCompoundObject* p3DObj = ImpCreateBasic3DShape();
         E3dScene* pScene = mpView->SetCurrent3DObj(p3DObj);

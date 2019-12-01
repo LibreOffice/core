@@ -66,9 +66,9 @@
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
-#include <vcl/waitobj.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/svapp.hxx>
 
 #include <core_resource.hxx>
 #include <stringarray.hrc>
@@ -2058,8 +2058,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rF
     try
     {
         uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
-        VclPtr<vcl::Window> pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow );
-        WaitObject aWaitCursor( pInspectorWindow );
+        weld::WaitObject aWaitCursor(Application::GetFrameWeld(xInspectorWindow));
 
         // get the form of the control we're inspecting
         uno::Reference< beans::XPropertySet > xFormSet( m_xRowSet, uno::UNO_QUERY );
