@@ -32,7 +32,7 @@ public:
     {
     }
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+    VCL_DLLPUBLIC virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
     sal_uInt8 const mcThreshold;

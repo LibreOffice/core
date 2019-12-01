@@ -66,7 +66,7 @@ public:
     /** This structure stores dimension information used when calculating
         results.  These data are read only during result calculation, so it
         should be passed as a const instance. */
-    struct CalcInfo
+    struct SAL_DLLPRIVATE CalcInfo
     {
         ::std::vector<long>             aColLevelDims;
         ::std::vector<ScDPDimension*>   aColDims;

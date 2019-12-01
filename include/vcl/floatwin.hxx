@@ -73,7 +73,7 @@ enum class FloatWinTitleType
 
 class VCL_DLLPUBLIC FloatingWindow : public SystemWindow
 {
-    class   ImplData;
+    class SAL_DLLPRIVATE ImplData;
 private:
     VclPtr<FloatingWindow>  mpNextFloat;
     VclPtr<vcl::Window>     mpFirstPopupModeWin;
