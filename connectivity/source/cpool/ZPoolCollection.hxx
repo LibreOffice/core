@@ -29,11 +29,9 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverManager2.hpp>
 #include <com/sun/star/sdbc/XConnectionPool.hpp>
-#include <com/sun/star/sdbc/XPooledConnection.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>

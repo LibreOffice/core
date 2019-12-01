@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HTABLE_HXX
 
 #include <connectivity/TTableHelper.hxx>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 
 namespace connectivity

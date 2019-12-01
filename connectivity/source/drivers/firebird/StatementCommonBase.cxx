@@ -29,6 +29,8 @@
 #include <vcl/svapp.hxx>
 #include <TConnection.hxx>
 
+#include <com/sun/star/sdbc/SQLException.hpp>
+
 using namespace ::connectivity::firebird;
 
 using namespace ::com::sun::star;

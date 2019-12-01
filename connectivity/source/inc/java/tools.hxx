@@ -24,13 +24,9 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <jni.h>
-#include <java/sql/SQLException.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 
 
 namespace connectivity

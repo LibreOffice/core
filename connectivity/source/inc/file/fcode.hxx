@@ -22,9 +22,6 @@
 
 #include <connectivity/sqliterator.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <connectivity/CommonTools.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <connectivity/FValue.hxx>
 #include <file/filedllapi.hxx>
 

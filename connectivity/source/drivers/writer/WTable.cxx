@@ -20,6 +20,7 @@
 #include <writer/WTable.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/table/XCellRange.hpp>

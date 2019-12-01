@@ -12,6 +12,9 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
+
 using namespace ::connectivity;
 
 using namespace ::com::sun::star;

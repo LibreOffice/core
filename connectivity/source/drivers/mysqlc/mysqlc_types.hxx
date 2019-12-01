@@ -20,6 +20,8 @@
 #ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_TYPES_HXX
 #define INCLUDED_MYSQLC_SOURCE_MYSQLC_TYPES_HXX
 
+#include <sal/types.h>
+
 struct TypeInfoDef
 {
     const char* typeName;

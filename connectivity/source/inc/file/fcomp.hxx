@@ -20,8 +20,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCOMP_HXX
 
 #include <file/fcode.hxx>
-#include <file/filedllapi.hxx>
-#include <list>
 
 namespace connectivity
 {
