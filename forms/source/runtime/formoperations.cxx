@@ -1669,6 +1669,23 @@ namespace frm
         }
     }
 
+    css::uno::Reference<css::awt::XWindow> FormOperations::GetDialogParent() const
+    {
+        css::uno::Reference<css::awt::XWindow> xDialogParent;
+
+        //tdf#122152 extract parent for dialog
+        if (m_xController.is())
+        {
+            css::uno::Reference<css::awt::XControl> xContainerControl(m_xController->getContainer(), css::uno::UNO_QUERY);
+            if (xContainerControl.is())
+            {
+                css::uno::Reference<css::awt::XWindowPeer> xContainerPeer = xContainerControl->getPeer();
+                xDialogParent = css::uno::Reference<css::awt::XWindow>(xContainerPeer, css::uno::UNO_QUERY);
+            }
+        }
+
+        return xDialogParent;
+    }
 
     void FormOperations::impl_executeFilterOrSort_throw( bool _bFilter ) const
     {
@@ -1682,18 +1699,7 @@ namespace frm
             return;
         try
         {
-            css::uno::Reference<css::awt::XWindow> xDialogParent;
-
-            //tdf#122152 extract parent for dialog
-            if (m_xController.is())
-            {
-                css::uno::Reference<css::awt::XControl> xContainerControl(m_xController->getContainer(), css::uno::UNO_QUERY);
-                if (xContainerControl.is())
-                {
-                    css::uno::Reference<css::awt::XWindowPeer> xContainerPeer = xContainerControl->getPeer();
-                    xDialogParent = css::uno::Reference<css::awt::XWindow>(xContainerPeer, css::uno::UNO_QUERY);
-                }
-            }
+            css::uno::Reference<css::awt::XWindow> xDialogParent(GetDialogParent());
 
             Reference< XExecutableDialog> xDialog;
             if ( _bFilter )
