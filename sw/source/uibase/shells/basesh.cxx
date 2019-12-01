@@ -2676,6 +2676,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             }
         }
         break;
+        case SID_ACCESSIBILITY_CHECK:
+        {}
+        break;
         default:OSL_FAIL("wrong Dispatcher (basesh.cxx)");
     }
     if(!bDone)
