@@ -25,7 +25,6 @@
 #include <editeng/justifyitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>

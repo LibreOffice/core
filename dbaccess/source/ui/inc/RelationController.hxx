@@ -24,13 +24,17 @@
 #include "RelationDesignView.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-class WaitObject;
+namespace weld
+{
+    class WaitObject;
+}
+
 namespace dbaui
 {
     class ORelationController : public OJoinController
     {
         css::uno::Reference< css::container::XNameAccess >    m_xTables;
-        std::unique_ptr<WaitObject> m_pWaitObject;
+        std::unique_ptr<weld::WaitObject> m_xWaitObject;
         sal_uLong       m_nThreadEvent;
         bool            m_bRelationsPossible;
     protected:

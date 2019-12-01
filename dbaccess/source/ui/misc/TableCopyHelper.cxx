@@ -51,7 +51,6 @@
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
-#include <vcl/waitobj.hxx>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <unotools/tempfile.hxx>
 #include <cppuhelper/exc_hlp.hxx>

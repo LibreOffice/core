@@ -127,7 +127,6 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 
 #include <memory>
@@ -2131,7 +2130,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent, bool)
 
     if (etTableContainer == pData->eType)
     {
-        WaitObject aWaitCursor(getBrowserView());
+        weld::WaitObject aWaitCursor(getFrameWeld());
 
         // it could be that we already have a connection
         SharedConnection xConnection;
@@ -2534,7 +2533,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
     {
         try
         {
-            WaitObject aWaitCursor(getBrowserView());
+            weld::WaitObject aWaitCursor(getFrameWeld());
 
             // tell the old entry it has been deselected
             selectPath(m_pCurrentlyDisplayed, false);

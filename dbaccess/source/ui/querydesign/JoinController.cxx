@@ -43,7 +43,6 @@
 #include <TableWindow.hxx>
 #include <TableConnectionData.hxx>
 #include <adtabdlg.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <UITools.hxx>

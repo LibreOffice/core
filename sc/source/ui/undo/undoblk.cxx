@@ -19,7 +19,6 @@
 
 #include <scitems.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/waitobj.hxx>
 #include <editeng/boxitem.hxx>
 #include <sfx2/app.hxx>
 #include <comphelper/lok.hxx>

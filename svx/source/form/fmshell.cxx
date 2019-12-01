@@ -24,7 +24,6 @@
 #include <fmprop.hxx>
 #include <fmpgeimp.hxx>
 #include <fmundo.hxx>
-#include <vcl/waitobj.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>

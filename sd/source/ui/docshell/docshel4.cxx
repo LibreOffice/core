@@ -27,7 +27,6 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <editeng/outlobj.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/waitobj.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
@@ -346,9 +345,9 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
  */
 bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 {
-    std::unique_ptr<WaitObject> pWait;
+    std::unique_ptr<weld::WaitObject> pWait;
     if( mpViewShell )
-        pWait.reset(new WaitObject( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) ));
+        pWait.reset(new weld::WaitObject(mpViewShell->GetFrameWeld()));
 
     mpDoc->NewOrLoadCompleted( NEW_DOC );
     mpDoc->CreateFirstPages();

@@ -32,7 +32,6 @@
 #include <sfx2/strings.hrc>
 
 #include <tools/debug.hxx>
-#include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/svdograf.hxx>

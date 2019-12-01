@@ -47,7 +47,6 @@
 #include <svtools/ehdl.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
-#include <vcl/waitobj.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -100,18 +99,18 @@ namespace dbaui
     }
 
     // OLinkedDocumentsAccess
-    OLinkedDocumentsAccess::OLinkedDocumentsAccess( vcl::Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
+    OLinkedDocumentsAccess::OLinkedDocumentsAccess( weld::Window* pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
         const Reference< XComponentContext >& _rxContext, const Reference< XNameAccess >& _rxContainer,
         const Reference< XConnection>& _xConnection, const OUString& _sDataSourceName )
         :m_xContext(_rxContext)
         ,m_xDocumentContainer(_rxContainer)
         ,m_xConnection(_xConnection)
         ,m_xDocumentUI( i_rDocumentUI )
-        ,m_pDialogParent(_pDialogParent)
+        ,m_pDialogParent(pDialogParent)
         ,m_sDataSourceName(_sDataSourceName)
     {
         OSL_ENSURE(m_xContext.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
-        OSL_ENSURE(m_pDialogParent, "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
+        assert(m_pDialogParent && "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
     }
     OLinkedDocumentsAccess::~OLinkedDocumentsAccess()
     {
@@ -125,7 +124,7 @@ namespace dbaui
         if ( !xComponentLoader.is() )
             return xRet;
 
-        WaitObject aWaitCursor( m_pDialogParent );
+        weld::WaitObject aWaitCursor(m_pDialogParent);
 
         ::comphelper::NamedValueCollection aArguments;
         OUString sOpenMode;
@@ -184,7 +183,7 @@ namespace dbaui
 
             Reference< XJobExecutor > xWizard;
             {
-                WaitObject aWaitCursor( m_pDialogParent );
+                weld::WaitObject aWaitCursor(m_pDialogParent);
                 xWizard.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     OUString::createFromAscii( _pWizardService ),
                     aArgs.getWrappedPropertyValues(),
@@ -291,7 +290,7 @@ namespace dbaui
                 Command aCommand;
                 aCommand.Name = "openDesign";
                 aCommand.Argument <<= aCommandArgs.getPropertyValues();
-                WaitObject aWaitCursor( m_pDialogParent );
+                weld::WaitObject aWaitCursor(m_pDialogParent);
                 xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), nullptr ), UNO_QUERY );
             }
         }
@@ -359,7 +358,7 @@ namespace dbaui
         }
         if (aInfo.isValid())
         {
-            showError(aInfo, VCLUnoHelper::GetInterface(m_pDialogParent), m_xContext );
+            showError(aInfo, m_pDialogParent->GetXWindow(), m_xContext);
         }
         return xRet;
     }

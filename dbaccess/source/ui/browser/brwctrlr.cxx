@@ -89,7 +89,6 @@
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/waitobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -634,7 +633,7 @@ void SbaXDataBrowserController::impl_checkForCannotSelectUnfiltered( const SQLEx
 
 bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _rxLoadable )
 {
-    WaitObject aWO(getBrowserView());
+    weld::WaitObject aWO(getFrameWeld());
 
     onStartLoading( _rxLoadable );
 

@@ -20,7 +20,6 @@
 #include <sfx2/app.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/waitobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>

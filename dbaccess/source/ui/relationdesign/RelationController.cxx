@@ -63,7 +63,6 @@
 #include <RelationDesignView.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/waitobj.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 
@@ -477,12 +476,12 @@ IMPL_LINK_NOARG( ORelationController, OnThreadFinished, void*, void )
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
-    m_pWaitObject.reset();
+    m_xWaitObject.reset();
 }
 
 void ORelationController::loadData()
 {
-    m_pWaitObject.reset( new WaitObject(getView()) );
+    m_xWaitObject.reset(new weld::WaitObject(getFrameWeld()));
     try
     {
         if ( !m_xTables.is() )

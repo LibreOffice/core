@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:30 using:
+ Generated on 2019-12-01 19:37:49 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -34,19 +34,18 @@
 #include <string_view>
 #include <utility>
 #include <vector>
-#include <o3tl/optional.hxx>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/security.h>
 #include <osl/thread.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
@@ -83,7 +82,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclreferencebase.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/weld.hxx>
 #endif // PCH_LEVEL >= 2

@@ -46,7 +46,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbexception.hxx>
-#include <vcl/waitobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include "AppView.hxx"
@@ -332,7 +331,7 @@ const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQL
             return m_xDataSourceConnection;
     }
 
-    WaitObject aWO(getView());
+    weld::WaitObject aWO(getFrameWeld());
     Reference<XConnection> conn;
     {
         SolarMutexGuard aSolarGuard;
@@ -499,7 +498,7 @@ std::unique_ptr< OLinkedDocumentsAccess > OApplicationController::getDocumentsAc
     }
 
     std::unique_ptr< OLinkedDocumentsAccess > pDocuments( new OLinkedDocumentsAccess(
-        getView(), this, getORB(), xDocContainer, xConnection, getDatabaseName()
+        getFrameWeld(), this, getORB(), xDocContainer, xConnection, getDatabaseName()
     ) );
     return pDocuments;
 }

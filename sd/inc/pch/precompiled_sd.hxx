@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-29 12:14:08 using:
+ Generated on 2019-12-01 19:53:21 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,8 +39,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <o3tl/optional.hxx>
-#include <o3tl/optional.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
@@ -108,7 +106,6 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -261,6 +258,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Impress.hxx>
@@ -309,7 +307,6 @@
 #include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
 #include <svl/macitem.hxx>
-#include <svl/metitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/srchitem.hxx>
@@ -384,7 +381,9 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnedit.hxx>
+#include <svx/xlnedwit.hxx>
 #include <svx/xlnstit.hxx>
+#include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

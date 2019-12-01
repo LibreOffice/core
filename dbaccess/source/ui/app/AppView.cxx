@@ -24,7 +24,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/event.hxx>
 #include <unotools/configmgr.hxx>
-#include <vcl/waitobj.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -434,7 +433,7 @@ void OApplicationView::clearPages()
 void OApplicationView::selectContainer(ElementType _eType)
 {
     OSL_ENSURE(m_pWin && getPanel(),"Detail view is NULL! -> GPF");
-    WaitObject aWO(this);
+    weld::WaitObject aWO(GetFrameWeld());
     getPanel()->selectContainer(_eType);
 }
 
