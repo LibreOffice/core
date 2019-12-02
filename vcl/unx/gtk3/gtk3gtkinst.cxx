@@ -5200,6 +5200,11 @@ public:
         gtk_adjustment_set_page_increment(m_pHAdjustment, size);
     }
 
+    virtual void hadjustment_set_step_increment(int size) override
+    {
+        gtk_adjustment_set_step_increment(m_pHAdjustment, size);
+    }
+
     virtual void set_hpolicy(VclPolicyType eHPolicy) override
     {
         GtkPolicyType eGtkVPolicy;
@@ -5279,6 +5284,11 @@ public:
     virtual void vadjustment_set_page_increment(int size) override
     {
         gtk_adjustment_set_page_increment(m_pVAdjustment, size);
+    }
+
+    virtual void vadjustment_set_step_increment(int size) override
+    {
+        gtk_adjustment_set_step_increment(m_pVAdjustment, size);
     }
 
     virtual void set_vpolicy(VclPolicyType eVPolicy) override
