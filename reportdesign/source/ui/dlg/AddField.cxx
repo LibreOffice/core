@@ -41,8 +41,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#include <svtools/imgdef.hxx>
-#include <vcl/treelistentry.hxx>
 
 namespace rptui
 {
