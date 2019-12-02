@@ -728,13 +728,17 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             PropertySet( xShape ).setAnyProperty( PROP_BottomBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceBottom )));
         }
 
-        if (getTextBox()->maLayoutFlow == "vertical")
+        sal_Int16 nWritingMode = text::WritingMode2::LR_TB;
+        if (getTextBox()->maLayoutFlow == "vertical" && maTypeModel.maLayoutFlowAlt.isEmpty())
         {
-            sal_Int16 nWritingMode = text::WritingMode2::TB_RL;
-            if (maTypeModel.maLayoutFlowAlt == "bottom-to-top")
-            {
-                nWritingMode = text::WritingMode2::BT_LR;
-            }
+            nWritingMode = text::WritingMode2::TB_RL;
+        }
+        else if (maTypeModel.maLayoutFlowAlt == "bottom-to-top")
+        {
+            nWritingMode = text::WritingMode2::BT_LR;
+        }
+        if (nWritingMode != text::WritingMode2::LR_TB)
+        {
             PropertySet(xShape).setAnyProperty(PROP_WritingMode, uno::makeAny(nWritingMode));
         }
     }
