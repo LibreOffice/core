@@ -169,7 +169,8 @@ public:
 public:
     void SetLinks(Link<weld::ToggleButton&,void> const&,
                   Link<ColorListBox&,void> const&,
-                  Link<weld::Widget&,void> const&);
+                  Link<weld::Widget&,void> const&,
+                  weld::ScrolledWindow& rScroll);
     void Update(EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ClickHdl(EditableColorConfig*, weld::ToggleButton&);
     void ColorHdl(EditableColorConfig*, EditableExtendedColorConfig*, const ColorListBox*);
@@ -212,6 +213,11 @@ private:
     public:
         void SetText(const OUString& rLabel) { dynamic_cast<weld::Label&>(*m_xText).set_label(rLabel); }
         void set_width_request(int nTextWidth) { m_xText->set_size_request(nTextWidth, -1); }
+        int get_height_request() const
+        {
+            return std::max(m_xText->get_preferred_size().Height(),
+                            m_xColorList->get_widget().get_preferred_size().Height());
+        }
         void Hide ();
     public:
         void SetLinks(Link<weld::ToggleButton&,void> const&,
@@ -458,10 +464,15 @@ void ColorConfigWindow_Impl::AdjustExtraWidths(int nTextWidth)
 // SetLinks()
 void ColorConfigWindow_Impl::SetLinks(Link<weld::ToggleButton&,void> const& aCheckLink,
                                       Link<ColorListBox&,void> const& aColorLink,
-                                      Link<weld::Widget&,void> const& rGetFocusLink)
+                                      Link<weld::Widget&,void> const& rGetFocusLink,
+                                      weld::ScrolledWindow& rScroll)
 {
+    if (vEntries.empty())
+        return;
     for (auto const & i: vEntries)
         i->SetLinks(aCheckLink, aColorLink, rGetFocusLink);
+    // 6 is the spacing set on ColorConfigWindow
+    rScroll.vadjustment_set_step_increment(vEntries[0]->get_height_request() + 6);
 }
 
 // Update()
@@ -622,7 +633,7 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(weld::Window* pTopLevel, weld::Builde
     Link<weld::ToggleButton&,void> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
     Link<ColorListBox&,void> aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
     Link<weld::Widget&,void> const& aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
-    m_xScrollWindow->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
+    m_xScrollWindow->SetLinks(aCheckLink, aColorLink, aGetFocusLink, *m_xVScroll);
 }
 
 void ColorConfigCtrl_Impl::Update ()
