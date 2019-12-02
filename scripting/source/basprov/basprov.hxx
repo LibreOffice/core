@@ -38,7 +38,6 @@ namespace basprov
 {
 
 
-    //  class BasicProviderImpl
 
 
     typedef ::cppu::WeakImplHelper<

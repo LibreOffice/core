@@ -26,7 +26,6 @@
 
 #include <vector>
 
-// class SvxGeneralTabPage -----------------------------------------------
 
 class SvxGeneralTabPage : public SfxTabPage
 {

@@ -24,7 +24,6 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
 
-// class SvxPathTabPage --------------------------------------------------
 
 class SvxOnlineUpdateTabPage : public SfxTabPage
 {

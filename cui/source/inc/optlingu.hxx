@@ -75,7 +75,6 @@ public:
     virtual ~SvxEditModulesDlg() override;
 };
 
-// class SvxLinguTabPage -------------------------------------------------
 
 class SvxLinguTabPage : public SfxTabPage
 {

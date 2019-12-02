@@ -22,7 +22,6 @@
 
 using namespace dbaui;
 
-// class OTableConnectionData
 OTableConnectionData::OTableConnectionData()
 {
     Init();

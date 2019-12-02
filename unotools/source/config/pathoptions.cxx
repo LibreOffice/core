@@ -68,7 +68,6 @@ typedef std::unordered_map<OUString, sal_Int32> NameToHandleMap;
 
 typedef std::set<OUString> VarNameSet;
 
-// class SvtPathOptions_Impl ---------------------------------------------
 class SvtPathOptions_Impl
 {
     private:
@@ -206,7 +205,6 @@ static const VarNameAttribute aVarNameAttribute[] =
     { SUBSTITUTE_PATH },    // $(path)
 };
 
-// class SvtPathOptions_Impl ---------------------------------------------
 
 const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
 {
@@ -437,7 +435,6 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
 }
 
-// class SvtPathOptions --------------------------------------------------
 
 namespace { struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {}; }
 

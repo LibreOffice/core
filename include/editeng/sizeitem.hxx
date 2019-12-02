@@ -23,7 +23,6 @@
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxSizeItem -----------------------------------------------------
 
 /*  [Description]
 

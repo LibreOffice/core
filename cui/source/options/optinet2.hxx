@@ -26,7 +26,6 @@ namespace svx {
     class SecurityOptionsDialog;
 }
 
-// class SvxProxyTabPage -------------------------------------------------
 class SvxProxyTabPage : public SfxTabPage
 {
 private:
@@ -73,7 +72,6 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
-// class SvxSecurityTabPage ---------------------------------------------
 
 class SvtSecurityOptions;
 class CertPathDialog;

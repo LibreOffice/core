@@ -41,7 +41,6 @@ enum class SvxBulletStyle
     BMP              = 128
 };
 
-// class SvxBulletItem ---------------------------------------------------
 
 class EDITENG_DLLPUBLIC SvxBulletItem final : public SfxPoolItem
 {

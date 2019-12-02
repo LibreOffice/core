@@ -779,7 +779,6 @@ void SwFormatPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-//  class SwFormatCol
 //  Partially implemented inline in hxx
 
 SwColumn::SwColumn() :
@@ -1857,7 +1856,6 @@ void SwFormatNoBalancedColumns::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class SwFormatFootnoteEndAtTextEnd
 
 sal_uInt16 SwFormatFootnoteEndAtTextEnd::GetValueCount() const
 {
@@ -1981,21 +1979,18 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
     return bRet;
 }
 
-// class SwFormatFootnoteAtTextEnd
 
 SfxPoolItem* SwFormatFootnoteAtTextEnd::Clone( SfxItemPool* ) const
 {
     return new SwFormatFootnoteAtTextEnd(*this);
 }
 
-// class SwFormatEndAtTextEnd
 
 SfxPoolItem* SwFormatEndAtTextEnd::Clone( SfxItemPool* ) const
 {
     return new SwFormatEndAtTextEnd(*this);
 }
 
-//class SwFormatChain
 
 bool SwFormatChain::operator==( const SfxPoolItem &rAttr ) const
 {

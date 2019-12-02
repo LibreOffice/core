@@ -33,7 +33,6 @@
 #include <tools/stream.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-// class FileBase
 #include <osl/file.hxx>
 using namespace osl;
 

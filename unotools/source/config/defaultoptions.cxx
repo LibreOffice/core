@@ -62,7 +62,6 @@ using namespace com::sun::star::uno;
 #define DEFAULTPATH_CLASSIFICATION 21
 #define DEFAULTPATH_USERDICTIONARY 22
 
-// class SvtDefaultOptions_Impl ------------------------------------------
 
 class SvtDefaultOptions_Impl : public utl::ConfigItem
 {
@@ -195,7 +194,6 @@ void SvtDefaultOptions_Impl::ImplCommit()
     // will never be changed
 }
 
-// class SvtDefaultOptions_Impl ------------------------------------------
 
 OUString SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
 {
@@ -326,7 +324,6 @@ SvtDefaultOptions_Impl::~SvtDefaultOptions_Impl()
         Commit();
 }
 
-// class SvtDefaultOptions -----------------------------------------------
 namespace { struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {}; }
 
 SvtDefaultOptions::SvtDefaultOptions()

@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star {
     struct PropertyValue;
 }}}}
 
-// class SvxSaveTabPage --------------------------------------------------
 
 struct SvxSaveTabPage_Impl;
 

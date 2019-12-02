@@ -25,7 +25,6 @@
 
 class SvtCJKOptions_Impl;
 
-// class SvtCJKOptions --------------------------------------------------
 
 class SVL_DLLPUBLIC SvtCJKOptions final : public utl::detail::Options
 {

@@ -24,7 +24,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxAdjustItem ---------------------------------------------------
 
 /*
 [Description]

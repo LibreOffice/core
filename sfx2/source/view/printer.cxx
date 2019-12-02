@@ -33,7 +33,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/tabdlg.hxx>
 
-// class SfxPrinter ------------------------------------------------------
 
 VclPtr<SfxPrinter> SfxPrinter::Create( SvStream& rStream, std::unique_ptr<SfxItemSet>&& pOptions )
 

@@ -121,7 +121,6 @@ SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidt
 SfxPoolItem* SvxCharReliefItem::CreateDefault() {return new SvxCharReliefItem(FontRelief::NONE, 0);}
 
 
-// class SvxFontListItem -------------------------------------------------
 
 SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
                                   const sal_uInt16 nId ) :
@@ -171,7 +170,6 @@ bool SvxFontListItem::GetPresentation
     return false;
 }
 
-// class SvxFontItem -----------------------------------------------------
 
 SvxFontItem::SvxFontItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId )
@@ -342,7 +340,6 @@ void SvxFontItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class SvxPostureItem --------------------------------------------------
 
 SvxPostureItem::SvxPostureItem( const FontItalic ePosture, const sal_uInt16 nId ) :
     SfxEnumItem( nId, ePosture )
@@ -457,7 +454,6 @@ void SvxPostureItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class SvxWeightItem ---------------------------------------------------
 
 SvxWeightItem::SvxWeightItem( const FontWeight eWght, const sal_uInt16 nId ) :
     SfxEnumItem( nId, eWght )
@@ -580,7 +576,6 @@ void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class SvxFontHeightItem -----------------------------------------------
 
 SvxFontHeightItem::SvxFontHeightItem( const sal_uLong nSz,
                                       const sal_uInt16 nPrp,
@@ -917,7 +912,6 @@ void SvxFontHeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class SvxTextLineItem ------------------------------------------------
 
 SvxTextLineItem::SvxTextLineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SfxEnumItem( nId, eSt ), mColor( COL_TRANSPARENT )
@@ -1044,7 +1038,6 @@ bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
            GetColor() == static_cast<const SvxTextLineItem&>(rItem).GetColor();
 }
 
-// class SvxUnderlineItem ------------------------------------------------
 
 
 SvxUnderlineItem::SvxUnderlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
@@ -1088,7 +1081,6 @@ OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
     return EditResId(RID_SVXITEMS_UL[nPos]);
 }
 
-// class SvxOverlineItem ------------------------------------------------
 
 SvxOverlineItem::SvxOverlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SvxTextLineItem( eSt, nId )
@@ -1131,7 +1123,6 @@ OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
     return EditResId(RID_SVXITEMS_OL[nPos]);
 }
 
-// class SvxCrossedOutItem -----------------------------------------------
 
 SvxCrossedOutItem::SvxCrossedOutItem( const FontStrikeout eSt, const sal_uInt16 nId )
     : SfxEnumItem( nId, eSt )
@@ -1232,7 +1223,6 @@ bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     }
     return true;
 }
-// class SvxShadowedItem -------------------------------------------------
 
 SvxShadowedItem::SvxShadowedItem( const bool bShadowed, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bShadowed )
@@ -1262,7 +1252,6 @@ bool SvxShadowedItem::GetPresentation
     return true;
 }
 
-// class SvxAutoKernItem -------------------------------------------------
 
 SvxAutoKernItem::SvxAutoKernItem( const bool bAutoKern, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bAutoKern )
@@ -1292,7 +1281,6 @@ bool SvxAutoKernItem::GetPresentation
     return true;
 }
 
-// class SvxWordLineModeItem ---------------------------------------------
 
 SvxWordLineModeItem::SvxWordLineModeItem( const bool bWordLineMode,
                                           const sal_uInt16 nId ) :
@@ -1323,7 +1311,6 @@ bool SvxWordLineModeItem::GetPresentation
     return true;
 }
 
-// class SvxContourItem --------------------------------------------------
 
 SvxContourItem::SvxContourItem( const bool bContoured, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bContoured )
@@ -1353,7 +1340,6 @@ bool SvxContourItem::GetPresentation
     return true;
 }
 
-// class SvxBackgroundColorItem -----------------------------------------
 
 SvxBackgroundColorItem::SvxBackgroundColorItem( const sal_uInt16 nId ) :
     SvxColorItem( nId )
@@ -1418,7 +1404,6 @@ bool SvxBackgroundColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId
     return true;
 }
 
-// class SvxColorItem ----------------------------------------------------
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     mColor( COL_BLACK )
@@ -1525,7 +1510,6 @@ void SvxColorItem::SetValue( const Color& rNewCol )
     mColor = rNewCol;
 }
 
-// class SvxKerningItem --------------------------------------------------
 
 SvxKerningItem::SvxKerningItem( const short nKern, const sal_uInt16 nId ) :
     SfxInt16Item( nId, nKern )
@@ -1606,7 +1590,6 @@ bool SvxKerningItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
     return true;
 }
 
-// class SvxCaseMapItem --------------------------------------------------
 
 SvxCaseMapItem::SvxCaseMapItem( const SvxCaseMap eMap, const sal_uInt16 nId ) :
     SfxEnumItem( nId, eMap )
@@ -1689,7 +1672,6 @@ bool SvxCaseMapItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     return true;
 }
 
-// class SvxEscapementItem -----------------------------------------------
 
 SvxEscapementItem::SvxEscapementItem( const sal_uInt16 nId ) :
     SfxEnumItemInterface( nId ),
@@ -1853,7 +1835,6 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-// class SvxLanguageItem -------------------------------------------------
 
 SvxLanguageItem::SvxLanguageItem( const LanguageType eLang, const sal_uInt16 nId )
     : SvxLanguageItem_Base( nId , eLang )
@@ -1932,7 +1913,6 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-// class SvxNoHyphenItem -------------------------------------------------
 
 SvxNoHyphenItem::SvxNoHyphenItem( const sal_uInt16 nId ) :
     SfxBoolItem( nId , true )
@@ -1964,7 +1944,6 @@ bool SvxNoHyphenItem::GetPresentation
  */
 
 
-// class SvxBlinkItem -------------------------------------------------
 
 
 SvxBlinkItem::SvxBlinkItem( const bool bBlink, const sal_uInt16 nId ) :
@@ -1995,7 +1974,6 @@ bool SvxBlinkItem::GetPresentation
     return true;
 }
 
-// class SvxEmphaisMarkItem ---------------------------------------------------
 
 SvxEmphasisMarkItem::SvxEmphasisMarkItem( const FontEmphasisMark nValue,
                                         const sal_uInt16 nId )

@@ -24,7 +24,6 @@
 #include <vcl/bitmapex.hxx>
 
 
-// class XPropertyEntry
 
 class SVX_DLLPUBLIC XPropertyEntry
 {

@@ -21,7 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-// class SvxCTLOptionsPage -----------------------------------------------------
 
 class SvxCTLOptionsPage : public SfxTabPage
 {

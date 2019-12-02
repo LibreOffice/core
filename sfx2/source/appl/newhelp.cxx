@@ -415,7 +415,6 @@ OUString ContentListBox_Impl::GetSelectedEntry() const
     return aRet;
 }
 
-// class HelpTabPage_Impl ------------------------------------------------
 HelpTabPage_Impl::HelpTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
     const OString& rID, const OUString& rUIXMLDescription)
     : TabPage( pParent, rID, rUIXMLDescription)
@@ -434,7 +433,6 @@ void HelpTabPage_Impl::dispose()
     TabPage::dispose();
 }
 
-// class ContentTabPage_Impl ---------------------------------------------
 ContentTabPage_Impl::ContentTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpContentPage",
         "sfx/ui/helpcontentpage.ui")
@@ -467,7 +465,6 @@ Control* ContentTabPage_Impl::GetLastFocusControl()
     return m_pContentBox;
 }
 
-// class IndexBox_Impl ---------------------------------------------------
 
 IndexBox_Impl::IndexBox_Impl(vcl::Window* pParent, WinBits nStyle)
     : ComboBox(pParent, nStyle)
@@ -541,7 +538,6 @@ void IndexBox_Impl::SelectExecutableEntry()
         SetText( aEntryText );
 }
 
-// class IndexTabPage_Impl -----------------------------------------------
 
 IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpIndexPage",
@@ -852,7 +848,6 @@ void IndexTabPage_Impl::OpenKeyword()
     }
 }
 
-// class SearchBox_Impl --------------------------------------------------
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeSearchBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
@@ -885,7 +880,6 @@ void SearchBox_Impl::Select()
         aSearchLink.Call( nullptr );
 }
 
-// class SearchResultsBox_Impl -------------------------------------------
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeSearchResultsBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
@@ -913,7 +907,6 @@ bool SearchResultsBox_Impl::EventNotify( NotifyEvent& rNEvt )
     return bHandled || ListBox::EventNotify( rNEvt );
 }
 
-// class SearchTabPage_Impl ----------------------------------------------
 
 SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpSearchPage",
@@ -1124,7 +1117,6 @@ bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
     return bRet;
 }
 
-// class BookmarksTabPage_Impl -------------------------------------------
 
 static void GetBookmarkEntry_Impl
 (
@@ -1272,7 +1264,6 @@ bool BookmarksBox_Impl::EventNotify( NotifyEvent& rNEvt )
     return bRet || ListBox::EventNotify( rNEvt );
 }
 
-// class BookmarksTabPage_Impl -------------------------------------------
 
 BookmarksTabPage_Impl::BookmarksTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpBookmarkPage",
@@ -1832,7 +1823,6 @@ void SfxHelpIndexWindow_Impl::SelectExecutableEntry()
         pIPage->SelectExecutableEntry();
 }
 
-// class TextWin_Impl ----------------------------------------------------
 
 TextWin_Impl::TextWin_Impl( vcl::Window* p ) : DockingWindow( p, 0 )
 {
@@ -1853,7 +1843,6 @@ static void lcl_disableLayoutOfFrame(const Reference< XFrame2 >& xFrame)
     xFrame->setLayoutManager( Reference< XLayoutManager >() );
 }
 
-// class SfxHelpTextWindow_Impl ------------------------------------------
 
 SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
@@ -2582,7 +2571,6 @@ void SfxHelpTextWindow_Impl::DoSearch()
     sfx2::SearchDialog::runAsync(m_xSrchDlg);
 }
 
-// class SfxHelpWindow_Impl ----------------------------------------------
 
 void SfxHelpWindow_Impl::Resize()
 {
@@ -3134,7 +3122,6 @@ bool SfxHelpWindow_Impl::HasHistorySuccessor() const
     return pHelpInterceptor->HasHistorySucc();
 }
 
-// class SfxAddHelpBookmarkDialog_Impl -----------------------------------
 
 SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(weld::Window* pParent, bool bRename)
     : GenericDialogController(pParent, "sfx/ui/bookmarkdialog.ui", "BookmarkDialog")

@@ -23,7 +23,6 @@
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxWritingModeItem ----------------------------------------------
 
 class EDITENG_DLLPUBLIC SvxWritingModeItem final : public SfxUInt16Item
 {

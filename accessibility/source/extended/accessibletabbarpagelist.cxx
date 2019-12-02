@@ -44,7 +44,6 @@ namespace accessibility
     using namespace ::comphelper;
 
 
-    // class AccessibleTabBarPageList
 
 
     AccessibleTabBarPageList::AccessibleTabBarPageList( TabBar* pTabBar, sal_Int32 nIndexInParent )

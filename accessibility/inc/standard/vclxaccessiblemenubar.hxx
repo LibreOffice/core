@@ -28,7 +28,6 @@ class VclWindowEvent;
 namespace vcl { class Window; }
 
 
-//  class VCLXAccessibleMenuBar
 
 
 class VCLXAccessibleMenuBar final : public OAccessibleMenuComponent

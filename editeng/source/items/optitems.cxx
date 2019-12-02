@@ -22,7 +22,6 @@
 #include <editeng/editrids.hrc>
 
 
-// class SfxHyphenRegionItem -----------------------------------------------
 
 SfxHyphenRegionItem::SfxHyphenRegionItem( const sal_uInt16 nId ) :
 

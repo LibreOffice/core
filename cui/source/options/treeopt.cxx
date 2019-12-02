@@ -1924,7 +1924,6 @@ short OfaTreeOptionsDialog::run()
     return nRet;
 }
 
-// class ExtensionsTabPage -----------------------------------------------
 ExtensionsTabPage::ExtensionsTabPage(
     weld::Container* pParent, const OUString& rPageURL,
     const OUString& rEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider )

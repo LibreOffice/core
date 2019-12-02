@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 
 
-// class SdrPercentItem
 // Integer percents of 0
 
 
@@ -37,7 +36,6 @@ public:
 };
 
 
-// class SdrSignedPercentItem
 // Integer percents of +/-
 
 

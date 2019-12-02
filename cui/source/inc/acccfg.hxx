@@ -34,7 +34,6 @@ class CuiConfigFunctionListBox;
 class SfxAcceleratorConfigPage;
 class SfxStringItem;
 
-// class SfxAcceleratorConfigPage ----------------------------------------
 
 struct TAccInfo
 {

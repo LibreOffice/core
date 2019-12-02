@@ -137,7 +137,6 @@ css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetStub::getSupported
 
 
 
-// class CachedDynamicResultSetStubFactory
 
 
 CachedDynamicResultSetStubFactory::CachedDynamicResultSetStubFactory(

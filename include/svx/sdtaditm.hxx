@@ -24,7 +24,6 @@
 #include <svx/svxdllapi.h>
 
 
-// class SdrTextAniDirectionItem
 
 
 enum class SdrTextAniDirection

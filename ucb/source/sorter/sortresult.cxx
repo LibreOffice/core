@@ -75,7 +75,6 @@ struct SortListData
 };
 
 
-// class SRSPropertySetInfo.
 
 
 class SRSPropertySetInfo : public cppu::WeakImplHelper <
@@ -1762,7 +1761,6 @@ sal_IntPtr SortedEntryList::operator [] ( sal_IntPtr nPos ) const
     }
 }
 
-// class SRSPropertySetInfo.
 
 SRSPropertySetInfo::SRSPropertySetInfo()
 {

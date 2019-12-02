@@ -58,7 +58,6 @@ static SvXMLEnumMapEntry<FontPitch> const aFontPitchMapping[] =
     { XML_TOKEN_INVALID,    FontPitch(0)    }
 };
 
-// class XMLFontFamilyNamePropHdl
 
 XMLFontFamilyNamePropHdl::~XMLFontFamilyNamePropHdl()
 {
@@ -189,7 +188,6 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     return bRet;
 }
 
-// class XMLFontFamilyPropHdl
 
 XMLFontFamilyPropHdl::~XMLFontFamilyPropHdl()
 {
@@ -224,7 +222,6 @@ bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     return bRet;
 }
 
-// class XMLFontEncodingPropHdl
 
 XMLFontEncodingPropHdl::~XMLFontEncodingPropHdl()
 {
@@ -258,7 +255,6 @@ bool XMLFontEncodingPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
     return bRet;
 }
 
-// class XMLFontPitchPropHdl
 
 XMLFontPitchPropHdl::~XMLFontPitchPropHdl()
 {

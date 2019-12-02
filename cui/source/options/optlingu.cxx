@@ -256,7 +256,6 @@ public:
     }
 };
 
-// class OptionsUserData -------------------------------------------------
 
 class OptionsUserData
 {
@@ -824,7 +823,6 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
 }
 
 
-// class SvxLinguTabPage -------------------------------------------------
 
 SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optlingupage.ui", "OptLinguPage", &rSet)

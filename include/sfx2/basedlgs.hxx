@@ -83,7 +83,6 @@ public:
     SfxBindings&            GetBindings() const { return *m_pBindings; }
 };
 
-// class SfxFloatingWindow --------------------------------------------------
 class SfxFloatingWindow_Impl;
 class SFX2_DLLPUBLIC SfxFloatingWindow: public FloatingWindow
 {
@@ -118,7 +117,6 @@ public:
 
 };
 
-// class SfxNoLayoutSingleTabDialog --------------------------------------------------
 
 typedef const sal_uInt16* (*GetTabPageRanges)(); // provides international Which values
 

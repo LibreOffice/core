@@ -25,9 +25,6 @@ namespace com::sun::star::i18n { class XCharacterClassification; }
 
 namespace i18npool {
 
-//      ----------------------------------------------------
-//      class ChapterCollator
-//      ----------------------------------------------------
 class ChapterCollator : public CollatorImpl
 {
 public:

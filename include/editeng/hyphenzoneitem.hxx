@@ -22,7 +22,6 @@
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxHyphenZoneItem -----------------------------------------------
 
 /*  [Description]
 

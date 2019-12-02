@@ -341,7 +341,6 @@ void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
     }
 }
 
-// class SvxAdjustItem ---------------------------------------------------
 
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId ),
@@ -467,7 +466,6 @@ void SvxAdjustItem::SetEnumValue( sal_uInt16 nVal )
 }
 
 
-// class SvxWidowsItem ---------------------------------------------------
 
 SvxWidowsItem::SvxWidowsItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
     SfxByteItem( nId, nL )
@@ -513,7 +511,6 @@ bool SvxWidowsItem::GetPresentation
     return true;
 }
 
-// class SvxOrphansItem --------------------------------------------------
 
 SvxOrphansItem::SvxOrphansItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
     SfxByteItem( nId, nL )
@@ -559,7 +556,6 @@ bool SvxOrphansItem::GetPresentation
     return true;
 }
 
-// class SvxHyphenZoneItem -----------------------------------------------
 
 SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
@@ -694,7 +690,6 @@ bool SvxHyphenZoneItem::GetPresentation
 }
 
 
-// class SvxTabStop ------------------------------------------------------
 
 SvxTabStop::SvxTabStop()
 {
@@ -730,7 +725,6 @@ void SvxTabStop::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class SvxTabStopItem --------------------------------------------------
 
 SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich ),
@@ -997,7 +991,6 @@ void SvxTabStopItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class SvxFormatSplitItem -------------------------------------------------
 SvxFormatSplitItem::~SvxFormatSplitItem()
 {
 }

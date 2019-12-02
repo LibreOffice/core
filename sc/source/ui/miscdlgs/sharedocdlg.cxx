@@ -44,7 +44,6 @@ IMPL_LINK(ScShareDocumentDlg, SizeAllocated, const Size&, rSize, void)
     m_xLbUsers->set_column_fixed_widths(aWidths);
 }
 
-// class ScShareDocumentDlg
 
 ScShareDocumentDlg::ScShareDocumentDlg(weld::Window* pParent, const ScViewData* pViewData)
     : GenericDialogController(pParent, "modules/scalc/ui/sharedocumentdlg.ui",

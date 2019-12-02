@@ -73,7 +73,6 @@ public:
 };
 
 
-//  class VCLXVirtualDevice
 
 
 class VCLXVirtualDevice : public VCLXDevice

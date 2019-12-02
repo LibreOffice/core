@@ -29,7 +29,6 @@
 
 class SfxDocTemplate_Impl;
 
-// class SfxDocumentTemplates --------------------------------------------
 
 class SFX2_DLLPUBLIC SfxDocumentTemplates
 {

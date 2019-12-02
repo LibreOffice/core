@@ -23,7 +23,6 @@
 #include <editeng/editengdllapi.h>
 #include <tools/fontenum.hxx>
 
-// class SvxPostureItem --------------------------------------------------
 
 /*  [Description]
 

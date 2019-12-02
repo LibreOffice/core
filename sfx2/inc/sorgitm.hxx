@@ -21,7 +21,6 @@
 
 #include <svl/stritem.hxx>
 
-// class SfxScriptOrganizerItem ---------------------------------------------
 
 class SfxScriptOrganizerItem : public SfxStringItem
 {

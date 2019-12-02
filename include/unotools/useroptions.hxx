@@ -52,7 +52,6 @@ enum class UserOptToken
     LAST               = EncryptToSelf,
 };
 
-// class SvtUserOptions --------------------------------------------------
 
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtUserOptions final : public utl::detail::Options
 {

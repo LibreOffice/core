@@ -40,7 +40,6 @@ enum class SdrCircKind { Full, Section, Cut, Arc };
 
 extern SVX_DLLPUBLIC SdrCircKind ToSdrCircKind(SdrObjKind);
 
-// class SdrCircObj
 
 class SVX_DLLPUBLIC SdrCircObj final : public SdrRectObj
 {

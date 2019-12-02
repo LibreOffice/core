@@ -66,7 +66,6 @@ class MouseEvent;
 class KeyEvent;
 
 
-//  class VclUnoHelper
 
 class TOOLKIT_DLLPUBLIC VCLUnoHelper
 {

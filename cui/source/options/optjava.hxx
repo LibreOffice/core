@@ -44,7 +44,6 @@ class   SvxJavaClassPathDlg;
 class   SvxJavaListBox;
 class   OfaTreeOptionsDialog;
 
-// class SvxJavaOptionsPage ----------------------------------------------
 
 class SvxJavaOptionsPage : public SfxTabPage
 {
@@ -116,7 +115,6 @@ public:
     virtual void            FillUserData() override;
 };
 
-// class SvxJavaParameterDlg ---------------------------------------------
 
 class SvxJavaParameterDlg : public weld::GenericDialogController
 {
@@ -171,7 +169,6 @@ public:
     void EditParameter();
 };
 
-// class SvxJavaClassPathDlg ---------------------------------------------
 
 class SvxJavaClassPathDlg : public weld::GenericDialogController
 {

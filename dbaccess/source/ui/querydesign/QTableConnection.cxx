@@ -22,7 +22,6 @@
 #include <QueryTableView.hxx>
 #include <ConnectionLine.hxx>
 using namespace dbaui;
-// class OQueryTableConnection
 
 OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData)
     : OTableConnection(pContainer, pTabConnData)

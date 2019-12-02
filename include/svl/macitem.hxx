@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVL_MACITEM_HXX
 #define INCLUDED_SVL_MACITEM_HXX
 
-// class SvxMacroItem ----------------------------------------------------
 
 #include <rtl/ustring.hxx>
 #include <svl/svldllapi.h>

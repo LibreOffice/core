@@ -28,7 +28,6 @@ namespace accessibility
 {
 
 
-    // class AccessibleTabListBox -----------------------------------------------------
 
     using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::uno;

@@ -27,7 +27,6 @@
 #include <i18nlangtag/lang.h>
 #include <memory>
 
-// class SvtLanguageOptions ----------------------------------------------------
 
 // these defines can be ORed
 // note these values DO NOT match the values in css::i18n::ScriptType

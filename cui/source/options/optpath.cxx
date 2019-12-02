@@ -180,7 +180,6 @@ static bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 #endif
 }
 
-// class SvxPathTabPage --------------------------------------------------
 
 SvxPathTabPage::SvxPathTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage( pPage, pController, "cui/ui/optpathspage.ui", "OptPathsPage", &rSet)

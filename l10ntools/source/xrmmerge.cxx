@@ -140,7 +140,6 @@ int GetError()
 }
 
 
-// class XRMResParser
 
 
 XRMResParser::XRMResParser()
@@ -278,7 +277,6 @@ void XRMResParser::Error( const OString &rError )
 }
 
 
-// class XMLResExport
 
 
 XRMResExport::XRMResExport(
@@ -350,7 +348,6 @@ void XRMResExport::EndOfText(
 }
 
 
-// class XRMResMerge
 
 
 XRMResMerge::XRMResMerge(

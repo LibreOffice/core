@@ -145,7 +145,6 @@ void CachedDynamicResultSet
 }
 
 
-// class CachedDynamicResultSetFactory
 
 
 CachedDynamicResultSetFactory::CachedDynamicResultSetFactory(

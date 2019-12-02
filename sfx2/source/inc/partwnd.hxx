@@ -39,7 +39,6 @@ namespace com
 
 // forward ---------------------------------------------------------------
 
-// class SfxPartChildWnd_Impl -----------------------------------
 
 class SfxPartChildWnd_Impl : public SfxChildWindow
 {
@@ -54,7 +53,6 @@ public:
     virtual bool            QueryClose() override;
 };
 
-// class SfxExplorerDockWnd_Impl -----------------------------------------
 
 class SfxPartDockWnd_Impl : public SfxDockingWindow
 {

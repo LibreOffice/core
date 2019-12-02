@@ -27,7 +27,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 
-// class XMLFmtSplitPropHdl
 
 
 XMLShadowedPropHdl::~XMLShadowedPropHdl()

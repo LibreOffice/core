@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase2.hxx>
 
 
-//  class VCLXAccessibleScrollBar
 
 
 typedef ::cppu::ImplHelper2<

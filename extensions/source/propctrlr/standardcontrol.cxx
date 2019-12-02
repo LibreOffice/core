@@ -252,7 +252,6 @@ namespace pcr
     }
 
 
-    // class ODateTimeControl
 
 
     ODateTimeControl::ODateTimeControl( vcl::Window* _pParent, WinBits _nWinStyle)

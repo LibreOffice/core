@@ -3592,7 +3592,6 @@ const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString const & rName )
     return pRet;
 }
 
-//          class WW8RStyle
 
 SprmResult WW8RStyle::HasParaSprm(sal_uInt16 nId) const
 {

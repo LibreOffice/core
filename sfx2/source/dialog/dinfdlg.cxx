@@ -1137,7 +1137,6 @@ void SfxDocumentInfoDialog::AddFontTabPage()
     AddTabPage("font", SfxResId(STR_FONT_TABPAGE), SfxDocumentFontsPage::Create);
 }
 
-// class CustomPropertiesYesNoButton -------------------------------------
 
 CustomPropertiesYesNoButton::CustomPropertiesYesNoButton(std::unique_ptr<weld::Widget> xTopLevel,
                                                          std::unique_ptr<weld::RadioButton> xYesButton,
@@ -1848,7 +1847,6 @@ void CustomPropertiesControl::SetCustomProperties(std::vector< std::unique_ptr<C
     m_xVertScroll->vadjustment_set_upper(nLineCount + 1);
 }
 
-// class SfxCustomPropertiesPage -----------------------------------------
 SfxCustomPropertiesPage::SfxCustomPropertiesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet )
     : SfxTabPage(pPage, pController, "sfx/ui/custominfopage.ui", "CustomInfoPage", &rItemSet)
     , m_xPropertiesCtrl(new CustomPropertiesControl)
@@ -2002,7 +2000,6 @@ CmisPropertyLine::~CmisPropertyLine( )
 {
 }
 
-// class CmisPropertiesWindow -----------------------------------------
 
 CmisPropertiesWindow::CmisPropertiesWindow(std::unique_ptr<weld::Container> xParent)
     : m_xBox(std::move(xParent))
@@ -2235,7 +2232,6 @@ void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
                                bOpenChoice, aChoices, rAny );
 }
 
-// class SfxCmisPropertiesPage -----------------------------------------
 SfxCmisPropertiesPage::SfxCmisPropertiesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet)
     : SfxTabPage(pPage, pController, "sfx/ui/cmisinfopage.ui", "CmisInfoPage", &rItemSet)
     , m_xPropertiesCtrl(new CmisPropertiesControl(*m_xBuilder))

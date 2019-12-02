@@ -31,7 +31,6 @@
 #include <svx/postattr.hxx>
 #include <postdlg.hxx>
 
-// class SvxPostItDialog -------------------------------------------------
 
 SvxPostItDialog::SvxPostItDialog(weld::Widget* pParent, const SfxItemSet& rCoreSet,
     bool bPrevNext)

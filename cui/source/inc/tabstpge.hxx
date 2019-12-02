@@ -28,7 +28,6 @@
 
 class SvxTabulatorTabPage;
 
-// class TabWin_Impl -----------------------------------------------------
 
 class TabWin_Impl : public weld::CustomWidgetController
 {
@@ -45,7 +44,6 @@ public:
     void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
 };
 
-// class SvxTabulatorTabPage ---------------------------------------------
 /*
     [Description]
     In this TabPage tabulators are managed.

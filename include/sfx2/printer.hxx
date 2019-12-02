@@ -26,7 +26,6 @@
 
 class SfxItemSet;
 
-// class SfxPrinter ------------------------------------------------------
 
 class SFX2_DLLPUBLIC SfxPrinter final : public Printer
 {

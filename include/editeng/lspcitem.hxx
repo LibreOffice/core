@@ -24,7 +24,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxLineSpacingItem ----------------------------------------------
 
 /*  [Description]
     This item describes the distance between the lines.

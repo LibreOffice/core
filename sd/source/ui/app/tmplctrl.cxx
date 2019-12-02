@@ -35,7 +35,6 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SdTemplateControl, SfxStringItem );
 
-// class SdTemplatePopup_Impl --------------------------------------------------
 
 namespace {
 
@@ -65,7 +64,6 @@ void SdTemplatePopup_Impl::Select()
     nCurId = GetCurItemId();
 }
 
-// class SdTemplateControl ------------------------------------------
 
 SdTemplateControl::SdTemplateControl( sal_uInt16 _nSlotId,
                                       sal_uInt16 _nId,

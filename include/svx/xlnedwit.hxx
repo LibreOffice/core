@@ -26,7 +26,6 @@
 #define LINE_END_WIDTH_DEFAULT      (200)
 
 
-// class XLineEndWidthItem
 
 
 class SVX_DLLPUBLIC XLineEndWidthItem final : public SfxMetricItem

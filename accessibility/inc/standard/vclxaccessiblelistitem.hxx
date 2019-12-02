@@ -41,7 +41,6 @@ namespace com::sun::star::awt {
     class XFocusListener;
 }
 
-// class VCLXAccessibleListItem ------------------------------------------
 
 typedef ::cppu::WeakAggComponentImplHelper6< css::accessibility::XAccessible
                                             , css::accessibility::XAccessibleContext

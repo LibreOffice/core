@@ -151,7 +151,6 @@ sal_uInt16 SpellUndoAction_Impl::GetId()const
     return m_nId;
 }
 
-// class SvxSpellCheckDialog ---------------------------------------------
 
 SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     weld::Window * pParent, SfxBindings* _pBindings)

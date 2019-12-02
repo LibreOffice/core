@@ -29,7 +29,6 @@
 #include <comphelper/accessibletexthelper.hxx>
 
 
-//  class VCLXAccessibleMenuItem
 
 
 typedef ::cppu::ImplHelper3<

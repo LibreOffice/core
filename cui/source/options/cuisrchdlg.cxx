@@ -24,7 +24,6 @@
 #include "optjsearch.hxx"
 
 
-// class SvxJSearchOptionsDialog -----------------------------------------
 
 SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(weld::Window *pParent,
     const SfxItemSet& rOptionsSet, TransliterationFlags nInitialFlags)

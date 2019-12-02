@@ -54,7 +54,6 @@ namespace accessibility
 {
     class AccessibleListBox;
 
-// class AccessibleListBoxEntry ------------------------------------------
     typedef ::cppu::WeakAggComponentImplHelper9< css::accessibility::XAccessible
                                                 , css::accessibility::XAccessibleContext
                                                 , css::accessibility::XAccessibleComponent

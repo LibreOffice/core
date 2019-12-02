@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 namespace svx
 {
 
-// class WebConnectionInfoDialog -----------------------------------------
 
 WebConnectionInfoDialog::WebConnectionInfoDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/storedwebconnectiondialog.ui", "StoredWebConnectionDialog")

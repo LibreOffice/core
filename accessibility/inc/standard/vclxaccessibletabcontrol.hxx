@@ -28,7 +28,6 @@
 #include <vector>
 
 
-//  class VCLXAccessibleTabControl
 
 
 typedef ::cppu::ImplHelper1 <

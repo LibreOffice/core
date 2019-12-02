@@ -1107,7 +1107,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharPreSelectHdl, SvxShowCharSet*, void)
     m_xOKBtn->set_sensitive(true);
 }
 
-// class SvxShowText =====================================================
 SvxShowText::SvxShowText(const VclPtr<VirtualDevice>& rVirDev)
     : m_xVirDev(rVirDev)
     , mnY(0)

@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 
-// class declaration
 
 
 class CmdMailMsg :

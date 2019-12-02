@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 
 
-// class SdrOnOffItem
 // here GetValueTextByVal() returns "on" or "off" instead
 // of "TRUE" or "FALSE"
 

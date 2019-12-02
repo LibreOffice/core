@@ -39,7 +39,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// class ODateTimeDialog
 
 ODateTimeDialog::ODateTimeDialog(weld::Window* _pParent, const uno::Reference< report::XSection >& _xHoldAlive,
                                  OReportController* _pController)

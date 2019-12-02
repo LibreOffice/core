@@ -36,7 +36,6 @@ class AccessibleStateSetHelper;
 
 
 //    ----------------------------------------------------
-//    class VCLXAccessibleHeaderBarItem
 //    ----------------------------------------------------
 
 typedef ::cppu::ImplHelper2<

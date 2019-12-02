@@ -25,7 +25,6 @@
 
 class SvtCTLOptions_Impl;
 
-// class SvtCTLOptions --------------------------------------------------------
 
 class SVL_DLLPUBLIC SvtCTLOptions final : public utl::detail::Options
 {

@@ -25,7 +25,6 @@
 
 #include <vector>
 
-// class SfxContentHelper ------------------------------------------------
 
 class SfxContentHelper
 {

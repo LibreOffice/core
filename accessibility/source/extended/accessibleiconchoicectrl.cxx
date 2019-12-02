@@ -32,7 +32,6 @@ namespace accessibility
 {
 
 
-    // class AccessibleIconChoiceCtrl ----------------------------------------------
 
     using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::uno;

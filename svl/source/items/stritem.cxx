@@ -20,7 +20,6 @@
 #include <svl/stritem.hxx>
 #include <libxml/xmlwriter.h>
 
-//  class SfxStringItem
 
 
 // virtual

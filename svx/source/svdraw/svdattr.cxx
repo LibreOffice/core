@@ -739,7 +739,6 @@ bool SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
 }
 
 
-// class SdrPercentItem
 
 
 SfxPoolItem* SdrPercentItem::Clone(SfxItemPool* /*pPool*/) const
@@ -763,7 +762,6 @@ bool SdrPercentItem::GetPresentation(
 }
 
 
-// class SdrAngleItem
 
 
 SfxPoolItem* SdrAngleItem::Clone(SfxItemPool* /*pPool*/) const
@@ -832,7 +830,6 @@ bool SdrAngleItem::GetPresentation(
 }
 
 
-// class SdrMetricItem
 
 
 SfxPoolItem* SdrMetricItem::Clone(SfxItemPool* /*pPool*/) const
@@ -1716,7 +1713,6 @@ bool SdrCircKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 }
 
 
-// class SdrSignedPercentItem
 
 
 SfxPoolItem* SdrSignedPercentItem::Clone(SfxItemPool* /*pPool*/) const

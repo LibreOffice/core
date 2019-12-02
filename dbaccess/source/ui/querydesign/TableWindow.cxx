@@ -90,7 +90,6 @@ void Draw3DBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
 
 }
 
-// class OTableWindow
 OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData )
           : ::comphelper::OContainerListener(m_aMutex)
           ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )

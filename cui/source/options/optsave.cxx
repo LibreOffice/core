@@ -64,7 +64,6 @@ SvxSaveTabPage_Impl::SvxSaveTabPage_Impl() : bInitialized( false )
 {
 }
 
-// class SvxSaveTabPage --------------------------------------------------
 
 SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage( pPage, pController, "cui/ui/optsavepage.ui", "OptSavePage", &rCoreSet )

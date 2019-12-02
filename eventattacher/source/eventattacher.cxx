@@ -59,7 +59,6 @@ using namespace osl;
 namespace comp_EventAttacher {
 
 
-//  class InvocationToAllListenerMapper
 //  helper class to map XInvocation to XAllListener
 
 namespace {
@@ -199,7 +198,6 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
 }
 
 
-//  class EventAttacherImpl
 //  represents an implementation of the EventAttacher service
 
 namespace {

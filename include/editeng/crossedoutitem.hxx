@@ -23,7 +23,6 @@
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxCrossedOutItem -----------------------------------------------
 
 /*  [Description]
     This item describes, whether and how it is striked out.

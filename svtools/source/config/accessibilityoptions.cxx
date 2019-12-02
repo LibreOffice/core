@@ -42,7 +42,6 @@ using namespace com::sun::star::uno;
 
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
 
-// class SvtAccessibilityOptions_Impl ---------------------------------------------
 
 class SvtAccessibilityOptions_Impl
 {
@@ -78,7 +77,6 @@ namespace
 }
 
 
-// class SvtAccessibilityOptions_Impl ---------------------------------------------
 
 SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
 {
@@ -352,7 +350,6 @@ void SvtAccessibilityOptions_Impl::SetVCLSettings()
     Application::SetSettings(aAllSettings);
 }
 
-// class SvtAccessibilityOptions --------------------------------------------------
 
 SvtAccessibilityOptions::SvtAccessibilityOptions()
 {

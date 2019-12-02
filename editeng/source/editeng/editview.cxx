@@ -156,12 +156,10 @@ LanguageType EditView::CheckLanguage(
     return nLang;
 }
 
-// class EditViewCallbacks
 EditViewCallbacks::~EditViewCallbacks()
 {
 }
 
-// class EditView
 EditView::EditView( EditEngine* pEng, vcl::Window* pWindow )
 {
     pImpEditView.reset( new ImpEditView( this, pEng, pWindow ) );
@@ -218,7 +216,6 @@ void EditView::InvalidateWindow(const tools::Rectangle& rClipRect)
     }
     else
     {
-        // classic mode: invalidate and trigger full repaint
         // of the changed area
         GetWindow()->Invalidate(rClipRect);
     }

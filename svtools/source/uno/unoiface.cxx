@@ -136,7 +136,6 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const cs
 }   // extern "C"
 
 
-//  class VCLXMultiLineEdit
 
 VCLXMultiLineEdit::VCLXMultiLineEdit()
     :maTextListeners( *this )
@@ -505,7 +504,6 @@ void VCLXMultiLineEdit::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
 
-//  class VCLXFileControl
 
 VCLXFileControl::VCLXFileControl() : maTextListeners( *this )
 {
@@ -783,7 +781,6 @@ void VCLXFileControl::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 }
 
 
-//  class SVTXFormattedField
 
 
 SVTXFormattedField::SVTXFormattedField()
@@ -1361,7 +1358,6 @@ void SVTXFormattedField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 }
 
 
-//  class SVTXNumericField
 
 SVTXNumericField::SVTXNumericField()
 {
@@ -1535,7 +1531,6 @@ void SVTXNumericField::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
 }
 
 
-//  class SVTXCurrencyField
 
 SVTXCurrencyField::SVTXCurrencyField()
 {
@@ -1774,7 +1769,6 @@ void SVTXCurrencyField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 }
 
 
-//  class SVTXDateField
 
 SVTXDateField::SVTXDateField()
     :VCLXDateField()

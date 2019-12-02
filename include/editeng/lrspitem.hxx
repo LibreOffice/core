@@ -23,7 +23,6 @@
 #include <editeng/editengdllapi.h>
 
 
-// class SvxLRSpaceItem --------------------------------------------------
 
 /*  [Description]
 

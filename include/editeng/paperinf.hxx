@@ -31,7 +31,6 @@
 
 class Printer;
 
-// class SvxPaperInfo -----------------------------------------------------
 
 class EDITENG_DLLPUBLIC SvxPaperInfo
 {

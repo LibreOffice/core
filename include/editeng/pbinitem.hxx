@@ -26,7 +26,6 @@
 
 #define PAPERBIN_PRINTER_SETTINGS   (sal_uInt8(0xFF))
 
-// class SvxPaperBinItem -------------------------------------------------
 
 /*  [Description]
 

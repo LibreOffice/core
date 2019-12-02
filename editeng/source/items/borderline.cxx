@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star::table::BorderLineStyle;
 
-// class SvxBorderLine  --------------------------------------------------
 
 namespace {
 

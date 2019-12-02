@@ -39,7 +39,6 @@ class DlgEdObj;
 class DialogWindow;
 
 
-//  class AccessibleDialogControlShape
 
 typedef ::cppu::ImplHelper3<
         css::accessibility::XAccessible,

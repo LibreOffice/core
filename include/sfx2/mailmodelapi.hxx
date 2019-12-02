@@ -32,10 +32,8 @@ namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::uno { class XInterface; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 
-// class AddressList_Impl ------------------------------------------------
 typedef ::std::vector< OUString > AddressList_Impl;
 
-// class SfxMailModel_Impl -----------------------------------------------
 
 class SFX2_DLLPUBLIC SfxMailModel
 {

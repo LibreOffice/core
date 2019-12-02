@@ -22,7 +22,6 @@
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxNoHyphenItem -------------------------------------------------
 class EDITENG_DLLPUBLIC SvxNoHyphenItem final : public SfxBoolItem
 {
 public:

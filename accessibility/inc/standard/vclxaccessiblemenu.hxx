@@ -26,7 +26,6 @@
 #include <cppuhelper/implbase1.hxx>
 
 
-//  class VCLXAccessibleMenu
 
 
 typedef ::cppu::ImplHelper1 <

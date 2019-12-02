@@ -40,7 +40,6 @@ namespace o3tl
     template<> struct typed_flags<SfxShowExtras> : is_typed_flags<SfxShowExtras, 0x0f> {};
 }
 
-// class SfxPasswordDialog -----------------------------------------------
 
 class SFX2_DLLPUBLIC SfxPasswordDialog final : public weld::GenericDialogController
 {

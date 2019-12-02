@@ -124,7 +124,6 @@ using namespace ucbhelper_impl;
 namespace ucbhelper
 {
 
-// class PropertyValues.
 class PropertyValues : public std::vector< ucbhelper_impl::PropertyValue > {};
 
 } // namespace ucbhelper

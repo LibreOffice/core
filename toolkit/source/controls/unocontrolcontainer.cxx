@@ -38,7 +38,6 @@
 using namespace ::com::sun::star;
 
 
-//  class UnoControlHolder
 
 namespace {
 
@@ -324,7 +323,6 @@ static void implUpdateVisibility
 }
 
 
-//  class DialogStepChangedListener
 
 typedef ::cppu::WeakImplHelper< beans::XPropertyChangeListener > PropertyChangeListenerHelper;
 
@@ -363,7 +361,6 @@ void SAL_CALL DialogStepChangedListener::propertyChange( const  beans::PropertyC
 }
 
 
-//  class UnoControlContainer
 
 UnoControlContainer::UnoControlContainer()
     :UnoControlContainer_Base()

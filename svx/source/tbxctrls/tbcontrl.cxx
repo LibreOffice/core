@@ -3650,7 +3650,6 @@ com_sun_star_comp_svx_ColorToolBoxControl_get_implementation(
     return cppu::acquire( new SvxColorToolBoxControl( rContext ) );
 }
 
-// class SvxFrameToolBoxControl --------------------------------------------
 
 namespace {
 

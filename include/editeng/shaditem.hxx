@@ -27,7 +27,6 @@
 #include <editeng/editengdllapi.h>
 
 
-// class SvxShadowItem ---------------------------------------------------
 
 /*  [Description]
 

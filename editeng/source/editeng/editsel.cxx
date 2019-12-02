@@ -22,7 +22,6 @@
 #include <editeng/editview.hxx>
 
 
-//  class EditSelFunctionSet
 
 EditSelFunctionSet::EditSelFunctionSet()
 {
@@ -74,7 +73,6 @@ void EditSelFunctionSet::DeselectAll()
 }
 
 
-//  class EditSelectionEngine
 
 EditSelectionEngine::EditSelectionEngine() : SelectionEngine( nullptr )
 {

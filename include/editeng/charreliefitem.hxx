@@ -23,7 +23,6 @@
 #include <vcl/fntstyle.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxCharRotateItem ----------------------------------------------
 
 /* [Description]
 

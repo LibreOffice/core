@@ -31,7 +31,6 @@
 #include <toolkit/helper/property.hxx>
 
 
-//  class VCLXContainer
 
 
 void VCLXContainer::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )

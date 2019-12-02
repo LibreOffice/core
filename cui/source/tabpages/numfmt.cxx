@@ -174,7 +174,6 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
     rRenderContext.Pop();
 }
 
-// class SvxNumberFormatTabPage ------------------------------------------
 
 #define REMOVE_DONTKNOW() \
     if (!m_xFtLanguage->get_sensitive())                              \

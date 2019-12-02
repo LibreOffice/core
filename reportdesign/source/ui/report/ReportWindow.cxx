@@ -50,7 +50,6 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-// class OReportWindow
 
 
 OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)

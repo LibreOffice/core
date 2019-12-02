@@ -46,7 +46,6 @@ typedef ::std::vector< ElementEntry_Impl >     ElementList;
 typedef css::beans::StringPair                 UnoFilterEntry;
 typedef css::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
 
-// class SvtFilePicker ---------------------------------------------------
 
 typedef ::cppu::ImplHelper5 <   css::ui::dialogs::XFilePicker3
                             ,   css::ui::dialogs::XFilePickerControlAccess

@@ -24,7 +24,6 @@
 #include <svx/svxdllapi.h>
 
 
-// class XLineWidthItem
 
 class SVX_DLLPUBLIC XLineWidthItem final : public SfxMetricItem
 {

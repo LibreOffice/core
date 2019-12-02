@@ -17,7 +17,6 @@
 #include <sfx2/mailmodelapi.hxx>
 
 
-// class SfxBluetoothModel_Impl -----------------------------------------------
 
 class SfxBluetoothModel:public SfxMailModel
 {

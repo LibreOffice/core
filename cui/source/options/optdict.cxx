@@ -89,7 +89,6 @@ static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rTex
     return eRes;
 }
 
-// class SvxNewDictionaryDialog -------------------------------------------
 
 SvxNewDictionaryDialog::SvxNewDictionaryDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/optnewdictionarydialog.ui", "OptNewDictionaryDialog")
@@ -196,7 +195,6 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, ModifyHdl_Impl, weld::Entry&, void)
     m_xOKBtn->set_sensitive(!m_xNameEdit->get_text().isEmpty());
 }
 
-// class SvxEditDictionaryDialog -------------------------------------------
 
 SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, const OUString& rName)
     : GenericDialogController(pParent, "cui/ui/editdictionarydialog.ui", "EditDictionaryDialog")

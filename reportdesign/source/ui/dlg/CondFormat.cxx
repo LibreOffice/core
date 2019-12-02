@@ -80,7 +80,6 @@ namespace rptui
         }
     }
 
-    // class ConditionalFormattingDialog
     ConditionalFormattingDialog::ConditionalFormattingDialog(
             weld::Window* _pParent, const Reference< XReportControlModel >& _rxFormatConditions, ::rptui::OReportController& _rController)
         : GenericDialogController(_pParent, "modules/dbreport/ui/condformatdialog.ui", "CondFormat")

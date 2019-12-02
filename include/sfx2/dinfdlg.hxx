@@ -49,7 +49,6 @@ namespace com { namespace sun { namespace star {
 
 struct CustomProperty;
 
-// class SfxDocumentInfoItem ---------------------------------------------
 
 class SFX2_DLLPUBLIC SfxDocumentInfoItem final : public SfxStringItem
 {
@@ -159,7 +158,6 @@ public:
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
-// class SfxDocumentPage -------------------------------------------------
 
 class SfxDocumentPage final : public SfxTabPage
 {
@@ -210,7 +208,6 @@ public:
     void                EnableUseUserData();
 };
 
-// class SfxDocumentDescPage ---------------------------------------------
 
 class SfxDocumentDescPage final : public SfxTabPage
 {
@@ -230,7 +227,6 @@ public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
 };
 
-// class SfxDocumentInfoDialog -------------------------------------------
 
 class SFX2_DLLPUBLIC SfxDocumentInfoDialog final : public SfxTabDialogController
 {
@@ -241,7 +237,6 @@ public:
     void AddFontTabPage();
 };
 
-// class CustomPropertiesRemoveButton ------------------------------------
 struct CustomPropertyLine;
 
 class CustomPropertiesDateField
@@ -341,7 +336,6 @@ struct CustomPropertyLine
     void Hide();
 };
 
-// class CustomPropertiesWindow ------------------------------------------
 
 class CustomPropertiesWindow
 {
@@ -399,7 +393,6 @@ public:
     void                Remove(const CustomPropertyLine* pLine);
 };
 
-// class CustomPropertiesControl -----------------------------------------
 
 class CustomPropertiesControl
 {
@@ -435,7 +428,6 @@ public:
     void         Init(weld::Builder& rParent);
 };
 
-// class SfxCustomPropertiesPage -----------------------------------------
 
 class SfxCustomPropertiesPage final : public SfxTabPage
 {
@@ -505,7 +497,6 @@ struct CmisPropertyLine
     ~CmisPropertyLine();
 };
 
-// class CmisPropertiesWindow ------------------------------------------
 
 class CmisPropertiesWindow
 {
@@ -529,7 +520,6 @@ public:
                         GetCmisProperties() const;
 };
 
-// class CmisPropertiesControl -----------------------------------------
 
 class CmisPropertiesControl
 {
@@ -553,7 +543,6 @@ public:
                         { return m_aPropertiesWin.GetCmisProperties(); }
 };
 
-// class SfxCmisPropertiesPage -------------------------------------------------
 
 class SfxCmisPropertiesPage final : public SfxTabPage
 {

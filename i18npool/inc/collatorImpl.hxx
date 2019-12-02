@@ -33,9 +33,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace i18npool {
 
-//      ----------------------------------------------------
-//      class CollatorImpl
-//      ----------------------------------------------------
 class CollatorImpl : public cppu::WeakImplHelper
 <
     css::i18n::XCollator,

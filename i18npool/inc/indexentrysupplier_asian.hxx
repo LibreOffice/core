@@ -26,7 +26,6 @@
 namespace i18npool {
 
 
-//  class IndexEntrySupplier_asian
 
 
 class IndexEntrySupplier_asian : public IndexEntrySupplier_Common {

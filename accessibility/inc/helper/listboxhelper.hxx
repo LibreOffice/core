@@ -31,7 +31,6 @@
 const sal_Int32 DEFAULT_INDEX_IN_PARENT = -1;
 
 
-// class VCLListBoxHelper
 
 
 template< class T > class VCLListBoxHelper : public ::accessibility::IComboListBoxHelper

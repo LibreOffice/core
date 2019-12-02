@@ -259,7 +259,6 @@ void SkiaCfg::setForceSkia(bool bSkia)
 
 }
 
-// class OfaMiscTabPage --------------------------------------------------
 
 DeactivateRC OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
@@ -713,7 +712,6 @@ void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
     xChangesBatch->commitChanges();
 }
 
-// class OfaViewTabPage --------------------------------------------------
 
 static bool DisplayNameCompareLessThan(const vcl::IconThemeInfo& rInfo1, const vcl::IconThemeInfo& rInfo2)
 {

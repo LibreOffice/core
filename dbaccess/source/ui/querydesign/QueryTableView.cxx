@@ -182,7 +182,6 @@ namespace
     }
 }
 
-// class OQueryTableView
 OQueryTableView::OQueryTableView( vcl::Window* pParent,OQueryDesignView* pView)
     : OJoinTableView( pParent,pView)
 {

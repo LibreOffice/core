@@ -104,7 +104,6 @@ struct LastPageSaver
     LastPageSaver() : m_nLastPageId( USHRT_MAX ) {}
 };
 
-// class OfaTreeOptionsDialog --------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 namespace com { namespace sun { namespace star { namespace awt { class XContainerWindowProvider; } } } }
@@ -192,7 +191,6 @@ public:
     void                SetNeedsRestart( svtools::RestartReason eReason );
 };
 
-// class ExtensionsTabPage -----------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
 namespace com { namespace sun { namespace star { namespace awt { class XContainerWindowEventHandler; } } } }

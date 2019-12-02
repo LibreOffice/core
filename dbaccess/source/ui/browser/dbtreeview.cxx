@@ -29,7 +29,6 @@ namespace dbaui
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-// class DBTreeView
 DBTreeView::DBTreeView( vcl::Window* pParent, WinBits nBits)
                     :   Window( pParent, nBits )
                     , m_pTreeListBox(nullptr)

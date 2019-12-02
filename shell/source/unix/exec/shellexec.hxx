@@ -27,7 +27,6 @@
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 
 
-// class declaration
 
 
 class ShellExec : public ::cppu::WeakImplHelper< css::system::XSystemShellExecute, css::lang::XServiceInfo >

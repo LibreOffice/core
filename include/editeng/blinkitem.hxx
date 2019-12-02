@@ -23,7 +23,6 @@
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxBlinkItem -------------------------------------------------
 
 /*
     [Description]

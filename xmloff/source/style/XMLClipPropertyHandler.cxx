@@ -31,7 +31,6 @@ using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 
-// class XMLMeasurePropHdl
 
 
 XMLClipPropertyHandler::XMLClipPropertyHandler( bool bODF11 ) :

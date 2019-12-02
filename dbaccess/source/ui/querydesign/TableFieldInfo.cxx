@@ -20,7 +20,6 @@
 #include "TableFieldInfo.hxx"
 
 using namespace dbaui;
-// class OTableFieldInfo
 
 OTableFieldInfo::OTableFieldInfo()  :
     m_eFieldType(TAB_NORMAL_FIELD), m_eDataType(1000)

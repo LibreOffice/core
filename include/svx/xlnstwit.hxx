@@ -26,7 +26,6 @@
 #define LINE_START_WIDTH_DEFAULT        (200)
 
 
-// class XLineStartWidthItem
 
 class SVX_DLLPUBLIC XLineStartWidthItem final : public SfxMetricItem
 {

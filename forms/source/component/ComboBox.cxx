@@ -68,7 +68,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
 
-// class OComboBoxModel
 Sequence<Type> OComboBoxModel::_getTypes()
 {
     return ::comphelper::concatSequences(

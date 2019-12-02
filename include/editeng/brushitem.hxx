@@ -25,7 +25,6 @@
 #include <editeng/editengdllapi.h>
 #include <memory>
 
-// class SvxBrushItem ----------------------------------------------------
 
 class Graphic;
 class GraphicObject;

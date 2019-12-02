@@ -23,7 +23,6 @@
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxEmphasisMarkItem ----------------------------------------------
 
 /* [Description]
 

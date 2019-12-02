@@ -31,7 +31,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
-// class ScZoomSliderControl ---------------------------------------
 
 SFX_IMPL_TOOLBOX_CONTROL( ScZoomSliderControl, SvxZoomSliderItem );
 

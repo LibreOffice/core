@@ -693,7 +693,6 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
     }
 }
 
-// class FormulaCompiler
 
 FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr, bool bComputeII, bool bMatrixFlag )
         :

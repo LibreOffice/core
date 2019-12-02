@@ -152,7 +152,6 @@ SmPrintUIOptions::SmPrintUIOptions()
 }
 
 
-// class SmModel
 
 namespace {
 

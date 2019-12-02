@@ -27,7 +27,6 @@
 
 #include <map>
 
-// class AccessibleListBox -----------------------------------------------
 
 class SvTreeListBox;
 class SvTreeListEntry;

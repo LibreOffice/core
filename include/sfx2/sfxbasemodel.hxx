@@ -90,7 +90,6 @@ namespace com::sun::star::ui { class XUIConfigurationManager2; }
 namespace com::sun::star::util { class XCloseListener; }
 namespace com::sun::star::util { class XModifyListener; }
 
-//  class declarations
 
 
 /**_______________________________________________________________________________________________________

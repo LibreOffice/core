@@ -212,7 +212,6 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-// class SvxSearchSimilarityDialog ---------------------------------------
 
 SvxSearchSimilarityDialog::SvxSearchSimilarityDialog(weld::Window* pParent, bool bRelax,
     sal_uInt16 nOther, sal_uInt16 nShorter, sal_uInt16 nLonger)

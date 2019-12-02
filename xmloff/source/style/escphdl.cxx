@@ -30,7 +30,6 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 
-// class XMLEscapementPropHdl
 
 
 XMLEscapementPropHdl::~XMLEscapementPropHdl()
@@ -95,7 +94,6 @@ bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 }
 
 
-// class XMLEscapementHeightPropHdl
 
 
 XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl()

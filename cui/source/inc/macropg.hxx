@@ -101,7 +101,6 @@ public:
     );
 };
 
-// class SvxMacroAssignDlg --------------------------------------------------
 
 typedef const sal_uInt16* (*GetTabPageRanges)(); // gives international Which-values
 

@@ -21,7 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-// class SvxFontSubstTabPage ----------------------------------------------------
 class SvtFontSubstConfig;
 class SvxFontSubstTabPage : public SfxTabPage
 {

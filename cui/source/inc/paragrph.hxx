@@ -26,7 +26,6 @@
 
 class SvxLineSpacingItem;
 
-// class SvxStdParagraphTabPage ------------------------------------------
 /*
     [Description]
     With this TabPage standard attributes of a paragraph can be set
@@ -119,7 +118,6 @@ public:
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-// class SvxParaAlignTabPage ------------------------------------------------
 
 class SvxParaAlignTabPage : public SfxTabPage
 {
@@ -175,7 +173,6 @@ public:
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-// class SvxExtParagraphTabPage ------------------------------------------
 /*
     [Description]
     With this TabPage special attributes of a paragraph can be set

@@ -29,7 +29,6 @@
 #include <vcl/svapp.hxx>
 
 
-//  class VCLXFont
 
 VCLXFont::VCLXFont()
 {

@@ -140,7 +140,6 @@ protected:
     std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
 };
 
-//  class SfxTemplateCategoryDialog -------------------------------------------------------------------
 
 class SfxTemplateCategoryDialog final : public weld::GenericDialogController
 {
@@ -182,7 +181,6 @@ public:
 };
 
 
-//  class SfxTemplateSelectionDialog -------------------------------------------------------------------
 
 class SFX2_DLLPUBLIC SfxTemplateSelectionDlg final : public SfxTemplateManagerDlg
 {

@@ -41,7 +41,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// class OAccessibleMenuComponent
 
 
 bool OAccessibleMenuComponent::IsEnabled()

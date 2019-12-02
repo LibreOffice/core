@@ -24,7 +24,6 @@
 #include <tools/solar.h>
 #include <editeng/editengdllapi.h>
 
-// class SvxFontHeightItem -----------------------------------------------
 
 // Warning: twips values
 

@@ -55,7 +55,6 @@ public:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
 };
 
-// class SvxCharNamePage -------------------------------------------------
 
 struct SvxCharNamePage_Impl;
 
@@ -155,7 +154,6 @@ public:
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-// class SvxCharEffectsPage ----------------------------------------------
 
 class SvxCharEffectsPage : public SvxCharBasePage
 {
@@ -227,7 +225,6 @@ public:
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-// class SvxCharPositionPage ---------------------------------------------
 class SvxCharPositionPage : public SvxCharBasePage
 {
     static const sal_uInt16 pPositionRanges[];
@@ -295,7 +292,6 @@ public:
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-// class SvxCharTwoLinesPage ---------------------------------------------
 
 class SvxCharTwoLinesPage : public SvxCharBasePage
 {

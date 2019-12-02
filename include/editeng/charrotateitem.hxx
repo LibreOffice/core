@@ -22,7 +22,6 @@
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 
- // class SvxTextRotateItem ----------------------------------------------
 
  /* [Description]
 
@@ -58,7 +57,6 @@ public:
 };
 
 
-// class SvxCharRotateItem ----------------------------------------------
 
 /* [Description]
 

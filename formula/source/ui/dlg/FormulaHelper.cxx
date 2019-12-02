@@ -54,7 +54,6 @@ namespace formula
         };
     }
 
-//  class FormulaHelper - static Method
 
 
 #define FUNC_NOTFOUND -1

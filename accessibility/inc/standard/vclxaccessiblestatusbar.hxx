@@ -27,7 +27,6 @@
 #include <vector>
 
 
-//  class VCLXAccessibleStatusBar
 
 
 class VCLXAccessibleStatusBar final : public VCLXAccessibleComponent

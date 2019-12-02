@@ -27,7 +27,6 @@
 class SdrModel;
 
 
-// class XLineEndItem
 
 class SVX_DLLPUBLIC XLineEndItem final : public NameOrIndex
 {

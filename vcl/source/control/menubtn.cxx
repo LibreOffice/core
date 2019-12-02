@@ -229,7 +229,6 @@ void MenuButton::SetPopover(Window* pWindow)
     mpFloatingWindow = pWindow;
 }
 
-//class MenuToggleButton ----------------------------------------------------
 
 MenuToggleButton::MenuToggleButton( vcl::Window* pParent, WinBits nWinBits )
     : MenuButton( pParent, nWinBits )

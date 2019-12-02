@@ -28,7 +28,6 @@
 
 class SdrView;
 
-// class SvxCaptionTabPage -----------------------------------------------
 
 const sal_uInt16 CAPTYPE_BITMAPS_COUNT = 3;
 
@@ -93,7 +92,6 @@ public:
     void FillValueSet();
 };
 
-// class SvxCaptionTabDialog ---------------------------------------------
 struct SvxSwFrameValidation;
 class SvxCaptionTabDialog : public SfxTabDialogController
 {

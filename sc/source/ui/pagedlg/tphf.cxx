@@ -40,7 +40,6 @@
 #include <memory>
 #include <helpids.h>
 
-// class ScHFPage
 
 ScHFPage::ScHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId)
     : SvxHFPage(pPage, pController, rSet, nSetId)
@@ -205,7 +204,6 @@ IMPL_LINK_NOARG(ScHFPage, BtnHdl, weld::Button&, void)
     }
 }
 
-// class ScHeaderPage
 
 ScHeaderPage::ScHeaderPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : ScHFPage(pPage, pController, rSet, SID_ATTR_PAGE_HEADERSET)
@@ -222,7 +220,6 @@ const sal_uInt16* ScHeaderPage::GetRanges()
     return SvxHeaderPage::GetRanges();
 }
 
-// class ScFooterPage
 
 ScFooterPage::ScFooterPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : ScHFPage( pPage, pController, rSet, SID_ATTR_PAGE_FOOTERSET )

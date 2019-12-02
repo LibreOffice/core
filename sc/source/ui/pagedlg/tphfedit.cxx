@@ -58,7 +58,6 @@ static void lcl_GetFieldData( ScHeaderFieldData& rData )
     }
 }
 
-// class ScEditWindow
 
 ScEditWindow::ScEditWindow(ScEditWindowLocation eLoc, weld::Window* pDialog)
     : eLocation(eLoc)

@@ -35,9 +35,6 @@ using namespace ::com::sun::star::lang;
 
 namespace i18npool {
 
-//  class cclass_Unicode
-//  ----------------------------------------------------;
-
 cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxContext ) :
         trans( new Transliteration_casemapping() ),
         m_xContext( rxContext ),

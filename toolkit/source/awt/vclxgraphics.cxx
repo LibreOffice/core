@@ -35,7 +35,6 @@
 using namespace com::sun::star;
 
 
-//  class VCLXGraphics
 
 // lang::XUnoTunnel
 UNO3_GETIMPLEMENTATION_IMPL( VCLXGraphics );

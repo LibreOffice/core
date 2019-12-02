@@ -22,7 +22,6 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
-// class SvxCTLOptionsPage -----------------------------------------------------
 
 IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, weld::Button&, void)
 {

@@ -3880,7 +3880,6 @@ void BasicAllListener_Impl ::disposing(const EventObject& )
 }
 
 
-//  class InvocationToAllListenerMapper
 //  helper class to map XInvocation to XAllListener (also in project eventattacher!)
 
 namespace {

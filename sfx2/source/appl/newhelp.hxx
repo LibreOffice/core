@@ -71,7 +71,6 @@ public:
     OUString        GetSelectedEntry() const;
 };
 
-// class HelpTabPage_Impl ------------------------------------------------
 
 class SfxHelpIndexWindow_Impl;
 
@@ -89,7 +88,6 @@ public:
     virtual Control*    GetLastFocusControl() = 0;
 };
 
-// class ContentTabPage_Impl ---------------------------------------------
 
 class ContentTabPage_Impl : public HelpTabPage_Impl
 {
@@ -109,7 +107,6 @@ public:
     void     SetFocusOnBox() { m_pContentBox->GrabFocus(); }
 };
 
-// class IndexTabPage_Impl -----------------------------------------------
 
 class IndexBox_Impl : public ComboBox
 {
@@ -168,7 +165,6 @@ public:
     void         SelectExecutableEntry() { m_pIndexCB->SelectExecutableEntry(); }
 };
 
-// class SearchTabPage_Impl ----------------------------------------------
 
 class SearchBox_Impl : public ComboBox
 {
@@ -241,7 +237,6 @@ public:
     bool                OpenKeyword( const OUString& rKeyword );
 };
 
-// class BookmarksTabPage_Impl -------------------------------------------
 
 class BookmarksBox_Impl : public ListBox
 {
@@ -278,7 +273,6 @@ public:
     void                SetFocusOnBox() { m_pBookmarksBox->GrabFocus(); }
 };
 
-// class SfxHelpIndexWindow_Impl -----------------------------------------
 
 class SfxHelpWindow_Impl;
 
@@ -400,7 +394,6 @@ bool SfxHelpIndexWindow_Impl::WasCursorLeftOrRight()
     return bRet;
 }
 
-// class TextWin_Impl ----------------------------------------------------
 
 class TextWin_Impl : public DockingWindow
 {
@@ -410,7 +403,6 @@ public:
     virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 };
 
-// class SfxHelpTextWindow_Impl ------------------------------------------
 
 class SvtMiscOptions;
 class SfxHelpWindow_Impl;
@@ -484,7 +476,6 @@ public:
     void                    DoSearch();
 };
 
-// class SfxHelpWindow_Impl ----------------------------------------------
 
 class HelpInterceptor_Impl;
 class HelpListener_Impl;

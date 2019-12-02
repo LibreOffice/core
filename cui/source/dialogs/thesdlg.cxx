@@ -230,7 +230,6 @@ IMPL_LINK_NOARG(SvxThesaurusDialog, SelectFirstHdl_Impl, void *, void)
     }
 }
 
-// class SvxThesaurusDialog ----------------------------------------------
 
 SvxThesaurusDialog::SvxThesaurusDialog(
     weld::Window* pParent,

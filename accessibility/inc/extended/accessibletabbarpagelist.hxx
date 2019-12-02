@@ -37,7 +37,6 @@ namespace accessibility
 {
 
 
-    //  class AccessibleTabBarPageList
 
 
     typedef ::cppu::ImplHelper3<

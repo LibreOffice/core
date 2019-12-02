@@ -313,8 +313,6 @@ void LibBox::ClearBox()
     ListBox::Clear();
 }
 
-// class LanguageBoxControl ----------------------------------------------
-
 /*! Macro for implementation two methods for LanguageBoxControl Class
  *
  * @code
@@ -357,7 +355,6 @@ VclPtr<vcl::Window> LanguageBoxControl::CreateItemWindow(vcl::Window* pParent)
     return VclPtr<LanguageBox>::Create(pParent);
 }
 
-// class basctl::LanguageBox -----------------------------------------------
 LanguageBox::LanguageBox(vcl::Window* pParent)
     : DocListenerBox(pParent)
     , msNotLocalizedStr(IDEResId(RID_STR_TRANSLATION_NOTLOCALIZED))

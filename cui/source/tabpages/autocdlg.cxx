@@ -2108,7 +2108,6 @@ IMPL_LINK(OfaAutoCompleteTabPage, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
     return bHandled;
 }
 
-// class OfaSmartTagOptionsTabPage ---------------------------------------------
 
 OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage(weld::Container* pPage, weld::DialogController* pController,
                                                      const SfxItemSet& rSet )

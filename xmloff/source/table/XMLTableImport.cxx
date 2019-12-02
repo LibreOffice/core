@@ -170,7 +170,6 @@ private:
 
 }
 
-// class XMLProxyContext
 
 XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent, sal_uInt16 nPrfx, const OUString& rLName )
 : SvXMLImportContext( rImport, nPrfx, rLName )
@@ -186,7 +185,6 @@ SvXMLImportContextRef XMLProxyContext::CreateChildContext( sal_uInt16 nPrefix, c
         return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 }
 
-// class XMLTableImport
 
 XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrImport( rImport )
@@ -357,7 +355,6 @@ void XMLTableImport::finishStyles()
     }
 }
 
-// class XMLTableImport
 
 XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter, sal_uInt16 nPrfx, const OUString& rLName,  Reference< XColumnRowRange > const & xColumnRowRange )
 : SvXMLImportContext( xImporter->mrImport, nPrfx, rLName )
@@ -744,7 +741,6 @@ void XMLCellImportContext::EndElement()
     }
 }
 
-// class XMLTableTemplateContext
 
 XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
 : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_TABLE_TEMPLATE_ID, false )

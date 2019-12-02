@@ -31,7 +31,6 @@ class SmartTagMgr;
 
 namespace editeng { class SortedAutoCompleteStrings; }
 
-// class OfaAutoCorrDlg --------------------------------------------------
 
 class OfaAutoCorrDlg : public SfxTabDialogController
 {
@@ -47,7 +46,6 @@ public:
     void EnableLanguage(bool bEnable);
 };
 
-// class OfaAutocorrOptionsPage ------------------------------------------
 
 class OfaAutocorrOptionsPage : public SfxTabPage
 {
@@ -78,7 +76,6 @@ public:
 
 };
 
-// class OfaSwAutoFmtOptionsPage ----------------------------------------------------
 
 class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
@@ -129,7 +126,6 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
 };
 
-// class OfaAutocorrReplacePage ------------------------------------------
 
 struct DoubleString
 {
@@ -206,7 +202,6 @@ public:
     void    NewEntry(const OUString& sShort, const OUString& sLong, bool bKeepSourceFormatting);
 };
 
-// class OfaAutocorrExceptPage ---------------------------------------------
 
 struct StringsArrays
 {
@@ -260,7 +255,6 @@ public:
 
 };
 
-// class OfaQuoteTabPage -------------------------------------------------
 
 class OfaQuoteTabPage : public SfxTabPage
 {
@@ -312,7 +306,6 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
 };
 
-// class OfaAutoCompleteTabPage ---------------------------------------------
 
 class OfaAutoCompleteTabPage : public SfxTabPage
 {
@@ -350,7 +343,6 @@ public:
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
-// class OfaSmartTagOptionsTabPage ---------------------------------------------
 
 /** Smart tag options tab page
 

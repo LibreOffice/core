@@ -22,7 +22,6 @@
 #include <svl/stritem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxPageModelItem ------------------------------------------------
 
 /*  [Description]
 

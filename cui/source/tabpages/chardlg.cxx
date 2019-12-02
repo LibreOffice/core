@@ -210,7 +210,6 @@ struct SvxCharNamePage_Impl
     }
 };
 
-// class SvxCharNamePage -------------------------------------------------
 
 SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
     : SvxCharBasePage(pPage, pController, "cui/ui/charnamepage.ui", "CharNamePage", rInSet)
@@ -1304,7 +1303,6 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
     if (pDisalbeItem)
         DisableControls(pDisalbeItem->GetValue());
 }
-// class SvxCharEffectsPage ----------------------------------------------
 
 SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
     : SvxCharBasePage(pPage, pController, "cui/ui/effectspage.ui", "EffectsPage", rInSet)
@@ -2453,7 +2451,6 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
     }
 }
 
-// class SvxCharPositionPage ---------------------------------------------
 
 SvxCharPositionPage::SvxCharPositionPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
     : SvxCharBasePage(pPage, pController, "cui/ui/positionpage.ui", "PositionPage", rInSet)
@@ -3065,7 +3062,6 @@ void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
             m_bPreviewBackgroundToCharacter = true;
     }
 }
-// class SvxCharTwoLinesPage ------------------------------------------------
 
 SvxCharTwoLinesPage::SvxCharTwoLinesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
     : SvxCharBasePage(pPage, pController, "cui/ui/twolinespage.ui", "TwoLinesPage", rInSet)

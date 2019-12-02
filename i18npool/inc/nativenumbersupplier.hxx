@@ -28,9 +28,6 @@ namespace com::sun::star::i18n { class XCharacterClassification; }
 
 namespace i18npool {
 
-//      ----------------------------------------------------
-//      class NativeNumberSupplierService
-//      ----------------------------------------------------
 class NativeNumberSupplierService : public cppu::WeakImplHelper
 <
         css::i18n::XNativeNumberSupplier2,

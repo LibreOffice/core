@@ -32,7 +32,6 @@
 #include <documentimport.hxx>
 #include <excdefs.hxx>
 
-// class XclImpChangeTrack
 
 XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStream& rBookStrm ) :
     XclImpRoot( rRoot ),
@@ -498,7 +497,6 @@ void XclImpChangeTrack::Apply()
     }
 }
 
-// class XclImpChTrFmlConverter
 
 XclImpChTrFmlConverter::XclImpChTrFmlConverter(
     XclImpRoot& rRoot, XclImpChangeTrack& rXclChTr ) :

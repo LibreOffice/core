@@ -25,7 +25,6 @@
 #include <vcl/vclevent.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
-// class AccessibleListBox -----------------------------------------------
 
 class SvtIconChoiceCtrl;
 

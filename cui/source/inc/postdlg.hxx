@@ -21,7 +21,6 @@
 
 #include <sfx2/basedlgs.hxx>
 
-// class SvxPostItDialog -------------------------------------------------
 /*
     [Description]
     In this dialog a note can be created or edited. If the

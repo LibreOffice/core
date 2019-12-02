@@ -26,7 +26,6 @@
 #include <libxml/xmlwriter.h>
 #include <boost/property_tree/ptree.hpp>
 
-//  class SfxByteItem
 
 
 SfxPoolItem* SfxByteItem::CreateDefault()
@@ -93,7 +92,6 @@ SfxPoolItem * SfxInt16Item::Clone(SfxItemPool *) const
     return new SfxInt16Item(*this);
 }
 
-//  class SfxUInt16Item
 SfxPoolItem* SfxUInt16Item::CreateDefault()
 {
     return new SfxUInt16Item();
@@ -115,7 +113,6 @@ boost::property_tree::ptree SfxUInt16Item::dumpAsJSON() const
 }
 
 
-//  class SfxInt32Item
 
 
 SfxPoolItem* SfxInt32Item::CreateDefault()
@@ -139,7 +136,6 @@ boost::property_tree::ptree SfxInt32Item::dumpAsJSON() const
 }
 
 
-//  class SfxUInt32Item
 
 
 SfxPoolItem* SfxUInt32Item::CreateDefault()

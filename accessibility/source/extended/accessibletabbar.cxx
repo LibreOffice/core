@@ -46,7 +46,6 @@ namespace accessibility
     using namespace ::comphelper;
 
 
-    //  class AccessibleTabBar
 
 
     AccessibleTabBar::AccessibleTabBar( TabBar* pTabBar )

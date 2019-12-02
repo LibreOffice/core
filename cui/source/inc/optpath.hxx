@@ -29,7 +29,6 @@
 struct OptPath_Impl;
 class SvxPathTabPage;
 
-// class SvxPathTabPage --------------------------------------------------
 class SvxPathTabPage : public SfxTabPage
 {
 private:

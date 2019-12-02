@@ -22,7 +22,6 @@
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxKerningItem --------------------------------------------------
 
 // Note: Twips value
 // Twips: 0 = no kerning

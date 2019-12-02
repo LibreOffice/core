@@ -72,7 +72,6 @@ public:
 };
 
 
-//  class UnoControlEditModel
 
 class UnoControlEditModel final : public UnoControlModel
 {
@@ -99,7 +98,6 @@ public:
 };
 
 
-//  class UnoEditControl
 
 typedef ::cppu::ImplHelper4  <   css::awt::XTextComponent
                              ,   css::awt::XTextListener
@@ -177,7 +175,6 @@ public:
 };
 
 
-//  class UnoControlFileControlModel
 
 class UnoControlFileControlModel final : public UnoControlModel
 {
@@ -203,7 +200,6 @@ public:
 };
 
 
-//  class UnoFileControl
 
 class UnoFileControl final : public UnoEditControl
 {
@@ -218,7 +214,6 @@ public:
 };
 
 
-//  class GraphicControlModel
 
 class GraphicControlModel : public UnoControlModel
 {
@@ -246,7 +241,6 @@ private:
 };
 
 
-//  class UnoControlButtonModel
 
 class UnoControlButtonModel final : public GraphicControlModel
 {
@@ -272,7 +266,6 @@ public:
 };
 
 
-//  class UnoButtonControl
 
 typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   css::awt::XButton
@@ -324,7 +317,6 @@ public:
 };
 
 
-//  class UnoControlImageControlModel
 
 class UnoControlImageControlModel final : public GraphicControlModel
 {
@@ -356,7 +348,6 @@ public:
 };
 
 
-//  class UnoImageControlControl
 
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlBase
                                             ,   css::awt::XLayoutConstrains
@@ -388,7 +379,6 @@ public:
 };
 
 
-//  class UnoControlRadioButtonModel
 
 class UnoControlRadioButtonModel final : public GraphicControlModel
 {
@@ -414,7 +404,6 @@ public:
 };
 
 
-//  class UnoRadioButtonControl
 
 typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   css::awt::XButton
@@ -468,7 +457,6 @@ public:
 };
 
 
-//  class UnoControlCheckBoxModel
 
 class UnoControlCheckBoxModel final : public GraphicControlModel
 {
@@ -494,7 +482,6 @@ public:
 };
 
 
-//  class UnoCheckBoxControl
 
 typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   css::awt::XButton
@@ -550,7 +537,6 @@ public:
 };
 
 
-//  class UnoControlFixedTextModel
 
 class UnoControlFixedHyperlinkModel final : public UnoControlModel
 {
@@ -574,7 +560,6 @@ public:
 };
 
 
-//  class UnoFixedHyperlinkControl
 
 class UnoFixedHyperlinkControl final : public UnoControlBase,
                                  public css::awt::XFixedHyperlink,
@@ -623,7 +608,6 @@ public:
 };
 
 
-//  class UnoControlFixedTextModel
 
 class UnoControlFixedTextModel final : public UnoControlModel
 {
@@ -649,7 +633,6 @@ public:
 };
 
 
-//  class UnoFixedTextControl
 
 class UnoFixedTextControl final : public UnoControlBase,
                             public css::awt::XFixedText,
@@ -689,7 +672,6 @@ public:
 };
 
 
-//  class UnoControlGroupBoxModel
 
 class UnoControlGroupBoxModel final : public UnoControlModel
 {
@@ -715,7 +697,6 @@ public:
 };
 
 
-//  class UnoGroupBoxControl
 
 class UnoGroupBoxControl final : public UnoControlBase
 {
@@ -732,7 +713,6 @@ public:
 };
 
 
-//  class UnoControlListBoxModel
 
 struct UnoControlListBoxModel_Data;
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
@@ -836,7 +816,6 @@ protected:
 };
 
 
-//  class UnoListBoxControl
 
 typedef ::cppu::AggImplInheritanceHelper5   <   UnoControlBase
                                             ,   css::awt::XListBox
@@ -915,7 +894,6 @@ private:
 };
 
 
-//  class UnoControlComboBoxModel
 
 class UnoControlComboBoxModel final : public UnoControlListBoxModel
 {
@@ -943,7 +921,6 @@ public:
 };
 
 
-//  class UnoComboBoxControl
 
 class UnoComboBoxControl final :  public UnoEditControl
                         ,   public css::awt::XComboBox
@@ -1010,7 +987,6 @@ private:
 };
 
 
-//  class UnoSpinFieldControl
 
 class UnoSpinFieldControl : public UnoEditControl,
                             public css::awt::XSpinField
@@ -1048,7 +1024,6 @@ public:
 };
 
 
-//  class UnoControlDateFieldModel
 
 class UnoControlDateFieldModel final : public UnoControlModel
 {
@@ -1074,7 +1049,6 @@ public:
 };
 
 
-//  class UnoDateFieldControl
 
 class UnoDateFieldControl final : public UnoSpinFieldControl,
                             public css::awt::XDateField
@@ -1126,7 +1100,6 @@ public:
 };
 
 
-//  class UnoControlTimeFieldModel
 
 class UnoControlTimeFieldModel final : public UnoControlModel
 {
@@ -1152,7 +1125,6 @@ public:
 };
 
 
-//  class UnoTimeFieldControl
 
 class UnoTimeFieldControl final : public UnoSpinFieldControl,
                             public css::awt::XTimeField
@@ -1202,7 +1174,6 @@ public:
 };
 
 
-//  class UnoControlNumericFieldModel
 
 class UnoControlNumericFieldModel final : public UnoControlModel
 {
@@ -1228,7 +1199,6 @@ public:
 };
 
 
-//  class UnoNumericFieldControl
 
 class UnoNumericFieldControl final : public UnoSpinFieldControl,
                                 public css::awt::XNumericField
@@ -1280,7 +1250,6 @@ public:
 };
 
 
-//  class UnoControlCurrencyFieldModel
 
 class UnoControlCurrencyFieldModel final : public UnoControlModel
 {
@@ -1306,7 +1275,6 @@ public:
 };
 
 
-//  class UnoCurrencyFieldControl
 
 class UnoCurrencyFieldControl final : public UnoSpinFieldControl,
                                 public css::awt::XCurrencyField
@@ -1358,7 +1326,6 @@ public:
 };
 
 
-//  class UnoControlPatternFieldModel
 
 class UnoControlPatternFieldModel final : public UnoControlModel
 {
@@ -1384,7 +1351,6 @@ public:
 };
 
 
-//  class UnoPatternFieldControl
 
 class UnoPatternFieldControl final : public UnoSpinFieldControl,
                                 public css::awt::XPatternField
@@ -1419,7 +1385,6 @@ public:
 };
 
 
-//  class UnoControlProgressBarModel
 
 class UnoControlProgressBarModel final : public UnoControlModel
 {
@@ -1445,7 +1410,6 @@ public:
 };
 
 
-//  class UnoProgressBarControl
 
 class UnoProgressBarControl final : public UnoControlBase,
                                 public css::awt::XProgressBar
@@ -1477,7 +1441,6 @@ public:
 };
 
 
-//  class UnoControlFixedLineModel
 
 class UnoControlFixedLineModel final : public UnoControlModel
 {
@@ -1503,7 +1466,6 @@ public:
 };
 
 
-//  class UnoFixedLineControl
 
 class UnoFixedLineControl final : public UnoControlBase
 {

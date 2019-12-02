@@ -22,7 +22,6 @@
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxContourItem --------------------------------------------------
 
 /*  [Description]
     This item describes, if contour is employed.

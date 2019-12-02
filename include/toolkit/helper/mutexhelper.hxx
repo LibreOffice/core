@@ -23,7 +23,6 @@
 #include <osl/mutex.hxx>
 
 
-//  class MutexHelper
 
 
 class MutexHelper

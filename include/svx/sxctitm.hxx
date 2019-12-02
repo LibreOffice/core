@@ -26,7 +26,6 @@
 enum class SdrCaptionType { Type1, Type2, Type3, Type4 };
 
 
-// class SdrCaptionTypeItem
 
 class SVX_DLLPUBLIC SdrCaptionTypeItem: public SfxEnumItem<SdrCaptionType> {
 public:

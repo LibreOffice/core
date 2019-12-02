@@ -29,7 +29,6 @@
 
 namespace editeng { class SvxBorderLine; }
 
-// class SvxBoxItem ------------------------------------------------------
 
 /*  [Description]
 
@@ -122,7 +121,6 @@ inline void SvxBoxItem::SetAllDistances(sal_uInt16 const nNew)
     nTopDist = nBottomDist = nLeftDist = nRightDist = nNew;
 }
 
-// class SvxBoxInfoItem --------------------------------------------------
 
 /*  [Description]
 

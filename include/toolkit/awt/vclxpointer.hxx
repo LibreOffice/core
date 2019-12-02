@@ -31,7 +31,6 @@
 #include <vcl/ptrstyle.hxx>
 
 
-//  class VCLXPointer
 
 
 class VCLXPointer final : public cppu::WeakImplHelper<

@@ -55,7 +55,6 @@ enum class SvxSearchApp
     DRAW          = 2,
 };
 
-// class SvxSearchItem ---------------------------------------------------
 
 class SVL_DLLPUBLIC SvxSearchItem final :
         public SfxPoolItem,

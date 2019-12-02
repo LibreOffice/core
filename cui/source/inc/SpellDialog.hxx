@@ -118,7 +118,6 @@ public:
     void            ResetIgnoreErrorsAt()   { m_aIgnoreErrorsAt.clear(); }
 };
 
-// class SvxSpellDialog ---------------------------------------------
 class SpellDialogChildWindow;
 
 class SpellDialog : public SfxModelessDialogController

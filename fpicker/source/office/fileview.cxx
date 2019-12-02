@@ -1114,7 +1114,6 @@ void SvtFileView::SetConfigString(const OUString& rCfgStr)
     pView->set_column_fixed_widths(aWidths);
 }
 
-// class SvtFileView_Impl
 SvtFileView_Impl::SvtFileView_Impl(SvtFileView* pAntiImpl, weld::Window* pTopLevel,
                                    std::unique_ptr<weld::TreeView> xTreeView,
                                    std::unique_ptr<weld::IconView> xIconView,

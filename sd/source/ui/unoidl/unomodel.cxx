@@ -2760,7 +2760,6 @@ void SAL_CALL SdXImpressDocument::dispose()
     mxDrawingPool = nullptr;
 }
 
-// class SdDrawPagesAccess
 
 SdDrawPagesAccess::SdDrawPagesAccess( SdXImpressDocument& rMyModel )  throw()
 :   mpModel( &rMyModel)
@@ -3006,7 +3005,6 @@ void SAL_CALL SdDrawPagesAccess::removeEventListener( const uno::Reference< lang
     OSL_FAIL( "not implemented!" );
 }
 
-// class SdMasterPagesAccess
 
 SdMasterPagesAccess::SdMasterPagesAccess( SdXImpressDocument& rMyModel ) throw()
 :   mpModel(&rMyModel)
@@ -3243,7 +3241,6 @@ uno::Sequence< OUString > SAL_CALL SdMasterPagesAccess::getSupportedServiceNames
     return { "com.sun.star.drawing.MasterPages" };
 }
 
-// class SdDocLinkTargets
 
 SdDocLinkTargets::SdDocLinkTargets( SdXImpressDocument& rMyModel ) throw()
 : mpModel( &rMyModel )

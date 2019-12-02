@@ -23,7 +23,6 @@
 #include <editeng/editengdllapi.h>
 
 
-// class SfxHyphenRegionItem ---------------------------------------------
 
 class EDITENG_DLLPUBLIC SfxHyphenRegionItem final : public SfxPoolItem
 {

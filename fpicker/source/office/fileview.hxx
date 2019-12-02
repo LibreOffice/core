@@ -27,7 +27,6 @@
 
 namespace com :: sun :: star :: ucb { class XContent; }
 
-// class SvtFileView -----------------------------------------------------
 
 class SvtFileView_Impl;
 struct SvtContentEntry;

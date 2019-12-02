@@ -30,7 +30,6 @@
 
 #include <tabopdlg.hxx>
 
-//  class ScTabOpDlg
 
 ScTabOpDlg::ScTabOpDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                        ScDocument* pDocument,

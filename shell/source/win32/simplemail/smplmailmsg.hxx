@@ -26,7 +26,6 @@
 #include <com/sun/star/system/XSimpleMailMessage2.hpp>
 
 
-// class declaration
 
 
 class CSmplMailMsg : public cppu::WeakImplHelper< css::system::XSimpleMailMessage2 >

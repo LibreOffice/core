@@ -28,7 +28,6 @@
 
 using namespace ::dbaui;
 
-// class OSplitterView
 OSplitterView::OSplitterView(vcl::Window* _pParent) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
     ,m_pSplitter( nullptr )
     ,m_pLeft(nullptr)

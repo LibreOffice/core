@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 
-//  class SvxTextEncodingTable
 class SVX_DLLPUBLIC SvxTextEncodingTable
 {
 public:

@@ -45,7 +45,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// class VCLXAccessibleStatusBarItem
 
 
 VCLXAccessibleStatusBarItem::VCLXAccessibleStatusBarItem( StatusBar* pStatusBar, sal_uInt16 nItemId )

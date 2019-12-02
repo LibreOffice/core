@@ -24,7 +24,6 @@
 #include <editeng/editengdllapi.h>
 #include <o3tl/sorted_vector.hxx>
 
-// class SvxTabStop ------------------------------------------------------
 
 #define SVX_TAB_DEFCOUNT    10
 #define SVX_TAB_DEFDIST     1134            // 2cm in twips
@@ -80,7 +79,6 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-// class SvxTabStopItem --------------------------------------------------
 
 typedef o3tl::sorted_vector<SvxTabStop> SvxTabStopArr;
 

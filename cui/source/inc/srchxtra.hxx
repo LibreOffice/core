@@ -37,7 +37,6 @@ private:
     std::unique_ptr<FontList> m_pFontList;
 };
 
-// class SvxSearchFormatDialog -------------------------------------------
 
 class SvxSearchAttributeDialog : public weld::GenericDialogController
 {
@@ -55,7 +54,6 @@ private:
     DECL_LINK(OKHdl, weld::Button&, void);
 };
 
-// class SvxSearchSimilarityDialog ---------------------------------------
 
 class SvxSearchSimilarityDialog : public weld::GenericDialogController
 {

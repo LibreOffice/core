@@ -131,7 +131,6 @@ static bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 #define MARGIN_TOP      ( MarginPosition(0x0004) )
 #define MARGIN_BOTTOM   ( MarginPosition(0x0008) )
 
-// class SvxPageDescPage --------------------------------------------------
 
 std::unique_ptr<SfxTabPage> SvxPageDescPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {

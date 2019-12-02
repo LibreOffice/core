@@ -280,7 +280,6 @@ static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )  // For Ka
 }
 
 
-//  class ImpEditEngine
 
 void ImpEditEngine::UpdateViews( EditView* pCurView )
 {

@@ -43,7 +43,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::svt;
 
-// class RegistrationItemSetHolder  -------------------------------------------------
 
 RegistrationItemSetHolder::RegistrationItemSetHolder( const SfxItemSet& _rMasterSet )
     :m_aRegistrationItems( _rMasterSet )
@@ -55,7 +54,6 @@ RegistrationItemSetHolder::~RegistrationItemSetHolder()
 {
 }
 
-// class DatabaseRegistrationDialog  ------------------------------------------------
 
 DatabaseRegistrationDialog::DatabaseRegistrationDialog(weld::Window* pParent, const SfxItemSet& rInAttrs)
     : RegistrationItemSetHolder(rInAttrs)
@@ -77,7 +75,6 @@ short DatabaseRegistrationDialog::run()
     return result;
 }
 
-// class DbRegistrationOptionsPage --------------------------------------------------
 
 DbRegistrationOptionsPage::DbRegistrationOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/dbregisterpage.ui", "DbRegisterPage", &rSet)

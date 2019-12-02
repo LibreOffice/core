@@ -88,7 +88,6 @@ public:
     void             SetTabJustify( sal_uInt16 nTab, SvTabJustify );
 };
 
-// class SvHeaderTabListBox ---------------------------------------------------
 
 class HeaderBar;
 namespace vcl {

@@ -32,7 +32,6 @@
 #include <helpids.h>
 #include <global.hxx>
 
-// class ScScenarioWindow ------------------------------------------------
 
 ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
     ListBox( &rParent, WB_BORDER | WB_TABSTOP ),
@@ -194,7 +193,6 @@ void ScScenarioListBox::DeleteScenario()
     }
 }
 
-// class ScScenarioWindow ------------------------------------------------
 
 ScScenarioWindow::ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_List,
                                     const OUString& aQH_Comment)

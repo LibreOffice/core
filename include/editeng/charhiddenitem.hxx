@@ -23,7 +23,6 @@
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxCharHiddenItem -------------------------------------------------
 /*  [Description]
 
     This item marks text as hidden

@@ -33,7 +33,6 @@ namespace linguistic2{
 // forward ---------------------------------------------------------------
 
 
-// class SvxNewDictionaryDialog ------------------------------------------
 
 class SvxNewDictionaryDialog : public weld::GenericDialogController
 {
@@ -53,7 +52,6 @@ public:
     const css::uno::Reference<css::linguistic2::XDictionary>& GetNewDictionary() const { return m_xNewDic; }
 };
 
-// class SvxEditDictionaryDialog -----------------------------------------
 
 class SvxEditDictionaryDialog : public weld::GenericDialogController
 {

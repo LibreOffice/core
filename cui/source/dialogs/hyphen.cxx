@@ -399,7 +399,6 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, GetFocusHdl_Impl, weld::Widget&, void)
     select_region(m_nOldPos, m_nOldPos + 1);
 }
 
-// class SvxHyphenWordDialog ---------------------------------------------
 
 SvxHyphenWordDialog::SvxHyphenWordDialog(
     const OUString &rWord, LanguageType nLang,

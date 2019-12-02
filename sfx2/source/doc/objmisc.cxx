@@ -128,7 +128,6 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::provider;
 using namespace ::com::sun::star::container;
 
-// class SfxHeaderAttributes_Impl ----------------------------------------
 
 namespace {
 

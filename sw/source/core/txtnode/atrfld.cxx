@@ -351,7 +351,6 @@ void SwFormatField::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class SwTextField ////////////////////////////////////////////////////
 
 SwTextField::SwTextField(
     SwFormatField & rAttr,
@@ -533,7 +532,6 @@ void SwTextField::DeleteTextField( const SwTextField& rTextField )
     }
 }
 
-// class SwTextInputField ///////////////////////////////////////////////
 
 // input field in-place editing
 SwTextInputField::SwTextInputField(
@@ -634,7 +632,6 @@ void SwTextInputField::UpdateTextNodeContent( const OUString& rNewContent )
     GetTextNode().ReplaceText( aIdx, nDelLen, rNewContent );
 }
 
-// class SwTextAnnotationField //////////////////////////////////////////
 
 // text annotation field
 SwTextAnnotationField::SwTextAnnotationField(

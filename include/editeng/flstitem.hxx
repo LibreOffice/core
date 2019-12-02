@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxFontListItem -------------------------------------------------
 
 class FontList;
 

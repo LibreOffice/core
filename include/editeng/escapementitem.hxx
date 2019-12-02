@@ -23,7 +23,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxEscapementItem -----------------------------------------------
 
 #define DFLT_ESC_SUPER   33     // 1/3
 #define DFLT_ESC_SUB    -33     // also 1/3 previously 8/100

@@ -65,7 +65,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-// class SvxJavaOptionsPage ----------------------------------------------
 SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optadvancedpage.ui", "OptAdvancedPage", &rSet)
     , m_aResetIdle("cui options SvxJavaOptionsPage Reset")
@@ -591,7 +590,6 @@ void SvxJavaOptionsPage::FillUserData()
     SetUserData( OUString() );
 }
 
-// class SvxJavaParameterDlg ---------------------------------------------
 
 SvxJavaParameterDlg::SvxJavaParameterDlg(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/javastartparametersdialog.ui",
@@ -745,7 +743,6 @@ void SvxJavaParameterDlg::SetParameters( std::vector< OUString > const & rParams
 }
 
 
-// class SvxJavaClassPathDlg ---------------------------------------------
 
 SvxJavaClassPathDlg::SvxJavaClassPathDlg(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/javaclasspathdialog.ui", "JavaClassPath")

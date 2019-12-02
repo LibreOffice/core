@@ -215,7 +215,6 @@ IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl, weld::TreeView&, void)
     m_xMakeDefPB->set_sensitive(bEnable && nCount > 1 && m_xLanguageLB->count_selected_rows() == 1);
 }
 
-// class SetDefaultLanguageDialog -----------------------------------------------
 
 SetDefaultLanguageDialog::SetDefaultLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr)
     : GenericDialogController(pParent, "modules/BasicIDE/ui/defaultlanguage.ui", "DefaultLanguageDialog")

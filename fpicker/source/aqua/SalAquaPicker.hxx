@@ -34,7 +34,6 @@
 #include <postmac.h>
 
 
-// class declaration
 
 
 class SalAquaPicker

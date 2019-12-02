@@ -43,7 +43,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::dbaui;
 using namespace ::dbtools;
 
-// class ORelationDialog
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  const TTableConnectionData::value_type& pConnectionData,
                                  bool bAllowTableSelect )

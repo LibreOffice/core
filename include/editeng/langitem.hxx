@@ -23,7 +23,6 @@
 #include <i18nlangtag/lang.h>
 #include <editeng/editengdllapi.h>
 
-// class SvxLanguageItem -------------------------------------------------
 
 /*  [Description]
 

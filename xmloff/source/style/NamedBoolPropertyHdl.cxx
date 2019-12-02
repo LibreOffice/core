@@ -26,7 +26,6 @@
 using namespace ::com::sun::star::uno;
 
 
-// class XMLNamedBoolPropertyHdl
 
 
 XMLNamedBoolPropertyHdl::~XMLNamedBoolPropertyHdl()

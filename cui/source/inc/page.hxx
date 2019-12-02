@@ -27,7 +27,6 @@
 #include <i18nutil/paper.hxx>
 #include <svx/flagsdef.hxx>
 
-// class SvxPageDescPage -------------------------------------------------
 /*
     [Description]
     TabPage for page settings (size, margins, ...)

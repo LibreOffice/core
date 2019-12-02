@@ -32,7 +32,6 @@ class AccessibleStateSetHelper;
 }
 
 
-//  class VCLXAccessibleStatusBarItem
 
 
 typedef ::comphelper::OAccessibleTextHelper AccessibleTextHelper_BASE;

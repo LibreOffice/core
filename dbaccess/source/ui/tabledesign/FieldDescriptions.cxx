@@ -39,7 +39,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
-// class OFieldDescription
 OFieldDescription::OFieldDescription()
     :m_pType()
     ,m_nType(DataType::VARCHAR)

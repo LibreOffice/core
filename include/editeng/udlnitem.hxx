@@ -24,7 +24,6 @@
 #include <tools/fontenum.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxTextLineItem ------------------------------------------------
 
 /* Value container for underline and overline font effects */
 
@@ -65,7 +64,6 @@ public:
     void                    SetColor( const Color& rCol )   { mColor = rCol; }
 };
 
-// class SvxUnderlineItem ------------------------------------------------
 
 /* Value container for underline font effects */
 
@@ -81,7 +79,6 @@ public:
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
 };
 
-// class SvxOverlineItem ------------------------------------------------
 
 /* Value container for overline font effects */
 

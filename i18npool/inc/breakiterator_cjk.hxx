@@ -26,7 +26,6 @@
 
 namespace i18npool {
 
-//  class BreakIterator_CJK
 
 class BreakIterator_CJK : public BreakIterator_Unicode
 {

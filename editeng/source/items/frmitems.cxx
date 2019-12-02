@@ -1292,7 +1292,6 @@ void SvxShadowItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class SvxBoxItem ------------------------------------------------------
 
 SvxBoxItem::SvxBoxItem( const SvxBoxItem& rCpy ) :
 
@@ -2076,7 +2075,6 @@ bool SvxBoxItem::HasBorder( bool bTreatPaddingAsBorder ) const
             || CalcLineSpace( SvxBoxItemLine::LEFT,  bTreatPaddingAsBorder );
 }
 
-// class SvxBoxInfoItem --------------------------------------------------
 
 SvxBoxInfoItem::SvxBoxInfoItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
@@ -2531,7 +2529,6 @@ void BorderDistancesToWord(const SvxBoxItem& rBox, const WordPageMargins& rMargi
 
 }
 
-// class SvxFormatBreakItem -------------------------------------------------
 
 bool SvxFormatBreakItem::operator==( const SfxPoolItem& rAttr ) const
 {

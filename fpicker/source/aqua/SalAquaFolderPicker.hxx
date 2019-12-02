@@ -32,7 +32,6 @@
 #include <rtl/ustring.hxx>
 
 
-// class declaration
 
 
 class SalAquaFolderPicker :

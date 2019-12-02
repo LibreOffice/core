@@ -22,7 +22,6 @@
 #include "calendar_gregorian.hxx"
 
 
-//  class Calendar_jewish
 
 
 namespace i18npool {

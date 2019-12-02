@@ -36,7 +36,6 @@ class XTextContent;
 class SvNumberFormatter;
 class MetaAction;
 
-// class SvxFieldItem ---------------------------------------------------
 
 
 class EDITENG_DLLPUBLIC SvxFieldData

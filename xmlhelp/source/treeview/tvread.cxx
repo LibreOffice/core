@@ -825,7 +825,6 @@ void TVChildTarget::subst( OUString& instpath )
     instpath = aOptions.SubstituteVariable( instpath );
 }
 
-// class TreeFileIterator
 
 static const char aHelpMediaType[] = "application/vnd.sun.star.help";
 
@@ -1022,7 +1021,6 @@ void TreeFileIterator::implGetLanguageVectorFromPackage( ::std::vector< OUString
     }
 }
 
-// class TreeFileIterator
 
 OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
 {

@@ -25,7 +25,6 @@
 #include <boost/property_tree/ptree_fwd.hpp>
 
 
-// class XFillFloatTransparenceItem -
 
 
 class SVX_DLLPUBLIC XFillFloatTransparenceItem : public XFillGradientItem
