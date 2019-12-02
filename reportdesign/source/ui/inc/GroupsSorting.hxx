@@ -19,14 +19,6 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_GROUPSSORTING_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_GROUPSSORTING_HXX
 
-#include <vcl/floatwin.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
-#include <vcl/toolbox.hxx>
 #include <com/sun/star/report/XGroups.hpp>
 #include <com/sun/star/report/XGroup.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -34,9 +26,12 @@
 #include <comphelper/propmultiplex.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 
 #include <vector>
+
+class Control;
 
 namespace comphelper
 {
@@ -52,38 +47,40 @@ class OReportController;
 |*
 \************************************************************************/
 
-class OGroupsSortingDialog :    public FloatingWindow
-                           ,    public ::cppu::BaseMutex
-                           ,    public ::comphelper::OPropertyChangeListener
+class OGroupsSortingDialog : public weld::GenericDialogController
+                           , public ::cppu::BaseMutex
+                           , public ::comphelper::OPropertyChangeListener
 {
     friend class OFieldExpressionControl;
 
-    VclPtr<ToolBox>                                m_pToolBox;
-    sal_uInt16                              m_nMoveUpId;
-    sal_uInt16                              m_nMoveDownId;
-    sal_uInt16                              m_nDeleteId;
-
-    VclPtr<VclContainer>                           m_pProperties;
-    VclPtr<ListBox>                                m_pOrderLst;
-    VclPtr<ListBox>                                m_pHeaderLst;
-    VclPtr<ListBox>                                m_pFooterLst;
-    VclPtr<ListBox>                                m_pGroupOnLst;
-    VclPtr<NumericField>                           m_pGroupIntervalEd;
-    VclPtr<ListBox>                                m_pKeepTogetherLst;
-    VclPtr<FixedText>                              m_pHelpWindow;
-
-    VclPtr<OFieldExpressionControl>                m_pFieldExpression;
     ::rptui::OReportController*                    m_pController;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pCurrentGroupListener;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pReportListener;
     css::uno::Reference< css::report::XGroups>            m_xGroups;
     css::uno::Reference< css::container::XNameAccess >    m_xColumns;
     bool const                                            m_bReadOnly;
+
+    std::unique_ptr<weld::Toolbar>          m_xToolBox;
+    std::unique_ptr<weld::Widget>           m_xProperties;
+    std::unique_ptr<weld::ComboBox>         m_xOrderLst;
+    std::unique_ptr<weld::ComboBox>         m_xHeaderLst;
+    std::unique_ptr<weld::ComboBox>         m_xFooterLst;
+    std::unique_ptr<weld::ComboBox>         m_xGroupOnLst;
+    std::unique_ptr<weld::SpinButton>       m_xGroupIntervalEd;
+    std::unique_ptr<weld::ComboBox>         m_xKeepTogetherLst;
+    std::unique_ptr<weld::Label>            m_xHelpWindow;
+    std::unique_ptr<weld::Container>        m_xBox;
+    css::uno::Reference<css::awt::XWindow>  m_xTableCtrlParent;
+    VclPtr<OFieldExpressionControl>         m_xFieldExpression;
+
 private:
-    DECL_LINK( OnControlFocusLost, Control&, void );
+    DECL_LINK( OnWidgetFocusLost, weld::Widget&, void );
+    DECL_LINK( OnWidgetFocusGot, weld::Widget&, void );
+
     DECL_LINK( OnControlFocusGot, Control&, void );
-    DECL_LINK( LBChangeHdl, ListBox&, void );
-    DECL_LINK( OnFormatAction, ToolBox*, void );
+
+    DECL_LINK( LBChangeHdl, weld::ComboBox&, void );
+    DECL_LINK( OnFormatAction, const OString&, void );
 
     /** returns the groups
         @return the groups which now have to check which one changes
@@ -135,11 +132,10 @@ protected:
     // OPropertyChangeListener
     virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) override;
 public:
-    OGroupsSortingDialog( vcl::Window* pParent
-                        ,bool _bReadOnly
-                        ,::rptui::OReportController* _pController);
+    OGroupsSortingDialog(weld::Window* pParent,
+                         bool _bReadOnly,
+                         ::rptui::OReportController* _pController);
     virtual ~OGroupsSortingDialog() override;
-    virtual void dispose() override;
 
     /* updates the current view
     */
