@@ -54,8 +54,9 @@ namespace basegfx
 
         void appendElement(const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount)
         {
-            maRanges.insert(maRanges.end(), nCount, rRange);
-            maOrient.insert(maOrient.end(), nCount, eOrient);
+            (void) nCount;
+            maRanges.push_back(rRange);
+            maOrient.push_back(eOrient);
             maBounds.expand(rRange);
         }
 
