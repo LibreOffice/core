@@ -53,7 +53,6 @@ FormulaDialog::FormulaDialog(weld::Window* pParent
     : FormulaModalDialog( pParent, _pFunctionMgr.get(),this)
     ,m_aFunctionManager(_pFunctionMgr)
     ,m_xFormulaData(new FormEditData())
-    ,m_pAddField(nullptr)
     ,m_xRowSet(_xRowSet)
     ,m_pEdit(nullptr)
     ,m_sFormula("=")
@@ -88,15 +87,19 @@ void FormulaDialog::fill()
 
 FormulaDialog::~FormulaDialog()
 {
-    if ( m_pAddField )
+    if ( m_xAddField )
     {
         SvtViewOptions aDlgOpt( EViewType::Window, HID_RPT_FIELD_SEL_WIN );
-        aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState(WindowStateMask::X | WindowStateMask::Y | WindowStateMask::State | WindowStateMask::Minimized), RTL_TEXTENCODING_ASCII_US));
+        aDlgOpt.SetWindowState(OStringToOUString(m_xAddField->getDialog()->get_window_state(WindowStateMask::X | WindowStateMask::Y | WindowStateMask::State | WindowStateMask::Minimized), RTL_TEXTENCODING_ASCII_US));
+
+        if (m_xAddField->getDialog()->get_visible())
+            m_xAddField->response(RET_CANCEL);
+
+        m_xAddField.reset();
     }
 
     StoreFormEditData(m_xFormulaData.get());
     m_pEdit = nullptr;
-    m_pAddField.clear();
 }
 
 // functions for right side
@@ -205,21 +208,23 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     if ( aPair.first )
         aPair.first->GetWidget()->hide();
 
-    if ( !m_pAddField )
+    if (!m_xAddField)
     {
-        m_pAddField = VclPtr<OAddFieldWindow>::Create(nullptr, m_xRowSet);
-        m_pAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
+        m_xAddField = std::make_shared<OAddFieldWindow>(m_xDialog.get(), m_xRowSet);
+        m_xAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
         SvtViewOptions aDlgOpt( EViewType::Window, HID_RPT_FIELD_SEL_WIN );
         if ( aDlgOpt.Exists() )
         {
-            m_pAddField->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
+            m_xAddField->getDialog()->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
 
         }
 
-        m_pAddField->Update();
+        m_xAddField->Update();
     }
     RefInputStartAfter();
-    m_pAddField->Show();
+
+    if (!m_xAddField->getDialog()->get_visible())
+        weld::DialogController::runAsync(m_xAddField, [this](sal_Int32 /*nResult*/) { m_xAddField.reset(); });
 }
 
 IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow& ,_rAddFieldDlg, void)
@@ -240,7 +245,8 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow& ,_rAddFieldDlg, void)
         }
     }
     m_pEdit = nullptr;
-    _rAddFieldDlg.Hide();
+    if (_rAddFieldDlg.getDialog()->get_visible())
+        _rAddFieldDlg.response(RET_CANCEL);
     RefInputDoneAfter();
 }
 

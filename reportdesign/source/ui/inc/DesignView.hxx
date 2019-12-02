@@ -63,7 +63,7 @@ namespace rptui
         VclPtr<OScrollWindowHelper>         m_aScrollWindow;
         VclPtr<vcl::Window>                 m_pTaskPane;
         VclPtr<PropBrw>                     m_pPropWin;
-        VclPtr<OAddFieldWindow>             m_pAddField;
+        std::shared_ptr<OAddFieldWindow>    m_xAddField;
         OSectionView*                       m_pCurrentView;
         VclPtr<ONavigator>                  m_pReportExplorer;
         Idle                                m_aMarkIdle;

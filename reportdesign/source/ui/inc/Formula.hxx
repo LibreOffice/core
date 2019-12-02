@@ -47,7 +47,7 @@ class FormulaDialog : public formula::FormulaModalDialog,
 {
     std::shared_ptr<formula::IFunctionManager> m_aFunctionManager;
     std::unique_ptr<formula::FormEditData> m_xFormulaData;
-    VclPtr<OAddFieldWindow>            m_pAddField;
+    std::shared_ptr<OAddFieldWindow> m_xAddField;
     css::uno::Reference < css::beans::XPropertySet >          m_xRowSet;
     css::uno::Reference< css::report::meta::XFormulaParser>   m_xParser;
     css::uno::Reference< css::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
