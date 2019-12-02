@@ -1442,7 +1442,9 @@ bool LightControl3D::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     // call parent
-    return !bCallParent;
+    if (bCallParent)
+        return PreviewControl3D::MouseButtonDown(rMEvt);
+    return true;
 }
 
 bool LightControl3D::MouseMove(const MouseEvent& rMEvt)
