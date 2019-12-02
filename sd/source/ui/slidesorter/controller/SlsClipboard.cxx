@@ -19,6 +19,8 @@
 
 #include <controller/SlsClipboard.hxx>
 
+#include <boost/assert.hpp>
+
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorter.hxx>
 #include <model/SlideSorterModel.hxx>
