@@ -70,7 +70,7 @@ namespace basegfx
         ElementType getElement(sal_uInt32 nIndex) const;
 
         // insert/append a single range
-        void appendElement(const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount = 1);
+        void appendElement(const B2DRange& rRange, B2VectorOrientation eOrient);
 
         void clear();
 

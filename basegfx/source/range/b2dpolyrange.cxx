@@ -52,10 +52,10 @@ namespace basegfx
             return std::make_tuple(maRanges[nIndex], maOrient[nIndex]);
         }
 
-        void appendElement(const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount)
+        void appendElement(const B2DRange& rRange, B2VectorOrientation eOrient)
         {
-            maRanges.insert(maRanges.end(), nCount, rRange);
-            maOrient.insert(maOrient.end(), nCount, eOrient);
+            maRanges.push_back(rRange);
+            maOrient.push_back(eOrient);
             maBounds.expand(rRange);
         }
 
@@ -130,9 +130,9 @@ namespace basegfx
         return mpImpl->getElement(nIndex);
     }
 
-    void B2DPolyRange::appendElement(const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount)
+    void B2DPolyRange::appendElement(const B2DRange& rRange, B2VectorOrientation eOrient)
     {
-        mpImpl->appendElement(rRange, eOrient, nCount );
+        mpImpl->appendElement(rRange, eOrient);
     }
 
     void B2DPolyRange::clear()
