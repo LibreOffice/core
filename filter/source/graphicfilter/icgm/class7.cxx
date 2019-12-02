@@ -127,9 +127,11 @@ void CGM::ImplDoClass7()
                         nAttributes >>= 12;
                         pTextEntry->nAttributes = nAttributes;
                         pAppData += 8;
-                        sal_uInt32 nLen = strlen( reinterpret_cast<char*>( pAppData ) ) + 1;
-                        pTextEntry->pText = new char[ nLen ];
+                        auto nMaxLen = mpEndValidSource - pAppData;
+                        sal_uInt32 nLen = strnlen(reinterpret_cast<char*>(pAppData), nMaxLen);
+                        pTextEntry->pText = new char[nLen + 1];
                         memcpy( pTextEntry->pText, pAppData, nLen );
+                        pTextEntry->pText[nLen] = 0;
                         pAppData += nLen;
 
                         mpChart->InsertTextEntry( pTextEntry );
