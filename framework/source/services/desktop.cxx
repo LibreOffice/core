@@ -143,8 +143,7 @@ void Desktop::constructorInit()
     @onerror    We throw an ASSERT in debug version or do nothing in release version.
 *//*-*************************************************************************************************************/
 Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        :   TransactionBase         (                                               )
-        ,   Desktop_BASE            ( m_aMutex )
+        :   Desktop_BASE            ( m_aMutex )
         ,   cppu::OPropertySetHelper( cppu::WeakComponentImplHelperBase::rBHelper   )
         // Init member
         ,   m_bIsTerminated         ( false                                     )   // see dispose() for further information!
