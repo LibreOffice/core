@@ -40,11 +40,12 @@ friend class ScMultiSelIter;
 
 public:
     ScMultiSel(SCROW nMaxRow);
-    ScMultiSel( const ScMultiSel& rMultiSel );
+    ScMultiSel(const ScMultiSel& rMultiSel) = default;
+    ScMultiSel(ScMultiSel&& rMultiSel) = default;
     ~ScMultiSel();
 
-    ScMultiSel& operator=(const ScMultiSel& rMultiSel);
-    ScMultiSel& operator=(const ScMultiSel&& rMultiSel) = delete;
+    ScMultiSel& operator=(const ScMultiSel& rMultiSel) = default;
+    ScMultiSel& operator=(ScMultiSel&& rMultiSel) = default;
 
     SCCOL GetMultiSelectionCount() const;
     bool HasMarks( SCCOL nCol ) const;
