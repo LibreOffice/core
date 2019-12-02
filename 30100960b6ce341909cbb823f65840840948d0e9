@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_9b43beaf",
+        "filename": "sw/source/core/text/frmform.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-12-02T08:33:31Z",
+      "side": 1,
+      "message": "it seems, this is unnecessary",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 31
+      },
+      "revId": "30100960b6ce341909cbb823f65840840948d0e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_5b80c6c0",
+        "filename": "sw/source/core/text/frmform.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1954,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-12-02T08:33:31Z",
+      "side": 1,
+      "message": "the id is lower case: tdf#117982",
+      "range": {
+        "startLine": 1954,
+        "startChar": 13,
+        "endLine": 1954,
+        "endChar": 16
+      },
+      "revId": "30100960b6ce341909cbb823f65840840948d0e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_9b1c1ec2",
+        "filename": "sw/source/core/text/frmform.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1956,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-12-02T08:33:31Z",
+      "side": 1,
+      "message": "choose meaningful names, for example pUp (as used before)",
+      "range": {
+        "startLine": 1956,
+        "startChar": 19,
+        "endLine": 1956,
+        "endChar": 30
+      },
+      "revId": "30100960b6ce341909cbb823f65840840948d0e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_3b7b8af5",
+        "filename": "sw/source/core/text/frmform.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1956,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-12-02T08:33:31Z",
+      "side": 1,
+      "message": "these are unnecessary (see the other ones, too)",
+      "range": {
+        "startLine": 1956,
+        "startChar": 33,
+        "endLine": 1956,
+        "endChar": 39
+      },
+      "revId": "30100960b6ce341909cbb823f65840840948d0e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_dbd936f3",
+        "filename": "sw/source/core/text/frmform.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-12-02T08:33:31Z",
+      "side": 1,
+      "message": "OSL is obsoleted, use\n\nSAL_INFO(\"sw.core\", \"Warn: Cell content has greater size than cell height!\");\n\nsee https://wiki.documentfoundation.org/Development/GeneralProgrammingGuidelines#Assertions_and_Logging",
+      "range": {
+        "startLine": 1964,
+        "startChar": 12,
+        "endLine": 1964,
+        "endChar": 92
+      },
+      "revId": "30100960b6ce341909cbb823f65840840948d0e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_fb9c320f",
+        "filename": "sw/source/core/text/frmform.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1975,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-12-02T08:33:31Z",
+      "side": 1,
+      "message": "Is this for reset the effect of the previous line in some special conditions? I\u0027ve removed this else branch, but I did\u0027nt see its effect during editing the test file.",
+      "range": {
+        "startLine": 1973,
+        "startChar": 0,
+        "endLine": 1975,
+        "endChar": 67
+      },
+      "revId": "30100960b6ce341909cbb823f65840840948d0e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
