@@ -43,11 +43,11 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveContent
     std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
     o3tl::optional<OUString> maText;
     o3tl::optional<OUString> maUndoText;
-    std::unique_ptr<SwRedlineData> pRedlData;
-    sal_uLong nNode;
-    sal_Int32 nContent, nLen;
-    bool const bIsWordDelim : 1;
-    bool const bIsAppend : 1;
+    std::unique_ptr<SwRedlineData> m_pRedlData;
+    sal_uLong m_nNode;
+    sal_Int32 m_nContent, m_nLen;
+    bool const m_bIsWordDelim : 1;
+    bool const m_bIsAppend : 1;
     bool m_bWithRsid : 1;
 
     const SwInsertFlags m_nInsertFlags;
@@ -56,7 +56,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveContent
     bool CanGrouping( sal_Unicode cIns );
     bool CanGrouping( const SwPosition& rPos );
 
-    SwDoc * pDoc;
+    SwDoc * m_pDoc;
 
     void Init(const SwNodeIndex & rNode);
     o3tl::optional<OUString> GetTextFromDoc() const;
@@ -134,11 +134,11 @@ private:
 
 class SwUndoReRead : public SwUndo
 {
-    std::unique_ptr<Graphic> pGrf;
+    std::unique_ptr<Graphic> mpGraphic;
     o3tl::optional<OUString> maNm;
     o3tl::optional<OUString> maFltr;
-    sal_uLong nPos;
-    MirrorGraph nMirr;
+    sal_uLong mnPosition;
+    MirrorGraph mnMirror;
 
     void SaveGraphicData( const SwGrfNode& );
     void SetAndSave( ::sw::UndoRedoContext & );

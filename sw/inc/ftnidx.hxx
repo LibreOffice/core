@@ -51,11 +51,11 @@ public:
 
 class SwUpdFootnoteEndNtAtEnd
 {
-    std::vector<const SwSectionNode*> aFootnoteSects, aEndSects;
-    std::vector<std::pair<sal_uInt16, sal_uInt16>> aFootnoteNums, aEndNums;
+    std::vector<const SwSectionNode*> m_aFootnoteSections, m_aEndSections;
+    std::vector<std::pair<sal_uInt16, sal_uInt16>> m_aFootnoteNumbers, m_aEndNumbers;
 
 public:
-    SwUpdFootnoteEndNtAtEnd() : aFootnoteSects(), aEndSects() {}
+    SwUpdFootnoteEndNtAtEnd() : m_aFootnoteSections(), m_aEndSections() {}
 
     static const SwSectionNode* FindSectNdWithEndAttr(
                                             const SwTextFootnote& rTextFootnote );

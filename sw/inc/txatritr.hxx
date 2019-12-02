@@ -32,8 +32,8 @@ class SwScriptIterator
 {
     const OUString& m_rText;
     sal_Int32 m_nChgPos;
-    sal_uInt16 nCurScript;
-    bool const bForward;
+    sal_uInt16 m_nCurScript;
+    bool const m_bForward;
 
 public:
     SwScriptIterator( const OUString& rStr, sal_Int32 nStart,
@@ -41,7 +41,7 @@ public:
 
     void Next();
 
-    sal_uInt16 GetCurrScript() const { return nCurScript; }
+    sal_uInt16 GetCurrScript() const { return m_nCurScript; }
     sal_Int32 GetScriptChgPos() const { return (m_nChgPos == -1) ? COMPLETE_STRING : m_nChgPos; }
     const OUString& GetText() const { return m_rText; }
 };

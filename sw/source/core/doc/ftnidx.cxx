@@ -469,14 +469,14 @@ std::pair<sal_uInt16, sal_uInt16> SwUpdFootnoteEndNtAtEnd::GetNumber(
     std::vector<std::pair<sal_uInt16, sal_uInt16>> *pNum;
     if( rTextFootnote.GetFootnote().IsEndNote() )
     {
-        pArr = &aEndSects;
-        pNum = &aEndNums;
+        pArr = &m_aEndSections;
+        pNum = &m_aEndNumbers;
         nWh = RES_END_AT_TXTEND;
     }
     else
     {
-        pArr = &aFootnoteSects;
-        pNum = &aFootnoteNums;
+        pArr = &m_aFootnoteSections;
+        pNum = &m_aFootnoteNumbers;
         nWh = RES_FTN_AT_TXTEND;
     }
 
