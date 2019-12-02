@@ -13162,6 +13162,30 @@ void GtkInstanceWindow::help()
             OString sPageId = m_pBuilder->get_current_page_help_id();
             if (!sPageId.isEmpty())
                 sHelpId = sPageId;
+            else
+            {
+                // tdf#129068 likewise the help for the wrapping dialog is less
+                // helpful than the help for the content area could be
+                GtkContainer* pContainer = nullptr;
+                if (GTK_IS_DIALOG(m_pWindow))
+                    pContainer = GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(m_pWindow)));
+                else if (GTK_IS_ASSISTANT(m_pWindow))
+                {
+                    GtkAssistant* pAssistant = GTK_ASSISTANT(m_pWindow);
+                    pContainer = GTK_CONTAINER(gtk_assistant_get_nth_page(pAssistant, gtk_assistant_get_current_page(pAssistant)));
+                }
+                if (pContainer)
+                {
+                    GList* pChildren = gtk_container_get_children(pContainer);
+                    GList* pChild = g_list_first(pChildren);
+                    if (pChild)
+                    {
+                        GtkWidget* pContentWidget = static_cast<GtkWidget*>(pChild->data);
+                        sHelpId = ::get_help_id(pContentWidget);
+                    }
+                    g_list_free(pChildren);
+                }
+            }
         }
         pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
     }
