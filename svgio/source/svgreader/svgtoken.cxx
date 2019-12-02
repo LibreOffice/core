@@ -169,150 +169,147 @@ namespace svgio
         {
             typedef std::unordered_map< OUString, SVGToken > SVGTokenMapper;
             typedef std::pair< OUString, SVGToken > SVGTokenValueType;
-            static SVGTokenMapper aSVGTokenMapperList;
+            static SVGTokenMapper aSVGTokenMapperList {
+                { aSVGStrWidth, SVGTokenWidth },
+                { aSVGStrHeight, SVGTokenHeight },
+                { aSVGStrViewBox, SVGTokenViewBox },
+                { aSVGStrTransform, SVGTokenTransform },
+                { aSVGStrStyle, SVGTokenStyle },
+                { aSVGStrDisplay, SVGTokenDisplay }, // #i121656#
+                { aSVGStrD, SVGTokenD },
+                { aSVGStrX, SVGTokenX },
+                { aSVGStrY, SVGTokenY },
+                { aSVGStrXmlns, SVGTokenXmlns },
+                { aSVGStrVersion, SVGTokenVersion },
+                { aSVGStrId, SVGTokenId },
+                { aSVGStrRx, SVGTokenRx },
+                { aSVGStrRy, SVGTokenRy },
+                { aSVGStrPoints, SVGTokenPoints },
+                { aSVGStrDx, SVGTokenDx },
+                { aSVGStrDy, SVGTokenDy },
+                { aSVGStrRotate, SVGTokenRotate },
+                { aSVGStrTextLength, SVGTokenTextLength },
+                { aSVGStrLengthAdjust, SVGTokenLengthAdjust },
+                { aSVGStrFont, SVGTokenFont },
+                { aSVGStrFontFamily, SVGTokenFontFamily },
+                { aSVGStrFontSize, SVGTokenFontSize },
+                { aSVGStrFontSizeAdjust, SVGTokenFontSizeAdjust },
+                { aSVGStrFontStretch, SVGTokenFontStretch },
+                { aSVGStrFontStyle, SVGTokenFontStyle },
+                { aSVGStrFontVariant, SVGTokenFontVariant },
+                { aSVGStrFontWeight, SVGTokenFontWeight },
+                { aSVGStrDirection, SVGTokenDirection },
+                { aSVGStrLetterSpacing, SVGTokenLetterSpacing },
+                { aSVGStrTextDecoration, SVGTokenTextDecoration },
+                { aSVGStrUnicodeBidi, SVGTokenUnicodeBidi },
+                { aSVGStrWordSpacing, SVGTokenWordSpacing },
+                { aSVGStrTspan, SVGTokenTspan },
+                { aSVGStrTref, SVGTokenTref },
+                { aSVGStrTextPath, SVGTokenTextPath },
+                { aSVGStrStartOffset, SVGTokenStartOffset },
+                { aSVGStrMethod, SVGTokenMethod },
+                { aSVGStrSpacing, SVGTokenSpacing },
+                { aSVGStrTextAlign, SVGTokenTextAlign },
+                { aSVGStrPathLength, SVGTokenPathLength },
+                { aSVGStrType, SVGTokenType },
+                { aSVGStrClass, SVGTokenClass },
+                { aSVGStrTextAnchor, SVGTokenTextAnchor },
+                { aSVGStrXmlSpace, SVGTokenXmlSpace },
+                { aSVGStrColor, SVGTokenColor },
+                { aSVGStrClipPathNode, SVGTokenClipPathNode },
+                { aSVGStrClipPathProperty, SVGTokenClipPathProperty },
+                { aSVGStrMask, SVGTokenMask },
+                { aSVGStrClipPathUnits, SVGTokenClipPathUnits },
+                { aSVGStrMaskUnits, SVGTokenMaskUnits },
+                { aSVGStrMaskContentUnits, SVGTokenMaskContentUnits },
+                { aSVGStrClipRule, SVGTokenClipRule },
+                { aSVGStrMarker, SVGTokenMarker },
+                { aSVGStrMarkerStart, SVGTokenMarkerStart },
+                { aSVGStrMarkerMid, SVGTokenMarkerMid },
+                { aSVGStrMarkerEnd, SVGTokenMarkerEnd },
+                { aSVGStrRefX, SVGTokenRefX },
+                { aSVGStrRefY, SVGTokenRefY },
+                { aSVGStrMarkerUnits, SVGTokenMarkerUnits },
+                { aSVGStrMarkerWidth, SVGTokenMarkerWidth },
+                { aSVGStrMarkerHeight, SVGTokenMarkerHeight },
+                { aSVGStrOrient, SVGTokenOrient },
+                { aSVGStrPattern, SVGTokenPattern },
+                { aSVGStrPatternUnits, SVGTokenPatternUnits },
+                { aSVGStrPatternContentUnits, SVGTokenPatternContentUnits },
+                { aSVGStrPatternTransform, SVGTokenPatternTransform },
+                { aSVGStrOpacity, SVGTokenOpacity },
+                { aSVGStrVisibility, SVGTokenVisibility },
+                { aSVGStrTitle, SVGTokenTitle },
+                { aSVGStrDesc, SVGTokenDesc },
 
-            if(aSVGTokenMapperList.empty())
-            {
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrWidth, SVGTokenWidth));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrHeight, SVGTokenHeight));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrViewBox, SVGTokenViewBox));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTransform, SVGTokenTransform));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStyle, SVGTokenStyle));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDisplay, SVGTokenDisplay)); // #i121656#
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrD, SVGTokenD));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrX, SVGTokenX));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrY, SVGTokenY));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXmlns, SVGTokenXmlns));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrVersion, SVGTokenVersion));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrId, SVGTokenId));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrRx, SVGTokenRx));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrRy, SVGTokenRy));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPoints, SVGTokenPoints));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDx, SVGTokenDx));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDy, SVGTokenDy));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrRotate, SVGTokenRotate));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTextLength, SVGTokenTextLength));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrLengthAdjust, SVGTokenLengthAdjust));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFont, SVGTokenFont));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFontFamily, SVGTokenFontFamily));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFontSize, SVGTokenFontSize));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFontSizeAdjust, SVGTokenFontSizeAdjust));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFontStretch, SVGTokenFontStretch));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFontStyle, SVGTokenFontStyle));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFontVariant, SVGTokenFontVariant));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFontWeight, SVGTokenFontWeight));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDirection, SVGTokenDirection));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrLetterSpacing, SVGTokenLetterSpacing));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTextDecoration, SVGTokenTextDecoration));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrUnicodeBidi, SVGTokenUnicodeBidi));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrWordSpacing, SVGTokenWordSpacing));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTspan, SVGTokenTspan));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTref, SVGTokenTref));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTextPath, SVGTokenTextPath));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStartOffset, SVGTokenStartOffset));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMethod, SVGTokenMethod));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrSpacing, SVGTokenSpacing));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTextAlign, SVGTokenTextAlign));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPathLength, SVGTokenPathLength));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrType, SVGTokenType));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrClass, SVGTokenClass));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTextAnchor, SVGTokenTextAnchor));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXmlSpace, SVGTokenXmlSpace));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrColor, SVGTokenColor));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrClipPathNode, SVGTokenClipPathNode));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrClipPathProperty, SVGTokenClipPathProperty));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMask, SVGTokenMask));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrClipPathUnits, SVGTokenClipPathUnits));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMaskUnits, SVGTokenMaskUnits));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMaskContentUnits, SVGTokenMaskContentUnits));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrClipRule, SVGTokenClipRule));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMarker, SVGTokenMarker));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMarkerStart, SVGTokenMarkerStart));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMarkerMid, SVGTokenMarkerMid));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMarkerEnd, SVGTokenMarkerEnd));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrRefX, SVGTokenRefX));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrRefY, SVGTokenRefY));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMarkerUnits, SVGTokenMarkerUnits));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMarkerWidth, SVGTokenMarkerWidth));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMarkerHeight, SVGTokenMarkerHeight));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrOrient, SVGTokenOrient));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPattern, SVGTokenPattern));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPatternUnits, SVGTokenPatternUnits));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPatternContentUnits, SVGTokenPatternContentUnits));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPatternTransform, SVGTokenPatternTransform));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrOpacity, SVGTokenOpacity));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrVisibility, SVGTokenVisibility));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTitle, SVGTokenTitle));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDesc, SVGTokenDesc));
+                { aSVGStrPreserveAspectRatio, SVGTokenPreserveAspectRatio },
+                { aSVGStrDefer, SVGTokenDefer },
+                { aSVGStrNone, SVGTokenNone },
+                { aSVGStrXMinYMin, SVGTokenXMinYMin },
+                { aSVGStrXMidYMin, SVGTokenXMidYMin },
+                { aSVGStrXMaxYMin, SVGTokenXMaxYMin },
+                { aSVGStrXMinYMid, SVGTokenXMinYMid },
+                { aSVGStrXMidYMid, SVGTokenXMidYMid },
+                { aSVGStrXMaxYMid, SVGTokenXMaxYMid },
+                { aSVGStrXMinYMax, SVGTokenXMinYMax },
+                { aSVGStrXMidYMax, SVGTokenXMidYMax },
+                { aSVGStrXMaxYMax, SVGTokenXMaxYMax },
+                { aSVGStrMeet, SVGTokenMeet },
+                { aSVGStrSlice, SVGTokenSlice },
 
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPreserveAspectRatio, SVGTokenPreserveAspectRatio));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDefer, SVGTokenDefer));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrNone, SVGTokenNone));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXMinYMin, SVGTokenXMinYMin));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXMidYMin, SVGTokenXMidYMin));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXMaxYMin, SVGTokenXMaxYMin));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXMinYMid, SVGTokenXMinYMid));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXMidYMid, SVGTokenXMidYMid));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXMaxYMid, SVGTokenXMaxYMid));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXMinYMax, SVGTokenXMinYMax));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXMidYMax, SVGTokenXMidYMax));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXMaxYMax, SVGTokenXMaxYMax));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrMeet, SVGTokenMeet));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrSlice, SVGTokenSlice));
+                { aSVGStrDefs, SVGTokenDefs },
+                { aSVGStrG, SVGTokenG },
+                { aSVGStrSvg, SVGTokenSvg },
+                { aSVGStrSymbol, SVGTokenSymbol },
+                { aSVGStrUse, SVGTokenUse },
+                { aSVGStrA, SVGTokenA },
 
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDefs, SVGTokenDefs));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrG, SVGTokenG));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrSvg, SVGTokenSvg));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrSymbol, SVGTokenSymbol));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrUse, SVGTokenUse));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrA, SVGTokenA));
+                { aSVGStrCircle, SVGTokenCircle },
+                { aSVGStrEllipse, SVGTokenEllipse },
+                { aSVGStrLine, SVGTokenLine },
+                { aSVGStrPath, SVGTokenPath },
+                { aSVGStrPolygon, SVGTokenPolygon },
+                { aSVGStrPolyline, SVGTokenPolyline },
+                { aSVGStrRect, SVGTokenRect },
+                { aSVGStrImage, SVGTokenImage },
 
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrCircle, SVGTokenCircle));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrEllipse, SVGTokenEllipse));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrLine, SVGTokenLine));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPath, SVGTokenPath));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPolygon, SVGTokenPolygon));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPolyline, SVGTokenPolyline));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrRect, SVGTokenRect));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrImage, SVGTokenImage));
+                { aSVGStrLinearGradient, SVGTokenLinearGradient },
+                { aSVGStrRadialGradient, SVGTokenRadialGradient },
+                { aSVGStrStop, SVGTokenStop },
+                { aSVGStrOffset, SVGTokenOffset },
+                { aSVGStrX1, SVGTokenX1 },
+                { aSVGStrY1, SVGTokenY1 },
+                { aSVGStrX2, SVGTokenX2 },
+                { aSVGStrY2, SVGTokenY2 },
+                { aSVGStrCx, SVGTokenCx },
+                { aSVGStrCy, SVGTokenCy },
+                { aSVGStrFx, SVGTokenFx },
+                { aSVGStrFy, SVGTokenFy },
+                { aSVGStrR, SVGTokenR },
+                { aSVGStrGradientUnits, SVGTokenGradientUnits },
+                { aSVGStrGradientTransform, SVGTokenGradientTransform },
+                { aSVGStrSpreadMethod, SVGTokenSpreadMethod },
+                { aSVGStrXlinkHref, SVGTokenXlinkHref },
+                { aSVGStrStopColor, SVGTokenStopColor },
+                { aSVGStrStopOpacity, SVGTokenStopOpacity },
 
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrLinearGradient, SVGTokenLinearGradient));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrRadialGradient, SVGTokenRadialGradient));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStop, SVGTokenStop));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrOffset, SVGTokenOffset));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrX1, SVGTokenX1));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrY1, SVGTokenY1));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrX2, SVGTokenX2));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrY2, SVGTokenY2));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrCx, SVGTokenCx));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrCy, SVGTokenCy));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFx, SVGTokenFx));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFy, SVGTokenFy));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrR, SVGTokenR));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrGradientUnits, SVGTokenGradientUnits));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrGradientTransform, SVGTokenGradientTransform));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrSpreadMethod, SVGTokenSpreadMethod));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrXlinkHref, SVGTokenXlinkHref));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStopColor, SVGTokenStopColor));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStopOpacity, SVGTokenStopOpacity));
+                { aSVGStrFill, SVGTokenFill },
+                { aSVGStrFillOpacity, SVGTokenFillOpacity },
+                { aSVGStrFillRule, SVGTokenFillRule },
 
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFill, SVGTokenFill));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFillOpacity, SVGTokenFillOpacity));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFillRule, SVGTokenFillRule));
+                { aSVGStrStroke, SVGTokenStroke },
+                { aSVGStrStrokeDasharray, SVGTokenStrokeDasharray },
+                { aSVGStrStrokeDashoffset, SVGTokenStrokeDashoffset },
+                { aSVGStrStrokeLinecap, SVGTokenStrokeLinecap },
+                { aSVGStrStrokeLinejoin, SVGTokenStrokeLinejoin },
+                { aSVGStrStrokeMiterlimit, SVGTokenStrokeMiterlimit },
+                { aSVGStrStrokeOpacity, SVGTokenStrokeOpacity },
+                { aSVGStrStrokeWidth, SVGTokenStrokeWidth },
 
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStroke, SVGTokenStroke));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStrokeDasharray, SVGTokenStrokeDasharray));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStrokeDashoffset, SVGTokenStrokeDashoffset));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStrokeLinecap, SVGTokenStrokeLinecap));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStrokeLinejoin, SVGTokenStrokeLinejoin));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStrokeMiterlimit, SVGTokenStrokeMiterlimit));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStrokeOpacity, SVGTokenStrokeOpacity));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStrokeWidth, SVGTokenStrokeWidth));
-
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrText, SVGTokenText));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrBaselineShift, SVGTokenBaselineShift));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFlowRoot, SVGTokenFlowRoot));
-            }
+                { aSVGStrText, SVGTokenText },
+                { aSVGStrBaselineShift, SVGTokenBaselineShift },
+                { aSVGStrFlowRoot, SVGTokenFlowRoot }
+            };
 
             const SVGTokenMapper::const_iterator aResult(aSVGTokenMapperList.find(rStr.startsWith("svg:") ? rStr.copy(4) : rStr));
 
