@@ -956,6 +956,7 @@ public:
     // return the number of toplevel nodes
     virtual int n_children() const = 0;
 
+    // afterwards, entries will be in default ascending sort order
     virtual void make_sorted() = 0;
     virtual void make_unsorted() = 0;
     virtual bool get_sort_order() const = 0;
