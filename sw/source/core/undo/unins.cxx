@@ -65,15 +65,15 @@ o3tl::optional<OUString> SwUndoInsert::GetTextFromDoc() const
 {
     o3tl::optional<OUString> aResult;
 
-    SwNodeIndex aNd( pDoc->GetNodes(), nNode);
+    SwNodeIndex aNd( m_pDoc->GetNodes(), m_nNode);
     SwContentNode* pCNd = aNd.GetNode().GetContentNode();
 
     if( pCNd->IsTextNode() )
     {
         OUString sText = pCNd->GetTextNode()->GetText();
 
-        sal_Int32 nStart = nContent-nLen;
-        sal_Int32 nLength = nLen;
+        sal_Int32 nStart = m_nContent-m_nLen;
+        sal_Int32 nLength = m_nLen;
 
         if (nStart < 0)
         {
@@ -90,12 +90,12 @@ o3tl::optional<OUString> SwUndoInsert::GetTextFromDoc() const
 void SwUndoInsert::Init(const SwNodeIndex & rNd)
 {
     // consider Redline
-    pDoc = rNd.GetNode().GetDoc();
-    if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+    m_pDoc = rNd.GetNode().GetDoc();
+    if( m_pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData.reset( new SwRedlineData( RedlineType::Insert,
-                                       pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
-        SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
+        m_pRedlData.reset( new SwRedlineData( RedlineType::Insert,
+                                       m_pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+        SetRedlineFlags( m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
     maUndoText = GetTextFromDoc();
@@ -108,8 +108,8 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
             const SwInsertFlags nInsertFlags,
             bool bWDelim )
     : SwUndo(SwUndoId::TYPING, rNd.GetNode().GetDoc()),
-        nNode( rNd.GetIndex() ), nContent(nCnt), nLen(nL),
-        bIsWordDelim( bWDelim ), bIsAppend( false )
+        m_nNode( rNd.GetIndex() ), m_nContent(nCnt), m_nLen(nL),
+        m_bIsWordDelim( bWDelim ), m_bIsAppend( false )
     , m_bWithRsid(false)
     , m_nInsertFlags(nInsertFlags)
 {
@@ -118,8 +118,8 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
 
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
     : SwUndo(SwUndoId::SPLITNODE, rNd.GetNode().GetDoc()),
-        nNode( rNd.GetIndex() ), nContent(0), nLen(1),
-        bIsWordDelim( false ), bIsAppend( true )
+        m_nNode( rNd.GetIndex() ), m_nContent(0), m_nLen(1),
+        m_bIsWordDelim( false ), m_bIsAppend( true )
     , m_bWithRsid(false)
     , m_nInsertFlags(SwInsertFlags::EMPTYEXPAND)
 {
@@ -132,11 +132,11 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
 
 bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
 {
-    if( !bIsAppend && bIsWordDelim ==
+    if( !m_bIsAppend && m_bIsWordDelim ==
         !GetAppCharClass().isLetterNumeric( OUString( cIns )) )
     {
-        nLen++;
-        nContent++;
+        m_nLen++;
+        m_nContent++;
 
         if (maUndoText)
             (*maUndoText) += OUStringChar(cIns);
@@ -149,8 +149,8 @@ bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
 bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
 {
     bool bRet = false;
-    if( nNode == rPos.nNode.GetIndex() &&
-        nContent == rPos.nContent.GetIndex() )
+    if( m_nNode == rPos.nNode.GetIndex() &&
+        m_nContent == rPos.nContent.GetIndex() )
     {
         // consider Redline
         SwDoc& rDoc = *rPos.nNode.GetNode().GetDoc();
@@ -171,10 +171,10 @@ bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
                 {
                     SwIndex* pIdx = &pRedl->End()->nContent;
                     if( pIReg == pIdx->GetIdxReg() &&
-                        nContent == pIdx->GetIndex() )
+                        m_nContent == pIdx->GetIndex() )
                     {
-                        if( !pRedl->HasMark() || !pRedlData ||
-                            *pRedl != *pRedlData || *pRedl != aRData )
+                        if( !pRedl->HasMark() || !m_pRedlData ||
+                            *pRedl != *m_pRedlData || *pRedl != aRData )
                         {
                             bRet = false;
                             break;
@@ -201,7 +201,7 @@ SwUndoInsert::~SwUndoInsert()
     {
         maText.reset();
     }
-    pRedlData.reset();
+    m_pRedlData.reset();
 }
 
 void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -209,9 +209,9 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc *const pTmpDoc = & rContext.GetDoc();
     SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
 
-    if( bIsAppend )
+    if( m_bIsAppend )
     {
-        pPam->GetPoint()->nNode = nNode;
+        pPam->GetPoint()->nNode = m_nNode;
 
         if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         {
@@ -227,20 +227,20 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        sal_uLong nNd = nNode;
-        sal_Int32 nCnt = nContent;
-        if( nLen )
+        sal_uLong nNd = m_nNode;
+        sal_Int32 nCnt = m_nContent;
+        if( m_nLen )
         {
-            SwNodeIndex aNd( pTmpDoc->GetNodes(), nNode);
+            SwNodeIndex aNd( pTmpDoc->GetNodes(), m_nNode);
             SwContentNode* pCNd = aNd.GetNode().GetContentNode();
-            SwPaM aPaM( *pCNd, nContent );
+            SwPaM aPaM( *pCNd, m_nContent );
 
             aPaM.SetMark();
 
             SwTextNode * const pTextNode( pCNd->GetTextNode() );
             if ( pTextNode )
             {
-                aPaM.GetPoint()->nContent -= nLen;
+                aPaM.GetPoint()->nContent -= m_nLen;
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
                     pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( aPaM, true, RedlineType::Any );
                 if (m_bWithRsid)
@@ -256,8 +256,8 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                         aPaM.GetMark()->nContent.GetIndex());
                 }
                 RemoveIdxFromRange( aPaM, false );
-                maText = pTextNode->GetText().copy(nContent-nLen, nLen);
-                pTextNode->EraseText( aPaM.GetPoint()->nContent, nLen );
+                maText = pTextNode->GetText().copy(m_nContent-m_nLen, m_nLen);
+                pTextNode->EraseText( aPaM.GetPoint()->nContent, m_nLen );
             }
             else                // otherwise Graphics/OLE/Text/...
             {
@@ -273,11 +273,11 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
             if (!maText)
             {
                 m_pUndoNodeIndex.reset(
-                        new SwNodeIndex(pDoc->GetNodes().GetEndOfContent()));
+                        new SwNodeIndex(m_pDoc->GetNodes().GetEndOfContent()));
                 MoveToUndoNds(aPaM, m_pUndoNodeIndex.get());
             }
-            nNode = aPaM.GetPoint()->nNode.GetIndex();
-            nContent = aPaM.GetPoint()->nContent.GetIndex();
+            m_nNode = aPaM.GetPoint()->nNode.GetIndex();
+            m_nContent = aPaM.GetPoint()->nContent.GetIndex();
         }
 
         // set cursor to Undo range
@@ -297,20 +297,20 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
     SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
     pPam->DeleteMark();
 
-    if( bIsAppend )
+    if( m_bIsAppend )
     {
-        pPam->GetPoint()->nNode = nNode - 1;
+        pPam->GetPoint()->nNode = m_nNode - 1;
         pTmpDoc->getIDocumentContentOperations().AppendTextNode( *pPam->GetPoint() );
 
         pPam->SetMark();
         pPam->Move( fnMoveBackward );
         pPam->Exchange();
 
-        if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
+        if( m_pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         {
             RedlineFlags eOld = pTmpDoc->getIDocumentRedlineAccess().GetRedlineFlags();
             pTmpDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags::Ignore);
-            pTmpDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *pRedlData, *pPam ), true);
+            pTmpDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlData, *pPam ), true);
             pTmpDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
         }
         else if( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
@@ -321,12 +321,12 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        pPam->GetPoint()->nNode = nNode;
+        pPam->GetPoint()->nNode = m_nNode;
         SwContentNode *const pCNd =
             pPam->GetPoint()->nNode.GetNode().GetContentNode();
-        pPam->GetPoint()->nContent.Assign( pCNd, nContent );
+        pPam->GetPoint()->nContent.Assign( pCNd, m_nContent );
 
-        if( nLen )
+        if( m_nLen )
         {
             const bool bMvBkwrd = MovePtBackward( *pPam );
 
@@ -352,16 +352,16 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
                 m_pUndoNodeIndex.reset();
                 MoveFromUndoNds(*pTmpDoc, nMvNd, *pPam->GetMark());
             }
-            nNode = pPam->GetMark()->nNode.GetIndex();
-            nContent = pPam->GetMark()->nContent.GetIndex();
+            m_nNode = pPam->GetMark()->nNode.GetIndex();
+            m_nContent = pPam->GetMark()->nContent.GetIndex();
 
             MovePtForward( *pPam, bMvBkwrd );
             pPam->Exchange();
-            if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
+            if( m_pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
             {
                 RedlineFlags eOld = pTmpDoc->getIDocumentRedlineAccess().GetRedlineFlags();
                 pTmpDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags::Ignore);
-                pTmpDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *pRedlData,
+                pTmpDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlData,
                                             *pPam ), true);
                 pTmpDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
             }
@@ -376,16 +376,16 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    if( !nLen )
+    if( !m_nLen )
         return;
 
     SwDoc & rDoc = rContext.GetDoc();
-    SwNodeIndex aNd( rDoc.GetNodes(), nNode );
+    SwNodeIndex aNd( rDoc.GetNodes(), m_nNode );
     SwContentNode* pCNd = aNd.GetNode().GetContentNode();
 
-    if( !bIsAppend && 1 == nLen )       // >1 than always Text, otherwise Graphics/OLE/Text/...
+    if( !m_bIsAppend && 1 == m_nLen )       // >1 than always Text, otherwise Graphics/OLE/Text/...
     {
-        SwPaM aPaM( *pCNd, nContent );
+        SwPaM aPaM( *pCNd, m_nContent );
         aPaM.SetMark();
         aPaM.Move(fnMoveBackward);
         pCNd = aPaM.GetContentNode();
@@ -396,7 +396,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
     switch( pCNd->GetNodeType() )
     {
     case SwNodeType::Text:
-        if( bIsAppend )
+        if( m_bIsAppend )
         {
             rDoc.getIDocumentContentOperations().AppendTextNode( *rContext.GetRepeatPaM().GetPoint() );
         }
@@ -405,7 +405,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
             OUString const aText( pCNd->GetTextNode()->GetText() );
             ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
             rDoc.getIDocumentContentOperations().InsertString( rContext.GetRepeatPaM(),
-                aText.copy(nContent - nLen, nLen) );
+                aText.copy(m_nContent - m_nLen, m_nLen) );
         }
         break;
     case SwNodeType::Grf:
@@ -781,7 +781,7 @@ void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
 }
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
-    : SwUndo( SwUndoId::REREAD, rPam.GetDoc() ), nPos( rPam.GetPoint()->nNode.GetIndex() )
+    : SwUndo( SwUndoId::REREAD, rPam.GetDoc() ), mnPosition( rPam.GetPoint()->nNode.GetIndex() )
 {
     SaveGraphicData( rGrfNd );
 }
@@ -793,16 +793,16 @@ SwUndoReRead::~SwUndoReRead()
 void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    SwGrfNode* pGrfNd = rDoc.GetNodes()[ nPos ]->GetGrfNode();
+    SwGrfNode* pGrfNd = rDoc.GetNodes()[ mnPosition ]->GetGrfNode();
 
     if( !pGrfNd )
         return ;
 
     // cache the old values
-    std::unique_ptr<Graphic> pOldGrf( pGrf ? new Graphic(*pGrf) : nullptr);
+    std::unique_ptr<Graphic> pOldGrf( mpGraphic ? new Graphic(*mpGraphic) : nullptr);
     o3tl::optional<OUString> aOldNm = maNm;
     o3tl::optional<OUString> aOldFltr = maFltr;
-    MirrorGraph nOldMirr = nMirr;
+    MirrorGraph nOldMirr = mnMirror;
     // since all of them are cleared/modified by SaveGraphicData:
     SaveGraphicData( *pGrfNd );
 
@@ -838,15 +838,15 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
         maNm = OUString();
         maFltr = OUString();
         rGrfNd.GetFileFilterNms(&*maNm, &*maFltr);
-        pGrf.reset();
+        mpGraphic.reset();
     }
     else
     {
-        pGrf.reset( new Graphic( rGrfNd.GetGrf(true) ) );
+        mpGraphic.reset( new Graphic( rGrfNd.GetGrf(true) ) );
         maNm.reset();
         maFltr.reset();
     }
-    nMirr = rGrfNd.GetSwAttrSet().GetMirrorGrf().GetValue();
+    mnMirror = rGrfNd.GetSwAttrSet().GetMirrorGrf().GetValue();
 }
 
 SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
