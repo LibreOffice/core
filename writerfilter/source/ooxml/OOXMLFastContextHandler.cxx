@@ -1461,6 +1461,10 @@ OOXMLValue::Pointer_t fakeNoBorder()
 // not insane enough to find out how to add cells in dmapper.
 void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Pointer_t& val )
 {
+    // start removing: disable for w:gridBefore
+    if (!mpGridAfter)
+        return;
+
     int count = val->getInt();
     for( int i = 0;
          i < count;
