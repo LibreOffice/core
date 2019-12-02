@@ -595,6 +595,15 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
     CPPUNIT_ASSERT( leftA3.toInt32() > leftB2.toInt32());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf116194, "tdf116194.docx")
+{
+    // The problem was that the importer lost consecutive tables with w:gridBefore
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx")
 {
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
