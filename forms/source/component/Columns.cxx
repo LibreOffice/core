@@ -292,44 +292,45 @@ void OGridColumn::disposing()
 void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, bool bAllowDropDown )
 {
     // some properties are not to be exposed to the outer world
-    ::std::set< OUString > aForbiddenProperties;
-    aForbiddenProperties.insert( PROPERTY_ALIGN );
-    aForbiddenProperties.insert( PROPERTY_AUTOCOMPLETE );
-    aForbiddenProperties.insert( PROPERTY_BACKGROUNDCOLOR );
-    aForbiddenProperties.insert( PROPERTY_BORDER );
-    aForbiddenProperties.insert( PROPERTY_BORDERCOLOR );
-    aForbiddenProperties.insert( PROPERTY_ECHO_CHAR );
-    aForbiddenProperties.insert( PROPERTY_FILLCOLOR );
-    aForbiddenProperties.insert( PROPERTY_FONT );
-    aForbiddenProperties.insert( PROPERTY_FONT_NAME );
-    aForbiddenProperties.insert( PROPERTY_FONT_STYLENAME );
-    aForbiddenProperties.insert( PROPERTY_FONT_FAMILY );
-    aForbiddenProperties.insert( PROPERTY_FONT_CHARSET );
-    aForbiddenProperties.insert( PROPERTY_FONT_HEIGHT );
-    aForbiddenProperties.insert( PROPERTY_FONT_WEIGHT );
-    aForbiddenProperties.insert( PROPERTY_FONT_SLANT );
-    aForbiddenProperties.insert( PROPERTY_FONT_UNDERLINE );
-    aForbiddenProperties.insert( PROPERTY_FONT_STRIKEOUT );
-    aForbiddenProperties.insert( PROPERTY_FONT_WORDLINEMODE );
-    aForbiddenProperties.insert( PROPERTY_TEXTLINECOLOR );
-    aForbiddenProperties.insert( PROPERTY_FONTEMPHASISMARK );
-    aForbiddenProperties.insert( PROPERTY_FONTRELIEF );
-    aForbiddenProperties.insert( PROPERTY_HARDLINEBREAKS );
-    aForbiddenProperties.insert( PROPERTY_HSCROLL );
-    aForbiddenProperties.insert( PROPERTY_LABEL );
-    aForbiddenProperties.insert( PROPERTY_LINECOLOR );
-    aForbiddenProperties.insert( PROPERTY_MULTISELECTION );
-    aForbiddenProperties.insert( PROPERTY_PRINTABLE );
-    aForbiddenProperties.insert( PROPERTY_TABINDEX );
-    aForbiddenProperties.insert( PROPERTY_TABSTOP );
-    aForbiddenProperties.insert( PROPERTY_TEXTCOLOR );
-    aForbiddenProperties.insert( PROPERTY_VSCROLL );
-    aForbiddenProperties.insert( PROPERTY_CONTROLLABEL );
-    aForbiddenProperties.insert( PROPERTY_RICH_TEXT );
-    aForbiddenProperties.insert( PROPERTY_VERTICAL_ALIGN );
-    aForbiddenProperties.insert( PROPERTY_IMAGE_URL );
-    aForbiddenProperties.insert( PROPERTY_IMAGE_POSITION );
-    aForbiddenProperties.insert( OUString( "EnableVisible" ) );
+    ::std::set< OUString > aForbiddenProperties {
+      PROPERTY_ALIGN,
+      PROPERTY_AUTOCOMPLETE,
+      PROPERTY_BACKGROUNDCOLOR,
+      PROPERTY_BORDER,
+      PROPERTY_BORDERCOLOR,
+      PROPERTY_ECHO_CHAR,
+      PROPERTY_FILLCOLOR,
+      PROPERTY_FONT,
+      PROPERTY_FONT_NAME,
+      PROPERTY_FONT_STYLENAME,
+      PROPERTY_FONT_FAMILY,
+      PROPERTY_FONT_CHARSET,
+      PROPERTY_FONT_HEIGHT,
+      PROPERTY_FONT_WEIGHT,
+      PROPERTY_FONT_SLANT,
+      PROPERTY_FONT_UNDERLINE,
+      PROPERTY_FONT_STRIKEOUT,
+      PROPERTY_FONT_WORDLINEMODE,
+      PROPERTY_TEXTLINECOLOR,
+      PROPERTY_FONTEMPHASISMARK,
+      PROPERTY_FONTRELIEF,
+      PROPERTY_HARDLINEBREAKS,
+      PROPERTY_HSCROLL,
+      PROPERTY_LABEL,
+      PROPERTY_LINECOLOR,
+      PROPERTY_MULTISELECTION,
+      PROPERTY_PRINTABLE,
+      PROPERTY_TABINDEX,
+      PROPERTY_TABSTOP,
+      PROPERTY_TEXTCOLOR,
+      PROPERTY_VSCROLL,
+      PROPERTY_CONTROLLABEL,
+      PROPERTY_RICH_TEXT,
+      PROPERTY_VERTICAL_ALIGN,
+      PROPERTY_IMAGE_URL,
+      PROPERTY_IMAGE_POSITION,
+      PROPERTY_ENABLEVISIBLE
+    };
     if ( !bAllowDropDown )
         aForbiddenProperties.insert( PROPERTY_DROPDOWN );
 
