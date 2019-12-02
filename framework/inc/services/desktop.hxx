@@ -26,7 +26,6 @@
 #include <vector>
 
 #include <classes/framecontainer.hxx>
-#include <threadhelp/transactionbase.hxx>
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -49,6 +48,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
+#include <threadhelp/transactionmanager.hxx>
 #include <unotools/cmdoptions.hxx>
 
 namespace framework{
@@ -95,7 +95,6 @@ typedef cppu::WeakComponentImplHelper<
            css::frame::XUntitledNumbers > Desktop_BASE;
 
 class Desktop : private cppu::BaseMutex,
-                private TransactionBase,
                 public Desktop_BASE,
                 public cppu::OPropertySetHelper
 {
@@ -376,6 +375,8 @@ class Desktop : private cppu::BaseMutex,
         bool impl_closeFrames(bool bAllowUI);
 
     private:
+
+        mutable TransactionManager    m_aTransactionManager;
 
         /** check flag to protect us against dispose before terminate!
           *   see dispose() for further information!
