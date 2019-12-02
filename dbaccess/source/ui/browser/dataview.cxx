@@ -25,7 +25,6 @@
 #include <dbaccess/IController.hxx>
 #include <UITools.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>

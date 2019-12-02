@@ -20,7 +20,6 @@
 #include <connectivity/dbtools.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/editbrowsebox.hxx>
-#include <svtools/imgdef.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
