@@ -41,6 +41,154 @@ namespace emfplushelper
     {
     }
 
+    static OUString StringFormatFlags(sal_uInt32 flag)
+    {
+        OUString sFlags;
+
+        if (flag & StringFormatDirectionRightToLeft)
+            sFlags = sFlags.concat("StringFormatDirectionRightToLeft");
+
+        if (flag & StringFormatDirectionRightToLeft)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("StringFormatDirectionRightToLeft");
+        }
+
+        if (flag & StringFormatNoFitBlackBox)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("StringFormatNoFitBlackBox");
+        }
+
+        if (flag & StringFormatDisplayFormatControl)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("StringFormatDisplayFormatControl");
+        }
+        if (flag & StringFormatNoFontFallback)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("StringFormatNoFontFallback");
+        }
+        if (flag & StringFormatMeasureTrailingSpaces)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("StringFormatMeasureTrailingSpaces");
+        }
+        if (flag & StringFormatNoWrap)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("StringFormatNoWrap");
+        }
+        if (flag & StringFormatLineLimit)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("StringFormatLineLimit");
+        }
+        if (flag & StringFormatNoClip)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("StringFormatNoClip");
+        }
+        if (flag & StringFormatBypassGDI)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("StringFormatBypassGDI");
+        }
+
+        return sFlags;
+    }
+
+    static OUString StringAlignmentString(sal_uInt32 nAlignment)
+    {
+        switch(nAlignment)
+        {
+            case StringAlignment::StringAlignmentNear:
+                return "StringAlignmentNear";
+            case StringAlignment::StringAlignmentCenter:
+                return "StringAlignmentCenter";
+            case StringAlignment::StringAlignmentFar:
+                return "StringAlignmentFar";
+            default:
+                assert(false && nAlignment && "invalid string alignment value");
+                return "INVALID";
+        }
+    }
+
+    static OUString DigitSubstitutionString(sal_uInt32 nSubst)
+    {
+        switch(nSubst)
+        {
+            case StringDigitSubstitution::StringDigitSubstitutionUser:
+                return "StringDigitSubstitutionUser";
+            case StringDigitSubstitution::StringDigitSubstitutionNone:
+                return "StringDigitSubstitutionNone";
+            case StringDigitSubstitution::StringDigitSubstitutionNational:
+                return "StringDigitSubstitutionNational";
+            case StringDigitSubstitution::StringDigitSubstitutionTraditional:
+                return "StringDigitSubstitutionTraditional";
+            default:
+                assert(false && nSubst && "invalid string digit subsitution value");
+                return "INVALID";
+        }
+    }
+
+    static OUString HotkeyPrefixString(sal_uInt32 nHotkey)
+    {
+        switch(nHotkey)
+        {
+            case HotkeyPrefix::HotkeyPrefixNone:
+                return "HotkeyPrefixNone";
+            case HotkeyPrefix::HotkeyPrefixShow:
+                return "HotkeyPrefixShow";
+            case HotkeyPrefix::HotkeyPrefixHide:
+                return "HotkeyPrefixHide";
+            default:
+                assert(false && nHotkey && "invalid hotkey prefix value");
+                return "INVALID";
+        }
+    }
+
+    static OUString StringTrimmingString(sal_uInt32 nTrimming)
+    {
+        switch(nTrimming)
+        {
+            case StringTrimming::StringTrimmingNone:
+                return "StringTrimmingNone";
+            case StringTrimming::StringTrimmingCharacter:
+                return "StringTrimmingCharacter";
+            case StringTrimming::StringTrimmingWord:
+                return "StringTrimmingWord";
+            case StringTrimming::StringTrimmingEllipsisCharacter:
+                return "StringTrimmingEllipsisCharacter";
+            case StringTrimming::StringTrimmingEllipsisWord:
+                return "StringTrimmingEllipsisWord";
+            case StringTrimming::StringTrimmingEllipsisPath:
+                return "StringTrimmingEllipsisPath";
+            default:
+                assert(false && nTrimming && "invalid trim value");
+                return "INVALID";
+        }
+    }
+
     void EMFPStringFormat::Read(SvMemoryStream &s)
     {
         s.ReadUInt32(header).ReadUInt32(stringFormatFlags).ReadUInt32(language);
@@ -51,20 +199,32 @@ namespace emfplushelper
         language >>= 16;
         digitLanguage >>= 16;
         SAL_WARN_IF((header >> 12) != 0xdbc01, "drawinglayer", "Invalid header - not 0xdbc01");
-        SAL_INFO("drawinglayer", "EMF+\t string format\nEMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " StringFormatFlags: 0x" << stringFormatFlags << std::dec << " Language: " << language);
-        SAL_INFO("drawinglayer", "EMF+\t StringAlignment: " << stringAlignment << " LineAlign: " << lineAlign << " DigitSubstitution: " << digitSubstitution << " DigitLanguage: " << digitLanguage);
-        SAL_INFO("drawinglayer", "EMF+\t FirstTabOffset: " << firstTabOffset << " HotkeyPrefix: " << hotkeyPrefix << " LeadingMargin: " << leadingMargin << " TrailingMargin: " << trailingMargin << " Tracking: " << tracking);
-        SAL_INFO("drawinglayer", "EMF+\t Trimming: " << trimming << " TabStopCount: " << tabStopCount << " RangeCount: " << rangeCount);
+        SAL_INFO("drawinglayer", "EMF+\t string format");
+        SAL_INFO("drawinglayer", "\t\tHeader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << std::dec);
+        SAL_INFO("drawinglayer", "\t\tStringFormatFlags: " << StringFormatFlags(stringFormatFlags));
+        SAL_INFO("drawinglayer", "\t\tLanguage: sublangid: 0x" << std::hex << (language >> 10) << ", primarylangid: 0x" << (language & 0xF800));
+        SAL_INFO("drawinglayer", "\t\tLineAlign: " << StringAlignmentString(lineAlign));
+        SAL_INFO("drawinglayer", "\t\tDigitSubstitution: " << DigitSubstitutionString(digitSubstitution));
+        SAL_INFO("drawinglayer", "\t\tDigitLanguage: sublangid: 0x" << std::hex << (digitLanguage >> 10) << ", primarylangid: 0x" << (digitLanguage & 0xF800));
+        SAL_INFO("drawinglayer", "\t\tFirstTabOffset: " << firstTabOffset);
+        SAL_INFO("drawinglayer", "\t\tHotkeyPrefix: " << HotkeyPrefixString(hotkeyPrefix));
+        SAL_INFO("drawinglayer", "\t\tLeadingMargin: " << leadingMargin);
+        SAL_INFO("drawinglayer", "\t\tTrailingMargin: " << trailingMargin);
+        SAL_INFO("drawinglayer", "\t\tTracking: " << tracking);
+        SAL_INFO("drawinglayer", "\t\tTrimming: " << StringTrimmingString(trimming));
+        SAL_INFO("drawinglayer", "\t\tTabStopCount: " << tabStopCount);
+        SAL_INFO("drawinglayer", "\t\tRangeCount: " << rangeCount);
 
-        SAL_WARN_IF(stringAlignment, "drawinglayer", "EMF+\t TODO EMFPStringFormat:StringAlignment");
-        SAL_WARN_IF(lineAlign, "drawinglayer", "EMF+\t TODO EMFPStringFormat:lineAlign");
-        SAL_WARN_IF(digitSubstitution, "drawinglayer", "EMF+\t TODO EMFPStringFormat:digitSubstitution");
+        SAL_WARN_IF(stringAlignment != StringAlignment::StringAlignmentNear, "drawinglayer", "EMF+\t TODO EMFPStringFormat:StringAlignment");
+        SAL_WARN_IF(lineAlign != StringAlignment::StringAlignmentNear, "drawinglayer", "EMF+\t TODO EMFPStringFormat:lineAlign");
+        SAL_WARN_IF(digitSubstitution != StringDigitSubstitution::StringDigitSubstitutionNone,
+                        "drawinglayer", "EMF+\t TODO EMFPStringFormat:digitSubstitution");
         SAL_WARN_IF(firstTabOffset != 0.0, "drawinglayer", "EMF+\t TODO EMFPStringFormat:firstTabOffset");
-        SAL_WARN_IF(hotkeyPrefix, "drawinglayer", "EMF+\t TODO EMFPStringFormat:hotkeyPrefix");
+        SAL_WARN_IF(hotkeyPrefix != HotkeyPrefix::HotkeyPrefixNone, "drawinglayer", "EMF+\t TODO EMFPStringFormat:hotkeyPrefix");
         SAL_WARN_IF(leadingMargin != 0.0, "drawinglayer", "EMF+\t TODO EMFPStringFormat:leadingMargin");
         SAL_WARN_IF(trailingMargin != 0.0, "drawinglayer", "EMF+\t TODO EMFPStringFormat:trailingMargin");
         SAL_WARN_IF(tracking != 1.0, "drawinglayer", "EMF+\t TODO EMFPStringFormat:tracking");
-        SAL_WARN_IF(trimming, "drawinglayer", "EMF+\t TODO EMFPStringFormat:trimming");
+        SAL_WARN_IF(trimming != StringTrimming::StringTrimmingNone, "drawinglayer", "EMF+\t TODO EMFPStringFormat:trimming");
         SAL_WARN_IF(tabStopCount, "drawinglayer", "EMF+\t TODO EMFPStringFormat:tabStopCount");
         SAL_WARN_IF(rangeCount, "drawinglayer", "EMF+\t TODO EMFPStringFormat:StringFormatData");
     }
