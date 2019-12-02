@@ -98,16 +98,9 @@ $(eval $(call gb_Library_use_libraries,sc,\
     xo \
 ))
 
-ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,sc,\
-    sc/source/core/tool/arraysumSSE2, -arch:SSE2 \
+    sc/source/core/tool/arraysumSSE2, $(CXXFLAGS_INTRINSICS_SSE2) \
 ))
-
-else
-$(eval $(call gb_Library_add_exception_objects,sc,\
-    sc/source/core/tool/arraysumSSE2 \
-))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/attarray \
