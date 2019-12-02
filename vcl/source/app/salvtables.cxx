@@ -2067,6 +2067,12 @@ public:
         return rHorzScrollBar.SetPageSize(size);
     }
 
+    virtual void hadjustment_set_step_increment(int size) override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        return rHorzScrollBar.SetLineSize(size);
+    }
+
     virtual void set_hpolicy(VclPolicyType eHPolicy) override
     {
         WinBits nWinBits = m_xScrolledWindow->GetStyle() & ~(WB_AUTOHSCROLL|WB_HSCROLL);
@@ -2160,6 +2166,12 @@ public:
     {
         ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
         return rVertScrollBar.SetPageSize(size);
+    }
+
+    virtual void vadjustment_set_step_increment(int size) override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        return rVertScrollBar.SetLineSize(size);
     }
 
     virtual void set_vpolicy(VclPolicyType eVPolicy) override
