@@ -1114,6 +1114,9 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nTilePosX, int nTilePosY,
                               long nTileWidth, long nTileHeight )
 {
+    Fraction origZoomX = pViewData->GetZoomX();
+    Fraction origZoomY = pViewData->GetZoomY();
+
     // Output size is in pixels while tile position and size are in logical units (twips).
 
     // Assumption: always paint the whole sheet i.e. "visible" range is always
@@ -1131,6 +1134,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     Fraction aFracX(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
     Fraction aFracY(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
+
+    // FIXME: compare vs. origZoomX/Y and avoid ?
 
     // page break zoom, and aLogicMode in ScViewData
     pViewData->SetZoom(aFracX, aFracY, true);
@@ -1239,6 +1244,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // Flag drawn formula cells "unchanged".
     pDoc->ResetChanged(ScRange(nTopLeftTileCol, nTopLeftTileRow, nTab, nBottomRightTileCol, nBottomRightTileRow, nTab));
     pDoc->PrepareFormulaCalc();
+
+    pViewData->SetZoom(origZoomX, origZoomY, true);
 }
 
 void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
