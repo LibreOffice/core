@@ -2303,7 +2303,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
     // small problem: To mark found fields, I need SdrObjects. To determine which controls
     // to include in the search, I need Controls (that is, XControl interfaces). So I have
     // to iterate over one of them and get the other in some way. Unfortunately, there is
-    // no direct connexion between the two worlds (except from a GetUnoControl to a
+    // no direct connection between the two worlds (except from a GetUnoControl to a
     // SdrUnoObject, but this requires an OutputDevice I can not do anything with.
     // However I can get to the Model from the Control and also from the SdrObject, and in
     // this way the assignment SdrObject<->Control is possible with a double loop.
