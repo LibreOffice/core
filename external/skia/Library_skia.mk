@@ -22,9 +22,6 @@ $(eval $(call gb_Library_add_defs,skia,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_cxxflags,skia, \
-    -arch:SSE2 \
-))
 ifneq ($(gb_ENABLE_PCH),)
 $(eval $(call gb_Library_add_cxxflags,skia, \
     -FIsrc/utils/win/SkDWriteNTDDI_VERSION.h \
@@ -41,11 +38,6 @@ $(eval $(call gb_Library_use_system_win32_libs,skia,\
     gdi32 \
 ))
 else
-# TODO SKIA
-$(eval $(call gb_Library_add_cxxflags,skia, \
-    -mssse3 \
-))
-
 $(eval $(call gb_Library_use_externals,skia,\
     freetype \
     fontconfig \
@@ -216,7 +208,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkNormalFlatSource \
     UnpackedTarball/skia/src/core/SkNormalMapSource \
     UnpackedTarball/skia/src/core/SkNormalSource \
-    UnpackedTarball/skia/src/core/SkOpts \
     UnpackedTarball/skia/src/core/SkOverdrawCanvas \
     UnpackedTarball/skia/src/core/SkPaint \
     UnpackedTarball/skia/src/core/SkPaintPriv \
@@ -800,15 +791,35 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/opts/SkOpts_avx \
-    UnpackedTarball/skia/src/opts/SkOpts_crc32 \
-    UnpackedTarball/skia/src/opts/SkOpts_hsw \
-    UnpackedTarball/skia/src/opts/SkOpts_sse41 \
-    UnpackedTarball/skia/src/opts/SkOpts_sse42 \
-    UnpackedTarball/skia/src/opts/SkOpts_ssse3 \
     UnpackedTarball/skia/src/ports/SkGlobalInitialization_default \
     UnpackedTarball/skia/src/ports/SkImageGenerator_none \
     UnpackedTarball/skia/src/ports/SkOSFile_stdio \
+))
+
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/opts/SkOpts_avx, $(CXXFLAGS_INTRINSICS_AVX) \
+))
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/opts/SkOpts_hsw, \
+        $(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA)\
+))
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/opts/SkOpts_sse41, $(CXXFLAGS_INTRINSICS_SSE41) \
+))
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/opts/SkOpts_sse42, $(CXXFLAGS_INTRINSICS_SSE42) \
+))
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/opts/SkOpts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) \
+))
+
+# Compile this file with the best intrinsics available.
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/core/SkOpts, \
+    $(CXXFLAGS_INTRINSICS_SSSE3) \
+    $(CXXFLAGS_INTRINSICS_SSE41) $(CXXFLAGS_INTRINSICS_SSE42) \
+    $(CXXFLAGS_INTRINSICS_AVX) \
+    $(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
@@ -885,6 +896,8 @@ endif
 #    UnpackedTarball/skia/src/gpu/gl/glfw/GrGLMakeNativeInterface_glfw \
 #    UnpackedTarball/skia/src/gpu/gl/iOS/GrGLMakeNativeInterface_iOS \
 #    UnpackedTarball/skia/src/gpu/gl/mac/GrGLMakeNativeInterface_mac \
+
+#    UnpackedTarball/skia/src/opts/SkOpts_crc32 \
 
 #    UnpackedTarball/skia/src/ports/SkDebug_android \
 #    UnpackedTarball/skia/src/ports/SkDiscardableMemory_none \

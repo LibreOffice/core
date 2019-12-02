@@ -6777,103 +6777,219 @@ dnl ===================================================================
 dnl CPU Intrinsics support - SSE, AVX
 dnl ===================================================================
 
-INTRINSICS_CXXFLAGS=""
+CXXFLAGS_INTRINSICS_SSE2=
+CXXFLAGS_INTRINSICS_SSSE3=
+CXXFLAGS_INTRINSICS_SSE41=
+CXXFLAGS_INTRINSICS_SSE42=
+CXXFLAGS_INTRINSICS_AVX=
+CXXFLAGS_INTRINSICS_AVX2=
+CXXFLAGS_INTRINSICS_F16C=
+CXXFLAGS_INTRINSICS_FMA=
 
 if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING([whether $CXX can compile SSE2 intrinsics])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -msse2"
-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        #include <emmintrin.h>
-        int main () {
-            volatile __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
-            c = _mm_xor_si128 (a, b);
-            return 0;
-        }
-        ])],
-        [can_compile_sse2=yes],
-        [can_compile_sse2=no])
-    AC_LANG_POP([C++])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_MSG_RESULT([${can_compile_sse2}])
-    if test "${can_compile_sse2}" = "yes" ; then
-        INTRINSICS_CXXFLAGS="-msse2"
-    else
-        AC_MSG_WARN([cannot compile SSE2 intrinsics])
-    fi
-
-    AC_MSG_CHECKING([whether $CXX can compile SSSE3 intrinsics])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -mssse3"
-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        #include <tmmintrin.h>
-        int main () {
-            volatile __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
-            c = _mm_maddubs_epi16 (a, b);
-            return 0;
-        }
-        ])],
-        [can_compile_ssse3=yes],
-        [can_compile_ssse3=no])
-    AC_LANG_POP([C++])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_MSG_RESULT([${can_compile_ssse3}])
-    if test "${can_compile_ssse3}" = "yes" ; then
-        INTRINSICS_CXXFLAGS="-mssse3"
-    else
-        AC_MSG_WARN([cannot compile SSSE3 intrinsics])
-    fi
-
-    AC_MSG_CHECKING([whether $CXX can compile AVX intrinsics])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -mavx"
-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        #include <immintrin.h>
-        int main () {
-            volatile __m256 a = _mm256_set1_ps (0.0f), b = _mm256_set1_ps (0.0f), c;
-            c = _mm256_xor_ps(a, b);
-            return 0;
-        }
-        ])],
-        [can_compile_avx=yes],
-        [can_compile_avx=no])
-    AC_LANG_POP([C++])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_MSG_RESULT([${can_compile_avx}])
-    if test "${can_compile_avx}" = "yes" ; then
-        INTRINSICS_CXXFLAGS="-mavx"
-    else
-        AC_MSG_WARN([cannot compile AVX intrinsics])
-    fi
-
-    AC_MSG_CHECKING([whether $CXX can compile AVX2 intrinsics])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -mavx2"
-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        #include <immintrin.h>
-        int main () {
-            volatile __m256i a = _mm256_set1_epi32 (0), b = _mm256_set1_epi32 (0), c;
-            c = _mm256_maddubs_epi16(a, b);
-            return 0;
-        }
-        ])],
-        [can_compile_avx2=yes],
-        [can_compile_avx2=no])
-    AC_LANG_POP([C++])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_MSG_RESULT([${can_compile_avx2}])
-    if test "${can_compile_avx2}" = "yes" ; then
-        INTRINSICS_CXXFLAGS="-mavx2"
-    else
-        AC_MSG_WARN([cannot compile AVX2 intrinsics])
-    fi
+    flag_sse2=-msse2
+    flag_ssse3=-mssse3
+    flag_sse41=-msse4.1
+    flag_sse42=-msse4.2
+    flag_avx=-mavx
+    flag_avx2=-mavx2
+    flag_f16c=-mf16c
+    flag_fma=-mfma
+else
+    # https://docs.microsoft.com/en-us/cpp/build/reference/arch-x86
+    # MSVC seems to differentiate only between SSE and SSE2, where in fact
+    # SSE2 seems to be SSE2+.
+    # Even if -arch:SSE2 is the default, set it explicitly, so that the variable
+    # is not empty (and can be tested in gbuild), moreover we now default to SSE
+    # for 32bit x86.
+    flag_sse2=-arch:SSE2
+    flag_ssse3=-arch:SSE2
+    flag_sse41=-arch:SSE2
+    flag_sse42=-arch:SSE2
+    flag_avx=-arch:AVX
+    flag_avx2=-arch:AVX2
+    # These are part of -arch:AVX2
+    flag_f16c=-arch:AVX2
+    flag_fma=-arch:AVX2
 fi
 
-AC_SUBST([INTRINSICS_CXXFLAGS])
+AC_MSG_CHECKING([whether $CXX can compile SSE2 intrinsics])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $flag_sse2"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+    #include <emmintrin.h>
+    int main () {
+        __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
+        c = _mm_xor_si128 (a, b);
+        return 0;
+    }
+    ])],
+    [can_compile_sse2=yes],
+    [can_compile_sse2=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([${can_compile_sse2}])
+if test "${can_compile_sse2}" = "yes" ; then
+    CXXFLAGS_INTRINSICS_SSE2="$flag_sse2"
+fi
+
+AC_MSG_CHECKING([whether $CXX can compile SSSE3 intrinsics])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $flag_ssse3"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+    #include <tmmintrin.h>
+    int main () {
+        __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
+        c = _mm_maddubs_epi16 (a, b);
+        return 0;
+    }
+    ])],
+    [can_compile_ssse3=yes],
+    [can_compile_ssse3=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([${can_compile_ssse3}])
+if test "${can_compile_ssse3}" = "yes" ; then
+    CXXFLAGS_INTRINSICS_SSSE3="$flag_ssse3"
+fi
+
+AC_MSG_CHECKING([whether $CXX can compile SSE4.1 intrinsics])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $flag_sse41"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+    #include <smmintrin.h>
+    int main () {
+        __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
+        c = _mm_cmpeq_epi64 (a, b);
+        return 0;
+    }
+    ])],
+    [can_compile_sse41=yes],
+    [can_compile_sse41=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([${can_compile_sse41}])
+if test "${can_compile_sse41}" = "yes" ; then
+    CXXFLAGS_INTRINSICS_SSE41="$flag_sse41"
+fi
+
+AC_MSG_CHECKING([whether $CXX can compile SSE4.2 intrinsics])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $flag_sse42"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+    #include <nmmintrin.h>
+    int main () {
+        __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
+        c = _mm_cmpgt_epi64 (a, b);
+        return 0;
+    }
+    ])],
+    [can_compile_sse42=yes],
+    [can_compile_sse42=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([${can_compile_sse42}])
+if test "${can_compile_sse42}" = "yes" ; then
+    CXXFLAGS_INTRINSICS_SSE42="$flag_sse42"
+fi
+
+AC_MSG_CHECKING([whether $CXX can compile AVX intrinsics])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $flag_avx"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+    #include <immintrin.h>
+    int main () {
+        __m256 a = _mm256_set1_ps (0.0f), b = _mm256_set1_ps (0.0f), c;
+        c = _mm256_xor_ps(a, b);
+        return 0;
+    }
+    ])],
+    [can_compile_avx=yes],
+    [can_compile_avx=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([${can_compile_avx}])
+if test "${can_compile_avx}" = "yes" ; then
+    CXXFLAGS_INTRINSICS_AVX="$flag_avx"
+fi
+
+AC_MSG_CHECKING([whether $CXX can compile AVX2 intrinsics])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $flag_avx2"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+    #include <immintrin.h>
+    int main () {
+        __m256i a = _mm256_set1_epi32 (0), b = _mm256_set1_epi32 (0), c;
+        c = _mm256_maddubs_epi16(a, b);
+        return 0;
+    }
+    ])],
+    [can_compile_avx2=yes],
+    [can_compile_avx2=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([${can_compile_avx2}])
+if test "${can_compile_avx2}" = "yes" ; then
+    CXXFLAGS_INTRINSICS_AVX2="$flag_avx2"
+fi
+
+AC_MSG_CHECKING([whether $CXX can compile F16C intrinsics])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $flag_f16c"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+    #include <immintrin.h>
+    int main () {
+        __m128i a = _mm_set1_epi32 (0);
+        __m128 c;
+        c = _mm_cvtph_ps(a);
+        return 0;
+    }
+    ])],
+    [can_compile_f16c=yes],
+    [can_compile_f16c=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([${can_compile_f16c}])
+if test "${can_compile_f16c}" = "yes" ; then
+    CXXFLAGS_INTRINSICS_F16C="$flag_f16c"
+fi
+
+AC_MSG_CHECKING([whether $CXX can compile FMA intrinsics])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $flag_fma"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+    #include <immintrin.h>
+    int main () {
+        __m256 a = _mm256_set1_ps (0.0f), b = _mm256_set1_ps (0.0f), c = _mm256_set1_ps (0.0f), d;
+        d = _mm256_fmadd_ps(a, b, c);
+        return 0;
+    }
+    ])],
+    [can_compile_fma=yes],
+    [can_compile_fma=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([${can_compile_fma}])
+if test "${can_compile_fma}" = "yes" ; then
+    CXXFLAGS_INTRINSICS_FMA="$flag_fma"
+fi
+
+AC_SUBST([CXXFLAGS_INTRINSICS_SSE2])
+AC_SUBST([CXXFLAGS_INTRINSICS_SSSE3])
+AC_SUBST([CXXFLAGS_INTRINSICS_SSE41])
+AC_SUBST([CXXFLAGS_INTRINSICS_SSE42])
+AC_SUBST([CXXFLAGS_INTRINSICS_AVX])
+AC_SUBST([CXXFLAGS_INTRINSICS_AVX2])
+AC_SUBST([CXXFLAGS_INTRINSICS_F16C])
+AC_SUBST([CXXFLAGS_INTRINSICS_FMA])
 
 dnl ===================================================================
 dnl system stl sanity tests
