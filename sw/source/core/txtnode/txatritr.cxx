@@ -33,54 +33,54 @@ SwScriptIterator::SwScriptIterator(
             const OUString& rStr, sal_Int32 nStt, bool const bFrwrd)
     : m_rText(rStr)
     , m_nChgPos(rStr.getLength())
-    , nCurScript(i18n::ScriptType::WEAK)
-    , bForward(bFrwrd)
+    , m_nCurScript(i18n::ScriptType::WEAK)
+    , m_bForward(bFrwrd)
 {
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
     if ( ! bFrwrd && nStt )
         --nStt;
 
     sal_Int32 nPos = nStt;
-    nCurScript = g_pBreakIt->GetBreakIter()->getScriptType(m_rText, nPos);
-    if( i18n::ScriptType::WEAK == nCurScript )
+    m_nCurScript = g_pBreakIt->GetBreakIter()->getScriptType(m_rText, nPos);
+    if( i18n::ScriptType::WEAK == m_nCurScript )
     {
         if( nPos )
         {
             nPos = g_pBreakIt->GetBreakIter()->beginOfScript(
-                                            m_rText, nPos, nCurScript);
+                                            m_rText, nPos, m_nCurScript);
             if (nPos > 0 && nPos < m_rText.getLength())
             {
                 nStt = --nPos;
-                nCurScript =
+                m_nCurScript =
                     g_pBreakIt->GetBreakIter()->getScriptType(m_rText,nPos);
             }
         }
     }
 
-    m_nChgPos = bForward
+    m_nChgPos = m_bForward
         ?  g_pBreakIt->GetBreakIter()->endOfScript(
-                m_rText, nStt, nCurScript)
+                m_rText, nStt, m_nCurScript)
         :  g_pBreakIt->GetBreakIter()->beginOfScript(
-                m_rText, nStt, nCurScript);
+                m_rText, nStt, m_nCurScript);
 }
 
 void SwScriptIterator::Next()
 {
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
-    if (bForward && m_nChgPos >= 0 && m_nChgPos < m_rText.getLength())
+    if (m_bForward && m_nChgPos >= 0 && m_nChgPos < m_rText.getLength())
     {
-        nCurScript =
+        m_nCurScript =
             g_pBreakIt->GetBreakIter()->getScriptType(m_rText, m_nChgPos);
         m_nChgPos = g_pBreakIt->GetBreakIter()->endOfScript(
-                                        m_rText, m_nChgPos, nCurScript);
+                                        m_rText, m_nChgPos, m_nCurScript);
     }
-    else if (!bForward && m_nChgPos > 0)
+    else if (!m_bForward && m_nChgPos > 0)
     {
         --m_nChgPos;
-        nCurScript =
+        m_nCurScript =
             g_pBreakIt->GetBreakIter()->getScriptType(m_rText, m_nChgPos);
         m_nChgPos = g_pBreakIt->GetBreakIter()->beginOfScript(
-                                            m_rText, m_nChgPos, nCurScript);
+                                            m_rText, m_nChgPos, m_nCurScript);
     }
 }
 
