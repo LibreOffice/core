@@ -3049,22 +3049,23 @@ struct LabelPlacementParam
 
     std::unordered_set<sal_Int32> maAllowedValues;
 
-    LabelPlacementParam() :
-        mbExport(true),
-        meDefault(css::chart::DataLabelPlacement::OUTSIDE) {}
-
-    void allowAll()
-    {
-        maAllowedValues.insert(css::chart::DataLabelPlacement::OUTSIDE);
-        maAllowedValues.insert(css::chart::DataLabelPlacement::INSIDE);
-        maAllowedValues.insert(css::chart::DataLabelPlacement::CENTER);
-        maAllowedValues.insert(css::chart::DataLabelPlacement::NEAR_ORIGIN);
-        maAllowedValues.insert(css::chart::DataLabelPlacement::TOP);
-        maAllowedValues.insert(css::chart::DataLabelPlacement::BOTTOM);
-        maAllowedValues.insert(css::chart::DataLabelPlacement::LEFT);
-        maAllowedValues.insert(css::chart::DataLabelPlacement::RIGHT);
-        maAllowedValues.insert(css::chart::DataLabelPlacement::AVOID_OVERLAP);
-    }
+    LabelPlacementParam(bool bExport, sal_Int32 nDefault) :
+        mbExport(bExport),
+        meDefault(nDefault),
+        maAllowedValues(
+          {
+           css::chart::DataLabelPlacement::OUTSIDE,
+           css::chart::DataLabelPlacement::INSIDE,
+           css::chart::DataLabelPlacement::CENTER,
+           css::chart::DataLabelPlacement::NEAR_ORIGIN,
+           css::chart::DataLabelPlacement::TOP,
+           css::chart::DataLabelPlacement::BOTTOM,
+           css::chart::DataLabelPlacement::LEFT,
+           css::chart::DataLabelPlacement::RIGHT,
+           css::chart::DataLabelPlacement::AVOID_OVERLAP
+          }
+        )
+    {}
 };
 
 const char* toOOXMLPlacement( sal_Int32 nPlacement )
@@ -3290,10 +3291,7 @@ void ChartExport::exportDataLabels(
     // is corrupt & refuse to open it.
 
     const chart::TypeGroupInfo& rInfo = chart::GetTypeGroupInfo(static_cast<chart::TypeId>(eChartType));
-    LabelPlacementParam aParam;
-    aParam.mbExport = !mbIs3DChart;
-    aParam.meDefault = rInfo.mnDefLabelPos;
-    aParam.allowAll();
+    LabelPlacementParam aParam(!mbIs3DChart, rInfo.mnDefLabelPos);
     switch (eChartType) // diagram chart type
     {
         case chart::TYPEID_PIE:
