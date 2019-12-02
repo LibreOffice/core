@@ -2995,12 +2995,13 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #else
     ScopedVclPtrInstance< VirtualDevice > pDevice(DeviceFormat::DEFAULT);
 
-#if HAVE_FEATURE_ANDROID_LOK
-    // Set background to transparent by default.
-    // [Unless it is the 'old' (JNI-based) Android app - no idea why it
-    // needs avoiding this.]
-    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+#if defined(ANDROID) && !HAVE_FEATURE_ANDROID_LOK
+    // Don't set the transparent background in the 'old' (JNI-based) Android
+    // app - no idea why it needs avoiding this.
+    if (false)
 #endif
+    // Set background to transparent by default.
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
