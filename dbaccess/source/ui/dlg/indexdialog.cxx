@@ -33,7 +33,6 @@
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <UITools.hxx>
-#include <svtools/imgdef.hxx>
 #include <browserids.hxx>
 #include <connectivity/dbtools.hxx>
 #include <osl/diagnose.h>
