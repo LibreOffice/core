@@ -51,12 +51,12 @@ ScMarkData::ScMarkData(const ScMarkData& rData) :
     aLeftEnvelope( rData.aLeftEnvelope ),
     aRightEnvelope( rData.aRightEnvelope ),
     mnMaxRow( rData.mnMaxRow ),
-    mnMaxCol( rData.mnMaxCol )
+    mnMaxCol( rData.mnMaxCol ),
+    bMarked( rData.bMarked ),
+    bMultiMarked( rData.bMultiMarked ),
+    bMarking( rData.bMarking ),
+    bMarkIsNeg( rData.bMarkIsNeg )
 {
-    bMarked      = rData.bMarked;
-    bMultiMarked = rData.bMultiMarked;
-    bMarking     = rData.bMarking;
-    bMarkIsNeg   = rData.bMarkIsNeg;
 }
 
 ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
