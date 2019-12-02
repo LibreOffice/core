@@ -209,13 +209,7 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     pRet->Put(aGridItem);
 
     // Options for PrintTabPage
-    const SwPrintData* pOpt = pAppView ?
-                        &pAppView->GetWrtShell().getIDocumentDeviceAccess().getPrintData() :
-                        nullptr;
-
-    if(!pOpt)
-        pOpt = GetPrtOptions(!bTextDialog);
-
+    const SwPrintData* pOpt = GetPrtOptions(!bTextDialog);
     SwAddPrinterItem aAddPrinterItem(*pOpt );
     pRet->Put(aAddPrinterItem);
 
@@ -370,9 +364,6 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         {
             const SwAddPrinterItem* pAddPrinterAttr = static_cast<const SwAddPrinterItem*>(pItem);
             *pOpt = *pAddPrinterAttr;
-
-            if(pAppView)
-                pAppView->GetWrtShell().getIDocumentDeviceAccess().setPrintData( *pOpt );
         }
 
     }
