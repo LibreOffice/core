@@ -22,6 +22,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ui/XImageManager.hpp>
 
 #include <vcl/image.hxx>
 
@@ -31,32 +32,20 @@
 namespace frm
 {
 
-
-    //= ICommandImageProvider
-
-    typedef ::std::vector< Image >                 CommandImages;
-
-    class SAL_NO_VTABLE ICommandImageProvider
+    class DocumentCommandImageProvider
     {
     public:
-        virtual CommandImages   getCommandImages(
-                                    const css::uno::Sequence< OUString >& _rCommandURLs,
-                                    const bool _bLarge
-                                ) const = 0;
+        DocumentCommandImageProvider( const css::uno::Reference<css::uno::XComponentContext>& _rContext, const css::uno::Reference< css::frame::XModel >& _rxDocument );
 
-        virtual ~ICommandImageProvider() { }
+        std::vector<Image> getCommandImages( const css::uno::Sequence< OUString >& _rCommandURLs, bool _bLarge ) const;
+
+    private:
+        css::uno::Reference< css::ui::XImageManager >    m_xDocumentImageManager;
+        css::uno::Reference< css::ui::XImageManager >    m_xModuleImageManager;
     };
 
-    typedef std::shared_ptr< const ICommandImageProvider >  PCommandImageProvider;
 
-
-    //= factory
-
-    PCommandImageProvider
-        createDocumentCommandImageProvider(
-            const css::uno::Reference<css::uno::XComponentContext>& _rContext,
-            const css::uno::Reference< css::frame::XModel >& _rxDocument
-        );
+    typedef std::shared_ptr< const DocumentCommandImageProvider >  PCommandImageProvider;
 
 
 } // namespace frm
