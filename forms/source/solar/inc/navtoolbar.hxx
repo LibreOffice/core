@@ -31,10 +31,10 @@ namespace frm
 
 
     class IFeatureDispatcher;
-    class ICommandImageProvider;
+    class DocumentCommandImageProvider;
     class ICommandDescriptionProvider;
     class ImplNavToolBar;
-    typedef std::shared_ptr< const ICommandImageProvider >  PCommandImageProvider;
+    typedef std::shared_ptr< const DocumentCommandImageProvider >  PCommandImageProvider;
 
     class NavigationToolBar final : public vcl::Window
     {
@@ -55,7 +55,7 @@ namespace frm
 
     private:
         const IFeatureDispatcher*       m_pDispatcher;
-        const std::shared_ptr< const ICommandImageProvider >
+        const std::shared_ptr< const DocumentCommandImageProvider >
                                         m_pImageProvider;
         ImageSize                       m_eImageSize;
         VclPtr<ImplNavToolBar>          m_pToolbar;

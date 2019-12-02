@@ -52,30 +52,7 @@ namespace frm
 
     namespace ImageType = ::com::sun::star::ui::ImageType;
 
-    namespace {
-
-    class DocumentCommandImageProvider : public ICommandImageProvider
-    {
-    public:
-        DocumentCommandImageProvider( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
-        {
-            impl_init_nothrow( _rContext, _rxDocument );
-        }
-
-        // ICommandImageProvider
-        virtual CommandImages getCommandImages( const css::uno::Sequence< OUString >& _rCommandURLs, const bool _bLarge ) const override;
-
-    private:
-        void    impl_init_nothrow( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument );
-
-    private:
-        Reference< XImageManager >    m_xDocumentImageManager;
-        Reference< XImageManager >    m_xModuleImageManager;
-    };
-
-    }
-
-    void DocumentCommandImageProvider::impl_init_nothrow( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
+    DocumentCommandImageProvider::DocumentCommandImageProvider( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
     {
         OSL_ENSURE( _rxDocument.is(), "DocumentCommandImageProvider::impl_init_nothrow: no document => no images!" );
         if ( !_rxDocument.is() )
@@ -112,10 +89,10 @@ namespace frm
     }
 
 
-    CommandImages DocumentCommandImageProvider::getCommandImages( const css::uno::Sequence< OUString >& _rCommandURLs, const bool _bLarge ) const
+    std::vector<Image> DocumentCommandImageProvider::getCommandImages( const css::uno::Sequence< OUString >& _rCommandURLs, const bool _bLarge ) const
     {
         const size_t nCommandCount = _rCommandURLs.getLength();
-        CommandImages aImages( nCommandCount );
+        std::vector<Image> aImages( nCommandCount );
         try
         {
             const sal_Int16 nImageType = ImageType::COLOR_NORMAL
@@ -149,15 +126,6 @@ namespace frm
         }
         return aImages;
     }
-
-
-    PCommandImageProvider createDocumentCommandImageProvider(
-        const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
-    {
-        PCommandImageProvider pImageProvider( new DocumentCommandImageProvider( _rContext, _rxDocument ) );
-        return pImageProvider;
-    }
-
 
 } // namespace frm
 

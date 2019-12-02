@@ -211,7 +211,7 @@ namespace frm
         VclPtrInstance<NavigationToolBar> pNavBar(
             _pParentWindow,
             lcl_getWinBits_nothrow( _rxModel ),
-            createDocumentCommandImageProvider( _rxORB, xContextDocument ),
+            std::make_shared<DocumentCommandImageProvider>( _rxORB, xContextDocument ),
             sModuleID
         );
 
