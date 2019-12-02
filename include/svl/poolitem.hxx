@@ -29,7 +29,7 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <tools/mapunit.hxx>
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 class IntlWrapper;
 

@@ -47,6 +47,7 @@
 #include <svx/linectrl.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/unitconv.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

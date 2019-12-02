@@ -90,6 +90,7 @@
 #include <vcl/gradient.hxx>
 #include <svx/svxids.hrc>
 #include <string>
+#include <boost/property_tree/ptree.hpp>
 
 #include <libxml/xmlwriter.h>
 

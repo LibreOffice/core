@@ -27,6 +27,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/msgpool.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <shellimpl.hxx>
 

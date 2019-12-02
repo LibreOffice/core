@@ -89,6 +89,7 @@
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/GraphicLoader.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
