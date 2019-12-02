@@ -231,18 +231,22 @@ shell SfxApplication
     SID_BASICIDE_APPEAR // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
     ]
     SID_SCRIPTORGANIZER  // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
     ]
     SID_MACROORGANIZER  // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
     ]
     SID_RUNMACRO  // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
     ]
     SID_BASICCHOOSER  // status(final|play)
     [
