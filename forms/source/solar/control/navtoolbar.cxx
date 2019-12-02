@@ -366,10 +366,10 @@ namespace frm
         }
 
         // retrieve the images for the command URLs
-        CommandImages aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge );
+        std::vector<Image> aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge );
 
         // and set them at the toolbar
-        CommandImages::const_iterator commandImage = aCommandImages.begin();
+        auto commandImage = aCommandImages.begin();
         for (auto const& formFeature : aFormFeatures)
         {
             m_pToolbar->SetItemImage( formFeature, *commandImage );
