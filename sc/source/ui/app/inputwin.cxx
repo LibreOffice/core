@@ -1796,10 +1796,8 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
         // Find position of the change, only paint the rest
         if (!mpEditEngine)
         {
-            bool bPaintAll;
-            if ( bIsRTL )
-                bPaintAll = true;
-            else
+            bool bPaintAll = mnLines > 1 || bIsRTL;
+            if (!bPaintAll)
             {
                 //  test if CTL script type is involved
                 SvtScriptType nOldScript = SvtScriptType::NONE;
@@ -1817,7 +1815,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
 
             if ( bPaintAll )
             {
-                // if CTL is involved, the whole text has to be redrawn
+                // In multiline mode, or if CTL is involved, the whole text has to be redrawn
                 Invalidate();
             }
             else
