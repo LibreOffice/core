@@ -1690,6 +1690,16 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
     }
     if ( comphelper::LibreOfficeKit::isActive() )
         rSet.DisableItem( SID_AUTO_CORRECT_DLG );
+
+    bool bMacrosDisabled
+        = officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
+    if (bMacrosDisabled)
+    {
+        rSet.DisableItem(SID_RUNMACRO);
+        rSet.DisableItem(SID_MACROORGANIZER);
+        rSet.DisableItem(SID_SCRIPTORGANIZER);
+        rSet.DisableItem(SID_BASICIDE_APPEAR);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
