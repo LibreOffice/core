@@ -157,9 +157,9 @@ namespace connectivity
         void            raiseException(
                             const ErrorCondition _eCondition,
                             const css::uno::Reference< css::uno::XInterface >& _rxContext,
-                            const ParamValue& _rParamValue1 = ParamValue(),
-                            const ParamValue& _rParamValue2 = ParamValue(),
-                            const ParamValue& _rParamValue3 = ParamValue()
+                            const o3tl::optional<OUString>& _rParamValue1 = o3tl::nullopt,
+                            const o3tl::optional<OUString>& _rParamValue2 = o3tl::nullopt,
+                            const o3tl::optional<OUString>& _rParamValue3 = o3tl::nullopt
                         ) const;
 
         /** throws an SQLException describing the given error condition
@@ -240,9 +240,9 @@ namespace connectivity
                         getSQLException(
                             const ErrorCondition _eCondition,
                             const css::uno::Reference< css::uno::XInterface >& _rxContext,
-                            const ParamValue& _rParamValue1 = ParamValue(),
-                            const ParamValue& _rParamValue2 = ParamValue(),
-                            const ParamValue& _rParamValue3 = ParamValue()
+                            const o3tl::optional<OUString>& _rParamValue1 = o3tl::nullopt,
+                            const o3tl::optional<OUString>& _rParamValue2 = o3tl::nullopt,
+                            const o3tl::optional<OUString>& _rParamValue3 = o3tl::nullopt
                         ) const;
 
     private:
