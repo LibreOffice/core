@@ -41,48 +41,6 @@ ScMarkData::ScMarkData(SCROW nMaxRow, SCCOL nMaxCol) :
     ResetMark();
 }
 
-ScMarkData::ScMarkData(const ScMarkData& rData) :
-    maTabMarked( rData.maTabMarked ),
-    aMarkRange( rData.aMarkRange ),
-    aMultiRange( rData.aMultiRange ),
-    aMultiSel( rData.aMultiSel ),
-    aTopEnvelope( rData.aTopEnvelope ),
-    aBottomEnvelope( rData.aBottomEnvelope ),
-    aLeftEnvelope( rData.aLeftEnvelope ),
-    aRightEnvelope( rData.aRightEnvelope ),
-    mnMaxRow( rData.mnMaxRow ),
-    mnMaxCol( rData.mnMaxCol ),
-    bMarked( rData.bMarked ),
-    bMultiMarked( rData.bMultiMarked ),
-    bMarking( rData.bMarking ),
-    bMarkIsNeg( rData.bMarkIsNeg )
-{
-}
-
-ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
-{
-    if ( &rData == this )
-        return *this;
-
-    aMarkRange   = rData.aMarkRange;
-    aMultiRange  = rData.aMultiRange;
-    bMarked      = rData.bMarked;
-    bMultiMarked = rData.bMultiMarked;
-    bMarking     = rData.bMarking;
-    bMarkIsNeg   = rData.bMarkIsNeg;
-    aTopEnvelope = rData.aTopEnvelope;
-    aBottomEnvelope = rData.aBottomEnvelope;
-    aLeftEnvelope   = rData.aLeftEnvelope;
-    aRightEnvelope  = rData.aRightEnvelope;
-
-    maTabMarked = rData.maTabMarked;
-    aMultiSel = rData.aMultiSel;
-    mnMaxRow = rData.mnMaxRow;
-    mnMaxCol = rData.mnMaxCol;
-
-    return *this;
-}
-
 ScMarkData::~ScMarkData()
 {
 }
