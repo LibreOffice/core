@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_7bc34239",
+        "filename": "sc/source/ui/vba/vbainterior.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-02T07:18:44Z",
+      "side": 1,
+      "message": "Looks like an accidental leftover? (No need to comment out things replaced in the patch, since we always have the git history :-))",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 2
+      },
+      "revId": "3471d83f49dcaab2cbbe18521ab1a405f15a0788",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
