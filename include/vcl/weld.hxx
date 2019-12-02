@@ -298,6 +298,7 @@ public:
     virtual int hadjustment_get_page_size() const = 0;
     virtual void hadjustment_set_page_size(int size) = 0;
     virtual void hadjustment_set_page_increment(int size) = 0;
+    virtual void hadjustment_set_step_increment(int size) = 0;
     virtual void set_hpolicy(VclPolicyType eHPolicy) = 0;
     virtual VclPolicyType get_hpolicy() const = 0;
     void connect_hadjustment_changed(const Link<ScrolledWindow&, void>& rLink)
@@ -316,6 +317,7 @@ public:
     virtual int vadjustment_get_page_size() const = 0;
     virtual void vadjustment_set_page_size(int size) = 0;
     virtual void vadjustment_set_page_increment(int size) = 0;
+    virtual void vadjustment_set_step_increment(int size) = 0;
     virtual int vadjustment_get_lower() const = 0;
     virtual void vadjustment_set_lower(int upper) = 0;
     virtual void set_vpolicy(VclPolicyType eVPolicy) = 0;
