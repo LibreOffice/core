@@ -52,7 +52,7 @@
 using namespace css;
 using namespace css::uno;
 
-const char USERITEM_NAME[]      = "FitItem";
+const char USERITEM_NAME[] = "FitItem";
 
 namespace svx { namespace sidebar {
 
