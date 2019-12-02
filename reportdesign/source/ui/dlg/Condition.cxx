@@ -39,7 +39,6 @@
 #include <svx/xtable.hxx>
 #include <svx/tbxcolorupdate.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/imgdef.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapaccess.hxx>
