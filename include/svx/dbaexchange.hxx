@@ -238,10 +238,12 @@ namespace svx
 
     /** class for transferring multiple columns
     */
-    class SAL_WARN_UNUSED SVX_DLLPUBLIC OMultiColumnTransferable final : public TransferableHelper
+    class SAL_WARN_UNUSED SVX_DLLPUBLIC OMultiColumnTransferable final : public TransferDataContainer
     {
     public:
-        OMultiColumnTransferable(const css::uno::Sequence< css::beans::PropertyValue >& _aDescriptors);
+        OMultiColumnTransferable();
+
+        void setDescriptors(const css::uno::Sequence< css::beans::PropertyValue >& rDescriptors);
 
         /** checks whether or not an object descriptor can be extracted from the data flavor vector given
             @param _rFlavors
