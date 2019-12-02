@@ -53,7 +53,6 @@
 #include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <o3tl/optional.hxx>
-#include <o3tl/optional.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1

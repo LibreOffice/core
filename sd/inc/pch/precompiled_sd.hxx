@@ -40,7 +40,6 @@
 #include <utility>
 #include <vector>
 #include <o3tl/optional.hxx>
-#include <o3tl/optional.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
