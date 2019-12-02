@@ -36,7 +36,7 @@ CGMChart::~CGMChart()
     for (auto & pTextEntry : maTextEntryList)
     {
         if ( pTextEntry )
-            delete pTextEntry->pText;
+            delete [] pTextEntry->pText;
     }
 }
 
