@@ -20,6 +20,7 @@
 #include <connectivity/dbtools.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/editbrowsebox.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
@@ -38,6 +39,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/property.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 
 #include <algorithm>
@@ -104,12 +106,12 @@ class OFieldExpressionControl : public ::svt::EditBrowseBox
     sal_Int32                       m_nDataPos;
     sal_Int32                       m_nCurrentPos;
     ImplSVEvent *                   m_nDeleteEvent;
-    VclPtr<OGroupsSortingDialog>    m_pParent;
+    OGroupsSortingDialog*           m_pParent;
     bool                            m_bIgnoreEvent;
     rtl::Reference<OFieldExpressionControlContainerListener> aContainerListener;
 
 public:
-    OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent);
+    OFieldExpressionControl(OGroupsSortingDialog* pParentDialog, const css::uno::Reference<css::awt::XWindow> &rParent);
     virtual ~OFieldExpressionControl() override;
     virtual void dispose() override;
 
@@ -127,8 +129,6 @@ public:
     void        DeleteRows();
 
     sal_Int32   getGroupPosition(sal_Int32 _nRow) const { return _nRow != BROWSER_ENDOFSELECTION ? m_aGroupPositions[_nRow] : sal_Int32(NO_GROUP); }
-
-    ::svt::ComboBoxControl*  getExpressionControl() const { return m_pComboCell; }
 
     /** returns the sequence with the selected groups
     */
@@ -184,9 +184,8 @@ void OFieldExpressionControlContainerListener::elementReplaced(const css::contai
 void OFieldExpressionControlContainerListener::elementRemoved(const css::container::ContainerEvent& rEvent)
 { mpParent->elementRemoved(rEvent); }
 
-
-OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent)
-    :EditBrowseBox( _pParent, EditBrowseBoxFlags::NONE, WB_TABSTOP,
+OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* pParentDialog, const css::uno::Reference<css::awt::XWindow> &rParent)
+    :EditBrowseBox( VCLUnoHelper::GetWindow(rParent), EditBrowseBoxFlags::NONE, WB_TABSTOP,
                     BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION | BrowserMode::AUTOSIZE_LASTCOL |
                               BrowserMode::KEEPHIGHLIGHT | BrowserMode::HLINES | BrowserMode::VLINES)
     ,m_aGroupPositions(GROUPS_START_LEN,-1)
@@ -194,19 +193,17 @@ OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentD
     ,m_nDataPos(-1)
     ,m_nCurrentPos(-1)
     ,m_nDeleteEvent(nullptr)
-    ,m_pParent(_pParentDialog)
+    ,m_pParent(pParentDialog)
     ,m_bIgnoreEvent(false)
     ,aContainerListener(new OFieldExpressionControlContainerListener(this))
 {
     SetBorderStyle(WindowBorderStyle::MONO);
 }
 
-
 OFieldExpressionControl::~OFieldExpressionControl()
 {
     disposeOnce();
 }
-
 
 void OFieldExpressionControl::dispose()
 {
@@ -218,7 +215,7 @@ void OFieldExpressionControl::dispose()
         Application::RemoveUserEvent( m_nDeleteEvent );
 
     m_pComboCell.disposeAndClear();
-    m_pParent.clear();
+    m_pParent = nullptr;
     ::svt::EditBrowseBox::dispose();
 }
 
@@ -380,7 +377,6 @@ void OFieldExpressionControl::lateInit()
         m_pComboCell->SetHelpId(HID_RPT_FIELDEXPRESSION);
 
         m_pComboCell->SetGetFocusHdl(LINK(m_pParent, OGroupsSortingDialog, OnControlFocusGot));
-        m_pComboCell->SetLoseFocusHdl(LINK(m_pParent, OGroupsSortingDialog, OnControlFocusLost));
 
 
         // set browse mode
@@ -791,98 +787,82 @@ Size OFieldExpressionControl::GetOptimalSize() const
     return LogicToPixel(Size(106, 75), MapMode(MapUnit::MapAppFont));
 }
 
-OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnly,
-                                           OReportController* _pController)
-    : FloatingWindow(_pParent, "FloatingSort", "modules/dbreport/ui/floatingsort.ui")
+OGroupsSortingDialog::OGroupsSortingDialog(weld::Window* pParent, bool bReadOnly,
+                                           OReportController* pController)
+    : GenericDialogController(pParent, "modules/dbreport/ui/floatingsort.ui", "FloatingSort")
     , OPropertyChangeListener(m_aMutex)
-    , m_pController(_pController)
+    , m_pController(pController)
     , m_xGroups(m_pController->getReportDefinition()->getGroups())
-    , m_bReadOnly(_bReadOnly)
+    , m_bReadOnly(bReadOnly)
+    , m_xToolBox(m_xBuilder->weld_toolbar("toolbox"))
+    , m_xProperties(m_xBuilder->weld_widget("properties"))
+    , m_xOrderLst(m_xBuilder->weld_combo_box("sorting"))
+    , m_xHeaderLst(m_xBuilder->weld_combo_box("header"))
+    , m_xFooterLst(m_xBuilder->weld_combo_box("footer"))
+    , m_xGroupOnLst(m_xBuilder->weld_combo_box("group"))
+    , m_xGroupIntervalEd(m_xBuilder->weld_spin_button("interval"))
+    , m_xKeepTogetherLst(m_xBuilder->weld_combo_box("keep"))
+    , m_xHelpWindow(m_xBuilder->weld_label("helptext"))
+    , m_xBox(m_xBuilder->weld_container("box"))
+    , m_xTableCtrlParent(m_xBox->CreateChildFrame())
+    , m_xFieldExpression(VclPtr<OFieldExpressionControl>::Create(this, m_xTableCtrlParent))
 {
-    get(m_pToolBox, "toolbox");
-    m_nMoveUpId = m_pToolBox->GetItemId(0);
-    m_nMoveDownId = m_pToolBox->GetItemId(1);
-    m_nDeleteId = m_pToolBox->GetItemId(2);
-    get(m_pOrderLst, "sorting");
-    get(m_pHeaderLst, "header");
-    get(m_pFooterLst, "footer");
-    get(m_pGroupOnLst, "group");
-    get(m_pGroupIntervalEd, "interval");
-    get(m_pKeepTogetherLst, "keep");
-    get(m_pHelpWindow, "helptext");
-    m_pHelpWindow->set_height_request(GetTextHeight() * 4);
-    get(m_pProperties, "properties");
-    m_pFieldExpression = VclPtr<OFieldExpressionControl>::Create(this, get<vcl::Window>("box"));
-    m_pFieldExpression->set_hexpand(true);
-    m_pFieldExpression->set_vexpand(true);
+    m_xHelpWindow->set_size_request(-1, m_xHelpWindow->get_text_height() * 4);
+    m_xFieldExpression->set_hexpand(true);
+    m_xFieldExpression->set_vexpand(true);
 
-    Control* pControlsLst[] = { m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pKeepTogetherLst, m_pOrderLst, m_pGroupIntervalEd};
-    for (Control* i : pControlsLst)
+    weld::Widget* pControlsLst[] = { m_xHeaderLst.get(), m_xFooterLst.get(), m_xGroupOnLst.get(),
+                                     m_xKeepTogetherLst.get(), m_xOrderLst.get(), m_xGroupIntervalEd.get() };
+    for (weld::Widget* i : pControlsLst)
     {
-        i->SetGetFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusGot));
-        i->SetLoseFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusLost));
-        i->Show();
+        i->connect_focus_in(LINK(this, OGroupsSortingDialog, OnWidgetFocusGot));
+        i->show();
     }
 
+    m_xGroupIntervalEd->connect_focus_out(LINK(this, OGroupsSortingDialog, OnWidgetFocusLost));
+
     for (size_t i = 0; i < SAL_N_ELEMENTS(pControlsLst) - 1; ++i)
-        static_cast<ListBox*>(pControlsLst[i])->SetSelectHdl(LINK(this,OGroupsSortingDialog,LBChangeHdl));
+        dynamic_cast<weld::ComboBox&>(*pControlsLst[i]).connect_changed(LINK(this,OGroupsSortingDialog,LBChangeHdl));
 
     m_pReportListener = new OPropertyChangeMultiplexer(this,m_pController->getReportDefinition().get());
     m_pReportListener->addProperty(PROPERTY_COMMAND);
     m_pReportListener->addProperty(PROPERTY_COMMANDTYPE);
 
-    m_pFieldExpression->lateInit();
+    m_xFieldExpression->lateInit();
     fillColumns();
-    m_pFieldExpression->Show();
+    Size aPrefSize = m_xFieldExpression->GetOptimalSize();
+    m_xBox->set_size_request(aPrefSize.Width(), aPrefSize.Height());
+    m_xFieldExpression->Show();
 
-    m_pHelpWindow->SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
-
-    m_pToolBox->SetLineSpacing(true);
-    m_pToolBox->SetSelectHdl(LINK(this, OGroupsSortingDialog, OnFormatAction));
+    m_xToolBox->connect_clicked(LINK(this, OGroupsSortingDialog, OnFormatAction));
 
     checkButtons(0);
-
-    Show();
 }
 
 OGroupsSortingDialog::~OGroupsSortingDialog()
 {
-    disposeOnce();
-}
-
-void OGroupsSortingDialog::dispose()
-{
-    m_xColumns.clear();
     m_pReportListener->dispose();
     if ( m_pCurrentGroupListener.is() )
         m_pCurrentGroupListener->dispose();
-    m_pToolBox.clear();
-    m_pProperties.clear();
-    m_pOrderLst.clear();
-    m_pHeaderLst.clear();
-    m_pFooterLst.clear();
-    m_pGroupOnLst.clear();
-    m_pGroupIntervalEd.clear();
-    m_pKeepTogetherLst.clear();
-    m_pHelpWindow.clear();
-    m_pFieldExpression.disposeAndClear();
-    FloatingWindow::dispose();
+    m_xFieldExpression.disposeAndClear();
+    m_xTableCtrlParent->dispose();
+    m_xTableCtrlParent.clear();
 }
 
 void OGroupsSortingDialog::UpdateData( )
 {
-    m_pFieldExpression->Invalidate();
-    long nCurRow = m_pFieldExpression->GetCurRow();
-    m_pFieldExpression->DeactivateCell();
-    m_pFieldExpression->ActivateCell(nCurRow, m_pFieldExpression->GetCurColumnId());
+    m_xFieldExpression->Invalidate();
+    long nCurRow = m_xFieldExpression->GetCurRow();
+    m_xFieldExpression->DeactivateCell();
+    m_xFieldExpression->ActivateCell(nCurRow, m_xFieldExpression->GetCurColumnId());
     DisplayData(nCurRow);
 }
 
 void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
 {
-    const sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
+    const sal_Int32 nGroupPos = m_xFieldExpression->getGroupPosition(_nRow);
     const bool bEmpty = nGroupPos == NO_GROUP;
-    m_pProperties->Enable(!bEmpty);
+    m_xProperties->set_sensitive(!bEmpty);
 
     checkButtons(_nRow);
 
@@ -903,35 +883,35 @@ void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
 
 void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
 {
-    sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
+    sal_Int32 nGroupPos = m_xFieldExpression->getGroupPosition(_nRow);
     if ( nGroupPos == NO_GROUP )
         return;
 
     uno::Reference< report::XGroup> xGroup = getGroup(nGroupPos);
-    if ( m_pHeaderLst->IsValueChangedFromSaved() )
-        xGroup->setHeaderOn( m_pHeaderLst->GetSelectedEntryPos() == 0 );
-    if ( m_pFooterLst->IsValueChangedFromSaved() )
-        xGroup->setFooterOn( m_pFooterLst->GetSelectedEntryPos() == 0 );
-    if ( m_pKeepTogetherLst->IsValueChangedFromSaved() )
-        xGroup->setKeepTogether( m_pKeepTogetherLst->GetSelectedEntryPos() );
-    if ( m_pGroupOnLst->IsValueChangedFromSaved() )
+    if (m_xHeaderLst->get_value_changed_from_saved())
+        xGroup->setHeaderOn( m_xHeaderLst->get_active() == 0 );
+    if (m_xFooterLst->get_value_changed_from_saved())
+        xGroup->setFooterOn( m_xFooterLst->get_active() == 0 );
+    if (m_xKeepTogetherLst->get_value_changed_from_saved())
+        xGroup->setKeepTogether( m_xKeepTogetherLst->get_active() );
+    if (m_xGroupOnLst->get_value_changed_from_saved())
     {
-        sal_Int16 nGroupOn = static_cast<sal_Int16>(reinterpret_cast<sal_IntPtr>(m_pGroupOnLst->GetSelectedEntryData()));
+        auto nGroupOn = m_xGroupOnLst->get_active_id().toInt32();
         xGroup->setGroupOn( nGroupOn );
     }
-    if ( m_pGroupIntervalEd->IsValueChangedFromSaved() )
+    if (m_xGroupIntervalEd->get_value_changed_from_saved())
     {
-        xGroup->setGroupInterval( static_cast<sal_Int32>(m_pGroupIntervalEd->GetValue()) );
-        m_pGroupIntervalEd->SaveValue();
+        xGroup->setGroupInterval(m_xGroupIntervalEd->get_value());
+        m_xGroupIntervalEd->save_value();
     }
-    if ( m_pOrderLst->IsValueChangedFromSaved() )
-        xGroup->setSortAscending( m_pOrderLst->GetSelectedEntryPos() == 0 );
+    if ( m_xOrderLst->get_value_changed_from_saved() )
+        xGroup->setSortAscending( m_xOrderLst->get_active() == 0 );
 
-    ListBox* pControls[] = { m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pKeepTogetherLst, m_pOrderLst};
-    for (ListBox* pControl : pControls)
-        pControl->SaveValue();
+    weld::ComboBox* pControls[] = { m_xHeaderLst.get(), m_xFooterLst.get(), m_xGroupOnLst.get(),
+                                    m_xKeepTogetherLst.get(), m_xOrderLst.get() };
+    for (weld::ComboBox* pControl : pControls)
+        pControl->save_value();
 }
-
 
 sal_Int32 OGroupsSortingDialog::getColumnDataType(const OUString& _sColumnName)
 {
@@ -955,100 +935,98 @@ sal_Int32 OGroupsSortingDialog::getColumnDataType(const OUString& _sColumnName)
     return nDataType;
 }
 
-IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control&, rControl, void )
+IMPL_LINK_NOARG(OGroupsSortingDialog, OnControlFocusGot, Control&, void )
 {
-    if ( m_pFieldExpression && m_pFieldExpression->getExpressionControl() )
+    m_xHelpWindow->set_label(RptResId(STR_RPT_HELP_FIELD));
+}
+
+IMPL_LINK(OGroupsSortingDialog, OnWidgetFocusGot, weld::Widget&, rControl, void )
+{
+    const std::pair<weld::Widget*, const char*> pControls[] = {
+        { m_xHeaderLst.get(), STR_RPT_HELP_HEADER },
+        { m_xFooterLst.get(), STR_RPT_HELP_FOOTER },
+        { m_xGroupOnLst.get(), STR_RPT_HELP_GROUPON },
+        { m_xGroupIntervalEd.get(), STR_RPT_HELP_INTERVAL },
+        { m_xKeepTogetherLst.get(), STR_RPT_HELP_KEEP },
+        { m_xOrderLst.get(), STR_RPT_HELP_SORT }
+    };
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
-        const std::pair<Control*, const char*> pControls[] = {
-            { m_pFieldExpression->getExpressionControl(), STR_RPT_HELP_FIELD },
-            { m_pHeaderLst, STR_RPT_HELP_HEADER },
-            { m_pFooterLst, STR_RPT_HELP_FOOTER },
-            { m_pGroupOnLst, STR_RPT_HELP_GROUPON },
-            { m_pGroupIntervalEd, STR_RPT_HELP_INTERVAL },
-            { m_pKeepTogetherLst, STR_RPT_HELP_KEEP },
-            { m_pOrderLst, STR_RPT_HELP_SORT }
-        };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
+        if (&rControl == pControls[i].first)
         {
-            if (&rControl == pControls[i].first)
-            {
-                ListBox* pListBox = dynamic_cast< ListBox* >( &rControl );
-                if ( pListBox )
-                    pListBox->SaveValue();
-                NumericField* pNumericField = dynamic_cast< NumericField* >( &rControl );
-                if ( pNumericField )
-                    pNumericField->SaveValue();
-                //shows the text given by the id in the multiline edit
-                m_pHelpWindow->SetText(RptResId(pControls[i].second));
-                break;
-            }
+            weld::ComboBox* pListBox = dynamic_cast<weld::ComboBox*>( &rControl );
+            if ( pListBox )
+                pListBox->save_value();
+            weld::SpinButton* pNumericField = dynamic_cast<weld::SpinButton*>(&rControl);
+            if ( pNumericField )
+                pNumericField->save_value();
+            //shows the text given by the id in the multiline edit
+            m_xHelpWindow->set_label(RptResId(pControls[i].second));
+            break;
         }
     }
 }
 
-IMPL_LINK(OGroupsSortingDialog, OnControlFocusLost, Control&, rControl, void )
+IMPL_LINK_NOARG(OGroupsSortingDialog, OnWidgetFocusLost, weld::Widget&, void)
 {
-    if (m_pFieldExpression && &rControl == m_pGroupIntervalEd)
+    if (m_xFieldExpression)
     {
-        if ( m_pGroupIntervalEd->IsModified() )
-            SaveData(m_pFieldExpression->GetCurRow());
+        if (m_xGroupIntervalEd->get_value_changed_from_saved())
+            SaveData(m_xFieldExpression->GetCurRow());
     }
 }
 
-IMPL_LINK_NOARG( OGroupsSortingDialog, OnFormatAction, ToolBox*, void )
+IMPL_LINK(OGroupsSortingDialog, OnFormatAction, const OString&, rCommand, void)
 {
-
-    sal_uInt16 nCommand = m_pToolBox->GetCurItemId();
-
-    if ( m_pFieldExpression )
+    if ( m_xFieldExpression )
     {
-        long nIndex = m_pFieldExpression->GetCurrRow();
-        sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(nIndex);
+        long nIndex = m_xFieldExpression->GetCurrRow();
+        sal_Int32 nGroupPos = m_xFieldExpression->getGroupPosition(nIndex);
         uno::Sequence<uno::Any> aClipboardList;
         if ( nIndex >= 0 && nGroupPos != NO_GROUP )
         {
             aClipboardList.realloc(1);
             aClipboardList[0] = m_xGroups->getByIndex(nGroupPos);
         }
-        if ( nCommand == m_nMoveUpId )
+        if (rCommand == "up")
         {
             --nIndex;
         }
-        if ( nCommand == m_nMoveDownId )
+        if (rCommand == "down")
         {
             ++nIndex;
         }
-        if ( nCommand == m_nDeleteId )
+        if (rCommand == "delete")
         {
-            Application::PostUserEvent( LINK(m_pFieldExpression, OFieldExpressionControl, DelayedDelete), nullptr, true );
+            Application::PostUserEvent(LINK(m_xFieldExpression, OFieldExpressionControl, DelayedDelete));
         }
         else
         {
             if ( nIndex >= 0 && aClipboardList.hasElements() )
             {
-                m_pFieldExpression->SetNoSelection();
-                m_pFieldExpression->moveGroups(aClipboardList,nIndex,false);
-                m_pFieldExpression->DeactivateCell();
-                m_pFieldExpression->GoToRow(nIndex);
-                m_pFieldExpression->ActivateCell(nIndex, m_pFieldExpression->GetCurColumnId());
+                m_xFieldExpression->SetNoSelection();
+                m_xFieldExpression->moveGroups(aClipboardList,nIndex,false);
+                m_xFieldExpression->DeactivateCell();
+                m_xFieldExpression->GoToRow(nIndex);
+                m_xFieldExpression->ActivateCell(nIndex, m_xFieldExpression->GetCurColumnId());
                 DisplayData(nIndex);
             }
         }
     }
 }
 
-IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox&, rListBox, void )
+IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, weld::ComboBox&, rListBox, void )
 {
-    if ( rListBox.IsValueChangedFromSaved() )
+    if ( rListBox.get_value_changed_from_saved() )
     {
-        sal_Int32 nRow = m_pFieldExpression->GetCurRow();
-        sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(nRow);
-        if (&rListBox != m_pHeaderLst && &rListBox != m_pFooterLst)
+        sal_Int32 nRow = m_xFieldExpression->GetCurRow();
+        sal_Int32 nGroupPos = m_xFieldExpression->getGroupPosition(nRow);
+        if (&rListBox != m_xHeaderLst.get() && &rListBox != m_xFooterLst.get())
         {
-            if ( rListBox.IsValueChangedFromSaved() )
+            if ( rListBox.get_value_changed_from_saved() )
                 SaveData(nRow);
-            if ( &rListBox == m_pGroupOnLst )
-                m_pGroupIntervalEd->Enable( rListBox.GetSelectedEntryPos() != 0 );
+            if ( &rListBox == m_xGroupOnLst.get() )
+                m_xGroupIntervalEd->set_sensitive(rListBox.get_active() != 0);
         }
         else if ( nGroupPos != NO_GROUP )
         {
@@ -1057,14 +1035,14 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox&, rListBox, void )
             aArgs[1].Name = PROPERTY_GROUP;
             aArgs[1].Value <<= xGroup;
 
-            if ( m_pHeaderLst  == &rListBox )
+            if ( m_xHeaderLst.get() == &rListBox )
                 aArgs[0].Name = PROPERTY_HEADERON;
             else
                 aArgs[0].Name = PROPERTY_FOOTERON;
 
-            aArgs[0].Value <<= rListBox.GetSelectedEntryPos() == 0;
-            m_pController->executeChecked(m_pHeaderLst  == &rListBox ? SID_GROUPHEADER : SID_GROUPFOOTER, aArgs);
-            m_pFieldExpression->InvalidateHandleColumn();
+            aArgs[0].Value <<= rListBox.get_active() == 0;
+            m_pController->executeChecked(m_xHeaderLst.get() == &rListBox ? SID_GROUPHEADER : SID_GROUPFOOTER, aArgs);
+            m_xFieldExpression->InvalidateHandleColumn();
         }
     }
 }
@@ -1081,19 +1059,19 @@ void OGroupsSortingDialog::_propertyChanged(const beans::PropertyChangeEvent& _r
 void OGroupsSortingDialog::fillColumns()
 {
     m_xColumns = m_pController->getColumns();
-    m_pFieldExpression->fillColumns(m_xColumns);
+    m_xFieldExpression->fillColumns(m_xColumns);
 }
 
 void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _xGroup)
 {
-    m_pHeaderLst->SelectEntryPos(_xGroup->getHeaderOn() ? 0 : 1 );
-    m_pFooterLst->SelectEntryPos(_xGroup->getFooterOn() ? 0 : 1 );
+    m_xHeaderLst->set_active(_xGroup->getHeaderOn() ? 0 : 1 );
+    m_xFooterLst->set_active(_xGroup->getFooterOn() ? 0 : 1 );
     sal_Int32 nDataType = getColumnDataType(_xGroup->getExpression());
 
     // first clear whole group on list
-    while(m_pGroupOnLst->GetEntryCount() > 1 )
+    while (m_xGroupOnLst->get_count() > 1 )
     {
-        m_pGroupOnLst->RemoveEntry(1);
+        m_xGroupOnLst->remove(1);
     }
 
     switch(nDataType)
@@ -1101,8 +1079,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         case sdbc::DataType::LONGVARCHAR:
         case sdbc::DataType::VARCHAR:
         case sdbc::DataType::CHAR:
-            m_pGroupOnLst->InsertEntry(RptResId(STR_RPT_PREFIXCHARS));
-            m_pGroupOnLst->SetEntryData(1,reinterpret_cast<void*>(report::GroupOn::PREFIX_CHARACTERS));
+            m_xGroupOnLst->append(OUString::number(report::GroupOn::PREFIX_CHARACTERS), RptResId(STR_RPT_PREFIXCHARS));
             break;
         case sdbc::DataType::DATE:
         case sdbc::DataType::TIME:
@@ -1111,14 +1088,12 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
                 const char* aIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
                 for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
                 {
-                    m_pGroupOnLst->InsertEntry(RptResId(aIds[i]));
-                    m_pGroupOnLst->SetEntryData(i+1,reinterpret_cast<void*>(i+2));
+                    m_xGroupOnLst->append(OUString::number(i+2), RptResId(aIds[i]));
                 }
             }
             break;
         default:
-            m_pGroupOnLst->InsertEntry(RptResId(STR_RPT_INTERVAL));
-            m_pGroupOnLst->SetEntryData(1,reinterpret_cast<void*>(report::GroupOn::INTERVAL));
+            m_xGroupOnLst->append(OUString::number(report::GroupOn::INTERVAL), RptResId(STR_RPT_INTERVAL));
             break;
     }
     sal_Int32 nPos = 0;
@@ -1157,56 +1132,56 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         default:
             nPos = 0;
     }
-    m_pGroupOnLst->SelectEntryPos(nPos);
-    m_pGroupIntervalEd->SetText(OUString::number(_xGroup->getGroupInterval()));
-    m_pGroupIntervalEd->SaveValue();
-    m_pGroupIntervalEd->Enable( nPos != 0 );
-    m_pKeepTogetherLst->SelectEntryPos(_xGroup->getKeepTogether());
-    m_pOrderLst->SelectEntryPos(_xGroup->getSortAscending() ? 0 : 1);
+    m_xGroupOnLst->set_active(nPos);
+    m_xGroupIntervalEd->set_value(_xGroup->getGroupInterval());
+    m_xGroupIntervalEd->save_value();
+    m_xGroupIntervalEd->set_sensitive( nPos != 0 );
+    m_xKeepTogetherLst->set_active(_xGroup->getKeepTogether());
+    m_xOrderLst->set_active(_xGroup->getSortAscending() ? 0 : 1);
 
-    ListBox* pControls[] = { m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pKeepTogetherLst, m_pOrderLst};
-    for (ListBox* pControl : pControls)
-        pControl->SaveValue();
+    weld::ComboBox* pControls[] = { m_xHeaderLst.get(), m_xFooterLst.get(), m_xGroupOnLst.get(),
+                                    m_xKeepTogetherLst.get(), m_xOrderLst.get() };
+    for (weld::ComboBox* pControl : pControls)
+        pControl->save_value();
 
-    ListBox* pControlsLst2[] = { m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pKeepTogetherLst, m_pOrderLst};
     bool bReadOnly = !m_pController->isEditable();
-    for (ListBox* i : pControlsLst2)
-        i->SetReadOnly(bReadOnly);
-    m_pGroupIntervalEd->SetReadOnly(bReadOnly);
+    for (weld::ComboBox* pControl : pControls)
+        pControl->set_sensitive(!bReadOnly);
+    m_xGroupIntervalEd->set_editable(!bReadOnly);
 }
 
 void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
 {
     sal_Int32 nGroupCount = m_xGroups->getCount();
-    sal_Int32 nRowCount = m_pFieldExpression->GetRowCount();
+    sal_Int32 nRowCount = m_xFieldExpression->GetRowCount();
     bool bEnabled = nGroupCount > 1;
 
     if (bEnabled && _nRow > 0 )
     {
-        m_pToolBox->EnableItem(m_nMoveUpId);
+        m_xToolBox->set_item_sensitive("up", true);
     }
     else
     {
-        m_pToolBox->EnableItem(m_nMoveUpId, false);
+        m_xToolBox->set_item_sensitive("up", false);
     }
     if (bEnabled && _nRow < (nRowCount - 1) )
     {
-        m_pToolBox->EnableItem(m_nMoveDownId);
+        m_xToolBox->set_item_sensitive("down", true);
     }
     else
     {
-        m_pToolBox->EnableItem(m_nMoveDownId, false);
+        m_xToolBox->set_item_sensitive("down", false);
     }
 
-    sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
+    sal_Int32 nGroupPos = m_xFieldExpression->getGroupPosition(_nRow);
     if ( nGroupPos != NO_GROUP )
     {
         bool bEnableDelete = nGroupCount > 0;
-        m_pToolBox->EnableItem(m_nDeleteId, bEnableDelete);
+        m_xToolBox->set_item_sensitive("delete", bEnableDelete);
     }
     else
     {
-        m_pToolBox->EnableItem(m_nDeleteId, false);
+        m_xToolBox->set_item_sensitive("delete", false);
     }
 }
 
