@@ -63,12 +63,12 @@ private:
     bool            bMarkIsNeg:1;           // cancel if multi selection
 
 public:
-                ScMarkData(SCROW nMaxRow, SCCOL nMaxCol);
-                ScMarkData(const ScMarkData& rData);
-                ScMarkData(SCROW nMaxRow, SCCOL nMaxCol, const ScRangeList& rList);
-                ~ScMarkData();
-
-    ScMarkData& operator=(const ScMarkData& rData);
+    ScMarkData(SCROW nMaxRow, SCCOL nMaxCol);
+    ScMarkData(SCROW nMaxRow, SCCOL nMaxCol, const ScRangeList& rList);
+    ScMarkData(const ScMarkData& rData) = default;
+    ScMarkData(ScMarkData&& rData) = default;
+    ScMarkData& operator=(const ScMarkData& rData) = default;
+    ~ScMarkData();
 
     void        ResetMark();
     void        SetMarkArea( const ScRange& rRange );
