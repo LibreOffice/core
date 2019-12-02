@@ -322,7 +322,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
 
     X11SalBitmap *pBitmap = dynamic_cast < X11SalBitmap * >
         (aIcon.ImplGetBitmapSalBitmap().get());
-    if (!pBitmap) // FIXME: opengl
+    if (!pBitmap) // FIXME: opengl , TODO SKIA
         return false;
 
     icon_pixmap = XCreatePixmap( pDisplay->GetDisplay(),
