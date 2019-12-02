@@ -49,6 +49,8 @@ namespace svx
 
     void OColumnTransferable::setDescriptor(const ODataAccessDescriptor& rDescriptor)
     {
+        ClearFormats();
+
         OUString sDataSource, sDatabaseLocation, sConnectionResource, sCommand, sFieldName;
         if ( rDescriptor.has( DataAccessDescriptorProperty::DataSource ) )         rDescriptor[ DataAccessDescriptorProperty::DataSource ] >>= sDataSource;
         if ( rDescriptor.has( DataAccessDescriptorProperty::DatabaseLocation ) )   rDescriptor[ DataAccessDescriptorProperty::DatabaseLocation ] >>= sDatabaseLocation;
@@ -58,7 +60,6 @@ namespace svx
 
         sal_Int32 nCommandType = CommandType::TABLE;
         OSL_VERIFY( rDescriptor[ DataAccessDescriptorProperty::CommandType ] >>= nCommandType );
-
 
         implConstruct(
             sDataSource.isEmpty() ? sDatabaseLocation : sDataSource,
@@ -558,9 +559,14 @@ namespace svx
         m_sCompatibleObjectDescription += sSeparator;
     }
 
-
-    OMultiColumnTransferable::OMultiColumnTransferable(const Sequence< PropertyValue >& _aDescriptors) : m_aDescriptors(_aDescriptors)
+    OMultiColumnTransferable::OMultiColumnTransferable()
     {
+    }
+
+    void OMultiColumnTransferable::setDescriptors(const Sequence< PropertyValue >& rDescriptors)
+    {
+        ClearFormats();
+        m_aDescriptors = rDescriptors;
     }
 
     SotClipboardFormatId OMultiColumnTransferable::getDescriptorFormatId()
@@ -590,14 +596,12 @@ namespace svx
         return false;
     }
 
-
     bool OMultiColumnTransferable::canExtractDescriptor(const DataFlavorExVector& _rFlavors)
     {
         const SotClipboardFormatId nFormatId = getDescriptorFormatId();
         return std::all_of(_rFlavors.begin(), _rFlavors.end(),
             [&nFormatId](const DataFlavorEx& rCheck) { return nFormatId == rCheck.mnSotId; });
     }
-
 
     Sequence< PropertyValue > OMultiColumnTransferable::extractDescriptor(const TransferableDataHelper& _rData)
     {
@@ -619,9 +623,6 @@ namespace svx
     {
         m_aDescriptors.realloc(0);
     }
-
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

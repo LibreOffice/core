@@ -23,66 +23,65 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <vcl/transfer.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/floatwin.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/containermultiplexer.hxx>
-#include <vcl/button.hxx>
 
 #include <svx/dataaccessdescriptor.hxx>
+#include <svx/dbaexchange.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
+
+#include <vcl/transfer.hxx>
+#include <vcl/weld.hxx>
 
 #include <rtl/ref.hxx>
+
+#include "ColumnInfo.hxx"
 
 namespace rptui
 {
 
 class OAddFieldWindow;
-class OAddFieldWindowListBox;
 
-class  OAddFieldWindow  :public FloatingWindow
-                    ,   public ::cppu::BaseMutex
-                    ,   public ::comphelper::OPropertyChangeListener
-                    ,   public ::comphelper::OContainerListener
+class  OAddFieldWindow : public weld::GenericDialogController
+                       , public ::cppu::BaseMutex
+                       , public ::comphelper::OPropertyChangeListener
+                       , public ::comphelper::OContainerListener
 {
     css::uno::Reference< css::lang::XComponent>                                 m_xHoldAlive;
     css::uno::Reference< css::container::XNameAccess>                           m_xColumns;
     css::uno::Reference< css::beans::XPropertySet >                             m_xRowSet;
 
-    VclPtr<ToolBox>                                                             m_aActions;
-
-    VclPtr<OAddFieldWindowListBox>                                              m_pListBox;
-    VclPtr<FixedText>                                                           m_aHelpText;
+    std::unique_ptr<weld::Toolbar>                                              m_xActions;
+    std::unique_ptr<weld::TreeView>                                             m_xListBox;
+    std::unique_ptr<weld::Label>                                                m_xHelpText;
 
     Link<OAddFieldWindow&,void>                                                 m_aCreateLink;
     OUString                                                                    m_aCommandName;
     OUString                                                                    m_sFilter;
-    sal_uInt16                                                                  m_nSortUpId;
-    sal_uInt16                                                                  m_nSortDownId;
-    sal_uInt16                                                                  m_nRemoveSortId;
-    sal_uInt16                                                                  m_nInsertId;
     sal_Int32                                                                   m_nCommandType;
     bool                                                                        m_bEscapeProcessing;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pChangeListener;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>                    m_pContainerListener;
+    ::rtl::Reference< svx::OMultiColumnTransferable >                           m_xHelper;
 
-    DECL_LINK( OnDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK( OnSelectHdl, SvTreeListBox*, void );
-    DECL_LINK( OnSortAction, ToolBox*, void );
+    std::vector<std::unique_ptr<ColumnInfo>> m_aListBoxData;
+
+    DECL_LINK( OnDoubleClickHdl, weld::TreeView&, bool );
+    DECL_LINK( OnSelectHdl, weld::TreeView&, void );
+    DECL_LINK( DragBeginHdl, weld::TreeView&, bool );
+    DECL_LINK( OnSortAction, const OString&, void );
+    DECL_LINK( FocusChangeHdl, weld::Widget&, void );
+
+    void addToList(const css::uno::Sequence<OUString>& rEntries);
+    void addToList(const css::uno::Reference<css::container::XNameAccess>& i_xColumns);
 
     OAddFieldWindow(const OAddFieldWindow&) = delete;
     void operator =(const OAddFieldWindow&) = delete;
 public:
-    OAddFieldWindow(vcl::Window* pParent
-                    , const css::uno::Reference< css::beans::XPropertySet >& _xRowSet);
+    OAddFieldWindow(weld::Window* pParent,
+                    const css::uno::Reference< css::beans::XPropertySet >& xRowSet);
 
     virtual ~OAddFieldWindow() override;
-    virtual void dispose() override;
-    virtual void GetFocus() override;
-    virtual bool PreNotify( NotifyEvent& _rNEvt ) override;
 
     const OUString&       GetCommand()            const { return m_aCommandName; }
     sal_Int32                    GetCommandType()        const { return m_nCommandType; }
@@ -98,10 +97,10 @@ public:
 
     /** fills the descriptor with the column name, column object, command and command type
     *
-    * \param _pSelected the currently selected
-    * \param _rDescriptor the descriptor will be filled
+    * \param rSelected the currently selected
+    * \param rDescriptor the descriptor will be filled
     */
-    void fillDescriptor(SvTreeListEntry const * _pSelected,svx::ODataAccessDescriptor& _rDescriptor);
+    void fillDescriptor(const weld::TreeIter& rSelected, svx::ODataAccessDescriptor& rDescriptor);
 
 private:
     // FmXChangeListener
