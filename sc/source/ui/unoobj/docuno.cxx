@@ -3338,7 +3338,7 @@ void ScModelObj::setFormulaCellNumberLimit( sal_Int32 number )
 
 sal_Int32 ScModelObj::getFormulaCellNumberLimit()
 {
-    return *officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::get();
+    return officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::get();
 }
 
 ScDrawPagesObj::ScDrawPagesObj(ScDocShell* pDocSh) :
