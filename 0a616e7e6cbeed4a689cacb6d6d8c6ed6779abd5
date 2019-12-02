@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_b1fa59ba",
+        "filename": "sc/inc/markdata.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-02T16:35:30Z",
+      "side": 1,
+      "message": "it now has a move ctor but no move assignment op?",
+      "revId": "0a616e7e6cbeed4a689cacb6d6d8c6ed6779abd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
