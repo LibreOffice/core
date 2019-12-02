@@ -21,6 +21,7 @@
 #include <services.h>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -58,6 +59,10 @@ MacrosMenuController::~MacrosMenuController()
 // private function
 void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
+    bool bMacrosDisabled = officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
+    if (bMacrosDisabled)
+        return;
+
     VCLXPopupMenu* pVCLPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( rPopupMenu ));
     PopupMenu*     pPopupMenu    = nullptr;
 

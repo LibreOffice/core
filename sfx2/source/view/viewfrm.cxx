@@ -2982,7 +2982,8 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 {
                     SvtMiscOptions aMiscOptions;
                     const OUString& sName{GetObjectShell()->GetFactory().GetFactoryName()};
-                    if ( !aMiscOptions.IsMacroRecorderMode() ||
+                    bool bMacrosDisabled = officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
+                    if (bMacrosDisabled || !aMiscOptions.IsMacroRecorderMode() ||
                          ( sName!="swriter" && sName!="scalc" ) )
                     {
                         rSet.DisableItem( nWhich );
