@@ -407,6 +407,26 @@ void TableManager::endRow()
 #ifdef DBG_UTIL
     TagLogger::getInstance().element("tablemanager.endRow");
 #endif
+    TableData::Pointer_t pTableData = mTableDataStack.top();
+
+    // Add borderless w:gridBefore cell(s) to the row
+    if (pTableData)
+    {
+        sal_uInt32 nGridBefore = mpTableDataHandler->getDomainMapperImpl().getTableManager().getCurrentGridBefore();
+        for (unsigned int i = 0; i < nGridBefore; ++i)
+        {
+            css::table::BorderLine2 aBorderLine;
+            aBorderLine.Color = 0;
+            aBorderLine.InnerLineWidth = 0;
+            aBorderLine.OuterLineWidth = 0;
+            TablePropertyMapPtr pCellProperties(new TablePropertyMap);
+            pCellProperties->Insert(PROP_TOP_BORDER, css::uno::makeAny(aBorderLine));
+            pCellProperties->Insert(PROP_LEFT_BORDER, css::uno::makeAny(aBorderLine));
+            pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::makeAny(aBorderLine));
+            pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::makeAny(aBorderLine));
+            pTableData->getCurrentRow()->addCell(pTableData->getCurrentRow()->getCellStart(0), pCellProperties, /*bAddBefore=*/true);
+        }
+    }
 
     setRowEnd(true);
 }
