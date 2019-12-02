@@ -24,6 +24,49 @@
 
 namespace emfplushelper
 {
+    const sal_uInt32 StringFormatDirectionRightToLeft = 0x00000001;
+    const sal_uInt32 StringFormatDirectionVertical = 0x00000002;
+    const sal_uInt32 StringFormatNoFitBlackBox = 0x00000004;
+    const sal_uInt32 StringFormatDisplayFormatControl = 0x00000020;
+    const sal_uInt32 StringFormatNoFontFallback = 0x00000400;
+    const sal_uInt32 StringFormatMeasureTrailingSpaces = 0x00000800;
+    const sal_uInt32 StringFormatNoWrap = 0x00001000;
+    const sal_uInt32 StringFormatLineLimit = 0x00002000;
+    const sal_uInt32 StringFormatNoClip = 0x00004000;
+    const sal_uInt32 StringFormatBypassGDI = 0x80000000;
+
+    enum StringAlignment
+    {
+        StringAlignmentNear = 0x00000000,
+        StringAlignmentCenter = 0x00000001,
+        StringAlignmentFar = 0x00000002
+    };
+
+    enum StringDigitSubstitution
+    {
+        StringDigitSubstitutionUser = 0x00000000,
+        StringDigitSubstitutionNone = 0x00000001,
+        StringDigitSubstitutionNational = 0x00000002,
+        StringDigitSubstitutionTraditional = 0x00000003
+    };
+
+    enum HotkeyPrefix
+    {
+        HotkeyPrefixNone = 0x00000000,
+        HotkeyPrefixShow = 0x00000001,
+        HotkeyPrefixHide = 0x00000002
+    };
+
+    enum StringTrimming
+    {
+        StringTrimmingNone = 0x00000000,
+        StringTrimmingCharacter = 0x00000001,
+        StringTrimmingWord = 0x00000002,
+        StringTrimmingEllipsisCharacter = 0x00000003,
+        StringTrimmingEllipsisWord = 0x00000004,
+        StringTrimmingEllipsisPath = 0x00000005
+    };
+
     struct EMFPStringFormat : public EMFPObject
     {
         sal_uInt32 header;
