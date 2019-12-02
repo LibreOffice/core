@@ -1475,7 +1475,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="OpenCLMinimumDataSize" oor:type="xs:int">
+        <prop oor:name="OpenCLMinimumDataSize" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>An approximate lower limit on the number of data cells a spreadsheet formula should use for OpenCL to be considered.</desc>
           </info>
