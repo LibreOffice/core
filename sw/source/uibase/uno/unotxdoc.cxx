@@ -3232,9 +3232,6 @@ void SwXTextDocument::setClientZoom(int nTilePixelWidth_, int /*nTilePixelHeight
     // This value is used in postMouseEvent and setGraphicSelection methods
     // for in place chart editing. We assume that x and y scale is roughly
     // the same.
-    // Indeed we could set mnTilePixelWidth, mnTilePixelHeight, mnTileTwipWidth,
-    // mnTileTwipHeight data members of this class but they are not very useful
-    // since we need to be able to retrieve the zoom value for each view shell.
     SfxInPlaceClient* pIPClient = pDocShell->GetView()->GetIPClient();
     if (pIPClient)
     {
