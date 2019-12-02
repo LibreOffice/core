@@ -6589,6 +6589,20 @@ void SalInstanceWindow::help()
             OString sPageId = m_pBuilder->get_current_page_help_id();
             if (!sPageId.isEmpty())
                 sHelpId = sPageId;
+            else
+            {
+                // tdf#129068 likewise the help for the wrapping dialog is less
+                // helpful than the help for the content area could be
+                vcl::Window *pContentArea = nullptr;
+                if (::Dialog* pDialog = dynamic_cast<::Dialog*>(m_xWindow.get()))
+                    pContentArea = pDialog->get_content_area();
+                if (pContentArea)
+                {
+                    vcl::Window* pContentWidget = pContentArea->GetWindow(GetWindowType::LastChild);
+                    if (pContentWidget)
+                        sHelpId = pContentWidget->GetHelpId();
+                }
+            }
         }
         pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
     }
