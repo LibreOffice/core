@@ -90,7 +90,6 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     ,m_rReportController( _rController )
     ,m_aScrollWindow(VclPtr<rptui::OScrollWindowHelper>::Create(this))
     ,m_pPropWin(nullptr)
-    ,m_pAddField(nullptr)
     ,m_pCurrentView(nullptr)
     ,m_pReportExplorer(nullptr)
     ,m_eMode( DlgEdMode::Select )
@@ -135,12 +134,15 @@ void ODesignView::dispose()
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         m_pPropWin.disposeAndClear();
     }
-    if ( m_pAddField )
+    if ( m_xAddField )
     {
         SvtViewOptions aDlgOpt( EViewType::Window, UID_RPT_RPT_APP_VIEW );
-        aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState(), RTL_TEXTENCODING_ASCII_US));
-        notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-        m_pAddField.disposeAndClear();
+        aDlgOpt.SetWindowState(OStringToOUString(m_xAddField->getDialog()->get_window_state(WindowStateMask::All), RTL_TEXTENCODING_ASCII_US));
+
+        if (m_xAddField->getDialog()->get_visible())
+            m_xAddField->response(RET_CANCEL);
+
+        m_xAddField.reset();
     }
     if ( m_pReportExplorer )
     {
@@ -184,7 +186,7 @@ bool ODesignView::PreNotify( NotifyEvent& rNEvt )
         {
             if ( m_pPropWin && m_pPropWin->HasChildPathFocus() )
                 return false;
-            if ( m_pAddField && m_pAddField->HasChildPathFocus() )
+            if (m_xAddField && m_xAddField->getDialog()->has_toplevel_focus())
                 return false;
             if ( m_pReportExplorer && m_pReportExplorer->HasChildPathFocus() )
                 return false;
@@ -483,12 +485,12 @@ void ODesignView::toggleReportExplorer()
 
 bool ODesignView::isAddFieldVisible() const
 {
-    return m_pAddField && m_pAddField->IsVisible();
+    return m_xAddField && m_xAddField->getDialog()->get_visible();
 }
 
 void ODesignView::toggleAddField()
 {
-    if ( !m_pAddField )
+    if (!m_xAddField)
     {
         uno::Reference< report::XReportDefinition > xReport(m_xReportComponent,uno::UNO_QUERY);
         uno::Reference< report::XReportComponent > xReportComponent(m_xReportComponent,uno::UNO_QUERY);
@@ -506,18 +508,17 @@ void ODesignView::toggleAddField()
             xReport = xSection->getReportDefinition();
         }
         uno::Reference < beans::XPropertySet > xSet(rReportController.getRowSet(),uno::UNO_QUERY);
-        m_pAddField = VclPtr<OAddFieldWindow>::Create(this,xSet);
-        m_pAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
+        m_xAddField = std::make_shared<OAddFieldWindow>(GetFrameWeld(), xSet);
+        m_xAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
         SvtViewOptions aDlgOpt( EViewType::Window, UID_RPT_RPT_APP_VIEW );
         if ( aDlgOpt.Exists() )
-            m_pAddField->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
-        m_pAddField->Update();
-        m_pAddField->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
-        notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::AddWindow));
-        m_pAddField->Show();
+            m_xAddField->getDialog()->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
+        m_xAddField->Update();
     }
+    if (!m_xAddField->getDialog()->get_visible())
+        weld::DialogController::runAsync(m_xAddField, [this](sal_Int32 /*nResult*/) { m_xAddField.reset(); });
     else
-        m_pAddField->Show(!m_pAddField->IsVisible());
+        m_xAddField->response(RET_CANCEL);
 }
 
 uno::Reference< report::XSection > ODesignView::getCurrentSection() const
@@ -584,7 +585,7 @@ bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
 {
     if ( m_pPropWin && m_pPropWin->HasChildPathFocus() )
         return false;
-    if ( m_pAddField && m_pAddField->HasChildPathFocus() )
+    if (m_xAddField && m_xAddField->getDialog()->has_toplevel_focus())
         return false;
     if ( m_pReportExplorer && m_pReportExplorer->HasChildPathFocus() )
         return false;
