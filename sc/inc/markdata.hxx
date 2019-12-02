@@ -68,6 +68,7 @@ public:
     ScMarkData(const ScMarkData& rData) = default;
     ScMarkData(ScMarkData&& rData) = default;
     ScMarkData& operator=(const ScMarkData& rData) = default;
+    ScMarkData& operator=(ScMarkData&& rData) = default;
     ~ScMarkData();
 
     void        ResetMark();

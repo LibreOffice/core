@@ -32,23 +32,8 @@ ScMultiSel::ScMultiSel(SCROW nMaxRow)
 {
 }
 
-ScMultiSel::ScMultiSel( const ScMultiSel& rOther )
-    : aRowSel(rOther.aRowSel)
-{
-    aMultiSelContainer = rOther.aMultiSelContainer;
-    mnMaxRow = rOther.mnMaxRow;
-}
-
 ScMultiSel::~ScMultiSel()
 {
-}
-
-ScMultiSel& ScMultiSel::operator=(const ScMultiSel& rOther)
-{
-    aRowSel = rOther.aRowSel;
-    aMultiSelContainer = rOther.aMultiSelContainer;
-    mnMaxRow = rOther.mnMaxRow;
-    return *this;
 }
 
 void ScMultiSel::Clear()
