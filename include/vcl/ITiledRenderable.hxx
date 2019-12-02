@@ -43,11 +43,7 @@ namespace vcl
 
 class VCL_DLLPUBLIC ITiledRenderable
 {
-protected:
-    int mnTilePixelWidth, mnTilePixelHeight;
-    int mnTileTwipWidth, mnTileTwipHeight;
 public:
-
     virtual ~ITiledRenderable();
 
     /**
