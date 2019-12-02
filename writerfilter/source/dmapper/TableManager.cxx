@@ -407,6 +407,30 @@ void TableManager::endRow()
 #ifdef DBG_UTIL
     TagLogger::getInstance().element("tablemanager.endRow");
 #endif
+    TableData::Pointer_t pTableData = mTableDataStack.top();
+
+    // Add w:gridBefore cell(s) to the row
+    sal_uInt32 nGridBefore = mpTableDataHandler->getDomainMapperImpl().getTableManager().getCurrentGridBefore();
+    if (pTableData && nGridBefore > 0)
+    {
+        TableData::Pointer_t pTableData2(new TableData(mTableDataStack.size()));
+
+        for (unsigned int i = 0; i < nGridBefore; ++i)
+        {
+            TablePropertyMapPtr pEmptyProps;
+            pTableData2->addCell(getHandle(), pEmptyProps);
+        }
+
+        for (unsigned int i = 0; i < pTableData->getCurrentRow()->getCellCount(); ++i)
+        {
+            pTableData2->addCell(pTableData->getCurrentRow()->getCellStart(i), pTableData->getCurrentRow()->getCellProperties(i));
+            pTableData2->endCell(pTableData->getCurrentRow()->getCellEnd(i));
+        }
+        pTableData.clear();
+
+        mTableDataStack.pop();
+        mTableDataStack.push(pTableData2);
+    }
 
     setRowEnd(true);
 }
