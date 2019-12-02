@@ -38,33 +38,6 @@ using namespace ::ooo::vba::excel::XlPattern;
 static const char BACKCOLOR[] = "CellBackColor";
 static const char PATTERN[] = "Pattern";
 static const char PATTERNCOLOR[] = "PatternColor";
-/*
-static PatternMap lcl_getPatternMap()
-{
-    PatternMap aPatternMap;
-    aPatternMap.insert( PatternPair( xlPatternAutomatic, 0 ) );
-    aPatternMap.insert( PatternPair( xlPatternChecker, 9 ) );
-    aPatternMap.insert( PatternPair( xlPatternCrissCross, 16 ) );
-    aPatternMap.insert( PatternPair( xlPatternDown, 7 ) );
-    aPatternMap.insert( PatternPair( xlPatternGray16, 17 ) );
-    aPatternMap.insert( PatternPair( xlPatternGray25, 4 ) );
-    aPatternMap.insert( PatternPair( xlPatternGray50, 2 ) );
-    aPatternMap.insert( PatternPair( xlPatternGray75, 3 ) );
-    aPatternMap.insert( PatternPair( xlPatternGray8, 18 ) );
-    aPatternMap.insert( PatternPair( xlPatternGrid, 15 ) );
-    aPatternMap.insert( PatternPair( xlPatternHorizontal, 5 ) );
-    aPatternMap.insert( PatternPair( xlPatternLightDown, 13 ) );
-    aPatternMap.insert( PatternPair( xlPatternLightHorizontal, 11 ) );
-    aPatternMap.insert( PatternPair( xlPatternLightUp, 14 ) );
-    aPatternMap.insert( PatternPair( xlPatternLightVertical, 12 ) );
-    aPatternMap.insert( PatternPair( xlPatternNone, 0 ) );
-    aPatternMap.insert( PatternPair( xlPatternSemiGray75, 10 ) );
-    aPatternMap.insert( PatternPair( xlPatternSolid, 0 ) );
-    aPatternMap.insert( PatternPair( xlPatternUp, 8 ) );
-    aPatternMap.insert( PatternPair( xlPatternVertical, 6 ) );
-    return aPatternMap;
-}
-*/
 
 static PatternMap aPatternMap {
     { xlPatternAutomatic, 0 },
