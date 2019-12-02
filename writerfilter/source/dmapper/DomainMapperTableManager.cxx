@@ -47,7 +47,7 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_nRow(0),
     m_nCell(),
     m_nGridSpan(1),
-    m_nGridBefore(0),
+    m_aGridBefore(),
     m_nGridAfter(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
@@ -354,7 +354,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
                 break;
             case NS_ooxml::LN_CT_TrPrBase_gridBefore:
-                m_nGridBefore = nIntValue;
+                m_aGridBefore.back( ) = nIntValue;
                 break;
             case NS_ooxml::LN_CT_TrPrBase_gridAfter:
                 m_nGridAfter = nIntValue;
@@ -392,6 +392,11 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
 DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurrentGrid( )
 {
     return m_aTableGrid.back( );
+}
+
+sal_uInt32 DomainMapperTableManager::getCurrentGridBefore( )
+{
+    return m_aGridBefore.back( );
 }
 
 bool DomainMapperTableManager::hasCurrentSpans() const
@@ -456,6 +461,7 @@ void DomainMapperTableManager::startLevel( )
     m_aTmpPosition.push_back( pTmpPosition );
     m_aTmpTableProperties.push_back( pTmpProperties );
     m_nCell.push_back( 0 );
+    m_aGridBefore.push_back( 0 );
     m_nTableWidth = 0;
     m_nLayoutType = 0;
 
@@ -485,6 +491,7 @@ void DomainMapperTableManager::endLevel( )
         m_aCellWidths.back()->push_back(*oCurrentWidth);
 
     m_nCell.pop_back( );
+    m_aGridBefore.pop_back( );
     m_nTableWidth = 0;
     m_nLayoutType = 0;
 
@@ -540,6 +547,7 @@ void DomainMapperTableManager::endOfRowAction()
         IntVectorPtr pTmpGridSpans = m_aGridSpans.back();
         IntVectorPtr pTmpCellWidths = m_aCellWidths.back();
         sal_uInt32 nTmpCell = m_nCell.back();
+        sal_uInt32 nTmpGridBefore = m_aGridBefore.back();
 
         // endLevel and startLevel are taking care of the non finished row
         // to carry it over to the next table
@@ -552,10 +560,12 @@ void DomainMapperTableManager::endOfRowAction()
         m_aGridSpans.pop_back();
         m_aCellWidths.pop_back();
         m_nCell.pop_back();
+        m_aGridBefore.pop_back();
         m_aTableGrid.push_back(pTmpTableGrid);
         m_aGridSpans.push_back(pTmpGridSpans);
         m_aCellWidths.push_back(pTmpCellWidths);
         m_nCell.push_back(nTmpCell);
+        m_aGridBefore.push_back(nTmpGridBefore);
     }
 
     // Push the tmp position now that we compared it
@@ -596,10 +606,16 @@ void DomainMapperTableManager::endOfRowAction()
     }
 
     IntVectorPtr pCurrentSpans = getCurrentSpans( );
-    if( pCurrentSpans->size() < m_nCell.back( ) )
+
+    if( m_aGridBefore.back() > 0 )
+    {
+        //fill missing gridBefore elements with '1'
+        pCurrentSpans->insert( pCurrentSpans->begin( ), m_aGridBefore.back(), 1 );
+    }
+    if( pCurrentSpans->size() < m_aGridBefore.back() + m_nCell.back( ))
     {
         //fill missing elements with '1'
-        pCurrentSpans->insert( pCurrentSpans->end( ), m_nCell.back( ) - pCurrentSpans->size(), 1 );
+        pCurrentSpans->insert( pCurrentSpans->end( ), m_aGridBefore.back() + m_nCell.back( ) - pCurrentSpans->size(), 1 );
     }
 
 #ifdef DBG_UTIL
@@ -626,7 +642,7 @@ void DomainMapperTableManager::endOfRowAction()
     for (int i : (*pTableGrid))
         nFullWidthRelative = o3tl::saturating_add(nFullWidthRelative, i);
 
-    if( pTableGrid->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
+    if( pTableGrid->size() == ( nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
         /*
          * If table width property set earlier is smaller than the current table width,
@@ -656,12 +672,12 @@ void DomainMapperTableManager::endOfRowAction()
                 }
             }
         }
-        uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
+        uno::Sequence< text::TableColumnSeparator > aSeparators( m_aGridBefore.back() + m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         double nLastRelPos = 0.0;
-        sal_uInt32 nBorderGridIndex = m_nGridBefore;
+        sal_uInt32 nBorderGridIndex = 0;
 
-        size_t nWidthsBound =  m_nCell.back( ) - 1;
+        size_t nWidthsBound = m_aGridBefore.back() + m_nCell.back() - 1;
         if (nWidthsBound)
         {
             if (nFullWidthRelative == 0)
@@ -694,7 +710,7 @@ void DomainMapperTableManager::endOfRowAction()
     }
     else if ( !pCellWidths->empty() &&
                ( m_nLayoutType == NS_ooxml::LN_Value_doc_ST_TblLayout_fixed
-                 || pCellWidths->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) )
+                 || pCellWidths->size() == ( nGrids + m_nGridAfter ) )
              )
     {
         // If we're here, then the number of cells does not equal to the amount
@@ -748,11 +764,12 @@ void DomainMapperTableManager::endOfRowAction()
 
     ++m_nRow;
     m_nCell.back( ) = 0;
+    m_aGridBefore.back( ) = 0;
     getCurrentGrid()->clear();
     pCurrentSpans->clear();
     pCellWidths->clear();
 
-    m_nGridBefore = m_nGridAfter = 0;
+    m_nGridAfter = 0;
     m_bTableSizeTypeInserted = false;
 
 #ifdef DBG_UTIL

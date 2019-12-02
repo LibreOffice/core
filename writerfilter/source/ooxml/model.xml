@@ -14442,7 +14442,7 @@
             <ref name="CT_DecimalNumber"/>
           </element>
           <element name="gridBefore">
-            <ref name="CT_TrPrBaseGridBefore"/>
+            <ref name="CT_DecimalNumber"/>
           </element>
           <element name="gridAfter">
             <ref name="CT_TrPrBaseGridAfter"/>
@@ -18404,6 +18404,7 @@
     <resource name="CT_TrPrBase" resource="Properties">
       <element name="cnfStyle" tokenid="ooxml:CT_TrPrBase_cnfStyle"/>
       <element name="divId" tokenid="ooxml:CT_TrPrBase_divId"/>
+      <element name="gridBefore" tokenid="ooxml:CT_TrPrBase_gridBefore"/>
       <element name="wBefore" tokenid="ooxml:CT_TrPrBase_wBefore"/>
       <element name="wAfter" tokenid="ooxml:CT_TrPrBase_wAfter"/>
       <element name="cantSplit" tokenid="ooxml:CT_TrPrBase_cantSplit"/>
@@ -18414,7 +18415,7 @@
       <element name="hidden" tokenid="ooxml:CT_TrPrBase_hidden"/>
     </resource>
     <resource name="CT_TrPrBaseGridBefore" resource="TextTableRow">
-      <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridBefore" action="handleGridBefore"/>
+      <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridBefore"/>
     </resource>
     <resource name="CT_TrPrBaseGridAfter" resource="TextTableRow">
       <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridAfter" action="handleGridAfter"/>
