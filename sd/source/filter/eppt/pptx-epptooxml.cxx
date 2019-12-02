@@ -2047,7 +2047,7 @@ void dump_pset(Reference< XPropertySet > const& rXPropSet)
         else if (value >>= boolValue)
             SAL_INFO("sd.eppt", name << " = " << boolValue << "           (bool)");
         else if (value >>= pointValue)
-            SAL_INFO("sd.eppt", name << " = " << pointValue << "    (RectanglePoint)");
+            SAL_INFO("sd.eppt", name << " = " << static_cast<int>(pointValue) << "    (RectanglePoint)");
         else
             SAL_INFO("sd.eppt", "???          <unhandled type>");
     }
