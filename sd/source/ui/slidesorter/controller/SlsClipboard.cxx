@@ -755,7 +755,7 @@ sal_Int8 Clipboard::ExecuteDrop (
             // has be notified, too, add a callback for that.
             std::shared_ptr<TransferableData> pSlideSorterTransferable (
                 TransferableData::GetFromTransferable(pDragTransferable));
-            BOOST_ASSERT(pSlideSorterTransferable);
+            assert(pSlideSorterTransferable);
             if (pSlideSorterTransferable
                 && pSlideSorterTransferable->GetSourceViewShell() != mrSlideSorter.GetViewShell())
             {
