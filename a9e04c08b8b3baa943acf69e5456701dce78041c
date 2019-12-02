@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_1e031c75",
+        "filename": "external/nss/ExternalProject_nss.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-12-02T12:47:30Z",
+      "side": 1,
+      "message": "i believe the situation that ANDROID uses AARCH64 and iOS uses ARM64 in our build system to designate the same arch is a confusing historical accident that should be consolidated...",
+      "revId": "a9e04c08b8b3baa943acf69e5456701dce78041c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
