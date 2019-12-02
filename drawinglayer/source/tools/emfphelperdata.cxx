@@ -105,17 +105,6 @@ namespace emfplushelper
     {
     }
 
-    namespace {
-
-    typedef enum
-    {
-        StringAlignmentNear = 0x00000000,
-        StringAlignmentCenter = 0x00000001,
-        StringAlignmentFar = 0x00000002
-    } StringAlignment;
-
-    }
-
     float EmfPlusHelperData::getUnitToPixelMultiplier(const UnitType aUnitType)
     {
         switch (aUnitType)
