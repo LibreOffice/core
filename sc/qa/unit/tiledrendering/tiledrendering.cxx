@@ -67,6 +67,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    void testRowColumnHeaders();
     void testRowColumnSelections();
     void testSortAscendingDescending();
     void testPartHash();
@@ -107,6 +108,7 @@ public:
     void testJumpToLastRowInvalidation();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
+    CPPUNIT_TEST(testRowColumnHeaders);
     CPPUNIT_TEST(testRowColumnSelections);
     CPPUNIT_TEST(testSortAscendingDescending);
     CPPUNIT_TEST(testPartHash);
@@ -1841,6 +1843,54 @@ void ScTiledRenderingTest::testJumpToLastRowInvalidation()
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 13005, 26775, 127500255), aView1.m_aInvalidations[0]);
+}
+
+// We need to ensure that views are not perterbed by rendering (!?) hmm ...
+void ScTiledRenderingTest::testRowColumnHeaders()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // view #1
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
+
+    // view #2
+    SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
+    ViewCallback aView2;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // ViewRowColumnHeaders test
+    SfxLokHelper::setView(nView1);
+    OUString aHeaders1 = pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695));
+
+    SfxLokHelper::setView(nView2);
+    // 50% zoom
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 22474, 47333));
+    pModelObj->setClientZoom(256, 256, 6636, 6636);
+    OUString aHeaders2 = pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695));
+
+    // Check vs. view #1
+    SfxLokHelper::setView(nView1);
+    OUString aHeaders1_2 = pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695));
+    CPPUNIT_ASSERT_EQUAL(aHeaders1, aHeaders1_2);
+
+    // Check vs. view #2
+    SfxLokHelper::setView(nView2);
+    OUString aHeaders2_2 = pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695));
+    CPPUNIT_ASSERT_EQUAL(aHeaders2, aHeaders2_2);
+
+    SfxLokHelper::setView(nView1);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+    SfxLokHelper::setView(nView2);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 }
