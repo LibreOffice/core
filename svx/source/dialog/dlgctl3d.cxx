@@ -246,196 +246,6 @@ void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
     Resize();
 }
 
-PreviewControl3D::PreviewControl3D()
-    : mpFmPage(nullptr)
-    , mpScene(nullptr)
-    , mp3DObj(nullptr)
-    , mnObjectType(SvxPreviewObjectType::SPHERE)
-{
-}
-
-void PreviewControl3D::SetDrawingArea(weld::DrawingArea* pDrawingArea)
-{
-    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(80, 100), MapMode(MapUnit::MapAppFont)));
-    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
-    SetOutputSizePixel(aSize);
-
-    Construct();
-}
-
-PreviewControl3D::~PreviewControl3D()
-{
-    mp3DView.reset();
-    mpModel.reset();
-}
-
-void PreviewControl3D::Construct()
-{
-    // Do never mirror the preview window.  This explicitly includes right
-    // to left writing environments.
-    EnableRTL (false);
-    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-    rDevice.SetMapMode(MapMode(MapUnit::Map100thMM));
-
-    // Model
-    mpModel.reset(new FmFormModel());
-    mpModel->GetItemPool().FreezeIdRanges();
-
-    // Page
-    mpFmPage = new FmFormPage( *mpModel );
-    mpModel->InsertPage( mpFmPage, 0 );
-
-    // 3D View
-    mp3DView.reset(new E3dView(*mpModel, &rDevice));
-    mp3DView->SetBufferedOutputAllowed(true);
-    mp3DView->SetBufferedOverlayAllowed(true);
-
-    // 3D Scene
-    mpScene = new E3dScene(*mpModel);
-
-    // initially create object
-    SetObjectType(SvxPreviewObjectType::SPHERE);
-
-    // camera and perspective
-    Camera3D rCamera  = mpScene->GetCamera();
-    const basegfx::B3DRange& rVolume = mpScene->GetBoundVolume();
-    double fW = rVolume.getWidth();
-    double fH = rVolume.getHeight();
-    double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
-
-    rCamera.SetAutoAdjustProjection(false);
-    rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
-    basegfx::B3DPoint aLookAt;
-    double fDefaultCamPosZ = mp3DView->GetDefaultCamPosZ();
-    basegfx::B3DPoint aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
-    rCamera.SetPosAndLookAt(aCamPos, aLookAt);
-    double fDefaultCamFocal = mp3DView->GetDefaultCamFocal();
-    rCamera.SetFocalLength(fDefaultCamFocal);
-
-    mpScene->SetCamera( rCamera );
-    mpFmPage->InsertObject( mpScene );
-
-    basegfx::B3DHomMatrix aRotation;
-    aRotation.rotate(DEG2RAD( 25 ), 0.0, 0.0);
-    aRotation.rotate(0.0, DEG2RAD( 40 ), 0.0);
-    mpScene->SetTransform(aRotation * mpScene->GetTransform());
-
-    // invalidate SnapRects of objects
-    mpScene->SetRectsDirty();
-
-    SfxItemSet aSet( mpModel->GetItemPool(),
-        svl::Items<XATTR_LINESTYLE, XATTR_LINESTYLE,
-        XATTR_FILL_FIRST, XATTR_FILLBITMAP>{} );
-    aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
-    aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
-    aSet.Put( XFillColorItem( "", COL_WHITE ) );
-
-    mpScene->SetMergedItemSet(aSet);
-
-    // PageView
-    SdrPageView* pPageView = mp3DView->ShowSdrPage( mpFmPage );
-    mp3DView->hideMarkHandles();
-
-    // mark scene
-    mp3DView->MarkObj( mpScene, pPageView );
-}
-
-void PreviewControl3D::Resize()
-{
-    // size of page
-    Size aSize(GetOutputSizePixel());
-    aSize = GetDrawingArea()->get_ref_device().PixelToLogic(aSize);
-    mpFmPage->SetSize(aSize);
-
-    // set size
-    Size aObjSize( aSize.Width()*5/6, aSize.Height()*5/6 );
-    Point aObjPoint( (aSize.Width() - aObjSize.Width()) / 2,
-        (aSize.Height() - aObjSize.Height()) / 2);
-    tools::Rectangle aRect( aObjPoint, aObjSize);
-    mpScene->SetSnapRect( aRect );
-}
-
-void PreviewControl3D::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
-{
-    mp3DView->CompleteRedraw(&rRenderContext, vcl::Region(rRect));
-}
-
-bool PreviewControl3D::MouseButtonDown(const MouseEvent& rMEvt)
-{
-    if (rMEvt.IsShift() && rMEvt.IsMod1())
-    {
-        if(SvxPreviewObjectType::SPHERE == GetObjectType())
-        {
-            SetObjectType(SvxPreviewObjectType::CUBE);
-        }
-        else
-        {
-            SetObjectType(SvxPreviewObjectType::SPHERE);
-        }
-    }
-    return false;
-}
-
-void PreviewControl3D::SetObjectType(SvxPreviewObjectType nType)
-{
-    if( mnObjectType != nType || !mp3DObj)
-    {
-        SfxItemSet aSet(mpModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
-        mnObjectType = nType;
-
-        if( mp3DObj )
-        {
-            aSet.Put(mp3DObj->GetMergedItemSet());
-            mpScene->RemoveObject( mp3DObj->GetOrdNum() );
-            // always use SdrObject::Free(...) for SdrObjects (!)
-            SdrObject* pTemp(mp3DObj);
-            SdrObject::Free(pTemp);
-        }
-
-        switch( nType )
-        {
-            case SvxPreviewObjectType::SPHERE:
-            {
-                mp3DObj = new E3dSphereObj(
-                    *mpModel,
-                    mp3DView->Get3DDefaultAttributes(),
-                    basegfx::B3DPoint( 0, 0, 0 ),
-                    basegfx::B3DVector( 5000, 5000, 5000 ));
-            }
-            break;
-
-            case SvxPreviewObjectType::CUBE:
-            {
-                mp3DObj = new E3dCubeObj(
-                    *mpModel,
-                    mp3DView->Get3DDefaultAttributes(),
-                    basegfx::B3DPoint( -2500, -2500, -2500 ),
-                    basegfx::B3DVector( 5000, 5000, 5000 ));
-            }
-            break;
-        }
-
-        if (mp3DObj)
-        {
-            mpScene->InsertObject( mp3DObj );
-            mp3DObj->SetMergedItemSet(aSet);
-        }
-
-        Invalidate();
-    }
-}
-
-SfxItemSet const & PreviewControl3D::Get3DAttributes() const
-{
-    return mp3DObj->GetMergedItemSet();
-}
-
-void PreviewControl3D::Set3DAttributes( const SfxItemSet& rAttr )
-{
-    mp3DObj->SetMergedItemSet(rAttr, true);
-    Resize();
-}
 
 #define RADIUS_LAMP_PREVIEW_SIZE    (4500.0)
 #define RADIUS_LAMP_SMALL           (600.0)
@@ -1123,7 +933,11 @@ basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
 }
 
 LightControl3D::LightControl3D()
-:   maChangeCallback(),
+:   mpFmPage(nullptr),
+    mpScene(nullptr),
+    mp3DObj(nullptr),
+    mnObjectType(SvxPreviewObjectType::SPHERE),
+    maChangeCallback(),
     maSelectionChangeCallback(),
     maSelectedLight(NO_LIGHT_SELECTED),
     mpExpansionObject(nullptr),
@@ -1143,9 +957,96 @@ LightControl3D::LightControl3D()
 {
 }
 
+void LightControl3D::Construct()
+{
+    // Do never mirror the preview window.  This explicitly includes right
+    // to left writing environments.
+    EnableRTL (false);
+    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+    rDevice.SetMapMode(MapMode(MapUnit::Map100thMM));
+
+    // Model
+    mpModel.reset(new FmFormModel());
+    mpModel->GetItemPool().FreezeIdRanges();
+
+    // Page
+    mpFmPage = new FmFormPage( *mpModel );
+    mpModel->InsertPage( mpFmPage, 0 );
+
+    // 3D View
+    mp3DView.reset(new E3dView(*mpModel, &rDevice));
+    mp3DView->SetBufferedOutputAllowed(true);
+    mp3DView->SetBufferedOverlayAllowed(true);
+
+    // 3D Scene
+    mpScene = new E3dScene(*mpModel);
+
+    // initially create object
+    SetObjectType(SvxPreviewObjectType::SPHERE);
+
+    // camera and perspective
+    Camera3D rCamera  = mpScene->GetCamera();
+    const basegfx::B3DRange& rVolume = mpScene->GetBoundVolume();
+    double fW = rVolume.getWidth();
+    double fH = rVolume.getHeight();
+    double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
+
+    rCamera.SetAutoAdjustProjection(false);
+    rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
+    basegfx::B3DPoint aLookAt;
+    double fDefaultCamPosZ = mp3DView->GetDefaultCamPosZ();
+    basegfx::B3DPoint aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
+    rCamera.SetPosAndLookAt(aCamPos, aLookAt);
+    double fDefaultCamFocal = mp3DView->GetDefaultCamFocal();
+    rCamera.SetFocalLength(fDefaultCamFocal);
+
+    mpScene->SetCamera( rCamera );
+    mpFmPage->InsertObject( mpScene );
+
+    basegfx::B3DHomMatrix aRotation;
+    aRotation.rotate(DEG2RAD( 25 ), 0.0, 0.0);
+    aRotation.rotate(0.0, DEG2RAD( 40 ), 0.0);
+    mpScene->SetTransform(aRotation * mpScene->GetTransform());
+
+    // invalidate SnapRects of objects
+    mpScene->SetRectsDirty();
+
+    SfxItemSet aSet( mpModel->GetItemPool(),
+        svl::Items<XATTR_LINESTYLE, XATTR_LINESTYLE,
+        XATTR_FILL_FIRST, XATTR_FILLBITMAP>{} );
+    aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
+    aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
+    aSet.Put( XFillColorItem( "", COL_WHITE ) );
+
+    mpScene->SetMergedItemSet(aSet);
+
+    // PageView
+    SdrPageView* pPageView = mp3DView->ShowSdrPage( mpFmPage );
+    mp3DView->hideMarkHandles();
+
+    // mark scene
+    mp3DView->MarkObj( mpScene, pPageView );
+}
+
+LightControl3D::~LightControl3D()
+{
+    mp3DView.reset();
+    mpModel.reset();
+}
+
+SfxItemSet const & LightControl3D::Get3DAttributes() const
+{
+    return mp3DObj->GetMergedItemSet();
+}
+
 void LightControl3D::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    PreviewControl3D::SetDrawingArea(pDrawingArea);
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(80, 100), MapMode(MapUnit::MapAppFont)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    SetOutputSizePixel(aSize);
+
+    Construct();
     Construct2();
 }
 
@@ -1405,7 +1306,7 @@ void LightControl3D::TrySelection(Point aPosPixel)
 
 void LightControl3D::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    PreviewControl3D::Paint(rRenderContext, rRect);
+    mp3DView->CompleteRedraw(&rRenderContext, vcl::Region(rRect));
 }
 
 tools::Rectangle LightControl3D::GetFocusRect()
@@ -1569,8 +1470,51 @@ void LightControl3D::Resize()
 
 void LightControl3D::SetObjectType(SvxPreviewObjectType nType)
 {
-    // call parent
-    PreviewControl3D::SetObjectType(nType);
+    if( mnObjectType != nType || !mp3DObj)
+    {
+        SfxItemSet aSet(mpModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
+        mnObjectType = nType;
+
+        if( mp3DObj )
+        {
+            aSet.Put(mp3DObj->GetMergedItemSet());
+            mpScene->RemoveObject( mp3DObj->GetOrdNum() );
+            // always use SdrObject::Free(...) for SdrObjects (!)
+            SdrObject* pTemp(mp3DObj);
+            SdrObject::Free(pTemp);
+        }
+
+        switch( nType )
+        {
+            case SvxPreviewObjectType::SPHERE:
+            {
+                mp3DObj = new E3dSphereObj(
+                    *mpModel,
+                    mp3DView->Get3DDefaultAttributes(),
+                    basegfx::B3DPoint( 0, 0, 0 ),
+                    basegfx::B3DVector( 5000, 5000, 5000 ));
+            }
+            break;
+
+            case SvxPreviewObjectType::CUBE:
+            {
+                mp3DObj = new E3dCubeObj(
+                    *mpModel,
+                    mp3DView->Get3DDefaultAttributes(),
+                    basegfx::B3DPoint( -2500, -2500, -2500 ),
+                    basegfx::B3DVector( 5000, 5000, 5000 ));
+            }
+            break;
+        }
+
+        if (mp3DObj)
+        {
+            mpScene->InsertObject( mp3DObj );
+            mp3DObj->SetMergedItemSet(aSet);
+        }
+
+        Invalidate();
+    }
 
     // apply object rotation
     if(mp3DObj)
@@ -1687,8 +1631,8 @@ void LightControl3D::GetRotation(double& rRotX, double& rRotY, double& rRotZ)
 
 void LightControl3D::Set3DAttributes( const SfxItemSet& rAttr )
 {
-    // call parent
-    PreviewControl3D::Set3DAttributes(rAttr);
+    mp3DObj->SetMergedItemSet(rAttr, true);
+    Resize();
 
     if(maSelectedLight != NO_LIGHT_SELECTED && !GetLightOnOff(maSelectedLight))
     {

@@ -66,34 +66,6 @@ public:
     virtual void Set3DAttributes(const SfxItemSet& rAttr);
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC PreviewControl3D : public weld::CustomWidgetController
-{
-protected:
-    std::unique_ptr<FmFormModel> mpModel;
-    FmFormPage*             mpFmPage;
-    std::unique_ptr<E3dView> mp3DView;
-    E3dScene*               mpScene;
-    E3dObject*              mp3DObj;
-    SvxPreviewObjectType    mnObjectType;
-
-    void Construct();
-
-public:
-    PreviewControl3D();
-    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual ~PreviewControl3D() override;
-
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void Resize() override;
-
-    virtual void SetObjectType(SvxPreviewObjectType nType);
-    SvxPreviewObjectType GetObjectType() const { return mnObjectType; }
-    SfxItemSet const & Get3DAttributes() const;
-    virtual void Set3DAttributes(const SfxItemSet& rAttr);
-};
-
-
 class SAL_WARN_UNUSED Svx3DLightControl final : public Svx3DPreviewControl
 {
     // Callback for interactive changes
@@ -164,8 +136,15 @@ public:
     basegfx::B3DVector GetLightDirection(sal_uInt32 nNum) const;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC LightControl3D final : public PreviewControl3D
+class SVX_DLLPUBLIC LightControl3D final : public weld::CustomWidgetController
 {
+    std::unique_ptr<FmFormModel> mpModel;
+    FmFormPage*             mpFmPage;
+    std::unique_ptr<E3dView> mp3DView;
+    E3dScene*               mpScene;
+    E3dObject*              mp3DObj;
+    SvxPreviewObjectType    mnObjectType;
+
     // Callback for interactive changes
     Link<LightControl3D*,void>  maChangeCallback;
     Link<LightControl3D*,void>  maSelectionChangeCallback;
@@ -194,6 +173,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC LightControl3D final : public PreviewControl
     bool                        mbMouseCaptured : 1;
     bool                        mbGeometrySelected : 1;
 
+    void Construct();
     void Construct2();
     void ConstructLightObjects();
     void AdaptToSelectedLight();
@@ -201,6 +181,10 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC LightControl3D final : public PreviewControl
 
 public:
     LightControl3D();
+    virtual ~LightControl3D() override;
+
+    SvxPreviewObjectType GetObjectType() const { return mnObjectType; }
+    SfxItemSet const & Get3DAttributes() const;
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -210,7 +194,7 @@ public:
     virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void Resize() override;
 
-    virtual void SetObjectType(SvxPreviewObjectType nType) override;
+    void SetObjectType(SvxPreviewObjectType nType);
 
     // register user callback
     void SetChangeCallback(Link<LightControl3D*,void> aNew) { maChangeCallback = aNew; }
@@ -229,7 +213,7 @@ public:
     void GetRotation(double& rRotX, double& rRotY, double& rRotZ);
 
     void SelectLight(sal_uInt32 nLightNumber);
-    virtual void Set3DAttributes(const SfxItemSet& rAttr) override;
+    void Set3DAttributes(const SfxItemSet& rAttr);
     sal_uInt32 GetSelectedLight() const { return maSelectedLight; }
 
     // light data access
