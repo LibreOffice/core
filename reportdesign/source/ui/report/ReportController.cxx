@@ -280,7 +280,6 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     :OReportController_BASE(xContext)
     ,OPropertyStateContainer(OGenericUnoController_Base::rBHelper)
     ,m_aSelectionListeners( getMutex() )
-    ,m_pGroupsFloater(nullptr)
     ,m_sMode("normal")
     ,m_nSplitPos(-1)
     ,m_nPageNum(-1)
@@ -321,11 +320,13 @@ void OReportController::disposing()
         m_pClipboardNotifier->RemoveListener( getView() );
         m_pClipboardNotifier.clear();
     }
-    if ( m_pGroupsFloater )
+    if ( m_xGroupsFloater )
     {
-        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
-        aDlgOpt.SetWindowState(OStringToOUString(m_pGroupsFloater->GetWindowState(), RTL_TEXTENCODING_ASCII_US));
-        m_pGroupsFloater.disposeAndClear();
+        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_xGroupsFloater->get_help_id(), RTL_TEXTENCODING_UTF8));
+        aDlgOpt.SetWindowState(OStringToOUString(m_xGroupsFloater->getDialog()->get_window_state(WindowStateMask::All), RTL_TEXTENCODING_ASCII_US));
+        if (m_xGroupsFloater->getDialog()->get_visible())
+            m_xGroupsFloater->response(RET_CANCEL);
+        m_xGroupsFloater.reset();
     }
 
     try
@@ -808,7 +809,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             break;
         case SID_SORTINGANDGROUPING:
             aReturn.bEnabled = true;
-            aReturn.bChecked = m_pGroupsFloater && m_pGroupsFloater->IsVisible();
+            aReturn.bChecked = m_xGroupsFloater && m_xGroupsFloater->getDialog()->get_visible();
             break;
         case SID_ATTR_CHAR_WEIGHT:
         case SID_ATTR_CHAR_POSTURE:
@@ -1019,8 +1020,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             SfxUndoManager& rUndoManager( getUndoManager() );
             (rUndoManager.*doXDo)();
             InvalidateAll();
-            if ( m_pGroupsFloater && m_pGroupsFloater->IsVisible() )
-                m_pGroupsFloater->UpdateData();
+            if (m_xGroupsFloater && m_xGroupsFloater->getDialog()->get_visible())
+                m_xGroupsFloater->UpdateData();
         }
         break;
         case SID_CUT:
@@ -2521,16 +2522,20 @@ void OReportController::openSortingAndGroupingDialog()
 {
     if ( !m_xReportDefinition.is() )
         return;
-    if ( !m_pGroupsFloater )
+    if (!m_xGroupsFloater)
     {
-        m_pGroupsFloater = VclPtr<OGroupsSortingDialog>::Create(getView(),!isEditable(),this);
-        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
+        m_xGroupsFloater = std::make_shared<OGroupsSortingDialog>(getFrameWeld(), !isEditable(), this);
+        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_xGroupsFloater->get_help_id(), RTL_TEXTENCODING_UTF8));
         if ( aDlgOpt.Exists() )
-            m_pGroupsFloater->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
-        m_pGroupsFloater->AddEventListener(LINK(this,OReportController,EventLstHdl));
+            m_xGroupsFloater->getDialog()->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
     }
-    else if ( isUiVisible() )
-        m_pGroupsFloater->Show(!m_pGroupsFloater->IsVisible());
+    if (isUiVisible())
+    {
+        if (!m_xGroupsFloater->getDialog()->get_visible())
+            weld::DialogController::runAsync(m_xGroupsFloater, [this](sal_Int32 /*nResult*/) { m_xGroupsFloater.reset(); });
+        else
+            m_xGroupsFloater->response(RET_CANCEL);
+    }
 }
 
 sal_Int32 OReportController::getGroupPosition(const uno::Reference< report::XGroup >& _xGroup)
