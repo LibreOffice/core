@@ -65,6 +65,8 @@ class SvxConfigDialog : public SfxTabDialogController
 {
 private:
     css::uno::Reference< css::frame::XFrame > m_xFrame;
+//    virtual void RequestHelp( const HelpEvent& rHEvt );
+    DECL_LINK(OnShowTooltip, weld::Widget&, bool);
 
 public:
     SvxConfigDialog(weld::Window*, const SfxItemSet*);

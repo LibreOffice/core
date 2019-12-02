@@ -223,6 +223,14 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
             SetCurPageId("toolbars");
         }
     }
+    pParent->connect_help(LINK(this, SvxConfigDialog, OnShowTooltip));
+}
+
+//void SvxConfigDialog::RequestHelp( const HelpEvent& rHEvt )
+IMPL_LINK_NOARG(SvxConfigDialog, OnShowTooltip, weld::Widget&, bool)
+{
+    Help::ShowQuickHelp( nullptr, tools::Rectangle(), "Hello World");
+    return true;
 }
 
 void SvxConfigDialog::SetFrame(const css::uno::Reference<css::frame::XFrame>& xFrame)

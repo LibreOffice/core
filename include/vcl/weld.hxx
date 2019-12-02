@@ -687,6 +687,7 @@ protected:
     Link<TreeView&, void> m_aVisibleRangeChangedHdl;
     Link<TreeView&, void> m_aModelChangedHdl;
     Link<const CommandEvent&, bool> m_aPopupMenuHdl;
+    Link<TreeView&, bool> m_aHelpRequestHdl;
     std::function<int(const weld::TreeIter&, const weld::TreeIter&)> m_aCustomSort;
 
     std::vector<int> m_aRadioIndexes;
@@ -984,6 +985,8 @@ public:
     void save_value() { m_sSavedValue = get_selected_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
+
+    void connect_help(const Link<TreeView&, bool>& rLink) { m_aHelpRequestHdl = rLink; }
 
     // for dnd
     virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult) = 0;
