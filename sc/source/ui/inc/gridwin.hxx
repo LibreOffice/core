@@ -430,13 +430,8 @@ public:
     void            UpdateShrinkOverlay();
     void            UpdateAllOverlays();
 
-    /// @see ScModelObj::getCellCursor().
-    OString         getCellCursor(const Fraction& rZoomX,
-                                  const Fraction& rZoomY) const;
-    OString         getCellCursor(int nOutputWidth,
-                                  int nOutputHeight,
-                                  long nTileWidth,
-                                  long nTileHeight);
+    /// get Cell cursor in this view's co-ordinate system @see ScModelObj::getCellCursor().
+    OString getCellCursor() const;
     void updateLibreOfficeKitCellCursor(const SfxViewShell* pOtherShell) const;
 
     /// Same as MouseButtonDown(), but coordinates are in logic unit.
