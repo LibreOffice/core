@@ -13,6 +13,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
 
+#include <o3tl/cppunittraitshelper.hxx>
 #include <unotest/directories.hxx>
 #include <svl/lockfilecommon.hxx>
 #include <svl/documentlockfile.hxx>

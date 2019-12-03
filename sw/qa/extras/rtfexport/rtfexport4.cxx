@@ -11,7 +11,7 @@
 
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-
+#include <o3tl/cppunittraitshelper.hxx>
 #include <svx/swframetypes.hxx>
 
 #include <doc.hxx>
