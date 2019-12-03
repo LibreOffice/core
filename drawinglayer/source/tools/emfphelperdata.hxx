@@ -122,6 +122,16 @@ namespace emfplushelper
         SmoothingModeAntiAlias8x8 = 0x05
     };
 
+    enum TextRenderingHint
+    {
+        TextRenderingHintSystemDefault = 0x00,
+        TextRenderingHintSingleBitPerPixelGridFit = 0x01,
+        TextRenderingHintSingleBitPerPixel = 0x02,
+        TextRenderingHintAntialiasGridFit = 0x03,
+        TextRenderingHintAntialias = 0x04,
+        TextRenderingHintClearTypeGridFit = 0x05
+    };
+
     enum UnitType
     {
         UnitTypeWorld = 0x00,
