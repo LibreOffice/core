@@ -102,6 +102,19 @@ namespace emfplushelper
         return "";
     }
 
+    static OUString PixelOffsetModeToString(sal_uInt16 nPixelOffset)
+    {
+        switch (nPixelOffset)
+        {
+            case PixelOffsetMode::PixelOffsetModeDefault: return "PixelOffsetModeDefault";
+            case PixelOffsetMode::PixelOffsetModeHighSpeed: return "PixelOffsetModeHighSpeed";
+            case PixelOffsetMode::PixelOffsetModeHighQuality: return "PixelOffsetModeHighQuality";
+            case PixelOffsetMode::PixelOffsetModeNone: return "PixelOffsetModeNone";
+            case PixelOffsetMode::PixelOffsetModeHalf: return "PixelOffsetModeHalf";
+        }
+        return "";
+    }
+
     EMFPObject::~EMFPObject()
     {
     }
@@ -1548,7 +1561,8 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSetPixelOffsetMode:
                     {
-                        SAL_INFO("drawinglayer", "TODO\t EMF+ SetPixelOffsetMode");
+                        SAL_INFO("drawinglayer", "EMF+ SetPixelOffsetMode: " << PixelOffsetModeToString(flags));
+                        SAL_WARN("drawinglayer", "TODO\t EMF+ SetPixelOffsetMode");
                         break;
                     }
                     case EmfPlusRecordTypeSetCompositingQuality:
