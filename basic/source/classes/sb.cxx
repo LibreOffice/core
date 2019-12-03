@@ -632,8 +632,9 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 {
     aOUSource = pClassModule->aOUSource;
     aComment = pClassModule->aComment;
-    pImage = std::move(pClassModule->pImage);
-    pBreaks = std::move(pClassModule->pBreaks);
+    // see comment in destructor about these two
+    pImage = pClassModule->pImage;
+    pBreaks = pClassModule->pBreaks;
 
     SetClassName( pClassModule->GetName() );
 
@@ -776,8 +777,8 @@ SbClassModuleObject::~SbClassModuleObject()
                 if( !pDocBasicItem->isDocClosed() )
                     triggerTerminateEvent();
 
-    // Must be deleted by base class dtor because this data
-    // is not owned by the SbClassModuleObject object
+    // prevent the base class destructor from deleting these because
+    // we do not actually own them
     pImage = nullptr;
     pBreaks = nullptr;
 }
