@@ -4848,44 +4848,8 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
             SetLastExceptionMsg("Document doesn't support tiled rendering");
             return nullptr;
         }
-
-        // Command has parameters.
-        int nOutputWidth = 0;
-        int nOutputHeight = 0;
-        long nTileWidth = 0;
-        long nTileHeight = 0;
-        if (aCommand.getLength() > aCellCursor.getLength())
-        {
-            OString aArguments = aCommand.copy(aCellCursor.getLength() + 1);
-            sal_Int32 nParamIndex = 0;
-            do
-            {
-                OString aParamToken = aArguments.getToken(0, '&', nParamIndex);
-                sal_Int32 nIndex = 0;
-                OString aKey;
-                OString aValue;
-                do
-                {
-                    OString aToken = aParamToken.getToken(0, '=', nIndex);
-                    if (!aKey.getLength())
-                        aKey = aToken;
-                    else
-                        aValue = aToken;
-                }
-                while (nIndex >= 0);
-                if (aKey == "outputWidth")
-                    nOutputWidth = aValue.toInt32();
-                else if (aKey == "outputHeight")
-                    nOutputHeight = aValue.toInt32();
-                else if (aKey == "tileWidth")
-                    nTileWidth = aValue.toInt64();
-                else if (aKey == "tileHeight")
-                    nTileHeight = aValue.toInt64();
-            }
-            while (nParamIndex >= 0);
-        }
-
-        return convertOString(pDoc->getCellCursor(nOutputWidth, nOutputHeight, nTileWidth, nTileHeight));
+        // Ignore command's deprecated parameters.
+        return convertOString(pDoc->getCellCursor());
     }
     else if (aCommand.startsWith(aFontSubset))
     {
