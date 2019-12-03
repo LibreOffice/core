@@ -175,13 +175,11 @@ public:
     }
 
     /**
-     * Get position and size of cell cursor in Calc.
+     * Get position and size of cell cursor in Calc - as JSON in the
+     * current' views' co-ordinate system.
      * (This could maybe also be used for tables in Writer/Impress in future?)
      */
-    virtual OString getCellCursor(int /*nOutputWidth*/,
-                                  int /*nOutputHeight*/,
-                                  long /*nTileWidth*/,
-                                  long /*nTileHeight*/)
+    virtual OString getCellCursor()
     {
         return OString();
     }
