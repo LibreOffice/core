@@ -139,7 +139,7 @@ void SbiCodeGen::Save()
     if( pParser->IsCodeCompleting() )
         return;
 
-    std::unique_ptr<SbiImage> p( new SbiImage );
+    SbiImage* p = new SbiImage;
     rMod.StartDefinitions();
     // OPTION BASE-Value:
     p->nDimBase = pParser->nBase;
@@ -156,7 +156,7 @@ void SbiCodeGen::Save()
 
         nIfaceCount = pParser->aIfaceVector.size();
         if( !rMod.pClassData )
-            rMod.pClassData.reset( new SbClassData );
+            rMod.pClassData.reset(new SbClassData);
         if( nIfaceCount )
         {
             for( int i = 0 ; i < nIfaceCount ; i++ )
@@ -381,7 +381,11 @@ void SbiCodeGen::Save()
     }
     if( !p->IsError() )
     {
-        rMod.pImage = std::move(p);
+        rMod.pImage = p;
+    }
+    else
+    {
+        delete p;
     }
     rMod.EndDefinitions();
 }
