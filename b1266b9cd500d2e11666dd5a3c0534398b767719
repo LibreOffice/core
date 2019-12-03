@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_6a9046ee",
+        "filename": "vcl/inc/qt5/Qt5FilePicker.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-12-03T16:41:57Z",
+      "side": 1,
+      "message": "I see no need to change visibility (private -\u003e protected) in this patch (maybe needed for follow-up patch?)",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 9
+      },
+      "revId": "b1266b9cd500d2e11666dd5a3c0534398b767719",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
