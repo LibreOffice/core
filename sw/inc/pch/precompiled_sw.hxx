@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-29 12:15:00 using:
+ Generated on 2019-12-03 09:23:47 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,7 +27,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <deque>
-#include <float.h>
 #include <functional>
 #include <initializer_list>
 #include <limits.h>
@@ -46,8 +45,8 @@
 #include <utility>
 #include <vector>
 #include <boost/circular_buffer.hpp>
-#include <o3tl/optional.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -84,10 +83,12 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
@@ -104,6 +105,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
@@ -122,6 +124,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
+#include <vcl/windowstate.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -130,7 +133,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
@@ -151,7 +153,6 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -223,7 +224,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/charrotateitem.hxx>
-#include <editeng/charscaleitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/contouritem.hxx>
@@ -232,7 +232,6 @@
 #include <editeng/editengdllapi.h>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/emphasismarkitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/flditem.hxx>
@@ -264,7 +263,6 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/tstpitem.hxx>
-#include <editeng/twolinesitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/unolingu.hxx>
@@ -280,11 +278,11 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <salhelper/condition.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
@@ -368,6 +366,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svditer.hxx>
+#include <svx/svdmark.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>
@@ -376,7 +375,6 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
@@ -386,8 +384,6 @@
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xoutbmp.hxx>
-#include <svx/xtable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/datetime.hxx>
@@ -412,7 +408,6 @@
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/lingucfg.hxx>
-#include <unotools/linguprops.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/options.hxx>
@@ -421,7 +416,6 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/useroptions.hxx>
 #include <xmloff/dllapi.h>
@@ -478,15 +472,12 @@
 #include <docstyle.hxx>
 #include <docufld.hxx>
 #include <drawdoc.hxx>
-#include <edimp.hxx>
 #include <editsh.hxx>
 #include <expfld.hxx>
 #include <fchrfmt.hxx>
 #include <fesh.hxx>
 #include <fldbas.hxx>
 #include <flddat.hxx>
-#include <fldupde.hxx>
-#include <flypos.hxx>
 #include <fmtanchr.hxx>
 #include <fmtautofmt.hxx>
 #include <fmtclbl.hxx>
@@ -530,7 +521,6 @@
 #include <lineinfo.hxx>
 #include <mdiexp.hxx>
 #include <modcfg.hxx>
-#include <modeltoviewhelper.hxx>
 #include <ndgrf.hxx>
 #include <ndindex.hxx>
 #include <ndnotxt.hxx>

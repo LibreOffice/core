@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-01 19:16:07 using:
+ Generated on 2019-12-03 09:23:12 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,7 +39,6 @@
 #include <new>
 #include <ostream>
 #include <set>
-#include <stack>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -51,6 +50,7 @@
 #include <vector>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
