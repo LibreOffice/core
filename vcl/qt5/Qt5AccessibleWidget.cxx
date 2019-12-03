@@ -50,6 +50,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/AccessibleImplementationHelper.hxx>
+#include <o3tl/any.hxx>
 #include <sal/log.hxx>
 #include <vcl/popupmenuwindow.hxx>
 
@@ -853,23 +854,19 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
     {
         if (pValues[i].Name == "CharFontName")
         {
-            OUString aStr;
-            pValues[i].Value >>= aStr;
-            aRet += "font-family:" + aStr + ";";
+            aRet += "font-family:" + *o3tl::doAccess<OUString>(pValues[i].Value) + ";";
             continue;
         }
         if (pValues[i].Name == "CharHeight")
         {
-            double fHeight;
-            pValues[i].Value >>= fHeight;
-            aRet += "font-size:" + OUString::number(fHeight) + "pt;";
+            aRet += "font-size:" + OUString::number(*o3tl::doAccess<double>(pValues[i].Value))
+                    + "pt;";
             continue;
         }
         if (pValues[i].Name == "CharWeight")
         {
-            double fWeight;
-            pValues[i].Value >>= fWeight;
-            aRet += "font-weight:" + lcl_convertFontWeight(fWeight) + ";";
+            aRet += "font-weight:"
+                    + lcl_convertFontWeight(*o3tl::doAccess<double>(pValues[i].Value)) + ";";
             continue;
         }
     }
