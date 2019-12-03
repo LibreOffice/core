@@ -48,7 +48,7 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 KF5FilePicker::KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                              QFileDialog::FileMode eMode)
     // Native kf5 filepicker does not add file extension automatically
-    : Qt5FilePicker(context, eMode, true, true)
+    : Qt5FilePicker(context, eMode, true)
     , _layout(new QGridLayout(m_pExtraControls))
 {
     // use native dialog
@@ -71,28 +71,6 @@ KF5FilePicker::KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> co
 
     // used to set the custom controls
     qApp->installEventFilter(this);
-}
-
-sal_Int16 SAL_CALL KF5FilePicker::execute()
-{
-    SolarMutexGuard g;
-    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
-    assert(pSalInst);
-    if (!pSalInst->IsMainThread())
-    {
-        sal_Int16 ret;
-        pSalInst->RunInMainThread([&ret, this] { ret = execute(); });
-        return ret;
-    }
-
-    if (!m_aNamedFilterList.isEmpty())
-        m_pFileDialog->setNameFilters(m_aNamedFilterList);
-    if (!m_aCurrentFilter.isEmpty())
-        m_pFileDialog->selectNameFilter(m_aCurrentFilter);
-
-    m_pFileDialog->show();
-    //block and wait for user input
-    return m_pFileDialog->exec() == QFileDialog::Accepted ? 1 : 0;
 }
 
 // XFilePickerControlAccess

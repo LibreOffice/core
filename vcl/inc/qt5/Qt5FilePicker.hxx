@@ -57,16 +57,11 @@ class VCLPLUG_QT5_PUBLIC Qt5FilePicker : public QObject, public Qt5FilePicker_Ba
 {
     Q_OBJECT
 
-private:
+protected:
     css::uno::Reference<css::uno::XComponentContext> m_context;
 
-    // whether to show (i.e. not remove) the file extension in the filter title,
-    // e.g. whether to use "ODF Text Document (*.odt)" or just
-    // "ODF Text Document" as filter title
-    // (non-native QFileDialog e.g. adds that information by itself anyway)
-    bool m_bShowFileExtensionInFilterTitle;
+    const bool m_bIsKF5;
 
-protected:
     css::uno::Reference<css::ui::dialogs::XFilePickerListener> m_xListener;
 
     std::unique_ptr<QFileDialog> m_pFileDialog; ///< the non-native file picker dialog
@@ -91,8 +86,7 @@ public:
     // use non-native file dialog by default; there's no easy way to add custom widgets
     // in a generic way in the native one
     explicit Qt5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                           QFileDialog::FileMode, bool bShowFileExtensionInFilterTitle = false,
-                           bool bUseNativeDialog = false);
+                           QFileDialog::FileMode, bool bIsKF5 = false);
     virtual ~Qt5FilePicker() override;
 
     // XFilePickerNotifier

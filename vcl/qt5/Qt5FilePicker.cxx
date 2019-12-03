@@ -76,15 +76,14 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 }
 
 Qt5FilePicker::Qt5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                             QFileDialog::FileMode eMode, bool bShowFileExtensionInFilterTitle,
-                             bool bUseNativeDialog)
+                             QFileDialog::FileMode eMode, bool bIsKF5)
     : Qt5FilePicker_Base(m_aHelperMutex)
     , m_context(context)
-    , m_bShowFileExtensionInFilterTitle(bShowFileExtensionInFilterTitle)
+    , m_bIsKF5(bIsKF5)
     , m_pFileDialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , m_bIsFolderPicker(eMode == QFileDialog::Directory)
 {
-    if (!bUseNativeDialog)
+    if (!m_bIsKF5)
         m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog);
 
     m_pFileDialog->setFileMode(eMode);
@@ -184,7 +183,8 @@ sal_Int16 SAL_CALL Qt5FilePicker::execute()
         m_pFileDialog->setFocusProxy(pTransientParent);
     }
 
-    updateAutomaticFileExtension();
+    if (!m_bIsKF5)
+        updateAutomaticFileExtension();
 
     int result = m_pFileDialog->exec();
     if (QFileDialog::Rejected == result)
@@ -296,7 +296,9 @@ void SAL_CALL Qt5FilePicker::appendFilter(const OUString& title, const OUString&
     QString t = toQString(title).replace("/", "\\/");
 
     QString n = t;
-    if (!m_bShowFileExtensionInFilterTitle)
+
+    // the KF5 file picker doesn't add the extensions, so there is no reason to strip them
+    if (!m_bIsKF5)
     {
         // strip file extension from filter title
         int pos = n.indexOf(" (");

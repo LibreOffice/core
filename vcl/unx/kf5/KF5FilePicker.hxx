@@ -35,9 +35,6 @@ public:
     explicit KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                            QFileDialog::FileMode);
 
-    // XExecutableDialog functions
-    virtual sal_Int16 SAL_CALL execute() override;
-
     // XFilePickerControlAccess functions
     virtual void SAL_CALL setValue(sal_Int16 nControlId, sal_Int16 nControlAction,
                                    const css::uno::Any& rValue) override;
