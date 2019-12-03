@@ -45,6 +45,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <o3tl/cppunittraitshelper.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>

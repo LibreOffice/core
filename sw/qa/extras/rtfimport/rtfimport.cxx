@@ -42,7 +42,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XFormField.hpp>
-
+#include <o3tl/cppunittraitshelper.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/sequenceashashmap.hxx>
