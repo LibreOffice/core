@@ -3753,6 +3753,12 @@ public:
         return m_xTreeView->GetModel()->GetChildList(nullptr).size();
     }
 
+    virtual int iter_n_children(const weld::TreeIter& rIter) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        return m_xTreeView->GetModel()->GetChildList(rVclIter.iter).size();
+    }
+
     virtual void select(int pos) override
     {
         assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");

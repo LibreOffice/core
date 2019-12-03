@@ -56,7 +56,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="properties">
+      <object class="GtkCheckMenuItem" id="properties">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="navigatormenu|properties">Properties...</property>

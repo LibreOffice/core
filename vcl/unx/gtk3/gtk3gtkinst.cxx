@@ -8882,6 +8882,12 @@ public:
         return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pTreeStore), nullptr);
     }
 
+    virtual int iter_n_children(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pTreeStore), const_cast<GtkTreeIter*>(&rGtkIter.iter));
+    }
+
     virtual void select(int pos) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");

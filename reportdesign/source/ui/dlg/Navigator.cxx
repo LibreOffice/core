@@ -41,6 +41,7 @@
 #include <comphelper/SelectionMultiplex.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
 #include <svl/solar.hrc>
 #include <ReportVisitor.hxx>
@@ -49,10 +50,6 @@
 
 #include <memory>
 #include <algorithm>
-
-#define DROP_ACTION_TIMER_INITIAL_TICKS     10
-#define DROP_ACTION_TIMER_SCROLL_TICKS      3
-#define DROP_ACTION_TIMER_TICK_BASE         10
 
 namespace rptui
 {
@@ -104,11 +101,10 @@ static OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElemen
 
 namespace {
 
-class NavigatorTree :   public ::cppu::BaseMutex
-                    ,   public SvTreeListBox
-                    ,   public reportdesign::ITraverseReport
-                    ,   public comphelper::OSelectionChangeListener
-                    ,   public ::comphelper::OPropertyChangeListener
+class NavigatorTree : public ::cppu::BaseMutex
+                    , public reportdesign::ITraverseReport
+                    , public comphelper::OSelectionChangeListener
+                    , public ::comphelper::OPropertyChangeListener
 {
     class UserData;
     friend class UserData;
@@ -119,9 +115,9 @@ class NavigatorTree :   public ::cppu::BaseMutex
         uno::Reference< uno::XInterface >                           m_xContent;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>   m_pListener;
         ::rtl::Reference< comphelper::OContainerListenerAdapter>    m_pContainerListener;
-        VclPtr<NavigatorTree>                                       m_pTree;
+        NavigatorTree*                                              m_pTree;
     public:
-        UserData(NavigatorTree* _pTree,const uno::Reference<uno::XInterface>& _xContent);
+        UserData(NavigatorTree* pTree, const uno::Reference<uno::XInterface>& xContent);
         virtual ~UserData() override;
 
         const uno::Reference< uno::XInterface >& getContent() const { return m_xContent; }
@@ -138,29 +134,18 @@ class NavigatorTree :   public ::cppu::BaseMutex
         virtual void _disposing(const lang::EventObject& _rSource) override;
     };
 
-    enum DROP_ACTION        { DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
-    AutoTimer                                                                   m_aDropActionTimer;
-    Point                                                                       m_aTimerTriggered;      // position at which the DropTimer started
-    DROP_ACTION                                                                 m_aDropActionType;
+    std::unique_ptr<weld::TreeView>                                             m_xTreeView;
     OReportController&                                                          m_rController;
-    SvTreeListEntry*                                                                m_pMasterReport;
-    SvTreeListEntry*                                                                m_pDragedEntry;
+    std::unique_ptr<weld::TreeIter>                                             m_xMasterReport;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pReportListener;
     ::rtl::Reference< comphelper::OSelectionChangeMultiplexer>                  m_pSelectionListener;
-    unsigned short                                                              m_nTimerCounter;
 
-    SvTreeListEntry* insertEntry(const OUString& _sName,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition,UserData* _pData);
-    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition = TREELIST_APPEND);
-    void traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent);
+    void insertEntry(const OUString& rName, weld::TreeIter* pParent, const OUString& rImageId, int nPosition, UserData* pData, weld::TreeIter& rRet);
+
+    void traverseSection(const uno::Reference<report::XSection>& xSection, weld::TreeIter* pParent, const OUString& rImageId, int nPosition = -1);
+    void traverseFunctions(const uno::Reference< report::XFunctions>& xFunctions, weld::TreeIter* pParent);
 
 protected:
-    virtual void        Command( const CommandEvent& rEvt ) override;
-    // DragSourceHelper overridables
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
-    // DropTargetHelper overridables
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) override;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) override;
-
     // OSelectionChangeListener
     virtual void _disposing(const lang::EventObject& _rSource) override;
 
@@ -173,54 +158,65 @@ protected:
     void _elementReplaced( const container::ContainerEvent& _rEvent );
 
 public:
-    NavigatorTree(vcl::Window* pParent,OReportController& _rController );
+    NavigatorTree(std::unique_ptr<weld::TreeView>, OReportController& rController);
     virtual ~NavigatorTree() override;
-    virtual void dispose() override;
 
-    DECL_LINK(OnEntrySelDesel, SvTreeListBox*, void);
-    DECL_LINK( OnDropActionTimer, Timer*, void );
+    DECL_LINK(OnEntrySelDesel, weld::TreeView&, void);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
 
     virtual void _selectionChanged( const lang::EventObject& aEvent ) override;
 
     // ITraverseReport
-    virtual void traverseReport(const uno::Reference< report::XReportDefinition>& _xReport) override;
-    virtual void traverseReportFunctions(const uno::Reference< report::XFunctions>& _xFunctions) override;
-    virtual void traverseReportHeader(const uno::Reference< report::XSection>& _xSection) override;
-    virtual void traverseReportFooter(const uno::Reference< report::XSection>& _xSection) override;
-    virtual void traversePageHeader(const uno::Reference< report::XSection>& _xSection) override;
-    virtual void traversePageFooter(const uno::Reference< report::XSection>& _xSection) override;
+    virtual void traverseReport(const uno::Reference< report::XReportDefinition>& xReport) override;
+    virtual void traverseReportFunctions(const uno::Reference< report::XFunctions>& xFunctions) override;
+    virtual void traverseReportHeader(const uno::Reference< report::XSection>& xSection) override;
+    virtual void traverseReportFooter(const uno::Reference< report::XSection>& xSection) override;
+    virtual void traversePageHeader(const uno::Reference< report::XSection>& xSection) override;
+    virtual void traversePageFooter(const uno::Reference< report::XSection>& xSection) override;
 
-    virtual void traverseGroups(const uno::Reference< report::XGroups>& _xGroups) override;
-    virtual void traverseGroup(const uno::Reference< report::XGroup>& _xGroup) override;
-    virtual void traverseGroupFunctions(const uno::Reference< report::XFunctions>& _xFunctions) override;
-    virtual void traverseGroupHeader(const uno::Reference< report::XSection>& _xSection) override;
-    virtual void traverseGroupFooter(const uno::Reference< report::XSection>& _xSection) override;
+    virtual void traverseGroups(const uno::Reference< report::XGroups>& xGroups) override;
+    virtual void traverseGroup(const uno::Reference< report::XGroup>& xGroup) override;
+    virtual void traverseGroupFunctions(const uno::Reference< report::XFunctions>& xFunctions) override;
+    virtual void traverseGroupHeader(const uno::Reference< report::XSection>& xSection) override;
+    virtual void traverseGroupFooter(const uno::Reference< report::XSection>& xSection) override;
 
-    virtual void traverseDetail(const uno::Reference< report::XSection>& _xSection) override;
+    virtual void traverseDetail(const uno::Reference< report::XSection>& xSection) override;
 
-    SvTreeListEntry* find(const uno::Reference< uno::XInterface >& _xContent);
-    void removeEntry(SvTreeListEntry* _pEntry,bool _bRemove = true);
+    bool find(const uno::Reference<uno::XInterface>& xContent, weld::TreeIter& rIter);
+    void removeEntry(weld::TreeIter& rEntry, bool bRemove = true);
 
-    virtual Size GetOptimalSize() const override;
-private:
-    using SvTreeListBox::ExecuteDrop;
+    void grab_focus() { m_xTreeView->grab_focus(); }
+
+    void set_text(const weld::TreeIter& rIter, const OUString& rStr)
+    {
+        m_xTreeView->set_text(rIter, rStr);
+    }
+
+    void expand_row(const weld::TreeIter& rIter)
+    {
+        m_xTreeView->expand_row(rIter);
+    }
+
+    std::unique_ptr<weld::TreeIter> make_iterator() const
+    {
+        return m_xTreeView->make_iterator();
+    }
+
+    int iter_n_children(const weld::TreeIter& rIter) const
+    {
+        return m_xTreeView->iter_n_children(rIter);
+    }
 };
 
 }
 
-NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rController )
-        :SvTreeListBox( pParent, WB_TABSTOP| WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )
-        ,comphelper::OSelectionChangeListener()
-        ,OPropertyChangeListener(m_aMutex)
-        ,m_aTimerTriggered(-1,-1)
-        ,m_aDropActionType( DA_SCROLLUP )
-        ,m_rController(_rController)
-        ,m_pMasterReport(nullptr)
-        ,m_pDragedEntry(nullptr)
-        ,m_nTimerCounter( DROP_ACTION_TIMER_INITIAL_TICKS )
+NavigatorTree::NavigatorTree(std::unique_ptr<weld::TreeView> xTreeView, OReportController& rController)
+    : comphelper::OSelectionChangeListener()
+    , OPropertyChangeListener(m_aMutex)
+    , m_xTreeView(std::move(xTreeView))
+    , m_rController(rController)
 {
-    set_hexpand(true);
-    set_vexpand(true);
+    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 25, m_xTreeView->get_height_rows(18));
 
     m_pReportListener = new OPropertyChangeMultiplexer(this,m_rController.getReportDefinition().get());
     m_pReportListener->addProperty(PROPERTY_PAGEHEADERON);
@@ -230,38 +226,22 @@ NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rControll
 
     m_pSelectionListener = new OSelectionChangeMultiplexer(this,&m_rController);
 
-    SetHelpId( HID_REPORT_NAVIGATOR_TREE );
+    m_xTreeView->set_help_id(HID_REPORT_NAVIGATOR_TREE);
 
-    SetNodeBitmaps(
-        Image(StockImage::Yes, RID_SVXBMP_COLLAPSEDNODE),
-        Image(StockImage::Yes, RID_SVXBMP_EXPANDEDNODE)
-    );
+    m_xTreeView->set_selection_mode(SelectionMode::Multiple);
 
-    SetDragDropMode(DragDropMode::ALL);
-    EnableInplaceEditing( false );
-    SetSelectionMode(SelectionMode::Multiple);
-    Clear();
-
-    m_aDropActionTimer.SetInvokeHandler(LINK(this, NavigatorTree, OnDropActionTimer));
-    SetSelectHdl(LINK(this, NavigatorTree, OnEntrySelDesel));
-    SetDeselectHdl(LINK(this, NavigatorTree, OnEntrySelDesel));
+    m_xTreeView->connect_changed(LINK(this, NavigatorTree, OnEntrySelDesel));
+    m_xTreeView->connect_popup_menu(LINK(this, NavigatorTree, CommandHdl));
 }
 
 NavigatorTree::~NavigatorTree()
 {
-    disposeOnce();
-}
-
-void NavigatorTree::dispose()
-{
-    SvTreeListEntry* pCurrent = First();
-    while ( pCurrent )
-    {
-        delete static_cast<UserData*>(pCurrent->GetUserData());
-        pCurrent = Next(pCurrent);
-    }
+    m_xTreeView->all_foreach([this](weld::TreeIter& rIter) {
+        UserData* pData = reinterpret_cast<UserData*>(m_xTreeView->get_id(rIter).toInt64());
+        delete pData;
+        return false;
+    });
     m_pReportListener->dispose();
-    SvTreeListBox::dispose();
 }
 
 namespace
@@ -284,69 +264,49 @@ namespace
     }
 }
 
-void NavigatorTree::Command( const CommandEvent& rEvt )
+IMPL_LINK(NavigatorTree, CommandHdl, const CommandEvent&, rEvt, bool)
 {
     bool bHandled = false;
     switch( rEvt.GetCommand())
     {
     case CommandEventId::ContextMenu:
         {
-            // the point that was clicked on
-            SvTreeListEntry* ptClickedOn = nullptr;
-            ::Point aWhere;
-            if (rEvt.IsMouseEvent())
-            {
-                aWhere = rEvt.GetMousePosPixel();
-                ptClickedOn = GetEntry(aWhere);
-                if (ptClickedOn == nullptr)
-                    break;
-                if ( !IsSelected(ptClickedOn) )
-                {
-                    SelectAll(false);
-                    Select(ptClickedOn);
-                    SetCurEntry(ptClickedOn);
-                }
-            }
-            else
-            {
-                ptClickedOn = GetCurEntry();
-                if ( !ptClickedOn )
-                    break;
-                aWhere = GetEntryPosition(ptClickedOn);
-            }
-            UserData* pData = static_cast<UserData*>(ptClickedOn->GetUserData());
+            UserData* pData = reinterpret_cast<UserData*>(m_xTreeView->get_selected_id().toInt64());
+            if (!pData)
+                break;
+
             uno::Reference< report::XFunctionsSupplier> xSupplier(pData->getContent(),uno::UNO_QUERY);
             uno::Reference< report::XFunctions> xFunctions(pData->getContent(),uno::UNO_QUERY);
             uno::Reference< report::XGroup> xGroup(pData->getContent(),uno::UNO_QUERY);
             bool bDeleteAllowed = m_rController.isEditable() && (xGroup.is() ||
                                       uno::Reference< report::XFunction>(pData->getContent(),uno::UNO_QUERY).is());
 
-            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/dbreport/ui/navigatormenu.ui", "");
-            VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "modules/dbreport/ui/navigatormenu.ui"));
+            std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
 
-            sal_uInt16 nCount = aContextMenu->GetItemCount();
-            for (sal_uInt16 i = 0; i < nCount; ++i)
+            const OString aIds[] = { "sorting", "page", "report", "function", "properties", "delete" };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
             {
-                if ( MenuItemType::SEPARATOR != aContextMenu->GetItemType(i))
-                {
-                    sal_uInt16 nMId = aContextMenu->GetItemId(i);
-                    sal_uInt16 nSId = mapIdent(aContextMenu->GetItemIdent(nMId));
+                sal_uInt16 nSId = mapIdent(aIds[i]);
 
-                    aContextMenu->CheckItem(nMId, m_rController.isCommandChecked(nSId));
-                    bool bEnabled = m_rController.isCommandEnabled(nSId);
-                    if (nSId == SID_RPT_NEW_FUNCTION)
-                        aContextMenu->EnableItem(nMId, m_rController.isEditable() && (xSupplier.is() || xFunctions.is()));
-                    // special condition, check for function and group
-                    else if (nSId == SID_DELETE)
-                        aContextMenu->EnableItem(nMId, bDeleteAllowed);
-                    else
-                        aContextMenu->EnableItem(nMId, bEnabled);
-                }
+                if (aIds[i] == "page" || aIds[i] == "report" || aIds[i] == "properties")
+                    xContextMenu->set_active(aIds[i], m_rController.isCommandChecked(nSId));
+                bool bEnabled = m_rController.isCommandEnabled(nSId);
+                if (nSId == SID_RPT_NEW_FUNCTION)
+                    xContextMenu->set_sensitive(aIds[i], m_rController.isEditable() && (xSupplier.is() || xFunctions.is()));
+                // special condition, check for function and group
+                else if (nSId == SID_DELETE)
+                    xContextMenu->set_sensitive(aIds[i], bDeleteAllowed);
+                else
+                    xContextMenu->set_sensitive(aIds[i], bEnabled);
             }
 
-            if (aContextMenu->Execute(this, aWhere))
+            // the point that was clicked on
+            ::Point aWhere(rEvt.GetMousePosPixel());
+            OString sCurItemIdent = xContextMenu->popup_at_rect(m_xTreeView.get(), tools::Rectangle(aWhere, Size(1,1)));
+            if (!sCurItemIdent.isEmpty())
             {
-                sal_uInt16 nId = mapIdent(aContextMenu->GetCurItemIdent());
+                sal_uInt16 nId = mapIdent(sCurItemIdent);
                 uno::Sequence< beans::PropertyValue> aArgs;
                 if ( nId == SID_RPT_NEW_FUNCTION )
                 {
@@ -370,115 +330,19 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
         default: break;
     }
 
-    if (!bHandled)
-        SvTreeListBox::Command( rEvt );
+    return bHandled;
 }
 
-sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
-{
-    ::Point aDropPos = _rEvt.maPosPixel;
-    if (_rEvt.mbLeaving)
-    {
-        if (m_aDropActionTimer.IsActive())
-            m_aDropActionTimer.Stop();
-    }
-    else
-    {
-        bool bNeedTrigger = false;
-        // At the first record?
-        if ((aDropPos.Y() >= 0) && (aDropPos.Y() < GetEntryHeight()))
-        {
-            m_aDropActionType = DA_SCROLLUP;
-            bNeedTrigger = true;
-        }
-        else if ((aDropPos.Y() < GetSizePixel().Height()) && (aDropPos.Y() >= GetSizePixel().Height() - GetEntryHeight()))
-        {
-            m_aDropActionType = DA_SCROLLDOWN;
-            bNeedTrigger = true;
-        }
-        else
-        {
-            SvTreeListEntry* pDroppedOn = GetEntry(aDropPos);
-            if (pDroppedOn && (GetChildCount(pDroppedOn) > 0) && !IsExpanded(pDroppedOn))
-            {
-                m_aDropActionType = DA_EXPANDNODE;
-                bNeedTrigger = true;
-            }
-        }
-
-        if (bNeedTrigger && (m_aTimerTriggered != aDropPos))
-        {
-            // again start counting
-            m_nTimerCounter = DROP_ACTION_TIMER_INITIAL_TICKS;
-            // remember the position, because I also get AcceptDrops, if the mouse does not move
-            m_aTimerTriggered = aDropPos;
-            // start Timer
-            if (!m_aDropActionTimer.IsActive()) // Does the Timer already exists?
-            {
-                m_aDropActionTimer.SetTimeout(DROP_ACTION_TIMER_TICK_BASE);
-                m_aDropActionTimer.Start();
-            }
-        }
-        else if (!bNeedTrigger)
-            m_aDropActionTimer.Stop();
-    }
-
-    return DND_ACTION_NONE;
-}
-
-sal_Int8 NavigatorTree::ExecuteDrop( const ExecuteDropEvent& /*_rEvt*/ )
-{
-    return DND_ACTION_NONE;
-}
-
-void NavigatorTree::StartDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
-{
-    m_pDragedEntry = GetEntry(_rPosPixel);
-    if ( m_pDragedEntry )
-    {
-        EndSelection();
-    }
-}
-
-IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer, Timer *, void)
-{
-    if (--m_nTimerCounter > 0)
-        return;
-
-    switch ( m_aDropActionType )
-    {
-        case DA_EXPANDNODE:
-        {
-            SvTreeListEntry* pToExpand = GetEntry(m_aTimerTriggered);
-            if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
-                Expand(pToExpand);
-            m_aDropActionTimer.Stop();
-        }
-        break;
-
-        case DA_SCROLLUP :
-            ScrollOutputArea( 1 );
-            m_nTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
-            break;
-
-        case DA_SCROLLDOWN :
-            ScrollOutputArea( -1 );
-            m_nTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
-            break;
-
-    }
-}
-
-
-IMPL_LINK_NOARG(NavigatorTree, OnEntrySelDesel, SvTreeListBox*, void)
+IMPL_LINK_NOARG(NavigatorTree, OnEntrySelDesel, weld::TreeView&, void)
 {
     if ( !m_pSelectionListener->locked() )
     {
         m_pSelectionListener->lock();
-        SvTreeListEntry* pEntry = GetCurEntry();
+        std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+        bool bEntry = m_xTreeView->get_cursor(xEntry.get());
         uno::Any aSelection;
-        if ( IsSelected(pEntry) )
-            aSelection <<= static_cast<UserData*>(pEntry->GetUserData())->getContent();
+        if (bEntry && m_xTreeView->is_selected(*xEntry))
+            aSelection <<= reinterpret_cast<UserData*>(m_xTreeView->get_id(*xEntry).toInt64())->getContent();
         m_rController.select(aSelection);
         m_pSelectionListener->unlock();
     }
@@ -491,172 +355,211 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent )
     uno::Any aSec = xSelectionSupplier->getSelection();
     uno::Sequence< uno::Reference< report::XReportComponent > > aSelection;
     aSec >>= aSelection;
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
     if ( !aSelection.hasElements() )
     {
         uno::Reference< uno::XInterface> xSelection(aSec,uno::UNO_QUERY);
-        SvTreeListEntry* pEntry = find(xSelection);
-        if ( pEntry && !IsSelected(pEntry) )
+        bool bEntry = find(xSelection, *xEntry);
+        if (bEntry && !m_xTreeView->is_selected(*xEntry))
         {
-            Select(pEntry);
-            SetCurEntry(pEntry);
+            m_xTreeView->select(*xEntry);
+            m_xTreeView->set_cursor(*xEntry);
         }
-        else if ( !pEntry )
-            SelectAll(false,false);
+        else if (!bEntry)
+            m_xTreeView->unselect_all();
     }
     else
     {
         for (const uno::Reference<report::XReportComponent>& rElem : std::as_const(aSelection))
         {
-            SvTreeListEntry* pEntry = find(rElem);
-            if ( pEntry && !IsSelected(pEntry) )
+            bool bEntry = find(rElem, *xEntry);
+            if (bEntry && !m_xTreeView->is_selected(*xEntry))
             {
-                Select(pEntry);
-                SetCurEntry(pEntry);
+                m_xTreeView->select(*xEntry);
+                m_xTreeView->set_cursor(*xEntry);
             }
         }
     }
     m_pSelectionListener->unlock();
 }
 
-SvTreeListEntry* NavigatorTree::insertEntry(const OUString& _sName,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition,UserData* _pData)
+void NavigatorTree::insertEntry(const OUString& rName, weld::TreeIter* pParent, const OUString& rImageId,
+                                int nPosition, UserData* pData, weld::TreeIter& rRet)
 {
-    SvTreeListEntry* pEntry = nullptr;
+    OUString sId = pData ? OUString::number(reinterpret_cast<sal_Int64>(pData)) : OUString();
+    m_xTreeView->insert(pParent, nPosition, &rName, &sId, nullptr, nullptr, nullptr, false, &rRet);
     if (!rImageId.isEmpty())
-    {
-        const Image aImage(StockImage::Yes, rImageId);
-        pEntry = InsertEntry(_sName,aImage,aImage,_pParent,false,_nPosition,_pData);
-    }
-    else
-        pEntry = InsertEntry(_sName,_pParent,false,_nPosition,_pData);
-    return pEntry;
+        m_xTreeView->set_image(rRet, rImageId);
 }
 
-void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition)
+void NavigatorTree::traverseSection(const uno::Reference<report::XSection>& xSection, weld::TreeIter* pParent, const OUString& rImageId, int nPosition)
 {
-    SvTreeListEntry* pSection = insertEntry(_xSection->getName(),_pParent, rImageId, _nPosition,new UserData(this,_xSection));
-    const sal_Int32 nCount = _xSection->getCount();
+    std::unique_ptr<weld::TreeIter> xSectionIter = m_xTreeView->make_iterator();
+    std::unique_ptr<weld::TreeIter> xScratch = m_xTreeView->make_iterator();
+    insertEntry(xSection->getName(), pParent, rImageId, nPosition, new UserData(this, xSection), *xSectionIter);
+    const sal_Int32 nCount = xSection->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        uno::Reference< report::XReportComponent> xElement(_xSection->getByIndex(i),uno::UNO_QUERY_THROW);
-        insertEntry(lcl_getName(xElement.get()),pSection,lcl_getImageId(xElement),TREELIST_APPEND,new UserData(this,xElement));
+        uno::Reference< report::XReportComponent> xElement(xSection->getByIndex(i), uno::UNO_QUERY_THROW);
+        insertEntry(lcl_getName(xElement.get()), xSectionIter.get(), lcl_getImageId(xElement), -1, new UserData(this, xElement), *xScratch);
         uno::Reference< report::XReportDefinition> xSubReport(xElement,uno::UNO_QUERY);
         if ( xSubReport.is() )
         {
-            m_pMasterReport = find(_xSection->getReportDefinition());
+            bool bMasterReport = find(xSection->getReportDefinition(), *xScratch);
+            if (!bMasterReport)
+                m_xMasterReport.reset();
+            else
+                m_xMasterReport = m_xTreeView->make_iterator(xScratch.get());
             reportdesign::OReportVisitor aSubVisitor(this);
             aSubVisitor.start(xSubReport);
         }
     }
 }
 
-void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent)
+void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>& xFunctions, weld::TreeIter* pParent)
 {
-    SvTreeListEntry* pFunctions = insertEntry(RptResId(RID_STR_FUNCTIONS), _pParent, RID_SVXBMP_RPT_NEW_FUNCTION, TREELIST_APPEND, new UserData(this,_xFunctions));
-    const sal_Int32 nCount = _xFunctions->getCount();
+    std::unique_ptr<weld::TreeIter> xFunctionIter = m_xTreeView->make_iterator();
+    std::unique_ptr<weld::TreeIter> xScratch = m_xTreeView->make_iterator();
+    insertEntry(RptResId(RID_STR_FUNCTIONS), pParent, RID_SVXBMP_RPT_NEW_FUNCTION, -1, new UserData(this, xFunctions), *xFunctionIter);
+    const sal_Int32 nCount = xFunctions->getCount();
     for (sal_Int32 i = 0; i< nCount; ++i)
     {
-        uno::Reference< report::XFunction> xElement(_xFunctions->getByIndex(i),uno::UNO_QUERY);
-        insertEntry(xElement->getName(),pFunctions,RID_SVXBMP_RPT_NEW_FUNCTION,TREELIST_APPEND,new UserData(this,xElement));
+        uno::Reference< report::XFunction> xElement(xFunctions->getByIndex(i),uno::UNO_QUERY);
+        insertEntry(xElement->getName(), xFunctionIter.get(), RID_SVXBMP_RPT_NEW_FUNCTION, -1, new UserData(this,xElement), *xScratch);
     }
 }
 
-SvTreeListEntry* NavigatorTree::find(const uno::Reference< uno::XInterface >& _xContent)
+bool NavigatorTree::find(const uno::Reference<uno::XInterface>& xContent, weld::TreeIter& rRet)
 {
-    SvTreeListEntry* pRet = nullptr;
-    if ( _xContent.is() )
+    bool bRet = false;
+    if (xContent.is())
     {
-        SvTreeListEntry* pCurrent = First();
-        while ( pCurrent )
-        {
-            UserData* pData = static_cast<UserData*>(pCurrent->GetUserData());
-            OSL_ENSURE(pData,"No UserData set an entry!");
-            if ( pData->getContent() == _xContent )
+        m_xTreeView->all_foreach([this, &xContent, &bRet, &rRet](weld::TreeIter& rIter) {
+            UserData* pData = reinterpret_cast<UserData*>(m_xTreeView->get_id(rIter).toInt64());
+            if (pData->getContent() == xContent)
             {
-                pRet = pCurrent;
-                break;
+                m_xTreeView->copy_iterator(rIter, rRet);
+                bRet = true;
+                return true;
             }
-            pCurrent = Next(pCurrent);
-        }
+            return false;
+        });
     }
-    return pRet;
+    return bRet;
 }
 
 // ITraverseReport
 
-void NavigatorTree::traverseReport(const uno::Reference< report::XReportDefinition>& _xReport)
+void NavigatorTree::traverseReport(const uno::Reference< report::XReportDefinition>& xReport)
 {
-    insertEntry(_xReport->getName(),m_pMasterReport,RID_SVXBMP_SELECT_REPORT,TREELIST_APPEND,new UserData(this,_xReport));
+    std::unique_ptr<weld::TreeIter> xScratch = m_xTreeView->make_iterator();
+    insertEntry(xReport->getName(), m_xMasterReport.get(), RID_SVXBMP_SELECT_REPORT,-1, new UserData(this, xReport), *xScratch);
 }
 
-void NavigatorTree::traverseReportFunctions(const uno::Reference< report::XFunctions>& _xFunctions)
+void NavigatorTree::traverseReportFunctions(const uno::Reference< report::XFunctions>& xFunctions)
 {
-    SvTreeListEntry* pReport = find(_xFunctions->getParent());
-    traverseFunctions(_xFunctions,pReport);
+    std::unique_ptr<weld::TreeIter> xReport = m_xTreeView->make_iterator();
+    bool bReport = find(xFunctions->getParent(), *xReport);
+    if (!bReport)
+        xReport.reset();
+    traverseFunctions(xFunctions, xReport.get());
 }
 
-void NavigatorTree::traverseReportHeader(const uno::Reference< report::XSection>& _xSection)
+void NavigatorTree::traverseReportHeader(const uno::Reference< report::XSection>& xSection)
 {
-    SvTreeListEntry* pReport = find(_xSection->getReportDefinition());
-    traverseSection(_xSection,pReport,RID_SVXBMP_REPORTHEADERFOOTER);
+    std::unique_ptr<weld::TreeIter> xReport = m_xTreeView->make_iterator();
+    bool bReport = find(xSection->getReportDefinition(), *xReport);
+    if (!bReport)
+        xReport.reset();
+    traverseSection(xSection, xReport.get(), RID_SVXBMP_REPORTHEADERFOOTER);
 }
 
-void NavigatorTree::traverseReportFooter(const uno::Reference< report::XSection>& _xSection)
+void NavigatorTree::traverseReportFooter(const uno::Reference< report::XSection>& xSection)
 {
-    SvTreeListEntry* pReport = find(_xSection->getReportDefinition());
-    traverseSection(_xSection,pReport,RID_SVXBMP_REPORTHEADERFOOTER);
+    std::unique_ptr<weld::TreeIter> xReport = m_xTreeView->make_iterator();
+    bool bReport = find(xSection->getReportDefinition(), *xReport);
+    if (!bReport)
+        xReport.reset();
+    traverseSection(xSection, xReport.get(), RID_SVXBMP_REPORTHEADERFOOTER);
 }
 
-void NavigatorTree::traversePageHeader(const uno::Reference< report::XSection>& _xSection)
+void NavigatorTree::traversePageHeader(const uno::Reference< report::XSection>& xSection)
 {
-    SvTreeListEntry* pReport = find(_xSection->getReportDefinition());
-    traverseSection(_xSection,pReport,RID_SVXBMP_PAGEHEADERFOOTER);
+    std::unique_ptr<weld::TreeIter> xReport = m_xTreeView->make_iterator();
+    bool bReport = find(xSection->getReportDefinition(), *xReport);
+    if (!bReport)
+        xReport.reset();
+    traverseSection(xSection, xReport.get(), RID_SVXBMP_PAGEHEADERFOOTER);
 }
 
-void NavigatorTree::traversePageFooter(const uno::Reference< report::XSection>& _xSection)
+void NavigatorTree::traversePageFooter(const uno::Reference< report::XSection>& xSection)
 {
-    SvTreeListEntry* pReport = find(_xSection->getReportDefinition());
-    traverseSection(_xSection,pReport,RID_SVXBMP_PAGEHEADERFOOTER);
+    std::unique_ptr<weld::TreeIter> xReport = m_xTreeView->make_iterator();
+    bool bReport = find(xSection->getReportDefinition(), *xReport);
+    if (!bReport)
+        xReport.reset();
+    traverseSection(xSection, xReport.get(), RID_SVXBMP_PAGEHEADERFOOTER);
 }
 
-void NavigatorTree::traverseGroups(const uno::Reference< report::XGroups>& _xGroups)
+void NavigatorTree::traverseGroups(const uno::Reference< report::XGroups>& xGroups)
 {
-    SvTreeListEntry* pReport = find(_xGroups->getReportDefinition());
-    insertEntry(RptResId(RID_STR_GROUPS), pReport, RID_SVXBMP_SORTINGANDGROUPING, TREELIST_APPEND, new UserData(this,_xGroups));
+    std::unique_ptr<weld::TreeIter> xReport = m_xTreeView->make_iterator();
+    bool bReport = find(xGroups->getReportDefinition(), *xReport);
+    if (!bReport)
+        xReport.reset();
+    std::unique_ptr<weld::TreeIter> xScratch = m_xTreeView->make_iterator();
+    insertEntry(RptResId(RID_STR_GROUPS), xReport.get(), RID_SVXBMP_SORTINGANDGROUPING, -1, new UserData(this, xGroups), *xScratch);
 }
 
-void NavigatorTree::traverseGroup(const uno::Reference< report::XGroup>& _xGroup)
+void NavigatorTree::traverseGroup(const uno::Reference< report::XGroup>& xGroup)
 {
-    uno::Reference< report::XGroups> xGroups(_xGroup->getParent(),uno::UNO_QUERY);
-    SvTreeListEntry* pGroups = find(xGroups);
-    OSL_ENSURE(pGroups,"No Groups inserted so far. Why!");
-    insertEntry(_xGroup->getExpression(),pGroups,RID_SVXBMP_GROUP,rptui::getPositionInIndexAccess(xGroups.get(),_xGroup),new UserData(this,_xGroup));
+    uno::Reference< report::XGroups> xGroups(xGroup->getParent(),uno::UNO_QUERY);
+    std::unique_ptr<weld::TreeIter> xGroupsIter = m_xTreeView->make_iterator();
+    bool bGroups = find(xGroups, *xGroupsIter);
+    OSL_ENSURE(bGroups, "No Groups inserted so far. Why!");
+    if (!bGroups)
+        xGroupsIter.reset();
+    std::unique_ptr<weld::TreeIter> xScratch = m_xTreeView->make_iterator();
+    insertEntry(xGroup->getExpression(), xGroupsIter.get(), RID_SVXBMP_GROUP, rptui::getPositionInIndexAccess(xGroups.get(),xGroup), new UserData(this,xGroup), *xScratch);
 }
 
-void NavigatorTree::traverseGroupFunctions(const uno::Reference< report::XFunctions>& _xFunctions)
+void NavigatorTree::traverseGroupFunctions(const uno::Reference< report::XFunctions>& xFunctions)
 {
-    SvTreeListEntry* pGroup = find(_xFunctions->getParent());
-    traverseFunctions(_xFunctions,pGroup);
+    std::unique_ptr<weld::TreeIter> xReport = m_xTreeView->make_iterator();
+    bool bReport = find(xFunctions->getParent(), *xReport);
+    if (!bReport)
+        xReport.reset();
+    traverseFunctions(xFunctions, xReport.get());
 }
 
-void NavigatorTree::traverseGroupHeader(const uno::Reference< report::XSection>& _xSection)
+void NavigatorTree::traverseGroupHeader(const uno::Reference< report::XSection>& xSection)
 {
-    SvTreeListEntry* pGroup = find(_xSection->getGroup());
-    OSL_ENSURE(pGroup,"No group found");
-    traverseSection(_xSection,pGroup,RID_SVXBMP_GROUPHEADER,1);
+    std::unique_ptr<weld::TreeIter> xReport = m_xTreeView->make_iterator();
+    bool bReport = find(xSection->getGroup(), *xReport);
+    OSL_ENSURE(bReport, "No group found");
+    if (!bReport)
+        xReport.reset();
+    traverseSection(xSection, xReport.get(), RID_SVXBMP_GROUPHEADER, 1);
 }
 
-void NavigatorTree::traverseGroupFooter(const uno::Reference< report::XSection>& _xSection)
+void NavigatorTree::traverseGroupFooter(const uno::Reference< report::XSection>& xSection)
 {
-    SvTreeListEntry* pGroup = find(_xSection->getGroup());
-    OSL_ENSURE(pGroup,"No group found");
-    traverseSection(_xSection,pGroup,RID_SVXBMP_GROUPFOOTER);
+    std::unique_ptr<weld::TreeIter> xReport = m_xTreeView->make_iterator();
+    bool bReport = find(xSection->getGroup(), *xReport);
+    OSL_ENSURE(bReport, "No group found");
+    if (!bReport)
+        xReport.reset();
+    traverseSection(xSection, xReport.get(), RID_SVXBMP_GROUPFOOTER);
 }
 
-void NavigatorTree::traverseDetail(const uno::Reference< report::XSection>& _xSection)
+void NavigatorTree::traverseDetail(const uno::Reference< report::XSection>& xSection)
 {
-    uno::Reference< report::XReportDefinition> xReport = _xSection->getReportDefinition();
-    SvTreeListEntry* pParent = find(xReport);
-    traverseSection(_xSection,pParent,RID_SVXBMP_ICON_DETAIL);
+    uno::Reference< report::XReportDefinition> xReport = xSection->getReportDefinition();
+    std::unique_ptr<weld::TreeIter> xParent = m_xTreeView->make_iterator();
+    bool bParent = find(xReport, *xParent);
+    if (!bParent)
+        xParent.reset();
+    traverseSection(xSection, xParent.get(), RID_SVXBMP_ICON_DETAIL);
 }
 
 void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
@@ -668,22 +571,27 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         _rEvent.NewValue >>= bEnabled;
         if ( bEnabled )
         {
-            SvTreeListEntry* pParent = find(xReport);
+            std::unique_ptr<weld::TreeIter> xParent = m_xTreeView->make_iterator();
+            bool bParent = find(xReport, *xParent);
+            if (!bParent)
+                xParent.reset();
             if ( _rEvent.PropertyName == PROPERTY_REPORTHEADERON )
             {
                 sal_uLong nPos = xReport->getReportHeaderOn() ? 2 : 1;
-                traverseSection(xReport->getReportHeader(),pParent,RID_SVXBMP_REPORTHEADERFOOTER,nPos);
+                traverseSection(xReport->getReportHeader(),xParent.get(),RID_SVXBMP_REPORTHEADERFOOTER,nPos);
             }
             else if ( _rEvent.PropertyName == PROPERTY_PAGEHEADERON )
             {
-                traverseSection(xReport->getPageHeader(),pParent, RID_SVXBMP_PAGEHEADERFOOTER,1);
+                traverseSection(xReport->getPageHeader(),xParent.get(), RID_SVXBMP_PAGEHEADERFOOTER,1);
             }
             else if ( _rEvent.PropertyName == PROPERTY_PAGEFOOTERON )
-                traverseSection(xReport->getPageFooter(),pParent, RID_SVXBMP_PAGEHEADERFOOTER);
+                traverseSection(xReport->getPageFooter(),xParent.get(), RID_SVXBMP_PAGEHEADERFOOTER);
             else if ( _rEvent.PropertyName == PROPERTY_REPORTFOOTERON )
             {
-                sal_uLong nPos = xReport->getPageFooterOn() ? (GetLevelChildCount(pParent) - 1) : TREELIST_APPEND;
-                traverseSection(xReport->getReportFooter(),pParent,RID_SVXBMP_REPORTHEADERFOOTER,nPos);
+                int nPos = -1;
+                if (xReport->getPageFooterOn() && xParent)
+                    nPos = m_xTreeView->iter_n_children(*xParent) - 1;
+                traverseSection(xReport->getReportFooter(),xParent.get(),RID_SVXBMP_REPORTHEADERFOOTER,nPos);
             }
         }
     }
@@ -691,7 +599,10 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
 
 void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
 {
-    SvTreeListEntry* pEntry = find(_rEvent.Source);
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+    bool bEntry = find(_rEvent.Source, *xEntry);
+    if (!bEntry)
+        xEntry.reset();
     uno::Reference<beans::XPropertySet> xProp(_rEvent.Element,uno::UNO_QUERY_THROW);
     OUString sName;
     uno::Reference< beans::XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
@@ -713,66 +624,69 @@ void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
         uno::Reference< report::XReportComponent> xElement(xProp,uno::UNO_QUERY);
         if ( xProp.is() )
             sName = lcl_getName(xProp);
-        insertEntry(sName,pEntry,(!xElement.is() ? OUString(RID_SVXBMP_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),TREELIST_APPEND,new UserData(this,xProp));
+        std::unique_ptr<weld::TreeIter> xScratch = m_xTreeView->make_iterator();
+        insertEntry(sName, xEntry.get(), (!xElement.is() ? OUString(RID_SVXBMP_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),
+                    -1, new UserData(this,xProp), *xScratch);
     }
-    if ( !IsExpanded(pEntry) )
-        Expand(pEntry);
+    if (bEntry && !m_xTreeView->get_row_expanded(*xEntry))
+        m_xTreeView->expand_row(*xEntry);
 }
 
 void NavigatorTree::_elementRemoved( const container::ContainerEvent& _rEvent )
 {
     uno::Reference<beans::XPropertySet> xProp(_rEvent.Element,uno::UNO_QUERY);
-    SvTreeListEntry* pEntry = find(xProp);
-    OSL_ENSURE(pEntry,"NavigatorTree::_elementRemoved: No Entry found!");
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+    bool bEntry = find(xProp, *xEntry);
+    OSL_ENSURE(bEntry,"NavigatorTree::_elementRemoved: No Entry found!");
 
-    if (pEntry)
+    if (bEntry)
     {
-        removeEntry(pEntry);
-        Invalidate();
+        removeEntry(*xEntry);
     }
 }
 
 void NavigatorTree::_elementReplaced( const container::ContainerEvent& _rEvent )
 {
     uno::Reference<beans::XPropertySet> xProp(_rEvent.ReplacedElement,uno::UNO_QUERY);
-    SvTreeListEntry* pEntry = find(xProp);
-    if ( pEntry )
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+    bool bEntry = find(xProp, *xEntry);
+    if (bEntry)
     {
-        UserData* pData = static_cast<UserData*>(pEntry->GetUserData());
+        UserData* pData = reinterpret_cast<UserData*>(m_xTreeView->get_id(*xEntry).toInt64());
         xProp.set(_rEvent.Element,uno::UNO_QUERY);
         pData->setContent(xProp);
         OUString sName;
         xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
-        SetEntryText(pEntry,sName);
+        m_xTreeView->set_text(*xEntry, sName);
     }
 }
 
 void NavigatorTree::_disposing(const lang::EventObject& _rSource)
 {
-    removeEntry(find(_rSource.Source));
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+    if (find(_rSource.Source, *xEntry))
+        removeEntry(*xEntry);
 }
 
-void NavigatorTree::removeEntry(SvTreeListEntry* _pEntry,bool _bRemove)
+void NavigatorTree::removeEntry(weld::TreeIter& rEntry, bool bRemove)
 {
-    if ( _pEntry )
+    std::unique_ptr<weld::TreeIter> xChild = m_xTreeView->make_iterator(&rEntry);
+    bool bChild = m_xTreeView->iter_children(*xChild);
+    while (bChild)
     {
-        SvTreeListEntry* pChild = FirstChild(_pEntry);
-        while( pChild )
-        {
-            removeEntry(pChild,false);
-            pChild = pChild->NextSibling();
-        }
-        delete static_cast<UserData*>(_pEntry->GetUserData());
-        if ( _bRemove )
-            GetModel()->Remove(_pEntry);
+        removeEntry(*xChild, false);
+        bChild = m_xTreeView->iter_next_sibling(*xChild);
     }
+    delete reinterpret_cast<UserData*>(m_xTreeView->get_id(rEntry).toInt64());
+    if (bRemove)
+        m_xTreeView->remove(rEntry);
 }
 
-NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno::XInterface>& _xContent)
+NavigatorTree::UserData::UserData(NavigatorTree* pTree,const uno::Reference<uno::XInterface>& xContent)
     : OPropertyChangeListener(m_aMutex)
     , OContainerListener(m_aMutex)
-    , m_xContent(_xContent)
-    , m_pTree(_pTree)
+    , m_xContent(xContent)
+    , m_pTree(pTree)
 {
     uno::Reference<beans::XPropertySet> xProp(m_xContent,uno::UNO_QUERY);
     if ( xProp.is() )
@@ -813,8 +727,11 @@ NavigatorTree::UserData::~UserData()
 // OPropertyChangeListener
 void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
 {
-    SvTreeListEntry* pEntry = m_pTree->find(_rEvent.Source);
-    OSL_ENSURE(pEntry,"No entry could be found! Why not!");
+    std::unique_ptr<weld::TreeIter> xEntry = m_pTree->make_iterator();
+    bool bEntry = m_pTree->find(_rEvent.Source, *xEntry);
+    OSL_ENSURE(bEntry,"No entry could be found! Why not!");
+    if (!bEntry)
+        return;
     const bool bFooterOn = (PROPERTY_FOOTERON == _rEvent.PropertyName);
     try
     {
@@ -828,7 +745,7 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
             {
                 pIsOn = ::std::mem_fn(&OGroupHelper::getFooterOn);
                 pMemFunSection = ::std::mem_fn(&OGroupHelper::getFooter);
-                nPos = m_pTree->GetChildCount(pEntry) - 1;
+                nPos = m_pTree->iter_n_children(*xEntry) - 1;
             }
 
             OGroupHelper aGroupHelper(xGroup);
@@ -836,19 +753,19 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
             {
                 if ( bFooterOn )
                     ++nPos;
-                m_pTree->traverseSection(pMemFunSection(&aGroupHelper),pEntry,bFooterOn ? OUString(RID_SVXBMP_GROUPFOOTER) : OUString(RID_SVXBMP_GROUPHEADER),nPos);
+                m_pTree->traverseSection(pMemFunSection(&aGroupHelper),xEntry.get(),bFooterOn ? OUString(RID_SVXBMP_GROUPFOOTER) : OUString(RID_SVXBMP_GROUPHEADER),nPos);
             }
         }
         else if ( PROPERTY_EXPRESSION == _rEvent.PropertyName)
         {
             OUString sNewName;
             _rEvent.NewValue >>= sNewName;
-            m_pTree->SetEntryText(pEntry,sNewName);
+            m_pTree->set_text(*xEntry, sNewName);
         }
         else if ( PROPERTY_DATAFIELD == _rEvent.PropertyName || PROPERTY_LABEL == _rEvent.PropertyName || PROPERTY_NAME == _rEvent.PropertyName )
         {
             uno::Reference<beans::XPropertySet> xProp(_rEvent.Source,uno::UNO_QUERY);
-            m_pTree->SetEntryText(pEntry,lcl_getName(xProp));
+            m_pTree->set_text(*xEntry, lcl_getName(xProp));
         }
     }
     catch(const uno::Exception &)
@@ -875,56 +792,49 @@ void NavigatorTree::UserData::_disposing(const lang::EventObject& _rSource)
     m_pTree->_disposing( _rSource );
 }
 
-Size NavigatorTree::GetOptimalSize() const
-{
-    return LogicToPixel(Size(100, 70), MapMode(MapUnit::MapAppFont));
-}
-
 class ONavigatorImpl
 {
 public:
-    ONavigatorImpl(OReportController& _rController,ONavigator* _pParent);
+    ONavigatorImpl(OReportController& rController, weld::Builder& rBuilder);
     ONavigatorImpl(const ONavigatorImpl&) = delete;
     ONavigatorImpl& operator=(const ONavigatorImpl&) = delete;
 
     uno::Reference< report::XReportDefinition>  m_xReport;
     ::rptui::OReportController&                 m_rController;
-    VclPtr<NavigatorTree>                       m_pNavigatorTree;
+    std::unique_ptr<NavigatorTree>              m_xNavigatorTree;
 };
 
-ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pParent)
-    :m_xReport(_rController.getReportDefinition())
-    ,m_rController(_rController)
-    ,m_pNavigatorTree(VclPtr<NavigatorTree>::Create(_pParent->get<vcl::Window>("box"),_rController))
+ONavigatorImpl::ONavigatorImpl(OReportController& rController, weld::Builder& rBuilder)
+    : m_xReport(rController.getReportDefinition())
+    , m_rController(rController)
+    , m_xNavigatorTree(std::make_unique<NavigatorTree>(rBuilder.weld_tree_view("treeview"), rController))
 {
-    reportdesign::OReportVisitor aVisitor(m_pNavigatorTree.get());
+    reportdesign::OReportVisitor aVisitor(m_xNavigatorTree.get());
     aVisitor.start(m_xReport);
-    m_pNavigatorTree->Expand(m_pNavigatorTree->find(m_xReport));
+    std::unique_ptr<weld::TreeIter> xScratch = m_xNavigatorTree->make_iterator();
+    if (m_xNavigatorTree->find(m_xReport, *xScratch))
+        m_xNavigatorTree->expand_row(*xScratch);
     lang::EventObject aEvent(m_rController);
-    m_pNavigatorTree->_selectionChanged(aEvent);
+    m_xNavigatorTree->_selectionChanged(aEvent);
 }
 
-ONavigator::ONavigator(vcl::Window* _pParent ,OReportController& _rController)
-    : FloatingWindow( _pParent, "FloatingNavigator", "modules/dbreport/ui/floatingnavigator.ui")
+ONavigator::ONavigator(weld::Window* pParent, OReportController& rController)
+    : GenericDialogController(pParent, "modules/dbreport/ui/floatingnavigator.ui", "FloatingNavigator")
 {
-    m_pImpl.reset(new ONavigatorImpl(_rController,this));
+    m_pImpl.reset(new ONavigatorImpl(rController, *m_xBuilder));
+    m_pImpl->m_xNavigatorTree->grab_focus();
 
-    m_pImpl->m_pNavigatorTree->Show();
-    m_pImpl->m_pNavigatorTree->GrabFocus();
-    Show();
+    m_xDialog->connect_toplevel_focus_changed(LINK(this, ONavigator, FocusChangeHdl));
 }
 
-void ONavigator::GetFocus()
+ONavigator::~ONavigator()
 {
-    Window::GetFocus();
-    if ( m_pImpl->m_pNavigatorTree.get() )
-        m_pImpl->m_pNavigatorTree->GrabFocus();
 }
 
-void ONavigator::dispose()
+IMPL_LINK_NOARG(ONavigator, FocusChangeHdl, weld::Widget&, void)
 {
-    m_pImpl->m_pNavigatorTree.disposeAndClear();
-    FloatingWindow::dispose();
+    if (m_xDialog->has_toplevel_focus())
+        m_pImpl->m_xNavigatorTree->grab_focus();
 }
 
 } // rptui
