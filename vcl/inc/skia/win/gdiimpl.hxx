@@ -29,22 +29,20 @@ public:
 
     virtual std::unique_ptr<Texture> getAsMaskTexture() override;
 
-    virtual bool copyToTexture(Texture& aTexture) override;
-
     virtual bool wantsTextColorWhite() const override { return true; }
 
-    SkBitmap getAsBitmap();
-    SkBitmap getAsMaskBitmap();
+    sk_sp<SkImage> getAsImage();
+    sk_sp<SkImage> getAsMaskImage();
 
     struct Texture;
 };
 
 struct SkiaCompatibleDC::Texture : public CompatibleDC::Texture
 {
-    SkBitmap bitmap; // TODO SkBitmap, SkSurface, SkImage?
-    virtual bool isValid() const { return !bitmap.drawsNothing(); }
-    virtual int GetWidth() const { return bitmap.width(); }
-    virtual int GetHeight() const { return bitmap.height(); }
+    sk_sp<SkImage> image;
+    virtual bool isValid() const { return image.get(); }
+    virtual int GetWidth() const { return image->width(); }
+    virtual int GetHeight() const { return image->height(); }
 };
 
 class WinSkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public WinSalGraphicsImplBase
@@ -81,8 +79,9 @@ protected:
     virtual void performFlush() override;
 };
 
-typedef std::pair<ControlCacheKey, SkBitmap> SkiaControlCachePair;
-typedef o3tl::lru_map<ControlCacheKey, SkBitmap, ControlCacheHashFunction> SkiaControlCacheType;
+typedef std::pair<ControlCacheKey, sk_sp<SkImage>> SkiaControlCachePair;
+typedef o3tl::lru_map<ControlCacheKey, sk_sp<SkImage>, ControlCacheHashFunction>
+    SkiaControlCacheType;
 
 class SkiaControlsCache
 {

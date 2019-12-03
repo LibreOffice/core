@@ -30,7 +30,8 @@ public:
     // caller must delete
     OpenGLTexture* getOpenGLTexture();
 
-    virtual bool copyToTexture(Texture& aTexture) override;
+    /// Copy bitmap data to the texture. Texture must be initialized and the correct size to hold the bitmap.
+    bool copyToTexture(Texture& aTexture);
 
     struct Texture;
 };
