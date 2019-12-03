@@ -5782,7 +5782,7 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
             nWwId == ww::stiEmphasis )
         return true;
 
-    static std::set<OUString, OUStringIgnoreCase> const aWhitelist
+    static o3tl::sorted_vector<OUString, OUStringIgnoreCase> const aWhitelist
     {
         "No Spacing",
         "List Paragraph",

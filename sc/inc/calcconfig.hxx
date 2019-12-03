@@ -13,8 +13,8 @@
 #include "scdllapi.h"
 
 #include <memory>
-#include <set>
 
+#include <o3tl/sorted_vector.hxx>
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
 #include <rtl/ustring.hxx>
@@ -64,7 +64,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     OUString maOpenCLDevice;
     sal_Int32 mnOpenCLMinimumFormulaGroupSize;
 
-    typedef std::shared_ptr<std::set<OpCode>> OpCodeSet;
+    typedef std::shared_ptr<o3tl::sorted_vector<OpCode>> OpCodeSet;
 
     OpCodeSet mpOpenCLSubsetOpCodes;
 

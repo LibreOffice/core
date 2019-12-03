@@ -27,6 +27,7 @@
 #include <vcl/timer.hxx>
 
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -40,7 +41,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <memory>
-#include <set>
 
 namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
 namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleContext; } } } }
@@ -533,7 +533,7 @@ private:
         const OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
     bool impl_DragDataPoint( const OUString & rCID, double fOffset );
 
-    static const std::set< OUString >& impl_getAvailableCommands();
+    static const o3tl::sorted_vector< OUString >& impl_getAvailableCommands();
 
     /** Creates a helper accessibility class that must be initialized via XInitialization.  For
         parameters see
