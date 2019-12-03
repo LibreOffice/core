@@ -36,6 +36,7 @@
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 #include <QtCore/QThread>
+#include <QtCore/QVersionNumber>
 #include <QtGui/QDragMoveEvent>
 #include <QtGui/QDropEvent>
 #include <QtGui/QIcon>
@@ -51,6 +52,9 @@
 #if QT5_USING_X11
 #include <QtX11Extras/QX11Info>
 #include <xcb/xproto.h>
+#if QT5_HAVE_XCB_ICCCM
+#include <xcb/xcb_icccm.h>
+#endif
 #endif
 
 #include <saldatabasic.hxx>
@@ -62,6 +66,11 @@
 
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
+
+#if QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
+static bool g_bNeedsWmHintsWindowGroup = true;
+static xcb_atom_t g_aXcbClientLeaderAtom = 0;
+#endif
 
 static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                              sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight)
@@ -197,6 +206,69 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         m_aSystemData.platform = SystemEnvData::Platform::Wayland;
 
     SetIcon(SV_ICON_ID_OFFICE);
+
+    fixICCCMwindowGroup();
+}
+
+void Qt5Frame::fixICCCMwindowGroup()
+{
+#if QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
+    // older Qt5 just sets WM_CLIENT_LEADER, but not the XCB_ICCCM_WM_HINT_WINDOW_GROUP
+    // see Qt commit 0de4b326d8 ("xcb: fix issue with dialogs hidden by other windows")
+    // or QTBUG-46626. So LO has to set this itself to help some WMs.
+    if (!g_bNeedsWmHintsWindowGroup)
+        return;
+    g_bNeedsWmHintsWindowGroup = false;
+
+    if (QGuiApplication::platformName() != "xcb")
+        return;
+    if (QVersionNumber::fromString(qVersion()) >= QVersionNumber(5, 12))
+        return;
+
+    xcb_connection_t* conn = QX11Info::connection();
+    xcb_window_t win = asChild()->winId();
+
+    xcb_icccm_wm_hints_t hints;
+
+    xcb_get_property_cookie_t prop_cookie = xcb_icccm_get_wm_hints_unchecked(conn, win);
+    if (!xcb_icccm_get_wm_hints_reply(conn, prop_cookie, &hints, nullptr))
+        return;
+
+    if (hints.flags & XCB_ICCCM_WM_HINT_WINDOW_GROUP)
+        return;
+
+    if (g_aXcbClientLeaderAtom == 0)
+    {
+        const char* const leader_name = "WM_CLIENT_LEADER\0";
+        xcb_intern_atom_cookie_t atom_cookie
+            = xcb_intern_atom(conn, 1, strlen(leader_name), leader_name);
+        xcb_intern_atom_reply_t* atom_reply = xcb_intern_atom_reply(conn, atom_cookie, nullptr);
+        if (!atom_reply)
+            return;
+        g_aXcbClientLeaderAtom = atom_reply->atom;
+        free(atom_reply);
+    }
+
+    g_bNeedsWmHintsWindowGroup = true;
+
+    prop_cookie = xcb_get_property(conn, 0, win, g_aXcbClientLeaderAtom, XCB_ATOM_WINDOW, 0, 1);
+    xcb_get_property_reply_t* prop_reply = xcb_get_property_reply(conn, prop_cookie, nullptr);
+    if (!prop_reply)
+        return;
+
+    if (xcb_get_property_value_length(prop_reply) != 4)
+    {
+        free(prop_reply);
+        return;
+    }
+
+    xcb_window_t leader = *static_cast<xcb_window_t*>(xcb_get_property_value(prop_reply));
+    free(prop_reply);
+
+    hints.flags |= XCB_ICCCM_WM_HINT_WINDOW_GROUP;
+    hints.window_group = leader;
+    xcb_icccm_set_wm_hints(conn, win, &hints);
+#endif
 }
 
 Qt5Frame::~Qt5Frame()
