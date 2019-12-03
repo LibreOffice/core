@@ -103,6 +103,15 @@ namespace emfplushelper
     #define EmfPlusObjectTypeImageAttributes 0x800
     #define EmfPlusObjectTypeCustomLineCap 0x900
 
+    enum PixelOffsetMode
+    {
+        PixelOffsetModeDefault = 0x00,
+        PixelOffsetModeHighSpeed = 0x01,
+        PixelOffsetModeHighQuality = 0x02,
+        PixelOffsetModeNone = 0x03,
+        PixelOffsetModeHalf = 0x04
+    };
+
     enum UnitType
     {
         UnitTypeWorld = 0x00,
