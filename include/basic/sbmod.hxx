@@ -27,7 +27,6 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <deque>
-#include <memory>
 #include <basic/basicdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -63,9 +62,9 @@ protected:
     css::uno::Reference< css::script::XInvocation > mxWrapper;
     OUString            aOUSource;
     OUString            aComment;
-    std::unique_ptr<SbiImage>        pImage;        // the Image
-    std::unique_ptr<SbiBreakpoints>  pBreaks;       // Breakpoints
-    std::unique_ptr<SbClassData>     pClassData;
+    SbiImage*           pImage;        // the Image
+    SbiBreakpoints*     pBreaks;       // Breakpoints
+    std::unique_ptr<SbClassData> pClassData;
     bool mbVBACompat;
     sal_Int32 mnType;
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
