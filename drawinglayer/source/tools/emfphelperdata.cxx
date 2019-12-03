@@ -128,6 +128,20 @@ namespace emfplushelper
         return "";
     }
 
+    static OUString TextRenderingHintToString(sal_uInt16 nHint)
+    {
+        switch (nHint)
+        {
+            case TextRenderingHint::TextRenderingHintSystemDefault: return "TextRenderingHintSystemDefault";
+            case TextRenderingHint::TextRenderingHintSingleBitPerPixelGridFit: return "TextRenderingHintSingleBitPerPixelGridFit";
+            case TextRenderingHint::TextRenderingHintSingleBitPerPixel: return "TextRenderingHintSingleBitPerPixel";
+            case TextRenderingHint::TextRenderingHintAntialiasGridFit: return "TextRenderingHintAntialiasGridFit";
+            case TextRenderingHint::TextRenderingHintAntialias: return "TextRenderingHintAntialias";
+            case TextRenderingHint::TextRenderingHintClearTypeGridFit: return "TextRenderingHintClearTypeGridFit";
+        }
+        return "";
+    }
+
     EMFPObject::~EMFPObject()
     {
     }
@@ -949,7 +963,10 @@ namespace emfplushelper
                 break;
             }
 
-            SAL_INFO("drawinglayer", "EMF+ record size: " << size << " type: " << emfTypeToName(type) << " flags: " << flags << " data size: " << dataSize);
+            SAL_INFO("drawinglayer", "EMF+ " << emfTypeToName(type));
+            SAL_INFO("drawinglayer", "EMF+\t record size: " << size);
+            SAL_INFO("drawinglayer", "EMF+\t flags: 0x" << std::hex << flags << std::dec);
+            SAL_INFO("drawinglayer", "EMF+\t data size: " << dataSize);
 
             if (bIsGetDCProcessing)
             {
@@ -1533,7 +1550,6 @@ namespace emfplushelper
                     case EmfPlusRecordTypeSetPageTransform:
                     {
                         rMS.ReadFloat(mfPageScale);
-                        SAL_INFO("drawinglayer", "EMF+ SetPageTransform");
                         SAL_INFO("drawinglayer", "EMF+\tscale: " << mfPageScale << " unit: " << flags);
 
                         if ((flags == UnitTypeDisplay) || (flags == UnitTypeWorld))
@@ -1557,14 +1573,15 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSetTextRenderingHint:
                     {
+                        sal_uInt8 nTextRenderingHint = (flags & 0xFF) >> 1;
+                        SAL_INFO("drawinglayer", "EMF+\t Text rendering hint: " << TextRenderingHintToString(nTextRenderingHint));
                         SAL_INFO("drawinglayer", "TODO\t EMF+ SetTextRenderingHint");
                         break;
                     }
                     case EmfPlusRecordTypeSetAntiAliasMode:
                     {
                         bool bUseAntiAlias = (flags & 0x0001);
-                        sal_uInt8 nSmoothingMode = ((flags & 0xFE00) >> 1);
-                        SAL_INFO("drawinglayer", "EMF+ EmfPlusRecordTypeSetAntiAliasMode");
+                        sal_uInt8 nSmoothingMode = (flags & 0xFE00) >> 1;
                         SAL_INFO("drawinglayer", "EMF+\t Antialiasing: " << (bUseAntiAlias ? "enabled" : "disabled"));
                         SAL_INFO("drawinglayer", "EMF+\t Smoothing mode: " << SmoothingModeToString(nSmoothingMode));
                         SAL_INFO("drawinglayer", "TODO\t EMF+ SetAntiAliasMode");
@@ -1577,7 +1594,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSetPixelOffsetMode:
                     {
-                        SAL_INFO("drawinglayer", "EMF+ SetPixelOffsetMode: " << PixelOffsetModeToString(flags));
+                        SAL_INFO("drawinglayer", "EMF+\t Pixel offset mode: " << PixelOffsetModeToString(flags));
                         SAL_WARN("drawinglayer", "TODO\t EMF+ SetPixelOffsetMode");
                         break;
                     }
@@ -1590,7 +1607,7 @@ namespace emfplushelper
                     {
                         sal_uInt32 stackIndex;
                         rMS.ReadUInt32(stackIndex);
-                        SAL_INFO("drawinglayer", "EMF+ Save stack index: " << stackIndex);
+                        SAL_INFO("drawinglayer", "EMF+\t Save stack index: " << stackIndex);
 
                         GraphicStatePush(mGSStack, stackIndex);
 
@@ -1600,7 +1617,7 @@ namespace emfplushelper
                     {
                         sal_uInt32 stackIndex;
                         rMS.ReadUInt32(stackIndex);
-                        SAL_INFO("drawinglayer", "EMF+ Restore stack index: " << stackIndex);
+                        SAL_INFO("drawinglayer", "EMF+\t Restore stack index: " << stackIndex);
 
                         GraphicStatePop(mGSStack, stackIndex, mrPropertyHolders.Current());
                         break;
@@ -1609,7 +1626,7 @@ namespace emfplushelper
                     {
                         sal_uInt32 stackIndex;
                         rMS.ReadUInt32(stackIndex);
-                        SAL_INFO("drawinglayer", "EMF+ Begin Container No Params stack index: " << stackIndex);
+                        SAL_INFO("drawinglayer", "EMF+\t Begin Container No Params stack index: " << stackIndex);
 
                         GraphicStatePush(mGSContainerStack, stackIndex);
                         break;
@@ -1618,32 +1635,29 @@ namespace emfplushelper
                     {
                         sal_uInt32 stackIndex;
                         rMS.ReadUInt32(stackIndex);
-                        SAL_INFO("drawinglayer", "EMF+ End Container stack index: " << stackIndex);
+                        SAL_INFO("drawinglayer", "EMF+\t End Container stack index: " << stackIndex);
 
                         GraphicStatePop(mGSContainerStack, stackIndex, mrPropertyHolders.Current());
                         break;
                     }
                     case EmfPlusRecordTypeSetWorldTransform:
                     {
-                        SAL_INFO("drawinglayer", "EMF+ SetWorldTransform, Post multiply: " << bool(flags & 0x2000));
+                        SAL_INFO("drawinglayer", "EMF+\t SetWorldTransform, Post multiply: " << bool(flags & 0x2000));
                         readXForm(rMS, maWorldTransform);
                         mappingChanged();
-                        SAL_INFO("drawinglayer", "EMF+\t: " << maWorldTransform);
+                        SAL_INFO("drawinglayer", "EMF+\t\t: " << maWorldTransform);
                         break;
                     }
                     case EmfPlusRecordTypeResetWorldTransform:
                     {
-                        SAL_INFO("drawinglayer",
-                                 "EMF+ ResetWorldTransform");
                         maWorldTransform.identity();
-                        SAL_INFO("drawinglayer",
-                                 "EMF+\t: " << maWorldTransform);
+                        SAL_INFO("drawinglayer", "EMF+\t: " << maWorldTransform);
                         mappingChanged();
                         break;
                     }
                     case EmfPlusRecordTypeMultiplyWorldTransform:
                     {
-                        SAL_INFO("drawinglayer", "EMF+ MultiplyWorldTransform, post multiply: " << bool(flags & 0x2000));
+                        SAL_INFO("drawinglayer", "EMF+\t MultiplyWorldTransform, post multiply: " << bool(flags & 0x2000));
                         basegfx::B2DHomMatrix transform;
                         readXForm(rMS, transform);
 
@@ -1670,7 +1684,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeTranslateWorldTransform:
                     {
-                        SAL_INFO("drawinglayer", "EMF+ TranslateWorldTransform, Post multiply: " << bool(flags & 0x2000));
+                        SAL_INFO("drawinglayer", "EMF+\t TranslateWorldTransform, Post multiply: " << bool(flags & 0x2000));
 
                         basegfx::B2DHomMatrix transform;
                         float eDx, eDy;
@@ -1707,7 +1721,7 @@ namespace emfplushelper
                         transform.set(0, 0, eSx);
                         transform.set(1, 1, eSy);
 
-                        SAL_INFO("drawinglayer", "EMF+ ScaleWorldTransform Sx: " << eSx <<
+                        SAL_INFO("drawinglayer", "EMF+\t ScaleWorldTransform Sx: " << eSx <<
                                  " Sy: " << eSy << ", Post multiply:" << bool(flags & 0x2000));
                         SAL_INFO("drawinglayer",
                                  "EMF+\t World transform matrix: " << maWorldTransform);
@@ -1736,7 +1750,7 @@ namespace emfplushelper
                         float eAngle;
                         rMS.ReadFloat(eAngle);
 
-                        SAL_INFO("drawinglayer", "EMF+ RotateWorldTransform Angle: " << eAngle <<
+                        SAL_INFO("drawinglayer", "EMF+\t RotateWorldTransform Angle: " << eAngle <<
                                  ", post multiply: " << bool(flags & 0x2000));
                         // Skipping flags & 0x2000
                         // For rotation transformation there is no difference between post and pre multiply
