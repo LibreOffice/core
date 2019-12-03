@@ -115,6 +115,20 @@ namespace emfplushelper
         return "";
     }
 
+    static OUString SmoothingModeToString(sal_uInt16 nSmoothMode)
+    {
+        switch (nSmoothMode)
+        {
+            case SmoothingMode::SmoothingModeDefault: return "SmoothingModeDefault";
+            case SmoothingMode::SmoothingModeHighSpeed: return "SmoothModeHighSpeed";
+            case SmoothingMode::SmoothingModeHighQuality: return "SmoothingModeHighQuality";
+            case SmoothingMode::SmoothingModeNone: return "SmoothingModeNone";
+            case SmoothingMode::SmoothingModeAntiAlias8x4: return "SmoothingModeAntiAlias8x4";
+            case SmoothingMode::SmoothingModeAntiAlias8x8: return "SmoothingModeAntiAlias8x8";
+        }
+        return "";
+    }
+
     EMFPObject::~EMFPObject()
     {
     }
@@ -1551,6 +1565,11 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSetAntiAliasMode:
                     {
+                        bool bUseAntiAlias = (flags & 0x0001);
+                        sal_uInt8 nSmoothingMode = ((flags & 0xFE00) >> 1);
+                        SAL_INFO("drawinglayer", "EMF+ EmfPlusRecordTypeSetAntiAliasMode");
+                        SAL_INFO("drawinglayer", "EMF+\t Antialiasing: " << (bUseAntiAlias ? "enabled" : "disabled"));
+                        SAL_INFO("drawinglayer", "EMF+\t Smoothing mode: " << SmoothingModeToString(nSmoothingMode));
                         SAL_INFO("drawinglayer", "TODO\t EMF+ SetAntiAliasMode");
                         break;
                     }
