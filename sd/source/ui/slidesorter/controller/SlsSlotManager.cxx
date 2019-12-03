@@ -763,6 +763,13 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
         }
     }
 
+    ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
+    if (pBase && pBase->isContentExtractionLocked())
+    {
+        rSet.DisableItem(SID_COPY);
+        rSet.DisableItem(SID_CUT);
+    }
+
     // Cut, copy, and delete page are disabled when there is no selection.
     if (!(rSet.GetItemState(SID_CUT) == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_COPY)  == SfxItemState::DEFAULT
