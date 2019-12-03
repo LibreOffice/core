@@ -9655,7 +9655,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="Image-Color:MenuColor">
-                                    <property name="label" translatable="yes" context="draw_notebookbar_groupedbar_compact|GridB">_Color</property>
+                                    <property name="label" translatable="yes" context="draw_notebookbar_groupedbar_compact|GridB">Fi_lter</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="focus_on_click">False</property>
