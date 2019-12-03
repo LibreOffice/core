@@ -139,18 +139,20 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         else if ((nStyle & SalFrameStyleFlags::FLOAT)
                  && !(nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION))
             aWinFlags |= Qt::Popup;
-        else if (nStyle & SalFrameStyleFlags::DIALOG && pParent)
-            aWinFlags |= Qt::Dialog;
         else if (nStyle & SalFrameStyleFlags::TOOLWINDOW)
             aWinFlags |= Qt::Tool;
+        // top level windows can't be transient in Qt, so make them dialogs, if they have a parent. At least
+        // the plasma shell relies on this setting to skip dialogs in the window list. And Qt Xcb will just
+        // set transient for the types Dialog, Sheet, Tool, SplashScreen, ToolTip, Drawer and Popup.
+        else if (nStyle & SalFrameStyleFlags::DIALOG || m_pParent)
+            aWinFlags |= Qt::Dialog;
         else
             aWinFlags |= Qt::Window;
     }
 
     if (aWinFlags == Qt::Window)
     {
-        QWidget* pParentWidget = m_pParent ? m_pParent->asChild() : nullptr;
-        m_pTopLevel = new Qt5MainWindow(*this, pParentWidget, aWinFlags);
+        m_pTopLevel = new Qt5MainWindow(*this, aWinFlags);
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
         m_pTopLevel->setCentralWidget(m_pQWidget);
         m_pTopLevel->setFocusProxy(m_pQWidget);
