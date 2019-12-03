@@ -20,8 +20,8 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_COMMANDDISPATCHCONTAINER_HXX
 
 #include <cppuhelper/weakref.hxx>
+#include <o3tl/sorted_vector.hxx>
 
-#include <set>
 #include <map>
 #include <vector>
 
@@ -81,7 +81,7 @@ public:
      */
     void setChartDispatch(
         const css::uno::Reference< css::frame::XDispatch >& rChartDispatch,
-        const std::set< OUString > & rChartCommands );
+        const o3tl::sorted_vector< OUString > & rChartCommands );
 
     /** Returns the dispatch that is able to do the command given in rURL, if
         implemented here.  If the URL is not implemented here, it should be
@@ -126,7 +126,7 @@ private:
     css::uno::WeakReference< css::frame::XModel >         m_xModel;
 
     css::uno::Reference< css::frame::XDispatch >          m_xChartDispatcher;
-    std::set< OUString >                                m_aChartCommands;
+    o3tl::sorted_vector< OUString >                       m_aChartCommands;
 
     DrawCommandDispatch* m_pDrawCommandDispatch;
     ShapeController* m_pShapeController;

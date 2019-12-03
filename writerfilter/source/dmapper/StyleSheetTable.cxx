@@ -44,6 +44,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/sorted_vector.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1422,15 +1423,15 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     else
     {
         // Style names which should not be used without a " (user)" suffix
-        static const std::set<OUString> ReservedStyleNames = [] {
-            std::set<OUString> set;
+        static const o3tl::sorted_vector<OUString> ReservedStyleNames = [] {
+            o3tl::sorted_vector<OUString> set;
             for (const auto& pair : StyleNameMap)
                 set.insert(pair.second);
             return set;
         }();
         // SwStyleNameMapper doc says: If the UI style name equals a
         // programmatic name, then it must append " (user)" to the end.
-        if (ReservedStyleNames.count(sRet) > 0)
+        if (ReservedStyleNames.find(sRet) != ReservedStyleNames.end())
             sRet += " (user)";
     }
 

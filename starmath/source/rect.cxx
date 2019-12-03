@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <o3tl/sorted_vector.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -29,7 +30,6 @@
 #include <smmod.hxx>
 
 #include <cassert>
-#include <unordered_set>
 
 namespace {
 
@@ -116,7 +116,7 @@ bool SmIsMathAlpha(const OUString &rText)
     // Set of symbols, which should be treated as letters in StarMath Font
     // (to get a normal (non-clipped) SmRect in contrast to the other operators
     // and symbols).
-    static std::unordered_set<sal_Unicode> const aMathAlpha({
+    static o3tl::sorted_vector<sal_Unicode> const aMathAlpha({
         MS_ALEPH,               MS_IM,                  MS_RE,
         MS_WP,                  u'\xE070',              MS_EMPTYSET,
         u'\x2113',              u'\xE0D6',              u'\x2107',

@@ -39,6 +39,7 @@
 #include <services.hxx>
 #include <strings.hrc>
 #include <tools/debug.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 
 namespace frm
@@ -292,7 +293,7 @@ void OGridColumn::disposing()
 void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, bool bAllowDropDown )
 {
     // some properties are not to be exposed to the outer world
-    ::std::set< OUString > aForbiddenProperties {
+    static const o3tl::sorted_vector< OUString > aForbiddenProperties {
       PROPERTY_ALIGN,
       PROPERTY_AUTOCOMPLETE,
       PROPERTY_BACKGROUNDCOLOR,
@@ -331,8 +332,6 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, bool 
       PROPERTY_IMAGE_POSITION,
       PROPERTY_ENABLEVISIBLE
     };
-    if ( !bAllowDropDown )
-        aForbiddenProperties.insert( PROPERTY_DROPDOWN );
 
     Sequence< Property > aNewProps( _rProps.getLength() );
     Property* pNewProps = aNewProps.getArray();
@@ -341,7 +340,8 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, bool 
     const Property* pPropsEnd = pProps + _rProps.getLength();
     for ( ; pProps != pPropsEnd; ++pProps )
     {
-        if ( aForbiddenProperties.find( pProps->Name ) == aForbiddenProperties.end() )
+        if ( aForbiddenProperties.find( pProps->Name ) == aForbiddenProperties.end()
+            && (bAllowDropDown || pProps->Name != PROPERTY_DROPDOWN))
             *pNewProps++ = *pProps;
     }
 
