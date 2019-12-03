@@ -134,6 +134,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
 
     void TriggerPaintEvent();
     void TriggerPaintEvent(QRect aRect);
+    void fixICCCMwindowGroup();
 
 public:
     Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
