@@ -26,17 +26,17 @@
 
 struct SkiaGlobalWinGlyphCache : public GlobalWinGlyphCache
 {
-    virtual bool AllocateTexture(WinGlyphDrawElement& rElement, int nWidth, int nHeight) override;
+    virtual bool AllocateTexture(WinGlyphDrawElement& rElement, CompatibleDC* dc) override;
     virtual void NotifyElementUsed(WinGlyphDrawElement& rElement) override;
     virtual void Prune() override;
-    // The least recently used SkBitmap order, identified by SkBitmap::getPixels().
-    std::vector<void*> mLRUOrder;
+    // The least recently used SkImage order, identified by SkImage::uniqueID().
+    std::vector<uint32_t> mLRUOrder;
 };
 
 class SkiaWinGlyphCache : public WinGlyphCache
 {
 public:
-    void RemoveTextures(const std::vector<void*>& pixels);
+    void RemoveTextures(const std::vector<uint32_t>& ids);
 
 private:
     // This class just "adds" RemoveTexture() to the base class, it's never instantiatied.

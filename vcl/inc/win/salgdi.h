@@ -128,9 +128,10 @@ public:
 
     HDC getCompatibleHDC() { return mhCompatibleDC; }
 
-    SalTwoRect getTwoRect() { return maRects; }
+    SalTwoRect getTwoRect() const { return maRects; }
 
-    Size getBitmapSize() { return Size(maRects.mnSrcWidth, maRects.mnSrcHeight); }
+    long getBitmapWidth() const { return maRects.mnSrcWidth; }
+    long getBitmapHeight() const { return maRects.mnSrcHeight; }
 
     /// Reset the DC with the defined color.
     void fill(sal_uInt32 color);
@@ -140,9 +141,6 @@ public:
 
     /// Obtain the texture in format for WinSalGraphicsImplBase::DrawTextMask().
     virtual std::unique_ptr<Texture> getAsMaskTexture() { abort(); };
-
-    /// Copy bitmap data to the texture. Texture must be initialized and the correct size to hold the bitmap.
-    virtual bool copyToTexture(Texture& /*aTexture*/) { abort(); };
 
     /// Return true if text glyphs should be drawn as white instead of black.
     virtual bool wantsTextColorWhite() const { return false; }

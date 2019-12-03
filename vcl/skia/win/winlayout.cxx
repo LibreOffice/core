@@ -11,17 +11,16 @@
 
 #include <skia/win/gdiimpl.hxx>
 
-bool SkiaGlobalWinGlyphCache::AllocateTexture(WinGlyphDrawElement& rElement, int nWidth,
-                                              int nHeight)
+bool SkiaGlobalWinGlyphCache::AllocateTexture(WinGlyphDrawElement& rElement, CompatibleDC* dc)
 {
     assert(rElement.maTexture.get() == nullptr);
+    assert(dynamic_cast<SkiaCompatibleDC*>(dc));
+    SkiaCompatibleDC* sdc = static_cast<SkiaCompatibleDC*>(dc);
     SkiaCompatibleDC::Texture* texture = new SkiaCompatibleDC::Texture;
     rElement.maTexture.reset(texture);
-    // TODO use something GPU-backed?
     // TODO is it possible to have an atlas?
-    if (!texture->bitmap.tryAllocN32Pixels(nWidth, nHeight))
-        return false;
-    mLRUOrder.push_back(texture->bitmap.getPixels());
+    texture->image = sdc->getAsImage();
+    mLRUOrder.push_back(texture->image->uniqueID());
     return true;
 }
 
@@ -31,10 +30,10 @@ void SkiaGlobalWinGlyphCache::Prune()
     if (mLRUOrder.size() > MAXSIZE)
     {
         size_t toRemove = mLRUOrder.size() - MAXSIZE;
-        std::vector<void*> pixelsToRemove(mLRUOrder.begin(), mLRUOrder.begin() + toRemove);
+        std::vector<uint32_t> idsToRemove(mLRUOrder.begin(), mLRUOrder.begin() + toRemove);
         mLRUOrder.erase(mLRUOrder.begin(), mLRUOrder.begin() + toRemove);
         for (auto& pWinGlyphCache : maWinGlyphCaches)
-            static_cast<SkiaWinGlyphCache*>(pWinGlyphCache)->RemoveTextures(pixelsToRemove);
+            static_cast<SkiaWinGlyphCache*>(pWinGlyphCache)->RemoveTextures(idsToRemove);
     }
 }
 
@@ -43,21 +42,21 @@ void SkiaGlobalWinGlyphCache::NotifyElementUsed(WinGlyphDrawElement& rElement)
     SkiaCompatibleDC::Texture* texture
         = static_cast<SkiaCompatibleDC::Texture*>(rElement.maTexture.get());
     // make the most recently used
-    auto it = find(mLRUOrder.begin(), mLRUOrder.end(), texture->bitmap.getPixels());
+    auto it = find(mLRUOrder.begin(), mLRUOrder.end(), texture->image->uniqueID());
     if (it != mLRUOrder.end())
         mLRUOrder.erase(it);
-    mLRUOrder.push_back(texture->bitmap.getPixels());
+    mLRUOrder.push_back(texture->image->uniqueID());
 }
 
-void SkiaWinGlyphCache::RemoveTextures(const std::vector<void*>& pixelsToRemove)
+void SkiaWinGlyphCache::RemoveTextures(const std::vector<uint32_t>& idsToRemove)
 {
     auto it = maWinTextureCache.begin();
     while (it != maWinTextureCache.end())
     {
         assert(dynamic_cast<SkiaCompatibleDC::Texture*>(it->second.maTexture.get()));
-        void* pixels = static_cast<SkiaCompatibleDC::Texture*>(it->second.maTexture.get())
-                           ->bitmap.getPixels();
-        if (std::find(pixelsToRemove.begin(), pixelsToRemove.end(), pixels) != pixelsToRemove.end())
+        uint32_t id = static_cast<SkiaCompatibleDC::Texture*>(it->second.maTexture.get())
+                          ->image->uniqueID();
+        if (std::find(idsToRemove.begin(), idsToRemove.end(), id) != idsToRemove.end())
             it = maWinTextureCache.erase(it);
         else
             ++it;

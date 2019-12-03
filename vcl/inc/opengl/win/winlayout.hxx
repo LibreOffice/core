@@ -32,7 +32,7 @@ struct OpenGLGlobalWinGlyphCache : public GlobalWinGlyphCache
 
     PackedTextureAtlasManager maPackedTextureAtlas;
 
-    virtual bool AllocateTexture(WinGlyphDrawElement& rElement, int nWidth, int nHeight) override;
+    virtual bool AllocateTexture(WinGlyphDrawElement& rElement, CompatibleDC* dc) override;
     virtual void Prune() override;
 };
 

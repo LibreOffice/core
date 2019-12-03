@@ -237,7 +237,7 @@ protected:
     // get the height of the device
     int GetHeight() const { return mProvider ? mProvider->GetHeight() : 1; }
 
-    void drawMask(const SalTwoRect& rPosAry, const SkBitmap& rBitmap, Color nMaskColor);
+    void drawMask(const SalTwoRect& rPosAry, const SkImage& rImage, Color nMaskColor);
 
     // When drawing using GPU, rounding errors may result in off-by-one errors,
     // see https://bugs.chromium.org/p/skia/issues/detail?id=9611 . Compensate for
