@@ -160,8 +160,6 @@ void XMLTableShapeImportHelper::finishShape(
                 if (ScMyTables::IsOLE(rShape))
                     rTables.AddOLE(rShape, *xRangeList);
             }
-
-            xRangeList.reset();
         }
         else // shape is annotation
         {
