@@ -760,7 +760,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
             << " Keys from PPD " << m_aFile << ":");
     for (auto const& key : m_aKeys)
     {
-        const PPDKey* pKey = key.second;
+        const PPDKey* pKey = key.second.get();
         char const* pSetupType = "<unknown>";
         switch( pKey->m_eSetupType )
         {
