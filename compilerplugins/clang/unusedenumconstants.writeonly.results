@@ -9564,8 +9564,6 @@ svx/source/stbctrls/modctrl.cxx:48
     enum SvxModifyControl::ImplData::ModificationState MODIFICATION_STATE_FEEDBACK
 svx/source/stbctrls/modctrl.cxx:49
     enum SvxModifyControl::ImplData::ModificationState MODIFICATION_STATE_SIZE
-svx/source/svdraw/svdibrow.cxx:78
-    enum ItemType DONTKNOW
 svx/source/svdraw/svdocapt.cxx:67
     enum EscDir UNT
 svx/source/table/tablehandles.hxx:30

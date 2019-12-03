@@ -31,10 +31,6 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdetc.hxx>
 
-#ifdef DBG_UTIL
-#include <svdibrow.hxx>
-#endif
-
 #include <svx/svdoutl.hxx>
 #include <svx/svdview.hxx>
 #include <editeng/editview.hxx>
@@ -1349,9 +1345,6 @@ void SdrView::MarkAll()
 {
     if (IsTextEdit()) {
         GetTextEditOutlinerView()->SetSelection(ESelection(0,0,EE_PARA_ALL,EE_TEXTPOS_ALL));
-#ifdef DBG_UTIL
-        if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
-#endif
     } else if (IsGluePointEditMode()) MarkAllGluePoints();
     else if (HasMarkablePoints()) MarkAllPoints();
     else MarkAllObj();
@@ -1364,9 +1357,6 @@ void SdrView::UnmarkAll()
         eSel.nStartPara=eSel.nEndPara;
         eSel.nStartPos=eSel.nEndPos;
         GetTextEditOutlinerView()->SetSelection(eSel);
-#ifdef DBG_UTIL
-        if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
-#endif
     } else if (HasMarkedGluePoints()) UnmarkAllGluePoints();
     else if (HasMarkedPoints()) UnmarkAllPoints(); // Marked, not Markable!
     else UnmarkAllObj();

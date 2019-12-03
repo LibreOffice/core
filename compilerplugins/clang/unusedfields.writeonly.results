@@ -772,8 +772,6 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:104
     svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:105
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
-svx/source/svdraw/svdibrow.cxx:98
-    ImpItemListRow pType const std::type_info *
 svx/source/svdraw/svdpdf.hxx:196
     ImpSdrPdfImport mdPageWidthPts double
 svx/source/tbxctrls/tbcontrl.cxx:199
