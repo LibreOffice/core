@@ -112,6 +112,16 @@ namespace emfplushelper
         PixelOffsetModeHalf = 0x04
     };
 
+    enum SmoothingMode
+    {
+        SmoothingModeDefault = 0x00,
+        SmoothingModeHighSpeed = 0x01,
+        SmoothingModeHighQuality = 0x02,
+        SmoothingModeNone = 0x03,
+        SmoothingModeAntiAlias8x4 = 0x04,
+        SmoothingModeAntiAlias8x8 = 0x05
+    };
+
     enum UnitType
     {
         UnitTypeWorld = 0x00,
