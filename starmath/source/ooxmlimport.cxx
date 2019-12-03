@@ -223,7 +223,7 @@ OUString SmOoxmlImport::handleAcc()
             break;
         default:
             acc = "acute";
-            SAL_WARN( "starmath.ooxml", "Unknown m:chr in m:acc \'" << accChr << "\'" );
+            SAL_WARN( "starmath.ooxml", "Unknown m:chr in m:acc \'" << OUString(accChr) << "\'" );
             break;
     }
     OUString e = readOMathArgInElement( M_TOKEN( e ));
@@ -554,7 +554,7 @@ OUString SmOoxmlImport::handleNary()
             ret = "sum";
             break;
         default:
-            SAL_WARN( "starmath.ooxml", "Unknown m:nary chr \'" << chr << "\'" );
+            SAL_WARN( "starmath.ooxml", "Unknown m:nary chr \'" << OUString(chr) << "\'" );
             break;
     }
     if( !subHide )
