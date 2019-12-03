@@ -570,7 +570,7 @@ SbMethod* SbiInstance::GetCaller( sal_uInt16 nLevel )
 
 SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
          : rBasic( *static_cast<StarBASIC*>(pm->pParent) ), pInst( GetSbData()->pInst ),
-           pMod( pm ), pMeth( pe ), pImg( pMod->pImage.get() ), mpExtCaller(nullptr), m_nLastTime(0)
+           pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), mpExtCaller(nullptr), m_nLastTime(0)
 {
     nFlags    = pe ? pe->GetDebugFlags() : BasicDebugFlags::NONE;
     pIosys    = pInst->GetIoSystem();
@@ -3163,9 +3163,10 @@ bool SbiRuntime::implIsClass( SbxObject const * pObj, const OUString& aClass )
         {
             const OUString& aObjClass = pObj->GetClassName();
             SbModule* pClassMod = GetSbData()->pClassFac->FindClass( aObjClass );
-            if( pClassMod && pClassMod->pClassData )
+            SbClassData* pClassData;
+            if( pClassMod && (pClassData=pClassMod->pClassData.get()) != nullptr )
             {
-                SbxVariable* pClassVar = pClassMod->pClassData->mxIfaces->Find( aClass, SbxClassType::DontCare );
+                SbxVariable* pClassVar = pClassData->mxIfaces->Find( aClass, SbxClassType::DontCare );
                 bRet = (pClassVar != nullptr);
             }
         }

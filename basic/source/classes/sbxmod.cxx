@@ -416,7 +416,7 @@ static bool getDefaultVBAMode( StarBASIC* pb )
 
 SbModule::SbModule( const OUString& rName, bool bVBACompat )
          : SbxObject( "StarBASICModule" ),
-           mbVBACompat( bVBACompat ), bIsProxyModule( false )
+           pImage(nullptr), pBreaks(nullptr), mbVBACompat( bVBACompat ), bIsProxyModule( false )
 {
     SetName( rName );
     SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );
@@ -433,8 +433,8 @@ SbModule::SbModule( const OUString& rName, bool bVBACompat )
 SbModule::~SbModule()
 {
     SAL_INFO("basic","Module named " << GetName() << " is destructing");
-    pImage.reset();
-    pBreaks.reset();
+    delete pImage;
+    delete pBreaks;
     pClassData.reset();
     mxWrapper = nullptr;
 }
@@ -464,7 +464,7 @@ const SbxObject* SbModule::FindType( const OUString& aTypeName ) const
 
 void SbModule::StartDefinitions()
 {
-    pImage.reset();
+    delete pImage; pImage = nullptr;
     if( pClassData )
         pClassData->clear();
 
@@ -614,7 +614,7 @@ void SbModule::EndDefinitions( bool bNewState )
 
 void SbModule::Clear()
 {
-    pImage.reset();
+    delete pImage; pImage = nullptr;
     if( pClassData )
         pClassData->clear();
     SbxObject::Clear();
@@ -1531,7 +1531,7 @@ bool SbModule::SetBP( sal_uInt16 nLine )
     if( !IsBreakable( nLine ) )
         return false;
     if( !pBreaks )
-        pBreaks.reset( new SbiBreakpoints );
+        pBreaks = new SbiBreakpoints;
     auto it = std::find_if(pBreaks->begin(), pBreaks->end(),
         [&nLine](const sal_uInt16 b) { return b <= nLine; });
     if (it != pBreaks->end() && *it == nLine)
@@ -1559,7 +1559,8 @@ bool SbModule::ClearBP( sal_uInt16 nLine )
         }
         if( pBreaks->empty() )
         {
-            pBreaks.reset();
+            delete pBreaks;
+            pBreaks = nullptr;
         }
     }
     return bRes;
@@ -1567,14 +1568,15 @@ bool SbModule::ClearBP( sal_uInt16 nLine )
 
 void SbModule::ClearAllBP()
 {
-    pBreaks.reset();
+    delete pBreaks;
+    pBreaks = nullptr;
 }
 
 void
 SbModule::fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg ) const
 {
         if ( !pImg )
-            pImg = pImage.get();
+            pImg = pImage;
         for( sal_uInt32 i = 0; i < pMethods->Count(); i++ )
         {
             SbMethod* pMeth = dynamic_cast<SbMethod*>( pMethods->Get( static_cast<sal_uInt16>(i) )  );
@@ -1601,17 +1603,18 @@ bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     rStrm.ReadUChar( bImage );
     if( bImage )
     {
-        std::unique_ptr<SbiImage> p( new SbiImage );
+        SbiImage* p = new SbiImage;
         sal_uInt32 nImgVer = 0;
 
         if( !p->Load( rStrm, nImgVer ) )
         {
+            delete p;
             return false;
         }
         // If the image is in old format, we fix up the method start offsets
         if ( nImgVer < B_EXT_IMG_VERSION )
         {
-            fixUpMethodStart( false, p.get() );
+            fixUpMethodStart( false, p );
             p->ReleaseLegacyBuffer();
         }
         aComment = p->aComment;
@@ -1623,13 +1626,15 @@ bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             if( nVer == 1 )
             {
                 SetSource32( p->aOUSource );
+                delete p;
             }
             else
-                pImage = std::move(p);
+                pImage = p;
         }
         else
         {
             SetSource32( p->aOUSource );
+            delete p;
         }
     }
     return true;
