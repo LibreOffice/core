@@ -1063,48 +1063,72 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
     {
         OUString sValue;
         bool bValue;
-
+        bool ok = false;
         if (rArg.Name == "SuggestedSaveAsName")
         {
-            rArg.Value >>= sValue;
-            pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASNAME, sValue));
+            if (rArg.Value >>= sValue)
+            {
+                pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASNAME, sValue));
+                ok = true;
+            }
         }
         else if (rArg.Name == "SuggestedSaveAsDir")
         {
-            rArg.Value >>= sValue;
-            pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASDIR, sValue));
+            if (rArg.Value >>= sValue)
+            {
+                pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASDIR, sValue));
+                ok = true;
+            }
         }
         else if (rArg.Name == "LockContentExtraction")
         {
-            rArg.Value >>= bValue;
-            pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_CONTENT_EXTRACTION, bValue));
+            if (rArg.Value >>= bValue)
+            {
+                pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_CONTENT_EXTRACTION, bValue));
+                ok = true;
+            }
         }
         else if (rArg.Name == "LockExport")
         {
-            rArg.Value >>= bValue;
-            pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_EXPORT, bValue));
+            if (rArg.Value >>= bValue)
+            {
+                pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_EXPORT, bValue));
+                ok = true;
+            }
         }
         else if (rArg.Name == "LockPrint")
         {
-            rArg.Value >>= bValue;
-            pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_PRINT, bValue));
+            if (rArg.Value >>= bValue)
+            {
+                pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_PRINT, bValue));
+                ok = true;
+            }
         }
         else if (rArg.Name == "LockSave")
         {
-            rArg.Value >>= bValue;
-            pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_SAVE, bValue));
+            if (rArg.Value >>= bValue)
+            {
+                pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_SAVE, bValue));
+                ok = true;
+            }
         }
         else if (rArg.Name == "LockEditDoc")
         {
-            rArg.Value >>= bValue;
-            pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_EDITDOC, bValue));
+            if (rArg.Value >>= bValue)
+            {
+                pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_EDITDOC, bValue));
+                ok = true;
+            }
         }
         else if (rArg.Name == "Replaceable")
         {
-            rArg.Value >>= bValue;
-            pMedium->GetItemSet()->Put(SfxBoolItem(SID_REPLACEABLE, bValue));
+            if (rArg.Value >>= bValue)
+            {
+                pMedium->GetItemSet()->Put(SfxBoolItem(SID_REPLACEABLE, bValue));
+                ok = true;
+            }
         }
-        else
+        if (!ok)
         {
             throw lang::IllegalArgumentException("Setting property not supported: " + rArg.Name,
                                                  comphelper::getProcessComponentContext(), 0);
