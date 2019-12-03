@@ -70,28 +70,6 @@ KF5FilePicker::KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> co
     qApp->installEventFilter(this);
 }
 
-sal_Int16 SAL_CALL KF5FilePicker::execute()
-{
-    SolarMutexGuard g;
-    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
-    assert(pSalInst);
-    if (!pSalInst->IsMainThread())
-    {
-        sal_Int16 ret;
-        pSalInst->RunInMainThread([&ret, this] { ret = execute(); });
-        return ret;
-    }
-
-    if (!m_aNamedFilterList.isEmpty())
-        m_pFileDialog->setNameFilters(m_aNamedFilterList);
-    if (!m_aCurrentFilter.isEmpty())
-        m_pFileDialog->selectNameFilter(m_aCurrentFilter);
-
-    m_pFileDialog->show();
-    //block and wait for user input
-    return m_pFileDialog->exec() == QFileDialog::Accepted ? 1 : 0;
-}
-
 // XFilePickerControlAccess
 void SAL_CALL KF5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
                                       const uno::Any& value)
