@@ -39,8 +39,6 @@
 #include <comphelper/containermultiplexer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/SelectionMultiplex.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentry.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
 #include <svl/solar.hrc>
