@@ -163,7 +163,7 @@ static const char* pDictEscs[] = {
 
 namespace {
 
-struct TYPE1OP
+namespace TYPE1OP
 {
     enum OPS
     {
@@ -180,9 +180,9 @@ struct TYPE1OP
         SBW=7,          ABS=9,              ADD=10,     SUB=11,
         DIV=12,         CALLOTHERSUBR=16,   POP=17,     SETCURRENTPOINT=33
     };
-};
+}
 
-struct TYPE2OP
+namespace TYPE2OP
 {
     enum OPS
     {
@@ -204,7 +204,7 @@ struct TYPE2OP
         DUP=27,     EXCH=28,    INDEX=29,   ROLL=30,
         HFLEX=34,   FLEX=35,    HFLEX1=36,  FLEX1=37
     };
-};
+}
 
 struct CffGlobal
 {
