@@ -79,6 +79,11 @@ private:
 
     const bool m_bIsFolderPicker;
 
+    // handle async QDialog result via QDialog::open()
+    bool m_bFinished;
+    int m_nResult;
+    bool* m_pDestroyed;
+
 protected:
     std::unique_ptr<QFileDialog> m_pFileDialog; ///< the file picker dialog
     QWidget* m_pExtraControls; ///< widget to contain extra custom controls
@@ -172,6 +177,8 @@ private Q_SLOTS:
     void currentChanged(const QString&);
     // (un)set automatic file extension
     virtual void updateAutomaticFileExtension();
+    // handle async picker close event
+    void finished(int nResult);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
