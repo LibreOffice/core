@@ -515,10 +515,10 @@ void SwDrawBase::CreateDefaultObject()
 {
     Point aStartPos = GetDefaultCenterPos();
     Point aEndPos(aStartPos);
-    aStartPos.AdjustX( -(8 * MM50) );
-    aStartPos.AdjustY( -(4 * MM50) );
-    aEndPos.AdjustX(8 * MM50 );
-    aEndPos.AdjustY(4 * MM50 );
+    aStartPos.AdjustX( -(6 * MM50) );
+    aStartPos.AdjustY( -(6 * MM50) );
+    aEndPos.AdjustX(6 * MM50 );
+    aEndPos.AdjustY(6 * MM50 );
     tools::Rectangle aRect(aStartPos, aEndPos);
     m_pSh->CreateDefaultShape( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), aRect, m_nSlotId);
 }
