@@ -367,10 +367,7 @@ public:
     virtual OUString getRowColumnHeaders(const tools::Rectangle& rRectangle) override;
 
     /// @see vcl::ITiledRenderable::getCellCursor().
-    virtual OString getCellCursor( int nOutputWidth,
-                                   int nOutputHeight,
-                                   long nTileWidth,
-                                   long nTileHeight ) override;
+    virtual OString getCellCursor() override;
 
     /// @see vcl::ITiledRenderable::getPointer().
     virtual PointerStyle getPointer() override;

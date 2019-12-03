@@ -2207,6 +2207,37 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     return Point( nScrPosX, nScrPosY );
 }
 
+OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY) const
+{
+    Point aScrPos = GetScrPos( nX, nY, SC_SPLIT_BOTTOMRIGHT, true );
+
+    long nSizeXPix;
+    long nSizeYPix;
+    GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
+
+    double fPPTX = GetPPTX();
+    double fPPTY = GetPPTY();
+
+    // make it a slim cell cursor, but not empty
+    if (nSizeXPix == 0)
+        nSizeXPix = 1;
+
+    if (nSizeYPix == 0)
+        nSizeYPix = 1;
+
+    long nPosXTw = rtl::math::round(aScrPos.getX() / fPPTX);
+    long nPosYTw = rtl::math::round(aScrPos.getY() / fPPTY);
+    // look at Rectangle( const Point& rLT, const Size& rSize ) for the '- 1'
+    long nSizeXTw = rtl::math::round(nSizeXPix / fPPTX) - 1;
+    long nSizeYTw = rtl::math::round(nSizeYPix / fPPTY) - 1;
+
+    std::stringstream ss;
+    ss << nPosXTw << ", " << nPosYTw << ", " << nSizeXTw << ", " << nSizeYTw << ", "
+       << nX << ", " << nY;
+
+    return ss.str().c_str();
+}
+
 //      Number of cells on a screen
 SCCOL ScViewData::CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeX ) const
 {
