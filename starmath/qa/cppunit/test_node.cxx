@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
+#include <o3tl/cppunittraitshelper.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/virdev.hxx>
 
