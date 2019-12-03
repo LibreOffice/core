@@ -9,6 +9,7 @@
 
 #include <test/bootstrapfixture.hxx>
 
+#include <sal/macros.h>
 #include <test/xmltesttools.hxx>
 #include <unotest/macros_test.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -16,9 +17,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <boost/preprocessor/stringize.hpp>
-
-#define MAKE_PATH_STRING( path ) BOOST_PP_STRINGIZE( path )
 #define SVG_SVG  *[name()='svg']
 #define SVG_G *[name()='g']
 #define SVG_TEXT *[name()='text']
@@ -97,17 +95,17 @@ public:
 
         svgDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(maTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
 
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG ), 1);
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2] ), "class", "SlideGroup");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G ), "class", "Slide");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1] ), "class", "TitleText");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT ), "class", "TextShape");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN ), "class", "TextParagraph");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "underline");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG ), 1);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2] ), "class", "SlideGroup");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G ), "class", "Slide");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1] ), "class", "TitleText");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT ), "class", "TextShape");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN ), "class", "TextParagraph");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "underline");
 
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT ), "class", "TextShape");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "class", "TextParagraph");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "line-through");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT ), "class", "TextShape");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "class", "TextParagraph");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "line-through");
     }
 
     void testSVGExportJavascriptURL()
@@ -119,7 +117,7 @@ public:
 
         // There should be only one child (no link to javascript url)
         assertXPathChildren(svgDoc,
-                            MAKE_PATH_STRING(/ SVG_SVG / SVG_G[2] / SVG_G / SVG_G / SVG_G / SVG_G
+                            SAL_STRINGIFY(/ SVG_SVG / SVG_G[2] / SVG_G / SVG_G / SVG_G / SVG_G
                                              / SVG_G[4] / SVG_G),
                             1);
     }
