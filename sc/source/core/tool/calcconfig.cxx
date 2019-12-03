@@ -108,7 +108,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
 {
     // Keep in order of opcode value, is that clearest? (Random order,
     // at least, would make no sense at all.)
-    static OpCodeSet pDefaultOpenCLSubsetOpCodes(new std::set<OpCode>({
+    static const OpCodeSet pDefaultOpenCLSubsetOpCodes(new o3tl::sorted_vector<OpCode>({
         ocAdd,
         ocSub,
         ocNegSub,
@@ -197,9 +197,9 @@ OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
     formula::FormulaCompiler aCompiler;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 
-    for (auto i = rOpCodes->cbegin(); i != rOpCodes->cend(); ++i)
+    for (auto i = rOpCodes->begin(); i != rOpCodes->end(); ++i)
     {
-        if (i != rOpCodes->cbegin())
+        if (i != rOpCodes->begin())
             result.append(';');
         result.append(pOpCodeMap->getSymbol(*i));
     }
@@ -209,7 +209,7 @@ OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
 
 ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
 {
-    ScCalcConfig::OpCodeSet result(new std::set< OpCode >);
+    ScCalcConfig::OpCodeSet result(new o3tl::sorted_vector< OpCode >);
     formula::FormulaCompiler aCompiler;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 
