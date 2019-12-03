@@ -118,7 +118,8 @@ private:
     };
     friend class Deleter;
 
-    enum InitializationState { NOT_INITIALIZED, INITIALIZING, INITIALIZED } meInitializationState;
+    enum class InitializationState { NotInitialized, Initializing, Initialized };
+    InitializationState meInitializationState;
 
     std::unique_ptr<MasterPageContainerQueue> mpRequestQueue;
     css::uno::Reference<css::frame::XModel> mxModel;
@@ -469,7 +470,7 @@ bool MasterPageContainer::RequestPreview (Token aToken)
 MasterPageContainer::Implementation::Implementation()
     : maMutex(),
       maContainer(),
-      meInitializationState(NOT_INITIALIZED),
+      meInitializationState(InitializationState::NotInitialized),
       mpDocument(nullptr),
       maPreviewRenderer(),
       mbFirstPageObjectSeen(false),
@@ -510,10 +511,10 @@ void MasterPageContainer::Implementation::LateInit()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    if (meInitializationState != NOT_INITIALIZED)
+    if (meInitializationState != InitializationState::NotInitialized)
         return;
 
-    meInitializationState = INITIALIZING;
+    meInitializationState = InitializationState::Initializing;
 
     OSL_ASSERT(Instance().get()==this);
     mpRequestQueue.reset(MasterPageContainerQueue::Create(
@@ -524,7 +525,7 @@ void MasterPageContainer::Implementation::LateInit()
         5,
         50);
 
-    meInitializationState = INITIALIZED;
+    meInitializationState = InitializationState::Initialized;
 }
 
 void MasterPageContainer::Implementation::AddChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink)
