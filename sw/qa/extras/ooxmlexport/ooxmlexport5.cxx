@@ -16,6 +16,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
+#include <o3tl/cppunittraitshelper.hxx>
 
 #include <ndindex.hxx>
 #include <pam.hxx>

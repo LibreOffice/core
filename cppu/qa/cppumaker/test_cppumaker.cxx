@@ -360,6 +360,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+#include <o3tl/cppunittraitshelper.hxx>
 #include <rtl/ustring.hxx>
 
 #include <cstddef>
