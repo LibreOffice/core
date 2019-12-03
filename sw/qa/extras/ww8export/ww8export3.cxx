@@ -318,9 +318,9 @@ DECLARE_WW8EXPORT_TEST(testTdf118375export, "tdf118375_240degClockwise.doc")
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
-    sal_Int32 nPosX, nPosY;
-    xShapeProps->getPropertyValue("HoriOrientPosition") >>= nPosX;
-    xShapeProps->getPropertyValue("VertOrientPosition") >>= nPosY;
+    sal_Int32 nPosX = {}, nPosY = {};
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("HoriOrientPosition") >>= nPosX);
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("VertOrientPosition") >>= nPosY);
     // Allow some tolerance because rounding errors through integer arithmetic
     // in rotation.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5200.0, static_cast<double>(nPosX), 1.0);
