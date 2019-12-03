@@ -35,9 +35,6 @@ public:
     explicit KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                            QFileDialog::FileMode);
 
-    // XExecutableDialog functions
-    virtual sal_Int16 SAL_CALL execute() override;
-
     // XFilePickerControlAccess functions
     virtual void SAL_CALL setValue(sal_Int16 nControlId, sal_Int16 nControlAction,
                                    const css::uno::Any& rValue) override;
@@ -56,6 +53,10 @@ private:
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId) override;
     bool eventFilter(QObject* watched, QEvent* event) override;
+
+private Q_SLOTS:
+    // the KF5 file picker has its own automatic extension handling
+    void updateAutomaticFileExtension() override {}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
