@@ -359,7 +359,7 @@ public:
         tools::Rectangle aRectangle;
         size_t index = 0;
 
-        std::vector<tools::Rectangle> aRegions = setupRegions(2, 2, nWidth, nHeight);
+        std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
 
         aRectangle = aRegions[index++];
         {
@@ -388,6 +388,13 @@ public:
             Bitmap aBitmap = aOutDevTest.setupDrawMask();
             assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestBitmap aOutDevTest;
+            BitmapEx aBitmap = aOutDevTest.setupDrawBlend();
+            assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap.GetBitmap(), rRenderContext);
         }
     }
 
