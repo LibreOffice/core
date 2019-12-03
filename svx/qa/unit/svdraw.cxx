@@ -22,12 +22,10 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <svx/sdrpagewindow.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdview.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -86,12 +84,10 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     CPPUNIT_ASSERT(pDrawPage);
     SdrPage* pSdrPage = pDrawPage->GetSdrPage();
     ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
-    SdrView aSdrView(pSdrPage->getSdrModelFromSdrPage(), aVirtualDevice);
-    SdrPageView aSdrPageView(pSdrPage, aSdrView);
-    SdrPageWindow* pSdrPageWindow = aSdrPageView.GetPageWindow(0);
-    sdr::contact::ObjectContact& rObjectContactOfPageView = pSdrPageWindow->GetObjectContact();
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
+                                                               { pSdrPage->GetObj(0) }, nullptr);
     const sdr::contact::ViewObjectContact& rDrawPageVOContact
-        = pSdrPage->GetViewContact().GetViewObjectContact(rObjectContactOfPageView);
+        = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
     sdr::contact::DisplayInfo aDisplayInfo;
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
         = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
