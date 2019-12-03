@@ -85,6 +85,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <vcl/font.hxx>
@@ -1153,8 +1154,7 @@ void DocxExport::WriteSettings()
             }
             else if (rProp.Name == "HyphenationZone")
             {
-                sal_Int16 nHyphenationZone;
-                rProp.Value >>= nHyphenationZone;
+                sal_Int16 nHyphenationZone = *o3tl::doAccess<sal_Int16>(rProp.Value);
                 if (nHyphenationZone > 0)
                     pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
                                          OString::number(nHyphenationZone));
