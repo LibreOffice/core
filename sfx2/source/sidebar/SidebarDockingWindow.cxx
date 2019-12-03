@@ -59,7 +59,8 @@ public:
     void Invoke() override
     {
         auto pNotifier = m_rSidebarDockingWin.GetLOKNotifier();
-        if (!pNotifier || !comphelper::LibreOfficeKit::isActive())
+        auto pMobileNotifier = SfxViewShell::Current();
+        if (!pNotifier || (!pMobileNotifier && !comphelper::LibreOfficeKit::isActive()))
             return;
 
         try
@@ -73,7 +74,7 @@ public:
                 if (message != m_LastNotificationMessage)
                 {
                     m_LastNotificationMessage = message;
-                    pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+                    pMobileNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
                 }
             }
             else
