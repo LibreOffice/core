@@ -89,6 +89,9 @@ Qt5FilePicker::Qt5FilePicker(css::uno::Reference<css::uno::XComponentContext> co
     , m_context(context)
     , m_pParentWidget(nullptr)
     , m_bIsFolderPicker(eMode == QFileDialog::Directory)
+    , m_bFinished(false)
+    , m_nResult(0)
+    , m_pDestroyed(nullptr)
     , m_pFileDialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , m_pExtraControls(new QWidget())
 {
@@ -116,6 +119,8 @@ Qt5FilePicker::Qt5FilePicker(css::uno::Reference<css::uno::XComponentContext> co
     // update automatic file extension when filter is changed
     connect(m_pFileDialog.get(), SIGNAL(filterSelected(const QString&)), this,
             SLOT(updateAutomaticFileExtension()));
+
+    connect(m_pFileDialog.get(), SIGNAL(finished(int)), this, SLOT(finished(int)));
 }
 
 Qt5FilePicker::~Qt5FilePicker()
@@ -127,6 +132,8 @@ Qt5FilePicker::~Qt5FilePicker()
         // must delete it in main thread, otherwise
         // QSocketNotifier::setEnabled() will crash us
         m_pFileDialog.reset();
+        if (m_pDestroyed)
+            *m_pDestroyed = true;
     });
 }
 
@@ -150,6 +157,12 @@ void SAL_CALL Qt5FilePicker::setTitle(const OUString& title)
     assert(pSalInst);
     pSalInst->RunInMainThread(
         [this, &title]() { m_pFileDialog->setWindowTitle(toQString(title)); });
+}
+
+void Qt5FilePicker::finished(int nResult)
+{
+    m_nResult = nResult;
+    m_bFinished = true;
 }
 
 sal_Int16 SAL_CALL Qt5FilePicker::execute()
@@ -176,6 +189,7 @@ sal_Int16 SAL_CALL Qt5FilePicker::execute()
                 pTransientParent = pFrame->asChild();
         }
     }
+    m_pFileDialog->setWindowModality(pTransientParent ? Qt::WindowModal : Qt::ApplicationModal);
 
     if (!m_aNamedFilterList.isEmpty())
         m_pFileDialog->setNameFilters(m_aNamedFilterList);
@@ -189,13 +203,19 @@ sal_Int16 SAL_CALL Qt5FilePicker::execute()
 
     // will hide the window, so do before show
     m_pFileDialog->setParent(pTransientParent, m_pFileDialog->windowFlags());
-    m_pFileDialog->show();
     xDesktop->addTerminateListener(this);
-    int result = m_pFileDialog->exec();
+    m_pFileDialog->open();
+    bool bDestroyed = false;
+    m_pDestroyed = &bDestroyed;
+    while (!m_bFinished)
+        Application::Yield();
     xDesktop->removeTerminateListener(this);
-    m_pFileDialog->setParent(nullptr, m_pFileDialog->windowFlags());
+    if (!bDestroyed)
+        m_pFileDialog->setParent(nullptr, m_pFileDialog->windowFlags());
+    else
+        m_pDestroyed = nullptr;
 
-    if (QFileDialog::Rejected == result)
+    if (QFileDialog::Rejected == m_nResult)
         return ExecutableDialogResults::CANCEL;
     return ExecutableDialogResults::OK;
 }
