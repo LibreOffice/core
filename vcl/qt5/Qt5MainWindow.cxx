@@ -15,8 +15,8 @@
 #include <QtGui/QAccessible>
 #include <QtGui/QCloseEvent>
 
-Qt5MainWindow::Qt5MainWindow(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f)
-    : QMainWindow(parent, f)
+Qt5MainWindow::Qt5MainWindow(Qt5Frame& rFrame, Qt::WindowFlags f)
+    : QMainWindow(nullptr, f)
     , m_rFrame(rFrame)
 {
     QAccessible::installFactory(Qt5AccessibleWidget::customFactory);
