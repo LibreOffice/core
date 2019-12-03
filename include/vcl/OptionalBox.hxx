@@ -20,11 +20,8 @@
 #ifndef INCLUDED_VCL_OPTIONALBOX_HXX
 #define INCLUDED_VCL_OPTIONALBOX_HXX
 
-#include <vcl/builderfactory.hxx>
 #include <vcl/IPrioritable.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/floatwin.hxx>
-#include <vcl/toolbox.hxx>
 
 class OptionalBox final : public VclHBox, public vcl::IPrioritable
 {
