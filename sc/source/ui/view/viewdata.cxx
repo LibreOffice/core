@@ -479,8 +479,6 @@ ScViewDataTable::ScViewDataTable() :
                 nCurY( 0 ),
                 nOldCurX( 0 ),
                 nOldCurY( 0 ),
-                nLOKOldCurX( 0 ),
-                nLOKOldCurY( 0 ),
                 aWidthHelper(true),
                 aHeightHelper(false),
                 nMaxTiledCol( 20 ),
@@ -2205,14 +2203,6 @@ OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY) const
     std::stringstream ss;
     ss << nPosXTw << ", " << nPosYTw << ", " << nSizeXTw << ", " << nSizeYTw << ", "
        << nX << ", " << nY;
-
-    // FIXME: is this really needed ?
-    GetLOKWidthHelper().removeByIndex(pViewData->GetLOKOldCurX() - 1);
-    GetLOKWidthHelper().insert(nX - 1, aScrPos.getX());
-    SetLOKOldCurX(nX);
-    GetLOKHeightHelper().removeByIndex(pViewData->GetLOKOldCurY() - 1);
-    GetLOKHeightHelper().insert(nY - 1, aScrPos.getY());
-    SetLOKOldCurY(nY);
 
     return ss.str().c_str();
 }
