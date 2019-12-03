@@ -908,8 +908,7 @@ OUString ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     return pTabView->getRowColumnHeaders(rRectangle);
 }
 
-OString ScModelObj::getCellCursor( int nOutputWidth, int nOutputHeight,
-                                   long nTileWidth, long nTileHeight )
+OString ScModelObj::getCellCursor()
 {
     SolarMutexGuard aGuard;
 
@@ -922,7 +921,7 @@ OString ScModelObj::getCellCursor( int nOutputWidth, int nOutputHeight,
     if (!pGridWindow)
         return OString();
 
-    return "{ \"commandName\": \".uno:CellCursor\", \"commandValues\": \"" + pGridWindow->getCellCursor( nOutputWidth, nOutputHeight, nTileWidth, nTileHeight ) + "\" }";
+    return "{ \"commandName\": \".uno:CellCursor\", \"commandValues\": \"" + pGridWindow->getCellCursor() + "\" }";
 }
 
 Pointer ScModelObj::getPointer()
