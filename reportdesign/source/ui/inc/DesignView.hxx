@@ -65,7 +65,7 @@ namespace rptui
         VclPtr<PropBrw>                     m_pPropWin;
         std::shared_ptr<OAddFieldWindow>    m_xAddField;
         OSectionView*                       m_pCurrentView;
-        VclPtr<ONavigator>                  m_pReportExplorer;
+        std::shared_ptr<ONavigator>         m_xReportExplorer;
         Idle                                m_aMarkIdle;
         DlgEdMode                           m_eMode;
         sal_uInt16                          m_eActObj;

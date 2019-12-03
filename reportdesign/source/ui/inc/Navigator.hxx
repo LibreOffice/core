@@ -19,24 +19,23 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_NAVIGATOR_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_NAVIGATOR_HXX
 
-#include <vcl/floatwin.hxx>
+#include <vcl/weld.hxx>
 #include <memory>
 namespace rptui
 {
     class OReportController;
     class ONavigatorImpl;
-    class ONavigator :  public FloatingWindow
+    class ONavigator : public weld::GenericDialogController
     {
         ::std::unique_ptr<ONavigatorImpl> m_pImpl;
         ONavigator(const ONavigator&) = delete;
         void operator =(const ONavigator&) = delete;
-    public:
-           ONavigator( vcl::Window* pParent
-                    ,OReportController& _rController);
 
-        // window
-        virtual void GetFocus() override;
-        virtual void dispose() override;
+        DECL_LINK(FocusChangeHdl, weld::Widget&, void);
+
+    public:
+        ONavigator(weld::Window* pParent, OReportController& rController);
+        ~ONavigator();
     };
 
 } // namespace rptui
