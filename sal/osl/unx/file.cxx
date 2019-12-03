@@ -18,7 +18,7 @@
  */
 
 #include <config_features.h>
-
+#include <o3tl/typed_flags_set.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
@@ -62,6 +62,20 @@
 
 namespace {
 
+enum class State
+{
+    Seekable  = 1, /*< default */
+    Readable  = 2, /*< default */
+    Writeable = 4, /*< open() sets, write() requires, else osl_File_E_BADF */
+    Modified  = 8  /*< write() sets, flush() resets  */
+};
+
+}
+
+template<> struct o3tl::typed_flags<State>: o3tl::is_typed_flags<State, 15> {};
+
+namespace {
+
 struct FileHandle_Impl
 {
     pthread_mutex_t m_mutex;
@@ -76,14 +90,7 @@ struct FileHandle_Impl
     int const    m_kind;
     /** State
      */
-    enum StateBits
-    {
-        STATE_SEEKABLE  = 1, /*< default */
-        STATE_READABLE  = 2, /*< default */
-        STATE_WRITEABLE = 4, /*< open() sets, write() requires, else osl_File_E_BADF */
-        STATE_MODIFIED  = 8  /*< write() sets, flush() resets  */
-    };
-    int          m_state;
+    State m_state;
 
     sal_uInt64   m_size;    /*< file size */
     off_t        m_offset;  /*< physical offset from begin of file */
@@ -176,7 +183,7 @@ FileHandle_Impl::FileHandle_Impl(int fd, enum Kind kind, char const * path)
     : m_strFilePath(nullptr),
       m_fd      (fd),
       m_kind    (kind),
-      m_state   (STATE_SEEKABLE | STATE_READABLE),
+      m_state   (State::Seekable | State::Readable),
       m_size    (0),
       m_offset  (0),
       m_fileptr (0),
@@ -306,12 +313,12 @@ oslFileError FileHandle_Impl::readAt(
     size_t       nBytesRequested,
     sal_uInt64 * pBytesRead)
 {
-    SAL_WARN_IF(!(m_state & STATE_SEEKABLE), "sal.osl", "FileHandle_Impl::readAt(): not seekable");
-    if (!(m_state & STATE_SEEKABLE))
+    SAL_WARN_IF(!(m_state & State::Seekable), "sal.osl", "FileHandle_Impl::readAt(): not seekable");
+    if (!(m_state & State::Seekable))
         return osl_File_E_SPIPE;
 
-    SAL_WARN_IF(!(m_state & STATE_READABLE), "sal.osl", "FileHandle_Impl::readAt(): not readable");
-    if (!(m_state & STATE_READABLE))
+    SAL_WARN_IF(!(m_state & State::Readable), "sal.osl", "FileHandle_Impl::readAt(): not readable");
+    if (!(m_state & State::Readable))
         return osl_File_E_BADF;
 
     if (m_kind == KIND_MEM)
@@ -358,12 +365,12 @@ oslFileError FileHandle_Impl::writeAt(
     size_t       nBytesToWrite,
     sal_uInt64 * pBytesWritten)
 {
-    SAL_WARN_IF(!(m_state & STATE_SEEKABLE), "sal.osl", "FileHandle_Impl::writeAt(): not seekable");
-    if (!(m_state & STATE_SEEKABLE))
+    SAL_WARN_IF(!(m_state & State::Seekable), "sal.osl", "FileHandle_Impl::writeAt(): not seekable");
+    if (!(m_state & State::Seekable))
         return osl_File_E_SPIPE;
 
-    SAL_WARN_IF(!(m_state & STATE_WRITEABLE), "sal.osl", "FileHandle_Impl::writeAt(): not writeable");
-    if (!(m_state & STATE_WRITEABLE))
+    SAL_WARN_IF(!(m_state & State::Writeable), "sal.osl", "FileHandle_Impl::writeAt(): not writeable");
+    if (!(m_state & State::Writeable))
         return osl_File_E_BADF;
 
     ssize_t nBytes = ::pwrite(m_fd, pBuffer, nBytesToWrite, nOffset);
@@ -383,7 +390,7 @@ oslFileError FileHandle_Impl::readFileAt(
     size_t       nBytesRequested,
     sal_uInt64*  pBytesRead)
 {
-    if ((m_state & STATE_SEEKABLE) == 0)
+    if (!(m_state & State::Seekable))
     {
         // not seekable (pipe)
         ssize_t nBytes = ::read(m_fd, pBuffer, nBytesRequested);
@@ -464,7 +471,7 @@ oslFileError FileHandle_Impl::writeFileAt(
     size_t       nBytesToWrite,
     sal_uInt64 * pBytesWritten)
 {
-    if ((m_state & STATE_SEEKABLE) == 0)
+    if (!(m_state & State::Seekable))
     {
         // not seekable (pipe)
         ssize_t nBytes = ::write(m_fd, pBuffer, nBytesToWrite);
@@ -530,7 +537,7 @@ oslFileError FileHandle_Impl::writeFileAt(
         nOffset += bytes;
 
         m_buflen = std::max(m_buflen, bufpos + bytes);
-        m_state |= STATE_MODIFIED;
+        m_state |= State::Modified;
     }
 
     return osl_File_E_None;
@@ -695,7 +702,7 @@ oslFileError FileHandle_Impl::writeSequence_Impl(
 oslFileError FileHandle_Impl::syncFile()
 {
     oslFileError result = osl_File_E_None;
-    if (m_state & STATE_MODIFIED)
+    if (m_state & State::Modified)
     {
         sal_uInt64 uDone = 0;
         result = writeAt(m_bufptr, m_buffer, m_buflen, &uDone);
@@ -705,7 +712,7 @@ oslFileError FileHandle_Impl::syncFile()
         if (uDone != m_buflen)
             return osl_File_E_IO;
 
-        m_state &= ~STATE_MODIFIED;
+        m_state &= ~State::Modified;
     }
 
     return result;
@@ -723,11 +730,11 @@ oslFileHandle osl::detail::createFileHandleFromFD(int fd)
     FileHandle_Impl *pImpl = new FileHandle_Impl(fd);
 
     // assume writeable
-    pImpl->m_state |= FileHandle_Impl::STATE_WRITEABLE;
+    pImpl->m_state |= State::Writeable;
     if (!S_ISREG(aFileStat.st_mode))
     {
         /* not a regular file, mark not seekable */
-        pImpl->m_state &= ~FileHandle_Impl::STATE_SEEKABLE;
+        pImpl->m_state &= ~State::Seekable;
     }
     else
     {
@@ -1016,7 +1023,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
     /* allocate memory for impl structure */
     FileHandle_Impl *pImpl = new FileHandle_Impl(fd, FileHandle_Impl::KIND_FD, cpFilePath);
     if (flags & O_RDWR)
-        pImpl->m_state |= FileHandle_Impl::STATE_WRITEABLE;
+        pImpl->m_state |= State::Writeable;
 
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);
 
@@ -1328,7 +1335,7 @@ oslFileError SAL_CALL osl_writeFile(
     if ((!pImpl) || (pImpl->m_fd == -1) || (!pBuffer) || (!pBytesWritten))
         return osl_File_E_INVAL;
 
-    if ((pImpl->m_state & FileHandle_Impl::STATE_WRITEABLE) == 0)
+    if (!(pImpl->m_state & State::Writeable))
         return osl_File_E_BADF;
 
     static sal_uInt64 const g_limit_ssize_t = std::numeric_limits< ssize_t >::max();
@@ -1358,7 +1365,7 @@ oslFileError SAL_CALL osl_readFileAt(
     if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)) || (!pBuffer) || (!pBytesRead))
         return osl_File_E_INVAL;
 
-    if ((pImpl->m_state & FileHandle_Impl::STATE_SEEKABLE) == 0)
+    if (!(pImpl->m_state & State::Seekable))
         return osl_File_E_SPIPE;
 
     if (exceedsMaxOffT(uOffset))
@@ -1390,10 +1397,10 @@ oslFileError SAL_CALL osl_writeFileAt(
     if ((!pImpl) || (pImpl->m_fd == -1) || (!pBuffer) || (!pBytesWritten))
         return osl_File_E_INVAL;
 
-    if ((pImpl->m_state & FileHandle_Impl::STATE_SEEKABLE) == 0)
+    if (!(pImpl->m_state & State::Seekable))
         return osl_File_E_SPIPE;
 
-    if ((pImpl->m_state & FileHandle_Impl::STATE_WRITEABLE) == 0)
+    if (!(pImpl->m_state & State::Writeable))
         return osl_File_E_BADF;
 
     if (exceedsMaxOffT(uOffset))
@@ -1507,7 +1514,7 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
     if ((!pImpl) || (pImpl->m_fd == -1))
         return osl_File_E_INVAL;
 
-    if ((pImpl->m_state & FileHandle_Impl::STATE_WRITEABLE) == 0)
+    if (!(pImpl->m_state & State::Writeable))
         return osl_File_E_BADF;
 
     if (exceedsMaxOffT(uSize))
