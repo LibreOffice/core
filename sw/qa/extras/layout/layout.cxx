@@ -22,6 +22,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
@@ -2597,13 +2598,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118672)
     xmlDocPtr pXmlDoc = parseLayoutDump();
 
     // Check if we have hyphenation support, otherwise can't test SwHyphPortion.
-    uno::Reference<linguistic2::XLinguServiceManager2> xLinguServiceManager
-        = linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
-    uno::Sequence<lang::Locale> aLocales
-        = xLinguServiceManager->getAvailableLocales("com.sun.star.linguistic2.Hyphenator");
-    if (std::none_of(aLocales.begin(), aLocales.end(), [](const lang::Locale& rLocale) {
-            return rLocale.Language == "en" && rLocale.Country == "US";
-        }))
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
         return;
 
     const OUString aLine1(
