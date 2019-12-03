@@ -70,13 +70,14 @@ namespace accessibility
                                                     SvTreeListEntry& rEntry,
                                                     AccessibleListBox & rListBox)
         : AccessibleListBoxEntry_BASE( m_aMutex )
-        , ListBoxAccessibleBase( _rListBox )
 
+        , m_pTreeListBox( &_rListBox )
         , m_pSvLBoxEntry(&rEntry)
         , m_nClientId( 0 )
         , m_wListBox(&rListBox)
         , m_rListBox(rListBox)
     {
+        m_pTreeListBox->AddEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
         _rListBox.FillEntryPath( m_pSvLBoxEntry, m_aEntryPath );
     }
 
@@ -87,6 +88,28 @@ namespace accessibility
             // increment ref count to prevent double call of Dtor
             osl_atomic_increment( &m_refCount );
             dispose();
+        }
+    }
+
+    IMPL_LINK( AccessibleListBoxEntry, WindowEventListener, VclWindowEvent&, rEvent, void )
+    {
+        OSL_ENSURE( rEvent.GetWindow() , "AccessibleListBoxEntry::WindowEventListener: no event window!" );
+        OSL_ENSURE( rEvent.GetWindow() == m_pTreeListBox, "AccessibleListBoxEntry::WindowEventListener: where did this come from?" );
+
+        if ( m_pTreeListBox != nullptr )
+        {
+            switch ( rEvent.GetId() )
+            {
+                case  VclEventId::ObjectDying :
+                {
+                    if ( m_pTreeListBox )
+                        m_pTreeListBox->RemoveEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
+                    m_pTreeListBox = nullptr;
+                    dispose();
+                    break;
+                }
+                default: break;
+            }
         }
     }
 
@@ -105,16 +128,16 @@ namespace accessibility
     tools::Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
     {
         tools::Rectangle aRect;
-        SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
         {
-            aRect = getListBox()->GetBoundingRect( pEntry );
-            SvTreeListEntry* pParent = getListBox()->GetParent( pEntry );
+            aRect = m_pTreeListBox->GetBoundingRect( pEntry );
+            SvTreeListEntry* pParent = m_pTreeListBox->GetParent( pEntry );
             if ( pParent )
             {
                 // position relative to parent entry
                 Point aTopLeft = aRect.TopLeft();
-                aTopLeft -= getListBox()->GetBoundingRect( pParent ).TopLeft();
+                aTopLeft -= m_pTreeListBox->GetBoundingRect( pParent ).TopLeft();
                 aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
             }
         }
@@ -125,12 +148,12 @@ namespace accessibility
     tools::Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen_Impl() const
     {
         tools::Rectangle aRect;
-        SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
         {
-            aRect = getListBox()->GetBoundingRect( pEntry );
+            aRect = m_pTreeListBox->GetBoundingRect( pEntry );
             Point aTopLeft = aRect.TopLeft();
-            aTopLeft += getListBox()->GetWindowExtentsRelative( nullptr ).TopLeft();
+            aTopLeft += m_pTreeListBox->GetWindowExtentsRelative( nullptr ).TopLeft();
             aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
         }
 
@@ -139,7 +162,7 @@ namespace accessibility
 
     bool AccessibleListBoxEntry::IsAlive_Impl() const
     {
-        return ( !rBHelper.bDisposed && !rBHelper.bInDispose && isAlive() );
+        return !rBHelper.bDisposed && !rBHelper.bInDispose && (m_pTreeListBox != nullptr);
     }
 
     bool AccessibleListBoxEntry::IsShowing_Impl() const
@@ -186,7 +209,7 @@ namespace accessibility
     OUString AccessibleListBoxEntry::implGetText()
     {
         OUString sRet;
-        SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
             sRet = SvTreeListBox::SearchEntryTextWithHeadTitle( pEntry );
         return sRet;
@@ -211,14 +234,6 @@ namespace accessibility
     }
 
 
-    // XComponent/ListBoxAccessibleBase
-
-    void SAL_CALL AccessibleListBoxEntry::dispose()
-    {
-        AccessibleListBoxEntry_BASE::dispose();
-    }
-
-
     // XComponent
 
     void SAL_CALL AccessibleListBoxEntry::disposing()
@@ -237,11 +252,11 @@ namespace accessibility
         }
 
         // clean up
-        {
-
-            ListBoxAccessibleBase::disposing();
-        }
         m_wListBox.clear();
+
+        if ( m_pTreeListBox )
+            m_pTreeListBox->RemoveEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
+        m_pTreeListBox = nullptr;
     }
 
     // XServiceInfo
@@ -279,10 +294,10 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
-        SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         sal_Int32 nCount = 0;
         if ( pEntry )
-            nCount = getListBox()->GetLevelChildCount( pEntry );
+            nCount = m_pTreeListBox->GetLevelChildCount( pEntry );
 
         return nCount;
     }
@@ -312,8 +327,8 @@ namespace accessibility
             if ( m_aEntryPath.size() == 1 )
             {   // we're a top level entry
                 // -> our parent is the tree listbox itself
-                if ( getListBox() )
-                    xParent = getListBox()->GetAccessible( );
+                if ( m_pTreeListBox )
+                    xParent = m_pTreeListBox->GetAccessible( );
             }
             else
             {   // we have an entry as parent -> get its accessible
@@ -323,11 +338,11 @@ namespace accessibility
                 aParentPath.pop_back();
 
                 // get the entry for this shortened access path
-                SvTreeListEntry* pParentEntry = getListBox()->GetEntryFromPath( aParentPath );
+                SvTreeListEntry* pParentEntry = m_pTreeListBox->GetEntryFromPath( aParentPath );
                 OSL_ENSURE( pParentEntry, "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!" );
 
                 if ( pParentEntry )
-                    pParentEntry = getListBox()->GetParent(pParentEntry);
+                    pParentEntry = m_pTreeListBox->GetParent(pParentEntry);
                 if ( pParentEntry )
                 {
                     uno::Reference<XAccessible> xListBox(m_wListBox);
@@ -363,18 +378,18 @@ namespace accessibility
     sal_Int32 AccessibleListBoxEntry::GetRoleType() const
     {
         sal_Int32 nCase = 0;
-        SvTreeListEntry* pEntry = getListBox()->GetEntry(0);
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(0);
         if ( pEntry )
         {
-            if( pEntry->HasChildrenOnDemand() || getListBox()->GetChildCount(pEntry) > 0  )
+            if( pEntry->HasChildrenOnDemand() || m_pTreeListBox->GetChildCount(pEntry) > 0  )
             {
                 nCase = 1;
                 return nCase;
             }
         }
 
-        bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
-        if( !(getListBox()->GetTreeFlags() & SvTreeFlags::CHKBTN) )
+        bool bHasButtons = (m_pTreeListBox->GetStyle() & WB_HASBUTTONS)!=0;
+        if( !(m_pTreeListBox->GetTreeFlags() & SvTreeFlags::CHKBTN) )
         {
             if( bHasButtons )
                 nCase = 1;
@@ -394,7 +409,7 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        SvTreeListBox* pBox = getListBox();
+        SvTreeListBox* pBox = m_pTreeListBox;
         if(pBox)
         {
             SvTreeFlags treeFlag = pBox->GetTreeFlags();
@@ -426,10 +441,10 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if( getAccessibleRole() == AccessibleRole::TREE_ITEM )
         {
-            return getListBox()->GetEntryLongDescription( pEntry );
+            return m_pTreeListBox->GetEntryLongDescription( pEntry );
         }
         //want to count the real column number in the list box.
         sal_uInt16 iRealItemCount = 0;
@@ -463,9 +478,9 @@ namespace accessibility
 
         OUString sRet(implGetText());
 
-        SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
 
-        OUString altText = getListBox()->GetEntryAltText( pEntry );
+        OUString altText = m_pTreeListBox->GetEntryAltText( pEntry );
         if (!altText.isEmpty())
         {
             sRet += " " + altText;
@@ -506,7 +521,7 @@ namespace accessibility
                     pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
                     pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
                     pStateSetHelper->AddState( AccessibleStateType::ENABLED );
-                    if (getListBox()->IsInplaceEditingEnabled())
+                    if (m_pTreeListBox->IsInplaceEditingEnabled())
                         pStateSetHelper->AddState( AccessibleStateType::EDITABLE );
                     if (IsShowing_Impl())
                         pStateSetHelper->AddState( AccessibleStateType::SHOWING );
@@ -519,9 +534,9 @@ namespace accessibility
                         pStateSetHelper->AddState( AccessibleStateType::SHOWING );
                     break;
             }
-            SvTreeListEntry *pEntry = getListBox()->GetEntryFromPath(m_aEntryPath);
+            SvTreeListEntry *pEntry = m_pTreeListBox->GetEntryFromPath(m_aEntryPath);
             if (pEntry)
-                getListBox()->FillAccessibleEntryStateSet(pEntry, *pStateSetHelper);
+                m_pTreeListBox->FillAccessibleEntryStateSet(pEntry, *pStateSetHelper);
         }
         else
             pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
@@ -550,7 +565,7 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
-        SvTreeListEntry* pEntry = getListBox()->GetEntry( VCLPoint( _aPoint ) );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( VCLPoint( _aPoint ) );
         if ( !pEntry )
             throw RuntimeException();
 
@@ -637,12 +652,12 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         awt::Rectangle aBounds( 0, 0, 0, 0 );
-        SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
         {
             vcl::ControlLayoutData aLayoutData;
             tools::Rectangle aItemRect = GetBoundingBox();
-            getListBox()->RecordLayoutData( &aLayoutData, aItemRect );
+            m_pTreeListBox->RecordLayoutData( &aLayoutData, aItemRect );
             tools::Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
             aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
             aBounds = AWTRectangle( aCharRect );
@@ -659,12 +674,12 @@ namespace accessibility
         if(aPoint.X==0 && aPoint.Y==0) return 0;
 
         sal_Int32 nIndex = -1;
-        SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
         {
             vcl::ControlLayoutData aLayoutData;
             tools::Rectangle aItemRect = GetBoundingBox();
-            getListBox()->RecordLayoutData( &aLayoutData, aItemRect );
+            m_pTreeListBox->RecordLayoutData( &aLayoutData, aItemRect );
             Point aPnt( VCLPoint( aPoint ) );
             aPnt += aItemRect.TopLeft();
             nIndex = aLayoutData.GetIndexForPoint( aPnt );
@@ -685,7 +700,7 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-        ::svt::OStringTransfer::CopyString( sText.copy( nStartIndex, nLen ), getListBox() );
+        ::svt::OStringTransfer::CopyString( sText.copy( nStartIndex, nLen ), m_pTreeListBox );
 
         return true;
     }
@@ -731,9 +746,8 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
         // three actions supported
-        SvTreeListBox* pBox = getListBox();
-        SvTreeFlags treeFlag = pBox->GetTreeFlags();
-        bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
+        SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
+        bool bHasButtons = (m_pTreeListBox->GetStyle() & WB_HASBUTTONS)!=0;
         if( (treeFlag & SvTreeFlags::CHKBTN) && !bHasButtons)
         {
             sal_Int16 role = getAccessibleRole();
@@ -756,28 +770,28 @@ namespace accessibility
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
 
-        SvTreeFlags treeFlag = getListBox()->GetTreeFlags();
+        SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
         if( nIndex == 0 && (treeFlag & SvTreeFlags::CHKBTN) )
         {
             if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
             {
-                SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
-                SvButtonState state = getListBox()->GetCheckButtonState( pEntry );
+                SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+                SvButtonState state = m_pTreeListBox->GetCheckButtonState( pEntry );
                 if ( state == SvButtonState::Checked )
-                    getListBox()->SetCheckButtonState(pEntry, SvButtonState::Unchecked);
+                    m_pTreeListBox->SetCheckButtonState(pEntry, SvButtonState::Unchecked);
                 else if (state == SvButtonState::Unchecked)
-                    getListBox()->SetCheckButtonState(pEntry, SvButtonState::Checked);
+                    m_pTreeListBox->SetCheckButtonState(pEntry, SvButtonState::Checked);
             }
         }
         else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN) ) || (nIndex == 0) )
         {
-            SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
+            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
             if ( pEntry )
             {
-                if ( getListBox()->IsExpanded( pEntry ) )
-                    getListBox()->Collapse( pEntry );
+                if ( m_pTreeListBox->IsExpanded( pEntry ) )
+                    m_pTreeListBox->Collapse( pEntry );
                 else
-                    getListBox()->Expand( pEntry );
+                    m_pTreeListBox->Expand( pEntry );
                 bRet = true;
             }
         }
@@ -793,10 +807,9 @@ namespace accessibility
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
 
-        // sal_Bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
-        SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
-        SvButtonState state = getListBox()->GetCheckButtonState( pEntry );
-        SvTreeFlags treeFlag = getListBox()->GetTreeFlags();
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+        SvButtonState state = m_pTreeListBox->GetCheckButtonState( pEntry );
+        SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
         if(nIndex == 0 && (treeFlag & SvTreeFlags::CHKBTN))
         {
             if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
@@ -814,7 +827,7 @@ namespace accessibility
         }else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN)) || nIndex == 0 )
         {
             if( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() )
-                return getListBox()->IsExpanded( pEntry ) ?
+                return m_pTreeListBox->IsExpanded( pEntry ) ?
                 AccResId(STR_SVT_ACC_ACTION_COLLAPSE) :
                 AccResId(STR_SVT_ACC_ACTION_EXPAND);
             return OUString();
@@ -846,7 +859,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry );
+        m_pTreeListBox->Select( pEntry );
     }
 
     sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int32 nChildIndex )
@@ -856,12 +869,12 @@ namespace accessibility
 
         EnsureIsAlive();
 
-        SvTreeListEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
-        SvTreeListEntry* pEntry = getListBox()->GetEntry( pParent, nChildIndex );
+        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, nChildIndex );
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        return getListBox()->IsSelected( pEntry );
+        return m_pTreeListBox->IsSelected( pEntry );
     }
 
     void SAL_CALL AccessibleListBoxEntry::clearAccessibleSelection(  )
@@ -871,15 +884,15 @@ namespace accessibility
 
         EnsureIsAlive();
 
-        SvTreeListEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
             throw RuntimeException();
-        sal_Int32 nCount = getListBox()->GetLevelChildCount( pParent );
+        sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            SvTreeListEntry* pEntry = getListBox()->GetEntry( pParent, i );
-            if ( getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, false );
+            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
+            if ( m_pTreeListBox->IsSelected( pEntry ) )
+                m_pTreeListBox->Select( pEntry, false );
         }
     }
 
@@ -890,15 +903,15 @@ namespace accessibility
 
         EnsureIsAlive();
 
-        SvTreeListEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
             throw RuntimeException();
-        sal_Int32 nCount = getListBox()->GetLevelChildCount( pParent );
+        sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            SvTreeListEntry* pEntry = getListBox()->GetEntry( pParent, i );
-            if ( !getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry );
+            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
+            if ( !m_pTreeListBox->IsSelected( pEntry ) )
+                m_pTreeListBox->Select( pEntry );
         }
     }
 
@@ -911,14 +924,14 @@ namespace accessibility
 
         sal_Int32 i, nSelCount = 0, nCount = 0;
 
-        SvTreeListEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
             throw RuntimeException();
-        nCount = getListBox()->GetLevelChildCount( pParent );
+        nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( i = 0; i < nCount; ++i )
         {
-            SvTreeListEntry* pEntry = getListBox()->GetEntry( pParent, i );
-            if ( getListBox()->IsSelected( pEntry ) )
+            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
+            if ( m_pTreeListBox->IsSelected( pEntry ) )
                 ++nSelCount;
         }
 
@@ -938,14 +951,14 @@ namespace accessibility
         Reference< XAccessible > xChild;
         sal_Int32 i, nSelCount = 0, nCount = 0;
 
-        SvTreeListEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
             throw RuntimeException();
-        nCount = getListBox()->GetLevelChildCount( pParent );
+        nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( i = 0; i < nCount; ++i )
         {
-            SvTreeListEntry* pEntry = getListBox()->GetEntry( pParent, i );
-            if ( getListBox()->IsSelected( pEntry ) )
+            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
+            if ( m_pTreeListBox->IsSelected( pEntry ) )
                 ++nSelCount;
 
             if ( nSelCount == ( nSelectedChildIndex + 1 ) )
@@ -967,12 +980,12 @@ namespace accessibility
 
         EnsureIsAlive();
 
-        SvTreeListEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
-        SvTreeListEntry* pEntry = getListBox()->GetEntry( pParent, nSelectedChildIndex );
+        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, nSelectedChildIndex );
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, false );
+        m_pTreeListBox->Select( pEntry, false );
     }
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getCaretPosition(  )
     {
@@ -1106,7 +1119,7 @@ namespace accessibility
 
 
         bool bReturn = false;
-        SvTreeListBox* pBox = getListBox();
+        SvTreeListBox* pBox = m_pTreeListBox;
         if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
         {
             SvTreeListEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
@@ -1136,7 +1149,7 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
         Any aValue;
-        // SvTreeListBox* pBox = getListBox();
+        // SvTreeListBox* pBox = m_pTreeListBox;
         switch(getAccessibleRole())
         {
             case AccessibleRole::CHECK_BOX:
@@ -1156,7 +1169,7 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
         Any aValue;
-        // SvTreeListBox* pBox = getListBox();
+        // SvTreeListBox* pBox = m_pTreeListBox;
         switch(getAccessibleRole())
         {
             case AccessibleRole::CHECK_BOX:
@@ -1174,14 +1187,14 @@ namespace accessibility
     SvTreeListEntry* AccessibleListBoxEntry::GetRealChild(sal_Int32 nIndex)
     {
         SvTreeListEntry* pEntry = nullptr;
-        SvTreeListEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
+        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if (pParent)
         {
-            pEntry = getListBox()->GetEntry( pParent, nIndex );
+            pEntry = m_pTreeListBox->GetEntry( pParent, nIndex );
             if ( !pEntry && getAccessibleChildCount() > 0 )
             {
-                getListBox()->RequestingChildren(pParent);
-                pEntry = getListBox()->GetEntry( pParent, nIndex );
+                m_pTreeListBox->RequestingChildren(pParent);
+                pEntry = m_pTreeListBox->GetEntry( pParent, nIndex );
             }
         }
         return pEntry;

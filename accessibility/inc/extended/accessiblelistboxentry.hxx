@@ -35,7 +35,6 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <vcl/treelistentry.hxx>
 #include <tools/gen.hxx>
-#include <extended/listboxaccessible.hxx>
 
 // forward ---------------------------------------------------------------
 
@@ -69,11 +68,11 @@ namespace accessibility
     class AccessibleListBoxEntry final : public ::cppu::BaseMutex
                                         ,public AccessibleListBoxEntry_BASE
                                         ,public ::comphelper::OCommonAccessibleText
-                                        ,public ListBoxAccessibleBase
     {
     friend class AccessibleListBox;
 
     private:
+        VclPtr<SvTreeListBox>               m_pTreeListBox;
         /** The treelistbox control */
         std::deque< sal_Int32 >           m_aEntryPath;
         SvTreeListEntry*                    m_pSvLBoxEntry; // Needed for a11y focused item...
@@ -105,10 +104,9 @@ namespace accessibility
 
         /** this function is called upon disposing the component
         */
-        virtual void SAL_CALL                   disposing() override;
+        virtual void SAL_CALL   disposing() override;
 
-        // ListBoxAccessible/XComponent
-        virtual void SAL_CALL dispose() final override;
+        DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 
         // OCommonAccessibleText
         virtual OUString                        implGetText() override;
