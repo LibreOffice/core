@@ -65,7 +65,6 @@ $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/extended/accessibletabbarpagelist \
     accessibility/source/extended/accessibletablistbox \
     accessibility/source/extended/accessibletablistboxtable \
-    accessibility/source/extended/listboxaccessible \
     accessibility/source/extended/textwindowaccessibility \
     accessibility/source/helper/acc_factory \
     accessibility/source/helper/accresmgr \
