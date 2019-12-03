@@ -136,7 +136,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         virtual void SAL_CALL disposing( const EventObject& aEvent ) override;
 
     protected:
-        enum WindowStateMask
+        enum // WindowStateMask
         {
             WINDOWSTATE_MASK_DOCKINGAREA    = 256,
             WINDOWSTATE_MASK_POS            = 512,
