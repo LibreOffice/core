@@ -377,7 +377,7 @@ public:
     void            FakeButtonUp( ScSplitPos eWhich );
 
     ScGridWindow*   GetActiveWin();
-    vcl::Window*         GetWindowByPos( ScSplitPos ePos ) { return pGridWin[ePos]; }
+    vcl::Window*    GetWindowByPos( ScSplitPos ePos ) const { return pGridWin[ePos]; }
 
     ScSplitPos      FindWindow( const vcl::Window* pWindow ) const;
 
