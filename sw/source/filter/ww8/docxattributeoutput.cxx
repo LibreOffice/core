@@ -2783,7 +2783,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
                 if ( *pIt < 0x0020 ) // filter out the control codes
                 {
                     impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
-                    SAL_INFO("sw.ww8", "Ignored control code in a text run: " << *pIt );
+                    SAL_INFO("sw.ww8", "Ignored control code in a text run: " << unsigned(*pIt) );
                 }
                 prevUnicode = *pIt;
                 break;
