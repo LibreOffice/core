@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_a53d2fc5",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-12-03T20:52:40Z",
+      "side": 1,
+      "message": "I know. I just wanted to mimic gtk behavior when I originally wrote that patch.",
+      "parentUuid": "7f7f9b97_ca239abc",
+      "range": {
+        "startLine": 189,
+        "startChar": 3,
+        "endLine": 189,
+        "endChar": 96
+      },
+      "revId": "340d8c33c237ece1b3762ec27d73dd3b617a76ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_0a3e72d9",
         "filename": "vcl/qt5/Qt5FilePicker.cxx",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_a5144f45",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-12-03T20:52:40Z",
+      "side": 1,
+      "message": "Probably an oversight. It was directly copied from gtk. Will recheck. This original patch is some months old and I didn\u0027t look into everything.",
+      "parentUuid": "7f7f9b97_0a3e72d9",
+      "range": {
+        "startLine": 832,
+        "startChar": 0,
+        "endLine": 833,
+        "endChar": 91
+      },
+      "revId": "340d8c33c237ece1b3762ec27d73dd3b617a76ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_ea38d6ee",
         "filename": "vcl/qt5/Qt5FilePicker.cxx",
         "patchSetId": 5
@@ -59,6 +107,30 @@
       "writtenOn": "2019-12-03T17:24:36Z",
       "side": 1,
       "message": "the result of std::any_of isn\u0027t actually used, maybe more straightforward to use std::find_if instead?",
+      "range": {
+        "startLine": 840,
+        "startChar": 12,
+        "endLine": 840,
+        "endChar": 23
+      },
+      "revId": "340d8c33c237ece1b3762ec27d73dd3b617a76ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_452f7b8d",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-12-03T20:52:40Z",
+      "side": 1,
+      "message": "True. I\u0027ll just return the iterator and assign m_pParentWidget outside. That is IMHO more in the spirit of the API, even if it essentially doesn\u0027t matter.",
+      "parentUuid": "7f7f9b97_ea38d6ee",
       "range": {
         "startLine": 840,
         "startChar": 12,
