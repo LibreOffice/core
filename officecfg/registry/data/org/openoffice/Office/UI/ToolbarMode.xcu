@@ -929,42 +929,6 @@
             <value>true</value>
           </prop>
         </node>
-        <node oor:name="GroupedbarFull" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Groupedbar</value>
-          </prop>
-          <prop oor:name="HasNotebookbar">
-            <value>true</value>
-          </prop>
-          <prop oor:name="IsExperimental">
-            <value>true</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>7</value>
-          </prop>
-          <prop oor:name="CommandArg">
-            <value>notebookbar_groupedbar_full.ui</value>
-          </prop>
-          <prop oor:name="Toolbars">
-            <value>
-            </value>
-          </prop>
-          <prop oor:name="UserToolbars">
-            <value>
-            </value>
-          </prop>
-          <prop oor:name="UIItemProperties">
-            <value>
-              <it>UIItemID,propertyName,propertyValue</it>
-            </value>
-          </prop>
-          <prop oor:name="Sidebar">
-            <value>Arrow</value>
-          </prop>
-          <prop oor:name="HasMenubar">
-            <value>true</value>
-          </prop>
-        </node>
         <node oor:name="ContextualSingle" oor:op="replace">
           <prop oor:name="Label">
             <value xml:lang="en-US">Contextual Single</value>
