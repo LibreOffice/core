@@ -520,7 +520,6 @@ void OTasksWindow::Clear()
     m_aCreation->Clear();
 }
 
-// class OApplicationDetailView
 
 OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent )
     ,m_aHorzSplitter(VclPtr<Splitter>::Create(this))

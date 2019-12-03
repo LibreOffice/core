@@ -403,7 +403,6 @@ void SvtFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter )
 }
 
 
-// class SvtFilePicker
 
 SvtFilePicker::SvtFilePicker()
     :m_bMultiSelection  ( false )

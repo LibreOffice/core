@@ -103,7 +103,6 @@ css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::Creat
 }
 
 
-// class OverflowingText
 
 OverflowingText::OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent) :
         mxOverflowingContent(xOverflowingContent)
@@ -112,7 +111,6 @@ OverflowingText::OverflowingText(css::uno::Reference< css::datatransfer::XTransf
 }
 
 
-// class NonOverflowingText
 
 NonOverflowingText::NonOverflowingText(const ESelection &aSel, bool bLastParaInterrupted)
     : maContentSel(aSel)
@@ -155,7 +153,6 @@ std::unique_ptr<OutlinerParaObject> OverflowingText::DeeplyMergeParaObject(Outli
     return TextChainingUtils::DeeplyMergeParaObject(mxOverflowingContent, pOutl, pNextPObj);
 }
 
-// class OFlowChainedText
 
 OFlowChainedText::OFlowChainedText(Outliner const *pOutl, bool bIsDeepMerge)
 {
@@ -205,7 +202,6 @@ bool OFlowChainedText::IsLastParaInterrupted() const
 }
 
 
-// classes UFlowChainedText
 
 UFlowChainedText::UFlowChainedText(Outliner const *pOutl, bool bIsDeepMerge)
 {

@@ -1072,7 +1072,6 @@ void Databases::setInstallPath( const OUString& aInstDir )
         m_aInstallDirectory += "/";
 }
 
-// class ExtensionIteratorBase
 
 ExtensionHelpExistenceMap ExtensionIteratorBase::aHelpExistenceMap;
 
@@ -1323,7 +1322,6 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
     }
 }
 
-// class DataBaseIterator
 
 helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
 {
@@ -1432,7 +1430,6 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( const Reference
     return pRetHdf;
 }
 
-// class KeyDataBaseFileIterator
 
 //returns a file URL
 OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
@@ -1512,7 +1509,6 @@ OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
     return aExpandedURL;
 }
 
-// class JarFileIterator
 
 Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
     ( Reference< deployment::XPackage >& o_xParentPackageBundle,
@@ -1631,7 +1627,6 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
     return xNA;
 }
 
-// class IndexFolderIterator
 
 OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTemporary )
 {

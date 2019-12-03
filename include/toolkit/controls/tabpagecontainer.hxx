@@ -33,7 +33,6 @@ namespace com { namespace sun { namespace star { namespace awt { namespace tab {
 namespace com { namespace sun { namespace star { namespace awt { namespace tab { class XTabPageContainerListener; } } } } }
 namespace com { namespace sun { namespace star { namespace awt { namespace tab { class XTabPageModel; } } } } }
 
-//  class css::awt::tab::UnoControlTabPageContainerModel
 
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
                                             ,   css::awt::tab::XTabPageContainerModel

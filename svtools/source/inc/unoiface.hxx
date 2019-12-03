@@ -38,7 +38,6 @@ namespace com { namespace sun { namespace star { namespace util {
 class SvNumberFormatsSupplierObj;
 
 
-//  class VCLXMultiLineEdit
 
 class VCLXMultiLineEdit :   public css::awt::XTextComponent,
                             public css::awt::XTextArea,
@@ -103,7 +102,6 @@ public:
 };
 
 
-//  class VCLXFileControl
 
 class VCLXFileControl final : public css::awt::XTextComponent, public css::awt::XTextLayoutConstrains, public VCLXWindow
 {
@@ -156,7 +154,6 @@ public:
 };
 
 
-//  class SVTXFormattedField
 
 
 class SVTXFormattedField : public VCLXSpinField
@@ -205,7 +202,6 @@ protected:
 };
 
 
-//  class SVTXNumericField
 
 class SVTXNumericField : public css::awt::XNumericField, public SVTXFormattedField
 {
@@ -244,7 +240,6 @@ public:
 };
 
 
-//  class VCLXCurrencyField
 
 class SVTXCurrencyField : public css::awt::XCurrencyField, public SVTXFormattedField
 {
@@ -288,7 +283,6 @@ public:
 };
 
 
-//  class SVTXDateField
 
 class SVTXDateField : public VCLXDateField
 {

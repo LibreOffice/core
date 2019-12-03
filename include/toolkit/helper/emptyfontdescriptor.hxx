@@ -26,7 +26,6 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 
 
-//  class EmptyFontDescriptor
 
 class EmptyFontDescriptor : public css::awt::FontDescriptor
 {

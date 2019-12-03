@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase2.hxx>
 
 
-//  class VCLXAccessibleButton
 
 
 typedef ::cppu::ImplHelper2<

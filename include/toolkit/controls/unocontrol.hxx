@@ -58,7 +58,6 @@ struct UnoControlComponentInfos
 
 struct UnoControl_Data;
 
-//  class UnoControl
 
 typedef ::cppu::WeakAggImplHelper9  <   css::awt::XControl
                                     ,   css::awt::XWindow2

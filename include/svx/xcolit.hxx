@@ -28,7 +28,6 @@
 class XColorList;
 
 
-// class XColorItem
 
 class SVX_DLLPUBLIC XColorItem : public NameOrIndex
 {

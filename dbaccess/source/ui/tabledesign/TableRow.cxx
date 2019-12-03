@@ -28,7 +28,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-// class OTableRow
 OTableRow::OTableRow()
     :m_pActFieldDescr( nullptr )
     ,m_nPos( -1 )

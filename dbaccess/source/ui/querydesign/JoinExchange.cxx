@@ -29,7 +29,6 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::datatransfer;
 
-    // class OJoinExchObj
     OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource,bool _bFirstEntry)
         :m_bFirstEntry(_bFirstEntry)
         ,m_jxdSourceDescription(jxdSource)

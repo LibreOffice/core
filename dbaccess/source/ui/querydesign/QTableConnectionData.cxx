@@ -24,7 +24,6 @@
 
 using namespace dbaui;
 
-// class OQueryTableConnectionData
 OQueryTableConnectionData::OQueryTableConnectionData()
     : OTableConnectionData()
     , m_nFromEntryIndex(0)

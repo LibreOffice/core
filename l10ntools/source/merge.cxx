@@ -56,7 +56,6 @@ namespace
 }
 
 
-//  class ResData
 
 
 ResData::ResData( const OString &rGId )
@@ -75,7 +74,6 @@ ResData::ResData( const OString &rGId, const OString &rFilename)
 }
 
 
-// class MergeEntrys
 
 
 bool MergeEntrys::GetText( OString &rReturn,
@@ -108,7 +106,6 @@ OString MergeEntrys::GetQTZText(const ResData& rResData, const OString& rOrigTex
     return sKey + GetDoubleBars() + rOrigText;
 }
 
-// class MergeDataFile
 
 
 MergeDataFile::MergeDataFile(

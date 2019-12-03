@@ -33,7 +33,6 @@ namespace com { namespace sun { namespace star { namespace ucb { class XCommandE
 namespace ucbhelper {
 
 
-// class PropertySetInfo.
 
 
 class ContentImplHelper;
@@ -77,7 +76,6 @@ public:
 };
 
 
-// class CommandProcessorInfo.
 
 
 /**

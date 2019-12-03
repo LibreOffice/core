@@ -25,7 +25,6 @@
 #include <cppuhelper/implbase.hxx>
 
 
-//  class UnoScriptTypeDetector
 
 class UnoScriptTypeDetector : public cppu::WeakImplHelper
 <

@@ -24,7 +24,6 @@
 #include <cppuhelper/queryinterface.hxx>
 
 
-//  class VCLXRegion
 
 VCLXRegion::VCLXRegion()
 {

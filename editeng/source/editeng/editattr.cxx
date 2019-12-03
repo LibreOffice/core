@@ -45,7 +45,6 @@
 #include <editattr.hxx>
 
 
-// class EditCharAttrib
 
 EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE ) :
     nStart(nS), nEnd(nE), bFeature(false), bEdge(false)
@@ -76,7 +75,6 @@ void EditCharAttrib::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 
-// class EditCharAttribFont
 
 EditCharAttribFont::EditCharAttribFont( const SvxFontItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -95,7 +93,6 @@ void EditCharAttribFont::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribItalic
 
 EditCharAttribItalic::EditCharAttribItalic( const SvxPostureItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -109,7 +106,6 @@ void EditCharAttribItalic::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribWeight
 
 EditCharAttribWeight::EditCharAttribWeight( const SvxWeightItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -123,7 +119,6 @@ void EditCharAttribWeight::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribUnderline
 
 EditCharAttribUnderline::EditCharAttribUnderline( const SvxUnderlineItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -141,7 +136,6 @@ void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 }
 
 
-// class EditCharAttribOverline
 
 EditCharAttribOverline::EditCharAttribOverline( const SvxOverlineItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -157,7 +151,6 @@ void EditCharAttribOverline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 }
 
 
-// class EditCharAttribFontHeight
 
 EditCharAttribFontHeight::EditCharAttribFontHeight( const SvxFontHeightItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -172,7 +165,6 @@ void EditCharAttribFontHeight::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribFontWidth
 
 EditCharAttribFontWidth::EditCharAttribFontWidth( const SvxCharScaleWidthItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -186,7 +178,6 @@ void EditCharAttribFontWidth::SetFont( SvxFont& /*rFont*/, OutputDevice* )
 }
 
 
-// class EditCharAttribStrikeout
 
 EditCharAttribStrikeout::EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -200,7 +191,6 @@ void EditCharAttribStrikeout::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribCaseMap
 
 EditCharAttribCaseMap::EditCharAttribCaseMap( const SvxCaseMapItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -214,7 +204,6 @@ void EditCharAttribCaseMap::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribColor
 
 EditCharAttribColor::EditCharAttribColor( const SvxColorItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -228,7 +217,6 @@ void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetColor( aColor);
 }
 
-// class EditCharAttribBackgroundColor
 
 EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
                                 const SvxBackgroundColorItem& rAttr,
@@ -246,7 +234,6 @@ void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetFillColor(aColor);
 }
 
-// class EditCharAttribLanguage
 EditCharAttribLanguage::EditCharAttribLanguage( const SvxLanguageItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
@@ -259,7 +246,6 @@ void EditCharAttribLanguage::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribShadow
 
 EditCharAttribShadow::EditCharAttribShadow( const SvxShadowedItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -273,7 +259,6 @@ void EditCharAttribShadow::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribEscapement
 
 EditCharAttribEscapement::EditCharAttribEscapement( const SvxEscapementItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -295,7 +280,6 @@ void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribOutline
 
 EditCharAttribOutline::EditCharAttribOutline( const SvxContourItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -309,7 +293,6 @@ void EditCharAttribOutline::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribTab
 
 EditCharAttribTab::EditCharAttribTab( const SfxVoidItem& rAttr, sal_Int32 nPos )
     : EditCharAttrib( rAttr, nPos, nPos+1 )
@@ -322,7 +305,6 @@ void EditCharAttribTab::SetFont( SvxFont&, OutputDevice* )
 }
 
 
-// class EditCharAttribLineBreak
 
 EditCharAttribLineBreak::EditCharAttribLineBreak( const SfxVoidItem& rAttr, sal_Int32 nPos )
     : EditCharAttrib( rAttr, nPos, nPos+1 )
@@ -335,7 +317,6 @@ void EditCharAttribLineBreak::SetFont( SvxFont&, OutputDevice* )
 }
 
 
-// class EditCharAttribField
 
 EditCharAttribField::EditCharAttribField( const SvxFieldItem& rAttr, sal_Int32 nPos )
     : EditCharAttrib( rAttr, nPos, nPos+1 )
@@ -400,7 +381,6 @@ bool EditCharAttribField::operator == ( const EditCharAttribField& rAttr ) const
 }
 
 
-// class EditCharAttribPairKerning
 
 EditCharAttribPairKerning::EditCharAttribPairKerning( const SvxAutoKernItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
 : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -414,7 +394,6 @@ void EditCharAttribPairKerning::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribKerning
 
 EditCharAttribKerning::EditCharAttribKerning( const SvxKerningItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
 : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -428,7 +407,6 @@ void EditCharAttribKerning::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribWordLineMode
 
 EditCharAttribWordLineMode::EditCharAttribWordLineMode( const SvxWordLineModeItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
 : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -442,7 +420,6 @@ void EditCharAttribWordLineMode::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribEmphasisMark
 
 EditCharAttribEmphasisMark::EditCharAttribEmphasisMark( const SvxEmphasisMarkItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -456,7 +433,6 @@ void EditCharAttribEmphasisMark::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-// class EditCharAttribRelief
 
 EditCharAttribRelief::EditCharAttribRelief( const SvxCharReliefItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -469,7 +445,6 @@ void EditCharAttribRelief::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetRelief( static_cast<const SvxCharReliefItem*>(GetItem())->GetValue() );
 }
 
-// class EditCharAttribGrabBag
 
 EditCharAttribGrabBag::EditCharAttribGrabBag( const SfxGrabBagItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )

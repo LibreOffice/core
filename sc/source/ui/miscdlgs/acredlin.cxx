@@ -41,7 +41,6 @@
 #define RD_SPECIAL_CONTENT      1
 #define RD_SPECIAL_VISCONTENT   2
 
-//  class ScRedlinData
 
 ScRedlinData::ScRedlinData()
     :RedlinData()
@@ -67,7 +66,6 @@ ScRedlinData::~ScRedlinData()
     bIsAcceptable=false;
 }
 
-//  class ScAcceptChgDlg
 
 ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
     ScViewData* ptrViewData)

@@ -42,7 +42,6 @@ class SvtIconChoiceCtrl;
 namespace accessibility
 {
 
-// class AccessibleIconChoiceCtrlEntry
 
     typedef ::cppu::WeakAggComponentImplHelper8< css::accessibility::XAccessible
                                                 , css::accessibility::XAccessibleContext

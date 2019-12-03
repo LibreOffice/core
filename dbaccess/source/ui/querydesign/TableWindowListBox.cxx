@@ -41,7 +41,6 @@ OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
 
 const sal_uLong SCROLLING_TIMESPAN = 500;
 const long LISTBOX_SCROLLING_AREA = 6;
-// class OTableWindowListBox
 OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS | WB_BORDER)
     ,m_aMousePos( Point(0,0) )

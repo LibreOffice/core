@@ -213,7 +213,6 @@ SfxFilterFlags getDontFlags( sal_Int16 nStoreMode )
 }
 
 
-// class DocumentSettingsGuard
 
 
 class DocumentSettingsGuard
@@ -273,7 +272,6 @@ public:
 } // anonymous namespace
 
 
-// class ModelData_Impl
 
 class ModelData_Impl
 {
@@ -1272,7 +1270,6 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
 }
 
 
-// class SfxStoringHelper
 
 
 SfxStoringHelper::SfxStoringHelper()

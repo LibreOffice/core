@@ -31,7 +31,6 @@
 #define UNOCONTROL_STREAMVERSION    short(2)
 
 
-//  class UnoControlModelEntryList
 
 UnoControlModelEntryList::UnoControlModelEntryList()
 {
@@ -85,7 +84,6 @@ void UnoControlModelEntryList::insert( size_t i, UnoControlModelEntry* item ) {
 }
 
 
-//  class StdTabControllerModel
 
 StdTabControllerModel::StdTabControllerModel()
 {

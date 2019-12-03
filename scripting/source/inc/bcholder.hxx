@@ -28,7 +28,6 @@ namespace scripting_helper
 {
 
 
-    //  class OMutexHolder
 
 
     class OMutexHolder
@@ -38,7 +37,6 @@ namespace scripting_helper
     };
 
 
-    //  class OBroadcastHelperHolder
 
 
     class OBroadcastHelperHolder

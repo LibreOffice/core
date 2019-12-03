@@ -210,7 +210,6 @@ void SAL_CALL VCLXTopWindow::setDisplay( ::sal_Int32 _display )
 }
 
 
-//  class VCLXTopWindow
 
 
 void VCLXTopWindow::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )

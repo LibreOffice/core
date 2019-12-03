@@ -73,7 +73,6 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_CrossedoutWidth_Enum[] =
     { XML_TOKEN_INVALID,        0 }
 };
 
-// class XMLCrossedOutTypePropHdl
 
 XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl()
 {
@@ -148,7 +147,6 @@ bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     return bRet;
 }
 
-// class XMLCrossedOutStylePropHdl
 
 XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl()
 {
@@ -196,7 +194,6 @@ bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::An
     return bRet;
 }
 
-// class XMLCrossedOutWidthPropHdl
 
 XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl()
 {
@@ -266,7 +263,6 @@ bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::An
     return bRet;
 }
 
-// class XMLCrossedOutTextPropHdl
 
 XMLCrossedOutTextPropHdl::~XMLCrossedOutTextPropHdl()
 {

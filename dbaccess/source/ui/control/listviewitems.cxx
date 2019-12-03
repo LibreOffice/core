@@ -23,7 +23,6 @@
 namespace dbaui
 {
 
-    // class OBoldListboxString
     void OBoldListboxString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* _pViewData)
     {
         SvLBoxString::InitViewData( pView, pEntry, _pViewData );

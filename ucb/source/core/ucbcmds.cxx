@@ -90,7 +90,6 @@ struct TransferCommandContext
 };
 
 
-// class InteractionHandlerProxy.
 
 
 class InteractionHandlerProxy :
@@ -160,7 +159,6 @@ void SAL_CALL InteractionHandlerProxy::handle(
 }
 
 
-// class ActiveDataSink.
 
 
 class ActiveDataSink : public cppu::WeakImplHelper< io::XActiveDataSink >
@@ -190,7 +188,6 @@ uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
 }
 
 
-// class CommandProcessorInfo.
 
 
 class CommandProcessorInfo :

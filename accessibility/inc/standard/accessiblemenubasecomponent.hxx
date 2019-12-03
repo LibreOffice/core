@@ -39,7 +39,6 @@ class AccessibleStateSetHelper;
 }
 
 
-//  class OAccessibleMenuBaseComponent
 
 typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,

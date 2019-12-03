@@ -156,12 +156,10 @@ LanguageType EditView::CheckLanguage(
     return nLang;
 }
 
-// class EditViewCallbacks
 EditViewCallbacks::~EditViewCallbacks()
 {
 }
 
-// class EditView
 EditView::EditView( EditEngine* pEng, vcl::Window* pWindow )
 {
     pImpEditView.reset( new ImpEditView( this, pEng, pWindow ) );

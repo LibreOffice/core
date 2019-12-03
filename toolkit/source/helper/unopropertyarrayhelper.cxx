@@ -23,7 +23,6 @@
 
 #include <helper/unopropertyarrayhelper.hxx>
 
-//  class UnoPropertyArrayHelper
 
 
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const css::uno::Sequence<sal_Int32>& rIDs )

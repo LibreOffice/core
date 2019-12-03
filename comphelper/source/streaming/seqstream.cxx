@@ -34,7 +34,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::osl;
 
 
-// class SequenceInputStream
 
 
 SequenceInputStream::SequenceInputStream(

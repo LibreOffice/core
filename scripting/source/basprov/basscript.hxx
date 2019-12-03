@@ -36,7 +36,6 @@ namespace basprov
 {
 
 
-    //  class BasicScriptImpl
 
 
     typedef ::cppu::WeakImplHelper<

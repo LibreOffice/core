@@ -380,7 +380,6 @@ SfxPoolItem* XFormTextShadowTranspItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextShadowTranspItem(*this);
 }
 
-// class XFillGradientStepCountItem
 
 XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 nStepCount ) :
     SfxUInt16Item( XATTR_GRADIENTSTEPCOUNT, nStepCount )
@@ -437,7 +436,6 @@ void XFillBmpTileItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class XFillBmpTilePosItem
 
 
 XFillBmpPosItem::XFillBmpPosItem( RectPoint eRP ) :
@@ -475,7 +473,6 @@ void XFillBmpPosItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class XFillBmpTileSizeXItem
 
 XFillBmpSizeXItem::XFillBmpSizeXItem( long nSizeX ) :
             SfxMetricItem( XATTR_FILLBMP_SIZEX, nSizeX )
@@ -504,7 +501,6 @@ bool XFillBmpSizeXItem::HasMetrics() const
     return GetValue() > 0;
 }
 
-// class XFillBmpTileSizeYItem
 
 
 XFillBmpSizeYItem::XFillBmpSizeYItem( long nSizeY ) :
@@ -534,7 +530,6 @@ bool XFillBmpSizeYItem::HasMetrics() const
     return GetValue() > 0;
 }
 
-// class XFillBmpTileLogItem
 
 XFillBmpSizeLogItem::XFillBmpSizeLogItem( bool bLog ) :
             SfxBoolItem( XATTR_FILLBMP_SIZELOG, bLog )
@@ -558,7 +553,6 @@ bool XFillBmpSizeLogItem::GetPresentation
     return true;
 }
 
-// class XFillBmpTileOffXItem
 
 
 XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( sal_uInt16 nOffX ) :
@@ -583,7 +577,6 @@ bool XFillBmpTileOffsetXItem::GetPresentation
     return true;
 }
 
-// class XFillBmpTileOffYItem
 
 XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( sal_uInt16 nOffY ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETY, nOffY )
@@ -637,7 +630,6 @@ void XFillBmpStretchItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class XFillBmpTileOffPosXItem
 
 XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETX, nOffPosX )
@@ -661,7 +653,6 @@ bool XFillBmpPosOffsetXItem::GetPresentation
     return true;
 }
 
-// class XFillBmpTileOffPosYItem
 
 XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETY, nOffPosY )

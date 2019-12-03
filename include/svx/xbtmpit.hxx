@@ -27,7 +27,6 @@
 
 class SdrModel;
 
-// class XFillBitmapItem
 
 class SVX_DLLPUBLIC XFillBitmapItem : public NameOrIndex
 {

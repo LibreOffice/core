@@ -25,7 +25,6 @@
 #include <vcl/BitmapTools.hxx>
 
 
-//  class VCLXBitmap
 
 
 // css::lang::XUnoTunnel

@@ -38,7 +38,6 @@
 #include <scuitphfedit.hxx>
 #include <memory>
 
-// class ScHFEditPage
 
 ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pController,
                            const SfxItemSet& rCoreAttrs,
@@ -778,7 +777,6 @@ IMPL_LINK(ScHFEditPage, MenuHdl, const OString&, rSelectedId, void)
     }
 }
 
-// class ScRightHeaderEditPage
 
 ScRightHeaderEditPage::ScRightHeaderEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pPage, pController,
@@ -792,7 +790,6 @@ std::unique_ptr<SfxTabPage> ScRightHeaderEditPage::Create( weld::Container* pPag
     return std::make_unique<ScRightHeaderEditPage>( pPage, pController, *rCoreSet );
 }
 
-// class ScLeftHeaderEditPage
 
 ScLeftHeaderEditPage::ScLeftHeaderEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pPage, pController,
@@ -806,7 +803,6 @@ std::unique_ptr<SfxTabPage> ScLeftHeaderEditPage::Create( weld::Container* pPage
     return std::make_unique<ScLeftHeaderEditPage>( pPage, pController, *rCoreSet );
 }
 
-// class ScRightFooterEditPage
 
 ScRightFooterEditPage::ScRightFooterEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pPage, pController,
@@ -820,7 +816,6 @@ std::unique_ptr<SfxTabPage> ScRightFooterEditPage::Create( weld::Container* pPag
     return std::make_unique<ScRightFooterEditPage>( pPage, pController, *rCoreSet );
 }
 
-// class ScLeftFooterEditPage
 
 ScLeftFooterEditPage::ScLeftFooterEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pPage, pController,

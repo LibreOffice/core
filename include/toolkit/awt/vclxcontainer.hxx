@@ -28,7 +28,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 
 
-//  class VCLXContainer
 
 
 class VCLXContainer : public css::awt::XVclContainer,

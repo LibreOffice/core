@@ -114,7 +114,6 @@ uno::Any SvxUnoTextContentEnumeration::nextElement()
 }
 
 
-// class SvxUnoTextContent
 
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw()
@@ -376,7 +375,6 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 }
 
 
-//  class SvxUnoTextRangeEnumeration
 
 
 SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rParentText, sal_Int32 nPara, const ESelection& rSel)

@@ -30,7 +30,6 @@
 #include <vcl/bitmapex.hxx>
 
 
-//  class VCLXBitmap
 
 
 class VCLXBitmap final : public cppu::WeakImplHelper<

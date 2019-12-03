@@ -33,7 +33,6 @@
 #include <cppuhelper/implbase.hxx>
 
 
-// class UcbContentProviderProxyFactory.
 
 
 class UcbContentProviderProxyFactory : public cppu::WeakImplHelper <
@@ -66,7 +65,6 @@ public:
 };
 
 
-// class UcbContentProviderProxy.
 
 
 class UcbContentProviderProxy :

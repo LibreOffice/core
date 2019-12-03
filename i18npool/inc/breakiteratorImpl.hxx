@@ -30,7 +30,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace i18npool {
 
 
-//  class BreakIterator
 
 class BreakIteratorImpl : public cppu::WeakImplHelper
 <

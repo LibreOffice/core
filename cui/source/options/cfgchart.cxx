@@ -156,7 +156,6 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 }
 
 
-// class SvxChartOptions
 
 
 SvxChartOptions::SvxChartOptions() :
@@ -257,7 +256,6 @@ void SvxChartOptions::Notify( const css::uno::Sequence< OUString >& )
 }
 
 
-// class SvxChartColorTableItem
 
 
 SvxChartColorTableItem::SvxChartColorTableItem( sal_uInt16 nWhich_, const SvxChartColorTable& aTable ) :

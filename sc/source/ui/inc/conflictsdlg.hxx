@@ -50,7 +50,6 @@ struct ScConflictsListEntry
 
 typedef ::std::vector< ScConflictsListEntry > ScConflictsList;
 
-// class ScConflictsListHelper
 
 class ScConflictsListHelper
 {
@@ -67,7 +66,6 @@ public:
                                         ScChangeActionMergeMap* pSharedMap, ScChangeActionMergeMap* pOwnMap );
 };
 
-// class ScConflictsFinder
 
 class ScConflictsFinder final
 {
@@ -91,7 +89,6 @@ public:
     bool                    Find();
 };
 
-// class ScConflictsResolver
 
 class ScConflictsResolver final
 {
@@ -107,7 +104,6 @@ public:
                             bool bHandleContentAction, bool bHandleNonContentAction );
 };
 
-// class ScConflictsDlg
 
 class ScConflictsDlg : public weld::GenericDialogController
 {

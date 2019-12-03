@@ -33,7 +33,6 @@ namespace com { namespace sun { namespace star { namespace awt { class XMenuBar;
 typedef ::cppu::ImplHelper2 <   css::awt::XTopWindow2, css::awt::XSystemDependentWindowPeer
                             >   VCLXTopWindow_XBase;
 
-//  class VCLXTopWindow
 
 class VCLXTopWindow: public VCLXTopWindow_XBase,
                      public VCLXContainer

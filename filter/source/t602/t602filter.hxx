@@ -55,7 +55,6 @@ typedef enum {
 
 enum class tnode {START,READCH,EOL,POCMD,EXPCMD,SETCMD,SETCH,WRITE,EEND,QUIT};
 
-// class T602ImportFilter
 
 
 struct inistruct

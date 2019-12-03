@@ -26,7 +26,6 @@
 #include <vcl/vclptr.hxx>
 
 
-//  class VCLXAccessibleTabPageWindow
 
 
 class VCLXAccessibleTabPageWindow : public VCLXAccessibleComponent

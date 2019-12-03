@@ -37,7 +37,6 @@
 using namespace dbaui;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-// class OTableWindowTitle
 OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
      FixedText( pParent, WB_3DLOOK|WB_LEFT|WB_NOLABEL|WB_VCENTER )
     ,m_pTabWin( pParent )

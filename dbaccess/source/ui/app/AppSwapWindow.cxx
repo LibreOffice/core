@@ -34,7 +34,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-// class OApplicationSwapWindow
 OApplicationSwapWindow::OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow )
     :Window(_pParent,WB_DIALOGCONTROL )
     ,m_aIconControl(VclPtr<OApplicationIconControl>::Create(this))

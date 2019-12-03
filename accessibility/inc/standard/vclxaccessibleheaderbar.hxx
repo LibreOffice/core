@@ -23,7 +23,6 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
-//  class VCLXAccessibleHeaderBar
 
 typedef std::vector< css::uno::WeakReference< css::accessibility::XAccessible > >
     ListItems;

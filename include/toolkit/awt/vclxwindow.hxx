@@ -53,7 +53,6 @@ namespace toolkit
     class IAccessibleFactory;
 }
 
-//  class VCLXWINDOW
 
 class UnoPropertyArrayHelper;
 class VCLXWindowImpl;

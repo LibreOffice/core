@@ -36,7 +36,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::view;
 
-//  class VCLXTabPageContainer
 
 void VCLXTabPageContainer::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {

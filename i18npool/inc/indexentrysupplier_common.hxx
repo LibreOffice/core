@@ -31,7 +31,6 @@ namespace i18npool { class CollatorImpl; }
 namespace i18npool {
 
 
-//  class IndexEntrySupplier_Common
 
 
 class IndexEntrySupplier_Common : public cppu::WeakImplHelper

@@ -123,7 +123,6 @@ namespace
     };
 }
 
-// class SchXMLExportHelper_Impl
 
 class SchXMLExportHelper_Impl
 {
@@ -962,7 +961,6 @@ bool lcl_exportDomainForThisSequence( const Reference< chart2::data::XDataSequen
 
 } // anonymous namespace
 
-// class SchXMLExportHelper
 
 SchXMLExportHelper::SchXMLExportHelper( SvXMLExport& rExport, SvXMLAutoStylePoolP& rASPool )
     : m_pImpl( new SchXMLExportHelper_Impl( rExport, rASPool ) )
@@ -3481,7 +3479,6 @@ void SchXMLExportHelper_Impl::exportText( const OUString& rText )
     SchXMLTools::exportText( mrExport, rText, false/*bConvertTabsLFs*/ );
 }
 
-// class SchXMLExport
 
 SchXMLExport::SchXMLExport(const Reference<uno::XComponentContext>& xContext,
                            OUString const& implementationName, SvXMLExportFlags nExportFlags)

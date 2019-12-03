@@ -32,7 +32,6 @@
 namespace formula
 {
 
-// class ArgEdit
 ArgEdit::ArgEdit(std::unique_ptr<weld::Entry> xControl)
     : RefEdit(std::move(xControl))
     , pEdPrev(nullptr)
@@ -130,7 +129,6 @@ bool ArgEdit::KeyInput(const KeyEvent& rKEvt)
     return RefEdit::KeyInput(rKEvt);
 }
 
-// class ArgInput
 ArgInput::ArgInput()
 {
     pFtArg=nullptr;
@@ -373,7 +371,6 @@ IMPL_LINK_NOARG(RefEdit, UpdateHdl, Timer *, void)
         pAnyRefDlg->ShowReference(xEntry->get_text());
 }
 
-//class RefButton
 RefButton::RefButton(std::unique_ptr<weld::Button> xControl)
     : xButton(std::move(xControl))
     , pAnyRefDlg( nullptr )

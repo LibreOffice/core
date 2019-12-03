@@ -25,7 +25,6 @@
 namespace i18npool {
 
 
-//  class IndexEntrySupplier_ja_phonetic
 
 
 class IndexEntrySupplier_ja_phonetic : public IndexEntrySupplier_Common {

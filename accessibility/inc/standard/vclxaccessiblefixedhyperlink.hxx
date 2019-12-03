@@ -23,7 +23,6 @@
 #include <standard/vclxaccessibletextcomponent.hxx>
 
 
-//  class VCLXAccessibleFixedHyperlink
 
 
 class VCLXAccessibleFixedHyperlink : public VCLXAccessibleTextComponent

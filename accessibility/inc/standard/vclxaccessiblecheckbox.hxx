@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase2.hxx>
 
 
-//  class VCLXAccessibleCheckBox
 
 
 typedef ::cppu::ImplHelper2<

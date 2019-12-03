@@ -34,7 +34,6 @@
 namespace xmlscript
 {
 
-    // class BasicElementBase
 
     class BasicImport;
 
@@ -77,7 +76,6 @@ namespace xmlscript
         virtual void SAL_CALL endElement() override;
     };
 
-    // class BasicLibrariesElement
 
     class BasicLibrariesElement : public BasicElementBase
     {
@@ -97,7 +95,6 @@ namespace xmlscript
         virtual void SAL_CALL endElement() override;
     };
 
-    // class BasicEmbeddedLibraryElement
 
     class BasicEmbeddedLibraryElement : public BasicElementBase
     {
@@ -121,7 +118,6 @@ namespace xmlscript
         virtual void SAL_CALL endElement() override;
     };
 
-    // class BasicModuleElement
 
     class BasicModuleElement : public BasicElementBase
     {
@@ -143,7 +139,6 @@ namespace xmlscript
         virtual void SAL_CALL endElement() override;
     };
 
-    // class BasicSourceCodeElement
 
     class BasicSourceCodeElement : public BasicElementBase
     {
@@ -164,7 +159,6 @@ namespace xmlscript
         virtual void SAL_CALL endElement() override;
     };
 
-    // class BasicImport
 
     typedef ::cppu::WeakImplHelper<
         css::xml::input::XRoot > BasicImport_BASE;
@@ -199,7 +193,6 @@ namespace xmlscript
             const css::uno::Reference< css::xml::input::XAttributes >& xAttributes ) override;
     };
 
-    // class XMLBasicImporterBase
 
     typedef ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
@@ -237,7 +230,6 @@ namespace xmlscript
         virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
     };
 
-    // class XMLBasicImporter
 
     class XMLBasicImporter : public XMLBasicImporterBase
     {
@@ -251,7 +243,6 @@ namespace xmlscript
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
     };
 
-    // class XMLOasisBasicImporter
 
     class XMLOasisBasicImporter : public XMLBasicImporterBase
     {

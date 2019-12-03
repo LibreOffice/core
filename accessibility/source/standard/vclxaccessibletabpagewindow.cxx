@@ -29,7 +29,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-//  class VCLXAccessibleTabPageWindow
 
 
 VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindow )

@@ -48,7 +48,6 @@ typedef ::std::vector<
 > PopupMenuRefList;
 
 
-//  class VCLXMenu
 
 
 class TOOLKIT_DLLPUBLIC VCLXMenu :  public css::awt::XMenuBar,

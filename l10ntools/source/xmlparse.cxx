@@ -40,7 +40,6 @@ using namespace osl;
 #define ID          "id"
 
 
-// class XMLChildNode
 
 
 XMLChildNode::XMLChildNode( XMLParentNode *pPar )
@@ -67,7 +66,6 @@ XMLChildNode& XMLChildNode::operator=(const XMLChildNode& rObj)
 }
 
 
-// class XMLParentNode
 
 
 XMLParentNode::~XMLParentNode()
@@ -145,7 +143,6 @@ void XMLParentNode::RemoveAndDeleteAllChildren()
 }
 
 
-// class XMLFile
 
 
 void XMLFile::Write( OString const &aFilename )
@@ -739,7 +736,6 @@ void XMLElement::Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement 
 }
 
 
-// class SimpleXMLParser
 
 
 namespace

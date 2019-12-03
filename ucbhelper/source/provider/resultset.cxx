@@ -82,7 +82,6 @@ static const PropertyInfo aPropertyTable[] =
 #define RESULTSET_PROPERTY_COUNT 2
 
 
-// class PropertySetInfo
 
 namespace {
 

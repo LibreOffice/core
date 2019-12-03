@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/MeasureTextHorzPos.hpp>
 #include <com/sun/star/drawing/MeasureTextVertPos.hpp>
 
-// class SdrMeasureTextHPosItem
 class SVX_DLLPUBLIC SdrMeasureTextHPosItem: public SfxEnumItem<css::drawing::MeasureTextHorzPos> {
 public:
     SdrMeasureTextHPosItem(css::drawing::MeasureTextHorzPos ePos = css::drawing::MeasureTextHorzPos::MeasureTextHorzPos_AUTO)
@@ -42,7 +41,6 @@ public:
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
 };
 
-// class SdrMeasureTextVPosItem
 class SVX_DLLPUBLIC SdrMeasureTextVPosItem: public SfxEnumItem<css::drawing::MeasureTextVertPos> {
 public:
     SdrMeasureTextVPosItem(css::drawing::MeasureTextVertPos ePos = css::drawing::MeasureTextVertPos_AUTO)

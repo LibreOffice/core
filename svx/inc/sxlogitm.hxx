@@ -32,7 +32,6 @@ public:
 };
 
 
-// class SdrLogicSizeWidthItem
 
 class SdrLogicSizeHeightItem: public SdrMetricItem {
 public:

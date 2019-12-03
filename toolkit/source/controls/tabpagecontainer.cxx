@@ -42,7 +42,6 @@ using ::com::sun::star::awt::tab::XTabPageModel;
 
 #define WRONG_TYPE_EXCEPTION "Type must be css::awt::tab::XTabPageModel!"
 
-//  class UnoControlTabPageContainerModel
 
 UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Reference< XComponentContext >& i_factory )
     :UnoControlTabPageContainerModel_Base( i_factory )
@@ -208,7 +207,6 @@ void UnoControlTabPageContainerModel::removeContainerListener( const Reference< 
 }
 
 
-//  class UnoControlTabPageContainer
 
 UnoControlTabPageContainer::UnoControlTabPageContainer( const uno::Reference< uno::XComponentContext >& rxContext )
     :UnoControlTabPageContainer_Base(rxContext)

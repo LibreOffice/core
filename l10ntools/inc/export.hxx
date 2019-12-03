@@ -57,7 +57,6 @@ typedef std::unordered_map<OString, bool>
 #define X_COMMENT "x-comment"
 
 
-// class ResData
 
 
 /// Purpose: holds mandatory data to export a single res
@@ -76,12 +75,10 @@ public:
 };
 
 
-// class Export
 
 
 class ParserQueue;
 
-// class MergeEntrys
 
 
 /// Purpose: holds information of data to merge
@@ -119,7 +116,6 @@ public:
 
 };
 
-// class MergeDataFile
 
 
 /// Purpose: holds information of data to merge, read from PO file

@@ -43,7 +43,6 @@ using namespace ::com::sun::star::view;
 namespace toolkit
 {
 
-//  class UnoTreeModel
 
 UnoTreeModel::UnoTreeModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )

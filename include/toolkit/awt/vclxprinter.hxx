@@ -47,7 +47,6 @@ class Printer;
 */
 
 
-//  class VCLXPrinterPropertySet
 
 
 typedef ::cppu::WeakImplHelper <   css::awt::XPrinterPropertySet
@@ -100,7 +99,6 @@ public:
 };
 
 
-//  class VCLXPrinter
 
 
 typedef ::cppu::ImplInheritanceHelper  <   VCLXPrinterPropertySet
@@ -139,7 +137,6 @@ public:
 };
 
 
-//  class VCLXInfoPrinter
 
 
 typedef ::cppu::ImplInheritanceHelper  <   VCLXPrinterPropertySet
@@ -172,7 +169,6 @@ public:
 };
 
 
-//  class VCLXPrinterServer
 
 
 typedef ::cppu::WeakImplHelper <   css::awt::XPrinterServer2,

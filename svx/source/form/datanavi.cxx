@@ -308,7 +308,6 @@ namespace svxform
     }
 
 
-    // class XFormsPage
 
     VCL_BUILDER_FACTORY_ARGS(DataTreeListBox, WB_BORDER)
 
@@ -2180,7 +2179,6 @@ namespace svxform
     }
 
 
-    // class NavigatorFrameManager
 
 
     SFX_IMPL_DOCKINGWINDOW( DataNavigatorManager, SID_FM_SHOW_DATANAVIGATOR )

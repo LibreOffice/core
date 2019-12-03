@@ -202,7 +202,6 @@ namespace toolkit
 }
 
 
-//  class VCLXGraphicControl
 
 
 void VCLXGraphicControl::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -333,7 +332,6 @@ css::uno::Any VCLXGraphicControl::getProperty( const OUString& PropertyName )
 }
 
 
-//  class VCLXButton
 
 
 void VCLXButton::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -616,7 +614,6 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  class VCLXImageControl
 
 
 void VCLXImageControl::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -747,7 +744,6 @@ css::uno::Any VCLXImageControl::getProperty( const OUString& PropertyName )
 }
 
 
-//  class VCLXCheckBox
 
 
 void VCLXCheckBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -1055,7 +1051,6 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  class VCLXRadioButton
 
 void VCLXRadioButton::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
@@ -1345,7 +1340,6 @@ void VCLXRadioButton::ImplClickedOrToggled( bool bToggled )
 }
 
 
-//  class VCLXSpinField
 
 void VCLXSpinField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
@@ -1486,7 +1480,6 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  class VCLXListBox
 
 void VCLXListBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
@@ -2181,7 +2174,6 @@ void SAL_CALL VCLXListBox::disposing( const EventObject& i_rEvent )
 }
 
 
-//  class VCLXMessageBox
 
 
 void VCLXMessageBox::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -2270,7 +2262,6 @@ css::awt::Size SAL_CALL VCLXMessageBox::getMinimumSize()
 }
 
 
-//  class VCLXDialog
 
 void VCLXDialog::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
@@ -2456,7 +2447,6 @@ void SAL_CALL VCLXDialog::setProperty(
 }
 
 
-//  class VCLXTabPage
 
 VCLXMultiPage::VCLXMultiPage() : maTabListeners( *this ), mTabId( 1 )
 {
@@ -2719,7 +2709,6 @@ void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  class VCLXTabPage
 
 VCLXTabPage::VCLXTabPage()
 {
@@ -2833,7 +2822,6 @@ TabPage *VCLXTabPage::getTabPage() const
 }
 
 
-//  class VCLXFixedHyperlink
 
 
 VCLXFixedHyperlink::VCLXFixedHyperlink() :
@@ -3129,7 +3117,6 @@ void VCLXFixedHyperlink::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 }
 
 
-//  class VCLXFixedText
 
 void VCLXFixedText::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
@@ -3279,7 +3266,6 @@ css::awt::Size VCLXFixedText::calcAdjustedSize( const css::awt::Size& rMaxSize )
 }
 
 
-//  class VCLXScrollBar
 
 void VCLXScrollBar::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
@@ -3762,7 +3748,6 @@ css::awt::Size SAL_CALL VCLXScrollBar::getMinimumSize()
 }
 
 
-//  class VCLXEdit
 
 
 void VCLXEdit::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -4146,7 +4131,6 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  class VCLXComboBox
 
 
 void VCLXComboBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -4641,7 +4625,6 @@ void SAL_CALL VCLXComboBox::disposing( const EventObject& i_rEvent )
 }
 
 
-//  class VCLXFormattedSpinField
 
 void VCLXFormattedSpinField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
@@ -4746,7 +4729,6 @@ css::uno::Any VCLXFormattedSpinField::getProperty( const OUString& PropertyName 
 }
 
 
-//  class VCLXDateField
 
 
 void VCLXDateField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -5102,7 +5084,6 @@ sal_Bool VCLXDateField::isStrictFormat()
 }
 
 
-//  class VCLXTimeField
 
 
 void VCLXTimeField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -5418,7 +5399,6 @@ css::uno::Any VCLXTimeField::getProperty( const OUString& PropertyName )
 }
 
 
-//  class VCLXNumericField
 
 
 void VCLXNumericField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -5769,7 +5749,6 @@ css::uno::Any VCLXNumericField::getProperty( const OUString& PropertyName )
 
 
 //    ----------------------------------------------------
-//    class VCLXMetricField
 //    ----------------------------------------------------
 
 void VCLXMetricField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -6024,7 +6003,6 @@ css::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName )
 }
 
 
-//  class VCLXCurrencyField
 
 
 void VCLXCurrencyField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -6388,7 +6366,6 @@ css::uno::Any VCLXCurrencyField::getProperty( const OUString& PropertyName )
 }
 
 
-//  class VCLXPatternField
 
 
 void VCLXPatternField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -6566,7 +6543,6 @@ css::uno::Any VCLXPatternField::getProperty( const OUString& PropertyName )
 }
 
 
-//  class VCLXToolBox
 
 VCLXToolBox::VCLXToolBox()
 {
@@ -6594,7 +6570,6 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXHeaderBar::Cre
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-//  class VCLXFrame
 
 VCLXFrame::VCLXFrame()
 {
@@ -6657,7 +6632,6 @@ void VCLXFrame::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     VCLXContainer::ProcessWindowEvent( rVclWindowEvent );
 }
 
-//  class VCLXProgressBar
 VCLXProgressBar::VCLXProgressBar()
             :m_nValue(0)
             ,m_nValueMin(0)

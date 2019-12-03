@@ -30,7 +30,6 @@ using namespace dbaui;
 using namespace ::svt;
 
 
-// class OTableDesignUndoAct
 OTableDesignUndoAct::OTableDesignUndoAct(OTableRowView* pOwner, const char* pCommentID)
     : OCommentUndoAction(pCommentID)
     , m_pTabDgnCtrl(pOwner)
@@ -66,7 +65,6 @@ void OTableDesignUndoAct::Redo()
     }
 }
 
-// class OTableDesignCellUndoAct
 OTableDesignCellUndoAct::OTableDesignCellUndoAct( OTableRowView* pOwner, long nRowID, sal_uInt16 nColumn ) :
      OTableDesignUndoAct( pOwner ,STR_TABED_UNDO_CELLMODIFIED)
     ,m_nCol( nColumn )
@@ -108,7 +106,6 @@ void OTableDesignCellUndoAct::Redo()
     OTableDesignUndoAct::Redo();
 }
 
-// class OTableEditorUndoAct
 OTableEditorUndoAct::OTableEditorUndoAct(OTableEditorCtrl* pOwner, const char* pCommentID)
     : OTableDesignUndoAct(pOwner, pCommentID)
     , pTabEdCtrl(pOwner)
@@ -119,7 +116,6 @@ OTableEditorUndoAct::~OTableEditorUndoAct()
 {
 }
 
-// class OTableEditorTypeSelUndoAct
 OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType )
     :OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_TYPE_CHANGED)
     ,m_nCol( nColumn )
@@ -155,7 +151,6 @@ void OTableEditorTypeSelUndoAct::Redo()
     OTableEditorUndoAct::Redo();
 }
 
-// class OTableEditorDelUndoAct
 OTableEditorDelUndoAct::OTableEditorDelUndoAct( OTableEditorCtrl* pOwner) :
      OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_ROWDELETED)
 {
@@ -216,7 +211,6 @@ void OTableEditorDelUndoAct::Redo()
     OTableEditorUndoAct::Redo();
 }
 
-// class OTableEditorInsUndoAct
 OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
                                                long nInsertPosition ,
                                                const std::vector<  std::shared_ptr<OTableRow> >& _vInsertedRows)
@@ -262,7 +256,6 @@ void OTableEditorInsUndoAct::Redo()
     OTableEditorUndoAct::Redo();
 }
 
-// class OTableEditorInsNewUndoAct
 OTableEditorInsNewUndoAct::OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, long nInsertPosition, long nInsertedRows ) :
      OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_NEWROWINSERTED)
     ,m_nInsPos( nInsertPosition )
@@ -301,7 +294,6 @@ void OTableEditorInsNewUndoAct::Redo()
     OTableEditorUndoAct::Redo();
 }
 
-// class OPrimKeyUndoAct
 OPrimKeyUndoAct::OPrimKeyUndoAct( OTableEditorCtrl* pOwner, const MultiSelection& aDeletedKeys, const MultiSelection& aInsertedKeys) :
      OTableEditorUndoAct( pOwner ,STR_TABLEDESIGN_UNDO_PRIMKEY)
     ,m_aDelKeys( aDeletedKeys )

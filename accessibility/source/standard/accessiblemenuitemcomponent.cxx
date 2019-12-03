@@ -43,7 +43,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// class OAccessibleMenuItemComponent
 
 
 OAccessibleMenuItemComponent::OAccessibleMenuItemComponent( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu )

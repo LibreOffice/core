@@ -30,7 +30,6 @@
 using namespace ::com::sun::star;
 
 
-// class XMLEscapementPropHdl
 
 
 XMLCharHeightHdl::~XMLCharHeightHdl()
@@ -76,7 +75,6 @@ bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 }
 
 
-// class XMLEscapementHeightPropHdl
 
 
 XMLCharHeightPropHdl::~XMLCharHeightPropHdl()
@@ -114,7 +112,6 @@ bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 }
 
 
-// class XMLEscapementPropHdl
 
 
 XMLCharHeightDiffHdl::~XMLCharHeightDiffHdl()

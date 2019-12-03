@@ -34,7 +34,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// class OPageNumberDialog
 
 OPageNumberDialog::OPageNumberDialog(weld::Window* pParent,
                                      const uno::Reference< report::XReportDefinition >& _xHoldAlive,

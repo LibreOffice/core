@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/HatchStyle.hpp>
 
 
-// class XHatch
 
 
 class SVX_DLLPUBLIC XHatch final

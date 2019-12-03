@@ -150,7 +150,6 @@ void SAL_CALL SvxTableControllerModifyListener::disposing( const css::lang::Even
 }
 
 
-// class SvxTableController
 
 
 rtl::Reference< sdr::SelectionController > CreateTableController(

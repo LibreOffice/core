@@ -51,7 +51,6 @@ namespace o3tl
 }
 
 
-//  class VCLXGraphics
 
 
 class VCLXGraphics final : public cppu::WeakImplHelper<

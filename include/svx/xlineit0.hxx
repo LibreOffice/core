@@ -22,7 +22,6 @@
 
 #include <svl/eitem.hxx>
 
-// class LineStyleItem
 
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/LineStyle.hpp>

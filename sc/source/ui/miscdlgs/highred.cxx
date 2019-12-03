@@ -24,7 +24,6 @@
 
 #include <highred.hxx>
 
-//  class ScHighlightChgDlg
 
 ScHighlightChgDlg::ScHighlightChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                                      ScViewData* ptrViewData)

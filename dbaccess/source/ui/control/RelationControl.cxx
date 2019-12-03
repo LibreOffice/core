@@ -125,7 +125,6 @@ namespace dbaui
 
     };
 
-    // class ORelationControl
     ORelationControl::ORelationControl(const css::uno::Reference<css::awt::XWindow>& rParent)
         : EditBrowseBox(VCLUnoHelper::GetWindow(rParent),
             EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT,
@@ -433,7 +432,6 @@ namespace dbaui
         return LogicToPixel(Size(140, 80), MapMode(MapUnit::MapAppFont));
     }
 
-    // class OTableListBoxControl
     OTableListBoxControl::OTableListBoxControl(weld::Builder* _pParent,
         const OJoinTableView::OTableWindowMap* _pTableMap,
         IRelationControlInterface* _pParentDialog)

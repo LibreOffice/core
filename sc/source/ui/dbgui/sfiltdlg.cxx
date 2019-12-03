@@ -50,7 +50,6 @@ namespace
     }
 }
 
-//  class ScSpecialFilterDialog
 
 ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                                         const SfxItemSet&   rArgSet )

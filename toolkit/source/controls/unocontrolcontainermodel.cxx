@@ -24,7 +24,6 @@
 
 #include <helper/unopropertyarrayhelper.hxx>
 
-//  class UnoControlContainerModel
 
 UnoControlContainerModel::UnoControlContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )

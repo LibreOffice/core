@@ -52,7 +52,6 @@ namespace migration
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 
-    // class ExtensionMigration
 
 
     typedef ::cppu::WeakImplHelper<

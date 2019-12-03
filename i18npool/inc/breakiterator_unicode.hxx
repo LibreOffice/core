@@ -34,7 +34,6 @@ namespace i18npool {
 #define LOAD_LINE_BREAKITERATOR         3
 
 
-//  class BreakIterator_Unicode
 
 class BreakIterator_Unicode : public BreakIteratorImpl
 {

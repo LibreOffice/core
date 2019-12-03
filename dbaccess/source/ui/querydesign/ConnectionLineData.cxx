@@ -20,7 +20,6 @@
 #include <ConnectionLineData.hxx>
 
 using namespace dbaui;
-//class OConnectionLineData
 OConnectionLineData::OConnectionLineData()
 {
 }

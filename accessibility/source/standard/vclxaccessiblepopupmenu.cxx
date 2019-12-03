@@ -28,7 +28,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::comphelper;
 
 
-// class VCLXAccessiblePopupMenu
 
 
 bool VCLXAccessiblePopupMenu::IsFocused()

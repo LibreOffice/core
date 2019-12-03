@@ -31,7 +31,6 @@
 namespace xmlscript
 {
 
-    // class XMLBasicExporterBase
 
     typedef ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
@@ -64,7 +63,6 @@ namespace xmlscript
         virtual void SAL_CALL cancel() override;
     };
 
-    // class XMLBasicExporter
 
     class XMLBasicExporter : public XMLBasicExporterBase
     {
@@ -77,7 +75,6 @@ namespace xmlscript
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
     };
 
-    // class XMLOasisBasicExporter
 
     class XMLOasisBasicExporter : public XMLBasicExporterBase
     {

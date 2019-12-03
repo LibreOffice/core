@@ -26,7 +26,6 @@ namespace formula
 
 class ParaWin;
 
-// class ArgEdit
 
 class ArgEdit : public RefEdit
 {
@@ -49,7 +48,6 @@ private:
 };
 
 
-// class ArgInput
 
 class ArgInput final
 {

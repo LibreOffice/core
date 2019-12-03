@@ -31,7 +31,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace i18npool {
 
 
-//  class TextConversionService
 
 class TextConversionService: public cppu::WeakImplHelper
 <
@@ -83,7 +82,6 @@ typedef struct {
 } Hangul_Index;
 
 
-//  class TextConversion_ko
 
 class TextConversion_ko : public TextConversionService
 {
@@ -120,7 +118,6 @@ private:
 };
 
 
-//  class TextConversion_zh
 
 
 // for SChines/TChinese word conversion

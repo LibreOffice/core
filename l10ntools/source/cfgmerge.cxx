@@ -85,7 +85,6 @@ void workOnTokenSet(int nTyp, char * pTokenText) {
 }
 
 
-// class CfgStackData
 
 
 CfgStackData* CfgStack::Push(const OString &rTag, const OString &rId)
@@ -96,7 +95,6 @@ CfgStackData* CfgStack::Push(const OString &rTag, const OString &rId)
 }
 
 
-// class CfgStack
 
 
 CfgStack::~CfgStack()
@@ -125,7 +123,6 @@ CfgStackData *CfgStack::GetStackData()
 }
 
 
-// class CfgParser
 
 
 CfgParser::CfgParser()
@@ -326,7 +323,6 @@ void CfgParser::Execute( int nToken, char * pToken )
 }
 
 
-// class CfgExport
 
 
 CfgExport::CfgExport(
@@ -385,7 +381,6 @@ void CfgExport::WorkOnText(
 }
 
 
-// class CfgMerge
 
 
 CfgMerge::CfgMerge(

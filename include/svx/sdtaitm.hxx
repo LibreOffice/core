@@ -24,7 +24,6 @@
 #include <svx/svxdllapi.h>
 
 
-// class SdrTextVertAdjustItem
 
 
 enum SdrTextVertAdjust {SDRTEXTVERTADJUST_TOP,      // aligned to top (normally used)
@@ -49,7 +48,6 @@ public:
 };
 
 
-// class SdrTextHorzAdjustItem
 
 
 enum SdrTextHorzAdjust {SDRTEXTHORZADJUST_LEFT,     // left adjusted

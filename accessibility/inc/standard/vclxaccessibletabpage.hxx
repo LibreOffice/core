@@ -34,7 +34,6 @@ class AccessibleStateSetHelper;
 }
 
 
-//  class VCLXAccessibleTabPage
 
 
 typedef ::comphelper::OAccessibleTextHelper AccessibleTextHelper_BASE;

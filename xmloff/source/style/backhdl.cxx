@@ -44,7 +44,6 @@ SvXMLEnumMapEntry<style::GraphicLocation> const pXML_BrushVerticalPos[] =
 };
 
 
-// class XMLBackGraphicPositionPropHdl
 
 
 XMLBackGraphicPositionPropHdl::~XMLBackGraphicPositionPropHdl()

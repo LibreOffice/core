@@ -39,7 +39,6 @@ SvXMLEnumMapEntry<FontItalic> const aPostureGenericMapping[] =
 };
 
 
-// class XMLPosturePropHdl
 
 
 XMLPosturePropHdl::~XMLPosturePropHdl()

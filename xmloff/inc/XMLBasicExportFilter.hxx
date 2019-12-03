@@ -23,7 +23,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 
-// class XMLBasicExportFilter
 
 typedef ::cppu::WeakImplHelper<
     css::xml::sax::XDocumentHandler > XMLBasicExportFilter_BASE;

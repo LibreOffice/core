@@ -128,12 +128,10 @@ public:
 };
 
 
-//  class SvxColorList
 
 typedef std::vector<Color> SvxColorList;
 
 
-//  class ItemList
 
 
 class ItemList
@@ -153,7 +151,6 @@ public:
 };
 
 
-// class ContentAttribs
 
 class ContentAttribs
 {
@@ -183,7 +180,6 @@ public:
 };
 
 
-// class CharAttribList
 
 class CharAttribList
 {
@@ -236,7 +232,6 @@ public:
 };
 
 
-// class ContentNode
 
 class ContentNode
 {
@@ -304,7 +299,6 @@ public:
 };
 
 
-// class EditPaM
 
 class EditPaM
 {
@@ -381,7 +375,6 @@ struct ExtraPortionInfo
 };
 
 
-// class TextPortion
 
 class TextPortion
 {
@@ -435,7 +428,6 @@ public:
 };
 
 
-// class TextPortionList
 
 class TextPortionList
 {
@@ -464,7 +456,6 @@ public:
 class ParaPortion;
 
 
-// class EditLine
 
 class EditLine
 {
@@ -548,7 +539,6 @@ public:
 };
 
 
-// class LineList
 
 class EditLineList
 {
@@ -571,7 +561,6 @@ public:
 };
 
 
-// class ParaPortion
 
 class ParaPortion
 {
@@ -642,7 +631,6 @@ public:
 };
 
 
-// class ParaPortionList
 
 class ParaPortionList
 {
@@ -676,7 +664,6 @@ public:
 };
 
 
-// class EditSelection
 
 class EditSelection
 {
@@ -709,7 +696,6 @@ public:
 };
 
 
-// class DeletedNodeInfo
 
 class DeletedNodeInfo
 {
@@ -729,7 +715,6 @@ public:
 };
 
 
-// class EditDoc
 
 class EditDoc
 {

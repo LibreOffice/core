@@ -206,7 +206,6 @@ static void CheckSelection( struct ESelection& rSel, SvxEditSource *pEdit ) thro
 }
 
 
-// class SvxUnoTextRangeBase
 
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextRangeBase );
@@ -1595,7 +1594,6 @@ OUString SAL_CALL SvxUnoTextRange::getImplementationName()
 }
 
 
-// class SvxUnoText
 
 
 SvxUnoTextBase::SvxUnoTextBase(const SvxItemPropertySet* _pSet)

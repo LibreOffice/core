@@ -43,7 +43,6 @@ namespace accessibility
     using namespace ::comphelper;
 
 
-    // class AccessibleTabBarPage
 
 
     AccessibleTabBarPage::AccessibleTabBarPage( TabBar* pTabBar, sal_uInt16 nPageId, const Reference< XAccessible >& rxParent )

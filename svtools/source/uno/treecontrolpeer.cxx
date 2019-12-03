@@ -1404,7 +1404,6 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
 }
 
 
-// class UnoTreeListBoxImpl
 
 
 UnoTreeListBoxImpl::UnoTreeListBoxImpl( TreeControlPeer* pPeer, vcl::Window* pParent, WinBits nWinStyle )
@@ -1494,7 +1493,6 @@ bool UnoTreeListBoxImpl::EditedEntry( SvTreeListEntry* pEntry, const OUString& r
 }
 
 
-// class UnoTreeListItem
 
 
 UnoTreeListItem::UnoTreeListItem()

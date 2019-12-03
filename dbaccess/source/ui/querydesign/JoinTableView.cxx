@@ -156,7 +156,6 @@ void OScrollWindowHelper::Resize()
     m_pTableView->SetPosSizePixel(Point( 0, 0 ),Size( aTotalOutputSize.Width()-nVScrollWidth, aTotalOutputSize.Height()-nHScrollHeight ));
 }
 
-// class OJoinTableView
 
 OJoinTableView::OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView )
     :Window( pParent,WB_BORDER )

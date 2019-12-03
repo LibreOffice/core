@@ -186,7 +186,6 @@ void OFieldExpressionControlContainerListener::elementRemoved(const css::contain
 { mpParent->elementRemoved(rEvent); }
 
 
-// class OFieldExpressionControl
 OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent)
     :EditBrowseBox( _pParent, EditBrowseBoxFlags::NONE, WB_TABSTOP,
                     BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION | BrowserMode::AUTOSIZE_LASTCOL |
@@ -793,7 +792,6 @@ Size OFieldExpressionControl::GetOptimalSize() const
     return LogicToPixel(Size(106, 75), MapMode(MapUnit::MapAppFont));
 }
 
-// class OGroupsSortingDialog
 OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnly,
                                            OReportController* _pController)
     : FloatingWindow(_pParent, "FloatingSort", "modules/dbreport/ui/floatingsort.ui")

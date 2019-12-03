@@ -47,7 +47,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-// class AccessibleDialogControlShape
 
 
 AccessibleDialogControlShape::AccessibleDialogControlShape (DialogWindow* pDialogWindow, DlgEdObj* pDlgEdObj)

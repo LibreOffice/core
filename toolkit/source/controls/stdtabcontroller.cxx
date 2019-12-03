@@ -42,7 +42,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 
-//  class StdTabController
 
 StdTabController::StdTabController()
 {

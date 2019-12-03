@@ -45,7 +45,6 @@ namespace com { namespace sun { namespace star { namespace uno { class XComponen
 typedef std::map<sal_uInt16, css::uno::Any> ImplPropertyTable;
 
 
-//  class UnoControlModel
 
 
 typedef ::cppu::WeakAggImplHelper7  <   css::awt::XControlModel

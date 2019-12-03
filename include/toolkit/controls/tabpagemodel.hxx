@@ -46,7 +46,6 @@ public:
 };
 
 
-//  class UnoTabPageControl
 
 typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
                                             ,   css::awt::tab::XTabPage

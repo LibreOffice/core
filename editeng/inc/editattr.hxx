@@ -61,7 +61,6 @@ class SfxGrabBagItem;
 #define DEF_METRIC  0
 
 
-// class EditCharAttrib
 
 // bFeature: Attribute must not expand/shrink, length is always 1
 // bEdge: Attribute will not expand, if you want to expand just on the edge
@@ -151,7 +150,6 @@ inline void EditCharAttrib::Collaps( sal_Int32 nDiff )
 }
 
 
-// class EditCharAttribFont
 
 class EditCharAttribFont: public EditCharAttrib
 {
@@ -162,7 +160,6 @@ public:
 };
 
 
-// class EditCharAttribWeight
 
 class EditCharAttribWeight : public EditCharAttrib
 {
@@ -172,7 +169,6 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
-// class EditCharAttribItalic
 
 class EditCharAttribItalic : public EditCharAttrib
 {
@@ -183,7 +179,6 @@ public:
 };
 
 
-// class EditCharAttribShadow
 
 class EditCharAttribShadow : public EditCharAttrib
 {
@@ -194,7 +189,6 @@ public:
 };
 
 
-// class EditCharAttribEscapement
 
 class EditCharAttribEscapement : public EditCharAttrib
 {
@@ -205,7 +199,6 @@ public:
 };
 
 
-// class EditCharAttribOutline
 
 class EditCharAttribOutline : public EditCharAttrib
 {
@@ -216,7 +209,6 @@ public:
 };
 
 
-// class EditCharAttribStrikeout
 
 class EditCharAttribStrikeout : public EditCharAttrib
 {
@@ -227,7 +219,6 @@ public:
 };
 
 
-// class EditCharAttribCaseMap
 
 class EditCharAttribCaseMap : public EditCharAttrib
 {
@@ -238,7 +229,6 @@ public:
 };
 
 
-// class EditCharAttribUnderline
 
 class EditCharAttribUnderline : public EditCharAttrib
 {
@@ -249,7 +239,6 @@ public:
 };
 
 
-// class EditCharAttribOverline
 
 class EditCharAttribOverline : public EditCharAttrib
 {
@@ -260,7 +249,6 @@ public:
 };
 
 
-// class EditCharAttribEmphasisMark
 
 class EditCharAttribEmphasisMark : public EditCharAttrib
 {
@@ -271,7 +259,6 @@ public:
 };
 
 
-// class EditCharAttribRelief
 
 class EditCharAttribRelief : public EditCharAttrib
 {
@@ -282,7 +269,6 @@ public:
 };
 
 
-// class EditCharAttribFontHeight
 
 class EditCharAttribFontHeight : public EditCharAttrib
 {
@@ -293,7 +279,6 @@ public:
 };
 
 
-// class EditCharAttribFontWidth
 
 class EditCharAttribFontWidth : public EditCharAttrib
 {
@@ -304,7 +289,6 @@ public:
 };
 
 
-// class EditCharAttribColor
 
 class EditCharAttribColor : public EditCharAttrib
 {
@@ -314,7 +298,6 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
-// class EditCharAttribBackgroundColor
 
 class EditCharAttribBackgroundColor : public EditCharAttrib
 {
@@ -326,7 +309,6 @@ public:
 };
 
 
-// class EditCharAttribLanguage
 
 class EditCharAttribLanguage : public EditCharAttrib
 {
@@ -337,7 +319,6 @@ public:
 };
 
 
-// class EditCharAttribTab
 
 class EditCharAttribTab : public EditCharAttrib
 {
@@ -348,7 +329,6 @@ public:
 };
 
 
-// class EditCharAttribLineBreak
 
 class EditCharAttribLineBreak : public EditCharAttrib
 {
@@ -359,7 +339,6 @@ public:
 };
 
 
-// class EditCharAttribField
 
 class EditCharAttribField: public EditCharAttrib
 {
@@ -389,7 +368,6 @@ public:
 };
 
 
-// class EditCharAttribPairKerning
 
 class EditCharAttribPairKerning : public EditCharAttrib
 {
@@ -400,7 +378,6 @@ public:
 };
 
 
-// class EditCharAttribKerning
 
 class EditCharAttribKerning : public EditCharAttrib
 {
@@ -411,7 +388,6 @@ public:
 };
 
 
-// class EditCharAttribWordLineMode
 
 class EditCharAttribWordLineMode: public EditCharAttrib
 {
@@ -421,7 +397,6 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
-// class EditCharAttribGrabBag
 
 class EditCharAttribGrabBag: public EditCharAttrib
 {

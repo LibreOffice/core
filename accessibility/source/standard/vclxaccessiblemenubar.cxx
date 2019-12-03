@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// class VCLXAccessibleMenuBar
 
 
 VCLXAccessibleMenuBar::VCLXAccessibleMenuBar( Menu* pMenu )

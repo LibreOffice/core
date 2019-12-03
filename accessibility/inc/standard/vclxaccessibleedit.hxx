@@ -27,7 +27,6 @@
 #include <cppuhelper/implbase2.hxx>
 
 
-//  class VCLXAccessibleEdit
 
 
 typedef ::cppu::ImplHelper2<

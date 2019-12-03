@@ -33,7 +33,6 @@ class XclExpStream;
 class XclExpXmlStream;
 class XclExpChangeTrack;
 
-// class ExcTable -
 
 class XclExpCellTable;
 
