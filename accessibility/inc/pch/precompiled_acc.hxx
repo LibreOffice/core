@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:13:07 using:
+ Generated on 2019-12-03 09:18:05 using:
  ./bin/update_pch accessibility acc --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,7 +39,6 @@
 #include <memory>
 #include <new>
 #include <ostream>
-#include <set>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -48,7 +47,6 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
-#include <o3tl/optional.hxx>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -91,6 +89,7 @@
 #include <vcl/GestureEvent.hxx>
 #include <vcl/IContext.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/accessibletable.hxx>
@@ -102,20 +101,16 @@
 #include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/controllayout.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
-#include <vcl/headbar.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
@@ -130,15 +125,16 @@
 #include <vcl/outdevstate.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
+#include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
 #include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelist.hxx>
 #include <vcl/treelistbox.hxx>
@@ -148,8 +144,10 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
+#include <vcl/windowstate.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -177,7 +175,6 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext2.hpp>
-#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
@@ -191,10 +188,18 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
+#include <com/sun/star/awt/XLayoutConstrains.hpp>
+#include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
+#include <com/sun/star/awt/XUnitConversion.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -242,6 +247,7 @@
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppu/cppudllapi.h>
@@ -263,7 +269,6 @@
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -276,11 +281,11 @@
 #include <extended/accessibletabbarbase.hxx>
 #include <helper/accresmgr.hxx>
 #include <helper/characterattributeshelper.hxx>
-#include <helper/listboxhelper.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -292,22 +297,18 @@
 #include <standard/accessiblemenubasecomponent.hxx>
 #include <standard/accessiblemenuitemcomponent.hxx>
 #include <standard/vclxaccessiblebox.hxx>
-#include <standard/vclxaccessibleedit.hxx>
-#include <standard/vclxaccessiblelist.hxx>
 #include <standard/vclxaccessibletextcomponent.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
-#include <svtools/svtdllapi.h>
 #include <svtools/tabbar.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
+#include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/convert.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
-#include <tools/debug.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>

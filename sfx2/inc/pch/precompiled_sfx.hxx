@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:16:16 using:
+ Generated on 2019-12-03 09:21:34 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -45,8 +45,8 @@
 #include <utility>
 #include <vector>
 #include <boost/logic/tribool.hpp>
-#include <o3tl/optional.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
@@ -88,7 +88,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/EnumContext.hxx>
-#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
@@ -98,6 +97,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/decoview.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
@@ -126,13 +126,10 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/tabctrl.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -348,6 +345,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
