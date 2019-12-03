@@ -28,7 +28,6 @@
 #include <vector>
 
 
-// class CharacterAttributesHelper
 
 
 class CharacterAttributesHelper

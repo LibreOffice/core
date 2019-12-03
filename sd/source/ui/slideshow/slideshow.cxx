@@ -127,7 +127,6 @@ static const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
     return aPresentationPropertyMap_Impl;
 }
 
-// class SlideShow
 
 SlideShow::SlideShow( SdDrawDocument* pDoc )
 : SlideshowBase( m_aMutex )

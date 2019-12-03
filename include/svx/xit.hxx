@@ -32,7 +32,6 @@ class NameOrIndex;
 typedef bool (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p2 );
 
 
-// class NameOrIndex
 
 class SVX_DLLPUBLIC NameOrIndex : public SfxStringItem
 {

@@ -30,7 +30,6 @@
 #include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
 
 
-// class declaration
 
 
 class CmdMailSuppl :

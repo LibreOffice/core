@@ -35,7 +35,6 @@ using namespace utl;
 using namespace com::sun::star::uno;
 
 
-// class ScGridOptions
 
 void ScGridOptions::SetDefaults()
 {
@@ -76,7 +75,6 @@ bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
             && bEqualGrid       == rCpy.bEqualGrid );
 }
 
-// class ScViewOptions
 
 ScViewOptions::ScViewOptions()
 {

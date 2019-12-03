@@ -27,7 +27,6 @@
 
 using namespace dbaui;
 
-// class OFieldDescGenWin
 OFieldDescGenWin::OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* pHelp ) :
      TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
 {

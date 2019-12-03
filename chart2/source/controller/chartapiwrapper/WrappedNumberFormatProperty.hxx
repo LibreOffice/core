@@ -30,7 +30,6 @@ namespace chart
 namespace wrapper
 {
 
-//class WrappedLinkNumberFormatProperty;
 
 class WrappedNumberFormatProperty : public WrappedDirectStateProperty
 {

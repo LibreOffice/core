@@ -45,7 +45,6 @@ namespace package_ucp
 {
 
 
-// class Package.
 
 namespace {
 

@@ -131,7 +131,6 @@ sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & Proper
 }
 
 
-//  class PropertySetHelper_Impl
 
 class OPropertySetHelper::Impl {
 
@@ -155,7 +154,6 @@ public:
 };
 
 
-//  class PropertySetHelper
 
 OPropertySetHelper::OPropertySetHelper(
     OBroadcastHelper  & rBHelper_ )

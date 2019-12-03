@@ -142,7 +142,6 @@ sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
     return nMax;
 }
 
-// class XMLTableExport
 
 XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExportPropertyMapper  >& xExportPropertyMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrExport( rExp )

@@ -150,7 +150,6 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWin
 }
 
 
-// class PopupWindowController
 
 
 PopupWindowController::PopupWindowController( const Reference< uno::XComponentContext >& rxContext,

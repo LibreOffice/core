@@ -30,7 +30,6 @@
 
 namespace i18npool { class NativeNumberSupplierService; }
 
-//  class Calendar_gregorian
 
 
 namespace i18npool {
@@ -146,7 +145,6 @@ private:
 };
 
 
-//  class Calendar_hanja
 
 class Calendar_hanja : public Calendar_gregorian
 {
@@ -158,7 +156,6 @@ public:
 };
 
 
-//  class Calendar_gengou
 
 class Calendar_gengou : public Calendar_gregorian
 {
@@ -168,7 +165,6 @@ public:
 };
 
 
-//  class Calendar_ROC
 
 class Calendar_ROC : public Calendar_gregorian
 {
@@ -178,7 +174,6 @@ public:
 };
 
 
-//  class Calendar_dangi
 
 class Calendar_dangi : public Calendar_gregorian
 {
@@ -188,7 +183,6 @@ public:
 };
 
 
-//  class Calendar_buddhist
 
 class Calendar_buddhist : public Calendar_gregorian
 {

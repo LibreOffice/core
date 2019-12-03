@@ -30,7 +30,6 @@
 
 #include <helper/accessibilityclient.hxx>
 
-//  class UnoWrapper
 
 
 class UnoWrapper : public UnoWrapperBase

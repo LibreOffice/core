@@ -167,7 +167,6 @@ namespace pcr
     }
 
 
-    // class OFormattedNumericControl
 
 
     OFormattedNumericControl::OFormattedNumericControl( vcl::Window* pParent, WinBits nWinStyle )

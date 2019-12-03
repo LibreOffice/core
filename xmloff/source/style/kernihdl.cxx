@@ -29,7 +29,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 
-// class XMLKerningPropHdl
 
 
 XMLKerningPropHdl::~XMLKerningPropHdl()

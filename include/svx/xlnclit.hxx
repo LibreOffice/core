@@ -24,7 +24,6 @@
 #include <svx/svxdllapi.h>
 
 
-// class XLineColorItem
 
 class SVX_DLLPUBLIC XLineColorItem final : public XColorItem
 {

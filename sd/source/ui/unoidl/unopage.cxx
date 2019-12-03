@@ -2612,7 +2612,6 @@ Any SdGenericDrawPage::getNavigationOrder()
     }
 }
 
-// class SdMasterPage
 SdMasterPage::SdMasterPage(SdXImpressDocument* pModel, SdPage* pPage)
     : SdGenericDrawPage(pModel, pPage, ImplGetMasterPagePropertySet(pPage->GetPageKind()))
 {

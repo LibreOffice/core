@@ -39,7 +39,6 @@
 struct FilterEntry;
 struct ElementEntry_Impl;
 
-// class declaration
 
 typedef cppu::WeakComponentImplHelper<
         css::ui::dialogs::XFilePickerControlAccess,

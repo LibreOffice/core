@@ -880,7 +880,6 @@ Size NavigatorTree::GetOptimalSize() const
     return LogicToPixel(Size(100, 70), MapMode(MapUnit::MapAppFont));
 }
 
-// class ONavigatorImpl
 class ONavigatorImpl
 {
 public:
@@ -905,7 +904,6 @@ ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pPar
     m_pNavigatorTree->_selectionChanged(aEvent);
 }
 
-// class ONavigator
 ONavigator::ONavigator(vcl::Window* _pParent ,OReportController& _rController)
     : FloatingWindow( _pParent, "FloatingNavigator", "modules/dbreport/ui/floatingnavigator.ui")
 {

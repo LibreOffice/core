@@ -51,7 +51,6 @@ namespace
 namespace accessibility
 {
 
-    // class AccessibleIconChoiceCtrlEntry
 
     using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::uno;

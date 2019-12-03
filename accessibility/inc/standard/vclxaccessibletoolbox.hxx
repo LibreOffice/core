@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 
-//  class VCLXAccessibleToolBox
 
 
 typedef ::cppu::ImplHelper1 < css::accessibility::XAccessibleSelection > VCLXAccessibleToolBox_BASE;

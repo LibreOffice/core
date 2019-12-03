@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_XDASH_HXX
 
 
-// class XDash
 
 
 #include <svx/svxdllapi.h>

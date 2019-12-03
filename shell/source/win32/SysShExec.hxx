@@ -28,7 +28,6 @@
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 
 
-// class declaration
 
 
 class CSysShExecBase

@@ -231,7 +231,6 @@ static tools::Time setTime( util::DateTime const & rDate )
 }
 
 
-// class SvxUnoTextField
 
 namespace
 {

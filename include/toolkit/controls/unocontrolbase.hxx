@@ -27,7 +27,6 @@
 #include <toolkit/controls/unocontrol.hxx>
 
 
-//  class UnoControlBase
 
 
 class UnoControlBase : public UnoControl

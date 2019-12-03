@@ -26,7 +26,6 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-//  class CalendarImpl
 
 
 namespace i18npool {

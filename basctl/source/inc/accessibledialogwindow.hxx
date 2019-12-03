@@ -44,7 +44,6 @@ class DlgEdModel;
 class DlgEdObj;
 
 
-//  class AccessibleDialogWindow
 
 typedef ::cppu::ImplHelper3 <
     css::accessibility::XAccessible,

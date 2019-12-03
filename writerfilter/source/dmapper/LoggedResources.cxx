@@ -27,7 +27,6 @@ namespace writerfilter
 {
 
 #ifdef DBG_UTIL
-// class: LoggedResourcesHelper
 
 LoggedResourcesHelper::LoggedResourcesHelper(const std::string & sPrefix)
 : msPrefix(sPrefix)
@@ -70,7 +69,6 @@ void LoggedResourcesHelper::attribute(const std::string & rName, sal_uInt32 nVal
 
 #endif
 
-// class: LoggedStream
 
 LoggedStream::LoggedStream(
 #ifdef DBG_UTIL
@@ -324,7 +322,6 @@ void LoggedStream::endGlossaryEntry()
 #endif
 }
 
-// class LoggedProperties
 LoggedProperties::LoggedProperties(
 #ifdef DBG_UTIL
     const std::string & sPrefix

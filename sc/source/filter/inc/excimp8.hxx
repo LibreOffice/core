@@ -59,7 +59,6 @@ private:
     ExcScenarioList maScenList;
 };
 
-// classes AutoFilterData, AutoFilterBuffer
 
 class XclImpAutoFilterData : private ExcRoot
 {

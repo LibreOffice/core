@@ -28,7 +28,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace i18npool {
 
 
-//  class IndexEntrySupplier
 
 class IndexEntrySupplier final : public cppu::WeakImplHelper
 <

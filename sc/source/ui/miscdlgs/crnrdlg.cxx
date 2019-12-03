@@ -52,7 +52,6 @@ const sal_uLong nEntryDataCol = 0;
 const sal_uLong nEntryDataRow = 1;
 const sal_uLong nEntryDataDelim = 2;
 
-//  class ScColRowNameRangesDlg
 
 // note: some of the initialisation is done in Init
 ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,

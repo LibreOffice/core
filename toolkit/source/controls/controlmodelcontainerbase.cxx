@@ -178,7 +178,6 @@ static OUString getStepPropertyName( )
 }
 
 
-//  class ControlModelContainerBase
 
 ControlModelContainerBase::ControlModelContainerBase( const Reference< XComponentContext >& rxContext )
     :ControlModelContainer_IBase( rxContext )
@@ -1265,7 +1264,6 @@ void SAL_CALL ResourceListener::disposing(
 }
 
 
-//  class DialogContainerControl
 
 ControlContainerBase::ControlContainerBase( const Reference< XComponentContext >& rxContext )
     :ContainerControl_IBase()

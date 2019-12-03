@@ -30,7 +30,6 @@
 
 #define WID_CHAOS_START 500
 
-// class CntStaticPoolDefaults_Impl
 
 namespace {
 

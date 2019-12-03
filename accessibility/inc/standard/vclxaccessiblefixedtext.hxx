@@ -23,7 +23,6 @@
 #include <standard/vclxaccessibletextcomponent.hxx>
 
 
-//  class VCLXAccessibleFixedText
 
 
 class VCLXAccessibleFixedText final : public VCLXAccessibleTextComponent

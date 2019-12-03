@@ -37,7 +37,6 @@ static const SvXMLEnumMapEntry<sal_uInt16> pXML_Casemap_Enum[] =
     { XML_TOKEN_INVALID,        0 }
 };
 
-// class XMLPosturePropHdl
 
 XMLCaseMapPropHdl::~XMLCaseMapPropHdl()
 {
@@ -72,7 +71,6 @@ bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
     return bRet;
 }
 
-// class XMLCaseMapVariantHdl
 
 XMLCaseMapVariantHdl::~XMLCaseMapVariantHdl()
 {

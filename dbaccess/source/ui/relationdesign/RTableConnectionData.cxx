@@ -43,7 +43,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// class ORelationTableConnectionData
 ORelationTableConnectionData::ORelationTableConnectionData()
     :OTableConnectionData()
     ,m_nUpdateRules(KeyRule::NO_ACTION)

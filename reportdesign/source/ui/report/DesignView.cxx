@@ -80,7 +80,6 @@ public:
 
 }
 
-// class ODesignView
 
 
 ODesignView::ODesignView(   vcl::Window* pParent,

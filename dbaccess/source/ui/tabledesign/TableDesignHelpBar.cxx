@@ -25,7 +25,6 @@
 #include <memory>
 using namespace dbaui;
 #define STANDARD_MARGIN                 6
-// class OTableDesignHelpBar
 OTableDesignHelpBar::OTableDesignHelpBar( vcl::Window* pParent ) :
      TabPage( pParent, WB_3DLOOK )
 {

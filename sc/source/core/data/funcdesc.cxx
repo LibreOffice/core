@@ -94,7 +94,6 @@ struct ScFuncDescCore
 
 static void ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc*, bool& rbSuppressed);
 
-// class ScFuncDesc:
 ScFuncDesc::ScFuncDesc() :
         pDefArgFlags    (nullptr),
         nFIndex         (0),
@@ -386,7 +385,6 @@ bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
 
 #define ENTRY(CODE) CODE, SAL_N_ELEMENTS(CODE)
 
-// class ScFunctionList:
 ScFunctionList::ScFunctionList()
 {
     sal_Int32  nMaxFuncNameLen = 0; // Length of longest function name
@@ -1009,7 +1007,6 @@ const ScFuncDesc* ScFunctionList::GetFunction( sal_uInt32 nIndex ) const
     return pDesc;
 }
 
-// class ScFunctionCategory:
 
 sal_uInt32 ScFunctionCategory::getCount() const
 {
@@ -1036,7 +1033,6 @@ sal_uInt32 ScFunctionCategory::getNumber() const
     return m_nCategory;
 }
 
-// class ScFunctionMgr:
 
 ScFunctionMgr::ScFunctionMgr() :
     pFuncList( ScGlobal::GetStarCalcFunctionList() )

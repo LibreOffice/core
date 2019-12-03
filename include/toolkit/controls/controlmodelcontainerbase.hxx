@@ -43,7 +43,6 @@
 namespace com { namespace sun { namespace star { namespace resource { class XStringResourceResolver; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
-//  class ControlModelContainerBase
 
 typedef UnoControlModel     ControlModel_Base;
 typedef ::cppu::AggImplInheritanceHelper8   <   ControlModel_Base

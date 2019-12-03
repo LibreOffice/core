@@ -24,7 +24,6 @@
 #include <ConnectionLine.hxx>
 
 using namespace dbaui;
-// class ORelationTableConnection
 ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContainer,
                                                    const TTableConnectionData::value_type& pTabConnData )
     :OTableConnection( pContainer, pTabConnData )

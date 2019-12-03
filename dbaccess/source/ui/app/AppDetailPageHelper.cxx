@@ -126,7 +126,6 @@ namespace
         OUString sErase = _rName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
         return (nIndex != -1 ? lcl_findEntry_impl(rTree,_rName.copy(sErase.getLength() + 1),_pFirst) : nullptr);
     }
-    // class OPreviewWindow
     class OTablePreviewWindow : public vcl::Window
     {
         DECL_LINK(OnDisableInput, void*, void);
@@ -179,7 +178,6 @@ namespace
 
 }
 
-// class OAppDetailPageHelper
 OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_rBorderWin(_rBorderWin)
     ,m_aFL(VclPtr<FixedLine>::Create(this,WB_VERT))

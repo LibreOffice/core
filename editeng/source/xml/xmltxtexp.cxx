@@ -126,7 +126,6 @@ void SvxEditEngineSource::UpdateData()
 {
 }
 
-// class SvxSimpleUnoModel
 
 SvxSimpleUnoModel::SvxSimpleUnoModel()
 {

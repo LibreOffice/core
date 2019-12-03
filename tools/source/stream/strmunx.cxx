@@ -29,7 +29,6 @@
 #include <osl/thread.h>
 #include <sal/log.hxx>
 
-// class FileBase
 #include <osl/file.hxx>
 #include <osl/detail/file.h>
 #include <rtl/instance.hxx>

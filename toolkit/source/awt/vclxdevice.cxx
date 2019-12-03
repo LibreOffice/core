@@ -37,7 +37,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/metric.hxx>
 
-//  class VCLXDevice
 
 VCLXDevice::VCLXDevice()
 {

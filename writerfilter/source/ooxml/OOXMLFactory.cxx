@@ -27,13 +27,11 @@ namespace ooxml {
 
 using namespace com::sun::star;
 
-// class OOXMLFactory_ns
 
 OOXMLFactory_ns::~OOXMLFactory_ns()
 {
 }
 
-// class OOXMLFactory
 
 void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                               const uno::Reference< xml::sax::XFastAttributeList > & xAttribs)

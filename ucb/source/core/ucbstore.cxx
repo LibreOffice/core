@@ -112,7 +112,6 @@ typedef std::unordered_map< OUString, PersistentPropertySet*> PropertySetMap_Imp
 
 namespace {
 
-// class PropertySetInfo_Impl
 class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
 {
     std::unique_ptr<Sequence< Property >>

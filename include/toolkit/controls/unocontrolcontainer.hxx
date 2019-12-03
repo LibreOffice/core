@@ -34,7 +34,6 @@
 class UnoControlHolderList;
 
 
-//  class UnoControlContainer
 
 typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   css::awt::XUnoControlContainer

@@ -51,7 +51,6 @@ class CachedContentResultSet
                 , public css::lang::XServiceInfo
 {
 
-    // class CCRS_Cache
 
     class CCRS_Cache
     {

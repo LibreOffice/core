@@ -44,7 +44,6 @@
 #define DETAILS_OPT_HELP_HEIGHT         100
 
 using namespace dbaui;
-// class OTableFieldDescWin
 OTableFieldDescWin::OTableFieldDescWin( vcl::Window* pParent)
     : TabPage(pParent, WB_3DLOOK)
     , m_eChildFocus(NONE)

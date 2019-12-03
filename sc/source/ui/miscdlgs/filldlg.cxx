@@ -29,7 +29,6 @@
 #include <filldlg.hxx>
 #include <scui_def.hxx>
 
-// class ScFillSeriesDlg
 
 ScFillSeriesDlg::ScFillSeriesDlg( weld::Window*       pParent,
                                   ScDocument&   rDocument,

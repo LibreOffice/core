@@ -31,7 +31,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_CASEMAP_NORMAL;
 
 
-// class XMLEscapementPropHdl
 
 
 XMLLineHeightHdl::~XMLLineHeightHdl()
@@ -94,7 +93,6 @@ bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 }
 
 
-// class XMLLineHeightAtLeastHdl
 
 
 XMLLineHeightAtLeastHdl::~XMLLineHeightAtLeastHdl()
@@ -134,7 +132,6 @@ bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const uno::Any&
 }
 
 
-// class XMLLineSpacingHdl
 
 
 XMLLineSpacingHdl::~XMLLineSpacingHdl()

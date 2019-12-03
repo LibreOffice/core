@@ -116,7 +116,6 @@ ScTextWndBase::ScTextWndBase( vcl::Window* pParent,  WinBits nStyle )
     }
 }
 
-//  class ScInputWindowWrapper
 
 SFX_IMPL_CHILDWINDOW_WITHID(ScInputWindowWrapper,FID_INPUTLINE_STATUS)
 
@@ -146,7 +145,6 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
     return aInfo;
 }
 
-//  class ScInputWindow
 
 static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, const SfxBindings* pBind )
 {

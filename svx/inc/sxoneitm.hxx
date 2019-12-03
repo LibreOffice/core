@@ -50,7 +50,6 @@ public:
 };
 
 
-// class SdrOneSizeWidthItem
 
 class SdrOneSizeHeightItem: public SdrMetricItem {
 public:

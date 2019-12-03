@@ -93,7 +93,6 @@ static void printAddressFlags(ScRefFlags nFlag)
 }
 #endif
 
-//  class ScPrintAreasDlg
 
 ScPrintAreasDlg::ScPrintAreasDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent)
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/printareasdialog.ui", "PrintAreasDialog")

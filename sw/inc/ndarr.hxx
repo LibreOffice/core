@@ -63,7 +63,6 @@ struct SwPosition;
 namespace sw { class DocumentContentOperationsManager; }
 namespace svt { class EmbeddedObjectRef; }
 
-// class SwNodes
 
 typedef SwNode * SwNodePtr;
 typedef bool (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );

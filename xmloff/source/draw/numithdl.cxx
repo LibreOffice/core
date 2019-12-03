@@ -22,7 +22,6 @@
 using namespace ::com::sun::star;
 
 
-// class XMLNumRulePropHdl
 
 
 XMLNumRulePropHdl::XMLNumRulePropHdl( css::uno::Reference< css::ucb::XAnyCompare > const & xNumRuleCompare )

@@ -29,7 +29,6 @@ enum class SdrEdgeKind
 };
 
 
-// class SdrEdgeKindItem
 
 class SVX_DLLPUBLIC SdrEdgeKindItem: public SfxEnumItem<SdrEdgeKind> {
 public:

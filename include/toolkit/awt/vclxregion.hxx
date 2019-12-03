@@ -31,7 +31,6 @@
 #include <vcl/region.hxx>
 
 
-//  class VCLXRegion
 
 
 class VCLXRegion final : public cppu::WeakImplHelper<

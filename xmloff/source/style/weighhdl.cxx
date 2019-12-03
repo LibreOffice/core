@@ -57,7 +57,6 @@ FontWeightMapper const aFontWeightMap[] =
     { css::awt::FontWeight::DONTKNOW,             1000 }
 };
 
-// class XMLFmtBreakBeforePropHdl
 
 XMLFontWeightPropHdl::~XMLFontWeightPropHdl()
 {

@@ -173,7 +173,6 @@ void SvStream::writeNumberWithoutSwap_(const void * pDataSrc, int nDataSize)
     }
 }
 
-//  class SvLockBytes
 
 void SvLockBytes::close()
 {
@@ -260,7 +259,6 @@ ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat) const
     return ERRCODE_NONE;
 }
 
-//  class SvStream
 
 std::size_t SvStream::GetData( void* pData, std::size_t nSize )
 {

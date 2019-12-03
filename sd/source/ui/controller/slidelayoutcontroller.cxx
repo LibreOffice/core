@@ -324,7 +324,6 @@ static Sequence< OUString >  InsertSlideController_getSupportedServiceNames()
     return aSNS;
 }
 
-// class SlideLayoutController
 
 SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentContext >& rxContext, const OUString& sCommandURL, bool bInsertPage )
 : svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), sCommandURL )

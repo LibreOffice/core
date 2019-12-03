@@ -27,7 +27,6 @@
 #include <set>
 
 
-//  class UnoPropertyArrayHelper
 
 class UnoPropertyArrayHelper final : public ::cppu::IPropertyArrayHelper
 {

@@ -24,7 +24,6 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 
 
-//  class css::awt::UnoControlContainerModel
 
 class UnoControlContainerModel final : public UnoControlModel
 {

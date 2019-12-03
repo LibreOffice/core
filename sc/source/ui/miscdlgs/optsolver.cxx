@@ -148,7 +148,6 @@ ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bM
 {
 }
 
-//  class ScOptSolverDlg
 
 ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                                ScDocShell* pDocSh, const ScAddress& aCursorPos)

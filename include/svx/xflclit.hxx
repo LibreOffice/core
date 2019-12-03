@@ -28,7 +28,6 @@
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-// class XFillColorItem
 
 class SVX_DLLPUBLIC XFillColorItem final : public XColorItem
 {

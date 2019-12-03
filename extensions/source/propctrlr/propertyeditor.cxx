@@ -39,7 +39,6 @@ namespace pcr
     using ::com::sun::star::uno::Reference;
 
 
-    // class OPropertyEditor
 
 
     OPropertyEditor::OPropertyEditor( vcl::Window* pParent)

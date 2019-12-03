@@ -23,7 +23,6 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-//      class UnoScriptTypeDetector
 sal_Int16 SAL_CALL
 UnoScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection )
 {

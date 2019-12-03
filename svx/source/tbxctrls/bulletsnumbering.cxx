@@ -63,7 +63,6 @@ public:
 
 }
 
-//class NumberingPopup
 NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
                                 vcl::Window* pParent, NumberingPageType ePageType ) :
     ToolbarMenu( rController.getFrameInterface(), pParent, WB_STDPOPUP ),
@@ -191,7 +190,6 @@ void NumberingPopup::VSSelectHdl(void const * pControl)
 }
 
 
-//class NumberingToolBoxControl
 NumberingToolBoxControl::NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext ):
     svt::PopupWindowController( rxContext, css::uno::Reference< css::frame::XFrame >(), OUString() ),
     mePageType( NumberingPageType::SINGLENUM )

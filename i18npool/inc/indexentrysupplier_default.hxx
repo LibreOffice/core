@@ -28,7 +28,6 @@ namespace i18npool {
 class Index;
 
 
-//  class IndexEntrySupplier_Unicode
 
 class IndexEntrySupplier_Unicode : public IndexEntrySupplier_Common {
 public:

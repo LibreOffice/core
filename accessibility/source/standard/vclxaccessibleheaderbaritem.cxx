@@ -39,7 +39,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-//  class AccessibleTabBar
 
 
 VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar, sal_Int32 _nIndexInParent )

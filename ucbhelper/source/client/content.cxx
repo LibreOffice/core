@@ -118,7 +118,6 @@ void EmptyInputStream::closeInput()
 }
 
 
-// class ContentEventListener_Impl.
 
 namespace {
 
@@ -147,7 +146,6 @@ public:
 
 }
 
-// class Content_Impl.
 
 
 class Content_Impl : public salhelper::SimpleReferenceObject

@@ -24,7 +24,6 @@
 namespace i18npool {
 
 
-//  class InputSequenceChecker_hi
 
 class InputSequenceChecker_hi : public InputSequenceCheckerImpl
 {

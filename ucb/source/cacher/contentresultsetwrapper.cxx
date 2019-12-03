@@ -35,7 +35,6 @@ using namespace comphelper;
 using namespace cppu;
 
 
-// class ContentResultSetWrapper
 
 
 ContentResultSetWrapper::ContentResultSetWrapper(
@@ -1216,7 +1215,6 @@ Reference< XArray > SAL_CALL ContentResultSetWrapper::getArray( sal_Int32 column
 }
 
 
-// class ContentResultSetWrapperListener
 
 
 ContentResultSetWrapperListener::ContentResultSetWrapperListener(

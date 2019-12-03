@@ -36,7 +36,6 @@
 
 namespace dlgprov
 {
-    // class DialogEventsAttacherImpl
     typedef std::unordered_map< OUString,
         css::uno::Reference< css::script::XScriptListener > > ListenerHash;
 
@@ -74,7 +73,6 @@ namespace dlgprov
     };
 
 
-    // class DialogAllListenerImpl
 
 
     typedef ::cppu::WeakImplHelper<
@@ -104,7 +102,6 @@ namespace dlgprov
     };
 
 
-    // class DialogScriptListenerImpl
 
 
     typedef ::cppu::WeakImplHelper<

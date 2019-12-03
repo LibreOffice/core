@@ -54,7 +54,6 @@ namespace
         xBox->run();
     }
 
-//  class DBSaveData
 
 class DBSaveData
 {
@@ -126,7 +125,6 @@ void DBSaveData::Restore()
     }
 }
 
-//  class ScDbNameDlg
 
 ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
     ScViewData* ptrViewData)

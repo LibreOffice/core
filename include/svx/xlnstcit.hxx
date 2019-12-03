@@ -24,7 +24,6 @@
 #include <svx/svxdllapi.h>
 
 
-// class XLineStartCenterItem
 
 class SVX_DLLPUBLIC XLineStartCenterItem : public SfxBoolItem
 {

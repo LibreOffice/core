@@ -31,7 +31,6 @@
 typedef std::unordered_map<OString, OString> OStringHashMap;
 
 
-// class CfgStackData
 
 
 class CfgStackData
@@ -60,7 +59,6 @@ public:
 };
 
 
-// class CfgStack
 
 
 class CfgStack

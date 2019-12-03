@@ -28,7 +28,6 @@ using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-// class OTableConnection
 namespace dbaui
 {
     OTableConnection::OTableConnection( OJoinTableView* _pContainer,const TTableConnectionData::value_type& _pTabConnData )

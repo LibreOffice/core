@@ -1082,7 +1082,6 @@ public:
     }
 };
 
-//  class SVTXRoadmap
 
 struct RMItemData
 {
@@ -1139,7 +1138,6 @@ private:
 
 
 
-//  class SVTXRoadmap
 
 SVTXRoadmap::SVTXRoadmap() : maItemListeners( *this )
 {

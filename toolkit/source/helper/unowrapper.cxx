@@ -113,7 +113,6 @@ static css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window c
 }
 
 
-//  class UnoWrapper
 
 
 extern "C" {

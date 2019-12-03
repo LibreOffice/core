@@ -29,7 +29,6 @@ namespace http_dav_ucp
 {
 
 
-// class DAVAuthListenerImpl.
 
 
     class DAVAuthListener_Impl : public DAVAuthListener

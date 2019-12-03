@@ -642,7 +642,6 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
 }
 
 
-//  class MultiPageControl
 
 UnoMultiPageControl::UnoMultiPageControl( const uno::Reference< uno::XComponentContext >& rxContext ) : ControlContainerBase(rxContext), maTabListeners( *this )
 {
@@ -926,7 +925,6 @@ sal_Bool SAL_CALL UnoMultiPageModel::getGroupControl(  )
 }
 
 
-//  class UnoPageControl
 
 UnoPageControl::UnoPageControl( const uno::Reference< uno::XComponentContext >& rxContext ) : ControlContainerBase(rxContext)
 {
@@ -1020,7 +1018,6 @@ sal_Bool SAL_CALL UnoPageModel::getGroupControl(  )
 // Frame control
 
 
-//  class UnoFrameControl
 
 UnoFrameControl::UnoFrameControl( const uno::Reference< uno::XComponentContext >& rxContext ) : ControlContainerBase(rxContext)
 {

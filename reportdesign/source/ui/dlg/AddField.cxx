@@ -98,7 +98,6 @@ uno::Sequence< beans::PropertyValue > OAddFieldWindowListBox::getSelectedFieldDe
     return aArgs;
 }
 
-// class OAddFieldWindowListBox
 
 
 OAddFieldWindowListBox::OAddFieldWindowListBox(Window *pParent, OAddFieldWindow* pFieldWindow)

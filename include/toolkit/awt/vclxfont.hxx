@@ -35,7 +35,6 @@ namespace com { namespace sun { namespace star { namespace awt { class XDevice; 
 class FontMetric;
 
 
-//  class VCLXFont
 
 
 class TOOLKIT_DLLPUBLIC VCLXFont final :

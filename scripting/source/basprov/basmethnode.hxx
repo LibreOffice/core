@@ -38,7 +38,6 @@ namespace basprov
 {
 
 
-    //  class BasicMethodNodeImpl
 
 
     typedef ::cppu::WeakImplHelper<

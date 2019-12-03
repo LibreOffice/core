@@ -87,7 +87,6 @@ ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
     return xGraphic;
 }
 
-//  class UnoControlEditModel
 
 UnoControlEditModel::UnoControlEditModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -155,7 +154,6 @@ stardiv_Toolkit_UnoControlEditModel_get_implementation(
 }
 
 
-//  class UnoEditControl
 
 UnoEditControl::UnoEditControl()
     :UnoControlBase()
@@ -479,7 +477,6 @@ stardiv_Toolkit_UnoEditControl_get_implementation(
 }
 
 
-//  class UnoControlFileControlModel
 
 UnoControlFileControlModel::UnoControlFileControlModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -555,7 +552,6 @@ stardiv_Toolkit_UnoControlFileControlModel_get_implementation(
 }
 
 
-//  class UnoFileControl
 
 UnoFileControl::UnoFileControl()
     :UnoEditControl()
@@ -590,7 +586,6 @@ stardiv_Toolkit_UnoFileControl_get_implementation(
 }
 
 
-//  class GraphicControlModel
 
 uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
@@ -661,7 +656,6 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
 }
 
 
-//  class UnoControlButtonModel
 
 UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
@@ -735,7 +729,6 @@ stardiv_Toolkit_UnoControlButtonModel_get_implementation(
 }
 
 
-//  class UnoButtonControl
 
 UnoButtonControl::UnoButtonControl()
     :UnoButtonControl_Base()
@@ -893,7 +886,6 @@ stardiv_Toolkit_UnoButtonControl_get_implementation(
 }
 
 
-//  class UnoControlImageControlModel
 
 UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
@@ -995,7 +987,6 @@ stardiv_Toolkit_UnoControlImageControlModel_get_implementation(
 }
 
 
-//  class UnoImageControlControl
 
 UnoImageControlControl::UnoImageControlControl()
     :UnoImageControlControl_Base()
@@ -1064,7 +1055,6 @@ stardiv_Toolkit_UnoImageControlControl_get_implementation(
 }
 
 
-//  class UnoControlRadioButtonModel
 
 UnoControlRadioButtonModel::UnoControlRadioButtonModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
@@ -1128,7 +1118,6 @@ stardiv_Toolkit_UnoControlRadioButtonModel_get_implementation(
 }
 
 
-//  class UnoRadioButtonControl
 
 UnoRadioButtonControl::UnoRadioButtonControl()
     :UnoRadioButtonControl_Base()
@@ -1306,7 +1295,6 @@ stardiv_Toolkit_UnoRadioButtonControl_get_implementation(
 }
 
 
-//  class UnoControlCheckBoxModel
 
 UnoControlCheckBoxModel::UnoControlCheckBoxModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
@@ -1369,7 +1357,6 @@ stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation(
 }
 
 
-//  class UnoCheckBoxControl
 
 UnoCheckBoxControl::UnoCheckBoxControl()
     :UnoCheckBoxControl_Base()
@@ -1520,7 +1507,6 @@ stardiv_Toolkit_UnoCheckBoxControl_get_implementation(
 }
 
 
-//  class UnoControlFixedHyperlinkModel
 
 UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -1573,7 +1559,6 @@ stardiv_Toolkit_UnoControlFixedHyperlinkModel_get_implementation(
 }
 
 
-//  class UnoFixedHyperlinkControl
 
 UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
     :UnoControlBase()
@@ -1713,7 +1698,6 @@ stardiv_Toolkit_UnoFixedHyperlinkControl_get_implementation(
 }
 
 
-//  class UnoControlFixedTextModel
 
 UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -1777,7 +1761,6 @@ stardiv_Toolkit_UnoControlFixedTextModel_get_implementation(
 }
 
 
-//  class UnoFixedTextControl
 
 UnoFixedTextControl::UnoFixedTextControl()
     :UnoControlBase()
@@ -1883,7 +1866,6 @@ stardiv_Toolkit_UnoFixedTextControl_get_implementation(
 }
 
 
-//  class UnoControlGroupBoxModel
 
 UnoControlGroupBoxModel::UnoControlGroupBoxModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -1950,7 +1932,6 @@ stardiv_Toolkit_UnoControlGroupBoxModel_get_implementation(
 }
 
 
-//  class UnoGroupBoxControl
 
 UnoGroupBoxControl::UnoGroupBoxControl()
     :UnoControlBase()
@@ -2550,7 +2531,6 @@ stardiv_Toolkit_UnoControlListBoxModel_get_implementation(
 }
 
 
-//  class UnoListBoxControl
 
 UnoListBoxControl::UnoListBoxControl()
     :UnoListBoxControl_Base()
@@ -2967,7 +2947,6 @@ stardiv_Toolkit_UnoListBoxControl_get_implementation(
 }
 
 
-//  class UnoControlComboBoxModel
 
 UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XComponentContext >& rxContext )
     :UnoControlListBoxModel( rxContext, ConstructWithoutProperties )
@@ -3056,7 +3035,6 @@ stardiv_Toolkit_UnoControlComboBoxModel_get_implementation(
 }
 
 
-//  class UnoComboBoxControl
 
 UnoComboBoxControl::UnoComboBoxControl()
     :UnoEditControl()
@@ -3472,7 +3450,6 @@ void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat )
 }
 
 
-//  class UnoControlDateFieldModel
 
 UnoControlDateFieldModel::UnoControlDateFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -3532,7 +3509,6 @@ stardiv_Toolkit_UnoControlDateFieldModel_get_implementation(
 }
 
 
-//  class UnoDateFieldControl
 
 UnoDateFieldControl::UnoDateFieldControl()
     :UnoSpinFieldControl()
@@ -3749,7 +3725,6 @@ stardiv_Toolkit_UnoDateFieldControl_get_implementation(
 }
 
 
-//  class UnoControlTimeFieldModel
 
 UnoControlTimeFieldModel::UnoControlTimeFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -3809,7 +3784,6 @@ stardiv_Toolkit_UnoControlTimeFieldModel_get_implementation(
 }
 
 
-//  class UnoTimeFieldControl
 
 UnoTimeFieldControl::UnoTimeFieldControl()
     :UnoSpinFieldControl()
@@ -3985,7 +3959,6 @@ stardiv_Toolkit_UnoTimeFieldControl_get_implementation(
 }
 
 
-//  class UnoControlNumericFieldModel
 
 UnoControlNumericFieldModel::UnoControlNumericFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -4045,7 +4018,6 @@ stardiv_Toolkit_UnoControlNumericFieldModel_get_implementation(
 }
 
 
-//  class UnoNumericFieldControl
 
 UnoNumericFieldControl::UnoNumericFieldControl()
     :UnoSpinFieldControl()
@@ -4212,7 +4184,6 @@ stardiv_Toolkit_UnoNumericFieldControl_get_implementation(
 }
 
 
-//  class UnoControlCurrencyFieldModel
 
 UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -4276,7 +4247,6 @@ stardiv_Toolkit_UnoControlCurrencyFieldModel_get_implementation(
 }
 
 
-//  class UnoCurrencyFieldControl
 
 UnoCurrencyFieldControl::UnoCurrencyFieldControl()
     :UnoSpinFieldControl()
@@ -4443,7 +4413,6 @@ stardiv_Toolkit_UnoCurrencyFieldControl_get_implementation(
 }
 
 
-//  class UnoControlPatternFieldModel
 
 UnoControlPatternFieldModel::UnoControlPatternFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -4502,7 +4471,6 @@ stardiv_Toolkit_UnoControlPatternFieldModel_get_implementation(
 }
 
 
-//  class UnoPatternFieldControl
 
 UnoPatternFieldControl::UnoPatternFieldControl()
     :UnoSpinFieldControl()
@@ -4615,7 +4583,6 @@ stardiv_Toolkit_UnoPatternFieldControl_get_implementation(
 }
 
 
-//  class UnoControlProgressBarModel
 
 UnoControlProgressBarModel::UnoControlProgressBarModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -4687,7 +4654,6 @@ stardiv_Toolkit_UnoControlProgressBarModel_get_implementation(
 }
 
 
-//  class UnoProgressBarControl
 
 UnoProgressBarControl::UnoProgressBarControl()
     :UnoControlBase()
@@ -4786,7 +4752,6 @@ stardiv_Toolkit_UnoProgressBarControl_get_implementation(
 }
 
 
-//  class UnoControlFixedLineModel
 
 UnoControlFixedLineModel::UnoControlFixedLineModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
@@ -4854,7 +4819,6 @@ stardiv_Toolkit_UnoControlFixedLineModel_get_implementation(
 }
 
 
-//  class UnoFixedLineControl
 
 UnoFixedLineControl::UnoFixedLineControl()
     :UnoControlBase()

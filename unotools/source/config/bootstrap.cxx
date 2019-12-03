@@ -528,7 +528,6 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
     return eErrCode;
 }
 
-// class Bootstrap
 
 OUString Bootstrap::getProductKey()
 {
@@ -640,7 +639,6 @@ Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage,
     return result;
 }
 
-// class Bootstrap::Impl
 
 bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap const & _rData)
 {

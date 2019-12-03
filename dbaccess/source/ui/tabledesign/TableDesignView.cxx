@@ -39,7 +39,6 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-// class OTableBorderWindow
 OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB_BORDER)
     ,m_aHorzSplitter( VclPtr<Splitter>::Create(this) )
 {
@@ -156,7 +155,6 @@ void OTableBorderWindow::GetFocus()
         m_pEditorCtrl->GrabFocus();
 }
 
-// class OTableDesignView
 OTableDesignView::OTableDesignView( vcl::Window* pParent,
                                     const Reference< XComponentContext >& _rxOrb,
                                     OTableController& _rController

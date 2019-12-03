@@ -359,7 +359,6 @@ Reference< XContent > CachedContentResultSet::CCRS_Cache
 }
 
 
-// class CCRS_PropertySetInfo
 
 
 class CCRS_PropertySetInfo :
@@ -619,7 +618,6 @@ sal_Int32 CCRS_PropertySetInfo
 }
 
 
-// class CachedContentResultSet
 
 
 CachedContentResultSet::CachedContentResultSet(
@@ -2051,7 +2049,6 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
 }
 
 
-// class CachedContentResultSetFactory
 
 
 CachedContentResultSetFactory::CachedContentResultSetFactory(

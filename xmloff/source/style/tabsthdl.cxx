@@ -24,7 +24,6 @@
 using namespace ::com::sun::star;
 
 
-// class XMLFontFamilyNamePropHdl
 
 
 XMLTabStopPropHdl::~XMLTabStopPropHdl()

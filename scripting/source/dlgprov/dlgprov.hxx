@@ -50,7 +50,6 @@ namespace dlgprov
     ::osl::Mutex& getMutex();
 
 
-    // class DialogProviderImpl
 
     css::uno::Reference< css::container::XNameContainer > lcl_createControlModel(const css::uno::Reference< css::uno::XComponentContext >& i_xContext);
     css::uno::Reference< css::resource::XStringResourceManager > lcl_getStringResourceManager(const css::uno::Reference< css::uno::XComponentContext >& i_xContext,const OUString& i_sURL);

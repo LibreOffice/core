@@ -61,7 +61,6 @@ class SfxViewShell;
 sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID );
 
 
-//  class declarations
 
 
 typedef ::cppu::WeakImplHelper  <   css::frame::XController2

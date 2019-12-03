@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/LineJoint.hpp>
 
 
-// class XLineJointItem
 
 
 class SVX_DLLPUBLIC XLineJointItem final : public SfxEnumItem<css::drawing::LineJoint>

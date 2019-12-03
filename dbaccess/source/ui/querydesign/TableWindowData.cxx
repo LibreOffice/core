@@ -36,7 +36,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-// class OTableWindowData
 OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
                                    ,const OUString& _rComposedName
                                    ,const OUString& rTableName

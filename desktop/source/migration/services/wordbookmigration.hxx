@@ -43,7 +43,6 @@ namespace migration
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 
-    // class WordbookMigration
 
 
     typedef ::cppu::WeakImplHelper<

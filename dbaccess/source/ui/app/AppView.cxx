@@ -55,7 +55,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
-// class OAppBorderWindow
 OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_pPanel(nullptr)
     ,m_pDetailView(nullptr)
@@ -161,7 +160,6 @@ OApplicationSwapWindow* OAppBorderWindow::getPanel() const
 }
 
 
-// class OApplicationView
 OApplicationView::OApplicationView( vcl::Window* pParent
                                     ,const Reference< XComponentContext >& _rxOrb
                                     ,OApplicationController& _rAppController

@@ -216,7 +216,6 @@ public:
 };
 
 
-//  class ImpEditView
 
 class ImpEditView : public vcl::unohelper::DragAndDropClient
 {

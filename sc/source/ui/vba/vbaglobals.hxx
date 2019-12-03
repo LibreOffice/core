@@ -28,7 +28,6 @@
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 namespace ooo { namespace vba { namespace excel { class XApplication; } } }
 
-    // class ScVbaGlobals
 
 typedef ::cppu::ImplInheritanceHelper< VbaGlobalsBase, ov::excel::XGlobals > ScVbaGlobals_BASE;
 

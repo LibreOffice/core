@@ -103,7 +103,6 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_UnderlineWidth_Enum[] =
 };
 
 
-// class XMLUnderlineTypePropHdl
 
 
 XMLUnderlineTypePropHdl::~XMLUnderlineTypePropHdl()
@@ -185,7 +184,6 @@ bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any&
 }
 
 
-// class XMLUnderlineStylePropHdl
 
 
 XMLUnderlineStylePropHdl::~XMLUnderlineStylePropHdl()
@@ -275,7 +273,6 @@ bool XMLUnderlineStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 }
 
 
-// class XMLUnderlineWidthPropHdl
 
 
 XMLUnderlineWidthPropHdl::~XMLUnderlineWidthPropHdl()
