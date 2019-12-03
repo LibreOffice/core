@@ -50,6 +50,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <o3tl/cppunittraitshelper.hxx>
 #include <osl/interlck.h>
 #include <rtl/string.h>
 #include <rtl/ustring.h>

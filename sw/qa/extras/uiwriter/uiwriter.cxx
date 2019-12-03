@@ -91,6 +91,8 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
+#include <o3tl/cppunittraitshelper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/make_unique.hxx>
 #include <osl/file.hxx>

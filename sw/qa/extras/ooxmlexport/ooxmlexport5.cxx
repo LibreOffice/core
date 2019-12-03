@@ -48,6 +48,7 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
+#include <o3tl/cppunittraitshelper.hxx>
 
 #include <string>
 #include <config_features.h>

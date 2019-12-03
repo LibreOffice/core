@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <o3tl/cppunittraitshelper.hxx>
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestAssert.h>

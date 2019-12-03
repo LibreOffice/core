@@ -27,6 +27,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <o3tl/cppunittraitshelper.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/tencinfo.h>
