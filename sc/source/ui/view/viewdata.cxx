@@ -497,8 +497,6 @@ ScViewDataTable::ScViewDataTable(ScDocument *pDoc) :
                 nCurY( 0 ),
                 nOldCurX( 0 ),
                 nOldCurY( 0 ),
-                nLOKOldCurX( 0 ),
-                nLOKOldCurY( 0 ),
                 aWidthHelper(pDoc, true),
                 aHeightHelper(pDoc, false),
                 nMaxTiledCol( 20 ),
