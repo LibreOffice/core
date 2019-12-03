@@ -7744,25 +7744,6 @@ SfxBoolItem ShowFmExplorer SID_FM_SHOW_FMEXPLORER
 
 
 
-SfxBoolItem ShowItemBrowser SID_SHOW_ITEMBROWSER
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::View;
-]
-
-
 SfxBoolItem ShowPropBrowser SID_SHOW_PROPERTYBROWSER
 
 [

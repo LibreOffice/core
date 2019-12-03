@@ -790,7 +790,7 @@ class SvxSetItem;
 
 #define SID_ATTR_TRANSFORM_HORI_POSITION                ( SID_SVX_START + 999 )
 #define SID_ATTR_TRANSFORM_VERT_POSITION                ( SID_SVX_START + 1000 )
-#define SID_SHOW_ITEMBROWSER                            ( SID_SVX_START + 1001 )
+// Available for use 1001
 #define SID_ALIGN_ANY_LEFT                              ( SID_SVX_START + 1002 )
 #define SID_ALIGN_ANY_HCENTER                           ( SID_SVX_START + 1003 )
 #define SID_ALIGN_ANY_RIGHT                             ( SID_SVX_START + 1004 )
