@@ -111,9 +111,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         const OUString m_loader;
 
-        enum reg {
-            REG_UNINIT, REG_VOID, REG_REGISTERED, REG_NOT_REGISTERED, REG_MAYBE_REGISTERED
-        } m_registered;
+        enum class Reg { Uninit, Void, Registered, NotRegistered, MaybeRegistered };
+        Reg m_registered;
 
         void getComponentInfo(
             ComponentBackendDb::Data * data,
@@ -339,7 +338,7 @@ BackendImpl::ComponentPackageImpl::ComponentPackageImpl(
     : Package( myBackend, url, name, name /* display-name */,
                xPackageType, bRemoved, identifier),
       m_loader( loader ),
-      m_registered( REG_UNINIT )
+      m_registered( Reg::Uninit )
 {}
 
 Reference<registry::XSimpleRegistry>
@@ -1257,9 +1256,9 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & )
 {
-    if (m_registered == REG_UNINIT)
+    if (m_registered == Reg::Uninit)
     {
-        m_registered = REG_NOT_REGISTERED;
+        m_registered = Reg::NotRegistered;
         const Reference<registry::XSimpleRegistry> xRDB( getRDB() );
         if (xRDB.is())
         {
@@ -1301,9 +1300,9 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
                 }
             }
             if (pos >= 0)
-                m_registered = REG_REGISTERED;
+                m_registered = Reg::Registered;
             else if (bAmbiguousComponentName)
-                m_registered = REG_MAYBE_REGISTERED;
+                m_registered = Reg::MaybeRegistered;
         }
     }
 
@@ -1320,12 +1319,12 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
     //the rest of the path is different).
     //If the caller cannot precisely determine that this package was registered, then it must
     //call registerPackage.
-    bool bAmbiguous = m_registered == REG_VOID // REG_VOID == we are in the progress of unregistration
-        || m_registered == REG_MAYBE_REGISTERED;
+    bool bAmbiguous = m_registered == Reg::Void // Reg::Void == we are in the progress of unregistration
+        || m_registered == Reg::MaybeRegistered;
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
         beans::Ambiguous<sal_Bool>(
-            m_registered == REG_REGISTERED, bAmbiguous) );
+            m_registered == Reg::Registered, bAmbiguous) );
 }
 
 
@@ -1383,10 +1382,10 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                 throw;
             }
         }
-        m_registered = REG_REGISTERED;
+        m_registered = Reg::Registered;
         that->addDataToDb(url, data);
     } else { // revoke
-        m_registered = REG_VOID;
+        m_registered = Reg::Void;
         ComponentBackendDb::Data data(that->readDataFromDb(url));
         css::uno::Reference< css::uno::XComponentContext > context(
             that->getObject(url), css::uno::UNO_QUERY);
@@ -1408,7 +1407,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         if (remoteContext) {
             that->releaseObject(url);
         }
-        m_registered = REG_NOT_REGISTERED;
+        m_registered = Reg::NotRegistered;
         getMyBackend()->revokeEntryFromDb(url);
     }
 }
