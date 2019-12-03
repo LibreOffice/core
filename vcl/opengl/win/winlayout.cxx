@@ -11,14 +11,17 @@
 
 #include <opengl/win/gdiimpl.hxx>
 
-bool OpenGLGlobalWinGlyphCache::AllocateTexture(WinGlyphDrawElement& rElement, int nWidth,
-                                                int nHeight)
+bool OpenGLGlobalWinGlyphCache::AllocateTexture(WinGlyphDrawElement& rElement, CompatibleDC* dc)
 {
     assert(rElement.maTexture.get() == nullptr);
+    assert(dynamic_cast<OpenGLCompatibleDC*>(dc));
+    OpenGLCompatibleDC* odc = static_cast<OpenGLCompatibleDC*>(dc);
     OpenGLCompatibleDC::Texture* texture = new OpenGLCompatibleDC::Texture;
     rElement.maTexture.reset(texture);
-    texture->texture = maPackedTextureAtlas.Reserve(nWidth, nHeight);
+    texture->texture = maPackedTextureAtlas.Reserve(dc->getBitmapWidth(), dc->getBitmapHeight());
     if (!texture->texture)
+        return false;
+    if (!odc->copyToTexture(*rElement.maTexture))
         return false;
     return true;
 }

@@ -842,14 +842,16 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
                                    Color nMaskColor)
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
-    drawMask(rPosAry, static_cast<const SkiaSalBitmap&>(rSalBitmap).GetAlphaSkBitmap(), nMaskColor);
+    sk_sp<SkImage> image
+        = SkImage::MakeFromBitmap(static_cast<const SkiaSalBitmap&>(rSalBitmap).GetAlphaSkBitmap());
+    drawMask(rPosAry, *image, nMaskColor);
 }
 
-void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkBitmap& rBitmap,
+void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkImage& rImage,
                                    Color nMaskColor)
 {
     SkBitmap tmpBitmap;
-    if (!tmpBitmap.tryAllocN32Pixels(rBitmap.width(), rBitmap.height()))
+    if (!tmpBitmap.tryAllocN32Pixels(rImage.width(), rImage.height()))
         abort();
     tmpBitmap.eraseColor(toSkColor(nMaskColor));
     SkPaint paint;
@@ -857,7 +859,7 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkBitmap& rB
     // TODO figure out the right blend mode to avoid the temporary bitmap
     paint.setBlendMode(SkBlendMode::kDstOut);
     SkCanvas canvas(tmpBitmap);
-    canvas.drawBitmap(rBitmap, 0, 0, &paint);
+    canvas.drawImage(&rImage, 0, 0, &paint);
 
     drawBitmap(rPosAry, tmpBitmap);
 }

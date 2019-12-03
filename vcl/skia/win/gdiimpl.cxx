@@ -91,7 +91,7 @@ bool WinSkiaSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const&
         return false;
 
     preDraw();
-    mSurface->getCanvas()->drawBitmap(iterator->second, nX, nY);
+    mSurface->getCanvas()->drawImage(iterator->second, nX, nY);
     postDraw();
     return true;
 }
@@ -103,16 +103,16 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
     assert(dynamic_cast<SkiaCompatibleDC*>(&rWhite));
     assert(dynamic_cast<SkiaCompatibleDC*>(&rBlack));
 
-    SkBitmap bitmap = static_cast<SkiaCompatibleDC&>(rWhite).getAsBitmap();
+    sk_sp<SkImage> image = static_cast<SkiaCompatibleDC&>(rWhite).getAsImage();
     preDraw();
-    mSurface->getCanvas()->drawBitmap(bitmap, nX, nY);
+    mSurface->getCanvas()->drawImage(image, nX, nY);
     postDraw();
     // TODO what is the point of the second texture?
     (void)rBlack;
 
     if (!aControlCacheKey.canCacheControl())
         return true;
-    SkiaControlCachePair pair(aControlCacheKey, std::move(bitmap));
+    SkiaControlCachePair pair(aControlCacheKey, std::move(image));
     SkiaControlsCache::get().insert(std::move(pair));
     return true;
 }
@@ -137,8 +137,8 @@ void WinSkiaSalGraphicsImpl::DeferredTextDraw(const CompatibleDC::Texture* pText
     // SkiaCompatibleDC::wantsTextColorWhite() ensures the glyph is white.
     // TODO maybe other black/white in WinFontInstance::CacheGlyphToAtlas() should be swapped.
     paint.setColorFilter(SkColorFilters::Blend(toSkColor(aMaskColor), SkBlendMode::kModulate));
-    mSurface->getCanvas()->drawBitmapRect(
-        static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->bitmap,
+    mSurface->getCanvas()->drawImageRect(
+        static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->image,
         SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
@@ -150,7 +150,7 @@ void WinSkiaSalGraphicsImpl::DrawTextMask(CompatibleDC::Texture* pTexture, Color
                                           const SalTwoRect& rPosAry)
 {
     assert(dynamic_cast<SkiaCompatibleDC::Texture*>(pTexture));
-    drawMask(rPosAry, static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->bitmap, nMaskColor);
+    drawMask(rPosAry, *static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->image, nMaskColor);
 }
 
 SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height)
@@ -161,11 +161,11 @@ SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int wid
 std::unique_ptr<CompatibleDC::Texture> SkiaCompatibleDC::getAsMaskTexture()
 {
     auto ret = std::make_unique<SkiaCompatibleDC::Texture>();
-    ret->bitmap = getAsMaskBitmap();
+    ret->image = getAsMaskImage();
     return ret;
 }
 
-SkBitmap SkiaCompatibleDC::getAsMaskBitmap()
+sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage()
 {
     // mpData is in the BGRA format, with A unused (and set to 0), and RGB are grey,
     // so convert it to Skia format, then to 8bit and finally use as alpha mask
@@ -192,34 +192,11 @@ SkBitmap SkiaCompatibleDC::getAsMaskBitmap()
     alpha.setInfo(bitmap8.info().makeColorType(kAlpha_8_SkColorType), bitmap8.rowBytes());
     alpha.setPixelRef(sk_ref_sp(bitmap8.pixelRef()), bitmap8.pixelRefOrigin().x(),
                       bitmap8.pixelRefOrigin().y());
-    return alpha;
+    // TODO GPU?
+    return SkImage::MakeFromBitmap(alpha);
 }
 
-bool SkiaCompatibleDC::copyToTexture(CompatibleDC::Texture& aTexture)
-{
-    assert(mpImpl);
-    assert(dynamic_cast<SkiaCompatibleDC::Texture*>(&aTexture));
-    SkBitmap tmpBitmap;
-    if (!tmpBitmap.installPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
-                                                   kBGRA_8888_SkColorType, kUnpremul_SkAlphaType),
-                                 mpData, maRects.mnSrcWidth * 4))
-        abort();
-    SkBitmap& bitmap = static_cast<SkiaCompatibleDC::Texture&>(aTexture).bitmap;
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-    SkCanvas canvas(bitmap);
-    // The data we got is upside-down.
-    SkMatrix matrix;
-    matrix.preTranslate(0, maRects.mnSrcHeight);
-    matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
-    canvas.concat(matrix);
-    canvas.drawBitmapRect(tmpBitmap,
-                          SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
-                          SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight), &paint);
-    return true;
-}
-
-SkBitmap SkiaCompatibleDC::getAsBitmap()
+sk_sp<SkImage> SkiaCompatibleDC::getAsImage()
 {
     SkBitmap tmpBitmap;
     if (!tmpBitmap.installPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
@@ -240,7 +217,8 @@ SkBitmap SkiaCompatibleDC::getAsBitmap()
     canvas.drawBitmapRect(tmpBitmap,
                           SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
                           SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight), &paint);
-    return bitmap;
+    // TODO GPU
+    return SkImage::MakeFromBitmap(bitmap);
 }
 
 SkiaControlsCache::SkiaControlsCache()
@@ -252,9 +230,7 @@ SkiaControlCacheType& SkiaControlsCache::get()
 {
     SalData* data = GetSalData();
     if (!data->m_pSkiaControlsCache)
-    {
         data->m_pSkiaControlsCache.reset(new SkiaControlsCache);
-    }
     return data->m_pSkiaControlsCache->cache;
 }
 
