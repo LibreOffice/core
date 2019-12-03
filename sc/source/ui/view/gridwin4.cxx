@@ -1802,9 +1802,16 @@ bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
     return ( bSimpleQuery && bColumnFound );
 }
 
-void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelRects )
+void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelRects ) const
 {
-    ScMarkData aMultiMark( pViewData->GetMarkData() );
+    GetPixelRectsFor( pViewData->GetMarkData(), rPixelRects );
+}
+
+/// convert rMarkData into pixel rectangles for this view
+void ScGridWindow::GetPixelRectsFor( const ScMarkData &rMarkData,
+                                     ::std::vector< tools::Rectangle >& rPixelRects ) const
+{
+    ScMarkData aMultiMark( rMarkData );
     aMultiMark.SetMarking( false );
     aMultiMark.MarkToMulti();
     ScDocument* pDoc = pViewData->GetDocument();
