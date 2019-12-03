@@ -66,9 +66,11 @@ private:
 
     osl::Mutex m_aHelperMutex; ///< mutex used by the WeakComponentImplHelper
 
+    QStringList m_aNamedFilterList; ///< to keep the original sequence
     QHash<QString, QString> m_aTitleToFilterMap;
     // to retrieve the filename extension for a given filter
     QHash<QString, QString> m_aNamedFilterToExtensionMap;
+    QString m_aCurrentFilter;
 
     QGridLayout* m_pLayout; ///< layout for extra custom controls
     QLabel* m_pFilenameLabel; ///< label to display the filename
@@ -78,9 +80,6 @@ private:
     const bool m_bIsFolderPicker;
 
 protected:
-    QStringList m_aNamedFilterList; ///< to keep the original sequence
-    QString m_aCurrentFilter;
-
     std::unique_ptr<QFileDialog> m_pFileDialog; ///< the file picker dialog
     QWidget* m_pExtraControls; ///< widget to contain extra custom controls
 
@@ -169,7 +168,7 @@ private Q_SLOTS:
     // emit XFilePickerListener fileSelectionChanged event
     void currentChanged(const QString&);
     // (un)set automatic file extension
-    void updateAutomaticFileExtension();
+    virtual void updateAutomaticFileExtension();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
