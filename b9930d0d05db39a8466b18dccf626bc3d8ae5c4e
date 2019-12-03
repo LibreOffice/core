@@ -16,6 +16,24 @@
       "revId": "b9930d0d05db39a8466b18dccf626bc3d8ae5c4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f40bdf79",
+        "filename": "extensions/source/update/feed/updatefeed.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000655
+      },
+      "writtenOn": "2019-12-03T06:49:08Z",
+      "side": 0,
+      "message": "Yes we can. Good catch!",
+      "parentUuid": "7f7f9b97_342dd7fd",
+      "revId": "b9930d0d05db39a8466b18dccf626bc3d8ae5c4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
