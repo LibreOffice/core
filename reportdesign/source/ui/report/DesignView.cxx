@@ -91,7 +91,6 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     ,m_aScrollWindow(VclPtr<rptui::OScrollWindowHelper>::Create(this))
     ,m_pPropWin(nullptr)
     ,m_pCurrentView(nullptr)
-    ,m_pReportExplorer(nullptr)
     ,m_eMode( DlgEdMode::Select )
     ,m_eActObj( OBJ_NONE )
     ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid
@@ -144,12 +143,15 @@ void ODesignView::dispose()
 
         m_xAddField.reset();
     }
-    if ( m_pReportExplorer )
+    if ( m_xReportExplorer )
     {
-        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_pReportExplorer->GetHelpId(), RTL_TEXTENCODING_UTF8));
-        aDlgOpt.SetWindowState(OStringToOUString(m_pReportExplorer->GetWindowState(), RTL_TEXTENCODING_ASCII_US));
-        notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-        m_pReportExplorer.disposeAndClear();
+        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_xReportExplorer->get_help_id(), RTL_TEXTENCODING_UTF8));
+        aDlgOpt.SetWindowState(OStringToOUString(m_xReportExplorer->getDialog()->get_window_state(WindowStateMask::All), RTL_TEXTENCODING_ASCII_US));
+
+        if (m_xReportExplorer->getDialog()->get_visible())
+            m_xReportExplorer->response(RET_CANCEL);
+
+        m_xReportExplorer.reset();
     }
 
     m_pTaskPane.disposeAndClear();
@@ -188,7 +190,7 @@ bool ODesignView::PreNotify( NotifyEvent& rNEvt )
                 return false;
             if (m_xAddField && m_xAddField->getDialog()->has_toplevel_focus())
                 return false;
-            if ( m_pReportExplorer && m_pReportExplorer->HasChildPathFocus() )
+            if ( m_xReportExplorer && m_xReportExplorer->getDialog()->has_toplevel_focus())
                 return false;
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             if ( handleKeyEvent(*pKeyEvent) )
@@ -464,23 +466,24 @@ void ODesignView::showProperties(const uno::Reference< uno::XInterface>& _xRepor
 
 bool ODesignView::isReportExplorerVisible() const
 {
-    return m_pReportExplorer && m_pReportExplorer->IsVisible();
+    return m_xReportExplorer && m_xReportExplorer->getDialog()->get_visible();
 }
 
 void ODesignView::toggleReportExplorer()
 {
-    if ( !m_pReportExplorer )
+    if ( !m_xReportExplorer )
     {
         OReportController& rReportController = getController();
-        m_pReportExplorer = VclPtr<ONavigator>::Create(this,rReportController);
-        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_pReportExplorer->GetHelpId(), RTL_TEXTENCODING_UTF8));
+        m_xReportExplorer = std::make_shared<ONavigator>(GetFrameWeld(), rReportController);
+        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_xReportExplorer->get_help_id(), RTL_TEXTENCODING_UTF8));
         if ( aDlgOpt.Exists() )
-            m_pReportExplorer->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
-        m_pReportExplorer->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
-        notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
+            m_xReportExplorer->getDialog()->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
     }
+
+    if (!m_xReportExplorer->getDialog()->get_visible())
+        weld::DialogController::runAsync(m_xReportExplorer, [this](sal_Int32 /*nResult*/) { m_xReportExplorer.reset(); });
     else
-        m_pReportExplorer->Show(!m_pReportExplorer->IsVisible());
+        m_xReportExplorer->response(RET_CANCEL);
 }
 
 bool ODesignView::isAddFieldVisible() const
@@ -587,7 +590,7 @@ bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
         return false;
     if (m_xAddField && m_xAddField->getDialog()->has_toplevel_focus())
         return false;
-    if ( m_pReportExplorer && m_pReportExplorer->HasChildPathFocus() )
+    if (m_xReportExplorer && m_xReportExplorer->getDialog()->has_toplevel_focus())
         return false;
     return m_aScrollWindow->handleKeyEvent(_rEvent);
 }
