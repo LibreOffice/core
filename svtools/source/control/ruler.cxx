@@ -113,6 +113,7 @@ private:
     long       nNullOff;
     long       nMargin1;
     long       nMargin2;
+    // In this context, "frame margin" means paragraph margins (indents)
     long       nLeftFrameMargin;
     long       nRightFrameMargin;
     RulerMarginStyle nMargin1Style;
