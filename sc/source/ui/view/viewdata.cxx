@@ -479,8 +479,6 @@ ScViewDataTable::ScViewDataTable() :
                 nCurY( 0 ),
                 nOldCurX( 0 ),
                 nOldCurY( 0 ),
-                nLOKOldCurX( 0 ),
-                nLOKOldCurY( 0 ),
                 aWidthHelper(true),
                 aHeightHelper(false),
                 nMaxTiledCol( 20 ),
