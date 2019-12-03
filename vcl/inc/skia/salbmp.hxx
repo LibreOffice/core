@@ -101,6 +101,6 @@ private:
     int mScanlineSize; // size of one row in mBuffer
 };
 
-#endif // INCLUDED_VCL_INC_OPENGL_SALBMP_H
+#endif // INCLUDED_VCL_INC_SKIA_SALBMP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -14,26 +14,28 @@
 
 #include <config_features.h>
 
-// All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
-struct VCL_DLLPUBLIC SkiaHelper
+namespace SkiaHelper
 {
-    SkiaHelper() = delete; // Should not be instantiated
-
-public:
-    static bool isVCLSkiaEnabled();
+VCL_DLLPUBLIC bool isVCLSkiaEnabled();
 
 #if HAVE_FEATURE_SKIA
-    // Which Skia backend to use.
-    enum RenderMethod
-    {
-        RenderRaster,
-        RenderVulkan
-    };
-    static RenderMethod renderMethodToUse();
-    static void disableRenderMethod(RenderMethod method);
-#endif
+
+// Which Skia backend to use.
+enum RenderMethod
+{
+    RenderRaster,
+    RenderVulkan
 };
 
-#endif
+VCL_DLLPUBLIC RenderMethod renderMethodToUse();
+
+// Clean up before exit.
+VCL_DLLPUBLIC void cleanup();
+
+#endif // HAVE_FEATURE_SKIA
+
+} // namespace
+
+#endif // INCLUDED_VCL_SKIA_SKIAHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

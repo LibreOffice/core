@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <skia/utils.hxx>
 
 #include <SkCanvas.h>
 #include <SkPath.h>
@@ -182,7 +183,6 @@ SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl()
 {
     assert(!mSurface);
     assert(!mWindowContext);
-    assert(!mOffscreenGrContext);
 }
 
 void SkiaSalGraphicsImpl::Init() {}
@@ -243,8 +243,7 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
     {
         case SkiaHelper::RenderVulkan:
         {
-            mOffscreenGrContext = sk_app::VulkanWindowContext::getSharedGrContext();
-            GrContext* grContext = mOffscreenGrContext.getGrContext();
+            GrContext* grContext = SkiaHelper::getSharedGrContext();
             // We may not get a GrContext if called before any onscreen window is created.
             if (!grContext)
             {
@@ -253,14 +252,10 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
                 // Create temporary WindowContext with no window. That will fail,
                 // but it will initialize the shared GrContext.
                 createWindowContext();
-                // Keep a reference.
-                sk_app::VulkanWindowContext::SharedGrContext context
-                    = sk_app::VulkanWindowContext::getSharedGrContext();
+                // This will use the temporarily created context.
+                grContext = SkiaHelper::getSharedGrContext();
                 // Destroy the temporary WindowContext.
                 destroySurface();
-                // Keep a reference until the surface is destroyed.
-                mOffscreenGrContext = context;
-                grContext = mOffscreenGrContext.getGrContext();
             }
             if (grContext)
             {
@@ -309,7 +304,6 @@ void SkiaSalGraphicsImpl::destroySurface()
     mSurface.reset();
     mWindowContext.reset();
     mIsGPU = false;
-    mOffscreenGrContext.reset();
 }
 
 void SkiaSalGraphicsImpl::DeInit() { destroySurface(); }
