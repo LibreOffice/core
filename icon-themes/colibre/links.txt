@@ -868,18 +868,24 @@ cmd/sc_spelldialog.png cmd/sc_spelling.png
 # Color
 cmd/32/backgroundpatterncontroller.png cmd/32/backgroundcolor.png
 cmd/32/characterbackgroundpattern.png cmd/32/backcolor.png
+cmd/32/fillcolor.png cmd/32/backgroundcolor.png
+cmd/32/fillstyle.png cmd/32/backgroundcolor.png
 cmd/32/fontcolor.png cmd/32/color.png
 cmd/32/formatarea.png cmd/32/backgroundcolor.png
 cmd/32/tablecellbackgroundcolor.png cmd/32/backgroundcolor.png
 
 cmd/lc_backgroundpatterncontroller.png cmd/lc_backgroundcolor.png
 cmd/lc_characterbackgroundpattern.png cmd/lc_backcolor.png
+cmd/lc_fillcolor.png cmd/lc_backgroundcolor.png
+cmd/lc_fillstyle.png cmd/lc_backgroundcolor.png
 cmd/lc_fontcolor.png cmd/lc_color.png
 cmd/lc_formatarea.png cmd/lc_backgroundcolor.png
 cmd/lc_tablecellbackgroundcolor.png cmd/lc_backgroundcolor.png
 
 cmd/sc_backgroundpatterncontroller.png cmd/sc_backgroundcolor.png
 cmd/sc_characterbackgroundpattern.png cmd/sc_backcolor.png
+cmd/sc_fillcolor.png cmd/sc_backgroundcolor.png
+cmd/sc_fillstyle.png cmd/sc_backgroundcolor.png
 cmd/sc_fontcolor.png cmd/sc_color.png
 cmd/sc_formatarea.png cmd/sc_backgroundcolor.png
 cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
@@ -2117,18 +2123,17 @@ svtools/res/back_small.png cmd/sc_prevrecord.png
 svtools/res/back_large.png cmd/lc_prevrecord.png
 svtools/res/bmpfont.png cmd/color.png
 svtools/res/ed06.png dbaccess/res/pkey.png
-svtools/res/folder.png cmd/sc_open.png
 svtools/res/folderop.png cmd/sc_open.png
 svtools/res/info_large.png cmd/lc_alignleft.png
 svtools/res/info_small.png cmd/sc_alignleft.png
 svtools/res/my_docs.png cmd/lc_open.png
-svtools/res/new_doc.png cmd/lc_newdoc.png
+svtools/res/new_doc.png cmd/32/newdoc.png
 svtools/res/preview_large.png cmd/lc_printpreview.png
 svtools/res/preview_small.png cmd/sc_printpreview.png
 svtools/res/prnfont.png cmd/sc_charfontname.png
 svtools/res/samples.png cmd/lc_choosedesign.png
 svtools/res/scalfont.png cmd/sc_scaletext.png
-svtools/res/template.png cmd/lc_newdoc.png
+svtools/res/template.png cmd/32/templatemanager.png
 
 # svx
 # ==============================================
@@ -2183,7 +2188,8 @@ svx/res/id04.png cmd/sc_selectobject.png
 svx/res/id05.png cmd/sc_rect.png
 svx/res/id06.png cmd/sc_ellipse.png
 svx/res/id07.png cmd/sc_polygon.png
-svx/res/id018.png cmd/sc_controlproperties.png
+svx/res/id018.png cmd/sc_choosemacro.png
+svx/res/id019.png cmd/sc_modifyframe.png
 svx/res/id030.png cmd/sc_toggleobjectbeziermode.png
 svx/res/id031.png cmd/sc_beziermove.png
 svx/res/id032.png cmd/sc_bezierinsert.png
