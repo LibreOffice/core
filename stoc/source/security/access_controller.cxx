@@ -288,7 +288,8 @@ class AccessController
     Reference< security::XPolicy > const & getPolicy();
 
     // mode
-    enum Mode { OFF, ON, DYNAMIC_ONLY, SINGLE_USER, SINGLE_DEFAULT_USER } m_mode;
+    enum class Mode { Off, On, DynamicOnly, SingleUser, SingleDefaultUser };
+    Mode m_mode;
 
     PermissionCollection m_defaultPermissions;
     // for single-user mode
@@ -339,7 +340,7 @@ public:
 AccessController::AccessController( Reference< XComponentContext > const & xComponentContext )
     : t_helper( m_mutex )
     , m_xComponentContext( xComponentContext )
-    , m_mode( ON ) // default
+    , m_mode( Mode::On ) // default
     , m_defaultPerm_init( false )
     , m_singleUser_init( false )
     , m_rec( nullptr )
@@ -353,15 +354,15 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     {
         if ( mode == "off" )
         {
-            m_mode = OFF;
+            m_mode = Mode::Off;
         }
         else if ( mode == "on" )
         {
-            m_mode = ON;
+            m_mode = Mode::On;
         }
         else if ( mode == "dynamic-only" )
         {
-            m_mode = DYNAMIC_ONLY;
+            m_mode = Mode::DynamicOnly;
         }
         else if ( mode == "single-user" )
         {
@@ -374,16 +375,16 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
                     "\"/services/" SERVICE_NAME "/single-user-id\"!",
                     static_cast<OWeakObject *>(this) );
             }
-            m_mode = SINGLE_USER;
+            m_mode = Mode::SingleUser;
         }
         else if ( mode == "single-default-user" )
         {
-            m_mode = SINGLE_DEFAULT_USER;
+            m_mode = Mode::SingleDefaultUser;
         }
     }
 
-    // switch on caching for DYNAMIC_ONLY and ON (shareable multi-user process)
-    if (!(ON == m_mode || DYNAMIC_ONLY == m_mode))
+    // switch on caching for Mode::DynamicOnly and Mode::On (shareable multi-user process)
+    if (!(Mode::On == m_mode || Mode::DynamicOnly == m_mode))
         return;
 
     sal_Int32 cacheSize = 0; // multi-user cache size
@@ -400,7 +401,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
 
 void AccessController::disposing()
 {
-    m_mode = OFF; // avoid checks from now on xxx todo review/ better DYNAMIC_ONLY?
+    m_mode = Mode::Off; // avoid checks from now on xxx todo review/ better Mode::DynamicOnly?
     m_xPolicy.clear();
     m_xComponentContext.clear();
 }
@@ -412,7 +413,7 @@ void AccessController::initialize(
 {
     // xxx todo: review for forking
     // portal forking hack: re-initialize for another user-id
-    if (SINGLE_USER != m_mode) // only if in single-user mode
+    if (Mode::SingleUser != m_mode) // only if in single-user mode
     {
         throw RuntimeException(
             "invalid call: ac must be in \"single-user\" mode!", static_cast<OWeakObject *>(this) );
@@ -498,7 +499,7 @@ void AccessController::checkAndClearPostPoned()
     t_rec_vec const& vec = *rec;
     switch (m_mode)
     {
-    case SINGLE_USER:
+    case Mode::SingleUser:
     {
         OSL_ASSERT( m_singleUser_init );
         for (const auto & p : vec)
@@ -508,7 +509,7 @@ void AccessController::checkAndClearPostPoned()
         }
         break;
     }
-    case SINGLE_DEFAULT_USER:
+    case Mode::SingleDefaultUser:
     {
         OSL_ASSERT( m_defaultPerm_init );
         for (const auto & p : vec)
@@ -518,7 +519,7 @@ void AccessController::checkAndClearPostPoned()
         }
         break;
     }
-    case ON:
+    case Mode::On:
     {
         for (const auto & p : vec)
         {
@@ -556,20 +557,20 @@ PermissionCollection AccessController::getEffectivePermissions(
 
     switch (m_mode)
     {
-    case SINGLE_USER:
+    case Mode::SingleUser:
     {
         if (m_singleUser_init)
             return m_singleUserPermissions;
         userId = m_singleUserId;
         break;
     }
-    case SINGLE_DEFAULT_USER:
+    case Mode::SingleDefaultUser:
     {
         if (m_defaultPerm_init)
             return m_defaultPermissions;
         break;
     }
-    case ON:
+    case Mode::On:
     {
         if (xContext.is())
         {
@@ -638,7 +639,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         // init user permissions
         switch (m_mode)
         {
-        case SINGLE_USER:
+        case Mode::SingleUser:
         {
             ret = PermissionCollection(
                 getPolicy()->getPermissions( userId ), m_defaultPermissions );
@@ -660,12 +661,12 @@ PermissionCollection AccessController::getEffectivePermissions(
 #endif
             break;
         }
-        case SINGLE_DEFAULT_USER:
+        case Mode::SingleDefaultUser:
         {
             ret = m_defaultPermissions;
             break;
         }
-        case ON:
+        case Mode::On:
         {
             ret = PermissionCollection(
                 getPolicy()->getPermissions( userId ), m_defaultPermissions );
@@ -726,7 +727,7 @@ void AccessController::checkPermission(
             "checkPermission() call on disposed AccessController!", static_cast<OWeakObject *>(this) );
     }
 
-    if (OFF == m_mode)
+    if (Mode::Off == m_mode)
         return;
 
     // first dynamic check of ac contexts
@@ -738,7 +739,7 @@ void AccessController::checkPermission(
         xACC->checkPermission( perm );
     }
 
-    if (DYNAMIC_ONLY == m_mode)
+    if (Mode::DynamicOnly == m_mode)
         return;
 
     // then static check
@@ -755,7 +756,7 @@ Any AccessController::doRestricted(
             "doRestricted() call on disposed AccessController!", static_cast<OWeakObject *>(this) );
     }
 
-    if (OFF == m_mode) // optimize this way, because no dynamic check will be performed
+    if (Mode::Off == m_mode) // optimize this way, because no dynamic check will be performed
         return xAction->run();
 
     if (xRestriction.is())
@@ -787,7 +788,7 @@ Any AccessController::doPrivileged(
             "doPrivileged() call on disposed AccessController!", static_cast<OWeakObject *>(this) );
     }
 
-    if (OFF == m_mode) // no dynamic check will be performed
+    if (Mode::Off == m_mode) // no dynamic check will be performed
     {
         return xAction->run();
     }
@@ -821,7 +822,7 @@ Reference< security::XAccessControlContext > AccessController::getContext()
             "getContext() call on disposed AccessController!", static_cast<OWeakObject *>(this) );
     }
 
-    if (OFF == m_mode) // optimize this way, because no dynamic check will be performed
+    if (Mode::Off == m_mode) // optimize this way, because no dynamic check will be performed
     {
         return new acc_Policy( PermissionCollection( new AllPermission() ) );
     }
