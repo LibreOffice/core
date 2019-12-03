@@ -34,8 +34,7 @@ class Qt5MainWindow : public QMainWindow
     void moveEvent(QMoveEvent*) override;
 
 public:
-    Qt5MainWindow(Qt5Frame& rFrame, QWidget* parent = Q_NULLPTR,
-                  Qt::WindowFlags f = Qt::WindowFlags());
+    Qt5MainWindow(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
