@@ -192,6 +192,31 @@ template<> struct o3tl::typed_flags<DocState>: o3tl::is_typed_flags<DocState, 10
 
 namespace {
 
+// TODO document me ... flag field
+// Emergency_Save and Recovery overwrites Auto_Save!
+enum class Job
+{
+    NoJob                     =   0,
+    AutoSave                  =   1,
+    EmergencySave             =   2,
+    Recovery                  =   4,
+    EntryBackup               =   8,
+    EntryCleanup              =  16,
+    PrepareEmergencySave      =  32,
+    SessionSave               =  64,
+    SessionRestore            = 128,
+    DisableAutorecovery       = 256,
+    SetAutosaveState          = 512,
+    SessionQuietQuit          = 1024,
+    UserAutoSave              = 2048
+};
+
+}
+
+template<> struct o3tl::typed_flags<Job>: o3tl::is_typed_flags<Job, 0xFFF> {};
+
+namespace {
+
 /**
     implements the functionality of AutoSave and AutoRecovery
     of documents - including features of an EmergencySave in
@@ -238,25 +263,6 @@ public:
         E_POLL_TILL_AUTOSAVE_IS_ALLOWED,
         /** don't start the timer - but calls the same action then before immediately again! */
         E_CALL_ME_BACK
-    };
-
-    // TODO document me ... flag field
-    // Emergency_Save and Recovery overwrites Auto_Save!
-    enum EJob
-    {
-        E_NO_JOB                    =   0,
-        E_AUTO_SAVE                 =   1,
-        E_EMERGENCY_SAVE            =   2,
-        E_RECOVERY                  =   4,
-        E_ENTRY_BACKUP              =   8,
-        E_ENTRY_CLEANUP             =  16,
-        E_PREPARE_EMERGENCY_SAVE    =  32,
-        E_SESSION_SAVE              =  64,
-        E_SESSION_RESTORE           = 128,
-        E_DISABLE_AUTORECOVERY      = 256,
-        E_SET_AUTOSAVE_STATE        = 512,
-        E_SESSION_QUIET_QUIT        = 1024,
-        E_USER_AUTO_SAVE            = 2048
     };
 
     /** @short  combine different information about one office document. */
@@ -381,7 +387,7 @@ private:
     /** @short  for an asynchronous operation we must know, if there is
                 at least one running job (may be asynchronous!).
      */
-    sal_Int32 m_eJob;
+    Job m_eJob;
 
     /** @short  the timer, which is used to be informed about the next
                 saving time ...
@@ -693,13 +699,13 @@ private:
         @param  bAllowUserIdleLoop
                 Because this method is used for different uses cases, it must
                 know, which actions are allowed or not.
-                AUTO_SAVE =>
+                Job::AutoSave =>
                              If a document is the most active one, saving it
                              will be postponed if there exists other unsaved
                              documents. This feature was implemented, because
                              we don't wish to disturb the user on it's work.
                              ... bAllowUserIdleLoop should be set to sal_True
-                EMERGENCY_SAVE / SESSION_SAVE =>
+                Job::EmergencySave / Job::SessionSave =>
                              Here we must finish our work ASAP! It's not allowed
                              to postpone any document.
                              ... bAllowUserIdleLoop must(!) be set to sal_False
@@ -779,8 +785,8 @@ private:
     /** @short  notifies all interested listener about the current state
                 of the currently running operation.
 
-        @descr  We support different set's of functions. AUTO_SAVE, EMERGENCY_SAVE,
-                AUTO_RECOVERY, FAILURE_SAVE ... etcpp.
+        @descr  We support different set's of functions. Job::AutoSave, Job::EmergencySave,
+                Job::Recovery ... etcpp.
                 Listener can register itself for any type of supported
                 functionality ... but not for document URL's in special.
 
@@ -792,7 +798,7 @@ private:
 
         @threadsafe
       */
-    void implts_informListener(      sal_Int32                      eJob  ,
+    void implts_informListener(      Job                      eJob  ,
                                const css::frame::FeatureStateEvent& aEvent);
 
     /** short   create a feature event struct, which can be send
@@ -800,7 +806,7 @@ private:
 
         @param  eJob
                 describe the current running operation
-                AUTOSAVE, EMERGENCYSAVE, RECOVERY
+                Job::AutoSave, Job::EmergencySave, Job::Recovery
 
         @param  sEventType
                 describe the type of this event
@@ -813,7 +819,7 @@ private:
         @return [css::frame::FeatureStateEvent]
                 the event structure for sending.
      */
-    static css::frame::FeatureStateEvent implst_createFeatureStateEvent(      sal_Int32                    eJob      ,
+    static css::frame::FeatureStateEvent implst_createFeatureStateEvent(      Job                    eJob      ,
                                                                         const OUString&             sEventType,
                                                                         AutoRecovery::TDocumentInfo const * pInfo     );
 
@@ -821,10 +827,10 @@ private:
     {
     private:
         AutoRecovery &m_rRecovery;
-        sal_Int32 m_eJob;
+        Job m_eJob;
         bool m_bStopped;
     public:
-        ListenerInformer(AutoRecovery &rRecovery, sal_Int32 eJob)
+        ListenerInformer(AutoRecovery &rRecovery, Job eJob)
             : m_rRecovery(rRecovery), m_eJob(eJob), m_bStopped(false)
         {
         }
@@ -900,13 +906,13 @@ private:
 
         @param  eJob
                 describe the current running operation
-                AUTOSAVE, EMERGENCYSAVE, RECOVERY
+                Job::AutoSave, Job::EmergencySave, Job::Recovery
 
         @return [string]
                 a suitable job description of form:
                     vnd.sun.star.autorecovery:/do...
      */
-    static OUString implst_getJobDescription(sal_Int32 eJob);
+    static OUString implst_getJobDescription(Job eJob);
 
     /** @short  map the given URL to an internal int representation.
 
@@ -916,9 +922,9 @@ private:
 
         @return [long]
                 the internal int representation
-                see enum EJob
+                see enum class Job
      */
-    static sal_Int32 implst_classifyJob(const css::util::URL& aURL);
+    static Job implst_classifyJob(const css::util::URL& aURL);
 
     /// TODO
     void implts_verifyCacheAgainstDesktopDocumentList();
@@ -1206,7 +1212,7 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
     , m_bListenForDocEvents     (false                                          )
     , m_bListenForConfigChanges (false                                          )
     , m_nAutoSaveTimeIntervall  (0                                                  )
-    , m_eJob                    (AutoRecovery::E_NO_JOB                             )
+    , m_eJob                    (Job::NoJob)
     , m_aTimer                  ( "Auto save timer" )
     , m_xAsyncDispatcher        (new vcl::EventPoster( LINK( this, AutoRecovery, implts_asyncDispatch )  ))
     , m_eTimerType              (E_DONT_START_TIMER                                 )
@@ -1266,8 +1272,8 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     SAL_INFO("fwk.autorecovery", "AutoRecovery::dispatch() starts ..." << aURL.Complete);
 
     // valid request ?
-    sal_Int32 eNewJob = AutoRecovery::implst_classifyJob(aURL);
-    if (eNewJob == AutoRecovery::E_NO_JOB)
+    Job eNewJob = AutoRecovery::implst_classifyJob(aURL);
+    if (eNewJob == Job::NoJob)
         return;
 
     bool bAsync;
@@ -1275,11 +1281,11 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     /* SAFE */ {
     osl::ClearableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
-    // still running operation ... ignoring AUTO_SAVE.
+    // still running operation ... ignoring Job::AutoSave.
     // All other requests has higher prio!
     if (
-        ( m_eJob                               != AutoRecovery::E_NO_JOB   ) &&
-        ((m_eJob & AutoRecovery::E_AUTO_SAVE ) != AutoRecovery::E_AUTO_SAVE)
+        ( m_eJob                               != Job::NoJob   ) &&
+        ((m_eJob & Job::AutoSave ) != Job::AutoSave)
        )
     {
         SAL_INFO("fwk.autorecovery", "AutoRecovery::dispatch(): There is already an asynchronous dispatch() running. New request will be ignored!");
@@ -1290,7 +1296,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
 
     // check if somewhere wish to disable recovery temp. for this office session
     // This can be done immediately... must not been done asynchronous.
-    if ((eNewJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
+    if ((eNewJob & Job::DisableAutorecovery) == Job::DisableAutorecovery)
     {
         // it's important to set a flag internally, so AutoRecovery will be suppressed - even if it's requested.
         m_eJob |= eNewJob;
@@ -1301,7 +1307,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
 
     // disable/enable AutoSave for this office session only
     // independent from the configuration entry.
-    if ((eNewJob & AutoRecovery::E_SET_AUTOSAVE_STATE) == AutoRecovery::E_SET_AUTOSAVE_STATE)
+    if ((eNewJob & Job::SetAutosaveState) == Job::SetAutosaveState)
     {
         bool bOn = lArgs.getUnpackedValueOrDefault(PROP_AUTOSAVE_STATE, true);
         if (bOn)
@@ -1318,7 +1324,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
         else
         {
             implts_stopTimer();
-            m_eJob       &= ~AutoRecovery::E_AUTO_SAVE;
+            m_eJob       &= ~Job::AutoSave;
             m_eTimerType  =  AutoRecovery::E_DONT_START_TIMER;
         }
         return;
@@ -1358,7 +1364,7 @@ void AutoRecovery::ListenerInformer::stop()
 
 void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
 {
-    sal_Int32 eJob;
+    Job eJob;
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     eJob = m_eJob;
@@ -1366,9 +1372,9 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
 
     // in case a new dispatch overwrites a may ba active AutoSave session
     // we must restore this session later. see below ...
-    bool bWasAutoSaveActive = ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE);
+    bool bWasAutoSaveActive = ((eJob & Job::AutoSave) == Job::AutoSave);
     bool bWasUserAutoSaveActive =
-        ((eJob & AutoRecovery::E_USER_AUTO_SAVE) == AutoRecovery::E_USER_AUTO_SAVE);
+        ((eJob & Job::UserAutoSave) == Job::UserAutoSave);
 
     // On the other side it makes no sense to reactivate the AutoSave operation
     // if the new dispatch indicates a final decision...
@@ -1388,8 +1394,8 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         //  Auto save is called from our internal timer ... not via dispatch() API !
         // else
         if (
-            ((eJob & AutoRecovery::E_PREPARE_EMERGENCY_SAVE) == AutoRecovery::E_PREPARE_EMERGENCY_SAVE) &&
-            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY      ) != AutoRecovery::E_DISABLE_AUTORECOVERY      )
+            ((eJob & Job::PrepareEmergencySave) == Job::PrepareEmergencySave) &&
+            ((eJob & Job::DisableAutorecovery      ) != Job::DisableAutorecovery      )
            )
         {
             SAL_INFO("fwk.autorecovery", "... prepare emergency save ...");
@@ -1398,8 +1404,8 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         }
         else
         if (
-            ((eJob & AutoRecovery::E_EMERGENCY_SAVE  ) == AutoRecovery::E_EMERGENCY_SAVE  ) &&
-            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            ((eJob & Job::EmergencySave  ) == Job::EmergencySave  ) &&
+            ((eJob & Job::DisableAutorecovery) != Job::DisableAutorecovery)
            )
         {
             SAL_INFO("fwk.autorecovery", "... do emergency save ...");
@@ -1408,8 +1414,8 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         }
         else
         if (
-            ((eJob & AutoRecovery::E_RECOVERY        ) == AutoRecovery::E_RECOVERY        ) &&
-            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            ((eJob & Job::Recovery        ) == Job::Recovery        ) &&
+            ((eJob & Job::DisableAutorecovery) != Job::DisableAutorecovery)
            )
         {
             SAL_INFO("fwk.autorecovery", "... do recovery ...");
@@ -1417,8 +1423,8 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         }
         else
         if (
-            ((eJob & AutoRecovery::E_SESSION_SAVE    ) == AutoRecovery::E_SESSION_SAVE    ) &&
-            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            ((eJob & Job::SessionSave    ) == Job::SessionSave    ) &&
+            ((eJob & Job::DisableAutorecovery) != Job::DisableAutorecovery)
             )
         {
             SAL_INFO("fwk.autorecovery", "... do session save ...");
@@ -1427,8 +1433,8 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         }
         else
         if (
-            ((eJob & AutoRecovery::E_SESSION_QUIET_QUIT    ) == AutoRecovery::E_SESSION_QUIET_QUIT ) &&
-            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            ((eJob & Job::SessionQuietQuit    ) == Job::SessionQuietQuit ) &&
+            ((eJob & Job::DisableAutorecovery) != Job::DisableAutorecovery)
             )
         {
             SAL_INFO("fwk.autorecovery", "... do session quiet quit ...");
@@ -1437,8 +1443,8 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         }
         else
         if (
-            ((eJob & AutoRecovery::E_SESSION_RESTORE ) == AutoRecovery::E_SESSION_RESTORE ) &&
-            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            ((eJob & Job::SessionRestore ) == Job::SessionRestore ) &&
+            ((eJob & Job::DisableAutorecovery) != Job::DisableAutorecovery)
             )
         {
             SAL_INFO("fwk.autorecovery", "... do session restore ...");
@@ -1446,14 +1452,14 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         }
         else
         if (
-            ((eJob & AutoRecovery::E_ENTRY_BACKUP    ) == AutoRecovery::E_ENTRY_BACKUP    ) &&
-            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            ((eJob & Job::EntryBackup    ) == Job::EntryBackup    ) &&
+            ((eJob & Job::DisableAutorecovery) != Job::DisableAutorecovery)
             )
             implts_backupWorkingEntry(aParams);
         else
         if (
-            ((eJob & AutoRecovery::E_ENTRY_CLEANUP   ) == AutoRecovery::E_ENTRY_CLEANUP   ) &&
-            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            ((eJob & Job::EntryCleanup   ) == Job::EntryCleanup   ) &&
+            ((eJob & Job::DisableAutorecovery) != Job::DisableAutorecovery)
             )
             implts_cleanUpWorkingEntry(aParams);
     }
@@ -1470,20 +1476,20 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
-    m_eJob = E_NO_JOB;
+    m_eJob = Job::NoJob;
     if ( bAllowAutoSaveReactivation && bWasAutoSaveActive )
     {
-        m_eJob |= AutoRecovery::E_AUTO_SAVE;
+        m_eJob |= Job::AutoSave;
 
         if (bWasUserAutoSaveActive)
         {
-            m_eJob |= AutoRecovery::E_USER_AUTO_SAVE;
+            m_eJob |= Job::UserAutoSave;
         }
     }
 
     } /* SAFE */
 
-    // depends on bAllowAutoSaveReactivation implicitly by looking on m_eJob=E_AUTO_SAVE! see before ...
+    // depends on bAllowAutoSaveReactivation implicitly by looking on m_eJob=Job::AutoSave! see before ...
     implts_updateTimer();
 
     if (bAllowAutoSaveReactivation)
@@ -1609,7 +1615,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     // Changes of the configuration must be ignored if AutoSave/Recovery was disabled for this
     // office session. That can happen if e.g. the command line arguments "--norestore" or "--headless"
     // was set.
-    if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
+    if ((m_eJob & Job::DisableAutorecovery) == Job::DisableAutorecovery)
        return;
 
     for (i=0; i<c; ++i)
@@ -1624,12 +1630,12 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
             {
                 if (bEnabled)
                 {
-                    m_eJob       |= AutoRecovery::E_AUTO_SAVE;
+                    m_eJob       |= Job::AutoSave;
                     m_eTimerType  = AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL;
                 }
                 else
                 {
-                    m_eJob       &= ~AutoRecovery::E_AUTO_SAVE;
+                    m_eJob       &= ~Job::AutoSave;
                     m_eTimerType  = AutoRecovery::E_DONT_START_TIMER;
                 }
             }
@@ -1750,21 +1756,21 @@ void AutoRecovery::implts_readAutoSaveConfig()
     {
         bool bUserEnabled(officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get(m_xContext));
 
-        m_eJob       |= AutoRecovery::E_AUTO_SAVE;
+        m_eJob       |= Job::AutoSave;
         m_eTimerType  = AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL;
 
         if (bUserEnabled)
         {
-            m_eJob |= AutoRecovery::E_USER_AUTO_SAVE;
+            m_eJob |= Job::UserAutoSave;
         }
         else
         {
-            m_eJob &= ~AutoRecovery::E_USER_AUTO_SAVE;
+            m_eJob &= ~Job::UserAutoSave;
         }
     }
     else
     {
-        m_eJob       &= ~AutoRecovery::E_AUTO_SAVE;
+        m_eJob       &= ~Job::AutoSave;
         m_eTimerType  = AutoRecovery::E_DONT_START_TIMER;
     }
     } /* SAFE */
@@ -2151,7 +2157,7 @@ void AutoRecovery::implts_stopListening()
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     // Attention: Don't reset our internal members here too.
     // May be we must work with our configuration, but don't wish to be informed
-    // about changes any longer. Needed e.g. during EMERGENCY_SAVE!
+    // about changes any longer. Needed e.g. during Job::EmergencySave!
     xCFG.set                   (m_xRecoveryCFG      , css::uno::UNO_QUERY);
     xGlobalEventBroadcaster = m_xNewDocBroadcaster;
     } /* SAFE */
@@ -2207,7 +2213,7 @@ void AutoRecovery::implts_updateTimer()
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (
-        (m_eJob       == AutoRecovery::E_NO_JOB          ) || // TODO may be superfluous - E_DONT_START_TIMER should be used only
+        (m_eJob       == Job::NoJob          ) || // TODO may be superfluous - E_DONT_START_TIMER should be used only
         (m_eTimerType == AutoRecovery::E_DONT_START_TIMER)
        )
         return;
@@ -2259,7 +2265,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
         // But so we are more "safe" .-)
         /* SAFE */ {
         osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
-        if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
+        if ((m_eJob & Job::DisableAutorecovery) == Job::DisableAutorecovery)
            return;
         } /* SAFE */
 
@@ -2296,8 +2302,8 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
 
         } /* SAFE */
 
-        implts_informListener(AutoRecovery::E_AUTO_SAVE,
-            AutoRecovery::implst_createFeatureStateEvent(AutoRecovery::E_AUTO_SAVE, OPERATION_START, nullptr));
+        implts_informListener(Job::AutoSave,
+            AutoRecovery::implst_createFeatureStateEvent(Job::AutoSave, OPERATION_START, nullptr));
 
         // force save of all currently open documents
         // The called method returns an info, if and how this
@@ -2318,8 +2324,8 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
             implts_resetHandleStates();
         }
 
-        implts_informListener(AutoRecovery::E_AUTO_SAVE,
-            AutoRecovery::implst_createFeatureStateEvent(AutoRecovery::E_AUTO_SAVE, OPERATION_STOP, nullptr));
+        implts_informListener(Job::AutoSave,
+            AutoRecovery::implst_createFeatureStateEvent(Job::AutoSave, OPERATION_STOP, nullptr));
 
         // restart timer - because it was disabled before ...
         /* SAFE */ {
@@ -2749,7 +2755,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
         // if the session save is still running the documents should not be thrown away,
         // actually that would be a bad sign, that means that the SessionManager tries
         // to kill the session before the saving is ready
-        if ((m_eJob & AutoRecovery::E_SESSION_SAVE) != AutoRecovery::E_SESSION_SAVE)
+        if ((m_eJob & Job::SessionSave) != Job::SessionSave)
         {
             css::uno::Reference< css::util::XModifiable > xModify(info.Document, css::uno::UNO_QUERY);
             if (xModify.is())
@@ -2833,7 +2839,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
     // there exists POSTPONED documents. see below ...
     AutoRecovery::ETimerType eTimer = AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL;
 
-    sal_Int32 eJob = m_eJob;
+    Job eJob = m_eJob;
 
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
@@ -2897,18 +2903,18 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         // E.g. a CrashSave can overwrite an AutoSave. So you have to check for a CrashSave before an AutoSave!
         if (aInfo.UsedForSaving)
         {
-            if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
+            if ((eJob & Job::EmergencySave) == Job::EmergencySave)
             {
                 lDangerousDocs.push_back(pIt);
                 continue;
             }
             else
-            if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
+            if ((eJob & Job::SessionSave) == Job::SessionSave)
             {
                 continue;
             }
             else
-            if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
+            if ((eJob & Job::AutoSave) == Job::AutoSave)
             {
                 eTimer = AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED;
                 aInfo.DocumentState |= DocState::Postponed;
@@ -3029,7 +3035,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     {
         // We must check here for an empty URL to avoid a "This operation is not supported on this operating system."
         // message during autosave.
-        if ((m_eJob & AutoRecovery::E_USER_AUTO_SAVE) == AutoRecovery::E_USER_AUTO_SAVE && !rInfo.OrgURL.isEmpty())
+        if ((m_eJob & Job::UserAutoSave) == Job::UserAutoSave && !rInfo.OrgURL.isEmpty())
         {
             Reference< XStorable > xDocSave(rInfo.Document, css::uno::UNO_QUERY_THROW);
             xDocSave->store();
@@ -3125,7 +3131,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
     /* SAFE */ {
     osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
-    sal_Int32                             eJob = m_eJob;
+    Job                             eJob = m_eJob;
     for (auto & info : m_lDocCache)
     {
         // Such documents are already loaded by the last loop.
@@ -3448,7 +3454,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
     rInfo.NewTempURL = aTempFile.GetURL();
 }
 
-void AutoRecovery::implts_informListener(      sal_Int32                      eJob  ,
+void AutoRecovery::implts_informListener(      Job                      eJob  ,
                                          const css::frame::FeatureStateEvent& aEvent)
 {
     // Helper shares mutex with us -> threadsafe!
@@ -3475,7 +3481,7 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
     }
 }
 
-OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
+OUString AutoRecovery::implst_getJobDescription(Job eJob)
 {
     // describe the current running operation
     OUStringBuffer sFeature(256);
@@ -3487,61 +3493,61 @@ OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
     // On the other side there exist a well defined order between two different jobs.
     // e.g. PrepareEmergencySave must be done before EmergencySave is started of course.
 
-    if ((eJob & AutoRecovery::E_PREPARE_EMERGENCY_SAVE) == AutoRecovery::E_PREPARE_EMERGENCY_SAVE)
+    if ((eJob & Job::PrepareEmergencySave) == Job::PrepareEmergencySave)
         sFeature.append(CMD_DO_PREPARE_EMERGENCY_SAVE);
-    else if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
+    else if ((eJob & Job::EmergencySave) == Job::EmergencySave)
         sFeature.append(CMD_DO_EMERGENCY_SAVE);
-    else if ((eJob & AutoRecovery::E_RECOVERY) == AutoRecovery::E_RECOVERY)
+    else if ((eJob & Job::Recovery) == Job::Recovery)
         sFeature.append(CMD_DO_RECOVERY);
-    else if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
+    else if ((eJob & Job::SessionSave) == Job::SessionSave)
         sFeature.append(CMD_DO_SESSION_SAVE);
-    else if ((eJob & AutoRecovery::E_SESSION_QUIET_QUIT) == AutoRecovery::E_SESSION_QUIET_QUIT)
+    else if ((eJob & Job::SessionQuietQuit) == Job::SessionQuietQuit)
         sFeature.append(CMD_DO_SESSION_QUIET_QUIT);
-    else if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
+    else if ((eJob & Job::SessionRestore) == Job::SessionRestore)
         sFeature.append(CMD_DO_SESSION_RESTORE);
-    else if ((eJob & AutoRecovery::E_ENTRY_BACKUP) == AutoRecovery::E_ENTRY_BACKUP)
+    else if ((eJob & Job::EntryBackup) == Job::EntryBackup)
         sFeature.append(CMD_DO_ENTRY_BACKUP);
-    else if ((eJob & AutoRecovery::E_ENTRY_CLEANUP) == AutoRecovery::E_ENTRY_CLEANUP)
+    else if ((eJob & Job::EntryCleanup) == Job::EntryCleanup)
         sFeature.append(CMD_DO_ENTRY_CLEANUP);
-    else if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
+    else if ((eJob & Job::AutoSave) == Job::AutoSave)
         sFeature.append(CMD_DO_AUTO_SAVE);
-    else if ( eJob != AutoRecovery::E_NO_JOB )
+    else if ( eJob != Job::NoJob )
         SAL_INFO("fwk.autorecovery", "AutoRecovery::implst_getJobDescription(): Invalid job identifier detected.");
 
     return sFeature.makeStringAndClear();
 }
 
-sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
+Job AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
 {
     if ( aURL.Protocol == CMD_PROTOCOL )
     {
         if ( aURL.Path == CMD_DO_PREPARE_EMERGENCY_SAVE )
-            return AutoRecovery::E_PREPARE_EMERGENCY_SAVE;
+            return Job::PrepareEmergencySave;
         else if ( aURL.Path == CMD_DO_EMERGENCY_SAVE )
-            return AutoRecovery::E_EMERGENCY_SAVE;
+            return Job::EmergencySave;
         else if ( aURL.Path == CMD_DO_RECOVERY )
-            return AutoRecovery::E_RECOVERY;
+            return Job::Recovery;
         else if ( aURL.Path == CMD_DO_ENTRY_BACKUP )
-            return AutoRecovery::E_ENTRY_BACKUP;
+            return Job::EntryBackup;
         else if ( aURL.Path == CMD_DO_ENTRY_CLEANUP )
-            return AutoRecovery::E_ENTRY_CLEANUP;
+            return Job::EntryCleanup;
         else if ( aURL.Path == CMD_DO_SESSION_SAVE )
-            return AutoRecovery::E_SESSION_SAVE;
+            return Job::SessionSave;
         else if ( aURL.Path == CMD_DO_SESSION_QUIET_QUIT )
-            return AutoRecovery::E_SESSION_QUIET_QUIT;
+            return Job::SessionQuietQuit;
         else if ( aURL.Path == CMD_DO_SESSION_RESTORE )
-            return AutoRecovery::E_SESSION_RESTORE;
+            return Job::SessionRestore;
         else if ( aURL.Path == CMD_DO_DISABLE_RECOVERY )
-            return AutoRecovery::E_DISABLE_AUTORECOVERY;
+            return Job::DisableAutorecovery;
         else if ( aURL.Path == CMD_DO_SET_AUTOSAVE_STATE )
-            return AutoRecovery::E_SET_AUTOSAVE_STATE;
+            return Job::SetAutosaveState;
     }
 
     SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_classifyJob(): Invalid URL (protocol).");
-    return AutoRecovery::E_NO_JOB;
+    return Job::NoJob;
 }
 
-css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(      sal_Int32                    eJob      ,
+css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(      Job                    eJob      ,
                                                                            const OUString&             sEventType,
                                                                            AutoRecovery::TDocumentInfo const * pInfo     )
 {
