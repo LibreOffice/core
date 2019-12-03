@@ -2091,11 +2091,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_SHOW_ITEMBROWSER // ole : no, status : play rec
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
     SID_AUTOSPELL_CHECK // ole : no, status : play rec
     [
         ExecMethod = FuSupport ;

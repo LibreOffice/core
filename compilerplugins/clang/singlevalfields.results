@@ -700,9 +700,6 @@ svl/source/crypto/cryptosign.cxx:153
 svx/inc/sdr/overlay/overlaymanagerbuffered.hxx:44
     sdr::overlay::OverlayManagerBuffered maBufferIdle
     sdr overlay OverlayManagerBuffered Idle
-svx/inc/svdibrow.hxx:96
-    SdrItemBrowser aIdle
-    svx svdraw SdrItemBrowser
 svx/source/dialog/contimp.hxx:70
     SvxSuperContourDlg aUpdateIdle
     SvxSuperContourDlg UpdateIdle

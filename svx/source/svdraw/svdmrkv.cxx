@@ -27,10 +27,6 @@
 #include <svx/svdotable.hxx>
 #include "svddrgm1.hxx"
 
-#ifdef DBG_UTIL
-#include <svdibrow.hxx>
-#endif
-
 #include <osl/thread.h>
 #include <svx/svdoole2.hxx>
 #include <svx/xgrad.hxx>
@@ -2445,9 +2441,6 @@ void SdrMarkView::MarkListHasChanged()
 
     mbMarkedObjRectDirty=true;
     mbMarkedPointsRectsDirty=true;
-#ifdef DBG_UTIL
-    if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
-#endif
     bool bOneEdgeMarked=false;
     if (GetMarkedObjectCount()==1) {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);

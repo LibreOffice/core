@@ -36,7 +36,6 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdograf.hxx>
-#include <svdibrow.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
@@ -134,9 +133,6 @@ BitmapEx convertMetafileToBitmapEx(
 
 void SdrPaintView::ImpClearVars()
 {
-#ifdef DBG_UTIL
-    mpItemBrowser=nullptr;
-#endif
     mbPageVisible=true;
     mbPageShadowVisible=true;
     mbPageBorderVisible=true;
@@ -206,10 +202,6 @@ SdrPaintView::~SdrPaintView()
 
     maColorConfig.RemoveListener(this);
     ClearPageView();
-
-#ifdef DBG_UTIL
-    mpItemBrowser.disposeAndClear();
-#endif
 
     // delete existing SdrPaintWindows
     maPaintWindows.clear();
@@ -289,13 +281,6 @@ void SdrPaintView::ModelHasChanged()
     {
         mpPageView->ModelHasChanged();
     }
-
-#ifdef DBG_UTIL
-    if(mpItemBrowser)
-    {
-        mpItemBrowser->SetDirty();
-    }
-#endif
 }
 
 
@@ -421,11 +406,6 @@ void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window *pWin
     {
         mpPageView->AddPaintWindowToPageView(*pNewPaintWindow);
     }
-
-#ifdef DBG_UTIL
-    if (mpItemBrowser!=nullptr)
-        mpItemBrowser->ForceParent();
-#endif
 }
 
 void SdrPaintView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
@@ -442,11 +422,6 @@ void SdrPaintView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
 
         DeletePaintWindow(*pCandidate);
     }
-
-#ifdef DBG_UTIL
-    if (mpItemBrowser!=nullptr)
-        mpItemBrowser->ForceParent();
-#endif
 }
 
 void SdrPaintView::SetLayerVisible(const OUString& rName, bool bShow)
@@ -989,9 +964,6 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
     if (bReplaceAll) maDefaultAttr.Set(rAttr);
     else maDefaultAttr.Put(rAttr,false); // if FALSE, regard InvalidItems as "holes," not as Default
     SetNotPersistDefaultAttr(rAttr);
-#ifdef DBG_UTIL
-    if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
-#endif
 }
 
 void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
@@ -1012,9 +984,6 @@ void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRe
             nWhich=aIter.NextWhich();
         }
     }
-#ifdef DBG_UTIL
-    if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
-#endif
 }
 
 void SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
@@ -1046,25 +1015,6 @@ void SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHar
 {
     SetDefaultStyleSheet(pStyleSheet,bDontRemoveHardAttr);
 }
-
-
-#ifdef DBG_UTIL
-void SdrPaintView::ShowItemBrowser(bool bShow)
-{
-    if (bShow) {
-        if (mpItemBrowser==nullptr) {
-            mpItemBrowser=VclPtr<SdrItemBrowser>::Create(*static_cast<SdrView*>(this));
-        }
-        mpItemBrowser->Show();
-        mpItemBrowser->GrabFocus();
-    } else {
-        if (mpItemBrowser!=nullptr) {
-            mpItemBrowser->Hide();
-            mpItemBrowser.disposeAndClear();
-        }
-    }
-}
-#endif
 
 void SdrPaintView::MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin)
 {
@@ -1130,13 +1080,6 @@ void SdrPaintView::SetAnimationEnabled( bool bEnable )
 {
     SetAnimationMode( bEnable ? SdrAnimationMode::Animate : SdrAnimationMode::Disable );
 }
-
-#if defined DBG_UTIL
-vcl::Window* SdrPaintView::GetItemBrowser() const
-{
-    return mpItemBrowser;
-}
-#endif
 
 void SdrPaintView::SetAnimationPause( bool bSet )
 {

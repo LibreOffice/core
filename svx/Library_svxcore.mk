@@ -301,7 +301,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdglue \
     svx/source/svdraw/svdhdl \
     svx/source/svdraw/svdhlpln \
-    svx/source/svdraw/svdibrow \
     svx/source/svdraw/svditer \
     svx/source/svdraw/svdlayer \
     svx/source/svdraw/svdmark \

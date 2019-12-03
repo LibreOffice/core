@@ -5765,11 +5765,6 @@
           <value xml:lang="en-US">Current Date</value>
         </prop>
       </node>
-      <node oor:name=".uno:ShowItemBrowser" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Item Browser On/Off</value>
-        </prop>
-      </node>
       <node oor:name=".uno:DateField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Date Field</value>
