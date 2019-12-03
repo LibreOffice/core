@@ -192,8 +192,9 @@ void SidebarDockingWindow::NotifyResize()
             LOKClose();
 
             SetLOKNotifier(pCurrentView);
-            mpIdleNotify->Start();
         }
+
+        mpIdleNotify->Start();
     }
 }
 
