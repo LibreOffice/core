@@ -53,10 +53,6 @@ class SdrModel;
 class SdrObject;
 enum class GraphicManagerDrawFlags;
 
-#ifdef DBG_UTIL
-class SdrItemBrowser;
-#endif
-
 namespace sdr { namespace contact {
     class ViewObjectContactRedirector;
 }}
@@ -134,9 +130,6 @@ private:
     std::unique_ptr<SdrPageView> mpPageView;
 protected:
     SdrModel*                   mpModel;
-#ifdef DBG_UTIL
-    VclPtr<SdrItemBrowser>      mpItemBrowser;
-#endif
     VclPtr<OutputDevice>        mpActualOutDev; // Only for comparison
     VclPtr<OutputDevice>        mpDragWin;
     SfxStyleSheet*              mpDefaultStyleSheet;
@@ -495,13 +488,6 @@ public:
     /// 2. SDR_ANIMATION_DONT_ANIMATE: only show the replacement picture
     /// 3. SdrAnimationMode::Disable: don't start and don't show any replacement
     void SetAnimationMode( const SdrAnimationMode eMode );
-
-    /// The Browser is destroyed for bShow=false
-#ifdef DBG_UTIL
-    void ShowItemBrowser(bool bShow);
-    bool IsItemBrowserVisible() const { return mpItemBrowser!=nullptr && GetItemBrowser()->IsVisible(); }
-    vcl::Window* GetItemBrowser() const;
-#endif
 
     /// Must be called by the App when scrolling etc. in order for
     /// an active FormControl to be moved too

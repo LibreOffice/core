@@ -1339,15 +1339,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-#ifdef DBG_UTIL
-        case SID_SHOW_ITEMBROWSER:
-        {
-            mpDrawView->ShowItemBrowser( !mpDrawView->IsItemBrowserVisible() );
-            rReq.Done ();
-        }
-        break;
-#endif
-
         case SID_AUTOSPELL_CHECK:
         {
             bool bOnlineSpell = !GetDoc()->GetOnlineSpell();

@@ -45,9 +45,6 @@
 #include <vcl/cursor.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/weld.hxx>
-#ifdef DBG_UTIL
-#include <svdibrow.hxx>
-#endif
 #include <comphelper/lok.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
@@ -1325,10 +1322,6 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                     LINK(this, SdrObjEditView, ImpAfterCutOrPasteChainingEventHdl));
             }
 
-#ifdef DBG_UTIL
-            if (mpItemBrowser != nullptr)
-                mpItemBrowser->SetDirty();
-#endif
             pTextEditOutliner->ClearModifyFlag();
 
             if (pTextObj->IsFitToSize())
@@ -1641,13 +1634,6 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         {
             GetMarkedObjectListWriteAccess().SetNameDirty();
         }
-#ifdef DBG_UTIL
-        if (mpItemBrowser)
-        {
-            GetMarkedObjectListWriteAccess().SetNameDirty();
-            mpItemBrowser->SetDirty();
-        }
-#endif
     }
 
     if (pTEObj && !pTEObj->getSdrModelFromSdrObject().isLocked() && pTEObj->GetBroadcaster())
@@ -1826,10 +1812,6 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 
             if (pWin != nullptr && pWin != pTextEditWin)
                 SetTextEditWin(pWin);
-#ifdef DBG_UTIL
-            if (mpItemBrowser != nullptr)
-                mpItemBrowser->SetDirty();
-#endif
             ImpMakeTextCursorAreaVisible();
             return true;
         }
@@ -1873,10 +1855,6 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, OutputDevice* pWin
                 if (pWin != nullptr && pWin != pTextEditWin
                     && pWin->GetOutDevType() == OUTDEV_WINDOW)
                     SetTextEditWin(static_cast<vcl::Window*>(pWin));
-#ifdef DBG_UTIL
-                if (mpItemBrowser != nullptr)
-                    mpItemBrowser->SetDirty();
-#endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
             }
@@ -1915,10 +1893,6 @@ bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, OutputDevice* pWin)
                              rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseButtonUp(aMEvt))
             {
-#ifdef DBG_UTIL
-                if (mpItemBrowser != nullptr)
-                    mpItemBrowser->SetDirty();
-#endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
             }
@@ -1962,10 +1936,6 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, OutputDevice* pWin)
                              rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseMove(aMEvt) && bSelMode)
             {
-#ifdef DBG_UTIL
-                if (mpItemBrowser != nullptr)
-                    mpItemBrowser->SetDirty();
-#endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
             }
@@ -2011,10 +1981,6 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
                 pTextEditOutlinerView->Command(aCEvt);
                 if (pWin != nullptr && pWin != pTextEditWin)
                     SetTextEditWin(pWin);
-#ifdef DBG_UTIL
-                if (mpItemBrowser != nullptr)
-                    mpItemBrowser->SetDirty();
-#endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
             }
@@ -2286,11 +2252,6 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             Outliner* pTEOutliner = pTextEditOutlinerView->GetOutliner();
             if (mpModel && pTEOutliner && pTEOutliner->IsModified())
                 mpModel->SetChanged();
-
-#ifdef DBG_UTIL
-            if (mpItemBrowser != nullptr)
-                mpItemBrowser->SetDirty();
-#endif
 
             ImpMakeTextCursorAreaVisible();
         }

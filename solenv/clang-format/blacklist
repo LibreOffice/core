@@ -13856,7 +13856,6 @@ svx/inc/sdr/properties/pageproperties.hxx
 svx/inc/sdr/properties/rectangleproperties.hxx
 svx/inc/sdr/properties/textproperties.hxx
 svx/inc/strings.hxx
-svx/inc/svdibrow.hxx
 svx/inc/sxallitm.hxx
 svx/inc/sxcikitm.hxx
 svx/inc/sxlayitm.hxx
@@ -14367,7 +14366,6 @@ svx/source/svdraw/svdglev.cxx
 svx/source/svdraw/svdglue.cxx
 svx/source/svdraw/svdhdl.cxx
 svx/source/svdraw/svdhlpln.cxx
-svx/source/svdraw/svdibrow.cxx
 svx/source/svdraw/svditer.cxx
 svx/source/svdraw/svdlayer.cxx
 svx/source/svdraw/svdmark.cxx
