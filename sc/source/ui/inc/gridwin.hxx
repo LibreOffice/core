@@ -286,8 +286,11 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
 
     void            SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, SCROW nCellY );
 
-    void            GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelRects );
-
+    void            GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelRects ) const;
+    void            GetPixelRectsFor( const ScMarkData &rMarkData,
+                                      ::std::vector< tools::Rectangle >& rPixelRects ) const;
+    void            UpdateKitSelection(const std::vector<tools::Rectangle>& rRectangles,
+                                       std::vector<tools::Rectangle>* pLogicRects = nullptr);
 
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
