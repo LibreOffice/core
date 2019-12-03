@@ -1111,12 +1111,14 @@ namespace
 
     bool extractVisible(VclBuilder::stringmap &rMap)
     {
+        bool bRet = false;
         VclBuilder::stringmap::iterator aFind = rMap.find(OString("visible"));
         if (aFind != rMap.end())
         {
-            return toBool(aFind->second);
+            bRet = toBool(aFind->second);
+            rMap.erase(aFind);
         }
-        return false;
+        return bRet;
     }
 
     Size extractSizeRequest(VclBuilder::stringmap &rMap)
@@ -3643,6 +3645,8 @@ void VclBuilder::insertMenuObject(Menu *pParent, PopupMenu *pSubMenu, const OStr
     if (nOldCount != pParent->GetItemCount())
     {
         pParent->SetHelpId(nNewId, m_sHelpRoot + rID);
+        if (!extractVisible(rProps))
+            pParent->HideItem(nNewId);
 
         for (auto const& prop : rProps)
         {
@@ -3653,8 +3657,6 @@ void VclBuilder::insertMenuObject(Menu *pParent, PopupMenu *pSubMenu, const OStr
                 pParent->SetTipHelpText(nNewId, rValue);
             else if (rKey == "tooltip-text")
                 pParent->SetTipHelpText(nNewId, rValue);
-            else if (rKey == "visible")
-                pParent->ShowItem(nNewId, toBool(rValue));
             else
                 SAL_INFO("vcl.layout", "unhandled property: " << rKey);
         }
