@@ -5868,21 +5868,15 @@ void ScGridWindow::UpdateCopySourceOverlay()
         SetMapMode( aOldMode );
 }
 
-/**
- * Turn the selection ranges rRectangles into the LibreOfficeKit selection, and call the callback.
- *
- * @param pLogicRects - if not 0, then don't invoke the callback, just collect the rectangles in the pointed vector.
- */
-static void updateLibreOfficeKitSelection(const ScViewData* pViewData, const std::vector<tools::Rectangle>& rRectangles, std::vector<tools::Rectangle>* pLogicRects = nullptr)
+static std::vector<tools::Rectangle> convertPixelToLogical(
+    const ScViewData* pViewData,
+    const std::vector<tools::Rectangle>& rRectangles,
+    tools::Rectangle &rBoundingBox)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
-        return;
+    std::vector<tools::Rectangle> aLogicRects;
 
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();
-
-    tools::Rectangle aBoundingBox;
-    std::vector<OString> aRectangles;
 
     for (const auto& rRectangle : rRectangles)
     {
@@ -5892,31 +5886,74 @@ static void updateLibreOfficeKitSelection(const ScViewData* pViewData, const std
         aRectangle.AdjustRight(1 );
         aRectangle.AdjustBottom(1 );
 
-        aBoundingBox.Union(aRectangle);
-
         tools::Rectangle aRect(aRectangle.Left() / nPPTX, aRectangle.Top() / nPPTY,
                 aRectangle.Right() / nPPTX, aRectangle.Bottom() / nPPTY);
-        if (pLogicRects)
-            pLogicRects->push_back(aRect);
-        else
-            aRectangles.push_back(aRect.toString());
-    }
 
-    if (pLogicRects)
+        rBoundingBox.Union(aRect);
+        aLogicRects.push_back(aRect);
+    }
+    return aLogicRects;
+}
+
+static OString rectanglesToString(const std::vector<tools::Rectangle> &rLogicRects)
+{
+    bool bFirst = true;
+    OStringBuffer aRects;
+    for (const auto &rRect : rLogicRects)
+    {
+        if (!bFirst)
+            aRects.append("; ");
+        bFirst = false;
+        aRects.append(rRect.toString());
+    }
+    return aRects.makeStringAndClear();
+}
+
+/**
+ * Turn the selection ranges rRectangles into the LibreOfficeKit selection, and call the callback.
+ *
+ * @param pLogicRects - if set then don't invoke the callback, just collect the rectangles in the pointed vector.
+ */
+void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRectangles, std::vector<tools::Rectangle>* pLogicRects)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    // selection start handle
-    tools::Rectangle aRectangle(
-            aBoundingBox.Left()  / nPPTX, aBoundingBox.Top() / nPPTY,
-            aBoundingBox.Right() / nPPTX, aBoundingBox.Bottom() / nPPTY);
+    tools::Rectangle aBoundingBox;
+    std::vector<tools::Rectangle> aLogicRects;
 
-    // the selection itself
-    OString aSelection = comphelper::string::join("; ", aRectangles).getStr();
+    aLogicRects = convertPixelToLogical(pViewData, rRectangles, aBoundingBox);
+    if (pLogicRects)
+    {
+        *pLogicRects = aLogicRects;
+        return;
+    }
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aRectangle.toString().getStr());
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.getStr());
-    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", aSelection.getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aBoundingBox.toString().getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, rectanglesToString(aLogicRects).getStr());
+
+    for (SfxViewShell* it = SfxViewShell::GetFirst(); it;
+         it = SfxViewShell::GetNext(*it))
+    {
+        if (it == pViewShell)
+            continue;
+        auto pOther = dynamic_cast<const ScTabViewShell *>(it);
+        assert(pOther);
+        if (!pOther)
+            return;
+
+        const ScGridWindow *pGrid = pOther->GetViewData().GetActiveWin();
+        assert(pGrid);
+
+        // Fetch pixels & convert for each view separately.
+        tools::Rectangle aDummyBBox;
+        std::vector<tools::Rectangle> aPixelRects;
+        pGrid->GetPixelRectsFor(pViewData->GetMarkData() /* ours */, aPixelRects);
+        auto aOtherLogicRects = convertPixelToLogical(&pOther->GetViewData(), aPixelRects, aDummyBBox);
+        SfxLokHelper::notifyOtherView(pViewShell, pOther, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+                                      "selection", rectanglesToString(aOtherLogicRects).getStr());
+    }
 }
 
 namespace
@@ -6110,7 +6147,7 @@ void ScGridWindow::GetCellSelection(std::vector<tools::Rectangle>& rLogicRects)
 {
     std::vector<tools::Rectangle> aPixelRects;
     GetSelectionRects(aPixelRects);
-    updateLibreOfficeKitSelection(pViewData, aPixelRects, &rLogicRects);
+    UpdateKitSelection(aPixelRects, &rLogicRects);
 }
 
 void ScGridWindow::DeleteSelectionOverlay()
@@ -6136,7 +6173,7 @@ void ScGridWindow::UpdateSelectionOverlay()
         if (comphelper::LibreOfficeKit::isActive())
         {
             // notify the LibreOfficeKit too
-            updateLibreOfficeKitSelection(pViewData, aPixelRects);
+            UpdateKitSelection(aPixelRects);
         }
         else if (xOverlayManager.is())
         {

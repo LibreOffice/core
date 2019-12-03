@@ -601,7 +601,7 @@ public:
 
     /// return json for our cursor position.
     OString         describeCellCursor() const { return describeCellCursorAt(GetCurX(), GetCurY()); }
-    OString         describeCellCursorAt(SCCOL nCol, SCROW nRow) const;
+    OString         describeCellCursorAt( SCCOL nCol, SCROW nRow ) const;
 
     SCCOL           CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeY = SC_SIZE_NONE ) const;
     SCROW           CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeX = SC_SIZE_NONE ) const;
