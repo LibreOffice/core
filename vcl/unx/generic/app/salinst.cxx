@@ -79,6 +79,10 @@ X11SalInstance::~X11SalInstance()
     // would be done in a static destructor else which is
     // a little late
     GetGenericUnixSalData()->Dispose();
+
+#if HAVE_FEATURE_SKIA
+    SkiaHelper::cleanup();
+#endif
 }
 
 SalX11Display* X11SalInstance::CreateDisplay() const

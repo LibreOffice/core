@@ -28,7 +28,7 @@
 #include <SkSurface.h>
 
 #include <prewin.h>
-#include <tools/sk_app/VulkanWindowContext.h>
+#include <tools/sk_app/WindowContext.h>
 #include <postwin.h>
 
 class SkiaFlushIdle;
@@ -263,7 +263,6 @@ protected:
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mProvider;
     std::unique_ptr<sk_app::WindowContext> mWindowContext;
-    sk_app::VulkanWindowContext::SharedGrContext mOffscreenGrContext;
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
     bool mIsGPU; // whether the surface is GPU-backed
