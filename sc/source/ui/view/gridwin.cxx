@@ -5697,68 +5697,20 @@ bool ScGridWindow::InsideVisibleRange( SCCOL nPosX, SCROW nPosY )
     return maVisibleRange.isInside(nPosX, nPosY);
 }
 
-// Use the same zoom calculations as in paintTile - this
-// means the client can ensure they can get the correct
-// cursor corresponding to their current tile sizings.
-OString ScGridWindow::getCellCursor( int nOutputWidth, int nOutputHeight,
-                                     long nTileWidth, long nTileHeight )
-{
-    Fraction zoomX(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
-    Fraction zoomY(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
-    return getCellCursor(zoomX, zoomY);
-}
-
-OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoomY) const
+OString ScGridWindow::getCellCursor() const
 {
     // GridWindow stores a shown cell cursor in mpOOCursors, hence
     // we can use that to determine whether we would want to be showing
     // one (client-side) for tiled rendering too.
     if (!mpOOCursors)
-    {
         return "EMPTY";
-    }
 
-    SCCOL nX = pViewData->GetCurX();
-    SCROW nY = pViewData->GetCurY();
-
-    Fraction defaultZoomX = pViewData->GetZoomX();
-    Fraction defaultZoomY = pViewData->GetZoomY();
-
-    pViewData->SetZoom(rZoomX, rZoomY, true);
-
-    Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, true );
-    long nSizeXPix;
-    long nSizeYPix;
-    pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-
-    double fPPTX = pViewData->GetPPTX();
-    double fPPTY = pViewData->GetPPTY();
-
-    // make it a slim cell cursor, but not empty
-    if (nSizeXPix == 0)
-        nSizeXPix = 1;
-
-    if (nSizeYPix == 0)
-        nSizeYPix = 1;
-
-    long nPosXTw = rtl::math::round(aScrPos.getX() / fPPTX);
-    long nPosYTw = rtl::math::round(aScrPos.getY() / fPPTY);
-    // look at Rectangle( const Point& rLT, const Size& rSize ) for the '- 1'
-    long nSizeXTw = rtl::math::round(nSizeXPix / fPPTX) - 1;
-    long nSizeYTw = rtl::math::round(nSizeYPix / fPPTY) - 1;
-
-    std::stringstream ss;
-    ss << nPosXTw << ", " << nPosYTw << ", " << nSizeXTw << ", " << nSizeYTw << ", "
-       << nX << ", " << nY;
-
-    pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
-
-    return ss.str().c_str();
+    return pViewData->describeCellCursor();
 }
 
 void ScGridWindow::updateLibreOfficeKitCellCursor(const SfxViewShell* pOtherShell) const
 {
-    OString aCursor = getCellCursor(pViewData->GetZoomX(), pViewData->GetZoomY());
+    OString aCursor = getCellCursor();
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     if (pOtherShell)
     {

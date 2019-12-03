@@ -825,7 +825,7 @@ void DesktopLOKTest::testCellCursor()
 
     OString aRectangle(aTree.get<std::string>("commandValues").c_str());
     // cell cursor geometry + col + row
-    CPPUNIT_ASSERT_EQUAL(OString("0, 0, 1279, 255, 0, 0"), aRectangle);
+    CPPUNIT_ASSERT_EQUAL(OString("0, 0, 1274, 254, 0, 0"), aRectangle);
 }
 
 void DesktopLOKTest::testCommandResult()
