@@ -71,6 +71,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
@@ -150,6 +151,47 @@ public:
     css::uno::Reference< css::uno::XInterface > m_xHoldRefForAsyncOpAlive;
 };
 
+/** These values are used as flags and represent the current state of a document.
+    Every state of the life time of a document has to be recognized here.
+
+    @attention  Do not change (means reorganize) already used numbers.
+                There exists some code inside SVX, which uses the same numbers,
+                to analyze such document states.
+                Not the best design ... but may be it will be changed later .-)
+*/
+enum class DocState: sal_Int32
+{
+    /* TEMP STATES */
+
+    /// default state, if a document was new created or loaded
+    Unknown = 0,
+    /// modified against the original file
+    Modified = 1,
+    /// an active document can be postponed to be saved later.
+    Postponed = 2,
+    /// was already handled during one AutoSave/Recovery session.
+    Handled = 4,
+    /** an action was started (saving/loading) ... Can be interesting later if the process may be was interrupted by an exception. */
+    TrySave = 8,
+    TryLoadBackup = 16,
+    TryLoadOriginal = 32,
+
+    /* FINAL STATES */
+
+    /// the Auto/Emergency saved document is not usable any longer
+    Damaged = 64,
+    /// the Auto/Emergency saved document is not really up-to-date (some changes can be missing)
+    Incomplete = 128,
+    /// the Auto/Emergency saved document was processed successfully
+    Succeeded = 512
+};
+
+}
+
+template<> struct o3tl::typed_flags<DocState>: o3tl::is_typed_flags<DocState, 1023 - 256> {};
+
+namespace {
+
 /**
     implements the functionality of AutoSave and AutoRecovery
     of documents - including features of an EmergencySave in
@@ -168,42 +210,6 @@ class AutoRecovery  : private cppu::BaseMutex
                     , public  ::cppu::OPropertySetHelper            // => XPropertySet, XFastPropertySet, XMultiPropertySet
 {
 public:
-
-    /** These values are used as flags and represent the current state of a document.
-        Every state of the life time of a document has to be recognized here.
-
-        @attention  Do not change (means reorganize) already used numbers.
-                    There exists some code inside SVX, which uses the same numbers,
-                    to analyze such document states.
-                    Not the best design ... but may be it will be changed later .-)
-    */
-    enum EDocStates
-    {
-        /* TEMP STATES */
-
-        /// default state, if a document was new created or loaded
-        E_UNKNOWN = 0,
-        /// modified against the original file
-        E_MODIFIED = 1,
-        /// an active document can be postponed to be saved later.
-        E_POSTPONED = 2,
-        /// was already handled during one AutoSave/Recovery session.
-        E_HANDLED = 4,
-        /** an action was started (saving/loading) ... Can be interesting later if the process may be was interrupted by an exception. */
-        E_TRY_SAVE = 8,
-        E_TRY_LOAD_BACKUP = 16,
-        E_TRY_LOAD_ORIGINAL = 32,
-
-        /* FINAL STATES */
-
-        /// the Auto/Emergency saved document is not usable any longer
-        E_DAMAGED = 64,
-        /// the Auto/Emergency saved document is not really up-to-date (some changes can be missing)
-        E_INCOMPLETE = 128,
-        /// the Auto/Emergency saved document was processed successfully
-        E_SUCCEEDED = 512
-    };
-
     /** @short  indicates the results of a FAILURE_SAFE operation
 
         @descr  We must know, which reason was the real one in case
@@ -259,7 +265,7 @@ public:
         public:
 
             TDocumentInfo()
-                : DocumentState   (E_UNKNOWN)
+                : DocumentState   (DocState::Unknown)
                 , UsedForSaving   (false)
                 , ListenForModify (false)
                 , IgnoreClosing   (false)
@@ -279,7 +285,7 @@ public:
                         Further we postpone saving of active documents, e.g. if the user
                         works currently on it. We wait for an idle period then...
              */
-            sal_Int32 DocumentState;
+            DocState DocumentState;
 
             /** Because our applications not ready for concurrent save requests at the same time,
                 we have suppress our own AutoSave for the moment, a document will be already saved
@@ -1814,7 +1820,9 @@ void AutoRecovery::implts_readConfig()
         xItem->getPropertyValue(CFG_ENTRY_PROP_TEMPURL) >>= aInfo.OldTempURL;
         xItem->getPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL) >>= aInfo.TemplateURL;
         xItem->getPropertyValue(CFG_ENTRY_PROP_FILTER) >>= aInfo.RealFilter;
-        xItem->getPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE) >>= aInfo.DocumentState;
+        sal_Int32 tmp;
+        xItem->getPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE) >>= tmp;
+        aInfo.DocumentState = DocState(tmp);
         xItem->getPropertyValue(CFG_ENTRY_PROP_MODULE) >>= aInfo.AppModule;
         xItem->getPropertyValue(CFG_ENTRY_PROP_TITLE) >>= aInfo.Title;
         xItem->getPropertyValue(CFG_ENTRY_PROP_VIEWNAMES) >>= aInfo.ViewNames;
@@ -2025,7 +2033,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPURL, css::uno::makeAny(rInfo.OldTempURL   ));
             xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL, css::uno::makeAny(rInfo.TemplateURL  ));
             xSet->setPropertyValue(CFG_ENTRY_PROP_FILTER, css::uno::makeAny(rInfo.RealFilter));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, css::uno::makeAny(rInfo.DocumentState));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, css::uno::makeAny(sal_Int32(rInfo.DocumentState)));
             xSet->setPropertyValue(CFG_ENTRY_PROP_MODULE, css::uno::makeAny(rInfo.AppModule));
             xSet->setPropertyValue(CFG_ENTRY_PROP_TITLE, css::uno::makeAny(rInfo.Title));
             xSet->setPropertyValue(CFG_ENTRY_PROP_VIEWNAMES, css::uno::makeAny(rInfo.ViewNames));
@@ -2443,7 +2451,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     css::uno::Reference< css::util::XModifiable > xModifyCheck(xDocument, css::uno::UNO_QUERY_THROW);
     if (xModifyCheck->isModified())
     {
-        aNew.DocumentState |= AutoRecovery::E_MODIFIED;
+        aNew.DocumentState |= DocState::Modified;
     }
 
     aCacheLock.lock(LOCK_FOR_CACHE_ADD_REMOVE);
@@ -2557,11 +2565,11 @@ void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::fr
 
         if (bModified)
         {
-            rInfo.DocumentState |= AutoRecovery::E_MODIFIED;
+            rInfo.DocumentState |= DocState::Modified;
         }
         else
         {
-            rInfo.DocumentState &= ~AutoRecovery::E_MODIFIED;
+            rInfo.DocumentState &= ~DocState::Modified;
         }
     }
 
@@ -2606,7 +2614,7 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
      * would change in the case of a 'Save as' operation) and the associated
      * backup file URL.  */
 
-    aInfo.DocumentState = AutoRecovery::E_UNKNOWN;
+    aInfo.DocumentState = DocState::Unknown;
     // TODO replace getLocation() with getURL() ... it's a workaround currently only!
     css::uno::Reference< css::frame::XStorable > xDoc(aInfo.Document, css::uno::UNO_QUERY);
     aInfo.OrgURL = xDoc->getLocation();
@@ -2856,7 +2864,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         // already auto saved during this session :-)
         // This state must be reset for all documents
         // if timer is started with normal AutoSaveTimerIntervall!
-        if ((aInfo.DocumentState & AutoRecovery::E_HANDLED) == AutoRecovery::E_HANDLED)
+        if ((aInfo.DocumentState & DocState::Handled) == DocState::Handled)
             continue;
 
         // Not modified documents are not saved.
@@ -2864,7 +2872,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         Reference< XDocumentRecovery > xDocRecover( aInfo.Document, UNO_QUERY_THROW );
         if ( !xDocRecover->wasModifiedSinceLastSave() )
         {
-            aInfo.DocumentState |= AutoRecovery::E_HANDLED;
+            aInfo.DocumentState |= DocState::Handled;
             continue;
         }
 
@@ -2903,7 +2911,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
             if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
             {
                 eTimer = AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED;
-                aInfo.DocumentState |= AutoRecovery::E_POSTPONED;
+                aInfo.DocumentState |= DocState::Postponed;
                 continue;
             }
         }
@@ -2913,14 +2921,14 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         // c) Document was     postponed - and is not active now. => save it
         // d) Document was     postponed - and is     active now. => save it (because user idle was checked already)
         bool bActive       = (xActiveModel == aInfo.Document);
-        bool bWasPostponed = ((aInfo.DocumentState & AutoRecovery::E_POSTPONED) == AutoRecovery::E_POSTPONED);
+        bool bWasPostponed = ((aInfo.DocumentState & DocState::Postponed) == DocState::Postponed);
 
         if (
             ! bWasPostponed &&
               bActive
            )
         {
-            aInfo.DocumentState |= AutoRecovery::E_POSTPONED;
+            aInfo.DocumentState |= DocState::Postponed;
             *pIt = aInfo;
             // postponed documents will be saved if this method is called again!
             // That can be done by an outside started timer           => E_POLL_FOR_USER_IDLE (if normal AutoSave is active)
@@ -3011,7 +3019,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
 
     // safe the state about "trying to save"
     // ... we need it for recovery if e.g. a crash occurs inside next line!
-    rInfo.DocumentState |= AutoRecovery::E_TRY_SAVE;
+    rInfo.DocumentState |= DocState::TrySave;
     implts_flushConfigItem(rInfo);
 
     // If userautosave is enabled, first try to save the original file.
@@ -3077,17 +3085,17 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     {
         // safe the state about success
         // ... you know the reason: to know it on recovery time if next line crash .-)
-        rInfo.DocumentState &= ~AutoRecovery::E_TRY_SAVE;
-        rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
-        rInfo.DocumentState |=  AutoRecovery::E_SUCCEEDED;
+        rInfo.DocumentState &= ~DocState::TrySave;
+        rInfo.DocumentState |=  DocState::Handled;
+        rInfo.DocumentState |=  DocState::Succeeded;
     }
     else
     {
         // safe the state about error ...
         rInfo.NewTempURL.clear();
-        rInfo.DocumentState &= ~AutoRecovery::E_TRY_SAVE;
-        rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
-        rInfo.DocumentState |=  AutoRecovery::E_INCOMPLETE;
+        rInfo.DocumentState &= ~DocState::TrySave;
+        rInfo.DocumentState |=  DocState::Handled;
+        rInfo.DocumentState |=  DocState::Incomplete;
     }
 
     // make sure the progress is not referred any longer
@@ -3121,13 +3129,13 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
     for (auto & info : m_lDocCache)
     {
         // Such documents are already loaded by the last loop.
-        // Don't check E_SUCCEEDED here! It may be the final state of an AutoSave
+        // Don't check DocState::Succeeded here! It may be the final state of an AutoSave
         // operation before!!!
-        if ((info.DocumentState & AutoRecovery::E_HANDLED) == AutoRecovery::E_HANDLED)
+        if ((info.DocumentState & DocState::Handled) == DocState::Handled)
             continue;
 
         // a1,b1,c1,d2,e2,f2)
-        if ((info.DocumentState & AutoRecovery::E_DAMAGED) == AutoRecovery::E_DAMAGED)
+        if ((info.DocumentState & DocState::Damaged) == DocState::Damaged)
         {
             // don't forget to inform listener! May be this document was
             // damaged on last saving time ...
@@ -3156,21 +3164,21 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
             lDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()] <<= aParams.m_xProgress;
 
         bool bBackupWasTried   = (
-                                        ((info.DocumentState & AutoRecovery::E_TRY_LOAD_BACKUP  ) == AutoRecovery::E_TRY_LOAD_BACKUP) || // temp. state!
-                                        ((info.DocumentState & AutoRecovery::E_INCOMPLETE       ) == AutoRecovery::E_INCOMPLETE     )    // transport TRY_LOAD_BACKUP from last loop to this new one!
+                                        ((info.DocumentState & DocState::TryLoadBackup  ) == DocState::TryLoadBackup) || // temp. state!
+                                        ((info.DocumentState & DocState::Incomplete       ) == DocState::Incomplete     )    // transport DocState::TryLoadBackup from last loop to this new one!
                                      );
-        bool bOriginalWasTried = ((info.DocumentState & AutoRecovery::E_TRY_LOAD_ORIGINAL) == AutoRecovery::E_TRY_LOAD_ORIGINAL);
+        bool bOriginalWasTried = ((info.DocumentState & DocState::TryLoadOriginal) == DocState::TryLoadOriginal);
 
         if (bBackupWasTried)
         {
             if (!bOriginalWasTried)
             {
-                info.DocumentState |= AutoRecovery::E_INCOMPLETE;
+                info.DocumentState |= DocState::Incomplete;
                 // try original URL ... ! don't continue with next item here ...
             }
             else
             {
-                info.DocumentState |= AutoRecovery::E_DAMAGED;
+                info.DocumentState |= DocState::Damaged;
                 continue;
             }
         }
@@ -3203,13 +3211,13 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         if (!sLoadBackupURL.isEmpty())
         {
             sURL = sLoadBackupURL;
-            info.DocumentState |= AutoRecovery::E_TRY_LOAD_BACKUP;
+            info.DocumentState |= DocState::TryLoadBackup;
             lDescriptor[utl::MediaDescriptor::PROP_SALVAGEDFILE()] <<= sLoadOriginalURL;
         }
         else if (!sLoadOriginalURL.isEmpty())
         {
             sURL = sLoadOriginalURL;
-            info.DocumentState |= AutoRecovery::E_TRY_LOAD_ORIGINAL;
+            info.DocumentState |= DocState::TryLoadOriginal;
         }
         else
             continue; // TODO ERROR!
@@ -3229,17 +3237,17 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         }
         catch(const css::uno::Exception&)
         {
-            info.DocumentState &= ~AutoRecovery::E_TRY_LOAD_BACKUP;
-            info.DocumentState &= ~AutoRecovery::E_TRY_LOAD_ORIGINAL;
+            info.DocumentState &= ~DocState::TryLoadBackup;
+            info.DocumentState &= ~DocState::TryLoadOriginal;
             if (!sLoadBackupURL.isEmpty())
             {
-                info.DocumentState |= AutoRecovery::E_INCOMPLETE;
+                info.DocumentState |= DocState::Incomplete;
                 eTimer               = AutoRecovery::E_CALL_ME_BACK;
             }
             else
             {
-                info.DocumentState |=  AutoRecovery::E_HANDLED;
-                info.DocumentState |=  AutoRecovery::E_DAMAGED;
+                info.DocumentState |=  DocState::Handled;
+                info.DocumentState |=  DocState::Damaged;
             }
 
             implts_flushConfigItem(info, true);
@@ -3265,14 +3273,14 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         css::uno::Reference< css::util::XModifiable > xModify(info.Document, css::uno::UNO_QUERY);
         if ( xModify.is() )
         {
-            bool bModified = ((info.DocumentState & AutoRecovery::E_MODIFIED) == AutoRecovery::E_MODIFIED);
+            bool bModified = ((info.DocumentState & DocState::Modified) == DocState::Modified);
             xModify->setModified(bModified);
         }
 
-        info.DocumentState &= ~AutoRecovery::E_TRY_LOAD_BACKUP;
-        info.DocumentState &= ~AutoRecovery::E_TRY_LOAD_ORIGINAL;
-        info.DocumentState |=  AutoRecovery::E_HANDLED;
-        info.DocumentState |=  AutoRecovery::E_SUCCEEDED;
+        info.DocumentState &= ~DocState::TryLoadBackup;
+        info.DocumentState &= ~DocState::TryLoadOriginal;
+        info.DocumentState |=  DocState::Handled;
+        info.DocumentState |=  DocState::Succeeded;
 
         implts_flushConfigItem(info);
         implts_informListener(eJob,
@@ -3313,7 +3321,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
 
         // put the filter name into the descriptor - we're not going to involve any type detection, so
         // the document might be lost without the FilterName property
-        if ( (rInfo.DocumentState & AutoRecovery::E_TRY_LOAD_ORIGINAL) == AutoRecovery::E_TRY_LOAD_ORIGINAL)
+        if ( (rInfo.DocumentState & DocState::TryLoadOriginal) == DocState::TryLoadOriginal)
             lDescriptor[ utl::MediaDescriptor::PROP_FILTERNAME() ] <<= rInfo.RealFilter;
         else
             lDescriptor[ utl::MediaDescriptor::PROP_FILTERNAME() ] <<= rInfo.DefaultFilter;
@@ -3321,7 +3329,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         if ( sURL == rInfo.FactoryURL )
         {
             // if the document was a new, unmodified document, then there's nothing to recover, just to init
-            ENSURE_OR_THROW( ( rInfo.DocumentState & AutoRecovery::E_MODIFIED ) == 0,
+            ENSURE_OR_THROW( ( rInfo.DocumentState & DocState::Modified ) == DocState(0),
                 "unexpected document state" );
             Reference< XLoadable > xModelLoad( xModel, UNO_QUERY_THROW );
             xModelLoad->initNew();
@@ -3553,7 +3561,7 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
         aInfo.put( OUString(CFG_ENTRY_PROP_MODULE), pInfo->AppModule);
         aInfo.put( OUString(CFG_ENTRY_PROP_TITLE), pInfo->Title);
         aInfo.put( OUString(CFG_ENTRY_PROP_VIEWNAMES), pInfo->ViewNames);
-        aInfo.put( OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), pInfo->DocumentState);
+        aInfo.put( OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), sal_Int32(pInfo->DocumentState));
 
         aEvent.State <<= aInfo.getPropertyValues();
     }
@@ -3570,8 +3578,8 @@ void AutoRecovery::implts_resetHandleStates()
 
     for (auto & info : m_lDocCache)
     {
-        info.DocumentState &= ~AutoRecovery::E_HANDLED;
-        info.DocumentState &= ~AutoRecovery::E_POSTPONED;
+        info.DocumentState &= ~DocState::Handled;
+        info.DocumentState &= ~DocState::Postponed;
 
         // } /* SAFE */
         g.clear();
