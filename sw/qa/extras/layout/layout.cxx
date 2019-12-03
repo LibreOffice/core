@@ -3571,6 +3571,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf121658)
     assertXPath(pXmlDoc, "//Special[@nType='PortionType::Hyphen']", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117982)
+{
+    SwDoc* pDocument = createDoc("tdf117982.docx");
+    SwDocShell* pShell = pDocument->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[1]/text", "FOO AAA");
+    //The first cell must be "FOO AAA". If not, this means the first cell content not visible in
+    //the source document.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
