@@ -31,6 +31,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <o3tl/any.hxx>
 #include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <oox/helper/progressbar.hxx>
@@ -761,14 +762,12 @@ void WorkbookHelper::finalizeWorkbookImport()
                             OUString sName(rProp.Name);
                             if (sName == SC_POSITIONLEFT)
                             {
-                                SCCOL nPosLeft;
-                                rProp.Value >>= nPosLeft;
+                                SCCOL nPosLeft = *o3tl::doAccess<SCCOL>(rProp.Value);
                                 getScDocument().SetPosLeft(nPosLeft);
                             }
                             else if (sName == SC_POSITIONTOP)
                             {
-                                SCROW nPosTop;
-                                rProp.Value >>= nPosTop;
+                                SCROW nPosTop = *o3tl::doAccess<SCROW>(rProp.Value);
                                 getScDocument().SetPosTop(nPosTop);
                             }
                         }
