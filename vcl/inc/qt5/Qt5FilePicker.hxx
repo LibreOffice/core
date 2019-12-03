@@ -82,7 +82,12 @@ protected:
     QLabel* m_pFilterLabel; ///< label to display the filter
     QHash<sal_Int16, QWidget*> m_aCustomWidgetsMap; ///< map of SAL control ID's to widget
 
-    bool m_bIsFolderPicker;
+    const bool m_bIsFolderPicker;
+
+    // handle async QDialog result via QDialog::open()
+    bool m_bFinished;
+    int m_nResult;
+    bool* m_pDestroyed;
 
 public:
     // use non-native file dialog by default; there's no easy way to add custom widgets
@@ -173,6 +178,8 @@ private Q_SLOTS:
     void currentChanged(const QString&);
     // (un)set automatic file extension
     void updateAutomaticFileExtension();
+    // handle async picker close event
+    void finished(int nResult);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
