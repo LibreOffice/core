@@ -11336,8 +11336,15 @@ then
 
     if test "$USING_X11" = TRUE; then
         PKG_CHECK_MODULES(QT5_XCB,[xcb],,[AC_MSG_ERROR([XCB not found, which is needed for correct app grouping in X11.])])
-        QT5_CFLAGS="$QT5_CFLAGS $QT5_XCB_CFLAGS"
-        QT5_LIBS="$QT5_LIBS $QT5_XCB_LIBS -lQt5X11Extras"
+        PKG_CHECK_MODULES(QT5_XCB_ICCCM,[xcb-icccm],[
+            QT5_HAVE_XCB_ICCCM=1
+            AC_DEFINE(QT5_HAVE_XCB_ICCCM)
+        ],[
+            AC_MSG_WARN([XCB ICCCM not found, which is needed for old Qt versions (< 5.12) on some WMs to correctly group dialogs (like QTBUG-46626)])
+            add_warning "XCB ICCCM not found, which is needed for Qt versions (< 5.12) on some WMs to correctly group dialogs (like QTBUG-46626)"
+        ])
+        QT5_CFLAGS="$QT5_CFLAGS $QT5_XCB_CFLAGS $QT5_XCB_ICCCM_CFLAGS"
+        QT5_LIBS="$QT5_LIBS $QT5_XCB_LIBS $QT5_XCB_ICCCM_LIBS -lQt5X11Extras"
         QT5_USING_X11=1
         AC_DEFINE(QT5_USING_X11)
     fi
