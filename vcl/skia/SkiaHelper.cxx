@@ -14,10 +14,19 @@
 #include <officecfg/Office/Common.hxx>
 
 #if !HAVE_FEATURE_SKIA
-bool SkiaHelper::isVCLSkiaEnabled() { return false; }
+
+namespace SkiaHelper
+{
+bool isVCLSkiaEnabled() { return false; }
+
+} // namespace
 
 #else
 
+#include <tools/sk_app/VulkanWindowContext.h>
+
+namespace SkiaHelper
+{
 static bool supportsVCLSkia()
 {
     static bool bDisableSkia = !!getenv("SAL_DISABLESKIA");
@@ -26,7 +35,7 @@ static bool supportsVCLSkia()
     return !bDisableSkia && !bBlacklisted;
 }
 
-bool SkiaHelper::isVCLSkiaEnabled()
+bool isVCLSkiaEnabled()
 {
     /**
      * The !bSet part should only be called once! Changing the results in the same
@@ -84,7 +93,7 @@ bool SkiaHelper::isVCLSkiaEnabled()
     return bRet;
 }
 
-static SkiaHelper::RenderMethod methodToUse = SkiaHelper::RenderRaster;
+static RenderMethod methodToUse = RenderRaster;
 
 static bool initRenderMethodToUse()
 {
@@ -92,15 +101,15 @@ static bool initRenderMethodToUse()
     {
         if (strcmp(env, "raster") == 0)
         {
-            methodToUse = SkiaHelper::RenderRaster;
+            methodToUse = RenderRaster;
             return true;
         }
     }
-    methodToUse = SkiaHelper::RenderVulkan;
+    methodToUse = RenderVulkan;
     return true;
 }
 
-SkiaHelper::RenderMethod SkiaHelper::renderMethodToUse()
+RenderMethod renderMethodToUse()
 {
     static bool methodToUseInited = initRenderMethodToUse();
     if (methodToUseInited) // Used just to ensure thread-safe one-time init.
@@ -108,7 +117,7 @@ SkiaHelper::RenderMethod SkiaHelper::renderMethodToUse()
     abort();
 }
 
-void SkiaHelper::disableRenderMethod(RenderMethod method)
+void disableRenderMethod(RenderMethod method)
 {
     if (renderMethodToUse() != method)
         return;
@@ -116,6 +125,38 @@ void SkiaHelper::disableRenderMethod(RenderMethod method)
     methodToUse = RenderRaster;
 }
 
+sk_app::VulkanWindowContext::SharedGrContext* sharedGrContext;
+
+GrContext* getSharedGrContext()
+{
+    assert(renderMethodToUse() == RenderVulkan);
+    if (sharedGrContext)
+        return sharedGrContext->getGrContext();
+    // TODO mutex?
+    // Setup the shared GrContext from Skia's (patched) VulkanWindowContext, if it's been
+    // already set up.
+    sk_app::VulkanWindowContext::SharedGrContext context
+        = sk_app::VulkanWindowContext::getSharedGrContext();
+    GrContext* grContext = context.getGrContext();
+    if (grContext)
+    {
+        sharedGrContext = new sk_app::VulkanWindowContext::SharedGrContext(context);
+        return grContext;
+    }
+    // TODO
+    // SkiaSalGraphicsImpl::createOffscreenSurface() creates the shared context using a dummy window,
+    // but we do not have a window here. Is it worth it to try to do it here?
+    return nullptr;
+}
+
+void cleanup()
+{
+    delete sharedGrContext;
+    sharedGrContext = nullptr;
+}
+
 #endif // HAVE_FEATURE_SKIA
+
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

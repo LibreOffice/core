@@ -407,6 +407,9 @@ WinSalInstance::~WinSalInstance()
 {
     ImplFreeSalGDI();
     DestroyWindow( mhComWnd );
+#if HAVE_FEATURE_SKIA
+    SkiaHelper::cleanup();
+#endif
 }
 
 static LRESULT ImplSalDispatchMessage( const MSG* pMsg )
