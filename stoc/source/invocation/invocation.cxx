@@ -704,10 +704,11 @@ struct MemberItem
     OUString aName;
 
     // Defines where the member comes from
-    enum Mode { NAMEACCESS, PROPERTYSET, METHOD } eMode;
+    enum class Mode { NameAccess, PropertySet, Method };
+    Mode eMode;
 
     // Index to respective sequence
-    // (Index to NameAccess sequence for eMode==NAMEACCESS etc.)
+    // (Index to NameAccess sequence for eMode==Mode::NameAccess etc.)
     sal_Int32 nIndex;
 };
 
@@ -765,7 +766,7 @@ void Invocation_Impl::getInfoSequenceImpl
     {
         MemberItem& rItem = pItems[ iTotal ];
         rItem.aName = pStrings[ i ];
-        rItem.eMode = MemberItem::NAMEACCESS;
+        rItem.eMode = MemberItem::Mode::NameAccess;
         rItem.nIndex = i;
     }
 
@@ -774,7 +775,7 @@ void Invocation_Impl::getInfoSequenceImpl
     {
         MemberItem& rItem = pItems[ iTotal ];
         rItem.aName = pProps[ i ].Name;
-        rItem.eMode = MemberItem::PROPERTYSET;
+        rItem.eMode = MemberItem::Mode::PropertySet;
         rItem.nIndex = i;
     }
 
@@ -784,7 +785,7 @@ void Invocation_Impl::getInfoSequenceImpl
         MemberItem& rItem = pItems[ iTotal ];
         Reference< XIdlMethod > xMethod = pMethods[ i ];
         rItem.aName = xMethod->getName();
-        rItem.eMode = MemberItem::METHOD;
+        rItem.eMode = MemberItem::Mode::Method;
         rItem.nIndex = i;
     }
 
@@ -814,15 +815,15 @@ void Invocation_Impl::getInfoSequenceImpl
 
         if( pRetInfos )
         {
-            if( rItem.eMode == MemberItem::NAMEACCESS )
+            if( rItem.eMode == MemberItem::Mode::NameAccess )
             {
                 fillInfoForNameAccess( pRetInfos[ iTotal ], rItem.aName );
             }
-            else if( rItem.eMode == MemberItem::PROPERTYSET )
+            else if( rItem.eMode == MemberItem::Mode::PropertySet )
             {
                 fillInfoForProperty( pRetInfos[ iTotal ], pProps[ rItem.nIndex ] );
             }
-            else if( rItem.eMode == MemberItem::METHOD )
+            else if( rItem.eMode == MemberItem::Mode::Method )
             {
                 fillInfoForMethod( pRetInfos[ iTotal ], pMethods[ rItem.nIndex ] );
             }
