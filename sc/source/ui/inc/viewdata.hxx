@@ -233,8 +233,6 @@ private:
     SCROW           nCurY;
     SCCOL           nOldCurX;
     SCROW           nOldCurY;
-    SCCOL           nLOKOldCurX;
-    SCROW           nLOKOldCurY;
 
     ScPositionHelper aWidthHelper;
     ScPositionHelper aHeightHelper;
@@ -402,8 +400,6 @@ public:
     SCROW           GetCurYForTab( SCTAB nTabIndex ) const;
     SCCOL           GetOldCurX() const;
     SCROW           GetOldCurY() const;
-    SCCOL           GetLOKOldCurX() const                   { return pThisTab->nLOKOldCurX; }
-    SCROW           GetLOKOldCurY() const                   { return pThisTab->nLOKOldCurY; }
     long            GetLOKDocWidthPixel() const             { return pThisTab->aWidthHelper.getPosition(pThisTab->nMaxTiledCol); }
     long            GetLOKDocHeightPixel() const            { return pThisTab->aHeightHelper.getPosition(pThisTab->nMaxTiledRow); }
 
@@ -434,8 +430,6 @@ public:
     void            SetCurYForTab( SCCOL nNewCurY, SCTAB nTabIndex );
     void            SetOldCursor( SCCOL nNewX, SCROW nNewY );
     void            ResetOldCursor();
-    void            SetLOKOldCurX( SCCOL nCurX )                    { pThisTab->nLOKOldCurX = nCurX; }
-    void            SetLOKOldCurY( SCROW nCurY )                    { pThisTab->nLOKOldCurY = nCurY; }
 
     void            SetHSplitMode( ScSplitMode eMode )              { pThisTab->eHSplitMode = eMode; }
     void            SetVSplitMode( ScSplitMode eMode )              { pThisTab->eVSplitMode = eMode; }
