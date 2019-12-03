@@ -648,7 +648,7 @@ namespace basegfx
                     default:
                     {
                         SAL_WARN("basegfx", "importFromSvgD(): skipping tags in svg:d element (unknown: \""
-                                << aCurrChar
+                                << OUString(aCurrChar)
                                 << "\")!");
                         ++nPos;
                         break;
