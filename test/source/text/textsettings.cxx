@@ -72,7 +72,7 @@ void testPrinterIndependentLayout(css::uno::Reference<css::beans::XPropertySet> 
     if (!extstsProperty(rxSettings, rPropertyName))
         return; // Property is optional
 
-    sal_Int16 aValue_Get;
+    sal_Int16 aValue_Get = {};
 
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue",
                            rxSettings->getPropertyValue(rPropertyName) >>= aValue_Get);
