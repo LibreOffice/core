@@ -1948,6 +1948,21 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
     CalcBaseOfstForFly();
     CalcHeightOfLastLine(); // i#11860 - Adjust spacing implementation for
                              // object positioning - Compatibility to MS Word
+    // tdf#117982 -- Fix cell spacing hides content
+    // Check if the cell's content has greater size than the row height
+    if (IsInTab() && GetUpper() && ((GetUpper()->getFramePrintArea().Height() < getFramePrintArea().Height())
+            || (getFramePrintArea().Height() <= 0)))
+    {
+           SAL_INFO("sw.core", "Warn: Cell content has greater size than cell height!");
+           //get font size...
+           SwTwips aTmpHeight = getFrameArea().Height();
+           //...and push it into the text frame
+           SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+           //if only bottom margin what we have:
+           if (GetTopMargin() == 0)
+               //set the frame to its original location
+               aPrt.SetTopAndHeight(0, aTmpHeight);
+    }
 }
 
 // bForceQuickFormat is set if GetFormatted() has been called during the
