@@ -183,15 +183,13 @@ class LOKitThread extends Thread {
     private void updateZoomConstraints() {
         if (mTileProvider == null) return;
         mLayerClient = mContext.getLayerClient();
-        if (mTileProvider.isSpreadsheet()) {
-            // Calc has a fixed zoom at 1x and doesn't allow zooming for now
-            mLayerClient.setZoomConstraints(new ZoomConstraints(false, 1f, 0f, 0f));
-        } else {
+
+        float minZoom = 0f;
+        if (!mTileProvider.isSpreadsheet()) {
             // Set min zoom to the page width so that you cannot zoom below page width
-            // applies to all types of document; in the future spreadsheets may be singled out
-            float minZoom = mLayerClient.getViewportMetrics().getWidth()/mTileProvider.getPageWidth();
-            mLayerClient.setZoomConstraints(new ZoomConstraints(true, 1f, minZoom, 0f));
+            minZoom = mLayerClient.getViewportMetrics().getWidth()/mTileProvider.getPageWidth();
         }
+        mLayerClient.setZoomConstraints(new ZoomConstraints(true, 1f, minZoom, 0f));
     }
 
 
