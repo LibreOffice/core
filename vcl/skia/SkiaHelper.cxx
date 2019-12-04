@@ -25,7 +25,12 @@ bool isVCLSkiaEnabled() { return false; }
 
 #include <skia/utils.hxx>
 
+#include <SkSurface.h>
 #include <tools/sk_app/VulkanWindowContext.h>
+
+#ifdef DBG_UTIL
+#include <fstream>
+#endif
 
 namespace SkiaHelper
 {
@@ -151,11 +156,80 @@ GrContext* getSharedGrContext()
     return nullptr;
 }
 
+sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
+{
+    assert(type == kN32_SkColorType || type == kAlpha_8_SkColorType);
+    sk_sp<SkSurface> surface;
+    switch (SkiaHelper::renderMethodToUse())
+    {
+        case SkiaHelper::RenderVulkan:
+        {
+            if (GrContext* grContext = getSharedGrContext())
+            {
+                surface = SkSurface::MakeRenderTarget(
+                    grContext, SkBudgeted::kNo,
+                    SkImageInfo::Make(width, height, type, kPremul_SkAlphaType));
+                assert(surface);
+#ifdef DBG_UTIL
+                prefillSurface(surface);
+#endif
+                return surface;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    // Create raster surface as a fallback.
+    surface = SkSurface::MakeRaster(SkImageInfo::Make(width, height, type, kPremul_SkAlphaType));
+    assert(surface);
+#ifdef DBG_UTIL
+    prefillSurface(surface);
+#endif
+    return surface;
+}
+
 void cleanup()
 {
     delete sharedGrContext;
     sharedGrContext = nullptr;
 }
+
+#ifdef DBG_UTIL
+void prefillSurface(sk_sp<SkSurface>& surface)
+{
+    // Pre-fill the surface with deterministic garbage.
+    SkBitmap bitmap;
+    bitmap.allocN32Pixels(2, 2);
+    SkPMColor* scanline;
+    scanline = bitmap.getAddr32(0, 0);
+    *scanline++ = SkPreMultiplyARGB(0xFF, 0xBF, 0x80, 0x40);
+    *scanline++ = SkPreMultiplyARGB(0xFF, 0x40, 0x80, 0xBF);
+    scanline = bitmap.getAddr32(0, 1);
+    *scanline++ = SkPreMultiplyARGB(0xFF, 0xE3, 0x5C, 0x13);
+    *scanline++ = SkPreMultiplyARGB(0xFF, 0x13, 0x5C, 0xE3);
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+    paint.setShader(bitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
+    surface->getCanvas()->drawPaint(paint);
+}
+
+void dump(const SkBitmap& bitmap, const char* file) { dump(SkImage::MakeFromBitmap(bitmap), file); }
+
+void dump(const sk_sp<SkSurface>& surface, const char* file)
+{
+    surface->getCanvas()->flush();
+    dump(surface->makeImageSnapshot(), file);
+}
+
+void dump(const sk_sp<SkImage>& image, const char* file)
+{
+    sk_sp<SkData> data = image->encodeToData();
+    std::ofstream ostream(file, std::ios::binary);
+    ostream.write(static_cast<const char*>(data->data()), data->size());
+}
+
+#endif
 
 } // namespace
 
