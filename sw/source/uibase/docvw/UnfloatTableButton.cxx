@@ -1,4 +1,4 @@
-﻿/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -26,6 +26,8 @@
 #include <ndindex.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
+#include <unoprnms.hxx>
+#include <unotbl.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -37,6 +39,7 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <svl/grabbagitem.hxx>
 
 #define TEXT_PADDING 3
 #define BOX_DISTANCE 3
@@ -109,6 +112,25 @@ void UnfloatTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
         return;
 
     SwDoc& rDoc = pTextFrame->GetDoc();
+
+    // tdf#129176: clear "TablePosition" grab bag, since we explicitly change the position here
+    // See DomainMapperTableHandler::endTableGetTableStyle, where the grab bag is filled, and
+    // DocxAttributeOutput::TableDefinition that uses it on export
+    SwFrameFormat* pTableFormat = pTableFrame->GetTable()->GetFrameFormat();
+    assert(pTableFormat);
+    if (const SfxGrabBagItem* pGrabBagItem = pTableFormat->GetAttrSet().GetItem(RES_FRMATR_GRABBAG))
+    {
+        SfxGrabBagItem aGrabBagItem(*pGrabBagItem); // Editable copy
+        if (aGrabBagItem.GetGrabBag().erase("TablePosition"))
+        {
+            css::uno::Any aVal;
+            aGrabBagItem.QueryValue(aVal);
+            const auto xTable = SwXTextTable::CreateXTextTable(pTableFormat);
+            const css::uno::Reference<css::beans::XPropertySet> xSet(xTable, css::uno::UNO_QUERY);
+            assert(xSet);
+            xSet->setPropertyValue(UNO_NAME_TABLE_INTEROP_GRAB_BAG, aVal);
+        }
+    }
 
     // When we move the table before the first text node, we need to clear RES_PAGEDESC attribute
     // of the text node otherwise LO will create a page break after the table
