@@ -54,10 +54,10 @@ WB_STDHEADERBAR     WB_BUTTONSTYLE | WB_BOTTOMBORDER
 ItemBits
 
 HeaderBarItemBits::LEFT            content is displayed in the item left-justified
-HeaderBarItemBits::CENTER          content is displayed in the item centred
+HeaderBarItemBits::CENTER          content is displayed in the item centered
 HeaderBarItemBits::RIGHT           content is displayed in the item right-justified
 HeaderBarItemBits::TOP             content is displayed in the item at the upper border
-HeaderBarItemBits::VCENTER         content is displayed in the item vertically centred
+HeaderBarItemBits::VCENTER         content is displayed in the item vertically centered
 HeaderBarItemBits::BOTTOM          content is displayed in the item at the bottom border
 HeaderBarItemBits::LEFTIMAGE       in case of text and image, the image is displayed left of the text
 HeaderBarItemBits::RIGHTIMAGE      in case of text and image, the image is displayed right of the text
