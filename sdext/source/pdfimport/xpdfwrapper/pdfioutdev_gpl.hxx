@@ -149,7 +149,11 @@ namespace pdfi
 
         int  parseFont( long long nNewId, GfxFont* pFont, GfxState* state ) const;
         void writeFontFile( GfxFont* gfxFont ) const;
+#if POPPLER_CHECK_VERSION(0, 83, 0)
+        static void printPath( const GfxPath* pPath );
+#else
         static void printPath( GfxPath* pPath );
+#endif
 
     public:
         explicit PDFOutDev( PDFDoc* pDoc );

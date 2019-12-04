@@ -68,7 +68,11 @@ int main(int argc, char **argv)
     }
 
     // read config file
+#if POPPLER_CHECK_VERSION(0, 83, 0)
+    globalParams = std::make_unique<GlobalParams>();
+#else
     globalParams = new GlobalParams();
+#endif
     globalParams->setErrQuiet(true);
 #if defined(_MSC_VER)
     globalParams->setupBaseFonts(nullptr);
