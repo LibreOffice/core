@@ -55,10 +55,11 @@ class ScAccessibleCell;
         This base class provides an implementation of the
         <code>AccessibleTable</code> service.
 */
-class ScAccessibleSpreadsheet final
-    :   public  ScAccessibleTableBase
+class ScAccessibleSpreadsheet final : public  ScAccessibleTableBase
 {
 public:
+    typedef std::vector<ScMyAddress> VEC_MYADDR;
+
     ScAccessibleSpreadsheet(
         ScAccessibleDocument* pAccDoc,
         ScTabViewShell* pViewShell,
@@ -76,6 +77,14 @@ public:
 
     void BoundingBoxChanged();
     void VisAreaChanged();
+    void FireFirstCellFocus();
+
+    css::uno::Reference < css::accessibility::XAccessible > GetActiveCell();
+    bool IsScAddrFormulaSel (const ScAddress &addr) const;
+    bool IsFormulaMode();
+    ScMyAddress CalcScAddressFromRangeList(ScRangeList *pMarkedRanges,sal_Int32 nSelectedChildIndex);
+    static bool CalcScRangeDifferenceMax(const ScRange & rSrc, const ScRange & rDest,int nMax,VEC_MYADDR &vecRet,int &nSize);
+    static bool CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet);
 
 private:
     ScAccessibleSpreadsheet(
@@ -200,7 +209,9 @@ private:
     virtual void SAL_CALL
         addAccessibleEventListener(
             const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
+
     //=====  XAccessibleTableSelection  ============================================
+
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row ) override;
     virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column ) override;
     virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row ) override;
@@ -212,6 +223,28 @@ private:
     /// Return the object's current bounding box relative to the parent object.
     virtual tools::Rectangle GetBoundingBox() const override;
 
+    bool IsDefunc(
+        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
+    bool IsEditable();
+    bool IsFocused();
+    bool IsCompleteSheetSelected();
+
+    void SelectCell(sal_Int32 nRow, sal_Int32 nCol, bool bDeselect);
+
+    static ScDocument* GetDocument(ScTabViewShell* pViewShell);
+
+    void RemoveSelection(const ScMarkData &refScMarkData);
+    void CommitFocusCell(const ScAddress &aNewCell);
+
+    sal_Int32 GetRowAll() const { return m_nMaxY - m_nMinY + 1 ; }
+    sal_uInt16  GetColAll() const { return m_nMaxX - m_nMinX + 1; }
+    void NotifyRefMode();
+    void RemoveFormulaSelection(bool bRemoveAll = false);
+    bool CheckChildIndex(sal_Int32) const;
+    ScAddress GetChildIndexAddress(sal_Int32) const;
+    sal_Int32 GetAccessibleIndexFormula( sal_Int32 nRow, sal_Int32 nColumn );
+    bool GetFormulaCurrentFocusCell(ScAddress &addr);
+
     ScTabViewShell* mpViewShell;
     std::unique_ptr<ScRangeList>  mpMarkedRanges;
     ScAccessibleDocument* mpAccDoc;
@@ -222,26 +255,9 @@ private:
     bool const      mbIsSpreadsheet;
     bool            mbDelIns;
     bool            mbIsFocusSend;
-
-    bool IsDefunc(
-        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
-    bool IsEditable();
-    bool IsFocused();
-    bool IsCompleteSheetSelected();
-
-    void SelectCell(sal_Int32 nRow, sal_Int32 nCol, bool bDeselect);
-
-    static ScDocument* GetDocument(ScTabViewShell* pViewShell);
-    typedef std::vector<ScMyAddress> VEC_MYADDR;
-
     typedef std::map<ScMyAddress,css::uno::Reference< css::accessibility::XAccessible > >
         MAP_ADDR_XACC;
     MAP_ADDR_XACC m_mapSelectionSend;
-    void RemoveSelection(const ScMarkData &refScMarkData);
-    void CommitFocusCell(const ScAddress &aNewCell);
-public:
-    void FireFirstCellFocus();
-private:
     bool          m_bFormulaMode;
     bool          m_bFormulaLastMode;
     ScAddress     m_aFormulaActiveCell;
@@ -252,16 +268,6 @@ private:
     sal_uInt16    m_nMaxX;
     sal_Int32     m_nMinY;
     sal_Int32     m_nMaxY;
-
-    sal_Int32 GetRowAll() const { return m_nMaxY - m_nMinY + 1 ; }
-    sal_uInt16  GetColAll() const { return m_nMaxX - m_nMinX + 1; }
-    void NotifyRefMode();
-    void RemoveFormulaSelection(bool bRemoveAll = false);
-    bool CheckChildIndex(sal_Int32) const;
-    ScAddress GetChildIndexAddress(sal_Int32) const;
-    sal_Int32 GetAccessibleIndexFormula( sal_Int32 nRow, sal_Int32 nColumn );
-    bool GetFormulaCurrentFocusCell(ScAddress &addr);
-public:
     ScRange       m_aLastWithInMarkRange;
     OUString      m_strCurCellValue;
     ScRangeList   m_LastMarkedRanges;
@@ -271,13 +277,6 @@ public:
     typedef std::vector<PAIR_COL> VEC_COL;
     VEC_COL       m_vecTempCol;
     OUString      m_strOldTabName;
-
-    css::uno::Reference < css::accessibility::XAccessible > GetActiveCell();
-    bool IsScAddrFormulaSel (const ScAddress &addr) const;
-    bool IsFormulaMode();
-    ScMyAddress CalcScAddressFromRangeList(ScRangeList *pMarkedRanges,sal_Int32 nSelectedChildIndex);
-    static bool CalcScRangeDifferenceMax(const ScRange & rSrc, const ScRange & rDest,int nMax,VEC_MYADDR &vecRet,int &nSize);
-    static bool CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet);
 };
 
 #endif
