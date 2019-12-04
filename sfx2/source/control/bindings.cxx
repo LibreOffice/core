@@ -30,6 +30,7 @@
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/timer.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

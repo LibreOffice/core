@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
+#include <vcl/windowstate.hxx>
 
 #include <recfloat.hxx>
 #include <sfx2/strings.hrc>

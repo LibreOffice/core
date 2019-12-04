@@ -48,7 +48,6 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
     using namespace ::dbtools;
-    using namespace ::svt;
 
     ISaveValueWrapper::~ISaveValueWrapper()
     {

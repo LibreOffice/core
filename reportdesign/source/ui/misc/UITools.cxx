@@ -29,10 +29,11 @@
 
 #include <tools/diagnose_ex.h>
 
+#include <vcl/settings.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
-#include <vcl/settings.hxx>
 
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

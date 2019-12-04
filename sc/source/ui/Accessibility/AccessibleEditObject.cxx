@@ -39,6 +39,7 @@
 #include <editeng/editeng.hxx>
 #include <svx/svdmodel.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <sfx2/objsh.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
