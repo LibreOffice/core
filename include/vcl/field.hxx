@@ -183,8 +183,6 @@ protected:
     virtual sal_Int64       GetValueFromString(const OUString& rStr) const;
 
 private:
-    SAL_DLLPRIVATE void     ImplInit();
-
     sal_uInt16              mnDecimalDigits;
     bool                    mbThousandSep;
     bool                    mbShowTrailingZeros;

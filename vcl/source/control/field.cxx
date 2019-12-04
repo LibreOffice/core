@@ -535,32 +535,25 @@ void NumericFormatter::ImplNumericReformat()
     FormatValue();
 }
 
-void NumericFormatter::ImplInit()
-{
-    mnFieldValue        = 0;
-    mnLastValue         = 0;
-    mnMin               = 0;
-    mnMax               = SAL_MAX_INT32;
-        // a "large" value substantially smaller than SAL_MAX_INT64, to avoid
-        // overflow in computations using this "dummy" value
-    mnDecimalDigits     = 2;
-    mbThousandSep       = true;
-    mbShowTrailingZeros = true;
-    mbWrapOnLimits      = false;
-    mbFormatting       = false;
-
-    // for fields
-    mnSpinSize          = 1;
-    mnFirst             = mnMin;
-    mnLast              = mnMax;
-
-    SetDecimalDigits( 0 );
-}
-
 NumericFormatter::NumericFormatter(Edit* pEdit)
     : FormatterBase(pEdit)
+    , mnFieldValue(0)
+    , mnLastValue(0)
+    , mnMin(0)
+    // a "large" value substantially smaller than SAL_MAX_INT64, to avoid
+    // overflow in computations using this "dummy" value
+    , mnMax(SAL_MAX_INT32)
+    , mbWrapOnLimits(false)
+    , mbFormatting(false)
+    , mnSpinSize(1)
+    // for fields
+    , mnFirst(mnMin)
+    , mnLast(mnMax)
+    , mnDecimalDigits(2)
+    , mbThousandSep(true)
+    , mbShowTrailingZeros(true)
 {
-    ImplInit();
+    SetDecimalDigits( 0 );
 }
 
 NumericFormatter::~NumericFormatter()
