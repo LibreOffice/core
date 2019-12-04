@@ -44,6 +44,7 @@
 #include <dbui.hrc>
 #include <strings.hrc>
 #include <unomid.h>
+#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
