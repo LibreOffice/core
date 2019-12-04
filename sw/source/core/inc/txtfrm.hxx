@@ -219,6 +219,8 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     bool mbFootnote           : 1;        // Has at least one footnote
     bool mbRepaint       : 1;        // TextFrame: Repaint is ready to be fetched
     bool mbHasBlinkPortions      : 1;        // Contains Blink Portions
+    /// Contains rotated portions.
+    bool mbHasRotatedPortions;
     bool mbFieldFollow   : 1;        // Start with Field rest of the Master
     bool mbHasAnimation  : 1;        // Contains animated SwGrfNumPortion
     bool mbIsSwapped     : 1;        // during text formatting we swap the
@@ -517,6 +519,8 @@ public:
     inline void SetBlinkPor() const;
     inline void ResetBlinkPor() const;
     bool HasBlinkPor() const { return mbHasBlinkPortions; }
+    void SetHasRotatedPortions(bool bHasRotatedPortions);
+    bool GetHasRotatedPortions() const { return mbHasRotatedPortions; }
     void SetAnimation() const
         { const_cast<SwTextFrame*>(this)->mbHasAnimation = true; }
     bool HasAnimation() const { return mbHasAnimation; }
