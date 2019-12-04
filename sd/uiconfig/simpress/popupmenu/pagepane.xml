@@ -56,7 +56,7 @@
       <menu:menuitem menu:id=".uno:MoveSlideDown"/>
       <menu:menuitem menu:id=".uno:MoveSlideLast"/>
     </menu:menupopup>
+  </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:SlideSetup"/>
-  </menu:menu>
 </menu:menupopup>
