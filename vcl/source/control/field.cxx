@@ -1401,16 +1401,11 @@ void MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, 
     rOutStr = CreateFieldText( static_cast<sal_Int64>(nTempVal) );
 }
 
-inline void MetricFormatter::ImplInit()
-{
-    mnBaseValue = 0;
-    meUnit = FieldUnit::NONE;
-}
-
 MetricFormatter::MetricFormatter(Edit* pEdit)
     : NumericFormatter(pEdit)
+    , mnBaseValue(0)
+    , meUnit(FieldUnit::NONE)
 {
-    ImplInit();
 }
 
 MetricFormatter::~MetricFormatter()
