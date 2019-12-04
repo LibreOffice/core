@@ -19,6 +19,7 @@
 #include <oox/crypto/AgileEngine.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
+#include <oox/crypto/CryptTools.hxx>
 
 using namespace css;
 
@@ -66,7 +67,7 @@ void CryptoTest::testCryptoHash()
                                     aContentString.getStr() + aContentString.getLength());
     std::vector<sal_uInt8> aKey = { 'k', 'e', 'y' };
     {
-        oox::core::CryptoHash aCryptoHash(aKey, oox::core::CryptoHashType::SHA1);
+        oox::crypto::CryptoHash aCryptoHash(aKey, oox::crypto::CryptoHashType::SHA1);
         aCryptoHash.update(aContent);
         std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
         CPPUNIT_ASSERT_EQUAL(std::string("de7c9b85b8b78aa6bc8a7a36f70a90701c9db4d9"),
@@ -74,7 +75,7 @@ void CryptoTest::testCryptoHash()
     }
 
     {
-        oox::core::CryptoHash aCryptoHash(aKey, oox::core::CryptoHashType::SHA256);
+        oox::crypto::CryptoHash aCryptoHash(aKey, oox::crypto::CryptoHashType::SHA256);
         aCryptoHash.update(aContent);
         std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
         CPPUNIT_ASSERT_EQUAL(
@@ -83,7 +84,7 @@ void CryptoTest::testCryptoHash()
     }
 
     {
-        oox::core::CryptoHash aCryptoHash(aKey, oox::core::CryptoHashType::SHA512);
+        oox::crypto::CryptoHash aCryptoHash(aKey, oox::crypto::CryptoHashType::SHA512);
         aCryptoHash.update(aContent);
         std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
         CPPUNIT_ASSERT_EQUAL(
