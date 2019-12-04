@@ -32,7 +32,7 @@ namespace drawinglayer
     {
         /** ContourExtractor2D class
 
-            A processor who extracts the contour of the primtives feeded to it
+            A processor who extracts the contour of the primitives fed to it
             in the single local PolyPolygon
          */
         class DRAWINGLAYER_DLLPUBLIC ContourExtractor2D final : public BaseProcessor2D
