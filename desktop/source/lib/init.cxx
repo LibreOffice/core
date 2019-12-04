@@ -4634,28 +4634,14 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis
     SfxLokHelper::destroyView(nId);
 }
 
-static void doc_setView(LibreOfficeKitDocument* pThis, int nId)
+static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
 {
     comphelper::ProfileZone aZone("doc_setView");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nId);
-    if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
-        handlerIt->second->disableCallbacks();
-
-    try
-    {
-        SfxLokHelper::setView(nId);
-    }
-    catch (const std::exception&)
-    {
-    }
-
-    if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
-        handlerIt->second->enableCallbacks();
+    SfxLokHelper::setView(nId);
 }
 
 static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
