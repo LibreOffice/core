@@ -510,11 +510,18 @@ void PDFOutDev::writeFontFile( GfxFont* gfxFont ) const
     gfree(pBuf);
 }
 
+#if POPPLER_CHECK_VERSION(0, 83, 0)
+void PDFOutDev::printPath( const GfxPath* pPath )
+#else
 void PDFOutDev::printPath( GfxPath* pPath )
+#endif
 {
     int nSubPaths = pPath ? pPath->getNumSubpaths() : 0;
     for( int i=0; i<nSubPaths; i++ )
     {
+#if POPPLER_CHECK_VERSION(0, 83, 0)
+        const
+#endif
         GfxSubpath* pSub  = pPath->getSubpath( i );
         const int nPoints = pSub->getNumPoints();
 
