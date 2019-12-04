@@ -309,7 +309,7 @@ ErrCode XMLFilter::impl_Import(
                     "com.sun.star.comp.Svx.GraphicImportHelper", aArgs), uno::UNO_QUERY);
         }
 
-        // create XPropertySet with extra informatio for the filter
+        // create XPropertySet with extra information for the filter
         /** property map for import info set */
         comphelper::PropertyMapEntry const aImportInfoMap[] =
         {
