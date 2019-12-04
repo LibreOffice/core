@@ -128,7 +128,7 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
     static const char decodingTable[] =
         {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
     sal_Int32 lenData = data.getLength();
-    sal_Int32 lenBuf = lenData / 2; //always divisable by two
+    sal_Int32 lenBuf = lenData / 2; //always divisible by two
     std::unique_ptr<unsigned char[]> pBuf(new unsigned char[lenBuf]);
     const sal_Int8* pData = data.getConstArray();
     for (sal_Int32 i = 0; i < lenBuf; i++)
