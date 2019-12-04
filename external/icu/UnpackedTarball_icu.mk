@@ -39,6 +39,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/char8_t.patch \
 	external/icu/c++20-comparison.patch \
 	external/icu/ubsan.patch \
+	external/icu/Wdeprecated-copy-dtor.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
