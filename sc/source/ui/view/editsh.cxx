@@ -33,6 +33,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <svx/hlnkitem.hxx>
 #include <vcl/EnumContext.hxx>
 #include <editeng/postitem.hxx>
@@ -646,15 +647,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         break;
         case SID_REMOVE_HYPERLINK:
             {
-                // Ensure the field is selected first
-                pEditView->SelectFieldAtCursor();
-                const SvxURLField* pURLField = GetURLField();
-                if (pURLField)
-                {
-                    ESelection aSel = pEditView->GetSelection();
-                    pEditView->GetEditEngine()->QuickInsertText(pURLField->GetRepresentation(), aSel);
-                }
-
+                URLFieldHelper::RemoveURLField(*pEditView);
             }
         break;
 
@@ -786,8 +779,8 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_COPY_HYPERLINK_LOCATION:
             case SID_REMOVE_HYPERLINK:
                 {
-                    if ( !GetURLField() )
-                        rSet.DisableItem( nWhich );
+                    if (!URLFieldHelper::IsCursorAtURLField(*pEditView))
+                        rSet.DisableItem (nWhich);
                 }
                 break;
 
