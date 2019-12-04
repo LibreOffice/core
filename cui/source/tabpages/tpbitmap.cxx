@@ -37,6 +37,7 @@
 #include <svx/dlgutil.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/opengrf.hxx>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdlg.hxx>
