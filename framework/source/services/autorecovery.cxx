@@ -188,7 +188,7 @@ enum class DocState: sal_Int32
 
 }
 
-template<> struct o3tl::typed_flags<DocState>: o3tl::is_typed_flags<DocState, 1023 - 256> {};
+template<> struct o3tl::typed_flags<DocState>: o3tl::is_typed_flags<DocState, 0x2FF> {};
 
 namespace {
 
