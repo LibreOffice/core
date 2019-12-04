@@ -48,6 +48,7 @@
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/meminfo.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -767,8 +768,10 @@ bool ZipPackageStream::saveChild(
                 // gives the full size, XInputStream's available() may not be
                 // the full size, but it appears that at this point it usually is.
                 sal_Int64 estimatedSize = xSeek.is() ? xSeek->getLength() : xStream->available();
+                sal_Int64 availableMemory = comphelper::getAvailablePhysicalMemory();
+                bool sysOnLowMemory = (availableMemory > 0) && (availableMemory < 800000000l);
 
-                if (estimatedSize > 1000000)
+                if (estimatedSize > 1000000 && !sysOnLowMemory)
                 {
                     // Use ThreadDeflater which will split the stream into blocks and compress
                     // them in threads, but not in background (i.e. writeStream() will block).

@@ -1,0 +1,52 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <comphelper/meminfo.hxx>
+
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#elif defined UNX && !defined MACOSX
+#include <unistd.h>
+#endif
+
+namespace comphelper
+{
+sal_Int64 getAvailablePhysicalMemory()
+{
+    sal_Int64 nPhyMemAvail = -1;
+
+#if defined UNX && !defined MACOSX
+    sal_Int64 nPages = sysconf(_SC_AVPHYS_PAGES);
+    sal_Int64 nPageSize = sysconf(_SC_PAGESIZE);
+    if (nPages > 0 && nPageSize > 0)
+        nPhyMemAvail = nPages * nPageSize;
+#elif defined(_WIN32)
+    MEMORYSTATUSEX statex;
+    statex.dwLength = sizeof(statex);
+    GlobalMemoryStatusEx(&statex);
+    nPhyMemAvail = statex.ullAvailPhys;
+#endif
+
+    return nPhyMemAvail;
+}
+
+} // namespace comphelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
