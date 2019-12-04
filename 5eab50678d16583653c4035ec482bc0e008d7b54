@@ -16,6 +16,24 @@
       "revId": "5eab50678d16583653c4035ec482bc0e008d7b54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_0044111a",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6841,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-12-04T10:46:19Z",
+      "side": 1,
+      "message": "I\u0027ll look at DOC again - but it seemed to be working OK already. RTF subscripts were a disaster right from the start, so I have been ignoring that (other than to try to not make it worse...)\n\nIf I remember correctly, DOC imports fine - probably because the binary format always provides a fontsize value? DOCX doesn\u0027t necessarily provide that which complicates things.\n\nSo I believe that at this point only DOCX forces default ESC/PROP on charstyle import, so only the DOCX export needs to do the same.",
+      "parentUuid": "7f7f9b97_c0961994",
+      "revId": "5eab50678d16583653c4035ec482bc0e008d7b54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
