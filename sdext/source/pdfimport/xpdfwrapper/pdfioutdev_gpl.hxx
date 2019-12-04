@@ -149,7 +149,7 @@ namespace pdfi
 
         int  parseFont( long long nNewId, GfxFont* pFont, GfxState* state ) const;
         void writeFontFile( GfxFont* gfxFont ) const;
-        static void printPath( GfxPath* pPath );
+        static void printPath( const GfxPath* pPath );
 
     public:
         explicit PDFOutDev( PDFDoc* pDoc );
