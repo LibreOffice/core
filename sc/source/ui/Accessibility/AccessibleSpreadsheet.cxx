@@ -123,7 +123,8 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
     return ScMyAddress(0,0,maActiveCell.Tab());
 }
 
-bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange & rSrc, const ScRange & rDest, int nMax, VEC_MYADDR &vecRet, int &nSize)
+bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange & rSrc, const ScRange & rDest, int nMax,
+                                std::vector<ScMyAddress> &vecRet, int &nSize)
 {
     //Src Must be :Src > Dest
     if (rDest.In(rSrc))
@@ -189,7 +190,8 @@ bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange & rSrc, con
 }
 
 //In Src , Not in Dest
-bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet)
+bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc, ScRangeList *pDest,
+                                int nMax, std::vector<ScMyAddress> &vecRet)
 {
     if (pSrc == nullptr || pDest == nullptr)
     {
@@ -607,7 +609,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         {
                             CommitFocusCell(aNewCell);
                         }
-                        VEC_MYADDR vecNew;
+                        std::vector<ScMyAddress> vecNew;
                         if(CalcScRangeListDifferenceMax(mpMarkedRanges.get(), &m_LastMarkedRanges,10,vecNew))
                         {
                             aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
@@ -1509,7 +1511,7 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
         }
         else
         {
-            VEC_MYADDR vecCurSel;
+            std::vector<ScMyAddress> vecCurSel;
             int nCurSize =  (m_nMaxX - m_nMinX +1)*(m_nMaxY - m_nMinY +1) ;
             vecCurSel.reserve(nCurSize);
             for (sal_uInt16 x = m_nMinX ; x <= m_nMaxX ; ++x)
@@ -1521,10 +1523,10 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
                 }
             }
             std::sort(vecCurSel.begin(), vecCurSel.end());
-            VEC_MYADDR vecNew;
+            std::vector<ScMyAddress> vecNew;
             std::set_difference(vecCurSel.begin(),vecCurSel.end(),
                 m_vecFormulaLastMyAddr.begin(),m_vecFormulaLastMyAddr.end(),
-                std::back_insert_iterator<VEC_MYADDR>(vecNew));
+                std::back_insert_iterator(vecNew));
             int nNewSize = vecNew.size();
             if ( nNewSize > 10 )
             {
