@@ -31,6 +31,22 @@ GrContext* getSharedGrContext();
 
 void disableRenderMethod(RenderMethod method);
 
+// Create SkSurface, GPU-backed if possible.
+VCL_DLLPUBLIC sk_sp<SkSurface> createSkSurface(int width, int height,
+                                               SkColorType type = kN32_SkColorType);
+
+inline sk_sp<SkSurface> createSkSurface(const Size& size, SkColorType type = kN32_SkColorType)
+{
+    return createSkSurface(size.Width(), size.Height(), type);
+}
+
+#ifdef DBG_UTIL
+void prefillSurface(sk_sp<SkSurface>& surface);
+void dump(const SkBitmap& bitmap, const char* file);
+void dump(const sk_sp<SkImage>& image, const char* file);
+void dump(const sk_sp<SkSurface>& surface, const char* file);
+#endif
+
 } // namespace
 
 #endif // INCLUDED_VCL_INC_SKIA_UTILS_H
