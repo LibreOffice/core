@@ -521,6 +521,7 @@ private:
     void InitScrollBars(const Size &rRequest);
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
     bool m_bUserManagedScrolling;
+    DrawFrameStyle m_eDrawFrameStyle;
     VclPtr<ScrollBar> m_pVScroll;
     VclPtr<ScrollBar> m_pHScroll;
     VclPtr<ScrollBarBox> m_aScrollBarBox;

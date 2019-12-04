@@ -326,6 +326,17 @@ namespace vcl
     };
 }
 
+enum class DrawFrameStyle
+{
+    NONE                     = 0x0000,
+    In                       = 0x0001,
+    Out                      = 0x0002,
+    Group                    = 0x0003,
+    DoubleIn                 = 0x0004,
+    DoubleOut                = 0x0005,
+    NWF                      = 0x0006,
+};
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
