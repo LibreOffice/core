@@ -435,7 +435,7 @@ SfxDockingWindow_Impl::SfxDockingWindow_Impl(SfxDockingWindow* pBase)
 
     This virtual method of the class FloatingWindow keeps track of changes in
     FloatingSize. If this method is overridden by a derived class,
-    then the SfxFloatingWindow: Resize() must also be called.
+    then the FloatingWindow: Resize() must also be called.
 */
 void SfxDockingWindow::Resize()
 {

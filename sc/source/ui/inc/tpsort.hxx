@@ -23,9 +23,10 @@
 #include <vector>
 
 #include <sfx2/tabdlg.hxx>
+#include <svtools/collatorres.hxx>
 #include <svx/langbox.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <svtools/collatorres.hxx>
+#include <vcl/idle.hxx>
 
 #include "sortkeydlg.hxx"
 

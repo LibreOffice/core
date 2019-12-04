@@ -32,6 +32,7 @@
 #include <svl/intitem.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
+#include <vcl/image.hxx>
 
 #define IID_BOTTOMLOCK 1
 #define IID_TOPLOCK    2
