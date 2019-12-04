@@ -79,6 +79,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeSetRenderingOrigin: return "EmfPlusRecordTypeSetRenderingOrigin";
             case EmfPlusRecordTypeSetAntiAliasMode: return "EmfPlusRecordTypeSetAntiAliasMode";
             case EmfPlusRecordTypeSetTextRenderingHint: return "EmfPlusRecordTypeSetTextRenderingHint";
+            case EmfPlusRecordTypeSetTextContrast: return "EmfPlusRectordTypeSetTextContrast";
             case EmfPlusRecordTypeSetInterpolationMode: return "EmfPlusRecordTypeSetInterpolationMode";
             case EmfPlusRecordTypeSetPixelOffsetMode: return "EmfPlusRecordTypeSetPixelOffsetMode";
             case EmfPlusRecordTypeSetCompositingQuality: return "EmfPlusRecordTypeSetCompositingQuality";
@@ -139,6 +140,22 @@ namespace emfplushelper
             case TextRenderingHint::TextRenderingHintAntialiasGridFit: return "TextRenderingHintAntialiasGridFit";
             case TextRenderingHint::TextRenderingHintAntialias: return "TextRenderingHintAntialias";
             case TextRenderingHint::TextRenderingHintClearTypeGridFit: return "TextRenderingHintClearTypeGridFit";
+        }
+        return "";
+    }
+
+    static OUString InterpolationModeToString(sal_uInt16 nMode)
+    {
+        switch (nMode)
+        {
+            case InterpolationMode::InterpolationModeDefault: return "InterpolationModeDefault";
+            case InterpolationMode::InterpolationModeLowQuality: return "InterpolationModeLowQuality";
+            case InterpolationMode::InterpolationModeHighQuality: return "InterpolationModeHighQuality";
+            case InterpolationMode::InterpolationModeBilinear: return "InterpolationModeBilinear";
+            case InterpolationMode::InterpolationModeBicubic: return "InterpolationModeBicubic";
+            case InterpolationMode::InterpolationModeNearestNeighbor: return "InterpolationModeNearestNeighbor";
+            case InterpolationMode::InterpolationModeHighQualityBilinear: return "InterpolationModeHighQualityBilinear";
+            case InterpolationMode::InterpolationModeHighQualityBicubic: return "InterpolationModeHighQualityBicubic";
         }
         return "";
     }
@@ -1592,6 +1609,8 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSetInterpolationMode:
                     {
+                        sal_uInt16 nInterpolationMode = flags & 0xFF;
+                        SAL_INFO("drawinglayer", "EMF+\t Interpolation mode: " << InterpolationModeToString(nInterpolationMode));
                         SAL_INFO("drawinglayer", "TODO\t EMF+ InterpolationMode");
                         break;
                     }
