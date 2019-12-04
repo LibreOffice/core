@@ -20,6 +20,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/lang.h>

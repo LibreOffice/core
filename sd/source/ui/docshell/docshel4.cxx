@@ -43,6 +43,7 @@
 #include <comphelper/classids.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/syswin.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 
