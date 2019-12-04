@@ -197,7 +197,8 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
         mxStatusIndicator->start( OUString(), 100 );
     }
 
-    Bitmap aGraphicBmp( rGraphic.GetBitmapEx().GetBitmap() );
+    Color replaceColor = COL_WHITE;
+    Bitmap aGraphicBmp( rGraphic.GetBitmapEx().GetBitmap(&replaceColor) );
 
     if ( mbGreys )
     {
