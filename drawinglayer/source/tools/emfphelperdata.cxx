@@ -38,6 +38,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/color/bcolormodifier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -46,6 +47,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
+
+#include <algorithm>
 
 namespace emfplushelper
 {
@@ -77,7 +80,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeSetRenderingOrigin: return "EmfPlusRecordTypeSetRenderingOrigin";
             case EmfPlusRecordTypeSetAntiAliasMode: return "EmfPlusRecordTypeSetAntiAliasMode";
             case EmfPlusRecordTypeSetTextRenderingHint: return "EmfPlusRecordTypeSetTextRenderingHint";
-            case EmfPlusRecordTypeSetTextContrast: return "EmfPlusRectordTypeSetTextContrast";
+            case EmfPlusRecordTypeSetTextContrast: return "EmfPlusRecordTypeSetTextContrast";
             case EmfPlusRecordTypeSetInterpolationMode: return "EmfPlusRecordTypeSetInterpolationMode";
             case EmfPlusRecordTypeSetPixelOffsetMode: return "EmfPlusRecordTypeSetPixelOffsetMode";
             case EmfPlusRecordTypeSetCompositingQuality: return "EmfPlusRecordTypeSetCompositingQuality";
@@ -881,6 +884,7 @@ namespace emfplushelper
         mnOriginY(0),
         mnHDPI(0),
         mnVDPI(0),
+        mnTextContrast(1000),
         mnFrameLeft(0),
         mnFrameTop(0),
         mnFrameRight(0),
@@ -1519,7 +1523,10 @@ namespace emfplushelper
                                         ::basegfx::B2DSize(font->emSize, font->emSize),
                                         ::basegfx::B2DPoint(lx + stringAlignmentHorizontalOffset, ly + font->emSize));
 
-                            const Color color = EMFPGetBrushColorOrARGBColor(flags, brushId);
+                            const Color uncorrectedColor = EMFPGetBrushColorOrARGBColor(flags, brushId);
+                            const basegfx::BColorModifier_gamma gamma(mnTextContrast / 1000);
+                            const Color color(gamma.getModifiedColor(uncorrectedColor.getBColor()));
+
                             mrPropertyHolders.Current().setTextColor(color.getBColor());
                             mrPropertyHolders.Current().setTextColorActive(true);
 
@@ -1602,11 +1609,24 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ SetRenderingOrigin, [x,y]: " << mnOriginX << "," << mnOriginY);
                         break;
                     }
+                    case EmfPlusRecordTypeSetTextContrast:
+                    {
+                        const sal_uInt16 LOWERGAMMA = 1000;
+                        const sal_uInt16 UPPERGAMMA = 2200;
+
+                        mnTextContrast = flags & 0xFFF;
+                        SAL_WARN_IF(mnTextContrast > UPPERGAMMA || mnTextContrast < LOWERGAMMA,
+                            "drawinglayer", "Gamma value is not with bounds 1000 to 2200, value is " << mnTextContrast);
+                        mnTextContrast = std::min(mnTextContrast, UPPERGAMMA);
+                        mnTextContrast = std::max(mnTextContrast, LOWERGAMMA);
+                        SAL_INFO("drawinglayer", "EMF+\t Text contrast: " << (mnTextContrast / 1000) << " gamma");
+                        break;
+                    }
                     case EmfPlusRecordTypeSetTextRenderingHint:
                     {
                         sal_uInt8 nTextRenderingHint = (flags & 0xFF) >> 1;
                         SAL_INFO("drawinglayer", "EMF+\t Text rendering hint: " << TextRenderingHintToString(nTextRenderingHint));
-                        SAL_INFO("drawinglayer", "TODO\t EMF+ SetTextRenderingHint");
+                        SAL_WARN("drawinglayer", "TODO\t EMF+ SetTextRenderingHint");
                         break;
                     }
                     case EmfPlusRecordTypeSetAntiAliasMode:
@@ -1615,14 +1635,14 @@ namespace emfplushelper
                         sal_uInt8 nSmoothingMode = (flags & 0xFE00) >> 1;
                         SAL_INFO("drawinglayer", "EMF+\t Antialiasing: " << (bUseAntiAlias ? "enabled" : "disabled"));
                         SAL_INFO("drawinglayer", "EMF+\t Smoothing mode: " << SmoothingModeToString(nSmoothingMode));
-                        SAL_INFO("drawinglayer", "TODO\t EMF+ SetAntiAliasMode");
+                        SAL_WARN("drawinglayer", "TODO\t EMF+ SetAntiAliasMode");
                         break;
                     }
                     case EmfPlusRecordTypeSetInterpolationMode:
                     {
                         sal_uInt16 nInterpolationMode = flags & 0xFF;
                         SAL_INFO("drawinglayer", "EMF+\t Interpolation mode: " << InterpolationModeToString(nInterpolationMode));
-                        SAL_INFO("drawinglayer", "TODO\t EMF+ InterpolationMode");
+                        SAL_WARN("drawinglayer", "TODO\t EMF+ InterpolationMode");
                         break;
                     }
                     case EmfPlusRecordTypeSetPixelOffsetMode:
