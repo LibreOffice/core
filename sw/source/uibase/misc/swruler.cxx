@@ -281,6 +281,18 @@ std::string SwCommentRuler::CreateJsonNotification()
     // GetPageWidth() on the other hand does return a value in twips.
     jsonNotif.put("pageWidth", convertTwipToMm100(GetPageWidth()));
 
+    boost::property_tree::ptree tabs;
+
+    for (auto const& tab : GetTabs())
+    {
+        boost::property_tree::ptree element;
+        element.put("position", tab.nPos);
+        element.put("style", tab.nStyle);
+        tabs.push_back(std::make_pair("", element));
+    }
+
+    jsonNotif.add_child("tabs", tabs);
+
     RulerUnitData aUnitData = GetCurrentRulerUnit();
     jsonNotif.put("unit", aUnitData.aUnitStr);
 
