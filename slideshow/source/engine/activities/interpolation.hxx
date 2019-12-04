@@ -146,7 +146,7 @@ namespace slideshow
         {
             // until one half of the total frames are over, take from value.
             // after that, take to value.
-            // For nFrames not divisable by 2, we prefer to over from, which
+            // For nFrames not divisible by 2, we prefer to over from, which
             // also neatly yields to for 1 frame activities
             return nFrame < nTotalFrames/2 ? rFrom : rTo;
         }
@@ -160,7 +160,7 @@ namespace slideshow
         {
             // until one half of the total frames are over, take from value.
             // after that, take to value.
-            // For nFrames not divisable by 2, we prefer to over from, which
+            // For nFrames not divisible by 2, we prefer to over from, which
             // also neatly yields to for 1 frame activities
             return nFrame < nTotalFrames/2 ? rFrom : rTo;
         }
@@ -174,7 +174,7 @@ namespace slideshow
         {
             // until one half of the total frames are over, take from value.
             // after that, take to value.
-            // For nFrames not divisable by 2, we prefer to over from, which
+            // For nFrames not divisible by 2, we prefer to over from, which
             // also neatly yields to for 1 frame activities
             return nFrame < nTotalFrames/2 ? bFrom : bTo;
         }
