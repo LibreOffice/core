@@ -72,7 +72,7 @@
 #include "pq_tools.hxx"
 
 #include <rtl/ustrbuf.hxx>
-
+#include <sal/macros.h>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
@@ -97,13 +97,10 @@ using com::sun::star::uno::UNO_QUERY_THROW;
 
 namespace pq_sdbc_driver
 {
-#define QUOTEME(X)  #X
-#define STRINGIFY(X) QUOTEME(X)
-
 // These are pre-processor versions of KeyRule.idl declarations
 // These are inherited from JDBC, and thus won't change anytime soon.
 // Having them as pre-processor definitions allows to include them
-// into compile-time strings (through STRINGIFY), which can be passed to ASCII_STR.
+// into compile-time strings (through SAL_STRINGIFY), which can be passed to ASCII_STR.
 // That is without resorting to horrendous hacks in template meta-programming.
 #define KEYRULE_CASCADE      0
 #define KEYRULE_RESTRICT     1
@@ -1811,11 +1808,11 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
 }
 
 // Copied / adapted / simplified from JDBC driver
-#define SQL_CASE_KEYRULE "  WHEN 'c' THEN " STRINGIFY(KEYRULE_CASCADE) \
-                         "  WHEN 'n' THEN " STRINGIFY(KEYRULE_SET_NULL) \
-                         "  WHEN 'd' THEN " STRINGIFY(KEYRULE_SET_DEFAULT) \
-                         "  WHEN 'r' THEN " STRINGIFY(KEYRULE_RESTRICT) \
-                         "  WHEN 'a' THEN " STRINGIFY(KEYRULE_NO_ACTION) \
+#define SQL_CASE_KEYRULE "  WHEN 'c' THEN " SAL_STRINGIFY(KEYRULE_CASCADE) \
+                         "  WHEN 'n' THEN " SAL_STRINGIFY(KEYRULE_SET_NULL) \
+                         "  WHEN 'd' THEN " SAL_STRINGIFY(KEYRULE_SET_DEFAULT) \
+                         "  WHEN 'r' THEN " SAL_STRINGIFY(KEYRULE_RESTRICT) \
+                         "  WHEN 'a' THEN " SAL_STRINGIFY(KEYRULE_NO_ACTION) \
                          "  ELSE NULL "
 
 #define SQL_GET_REFERENCES \
@@ -1831,9 +1828,9 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
     " END AS DELETE_RULE, " \
     " con.conname AS FK_NAME, pkic.relname AS PK_NAME, " \
     " CASE " \
-    "  WHEN con.condeferrable AND con.condeferred THEN " STRINGIFY(DEFERRABILITY_INITIALLY_DEFERRED) \
-    "  WHEN con.condeferrable THEN " STRINGIFY(DEFERRABILITY_INITIALLY_IMMEDIATE) \
-    "  ELSE " STRINGIFY(DEFERRABILITY_NONE) \
+    "  WHEN con.condeferrable AND con.condeferred THEN " SAL_STRINGIFY(DEFERRABILITY_INITIALLY_DEFERRED) \
+    "  WHEN con.condeferrable THEN " SAL_STRINGIFY(DEFERRABILITY_INITIALLY_IMMEDIATE) \
+    "  ELSE " SAL_STRINGIFY(DEFERRABILITY_NONE) \
     " END AS DEFERRABILITY " \
     "FROM " \
     " pg_catalog.pg_namespace pkn, pg_catalog.pg_class pkc, pg_catalog.pg_attribute pka, " \
