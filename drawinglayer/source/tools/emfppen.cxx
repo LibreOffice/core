@@ -104,9 +104,11 @@ namespace emfplushelper
         sal_uInt32 graphicsVersion, penType;
         int i;
         s.ReadUInt32(graphicsVersion).ReadUInt32(penType).ReadUInt32(penDataFlags).ReadUInt32(penUnit).ReadFloat(penWidth);
-        SAL_INFO("drawinglayer", "EMF+\tpen");
-        SAL_INFO("drawinglayer", "EMF+\t graphics version: 0x" << std::hex << graphicsVersion << " type (must be set to zero): " << penType <<
-            " pen data flags: 0x" << penDataFlags << " unit: " << penUnit << " width: " << std::dec << penWidth);
+        SAL_INFO("drawinglayer", "EMF+\t\tGraphics version: 0x" << std::hex << graphicsVersion);
+        SAL_INFO("drawinglayer", "EMF+\t\tType: " << penType);
+        SAL_INFO("drawinglayer", "EMF+\t\tPen data flags: 0x" << penDataFlags);
+        SAL_INFO("drawinglayer", "EMF+\t\tUnit: " << penUnit);
+        SAL_INFO("drawinglayer", "EMF+\t\tWidth: " << std::dec << penWidth);
 
         penWidth = penWidth * EmfPlusHelperData::getUnitToPixelMultiplier(static_cast<UnitType>(penUnit));
 
@@ -199,7 +201,7 @@ namespace emfplushelper
             sal_Int32 dashPatternLen;
 
             s.ReadInt32(dashPatternLen);
-            SAL_INFO("drawinglayer", "EMF+\t\tdashPatternLen: " << dashPatternLen);
+            SAL_INFO("drawinglayer", "EMF+\t\t\tdashPatternLen: " << dashPatternLen);
 
             if (dashPatternLen<0 || sal_uInt32(dashPatternLen)>SAL_MAX_INT32 / sizeof(float))
             {
@@ -211,7 +213,7 @@ namespace emfplushelper
             for (i = 0; i < dashPatternLen; i++)
             {
                 s.ReadFloat(dashPattern[i]);
-                SAL_INFO("drawinglayer", "EMF+\t\t\tdashPattern[" << i << "]: " << dashPattern[i]);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tdashPattern[" << i << "]: " << dashPattern[i]);
             }
         }
 
@@ -247,7 +249,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataCustomStartCap)
         {
             s.ReadInt32(customStartCapLen);
-            SAL_INFO("drawinglayer", "EMF+\t\tcustomStartCapLen: " << customStartCapLen);
+            SAL_INFO("drawinglayer", "EMF+\t\t\tcustomStartCapLen: " << customStartCapLen);
             sal_uInt64 const pos = s.Tell();
 
             customStartCap.reset( new EMFPCustomLineCap() );
@@ -264,7 +266,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataCustomEndCap)
         {
             s.ReadInt32(customEndCapLen);
-            SAL_INFO("drawinglayer", "EMF+\t\tcustomEndCapLen: " << customEndCapLen);
+            SAL_INFO("drawinglayer", "EMF+\t\t\tcustomEndCapLen: " << customEndCapLen);
             sal_uInt64 const pos = s.Tell();
 
             customEndCap.reset( new EMFPCustomLineCap() );
