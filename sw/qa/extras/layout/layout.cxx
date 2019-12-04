@@ -2706,6 +2706,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118058)
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128611)
+{
+    createDoc("tdf128611.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 14
+    // i.e. there were multiple portions in the first paragraph of the A1 cell, which means that the
+    // rotated text was broken into multiple lines without a good reason.
+    assertXPath(pXmlDoc, "//tab/row/cell[1]/txt/Text", "Portion", "Abcd efghijkl");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117188)
 {
     createDoc("tdf117188.docx");
