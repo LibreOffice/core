@@ -24,7 +24,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <vector>
 
-    //= UI flags (for all browseable properties)
+    //= UI flags (for all browsable properties)
 enum class PropUIFlags {
     NONE          = 0x0001,  // no special flag
     Composeable   = 0x0002,  // the property is "composeable", i.e. an intersection of property
@@ -86,7 +86,7 @@ namespace rptui
     };
 
 
-    //= property ids (for all browseable properties)
+    //= property ids (for all browsable properties)
     //= The ID is used for the view order in the property browser.
 
 
