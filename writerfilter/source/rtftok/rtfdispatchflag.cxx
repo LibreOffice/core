@@ -1215,6 +1215,11 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Compat_doNotUseHTMLParagraphAutoSpacing,
                                       new RTFValue(0));
             break;
+        case RTF_DNTBLNSBDB:
+            // tdf#128428 switch off longer space sequence
+            m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_longerSpaceSequence,
+                                      new RTFValue(0));
+            break;
         default:
         {
             SAL_INFO("writerfilter", "TODO handle flag '" << keywordToString(nKeyword) << "'");
