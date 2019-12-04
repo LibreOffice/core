@@ -201,7 +201,7 @@ public:
     @descr  Determines if a given position is inside a hidden text range. The
             static version tries to obtain a valid SwScriptInfo object
             via the SwTextNode, otherwise it calculates the values from scratch.
-            The non-static version uses the internally cached informatio
+            The non-static version uses the internally cached information
             for the calculation.
 
     @param  rNode
