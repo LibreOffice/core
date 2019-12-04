@@ -531,7 +531,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         }
         else
         {
-            // set the specific graphic attrbutes to the graphic
+            // set the specific graphic attributes to the graphic
             bReturn = true;
             AutoCaption( GRAPHIC_CAP );
             rReq.Done();
