@@ -23,6 +23,8 @@
 #include <math.h>
 #include <limits.h>
 #include <vector>
+
+#include <o3tl/any.hxx>
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <tools/solar.h>
@@ -4631,11 +4633,14 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         pAny = aGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
                         if (pAny && (*pAny >>= seqCoordinates) && (seqCoordinates.getLength() >= 2))
                         {
-                            sal_Int32 nL, nT, nR, nB;
-                            seqCoordinates[0].First.Value >>= nL;
-                            seqCoordinates[0].Second.Value >>= nT;
-                            seqCoordinates[1].First.Value >>= nR;
-                            seqCoordinates[1].Second.Value >>= nB;
+                            auto const nL
+                                = *o3tl::doAccess<sal_Int32>(seqCoordinates[0].First.Value);
+                            auto const nT
+                                = *o3tl::doAccess<sal_Int32>(seqCoordinates[0].Second.Value);
+                            auto const nR
+                                = *o3tl::doAccess<sal_Int32>(seqCoordinates[1].First.Value);
+                            auto const nB
+                                = *o3tl::doAccess<sal_Int32>(seqCoordinates[1].Second.Value);
                             aEllipseRect_MS = basegfx::B2DRectangle(nL, nT, nR, nB);
                         }
 
