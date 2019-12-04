@@ -2327,7 +2327,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         eHoriOri = text::HoriOrientation::RIGHT;
         break;
     case SvxAdjust::Center:
-        // Centred tables are not considerate of margins
+        // Centered tables are not considerate of margins
         eHoriOri = text::HoriOrientation::CENTER;
         break;
     case SvxAdjust::Left:
