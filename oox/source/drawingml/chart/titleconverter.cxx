@@ -26,6 +26,9 @@
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <osl/diagnose.h>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textparagraph.hxx>
@@ -249,9 +252,50 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 
         if(eLegendPos == LegendPosition_CUSTOM && bTopRight && !bManualLayout)
             aPropSet.setProperty( PROP_RelativePosition , makeAny(eRelPos));
+        if (mrModel.maLegendEntries.size() > 0)
+            legendEntriesFormatting(rxDiagram);
     }
     catch( Exception& )
     {
+    }
+}
+
+void LegendConverter::legendEntriesFormatting(const Reference<XDiagram>& rxDiagram)
+{
+    Reference<XCoordinateSystemContainer> xCooSysContainer(rxDiagram, UNO_QUERY_THROW);
+    const Sequence<Reference<XCoordinateSystem>> xCooSysSequence(xCooSysContainer->getCoordinateSystems());
+    if (!xCooSysSequence.hasElements())
+        return;
+
+    sal_Int32 nIndex = 0;
+    for (const auto& rCooSysSequence : xCooSysSequence)
+    {
+        Reference<XChartTypeContainer> xChartTypeContainer(rCooSysSequence, UNO_QUERY_THROW);
+        const Sequence<Reference<XChartType>> xChartTypeSequence(xChartTypeContainer->getChartTypes());
+        if (!xChartTypeSequence.hasElements())
+            continue;
+
+        for (const auto& rCT : xChartTypeSequence)
+        {
+            Reference<XDataSeriesContainer> xDSCont(rCT, UNO_QUERY);
+            if (!xDSCont.is())
+                continue;
+
+            const Sequence<Reference<XDataSeries>> aDataSeriesSeq = xDSCont->getDataSeries();
+            for (const auto& rDataSeries : aDataSeriesSeq)
+            {
+                PropertySet aSeriesProp(rDataSeries);
+                for (const auto& rLegendEntry : mrModel.maLegendEntries)
+                {
+                    if (nIndex == rLegendEntry->mnLegendEntryIdx)
+                    {
+                        aSeriesProp.setProperty(PROP_ShowLegendEntry, !rLegendEntry->mbLabelDeleted);
+                        break;
+                    }
+                }
+                nIndex++;
+            }
+        }
     }
 }
 

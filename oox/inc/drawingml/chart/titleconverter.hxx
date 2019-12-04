@@ -90,6 +90,9 @@ public:
     /** Creates a legend object and attaches it at the passed diagram. */
     void                convertFromModel(
                             const css::uno::Reference< css::chart2::XDiagram >& rxDiagram );
+
+private:
+    void                legendEntriesFormatting(const css::uno::Reference<css::chart2::XDiagram>& rxDiagram);
 };
 
 
