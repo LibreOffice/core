@@ -55,27 +55,18 @@ const sal_uInt8 BIFF12_ROW_SHOWPHONETIC     = 0x01;
 
 } // namespace
 
-SheetDataContextBase::SheetDataContextBase( const WorksheetHelper& rHelper ) :
-    mrAddressConv( rHelper.getAddressConverter() ),
-    mrSheetData( rHelper.getSheetData() ),
-    mnSheet( rHelper.getSheetIndex() )
-{
-    mxFormulaParser.reset(rHelper.createFormulaParser());
-}
-
-SheetDataContextBase::~SheetDataContextBase()
-{
-}
-
 SheetDataContext::SheetDataContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment ),
-    SheetDataContextBase( rFragment ),
+    mrAddressConv( rFragment.getAddressConverter() ),
+    mrSheetData( rFragment.getSheetData() ),
+    mnSheet( rFragment.getSheetIndex() ),
     mbHasFormula( false ),
     mbValidRange( false ),
     mnRow( -1 ),
     mnCol( -1 )
 {
     SAL_INFO( "sc.filter",  "start safe sheet data context - unlock" );
+    mxFormulaParser.reset(rFragment.createFormulaParser());
 }
 
 SheetDataContext::~SheetDataContext()
