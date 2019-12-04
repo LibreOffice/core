@@ -59,10 +59,6 @@
 #include <osl/conditn.hxx>
 #include <vcl/svapp.hxx>
 
-#ifdef DEBUG
-#include <com/sun/star/io/NotConnectedException.hpp>
-#include <com/sun/star/io/BufferSizeExceededException.hpp>
-#endif
 namespace beans = com::sun::star::beans ;
 namespace container = com::sun::star::container ;
 namespace deployment = com::sun::star::deployment ;
