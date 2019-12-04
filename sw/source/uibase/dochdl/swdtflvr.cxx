@@ -1394,11 +1394,11 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                                     &nActionFlags );
     }
 
-    // tdf#37223 avoid OLE insertion of worksheets in the following cases:
+    // tdf#37223 avoid non-native insertion of Calc worksheets in the following cases:
     // content of 1-cell worksheets are inserted as simple text using RTF format,
     // bigger worksheets within native (Writer) table cells are inserted as native tables,
     // ie. cell by cell instead of embedding the worksheet in a single cell of the Writer table
-    if ( EXCHG_OUT_ACTION_INSERT_OLE == nAction && ( rData.HasFormat( SotClipboardFormatId::SYLK ) ||
+    if ( EXCHG_IN_ACTION_COPY == nAction && ( rData.HasFormat( SotClipboardFormatId::SYLK ) ||
                   rData.HasFormat( SotClipboardFormatId::SYLK_BIGCAPS ) ) )
     {
         // is it a 1-cell worksheet?
