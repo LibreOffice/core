@@ -384,6 +384,112 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
 #endif
  }
 
+namespace {
+
+// BEGIN code copied from LLVM's clang/lib/Sema/Sema.cpp
+
+/// Returns true, if all methods and nested classes of the given
+/// CXXRecordDecl are defined in this translation unit.
+///
+/// Should only be called from ActOnEndOfTranslationUnit so that all
+/// definitions are actually read.
+static bool MethodsAndNestedClassesComplete(const CXXRecordDecl *RD,
+                                            RecordCompleteMap &MNCComplete) {
+  RecordCompleteMap::iterator Cache = MNCComplete.find(RD);
+  if (Cache != MNCComplete.end())
+    return Cache->second;
+  if (!RD->isCompleteDefinition())
+    return false;
+  bool Complete = true;
+  for (DeclContext::decl_iterator I = RD->decls_begin(),
+                                  E = RD->decls_end();
+       I != E && Complete; ++I) {
+    if (const CXXMethodDecl *M = dyn_cast<CXXMethodDecl>(*I))
+      Complete = M->isDefined() || M->isDefaulted() ||
+                 (M->isPure() && !isa<CXXDestructorDecl>(M));
+    else if (const FunctionTemplateDecl *F = dyn_cast<FunctionTemplateDecl>(*I))
+      // If the template function is marked as late template parsed at this
+      // point, it has not been instantiated and therefore we have not
+      // performed semantic analysis on it yet, so we cannot know if the type
+      // can be considered complete.
+      Complete = !F->getTemplatedDecl()->isLateTemplateParsed() &&
+                  F->getTemplatedDecl()->isDefined();
+    else if (const CXXRecordDecl *R = dyn_cast<CXXRecordDecl>(*I)) {
+      if (R->isInjectedClassName())
+        continue;
+      if (R->hasDefinition())
+        Complete = MethodsAndNestedClassesComplete(R->getDefinition(),
+                                                   MNCComplete);
+      else
+        Complete = false;
+    }
+  }
+  MNCComplete[RD] = Complete;
+  return Complete;
+}
+
+/// Returns true, if the given CXXRecordDecl is fully defined in this
+/// translation unit, i.e. all methods are defined or pure virtual and all
+/// friends, friend functions and nested classes are fully defined in this
+/// translation unit.
+///
+/// Should only be called from ActOnEndOfTranslationUnit so that all
+/// definitions are actually read.
+static bool IsRecordFullyDefined(const CXXRecordDecl *RD,
+                                 RecordCompleteMap &RecordsComplete,
+                                 RecordCompleteMap &MNCComplete) {
+  RecordCompleteMap::iterator Cache = RecordsComplete.find(RD);
+  if (Cache != RecordsComplete.end())
+    return Cache->second;
+  bool Complete = MethodsAndNestedClassesComplete(RD, MNCComplete);
+  for (CXXRecordDecl::friend_iterator I = RD->friend_begin(),
+                                      E = RD->friend_end();
+       I != E && Complete; ++I) {
+    // Check if friend classes and methods are complete.
+    if (TypeSourceInfo *TSI = (*I)->getFriendType()) {
+      // Friend classes are available as the TypeSourceInfo of the FriendDecl.
+      if (CXXRecordDecl *FriendD = TSI->getType()->getAsCXXRecordDecl())
+        Complete = MethodsAndNestedClassesComplete(FriendD, MNCComplete);
+      else
+        Complete = false;
+    } else {
+      // Friend functions are available through the NamedDecl of FriendDecl.
+      if (const FunctionDecl *FD =
+          dyn_cast<FunctionDecl>((*I)->getFriendDecl()))
+        Complete = FD->isDefined();
+      else
+        // This is a template friend, give up.
+        Complete = false;
+    }
+  }
+  RecordsComplete[RD] = Complete;
+  return Complete;
+}
+
+// END code copied from LLVM's clang/lib/Sema/Sema.cpp
+
+}
+
+bool PluginHandler::isAllRelevantCodeDefined(NamedDecl const * decl) {
+    switch (decl->getAccess()) {
+    case AS_protected:
+        if (!cast<CXXRecordDecl>(decl->getDeclContext())->hasAttr<FinalAttr>()) {
+            break;
+        }
+        LLVM_FALLTHROUGH;
+    case AS_private:
+        if (IsRecordFullyDefined(
+                cast<CXXRecordDecl>(decl->getDeclContext()), RecordsComplete_, MNCComplete_))
+        {
+            return true;
+        }
+        break;
+    default:
+        break;
+    }
+    return !decl->isExternallyVisible();
+}
+
 std::unique_ptr<ASTConsumer> LibreOfficeAction::CreateASTConsumer( CompilerInstance& Compiler, StringRef )
 {
 #if __cplusplus >= 201402L
