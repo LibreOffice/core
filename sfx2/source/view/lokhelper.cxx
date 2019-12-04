@@ -30,6 +30,34 @@
 
 using namespace com::sun::star;
 
+/// Used to disable callbacks.
+/// Needed to avoid recursion when switching views,
+/// which can cause clients to invoke LOKit API and
+/// implicitly set the view, which might cause an
+/// infinite recursion if not detected and prevented.
+class DisableCallbacks
+{
+public:
+    DisableCallbacks()
+    {
+        assert(m_nDisabled >= 0 && "Expected non-negative DisabledCallbacks state when disabling.");
+        ++m_nDisabled;
+    }
+
+    ~DisableCallbacks()
+    {
+        assert(m_nDisabled > 0 && "Expected positive DisabledCallbacks state when re-enabling.");
+        --m_nDisabled;
+    }
+
+    static bool disabled() { return m_nDisabled != 0; }
+
+private:
+    static int m_nDisabled;
+};
+
+int DisableCallbacks::m_nDisabled = 0;
+
 int SfxLokHelper::createView()
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
@@ -77,6 +105,8 @@ void SfxLokHelper::setView(int nId)
     {
         if (static_cast<sal_Int32>(pViewShell->GetViewShellId()) == nViewShellId)
         {
+            DisableCallbacks dc;
+
             // update the current LOK language for the dialog tunneling
             comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
 
@@ -162,6 +192,9 @@ static OString lcl_escapeQuotes(const OString &rStr)
 
 void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload)
 {
+    if (DisableCallbacks::disabled())
+        return;
+
     OString aPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView(pThisView)) +
                        "\", \"part\": \"" + OString::number(pThisView->getPart()) +
                        "\", \"" + rKey + "\": \"" + lcl_escapeQuotes(rPayload) + "\" }";
@@ -171,7 +204,7 @@ void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* 
 
 void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload)
 {
-    if (SfxLokHelper::getViewsCount() <= 1)
+    if (SfxLokHelper::getViewsCount() <= 1 || DisableCallbacks::disabled())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -204,7 +237,7 @@ namespace {
 
 void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxItemSet* pSet)
 {
-    if (!pShell || !pSet)
+    if (!pShell || !pSet || DisableCallbacks::disabled())
         return;
 
     boost::property_tree::ptree aTree;
@@ -239,7 +272,7 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
 {
     assert(pThisView);
 
-    if (SfxLokHelper::getViewsCount() <= 0 || nLOKWindowId == 0)
+    if (SfxLokHelper::getViewsCount() <= 0 || nLOKWindowId == 0 || DisableCallbacks::disabled())
         return;
 
     OStringBuffer aPayload;
@@ -262,6 +295,9 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
 
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload)
 {
+    if (DisableCallbacks::disabled())
+        return;
+
     OStringBuffer aBuf;
     aBuf.append(rPayload);
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
@@ -274,10 +310,7 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OStri
 
 void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
-        return;
-
-    if (!pDoc)
+    if (!pDoc || !comphelper::LibreOfficeKit::isActive() || DisableCallbacks::disabled())
         return;
 
     if (bInvalidateAll)
@@ -294,7 +327,7 @@ void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, cons
 
 void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::LibreOfficeKit::isActive() || DisableCallbacks::disabled())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -307,6 +340,9 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
 
 void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle, bool bMispelledWord, const OString& rHyperlink)
 {
+    if (DisableCallbacks::disabled())
+        return;
+
     OString sPayload;
     if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
     {
@@ -325,6 +361,9 @@ void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisVie
 
 void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
 {
+    if (DisableCallbacks::disabled())
+        return;
+
     const auto payload = rPayload.getStr();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
@@ -336,6 +375,9 @@ void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
 
 void SfxLokHelper::notifyContextChange(SfxViewShell const* pViewShell, const OUString& aApplication, const OUString& aContext)
 {
+    if (DisableCallbacks::disabled())
+        return;
+
     OStringBuffer aBuffer;
     aBuffer.append(OUStringToOString(aApplication.replace(' ', '_'), RTL_TEXTENCODING_UTF8));
     aBuffer.append(' ');
