@@ -146,7 +146,7 @@ namespace emfplushelper
             case StringDigitSubstitution::StringDigitSubstitutionTraditional:
                 return "StringDigitSubstitutionTraditional";
             default:
-                assert(false && nSubst && "invalid string digit subsitution value");
+                assert(false && nSubst && "invalid string digit substitution value");
                 return "INVALID";
         }
     }
