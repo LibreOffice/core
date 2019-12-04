@@ -71,6 +71,7 @@ protected:
     { return handler.ignoreLocation(loc); }
     bool ignoreLocation( const Decl* decl ) const;
     bool ignoreLocation( const Stmt* stmt ) const;
+    bool ignoreLocation(TypeLoc tloc) const { return ignoreLocation(tloc.getBeginLoc()); }
     CompilerInstance& compiler;
     PluginHandler& handler;
     /**

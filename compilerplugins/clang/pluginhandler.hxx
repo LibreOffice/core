@@ -40,6 +40,9 @@ namespace loplugin
 class Plugin;
 struct InstantiationData;
 
+// Used internally by PluginHandler::isAllRelevantCodeDefined and its (free) helper functions:
+typedef llvm::DenseMap<const CXXRecordDecl*, bool> RecordCompleteMap;
+
 /**
  Class that manages all LO modules.
 */
@@ -62,6 +65,10 @@ public:
     bool checkOverlap(SourceRange range);
     void addSourceModification(SourceRange range);
     StringRef const& getMainFileName() const { return mainFileName; }
+
+    // Is all code that could see `decl` defined in this TU?
+    bool isAllRelevantCodeDefined(NamedDecl const * decl);
+
 private:
     void handleOption( const std::string& option );
     void createPlugins( std::set< std::string > rewriters );
@@ -76,6 +83,10 @@ private:
     bool warningsAsErrors;
     bool debugMode = false;
     std::vector<std::pair<char const*, char const*>> mvModifiedRanges;
+
+    // Used internally by isAllRelevantCodeDefined:
+    RecordCompleteMap RecordsComplete_;
+    RecordCompleteMap MNCComplete_;
 };
 
 /**
