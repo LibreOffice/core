@@ -9,21 +9,21 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,writerfilter_rtftok))
+$(eval $(call gb_CppunitTest_CppunitTest,writerfilter_filters_test))
 
-$(eval $(call gb_CppunitTest_use_external,writerfilter_rtftok,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,writerfilter_filters_test,boost_headers))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_rtftok, \
-	writerfilter/qa/cppunittests/rtftok/testrtftok \
+$(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_filters_test, \
+	writerfilter/qa/cppunittests/filters-test/filters-test \
 ))
 
 ifeq ($(DISABLE_CVE_TESTS),TRUE)
-$(eval $(call gb_CppunitTest_add_defs,writerfilter_rtftok,\
+$(eval $(call gb_CppunitTest_add_defs,writerfilter_filters_test,\
     -DDISABLE_CVE_TESTS \
 ))
 endif
 
-$(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
+$(eval $(call gb_CppunitTest_use_libraries,writerfilter_filters_test, \
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -34,12 +34,12 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
 	writerfilter \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,writerfilter_rtftok))
+$(eval $(call gb_CppunitTest_use_sdk_api,writerfilter_filters_test))
 
-$(eval $(call gb_CppunitTest_use_ure,writerfilter_rtftok))
-$(eval $(call gb_CppunitTest_use_vcl,writerfilter_rtftok))
+$(eval $(call gb_CppunitTest_use_ure,writerfilter_filters_test))
+$(eval $(call gb_CppunitTest_use_vcl,writerfilter_filters_test))
 
-$(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
+$(eval $(call gb_CppunitTest_use_components,writerfilter_filters_test,\
 	configmgr/source/configmgr \
 	framework/util/fwk \
 	i18npool/util/i18npool \
@@ -52,10 +52,10 @@ $(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
 
 
 
-$(eval $(call gb_CppunitTest_use_configuration,writerfilter_rtftok))
+$(eval $(call gb_CppunitTest_use_configuration,writerfilter_filters_test))
 
 # we need to explicitly depend on library writerfilter because it is not implied
 # by a link relation
-$(call gb_CppunitTest_get_target,writerfilter_rtftok) : $(call gb_Library_get_target,writerfilter)
+$(call gb_CppunitTest_get_target,writerfilter_filters_test) : $(call gb_Library_get_target,writerfilter)
 
 # vim: set noet sw=4 ts=4:

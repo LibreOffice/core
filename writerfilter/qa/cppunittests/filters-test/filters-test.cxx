@@ -16,7 +16,7 @@
 using namespace ::com::sun::star;
 
 /**
- * Unit test invoking the Writer RTF import filter.
+ * Unit test invoking writerfilter/ only.
  *
  * This does only minimal testing, checking if the filter crashes and returns
  * the expected bool value for given inputs. More fine-grained tests can be
@@ -69,7 +69,8 @@ bool RtfTest::load(const OUString&, const OUString& rURL, const OUString&, SfxFi
 CPPUNIT_TEST_FIXTURE(RtfTest, testFilter)
 {
 #ifndef DISABLE_CVE_TESTS
-    testDir(OUString(), m_directories.getURLFromSrc("/writerfilter/qa/cppunittests/rtftok/data/"));
+    testDir(OUString(),
+            m_directories.getURLFromSrc("/writerfilter/qa/cppunittests/filters-test/data/"));
 #endif
 }
 
