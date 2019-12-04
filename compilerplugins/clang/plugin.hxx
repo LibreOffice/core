@@ -71,6 +71,7 @@ protected:
     { return handler.ignoreLocation(loc); }
     bool ignoreLocation( const Decl* decl ) const;
     bool ignoreLocation( const Stmt* stmt ) const;
+    bool ignoreLocation(TypeLoc tloc) const;
     CompilerInstance& compiler;
     PluginHandler& handler;
     /**
@@ -221,6 +222,14 @@ bool Plugin::ignoreLocation( const Stmt* stmt ) const
     // Invalid location can happen at least for ImplicitCastExpr of
     // ImplicitParam 'self' in Objective C method declarations:
     return compat::getBeginLoc(stmt).isValid() && ignoreLocation( compat::getBeginLoc(stmt));
+}
+
+inline bool Plugin::ignoreLocation(TypeLoc tloc) const
+{
+    // Invalid locations appear to happen at least with Clang 5.0.2 (but no longer with at least
+    // recent Clang 10 trunk):
+    auto const loc = tloc.getBeginLoc();
+    return loc.isValid() && ignoreLocation(loc);
 }
 
 template< typename T >
