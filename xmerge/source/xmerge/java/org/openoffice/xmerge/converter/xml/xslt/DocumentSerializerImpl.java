@@ -252,7 +252,7 @@ public final class DocumentSerializerImpl
             DOMSource xslDomSource = new DOMSource(xslDoc);
             DOMSource xmlDomSource = new DOMSource(domDoc);
 
-            //call the tranformer using the XSL, Source and Result.
+            //call the transformer using the XSL, Source and Result.
             TransformerFactory tFactory = TransformerFactory.newInstance();
             tFactory.setURIResolver(this);
             Transformer transformer = tFactory.newTransformer(xslDomSource);
