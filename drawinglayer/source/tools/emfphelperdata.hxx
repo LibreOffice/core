@@ -187,6 +187,8 @@ namespace emfplushelper
         sal_Int32                   mnOriginY;
         sal_uInt32                  mnHDPI;
         sal_uInt32                  mnVDPI;
+        bool                        mbSetTextContrast;
+        sal_uInt16                  mnTextContrast;
 
         /* EMF+ emf header info */
         sal_Int32                   mnFrameLeft;
