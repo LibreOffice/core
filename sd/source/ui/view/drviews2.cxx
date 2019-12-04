@@ -1195,8 +1195,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
                 if (pOutView)
                     pOutView->SelectFieldAtCursor();
-                URLFieldHelper::RemoveURLField(mpDrawView->GetTextEditOutliner(),
-                                               mpDrawView->GetTextEditOutlinerView());
+                URLFieldHelper::RemoveURLField(pOutView->GetEditView());
             }
         }
         Cancel();

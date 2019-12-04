@@ -326,8 +326,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_REMOVE_HYPERLINK:
             {
                 // Ensure the field is selected first
-                pOutView->SelectFieldAtCursor();
-                URLFieldHelper::RemoveURLField(pOutliner, pOutView);
+                URLFieldHelper::RemoveURLField(pOutView->GetEditView());
             }
             break;
 
@@ -412,8 +411,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         || rSet.GetItemState(SID_REMOVE_HYPERLINK) != SfxItemState::UNKNOWN)
     {
         SdrView* pView = pViewData->GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
-        if( !URLFieldHelper::IsCursorAtURLField(pOutView) )
+        if( !URLFieldHelper::IsCursorAtURLField(pView->GetTextEditOutlinerView()->GetEditView()) )
         {
             rSet.DisableItem( SID_OPEN_HYPERLINK );
             rSet.DisableItem( SID_EDIT_HYPERLINK );
