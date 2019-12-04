@@ -32,10 +32,12 @@
 namespace oox {
 namespace xls {
 
-/** Used as base for sheet data context classes. Provides fast access to often
-    used converter objects and sheet index, to improve performance.
+/** This class implements importing the sheetData element.
+
+    The sheetData element contains all row settings and all cells in a single
+    sheet of a spreadsheet document.
  */
-struct SheetDataContextBase
+class SheetDataContext : public WorksheetContextBase
 {
     AddressConverter&   mrAddressConv;      /// The address converter.
     std::unique_ptr<FormulaParser> mxFormulaParser;    /// The formula parser, different one for each SheetDataContext
@@ -43,18 +45,6 @@ struct SheetDataContextBase
     CellModel           maCellData;         /// Position, contents, formatting of current imported cell.
     CellFormulaModel    maFmlaData;         /// Settings for a cell formula.
     sal_Int16 const           mnSheet;            /// Index of the current sheet.
-
-    explicit            SheetDataContextBase( const WorksheetHelper& rHelper );
-    virtual             ~SheetDataContextBase();
-};
-
-/** This class implements importing the sheetData element.
-
-    The sheetData element contains all row settings and all cells in a single
-    sheet of a spreadsheet document.
- */
-class SheetDataContext : public WorksheetContextBase, private SheetDataContextBase
-{
     // If we are doing threaded parsing, this SheetDataContext
     // forms the inner loop for bulk data parsing, and for the
     // duration of this we can drop the solar mutex.
