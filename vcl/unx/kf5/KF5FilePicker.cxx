@@ -48,12 +48,9 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 KF5FilePicker::KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                              QFileDialog::FileMode eMode)
     // Native kf5 filepicker does not add file extension automatically
-    : Qt5FilePicker(context, eMode, true, true)
+    : Qt5FilePicker(context, eMode, true)
     , _layout(new QGridLayout(m_pExtraControls))
 {
-    // use native dialog
-    m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog, false);
-
     // only columns 0 and 1 are used by controls (s. Qt5FilePicker::addCustomControl);
     // set stretch for (unused) column 2 in order for the controls to only take the space
     // they actually need and avoid empty space in between
