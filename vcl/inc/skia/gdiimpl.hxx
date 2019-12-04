@@ -193,10 +193,11 @@ public:
 
 #ifdef DBG_UTIL
     void dump(const char* file) const;
-    static void dump(const SkBitmap& bitmap, const char* file);
 #endif
 
     // Default blend mode for SkPaint is SkBlendMode::kSrcOver
+    void drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
+                   SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
     void drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& aBitmap,
                     SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
 
@@ -237,7 +238,7 @@ protected:
     // get the height of the device
     int GetHeight() const { return mProvider ? mProvider->GetHeight() : 1; }
 
-    void drawMask(const SalTwoRect& rPosAry, const SkImage& rImage, Color nMaskColor);
+    void drawMask(const SalTwoRect& rPosAry, const sk_sp<SkImage>& rImage, Color nMaskColor);
 
     // When drawing using GPU, rounding errors may result in off-by-one errors,
     // see https://bugs.chromium.org/p/skia/issues/detail?id=9611 . Compensate for
@@ -245,10 +246,6 @@ protected:
     // it seems better to not do this though.
     SkScalar toSkX(long x) const { return mIsGPU ? x + 0.5 : x; }
     SkScalar toSkY(long y) const { return mIsGPU ? y + 0.5 : y; }
-
-#ifdef DBG_UTIL
-    void prefillSurface();
-#endif
 
     template <typename charT, typename traits>
     friend inline std::basic_ostream<charT, traits>&
