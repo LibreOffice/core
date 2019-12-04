@@ -4,7 +4,7 @@
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/colibre/cmd/ -->
-  <object class="GtkMenu" id="Menu3D">
+  <object class="GtkMenu" id="Menu 3d">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -82,60 +82,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuConvert">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="MenuConvert-ChangeBezier">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ChangeBezier</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuConvert-ChangePolygon">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ChangePolygon</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuConvert-convert_to_contour">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:convert_to_contour</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuConvert-ConvertInto3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ConvertInto3D</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuConvert-ConvertInto3DLatheFast">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ConvertInto3DLatheFast</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuConvert-ConvertIntoBitmap">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ConvertIntoBitmap</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuConvert-ConvertIntoMetaFile">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ConvertIntoMetaFile</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkMenu" id="MenuDraw">
+  <object class="GtkMenu" id="Menu Draw">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -338,7 +285,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuField">
+  <object class="GtkMenu" id="Menu Field">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -411,7 +358,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuFile">
+  <object class="GtkMenu" id="Menu File">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -584,7 +531,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuForm">
+  <object class="GtkMenu" id="Menu Form">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -744,7 +691,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuHelp">
+  <object class="GtkMenu" id="Menu Help">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -848,7 +795,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuHome">
+  <object class="GtkMenu" id="Menu Home">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -873,7 +820,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuImage">
+  <object class="GtkMenu" id="Menu Image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -965,7 +912,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuInsert">
+  <object class="GtkMenu" id="Menu Insert">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -1118,142 +1065,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuMasterPage">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="InsertMasterPageD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertMasterPage</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="RenameMasterPageD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:RenameMasterPage</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="DeleteMasterPageD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:DeleteMasterPage</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="CloseMasterViewD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:CloseMasterView</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkMenu" id="MenuMedia">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="MenuMedia-AVMediaPlayer">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:AVMediaPlayer</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuMedia-separator1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuMedia-RenameObject">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:RenameObject</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuMedia-ObjectTitleDescription">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ObjectTitleDescription</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuMedia-separator2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuMedia-EditShapeHyperlink">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:EditShapeHyperlink</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuMedia-DeleteShapeHyperlink">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:DeleteShapeHyperlink</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuMedia-OpenHyperlinkOnCursor">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:OpenHyperlinkOnCursor</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkMenu" id="MenuObject">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="MenuObject-ChainFrames">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ChainFrames</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuObject-UnhainFrames">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:UnhainFrames</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuObject-separator">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuObject-NameGroup">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:NameGroup</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuObject-ObjectTitleDescription">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ObjectTitleDescription</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuObject-FrameDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:FrameDialog</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkMenu" id="MenuPage">
+  <object class="GtkMenu" id="Menu Layout">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -1419,7 +1231,142 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuReference">
+  <object class="GtkMenu" id="Menu Master">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="InsertMasterPageD1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertMasterPage</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="RenameMasterPageD1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RenameMasterPage</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="DeleteMasterPageD1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DeleteMasterPage</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="CloseMasterViewD1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:CloseMasterView</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="Menu Media">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-AVMediaPlayer">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AVMediaPlayer</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuMedia-separator1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-RenameObject">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RenameObject</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-ObjectTitleDescription">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ObjectTitleDescription</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuMedia-separator2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-EditShapeHyperlink">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:EditShapeHyperlink</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-DeleteShapeHyperlink">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DeleteShapeHyperlink</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-OpenHyperlinkOnCursor">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:OpenHyperlinkOnCursor</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="Menu Object">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="MenuObject-ChainFrames">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ChainFrames</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuObject-UnhainFrames">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:UnhainFrames</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuObject-separator">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuObject-NameGroup">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:NameGroup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuObject-ObjectTitleDescription">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ObjectTitleDescription</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuObject-FrameDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:FrameDialog</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="Menu Reference">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -1505,7 +1452,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuReview">
+  <object class="GtkMenu" id="Menu Review">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -1571,7 +1518,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuTable">
+  <object class="GtkMenu" id="Menu Table">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -1750,7 +1697,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuText">
+  <object class="GtkMenu" id="Menu Text">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -1944,7 +1891,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuTools">
+  <object class="GtkMenu" id="Menu Tools">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -2057,7 +2004,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkMenu" id="MenuView">
+  <object class="GtkMenu" id="Menu View">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -2276,90 +2223,11 @@
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <child>
-              <object class="sfxlo-PriorityHBox" id="FileBox">
+              <object class="sfxlo-PriorityHBox" id="File Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="FileSection">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkToolButton" id="CloseDoc">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="action_name">.uno:CloseDoc</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="svtlo-ManagedMenuButton" id="File-FileButton:MenuFile">
-                        <property name="label" translatable="yes" context="notebookbar_draw_compact|FileMenuButton">_File</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
-                        <property name="receives_default">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="resize_mode">immediate</property>
-                        <property name="relief">none</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="separator3">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <property name="margin_top">5</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="vexpand">True</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">5</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="FileContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="File">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -2938,36 +2806,17 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="FileLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_draw_compact|FileLabel">~File</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="sfxlo-PriorityHBox" id="HomeBox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="valign">center</property>
-                <property name="vexpand">True</property>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="MenuSection">
+                  <object class="sfxlo-DropdownBox" id="File-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom10">
+                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
@@ -2975,15 +2824,15 @@
                         <property name="toolbar_style">icons</property>
                         <property name="show_arrow">False</property>
                         <child>
-                          <object class="GtkToolButton" id="Home-SearchDialog">
+                          <object class="GtkToolButton" id="CloseDoc">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="action_name">.uno:SearchDialog</property>
+                            <property name="action_name">.uno:CloseDoc</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
+                            <property name="homogeneous">True</property>
                           </packing>
                         </child>
                       </object>
@@ -2994,14 +2843,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="Home-HomeButton:MenuHome">
-                        <property name="label" translatable="yes" context="notebookbar_draw_compact|HomeMenuButton">_Home</property>
+                      <object class="svtlo-ManagedMenuButton" id="File-FileButton:Menu File">
+                        <property name="label" translatable="yes" context="notebookbar_draw_compact|FileMenuButton">_File</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
+                        <property name="resize_mode">immediate</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
                       </object>
@@ -3020,85 +2870,123 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="PasteBox">
+                  <object class="GtkSeparator" id="separator3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">end</property>
                     <property name="valign">center</property>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkMenuToolButton" id="Home-Paste">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:Paste</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom5">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkToolButton" id="Home-Cut">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:Cut</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="Home-Copy">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:Copy</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="vexpand">True</property>
+                    <property name="orientation">vertical</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
+                    <property name="padding">5</property>
+                    <property name="pack_type">end</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="FileLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_draw_compact|FileLabel">~File</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="sfxlo-PriorityHBox" id="Home Tab">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">center</property>
+                <property name="vexpand">True</property>
                 <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="HomeContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="Home">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="Home-Section-Clipboard">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom3">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkMenuToolButton" id="Home-Paste">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:Paste</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom5">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Home-Cut">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:Cut</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Home-Copy">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:Copy</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="sfxlo-OptionalBox" id="Home-Section-Select">
                         <property name="visible">True</property>
@@ -3160,7 +3048,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -3215,7 +3103,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -3255,7 +3143,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -3294,7 +3182,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
@@ -3335,7 +3223,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -3375,7 +3263,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
@@ -3414,7 +3302,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                     <child>
@@ -3453,7 +3341,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <child>
@@ -3492,7 +3380,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">8</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                     <child>
@@ -3530,7 +3418,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">9</property>
+                        <property name="position">10</property>
                       </packing>
                     </child>
                     <child>
@@ -3571,7 +3459,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">10</property>
+                        <property name="position">11</property>
                       </packing>
                     </child>
                     <child>
@@ -3636,7 +3524,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">11</property>
+                        <property name="position">12</property>
                       </packing>
                     </child>
                     <child>
@@ -3683,7 +3571,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">12</property>
+                        <property name="position">13</property>
                       </packing>
                     </child>
                     <child>
@@ -3730,7 +3618,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">13</property>
+                        <property name="position">14</property>
                       </packing>
                     </child>
                     <child>
@@ -3807,7 +3695,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">14</property>
+                        <property name="position">15</property>
                       </packing>
                     </child>
                     <child>
@@ -3884,7 +3772,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">15</property>
+                        <property name="position">16</property>
                       </packing>
                     </child>
                     <child>
@@ -3951,7 +3839,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">16</property>
+                        <property name="position">17</property>
                       </packing>
                     </child>
                     <child>
@@ -4001,7 +3889,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">17</property>
+                        <property name="position">18</property>
                       </packing>
                     </child>
                     <child>
@@ -4053,7 +3941,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">18</property>
+                        <property name="position">19</property>
                       </packing>
                     </child>
                     <child>
@@ -4109,7 +3997,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">19</property>
+                        <property name="position">20</property>
                       </packing>
                     </child>
                     <child>
@@ -4158,7 +4046,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">20</property>
+                        <property name="position">21</property>
                       </packing>
                     </child>
                     <child>
@@ -4223,7 +4111,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">21</property>
+                        <property name="position">22</property>
                       </packing>
                     </child>
                     <child>
@@ -4273,7 +4161,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">22</property>
+                        <property name="position">23</property>
                       </packing>
                     </child>
                     <child>
@@ -4338,7 +4226,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">23</property>
+                        <property name="position">24</property>
                       </packing>
                     </child>
                     <child>
@@ -4399,14 +4287,73 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">24</property>
+                        <property name="position">25</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="Home-Menu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <child>
+                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom10">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <property name="toolbar_style">icons</property>
+                        <property name="show_arrow">False</property>
+                        <child>
+                          <object class="GtkToolButton" id="Home-SearchDialog">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="valign">center</property>
+                            <property name="action_name">.uno:SearchDialog</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">False</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="svtlo-ManagedMenuButton" id="Home-HomeButton:Menu Home">
+                        <property name="label" translatable="yes" context="notebookbar_draw_compact|HomeMenuButton">_Home</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="receives_default">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -4425,7 +4372,7 @@
                     <property name="fill">False</property>
                     <property name="padding">5</property>
                     <property name="pack_type">end</property>
-                    <property name="position">3</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -4450,11 +4397,11 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="InsertBox">
+              <object class="sfxlo-PriorityHBox" id="Insert Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="InsertContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="Insert">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -5007,7 +4954,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo-ManagedMenuButton" id="Insert-FieldButton:MenuField">
+                          <object class="svtlo-ManagedMenuButton" id="Insert-FieldButton:Menu Field">
                             <property name="label" translatable="yes" context="notebookbar_draw_compact|FieldMenuButton">Fiel_d</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -5532,7 +5479,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="InsertMenuSection">
+                  <object class="sfxlo-DropdownBox" id="Insert-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -5564,7 +5511,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="Insert-InsertButton:MenuInsert">
+                      <object class="svtlo-ManagedMenuButton" id="Insert-InsertButton:Menu Insert">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|InsertMenuButton">_Insert</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -5604,7 +5551,7 @@
                     <property name="fill">False</property>
                     <property name="padding">5</property>
                     <property name="pack_type">end</property>
-                    <property name="position">3</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -5625,13 +5572,13 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="LayoutBox">
+              <object class="sfxlo-PriorityHBox" id="Layout Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
                 <property name="vexpand">True</property>
                 <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="PageLayoutContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="Layout">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -6370,11 +6317,11 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="PageSection">
+                  <object class="sfxlo-DropdownBox" id="Layout-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -6408,7 +6355,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="Layout-PageButton:MenuPage">
+                      <object class="svtlo-ManagedMenuButton" id="Layout-PageButton:Menu Layout">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|LayoutMenuButton">Layout</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -6470,11 +6417,11 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="ReviewBox">
+              <object class="sfxlo-PriorityHBox" id="Review Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="ReviewContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="Review">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -6949,30 +6896,11 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="separator150">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <property name="margin_top">5</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="vexpand">True</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">5</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-DropdownBox" id="ReviewSection">
+                  <object class="sfxlo-DropdownBox" id="Review-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -7006,7 +6934,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="Review-ReviewButton:MenuReview">
+                      <object class="svtlo-ManagedMenuButton" id="Review-ReviewButton:Menu Review">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|ReviewMenuButton">_Review</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -7027,6 +6955,25 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="separator150">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="vexpand">True</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="padding">5</property>
                     <property name="pack_type">end</property>
                     <property name="position">2</property>
                   </packing>
@@ -7049,11 +6996,11 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="ViewBox">
+              <object class="sfxlo-PriorityHBox" id="View Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="ViewContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="View">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -7716,7 +7663,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="ViewSection">
+                  <object class="sfxlo-DropdownBox" id="View-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -7750,7 +7697,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="View-ViewButton:MenuView">
+                      <object class="svtlo-ManagedMenuButton" id="View-ViewButton:Menu View">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|ViewMenuButton">_View</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -7812,108 +7759,80 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="TextBox">
+              <object class="sfxlo-PriorityHBox" id="Text Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkBox" id="PasteBox1">
+                  <object class="sfxlo-PriorityMergedHBox" id="Text">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
-                    <property name="vexpand">True</property>
                     <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom182">
+                      <object class="sfxlo-OptionalBox" id="Text-Section-Clipboard">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
                         <child>
-                          <object class="GtkMenuToolButton" id="Home-Paste1">
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom182">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:Paste</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkMenuToolButton" id="Home-Paste1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:Paste</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom183">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkToolButton" id="Home-Cut1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:Cut</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkToolButton" id="Home-Copy1">
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom183">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:Copy</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Home-Cut1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:Cut</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Home-Copy1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:Copy</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-DropdownBox" id="TextSection">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <property name="vexpand">True</property>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom18">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkToolButton" id="Text-TransformDialog">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:TransformDialog</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
@@ -7923,58 +7842,6 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="svtlo-ManagedMenuButton" id="Text-TextBotton:MenuText">
-                        <property name="label" translatable="yes" context="notebookbar_draw_compact|TextMenuButton">T_ext</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
-                        <property name="receives_default">False</property>
-                        <property name="halign">end</property>
-                        <property name="valign">center</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="relief">none</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="separator23">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <property name="margin_top">5</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="vexpand">True</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">5</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="TextContainer">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">center</property>
                     <child>
                       <object class="sfxlo-OptionalBox" id="Text-Section-Paintbrush">
                         <property name="visible">True</property>
@@ -8037,7 +7904,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -8092,7 +7959,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -8132,7 +7999,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -8171,7 +8038,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
@@ -8212,7 +8079,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -8252,7 +8119,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
@@ -8291,7 +8158,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                     <child>
@@ -8330,7 +8197,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <child>
@@ -8369,7 +8236,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">8</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                     <child>
@@ -8410,7 +8277,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">9</property>
+                        <property name="position">10</property>
                       </packing>
                     </child>
                     <child>
@@ -8464,7 +8331,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">10</property>
+                        <property name="position">11</property>
                       </packing>
                     </child>
                     <child>
@@ -8504,7 +8371,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">11</property>
+                        <property name="position">12</property>
                       </packing>
                     </child>
                     <child>
@@ -8555,7 +8422,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">12</property>
+                        <property name="position">13</property>
                       </packing>
                     </child>
                     <child>
@@ -8650,7 +8517,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">13</property>
+                        <property name="position">14</property>
                       </packing>
                     </child>
                     <child>
@@ -8699,7 +8566,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">14</property>
+                        <property name="position">15</property>
                       </packing>
                     </child>
                     <child>
@@ -8772,7 +8639,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">15</property>
+                        <property name="position">16</property>
                       </packing>
                     </child>
                     <child>
@@ -8810,7 +8677,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">16</property>
+                        <property name="position">17</property>
                       </packing>
                     </child>
                     <child>
@@ -8882,7 +8749,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">17</property>
+                        <property name="position">18</property>
                       </packing>
                     </child>
                     <child>
@@ -8932,7 +8799,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">18</property>
+                        <property name="position">19</property>
                       </packing>
                     </child>
                     <child>
@@ -9019,7 +8886,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">19</property>
+                        <property name="position">20</property>
                       </packing>
                     </child>
                     <child>
@@ -9100,7 +8967,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">20</property>
+                        <property name="position">21</property>
                       </packing>
                     </child>
                     <child>
@@ -9151,7 +9018,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">21</property>
+                        <property name="position">22</property>
                       </packing>
                     </child>
                     <child>
@@ -9210,7 +9077,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">22</property>
+                        <property name="position">23</property>
                       </packing>
                     </child>
                     <child>
@@ -9251,7 +9118,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">23</property>
+                        <property name="position">24</property>
                       </packing>
                     </child>
                     <child>
@@ -9303,7 +9170,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">24</property>
+                        <property name="position">25</property>
                       </packing>
                     </child>
                     <child>
@@ -9372,13 +9239,92 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">25</property>
+                        <property name="position">26</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="Text-Menu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom18">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <property name="show_arrow">False</property>
+                        <child>
+                          <object class="GtkToolButton" id="Text-TransformDialog">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="action_name">.uno:TransformDialog</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="svtlo-ManagedMenuButton" id="Text-TextBotton:Menu Text">
+                        <property name="label" translatable="yes" context="notebookbar_draw_compact|TextMenuButton">T_ext</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="separator23">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="vexpand">True</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="padding">5</property>
+                    <property name="pack_type">end</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -9406,165 +9352,11 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="TableBox">
+              <object class="sfxlo-PriorityHBox" id="Table Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkBox" id="PasteBox2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">center</property>
-                    <property name="vexpand">True</property>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom184">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkMenuToolButton" id="Home-Paste2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:Paste</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom185">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkToolButton" id="Home-Cut2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:Cut</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="Home-Copy2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:Copy</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-DropdownBox" id="TableSelection">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <property name="vexpand">True</property>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom76">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkToolButton" id="Table-TableDialog">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="action_name">.uno:TableDialog</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="svtlo-ManagedMenuButton" id="Table-TableButton:MenuTable">
-                        <property name="label" translatable="yes" context="notebookbar_draw_compact|TableMenuButton">T_able</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
-                        <property name="receives_default">False</property>
-                        <property name="valign">center</property>
-                        <property name="relief">none</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="separator170">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <property name="margin_top">5</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="vexpand">True</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">5</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="TableContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="Table">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -11258,6 +11050,84 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="Table-Menu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom76">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <property name="toolbar_style">icons</property>
+                        <property name="show_arrow">False</property>
+                        <child>
+                          <object class="GtkToolButton" id="Table-TableDialog">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="valign">center</property>
+                            <property name="action_name">.uno:TableDialog</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="svtlo-ManagedMenuButton" id="Table-TableButton:Menu Table">
+                        <property name="label" translatable="yes" context="notebookbar_draw_compact|TableMenuButton">T_able</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="receives_default">False</property>
+                        <property name="valign">center</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="separator170">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="vexpand">True</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="padding">5</property>
+                    <property name="pack_type">end</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -11282,11 +11152,11 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="GraphicBox">
+              <object class="sfxlo-PriorityHBox" id="Image Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="GraphicContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="Image">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -12657,11 +12527,11 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="GraphicSelection">
+                  <object class="sfxlo-DropdownBox" id="Image-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -12696,7 +12566,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="Image-GraphicButton:MenuImage">
+                      <object class="svtlo-ManagedMenuButton" id="Image-GraphicButton:Menu Image">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|ImageMenuButton">Image</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -12717,7 +12587,7 @@
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -12761,11 +12631,11 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="DrawBox">
+              <object class="sfxlo-PriorityHBox" id="Draw Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="DrawContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="Draw">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -14538,11 +14408,11 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="DrawSections">
+                  <object class="sfxlo-DropdownBox" id="Draw-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -14576,7 +14446,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="Draw-DrawButton:MenuDraw">
+                      <object class="svtlo-ManagedMenuButton" id="Draw-DrawButton:Menu Draw">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|DrawMenuButton">D_raw</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -14598,7 +14468,7 @@
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
-                    <property name="position">9</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -14617,7 +14487,7 @@
                     <property name="fill">False</property>
                     <property name="padding">5</property>
                     <property name="pack_type">end</property>
-                    <property name="position">11</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <style>
@@ -14646,90 +14516,89 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="FrameBox">
+              <object class="sfxlo-PriorityHBox" id="Object Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkBox" id="FramePasteBox">
+                  <object class="sfxlo-PriorityMergedHBox" id="Object">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
-                    <property name="vexpand">True</property>
                     <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom190">
+                      <object class="sfxlo-OptionalBox" id="Object-Section-Advanced">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
                         <child>
-                          <object class="GtkToolButton" id="Frame-AdvancedMode">
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom190">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:AdvancedMode</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Frame-AdvancedMode">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:AdvancedMode</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom191">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Frame-ToggleObjectBezierMode">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ToggleObjectBezierMode</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Frame-FlipHorizontal">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:FlipHorizontal</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom191">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkToolButton" id="Frame-ToggleObjectBezierMode">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:ToggleObjectBezierMode</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="Frame-FlipHorizontal">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:FlipHorizontal</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="ObjectContainer">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">center</property>
                     <child>
                       <object class="sfxlo-OptionalBox" id="Object-Section-Select">
                         <property name="visible">True</property>
@@ -14792,7 +14661,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -14845,7 +14714,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -14885,7 +14754,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -14924,7 +14793,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
@@ -14962,7 +14831,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -14999,7 +14868,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
@@ -15035,7 +14904,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                     <child>
@@ -15074,7 +14943,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <child>
@@ -15113,7 +14982,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">8</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                     <child>
@@ -15622,11 +15491,11 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="ObjectSection">
+                  <object class="sfxlo-DropdownBox" id="Object-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -15660,7 +15529,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="Object-ObjectButton:MenuObject">
+                      <object class="svtlo-ManagedMenuButton" id="Object-ObjectButton:Menu Object">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|ObjectMenuButton">Object</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -15701,7 +15570,7 @@
                     <property name="fill">False</property>
                     <property name="padding">5</property>
                     <property name="pack_type">end</property>
-                    <property name="position">8</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <style>
@@ -15730,90 +15599,89 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="MediaBox">
+              <object class="sfxlo-PriorityHBox" id="Media Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkBox" id="MediaPasteBox">
+                  <object class="sfxlo-PriorityMergedHBox" id="Media">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
-                    <property name="vexpand">True</property>
                     <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom192">
+                      <object class="sfxlo-OptionalBox" id="Media-Section-Advanced">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
                         <child>
-                          <object class="GtkToolButton" id="Media-AdvancedMode">
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom192">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:AdvancedMode</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Media-AdvancedMode">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:AdvancedMode</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom193">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Media-ToggleObjectBezierMode">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ToggleObjectBezierMode</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Media-FlipHorizontal">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:FlipHorizontal</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom193">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkToolButton" id="Media-ToggleObjectBezierMode">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:ToggleObjectBezierMode</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="Media-FlipHorizontal">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:FlipHorizontal</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="MediaContainer">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">center</property>
                     <child>
                       <object class="sfxlo-OptionalBox" id="Media-Section-Select">
                         <property name="visible">True</property>
@@ -15876,7 +15744,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -15929,7 +15797,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -15969,7 +15837,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -16008,7 +15876,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
@@ -16046,7 +15914,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -16083,7 +15951,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
@@ -16119,7 +15987,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                     <child>
@@ -16158,7 +16026,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <child>
@@ -16197,45 +16065,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">8</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-LineDialog">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="Draw12">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="show_arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="Media-FormatLine1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="visible_horizontal">False</property>
-                                <property name="action_name">.uno:FormatLine</property>
-                                <property name="icon_name">sfx2/res/symphony/open_more.png</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">10</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                     <child>
@@ -16281,6 +16111,44 @@
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">10</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="Media-Section-LineDialog">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="Draw12">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="valign">center</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Media-FormatLine1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="visible_horizontal">False</property>
+                                <property name="action_name">.uno:FormatLine</property>
+                                <property name="icon_name">sfx2/res/symphony/open_more.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                       </object>
@@ -16856,11 +16724,11 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="MediaSection">
+                  <object class="sfxlo-DropdownBox" id="Media-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -16894,7 +16762,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="media:MenuMedia">
+                      <object class="svtlo-ManagedMenuButton" id="media:Menu Media">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|MediaButton">_Media</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -16934,7 +16802,7 @@
                     <property name="fill">False</property>
                     <property name="padding">5</property>
                     <property name="pack_type">end</property>
-                    <property name="position">8</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <style>
@@ -16961,11 +16829,11 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="FormBox">
+              <object class="sfxlo-PriorityHBox" id="Form Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="FormContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="Form">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -18192,7 +18060,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="FormSection1">
+                  <object class="sfxlo-DropdownBox" id="Form-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -18226,7 +18094,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="form:MenuForm">
+                      <object class="svtlo-ManagedMenuButton" id="form:Menu Form">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|FormButton">Fo_rm</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -18267,7 +18135,7 @@
                     <property name="fill">False</property>
                     <property name="padding">5</property>
                     <property name="pack_type">end</property>
-                    <property name="position">8</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <style>
@@ -18294,11 +18162,11 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="MasterPageBox">
+              <object class="sfxlo-PriorityHBox" id="Master Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="MasterPageContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="Master">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -18898,11 +18766,11 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="MasterPageSection">
+                  <object class="sfxlo-DropdownBox" id="MasterPage-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -18936,7 +18804,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="Master-Menu:MenuMasterPage">
+                      <object class="svtlo-ManagedMenuButton" id="Master-Menu:Menu Master">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|PrintPreviewButton">_Master</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -18977,7 +18845,7 @@
                     <property name="fill">False</property>
                     <property name="padding">5</property>
                     <property name="pack_type">end</property>
-                    <property name="position">8</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -19001,53 +18869,52 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="3DBox">
+              <object class="sfxlo-PriorityHBox" id="3d Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkBox" id="3DObjectPasteBox">
+                  <object class="sfxlo-PriorityMergedHBox" id="3d">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
-                    <property name="vexpand">True</property>
                     <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom194">
+                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Window3d">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">both-horiz</property>
-                        <property name="show_arrow">False</property>
                         <child>
-                          <object class="GtkToolButton" id="3D-Window3D">
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom194">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:Window3D</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">both-horiz</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="3D-Window3D">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:Window3D</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="3DObjectContainer">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">center</property>
                     <child>
                       <object class="sfxlo-OptionalBox" id="3dObject-Section-Select">
                         <property name="visible">True</property>
@@ -19110,7 +18977,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -19163,7 +19030,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -19203,7 +19070,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -19242,7 +19109,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
@@ -19280,7 +19147,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -19317,7 +19184,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
@@ -19353,7 +19220,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                     <child>
@@ -19392,7 +19259,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <child>
@@ -19431,7 +19298,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">8</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                     <child>
@@ -19940,11 +19807,11 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="3DSection">
+                  <object class="sfxlo-DropdownBox" id="3d-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -19978,7 +19845,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="Draw-3D:Menu3D">
+                      <object class="svtlo-ManagedMenuButton" id="Draw-3D:Menu 3d">
                         <property name="label" translatable="yes" context="notebookbar_draw_compact|FormButton">3_d</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -20019,7 +19886,7 @@
                     <property name="fill">False</property>
                     <property name="padding">5</property>
                     <property name="pack_type">end</property>
-                    <property name="position">8</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <style>
@@ -20046,89 +19913,11 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="ToolBox">
+              <object class="sfxlo-PriorityHBox" id="Tools Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="ToolsSection">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <property name="vexpand">True</property>
-                    <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom126">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <child>
-                          <object class="GtkToolButton" id="Tools-ShowFmExplorer">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">.uno:OptionsTreeDialog</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="svtlo-ManagedMenuButton" id="Tools-ToolsButton:MenuTools">
-                        <property name="label" translatable="yes" context="notebookbar_draw_compact|ToolsMenuButton">_Tools</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
-                        <property name="receives_default">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="relief">none</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="separator123">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <property name="margin_top">5</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="vexpand">True</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">5</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="ToolBoxContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="Tools">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -21110,6 +20899,84 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="Tools-Menu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom126">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <property name="toolbar_style">icons</property>
+                        <property name="show_arrow">False</property>
+                        <child>
+                          <object class="GtkToolButton" id="Tools-ShowFmExplorer">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="action_name">.uno:OptionsTreeDialog</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">False</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="svtlo-ManagedMenuButton" id="Tools-ToolsButton:Menu Tools">
+                        <property name="label" translatable="yes" context="notebookbar_draw_compact|ToolsMenuButton">_Tools</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="receives_default">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="separator123">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="vexpand">True</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="padding">5</property>
+                    <property name="pack_type">end</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
