@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-03 09:21:34 using:
+ Generated on 2019-12-04 09:32:44 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -88,8 +88,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/EnumContext.hxx>
-#include <vcl/Scanline.hxx>
-#include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/builderfactory.hxx>
@@ -103,7 +101,6 @@
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
@@ -126,8 +123,10 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/taskpanelist.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_OLINEWIN_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_OLINEWIN_HXX
 
+#include <vcl/window.hxx>
 #include "viewdata.hxx"
 
 class ScOutlineEntry;

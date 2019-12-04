@@ -62,6 +62,7 @@
 #include <sal/log.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <memory>
 

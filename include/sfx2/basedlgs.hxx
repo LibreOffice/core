@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <vcl/floatwin.hxx>
 #include <vcl/weld.hxx>
 
 class SfxTabPage;
@@ -82,43 +81,6 @@ public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
     SfxBindings&            GetBindings() const { return *m_pBindings; }
 };
-
-// class SfxFloatingWindow --------------------------------------------------
-class SfxFloatingWindow_Impl;
-class SFX2_DLLPUBLIC SfxFloatingWindow: public FloatingWindow
-{
-    SfxBindings*            pBindings;
-    Size                    aSize;
-    std::unique_ptr< SfxFloatingWindow_Impl > pImpl;
-
-    SfxFloatingWindow(SfxFloatingWindow const &) = delete;
-    SfxFloatingWindow& operator =(SfxFloatingWindow const &) = delete;
-
-protected:
-                            SfxFloatingWindow( SfxBindings *pBindings,
-                                              SfxChildWindow *pCW,
-                                              vcl::Window* pParent,
-                                              WinBits nWinBits);
-                            virtual ~SfxFloatingWindow() override;
-    virtual void            dispose() override;
-
-    virtual void            StateChanged( StateChangedType nStateChange ) override;
-    virtual bool            Close() override;
-    virtual void            Resize() override;
-    virtual void            Move() override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    SfxBindings&            GetBindings()
-                            { return *pBindings; }
-
-public:
-    virtual void            FillInfo(SfxChildWinInfo&) const;
-    void                    Initialize (SfxChildWinInfo const * pInfo);
-
-    DECL_LINK(TimerHdl, Timer *, void);
-
-};
-
-// class SfxNoLayoutSingleTabDialog --------------------------------------------------
 
 typedef const sal_uInt16* (*GetTabPageRanges)(); // provides international Which values
 

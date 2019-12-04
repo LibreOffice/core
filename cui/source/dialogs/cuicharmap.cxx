@@ -31,6 +31,7 @@
 #include <vcl/virdev.hxx>
 #include <svl/stritem.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/dispatchcommand.hxx>
 
