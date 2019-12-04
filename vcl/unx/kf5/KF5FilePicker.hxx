@@ -23,11 +23,11 @@
 
 class QGridLayout;
 
-class KF5FilePicker : public Qt5FilePicker
+class KF5FilePicker final : public Qt5FilePicker
 {
     Q_OBJECT
 
-protected:
+private:
     //layout for extra custom controls
     QGridLayout* _layout;
 
@@ -55,8 +55,6 @@ public:
 private:
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId) override;
-
-protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 };
 
