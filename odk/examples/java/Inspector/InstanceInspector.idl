@@ -44,7 +44,7 @@ module org {  module openoffice {
     /**
      * This service describes an instance inspector which can inspect
      * UNO objects and provides information about the implemented
-     * interfaces, the supported services and properties of this onject.
+     * interfaces, the supported services and properties of this object.
      */
     service InstanceInspector: XInstanceInspector;
 
