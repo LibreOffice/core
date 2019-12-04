@@ -27,6 +27,9 @@
 #include <SkCanvas.h>
 #include <SkImage.h>
 #include <SkPixelRef.h>
+#include <SkSurface.h>
+
+#include <skia/utils.hxx>
 
 #ifdef DBG_UTIL
 #include <fstream>
@@ -43,15 +46,18 @@ static bool isValidBitCount(sal_uInt16 nBitCount)
            || (nBitCount == 32);
 }
 
-SkiaSalBitmap::SkiaSalBitmap(const SkImage& image)
+SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
 {
-    if (Create(Size(image.width(), image.height()), 32, BitmapPalette()))
+    if (Create(Size(image->width(), image->height()), 32, BitmapPalette()))
     {
         SkCanvas canvas(mBitmap);
         // TODO makeNonTextureImage() ?
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-        canvas.drawImage(&image, 0, 0, &paint);
+        canvas.drawImage(image, 0, 0, &paint);
+        // Also set up the cached image, often it will be immediately read again.
+        // TODO Maybe do the image -> bitmap conversion on demand?
+        mImage = image;
     }
 }
 
@@ -291,9 +297,12 @@ bool SkiaSalBitmap::ConvertToGreyscale()
     return false;
 }
 
-const SkBitmap& SkiaSalBitmap::GetSkBitmap() const
+SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
 {
-    if (mBuffer && mBitmap.drawsNothing())
+    if (!mBitmap.drawsNothing())
+        return mBitmap;
+    SkBitmap bitmap;
+    if (mBuffer)
     {
         if (mBitCount == 24)
         {
@@ -311,12 +320,12 @@ const SkBitmap& SkiaSalBitmap::GetSkBitmap() const
                     *dest++ = 0xff;
                 }
             }
-            if (!const_cast<SkBitmap&>(mBitmap).installPixels(
+            if (!bitmap.installPixels(
                     SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), kOpaque_SkAlphaType),
                     data.release(), mSize.Width() * 4,
                     [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
                 abort();
-            SAL_INFO("vcl.skia", "skbitmap(" << this << ")");
+            bitmap.setImmutable();
         }
         else
         {
@@ -327,90 +336,105 @@ const SkBitmap& SkiaSalBitmap::GetSkBitmap() const
                 = convertDataBitCount(mBuffer.get(), mSize.Width(), mSize.Height(), mBitCount,
                                       mScanlineSize, mPalette, GET_FORMAT);
 #undef GET_FORMAT
-            if (!const_cast<SkBitmap&>(mBitmap).installPixels(
+            if (!bitmap.installPixels(
                     SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), kOpaque_SkAlphaType),
                     data.release(), mSize.Width() * 4,
                     [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
                 abort();
-            SAL_INFO("vcl.skia", "skbitmap(" << this << ")");
+            bitmap.setImmutable();
         }
     }
-    return mBitmap;
+    return bitmap;
 }
 
-const SkBitmap& SkiaSalBitmap::GetAlphaSkBitmap() const
+const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 {
-    if (mAlphaBitmap.drawsNothing())
-    {
-        if (mBuffer && mBitCount <= 8)
-        {
-            assert(mBuffer.get());
-            verify();
-            std::unique_ptr<sal_uInt8[]> data
-                = convertDataBitCount(mBuffer.get(), mSize.Width(), mSize.Height(), mBitCount,
-                                      mScanlineSize, mPalette, BitConvert::A8);
-            if (!const_cast<SkBitmap&>(mAlphaBitmap)
-                     .installPixels(
-                         SkImageInfo::MakeA8(mSize.Width(), mSize.Height()), data.release(),
-                         mSize.Width(),
-                         [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); },
-                         nullptr))
-                abort();
-            SAL_INFO("vcl.skia", "skalphabitmap(" << this << ")");
-        }
-        else
-        {
-            GetSkBitmap(); // make sure we have mBitmap, in case (mBuffer && mBitCount > 8)
-            // To make things more interesting, some LO code creates masks as 24bpp,
-            // so we first need to convert to 8bit to be able to convert that to 8bit alpha.
-            SkBitmap* convertedBitmap = nullptr;
-            const SkBitmap* bitmap8 = &mBitmap;
-            if (mBitmap.colorType() != kGray_8_SkColorType)
-            {
-                convertedBitmap = new SkBitmap;
-                if (!convertedBitmap->tryAllocPixels(SkImageInfo::Make(
-                        mSize.Width(), mSize.Height(), kGray_8_SkColorType, kOpaque_SkAlphaType)))
-                    abort();
-                SkCanvas canvas(*convertedBitmap);
-                SkPaint paint;
-                paint.setBlendMode(SkBlendMode::kSrc); // copy and convert depth
-                canvas.drawBitmap(mBitmap, 0, 0, &paint);
-                bitmap8 = convertedBitmap;
-            }
-            // Skia uses a bitmap as an alpha channel only if it's set as kAlpha_8_SkColorType.
-            // But in SalBitmap::Create() it's not quite clear if the 8-bit image will be used
-            // as a mask or as a real bitmap. So mBitmap is always kGray_8_SkColorType for 8bpp
-            // and mAlphaBitmap is kAlpha_8_SkColorType that can be used as a mask.
-            // Make mAlphaBitmap share mBitmap's data.
-            const_cast<SkBitmap&>(mAlphaBitmap)
-                .setInfo(bitmap8->info().makeColorType(kAlpha_8_SkColorType), bitmap8->rowBytes());
-            const_cast<SkBitmap&>(mAlphaBitmap)
-                .setPixelRef(sk_ref_sp(bitmap8->pixelRef()), bitmap8->pixelRefOrigin().x(),
-                             bitmap8->pixelRefOrigin().y());
-            delete convertedBitmap;
-            SAL_INFO("vcl.skia", "skalphabitmap(" << this << ")");
-            return mAlphaBitmap;
-        }
-    }
-    return mAlphaBitmap;
+    if (mImage)
+        return mImage;
+    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
+    assert(surface);
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+    surface->getCanvas()->drawBitmap(GetAsSkBitmap(), 0, 0, &paint);
+    const_cast<sk_sp<SkImage>&>(mImage) = surface->makeImageSnapshot();
+    SAL_INFO("vcl.skia", "getskimage(" << this << ")");
+    return mImage;
 }
 
-// Reset the cached bitmap allocated in GetSkBitmap().
+const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
+{
+    if (mAlphaImage)
+        return mAlphaImage;
+    SkBitmap alphaBitmap;
+    if (mBuffer && mBitCount <= 8)
+    {
+        assert(mBuffer.get());
+        verify();
+        std::unique_ptr<sal_uInt8[]> data
+            = convertDataBitCount(mBuffer.get(), mSize.Width(), mSize.Height(), mBitCount,
+                                  mScanlineSize, mPalette, BitConvert::A8);
+        if (!alphaBitmap.installPixels(
+                SkImageInfo::MakeA8(mSize.Width(), mSize.Height()), data.release(), mSize.Width(),
+                [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
+            abort();
+        alphaBitmap.setImmutable();
+    }
+    else
+    {
+        SkBitmap originalBitmap = GetAsSkBitmap();
+        // To make things more interesting, some LO code creates masks as 24bpp,
+        // so we first need to convert to 8bit to be able to convert that to 8bit alpha.
+        SkBitmap* convertedBitmap = nullptr;
+        const SkBitmap* bitmap8 = &originalBitmap;
+        if (originalBitmap.colorType() != kGray_8_SkColorType)
+        {
+            convertedBitmap = new SkBitmap;
+            if (!convertedBitmap->tryAllocPixels(SkImageInfo::Make(
+                    mSize.Width(), mSize.Height(), kGray_8_SkColorType, kOpaque_SkAlphaType)))
+                abort();
+            SkCanvas canvas(*convertedBitmap);
+            SkPaint paint;
+            paint.setBlendMode(SkBlendMode::kSrc); // copy and convert depth
+            canvas.drawBitmap(originalBitmap, 0, 0, &paint);
+            convertedBitmap->setImmutable();
+            bitmap8 = convertedBitmap;
+        }
+        // Skia uses a bitmap as an alpha channel only if it's set as kAlpha_8_SkColorType.
+        // But in SalBitmap::Create() it's not quite clear if the 8-bit image will be used
+        // as a mask or as a real bitmap. So mBitmap is always kGray_8_SkColorType for 8bpp
+        // and alphaBitmap is kAlpha_8_SkColorType that can be used as a mask.
+        // Make alphaBitmap share bitmap8's data.
+        alphaBitmap.setInfo(
+            bitmap8->info().makeColorType(kAlpha_8_SkColorType).makeAlphaType(kPremul_SkAlphaType),
+            bitmap8->rowBytes());
+        alphaBitmap.setPixelRef(sk_ref_sp(bitmap8->pixelRef()), bitmap8->pixelRefOrigin().x(),
+                                bitmap8->pixelRefOrigin().y());
+        delete convertedBitmap;
+        alphaBitmap.setImmutable();
+    }
+    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
+    assert(surface);
+    // https://bugs.chromium.org/p/skia/issues/detail?id=9692
+    // Raster kAlpha_8_SkColorType surfaces need empty contents for SkBlendMode::kSrc.
+    if (!surface->getCanvas()->getGrContext())
+        surface->getCanvas()->clear(SkColorSetARGB(0x00, 0x00, 0x00, 0x00));
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+    surface->getCanvas()->drawBitmap(alphaBitmap, 0, 0, &paint);
+    const_cast<sk_sp<SkImage>&>(mAlphaImage) = surface->makeImageSnapshot();
+    SAL_INFO("vcl.skia", "getalphaskbitmap(" << this << ")");
+    return mAlphaImage;
+}
+
+// Reset the cached images allocated in GetSkImage().
 void SkiaSalBitmap::ResetCachedBitmap()
 {
-    mAlphaBitmap.reset();
-    if (mBuffer)
-        mBitmap.reset();
+    mAlphaImage.reset();
+    mImage.reset();
 }
 
 #ifdef DBG_UTIL
-void SkiaSalBitmap::dump(const char* file) const
-{
-    sk_sp<SkImage> image = SkImage::MakeFromBitmap(GetSkBitmap());
-    sk_sp<SkData> data = image->encodeToData();
-    std::ofstream ostream(file, std::ios::binary);
-    ostream.write(static_cast<const char*>(data->data()), data->size());
-}
+void SkiaSalBitmap::dump(const char* file) const { SkiaHelper::dump(GetSkImage(), file); }
 
 void SkiaSalBitmap::verify() const
 {

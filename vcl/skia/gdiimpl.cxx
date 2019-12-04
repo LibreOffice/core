@@ -35,10 +35,6 @@
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-#ifdef DBG_UTIL
-#include <fstream>
-#endif
-
 namespace
 {
 // Create Skia Path from B2DPolygon
@@ -199,9 +195,6 @@ void SkiaSalGraphicsImpl::createSurface()
         createOffscreenSurface();
     else
         createWindowSurface();
-#ifdef DBG_UTIL
-    prefillSurface();
-#endif
     mSurface->getCanvas()->save(); // see SetClipRegion()
     mClipRegion = vcl::Region(tools::Rectangle(0, 0, GetWidth(), GetHeight()));
 
@@ -232,6 +225,10 @@ void SkiaSalGraphicsImpl::createWindowSurface()
                 abort(); // this should not really happen
         }
     }
+    assert((mSurface->getCanvas()->getGrContext() != nullptr) == mIsGPU);
+#ifdef DBG_UTIL
+    SkiaHelper::prefillSurface(mSurface);
+#endif
 }
 
 void SkiaSalGraphicsImpl::createOffscreenSurface()
@@ -259,14 +256,10 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
             }
             if (grContext)
             {
-                mSurface = SkSurface::MakeRenderTarget(
-                    grContext, SkBudgeted::kNo,
-                    SkImageInfo::MakeN32Premul(GetWidth(), GetHeight()));
-                mIsGPU = true;
+                mSurface = SkiaHelper::createSkSurface(GetWidth(), GetHeight());
                 assert(mSurface);
-#ifdef DBG_UTIL
-                prefillSurface();
-#endif
+                assert(mSurface->getCanvas()->getGrContext()); // is GPU-backed
+                mIsGPU = true;
                 return;
             }
             SAL_WARN("vcl.skia", "cannot create Vulkan offscreen GPU surface, disabling Vulkan");
@@ -276,9 +269,10 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
         default:
             break;
     }
-    // Create raster surface. Subclasses will create GPU-backed surfaces as appropriate.
-    mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
+    // Create raster surface as a fallback.
+    mSurface = SkiaHelper::createSkSurface(GetWidth(), GetHeight());
     assert(mSurface);
+    assert(!mSurface->getCanvas()->getGrContext()); // is not GPU-backed
     mIsGPU = false;
 }
 
@@ -768,10 +762,8 @@ bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect& rPosAry, const SalBitmap
         return false;
 
     assert(dynamic_cast<const SkiaSalBitmap*>(&rBitmap));
-
     const SkiaSalBitmap& rSkiaBitmap = static_cast<const SkiaSalBitmap&>(rBitmap);
-    drawBitmap(rPosAry, rSkiaBitmap.GetSkBitmap(), SkBlendMode::kMultiply);
-
+    drawImage(rPosAry, rSkiaBitmap.GetSkImage(), SkBlendMode::kMultiply);
     return true;
 }
 
@@ -787,31 +779,27 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
     assert(dynamic_cast<const SkiaSalBitmap*>(&rMaskBitmap));
     assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
 
-    SkBitmap aTempBitmap;
-    if (!aTempBitmap.tryAllocN32Pixels(rSourceBitmap.GetSize().Width(),
-                                       rSourceBitmap.GetSize().Height()))
-    {
+    sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(rSourceBitmap.GetSize());
+    if (!tmpSurface)
         return false;
-    }
 
     const SkiaSalBitmap& rSkiaSourceBitmap = static_cast<const SkiaSalBitmap&>(rSourceBitmap);
     const SkiaSalBitmap& rSkiaMaskBitmap = static_cast<const SkiaSalBitmap&>(rMaskBitmap);
     const SkiaSalBitmap& rSkiaAlphaBitmap = static_cast<const SkiaSalBitmap&>(rAlphaBitmap);
 
-    SkCanvas aCanvas(aTempBitmap);
+    SkCanvas* aCanvas = tmpSurface->getCanvas();
     SkPaint aPaint;
 
     aPaint.setBlendMode(SkBlendMode::kSrc);
-    aCanvas.drawBitmap(rSkiaMaskBitmap.GetAlphaSkBitmap(), 0, 0, &aPaint);
+    aCanvas->drawImage(rSkiaSourceBitmap.GetSkImage(), 0, 0, &aPaint);
 
-    aPaint.setBlendMode(SkBlendMode::kSrcIn);
-    aCanvas.drawBitmap(rSkiaAlphaBitmap.GetAlphaSkBitmap(), 0, 0, &aPaint);
+    // Apply cumulatively both the bitmap alpha and the device alpha.
+    aPaint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
+    aCanvas->drawImage(rSkiaMaskBitmap.GetAlphaSkImage(), 0, 0, &aPaint);
+    aPaint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
+    aCanvas->drawImage(rSkiaAlphaBitmap.GetAlphaSkImage(), 0, 0, &aPaint);
 
-    aPaint.setBlendMode(SkBlendMode::kSrcOut);
-    aCanvas.drawBitmap(rSkiaSourceBitmap.GetSkBitmap(), 0, 0, &aPaint);
-
-    drawBitmap(rPosAry, aTempBitmap);
-
+    drawImage(rPosAry, tmpSurface->makeImageSnapshot());
     return true;
 }
 
@@ -823,7 +811,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
     const SkiaSalBitmap& rSkiaSourceBitmap = static_cast<const SkiaSalBitmap&>(rSalBitmap);
 
-    drawBitmap(rPosAry, rSkiaSourceBitmap.GetSkBitmap());
+    drawImage(rPosAry, rSkiaSourceBitmap.GetSkImage());
 }
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
@@ -836,26 +824,24 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
                                    Color nMaskColor)
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
-    sk_sp<SkImage> image
-        = SkImage::MakeFromBitmap(static_cast<const SkiaSalBitmap&>(rSalBitmap).GetAlphaSkBitmap());
-    drawMask(rPosAry, *image, nMaskColor);
+    drawMask(rPosAry, static_cast<const SkiaSalBitmap&>(rSalBitmap).GetAlphaSkImage(), nMaskColor);
 }
 
-void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkImage& rImage,
+void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const sk_sp<SkImage>& rImage,
                                    Color nMaskColor)
 {
-    SkBitmap tmpBitmap;
-    if (!tmpBitmap.tryAllocN32Pixels(rImage.width(), rImage.height()))
-        abort();
-    tmpBitmap.eraseColor(toSkColor(nMaskColor));
+    SAL_INFO("vcl.skia", "drawmask(" << this << "): " << rPosAry << ":" << nMaskColor);
+    sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(rImage->width(), rImage->height());
+    assert(tmpSurface);
+    SkCanvas* canvas = tmpSurface->getCanvas();
+    canvas->clear(toSkColor(nMaskColor));
     SkPaint paint;
     // Draw the color with the given mask.
-    // TODO figure out the right blend mode to avoid the temporary bitmap
+    // TODO figure out the right blend mode to avoid the temporary surface
     paint.setBlendMode(SkBlendMode::kDstOut);
-    SkCanvas canvas(tmpBitmap);
-    canvas.drawImage(&rImage, 0, 0, &paint);
+    canvas->drawImage(rImage, 0, 0, &paint);
 
-    drawBitmap(rPosAry, tmpBitmap);
+    drawImage(rPosAry, tmpSurface->makeImageSnapshot());
 }
 
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
@@ -866,7 +852,7 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long
              "getbitmap(" << this << "): " << Point(nX, nY) << "/" << Size(nWidth, nHeight));
     mSurface->getCanvas()->flush();
     sk_sp<SkImage> image = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
-    return std::make_shared<SkiaSalBitmap>(*image);
+    return std::make_shared<SkiaSalBitmap>(image);
 }
 
 Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
@@ -922,7 +908,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
         if (eFlags == SalInvert::N50)
         {
             // This creates 4x4 checker pattern bitmap
-            // TODO Cache the bitmap
+            // TODO Use SkiaHelper::createSkSurface() and cache the image
             SkBitmap aBitmap;
             aBitmap.allocN32Pixels(4, 4);
             const SkPMColor white = SkPreMultiplyARGB(0xFF, 0xFF, 0xFF, 0xFF);
@@ -989,19 +975,35 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
     assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
-    SkBitmap tmpBitmap;
-    if (!tmpBitmap.tryAllocN32Pixels(rSourceBitmap.GetSize().Width(),
-                                     rSourceBitmap.GetSize().Height()))
+    sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(rSourceBitmap.GetSize());
+    if (!tmpSurface)
         return false;
-    SkCanvas canvas(tmpBitmap);
+    SkCanvas* canvas = tmpSurface->getCanvas();
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkBitmap(), 0, 0, &paint);
-    paint.setBlendMode(SkBlendMode::kDstOut);
-    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rAlphaBitmap).GetAlphaSkBitmap(), 0, 0,
+    canvas->drawImage(static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkImage(), 0, 0, &paint);
+    paint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
+    canvas->drawImage(static_cast<const SkiaSalBitmap&>(rAlphaBitmap).GetAlphaSkImage(), 0, 0,
                       &paint);
-    drawBitmap(rPosAry, tmpBitmap);
+    drawImage(rPosAry, tmpSurface->makeImageSnapshot());
     return true;
+}
+
+void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
+                                    SkBlendMode eBlendMode)
+{
+    SkRect aSourceRect
+        = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+    SkRect aDestinationRect = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
+                                               rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+
+    SkPaint aPaint;
+    aPaint.setBlendMode(eBlendMode);
+
+    preDraw();
+    SAL_INFO("vcl.skia", "drawimage(" << this << "): " << rPosAry << ":" << int(eBlendMode));
+    mSurface->getCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
+    postDraw();
 }
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& aBitmap,
@@ -1033,26 +1035,19 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     const SkiaSalBitmap& rSkiaBitmap = static_cast<const SkiaSalBitmap&>(rSourceBitmap);
     const SkiaSalBitmap* pSkiaAlphaBitmap = static_cast<const SkiaSalBitmap*>(pAlphaBitmap);
 
-    long nSourceWidth = rSourceBitmap.GetSize().Width();
-    long nSourceHeight = rSourceBitmap.GetSize().Height();
-
-    SkBitmap aTemporaryBitmap;
-    if (!aTemporaryBitmap.tryAllocN32Pixels(nSourceWidth, nSourceHeight))
-    {
+    sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(rSourceBitmap.GetSize());
+    if (!tmpSurface)
         return false;
-    }
 
+    // Combine bitmap + alpha bitmap into one temporary bitmap with alpha
+    SkCanvas* aCanvas = tmpSurface->getCanvas();
+    SkPaint aPaint;
+    aPaint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+    aCanvas->drawImage(rSkiaBitmap.GetSkImage(), 0, 0, &aPaint);
+    if (pSkiaAlphaBitmap != nullptr)
     {
-        // Combine bitmap + alpha bitmap into one temporary bitmap with alpha
-        SkCanvas aCanvas(aTemporaryBitmap);
-        SkPaint aPaint;
-        aPaint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-        aCanvas.drawBitmap(rSkiaBitmap.GetSkBitmap(), 0, 0, &aPaint);
-        if (pSkiaAlphaBitmap != nullptr)
-        {
-            aPaint.setBlendMode(SkBlendMode::kDstOut);
-            aCanvas.drawBitmap(pSkiaAlphaBitmap->GetAlphaSkBitmap(), 0, 0, &aPaint);
-        }
+        aPaint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
+        aCanvas->drawImage(pSkiaAlphaBitmap->GetAlphaSkImage(), 0, 0, &aPaint);
     }
     // setup the image transformation
     // using the rNull, rX, rY points as destinations for the (0,0), (0,Width), (Height,0) source points
@@ -1075,7 +1070,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     {
         SkAutoCanvasRestore autoRestore(mSurface->getCanvas(), true);
         mSurface->getCanvas()->concat(aMatrix);
-        mSurface->getCanvas()->drawBitmap(aTemporaryBitmap, 0, 0);
+        mSurface->getCanvas()->drawImage(tmpSurface->makeImageSnapshot(), 0, 0);
     }
     postDraw();
 
@@ -1111,36 +1106,7 @@ bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
 void SkiaSalGraphicsImpl::dump(const char* file) const
 {
     assert(mSurface.get());
-    mSurface->getCanvas()->flush();
-    sk_sp<SkImage> image = mSurface->makeImageSnapshot();
-    sk_sp<SkData> data = image->encodeToData();
-    std::ofstream ostream(file, std::ios::binary);
-    ostream.write(static_cast<const char*>(data->data()), data->size());
-}
-
-void SkiaSalGraphicsImpl::dump(const SkBitmap& bitmap, const char* file)
-{
-    sk_sp<SkImage> image = SkImage::MakeFromBitmap(bitmap);
-    sk_sp<SkData> data = image->encodeToData();
-    std::ofstream ostream(file, std::ios::binary);
-    ostream.write(static_cast<const char*>(data->data()), data->size());
-}
-
-void SkiaSalGraphicsImpl::prefillSurface()
-{
-    // Pre-fill the surface with deterministic garbage.
-    SkBitmap bitmap;
-    bitmap.allocN32Pixels(2, 2);
-    SkPMColor* scanline;
-    scanline = bitmap.getAddr32(0, 0);
-    *scanline++ = SkPreMultiplyARGB(0xFF, 0xBF, 0x80, 0x40);
-    *scanline++ = SkPreMultiplyARGB(0xFF, 0x40, 0x80, 0xBF);
-    scanline = bitmap.getAddr32(0, 1);
-    *scanline++ = SkPreMultiplyARGB(0xFF, 0xE3, 0x5C, 0x13);
-    *scanline++ = SkPreMultiplyARGB(0xFF, 0x13, 0x5C, 0xE3);
-    SkPaint paint;
-    paint.setShader(bitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
-    mSurface->getCanvas()->drawPaint(paint);
+    SkiaHelper::dump(mSurface, file);
 }
 #endif
 

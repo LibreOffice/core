@@ -11,6 +11,7 @@
 
 #include <win/saldata.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <skia/utils.hxx>
 
 #include <SkColorFilter.h>
 #include <SkPixelRef.h>
@@ -150,7 +151,7 @@ void WinSkiaSalGraphicsImpl::DrawTextMask(CompatibleDC::Texture* pTexture, Color
                                           const SalTwoRect& rPosAry)
 {
     assert(dynamic_cast<SkiaCompatibleDC::Texture*>(pTexture));
-    drawMask(rPosAry, *static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->image, nMaskColor);
+    drawMask(rPosAry, static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->image, nMaskColor);
 }
 
 SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height)
@@ -192,8 +193,16 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage()
     alpha.setInfo(bitmap8.info().makeColorType(kAlpha_8_SkColorType), bitmap8.rowBytes());
     alpha.setPixelRef(sk_ref_sp(bitmap8.pixelRef()), bitmap8.pixelRefOrigin().x(),
                       bitmap8.pixelRefOrigin().y());
-    // TODO GPU?
-    return SkImage::MakeFromBitmap(alpha);
+    sk_sp<SkSurface> surface
+        = SkiaHelper::createSkSurface(alpha.width(), alpha.height(), kAlpha_8_SkColorType);
+    // https://bugs.chromium.org/p/skia/issues/detail?id=9692
+    // Raster kAlpha_8_SkColorType surfaces need empty contents for SkBlendMode::kSrc.
+    if (!surface->getCanvas()->getGrContext())
+        surface->getCanvas()->clear(SkColorSetARGB(0x00, 0x00, 0x00, 0x00));
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+    surface->getCanvas()->drawBitmap(alpha, 0, 0, &paint);
+    return surface->makeImageSnapshot();
 }
 
 sk_sp<SkImage> SkiaCompatibleDC::getAsImage()
@@ -203,22 +212,21 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImage()
                                                    kBGRA_8888_SkColorType, kUnpremul_SkAlphaType),
                                  mpData, maRects.mnSrcWidth * 4))
         abort();
-    SkBitmap bitmap;
-    if (!bitmap.tryAllocPixels(tmpBitmap.info()))
-        abort();
+    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(tmpBitmap.width(), tmpBitmap.height());
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-    SkCanvas canvas(bitmap);
+    SkCanvas* canvas = surface->getCanvas();
+    canvas->save();
     // The data we got is upside-down.
     SkMatrix matrix;
     matrix.preTranslate(0, maRects.mnSrcHeight);
     matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
-    canvas.concat(matrix);
-    canvas.drawBitmapRect(tmpBitmap,
-                          SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
-                          SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight), &paint);
-    // TODO GPU
-    return SkImage::MakeFromBitmap(bitmap);
+    canvas->concat(matrix);
+    canvas->drawBitmapRect(tmpBitmap,
+                           SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
+                           SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight), &paint);
+    canvas->restore();
+    return surface->makeImageSnapshot();
 }
 
 SkiaControlsCache::SkiaControlsCache()
