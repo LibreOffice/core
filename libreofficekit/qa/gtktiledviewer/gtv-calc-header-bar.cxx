@@ -9,6 +9,7 @@
 
 #include <gtk/gtk.h>
 
+#include <cassert>
 #include <cmath>
 #include <iostream>
 
@@ -131,6 +132,10 @@ static gboolean gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCair
             // Bottom line.
             cairo_rectangle(pCairo, aRectangle.x, aRectangle.height, aRectangle.width, 1);
             cairo_fill(pCairo);
+        }
+        else
+        {
+            assert(false); // should never happen
         }
 
         gtv_calc_header_bar_draw_text(pCairo, aRectangle, rHeader.m_aText);
