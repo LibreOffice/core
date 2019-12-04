@@ -64,7 +64,7 @@ namespace emfplushelper
     #define EmfPlusRecordTypeSetRenderingOrigin 0x401D
     #define EmfPlusRecordTypeSetAntiAliasMode 0x401E
     #define EmfPlusRecordTypeSetTextRenderingHint 0x401F
-    //TODO EmfPlusSetTextContrast 0x4020
+    #define EmfPlusRecordTypeSetTextContrast 0x4020
     #define EmfPlusRecordTypeSetInterpolationMode 0x4021
     #define EmfPlusRecordTypeSetPixelOffsetMode 0x4022
     //TODO EmfPlusRecordTypeSetCompositingMode 0x4023
@@ -120,6 +120,18 @@ namespace emfplushelper
         SmoothingModeNone = 0x03,
         SmoothingModeAntiAlias8x4 = 0x04,
         SmoothingModeAntiAlias8x8 = 0x05
+    };
+
+    enum InterpolationMode
+    {
+        InterpolationModeDefault = 0x00,
+        InterpolationModeLowQuality = 0x01,
+        InterpolationModeHighQuality = 0x02,
+        InterpolationModeBilinear = 0x03,
+        InterpolationModeBicubic = 0x04,
+        InterpolationModeNearestNeighbor = 0x05,
+        InterpolationModeHighQualityBilinear = 0x06,
+        InterpolationModeHighQualityBicubic = 0x07
     };
 
     enum TextRenderingHint
