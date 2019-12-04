@@ -12,12 +12,13 @@
 #include <sal/config.h>
 #include <editeng/editengdllapi.h>
 #include <editeng/outliner.hxx>
+#include <editeng/editview.hxx>
 
 class EDITENG_DLLPUBLIC URLFieldHelper
 {
 public:
-    static void RemoveURLField(Outliner* pOutl, const OutlinerView* pOLV);
-    static bool IsCursorAtURLField(const OutlinerView* pOLV);
+    static void RemoveURLField(EditView& pEditView);
+    static bool IsCursorAtURLField(const EditView& pEditView);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
