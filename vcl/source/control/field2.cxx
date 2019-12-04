@@ -1397,23 +1397,17 @@ void DateField::ImplDateSpinArea( bool bUp )
     }
 }
 
-void DateFormatter::ImplInit()
+DateFormatter::DateFormatter(Edit* pEdit)
+    : FormatterBase(pEdit)
+    , maFieldDate(0)
+    , maLastDate(0)
+    , maMin(1, 1, 1900)
+    , maMax(31, 12, 2200)
+    , mbLongFormat(false)
+    , mbShowDateCentury(true)
+    , mnExtDateFormat(ExtDateFieldFormat::SystemShort)
+    , mbEnforceValidValue(true)
 {
-    mbLongFormat        = false;
-    mbShowDateCentury   = true;
-    mpCalendarWrapper   = nullptr;
-    mnExtDateFormat     = ExtDateFieldFormat::SystemShort;
-}
-
-DateFormatter::DateFormatter(Edit* pEdit) :
-    FormatterBase(pEdit),
-    maFieldDate( 0 ),
-    maLastDate( 0 ),
-    maMin( 1, 1, 1900 ),
-    maMax( 31, 12, 2200 ),
-    mbEnforceValidValue( true )
-{
-    ImplInit();
 }
 
 DateFormatter::~DateFormatter()
@@ -1422,13 +1416,13 @@ DateFormatter::~DateFormatter()
 
 CalendarWrapper& DateFormatter::GetCalendarWrapper() const
 {
-    if ( !mpCalendarWrapper )
+    if (!mxCalendarWrapper)
     {
-        const_cast<DateFormatter*>(this)->mpCalendarWrapper.reset( new CalendarWrapper( comphelper::getProcessComponentContext() ) );
-        mpCalendarWrapper->loadDefaultCalendar( GetLocale() );
+        const_cast<DateFormatter*>(this)->mxCalendarWrapper.reset( new CalendarWrapper( comphelper::getProcessComponentContext() ) );
+        mxCalendarWrapper->loadDefaultCalendar( GetLocale() );
     }
 
-    return *mpCalendarWrapper;
+    return *mxCalendarWrapper;
 }
 
 void DateFormatter::SetExtDateFormat( ExtDateFieldFormat eFormat )

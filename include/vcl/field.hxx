@@ -267,7 +267,7 @@ public:
 class VCL_DLLPUBLIC DateFormatter : public FormatterBase
 {
 private:
-    std::unique_ptr<CalendarWrapper> mpCalendarWrapper;
+    std::unique_ptr<CalendarWrapper> mxCalendarWrapper;
     Date                    maFieldDate;
     Date                    maLastDate;
     Date                    maMin;
@@ -276,8 +276,6 @@ private:
     bool                    mbShowDateCentury;
     ExtDateFieldFormat      mnExtDateFormat;
     bool                    mbEnforceValidValue;
-
-    SAL_DLLPRIVATE void     ImplInit();
 
 protected:
                             DateFormatter(Edit* pEdit);
