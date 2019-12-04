@@ -114,6 +114,31 @@ ContextHandlerRef TitleContext::onCreateContext( sal_Int32 nElement, const Attri
     return nullptr;
 }
 
+LegendEntryContext::LegendEntryContext( ContextHandler2Helper& rParent, LegendEntryModel& rModel ) :
+    ContextBase< LegendEntryModel >( rParent, rModel )
+{
+}
+
+LegendEntryContext::~LegendEntryContext()
+{
+}
+
+ContextHandlerRef LegendEntryContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    // this context handler is used for <c:legendEntry> only
+    switch( nElement )
+    {
+        case C_TOKEN( idx ):
+            mrModel.mnLegendEntryIdx = rAttribs.getInteger( XML_val, -1 );
+            return nullptr;
+
+        case C_TOKEN( delete ):
+            mrModel.mbLabelDeleted = rAttribs.getBool( XML_val, true );
+            return nullptr;
+    }
+    return nullptr;
+}
+
 LegendContext::LegendContext( ContextHandler2Helper& rParent, LegendModel& rModel ) :
     ContextBase< LegendModel >( rParent, rModel )
 {
@@ -135,6 +160,9 @@ ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const Attr
         case C_TOKEN( legendPos ):
             mrModel.mnPosition = rAttribs.getToken( XML_val, XML_r );
             return nullptr;
+
+        case C_TOKEN( legendEntry ):
+            return new LegendEntryContext( *this, mrModel.maLegendEntries.create() );
 
         case C_TOKEN( overlay ):
             mrModel.mbOverlay = rAttribs.getBool( XML_val, !bMSO2007Doc );
