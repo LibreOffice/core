@@ -60,39 +60,31 @@ class VCLPLUG_QT5_PUBLIC Qt5FilePicker : public QObject, public Qt5FilePicker_Ba
 private:
     css::uno::Reference<css::uno::XComponentContext> m_context;
 
-    // whether to show (i.e. not remove) the file extension in the filter title,
-    // e.g. whether to use "ODF Text Document (*.odt)" or just
-    // "ODF Text Document" as filter title
-    // (non-native QFileDialog e.g. adds that information by itself anyway)
-    bool m_bShowFileExtensionInFilterTitle;
-
-protected:
     css::uno::Reference<css::ui::dialogs::XFilePickerListener> m_xListener;
-
-    std::unique_ptr<QFileDialog> m_pFileDialog; ///< the non-native file picker dialog
 
     osl::Mutex m_aHelperMutex; ///< mutex used by the WeakComponentImplHelper
 
-    QStringList m_aNamedFilterList; ///< to keep the original sequence
     QHash<QString, QString> m_aTitleToFilterMap;
     // to retrieve the filename extension for a given filter
     QHash<QString, QString> m_aNamedFilterToExtensionMap;
-    QString m_aCurrentFilter;
 
-    QWidget* m_pExtraControls; ///< widget to contain extra custom controls
     QGridLayout* m_pLayout; ///< layout for extra custom controls
-    QLabel* m_pFilenameLabel; ///< label to display the filename
-    QLabel* m_pFilterLabel; ///< label to display the filter
     QHash<sal_Int16, QWidget*> m_aCustomWidgetsMap; ///< map of SAL control ID's to widget
 
-    bool m_bIsFolderPicker;
+    const bool m_bIsFolderPicker;
+
+protected:
+    QStringList m_aNamedFilterList; ///< to keep the original sequence
+    QString m_aCurrentFilter;
+
+    std::unique_ptr<QFileDialog> m_pFileDialog; ///< the file picker dialog
+    QWidget* m_pExtraControls; ///< widget to contain extra custom controls
 
 public:
     // use non-native file dialog by default; there's no easy way to add custom widgets
     // in a generic way in the native one
     explicit Qt5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                           QFileDialog::FileMode, bool bShowFileExtensionInFilterTitle = false,
-                           bool bUseNativeDialog = false);
+                           QFileDialog::FileMode, bool bUseNative = false);
     virtual ~Qt5FilePicker() override;
 
     // XFilePickerNotifier
@@ -155,9 +147,6 @@ public:
     virtual void SAL_CALL setDescription(const OUString& rDescription) override;
 
 protected:
-    static css::uno::Any handleGetListValue(const QComboBox* pWidget, sal_Int16 nControlAction);
-    static void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
-                                   const css::uno::Any& rValue);
     virtual void addCustomControl(sal_Int16 controlId);
     void setCustomControlWidgetLayout(QGridLayout* pLayout) { m_pLayout = pLayout; }
 
@@ -166,6 +155,9 @@ private:
     Qt5FilePicker& operator=(const Qt5FilePicker&) = delete;
 
     static QString getResString(const char* pRedId);
+    static css::uno::Any handleGetListValue(const QComboBox* pWidget, sal_Int16 nControlAction);
+    static void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
+                                   const css::uno::Any& rValue);
 
 private Q_SLOTS:
     // emit XFilePickerListener controlStateChanged event

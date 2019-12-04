@@ -76,16 +76,14 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 }
 
 Qt5FilePicker::Qt5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                             QFileDialog::FileMode eMode, bool bShowFileExtensionInFilterTitle,
-                             bool bUseNativeDialog)
+                             QFileDialog::FileMode eMode, bool bUseNative)
     : Qt5FilePicker_Base(m_aHelperMutex)
     , m_context(context)
-    , m_bShowFileExtensionInFilterTitle(bShowFileExtensionInFilterTitle)
-    , m_pFileDialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , m_bIsFolderPicker(eMode == QFileDialog::Directory)
+    , m_pFileDialog(new QFileDialog(nullptr, {}, QDir::homePath()))
+    , m_pExtraControls(new QWidget())
 {
-    if (!bUseNativeDialog)
-        m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog);
+    m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog, !bUseNative);
 
     m_pFileDialog->setFileMode(eMode);
     m_pFileDialog->setWindowModality(Qt::ApplicationModal);
@@ -96,7 +94,6 @@ Qt5FilePicker::Qt5FilePicker(css::uno::Reference<css::uno::XComponentContext> co
         m_pFileDialog->setWindowTitle(toQString(VclResId(STR_FPICKER_FOLDER_DEFAULT_TITLE)));
     }
 
-    m_pExtraControls = new QWidget();
     m_pLayout = dynamic_cast<QGridLayout*>(m_pFileDialog->layout());
 
     setMultiSelectionMode(false);
@@ -293,28 +290,28 @@ void SAL_CALL Qt5FilePicker::appendFilter(const OUString& title, const OUString&
     }
 
     // '/' need to be escaped else they are assumed to be mime types
-    QString t = toQString(title).replace("/", "\\/");
+    QString sTitle = toQString(title).replace("/", "\\/");
 
-    QString n = t;
-    if (!m_bShowFileExtensionInFilterTitle)
+    QString sFilterName = sTitle;
+    // the Qt5 non-native file picker adds the extensions to the filter title, so strip them
+    if (m_pFileDialog->testOption(QFileDialog::DontUseNativeDialog))
     {
-        // strip file extension from filter title
-        int pos = n.indexOf(" (");
+        int pos = sFilterName.indexOf(" (");
         if (pos >= 0)
-            n.truncate(pos);
+            sFilterName.truncate(pos);
     }
 
-    QString f = toQString(filter);
+    QString sGlobFilter = toQString(filter);
 
     // LibreOffice gives us filters separated by ';' qt dialogs just want space separated
-    f.replace(";", " ");
+    sGlobFilter.replace(";", " ");
 
     // make sure "*.*" is not used as "all files"
-    f.replace("*.*", "*");
+    sGlobFilter.replace("*.*", "*");
 
-    m_aNamedFilterList << QStringLiteral("%1 (%2)").arg(n, f);
-    m_aTitleToFilterMap[t] = m_aNamedFilterList.constLast();
-    m_aNamedFilterToExtensionMap[m_aNamedFilterList.constLast()] = f;
+    m_aNamedFilterList << QStringLiteral("%1 (%2)").arg(sFilterName, sGlobFilter);
+    m_aTitleToFilterMap[sTitle] = m_aNamedFilterList.constLast();
+    m_aNamedFilterToExtensionMap[m_aNamedFilterList.constLast()] = sGlobFilter;
 }
 
 void SAL_CALL Qt5FilePicker::setCurrentFilter(const OUString& title)
@@ -704,6 +701,7 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
         return;
     }
 
+    m_aNamedFilterToExtensionMap.clear();
     m_aNamedFilterList.clear();
     m_aTitleToFilterMap.clear();
     m_aCurrentFilter.clear();
