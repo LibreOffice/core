@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ooo="http://openoffice.org/2004/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:font-face-decls>
+    <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman"/>
+  </office:font-face-decls>
+  <office:styles>
+    <style:default-style style:family="paragraph">
+    </style:default-style>
+    <style:default-style style:family="table">
+      <style:table-properties table:border-model="collapsing"/>
+    </style:default-style>
+    <style:default-style style:family="table-row">
+      <style:table-row-properties fo:keep-together="auto"/>
+    </style:default-style>
+    <style:style style:name="Standard" style:family="paragraph" style:default-outline-level="" style:class="text">
+    </style:style>
+    <text:notes-configuration text:note-class="footnote" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+    <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
+    <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
+    <style:default-page-layout>
+      <style:page-layout-properties style:writing-mode="lr-tb" style:layout-grid-standard-mode="true"/>
+    </style:default-page-layout>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="Table1" style:family="table">
+      <style:table-properties style:width="15.997cm" fo:margin-left="-0.004cm" fo:margin-top="0cm" fo:margin-bottom="0cm" table:align="left" style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="Table1.A" style:family="table-column">
+      <style:table-column-properties style:column-width="3.27cm"/>
+    </style:style>
+    <style:style style:name="Table1.B" style:family="table-column">
+      <style:table-column-properties style:column-width="12.726cm"/>
+    </style:style>
+    <style:style style:name="Table1.1" style:family="table-row">
+      <style:table-row-properties style:min-row-height="0.6cm" fo:keep-together="auto"/>
+    </style:style>
+    <style:style style:name="Table1.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding-left="0.012cm" fo:padding-right="0.012cm" fo:padding-top="0cm" fo:padding-bottom="0cm" fo:border="0.25pt solid #000001"/>
+    </style:style>
+    <style:style style:name="Table1.B1" style:family="table-cell">
+      <style:table-cell-properties style:vertical-align="middle" fo:padding-left="0.012cm" fo:padding-right="0.012cm" fo:padding-top="0cm" fo:padding-bottom="0cm" fo:border-left="0.25pt solid #000001" fo:border-right="none" fo:border-top="0.5pt solid #000001" fo:border-bottom="0.25pt solid #000001"/>
+    </style:style>
+    <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+      <style:text-properties style:text-rotation-angle="90" style:text-rotation-scale="line-height"/>
+    </style:style>
+    <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="Standard">
+    </style:style>
+    <style:page-layout style:name="pm1">
+      <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2.499cm" fo:margin-bottom="2.499cm" fo:margin-left="2.499cm" fo:margin-right="2.499cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="24702" style:layout-grid-base-height="0.176cm" style:layout-grid-ruby-height="0cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.353cm" style:layout-grid-snap-to="true" style:footnote-max-height="0cm">
+        <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style/>
+      <style:footer-style/>
+    </style:page-layout>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <text:p text:style-name="P2"/>
+      <table:table table:name="Table1" table:style-name="Table1">
+        <table:table-column table:style-name="Table1.A"/>
+        <table:table-column table:style-name="Table1.B"/>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="P1">Abcd efghijkl</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.B1" office:value-type="string">
+            <text:p text:style-name="Standard">B1 Line1<text:line-break/>Line2<text:line-break/>Line3<text:line-break/>Line4<text:line-break/>Line5<text:line-break/>Line6<text:line-break/>Line7<text:line-break/>Line8</text:p>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+      <text:p text:style-name="Standard"/>
+    </office:text>
+  </office:body>
+</office:document>
