@@ -58,8 +58,6 @@ class ScAccessibleCell;
 class ScAccessibleSpreadsheet final : public  ScAccessibleTableBase
 {
 public:
-    typedef std::vector<ScMyAddress> VEC_MYADDR;
-
     ScAccessibleSpreadsheet(
         ScAccessibleDocument* pAccDoc,
         ScTabViewShell* pViewShell,
@@ -83,8 +81,8 @@ public:
     bool IsScAddrFormulaSel (const ScAddress &addr) const;
     bool IsFormulaMode();
     ScMyAddress CalcScAddressFromRangeList(ScRangeList *pMarkedRanges,sal_Int32 nSelectedChildIndex);
-    static bool CalcScRangeDifferenceMax(const ScRange & rSrc, const ScRange & rDest,int nMax,VEC_MYADDR &vecRet,int &nSize);
-    static bool CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet);
+    static bool CalcScRangeDifferenceMax(const ScRange & rSrc, const ScRange & rDest,int nMax,std::vector<ScMyAddress> &vecRet,int &nSize);
+    static bool CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,std::vector<ScMyAddress> &vecRet);
 
 private:
     ScAccessibleSpreadsheet(
@@ -262,7 +260,7 @@ private:
     bool          m_bFormulaLastMode;
     ScAddress     m_aFormulaActiveCell;
     MAP_ADDR_XACC m_mapFormulaSelectionSend;
-    VEC_MYADDR    m_vecFormulaLastMyAddr;
+    std::vector<ScMyAddress>  m_vecFormulaLastMyAddr;
     rtl::Reference<ScAccessibleCell> m_pAccFormulaCell;
     sal_uInt16    m_nMinX;
     sal_uInt16    m_nMaxX;
@@ -271,11 +269,9 @@ private:
     ScRange       m_aLastWithInMarkRange;
     OUString      m_strCurCellValue;
     ScRangeList   m_LastMarkedRanges;
-    typedef std::vector<ScRange> VEC_RANGE;
-    VEC_RANGE     m_vecTempRange;
+    std::vector<ScRange>  m_vecTempRange;
     typedef std::pair<sal_uInt16,sal_uInt16> PAIR_COL;
-    typedef std::vector<PAIR_COL> VEC_COL;
-    VEC_COL       m_vecTempCol;
+    std::vector<PAIR_COL> m_vecTempCol;
     OUString      m_strOldTabName;
 };
 
