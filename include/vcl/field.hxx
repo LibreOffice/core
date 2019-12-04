@@ -244,8 +244,6 @@ protected:
     virtual sal_Int64       GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const;
 
 private:
-    SAL_DLLPRIVATE  void    ImplInit();
-
     OUString                maCustomUnitText;
     OUString                maCurUnitText;
 };
