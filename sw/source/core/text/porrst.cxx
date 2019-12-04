@@ -331,6 +331,13 @@ bool SwTextFrame::FormatEmpty()
         ClearPara();
         ResetBlinkPor();
     }
+
+    if (GetHasRotatedPortions())
+    {
+        ClearPara();
+        SetHasRotatedPortions(false);
+    }
+
     RemoveFromCache();
     if( !IsEmpty() )
     {
