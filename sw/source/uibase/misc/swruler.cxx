@@ -279,14 +279,17 @@ std::string SwCommentRuler::CreateJsonNotification()
     jsonNotif.put("pageOffset", convertTwipToMm100(GetPageOffset()));
 
     // GetPageWidth() on the other hand does return a value in twips.
+    // So here convertTwipToMm100() really does produce actual mm100. Fun.
     jsonNotif.put("pageWidth", convertTwipToMm100(GetPageWidth()));
 
     boost::property_tree::ptree tabs;
 
+    // The RulerTab array elements that GetTabs() returns have their nPos field in twips. So these
+    // too are actual mm100.
     for (auto const& tab : GetTabs())
     {
         boost::property_tree::ptree element;
-        element.put("position", tab.nPos);
+        element.put("position", convertTwipToMm100(tab.nPos));
         element.put("style", tab.nStyle);
         tabs.push_back(std::make_pair("", element));
     }
