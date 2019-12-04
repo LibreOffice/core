@@ -43,16 +43,6 @@ namespace o3tl
 }
 
 // Flags for DrawFrame()
-enum class DrawFrameStyle
-{
-    NONE                     = 0x0000,
-    In                       = 0x0001,
-    Out                      = 0x0002,
-    Group                    = 0x0003,
-    DoubleIn                 = 0x0004,
-    DoubleOut                = 0x0005,
-    NWF                      = 0x0006,
-};
 enum class DrawFrameFlags
 {
     NONE                     = 0x0000,

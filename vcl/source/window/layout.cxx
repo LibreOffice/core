@@ -1681,6 +1681,7 @@ IMPL_LINK( VclExpander, ClickHdl, CheckBox&, rBtn, void )
 VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
     : VclBin(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL | WB_TABSTOP)
     , m_bUserManagedScrolling(false)
+    , m_eDrawFrameStyle(DrawFrameStyle::NONE)
     , m_pVScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_VERT))
     , m_pHScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_HORZ))
     , m_aScrollBarBox(VclPtr<ScrollBarBox>::Create(this, WB_HIDE))
@@ -1888,6 +1889,22 @@ Size VclScrolledWindow::getVisibleChildSize() const
 
 bool VclScrolledWindow::set_property(const OString &rKey, const OUString &rValue)
 {
+    if (rKey == "shadow-type")
+    {
+        // despite the style names, this looks like the best mapping
+        if (rValue == "in")
+            m_eDrawFrameStyle = DrawFrameStyle::Out;
+        else if (rValue == "out")
+            m_eDrawFrameStyle = DrawFrameStyle::In;
+        else if (rValue == "etched-in")
+            m_eDrawFrameStyle = DrawFrameStyle::DoubleOut;
+        else if (rValue == "etched-out")
+            m_eDrawFrameStyle = DrawFrameStyle::DoubleIn;
+        else if (rValue == "none")
+            m_eDrawFrameStyle = DrawFrameStyle::NONE;
+        return true;
+    }
+
     bool bRet = VclBin::set_property(rKey, rValue);
     m_pVScroll->Show((GetStyle() & WB_VSCROLL) != 0);
     m_pHScroll->Show((GetStyle() & WB_HSCROLL) != 0);
@@ -1917,7 +1934,7 @@ void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
 {
     VclBin::Paint(rRenderContext, rRect);
     DecorationView aDecoView(&rRenderContext);
-    aDecoView.DrawFrame(tools::Rectangle(Point(0,0), GetSizePixel()));
+    aDecoView.DrawFrame(tools::Rectangle(Point(0,0), GetSizePixel()), m_eDrawFrameStyle);
 }
 
 void VclViewport::setAllocation(const Size &rAllocation)
