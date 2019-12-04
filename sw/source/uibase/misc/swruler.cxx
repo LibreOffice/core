@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -257,10 +257,28 @@ std::string SwCommentRuler::CreateJsonNotification()
 {
     boost::property_tree::ptree jsonNotif;
 
+    // Note that GetMargin1(), GetMargin2(), GetNullOffset(), and GetPageOffset() return values in
+    // pixels. Not twips. So "converting" the returned values with convertTwipToMm100() is quite
+    // wrong. (Also, even if the return values actually were in twips, it is questionable why we
+    // would want to pass them in mm100, as all other length values in the LOKit protocol apparently
+    // are in twips.)
+
+    // Anyway, as the consuming code in Online mostly seems to work anyway, it is likely that it
+    // would work as well even if the values in pixels were passed without a bogus "conversion" to
+    // mm100. But let's keep this as is for now.
+
+    // Also note that in desktop LibreOffice, these pixel values for the ruler of course change as
+    // one changes the zoom level. (Can be seen if one temporarily modifies the NotifyKit() function
+    // below to call this CreateJsonNotification() function and print its result in all cases even
+    // without LibreOfficeKit::isActive().) But in both web-based Online and in the iOS app, the
+    // zoom level from the point of view of this code here apparently does not change even if one
+    // zooms from the Online code's point of view.
     jsonNotif.put("margin1", convertTwipToMm100(GetMargin1()));
     jsonNotif.put("margin2", convertTwipToMm100(GetMargin2()));
     jsonNotif.put("leftOffset", convertTwipToMm100(GetNullOffset()));
     jsonNotif.put("pageOffset", convertTwipToMm100(GetPageOffset()));
+
+    // GetPageWidth() on the other hand does return a value in twips.
     jsonNotif.put("pageWidth", convertTwipToMm100(GetPageWidth()));
 
     RulerUnitData aUnitData = GetCurrentRulerUnit();
