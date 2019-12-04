@@ -1061,48 +1061,41 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
     for (int i = 0; i < aArgs.getLength(); i++)
     {
         OUString sValue;
-        aArgs[i].Value >>= sValue;
         bool bValue;
+        aArgs[i].Value >>= sValue;
+        aArgs[i].Value >>= bValue;
 
         if (aArgs[i].Name == "SuggestedSaveAsName")
         {
-            rArg.Value >>= sValue;
             pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASNAME, sValue));
         }
         else if (aArgs[i].Name == "SuggestedSaveAsDir")
         {
-            rArg.Value >>= sValue;
             pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASDIR, sValue));
         }
-        else if (rArg.Name == "LockContentExtraction")
+        else if (aArgs[i].Name == "LockContentExtraction")
         {
-            rArg.Value >>= bValue;
             pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_CONTENT_EXTRACTION, bValue));
         }
-        else if (rArg.Name == "LockExport")
+        else if (aArgs[i].Name == "LockExport")
         {
-            rArg.Value >>= bValue;
             pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_EXPORT, bValue));
         }
-        else if (rArg.Name == "LockPrint")
+        else if (aArgs[i].Name == "LockPrint")
         {
-            rArg.Value >>= bValue;
             pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_PRINT, bValue));
         }
-        else if (rArg.Name == "LockSave")
+        else if (aArgs[i].Name == "LockSave")
         {
-            rArg.Value >>= bValue;
             pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_SAVE, bValue));
         }
-        else if (rArg.Name == "LockEditDoc")
+        else if (aArgs[i].Name == "LockEditDoc")
         {
-            rArg.Value >>= bValue;
             pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_EDITDOC, bValue));
         }
-        else if (rArg.Name == "EncryptionData")
+        else if (aArgs[i].Name == "EncryptionData")
         {
-            rArg.Value >>= bValue;
-            pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, rArg.Value));
+            pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, aArgs[i].Value));
         }
         else
         {
