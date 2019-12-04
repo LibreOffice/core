@@ -57,7 +57,7 @@ namespace desktop {
     {
     public:
 
-        // constructs a new lockfile onject
+        // constructs a new lockfile object
         Lockfile( bool bIPCserver = true );
 
         // separating GUI code:
