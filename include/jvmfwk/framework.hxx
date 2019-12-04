@@ -465,7 +465,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getJavaInfoByPath(
     were not met.</br>
     JFW_E_JAVA_DISABLED the use of Java is currently disabled. <br/>
     JFW_E_NO_SELECT there is no JRE selected yet. <br/>
-    JFW_E_RUNNIN_JVM there is already a VM running.<br/>
+    JFW_E_RUNNING_JVM there is already a VM running.<br/>
     JFW_E_INVALID_SETTINGS the javavendors.xml has been changed and no
     JRE has been selected afterwards. <br/>
     JFW_E_NEED_RESTART in the current process a different JRE has been selected
