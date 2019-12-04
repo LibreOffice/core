@@ -353,8 +353,6 @@ private:
     bool                    mbDuration;
     bool                    mbEnforceValidValue;
 
-    SAL_DLLPRIVATE void     ImplInit();
-
 protected:
     tools::Time             maFieldTime;
 

@@ -2287,22 +2287,17 @@ void TimeField::ImplTimeSpinArea( bool bUp )
     }
 }
 
-void TimeFormatter::ImplInit()
+TimeFormatter::TimeFormatter(Edit* pEdit)
+    : FormatterBase(pEdit)
+    , maLastTime(0, 0)
+    , maMin(0, 0)
+    , maMax(23, 59, 59, 999999999)
+    , meFormat(TimeFieldFormat::F_NONE)
+    , mnTimeFormat(TimeFormat::Hour24)  // Should become an ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
+    , mbDuration(false)
+    , mbEnforceValidValue(true)
+    , maFieldTime(0, 0)
 {
-    meFormat        = TimeFieldFormat::F_NONE;
-    mbDuration      = false;
-    mnTimeFormat    = TimeFormat::Hour24;  // Should become an ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
-}
-
-TimeFormatter::TimeFormatter(Edit* pEdit) :
-    FormatterBase(pEdit),
-    maLastTime( 0, 0 ),
-    maMin( 0, 0 ),
-    maMax( 23, 59, 59, 999999999 ),
-    mbEnforceValidValue( true ),
-    maFieldTime( 0, 0 )
-{
-    ImplInit();
 }
 
 TimeFormatter::~TimeFormatter()
