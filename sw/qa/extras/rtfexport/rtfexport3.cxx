@@ -294,6 +294,12 @@ DECLARE_RTFEXPORT_TEST(testTdf128428_compatible_monospaced, "tdf128428_compatibl
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf128428_dntblnsbdb, "tdf128428_dntblnsbdb.rtf")
+{
+    // still 1 here
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
