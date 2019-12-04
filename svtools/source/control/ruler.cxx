@@ -2646,6 +2646,11 @@ void Ruler::SetTabs( sal_uInt32 aTabArraySize, const RulerTab* pTabArray )
     ImplUpdate();
 }
 
+const std::vector<RulerTab>& Ruler::GetTabs() const
+{
+    return mpData->pTabs;
+}
+
 void Ruler::SetStyle( WinBits nStyle )
 {
     if ( mnWinStyle != nStyle )
