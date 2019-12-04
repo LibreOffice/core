@@ -1041,7 +1041,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             // The exceptions are for punctuation characters that are not centered
             // so in these cases we just add half a regular "average" character width
             // to the first characters actual width to allow the next character to
-            // be centred automatically
+            // be centered automatically
             // If the character is "special right", then the offset is correct already
             // so the fix offset is as normal - half the average character width
 
