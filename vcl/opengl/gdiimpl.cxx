@@ -703,7 +703,7 @@ void OpenGLSalGraphicsImpl::UseLine(GLfloat fLineWidth, bool bUseAA)
         return;
     mpProgram->SetShaderType(DrawShaderType::Line);
     mpProgram->SetUniform1f("line_width", fLineWidth);
-    // The width of the feather - area we make lineary transparent in VS.
+    // The width of the feather - area we make linearly transparent in VS.
     // Good AA value is 0.5f, no AA if feather 0.0f
     mpProgram->SetUniform1f("feather", bUseAA ? 0.5f : 0.0f);
     // We need blending or AA won't work correctly
