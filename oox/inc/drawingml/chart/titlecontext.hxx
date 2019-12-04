@@ -55,6 +55,18 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
+struct LegendEntryModel;
+
+/** Handler for a chart legend entry context (c:legendEntry element).
+ */
+class LegendEntryContext : public ContextBase< LegendEntryModel >
+{
+public:
+    explicit            LegendEntryContext( ::oox::core::ContextHandler2Helper& rParent, LegendEntryModel& rModel );
+    virtual             ~LegendEntryContext() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+};
 
 struct LegendModel;
 
