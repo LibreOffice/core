@@ -720,12 +720,15 @@ void SvpSalGraphics::drawPixel( long nX, long nY )
 
 void SvpSalGraphics::drawPixel( long nX, long nY, Color aColor )
 {
-    cairo_t* cr = getCairoContext(true);
+    cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
 
     cairo_rectangle(cr, nX, nY, 1, 1);
     applyColor(cr, aColor, 0.0);
     cairo_fill(cr);
+
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
+    releaseCairoContext(cr, false, extents);
 }
 
 void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
