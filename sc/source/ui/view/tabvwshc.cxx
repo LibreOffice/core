@@ -462,7 +462,7 @@ void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
 
     const ScGridWindow* pWin = GetViewData().GetActiveWin();
     if (pWin)
-        pWin->updateLibreOfficeKitCellCursor(pOtherShell);
+        pWin->updateKitCellCursor(pOtherShell);
 }
 
 css::uno::Reference<css::datatransfer::XTransferable2> ScTabViewShell::GetClipData(vcl::Window* pWin)

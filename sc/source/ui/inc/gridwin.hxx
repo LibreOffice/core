@@ -432,7 +432,11 @@ public:
 
     /// get Cell cursor in this view's co-ordinate system @see ScModelObj::getCellCursor().
     OString getCellCursor() const;
-    void updateLibreOfficeKitCellCursor(const SfxViewShell* pOtherShell) const;
+    void notifyKitCellCursor() const;
+    void notifyKitCellViewCursor(const SfxViewShell* pForShell) const;
+    void updateKitCellCursor(const SfxViewShell* pOtherShell) const;
+    /// notify this view with new positions for other view's cursors (after zoom)
+    void updateKitOtherCursors() const;
 
     /// Same as MouseButtonDown(), but coordinates are in logic unit.
     virtual void LogicMouseButtonDown(const MouseEvent& rMouseEvent) override;
