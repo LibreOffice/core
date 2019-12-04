@@ -98,7 +98,7 @@ namespace pcr
     };
 
 
-    //= UI flags (for all browseable properties)
+    //= UI flags (for all browsable properties)
 
 
 #define PROP_FLAG_NONE              0x00000000  // no special flag
@@ -117,7 +117,7 @@ namespace pcr
 #define PROP_FLAG_REPORT_INVISIBLE  0x00000200  // the property should not appear in the Report Designer UI
 
 
-    //= property ids (for all browseable properties)
+    //= property ids (for all browsable properties)
 
 
     #define PROPERTY_ID_NAME                  1
