@@ -549,11 +549,11 @@ NumericFormatter::NumericFormatter(Edit* pEdit)
     // for fields
     , mnFirst(mnMin)
     , mnLast(mnMax)
-    , mnDecimalDigits(2)
+    , mnDecimalDigits(0)
     , mbThousandSep(true)
     , mbShowTrailingZeros(true)
 {
-    SetDecimalDigits( 0 );
+    ReformatAll();
 }
 
 NumericFormatter::~NumericFormatter()
