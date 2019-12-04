@@ -753,6 +753,7 @@ void SwTextFrame::Init()
     {
         ClearPara();
         ResetBlinkPor();
+        SetHasRotatedPortions(false);
         // set flags directly to save a ResetPreps call,
         // and thereby an unnecessary GetPara call
         // don't set bOrphan, bLocked or bWait to false!
@@ -781,6 +782,7 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib,
     , mbFootnote( false )
     , mbRepaint( false )
     , mbHasBlinkPortions( false )
+    , mbHasRotatedPortions( false )
     , mbFieldFollow( false )
     , mbHasAnimation( false )
     , mbIsSwapped( false )

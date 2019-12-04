@@ -1264,8 +1264,11 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                           nEnd, TextFrameIndex(0), rInf );
                 }
                 else if( SwMultiCreatorId::Rotate == pCreate->nId )
+                {
                     pTmp = new SwRotatedPortion( *pCreate, nEnd,
                                                  GetTextFrame()->IsRightToLeft() );
+                    GetTextFrame()->SetHasRotatedPortions(true);
+                }
                 else
                     pTmp = new SwDoubleLinePortion( *pCreate, nEnd );
 

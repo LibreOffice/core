@@ -5223,6 +5223,25 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             lcl_ArrangeLowers( this, lYStart, true );
         }
     }
+
+    // Handle rotated portions of lowers: it's possible that we have changed amount of vertical
+    // space since the last format, and this affects how many rotated portions we need. So throw
+    // away the current portions to build them using the new line width.
+    for (SwFrame* pFrame = Lower(); pFrame; pFrame = pFrame->GetNext())
+    {
+        if (!pFrame->IsTextFrame())
+        {
+            continue;
+        }
+
+        auto pTextFrame = static_cast<SwTextFrame*>(pFrame);
+        if (!pTextFrame->GetHasRotatedPortions())
+        {
+            continue;
+        }
+
+        pTextFrame->Prepare();
+    }
 }
 
 void SwCellFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )

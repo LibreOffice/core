@@ -82,6 +82,11 @@ SwTextFrame *SwTextFrame::FindFootnoteRef( const SwTextFootnote *pFootnote )
     return pFrame;
 }
 
+void SwTextFrame::SetHasRotatedPortions(bool bHasRotatedPortions)
+{
+    mbHasRotatedPortions = bHasRotatedPortions;
+}
+
 #ifdef DBG_UTIL
 void SwTextFrame::CalcFootnoteFlag(TextFrameIndex nStop) // For testing the SplitFrame
 #else
