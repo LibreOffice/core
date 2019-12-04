@@ -22,15 +22,13 @@
 
 #include <salbmp.hxx>
 
-#include <SkBitmap.h>
-
-class SkImage;
+#include <SkImage.h>
 
 class VCL_PLUGIN_PUBLIC SkiaSalBitmap : public SalBitmap
 {
 public:
     SkiaSalBitmap();
-    SkiaSalBitmap(const SkImage& image);
+    SkiaSalBitmap(const sk_sp<SkImage>& image);
     virtual ~SkiaSalBitmap() override;
 
     // SalBitmap methods
@@ -59,12 +57,11 @@ public:
                          sal_uInt8 nTol) override;
     virtual bool ConvertToGreyscale() override;
 
-    // Accesses the internal SkBitmap. If the bit count is one that Skia does
-    // not support natively, data from the internal buffer is converted
-    // to a 32bpp SkBitmap.
-    const SkBitmap& GetSkBitmap() const;
+    // Returns the contents as SkImage (possibly GPU-backed).
+    const sk_sp<SkImage>& GetSkImage() const;
 
-    const SkBitmap& GetAlphaSkBitmap() const;
+    // Returns the contents as alpha SkImage (possibly GPU-backed)
+    const sk_sp<SkImage>& GetAlphaSkImage() const;
 
 #ifdef DBG_UTIL
     void dump(const char* file) const;
@@ -72,6 +69,7 @@ public:
 
 private:
     void ResetCachedBitmap();
+    SkBitmap GetAsSkBitmap() const;
 #ifdef DBG_UTIL
     void verify() const;
 #else
@@ -82,16 +80,18 @@ private:
     friend inline std::basic_ostream<charT, traits>&
     operator<<(std::basic_ostream<charT, traits>& stream, const SkiaSalBitmap* bitmap)
     { // TODO GPU-based, once it's done
-        // B - has SkBitmap, A - has alpha SkBitmap, D - has data buffer
+        // B - has SkBitmap, D - has data buffer, I/i - has SkImage (on GPU/CPU),
+        // A/a - has alpha SkImage (on GPU/CPU)
         return stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "/"
                       << bitmap->mBitCount << (!bitmap->mBitmap.drawsNothing() ? "B" : "")
-                      << (!bitmap->mAlphaBitmap.drawsNothing() ? "A" : "")
-                      << (bitmap->mBuffer.get() ? "D" : "");
+                      << (bitmap->mBuffer.get() ? "D" : "")
+                      << (bitmap->mImage ? (bitmap->mImage->isTextureBacked() ? "I" : "i") : "")
+                      << (bitmap->mAlphaImage ? (bitmap->mAlphaImage->isTextureBacked() ? "A" : "a")
+                                              : "");
     }
 
-    // TODO use something GPU-backed, or at least cache it for when drawing it to something GPU-backed?
+    // Bitmap pixels, if format is supported by Skia. If not, mBuffer is used.
     SkBitmap mBitmap;
-    SkBitmap mAlphaBitmap; // TODO for use as an alpha channel or mask
     BitmapPalette mPalette;
     int mBitCount; // bpp
     Size mSize;
@@ -99,6 +99,8 @@ private:
     // in a buffer (and converted to 32bpp SkBitmap on-demand using GetSkBitmap()).
     std::unique_ptr<sal_uInt8[]> mBuffer;
     int mScanlineSize; // size of one row in mBuffer
+    sk_sp<SkImage> mImage; // cached contents, possibly GPU-backed
+    sk_sp<SkImage> mAlphaImage; // cached contents as alpha image, possibly GPU-backed
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_SALBMP_H
