@@ -786,8 +786,11 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_COPY_HYPERLINK_LOCATION:
             case SID_REMOVE_HYPERLINK:
                 {
-                    if ( !GetURLField() )
-                        rSet.DisableItem( nWhich );
+                    ESelection aSel = pEditView->GetSelection();
+                    // tdf#128666 Only enable when just the URL field is selected
+                    // (or selection is empty, but mouse cursor is over the URL field)
+                    if (!GetURLField() || aSel.nEndPos - aSel.nStartPos > 1)
+                        rSet.DisableItem (nWhich);
                 }
                 break;
 
