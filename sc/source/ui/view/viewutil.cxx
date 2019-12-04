@@ -30,6 +30,7 @@
 #include <svl/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/window.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>

@@ -18,11 +18,12 @@
  */
 
 #include <sfx2/objface.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/syswin.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
 #include <svl/whiter.hxx>

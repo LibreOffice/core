@@ -62,6 +62,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/fmtfield.hxx>
 #include <vcl/svapp.hxx>

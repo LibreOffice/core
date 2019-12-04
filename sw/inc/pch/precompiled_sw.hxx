@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-03 09:23:47 using:
+ Generated on 2019-12-04 09:34:32 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -83,12 +83,10 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
-#include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
@@ -99,7 +97,6 @@
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>
@@ -115,7 +112,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/syswin.hxx>
 #include <vcl/textfilter.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
@@ -124,7 +120,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
-#include <vcl/windowstate.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
