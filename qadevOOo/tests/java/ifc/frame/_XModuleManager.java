@@ -52,7 +52,7 @@ import com.sun.star.frame.UnknownModuleException;
 */
 public class _XModuleManager extends MultiMethodTest {
     /** Test calls the method. <p>
-     * The onject relations <CODE>XModuleManager.XFrame</CODE>,
+     * The object relations <CODE>XModuleManager.XFrame</CODE>,
      * <CODE>XModuleManager.XController</CODE> and <CODE>XModuleManager.XModel</CODE>
      * are sequences of <CODE>PropertyValue</CODE>. The value of a PropertyValue
      * contains a <CODE>XFrame</CODE>, <CODE>XController</CODE> or a
@@ -69,7 +69,7 @@ public class _XModuleManager extends MultiMethodTest {
     * previously obtained object relation 'Frame'.
     * The following method tests are to be completed successfully before:
     * <ul>
-    *  <li> <code> attachFrame() </code> : attachs frame obtained object
+    *  <li> <code> attachFrame() </code> : attaches frame obtained object
     * relation 'Frame' </li>
     * </ul>
     */
