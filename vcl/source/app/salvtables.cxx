@@ -1100,8 +1100,8 @@ public:
     virtual void add_widget(weld::Widget* pWidget) override
     {
         SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
-        assert(pVclWidget);
-        m_xGroup->insert(pVclWidget->getWidget());
+        assert(pVclWidget && pVclWidget->getWidget());
+        pVclWidget->getWidget()->add_to_size_group(m_xGroup);
     }
     virtual void set_mode(VclSizeGroupMode eMode) override
     {
