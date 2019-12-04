@@ -483,8 +483,6 @@ namespace pcr
         ,m_eValueUnit( FieldUnit::NONE )
         ,m_nFieldToUNOValueFactor( 1 )
     {
-        MetricField::SetDefaultUnit( FieldUnit::NONE );
-
         getTypedControlWindow()->EnableEmptyFieldValue( true );
         getTypedControlWindow()->SetStrictFormat( true );
         Optional< double > value( getMaxValue() );

@@ -1118,10 +1118,7 @@ mm/100    mm    cm       m     km  twip point  pica  inch    foot       mile    
 #undef M
 #undef K
 
-static FieldUnit eDefaultUnit = FieldUnit::NONE;
-
-FieldUnit MetricField::GetDefaultUnit() { return eDefaultUnit; }
-void MetricField::SetDefaultUnit( FieldUnit meUnit ) { eDefaultUnit = meUnit; }
+FieldUnit MetricField::GetDefaultUnit() { return FieldUnit::NONE; }
 
 static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, long& nDecDigits )
 {
