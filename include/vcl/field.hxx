@@ -486,7 +486,6 @@ public:
     void             SetLast(sal_Int64 last) { SetLast(last, FieldUnit::NONE); }
     sal_Int64               GetLast( FieldUnit eOutUnit ) const;
 
-    static FieldUnit        GetDefaultUnit();
     static sal_Int64        ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                           FieldUnit eInUnit, FieldUnit eOutUnit );
     static sal_Int64        ConvertValue( sal_Int64 nValue, sal_uInt16 nDecDigits,

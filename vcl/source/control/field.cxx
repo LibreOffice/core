@@ -1118,8 +1118,6 @@ mm/100    mm    cm       m     km  twip point  pica  inch    foot       mile    
 #undef M
 #undef K
 
-FieldUnit MetricField::GetDefaultUnit() { return FieldUnit::NONE; }
-
 static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, long& nDecDigits )
 {
     switch( meUnit )
@@ -1406,7 +1404,7 @@ void MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, 
 inline void MetricFormatter::ImplInit()
 {
     mnBaseValue = 0;
-    meUnit = MetricField::GetDefaultUnit();
+    meUnit = FieldUnit::NONE;
 }
 
 MetricFormatter::MetricFormatter(Edit* pEdit)
