@@ -11,27 +11,33 @@
 
 #include <editeng/flditem.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
 
-void URLFieldHelper::RemoveURLField(Outliner* pOutl, const OutlinerView* pOLV)
+void URLFieldHelper::RemoveURLField(EditView& pEditView)
 {
-    if (!pOutl || !pOLV)
-        return;
-
-    const SvxFieldData* pField = pOLV->GetFieldAtCursor();
+    pEditView.SelectFieldAtCursor();
+    const SvxFieldData* pField = pEditView.GetFieldAtCursor();
     if (auto pUrlField = dynamic_cast<const SvxURLField*>(pField))
     {
-        ESelection aSel = pOLV->GetSelection();
-        pOutl->QuickInsertText(pUrlField->GetRepresentation(), aSel);
-        pOLV->GetEditView().Invalidate();
+        ESelection aSel = pEditView.GetSelection();
+        pEditView.GetEditEngine()->QuickInsertText(pUrlField->GetRepresentation(), aSel);
+        pEditView.Invalidate();
     }
 }
 
-bool URLFieldHelper::IsCursorAtURLField(const OutlinerView* pOLV)
+bool URLFieldHelper::IsCursorAtURLField(const EditView& pEditView)
 {
-    if (!pOLV)
+    // tdf#128666 Make sure only URL field (or nothing) is selected
+    ESelection aSel = pEditView.GetSelection();
+    auto nSelectedParas = aSel.nEndPara - aSel.nStartPara;
+    auto nSelectedChars = aSel.nEndPos - aSel.nStartPos;
+    bool bIsValidSelection
+        = nSelectedParas == 0
+          && (nSelectedChars == 0 || nSelectedChars == 1 || nSelectedChars == -1);
+    if (!bIsValidSelection)
         return false;
 
-    const SvxFieldData* pField = pOLV->GetFieldAtCursor();
+    const SvxFieldData* pField = pEditView.GetFieldAtCursor();
     if (dynamic_cast<const SvxURLField*>(pField))
         return true;
 
