@@ -23,114 +23,6 @@
 
 namespace {
 
-// BEGIN code copied from LLVM's clang/lib/Sema/Sema.cpp
-
-typedef llvm::DenseMap<const CXXRecordDecl*, bool> RecordCompleteMap;
-
-/// Returns true, if all methods and nested classes of the given
-/// CXXRecordDecl are defined in this translation unit.
-///
-/// Should only be called from ActOnEndOfTranslationUnit so that all
-/// definitions are actually read.
-static bool MethodsAndNestedClassesComplete(const CXXRecordDecl *RD,
-                                            RecordCompleteMap &MNCComplete) {
-  RecordCompleteMap::iterator Cache = MNCComplete.find(RD);
-  if (Cache != MNCComplete.end())
-    return Cache->second;
-  if (!RD->isCompleteDefinition())
-    return false;
-  bool Complete = true;
-  for (DeclContext::decl_iterator I = RD->decls_begin(),
-                                  E = RD->decls_end();
-       I != E && Complete; ++I) {
-    if (const CXXMethodDecl *M = dyn_cast<CXXMethodDecl>(*I))
-      Complete = M->isDefined() || M->isDefaulted() ||
-                 (M->isPure() && !isa<CXXDestructorDecl>(M));
-    else if (const FunctionTemplateDecl *F = dyn_cast<FunctionTemplateDecl>(*I))
-      // If the template function is marked as late template parsed at this
-      // point, it has not been instantiated and therefore we have not
-      // performed semantic analysis on it yet, so we cannot know if the type
-      // can be considered complete.
-      Complete = !F->getTemplatedDecl()->isLateTemplateParsed() &&
-                  F->getTemplatedDecl()->isDefined();
-    else if (const CXXRecordDecl *R = dyn_cast<CXXRecordDecl>(*I)) {
-      if (R->isInjectedClassName())
-        continue;
-      if (R->hasDefinition())
-        Complete = MethodsAndNestedClassesComplete(R->getDefinition(),
-                                                   MNCComplete);
-      else
-        Complete = false;
-    }
-  }
-  MNCComplete[RD] = Complete;
-  return Complete;
-}
-
-/// Returns true, if the given CXXRecordDecl is fully defined in this
-/// translation unit, i.e. all methods are defined or pure virtual and all
-/// friends, friend functions and nested classes are fully defined in this
-/// translation unit.
-///
-/// Should only be called from ActOnEndOfTranslationUnit so that all
-/// definitions are actually read.
-static bool IsRecordFullyDefined(const CXXRecordDecl *RD,
-                                 RecordCompleteMap &RecordsComplete,
-                                 RecordCompleteMap &MNCComplete) {
-  RecordCompleteMap::iterator Cache = RecordsComplete.find(RD);
-  if (Cache != RecordsComplete.end())
-    return Cache->second;
-  bool Complete = MethodsAndNestedClassesComplete(RD, MNCComplete);
-  for (CXXRecordDecl::friend_iterator I = RD->friend_begin(),
-                                      E = RD->friend_end();
-       I != E && Complete; ++I) {
-    // Check if friend classes and methods are complete.
-    if (TypeSourceInfo *TSI = (*I)->getFriendType()) {
-      // Friend classes are available as the TypeSourceInfo of the FriendDecl.
-      if (CXXRecordDecl *FriendD = TSI->getType()->getAsCXXRecordDecl())
-        Complete = MethodsAndNestedClassesComplete(FriendD, MNCComplete);
-      else
-        Complete = false;
-    } else {
-      // Friend functions are available through the NamedDecl of FriendDecl.
-      if (const FunctionDecl *FD =
-          dyn_cast<FunctionDecl>((*I)->getFriendDecl()))
-        Complete = FD->isDefined();
-      else
-        // This is a template friend, give up.
-        Complete = false;
-    }
-  }
-  RecordsComplete[RD] = Complete;
-  return Complete;
-}
-
-RecordCompleteMap RecordsComplete;
-RecordCompleteMap MNCComplete;
-
-// END code copied from LLVM's clang/lib/Sema/Sema.cpp
-
-// Is all code that could see `decl` defined in this TU?
-bool isAllRelevantCodeDefined(NamedDecl const * decl) {
-    switch (decl->getAccess()) {
-    case AS_protected:
-        if (!cast<CXXRecordDecl>(decl->getDeclContext())->hasAttr<FinalAttr>()) {
-            break;
-        }
-        LLVM_FALLTHROUGH;
-    case AS_private:
-        if (IsRecordFullyDefined(
-                cast<CXXRecordDecl>(decl->getDeclContext()), RecordsComplete, MNCComplete))
-        {
-            return true;
-        }
-        break;
-    default:
-        break;
-    }
-    return !decl->isExternallyVisible();
-}
-
 enum FakeBoolKind {
     FBK_No,
     FBK_BOOL, FBK_First = FBK_BOOL,
@@ -845,7 +737,7 @@ bool FakeBool::VisitParmVarDecl(ParmVarDecl const * decl) {
         FunctionDecl const * f = dyn_cast<FunctionDecl>(decl->getDeclContext());
         if (f != nullptr) { // e.g.: typedef sal_Bool (* FuncPtr )( sal_Bool );
             f = f->getCanonicalDecl();
-            if (isAllRelevantCodeDefined(f)
+            if (handler.isAllRelevantCodeDefined(f)
                 && !(hasCLanguageLinkageType(f)
                      || (fbk == FBK_sal_Bool && isInUnoIncludeFile(f)
                          && (!f->isInlined() || f->hasAttr<DeprecatedAttr>()
@@ -916,7 +808,7 @@ bool FakeBool::VisitFieldDecl(FieldDecl const * decl) {
     if (k == FBK_No) {
         return true;
     }
-    if (!isAllRelevantCodeDefined(decl)) {
+    if (!handler.isAllRelevantCodeDefined(decl)) {
         return true;
     }
     if (k == FBK_sal_Bool
@@ -951,7 +843,7 @@ bool FakeBool::VisitFunctionDecl(FunctionDecl const * decl) {
     auto const fbk = isFakeBool(decl->getReturnType().getNonReferenceType());
     if (fbk != FBK_No
         && !(decl->isDeletedAsWritten() && isa<CXXConversionDecl>(decl))
-        && isAllRelevantCodeDefined(decl))
+        && handler.isAllRelevantCodeDefined(decl))
     {
         FunctionDecl const * f = decl->getCanonicalDecl();
         OverrideKind k = getOverrideKind(f);
