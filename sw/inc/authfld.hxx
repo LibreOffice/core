@@ -31,6 +31,7 @@
 
 class SwAuthEntry final : public salhelper::SimpleReferenceObject
 {
+friend class SwAuthorityFieldType;
     OUString        aAuthFields[AUTH_FIELD_END];
 public:
     SwAuthEntry() = default;

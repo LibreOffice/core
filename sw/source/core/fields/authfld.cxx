@@ -81,18 +81,22 @@ std::unique_ptr<SwFieldType> SwAuthorityFieldType::Copy()  const
     return std::make_unique<SwAuthorityFieldType>(m_pDoc);
 }
 
-void SwAuthorityFieldType::RemoveField(const SwAuthEntry* nHandle)
+void SwAuthorityFieldType::RemoveField(const SwAuthEntry* pEntry)
 {
     for(SwAuthDataArr::size_type j = 0; j < m_DataArr.size(); ++j)
     {
-        if(m_DataArr[j].get() == nHandle)
+        if(m_DataArr[j].get() == pEntry)
         {
-            m_DataArr.erase(m_DataArr.begin() + j);
-            //re-generate positions of the fields
-            DelSequenceArray();
+            if (m_DataArr[j]->m_nCount <= 1)
+            {
+                m_DataArr.erase(m_DataArr.begin() + j);
+                //re-generate positions of the fields
+                DelSequenceArray();
+            }
             return;
         }
     }
+    assert(false);
     OSL_FAIL("Field unknown" );
 }
 
