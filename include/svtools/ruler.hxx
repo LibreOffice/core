@@ -397,7 +397,7 @@ Further helper functions:
     By this, it is also possible to show the Tabs in dialogs like
     they are drawn in the ruler.
 
-    This method outputs the Tab centred at the given position. The size
+    This method outputs the Tab centered at the given position. The size
     of the tabs can be defined by the defines RULER_TAB_WIDTH and
     RULER_TAB_HEIGHT.
 
