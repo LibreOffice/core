@@ -21,6 +21,7 @@
 #define INCLUDED_SVTOOLS_RULER_HXX
 
 #include <memory>
+#include <vector>
 #include <svtools/svtdllapi.h>
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
@@ -781,6 +782,7 @@ public:
     void            SetIndents( sal_uInt32 n = 0, const RulerIndent* pIndentAry = nullptr );
 
     void            SetTabs( sal_uInt32 n = 0, const RulerTab* pTabAry = nullptr );
+    const std::vector<RulerTab>& GetTabs() const;
 
     static void     DrawTab(vcl::RenderContext& rRenderContext, const Color &rFillColor,
                             const Point& rPos, sal_uInt16 nStyle);
