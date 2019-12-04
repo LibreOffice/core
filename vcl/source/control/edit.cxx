@@ -1165,7 +1165,7 @@ void Edit::ImplAlign()
     }
     else if( mnAlign == EDIT_ALIGN_CENTER )
     {
-        // would be nicer with check while scrolling but then it's not centred in scrolled state
+        // would be nicer with check while scrolling but then it's not centered in scrolled state
         mnXOffset = (nOutWidth - nTextWidth) / 2;
     }
 }
