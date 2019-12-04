@@ -367,7 +367,7 @@ namespace drawinglayer
         {
             // #i113922# the LineWidth is duplicated in the MetaPolylineAction,
             // and also inside the SvtGraphicStroke and needs transforming into
-            // the same space as its co-ordinates here cf. fdo#61789
+            // the same space as its coordinates here cf. fdo#61789
             // This is a partial fix. When an object transformation is used which
             // e.g. contains a scaleX != scaleY, an unproportional scaling will happen.
             const basegfx::B2DVector aDiscreteUnit( maCurrentTransformation * basegfx::B2DVector( fWidth, 0.0 ) );
@@ -1852,7 +1852,7 @@ namespace drawinglayer
                 // is written to the Metafile. This is the PolyPolygons building the gradient fill.
                 // These will need more space and time, but the result will be as if the Gradient
                 // was rotated with the object.
-                // This mechanism is used by all exporters still not using Primtives (e.g. Print,
+                // This mechanism is used by all exporters still not using Primitives (e.g. Print,
                 // Slideshow, Export rto PDF, export to Picture, ...) but relying on Metafile
                 // transfers. One more reason to *change* these to primitives.
                 // BTW: One more example how useful the principles of primitives are; the decomposition
