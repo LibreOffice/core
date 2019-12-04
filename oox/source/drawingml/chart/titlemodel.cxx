@@ -42,6 +42,16 @@ TitleModel::~TitleModel()
 {
 }
 
+LegendEntryModel::LegendEntryModel() :
+    mnLegendEntryIdx( -1 ),
+    mbLabelDeleted( false )
+{
+}
+
+LegendEntryModel::~LegendEntryModel()
+{
+}
+
 LegendModel::LegendModel(bool bMSO2007Doc) :
     mnPosition( XML_r ),
     mbOverlay( !bMSO2007Doc )
