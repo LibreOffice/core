@@ -46,7 +46,7 @@ public:
         @param typeName specifies the full qualified type name with '/' as separator.
         @param superTypeName specifies the full qualified type name of the base type
                              with '/' as separator.
-        @param fieldCount specifies the number of fields (eg. number of attrbutes/properties,
+        @param fieldCount specifies the number of fields (eg. number of attributes/properties,
                           enum values or constants).
      */
     RegistryTypeWriter(RTTypeClass               RTTypeClass,
