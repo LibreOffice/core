@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c0961994",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6841,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-12-04T09:42:20Z",
+      "side": 1,
+      "message": "Would it make sense to go further and do this in the caller of CharEscapement(), so it\u0027s done in shared code for doc/docx/rtf, and not only for docx?",
+      "revId": "5eab50678d16583653c4035ec482bc0e008d7b54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
