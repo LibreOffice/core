@@ -5692,42 +5692,69 @@ OString ScGridWindow::getCellCursor() const
     return pViewData->describeCellCursor();
 }
 
-// Send our cursor details to a view described by @pOtherShell, or all views
-// if @pOtherShell is null. In each case send the current view a cell-cursor
+void ScGridWindow::notifyKitCellCursor() const
+{
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, getCellCursor().getStr());
+    if (bListValButton && aListValPos == pViewData->GetCurPos())
+        updateLOKValListButton(true, aListValPos);
+}
+
+void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
+{
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+
+    OString aCursor("EMPTY");
+    if (mpOOCursors) // cf. getCellCursor above
+    {
+        auto pForTabView = dynamic_cast<const ScTabViewShell *>(pForShell);
+        assert(pForTabView);
+        if (!pForTabView)
+            return;
+        aCursor = pForTabView->GetViewData().describeCellCursorAt(
+            pViewData->GetCurX(), pViewData->GetCurY()); // our position.
+    }
+    SfxLokHelper::notifyOtherView(pViewShell, pForShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+}
+
+// Send our cursor details to a view described by @pForShell, or all views
+// if @pForShell is null. In each case send the current view a cell-cursor
 // event, and others a cell_view_cursor event.
 //
 // NB. we need to re-construct the cursor details for each other view in their
 // own zoomed co-ordinate system.
-void ScGridWindow::updateLibreOfficeKitCellCursor(const SfxViewShell* pForShell) const
+void ScGridWindow::updateKitCellCursor(const SfxViewShell* pForShell) const
 {
-    if (!pForShell) // recurse with it set
+    if (!pForShell)
     {
         for (SfxViewShell* it = SfxViewShell::GetFirst(); it;
              it = SfxViewShell::GetNext(*it))
-            updateLibreOfficeKitCellCursor(it);
+            updateKitCellCursor(it);
         return;
     }
 
-    ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    if (pForShell == pViewShell)
-    {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, getCellCursor().getStr());
-        if (bListValButton && aListValPos == pViewData->GetCurPos())
-            updateLOKValListButton(true, aListValPos);
-    }
+    if (pForShell == pViewData->GetViewShell())
+        notifyKitCellCursor();
     else
+        notifyKitCellViewCursor(pForShell);
+}
+
+void ScGridWindow::updateKitOtherCursors() const
+{
+    for (SfxViewShell* it = SfxViewShell::GetFirst(); it;
+         it = SfxViewShell::GetNext(*it))
     {
-        OString aCursor("EMPTY");
-        if (mpOOCursors) // cf. getCellCursor above
-        {
-            auto pOther = dynamic_cast<const ScTabViewShell *>(pForShell);
-            assert(pOther);
-            if (!pOther)
-                return;
-            aCursor = pOther->GetViewData().describeCellCursorAt(
-                pViewData->GetCurX(), pViewData->GetCurY()); // our position.
-        }
-        SfxLokHelper::notifyOtherView(pViewShell, pForShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+        auto pOther = dynamic_cast<const ScTabViewShell *>(it);
+        assert(pOther);
+        if (!pOther)
+            continue;
+        const ScGridWindow *pGrid = pOther->GetViewData().GetActiveWin();
+        assert(pGrid);
+        if (pGrid == this)
+            notifyKitCellCursor();
+        else
+            pGrid->notifyKitCellViewCursor(pViewData->GetViewShell());
     }
 }
 
@@ -6039,7 +6066,7 @@ void ScGridWindow::UpdateCursorOverlay()
         if (comphelper::LibreOfficeKit::isActive())
         {
             mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
-            updateLibreOfficeKitCellCursor(nullptr);
+            updateKitCellCursor(nullptr);
         }
         else
         {
