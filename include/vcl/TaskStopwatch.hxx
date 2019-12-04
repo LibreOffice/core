@@ -26,7 +26,7 @@
  * TODO: merge into the general Scheduler, so this can also be used to track
  * Task runtimes in a more general way.
  * TODO: handle fast iterations, where continueIter is called multiple times
- * per tick, by counting the iterations per tick and use that for appoximation.
+ * per tick, by counting the iterations per tick and use that for approximation.
  **/
 class VCL_DLLPUBLIC TaskStopwatch
 {
