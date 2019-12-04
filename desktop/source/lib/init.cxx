@@ -2752,7 +2752,8 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #else
     ScopedVclPtrInstance< VirtualDevice > pDevice(DeviceFormat::DEFAULT);
 
-#if HAVE_FEATURE_ANDROID_LOK
+// New / JNI-based Android app or non-Android.
+#if HAVE_FEATURE_ANDROID_LOK || !defined(ANDROID)
     // Set background to transparent by default.
     // [Unless it is the 'old' (JNI-based) Android app - no idea why it
     // needs avoiding this.]
