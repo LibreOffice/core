@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_40320961",
+        "filename": "sd/uiconfig/simpress/popupmenu/pagepane.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-04T12:44:59Z",
+      "side": 1,
+      "message": "A formatting nitpick: these two items are indented incorrectly: their indent should be the same as in line 58, not as in line 61 which closes this group.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 2
+      },
+      "revId": "e9a60f3d9ba7c6164851264e7171b90238f7948c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
