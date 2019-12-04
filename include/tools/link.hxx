@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <sal/macros.h>
 #include <sal/types.h>
 
 #define DECL_LINK(Member, ArgType, RetType) \
@@ -68,10 +69,8 @@
         SAL_UNUSED_PARAMETER Class *, SAL_UNUSED_PARAMETER ArgType)
 
 #ifdef DBG_UTIL
-#define XSTRINGIFY(X) #X
-#define STRINGIFY(X) XSTRINGIFY(X)
 #define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
-    ::tools::detail::castTo<Class *>(Instance), &Class::LinkStub##Member, __FILE__, __LINE__, STRINGIFY(Class::LinkStub##Member))
+    ::tools::detail::castTo<Class *>(Instance), &Class::LinkStub##Member, __FILE__, __LINE__, SAL_STRINGIFY(Class::LinkStub##Member))
 #else
 #define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
     ::tools::detail::castTo<Class *>(Instance), &Class::LinkStub##Member)
