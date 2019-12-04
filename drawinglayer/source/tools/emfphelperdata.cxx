@@ -51,7 +51,6 @@
 
 namespace emfplushelper
 {
-
     const char* emfTypeToName(sal_uInt16 type)
     {
         switch (type)
@@ -157,6 +156,21 @@ namespace emfplushelper
             case InterpolationMode::InterpolationModeNearestNeighbor: return "InterpolationModeNearestNeighbor";
             case InterpolationMode::InterpolationModeHighQualityBilinear: return "InterpolationModeHighQualityBilinear";
             case InterpolationMode::InterpolationModeHighQualityBicubic: return "InterpolationModeHighQualityBicubic";
+        }
+        return "";
+    }
+
+    static OUString UnitTypeToString(sal_uInt16 nType)
+    {
+        switch (nType)
+        {
+            case UnitTypeWorld: return "UnitTypeWorld";
+            case UnitTypeDisplay: return "UnitTypeDisplay";
+            case UnitTypePixel: return "UnitTypePixel";
+            case UnitTypePoint: return "UnitTypePoint";
+            case UnitTypeInch: return "UnitTypeInch";
+            case UnitTypeDocument: return "UnitTypeDocument";
+            case UnitTypeMillimeter: return "UnitTypeMillimeter";
         }
         return "";
     }
@@ -1575,7 +1589,7 @@ namespace emfplushelper
                     case EmfPlusRecordTypeSetPageTransform:
                     {
                         rMS.ReadFloat(mfPageScale);
-                        SAL_INFO("drawinglayer", "EMF+\tscale: " << mfPageScale << " unit: " << flags);
+                        SAL_INFO("drawinglayer", "EMF+\tscale: " << mfPageScale << " unit: " << UnitTypeToString(flags));
 
                         if ((flags == UnitTypeDisplay) || (flags == UnitTypeWorld))
                         {
