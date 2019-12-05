@@ -208,6 +208,7 @@ void prefillSurface(sk_sp<SkSurface>& surface)
     scanline = bitmap.getAddr32(0, 1);
     *scanline++ = SkPreMultiplyARGB(0xFF, 0xE3, 0x5C, 0x13);
     *scanline++ = SkPreMultiplyARGB(0xFF, 0x13, 0x5C, 0xE3);
+    bitmap.setImmutable();
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     paint.setShader(bitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
