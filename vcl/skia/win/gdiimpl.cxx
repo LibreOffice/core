@@ -175,6 +175,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage()
                                                    kBGRA_8888_SkColorType, kOpaque_SkAlphaType),
                                  mpData, maRects.mnSrcWidth * 4))
         abort();
+    tmpBitmap.setImmutable();
     SkBitmap bitmap8;
     if (!bitmap8.tryAllocPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
                                                   kGray_8_SkColorType, kOpaque_SkAlphaType)))
@@ -188,11 +189,13 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage()
     matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
     canvas8.concat(matrix);
     canvas8.drawBitmap(tmpBitmap, 0, 0, &paint8);
+    bitmap8.setImmutable();
     // use the 8bit data as an alpha channel
     SkBitmap alpha;
     alpha.setInfo(bitmap8.info().makeColorType(kAlpha_8_SkColorType), bitmap8.rowBytes());
     alpha.setPixelRef(sk_ref_sp(bitmap8.pixelRef()), bitmap8.pixelRefOrigin().x(),
                       bitmap8.pixelRefOrigin().y());
+    alpha.setImmutable();
     sk_sp<SkSurface> surface
         = SkiaHelper::createSkSurface(alpha.width(), alpha.height(), kAlpha_8_SkColorType);
     // https://bugs.chromium.org/p/skia/issues/detail?id=9692
@@ -212,6 +215,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImage()
                                                    kBGRA_8888_SkColorType, kUnpremul_SkAlphaType),
                                  mpData, maRects.mnSrcWidth * 4))
         abort();
+    tmpBitmap.setImmutable();
     sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(tmpBitmap.width(), tmpBitmap.height());
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
