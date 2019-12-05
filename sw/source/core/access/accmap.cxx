@@ -1215,20 +1215,18 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                     }
                                     else if( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA )
                                     {
-                                        if (((nStartIndex < nFirstNode) ||
-                                             (nFirstNode == nStartIndex && pStart->nContent.GetIndex() == 0))
-                                            && (nLastNode < nEndIndex))
-                                        {
-                                            uno::Reference < XAccessible > xAcc( (*aIter).second );
+                                        uno::Reference<XAccessible> const xAcc((*aIter).second);
                                             if( xAcc.is() )
+                                        {
+                                            if (IsSelectFrameAnchoredAtPara(*pPos, *pStart, *pEnd))
+                                            {
                                                 static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->SetState( AccessibleStateType::SELECTED );
                                         }
                                         else
                                         {
-                                            uno::Reference < XAccessible > xAcc( (*aIter).second );
-                                            if(xAcc.is())
                                                 static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->ResetState( AccessibleStateType::SELECTED );
                                         }
+                                    }
                                     }
                                     else if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
                                     {

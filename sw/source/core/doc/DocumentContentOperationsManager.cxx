@@ -3441,9 +3441,11 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                     ++nStart;
             break;
             case RndStdIds::FLY_AT_PARA:
-                // FIXME TODO why exclude start node, this seems very questionable and causes data loss on export
-                if(m_rDoc.getIDocumentRedlineAccess().IsRedlineMove())
-                    ++nStart;
+                {
+                    bAdd = IsSelectFrameAnchoredAtPara(*pAPos,
+                        pCopiedPaM ? *pCopiedPaM->Start() : SwPosition(rRg.aStart),
+                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd));
+                }
             break;
             case RndStdIds::FLY_AT_CHAR:
                 {
@@ -3455,7 +3457,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             default:
                 continue;
         }
-        if (RndStdIds::FLY_AT_CHAR != pAnchor->GetAnchorId())
+        if (RndStdIds::FLY_AT_FLY == pAnchor->GetAnchorId())
         {
             if (nStart > nSkipAfter)
                 continue;
@@ -3470,31 +3472,6 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 bAdd = true;
             if (!bAdd && !m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()) // fdo#40599: not for redline move
             {
-                bool bEmptyNode = false;
-                bool bLastNode = false;
-                // is the node empty?
-                const SwNodes& rNodes = pAPos->nNode.GetNodes();
-                SwTextNode *const pTextNode = pAPos->nNode.GetNode().GetTextNode();
-                if (nullptr != pTextNode)
-                {
-                    bEmptyNode = pTextNode->GetText().isEmpty();
-                    if (bEmptyNode)
-                    {
-                        //last node information is only necessary to know for the last TextNode
-                        SwNodeIndex aTmp( pAPos->nNode );
-                        ++aTmp;//goto next node
-                        while (aTmp.GetNode().IsEndNode())
-                        {
-                            if (aTmp == rNodes.GetEndOfContent().GetIndex())
-                            {
-                                bLastNode = true;
-                                break;
-                            }
-                            ++aTmp;
-                        }
-                    }
-                }
-                bAdd = bLastNode && bEmptyNode;
                 if (!bAdd)
                 {
                     // technically old code checked nContent of AT_FLY which is pointless
@@ -4753,6 +4730,8 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
         // at-char anchors post SplitNode are on index 0 of 2nd node and will
         // remain there - move them back to the start (end would also work?)
+        // ... also for at-para anchors; here start is preferable because
+        // it's consistent with SplitNode from SwUndoInserts::RedoImpl()
         if (pFlysAtInsPos)
         {
             // init *again* - because CopyWithFlyInFly moved startPos
@@ -4765,6 +4744,8 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 startPos = *temp.GetPoint();
             }
             assert(startPos.nNode.GetNode().IsContentNode());
+            SwPosition startPosAtPara(startPos);
+            startPosAtPara.nContent.Assign(nullptr, 0);
 
             for (SwFrameFormat * pFly : *pFlysAtInsPos)
             {
@@ -4773,6 +4754,12 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 {
                     SwFormatAnchor anchor(*pAnchor);
                     anchor.SetAnchor( &startPos );
+                    pFly->SetFormatAttr(anchor);
+                }
+                if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
+                {
+                    SwFormatAnchor anchor(*pAnchor);
+                    anchor.SetAnchor( &startPosAtPara );
                     pFly->SetFormatAttr(anchor);
                 }
             }
