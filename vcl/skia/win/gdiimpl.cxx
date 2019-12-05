@@ -24,9 +24,9 @@ WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
 {
 }
 
+#if 0 // TODO
 void WinSkiaSalGraphicsImpl::Init()
 {
-#if 0 // TODO
     if (!IsOffscreen() && mpContext.is() && mpContext->isInitialized())
     {
         const GLWinWindow& rGLWindow = static_cast<const GLWinWindow&>(mpContext->getOpenGLWindow());
@@ -39,9 +39,8 @@ void WinSkiaSalGraphicsImpl::Init()
             DeInit();
         }
     }
-#endif
-    SkiaSalGraphicsImpl::Init();
 }
+#endif
 
 void WinSkiaSalGraphicsImpl::createWindowContext()
 {
