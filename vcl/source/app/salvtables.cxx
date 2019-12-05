@@ -3108,7 +3108,10 @@ public:
 
     virtual void set_image(VirtualDevice* pDevice) override
     {
-        m_xImage->SetImage(createImage(*pDevice));
+        if (pDevice)
+            m_xImage->SetImage(createImage(*pDevice));
+        else
+            m_xImage->SetImage(::Image());
     }
 
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
