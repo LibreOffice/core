@@ -247,7 +247,7 @@ void ScSpellDialogChildWindow::Init()
     mxEngine->SetControlWord( EEControlBits::USECHARATTRIBS );
     mxEngine->EnableUndo( false );
     mxEngine->SetPaperSize( aRect.GetSize() );
-    mxEngine->SetText( EMPTY_OUSTRING );
+    mxEngine->SetTextCurrentDefaults( EMPTY_OUSTRING );
     mxEngine->ClearModifyFlag();
 
     mbNeedNextObj = true;

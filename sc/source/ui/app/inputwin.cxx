@@ -1389,7 +1389,7 @@ void ScTextWnd::InitEditEngine()
     if (bFilled && mpEditEngine->GetText() == aString)
         Invalidate(); // Repaint for (filled) Field
     else
-        mpEditEngine->SetText(aString); // At least the right text then
+        mpEditEngine->SetTextCurrentDefaults(aString); // At least the right text then
 
     mpEditView = std::make_unique<EditView>(mpEditEngine.get(), this);
     mpEditView->SetInsertMode(bIsInsertMode);
@@ -1847,7 +1847,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
         }
         else
         {
-            mpEditEngine->SetText(rNewString);
+            mpEditEngine->SetTextCurrentDefaults(rNewString);
         }
 
         aString = rNewString;

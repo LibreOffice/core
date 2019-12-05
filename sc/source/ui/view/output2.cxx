@@ -2341,7 +2341,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
         const EditTextObject* pData = maCell.mpEditText;
         if (pData)
         {
-            mpEngine->SetText(*pData);
+            mpEngine->SetTextCurrentDefaults(*pData);
 
             if ( mbBreak && !mbAsianVertical && pData->HasField() )
             {
@@ -2370,7 +2370,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
                                  bShowNullValues,
                                  bShowFormulas);
 
-        mpEngine->SetText(aString);
+        mpEngine->SetTextCurrentDefaults(aString);
         if ( pColor && !bSyntaxMode && !( bUseStyleColor && bForceAutoColor ) )
             lcl_SetEditColor( *mpEngine, *pColor );
     }
@@ -2786,7 +2786,7 @@ private:
 long ScOutputData::SetEngineTextAndGetWidth( DrawEditParam& rParam, const OUString& rSetString,
                                              long& rNeededPixel, long nAddWidthPixels )
 {
-    rParam.mpEngine->SetText( rSetString );
+    rParam.mpEngine->SetTextCurrentDefaults( rSetString );
     long nEngineWidth = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
     if ( rParam.mbPixelToLogic )
         rNeededPixel = mpRefDevice->LogicToPixel( Size( nEngineWidth, 0 ) ).Width();
@@ -4677,7 +4677,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             if (aCell.meType == CELLTYPE_EDIT)
                             {
                                 if (aCell.mpEditText)
-                                    pEngine->SetText(*aCell.mpEditText);
+                                    pEngine->SetTextCurrentDefaults(*aCell.mpEditText);
                                 else
                                 {
                                     OSL_FAIL("pData == 0");
@@ -4696,7 +4696,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                                          mbShowNullValues,
                                                          mbShowFormulas);
 
-                                pEngine->SetText(aString);
+                                pEngine->SetTextCurrentDefaults(aString);
                                 if ( pColor && !mbSyntaxMode && !( mbUseStyleColor && mbForceAutoColor ) )
                                     lcl_SetEditColor( *pEngine, *pColor );
                             }

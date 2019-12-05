@@ -223,7 +223,7 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
         return pForwarder.get();
 
     if (mpTextObj)
-        pEditEngine->SetText(*mpTextObj);
+        pEditEngine->SetTextCurrentDefaults(*mpTextObj);
 
     bDataValid = true;
     return pForwarder.get();
@@ -342,7 +342,7 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString()
         FillDummyFieldData( aData );
         aEditEngine.SetData( aData );
 
-        aEditEngine.SetText(*pData);
+        aEditEngine.SetTextCurrentDefaults(*pData);
         aRet = ScEditUtil::GetSpaceDelimitedString( aEditEngine );
     }
     return aRet;
@@ -354,7 +354,7 @@ void SAL_CALL ScHeaderFooterTextObj::setString( const OUString& aText )
 
     // for pure text, no font info is needed in pool defaults
     ScHeaderEditEngine aEditEngine(EditEngine::CreatePool());
-    aEditEngine.SetText( aText );
+    aEditEngine.SetTextCurrentDefaults( aText );
     aTextData.UpdateData(aEditEngine);
 }
 
@@ -741,7 +741,7 @@ ScEditEngineTextObj::~ScEditEngineTextObj() throw()
 
 void ScEditEngineTextObj::SetText( const EditTextObject& rTextObject )
 {
-    GetEditEngine()->SetText( rTextObject );
+    GetEditEngine()->SetTextCurrentDefaults( rTextObject );
 
     ESelection aSel;
     ::GetSelection( aSel, GetEditSource()->GetTextForwarder() );
