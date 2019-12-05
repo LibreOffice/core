@@ -375,14 +375,14 @@ void ScCellValue::assign(const ScCellValue& rOther, ScDocument& rDestDoc, ScClon
                 bool bNewControl = ((nControl & nSpellControl) != nSpellControl);
                 if (bNewControl)
                     rEngine.SetControlWord(nControl | nSpellControl);
-                rEngine.SetText(*rOther.mpEditText);
+                rEngine.SetTextCurrentDefaults(*rOther.mpEditText);
                 mpEditText = rEngine.CreateTextObject().release();
                 if (bNewControl)
                     rEngine.SetControlWord(nControl);
             }
             else
             {
-                rEngine.SetText(*rOther.mpEditText);
+                rEngine.SetTextCurrentDefaults(*rOther.mpEditText);
                 mpEditText = rEngine.CreateTextObject().release();
             }
         }

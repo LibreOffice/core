@@ -1906,7 +1906,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData
             if( const ScPostIt* pNote = pDoc->GetNote( rPos ) )
             {
                 if(const EditTextObject *pEditText = pNote->GetEditTextObject())
-                    pEditEngine->SetText(*pEditText);
+                    pEditEngine->SetTextCurrentDefaults(*pEditText);
                 long nTextHeight = pEditEngine->GetTextHeight();
                 if ( nPosY + nTextHeight < aPageRect.Bottom() )
                 {
@@ -1917,7 +1917,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData
                         OUString aMarkStr(rPos.Format(ScRefFlags::VALID, pDoc, pDoc->GetAddressConvention()) + ":");
 
                         //  cell position also via EditEngine, for correct positioning
-                        pEditEngine->SetText(aMarkStr);
+                        pEditEngine->SetTextCurrentDefaults(aMarkStr);
                         pEditEngine->Draw( pDev, Point( aPageRect.Left(), nPosY ) );
                     }
 

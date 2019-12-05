@@ -165,7 +165,7 @@ OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos,
         if (pData)
         {
             ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
-            rEngine.SetText(*pData);
+            rEngine.SetTextCurrentDefaults(*pData);
             aVal = rEngine.GetText();
         }
         //  also do not format EditCells as numbers

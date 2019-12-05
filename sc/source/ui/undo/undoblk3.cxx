@@ -1025,7 +1025,7 @@ void ScUndoReplace::Undo()
         if ( aUndoStr.indexOf('\n') != -1 )
         {
             ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
-            rEngine.SetText(aUndoStr);
+            rEngine.SetTextCurrentDefaults(aUndoStr);
             rDoc.SetEditText(aCursorPos, rEngine.CreateTextObject());
         }
         else

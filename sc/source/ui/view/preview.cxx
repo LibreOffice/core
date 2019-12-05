@@ -518,7 +518,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
             pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
 
-            pEditEng->SetText(aEmptyMsg);
+            pEditEng->SetTextCurrentDefaults(aEmptyMsg);
 
             Point aCenter(
                 (aWinEnd.X() - pEditEng->CalcTextWidth())/2,

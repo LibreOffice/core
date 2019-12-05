@@ -186,7 +186,7 @@ void Test::testSharedFormulas()
 
     // Set edit text to B17. Now B18 should be non-shared.
     ScFieldEditEngine& rEditEngine = m_pDoc->GetEditEngine();
-    rEditEngine.SetText("Edit Text");
+    rEditEngine.SetTextCurrentDefaults("Edit Text");
     aPos.SetRow(16);
     m_pDoc->SetEditText(aPos, rEditEngine.CreateTextObject());
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, m_pDoc->GetCellType(aPos));

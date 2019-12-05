@@ -1746,7 +1746,7 @@ void ScExportTest::testRichTextExportODS()
 
         // Insert an edit text cell.
         ScFieldEditEngine* pEE = &rDoc.GetEditEngine();
-        pEE->SetText("Bold and Italic");
+        pEE->SetTextCurrentDefaults("Bold and Italic");
         // Set the 'Bold' part bold.
         setAttribute(*pEE, 0, 0, 4, EE_CHAR_WEIGHT);
         // Set the 'Italic' part italic.
@@ -1774,7 +1774,7 @@ void ScExportTest::testRichTextExportODS()
 
         // Insert a multi-line content to B4.
         pEE->Clear();
-        pEE->SetText("One\nTwo\nThree");
+        pEE->SetTextCurrentDefaults("One\nTwo\nThree");
         rDoc2.SetEditText(ScAddress(1,3,0), pEE->CreateTextObject());
         pEditText = rDoc2.GetEditText(ScAddress(1,3,0));
         CPPUNIT_ASSERT_MESSAGE("Incorrect B4 value.", aCheckFunc.checkB4(pEditText));
@@ -1794,14 +1794,14 @@ void ScExportTest::testRichTextExportODS()
 
         // Insert a multi-line content to B5, but this time, set some empty paragraphs.
         pEE->Clear();
-        pEE->SetText("\nTwo\nThree\n\nFive\n");
+        pEE->SetTextCurrentDefaults("\nTwo\nThree\n\nFive\n");
         rDoc3.SetEditText(ScAddress(1,4,0), pEE->CreateTextObject());
         pEditText = rDoc3.GetEditText(ScAddress(1,4,0));
         CPPUNIT_ASSERT_MESSAGE("Incorrect B5 value.", aCheckFunc.checkB5(pEditText));
 
         // Insert a text with strikethrough in B6.
         pEE->Clear();
-        pEE->SetText("Strike Me");
+        pEE->SetTextCurrentDefaults("Strike Me");
         // Set the 'Strike' part strikethrough.
         setAttribute(*pEE, 0, 0, 6, EE_CHAR_STRIKEOUT);
         rDoc3.SetEditText(ScAddress(1,5,0), pEE->CreateTextObject());
@@ -1810,7 +1810,7 @@ void ScExportTest::testRichTextExportODS()
 
         // Insert a text with different font segments in B7.
         pEE->Clear();
-        pEE->SetText("Font1 and Font2");
+        pEE->SetTextCurrentDefaults("Font1 and Font2");
         setFont(*pEE, 0, 0, 5, "Courier");
         setFont(*pEE, 0, 10, 15, "Luxi Mono");
         rDoc3.SetEditText(ScAddress(1,6,0), pEE->CreateTextObject());
@@ -1819,7 +1819,7 @@ void ScExportTest::testRichTextExportODS()
 
         // Insert a text with overline and underline in B8.
         pEE->Clear();
-        pEE->SetText("Over and Under");
+        pEE->SetTextCurrentDefaults("Over and Under");
         setAttribute(*pEE, 0, 0, 4, EE_CHAR_OVERLINE);
         setAttribute(*pEE, 0, 9, 14, EE_CHAR_UNDERLINE);
         rDoc3.SetEditText(ScAddress(1,7,0), pEE->CreateTextObject());
@@ -1827,7 +1827,7 @@ void ScExportTest::testRichTextExportODS()
         CPPUNIT_ASSERT_MESSAGE("Incorrect B8 value.", aCheckFunc.checkB8(pEditText));
 
         pEE->Clear();
-        pEE->SetText("Sub and Super");
+        pEE->SetTextCurrentDefaults("Sub and Super");
         setEscapement(*pEE, 0, 0, 3, 32, 64);
         setEscapement(*pEE, 0, 8, 13, -32, 66);
         rDoc3.SetEditText(ScAddress(1,8,0), pEE->CreateTextObject());
@@ -1839,7 +1839,7 @@ void ScExportTest::testRichTextExportODS()
         // Set font color of B10 to blue.
         rDoc3.ApplyPattern(1, 9, 0, aCellFontColor);
         pEE->Clear();
-        pEE->SetText("BLUE AUTO");
+        pEE->SetTextCurrentDefaults("BLUE AUTO");
         // Set the color of the string "AUTO" to automatic color.
         setAttribute(*pEE, 0, 5, 9, EE_CHAR_COLOR, COL_AUTO);
         rDoc3.SetEditText(ScAddress(1, 9, 0), pEE->CreateTextObject());

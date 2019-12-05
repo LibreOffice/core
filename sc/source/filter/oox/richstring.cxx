@@ -403,7 +403,7 @@ std::unique_ptr<EditTextObject> RichString::convert( ScEditEngineDefaulter& rEE,
     // fdo#84370 - diving into editeng is not thread safe.
     SolarMutexGuard aGuard;
 
-    rEE.SetText( sString.makeStringAndClear() );
+    rEE.SetTextCurrentDefaults( sString.makeStringAndClear() );
 
     for( const auto& rxTextPortion : maTextPortions )
     {
