@@ -12,17 +12,12 @@
 #define INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYCHECK_HXX
 
 #include <doc.hxx>
-
-class AccessibilityIssue
-{
-public:
-    OUString m_aIssueText;
-};
+#include <svx/AccessibilityIssue.hxx>
 
 class AccessibilityCheck
 {
     SwDoc* m_pDoc;
-    std::vector<AccessibilityIssue> m_aAccessibilityIssueCollection;
+    std::vector<svx::AccessibilityIssue> m_aAccessibilityIssueCollection;
 
 public:
     AccessibilityCheck(SwDoc* pDoc)
@@ -30,7 +25,7 @@ public:
     {
     }
 
-    std::vector<AccessibilityIssue> const& getIssueCollecton()
+    std::vector<svx::AccessibilityIssue> const& getIssueCollecton()
     {
         return m_aAccessibilityIssueCollection;
     }
