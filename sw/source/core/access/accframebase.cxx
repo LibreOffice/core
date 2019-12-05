@@ -319,8 +319,7 @@ bool SwAccessibleFrameBase::GetSelectedState( )
                         }
                         else if( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA )
                         {
-                            if( ((nHere > nStartIndex) || pStart->nContent.GetIndex() ==0 )
-                                && (nHere < nEndIndex ) )
+                            if (IsSelectFrameAnchoredAtPara(*pPos, *pStart, *pEnd))
                                 return true;
                         }
                         else if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
