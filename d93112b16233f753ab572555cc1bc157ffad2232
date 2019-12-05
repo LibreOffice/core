@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_30439c6e",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-12-05T10:23:06Z",
+      "side": 1,
+      "message": "I think the true/false above needs to balance with the sam here",
+      "revId": "d93112b16233f753ab572555cc1bc157ffad2232",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
