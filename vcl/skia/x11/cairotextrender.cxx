@@ -81,6 +81,7 @@ void SkiaX11CairoTextRender::releaseCairoContext(cairo_t* cr)
     SkBitmap bitmap;
     if (!bitmap.installPixels(info, pSrc, nWidth * 4))
         abort();
+    bitmap.setImmutable();
 
     pImpl->drawBitmap(aRect, bitmap);
 
