@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_b0600cd1",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-12-05T08:36:52Z",
+      "side": 1,
+      "message": "This change looks unrelated.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 1
+      },
+      "revId": "9bd3aaa3c3ece8fcead33ce780bab85d749ad7d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
