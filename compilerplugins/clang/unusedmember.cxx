@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// A more agressive check for unused C struct/C++ class members than what plain Clang offers.  On
+// A more aggressive check for unused C struct/C++ class members than what plain Clang offers.  On
 // the one hand, unlike -Wunused-private-field, it warns about all members regardless of access
 // specifiers, if all code that can use a class has been seen.  On the other hand, it warns about
 // all kinds of members.  But it uses some heuristics (the type showing up in sizeof, alignof,
 // offsetof, certain casts) to determine that seemingly unused data members are probably used after
 // all; the used heuristics were enough to not require any explicit [[maybe_unused]] decorations
-// across the exisiting code base.
+// across the existing code base.
 
 #ifndef LO_CLANG_SHARED_PLUGINS
 
@@ -138,7 +138,7 @@ public:
             }
             if (auto const d1 = dyn_cast<FriendDecl>(d))
             {
-                //TODO: determine whether the friendship is acutally required
+                //TODO: determine whether the friendship is actually required
                 auto const d2 = d1->getFriendDecl();
                 if (d2 == nullptr)
                 { // happens for "friend class C;"
@@ -162,7 +162,7 @@ public:
             {
                 continue;
             }
-            // Check individual members instead of the whole CXXRecordDecl for comming from a macro,
+            // Check individual members instead of the whole CXXRecordDecl for coming from a macro,
             // as CppUnit's CPPUNIT_TEST_SUITE_END (cppunit/extensions/HelperMacros.h) contains a
             // partial member list ending in
             //
