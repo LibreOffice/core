@@ -18,10 +18,7 @@
  */
 
 #include <UndoNumbering.hxx>
-#include <hintids.hxx>
-#include <editeng/lrspitem.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>

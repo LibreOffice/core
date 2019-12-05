@@ -17,26 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <hintids.hxx>
+#include <fmtinfmt.hxx>
 #include <unosrch.hxx>
-#include <doc.hxx>
-#include <hints.hxx>
 #include <unomap.hxx>
-#include <unobaseclass.hxx>
-#include <unomid.h>
 #include <fchrfmt.hxx>
+#include <swtypes.hxx>
 
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <o3tl/any.hxx>
 #include <vcl/svapp.hxx>
-#include <editeng/unolingu.hxx>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itemprop.hxx>
+#include <svl/itempool.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <utility>
-
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -28,7 +26,6 @@
 #include <svl/listener.hxx>
 #include <osl/mutex.hxx>
 
-#include <unomid.h>
 #include <unofootnote.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
@@ -41,7 +38,6 @@
 #include <txtftn.hxx>
 #include <ndtxt.hxx>
 #include <unocrsr.hxx>
-#include <hints.hxx>
 #include <svl/itemprop.hxx>
 
 using namespace ::com::sun::star;

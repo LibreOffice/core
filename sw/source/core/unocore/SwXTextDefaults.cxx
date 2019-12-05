@@ -34,7 +34,6 @@
 #include <unomap.hxx>
 #include <unomid.h>
 #include <paratr.hxx>
-#include <unoprnms.hxx>
 #include <unocrsrhelper.hxx>
 #include <hintids.hxx>
 #include <fmtpdsc.hxx>

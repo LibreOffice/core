@@ -21,7 +21,6 @@
 
 #include <strings.hrc>
 #include <doc.hxx>
-#include <docary.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 

@@ -36,18 +36,14 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/memberids.h>
 #include <hints.hxx>
-#include <cmdid.h>
 #include <swtypes.hxx>
 #include <shellres.hxx>
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
-#include <poolfmt.hxx>
-#include <pagedesc.hxx>
 #include <fmtcntnt.hxx>
 #include <unomap.hxx>
 #include <unotextrange.hxx>
@@ -55,8 +51,6 @@
 #include <unosection.hxx>
 #include <doctxm.hxx>
 #include <txttxmrk.hxx>
-#include <unocrsr.hxx>
-#include <unostyle.hxx>
 #include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <chpfld.hxx>

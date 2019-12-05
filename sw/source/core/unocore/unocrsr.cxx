@@ -21,7 +21,6 @@
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <swtable.hxx>
-#include <docary.hxx>
 #include <rootfrm.hxx>
 
 sw::UnoCursorHint::~UnoCursorHint() {}

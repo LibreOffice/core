@@ -19,12 +19,11 @@
 
 #include <UndoDraw.hxx>
 
-#include <rtl/string.h>
-
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmark.hxx>
+#include <svx/svdview.hxx>
 
 #include <hintids.hxx>
 #include <hints.hxx>
@@ -36,14 +35,11 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
-#include <frame.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <dcontact.hxx>
-#include <dview.hxx>
-#include <rootfrm.hxx>
 #include <viewsh.hxx>
 
 struct SwUndoGroupObjImpl

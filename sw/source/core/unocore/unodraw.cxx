@@ -21,7 +21,6 @@
 
 #include <initializer_list>
 #include <memory>
-#include <sal/config.h>
 #include <sal/log.hxx>
 
 #include <cmdid.h>
@@ -29,7 +28,6 @@
 
 #include <drawdoc.hxx>
 #include <unodraw.hxx>
-#include <unocoll.hxx>
 #include <unoframe.hxx>
 #include <unoparagraph.hxx>
 #include <unotextrange.hxx>
@@ -37,13 +35,12 @@
 #include <swunohelper.hxx>
 #include <textboxhelper.hxx>
 #include <doc.hxx>
-#include <docary.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtflcnt.hxx>
-#include <txtatr.hxx>
+#include <txatbase.hxx>
 #include <docsh.hxx>
 #include <unomap.hxx>
 #include <unoport.hxx>
@@ -53,7 +50,6 @@
 #include <svx/svdview.hxx>
 #include <svx/unoshape.hxx>
 #include <dcontact.hxx>
-#include <svx/fmglob.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtfollowtextflow.hxx>

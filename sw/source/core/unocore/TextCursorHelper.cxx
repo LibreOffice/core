@@ -18,7 +18,6 @@
  */
 
 #include <TextCursorHelper.hxx>
-#include <unobaseclass.hxx>
 #include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;

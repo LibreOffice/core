@@ -25,9 +25,6 @@
 #include <fesh.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <editeng/formatbreakitem.hxx>
-#include <fmtornt.hxx>
-#include <fmtpdsc.hxx>
 #include <doc.hxx>
 #include <docredln.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -40,12 +37,10 @@
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <pam.hxx>
-#include <cntfrm.hxx>
 #include <tblsel.hxx>
 #include <swundo.hxx>
 #include <rolbck.hxx>
 #include <ddefld.hxx>
-#include <tabcol.hxx>
 #include <tabfrm.hxx>
 #include <rowfrm.hxx>
 #include <cellfrm.hxx>
@@ -184,7 +179,6 @@ public:
 }
 
 #if OSL_DEBUG_LEVEL > 0
-#include <shellio.hxx>
 static void CheckTable( const SwTable& );
 #define CHECKTABLE(t) CheckTable( t );
 #else

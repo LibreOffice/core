@@ -20,10 +20,8 @@
 #include <doc.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
-#include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
-#include <docary.hxx>
 
 SwUndoFormatColl::SwUndoFormatColl( const SwPaM& rRange,
                               const SwFormatColl* pColl,

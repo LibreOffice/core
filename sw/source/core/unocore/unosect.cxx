@@ -45,7 +45,6 @@
 #include <unoport.hxx>
 #include <redline.hxx>
 #include <unomap.hxx>
-#include <unocrsr.hxx>
 #include <section.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -53,7 +52,6 @@
 #include <sfx2/docfile.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
-#include <hints.hxx>
 #include <tox.hxx>
 #include <unoidx.hxx>
 #include <doctxm.hxx>

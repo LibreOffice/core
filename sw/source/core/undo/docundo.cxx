@@ -19,21 +19,16 @@
 
 #include <UndoManager.hxx>
 
-#include <svx/svdmodel.hxx>
-#include <swmodule.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <view.hxx>
 #include <drawdoc.hxx>
 #include <ndarr.hxx>
 #include <pam.hxx>
-#include <ndtxt.hxx>
 #include <swundo.hxx>
 #include <UndoCore.hxx>
-#include <rolbck.hxx>
 #include <editsh.hxx>
 #include <unobaseclass.hxx>
-#include <limits>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>

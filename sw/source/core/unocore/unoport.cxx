@@ -21,7 +21,6 @@
 
 #include <cmdid.h>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
 
@@ -32,11 +31,8 @@
 #include <unoprnms.hxx>
 #include <unomid.h>
 #include <txtatr.hxx>
-#include <txtfld.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
-#include <fmtflcnt.hxx>
-#include <fmtfld.hxx>
 #include <frmfmt.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

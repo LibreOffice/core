@@ -26,7 +26,6 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <o3tl/any.hxx>

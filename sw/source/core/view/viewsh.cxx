@@ -17,20 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/svdobj.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sal/log.hxx>
 #include <drawdoc.hxx>
 #include <swwait.hxx>
-#include <swmodule.hxx>
-#include <fesh.hxx>
+#include <crsrsh.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -47,23 +43,18 @@
 #include <dview.hxx>
 #include <swregion.hxx>
 #include <hints.hxx>
-#include <fmtfsize.hxx>
 #include <docufld.hxx>
 #include <txtfrm.hxx>
 #include <layact.hxx>
 #include <mdiexp.hxx>
 #include <fntcache.hxx>
 #include <ptqueue.hxx>
-#include <tabfrm.hxx>
 #include <docsh.hxx>
 #include <pagedesc.hxx>
 #include <ndole.hxx>
 #include <ndindex.hxx>
 #include <accmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <svtools/colorcfg.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/alpha.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <accessibilityoptions.hxx>
 #include <strings.hrc>
@@ -71,21 +62,17 @@
 #include <pagepreviewlayout.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
-#include <wrtsh.hxx>
 #include <DocumentSettingManager.hxx>
 
 #include <unotxdoc.hxx>
 #include <view.hxx>
 #include <PostItMgr.hxx>
 #include <unotools/configmgr.hxx>
-#include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
-#include <prevwpage.hxx>
 #include <sfx2/lokhelper.hxx>
 
 #if !HAVE_FEATURE_DESKTOP

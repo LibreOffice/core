@@ -25,15 +25,14 @@
 #include <editeng/keepitem.hxx>
 #include <svx/svdobj.hxx>
 
-#include <docsh.hxx>
 #include <fmtcntnt.hxx>
-#include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IShellCursorSupplier.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -46,12 +45,10 @@
 #include <grfatr.hxx>
 #include <cntfrm.hxx>
 #include <flyfrm.hxx>
-#include <fesh.hxx>
 #include <swtable.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
 #include <acorrect.hxx>
-#include <dcontact.hxx>
 #include <fmtautofmt.hxx>
 #include <fchrfmt.hxx>
 

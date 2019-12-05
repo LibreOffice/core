@@ -31,7 +31,6 @@
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <svx/svxids.hrc>
 #include <svx/unoshape.hxx>
 
 #include <cmdid.h>
@@ -41,7 +40,6 @@
 #include <unobookmark.hxx>
 #include <unomap.hxx>
 #include <unorefmark.hxx>
-#include <unostyle.hxx>
 #include <unoidx.hxx>
 #include <unofield.hxx>
 #include <unotbl.hxx>
@@ -53,13 +51,10 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <fmtftn.hxx>
-#include <fmtpdsc.hxx>
 #include <charfmt.hxx>
 #include <pagedesc.hxx>
 #include <docstyle.hxx>
 #include <ndtxt.hxx>
-#include <txtrfmrk.hxx>
-#include <fmtfld.hxx>
 #include <docsh.hxx>
 #include <section.hxx>
 #include <shellio.hxx>
@@ -74,6 +69,7 @@
 #include <tox.hxx>
 #include <doctxm.hxx>
 #include <fchrfmt.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>

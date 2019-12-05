@@ -26,9 +26,7 @@
 #include <fmtcntnt.hxx>
 #include <txtflcnt.hxx>
 #include <frmfmt.hxx>
-#include <flyfrm.hxx>
 #include <UndoCore.hxx>
-#include <UndoDraw.hxx>
 #include <rolbck.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -37,7 +35,6 @@
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <dcontact.hxx>
 #include <ndole.hxx>
 
 SwUndoFlyBase::SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId )

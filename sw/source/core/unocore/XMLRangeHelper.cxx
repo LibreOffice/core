@@ -18,10 +18,8 @@
  */
 
 #include "XMLRangeHelper.hxx"
-#include <unotools/charclass.hxx>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
 
 #include <algorithm>
 

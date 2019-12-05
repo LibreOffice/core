@@ -26,7 +26,6 @@
 #include <undobj.hxx>
 #include <fmtcol.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <strings.hrc>
 
 SwUndoFormatCreate::SwUndoFormatCreate

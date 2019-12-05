@@ -25,9 +25,7 @@
 #include <DocumentFieldsManager.hxx>
 #include <txtfld.hxx>
 #include <fldbas.hxx>
-#include <ndtxt.hxx>
 #include <fmtfld.hxx>
-#include <dbfld.hxx>
 #include <docsh.hxx>
 #include <pam.hxx>
 #include <osl/diagnose.h>

@@ -19,32 +19,19 @@
 
 #include <config_features.h>
 
-#include <swtypes.hxx>
-#include <cmdid.h>
 #include <hintids.hxx>
-#include <svx/svxids.hrc>
 #include <doc.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
-#include <fmtcol.hxx>
-#include <poolfmt.hxx>
 #include <unocoll.hxx>
 #include <unosett.hxx>
-#include <fmtanchr.hxx>
-#include <ndtxt.hxx>
 #include <section.hxx>
 #include <IMark.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
-#include <fmtpdsc.hxx>
-#include <pagedesc.hxx>
-#include <com/sun/star/text/XTextTableCursor.hpp>
-#include <com/sun/star/text/XTextTablesSupplier.hpp>
-#include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
-#include <svl/PasswordHelper.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/unoevent.hxx>
 #include <unotbl.hxx>
@@ -61,7 +48,6 @@
 #include <unochart.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <iterator>
 #include <unosection.hxx>
 #include <unoparagraph.hxx>
 #include <unobookmark.hxx>
