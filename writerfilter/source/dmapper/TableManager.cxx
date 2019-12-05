@@ -408,24 +408,30 @@ void TableManager::endRow()
     TagLogger::getInstance().element("tablemanager.endRow");
 #endif
     TableData::Pointer_t pTableData = mTableDataStack.top();
+    sal_uInt32 nGridBefore = mpTableDataHandler->getDomainMapperImpl().getTableManager().getCurrentGridBefore();
+    sal_uInt32 nGridAfter = mpTableDataHandler->getDomainMapperImpl().getTableManager().getCurrentGridAfter();
 
-    // Add borderless w:gridBefore cell(s) to the row
-    if (pTableData)
+    // Add borderless w:gridBefore and w:gridAfter cell(s) to the row
+    if (pTableData && (nGridBefore > 0 || nGridAfter > 0))
     {
-        sal_uInt32 nGridBefore = mpTableDataHandler->getDomainMapperImpl().getTableManager().getCurrentGridBefore();
+        css::table::BorderLine2 aBorderLine;
+        aBorderLine.Color = 0;
+        aBorderLine.InnerLineWidth = 0;
+        aBorderLine.OuterLineWidth = 0;
+        TablePropertyMapPtr pCellProperties(new TablePropertyMap);
+        pCellProperties->Insert(PROP_TOP_BORDER, css::uno::makeAny(aBorderLine));
+        pCellProperties->Insert(PROP_LEFT_BORDER, css::uno::makeAny(aBorderLine));
+        pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::makeAny(aBorderLine));
+        pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::makeAny(aBorderLine));
+
+        const css::uno::Reference<css::text::XTextRange>& rFirstCellStartHandle = pTableData->getCurrentRow()->getCellStart(0);
         for (unsigned int i = 0; i < nGridBefore; ++i)
-        {
-            css::table::BorderLine2 aBorderLine;
-            aBorderLine.Color = 0;
-            aBorderLine.InnerLineWidth = 0;
-            aBorderLine.OuterLineWidth = 0;
-            TablePropertyMapPtr pCellProperties(new TablePropertyMap);
-            pCellProperties->Insert(PROP_TOP_BORDER, css::uno::makeAny(aBorderLine));
-            pCellProperties->Insert(PROP_LEFT_BORDER, css::uno::makeAny(aBorderLine));
-            pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::makeAny(aBorderLine));
-            pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::makeAny(aBorderLine));
-            pTableData->getCurrentRow()->addCell(pTableData->getCurrentRow()->getCellStart(0), pCellProperties, /*bAddBefore=*/true);
-        }
+            pTableData->getCurrentRow()->addCell(rFirstCellStartHandle, pCellProperties, /*bAddBefore=*/true);
+
+        sal_Int32 nLastCell = pTableData->getCurrentRow()->getCellCount() - 1;
+        const css::uno::Reference<css::text::XTextRange>& rLastCellEndHandle = pTableData->getCurrentRow()->getCellEnd(nLastCell);
+        for (unsigned int i = 0; i < nGridAfter; ++i)
+            pTableData->getCurrentRow()->addCell(rLastCellEndHandle, pCellProperties, /*bAddBefore=*/false);
     }
 
     setRowEnd(true);
