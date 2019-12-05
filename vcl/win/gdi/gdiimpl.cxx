@@ -1972,6 +1972,8 @@ static void impAddB2DPolygonToGDIPlusGraphicsPathReal(
     }
 }
 
+namespace {
+
 class SystemDependentData_GraphicsPath : public basegfx::SystemDependentData
 {
 private:
@@ -1996,6 +1998,8 @@ public:
 
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
+
+}
 
 SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,

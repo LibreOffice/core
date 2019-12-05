@@ -45,6 +45,8 @@
 #include <oledlg.h>
 #include <vcl/winscheduler.hxx>
 
+namespace {
+
 class InitializedOleGuard
 {
 public:
@@ -59,6 +61,8 @@ public:
         OleUninitialize();
     }
 };
+
+}
 
 extern "C" {
 typedef UINT STDAPICALLTYPE OleUIInsertObjectA_Type(LPOLEUIINSERTOBJECTA);

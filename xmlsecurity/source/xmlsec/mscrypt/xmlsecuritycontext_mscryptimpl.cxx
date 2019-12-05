@@ -34,6 +34,8 @@ using ::com::sun::star::lang::XSingleServiceFactory ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
+namespace {
+
 class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSecurityContext ,
     css::lang::XServiceInfo >
@@ -74,6 +76,8 @@ class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 XMLSecurityContext_MSCryptImpl::XMLSecurityContext_MSCryptImpl()
 {

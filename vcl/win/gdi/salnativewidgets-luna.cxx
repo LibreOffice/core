@@ -64,6 +64,8 @@ static ThemeMap aThemeMap;
  it is not available on all Windows platforms
 *****************************************************/
 
+namespace {
+
 class VisualStylesAPI
 {
 private:
@@ -95,8 +97,10 @@ public:
     HRESULT DrawThemeBackground( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pRect, const RECT *pClipRect );
     HRESULT DrawThemeText( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, DWORD dwTextFlags2, const RECT *pRect );
     HRESULT GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz );
-    BOOL IsThemeActive();
+    bool IsThemeActive();
 };
+
+}
 
 static VisualStylesAPI vsAPI;
 
@@ -178,12 +182,12 @@ HRESULT VisualStylesAPI::GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, 
         return S_FALSE;
 }
 
-BOOL VisualStylesAPI::IsThemeActive()
+bool VisualStylesAPI::IsThemeActive()
 {
     if(lpfnIsThemeActive)
         return (*lpfnIsThemeActive) ();
     else
-        return FALSE;
+        return false;
 }
 
 /*********************************************************

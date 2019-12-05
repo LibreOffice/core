@@ -81,8 +81,6 @@ enum osl_TLockMode
     un_lock, read_lock, write_lock
 };
 
-}
-
 struct osl_TFile
 {
     HANDLE  m_Handle;
@@ -126,6 +124,8 @@ struct osl_TProfileImpl
     rtl_uString *m_strFileName;
     osl_TProfileSection* m_Sections;
 };
+
+}
 
 static osl_TFile*           openFileImpl(rtl_uString * strFileName, oslProfileOption ProfileFlags  );
 static osl_TStamp           closeFileImpl(osl_TFile* pFile);

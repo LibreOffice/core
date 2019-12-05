@@ -95,8 +95,6 @@ Gdiplus::Rect CalcScaledAspectRatio(const Gdiplus::Rect& src, const Gdiplus::Rec
     return result;
 }
 
-}
-
 class StreamOnZipBuffer final : public IStream
 {
 public:
@@ -125,6 +123,8 @@ private:
     const ZipFile::ZipContentBuffer_t& ref_zip_buffer_;
     size_t pos_;
 };
+
+}
 
 StreamOnZipBuffer::StreamOnZipBuffer(const ZipFile::ZipContentBuffer_t& zip_buffer) :
     ref_count_(1),

@@ -36,6 +36,8 @@
 
 using namespace com::sun::star::uno;
 
+namespace {
+
 #pragma pack(2)
 struct METAFILEHEADER
 {
@@ -47,6 +49,8 @@ struct METAFILEHEADER
     WORD        checksum;
 };
 #pragma pack()
+
+}
 
 // convert a windows metafile picture to a LibreOffice metafile picture
 

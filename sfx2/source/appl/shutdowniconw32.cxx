@@ -80,6 +80,8 @@ static HMENU popupMenu = nullptr;
 static void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis);
 static void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis);
 
+namespace {
+
 typedef struct tagMYITEM
 {
     OUString text;
@@ -87,6 +89,7 @@ typedef struct tagMYITEM
     UINT iconId;
 } MYITEM;
 
+}
 
 static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, bool bOwnerdraw, const OUString& module )
 {

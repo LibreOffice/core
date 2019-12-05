@@ -323,6 +323,9 @@ bool isZipStream(StreamInterface *stream)
 
 namespace internal
 {
+
+namespace {
+
 /* for case in-sensitive string comparison */
 struct stricmp
 {
@@ -336,6 +339,9 @@ struct stricmp
 
     std::string str_;
 };
+
+}
+
 } // namespace internal
 
 /** Checks whether a file is a zip file or not

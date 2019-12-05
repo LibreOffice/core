@@ -302,13 +302,13 @@ oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
     return result;
 }
 
-}
-
 struct CommandArgs_Impl
 {
     sal_uInt32     m_nCount;
     rtl_uString ** m_ppArgs;
 };
+
+}
 
 static struct CommandArgs_Impl g_command_args =
 {

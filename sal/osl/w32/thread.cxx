@@ -28,6 +28,8 @@
 #include <rtl/tencinfo.h>
 #include <errno.h>
 
+namespace {
+
 /**
     Thread-data structure hidden behind oslThread:
  */
@@ -40,6 +42,8 @@ typedef struct
     void*               m_pData;
 
 } osl_TThreadImpl;
+
+}
 
 static unsigned __stdcall oslWorkerWrapperFunction(void* pData);
 static oslThread oslCreateThread(oslWorkerFunction pWorker, void* pThreadData, sal_uInt32 nFlags);
@@ -378,12 +382,16 @@ void SAL_CALL osl_setThreadName(char const * name) {
 #endif
 }
 
+namespace {
+
 typedef struct TLS_
 {
     DWORD                           dwIndex;
     oslThreadKeyCallbackFunction    pfnCallback;
     struct TLS_                     *pNext, *pPrev;
 } TLS, *PTLS;
+
+}
 
 static  PTLS        g_pThreadKeyList = nullptr;
 CRITICAL_SECTION    g_ThreadKeyListCS;

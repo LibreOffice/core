@@ -132,6 +132,8 @@ namespace {
 namespace inprocserv
 {
 
+namespace {
+
 class InprocEmbedProvider_Impl : public IClassFactory, public InprocCountedObject_Impl
 {
 public:
@@ -153,6 +155,9 @@ protected:
     ULONG               m_refCount;
     GUID                m_guid;
 };
+
+}
+
 }; // namespace inprocserv
 
 

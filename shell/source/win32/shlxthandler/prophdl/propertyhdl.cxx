@@ -39,6 +39,8 @@
 long g_DllRefCnt = 0;
 static HINSTANCE g_hModule = nullptr;
 
+namespace {
+
 // Map of property keys to the locations of their value(s) in the .??? XML schema
 struct PROPERTYMAP
 {
@@ -46,6 +48,8 @@ struct PROPERTYMAP
     PCWSTR pszXPathParent;
     PCWSTR pszValueNodeName;
 };
+
+}
 
 const PROPERTYMAP g_rgPROPERTYMAP[] =
 {

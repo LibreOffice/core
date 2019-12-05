@@ -41,11 +41,15 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
 // we have to translate control ids to resource ids
 
+namespace {
+
 struct Entry
 {
     sal_Int32 ctrlId;
     const char* resId;
 };
+
+}
 
 Entry const CtrlIdToResIdTable[] = {
     { CHECKBOX_AUTOEXTENSION,                   STR_SVT_FILEPICKER_AUTO_EXTENSION },

@@ -61,6 +61,8 @@ static OUString SfxDdeServiceName_Impl( const OUString& sIn )
     return sReturn.makeStringAndClear();
 }
 
+namespace {
+
 class ImplDdeService : public DdeService
 {
 public:
@@ -74,9 +76,6 @@ public:
     virtual bool SysTopicExecute( const OUString* pStr );
 };
 
-
-namespace
-{
     bool lcl_IsDocument( const OUString& rContent )
     {
         using namespace com::sun::star;

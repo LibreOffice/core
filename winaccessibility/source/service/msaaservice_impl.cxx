@@ -57,6 +57,8 @@ static OUString getImplementationName_MSAAServiceImpl()
     return "com.sun.star.accessibility.my_sc_implementation.MSAAService";
 }
 
+namespace {
+
 class MSAAServiceImpl : public ::cppu::WeakImplHelper<
             XMSAAService, lang::XServiceInfo >
 {
@@ -83,6 +85,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
+
+}
 
 /**
    * Implementation of getAccObjectPtr.

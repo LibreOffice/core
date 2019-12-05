@@ -42,6 +42,8 @@ const GUID* const guidList[ SUPPORTED_FACTORIES_NUM ] = {
     &OID_MathOASISServer
 };
 
+namespace {
+
 class CurThreadData
 {
     public:
@@ -55,6 +57,8 @@ class CurThreadData
     protected:
         oslThreadKey m_hKey;
 };
+
+}
 
 CurThreadData::CurThreadData() : m_hKey(osl_createThreadKey( nullptr ))
 {

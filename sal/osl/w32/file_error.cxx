@@ -20,12 +20,16 @@
 #include "file_error.hxx"
 #include <winerror.h>
 
+namespace {
+
 /* OS error to oslFileError values mapping table */
 struct osl_file_error_entry
 {
     unsigned long oscode; /* OS return value */
     int errnocode;        /* oslFileError code */
 };
+
+}
 
 static const struct osl_file_error_entry errtable[] = {
   {  ERROR_SUCCESS,                osl_File_E_None     },  /* 0 */

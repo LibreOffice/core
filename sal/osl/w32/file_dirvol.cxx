@@ -221,6 +221,8 @@ oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle
 #define DIRECTORYITEM_FILE      1
 #define DIRECTORYITEM_SERVER    2
 
+namespace {
+
 struct DirectoryItem_Impl
 {
     UINT uType;
@@ -229,13 +231,17 @@ struct DirectoryItem_Impl
         WCHAR            cDriveString[MAX_PATH];
     };
     rtl_uString*    m_pFullPath;
-    BOOL            bFullPathNormalized;
+    bool            bFullPathNormalized;
     int             nRefCount;
 };
+
+}
 
 #define DIRECTORYTYPE_LOCALROOT     0
 #define DIRECTORYTYPE_NETROOT       1
 #define DIRECTORYTYPE_FILESYSTEM    3
+
+namespace {
 
 struct Directory_Impl
 {
@@ -253,6 +259,8 @@ typedef struct tagDRIVEENUM
     WCHAR   cBuffer[/*('Z' - 'A' + 1) * sizeof("A:\\") + 1*/256];
     LPCWSTR lpCurrent;
 } DRIVEENUM, * PDRIVEENUM, FAR * LPDRIVEENUM;
+
+}
 
 static HANDLE WINAPI OpenLogicalDrivesEnum()
 {
@@ -315,11 +323,15 @@ static bool WINAPI CloseLogicalDrivesEnum(HANDLE hEnum)
     return fSuccess;
 }
 
+namespace {
+
 typedef struct tagDIRECTORY
 {
     HANDLE           hFind;
     WIN32_FIND_DATAW aFirstData;
 } DIRECTORY, *PDIRECTORY, FAR *LPDIRECTORY;
+
+}
 
 static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
 {
@@ -878,7 +890,7 @@ static oslFileError osl_getNextFileItem(
         rtl_uString_newConcat( &pItemImpl->m_pFullPath, pDirImpl->m_pDirectoryPath, pTmpFileName );
         rtl_uString_release( pTmpFileName );
 
-        pItemImpl->bFullPathNormalized = FALSE;
+        pItemImpl->bFullPathNormalized = false;
         *pItem = static_cast<oslDirectoryItem>(pItemImpl);
         return osl_File_E_None;
     }
@@ -1677,7 +1689,7 @@ oslFileError SAL_CALL osl_getFileStatus(
             {
                 rtl_uString_newFromStr( &pItemImpl->m_pFullPath, aBuffer );
                 sFullPath = OUString( pItemImpl->m_pFullPath );
-                pItemImpl->bFullPathNormalized = TRUE;
+                pItemImpl->bFullPathNormalized = true;
             }
         }
 

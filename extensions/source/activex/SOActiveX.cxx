@@ -151,7 +151,7 @@ CSOActiveX::CSOActiveX()
 , mpDispatchInterceptor( nullptr )
 , mnVersion( SO_NOT_DETECTED )
 , mbReadyForActivation( FALSE )
-, mbDrawLocked( FALSE )
+, mbDrawLocked( false )
 {
     CLSID const clsFactory = {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
     HRESULT hr = CoCreateInstance( clsFactory, nullptr, CLSCTX_ALL, __uuidof(IDispatch), reinterpret_cast<void**>(&mpDispFactory));
@@ -948,21 +948,25 @@ SOVersion CSOActiveX::GetVersionConnected()
     return bResult;
 }
 
+namespace {
+
 class LockingGuard
 {
-    BOOL& mbLocked;
+    bool& mbLocked;
 public:
-    explicit LockingGuard( BOOL& bLocked )
+    explicit LockingGuard( bool& bLocked )
     : mbLocked( bLocked )
     {
-        mbLocked = TRUE;
+        mbLocked = true;
     }
 
     ~LockingGuard()
     {
-        mbLocked = FALSE;
+        mbLocked = false;
     }
 };
+
+}
 
 HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
 {

@@ -116,6 +116,8 @@ static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
 static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr);
 
+namespace {
+
 class TerminationVetoer : public WeakImplHelper<css::frame::XTerminateListener>
 {
 public:
@@ -170,6 +172,8 @@ public:
         // ???
     }
 };
+
+}
 
 /* Does not throw any exceptions.
    Param pInfo can be NULL.
@@ -315,6 +319,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::GetTypeInfoCount( UINT *p
 
     return S_OK;
 }
+
+namespace {
 
 class CXTypeInfo : public ITypeInfo,
                    public CComObjectRoot
@@ -591,6 +597,8 @@ private:
     OUString msImplementationName;
     Reference<XMultiServiceFactory> mxMSF;
 };
+
+}
 
 void CXTypeInfo::InitForCoclass(Reference<XInterface> xOrigin,
                                 const OUString& sImplementationName,
@@ -2204,6 +2212,8 @@ HRESULT InterfaceOleWrapper::doSetProperty( DISPPARAMS * /*pdispparams*/, VARIAN
     return ret;
 }
 
+namespace {
+
 class CXEnumVariant : public IEnumVARIANT,
                       public CComObjectRoot
 {
@@ -2352,6 +2362,8 @@ private:
     ooo::vba::TypeAndIID maTypeAndIID;
     InterfaceOleWrapper* mpInterfaceOleWrapper;
 };
+
+}
 
 Sink::Sink(IUnknown* pUnkSink,
            Reference<XMultiServiceFactory> xMSF,
@@ -2534,6 +2546,8 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
     }
     SAL_WARN("extensions.olebridge", "Sink::Call: Unknown method '" << Method << "'");
 }
+
+namespace {
 
 class CXEnumConnections : public IEnumConnections,
                           public CComObjectRoot
@@ -2793,6 +2807,8 @@ public:
     Reference<ooo::vba::XConnectionPoint> mxCP;
     ooo::vba::TypeAndIID maTypeAndIID;
 };
+
+}
 
 HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,

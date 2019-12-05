@@ -345,6 +345,8 @@ float WinFontInstance::getHScale() const
     return nWidth / nHeight;
 }
 
+namespace {
+
 struct BlobReference
 {
     hb_blob_t* mpBlob;
@@ -359,7 +361,13 @@ struct BlobReference
     }
     ~BlobReference() { hb_blob_destroy(mpBlob); }
 };
+
+}
+
 using BlobCacheKey = std::pair<rtl::Reference<PhysicalFontFace>, hb_tag_t>;
+
+namespace {
+
 struct BlobCacheKeyHash
 {
     std::size_t operator()(BlobCacheKey const& rKey) const
@@ -370,6 +378,8 @@ struct BlobCacheKeyHash
         return seed;
     }
 };
+
+}
 
 static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
