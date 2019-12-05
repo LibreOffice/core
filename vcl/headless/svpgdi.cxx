@@ -720,7 +720,7 @@ void SvpSalGraphics::drawPixel( long nX, long nY )
 
 void SvpSalGraphics::drawPixel( long nX, long nY, Color aColor )
 {
-    cairo_t* cr = getCairoContext(false);
+    cairo_t* cr = getCairoContext(true);
     clipRegion(cr);
 
     cairo_rectangle(cr, nX, nY, 1, 1);
