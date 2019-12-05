@@ -231,7 +231,7 @@
 #define STR_TABPAGE_INVALIDSTYLE                NC_("STR_TABPAGE_INVALIDSTYLE", "This Style does not exist.")
 #define STR_TABPAGE_INVALIDPARENT               NC_("STR_TABPAGE_INVALIDPARENT", "This Style cannot be used as a base Style,\nbecause it would result in a recursive reference.")
 #define STR_POOL_STYLE_NAME                     NC_("STR_POOL_STYLE_NAME", "Name already exists as a default Style.\nPlease choose another name.")
-#define STR_DELETE_STYLE_USED                   NC_("STR_DELETE_STYLE_USED", "One or more of the selected styles is in use in this document.\nIf you delete these styles, text will revert to the parent style.\nDo you still wish to delete these styles?\n")
+#define STR_DELETE_STYLE_USED                   NC_("STR_DELETE_STYLE_USED", "One or more of the selected styles is in use in this document.\nIf you'll delete it, text or objects using these styles will revert to the parent style.\nDo you still wish to delete these styles?\n")
 #define STR_DELETE_STYLE                        NC_("STR_DELETE_STYLE", "Styles in use: ")
 #define STR_SID_NAVIGATOR                       NC_("STR_SID_NAVIGATOR", "Navigator")
 #define STR_ERROR_WRONG_CONFIRM                 NC_("STR_ERROR_WRONG_CONFIRM", "Faulty password confirmation")
