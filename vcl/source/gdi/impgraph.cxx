@@ -683,9 +683,8 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
         }
 
         const BitmapEx& rRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maEx );
-        const Color     aReplaceColor( COL_WHITE );
 
-        aRetBmp = rRetBmpEx.GetBitmap( &aReplaceColor );
+        aRetBmp = rRetBmpEx.GetBitmap( COL_WHITE );
 
         if(rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
             aRetBmp.Scale(rParameters.getSizePixel());
