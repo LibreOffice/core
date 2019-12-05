@@ -48,7 +48,6 @@
 #include <fldbas.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
-#include <ndgrf.hxx>
 #include <UndoCore.hxx>
 #include <IMark.hxx>
 #include <charfmt.hxx>

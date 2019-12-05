@@ -17,17 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svxids.hrc>
-#include <editeng/memberids.h>
+#include <editeng/editids.hrc>
 #include <swtypes.hxx>
-#include <cmdid.h>
 #include <unomid.h>
 #include <hintids.hxx>
 #include <strings.hrc>
 #include <poolfmt.hxx>
 #include <fmtcol.hxx>
 #include <unomap.hxx>
-#include <unostyle.hxx>
+//#include <unostyle.hxx>
 #include <unosett.hxx>
 #include <unoprnms.hxx>
 #include <ftninfo.hxx>
@@ -42,11 +40,6 @@
 #include <fmtclds.hxx>
 #include <editeng/brushitem.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/text/XFootnotesSettingsSupplier.hpp>
-#include <com/sun/star/text/XFootnote.hpp>
-#include <com/sun/star/text/XFootnotesSupplier.hpp>
-#include <com/sun/star/text/XEndnotesSupplier.hpp>
-#include <com/sun/star/text/XEndnotesSettingsSupplier.hpp>
 #include <com/sun/star/text/FootnoteNumbering.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>

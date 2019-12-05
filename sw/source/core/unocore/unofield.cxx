@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <sal/config.h>
-#include <editeng/outlobj.hxx>
 #include <algorithm>
 #include <memory>
 
@@ -44,28 +41,20 @@
 #include <unotextcursor.hxx>
 #include <unocoll.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <docstat.hxx>
 #include <editsh.hxx>
 #include <viewsh.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
 
 //undef to prevent error (from sfx2/docfile.cxx)
 #undef SEQUENCE
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <com/sun/star/text/PageNumberType.hpp>
-#include <unocrsr.hxx>
 #include <authfld.hxx>
 #include <flddat.hxx>
 #include <dbfld.hxx>
@@ -93,11 +82,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
-#include <editeng/outliner.hxx>
-#include <docsh.hxx>
 #include <fmtmeta.hxx>
-#include <rtl/strbuf.hxx>
-#include <editeng/outlobj.hxx>
 #include <vector>
 
 using namespace ::com::sun::star;

@@ -28,7 +28,6 @@
 #include <UndoTable.hxx>
 #include <sortopt.hxx>
 #include <docsort.hxx>
-#include <redline.hxx>
 #include <node2lay.hxx>
 
 // Undo for Sorting

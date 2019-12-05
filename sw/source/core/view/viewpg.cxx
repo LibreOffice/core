@@ -17,27 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <tools/fract.hxx>
-#include <vcl/window.hxx>
-#include <vcl/oldprintadaptor.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/progress.hxx>
-#include <pvprtdat.hxx>
 #include <viewsh.hxx>
 #include <pagefrm.hxx>
-#include <rootfrm.hxx>
 #include <viewimp.hxx>
-#include <viewopt.hxx>
 #include <printdata.hxx>
-#include <fldbas.hxx>
 #include <ptqueue.hxx>
-#include <swregion.hxx>
-#include <hints.hxx>
 #include <fntcache.hxx>
 
-#include <IDocumentFieldsAccess.hxx>
-#include <IDocumentDeviceAccess.hxx>
 #include "vprint.hxx"
 
 using namespace ::com::sun::star;

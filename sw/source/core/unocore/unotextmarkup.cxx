@@ -19,6 +19,7 @@
 
 #include <unotextmarkup.hxx>
 
+#include <osl/diagnose.h>
 #include <svl/listener.hxx>
 #include <vcl/svapp.hxx>
 #include <SwSmartTagMgr.hxx>
@@ -29,6 +30,7 @@
 #include <com/sun/star/container/XStringKeyMap.hpp>
 #include <ndtxt.hxx>
 #include <SwGrammarMarkUp.hxx>
+#include <TextCursorHelper.hxx>
 
 #include <IGrammarContact.hxx>
 
@@ -38,7 +40,6 @@
 #include <pam.hxx>
 
 #include <unotextrange.hxx>
-#include <unotextcursor.hxx>
 #include <modeltoviewhelper.hxx>
 
 using namespace ::com::sun::star;

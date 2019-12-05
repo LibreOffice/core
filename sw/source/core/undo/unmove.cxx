@@ -19,7 +19,6 @@
 
 #include <UndoSplitMove.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>

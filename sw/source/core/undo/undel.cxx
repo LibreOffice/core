@@ -20,8 +20,6 @@
 #include <UndoDelete.hxx>
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
-#include <editeng/formatbreakitem.hxx>
-#include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
@@ -36,11 +34,7 @@
 #include <rolbck.hxx>
 #include <poolfmt.hxx>
 #include <mvsave.hxx>
-#include <redline.hxx>
 #include <docary.hxx>
-#include <sfx2/app.hxx>
-#include <fldbas.hxx>
-#include <fmtfld.hxx>
 #include <frmtool.hxx>
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>

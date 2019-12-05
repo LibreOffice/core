@@ -38,7 +38,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/flstitem.hxx>
@@ -74,7 +73,6 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>

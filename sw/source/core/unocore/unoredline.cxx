@@ -20,11 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <utility>
-
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/text/XTextTable.hpp>
-
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 
@@ -33,7 +28,6 @@
 #include <redline.hxx>
 #include <section.hxx>
 #include <unoprnms.hxx>
-#include <unomid.h>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
