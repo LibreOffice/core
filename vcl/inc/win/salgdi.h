@@ -150,7 +150,7 @@ public:
 
 struct CompatibleDC::Texture
 {
-    virtual ~Texture() = 0 {};
+    virtual ~Texture() {};
     virtual bool isValid() const = 0;
     virtual int GetWidth() const = 0;
     virtual int GetHeight() const = 0;
