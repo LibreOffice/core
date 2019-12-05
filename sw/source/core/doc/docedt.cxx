@@ -138,14 +138,14 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
 
     const SwPosition* pPos = rPam.Start();
     const SwNodeIndex& rSttNdIdx = pPos->nNode;
-    short nSttOff = (!bMoveAllFlys && rSttNdIdx.GetNode().IsContentNode() &&
-                    pPos->nContent.GetIndex()) ? 1 : 0;
 
-    pPos = rPam.GetPoint() == pPos ? rPam.GetMark() : rPam.GetPoint();
-    const SwNodeIndex& rEndNdIdx = pPos->nNode;
-    short nOff = ( bMoveAllFlys || ( rEndNdIdx.GetNode().IsContentNode() &&
-                pPos->nContent == rEndNdIdx.GetNode().GetContentNode()->Len() ))
-                    ? 0 : 1;
+    SwPosition atParaEnd(*rPam.End());
+    if (bMoveAllFlys)
+    {
+        assert(rPam.End()->nContent.GetIndex() == rPam.End()->nNode.GetNode().GetTextNode()->Len());
+        ++atParaEnd.nNode;
+        atParaEnd.nContent.Assign(atParaEnd.nNode.GetNode().GetContentNode(), 0);
+    }
 
     for( SwFrameFormats::size_type n = 0; n < rFormats.size(); ++n )
     {
@@ -163,27 +163,13 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
         {
             bool bInsPos = false;
 
-            if (!bMoveAllFlys
-                && RndStdIds::FLY_AT_CHAR != pAnchor->GetAnchorId()
-                && rEndNdIdx == pAPos->nNode)
-            {
-                // Do not touch Anchor, if only a part of the EndNode
-                // or the whole EndNode is identical with the SttNode
-                if( rSttNdIdx != pAPos->nNode )
-                {
-                    // Only attach an anchor to the beginning or end
-                    SwPosition aPos( rSttNdIdx );
-                    SwFormatAnchor aAnchor( *pAnchor );
-                    aAnchor.SetAnchor( &aPos );
-                    pFormat->SetFormatAttr( aAnchor );
-                }
-            }
-            else if (  (//bMoveAllFlys ... no do not check - all callers are actually from redline code, from the MoveToSection case; so check bMoveAllFlys only for AT_PARA!
-                           (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())
+            if (       (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId()
                         && IsDestroyFrameAnchoredAtChar(*pAPos, *rPam.Start(), *rPam.End()))
                     || (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()
-                        && rSttNdIdx.GetIndex() + nSttOff <= pAPos->nNode.GetIndex()
-                        && pAPos->nNode.GetIndex() <= rEndNdIdx.GetIndex() - nOff)
+                        && IsSelectFrameAnchoredAtPara(*pAPos, *rPam.Start(), atParaEnd,
+                            bMoveAllFlys
+                                ? DelContentType::CheckNoCntnt|DelContentType::AllMask
+                                : DelContentType::AllMask))
                     || (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()
                             && (bInsPos = (rInsPos.nNode == pAPos->nNode)))
                     || (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId()
@@ -224,7 +210,6 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                             : SwPosition(rMkNdIdx));
     SwPosition const& rStart = mark <= point ? mark : point;
     SwPosition const& rEnd   = mark <= point ? point : mark;
-    const bool bDelFwrd = rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex();
 
     SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
     SwFrameFormats& rTable = *pDoc->GetSpzFrameFormats();
@@ -235,25 +220,14 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
         SwPosition const*const pAPos = rAnch.GetContentAnchor();
         if (pAPos &&
             (((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
-                && (bDelFwrd
-                    ? rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx
-                    : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx))
+                && IsSelectFrameAnchoredAtPara(*pAPos, rStart, rEnd, pPtIdx
+                    ? DelContentType::AllMask
+                    : DelContentType::AllMask|DelContentType::CheckNoCntnt))
             || ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
                 && IsDestroyFrameAnchoredAtChar(*pAPos, rStart, rEnd, pPtIdx
                     ? DelContentType::AllMask
                     : DelContentType::AllMask|DelContentType::CheckNoCntnt))))
         {
-            // Only move the Anchor??
-            if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
-                && rPtNdIdx == pAPos->nNode )
-            {
-                SwFormatAnchor aAnch( pFormat->GetAnchor() );
-                SwPosition aPos( rMkNdIdx );
-                aAnch.SetAnchor( &aPos );
-                pFormat->SetFormatAttr( aAnch );
-            }
-            else
-            {
                 // If the Fly is deleted, all Flys in its content have to be deleted too.
                 const SwFormatContent &rContent = pFormat->GetContent();
                 // But only fly formats own their content, not draw formats.
@@ -274,7 +248,6 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                 // DelLayoutFormat can also trigger the deletion of objects.
                 if( i > rTable.size() )
                     i = rTable.size();
-            }
         }
     }
 }

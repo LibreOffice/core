@@ -135,7 +135,7 @@ enum class DelContentType : sal_uInt16
     Fly          = 0x02,
     Bkm          = 0x08,
     AllMask      = 0x0b,
-    ExcludeAtCharFlyAtStartEnd = 0x40,
+    ExcludeFlyAtStartEnd = 0x40,
     CheckNoCntnt = 0x80,
 };
 namespace o3tl {
@@ -144,6 +144,10 @@ namespace o3tl {
 
 /// will DelContentIndex destroy a frame anchored at character at rAnchorPos?
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
+        SwPosition const & rStart, SwPosition const & rEnd,
+        DelContentType const nDelContentType = DelContentType::AllMask);
+/// is a fly anchored at paragraph at rAnchorPos selected?
+bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd,
         DelContentType const nDelContentType = DelContentType::AllMask);
 
