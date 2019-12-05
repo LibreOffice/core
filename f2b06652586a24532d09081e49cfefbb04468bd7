@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_f0c6849a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-12-05T08:58:01Z",
+      "side": 1,
+      "message": "nit-pick: maybe would be nice to update the date here (e.g.with \u0027git commit --amend --reset-author\u0027); that patch has little to do with the original one from June :)",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 37
+      },
+      "revId": "f2b06652586a24532d09081e49cfefbb04468bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
