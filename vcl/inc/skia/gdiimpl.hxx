@@ -26,7 +26,10 @@
 #include <salgeom.hxx>
 
 #include <SkSurface.h>
+
+#include <prewin.h>
 #include <tools/sk_app/VulkanWindowContext.h>
+#include <postwin.h>
 
 class SkiaFlushIdle;
 
