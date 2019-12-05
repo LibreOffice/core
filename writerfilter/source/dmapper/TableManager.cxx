@@ -408,24 +408,26 @@ void TableManager::endRow()
     TagLogger::getInstance().element("tablemanager.endRow");
 #endif
     TableData::Pointer_t pTableData = mTableDataStack.top();
+    sal_uInt32 nGridBefore = mpTableDataHandler->getDomainMapperImpl().getTableManager().getCurrentGridBefore();
+    sal_uInt32 nGridAfter = mpTableDataHandler->getDomainMapperImpl().getTableManager().getCurrentGridAfter();
 
-    // Add borderless w:gridBefore cell(s) to the row
-    if (pTableData)
+    // Add borderless w:gridBefore and w:gridAfter cell(s) to the row
+    if (pTableData && (nGridBefore > 0 || nGridAfter > 0))
     {
-        sal_uInt32 nGridBefore = mpTableDataHandler->getDomainMapperImpl().getTableManager().getCurrentGridBefore();
+        css::table::BorderLine2 aBorderLine;
+        aBorderLine.Color = 0;
+        aBorderLine.InnerLineWidth = 0;
+        aBorderLine.OuterLineWidth = 0;
+        TablePropertyMapPtr pCellProperties(new TablePropertyMap);
+        pCellProperties->Insert(PROP_TOP_BORDER, css::uno::makeAny(aBorderLine));
+        pCellProperties->Insert(PROP_LEFT_BORDER, css::uno::makeAny(aBorderLine));
+        pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::makeAny(aBorderLine));
+        pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::makeAny(aBorderLine));
+
         for (unsigned int i = 0; i < nGridBefore; ++i)
-        {
-            css::table::BorderLine2 aBorderLine;
-            aBorderLine.Color = 0;
-            aBorderLine.InnerLineWidth = 0;
-            aBorderLine.OuterLineWidth = 0;
-            TablePropertyMapPtr pCellProperties(new TablePropertyMap);
-            pCellProperties->Insert(PROP_TOP_BORDER, css::uno::makeAny(aBorderLine));
-            pCellProperties->Insert(PROP_LEFT_BORDER, css::uno::makeAny(aBorderLine));
-            pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::makeAny(aBorderLine));
-            pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::makeAny(aBorderLine));
             pTableData->getCurrentRow()->addCell(pTableData->getCurrentRow()->getCellStart(0), pCellProperties, /*bAddBefore=*/true);
-        }
+        for (unsigned int i = 0; i < nGridAfter; ++i)
+            pTableData->getCurrentRow()->addCell(pTableData->getCurrentRow()->getCellStart(0), pCellProperties, /*bAddBefore=*/false);
     }
 
     setRowEnd(true);
