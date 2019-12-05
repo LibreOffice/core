@@ -936,6 +936,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44986, "tdf44986.docx")
     // Check the first row of the table, it should have two cells (one separator).
     // This was 0: the first row had no separators, so it had only one cell, which was too wide.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
+    // Check content of cells, including the newly added gridAfter cell
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"), uno::Reference<text::XTextRange>(xTable->getCellByName("A1"), uno::UNO_QUERY_THROW)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("A2"), uno::Reference<text::XTextRange>(xTable->getCellByName("A2"), uno::UNO_QUERY_THROW)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), uno::Reference<text::XTextRange>(xTable->getCellByName("B1"), uno::UNO_QUERY_THROW)->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106953, "tdf106953.docx")
