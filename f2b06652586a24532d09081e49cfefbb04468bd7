@@ -22,6 +22,30 @@
       "revId": "f2b06652586a24532d09081e49cfefbb04468bd7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_90c4f0f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-12-05T11:05:58Z",
+      "side": 1,
+      "message": "Technically it\u0027s the same patch, except for the dropped Qt::WindowModal handling.",
+      "parentUuid": "7f7f9b97_f0c6849a",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 37
+      },
+      "revId": "f2b06652586a24532d09081e49cfefbb04468bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
