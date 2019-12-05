@@ -622,7 +622,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 {
                     const SvxURLField* pURLField = GetURLField();
                     if ( pURLField )
-                        ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
+                        ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame(), true );
                     return;
                 }
         case SID_EDIT_HYPERLINK:
