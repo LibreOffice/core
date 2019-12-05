@@ -161,7 +161,7 @@ void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
 
 void ScEditWindow::SetText( const EditTextObject& rTextObject )
 {
-    m_xEditEngine->SetText( rTextObject );
+    GetEditEngine()->SetText( rTextObject );
 }
 
 void ScEditWindow::InsertField( const SvxFieldItem& rFld )
