@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_3306461e",
+        "filename": "vcl/inc/win/salgdi.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-05T10:38:43Z",
+      "side": 1,
+      "message": "but why not `\u003d default`?",
+      "range": {
+        "startLine": 153,
+        "startChar": 23,
+        "endLine": 153,
+        "endChar": 25
+      },
+      "revId": "b024d8bcedc93f1f5c60c7f5eeb54d08b751d950",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
