@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_907f10df",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-12-05T09:50:00Z",
+      "side": 1,
+      "message": "are we sure about that bXorModeAllowed \u003d false change ?",
+      "revId": "7b267be4b2c87b2c3987d4d751307977a7d3ad41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
