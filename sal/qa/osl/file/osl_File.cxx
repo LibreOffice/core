@@ -314,7 +314,7 @@ static bool ifFileCanWrite(const OUString & str)
     OString aString = OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US);
     const char *path = aString.getStr();
     if ((_access(path, 2)) != -1)
-         bCheckResult = sal_True;
+         bCheckResult = true;
      // on UNX, just test if open success with osl_File_OpenFlag_Write
 #else
     File testFile(str);
@@ -390,9 +390,9 @@ static OString outputError(const OString & returnVal, const OString & rightVal, 
     return aString;
 }
 
+#if (defined UNX) /* chmod() method is different in Windows */
 /** Change file mode, two version in UNIX and Windows;.
 */
-#if (defined UNX) /* chmod() method is different in Windows */
 static void changeFileMode(OUString & filepath, sal_Int32 mode)
 {
     OString aString;
@@ -405,16 +405,11 @@ static void changeFileMode(OUString & filepath, sal_Int32 mode)
     int ret = chmod(aString.getStr(), mode);
     CPPUNIT_ASSERT_EQUAL(0, ret);
 }
-#else /* Windows version */
-inline void changeFileMode(OUString & filepath, sal_Int32 mode)
-{
-    (void)filepath;
-    (void)mode;
-    printf("this method is not implemented yet");
-}
 #endif
 
+#if defined UNX
 static OUString getCurrentPID();
+#endif
 
 // Beginning of the test cases for osl::FileBase class
 
@@ -511,7 +506,7 @@ namespace osl_FileBase
 #if (defined UNX)
         suAssume = aUserDirectoryURL.concat("/relative/");
 #else
-        suAssume = aUserDirectoryURL.concat(OUString("/relative"));
+        suAssume = aUserDirectoryURL.concat("/relative");
 #endif
         check_getAbsoluteFileURL(aUserDirectoryURL, "././relative/.",osl::FileBase::E_None, suAssume);
     }
@@ -528,7 +523,7 @@ namespace osl_FileBase
 #if (defined UNX)
         suAssume = aUserDirectoryURL.concat("/.a/");
 #else // windows
-        suAssume = aUserDirectoryURL.concat(OUString("/.a"));
+        suAssume = aUserDirectoryURL.concat("/.a");
 #endif
         check_getAbsoluteFileURL(aUserDirectoryURL, "./.a/mydir/..",osl::FileBase::E_None, suAssume);
     }
@@ -765,7 +760,7 @@ namespace osl_FileBase
             OString const& _sWNTAssumeResultString)
     {
 #if defined(_WIN32)
-        check_SystemPath_FileURL(_sSysPath, _nAssumeError, _sWNTAssumeResultString, sal_False);
+        check_SystemPath_FileURL(_sSysPath, _nAssumeError, _sWNTAssumeResultString, false);
 #else
         (void)_sSysPath;
         (void)_nAssumeError;
@@ -1754,8 +1749,8 @@ namespace osl_FileStatus
 #else // Windows version
         void getAttributes_001()
         {
-            CPPUNIT_ASSERT_MESSAGE("test for getAttributes function: ReadOnly, GrpRead, OwnRead, OthRead(Windows version)",
-                                     1 == 1);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getAttributes function: ReadOnly, GrpRead, OwnRead, OthRead(Windows version)",
+                                     1, 1);
         }
 #endif
 
@@ -1790,8 +1785,8 @@ namespace osl_FileStatus
 #else // Windows version
         void getAttributes_003()
         {
-            CPPUNIT_ASSERT_MESSAGE("test for getAttributes function: GrpWrite, OwnWrite, OthWrite(Windows version)",
-                                     1 == 1);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getAttributes function: GrpWrite, OwnWrite, OthWrite(Windows version)",
+                                     1, 1);
         }
 #endif
 
@@ -1812,7 +1807,7 @@ namespace osl_FileStatus
         {
             OUString aUserHiddenFileURL ("file:///c:/AUTOEXEC.BAT");
             nError = DirectoryItem::get(aUserHiddenFileURL, rItem_hidden);
-            CPPUNIT_ASSERT_MESSAGE("get item fail", nError == osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("get item fail", osl::FileBase::E_None, nError);
             FileStatus   rFileStatus(osl_FileStatus_Mask_Attributes);
             nError = rItem_hidden.getFileStatus(rFileStatus);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError);
@@ -2097,12 +2092,9 @@ namespace osl_FileStatus
     {
     private:
         OUString aTypeURL;
-        osl::FileBase::RC nError;
         DirectoryItem rItem;
 
     public:
-        getLinkTargetURL() : nError(osl::FileBase::E_None) {}
-
         void setUp() override
         {
             aTypeURL = aUserDirectoryURL.copy(0);
@@ -2132,7 +2124,7 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT_EQUAL_MESSAGE("in creating link file",  static_cast<sal_Int32>(0), fd);
 
             // get linkTarget URL
-            nError = DirectoryItem::get(aLnkURL1, rItem);
+            auto nError = DirectoryItem::get(aLnkURL1, rItem);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("in getting link file item", osl::FileBase::E_None, nError);
 
             FileStatus   rFileStatus(osl_FileStatus_Mask_LinkTargetURL);
@@ -3461,9 +3453,9 @@ namespace osl_File
 #else
             // please see GetFileAttributes
             nError2 = File::setAttributes(aTmpName6, osl_File_Attribute_ReadOnly);
-            CPPUNIT_ASSERT(nError2 == osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError2);
             nError1 = DirectoryItem::get(aTmpName6, rItem);
-            CPPUNIT_ASSERT(nError1 == osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // get the file attributes
             FileStatus   rFileStatus(osl_FileStatus_Mask_Attributes);
             nError1 = rItem.getFileStatus(rFileStatus);
@@ -3488,9 +3480,9 @@ namespace osl_File
             // set the file to hidden
             nError2 = File::setAttributes(aTmpName6, osl_File_Attribute_Hidden);
 
-            CPPUNIT_ASSERT(nError2 == osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError2);
             nError1 = DirectoryItem::get(aTmpName6, rItem);
-            CPPUNIT_ASSERT(nError1 == osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // get the file attributes
             FileStatus rFileStatus(osl_FileStatus_Mask_Attributes);
             nError1 = rItem.getFileStatus(rFileStatus);
@@ -3580,7 +3572,7 @@ namespace osl_File
             // Unfortunately there is no way to get the creation time of a file under Unix (it's a Windows only feature).
             // That means the flag osl_FileStatus_Mask_CreationTime should be deprecated under Unix.
             CPPUNIT_ASSERT_MESSAGE("test for setTime function: set creation time then get it. ",
-                sal_True == t_compareTime(pTV_creation, pTV_current, delta));
+                t_compareTime(pTV_creation, pTV_current, delta));
 #endif
             CPPUNIT_ASSERT_MESSAGE("test for setTime function: set modify time then get it. ",
                 t_compareTime(pTV_modify, pTV_current, delta));
@@ -3601,12 +3593,9 @@ namespace osl_File
     class sync : public CppUnit::TestFixture
     {
     private:
-        osl::FileBase::RC nError1, nError2;
         DirectoryItem rItem;
 
     public:
-        sync() : nError1(osl::FileBase::E_None),nError2(osl::FileBase::E_None) {}
-
         void setUp() override
         {
             // create a tempfile in $TEMP/tmpdir/tmpname.
@@ -3624,7 +3613,7 @@ namespace osl_File
         void sync_001()
         {
 #ifdef UNX
-            nError1 = DirectoryItem::get(aTmpName6, rItem);
+            auto nError1 = DirectoryItem::get(aTmpName6, rItem);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             File tmp_file(aTmpName6);
@@ -3638,7 +3627,7 @@ namespace osl_File
             CPPUNIT_ASSERT_EQUAL_MESSAGE("write failed!", osl::FileBase::E_None, nError1);
 
             // set the file to readonly
-            nError2 = File::setAttributes(aTmpName6, osl_File_Attribute_ReadOnly | osl_File_Attribute_GrpRead | osl_File_Attribute_OwnRead | osl_File_Attribute_OthRead);
+            auto nError2 = File::setAttributes(aTmpName6, osl_File_Attribute_ReadOnly | osl_File_Attribute_GrpRead | osl_File_Attribute_OwnRead | osl_File_Attribute_OthRead);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError2);
 
             nError2 = tmp_file.sync();
@@ -5090,7 +5079,7 @@ namespace osl_Directory
             if (i > 2)
                 return m_aBuff + j;
 
-            return NULL;
+            return nullptr;
         }
 
         void at_invalid_logical_drive()
@@ -5140,6 +5129,7 @@ namespace osl_Directory
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Directory::createPath);
 }
 
+#if defined UNX
 /** get Current PID.
 */
 OUString getCurrentPID()
@@ -5153,6 +5143,7 @@ OUString getCurrentPID()
 #endif
     return OUString::number(nPID);
 }
+#endif
 
 namespace {
 
@@ -5171,25 +5162,25 @@ public:
 #else
             //~ some clean up task  for Windows OS
             //~ check if some files are in the way, remove them if necessary.
-            if (ifFileExist(aTmpName6) == sal_True)
+            if (ifFileExist(aTmpName6))
                 deleteTestFile(aTmpName6);
-            if (ifFileExist(aTmpName4) == sal_True)
+            if (ifFileExist(aTmpName4))
                 deleteTestFile(aTmpName4);
-            if (checkDirectory(aTmpName4, oslCheckMode::Exist) == sal_True)
+            if (checkDirectory(aTmpName4, oslCheckMode::Exist))
                 deleteTestDirectory(aTmpName4);
-            if (ifFileExist(aTmpName3) == sal_True)
+            if (ifFileExist(aTmpName3))
                 deleteTestFile(aTmpName3);
-            if (checkDirectory(aTmpName3, oslCheckMode::Exist) == sal_True)
+            if (checkDirectory(aTmpName3, oslCheckMode::Exist))
                 deleteTestDirectory(aTmpName3);
 
             OUString aUStr(aUserDirectoryURL);
             concatURL(aUStr, aHidURL1);
-            if (ifFileExist(aUStr) == sal_True)
+            if (ifFileExist(aUStr))
                 deleteTestFile(aUStr);
 
             OUString aUStr1(aRootURL);
             concatURL(aUStr1, aTmpName2);
-            if (ifFileExist(aUStr1) == sal_True)
+            if (ifFileExist(aUStr1))
                 deleteTestFile(aUStr1);
 #endif
         }
