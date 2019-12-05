@@ -533,6 +533,7 @@ private:
     bool                            m_bIsFirstParaInSectionAfterRedline;
     bool                            m_bIsFirstParaInShape = false;
     bool                            m_bDummyParaAddedForTableInSection;
+    bool                            m_bDummyCharAddedForTableRowGridAfter;
     bool                            m_bTextFrameInserted;
     bool                            m_bIsPreviousParagraphFramed;
     bool                            m_bIsLastParaInSection;
@@ -630,6 +631,8 @@ public:
     bool GetIsFirstParagraphInShape() const { return m_bIsFirstParaInShape; }
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
     bool GetIsDummyParaAddedForTableInSection() const { return m_bDummyParaAddedForTableInSection;}
+    void SetIsDummyCharAddedForTableRowGridAfter( bool bIsAdded ) { m_bDummyCharAddedForTableRowGridAfter = bIsAdded; }
+    bool GetIsDummyCharAddedForTableRowGridAfter() const { return m_bDummyCharAddedForTableRowGridAfter;}
 
     /// Track if a textframe has been inserted into this section
     void SetIsTextFrameInserted( bool bIsInserted );
