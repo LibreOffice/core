@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_50597832",
+        "filename": "vcl/unx/kf5/KF5FilePicker.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-12-05T07:54:33Z",
+      "side": 1,
+      "message": "A short comment like in the commit message might be helpful (\"the KF5 file picker has its own automatic extension\nhandling\")\n\nand \u0027-Wextra-semi\u0027 results in \"extra \u0027;\u0027 after member function definition\" warning, i.e. the semicolon is not needed, but feel free to ignore that...",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 51
+      },
+      "revId": "b87e6ffebb66c4e208d14a01b853d5d39f29f151",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
