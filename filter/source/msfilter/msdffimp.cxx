@@ -4590,7 +4590,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     }
 
                     // mso_sptArc special treating
-                    // tdf#124026: A new custom shape is generated from prototype 'msoArc'. Values, which are
+                    // tdf#124029: A new custom shape is generated from prototype 'msoArc'. Values, which are
                     // read here, are adapted and merged. The shape type is changed, so this code
                     // applies only if importing arcs from MS Office.
                     if ( aObjData.eShapeType == mso_sptArc )
@@ -4684,7 +4684,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // MS Office uses for mso_sptArc a frame rectangle (=resize handles)
                         // which encloses only the sector, LibreOffice uses for custom shapes as
                         // default a frame rectangle, which encloses the entire ellipse. That would
-                        // result in wrong positions in Writer and Calc, see tdf#124026.
+                        // result in wrong positions in Writer and Calc, see tdf#124029.
                         // We workaround this problem, by setting a suitable viewBox.
                         bool bIsImportPPT(GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_PPT);
                         css::awt::Rectangle aViewBox_LO; // in LO coordinate system
