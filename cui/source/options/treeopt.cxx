@@ -226,7 +226,6 @@ namespace {
 class MailMergeCfg_Impl : public utl::ConfigItem
 {
 private:
-    friend class SvxEMailTabPage;
     // variables
     bool bIsEmailSupported;
 
