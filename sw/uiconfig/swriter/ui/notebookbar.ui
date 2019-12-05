@@ -8176,7 +8176,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-9"/>
+                          <class name="priority-10"/>
                         </style>
                       </object>
                       <packing>
@@ -8313,7 +8313,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-8"/>
+                          <class name="priority-9"/>
                         </style>
                       </object>
                       <packing>
@@ -8457,7 +8457,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-7"/>
+                          <class name="priority-8"/>
                         </style>
                       </object>
                       <packing>
@@ -8535,7 +8535,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-6"/>
+                          <class name="priority-7"/>
                         </style>
                       </object>
                       <packing>
@@ -8564,10 +8564,10 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Review-AcceptAllTrackedChanges3">
+                                  <object class="GtkToolButton" id="Review-AcceptTrackedChangeToNext">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:AcceptAllTrackedChanges</property>
+                                    <property name="action_name">.uno:AcceptTrackedChangeToNext</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8588,7 +8588,85 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Review-RejectAllTrackedChanges3">
+                                  <object class="GtkToolButton" id="Review-RejectTrackedChangeToNext">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:RejectTrackedChangeToNext</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <style>
+                          <class name="priority-6"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="Review-Section-TrackChanges4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="GtkBox" id="GroupB65">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="sfxlo-NotebookbarToolBox" id="LineB27">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="toolbar_style">both-horiz</property>
+                                <property name="show_arrow">False</property>
+                                <child>
+                                  <object class="GtkToolButton" id="Review-AcceptAllTrackedChanges1">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:AcceptAllTrackedChanges</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="sfxlo-NotebookbarToolBox" id="LineA26">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="toolbar_style">both-horiz</property>
+                                <property name="show_arrow">False</property>
+                                <child>
+                                  <object class="GtkToolButton" id="Review-RejectAllTrackedChanges1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:RejectAllTrackedChanges</property>
@@ -8619,7 +8697,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <child>
@@ -8677,7 +8755,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">8</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                     <child>
@@ -8755,7 +8833,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">9</property>
+                        <property name="position">10</property>
                       </packing>
                     </child>
                     <child>
@@ -8813,7 +8891,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">10</property>
+                        <property name="position">11</property>
                       </packing>
                     </child>
                     <child>
@@ -8871,7 +8949,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">11</property>
+                        <property name="position">12</property>
                       </packing>
                     </child>
                   </object>
@@ -16386,7 +16464,7 @@
                 <property name="label" translatable="yes" context="WriterNotebookbar|PrintLabel">~Print</property>
                 <property name="use_underline">True</property>
                 <style>
-                  <class name="context-PrintPreview"/>
+                  <class name="context-Printpreview"/>
                 </style>
               </object>
               <packing>
