@@ -257,7 +257,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
         }
     }
     TypeHdl(*m_xTypeLB);
-    if(nFormatBoxPosition != USHRT_MAX)
+    if (nFormatBoxPosition < m_xFormatLB->n_children())
     {
         m_xFormatLB->select(nFormatBoxPosition);
     }
