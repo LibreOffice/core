@@ -38,7 +38,7 @@ void AccessibilityCheck::check()
                     if (sAlternative.isEmpty())
                     {
                         OUString sName = pNoTextNode->GetFlyFormat()->GetName();
-                        AccessibilityIssue aIssue;
+                        svx::AccessibilityIssue aIssue;
                         aIssue.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
                         m_aAccessibilityIssueCollection.push_back(aIssue);
                     }
@@ -63,7 +63,7 @@ void AccessibilityCheck::check()
                 if (sAlternative.isEmpty())
                 {
                     OUString sName = pObject->GetName();
-                    AccessibilityIssue aIssue;
+                    svx::AccessibilityIssue aIssue;
                     aIssue.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
                     m_aAccessibilityIssueCollection.push_back(aIssue);
                 }
