@@ -121,6 +121,15 @@ bool mentions(QualType type1, QualType type2)
     return false;
 }
 
+bool hasSalDllpublicExportAttr(Decl const* decl)
+{
+    if (auto const attr = decl->getAttr<VisibilityAttr>())
+    {
+        return attr->getVisibility() == VisibilityAttr::Default;
+    }
+    return decl->hasAttr<DLLExportAttr>();
+}
+
 class External : public loplugin::FilteringPlugin<External>
 {
 public:
@@ -155,15 +164,12 @@ public:
             {
                 return true;
             }
-            if (auto const attr = d->getAttr<VisibilityAttr>())
+            if (hasSalDllpublicExportAttr(d))
             {
-                if (attr->getVisibility() == VisibilityAttr::Default)
-                {
-                    // If the class definition has explicit default visibility, then assume that it
-                    // needs to be present (e.g., a backwards-compatibility stub like in
-                    // cppuhelper/source/compat.cxx):
-                    return true;
-                }
+                // If the class definition has explicit default visibility, then assume that it
+                // needs to be present (e.g., a backwards-compatibility stub like in
+                // cppuhelper/source/compat.cxx):
+                return true;
             }
             if (derivesFromTestFixture(d))
             {
@@ -202,14 +208,7 @@ public:
         // If the function definition is explicit marked SAL_DLLPUBLIC_EXPORT or similar, then
         // assume that it needs to be present (e.g., only called via dlopen, or a backwards-
         // compatibility stub like in sal/osl/all/compat.cxx):
-        if (auto const attr = decl->getAttr<VisibilityAttr>())
-        {
-            if (attr->getVisibility() == VisibilityAttr::Default)
-            {
-                return true;
-            }
-        }
-        else if (decl->hasAttr<DLLExportAttr>())
+        if (hasSalDllpublicExportAttr(decl))
         {
             return true;
         }
