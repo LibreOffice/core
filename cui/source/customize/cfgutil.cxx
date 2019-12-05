@@ -278,11 +278,19 @@ CuiConfigFunctionListBox::CuiConfigFunctionListBox(std::unique_ptr<weld::TreeVie
 {
     m_xTreeView->make_sorted();
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 35, m_xTreeView->get_height_rows(9));
+    m_xTreeView->connect_query_tooltip(LINK(this, CuiConfigFunctionListBox, QueryTooltip));
 }
 
 CuiConfigFunctionListBox::~CuiConfigFunctionListBox()
 {
     ClearAll();
+}
+
+IMPL_LINK(CuiConfigFunctionListBox, QueryTooltip, const weld::TreeIter&, rIter, OUString)
+{
+    // example tooltip that uses the item text as the tooltip
+    OUString sToolTip = m_xTreeView->get_text(rIter);
+    return sToolTip;
 }
 
 void CuiConfigFunctionListBox::ClearAll()

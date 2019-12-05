@@ -175,6 +175,8 @@ public:
     OUString      GetHelpText( bool bConsiderParent = true );
     OUString      GetCurCommand() const;
     OUString      GetCurLabel() const;
+
+    DECL_LINK(QueryTooltip, const weld::TreeIter& rIter, OUString);
 };
 
 struct SvxConfigGroupBoxResource_Impl;
