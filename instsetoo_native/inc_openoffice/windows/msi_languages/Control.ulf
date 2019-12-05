@@ -700,3 +700,8 @@ en-US = "Cancel"
 [OOO_CONTROL_326]
 en-US = "OK"
 
+[OOO_CONTROL_327]
+en-US = "{&DialogDefaultBold}Attention!"
+
+[OOO_CONTROL_328]
+en-US = "LibreOffice help must be installed into the installation directory of LibreOffice program."
