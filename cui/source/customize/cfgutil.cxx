@@ -278,11 +278,23 @@ CuiConfigFunctionListBox::CuiConfigFunctionListBox(std::unique_ptr<weld::TreeVie
 {
     m_xTreeView->make_sorted();
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 35, m_xTreeView->get_height_rows(9));
+    m_xTreeView->connect_query_tooltip(LINK(this, CuiConfigFunctionListBox, QueryTooltip));
 }
 
 CuiConfigFunctionListBox::~CuiConfigFunctionListBox()
 {
     ClearAll();
+}
+
+IMPL_LINK(CuiConfigFunctionListBox, QueryTooltip, const weld::TreeIter&, rIter, OUString)
+{
+    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(rIter).toInt64());
+    if (!pData)
+        return OUString();
+    OUString aLabel = CuiResId(RID_SVXSTR_COMMANDLABEL) + ": ";
+    OUString aName = CuiResId(RID_SVXSTR_COMMANDNAME) + ": ";
+    OUString aTip = CuiResId(RID_SVXSTR_COMMANDTIP) + ": ";
+    return  aLabel + pData->sLabel + "\n" + aName + pData->sCommand+ "\n" + aTip + pData->sTooltip;
 }
 
 void CuiConfigFunctionListBox::ClearAll()
