@@ -28,11 +28,22 @@ class tdf108124(UITestCase):
     xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+a"})) # select all
     xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+c"})) # copy
     xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+v"})) # paste
-    self.assertEqual(document.GraphicObjects.getCount(), 4)
+    self.assertEqual(document.GraphicObjects.getCount(), 2)
+    xObj1Old = document.GraphicObjects[0]
+    xObj2Old = document.GraphicObjects[1]
     self.xUITest.executeCommand(".uno:Undo")  #Undo
     self.assertEqual(document.GraphicObjects.getCount(), 2)
+    xObj1New = document.GraphicObjects[0]
+    xObj2New = document.GraphicObjects[1]
+    # there should be 2 different objects now but they have the same names,
+    # so rely on the object identity for testing...
+    self.assertNotEqual(xObj1Old, xObj1New)
+    self.assertNotEqual(xObj1Old, xObj2New)
+    self.assertNotEqual(xObj2Old, xObj1New)
+    self.assertNotEqual(xObj2Old, xObj2New)
     self.xUITest.executeCommand(".uno:Redo")  #Redo
-    self.assertEqual(document.GraphicObjects.getCount(), 4)
+    self.assertEqual(document.GraphicObjects.getCount(), 2)
 
     self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
