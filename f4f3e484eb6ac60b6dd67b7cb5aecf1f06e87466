@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_ad043519",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-05T07:08:44Z",
+      "side": 1,
+      "message": "Maybe even \"... text or objects using this style ...\"?",
+      "range": {
+        "startLine": 234,
+        "startChar": 170,
+        "endLine": 234,
+        "endChar": 186
+      },
+      "revId": "f4f3e484eb6ac60b6dd67b7cb5aecf1f06e87466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
