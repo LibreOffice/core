@@ -48,6 +48,7 @@
 #include <PostItMgr.hxx>
 #include <postithelper.hxx>
 #include <fmtcntnt.hxx>
+#include <shellio.hxx>
 
 namespace
 {
@@ -2410,6 +2411,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128603)
     // i.e. the shape content index and the frame content index did not match after undo, even if
     // their "other text box format" pointers pointed to each other.
     CPPUNIT_ASSERT_EQUAL(pIndex4->GetIndex(), pIndex5->GetIndex());
+}
+
+// only care that it doesn't assert/crash
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testOfz18563)
+{
+    OUString sURL(m_directories.getURLFromSrc("/sw/qa/extras/uiwriter/data2/ofz18563.docx"));
+    SvFileStream aFileStream(sURL, StreamMode::READ);
+    TestImportDOCX(aFileStream);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
