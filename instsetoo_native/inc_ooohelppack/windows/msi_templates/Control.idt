@@ -90,12 +90,14 @@ DestinationFolder	Banner	Bitmap	0	0	474	44	1		BannerBmp
 DestinationFolder	BannerLine	Line	0	44	474	0	1				
 DestinationFolder	Cancel	PushButton	401	243	66	17	3		OOO_CONTROL_87	ChangeFolder	
 DestinationFolder	ChangeFolder	PushButton	401	125	66	17	3		OOO_CONTROL_88	Back	
-DestinationFolder	DestFolder	Icon	21	112	24	24	5242881		OpenFolderIco		
+DestinationFolder	DestFolder	Icon	21	122	24	24	5242881		OpenFolderIco		
 DestinationFolder	DlgDesc	Text	21	23	372	25	65539		OOO_CONTROL_304		
 DestinationFolder	DlgLine	Line	114	234	360	0	1				
-DestinationFolder	DlgTitle	Text	13	6	380	25	65539		{&MSSansBold8}[ProductName]		
+DestinationFolder	DlgTitle	Text	13	6	380	25	65539		{&DialogDefaultBold}[ProductName]		
+DestinationFolder	Attention	Text	57	60	340	15	3		OOO_CONTROL_327		
+DestinationFolder	AttText	Text	57	75	340	40	3		OOO_CONTROL_328		
 DestinationFolder	Location	Text	57	128	340	40	3	_BrowseProperty	[INSTALLLOCATION]		
-DestinationFolder	LocLabel	Text	57	115	390	10	3		OOO_CONTROL_92		
+DestinationFolder	LocLabel	Text	57	106	390	12	3		OOO_CONTROL_92		
 DestinationFolder	Next	PushButton	330	243	66	17	3		OOO_CONTROL_93	Cancel	
 DestinationFolder	LabelStartInstall	Text	21	52	390	30	2		OOO_CONTROL_300		
 DestinationFolder	LabelInvalidDir	Text	21	52	390	30	2		OOO_CONTROL_301		
