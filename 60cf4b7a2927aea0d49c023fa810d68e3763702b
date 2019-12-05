@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_9052b03a",
+        "filename": "xmloff/source/transform/PropertyActionsOOo.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-12-05T10:45:35Z",
+      "side": 1,
+      "message": "i think this is mostly irrelevant because it\u0027s for the OOo XML format... there aren\u0027t any existing OOo XML documents with the attribute and we\u0027ve removed the OOo XML export years ago so adding anything here is pointless",
+      "revId": "60cf4b7a2927aea0d49c023fa810d68e3763702b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
