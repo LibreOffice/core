@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_f328cee2",
+        "filename": "bin/symstore.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-12-05T14:25:38Z",
+      "side": 1,
+      "message": "So I checked on my local 6.3 build, there\u0027s three PDB files with duplicates:\n\n      2 libcurl.pdb\n      2 mkheader.pdb\n      2 python.pdb\n\nlibcurl.pdb is copies of the same file, for python.pdb the one generated for instdir/program/python.exe is the one in workdir/LinkTarget/Executables. mkheader.pdb is not shipped, so can be ignored.\n\nI\u0027d really prefer to hardcode (or fix in the buildsytem) the python case, than this loop, which has a non-zero probability to pick up the wrong PDB file.",
+      "revId": "d244b077646bba3d39b91146f9fa5acffe6444d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
