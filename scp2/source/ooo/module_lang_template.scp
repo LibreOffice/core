@@ -63,6 +63,7 @@ Module gid_Module_Langpack_Basis_Template
              gid_File_Res_fps_Lang,
              gid_File_Res_frm_Lang,
              gid_File_Res_fwk_Lang,
+             gid_File_Res_oox_Lang,
              gid_File_Res_pcr_Lang,
              gid_File_Res_rpt_Lang,
              gid_File_Res_sb_Lang,
