@@ -46,6 +46,8 @@ using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XUriBinding ;
 
+namespace {
+
 class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignature ,
     css::lang::XServiceInfo >
@@ -73,6 +75,8 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 } ;
+
+}
 
 XMLSignature_MSCryptImpl::XMLSignature_MSCryptImpl() {
 }

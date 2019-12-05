@@ -56,7 +56,6 @@ namespace
         Sequence< OUString > aRet { "com.sun.star.datatransfer.DataFormatTranslator" };
         return aRet;
     }
-}
 
 struct FormatEntry
 {
@@ -72,6 +71,8 @@ struct FormatEntry
     OUString                      aNativeFormatName;
     sal_Int32                     aStandardFormatId;
 };
+
+}
 
 FormatEntry::FormatEntry(
     const char *mime_content_type,

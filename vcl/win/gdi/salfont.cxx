@@ -79,6 +79,8 @@ static int IntTimes256FromFixed(FIXED f)
     return nFixedTimes256;
 }
 
+namespace {
+
 // raw font data with a scoped lifetime
 class RawFontData
 {
@@ -92,6 +94,8 @@ private:
     std::unique_ptr<unsigned char[]> mpRawBytes;
     unsigned        mnByteCount;
 };
+
+}
 
 RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
 :   mnByteCount( 0 )
@@ -145,6 +149,8 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
 
 // platform specific font substitution hooks for glyph fallback enhancement
 
+namespace {
+
 class WinPreMatchFontSubstititution
 :    public ImplPreMatchFontSubstitution
 {
@@ -171,6 +177,8 @@ private:
     HDC mhDC;
     bool HasMissingChars(PhysicalFontFace*, OUString& rMissingChars) const;
 };
+
+}
 
 // does a font face hold the given missing characters?
 bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OUString& rMissingChars) const
@@ -338,6 +346,8 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rFont
     return bFound;
 }
 
+namespace {
+
 struct ImplEnumInfo
 {
     HDC                 mhDC;
@@ -347,6 +357,8 @@ struct ImplEnumInfo
     bool                mbPrinter;
     int                 mnFontCount;
 };
+
+}
 
 static rtl_TextEncoding ImplCharSetToSal( BYTE nCharSet )
 {
@@ -1513,6 +1525,8 @@ ScopedFont::~ScopedFont()
     }
 }
 
+namespace {
+
 class ScopedTrueTypeFont
 {
 public:
@@ -1527,6 +1541,8 @@ public:
 private:
     TrueTypeFont * m_pFont;
 };
+
+}
 
 ScopedTrueTypeFont::~ScopedTrueTypeFont()
 {

@@ -33,6 +33,7 @@ namespace container = com::sun::star::container ;
 namespace lang = com::sun::star::lang ;
 namespace uno = com::sun::star::uno ;
 
+namespace {
 
 struct OutData
 {
@@ -47,6 +48,7 @@ struct OutData
     explicit OutData(osl::Condition& rCondition) : FileHandle(nullptr), Offset(0), StopCondition(rCondition), curl(nullptr) {};
 };
 
+}
 
 static void openFile( OutData& out )
 {

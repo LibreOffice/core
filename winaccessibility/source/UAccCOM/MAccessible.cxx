@@ -2560,12 +2560,16 @@ createAggInstance(CMAccessible &rOuter, void ** ppvObject)
 
 typedef HRESULT (AggCreatorFunc)(CMAccessible &, void **);
 
+namespace {
+
 struct AggMapEntry
 {
     const IID* piid;
     AggCreatorFunc* pfnCreateInstance;
     int XIFIndex;
 };
+
+}
 
 static AggMapEntry g_CMAccessible_AggMap[] = {
     { &IID_IAccessibleComponent, &createAggInstance<CAccComponent>, XI_COMPONENT },

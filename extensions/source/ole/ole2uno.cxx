@@ -24,6 +24,8 @@
 
 using namespace osl;
 
+namespace {
+
 struct MutexInit
 {
     Mutex * operator () ()
@@ -33,6 +35,7 @@ struct MutexInit
     }
 };
 
+}
 
 Mutex * getBridgeMutex()
 {

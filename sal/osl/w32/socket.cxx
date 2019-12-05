@@ -219,6 +219,9 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 
 #if OSL_DEBUG_LEVEL > 0
 static sal_uInt32 g_nSocketAddr = 0;
+
+namespace {
+
 struct LeakWarning
 {
     ~LeakWarning()
@@ -226,6 +229,9 @@ struct LeakWarning
         SAL_WARN_IF( g_nSocketAddr, "sal.osl", "sal_socket: " << g_nSocketAddr << " socket address instances leak" );
     }
 };
+
+}
+
 static LeakWarning socketWarning;
 #endif
 

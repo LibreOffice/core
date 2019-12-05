@@ -25,6 +25,8 @@
 static std::vector<HGLRC> g_vShareList;
 static bool g_bAnyCurrent;
 
+namespace {
+
 class GLWinWindow : public GLWindow
 {
 public:
@@ -34,12 +36,16 @@ public:
     GLWinWindow();
 };
 
+}
+
 GLWinWindow::GLWinWindow()
     : hWnd(nullptr)
     , hDC(nullptr)
     , hRC(nullptr)
 {
 }
+
+namespace {
 
 class WinOpenGLContext : public OpenGLContext
 {
@@ -58,6 +64,8 @@ private:
     virtual void resetCurrent() override;
     virtual void swapBuffers() override;
 };
+
+}
 
 void WinOpenGLContext::swapBuffers()
 {

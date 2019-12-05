@@ -46,17 +46,12 @@ struct Library {
     ~Library() { if (module) FreeLibrary(module); }
 };
 
-}
-
 struct ProxyEntry
 {
     OUString Server;
     OUString Port;
 };
 
-
-namespace
-{
     ProxyEntry ReadProxyEntry(const OUString& aProxy, sal_Int32& i)
     {
         ProxyEntry aProxyEntry;

@@ -56,6 +56,8 @@ namespace dxcanvas
         CanvasBitmap_Base::disposeThis();
     }
 
+    namespace {
+
     struct AlphaDIB
     {
         BITMAPINFOHEADER bmiHeader;
@@ -72,6 +74,8 @@ namespace dxcanvas
             }
         }
     };
+
+    }
 
     uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
     {

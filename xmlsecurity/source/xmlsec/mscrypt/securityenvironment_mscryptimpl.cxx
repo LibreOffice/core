@@ -58,10 +58,14 @@ using ::com::sun::star::security::XCertificate ;
 
 static X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert ) ;
 
+namespace {
+
 struct CertErrorToString{
     DWORD error;
     char const * name;
 };
+
+}
 
 CertErrorToString const arErrStrings[] =
 {

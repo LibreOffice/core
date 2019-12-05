@@ -57,6 +57,8 @@ namespace sdecl = comphelper::service_decl;
 
 namespace dxcanvas
 {
+    namespace {
+
     /// Actual canonical implementation of the GraphicsProvider interface
     class GraphicsProviderImpl : public GraphicsProvider
     {
@@ -65,6 +67,8 @@ namespace dxcanvas
         explicit GraphicsProviderImpl( Gdiplus::Graphics* pGraphics ) : mpGraphics( pGraphics ) {}
         virtual GraphicsSharedPtr getGraphics() override { return mpGraphics; }
     };
+
+    }
 
     Canvas::Canvas( const uno::Sequence< uno::Any >&                aArguments,
                     const uno::Reference< uno::XComponentContext >& rxContext ) :

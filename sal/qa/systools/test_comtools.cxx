@@ -21,6 +21,8 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <systools/win32/comtools.hxx>
 
+namespace {
+
 class COMObject : public IUnknown
 {
 public:
@@ -65,6 +67,8 @@ public:
 private:
     ULONG ref_count_;
 };
+
+}
 
 static sal::systools::COMReference<IUnknown> comObjectSource()
 {

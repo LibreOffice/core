@@ -95,6 +95,8 @@ void WinSalBitmap::Destroy()
     mnBitCount = 0;
 }
 
+namespace {
+
 class SystemDependentData_GdiPlusBitmap : public basegfx::SystemDependentData
 {
 private:
@@ -112,6 +114,8 @@ public:
 
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
+
+}
 
 SystemDependentData_GdiPlusBitmap::SystemDependentData_GdiPlusBitmap(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,

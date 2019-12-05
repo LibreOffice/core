@@ -41,6 +41,8 @@
 #define ELP_LANGUAGE_FIELD_LENGTH 4
 #define ELP_COUNTRY_FIELD_LENGTH  3
 
+namespace {
+
 /** Struct used in EnumLocalesProcW() called via EnumSystemLocalesW() to obtain
     available locales.
 */
@@ -50,6 +52,8 @@ struct EnumLocalesParams
     WCHAR Country[ELP_COUNTRY_FIELD_LENGTH];
     LCID  Locale;
 };
+
+}
 
 static DWORD g_dwTLSLocaleEncId = DWORD(-1);
 

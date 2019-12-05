@@ -31,6 +31,7 @@
 static HCURSOR afxCursors[10] = { nullptr, };
 static HBRUSH afxHalftoneBrush = nullptr;
 
+namespace {
 
 // the struct below is used to determine the qualities of a particular handle
 struct AFX_HANDLEINFO
@@ -44,6 +45,8 @@ struct AFX_HANDLEINFO
     int nInvertX;       // handle converts to this when X inverted
     int nInvertY;       // handle converts to this when Y inverted
 };
+
+}
 
 // this array describes all 8 handles (clock-wise)
 const AFX_HANDLEINFO afxHandleInfo[] =
@@ -61,6 +64,8 @@ const AFX_HANDLEINFO afxHandleInfo[] =
     { offsetof(RECT, left), offsetof(RECT, top),        0, 1,  0,  0, 5, 7 }
 };
 
+namespace {
+
 // the struct below gives us information on the layout of a RECT struct and
 //  the relationship between its members
 struct AFX_RECTINFO
@@ -68,6 +73,8 @@ struct AFX_RECTINFO
     size_t nOffsetAcross;   // offset of opposite point (ie. left->right)
     int nSignAcross;        // sign relative to that point (ie. add/subtract)
 };
+
+}
 
 // this array is indexed by the offset of the RECT member / sizeof(int)
 const AFX_RECTINFO afxRectInfo[] =

@@ -665,11 +665,15 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     return nRet;
 }
 
+namespace {
+
 struct MsgRange
 {
     UINT nStart;
     UINT nEnd;
 };
+
+}
 
 static std::vector<MsgRange> GetOtherRanges( VclInputFlags nType )
 {

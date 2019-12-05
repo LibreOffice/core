@@ -173,6 +173,8 @@ static HRESULT UnmarshalIDataObjectAndReleaseStream( LPSTREAM lpStream, IDataObj
 
 // helper class to ensure that the calling thread has com initialized
 
+namespace {
+
 class CAutoComInit
 {
 public:
@@ -213,6 +215,8 @@ public:
 private:
     HRESULT m_hResult;
 };
+
+}
 
 // ctor
 

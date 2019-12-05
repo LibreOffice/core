@@ -233,6 +233,7 @@ void VistaFilePickerEventHandler::stopListening()
 static const char PROP_CONTROL_ID[] = "control_id";
 static const char PROP_PICKER_LISTENER[] = "picker_listener";
 
+namespace {
 
 class AsyncPickerEvents : public RequestHandler
 {
@@ -286,6 +287,7 @@ public:
     {}
 };
 
+}
 
 void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
                                                  ::sal_Int16  nControlID)

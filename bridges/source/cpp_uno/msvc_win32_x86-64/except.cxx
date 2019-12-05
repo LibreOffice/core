@@ -306,6 +306,9 @@ static OUString toRTTIname(
 //RTTI simulation
 
 typedef std::unordered_map< OUString, void * > t_string2PtrMap;
+
+namespace {
+
 class type_info_descriptor;
 
 class RTTInfos
@@ -323,7 +326,7 @@ public:
 class type_info_
 {
     friend type_info * RTTInfos::getRTTI( OUString const & ) throw ();
-    friend int mscx_filterCppException(
+    friend int mscx::mscx_filterCppException(
         EXCEPTION_POINTERS *, uno_Any *, uno_Mapping * );
 
 public:
@@ -338,10 +341,14 @@ private:
     char _m_d_name[1];
 };
 
+}
+
 type_info_::~type_info_() throw ()
 {
     (void)_m_data;
 }
+
+namespace {
 
 class type_info_descriptor
 {
@@ -366,6 +373,8 @@ public:
         return type_info_size;
     }
 };
+
+}
 
 type_info_descriptor * RTTInfos::insert_new_type_info_descriptor(OUString const & rUNOname) {
 
@@ -484,6 +493,8 @@ static void GenerateDestructorTrampoline(
     assert( p < code + codeSnippetSize );
 }
 
+namespace {
+
 // This looks like it is the struct catchabletype above
 
 struct ExceptionType
@@ -538,9 +549,13 @@ public:
     ExceptionInfos() throw ();
 };
 
+}
+
 DWORD ExceptionInfos::allocationGranularity = 0;
 
 // This corresponds to the struct throwinfo described above.
+
+namespace {
 
 struct RaiseInfo
 {
@@ -556,6 +571,8 @@ struct RaiseInfo
 
     explicit RaiseInfo(typelib_TypeDescription * pTD) throw ();
 };
+
+}
 
 /* Rewrite of 32-Bit-Code to work under 64 Bit:
 * To use the 32 Bit offset values in the ExceptionType we have to

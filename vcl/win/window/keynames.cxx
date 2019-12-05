@@ -51,6 +51,8 @@
 
 namespace vcl_sal {
 
+    namespace {
+
     struct KeysNameReplacement
     {
         LONG            aSymbol;
@@ -63,6 +65,8 @@ namespace vcl_sal {
         const KeysNameReplacement*      pReplacements;
         int                             nReplacements;
     };
+
+    }
 
     // CAUTION CAUTION CAUTION
     // Every string value in the replacements tables must be in UTF-8

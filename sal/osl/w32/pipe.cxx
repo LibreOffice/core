@@ -36,6 +36,8 @@
 #define PIPESYSTEM      "\\\\.\\pipe\\"
 #define PIPEPREFIX      "OSL_PIPE_"
 
+namespace {
+
 typedef struct
 {
     sal_uInt32           m_Size;
@@ -44,6 +46,8 @@ typedef struct
     BYTE                 m_Data[1];
 
 } oslPipeBuffer;
+
+}
 
 struct oslPipeImpl
 {

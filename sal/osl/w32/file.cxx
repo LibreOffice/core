@@ -41,6 +41,8 @@
 #undef min
 #endif
 
+namespace {
+
 /** File handle implementation.
 */
 struct FileHandle_Impl
@@ -131,6 +133,8 @@ struct FileHandle_Impl
         ~Guard();
     };
 };
+
+}
 
 FileHandle_Impl::Guard::Guard(LPCRITICAL_SECTION pMutex)
     : m_mutex (pMutex)
