@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <memory>
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -303,6 +304,31 @@ GetNestedTextContent(SwTextNode const & rTextNode, sal_Int32 const nIndex,
     return xRet;
 }
 
+static uno::Any GetParaListAutoFormat(SwTextNode const& rNode)
+{
+    SwFormatAutoFormat const*const pFormat(
+        rNode.GetSwAttrSet().GetItem<SwFormatAutoFormat>(RES_PARATR_LIST_AUTOFMT, false));
+    if (!pFormat)
+    {
+        return uno::Any();
+    }
+    SfxItemSet const& rSet(*pFormat->GetStyleHandle());
+    SfxItemPropertySet const& rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE));
+    SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
+    std::vector<beans::NamedValue> props;
+    // have to iterate the map, not the item set?
+    for (auto const& rEntry : rMap.getPropertyEntries())
+    {
+        if (rPropSet.getPropertyState(rEntry, rSet) == PropertyState_DIRECT_VALUE)
+        {
+            Any value;
+            rPropSet.getPropertyValue(rEntry, rSet, value);
+            props.emplace_back(rEntry.sName, value);
+        }
+    }
+    return uno::makeAny(comphelper::containerToSequence(props));
+}
+
 // Read the special properties of the cursor
 bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
@@ -413,48 +439,82 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         // #i91601#
         case FN_UNO_LIST_ID:
         case FN_NUMBER_NEWSTART:
+        case FN_UNO_PARA_NUM_AUTO_FORMAT:
         {
+            if (!pAny)
+            {
+                break;
+            }
             // a multi selection is not considered
             const SwTextNode* pTextNd = rPam.GetNode().GetTextNode();
             if ( pTextNd && pTextNd->IsInList() )
             {
-                if( pAny )
+                switch (rEntry.nWID)
                 {
-                    if(rEntry.nWID == FN_UNO_NUM_LEVEL)
+                    case FN_UNO_NUM_LEVEL:
+                    {
                         *pAny <<= static_cast<sal_Int16>(pTextNd->GetActualListLevel());
-                    else if(rEntry.nWID == FN_UNO_IS_NUMBER)
+                        break;
+                    }
+                    case FN_UNO_IS_NUMBER:
                     {
                         *pAny <<= pTextNd->IsCountedInList();
+                        break;
                     }
                     // #i91601#
-                    else if ( rEntry.nWID == FN_UNO_LIST_ID )
+                    case FN_UNO_LIST_ID:
                     {
                         *pAny <<= pTextNd->GetListId();
+                        break;
                     }
-                    else
+                    case FN_NUMBER_NEWSTART:
                     {
                         *pAny <<= pTextNd->IsListRestart();
+                        break;
                     }
+                    case FN_UNO_PARA_NUM_AUTO_FORMAT:
+                    {
+                        *pAny = GetParaListAutoFormat(*pTextNd);
+                        break;
+                    }
+                    default:
+                        assert(false);
                 }
             }
             else
             {
                 eNewState = PropertyState_DEFAULT_VALUE;
 
-                if( pAny )
-                {
                     // #i30838# set default values for default properties
-                    if(rEntry.nWID == FN_UNO_NUM_LEVEL)
+                switch (rEntry.nWID)
+                {
+                    case FN_UNO_NUM_LEVEL:
+                    {
                         *pAny <<= static_cast<sal_Int16>( 0 );
-                    else if(rEntry.nWID == FN_UNO_IS_NUMBER)
+                        break;
+                    }
+                    case FN_UNO_IS_NUMBER:
+                    {
                         *pAny <<= false;
+                        break;
+                    }
                     // #i91601#
-                    else if ( rEntry.nWID == FN_UNO_LIST_ID )
+                    case FN_UNO_LIST_ID:
                     {
                         *pAny <<= OUString();
+                        break;
                     }
-                    else
+                    case FN_NUMBER_NEWSTART:
+                    {
                         *pAny <<= false;
+                        break;
+                    }
+                    case FN_UNO_PARA_NUM_AUTO_FORMAT:
+                    {
+                        break; // void
+                    }
+                    default:
+                        assert(false);
                 }
             }
             //PROPERTY_MAYBEVOID!
