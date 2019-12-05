@@ -95,6 +95,7 @@ $(eval $(call gb_Library_use_externals,sw,\
 $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/SwNumberTree/SwNodeNum \
     sw/source/core/SwNumberTree/SwNumberTree \
+    sw/source/core/access/AccessibilityCheck \
     sw/source/core/access/acccell \
     sw/source/core/access/acccontext \
     sw/source/core/access/accdoc \
