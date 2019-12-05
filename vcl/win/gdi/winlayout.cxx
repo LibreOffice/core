@@ -211,7 +211,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
 
     if (!GlobalWinGlyphCache::get()->AllocateTexture(aElement, nBitmapWidth, nBitmapHeight))
         return false;
-    if (!aDC->copyToTexture(*aElement.maTexture.get()))
+    if (!aDC->copyToTexture(*aElement.maTexture))
         return false;
 
     maWinGlyphCache.PutDrawElementInCache(std::move(aElement), nGlyphIndex);
