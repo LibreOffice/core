@@ -64,6 +64,7 @@ struct GlobalWinGlyphCache
 
     static GlobalWinGlyphCache * get();
 
+    virtual ~GlobalWinGlyphCache() {}
     virtual bool AllocateTexture(WinGlyphDrawElement& rElement, int nWidth, int nHeight) = 0;
     virtual void NotifyElementUsed(WinGlyphDrawElement& /*rElement*/) {}
     virtual void Prune() {}
