@@ -190,7 +190,7 @@ class theExceptionThrower : public rtl::Static<ExceptionThrower, theExceptionThr
 // css::ucb:InteractiveAugmentedIOException.)
 //
 // So we can simply have code that checks what the type of object being thrown
-// is, and explicitgly throws such an object then with a normal C++ throw
+// is, and explicitly throws such an object then with a normal C++ throw
 // statement. Seems to work.
 template <class E> void tryThrow(css::uno::Any const& aException)
 {
