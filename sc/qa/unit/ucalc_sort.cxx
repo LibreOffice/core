@@ -433,7 +433,7 @@ void Test::testSortWithStrings()
     m_pDoc->InsertTab(0, "Test");
 
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
-    rEE.SetText("Val1");
+    rEE.SetTextCurrentDefaults("Val1");
     m_pDoc->SetString(ScAddress(1,1,0), "Header");
     m_pDoc->SetString(ScAddress(1,2,0), "Val2");
     m_pDoc->SetEditText(ScAddress(1,3,0), rEE.CreateTextObject());
