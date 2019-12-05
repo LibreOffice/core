@@ -27,7 +27,7 @@ void Test::testColumnFindEditCells()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no edit cells.", SCROW(-1), nResRow);
 
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
-    rEE.SetText("Test");
+    rEE.SetTextCurrentDefaults("Test");
     m_pDoc->SetEditText(ScAddress(0,0,0), rEE.CreateTextObject());
     const EditTextObject* pObj = m_pDoc->GetEditText(ScAddress(0,0,0));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell here.", pObj);

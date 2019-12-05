@@ -243,7 +243,7 @@ void ScPDFExportTest::testExportRange_Tdf120161()
         // set "Text" to H1 cell with "DejaVuSans" font
         ScFieldEditEngine& rEE = rDoc.GetEditEngine();
         rEE.Clear();
-        rEE.SetText("Text");
+        rEE.SetTextCurrentDefaults("Text");
         setFont(rEE, 0, 4, "DejaVuSans"); // set font for first 4 chars
         rDoc.SetEditText(ScAddress(7, 0, 0), rEE.CreateTextObject());
     }

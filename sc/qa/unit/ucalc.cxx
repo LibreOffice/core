@@ -243,7 +243,7 @@ void Test::testSharedStringPool()
     // Now, compare string and edit text cells.
     m_pDoc->SetString(ScAddress(0,0,0), "Andy and Bruce"); // A1
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
-    rEE.SetText("Andy and Bruce");
+    rEE.SetTextCurrentDefaults("Andy and Bruce");
 
     ESelection aSel;
     aSel.nStartPara = aSel.nEndPara = 0;
@@ -277,7 +277,7 @@ void Test::testSharedStringPool()
     CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", aSS2.isValid());
     CPPUNIT_ASSERT_EQUAL(aSS1.getData(), aSS2.getData());
 
-    rEE.SetText("ANDY and BRUCE");
+    rEE.SetTextCurrentDefaults("ANDY and BRUCE");
     m_pDoc->SetEditText(ScAddress(2,0,0), rEE.CreateTextObject()); // C1
     aSS2 = m_pDoc->GetSharedString(ScAddress(2,0,0));
     CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", aSS2.isValid());
@@ -589,7 +589,7 @@ void Test::testSelectionFunction()
 
     // Insert edit text into D5.
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
-    rEE.SetText("Rich Text");
+    rEE.SetTextCurrentDefaults("Rich Text");
     m_pDoc->SetEditText(ScAddress(3,4,0), rEE.CreateTextObject());
 
     // Insert Another string into D6.
@@ -2017,11 +2017,11 @@ void Test::testSheetCopy()
 
     // Insert edit cells in B1:B3.
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
-    rEE.SetText("Edit 1");
+    rEE.SetTextCurrentDefaults("Edit 1");
     m_pDoc->SetEditText(ScAddress(1,0,0), rEE.CreateTextObject());
-    rEE.SetText("Edit 2");
+    rEE.SetTextCurrentDefaults("Edit 2");
     m_pDoc->SetEditText(ScAddress(1,1,0), rEE.CreateTextObject());
-    rEE.SetText("Edit 3");
+    rEE.SetTextCurrentDefaults("Edit 3");
     m_pDoc->SetEditText(ScAddress(1,2,0), rEE.CreateTextObject());
 
     SCROW nRow1, nRow2;
@@ -5872,7 +5872,7 @@ void Test::testEditTextIterator()
 
     {
         // Only set one edit cell.
-        rEditEngine.SetText("A2");
+        rEditEngine.SetTextCurrentDefaults("A2");
         m_pDoc->SetEditText(ScAddress(0,1,0), rEditEngine.CreateTextObject());
         sc::EditTextIterator aIter(*m_pDoc,0);
         const char* pChecks[] = { "A2", nullptr };
@@ -5881,11 +5881,11 @@ void Test::testEditTextIterator()
 
     {
         // Add a series of edit cells.
-        rEditEngine.SetText("A5");
+        rEditEngine.SetTextCurrentDefaults("A5");
         m_pDoc->SetEditText(ScAddress(0,4,0), rEditEngine.CreateTextObject());
-        rEditEngine.SetText("A6");
+        rEditEngine.SetTextCurrentDefaults("A6");
         m_pDoc->SetEditText(ScAddress(0,5,0), rEditEngine.CreateTextObject());
-        rEditEngine.SetText("A7");
+        rEditEngine.SetTextCurrentDefaults("A7");
         m_pDoc->SetEditText(ScAddress(0,6,0), rEditEngine.CreateTextObject());
         sc::EditTextIterator aIter(*m_pDoc,0);
         const char* pChecks[] = { "A2", "A5", "A6", "A7", nullptr };
@@ -5894,11 +5894,11 @@ void Test::testEditTextIterator()
 
     {
         // Add more edit cells to column C. Skip column B.
-        rEditEngine.SetText("C1");
+        rEditEngine.SetTextCurrentDefaults("C1");
         m_pDoc->SetEditText(ScAddress(2,0,0), rEditEngine.CreateTextObject());
-        rEditEngine.SetText("C3");
+        rEditEngine.SetTextCurrentDefaults("C3");
         m_pDoc->SetEditText(ScAddress(2,2,0), rEditEngine.CreateTextObject());
-        rEditEngine.SetText("C4");
+        rEditEngine.SetTextCurrentDefaults("C4");
         m_pDoc->SetEditText(ScAddress(2,3,0), rEditEngine.CreateTextObject());
         sc::EditTextIterator aIter(*m_pDoc,0);
         const char* pChecks[] = { "A2", "A5", "A6", "A7", "C1", "C3", "C4", nullptr };

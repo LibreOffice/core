@@ -998,7 +998,7 @@ static bool lcl_PutString(
             if(ScStringUtil::isMultiline(rStr))
             {
                 ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
-                rEngine.SetText(rStr);
+                rEngine.SetTextCurrentDefaults(rStr);
                 rDocImport.setEditCell(ScAddress(nCol, nRow, nTab), rEngine.CreateTextObject());
                 return true;
             }
@@ -1246,7 +1246,7 @@ static bool lcl_PutString(
     {
         bMultiLine = true;
         ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
-        rEngine.SetText(rStr);
+        rEngine.SetTextCurrentDefaults(rStr);
         if ( bUseDocImport )
             rDocImport.setEditCell(ScAddress(nCol, nRow, nTab), rEngine.CreateTextObject());
         else

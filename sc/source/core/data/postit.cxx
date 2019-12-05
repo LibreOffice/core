@@ -916,7 +916,7 @@ OUString ScPostIt::GetText() const
     {
         OUStringBuffer aBuffer;
         ScNoteEditEngine& rEngine = mrDoc.GetNoteEngine();
-        rEngine.SetText(*pEditObj);
+        rEngine.SetTextCurrentDefaults(*pEditObj);
         sal_Int32 nParaCount = rEngine.GetParagraphCount();
         for( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
         {

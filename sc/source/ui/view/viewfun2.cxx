@@ -860,7 +860,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     {
         const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
         ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool(), pDoc );
-        aEngine.SetText(*pData);
+        aEngine.SetTextCurrentDefaults(*pData);
 
         ScEditAttrTester aTester( &aEngine );
         if (!aTester.NeedsObject())

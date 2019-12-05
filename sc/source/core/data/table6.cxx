@@ -256,7 +256,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         else if ( bMultiLine && aString.indexOf('\n') != -1 )
         {
             ScFieldEditEngine& rEngine = pDocument->GetEditEngine();
-            rEngine.SetText(aString);
+            rEngine.SetTextCurrentDefaults(aString);
             SetEditText(nCol, nRow, rEngine.CreateTextObject());
         }
         else

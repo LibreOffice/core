@@ -282,7 +282,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Header:
     // [empty][\sheet\][empty]
 
-    pEdEngine->SetText(EMPTY_OUSTRING);
+    pEdEngine->SetTextCurrentDefaults(EMPTY_OUSTRING);
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
     pHeaderItem->SetLeftArea  ( *pEmptyTxtObj );
@@ -294,7 +294,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // [empty][Page \STR_PAGE\][empty]
 
     aStr = SCSTR( STR_PAGE ) + " ";
-    pEdEngine->SetText( aStr );
+    pEdEngine->SetTextCurrentDefaults( aStr );
     nStrLen = aStr.getLength();
     pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
     pTxtObj = pEdEngine->CreateTextObject();
@@ -341,14 +341,14 @@ void ScStyleSheetPool::CreateStandardStyles()
     // [\TABLE\ (\DATA\)][empty][\DATE\, \TIME\]
 
     aStr = " ()";
-    pEdEngine->SetText( aStr );
+    pEdEngine->SetTextCurrentDefaults( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
     pHeaderItem->SetLeftArea( *pTxtObj );
     pHeaderItem->SetCenterArea( *pEmptyTxtObj );
     aStr = ", ";
-    pEdEngine->SetText( aStr );
+    pEdEngine->SetTextCurrentDefaults( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SvxDateType::Var), EE_FEATURE_FIELD),
                                     ESelection() );
@@ -363,7 +363,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     nStrLen = aStr.getLength();
     aStr += " / ";
     sal_Int32 nStrLen2 = aStr.getLength();
-    pEdEngine->SetText( aStr );
+    pEdEngine->SetTextCurrentDefaults( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(0,nStrLen2,0,nStrLen2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
     pTxtObj = pEdEngine->CreateTextObject();
