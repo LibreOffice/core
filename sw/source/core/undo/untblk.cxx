@@ -200,15 +200,14 @@ SwUndoInserts::~SwUndoInserts()
 //  But storing absolute indices leads to crashes if some action in Undo fails to roll back some modifications.
 
 //  Has following main steps:
-//  1. DelContentIndex to delete footnotes, flys, bookmarks (see comment for this function)
+//  1. m_FlyUndos removes flys anchored to first and last paragraph in Undo range.
+//     This array may be empty.
+//  2. DelContentIndex to delete footnotes, flys, bookmarks (see comment for this function)
 //     Deleted flys are stored in pHistory array.
-//     First and last paragraphs flys are handled later in this function! They are not deleted by DelContentIndex!
-//     For flys anchored to last paragraph, DelContentIndex re-anchors them to the last paragraph that will remain after Undo.
-//     This is not fully correct, as everything between nSttNode and nEndNode should be deleted (these nodes marks range of inserted nodes).
-//     But due to bug in paste (probably there), during paste all flys are anchored to last paragraph (see https://bugs.documentfoundation.org/show_bug.cgi?id=94225#c38).
-//     So they should be re-anchored.
-//  2. MoveToUndoNds moves nodes to Undo nodes array and removes them from document.
-//  3. m_FlyUndos removes flys anchored to first and last paragraph in Undo range. This array may be empty.
+//     First and last paragraphs flys are not deleted by DelContentIndex!
+//     For flys anchored to last paragraph, DelContentIndex re-anchors them to
+//     the last paragraph that will remain after Undo.
+//  3. MoveToUndoNds moves nodes to Undo nodes array and removes them from document.
 //  4. Lastly (starting from if(pTextNode)), text from last paragraph is joined to last remaining paragraph and FormatColl for last paragraph is restored.
 //     Format coll for last paragraph is removed during execution of UndoImpl
 
@@ -266,7 +265,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         m_nSetPos = m_pHistory->Count();
         sal_uLong nTmp = rPam.GetMark()->nNode.GetIndex();
         DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(),
-            DelContentType::AllMask|DelContentType::ExcludeAtCharFlyAtStartEnd);
+            DelContentType::AllMask|DelContentType::ExcludeFlyAtStartEnd);
         m_nNodeDiff += nTmp - rPam.GetMark()->nNode.GetIndex();
         if( *rPam.GetPoint() != *rPam.GetMark() )
         {

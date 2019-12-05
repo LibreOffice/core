@@ -168,6 +168,8 @@ public:
     void testRedlineFrameAtCharStartInside();
     void testRedlineFrameAtParaStartOutside();
     void testRedlineFrameAtParaEndInside();
+    void testRedlineFrameAtParaOneParagraph();
+    void testRedlineFrameAtPara2ndParagraph();
     void testThreadedException();
     void testBookmarkCopy();
     void testFdo69893();
@@ -368,6 +370,8 @@ public:
     CPPUNIT_TEST(testRedlineFrameAtCharStartInside);
     CPPUNIT_TEST(testRedlineFrameAtParaStartOutside);
     CPPUNIT_TEST(testRedlineFrameAtParaEndInside);
+    CPPUNIT_TEST(testRedlineFrameAtParaOneParagraph);
+    CPPUNIT_TEST(testRedlineFrameAtPara2ndParagraph);
     CPPUNIT_TEST(testThreadedException);
     CPPUNIT_TEST(testBookmarkCopy);
     CPPUNIT_TEST(testFdo69893);
@@ -682,6 +686,18 @@ void SwUiWriterTest::testRedlineFrameAtParaStartOutside()
 void SwUiWriterTest::testRedlineFrameAtParaEndInside()
 {
     testRedlineFrame("redline_fly_duplication_at_para_end_inside.fodt");
+}
+
+void SwUiWriterTest::testRedlineFrameAtParaOneParagraph()
+{
+    // test ALLFLYS flag: oddly enough it didn't fail as fodt but failed as odt...
+    testRedlineFrame("redline_fly_at_para_one_paragraph.odt");
+}
+
+void SwUiWriterTest::testRedlineFrameAtPara2ndParagraph()
+{
+    // lost via the buggy increment in Copy
+    testRedlineFrame("redline_fly_duplication_at_para_2nd_paragraph.fodt");
 }
 
 void SwUiWriterTest::testThreadedException()

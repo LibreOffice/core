@@ -1165,8 +1165,7 @@ void SwDocTest::randomTest()
                 SwMoveFlags nFlags =
                          getRand(1) // FIXME: puterb this more ?
                          ? SwMoveFlags::DEFAULT
-                         : SwMoveFlags::ALLFLYS |
-                           SwMoveFlags::CREATEUNDOOBJ |
+                         : SwMoveFlags::CREATEUNDOOBJ |
                            SwMoveFlags::REDLINES |
                            SwMoveFlags::NO_DELFRMS;
                 SwPosition aTo(getRandomPosition(m_pDoc, i/10));

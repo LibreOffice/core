@@ -931,7 +931,6 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
         const SwFrameFormats& rSpzArr = *pDoc->GetSpzFrameFormats();
         if( !rSpzArr.empty() )
         {
-            const bool bDelFwrd = rMark.nNode.GetIndex() <= rPoint.nNode.GetIndex();
             SwFrameFormat* pFormat;
             const SwFormatAnchor* pAnchor;
             size_t n = rSpzArr.size();
@@ -965,28 +964,25 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 case RndStdIds::FLY_AT_PARA:
                     {
                         pAPos =  pAnchor->GetContentAnchor();
-                        if( pAPos )
+                        if (pAPos &&
+                            pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode)
                         {
-                            bool bTmp;
-                            if( DelContentType::CheckNoCntnt & nDelContentType )
-                                bTmp = pStt->nNode <= pAPos->nNode && pAPos->nNode < pEnd->nNode;
-                            else
-                            {
-                                if (bDelFwrd)
-                                    bTmp = rMark.nNode < pAPos->nNode &&
-                                        pAPos->nNode <= rPoint.nNode;
-                                else
-                                    bTmp = rPoint.nNode <= pAPos->nNode &&
-                                        pAPos->nNode < rMark.nNode;
-                            }
-
-                            if (bTmp)
-                            {
                                 if( !m_pHistory )
                                     m_pHistory.reset( new SwHistory );
 
+                                if (IsSelectFrameAnchoredAtPara(*pAPos, *pStt, *pEnd, nDelContentType))
+                                {
+                                    m_pHistory->AddDeleteFly(*pFormat, nChainInsPos);
+                                    // reset n so that no Format is skipped
+                                    n = n >= rSpzArr.size()
+                                        ? rSpzArr.size() : n+1;
+                                }
                                 // Moving the anchor?
-                                if( !( DelContentType::CheckNoCntnt & nDelContentType ) &&
+                                else if (!((DelContentType::CheckNoCntnt|DelContentType::ExcludeFlyAtStartEnd)
+                                        & nDelContentType) &&
+                                    // at least for calls from SwUndoDelete,
+                                    // this should work - other Undos don't
+                                    // remember the order of the cursor
                                     (rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex())
                                     // Do not try to move the anchor to a table!
                                     && rMark.nNode.GetNode().IsTextNode())
@@ -997,14 +993,6 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                     aAnch.SetAnchor( &aPos );
                                     pFormat->SetFormatAttr( aAnch );
                                 }
-                                else
-                                {
-                                    m_pHistory->AddDeleteFly(*pFormat, nChainInsPos );
-                                    // reset n so that no Format is skipped
-                                    n = n >= rSpzArr.size() ?
-                                        rSpzArr.size() : n+1;
-                                }
-                            }
                         }
                     }
                     break;
@@ -1021,7 +1009,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                             n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                         }
                         else if (!((DelContentType::CheckNoCntnt |
-                                    DelContentType::ExcludeAtCharFlyAtStartEnd)
+                                    DelContentType::ExcludeFlyAtStartEnd)
                                     & nDelContentType))
                         {
                             if( *pStt <= *pAPos && *pAPos < *pEnd )
@@ -1547,6 +1535,15 @@ static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
     return node == rAnchorPos.nNode && rAnchorPos.nContent == 0;
 }
 
+static bool IsNotBackspaceHeuristic(
+        SwPosition const& rStart, SwPosition const& rEnd)
+{
+    // check if the selection is backspace/delete created by DelLeft/DelRight
+    return rStart.nNode.GetIndex() + 1 != rEnd.nNode.GetIndex()
+        || rEnd.nContent != 0
+        || rStart.nContent != rStart.nNode.GetNode().GetTextNode()->Len();
+}
+
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd,
         DelContentType const nDelContentType)
@@ -1566,16 +1563,57 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
     // in general, exclude the start and end position
     return ((rStart < rAnchorPos)
             || (rStart == rAnchorPos
-                && !(nDelContentType & DelContentType::ExcludeAtCharFlyAtStartEnd)
+                && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0)
                     || IsAtStartOfSection(rAnchorPos))))
         && ((rAnchorPos < rEnd)
             || (rAnchorPos == rEnd
-                && !(nDelContentType & DelContentType::ExcludeAtCharFlyAtStartEnd)
+                && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len())
                     || IsAtEndOfSection(rAnchorPos))));
+}
+
+bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
+        SwPosition const & rStart, SwPosition const & rEnd,
+        DelContentType const nDelContentType)
+{
+    assert(rStart <= rEnd);
+
+    // CheckNoCntnt means DelFullPara which is obvious to handle
+    if (DelContentType::CheckNoCntnt & nDelContentType)
+    {   // exclude selection end node because it won't be deleted
+        return (rAnchorPos.nNode < rEnd.nNode)
+            && (rStart.nNode <= rAnchorPos.nNode);
+    }
+
+    if (rAnchorPos.GetDoc()->IsInReading())
+    {   // FIXME hack for writerfilter RemoveLastParagraph(); can't test file format more specific?
+        // but it MUST NOT be done during the SetRedlineFlags at the end of ODF
+        // import, where the IsInXMLImport() cannot be checked because the
+        // stupid code temp. overrides it - instead rely on setting the ALLFLYS
+        // flag in MoveFromSection() and converting that to CheckNoCntnt with
+        // adjusted cursor!
+        return (rStart.nNode < rAnchorPos.nNode) && (rAnchorPos.nNode < rEnd.nNode);
+    }
+
+    // in general, exclude the start and end position
+    return ((rStart.nNode < rAnchorPos.nNode)
+            || (rStart.nNode == rAnchorPos.nNode
+                && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
+                // special case: fully deleted node
+                && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0
+                        // but not if the selection is backspace/delete!
+                        && IsNotBackspaceHeuristic(rStart, rEnd))
+                    || IsAtStartOfSection(rStart))))
+        && ((rAnchorPos.nNode < rEnd.nNode)
+            || (rAnchorPos.nNode == rEnd.nNode
+                && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
+                // special case: fully deleted node
+                && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
+                        && IsNotBackspaceHeuristic(rStart, rEnd))
+                    || IsAtEndOfSection(rEnd))));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
