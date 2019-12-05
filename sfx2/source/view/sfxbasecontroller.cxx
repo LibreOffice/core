@@ -176,7 +176,6 @@ namespace {
 
 class SfxStatusIndicator : public ::cppu::WeakImplHelper< task::XStatusIndicator, lang::XEventListener >
 {
-friend class SfxBaseController;
     Reference < XController > xOwner;
     Reference < task::XStatusIndicator > xProgress;
     SfxWorkWindow*          pWorkWindow;
