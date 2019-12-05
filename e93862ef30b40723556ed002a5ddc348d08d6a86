@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_9005d013",
+        "filename": "vcl/source/window/window2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-12-05T07:10:29Z",
+      "side": 1,
+      "message": "Is a word missing here?",
+      "revId": "e93862ef30b40723556ed002a5ddc348d08d6a86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
