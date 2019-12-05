@@ -190,6 +190,7 @@ namespace o3tl {
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOC(SvStream &rStream, const OUString &rFltName);
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOCX(SvStream &rStream);
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportRTF(SvStream &rStream);
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHTML(SvStream &rStream);
 SAL_DLLPUBLIC_EXPORT void FlushFontCache();
