@@ -2584,22 +2584,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                         && (   (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR
                                 && IsDestroyFrameAnchoredAtChar(*anchoredAt, *pStartPos, *pEndPos))
                             || (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
-                                && *pStartPos <= *anchoredAt
-                                && *anchoredAt < *pEndPos)));
-                if (anchoredAt != nullptr
-                    && rAnchor.GetAnchorId() != RndStdIds::FLY_AT_CHAR
-                    && *anchoredAt == *pEndPos)
-                {
-                    const SwNodes& nodes = anchoredAt->GetDoc()->GetNodes();
-                    if( *pEndPos == SwPosition( nodes.GetEndOfContent()))
-                        inSelection = true;
-                    else
-                    {
-                        SwNodeIndex idx( nodes.GetEndOfContent());
-                        if( SwContentNode* last = SwNodes::GoPrevious( &idx ))
-                            inSelection = *pEndPos == SwPosition( *last, last->Len());
-                    }
-                }
+                                && IsSelectFrameAnchoredAtPara(*anchoredAt, *pStartPos, *pEndPos))));
                 if( inSelection )
                         Add( aRegion, pFly->getFrameArea() );
                 else if ( !pFly->IsAnLower( pStartFrame ) &&
