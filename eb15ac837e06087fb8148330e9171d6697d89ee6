@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_1311ca52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-05T10:41:18Z",
+      "side": 1,
+      "message": "Please document what exactly does not work.",
+      "revId": "eb15ac837e06087fb8148330e9171d6697d89ee6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f313ee5a",
+        "filename": "cppuhelper/Library_cppuhelper.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-05T10:41:18Z",
+      "side": 1,
+      "message": "Please make this hack conditional for the platforms that actually need it.  At least conceptionally, URE should not depend on offapi.",
+      "revId": "eb15ac837e06087fb8148330e9171d6697d89ee6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
