@@ -619,9 +619,9 @@
                                         <property name="can_focus">False</property>
                                         <property name="hexpand">True</property>
                                         <items>
-                                          <item translatable="yes" context="printdialog|liststore4">Print only in one side</item>
-                                          <item translatable="yes" context="printdialog|liststore4">Print in both sides (long edge)</item>
-                                          <item translatable="yes" context="printdialog|liststore4">Print in both sides (short edge)</item>
+                                          <item translatable="yes" context="printdialog|liststore4">Print on one side (simplex)</item>
+                                          <item translatable="yes" context="printdialog|liststore4">Print on both sides (duplex long edge)</item>
+                                          <item translatable="yes" context="printdialog|liststore4">Print on both sides (duplex short edge)</item>
                                         </items>
                                       </object>
                                       <packing>
