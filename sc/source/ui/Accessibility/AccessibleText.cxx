@@ -1060,7 +1060,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
                 aSize = pWindow->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
             pEditEngine->SetPaperSize(aSize);
         }
-        pEditEngine->SetText( maText );
+        pEditEngine->SetTextCurrentDefaults( maText );
     }
 
     bDataValid = true;
@@ -1179,7 +1179,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
         mpEditEngine->SetPaperSize(aSize);
     }
     if (mpEditObj)
-        mpEditEngine->SetText(*mpEditObj);
+        mpEditEngine->SetTextCurrentDefaults(*mpEditObj);
 
     mbDataValid = true;
     return mpForwarder.get();
@@ -1278,7 +1278,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
                 aSize = pWindow->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
             mpEditEngine->SetPaperSize(aSize);
         }
-        mpEditEngine->SetText( msText );
+        mpEditEngine->SetTextCurrentDefaults( msText );
     }
 
     mbDataValid = true;

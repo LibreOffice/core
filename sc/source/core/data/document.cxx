@@ -3402,7 +3402,7 @@ void ScDocument::SetEditText( const ScAddress& rPos, const OUString& rStr )
         return;
 
     ScFieldEditEngine& rEngine = GetEditEngine();
-    rEngine.SetText(rStr);
+    rEngine.SetTextCurrentDefaults(rStr);
     maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), rEngine.CreateTextObject());
 }
 
@@ -3423,7 +3423,7 @@ void ScDocument::SetTextCell( const ScAddress& rPos, const OUString& rStr )
     if (ScStringUtil::isMultiline(rStr))
     {
         ScFieldEditEngine& rEngine = GetEditEngine();
-        rEngine.SetText(rStr);
+        rEngine.SetTextCurrentDefaults(rStr);
         maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), rEngine.CreateTextObject());
     }
     else

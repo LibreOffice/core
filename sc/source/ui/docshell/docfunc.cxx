@@ -966,7 +966,7 @@ bool ScDocFunc::SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr
     if (ScStringUtil::isMultiline(rStr))
     {
         ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
-        rEngine.SetText(rStr);
+        rEngine.SetTextCurrentDefaults(rStr);
         std::unique_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
         return SetEditCell(rPos, *pEditText, bInteraction);
     }
