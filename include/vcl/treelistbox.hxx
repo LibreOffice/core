@@ -200,6 +200,7 @@ class VCL_DLLPUBLIC SvTreeListBox
     Link<SvTreeListBox*,void>  aSelectHdl;
     Link<SvTreeListBox*,void>  aDeselectHdl;
     Link<const CommandEvent&, bool> aPopupMenuHdl;
+    Link<const HelpEvent&, void> aTooltipHdl;
 
     Image           aPrevInsertedExpBmp;
     Image           aPrevInsertedColBmp;
@@ -433,6 +434,7 @@ public:
     void            SetExpandingHdl(const Link<SvTreeListBox*,bool>& rNewHdl){aExpandingHdl=rNewHdl;}
     void            SetExpandedHdl(const Link<SvTreeListBox*,void>& rNewHdl){aExpandedHdl=rNewHdl;}
     void SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink) { aPopupMenuHdl = rLink; }
+    void SetTooltipHdl(const Link<const HelpEvent&, void>& rLink) { aTooltipHdl = rLink; }
 
     virtual void    ExpandedHdl();
     virtual bool    ExpandingHdl();

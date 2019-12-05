@@ -8037,6 +8037,7 @@ private:
     gulong m_nDragDataDeleteignalId;
     gulong m_nDragGetSignalId;
     gulong m_nKeyPressSignalId;
+    gulong m_nQueryTooltipSignalId;
     ImplSVEvent* m_pChangeEvent;
 
     DECL_LINK(async_signal_changed, void*, void);
@@ -8521,6 +8522,24 @@ private:
         return pThis->signal_key_press(pEvent);
     }
 
+    static gboolean signalQueryTooltip(GtkWidget* /*pGtkWidget*/, gint x, gint y,
+                                         gboolean keyboard_tip, GtkTooltip *tooltip,
+                                         gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        GtkTreeIter iter;
+        GtkTreeView *pTreeView = pThis->m_pTreeView;
+        GtkTreeModel *pModel = gtk_tree_view_get_model(pTreeView);
+        GtkTreePath *pPath = nullptr;
+        if (!gtk_tree_view_get_tooltip_context(pTreeView, &x, &y, keyboard_tip, &pModel, &pPath, &iter))
+            return false;
+        OUString aTooltip = pThis->signal_query_tooltip(GtkInstanceTreeIter(iter));
+        gtk_tooltip_set_text(tooltip, OUStringToOString(aTooltip, RTL_TEXTENCODING_UTF8).getStr());
+        gtk_tree_view_set_tooltip_row(pTreeView, tooltip, pPath);
+        gtk_tree_path_free(pPath);
+        return true;
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -8543,6 +8562,7 @@ public:
         , m_nDragDataDeleteignalId(0)
         , m_nDragGetSignalId(0)
         , m_nKeyPressSignalId(g_signal_connect(pTreeView, "key-press-event", G_CALLBACK(signalKeyPress), this))
+        , m_nQueryTooltipSignalId(g_signal_connect(pTreeView, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
         , m_pChangeEvent(nullptr)
     {
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
@@ -10007,6 +10027,8 @@ public:
             m_aColumnSignalIds.pop_back();
         }
         g_list_free(m_pColumns);
+
+        g_signal_handler_disconnect(m_pTreeView, m_nQueryTooltipSignalId);
     }
 };
 

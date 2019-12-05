@@ -730,7 +730,15 @@ protected:
         return m_aEditingDoneHdl.Call(rIterText);
     }
 
+    Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
+    OUString signal_query_tooltip(const TreeIter& rIter) { return m_aQueryTooltipHdl.Call(rIter); }
+
 public:
+    void connect_query_tooltip(const Link<const TreeIter&, OUString>& rLink)
+    {
+        m_aQueryTooltipHdl = rLink;
+    }
+
     virtual void insert(const TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
                         const OUString* pExpanderName, bool bChildrenOnDemand, TreeIter* pRet)
