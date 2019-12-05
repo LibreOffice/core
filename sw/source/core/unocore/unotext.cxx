@@ -20,9 +20,7 @@
 #include <stdlib.h>
 
 #include <memory>
-#include <iostream>
 #include <set>
-#include <utility>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -54,20 +52,16 @@
 #include <unoframe.hxx>
 #include <unofield.hxx>
 #include <unometa.hxx>
-#include <unodraw.hxx>
-#include <unoredline.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unoparagraph.hxx>
 #include <unocrsrhelper.hxx>
-#include <docsh.hxx>
 #include <docary.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <redline.hxx>
 #include <swundo.hxx>
 #include <section.hxx>
-#include <IMark.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <ndtxt.hxx>

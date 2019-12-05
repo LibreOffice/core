@@ -36,9 +36,6 @@
 #include <IMark.hxx>
 #include <crossrefbookmark.hxx>
 #include <doc.hxx>
-#include <IDocumentState.hxx>
-#include <docary.hxx>
-#include <swundo.hxx>
 #include <docsh.hxx>
 
 using namespace ::sw::mark;

@@ -32,18 +32,15 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
-#include <unomid.h>
 #include <unotextrange.hxx>
 #include <unorefmark.hxx>
 #include <unotextcursor.hxx>
 #include <unomap.hxx>
-#include <unocrsr.hxx>
 #include <unocrsrhelper.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <fmtrfmrk.hxx>
 #include <txtrfmrk.hxx>
-#include <hints.hxx>
 #include <unometa.hxx>
 #include <unotext.hxx>
 #include <unoport.hxx>

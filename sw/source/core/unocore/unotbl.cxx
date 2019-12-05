@@ -18,7 +18,6 @@
  */
 
 #include <tuple>
-#include <array>
 #include <utility>
 #include <memory>
 #include <vector>
@@ -30,13 +29,12 @@
 #include <float.h>
 #include <swtypes.hxx>
 #include <cmdid.h>
+#include <unocoll.hxx>
 #include <unomid.h>
 #include <unomap.hxx>
 #include <unotbl.hxx>
-#include <unostyle.hxx>
 #include <section.hxx>
 #include <unocrsr.hxx>
-#include <svx/unomid.hxx>
 #include <hints.hxx>
 #include <swtblfmt.hxx>
 #include <doc.hxx>
@@ -62,7 +60,6 @@
 #include <tabfrm.hxx>
 #include <redline.hxx>
 #include <unoport.hxx>
-#include <unoprnms.hxx>
 #include <unocrsrhelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -70,20 +67,13 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
-#include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
-#include <com/sun/star/style/PageStyleLayout.hpp>
-#include <com/sun/star/style/BreakType.hpp>
-#include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 #include <com/sun/star/chart/ChartDataChangeEvent.hpp>
-#include <com/sun/star/chart2/data/XDataSequence.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
@@ -100,7 +90,6 @@
 #include <osl/mutex.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <frmatr.hxx>
-#include <unochart.hxx>
 #include <sortopt.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -115,7 +104,6 @@
 #include <docsh.hxx>
 #include <fesh.hxx>
 #include <itabenum.hxx>
-#include <poolfmt.hxx>
 
 using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;

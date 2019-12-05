@@ -36,12 +36,10 @@
 #include <docary.hxx>
 #include <textboxhelper.hxx>
 #include <tox.hxx>
-#include <unomid.h>
 #include <unoparaframeenum.hxx>
 #include <unocrsrhelper.hxx>
 #include <unorefmark.hxx>
 #include <unobookmark.hxx>
-#include <unoredline.hxx>
 #include <unofield.hxx>
 #include <unometa.hxx>
 #include <fmtfld.hxx>
@@ -54,8 +52,6 @@
 #include <unoidx.hxx>
 #include <unocoll.hxx>
 #include <redline.hxx>
-#include <docufld.hxx>
-#include <txtfld.hxx>
 #include <txtannotationfld.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/string.hxx>

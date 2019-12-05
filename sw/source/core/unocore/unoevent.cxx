@@ -22,12 +22,8 @@
 #include <unoevent.hxx>
 #include <unoframe.hxx>
 #include <unostyle.hxx>
-#include <swevent.hxx>
-#include <docstyle.hxx>
-#include <svx/svxids.hrc>
 #include <fmtinfmt.hxx>
 #include <svl/macitem.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sfx2/event.hxx>
 
 using namespace ::com::sun::star;

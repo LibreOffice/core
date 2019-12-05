@@ -33,7 +33,6 @@
 #include <rootfrm.hxx>
 #include <viewimp.hxx>
 #include <dflyobj.hxx>
-#include <viewopt.hxx>
 #include <printdata.hxx>
 #include <dcontact.hxx>
 #include <dview.hxx>

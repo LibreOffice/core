@@ -19,26 +19,12 @@
 
 
 #include <hintids.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/prnmon.hxx>
-#include <svl/languageoptions.hxx>
-#include <editeng/paperinf.hxx>
-#include <editeng/pbinitem.hxx>
 #include <svx/svdview.hxx>
-#include <toolkit/awt/vclxdevice.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <unotools/moduleoptions.hxx>
-#include <unotools/syslocale.hxx>
-#include <vcl/oldprintadaptor.hxx>
 
-#include <unotxdoc.hxx>
-#include <docsh.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <fmtfsize.hxx>
-#include <frmatr.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -47,27 +33,17 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <wdocsh.hxx>
 #include <fesh.hxx>
 #include <pam.hxx>
 #include <viewimp.hxx>
 #include <layact.hxx>
 #include <ndtxt.hxx>
-#include <fldbas.hxx>
-#include <docfld.hxx>
-#include <docufld.hxx>
-#include <shellres.hxx>
 #include <viewopt.hxx>
 #include <printdata.hxx>
 #include <pagedesc.hxx>
-#include <poolfmt.hxx>
-#include <mdiexp.hxx>
 #include <ptqueue.hxx>
-#include <tabfrm.hxx>
-#include <txtfrm.hxx>
 #include <viscrs.hxx>
 #include <fmtpdsc.hxx>
-#include <globals.hrc>
 #include <PostItMgr.hxx>
 #include "vprint.hxx"
 

@@ -19,7 +19,6 @@
 
 #include <printdata.hxx>
 
-#include <globals.hrc>
 #include <strings.hrc>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>

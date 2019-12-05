@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/unolingu.hxx>
-
 #include <unobaseclass.hxx>
 #include <unocrsrhelper.hxx>
 #include <unoflatpara.hxx>
@@ -29,7 +27,6 @@
 #include <unotextmarkup.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
-#include <docsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <viewsh.hxx>

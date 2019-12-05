@@ -20,7 +20,6 @@
 #include <doc.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
-#include <ndtxt.hxx>
 
 #include <UndoCore.hxx>
 
