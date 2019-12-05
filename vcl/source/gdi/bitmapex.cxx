@@ -233,11 +233,11 @@ const Bitmap& BitmapEx::GetBitmapRef() const
     return maBitmap;
 }
 
-Bitmap BitmapEx::GetBitmap( const Color* pTransReplaceColor ) const
+Bitmap BitmapEx::GetBitmap( o3tl::optional<Color> xTransparentReplaceColor ) const
 {
     Bitmap aRetBmp( maBitmap );
 
-    if( pTransReplaceColor && ( meTransparent != TransparentType::NONE ) )
+    if( xTransparentReplaceColor && ( meTransparent != TransparentType::NONE ) )
     {
         Bitmap aTempMask;
 
@@ -247,9 +247,9 @@ Bitmap BitmapEx::GetBitmap( const Color* pTransReplaceColor ) const
             aTempMask = maMask;
 
         if( !IsAlpha() )
-            aRetBmp.Replace( aTempMask, *pTransReplaceColor );
+            aRetBmp.Replace( aTempMask, *xTransparentReplaceColor );
         else
-            aRetBmp.Replace( GetAlpha(), *pTransReplaceColor );
+            aRetBmp.Replace( GetAlpha(), *xTransparentReplaceColor );
     }
 
     return aRetBmp;

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_BITMAPEX_HXX
 #define INCLUDED_VCL_BITMAPEX_HXX
 
+#include <o3tl/optional.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/alpha.hxx>
 #include <vcl/Scanline.hxx>
@@ -72,7 +73,7 @@ public:
     bool                IsTransparent() const;
     TransparentType     GetTransparentType() const { return meTransparent; }
 
-    Bitmap              GetBitmap( const Color* pTransReplaceColor = nullptr ) const;
+    Bitmap              GetBitmap( o3tl::optional<Color> xTransparentReplaceColor = o3tl::optional<Color>() ) const;
     /// Gives direct access to the contained bitmap.
     const Bitmap&       GetBitmapRef() const;
     Bitmap              GetMask() const;
