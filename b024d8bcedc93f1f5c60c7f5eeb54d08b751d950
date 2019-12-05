@@ -22,6 +22,30 @@
       "revId": "b024d8bcedc93f1f5c60c7f5eeb54d08b751d950",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_7377dea1",
+        "filename": "vcl/inc/win/salgdi.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-05T10:53:08Z",
+      "side": 1,
+      "message": "yeah, should work just as fine; feel free to improve it",
+      "parentUuid": "7f7f9b97_3306461e",
+      "range": {
+        "startLine": 153,
+        "startChar": 23,
+        "endLine": 153,
+        "endChar": 25
+      },
+      "revId": "b024d8bcedc93f1f5c60c7f5eeb54d08b751d950",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
