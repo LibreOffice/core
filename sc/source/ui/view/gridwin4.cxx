@@ -1515,7 +1515,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
-                                    pEditEng->SetText( aThisPageStr );
+                                    pEditEng->SetTextCurrentDefaults( aThisPageStr );
                                     Size aSize100( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
 
                                     //  40% of width or 60% of height

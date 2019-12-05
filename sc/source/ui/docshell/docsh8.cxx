@@ -710,7 +710,7 @@ void lcl_getLongVarCharEditString( OUString& rString,
     if (!rCell.mpEditText)
         return;
 
-    rEditEngine.SetText(*rCell.mpEditText);
+    rEditEngine.SetTextCurrentDefaults(*rCell.mpEditText);
     rString = rEditEngine.GetText( LINEEND_CRLF );
 }
 

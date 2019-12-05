@@ -178,12 +178,12 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
             if( aCell.meType == CELLTYPE_EDIT )
             {
                 const EditTextObject* pEditObj = aCell.mpEditText;
-                rEE.SetText( *pEditObj );
+                rEE.SetTextCurrentDefaults( *pEditObj );
                 rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0, 0, EE_PARA_ALL, 0 ) );
             }
             else
             {
-                rEE.SetText( EMPTY_OUSTRING );
+                rEE.SetTextCurrentDefaults( EMPTY_OUSTRING );
                 rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection() );
                 if( const ScPatternAttr* pPattern = rDoc.getDoc().GetPattern( aScPos.Col(), aScPos.Row(), nScTab ) )
                 {

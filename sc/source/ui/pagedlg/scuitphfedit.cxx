@@ -523,7 +523,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         {
             ClearTextAreas();
             OUString aPageEntry( m_xFtPage->get_label() + " " );
-            m_xWndCenter->GetEditEngine()->SetText(aPageEntry);
+            m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             m_xWndCenter->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             if(!bTravelling)
                 m_xWndCenter->GrabFocus();
@@ -535,7 +535,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ClearTextAreas();
             ESelection aSel(0,0,0,0);
             OUString aPageEntry( m_xFtPage->get_label() + " ");
-            m_xWndCenter->GetEditEngine()->SetText(aPageEntry);
+            m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             aSel.nEndPos = aPageEntry.getLength();
             m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
@@ -562,11 +562,11 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         {
             ClearTextAreas();
             OUString aConfidentialEntry(aUserOpt.GetCompany() + " " + m_xFtConfidential->get_label());
-            m_xWndLeft->GetEditEngine()->SetText(aConfidentialEntry);
+            m_xWndLeft->GetEditEngine()->SetTextCurrentDefaults(aConfidentialEntry);
             m_xWndCenter->InsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SvxDateType::Var), EE_FEATURE_FIELD) );
 
             OUString aPageEntry( m_xFtPage->get_label() + " ");
-            m_xWndRight->GetEditEngine()->SetText(aPageEntry);
+            m_xWndRight->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             m_xWndRight->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             if(!bTravelling)
                 m_xWndRight->GrabFocus();
@@ -604,7 +604,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ClearTextAreas();
             ESelection aSel(0,0,0,0);
             OUString aPageEntry( m_xFtPage->get_label() + " " );
-            m_xWndCenter->GetEditEngine()->SetText(aPageEntry);
+            m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             aSel.nEndPos = aPageEntry.getLength();
             m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
@@ -625,7 +625,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ClearTextAreas();
             ESelection aSel(0,0,0,0);
             OUString aPageEntry( m_xFtPage->get_label() + " " );
-            m_xWndCenter->GetEditEngine()->SetText(aPageEntry);
+            m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             aSel.nEndPos = aPageEntry.getLength();
             m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
@@ -644,7 +644,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         {
             ClearTextAreas();
             OUString aPageEntry( m_xFtPage->get_label() + " " );
-            m_xWndCenter->GetEditEngine()->SetText(aPageEntry);
+            m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             m_xWndCenter->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             m_xWndRight->InsertField( SvxFieldItem( SvxExtFileField(
                 EMPTY_OUSTRING, SvxFileType::Var, SvxFileFormat::PathFull ), EE_FEATURE_FIELD ) );
@@ -657,10 +657,10 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         {
             ClearTextAreas();
             OUString aUserNameEntry(aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName());
-            m_xWndLeft->GetEditEngine()->SetText(aUserNameEntry);
+            m_xWndLeft->GetEditEngine()->SetTextCurrentDefaults(aUserNameEntry);
             OUString aPageEntry( m_xFtPage->get_label() + " ");
             //aPageEntry += " ";
-            m_xWndCenter->GetEditEngine()->SetText(aPageEntry);
+            m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             m_xWndCenter->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             m_xWndRight->InsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SvxDateType::Var), EE_FEATURE_FIELD) );
             if(!bTravelling)
@@ -672,10 +672,10 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         {
             ClearTextAreas();
             OUString aCreatedByEntry( m_xFtCreatedBy->get_label() + " " + aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName());
-            m_xWndLeft->GetEditEngine()->SetText(aCreatedByEntry);
+            m_xWndLeft->GetEditEngine()->SetTextCurrentDefaults(aCreatedByEntry);
             m_xWndCenter->InsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SvxDateType::Var), EE_FEATURE_FIELD) );
             OUString aPageEntry( m_xFtPage->get_label() + " " );
-            m_xWndRight->GetEditEngine()->SetText(aPageEntry);
+            m_xWndRight->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             m_xWndRight->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             if(!bTravelling)
                 m_xWndRight->GrabFocus();
@@ -689,11 +689,11 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
 
 void ScHFEditPage::ClearTextAreas()
 {
-    m_xWndLeft->GetEditEngine()->SetText(EMPTY_OUSTRING);
+    m_xWndLeft->GetEditEngine()->SetTextCurrentDefaults(EMPTY_OUSTRING);
     m_xWndLeft->Invalidate();
-    m_xWndCenter->GetEditEngine()->SetText(EMPTY_OUSTRING);
+    m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(EMPTY_OUSTRING);
     m_xWndCenter->Invalidate();
-    m_xWndRight->GetEditEngine()->SetText(EMPTY_OUSTRING);
+    m_xWndRight->GetEditEngine()->SetTextCurrentDefaults(EMPTY_OUSTRING);
     m_xWndRight->Invalidate();
 }
 

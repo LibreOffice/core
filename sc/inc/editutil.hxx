@@ -144,8 +144,8 @@ public:
                     /// Returns the stored defaults, used to find non-default character attributes
     const SfxItemSet& GetDefaults();
 
-                    /// Overwritten method to be able to apply defaults already set
-    void            SetText( const EditTextObject& rTextObject );
+                    /// SetText and apply defaults already set
+    void            SetTextCurrentDefaults( const EditTextObject& rTextObject );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
                         const SfxItemSet& rDefaults, bool bRememberCopy = true );
@@ -153,8 +153,8 @@ public:
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
                         std::unique_ptr<SfxItemSet> pDefaults );
 
-                    /// Overwritten method to be able to apply defaults already set
-    void            SetText( const OUString& rText );
+                    /// SetText and apply defaults already set
+    void            SetTextCurrentDefaults( const OUString& rText );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const OUString& rText,
                         const SfxItemSet& rDefaults );

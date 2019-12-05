@@ -5256,7 +5256,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     if (aCell.meType == CELLTYPE_EDIT)
     {
         if (aCell.mpEditText)
-            pEngine->SetText(*aCell.mpEditText);
+            pEngine->SetTextCurrentDefaults(*aCell.mpEditText);
     }
     else  // Not an Edit cell and is a formula cell with 'Hyperlink'
           // function if we have no URL, otherwise it could be a formula
@@ -5278,7 +5278,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         }
 
         if (pTextObj)
-            pEngine->SetText(*pTextObj);
+            pEngine->SetTextCurrentDefaults(*pTextObj);
     }
 
     long nStartX = aLogicEdit.Left();
@@ -5360,9 +5360,9 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow
     pEngine->SetPaperSize(aPaperSize);
 
     if (aCell.meType == CELLTYPE_EDIT)
-        pEngine->SetText(*aCell.mpEditText);
+        pEngine->SetTextCurrentDefaults(*aCell.mpEditText);
     else
-        pEngine->SetText(aCell.mpString->getString());
+        pEngine->SetTextCurrentDefaults(aCell.mpString->getString());
 
     long nTextWidth = static_cast<long>(pEngine->CalcTextWidth());
 
@@ -5586,9 +5586,9 @@ bool ScGridWindow::ContinueOnlineSpelling()
             pEngine->SetDefaultItem(SvxLanguageItem(nCellLang, EE_CHAR_LANGUAGE));
 
             if (eType == CELLTYPE_STRING)
-                pEngine->SetText(pCell->mpString->getString());
+                pEngine->SetTextCurrentDefaults(pCell->mpString->getString());
             else
-                pEngine->SetText(*pCell->mpEditText);
+                pEngine->SetTextCurrentDefaults(*pCell->mpEditText);
 
             aStatus.mbModified = false;
             pEngine->CompleteOnlineSpelling();

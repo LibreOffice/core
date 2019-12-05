@@ -1303,7 +1303,7 @@ public:
                             {
                                 // Clone as an edit text object.
                                 ScFieldEditEngine& rEngine = mrDestCol.GetDoc()->GetEditEngine();
-                                rEngine.SetText(aStr.getString());
+                                rEngine.SetTextCurrentDefaults(aStr.getString());
                                 mrDestCol.SetEditText(maDestBlockPos, nSrcRow + mnRowOffset, rEngine.CreateTextObject());
                             }
                             else if (mpSharedStringPool)

@@ -258,17 +258,17 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             Color* pColor;
             ScCellFormat::GetString(aCell, nNumFmt, aText, &pColor, *pFormatter, &mrDoc);
 
-            SetText(aText);
+            SetTextCurrentDefaults(aText);
         }
         break;
         case CELLTYPE_EDIT:
         {
             const EditTextObject* pNewEditObj = aCell.mpEditText;
-            SetText(*pNewEditObj);
+            SetTextCurrentDefaults(*pNewEditObj);
         }
         break;
         default:
-            SetText(EMPTY_OUSTRING);
+            SetTextCurrentDefaults(EMPTY_OUSTRING);
     }
 }
 

@@ -312,7 +312,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             if (aCell.meType == CELLTYPE_EDIT)
             {
                 const EditTextObject* pObj = aCell.mpEditText;
-                aEngine.SetText(*pObj);
+                aEngine.SetTextCurrentDefaults(*pObj);
             }
             else
             {
@@ -322,7 +322,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 Color* pColor;
                 ScCellFormat::GetString(aCell, nNumFmt, aText, &pColor, *pFormatter, m_pDoc.get());
                 if (!aText.isEmpty())
-                    aEngine.SetText(aText);
+                    aEngine.SetTextCurrentDefaults(aText);
             }
 
             bOK = SetObject( &aEngine,
@@ -900,7 +900,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
                 if ( pFCell->IsMultilineResult() )
                 {
                     ScFieldEditEngine& rEngine = pDestDoc->GetEditEngine();
-                    rEngine.SetText(aStr);
+                    rEngine.SetTextCurrentDefaults(aStr);
                     pDestDoc->SetEditText(ScAddress(nCol,nRow,nDestTab), rEngine.CreateTextObject());
                 }
                 else

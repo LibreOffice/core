@@ -539,12 +539,12 @@ const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
     return *pDefaults;
 }
 
-void ScEditEngineDefaulter::SetText( const EditTextObject& rTextObject )
+void ScEditEngineDefaulter::SetTextCurrentDefaults( const EditTextObject& rTextObject )
 {
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
-    EditEngine::SetText( rTextObject );
+    SetText( rTextObject );
     if ( pDefaults )
         SetDefaults( *pDefaults, false );
     if ( bUpdateMode )
@@ -557,7 +557,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
-    EditEngine::SetText( rTextObject );
+    SetText( rTextObject );
     SetDefaults( rSet, bRememberCopy );
     if ( bUpdateMode )
         SetUpdateMode( true );
@@ -569,18 +569,18 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
-    EditEngine::SetText( rTextObject );
+    SetText( rTextObject );
     SetDefaults( std::move(pSet) );
     if ( bUpdateMode )
         SetUpdateMode( true );
 }
 
-void ScEditEngineDefaulter::SetText( const OUString& rText )
+void ScEditEngineDefaulter::SetTextCurrentDefaults( const OUString& rText )
 {
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
-    EditEngine::SetText( rText );
+    SetText( rText );
     if ( pDefaults )
         SetDefaults( *pDefaults, false );
     if ( bUpdateMode )
@@ -593,7 +593,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
-    EditEngine::SetText( rText );
+    SetText( rText );
     SetDefaults( rSet );
     if ( bUpdateMode )
         SetUpdateMode( true );
@@ -605,7 +605,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
-    EditEngine::SetText( rText );
+    SetText( rText );
     SetDefaults( std::move(pSet) );
     if ( bUpdateMode )
         SetUpdateMode( true );

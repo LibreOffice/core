@@ -607,7 +607,7 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
         {
             // Flush the cached first paragraph first.
             mpEditEngine->Clear();
-            mpEditEngine->SetText(*maFirstParagraph);
+            mpEditEngine->SetTextCurrentDefaults(*maFirstParagraph);
             maFirstParagraph.reset();
         }
         mpEditEngine->InsertParagraph(mpEditEngine->GetParagraphCount(), maParagraph.makeStringAndClear());
@@ -615,7 +615,7 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
     else if (mbHasFormatRuns)
     {
         mpEditEngine->Clear();
-        mpEditEngine->SetText(maParagraph.makeStringAndClear());
+        mpEditEngine->SetTextCurrentDefaults(maParagraph.makeStringAndClear());
         mbEditEngineHasText = true;
     }
     else if (mnCurParagraph == 0)

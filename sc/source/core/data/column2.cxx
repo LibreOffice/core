@@ -1077,7 +1077,7 @@ public:
             mpEngine->SetControlWord(mpEngine->GetControlWord() | EEControlBits::ONLINESPELLING);
             mpDoc->ApplyAsianEditSettings(*mpEngine);
         }
-        mpEngine->SetText(*pObj);
+        mpEngine->SetTextCurrentDefaults(*pObj);
         sal_Int32 nParCount = mpEngine->GetParagraphCount();
         for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
         {

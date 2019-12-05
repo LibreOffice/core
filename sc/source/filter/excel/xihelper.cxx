@@ -153,7 +153,7 @@ std::unique_ptr<EditTextObject> lclCreateTextObject( const XclImpRoot& rRoot,
         const XclFormatRunVec& rFormats = rString.GetFormats();
 
         ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
-        rEE.SetText( rString.GetText() );
+        rEE.SetTextCurrentDefaults( rString.GetText() );
 
         SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
         if( bFirstEscaped )
@@ -240,7 +240,7 @@ void XclImpStringHelper::SetToDocument(
         {
             // Multiline content.
             ScFieldEditEngine& rEngine = rDoc.getDoc().GetEditEngine();
-            rEngine.SetText(aStr);
+            rEngine.SetTextCurrentDefaults(aStr);
             rDoc.setEditCell(rPos, rEngine.CreateTextObject());
         }
         else

@@ -373,9 +373,9 @@ void ScViewFunc::DoThesaurus()
     }
 
     if (aOldText.meType == CELLTYPE_EDIT)
-        pThesaurusEngine->SetText(*aOldText.mpEditText);
+        pThesaurusEngine->SetTextCurrentDefaults(*aOldText.mpEditText);
     else
-        pThesaurusEngine->SetText(aOldText.getString(&rDoc));
+        pThesaurusEngine->SetTextCurrentDefaults(aOldText.getString(&rDoc));
 
     pEditView = GetViewData().GetEditView(GetViewData().GetActivePart());
     if (pEditSel)
@@ -532,7 +532,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     pEngine->SetControlWord( EEControlBits::USECHARATTRIBS );
     pEngine->EnableUndo( false );
     pEngine->SetPaperSize( aRect.GetSize() );
-    pEngine->SetText( EMPTY_OUSTRING );
+    pEngine->SetTextCurrentDefaults( EMPTY_OUSTRING );
 
     // *** do the conversion *** ----------------------------------------------
 

@@ -2332,7 +2332,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             OUString aStr;
             if (bTextValid)
             {
-                mpEditEngine->SetText(aCurrentText);
+                mpEditEngine->SetTextCurrentDefaults(aCurrentText);
                 aStr = aCurrentText;
                 bTextValid = false;
                 aCurrentText.clear();
@@ -2343,7 +2343,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             if (aStr.startsWith("{=") && aStr.endsWith("}") )  // Matrix formula?
             {
                 aStr = aStr.copy(1, aStr.getLength() -2);
-                mpEditEngine->SetText(aStr);
+                mpEditEngine->SetTextCurrentDefaults(aStr);
                 if ( pInputWin )
                     pInputWin->SetTextString(aStr);
             }
@@ -2711,7 +2711,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
 
         if (pInitText)
         {
-            mpEditEngine->SetText(*pInitText);
+            mpEditEngine->SetTextCurrentDefaults(*pInitText);
             bModified = true;
         }
 
@@ -3195,7 +3195,7 @@ void ScInputHandler::CancelHandler()
         pExecuteSh->StopEditShell();
 
     aCursorPos.Set(pExecuteSh->GetViewData().GetDocument()->MaxCol()+1,0,0); // Invalid flag
-    mpEditEngine->SetText(OUString());
+    mpEditEngine->SetTextCurrentDefaults(OUString());
 
     if ( !pLastState && pExecuteSh )
         pExecuteSh->UpdateInputHandler( true );  // Update status again
@@ -3881,7 +3881,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                 {
                     if (pData)
                     {
-                        mpEditEngine->SetText( *pData );
+                        mpEditEngine->SetTextCurrentDefaults( *pData );
                         if (pInputWin)
                             aString = ScEditUtil::GetMultilineString(*mpEditEngine);
                         else
@@ -4027,7 +4027,7 @@ IMPL_LINK_NOARG( ScInputHandler, DelayTimer, Timer*, void )
             bInOwnChange = true; // disable ModifyHdl (reset below)
 
             pActiveViewSh = nullptr;
-            mpEditEngine->SetText( EMPTY_OUSTRING );
+            mpEditEngine->SetTextCurrentDefaults( EMPTY_OUSTRING );
             if ( pInputWin )
             {
                 pInputWin->SetPosString( EMPTY_OUSTRING );
@@ -4059,7 +4059,7 @@ void ScInputHandler::InputChanged( const EditView* pView, bool bFromNotify )
 
     bool bNewView = DataChanging();                     //FIXME: Is this at all possible?
     aCurrentText = pView->GetEditEngine()->GetText();   // Also remember the string
-    mpEditEngine->SetText( aCurrentText );
+    mpEditEngine->SetTextCurrentDefaults( aCurrentText );
     DataChanged( bFromTopNotify );
     bTextValid = true; // Is set to false in DataChanged
 
@@ -4109,7 +4109,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
         {
             // Copy content
             std::unique_ptr<EditTextObject> pObj = mpEditEngine->CreateTextObject();
-            rDestEngine.SetText(*pObj);
+            rDestEngine.SetTextCurrentDefaults(*pObj);
             pObj.reset();
 
             // Delete attributes

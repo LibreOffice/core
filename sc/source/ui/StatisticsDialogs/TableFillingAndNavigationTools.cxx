@@ -210,7 +210,7 @@ void AddressWalkerWriter::writeString(const char* aCharArray)
 void AddressWalkerWriter::writeBoldString(const OUString& aString)
 {
     ScFieldEditEngine& rEngine = mpDocument->GetEditEngine();
-    rEngine.SetText(aString);
+    rEngine.SetTextCurrentDefaults(aString);
     SfxItemSet aItemSet = rEngine.GetEmptyItemSet();
     SvxWeightItem aWeight(WEIGHT_BOLD, EE_CHAR_WEIGHT);
     aItemSet.Put(aWeight);

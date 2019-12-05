@@ -583,7 +583,7 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
     rEE.SetDefaults( std::move(pEEItemSet) );      // edit engine takes ownership
 
     // create the string
-    rEE.SetText(rEditText);
+    rEE.SetTextCurrentDefaults(rEditText);
     xString = lclCreateFormattedString( rRoot, rEE, &rLinkHelper, nFlags, nMaxLen );
     rEE.SetUpdateMode( bOldUpdateMode );
 
