@@ -92,6 +92,7 @@ struct SfxGroupInfo_Impl
     OUString    sCommand;
     OUString    sLabel;
     OUString    sHelpText;
+    OUString    sTooltip;
 
                 SfxGroupInfo_Impl( SfxCfgKind n, sal_uInt16 nr, void* pObj = nullptr ) :
                     nKind( n ), nUniqueID( nr ), pObject( pObj ) {}
@@ -175,6 +176,8 @@ public:
     OUString      GetHelpText( bool bConsiderParent = true );
     OUString      GetCurCommand() const;
     OUString      GetCurLabel() const;
+
+    DECL_LINK(QueryTooltip, const weld::TreeIter& rIter, OUString);
 };
 
 struct SvxConfigGroupBoxResource_Impl;

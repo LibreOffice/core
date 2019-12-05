@@ -243,6 +243,7 @@ void CommandCategoryListBox::FillFunctionsList(
         SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
         pGrpInfo->sCommand = rInfo.Command;
         pGrpInfo->sLabel   = sUIName;
+        pGrpInfo->sTooltip = sTooltipLabel;
         pFunctionListBox->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName, xImage);
     }
 }

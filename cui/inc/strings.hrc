@@ -396,6 +396,10 @@
 
 #define RID_SVXSTR_EDIT_PATHS                       NC_("optpathspage|editpaths", "Edit Paths: %1")
 
+#define RID_SVXSTR_COMMANDLABEL                     NC_("RID_SVXSTR_COMMANDLABEL", "Label")
+#define RID_SVXSTR_COMMANDNAME                      NC_("RID_SVXSTR_COMMANDLABEL", "Command")
+#define RID_SVXSTR_COMMANDTIP                       NC_("RID_SVXSTR_COMMANDLABEL", "Tooltip")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
