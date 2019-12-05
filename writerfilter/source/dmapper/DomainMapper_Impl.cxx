@@ -279,6 +279,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstParaInSection( true ),
         m_bIsFirstParaInSectionAfterRedline( true ),
         m_bDummyParaAddedForTableInSection( false ),
+        m_bDummyCharAddedForTableRowGridAfter( false ),
         m_bTextFrameInserted(false),
         m_bIsPreviousParagraphFramed( false ),
         m_bIsLastParaInSection( false ),
@@ -1634,6 +1635,17 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::makeAny(static_cast<sal_Int32>(0)));
                             }
                         }
+                    }
+
+                    // remove dummy character added for gridAfter table cells
+                    if (GetIsDummyCharAddedForTableRowGridAfter())
+                    {
+                        SetIsDummyCharAddedForTableRowGridAfter(false);
+                        uno::Reference<text::XParagraphCursor> xParaCursor(
+                            xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
+                        xParaCursor->gotoStartOfParagraph( false);
+                        xParaCursor->goRight(1, true);
+                        xParaCursor->setString("");
                     }
 
                     xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );

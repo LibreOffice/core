@@ -14445,7 +14445,7 @@
             <ref name="CT_DecimalNumber"/>
           </element>
           <element name="gridAfter">
-            <ref name="CT_TrPrBaseGridAfter"/>
+            <ref name="CT_DecimalNumber"/>
           </element>
           <element name="wBefore">
             <ref name="CT_TblWidth"/>
@@ -14472,16 +14472,6 @@
             <ref name="CT_OnOff"/>
           </element>
         </choice>
-      </define>
-      <define name="CT_TrPrBaseGridBefore">
-        <attribute name="val">
-          <ref name="ST_DecimalNumber"/>
-        </attribute>
-      </define>
-      <define name="CT_TrPrBaseGridAfter">
-        <attribute name="val">
-          <ref name="ST_DecimalNumber"/>
-        </attribute>
       </define>
       <define name="CT_TrPr">
         <ref name="CT_TrPrBase"/>
@@ -18405,6 +18395,7 @@
       <element name="cnfStyle" tokenid="ooxml:CT_TrPrBase_cnfStyle"/>
       <element name="divId" tokenid="ooxml:CT_TrPrBase_divId"/>
       <element name="gridBefore" tokenid="ooxml:CT_TrPrBase_gridBefore"/>
+      <element name="gridAfter" tokenid="ooxml:CT_TrPrBase_gridAfter"/>
       <element name="wBefore" tokenid="ooxml:CT_TrPrBase_wBefore"/>
       <element name="wAfter" tokenid="ooxml:CT_TrPrBase_wAfter"/>
       <element name="cantSplit" tokenid="ooxml:CT_TrPrBase_cantSplit"/>
@@ -18413,12 +18404,6 @@
       <element name="tblCellSpacing" tokenid="ooxml:CT_TrPrBase_tblCellSpacing"/>
       <element name="jc" tokenid="ooxml:CT_TrPrBase_jc"/>
       <element name="hidden" tokenid="ooxml:CT_TrPrBase_hidden"/>
-    </resource>
-    <resource name="CT_TrPrBaseGridBefore" resource="TextTableRow">
-      <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridBefore"/>
-    </resource>
-    <resource name="CT_TrPrBaseGridAfter" resource="TextTableRow">
-      <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridAfter" action="handleGridAfter"/>
     </resource>
     <resource name="CT_TrPr" resource="Properties">
       <element name="ins" tokenid="ooxml:CT_TrPr_ins"/>
