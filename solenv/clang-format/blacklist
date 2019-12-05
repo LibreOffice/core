@@ -6680,7 +6680,6 @@ include/sfx2/frmhtmlw.hxx
 include/sfx2/groupid.hxx
 include/sfx2/hintpost.hxx
 include/sfx2/htmlmode.hxx
-include/sfx2/infobar.hxx
 include/sfx2/inputdlg.hxx
 include/sfx2/ipclient.hxx
 include/sfx2/linkmgr.hxx
@@ -12687,7 +12686,6 @@ sfx2/source/dialog/filedlghelper.cxx
 sfx2/source/dialog/filedlgimpl.hxx
 sfx2/source/dialog/filtergrouping.cxx
 sfx2/source/dialog/filtergrouping.hxx
-sfx2/source/dialog/infobar.cxx
 sfx2/source/dialog/inputdlg.cxx
 sfx2/source/dialog/mailmodel.cxx
 sfx2/source/dialog/mgetempl.cxx
