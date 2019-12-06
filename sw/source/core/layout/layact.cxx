@@ -1204,10 +1204,8 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
             aOldRect = static_cast<SwPageFrame*>(pLay)->GetBoundRect(pRenderContext);
         }
 
-        {
-            SwFrameDeleteGuard aDeleteGuard(pLay);
-            pLay->Calc(pRenderContext);
-        }
+        SwFrameDeleteGuard aDeleteGuard(pLay);
+        pLay->Calc(pRenderContext);
 
         if ( aOldFrame != pLay->getFrameArea() )
             bChanged = true;
@@ -1359,6 +1357,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
     bool bTabChanged = false;
     while ( pLow && pLow->GetUpper() == pLay )
     {
+        SwFrameDeleteGuard delG(pLow);
         if ( pLow->IsLayoutFrame() )
         {
             if ( pLow->IsTabFrame() )
@@ -1583,11 +1582,10 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
     // format lowers, only if table frame is valid
     if ( pTab->isFrameAreaDefinitionValid() )
     {
-        FlowFrameJoinLockGuard tabG(pTab); // tdf#124675 prevent Join() if pTab becomes empty
         SwLayoutFrame *pLow = static_cast<SwLayoutFrame*>(pTab->Lower());
         while ( pLow )
         {
-            SwFrameDeleteGuard rowG(pLow); // tdf#124675 prevent RemoveFollowFlowLine()
+            SwFrameDeleteGuard delG(pLow);
             bChanged |= FormatLayout( m_pImp->GetShell()->GetOut(), pLow, bAddRect );
             if ( IsAgain() )
                 return false;

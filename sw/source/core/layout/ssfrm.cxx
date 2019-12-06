@@ -381,13 +381,23 @@ SwFrame::~SwFrame()
 
 void SwFrame::DestroyFrame(SwFrame *const pFrame)
 {
-    if (pFrame)
-    {
-        pFrame->m_isInDestroy = true;
-        pFrame->DestroyImpl();
-        assert(pFrame->mbInDtor); // check that nobody forgot to call base class
-        delete pFrame;
-    }
+    if (!pFrame)
+        return;
+
+    pFrame->m_isInDestroy = true;
+    if (pFrame->IsDeleteForbidden())
+        return;
+
+    pFrame->DestroyImpl();
+    assert(pFrame->mbInDtor); // check that nobody forgot to call base class
+    delete pFrame;
+}
+
+void SwFrame::AllowDelete(bool bDestroy)
+{
+    mbForbidDelete = false;
+    if (m_isInDestroy && bDestroy)
+        DestroyFrame(this);
 }
 
 const SwFrameFormat * SwLayoutFrame::GetFormat() const

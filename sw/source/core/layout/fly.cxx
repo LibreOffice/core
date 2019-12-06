@@ -1447,11 +1447,9 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                 }
             }
 
-            {
-                SwFrameDeleteGuard aDeletePageGuard(pSect ? pSect->FindPageFrame() : nullptr);
-                SwFrameDeleteGuard aDeleteGuard(pSect);
-                pFrame->Calc(pRenderContext);
-            }
+            SwFrameDeleteGuard aDeletePageGuard(pSect ? pSect->FindPageFrame() : nullptr);
+            SwFrameDeleteGuard aDeleteGuard(pSect);
+            pFrame->Calc(pRenderContext);
 
             // OD 14.03.2003 #i11760# - reset control flag for follow format.
             if ( pFrame->IsTextFrame() )

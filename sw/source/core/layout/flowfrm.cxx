@@ -1878,7 +1878,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         }
     }
 
-    std::unique_ptr<SwFrameDeleteGuard> xDeleteGuard(bMakePage ? new SwFrameDeleteGuard(pOldBoss) : nullptr);
+    SwFrameDeleteGuard aDeleteGuard(bMakePage ? pOldBoss : nullptr);
 
     bool bSamePage = true;
     SwLayoutFrame *pNewUpper =
@@ -1917,8 +1917,6 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         pNewBoss = pNewBoss->FindFootnoteBossFrame( true );
         pOldBoss = pOldBoss->FindFootnoteBossFrame( true );
         SwPageFrame* pNewPage = pOldPage;
-
-        xDeleteGuard.reset();
 
         // First, we move the footnotes.
         bool bFootnoteMoved = false;
@@ -2520,35 +2518,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
             bFollow = pSect->HasFollow();
         }
 
-        {
-            auto const pOld = m_rThis.GetUpper();
-#if BOOST_VERSION < 105600
-            std::list<SwFrameDeleteGuard> g;
-#else
-            ::boost::optional<SwFrameDeleteGuard> g;
-#endif
-            if (m_rThis.GetUpper()->IsCellFrame())
-            {
-                // note: IsFollowFlowRow() is never set for new-style tables
-                SwTabFrame const*const pTabFrame(m_rThis.FindTabFrame());
-                if (   pTabFrame->IsFollow()
-                    && static_cast<SwTabFrame const*>(pTabFrame->GetPrecede())->HasFollowFlowLine()
-                    && pTabFrame->GetFirstNonHeadlineRow() == m_rThis.GetUpper()->GetUpper())
-                {
-                    // lock follow-flow-row (similar to sections above)
-#if BOOST_VERSION < 105600
-                    g.emplace_back(m_rThis.GetUpper()->GetUpper());
-#else
-                    g.emplace(m_rThis.GetUpper()->GetUpper());
-#endif
-                    assert(m_rThis.GetUpper()->GetUpper()->IsDeleteForbidden());
-                }
-            }
-            pNewUpper->Calc(m_rThis.getRootFrame()->GetCurrShell()->GetOut());
-            SAL_WARN_IF(pOld != m_rThis.GetUpper(), "sw.core",
-                    "MoveBwd(): pNewUpper->Calc() moved this frame?");
-        }
-
+        pNewUpper->Calc(m_rThis.getRootFrame()->GetCurrShell()->GetOut());
         m_rThis.Cut();
 
         // optimization: format section, if its size is invalidated and if it's

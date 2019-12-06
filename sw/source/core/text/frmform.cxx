@@ -581,7 +581,7 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
                 OSL_FAIL( "+SwTextFrame::JoinFrame: Follow is locked." );
                 return;
             }
-            if (GetFollow()->IsDeleteForbidden())
+            if (GetFollow()->IsFootnoteFrame() && GetFollow()->IsDeleteForbidden())
                 return;
             JoinFrame();
         }

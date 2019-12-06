@@ -462,9 +462,6 @@ bool SwSectionFrame::HasToBreak( const SwFrame* pFrame ) const
 |*/
 void SwSectionFrame::MergeNext( SwSectionFrame* pNxt )
 {
-    if (pNxt->IsDeleteForbidden())
-        return;
-
     if (!pNxt->IsJoinLocked() && GetSection() == pNxt->GetSection())
     {
         PROTOCOL( this, PROT::Section, DbgAction::Merge, pNxt )
