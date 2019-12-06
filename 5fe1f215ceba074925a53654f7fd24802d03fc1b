@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_f1da0376",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2019-12-06T21:13:23Z",
+      "side": 1,
+      "message": "it should be tdf#128739 istead of #tdf128739 ( pound sign )",
+      "revId": "5fe1f215ceba074925a53654f7fd24802d03fc1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
