@@ -10418,11 +10418,25 @@ else
     AC_MSG_CHECKING([the bison version])
     _bison_version=`$BISON --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
     _bison_longver=`echo $_bison_version | $AWK -F. '{ print \$1*1000+\$2}'`
-    # Accept newer than 2.0
-    if test "$_bison_longver" -lt 2000; then
-        AC_MSG_ERROR([failed ($BISON $_bison_version need 2.0+)])
+    dnl Accept newer than 2.0; for --enable-compiler-plugins at least 2.3 is known to be bad and
+    dnl cause
+    dnl
+    dnl   idlc/source/parser.y:222:15: error: externally available entity 'YYSTYPE' is not previously declared in an included file (if it is only used in this translation unit, put it in an unnamed namespace; otherwise, provide a declaration of it in an included file) [loplugin:external]
+    dnl   typedef union YYSTYPE
+    dnl           ~~~~~~^~~~~~~
+    dnl
+    dnl while at least 3.4.1 is know to be good:
+    if test "$COMPILER_PLUGINS" = TRUE; then
+        if test "$_bison_longver" -lt 2004; then
+            AC_MSG_ERROR([failed ($BISON $_bison_version need 2.4+ for --enable-compiler-plugins)])
+        fi
+    else
+        if test "$_bison_longver" -lt 2000; then
+            AC_MSG_ERROR([failed ($BISON $_bison_version need 2.0+)])
+        fi
     fi
 fi
+AC_SUBST([BISON])
 
 AC_PATH_PROG(FLEX, flex)
 if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then

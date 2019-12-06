@@ -29,7 +29,7 @@ gb_LINK := link
 gb_AWK := awk
 gb_CLASSPATHSEP := ;
 gb_RC := rc
-gb_YACC := bison
+gb_YACC := $(BISON)
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
