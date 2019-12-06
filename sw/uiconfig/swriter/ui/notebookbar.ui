@@ -1547,11 +1547,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-WordCountDialog">
+      <object class="GtkMenuItem" id="MenuReview-MoreDictionaries">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:WordCountDialog</property>
+        <property name="action_name">.uno:MoreDictionaries</property>
       </object>
+      <packing>
+        <property name="bottom_attach">0</property>
+      </packing>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="MenuReview-separator1">
@@ -1587,13 +1590,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-Hyphenate">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Hyphenate</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="MenuReview-ChineseConversion">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1608,10 +1604,17 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-MoreDictionaries">
+      <object class="GtkMenuItem" id="MenuReview-Hyphenate">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:MoreDictionaries</property>
+        <property name="action_name">.uno:Hyphenate</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-WordCountDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:WordCountDialog</property>
       </object>
     </child>
     <child>
@@ -1642,27 +1645,69 @@
       </object>
     </child>
     <child>
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator7">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-PreviousTrackedChange">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:PreviousTrackedChange</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-NextTrackedChange">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:NextTrackedChange</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-AcceptTrackedChange">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AcceptTrackedChange</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-AcceptTrackedChangeToNext">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AcceptTrackedChangeToNext</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-AcceptAllTrackedChanges">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AcceptAllTrackedChanges</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RejectTrackedChange">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RejectTrackedChange</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RejectTrackedChangeToNext">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RejectTrackedChangeToNext</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RejectAllTrackedChanges">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RejectAllTrackedChanges</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="MenuReview-separator4">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuReview-InsertAnnotation">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertAnnotation</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuReview-ShowAnnotations">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ShowAnnotations</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuReview-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1686,6 +1731,19 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MergeDocuments</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator5">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RedactDoc">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RedactDoc</property>
       </object>
     </child>
   </object>
