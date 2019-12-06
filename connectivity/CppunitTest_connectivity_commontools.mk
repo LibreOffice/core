@@ -14,6 +14,8 @@ $(eval $(call gb_CppunitTest_set_include,connectivity_commontools,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,connectivity_commontools,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_ure,connectivity_commontools))
 $(eval $(call gb_CppunitTest_use_vcl,connectivity_commontools))
 

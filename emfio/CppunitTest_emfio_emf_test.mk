@@ -10,6 +10,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,emfio_emf))
 
 $(eval $(call gb_CppunitTest_use_externals,emfio_emf,\
+    boost_headers \
     libxml2 \
 ))
 
