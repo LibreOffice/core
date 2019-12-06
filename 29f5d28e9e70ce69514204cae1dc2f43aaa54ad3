@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_a42e8a8f",
+        "filename": "sfx2/source/doc/sfxbasemodel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2019-12-06T10:54:28Z",
+      "side": 1,
+      "message": "this condition is incorrect: EncryptionData is a Sequence\u003cNamedValue\u003e not a bool.\nsee the original commit https://gerrit.libreoffice.org/#/c/80432/2",
+      "range": {
+        "startLine": 1140,
+        "startChar": 12,
+        "endLine": 1140,
+        "endChar": 38
+      },
+      "revId": "29f5d28e9e70ce69514204cae1dc2f43aaa54ad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
