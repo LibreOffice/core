@@ -19,8 +19,6 @@
 
 
 #include <osl/diagnose.h>
-#include <svl/whiter.hxx>
-#include <svl/eitem.hxx>
 #include <tools/debug.hxx>
 
 #include <sfx2/app.hxx>
@@ -28,13 +26,7 @@
 #include <workwin.hxx>
 #include <childwinimpl.hxx>
 #include <sfx2/childwin.hxx>
-#include <sfx2/templdlg.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 
 

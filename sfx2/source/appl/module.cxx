@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdarg>
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/styfitem.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/stbitem.hxx>
@@ -32,7 +30,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>
 #include <tools/diagnose_ex.h>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 #define ShellClass_SfxModule

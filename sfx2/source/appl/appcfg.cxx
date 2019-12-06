@@ -18,16 +18,12 @@
  */
 
 #include <memory>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XFlushable.hpp>
 #include <comphelper/sequence.hxx>
 #include <osl/file.hxx>
 
-#include <stdlib.h>
 #include <rtl/ustring.hxx>
 #include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
@@ -36,14 +32,11 @@
 #include <svl/undo.hxx>
 
 #include <sfx2/sfxsids.hrc>
-#include <sot/exchange.hxx>
 
 #include <svl/isethint.hxx>
 
 #include <officecfg/Inet.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <unotools/configmgr.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/securityoptions.hxx>
@@ -51,25 +44,15 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/toolbox.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <vcl/idle.hxx>
 
 #include <sfx2/app.hxx>
-#include <sfx2/docfile.hxx>
+#include <sfx2/event.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/sfxhelp.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <objshimp.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/evntconf.hxx>
-#include <appdata.hxx>
-#include <workwin.hxx>
-#include <helper.hxx>
 #include "shutdownicon.hxx"
 
 using namespace ::com::sun::star::uno;

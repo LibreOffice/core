@@ -19,34 +19,20 @@
 
 #include <config_features.h>
 
-#include <basic/basmgr.hxx>
 #include <basic/sbstar.hxx>
-
-#include <svl/svdde.hxx>
-#include <svl/eitem.hxx>
-
-#include <unotools/saveopt.hxx>
-#include <unotools/misccfg.hxx>
+#include <tools/solar.h>
+#include <tools/debug.hxx>
 
 #include <sfx2/app.hxx>
-#include <sfx2/evntconf.hxx>
-#include <sfx2/unoctitm.hxx>
 #include <appdata.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/printer.hxx>
-#include <arrdecl.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/templdlg.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <nochaos.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/docfac.hxx>
 #include <appbaslib.hxx>
 #include <childwinimpl.hxx>
 #include <ctrlfactoryimpl.hxx>

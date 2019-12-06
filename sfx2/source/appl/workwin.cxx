@@ -20,6 +20,7 @@
 #include <config_feature_desktop.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objface.hxx>
@@ -33,20 +34,13 @@
 #include <sfx2/viewsh.hxx>
 #include <splitwin.hxx>
 #include <childwinimpl.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/toolbarids.hxx>
 #include <vcl/taskpanelist.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/diagnose_ex.h>
-#include <svl/itempool.hxx>
-#include <svl/itemiter.hxx>
-#include <svl/whiter.hxx>
-#include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <tools/svborder.hxx>
+#include <tools/debug.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
@@ -54,7 +48,6 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <type_traits>
 #include <unordered_map>

@@ -4,6 +4,9 @@ blacklist:
     sfx2/source/doc/syspathw32.hxx:
     # Needed on WIN32
     - sal/types.h
+    sfx2/source/appl/appdata.cxx:
+    # Needed for direct member access
+    - sfx2/module.hxx
     sfx2/source/appl/appdde.cxx:
     # Needed on WIN32
     - config_features.h
@@ -27,3 +30,35 @@ blacklist:
     - sfx2/docfile.hxx
     - ucbhelper/content.hxx
     - comphelper/processfactory.hxx
+    sfx2/source/appl/appquit.cxx:
+    # Needed for DELETEZ to avoid -Wdelete-incomplete warnings
+    - childwinimpl.hxx
+    - ctrlfactoryimpl.hxx
+    - sfx2/doctempl.hxx
+    - sfx2/fcontnr.hxx
+    - sfx2/msgpool.hxx
+    - sfx2/viewsh.hxx
+    - shellimpl.hxx
+    sfx2/source/appl/appmisc.cxx:
+    # Needed for TypedWhichId macro
+    - svl/stritem.hxx
+    sfx2/source/appl/appbas.cxx:
+    # Needed for createSfxPoolItem calls
+    - svl/eitem.hxx
+    - sfx2/dinfdlg.hxx
+    - sfx2/frame.hxx
+    - sfx2/msg.hxx
+    - sorgitm.hxx
+    # Needed for STATIC_LINKING to work
+    - config_options.h
+    sfx2/source/appl/newhelp.cxx:
+    # Actually used
+    - com/sun/star/i18n/XBreakIterator.hpp
+    sfx2/source/appl/shutdownicon.cxx:
+    # Needed on MAC
+    - osl/file.hxx
+    # Needed on WIN32
+    - sfx2/sfxresid.hxx
+    - sfx2/strings.hrc
+    # Don't propose hxx -> h change in URE libs
+    - osl/module.hxx

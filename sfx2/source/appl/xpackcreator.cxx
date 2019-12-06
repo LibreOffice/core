@@ -26,14 +26,12 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
 #include <sot/stg.hxx>
 #include <sot/storage.hxx>
 #include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/commandenvironment.hxx>
 
 using namespace css;
 

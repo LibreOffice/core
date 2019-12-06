@@ -18,8 +18,6 @@
  */
 
 #include <memory>
-#include <vcl/toolbox.hxx>
-#include <unotools/moduleoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
