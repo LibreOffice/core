@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,writerperfect_calc))
 
+$(eval $(call gb_CppunitTest_use_external,writerperfect_calc,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,writerperfect_calc))
 
 $(eval $(call gb_CppunitTest_use_libraries,writerperfect_calc,\

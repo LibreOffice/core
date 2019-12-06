@@ -14,6 +14,8 @@ $(eval $(call gb_CppunitTest_use_api,filter_textfilterdetect,\
 	udkapi \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,filter_textfilterdetect,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,filter_textfilterdetect, \
 	comphelper \
 	cppu \

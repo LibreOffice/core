@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_add_defs,writerperfect_import,\
 	-DTEST_DIR=\"writerperfect/qa/unit/data/import\" \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,writerperfect_import,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,writerperfect_import))
 
 $(eval $(call gb_CppunitTest_use_libraries,writerperfect_import,\
