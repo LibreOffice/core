@@ -1,0 +1,372 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_79f1ff6a",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "The SB is also available in other modules, however not with 10 information.",
+      "range": {
+        "startLine": 51,
+        "startChar": 230,
+        "endLine": 51,
+        "endChar": 247
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_d9de13d9",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "lower case here",
+      "range": {
+        "startLine": 51,
+        "startChar": 78,
+        "endLine": 51,
+        "endChar": 88
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_99f65b63",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "Once extra space here",
+      "range": {
+        "startLine": 68,
+        "startChar": 82,
+        "endLine": 68,
+        "endChar": 83
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_39e707af",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "Space here too",
+      "range": {
+        "startLine": 68,
+        "startChar": 130,
+        "endLine": 68,
+        "endChar": 131
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_59ec438e",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "This tip is relevant in Draw, so better with generic reference.",
+      "range": {
+        "startLine": 68,
+        "startChar": 203,
+        "endLine": 68,
+        "endChar": 220
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_19024b3e",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "...with Unformatted Text.\" (the other options will paste the comment)",
+      "range": {
+        "startLine": 116,
+        "startChar": 111,
+        "endLine": 116,
+        "endChar": 129
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_b9fa3740",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "lower case",
+      "range": {
+        "startLine": 134,
+        "startChar": 73,
+        "endLine": 134,
+        "endChar": 74
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_7996dff2",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "how about \"access\"? Wording sounds a bit halting.",
+      "range": {
+        "startLine": 134,
+        "startChar": 92,
+        "endLine": 134,
+        "endChar": 95
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_399ce70c",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "Again not just Writer (but admittedly most relevant there)",
+      "range": {
+        "startLine": 134,
+        "startChar": 158,
+        "endLine": 134,
+        "endChar": 160
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_79649f22",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "Cool! Didn\u0027t know this :-)",
+      "range": {
+        "startLine": 153,
+        "startChar": 82,
+        "endLine": 153,
+        "endChar": 93
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_99c41bf7",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "lower case",
+      "range": {
+        "startLine": 153,
+        "startChar": 120,
+        "endLine": 153,
+        "endChar": 130
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_d98cd3d8",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "ugly spaces",
+      "range": {
+        "startLine": 153,
+        "startChar": 5,
+        "endLine": 153,
+        "endChar": 7
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_99697bfa",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "Extra space",
+      "range": {
+        "startLine": 228,
+        "startChar": 106,
+        "endLine": 228,
+        "endChar": 107
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f9774fd3",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "How about \"Try to paste as unformatted text (shift+ctrl+alt+Y).\"",
+      "range": {
+        "startLine": 228,
+        "startChar": 107,
+        "endLine": 228,
+        "endChar": 152
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_19756bcb",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "Extra space",
+      "range": {
+        "startLine": 228,
+        "startChar": 182,
+        "endLine": 228,
+        "endChar": 183
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_396aa7ec",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-06T10:23:13Z",
+      "side": 1,
+      "message": "lower case",
+      "range": {
+        "startLine": 228,
+        "startChar": 129,
+        "endLine": 228,
+        "endChar": 152
+      },
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
