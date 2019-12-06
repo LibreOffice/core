@@ -964,32 +964,31 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         if (pAPos &&
                             pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode)
                         {
-                                if( !m_pHistory )
-                                    m_pHistory.reset( new SwHistory );
+                            if (!m_pHistory)
+                                m_pHistory.reset( new SwHistory );
 
-                                if (IsSelectFrameAnchoredAtPara(*pAPos, *pStt, *pEnd, nDelContentType))
-                                {
-                                    m_pHistory->AddDeleteFly(*pFormat, nChainInsPos);
-                                    // reset n so that no Format is skipped
-                                    n = n >= rSpzArr.size()
-                                        ? rSpzArr.size() : n+1;
-                                }
-                                // Moving the anchor?
-                                else if (!((DelContentType::CheckNoCntnt|DelContentType::ExcludeFlyAtStartEnd)
-                                        & nDelContentType) &&
-                                    // at least for calls from SwUndoDelete,
-                                    // this should work - other Undos don't
-                                    // remember the order of the cursor
-                                    (rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex())
-                                    // Do not try to move the anchor to a table!
-                                    && rMark.nNode.GetNode().IsTextNode())
-                                {
-                                    m_pHistory->AddChangeFlyAnchor(*pFormat);
-                                    SwFormatAnchor aAnch( *pAnchor );
-                                    SwPosition aPos( rMark.nNode );
-                                    aAnch.SetAnchor( &aPos );
-                                    pFormat->SetFormatAttr( aAnch );
-                                }
+                            if (IsSelectFrameAnchoredAtPara(*pAPos, *pStt, *pEnd, nDelContentType))
+                            {
+                                m_pHistory->AddDeleteFly(*pFormat, nChainInsPos);
+                                // reset n so that no Format is skipped
+                                n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
+                            }
+                            // Moving the anchor?
+                            else if (!((DelContentType::CheckNoCntnt|DelContentType::ExcludeFlyAtStartEnd)
+                                    & nDelContentType) &&
+                                // at least for calls from SwUndoDelete,
+                                // this should work - other Undos don't
+                                // remember the order of the cursor
+                                (rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex())
+                                // Do not try to move the anchor to a table!
+                                && rMark.nNode.GetNode().IsTextNode())
+                            {
+                                m_pHistory->AddChangeFlyAnchor(*pFormat);
+                                SwFormatAnchor aAnch( *pAnchor );
+                                SwPosition aPos( rMark.nNode );
+                                aAnch.SetAnchor( &aPos );
+                                pFormat->SetFormatAttr( aAnch );
+                            }
                         }
                     }
                     break;
