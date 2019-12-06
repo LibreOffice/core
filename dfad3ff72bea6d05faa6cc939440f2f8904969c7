@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7f7f9b97_ff6acfb0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-12-06T14:30:47Z",
+      "side": 1,
+      "message": "The first line of the commit message is too long. Add further details in new lines.",
+      "revId": "dfad3ff72bea6d05faa6cc939440f2f8904969c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_79f1ff6a",
         "filename": "cui/inc/tipoftheday.hrc",
         "patchSetId": 2
