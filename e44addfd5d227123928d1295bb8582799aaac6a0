@@ -22,6 +22,29 @@
       "revId": "e44addfd5d227123928d1295bb8582799aaac6a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_39ce272d",
+        "filename": "basic/source/sbx/sbxbase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-06T10:09:34Z",
+      "side": 0,
+      "message": "this has never been true -\u003e nPos has never got decremented -\u003e always inserted after the end, not in the beginning.",
+      "range": {
+        "startLine": 127,
+        "startChar": 27,
+        "endLine": 127,
+        "endChar": 66
+      },
+      "revId": "e44addfd5d227123928d1295bb8582799aaac6a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
