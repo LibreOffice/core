@@ -1778,7 +1778,7 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
         Help* pHelp = Application::GetHelp();
         if( pHelp )
         {
-            pHelp->Start("vcl/ui/printdialog", mxOKButton.get());
+            pHelp->Start("vcl/ui/printdialog/PrintDialog", mxOKButton.get());
         }
     }
     else if ( &rButton == mxPreviewBox.get() )
