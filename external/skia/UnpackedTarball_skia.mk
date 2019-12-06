@@ -14,10 +14,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,skia,$(SKIA_TARBALL)))
 # TODO
 skia_patches := \
     lerp.patch \
-    fix-pch.patch \
+    fix-pch.patch.1 \
     fix-ddi.patch \
     make-api-visible.patch.1 \
-    fix-shader-locale.patch.1 \
     no-trace-resources-on-exit.patch.1 \
     fix-alpha-difference-copy.patch.1 \
     libvulkan-name.patch.1 \
