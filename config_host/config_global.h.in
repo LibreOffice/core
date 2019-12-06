@@ -29,6 +29,9 @@ Any change in this header will cause a rebuild of almost everything.
 // constexpr", and <https://wg21.link/P1143R2> "Adding the constinit keyword":
 #define HAVE_CPP_CONSTINIT_SORTED_VECTOR 0
 
+// Useable C++2a <span>:
+#define HAVE_CPP_SPAN 0
+
 /* GCC bug <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87150> "move ctor wrongly chosen in return
    stmt (derived vs. base)": */
 #define HAVE_GCC_BUG_87150 0
