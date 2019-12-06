@@ -22,6 +22,30 @@
       "revId": "f260aa63c18b978c6f2bee502d31a67010b52e99",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_dfed93b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-12-06T16:20:05Z",
+      "side": 1,
+      "message": "nah, probably something to do with there was two arrays there before they were merged. I probably kept one as sal_Int32 and the other as const char* in some interim step before they all went const char* and I then forgot to remove the interim OldEntry step",
+      "parentUuid": "7f7f9b97_1f7c6b1d",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 11,
+        "endChar": 29
+      },
+      "revId": "f260aa63c18b978c6f2bee502d31a67010b52e99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
