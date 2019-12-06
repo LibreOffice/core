@@ -24,6 +24,9 @@ Any change in this header will cause a rebuild of almost everything.
 /* Guaranteed copy elision (C++17), __cpp_guaranteed_copy_elision (C++2a): */
 #define HAVE_CPP_GUARANTEED_COPY_ELISION 0
 
+// Useable C++2a <span>:
+#define HAVE_CPP_SPAN 0
+
 /* GCC bug <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87150> "move ctor wrongly chosen in return
    stmt (derived vs. base)": */
 #define HAVE_GCC_BUG_87150 0

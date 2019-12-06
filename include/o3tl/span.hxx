@@ -12,7 +12,9 @@
 
 #include <sal/config.h>
 
-#if __has_include(<span>)
+#include <config_global.h>
+
+#if HAVE_CPP_SPAN
 
 #include <span>
 
@@ -40,7 +42,7 @@ public:
     using iterator = pointer;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
     using reverse_iterator = std::reverse_iterator<iterator>;
-    using index_type = std::size_t;
+    using size_type = std::size_t;
     using difference_type = std::ptrdiff_t;
 
     constexpr span() noexcept : data_(nullptr), size_(0) {}
@@ -48,7 +50,7 @@ public:
     template<std::size_t N>
     constexpr span (T (&a)[N]) noexcept : data_(a), size_(N) {}
 
-    constexpr span (T *a, index_type len) noexcept
+    constexpr span (T *a, size_type len) noexcept
         : data_(a), size_(len)
     {
         // not terribly sure about this, might need to strengthen it
@@ -72,9 +74,9 @@ public:
     { return rbegin(); }
     constexpr const_reverse_iterator crend() const noexcept { return rend(); }
 
-    constexpr index_type size() const noexcept { return size_; }
+    constexpr size_type size() const noexcept { return size_; }
 
-    constexpr reference operator [](index_type pos) const {
+    constexpr reference operator [](size_type pos) const {
         assert(pos < size());
         return data_[pos];
     }
@@ -83,7 +85,7 @@ public:
 
 private:
     pointer    data_;
-    index_type size_;
+    size_type size_;
 };
 
 } // namespace o3tl
