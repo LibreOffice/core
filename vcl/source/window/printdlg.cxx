@@ -906,7 +906,6 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
                             aPrt->GetDPIX(), aPrt->GetDPIY(),
                             aPrt->GetPrinterOptions().IsConvertToGreyscales()
                             );
-
         mxForwardBtn->set_sensitive( false );
         mxBackwardBtn->set_sensitive( false );
         mxFirstBtn->set_sensitive( false );
@@ -1778,7 +1777,7 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
         Help* pHelp = Application::GetHelp();
         if( pHelp )
         {
-            pHelp->Start("vcl/ui/printdialog", mxOKButton.get());
+            pHelp->Start("vcl/ui/printdialog/PrintDialog", mxOKButton.get());
         }
     }
     else if ( &rButton == mxPreviewBox.get() )
