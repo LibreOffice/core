@@ -69,8 +69,7 @@ public:
 // 'if(SHOULD_ASSERT && aOutDevTest.getRenderBackendName() != "skia")'.
 #define SHOULD_ASSERT                                                                              \
     (assertBackendNameNotEmpty(aOutDevTest.getRenderBackendName())                                 \
-     || aOutDevTest.getRenderBackendName() == "skia"                                               \
-     || aOutDevTest.getRenderBackendName() == "qt5svp")
+     || aOutDevTest.getRenderBackendName() == "skia")
 
     void testDrawRectWithRectangle()
     {
