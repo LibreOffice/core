@@ -287,6 +287,8 @@ const SystemEnvData* AquaSalObject::GetSystemData() const
     return &maSysData;
 }
 
+namespace {
+
 class AquaOpenGLContext : public OpenGLContext
 {
 public:
@@ -309,6 +311,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual void resetCurrent() override;
     virtual void swapBuffers() override;
 };
+
+}
 
 void AquaOpenGLContext::resetCurrent()
 {

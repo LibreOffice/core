@@ -599,13 +599,18 @@ sal_uInt16 QuartzSalBitmap::GetBitCount() const
     return mnBits;
 }
 
-static struct pal_entry
+namespace {
+
+struct pal_entry
 {
     sal_uInt8 mnRed;
     sal_uInt8 mnGreen;
     sal_uInt8 mnBlue;
+};
+
 }
-const aImplSalSysPalEntryAry[ 16 ] =
+
+static pal_entry const aImplSalSysPalEntryAry[ 16 ] =
 {
 {    0,    0,    0 },
 {    0,    0, 0x80 },

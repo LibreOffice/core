@@ -27,6 +27,7 @@
 #include "MacabResultSetMetaData.hxx"
 #include "macabcondition.hxx"
 #include "macaborder.hxx"
+#include "macabutilities.hxx"
 #include <TConnection.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>

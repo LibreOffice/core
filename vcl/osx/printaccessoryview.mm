@@ -46,7 +46,11 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 
+namespace {
+
 class ControllerProperties;
+
+}
 
 @interface ControlTarget : NSObject
 {
@@ -148,6 +152,8 @@ class ControllerProperties;
 }
 
 @end
+
+namespace {
 
 class ControllerProperties
 {
@@ -315,6 +321,8 @@ public:
 
 };
 
+}
+
 static OUString filterAccelerator( OUString const & rText )
 {
     OUStringBuffer aBuf( rText.getLength() );
@@ -419,6 +427,8 @@ static OUString filterAccelerator( OUString const & rText )
 
 @end
 
+namespace {
+
 struct ColumnItem
 {
     NSControl*      pControl;
@@ -449,6 +459,8 @@ struct ColumnItem
         return nWidth;
     }
 };
+
+}
 
 static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
                                    std::vector< ColumnItem >& rLeftColumn,

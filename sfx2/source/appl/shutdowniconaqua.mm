@@ -122,6 +122,8 @@ static NSString* getAutoreleasedString( const OUString& rStr )
     return [[[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rStr.getStr()) length: rStr.getLength()] autorelease];
 }
 
+namespace {
+
 struct RecentMenuEntry
 {
     OUString aURL;
@@ -141,6 +143,8 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
             return aString.getLength();
         }
 };
+
+}
 
 @interface RecentMenuDelegate : NSObject
 {

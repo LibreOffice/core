@@ -57,12 +57,16 @@
 
 using namespace vcl;
 
+namespace {
+
 class CoreTextGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
 public:
     bool FindFontSubstitute(FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString&) const override;
 };
+
+}
 
 bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rPattern, LogicalFontInstance* pLogicalFont,
     OUString& rMissingChars) const
