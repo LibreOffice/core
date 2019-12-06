@@ -220,7 +220,7 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     bool mbRepaint       : 1;        // TextFrame: Repaint is ready to be fetched
     bool mbHasBlinkPortions      : 1;        // Contains Blink Portions
     /// Contains rotated portions.
-    bool mbHasRotatedPortions;
+    bool mbHasRotatedPortions : 1;
     bool mbFieldFollow   : 1;        // Start with Field rest of the Master
     bool mbHasAnimation  : 1;        // Contains animated SwGrfNumPortion
     bool mbIsSwapped     : 1;        // during text formatting we swap the
