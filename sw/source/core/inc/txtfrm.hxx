@@ -661,7 +661,7 @@ public:
     sal_uLong GetThisLines() const { return mnThisLines;}
     void RecalcAllLines();
 
-    /// Stops the animations within numberings
+    /// Stops the animations within numbering
     void StopAnimation( OutputDevice *pOut );
 
     /// Visit all portions for Accessibility
