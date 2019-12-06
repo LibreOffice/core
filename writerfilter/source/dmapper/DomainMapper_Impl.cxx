@@ -1469,7 +1469,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         // Remember what objects are anchored to this paragraph.
                         // That list is only used for Word compat purposes, and
                         // it is only relevant for body text.
-                        AnchoredObjectInfo aInfo;
+                        AnchoredObjectsInfo aInfo;
                         aInfo.m_xParagraph = xTextRange;
                         aInfo.m_aAnchoredObjects = rAppendContext.m_aAnchoredObjects;
                         m_aAnchoredObjectAnchors.push_back(aInfo);
@@ -5604,8 +5604,18 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
         appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
 
         if (eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR && !m_aTextAppendStack.empty())
+        {
             // Remember this object is anchored to the current paragraph.
-            m_aTextAppendStack.top().m_aAnchoredObjects.push_back(xTextContent);
+            AnchoredObjectInfo aInfo;
+            aInfo.m_xAnchoredObject = xTextContent;
+            if (m_pGraphicImport)
+            {
+                // We still have the graphic import around, remember the original margin, so later
+                // SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing() can use it.
+                aInfo.m_nLeftMargin = m_pGraphicImport->GetLeftMarginOrig();
+            }
+            m_aTextAppendStack.top().m_aAnchoredObjects.push_back(aInfo);
+        }
     }
 
     // Clear the reference, so in case the embedded object is inside a

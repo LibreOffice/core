@@ -309,6 +309,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf115719, "tdf115719.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf115719b, "tdf115719b.docx")
+{
+    // This is similar to testTdf115719, but here the left textbox is not aligned "from left, by
+    // 0cm" but simply aligned to left, which is a different codepath.
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the the textboxes did not appear on the 2nd page, but everything was on a single page.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123243, "tdf123243.docx")
 {
     // Without the accompanying fix in place, this test would have failed with 'Expected: 1; Actual:
