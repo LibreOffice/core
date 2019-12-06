@@ -455,6 +455,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     }
 
     // Line color
+    if (m_xLbColor->IsValueChangedFromSaved())
     {
         NamedColor aColor = m_xLbColor->GetSelectedEntry();
         XLineColorItem aItem(aColor.second, aColor.first);
