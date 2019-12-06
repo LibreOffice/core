@@ -202,6 +202,7 @@ public:
     WrapPolygon::Pointer_t mpWrapPolygon;
 
     sal_Int32 nLeftMargin;
+    sal_Int32 nLeftMarginOrig = 0;
     sal_Int32 nRightMargin;
     sal_Int32 nTopMargin;
     sal_Int32 nBottomMargin;
@@ -971,6 +972,7 @@ void GraphicImport::ProcessShapeOptions(Value const & rValue)
     {
         case NS_ooxml::LN_CT_Anchor_distL:
             m_pImpl->nLeftMargin = nIntValue / 360;
+            m_pImpl->nLeftMarginOrig = m_pImpl->nLeftMargin;
         break;
         case NS_ooxml::LN_CT_Anchor_distT:
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
@@ -1484,6 +1486,11 @@ void GraphicImport::lcl_endShape( )
 bool GraphicImport::IsGraphic() const
 {
     return m_pImpl->bIsGraphic;
+}
+
+sal_Int32 GraphicImport::GetLeftMarginOrig() const
+{
+    return m_pImpl->nLeftMarginOrig;
 }
 
 }

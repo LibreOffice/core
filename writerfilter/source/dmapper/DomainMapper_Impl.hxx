@@ -219,7 +219,7 @@ struct TextAppendContext
      * Objects anchored to the current paragraph, may affect the paragraph
      * spacing.
      */
-    std::vector<css::uno::Reference<css::text::XTextContent>> m_aAnchoredObjects;
+    std::vector<AnchoredObjectInfo> m_aAnchoredObjects;
 
     TextAppendContext(const css::uno::Reference<css::text::XTextAppend>& xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur)
         : xTextAppend(xAppend)
@@ -380,11 +380,18 @@ struct FloatingTableInfo
     css::uno::Any getPropertyValue(const OUString &propertyName);
 };
 
-/// Stores info about objects anchored to a given paragraph.
+/// Stores original/in-file-format info about a single anchored object.
 struct AnchoredObjectInfo
 {
+    css::uno::Reference<css::text::XTextContent> m_xAnchoredObject;
+    sal_Int32 m_nLeftMargin = 0;
+};
+
+/// Stores info about objects anchored to a given paragraph.
+struct AnchoredObjectsInfo
+{
     css::uno::Reference<css::text::XTextRange> m_xParagraph;
-    std::vector<css::uno::Reference<css::text::XTextContent>> m_aAnchoredObjects;
+    std::vector<AnchoredObjectInfo> m_aAnchoredObjects;
 };
 
 struct SymbolData
@@ -958,7 +965,7 @@ public:
     std::vector<FloatingTableInfo> m_aPendingFloatingTables;
 
     /// Paragraphs with anchored objects in the current section.
-    std::vector<AnchoredObjectInfo> m_aAnchoredObjectAnchors;
+    std::vector<AnchoredObjectsInfo> m_aAnchoredObjectAnchors;
 
     /// Append a property to a sub-grabbag if necessary (e.g. 'lineRule', 'auto')
     void appendGrabBag(std::vector<css::beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, const OUString& aValue);
