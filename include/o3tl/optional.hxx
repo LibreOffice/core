@@ -25,7 +25,7 @@ namespace o3tl
 using boost::make_optional;
 using boost::optional;
 
-inline constexpr auto nullopt = boost::none;
+inline auto const nullopt = boost::none;
 }
 
 #else
