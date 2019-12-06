@@ -17,46 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <comphelper/lok.hxx>
 #include <comphelper/base64.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <unotools/historyoptions.hxx>
 #include <unotools/useroptions.hxx>
+#include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
-#include <framework/menuconfiguration.hxx>
-#include <sax/tools/converter.hxx>
 #include <svl/inethist.hxx>
-#include <svl/stritem.hxx>
-#include <svl/eitem.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <osl/file.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <cppuhelper/implbase.hxx>
 
 
 #include <sfx2/app.hxx>
 #include <sfxpicklist.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <sfxtypes.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/event.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
-#include <objshimp.hxx>
 #include <openurlhint.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <rtl/instance.hxx>
-
-#include <algorithm>
 
 
 using namespace ::com::sun::star::uno;

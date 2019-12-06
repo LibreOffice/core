@@ -18,48 +18,25 @@
  */
 
 #include <fltoptint.hxx>
-#include <objshimp.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/brokenpackageint.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <sfx2/frame.hxx>
-#include <sfx2/module.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/sfxuno.hxx>
-#include <sfx2/unoctitm.hxx>
 #include <sfxslots.hxx>
-#include <sfxtypes.hxx>
 
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <basic/basmgr.hxx>
-#include <basic/sberrors.hxx>
-#include <basic/sbmeth.hxx>
-#include <basic/sbuno.hxx>
-#include <basic/sbx.hxx>
-#include <basic/sbxcore.hxx>
-#include <basic/sbxmeth.hxx>
-#include <basic/sbxobj.hxx>
 #include <comphelper/interaction.hxx>
-#include <framework/documentundoguard.hxx>
+#include <osl/diagnose.h>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
-#include <svl/lckbitem.hxx>
-#include <svl/ownlist.hxx>
-#include <svl/rectitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
-#include <tools/config.hxx>
 #include <tools/debug.hxx>
-#include <tools/urlobj.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/document/BrokenPackageRequest.hpp>
@@ -67,7 +44,9 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 
 #include <memory>

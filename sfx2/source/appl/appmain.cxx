@@ -17,26 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/ehdl.hxx>
-#include <svl/itempool.hxx>
 #include <svl/urihelper.hxx>
-#include <svtools/helpopt.hxx>
-#include <framework/sfxhelperfunctions.hxx>
-#include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 
-#include <sfxtypes.hxx>
 #include <appdata.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/app.hxx>
-#include <arrdecl.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/docfile.hxx>
-#include <workwin.hxx>
 
 
 SfxFilterMatcher& SfxApplication::GetFilterMatcher()

@@ -21,8 +21,6 @@
 
 #include <macroloader.hxx>
 
-#include <com/sun/star/document/UpdateDocMode.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
@@ -31,14 +29,9 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <framework/documentundoguard.hxx>
-#include <rtl/ref.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <svl/intitem.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 

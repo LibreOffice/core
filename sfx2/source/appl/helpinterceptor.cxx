@@ -21,12 +21,8 @@
 #include "helpinterceptor.hxx"
 #include "helpdispatch.hxx"
 #include "newhelp.hxx"
-#include <sfx2/sfxuno.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <cppuhelper/interfacecontainer.h>
-#include <vcl/window.hxx>
 #include <limits.h>
 
 using namespace ::com::sun::star::beans;

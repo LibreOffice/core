@@ -25,10 +25,8 @@
 
 #include "impldde.hxx"
 
-#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sot/exchange.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
 #include <sfx2/lnkbase.hxx>
@@ -39,8 +37,6 @@
 
 #include <svl/svdde.hxx>
 #include <sot/formats.hxx>
-
-#include <unotools/securityoptions.hxx>
 
 using namespace ::com::sun::star::uno;
 

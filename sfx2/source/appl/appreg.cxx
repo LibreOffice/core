@@ -19,12 +19,9 @@
 
 
 #include <sal/log.hxx>
-#include <vcl/toolbox.hxx>
 
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
-#include <sfx2/sfxhelp.hxx>
-#include <sfx2/templdlg.hxx>
 #include <inettbc.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/infobar.hxx>
@@ -37,7 +34,6 @@
 #include <ctrlfactoryimpl.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/objface.hxx>
 
 
 void SfxApplication::Registrations_Impl()

@@ -26,31 +26,17 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/util/URL.hpp>
 
-#include <basic/basmgr.hxx>
-#include <basic/sbuno.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/frame.hxx>
-#include <sfx2/module.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <sfx2/sfxuno.hxx>
 #include <sfx2/unoctitm.hxx>
-#include <svl/intitem.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

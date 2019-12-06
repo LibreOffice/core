@@ -19,7 +19,6 @@
 
 
 #include "helpdispatch.hxx"
-#include <sfx2/sfxuno.hxx>
 #include "newhelp.hxx"
 #include <tools/debug.hxx>
 

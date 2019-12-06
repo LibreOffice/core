@@ -21,7 +21,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <framework/sfxhelperfunctions.hxx>
 
 #include <vcl/svapp.hxx>
 

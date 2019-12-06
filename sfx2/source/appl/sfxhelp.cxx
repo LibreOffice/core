@@ -20,7 +20,6 @@
 #include <config_folders.h>
 #include <sfx2/sfxhelp.hxx>
 
-#include <set>
 #include <string_view>
 #include <algorithm>
 #include <cassert>
@@ -37,25 +36,17 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/configmgr.hxx>
-#include <unotools/configitem.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/debug.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
 #include <rtl/byteseq.hxx>
@@ -63,9 +54,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
-#include <unotools/bootstrap.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/securityoptions.hxx>
 #include <rtl/uri.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -73,8 +62,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
-#include <svtools/ehdl.hxx>
-#include <svtools/sfxecode.hxx>
 #include <openuriexternally.hxx>
 
 #include <comphelper/lok.hxx>
@@ -82,15 +69,11 @@
 #include <sfx2/viewsh.hxx>
 
 #include "newhelp.hxx"
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/flatpak.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <helper.hxx>
 #include <sfx2/strings.hrc>
-#include <sfx2/sfxuno.hxx>
 #include <vcl/svapp.hxx>
-#include <sfx2/frame.hxx>
 #include <rtl/string.hxx>
 #include <svtools/langtab.hxx>
 #include <tools/diagnose_ex.h>
@@ -100,7 +83,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::system;
 
 namespace {
 

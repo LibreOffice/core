@@ -21,13 +21,10 @@
 
 #include <appbaslib.hxx>
 
-#include <sfx2/sfxuno.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/app.hxx>
 
 #include <basic/basmgr.hxx>
 #include <tools/diagnose_ex.h>
-#include <cppuhelper/weak.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star::uno;

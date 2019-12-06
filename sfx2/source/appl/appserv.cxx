@@ -21,8 +21,6 @@
 
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -33,8 +31,6 @@
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/SystemShellExecuteException.hpp>
-#include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/text/ModuleDispatcher.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -56,39 +52,29 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/restartdialog.hxx>
 #include <svl/visitem.hxx>
-#include <unotools/intlwrapper.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
-#include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <basic/sbstar.hxx>
-#include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>
 #include <basic/sberrors.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
 #include <vcl/help.hxx>
-#include <vcl/stdtext.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <vcl/EnumContext.hxx>
 
-#include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <unotools/viewoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <unotools/bootstrap.hxx>
 #include <rtl/bootstrap.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -99,34 +85,19 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/hintpost.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfac.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/new.hxx>
-#include <sfxtypes.hxx>
-#include <sfx2/tabdlg.hxx>
-#include <arrdecl.hxx>
 #include <sfx2/strings.hrc>
-#include <sfx2/passwd.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/childwin.hxx>
 #include <appdata.hxx>
-#include <sfx2/minfitem.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfxpicklist.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sorgitm.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <sfx2/templatedlg.hxx>
-#include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/safemode.hxx>
@@ -134,7 +105,6 @@
 
 #include <comphelper/types.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <unotools/confignode.hxx>
 #include <officecfg/Setup.hxx>
 #include <memory>

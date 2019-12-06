@@ -21,11 +21,7 @@
 #include <tools/stream.hxx>
 #include <sot/formats.hxx>
 #include <sal/log.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/progress.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sot/exchange.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -42,7 +38,6 @@
 #include <sfx2/objsh.hxx>
 #include "fileobj.hxx"
 #include <sfx2/strings.hrc>
-#include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
 
 #define FILETYPE_TEXT       1

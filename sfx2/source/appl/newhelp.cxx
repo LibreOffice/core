@@ -19,13 +19,9 @@
 
 
 #include "newhelp.hxx"
-#include <sfx2/sfxuno.hxx>
 #include <sfx2/sfxresid.hxx>
 #include "helpinterceptor.hxx"
 #include <helper.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/app.hxx>
-#include <sfxtypes.hxx>
 #include "panelist.hxx"
 #include <srchdlg.hxx>
 #include <sfx2/sfxhelp.hxx>
@@ -45,8 +41,6 @@
 #include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -60,13 +54,11 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -78,16 +70,12 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
-#include <svtools/helpopt.hxx>
 #include <unotools/historyoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/streamhelper.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/unohelp.hxx>
@@ -99,10 +87,6 @@
 
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
-
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfac.hxx>
 
 #include <unordered_map>
 #include <vector>

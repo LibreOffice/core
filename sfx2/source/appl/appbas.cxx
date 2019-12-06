@@ -25,51 +25,24 @@
 #include <cassert>
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <basic/basrdll.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <svl/macitem.hxx>
-#include <basic/sbxfac.hxx>
-#include <basic/sbx.hxx>
-#include <vcl/gradient.hxx>
-#include <svl/rectitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include <basic/sbmod.hxx>
 #include <svl/whiter.hxx>
-#include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
-#include <basic/sbuno.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
 
+#include <sfx2/frame.hxx>
 #include <sfx2/dinfdlg.hxx>
-#include <sfx2/module.hxx>
-#include <arrdecl.hxx>
 #include <sfx2/app.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/msg.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/progress.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/objitem.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/tplpitem.hxx>
-#include <sfx2/minfitem.hxx>
-#include <sfx2/evntconf.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <appdata.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <basic/basmgr.hxx>
 #include <unotools/configmgr.hxx>
 #include <sorgitm.hxx>
 #include <appbaslib.hxx>
 #include <basic/basicmanagerrepository.hxx>
-
-#include <svl/srchitem.hxx>
-#include <osl/socket.hxx>
 
 #define SFX_TYPEMAP
 #include <sfxslots.hxx>

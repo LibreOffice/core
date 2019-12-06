@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -36,6 +35,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/uno/Sequence.h>
@@ -55,14 +55,9 @@
 #include <svtools/sfxecode.hxx>
 #include <preventduplicateinteraction.hxx>
 #include <svtools/ehdl.hxx>
-#include <basic/sbxobj.hxx>
-#include <svl/urihelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svtools/miscopt.hxx>
-#include <osl/file.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <vcl/svapp.hxx>
@@ -74,14 +69,10 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/new.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/slstitm.hxx>
 #include <appopen.hxx>
-#include <objshimp.hxx>
-#include <openflag.hxx>
-#include <sfx2/passwd.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/viewsh.hxx>
@@ -90,8 +81,6 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/event.hxx>
 #include <sfx2/templatedlg.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <openuriexternally.hxx>

@@ -23,7 +23,6 @@
 #include <cassert>
 
 #include <boost/logic/tribool.hpp>
-#include <config_folders.h>
 #include "shutdownicon.hxx"
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
@@ -41,7 +40,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -54,21 +52,13 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <sfx2/dispatch.hxx>
 #include <comphelper/extract.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
-#include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
-#ifdef UNX // need symlink
-#include <unistd.h>
-#include <errno.h>
-#endif
 
 #include <sfx2/sfxresid.hxx>
 

@@ -19,29 +19,14 @@
 
 #include <config_features.h>
 
-#include <tools/config.hxx>
-#include <svl/stritem.hxx>
-
-#include <vcl/menu.hxx>
-#include <comphelper/processfactory.hxx>
-
-#include <sfx2/viewfrm.hxx>
 #include <appdata.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/event.hxx>
 #include <sfxpicklist.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/doctempl.hxx>
-#include <arrdecl.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/unoctitm.hxx>
-#include <objshimp.hxx>
 #include <appbaslib.hxx>
-#include <childwinimpl.hxx>
 #include <svl/svdde.hxx>
 
 #include <basic/basicmanagerrepository.hxx>
