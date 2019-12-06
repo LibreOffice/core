@@ -1815,7 +1815,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
         Help* pHelp = Application::GetHelp();
         if( pHelp )
         {
-            pHelp->Start( "vcl/ui/printdialog", mpOKButton );
+            pHelp->Start("vcl/ui/printdialog/PrintDialog", mpOKButton );
         }
     }
     else if ( pButton == mpPreviewBox )
