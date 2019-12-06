@@ -1,0 +1,18 @@
+diff --git a/src/gpu/ccpr/GrCCDrawPathsOp.cpp b/src/gpu/ccpr/GrCCDrawPathsOp.cpp
+index 2aa6b59dfd..55b67f3685 100644
+--- a/src/gpu/ccpr/GrCCDrawPathsOp.cpp
++++ b/src/gpu/ccpr/GrCCDrawPathsOp.cpp
+@@ -17,8 +17,11 @@
+ #include "src/gpu/ccpr/GrOctoBounds.h"
+ 
+ static bool has_coord_transforms(const GrPaint& paint) {
+-    for (const auto& fp : GrFragmentProcessor::PaintCRange(paint)) {
+-        if (!fp.coordTransforms().empty()) {
++//    for (const auto& fp : GrFragmentProcessor::PaintCRange(paint)) {
++    GrFragmentProcessor::PaintCRange range(paint);
++    for( auto it = range.begin(); it != range.end(); ++it ) {
++//        if (!fp.coordTransforms().empty()) {
++        if (!(*it).coordTransforms().empty()) {
+             return true;
+         }
+     }
