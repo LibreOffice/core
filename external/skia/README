@@ -10,13 +10,15 @@ git clone https://skia.googlesource.com/skia.git
 cd skia
 git checkout chrome/mXX
 id=$(git rev-parse chrome/mXX)
+git clean -idx
 rm -rf .git gitignore
 cd ..
 tar cvJf skia-mXX-$id.tar.xz skia
 
 (where XX refers to the branch version)
 
-And review differences for BUILD.gn and relevant files in gn/ .
+And review differences for BUILD.gn and relevant files in gn/
+(git diff chrome/mYY..chrome/mXX ./file).
 
 
 GrContext sharing

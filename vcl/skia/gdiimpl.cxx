@@ -355,7 +355,7 @@ static SkRegion toSkRegion(const vcl::Region& region)
     {
         SkPath path;
         addPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
-        path.setFillType(SkPath::kEvenOdd_FillType);
+        path.setFillType(SkPathFillType::kEvenOdd);
         SkRegion skRegion;
         skRegion.setPath(path, SkRegion(path.getBounds().roundOut()));
         return skRegion;
@@ -395,7 +395,7 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     {
         SkPath path;
         addPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
-        path.setFillType(SkPath::kEvenOdd_FillType);
+        path.setFillType(SkPathFillType::kEvenOdd);
         canvas->clipPath(path);
     }
     else
@@ -586,7 +586,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     SAL_INFO("vcl.skia", "drawpolypolygon(" << this << "): " << aPolyPolygon << ":" << mLineColor
                                             << ":" << mFillColor);
     addPolyPolygonToPath(aPolyPolygon, aPath);
-    aPath.setFillType(SkPath::kEvenOdd_FillType);
+    aPath.setFillType(SkPathFillType::kEvenOdd);
 
     SkPaint aPaint;
     aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
@@ -685,7 +685,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
 
     SkPath aPath;
     addPolygonToPath(aPolyLine, aPath);
-    aPath.setFillType(SkPath::kEvenOdd_FillType);
+    aPath.setFillType(SkPathFillType::kEvenOdd);
     // Apply the same adjustment as toSkX()/toSkY() do. Do it here even in the non-GPU
     // case as it seems to produce better results.
     aPath.offset(0.5, 0.5, nullptr);
@@ -878,7 +878,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     {
         SkPath aPath;
         addPolygonToPath(rPoly, aPath);
-        aPath.setFillType(SkPath::kEvenOdd_FillType);
+        aPath.setFillType(SkPathFillType::kEvenOdd);
         // TrackFrame is not supposed to paint outside of the polygon (usually rectangle),
         // but wider stroke width usually results in that, so ensure the requirement
         // by clipping.
@@ -898,7 +898,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     {
         SkPath aPath;
         addPolygonToPath(rPoly, aPath);
-        aPath.setFillType(SkPath::kEvenOdd_FillType);
+        aPath.setFillType(SkPathFillType::kEvenOdd);
         SkPaint aPaint;
         aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
         aPaint.setStyle(SkPaint::kFill_Style);

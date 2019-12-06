@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-21 16:31:00 using:
+ Generated on 2019-12-06 12:13:34 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <atomic>
+#include <bitset>
 #include <cctype>
 #include <cfloat>
 #include <chrono>
@@ -83,7 +84,6 @@
 #include <include/c/sk_surface.h>
 #include <include/codec/SkAndroidCodec.h>
 #include <include/codec/SkCodec.h>
-#include <include/codec/SkCodecAnimation.h>
 #include <include/core/SkAnnotation.h>
 #include <include/core/SkBBHFactory.h>
 #include <include/core/SkBitmap.h>
@@ -122,8 +122,6 @@
 #include <include/core/SkMath.h>
 #include <include/core/SkMatrix.h>
 #include <include/core/SkMatrix44.h>
-#include <include/core/SkMilestone.h>
-#include <include/core/SkMultiPictureDraw.h>
 #include <include/core/SkOverdrawCanvas.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
@@ -262,6 +260,7 @@
 #include <include/private/SkTFitsIn.h>
 #include <include/private/SkTHash.h>
 #include <include/private/SkTemplates.h>
+#include <include/private/SkThreadAnnotations.h>
 #include <include/private/SkThreadID.h>
 #include <include/private/SkTo.h>
 #include <include/private/SkVx.h>
@@ -292,7 +291,6 @@
 #include <src/codec/SkCodecPriv.h>
 #include <src/codec/SkColorTable.h>
 #include <src/codec/SkFrameHolder.h>
-#include <src/codec/SkGifCodec.h>
 #include <src/codec/SkIcoCodec.h>
 #include <src/codec/SkJpegCodec.h>
 #include <src/codec/SkJpegDecoderMgr.h>
@@ -445,6 +443,7 @@
 #include <src/core/SkScanPriv.h>
 #include <src/core/SkScopeExit.h>
 #include <src/core/SkSharedMutex.h>
+#include <src/core/SkSpan.h>
 #include <src/core/SkSpecialImage.h>
 #include <src/core/SkSpecialSurface.h>
 #include <src/core/SkSpriteBlitter.h>
@@ -468,6 +467,7 @@
 #include <src/core/SkTTopoSort.h>
 #include <src/core/SkTaskGroup.h>
 #include <src/core/SkTextBlobPriv.h>
+#include <src/core/SkTextBlobTrace.h>
 #include <src/core/SkTextFormatParams.h>
 #include <src/core/SkTraceEvent.h>
 #include <src/core/SkTraceEventCommon.h>
@@ -475,6 +475,7 @@
 #include <src/core/SkTypeface_remote.h>
 #include <src/core/SkUtils.h>
 #include <src/core/SkVM.h>
+#include <src/core/SkVMBlitter.h>
 #include <src/core/SkValidationUtils.h>
 #include <src/core/SkVertState.h>
 #include <src/core/SkWriteBuffer.h>
@@ -484,6 +485,7 @@
 #include <src/core/SkXfermodePriv.h>
 #include <src/core/SkYUVMath.h>
 #include <src/core/SkYUVPlanesCache.h>
+#include <src/core/SkZip.h>
 #include <src/effects/SkDashImpl.h>
 #include <src/effects/SkEmbossMask.h>
 #include <src/effects/SkEmbossMaskFilter.h>
@@ -666,11 +668,13 @@
 #include <src/gpu/effects/generated/GrConfigConversionEffect.h>
 #include <src/gpu/effects/generated/GrConstColorProcessor.h>
 #include <src/gpu/effects/generated/GrEllipseEffect.h>
+#include <src/gpu/effects/generated/GrHSLToRGBFilterEffect.h>
 #include <src/gpu/effects/generated/GrLumaColorFilterEffect.h>
 #include <src/gpu/effects/generated/GrMagnifierEffect.h>
 #include <src/gpu/effects/generated/GrMixerEffect.h>
 #include <src/gpu/effects/generated/GrOverrideInputFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrPremulInputFragmentProcessor.h>
+#include <src/gpu/effects/generated/GrRGBToHSLFilterEffect.h>
 #include <src/gpu/effects/generated/GrRRectBlurEffect.h>
 #include <src/gpu/effects/generated/GrRectBlurEffect.h>
 #include <src/gpu/effects/generated/GrSaturateProcessor.h>
@@ -777,7 +781,6 @@
 #include <src/gpu/text/GrTextContext.h>
 #include <src/gpu/text/GrTextTarget.h>
 #include <src/gpu/vk/GrVkBuffer.h>
-#include <src/gpu/vk/GrVkBufferView.h>
 #include <src/gpu/vk/GrVkCaps.h>
 #include <src/gpu/vk/GrVkCommandBuffer.h>
 #include <src/gpu/vk/GrVkCommandPool.h>
@@ -983,7 +986,6 @@
 #include <src/utils/SkShadowTessellator.h>
 #include <src/utils/SkShaperJSONWriter.h>
 #include <src/utils/SkUTF.h>
-#include <third_party/gif/SkGifImageReader.h>
 #include <tools/gpu/vk/GrVulkanDefines.h>
 #include <tools/gpu/vk/VkTestUtils.h>
 #include <tools/sk_app/GLWindowContext.h>
