@@ -1548,6 +1548,8 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd,
         DelContentType const nDelContentType)
 {
+    assert(rStart <= rEnd);
+
     // CheckNoCntnt means DelFullPara which is obvious to handle
     if (DelContentType::CheckNoCntnt & nDelContentType)
     {   // exclude selection end node because it won't be deleted
@@ -1565,13 +1567,16 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
             || (rStart == rAnchorPos
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
-                && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0)
+                && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0
+                        // but not if the selection is backspace/delete!
+                        && IsNotBackspaceHeuristic(rStart, rEnd))
                     || IsAtStartOfSection(rAnchorPos))))
         && ((rAnchorPos < rEnd)
             || (rAnchorPos == rEnd
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
-                && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len())
+                && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
+                        && IsNotBackspaceHeuristic(rStart, rEnd))
                     || IsAtEndOfSection(rAnchorPos))));
 }
 
