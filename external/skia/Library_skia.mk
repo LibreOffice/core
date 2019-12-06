@@ -90,7 +90,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkCodecImageGenerator \
     UnpackedTarball/skia/src/codec/SkColorTable \
     UnpackedTarball/skia/src/codec/SkEncodedInfo \
-    UnpackedTarball/skia/src/codec/SkGifCodec \
     UnpackedTarball/skia/src/codec/SkIcoCodec \
     UnpackedTarball/skia/src/codec/SkJpegCodec \
     UnpackedTarball/skia/src/codec/SkJpegDecoderMgr \
@@ -167,6 +166,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkExecutor \
     UnpackedTarball/skia/src/core/SkFlattenable \
     UnpackedTarball/skia/src/core/SkFont \
+    UnpackedTarball/skia/src/core/SkFont_serial \
     UnpackedTarball/skia/src/core/SkFontDescriptor \
     UnpackedTarball/skia/src/core/SkFontLCDConfig \
     UnpackedTarball/skia/src/core/SkFontMgr \
@@ -190,6 +190,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkLatticeIter \
     UnpackedTarball/skia/src/core/SkLineClipper \
     UnpackedTarball/skia/src/core/SkLocalMatrixImageFilter \
+    UnpackedTarball/skia/src/core/SkMalloc \
     UnpackedTarball/skia/src/core/SkMallocPixelRef \
     UnpackedTarball/skia/src/core/SkMaskBlurFilter \
     UnpackedTarball/skia/src/core/SkMaskCache \
@@ -204,7 +205,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkMiniRecorder \
     UnpackedTarball/skia/src/core/SkMipMap \
     UnpackedTarball/skia/src/core/SkModeColorFilter \
-    UnpackedTarball/skia/src/core/SkMultiPictureDraw \
     UnpackedTarball/skia/src/core/SkNormalFlatSource \
     UnpackedTarball/skia/src/core/SkNormalMapSource \
     UnpackedTarball/skia/src/core/SkNormalSource \
@@ -277,6 +277,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkSwizzle \
     UnpackedTarball/skia/src/core/SkTaskGroup \
     UnpackedTarball/skia/src/core/SkTextBlob \
+    UnpackedTarball/skia/src/core/SkTextBlobTrace \
     UnpackedTarball/skia/src/core/SkThreadID \
     UnpackedTarball/skia/src/core/SkTime \
     UnpackedTarball/skia/src/core/SkTLS \
@@ -520,12 +521,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/effects/generated/GrConfigConversionEffect \
     UnpackedTarball/skia/src/gpu/effects/generated/GrConstColorProcessor \
     UnpackedTarball/skia/src/gpu/effects/generated/GrEllipseEffect \
+    UnpackedTarball/skia/src/gpu/effects/generated/GrHSLToRGBFilterEffect \
     UnpackedTarball/skia/src/gpu/effects/generated/GrLumaColorFilterEffect \
     UnpackedTarball/skia/src/gpu/effects/generated/GrMagnifierEffect \
     UnpackedTarball/skia/src/gpu/effects/generated/GrMixerEffect \
     UnpackedTarball/skia/src/gpu/effects/generated/GrOverrideInputFragmentProcessor \
     UnpackedTarball/skia/src/gpu/effects/generated/GrPremulInputFragmentProcessor \
     UnpackedTarball/skia/src/gpu/effects/generated/GrRectBlurEffect \
+    UnpackedTarball/skia/src/gpu/effects/generated/GrRGBToHSLFilterEffect \
     UnpackedTarball/skia/src/gpu/effects/generated/GrRRectBlurEffect \
     UnpackedTarball/skia/src/gpu/effects/generated/GrSaturateProcessor \
     UnpackedTarball/skia/src/gpu/effects/generated/GrSimpleTextureEffect \
@@ -750,7 +753,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/image/SkSurface_Gpu \
     UnpackedTarball/skia/src/gpu/vk/GrVkAMDMemoryAllocator \
     UnpackedTarball/skia/src/gpu/vk/GrVkBuffer \
-    UnpackedTarball/skia/src/gpu/vk/GrVkBufferView \
     UnpackedTarball/skia/src/gpu/vk/GrVkCaps \
     UnpackedTarball/skia/src/gpu/vk/GrVkCommandBuffer \
     UnpackedTarball/skia/src/gpu/vk/GrVkCommandPool \
@@ -970,7 +972,6 @@ endif
 #    UnpackedTarball/skia/src/atlastext/SkInternalAtlasTextContext \
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/third_party/gif/SkGifImageReader \
     UnpackedTarball/skia/third_party/skcms/skcms \
     UnpackedTarball/skia/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator \
 ))
