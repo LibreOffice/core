@@ -48,6 +48,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "To start temporarily with a fresh user profile, or to restore a non-working %PRODUCTNAME, use  Help > Restart in Safe Mode."), "svx/ui/safemodedialog/SafeModeDialog", ""}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/01/profile_safe_mode.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Writing a book? %PRODUCTNAME master document lets you manage large documents as a container for individual %PRODUCTNAME Writer files."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/globaldoc.html", "tipoftheday_w.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Create editable Hybrid PDFs with %PRODUCTNAME."), "https://wiki.documentfoundation.org/Documentation/HowTo/CreateAHybridPDF", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Explore the ten different functions in the status bar (at the bottom of the document window). Place the cursor over each field for an explanation. If not visible, use View > Status Bar."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sum a cell through several sheets? Refer to the range of sheets e.g. =SUM(Sheet1.A1:Sheet3.A1)."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Create fillable form documents (even PDF's) with %PRODUCTNAME."), "https://www.techrepublic.com/article/how-to-create-interactive-pdfs-with-libreoffice", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Can't see all the text in a cell? Expand the input line in the formula bar and you can scroll."), "", "tipoftheday_c.png"},
@@ -64,6 +65,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Use View > Value Highlighting to display cell contents in colors: Text/black, Formulas/green, Numbers/blue, Protected cells/grey background."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/03080000.html", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Create different master pages in a presentation template: View > Master Slide and Slide > New Master (or per toolbar or right click in slide pane)."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a pivot table? Click on drop-list's arrow in the row/col header and select sort method: ascending, descending, or custom."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Display photos or images with different shapes. Insert and select shape, then Insert > Image. To adjust image, right-click on selected shape and choose Area."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Page/Slide > Properties > 'Fit object to paper format' in Draw/Impress to resize the objects so that they fit on your chosen paper format."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Fit the entire page in a Draw window, use * on the number pad."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "In a Draw page, use '-' to zoom out; '+' to zoom in."), "", "tipoftheday_d.png"},
@@ -128,6 +130,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Annoyed by the 'marching ants' around cells in Calc? Press escape to stop them; the copied content will remain available for pasting."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to become a %PRODUCTNAME Ambassador? There are certifications for developers, admins, and trainers."), "http://www.documentfoundation.org/certification", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Mix portrait and landscape orientations in a Calc spreadsheet by applying different page styles on sheets."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Click on the special character icon in the toolbar to get quick access to favorite and recent characters to insert."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Choose ‘Hierarchical View’ in the Styles sidebar to see the relation between styles."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can use styles to make the tables in your document consistent. Choose one from the predefined per Styles (F11) or  via Table > AutoFormat."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Configure use of the Ctrl key to open hyperlinks? Tools > Options > %PRODUCTNAME > Security > Options > ‘Ctrl+click required to open hyperlinks’."), "", ""},
@@ -146,6 +149,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to insert a value in the same place on several sheets? Select the sheets: hold down Ctrl key and click their tabs before entering."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can customize the middle mouse button per Tools > Options > %PRODUCTNAME > View > Middle Mouse button."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to print two portrait pages on a landscape one (reducing A4 to A5)? File > Print and select 2 at ‘Pages per sheet’."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "For quick access to your document bookmarks, right-click on the page number of the status bar (lower-left corner of document window)."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Select an object in the document background via the Select tool in the Drawing toolbar to surround the object to select."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Define texts that you often use as AutoText. You will be able to insert them by their name, shortcut or toolbar in any Writer document."), "modules/swriter/ui/autotext/AutoTextDialog", "tipoftheday_w.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/autotext.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Play music throughout a slideshow by assigning the sound to the first slide transition without clicking the ‘Apply to All Slides’ button."), "", "tipoftheday_i.png"},
@@ -220,6 +224,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to return to default after applying a list style? Click Bullets or Numbering On/Off tool on the Formatting toolbar."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Delete all of your printing areas in one step: select all sheets, then Format > Print Ranges > Clear."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Add background images to spreadsheets via Insert > Image or drag a background from the Gallery, then Format > Arrange > To Background."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Having trouble pasting text from PDF files or webpages into documents? Try to paste as unformatted text (ctrl+alt+shift+V)."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "In Calc use TRIMMEAN() to return the mean of a data set excluding the highest and lowest values."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/04060182.html?DbPAR=CALC#bm_id3152966", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "The 4th optional parameter of VLOOKUP Calc function indicates whether the first column of data is sorted. If not, enter FALSE or zero."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Toolbars are contextual - they open depending on the context. If you do not want that, uncheck them from View > Toolbars."), "", ""},
