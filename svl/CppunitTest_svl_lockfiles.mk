@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,svl_lockfiles))
 
+$(eval $(call gb_CppunitTest_use_external,svl_lockfiles,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,svl_lockfiles))
 
 $(eval $(call gb_CppunitTest_use_api,svl_lockfiles,\

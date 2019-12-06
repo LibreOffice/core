@@ -18,6 +18,8 @@ $(eval $(call gb_CppunitTest_set_include,vcl_png_test,\
     -I$(SRCDIR)/vcl/inc \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,vcl_png_test,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,vcl_png_test, \
 	comphelper \
 	cppu \

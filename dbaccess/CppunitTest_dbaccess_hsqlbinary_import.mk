@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_hsql_binary_import, 
     dbaccess/qa/unit/hsql_binary_import \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,dbaccess_hsql_binary_import,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,dbaccess_hsql_binary_import, \
     basegfx \
     comphelper \
