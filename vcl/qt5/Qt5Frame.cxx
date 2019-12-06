@@ -268,6 +268,8 @@ void Qt5Frame::fixICCCMwindowGroup()
     hints.flags |= XCB_ICCCM_WM_HINT_WINDOW_GROUP;
     hints.window_group = leader;
     xcb_icccm_set_wm_hints(conn, win, &hints);
+#else
+    (void)this; // avoid loplugin:staticmethods
 #endif
 }
 
