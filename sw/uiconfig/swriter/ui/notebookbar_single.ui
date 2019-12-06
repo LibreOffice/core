@@ -1365,7 +1365,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-InsertObjectChart">
-                                <property name="visible">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertObjectChart</property>
                               </object>
@@ -1387,7 +1386,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-InsertObject">
-                                <property name="visible">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertObject</property>
                               </object>
@@ -1409,7 +1407,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-DrawText">
-                                <property name="visible">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DrawText</property>
                               </object>
@@ -1420,7 +1417,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-FontworkGalleryFloater">
-                                <property name="visible">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FontworkGalleryFloater</property>
                               </object>
@@ -9407,6 +9403,28 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Review-RejectTrackedChangeToNext">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:RejectTrackedChangeToNext</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Review-AcceptTrackedChangeToNext">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:AcceptTrackedChangeToNext</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                             <child>
                               <object class="GtkToolButton" id="Review-AcceptAllTrackedChanges">
                                 <property name="visible">True</property>

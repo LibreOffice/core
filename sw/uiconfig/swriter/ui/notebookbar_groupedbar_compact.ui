@@ -2709,6 +2709,68 @@
       </object>
     </child>
     <child>
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator7">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-PreviousTrackedChange">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:PreviousTrackedChange</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-NextTrackedChange">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:NextTrackedChange</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-AcceptTrackedChange">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AcceptTrackedChange</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-AcceptTrackedChangeToNext">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AcceptTrackedChangeToNext</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-AcceptAllTrackedChanges">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AcceptAllTrackedChanges</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RejectTrackedChange">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RejectTrackedChange</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RejectTrackedChangeToNext">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RejectTrackedChangeToNext</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RejectAllTrackedChanges">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RejectAllTrackedChanges</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="MenuReview-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -11755,10 +11817,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Review-AcceptTrackedChange">
+                                  <object class="GtkToolButton" id="Review-AcceptTrackedChangeToNext">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:AcceptTrackedChange</property>
+                                    <property name="action_name">.uno:AcceptTrackedChangeToNext</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -11766,10 +11828,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Review-RejectTrackedChange">
+                                  <object class="GtkToolButton" id="Review-RejectTrackedChangeToNext">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:RejectTrackedChange</property>
+                                    <property name="action_name">.uno:RejectTrackedChangeToNext</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
