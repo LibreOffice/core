@@ -885,11 +885,6 @@ bool SwTabFrame::RemoveFollowFlowLine()
     // #140081# Make code robust.
     if ( !pFollowFlowLine || !pLastLine )
         return true;
-    if (pFollowFlowLine->IsDeleteForbidden())
-    {
-        SAL_WARN("sw.layout", "Cannot remove in-use Follow Flow Line");
-        return false;
-    }
 
     // We have to reset the flag here, because lcl_MoveRowContent
     // calls a GrowFrame(), which has a different behavior if

@@ -243,7 +243,7 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
     StackHack aHack;
     if ( GetUpper() )
     {
-        SwFrameDeleteGuard aDeleteGuard(this);
+        SwFrameDeleteGuard aDeleteGuard(this, false);
         if ( lcl_IsCalcUpperAllowed( *this ) )
             GetUpper()->Calc(pRenderContext);
         OSL_ENSURE( GetUpper(), ":-( Layout unstable (Upper gone)." );
@@ -377,7 +377,7 @@ void SwFrame::OptPrepareMake()
          !GetUpper()->IsFlyFrame() )
     {
         {
-            SwFrameDeleteGuard aDeleteGuard(this);
+            SwFrameDeleteGuard aDeleteGuard(this, false);
             GetUpper()->Calc(getRootFrame()->GetCurrShell() ? getRootFrame()->GetCurrShell()->GetOut() : nullptr);
         }
         OSL_ENSURE( GetUpper(), ":-( Layout unstable (Upper gone)." );
@@ -1234,7 +1234,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         return;
     }
 
-    auto xDeleteGuard = std::make_unique<SwFrameDeleteGuard>(this);
+    auto xDeleteGuard = std::make_unique<SwFrameDeleteGuard>(this, false);
     LockJoin();
     long nFormatCount = 0;
     // - loop prevention

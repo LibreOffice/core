@@ -2432,7 +2432,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         }
 
         return xFilter->filter( aArgs );
-        }catch(...)
+        }catch(const uno::Exception&)
         {}
     }
 
