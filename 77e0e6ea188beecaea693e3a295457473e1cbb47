@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_24b03a8a",
+        "filename": "include/sfx2/objsh.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-06T13:40:16Z",
+      "side": 1,
+      "message": "this include is the source for the Clang build failures; it apparently makes the types involved there complete",
+      "revId": "77e0e6ea188beecaea693e3a295457473e1cbb47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
