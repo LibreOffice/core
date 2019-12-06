@@ -53,6 +53,7 @@ public:
     CPPUNIT_TEST(testImportNamedRangeRedefinedInSource);
     CPPUNIT_TEST(testImportNewNamedRange);
     CPPUNIT_TEST(testImportCellStyle);
+    CPPUNIT_TEST(testLastAfterInsertCopy);
 
     // XNameContainer
     CPPUNIT_TEST(testRemoveByName);

@@ -44,6 +44,9 @@ static constexpr OUStringLiteral gaSrcSheetName("SheetToCopy");
 static constexpr OUStringLiteral gaSrcFileName("rangenamessrc.ods");
 static constexpr OUStringLiteral gaDestFileBase("ScNamedRangeObj.ods");
 
+static sal_Int32 nInsertedSheets(0);
+
+
 XSpreadsheets2::XSpreadsheets2()
 {
 }
@@ -275,6 +278,56 @@ void XSpreadsheets2::testImportCellStyle()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("New style: VertJustify not set", table::CellVertJustify_CENTER, static_cast<table::CellVertJustify>(aVertJustify));
 }
 
+void XSpreadsheets2::testLastAfterInsertCopy()
+{
+    /** Test that results in row 1 of all inserted sheets are equal to the
+        source sheet. The loaded destination document is kept open so several
+        sheets are imported.
+    */
+
+    CPPUNIT_ASSERT(nInsertedSheets > 0);
+    constexpr sal_Int32 nCols = 7;
+
+    uno::Reference< container::XNameAccess> xSrcNameAccess(init(),UNO_QUERY_THROW);
+    xSrcSheet.set( xSrcNameAccess->getByName(gaSrcSheetName), UNO_QUERY_THROW);
+
+    OUString aSrcString[nCols];
+    for (sal_Int32 nCol=0; nCol < nCols; ++nCol)
+    {
+        uno::Reference< table::XCell > xSrcCell = xSrcSheet->getCellByPosition(nCol, 0);
+        uno::Reference< text::XTextRange > xSrcTextRange(xSrcCell, UNO_QUERY_THROW);
+        aSrcString[nCol] = xSrcTextRange->getString();
+    }
+    // The named range 'initial2' is already present in the destination
+    // document defined to $Sheet1.$B$2 and thus is not copied, pointing to
+    // "content2" instead.
+    aSrcString[6] = "content2";
+
+    xDestDoc = getDoc(gaDestFileBase);
+    CPPUNIT_ASSERT(xDestDoc.is());
+    uno::Reference< container::XIndexAccess > xDestSheetIndexAccess (xDestDoc->getSheets(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT( nInsertedSheets < xDestSheetIndexAccess->getCount());
+    for (sal_Int32 nSheet=0; nSheet < nInsertedSheets; ++nSheet)
+    {
+        xDestSheet.set( xDestSheetIndexAccess->getByIndex(nSheet), UNO_QUERY_THROW);
+        for (sal_Int32 nCol=0; nCol < nCols; ++nCol)
+        {
+            uno::Reference< table::XCell > xDestCell = xDestSheet->getCellByPosition(nCol, 0);
+            uno::Reference< text::XTextRange > xDestTextRange(xDestCell, UNO_QUERY_THROW);
+            OUString aDestString = xDestTextRange->getString();
+
+            if (nCol == 4 && aDestString == "Err:540")
+                // The created external reference to the source document not
+                // allowed may result in Err:540
+                continue;
+
+            OString aMessage("Imported result does not match, sheet " + OString::number(nSheet)
+                    + " column " + OString::number(nCol));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), aSrcString[nCol], aDestString);
+        }
+    }
+}
+
 uno::Reference< sheet::XSpreadsheetDocument> XSpreadsheets2::getDoc(const OUString& aFileBase)
 {
     OUString aFileURL;
@@ -308,6 +361,7 @@ void XSpreadsheets2::importSheetToCopy()
     sal_Int32 nDestPos = 0;
     sal_Int32 nDestPosEffective = xDestSheets->importSheet(xDocument, gaSrcSheetName, nDestPos);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet index", nDestPos, nDestPosEffective);
+    ++nInsertedSheets;
 
     uno::Reference< container::XIndexAccess > xDestSheetIndexAccess (xDestDoc->getSheets(), UNO_QUERY_THROW);
     xDestSheet.set( xDestSheetIndexAccess->getByIndex(nDestPosEffective), UNO_QUERY_THROW);
