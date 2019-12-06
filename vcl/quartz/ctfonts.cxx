@@ -257,7 +257,7 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
 hb_font_t* CoreTextStyle::ImplInitHbFont()
 {
-    hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, const_cast<PhysicalFontFace*>(GetFontFace()), nullptr);
+    hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, GetFontFace(), nullptr);
 
     return InitHbFont(pHbFace);
 }
