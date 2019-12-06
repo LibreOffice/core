@@ -403,7 +403,7 @@ $(call gb_YaccTarget_get_header_target,$(1)) : $(call gb_YaccTarget_get_target,$
 
 endef
 
-gb_YACC := bison
+gb_YACC := $(BISON)
 
 
 # LexTarget class
