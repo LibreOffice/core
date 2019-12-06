@@ -71,8 +71,6 @@ private:
     bool bIsDescriptor;
     OUString                        m_sName;
 
-    std::unique_ptr<SwPaM>          m_pCopySource;
-
     sal_Int64                       m_nDrawAspect;
     sal_Int64                       m_nVisibleAreaWidth;
     sal_Int64                       m_nVisibleAreaHeight;
@@ -148,7 +146,8 @@ public:
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void attachToRange(const css::uno::Reference< css::text::XTextRange > & xTextRange);
+    void attachToRange(css::uno::Reference<css::text::XTextRange> const& xTextRange,
+            SwPaM const* pCopySource = nullptr);
 
     const SwFrameFormat* GetFrameFormat() const
         { return m_pFrameFormat; }
