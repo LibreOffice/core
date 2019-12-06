@@ -81,6 +81,8 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+
+#include <tuple>
 #include <memory>
 
 
@@ -494,7 +496,7 @@ namespace sw
         SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
         IDocumentMarkAccess const& rIDMA(*rPam.GetDoc()->getIDocumentMarkAccess());
 
-        std::stack<sw::mark::IFieldmark const*> startedFields;
+        std::stack<std::tuple<sw::mark::IFieldmark const*, bool, sal_uLong, sal_Int32>> startedFields;
 
         for (sal_uLong n = nStartNode; n <= nEndNode; ++n)
         {
@@ -534,7 +536,7 @@ namespace sw
                         case CH_TXT_ATR_FIELDSTART:
                         {
                             auto const pFieldMark(rIDMA.getFieldmarkAt(SwPosition(rTextNode, i)));
-                            startedFields.push(pFieldMark);
+                            startedFields.emplace(pFieldMark, false, 0, 0);
                             break;
                         }
                         case CH_TXT_ATR_FIELDSEP:
@@ -545,7 +547,10 @@ namespace sw
                             }
                             else
                             {   // no way to find the field via MarkManager...
-                                assert(startedFields.top()->IsCoveringPosition(SwPosition(rTextNode, i)));
+                                assert(std::get<0>(startedFields.top())->IsCoveringPosition(SwPosition(rTextNode, i)));
+                                std::get<1>(startedFields.top()) = true;
+                                std::get<2>(startedFields.top()) = n;
+                                std::get<3>(startedFields.top()) = i;
                             }
                             break;
                         }
@@ -557,7 +562,7 @@ namespace sw
                             }
                             else
                             {   // fieldmarks must not overlap => stack
-                                assert(startedFields.top() == rIDMA.getFieldmarkAt(SwPosition(rTextNode, i)));
+                                assert(std::get<0>(startedFields.top()) == rIDMA.getFieldmarkAt(SwPosition(rTextNode, i)));
                                 startedFields.pop();
                             }
                             break;
@@ -579,14 +584,22 @@ namespace sw
         }
         while (!startedFields.empty())
         {
-            auto const pField(startedFields.top());
-            startedFields.pop();
-            SwPosition const& rStart(pField->GetMarkStart());
+            SwPosition const& rStart(std::get<0>(startedFields.top())->GetMarkStart());
             std::pair<sal_uLong, sal_Int32> const pos(
                     rStart.nNode.GetIndex(), rStart.nContent.GetIndex());
             auto it = std::lower_bound(rBreaks.begin(), rBreaks.end(), pos);
             assert(it == rBreaks.end() || *it != pos);
             rBreaks.insert(it, pos);
+            if (std::get<1>(startedFields.top()))
+            {
+                std::pair<sal_uLong, sal_Int32> const posSep(
+                    std::get<2>(startedFields.top()),
+                    std::get<3>(startedFields.top()));
+                it = std::lower_bound(rBreaks.begin(), rBreaks.end(), posSep);
+                assert(it == rBreaks.end() || *it != posSep);
+                rBreaks.insert(it, posSep);
+            }
+            startedFields.pop();
         }
     }
 }
@@ -1963,6 +1976,10 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
 
     {
         SwPaM temp(rPam, nullptr);
+        if (!temp.HasMark())
+        {
+            temp.SetMark();
+        }
         if (SwTextNode *const pNode = temp.Start()->nNode.GetNode().GetTextNode())
         { // rPam may not have nContent set but IsFieldmarkOverlap requires it
             pNode->MakeStartIndex(&temp.Start()->nContent);
