@@ -16,6 +16,24 @@
       "revId": "55e596956e56b175ab17b682e7c8ac7daeb9289a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_99909b4c",
+        "filename": "sal/rtl/uri.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-06T08:44:54Z",
+      "side": 1,
+      "message": "yeah, just spotted the fallout from that junk myself, \u003chttps://gerrit.libreoffice.org/#/c/84599/\u003e \"Remove spurious #include\"",
+      "parentUuid": "7f7f9b97_b9ff97a9",
+      "revId": "55e596956e56b175ab17b682e7c8ac7daeb9289a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
