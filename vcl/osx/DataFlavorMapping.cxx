@@ -146,8 +146,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     return (theType == cppu::UnoType<OUString>::get() );
   }
 
-} // unnamed namespace
-
 /* A base class for other data provider.
  */
 class DataProviderBaseImpl : public DataProvider
@@ -162,6 +160,8 @@ protected:
   //NSData* mSystemData;
   id mSystemData;
 };
+
+} // unnamed namespace
 
 DataProviderBaseImpl::DataProviderBaseImpl(const Any& data) :
   mData(data),
@@ -183,6 +183,8 @@ DataProviderBaseImpl::~DataProviderBaseImpl()
     }
 }
 
+namespace {
+
 class UniDataProvider : public DataProviderBaseImpl
 {
 public:
@@ -194,6 +196,8 @@ public:
 
   virtual Any getOOoData() override;
 };
+
+}
 
 UniDataProvider::UniDataProvider(const Any& data) :
   DataProviderBaseImpl(data)
@@ -234,6 +238,8 @@ Any UniDataProvider::getOOoData()
   return oOOData;
 }
 
+namespace {
+
 class ByteSequenceDataProvider : public DataProviderBaseImpl
 {
 public:
@@ -245,6 +251,8 @@ public:
 
   virtual Any getOOoData() override;
 };
+
+}
 
 ByteSequenceDataProvider::ByteSequenceDataProvider(const Any& data) :
   DataProviderBaseImpl(data)
@@ -284,6 +292,8 @@ Any ByteSequenceDataProvider::getOOoData()
   return oOOData;
 }
 
+namespace {
+
 class HTMLFormatDataProvider : public DataProviderBaseImpl
 {
 public:
@@ -293,6 +303,8 @@ public:
 
   virtual Any getOOoData() override;
 };
+
+}
 
 HTMLFormatDataProvider::HTMLFormatDataProvider(NSData* data) :
   DataProviderBaseImpl(data)
@@ -340,6 +352,9 @@ Any HTMLFormatDataProvider::getOOoData()
   return oOOData;
 }
 
+namespace {
+
+
 class PNGDataProvider : public DataProviderBaseImpl
 {
     NSBitmapImageFileType meImageType;
@@ -352,6 +367,8 @@ public:
 
     virtual Any getOOoData() override;
 };
+
+}
 
 PNGDataProvider::PNGDataProvider( const Any& data, NSBitmapImageFileType eImageType) :
   DataProviderBaseImpl(data),
@@ -404,6 +421,8 @@ Any PNGDataProvider::getOOoData()
     return oOOData;
 }
 
+namespace {
+
 class FileListDataProvider : public DataProviderBaseImpl
 {
 public:
@@ -413,6 +432,8 @@ public:
   virtual NSData* getSystemData() override;
   virtual Any getOOoData() override;
 };
+
+}
 
 FileListDataProvider::FileListDataProvider(const Any& data) :
   DataProviderBaseImpl(data)

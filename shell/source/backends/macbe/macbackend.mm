@@ -38,15 +38,14 @@
 #define SPACE      ' '
 #define SEMI_COLON ';'
 
+namespace
+{
+
 typedef enum {
     sHTTP,
     sHTTPS,
     sFTP
 } ServiceType;
-
-
-namespace
-{
 
 /*
  * Returns current proxy settings for selected service type (HTTP or

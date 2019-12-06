@@ -141,6 +141,8 @@ static OUString toUNOname( char const * p )
 #endif
 }
 
+namespace {
+
 class RTTI
 {
     typedef std::unordered_map< OUString, std::type_info * > t_rtti_map;
@@ -157,6 +159,8 @@ public:
 
     std::type_info * getRTTI( typelib_CompoundTypeDescription * );
 };
+
+}
 
 RTTI::RTTI()
     : m_hApp( dlopen( nullptr, RTLD_LAZY ) )

@@ -143,8 +143,12 @@ bool CoreTextStyle::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRe
     return true;
 }
 
+namespace {
+
 // callbacks from CTFontCreatePathForGlyph+CGPathApply for GetGlyphOutline()
 struct GgoData { basegfx::B2DPolygon maPolygon; basegfx::B2DPolyPolygon* mpPolyPoly; };
+
+}
 
 static void MyCGPathApplierFunc( void* pData, const CGPathElement* pElement )
 {

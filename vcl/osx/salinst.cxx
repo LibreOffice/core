@@ -83,6 +83,8 @@ static int* gpnInit = nullptr;
 static NSMenu* pDockMenu = nil;
 static bool bLeftMain = false;
 
+namespace {
+
 class AquaDelayedSettingsChanged : public Idle
 {
     bool            mbInvalidate;
@@ -112,6 +114,8 @@ public:
         delete this;
     }
 };
+
+}
 
 void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
 {
