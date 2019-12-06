@@ -1267,7 +1267,6 @@ SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItem
 SwXFrame::~SwXFrame()
 {
     SolarMutexGuard aGuard;
-    m_pCopySource.reset();
     m_pProps.reset();
     EndListeningAll();
 }
@@ -1354,13 +1353,6 @@ uno::Reference< beans::XPropertySetInfo >  SwXFrame::getPropertySetInfo()
         ;
     }
     return xRef;
-}
-
-void SwXFrame::SetSelection(SwPaM& rCopySource)
-{
-    m_pCopySource.reset(new SwPaM(*rCopySource.Start()));
-    m_pCopySource->SetMark();
-    *m_pCopySource->GetMark() = *rCopySource.End();
 }
 
 SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrameFormat &rFormat)
@@ -2668,7 +2660,8 @@ void SwXFrame::ResetDescriptor()
     m_pProps.reset();
 }
 
-void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
+void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
+        SwPaM const*const pCopySource)
 {
     SolarMutexGuard aGuard;
     if(!IsDescriptor())
@@ -2760,7 +2753,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     if( eType == FLYCNTTYPE_FRM)
     {
         UnoActionContext aCont(pDoc);
-        if(m_pCopySource)
+        if (pCopySource)
         {
             std::unique_ptr<SwFormatAnchor> pAnchorItem;
             // the frame is inserted bound to page
@@ -2773,18 +2766,17 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
             aPam.DeleteMark(); // mark position node will be deleted!
             aIntPam.DeleteMark(); // mark position node will be deleted!
-            pFormat = pDoc->MakeFlyAndMove( *m_pCopySource, aFrameSet,
+            pFormat = pDoc->MakeFlyAndMove( *pCopySource, aFrameSet,
                            nullptr,
                            pParentFrameFormat );
             if(pAnchorItem && pFormat)
             {
                 pFormat->DelFrames();
-                pAnchorItem->SetAnchor( m_pCopySource->Start() );
+                pAnchorItem->SetAnchor( pCopySource->Start() );
                 SfxItemSet aAnchorSet( pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
                 aAnchorSet.Put( *pAnchorItem );
                 pDoc->SetFlyFrameAttr( *pFormat, aAnchorSet );
             }
-            m_pCopySource.reset();
         }
         else
         {
