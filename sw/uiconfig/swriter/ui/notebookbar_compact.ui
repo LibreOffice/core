@@ -1540,166 +1540,224 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="SpellingAndGrammarDialogD">
+      <object class="GtkMenuItem" id="MenuReview-SpellingAndGrammarDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SpellingAndGrammarDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SpellOnlineD">
+      <object class="GtkMenuItem" id="MenuReview-SpellOnline">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SpellOnline</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ThesaurusDialogD">
+      <object class="GtkMenuItem" id="MenuReview-ThesaurusDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ThesaurusDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="WordCountDialogD">
+      <object class="GtkMenuItem" id="MenuReview-MoreDictionaries">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:WordCountDialog</property>
+        <property name="action_name">.uno:MoreDictionaries</property>
+      </object>
+      <packing>
+        <property name="bottom_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator58">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="SetLanguageSelectionMenuD">
+      <object class="GtkMenuItem" id="MenuReview-SetLanguageSelectionMenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SetLanguageSelectionMenu</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SetLanguageParagraphMenuD">
+      <object class="GtkMenuItem" id="MenuReview-SetLanguageParagraphMenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SetLanguageParagraphMenu</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SetLanguageAllTextMenuD">
+      <object class="GtkMenuItem" id="MenuReview-SetLanguageAllTextMenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SetLanguageAllTextMenu</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator90">
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="HyphenateD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Hyphenate</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="ChineseConversionD">
+      <object class="GtkMenuItem" id="MenuReview-ChineseConversion">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ChineseConversion</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="HangulHanjaConversionD">
+      <object class="GtkMenuItem" id="MenuReview-HangulHanjaConversion">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:HangulHanjaConversion</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MoreDictionariesD">
+      <object class="GtkMenuItem" id="MenuReview-Hyphenate">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:MoreDictionaries</property>
+        <property name="action_name">.uno:Hyphenate</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator64">
+      <object class="GtkMenuItem" id="MenuReview-WordCountDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:WordCountDialog</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="TrackChangesD">
+      <object class="GtkMenuItem" id="MenuReview-TrackChanges">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TrackChanges</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ShowTrackedChangesD">
+      <object class="GtkMenuItem" id="MenuReview-ShowTrackedChanges">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ShowTrackedChanges</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="AcceptTrackedChangesD">
+      <object class="GtkMenuItem" id="MenuReview-AcceptTrackedChanges">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AcceptTrackedChanges</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator73">
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator7">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertAnnotationD">
-        <property name="visible">True</property>
+      <object class="GtkMenuItem" id="MenuReview-PreviousTrackedChange">
+        <property name="visible">False</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertAnnotation</property>
+        <property name="action_name">.uno:PreviousTrackedChange</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ShowAnnotationsD1">
-        <property name="visible">True</property>
+      <object class="GtkMenuItem" id="MenuReview-NextTrackedChange">
+        <property name="visible">False</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:ShowAnnotations</property>
+        <property name="action_name">.uno:NextTrackedChange</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator77">
+      <object class="GtkMenuItem" id="MenuReview-AcceptTrackedChange">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AcceptTrackedChange</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-AcceptTrackedChangeToNext">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AcceptTrackedChangeToNext</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-AcceptAllTrackedChanges">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AcceptAllTrackedChanges</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RejectTrackedChange">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RejectTrackedChange</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RejectTrackedChangeToNext">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RejectTrackedChangeToNext</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RejectAllTrackedChanges">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RejectAllTrackedChanges</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ProtectTraceChangeModeD">
+      <object class="GtkMenuItem" id="MenuReview-ProtectTraceChangeMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ProtectTraceChangeMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="CompareDocuments">
+      <object class="GtkMenuItem" id="MenuReview-CompareDocuments">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CompareDocuments</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MergeDocumentsD">
+      <object class="GtkMenuItem" id="MenuReview-MergeDocuments">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MergeDocuments</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator5">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-RedactDoc">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RedactDoc</property>
       </object>
     </child>
   </object>
@@ -7669,6 +7727,28 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Review-RejectTrackedChangeToNext">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:RejectTrackedChangeToNext</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Review-AcceptTrackedChangeToNext">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:AcceptTrackedChangeToNext</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                             <child>
                               <object class="GtkToolButton" id="Review-AcceptAllTrackedChanges">
                                 <property name="visible">True</property>
