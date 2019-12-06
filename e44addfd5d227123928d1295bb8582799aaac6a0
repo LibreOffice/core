@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_99689b1d",
+        "filename": "basic/source/sbx/sbxbase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-06T10:04:36Z",
+      "side": 0,
+      "message": "Possibly this should have been kept - since the condition was always true before the change? I suppose it\u0027s the cause of tdf#129227",
+      "range": {
+        "startLine": 124,
+        "startChar": 8,
+        "endLine": 124,
+        "endChar": 29
+      },
+      "revId": "e44addfd5d227123928d1295bb8582799aaac6a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
