@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <algorithm>
+#include <cstddef>
 #include <deque>
 #include <vector>
 
@@ -1547,7 +1548,7 @@ void SfxDispatcher::SetSlotFilter(SfxSlotFilterState nEnable,
 {
 #ifdef DBG_UTIL
     // Check Array
-    for ( o3tl::span<sal_uInt16 const>::index_type n = 1; n < pSIDs.size(); ++n )
+    for ( std::size_t n = 1; n < pSIDs.size(); ++n )
         DBG_ASSERT( pSIDs[n] > pSIDs[n-1], "SetSlotFilter: SIDs not sorted" );
 #endif
 

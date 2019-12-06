@@ -6766,6 +6766,22 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
+AC_MSG_CHECKING([whether $CXX supports C++2a <span> with unsigned size_type])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        #include <span>
+        #include <type_traits>
+        // Don't check size_type directly, as it was called index_type before P1872R0:
+        void f(std::span<int> s) { static_assert(std::is_unsigned_v<decltype(s.size())>); };
+    ])], [
+        AC_DEFINE([HAVE_CPP_SPAN],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+
 AC_MSG_CHECKING([whether $CXX has GCC bug 87150])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
