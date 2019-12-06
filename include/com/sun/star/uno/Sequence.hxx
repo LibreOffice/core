@@ -55,7 +55,7 @@ inline Sequence< E >::Sequence()
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
-        0, 0, cpp_acquire );
+        NULL, 0, cpp_acquire );
     // no bad_alloc, because empty sequence is statically allocated in cppu
 }
 
@@ -102,7 +102,7 @@ inline Sequence< E >::Sequence( sal_Int32 len )
     bool success =
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
-        0, len, cpp_acquire );
+        NULL, len, cpp_acquire );
     if (! success)
         throw ::std::bad_alloc();
 }
