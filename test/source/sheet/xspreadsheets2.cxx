@@ -309,8 +309,8 @@ void XSpreadsheets2::importSheetToCopy()
     sal_Int32 nDestPosEffective = xDestSheets->importSheet(xDocument, gaSrcSheetName, nDestPos);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet index", nDestPosEffective, nDestPos);
 
-    uno::Reference< container::XNameAccess > xDestSheetNameAccess (xDestDoc->getSheets(), UNO_QUERY_THROW);
-    xDestSheet.set( xDestSheetNameAccess->getByName(gaSrcSheetName), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xDestSheetIndexAccess (xDestDoc->getSheets(), UNO_QUERY_THROW);
+    xDestSheet.set( xDestSheetIndexAccess->getByIndex(nDestPosEffective), UNO_QUERY_THROW);
 }
 
 bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, const OUString& aSrcContent )
