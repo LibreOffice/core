@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_5f0bc322",
+        "filename": "oox/source/drawingml/table/tableproperties.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-12-06T14:01:47Z",
+      "side": 1,
+      "message": "Why is this necessary? The oox::drawingml::Color ctor sets meMode to COLOR_UNUSED already, right?",
+      "revId": "9abe15060b759ca82c5c9f73672918cece889e73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
