@@ -1,0 +1,15 @@
+diff --git a/src/gpu/GrFragmentProcessor.h b/src/gpu/GrFragmentProcessor.h
+index 03d22aeaae..b538bed303 100644
+--- a/src/gpu/GrFragmentProcessor.h
++++ b/src/gpu/GrFragmentProcessor.h
+@@ -530,8 +530,9 @@ public:
+     operator bool() const { return !fFPStack.empty(); }
+     bool operator!=(const EndIter&) { return (bool)*this; }
+ 
++    IterBase(const IterBase&) = default;
++
+     // Because each iterator carries a stack we want to avoid copies.
+-    IterBase(const IterBase&) = delete;
+     IterBase& operator=(const IterBase&) = delete;
+ 
+ protected:
