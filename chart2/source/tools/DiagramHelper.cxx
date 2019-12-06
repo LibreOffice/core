@@ -1328,7 +1328,8 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                             {
                                 sal_Int32 nNewSeriesIndex = nS;
 
-                                if( bForward )
+                                // tdf#34517 Bringing forward means increasing, backwards means decreasing series position
+                                if( !bForward )
                                     nNewSeriesIndex--;
                                 else
                                     nNewSeriesIndex++;
