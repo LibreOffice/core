@@ -1511,13 +1511,20 @@ SwXText::convertToTextFrame(
         throw  uno::RuntimeException();
     }
     uno::Reference< text::XTextContent > xRet;
-    SwUnoInternalPaM aStartPam(*GetDoc());
+    std::unique_ptr<SwUnoInternalPaM> pTempStartPam(new SwUnoInternalPaM(*GetDoc()));
     std::unique_ptr< SwUnoInternalPaM > pEndPam(new SwUnoInternalPaM(*GetDoc()));
-    if (!::sw::XTextRangeToSwPaM(aStartPam, xStart) ||
+    if (!::sw::XTextRangeToSwPaM(*pTempStartPam, xStart) ||
         !::sw::XTextRangeToSwPaM(*pEndPam, xEnd))
     {
         throw lang::IllegalArgumentException();
     }
+    auto pStartPam(GetDoc()->CreateUnoCursor(*pTempStartPam->GetPoint()));
+    if (pTempStartPam->HasMark())
+    {
+        pStartPam->SetMark();
+        *pStartPam->GetMark() = *pTempStartPam->GetMark();
+    }
+    pTempStartPam.reset();
 
     SwXTextRange *const pStartRange =
         comphelper::getUnoTunnelImplementation<SwXTextRange>(xStart);
@@ -1538,7 +1545,7 @@ SwXText::convertToTextFrame(
     bool bIllegalException = false;
     bool bRuntimeException = false;
     OUString sMessage;
-    SwStartNode* pStartStartNode = aStartPam.GetNode().StartOfSectionNode();
+    SwStartNode* pStartStartNode = pStartPam->GetNode().StartOfSectionNode();
     while (pStartStartNode && pStartStartNode->IsSectionNode())
     {
         pStartStartNode = pStartStartNode->StartOfSectionNode();
@@ -1576,9 +1583,9 @@ SwXText::convertToTextFrame(
             const SwNodeIndex aTableIdx(  *pStartTableNode, -1 );
             SwPosition aBefore(aTableIdx);
             bParaBeforeInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aBefore );
-            aStartPam.DeleteMark();
-            *aStartPam.GetPoint() = aBefore;
-            pStartStartNode = aStartPam.GetNode().StartOfSectionNode();
+            pStartPam->DeleteMark();
+            *pStartPam->GetPoint() = aBefore;
+            pStartStartNode = pStartPam->GetNode().StartOfSectionNode();
         }
         if (pEndStartNode->GetStartNodeType() == SwTableBoxStartNode)
         {
@@ -1597,8 +1604,8 @@ SwXText::convertToTextFrame(
             // if not - remove the additional paragraphs and throw
             if (bParaBeforeInserted)
             {
-                SwCursor aDelete(*aStartPam.GetPoint(), nullptr);
-                *aStartPam.GetPoint() = // park it because node is deleted
+                SwCursor aDelete(*pStartPam->GetPoint(), nullptr);
+                *pStartPam->GetPoint() = // park it because node is deleted
                     SwPosition(GetDoc()->GetNodes().GetEndOfContent());
                 aDelete.MovePara(GoCurrPara, fnParaStart);
                 aDelete.SetMark();
@@ -1619,20 +1626,20 @@ SwXText::convertToTextFrame(
         }
     }
 
-    // make a selection from aStartPam to a EndPam
+    // make a selection from pStartPam to pEndPam
     // If there is no content in the frame the shape is in
     // it gets deleted in the DelFullPara call below,
     // In this case insert a tmp text node ( we delete it later )
-    if ( aStartPam.Start()->nNode == pEndPam->Start()->nNode
-    && aStartPam.End()->nNode == pEndPam->End()->nNode )
+    if (pStartPam->Start()->nNode == pEndPam->Start()->nNode
+        && pStartPam->End()->nNode == pEndPam->End()->nNode)
     {
-        SwPosition aEnd(*aStartPam.End());
+        SwPosition aEnd(*pStartPam->End());
         bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aEnd );
         pEndPam->DeleteMark();
         *pEndPam->GetPoint() = aEnd;
     }
-    aStartPam.SetMark();
-    *aStartPam.End() = *pEndPam->End();
+    pStartPam->SetMark();
+    *pStartPam->End() = *pEndPam->End();
     pEndPam.reset();
 
     // see if there are frames already anchored to this node
@@ -1646,8 +1653,8 @@ SwXText::convertToTextFrame(
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         if ( !isGraphicNode(pFrameFormat) &&
                 (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
-                aStartPam.Start()->nNode.GetIndex() <= rAnchor.GetContentAnchor()->nNode.GetIndex() &&
-                aStartPam.End()->nNode.GetIndex() >= rAnchor.GetContentAnchor()->nNode.GetIndex())
+                pStartPam->Start()->nNode.GetIndex() <= rAnchor.GetContentAnchor()->nNode.GetIndex() &&
+                pStartPam->End()->nNode.GetIndex() >= rAnchor.GetContentAnchor()->nNode.GetIndex())
         {
             if (pFrameFormat->GetName().isEmpty())
             {
@@ -1663,7 +1670,6 @@ SwXText::convertToTextFrame(
     const uno::Reference<text::XTextFrame> xNewFrame(
             SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, nullptr));
     SwXTextFrame& rNewFrame = dynamic_cast<SwXTextFrame&>(*xNewFrame);
-    rNewFrame.SetSelection( aStartPam );
     try
     {
         for (const beans::PropertyValue& rValue : rFrameProperties)
@@ -1674,19 +1680,19 @@ SwXText::convertToTextFrame(
         {   // has to be in a block to remove the SwIndexes before
             // DelFullPara is called
             const uno::Reference< text::XTextRange> xInsertTextRange =
-                new SwXTextRange(aStartPam, this);
-            aStartPam.DeleteMark(); // mark position node may be deleted!
-            rNewFrame.attach( xInsertTextRange );
+                new SwXTextRange(*pStartPam, this);
+            assert(rNewFrame.IsDescriptor());
+            rNewFrame.attachToRange(xInsertTextRange, pStartPam.get());
             rNewFrame.setName(m_pImpl->m_pDoc->GetUniqueFrameName());
         }
 
-        SwTextNode *const pTextNode(aStartPam.GetNode().GetTextNode());
+        SwTextNode *const pTextNode(pStartPam->GetNode().GetTextNode());
         assert(pTextNode);
         if (!pTextNode || !pTextNode->Len()) // don't remove if it contains text!
         {
             {   // has to be in a block to remove the SwIndexes before
                 // DelFullPara is called
-                SwPaM aMovePam( aStartPam.GetNode() );
+                SwPaM aMovePam( pStartPam->GetNode() );
                 if (aMovePam.Move( fnMoveForward, GoInContent ))
                 {
                     // move the anchor to the next paragraph
@@ -1710,7 +1716,7 @@ SwXText::convertToTextFrame(
                     }
                 }
             }
-            m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(aStartPam);
+            m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*pStartPam);
         }
     }
     catch (const lang::IllegalArgumentException& rIllegal)
