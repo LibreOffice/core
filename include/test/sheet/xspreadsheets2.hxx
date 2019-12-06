@@ -36,6 +36,7 @@ public:
     void testImportNamedRangeRedefinedInSource();
     void testImportNewNamedRange();
     void testImportCellStyle();
+    void testLastAfterInsertCopy();
 
     virtual css::uno::Reference< css::lang::XComponent > getComponent() = 0;
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
