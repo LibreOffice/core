@@ -1,0 +1,30 @@
+diff --git a/src/gpu/GrFragmentProcessor.h b/src/gpu/GrFragmentProcessor.h
+index 03d22aeaae..a5f4464a52 100644
+--- a/src/gpu/GrFragmentProcessor.h
++++ b/src/gpu/GrFragmentProcessor.h
+@@ -585,7 +585,6 @@ public:
+     CIter begin() const { return CIter(fT); }
+     EndIter end() const { return EndIter(); }
+ 
+-private:
+     const Src& fT;
+ };
+ 
+diff --git a/src/gpu/ccpr/GrCCDrawPathsOp.cpp b/src/gpu/ccpr/GrCCDrawPathsOp.cpp
+index 2aa6b59dfd..43f5d6dd14 100644
+--- a/src/gpu/ccpr/GrCCDrawPathsOp.cpp
++++ b/src/gpu/ccpr/GrCCDrawPathsOp.cpp
+@@ -17,8 +17,11 @@
+ #include "src/gpu/ccpr/GrOctoBounds.h"
+ 
+ static bool has_coord_transforms(const GrPaint& paint) {
+-    for (const auto& fp : GrFragmentProcessor::PaintCRange(paint)) {
+-        if (!fp.coordTransforms().empty()) {
++//    for (auto& fp : GrFragmentProcessor::PaintCRange(paint)) {
++//        if (!fp.coordTransforms().empty()) {
++    GrFragmentProcessor::PaintCRange range(paint);
++    for(GrFragmentProcessor::CIter it(range.fT); it != range.end(); ++it) {
++        if (!(*it).coordTransforms().empty()) {
+             return true;
+         }
+     }
