@@ -114,9 +114,7 @@ void SbxBase::ResetError()
 
 void SbxBase::AddFactory( SbxFactory* pFac )
 {
-    SbxAppData& r = GetSbxData_Impl();
-
-    r.m_Factories.insert(r.m_Factories.begin(), std::unique_ptr<SbxFactory>(pFac));
+    GetSbxData_Impl().m_Factories.emplace_back(pFac);
 }
 
 void SbxBase::RemoveFactory( SbxFactory const * pFac )
