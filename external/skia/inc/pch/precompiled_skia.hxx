@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-06 12:13:34 using:
+ Generated on 2019-12-06 12:41:34 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -216,10 +216,6 @@
 #include <include/gpu/GrSurface.h>
 #include <include/gpu/GrTexture.h>
 #include <include/gpu/GrTypes.h>
-#include <include/gpu/gl/GrGLAssembleHelpers.h>
-#include <include/gpu/gl/GrGLAssembleInterface.h>
-#include <include/gpu/gl/GrGLExtensions.h>
-#include <include/gpu/gl/GrGLInterface.h>
 #include <include/gpu/mock/GrMockTypes.h>
 #include <include/gpu/vk/GrVkBackendContext.h>
 #include <include/gpu/vk/GrVkExtensions.h>
@@ -228,7 +224,6 @@
 #include <include/pathops/SkPathOps.h>
 #include <include/ports/SkRemotableFontMgr.h>
 #include <include/private/GrContext_Base.h>
-#include <include/private/GrGLTypesPriv.h>
 #include <include/private/GrImageContext.h>
 #include <include/private/GrRecordingContext.h>
 #include <include/private/GrResourceKey.h>
@@ -494,7 +489,6 @@
 #include <src/effects/SkTrimPE.h>
 #include <src/gpu/GrAHardwareBufferImageGenerator.h>
 #include <src/gpu/GrAHardwareBufferUtils.h>
-#include <src/gpu/GrAllocator.h>
 #include <src/gpu/GrAppliedClip.h>
 #include <src/gpu/GrAuditTrail.h>
 #include <src/gpu/GrAutoLocaleSetter.h>
@@ -685,28 +679,9 @@
 #include <src/gpu/geometry/GrQuadUtils.h>
 #include <src/gpu/geometry/GrRect.h>
 #include <src/gpu/geometry/GrShape.h>
-#include <src/gpu/gl/GrGLBuffer.h>
-#include <src/gpu/gl/GrGLCaps.h>
-#include <src/gpu/gl/GrGLContext.h>
-#include <src/gpu/gl/GrGLDefines.h>
-#include <src/gpu/gl/GrGLGLSL.h>
 #include <src/gpu/gl/GrGLGpu.h>
-#include <src/gpu/gl/GrGLOpsRenderPass.h>
-#include <src/gpu/gl/GrGLPath.h>
-#include <src/gpu/gl/GrGLPathRendering.h>
-#include <src/gpu/gl/GrGLProgram.h>
-#include <src/gpu/gl/GrGLProgramDataManager.h>
-#include <src/gpu/gl/GrGLRenderTarget.h>
-#include <src/gpu/gl/GrGLSemaphore.h>
-#include <src/gpu/gl/GrGLStencilAttachment.h>
 #include <src/gpu/gl/GrGLTexture.h>
-#include <src/gpu/gl/GrGLTextureRenderTarget.h>
-#include <src/gpu/gl/GrGLUniformHandler.h>
 #include <src/gpu/gl/GrGLUtil.h>
-#include <src/gpu/gl/GrGLVaryingHandler.h>
-#include <src/gpu/gl/GrGLVertexArray.h>
-#include <src/gpu/gl/builders/GrGLProgramBuilder.h>
-#include <src/gpu/gl/builders/GrGLShaderStringBuilder.h>
 #include <src/gpu/glsl/GrGLSL.h>
 #include <src/gpu/glsl/GrGLSLBlend.h>
 #include <src/gpu/glsl/GrGLSLColorSpaceXformHelper.h>
@@ -955,7 +930,6 @@
 #include <src/sksl/ir/SkSLNullLiteral.h>
 #include <src/sksl/ir/SkSLPostfixExpression.h>
 #include <src/sksl/ir/SkSLPrefixExpression.h>
-#include <src/sksl/ir/SkSLProgram.h>
 #include <src/sksl/ir/SkSLReturnStatement.h>
 #include <src/sksl/ir/SkSLSection.h>
 #include <src/sksl/ir/SkSLSetting.h>
@@ -988,7 +962,6 @@
 #include <src/utils/SkUTF.h>
 #include <tools/gpu/vk/GrVulkanDefines.h>
 #include <tools/gpu/vk/VkTestUtils.h>
-#include <tools/sk_app/GLWindowContext.h>
 #include <tools/sk_app/VulkanWindowContext.h>
 #include <vulkan/vulkan_core.h>
 #endif // PCH_LEVEL >= 3

@@ -12,8 +12,6 @@ are the same.
 
 #define SK_SUPPORT_GPU 1
 
-#define SK_GL 1
-
 #define SK_VULKAN 1
 
 #define SK_HAS_JPEG_LIBRARY 1
@@ -22,10 +20,9 @@ are the same.
 
 #define SK_GAMMA_APPLY_TO_A8
 
+// silence -Wundef warnings in Skia headers
 #define SK_ASSUME_GL 1
-
 #define SK_ASSUME_GL_ES 0
-
 
 #ifdef DBG_UTIL
 
