@@ -96,7 +96,7 @@ $(call gb_UITest_get_target,$(1)) : PYPATH := $(SRCDIR)/uitest$$(gb_CLASSPATHSEP
 $(call gb_UITest_get_target,$(1)) : MODULES :=
 
 $(eval $(call gb_TestHelpers_use_more_fonts,$(call gb_UITest_get_target,$(1))))
-$(eval $(call gb_Module_register_target,UITest_$(1),$(call gb_UITest_get_target,$(1)),$(call gb_UITest_get_clean_target,$(1))))
+$(eval $(call gb_Module_register_target,$(call gb_UITest_get_target,$(1)),$(call gb_UITest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UITest)
 
 endef
@@ -138,7 +138,7 @@ endif
 	@true
 
 define gb_UITest_UITest
-$(eval $(call gb_Module_register_target,UITest_$(1),$(call gb_UITest_get_target,$(1)),$(call gb_UITest_get_clean_target,$(1))))
+$(eval $(call gb_Module_register_target,$(call gb_UITest_get_target,$(1)),$(call gb_UITest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UITest)
 
 endef
