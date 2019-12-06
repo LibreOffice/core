@@ -346,6 +346,25 @@ void SbRtl_ChrW(StarBASIC *, SbxArray & rPar, bool)
     implChr( rPar, true/*bChrW*/ );
 }
 
+#if defined _WIN32
+
+namespace {
+
+extern "C" void invalidParameterHandler(
+    wchar_t const * expression, wchar_t const * function, wchar_t const * file, unsigned int line,
+    uintptr_t)
+{
+    SAL_INFO(
+        "basic",
+        "invalid parameter during _wgetdcwd; \"" << (expression ? o3tl::toU(expression) : u"???")
+            << "\" (" << (function ? o3tl::toU(function) : u"???") << ") at "
+            << (file ? o3tl::toU(file) : u"???") << ":" << line);
+}
+
+}
+
+#endif
+
 void SbRtl_CurDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
 {
     (void)pBasic;
@@ -375,7 +394,13 @@ void SbRtl_CurDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
         nCurDir = c - 'A' + 1;
     }
     wchar_t pBuffer[ _MAX_PATH ];
-    if ( _wgetdcwd( nCurDir, pBuffer, _MAX_PATH ) != nullptr )
+    // _wgetdcwd calls the C runtime's invalid parameter handler (which by default terminates the
+    // process) if nCurDir does not correspond to an existing drive, so temporarily set a "harmless"
+    // handler:
+    auto const handler = _set_thread_local_invalid_parameter_handler(&invalidParameterHandler);
+    auto const ok = _wgetdcwd( nCurDir, pBuffer, _MAX_PATH ) != nullptr;
+    _set_thread_local_invalid_parameter_handler(handler);
+    if ( ok )
     {
         rPar.Get(0)->PutString( o3tl::toU(pBuffer) );
     }
