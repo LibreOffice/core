@@ -5893,7 +5893,8 @@ public:
 
     virtual OString get_current_page_ident() const override
     {
-        return get_page_ident(get_current_page());
+        const int nPage = get_current_page();
+        return nPage != -1 ? get_page_ident(nPage) : OString();
     }
 
     virtual weld::Container* get_page(const OString& rIdent) const override
