@@ -1225,7 +1225,7 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
     sal_Int32 nPageWidth = GetPageWidth();
     sal_Int32 nTextAreaWidth = nPageWidth - GetLeftMargin() - GetRightMargin();
 
-    std::vector<AnchoredObjectInfo>& rAnchoredObjectAnchors = rDM_Impl.m_aAnchoredObjectAnchors;
+    std::vector<AnchoredObjectsInfo>& rAnchoredObjectAnchors = rDM_Impl.m_aAnchoredObjectAnchors;
     for (const auto& rAnchor : rAnchoredObjectAnchors)
     {
         // Ignore this paragraph when there are not enough shapes to trigger the Word bug we
@@ -1238,11 +1238,11 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
         sal_Int32 nShapesWidth = 0;
         for (const auto& rAnchored : rAnchor.m_aAnchoredObjects)
         {
-            uno::Reference<drawing::XShape> xShape(rAnchored, uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape(rAnchored.m_xAnchoredObject, uno::UNO_QUERY);
             if (!xShape.is())
                 continue;
 
-            uno::Reference<beans::XPropertySet> xPropertySet(rAnchored, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
             if (!xPropertySet.is())
                 continue;
 
@@ -1252,8 +1252,9 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
             if (eWrap == text::WrapTextMode_THROUGH)
                 continue;
 
-            sal_Int32 nLeftMargin = 0;
-            xPropertySet->getPropertyValue("LeftMargin") >>= nLeftMargin;
+            // Use the original left margin, in case GraphicImport::lcl_sprm() reduced the doc model
+            // one to 0.
+            sal_Int32 nLeftMargin = rAnchored.m_nLeftMargin;
             sal_Int32 nRightMargin = 0;
             xPropertySet->getPropertyValue("RightMargin") >>= nRightMargin;
             nShapesWidth += xShape->getSize().Width + nLeftMargin + nRightMargin;
@@ -1266,7 +1267,7 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
         sal_Int32 nHeight = 0;
         for (const auto& rAnchored : rAnchor.m_aAnchoredObjects)
         {
-            uno::Reference<drawing::XShape> xShape(rAnchored, uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape(rAnchored.m_xAnchoredObject, uno::UNO_QUERY);
             if (!xShape.is())
                 continue;
 

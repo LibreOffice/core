@@ -97,6 +97,7 @@ public:
     css::uno::Reference<css::text::XTextContent> GetGraphicObject();
     const css::uno::Reference<css::drawing::XShape>& GetXShapeObject() const { return m_xShape;}
     bool IsGraphic() const;
+    sal_Int32 GetLeftMarginOrig() const;
 
  private:
     // Properties
