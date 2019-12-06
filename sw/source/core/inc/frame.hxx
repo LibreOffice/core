@@ -901,7 +901,7 @@ public:
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
 
     void ForbidDelete()      { mbForbidDelete = true; }
-    void AllowDelete()    { mbForbidDelete = false; }
+    void AllowDelete(bool bDestroy = true);
 
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
     bool supportsFullDrawingLayerFillAttributeSet() const;
@@ -1228,18 +1228,21 @@ inline bool SwFrame::IsAccessibleFrame() const
     return bool(GetType() & FRM_ACCESSIBLE);
 }
 
-//use this to protect a SwFrame for a given scope from getting deleted
+// use this to protect a SwFrame for a given scope from getting deleted.
+// normally it will destroy the protected frame in the constructor.
+// but this doesn't make any sense for "this" frames, so if your frame
+// is this, you very likely want to manage the proper lifecycle yourself.
 class SwFrameDeleteGuard
 {
 private:
     SwFrame *m_pForbidFrame;
+    bool m_bDestroy;
+
 public:
-    //Flag pFrame for SwFrameDeleteGuard lifetime that we shouldn't delete
-    //it in e.g. SwSectionFrame::MergeNext etc because we will need it
-    //again after the SwFrameDeleteGuard dtor
-    explicit SwFrameDeleteGuard(SwFrame* pFrame)
+    explicit SwFrameDeleteGuard(SwFrame* pFrame, bool bDestroy = true)
         : m_pForbidFrame((pFrame && !pFrame->IsDeleteForbidden()) ?
             pFrame : nullptr)
+        , m_bDestroy(bDestroy)
     {
         if (m_pForbidFrame)
             m_pForbidFrame->ForbidDelete();
@@ -1250,7 +1253,7 @@ public:
     ~SwFrameDeleteGuard()
     {
         if (m_pForbidFrame)
-            m_pForbidFrame->AllowDelete();
+            m_pForbidFrame->AllowDelete(m_bDestroy);
     }
 
     SwFrameDeleteGuard& operator=(const SwFrameDeleteGuard&) =delete;

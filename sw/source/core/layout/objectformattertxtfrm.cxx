@@ -642,37 +642,17 @@ static void lcl_FormatContentOfLayoutFrame( SwLayoutFrame* pLayFrame,
         {
             break;
         }
+
+        SwFrameDeleteGuard aCrudeHack(pLowerFrame); // ??? any issue setting this for non-footnote frames?
         if ( pLowerFrame->IsLayoutFrame() )
         {
-            SwFrameDeleteGuard aCrudeHack(pLowerFrame); // ??? any issue setting this for non-footnote frames?
             lcl_FormatContentOfLayoutFrame( static_cast<SwLayoutFrame*>(pLowerFrame),
                                         pLastLowerFrame );
         }
         else
             pLowerFrame->Calc(pLowerFrame->getRootFrame()->GetCurrShell()->GetOut());
 
-        // Calc on a SwTextFrame in a footnote can move it to the next page -
-        // deletion of the SwFootnoteFrame was disabled with SwFrameDeleteGuard
-        // but now we have to clean up empty footnote frames to prevent crashes.
-        // Note: check it at this level, not lower: both container and footnote
-        // can be deleted at the same time!
-        SwFrame *const pNext = pLowerFrame->GetNext();
-        if (pLowerFrame->IsFootnoteContFrame())
-        {
-            for (SwFrame * pFootnote = pLowerFrame->GetLower(); pFootnote; )
-            {
-                assert(pFootnote->IsFootnoteFrame());
-                SwFrame *const pNextNote = pFootnote->GetNext();
-                if (!pFootnote->IsDeleteForbidden() && !pFootnote->GetLower() && !pFootnote->IsColLocked() &&
-                    !static_cast<SwFootnoteFrame*>(pFootnote)->IsBackMoveLocked())
-                {
-                    pFootnote->Cut();
-                    SwFrame::DestroyFrame(pFootnote);
-                }
-                pFootnote = pNextNote;
-            }
-        }
-        pLowerFrame = pNext;
+        pLowerFrame = pLowerFrame->GetNext();
     }
 }
 

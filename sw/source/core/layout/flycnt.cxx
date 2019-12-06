@@ -407,6 +407,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 {
                     SwTextFrame& rAnchPosAnchorFrame =
                             dynamic_cast<SwTextFrame&>(*GetAnchorFrameContainingAnchPos());
+                    SwFrameDeleteGuard aDel(&rAnchPosAnchorFrame);
                     // #i58182# - For the usage of new method
                     // <SwObjectFormatterTextFrame::CheckMovedFwdCondition(..)>
                     // to check move forward of anchor frame due to the object
