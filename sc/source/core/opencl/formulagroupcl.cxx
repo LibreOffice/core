@@ -1204,9 +1204,9 @@ public:
 
     size_t GetWindowSize() const { return mpDVR->GetRefRowSize(); }
 
-    size_t GetStartFixed() const { return bIsStartFixed; }
+    bool GetStartFixed() const { return bIsStartFixed; }
 
-    size_t GetEndFixed() const { return bIsEndFixed; }
+    bool GetEndFixed() const { return bIsEndFixed; }
 
 protected:
     bool bIsStartFixed, bIsEndFixed;
