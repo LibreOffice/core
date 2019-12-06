@@ -984,7 +984,7 @@ bool SwEditShell::GetGrammarCorrection(
             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( mxDoc->GetGCIterator() );
             if (xGCIterator.is())
             {
-                uno::Reference< lang::XComponent > xDoc( mxDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
+                uno::Reference< lang::XComponent > xDoc = mxDoc->GetDocShell()->GetBaseModel();
 
                 // Expand the string:
                 const ModelToViewHelper aConversionMap(*pNode, GetLayout());
