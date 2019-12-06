@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <cstddef>
 #include <utility>
 
 #include <cppunit/TestAssert.h>
@@ -18,6 +19,8 @@
 #include <o3tl/span.hxx>
 
 namespace {
+
+template<typename T> std::size_t consistentTypeForOldStdSpan(T size) { return std::size_t(size); }
 
 class Test: public CppUnit::TestFixture {
 private:
@@ -42,7 +45,7 @@ private:
         CPPUNIT_ASSERT_EQUAL(3, *v.crbegin());
         CPPUNIT_ASSERT_EQUAL(
             o3tl::span<int>::difference_type(3), v.crend() - v.crbegin());
-        CPPUNIT_ASSERT_EQUAL(o3tl::span<int>::index_type(3), v.size());
+        CPPUNIT_ASSERT_EQUAL(std::size_t(3), consistentTypeForOldStdSpan(v.size()));
         CPPUNIT_ASSERT(!v.empty());
         CPPUNIT_ASSERT_EQUAL(2, v[1]);
         CPPUNIT_ASSERT_EQUAL(1, *v.data());
@@ -52,8 +55,8 @@ private:
             o3tl::span<int const> v1( d1 );
             o3tl::span<int const> v2( d2 );
             std::swap(v1, v2);
-            CPPUNIT_ASSERT_EQUAL(o3tl::span<int>::index_type(4), v1.size());
-            CPPUNIT_ASSERT_EQUAL(o3tl::span<int>::index_type(2), v2.size());
+            CPPUNIT_ASSERT_EQUAL(std::size_t(4), consistentTypeForOldStdSpan(v1.size()));
+            CPPUNIT_ASSERT_EQUAL(std::size_t(2), consistentTypeForOldStdSpan(v2.size()));
         }
     }
 };
