@@ -15,6 +15,8 @@ $(eval $(call gb_CppunitTest_set_include,connectivity_sharedresources,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,connectivity_sharedresources,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_ure,connectivity_sharedresources))
 $(eval $(call gb_CppunitTest_use_vcl,connectivity_sharedresources))
 
