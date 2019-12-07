@@ -318,8 +318,9 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         }
         if( pOld && !(eOp == SbiOpcode::REDIM_ || eOp == SbiOpcode::REDIMP_) )
         {
-            if( pDef->GetScope() == SbLOCAL && pOld->GetScope() != SbLOCAL )
-                pOld = nullptr;
+            if( pDef->GetScope() == SbLOCAL )
+                if (auto eOldScope = pOld->GetScope(); eOldScope != SbLOCAL && eOldScope != SbPARAM)
+                    pOld = nullptr;
         }
         if( pOld )
         {
