@@ -8,7 +8,6 @@
 #
 
 gb_AWK := awk
-gb_YACC := $(BISON)
 
 gb_CLASSPATHSEP := :
 gb_LICENSE := LICENSE

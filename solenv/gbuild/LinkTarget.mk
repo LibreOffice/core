@@ -403,9 +403,6 @@ $(call gb_YaccTarget_get_header_target,$(1)) : $(call gb_YaccTarget_get_target,$
 
 endef
 
-gb_YACC := $(BISON)
-
-
 # LexTarget class
 
 gb_LexTarget_get_source = $(1)/$(2).l
