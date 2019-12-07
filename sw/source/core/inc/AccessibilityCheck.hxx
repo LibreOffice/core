@@ -32,6 +32,7 @@ public:
     }
 
     void check();
+    void checkTableNode(SwTableNode* pTableNode);
     void checkNoTextNode(SwNoTextNode* pNoTextNode);
     void checkObject(SdrObject* pObject);
 };
