@@ -20,38 +20,22 @@
 #include <memory>
 #include "eschesdo.hxx"
 #include <o3tl/any.hxx>
-#include <sal/log.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/svdoashp.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/poly.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/graph.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/fract.hxx>
 #include <svx/fmdpage.hxx>
-#include <com/sun/star/style/VerticalAlignment.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/drawing/PointSequence.hpp>
-#include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include <com/sun/star/drawing/FlagSequence.hpp>
-#include <com/sun/star/drawing/TextAdjust.hpp>
-#include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <comphelper/extract.hxx>
-#include <vcl/fltcall.hxx>
-#include <vcl/cvtgrf.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

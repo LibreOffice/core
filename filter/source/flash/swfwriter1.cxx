@@ -19,12 +19,10 @@
 
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include "swfwriter.hxx"
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

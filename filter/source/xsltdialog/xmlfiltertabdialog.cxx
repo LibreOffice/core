@@ -21,7 +21,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/fileurl.hxx>
-#include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/file.hxx>
@@ -30,7 +29,7 @@
 #include "xmlfiltertabdialog.hxx"
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltertabpagexslt.hxx"
-#include "xmlfiltersettingsdialog.hxx"
+#include "xmlfiltercommon.hxx"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;

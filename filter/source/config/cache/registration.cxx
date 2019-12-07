@@ -19,7 +19,8 @@
 
 
 #include <cppuhelper/factory.hxx>
-#include <rtl/instance.hxx>
+
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include "typedetection.hxx"
 #include "filterfactory.hxx"

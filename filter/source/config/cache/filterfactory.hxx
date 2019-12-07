@@ -23,7 +23,6 @@
 #include "basecontainer.hxx"
 #include "querytokenizer.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 
 

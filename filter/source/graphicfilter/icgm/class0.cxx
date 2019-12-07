@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "main.hxx"
+#include "bitmap.hxx"
+#include "cgm.hxx"
+#include "elements.hxx"
 #include "outact.hxx"
 
 

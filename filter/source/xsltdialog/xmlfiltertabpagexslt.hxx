@@ -19,7 +19,6 @@
 #ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABPAGEXSLT_HXX
 #define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABPAGEXSLT_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/weld.hxx>
 #include <svtools/inettbc.hxx>
 

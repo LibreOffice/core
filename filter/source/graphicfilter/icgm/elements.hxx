@@ -19,7 +19,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_ELEMENTS_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_ELEMENTS_HXX
 
-#include "main.hxx"
+#include "bundles.hxx"
 #include "cgmtypes.hxx"
 #include <vector>
 #include <map>

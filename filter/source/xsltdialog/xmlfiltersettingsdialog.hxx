@@ -19,14 +19,10 @@
 #ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERSETTINGSDIALOG_HXX
 #define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERSETTINGSDIALOG_HXX
 
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
-#include <svl/poolitem.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include "xmlfiltercommon.hxx"

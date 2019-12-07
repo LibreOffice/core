@@ -18,9 +18,6 @@
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

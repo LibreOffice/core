@@ -20,7 +20,6 @@
 #include <config_features.h>
 
 #include <filter/msfilter/msvbahelper.hxx>
-#include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
@@ -40,7 +39,6 @@
 #include <rtl/character.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <com/sun/star/awt/KeyModifier.hpp>
 #include <svtools/acceleratorexecute.hxx>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>

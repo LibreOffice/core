@@ -26,7 +26,6 @@
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include <osl/conditn.hxx>
-#include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -34,7 +33,6 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
@@ -47,7 +45,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
@@ -58,8 +55,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
@@ -70,8 +65,6 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/xml/xslt/XSLT2Transformer.hpp>
 #include <com/sun/star/xml/xslt/XSLTTransformer.hpp>
-
-#include <xmloff/attrlist.hxx>
 
 #include "LibXSLTTransformer.hxx"
 
