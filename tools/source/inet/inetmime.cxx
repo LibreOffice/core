@@ -131,46 +131,6 @@ std::unique_ptr<sal_Unicode[]> convertToUnicode(const sal_Char * pBegin,
     return pBuffer;
 }
 
-std::unique_ptr<sal_Char[]> convertFromUnicode(const sal_Unicode * pBegin,
-                                        const sal_Unicode * pEnd,
-                                        rtl_TextEncoding eEncoding,
-                                        sal_Size & rSize)
-{
-    if (eEncoding == RTL_TEXTENCODING_DONTKNOW)
-        return nullptr;
-    rtl_UnicodeToTextConverter hConverter
-        = rtl_createUnicodeToTextConverter(eEncoding);
-    rtl_UnicodeToTextContext hContext
-        = rtl_createUnicodeToTextContext(hConverter);
-    std::unique_ptr<sal_Char[]> pBuffer;
-    sal_uInt32 nInfo;
-    for (sal_Size nBufferSize = pEnd - pBegin;;
-         nBufferSize += nBufferSize / 3 + 1)
-    {
-        pBuffer.reset(new sal_Char[nBufferSize]);
-        sal_Size nSrcCvtBytes;
-        rSize = rtl_convertUnicodeToText(
-                    hConverter, hContext, pBegin, pEnd - pBegin, pBuffer.get(),
-                    nBufferSize,
-                    RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                        | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
-                        | RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
-                        | RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR,
-                    &nInfo, &nSrcCvtBytes);
-        if (nInfo != RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)
-            break;
-        pBuffer.reset();
-        rtl_resetUnicodeToTextContext(hConverter, hContext);
-    }
-    rtl_destroyUnicodeToTextContext(hConverter, hContext);
-    rtl_destroyUnicodeToTextConverter(hConverter);
-    if (nInfo != 0)
-    {
-        pBuffer.reset();
-    }
-    return pBuffer;
-}
-
 /** Put the UTF-16 encoding of a UTF-32 character into a buffer.
 
     @param pBuffer  Points to a buffer, must not be null.
@@ -231,7 +191,6 @@ void writeUTF8(OStringBuffer & rSink, sal_uInt32 nChar)
 
 bool translateUTF8Char(const sal_Char *& rBegin,
                                  const sal_Char * pEnd,
-                                 rtl_TextEncoding eEncoding,
                                  sal_uInt32 & rCharacter)
 {
     if (rBegin == pEnd || static_cast< unsigned char >(*rBegin) < 0x80
@@ -283,21 +242,7 @@ bool translateUTF8Char(const sal_Char *& rBegin,
     if (!rtl::isUnicodeCodePoint(nUCS4) || nUCS4 < nMin)
         return false;
 
-    if (eEncoding >= RTL_TEXTENCODING_UCS4)
-        rCharacter = nUCS4;
-    else
-    {
-        sal_Unicode aUTF16[2];
-        const sal_Unicode * pUTF16End = putUTF32Character(aUTF16, nUCS4);
-        sal_Size nSize;
-        std::unique_ptr<sal_Char[]> pBuffer = convertFromUnicode(aUTF16, pUTF16End, eEncoding,
-                                                nSize);
-        if (!pBuffer)
-            return false;
-        DBG_ASSERT(nSize == 1,
-                   "translateUTF8Char(): Bad conversion");
-        rCharacter = pBuffer[0];
-    }
+    rCharacter = nUCS4;
     rBegin = p;
     return true;
 }
@@ -1442,8 +1387,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                 const sal_Char * pUTF8Begin = p - 1;
                 const sal_Char * pUTF8End = pUTF8Begin;
                 sal_uInt32 nCharacter = 0;
-                if (translateUTF8Char(pUTF8End, pEnd, RTL_TEXTENCODING_UCS4,
-                                      nCharacter))
+                if (translateUTF8Char(pUTF8End, pEnd, nCharacter))
                 {
                     appendISO88591(sDecoded, pCopyBegin, p - 1);
                     sal_Unicode aUTF16Buf[2];
