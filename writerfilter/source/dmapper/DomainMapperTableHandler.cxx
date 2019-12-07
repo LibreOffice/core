@@ -824,7 +824,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 #endif
 
                 // Do not apply horizontal and vertical borders to a one cell table.
-                if (m_aCellProperties.size() <= 1)
+                if (m_aCellProperties.size() <= 1 && aRowOfCellsIterator->size() <= 1)
                 {
                     rInfo.pTableBorders->Erase(META_PROP_HORIZONTAL_BORDER);
                     rInfo.pTableBorders->Erase(META_PROP_VERTICAL_BORDER);
