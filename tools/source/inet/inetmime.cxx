@@ -1272,7 +1272,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                         }
                         else
                         {
-                            sal_uInt32 nChar = *q++;
+                            sal_uInt32 nChar = static_cast<unsigned char>(*q++);
                             switch (nChar)
                             {
                                 case '=':
