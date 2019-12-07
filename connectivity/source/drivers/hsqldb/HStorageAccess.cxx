@@ -167,11 +167,7 @@ jint read_from_storage_stream( JNIEnv * env, jstring name, jstring key )
         }
         else
         {
-            sal_Int32 tmpInt = aData[0];
-            if (tmpInt < 0 )
-                tmpInt = 256 +tmpInt;
-
-            return tmpInt;
+            return static_cast<unsigned char>(aData[0]);;
         }
     }
     return -1;
@@ -306,9 +302,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
         Sequence< sal_Int32 > ch(4);
         for(sal_Int32 i = 0;i < 4; ++i)
         {
-            ch[i] = aData[i];
-            if (ch[i] < 0 )
-                ch[i] = 256 + ch[i];
+            ch[i] = static_cast<unsigned char>(aData[i]);
         }
 
         if ((ch[0] | ch[1] | ch[2] | ch[3]) < 0)
