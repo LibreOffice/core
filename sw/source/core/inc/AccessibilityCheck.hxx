@@ -13,6 +13,7 @@
 
 #include <doc.hxx>
 #include <svx/AccessibilityIssue.hxx>
+#include <node.hxx>
 
 class AccessibilityCheck
 {
@@ -31,6 +32,8 @@ public:
     }
 
     void check();
+    void checkNoTextNode(SwNoTextNode* pNoTextNode);
+    void checkObject(SdrObject* pObject);
 };
 
 #endif
