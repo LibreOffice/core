@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_b5fe60ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-07T14:41:03Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/84684/\u003e \"Remove redundant gb_YACC indirection\"",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 80
+      },
+      "revId": "0a803c0a41f46be4019ddd2768b4be5669b7ab59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
