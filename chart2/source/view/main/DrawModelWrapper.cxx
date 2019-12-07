@@ -82,7 +82,7 @@ DrawModelWrapper::DrawModelWrapper()
         b3dFactoryInitialized = true;
     }
 
-    //Hyphenyation and spellchecking
+    //Hyphenation and spellchecking
     SdrOutliner& rOutliner = GetDrawOutliner();
     try
     {
