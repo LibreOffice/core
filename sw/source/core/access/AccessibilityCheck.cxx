@@ -14,15 +14,53 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
+#include <swtable.hxx>
+
+namespace
+{
+OUString sNoAlt("No alt text for graphic '%OBJECT_NAME%'");
+}
+
+// Check NoTextNodes: Graphic, OLE
+void AccessibilityCheck::checkNoTextNode(SwNoTextNode* pNoTextNode)
+{
+    if (!pNoTextNode)
+        return;
+
+    OUString sAlternative = pNoTextNode->GetTitle();
+    if (sAlternative.isEmpty())
+    {
+        OUString sName = pNoTextNode->GetFlyFormat()->GetName();
+        svx::AccessibilityIssue aIssue;
+        aIssue.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
+        m_aAccessibilityIssueCollection.push_back(aIssue);
+    }
+}
+
+// Check Shapes, TextBox
+void AccessibilityCheck::checkObject(SdrObject* pObject)
+{
+    if (!pObject)
+        return;
+
+    if (pObject->GetObjIdentifier() == OBJ_CUSTOMSHAPE || pObject->GetObjIdentifier() == OBJ_TEXT)
+    {
+        OUString sAlternative = pObject->GetTitle();
+        if (sAlternative.isEmpty())
+        {
+            OUString sName = pObject->GetName();
+            svx::AccessibilityIssue aIssue;
+            aIssue.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
+            m_aAccessibilityIssueCollection.push_back(aIssue);
+        }
+    }
+}
 
 void AccessibilityCheck::check()
 {
     if (m_pDoc == nullptr)
         return;
 
-    OUString sNoAlt("No alt text for graphic '%OBJECT_NAME%'");
-
-    // Check NoTextNodes: Graphic, OLE
     auto const& pNodes = m_pDoc->GetNodes();
     for (sal_uLong n = 0; n < pNodes.Count(); ++n)
     {
@@ -33,21 +71,11 @@ void AccessibilityCheck::check()
             {
                 SwNoTextNode* pNoTextNode = pNode->GetNoTextNode();
                 if (pNoTextNode)
-                {
-                    OUString sAlternative = pNoTextNode->GetTitle();
-                    if (sAlternative.isEmpty())
-                    {
-                        OUString sName = pNoTextNode->GetFlyFormat()->GetName();
-                        svx::AccessibilityIssue aIssue;
-                        aIssue.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
-                        m_aAccessibilityIssueCollection.push_back(aIssue);
-                    }
-                }
+                    checkNoTextNode(pNoTextNode);
             }
         }
     }
 
-    // Check Shapes, TextBox
     IDocumentDrawModelAccess& rDrawModelAccess = m_pDoc->getIDocumentDrawModelAccess();
     auto* pModel = rDrawModelAccess.GetDrawModel();
     for (sal_uInt16 nPage = 0; nPage < pModel->GetPageCount(); ++nPage)
@@ -56,18 +84,8 @@ void AccessibilityCheck::check()
         for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
         {
             SdrObject* pObject = pPage->GetObj(nObject);
-            if (pObject->GetObjIdentifier() == OBJ_CUSTOMSHAPE
-                || pObject->GetObjIdentifier() == OBJ_TEXT)
-            {
-                OUString sAlternative = pObject->GetTitle();
-                if (sAlternative.isEmpty())
-                {
-                    OUString sName = pObject->GetName();
-                    svx::AccessibilityIssue aIssue;
-                    aIssue.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
-                    m_aAccessibilityIssueCollection.push_back(aIssue);
-                }
-            }
+            if (pObject)
+                checkObject(pObject);
         }
     }
 }
