@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_f537f8e2",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-07T07:52:00Z",
+      "side": 1,
+      "message": "This is a perfect example for a tip where an image is needed. Maybe you find a better phrasing for \"the...icon... gives you access\". Comment if not and I will push the patch.",
+      "range": {
+        "startLine": 133,
+        "startChar": 39,
+        "endLine": 133,
+        "endChar": 61
+      },
+      "revId": "188981d87d5d8c11f8bf21efa1d8063a73ff034e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
