@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_559a6cc5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-07T08:33:03Z",
+      "side": 1,
+      "message": "decltype?",
+      "range": {
+        "startLine": 20,
+        "startChar": 21,
+        "endLine": 21,
+        "endChar": 54
+      },
+      "revId": "8e6865188242bccb3d8aa857ddc990d72a058d3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
