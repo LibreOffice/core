@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_d5cf5c55",
+        "filename": "cui/uiconfig/ui/textflowpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-12-07T18:58:26Z",
+      "side": 1,
+      "message": "not an UI expert but i guess this is the only new string",
+      "revId": "de9856b23d35fb9f31b9b2c249a966705a339358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
