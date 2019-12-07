@@ -4877,7 +4877,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                     anchor.SetAnchor( &startPos );
                     pFly->SetFormatAttr(anchor);
                 }
-                if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
+                else if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
                 {
                     SwFormatAnchor anchor(*pAnchor);
                     anchor.SetAnchor( &startPosAtPara );
