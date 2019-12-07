@@ -386,7 +386,7 @@ void SvRTFParser::ScanText()
                             if (nSlash != '\\' || nNextCh != '\'')
                             {
                                 rInput.SeekRel(-1);
-                                nNextCh = nSlash;
+                                nNextCh = static_cast<unsigned char>(nSlash);
                                 break;
                             }
                         }
@@ -582,7 +582,8 @@ SvParserState SvRTFParser::CallParser()
 {
     sal_Char cFirstCh;
     nNextChPos = rInput.Tell();
-    rInput.ReadChar( cFirstCh ); nNextCh = cFirstCh;
+    rInput.ReadChar( cFirstCh );
+    nNextCh = static_cast<unsigned char>(cFirstCh);
     eState = SvParserState::Working;
     nOpenBrakets = 0;
     eCodeSet = RTL_TEXTENCODING_MS_1252;
