@@ -146,6 +146,15 @@ public:
     virtual int get_margin_left() const = 0;
     virtual int get_margin_right() const = 0;
 
+    /*
+     * Report the extents of this widget relative to the rRelative target widget.
+     *
+     * To succeed, both widgets must be realized, and must share a common toplevel.
+     *
+     * returns false if the relative extents could not be determined, e.g. if
+     * either widget was not realized, or there was no common ancestor.
+     * Otherwise true.
+     */
     virtual bool get_extents_relative_to(Widget& rRelative, int& x, int& y, int& width, int& height)
         = 0;
 
