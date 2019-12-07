@@ -20,6 +20,7 @@
 
 #include "elements.hxx"
 
+#include <algorithm>
 
 CGMElements::CGMElements()
 {

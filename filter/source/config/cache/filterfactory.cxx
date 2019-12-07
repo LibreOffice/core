@@ -25,7 +25,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/sequence.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/TypeDetection/UISort.hxx>
 

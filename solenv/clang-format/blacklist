@@ -4526,7 +4526,6 @@ external/unixODBC/inc/odbc/sql.h
 external/unixODBC/inc/odbc/sqlext.h
 external/unixODBC/inc/odbc/sqltypes.h
 external/unixODBC/inc/odbc/sqlucode.h
-filter/inc/gfxtypes.hxx
 filter/inc/strings.hxx
 filter/qa/cppunit/filters-dxf-test.cxx
 filter/qa/cppunit/filters-eps-test.cxx
@@ -4606,7 +4605,6 @@ filter/source/graphicfilter/icgm/class7.cxx
 filter/source/graphicfilter/icgm/classx.cxx
 filter/source/graphicfilter/icgm/elements.cxx
 filter/source/graphicfilter/icgm/elements.hxx
-filter/source/graphicfilter/icgm/main.hxx
 filter/source/graphicfilter/icgm/outact.hxx
 filter/source/graphicfilter/idxf/dxf2mtf.cxx
 filter/source/graphicfilter/idxf/dxf2mtf.hxx
@@ -4672,7 +4670,6 @@ filter/source/pdf/pdfuno.cxx
 filter/source/storagefilterdetect/fdcomp.cxx
 filter/source/storagefilterdetect/filterdetect.cxx
 filter/source/storagefilterdetect/filterdetect.hxx
-filter/source/svg/spirit_supplements.hxx
 filter/source/svg/svgexport.cxx
 filter/source/svg/svgfilter.cxx
 filter/source/svg/svgfilter.hxx

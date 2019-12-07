@@ -19,6 +19,7 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -28,9 +29,7 @@
 #include <vcl/gdimtf.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/diagnose.h>
-#include <osl/file.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/wmf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/gdimetafiletools.hxx>
 #include <memory>

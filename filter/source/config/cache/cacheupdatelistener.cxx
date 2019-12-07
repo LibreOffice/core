@@ -19,12 +19,10 @@
 
 
 #include "cacheupdatelistener.hxx"
-#include "constant.hxx"
 
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/document/FilterConfigRefresh.hpp>
-#include <salhelper/singletonref.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>

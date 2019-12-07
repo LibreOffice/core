@@ -21,12 +21,9 @@
 #include "swfdialog.hxx"
 #include "swfuno.hxx"
 #include "impswfdialog.hxx"
-#include <svl/solar.hrc>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/view/XRenderable.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

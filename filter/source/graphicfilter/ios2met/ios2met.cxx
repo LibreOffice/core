@@ -30,7 +30,6 @@
 #include <vcl/gdimtf.hxx>
 
 #include <math.h>
-#include <algorithm>
 #include <memory>
 
 class FilterConfigItem;

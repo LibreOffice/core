@@ -23,6 +23,7 @@
 
 #include <com/sun/star/uno/Sequence.h>
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <osl/diagnose.h>

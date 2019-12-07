@@ -17,19 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include "impdialog.hxx"
 #include <strings.hrc>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/errinf.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/passwd.hxx>
-#include <svtools/miscopt.hxx>
 #include <unotools/resmgr.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/propertyvalue.hxx>
@@ -42,8 +37,8 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
-#include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 static OUString PDFFilterResId(const char* pId)
 {

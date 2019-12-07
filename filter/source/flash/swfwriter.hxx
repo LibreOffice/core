@@ -31,7 +31,7 @@
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <osl/file.hxx>
+#include <osl/diagnose.h>
 
 #include <vector>
 #include <stack>

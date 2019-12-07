@@ -20,17 +20,15 @@
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 
 #include "typedetectionexport.hxx"
-#include "xmlfiltersettingsdialog.hxx"
+#include "xmlfiltercommon.hxx"
 
 #include <comphelper/attributelist.hxx>
 
-using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;

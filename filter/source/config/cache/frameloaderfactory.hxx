@@ -22,7 +22,6 @@
 
 #include "basecontainer.hxx"
 #include <com/sun/star/frame/XLoaderFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 
 
