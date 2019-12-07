@@ -1002,14 +1002,14 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if (pObj->IsChart())
                     {
-                        bool bDisableDataTableDialog = false;
+                        bool bEnableDataTableDialog = true;
                         svt::EmbeddedObjectRef::TryRunningState( xObj );
                         uno::Reference< beans::XPropertySet > xProps( xObj->getComponent(), uno::UNO_QUERY );
                         if ( xProps.is() &&
-                             ( xProps->getPropertyValue( "DisableDataTableDialog" ) >>= bDisableDataTableDialog ) &&
-                             bDisableDataTableDialog )
+                             ( xProps->getPropertyValue( "EnableDataTableDialog" ) >>= bEnableDataTableDialog ) &&
+                             !bEnableDataTableDialog )
                         {
-                            xProps->setPropertyValue( "DisableDataTableDialog" , uno::makeAny( false ) );
+                            xProps->setPropertyValue( "EnableDataTableDialog" , uno::makeAny( true ) );
                             xProps->setPropertyValue( "DisableComplexChartTypes" , uno::makeAny( false ) );
                             uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                             if ( xModifiable.is() )

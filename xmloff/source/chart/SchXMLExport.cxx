@@ -1530,10 +1530,10 @@ void SchXMLExportHelper_Impl::exportTable()
     {
         bool bProtected = false;
         Reference< beans::XPropertySet > xProps( mrExport.GetModel(), uno::UNO_QUERY_THROW );
-        if ( ( xProps->getPropertyValue("DisableDataTableDialog") >>= bProtected ) &&
-             bProtected )
+        if ( ( xProps->getPropertyValue("EnableDataTableDialog") >>= bProtected ) &&
+             !bProtected )
         {
-            mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE );
+            mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED, XML_FALSE );
         }
     }
     catch ( const uno::Exception& )

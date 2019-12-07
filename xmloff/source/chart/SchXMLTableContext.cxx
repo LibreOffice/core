@@ -804,7 +804,7 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
         try
         {
             Reference< beans::XPropertySet > xProps( xChartDoc, uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue( "DisableDataTableDialog", uno::makeAny( true ) );
+            xProps->setPropertyValue( "EnableDataTableDialog", uno::makeAny( false ) );
             xProps->setPropertyValue( "DisableComplexChartTypes", uno::makeAny( true ) );
         }
         catch ( uno::Exception& )

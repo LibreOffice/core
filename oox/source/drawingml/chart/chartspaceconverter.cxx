@@ -280,7 +280,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     if ( mrModel.mbPivotChart )
     {
         PropertySet aProps( getChartDocument() );
-        aProps.setProperty( PROP_DisableDataTableDialog , true );
+        aProps.setProperty( PROP_EnableDataTableDialog , false );
         aProps.setProperty( PROP_DisableComplexChartTypes , true );
     }
 

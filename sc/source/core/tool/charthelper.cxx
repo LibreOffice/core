@@ -291,13 +291,13 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
             const uno::Reference< embed::XEmbeddedObject >& xEmbeddedObj = pSdrOle2Obj->GetObjRef();
             if ( xEmbeddedObj.is() )
             {
-                bool bDisableDataTableDialog = false;
+                bool bEnableDataTableDialog = true;
                 sal_Int32 nOldState = xEmbeddedObj->getCurrentState();
                 svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
                 uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
                 if ( xProps.is() &&
-                     ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
-                     bDisableDataTableDialog )
+                     ( xProps->getPropertyValue("EnableDataTableDialog") >>= bEnableDataTableDialog ) &&
+                     !bEnableDataTableDialog )
                 {
                     ScChartListenerCollection* pCollection = pDocument->GetChartListenerCollection();
                     if (pCollection)
@@ -382,12 +382,12 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, co
                         const uno::Reference< embed::XEmbeddedObject >& xEmbeddedObj = pSdrOle2Obj->GetObjRef();
                         if ( xEmbeddedObj.is() && ( nRangeList < nRangeListCount ) )
                         {
-                            bool bDisableDataTableDialog = false;
+                            bool bEnableDataTableDialog = true;
                             svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
                             uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
                             if ( xProps.is() &&
-                                 ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
-                                 bDisableDataTableDialog )
+                                 ( xProps->getPropertyValue("EnableDataTableDialog") >>= bEnableDataTableDialog ) &&
+                                 !bEnableDataTableDialog )
                             {
                                 if ( bSameDoc )
                                 {
@@ -403,8 +403,8 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, co
                                 }
                                 else
                                 {
-                                    xProps->setPropertyValue("DisableDataTableDialog",
-                                        uno::makeAny( false ) );
+                                    xProps->setPropertyValue("EnableDataTableDialog",
+                                        uno::makeAny( true ) );
                                     xProps->setPropertyValue("DisableComplexChartTypes",
                                         uno::makeAny( false ) );
                                 }

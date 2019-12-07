@@ -573,15 +573,15 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
         uno::Reference< embed::XEmbeddedObject > xEmbeddedObj = xRef.GetObject();
         if ( xEmbeddedObj.is() )
         {
-            bool bDisableDataTableDialog = false;
+            bool bEnableDataTableDialog = false;
             svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
             uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
             if ( xProps.is() &&
-                 ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
-                 bDisableDataTableDialog )
+                 ( xProps->getPropertyValue("EnableDataTableDialog") >>= bEnableDataTableDialog ) &&
+                 !bEnableDataTableDialog )
             {
-                xProps->setPropertyValue("DisableDataTableDialog",
-                    uno::makeAny( false ) );
+                xProps->setPropertyValue("EnableDataTableDialog",
+                    uno::makeAny( true ) );
                 xProps->setPropertyValue("DisableComplexChartTypes",
                     uno::makeAny( false ) );
                 uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );

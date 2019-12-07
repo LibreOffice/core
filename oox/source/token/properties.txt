@@ -136,13 +136,13 @@ DiagonalBLTR
 DiagonalTLBR
 DialogLibraries
 DisableComplexChartTypes
-DisableDataTableDialog
 DisplayLabels
 DisplayUnits
 DrillDownOnDoubleClick
 Dropdown
 Duration
 EchoChar
+EnableDataTableDialog
 EnableVisible
 Enabled
 EndPosition
