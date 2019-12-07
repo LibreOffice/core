@@ -481,9 +481,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         // Let's check whether the secondary Y axis is visible
         try
         {
-            Reference< beans::XPropertySet > xAxisProp(xCooSys->getAxisByDimension(1, 1), uno::UNO_QUERY);
-            if (xAxisProp.is())
+            if (xCooSys->getMaximumAxisIndexByDimension(1) > 0)
             {
+                Reference< beans::XPropertySet > xAxisProp(xCooSys->getAxisByDimension(1, 1), uno::UNO_QUERY);
                 xAxisProp->getPropertyValue("Show") >>= bSecondaryYaxisVisible;
             }
         }
