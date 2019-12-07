@@ -165,7 +165,7 @@ void SbiSymPool::Add( SbiSymDef* pDef )
 }
 
 
-SbiSymDef* SbiSymPool::Find( const OUString& rName )
+SbiSymDef* SbiSymPool::Find( const OUString& rName, bool bSearchInParents )
 {
     sal_uInt16 nCount = m_Data.size();
     for( sal_uInt16 i = 0; i < nCount; i++ )
@@ -177,7 +177,7 @@ SbiSymDef* SbiSymPool::Find( const OUString& rName )
             return &r;
         }
     }
-    if( pParent )
+    if( bSearchInParents && pParent )
     {
         return pParent->Find( rName );
     }

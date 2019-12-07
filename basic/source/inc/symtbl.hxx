@@ -71,7 +71,7 @@ public:
     SbiSymDef* AddSym( const OUString& );
     SbiProcDef* AddProc( const OUString& );
     void Add( SbiSymDef* );
-    SbiSymDef* Find( const OUString& ); // variable name
+    SbiSymDef* Find( const OUString&, bool bSearchInParents = true ); // variable name
     SbiSymDef* Get( sal_uInt16 );     // find variable per position
     SbiSymDef* First(), *Next();            // iterators
 
