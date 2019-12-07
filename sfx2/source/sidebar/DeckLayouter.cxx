@@ -163,13 +163,10 @@ tools::Rectangle LayoutPanels (
     sal_Int32 nTotalPreferredHeight (0);
     sal_Int32 nTotalMinimumHeight (0);
 
-    for(::std::vector<LayoutItem>::const_iterator iItem(rLayoutItems.begin()),
-         iEnd(rLayoutItems.end());
-        iItem!=iEnd;
-        ++iItem)
+    for (const LayoutItem& item : rLayoutItems)
     {
-        nTotalMinimumHeight += iItem->maLayoutSize.Minimum;
-        nTotalPreferredHeight += iItem->maLayoutSize.Preferred;
+        nTotalMinimumHeight += item.maLayoutSize.Minimum;
+        nTotalPreferredHeight += item.maLayoutSize.Preferred;
     }
 
 
