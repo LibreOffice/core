@@ -21,8 +21,6 @@
 #include "pdfdialog.hxx"
 #include "impdialog.hxx"
 #include <vcl/svapp.hxx>
-#include <svl/solar.hrc>
-#include <com/sun/star/view/XRenderable.hpp>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;

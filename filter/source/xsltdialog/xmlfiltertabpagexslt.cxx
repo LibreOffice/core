@@ -19,14 +19,13 @@
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <sfx2/filedlghelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <osl/file.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
 
+#include "xmlfiltercommon.hxx"
 #include "xmlfiltertabpagexslt.hxx"
-#include "xmlfiltersettingsdialog.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

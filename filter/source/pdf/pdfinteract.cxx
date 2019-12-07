@@ -25,7 +25,6 @@
 #include <com/sun/star/task/PDFExportException.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
 PDFInteractionHandler::PDFInteractionHandler()

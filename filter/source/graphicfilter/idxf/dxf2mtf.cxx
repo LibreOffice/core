@@ -18,7 +18,6 @@
  */
 
 
-#include <string.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>

@@ -18,7 +18,6 @@
  */
 
 
-#include <string.h>
 #include "dxfreprd.hxx"
 #include <osl/nlsupport.h>
 #include <officecfg/Setup.hxx>

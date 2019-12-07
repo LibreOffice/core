@@ -47,9 +47,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/helpers.hxx>
 #include <unotools/configmgr.hxx>
-#include <vcl/gradient.hxx>
 
-#include "main.hxx"
+#include "bitmap.hxx"
+#include "elements.hxx"
 #include "outact.hxx"
 
 using namespace ::com::sun::star;

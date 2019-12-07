@@ -13,9 +13,6 @@
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 
-#include <osl/file.hxx>
-#include <osl/process.h>
-
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT bool SAL_CALL

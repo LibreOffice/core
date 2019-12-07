@@ -19,7 +19,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABDIALOG_HXX
 #define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABDIALOG_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
 
 class filter_info_impl;
