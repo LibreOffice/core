@@ -938,7 +938,14 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                 {
                     pPar->SetParamArray();
                 }
-                pDef->GetParams().Add( pPar );
+                if (SbiSymDef* pOldDef = pDef->GetParams().Find(pPar->GetName(), false))
+                {
+                    Error(ERRCODE_BASIC_VAR_DEFINED, pPar->GetName());
+                    delete pPar;
+                    pPar = pOldDef;
+                }
+                else
+                    pDef->GetParams().Add( pPar );
                 SbiToken eTok = Next();
                 if( eTok != COMMA && eTok != RPAREN )
                 {
