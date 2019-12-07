@@ -19,6 +19,55 @@
 namespace
 {
 OUString sNoAlt("No alt text for graphic '%OBJECT_NAME%'");
+OUString sTableMergeSplit("Table '%OBJECT_NAME%' contains merges or splits");
+}
+
+void AccessibilityCheck::checkTableNode(SwTableNode* pTableNode)
+{
+    if (!pTableNode)
+        return;
+
+    SwTable const& rTable = pTableNode->GetTable();
+    if (rTable.IsTableComplex())
+    {
+        OUString sName = rTable.GetTableStyleName();
+        svx::AccessibilityIssue aIssue;
+        aIssue.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
+        m_aAccessibilityIssueCollection.push_back(aIssue);
+    }
+    else
+    {
+        if (rTable.GetTabLines().size() > 1)
+        {
+            int i = 0;
+            size_t nFirstLineSize = 0;
+            bool bAllColumnsSameSize = true;
+
+            for (SwTableLine const* pTableLine : rTable.GetTabLines())
+            {
+                if (i == 0)
+                {
+                    nFirstLineSize = pTableLine->GetTabBoxes().size();
+                }
+                else
+                {
+                    size_t nLineSize = pTableLine->GetTabBoxes().size();
+                    if (nFirstLineSize != nLineSize)
+                    {
+                        bAllColumnsSameSize = false;
+                    }
+                }
+                i++;
+            }
+            if (!bAllColumnsSameSize)
+            {
+                OUString sName = rTable.GetTableStyleName();
+                svx::AccessibilityIssue aIssue;
+                aIssue.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
+                m_aAccessibilityIssueCollection.push_back(aIssue);
+            }
+        }
+    }
 }
 
 // Check NoTextNodes: Graphic, OLE
@@ -72,6 +121,12 @@ void AccessibilityCheck::check()
                 SwNoTextNode* pNoTextNode = pNode->GetNoTextNode();
                 if (pNoTextNode)
                     checkNoTextNode(pNoTextNode);
+            }
+            if (pNode->GetNodeType() & SwNodeType::Table)
+            {
+                SwTableNode* pTableNode = pNode->GetTableNode();
+                if (pTableNode)
+                    checkTableNode(pTableNode);
             }
         }
     }
