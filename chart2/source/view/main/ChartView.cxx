@@ -1374,15 +1374,23 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                             else
                             {
                                 //Calc is parent document
-                                xParentProps->getPropertyValue( "PageStyle" ) >>= aPageStyle;
+                                Reference< com::sun::star::beans::XPropertySetInfo > xInfo = xParentProps->getPropertySetInfo();
+                                if (xInfo->hasPropertyByName("PageStyle"))
+                                {
+                                    xParentProps->getPropertyValue( "PageStyle" ) >>= aPageStyle;
+                                }
                                 if(aPageStyle.isEmpty())
                                     aPageStyle = "Default";
                             }
                             if( nWritingMode == -1 || nWritingMode == text::WritingMode2::PAGE )
                             {
                                 uno::Reference< beans::XPropertySet > xPageStyle( xPageStyles->getByName( aPageStyle ), uno::UNO_QUERY );
-                                if( xPageStyle.is() )
-                                    xPageStyle->getPropertyValue( "WritingMode" ) >>= nWritingMode;
+                                Reference< com::sun::star::beans::XPropertySetInfo > xInfo = xPageStyle->getPropertySetInfo();
+                                if (xInfo->hasPropertyByName("WritingMode"))
+                                {
+                                    if( xPageStyle.is() )
+                                        xPageStyle->getPropertyValue( "WritingMode" ) >>= nWritingMode;
+                                }
                             }
                         }
                     }
