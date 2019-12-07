@@ -1021,6 +1021,18 @@ DECLARE_OOXMLEXPORT_TEST(testSingleCellTableBorders, "tdf124399_SingleCellTableB
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testInsideBorders, "tdf129242_InsideBorders.docx")
+{
+    // tdf#129242: Don't remove inside borders if the table has more than one cells.
+
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Rcsostblzat']/w:tblPr/w:tblBorders/w:insideV");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Rcsostblzat']/w:tblPr/w:tblBorders/w:insideH");
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
