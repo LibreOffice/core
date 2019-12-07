@@ -876,8 +876,10 @@ IMPL_LINK_NOARG(SvxColorOptionsTabPage, AdjustHeaderBar, const Size&, void)
 {
     // horizontal positions
     int nX0 = 0, nX1, nX2, y, width, height;
-    m_rWidget1.get_extents_relative_to(*m_xTable, nX1, y, width, height);
-    m_rWidget2.get_extents_relative_to(*m_xTable, nX2, y, width, height);
+    if (!m_rWidget1.get_extents_relative_to(*m_xTable, nX1, y, width, height))
+        return;
+    if (!m_rWidget2.get_extents_relative_to(*m_xTable, nX2, y, width, height))
+        return;
     auto nTextWidth1 = nX1 - nX0;
     auto nTextWidth2 = nX2 - nX1;
     m_xOnFT->set_size_request(nTextWidth1, -1);
