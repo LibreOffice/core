@@ -24,9 +24,14 @@
 
 #include <vcl/unohelp.hxx>
 #include <vcl/font.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <xmloff/nmspmap.hxx>
+
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 
 static const sal_Int32 nFontEM = 2048;
 

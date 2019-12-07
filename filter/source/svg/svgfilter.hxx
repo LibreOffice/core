@@ -32,22 +32,10 @@
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#include <osl/diagnose.h>
-#include <sal/log.hxx>
-#include <rtl/process.h>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <editeng/flditem.hxx>
-#include <unotools/tempfile.hxx>
-#include <unotools/streamwrap.hxx>
-#include <vcl/cvtgrf.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/svdxcgv.hxx>
-#include <svx/svdobj.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <cstdio>
 #include <unordered_set>

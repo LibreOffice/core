@@ -9,15 +9,11 @@
 
 // Unit test to check that we get the right filters for the right extensions.
 
-#include <limits>
-
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <sal/types.h>
-#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <comphelper/processfactory.hxx>

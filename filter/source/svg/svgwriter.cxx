@@ -22,15 +22,25 @@
 #include "svgwriter.hxx"
 
 #include <comphelper/base64.hxx>
-#include <rtl/crc.h>
 #include <sal/log.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
+#include <tools/fract.hxx>
 #include <tools/helpers.hxx>
+#include <tools/stream.hxx>
+#include <xmloff/nmspmap.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
-#include <sax/tools/converter.hxx>
 #include <i18nlangtag/languagetag.hxx>
+
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 
 #include <memory>
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
 #include <stdlib.h>
 #include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>

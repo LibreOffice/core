@@ -18,8 +18,10 @@
  */
 
 
-#include "main.hxx"
+#include "bitmap.hxx"
+#include "cgm.hxx"
 #include "chart.hxx"
+#include "elements.hxx"
 #include "outact.hxx"
 #include <math.h>
 #include <memory>

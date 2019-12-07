@@ -21,7 +21,6 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <cppuhelper/supportsservice.hxx>

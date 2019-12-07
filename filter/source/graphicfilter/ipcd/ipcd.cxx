@@ -18,12 +18,8 @@
  */
 
 
-#include <rtl/alloc.h>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/fltcall.hxx>
-#include <svl/solar.hrc>
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
 

@@ -28,15 +28,11 @@
 #include <vcl/graph.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/region.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/font.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gradient.hxx>
-#include <vcl/settings.hxx>
 #include <unotools/configmgr.hxx>
-#include <svl/solar.hrc>
-#include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/weld.hxx>
@@ -44,7 +40,6 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-#include <math.h>
 #include <memory>
 
 using namespace ::com::sun::star::uno;

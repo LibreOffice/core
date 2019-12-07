@@ -17,7 +17,6 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>

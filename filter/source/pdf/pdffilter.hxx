@@ -24,27 +24,16 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <osl/diagnose.h>
-#include <rtl/process.h>
-#include <unotools/tempfile.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::io;
 
 
 class PDFFilter : public cppu::WeakImplHelper < XFilter, XExporter, XInitialization, XServiceInfo >

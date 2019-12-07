@@ -23,6 +23,8 @@
 #include "dxfreprd.hxx"
 #include <vcl/font.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/virdev.hxx>
 
 enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 

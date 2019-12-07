@@ -25,37 +25,17 @@
 #include <osl/diagnose.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/cvtgrf.hxx>
 #include <vcl/graphictools.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/nmspmap.hxx>
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/text/XTextField.hpp>
-#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
 
 #include <memory>

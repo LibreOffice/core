@@ -20,11 +20,8 @@
 
 #include <cstdio>
 
-#include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/servicedecl.hxx>
-#include <uno/environment.h>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -34,21 +31,15 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/drawing/XDrawSubController.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/AnchorBindingMode.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/XResource.hpp>
-#include <com/sun/star/drawing/framework/XView.hpp>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/streamwrap.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/zcodec.hxx>
@@ -61,6 +52,8 @@
 
 #include <svx/unopage.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/window.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
 #include <svl/itempool.hxx>

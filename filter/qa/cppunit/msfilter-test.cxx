@@ -8,12 +8,10 @@
  */
 
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <sal/types.h>
-#include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
 #include <filter/msfilter/util.hxx>
 

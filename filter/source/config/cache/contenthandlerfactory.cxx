@@ -19,8 +19,6 @@
 
 
 #include "contenthandlerfactory.hxx"
-#include "querytokenizer.hxx"
-#include "constant.hxx"
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/processfactory.hxx>

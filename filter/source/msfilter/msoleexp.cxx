@@ -32,10 +32,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <osl/diagnose.h>
 #include <comphelper/classids.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>

@@ -16,9 +16,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/metaactiontypes.hxx>
 
-#include <osl/file.hxx>
-#include <osl/process.h>
-
 #include "../../source/graphicfilter/ipict/ipict.hxx"
 
 extern "C"

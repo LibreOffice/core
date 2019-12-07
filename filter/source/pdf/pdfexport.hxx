@@ -20,10 +20,15 @@
 #ifndef INCLUDED_FILTER_SOURCE_PDF_PDFEXPORT_HXX
 #define INCLUDED_FILTER_SOURCE_PDF_PDFEXPORT_HXX
 
-#include "pdffilter.hxx"
 #include <tools/multisel.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 
 class GDIMetaFile;
@@ -31,6 +36,10 @@ class Size;
 
 namespace vcl { class PDFWriter; }
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 
 class PDFExport
 {

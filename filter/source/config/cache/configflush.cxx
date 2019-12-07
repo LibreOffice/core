@@ -18,7 +18,6 @@
  */
 
 #include "configflush.hxx"
-#include "constant.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
 

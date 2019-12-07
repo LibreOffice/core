@@ -22,10 +22,8 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <rtl/ustring.hxx>
 #include <vector>
 #include <memory>
-#include <vcl/vclptr.hxx>
 #include "cgmtypes.hxx"
 
 class   Graphic;

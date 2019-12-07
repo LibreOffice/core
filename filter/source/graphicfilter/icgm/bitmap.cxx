@@ -18,11 +18,13 @@
  */
 
 
-#include "main.hxx"
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <memory>
+
+#include "bitmap.hxx"
+#include "elements.hxx"
 
 namespace {
 

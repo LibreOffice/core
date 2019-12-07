@@ -24,8 +24,9 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
-#include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -36,21 +37,19 @@
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 
 #include <rtl/bootstrap.hxx>
-#include <svtools/miscopt.hxx>
 #include <svx/unopage.hxx>
-#include <svx/unoshape.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/xfillit0.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/numitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/zforlist.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/streamwrap.hxx>
+#include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -58,6 +57,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/animationexport.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdxcgv.hxx>
 
 #include <memory>
 

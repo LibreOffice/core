@@ -28,10 +28,8 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <editeng/outlobj.hxx>
-#include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
@@ -50,17 +48,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
-#include <com/sun/star/awt/RasterOperation.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/drawing/BezierPoint.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
-#include <com/sun/star/drawing/ConnectionType.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
@@ -80,7 +75,6 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <vcl/hatch.hxx>
-#include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
@@ -90,7 +84,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>

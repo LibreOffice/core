@@ -18,28 +18,19 @@
  */
 
 #include <iostream>
-#include <stdlib.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include "XmlFilterAdaptor.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>

@@ -20,6 +20,11 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CHART_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CHART_HXX
 
+#include <sal/types.h>
+
+#include <memory>
+#include <vector>
+
 /* FILE TYPE CONSTANTS: */
 #define BULCHART        32      /* Bullet chart file.       */
 /* the following were added although SPC doesn't have a #define */

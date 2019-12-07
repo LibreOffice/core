@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "main.hxx"
+#include "bundles.hxx"
+#include "cgm.hxx"
+#include "elements.hxx"
 
 
 void CGM::ImplDoClass1()

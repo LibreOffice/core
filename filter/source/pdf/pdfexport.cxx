@@ -21,22 +21,11 @@
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/fract.hxx>
 #include <tools/poly.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/jobset.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/FilterConfigItem.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/graphictools.hxx>
-#include <svl/solar.hrc>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -44,22 +33,16 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <unotools/streamwrap.hxx>
-#include <unotools/saveopt.hxx>
 #include <unotools/configmgr.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include "pdfexport.hxx"
-#include "impdialog.hxx"
 #include <strings.hrc>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -70,16 +53,16 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/PDFExportException.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;

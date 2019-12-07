@@ -21,8 +21,6 @@
 #include "lzwdecom.hxx"
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
-#include <algorithm>
-#include <set>
 
 LZWDecompressor::LZWDecompressor()
     : pIStream(nullptr)

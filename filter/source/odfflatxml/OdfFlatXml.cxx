@@ -17,7 +17,6 @@
 
 #include <sax/tools/documenthandleradapter.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
@@ -28,8 +27,6 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 

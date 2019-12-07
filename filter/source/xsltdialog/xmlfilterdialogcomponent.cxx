@@ -18,17 +18,13 @@
  */
 
 #include <osl/mutex.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
-#include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/component.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -36,11 +32,8 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
-
-#include <svl/solar.hrc>
 
 #include "xmlfiltersettingsdialog.hxx"
 

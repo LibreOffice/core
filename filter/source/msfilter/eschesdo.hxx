@@ -20,7 +20,6 @@
 #define INCLUDED_FILTER_SOURCE_MSFILTER_ESCHESDO_HXX
 #include <filter/msfilter/escherex.hxx>
 #include <o3tl/any.hxx>
-#include <svx/unopage.hxx>
 #include <vcl/mapmod.hxx>
 
 

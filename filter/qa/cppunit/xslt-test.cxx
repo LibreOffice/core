@@ -10,11 +10,9 @@
 #include <sal/config.h>
 
 #include <condition_variable>
-#include <limits>
 #include <mutex>
 
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
@@ -27,7 +25,6 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/xml/xslt/XSLTTransformer.hpp>
 

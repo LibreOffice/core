@@ -26,14 +26,17 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/weld.hxx>
 
-#include "pdffilter.hxx"
-
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 class ImpPDFTabGeneralPage;
 class ImpPDFTabViewerPage;
 class ImpPDFTabOpnFtrPage;
 class ImpPDFTabLinksPage;
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 
 class ImplErrorDialog : public weld::MessageDialogController
 {

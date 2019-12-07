@@ -25,9 +25,13 @@
 #include <vcl/window.hxx>
 #include <svl/outstrm.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/tempfile.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <memory>
 
+#include <com/sun/star/io/XOutputStream.hpp>
+
+using namespace ::com::sun::star::io;
 
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
     mxContext( rxContext )

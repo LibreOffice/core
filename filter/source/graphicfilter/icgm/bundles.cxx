@@ -20,8 +20,8 @@
 
 #include "bundles.hxx"
 
-#include <tools/stream.hxx>
 #include <memory>
+#include <string.h>
 
 void Bundle::SetColor( sal_uInt32 nColor )
 {

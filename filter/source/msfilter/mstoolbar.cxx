@@ -7,9 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <filter/msfilter/mstoolbar.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <stdarg.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
@@ -19,16 +17,11 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
-#include <fstream>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/image.hxx>
-#include <map>
 #include <sfx2/objsh.hxx>
-#include <basic/basmgr.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
-#include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 

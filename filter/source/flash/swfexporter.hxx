@@ -19,14 +19,14 @@
 #ifndef INCLUDED_FILTER_SOURCE_FLASH_SWFEXPORTER_HXX
 #define INCLUDED_FILTER_SOURCE_FLASH_SWFEXPORTER_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XGraphicExportFilter.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <vcl/checksum.hxx>
 
-#include <vector>
 #include <map>
 #include <memory>
 

@@ -9,14 +9,11 @@
  */
 
 #include <algorithm>
-#include <cstdio>
 #include <cstring>
 #include <map>
 #include <utility>
 #include <vector>
-#include <iostream>
 #include <libxml/parser.h>
-#include <libxml/tree.h>
 #include <libxml/xmlIO.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
@@ -29,18 +26,11 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include <osl/module.h>
 #include <osl/file.hxx>
-#include <osl/process.h>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
 
 #include "LibXSLTTransformer.hxx"

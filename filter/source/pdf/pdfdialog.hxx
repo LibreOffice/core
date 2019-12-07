@@ -20,14 +20,22 @@
 #ifndef INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
 #define INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
 
-#include "pdffilter.hxx"
 #include <svtools/genericunodialog.hxx>
 
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase.hxx>
 
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace vcl { class Window; }
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 
 typedef ::cppu::ImplInheritanceHelper < ::svt::OGenericUnoDialog, XPropertyAccess, XExporter >  PDFDialog_Base;
 

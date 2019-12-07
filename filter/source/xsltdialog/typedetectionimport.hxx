@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_TYPEDETECTIONIMPORT_HXX
 #define INCLUDED_FILTER_SOURCE_XSLTDIALOG_TYPEDETECTIONIMPORT_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>

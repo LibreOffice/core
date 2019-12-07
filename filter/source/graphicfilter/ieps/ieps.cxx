@@ -20,10 +20,7 @@
 
 #include <tools/solar.h>
 #include <vcl/svapp.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/animate/Animation.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>

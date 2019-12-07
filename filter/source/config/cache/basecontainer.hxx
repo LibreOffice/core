@@ -22,7 +22,6 @@
 #include <memory>
 
 #include "filtercache.hxx"
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

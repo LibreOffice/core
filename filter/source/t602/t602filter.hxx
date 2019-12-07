@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FILTER_SOURCE_T602_T602FILTER_HXX
 #define INCLUDED_FILTER_SOURCE_T602_T602FILTER_HXX
 
-#include <memory>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>

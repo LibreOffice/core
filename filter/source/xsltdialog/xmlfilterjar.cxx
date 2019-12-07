@@ -18,13 +18,13 @@
  */
 
 #include <com/sun/star/io/XActiveDataControl.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -42,9 +42,8 @@
 
 #include <rtl/uri.hxx>
 
+#include "xmlfiltercommon.hxx"
 #include "xmlfilterjar.hxx"
-#include <strings.hrc>
-#include "xmlfiltersettingsdialog.hxx"
 #include "typedetectionexport.hxx"
 #include "typedetectionimport.hxx"
 

@@ -10,10 +10,8 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/BitmapPalette.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
