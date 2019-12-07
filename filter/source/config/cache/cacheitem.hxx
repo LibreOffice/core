@@ -23,7 +23,6 @@
 #include <unordered_map>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <vector>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/mutex.hxx>

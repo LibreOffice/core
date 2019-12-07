@@ -19,7 +19,6 @@
 
 
 #include "basecontainer.hxx"
-#include "constant.hxx"
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/document/FilterConfigRefresh.hpp>

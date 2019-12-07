@@ -21,7 +21,7 @@
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vector>
 

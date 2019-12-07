@@ -26,14 +26,10 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>

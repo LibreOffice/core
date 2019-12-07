@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
@@ -46,8 +46,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <strings.hrc>
-#include "xmlfiltersettingsdialog.hxx"
+#include "xmlfiltercommon.hxx"
 #include "xmlfiltertestdialog.hxx"
 
 

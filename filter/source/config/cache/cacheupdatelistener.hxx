@@ -20,9 +20,7 @@
 #define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEUPDATELISTENER_HXX
 
 #include "filtercache.hxx"
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
-#include <salhelper/singletonref.hxx>
 #include <cppuhelper/implbase.hxx>
 
 

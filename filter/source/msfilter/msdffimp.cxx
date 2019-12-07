@@ -25,10 +25,8 @@
 #include <vector>
 
 #include <o3tl/any.hxx>
-#include <osl/endian.h>
 #include <osl/file.hxx>
 #include <tools/solar.h>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 
 #include <comphelper/classids.hxx>
@@ -52,21 +50,14 @@
 // SvxItem-Mapping. Is needed to successfully include the SvxItem-Header
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
-#include <svl/urihelper.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <filter/msfilter/escherex.hxx>
-#include <basegfx/range/b2drange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <com/sun/star/container/XIdentifierContainer.hpp>
-#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
-#include <com/sun/star/drawing/GluePoint2.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -74,19 +65,14 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <sot/storage.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/module.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xsflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdgmoitm.hxx>
-#include <editeng/tstpitem.hxx>
-#include <svx/fmmodel.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
@@ -94,9 +80,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdorect.hxx>
-#include <svx/svdocapt.hxx>
 #include <svx/svdoedge.hxx>
-#include <svx/svdocirc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdopath.hxx>
@@ -119,11 +103,7 @@
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/colritem.hxx>
 #include <svx/sxekitm.hxx>
-#include <editeng/bulletitem.hxx>
-#include <svx/extrud3d.hxx>
-#include <svx/svditer.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlncapit.hxx>
@@ -152,11 +132,7 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/editeng.hxx>
-#include <svx/gallery.hxx>
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#include <svl/itempool.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svx3ditems.hxx>
@@ -176,8 +152,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <svx/EnhancedCustomShape2d.hxx>
-#include <svx/xbitmap.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <svtools/embedhlp.hxx>
 #include <memory>

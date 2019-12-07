@@ -19,13 +19,12 @@
 #ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTESTDIALOG_HXX
 #define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTESTDIALOG_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/weakref.hxx>
 #include <vcl/weld.hxx>
-#include <svl/poolitem.hxx>
 
 class filter_info_impl;
 

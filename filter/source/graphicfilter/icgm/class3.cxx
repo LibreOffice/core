@@ -18,7 +18,8 @@
  */
 
 
-#include "main.hxx"
+#include "cgm.hxx"
+#include "elements.hxx"
 #include "outact.hxx"
 
 

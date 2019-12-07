@@ -9,22 +9,7 @@
  */
 
 
-#include <cstdio>
-#include <cstring>
-#include <list>
-#include <map>
-#include <vector>
-#include <iostream>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#include <libxml/xmlIO.h>
-#include <libxslt/transform.h>
-#include <libxslt/xsltutils.h>
-#include <libxslt/variables.h>
-
 #include <rtl/ustrbuf.hxx>
-
-#include <sax/tools/converter.hxx>
 
 #include <package/Inflater.hxx>
 #include <package/Deflater.hxx>
@@ -32,7 +17,6 @@
 #include <cppuhelper/factory.hxx>
 #include <comphelper/base64.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

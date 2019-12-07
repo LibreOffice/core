@@ -23,13 +23,10 @@
 #include <memory>
 
 #include "cacheitem.hxx"
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/util/ChangesEvent.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
 #include <comphelper/documentconstants.hxx>

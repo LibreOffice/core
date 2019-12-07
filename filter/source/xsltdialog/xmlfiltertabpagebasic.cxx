@@ -19,9 +19,8 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
-#include <strings.hrc>
+#include "xmlfiltercommon.hxx"
 #include "xmlfiltertabpagebasic.hxx"
-#include "xmlfiltersettingsdialog.hxx"
 
 XMLFilterTabPageBasic::XMLFilterTabPageBasic(weld::Widget* pPage)
     : m_xBuilder(Application::CreateBuilder(pPage, "filter/ui/xmlfiltertabpagegeneral.ui"))

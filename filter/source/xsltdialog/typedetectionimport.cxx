@@ -20,11 +20,10 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <osl/diagnose.h>
 
 #include "typedetectionimport.hxx"
-#include "xmlfiltersettingsdialog.hxx"
+#include "xmlfiltercommon.hxx"
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;

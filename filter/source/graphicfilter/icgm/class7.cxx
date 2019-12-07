@@ -18,7 +18,7 @@
  */
 
 
-#include "main.hxx"
+#include "cgm.hxx"
 #include "chart.hxx"
 #include "outact.hxx"
 

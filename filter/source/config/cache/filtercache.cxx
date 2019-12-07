@@ -29,11 +29,9 @@
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
