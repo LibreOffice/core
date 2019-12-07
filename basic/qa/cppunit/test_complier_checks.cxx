@@ -24,4 +24,13 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testRedefineArgument)
     CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_VAR_DEFINED, aMacro.getError().StripDynamic());
 }
 
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testDoubleArgument)
+{
+    MacroSnippet aMacro("Sub doUnitTest(argName, argName)\n"
+                        "End Sub\n");
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_VAR_DEFINED, aMacro.getError().StripDynamic());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
