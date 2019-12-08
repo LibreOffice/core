@@ -97,6 +97,8 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
     mpScrollContainer->Show();
 
     mpVerticalScrollBar->SetScrollHdl(LINK(this, Deck, HandleVerticalScrollBarChange));
+    mpVerticalScrollBar->SetLineSize(10);
+    mpVerticalScrollBar->SetPageSize(100);
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -444,6 +446,7 @@ IMPL_LINK_NOARG(Deck, HandleVerticalScrollBarChange, ScrollBar*, void)
     const sal_Int32 nYOffset (-mpVerticalScrollBar->GetThumbPos());
     mpScrollContainer->SetPosPixel(Point(mpScrollContainer->GetPosPixel().X(),
                                          nYOffset));
+    mpScrollContainer->Invalidate();
 }
 
 //----- Deck::ScrollContainerWindow -------------------------------------------
