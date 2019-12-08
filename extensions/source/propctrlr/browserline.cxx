@@ -28,7 +28,6 @@
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

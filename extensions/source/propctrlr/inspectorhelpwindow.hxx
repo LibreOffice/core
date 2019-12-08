@@ -19,9 +19,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_INSPECTORHELPWINDOW_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_INSPECTORHELPWINDOW_HXX
 
-#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
-#include <svtools/svmedit.hxx>
 
 namespace pcr
 {

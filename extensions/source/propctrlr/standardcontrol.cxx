@@ -38,18 +38,15 @@
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 
-#include <vcl/floatwin.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/datetime.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/ptrstyle.hxx>
 
 #include <cstdlib>
 #include <limits>
