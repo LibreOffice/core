@@ -22,6 +22,7 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Deck.hxx>
+#include <comphelper/lok.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
@@ -169,9 +170,8 @@ tools::Rectangle LayoutPanels (
         nTotalPreferredHeight += item.maLayoutSize.Preferred;
     }
 
-
-    if (nTotalMinimumHeight > nAvailableHeight
-        && ! bShowVerticalScrollBar)
+    if (nTotalMinimumHeight > nAvailableHeight && !bShowVerticalScrollBar
+        && !comphelper::LibreOfficeKit::isActive())
     {
         // Not enough space, even when all panels are shrunk to their
         // minimum height.
