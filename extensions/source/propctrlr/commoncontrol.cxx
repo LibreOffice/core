@@ -21,7 +21,6 @@
 #include "pcrcommon.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/combobox.hxx>
 
 
 namespace pcr

@@ -26,8 +26,6 @@
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
-#include <vcl/scrbar.hxx>
-#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
