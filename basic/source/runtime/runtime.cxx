@@ -2219,6 +2219,10 @@ static bool implRestorePreservedArray(SbxDimArray* pNewArray, SbxArrayRef& rrefR
                 pActualIndices[j] = pLowerBounds[j] = lBoundNew;
                 pUpperBounds[j] = uBoundNew;
             }
+
+            // Optimization: pre-allocate underlying container
+            pNewArray->Put32(nullptr, pUpperBounds.get());
+
             // Copy data from old array by going recursively through all dimensions
             // (It would be faster to work on the flat internal data array of an
             // SbyArray but this solution is clearer and easier)
@@ -4313,6 +4317,9 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             const sal_Int32 nSize = nUpper - nLower + 1;
             nTotalSize *= nSize;
         }
+
+        // Optimization: pre-allocate underlying container
+        pArray->SbxArray::GetRef32(nTotalSize - 1);
 
         // First, fill those parts of the array that are preserved
         bool bWasError = false;
