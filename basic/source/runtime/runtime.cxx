@@ -2160,7 +2160,7 @@ void SbiRuntime::StepREDIM()
 }
 
 
-// Helper function for StepREDIMP
+// Helper function for StepREDIMP and StepDCREATE_IMPL / bRedimp = true
 static void implCopyDimArray( SbxDimArray* pNewArray, SbxDimArray* pOldArray, short nMaxDimIndex,
     short nActualDim, sal_Int32* pActualIndices, sal_Int32* pLowerBounds, sal_Int32* pUpperBounds )
 {
@@ -2175,13 +2175,61 @@ static void implCopyDimArray( SbxDimArray* pNewArray, SbxDimArray* pOldArray, sh
         else
         {
             SbxVariable* pSource = pOldArray->Get32( pActualIndices );
-            SbxVariable* pDest   = pNewArray->Get32( pActualIndices );
-            if( pSource && pDest )
-            {
-                *pDest = *pSource;
-            }
+            pNewArray->Put32(pSource, pActualIndices);
         }
     }
+}
+
+// Returns true when actually restored
+static bool implRestorePreservedArray(SbxDimArray* pNewArray, SbxArrayRef& rrefRedimpArray, bool* pbWasError = nullptr)
+{
+    assert(pNewArray);
+    bool bResult = false;
+    if (pbWasError)
+        *pbWasError = false;
+    if (rrefRedimpArray)
+    {
+        SbxDimArray* pOldArray = static_cast<SbxDimArray*>(rrefRedimpArray.get());
+        const short nDimsNew = pNewArray->GetDims();
+        const short nDimsOld = pOldArray->GetDims();
+
+        if (nDimsOld != nDimsNew)
+        {
+            StarBASIC::Error(ERRCODE_BASIC_OUT_OF_RANGE);
+            if (pbWasError)
+                *pbWasError = true;
+        }
+        else if (nDimsNew > 0)
+        {
+            // Store dims to use them for copying later
+            std::unique_ptr<sal_Int32[]> pLowerBounds(new sal_Int32[nDimsNew]);
+            std::unique_ptr<sal_Int32[]> pUpperBounds(new sal_Int32[nDimsNew]);
+            std::unique_ptr<sal_Int32[]> pActualIndices(new sal_Int32[nDimsNew]);
+
+            // Compare bounds
+            for (short i = 1; i <= nDimsNew; i++)
+            {
+                sal_Int32 lBoundNew, uBoundNew;
+                sal_Int32 lBoundOld, uBoundOld;
+                pNewArray->GetDim32(i, lBoundNew, uBoundNew);
+                pOldArray->GetDim32(i, lBoundOld, uBoundOld);
+                lBoundNew = std::max(lBoundNew, lBoundOld);
+                uBoundNew = std::min(uBoundNew, uBoundOld);
+                short j = i - 1;
+                pActualIndices[j] = pLowerBounds[j] = lBoundNew;
+                pUpperBounds[j] = uBoundNew;
+            }
+            // Copy data from old array by going recursively through all dimensions
+            // (It would be faster to work on the flat internal data array of an
+            // SbyArray but this solution is clearer and easier)
+            implCopyDimArray(pNewArray, pOldArray, nDimsNew - 1, 0, pActualIndices.get(),
+                             pLowerBounds.get(), pUpperBounds.get());
+            bResult = true;
+        }
+
+        rrefRedimpArray.clear();
+    }
+    return bResult;
 }
 
 // REDIM PRESERVE
@@ -2196,50 +2244,9 @@ void SbiRuntime::StepREDIMP()
     // Now check, if we can copy from the old array
     if( refRedimpArray.is() )
     {
-        SbxBase* pElemObj = refVar->GetObject();
-        SbxDimArray* pNewArray = dynamic_cast<SbxDimArray*>( pElemObj );
-        SbxDimArray* pOldArray = static_cast<SbxDimArray*>(refRedimpArray.get());
-        if( pNewArray )
-        {
-            short nDimsNew = pNewArray->GetDims();
-            short nDimsOld = pOldArray->GetDims();
-            short nDims = nDimsNew;
-
-            if( nDimsOld != nDimsNew )
-            {
-                StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
-            }
-            else if (nDims > 0)
-            {
-                // Store dims to use them for copying later
-                std::unique_ptr<sal_Int32[]> pLowerBounds(new sal_Int32[nDims]);
-                std::unique_ptr<sal_Int32[]> pUpperBounds(new sal_Int32[nDims]);
-                std::unique_ptr<sal_Int32[]> pActualIndices(new sal_Int32[nDims]);
-
-                // Compare bounds
-                for( short i = 1 ; i <= nDims ; i++ )
-                {
-                    sal_Int32 lBoundNew, uBoundNew;
-                    sal_Int32 lBoundOld, uBoundOld;
-                    pNewArray->GetDim32( i, lBoundNew, uBoundNew );
-                    pOldArray->GetDim32( i, lBoundOld, uBoundOld );
-                    lBoundNew = std::max( lBoundNew, lBoundOld );
-                    uBoundNew = std::min( uBoundNew, uBoundOld );
-                    short j = i - 1;
-                    pActualIndices[j] = pLowerBounds[j] = lBoundNew;
-                    pUpperBounds[j] = uBoundNew;
-                }
-                // Copy data from old array by going recursively through all dimensions
-                // (It would be faster to work on the flat internal data array of an
-                // SbyArray but this solution is clearer and easier)
-                implCopyDimArray( pNewArray, pOldArray, nDims - 1,
-                                  0, pActualIndices.get(), pLowerBounds.get(), pUpperBounds.get() );
-            }
-
-            refRedimpArray = nullptr;
-        }
+        if (SbxDimArray* pNewArray = dynamic_cast<SbxDimArray*>(refVar->GetObject()))
+            implRestorePreservedArray(pNewArray, refRedimpArray);
     }
-
 }
 
 // REDIM_COPY
@@ -4278,27 +4285,6 @@ void SbiRuntime::StepDCREATE_REDIMP( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     StepDCREATE_IMPL( nOp1, nOp2 );
 }
 
-
-// Helper function for StepDCREATE_IMPL / bRedimp = true
-static void implCopyDimArray_DCREATE( SbxDimArray* pNewArray, SbxDimArray* pOldArray, short nMaxDimIndex,
-    short nActualDim, sal_Int32* pActualIndices, sal_Int32* pLowerBounds, sal_Int32* pUpperBounds )
-{
-    sal_Int32& ri = pActualIndices[nActualDim];
-    for( ri = pLowerBounds[nActualDim] ; ri <= pUpperBounds[nActualDim] ; ri++ )
-    {
-        if( nActualDim < nMaxDimIndex )
-        {
-            implCopyDimArray_DCREATE( pNewArray, pOldArray, nMaxDimIndex, nActualDim + 1,
-                pActualIndices, pLowerBounds, pUpperBounds );
-        }
-        else
-        {
-            SbxVariable* pSource = pOldArray->Get32( pActualIndices );
-            pNewArray->Put32( pSource, pActualIndices );
-        }
-    }
-}
-
 // #56204 create object array (+StringID+StringID), DCREATE == Dim-Create
 void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
@@ -4307,15 +4293,14 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     DimImpl( refVar );
 
     // fill the array with instances of the requested class
-    SbxBaseRef xObj = refVar->GetObject();
-    if( !xObj.is() )
+    SbxBase* pObj = refVar->GetObject();
+    if (!pObj)
     {
         StarBASIC::Error( ERRCODE_BASIC_INVALID_OBJECT );
         return;
     }
 
-    SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(xObj.get());
-    if (pArray)
+    if (SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(pObj))
     {
         const short nDims = pArray->GetDims();
         sal_Int32 nTotalSize = nDims > 0 ? 1 : 0;
@@ -4330,52 +4315,17 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         }
 
         // First, fill those parts of the array that are preserved
-        SbxDimArray* const pOldArray = static_cast<SbxDimArray*>(refRedimpArray.get());
-        if (nTotalSize && pOldArray)
-        {
-            const short nDimsOld = pOldArray->GetDims();
-
-            if (nDimsOld != nDims)
-            {
-                StarBASIC::Error(ERRCODE_BASIC_OUT_OF_RANGE);
-                nTotalSize = 0; // don't create objects on error
-            }
-            else
-            {
-                std::unique_ptr<sal_Int32[]> pLowerBounds(new sal_Int32[nDims]);
-                std::unique_ptr<sal_Int32[]> pUpperBounds(new sal_Int32[nDims]);
-                std::unique_ptr<sal_Int32[]> pActualIndices(new sal_Int32[nDims]);
-
-                // Compare bounds
-                for (short i = 1; i <= nDims; i++)
-                {
-                    sal_Int32 lBoundNew, uBoundNew;
-                    sal_Int32 lBoundOld, uBoundOld;
-                    pArray->GetDim32(i, lBoundNew, uBoundNew);
-                    pOldArray->GetDim32(i, lBoundOld, uBoundOld);
-
-                    lBoundNew = std::max(lBoundNew, lBoundOld);
-                    uBoundNew = std::min(uBoundNew, uBoundOld);
-                    short j = i - 1;
-                    pActualIndices[j] = pLowerBounds[j] = lBoundNew;
-                    pUpperBounds[j] = uBoundNew;
-                }
-
-                // Copy data from old array by going recursively through all dimensions
-                // (It would be faster to work on the flat internal data array of an
-                // SbyArray but this solution is clearer and easier)
-                implCopyDimArray_DCREATE(pArray, pOldArray, nDims - 1,
-                    0, pActualIndices.get(), pLowerBounds.get(), pUpperBounds.get());
-            }
-            refRedimpArray.clear();
-        }
-        // pOldArray points to destroyed object now, and only used as "ReDim Preserve" flag below
+        bool bWasError = false;
+        const bool bRestored = implRestorePreservedArray(pArray, refRedimpArray, &bWasError);
+        if (bWasError)
+            nTotalSize = 0; // on error, don't create objects
 
         // create objects and insert them into the array
         OUString aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
+        OUString aName;
         for( sal_Int32 i = 0 ; i < nTotalSize ; ++i )
         {
-            if (!pOldArray || !pArray->SbxArray::GetRef32(i)) // For those left unset after preserve
+            if (!bRestored || !pArray->SbxArray::GetRef32(i)) // For those left unset after preserve
             {
                 SbxObject* pClassObj = SbxBase::CreateObject(aClass);
                 if (!pClassObj)
@@ -4385,7 +4335,8 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                 }
                 else
                 {
-                    OUString aName(pImg->GetString(static_cast<short>(nOp1)));
+                    if (aName.isEmpty())
+                        aName = pImg->GetString(static_cast<short>(nOp1));
                     pClassObj->SetName(aName);
                     // the object must be able to call the basic
                     pClassObj->SetParent(&rBasic);
