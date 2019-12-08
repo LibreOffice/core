@@ -1727,7 +1727,6 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
     vcl::Font aFont = GetDrawPixelFont( pDev );
-    OutDevType eOutDevType = pDev->GetOutDevType();
 
     pDev->Push();
     pDev->SetMapMode();
@@ -1754,7 +1753,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
     }
 
     // Content
-    if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
+    if ( nFlags & DrawFlags::Mono )
         pDev->SetTextColor( COL_BLACK );
     else
     {
