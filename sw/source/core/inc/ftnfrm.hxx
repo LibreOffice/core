@@ -45,10 +45,15 @@ void RemoveFootnotesForNode(
 // continue on another page.
 class SwFootnoteContFrame: public SwLayoutFrame
 {
+    static SwFootnoteFrame* AddChained(bool bAppend, SwFrame *pNewUpper, bool bDefaultFormat);
+
 public:
     SwFootnoteContFrame( SwFrameFormat*, SwFrame* );
 
     const SwFootnoteFrame* FindFootNote() const;
+
+    static inline SwFootnoteFrame* AppendChained(SwFrame* pThis, bool bDefaultFormat);
+    static inline SwFootnoteFrame* PrepedChained(SwFrame* pThis, bool bDefaultFormat);
 
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
@@ -60,6 +65,16 @@ public:
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
             void    PaintLine( const SwRect &, const SwPageFrame * ) const;
 };
+
+inline SwFootnoteFrame* SwFootnoteContFrame::AppendChained(SwFrame* pThis, bool bDefaultFormat)
+{
+    return AddChained(true, pThis, bDefaultFormat);
+}
+
+inline SwFootnoteFrame* SwFootnoteContFrame::PrepedChained(SwFrame* pThis, bool bDefaultFormat)
+{
+    return AddChained(false, pThis, bDefaultFormat);
+}
 
 class SwFootnoteFrame: public SwLayoutFrame
 {
