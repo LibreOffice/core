@@ -21,8 +21,6 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERLINE_HXX
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 
 namespace com { namespace sun { namespace star { namespace inspection { namespace PropertyLineElement
