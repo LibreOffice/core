@@ -11,13 +11,17 @@
 #include <AccessibilityCheck.hxx>
 #include <ndgrf.hxx>
 #include <ndole.hxx>
+#include <ndtxt.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
 #include <swtable.hxx>
 
+namespace sw
+{
 namespace
 {
+// TODO move these to string file and look for a better name.
 OUString sNoAlt("No alt text for graphic '%OBJECT_NAME%'");
 OUString sTableMergeSplit("Table '%OBJECT_NAME%' contains merges or splits");
 }
@@ -31,7 +35,7 @@ void AccessibilityCheck::checkTableNode(SwTableNode* pTableNode)
     if (rTable.IsTableComplex())
     {
         OUString sName = rTable.GetTableStyleName();
-        AccessibilityCheckResult aResult;
+        svx::AccessibilityCheckResult aResult;
         aResult.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
         m_aAccessibilityCheckResultCollection.push_back(aResult);
     }
@@ -62,7 +66,7 @@ void AccessibilityCheck::checkTableNode(SwTableNode* pTableNode)
             if (!bAllColumnsSameSize)
             {
                 OUString sName = rTable.GetTableStyleName();
-                AccessibilityCheckResult aResult;
+                svx::AccessibilityCheckResult aResult;
                 aResult.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
                 m_aAccessibilityCheckResultCollection.push_back(aResult);
             }
@@ -80,7 +84,7 @@ void AccessibilityCheck::checkNoTextNode(SwNoTextNode* pNoTextNode)
     if (sAlternative.isEmpty())
     {
         OUString sName = pNoTextNode->GetFlyFormat()->GetName();
-        AccessibilityCheckResult aResult;
+        svx::AccessibilityCheckResult aResult;
         aResult.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
         m_aAccessibilityCheckResultCollection.push_back(aResult);
     }
@@ -98,7 +102,7 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
         if (sAlternative.isEmpty())
         {
             OUString sName = pObject->GetName();
-            AccessibilityCheckResult aResult;
+            svx::AccessibilityCheckResult aResult;
             aResult.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
             m_aAccessibilityCheckResultCollection.push_back(aResult);
         }
@@ -144,5 +148,7 @@ void AccessibilityCheck::check()
         }
     }
 }
+
+} // end sw namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

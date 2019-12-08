@@ -11,6 +11,8 @@
 #include <svx/AccessibilityCheckDialog.hxx>
 #include <vcl/svapp.hxx>
 
+namespace svx
+{
 AccessibilityCheckEntry::AccessibilityCheckEntry(
     weld::Container* pParent, weld::Window* pDialog,
     AccessibilityCheckResult const& rAccessibilityCheckResult)
@@ -49,5 +51,7 @@ short AccessibilityCheckDialog::run()
     }
     return GenericDialogController::run();
 }
+
+} // end svx namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
