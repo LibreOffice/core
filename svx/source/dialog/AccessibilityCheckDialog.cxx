@@ -12,8 +12,10 @@
 #include <svx/AccessibilityIssue.hxx>
 #include <vcl/svapp.hxx>
 
+namespace svx
+{
 AccessibilityCheckEntry::AccessibilityCheckEntry(weld::Container* pParent,
-                                                 svx::AccessibilityIssue const& rAccessibilityIssue)
+                                                 AccessibilityIssue const& rAccessibilityIssue)
     : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/accessibilitycheckentry.ui"))
     , m_xContainer(m_xBuilder->weld_container("accessibilityCheckEntryBox"))
     , m_xLabel(m_xBuilder->weld_label("accessibilityCheckEntryLabel"))
@@ -48,5 +50,7 @@ short AccessibilityCheckDialog::run()
     }
     return GenericDialogController::run();
 }
+
+} // end svx namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

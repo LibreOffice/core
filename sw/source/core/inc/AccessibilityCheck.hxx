@@ -11,14 +11,16 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYCHECK_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYCHECK_HXX
 
+#include <svx/AccessibilityCheck.hxx>
 #include <doc.hxx>
-#include <svx/AccessibilityIssue.hxx>
 #include <node.hxx>
 
-class AccessibilityCheck
+namespace sw
 {
+class AccessibilityCheck final : public svx::AccessibilityCheck
+{
+private:
     SwDoc* m_pDoc;
-    std::vector<svx::AccessibilityIssue> m_aAccessibilityIssueCollection;
 
 public:
     AccessibilityCheck(SwDoc* pDoc)
@@ -26,16 +28,14 @@ public:
     {
     }
 
-    std::vector<svx::AccessibilityIssue> const& getIssueCollecton()
-    {
-        return m_aAccessibilityIssueCollection;
-    }
+    void check() override;
 
-    void check();
     void checkTableNode(SwTableNode* pTableNode);
     void checkNoTextNode(SwNoTextNode* pNoTextNode);
     void checkObject(SdrObject* pObject);
 };
+
+} // end sw namespace
 
 #endif
 
