@@ -26,69 +26,125 @@ OUString sNoAlt("No alt text for graphic '%OBJECT_NAME%'");
 OUString sTableMergeSplit("Table '%OBJECT_NAME%' contains merges or splits");
 }
 
-void AccessibilityCheck::checkTableNode(SwTableNode* pTableNode)
+class NodeCheck
 {
-    if (!pTableNode)
-        return;
+protected:
+    std::vector<svx::AccessibilityCheckResult>& m_rAccessibilityCheckResultCollection;
 
-    SwTable const& rTable = pTableNode->GetTable();
-    if (rTable.IsTableComplex())
+public:
+    NodeCheck(std::vector<svx::AccessibilityCheckResult>& rAccessibilityCheckResultCollection)
+        : m_rAccessibilityCheckResultCollection(rAccessibilityCheckResultCollection)
     {
-        OUString sName = rTable.GetTableStyleName();
-        svx::AccessibilityCheckResult aResult;
-        aResult.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
-        m_aAccessibilityCheckResultCollection.push_back(aResult);
     }
-    else
-    {
-        if (rTable.GetTabLines().size() > 1)
-        {
-            int i = 0;
-            size_t nFirstLineSize = 0;
-            bool bAllColumnsSameSize = true;
+    virtual ~NodeCheck() {}
+    virtual void check(SwNode* pCurrent) = 0;
+};
 
-            for (SwTableLine const* pTableLine : rTable.GetTabLines())
+// Check NoTextNodes: Graphic, OLE for alt (title) text
+class NoTextNodeAltTextCheck : public NodeCheck
+{
+    void checkNoTextNode(SwNoTextNode* pNoTextNode)
+    {
+        if (!pNoTextNode)
+            return;
+
+        OUString sAlternative = pNoTextNode->GetTitle();
+        if (sAlternative.isEmpty())
+        {
+            OUString sName = pNoTextNode->GetFlyFormat()->GetName();
+            svx::AccessibilityCheckResult aResult;
+            aResult.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
+            m_rAccessibilityCheckResultCollection.push_back(aResult);
+        }
+    }
+
+public:
+    NoTextNodeAltTextCheck(
+        std::vector<svx::AccessibilityCheckResult>& rAccessibilityCheckResultCollection)
+        : NodeCheck(rAccessibilityCheckResultCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (pCurrent->GetNodeType() & SwNodeType::NoTextMask)
+        {
+            SwNoTextNode* pNoTextNode = pCurrent->GetNoTextNode();
+            if (pNoTextNode)
+                checkNoTextNode(pNoTextNode);
+        }
+    }
+};
+
+// Check Table node if the table is merged and splitted.
+class TableNodeMergeSplitCheck : public NodeCheck
+{
+private:
+    void checkTableNode(SwTableNode* pTableNode)
+    {
+        if (!pTableNode)
+            return;
+
+        SwTable const& rTable = pTableNode->GetTable();
+        if (rTable.IsTableComplex())
+        {
+            OUString sName = rTable.GetTableStyleName();
+            svx::AccessibilityCheckResult aResult;
+            aResult.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
+            m_rAccessibilityCheckResultCollection.push_back(aResult);
+        }
+        else
+        {
+            if (rTable.GetTabLines().size() > 1)
             {
-                if (i == 0)
+                int i = 0;
+                size_t nFirstLineSize = 0;
+                bool bAllColumnsSameSize = true;
+
+                for (SwTableLine const* pTableLine : rTable.GetTabLines())
                 {
-                    nFirstLineSize = pTableLine->GetTabBoxes().size();
-                }
-                else
-                {
-                    size_t nLineSize = pTableLine->GetTabBoxes().size();
-                    if (nFirstLineSize != nLineSize)
+                    if (i == 0)
                     {
-                        bAllColumnsSameSize = false;
+                        nFirstLineSize = pTableLine->GetTabBoxes().size();
                     }
+                    else
+                    {
+                        size_t nLineSize = pTableLine->GetTabBoxes().size();
+                        if (nFirstLineSize != nLineSize)
+                        {
+                            bAllColumnsSameSize = false;
+                        }
+                    }
+                    i++;
                 }
-                i++;
-            }
-            if (!bAllColumnsSameSize)
-            {
-                OUString sName = rTable.GetTableStyleName();
-                svx::AccessibilityCheckResult aResult;
-                aResult.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
-                m_aAccessibilityCheckResultCollection.push_back(aResult);
+                if (!bAllColumnsSameSize)
+                {
+                    OUString sName = rTable.GetTableStyleName();
+                    svx::AccessibilityCheckResult aResult;
+                    aResult.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
+                    m_rAccessibilityCheckResultCollection.push_back(aResult);
+                }
             }
         }
     }
-}
 
-// Check NoTextNodes: Graphic, OLE
-void AccessibilityCheck::checkNoTextNode(SwNoTextNode* pNoTextNode)
-{
-    if (!pNoTextNode)
-        return;
-
-    OUString sAlternative = pNoTextNode->GetTitle();
-    if (sAlternative.isEmpty())
+public:
+    TableNodeMergeSplitCheck(
+        std::vector<svx::AccessibilityCheckResult>& rAccessibilityCheckResultCollection)
+        : NodeCheck(rAccessibilityCheckResultCollection)
     {
-        OUString sName = pNoTextNode->GetFlyFormat()->GetName();
-        svx::AccessibilityCheckResult aResult;
-        aResult.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
-        m_aAccessibilityCheckResultCollection.push_back(aResult);
     }
-}
+
+    void check(SwNode* pCurrent) override
+    {
+        if (pCurrent->GetNodeType() & SwNodeType::Table)
+        {
+            SwTableNode* pTableNode = pCurrent->GetTableNode();
+            if (pTableNode)
+                checkTableNode(pTableNode);
+        }
+    }
+};
 
 // Check Shapes, TextBox
 void AccessibilityCheck::checkObject(SdrObject* pObject)
@@ -114,23 +170,22 @@ void AccessibilityCheck::check()
     if (m_pDoc == nullptr)
         return;
 
+    std::vector<std::unique_ptr<NodeCheck>> aNodeChecks;
+    aNodeChecks.push_back(
+        std::make_unique<NoTextNodeAltTextCheck>(m_aAccessibilityCheckResultCollection));
+    aNodeChecks.push_back(
+        std::make_unique<TableNodeMergeSplitCheck>(m_aAccessibilityCheckResultCollection));
+
     auto const& pNodes = m_pDoc->GetNodes();
+    SwNode* pNode = nullptr;
     for (sal_uLong n = 0; n < pNodes.Count(); ++n)
     {
-        SwNode* pNode = pNodes[n];
+        pNode = pNodes[n];
         if (pNode)
         {
-            if (pNode->GetNodeType() & SwNodeType::NoTextMask)
+            for (std::unique_ptr<NodeCheck>& rpNodeCheck : aNodeChecks)
             {
-                SwNoTextNode* pNoTextNode = pNode->GetNoTextNode();
-                if (pNoTextNode)
-                    checkNoTextNode(pNoTextNode);
-            }
-            if (pNode->GetNodeType() & SwNodeType::Table)
-            {
-                SwTableNode* pTableNode = pNode->GetTableNode();
-                if (pTableNode)
-                    checkTableNode(pTableNode);
+                rpNodeCheck->check(pNode);
             }
         }
     }

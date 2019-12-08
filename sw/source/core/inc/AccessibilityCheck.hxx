@@ -13,7 +13,6 @@
 
 #include <svx/AccessibilityCheck.hxx>
 #include <doc.hxx>
-#include <node.hxx>
 
 namespace sw
 {
@@ -29,9 +28,6 @@ public:
     }
 
     void check() override;
-
-    void checkTableNode(SwTableNode* pTableNode);
-    void checkNoTextNode(SwNoTextNode* pNoTextNode);
     void checkObject(SdrObject* pObject);
 };
 
