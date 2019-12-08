@@ -23,6 +23,7 @@
 #include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Deck.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <comphelper/lok.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <vcl/window.hxx>
@@ -179,8 +180,8 @@ tools::Rectangle LayoutPanels (
         nTotalPreferredHeight += rItem.maLayoutSize.Preferred;
     }
 
-    if (nTotalMinimumHeight > nAvailableHeight
-        && ! bShowVerticalScrollBar)
+    if (nTotalMinimumHeight > nAvailableHeight && !bShowVerticalScrollBar
+        && !comphelper::LibreOfficeKit::isActive())
     {
         // Not enough space, even when all panels are shrunk to their
         // minimum height.
@@ -524,7 +525,8 @@ void DistributeHeights (
         // There are no panels with unrestricted height.
         return;
     }
-    const sal_Int32 nAdditionalHeightPerPanel (nRemainingHeightToDistribute / nNoMaximumCount);
+
+    const sal_Int32 nAdditionalHeightPerPanel(nRemainingHeightToDistribute / nNoMaximumCount);
     // Handle rounding error.
     sal_Int32 nAdditionalHeightForFirstPanel (nRemainingHeightToDistribute
         - nNoMaximumCount*nAdditionalHeightPerPanel);
