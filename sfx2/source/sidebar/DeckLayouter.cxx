@@ -163,13 +163,10 @@ tools::Rectangle LayoutPanels (
     sal_Int32 nTotalPreferredHeight (0);
     sal_Int32 nTotalMinimumHeight (0);
 
-    for(::std::vector<LayoutItem>::const_iterator iItem(rLayoutItems.begin()),
-         iEnd(rLayoutItems.end());
-        iItem!=iEnd;
-        ++iItem)
+    for (const LayoutItem& item : rLayoutItems)
     {
-        nTotalMinimumHeight += iItem->maLayoutSize.Minimum;
-        nTotalPreferredHeight += iItem->maLayoutSize.Preferred;
+        nTotalMinimumHeight += item.maLayoutSize.Minimum;
+        nTotalPreferredHeight += item.maLayoutSize.Preferred;
     }
 
 
@@ -354,41 +351,39 @@ void GetRequestedSizes (
 
     const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
 
-    ::std::vector<LayoutItem>::const_iterator iEnd(rLayoutItems.end());
-
-    for(::std::vector<LayoutItem>::iterator iItem(rLayoutItems.begin());
-        iItem!=iEnd;
-        ++iItem)
+    for (LayoutItem& item : rLayoutItems)
     {
         ui::LayoutSize aLayoutSize (ui::LayoutSize(0,0,0));
-        if (iItem->mpPanel != nullptr)
+        if (item.mpPanel != nullptr)
         {
             if (rLayoutItems.size() == 1
-                && iItem->mpPanel->IsTitleBarOptional())
+                && item.mpPanel->IsTitleBarOptional())
             {
                 // There is only one panel and its title bar is
                 // optional => hide it.
                 rAvailableHeight -= nDeckSeparatorHeight;
-                iItem->mbShowTitleBar = false;
+                item.mbShowTitleBar = false;
             }
             else
             {
                 // Show the title bar and a separator above and below
                 // the title bar.
-                const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * iItem->mpPanel->GetDPIScaleFactor());
+                const sal_Int32 nPanelTitleBarHeight(
+                    Theme::GetInteger(Theme::Int_PanelTitleBarHeight)
+                    * item.mpPanel->GetDPIScaleFactor());
 
                 rAvailableHeight -= nPanelTitleBarHeight;
                 rAvailableHeight -= nDeckSeparatorHeight;
             }
 
-            if (iItem->mpPanel->IsExpanded())
+            if (item.mpPanel->IsExpanded())
             {
-                Reference<ui::XSidebarPanel> xPanel (iItem->mpPanel->GetPanelComponent());
+                Reference<ui::XSidebarPanel> xPanel(item.mpPanel->GetPanelComponent());
                 if (xPanel.is())
                 {
                     aLayoutSize = xPanel->getHeightForWidth(rContentBox.GetWidth());
 
-                    sal_Int32 nWidth = xPanel->getMinimalWidth();
+                    const sal_Int32 nWidth = xPanel->getMinimalWidth();
                     if (nWidth > rMinimalWidth)
                         rMinimalWidth = nWidth;
                 }
@@ -396,7 +391,8 @@ void GetRequestedSizes (
                     aLayoutSize = ui::LayoutSize(MinimalPanelHeight, -1, 0);
             }
         }
-        iItem->maLayoutSize = aLayoutSize;
+
+        item.maLayoutSize = aLayoutSize;
     }
 }
 
@@ -416,25 +412,19 @@ void DistributeHeights (
     sal_Int32 nTotalWeight (0);
     sal_Int32 nNoMaximumCount (0);
 
-    ::std::vector<LayoutItem>::const_iterator iEnd(rLayoutItems.end());
-
-    for(::std::vector<LayoutItem>::iterator iItem(rLayoutItems.begin());
-        iItem!=iEnd;
-        ++iItem)
+    for (LayoutItem& item : rLayoutItems)
     {
-        if (iItem->maLayoutSize.Maximum == 0)
+        if (item.maLayoutSize.Maximum == 0)
             continue;
-        if (iItem->maLayoutSize.Maximum < 0)
+        if (item.maLayoutSize.Maximum < 0)
             ++nNoMaximumCount;
 
-        const sal_Int32 nBaseHeight (
-            bMinimumHeightIsBase
-                ? iItem->maLayoutSize.Minimum
-                : iItem->maLayoutSize.Preferred);
+        const sal_Int32 nBaseHeight(bMinimumHeightIsBase ? item.maLayoutSize.Minimum
+                                                         : item.maLayoutSize.Preferred);
         if (nBaseHeight < nContainerHeight)
         {
-            iItem->mnWeight = nContainerHeight - nBaseHeight;
-            nTotalWeight += iItem->mnWeight;
+            item.mnWeight = nContainerHeight - nBaseHeight;
+            nTotalWeight += item.mnWeight;
         }
     }
 
@@ -442,21 +432,18 @@ void DistributeHeights (
         return;
 
     // First pass of height distribution.
-    for(::std::vector<LayoutItem>::iterator iItem(rLayoutItems.begin());
-        iItem!=iEnd;
-        ++iItem)
+    for (LayoutItem& item : rLayoutItems)
     {
-        const sal_Int32 nBaseHeight (
-            bMinimumHeightIsBase
-                ? iItem->maLayoutSize.Minimum
-                : iItem->maLayoutSize.Preferred);
-        sal_Int32 nDistributedHeight (iItem->mnWeight * nHeightToDistribute / nTotalWeight);
-        if (nBaseHeight+nDistributedHeight > iItem->maLayoutSize.Maximum
-            && iItem->maLayoutSize.Maximum >= 0)
+        const sal_Int32 nBaseHeight(bMinimumHeightIsBase ? item.maLayoutSize.Minimum
+                                                         : item.maLayoutSize.Preferred);
+        sal_Int32 nDistributedHeight(item.mnWeight * nHeightToDistribute / nTotalWeight);
+        if (nBaseHeight + nDistributedHeight > item.maLayoutSize.Maximum
+            && item.maLayoutSize.Maximum >= 0)
         {
-            nDistributedHeight = ::std::max<sal_Int32>(0,iItem->maLayoutSize.Maximum - nBaseHeight);
+            nDistributedHeight = ::std::max<sal_Int32>(0, item.maLayoutSize.Maximum - nBaseHeight);
         }
-        iItem->mnDistributedHeight = nDistributedHeight;
+
+        item.mnDistributedHeight = nDistributedHeight;
         nRemainingHeightToDistribute -= nDistributedHeight;
     }
 
@@ -473,19 +460,19 @@ void DistributeHeights (
         // There are no panels with unrestricted height.
         return;
     }
-    const sal_Int32 nAdditionalHeightPerPanel (nRemainingHeightToDistribute / nNoMaximumCount);
-    // Handle rounding error.
-    sal_Int32 nAdditionalHeightForFirstPanel (nRemainingHeightToDistribute
-        - nNoMaximumCount*nAdditionalHeightPerPanel);
 
-    for(::std::vector<LayoutItem>::iterator iItem(rLayoutItems.begin());
-        iItem!=iEnd;
-        ++iItem)
+    const sal_Int32 nAdditionalHeightPerPanel(nRemainingHeightToDistribute / nNoMaximumCount);
+    // Handle rounding error.
+    const sal_Int32 nAdditionalHeightForFirstPanel(nRemainingHeightToDistribute
+                                                   - nNoMaximumCount * nAdditionalHeightPerPanel);
+
+    for (LayoutItem& item : rLayoutItems)
     {
-        if (iItem->maLayoutSize.Maximum < 0)
+        if (item.maLayoutSize.Maximum < 0)
         {
-            iItem->mnDistributedHeight += nAdditionalHeightPerPanel + nAdditionalHeightForFirstPanel;
-            nRemainingHeightToDistribute -= nAdditionalHeightPerPanel + nAdditionalHeightForFirstPanel;
+            item.mnDistributedHeight += nAdditionalHeightPerPanel + nAdditionalHeightForFirstPanel;
+            nRemainingHeightToDistribute
+                -= nAdditionalHeightPerPanel + nAdditionalHeightForFirstPanel;
         }
     }
 
