@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_b846554f",
+        "filename": "solenv/gbuild/platform/com_GCC_defs.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-08T12:14:21Z",
+      "side": 1,
+      "message": "In which scenarios exactly do these additions to gb_C[XX]FLAGS_COMMON help?  They break my use case of building with `make -O ...` parallel output synchronization (i.e., capturing output per target to a non-tty destination, but with the side effect that -fdiagnostics-color\u003dauto will not colorize) and passing\n\n  CC\u003d... -fdiagnostics-color\u003dalways ...\n  CXX\u003d... -fdiagnostics-color\u003dalways ...\n\ninto autogen.sh to enable colorization (but which is now overridden by gb_C[XX]FLAGS_COMMON -fdiagnostics-color\u003dauto).",
+      "revId": "13b52f50e52d226c935dcb94fac641c59a77f13f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
