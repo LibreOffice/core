@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_d811d155",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-08T10:05:28Z",
+      "side": 1,
+      "message": "Superfluous space",
+      "range": {
+        "startLine": 614,
+        "startChar": 128,
+        "endLine": 614,
+        "endChar": 129
+      },
+      "revId": "0f98d4fbaa638a074d09f427a3fc046775567f9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
