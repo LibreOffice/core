@@ -4317,93 +4317,82 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(xObj.get());
     if (pArray)
     {
-        short nDims = pArray->GetDims();
-        sal_Int32 nTotalSize = 0;
+        const short nDims = pArray->GetDims();
+        sal_Int32 nTotalSize = nDims > 0 ? 1 : 0;
 
         // must be a one-dimensional array
         sal_Int32 nLower, nUpper;
         for( sal_Int32 i = 0 ; i < nDims ; ++i )
         {
             pArray->GetDim32( i+1, nLower, nUpper );
-            sal_Int32 nSize = nUpper - nLower + 1;
-            if( i == 0 )
+            const sal_Int32 nSize = nUpper - nLower + 1;
+            nTotalSize *= nSize;
+        }
+
+        // First, fill those parts of the array that are preserved
+        SbxDimArray* const pOldArray = static_cast<SbxDimArray*>(refRedimpArray.get());
+        if (nTotalSize && pOldArray)
+        {
+            const short nDimsOld = pOldArray->GetDims();
+
+            if (nDimsOld != nDims)
             {
-                nTotalSize = nSize;
+                StarBASIC::Error(ERRCODE_BASIC_OUT_OF_RANGE);
+                nTotalSize = 0; // don't create objects on error
             }
             else
             {
-                nTotalSize *= nSize;
+                std::unique_ptr<sal_Int32[]> pLowerBounds(new sal_Int32[nDims]);
+                std::unique_ptr<sal_Int32[]> pUpperBounds(new sal_Int32[nDims]);
+                std::unique_ptr<sal_Int32[]> pActualIndices(new sal_Int32[nDims]);
+
+                // Compare bounds
+                for (short i = 1; i <= nDims; i++)
+                {
+                    sal_Int32 lBoundNew, uBoundNew;
+                    sal_Int32 lBoundOld, uBoundOld;
+                    pArray->GetDim32(i, lBoundNew, uBoundNew);
+                    pOldArray->GetDim32(i, lBoundOld, uBoundOld);
+
+                    lBoundNew = std::max(lBoundNew, lBoundOld);
+                    uBoundNew = std::min(uBoundNew, uBoundOld);
+                    short j = i - 1;
+                    pActualIndices[j] = pLowerBounds[j] = lBoundNew;
+                    pUpperBounds[j] = uBoundNew;
+                }
+
+                // Copy data from old array by going recursively through all dimensions
+                // (It would be faster to work on the flat internal data array of an
+                // SbyArray but this solution is clearer and easier)
+                implCopyDimArray_DCREATE(pArray, pOldArray, nDims - 1,
+                    0, pActualIndices.get(), pLowerBounds.get(), pUpperBounds.get());
             }
+            refRedimpArray.clear();
         }
+        // pOldArray points to destroyed object now, and only used as "ReDim Preserve" flag below
 
         // create objects and insert them into the array
         OUString aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
         for( sal_Int32 i = 0 ; i < nTotalSize ; ++i )
         {
-            SbxObject *pClassObj = SbxBase::CreateObject( aClass );
-            if( !pClassObj )
+            if (!pOldArray || !pArray->SbxArray::GetRef32(i)) // For those left unset after preserve
             {
-                Error( ERRCODE_BASIC_INVALID_OBJECT );
-                break;
-            }
-            else
-            {
-                OUString aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-                pClassObj->SetName( aName );
-                // the object must be able to call the basic
-                pClassObj->SetParent( &rBasic );
-                pArray->SbxArray::Put32( pClassObj, i );
-            }
-        }
-    }
-
-    SbxDimArray* pOldArray = static_cast<SbxDimArray*>(refRedimpArray.get());
-    if( pArray && pOldArray )
-    {
-        short nDimsNew = pArray->GetDims();
-        short nDimsOld = pOldArray->GetDims();
-        short nDims = nDimsNew;
-        bool bRangeError = false;
-
-        // Store dims to use them for copying later
-        std::unique_ptr<sal_Int32[]> pLowerBounds(new sal_Int32[nDims]);
-        std::unique_ptr<sal_Int32[]> pUpperBounds(new sal_Int32[nDims]);
-        std::unique_ptr<sal_Int32[]> pActualIndices(new sal_Int32[nDims]);
-        if( nDimsOld != nDimsNew )
-        {
-            bRangeError = true;
-        }
-        else
-        {
-            // Compare bounds
-            for( short i = 1 ; i <= nDims ; i++ )
-            {
-                sal_Int32 lBoundNew, uBoundNew;
-                sal_Int32 lBoundOld, uBoundOld;
-                pArray->GetDim32( i, lBoundNew, uBoundNew );
-                pOldArray->GetDim32( i, lBoundOld, uBoundOld );
-
-                lBoundNew = std::max( lBoundNew, lBoundOld );
-                uBoundNew = std::min( uBoundNew, uBoundOld );
-                short j = i - 1;
-                pActualIndices[j] = pLowerBounds[j] = lBoundNew;
-                pUpperBounds[j] = uBoundNew;
+                SbxObject* pClassObj = SbxBase::CreateObject(aClass);
+                if (!pClassObj)
+                {
+                    Error(ERRCODE_BASIC_INVALID_OBJECT);
+                    break;
+                }
+                else
+                {
+                    OUString aName(pImg->GetString(static_cast<short>(nOp1)));
+                    pClassObj->SetName(aName);
+                    // the object must be able to call the basic
+                    pClassObj->SetParent(&rBasic);
+                    pArray->SbxArray::Put32(pClassObj, i);
+                }
             }
         }
-
-        if( bRangeError )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
-        }
-        else
-        {
-            // Copy data from old array by going recursively through all dimensions
-            // (It would be faster to work on the flat internal data array of an
-            // SbyArray but this solution is clearer and easier)
-            implCopyDimArray_DCREATE( pArray, pOldArray, nDims - 1,
-                                      0, pActualIndices.get(), pLowerBounds.get(), pUpperBounds.get() );
-        }
-        refRedimpArray = nullptr;
     }
 }
 
