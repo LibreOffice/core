@@ -11,13 +11,15 @@
 #ifndef INCLUDED_SVX_ACCESSIBILITYCHECKDIALOG_HXX
 #define INCLUDED_SVX_ACCESSIBILITYCHECKDIALOG_HXX
 
+#include <svx/AccessibilityCheck.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/weld.hxx>
-#include <svx/AccessibilityIssue.hxx>
 
+namespace svx
+{
 class SVX_DLLPUBLIC AccessibilityCheckEntry final
 {
 private:
@@ -49,6 +51,8 @@ public:
     virtual ~AccessibilityCheckDialog() override;
     virtual short run() override;
 };
+
+} // end svx namespace
 
 #endif // INCLUDED_SVX_ACCESSIBILITYCHECKDIALOG_HXX
 

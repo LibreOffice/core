@@ -11,13 +11,17 @@
 #include <AccessibilityCheck.hxx>
 #include <ndgrf.hxx>
 #include <ndole.hxx>
+#include <ndtxt.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
 #include <swtable.hxx>
 
+namespace sw
+{
 namespace
 {
+// TODO move these to string file and look for a better name.
 OUString sNoAlt("No alt text for graphic '%OBJECT_NAME%'");
 OUString sTableMergeSplit("Table '%OBJECT_NAME%' contains merges or splits");
 }
@@ -144,5 +148,7 @@ void AccessibilityCheck::check()
         }
     }
 }
+
+} // end sw namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

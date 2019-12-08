@@ -2681,9 +2681,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         break;
         case SID_ACCESSIBILITY_CHECK:
         {
-            AccessibilityCheck aCheck(rSh.GetDoc());
+            sw::AccessibilityCheck aCheck(rSh.GetDoc());
             aCheck.check();
-            AccessibilityCheckDialog aDialog(pMDI, aCheck.getIssueCollecton());
+            svx::AccessibilityCheckDialog aDialog(pMDI, aCheck.getIssueCollecton());
             aDialog.run();
         }
         break;
