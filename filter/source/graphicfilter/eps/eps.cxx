@@ -52,11 +52,6 @@ using namespace ::com::sun::star::uno;
 
 #define PS_LINESIZE         70      // maximum number of characters a line in the output
 
-#define PS_NONE             0       // formatting mode: action which is inserted behind the output
-#define PS_SPACE            1
-#define PS_RET              2
-#define PS_WRAP             4
-
 // -----------------------------field-types------------------------------
 
 namespace {
@@ -92,6 +87,12 @@ struct PSLZWCTreeNode
     sal_uInt16          nValue;         // the pixel value
 };
 
+enum NMode {PS_NONE = 0x00, PS_SPACE = 0x01, PS_RET = 0x02, PS_WRAP = 0x04}; // formatting mode: action which is inserted behind the output
+inline NMode operator|(NMode a, NMode b)
+{
+    return static_cast<NMode>(static_cast<sal_uInt8>(a) | static_cast<sal_uInt8>(b));
+}
+
 class PSWriter
 {
 private:
@@ -116,7 +117,7 @@ private:
     double              nBoundingY2;
 
     StackMember*        pGDIStack;
-    sal_uLong           mnCursorPos;        // current cursor position in output
+    sal_uInt32           mnCursorPos;        // current cursor position in output
     Color               aColor;             // current color which is used for output
     bool                bLineColor;
     Color               aLineColor;         // current GDIMetafile color settings
@@ -156,33 +157,33 @@ private:
 
                         // this method makes LF's, space inserting and word wrapping as used in all nMode
                         // parameters
-    inline void         ImplExecMode( sal_uLong nMode );
+    inline void         ImplExecMode( NMode nMode );
 
                         // writes char[] + LF to stream
-    inline void         ImplWriteLine( const char*, sal_uLong nMode = PS_RET );
+    inline void         ImplWriteLine( const char*, NMode nMode = PS_RET );
 
                         // writes ( nNumb / 10^nCount ) in ASCII format to stream
-    void                ImplWriteF( sal_Int32 nNumb, sal_uLong nCount = 3, sal_uLong nMode = PS_SPACE );
+    void                ImplWriteF( sal_Int32 nNumb, sal_uInt8 nCount = 3, NMode nMode = PS_SPACE );
 
                         // writes a double in ASCII format to stream
     void                ImplWriteDouble( double );
 
                         // writes a long in ASCII format to stream
-    void                ImplWriteLong( sal_Int32 nNumb, sal_uLong nMode = PS_SPACE );
+    void                ImplWriteLong( sal_Int32 nNumb, NMode nMode = PS_SPACE );
 
                         // writes a byte in ASCII format to stream
-    void                ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode = PS_SPACE );
+    void                ImplWriteByte( sal_uInt8 nNumb, NMode nMode = PS_SPACE );
 
                         // writes a byte in ASCII (hex) format to stream
-    void                ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode = PS_WRAP );
+    void                ImplWriteHexByte( sal_uInt8 nNumb, NMode nMode = PS_WRAP );
 
                         // writes nNumb as number from 0.000 till 1.000 in ASCII format to stream
     void                ImplWriteB1( sal_uInt8 nNumb );
 
     inline void         ImplWritePoint( const Point& );
     void                ImplMoveTo( const Point& );
-    void                ImplLineTo( const Point&, sal_uInt32 nMode = PS_SPACE );
-    void                ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, sal_uInt32 nMode );
+    void                ImplLineTo( const Point&, NMode nMode = PS_SPACE );
+    void                ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, NMode nMode );
     void                ImplTranslate( const double& fX, const double& fY );
     void                ImplScale( const double& fX, const double& fY );
 
@@ -208,15 +209,15 @@ private:
     void                ImplClosePathDraw();
     void                ImplPathDraw();
 
-    inline void         ImplWriteLineColor( sal_uLong nMode );
-    inline void         ImplWriteFillColor( sal_uLong nMode );
-    inline void         ImplWriteTextColor( sal_uLong nMode );
-    void                ImplWriteColor( sal_uLong nMode );
+    inline void         ImplWriteLineColor( NMode nMode );
+    inline void         ImplWriteFillColor( NMode nMode );
+    inline void         ImplWriteTextColor( NMode nMode );
+    void                ImplWriteColor( NMode nMode );
 
     static double       ImplGetScaling( const MapMode& );
     void                ImplGetMapMode( const MapMode& );
-    static bool         ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
-    static sal_uInt8*   ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize );
+    static bool         ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uInt32 nSize );
+    static sal_uInt8*   ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uInt32 nComp, sal_uInt32 nSize );
                         // LZW methods
     void                StartCompression();
     void                Compress( sal_uInt8 nSrc );
@@ -1102,8 +1103,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
                 bool    bLevelConflict = false;
                 sal_uInt8*  pSource = const_cast<sal_uInt8*>(aGfxLink.GetData());
-                sal_uLong   nSize = aGfxLink.GetDataSize();
-                sal_uLong   nParseThis = POSTSCRIPT_BOUNDINGSEARCH;
+                sal_uInt32   nSize = aGfxLink.GetDataSize();
+                sal_uInt32 nParseThis = POSTSCRIPT_BOUNDINGSEARCH;
                 if ( nSize < 64 )                       // assuming eps is larger than 64 bytes
                     pSource = nullptr;
                 if ( nParseThis > nSize )
@@ -1412,14 +1413,14 @@ void PSWriter::ImplMoveTo( const Point& rPoint )
     ImplExecMode( PS_SPACE );
 }
 
-void PSWriter::ImplLineTo( const Point& rPoint, sal_uInt32 nMode )
+void PSWriter::ImplLineTo( const Point& rPoint, NMode nMode )
 {
     ImplWritePoint( rPoint );
     ImplWriteByte( 'l' );
     ImplExecMode( nMode );
 }
 
-void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, sal_uInt32 nMode )
+void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, NMode nMode )
 {
     ImplWritePoint( rP1 );
     ImplWritePoint( rP2 );
@@ -2131,7 +2132,7 @@ void PSWriter::ImplPathDraw()
 }
 
 
-inline void PSWriter::ImplWriteLineColor( sal_uLong nMode )
+inline void PSWriter::ImplWriteLineColor( NMode nMode )
 {
     if ( aColor != aLineColor )
     {
@@ -2140,7 +2141,7 @@ inline void PSWriter::ImplWriteLineColor( sal_uLong nMode )
     }
 }
 
-inline void PSWriter::ImplWriteFillColor( sal_uLong nMode )
+inline void PSWriter::ImplWriteFillColor( NMode nMode )
 {
     if ( aColor != aFillColor )
     {
@@ -2149,7 +2150,7 @@ inline void PSWriter::ImplWriteFillColor( sal_uLong nMode )
     }
 }
 
-inline void PSWriter::ImplWriteTextColor( sal_uLong nMode )
+inline void PSWriter::ImplWriteTextColor( NMode nMode )
 {
     if ( aColor != aTextColor )
     {
@@ -2158,7 +2159,7 @@ inline void PSWriter::ImplWriteTextColor( sal_uLong nMode )
     }
 }
 
-void PSWriter::ImplWriteColor( sal_uLong nMode )
+void PSWriter::ImplWriteColor( NMode nMode )
 {
     if ( mbGrayScale )
     {
@@ -2187,7 +2188,7 @@ void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
     ImplScale( fScaleX, fScaleY );
 }
 
-inline void PSWriter::ImplExecMode( sal_uLong nMode )
+inline void PSWriter::ImplExecMode( NMode nMode )
 {
     if ( nMode & PS_WRAP )
     {
@@ -2210,9 +2211,9 @@ inline void PSWriter::ImplExecMode( sal_uLong nMode )
     }
 }
 
-inline void PSWriter::ImplWriteLine( const char* pString, sal_uLong nMode )
+inline void PSWriter::ImplWriteLine( const char* pString, NMode nMode )
 {
-    sal_uLong i = 0;
+    sal_uInt32 i = 0;
     while ( pString[ i ] )
     {
         mpPS->WriteUChar( pString[ i++ ] );
@@ -2359,7 +2360,7 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
     ImplWriteLineInfo( fLWidth, fMiterLimit, aCapType, aJoinType, l_aDashArray );
 }
 
-void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
+void PSWriter::ImplWriteLong(sal_Int32 nNumber, NMode nMode)
 {
     const OString aNumber(OString::number(nNumber));
     mnCursorPos += aNumber.getLength();
@@ -2410,7 +2411,7 @@ void PSWriter::ImplWriteDouble( double fNumber )
 }
 
 /// Writes the number to stream: nNumber / ( 10^nCount )
-void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode )
+void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uInt8 nCount, NMode nMode )
 {
     if ( nNumber < 0 )
     {
@@ -2419,7 +2420,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
         mnCursorPos++;
     }
     const OString aScaleFactor(OString::number(nNumber));
-    sal_uLong nLen = aScaleFactor.getLength();
+    sal_uInt32 nLen = aScaleFactor.getLength();
     long nStSize =  ( nCount + 1 ) - nLen;
     if ( nStSize >= 1 )
     {
@@ -2436,7 +2437,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
         }
     }
     mnCursorPos += nLen;
-    for( sal_uLong n = 0; n < nLen; n++  )
+    for( sal_uInt32 n = 0; n < nLen; n++  )
     {
         if ( n == nLen - nCount )
         {
@@ -2448,14 +2449,14 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
     ImplExecMode( nMode );
 }
 
-void PSWriter::ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode )
+void PSWriter::ImplWriteByte( sal_uInt8 nNumb, NMode nMode )
 {
     mpPS->WriteUChar( nNumb );
     mnCursorPos++;
     ImplExecMode( nMode );
 }
 
-void PSWriter::ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode )
+void PSWriter::ImplWriteHexByte( sal_uInt8 nNumb, NMode nMode )
 {
     if ( ( nNumb >> 4 ) > 9 )
         mpPS->WriteUChar( ( nNumb >> 4 ) + 'A' - 10 );
@@ -2577,11 +2578,11 @@ void PSWriter::EndCompression()
     pTable.reset();
 }
 
-sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize )
+sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uInt32 nComp, sal_uInt32 nSize )
 {
     while ( nComp-- >= nSize )
     {
-        sal_uLong i;
+        sal_uInt64 i;
         for ( i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
@@ -2594,10 +2595,10 @@ sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDes
     return nullptr;
 }
 
-bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize )
+bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uInt32 nSize )
 {
     bool    bRetValue = false;
-    sal_uLong   nBytesRead;
+    sal_uInt32   nBytesRead;
 
     if ( nSize < 256 )      // we assume that the file is greater than 256 bytes
         return false;

@@ -73,9 +73,9 @@ void LZWDecompressor::StartDecompression(SvStream & rIStream)
 }
 
 
-sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
+sal_uInt64 LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uInt32 nMaxCount)
 {
-    sal_uLong nCount;
+    sal_uInt32 nCount;
 
     if (pIStream==nullptr) return 0;
 
@@ -84,7 +84,7 @@ sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
 
         if (pIStream->GetError()) break;
 
-        if (static_cast<sal_uLong>(nOutBufDataLen)>=nMaxCount) {
+        if (nOutBufDataLen>=nMaxCount) {
             nOutBufDataLen = nOutBufDataLen - static_cast<sal_uInt16>(nMaxCount);
             nCount+=nMaxCount;
             while (nMaxCount>0) {
@@ -94,7 +94,7 @@ sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
             break;
         }
 
-        nMaxCount-=static_cast<sal_uLong>(nOutBufDataLen);
+        nMaxCount-=static_cast<sal_uInt32>(nOutBufDataLen);
         nCount+=nOutBufDataLen;
         while (nOutBufDataLen>0) {
             *(pTarget++)=*(pOutBufData++);

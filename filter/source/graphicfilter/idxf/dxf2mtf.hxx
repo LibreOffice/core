@@ -37,10 +37,10 @@ private:
 
     sal_uInt16 OptPointsPerCircle;
 
-    sal_uLong nMinPercent;
-    sal_uLong nMaxPercent;
-    sal_uLong nLastPercent;
-    sal_uLong nMainEntitiesCount;
+    sal_uInt16 nMinPercent;
+    sal_uInt16 nMaxPercent;
+    sal_uInt16 nLastPercent;
+    sal_uInt16 nMainEntitiesCount;
 
     long        nBlockColor;
     DXFLineInfo aBlockDXFLineInfo;
@@ -51,7 +51,7 @@ private:
     vcl::Font   aActFont;
     const LineInfo aDefaultLineInfo; // to share between lines to reduce memory
 
-    static sal_uLong CountEntities(const DXFEntities & rEntities);
+    static sal_uInt64 CountEntities(const DXFEntities & rEntities);
 
     Color ConvertColor(sal_uInt8 nColor);
 

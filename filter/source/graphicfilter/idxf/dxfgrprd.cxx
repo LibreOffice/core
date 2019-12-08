@@ -30,7 +30,7 @@ static OString DXFReadLine(SvStream& rIStm)
 {
     char  buf[256 + 1];
     bool  bEnd = false;
-    sal_uLong nOldFilePos = rIStm.Tell();
+    sal_uInt64 nOldFilePos = rIStm.Tell();
     char  c = 0;
 
     OStringBuffer aBuf(512);
@@ -109,7 +109,6 @@ DXFGroupReader::DXFGroupReader(SvStream & rIStream)
   : rIS(rIStream)
   , bStatus(true)
   , nLastG(0)
-  , nGCount(0)
   , S()
   , I(0)
 {
@@ -121,7 +120,6 @@ sal_uInt16 DXFGroupReader::Read()
     sal_uInt16 nG = 0;
     if ( bStatus )
     {
-        nGCount++;
         nG = static_cast<sal_uInt16>(ReadI());
         if ( bStatus )
         {
@@ -152,11 +150,6 @@ sal_uInt16 DXFGroupReader::Read()
     {
         nG = 0;
         S = "EOF";
-        if ( nGCount != 0xffffffff )
-        {
-            // InfoBox(NULL,String("Error in group # ")+String(nGCount)).Execute();
-            nGCount=0xffffffff;
-        }
     }
     nLastG = nG;
     return nG;

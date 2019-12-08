@@ -98,7 +98,7 @@ private:
 
     bool                mbStatus;
 
-    sal_uLong           mnTGAVersion;       // Enhanced TGA is defined as Version 2.0
+    sal_uInt8           mnTGAVersion;       // Enhanced TGA is defined as Version 2.0
     sal_uInt16          mnDestBitDepth;
     bool                mbIndexing;         // sal_True if source contains indexing color values
     bool                mbEncoding;         // sal_True if source is compressed
@@ -179,9 +179,9 @@ bool TGAReader::ImplReadHeader()
     mpFileFooter.reset( new TGAFileFooter );  // read the TGA-File-Footer to determine whether
                                               // we got an old TGA format or the new one
 
-    sal_uLong nCurStreamPos = m_rTGA.Tell();
+    sal_uInt64 nCurStreamPos = m_rTGA.Tell();
     m_rTGA.Seek( STREAM_SEEK_TO_END );
-    sal_uLong nTemp = m_rTGA.Tell();
+    sal_uInt64 nTemp = m_rTGA.Tell();
     m_rTGA.Seek( nTemp - SizeOfTGAFileFooter );
 
     m_rTGA.ReadUInt32( mpFileFooter->nExtensionFileOffset ).ReadUInt32( mpFileFooter->nDeveloperDirectoryOffset ).            ReadUInt32( mpFileFooter->nSignature[0] ).ReadUInt32( mpFileFooter->nSignature[1] ).ReadUInt32( mpFileFooter->nSignature[2] ).                ReadUInt32( mpFileFooter->nSignature[3] ).ReadUChar( mpFileFooter->nPadByte ).ReadUChar( mpFileFooter->nStringTerminator );
@@ -715,7 +715,7 @@ bool TGAReader::ImplReadPalette()
         {
             case 0x3f :
                 {
-                    for ( sal_uLong i = 0; i < nColors; i++ )
+                    for ( sal_uInt16 i = 0; i < nColors; i++ )
                     {
                         mpColorMap[ i ] = ( i << 16 ) + ( i << 8 ) + i;
                     }
@@ -731,7 +731,7 @@ bool TGAReader::ImplReadPalette()
 
             case 24 :
                 {
-                    for ( sal_uLong i = 0; i < nColors; i++ )
+                    for ( sal_uInt16 i = 0; i < nColors; i++ )
                     {
                         sal_uInt8 nBlue;
                         sal_uInt8 nGreen;
@@ -745,7 +745,7 @@ bool TGAReader::ImplReadPalette()
             case 15 :
             case 16 :
                 {
-                    for ( sal_uLong i = 0; i < nColors; i++ )
+                    for ( sal_uInt16 i = 0; i < nColors; i++ )
                     {
                         sal_uInt16 nTemp;
                         m_rTGA.ReadUInt16( nTemp );
