@@ -29,11 +29,11 @@ OUString sTableMergeSplit("Table '%OBJECT_NAME%' contains merges or splits");
 class NodeCheck
 {
 protected:
-    std::vector<svx::AccessibilityCheckResult>& m_rAccessibilityCheckResultCollection;
+    std::vector<svx::AccessibilityCheckResult>& m_rResultCollection;
 
 public:
-    NodeCheck(std::vector<svx::AccessibilityCheckResult>& rAccessibilityCheckResultCollection)
-        : m_rAccessibilityCheckResultCollection(rAccessibilityCheckResultCollection)
+    NodeCheck(std::vector<svx::AccessibilityCheckResult>& rResultCollection)
+        : m_rResultCollection(rResultCollection)
     {
     }
     virtual ~NodeCheck() {}
@@ -54,14 +54,13 @@ class NoTextNodeAltTextCheck : public NodeCheck
             OUString sName = pNoTextNode->GetFlyFormat()->GetName();
             svx::AccessibilityCheckResult aResult;
             aResult.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
-            m_rAccessibilityCheckResultCollection.push_back(aResult);
+            m_rResultCollection.push_back(aResult);
         }
     }
 
 public:
-    NoTextNodeAltTextCheck(
-        std::vector<svx::AccessibilityCheckResult>& rAccessibilityCheckResultCollection)
-        : NodeCheck(rAccessibilityCheckResultCollection)
+    NoTextNodeAltTextCheck(std::vector<svx::AccessibilityCheckResult>& rResultCollection)
+        : NodeCheck(rResultCollection)
     {
     }
 
@@ -91,7 +90,7 @@ private:
             OUString sName = rTable.GetTableStyleName();
             svx::AccessibilityCheckResult aResult;
             aResult.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
-            m_rAccessibilityCheckResultCollection.push_back(aResult);
+            m_rResultCollection.push_back(aResult);
         }
         else
         {
@@ -122,7 +121,7 @@ private:
                     OUString sName = rTable.GetTableStyleName();
                     svx::AccessibilityCheckResult aResult;
                     aResult.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
-                    m_rAccessibilityCheckResultCollection.push_back(aResult);
+                    m_rResultCollection.push_back(aResult);
                 }
             }
         }
@@ -160,7 +159,7 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
             OUString sName = pObject->GetName();
             svx::AccessibilityCheckResult aResult;
             aResult.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
-            m_aAccessibilityCheckResultCollection.push_back(aResult);
+            m_aResultCollection.push_back(aResult);
         }
     }
 }
@@ -171,10 +170,8 @@ void AccessibilityCheck::check()
         return;
 
     std::vector<std::unique_ptr<NodeCheck>> aNodeChecks;
-    aNodeChecks.push_back(
-        std::make_unique<NoTextNodeAltTextCheck>(m_aAccessibilityCheckResultCollection));
-    aNodeChecks.push_back(
-        std::make_unique<TableNodeMergeSplitCheck>(m_aAccessibilityCheckResultCollection));
+    aNodeChecks.push_back(std::make_unique<NoTextNodeAltTextCheck>(m_aResultCollection));
+    aNodeChecks.push_back(std::make_unique<TableNodeMergeSplitCheck>(m_aResultCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;

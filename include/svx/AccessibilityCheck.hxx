@@ -26,7 +26,7 @@ public:
 class SVX_DLLPUBLIC AccessibilityCheck
 {
 protected:
-    std::vector<AccessibilityCheckResult> m_aAccessibilityCheckResultCollection;
+    std::vector<AccessibilityCheckResult> m_aResultCollection;
 
 public:
     virtual ~AccessibilityCheck() {}
@@ -35,7 +35,7 @@ public:
 
     std::vector<AccessibilityCheckResult> const& getResultCollecton()
     {
-        return m_aAccessibilityCheckResultCollection;
+        return m_aResultCollection;
     }
 };
 
