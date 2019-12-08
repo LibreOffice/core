@@ -153,6 +153,38 @@ SwFootnoteContFrame::SwFootnoteContFrame( SwFrameFormat *pFormat, SwFrame* pSib 
     mnFrameType = SwFrameType::FtnCont;
 }
 
+SwFootnoteFrame* SwFootnoteContFrame::AddChained(bool bAppend, SwFrame* pThis, bool bDefaultFormat)
+{
+    SwFootnoteFrame *pOld = pThis->FindFootnoteFrame();
+    SwFrameFormat *pFormat = pOld->GetFormat();
+    if (bDefaultFormat)
+        pFormat = pFormat->GetDoc()->GetDfltFrameFormat();
+
+    SwFootnoteFrame *pNew = new SwFootnoteFrame(pFormat, pOld, pOld->GetRef(), pOld->GetAttr());
+
+    if (bAppend)
+    {
+        if (pOld->GetFollow())
+        {
+            pNew->SetFollow(pOld->GetFollow());
+            pOld->GetFollow()->SetMaster(pNew);
+        }
+        pOld->SetFollow(pNew);
+        pNew->SetMaster(pOld);
+    }
+    else
+    {
+        if (pOld->GetMaster())
+        {
+            pNew->SetMaster(pOld->GetMaster());
+            pOld->GetMaster()->SetFollow(pNew);
+        }
+        pNew->SetFollow(pOld);
+        pOld->SetMaster(pNew);
+    }
+
+    return pNew;
+}
 
 // lcl_Undersize(..) walks over a SwFrame and its contents
 // and returns the sum of all requested TextFrame magnifications.
@@ -1420,6 +1452,33 @@ void SwFootnoteBossFrame::InsertFootnote( SwFootnoteFrame* pNew )
     pNew->Paste( pParent, pSibling );
 }
 
+static SwPageFrame* lcl_GetApproximateFootnotePage(const bool bEnd, const SwPageFrame* pPage,
+                                                   const SwDoc *pDoc, const SwTextFootnote *pAttr)
+{
+    // We can at least search the approximately correct page
+    // to ensure that we will finish in finite time even if
+    // hundreds of footnotes exist.
+    const SwPageFrame *pNxt = static_cast<const SwPageFrame*>(pPage->GetNext());
+    const sal_uLong nStPos = ::lcl_FindFootnotePos(pDoc, pAttr);
+    while (pNxt && (bEnd ? pNxt->IsEndNotePage() : pNxt->IsFootnotePage() && !pNxt->IsEndNotePage()))
+    {
+        const SwFootnoteContFrame *pCont = pNxt->FindFootnoteCont();
+        if (pCont && pCont->Lower())
+        {
+            OSL_ENSURE( pCont->Lower()->IsFootnoteFrame(), "no footnote in the container" );
+            if (nStPos > ::lcl_FindFootnotePos(pDoc,
+                                static_cast<const SwFootnoteFrame*>(pCont->Lower())->GetAttr()))
+            {
+                pPage = pNxt;
+                pNxt = static_cast<const SwPageFrame*>(pPage->GetNext());
+                continue;
+            }
+        }
+        break;
+    }
+    return const_cast<SwPageFrame*>(pPage);
+}
+
 void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *pAttr )
 {
     // If the footnote already exists, do nothing.
@@ -1436,10 +1495,9 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
     SwPageFrame *pPage = FindPageFrame();
     SwPageFrame *pMyPage = pPage;
     bool bChgPage = false;
-    bool bEnd = false;
-    if ( pAttr->GetFootnote().IsEndNote() )
+    const bool bEnd = pAttr->GetFootnote().IsEndNote();
+    if (bEnd)
     {
-        bEnd = true;
         const IDocumentSettingAccess& rSettings = *pAttr->GetTextNode().getIDocumentSettingAccess();
         if( GetUpper()->IsSctFrame() &&
             static_cast<SwSectionFrame*>(GetUpper())->IsEndnAtEnd() )
@@ -1476,29 +1534,7 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
                 bChgPage = true;
             }
             else
-            {
-                // At least we can search the approximately correct page.
-                // To ensure to be finished in finite time even if hundreds
-                // of footnotes exist
-                SwPageFrame *pNxt = static_cast<SwPageFrame*>(pPage->GetNext());
-                const sal_uLong nStPos = ::lcl_FindFootnotePos( pDoc, pAttr );
-                while ( pNxt && pNxt->IsEndNotePage() )
-                {
-                    SwFootnoteContFrame *pCont = pNxt->FindFootnoteCont();
-                    if ( pCont && pCont->Lower() )
-                    {
-                        OSL_ENSURE( pCont->Lower()->IsFootnoteFrame(), "no footnote in the container" );
-                        if ( nStPos > ::lcl_FindFootnotePos( pDoc,
-                                        static_cast<SwFootnoteFrame*>(pCont->Lower())->GetAttr()))
-                        {
-                            pPage = pNxt;
-                            pNxt = static_cast<SwPageFrame*>(pPage->GetNext());
-                            continue;
-                        }
-                    }
-                    break;
-                }
-            }
+                pPage = lcl_GetApproximateFootnotePage(true, pPage, pDoc, pAttr);
         }
     }
     else if( FTNPOS_CHAPTER == pDoc->GetFootnoteInfo().m_ePos && ( !GetUpper()->
@@ -1519,29 +1555,7 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
             bChgPage = true;
         }
         else
-        {
-            // We can at least search the approximately correct page
-            // to ensure that we will finish in finite time even if
-            // hundreds of footnotes exist.
-            SwPageFrame *pNxt = static_cast<SwPageFrame*>(pPage->GetNext());
-            const sal_uLong nStPos = ::lcl_FindFootnotePos( pDoc, pAttr );
-            while ( pNxt && pNxt->IsFootnotePage() && !pNxt->IsEndNotePage() )
-            {
-                SwFootnoteContFrame *pCont = pNxt->FindFootnoteCont();
-                if ( pCont && pCont->Lower() )
-                {
-                    OSL_ENSURE( pCont->Lower()->IsFootnoteFrame(), "no footnote in the container" );
-                    if ( nStPos > ::lcl_FindFootnotePos( pDoc,
-                                        static_cast<SwFootnoteFrame*>(pCont->Lower())->GetAttr()))
-                    {
-                        pPage = pNxt;
-                        pNxt = static_cast<SwPageFrame*>(pPage->GetNext());
-                        continue;
-                    }
-                }
-                break;
-            }
-        }
+            pPage = lcl_GetApproximateFootnotePage(false, pPage, pDoc, pAttr);
     }
 
     // For now, create a footnote and the corresponding content frames
@@ -1772,13 +1786,8 @@ void SwFootnoteBossFrame::CollectFootnotes( const SwContentFrame* _pRef,
             pFootnote = _pOld->FindFirstFootnote();
         }
     }
-    // OD 03.04.2003 #108446# - consider new parameter <_bCollectOnlyPreviousFootnotes>
-    SwFootnoteBossFrame* pRefBossFrame = nullptr;
-    if ( _bCollectOnlyPreviousFootnotes )
-    {
-        pRefBossFrame = this;
-    }
-    CollectFootnotes_( _pRef, pFootnote, _rFootnoteArr, _bCollectOnlyPreviousFootnotes, pRefBossFrame );
+
+    CollectFootnotes_(_pRef, pFootnote, _rFootnoteArr, _bCollectOnlyPreviousFootnotes ? this : nullptr);
 }
 
 static void FootnoteInArr( SwFootnoteFrames& rFootnoteArr, SwFootnoteFrame* pFootnote )
@@ -1787,24 +1796,11 @@ static void FootnoteInArr( SwFootnoteFrames& rFootnoteArr, SwFootnoteFrame* pFoo
         rFootnoteArr.push_back( pFootnote );
 }
 
-/// OD 03.04.2003 #108446# - add parameters <_bCollectOnlyPreviousFootnotes> and
-/// <_pRefFootnoteBossFrame> in order to control, if only footnotes, which are positioned
-/// before the given reference footnote boss frame have to be collected.
-/// Note: if parameter <_bCollectOnlyPreviousFootnotes> is true, then parameter
-/// <_pRefFootnoteBossFrame> have to be referenced to an object.
-/// Adjust parameter names.
 void SwFootnoteBossFrame::CollectFootnotes_( const SwContentFrame*   _pRef,
                                  SwFootnoteFrame*           _pFootnote,
                                  SwFootnoteFrames&          _rFootnoteArr,
-                                 bool                _bCollectOnlyPreviousFootnotes,
                                  const SwFootnoteBossFrame* _pRefFootnoteBossFrame)
 {
-    // OD 03.04.2003 #108446# - assert, that no reference footnote boss frame
-    // is set, in spite of the order, that only previous footnotes has to be
-    // collected.
-    OSL_ENSURE( !_bCollectOnlyPreviousFootnotes || _pRefFootnoteBossFrame,
-            "<SwFootnoteBossFrame::CollectFootnotes_(..)> - No reference footnote boss frame for collecting only previous footnotes set.\nCrash will be caused!" );
-
     // Collect all footnotes referenced by pRef (attribute by attribute), combine them
     // (the content might be divided over multiple pages) and cut them.
 
@@ -1874,7 +1870,7 @@ void SwFootnoteBossFrame::CollectFootnotes_( const SwContentFrame*   _pRef,
         bool bContinuousEndnotes = rSettings.get(DocumentSettingId::CONTINUOUS_ENDNOTES);
         if (_pFootnote->GetRef() == _pRef && (!bEndNote || bContinuousEndnotes))
         {
-            if ( _bCollectOnlyPreviousFootnotes )
+            if (_pRefFootnoteBossFrame)
             {
                 SwFootnoteBossFrame* pBossOfFoundFootnote = _pFootnote->FindFootnoteBossFrame( true );
                 OSL_ENSURE( pBossOfFoundFootnote,
@@ -2165,7 +2161,7 @@ void SwFootnoteBossFrame::MoveFootnotes( const SwContentFrame *pSrc, SwContentFr
         if( pDestBoss )     // robust
         {
             SwFootnoteFrames aFootnoteArr;
-            SwFootnoteBossFrame::CollectFootnotes_( pDest, pFootnote, aFootnoteArr );
+            SwFootnoteBossFrame::CollectFootnotes_(pDest, pFootnote, aFootnoteArr, nullptr);
             if ( !aFootnoteArr.empty() )
             {
                 pDestBoss->MoveFootnotes_( aFootnoteArr, true );
@@ -2782,23 +2778,10 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
         // it into the container.
         // Create also a SectionFrame if currently in an area inside a footnote.
         SwFootnoteFrame* pTmpFootnote = pNewUpper->IsFootnoteFrame() ? static_cast<SwFootnoteFrame*>(pNewUpper) : nullptr;
-        if( !pTmpFootnote )
+        if (!pTmpFootnote && pNewUpper->IsFootnoteContFrame())
         {
-            OSL_ENSURE( pNewUpper->IsFootnoteContFrame(), "New Upper not a FootnoteCont.");
             SwFootnoteContFrame *pCont = static_cast<SwFootnoteContFrame*>(pNewUpper);
-
-            // create footnote
-            SwFootnoteFrame *pOld = FindFootnoteFrame();
-            pTmpFootnote = new SwFootnoteFrame( pOld->GetFormat()->GetDoc()->GetDfltFrameFormat(),
-                                    pOld, pOld->GetRef(), pOld->GetAttr() );
-            // chaining of footnotes
-            if ( pOld->GetFollow() )
-            {
-                pTmpFootnote->SetFollow( pOld->GetFollow() );
-                pOld->GetFollow()->SetMaster( pTmpFootnote );
-            }
-            pOld->SetFollow( pTmpFootnote );
-            pTmpFootnote->SetMaster( pOld );
+            pTmpFootnote = SwFootnoteContFrame::AppendChained(this, true);
             SwFrame* pNx = pCont->Lower();
             if( pNx && pTmpFootnote->GetAttr()->GetFootnote().IsEndNote() )
                 while(pNx && !static_cast<SwFootnoteFrame*>(pNx)->GetAttr()->GetFootnote().IsEndNote())

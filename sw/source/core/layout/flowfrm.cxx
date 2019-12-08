@@ -2473,16 +2473,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         if ( pNewUpper->IsFootnoteContFrame() )
         {
             // I may have gotten a Container
-            SwFootnoteFrame *pOld = m_rThis.FindFootnoteFrame();
-            SwFootnoteFrame *pNew = new SwFootnoteFrame( pOld->GetFormat(), pOld,
-                                           pOld->GetRef(), pOld->GetAttr() );
-            if ( pOld->GetMaster() )
-            {
-                pNew->SetMaster( pOld->GetMaster() );
-                pOld->GetMaster()->SetFollow( pNew );
-            }
-            pNew->SetFollow( pOld );
-            pOld->SetMaster( pNew );
+            SwFootnoteFrame *pNew = SwFootnoteContFrame::AppendChained(&m_rThis, false);
             pNew->Paste( pNewUpper );
             pNewUpper = pNew;
         }

@@ -59,6 +59,9 @@ class SAL_DLLPUBLIC_RTTI SwFootnoteBossFrame: public SwLayoutFrame
     SwFootnoteFrame     *FindFirstFootnote();
     SwNeighbourAdjust NeighbourhoodAdjustment_() const;
 
+    static void CollectFootnotes_(const SwContentFrame*, SwFootnoteFrame*,
+                                  SwFootnoteFrames&, const SwFootnoteBossFrame*);
+
 protected:
     void          InsertFootnote( SwFootnoteFrame * );
     static void   ResetFootnote( const SwFootnoteFrame *pAssumed );
@@ -96,18 +99,8 @@ public:
     SwTwips GetVarSpace() const;
 
     // methods needed for layouting
-    // The parameters <_bCollectOnlyPreviousFootnotes> and <_pRefFootnoteBossFrame> control
-    // if only footnotes that are positioned before the given reference
-    // footnote boss-frame have to be collected.
-    // Note: if parameter <_bCollectOnlyPreviousFootnotes> is true, then parameter
-    // <_pRefFootnoteBossFrame> has to be referenced by an object.
-    static void CollectFootnotes_( const SwContentFrame*   _pRef,
-                              SwFootnoteFrame*           _pFootnote,
-                              SwFootnoteFrames&          _rFootnoteArr,
-                              const bool      _bCollectOnlyPreviousFootnotes = false,
-                              const SwFootnoteBossFrame* _pRefFootnoteBossFrame = nullptr);
     // The parameter <_bCollectOnlyPreviousFootnotes> controls if only footnotes
-    // that are positioned before the footnote boss-frame <this> have to be
+    // that are positioned before the this footnote boss-frame have to be
     // collected.
     void    CollectFootnotes( const SwContentFrame* _pRef,
                          SwFootnoteBossFrame*     _pOld,
