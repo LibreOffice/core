@@ -59,13 +59,13 @@ private:
 
     PCDResolution       eResolution;    // which resolution we want
 
-    sal_uLong               nWidth;         // width of the PCD picture
-    sal_uLong               nHeight;        // height of the PCD picture
-    sal_uLong               nImagePos;      // position of the picture within the PCD file
+    sal_uInt32               nWidth;         // width of the PCD picture
+    sal_uInt32               nHeight;        // height of the PCD picture
+    sal_uInt32               nImagePos;      // position of the picture within the PCD file
 
     // temporary lLue-Green-Red-Bitmap
-    sal_uLong               nBMPWidth;
-    sal_uLong               nBMPHeight;
+    sal_uInt32               nBMPWidth;
+    sal_uInt32               nBMPHeight;
 
     void    CheckPCDImagePacFile();
         // checks whether it's a Photo-CD file with 'Image Pac'
@@ -187,7 +187,7 @@ void PCDReader::ReadOrientation()
 
 void PCDReader::ReadImage()
 {
-    sal_uLong  nx,ny,nW2,nH2,nYPair,ndy,nXPair;
+    sal_uInt32  nx,ny,nW2,nH2,nYPair,ndy,nXPair;
     long   nL,nCb,nCr,nRed,nGreen,nBlue;
     sal_uInt8 * pt;
     sal_uInt8 * pL0; // luminance for each pixel of the 1st row of the current pair of rows
