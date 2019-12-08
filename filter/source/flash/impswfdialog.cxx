@@ -37,7 +37,7 @@ ImpSWFDialog::ImpSWFDialog(weld::Window* pParent, Sequence< PropertyValue >& rFi
     , mxCheckExportOLEAsJPEG(m_xBuilder->weld_check_button("exportoleasjpeg"))
     , mxCheckExportMultipleFiles(m_xBuilder->weld_check_button("exportmultiplefiles"))
 {
-    const sal_uLong nCompressMode = maConfigItem.ReadInt32( "CompressMode", 75 );
+    const sal_Int32 nCompressMode = maConfigItem.ReadInt32( "CompressMode", 75 );
     mxNumFldQuality->set_value(nCompressMode);
 
     mxCheckExportAll->set_active(true);

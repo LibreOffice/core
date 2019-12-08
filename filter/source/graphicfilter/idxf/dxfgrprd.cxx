@@ -31,7 +31,7 @@ static OString DXFReadLine(SvStream& rIStm)
 {
     char  buf[256 + 1];
     bool  bEnd = false;
-    sal_uLong nOldFilePos = rIStm.Tell();
+    sal_uInt64 nOldFilePos = rIStm.Tell();
     char  c = 0;
 
     OStringBuffer aBuf(512);

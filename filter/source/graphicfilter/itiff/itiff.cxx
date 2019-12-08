@@ -1581,7 +1581,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
                     if (bStatus)
                     {
-                        sal_uLong nTargetBits = nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes;
+                        sal_uInt64 nTargetBits = nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes;
                         if (nTargetBits > SAL_MAX_UINT16)
                             bStatus = false;
                     }
