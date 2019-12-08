@@ -39,7 +39,9 @@ class Panel;
 */
 namespace DeckLayouter
 {
-    void LayoutDeck (
+    /// Layout the panels and other contents in the Deck.
+    /// Returns the used area rectangle.
+    tools::Rectangle LayoutDeck(
         const tools::Rectangle& rContentArea,
         sal_Int32& rMinimalWidth,
         sal_Int32& rMinimalHeight,

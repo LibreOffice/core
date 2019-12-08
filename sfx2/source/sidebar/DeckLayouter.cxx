@@ -22,6 +22,7 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Deck.hxx>
+#include <comphelper/lok.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
@@ -98,7 +99,7 @@ namespace {
         const tools::Rectangle& rBox);
 }
 
-void DeckLayouter::LayoutDeck (
+tools::Rectangle DeckLayouter::LayoutDeck(
     const tools::Rectangle& rContentArea,
     sal_Int32& rMinimalWidth,
     sal_Int32& rMinimalHeight,
@@ -110,7 +111,8 @@ void DeckLayouter::LayoutDeck (
     ScrollBar& rVerticalScrollBar)
 {
     if (rContentArea.GetWidth()<=0 || rContentArea.GetHeight()<=0)
-        return;
+        return tools::Rectangle(0, 0, 0, 0);
+
     tools::Rectangle aBox (PlaceDeckTitle(rDeckTitleBar, rContentArea));
 
     if ( ! rPanels.empty())
@@ -132,6 +134,7 @@ void DeckLayouter::LayoutDeck (
             false);
     }
     UpdateFiller(rFiller, aBox);
+    return aBox;
 }
 
 namespace {
@@ -169,9 +172,8 @@ tools::Rectangle LayoutPanels (
         nTotalPreferredHeight += item.maLayoutSize.Preferred;
     }
 
-
     if (nTotalMinimumHeight > nAvailableHeight
-        && ! bShowVerticalScrollBar)
+        && ! bShowVerticalScrollBar && !comphelper::LibreOfficeKit::isActive())
     {
         // Not enough space, even when all panels are shrunk to their
         // minimum height.
@@ -243,6 +245,7 @@ tools::Rectangle LayoutPanels (
     const sal_Int32 nUsedHeight (PlacePanels(rLayoutItems, nWidth, eMode, rScrollContainer));
     aBox.AdjustTop(nUsedHeight );
     rMinimalHeight = nUsedHeight;
+
     return aBox;
 }
 
