@@ -100,7 +100,7 @@ private:
     void                ImplWritePalette();
     void                ImplWriteBody();
     void                ImplWriteTag( sal_uInt16 TagID, sal_uInt16 DataType, sal_uInt32 NumberOfItems, sal_uInt32 Value);
-    void                ImplWriteResolution( sal_uLong nStreamPos, sal_uInt32 nResolutionUnit );
+    void                ImplWriteResolution( sal_uInt64 nStreamPos, sal_uInt32 nResolutionUnit );
     void                StartCompression();
     void                Compress( sal_uInt8 nSrc );
     void                EndCompression();
@@ -316,7 +316,7 @@ bool TIFFWriter::ImplWriteHeader( bool bMultiPage )
 
 void TIFFWriter::ImplWritePalette()
 {
-    sal_uLong nCurrentPos = m_rOStm.Tell();
+    sal_uInt64 nCurrentPos = m_rOStm.Tell();
     m_rOStm.Seek( mnPalPos + 8 );           // the palette tag entry needs the offset
     m_rOStm.WriteUInt32( nCurrentPos - mnStreamOfs );  // to the palette colors
     m_rOStm.Seek( nCurrentPos );
@@ -343,9 +343,9 @@ void TIFFWriter::ImplWriteBody()
 {
     sal_uInt8   nTemp = 0;
     sal_uInt8    nShift;
-    sal_uLong   j, x, y;
+    sal_uInt64   j, x, y;
 
-    sal_uLong nGfxBegin = m_rOStm.Tell();
+    sal_uInt64 nGfxBegin = m_rOStm.Tell();
     m_rOStm.Seek( mnBitmapPos + 8 );                // the strip offset tag entry needs the offset
     m_rOStm.WriteUInt32( nGfxBegin - mnStreamOfs ); // to the bitmap data
     m_rOStm.Seek( nGfxBegin );
@@ -441,7 +441,7 @@ void TIFFWriter::ImplWriteBody()
 
     if ( mnStripByteCountPos && mbStatus )
     {
-        sal_uLong nGfxEnd = m_rOStm.Tell();
+        sal_uInt64 nGfxEnd = m_rOStm.Tell();
         m_rOStm.Seek( mnStripByteCountPos + 8 );
         m_rOStm.WriteUInt32( nGfxEnd - nGfxBegin );      // mnStripByteCountPos needs the size of the compression data
         m_rOStm.Seek( nGfxEnd );
@@ -449,9 +449,9 @@ void TIFFWriter::ImplWriteBody()
 }
 
 
-void TIFFWriter::ImplWriteResolution( sal_uLong nStreamPos, sal_uInt32 nResolutionUnit )
+void TIFFWriter::ImplWriteResolution( sal_uInt64 nStreamPos, sal_uInt32 nResolutionUnit )
 {
-    sal_uLong nCurrentPos = m_rOStm.Tell();
+    sal_uInt64 nCurrentPos = m_rOStm.Tell();
     m_rOStm.Seek( nStreamPos + 8 );
     m_rOStm.WriteUInt32( nCurrentPos - mnStreamOfs );
     m_rOStm.Seek( nCurrentPos );

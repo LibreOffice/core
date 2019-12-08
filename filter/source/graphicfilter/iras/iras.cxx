@@ -111,7 +111,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
 
         if ( mnColorMapType == RAS_COLOR_RAW_MAP )      // RAW color map is skipped
         {
-            sal_uLong nCurPos = m_rRAS.Tell();
+            sal_uInt64 nCurPos = m_rRAS.Tell();
             bOk = checkSeek(m_rRAS, nCurPos + mnColorMapSize);
         }
         else if ( mnColorMapType == RAS_COLOR_RGB_MAP ) // we can read out the RGB
@@ -148,7 +148,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
             aPalette.resize(mnDstColors);
             for ( sal_uInt16 i = 0; i < mnDstColors; i++ )
             {
-                sal_uLong nCount = 255 - ( 255 * i / ( mnDstColors - 1 ) );
+                sal_uInt64 nCount = 255 - ( 255 * i / ( mnDstColors - 1 ) );
                 aPalette[i] = Color(static_cast<sal_uInt8>(nCount), static_cast<sal_uInt8>(nCount), static_cast<sal_uInt8>(nCount));
             }
         }
@@ -157,7 +157,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     {
         if ( mnColorMapType != RAS_COLOR_NO_MAP )   // when graphic has more than 256 colors and a color map we skip
         {                                           // the colormap
-            sal_uLong nCurPos = m_rRAS.Tell();
+            sal_uInt64 nCurPos = m_rRAS.Tell();
             bOk = checkSeek(m_rRAS, nCurPos + mnColorMapSize);
         }
     }

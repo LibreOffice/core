@@ -69,7 +69,7 @@ private:
     SvStream & rIS;
     bool bStatus;
     sal_uInt16 nLastG;
-    sal_uLong nGCount;
+    sal_uInt64 nGCount;
 
     OString S;
     union {
