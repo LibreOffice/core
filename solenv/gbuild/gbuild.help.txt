@@ -147,3 +147,6 @@ INTERACTIVE VARIABLES:
                        debugrun. Double quotes will be automatically escaped.
        gb_SUPPRESS_TESTS Do not run tests (but still build them, when requested
                        by the given targets).
+       GCC_COLORS      Colorize gcc diagnostics output. See
+                       https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Message-Formatting-Options.html
+                       for details & syntax. Or export that setting in your .bash_profile.

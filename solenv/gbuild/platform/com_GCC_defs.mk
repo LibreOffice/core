@@ -67,6 +67,7 @@ gb_CFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 	-fstack-protector-strong \
+	-fdiagnostics-color=auto \
 
 gb_CXXFLAGS_COMMON := \
 	-Wall \
@@ -82,6 +83,7 @@ gb_CXXFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 	-fstack-protector-strong \
+	-fdiagnostics-color=auto \
 
 gb_CXXFLAGS_DISABLE_WARNINGS = -w
 
