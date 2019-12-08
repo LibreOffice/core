@@ -21,17 +21,14 @@ namespace svx
 class SVX_DLLPUBLIC AccessibilityCheck
 {
 protected:
-    std::vector<AccessibilityIssue> m_aAccessibilityIssueCollection;
+    std::vector<AccessibilityIssue> m_aIssueCollection;
 
 public:
     virtual ~AccessibilityCheck() {}
 
     virtual void check() = 0;
 
-    std::vector<svx::AccessibilityIssue> const& getIssueCollecton()
-    {
-        return m_aAccessibilityIssueCollection;
-    }
+    std::vector<svx::AccessibilityIssue> const& getIssueCollecton() { return m_aIssueCollection; }
 };
 
 } // end svx namespace
