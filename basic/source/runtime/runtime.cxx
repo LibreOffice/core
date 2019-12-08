@@ -2205,6 +2205,7 @@ static bool implRestorePreservedArray(SbxDimArray* pNewArray, SbxArrayRef& rrefR
             std::unique_ptr<sal_Int32[]> pLowerBounds(new sal_Int32[nDimsNew]);
             std::unique_ptr<sal_Int32[]> pUpperBounds(new sal_Int32[nDimsNew]);
             std::unique_ptr<sal_Int32[]> pActualIndices(new sal_Int32[nDimsNew]);
+            bool bNeedsPreallocation = true;
 
             // Compare bounds
             for (short i = 1; i <= nDimsNew; i++)
@@ -2218,7 +2219,14 @@ static bool implRestorePreservedArray(SbxDimArray* pNewArray, SbxArrayRef& rrefR
                 short j = i - 1;
                 pActualIndices[j] = pLowerBounds[j] = lBoundNew;
                 pUpperBounds[j] = uBoundNew;
+                if (lBoundNew > uBoundNew) // No elements in the dimension -> no elements to restore
+                    bNeedsPreallocation = false;
             }
+
+            // Optimization: pre-allocate underlying container
+            if (bNeedsPreallocation)
+                pNewArray->Put32(nullptr, pUpperBounds.get());
+
             // Copy data from old array by going recursively through all dimensions
             // (It would be faster to work on the flat internal data array of an
             // SbyArray but this solution is clearer and easier)
@@ -4313,6 +4321,10 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             const sal_Int32 nSize = nUpper - nLower + 1;
             nTotalSize *= nSize;
         }
+
+        // Optimization: pre-allocate underlying container
+        if (nTotalSize > 0)
+            pArray->SbxArray::GetRef32(nTotalSize - 1);
 
         // First, fill those parts of the array that are preserved
         bool bWasError = false;
