@@ -86,6 +86,9 @@ public:
 private:
     void RequestLayoutInternal();
 
+    /// Resize the Deck to fit the minimal dimensions.
+    void ResizeToMinimals();
+
 private:
     const OUString msId;
     sal_Int32 mnMinimalWidth;

@@ -228,9 +228,22 @@ void Deck::RequestLayoutInternal()
     mnMinimalWidth = 0;
     mnMinimalHeight = 0;
 
-    DeckLayouter::LayoutDeck(GetContentArea(), mnMinimalWidth, mnMinimalHeight, maPanels,
-                             *GetTitleBar(), *mpScrollClipWindow, *mpScrollContainer,
-                             *mpFiller, *mpVerticalScrollBar);
+    const tools::Rectangle aBox = DeckLayouter::LayoutDeck(
+        GetContentArea(), mnMinimalWidth, mnMinimalHeight, maPanels, *GetTitleBar(),
+        *mpScrollClipWindow, *mpScrollContainer, *mpFiller, *mpVerticalScrollBar);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // We couldn't fit, and we don't want scrollbars in LOK.
+        // Resize and re-layout.
+        if (aBox.GetHeight() < mnMinimalHeight)
+        {
+            ResizeToMinimals();
+            DeckLayouter::LayoutDeck(GetContentArea(), mnMinimalWidth, mnMinimalHeight, maPanels,
+                                     *GetTitleBar(), *mpScrollClipWindow, *mpScrollContainer,
+                                     *mpFiller, *mpVerticalScrollBar);
+        }
+    }
 }
 
 void Deck::RequestLayout()
@@ -238,29 +251,36 @@ void Deck::RequestLayout()
     RequestLayoutInternal();
 
     if (comphelper::LibreOfficeKit::isActive())
+        ResizeToMinimals();
+}
+
+void Deck::ResizeToMinimals()
+{
+    bool bChangeNeeded = false;
+    Size aParentSize = GetParent()->GetSizePixel();
+
+    if (mnMinimalHeight > 0
+        && (mnMinimalHeight != aParentSize.Height() || GetSizePixel().Height() != mnMinimalHeight))
     {
-        bool bChangeNeeded = false;
-        Size aParentSize = GetParent()->GetSizePixel();
+        aParentSize.setHeight(mnMinimalHeight);
+        bChangeNeeded = true;
+    }
+    if (mnMinimalWidth > 0
+        && (mnMinimalWidth != aParentSize.Width() || GetSizePixel().Width() != mnMinimalWidth)
+        && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+    {
+        aParentSize.setWidth(mnMinimalWidth);
+        bChangeNeeded = true;
+    }
 
-        if (mnMinimalHeight > 0 && (mnMinimalHeight != aParentSize.Height() || GetSizePixel().Height() != mnMinimalHeight))
-        {
-            aParentSize.setHeight(mnMinimalHeight);
-            bChangeNeeded = true;
-        }
-        if (mnMinimalWidth > 0 && (mnMinimalWidth != aParentSize.Width() || GetSizePixel().Width() != mnMinimalWidth)
-                && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
-        {
-            aParentSize.setWidth(mnMinimalWidth);
-            bChangeNeeded = true;
-        }
-
-        if (bChangeNeeded)
-        {
-            GetParent()->SetSizePixel(aParentSize);
-            setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
-        }
-        else if (aParentSize != GetSizePixel()) //Sync parent & child sizes
-            setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
+    if (bChangeNeeded)
+    {
+        GetParent()->SetSizePixel(aParentSize);
+        setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
+    }
+    else if (aParentSize != GetSizePixel()) //Sync parent & child sizes
+    {
+        setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
     }
 }
 
