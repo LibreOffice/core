@@ -53,11 +53,11 @@ class FilterConfigItem;
 |*
 *************************************************************************/
 
-static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize )
+static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uInt64 nComp, size_t nSize )
 {
     while ( nComp-- >= nSize )
     {
-        sal_uLong i;
+        sal_uInt64 i;
         for ( i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )

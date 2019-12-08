@@ -61,12 +61,12 @@ class CCIDecompressor {
 
 public:
 
-    CCIDecompressor( sal_uLong nOptions, sal_uInt32 nImageWidth );
+    CCIDecompressor( sal_uInt64 nOptions, sal_uInt32 nImageWidth );
     ~CCIDecompressor();
 
     void StartDecompression( SvStream & rIStream );
 
-    DecompressStatus DecompressScanline(sal_uInt8 * pTarget, sal_uLong nTargetBits, bool bLastLine);
+    DecompressStatus DecompressScanline(sal_uInt8 * pTarget, sal_uInt64 nTargetBits, bool bLastLine);
 
 private:
 
@@ -108,7 +108,7 @@ private:
 
     sal_uInt32 nWidth;
 
-    sal_uLong nOptions;
+    sal_uInt64 nOptions;
 
     bool bFirstEOL;
 
@@ -117,11 +117,11 @@ private:
     std::array<CCILookUpTableEntry, 1<<10> p2DModeLookUp;
     std::array<CCILookUpTableEntry, 1<<11> pUncompLookUp;
 
-    sal_uLong nInputBitsBuf;
+    sal_uInt64 nInputBitsBuf;
     sal_uInt16 nInputBitsBufSize;
 
     std::unique_ptr<sal_uInt8[]> pLastLine;
-    sal_uLong nLastLineSize;
+    sal_uInt64 nLastLineSize;
 };
 
 

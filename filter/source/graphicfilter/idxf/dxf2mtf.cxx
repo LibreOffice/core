@@ -29,10 +29,10 @@
 #include <math.h>
 
 
-sal_uLong DXF2GDIMetaFile::CountEntities(const DXFEntities & rEntities)
+sal_uInt64 DXF2GDIMetaFile::CountEntities(const DXFEntities & rEntities)
 {
     const DXFBasicEntity * pBE;
-    sal_uLong nRes;
+    sal_uInt64 nRes;
 
     nRes=0;
     for (pBE=rEntities.pFirst; pBE!=nullptr; pBE=pBE->pSucc) nRes++;
@@ -785,8 +785,8 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
 
     OptPointsPerCircle=50;
 
-    nMinPercent=static_cast<sal_uLong>(nminpercent);
-    nMaxPercent=static_cast<sal_uLong>(nmaxpercent);
+    nMinPercent=static_cast<sal_uInt64>(nminpercent);
+    nMaxPercent=static_cast<sal_uInt64>(nmaxpercent);
     nLastPercent=nMinPercent;
     nMainEntitiesCount=CountEntities(pDXF->aEntities);
 

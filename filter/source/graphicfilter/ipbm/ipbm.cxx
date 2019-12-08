@@ -37,12 +37,12 @@ private:
     bool            mbStatus;
     bool            mbRemark;           // sal_False if the stream is in a comment
     bool            mbRaw;              // RAW/ASCII MODE
-    sal_uLong           mnMode;             // 0->PBM, 1->PGM, 2->PPM
+    sal_uInt8           mnMode;             // 0->PBM, 1->PGM, 2->PPM
     std::unique_ptr<vcl::bitmap::RawBitmap> mpRawBmp;
     std::vector<Color>  mvPalette;
     sal_Int32       mnWidth, mnHeight;  // dimensions in pixel
-    sal_uLong           mnCol;
-    sal_uLong           mnMaxVal;           // max value in the <missing comment>
+    sal_uInt64           mnCol;
+    sal_uInt64           mnMaxVal;           // max value in the <missing comment>
     bool            ImplReadBody();
     bool            ImplReadHeader();
 
@@ -113,9 +113,9 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
                 mnCol = 256;
 
             mvPalette.resize( 256 );
-            for ( sal_uLong i = 0; i < mnCol; i++ )
+            for ( sal_uInt64 i = 0; i < mnCol; i++ )
             {
-                sal_uLong nCount = 255 * i / mnCol;
+                sal_uInt64 nCount = 255 * i / mnCol;
                 mvPalette[i] = Color( static_cast<sal_uInt8>(nCount), static_cast<sal_uInt8>(nCount), static_cast<sal_uInt8>(nCount) );
             }
             break;
@@ -240,12 +240,12 @@ bool PBMReader::ImplReadHeader()
             }
             else if ( nCount == 2 )
             {
-                if (mnMaxVal > std::numeric_limits<sal_uLong>::max() / 10)
+                if (mnMaxVal > std::numeric_limits<sal_uInt64>::max() / 10)
                 {
                     return false;
                 }
                 mnMaxVal *= 10;
-                if (nDat > std::numeric_limits<sal_uLong>::max() - mnMaxVal)
+                if (nDat > std::numeric_limits<sal_uInt64>::max() - mnMaxVal)
                 {
                     return false;
                 }
@@ -261,7 +261,7 @@ bool PBMReader::ImplReadHeader()
 bool PBMReader::ImplReadBody()
 {
     sal_uInt8   nDat = 0, nCount;
-    sal_uLong   nGrey, nRGB[3];
+    sal_uInt8   nGrey, nRGB[3];
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
 
@@ -319,12 +319,12 @@ bool PBMReader::ImplReadBody()
                         return false;
 
                     sal_uInt8   nR, nG, nB;
-                    sal_uLong   nRed, nGreen, nBlue;
+                    sal_uInt8   nRed, nGreen, nBlue;
                     mrPBM.ReadUChar( nR ).ReadUChar( nG ).ReadUChar( nB );
                     nRed = 255 * nR / mnMaxVal;
                     nGreen = 255 * nG / mnMaxVal;
                     nBlue = 255 * nB / mnMaxVal;
-                    mpRawBmp->SetPixel( nHeight, nWidth++, Color( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                    mpRawBmp->SetPixel( nHeight, nWidth++, Color( nRed, nGreen, nBlue ) );
                     if ( nWidth == mnWidth )
                     {
                         nWidth = 0;
@@ -393,7 +393,7 @@ bool PBMReader::ImplReadBody()
                     nCount--;
                     if ( nGrey <= mnMaxVal )
                         nGrey = 255 * nGrey / mnMaxVal;
-                    mpRawBmp->SetPixel( nHeight, nWidth++, mvPalette[static_cast<sal_uInt8>(nGrey)] );
+                    mpRawBmp->SetPixel( nHeight, nWidth++, mvPalette[nGrey] );
                     nGrey = 0;
                     if ( nWidth == mnWidth )
                     {

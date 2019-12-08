@@ -336,7 +336,7 @@ namespace
 
 bool PSDReader::ImplReadBody()
 {
-    sal_uLong       nX, nY;
+    sal_uInt64       nX, nY;
     signed char nRunCount = 0;
     sal_uInt8       nDat = 0, nDummy, nRed, nGreen, nBlue;
     BitmapColor aBitmapColor;
