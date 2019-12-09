@@ -58,6 +58,23 @@ VclPtr<vcl::Window> PageFormatPanel::Create(
     return VclPtr<PageFormatPanel>::Create(pParent, rxFrame, pBindings);
 }
 
+void PageFormatPanel::SetMarginFieldUnit()
+{
+    auto nSelected = mpMarginSelectBox->GetSelectedEntryPos();
+    mpMarginSelectBox->Clear();
+    if (IsInch(meFUnit))
+    {
+        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
+            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i]));
+    }
+    else
+    {
+        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
+            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_CM[i]));
+    }
+    mpMarginSelectBox->SelectEntryPos(nSelected);
+}
+
 PageFormatPanel::PageFormatPanel(
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
@@ -82,17 +99,6 @@ PageFormatPanel::PageFormatPanel(
     get(mpPaperHeight, "paperheight");
     get(mpPaperOrientation, "paperorientation");
     get(mpMarginSelectBox, "marginLB");
-    FieldUnit eMetric = ::GetDfltMetric(false);
-    if (IsInch(eMetric))
-    {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
-            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i]));
-    }
-    else
-    {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
-            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_CM[i]));
-    }
     get(mpCustomEntry, "customlabel");
     Initialize();
 }
@@ -130,6 +136,7 @@ void PageFormatPanel::Initialize()
     meUnit = maPaperSizeController.GetCoreMetric();
     SetFieldUnit( *mpPaperWidth, meFUnit );
     SetFieldUnit( *mpPaperHeight, meFUnit );
+    SetMarginFieldUnit();
     aCustomEntry = mpCustomEntry->GetText();
 
     const SvtOptionsDrawinglayer aDrawinglayerOpt;
@@ -188,6 +195,8 @@ void PageFormatPanel::NotifyItemUpdate(
             {
                 SetFieldUnit( *mpPaperHeight, meFUnit );
                 SetFieldUnit( *mpPaperWidth, meFUnit );
+                SetMarginFieldUnit();
+                UpdateMarginBox();
             }
             meLastFUnit = meFUnit;
         }
