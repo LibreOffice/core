@@ -40,6 +40,20 @@ namespace emfplushelper
     const sal_Int32 EmfPlusLineStyleDashDotDot = 0x00000004;
     const sal_Int32 EmfPlusLineStyleCustom = 0x00000005;
 
+    const sal_uInt32 EmfPlusPenDataTransform = 0x00000001;
+    const sal_uInt32 EmfPlusPenDataStartCap = 0x00000002;
+    const sal_uInt32 EmfPlusPenDataEndCap = 0x00000004;
+    const sal_uInt32 EmfPlusPenDataJoin = 0x00000008;
+    const sal_uInt32 EmfPlusPenDataMiterLimit = 0x00000010;
+    const sal_uInt32 EmfPlusPenDataLineStyle = 0x00000020;
+    const sal_uInt32 EmfPlusPenDataDashedLineCap = 0x00000040;
+    const sal_uInt32 EmfPlusPenDataDashedLineOffset = 0x00000080;
+    const sal_uInt32 EmfPlusPenDataDashedLine = 0x00000100;
+    const sal_uInt32 EmfPlusPenDataNonCenter = 0x00000200;
+    const sal_uInt32 EmfPlusPenDataCompoundLine = 0x00000400;
+    const sal_uInt32 EmfPlusPenDataCustomStartCap = 0x00000800;
+    const sal_uInt32 EmfPlusPenDataCustomEndCap = 0x000001000;
+
     struct EMFPCustomLineCap;
 
     struct EMFPPen : public EMFPBrush
