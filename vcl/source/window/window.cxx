@@ -3225,6 +3225,11 @@ VclPtr<Window> Window::FindLOKWindow(vcl::LOKWindowId nWindowId)
     return VclPtr<Window>();
 }
 
+bool Window::IsLOKWindowsEmpty()
+{
+    return GetLOKWindowsMap().empty();
+}
+
 void Window::ReleaseLOKNotifier()
 {
     // unregister the LOK window binding
