@@ -685,6 +685,7 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
 
         aGuard.clear(); // (load has an own guarding scheme)
         load( aMediaDescriptor.getPropertyValues() );
+        aGuard.reset();
 
         // Without a controller, we are unable to recover the sub components, as they're always tied to a controller.
         // So, everything else is done when the first controller is connected.
