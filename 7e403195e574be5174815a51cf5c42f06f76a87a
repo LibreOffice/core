@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_1bb74389",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-09T16:16:59Z",
+      "side": 1,
+      "message": "While at least \"g++ (GCC) 9.2.1 20190827 (Red Hat 9.2.1-1)\" would do a successful --enable-optimized --enable-werror build with the HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED check removed from configure.ac, at least some local \"g++ (GCC) 7.1.1 20170503\" would still produce a bogus failure at\n\n\u003e sw/source/ui/table/tabledlg.cxx: In member function ‘virtual bool SwTextFlowPage::FillItemSet(SfxItemSet*)’:\n\u003e sw/source/ui/table/tabledlg.cxx:1329:42: error: ‘oPageNum’ may be used uninitialized in this function [-Werror\u003dmaybe-uninitialized]\n\u003e          o3tl::optional\u003csal_uInt16\u003e const oPageNum(\n\u003e                                           ^~~~~~~~\n\nSo keep that check for now.",
+      "range": {
+        "startLine": 21,
+        "startChar": 64,
+        "endLine": 23,
+        "endChar": 6
+      },
+      "revId": "7e403195e574be5174815a51cf5c42f06f76a87a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
