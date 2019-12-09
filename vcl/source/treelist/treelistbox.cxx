@@ -3322,13 +3322,11 @@ void SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos )
 
 void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    if (aTooltipHdl.IsSet())
-        aTooltipHdl.Call(rHEvt);
-    else
-    {
-        if( !pImpl->RequestHelp( rHEvt ) )
-            Control::RequestHelp( rHEvt );
-    }
+    if (aTooltipHdl.IsSet() && aTooltipHdl.Call(rHEvt))
+        return;
+
+    if( !pImpl->RequestHelp( rHEvt ) )
+        Control::RequestHelp( rHEvt );
 }
 
 sal_Int32 SvTreeListBox::DefaultCompare(const SvLBoxString* pLeftText, const SvLBoxString* pRightText)

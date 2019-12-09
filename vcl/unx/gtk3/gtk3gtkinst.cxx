@@ -8534,6 +8534,8 @@ private:
         if (!gtk_tree_view_get_tooltip_context(pTreeView, &x, &y, keyboard_tip, &pModel, &pPath, &iter))
             return false;
         OUString aTooltip = pThis->signal_query_tooltip(GtkInstanceTreeIter(iter));
+        if (aTooltip.isEmpty())
+            return false;
         gtk_tooltip_set_text(tooltip, OUStringToOString(aTooltip, RTL_TEXTENCODING_UTF8).getStr());
         gtk_tree_view_set_tooltip_row(pTreeView, tooltip, pPath);
         gtk_tree_path_free(pPath);
