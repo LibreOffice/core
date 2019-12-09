@@ -1118,9 +1118,9 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 OUString EditorWindow::GetActualSubName( sal_uLong nLine )
 {
     SbxArrayRef pMethods = rModulWindow.GetSbModule()->GetMethods();
-    for( sal_uInt16 i=0; i < pMethods->Count(); i++ )
+    for( sal_uInt32 i=0; i < pMethods->Count32(); i++ )
     {
-        SbMethod* pMeth = dynamic_cast<SbMethod*>( pMethods->Get( i )  );
+        SbMethod* pMeth = dynamic_cast<SbMethod*>( pMethods->Get32( i )  );
         if( pMeth )
         {
             sal_uInt16 l1,l2;
@@ -1682,7 +1682,7 @@ struct WatchItem
     SbxDimArrayRef  mpArray;
     int             nDimLevel;  // 0 = Root
     int             nDimCount;
-    std::vector<short> vIndices;
+    std::vector<sal_Int32> vIndices;
 
     WatchItem*      mpArrayParentItem;
 
@@ -1914,9 +1914,9 @@ void StackWindow::UpdateCalls()
             {
                 aEntry.append("(");
                 // 0 is the sub's name...
-                for ( sal_uInt16 nParam = 1; nParam < pParams->Count(); nParam++ )
+                for ( sal_uInt32 nParam = 1; nParam < pParams->Count32(); nParam++ )
                 {
-                    SbxVariable* pVar = pParams->Get( nParam );
+                    SbxVariable* pVar = pParams->Get32( nParam );
                     assert(pVar && "Parameter?!");
                     if ( !pVar->GetName().isEmpty() )
                     {
@@ -1924,7 +1924,8 @@ void StackWindow::UpdateCalls()
                     }
                     else if ( pInfo )
                     {
-                        const SbxParamInfo* pParam = pInfo->GetParam( nParam );
+                        assert(nParam <= std::numeric_limits<sal_uInt16>::max());
+                        const SbxParamInfo* pParam = pInfo->GetParam( sal::static_int_cast<sal_uInt16>(nParam) );
                         if ( pParam )
                         {
                             aEntry.append(pParam->aName);
@@ -1940,7 +1941,7 @@ void StackWindow::UpdateCalls()
                     {
                         aEntry.append(pVar->GetOUString());
                     }
-                    if ( nParam < ( pParams->Count() - 1 ) )
+                    if ( nParam < ( pParams->Count32() - 1 ) )
                     {
                         aEntry.append(", ");
                     }
@@ -2143,19 +2144,19 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
     {
         createAllObjectProperties( pObj );
         SbxArray* pProps = pObj->GetProperties();
-        sal_uInt16 nPropCount = pProps->Count();
+        sal_uInt32 nPropCount = pProps->Count32();
         if ( nPropCount >= 3 &&
-             pProps->Get( nPropCount -1 )->GetName().equalsIgnoreAsciiCase( "Dbg_Methods" ) &&
-             pProps->Get( nPropCount -2 )->GetName().equalsIgnoreAsciiCase( "Dbg_Properties" ) &&
-             pProps->Get( nPropCount -3 )->GetName().equalsIgnoreAsciiCase( "Dbg_SupportedInterfaces" ) )
+             pProps->Get32( nPropCount -1 )->GetName().equalsIgnoreAsciiCase( "Dbg_Methods" ) &&
+             pProps->Get32( nPropCount -2 )->GetName().equalsIgnoreAsciiCase( "Dbg_Properties" ) &&
+             pProps->Get32( nPropCount -3 )->GetName().equalsIgnoreAsciiCase( "Dbg_SupportedInterfaces" ) )
         {
             nPropCount -= 3;
         }
         pItem->maMemberList.reserve(nPropCount);
 
-        for( sal_uInt16 i = 0 ; i < nPropCount ; ++i )
+        for( sal_uInt32 i = 0 ; i < nPropCount ; ++i )
         {
-            SbxVariable* pVar = pProps->Get( i );
+            SbxVariable* pVar = pProps->Get32( i );
 
             pItem->maMemberList.push_back(pVar->GetName());
             OUString const& rName = pItem->maMemberList.back();
@@ -2190,10 +2191,10 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
             sal_Int32 j;
             for( j = 0 ; j < nParentLevel ; j++ )
             {
-                short n = pChildItem->vIndices[j] = pItem->vIndices[j];
+                sal_Int32 n = pChildItem->vIndices[j] = pItem->vIndices[j];
                 aIndexStr.append(OUString::number( n )).append(",");
             }
-            pChildItem->vIndices[nParentLevel] = sal::static_int_cast<short>( i );
+            pChildItem->vIndices[nParentLevel] = i;
             aIndexStr.append(OUString::number( i )).append(")");
 
             OUString aDisplayName;
@@ -2246,7 +2247,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rb
         {
             rbArrayElement = true;
             if( pParentItem->nDimLevel + 1 == pParentItem->nDimCount )
-                pSBX = pArray->Get(pItem->vIndices.empty() ? nullptr : &*pItem->vIndices.begin());
+                pSBX = pArray->Get32(pItem->vIndices.empty() ? nullptr : &*pItem->vIndices.begin());
         }
     }
     else
@@ -2356,8 +2357,8 @@ OUString implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
             aRetStr += "(";
             for( int i = nDimLevel ; i < nDims ; i++ )
             {
-                short nMin, nMax;
-                pArray->GetDim( sal::static_int_cast<short>( i+1 ), nMin, nMax );
+                sal_Int32 nMin, nMax;
+                pArray->GetDim32( sal::static_int_cast<sal_Int32>( i+1 ), nMin, nMax );
                 aRetStr += OUString::number(nMin) + " to "  + OUString::number(nMax);
                 if( i < nDims - 1 )
                     aRetStr += ", ";
@@ -2429,21 +2430,21 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         {
                             // Compare Array dimensions to see if array has changed
                             // Can be a copy, so comparing pointers does not work
-                            sal_uInt16 nOldDims = pOldArray->GetDims();
-                            sal_uInt16 nNewDims = pNewArray->GetDims();
+                            sal_Int32 nOldDims = pOldArray->GetDims32();
+                            sal_Int32 nNewDims = pNewArray->GetDims32();
                             if( nOldDims != nNewDims )
                             {
                                 bArrayChanged = true;
                             }
                             else
                             {
-                                for( int i = 0 ; i < nOldDims ; i++ )
+                                for( sal_Int32 i = 0 ; i < nOldDims ; i++ )
                                 {
-                                    short nOldMin, nOldMax;
-                                    short nNewMin, nNewMax;
+                                    sal_Int32 nOldMin, nOldMax;
+                                    sal_Int32 nNewMin, nNewMax;
 
-                                    pOldArray->GetDim( sal::static_int_cast<short>( i+1 ), nOldMin, nOldMax );
-                                    pNewArray->GetDim( sal::static_int_cast<short>( i+1 ), nNewMin, nNewMax );
+                                    pOldArray->GetDim32( i+1, nOldMin, nOldMax );
+                                    pNewArray->GetDim32( i+1, nNewMin, nNewMax );
                                     if( nOldMin != nNewMin || nOldMax != nNewMax )
                                     {
                                         bArrayChanged = true;
@@ -2464,7 +2465,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                             implEnableChildren(pEntry, true);
 
                             pItem->mpArray = pNewArray;
-                            sal_uInt16 nDims = pNewArray->GetDims();
+                            sal_Int32 nDims = pNewArray->GetDims32();
                             pItem->nDimLevel = 0;
                             pItem->nDimCount = nDims;
                         }
@@ -2487,10 +2488,10 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         {
                             bool bObjChanged = false; // Check if member list has changed
                             SbxArray* pProps = pObj->GetProperties();
-                            sal_uInt16 nPropCount = pProps->Count();
-                            for( sal_uInt16 i = 0 ; i < nPropCount - 3 ; i++ )
+                            sal_uInt32 nPropCount = pProps->Count32();
+                            for( sal_uInt32 i = 0 ; i < nPropCount - 3 ; i++ )
                             {
-                                SbxVariable* pVar_ = pProps->Get( i );
+                                SbxVariable* pVar_ = pProps->Get32( i );
                                 if( pItem->maMemberList[i] != pVar_->GetName() )
                                 {
                                     bObjChanged = true;

@@ -782,7 +782,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             }
             else
             {
-                xArray->unoAddDim( 0, -1 );
+                xArray->unoAddDim32( 0, -1 );
             }
 
             // return the Array
@@ -871,7 +871,7 @@ static Type getUnoTypeForSbxValue( const SbxValue* pVal )
 
         if( auto pArray = dynamic_cast<SbxDimArray*>( xObj.get() ) )
         {
-            short nDims = pArray->GetDims();
+            sal_Int32 nDims = pArray->GetDims32();
             Type aElementType = getUnoTypeForSbxBaseType( static_cast<SbxDataType>(pArray->GetType() & 0xfff) );
             TypeClass eElementTypeClass = aElementType.getTypeClass();
 
@@ -948,7 +948,7 @@ static Type getUnoTypeForSbxValue( const SbxValue* pVal )
                 }
 
                 OUStringBuffer aSeqTypeName;
-                for( short iDim = 0 ; iDim < nDims ; iDim++ )
+                for(sal_Int32 iDim = 0 ; iDim < nDims ; iDim++ )
                 {
                     aSeqTypeName.append(aSeqLevelStr);
                 }
@@ -1078,7 +1078,7 @@ static Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmall
 
 // Helper function for StepREDIMP
 static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
-    const Type& aElemType, short nMaxDimIndex, short nActualDim,
+    const Type& aElemType, sal_Int32 nMaxDimIndex, sal_Int32 nActualDim,
     sal_Int32* pActualIndices, sal_Int32* pLowerBounds, sal_Int32* pUpperBounds )
 {
     sal_Int32 nSeqLevel = nMaxDimIndex - nActualDim + 1;
@@ -1302,7 +1302,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUn
             SbxBaseRef xObj = pVar->GetObject();
             if( auto pArray = dynamic_cast<SbxDimArray*>( xObj.get() ) )
             {
-                short nDims = pArray->GetDims();
+                sal_Int32 nDims = pArray->GetDims32();
 
                 // Normal case: One dimensional array
                 sal_Int32 nLower, nUpper;
@@ -1380,12 +1380,12 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUn
                         std::unique_ptr<sal_Int32[]> pLowerBounds(new sal_Int32[nDims]);
                         std::unique_ptr<sal_Int32[]> pUpperBounds(new sal_Int32[nDims]);
                         std::unique_ptr<sal_Int32[]> pActualIndices(new sal_Int32[nDims]);
-                        for( short i = 1 ; i <= nDims ; i++ )
+                        for(sal_Int32 i = 1 ; i <= nDims ; i++ )
                         {
                             sal_Int32 lBound, uBound;
                             pArray->GetDim32( i, lBound, uBound );
 
-                            short j = i - 1;
+                            sal_Int32 j = i - 1;
                             pActualIndices[j] = pLowerBounds[j] = lBound;
                             pUpperBounds[j] = uBound;
                         }
@@ -1468,9 +1468,9 @@ static void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, s
         Any aValAny;
         for( i = 0 ; i < nParamCount ; i++ )
         {
-            sal_uInt16 iSbx = static_cast<sal_uInt16>(i+1);
+            sal_uInt32 iSbx = i + 1;
 
-            aValAny = sbxToUnoValueImpl( pParams->Get( iSbx ),
+            aValAny = sbxToUnoValueImpl( pParams->Get32( iSbx ),
             bBlockConversionToSmallestType );
 
             OUString aParamName = pNames[iSbx];
@@ -1491,7 +1491,7 @@ static void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, s
     {
         for( i = 0 ; i < nParamCount ; i++ )
         {
-            pAnyArgs[i] = sbxToUnoValueImpl( pParams->Get( static_cast<sal_uInt16>(i+1) ),
+            pAnyArgs[i] = sbxToUnoValueImpl(pParams->Get32(i + 1),
             bBlockConversionToSmallestType );
         }
     }
@@ -1539,7 +1539,7 @@ static Any invokeAutomationMethod( const OUString& Name, Sequence< Any > const &
             sal_Int16 iTarget = pIndices[ j ];
             if( iTarget >= static_cast<sal_Int16>(nParamCount) )
                 break;
-            unoToSbxValue( pParams->Get( static_cast<sal_uInt16>(j+1) ), pNewValues[ j ] );
+            unoToSbxValue( pParams->Get32(j + 1), pNewValues[ j ] );
         }
     }
     return aRetAny;
@@ -1855,11 +1855,11 @@ static OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
     const Property* pUnoProps = props.getConstArray();
 
     SbxArray* pProps = rUnoObj.GetProperties();
-    sal_uInt16 nPropCount = pProps->Count();
-    sal_uInt16 nPropsPerLine = 1 + nPropCount / 30;
-    for( sal_uInt16 i = 0; i < nPropCount; i++ )
+    sal_uInt32 nPropCount = pProps->Count32();
+    sal_uInt32 nPropsPerLine = 1 + nPropCount / 30;
+    for( sal_uInt32 i = 0; i < nPropCount; i++ )
     {
-        SbxVariable* pVar = pProps->Get( i );
+        SbxVariable* pVar = pProps->Get32( i );
         if( pVar )
         {
             OUStringBuffer aPropStr;
@@ -1931,16 +1931,16 @@ static OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
     const Reference< XIdlMethod >* pUnoMethods = methods.getConstArray();
 
     SbxArray* pMethods = rUnoObj.GetMethods();
-    sal_uInt16 nMethodCount = pMethods->Count();
+    sal_uInt32 nMethodCount = pMethods->Count32();
     if( !nMethodCount )
     {
         aRet.append( "\nNo methods found\n" );
         return aRet.makeStringAndClear();
     }
-    sal_uInt16 nPropsPerLine = 1 + nMethodCount / 30;
-    for( sal_uInt16 i = 0; i < nMethodCount; i++ )
+    sal_uInt32 nPropsPerLine = 1 + nMethodCount / 30;
+    for( sal_uInt32 i = 0; i < nMethodCount; i++ )
     {
-        SbxVariable* pVar = pMethods->Get( i );
+        SbxVariable* pVar = pMethods->Get32( i );
         if( pVar )
         {
             if( (i % nPropsPerLine) == 0 )
@@ -2086,7 +2086,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     try
                     {
-                        sal_uInt32 nParamCount = pParams ? (static_cast<sal_uInt32>(pParams->Count()) - 1) : 0;
+                        sal_uInt32 nParamCount = pParams ? (pParams->Count32() - 1) : 0;
                         bool bCanBeConsideredAMethod = mxInvocation->hasMethod( pProp->GetName() );
                         Any aRetAny;
                         if ( bCanBeConsideredAMethod && nParamCount )
@@ -2172,7 +2172,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if( pHint->GetId() == SfxHintId::BasicDataWanted )
             {
                 // number of Parameter -1 because of Param0 == this
-                sal_uInt32 nParamCount = pParams ? (static_cast<sal_uInt32>(pParams->Count()) - 1) : 0;
+                sal_uInt32 nParamCount = pParams ? (pParams->Count32() - 1) : 0;
                 Sequence<Any> args;
                 bool bOutParams = false;
 
@@ -2224,7 +2224,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             css::uno::Type aType( rxClass->getTypeClass(), rxClass->getName() );
 
                             // ATTENTION: Don't forget for Sbx-Parameter the offset!
-                            pAnyArgs[i] = sbxToUnoValue( pParams->Get( static_cast<sal_uInt16>(i+1) ), aType );
+                            pAnyArgs[i] = sbxToUnoValue( pParams->Get32(i + 1), aType );
 
                             // If it is not certain check whether the out-parameter are available.
                             if( !bOutParams )
@@ -2267,7 +2267,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                                 const ParamInfo& rInfo = pParamInfos[j];
                                 ParamMode aParamMode = rInfo.aMode;
                                 if( aParamMode != ParamMode_IN )
-                                    unoToSbxValue( pParams->Get( static_cast<sal_uInt16>(j+1) ), pAnyArgs[ j ] );
+                                    unoToSbxValue( pParams->Get32(j + 1), pAnyArgs[ j ] );
                             }
                         }
                     }
@@ -2922,14 +2922,14 @@ void createAllObjectProperties( SbxObject* pObj )
 void RTL_Impl_CreateUnoStruct( SbxArray& rPar )
 {
     // We need 1 parameter minimum
-    if ( rPar.Count() < 2 )
+    if ( rPar.Count32() < 2 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
     // get the name of the class of the struct
-    OUString aClassName = rPar.Get(1)->GetOUString();
+    OUString aClassName = rPar.Get32(1)->GetOUString();
 
     // try to create Struct with the same name
     SbUnoObjectRef xUnoObj = Impl_CreateUnoStruct( aClassName );
@@ -2938,21 +2938,21 @@ void RTL_Impl_CreateUnoStruct( SbxArray& rPar )
         return;
     }
     // return the object
-    SbxVariableRef refVar = rPar.Get(0);
+    SbxVariableRef refVar = rPar.Get32(0);
     refVar->PutObject( xUnoObj.get() );
 }
 
 void RTL_Impl_CreateUnoService( SbxArray& rPar )
 {
     // We need 1 Parameter minimum
-    if ( rPar.Count() < 2 )
+    if ( rPar.Count32() < 2 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
     // get the name of the class of the struct
-    OUString aServiceName = rPar.Get(1)->GetOUString();
+    OUString aServiceName = rPar.Get32(1)->GetOUString();
 
     // search for the service and instantiate it
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
@@ -2966,7 +2966,7 @@ void RTL_Impl_CreateUnoService( SbxArray& rPar )
         implHandleAnyException( ::cppu::getCaughtException() );
     }
 
-    SbxVariableRef refVar = rPar.Get(0);
+    SbxVariableRef refVar = rPar.Get32(0);
     if( xInterface.is() )
     {
         // Create a SbUnoObject out of it and return it
@@ -2990,15 +2990,15 @@ void RTL_Impl_CreateUnoService( SbxArray& rPar )
 void RTL_Impl_CreateUnoServiceWithArguments( SbxArray& rPar )
 {
     // We need 2 parameter minimum
-    if ( rPar.Count() < 3 )
+    if ( rPar.Count32() < 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
     // get the name of the class of the struct
-    OUString aServiceName = rPar.Get(1)->GetOUString();
-    Any aArgAsAny = sbxToUnoValue( rPar.Get(2),
+    OUString aServiceName = rPar.Get32(1)->GetOUString();
+    Any aArgAsAny = sbxToUnoValue( rPar.Get32(2),
                 cppu::UnoType<Sequence<Any>>::get() );
     Sequence< Any > aArgs;
     aArgAsAny >>= aArgs;
@@ -3015,7 +3015,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( SbxArray& rPar )
         implHandleAnyException( ::cppu::getCaughtException() );
     }
 
-    SbxVariableRef refVar = rPar.Get(0);
+    SbxVariableRef refVar = rPar.Get32(0);
     if( xInterface.is() )
     {
         // Create a SbUnoObject out of it and return it
@@ -3038,7 +3038,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( SbxArray& rPar )
 
 void RTL_Impl_GetProcessServiceManager( SbxArray& rPar )
 {
-    SbxVariableRef refVar = rPar.Get(0);
+    SbxVariableRef refVar = rPar.Get32(0);
 
     // get the global service manager
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
@@ -3051,7 +3051,7 @@ void RTL_Impl_GetProcessServiceManager( SbxArray& rPar )
 void RTL_Impl_HasInterfaces( SbxArray& rPar )
 {
     // We need 2 parameter minimum
-    sal_uInt16 nParCount = rPar.Count();
+    sal_uInt32 nParCount = rPar.Count32();
     if( nParCount < 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -3059,11 +3059,11 @@ void RTL_Impl_HasInterfaces( SbxArray& rPar )
     }
 
     // variable for the return value
-    SbxVariableRef refVar = rPar.Get(0);
+    SbxVariableRef refVar = rPar.Get32(0);
     refVar->PutBool( false );
 
     // get the Uno-Object
-    SbxBaseRef pObj = rPar.Get( 1 )->GetObject();
+    SbxBaseRef pObj = rPar.Get32( 1 )->GetObject();
     auto obj = dynamic_cast<SbUnoObject*>( pObj.get() );
     if( obj == nullptr )
     {
@@ -3082,10 +3082,10 @@ void RTL_Impl_HasInterfaces( SbxArray& rPar )
     {
         return;
     }
-    for( sal_uInt16 i = 2 ; i < nParCount ; i++ )
+    for( sal_uInt32 i = 2 ; i < nParCount ; i++ )
     {
         // get the name of the interface of the struct
-        OUString aIfaceName = rPar.Get( i )->GetOUString();
+        OUString aIfaceName = rPar.Get32( i )->GetOUString();
 
         // search for the class
         Reference< XIdlClass > xClass = xCoreReflection->forName( aIfaceName );
@@ -3109,23 +3109,23 @@ void RTL_Impl_HasInterfaces( SbxArray& rPar )
 void RTL_Impl_IsUnoStruct( SbxArray& rPar )
 {
     // We need 1 parameter minimum
-    if ( rPar.Count() < 2 )
+    if ( rPar.Count32() < 2 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
     // variable for the return value
-    SbxVariableRef refVar = rPar.Get(0);
+    SbxVariableRef refVar = rPar.Get32(0);
     refVar->PutBool( false );
 
     // get the Uno-Object
-    SbxVariableRef xParam = rPar.Get( 1 );
+    SbxVariableRef xParam = rPar.Get32( 1 );
     if( !xParam->IsObject() )
     {
         return;
     }
-    SbxBaseRef pObj = rPar.Get( 1 )->GetObject();
+    SbxBaseRef pObj = xParam->GetObject();
     auto obj = dynamic_cast<SbUnoObject*>( pObj.get() );
     if( obj == nullptr )
     {
@@ -3142,18 +3142,18 @@ void RTL_Impl_IsUnoStruct( SbxArray& rPar )
 
 void RTL_Impl_EqualUnoObjects( SbxArray& rPar )
 {
-    if ( rPar.Count() < 3 )
+    if ( rPar.Count32() < 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
     // variable for the return value
-    SbxVariableRef refVar = rPar.Get(0);
+    SbxVariableRef refVar = rPar.Get32(0);
     refVar->PutBool( false );
 
     // get the Uno-Objects
-    SbxVariableRef xParam1 = rPar.Get( 1 );
+    SbxVariableRef xParam1 = rPar.Get32( 1 );
     if( !xParam1->IsObject() )
     {
         return;
@@ -3173,7 +3173,7 @@ void RTL_Impl_EqualUnoObjects( SbxArray& rPar )
     Reference< XInterface > x1;
     aAny1 >>= x1;
 
-    SbxVariableRef xParam2 = rPar.Get( 2 );
+    SbxVariableRef xParam2 = rPar.Get32( 2 );
     if( !xParam2->IsObject() )
     {
         return;
@@ -3540,7 +3540,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if( pUnoCtor && pHint->GetId() == SfxHintId::BasicDataWanted )
         {
             // Parameter count -1 because of Param0 == this
-            sal_uInt32 nParamCount = pParams ? (static_cast<sal_uInt32>(pParams->Count()) - 1) : 0;
+            sal_uInt32 nParamCount = pParams ? (pParams->Count32() - 1) : 0;
             Sequence<Any> args;
 
             Reference< XServiceConstructorDescription > xCtor = pUnoCtor->getServiceCtorDesc();
@@ -3564,14 +3564,14 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
 
             // Too many parameters with context as first parameter?
-            sal_uInt16 nSbxParameterOffset = 1;
-            sal_uInt16 nParameterOffsetByContext = 0;
+            sal_uInt32 nSbxParameterOffset = 1;
+            sal_uInt32 nParameterOffsetByContext = 0;
             Reference < XComponentContext > xFirstParamContext;
             if( nParamCount > nUnoParamCount )
             {
                 // Check if first parameter is a context and use it
                 // then in createInstanceWithArgumentsAndContext
-                Any aArg0 = sbxToUnoValue( pParams->Get( nSbxParameterOffset ) );
+                Any aArg0 = sbxToUnoValue( pParams->Get32( nSbxParameterOffset ) );
                 if( (aArg0 >>= xFirstParamContext) && xFirstParamContext.is() )
                     nParameterOffsetByContext = 1;
             }
@@ -3607,7 +3607,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     Any* pAnyArgs = args.getArray();
                     for( sal_uInt32 i = 0 ; i < nEffectiveParamCount ; i++ )
                     {
-                        sal_uInt16 iSbx = static_cast<sal_uInt16>(i + nSbxParameterOffset + nParameterOffsetByContext);
+                        sal_uInt32 iSbx = i + nSbxParameterOffset + nParameterOffsetByContext;
 
                         // bRestParameterMode allows nEffectiveParamCount > nUnoParamCount
                         Reference< XParameter > xParam;
@@ -3623,7 +3623,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             css::uno::Type aType( xParamTypeDesc->getTypeClass(), xParamTypeDesc->getName() );
 
                             // sbx parameter needs offset 1
-                            pAnyArgs[i] = sbxToUnoValue( pParams->Get( iSbx ), aType );
+                            pAnyArgs[i] = sbxToUnoValue( pParams->Get32( iSbx ), aType );
 
                             // Check for out parameter if not already done
                             if( !bOutParams && xParam->isOut() )
@@ -3631,7 +3631,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         }
                         else
                         {
-                            pAnyArgs[i] = sbxToUnoValue( pParams->Get( iSbx ) );
+                            pAnyArgs[i] = sbxToUnoValue( pParams->Get32( iSbx ) );
                         }
                     }
                 }
@@ -3669,7 +3669,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             continue;
 
                         if( xParam->isOut() )
-                            unoToSbxValue( pParams->Get( static_cast<sal_uInt16>(j+1) ), pAnyArgs[ j ] );
+                            unoToSbxValue( pParams->Get32(j + 1), pAnyArgs[ j ] );
                     }
                 }
             }
@@ -3737,7 +3737,7 @@ void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pParams = pVar->GetParameters();
-        sal_uInt32 nParamCount = pParams ? (static_cast<sal_uInt32>(pParams->Count()) - 1) : 0;
+        sal_uInt32 nParamCount = pParams ? (pParams->Count32() - 1) : 0;
         sal_uInt32 nAllowedParamCount = 1;
 
         Reference < XComponentContext > xContextToUse;
@@ -3745,7 +3745,7 @@ void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             // Check if first parameter is a context and use it then
             Reference < XComponentContext > xFirstParamContext;
-            Any aArg1 = sbxToUnoValue( pParams->Get( 1 ) );
+            Any aArg1 = sbxToUnoValue( pParams->Get32( 1 ) );
             if( (aArg1 >>= xFirstParamContext) && xFirstParamContext.is() )
                 xContextToUse = xFirstParamContext;
         }
@@ -3832,7 +3832,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
                     // Convert elements
                     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
                     unoToSbxValue( xVar.get(), pArgs[i] );
-                    xSbxArray->Put( xVar.get(), sal::static_int_cast< sal_uInt16 >(i+1) );
+                    xSbxArray->Put32( xVar.get(), i + 1 );
                 }
 
                 pLib->Call( aMethodName, xSbxArray.get() );
@@ -3840,7 +3840,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
                 // get the return value from the Param-Array, if requested
                 if( pRet )
                 {
-                    SbxVariable* pVar = xSbxArray->Get( 0 );
+                    SbxVariable* pVar = xSbxArray->Get32( 0 );
                     if( pVar )
                     {
                         // #95792 Avoid a second call
@@ -4025,15 +4025,15 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
 void SbRtl_CreateUnoListener(StarBASIC * pBasic, SbxArray & rPar, bool)
 {
     // We need 2 parameters
-    if ( rPar.Count() != 3 )
+    if ( rPar.Count32() != 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
     // get the name of the class of the struct
-    OUString aPrefixName = rPar.Get(1)->GetOUString();
-    OUString aListenerClassName = rPar.Get(2)->GetOUString();
+    OUString aPrefixName = rPar.Get32(1)->GetOUString();
+    OUString aListenerClassName = rPar.Get32(2)->GetOUString();
 
     // get the CoreReflection
     Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
@@ -4071,10 +4071,10 @@ void SbRtl_CreateUnoListener(StarBASIC * pBasic, SbxArray & rPar, bool)
 
     // #100326 Register listener object to set Parent NULL in Dtor
     SbxArrayRef xBasicUnoListeners = pBasic->getUnoListeners();
-    xBasicUnoListeners->Insert( pUnoObj, xBasicUnoListeners->Count() );
+    xBasicUnoListeners->Insert32( pUnoObj, xBasicUnoListeners->Count32() );
 
     // return the object
-    SbxVariableRef refVar = rPar.Get(0);
+    SbxVariableRef refVar = rPar.Get32(0);
     refVar->PutObject( p->xSbxObj.get() );
 }
 
@@ -4083,7 +4083,7 @@ void SbRtl_CreateUnoListener(StarBASIC * pBasic, SbxArray & rPar, bool)
 // in the Basic runtime system.
 void RTL_Impl_GetDefaultContext( SbxArray& rPar )
 {
-    SbxVariableRef refVar = rPar.Get(0);
+    SbxVariableRef refVar = rPar.Get32(0);
 
     Any aContextAny( comphelper::getProcessComponentContext() );
 
@@ -4097,15 +4097,15 @@ void RTL_Impl_GetDefaultContext( SbxArray& rPar )
 void RTL_Impl_CreateUnoValue( SbxArray& rPar )
 {
     // 2 parameters needed
-    if ( rPar.Count() != 3 )
+    if ( rPar.Count32() != 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
     // get the name of the class of the struct
-    OUString aTypeName = rPar.Get(1)->GetOUString();
-    SbxVariable* pVal = rPar.Get(2);
+    OUString aTypeName = rPar.Get32(1)->GetOUString();
+    SbxVariable* pVal = rPar.Get32(2);
 
     if( aTypeName == "type" )
     {
@@ -4137,7 +4137,7 @@ void RTL_Impl_CreateUnoValue( SbxArray& rPar )
         if( bSuccess )
         {
             Any aTypeAny( aType );
-            SbxVariableRef refVar = rPar.Get(0);
+            SbxVariableRef refVar = rPar.Get32(0);
             SbxObjectRef xUnoAnyObject = new SbUnoAnyObject( aTypeAny );
             refVar->PutObject( xUnoAnyObject.get() );
         }
@@ -4167,7 +4167,7 @@ void RTL_Impl_CreateUnoValue( SbxArray& rPar )
     Any aVal = sbxToUnoValueImpl( pVal );
     Any aConvertedVal = convertAny( aVal, aDestType );
 
-    SbxVariableRef refVar = rPar.Get(0);
+    SbxVariableRef refVar = rPar.Get32(0);
     SbxObjectRef xUnoAnyObject = new SbUnoAnyObject( aConvertedVal );
     refVar->PutObject( xUnoAnyObject.get() );
 }
@@ -4244,7 +4244,7 @@ void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const A
     SbxArrayRef xArray = new SbxArray;
     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
     unoToSbxValue( xVar.get(), rValue );
-    xArray->Put( xVar.get(), 1 );
+    xArray->Put32( xVar.get(), 1 );
 
     // Call property method
     SbxVariableRef xValue = new SbxVariable;
@@ -4344,7 +4344,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
         {
             SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
             unoToSbxValue( xVar.get(), pArgs[i] );
-            xArray->Put( xVar.get(), sal::static_int_cast< sal_uInt16 >(i+1) );
+            xArray->Put32( xVar.get(), sal::static_int_cast< sal_uInt16 >(i+1) );
         }
     }
 
@@ -4467,7 +4467,7 @@ void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic )
 {
     StarBasicDisposeItem* pItem = lcl_getOrCreateItemForBasic( pBasic );
     SbxArray* pArray = pItem->m_pRegisteredVariables.get();
-    pArray->Put( pVar, pArray->Count() );
+    pArray->Put32( pVar, pArray->Count32() );
 }
 
 void disposeComVariablesForBasic( StarBASIC const * pBasic )
@@ -4478,10 +4478,10 @@ void disposeComVariablesForBasic( StarBASIC const * pBasic )
         StarBasicDisposeItem* pItem = *it;
 
         SbxArray* pArray = pItem->m_pRegisteredVariables.get();
-        sal_uInt16 nCount = pArray->Count();
-        for( sal_uInt16 i = 0 ; i < nCount ; ++i )
+        sal_uInt32 nCount = pArray->Count32();
+        for( sal_uInt32 i = 0 ; i < nCount ; ++i )
         {
-            SbxVariable* pVar = pArray->Get( i );
+            SbxVariable* pVar = pArray->Get32( i );
             pVar->ClearComListener();
         }
 
@@ -4519,10 +4519,10 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
     bool bSuccess = false;
 
     SbxArray* pModIfaces = pClassData->mxIfaces.get();
-    sal_uInt16 nCount = pModIfaces->Count();
-    for( sal_uInt16 i = 0 ; i < nCount ; ++i )
+    sal_uInt32 nCount = pModIfaces->Count32();
+    for( sal_uInt32 i = 0 ; i < nCount ; ++i )
     {
-        SbxVariable* pVar = pModIfaces->Get( i );
+        SbxVariable* pVar = pModIfaces->Get32( i );
         const OUString& aIfaceName = pVar->GetName();
 
         if( !aIfaceName.isEmpty() )
@@ -4775,11 +4775,11 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
     aRet.append("Properties of object ");
     aRet.append( getDbgObjectName() );
 
-    sal_uInt16 nPropCount = pProps->Count();
-    sal_uInt16 nPropsPerLine = 1 + nPropCount / 30;
-    for( sal_uInt16 i = 0; i < nPropCount; i++ )
+    sal_uInt32 nPropCount = pProps->Count32();
+    sal_uInt32 nPropsPerLine = 1 + nPropCount / 30;
+    for( sal_uInt32 i = 0; i < nPropCount; i++ )
     {
-        SbxVariable* pVar = pProps->Get( i );
+        SbxVariable* pVar = pProps->Get32( i );
         if( pVar )
         {
             OUStringBuffer aPropStr;
