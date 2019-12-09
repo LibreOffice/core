@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_58bdc166",
+        "filename": "svx/source/stbctrls/selctrl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-12-09T10:01:11Z",
+      "side": 1,
+      "message": "Is there a need for this include?",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 51
+      },
+      "revId": "30e3e70e77713bd41f61acf38cf9a2f9497ed5d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_b88e55ce",
+        "filename": "svx/source/stbctrls/selctrl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-12-09T10:01:11Z",
+      "side": 1,
+      "message": "And this one?",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 41
+      },
+      "revId": "30e3e70e77713bd41f61acf38cf9a2f9497ed5d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_d8b0f18e",
+        "filename": "svx/source/stbctrls/selctrl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-12-09T10:01:11Z",
+      "side": 1,
+      "message": "To save some keystrokes, css is an alias for this namespace",
+      "range": {
+        "startLine": 121,
+        "startChar": 10,
+        "endLine": 121,
+        "endChar": 26
+      },
+      "revId": "30e3e70e77713bd41f61acf38cf9a2f9497ed5d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
