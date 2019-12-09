@@ -87,6 +87,7 @@ private:
     Link<Edit&,bool>    maActivateHdl;
     std::unique_ptr<VclBuilder> mpUIBuilder;
 
+    css::uno::Reference<css::i18n::XBreakIterator> mxBreakIterator;
     css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> mxISC;
 
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_Int32 nSelectionLen ) const;
@@ -113,8 +114,8 @@ private:
     SAL_DLLPRIVATE void        ImplCopy(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
     SAL_DLLPRIVATE void        ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
     SAL_DLLPRIVATE long        ImplGetTextYPosition() const;
-    SAL_DLLPRIVATE css::uno::Reference<css::i18n::XExtendedInputSequenceChecker > const & ImplGetInputSequenceChecker();
-    SAL_DLLPRIVATE static css::uno::Reference<css::i18n::XBreakIterator > ImplGetBreakIterator();
+    SAL_DLLPRIVATE css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> const& ImplGetInputSequenceChecker();
+    SAL_DLLPRIVATE css::uno::Reference<css::i18n::XBreakIterator> const& ImplGetBreakIterator();
     SAL_DLLPRIVATE void        filterText();
 
 protected:

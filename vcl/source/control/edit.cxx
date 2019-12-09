@@ -739,22 +739,17 @@ OUString Edit::ImplGetValidString( const OUString& rString )
     return aValidString;
 }
 
-uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator()
+uno::Reference <i18n::XBreakIterator> const& Edit::ImplGetBreakIterator()
 {
-    //!! since we don't want to become incompatible in the next minor update
-    //!! where this code will get integrated into, xISC will be a local
-    //!! variable instead of a class member!
-    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    return i18n::BreakIterator::create(xContext);
+    if (!mxBreakIterator)
+        mxBreakIterator = i18n::BreakIterator::create(::comphelper::getProcessComponentContext());
+    return mxBreakIterator;
 }
 
-uno::Reference < i18n::XExtendedInputSequenceChecker > const & Edit::ImplGetInputSequenceChecker()
+uno::Reference <i18n::XExtendedInputSequenceChecker> const& Edit::ImplGetInputSequenceChecker()
 {
-    if ( !mxISC.is() )
-    {
-        mxISC = i18n::InputSequenceChecker::create(
-                ::comphelper::getProcessComponentContext() );
-    }
+    if (!mxISC.is())
+        mxISC = i18n::InputSequenceChecker::create(::comphelper::getProcessComponentContext());
     return mxISC;
 }
 
