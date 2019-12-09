@@ -14,17 +14,17 @@ index 0d3f7241ca..d80ea82cee 100644
 --- a/Modules/_ctypes/ctypes.h
 +++ b/Modules/_ctypes/ctypes.h
 @@ -34,7 +34,6 @@ union value {
- #ifdef HAVE_LONG_LONG
-                 PY_LONG_LONG ll;
- #endif
+                 float f;
+                 double d;
+                 long long ll;
 -                long double D;
  };
  
  /*
 @@ -306,7 +305,6 @@ struct tagPyCArgObject {
- #ifdef HAVE_LONG_LONG
-         PY_LONG_LONG q;
- #endif
+         int i;
+         long l;
+         long long q;
 -        long double D;
          double d;
          float f;
