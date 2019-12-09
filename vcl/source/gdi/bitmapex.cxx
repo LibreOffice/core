@@ -864,6 +864,7 @@ namespace
                 }
             }
         }
+        xWrite.reset();
 
         rSource.AdaptBitCount(aDestination);
 
