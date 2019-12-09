@@ -33,6 +33,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>
 #include <config_features.h>
@@ -187,6 +188,7 @@ namespace vclcanvas
 #if HAVE_FEATURE_UI
                     || OpenGLHelper::isVCLOpenGLEnabled()
 #endif
+                    || SkiaHelper::isVCLSkiaEnabled()
                    )
                 {
                     // "complex" transformation, employ affine

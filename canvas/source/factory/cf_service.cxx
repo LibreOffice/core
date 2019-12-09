@@ -40,6 +40,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
+#include <vcl/skia/SkiaHelper.hxx>
 #include <unotools/configmgr.hxx>
 
 using namespace ::com::sun::star;
@@ -303,6 +304,8 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     if( OpenGLWrapper::isVCLOpenGLEnabled() )
         bForceLastEntry = true;
 #endif
+    if( SkiaHelper::isVCLSkiaEnabled() )
+        bForceLastEntry = true;
 
     // use anti-aliasing canvas, if config flag set (or not existing)
     bool bUseAAEntry(true);

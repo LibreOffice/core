@@ -37,6 +37,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/sysdata.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -85,6 +86,7 @@ namespace dxcanvas
 
         // tdf#93870 - force VCL canvas in OpenGL mode for now.
         assert( !OpenGLWrapper::isVCLOpenGLEnabled() );
+        assert( !SkiaHelper::isVCLSkiaEnabled() );
 
         SAL_INFO("canvas.directx", "Canvas::initialize called" );
 
