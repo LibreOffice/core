@@ -279,7 +279,7 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 void SbStdClipboard::MethClear( SbxArray const * pPar_ )
 {
-    if( pPar_ && (pPar_->Count() > 1) )
+    if( pPar_ && (pPar_->Count32() > 1) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
@@ -289,13 +289,13 @@ void SbStdClipboard::MethClear( SbxArray const * pPar_ )
 
 void SbStdClipboard::MethGetData( SbxArray* pPar_ )
 {
-    if( !pPar_ || (pPar_->Count() != 2) )
+    if( !pPar_ || (pPar_->Count32() != 2) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
     }
 
-    sal_Int16 nFormat = pPar_->Get(1)->GetInteger();
+    sal_Int16 nFormat = pPar_->Get32(1)->GetInteger();
     if( nFormat <= 0 || nFormat > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -306,13 +306,13 @@ void SbStdClipboard::MethGetData( SbxArray* pPar_ )
 
 void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_ )
 {
-    if( !pPar_ || (pPar_->Count() != 2) )
+    if( !pPar_ || (pPar_->Count32() != 2) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
     }
 
-    sal_Int16 nFormat = pPar_->Get(1)->GetInteger();
+    sal_Int16 nFormat = pPar_->Get32(1)->GetInteger();
     if( nFormat <= 0 || nFormat > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -324,7 +324,7 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_ )
 
 void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray const * pPar_ )
 {
-    if( pPar_ && (pPar_->Count() > 1) )
+    if( pPar_ && (pPar_->Count32() > 1) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
@@ -335,13 +335,13 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray const * pPar_ )
 
 void SbStdClipboard::MethSetData( SbxArray* pPar_ )
 {
-    if( !pPar_ || (pPar_->Count() != 3) )
+    if( !pPar_ || (pPar_->Count32() != 3) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
     }
 
-    sal_Int16 nFormat = pPar_->Get(2)->GetInteger();
+    sal_Int16 nFormat = pPar_->Get32(2)->GetInteger();
     if( nFormat <= 0 || nFormat > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -352,7 +352,7 @@ void SbStdClipboard::MethSetData( SbxArray* pPar_ )
 
 void SbStdClipboard::MethSetText( SbxArray const * pPar_ )
 {
-    if( !pPar_ || (pPar_->Count() != 2) )
+    if( !pPar_ || (pPar_->Count32() != 2) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;

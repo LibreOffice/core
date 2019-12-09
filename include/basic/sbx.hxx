@@ -113,16 +113,11 @@ public:
     SbxArray( const SbxArray& ) = delete;
     SbxArray& operator=( const SbxArray& );
     virtual void Clear() override;
-    sal_uInt16           Count() const;
     virtual SbxDataType  GetType() const override;
-    SbxVariableRef&      GetRef( sal_uInt16 );
-    SbxVariable*         Get( sal_uInt16 );
-    void                 Put( SbxVariable*, sal_uInt16 );
-    void                 Insert( SbxVariable*, sal_uInt16 );
     void                 Remove( SbxVariable const * );
     void                 Merge( SbxArray* );
-    OUString             GetAlias( sal_uInt16 );
-    void                 PutAlias( const OUString&, sal_uInt16 );
+    OUString             GetAlias32( sal_uInt32 );
+    void                 PutAlias32( const OUString&, sal_uInt32 );
     SbxVariable* Find( const OUString&, SbxClassType );
 
     // Additional methods for 32-bit indices
@@ -146,7 +141,6 @@ class BASIC_DLLPUBLIC SbxDimArray final : public SbxArray
     BASIC_DLLPRIVATE void AddDimImpl32( sal_Int32, sal_Int32, bool bAllowSize0 );
     bool mbHasFixedSize;
 
-    sal_uInt16  Offset( const short* );
     sal_uInt32  Offset32( const sal_Int32* );
     sal_uInt32  Offset32( SbxArray* );
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
@@ -158,17 +152,9 @@ public:
     SbxDimArray( const SbxDimArray& ) = delete;
     SbxDimArray& operator=( const SbxDimArray& );
     virtual void Clear() override;
-    using SbxArray::GetRef;
-    using SbxArray::Get;
-    SbxVariable* Get( const short* );
-    using SbxArray::Put;
-    void Put( SbxVariable*, const short* );
     SbxVariable* Get( SbxArray* );
 
-    short  GetDims() const { return m_vDimensions.size();}
-    void   AddDim( short, short );
-    void   unoAddDim( short, short );
-    bool   GetDim( short, short&, short& ) const;
+    sal_Int32 GetDims32() const { return m_vDimensions.size();}
 
     using SbxArray::GetRef32;
     using SbxArray::Get32;
