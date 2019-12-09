@@ -82,7 +82,9 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 		&& $(MAKE) build_libs \
 			CC="$(CC) -fPIC \
 				$(if $(filter-out WNT MACOSX,$(OS)),-fvisibility=hidden)" \
+		&& ln -s . lib \
 	)
+# symlink lib dir for python3
 endif
 
 # vim: set noet sw=4 ts=4:
