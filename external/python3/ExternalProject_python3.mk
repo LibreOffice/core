@@ -36,6 +36,9 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
+			/p:opensslIncludeDir=$(call gb_UnpackedTarball_get_dir,openssl)/include \
+			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl)/out32dll \
+			/p:zlibDir=$(call gb_UnpackedTarball_get_dir,zlib) \
 			/maxcpucount \
 			$(if $(filter 150,$(VCVER)),/p:PlatformToolset=v141 /p:VisualStudioVersion=15.0 /ToolsVersion:15.0) \
 			$(if $(filter 160,$(VCVER)),/p:PlatformToolset=v142 /p:VisualStudioVersion=16.0 /ToolsVersion:Current) \
@@ -45,6 +48,12 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 else
 
 # --with-system-expat: this should find the one in the workdir (or system)
+
+# OPENSSL_INCLUDES OPENSSL_LDFLAGS OPENSSL_LIBS cannot be set via commandline!
+# use --with-openssl instead, which requires include/ and lib/ subdirs.
+
+# TODO: libffi has different SONAME on CentOS 6 vs. 7, so we better use
+# --without-system-ffi. However, that doesn't actually do anything on Linux :(
 
 # create a symlink "LO_lib" because the .so are in a directory with platform
 # specific name like build/lib.linux-x86_64-3.3
@@ -77,17 +86,18 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
             ) \
 			--enable-framework=/@__________________________________________________OOO --with-framework-name=LibreOfficePython, \
 			--enable-shared \
+			$(if $(filter 1090 101000 101100 101200,$(MAC_OS_X_VERSION_MIN_REQUIRED)),ac_cv_func_utimensat=no) \
+		) \
+		$(if $(SYSTEM_OPENSSL)$(DISABLE_OPENSSL),,\
+			--with-openssl=$(call gb_UnpackedTarball_get_dir,openssl) \
 		) \
 		CC="$(strip $(CC) \
-			$(if $(SYSTEM_OPENSSL),,-I$(call gb_UnpackedTarball_get_dir,openssl)/include \
-				$(if $(DISABLE_OPENSSL),,-I$(call gb_UnpackedTarball_get_dir,openssl)/include)) \
 			$(if $(SYSTEM_EXPAT),,-I$(call gb_UnpackedTarball_get_dir,expat)/lib) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
 		$(if $(filter -fsanitize=%,$(CC)),LINKCC="$(CXX) -pthread") \
 		LDFLAGS="$(strip $(LDFLAGS) \
-			$(if $(SYSTEM_OPENSSL),,-L$(call gb_UnpackedTarball_get_dir,openssl)) \
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSTEM_ZLIB),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \

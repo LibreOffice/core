@@ -277,6 +277,7 @@ public:
 class LO_DLLPUBLIC_PYUNO PyThreadAttach
 {
     PyThreadState *tstate;
+    bool m_isNewState;
     PyThreadAttach ( const PyThreadAttach & ) = delete;
     PyThreadAttach & operator = ( const PyThreadAttach & ) = delete;
 public:
