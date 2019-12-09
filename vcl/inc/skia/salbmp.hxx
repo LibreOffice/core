@@ -99,6 +99,9 @@ private:
     int mScanlineSize; // size of one row in mBuffer
     sk_sp<SkImage> mImage; // cached contents, possibly GPU-backed
     sk_sp<SkImage> mAlphaImage; // cached contents as alpha image, possibly GPU-backed
+#ifdef DBG_UTIL
+    int mWriteAccessCount; // number of write AcquireAccess() that have not been released
+#endif
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_SALBMP_H

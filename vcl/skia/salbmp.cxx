@@ -136,6 +136,9 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
     mPalette = rPal;
     mBitCount = nBitCount;
     mSize = rSize;
+#ifdef DBG_UTIL
+    mWriteAccessCount = 0;
+#endif
     SAL_INFO("vcl.skia", "create(" << this << ")");
     return true;
 }
@@ -171,6 +174,9 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
             mBuffer.reset(newBuffer);
             mScanlineSize = src.mScanlineSize;
         }
+#ifdef DBG_UTIL
+        mWriteAccessCount = 0;
+#endif
         SAL_INFO("vcl.skia", "create(" << this << "): (" << &src << ")");
         return true;
     }
@@ -190,6 +196,9 @@ bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanv
 void SkiaSalBitmap::Destroy()
 {
     SAL_INFO("vcl.skia", "destroy(" << this << ")");
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     mBitmap.reset();
     mBuffer.reset();
 }
@@ -198,11 +207,18 @@ Size SkiaSalBitmap::GetSize() const { return mSize; }
 
 sal_uInt16 SkiaSalBitmap::GetBitCount() const { return mBitCount; }
 
-BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
+BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
 {
-    //(void)nMode; // TODO
+#ifndef DBG_UTIL
+    (void)nMode; // TODO
+#endif
     if (mBitmap.drawsNothing() && !mBuffer)
         return nullptr;
+#ifdef DBG_UTIL
+    // BitmapWriteAccess stores also a copy of the palette and it can
+    // be modified, so concurrent reading of it might result in inconsistencies.
+    assert(mWriteAccessCount == 0 || nMode == BitmapAccessMode::Write);
+#endif
     BitmapBuffer* buffer = new BitmapBuffer;
     buffer->mnWidth = mSize.Width();
     buffer->mnHeight = mSize.Height();
@@ -250,6 +266,10 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
             abort();
     }
     buffer->mnFormat |= ScanlineFormat::TopDown;
+#ifdef DBG_UTIL
+    if (nMode == BitmapAccessMode::Write)
+        ++mWriteAccessCount;
+#endif
     return buffer;
 }
 
@@ -257,6 +277,10 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 {
     if (nMode == BitmapAccessMode::Write) // TODO something more?
     {
+#ifdef DBG_UTIL
+        assert(mWriteAccessCount > 0);
+        --mWriteAccessCount;
+#endif
         mPalette = pBuffer->maPalette;
         ResetCachedBitmap();
     }
@@ -270,6 +294,9 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 
 bool SkiaSalBitmap::GetSystemData(BitmapSystemData&)
 {
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     // TODO?
     return false;
 }
@@ -278,18 +305,27 @@ bool SkiaSalBitmap::ScalingSupported() const { return false; }
 
 bool SkiaSalBitmap::Scale(const double&, const double&, BmpScaleFlag)
 {
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     // TODO?
     return false;
 }
 
 bool SkiaSalBitmap::Replace(const Color&, const Color&, sal_uInt8)
 {
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     // TODO?
     return false;
 }
 
 bool SkiaSalBitmap::ConvertToGreyscale()
 {
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     // Skia can convert color SkBitmap to a greyscale one (draw using SkCanvas),
     // but it uses different coefficients for the color->grey conversion than VCL.
     // So just let VCL do it.
@@ -298,6 +334,9 @@ bool SkiaSalBitmap::ConvertToGreyscale()
 
 SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
 {
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     if (!mBitmap.drawsNothing())
         return mBitmap;
     SkBitmap bitmap;
@@ -348,6 +387,9 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
 
 const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 {
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     if (mImage)
         return mImage;
     sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
@@ -362,6 +404,9 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 
 const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
 {
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     if (mAlphaImage)
         return mAlphaImage;
     SkBitmap alphaBitmap;
@@ -433,7 +478,20 @@ void SkiaSalBitmap::ResetCachedBitmap()
 }
 
 #ifdef DBG_UTIL
-void SkiaSalBitmap::dump(const char* file) const { SkiaHelper::dump(GetSkImage(), file); }
+void SkiaSalBitmap::dump(const char* file) const
+{
+    sk_sp<SkImage> saveImage = mImage;
+    sk_sp<SkImage> saveAlphaImage = mAlphaImage;
+    int saveWriteAccessCount = mWriteAccessCount;
+    SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+    // avoid possible assert
+    thisPtr->mWriteAccessCount = 0;
+    SkiaHelper::dump(GetSkImage(), file);
+    // restore old state, so that debugging doesn't affect it
+    thisPtr->mImage = saveImage;
+    thisPtr->mAlphaImage = saveAlphaImage;
+    thisPtr->mWriteAccessCount = saveWriteAccessCount;
+}
 
 void SkiaSalBitmap::verify() const
 {
