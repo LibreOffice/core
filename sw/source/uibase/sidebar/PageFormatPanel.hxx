@@ -94,6 +94,7 @@ private:
     OUString aCustomEntry;
 
     void Initialize();
+    void SetMarginFieldUnit();
     void UpdateMarginBox();
     void ExecuteMarginLRChange( const long nPageLeftMargin, const long nPageRightMargin );
     void ExecuteMarginULChange( const long nPageTopMargin, const long  nPageBottomMargin);
