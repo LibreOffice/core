@@ -5159,6 +5159,13 @@ public:
         m_xButton->SetDecimalDigits(digits);
     }
 
+    // SpinButton may be comprised of multiple subwidgets, consider the lot as
+    // one thing for focus
+    virtual bool has_focus() const override
+    {
+        return m_xWidget->HasChildPathFocus();
+    }
+
     //so with hh::mm::ss, incrementing mm will not reset ss
     void DisableRemainderFactor()
     {
