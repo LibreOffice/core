@@ -1837,10 +1837,10 @@ sal_Bool DialogContainer_Impl::hasElements()
 {
     bool bRet = false;
 
-    sal_Int16 nCount = mpLib->GetObjects()->Count();
-    for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
+    sal_Int32 nCount = mpLib->GetObjects()->Count32();
+    for( sal_Int32 nObj = 0; nObj < nCount ; nObj++ )
     {
-        SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
+        SbxVariable* pVar = mpLib->GetObjects()->Get32( nObj );
         SbxObject* pObj = dynamic_cast<SbxObject*>(pVar);
         if ( pObj && (pObj->GetSbxId() == SBXID_DIALOG ) )
         {
@@ -1871,14 +1871,14 @@ uno::Any DialogContainer_Impl::getByName( const OUString& aName )
 
 uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
 {
-    sal_Int16 nCount = mpLib->GetObjects()->Count();
+    sal_Int32 nCount = mpLib->GetObjects()->Count32();
     uno::Sequence< OUString > aRetSeq( nCount );
     OUString* pRetSeq = aRetSeq.getArray();
     sal_Int32 nDialogCounter = 0;
 
-    for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
+    for( sal_Int32 nObj = 0; nObj < nCount ; nObj++ )
     {
-        SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
+        SbxVariable* pVar = mpLib->GetObjects()->Get32( nObj );
         SbxObject* pObj = dynamic_cast<SbxObject*> (pVar);
         if ( pObj && ( pObj->GetSbxId() == SBXID_DIALOG ) )
         {

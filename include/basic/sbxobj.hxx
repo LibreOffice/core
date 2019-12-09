@@ -29,7 +29,7 @@ class SbxProperty;
 
 class BASIC_DLLPUBLIC SbxObject : public SbxVariable, public SfxListener
 {
-    BASIC_DLLPRIVATE SbxArray* FindVar( SbxVariable const *, sal_uInt16& );
+    BASIC_DLLPRIVATE SbxArray* FindVar( SbxVariable const *, sal_uInt32& );
 protected:
     SbxArrayRef  pMethods;                  // Methods
     SbxArrayRef  pProps;                    // Properties
