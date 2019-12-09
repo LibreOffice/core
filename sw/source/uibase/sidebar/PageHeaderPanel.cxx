@@ -54,6 +54,12 @@ VclPtr<vcl::Window> PageHeaderPanel::Create(
     return VclPtr<PageHeaderPanel>::Create(pParent, rxFrame, pBindings);
 }
 
+void PageHeaderPanel::SetMarginsAndSpacingFieldUnit()
+{
+    mpHeaderSpacingLB->Init(IsInch(meFUnit) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
+    mpHeaderMarginPresetLB->Init(IsInch(meFUnit) ? SpacingType::MARGINS_INCH : SpacingType::MARGINS_CM);
+}
+
 PageHeaderPanel::PageHeaderPanel(
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
@@ -62,9 +68,11 @@ PageHeaderPanel::PageHeaderPanel(
     PanelLayout(pParent, "PageHeaderPanel", "modules/swriter/ui/pageheaderpanel.ui", rxFrame),
     mpBindings( pBindings ),
     maHFToggleController(SID_ATTR_PAGE_HEADER, *pBindings, *this),
+    maMetricController(SID_ATTR_METRIC, *pBindings,*this),
     maHeaderLRMarginController(SID_ATTR_PAGE_HEADER_LRMARGIN, *pBindings, *this),
     maHeaderSpacingController(SID_ATTR_PAGE_HEADER_SPACING, *pBindings, *this),
     maHeaderLayoutController(SID_ATTR_PAGE_HEADER_LAYOUT, *pBindings, *this),
+    meFUnit(GetModuleFieldUnit()),
     aCustomEntry(),
     mpHeaderItem( new SfxBoolItem(SID_ATTR_PAGE_HEADER) ),
     mpHeaderLRMarginItem( new SvxLongLRSpaceItem(0, 0, SID_ATTR_PAGE_HEADER_LRMARGIN)),
@@ -73,11 +81,8 @@ PageHeaderPanel::PageHeaderPanel(
 {
     get(mpHeaderToggle, "headertoggle");
     get(mpHeaderSpacingLB, "spacingpreset");
-    FieldUnit eMetric = ::GetDfltMetric(false);
-    mpHeaderSpacingLB->Init(IsInch(eMetric) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
     get(mpHeaderLayoutLB, "samecontentLB");
     get(mpHeaderMarginPresetLB, "headermarginpreset");
-    mpHeaderMarginPresetLB->Init(IsInch(eMetric) ? SpacingType::MARGINS_INCH : SpacingType::MARGINS_CM);
     get(mpCustomEntry, "customlabel");
 
     Initialize();
@@ -99,14 +104,29 @@ void PageHeaderPanel::dispose()
     PanelLayout::dispose();
 }
 
+FieldUnit PageHeaderPanel::GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState)
+{
+    FieldUnit eUnit;
+
+    if (pState && eState >= SfxItemState::DEFAULT)
+        eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pState)->GetValue());
+    else
+        eUnit = GetModuleFieldUnit();
+
+    return eUnit;
+}
+
 void PageHeaderPanel::Initialize()
 {
+    SetMarginsAndSpacingFieldUnit();
+
     aCustomEntry = mpCustomEntry->GetText();
     mpHeaderToggle->SetClickHdl( LINK(this, PageHeaderPanel, HeaderToggleHdl) );
     mpHeaderMarginPresetLB->SetSelectHdl( LINK(this, PageHeaderPanel, HeaderLRMarginHdl));
     mpHeaderSpacingLB->SetSelectHdl( LINK(this, PageHeaderPanel, HeaderSpacingHdl));
     mpHeaderLayoutLB->SetSelectHdl( LINK(this, PageHeaderPanel, HeaderLayoutHdl));
 
+    mpBindings->Invalidate(SID_ATTR_METRIC);
     mpBindings->Invalidate(SID_ATTR_PAGE_HEADER);
     mpBindings->Invalidate(SID_ATTR_PAGE_HEADER_LRMARGIN);
     mpBindings->Invalidate(SID_ATTR_PAGE_HEADER_SPACING);
@@ -221,6 +241,18 @@ void PageHeaderPanel::NotifyItemUpdate(
             {
                 mpHeaderLayoutItem.reset(static_cast<SfxInt16Item*>(pState->Clone()) );
                 UpdateLayoutControl();
+            }
+        }
+        break;
+        case SID_ATTR_METRIC:
+        {
+            FieldUnit eFUnit = GetCurrentUnit(eState, pState);
+            if (meFUnit != eFUnit)
+            {
+                meFUnit = eFUnit;
+                SetMarginsAndSpacingFieldUnit();
+                UpdateSpacingControl();
+                UpdateMarginControl();
             }
         }
         break;
