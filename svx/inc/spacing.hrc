@@ -17,13 +17,13 @@
 const std::pair<const char*, int> RID_SVXSTRARY_SPACING_INCH[] =
 {
     { NC_("RID_SVXSTRARY_SPACING_INCH", "None"),                    0 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Extra Small (1/16\")"),   91 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Small (1/8\")"),         181 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Small Medium (1/4\")"),  363 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Medium (3/8\")"),        539 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Medium Large (1/2\")"),  720 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Large (3/4\")"),        1077 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Extra Large (1\")"),    1440 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Extra Small (1/16″)"),   91 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Small (1/8″)"),         181 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Small Medium (1/4″)"),  363 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Medium (3/8″)"),        539 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Medium Large (1/2″)"),  720 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Large (3/4″)"),        1077 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Extra Large (1″)"),    1440 },
     { nullptr, 0 }
 };
 
@@ -45,13 +45,13 @@ const std::pair<const char*, int> RID_SVXSTRARY_SPACING_CM[] =
 const std::pair<const char*, int> RID_SVXSTRARY_MARGINS_INCH[] =
 {
     { NC_("RID_SVXSTRARY_MARGINS_INCH", "None"),                    0 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Extra Small (1/16\")"),   91 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Small (1/8\")"),         181 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Small Medium (1/4\")"),  363 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Medium (3/8\")"),        539 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Medium Large (1/2\")"),  720 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Large (3/4\")"),        1077 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Extra Large (1\")"),    1440 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Extra Small (1/16″)"),   91 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Small (1/8″)"),         181 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Small Medium (1/4″)"),  363 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Medium (3/8″)"),        539 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Medium Large (1/2″)"),  720 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Large (3/4″)"),        1077 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Extra Large (1″)"),    1440 },
     { nullptr, 0 }
 };
 
