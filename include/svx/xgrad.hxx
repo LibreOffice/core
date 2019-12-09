@@ -76,6 +76,7 @@ public:
     sal_uInt16         GetSteps() const                 { return nStepCount; }
 
     boost::property_tree::ptree dumpAsJSON() const;
+    static XGradient fromJSON(const OUString& rJSON);
 };
 
 #endif
