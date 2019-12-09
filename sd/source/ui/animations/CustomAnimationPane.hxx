@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 
+#include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <svx/sidebar/PanelLayout.hxx>

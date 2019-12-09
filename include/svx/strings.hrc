@@ -1702,6 +1702,8 @@
 #define RID_SVXSTR_PAGEDIR_LTR_VERT                         NC_("RID_SVXSTR_PAGEDIR_LTR_VERT", "Left-to-right (vertical)")
 #define RID_SVXSTR_PAGEDIR_LTR_BTT_VERT                     NC_("RID_SVXSTR_PAGEDIR_LTR_BTT_VERT", "Bottom-to-top, left-to-right (vertical)")
 
+#define RID_SVXSTR_FONTWORK                                 NC_("RID_SVXSTR_FONTWORK", "Fontwork")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

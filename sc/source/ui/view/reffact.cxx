@@ -224,8 +224,9 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(vcl::Window* pParentP,
     OSL_ENSURE( pViewShell, "missing view shell :-(" );
     if (pViewShell)
     {
-        SetController(std::make_shared<ScAcceptChgDlg>(pBindings, this, pParentP->GetFrameWeld(), &pViewShell->GetViewData()));
-        static_cast<ScAcceptChgDlg*>(GetController().get())->Initialize( pInfo );
+        auto xDlg = std::make_shared<ScAcceptChgDlg>(pBindings, this, pParentP->GetFrameWeld(), &pViewShell->GetViewData());
+        SetController(xDlg);
+        xDlg->Initialize( pInfo );
     }
     else
         SetController( nullptr );

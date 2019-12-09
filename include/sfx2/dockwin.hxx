@@ -39,6 +39,11 @@ bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rF
 
 class SFX2_DLLPUBLIC SfxDockingWindow : public DockingWindow
 {
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    VclPtr<vcl::Window> m_xVclContentArea;
+    std::unique_ptr<weld::Container> m_xContainer;
+
 private:
     tools::Rectangle               aInnerRect;
     tools::Rectangle               aOuterRect;
@@ -77,7 +82,8 @@ public:
                         SfxDockingWindow( SfxBindings *pBindings,
                                           SfxChildWindow *pCW,
                                           vcl::Window* pParent,
-                                          const OString& rID, const OUString& rUIXMLDescription );
+                                          const OString& rID, const OUString& rUIXMLDescription,
+                                          bool bInterim = false );
                         virtual ~SfxDockingWindow() override;
     virtual void        dispose() override;
 

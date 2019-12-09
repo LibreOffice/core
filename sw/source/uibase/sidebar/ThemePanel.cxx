@@ -17,6 +17,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <editeng/fontitem.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <charatr.hxx>

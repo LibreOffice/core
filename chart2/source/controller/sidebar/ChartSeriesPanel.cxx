@@ -27,6 +27,8 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
+#include <vcl/svapp.hxx>
+
 #include "ChartSeriesPanel.hxx"
 #include <ChartController.hxx>
 

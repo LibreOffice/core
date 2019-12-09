@@ -21,8 +21,9 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
-
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+
+#include <vcl/svapp.hxx>
 
 #include "ChartAxisPanel.hxx"
 #include <ChartController.hxx>

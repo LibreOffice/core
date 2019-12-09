@@ -14,7 +14,6 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
@@ -26,7 +25,7 @@ class SVX_DLLPUBLIC PanelLayout : public Control, public VclBuilderContainer
 {
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<VclVBox> m_xVclContentArea;
+    VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
 
 private:

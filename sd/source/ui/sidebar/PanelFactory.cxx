@@ -32,6 +32,7 @@
 #include "SlideBackground.hxx"
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <vcl/window.hxx>

@@ -26,8 +26,9 @@
 
 #include <comphelper/sequence.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/virdev.hxx>
+#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 
 #include <tools/debug.hxx>
 #include <svl/style.hxx>

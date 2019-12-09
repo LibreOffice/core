@@ -20,8 +20,9 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/dispatchcommand.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 
 namespace svx::sidebar {
 
