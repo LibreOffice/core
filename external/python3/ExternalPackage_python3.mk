@@ -117,10 +117,20 @@ endif
 # headers are not delivered, but used from unpacked dir Include/
 # (+ toplevel for pyconfig.h)
 
+ifeq ($(OS),LINUX)
+python3_MACHDEP=linux
+else
+ifeq ($(OS),MACOSX)
+python3_MACHDEP=darwin
+endif
+endif
+
 # that one is generated...
+# note: python configure overrides config.guess with something that doesn't
+# put -pc in its linux platform triplets, so filter that...
 ifneq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
-	LO_lib/_sysconfigdata.py \
+	LO_lib/_sysconfigdata_m_$(python3_MACHDEP)_$(subst -pc,,$(HOST_PLATFORM)).py \
 ))
 endif
 
@@ -130,33 +140,6 @@ endif
 # idlelib, tkinter, turtledemo - need Tk to build the C module
 # test - probably unnecessary? was explicitly removed #i116738#
 # venv - why would we need virtual environments
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/plat-linux,\
-	Lib/plat-linux/regen \
-	Lib/plat-linux/CDROM.py \
-	Lib/plat-linux/DLFCN.py \
-	Lib/plat-linux/IN.py \
-	Lib/plat-linux/TYPES.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/plat-darwin,\
-	Lib/plat-darwin/IN.py \
-	Lib/plat-darwin/regen \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/plat-sunos5,\
-	Lib/plat-sunos5/regen \
-	Lib/plat-sunos5/CDIO.py \
-	Lib/plat-sunos5/DLFCN.py \
-	Lib/plat-sunos5/IN.py \
-	Lib/plat-sunos5/STROPTS.py \
-	Lib/plat-sunos5/TYPES.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/plat-aix4,\
-	Lib/plat-aix4/regen \
-	Lib/plat-aix4/IN.py \
-))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
 	LICENSE \
@@ -238,7 +221,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/locale.py \
 	Lib/lzma.py \
 	Lib/macpath.py \
-	Lib/macurl2path.py \
 	Lib/mailbox.py \
 	Lib/mailcap.py \
 	Lib/mimetypes.py \
@@ -341,7 +323,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/collections,\
 	Lib/collections/__init__.py \
-	Lib/collections/__main__.py \
 	Lib/collections/abc.py \
 ))
 
@@ -866,7 +847,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/site-packages,\
-	Lib/site-packages/README \
+	Lib/site-packages/README.txt \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -44,6 +44,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 
 else
 
+# TODO OPENSSL_LIBS ?
 # --with-system-expat: this should find the one in the workdir (or system)
 
 # create a symlink "LO_lib" because the .so are in a directory with platform
@@ -77,17 +78,19 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
             ) \
 			--enable-framework=/@__________________________________________________OOO --with-framework-name=LibreOfficePython, \
 			--enable-shared \
+			$(if $(filter 1090 101000 101100 101200,$(MAC_OS_X_VERSION_MIN_REQUIRED)),ac_cv_func_utimensat=no) \
+		) \
+		$(if $(SYSTEM_OPENSSL)$(DISABLE_OPENSSL),,\
+			OPENSSL_INCLUDES='-I$(call gb_UnpackedTarball_get_dir,openssl)/include' \
+			OPENSSL_LDFLAGS='-L$(call gb_UnpackedTarball_get_dir,openssl)' \
 		) \
 		CC="$(strip $(CC) \
-			$(if $(SYSTEM_OPENSSL),,-I$(call gb_UnpackedTarball_get_dir,openssl)/include \
-				$(if $(DISABLE_OPENSSL),,-I$(call gb_UnpackedTarball_get_dir,openssl)/include)) \
 			$(if $(SYSTEM_EXPAT),,-I$(call gb_UnpackedTarball_get_dir,expat)/lib) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
 		$(if $(filter -fsanitize=%,$(CC)),LINKCC="$(CXX) -pthread") \
 		LDFLAGS="$(strip $(LDFLAGS) \
-			$(if $(SYSTEM_OPENSSL),,-L$(call gb_UnpackedTarball_get_dir,openssl)) \
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSTEM_ZLIB),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \
