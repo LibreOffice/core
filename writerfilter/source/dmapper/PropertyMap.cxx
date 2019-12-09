@@ -1202,17 +1202,17 @@ void SectionPropertyMap::InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Imp
     }
 
     // FirstPageStyle may only be inherited if it will not be used or re-linked to a different follow
-    if ( !m_bTitlePage && pLastContext && m_sFirstPageStyleName.isEmpty() )
+    if ( pLastContext && m_sFirstPageStyleName.isEmpty() )
         m_sFirstPageStyleName = pLastContext->GetPageStyleName( /*bFirst=*/true );
-    else
-    {
-        HandleMarginsHeaderFooter( /*bFirst=*/true, rDM_Impl );
-        GetPageStyle( rDM_Impl, /*bFirst=*/true );
-        if ( rDM_Impl.IsNewDoc() && m_aFirstPageStyle.is() )
-            ApplyProperties_( m_aFirstPageStyle );
 
-        // Chain m_aFollowPageStyle to be after m_aFirstPageStyle
-        m_aFirstPageStyle->setPropertyValue( "FollowStyle", uno::makeAny( m_sFollowPageStyleName ) );
+    HandleMarginsHeaderFooter( /*bFirst=*/true, rDM_Impl );
+    GetPageStyle( rDM_Impl, /*bFirst=*/true );
+    if ( rDM_Impl.IsNewDoc() && m_aFirstPageStyle.is() )
+        ApplyProperties_( m_aFirstPageStyle );
+
+    if (m_aFirstPageStyle)
+    {
+        m_aFirstPageStyle->setPropertyValue("FollowStyle", uno::makeAny(m_sFollowPageStyleName));
     }
 }
 
