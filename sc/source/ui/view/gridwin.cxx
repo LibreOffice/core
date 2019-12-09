@@ -5901,6 +5901,21 @@ static void updateLibreOfficeKitSelection(const ScViewData* pViewData, const std
         else
             aRectangles.push_back(aRect.toString());
     }
+    return aRects.makeStringAndClear();
+}
+
+/**
+ * Turn the selection ranges rRectangles into the LibreOfficeKit selection, and send to other views.
+ *
+ * @param pLogicRects - if set then don't invoke the callback, just collect the rectangles in the pointed vector.
+ */
+void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRectangles, std::vector<tools::Rectangle>* pLogicRects)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    tools::Rectangle aBoundingBox;
+    std::vector<tools::Rectangle> aLogicRects;
 
     if (pLogicRects)
         return;
@@ -5917,6 +5932,42 @@ static void updateLibreOfficeKitSelection(const ScViewData* pViewData, const std
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aRectangle.toString().getStr());
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.getStr());
     SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", aSelection.getStr());
+}
+
+/**
+ * Fetch the selection ranges for other views into the LibreOfficeKit selection,
+ * map them into our view co-ordinates and send to our view.
+ */
+void ScGridWindow::updateOtherKitSelections() const
+{
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+
+    for (SfxViewShell* it = SfxViewShell::GetFirst(); it;
+         it = SfxViewShell::GetNext(*it))
+    {
+        auto pOther = dynamic_cast<const ScTabViewShell *>(it);
+        assert(pOther);
+        if (!pOther)
+            return;
+
+        const ScGridWindow *pGrid = pOther->GetViewData().GetActiveWin();
+        assert(pGrid);
+
+        // Fetch pixels & convert for each view separately.
+        tools::Rectangle aBoundingBox;
+        std::vector<tools::Rectangle> aPixelRects;
+        GetPixelRectsFor(pOther->GetViewData().GetMarkData() /* theirs */, aPixelRects);
+        auto aOtherLogicRects = convertPixelToLogical(&pViewShell->GetViewData(), aPixelRects, aBoundingBox);
+        OString aRectsString = rectanglesToString(aOtherLogicRects);
+        if (it == pViewShell)
+        {
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aBoundingBox.toString().getStr());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString.getStr());
+        }
+        else
+            SfxLokHelper::notifyOtherView(it, pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+                                          "selection", aRectsString.getStr());
+    }
 }
 
 namespace
