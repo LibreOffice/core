@@ -90,8 +90,9 @@ FmPropBrwMgr::FmPropBrwMgr( vcl::Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
-    SetController(std::make_shared<FmPropBrw>(::comphelper::getProcessComponentContext(), _pBindings, this, _pParent->GetFrameWeld(), _pInfo));
-    static_cast<FmPropBrw*>(GetController().get())->Initialize( _pInfo );
+    auto xDlg = std::make_shared<FmPropBrw>(::comphelper::getProcessComponentContext(), _pBindings, this, _pParent->GetFrameWeld(), _pInfo);
+    SetController(xDlg);
+    xDlg->Initialize( _pInfo );
 }
 
 static OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)

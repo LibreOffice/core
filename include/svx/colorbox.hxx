@@ -108,7 +108,8 @@ private:
     DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
 
 public:
-    ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pWindow);
+    // pTopLevelWindow will be used as parent for any color picker dialog created
+    ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pTopLevelWindow);
     ~ColorListBox();
 
     void SetSelectHdl(const Link<ColorListBox&, void>& rLink)

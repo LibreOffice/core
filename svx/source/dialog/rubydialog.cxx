@@ -71,7 +71,7 @@ static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
 SvxRubyChildWindow::SvxRubyChildWindow(vcl::Window* _pParent, sal_uInt16 nId,SfxBindings* pBindings, SfxChildWinInfo const * pInfo)
     : SfxChildWindow(_pParent, nId)
 {
-    std::shared_ptr<SvxRubyDialog> xDlg(new SvxRubyDialog(pBindings, this, _pParent->GetFrameWeld()));
+    auto xDlg = std::make_shared<SvxRubyDialog>(pBindings, this, _pParent->GetFrameWeld());
     SetController(xDlg);
     xDlg->Initialize(pInfo);
 }
