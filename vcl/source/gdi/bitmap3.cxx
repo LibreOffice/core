@@ -634,6 +634,7 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color const * pExtColor)
 
             bRet = true;
         }
+        pWriteAcc.reset();
 
         if(bRet)
         {
