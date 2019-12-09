@@ -22,6 +22,30 @@
       "revId": "8e6865188242bccb3d8aa857ddc990d72a058d3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_58c62119",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-09T08:44:49Z",
+      "side": 1,
+      "message": "\"easy\" as in: doesn\u0027t need obviously contorted code, compared to what code only targeting the latest std::span incarnation would look like",
+      "parentUuid": "5f7c97a3_559a6cc5",
+      "range": {
+        "startLine": 20,
+        "startChar": 21,
+        "endLine": 21,
+        "endChar": 54
+      },
+      "revId": "8e6865188242bccb3d8aa857ddc990d72a058d3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
