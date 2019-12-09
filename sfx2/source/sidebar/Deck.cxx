@@ -134,6 +134,11 @@ void Deck::dispose()
     mpScrollContainer.disposeAndClear();
     mpScrollClipWindow.disposeAndClear();
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ReleaseLOKNotifier();
+    }
+
     vcl::Window::dispose();
 }
 
