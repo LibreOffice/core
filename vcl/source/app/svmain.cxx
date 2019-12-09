@@ -404,6 +404,9 @@ VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
 
 void DeInitVCL()
 {
+    // The LOK Windows map container should be empty
+    assert(vcl::Window::IsLOKWindowsEmpty());
+
     //rhbz#1444437, when using LibreOffice like a library you can't realistically
     //tear everything down and recreate them on the next call, there's too many
     //(c++) singletons that point to stuff that gets deleted during shutdown

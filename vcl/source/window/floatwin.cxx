@@ -203,6 +203,8 @@ FloatingWindow::~FloatingWindow()
 
 void FloatingWindow::dispose()
 {
+    ReleaseLOKNotifier();
+
     if (mpImplData)
     {
         if( mbPopupModeCanceled )
