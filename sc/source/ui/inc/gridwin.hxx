@@ -440,6 +440,7 @@ public:
     void updateKitCellCursor(const SfxViewShell* pOtherShell) const;
     /// notify this view with new positions for other view's cursors (after zoom)
     void updateKitOtherCursors() const;
+    void updateOtherKitSelections() const;
 
     /// Same as MouseButtonDown(), but coordinates are in logic unit.
     virtual void LogicMouseButtonDown(const MouseEvent& rMouseEvent) override;
