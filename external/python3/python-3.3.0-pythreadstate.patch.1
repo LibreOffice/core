@@ -6,8 +6,8 @@ disable a check in PyThreadState_Swap that is hopefully not a "real" problem
         to be used for a thread.  Check this the best we can in debug
         builds.
      */
--#if defined(Py_DEBUG) && defined(WITH_THREAD)
-+#if defined(Py_DEBUG) && defined(WITH_THREAD) && 0
+-#if defined(Py_DEBUG)
++#if defined(Py_DEBUG) && 0
 +    /* disable this for LO - it is triggered by nested PyThreadAttach
 +       which do not appear to be a real problem */
      if (newts) {
