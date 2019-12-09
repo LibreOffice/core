@@ -3469,7 +3469,7 @@ private:
     DECL_LINK(VisibleRangeChangedHdl, SvTreeListBox*, void);
     DECL_LINK(CompareHdl, const SvSortData&, sal_Int32);
     DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
-    DECL_LINK(TooltipHdl, const HelpEvent&, void);
+    DECL_LINK(TooltipHdl, const HelpEvent&, bool);
 
     bool IsDummyEntry(SvTreeListEntry* pEntry) const
     {
@@ -4627,24 +4627,27 @@ public:
         m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
         m_xTreeView->SetDeselectHdl(Link<SvTreeListBox*, void>());
         m_xTreeView->SetScrolledHdl(Link<SvTreeListBox*, void>());
-        m_xTreeView->SetTooltipHdl(Link<const HelpEvent&, void>());
+        m_xTreeView->SetTooltipHdl(Link<const HelpEvent&, bool>());
     }
 };
 
-IMPL_LINK(SalInstanceTreeView, TooltipHdl, const HelpEvent&, rHEvt, void)
+IMPL_LINK(SalInstanceTreeView, TooltipHdl, const HelpEvent&, rHEvt, bool)
 {
     if (notify_events_disabled())
-        return;
+        return false;
     Point aPos(m_xTreeView->ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
     SvTreeListEntry* pEntry = m_xTreeView->GetEntry(aPos);
     if (pEntry)
     {
         SalInstanceTreeIter aIter(pEntry);
         OUString aTooltip = signal_query_tooltip(aIter);
+        if (aTooltip.isEmpty())
+            return false;
         Size aSize(m_xTreeView->GetOutputSizePixel().Width(), m_xTreeView->GetEntryHeight());
         tools::Rectangle aScreenRect(m_xTreeView->OutputToScreenPixel(m_xTreeView->GetEntryPosition(pEntry)), aSize);
         Help::ShowQuickHelp(m_xTreeView, aScreenRect, aTooltip);
     }
+    return true;
 }
 
 IMPL_LINK(SalInstanceTreeView, CompareHdl, const SvSortData&, rSortData, sal_Int32)
