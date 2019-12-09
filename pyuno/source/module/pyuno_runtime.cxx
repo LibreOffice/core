@@ -974,8 +974,17 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
 
 
 PyThreadAttach::PyThreadAttach( PyInterpreterState *interp)
+    : m_isNewState(false)
 {
-    tstate = PyThreadState_New( interp );
+    // note: *may* be called recursively, with PyThreadDetach between  - in
+    // that case, don't create *new* PyThreadState but reuse!
+    tstate = PyGILState_GetThisThreadState(); // from TLS, possibly detached
+    assert(_PyThreadState_UncheckedGet() == nullptr && "recursive PyThreadAttach");
+    if (!tstate)
+    {
+        m_isNewState = true;
+        tstate = PyThreadState_New( interp );
+    }
     if( !tstate  )
         throw RuntimeException( "Couldn't create a pythreadstate" );
     PyEval_AcquireThread( tstate);
@@ -983,9 +992,15 @@ PyThreadAttach::PyThreadAttach( PyInterpreterState *interp)
 
 PyThreadAttach::~PyThreadAttach()
 {
-    PyThreadState_Clear( tstate );
+    if (m_isNewState)
+    {   // Clear needs GIL!
+        PyThreadState_Clear( tstate );
+    }
     PyEval_ReleaseThread( tstate );
-    PyThreadState_Delete( tstate );
+    if (m_isNewState)
+    {
+        PyThreadState_Delete( tstate );
+    }
 }
 
 PyThreadDetach::PyThreadDetach()
