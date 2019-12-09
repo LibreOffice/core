@@ -100,7 +100,6 @@ public:
 
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
-    const OUString&  GetSource() const;
     const OUString&  GetSource32() const { return aOUSource;}
     void             SetSource32( const OUString& r );
 
