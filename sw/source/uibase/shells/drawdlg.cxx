@@ -39,7 +39,9 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xflgrit.hxx>
 #include <comphelper/lok.hxx>
+#include <vcl/uitest/uiobject.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -211,6 +213,33 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
 namespace
 {
+    StringMap jsonToStringMap(const OUString& rJSON)
+    {
+        StringMap aArgs;
+        if (rJSON.getLength() && rJSON[0] != '\0')
+        {
+            std::stringstream aStream(OUStringToOString(rJSON, RTL_TEXTENCODING_ASCII_US).getStr());
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+
+            for (const auto& rPair : aTree)
+            {
+                aArgs[OUString::fromUtf8(rPair.first.c_str())] = OUString::fromUtf8(rPair.second.get_value<std::string>(".").c_str());
+            }
+        }
+        return aArgs;
+}
+
+    XGradient lcl_buildGradientFromStringMap(const StringMap& rMap)
+    {
+        Color aStart = COL_BLACK;
+        Color aEnd = COL_BLUE;
+        css::awt::GradientStyle eStyle = css::awt::GradientStyle_LINEAR;
+        long nAngle = 36000;
+
+        return XGradient(aStart, aEnd, eStyle, nAngle);
+    }
+
     void lcl_convertStringArguments(sal_uInt16 nSlot, std::unique_ptr<SfxItemSet>& pArgs)
     {
         Color aColor;
@@ -251,6 +280,16 @@ namespace
             int nValue = fValue * nPow;
 
             XLineWidthItem aItem(nValue);
+            pArgs->Put(aItem);
+        }
+        else if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
+        {
+            const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
+            StringMap aMap(jsonToStringMap(pJSON->GetValue()));
+
+            XGradient aGradient = lcl_buildGradientFromStringMap(aMap);
+
+            XFillGradientItem aItem(aGradient);
             pArgs->Put(aItem);
         }
     }
