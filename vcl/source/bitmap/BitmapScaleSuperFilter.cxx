@@ -1176,6 +1176,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
             if (!bUseThreads)
                 pScaleRangeFn( aContext, nStartY, nEndY );
 
+            pWriteAccess.reset();
             bRet = true;
             aBitmap.AdaptBitCount(aOutBmp);
             aBitmap = aOutBmp;
