@@ -3491,7 +3491,6 @@ public:
         m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
         m_xTreeView->SetExpandingHdl(LINK(this, SalInstanceTreeView, ExpandingHdl));
         m_xTreeView->SetPopupMenuHdl(LINK(this, SalInstanceTreeView, PopupMenuHdl));
-        m_xTreeView->SetTooltipHdl(LINK(this, SalInstanceTreeView, TooltipHdl));
         const long aTabPositions[] = { 0 };
         m_xTreeView->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
@@ -3518,6 +3517,12 @@ public:
         }
         m_aCheckButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
         m_aRadioButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
+    }
+
+    virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override
+    {
+        weld::TreeView::connect_query_tooltip(rLink);
+        m_xTreeView->SetTooltipHdl(LINK(this, SalInstanceTreeView, TooltipHdl));
     }
 
     virtual void columns_autosize() override
