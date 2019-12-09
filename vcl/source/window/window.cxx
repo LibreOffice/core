@@ -3178,9 +3178,6 @@ namespace {
 
 LOKWindowsMap& GetLOKWindowsMap()
 {
-    // never use this in the desktop case
-    assert(comphelper::LibreOfficeKit::isActive());
-
     // Map to remember the LOKWindowId <-> Window binding.
     static std::unique_ptr<LOKWindowsMap> s_pLOKWindowsMap;
 
@@ -3223,6 +3220,11 @@ VclPtr<Window> Window::FindLOKWindow(vcl::LOKWindowId nWindowId)
         return it->second;
 
     return VclPtr<Window>();
+}
+
+bool Window::IsLOKWindowsEmpty()
+{
+    return GetLOKWindowsMap().empty();
 }
 
 void Window::ReleaseLOKNotifier()
