@@ -303,9 +303,10 @@ FmFieldWinMgr::FmFieldWinMgr(vcl::Window* _pParent, sal_uInt16 _nId,
                SfxBindings* _pBindings, SfxChildWinInfo const * _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
-    SetController(std::make_shared<FmFieldWin>(_pBindings, this, _pParent->GetFrameWeld()));
+    auto xDlg = std::make_shared<FmFieldWin>(_pBindings, this, _pParent->GetFrameWeld());
+    SetController(xDlg);
     SetHideNotDelete(true);
-    static_cast<FmFieldWin*>(GetController().get())->Initialize(_pInfo);
+    xDlg->Initialize(_pInfo);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,15 +19,13 @@
 #ifndef INCLUDED_SVX_FONTWORK_HXX
 #define INCLUDED_SVX_FONTWORK_HXX
 
-#include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/idle.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
 
-class SvxColorListBox;
+class ColorListBox;
 
 class XFormTextAdjustItem;
 class XFormTextDistanceItem;
@@ -71,67 +69,50 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkChildWindow final : public SfxChi
 /** Floating window for setting attributes of text effects
   */
 
-class SAL_WARN_UNUSED SvxFontWorkDialog : public SfxDockingWindow
+class SAL_WARN_UNUSED SvxFontWorkDialog : public SfxModelessDialogController
 {
 #define CONTROLLER_COUNT 11
-
-    SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
-
-    VclPtr<ToolBox>         m_pTbxStyle;
-    VclPtr<ToolBox>         m_pTbxAdjust;
-
-    VclPtr<MetricField>     m_pMtrFldDistance;
-    VclPtr<MetricField>     m_pMtrFldTextStart;
-
-    VclPtr<ToolBox>         m_pTbxShadow;
-
-    VclPtr<FixedImage>      m_pFbShadowX;
-    VclPtr<MetricField>     m_pMtrFldShadowX;
-    VclPtr<FixedImage>      m_pFbShadowY;
-    VclPtr<MetricField>     m_pMtrFldShadowY;
-
-    VclPtr<SvxColorListBox> m_pShadowColorLB;
 
     SfxBindings&    rBindings;
     Idle            aInputIdle;
 
-    sal_uInt16      nLastStyleTbxId;
-    sal_uInt16      nStyleOffId;
-    sal_uInt16      nStyleRotateId;
-    sal_uInt16      nStyleUprightId;
-    sal_uInt16      nStyleSlantXId;
-    sal_uInt16      nStyleSlantYId;
-
-    sal_uInt16      nLastAdjustTbxId;
-    sal_uInt16      nAdjustMirrorId;
-    sal_uInt16      nAdjustLeftId;
-    sal_uInt16      nAdjustCenterId;
-    sal_uInt16      nAdjustRightId;
-    sal_uInt16      nAdjustAutoSizeId;
-
-    sal_uInt16      nLastShadowTbxId;
-    sal_uInt16      nShowFormId;
-    sal_uInt16      nOutlineId;
-    sal_uInt16      nShadowOffId;
-    sal_uInt16      nShadowNormalId;
-    sal_uInt16      nShadowSlantId;
+    OString         m_sLastStyleTbxId;
+    OString         m_sLastAdjustTbxId;
+    OString         m_sLastShadowTbxId;
 
     long            nSaveShadowX;
     long            nSaveShadowY;
     long            nSaveShadowAngle;
     long            nSaveShadowSize;
 
- friend class SvxFontWorkChildWindow;
- friend class SvxFontWorkControllerItem;
+    SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
 
-    DECL_LINK( SelectStyleHdl_Impl, ToolBox *, void );
-    DECL_LINK( SelectAdjustHdl_Impl, ToolBox *, void );
-    DECL_LINK( SelectShadowHdl_Impl, ToolBox *, void );
+    std::unique_ptr<weld::Toolbar> m_xTbxStyle;
+    std::unique_ptr<weld::Toolbar> m_xTbxAdjust;
 
-    DECL_LINK( ModifyInputHdl_Impl, Edit&, void );
-    DECL_LINK( InputTimeoutHdl_Impl, Timer *, void );
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldDistance;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldTextStart;
 
-    DECL_LINK( ColorSelectHdl_Impl, SvxColorListBox&, void );
+    std::unique_ptr<weld::Toolbar> m_xTbxShadow;
+
+    std::unique_ptr<weld::Image> m_xFbShadowX;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldShadowX;
+    std::unique_ptr<weld::Image> m_xFbShadowY;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldShadowY;
+
+    std::unique_ptr<ColorListBox> m_xShadowColorLB;
+
+    friend class SvxFontWorkChildWindow;
+    friend class SvxFontWorkControllerItem;
+
+    DECL_LINK( SelectStyleHdl_Impl, const OString&, void );
+    DECL_LINK( SelectAdjustHdl_Impl, const OString&, void );
+    DECL_LINK( SelectShadowHdl_Impl, const OString&, void );
+
+    DECL_LINK( ModifyInputHdl_Impl, weld::MetricSpinButton&, void );
+    DECL_LINK( InputTimeoutHdl_Impl, Timer*, void );
+
+    DECL_LINK( ColorSelectHdl_Impl, ColorListBox&, void );
 
     void SetStyle_Impl(const XFormTextStyleItem*);
     void SetAdjust_Impl(const XFormTextAdjustItem*);
@@ -147,15 +128,16 @@ class SAL_WARN_UNUSED SvxFontWorkDialog : public SfxDockingWindow
 
     void ApplyImageList();
 
+#if 0
  protected:
     virtual SfxChildAlignment CheckAlignment( SfxChildAlignment eActAlign,
                                               SfxChildAlignment eAlign ) override;
+#endif
 
- public:
+public:
     SvxFontWorkDialog(SfxBindings *pBinding, SfxChildWindow *pCW,
-                      vcl::Window* pParent);
+                      weld::Window* pParent);
     virtual ~SvxFontWorkDialog() override;
-    virtual void dispose() override;
 };
 
 #endif // INCLUDED_SVX_FONTWORK_HXX
