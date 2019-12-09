@@ -38,7 +38,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_DRIVER_HXX
 
 #include <osl/mutex.hxx>
-
+#include <sal/macros.h>
 #include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -51,11 +51,9 @@
 namespace pq_sdbc_driver
 {
 
-#define MY_STRINGIFY( x ) #x
-
-#define PQ_SDBC_DRIVER_VERSION MY_STRINGIFY(PQ_SDBC_MAJOR) "."  \
-                               MY_STRINGIFY(PQ_SDBC_MINOR) "." \
-                               MY_STRINGIFY(PQ_SDBC_MICRO)
+#define PQ_SDBC_DRIVER_VERSION SAL_STRINGIFY(PQ_SDBC_MAJOR) "."  \
+                               SAL_STRINGIFY(PQ_SDBC_MINOR) "." \
+                               SAL_STRINGIFY(PQ_SDBC_MICRO)
 
 struct MutexHolder { osl::Mutex m_mutex; };
 // use this to switch off sdbc support !
