@@ -1523,14 +1523,14 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             SbxArrayRef xArgs = new SbxArray;
             SbxVariableRef xVar = new SbxVariable;
             xVar->PutString( pFlyFormat->GetName() );
-            xArgs->Put( xVar.get(), 1 );
+            xArgs->Put32( xVar.get(), 1 );
 
             xVar = new SbxVariable;
             if( SvMacroItemId::SwFrmKeyInputAlpha == nEvent )
                 xVar->PutChar( aCh );
             else
                 xVar->PutUShort( rKeyCode.GetModifier() | rKeyCode.GetCode() );
-            xArgs->Put( xVar.get(), 2 );
+            xArgs->Put32( xVar.get(), 2 );
 
             OUString sRet;
             rSh.ExecMacro( *pMacro, &sRet, xArgs.get() );
@@ -4036,25 +4036,25 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             m_aRszMvHdlPt != aDocPt )
                         {
                             m_aRszMvHdlPt = aDocPt;
-                            sal_uInt16 nPos = 0;
+                            sal_uInt32 nPos = 0;
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
                             xVar->PutString( pFlyFormat->GetName() );
-                            xArgs->Put( xVar.get(), ++nPos );
+                            xArgs->Put32( xVar.get(), ++nPos );
 
                             if( SvMacroItemId::SwFrmResize == nEvent )
                             {
                                 xVar = new SbxVariable;
                                 xVar->PutUShort( static_cast< sal_uInt16 >(g_eSdrMoveHdl) );
-                                xArgs->Put( xVar.get(), ++nPos );
+                                xArgs->Put32( xVar.get(), ++nPos );
                             }
 
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.X() - aSttPt.X() );
-                            xArgs->Put( xVar.get(), ++nPos );
+                            xArgs->Put32( xVar.get(), ++nPos );
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.Y() - aSttPt.Y() );
-                            xArgs->Put( xVar.get(), ++nPos );
+                            xArgs->Put32( xVar.get(), ++nPos );
 
                             OUString sRet;
 
@@ -4495,29 +4495,29 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             const Point aSttPt( PixelToLogic( m_aStartPos ) );
                             m_aRszMvHdlPt = aDocPt;
-                            sal_uInt16 nPos = 0;
+                            sal_uInt32 nPos = 0;
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
                             xVar->PutString( pFlyFormat->GetName() );
-                            xArgs->Put( xVar.get(), ++nPos );
+                            xArgs->Put32( xVar.get(), ++nPos );
 
                             if( SvMacroItemId::SwFrmResize == nEvent )
                             {
                                 xVar = new SbxVariable;
                                 xVar->PutUShort( static_cast< sal_uInt16 >(eOldSdrMoveHdl) );
-                                xArgs->Put( xVar.get(), ++nPos );
+                                xArgs->Put32( xVar.get(), ++nPos );
                             }
 
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.X() - aSttPt.X() );
-                            xArgs->Put( xVar.get(), ++nPos );
+                            xArgs->Put32( xVar.get(), ++nPos );
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.Y() - aSttPt.Y() );
-                            xArgs->Put( xVar.get(), ++nPos );
+                            xArgs->Put32( xVar.get(), ++nPos );
 
                             xVar = new SbxVariable;
                             xVar->PutUShort( 1 );
-                            xArgs->Put( xVar.get(), ++nPos );
+                            xArgs->Put32( xVar.get(), ++nPos );
 
                             ReleaseMouse();
 
