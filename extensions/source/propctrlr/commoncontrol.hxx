@@ -198,7 +198,7 @@ namespace pcr
     {
         if (bReadOnly)
         {
-            // disable widget by default, entries will overide to enable the widget but set it non-editable
+            // disable widget by default, entries will override to enable the widget but set it non-editable
             m_xControlWindow->set_sensitive(false);
         }
     }
