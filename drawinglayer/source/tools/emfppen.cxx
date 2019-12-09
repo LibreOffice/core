@@ -71,6 +71,52 @@ namespace emfplushelper
     {
     }
 
+    static OUString PenDataFlagsToString(sal_uInt32 flags)
+    {
+        OUString sFlags;
+
+        if (flags & EmfPlusPenDataTransform)
+            sFlags = "\nEMF+\t\t\tEmfPlusPenDataTransform";
+
+        if (flags & EmfPlusPenDataStartCap)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataStartCap");
+
+        if (flags & EmfPlusPenDataEndCap)
+             sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataEndCap");
+
+        if (flags & EmfPlusPenDataJoin)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataJoin");
+
+        if (flags & EmfPlusPenDataMiterLimit)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataMiterLimit");
+
+        if (flags & EmfPlusPenDataLineStyle)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataLineStyle");
+
+        if (flags & EmfPlusPenDataDashedLineCap)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataDashedLineCap");
+
+        if (flags & EmfPlusPenDataDashedLineOffset)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataDashedLineOffset");
+
+        if (flags & EmfPlusPenDataDashedLine)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataDashedLine");
+
+        if (flags & EmfPlusPenDataNonCenter)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataNonCenter");
+
+        if (flags & EmfPlusPenDataCompoundLine)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataCompoundLine");
+
+        if (flags & EmfPlusPenDataCustomStartCap)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataCustomStartCap");
+
+        if (flags & EmfPlusPenDataCustomEndCap)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataCustomEndCap");
+
+        return sFlags;
+    }
+
     /// Convert stroke caps between EMF+ and rendering API
     sal_Int8 EMFPPen::lcl_convertStrokeCap(sal_uInt32 nEmfStroke)
     {
@@ -106,8 +152,8 @@ namespace emfplushelper
         s.ReadUInt32(graphicsVersion).ReadUInt32(penType).ReadUInt32(penDataFlags).ReadUInt32(penUnit).ReadFloat(penWidth);
         SAL_INFO("drawinglayer", "EMF+\t\tGraphics version: 0x" << std::hex << graphicsVersion);
         SAL_INFO("drawinglayer", "EMF+\t\tType: " << penType);
-        SAL_INFO("drawinglayer", "EMF+\t\tPen data flags: 0x" << penDataFlags);
-        SAL_INFO("drawinglayer", "EMF+\t\tUnit: " << penUnit);
+        SAL_INFO("drawinglayer", "EMF+\t\tPen data flags: 0x" << penDataFlags << PenDataFlagsToString(penDataFlags));
+        SAL_INFO("drawinglayer", "EMF+\t\tUnit: " << UnitTypeToString(penUnit));
         SAL_INFO("drawinglayer", "EMF+\t\tWidth: " << std::dec << penWidth);
 
         penWidth = penWidth * EmfPlusHelperData::getUnitToPixelMultiplier(static_cast<UnitType>(penUnit));

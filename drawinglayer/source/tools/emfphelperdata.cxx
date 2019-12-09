@@ -180,7 +180,7 @@ namespace emfplushelper
         return "";
     }
 
-    static OUString UnitTypeToString(sal_uInt16 nType)
+    OUString UnitTypeToString(sal_uInt16 nType)
     {
         switch (nType)
         {
@@ -204,40 +204,28 @@ namespace emfplushelper
         switch (aUnitType)
         {
             case UnitTypePixel:
-            {
                 return 1.0f;
-            }
+
             case UnitTypePoint:
-            {
-                SAL_INFO("drawinglayer", "EMF+\t Converting Points to Pixels.");
                 return Application::GetDefaultDevice()->GetDPIX() / 72;
-            }
+
             case UnitTypeInch:
-            {
-                SAL_INFO("drawinglayer", "EMF+\t Converting Inches to Pixels.");
                 return Application::GetDefaultDevice()->GetDPIX();
-            }
+
             case UnitTypeMillimeter:
-            {
-                SAL_INFO("drawinglayer", "EMF+\t Converting Millimeters to Pixels");
                 return Application::GetDefaultDevice()->GetDPIX() / 25.4;
-            }
+
             case UnitTypeDocument:
-            {
-                SAL_INFO("drawinglayer", "EMF+\t Converting Documents to Pixels.");
                 return Application::GetDefaultDevice()->GetDPIX() / 300;
-            }
+
             case UnitTypeWorld:
             case UnitTypeDisplay:
-            {
                 SAL_WARN("drawinglayer", "EMF+\t Converting to World/Display.");
                 return 1.0f;
-            }
+
             default:
-            {
                 SAL_WARN("drawinglayer", "EMF+\tTODO Unimplemented support of Unit Type: 0x" << std::hex << aUnitType);
                 return 1.0f;
-            }
         }
     }
 
@@ -491,14 +479,14 @@ namespace emfplushelper
         {
             // we need a line join attribute
             basegfx::B2DLineJoin lineJoin = basegfx::B2DLineJoin::Round;
-            if (pen->penDataFlags & 0x00000008) // additional line join information
+            if (pen->penDataFlags & EmfPlusPenDataJoin) // additional line join information
             {
                 lineJoin = static_cast<basegfx::B2DLineJoin>(EMFPPen::lcl_convertLineJoinType(pen->lineJoin));
             }
 
             // we need a line cap attribute
             css::drawing::LineCap lineCap = css::drawing::LineCap_BUTT;
-            if (pen->penDataFlags & 0x00000002) // additional line cap information
+            if (pen->penDataFlags & EmfPlusPenDataStartCap) // additional line cap information
             {
                 lineCap = static_cast<css::drawing::LineCap>(EMFPPen::lcl_convertStrokeCap(pen->startCap));
                 SAL_WARN_IF(pen->startCap != pen->endCap, "drawinglayer", "emf+ pen uses different start and end cap");
@@ -511,7 +499,7 @@ namespace emfplushelper
                                                                  lineCap);
 
             drawinglayer::attribute::StrokeAttribute aStrokeAttribute;
-            if (pen->penDataFlags & 0x00000020 && pen->dashStyle != EmfPlusLineStyleCustom) // pen has a predefined line style
+            if (pen->penDataFlags & EmfPlusPenDataLineStyle && pen->dashStyle != EmfPlusLineStyleCustom) // pen has a predefined line style
             {
                 // short writing
                 const double pw = maMapTransform.get(1, 1) * pen->penWidth;
@@ -539,7 +527,7 @@ namespace emfplushelper
                         break;
                 }
             }
-            else if (pen->penDataFlags & 0x00000100) // pen has a custom dash line
+            else if (pen->penDataFlags & EmfPlusPenDataMiterLimit) // pen has a custom dash line
             {
                 // StrokeAttribute needs a double vector while the pen provides a float vector
                 std::vector<double> aPattern(pen->dashPattern.size());
@@ -573,7 +561,7 @@ namespace emfplushelper
                                 pen->GetColor().GetTransparency() / 255.0));
             }
 
-            if ((pen->penDataFlags & 0x00000800) && (pen->customStartCap->polygon.begin()->count() > 1))
+            if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && (pen->customStartCap->polygon.begin()->count() > 1))
             {
                 SAL_WARN("drawinglayer", "EMF+\tCustom Start Line Cap");
                 ::basegfx::B2DPolyPolygon startCapPolygon(pen->customStartCap->polygon);
@@ -618,7 +606,7 @@ namespace emfplushelper
                 }
             }
 
-            if ((pen->penDataFlags & 0x00001000) && (pen->customEndCap->polygon.begin()->count() > 1))
+            if ((pen->penDataFlags & EmfPlusPenDataCustomEndCap) && (pen->customEndCap->polygon.begin()->count() > 1))
             {
                 SAL_WARN("drawinglayer", "EMF+\tCustom End Line Cap");
 

@@ -103,6 +103,8 @@ namespace emfplushelper
     #define EmfPlusObjectTypeImageAttributes 0x800
     #define EmfPlusObjectTypeCustomLineCap 0x900
 
+    OUString UnitTypeToString(sal_uInt16 nType);
+
     enum PixelOffsetMode
     {
         PixelOffsetModeDefault = 0x00,
