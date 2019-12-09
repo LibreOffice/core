@@ -79,7 +79,7 @@ private:
     template <typename charT, typename traits>
     friend inline std::basic_ostream<charT, traits>&
     operator<<(std::basic_ostream<charT, traits>& stream, const SkiaSalBitmap* bitmap)
-    { // TODO GPU-based, once it's done
+    {
         // B - has SkBitmap, D - has data buffer, I/i - has SkImage (on GPU/CPU),
         // A/a - has alpha SkImage (on GPU/CPU)
         return stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "/"
@@ -95,8 +95,6 @@ private:
     BitmapPalette mPalette;
     int mBitCount; // bpp
     Size mSize;
-    // Skia does not natively support 1bpp and 4bpp, so such bitmaps are stored
-    // in a buffer (and converted to 32bpp SkBitmap on-demand using GetSkBitmap()).
     std::unique_ptr<sal_uInt8[]> mBuffer;
     int mScanlineSize; // size of one row in mBuffer
     sk_sp<SkImage> mImage; // cached contents, possibly GPU-backed
