@@ -45,6 +45,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <sal/log.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -209,31 +210,35 @@ namespace emfplushelper
             case UnitTypePoint:
             {
                 SAL_INFO("drawinglayer", "EMF+\t Converting Points to Pixels.");
-                return 1.333333f;
+                return Application::GetDefaultDevice()->GetDPIX() / 72;
             }
             case UnitTypeInch:
             {
-                SAL_INFO("drawinglayer", "EMF+\t TODO Test Converting Inches to Pixels, if it is working correctly.");
-                return 96.0f;
+                SAL_INFO("drawinglayer", "EMF+\t Converting Inches to Pixels.");
+                return Application::GetDefaultDevice()->GetDPIX();
             }
             case UnitTypeMillimeter:
             {
-                SAL_INFO("drawinglayer", "EMF+\t TODO Test Converting Millimeters to Pixels, if it is working correctly.");
-                return 3.779528f;
+                SAL_INFO("drawinglayer", "EMF+\t Converting Millimeters to Pixels");
+                return Application::GetDefaultDevice()->GetDPIX() / 25.4;
             }
             case UnitTypeDocument:
             {
-                SAL_INFO("drawinglayer", "EMF+\t TODO Test Converting Documents to Pixels, if it is working correctly.");
-                return 0.32f;
+                SAL_INFO("drawinglayer", "EMF+\t Converting Documents to Pixels.");
+                return Application::GetDefaultDevice()->GetDPIX() / 300;
             }
             case UnitTypeWorld:
             case UnitTypeDisplay:
+            {
+                SAL_WARN("drawinglayer", "EMF+\t Converting to World/Display.");
+                return 1.0f;
+            }
             default:
             {
                 SAL_WARN("drawinglayer", "EMF+\tTODO Unimplemented support of Unit Type: 0x" << std::hex << aUnitType);
+                return 1.0f;
             }
         }
-        return 1.0f;
     }
 
     void EmfPlusHelperData::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream)
