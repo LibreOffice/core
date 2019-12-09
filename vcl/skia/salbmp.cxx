@@ -69,15 +69,14 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
         return false;
     // Skia only supports 8bit gray, 16bit and 32bit formats (e.g. 24bpp is actually stored as 32bpp).
     // But some of our code accessing the bitmap assumes that when it asked for 24bpp, the format
-    // really will be 24bpp (e.g. the png loader).
+    // really will be 24bpp (e.g. the png loader), so we cannot use SkBitmap to store the data.
+    // And even 8bpp is problematic, since Skia does not support palettes and a VCL bitmap can change
+    // its grayscale status simply by changing the palette.
+    // So basically use Skia only for 32bpp bitmaps.
     // TODO what is the performance impact of handling 24bpp ourselves instead of in Skia?
     SkColorType colorType = kUnknown_SkColorType;
     switch (nBitCount)
     {
-        case 8:
-            if (rPal.IsGreyPalette()) // see GetAlphaSkBitmap()
-                colorType = kGray_8_SkColorType;
-            break;
         case 32:
             colorType = kN32_SkColorType;
             break;
