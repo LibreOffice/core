@@ -84,9 +84,9 @@ SbxObject& SbxObject::operator=( const SbxObject& r )
 
 static void CheckParentsOnDelete( SbxObject* pObj, SbxArray* p )
 {
-    for( sal_uInt16 i = 0; i < p->Count(); i++ )
+    for( sal_uInt32 i = 0; i < p->Count32(); i++ )
     {
-        SbxVariableRef& rRef = p->GetRef( i );
+        SbxVariableRef& rRef = p->GetRef32( i );
         if( rRef->IsBroadcaster() )
         {
             pObj->EndListening( rRef->GetBroadcaster(), true );
@@ -301,7 +301,7 @@ void SbxObject::SetDfltProperty( const OUString& rName )
 // the index will be set, otherwise the Count of the Array will be returned.
 // In any case the correct Array will be returned.
 
-SbxArray* SbxObject::FindVar( SbxVariable const * pVar, sal_uInt16& nArrayIdx )
+SbxArray* SbxObject::FindVar( SbxVariable const * pVar, sal_uInt32& nArrayIdx )
 {
     SbxArray* pArray = nullptr;
     if( pVar )
@@ -317,15 +317,15 @@ SbxArray* SbxObject::FindVar( SbxVariable const * pVar, sal_uInt16& nArrayIdx )
     }
     if( pArray )
     {
-        nArrayIdx = pArray->Count();
+        nArrayIdx = pArray->Count32();
         // Is the variable per name available?
         pArray->ResetFlag( SbxFlagBits::ExtSearch );
         SbxVariable* pOld = pArray->Find( pVar->GetName(), pVar->GetClass() );
         if( pOld )
         {
-            for( sal_uInt16 i = 0; i < pArray->Count(); i++ )
+            for( sal_uInt32 i = 0; i < pArray->Count32(); i++ )
             {
-                SbxVariableRef& rRef = pArray->GetRef( i );
+                SbxVariableRef& rRef = pArray->GetRef32( i );
                 if( rRef.get() == pOld )
                 {
                     nArrayIdx = i; break;
@@ -381,7 +381,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
         break;
     }
     pVar->SetParent( this );
-    pArray->Put( pVar, pArray->Count() );
+    pArray->Put32( pVar, pArray->Count32() );
     SetModified( true );
     // The object listen always
     StartListening(pVar->GetBroadcaster(), DuplicateHandling::Prevent);
@@ -390,22 +390,22 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
 
 void SbxObject::Insert( SbxVariable* pVar )
 {
-    sal_uInt16 nIdx;
+    sal_uInt32 nIdx;
     SbxArray* pArray = FindVar( pVar, nIdx );
     if( pArray )
     {
         // Into with it. But you should pay attention at the Pointer!
-        if( nIdx < pArray->Count() )
+        if( nIdx < pArray->Count32() )
         {
             // Then this element exists already
             // There are objects of the same name allowed at collections
             if( pArray == pObjs.get() && dynamic_cast<const SbxCollection*>( this ) != nullptr )
             {
-                nIdx = pArray->Count();
+                nIdx = pArray->Count32();
             }
             else
             {
-                SbxVariable* pOld = pArray->Get( nIdx );
+                SbxVariable* pOld = pArray->Get32( nIdx );
                 // already inside: overwrite
                 if( pOld == pVar )
                 {
@@ -422,7 +422,7 @@ void SbxObject::Insert( SbxVariable* pVar )
             }
         }
         StartListening(pVar->GetBroadcaster(), DuplicateHandling::Prevent);
-        pArray->Put( pVar, nIdx );
+        pArray->Put32( pVar, nIdx );
         if( pVar->GetParent() != this )
         {
             pVar->SetParent( this );
@@ -466,7 +466,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     if( pArray )
     {
         StartListening(pVar->GetBroadcaster(), DuplicateHandling::Prevent);
-        pArray->Put( pVar, pArray->Count() );
+        pArray->Put32( pVar, pArray->Count32() );
         if( pVar->GetParent() != this )
         {
             pVar->SetParent( this );
@@ -498,9 +498,9 @@ void SbxObject::Remove( const OUString& rName, SbxClassType t )
 
 void SbxObject::Remove( SbxVariable* pVar )
 {
-    sal_uInt16 nIdx;
+    sal_uInt32 nIdx;
     SbxArray* pArray = FindVar( pVar, nIdx );
-    if( pArray && nIdx < pArray->Count() )
+    if( pArray && nIdx < pArray->Count32() )
     {
 #ifdef DBG_UTIL
         OUString aVarName( pVar->GetName() );
@@ -512,7 +512,7 @@ void SbxObject::Remove( SbxVariable* pVar )
             "basic.sbx",
             "remove " << aVarName << " in " << SbxVariable::GetName());
 #endif
-        SbxVariableRef pVar_ = pArray->Get( nIdx );
+        SbxVariableRef pVar_ = pArray->Get32( nIdx );
         if( pVar_->IsBroadcaster() )
         {
             EndListening( pVar_->GetBroadcaster(), true );
@@ -537,9 +537,9 @@ static bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
     {
         return false;
     }
-    for( sal_uInt16 i = 0; i < p->Count(); i++ )
+    for( sal_uInt32 i = 0; i < p->Count32(); i++ )
     {
-        SbxVariableRef& r = p->GetRef( i );
+        SbxVariableRef& r = p->GetRef32( i );
         SbxVariable* pVar = r.get();
         if( pVar )
         {
@@ -727,9 +727,9 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
 
     // Methods
     rStrm.WriteOString( aIndentNameStr ).WriteCharPtr( "- Methods:" ) << endl;
-    for( sal_uInt16 i = 0; i < pMethods->Count(); i++ )
+    for( sal_uInt32 i = 0; i < pMethods->Count32(); i++ )
     {
-        SbxVariableRef& r = pMethods->GetRef( i );
+        SbxVariableRef& r = pMethods->GetRef32( i );
         SbxVariable* pVar = r.get();
         if( pVar )
         {
@@ -764,9 +764,9 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
     // Properties
     rStrm.WriteOString( aIndentNameStr ).WriteCharPtr( "- Properties:" ) << endl;
     {
-        for( sal_uInt16 i = 0; i < pProps->Count(); i++ )
+        for( sal_uInt32 i = 0; i < pProps->Count32(); i++ )
         {
-            SbxVariableRef& r = pProps->GetRef( i );
+            SbxVariableRef& r = pProps->GetRef32( i );
             SbxVariable* pVar = r.get();
             if( pVar )
             {
@@ -802,9 +802,9 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
     // Objects
     rStrm.WriteOString( aIndentNameStr ).WriteCharPtr( "- Objects:" ) << endl;
     {
-        for( sal_uInt16 i = 0; i < pObjs->Count(); i++ )
+        for( sal_uInt32 i = 0; i < pObjs->Count32(); i++ )
         {
-            SbxVariableRef& r = pObjs->GetRef( i );
+            SbxVariableRef& r = pObjs->GetRef32( i );
             SbxVariable* pVar = r.get();
             if ( pVar )
             {
