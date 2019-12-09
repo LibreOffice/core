@@ -67,9 +67,12 @@ private:
     SfxBindings* mpBindings;
 
     ::sfx2::sidebar::ControllerItem maHFToggleController;
+    ::sfx2::sidebar::ControllerItem maMetricController;
     ::sfx2::sidebar::ControllerItem maHeaderLRMarginController;
     ::sfx2::sidebar::ControllerItem maHeaderSpacingController;
     ::sfx2::sidebar::ControllerItem maHeaderLayoutController;
+
+    FieldUnit meFUnit;
 
     VclPtr<CheckBox>           mpHeaderToggle;
     VclPtr<SpacingListBox>     mpHeaderSpacingLB;
@@ -79,6 +82,7 @@ private:
     OUString aCustomEntry;
 
     void Initialize();
+    void SetMarginsAndSpacingFieldUnit();
     void UpdateHeaderCheck();
     void UpdateMarginControl();
     void UpdateSpacingControl();
@@ -88,6 +92,8 @@ private:
     ::std::unique_ptr<SvxLongLRSpaceItem> mpHeaderLRMarginItem;
     ::std::unique_ptr<SvxLongULSpaceItem> mpHeaderSpacingItem;
     ::std::unique_ptr<SfxInt16Item>       mpHeaderLayoutItem;
+
+    static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
 
     DECL_LINK( HeaderToggleHdl, Button*, void );
     DECL_LINK( HeaderLRMarginHdl, ListBox&, void);
