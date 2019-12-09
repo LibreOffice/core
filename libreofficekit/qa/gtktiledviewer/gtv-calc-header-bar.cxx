@@ -9,7 +9,6 @@
 
 #include <gtk/gtk.h>
 
-#include <cassert>
 #include <cmath>
 #include <iostream>
 
@@ -21,6 +20,7 @@
 #include <map>
 #include <boost/property_tree/json_parser.hpp>
 #include <o3tl/optional.hxx>
+#include <o3tl/unreachable.hxx>
 
 namespace {
 
@@ -150,7 +150,7 @@ static bool gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCairo)
         }
         else
         {
-            assert(false); // should never happen
+            O3TL_UNREACHABLE; // should never happen
         }
 
         gtv_calc_header_bar_draw_text(pCairo, aRectangle, rHeader.m_aText);
