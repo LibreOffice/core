@@ -40,6 +40,7 @@
 #include <svx/chrtitem.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xflgrit.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -255,6 +256,16 @@ namespace
 
             XLineWidthItem aItem(nValue);
             pArgs->Put(aItem);
+        }
+        if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
+        {
+            const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
+            if (pJSON)
+            {
+                XGradient aGradient = XGradient::fromJSON(pJSON->GetValue());
+                XFillGradientItem aItem(aGradient);
+                pArgs->Put(aItem);
+            }
         }
     }
 }
