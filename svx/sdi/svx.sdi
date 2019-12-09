@@ -2649,7 +2649,7 @@ XFillColorItem FillPageColor SID_ATTR_PAGE_COLOR
 ]
 
 XFillGradientItem FillGradient SID_ATTR_FILL_GRADIENT
-
+(SfxStringItem FillGradientJSON SID_FILL_GRADIENT_JSON)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
