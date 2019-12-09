@@ -625,14 +625,19 @@ CanvasSettings::CanvasSettings() :
 
 bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
-#if HAVE_FEATURE_OPENGL
-// TODO SKIA
-    if (OpenGLWrapper::isVCLOpenGLEnabled() && Application::GetToolkitName() != "gtk3")
+    if (SkiaHelper::isVCLSkiaEnabled() && Application::GetToolkitName() != "gtk3")
+    {
         mbHWAccelAvailable = false;
-
-    else
+        return false;
+    }
+#if HAVE_FEATURE_OPENGL
+    if (OpenGLWrapper::isVCLOpenGLEnabled() && Application::GetToolkitName() != "gtk3")
+    {
+        mbHWAccelAvailable = false;
+        return false;
+    }
 #endif
-        if( !mbHWAccelChecked )
+    if( !mbHWAccelChecked )
     {
         mbHWAccelChecked = true;
 

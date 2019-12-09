@@ -26,6 +26,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/sysdata.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include "cairo_canvas.hxx"
 
@@ -48,6 +49,7 @@ namespace cairocanvas
 
         // tdf#93870 - force VCL canvas in OpenGL mode for now.
         assert( !OpenGLWrapper::isVCLOpenGLEnabled() );
+        assert( !SkiaHelper::isVCLSkiaEnabled() );
 
         /* maArguments:
            0: ptr to creating instance (Window or VirtualDevice)
