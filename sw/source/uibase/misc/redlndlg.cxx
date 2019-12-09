@@ -64,9 +64,9 @@ SwRedlineAcceptChild::SwRedlineAcceptChild(vcl::Window* _pParent,
                                            SfxChildWinInfo* pInfo)
     : SwChildWinWrapper(_pParent, nId)
 {
-    SetController(std::make_shared<SwModelessRedlineAcceptDlg>(pBindings, this, _pParent->GetFrameWeld()));
-
-    static_cast<SwModelessRedlineAcceptDlg*>(GetController().get())->Initialize(pInfo);
+    auto xDlg = std::make_shared<SwModelessRedlineAcceptDlg>(pBindings, this, _pParent->GetFrameWeld());
+    SetController(xDlg);
+    xDlg->Initialize(pInfo);
 }
 
 // newly initialise dialog after document switch

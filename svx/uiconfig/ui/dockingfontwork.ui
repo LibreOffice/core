@@ -1,214 +1,148 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">-50000</property>
     <property name="upper">50000</property>
     <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">1</property>
   </object>
-  <object class="GtkWindow" id="DockingFontwork">
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">-50000</property>
+    <property name="upper">50000</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="lower">-50000</property>
+    <property name="upper">50000</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="lower">-50000</property>
+    <property name="upper">50000</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkDialog" id="DockingFontwork">
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="dockingfontwork|DockingFontwork">Fontwork</property>
-    <property name="type_hint">dock</property>
+    <property name="type_hint">utility</property>
     <child>
-      <object class="GtkGrid" id="grid1">
-        <property name="visible">True</property>
+      <placeholder/>
+    </child>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="row_spacing">12</property>
-        <child>
-          <object class="GtkToolbar" id="style">
-            <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
             <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
             <child>
-              <object class="GtkToggleToolButton" id="off">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|off|tooltip_text">Off</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw01.png</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSeparatorToolItem" id="toolbutton1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="rotate">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|rotate|tooltip_text">Rotate</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw02.png</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="upright">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|upright|tooltip_text">Upright</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw03.png</property>
-                <property name="group">rotate</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="hori">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|hori|tooltip_text">Slant Horizontal</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw04.png</property>
-                <property name="group">rotate</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="vert">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|vert|tooltip_text">Slant Vertical</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw05.png</property>
-                <property name="group">rotate</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkToolbar" id="adjust">
+          <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="row_spacing">12</property>
             <child>
-              <object class="GtkToggleToolButton" id="orientation">
+              <object class="GtkToolbar" id="style">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|orientation|tooltip_text">Orientation</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw06.png</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSeparatorToolItem" id="toolbutton2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="left">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|left|tooltip_text">Align Left</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw07.png</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="center">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|center|tooltip_text">Center</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw08.png</property>
-                <property name="group">left</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="right">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|right|tooltip_text">Align Right</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw09.png</property>
-                <property name="group">left</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="autosize">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|autosize|tooltip_text">AutoSize Text</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw010.png</property>
-                <property name="group">left</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkGrid" id="grid2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="column_spacing">12</property>
-            <child>
-              <object class="GtkImage" id="image1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="valign">center</property>
-                <property name="pixbuf">svx/res/fw020.png</property>
+                <property name="show_arrow">False</property>
+                <child>
+                  <object class="GtkToggleToolButton" id="off">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|off|tooltip_text">Off</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw01.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="rotate">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|rotate|tooltip_text">Rotate</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw02.png</property>
+                    <property name="active">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="upright">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|upright|tooltip_text">Upright</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw03.png</property>
+                    <property name="group">rotate</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="hori">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|hori|tooltip_text">Slant Horizontal</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw04.png</property>
+                    <property name="group">rotate</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="vert">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|vert|tooltip_text">Slant Vertical</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw05.png</property>
+                    <property name="group">rotate</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -216,236 +150,359 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="distance:0.00mm">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|distance|tooltip_text">Distance</property>
-                <property name="adjustment">adjustment1</property>
-                <property name="digits">2</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkGrid" id="grid3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="column_spacing">12</property>
-            <child>
-              <object class="GtkImage" id="image2">
+              <object class="GtkToolbar" id="adjust">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="valign">center</property>
-                <property name="pixbuf">svx/res/fw021.png</property>
+                <property name="show_arrow">False</property>
+                <child>
+                  <object class="GtkToggleToolButton" id="orientation">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|orientation|tooltip_text">Orientation</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw06.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="left">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|left|tooltip_text">Align Left</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw07.png</property>
+                    <property name="active">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="center">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|center|tooltip_text">Center</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw08.png</property>
+                    <property name="group">left</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="right">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|right|tooltip_text">Align Right</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw09.png</property>
+                    <property name="group">left</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="autosize">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|autosize|tooltip_text">AutoSize Text</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw010.png</property>
+                    <property name="group">left</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="indent:0.00mm">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|indent|tooltip_text">Indent</property>
-                <property name="text" translatable="no">0.00</property>
-                <property name="adjustment">adjustment1</property>
-                <property name="digits">2</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToolbar" id="shadow">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToggleToolButton" id="contour">
+              <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|contour|tooltip_text">Contour</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw011.png</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleToolButton" id="textcontour">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|textcontour|tooltip_text">Text Contour</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw012.png</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSeparatorToolItem" id="toolbutton3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="noshadow">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|noshadow|tooltip_text">No Shadow</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw013.png</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="vertical">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|vertical|tooltip_text">Vertical</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw014.png</property>
-                <property name="group">noshadow</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioToolButton" id="slant">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|slant|tooltip_text">Slant</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">svx/res/fw015.png</property>
-                <property name="group">noshadow</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkGrid" id="grid4">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="column_spacing">12</property>
-            <child>
-              <object class="GtkImage" id="shadowx">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="valign">center</property>
-                <property name="pixbuf">svx/res/fw018.png</property>
+                <property name="halign">end</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkImage" id="image1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="icon_name">svx/res/fw020.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="distance">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|distance|tooltip_text">Distance</property>
+                    <property name="adjustment">adjustment1</property>
+                    <property name="digits">2</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="top_attach">2</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="distancex:0.00mm">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|distancex|tooltip_text">Distance X</property>
-                <property name="text" translatable="no">0.00</property>
-                <property name="adjustment">adjustment1</property>
-                <property name="digits">2</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkGrid" id="grid5">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="column_spacing">12</property>
-            <child>
-              <object class="GtkImage" id="shadowy">
+              <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="valign">center</property>
-                <property name="pixbuf">svx/res/fw019.png</property>
+                <property name="halign">end</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkImage" id="image2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="icon_name">svx/res/fw021.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="indent">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|indent|tooltip_text">Indent</property>
+                    <property name="text">0.00</property>
+                    <property name="adjustment">adjustment2</property>
+                    <property name="digits">2</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="top_attach">3</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="distancey:0.00mm">
+              <object class="GtkToolbar" id="shadow">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes" context="dockingfontwork|distancey|tooltip_text">Distance Y</property>
-                <property name="text" translatable="no">0</property>
-                <property name="adjustment">adjustment1</property>
-                <property name="digits">2</property>
+                <property name="can_focus">False</property>
+                <property name="show_arrow">False</property>
+                <child>
+                  <object class="GtkToggleToolButton" id="contour">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|contour|tooltip_text">Contour</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw011.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleToolButton" id="textcontour">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|textcontour|tooltip_text">Text Contour</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw012.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="noshadow">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|noshadow|tooltip_text">No Shadow</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw013.png</property>
+                    <property name="active">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="vertical">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|vertical|tooltip_text">Vertical</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw014.png</property>
+                    <property name="group">noshadow</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioToolButton" id="slant">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|slant|tooltip_text">Slant</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">svx/res/fw015.png</property>
+                    <property name="group">noshadow</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkImage" id="shadowx">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="icon_name">svx/res/fw018.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="distancex">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|distancex|tooltip_text">Distance X</property>
+                    <property name="text">0.00</property>
+                    <property name="adjustment">adjustment3</property>
+                    <property name="digits">2</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkImage" id="shadowy">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="icon_name">svx/res/fw019.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="distancey">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes" context="dockingfontwork|distancey|tooltip_text">Distance Y</property>
+                    <property name="text">0.00</property>
+                    <property name="adjustment">adjustment4</property>
+                    <property name="digits">2</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="color">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip_text" translatable="yes" context="dockingfontwork|color|tooltip_text">Shadow Color</property>
+                <property name="xalign">0</property>
+                <property name="hexpand">True</property>
+                <property name="draw_indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">7</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="svxcorelo-SvxColorListBox" id="color">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes" context="dockingfontwork|color|tooltip_text">Shadow Color</property>
-            <property name="valign">start</property>
-            <property name="hexpand">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">7</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>
@@ -453,10 +510,10 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
-      <widget name="distance:0.00mm"/>
-      <widget name="indent:0.00mm"/>
-      <widget name="distancex:0.00mm"/>
-      <widget name="distancey:0.00mm"/>
+      <widget name="distance"/>
+      <widget name="indent"/>
+      <widget name="distancex"/>
+      <widget name="distancey"/>
     </widgets>
   </object>
 </interface>
