@@ -50,6 +50,11 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
     FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
     if (pDraw && !pViewData->IsRefMode())
     {
+        MapMode aDrawMode = GetDrawMapMode();
+        MapMode aOldMode = GetMapMode();
+        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+            SetMapMode( aDrawMode );
+
         pDraw->SetWindow( this );
         Point aLogicPos = PixelToLogic(rMEvt.GetPosPixel());
         if ( pDraw->IsDetectiveHit( aLogicPos ) )
@@ -63,6 +68,9 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
             if ( bRet )
                 UpdateStatusPosSize();
         }
+
+        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+            SetMapMode( aOldMode );
     }
 
     // cancel draw with right key
@@ -82,6 +90,11 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
     FuPoor* pDraw = pView->GetDrawFuncPtr();
     if (pDraw && !pViewData->IsRefMode())
     {
+        MapMode aDrawMode = GetDrawMapMode();
+        MapMode aOldMode = GetMapMode();
+        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+            SetMapMode( aDrawMode );
+
         pDraw->SetWindow( this );
         bRet = pDraw->MouseButtonUp( rMEvt );
 
@@ -98,6 +111,9 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
             if ( !pView->IsPaintBrushLocked() )
                 pView->ResetBrushDocument(); // end paint brush mode if not locked
         }
+
+        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+            SetMapMode( aOldMode );
     }
 
     return bRet;
@@ -108,10 +124,19 @@ bool ScGridWindow::DrawMouseMove(const MouseEvent& rMEvt)
     FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
     if (pDraw && !pViewData->IsRefMode())
     {
+        MapMode aDrawMode = GetDrawMapMode();
+        MapMode aOldMode = GetMapMode();
+        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+            SetMapMode( aDrawMode );
+
         pDraw->SetWindow( this );
         bool bRet = pDraw->MouseMove( rMEvt );
         if ( bRet )
             UpdateStatusPosSize();
+
+        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+            SetMapMode( aOldMode );
+
         return bRet;
     }
     else
