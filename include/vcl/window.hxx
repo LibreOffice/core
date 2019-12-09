@@ -1205,6 +1205,9 @@ public:
     /// Find an existing Window based on the LOKWindowId.
     static VclPtr<vcl::Window>          FindLOKWindow(vcl::LOKWindowId nWindowId);
 
+    /// check if LOK Window container is empty
+    static bool                         IsLOKWindowsEmpty();
+
     /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.
     virtual boost::property_tree::ptree DumpAsPropertyTree();
 
