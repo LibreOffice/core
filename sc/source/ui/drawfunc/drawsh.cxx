@@ -57,6 +57,7 @@
 #include <svx/chrtitem.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
@@ -102,6 +103,16 @@ namespace
                     pArgs->Put(aFillColorItem);
                     break;
                 }
+            }
+        }
+        if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
+        {
+            const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
+            if (pJSON)
+            {
+                XGradient aGradient = XGradient::fromJSON(pJSON->GetValue());
+                XFillGradientItem aItem(aGradient);
+                pArgs->Put(aItem);
             }
         }
     }

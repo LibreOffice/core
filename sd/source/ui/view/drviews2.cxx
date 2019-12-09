@@ -89,6 +89,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/xflgrit.hxx>
 
 #include <tools/diagnose_ex.h>
 
@@ -581,6 +582,16 @@ namespace
                     pArgs->Put(aFillColorItem);
                     break;
                 }
+            }
+        }
+        if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
+        {
+            const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
+            if (pJSON)
+            {
+                XGradient aGradient = XGradient::fromJSON(pJSON->GetValue());
+                XFillGradientItem aItem(aGradient);
+                pArgs->Put(aItem);
             }
         }
     }
