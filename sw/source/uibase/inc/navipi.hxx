@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NAVIPI_HXX
 
 #include <vcl/lstbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>

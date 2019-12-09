@@ -54,6 +54,7 @@
 #include <EventMultiplexer.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/svapp.hxx>
 
 #include <editeng/sizeitem.hxx>
 #include <comphelper/lok.hxx>

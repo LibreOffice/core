@@ -22,6 +22,8 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
+#include <vcl/svapp.hxx>
+
 #include "ChartElementsPanel.hxx"
 #include <ChartController.hxx>
 #include <comphelper/processfactory.hxx>

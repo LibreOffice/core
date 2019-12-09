@@ -22,6 +22,7 @@
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xgrad.hxx>
+#include <vcl/svapp.hxx>
 
 namespace svx::sidebar {
 

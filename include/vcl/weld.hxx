@@ -1722,6 +1722,10 @@ public:
     }
     void set_help_id(const OString& rName) { m_xSpinButton->set_help_id(rName); }
     void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
+    // set the width of the underlying widget in characters, this setting is
+    // invalidated when changing the units, range or digits, so to have effect
+    // must come after changing those values
+    void set_width_chars(int nChars) { m_xSpinButton->set_width_chars(nChars); }
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 

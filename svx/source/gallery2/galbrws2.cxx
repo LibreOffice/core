@@ -23,6 +23,8 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/bindings.hxx>
