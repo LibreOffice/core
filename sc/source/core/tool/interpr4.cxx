@@ -3263,9 +3263,9 @@ void ScInterpreter::ScMacro()
 
     SbxArrayRef refPar = new SbxArray;
     bool bOk = true;
-    for( short i = nParamCount; i && bOk ; i-- )
+    for( sal_uInt32 i = nParamCount; i && bOk ; i-- )
     {
-        SbxVariable* pPar = refPar->Get( static_cast<sal_uInt16>(i) );
+        SbxVariable* pPar = refPar->Get32(i);
         switch( GetStackType() )
         {
             case svDouble:
@@ -3442,7 +3442,7 @@ void ScInterpreter::ScMacro()
         {
             SbxBase* pElemObj = refRes->GetObject();
             SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>(pElemObj);
-            short nDim = pDimArray ? pDimArray->GetDims() : 0;
+            sal_Int32 nDim = pDimArray ? pDimArray->GetDims32() : 0;
             if ( 1 <= nDim && nDim <= 2 )
             {
                 sal_Int32 nCs, nCe, nRs, nRe;

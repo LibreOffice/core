@@ -293,7 +293,7 @@ static SbxVariableRef Element
             {
                 p++;
                 auto refPar = tools::make_ref<SbxArray>();
-                sal_uInt16 nArg = 0;
+                sal_uInt32 nArg = 0;
                 // We are once relaxed and accept as well
                 // the line- or command end as delimiter
                 // Search parameter always global!
@@ -310,7 +310,7 @@ static SbxVariableRef Element
                         // One copies the parameter, so that
                         // one have the current status (triggers also
                         // the call per access)
-                        refPar->Put( new SbxVariable( *refArg ), ++nArg );
+                        refPar->Put32( new SbxVariable( *refArg ), ++nArg );
                     }
                     p = SkipWhitespace( p );
                     if( *p == ',' )
