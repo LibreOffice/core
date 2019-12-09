@@ -2422,6 +2422,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     SAL_INFO_IF(!xWindow, "vcl.layout", "probably need to implement " << name << " or add a make" << name << " function");
     if (xWindow)
     {
+        // child windows of disabled windows are made disabled by vcl by default, we don't want that
+        WindowImpl *pWindowImpl = xWindow->ImplGetWindowImpl();
+        pWindowImpl->mbDisabled = false;
+
         xWindow->SetHelpId(m_sHelpRoot + id);
         SAL_INFO("vcl.layout", "for " << name <<
             ", created " << xWindow.get() << " child of " <<
