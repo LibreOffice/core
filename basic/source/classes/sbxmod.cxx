@@ -229,7 +229,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
         {
             SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
             unoToSbxValue( xSbxVar.get(), pParams[i] );
-            xSbxParams->Put( xSbxVar.get(), static_cast< sal_uInt16 >( i ) + 1 );
+            xSbxParams->Put32( xSbxVar.get(), static_cast< sal_uInt32 >( i ) + 1 );
 
             // Enable passing by ref
             if ( xSbxVar->GetType() != SbxVARIANT )
@@ -251,12 +251,13 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
         if ( pInfo_ )
         {
             OutParamMap aOutParamMap;
-            for ( sal_uInt16 n = 1, nCount = xSbxParams->Count(); n < nCount; ++n )
+            for ( sal_uInt32 n = 1, nCount = xSbxParams->Count32(); n < nCount; ++n )
             {
-                const SbxParamInfo* pParamInfo = pInfo_->GetParam( n );
+                assert(n <= std::numeric_limits<sal_uInt16>::max());
+                const SbxParamInfo* pParamInfo = pInfo_->GetParam( sal::static_int_cast<sal_uInt16>(n) );
                 if ( pParamInfo && ( pParamInfo->eType & SbxBYREF ) != 0 )
                 {
-                    SbxVariable* pVar = xSbxParams->Get( n );
+                    SbxVariable* pVar = xSbxParams->Get32( n );
                     if ( pVar )
                     {
                         SbxVariableRef xVar = pVar;
@@ -470,16 +471,16 @@ void SbModule::StartDefinitions()
 
     // methods and properties persist, but they are invalid;
     // at least are the information under certain conditions clogged
-    sal_uInt16 i;
-    for( i = 0; i < pMethods->Count(); i++ )
+    sal_uInt32 i;
+    for( i = 0; i < pMethods->Count32(); i++ )
     {
-        SbMethod* p = dynamic_cast<SbMethod*>( pMethods->Get( i )  );
+        SbMethod* p = dynamic_cast<SbMethod*>( pMethods->Get32( i )  );
         if( p )
             p->bInvalid = true;
     }
-    for( i = 0; i < pProps->Count(); )
+    for( i = 0; i < pProps->Count32(); )
     {
-        SbProperty* p = dynamic_cast<SbProperty*>( pProps->Get( i )  );
+        SbProperty* p = dynamic_cast<SbProperty*>( pProps->Get32( i )  );
         if( p )
             pProps->Remove( i );
         else
@@ -502,7 +503,7 @@ SbMethod* SbModule::GetMethod( const OUString& rName, SbxDataType t )
         pMeth = new SbMethod( rName, t, this );
         pMeth->SetParent( this );
         pMeth->SetFlags( SbxFlagBits::Read );
-        pMethods->Put( pMeth, pMethods->Count() );
+        pMethods->Put32( pMeth, pMethods->Count32() );
         StartListening(pMeth->GetBroadcaster(), DuplicateHandling::Prevent);
     }
     // The method is per default valid, because it could be
@@ -540,7 +541,7 @@ SbProperty* SbModule::GetProperty( const OUString& rName, SbxDataType t )
         pProp = new SbProperty( rName, t, this );
         pProp->SetFlag( SbxFlagBits::ReadWrite );
         pProp->SetParent( this );
-        pProps->Put( pProp, pProps->Count() );
+        pProps->Put32( pProp, pProps->Count32() );
         StartListening(pProp->GetBroadcaster(), DuplicateHandling::Prevent);
     }
     return pProp;
@@ -559,7 +560,7 @@ void SbModule::GetProcedureProperty( const OUString& rName, SbxDataType t )
         pProp = new SbProcedureProperty( rName, t );
         pProp->SetFlag( SbxFlagBits::ReadWrite );
         pProp->SetParent( this );
-        pProps->Put( pProp, pProps->Count() );
+        pProps->Put32( pProp, pProps->Count32() );
         StartListening(pProp->GetBroadcaster(), DuplicateHandling::Prevent);
     }
 }
@@ -577,7 +578,7 @@ void SbModule::GetIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth 
         pMapperMethod = new SbIfaceMapperMethod( rName, pImplMeth );
         pMapperMethod->SetParent( this );
         pMapperMethod->SetFlags( SbxFlagBits::Read );
-        pMethods->Put( pMapperMethod, pMethods->Count() );
+        pMethods->Put32( pMapperMethod, pMethods->Count32() );
     }
     pMapperMethod->bInvalid = false;
 }
@@ -591,9 +592,9 @@ SbIfaceMapperMethod::~SbIfaceMapperMethod()
 
 void SbModule::EndDefinitions( bool bNewState )
 {
-    for( sal_uInt16 i = 0; i < pMethods->Count(); )
+    for( sal_uInt32 i = 0; i < pMethods->Count32(); )
     {
-        SbMethod* p = dynamic_cast<SbMethod*>( pMethods->Get( i )  );
+        SbMethod* p = dynamic_cast<SbMethod*>( pMethods->Get32( i )  );
         if( p )
         {
             if( p->bInvalid )
@@ -699,15 +700,15 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     aVals.eType = SbxVARIANT;
 
                     SbxArray* pArg = pVar->GetParameters();
-                    sal_uInt16 nVarParCount = (pArg != nullptr) ? pArg->Count() : 0;
+                    sal_uInt32 nVarParCount = (pArg != nullptr) ? pArg->Count32() : 0;
                     if( nVarParCount > 1 )
                     {
                         auto xMethParameters = tools::make_ref<SbxArray>();
-                        xMethParameters->Put( pMethVar, 0 );    // Method as parameter 0
-                        for( sal_uInt16 i = 1 ; i < nVarParCount ; ++i )
+                        xMethParameters->Put32( pMethVar, 0 );    // Method as parameter 0
+                        for( sal_uInt32 i = 1 ; i < nVarParCount ; ++i )
                         {
-                            SbxVariable* pPar = pArg->Get( i );
-                            xMethParameters->Put( pPar, i );
+                            SbxVariable* pPar = pArg->Get32( i );
+                            xMethParameters->Put32( pPar, i );
                         }
 
                         pMethVar->SetParameters( xMethParameters.get() );
@@ -746,8 +747,8 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     // Setup parameters
                     SbxArrayRef xArray = new SbxArray;
-                    xArray->Put( pMethVar, 0 ); // Method as parameter 0
-                    xArray->Put( pVar, 1 );
+                    xArray->Put32( pMethVar, 0 ); // Method as parameter 0
+                    xArray->Put32( pVar, 1 );
                     pMethVar->SetParameters( xArray.get() );
 
                     SbxValues aVals;
@@ -905,9 +906,9 @@ static void SendHint_( SbxObject* pObj, SfxHintId nId, SbMethod* p )
         pObj->GetBroadcaster().Broadcast( SbxHint( nId, p ) );
     // Then ask for the subobjects
     SbxArray* pObjs = pObj->GetObjects();
-    for( sal_uInt16 i = 0; i < pObjs->Count(); i++ )
+    for( sal_uInt32 i = 0; i < pObjs->Count32(); i++ )
     {
-        SbxVariable* pVar = pObjs->Get( i );
+        SbxVariable* pVar = pObjs->Get32( i );
         if( dynamic_cast<const SbxObject *>(pVar) != nullptr )
             SendHint_( dynamic_cast<SbxObject*>( pVar), nId, p  );
     }
@@ -950,10 +951,10 @@ static void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
     }
     // Go over all Sub-Basics
     SbxArray* pObjs = pBasic->GetObjects();
-    sal_uInt16 nCount = pObjs->Count();
-    for( sal_uInt16 i = 0 ; i < nCount ; i++ )
+    sal_uInt32 nCount = pObjs->Count32();
+    for( sal_uInt32 i = 0 ; i < nCount ; i++ )
     {
-        SbxVariable* pObjVar = pObjs->Get( i );
+        SbxVariable* pObjVar = pObjs->Get32( i );
         StarBASIC* pSubBasic = dynamic_cast<StarBASIC*>( pObjVar  );
         if( pSubBasic )
         {
@@ -1297,9 +1298,9 @@ void SbModule::RemoveVars()
 
 void SbModule::ClearPrivateVars()
 {
-    for( sal_uInt16 i = 0 ; i < pProps->Count() ; i++ )
+    for( sal_uInt32 i = 0 ; i < pProps->Count32() ; i++ )
     {
-        SbProperty* p = dynamic_cast<SbProperty*>( pProps->Get( i )  );
+        SbProperty* p = dynamic_cast<SbProperty*>( pProps->Get32( i )  );
         if( p )
         {
             // Delete not the arrays, only their content
@@ -1308,9 +1309,9 @@ void SbModule::ClearPrivateVars()
                 SbxArray* pArray = dynamic_cast<SbxArray*>( p->GetObject() );
                 if( pArray )
                 {
-                    for( sal_uInt16 j = 0 ; j < pArray->Count() ; j++ )
+                    for( sal_uInt32 j = 0 ; j < pArray->Count32() ; j++ )
                     {
-                        SbxVariable* pj = pArray->Get( j );
+                        SbxVariable* pj = pArray->Get32( j );
                         pj->SbxValue::Clear();
                     }
                 }
@@ -1351,9 +1352,9 @@ void SbModule::implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC
 
 void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
 {
-    for( sal_uInt16 i = 0 ; i < pProps->Count() ; i++ )
+    for( sal_uInt32 i = 0 ; i < pProps->Count32() ; i++ )
     {
-        SbProperty* p = dynamic_cast<SbProperty*>( pProps->Get( i )  );
+        SbProperty* p = dynamic_cast<SbProperty*>( pProps->Get32( i )  );
         if( p )
         {
             if( p->GetType() & SbxARRAY )
@@ -1361,9 +1362,9 @@ void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
                 SbxArray* pArray = dynamic_cast<SbxArray*>( p->GetObject() );
                 if( pArray )
                 {
-                    for( sal_uInt16 j = 0 ; j < pArray->Count() ; j++ )
+                    for( sal_uInt32 j = 0 ; j < pArray->Count32() ; j++ )
                     {
-                        SbxVariable* pVar = pArray->Get( j );
+                        SbxVariable* pVar = pArray->Get32( j );
                         implClearIfVarDependsOnDeletedBasic( pVar, pDeletedBasic );
                     }
                 }
@@ -1577,9 +1578,9 @@ SbModule::fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg ) const
 {
         if ( !pImg )
             pImg = pImage;
-        for( sal_uInt32 i = 0; i < pMethods->Count(); i++ )
+        for( sal_uInt32 i = 0; i < pMethods->Count32(); i++ )
         {
-            SbMethod* pMeth = dynamic_cast<SbMethod*>( pMethods->Get( static_cast<sal_uInt16>(i) )  );
+            SbMethod* pMeth = dynamic_cast<SbMethod*>( pMethods->Get32(i)  );
             if( pMeth )
             {
                 //fixup method start positions
@@ -1802,17 +1803,17 @@ void SbModule::LoadBinaryData( SvStream& rStrm )
 bool SbModule::LoadCompleted()
 {
     SbxArray* p = GetMethods().get();
-    sal_uInt16 i;
-    for( i = 0; i < p->Count(); i++ )
+    sal_uInt32 i;
+    for( i = 0; i < p->Count32(); i++ )
     {
-        SbMethod* q = dynamic_cast<SbMethod*>( p->Get( i )  );
+        SbMethod* q = dynamic_cast<SbMethod*>( p->Get32( i )  );
         if( q )
             q->pMod = this;
     }
     p = GetProperties();
-    for( i = 0; i < p->Count(); i++ )
+    for( i = 0; i < p->Count32(); i++ )
     {
-        SbProperty* q = dynamic_cast<SbProperty*>( p->Get( i )  );
+        SbProperty* q = dynamic_cast<SbProperty*>( p->Get32( i )  );
         if( q )
             q->pMod = this;
     }
@@ -1844,15 +1845,15 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
                     aVals.eType = SbxVARIANT;
 
                     SbxArray* pArg = pVar->GetParameters();
-                    sal_uInt16 nVarParCount = (pArg != nullptr) ? pArg->Count() : 0;
+                    sal_uInt32 nVarParCount = (pArg != nullptr) ? pArg->Count32() : 0;
                     if( nVarParCount > 1 )
                     {
                         SbxArrayRef xMethParameters = new SbxArray;
-                        xMethParameters->Put( pMeth, 0 );   // Method as parameter 0
-                        for( sal_uInt16 i = 1 ; i < nVarParCount ; ++i )
+                        xMethParameters->Put32( pMeth, 0 );   // Method as parameter 0
+                        for( sal_uInt32 i = 1 ; i < nVarParCount ; ++i )
                         {
-                            SbxVariable* pPar = pArg->Get( i );
-                            xMethParameters->Put( pPar, i );
+                            SbxVariable* pPar = pArg->Get32( i );
+                            xMethParameters->Put32( pPar, i );
                         }
 
                         pMeth->SetParameters( xMethParameters.get() );
@@ -1891,8 +1892,8 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
                 {
                     // Setup parameters
                     SbxArrayRef xArray = new SbxArray;
-                    xArray->Put( pMeth, 0 );    // Method as parameter 0
-                    xArray->Put( pVar, 1 );
+                    xArray->Put32( pMeth, 0 );    // Method as parameter 0
+                    xArray->Put32( pVar, 1 );
                     pMeth->SetParameters( xArray.get() );
 
                     SbxValues aVals;
@@ -2441,13 +2442,13 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
         if ( aArguments.hasElements() )   // Setup parameters
         {
             auto xArray = tools::make_ref<SbxArray>();
-            xArray->Put( pMeth, 0 );    // Method as parameter 0
+            xArray->Put32( pMeth, 0 );    // Method as parameter 0
 
             for ( sal_Int32 i = 0; i < aArguments.getLength(); ++i )
             {
                 auto xSbxVar = tools::make_ref<SbxVariable>( SbxVARIANT );
                 unoToSbxValue( xSbxVar.get(), aArguments[i] );
-                xArray->Put( xSbxVar.get(), static_cast< sal_uInt16 >( i ) + 1 );
+                xArray->Put32( xSbxVar.get(), static_cast< sal_uInt32 >( i ) + 1 );
 
                 // Enable passing by ref
                 if ( xSbxVar->GetType() != SbxVARIANT )
@@ -2460,7 +2461,7 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
 
             for ( sal_Int32 i = 0; i < aArguments.getLength(); ++i )
             {
-                aArguments[i] = sbxToUnoValue( xArray->Get( static_cast< sal_uInt16 >(i) + 1) );
+                aArguments[i] = sbxToUnoValue( xArray->Get32( static_cast< sal_uInt32 >(i) + 1) );
             }
             pMeth->SetParameters( nullptr );
         }
