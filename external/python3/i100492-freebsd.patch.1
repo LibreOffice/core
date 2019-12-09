@@ -1,39 +1,7 @@
 FreeBSD porting fixes, patch by maho@openoffice.org
 
---- python3.orig/Lib/test/test_threading.py	2015-07-05 18:50:07.000000000 +0200
-+++ python3/Lib/test/test_threading.py	2015-07-26 17:03:55.935367820 +0200
-@@ -24,8 +24,8 @@
- # #12316 and #11870), and fork() from a worker thread is known to trigger
- # problems with some operating systems (issue #3863): skip problematic tests
- # on platforms known to behave badly.
--platforms_to_skip = ('freebsd4', 'freebsd5', 'freebsd6', 'netbsd5',
--                     'hp-ux11')
-+platforms_to_skip = ('freebsd4', 'freebsd5', 'freebsd6', 'freebsd7', 'netbsd5',
-+                     'os2emx', 'hp-ux11')
- 
- 
- # A trivial mutable counter.
 --- Python-3.3.0/Python/thread_pthread.h	2012-11-28 09:00:41.097955124 +0000
 +++ Python-3.3.0/Python/thread_pthread.h	2012-11-28 09:01:13.018329351 +0000
-@@ -42,6 +42,10 @@
- #endif
- #endif
- 
-+#ifdef __FreeBSD__
-+#include <osreldate.h>
-+#endif
-+
- /* The POSIX spec says that implementations supporting the sem_*
-    family of functions must indicate this by defining
-    _POSIX_SEMAPHORES. */
-@@ -60,7 +64,6 @@
-    in default setting.  So the process scope is preferred to get
-    enough number of threads to work. */
- #ifdef __FreeBSD__
--#include <osreldate.h>
- #if __FreeBSD_version >= 500000 && __FreeBSD_version < 504101
- #undef PTHREAD_SYSTEM_SCHED_SUPPORTED
- #endif
 @@ -186,6 +189,9 @@
  {
      pthread_t th;
@@ -44,11 +12,10 @@ FreeBSD porting fixes, patch by maho@openoffice.org
  #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
      pthread_attr_t attrs;
  #endif
-@@ -214,7 +220,10 @@
- #if defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
-     pthread_attr_setscope(&attrs, PTHREAD_SCOPE_SYSTEM);
- #endif
--
+@@ -214,6 +220,10 @@
+     callback->func = func;
+     callback->arg = arg;
+ 
 +#ifdef __FreeBSD__
 +	sigfillset(&set);
 +	SET_THREAD_SIGMASK(SIG_BLOCK, &set, &oset);
@@ -57,8 +24,8 @@ FreeBSD porting fixes, patch by maho@openoffice.org
  #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
                               &attrs,
 @@ -225,6 +234,9 @@
-                              (void *)arg
-                              );
+ #endif
+                              pythread_wrapper, callback);
  
 +#ifdef __FreeBSD__
 +	SET_THREAD_SIGMASK(SIG_SETMASK, &oset, NULL);
