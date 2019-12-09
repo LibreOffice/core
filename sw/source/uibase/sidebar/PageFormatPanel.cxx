@@ -90,7 +90,6 @@ PageFormatPanel::PageFormatPanel(
     mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) ),
     mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) ),
     meFUnit(GetModuleFieldUnit()),
-    meLastFUnit(GetModuleFieldUnit()),
     meUnit(),
     aCustomEntry()
 {
@@ -154,8 +153,8 @@ void PageFormatPanel::Initialize()
     mpBindings->Update(SID_ATTR_METRIC);
     mpBindings->Update(SID_ATTR_PAGE);
     mpBindings->Update(SID_ATTR_PAGE_SIZE);
-    mpBindings->Update( SID_ATTR_PAGE_LRSPACE );
-    mpBindings->Update( SID_ATTR_PAGE_ULSPACE );
+    mpBindings->Update(SID_ATTR_PAGE_LRSPACE);
+    mpBindings->Update(SID_ATTR_PAGE_ULSPACE);
 
     UpdateMarginBox();
 }
@@ -190,15 +189,15 @@ void PageFormatPanel::NotifyItemUpdate(
         case SID_ATTR_METRIC:
         {
             meUnit = maPaperSizeController.GetCoreMetric();
-            meFUnit = GetCurrentUnit(eState, pState);
-            if(meFUnit != meLastFUnit)
+            FieldUnit eFUnit = GetCurrentUnit(eState, pState);
+            if (eFUnit != meFUnit)
             {
+                meFUnit = eFUnit;
                 SetFieldUnit( *mpPaperHeight, meFUnit );
                 SetFieldUnit( *mpPaperWidth, meFUnit );
                 SetMarginFieldUnit();
                 UpdateMarginBox();
             }
-            meLastFUnit = meFUnit;
         }
         break;
         case SID_ATTR_PAGE:

@@ -67,9 +67,12 @@ private:
     SfxBindings* mpBindings;
 
     ::sfx2::sidebar::ControllerItem maHFToggleController;
+    ::sfx2::sidebar::ControllerItem maMetricController;
     ::sfx2::sidebar::ControllerItem maFooterLRMarginController;
     ::sfx2::sidebar::ControllerItem maFooterSpacingController;
     ::sfx2::sidebar::ControllerItem maFooterLayoutController;
+
+    FieldUnit meFUnit;
 
     VclPtr<CheckBox>           mpFooterToggle;
     VclPtr<SpacingListBox>     mpFooterSpacingLB;
@@ -79,6 +82,7 @@ private:
     OUString aCustomEntry;
 
     void Initialize();
+    void SetMarginsAndSpacingFieldUnit();
     void UpdateFooterCheck();
     void UpdateMarginControl();
     void UpdateSpacingControl();
@@ -88,6 +92,8 @@ private:
     ::std::unique_ptr<SvxLongLRSpaceItem> mpFooterLRMarginItem;
     ::std::unique_ptr<SvxLongULSpaceItem> mpFooterSpacingItem;
     ::std::unique_ptr<SfxInt16Item>       mpFooterLayoutItem;
+
+    static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
 
     DECL_LINK( FooterToggleHdl, Button*, void );
     DECL_LINK( FooterLRMarginHdl, ListBox&, void);

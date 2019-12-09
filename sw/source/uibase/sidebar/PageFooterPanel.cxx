@@ -52,6 +52,12 @@ VclPtr<vcl::Window> PageFooterPanel::Create(
     return VclPtr<PageFooterPanel>::Create(pParent, rxFrame, pBindings);
 }
 
+void PageFooterPanel::SetMarginsAndSpacingFieldUnit()
+{
+    mpFooterSpacingLB->Init(IsInch(meFUnit) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
+    mpFooterMarginPresetLB->Init(IsInch(meFUnit) ? SpacingType::MARGINS_INCH : SpacingType::MARGINS_CM);
+}
+
 PageFooterPanel::PageFooterPanel(
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
@@ -59,9 +65,11 @@ PageFooterPanel::PageFooterPanel(
     PanelLayout(pParent, "PageFooterPanel", "modules/swriter/ui/pagefooterpanel.ui", rxFrame),
     mpBindings( pBindings ),
     maHFToggleController(SID_ATTR_PAGE_FOOTER, *pBindings, *this),
+    maMetricController(SID_ATTR_METRIC, *pBindings,*this),
     maFooterLRMarginController(SID_ATTR_PAGE_FOOTER_LRMARGIN, *pBindings, *this),
     maFooterSpacingController(SID_ATTR_PAGE_FOOTER_SPACING, *pBindings, *this),
     maFooterLayoutController(SID_ATTR_PAGE_FOOTER_LAYOUT, *pBindings, *this),
+    meFUnit(GetModuleFieldUnit()),
     aCustomEntry(),
     mpFooterItem( new SfxBoolItem(SID_ATTR_PAGE_FOOTER) ),
     mpFooterLRMarginItem( new SvxLongLRSpaceItem(0, 0, SID_ATTR_PAGE_FOOTER_LRMARGIN)),
@@ -70,11 +78,8 @@ PageFooterPanel::PageFooterPanel(
 {
     get(mpFooterToggle, "footertoggle");
     get(mpFooterSpacingLB, "spacingpreset");
-    FieldUnit eMetric = ::GetDfltMetric(false);
-    mpFooterSpacingLB->Init(IsInch(eMetric) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
     get(mpFooterLayoutLB, "samecontentLB");
     get(mpFooterMarginPresetLB, "footermarginpreset");
-    mpFooterMarginPresetLB->Init(IsInch(GetModuleFieldUnit()) ? SpacingType::MARGINS_INCH : SpacingType::MARGINS_CM);
     get(mpCustomEntry, "customlabel");
 
     Initialize();
@@ -88,6 +93,7 @@ PageFooterPanel::~PageFooterPanel()
 void PageFooterPanel::dispose()
 {
     mpFooterToggle.disposeAndClear();
+    maMetricController.dispose();
     mpFooterSpacingLB.disposeAndClear();
     mpFooterLayoutLB.disposeAndClear();
     mpFooterMarginPresetLB.disposeAndClear();
@@ -96,14 +102,29 @@ void PageFooterPanel::dispose()
     PanelLayout::dispose();
 }
 
+FieldUnit PageFooterPanel::GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState)
+{
+    FieldUnit eUnit;
+
+    if (pState && eState >= SfxItemState::DEFAULT)
+        eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pState)->GetValue());
+    else
+        eUnit = GetModuleFieldUnit();
+
+    return eUnit;
+}
+
 void PageFooterPanel::Initialize()
 {
+    SetMarginsAndSpacingFieldUnit();
+
     aCustomEntry = mpCustomEntry->GetText();
     mpFooterToggle->SetClickHdl( LINK(this, PageFooterPanel, FooterToggleHdl) );
     mpFooterMarginPresetLB->SetSelectHdl( LINK(this, PageFooterPanel, FooterLRMarginHdl));
     mpFooterSpacingLB->SetSelectHdl( LINK(this, PageFooterPanel, FooterSpacingHdl));
     mpFooterLayoutLB->SetSelectHdl( LINK(this, PageFooterPanel, FooterLayoutHdl));
 
+    mpBindings->Invalidate(SID_ATTR_METRIC);
     mpBindings->Invalidate(SID_ATTR_PAGE_FOOTER);
     mpBindings->Invalidate(SID_ATTR_PAGE_FOOTER_LRMARGIN);
     mpBindings->Invalidate(SID_ATTR_PAGE_FOOTER_SPACING);
@@ -218,6 +239,18 @@ void PageFooterPanel::NotifyItemUpdate(
             {
                 mpFooterLayoutItem.reset(static_cast<SfxInt16Item*>(pState->Clone()) );
                 UpdateLayoutControl();
+            }
+        }
+        break;
+        case SID_ATTR_METRIC:
+        {
+            FieldUnit eFUnit = GetCurrentUnit(eState, pState);
+            if (meFUnit != eFUnit)
+            {
+                meFUnit = eFUnit;
+                SetMarginsAndSpacingFieldUnit();
+                UpdateSpacingControl();
+                UpdateMarginControl();
             }
         }
         break;

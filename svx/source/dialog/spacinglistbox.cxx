@@ -29,6 +29,11 @@ SpacingListBox::SpacingListBox(vcl::Window* pParent)
 
 void SpacingListBox::Init(SpacingType eType)
 {
+    auto nSelected = GetSelectedEntryPos();
+    if (nSelected == LISTBOX_ENTRY_NOTFOUND)
+        nSelected = 0;
+    Clear();
+
     const std::pair<const char*, int>* pResources;
     switch (eType)
     {
@@ -57,7 +62,7 @@ void SpacingListBox::Init(SpacingType eType)
     }
 
     SetDropDownLineCount(8);
-    SelectEntryPos(0);
+    SelectEntryPos(nSelected);
 }
 
 VCL_BUILDER_FACTORY(SpacingListBox);
