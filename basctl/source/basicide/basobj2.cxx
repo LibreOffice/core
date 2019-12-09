@@ -370,7 +370,7 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
         SbModuleRef xModule;
         // Only reparse modules if ScriptDocument source is out of sync
         // with basic's Module
-        if ( !pMod || pMod->GetSource() != aOUSource )
+        if ( !pMod || pMod->GetSource32() != aOUSource )
         {
             xModule = new SbModule( rModName );
             xModule->SetSource32( aOUSource );
@@ -420,7 +420,7 @@ bool HasMethod (
         SbModuleRef xModule;
         // Only reparse modules if ScriptDocument source is out of sync
         // with basic's Module
-        if ( !pMod || pMod->GetSource() != aOUSource )
+        if ( !pMod || pMod->GetSource32() != aOUSource )
         {
             xModule = new SbModule( rModName );
             xModule->SetSource32( aOUSource );

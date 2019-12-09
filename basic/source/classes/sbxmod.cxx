@@ -663,12 +663,6 @@ SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
     return pRes;
 }
 
-
-const OUString& SbModule::GetSource() const
-{
-    return aOUSource;
-}
-
 // Parent and BASIC are one!
 
 void SbModule::SetParent( SbxObject* p )
