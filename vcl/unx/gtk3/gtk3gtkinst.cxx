@@ -8564,7 +8564,7 @@ public:
         , m_nDragDataDeleteignalId(0)
         , m_nDragGetSignalId(0)
         , m_nKeyPressSignalId(g_signal_connect(pTreeView, "key-press-event", G_CALLBACK(signalKeyPress), this))
-        , m_nQueryTooltipSignalId(g_signal_connect(pTreeView, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
+        , m_nQueryTooltipSignalId(0)
         , m_pChangeEvent(nullptr)
     {
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
@@ -8623,6 +8623,12 @@ public:
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         m_nRowDeletedSignalId = g_signal_connect(pModel, "row-deleted", G_CALLBACK(signalRowDeleted), this);
         m_nRowInsertedSignalId = g_signal_connect(pModel, "row-inserted", G_CALLBACK(signalRowInserted), this);
+    }
+
+    virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override
+    {
+        weld::TreeView::connect_query_tooltip(rLink);
+        m_nQueryTooltipSignalId = g_signal_connect(m_pTreeView, "query-tooltip", G_CALLBACK(signalQueryTooltip), this);
     }
 
     virtual void columns_autosize() override
@@ -9998,6 +10004,8 @@ public:
     {
         if (m_pChangeEvent)
             Application::RemoveUserEvent(m_pChangeEvent);
+        if (m_nQueryTooltipSignalId)
+            g_signal_handler_disconnect(m_pTreeView, m_nQueryTooltipSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nKeyPressSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nDragEndSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nDragBeginSignalId);
@@ -10029,8 +10037,6 @@ public:
             m_aColumnSignalIds.pop_back();
         }
         g_list_free(m_pColumns);
-
-        g_signal_handler_disconnect(m_pTreeView, m_nQueryTooltipSignalId);
     }
 };
 

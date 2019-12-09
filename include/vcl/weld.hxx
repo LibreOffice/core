@@ -734,8 +734,9 @@ protected:
     OUString signal_query_tooltip(const TreeIter& rIter) { return m_aQueryTooltipHdl.Call(rIter); }
 
 public:
-    void connect_query_tooltip(const Link<const TreeIter&, OUString>& rLink)
+    virtual void connect_query_tooltip(const Link<const TreeIter&, OUString>& rLink)
     {
+        assert(!m_aQueryTooltipHdl.IsSet() || !rLink.IsSet());
         m_aQueryTooltipHdl = rLink;
     }
 
