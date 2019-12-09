@@ -39,12 +39,15 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xflgrit.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 using namespace com::sun::star::drawing;
+
+typedef std::map<OUString, OUString> StringMap;
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
@@ -211,6 +214,53 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
 namespace
 {
+    StringMap jsonToStringMap(const OUString& rJSON)
+    {
+        StringMap aArgs;
+        if (rJSON.getLength() && rJSON[0] != '\0')
+        {
+            std::stringstream aStream(OUStringToOString(rJSON, RTL_TEXTENCODING_ASCII_US).getStr());
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+
+            for (const auto& rPair : aTree)
+            {
+                aArgs[OUString::fromUtf8(rPair.first.c_str())] = OUString::fromUtf8(rPair.second.get_value<std::string>(".").c_str());
+            }
+        }
+        return aArgs;
+    }
+
+    css::awt::GradientStyle lcl_getStyleFromString(const OUString& rStyle)
+    {
+        if (rStyle == "LINEAR")
+            return css::awt::GradientStyle_LINEAR;
+        else if (rStyle == "AXIAL")
+            return css::awt::GradientStyle_AXIAL;
+        else if (rStyle == "RADIAL")
+            return css::awt::GradientStyle_RADIAL;
+        else if (rStyle == "ELLIPTICAL")
+            return css::awt::GradientStyle_ELLIPTICAL;
+        else if (rStyle == "SQUARE")
+            return css::awt::GradientStyle_SQUARE;
+        else if (rStyle == "RECT")
+            return css::awt::GradientStyle_RECT;
+
+        return css::awt::GradientStyle_LINEAR;
+    }
+
+    XGradient lcl_buildGradientFromStringMap(StringMap& rMap)
+    {
+        XGradient aGradient;
+
+        aGradient.SetStartColor(rMap["startcolor"].toInt32(16));
+        aGradient.SetEndColor(rMap["endcolor"].toInt32(16));
+        aGradient.SetGradientStyle(lcl_getStyleFromString(rMap["style"]));
+        aGradient.SetAngle(rMap["angle"].toInt32());
+
+        return aGradient;
+    }
+
     void lcl_convertStringArguments(sal_uInt16 nSlot, std::unique_ptr<SfxItemSet>& pArgs)
     {
         Color aColor;
@@ -252,6 +302,19 @@ namespace
 
             XLineWidthItem aItem(nValue);
             pArgs->Put(aItem);
+        }
+        else if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
+        {
+            const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
+            if (pJSON)
+            {
+                StringMap aMap(jsonToStringMap(pJSON->GetValue()));
+
+                XGradient aGradient = lcl_buildGradientFromStringMap(aMap);
+
+                XFillGradientItem aItem(aGradient);
+                pArgs->Put(aItem);
+            }
         }
     }
 }
