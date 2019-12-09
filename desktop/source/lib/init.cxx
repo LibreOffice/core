@@ -40,6 +40,7 @@
 #include <sal/log.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/lok.hxx>
+#include <o3tl/any.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -3485,17 +3486,16 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
                 int nLeft = OutputDevice::LogicToLogic(aChartBB.Left(), MapUnit::MapTwip, MapUnit::Map100thMM);
                 int nTop = OutputDevice::LogicToLogic(aChartBB.Top(), MapUnit::MapTwip, MapUnit::Map100thMM);
 
-                sal_Int32 value;
                 for (beans::PropertyValue& rPropValue: aPropertyValuesVector)
                 {
                     if (rPropValue.Name == "TransformPosX" || rPropValue.Name == "TransformRotationX")
                     {
-                        rPropValue.Value >>= value;
+                        auto const value = *o3tl::doAccess<sal_Int32>(rPropValue.Value);
                         rPropValue.Value <<= value - nLeft;
                     }
                     else if (rPropValue.Name == "TransformPosY" || rPropValue.Name == "TransformRotationY")
                     {
-                        rPropValue.Value >>= value;
+                        auto const value = *o3tl::doAccess<sal_Int32>(rPropValue.Value);
                         rPropValue.Value <<= value - nTop;
                     }
                 }
