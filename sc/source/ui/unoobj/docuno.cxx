@@ -887,8 +887,9 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     pViewData->SetZoom(Fraction(nTilePixelWidth_ * TWIPS_PER_PIXEL, nTileTwipWidth_),
                        Fraction(nTilePixelHeight_ * TWIPS_PER_PIXEL, nTileTwipHeight_), true);
 
-    // refresh our view's take on other view's cursors
+    // refresh our view's take on other view's cursors & selections
     pViewData->GetActiveWin()->updateKitOtherCursors();
+    pViewData->GetActiveWin()->updateOtherKitSelections();
 }
 
 OUString ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle)
