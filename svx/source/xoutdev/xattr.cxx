@@ -96,6 +96,8 @@
 
 using namespace ::com::sun::star;
 
+typedef std::map<OUString, OUString> StringMap;
+
 static long ScaleMetricValue( long nVal, long nMul, long nDiv )
 {
     BigInt aVal( nVal );
@@ -1973,6 +1975,62 @@ std::string XGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
     }
 
     return "";
+}
+
+namespace
+{
+    css::awt::GradientStyle lcl_getStyleFromString(const OUString& rStyle)
+    {
+        if (rStyle == "LINEAR")
+            return css::awt::GradientStyle_LINEAR;
+        else if (rStyle == "AXIAL")
+            return css::awt::GradientStyle_AXIAL;
+        else if (rStyle == "RADIAL")
+            return css::awt::GradientStyle_RADIAL;
+        else if (rStyle == "ELLIPTICAL")
+            return css::awt::GradientStyle_ELLIPTICAL;
+        else if (rStyle == "SQUARE")
+            return css::awt::GradientStyle_SQUARE;
+        else if (rStyle == "RECT")
+            return css::awt::GradientStyle_RECT;
+
+        return css::awt::GradientStyle_LINEAR;
+    }
+
+    StringMap lcl_jsonToStringMap(const OUString& rJSON)
+    {
+        StringMap aArgs;
+        if (rJSON.getLength() && rJSON[0] != '\0')
+        {
+            std::stringstream aStream(OUStringToOString(rJSON, RTL_TEXTENCODING_ASCII_US).getStr());
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+
+            for (const auto& rPair : aTree)
+            {
+                aArgs[OUString::fromUtf8(rPair.first.c_str())] = OUString::fromUtf8(rPair.second.get_value<std::string>(".").c_str());
+            }
+        }
+        return aArgs;
+    }
+
+    XGradient lcl_buildGradientFromStringMap(StringMap& rMap)
+    {
+        XGradient aGradient;
+
+        aGradient.SetStartColor(rMap["startcolor"].toInt32(16));
+        aGradient.SetEndColor(rMap["endcolor"].toInt32(16));
+        aGradient.SetGradientStyle(lcl_getStyleFromString(rMap["style"]));
+        aGradient.SetAngle(rMap["angle"].toInt32());
+
+        return aGradient;
+    }
+}
+
+XGradient XGradient::fromJSON(const OUString& rJSON)
+{
+    StringMap aMap(lcl_jsonToStringMap(rJSON));
+    return lcl_buildGradientFromStringMap(aMap);
 }
 
 XGradient::XGradient() :
