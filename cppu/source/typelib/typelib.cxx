@@ -19,6 +19,7 @@
 
 
 #include <algorithm>
+#include <atomic>
 #include <unordered_map>
 #include <cassert>
 #include <list>
@@ -1487,10 +1488,11 @@ extern "C" void SAL_CALL typelib_typedescription_register(
             {
                 // uninitialized or incomplete
 
-                if (pTDR->pType->pWeakRef) // if init
-                {
-                    typelib_typedescription_destructExtendedMembers( pTDR->pType );
-                }
+                // Removed destruction of extended members here to fix a crash where
+                // one thread is using the ppMemberOffsets and ppTypeRefs memb
+                // for an IPC, while another thread is completing the typedescription and
+                // destroys these members, replacing them with different pointers
+                // see https://bugs.documentfoundation.org/show_bug.cgi?id=115399
 
                 // pTDR->pType->pWeakRef == 0 means that the description is empty
                 // description is not weak and the not the same
@@ -1502,7 +1504,6 @@ extern "C" void SAL_CALL typelib_typedescription_register(
                     *ppNewDescription +1,
                     nSize - sizeof(typelib_TypeDescription) );
 
-                pTDR->pType->bComplete = (*ppNewDescription)->bComplete;
                 pTDR->pType->nSize = (*ppNewDescription)->nSize;
                 pTDR->pType->nAlignment = (*ppNewDescription)->nAlignment;
 
@@ -1525,6 +1526,18 @@ extern "C" void SAL_CALL typelib_typedescription_register(
                 }
 
                 pTDR->pType->bOnDemand = (*ppNewDescription)->bOnDemand;
+
+                // atomic store for bComplete, so that once bComplete==1 is seen by a thread,
+                // it's guaranteed that it will also see the other members. Ideally we'd change
+                // the type of bComplete to std::atomic_flag, but this would change the public
+                // API...
+                if ((*ppNewDescription)->bComplete)
+                {
+                    (reinterpret_cast<std::atomic_flag*>(&pTDR->pType->bComplete))->test_and_set();
+                } else {
+                    (reinterpret_cast<std::atomic_flag*>(&pTDR->pType->bComplete))->clear();
+                }
+
                 // initialized
                 pTDR->pType->pWeakRef = pTDR;
             }
