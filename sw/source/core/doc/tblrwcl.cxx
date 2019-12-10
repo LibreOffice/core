@@ -75,19 +75,16 @@ namespace {
 // up the current one in the array. If it's already there return the new one.
 struct CpyTabFrame
 {
-    union {
-        SwFrameFormat* pFrameFormat; // for CopyCol
-        SwTwips nSize;               // for DelCol
-    } Value;
+    SwFrameFormat* pFrameFormat;
     SwTableBoxFormat *pNewFrameFormat;
 
     explicit CpyTabFrame(SwFrameFormat* pCurrentFrameFormat) : pNewFrameFormat( nullptr )
-    {   Value.pFrameFormat = pCurrentFrameFormat; }
+    {   pFrameFormat = pCurrentFrameFormat; }
 
     bool operator==( const CpyTabFrame& rCpyTabFrame ) const
-        { return  static_cast<sal_uLong>(Value.nSize) == static_cast<sal_uLong>(rCpyTabFrame.Value.nSize); }
+        { return pFrameFormat == rCpyTabFrame.pFrameFormat; }
     bool operator<( const CpyTabFrame& rCpyTabFrame ) const
-        { return  static_cast<sal_uLong>(Value.nSize) < static_cast<sal_uLong>(rCpyTabFrame.Value.nSize); }
+        { return pFrameFormat < rCpyTabFrame.pFrameFormat; }
 };
 
 struct CR_SetBoxWidth
@@ -303,7 +300,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
 
                 aFindFrame.pNewFrameFormat = pNewFormat;
                 pCpyPara->rTabFrameArr.insert( aFindFrame );
-                aFindFrame.Value.pFrameFormat = pNewFormat;
+                aFindFrame.pFrameFormat = pNewFormat;
                 pCpyPara->rTabFrameArr.insert( aFindFrame );
             }
         }
@@ -351,7 +348,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
                     ? rBoxItem.GetTop()
                     : rBoxItem.GetRight() )
             {
-                aFindFrame.Value.pFrameFormat = pBox->GetFrameFormat();
+                aFindFrame.pFrameFormat = pBox->GetFrameFormat();
 
                 SvxBoxItem aNew( rBoxItem );
                 if( 8 > pCpyPara->nDelBorderFlag )
@@ -1241,7 +1238,7 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
             {
                 const CpyTabFrame& rCTF = aFrameArr[ --i ];
                 if( rCTF.pNewFrameFormat == aFindFrame.pNewFrameFormat ||
-                    rCTF.Value.pFrameFormat == aFindFrame.pNewFrameFormat )
+                    rCTF.pFrameFormat == aFindFrame.pNewFrameFormat )
                 {
                     aFrameArr.erase( aFrameArr.begin() + i );
                     aLastBoxArr.erase( aLastBoxArr.begin() + i );
