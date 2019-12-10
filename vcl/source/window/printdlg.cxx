@@ -937,6 +937,8 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
 {
     VclPtr<Printer> aPrt( maPController->getPrinter() );
     Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) );
+    // tdf#123076 Get paper size for the preview top label
+    mePaper = aPrt->GetPaper();
     GDIMetaFile aMtf;
 
     // page range may have changed depending on options
