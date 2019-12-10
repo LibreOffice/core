@@ -573,6 +573,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
             OUString sImage(GetActionImage(rRedln, nStack));
             OUString sAuthor = rRedln.GetAuthorString(nStack);
             pData->aDateTime = rRedln.GetTimeStamp(nStack);
+            pData->eType = rRedln.GetType(nStack);
             OUString sDateEntry = GetAppLangDateTimeString(pData->aDateTime);
             OUString sComment = rRedln.GetComment(nStack);
 
@@ -735,6 +736,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         OUString sImage = GetActionImage(rRedln);
         OUString sAuthor = rRedln.GetAuthorString(0);
         pData->aDateTime = rRedln.GetTimeStamp(0);
+        pData->eType = rRedln.GetType(0);
         OUString sDateEntry = GetAppLangDateTimeString(pData->aDateTime);
 
         OUString sId = OUString::number(reinterpret_cast<sal_Int64>(pData.release()));
