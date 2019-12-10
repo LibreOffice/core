@@ -328,7 +328,8 @@ OUString SvxVerJustifyItem::GetValueText( SvxCellVerJustify nVal )
         case SvxCellVerJustify::Bottom:
             sRet = EditResId(RID_SVXITEMS_VERJUST_BOTTOM);
             break;
-        default:
+        case SvxCellVerJustify::Block:
+            sRet = EditResId(RID_SVXITEMS_VERJUST_BLOCK);
             break;
     }
     return sRet;
