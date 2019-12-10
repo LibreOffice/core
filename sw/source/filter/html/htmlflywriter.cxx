@@ -672,11 +672,11 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     }
 
     // WIDTH and/or HEIGHT
-    // Output ATT_VAR_SIZE/ATT_MIN_SIZE only, if ANYSIZE is set
+    // Output SwFrameSize::Variable/SwFrameSize::Minimum only, if ANYSIZE is set
     if( (nFrameOpts & HtmlFrmOpts::Size) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ) &&
         ( (nFrameOpts & HtmlFrmOpts::AnySize) ||
-          ATT_FIX_SIZE == static_cast<const SwFormatFrameSize *>(pItem)->GetHeightSizeType()) )
+          SwFrameSize::Fixed == static_cast<const SwFormatFrameSize *>(pItem)->GetHeightSizeType()) )
     {
         const SwFormatFrameSize *pFSItem = static_cast<const SwFormatFrameSize *>(pItem);
         sal_uInt8 nPrcWidth = pFSItem->GetWidthPercent();
@@ -938,11 +938,11 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     }
 
     // "width" and/or "height"
-    // Only output ATT_VAR_SIZE/ATT_MIN_SIZE if ANYSIZE is set
+    // Only output SwFrameSize::Variable/SwFrameSize::Minimum if ANYSIZE is set
     if( (nFrameOptions & HtmlFrmOpts::Size) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ) &&
         ( (nFrameOptions & HtmlFrmOpts::AnySize) ||
-          ATT_FIX_SIZE == static_cast<const SwFormatFrameSize *>(pItem)->GetHeightSizeType()) )
+          SwFrameSize::Fixed == static_cast<const SwFormatFrameSize *>(pItem)->GetHeightSizeType()) )
     {
         const SwFormatFrameSize *pFSItem = static_cast<const SwFormatFrameSize *>(pItem);
         sal_uInt8 nPrcWidth = pFSItem->GetWidthPercent();

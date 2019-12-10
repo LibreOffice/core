@@ -570,7 +570,7 @@ std::unique_ptr<SwBoxSelection> SwTable::CollectBoxSelection( const SwPaM& rPam 
         {
             SwFrameFormat* pFormat = newWidth.first->ClaimFrameFormat();
             long nNewWidth = pFormat->GetFrameSize().GetWidth() + newWidth.second;
-            pFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nNewWidth, 0 ) );
+            pFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nNewWidth, 0 ) );
         }
     }
     else
@@ -923,7 +923,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
         FindSuperfluousRows_( rBoxes, pFirstLn, pLastLn );
         // pNewFormat will be set to the new master box and the overlapped cells
         SwFrameFormat* pNewFormat = pMergeBox->ClaimFrameFormat();
-        pNewFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, pSel->mnMergeWidth, 0 ) );
+        pNewFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, pSel->mnMergeWidth, 0 ) );
         for( size_t nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
         {
             const SwSelBoxes& rLineBoxes = pSel->maBoxes[nCurrLine];
@@ -936,7 +936,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     // Even this box will be deleted soon,
                     // we have to correct the width to avoid side effects
                     SwFrameFormat* pFormat = pBox->ClaimFrameFormat();
-                    pFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, 0, 0 ) );
+                    pFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, 0, 0 ) );
                 }
                 else
                 {
@@ -1172,7 +1172,7 @@ void SwTable::InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
     SwTableLine& rLine = *GetTabLines()[ nRowIdx ];
     lcl_FillSelBoxes( aBoxes, rLine );
     SwFormatFrameSize aFSz( rLine.GetFrameFormat()->GetFrameSize() );
-    if( ATT_VAR_SIZE != aFSz.GetHeightSizeType() )
+    if( SwFrameSize::Variable != aFSz.GetHeightSizeType() )
     {
         SwFrameFormat* pFrameFormat = rLine.ClaimFrameFormat();
         long nNewHeight = aFSz.GetHeight() / ( nCnt + 1 );
@@ -1427,7 +1427,7 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                 SwTableLine* pRow = GetTabLines()[ nFirst ];
                 SwFrameFormat* pRowFormat = pRow->ClaimFrameFormat();
                 SwFormatFrameSize aFSz( pRowFormat->GetFrameSize() );
-                aFSz.SetHeightSizeType( ATT_MIN_SIZE );
+                aFSz.SetHeightSizeType( SwFrameSize::Minimum );
                 aFSz.SetHeight( *pSplit - nLast );
                 pRowFormat->SetFormatAttr( aFSz );
                 nLast = *pSplit;
@@ -1439,7 +1439,7 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             SwTableLine* pRow = GetTabLines()[ nFirst ];
             SwFrameFormat* pRowFormat = pRow->ClaimFrameFormat();
             SwFormatFrameSize aFSz( pRowFormat->GetFrameSize() );
-            aFSz.SetHeightSizeType( ATT_MIN_SIZE );
+            aFSz.SetHeightSizeType( SwFrameSize::Minimum );
             aFSz.SetHeight( rCurr - nLast );
             pRowFormat->SetFormatAttr( aFSz );
             nLast = rCurr;

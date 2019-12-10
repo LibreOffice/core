@@ -213,8 +213,8 @@ void SwFrame::CheckDirChange()
                     SwTableLine* pLine = const_cast<SwTableLine*>(static_cast<SwCellFrame*>(this)->GetTabBox()->GetUpper());
                     SwFrameFormat* pFrameFormat = pLine->GetFrameFormat();
                     SwFormatFrameSize aNew( pFrameFormat->GetFrameSize() );
-                    if ( ATT_FIX_SIZE != aNew.GetHeightSizeType() )
-                        aNew.SetHeightSizeType( ATT_MIN_SIZE );
+                    if ( SwFrameSize::Fixed != aNew.GetHeightSizeType() )
+                        aNew.SetHeightSizeType( SwFrameSize::Minimum );
                     if ( aNew.GetHeight() < MIN_VERT_CELL_HEIGHT )
                         aNew.SetHeight( MIN_VERT_CELL_HEIGHT );
                     SwDoc* pDoc = pFrameFormat->GetDoc();

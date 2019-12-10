@@ -2369,7 +2369,7 @@ void WW8TabDesc::SetSizePosition(SwFrameFormat* pFrameFormat)
     if (pFrameFormat)
     {
         SwFormatFrameSize aSize = pFrameFormat->GetFrameSize();
-        aSize.SetHeightSizeType(ATT_MIN_SIZE);
+        aSize.SetHeightSizeType(SwFrameSize::Minimum);
         aSize.SetHeight(MINLAY);
         pFrameFormat->SetFormatAttr(aSize);
         m_pTable->GetFrameFormat()->SetFormatAttr(SwFormatHoriOrient(0,text::HoriOrientation::FULL));
@@ -2477,7 +2477,7 @@ void WW8TabDesc::CreateSwTable()
     // total width of table
     if( m_nMaxRight - m_nMinLeft > MINLAY * m_nDefaultSwCols )
     {
-        SwFormatFrameSize aFrameSize(ATT_FIX_SIZE, m_nSwWidth);
+        SwFormatFrameSize aFrameSize(SwFrameSize::Fixed, m_nSwWidth);
         // Don't set relative width if the table has been converted into a floating frame
         if ( m_nPercentWidth && (!m_pIo->m_xSFlyPara || !m_pIo->m_xSFlyPara->pFlyFormat) )
             aFrameSize.SetWidthPercent(m_nPercentWidth);
@@ -2774,7 +2774,7 @@ void WW8TabDesc::FinishSwTable()
             if((1 < groupIt->size()) && groupIt->row(0)[0])
             {
                 SwFrameFormat* pNewFormat = groupIt->row(0)[0]->ClaimFrameFormat();
-                pNewFormat->SetFormatAttr(SwFormatFrameSize(ATT_VAR_SIZE, groupIt->nGroupWidth, 0));
+                pNewFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Variable, groupIt->nGroupWidth, 0));
                 const sal_uInt16 nRowSpan = groupIt->rowsCount();
                 for (sal_uInt16 n = 0; n < nRowSpan; ++n)
                 {
@@ -2792,7 +2792,7 @@ void WW8TabDesc::FinishSwTable()
                         else
                         {
                             SwFrameFormat* pFormat = pCurrentBox->ClaimFrameFormat();
-                            pFormat->SetFormatAttr(SwFormatFrameSize(ATT_VAR_SIZE, 0, 0));
+                            pFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Variable, 0, 0));
                         }
                     }
                 }
@@ -3159,15 +3159,15 @@ void WW8TabDesc::AdjustNewBand()
     if( m_bClaimLineFormat )
     {
         m_pTabLine->ClaimFrameFormat();            // necessary because of cell height
-        SwFormatFrameSize aF( ATT_MIN_SIZE, 0, 0 );  // default
+        SwFormatFrameSize aF( SwFrameSize::Minimum, 0, 0 );  // default
 
         if (m_pActBand->nLineHeight == 0)    // 0 = Auto
-            aF.SetHeightSizeType( ATT_VAR_SIZE );
+            aF.SetHeightSizeType( SwFrameSize::Variable );
         else
         {
             if (m_pActBand->nLineHeight < 0) // positive = min, negative = exact
             {
-                aF.SetHeightSizeType(ATT_FIX_SIZE);
+                aF.SetHeightSizeType(SwFrameSize::Fixed);
                 m_pActBand->nLineHeight = -m_pActBand->nLineHeight;
             }
             if (m_pActBand->nLineHeight < MINLAY) // invalid cell height
@@ -3190,7 +3190,7 @@ void WW8TabDesc::AdjustNewBand()
     short i;    // SW-Index
     short j;    // WW-Index
     short nW;   // Width
-    SwFormatFrameSize aFS( ATT_FIX_SIZE );
+    SwFormatFrameSize aFS( SwFrameSize::Fixed );
     j = m_pActBand->bLEmptyCol ? -1 : 0;
 
     for( i = 0; i < m_pActBand->nSwCols; i++ )

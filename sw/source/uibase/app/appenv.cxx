@@ -381,7 +381,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pDesc->SetUseOn(UseOnPage::All);
 
         // Page size
-        rFormat.SetFormatAttr(SwFormatFrameSize(ATT_FIX_SIZE,
+        rFormat.SetFormatAttr(SwFormatFrameSize(SwFrameSize::Fixed,
                                             nPageW + lLeft, nPageH + lUpper));
 
         // Set type of page numbering
@@ -410,7 +410,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         // Insert Frame
         SwFlyFrameAttrMgr aMgr(false, pSh, Frmmgr_Type::ENVELP);
         SwFieldMgr aFieldMgr;
-        aMgr.SetHeightSizeType(ATT_VAR_SIZE);
+        aMgr.SetHeightSizeType(SwFrameSize::Variable);
 
         // Overwrite defaults!
         aMgr.GetAttrSet().Put( SvxBoxItem(RES_BOX) );

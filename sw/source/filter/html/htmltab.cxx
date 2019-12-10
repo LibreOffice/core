@@ -1569,7 +1569,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
             nRowHeight += GetTopCellSpace( nTopRow ) +
                        GetBottomCellSpace( nTopRow, 1 );
 
-            pFrameFormat->SetFormatAttr( SwFormatFrameSize( ATT_MIN_SIZE, 0, nRowHeight ) );
+            pFrameFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Minimum, 0, nRowHeight ) );
         }
 
         if( pBGBrushItem )
@@ -2391,7 +2391,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
         (m_pSwTable->GetTabLines())[0]->ClaimFrameFormat();
         (m_pSwTable->GetTabLines())[0]->GetFrameFormat()
-            ->SetFormatAttr( SwFormatFrameSize( ATT_MIN_SIZE, 0, m_nHeight ) );
+            ->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Minimum, 0, m_nHeight ) );
     }
 
     if( GetBGBrush() )
@@ -2414,7 +2414,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             sal_uInt32 nMin = m_xLayoutInfo->GetMin();
             if( nMin > USHRT_MAX )
                 nMin = USHRT_MAX;
-            SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, static_cast<SwTwips>(nMin), MINLAY );
+            SwFormatFrameSize aFlyFrameSize( SwFrameSize::Variable, static_cast<SwTwips>(nMin), MINLAY );
             aFlyFrameSize.SetWidthPercent( 100 );
             m_pContext->GetFrameFormat()->SetFormatAttr( aFlyFrameSize );
             bIsInFlyFrame = false;
@@ -2430,7 +2430,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
                 sal_uInt32 nMax = m_xLayoutInfo->GetMax();
                 if( nMax > USHRT_MAX )
                     nMax = USHRT_MAX;
-                SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, static_cast<SwTwips>(nMax), MINLAY );
+                SwFormatFrameSize aFlyFrameSize( SwFrameSize::Variable, static_cast<SwTwips>(nMax), MINLAY );
                 m_pContext->GetFrameFormat()->SetFormatAttr( aFlyFrameSize );
                 bIsInFlyFrame = false;
             }
@@ -3442,7 +3442,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                             true );
                     aFrameSet.Put( SwFormatSurround(eSurround) );
 
-                    SwFormatFrameSize aFrameSize( ATT_VAR_SIZE, 20*MM50, MINLAY );
+                    SwFormatFrameSize aFrameSize( SwFrameSize::Variable, 20*MM50, MINLAY );
                     aFrameSize.SetWidthPercent( 100 );
                     aFrameSet.Put( aFrameSize );
 

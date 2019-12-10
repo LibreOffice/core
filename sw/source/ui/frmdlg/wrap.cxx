@@ -393,7 +393,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         const SwFormatVertOrient& rVert = rSet.Get(RES_VERT_ORIENT);
 
         aVal.nAnchorType = m_nAnchorId;
-        aVal.bAutoHeight = rFrameSize.GetHeightSizeType() == ATT_MIN_SIZE;
+        aVal.bAutoHeight = rFrameSize.GetHeightSizeType() == SwFrameSize::Minimum;
         aVal.bMirror = rHori.IsPosToggle();
         // #i18732#
         aVal.bFollowTextFlow = rSet.Get(RES_FOLLOW_TEXT_FLOW).GetValue();

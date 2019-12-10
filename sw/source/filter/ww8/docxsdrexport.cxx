@@ -1400,7 +1400,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         // AutoSize of the Text Frame.
         const SwFormatFrameSize& rSize = rFrameFormat.GetFrameSize();
         pFS->singleElementNS(
-            XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit));
+            XML_a,
+            (rSize.GetHeightSizeType() == SwFrameSize::Variable ? XML_spAutoFit : XML_noAutofit));
         pFS->endElementNS(XML_wps, XML_bodyPr);
 
         pFS->endElementNS(XML_wps, XML_wsp);

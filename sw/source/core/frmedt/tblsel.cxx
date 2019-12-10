@@ -1402,7 +1402,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     }
 
     // set width of the box
-    (*ppMergeBox)->GetFrameFormat()->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nWidth, 0 ));
+    (*ppMergeBox)->GetFrameFormat()->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nWidth, 0 ));
     if( pUndo )
         pUndo->AddNewBox( (*ppMergeBox)->GetSttIdx() );
 }

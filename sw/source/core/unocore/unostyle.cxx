@@ -2695,7 +2695,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
         pPageFormat->SetFormatAttr(aLR);
         pPageFormat->SetFormatAttr(aUL);
         SwPageDesc* pStdPgDsc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
-        std::shared_ptr<SwFormatFrameSize> aFrameSz(std::make_shared<SwFormatFrameSize>(ATT_FIX_SIZE));
+        std::shared_ptr<SwFormatFrameSize> aFrameSz(std::make_shared<SwFormatFrameSize>(SwFrameSize::Fixed));
 
         if(RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFormatId())
         {

@@ -375,7 +375,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         }
         else
         {
-            SwFormatFrameSize aSz( ATT_VAR_SIZE, nWidth );
+            SwFormatFrameSize aSz( SwFrameSize::Variable, nWidth );
             if(pRep->GetWidthPercent())
             {
                 aSz.SetWidthPercent( static_cast<sal_uInt8>(pRep->GetWidthPercent()) );
@@ -1126,8 +1126,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 std::unique_ptr<SwFormatFrameSize> pHeight = rSh.GetRowHeight();
                 if ( pHeight )
                 {
-                    if (pHeight->GetHeightSizeType() == ATT_VAR_SIZE)
-                        pHeight->SetHeightSizeType(ATT_MIN_SIZE);
+                    if (pHeight->GetHeightSizeType() == SwFrameSize::Variable)
+                        pHeight->SetHeightSizeType(SwFrameSize::Minimum);
                     pHeight->SetHeight(nNewHeight);
                     rSh.SetRowHeight(*pHeight);
                 }
@@ -1309,7 +1309,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 std::unique_ptr<SwFormatFrameSize> pSz = rSh.GetRowHeight();
                 if ( pSz )
                 {
-                    if ( ATT_VAR_SIZE == pSz->GetHeightSizeType() )
+                    if ( SwFrameSize::Variable == pSz->GetHeightSizeType() )
                         rSet.DisableItem( nSlot );
                 }
                 break;

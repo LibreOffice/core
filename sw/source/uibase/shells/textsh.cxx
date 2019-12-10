@@ -859,12 +859,12 @@ SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
     GetShell().GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->PutAreaListItems(aSet);
 
     const SwRect &rPg = GetShell().GetAnyCurRect(CurRectType::Page);
-    SwFormatFrameSize aFrameSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
+    SwFormatFrameSize aFrameSize(SwFrameSize::Variable, rPg.Width(), rPg.Height());
     aFrameSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
     aSet.Put(aFrameSize);
 
     const SwRect &rPr = GetShell().GetAnyCurRect(CurRectType::PagePrt);
-    SwFormatFrameSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
+    SwFormatFrameSize aPrtSize(SwFrameSize::Variable, rPr.Width(), rPr.Height());
     aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
     aSet.Put(aPrtSize);
 

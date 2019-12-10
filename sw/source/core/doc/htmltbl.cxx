@@ -289,7 +289,7 @@ void SwHTMLTableLayout::SetBoxWidth( SwTableBox *pBox, sal_uInt16 nCol,
         nFrameWidth += GetColumn( nCol++ )->GetRelColWidth();
 
     // and reset
-    pFrameFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nFrameWidth, 0 ));
+    pFrameFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nFrameWidth, 0 ));
 }
 
 void SwHTMLTableLayout::GetAvail( sal_uInt16 nCol, sal_uInt16 nColSpan,
@@ -1527,7 +1527,7 @@ static void lcl_ResizeBox( const SwTableBox* pBox, SwTwips* pWidth )
         SwTwips nWidth = 0;
         for( const SwTableLine *pLine : pBox->GetTabLines() )
             lcl_ResizeLine( pLine, &nWidth );
-        pBox->GetFrameFormat()->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nWidth, 0 ));
+        pBox->GetFrameFormat()->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nWidth, 0 ));
         *pWidth = *pWidth + nWidth;
     }
     else
@@ -1636,7 +1636,7 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
             SwFrameFormat *pFlyFrameFormat = FindFlyFrameFormat();
             if( pFlyFrameFormat )
             {
-                SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, m_nRelTabWidth, MINLAY );
+                SwFormatFrameSize aFlyFrameSize( SwFrameSize::Variable, m_nRelTabWidth, MINLAY );
 
                 if( m_bUseRelWidth )
                 {

@@ -523,7 +523,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     {
                         SwFormatFrameSize aSz( bHead ? pHeaderFormat->GetFrameSize() :
                                                   pFooterFormat->GetFrameSize() );
-                        aSz.SetHeightSizeType( ATT_FIX_SIZE );
+                        aSz.SetHeightSizeType( SwFrameSize::Fixed );
                         aSz.SetHeight(nPageHeight - aLongULSpace.GetLower() -
                                                     aLongULSpace.GetUpper() );
                         if ( bHead )

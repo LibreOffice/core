@@ -2881,10 +2881,10 @@ static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
         bool bOutHeight = false;
         switch( rFSItem.GetHeightSizeType() )
         {
-        case ATT_FIX_SIZE:
+        case SwFrameSize::Fixed:
             bOutHeight = bool(nMode & Css1FrameSize::FixHeight);
             break;
-        case ATT_MIN_SIZE:
+        case SwFrameSize::Minimum:
             bOutHeight = bool(nMode & Css1FrameSize::MinHeight);
             break;
         default:

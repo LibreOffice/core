@@ -397,7 +397,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
             // the other hand, this is only rarely used and re-calculation of
             // the fly frame does not cause too much trouble. So we keep it this
             // way:
-            if ( ATT_FIX_SIZE != rFrameSz.GetWidthSizeType() )
+            if ( SwFrameSize::Fixed != rFrameSz.GetWidthSizeType() )
             {
                 // #i50668#, #i50998# - invalidation of position
                 // of as-character anchored fly frames not needed and can cause

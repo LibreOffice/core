@@ -193,7 +193,7 @@ bool SwFormatFrameSize::HasMetrics() const {
 SwFormatFrameSize::SwFormatFrameSize( SwFrameSize eSize, SwTwips nWidth, SwTwips nHeight )
     : SvxSizeItem( RES_FRM_SIZE, {nWidth, nHeight} ),
     m_eFrameHeightType( eSize ),
-    m_eFrameWidthType( ATT_FIX_SIZE )
+    m_eFrameWidthType( SwFrameSize::Fixed )
 {
     m_nWidthPercent = m_eWidthPercentRelation = m_nHeightPercent = m_eHeightPercentRelation = 0;
 }
@@ -261,7 +261,7 @@ bool SwFormatFrameSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= static_cast<sal_Int16>(GetHeightSizeType());
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
-            rVal <<= ATT_FIX_SIZE != GetHeightSizeType();
+            rVal <<= SwFrameSize::Fixed != GetHeightSizeType();
         break;
         case MID_FRMSIZE_WIDTH_TYPE:
             rVal <<= static_cast<sal_Int16>(GetWidthSizeType());
@@ -379,7 +379,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_FRMSIZE_SIZE_TYPE:
         {
             sal_Int16 nType = 0;
-            if((rVal >>= nType) && nType >= 0 && nType <= ATT_MIN_SIZE )
+            if((rVal >>= nType) && nType >= 0 && nType <= static_cast<int>(SwFrameSize::Minimum) )
             {
                 SetHeightSizeType(static_cast<SwFrameSize>(nType));
             }
@@ -390,13 +390,13 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
         {
             bool bSet = *o3tl::doAccess<bool>(rVal);
-            SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
+            SetHeightSizeType(bSet ? SwFrameSize::Variable : SwFrameSize::Fixed);
         }
         break;
         case MID_FRMSIZE_WIDTH_TYPE:
         {
             sal_Int16 nType = 0;
-            if((rVal >>= nType) && nType >= 0 && nType <= ATT_MIN_SIZE )
+            if((rVal >>= nType) && nType >= 0 && nType <= static_cast<int>(SwFrameSize::Minimum) )
             {
                 SetWidthSizeType(static_cast<SwFrameSize>(nType));
             }
@@ -419,8 +419,8 @@ void SwFormatFrameSize::dumpAsXml(xmlTextWriterPtr pWriter) const
     aSize << GetSize();
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(aSize.str().c_str()));
 
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eFrameHeightType"), BAD_CAST(OString::number(m_eFrameHeightType).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eFrameWidthType"), BAD_CAST(OString::number(m_eFrameWidthType).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eFrameHeightType"), BAD_CAST(OString::number(static_cast<int>(m_eFrameHeightType)).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eFrameWidthType"), BAD_CAST(OString::number(static_cast<int>(m_eFrameWidthType)).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWidthPercent"), BAD_CAST(OString::number(m_nWidthPercent).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eWidthPercentRelation"), BAD_CAST(OString::number(m_eWidthPercentRelation).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nHeightPercent"), BAD_CAST(OString::number(m_nHeightPercent).getStr()));

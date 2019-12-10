@@ -1977,8 +1977,8 @@ void SwFrame::ImplInvalidateLineNum()
 void SwFrame::ReinitializeFrameSizeAttrFlags()
 {
     const SwFormatFrameSize &rFormatSize = GetAttrSet()->GetFrameSize();
-    if ( ATT_VAR_SIZE == rFormatSize.GetHeightSizeType() ||
-         ATT_MIN_SIZE == rFormatSize.GetHeightSizeType())
+    if ( SwFrameSize::Variable == rFormatSize.GetHeightSizeType() ||
+         SwFrameSize::Minimum == rFormatSize.GetHeightSizeType())
     {
         mbFixSize = false;
         if ( GetType() & (SwFrameType::Header | SwFrameType::Footer | SwFrameType::Row) )
@@ -2004,7 +2004,7 @@ void SwFrame::ReinitializeFrameSizeAttrFlags()
             }
         }
     }
-    else if ( rFormatSize.GetHeightSizeType() == ATT_FIX_SIZE )
+    else if ( rFormatSize.GetHeightSizeType() == SwFrameSize::Fixed )
     {
         if( IsVertical() )
             ChgSize( Size( rFormatSize.GetWidth(), getFrameArea().Height()));
@@ -2525,7 +2525,7 @@ SwLayoutFrame::SwLayoutFrame(SwFrameFormat *const pFormat, SwFrame *const pSib)
     , m_pLower(nullptr)
 {
     const SwFormatFrameSize &rFormatSize = pFormat->GetFrameSize();
-    if ( rFormatSize.GetHeightSizeType() == ATT_FIX_SIZE )
+    if ( rFormatSize.GetHeightSizeType() == SwFrameSize::Fixed )
         mbFixSize = true;
 }
 
@@ -3392,7 +3392,7 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
         {
             const SwTwips nBorder = nUpper + nLower;
             const SwFormatFrameSize &rSz = GetFormat()->GetFrameSize();
-            SwTwips nMinHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
+            SwTwips nMinHeight = rSz.GetHeightSizeType() == SwFrameSize::Minimum ? rSz.GetHeight() : 0;
             do
             {
                 setFrameAreaSizeValid(true);

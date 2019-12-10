@@ -1196,13 +1196,13 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
     {
         if (m_xAutoHeightCB->get_state_changed_from_saved())
         {
-            SwFrameSize eFrameSize = m_xAutoHeightCB->get_active()? ATT_MIN_SIZE : ATT_FIX_SIZE;
+            SwFrameSize eFrameSize = m_xAutoHeightCB->get_active()? SwFrameSize::Minimum : SwFrameSize::Fixed;
             if( eFrameSize != aSz.GetHeightSizeType() )
                 aSz.SetHeightSizeType(eFrameSize);
         }
         if (m_xAutoWidthCB->get_state_changed_from_saved())
         {
-            SwFrameSize eFrameSize = m_xAutoWidthCB->get_active()? ATT_MIN_SIZE : ATT_FIX_SIZE;
+            SwFrameSize eFrameSize = m_xAutoWidthCB->get_active()? SwFrameSize::Minimum : SwFrameSize::Fixed;
             if( eFrameSize != aSz.GetWidthSizeType() )
                 aSz.SetWidthSizeType( eFrameSize );
         }
@@ -1217,8 +1217,8 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
                 (aSz.GetWidth() > 0 || aSz.GetWidthPercent() > 0) &&
                     (aSz.GetHeight() > 0 || aSz.GetHeightPercent() > 0)))
     {
-        if (aSz.GetHeightSizeType() == ATT_VAR_SIZE)    // there is no VAR_SIZE in frames
-            aSz.SetHeightSizeType(ATT_MIN_SIZE);
+        if (aSz.GetHeightSizeType() == SwFrameSize::Variable)    // there is no VAR_SIZE in frames
+            aSz.SetHeightSizeType(SwFrameSize::Minimum);
 
         bRet |= nullptr != rSet->Put( aSz );
     }
@@ -2163,17 +2163,17 @@ void SwFramePage::Init(const SfxItemSet& rSet)
     if (!IsInGraficMode())
     {
         SwFrameSize eSize = rSize.GetHeightSizeType();
-        bool bCheck = eSize != ATT_FIX_SIZE;
+        bool bCheck = eSize != SwFrameSize::Fixed;
         m_xAutoHeightCB->set_active(bCheck);
         HandleAutoCB( bCheck, *m_xHeightFT, *m_xHeightAutoFT, *m_xWidthED->get() );
-        if( eSize == ATT_VAR_SIZE )
+        if( eSize == SwFrameSize::Variable )
             m_xHeightED->set_value(m_xHeightED->get_min());
 
         eSize = rSize.GetWidthSizeType();
-        bCheck = eSize != ATT_FIX_SIZE;
+        bCheck = eSize != SwFrameSize::Fixed;
         m_xAutoWidthCB->set_active(bCheck);
         HandleAutoCB( bCheck, *m_xWidthFT, *m_xWidthAutoFT, *m_xWidthED->get() );
-        if( eSize == ATT_VAR_SIZE )
+        if( eSize == SwFrameSize::Variable )
             m_xWidthED->set_value(m_xWidthED->get_min());
 
         if ( !m_bFormat )

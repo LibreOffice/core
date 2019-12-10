@@ -235,9 +235,9 @@ bool SwFormatFrameSize::GetPresentation
         rText += ::GetMetricText( GetWidth(), eCoreUnit, ePresUnit, &rIntl ) +
             " " + ::EditResId( ::GetMetricId( ePresUnit ) );
     }
-    if ( ATT_VAR_SIZE != GetHeightSizeType() )
+    if ( SwFrameSize::Variable != GetHeightSizeType() )
     {
-        const char* pId = ATT_FIX_SIZE == m_eFrameHeightType ?
+        const char* pId = SwFrameSize::Fixed == m_eFrameHeightType ?
                                 STR_FRM_FIXEDHEIGHT : STR_FRM_MINHEIGHT;
         rText += ", " + SwResId(pId) + " ";
         if ( GetHeightPercent() )

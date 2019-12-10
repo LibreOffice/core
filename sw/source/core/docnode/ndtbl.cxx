@@ -181,7 +181,7 @@ static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTab
     {
         SwTableBoxFormat* pBoxFormat = rDoc.MakeTableBoxFormat();
         if( USHRT_MAX != nCols )
-            pBoxFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE,
+            pBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable,
                                             USHRT_MAX / nCols, 0 ));
         ::lcl_SetDfltBoxAttr( *pBoxFormat, nId );
         rBoxFormatArr[ nId ] = pBoxFormat;
@@ -201,7 +201,7 @@ static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<Sw
                                 SwTableAutoFormatUpdateFlags::Box,
                                 rDoc.GetNumberFormatter( ) );
         if( USHRT_MAX != nCols )
-            pBoxFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE,
+            pBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable,
                                             USHRT_MAX / nCols, 0 ));
         rBoxFormatArr[ nId ] = pBoxFormat;
     }
@@ -430,7 +430,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         nWidth /= nCols;
         nWidth *= nCols; // to avoid rounding problems
     }
-    pTableFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nWidth ));
+    pTableFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nWidth ));
     if( !(rInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout) )
         pTableFormat->SetFormatAttr( SwFormatLayoutSplit( false ));
 
@@ -467,7 +467,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     if( !bDfltBorders && !pTAFormat )
     {
         pBoxFormat = MakeTableBoxFormat();
-        pBoxFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, USHRT_MAX / nCols, 0 ));
+        pBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, USHRT_MAX / nCols, 0 ));
     }
     else
     {
@@ -524,7 +524,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
                         *pNewFormat = *pBoxF;
                         pBoxF = pNewFormat;
                     }
-                    pBoxF->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nWidth ));
+                    pBoxF->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nWidth ));
                 }
             }
 
@@ -695,7 +695,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     // All Lines have a left-to-right Fill Order
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
     // The Table's SSize is USHRT_MAX
-    pTableFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, USHRT_MAX ));
+    pTableFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, USHRT_MAX ));
     if( !(rInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout) )
         pTableFormat->SetFormatAttr( SwFormatLayoutSplit( false ));
 
@@ -966,7 +966,7 @@ lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
         {
             SwTableBoxFormat *pNewFormat = rDoc.MakeTableBoxFormat();
             pNewFormat->SetFormatAttr(
-                    SwFormatFrameSize(ATT_VAR_SIZE, (*pPositions)[n] - nLastPos));
+                    SwFormatFrameSize(SwFrameSize::Variable, (*pPositions)[n] - nLastPos));
             for (size_t nTmpLine = 0; nTmpLine < rLns.size(); ++nTmpLine)
             {
                 // Have to do an Add here, because the BoxFormat
@@ -980,12 +980,12 @@ lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
         // propagate size upwards from format, so the table gets the right size
         SAL_WARN_IF(rBoxFormat.HasWriterListeners(), "sw.core",
                 "who is still registered in the format?");
-        rBoxFormat.SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nLastPos ));
+        rBoxFormat.SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nLastPos ));
     }
     else
     {
         size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
-        rBoxFormat.SetFormatAttr(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
+        rBoxFormat.SetFormatAttr(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
     }
 }
 
@@ -1228,7 +1228,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     // All Lines have a left-to-right Fill Order
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
     // The Table's SSize is USHRT_MAX
-    pTableFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, USHRT_MAX ));
+    pTableFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, USHRT_MAX ));
 
     /* If the first node in the selection is a context node and if it
        has an item FRAMEDIR set (no default) propagate the item to the
@@ -1350,14 +1350,14 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
             // default width for box at the end of an incomplete line
             SwTableBoxFormat *const pNewFormat = rDoc.MakeTableBoxFormat();
             size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
-            pNewFormat->SetFormatAttr( SwFormatFrameSize(ATT_VAR_SIZE,
+            pNewFormat->SetFormatAttr( SwFormatFrameSize(SwFrameSize::Variable,
                         nWidth * (nMissing + 1)) );
             pNewFormat->Add(rBoxes.back());
         }
     }
     size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
     // default width for all boxes not at the end of an incomplete line
-    rBoxFormat.SetFormatAttr(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
+    rBoxFormat.SetFormatAttr(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
 }
 
 SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
@@ -2823,8 +2823,8 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                                     if( nNewSize != aNew.GetHeight() )
                                     {
                                         aNew.SetHeight( nNewSize );
-                                        if ( ATT_VAR_SIZE == aNew.GetHeightSizeType() )
-                                            aNew.SetHeightSizeType( ATT_MIN_SIZE );
+                                        if ( SwFrameSize::Variable == aNew.GetHeightSizeType() )
+                                            aNew.SetHeightSizeType( SwFrameSize::Minimum );
                                         // This position must not be in an overlapped box
                                         const SwPosition aPos(*static_cast<const SwTextFrame*>(pContent)->GetTextNodeFirst());
                                         const SwCursor aTmpCursor( aPos, nullptr );

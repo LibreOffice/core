@@ -239,17 +239,17 @@ void SwColumnDlg::ObjectHdl(const weld::ComboBox* pBox)
         case LISTBOX_SELECTION  :
             pSet = m_pSelectionSet.get();
             if( m_pSelectionSet )
-                pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
+                pSet->Put(SwFormatFrameSize(SwFrameSize::Variable, nWidth, nWidth));
         break;
         case LISTBOX_SECTION    :
         case LISTBOX_SECTIONS   :
             pSet = m_pSectionSet.get();
-            pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
+            pSet->Put(SwFormatFrameSize(SwFrameSize::Variable, nWidth, nWidth));
         break;
         case LISTBOX_PAGE       :
             nWidth = m_nPageWidth;
             pSet = m_pPageSet.get();
-            pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
+            pSet->Put(SwFormatFrameSize(SwFrameSize::Variable, nWidth, nWidth));
         break;
         case LISTBOX_FRAME:
             pSet = m_pFrameSet;

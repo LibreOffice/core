@@ -277,7 +277,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
         const Size aSizeTwip = OutputDevice::LogicToLogic(
             aGraph.GetPrefSize(), aGraph.GetPrefMapMode(), MapMode(MapUnit::MapTwip));
 
-        pTempSet->Put( SwFormatFrameSize( ATT_FIX_SIZE, aSizeTwip.Width(),
+        pTempSet->Put( SwFormatFrameSize( SwFrameSize::Fixed, aSizeTwip.Width(),
             aSizeTwip.Height() ) );
         pTempSet->Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
 

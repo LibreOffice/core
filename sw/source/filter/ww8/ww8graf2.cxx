@@ -357,7 +357,7 @@ SwFlyFrameFormat* SwWW8ImplReader::MakeGrafNotInContent(const WW8PicDesc& rPD,
     aAnchor.SetAnchor(m_pPaM->GetPoint());
     aFlySet.Put(aAnchor);
 
-    aFlySet.Put( SwFormatFrameSize( ATT_FIX_SIZE, nWidth, nHeight ) );
+    aFlySet.Put( SwFormatFrameSize( SwFrameSize::Fixed, nWidth, nHeight ) );
 
     SwFlyFrameFormat *const pFlyFormat =
         m_rDoc.getIDocumentContentOperations().InsertGraphic(
@@ -609,7 +609,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
 
                     // Set the size from the WinWord PIC-structure as graphic
                     // size
-                    aAttrSet.Put( SwFormatFrameSize( ATT_FIX_SIZE, aPD.nWidth,
+                    aAttrSet.Put( SwFormatFrameSize( SwFrameSize::Fixed, aPD.nWidth,
                         aPD.nHeight ) );
                 }
 

@@ -456,7 +456,7 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool
                 if ( bOptimize )
                     nHeight = nTotalHeight / aRowArr.size();
 
-                SwFormatFrameSize aNew( ATT_MIN_SIZE, 0, nHeight );
+                SwFormatFrameSize aNew( SwFrameSize::Minimum, 0, nHeight );
 
                 if (GetIDocumentUndoRedo().DoesUndo())
                 {

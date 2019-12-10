@@ -274,7 +274,7 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
     else
         aSet.Put(SwFormatHoriOrient( rDestination.X(), text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     aSet.Put(SwFormatVertOrient( rDestination.Y(), text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-    aSet.Put(SwFormatFrameSize( ATT_MIN_SIZE, DEFAULT_ADDRESS_WIDTH, DEFAULT_ADDRESS_HEIGHT ));
+    aSet.Put(SwFormatFrameSize( SwFrameSize::Minimum, DEFAULT_ADDRESS_WIDTH, DEFAULT_ADDRESS_HEIGHT ));
     // the example gets a border around the frame, the real document doesn't get one
     if(!bExample)
         aSet.Put(SvxBoxItem( RES_BOX ));

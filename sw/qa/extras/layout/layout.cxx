@@ -225,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     flySet.Put(anchor);
-    SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
+    SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
     SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
     CPPUNIT_ASSERT(pFly != nullptr);
@@ -495,7 +495,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     flySet.Put(anchor);
-    SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
+    SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
     SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
     CPPUNIT_ASSERT(pFly != nullptr);
@@ -767,7 +767,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 
     SfxItemSet flySet(pDoc->GetAttrPool(),
                       svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
-    SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
+    SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
@@ -1147,7 +1147,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
     pWrtShell->Insert("baz");
     SfxItemSet flySet(pDoc->GetAttrPool(),
                       svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
-    SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
+    SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
     pWrtShell->StartOfSection(false);
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -1611,7 +1611,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
     pWrtShell->Insert("baz");
     SfxItemSet flySet(pDoc->GetAttrPool(),
                       svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
-    SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
+    SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
     pWrtShell->StartOfSection(false);
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);

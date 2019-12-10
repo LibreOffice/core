@@ -602,7 +602,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
     SfxItemSet flySet(pDoc->GetAttrPool(),
                       svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
     flySet.Put(anchor);
-    SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
+    SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
     SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
     CPPUNIT_ASSERT(pFly != nullptr);
@@ -653,7 +653,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
     SfxItemSet flySet(pDoc->GetAttrPool(),
                       svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
     flySet.Put(anchor);
-    SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
+    SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
     SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
     CPPUNIT_ASSERT(pFly != nullptr);

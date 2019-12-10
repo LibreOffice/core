@@ -1326,7 +1326,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
                     SwFrameFormat *pFormat = pChgFly->GetFormat();
                     SwFormatFrameSize aFrameSz( pFormat->GetFrameSize() );
                     aFrameSz.SetWidth( aNewSz.Width() );
-                    if( ATT_MIN_SIZE != aFrameSz.GetHeightSizeType() )
+                    if( SwFrameSize::Minimum != aFrameSz.GetHeightSizeType() )
                     {
                         aNewSz.AdjustHeight(pChgFly->getFrameArea().Height() -
                                                pFly->getFramePrintArea().Height() );
@@ -1774,7 +1774,7 @@ void SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
 
             const long nWidth = rBound.Right()  - rBound.Left();
             const long nHeight= rBound.Bottom() - rBound.Top();
-            aFrameSet.Put( SwFormatFrameSize( ATT_MIN_SIZE,
+            aFrameSet.Put( SwFormatFrameSize( SwFrameSize::Minimum,
                                 std::max( nWidth,  long(MINFLY) ),
                                 std::max( nHeight, long(MINFLY) )));
 
