@@ -724,6 +724,7 @@ void AreaChart::createShapes()
                     if( m_nDimension==3 && m_bArea && rXSlot.m_aSeriesVector.size()!=1 )
                         fLogicY = fabs( fLogicY );
 
+                    double fLogicValueForLabeDisplay = fLogicY;
                     std::map< sal_Int32, double >& rLogicYSumMap = aLogicYSumMapByX[nIndex];
                     if (rPosHelper.isPercentY() && rLogicYSumMap[nAttachedAxisIndex] != 0.0)
                     {
@@ -750,8 +751,6 @@ void AreaChart::createShapes()
                     std::map< sal_Int32, double >& rLogicYForNextSeriesMap = aLogicYForNextSeriesMapByX[nIndex];
                     if( rLogicYForNextSeriesMap.find(nAttachedAxisIndex) == rLogicYForNextSeriesMap.end() )
                         rLogicYForNextSeriesMap[nAttachedAxisIndex] = 0.0;
-
-                    double fLogicValueForLabeDisplay = fLogicY;
 
                     fLogicY += rLogicYForNextSeriesMap[nAttachedAxisIndex];
                     rLogicYForNextSeriesMap[nAttachedAxisIndex] = fLogicY;
