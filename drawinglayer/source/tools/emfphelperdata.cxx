@@ -195,6 +195,23 @@ namespace emfplushelper
         return "";
     }
 
+    static bool IsBrush(sal_uInt16 flags)
+    {
+        return (!((flags >> 15) & 0x0001));
+    }
+
+    static OUString BrushIDToString(sal_uInt16 flags, sal_uInt32 brushid)
+    {
+        OUString sBrushId;
+
+        if (IsBrush(flags))
+            sBrushId = sBrushId.concat("EmfPlusBrush ID: ").concat(OUString::number(brushid));
+        else
+            sBrushId = sBrushId.concat("ARGB: 0x").concat(OUString::number(brushid, 16));
+
+        return sBrushId;
+    }
+
     EMFPObject::~EMFPObject()
     {
     }
@@ -1467,7 +1484,8 @@ namespace emfplushelper
                         sal_uInt32 formatId;
                         sal_uInt32 stringLength;
                         rMS.ReadUInt32(brushId).ReadUInt32(formatId).ReadUInt32(stringLength);
-                        SAL_INFO("drawinglayer", "EMF+\t DrawString brushId: " << brushId);
+                        SAL_INFO("drawinglayer", "EMF+\t FontId: " << OUString::number(flags & 0xFF));
+                        SAL_INFO("drawinglayer", "EMF+\t BrushId: " << BrushIDToString(flags, brushId));
                         SAL_INFO("drawinglayer", "EMF+\t FormatId: " << formatId);
                         SAL_INFO("drawinglayer", "EMF+\t Length: " << stringLength);
 
