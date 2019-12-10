@@ -59,6 +59,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 
+#include <attrib.hxx>
 #include <inputwin.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
