@@ -416,22 +416,13 @@ void Qt5Widget::commitText(Qt5Frame& rFrame, const QString& aText)
         rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
 }
 
-bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent,
+bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget&, QKeyEvent* pEvent,
                                const ButtonKeyState eState)
 {
-    sal_uInt16 nCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
-    if (eState == ButtonKeyState::Pressed && nCode == 0 && !pEvent->text().isEmpty()
-        && rWidget.testAttribute(Qt::WA_InputMethodEnabled))
-    {
-        commitText(rFrame, pEvent->text());
-        pEvent->accept();
-        return true;
-    }
-
     SalKeyEvent aEvent;
     aEvent.mnCharCode = (pEvent->text().isEmpty() ? 0 : pEvent->text().at(0).unicode());
     aEvent.mnRepeat = 0;
-    aEvent.mnCode = nCode;
+    aEvent.mnCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
     aEvent.mnCode |= GetKeyModCode(pEvent->modifiers());
 
     QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
