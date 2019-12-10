@@ -727,4 +727,25 @@ void ScCondFormatItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+ScRotateValueItem::ScRotateValueItem(sal_Int32 nAngle)
+    : SdrAngleItem(ATTR_ROTATE_VALUE, nAngle)
+{
+}
+
+ScRotateValueItem* ScRotateValueItem::Clone(SfxItemPool*) const
+{
+    return new ScRotateValueItem(GetValue());
+}
+
+bool ScRotateValueItem::GetPresentation(SfxItemPresentation ePresentation,
+                                        MapUnit eCoreMetric, MapUnit ePresMetric,
+                                        OUString& rText,
+                                        const IntlWrapper& rWrapper) const
+{
+    bool bRet = SdrAngleItem::GetPresentation(SfxItemPresentation::Nameless, eCoreMetric, ePresMetric, rText, rWrapper);
+    if (bRet && ePresentation == SfxItemPresentation::Complete)
+        rText = ScResId(STR_TEXTORIENTANGLE) + " " + rText;
+    return bRet;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

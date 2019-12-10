@@ -5173,7 +5173,7 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         {
             // 90 or 270 degrees is former SvxOrientationItem - only look for other values
             // (see ScPatternAttr::GetCellOrientation)
-            sal_Int32 nAngle = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+            sal_Int32 nAngle = static_cast<const ScRotateValueItem*>(pItem)->GetValue();
             if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
             {
                 bAnyItem = true;

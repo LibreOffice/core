@@ -36,6 +36,7 @@
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 
+#include <attrib.hxx>
 #include <afmtuno.hxx>
 #include <miscuno.hxx>
 #include <autoform.hxx>
@@ -595,11 +596,11 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                                 break;
                                 case table::CellOrientation_TOPBOTTOM:
                                     pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, false ) );
-                                    pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
+                                    pData->PutItem( nFieldIndex, ScRotateValueItem( 27000 ) );
                                 break;
                                 case table::CellOrientation_BOTTOMTOP:
                                     pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, false ) );
-                                    pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
+                                    pData->PutItem( nFieldIndex, ScRotateValueItem( 9000 ) );
                                 break;
                                 case table::CellOrientation_STACKED:
                                     pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, true ) );
@@ -685,7 +686,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
                 {
                     case ATTR_STACKED:
                     {
-                        const SfxInt32Item* pRotItem = pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
+                        const ScRotateValueItem* pRotItem = pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
                         sal_Int32 nRot = pRotItem ? pRotItem->GetValue() : 0;
                         bool bStacked = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aVal );

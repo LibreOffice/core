@@ -23,6 +23,7 @@
 #include <memory>
 #include <AccessibleText.hxx>
 #include <AccessibleCell.hxx>
+#include <attrib.hxx>
 #include <tabvwsh.hxx>
 #include <editutil.hxx>
 #include <document.hxx>
@@ -534,7 +535,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             return the size of the complete text then, which is used to expand
             the cell bounding box in ScAccessibleCell::GetBoundingBox()
             (see sc/source/ui/Accessibility/AccessibleCell.cxx). */
-        const SfxInt32Item* pItem = rDoc.GetAttr( aCellPos, ATTR_ROTATE_VALUE );
+        const ScRotateValueItem* pItem = rDoc.GetAttr( aCellPos, ATTR_ROTATE_VALUE );
         if( pItem && (pItem->GetValue() != 0) )
         {
             pEditEngine->SetPaperSize( Size( LONG_MAX, aSize.getHeight() ) );

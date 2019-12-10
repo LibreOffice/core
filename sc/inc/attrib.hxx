@@ -24,6 +24,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <svx/sdangitm.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include "scdllapi.h"
@@ -282,6 +283,18 @@ public:
 
 private:
     ScCondFormatIndexes maIndex;
+};
+
+class SC_DLLPUBLIC ScRotateValueItem final : public SdrAngleItem
+{
+public:
+    ScRotateValueItem(sal_Int32 nAngle);
+    virtual ScRotateValueItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    virtual bool GetPresentation( SfxItemPresentation ePresentation,
+                                  MapUnit, MapUnit,
+                                  OUString& rText,
+                                  const IntlWrapper& ) const override;
 };
 
 #endif
