@@ -243,7 +243,7 @@ static void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
     const SfxBoolItem& rDynamic = rSet.Get(SID_ATTR_PAGE_DYNAMIC);
 
     // Convert size
-    SwFormatFrameSize aFrameSize(rDynamic.GetValue() ? ATT_MIN_SIZE : ATT_FIX_SIZE,
+    SwFormatFrameSize aFrameSize(rDynamic.GetValue() ? SwFrameSize::Minimum : SwFrameSize::Fixed,
                             rSize.GetSize().Width(),
                             rSize.GetSize().Height());
     aSet.Put(aFrameSize);
@@ -307,7 +307,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     if(rSet.GetItemState(SID_ATTR_PAGE_SIZE) == SfxItemState::SET)
     {
         const SvxSizeItem& rSizeItem = rSet.Get(SID_ATTR_PAGE_SIZE);
-        SwFormatFrameSize aSize(ATT_FIX_SIZE);
+        SwFormatFrameSize aSize(SwFrameSize::Fixed);
         aSize.SetSize(rSizeItem.GetSize());
         rMaster.SetFormatAttr(aSize);
     }
@@ -500,7 +500,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 
         const SwFormatFrameSize &rFrameSize = pHeaderFormat->GetFrameSize();
         const SwFrameSize eSizeType = rFrameSize.GetHeightSizeType();
-        SfxBoolItem aDynamic(SID_ATTR_PAGE_DYNAMIC, eSizeType != ATT_FIX_SIZE);
+        SfxBoolItem aDynamic(SID_ATTR_PAGE_DYNAMIC, eSizeType != SwFrameSize::Fixed);
         aHeaderSet.Put(aDynamic);
 
         // Left equal right
@@ -550,7 +550,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 
         const SwFormatFrameSize &rFrameSize = pFooterFormat->GetFrameSize();
         const SwFrameSize eSizeType = rFrameSize.GetHeightSizeType();
-        SfxBoolItem aDynamic(SID_ATTR_PAGE_DYNAMIC, eSizeType != ATT_FIX_SIZE);
+        SfxBoolItem aDynamic(SID_ATTR_PAGE_DYNAMIC, eSizeType != SwFrameSize::Fixed);
         aFooterSet.Put(aDynamic);
 
         // Left equal right

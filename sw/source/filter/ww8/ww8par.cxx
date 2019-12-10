@@ -2211,8 +2211,8 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
     SwFormatAnchor aAnch( pFrame->GetAnchor() );
     aAnch.SetType( RndStdIds::FLY_AT_PARA );
     pFrame->SetFormatAttr( aAnch );
-    SwFormatFrameSize aSz(ATT_MIN_SIZE, nPageWidth, MINLAY);
-    SwFrameSize eFrameSize = ATT_MIN_SIZE;
+    SwFormatFrameSize aSz(SwFrameSize::Minimum, nPageWidth, MINLAY);
+    SwFrameSize eFrameSize = SwFrameSize::Minimum;
     if( eFrameSize != aSz.GetWidthSizeType() )
         aSz.SetWidthSizeType( eFrameSize );
     pFrame->SetFormatAttr(aSz);

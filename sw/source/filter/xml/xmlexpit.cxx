@@ -1055,11 +1055,11 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                     }
                     break;
                 case MID_FRMSIZE_MIN_HEIGHT:
-                    if( ATT_MIN_SIZE == rFrameSize.GetHeightSizeType() )
+                    if( SwFrameSize::Minimum == rFrameSize.GetHeightSizeType() )
                         bOutHeight = true;
                     break;
                 case MID_FRMSIZE_FIX_HEIGHT:
-                    if( ATT_FIX_SIZE == rFrameSize.GetHeightSizeType() )
+                    if( SwFrameSize::Fixed == rFrameSize.GetHeightSizeType() )
                         bOutHeight = true;
                     break;
             }

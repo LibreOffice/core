@@ -290,7 +290,7 @@ static void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
         for(SwFormat* pFormat : rFormatArr)
         {
             const SwTwips nBox = lcl_MulDiv64<SwTwips>(pFormat->GetFrameSize().GetWidth(), nNew, nOld);
-            SwFormatFrameSize aNewBox( ATT_VAR_SIZE, nBox, 0 );
+            SwFormatFrameSize aNewBox( SwFrameSize::Variable, nBox, 0 );
             pFormat->LockModify();
             pFormat->SetFormatAttr( aNewBox );
             pFormat->UnlockModify();
@@ -326,7 +326,7 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
             {
                 nBox = nWishedSum;
                 pFormat = rBox.ClaimFrameFormat();
-                SwFormatFrameSize aNewBox( ATT_VAR_SIZE, static_cast< SwTwips >(nBox), 0 );
+                SwFormatFrameSize aNewBox( SwFrameSize::Variable, static_cast< SwTwips >(nBox), 0 );
                 pFormat->LockModify();
                 pFormat->SetFormatAttr( aNewBox );
                 pFormat->UnlockModify();

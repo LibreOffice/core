@@ -817,16 +817,16 @@ void RtfAttributeOutput::TableHeight(ww8::WW8TableNodeInfoInner::Pointer_t pTabl
     const SwFrameFormat* pLineFormat = pTabLine->GetFrameFormat();
     const SwFormatFrameSize& rLSz = pLineFormat->GetFrameSize();
 
-    if (ATT_VAR_SIZE != rLSz.GetHeightSizeType() && rLSz.GetHeight())
+    if (SwFrameSize::Variable != rLSz.GetHeightSizeType() && rLSz.GetHeight())
     {
         sal_Int32 nHeight = 0;
 
         switch (rLSz.GetHeightSizeType())
         {
-            case ATT_FIX_SIZE:
+            case SwFrameSize::Fixed:
                 nHeight = -rLSz.GetHeight();
                 break;
-            case ATT_MIN_SIZE:
+            case SwFrameSize::Minimum:
                 nHeight = rLSz.GetHeight();
                 break;
             default:

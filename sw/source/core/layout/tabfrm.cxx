@@ -534,7 +534,7 @@ static void lcl_PreprocessRowsInCells( SwTabFrame& rTab, SwRowFrame& rLastLine,
             {
                 {
                     const SwFormatFrameSize &rSz = pTmpLastLineRow->GetFormat()->GetFrameSize();
-                    if ( rSz.GetHeightSizeType() == ATT_MIN_SIZE )
+                    if ( rSz.GetHeightSizeType() == SwFrameSize::Minimum )
                         nMinHeight = rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*pTmpLastLineRow);
                 }
 
@@ -3997,12 +3997,12 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
         const SwFormatFrameSize &rSz = _pRow->GetFormat()->GetFrameSize();
         if ( _pRow->HasFixSize() )
         {
-            OSL_ENSURE(ATT_FIX_SIZE == rSz.GetHeightSizeType(), "pRow claims to have fixed size");
+            OSL_ENSURE(SwFrameSize::Fixed == rSz.GetHeightSizeType(), "pRow claims to have fixed size");
             return rSz.GetHeight();
         }
         // If this row frame is being split, then row's minimal height shouldn't restrict
         // this frame's minimal height, because the rest will go to follow frame.
-        else if ( !_pRow->IsInSplit() && rSz.GetHeightSizeType() == ATT_MIN_SIZE )
+        else if ( !_pRow->IsInSplit() && rSz.GetHeightSizeType() == SwFrameSize::Minimum )
         {
             nHeight = rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*_pRow);
         }
@@ -4555,7 +4555,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     {
         const SwFormatFrameSize &rSz = pMod->GetFrameSize();
         SwTwips nMinHeight = 0;
-        if (rSz.GetHeightSizeType() == ATT_MIN_SIZE)
+        if (rSz.GetHeightSizeType() == SwFrameSize::Minimum)
             nMinHeight = std::max(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*this),
                                   0L);
 
@@ -4643,7 +4643,7 @@ bool SwRowFrame::IsRowSplitAllowed() const
     // Fixed size rows are never allowed to split:
     if ( HasFixSize() )
     {
-        OSL_ENSURE( ATT_FIX_SIZE == GetFormat()->GetFrameSize().GetHeightSizeType(), "pRow claims to have fixed size" );
+        OSL_ENSURE( SwFrameSize::Fixed == GetFormat()->GetFrameSize().GetHeightSizeType(), "pRow claims to have fixed size" );
         return false;
     }
 
@@ -5655,10 +5655,10 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
             SwFormatFrameSize const& rFrameSize(pFirstRow->GetAttrSet()->GetFrameSize());
             if ( pFirstRow->GetPrev() &&
                  static_cast<const SwRowFrame*>(pFirstRow->GetPrev())->IsRowSpanLine()
-                && rFrameSize.GetHeightSizeType() != ATT_FIX_SIZE)
+                && rFrameSize.GetHeightSizeType() != SwFrameSize::Fixed)
             {
                 // Calculate maximum height of all cells with rowspan = 1:
-                SwTwips nMaxHeight = rFrameSize.GetHeightSizeType() == ATT_MIN_SIZE
+                SwTwips nMaxHeight = rFrameSize.GetHeightSizeType() == SwFrameSize::Minimum
                     ? rFrameSize.GetHeight()
                     : 0;
                 const SwCellFrame* pLower2 = static_cast<const SwCellFrame*>(pFirstRow->Lower());
@@ -5692,7 +5692,7 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
             const SwFormatFrameSize &rSz = pFirstRow->GetFormat()->GetFrameSize();
 
             SwTwips nMinRowHeight = 0;
-            if (rSz.GetHeightSizeType() == ATT_MIN_SIZE)
+            if (rSz.GetHeightSizeType() == SwFrameSize::Minimum)
             {
                 nMinRowHeight = std::max(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*pFirstRow),
                                          0L);

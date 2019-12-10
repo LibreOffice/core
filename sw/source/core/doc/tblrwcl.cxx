@@ -1053,8 +1053,8 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 
         // Respect the Line's height, reset if needed
         SwFormatFrameSize aFSz( pInsLine->GetFrameFormat()->GetFrameSize() );
-        if ( bSameHeight && ATT_VAR_SIZE == aFSz.GetHeightSizeType() )
-            aFSz.SetHeightSizeType( ATT_MIN_SIZE );
+        if ( bSameHeight && SwFrameSize::Variable == aFSz.GetHeightSizeType() )
+            aFSz.SetHeightSizeType( SwFrameSize::Minimum );
 
         bool bChgLineSz = 0 != aFSz.GetHeight() || bSameHeight;
         if ( bChgLineSz )
@@ -1196,7 +1196,7 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
             aFindFrame.pNewFrameFormat = static_cast<SwTableBoxFormat*>(pSelBox->ClaimFrameFormat());
             SwTwips nBoxSz = aFindFrame.pNewFrameFormat->GetFrameSize().GetWidth();
             SwTwips nNewBoxSz = nBoxSz / ( nCnt + 1 );
-            aFindFrame.pNewFrameFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE,
+            aFindFrame.pNewFrameFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable,
                                                         nNewBoxSz, 0 ) );
             aFrameArr.insert( aFindFrame );
 
@@ -1206,7 +1206,7 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
                 // We have a remainder, so we need to define an own Format
                 // for the last Box.
                 pLastBoxFormat = new SwTableBoxFormat( *aFindFrame.pNewFrameFormat );
-                pLastBoxFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE,
+                pLastBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable,
                                 nBoxSz - ( nNewBoxSz * nCnt ), 0 ) );
             }
             aLastBoxArr.insert( aLastBoxArr.begin() + nFndPos, pLastBoxFormat );
@@ -1311,7 +1311,7 @@ static void lcl_CalcWidth( SwTableBox* pBox )
     for( auto pTabBox : pLine->GetTabBoxes() )
         nWidth += pTabBox->GetFrameFormat()->GetFrameSize().GetWidth();
 
-    pFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nWidth, 0 ));
+    pFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nWidth, 0 ));
 
     // Boxes with Lines can only have Size/Fillorder
     pFormat->ResetFormatAttr( RES_LR_SPACE, RES_FRMATR_END - 1 );
@@ -2931,10 +2931,10 @@ static void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewH
         nMyNewH = long(aTmp);
     }
 
-    SwFrameSize eSize = ATT_MIN_SIZE;
+    SwFrameSize eSize = SwFrameSize::Minimum;
     if( !bMinSize &&
         ( nMyOldH - nMyNewH ) > ( CalcRowRstHeight( pLineFrame ) + ROWFUZZY ))
-        eSize = ATT_FIX_SIZE;
+        eSize = SwFrameSize::Fixed;
 
     pFormat->SetFormatAttr( SwFormatFrameSize( eSize, 0, nMyNewH ) );
 

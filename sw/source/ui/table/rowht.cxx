@@ -38,9 +38,9 @@
 void SwTableHeightDlg::Apply()
 {
     SwTwips nHeight = static_cast< SwTwips >(m_xHeightEdit->denormalize(m_xHeightEdit->get_value(FieldUnit::TWIP)));
-    SwFormatFrameSize aSz(ATT_FIX_SIZE, 0, nHeight);
+    SwFormatFrameSize aSz(SwFrameSize::Fixed, 0, nHeight);
 
-    SwFrameSize eFrameSize = m_xAutoHeightCB->get_active() ?  ATT_MIN_SIZE : ATT_FIX_SIZE;
+    SwFrameSize eFrameSize = m_xAutoHeightCB->get_active() ?  SwFrameSize::Minimum : SwFrameSize::Fixed;
     if(eFrameSize != aSz.GetHeightSizeType())
     {
         aSz.SetHeightSizeType(eFrameSize);
@@ -63,7 +63,7 @@ SwTableHeightDlg::SwTableHeightDlg(weld::Window *pParent, SwWrtShell &rS)
     if (pSz)
     {
         auto nHeight = pSz->GetHeight();
-        m_xAutoHeightCB->set_active(pSz->GetHeightSizeType() != ATT_FIX_SIZE);
+        m_xAutoHeightCB->set_active(pSz->GetHeightSizeType() != SwFrameSize::Fixed);
         m_xHeightEdit->set_value(m_xHeightEdit->normalize(nHeight), FieldUnit::TWIP);
     }
 }

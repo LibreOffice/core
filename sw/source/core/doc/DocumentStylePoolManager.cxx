@@ -1627,7 +1627,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_PARALLEL ));
             // Set the default width to 3.5 cm, use the minimum value for the height
-            aSet.Put( SwFormatFrameSize( ATT_MIN_SIZE,
+            aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum,
                     GetMetricVal( CM_1 ) * 3 + GetMetricVal( CM_05 ),
                     MM50 ));
         }
@@ -1774,7 +1774,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
         {
             Size aPSize( SvxPaperInfo::GetPaperSize( PAPER_ENV_C65 ) );
             LandscapeSwap( aPSize );
-            aSet.Put( SwFormatFrameSize( ATT_FIX_SIZE, aPSize.Width(), aPSize.Height() ));
+            aSet.Put( SwFormatFrameSize( SwFrameSize::Fixed, aPSize.Width(), aPSize.Height() ));
             aLR.SetLeft( 0 ); aLR.SetRight( 0 );
             aUL.SetUpper( 0 ); aUL.SetLower( 0 );
             aSet.Put( aLR );

@@ -1094,12 +1094,12 @@ SwChainRet SwDoc::Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest )
         aSet.Put( aChain );
 
         SwFormatFrameSize aSize( rSource.GetFrameSize() );
-        if ( aSize.GetHeightSizeType() != ATT_FIX_SIZE )
+        if ( aSize.GetHeightSizeType() != SwFrameSize::Fixed )
         {
             SwFlyFrame *pFly = SwIterator<SwFlyFrame,SwFormat>( rSource ).First();
             if ( pFly )
                 aSize.SetHeight( pFly->getFrameArea().Height() );
-            aSize.SetHeightSizeType( ATT_FIX_SIZE );
+            aSize.SetHeightSizeType( SwFrameSize::Fixed );
             aSet.Put( aSize );
         }
         SetAttr( aSet, rSource );

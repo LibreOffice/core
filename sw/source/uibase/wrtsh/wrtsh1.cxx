@@ -330,7 +330,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         else if ( aSz.Width() != DFLT_WIDTH && aSz.Height() != DFLT_HEIGHT )
             bSetGrfSize = false;
 
-        pFrameMgr->SetHeightSizeType(ATT_FIX_SIZE);
+        pFrameMgr->SetHeightSizeType(SwFrameSize::Fixed);
     }
 
     // Insert the graphic
@@ -542,7 +542,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
     EnterSelFrameMode();
 
     SwFlyFrameAttrMgr aFrameMgr( true, this, Frmmgr_Type::OLE );
-    aFrameMgr.SetHeightSizeType(ATT_FIX_SIZE);
+    aFrameMgr.SetHeightSizeType(SwFrameSize::Fixed);
 
     SwRect aBound;
     CalcBoundRect( aBound, aFrameMgr.GetAnchor() );

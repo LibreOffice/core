@@ -83,7 +83,7 @@ namespace myImplHelpers
             else
             {
                 const SwFormatFrameSize& rSize = rFormat.GetFrameSize();
-                if (ATT_VAR_SIZE != rSize.GetHeightSizeType())
+                if (SwFrameSize::Variable != rSize.GetHeightSizeType())
                     nDist += rSize.GetHeight();
                 else
                 {

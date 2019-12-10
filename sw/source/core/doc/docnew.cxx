@@ -296,7 +296,7 @@ SwDoc::SwDoc()
         getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
 
     // Set to "Empty Page"
-    mpEmptyPageFormat->SetFormatAttr( SwFormatFrameSize( ATT_FIX_SIZE ) );
+    mpEmptyPageFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Fixed ) );
     // Set BodyFormat for columns
     mpColumnContFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ) );
 

@@ -73,7 +73,7 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
     // The default page size is obtained from the application
     //locale
 
-    SwFormatFrameSize aFrameSize( ATT_FIX_SIZE );
+    SwFormatFrameSize aFrameSize( SwFrameSize::Fixed );
     const Size aPhysSize = SvxPaperInfo::GetDefaultPaperSize();
     aFrameSize.SetSize( aPhysSize );
 

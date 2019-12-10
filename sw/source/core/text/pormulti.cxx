@@ -1941,7 +1941,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
                 return false;
             const SwTableLine* pLine = static_cast<const SwRowFrame*>(pUpperFrame->GetUpper())->GetTabLine();
             const SwFormatFrameSize& rFrameFormatSize = pLine->GetFrameFormat()->GetFrameSize();
-            if ( ATT_VAR_SIZE == rFrameFormatSize.GetHeightSizeType() )
+            if ( SwFrameSize::Variable == rFrameFormatSize.GetHeightSizeType() )
                 pUpperFrame = pPage;
         }
         if ( pUpperFrame == pPage && !m_pFrame->IsInFootnote() )

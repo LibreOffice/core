@@ -4248,15 +4248,15 @@ void DocxAttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTa
     const SwFrameFormat * pLineFormat = pTabLine->GetFrameFormat();
 
     const SwFormatFrameSize& rLSz = pLineFormat->GetFrameSize();
-    if ( ATT_VAR_SIZE != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
+    if ( SwFrameSize::Variable != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
     {
         sal_Int32 nHeight = rLSz.GetHeight();
         const char *pRule = nullptr;
 
         switch ( rLSz.GetHeightSizeType() )
         {
-            case ATT_FIX_SIZE: pRule = "exact"; break;
-            case ATT_MIN_SIZE: pRule = "atLeast"; break;
+            case SwFrameSize::Fixed: pRule = "exact"; break;
+            case SwFrameSize::Minimum: pRule = "atLeast"; break;
             default:           break;
         }
 
@@ -7984,14 +7984,14 @@ void DocxAttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
     }
     else if ( m_rExport.m_bOutFlyFrameAttrs )
     {
-        if ( rSize.GetWidth() && rSize.GetWidthSizeType() == ATT_FIX_SIZE )
+        if ( rSize.GetWidth() && rSize.GetWidthSizeType() == SwFrameSize::Fixed )
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(),
                     FSNS( XML_w, XML_w ), OString::number( rSize.GetWidth( ) ).getStr() );
 
         if ( rSize.GetHeight() )
         {
             OString sRule( "exact" );
-            if ( rSize.GetHeightSizeType() == ATT_MIN_SIZE )
+            if ( rSize.GetHeightSizeType() == SwFrameSize::Minimum )
                 sRule = OString( "atLeast" );
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), 2,
                     FSNS( XML_w, XML_hRule ), sRule.getStr(),

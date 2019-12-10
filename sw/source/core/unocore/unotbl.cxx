@@ -1439,7 +1439,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                     if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                     {
                         bool bSet = *o3tl::doAccess<bool>(aValue);
-                        aFrameSize.SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
+                        aFrameSize.SetHeightSizeType(bSet ? SwFrameSize::Variable : SwFrameSize::Fixed);
                     }
                     else
                     {
@@ -1495,7 +1495,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName)
                 const SwFormatFrameSize& rSize = pLn->GetFrameFormat()->GetFrameSize();
                 if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                 {
-                    aRet <<= ATT_VAR_SIZE == rSize.GetHeightSizeType();
+                    aRet <<= SwFrameSize::Variable == rSize.GetHeightSizeType();
                 }
                 else
                     aRet <<= static_cast<sal_Int32>(convertTwipToMm100(rSize.GetSize().Height()));
@@ -1998,7 +1998,7 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
     GetProperty(FN_TABLE_WIDTH, 0xff, pWidth);
 
     bool bPutSize = pWidth != nullptr;
-    SwFormatFrameSize aSz(ATT_VAR_SIZE);
+    SwFormatFrameSize aSz(SwFrameSize::Variable);
     if(pWidth)
     {
         aSz.PutValue(*pWidth, MID_FRMSIZE_WIDTH);
