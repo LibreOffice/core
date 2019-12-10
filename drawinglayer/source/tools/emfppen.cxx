@@ -160,9 +160,9 @@ namespace emfplushelper
         return "";
     }
 
-    static OUString PenAlignmentToString(sal_uInt32 penalignment)
+    static OUString PenAlignmentToString(sal_uInt32 alignment)
     {
-        switch (penalignment)
+        switch (alignment)
         {
             case PenAlignmentCenter: return "PenAlignmentCenter";
             case PenAlignmentInset: return "PenAlignmentInset";
@@ -322,7 +322,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataAlignment)
         {
             s.ReadInt32(alignment);
-            SAL_WARN("drawinglayer", "EMF+\t\tTODO PenDataAlignment: " << PenAlignmentToString(alignment) << " (0x" << std::hex << alignment << ")");
+            SAL_WARN("drawinglayer", "EMF+\t\t\tTODO PenDataAlignment: " << PenAlignmentToString(alignment) << " (0x" << std::hex << alignment << ")");
         }
         else
         {
@@ -331,6 +331,7 @@ namespace emfplushelper
 
         if (penDataFlags & PenDataCompoundLine)
         {
+            SAL_WARN("drawinglayer", "EMF+\t\t\tTODO PenDataCompoundLine");
             sal_Int32 compoundArrayLen;
             s.ReadInt32(compoundArrayLen);
 
@@ -344,8 +345,8 @@ namespace emfplushelper
             for (i = 0; i < compoundArrayLen; i++)
             {
                 s.ReadFloat(compoundArray[i]);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tcompoundArray[" << i << "]: " << compoundArray[i]);
             }
-            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataCompoundLine: 0x");
         }
 
         if (penDataFlags & PenDataCustomStartCap)
