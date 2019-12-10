@@ -336,10 +336,6 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
     }
     else
         rSet.Put(pSdrView->GetDefaultAttr());
-
-    SfxViewShell* pViewShell = GetShell().GetSfxViewShell();
-    if (pViewShell && comphelper::LibreOfficeKit::isActive())
-        pViewShell->sendUnoStatus( &rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
