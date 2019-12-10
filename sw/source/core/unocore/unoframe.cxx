@@ -199,7 +199,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     const ::uno::Any* pGraphic = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC, pGraphic     );
     const ::uno::Any* pGrFilter = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
     const ::uno::Any* pGraphicURL = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGraphicURL );
-    const ::uno::Any* pGrTranparency = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
+    const ::uno::Any* pGrTransparency = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTransparency     );
     const bool bSvxBrushItemPropertiesUsed(
         pCol ||
         pTrans ||
@@ -207,7 +207,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         pGraphicURL ||
         pGrFilter ||
         pGrLoc ||
-        pGrTranparency ||
+        pGrTransparency ||
         pColTrans ||
         pRGBCol);
 
@@ -329,9 +329,9 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGrLoc, MID_GRAPHIC_POSITION);
         }
 
-        if(pGrTranparency)
+        if(pGrTransparency)
         {
-            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGrTranparency, MID_GRAPHIC_TRANSPARENCY);
+            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGrTransparency, MID_GRAPHIC_TRANSPARENCY);
         }
 
         setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
