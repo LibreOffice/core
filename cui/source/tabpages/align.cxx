@@ -98,6 +98,11 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const 
     if (rLB.get_active() == nListPos)
         eJM = SvxCellJustifyMethod::Distribute;
 
+    // tdf#129300 If it would create no change, don't force it
+    const SvxJustifyMethodItem& rOldItem = static_cast<const SvxJustifyMethodItem&>(rSet.Get(nWhichJM));
+    if (rOldItem.GetValue() == eJM)
+        return;
+
     SvxJustifyMethodItem aItem(eJM, nWhichJM);
     rSet.Put(aItem);
 }
