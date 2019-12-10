@@ -25,15 +25,49 @@
 
 namespace emfplushelper
 {
-    const sal_uInt32 PathPointFlagsRelative = 0x0800;
-    const sal_uInt32 PathPointFlagsAbsolute = 0x4000;
-
     static sal_Int16 GetEmfPlusInteger(sal_Int32 nInt)
     {
         if (nInt & 0x80000000)
             return (nInt & 0x7FFF) >> 16;
 
         return nInt >> 24;
+    }
+
+    static OUString PathPointTypeFlagsToString(sal_uInt8 flags)
+    {
+        OUString sFlags;
+
+        if (flags & PathPointTypeDashMode)
+            sFlags = sFlags.concat("PathPointTypeDashMode");
+
+        if (flags & PathPointTypePathMarker)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("PathPointTypePathMarker");
+        }
+
+        if (flags & PathPointTypeCloseSubpath)
+        {
+            if (!sFlags.isEmpty())
+                sFlags = sFlags.concat(", ");
+
+            sFlags = sFlags.concat("PathPointTypeCloseSubpath");
+        }
+
+        return sFlags;
+    }
+
+    static OUString PathPointTypeToString(sal_uInt8 type)
+    {
+        switch (type)
+        {
+            case PathPointTypeStart: return "PathPointStart";
+            case PathPointTypeLine: return "PathPointTypeBezier";
+            case PathPointTypeBezier: return "PathPointTypeBezier";
+        }
+        return "";
     }
 
     EMFPPath::EMFPPath (sal_Int32 _nPoints, bool bLines)
@@ -56,6 +90,13 @@ namespace emfplushelper
 
     void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags)
     {
+        if (pathFlags & PathPointFlagsRelative)
+            SAL_INFO("drawinglayer", "EMF+\t\tUses EmfPlusPointR object and EmfPlusPathPointTypeRLE objects");
+        else if (pathFlags & PathPointFlagsAbsolute)
+            SAL_INFO("drawinglayer", "EMF+\t\tUses EmfPlusPoint object and EmfPlusPathPointType objects");
+        else
+            SAL_INFO("drawinglayer", "EMF+\t\tUses EmfPlusPointF object and EmfPlusPathPointType objects");
+
         SAL_INFO("drawinglayer", "EMF+\t\tPoints:");
         for (int i = 0; i < nPoints; i ++)
         {
@@ -86,7 +127,7 @@ namespace emfplushelper
             {
                 // EMFPlusPointF: stored in Single (float) format
                 s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
-                SAL_INFO ("drawinglayer", "EMF+\t\t\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
+                SAL_INFO ("drawinglayer", "EMF+\t\t\tEMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
             }
         }
 
@@ -94,8 +135,21 @@ namespace emfplushelper
         {
             for (int i = 0; i < nPoints; i++)
             {
+                if (pathFlags & PathPointFlagsRelative)
+                {
+                    sal_uInt8 rle;
+                    s.ReadUChar(rle);
+
+                    if (rle & 0x01)
+                        SAL_INFO("drawinglayer", "EMF+\tPath points are on a bezier curve");
+
+                    SAL_INFO("drawinglayer", "EMF+\tRunCount: " << ((rle & 0xFC) >> 2));
+                }
+
                 s.ReadUChar(pPointTypes[i]);
-                SAL_INFO("drawinglayer", "EMF+\tpoint type: " << static_cast<int>(pPointTypes[i]));
+                SAL_INFO("drawinglayer", "EMF+\t\tPoint type " << i+1 << ":");
+                SAL_INFO("drawinglayer", "EMF+\t\t\tFlags: " << PathPointTypeFlagsToString(pPointTypes[i] & 0xF));
+                SAL_INFO("drawinglayer", "EMF+\t\t\tType: " << PathPointTypeToString(pPointTypes[i] >> 4));
             }
         }
 
