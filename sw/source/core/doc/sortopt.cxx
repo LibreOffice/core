@@ -36,7 +36,7 @@ SwSortKey::SwSortKey(sal_uInt16 nId, const OUString& rSrtType, SwSortOrder eOrde
 }
 
 SwSortOptions::SwSortOptions()
-    : eDirection( SRT_ROWS ),
+    : eDirection( SwSortDirection::Rows ),
     cDeli( 9 ),
     nLanguage( LANGUAGE_SYSTEM ),
     bTable( false ),

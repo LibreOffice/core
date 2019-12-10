@@ -236,7 +236,7 @@ OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
     const FndBox_* pFndBox;
     sal_uInt16 nCol = pOptions->aKeys[nKey]->nColumnId-1;
 
-    if( SRT_ROWS == pOptions->eDirection )
+    if( SwSortDirection::Rows == pOptions->eDirection )
         pFndBox = pBox->GetBox(nCol, nRow);         // Sort rows
     else
         pFndBox = pBox->GetBox(nRow, nCol);         // Sort columns
@@ -265,7 +265,7 @@ double SwSortBoxElement::GetValue( sal_uInt16 nKey ) const
     const FndBox_* pFndBox;
     sal_uInt16 nCol = pOptions->aKeys[nKey]->nColumnId-1;
 
-    if( SRT_ROWS == pOptions->eDirection )
+    if( SwSortDirection::Rows == pOptions->eDirection )
         pFndBox = pBox->GetBox(nCol, nRow);         // Sort rows
     else
         pFndBox = pBox->GetBox(nRow, nCol);         // Sort columns
@@ -491,7 +491,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         getIDocumentRedlineAccess().DeleteRedline( *pTableNd, true, RedlineType::Any );
 
     FndLines_t::size_type nStart = 0;
-    if( pTableNd->GetTable().GetRowsToRepeat() > 0 && rOpt.eDirection == SRT_ROWS )
+    if( pTableNd->GetTable().GetRowsToRepeat() > 0 && rOpt.eDirection == SwSortDirection::Rows )
     {
         // Uppermost selected Cell
         FndLines_t& rLines = aFndBox.GetLines();
@@ -547,7 +547,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // Insert KeyElements
-    sal_uInt16 nCount = (rOpt.eDirection == SRT_ROWS) ?
+    sal_uInt16 nCount = (rOpt.eDirection == SwSortDirection::Rows) ?
                     aFlatBox.GetRows() : aFlatBox.GetCols();
 
     // Sort SortList by Key
@@ -565,7 +565,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     sal_uInt16 i = 0;
     for (const auto& rElem : aSortList)
     {
-        if(rOpt.eDirection == SRT_ROWS)
+        if(rOpt.eDirection == SwSortDirection::Rows)
         {
             MoveRow(this, aFlatBox, rElem.nRow, i+nStart, aMovedList, pUndoSort);
         }
