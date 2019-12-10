@@ -49,7 +49,7 @@ namespace emfplushelper
     const sal_uInt32 EmfPlusPenDataDashedLineCap = 0x00000040;
     const sal_uInt32 EmfPlusPenDataDashedLineOffset = 0x00000080;
     const sal_uInt32 EmfPlusPenDataDashedLine = 0x00000100;
-    const sal_uInt32 EmfPlusPenDataNonCenter = 0x00000200;
+    const sal_uInt32 EmfPlusPenDataAlignment = 0x00000200;
     const sal_uInt32 EmfPlusPenDataCompoundLine = 0x00000400;
     const sal_uInt32 EmfPlusPenDataCustomStartCap = 0x00000800;
     const sal_uInt32 EmfPlusPenDataCustomEndCap = 0x000001000;
