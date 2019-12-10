@@ -793,7 +793,7 @@ bool DetectRethrow(void* ppExcept)
         struct _EXCEPTION_RECORD* ExceptionRecord;
         PVOID ExceptionAddress;
         DWORD NumberParameters;
-        struct alignas(8) EHParameters
+        struct alignas(8)
         {
             DWORD magicNumber;
             PVOID pExceptionObject;
