@@ -287,7 +287,12 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_xBtnWrap->get_state_changed_from_saved())
     {
-        rSet->Put(SfxBoolItem(GetWhich(SID_ATTR_ALIGN_LINEBREAK), m_xBtnWrap->get_active()));
+        const SfxBoolItem* pWrapItem = static_cast<const SfxBoolItem*>(GetOldItem(
+                                            *rSet, SID_ATTR_ALIGN_LINEBREAK));
+        assert(pWrapItem);
+        std::unique_ptr<SfxBoolItem> pNewWrapItem(static_cast<SfxBoolItem*>(pWrapItem->Clone()));
+        pNewWrapItem->SetValue(m_xBtnWrap->get_active());
+        rSet->Put(*pNewWrapItem);
         bChanged = true;
     }
 
