@@ -298,7 +298,12 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_xBtnHyphen->get_state_changed_from_saved())
     {
-        rSet->Put(SfxBoolItem(GetWhich(SID_ATTR_ALIGN_HYPHENATION), m_xBtnHyphen->get_active()));
+        const SfxBoolItem* pHyphItem = static_cast<const SfxBoolItem*>(GetOldItem(
+                                            *rSet, SID_ATTR_ALIGN_HYPHENATION));
+        assert(pHyphItem);
+        std::unique_ptr<SfxBoolItem> pNewHyphItem(static_cast<SfxBoolItem*>(pHyphItem->Clone()));
+        pNewHyphItem->SetValue(m_xBtnHyphen->get_active());
+        rSet->Put(*pNewHyphItem);
         bChanged = true;
     }
 
