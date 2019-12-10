@@ -125,6 +125,7 @@ SlideBackground::SlideBackground(
     m_nPageRightMargin(0),
     m_nPageTopMargin(0),
     m_nPageBottomMargin(0),
+    meFUnit(GetModuleFieldUnit()),
     maCustomEntry(),
     mpBindings(pBindings)
 {
@@ -146,27 +147,6 @@ SlideBackground::SlideBackground(
     get(mpEditMaster, "masterslidebutton");
     get(mpMasterLabel, "masterlabel");
     get(mpMarginSelectBox, "marginLB");
-
-    ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
-    SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
-    if (pDoc)
-    {
-        SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
-        if (pOptions)
-        {
-            FieldUnit eMetric = static_cast<FieldUnit>(pOptions->GetMetric());
-            if (IsInch(eMetric))
-            {
-                for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
-                    mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i]));
-                }
-            else
-            {
-                for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
-                    mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_CM[i]));
-            }
-        }
-    }
 
     maCustomEntry = get<FixedText>("customlabel")->GetText();
 
@@ -193,8 +173,41 @@ bool SlideBackground::IsImpress()
              maContext == maImpressNotesContext );
 }
 
+FieldUnit SlideBackground::GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState)
+{
+    FieldUnit eUnit;
+
+    if (pState && eState >= SfxItemState::DEFAULT)
+        eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pState)->GetValue());
+    else
+        eUnit = GetModuleFieldUnit();
+
+    return eUnit;
+}
+
+void SlideBackground::SetMarginsFieldUnit()
+{
+    auto nSelected = mpMarginSelectBox->GetSelectedEntryPos();
+    mpMarginSelectBox->Clear();
+
+    if (IsInch(meFUnit))
+    {
+        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
+            mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i]));
+    }
+    else
+    {
+        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
+            mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_CM[i]));
+    }
+
+    mpMarginSelectBox->SelectEntryPos(nSelected);
+}
+
 void SlideBackground::Initialize()
 {
+    SetMarginsFieldUnit();
+
     mpPaperSizeBox->FillPaperSizeEntries( PaperSizeApp::Draw );
     mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
     mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
@@ -944,6 +957,17 @@ void SlideBackground::NotifyItemUpdate(
             {
                 mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(BITMAP));
                 Update();
+            }
+        }
+        break;
+        case SID_ATTR_METRIC:
+        {
+            FieldUnit eFUnit = GetCurrentUnit(eState, pState);
+            if (meFUnit != eFUnit)
+            {
+                meFUnit = eFUnit;
+                SetMarginsFieldUnit();
+                UpdateMarginBox();
             }
         }
         break;
