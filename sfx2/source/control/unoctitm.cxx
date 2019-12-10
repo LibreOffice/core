@@ -66,6 +66,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/pathoptions.hxx>
 #include <osl/time.h>
+#include <sfx2/lokhelper.hxx>
 
 #include <iostream>
 #include <map>
@@ -1206,6 +1207,9 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
     }
     else
     {
+        // Try to send JSON state version
+        SfxLokHelper::sendUnoStatus(SfxViewShell::Current(), pState);
+
         return;
     }
 
