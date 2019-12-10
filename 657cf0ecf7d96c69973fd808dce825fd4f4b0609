@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_04ab60d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-12-10T13:56:15Z",
+      "side": 1,
+      "message": "#tdf127294 \u003d\u003e tdf#127294",
+      "revId": "657cf0ecf7d96c69973fd808dce825fd4f4b0609",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
