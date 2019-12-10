@@ -517,6 +517,8 @@
 #define STR_TEXTORIENTANGLE                     NC_("STR_TEXTORIENTANGLE", "Text orientation angle")
 #define STR_SHRINKTOFITCELL_ON                  NC_("STR_SHRINKTOFITCELL_ON", "Shrink to fit cell: On")
 #define STR_SHRINKTOFITCELL_OFF                 NC_("STR_SHRINKTOFITCELL_OFF", "Shrink to fit cell: Off")
+#define STR_VERTICALSTACKCELL_ON                NC_("STR_VERTICALSTACKCELL_ON", "Vertically stacked: On")
+#define STR_VERTICALSTACKCELL_OFF               NC_("STR_VERTICALSTACKCELL_OFF", "Vertically stacked: Off")
 
 #endif
 
