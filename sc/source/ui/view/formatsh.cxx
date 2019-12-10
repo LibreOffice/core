@@ -2688,7 +2688,7 @@ void ScFormatShell::ExecuteTextDirection( const SfxRequest& rReq )
             bool bVert = (nSlot == SID_TEXTDIRECTION_TOP_TO_BOTTOM);
             ScPatternAttr aAttr( GetViewData()->GetDocument()->GetPool() );
             SfxItemSet& rItemSet = aAttr.GetItemSet();
-            rItemSet.Put( SfxBoolItem( ATTR_STACKED, bVert ) );
+            rItemSet.Put( ScVerticalStackCell( bVert ) );
             rItemSet.Put( SfxBoolItem( ATTR_VERTICAL_ASIAN, bVert ) );
             pTabViewShell->ApplySelectionPattern( aAttr );
             pTabViewShell->AdjustBlockHeight();
