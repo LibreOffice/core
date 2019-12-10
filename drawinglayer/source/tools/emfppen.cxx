@@ -117,6 +117,25 @@ namespace emfplushelper
         return sFlags;
     }
 
+    static OUString LineCapTypeToString(sal_uInt32 linecap)
+    {
+        switch (linecap)
+        {
+            case LineCapTypeFlat: return "LineCapTypeFlat";
+            case LineCapTypeSquare: return "LineCapTypeSquare";
+            case LineCapTypeRound: return "LineCapTypeRound";
+            case LineCapTypeTriangle: return "LineCapTypeTriangle";
+            case LineCapTypeNoAnchor: return "LineCapTypeNoAnchor";
+            case LineCapTypeSquareAnchor: return "LineCapTypeSquareAnchor";
+            case LineCapTypeRoundAnchor: return "LineCapTypeRoundAchor";
+            case LineCapTypeDiamondAnchor: return "LineCapTypeDiamondAnchor";
+            case LineCapTypeArrowAnchor: return "LineCapTypeArrowAnchor";
+            case LineCapTypeAnchorMask: return "LineCapTypeAnchorMask";
+            case LineCapTypeCustom: return "LineCapTypeCustom";
+        }
+        return "";
+    }
+
     /// Convert stroke caps between EMF+ and rendering API
     sal_Int8 EMFPPen::lcl_convertStrokeCap(sal_uInt32 nEmfStroke)
     {
@@ -174,7 +193,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataStartCap)
         {
             s.ReadInt32(startCap);
-            SAL_INFO("drawinglayer", "EMF+\t\tstartCap: 0x" << std::hex << startCap);
+            SAL_INFO("drawinglayer", "EMF+\t\tstartCap: " << LineCapTypeToString(startCap) << " (0x" << std::hex << startCap << ")");
         }
         else
         {
@@ -184,7 +203,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataEndCap)
         {
             s.ReadInt32(endCap);
-            SAL_INFO("drawinglayer", "EMF+\t\tendCap: 0x" << std::hex << endCap);
+            SAL_INFO("drawinglayer", "EMF+\t\tendCap: " << LineCapTypeToString(endCap) << " (0x" << std::hex << startCap << ")");
         }
         else
         {
