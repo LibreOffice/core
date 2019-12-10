@@ -194,7 +194,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
             xIStm->ReadInt32( nNumIndex );
             while (nNumIndex>=0 && nNumIndex<DEFAULT_NUM_VALUSET_COUNT) {
                 SvxNumRule aNum(*xIStm);
-                //bullet color in font properties is not stored correctly. Need set tranparency bits manually
+                //bullet color in font properties is not stored correctly. Need set transparency bits manually
                 for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
                 {
                     SvxNumberFormat aFmt(aNum.GetLevel(i));
