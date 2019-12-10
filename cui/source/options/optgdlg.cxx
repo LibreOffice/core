@@ -23,6 +23,7 @@
 #include <svl/currencytable.hxx>
 #include <svtools/langhelp.hxx>
 #include <unotools/lingucfg.hxx>
+#include <unotools/resmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <i18nlangtag/mslangid.hxx>
