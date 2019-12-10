@@ -2585,17 +2585,17 @@ bool SwUnoCursorHelper::ConvertSortProperties(
     std::unique_ptr<SwSortKey> pKey1(new SwSortKey);
     pKey1->nColumnId = USHRT_MAX;
     pKey1->bIsNumeric = true;
-    pKey1->eSortOrder = SRT_ASCENDING;
+    pKey1->eSortOrder = SwSortOrder::Ascending;
 
     std::unique_ptr<SwSortKey> pKey2(new SwSortKey);
     pKey2->nColumnId = USHRT_MAX;
     pKey2->bIsNumeric = true;
-    pKey2->eSortOrder = SRT_ASCENDING;
+    pKey2->eSortOrder = SwSortOrder::Ascending;
 
     std::unique_ptr<SwSortKey> pKey3(new SwSortKey);
     pKey3->nColumnId = USHRT_MAX;
     pKey3->bIsNumeric = true;
-    pKey3->eSortOrder = SRT_ASCENDING;
+    pKey3->eSortOrder = SwSortOrder::Ascending;
     SwSortKey* aKeys[3] = {pKey1.get(), pKey2.get(), pKey3.get()};
 
     bool bOldSortdescriptor(false);
@@ -2744,7 +2744,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             if (bTemp && nIndex < 3)
             {
                 aKeys[nIndex]->eSortOrder = (*bTemp)
-                    ? SRT_ASCENDING : SRT_DESCENDING;
+                    ? SwSortOrder::Ascending : SwSortOrder::Descending;
             }
             else
             {
@@ -2785,7 +2785,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
                         aKeys[i]->bIsNumeric = (pFields[i].FieldType ==
                                 table::TableSortFieldType_NUMERIC);
                         aKeys[i]->eSortOrder = (pFields[i].IsAscending)
-                            ? SRT_ASCENDING : SRT_DESCENDING;
+                            ? SwSortOrder::Ascending : SwSortOrder::Descending;
                     }
                 }
                 else

@@ -269,7 +269,7 @@ void SwSortDlg::Apply()
 
         aOptions.aKeys.push_back(
             std::make_unique<SwSortKey>( nCol1, sEntry,
-                                    bAsc1 ? SRT_ASCENDING : SRT_DESCENDING ));
+                                    bAsc1 ? SwSortOrder::Ascending : SwSortOrder::Descending ));
     }
 
     if( bCheck2 )
@@ -282,7 +282,7 @@ void SwSortDlg::Apply()
 
         aOptions.aKeys.push_back(
             std::make_unique<SwSortKey>( nCol2, sEntry,
-                                    bAsc2 ? SRT_ASCENDING : SRT_DESCENDING ));
+                                    bAsc2 ? SwSortOrder::Ascending : SwSortOrder::Descending ));
     }
 
     if( bCheck3 )
@@ -295,7 +295,7 @@ void SwSortDlg::Apply()
 
         aOptions.aKeys.push_back(
             std::make_unique<SwSortKey>( nCol3, sEntry,
-                                    bAsc3 ? SRT_ASCENDING : SRT_DESCENDING ));
+                                    bAsc3 ? SwSortOrder::Ascending : SwSortOrder::Descending ));
     }
 
     aOptions.eDirection =  bCol ? SRT_COLUMNS : SRT_ROWS;
