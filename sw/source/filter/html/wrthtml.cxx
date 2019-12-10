@@ -401,7 +401,7 @@ ErrCode SwHTMLWriter::WriteStream()
             }
             else
             {
-                OSL_ENSURE( FILE_LINK_SECTION != pSNd->GetSection().GetType(),
+                OSL_ENSURE( SectionType::FileLink != pSNd->GetSection().GetType(),
                         "Export linked areas at document beginning is not implemented" );
 
                 // save only the tag of section
@@ -552,7 +552,7 @@ static const SwFormatCol *lcl_html_GetFormatCol( const SwSection& rSection,
     const SwFormatCol *pCol = nullptr;
 
     const SfxPoolItem* pItem;
-    if( FILE_LINK_SECTION != rSection.GetType() &&
+    if( SectionType::FileLink != rSection.GetType() &&
         SfxItemState::SET == rFormat.GetAttrSet().GetItemState(RES_COL,false,&pItem) &&
         static_cast<const SwFormatCol *>(pItem)->GetNumCols() > 1 )
     {
@@ -616,7 +616,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
     rHTMLWrt.OutDirection( nDir );
 
-    if( FILE_LINK_SECTION == rSection.GetType() )
+    if( SectionType::FileLink == rSection.GetType() )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_href "=\"");
         rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );

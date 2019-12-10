@@ -100,7 +100,7 @@ void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, bool bReadonly)
     OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( &rTOXBase) !=  nullptr, "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
     const_cast<SwTOXBase&>(rTOXBase).SetProtected(bReadonly);
-    OSL_ENSURE( rTOXSect.SwSection::GetType() == TOX_CONTENT_SECTION, "not a TOXContentSection" );
+    OSL_ENSURE( rTOXSect.SwSection::GetType() == SectionType::ToxContent, "not a TOXContentSection" );
 
     SwSectionData aSectionData(rTOXSect);
     aSectionData.SetProtectFlag(bReadonly);
@@ -215,7 +215,7 @@ sal_uInt16 SwEditShell::GetTOXCount() const
     for( auto n = rFormats.size(); n; )
     {
         const SwSection* pSect = rFormats[ --n ]->GetSection();
-        if( TOX_CONTENT_SECTION == pSect->GetType() &&
+        if( SectionType::ToxContent == pSect->GetType() &&
             pSect->GetFormat()->GetSectionNode() )
             ++nRet;
     }
@@ -229,7 +229,7 @@ const SwTOXBase* SwEditShell::GetTOX( sal_uInt16 nPos ) const
     for( const SwSectionFormat *pFormat : rFormats )
     {
         const SwSection* pSect = pFormat->GetSection();
-        if( TOX_CONTENT_SECTION == pSect->GetType() &&
+        if( SectionType::ToxContent == pSect->GetType() &&
             pSect->GetFormat()->GetSectionNode() &&
             nCnt++ == nPos )
         {

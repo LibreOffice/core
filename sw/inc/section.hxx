@@ -43,11 +43,11 @@ class SwServerObject;
 
 typedef std::vector<SwSection*> SwSections;
 
-enum SectionType { CONTENT_SECTION,
-                    TOX_HEADER_SECTION,
-                    TOX_CONTENT_SECTION,
-                    DDE_LINK_SECTION    = OBJECT_CLIENT_DDE,
-                    FILE_LINK_SECTION   = OBJECT_CLIENT_FILE
+enum class SectionType { Content,
+                    ToxHeader,
+                    ToxContent,
+                    DdeLink    = OBJECT_CLIENT_DDE,
+                    FileLink   = OBJECT_CLIENT_FILE
                     };
 
 enum LinkCreateType
@@ -128,7 +128,7 @@ public:
     void SetPassword(css::uno::Sequence<sal_Int8> const& rNew)
                                             { m_Password = rNew; }
     bool IsLinkType() const
-    { return (DDE_LINK_SECTION == m_eType) || (FILE_LINK_SECTION == m_eType); }
+    { return (SectionType::DdeLink == m_eType) || (SectionType::FileLink == m_eType); }
 
     bool IsConnectFlag() const                  { return m_bConnectFlag; }
     void SetConnectFlag(bool const bFlag){ m_bConnectFlag = bFlag; }

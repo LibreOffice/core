@@ -331,13 +331,13 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                             else
                                 pSh->SetMark();     // set only the mark
 
-                            SwSectionData aSect(CONTENT_SECTION, MASTER_LABEL);
+                            SwSectionData aSect(SectionType::Content, MASTER_LABEL);
                             pSh->InsertSection(aSect);
                         }
                     }
                     else if (rItem.m_bSynchron)
                     {
-                        SwSectionData aSect(FILE_LINK_SECTION,
+                        SwSectionData aSect(SectionType::FileLink,
                                 pSh->GetUniqueSectionName());
                         OUString sLinkName =
                             OUStringChar(sfx2::cTokenSeparator) +

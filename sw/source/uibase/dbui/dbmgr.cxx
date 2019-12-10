@@ -843,9 +843,9 @@ static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
     for (size_t nSection = 0; nSection < nSections; ++nSection)
     {
         SwSectionData aSectionData( *rWorkShell.GetSectionFormat( nSection ).GetSection() );
-        if( aSectionData.GetType() == FILE_LINK_SECTION )
+        if( aSectionData.GetType() == SectionType::FileLink )
         {
-            aSectionData.SetType( CONTENT_SECTION );
+            aSectionData.SetType( SectionType::Content );
             aSectionData.SetLinkFileName( OUString() );
             rWorkShell.UpdateSection( nSection, aSectionData );
         }

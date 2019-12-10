@@ -586,7 +586,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     }
     else
     {
-        SwSectionData aSection( FILE_LINK_SECTION, GetUniqueSectionName() );
+        SwSectionData aSection( SectionType::FileLink, GetUniqueSectionName() );
         OUString aLinkFile = rBkmk.GetURL().getToken(0, '#')
             + OUStringChar(sfx2::cTokenSeparator)
             + OUStringChar(sfx2::cTokenSeparator)
@@ -598,7 +598,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
         {
             aSection = SwSectionData(*pIns);
             aSection.SetLinkFileName( OUString() );
-            aSection.SetType( CONTENT_SECTION );
+            aSection.SetType( SectionType::Content );
             aSection.SetProtectFlag( false );
 
             // the update of content from linked section at time delete

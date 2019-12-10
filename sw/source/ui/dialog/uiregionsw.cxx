@@ -92,8 +92,8 @@ static void lcl_FillList( SwWrtShell& rSh, weld::ComboBox& rSubRegions, weld::Co
             const SwSectionFormat* pFormat = &rSh.GetSectionFormat(i);
             if( !pFormat->GetParent() &&
                     pFormat->IsInNodesArr() &&
-                    (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                    && TOX_HEADER_SECTION != eTmpType )
+                    (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
+                    && SectionType::ToxHeader != eTmpType )
             {
                     const OUString sString(pFormat->GetSection()->GetSectionName());
                     if (pAvailNames)
@@ -114,8 +114,8 @@ static void lcl_FillList( SwWrtShell& rSh, weld::ComboBox& rSubRegions, weld::Co
             {
                 const SwSectionFormat* pFormat = pSect->GetFormat();
                 if( pFormat->IsInNodesArr()&&
-                    (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                    && TOX_HEADER_SECTION != eTmpType )
+                    (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
+                    && SectionType::ToxHeader != eTmpType )
                 {
                     const OUString sString(pFormat->GetSection()->GetSectionName());
                     if (pAvailNames)
@@ -234,11 +234,11 @@ void SectRepr::SetFile( const OUString& rFile )
 
     if( !rFile.isEmpty() || !sSub.isEmpty() )
     {
-        m_SectionData.SetType( FILE_LINK_SECTION );
+        m_SectionData.SetType( SectionType::FileLink );
     }
     else
     {
-        m_SectionData.SetType( CONTENT_SECTION );
+        m_SectionData.SetType( SectionType::Content );
     }
 }
 
@@ -260,7 +260,7 @@ void SectRepr::SetFilter( const OUString& rFilter )
 
     if( !sNewFile.isEmpty() )
     {
-        m_SectionData.SetType( FILE_LINK_SECTION );
+        m_SectionData.SetType( SectionType::FileLink );
     }
 }
 
@@ -280,11 +280,11 @@ void SectRepr::SetSubRegion(const OUString& rSubRegion)
 
     if( !rSubRegion.isEmpty() || !sOldFileName.isEmpty() )
     {
-        m_SectionData.SetType( FILE_LINK_SECTION );
+        m_SectionData.SetType( SectionType::FileLink );
     }
     else
     {
-        m_SectionData.SetType( CONTENT_SECTION );
+        m_SectionData.SetType( SectionType::Content );
     }
 }
 
@@ -296,7 +296,7 @@ OUString SectRepr::GetFile() const
     {
         return sLinkFile;
     }
-    if (DDE_LINK_SECTION == m_SectionData.GetType())
+    if (SectionType::DdeLink == m_SectionData.GetType())
     {
         sal_Int32 n = 0;
         return sLinkFile.replaceFirst( OUStringChar(sfx2::cTokenSeparator), " ", &n )
@@ -460,8 +460,8 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
             SectionType eTmpType;
             if( !( pFormat = &rSh.GetSectionFormat(n))->GetParent() &&
                 pFormat->IsInNodesArr() &&
-                (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                && TOX_HEADER_SECTION != eTmpType )
+                (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
+                && SectionType::ToxHeader != eTmpType )
             {
                 SwSection *pSect = pFormat->GetSection();
                 SectRepr* pSectRepr = new SectRepr( n, *pSect );
@@ -492,8 +492,8 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
             SectionType eTmpType;
             pFormat = pSect->GetFormat();
             if( pFormat->IsInNodesArr() &&
-                (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                && TOX_HEADER_SECTION != eTmpType )
+                (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
+                && SectionType::ToxHeader != eTmpType )
             {
                 SectRepr* pSectRepr=new SectRepr(
                                 FindArrPos( pSect->GetFormat() ), *pSect );
@@ -608,7 +608,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
                 // edit in readonly sections
                 bEditInReadonly = rData.IsEditInReadonlyFlag();
 
-                bFile           = (rData.GetType() != CONTENT_SECTION);
+                bFile           = (rData.GetType() != SectionType::Content);
                 aCurPasswd      = rData.GetPassword();
             }
             else
@@ -622,7 +622,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
                     (bEditInReadonly == rData.IsEditInReadonlyFlag());
 
                 bFileValid        = (bFile ==
-                    (rData.GetType() != CONTENT_SECTION));
+                    (rData.GetType() != SectionType::Content));
                 bPasswdValid      = (aCurPasswd == rData.GetPassword());
             }
             bFirst = false;
@@ -695,7 +695,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
             m_xFileCB->set_active(true);
             m_xFileNameED->set_text(aFile);
             m_xSubRegionED->set_entry_text(sSub);
-            m_xDDECB->set_active(rData.GetType() == DDE_LINK_SECTION);
+            m_xDDECB->set_active(rData.GetType() == SectionType::DdeLink);
         }
         else
         {
@@ -1140,7 +1140,7 @@ IMPL_LINK(SwEditRegionDlg, FileNameEntryHdl, weld::Entry&, rEdit, void)
         }
 
         pSectRepr->GetSectionData().SetLinkFileName( sLink );
-        pSectRepr->GetSectionData().SetType( DDE_LINK_SECTION );
+        pSectRepr->GetSectionData().SetType( SectionType::DdeLink );
     }
     else
     {
@@ -1176,13 +1176,13 @@ IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::ToggleButton&, rButton, void)
             m_xDDECommandFT->show();
             m_xSubRegionFT->hide();
             m_xSubRegionED->hide();
-            if (FILE_LINK_SECTION == rData.GetType())
+            if (SectionType::FileLink == rData.GetType())
             {
                 pSectRepr->SetFile(OUString());
                 m_xFileNameED->set_text(OUString());
                 rData.SetLinkFilePassword(OUString());
             }
-            rData.SetType(DDE_LINK_SECTION);
+            rData.SetType(SectionType::DdeLink);
         }
         else
         {
@@ -1194,9 +1194,9 @@ IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::ToggleButton&, rButton, void)
             m_xSubRegionED->set_sensitive(bFile);
             m_xSubRegionFT->set_sensitive(bFile);
             m_xSubRegionED->set_sensitive(bFile);
-            if (DDE_LINK_SECTION == rData.GetType())
+            if (SectionType::DdeLink == rData.GetType())
             {
-                rData.SetType(FILE_LINK_SECTION);
+                rData.SetType(SectionType::FileLink);
                 pSectRepr->SetFile(OUString());
                 rData.SetLinkFilePassword(OUString());
                 m_xFileNameED->set_text(OUString());
@@ -1554,7 +1554,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
 
 bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
 {
-    SwSectionData aSection(CONTENT_SECTION, m_xCurName->get_active_text());
+    SwSectionData aSection(SectionType::Content, m_xCurName->get_active_text());
     aSection.SetCondition(m_xConditionED->get_text());
     bool bProtected = m_xProtectCB->get_active();
     aSection.SetProtectFlag(bProtected);
@@ -1603,8 +1603,8 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
         if (!aLinkFile.isEmpty())
         {
             aSection.SetType( m_xDDECB->get_active() ?
-                                    DDE_LINK_SECTION :
-                                        FILE_LINK_SECTION);
+                                    SectionType::DdeLink :
+                                        SectionType::FileLink);
         }
     }
     static_cast<SwInsertSectionTabDialog*>(GetDialogController())->SetSectionData(aSection);

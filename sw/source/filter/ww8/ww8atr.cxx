@@ -628,7 +628,7 @@ const SwSectionFormat* MSWordExportBase::GetSectionFormat( const SwNode& rNd )
     const SwSectionFormat* pFormat = nullptr;
     const SwSectionNode* pSect = rNd.FindSectionNode();
     if ( pSect &&
-         CONTENT_SECTION == pSect->GetSection().GetType() )
+         SectionType::Content == pSect->GetSection().GetType() )
     {
         pFormat = pSect->GetSection().GetFormat();
     }

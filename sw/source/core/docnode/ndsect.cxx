@@ -772,8 +772,8 @@ void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
 
 static bool lcl_IsTOXSection(SwSectionData const& rSectionData)
 {
-    return (TOX_CONTENT_SECTION == rSectionData.GetType())
-        || (TOX_HEADER_SECTION  == rSectionData.GetType());
+    return (SectionType::ToxContent == rSectionData.GetType())
+        || (SectionType::ToxHeader  == rSectionData.GetType());
 }
 
 SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
@@ -983,7 +983,7 @@ SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
     : SwStartNode( rIdx, SwNodeType::Section )
     , m_pSection( pTOXBase
         ? new SwTOXBaseSection(*pTOXBase, lcl_initParent(*this, rFormat))
-        : new SwSection( CONTENT_SECTION, rFormat.GetName(),
+        : new SwSection( SectionType::Content, rFormat.GetName(),
                 lcl_initParent(*this, rFormat) ) )
 {
     // Set the connection from Format to Node
@@ -1198,7 +1198,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     pSectFormat->CopyAttrs( *GetSection().GetFormat() );
 
     std::unique_ptr<SwTOXBase> pTOXBase;
-    if (TOX_CONTENT_SECTION == GetSection().GetType())
+    if (SectionType::ToxContent == GetSection().GetType())
     {
         OSL_ENSURE( dynamic_cast< const SwTOXBaseSection* >( &GetSection() ) !=  nullptr , "no TOXBaseSection!" );
         SwTOXBaseSection const& rTBS(
@@ -1214,7 +1214,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     // Take over values
     SwSection *const pNewSect = pSectNd->m_pSection.get();
 
-    if (TOX_CONTENT_SECTION != GetSection().GetType())
+    if (SectionType::ToxContent != GetSection().GetType())
     {
         // Keep the Name for Move
         if( rNds.GetDoc() == pDoc && pDoc->IsCopyIsMove() )
@@ -1337,7 +1337,7 @@ void SwSectionNode::NodesArrChgd()
     }
     else
     {
-        if (CONTENT_SECTION != m_pSection->GetType()
+        if (SectionType::Content != m_pSection->GetType()
             && m_pSection->IsConnected())
         {
             pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( &m_pSection->GetBaseLink() );

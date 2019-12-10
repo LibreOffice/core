@@ -409,7 +409,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                 default:
                     {
                         const OUString sNm(INetURLObject(sFileName).GetLastName());
-                        SwSectionData aSectData( FILE_LINK_SECTION,
+                        SwSectionData aSectData( SectionType::FileLink,
                                         GetUniqueSectionName( &sNm ));
                         SwSectionFormat* pFormat = MakeSectionFormat();
                         aSectData.SetLinkFileName(sFileName);

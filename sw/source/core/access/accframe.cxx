@@ -389,8 +389,8 @@ bool SwAccessibleFrame::IsOpaque( SwViewShell const *pVSh ) const
         if( pFrame->IsSctFrame() )
         {
             const SwSection* pSection = static_cast<const SwSectionFrame*>(pFrame)->GetSection();
-            if( pSection && ( TOX_HEADER_SECTION == pSection->GetType() ||
-                TOX_CONTENT_SECTION == pSection->GetType() ) &&
+            if( pSection && ( SectionType::ToxHeader == pSection->GetType() ||
+                SectionType::ToxContent == pSection->GetType() ) &&
                 !pVOpt->IsReadonly() &&
                 SwViewOption::IsIndexShadings() )
                 return true;

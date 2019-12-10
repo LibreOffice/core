@@ -361,7 +361,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
     GetIDocumentUndoRedo().StartUndo( SwUndoId::INSTOX, nullptr );
 
     OUString sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName() );
-    SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
+    SwSectionData aSectionData( SectionType::ToxContent, sSectNm );
 
     std::pair<SwTOXBase const*, sw::RedlineMode> const tmp(&rTOX,
         pLayout && pLayout->IsHideRedlines()
@@ -390,7 +390,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
             SwTextNode* pHeadNd = GetNodes().MakeTextNode( aIdx,
                             getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
 
-            SwSectionData headerData( TOX_HEADER_SECTION, pNewSection->GetTOXName()+"_Head" );
+            SwSectionData headerData( SectionType::ToxHeader, pNewSection->GetTOXName()+"_Head" );
 
             SwNodeIndex aStt( *pHeadNd ); --aIdx;
             SwSectionFormat* pSectFormat = MakeSectionFormat();
@@ -414,14 +414,14 @@ void SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
     while( pSectNd )
     {
         SectionType eT = pSectNd->GetSection().GetType();
-        if( TOX_HEADER_SECTION == eT || TOX_CONTENT_SECTION == eT )
+        if( SectionType::ToxHeader == eT || SectionType::ToxContent == eT )
             return;
         pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
     }
 
     const OUString sSectNm = GetUniqueTOXBaseName(*rTOX.GetTOXType(), rTOX.GetTOXName());
 
-    SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
+    SwSectionData aSectionData( SectionType::ToxContent, sSectNm );
 
     SwNodeIndex aStt( GetNodes(), nSttNd ), aEnd( GetNodes(), nEndNd );
     SwSectionFormat* pFormat = MakeSectionFormat();
@@ -450,7 +450,7 @@ SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos )
     while( pSectNd )
     {
         SectionType eT = pSectNd->GetSection().GetType();
-        if( TOX_CONTENT_SECTION == eT )
+        if( SectionType::ToxContent == eT )
         {
             OSL_ENSURE( dynamic_cast< const SwTOXBaseSection *>( &pSectNd->GetSection()) !=  nullptr,
                     "no TOXBaseSection!" );
@@ -589,7 +589,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
             pFormat->GetChildSections( aArr, SectionSort::Not, false );
             for( const auto pSect : aArr )
             {
-                if( TOX_HEADER_SECTION == pSect->GetType() )
+                if( SectionType::ToxHeader == pSect->GetType() )
                 {
                     DelSectionFormat( pSect->GetFormat(), bDelNodes );
                 }
@@ -660,7 +660,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
             continue;
 
         const SwSection& rSect = pSectNd->GetSection();
-        if (rSect.GetType()==TOX_CONTENT_SECTION)
+        if (rSect.GetType()==SectionType::ToxContent)
         {
             const OUString& rNm = rSect.GetSectionName();
             if ( rNm.startsWith(aName) )
@@ -740,7 +740,7 @@ static const SwTextNode* lcl_FindChapterNode( const SwNode& rNd,
 // Table of contents class
 SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFormat & rFormat)
     : SwTOXBase( rBase )
-    , SwSection( TOX_CONTENT_SECTION, OUString(), rFormat )
+    , SwSection( SectionType::ToxContent, OUString(), rFormat )
 {
     SetProtect( rBase.IsProtected() );
     SetSectionName( GetTOXName() );
@@ -970,7 +970,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                                 GetTextFormatColl( FORM_TITLE ) );
         pHeadNd->InsertText( GetTitle(), SwIndex( pHeadNd ) );
 
-        SwSectionData headerData( TOX_HEADER_SECTION, GetTOXName()+"_Head" );
+        SwSectionData headerData( SectionType::ToxHeader, GetTOXName()+"_Head" );
 
         SwNodeIndex aStt( *pHeadNd ); --aIdx;
         SwSectionFormat* pSectFormat = pDoc->MakeSectionFormat();

@@ -123,8 +123,8 @@ bool SwEditShell::IsAnySectionInDoc() const
     {
         SectionType eTmpType;
         if( pFormat->IsInNodesArr() &&
-            ( (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
-               && TOX_HEADER_SECTION != eTmpType ) )
+            ( (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
+               && SectionType::ToxHeader != eTmpType ) )
         {
             return true;
         }

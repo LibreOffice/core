@@ -1437,8 +1437,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_EDIT_CURRENT_REGION:
                 //tdf#112808 if cursor is in an index, don't show the edit section.
                 if( !rSh.GetCurrSection() ||
-                    (rSh.GetCurrSection()->GetType() != CONTENT_SECTION &&
-                    rSh.GetCurrSection()->GetType() != FILE_LINK_SECTION ))
+                    (rSh.GetCurrSection()->GetType() != SectionType::Content &&
+                    rSh.GetCurrSection()->GetType() != SectionType::FileLink ))
                 {
                     rSet.DisableItem(nWhich);
                 }

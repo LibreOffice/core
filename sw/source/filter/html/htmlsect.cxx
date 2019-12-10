@@ -307,8 +307,8 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             aHRef = aURL;
         }
 
-        SwSectionData aSection( (!aHRef.isEmpty()) ? FILE_LINK_SECTION
-                                        : CONTENT_SECTION, aName );
+        SwSectionData aSection( (!aHRef.isEmpty()) ? SectionType::FileLink
+                                        : SectionType::Content, aName );
         if( !aHRef.isEmpty() )
         {
             aSection.SetLinkFileName( aHRef );
@@ -688,7 +688,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
         // Make section name unique.
         OUString aName( m_xDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
-        SwSectionData aSection( CONTENT_SECTION, aName );
+        SwSectionData aSection( SectionType::Content, aName );
 
         SfxItemSet aFrameItemSet( m_xDoc->GetAttrPool(),
                                 svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );

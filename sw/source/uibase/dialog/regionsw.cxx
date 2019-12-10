@@ -101,7 +101,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         else
             aTmpStr = rSh.GetUniqueSectionName();
 
-        SwSectionData aSection(CONTENT_SECTION, aTmpStr);
+        SwSectionData aSection(SectionType::Content, aTmpStr);
         rReq.SetReturnValue(SfxStringItem(FN_INSERT_REGION, aTmpStr));
 
         aSet.Put( *pSet );
@@ -165,7 +165,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             }
 
             sLinkFileName += aSub;
-            aSection.SetType( FILE_LINK_SECTION );
+            aSection.SetType( SectionType::FileLink );
             aSection.SetLinkFileName(sLinkFileName);
         }
         rSh.InsertSection(aSection, aSet.Count() ? &aSet : nullptr);

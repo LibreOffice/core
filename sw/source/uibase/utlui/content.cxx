@@ -366,8 +366,8 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 const SwSectionFormat* pFormat;
                 SectionType eTmpType;
                 if( (pFormat = &m_pWrtShell->GetSectionFormat(i))->IsInNodesArr() &&
-                (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                && TOX_HEADER_SECTION != eTmpType )
+                (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
+                && SectionType::ToxHeader != eTmpType )
                 {
                     const OUString& rSectionName =
                         pFormat->GetSection()->GetSectionName();
@@ -671,8 +671,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 const SwSectionFormat* pFormat;
                 SectionType eTmpType;
                 if( (pFormat = &m_pWrtShell->GetSectionFormat(i))->IsInNodesArr() &&
-                (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                && TOX_HEADER_SECTION != eTmpType )
+                (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
+                && SectionType::ToxHeader != eTmpType )
                 {
                     OUString sSectionName = pFormat->GetSection()->GetSectionName();
 
