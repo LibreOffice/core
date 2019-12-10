@@ -277,25 +277,6 @@
 #define RID_SVXITEMS_CHARHIDDEN_FALSE           NC_("RID_SVXITEMS_CHARHIDDEN_FALSE", "Not hidden")
 #define RID_SVXITEMS_CHARHIDDEN_TRUE            NC_("RID_SVXITEMS_CHARHIDDEN_TRUE", "Hidden")
 
-// enum SvxCellHorJustify ----------------------------------------------------
-#define RID_SVXITEMS_HORJUST_STANDARD           NC_("RID_SVXITEMS_HORJUST_STANDARD", "Horizontal alignment default")
-#define RID_SVXITEMS_HORJUST_LEFT               NC_("RID_SVXITEMS_HORJUST_LEFT", "Align left")
-#define RID_SVXITEMS_HORJUST_CENTER             NC_("RID_SVXITEMS_HORJUST_CENTER", "Centered horizontally")
-#define RID_SVXITEMS_HORJUST_RIGHT              NC_("RID_SVXITEMS_HORJUST_RIGHT", "Align right")
-#define RID_SVXITEMS_HORJUST_BLOCK              NC_("RID_SVXITEMS_HORJUST_BLOCK", "Justify horizontally")
-#define RID_SVXITEMS_HORJUST_REPEAT             NC_("RID_SVXITEMS_HORJUST_REPEAT", "Repeat alignment")
-
-// enum SvxCellVerJustify ----------------------------------------------------
-#define RID_SVXITEMS_VERJUST_STANDARD           NC_("RID_SVXITEMS_VERJUST_STANDARD", "Vertical alignment default")
-#define RID_SVXITEMS_VERJUST_TOP                NC_("RID_SVXITEMS_VERJUST_TOP", "Align to top")
-#define RID_SVXITEMS_VERJUST_CENTER             NC_("RID_SVXITEMS_VERJUST_CENTER", "Centered vertically")
-#define RID_SVXITEMS_VERJUST_BOTTOM             NC_("RID_SVXITEMS_VERJUST_BOTTOM", "Align to bottom")
-#define RID_SVXITEMS_VERJUST_BLOCK              NC_("RID_SVXITEMS_HORJUST_BLOCK", "Justify vertically")
-
-// enum SvxCellJustifyMethod ----------------------------------------------------
-#define RID_SVXITEMS_JUSTMETHOD_AUTO            NC_("RID_SVXITEMS_JUSTMETHOD_AUTO", "Automatic")
-#define RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE      NC_("RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE", "Distributed")
-
 #define RID_SVXSTR_PAPERBIN                     NC_("RID_SVXSTR_PAPERBIN", "Paper tray")
 #define RID_SVXSTR_PAPERBIN_SETTINGS            NC_("RID_SVXSTR_PAPERBIN_SETTINGS", "[From printer settings]")
 
