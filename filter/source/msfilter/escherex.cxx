@@ -592,7 +592,7 @@ void    EscherPropertyContainer::CreateFillProperties(
         if ( pObj )
         {
             const SfxItemSet& aAttr( pObj->GetMergedItemSet() );
-            // tranparency with gradient. Means the third setting in transparency page is set
+            // transparency with gradient. Means the third setting in transparency page is set
             bool bTransparentGradient =  ( aAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SfxItemState::SET ) &&
                 aAttr.Get( XATTR_FILLFLOATTRANSPARENCE ).IsEnabled();
             CreateFillProperties(  rXPropSet, bEdge, bTransparentGradient );
