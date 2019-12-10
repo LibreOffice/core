@@ -21,6 +21,8 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_SLIDEBACKGROUND_HXX
 
 #include <memory>
+#include <svl/intitem.hxx>
+#include <svx/dlgutil.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -132,6 +134,7 @@ private:
     long m_nPageRightMargin;
     long m_nPageTopMargin;
     long m_nPageBottomMargin;
+    FieldUnit meFUnit;
     OUString maCustomEntry;
 
     SfxBindings* const mpBindings;
@@ -153,6 +156,7 @@ private:
     void Update();
     void UpdateMarginBox();
     void SetPanelTitle(const OUString& rTitle);
+    void SetMarginsFieldUnit();
 
     Color const & GetColorSetOrDefault();
     XGradient const & GetGradientSetOrDefault();
@@ -167,6 +171,8 @@ private:
     void ExecuteMarginULChange(const long mnPageTopMargin, const long mnPageBottomMargin);
     void populateMasterSlideDropdown();
     void updateMasterSlideSelection();
+
+    static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
 };
 
 }}
