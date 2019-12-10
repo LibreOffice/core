@@ -54,6 +54,21 @@ namespace emfplushelper
     const sal_uInt32 EmfPlusPenDataCustomStartCap = 0x00000800;
     const sal_uInt32 EmfPlusPenDataCustomEndCap = 0x000001000;
 
+    enum LineCapType
+    {
+        LineCapTypeFlat = 0x00000000,
+        LineCapTypeSquare = 0x00000001,
+        LineCapTypeRound = 0x00000002,
+        LineCapTypeTriangle = 0x00000003,
+        LineCapTypeNoAnchor = 0x00000010,
+        LineCapTypeSquareAnchor = 0x00000011,
+        LineCapTypeRoundAnchor = 0x00000012,
+        LineCapTypeDiamondAnchor = 0x00000013,
+        LineCapTypeArrowAnchor = 0x00000014,
+        LineCapTypeAnchorMask = 0x000000F0,
+        LineCapTypeCustom = 0x000000FF
+    };
+
     struct EMFPCustomLineCap;
 
     struct EMFPPen : public EMFPBrush
