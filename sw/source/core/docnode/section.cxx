@@ -1538,14 +1538,14 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
 
     switch( eCreateType )
     {
-    case CREATE_CONNECT: // Connect Link right away
+    case LinkCreateType::Connect: // Connect Link right away
         pLnk->Connect();
         break;
 
-    case CREATE_UPDATE: // Connect Link and update
+    case LinkCreateType::Update: // Connect Link and update
         pLnk->Update();
         break;
-    case CREATE_NONE: break;
+    case LinkCreateType::NONE: break;
     }
 }
 

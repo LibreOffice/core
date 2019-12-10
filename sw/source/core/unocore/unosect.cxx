@@ -431,7 +431,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     {
         if (! pRet->IsConnected())
         {
-            pRet->CreateLink(CREATE_CONNECT);
+            pRet->CreateLink(LinkCreateType::Connect);
         }
         pRet->SetUpdateType( m_pImpl->m_pProps->m_bUpdateType ?
                 SfxLinkUpdateMode::ALWAYS : SfxLinkUpdateMode::ONCALL );
@@ -510,7 +510,7 @@ lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways)
         // set update type; needs an established link
         if (!rSection.IsConnected())
         {
-            rSection.CreateLink(CREATE_CONNECT);
+            rSection.CreateLink(LinkCreateType::Connect);
         }
         rSection.SetUpdateType( bLinkUpdateAlways
             ? SfxLinkUpdateMode::ALWAYS : SfxLinkUpdateMode::ONCALL );

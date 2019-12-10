@@ -369,7 +369,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
     if (rNewData.IsLinkType())
     {
-        pNewSectNode->GetSection().CreateLink( bUpdate ? CREATE_UPDATE : CREATE_CONNECT );
+        pNewSectNode->GetSection().CreateLink( bUpdate ? LinkCreateType::Update : LinkCreateType::Connect );
     }
 
     if( bUpdateFootnote )
@@ -731,7 +731,7 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
     }
 
     if( bUpdate )
-        pSection->CreateLink( bPreventLinkUpdate ? CREATE_CONNECT : CREATE_UPDATE );
+        pSection->CreateLink( bPreventLinkUpdate ? LinkCreateType::Connect : LinkCreateType::Update );
     else if( !pSection->IsLinkType() && pSection->IsConnected() )
     {
         pSection->Disconnect();
@@ -1248,7 +1248,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
 
     // Copy the Links/Server
     if( pNewSect->IsLinkType() ) // Add the Link
-        pNewSect->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? CREATE_CONNECT : CREATE_NONE );
+        pNewSect->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? LinkCreateType::Connect : LinkCreateType::NONE );
 
     // If we copy from the Undo as Server, enter it again
     if (m_pSection->IsServer()
@@ -1330,7 +1330,7 @@ void SwSectionNode::NodesArrChgd()
         OSL_ENSURE( pDoc == GetDoc(),
                 "Moving to different Documents?" );
         if( m_pSection->IsLinkType() ) // Remove the Link
-            m_pSection->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? CREATE_CONNECT : CREATE_NONE );
+            m_pSection->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? LinkCreateType::Connect : LinkCreateType::NONE );
 
         if (m_pSection->IsServer())
             pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertServer( m_pSection->GetObject() );
