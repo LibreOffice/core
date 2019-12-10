@@ -1297,7 +1297,7 @@ void Alignment::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     // set an angle in the range from -90 to 90 degrees
     ScfTools::PutItem( rItemSet, ScRotateValueItem( maApiData.mnRotation ), bSkipPoolDefs );
     // Orientation
-    ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_STACKED, maApiData.meOrientation == css::table::CellOrientation_STACKED ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, ScVerticalStackCell( maApiData.meOrientation == css::table::CellOrientation_STACKED ), bSkipPoolDefs );
     // indent
     ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_INDENT, maApiData.mnIndent ), bSkipPoolDefs );
     // line wrap

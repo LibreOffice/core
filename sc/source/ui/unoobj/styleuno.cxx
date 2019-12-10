@@ -1545,18 +1545,18 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                                     switch (eOrient)
                                     {
                                         case table::CellOrientation_STANDARD:
-                                            rSet.Put(SfxBoolItem(ATTR_STACKED, false));
+                                            rSet.Put(ScVerticalStackCell(false));
                                         break;
                                         case table::CellOrientation_TOPBOTTOM:
-                                            rSet.Put(SfxBoolItem(ATTR_STACKED, false));
+                                            rSet.Put(ScVerticalStackCell(false));
                                             rSet.Put(ScRotateValueItem(27000));
                                         break;
                                         case table::CellOrientation_BOTTOMTOP:
-                                            rSet.Put(SfxBoolItem(ATTR_STACKED, false));
+                                            rSet.Put(ScVerticalStackCell(false));
                                             rSet.Put(ScRotateValueItem(9000));
                                         break;
                                         case table::CellOrientation_STACKED:
-                                            rSet.Put(SfxBoolItem(ATTR_STACKED, true));
+                                            rSet.Put(ScVerticalStackCell(true));
                                         break;
                                         default:
                                         {
@@ -1795,7 +1795,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
                     case ATTR_STACKED:
                         {
                             sal_Int32 nRot = pItemSet->Get(ATTR_ROTATE_VALUE).GetValue();
-                            bool bStacked = static_cast<const SfxBoolItem&>(pItemSet->Get(nWhich)).GetValue();
+                            bool bStacked = static_cast<const ScVerticalStackCell&>(pItemSet->Get(nWhich)).GetValue();
                             SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aAny );
                         }
                         break;

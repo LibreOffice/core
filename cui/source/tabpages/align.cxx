@@ -270,7 +270,12 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_xCbStacked->get_state_changed_from_saved())
     {
-        rSet->Put(SfxBoolItem(GetWhich(SID_ATTR_ALIGN_STACKED), m_xCbStacked->get_active()));
+        const SfxBoolItem* pStackItem = static_cast<const SfxBoolItem*>(GetOldItem(
+                                            *rSet, SID_ATTR_ALIGN_STACKED));
+        assert(pStackItem);
+        std::unique_ptr<SfxBoolItem> pNewStackItem(static_cast<SfxBoolItem*>(pStackItem->Clone()));
+        pNewStackItem->SetValue(m_xCbStacked->get_active());
+        rSet->Put(*pNewStackItem);
         bChanged = true;
     }
 
