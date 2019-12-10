@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_ef02bd3e",
+        "filename": "sfx2/source/dialog/infobar.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-12-10T23:30:30Z",
+      "side": 1,
+      "message": "During testing of gen backend I noticed the shade remained on the close button when keyboard focus was move from the close button to another button in the infobar. I can\u0027t reproduce that any more.",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 45
+      },
+      "revId": "36cc00ab8dd50bfc8008ea61e50af7a7b65a3467",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
