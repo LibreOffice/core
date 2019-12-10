@@ -24,6 +24,20 @@
 
 namespace emfplushelper
 {
+    const sal_uInt32 PathPointFlagsRelative = 0x0800;
+    const sal_uInt32 PathPointFlagsAbsolute = 0x4000;
+
+    const sal_uInt8 PathPointTypeDashMode = 0x01;
+    const sal_uInt8 PathPointTypePathMarker = 0x02;
+    const sal_uInt8 PathPointTypeCloseSubpath = 0x08;
+
+    enum PathPointType
+    {
+        PathPointTypeStart = 0x00,
+        PathPointTypeLine = 0x01,
+        PathPointTypeBezier = 0x03
+    };
+
     struct EMFPPath : public EMFPObject
     {
         ::basegfx::B2DPolyPolygon    aPolygon;
