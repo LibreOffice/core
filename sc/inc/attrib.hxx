@@ -333,6 +333,18 @@ public:
                                  const IntlWrapper& rIntl) const override;
 };
 
+class SC_DLLPUBLIC ScHyphenateCell final : public SfxBoolItem
+{
+public:
+    ScHyphenateCell(bool bHyphenate= false);
+    virtual ScHyphenateCell* Clone(SfxItemPool *pPool = nullptr) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePres,
+                                 MapUnit eCoreMetric,
+                                 MapUnit ePresMetric,
+                                 OUString &rText,
+                                 const IntlWrapper& rIntl) const override;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
