@@ -111,7 +111,7 @@ class SvxSizeItem;
 #define ATTR_USERDEF            TypedWhichId<SvXMLAttrContainerItem>(122)    // not saved in binary files
 #define ATTR_FONT_WORDLINE      TypedWhichId<SvxWordLineModeItem>(123)
 #define ATTR_FONT_RELIEF        TypedWhichId<SvxCharReliefItem>(124)
-#define ATTR_HYPHENATE          TypedWhichId<SfxBoolItem>(125)
+#define ATTR_HYPHENATE          TypedWhichId<ScHyphenateCell>(125)
 #define ATTR_SCRIPTSPACE        TypedWhichId<SvxScriptSpaceItem>(126)
 #define ATTR_HANGPUNCTUATION    TypedWhichId<SvxHangingPunctuationItem>(127)
 #define ATTR_FORBIDDEN_RULES    TypedWhichId<SvxForbiddenRuleItem>(128)
