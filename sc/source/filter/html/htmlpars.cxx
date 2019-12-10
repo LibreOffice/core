@@ -51,6 +51,7 @@
 
 #include <rtl/tencinfo.h>
 
+#include <attrib.hxx>
 #include <htmlpars.hxx>
 #include <global.hxx>
 #include <document.hxx>
@@ -831,7 +832,7 @@ void ScHTMLLayoutParser::CloseEntry( const HtmlImportInfo* pInfo )
         rSel.nEndPara = rSel.nStartPara;
     }
     if ( rSel.HasRange() )
-        mxActEntry->aItemSet.Put( SfxBoolItem( ATTR_LINEBREAK, true ) );
+        mxActEntry->aItemSet.Put( ScLineBreakCell(true) );
     maList.push_back(mxActEntry);
     NewActEntry(mxActEntry.get()); // New free flying mxActEntry
 }

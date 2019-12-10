@@ -177,7 +177,7 @@ void ScAnchorTest::testTdf76183()
     const tools::Rectangle& rNewRect = pObj->GetLogicRect();
 
     // Set word wrap to true
-    rDoc.ApplyAttr(0, 0, 0, SfxBoolItem(ATTR_LINEBREAK, true));
+    rDoc.ApplyAttr(0, 0, 0, ScLineBreakCell(true));
     // Add multi-line text to cell to initiate optimal height change
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), uno::UNO_QUERY_THROW);
