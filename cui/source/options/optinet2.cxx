@@ -734,20 +734,6 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, weld::Button&, void)
 
 void SvxSecurityTabPage::InitControls()
 {
-    // Hide all controls which belong to the macro security button in case the macro
-    // security settings managed by the macro security dialog opened via the button
-    // are all readonly or if the macros are disabled in general.
-    // @@@ Better would be to query the dialog whether it is 'useful' or not. Exposing
-    //     macro security dialog implementations here, which is bad.
-    if (    mpSecOptions->IsMacroDisabled()
-         || (    mpSecOptions->IsReadOnly( SvtSecurityOptions::EOption::MacroSecLevel )
-              && mpSecOptions->IsReadOnly( SvtSecurityOptions::EOption::MacroTrustedAuthors )
-              && mpSecOptions->IsReadOnly( SvtSecurityOptions::EOption::SecureUrls ) ) )
-    {
-        //Hide these
-        m_xMacroSecFrame->hide();
-    }
-
 #ifndef UNX
     m_xCertFrame->hide();
 #endif
