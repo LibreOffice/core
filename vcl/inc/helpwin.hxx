@@ -24,7 +24,7 @@
 #include <vcl/timer.hxx>
 
 enum class QuickHelpFlags;
-class ImplSVHelpData;
+struct ImplSVHelpData;
 
 class HelpTextWindow : public FloatingWindow
 {
