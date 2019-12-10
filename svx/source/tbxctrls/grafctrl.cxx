@@ -1013,10 +1013,6 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
 
         nWhich = aIter.NextWhich();
     }
-
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (pViewShell && comphelper::LibreOfficeKit::isActive())
-        pViewShell->sendUnoStatus( &rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

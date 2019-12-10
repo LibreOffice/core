@@ -2424,10 +2424,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         }
         nWhich = aIter.NextWhich();
     }
-
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (pViewShell && comphelper::LibreOfficeKit::isActive())
-        pViewShell->sendUnoStatus( &rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
