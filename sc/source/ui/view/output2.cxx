@@ -1646,7 +1646,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         // Disable line break when the cell content is numeric.
                         aAltPatterns.push_back(std::make_unique<ScPatternAttr>(*pPattern));
                         ScPatternAttr* pAltPattern = aAltPatterns.back().get();
-                        SfxBoolItem aLineBreak(ATTR_LINEBREAK, false);
+                        ScLineBreakCell aLineBreak(false);
                         pAltPattern->GetItemSet().Put(aLineBreak);
                         pPattern = pAltPattern;
                     }

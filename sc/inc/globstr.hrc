@@ -519,6 +519,8 @@
 #define STR_SHRINKTOFITCELL_OFF                 NC_("STR_SHRINKTOFITCELL_OFF", "Shrink to fit cell: Off")
 #define STR_VERTICALSTACKCELL_ON                NC_("STR_VERTICALSTACKCELL_ON", "Vertically stacked: On")
 #define STR_VERTICALSTACKCELL_OFF               NC_("STR_VERTICALSTACKCELL_OFF", "Vertically stacked: Off")
+#define STR_LINEBREAKCELL_ON                    NC_("STR_LINEBREAKCELL_ON", "Wrap text automatically: On")
+#define STR_LINEBREAKCELL_OFF                   NC_("STR_LINEBREAKCELL_OFF", "Wrap text automatically: Off")
 
 #endif
 

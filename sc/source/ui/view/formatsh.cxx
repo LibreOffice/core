@@ -1710,7 +1710,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     const ScPatternAttr* pAttrs = pTabViewShell->GetSelectionPattern();
                     bool bOld = pAttrs->GetItem(ATTR_LINEBREAK).GetValue();
-                    SfxBoolItem aBreakItem( ATTR_LINEBREAK, !bOld );
+                    ScLineBreakCell aBreakItem(!bOld);
                     pTabViewShell->ApplyAttr( aBreakItem );
 
                     SfxAllItemSet aNewSet( GetPool() );
