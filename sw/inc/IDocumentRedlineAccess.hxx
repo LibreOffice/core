@@ -28,6 +28,7 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <svx/ctredlin.hxx>
 
 #include "docary.hxx"
 
@@ -60,21 +61,6 @@ namespace o3tl
     template<> struct typed_flags<RedlineFlags> : is_typed_flags<RedlineFlags, 0x533> {};
 }
 
-enum class RedlineType : sal_uInt16
-{
-    // Range of RedlineTypes is 0 to 127.
-    Insert = 0x0,// Content has been inserted.
-    Delete = 0x1,// Content has been deleted.
-    Format = 0x2,// Attributes have been applied.
-    Table = 0x3,// Table structure has been altered.
-    FmtColl = 0x4,// Style has been altered (Autoformat!).
-    ParagraphFormat = 0x5,// Paragraph attributes have been changed.
-    TableRowInsert = 0x6,// Table row has been inserted.
-    TableRowDelete = 0x7,// Table row has been deleted.
-    TableCellInsert = 0x8,// Table cell has been inserted.
-    TableCellDelete = 0x9,// Table cell has been deleted.
-    Any = USHRT_MAX // special value to indicate any redline type in some method calls
-};
 inline OUString SwRedlineTypeToOUString(RedlineType eType)
 {
     OUString sRet;
