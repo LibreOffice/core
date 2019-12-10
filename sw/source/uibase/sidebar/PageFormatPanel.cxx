@@ -40,6 +40,9 @@
 #include <uitool.hxx>
 #include <svtools/unitconv.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -62,15 +65,25 @@ void PageFormatPanel::SetMarginFieldUnit()
 {
     auto nSelected = mpMarginSelectBox->GetSelectedEntryPos();
     mpMarginSelectBox->Clear();
+
+    const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
     if (IsInch(meFUnit))
     {
+        OUString sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::INCH);
         for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
-            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i]));
+        {
+            OUString sStr = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_INCH[i].second, 2, true, false) + sSuffix;
+            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i].first).replaceFirst("%1", sStr));
+        }
     }
     else
     {
+        OUString sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::CM);
         for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
-            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_CM[i]));
+        {
+            OUString sStr = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_CM[i].second, 2, true, false) + " " + sSuffix;
+            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_CM[i].first).replaceFirst("%1", sStr));
+        }
     }
     mpMarginSelectBox->SelectEntryPos(nSelected);
 }
