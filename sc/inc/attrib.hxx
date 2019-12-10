@@ -321,6 +321,18 @@ public:
                                  const IntlWrapper& rIntl) const override;
 };
 
+class SC_DLLPUBLIC ScLineBreakCell final : public SfxBoolItem
+{
+public:
+    ScLineBreakCell(bool bLineBreak = false);
+    virtual ScLineBreakCell* Clone(SfxItemPool *pPool = nullptr) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePres,
+                                 MapUnit eCoreMetric,
+                                 MapUnit ePresMetric,
+                                 OUString &rText,
+                                 const IntlWrapper& rIntl) const override;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

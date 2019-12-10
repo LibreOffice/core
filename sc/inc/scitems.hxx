@@ -50,7 +50,9 @@ class SvxVerJustifyItem;
 class SvxBrushItem;
 class SvxBoxItem;
 class ScCondFormatItem;
+class ScLineBreakCell;
 class ScRotateValueItem;
+class ScShrinkToFitCell;
 class SvxLineItem;
 class SvxRotateModeItem;
 class SfxStringItem;
@@ -118,12 +120,12 @@ class SvxSizeItem;
 #define ATTR_INDENT             TypedWhichId<SfxUInt16Item>(131)
 #define ATTR_VER_JUSTIFY        TypedWhichId<SvxVerJustifyItem>(132)
 #define ATTR_VER_JUSTIFY_METHOD TypedWhichId<SvxJustifyMethodItem>(133)
-#define ATTR_STACKED            TypedWhichId<SfxBoolItem>(134)
+#define ATTR_STACKED            TypedWhichId<ScShrinkToFitCell>(134)
 #define ATTR_ROTATE_VALUE       TypedWhichId<ScRotateValueItem>(135)
 #define ATTR_ROTATE_MODE        TypedWhichId<SvxRotateModeItem>(136)
 #define ATTR_VERTICAL_ASIAN     TypedWhichId<SfxBoolItem>(137)
 #define ATTR_WRITINGDIR         TypedWhichId<SvxFrameDirectionItem>(138)
-#define ATTR_LINEBREAK          TypedWhichId<SfxBoolItem>(139)
+#define ATTR_LINEBREAK          TypedWhichId<ScLineBreakCell>(139)
 #define ATTR_SHRINKTOFIT        TypedWhichId<SfxBoolItem>(140)
 #define ATTR_BORDER_TLBR        TypedWhichId<SvxLineItem>(141)
 #define ATTR_BORDER_BLTR        TypedWhichId<SvxLineItem>(142)
