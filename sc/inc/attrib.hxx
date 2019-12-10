@@ -294,7 +294,19 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePresentation,
                                   MapUnit, MapUnit,
                                   OUString& rText,
-                                  const IntlWrapper& ) const override;
+                                  const IntlWrapper& rIntl) const override;
+};
+
+class SC_DLLPUBLIC ScShrinkToFitCell final : public SfxBoolItem
+{
+public:
+    ScShrinkToFitCell(bool bShrink = false);
+    virtual ScShrinkToFitCell* Clone(SfxItemPool *pPool = nullptr) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePres,
+                                 MapUnit eCoreMetric,
+                                 MapUnit ePresMetric,
+                                 OUString &rText,
+                                 const IntlWrapper& rIntl) const override;
 };
 
 #endif

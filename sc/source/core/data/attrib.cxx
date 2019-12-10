@@ -748,4 +748,24 @@ bool ScRotateValueItem::GetPresentation(SfxItemPresentation ePresentation,
     return bRet;
 }
 
+ScShrinkToFitCell::ScShrinkToFitCell(bool bShrink)
+    : SfxBoolItem(ATTR_SHRINKTOFIT, bShrink)
+{
+}
+
+ScShrinkToFitCell* ScShrinkToFitCell::Clone(SfxItemPool*) const
+{
+    return new ScShrinkToFitCell(GetValue());
+}
+
+bool ScShrinkToFitCell::GetPresentation(SfxItemPresentation,
+                                        MapUnit, MapUnit,
+                                        OUString& rText,
+                                        const IntlWrapper&) const
+{
+    const char* pId = GetValue() ? STR_SHRINKTOFITCELL_ON : STR_SHRINKTOFITCELL_OFF;
+    rText = ScResId(pId);
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

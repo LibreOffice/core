@@ -825,7 +825,7 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_INDENT, nScIndent ), bSkipPoolDefs );
 
     // shrink to fit
-    ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_SHRINKTOFIT, mbShrink ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, ScShrinkToFitCell( mbShrink ), bSkipPoolDefs );
 
     // text orientation/rotation (BIFF2-BIFF7 sets mnOrient)
     sal_uInt8 nXclRot = (mnOrient == EXC_ORIENT_NONE) ? mnRotation : XclTools::GetXclRotFromOrient( mnOrient );

@@ -237,9 +237,9 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         const SdrAngleItem* pAngleItem = static_cast<const SdrAngleItem*>(GetOldItem(
                                             *rSet, SID_ATTR_ALIGN_DEGREES));
         assert(pAngleItem);
-        std::unique_ptr<SdrAngleItem> pNewAngletem(static_cast<SdrAngleItem*>(pAngleItem->Clone()));
-        pNewAngletem->SetValue(m_aCtrlDial.GetRotation());
-        rSet->Put(*pNewAngletem);
+        std::unique_ptr<SdrAngleItem> pNewAngleItem(static_cast<SdrAngleItem*>(pAngleItem->Clone()));
+        pNewAngleItem->SetValue(m_aCtrlDial.GetRotation());
+        rSet->Put(*pNewAngleItem);
         bChanged = true;
     }
 
@@ -289,7 +289,12 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_xBtnShrink->get_state_changed_from_saved())
     {
-        rSet->Put(SfxBoolItem(GetWhich(SID_ATTR_ALIGN_SHRINKTOFIT), m_xBtnShrink->get_active()));
+        const SfxBoolItem* pShrinkItem = static_cast<const SfxBoolItem*>(GetOldItem(
+                                            *rSet, SID_ATTR_ALIGN_SHRINKTOFIT));
+        assert(pShrinkItem);
+        std::unique_ptr<SfxBoolItem> pNewShrinkItem(static_cast<SfxBoolItem*>(pShrinkItem->Clone()));
+        pNewShrinkItem->SetValue(m_xBtnShrink->get_active());
+        rSet->Put(*pNewShrinkItem);
         bChanged = true;
     }
 
