@@ -2580,7 +2580,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
 
     rSortOpt.bTable = false;
     rSortOpt.cDeli = ' ';
-    rSortOpt.eDirection = SRT_COLUMNS;  //!! UI text may be contrary though !!
+    rSortOpt.eDirection = SwSortDirection::Columns;  //!! UI text may be contrary though !!
 
     std::unique_ptr<SwSortKey> pKey1(new SwSortKey);
     pKey1->nColumnId = USHRT_MAX;
@@ -2644,7 +2644,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             bool bTemp(false);
             if (aValue >>= bTemp)
             {
-                rSortOpt.eDirection = bTemp ? SRT_COLUMNS : SRT_ROWS;
+                rSortOpt.eDirection = bTemp ? SwSortDirection::Columns : SwSortDirection::Rows;
             }
             else
             {
@@ -2757,7 +2757,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             bNewSortdescriptor = true;
             if (auto bTemp = o3tl::tryAccess<bool>(aValue))
             {
-                rSortOpt.eDirection = *bTemp ? SRT_COLUMNS : SRT_ROWS;
+                rSortOpt.eDirection = *bTemp ? SwSortDirection::Columns : SwSortDirection::Rows;
             }
             else
             {
