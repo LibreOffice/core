@@ -945,8 +945,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             rDevice.SetMapMode(aDrawMode);
 
                             static const double twipFactor = 15 * 1.76388889; // 26.45833335
-                            aOrigin = Point(aOrigin.getX() * twipFactor,
-                                            aOrigin.getY() * twipFactor);
+                            // keep into account the zoom factor
+                            aOrigin = Point((aOrigin.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
+                                            (aOrigin.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
+
                             MapMode aNew = rDevice.GetMapMode();
                             aNew.SetOrigin(aOrigin);
                             rDevice.SetMapMode(aNew);
@@ -1017,8 +1019,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
             aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
             static const double twipFactor = 15 * 1.76388889; // 26.45833335
-            aOrigin = Point(aOrigin.getX() * twipFactor,
-                            aOrigin.getY() * twipFactor);
+            // keep into account the zoom factor
+            aOrigin = Point((aOrigin.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
+                            (aOrigin.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
             MapMode aNew = rDevice.GetMapMode();
             aNew.SetOrigin(aOrigin);
             rDevice.SetMapMode(aNew);
