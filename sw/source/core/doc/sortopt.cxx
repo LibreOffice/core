@@ -21,7 +21,7 @@
 #include <sortopt.hxx>
 
 SwSortKey::SwSortKey() :
-    eSortOrder( SRT_ASCENDING ),
+    eSortOrder( SwSortOrder::Ascending ),
     nColumnId( 0 ),
     bIsNumeric( true )
 {

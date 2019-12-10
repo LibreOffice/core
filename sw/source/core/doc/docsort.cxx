@@ -123,7 +123,7 @@ int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
     const SwSortElement *pOrig, *pCmp;
 
     const SwSortKey* pSrtKey = pOptions->aKeys[ nKey ].get();
-    if( pSrtKey->eSortOrder == SRT_ASCENDING )
+    if( pSrtKey->eSortOrder == SwSortOrder::Ascending )
     {
         pOrig = this;
         pCmp = &rCmp;
