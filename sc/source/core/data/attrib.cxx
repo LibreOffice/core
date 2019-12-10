@@ -779,11 +779,31 @@ ScVerticalStackCell* ScVerticalStackCell::Clone(SfxItemPool*) const
 }
 
 bool ScVerticalStackCell::GetPresentation(SfxItemPresentation,
-                                        MapUnit, MapUnit,
-                                        OUString& rText,
-                                        const IntlWrapper&) const
+                                          MapUnit, MapUnit,
+                                          OUString& rText,
+                                          const IntlWrapper&) const
 {
     const char* pId = GetValue() ? STR_VERTICALSTACKCELL_ON : STR_VERTICALSTACKCELL_OFF;
+    rText = ScResId(pId);
+    return true;
+}
+
+ScLineBreakCell::ScLineBreakCell(bool bStack)
+    : SfxBoolItem(ATTR_LINEBREAK, bStack)
+{
+}
+
+ScLineBreakCell* ScLineBreakCell::Clone(SfxItemPool*) const
+{
+    return new ScLineBreakCell(GetValue());
+}
+
+bool ScLineBreakCell::GetPresentation(SfxItemPresentation,
+                                      MapUnit, MapUnit,
+                                      OUString& rText,
+                                      const IntlWrapper&) const
+{
+    const char* pId = GetValue() ? STR_LINEBREAKCELL_ON : STR_LINEBREAKCELL_OFF;
     rText = ScResId(pId);
     return true;
 }

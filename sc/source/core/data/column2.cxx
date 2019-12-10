@@ -145,7 +145,7 @@ long ScColumn::GetNeededSize(
         bBreak = true;
     else if ( pCondSet &&
                 pCondSet->GetItemState(ATTR_LINEBREAK, true, &pCondItem) == SfxItemState::SET)
-        bBreak = static_cast<const SfxBoolItem*>(pCondItem)->GetValue();
+        bBreak = static_cast<const ScLineBreakCell*>(pCondItem)->GetValue();
     else
         bBreak = pPattern->GetItem(ATTR_LINEBREAK).GetValue();
 
