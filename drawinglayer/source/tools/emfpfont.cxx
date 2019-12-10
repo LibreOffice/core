@@ -22,6 +22,25 @@
 
 namespace emfplushelper
 {
+    static OUString FontStyleToString(sal_uInt32 style)
+    {
+        OUString sStyle;
+
+        if (style & FontStyleBold)
+            sStyle = "\n\t\t\tFontStyleBold";
+
+        if (style & FontStyleItalic)
+            sStyle = sStyle.concat("\n\t\t\tFontStyleItalic");
+
+        if (style & FontStyleUnderline)
+            sStyle = sStyle.concat("\n\t\t\tFontStyleUnderline");
+
+        if (style & FontStyleStrikeout)
+            sStyle = sStyle.concat("\n\t\t\tFontStyleStrikeout");
+
+        return sStyle;
+    }
+
     void EMFPFont::Read(SvMemoryStream &s)
     {
         sal_uInt32 header;
@@ -29,8 +48,13 @@ namespace emfplushelper
         sal_uInt32 length;
         s.ReadUInt32(header).ReadFloat(emSize).ReadUInt32(sizeUnit).ReadInt32(fontFlags).ReadUInt32(reserved).ReadUInt32(length);
         SAL_WARN_IF((header >> 12) != 0xdbc01, "drawinglayer", "Invalid header - not 0xdbc01");
-        SAL_INFO("drawinglayer", "EMF+\tfont\nEMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " size: " << std::dec << emSize << " unit: 0x" << std::hex << sizeUnit << std::dec);
-        SAL_INFO("drawinglayer", "EMF+\tflags: 0x" << std::hex << fontFlags << " reserved: 0x" << reserved << " length: 0x" << std::hex << length << std::dec);
+        SAL_INFO("drawinglayer", "EMF+\tHeader: 0x" << std::hex << (header >> 12));
+        SAL_INFO("drawinglayer", "EMF+\tVersion: 0x" << (header & 0x1fff));
+        SAL_INFO("drawinglayer", "EMF+\tSize: " << std::dec << emSize);
+        SAL_INFO("drawinglayer", "EMF+\tUnit: " << UnitTypeToString(sizeUnit) << " (0x" << std::hex << sizeUnit << ")" << std::dec);
+        SAL_INFO("drawinglayer", "EMF+\tFlags: " << FontStyleToString(fontFlags) << " (0x" << std::hex << fontFlags << ")");
+        SAL_INFO("drawinglayer", "EMF+\tReserved: 0x" << reserved << std::dec);
+        SAL_INFO("drawinglayer", "EMF+\tLength: " << length);
 
         //tdf#113624 Convert unit to Pixels
         emSize = emSize * EmfPlusHelperData::getUnitToPixelMultiplier(static_cast<UnitType>(sizeUnit));
@@ -46,7 +70,7 @@ namespace emfplushelper
             }
 
             family = OUString(pStr, SAL_NO_ACQUIRE);
-            SAL_INFO("drawinglayer", "EMF+\tfamily: " << family);
+            SAL_INFO("drawinglayer", "EMF+\tFamily: " << family);
         }
     }
 }
