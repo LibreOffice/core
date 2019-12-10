@@ -230,11 +230,17 @@ namespace sfx2
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
                 // the trusted macro check will also retrieve the signature state ( small optimization )
-                bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN );
+                const SvtSecurityOptions aSecOption;
+                const bool bAllowUIToAddAuthor = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
+                                                 && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
+                                                     || !aSecOption.IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors));
+                const bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature(bAllowUIToAddAuthor);
 
                 SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
                 if ( nSignatureState == SignatureState::BROKEN )
                 {
+                    if (!bAllowUIToAddAuthor)
+                        lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
                     return disallowMacroExecution();
                 }
                 else if ( m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading() &&
@@ -254,6 +260,8 @@ namespace sfx2
                        || nSignatureState == SignatureState::NOTVALIDATED )
                 {
                     // there is valid signature, but it is not from the trusted author
+                    if (!bAllowUIToAddAuthor)
+                        lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
                     return disallowMacroExecution();
                 }
             }
