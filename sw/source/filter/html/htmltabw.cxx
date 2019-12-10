@@ -320,13 +320,13 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
     long nWidth = 0;
     bool bOutWidth = true;
-    sal_uInt32 nPrcWidth = SAL_MAX_UINT32;
+    sal_uInt32 nPercentWidth = SAL_MAX_UINT32;
 
     if( m_bLayoutExport )
     {
-        if( pCell->HasPrcWidthOpt() )
+        if( pCell->HasPercentWidthOpt() )
         {
-            nPrcWidth = pCell->GetWidthOpt();
+            nPercentWidth = pCell->GetWidthOpt();
         }
         else
         {
@@ -338,7 +338,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     else
     {
         if( HasRelWidths() )
-            nPrcWidth = GetPrcWidth(nCol, nColSpan);
+            nPercentWidth = GetPercentWidth(nCol, nColSpan);
         else
             nWidth = GetAbsWidth( nCol, nColSpan );
     }
@@ -369,9 +369,9 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
             append("=\"");
-        if( nPrcWidth != SAL_MAX_UINT32 )
+        if( nPercentWidth != SAL_MAX_UINT32 )
         {
-            sOut.append(static_cast<sal_Int32>(nPrcWidth)).append('%');
+            sOut.append(static_cast<sal_Int32>(nPercentWidth)).append('%');
         }
         else
         {
@@ -875,7 +875,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     // NONE means that no horizontal alignment was outputted.
     sal_Int16 eFlyHoriOri = text::HoriOrientation::NONE;
     css::text::WrapTextMode eSurround = css::text::WrapTextMode_NONE;
-    sal_uInt8 nFlyPrcWidth = 0;
+    sal_uInt8 nFlyPercentWidth = 0;
     long nFlyWidth = 0;
     sal_uInt16 nFlyHSpace = 0;
     sal_uInt16 nFlyVSpace = 0;
@@ -883,7 +883,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     {
         eSurround = pFlyFrameFormat->GetSurround().GetSurround();
         const SwFormatFrameSize& rFrameSize = pFlyFrameFormat->GetFrameSize();
-        nFlyPrcWidth = rFrameSize.GetWidthPercent();
+        nFlyPercentWidth = rFrameSize.GetWidthPercent();
         nFlyWidth = rFrameSize.GetSize().Width();
 
         eFlyHoriOri = pFlyFrameFormat->GetHoriOrient().GetHoriOrient();
@@ -910,7 +910,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
 
     const SwFormatFrameSize& rFrameSize = pFormat->GetFrameSize();
     long nWidth = rFrameSize.GetSize().Width();
-    sal_uInt8 nPrcWidth = rFrameSize.GetWidthPercent();
+    sal_uInt8 nPercentWidth = rFrameSize.GetWidthPercent();
     sal_uInt16 nBaseWidth = static_cast<sal_uInt16>(nWidth);
 
     sal_Int16 eTabHoriOri = pFormat->GetHoriOrient().GetHoriOrient();
@@ -944,10 +944,10 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
                 }
 
             }
-            else if( nPrcWidth  )
+            else if( nPercentWidth  )
             {
                 // Without a right border the %-width is maintained.
-                nWidth = nPrcWidth;
+                nWidth = nPercentWidth;
                 bRelWidths = true;
             }
             else
@@ -968,10 +968,10 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     default:
         // In all other case it's possible to use directly an absolute
         // or relative width.
-        if( nPrcWidth )
+        if( nPercentWidth )
         {
             bRelWidths = true;
-            nWidth = nPrcWidth;
+            nWidth = nPercentWidth;
         }
         break;
     }
@@ -1020,8 +1020,8 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         // relative width <100% into frames is to blame when the result looks bad.
         if( bRelWidths )
         {
-            nWidth = nFlyPrcWidth ? nFlyPrcWidth : nFlyWidth;
-            bRelWidths = nFlyPrcWidth > 0;
+            nWidth = nFlyPercentWidth ? nFlyPercentWidth : nFlyWidth;
+            bRelWidths = nFlyPercentWidth > 0;
         }
     }
 

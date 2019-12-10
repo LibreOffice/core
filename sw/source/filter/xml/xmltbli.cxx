@@ -2627,7 +2627,7 @@ void SwXMLTableContext::MakeTable()
     sal_Int16 eHoriOrient = text::HoriOrientation::FULL;
     bool bSetHoriOrient = false;
 
-    sal_uInt8 nPrcWidth = 0U;
+    sal_uInt8 nPercentWidth = 0U;
 
     m_pTableNode->GetTable().SetRowsToRepeat( m_nHeaderRows );
     m_pTableNode->GetTable().SetTableModel( !m_bHasSubTables );
@@ -2697,7 +2697,7 @@ void SwXMLTableContext::MakeTable()
                 if( pSize->GetWidthPercent() )
                 {
                     // The width will be set in MakeTable_
-                    nPrcWidth = pSize->GetWidthPercent();
+                    nPercentWidth = pSize->GetWidthPercent();
                 }
                 else
                 {
@@ -2751,7 +2751,7 @@ void SwXMLTableContext::MakeTable()
     // changed there.
     pFrameFormat->LockModify();
     SwFormatFrameSize aSize( SwFrameSize::Variable, m_nWidth );
-    aSize.SetWidthPercent( nPrcWidth );
+    aSize.SetWidthPercent( nPercentWidth );
     pFrameFormat->SetFormatAttr( aSize );
     pFrameFormat->UnlockModify();
 

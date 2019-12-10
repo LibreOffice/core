@@ -348,7 +348,7 @@ sal_uInt16 SwWriteTable::GetRelWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) con
                                    GetBaseWidth() )));
 }
 
-sal_uInt16 SwWriteTable::GetPrcWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const
+sal_uInt16 SwWriteTable::GetPercentWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const
 {
     long nWidth = GetRawWidth( nCol, nColSpan );
 
@@ -767,7 +767,7 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
     : m_pTable(pTable), m_nBorderColor(sal_uInt32(-1)), m_nCellSpacing(0), m_nCellPadding(0), m_nBorder(0),
     m_nInnerBorder(0), m_nBaseWidth(pLayoutInfo->GetWidthOption()), m_nHeadEndRow(0),
     m_nLeftSub(0), m_nRightSub(0), m_nTabWidth(pLayoutInfo->GetWidthOption()),
-    m_bRelWidths(pLayoutInfo->HasPrcWidthOption()), m_bUseLayoutHeights(false),
+    m_bRelWidths(pLayoutInfo->HasPercentWidthOption()), m_bUseLayoutHeights(false),
 #ifdef DBG_UTIL
     m_bGetLineHeightCalled(false),
 #endif
@@ -846,7 +846,7 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
                 pRow->AddCell( pBox, nRow, nCol, nRowSpan, nColSpan,
                                nHeight, pBrushItem );
             pCell->SetWidthOpt( pLayoutCell->GetWidthOption(),
-                                pLayoutCell->IsPrcWidthOption() );
+                                pLayoutCell->IsPercentWidthOption() );
 
             sal_uInt16 nTopBorder = USHRT_MAX, nBottomBorder = USHRT_MAX;
             sal_uInt16 nBorderMask =

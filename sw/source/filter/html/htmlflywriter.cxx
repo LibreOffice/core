@@ -679,13 +679,13 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
           SwFrameSize::Fixed == static_cast<const SwFormatFrameSize *>(pItem)->GetHeightSizeType()) )
     {
         const SwFormatFrameSize *pFSItem = static_cast<const SwFormatFrameSize *>(pItem);
-        sal_uInt8 nPrcWidth = pFSItem->GetWidthPercent();
-        sal_uInt8 nPrcHeight = pFSItem->GetHeightPercent();
+        sal_uInt8 nPercentWidth = pFSItem->GetWidthPercent();
+        sal_uInt8 nPercentHeight = pFSItem->GetHeightPercent();
 
         // Size of the object in Twips without margins
-        Size aTwipSz( (nPrcWidth ? 0
+        Size aTwipSz( (nPercentWidth ? 0
                                  : pFSItem->GetWidth()-aTwipSpc.Width()),
-                      (nPrcHeight ? 0
+                      (nPercentHeight ? 0
                                   : pFSItem->GetHeight()-aTwipSpc.Height()) );
 
         OSL_ENSURE( aTwipSz.Width() >= 0 && aTwipSz.Height() >= 0,
@@ -709,24 +709,24 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         }
 
         if( (nFrameOpts & HtmlFrmOpts::Width) &&
-            ((nPrcWidth && nPrcWidth!=255) || aPixelSz.Width()) )
+            ((nPercentWidth && nPercentWidth!=255) || aPixelSz.Width()) )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
                 append("=\"");
-            if( nPrcWidth )
-                sOut.append(static_cast<sal_Int32>(nPrcWidth)).append('%');
+            if( nPercentWidth )
+                sOut.append(static_cast<sal_Int32>(nPercentWidth)).append('%');
             else
                 sOut.append(static_cast<sal_Int32>(aPixelSz.Width()));
             sOut.append("\"");
         }
 
         if( (nFrameOpts & HtmlFrmOpts::Height) &&
-            ((nPrcHeight && nPrcHeight!=255) || aPixelSz.Height()) )
+            ((nPercentHeight && nPercentHeight!=255) || aPixelSz.Height()) )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
                 append("=\"");
-            if( nPrcHeight )
-                sOut.append(static_cast<sal_Int32>(nPrcHeight)).append('%');
+            if( nPercentHeight )
+                sOut.append(static_cast<sal_Int32>(nPercentHeight)).append('%');
             else
                 sOut.append(static_cast<sal_Int32>(aPixelSz.Height()));
             sOut.append("\"");
@@ -945,13 +945,13 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
           SwFrameSize::Fixed == static_cast<const SwFormatFrameSize *>(pItem)->GetHeightSizeType()) )
     {
         const SwFormatFrameSize *pFSItem = static_cast<const SwFormatFrameSize *>(pItem);
-        sal_uInt8 nPrcWidth = pFSItem->GetWidthPercent();
-        sal_uInt8 nPrcHeight = pFSItem->GetHeightPercent();
+        sal_uInt8 nPercentWidth = pFSItem->GetWidthPercent();
+        sal_uInt8 nPercentHeight = pFSItem->GetHeightPercent();
 
         // Size of the object in Twips without margins
-        Size aTwipSz( (nPrcWidth ? 0
+        Size aTwipSz( (nPercentWidth ? 0
                                  : pFSItem->GetWidth()-aTwipSpc.Width()),
-                      (nPrcHeight ? 0
+                      (nPercentHeight ? 0
                                   : pFSItem->GetHeight()-aTwipSpc.Height()) );
 
         OSL_ENSURE( aTwipSz.Width() >= 0 && aTwipSz.Height() >= 0,
@@ -975,22 +975,22 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         }
 
         if( (nFrameOptions & HtmlFrmOpts::Width) &&
-            ((nPrcWidth && nPrcWidth!=255) || aPixelSz.Width()) )
+            ((nPercentWidth && nPercentWidth!=255) || aPixelSz.Width()) )
         {
             OString sWidth;
-            if (nPrcWidth)
-                sWidth = OString::number(static_cast<sal_Int32>(nPrcWidth)) + "%";
+            if (nPercentWidth)
+                sWidth = OString::number(static_cast<sal_Int32>(nPercentWidth)) + "%";
             else
                 sWidth = OString::number(static_cast<sal_Int32>(aPixelSz.Width()));
             aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_width, sWidth);
         }
 
         if( (nFrameOptions & HtmlFrmOpts::Height) &&
-            ((nPrcHeight && nPrcHeight!=255) || aPixelSz.Height()) )
+            ((nPercentHeight && nPercentHeight!=255) || aPixelSz.Height()) )
         {
             OString sHeight;
-            if (nPrcHeight)
-                sHeight = OString::number(static_cast<sal_Int32>(nPrcHeight)) + "%";
+            if (nPercentHeight)
+                sHeight = OString::number(static_cast<sal_Int32>(nPercentHeight)) + "%";
             else
                 sHeight = OString::number(static_cast<sal_Int32>(aPixelSz.Height()));
             aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_height, sHeight);
