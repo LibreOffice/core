@@ -148,6 +148,17 @@ namespace emfplushelper
         return "";
     }
 
+    static OUString DashedLineCapTypeToString(sal_uInt32 dashedlinecaptype)
+    {
+        switch (dashedlinecaptype)
+        {
+            case DashedLineCapTypeFlat: return "DashedLineCapTypeFlat";
+            case DashedLineCapTypeRound: return "DashedLineCapTypeRound";
+            case DashedLineCapTypeTriangle: return "DashedLineCapTypeTriangle";
+        }
+        return "";
+    }
+
     /// Convert stroke caps between EMF+ and rendering API
     sal_Int8 EMFPPen::lcl_convertStrokeCap(sal_uInt32 nEmfStroke)
     {
@@ -245,7 +256,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataLineStyle)
         {
             s.ReadInt32(dashStyle);
-            SAL_INFO("drawinglayer", "EMF+\t\tdashStyle: 0x" << std::hex << dashStyle);
+            SAL_INFO("drawinglayer", "EMF+\t\tdashStyle: " << DashedLineCapTypeToString(dashStyle) << " (0x" << std::hex << dashStyle << ")");
         }
         else
         {

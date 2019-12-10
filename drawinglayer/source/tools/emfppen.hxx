@@ -77,6 +77,13 @@ namespace emfplushelper
         LineJoinTypeMiterClipped = 0x00000003
     };
 
+    enum DashedLineCapType
+    {
+        DashedLineCapTypeFlat = 0x00000000,
+        DashedLineCapTypeRound = 0x00000002,
+        DashedLineCapTypeTriangle = 0x00000003
+    };
+
     struct EMFPCustomLineCap;
 
     struct EMFPPen : public EMFPBrush
