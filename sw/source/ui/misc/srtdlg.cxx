@@ -298,7 +298,7 @@ void SwSortDlg::Apply()
                                     bAsc3 ? SwSortOrder::Ascending : SwSortOrder::Descending ));
     }
 
-    aOptions.eDirection =  bCol ? SRT_COLUMNS : SRT_ROWS;
+    aOptions.eDirection =  bCol ? SwSortDirection::Columns : SwSortDirection::Rows;
     aOptions.cDeli = cDeli;
     aOptions.nLanguage = nLang;
     aOptions.bTable = rSh.IsTableMode();

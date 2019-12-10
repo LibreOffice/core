@@ -25,8 +25,8 @@
 #include <memory>
 #include <vector>
 
-enum class SwSortOrder  { Ascending, Descending };
-enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
+enum class SwSortOrder     { Ascending, Descending };
+enum class SwSortDirection { Columns, Rows };
 
 struct SW_DLLPUBLIC SwSortKey
 {
