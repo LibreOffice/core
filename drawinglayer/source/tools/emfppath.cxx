@@ -25,6 +25,14 @@
 
 namespace emfplushelper
 {
+    static sal_Int16 GetEmfPlusInteger(sal_Int32 nInt)
+    {
+        if (nInt & 0x80000000)
+            return (nInt & 0x7FFF) >> 16;
+
+        return nInt >> 24;
+    }
+
     EMFPPath::EMFPPath (sal_Int32 _nPoints, bool bLines)
     {
         if (_nPoints<0 || sal_uInt32(_nPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
@@ -52,7 +60,13 @@ namespace emfplushelper
                 // EMFPlusPointR: points are stored in EMFPlusInteger7 or
                 // EMFPlusInteger15 objects, see section 2.2.2.21/22
                 // If 0x800 bit is set, the 0x4000 bit is undefined and must be ignored
-                SAL_WARN("drawinglayer", "EMF+\t\t TODO - parse EMFPlusPointR object (section 2.2.1.6)");
+                sal_Int32 x, y;
+                s.ReadInt32(x).ReadInt32(x);
+                x = GetEmfPlusInteger(x);
+                y = GetEmfPlusInteger(y);
+                pPoints [i*2] = x;
+                pPoints [i*2 + 1] = y;
+                SAL_INFO("drawinglayer", "EMF+\t\t\tEmfPlusPointR [x,y]: " << x << ", " << y);
             }
             else if (pathFlags & 0x4000)
             {
@@ -60,7 +74,7 @@ namespace emfplushelper
                 sal_Int16 x, y;
 
                 s.ReadInt16( x ).ReadInt16( y );
-                SAL_INFO ("drawinglayer", "EMF+\t EMFPlusPoint [x,y]: " << x << "," << y);
+                SAL_INFO ("drawinglayer", "EMF+\t\t\tEmfPlusPoint [x,y]: " << x << "," << y);
                 pPoints [i*2] = x;
                 pPoints [i*2 + 1] = y;
             }
