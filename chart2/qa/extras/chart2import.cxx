@@ -88,6 +88,7 @@ public:
     // void testTextCanOverlapXLSX(); // TODO : temporarily disabled.
     void testTextBreakXLSX();
     void testNumberFormatsXLSX();
+    void testAreaChartNumberFormatsXLSX();
 
     void testTransparentBackground(OUString const & filename);
 
@@ -194,6 +195,7 @@ public:
     // CPPUNIT_TEST(testTextCanOverlapXLSX); // TODO : temporarily disabled.
     CPPUNIT_TEST(testTextBreakXLSX);
     CPPUNIT_TEST(testNumberFormatsXLSX);
+    CPPUNIT_TEST(testAreaChartNumberFormatsXLSX);
     CPPUNIT_TEST(testAutoTitleDelDefaultValue2007XLSX);
     CPPUNIT_TEST(testAutoTitleDelDefaultValue2013XLSX);
     CPPUNIT_TEST(testDispBlanksAsDefaultValue2007XLSX);
@@ -1250,6 +1252,32 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
     bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(false, bSuccess);
+    bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
+}
+
+void Chart2ImportTest::testAreaChartNumberFormatsXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testAreaChartNumberFormat.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    chart2::DataPointLabel aLabel;
+    sal_Int32 nNumberFormat;
+    bool bLinkNumberFormatToSource = false;
+    const sal_Int32 nChartDataNumberFormat = getNumberFormat(
+        xChartDoc, "0.00");
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
+    xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
+    bool bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(false, bSuccess);
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);

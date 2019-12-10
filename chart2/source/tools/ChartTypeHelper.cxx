@@ -657,15 +657,6 @@ OUString ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( co
     return aRet;
 }
 
-bool ChartTypeHelper::shouldLabelNumberFormatKeyBeDetectedFromYAxis( const uno::Reference< XChartType >& xChartType )
-{
-    bool bRet = true;
-    OUString aChartTypeName = xChartType->getChartType();
-    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
-        bRet = false;
-    return bRet;
-}
-
 bool ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( const uno::Reference< XChartType >& xChartType )
 {
     bool bRet = false;

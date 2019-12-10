@@ -367,10 +367,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries const & rDataSeries
         }
         else
         {
-            if( rDataSeries.shouldLabelNumberFormatKeyBeDetectedFromYAxis() && m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
-                nNumberFormatKey = m_aAxesNumberFormats.getFormat(1,rDataSeries.getAttachedAxisIndex());
-            else
-                nNumberFormatKey = rDataSeries.detectNumberFormatKey( nPointIndex );
+            nNumberFormatKey = rDataSeries.detectNumberFormatKey( nPointIndex );
         }
         if(nNumberFormatKey<0)
             nNumberFormatKey=0;
