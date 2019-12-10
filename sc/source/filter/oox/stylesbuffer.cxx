@@ -1301,7 +1301,7 @@ void Alignment::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     // indent
     ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_INDENT, maApiData.mnIndent ), bSkipPoolDefs );
     // line wrap
-    ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_LINEBREAK, maApiData.mbWrapText ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, ScLineBreakCell( maApiData.mbWrapText ), bSkipPoolDefs );
     ScfTools::PutItem( rItemSet, ScShrinkToFitCell( maApiData.mbShrink ), bSkipPoolDefs );
 }
 

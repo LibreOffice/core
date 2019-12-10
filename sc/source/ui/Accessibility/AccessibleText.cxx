@@ -545,7 +545,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         else
         {
             // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
-            const SfxBoolItem* pLineBreakItem = rDoc.GetAttr( aCellPos, ATTR_LINEBREAK );
+            const ScLineBreakCell* pLineBreakItem = rDoc.GetAttr( aCellPos, ATTR_LINEBREAK );
             bool bLineBreak = ( pLineBreakItem && pLineBreakItem->GetValue() );
             if ( !bLineBreak )
             {

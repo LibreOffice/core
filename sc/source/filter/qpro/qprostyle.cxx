@@ -30,6 +30,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/justifyitem.hxx>
 
+#include <attrib.hxx>
 #include <global.hxx>
 #include <docpool.hxx>
 #include <patattr.hxx>
@@ -107,8 +108,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     // Wrap cell contents
     if( nTmp & 0x80 )
     {
-        SfxBoolItem aWrapItem( ATTR_LINEBREAK );
-        aWrapItem.SetValue( true );
+        ScLineBreakCell aWrapItem(true);
         rItemSet.Put( aWrapItem );
     }
 
