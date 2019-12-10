@@ -206,34 +206,23 @@ namespace {
     }
 }
 
-void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxItemSet* pSet)
+void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem)
 {
-    if (!pShell || !pSet)
+    if (!pShell || !pItem)
         return;
 
-    boost::property_tree::ptree aTree;
-    boost::property_tree::ptree anArray;
+    boost::property_tree::ptree aItem = pItem->dumpAsJSON();
 
-    for(int i = 0; i < pSet->Count(); i++)
+    if (aItem.count("state"))
     {
-        sal_uInt16 nWhich = pSet->GetWhichByPos(i);
-        if (pSet->HasItem(nWhich) && SfxItemState::SET >= pSet->GetItemState(nWhich))
-        {
-            boost::property_tree::ptree aItem = pSet->Get(nWhich).dumpAsJSON();
+        OUString sCommand = lcl_getNameForSlot(pShell, pItem->Which());
+        if (!sCommand.isEmpty())
+            aItem.put("commandName", sCommand);
 
-            OUString sCommand = lcl_getNameForSlot(pShell, nWhich);
-            if (!sCommand.isEmpty())
-                aItem.put("commandName", sCommand);
-
-            if (!aItem.empty())
-                anArray.push_back(std::make_pair("", aItem));
-        }
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aItem);
+        pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aStream.str().c_str());
     }
-    aTree.add_child("items", anArray);
-
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-    pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aStream.str().c_str());
 }
 
 void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,

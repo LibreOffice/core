@@ -924,10 +924,6 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
     SetGetStateSet( nullptr );
-
-    SfxViewShell* pViewShell = GetShell().GetSfxViewShell();
-    if (pViewShell && comphelper::LibreOfficeKit::isActive())
-        pViewShell->sendUnoStatus( &rSet );
 }
 
 void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)

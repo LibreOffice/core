@@ -43,7 +43,7 @@ public:
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
     static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload);
     /// Emits a LOK_CALLBACK_STATE_CHANGED
-    static void sendUnoStatus(const SfxViewShell* pThisView, const SfxItemSet* pSet);
+    static void sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem);
     /// Emits a LOK_CALLBACK_WINDOW
     static void notifyWindow(const SfxViewShell* pThisView,
                              vcl::LOKWindowId nWindowId,
