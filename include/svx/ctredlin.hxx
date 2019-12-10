@@ -46,15 +46,32 @@ enum class SvxRedlinDateMode
     BEFORE, SINCE, EQUAL, NOTEQUAL, BETWEEN, SAVE, NONE
 };
 
+enum class RedlineType : sal_uInt16
+{
+    // Range of RedlineTypes is 0 to 127.
+    Insert = 0x0,// Content has been inserted.
+    Delete = 0x1,// Content has been deleted.
+    Format = 0x2,// Attributes have been applied.
+    Table = 0x3,// Table structure has been altered.
+    FmtColl = 0x4,// Style has been altered (Autoformat!).
+    ParagraphFormat = 0x5,// Paragraph attributes have been changed.
+    TableRowInsert = 0x6,// Table row has been inserted.
+    TableRowDelete = 0x7,// Table row has been deleted.
+    TableCellInsert = 0x8,// Table cell has been inserted.
+    TableCellDelete = 0x9,// Table cell has been deleted.
+    Any = USHRT_MAX // special value to indicate any redline type in some method calls
+};
+
 /// Struct for sorting data.
 class SAL_WARN_UNUSED SVX_DLLPUBLIC RedlinData
 {
 public:
                     RedlinData();
     virtual         ~RedlinData();
-    bool            bDisabled;
     DateTime        aDateTime;
     void*           pData;
+    RedlineType     eType;
+    bool            bDisabled;
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlinTable

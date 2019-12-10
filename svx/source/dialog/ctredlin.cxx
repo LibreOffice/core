@@ -35,10 +35,12 @@
 #define WRITER_DATE     2
 #define CALC_DATE       3
 
-RedlinData::RedlinData() : aDateTime(DateTime::EMPTY)
+RedlinData::RedlinData()
+    : aDateTime(DateTime::EMPTY)
+    , pData(nullptr)
+    , eType(RedlineType::Any)
+    , bDisabled(false)
 {
-    bDisabled=false;
-    pData=nullptr;
 }
 
 RedlinData::~RedlinData()
@@ -127,6 +129,21 @@ int SvxRedlinTable::ColCompare(const weld::TreeIter& rLeft, const weld::TreeIter
     sal_Int32 nCompare = 0;
 
     int nSortCol = pTreeView->get_sort_column();
+
+    if (pTreeView == xWriterTreeView.get() && nSortCol == 0)
+    {
+        RedlinData *pLeftData = reinterpret_cast<RedlinData*>(pTreeView->get_id(rLeft).toInt64());
+        RedlinData *pRightData = reinterpret_cast<RedlinData*>(pTreeView->get_id(rRight).toInt64());
+
+        if (pLeftData && pRightData)
+        {
+            if (pLeftData->eType < pRightData->eType)
+                nCompare = -1;
+            else if (pLeftData->eType > pRightData->eType)
+                nCompare = 1;
+            return nCompare;
+        }
+    }
 
     if (nSortCol == nDatePos)
     {
