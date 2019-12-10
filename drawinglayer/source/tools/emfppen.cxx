@@ -136,6 +136,18 @@ namespace emfplushelper
         return "";
     }
 
+    static OUString LineJoinTypeToString(sal_uInt32 jointype)
+    {
+        switch (jointype)
+        {
+            case LineJoinTypeMiter: return "LineJoinTypeMiter";
+            case LineJoinTypeBevel: return "LineJoinTypeBevel";
+            case LineJoinTypeRound: return "LineJoinTypeRound";
+            case LineJoinTypeMiterClipped: return "LineJoinTypeMiterClipped";
+        }
+        return "";
+    }
+
     /// Convert stroke caps between EMF+ and rendering API
     sal_Int8 EMFPPen::lcl_convertStrokeCap(sal_uInt32 nEmfStroke)
     {
@@ -213,7 +225,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataJoin)
         {
             s.ReadInt32(lineJoin);
-            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataJoin: 0x" << std::hex << lineJoin);
+            SAL_WARN("drawinglayer", "EMF+\t\tTODO PenDataJoin: " << LineJoinTypeToString(lineJoin) << " (0x" << std::hex << lineJoin << ")");
         }
         else
         {
