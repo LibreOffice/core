@@ -72,16 +72,14 @@ class ColorScanlineConverter
 {
 public:
     ScanlineFormat meSourceFormat;
-    ScanlineFormat meDestinationFormat;
 
     int mnComponentSize;
     int mnComponentExchangeIndex;
 
     long mnScanlineSize;
 
-    ColorScanlineConverter(ScanlineFormat eSourceFormat, ScanlineFormat eDestinationFormat, int nComponentSize, long nScanlineSize)
+    ColorScanlineConverter(ScanlineFormat eSourceFormat, int nComponentSize, long nScanlineSize)
         : meSourceFormat(eSourceFormat)
-        , meDestinationFormat(eDestinationFormat)
         , mnComponentSize(nComponentSize)
         , mnComponentExchangeIndex(0)
         , mnScanlineSize(nScanlineSize)
@@ -127,10 +125,10 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
     std::unique_ptr<ColorScanlineConverter> pConverter;
 
     if (pRead->mnFormat == ScanlineFormat::N24BitTcRgb)
-        pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N24BitTcRgb, ScanlineFormat::N24BitTcBgr,
+        pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N24BitTcRgb,
                                                     3, pRead->mnScanlineSize));
     else if (pRead->mnFormat == ScanlineFormat::N32BitTcRgba)
-        pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N32BitTcRgba, ScanlineFormat::N32BitTcBgra,
+        pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N32BitTcRgba,
                                                     4, pRead->mnScanlineSize));
     if (pConverter)
     {
