@@ -16,29 +16,35 @@ namespace sw
 {
 
 // To translators: this is a listbox labelled by "Margins:", inch units
-const char* RID_PAGEFORMATPANEL_MARGINS_INCH[] =
+const std::pair<const char*, int> RID_PAGEFORMATPANEL_MARGINS_INCH[] =
 {
-    NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "None"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Narrow"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Moderate"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (0.75″)"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (1″)"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (1.25″)"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Wide"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Mirrored")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "None"), 0 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Narrow"), 0 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Moderate"), 0 },
+    // Normal (0.75")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"), 75 },
+    // Normal (1")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"), 100 },
+    // Normal (1.25")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"), 125 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Wide"), 0 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Mirrored"), 0 }
 };
 
 // To translators: this is a listbox labelled by "Margins:", cm units
-const char* RID_PAGEFORMATPANEL_MARGINS_CM[] =
+const std::pair<const char*, int> RID_PAGEFORMATPANEL_MARGINS_CM[] =
 {
-    NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "None"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Narrow"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Moderate"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (1.9 cm)"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (2.54 cm)"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (3.18 cm)"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Wide"),
-    NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Mirrored")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "None"), 0 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Narrow"), 0 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Moderate"), 0 },
+    // Normal (1.9 cm)
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 190 },
+    // Normal (2.54 cm)
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 254 },
+    // Normal (3.18 cm)
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 318 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Wide"), 0 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Mirrored"), 0 }
 };
 
 }
