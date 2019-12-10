@@ -50,6 +50,7 @@
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
 
+#include <attrib.hxx>
 #include <patattr.hxx>
 #include <docpool.hxx>
 #include <stlsheet.hxx>

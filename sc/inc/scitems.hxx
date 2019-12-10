@@ -50,6 +50,7 @@ class SvxVerJustifyItem;
 class SvxBrushItem;
 class SvxBoxItem;
 class ScCondFormatItem;
+class ScRotateValueItem;
 class SvxLineItem;
 class SvxRotateModeItem;
 class SfxStringItem;
@@ -118,7 +119,7 @@ class SvxSizeItem;
 #define ATTR_VER_JUSTIFY        TypedWhichId<SvxVerJustifyItem>(132)
 #define ATTR_VER_JUSTIFY_METHOD TypedWhichId<SvxJustifyMethodItem>(133)
 #define ATTR_STACKED            TypedWhichId<SfxBoolItem>(134)
-#define ATTR_ROTATE_VALUE       TypedWhichId<SfxInt32Item>(135)
+#define ATTR_ROTATE_VALUE       TypedWhichId<ScRotateValueItem>(135)
 #define ATTR_ROTATE_MODE        TypedWhichId<SvxRotateModeItem>(136)
 #define ATTR_VERTICAL_ASIAN     TypedWhichId<SfxBoolItem>(137)
 #define ATTR_WRITINGDIR         TypedWhichId<SvxFrameDirectionItem>(138)

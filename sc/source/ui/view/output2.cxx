@@ -2807,7 +2807,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     bool bRepeat = (rParam.meHorJustAttr == SvxCellHorJustify::Repeat && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
-    long nAttrRotate = lcl_GetValue<SfxInt32Item, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
+    long nAttrRotate = lcl_GetValue<ScRotateValueItem, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
 
     if ( rParam.meHorJustAttr == SvxCellHorJustify::Repeat )
     {
@@ -3982,7 +3982,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     bool bHidden = false;
     bool bShrink = !rParam.mbBreak && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
-    long nAttrRotate = lcl_GetValue<SfxInt32Item, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
+    long nAttrRotate = lcl_GetValue<ScRotateValueItem, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
 
     if (nAttrRotate)
     {

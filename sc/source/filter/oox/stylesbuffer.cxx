@@ -1295,7 +1295,7 @@ void Alignment::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     // CTL text direction
     ScfTools::PutItem( rItemSet, SvxFrameDirectionItem( GetScFrameDir(), ATTR_WRITINGDIR ), bSkipPoolDefs );
     // set an angle in the range from -90 to 90 degrees
-    ScfTools::PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, maApiData.mnRotation ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, ScRotateValueItem( maApiData.mnRotation ), bSkipPoolDefs );
     // Orientation
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_STACKED, maApiData.meOrientation == css::table::CellOrientation_STACKED ), bSkipPoolDefs );
     // indent
