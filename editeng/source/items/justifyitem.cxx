@@ -31,6 +31,7 @@
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
+#include <strings.hrc>
 
 SfxPoolItem* SvxHorJustifyItem::CreateDefault() { return new  SvxHorJustifyItem(SvxCellHorJustify::Standard, 0) ;}
 SfxPoolItem* SvxVerJustifyItem::CreateDefault() { return new  SvxVerJustifyItem(SvxCellVerJustify::Standard, 0) ;}
@@ -57,7 +58,7 @@ bool SvxHorJustifyItem::GetPresentation
     MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper&)    const
 {
-    rText = GetValueText( GetValue() );
+    rText = GetValueText(GetValue());
     return true;
 }
 
@@ -158,36 +159,11 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-
-OUString SvxHorJustifyItem::GetValueText( SvxCellHorJustify nVal )
+OUString SvxHorJustifyItem::GetValueText(SvxCellHorJustify nVal)
 {
-    DBG_ASSERT( nVal <= SvxCellHorJustify::Repeat, "enum overflow!" );
-
-    OUString sRet;
-    switch (nVal)
-    {
-        case SvxCellHorJustify::Standard:
-            sRet = EditResId(RID_SVXITEMS_HORJUST_STANDARD);
-            break;
-        case SvxCellHorJustify::Left:
-            sRet = EditResId(RID_SVXITEMS_HORJUST_LEFT);
-            break;
-        case SvxCellHorJustify::Center:
-            sRet = EditResId(RID_SVXITEMS_HORJUST_CENTER);
-            break;
-        case SvxCellHorJustify::Right:
-            sRet = EditResId(RID_SVXITEMS_HORJUST_RIGHT);
-            break;
-        case SvxCellHorJustify::Block:
-            sRet = EditResId(RID_SVXITEMS_HORJUST_BLOCK);
-            break;
-        case SvxCellHorJustify::Repeat:
-            sRet = EditResId(RID_SVXITEMS_HORJUST_REPEAT);
-            break;
-    }
-    return sRet;
+    assert(nVal <= SvxCellHorJustify::Repeat && "enum overflow!");
+    return EditResId(RID_SVXITEMS_HORJUST[static_cast<size_t>(nVal)]);
 }
-
 
 SfxPoolItem* SvxHorJustifyItem::Clone( SfxItemPool* ) const
 {
@@ -308,52 +284,27 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-
 OUString SvxVerJustifyItem::GetValueText( SvxCellVerJustify nVal )
 {
-    DBG_ASSERT( nVal <= SvxCellVerJustify::Bottom, "enum overflow!" );
-
-    OUString sRet;
-    switch (nVal)
-    {
-        case SvxCellVerJustify::Standard:
-            sRet = EditResId(RID_SVXITEMS_VERJUST_STANDARD);
-            break;
-        case SvxCellVerJustify::Top:
-            sRet = EditResId(RID_SVXITEMS_VERJUST_TOP);
-            break;
-        case SvxCellVerJustify::Center:
-            sRet = EditResId(RID_SVXITEMS_VERJUST_CENTER);
-            break;
-        case SvxCellVerJustify::Bottom:
-            sRet = EditResId(RID_SVXITEMS_VERJUST_BOTTOM);
-            break;
-        case SvxCellVerJustify::Block:
-            sRet = EditResId(RID_SVXITEMS_VERJUST_BLOCK);
-            break;
-    }
-    return sRet;
+    assert(nVal <= SvxCellVerJustify::Block && "enum overflow!");
+    return EditResId(RID_SVXITEMS_VERJUST[static_cast<size_t>(nVal)]);
 }
-
 
 SfxPoolItem* SvxVerJustifyItem::Clone( SfxItemPool* ) const
 {
     return new SvxVerJustifyItem( *this );
 }
 
-
 sal_uInt16 SvxVerJustifyItem::GetValueCount() const
 {
     return static_cast<sal_uInt16>(SvxCellVerJustify::Bottom) + 1;  // Last Enum value + 1
 }
-
 
 SvxJustifyMethodItem::SvxJustifyMethodItem( const SvxCellJustifyMethod eJustify,
                                       const sal_uInt16 nId ) :
     SfxEnumItem( nId, eJustify )
 {
 }
-
 
 bool SvxJustifyMethodItem::GetPresentation
 (
@@ -402,28 +353,16 @@ bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
     return true;
 }
 
-
 OUString SvxJustifyMethodItem::GetValueText( SvxCellJustifyMethod nVal )
 {
-    OUString sRet;
-    switch (nVal)
-    {
-        case SvxCellJustifyMethod::Auto:
-            sRet = EditResId(RID_SVXITEMS_JUSTMETHOD_AUTO);
-            break;
-        case SvxCellJustifyMethod::Distribute:
-            sRet = EditResId(RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE);
-            break;
-    }
-    return sRet;
+    assert(nVal <= SvxCellJustifyMethod::Distribute && "enum overflow!");
+    return EditResId(RID_SVXITEMS_JUSTMETHOD[static_cast<size_t>(nVal)]);
 }
-
 
 SfxPoolItem* SvxJustifyMethodItem::Clone( SfxItemPool* ) const
 {
     return new SvxJustifyMethodItem( *this );
 }
-
 
 sal_uInt16 SvxJustifyMethodItem::GetValueCount() const
 {
