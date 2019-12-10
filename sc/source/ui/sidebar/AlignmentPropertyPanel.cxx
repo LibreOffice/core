@@ -25,6 +25,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svx/rotmodit.hxx>
+#include <svx/sdangitm.hxx>
 #include <svtools/unitconv.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -177,7 +178,7 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl, Edit&, void )
     FormatDegrees(fTmp);
 
     sal_Int64 nTmp = static_cast<sal_Int64>(fTmp)*100;
-    SfxInt32Item aAngleItem( SID_ATTR_ALIGN_DEGREES,static_cast<sal_uInt32>(nTmp));
+    SdrAngleItem aAngleItem( SID_ATTR_ALIGN_DEGREES,static_cast<sal_uInt32>(nTmp));
 
     GetBindings()->GetDispatcher()->ExecuteList(
         SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, { &aAngleItem });
@@ -380,7 +381,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     case SID_ATTR_ALIGN_DEGREES:
         if (eState >= SfxItemState::DEFAULT)
         {
-            long nTmp = static_cast<const SfxInt32Item*>(pState)->GetValue();
+            long nTmp = static_cast<const SdrAngleItem*>(pState)->GetValue();
             mpMtrAngle->SetValue( nTmp / 100);  //wj
             switch(nTmp)
             {

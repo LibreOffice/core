@@ -548,6 +548,7 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case SDRATTR_LOGICSIZEWIDTH : pResId = SIP_SA_LOGICSIZEWIDTH;break;
         case SDRATTR_LOGICSIZEHEIGHT: pResId = SIP_SA_LOGICSIZEHEIGHT;break;
         case SDRATTR_ROTATEANGLE    : pResId = SIP_SA_ROTATEANGLE;break;
+        case SID_ATTR_ALIGN_DEGREES : pResId = SIP_SA_TEXTROTATEANGLE;break;
         case SDRATTR_SHEARANGLE     : pResId = SIP_SA_SHEARANGLE;break;
         case SDRATTR_MOVEX          : pResId = SIP_SA_MOVEX;break;
         case SDRATTR_MOVEY          : pResId = SIP_SA_MOVEY;break;

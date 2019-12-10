@@ -25,6 +25,7 @@
 #include <svx/dialmgr.hxx>
 #include <bitmaps.hlst>
 #include <svx/rotmodit.hxx>
+#include <svx/sdangitm.hxx>
 
 #include <editeng/frmdiritem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -233,7 +234,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_xNfRotate->get_value_changed_from_saved())
     {
-        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_ALIGN_DEGREES), m_aCtrlDial.GetRotation()));
+        rSet->Put(SdrAngleItem(GetWhich(SID_ATTR_ALIGN_DEGREES), m_aCtrlDial.GetRotation()));
         bChanged = true;
     }
 
@@ -483,7 +484,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
         case SfxItemState::DEFAULT:
         case SfxItemState::SET:
         {
-            const SfxInt32Item& rAlignItem = static_cast<const SfxInt32Item&>(pCoreAttrs->Get(nWhich));
+            const SdrAngleItem& rAlignItem = static_cast<const SdrAngleItem&>(pCoreAttrs->Get(nWhich));
             m_aCtrlDial.SetRotation(rAlignItem.GetValue());
             break;
         }

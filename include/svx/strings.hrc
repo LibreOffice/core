@@ -457,6 +457,7 @@
 #define SIP_SA_LOGICSIZEHEIGHT                              NC_("SIP_SA_LOGICSIZEHEIGHT", "Logical height")
 #define SIP_SA_ROTATEANGLE                                  NC_("SIP_SA_ROTATEANGLE", "Single rotation angle")
 #define SIP_SA_SHEARANGLE                                   NC_("SIP_SA_SHEARANGLE", "Single shear angle")
+#define SIP_SA_TEXTROTATEANGLE                              NC_("SIP_SA_TEXTROTATEANGLE", "Text rotation angle")
 #define SIP_SA_MOVEX                                        NC_("SIP_SA_MOVEX", "Move horizontally")
 #define SIP_SA_MOVEY                                        NC_("SIP_SA_MOVEY", "Move vertically")
 #define SIP_SA_RESIZEXONE                                   NC_("SIP_SA_RESIZEXONE", "Resize X, single")
