@@ -49,7 +49,7 @@ namespace emfplushelper
     const sal_uInt32 EmfPlusPenDataDashedLineCap = 0x00000040;
     const sal_uInt32 EmfPlusPenDataDashedLineOffset = 0x00000080;
     const sal_uInt32 EmfPlusPenDataDashedLine = 0x00000100;
-    const sal_uInt32 EmfPlusPenDataNonCenter = 0x00000200;
+    const sal_uInt32 EmfPlusPenDataAlignment = 0x00000200;
     const sal_uInt32 EmfPlusPenDataCompoundLine = 0x00000400;
     const sal_uInt32 EmfPlusPenDataCustomStartCap = 0x00000800;
     const sal_uInt32 EmfPlusPenDataCustomEndCap = 0x000001000;
@@ -82,6 +82,15 @@ namespace emfplushelper
         DashedLineCapTypeFlat = 0x00000000,
         DashedLineCapTypeRound = 0x00000002,
         DashedLineCapTypeTriangle = 0x00000003
+    };
+
+    enum PenAlignment
+    {
+        PenAlignmentCenter = 0x00000000,
+        PenAlignmentInset = 0x00000001,
+        PenAlignmentLeft = 0x00000002,
+        PenAlignmentOutset = 0x00000003,
+        PenAlignmentRight = 0x00000004
     };
 
     struct EMFPCustomLineCap;
