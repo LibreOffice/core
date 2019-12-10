@@ -36,19 +36,6 @@
 #define PIPESYSTEM      "\\\\.\\pipe\\"
 #define PIPEPREFIX      "OSL_PIPE_"
 
-namespace {
-
-typedef struct
-{
-    sal_uInt32           m_Size;
-    sal_uInt32           m_ReadPos;
-    sal_uInt32           m_WritePos;
-    BYTE                 m_Data[1];
-
-} oslPipeBuffer;
-
-}
-
 struct oslPipeImpl
 {
     oslInterlockedCount  m_Reference;
