@@ -768,4 +768,24 @@ bool ScShrinkToFitCell::GetPresentation(SfxItemPresentation,
     return true;
 }
 
+ScVerticalStackCell::ScVerticalStackCell(bool bStack)
+    : SfxBoolItem(ATTR_STACKED, bStack)
+{
+}
+
+ScVerticalStackCell* ScVerticalStackCell::Clone(SfxItemPool*) const
+{
+    return new ScVerticalStackCell(GetValue());
+}
+
+bool ScVerticalStackCell::GetPresentation(SfxItemPresentation,
+                                        MapUnit, MapUnit,
+                                        OUString& rText,
+                                        const IntlWrapper&) const
+{
+    const char* pId = GetValue() ? STR_VERTICALSTACKCELL_ON : STR_VERTICALSTACKCELL_OFF;
+    rText = ScResId(pId);
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
