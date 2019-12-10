@@ -703,10 +703,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 }
                 nWhich = aNewIter.NextWhich();
             }
-
-            SfxViewShell* pViewShell = GetDrawView()->GetSfxViewShell();
-            if (pViewShell && comphelper::LibreOfficeKit::isActive())
-                pViewShell->sendUnoStatus( &rSet );
         }
 
         SfxItemState eState = pSet->GetItemState( EE_PARA_LRSPACE );
