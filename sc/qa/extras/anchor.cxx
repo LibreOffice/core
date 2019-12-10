@@ -16,6 +16,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/text/XText.hpp>
 
+#include <attrib.hxx>
 #include <docsh.hxx>
 #include <drwlayer.hxx>
 #include <scitems.hxx>

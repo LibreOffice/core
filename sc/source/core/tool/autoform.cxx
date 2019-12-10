@@ -369,7 +369,7 @@ void ScAutoFormatData::PutItem( sal_uInt16 nIndex, const SfxPoolItem& rItem )
         case ATTR_BACKGROUND:       rField.SetBackground( static_cast<const SvxBrushItem&>(rItem) );       break;
         case ATTR_HOR_JUSTIFY:      rField.SetHorJustify( static_cast<const SvxHorJustifyItem&>(rItem) );  break;
         case ATTR_VER_JUSTIFY:      rField.SetVerJustify( static_cast<const SvxVerJustifyItem&>(rItem) );  break;
-        case ATTR_STACKED:          rField.SetStacked( static_cast<const SfxBoolItem&>(rItem) );           break;
+        case ATTR_STACKED:          rField.SetStacked( static_cast<const ScVerticalStackCell&>(rItem) );   break;
         case ATTR_MARGIN:           rField.SetMargin( static_cast<const SvxMarginItem&>(rItem) );          break;
         case ATTR_LINEBREAK:        rField.SetLinebreak( static_cast<const SfxBoolItem&>(rItem) );         break;
         case ATTR_ROTATE_VALUE:     rField.SetRotateAngle( static_cast<const ScRotateValueItem&>(rItem) ); break;

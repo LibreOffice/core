@@ -2124,20 +2124,20 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                     switch( eOrient )
                     {
                         case table::CellOrientation_STANDARD:
-                            rSet.Put( SfxBoolItem( ATTR_STACKED, false ) );
+                            rSet.Put( ScVerticalStackCell( false ) );
                         break;
                         case table::CellOrientation_TOPBOTTOM:
-                            rSet.Put( SfxBoolItem( ATTR_STACKED, false ) );
+                            rSet.Put( ScVerticalStackCell( false ) );
                             rSet.Put( ScRotateValueItem( 27000 ) );
                             rSecondItemId = ATTR_ROTATE_VALUE;
                         break;
                         case table::CellOrientation_BOTTOMTOP:
-                            rSet.Put( SfxBoolItem( ATTR_STACKED, false ) );
+                            rSet.Put( ScVerticalStackCell( false ) );
                             rSet.Put( ScRotateValueItem( 9000 ) );
                             rSecondItemId = ATTR_ROTATE_VALUE;
                         break;
                         case table::CellOrientation_STACKED:
-                            rSet.Put( SfxBoolItem( ATTR_STACKED, true ) );
+                            rSet.Put( ScVerticalStackCell( true ) );
                         break;
                         default:
                         {
@@ -2415,7 +2415,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                     case ATTR_STACKED:
                         {
                             sal_Int32 nRot = pDataSet->Get(ATTR_ROTATE_VALUE).GetValue();
-                            bool bStacked = static_cast<const SfxBoolItem&>(pDataSet->Get(pEntry->nWID)).GetValue();
+                            bool bStacked = static_cast<const ScVerticalStackCell&>(pDataSet->Get(pEntry->nWID)).GetValue();
                             SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( rAny );
                         }
                         break;
