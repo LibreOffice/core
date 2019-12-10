@@ -315,7 +315,6 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 
     // Special treatment for distributed alignment; we need to set the justify
     // method to 'distribute' to distinguish from the normal justification.
-
     sal_uInt16 nWhichHorJM = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
     lcl_SetJustifyMethodToItemSet(*rSet, nWhichHorJM, *m_xLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
     if (!bChanged)
