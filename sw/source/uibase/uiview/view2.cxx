@@ -130,7 +130,6 @@
 #include <ndtxt.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <svx/svxdlg.hxx>
