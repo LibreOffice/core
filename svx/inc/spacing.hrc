@@ -13,60 +13,81 @@
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
-// To translators: this is a listbox labelled by "Spacing:", inch units
-const std::pair<const char*, int> RID_SVXSTRARY_SPACING_INCH[] =
+struct measurement
 {
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "None"),                    0 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Extra Small (1/16″)"),   91 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Small (1/8″)"),         181 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Small Medium (1/4″)"),  363 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Medium (3/8″)"),        539 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Medium Large (1/2″)"),  720 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Large (3/4″)"),        1077 },
-    { NC_("RID_SVXSTRARY_SPACING_INCH", "Extra Large (1″)"),    1440 },
-    { nullptr, 0 }
+    const char* key;
+    int twips;
+    int human;
+};
+
+// To translators: this is a listbox labelled by "Spacing:", inch units
+const measurement RID_SVXSTRARY_SPACING_INCH[] =
+{
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "None"),                   0, 0 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Extra Small (1/16″)"),   91, 0 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Small (1/8″)"),         181, 0 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Small Medium (1/4″)"),  363, 0 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Medium (3/8″)"),        539, 0 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Medium Large (1/2″)"),  720, 0 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Large (3/4″)"),        1077, 0 },
+    { NC_("RID_SVXSTRARY_SPACING_INCH", "Extra Large (1″)"),    1440, 0 },
+    { nullptr, 0, 0 }
 };
 
 // To translators: this is a listbox labelled by "Spacing:", cm units
-const std::pair<const char*, int> RID_SVXSTRARY_SPACING_CM[] =
+const measurement RID_SVXSTRARY_SPACING_CM[] =
 {
-    { NC_("RID_SVXSTRARY_SPACING_CM", "None"),                    0 },
-    { NC_("RID_SVXSTRARY_SPACING_CM", "Extra Small (0.16 cm)"),   91 },
-    { NC_("RID_SVXSTRARY_SPACING_CM", "Small (0.32 cm)"),        181 },
-    { NC_("RID_SVXSTRARY_SPACING_CM", "Small Medium (0.64 cm)"), 363 },
-    { NC_("RID_SVXSTRARY_SPACING_CM", "Medium (0.95 cm)"),       539 },
-    { NC_("RID_SVXSTRARY_SPACING_CM", "Medium Large (1.27 cm)"), 720 },
-    { NC_("RID_SVXSTRARY_SPACING_CM", "Large (1.9 cm)"),        1077 },
-    { NC_("RID_SVXSTRARY_SPACING_CM", "Extra Large (2.54 cm)"), 1440 },
-    { nullptr, 0 }
+    { NC_("RID_SVXSTRARY_SPACING_CM", "None"),                0,   0 },
+    // Extra Small (0.16 cm)
+    { NC_("RID_SVXSTRARY_SPACING_CM", "Extra Small (%1)"),   91,  16 },
+    // Small (0.32 cm)
+    { NC_("RID_SVXSTRARY_SPACING_CM", "Small (%1)"),        181,  32 },
+    // Small Medium (0.64 cm)
+    { NC_("RID_SVXSTRARY_SPACING_CM", "Small Medium (%1)"), 363,  64 },
+    // Medium (0.95 cm)
+    { NC_("RID_SVXSTRARY_SPACING_CM", "Medium (%1)"),       539,  95 },
+    // Medium Large (1.27 cm)
+    { NC_("RID_SVXSTRARY_SPACING_CM", "Medium Large (%1)"), 720, 127 },
+    // Large (1.9 cm)
+    { NC_("RID_SVXSTRARY_SPACING_CM", "Large (%1)"),       1077, 190 },
+    // Extra Large (2.54 cm)
+    { NC_("RID_SVXSTRARY_SPACING_CM", "Extra Large (%1)"), 1440, 254 },
+    { nullptr, 0, 0 }
 };
 
 // To translators: this is a listbox labelled by "Margins:", inch units
-const std::pair<const char*, int> RID_SVXSTRARY_MARGINS_INCH[] =
+const measurement RID_SVXSTRARY_MARGINS_INCH[] =
 {
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "None"),                    0 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Extra Small (1/16″)"),   91 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Small (1/8″)"),         181 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Small Medium (1/4″)"),  363 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Medium (3/8″)"),        539 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Medium Large (1/2″)"),  720 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Large (3/4″)"),        1077 },
-    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Extra Large (1″)"),    1440 },
-    { nullptr, 0 }
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "None"),                   0, 0 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Extra Small (1/16″)"),   91, 0 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Small (1/8″)"),         181, 0 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Small Medium (1/4″)"),  363, 0 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Medium (3/8″)"),        539, 0 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Medium Large (1/2″)"),  720, 0 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Large (3/4″)"),        1077, 0 },
+    { NC_("RID_SVXSTRARY_MARGINS_INCH", "Extra Large (1″)"),    1440, 0 },
+    { nullptr, 0, 0 }
 };
 
 // To translators: this is a listbox labelled by "Margins:", cm units
-const std::pair<const char*, int> RID_SVXSTRARY_MARGINS_CM[] =
+const measurement RID_SVXSTRARY_MARGINS_CM[] =
 {
-    { NC_("RID_SVXSTRARY_MARGINS_CM", "None"),                    0 },
-    { NC_("RID_SVXSTRARY_MARGINS_CM", "Extra Small (0.16 cm)"),   91 },
-    { NC_("RID_SVXSTRARY_MARGINS_CM", "Small (0.32 cm)"),        181 },
-    { NC_("RID_SVXSTRARY_MARGINS_CM", "Small Medium (0.64 cm)"), 363 },
-    { NC_("RID_SVXSTRARY_MARGINS_CM", "Medium (0.95 cm)"),       539 },
-    { NC_("RID_SVXSTRARY_MARGINS_CM", "Medium Large (1.27 cm)"), 720 },
-    { NC_("RID_SVXSTRARY_MARGINS_CM", "Large (1.9 cm)"),        1077 },
-    { NC_("RID_SVXSTRARY_MARGINS_CM", "Extra Large (2.54 cm)"), 1440 },
-    { nullptr, 0 }
+    { NC_("RID_SVXSTRARY_MARGINS_CM", "None"),                0,   0 },
+    // Extra Small (0.16 cm)
+    { NC_("RID_SVXSTRARY_MARGINS_CM", "Extra Small (%1)"),   91,  16 },
+    // Small (0.32 cm)
+    { NC_("RID_SVXSTRARY_MARGINS_CM", "Small (%1)"),        181,  32 },
+    // Small Medium (0.64 cm)
+    { NC_("RID_SVXSTRARY_MARGINS_CM", "Small Medium (%1)"), 363,  64 },
+    // Medium (0.95 cm)
+    { NC_("RID_SVXSTRARY_MARGINS_CM", "Medium (%1)"),       539,  95 },
+    // Medium Large (1.27 cm)
+    { NC_("RID_SVXSTRARY_MARGINS_CM", "Medium Large (%1)"), 720, 127 },
+    // Large (1.9 cm)
+    { NC_("RID_SVXSTRARY_MARGINS_CM", "Large (%1)"),       1077, 190 },
+    // Extra Large (2.54 cm)
+    { NC_("RID_SVXSTRARY_MARGINS_CM", "Extra Large (%1)"), 1440, 254 },
+    { nullptr, 0, 0 }
 };
 
 #endif
