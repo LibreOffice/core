@@ -25,6 +25,9 @@
 
 namespace emfplushelper
 {
+    const sal_uInt32 PathPointFlagsRelative = 0x0800;
+    const sal_uInt32 PathPointFlagsAbsolute = 0x4000;
+
     static sal_Int16 GetEmfPlusInteger(sal_Int32 nInt)
     {
         if (nInt & 0x80000000)
@@ -53,27 +56,28 @@ namespace emfplushelper
 
     void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags)
     {
+        SAL_INFO("drawinglayer", "EMF+\t\tPoints:");
         for (int i = 0; i < nPoints; i ++)
         {
-            if (pathFlags & 0x800)
+            if (pathFlags & PathPointFlagsRelative)
             {
                 // EMFPlusPointR: points are stored in EMFPlusInteger7 or
                 // EMFPlusInteger15 objects, see section 2.2.2.21/22
                 // If 0x800 bit is set, the 0x4000 bit is undefined and must be ignored
-                sal_Int32 x, y;
-                s.ReadInt32(x).ReadInt32(x);
+                sal_Int32 x = 0, y = 0;
+                s.ReadInt32(x).ReadInt32(y);
                 x = GetEmfPlusInteger(x);
                 y = GetEmfPlusInteger(y);
                 pPoints [i*2] = x;
                 pPoints [i*2 + 1] = y;
                 SAL_INFO("drawinglayer", "EMF+\t\t\tEmfPlusPointR [x,y]: " << x << ", " << y);
             }
-            else if (pathFlags & 0x4000)
+            else if (pathFlags & PathPointFlagsAbsolute)
             {
                 // EMFPlusPoint: stored in signed short 16bit integer format
                 sal_Int16 x, y;
 
-                s.ReadInt16( x ).ReadInt16( y );
+                s.ReadInt16(x).ReadInt16(y);
                 SAL_INFO ("drawinglayer", "EMF+\t\t\tEmfPlusPoint [x,y]: " << x << "," << y);
                 pPoints [i*2] = x;
                 pPoints [i*2 + 1] = y;
@@ -82,7 +86,7 @@ namespace emfplushelper
             {
                 // EMFPlusPointF: stored in Single (float) format
                 s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
-                SAL_INFO ("drawinglayer", "EMF+\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
+                SAL_INFO ("drawinglayer", "EMF+\t\t\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
             }
         }
 
