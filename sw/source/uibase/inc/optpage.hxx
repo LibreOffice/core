@@ -232,12 +232,7 @@ class SwShdwCursorOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::Frame> m_xDirectCursorFrame;
     std::unique_ptr<weld::CheckButton> m_xOnOffCB;
 
-    std::unique_ptr<weld::RadioButton> m_xFillMarginRB;
-    std::unique_ptr<weld::RadioButton> m_xFillIndentRB;
-    std::unique_ptr<weld::RadioButton> m_xFillTabRB;
-    std::unique_ptr<weld::RadioButton> m_xFillTabAndSpaceRB;
-    std::unique_ptr<weld::RadioButton> m_xFillSpaceRB;
-
+    std::unique_ptr<weld::ComboBox> m_xDirectCursorFillMode;
     std::unique_ptr<weld::Frame> m_xCursorProtFrame;
     std::unique_ptr<weld::CheckButton> m_xCursorInProtCB;
 

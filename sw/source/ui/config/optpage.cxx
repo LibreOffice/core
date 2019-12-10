@@ -1208,11 +1208,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xCharHiddenCB(m_xBuilder->weld_check_button("hiddentext"))
     , m_xDirectCursorFrame(m_xBuilder->weld_frame("directcrsrframe"))
     , m_xOnOffCB(m_xBuilder->weld_check_button("cursoronoff"))
-    , m_xFillMarginRB(m_xBuilder->weld_radio_button("fillmargin"))
-    , m_xFillIndentRB(m_xBuilder->weld_radio_button("fillindent"))
-    , m_xFillTabRB(m_xBuilder->weld_radio_button("filltab"))
-    , m_xFillTabAndSpaceRB(m_xBuilder->weld_radio_button("filltabandspace"))
-    , m_xFillSpaceRB(m_xBuilder->weld_radio_button("fillspace"))
+    , m_xDirectCursorFillMode(m_xBuilder->weld_combo_box("cxDirectCursorFillMode"))
     , m_xCursorProtFrame(m_xBuilder->weld_frame("crsrprotframe"))
     , m_xCursorInProtCB(m_xBuilder->weld_check_button("cursorinprot"))
     , m_xMathBaselineAlignmentCB(m_xBuilder->weld_check_button("mathbaseline"))
@@ -1229,12 +1225,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     }
     m_xOnOffCB->set_active( bIsOn );
 
-    m_xFillIndentRB->set_active( FILL_INDENT == eMode );
-    m_xFillMarginRB->set_active( FILL_MARGIN == eMode );
-    m_xFillTabRB->set_active( FILL_TAB == eMode );
-    m_xFillSpaceRB->set_active( FILL_SPACE == eMode );
-    m_xFillTabAndSpaceRB->set_active( FILL_TAB_SPACE == eMode );
-
+    m_xDirectCursorFillMode->set_active( eMode );
     if(SfxItemState::SET != rSet.GetItemState(SID_HTML_MODE, false, &pItem )
         || !(static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON))
         return;
@@ -1244,12 +1235,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
 
     m_xDirectCursorFrame->hide();
     m_xOnOffCB->hide();
-    m_xFillMarginRB->hide();
-    m_xFillIndentRB->hide();
-    m_xFillTabRB->hide();
-    m_xFillSpaceRB->hide();
-    m_xFillTabAndSpaceRB->hide();
-
+    m_xDirectCursorFillMode->hide();
     m_xCursorProtFrame->hide();
     m_xCursorInProtCB->hide();
 }
@@ -1276,16 +1262,7 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     aOpt.SetOn( m_xOnOffCB->get_active() );
 
     sal_uInt8 eMode;
-    if( m_xFillIndentRB->get_active() )
-        eMode= FILL_INDENT;
-    else if( m_xFillMarginRB->get_active() )
-        eMode = FILL_MARGIN;
-    else if( m_xFillTabRB->get_active() )
-        eMode = FILL_TAB;
-    else if ( m_xFillTabAndSpaceRB->get_active() )
-        eMode = FILL_TAB_SPACE;
-    else
-        eMode = FILL_SPACE;
+    eMode = m_xDirectCursorFillMode->get_active();
     aOpt.SetMode( eMode );
 
     bool bRet = false;
@@ -1343,12 +1320,7 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
     }
     m_xOnOffCB->set_active( bIsOn );
 
-    m_xFillIndentRB->set_active( FILL_INDENT == eMode );
-    m_xFillMarginRB->set_active( FILL_MARGIN == eMode );
-    m_xFillTabRB->set_active( FILL_TAB == eMode );
-    m_xFillSpaceRB->set_active( FILL_SPACE == eMode );
-    m_xFillTabAndSpaceRB->set_active( FILL_TAB_SPACE == eMode );
-
+    m_xDirectCursorFillMode->set_active( eMode );
     if (m_pWrtShell) {
         m_xMathBaselineAlignmentCB->set_active( m_pWrtShell->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) );
         m_xMathBaselineAlignmentCB->save_state();
