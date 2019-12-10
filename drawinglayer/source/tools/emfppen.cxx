@@ -57,7 +57,7 @@ namespace emfplushelper
         , startCap(0)
         , endCap(0)
         , lineJoin(0)
-        , mitterLimit(0.0)
+        , miterLimit(0.0)
         , dashStyle(0)
         , dashCap(0)
         , dashOffset(0.0)
@@ -155,12 +155,12 @@ namespace emfplushelper
 
         if (penDataFlags & PenDataMiterLimit)
         {
-            s.ReadFloat(mitterLimit);
-            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataMiterLimit: 0x" << std::hex << mitterLimit);
+            s.ReadFloat(miterLimit);
+            SAL_WARN("drawinglayer", "EMF+\t\tTODO PenDataMiterLimit: " << std::dec << miterLimit);
         }
         else
         {
-            mitterLimit = 0;
+            miterLimit = 0;
         }
 
         if (penDataFlags & PenDataLineStyle)

@@ -51,7 +51,7 @@ namespace emfplushelper
         sal_Int32 startCap;
         sal_Int32 endCap;
         sal_Int32 lineJoin;
-        float mitterLimit;
+        float miterLimit;
         sal_Int32 dashStyle;
         sal_Int32 dashCap;
         float dashOffset;
