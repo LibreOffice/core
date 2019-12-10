@@ -36,8 +36,8 @@ const char* RID_SVXITEMS_VERJUST[] =
 const char* RID_SVXITEMS_JUSTMETHOD[] =
 {
     // enum SvxCellJustifyMethod ----------------------------------------------------
-    NC_("RID_SVXITEMS_JUSTMETHOD_AUTO", "Automatic"),
-    NC_("RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE", "Distributed")
+    NC_("RID_SVXITEMS_JUSTMETHOD_AUTO", "Automatic Justify"),
+    NC_("RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE", "Distributed Justify")
 };
 
 #endif
