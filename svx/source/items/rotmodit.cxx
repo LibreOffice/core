@@ -31,7 +31,9 @@
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
+#include <svx/dialmgr.hxx>
 #include <svx/rotmodit.hxx>
+#include <rotationstrings.hrc>
 
 using namespace ::com::sun::star;
 
@@ -56,6 +58,12 @@ SvxRotateModeItem::~SvxRotateModeItem()
 {
 }
 
+OUString SvxRotateModeItem::GetValueText(SvxRotateMode nVal)
+{
+    assert(nVal <= SVX_ROTATE_MODE_BOTTOM && "enum overflow!");
+    return SvxResId(RID_SVXITEMS_ROTATE_MODE[static_cast<size_t>(nVal)]);
+}
+
 bool SvxRotateModeItem::GetPresentation(
                                 SfxItemPresentation ePres,
                                 MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
@@ -66,8 +74,9 @@ bool SvxRotateModeItem::GetPresentation(
     switch ( ePres )
     {
         case SfxItemPresentation::Complete:
-            rText += "...: ";
-            [[fallthrough]]; // break; // FALL THROUGH!!!
+            rText += GetValueText(GetValue());
+            return true;
+            break;
 
         case SfxItemPresentation::Nameless:
             rText += OUString::number( GetValue() );
