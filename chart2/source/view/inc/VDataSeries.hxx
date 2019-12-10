@@ -102,7 +102,6 @@ public:
     bool        hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const;
     sal_Int32   getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const;
     sal_Int32   detectNumberFormatKey( sal_Int32 nPointIndex ) const;
-    bool        shouldLabelNumberFormatKeyBeDetectedFromYAxis() const;
 
     sal_Int32 getLabelPlacement(
         sal_Int32 nPointIndex, const css::uno::Reference<css::chart2::XChartType>& xChartType,

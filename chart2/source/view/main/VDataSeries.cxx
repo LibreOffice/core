@@ -552,10 +552,14 @@ bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPerce
 {
     OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString(CHART_UNONAME_NUMFMT);
     bool bHasNumberFormat = false;
+    bool bLinkToSource = true;
     uno::Reference< beans::XPropertySet > xPointProp( getPropertiesOfPoint( nPointIndex ));
     sal_Int32 nNumberFormat = -1;
-    if( xPointProp.is() && (xPointProp->getPropertyValue(aPropName) >>= nNumberFormat) )
-        bHasNumberFormat = true;
+    if( xPointProp.is() && (xPointProp->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkToSource))
+    {
+        if( !bLinkToSource && (xPointProp->getPropertyValue(aPropName) >>= nNumberFormat))
+            bHasNumberFormat = true;
+    }
     return bHasNumberFormat;
 }
 sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
@@ -583,14 +587,6 @@ void VDataSeries::setRoleOfSequenceForDataLabelNumberFormatDetection( const OUSt
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_Last;
     else if (rRole == "values-x")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_X;
-}
-bool VDataSeries::shouldLabelNumberFormatKeyBeDetectedFromYAxis() const
-{
-    if( m_pValueSequenceForDataLabelNumberFormatDetection == &m_aValues_Bubble_Size )
-        return false;
-    else if( m_pValueSequenceForDataLabelNumberFormatDetection == &m_aValues_X )
-        return false;
-    return true;
 }
 sal_Int32 VDataSeries::detectNumberFormatKey( sal_Int32 index ) const
 {
