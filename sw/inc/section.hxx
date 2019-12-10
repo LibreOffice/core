@@ -50,11 +50,11 @@ enum class SectionType { Content,
                     FileLink   = OBJECT_CLIENT_FILE
                     };
 
-enum LinkCreateType
+enum class LinkCreateType
 {
-    CREATE_NONE,            // Do nothing.
-    CREATE_CONNECT,         // Connect created link.
-    CREATE_UPDATE           // Connect created link and update it.
+    NONE,            // Do nothing.
+    Connect,         // Connect created link.
+    Update           // Connect created link and update it.
 };
 
 class SW_DLLPUBLIC SwSectionData

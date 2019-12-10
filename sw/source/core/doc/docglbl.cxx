@@ -475,7 +475,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         }
                         // <- #i26762#
 
-                        pSectNd->GetSection().CreateLink( CREATE_CONNECT );
+                        pSectNd->GetSection().CreateLink( LinkCreateType::Connect );
                     }
                     break;
                 }

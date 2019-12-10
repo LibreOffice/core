@@ -500,7 +500,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
         m_pSectionData.reset(pOld);
 
         if( bUpdate )
-            rNdSect.CreateLink( CREATE_UPDATE );
+            rNdSect.CreateLink( LinkCreateType::Update );
         else if( SectionType::Content == rNdSect.GetType() && rNdSect.IsConnected() )
         {
             rNdSect.Disconnect();
