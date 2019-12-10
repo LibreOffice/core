@@ -70,9 +70,9 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             std::unique_ptr<SwGlblDocContent> pNew;
             switch( pSect->GetType() )
             {
-            case TOX_HEADER_SECTION:
+            case SectionType::ToxHeader:
                 break;      // ignore
-            case TOX_CONTENT_SECTION:
+            case SectionType::ToxContent:
                 OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( pSect) !=  nullptr, "no TOXBaseSection!" );
                 pNew.reset(new SwGlblDocContent( static_cast<const SwTOXBaseSection*>(pSect) ));
                 break;

@@ -501,7 +501,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( bUpdate )
             rNdSect.CreateLink( CREATE_UPDATE );
-        else if( CONTENT_SECTION == rNdSect.GetType() && rNdSect.IsConnected() )
+        else if( SectionType::Content == rNdSect.GetType() && rNdSect.IsConnected() )
         {
             rNdSect.Disconnect();
             rDoc.getIDocumentLinksAdministration().GetLinkManager().Remove( &rNdSect.GetBaseLink() );

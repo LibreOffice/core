@@ -1000,26 +1000,26 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
     }
     else if (pNd && nullptr != ( pSectNd = pNd->FindSectionNode() ))
     {
-        if ( TOX_HEADER_SECTION == pSectNd->GetSection().GetType() &&
+        if ( SectionType::ToxHeader == pSectNd->GetSection().GetType() &&
              pSectNd->StartOfSectionNode()->IsSectionNode() )
         {
             pSectNd = pSectNd->StartOfSectionNode()->GetSectionNode();
         }
 
-        if ( TOX_CONTENT_SECTION == pSectNd->GetSection().GetType() )
+        if ( SectionType::ToxContent == pSectNd->GetSection().GetType() )
         {
             pNd = pSectNd;
             rExport.m_pCurPam->GetPoint()->nNode = *pNd;
         }
 
-        if ( CONTENT_SECTION == pSectNd->GetSection().GetType() )
+        if ( SectionType::Content == pSectNd->GetSection().GetType() )
             pFormat = pSectNd->GetSection().GetFormat();
     }
 
     // tdf#118393: FILESAVE: DOCX Export loses header/footer
     rExport.m_bFirstTOCNodeWithSection = pSectNd &&
-        (   TOX_HEADER_SECTION  == pSectNd->GetSection().GetType() ||
-            TOX_CONTENT_SECTION == pSectNd->GetSection().GetType()  );
+        (   SectionType::ToxHeader  == pSectNd->GetSection().GetType() ||
+            SectionType::ToxContent == pSectNd->GetSection().GetType()  );
 
     // Try to get page descriptor of the first node
     if ( pSet &&

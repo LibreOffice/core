@@ -915,7 +915,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                             SectionSort::Not, false);
                     for(SwSection* pSect : aSectArr)
                     {
-                        if(pSect->GetType() == TOX_HEADER_SECTION)
+                        if(pSect->GetType() == SectionType::ToxHeader)
                         {
                             const uno::Reference <text::XTextSection> xHeader =
                                 SwXTextSection::CreateXTextSection(
@@ -2361,7 +2361,7 @@ SwXDocumentIndexes::getCount()
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
         const SwSection* pSect = rFormats[ n ]->GetSection();
-        if( TOX_CONTENT_SECTION == pSect->GetType() &&
+        if( SectionType::ToxContent == pSect->GetType() &&
             pSect->GetFormat()->GetSectionNode() )
         {
             ++nRet;
@@ -2384,7 +2384,7 @@ SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
         SwSection* pSect = rFormats[ n ]->GetSection();
-        if( TOX_CONTENT_SECTION == pSect->GetType() &&
+        if( SectionType::ToxContent == pSect->GetType() &&
             pSect->GetFormat()->GetSectionNode() &&
             nIdx++ == nIndex )
         {
@@ -2412,7 +2412,7 @@ SwXDocumentIndexes::getByName(const OUString& rName)
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
         SwSection* pSect = rFormats[ n ]->GetSection();
-        if( TOX_CONTENT_SECTION == pSect->GetType() &&
+        if( SectionType::ToxContent == pSect->GetType() &&
             pSect->GetFormat()->GetSectionNode() &&
             (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()
                 == rName))
@@ -2441,7 +2441,7 @@ SwXDocumentIndexes::getElementNames()
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
         SwSection const*const pSect = rFormats[ n ]->GetSection();
-        if( TOX_CONTENT_SECTION == pSect->GetType() &&
+        if( SectionType::ToxContent == pSect->GetType() &&
             pSect->GetFormat()->GetSectionNode() )
         {
             ++nCount;
@@ -2454,7 +2454,7 @@ SwXDocumentIndexes::getElementNames()
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
         SwSection const*const pSect = rFormats[ n ]->GetSection();
-        if( TOX_CONTENT_SECTION == pSect->GetType() &&
+        if( SectionType::ToxContent == pSect->GetType() &&
             pSect->GetFormat()->GetSectionNode())
         {
             pArray[nCnt++] = static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName();
@@ -2475,7 +2475,7 @@ SwXDocumentIndexes::hasByName(const OUString& rName)
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
         SwSection const*const pSect = rFormats[ n ]->GetSection();
-        if( TOX_CONTENT_SECTION == pSect->GetType() &&
+        if( SectionType::ToxContent == pSect->GetType() &&
             pSect->GetFormat()->GetSectionNode())
         {
             if (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()

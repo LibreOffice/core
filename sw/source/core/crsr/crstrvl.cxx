@@ -269,7 +269,7 @@ bool SwCursorShell::GotoNextTOXBase( const OUString* pName )
     for( SwSectionFormats::size_type n = rFormats.size(); n; )
     {
         const SwSection* pSect = rFormats[ --n ]->GetSection();
-        if (TOX_CONTENT_SECTION == pSect->GetType())
+        if (SectionType::ToxContent == pSect->GetType())
         {
             SwSectionNode const*const pSectNd(
                     pSect->GetFormat()->GetSectionNode());
@@ -320,7 +320,7 @@ bool SwCursorShell::GotoPrevTOXBase( const OUString* pName )
     for( SwSectionFormats::size_type n = rFormats.size(); n; )
     {
         const SwSection* pSect = rFormats[ --n ]->GetSection();
-        if (TOX_CONTENT_SECTION == pSect->GetType())
+        if (SectionType::ToxContent == pSect->GetType())
         {
             SwSectionNode const*const pSectNd(
                     pSect->GetFormat()->GetSectionNode());

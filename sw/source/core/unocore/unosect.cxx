@@ -312,11 +312,11 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     {
         m_pImpl->m_sName = "TextSection";
     }
-    SectionType eType(FILE_LINK_SECTION);
+    SectionType eType(SectionType::FileLink);
     if( m_pImpl->m_pProps->m_bDDE )
-        eType = DDE_LINK_SECTION;
+        eType = SectionType::DdeLink;
     else if( m_pImpl->m_pProps->m_sLinkFileName.isEmpty() && m_pImpl->m_pProps->m_sSectionRegion.isEmpty() )
-        eType = CONTENT_SECTION;
+        eType = SectionType::Content;
     // index header section?
     if (m_pImpl->m_bIndexHeader)
     {
@@ -338,12 +338,12 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
             bool bHeaderPresent = false;
             for(size_t i = 0; i < nCount; ++i)
             {
-                if (aSectionsArr[i]->GetType() == TOX_HEADER_SECTION)
+                if (aSectionsArr[i]->GetType() == SectionType::ToxHeader)
                     bHeaderPresent = true;
             }
             if (! bHeaderPresent)
             {
-                eType = TOX_HEADER_SECTION;
+                eType = SectionType::ToxHeader;
             }
         }
     }
@@ -505,7 +505,7 @@ SwXTextSection::getPropertySetInfo()
 static void
 lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways)
 {
-    if (rSection.GetType() == DDE_LINK_SECTION)
+    if (rSection.GetType() == SectionType::DdeLink)
     {
         // set update type; needs an established link
         if (!rSection.IsConnected())
@@ -630,10 +630,10 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                 else
                 {
                     OUString sLinkFileName(pSectionData->GetLinkFileName());
-                    if (pSectionData->GetType() != DDE_LINK_SECTION)
+                    if (pSectionData->GetType() != SectionType::DdeLink)
                     {
                         sLinkFileName = OUStringChar(sfx2::cTokenSeparator) + OUStringChar(sfx2::cTokenSeparator);
-                        pSectionData->SetType(DDE_LINK_SECTION);
+                        pSectionData->SetType(SectionType::DdeLink);
                     }
                     sLinkFileName = comphelper::string::setToken(sLinkFileName,
                         pEntry->nWID - WID_SECT_DDE_TYPE,
@@ -675,10 +675,10 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                 }
                 else
                 {
-                    if (pSectionData->GetType() != FILE_LINK_SECTION &&
+                    if (pSectionData->GetType() != SectionType::FileLink &&
                         !aLink.FileURL.isEmpty())
                     {
-                        pSectionData->SetType(FILE_LINK_SECTION);
+                        pSectionData->SetType(SectionType::FileLink);
                     }
                     const OUString sTmp(!aLink.FileURL.isEmpty()
                         ? URIHelper::SmartRel2Abs(
@@ -692,7 +692,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                     pSectionData->SetLinkFileName(sFileName);
                     if (sFileName.getLength() < 3)
                     {
-                        pSectionData->SetType(CONTENT_SECTION);
+                        pSectionData->SetType(SectionType::Content);
                     }
                 }
             }
@@ -708,10 +708,10 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                 }
                 else
                 {
-                    if (pSectionData->GetType() != FILE_LINK_SECTION &&
+                    if (pSectionData->GetType() != SectionType::FileLink &&
                         !sLink.isEmpty())
                     {
-                        pSectionData->SetType(FILE_LINK_SECTION);
+                        pSectionData->SetType(SectionType::FileLink);
                     }
                     OUString sSectLink(pSectionData->GetLinkFileName());
                     for (sal_Int32 i = comphelper::string::getTokenCount(sSectLink, sfx2::cTokenSeparator);
@@ -723,7 +723,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                     pSectionData->SetLinkFileName(sSectLink);
                     if (sSectLink.getLength() < 3)
                     {
-                        pSectionData->SetType(CONTENT_SECTION);
+                        pSectionData->SetType(SectionType::Content);
                     }
                 }
             }
@@ -992,7 +992,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                         sRet = m_pProps->m_sLinkFileName;
                     }
                 }
-                else if (DDE_LINK_SECTION == pSect->GetType())
+                else if (SectionType::DdeLink == pSect->GetType())
                 {
                     sRet = pSect->GetLinkFileName();
                 }
@@ -1022,7 +1022,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                         aLink.FilterName = m_pProps->m_sSectionFilter;
                     }
                 }
-                else if (FILE_LINK_SECTION == pSect->GetType())
+                else if (SectionType::FileLink == pSect->GetType())
                 {
                     const OUString& sRet( pSect->GetLinkFileName() );
                     sal_Int32 nIndex(0);
@@ -1041,7 +1041,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                 {
                     sRet = m_pProps->m_sSectionRegion;
                 }
-                else if (FILE_LINK_SECTION == pSect->GetType())
+                else if (SectionType::FileLink == pSect->GetType())
                 {
                     sRet = pSect->GetLinkFileName().getToken(2,
                             sfx2::cTokenSeparator);
@@ -1090,7 +1090,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                 // search enclosing index
                 SwSection* pEnclosingSection = pSect;
                 while ((pEnclosingSection != nullptr) &&
-                       (TOX_CONTENT_SECTION != pEnclosingSection->GetType()))
+                       (SectionType::ToxContent != pEnclosingSection->GetType()))
                 {
                     pEnclosingSection = pEnclosingSection->GetParent();
                 }
@@ -1489,7 +1489,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
             }
             else
             {
-                pSectionData->SetType(CONTENT_SECTION);
+                pSectionData->SetType(SectionType::Content);
             }
         break;
         case WID_SECT_DDE_AUTOUPDATE:

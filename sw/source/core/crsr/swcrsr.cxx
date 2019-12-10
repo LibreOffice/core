@@ -315,7 +315,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                     {
                         // if it is no linked section then we cannot select it
                         const SwSection& rSect = *pFormat->GetSection();
-                        if( CONTENT_SECTION == rSect.GetType() )
+                        if( SectionType::Content == rSect.GetType() )
                         {
                             RestoreSavePos();
                             return true;

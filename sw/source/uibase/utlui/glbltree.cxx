@@ -1339,12 +1339,12 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         if ( nAddNumber )
             sSectionName = sTempSectionName;
 
-        SwSectionData aSectionData(CONTENT_SECTION, sSectionName);
+        SwSectionData aSectionData(SectionType::Content, sSectionName);
         aSectionData.SetProtectFlag(true);
         aSectionData.SetHidden(false);
 
         aSectionData.SetLinkFileName(sFileName);
-        aSectionData.SetType(FILE_LINK_SECTION);
+        aSectionData.SetType(SectionType::FileLink);
         aSectionData.SetLinkFilePassword( OUString() );
 
         rSh.InsertGlobalDocContent( *pAnchorContent, aSectionData );

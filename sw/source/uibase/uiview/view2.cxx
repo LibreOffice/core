@@ -1586,8 +1586,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     {
                         switch( pCurrSect->GetType() )
                         {
-                        case TOX_HEADER_SECTION:
-                        case TOX_CONTENT_SECTION:
+                        case SectionType::ToxHeader:
+                        case SectionType::ToxContent:
                             {
                                 const SwTOXBase* pTOX = m_pWrtShell->GetCurTOX();
                                 if( pTOX )

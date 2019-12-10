@@ -7272,8 +7272,8 @@ bool SwFrame::GetBackgroundBrush(
             //         option "index shadings" is set and
             //         the output is not the printer
             //         then set <rpCol> to the color of the index shading
-            if( pSection && (   TOX_HEADER_SECTION == pSection->GetType() ||
-                                TOX_CONTENT_SECTION == pSection->GetType() ) &&
+            if( pSection && (   SectionType::ToxHeader == pSection->GetType() ||
+                                SectionType::ToxContent == pSection->GetType() ) &&
                 (rBack.GetColor() == COL_TRANSPARENT) &&
                 rBack.GetGraphicPos() == GPOS_NONE &&
                 !pOpt->IsPagePreview() &&

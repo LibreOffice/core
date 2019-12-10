@@ -2562,7 +2562,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                 if( rWrtShell.HasSelection() )
                     rWrtShell.DelRight();
 
-                SwSectionData aSect( DDE_LINK_SECTION, aName );
+                SwSectionData aSect( SectionType::DdeLink, aName );
                 aSect.SetLinkFileName( aCmd );
                 aSect.SetProtectFlag(true);
                 rWrtShell.InsertSection( aSect );
@@ -2974,7 +2974,7 @@ bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
                 {
                     // and then pull up the insert-region-dialog
                     SwSectionData aSect(
-                                    FILE_LINK_SECTION,
+                                    SectionType::FileLink,
                                     rSh.GetDoc()->GetUniqueSectionName() );
                     aSect.SetLinkFileName( sFileURL );
                     aSect.SetProtectFlag( true );

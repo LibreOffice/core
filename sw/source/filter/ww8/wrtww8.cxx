@@ -2752,7 +2752,7 @@ void MSWordExportBase::WriteText()
         {
             const SwSection& rSect = rNd.StartOfSectionNode()->GetSectionNode()
                                         ->GetSection();
-            if ( m_bStartTOX && TOX_CONTENT_SECTION == rSect.GetType() )
+            if ( m_bStartTOX && SectionType::ToxContent == rSect.GetType() )
                 m_bStartTOX = false;
 
             SwNodeIndex aIdx( rNd, 1 );
@@ -2764,7 +2764,7 @@ void MSWordExportBase::WriteText()
             {
                 //#120140# Do not need to insert a page/section break after a section end. Check this case first
                 bool bNeedExportBreakHere = true;
-                if ( rSect.GetType() == TOX_CONTENT_SECTION || rSect.GetType() == TOX_HEADER_SECTION )
+                if ( rSect.GetType() == SectionType::ToxContent || rSect.GetType() == SectionType::ToxHeader )
                     bNeedExportBreakHere = false;
                 else if ( aIdx.GetNode().IsTextNode() )
                 {

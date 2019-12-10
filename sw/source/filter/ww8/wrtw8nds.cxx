@@ -2151,7 +2151,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
     {
         // ignore TOX header section
         const SwSectionNode* pSectNd = rNode.FindSectionNode();
-        if ( pSectNd && TOX_CONTENT_SECTION == pSectNd->GetSection().GetType() )
+        if ( pSectNd && SectionType::ToxContent == pSectNd->GetSection().GetType() )
         {
             AttrOutput().StartTOX( pSectNd->GetSection() );
             m_aCurrentCharPropStarts.push( 0 );
@@ -3117,7 +3117,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         else
             AttrOutput().SectionBreaks( rSectionNode );
 
-        const bool bInTOX = rSection.GetType() == TOX_CONTENT_SECTION || rSection.GetType() == TOX_HEADER_SECTION;
+        const bool bInTOX = rSection.GetType() == SectionType::ToxContent || rSection.GetType() == SectionType::ToxHeader;
         if ( !pSet && !bInTOX )
         {
             // new Section with no own PageDesc/-Break
@@ -3133,7 +3133,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
             AppendSection( pCurrent, pFormat, nRstLnNum );
         }
     }
-    if ( TOX_CONTENT_SECTION == rSection.GetType() )
+    if ( SectionType::ToxContent == rSection.GetType() )
     {
         m_bStartTOX = true;
         UpdateTocSectionNodeProperties(rSectionNode);
@@ -3149,7 +3149,7 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
     // check section type
     {
         const SwSection& rSection = rSectionNode.GetSection();
-        if (TOX_CONTENT_SECTION != rSection.GetType())
+        if (SectionType::ToxContent != rSection.GetType())
             return;
 
         const SwTOXBase* pTOX = rSection.GetTOXBase();
@@ -3170,7 +3170,7 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
         if (rNdNext.IsSectionNode())
         {
             const SwSectionNode* pSectNdNext = static_cast<const SwSectionNode*>(&rNdNext);
-            if (TOX_HEADER_SECTION == pSectNdNext->GetSection().GetType() &&
+            if (SectionType::ToxHeader == pSectNdNext->GetSection().GetType() &&
                 pSectNdNext->StartOfSectionNode()->IsSectionNode())
             {
                 pSectNd = pSectNdNext;

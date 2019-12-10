@@ -2524,7 +2524,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, OUString& rSt
     */
     SwPosition aTmpPos(*m_pPaM->GetPoint());
 
-    SwSectionData aSection(FILE_LINK_SECTION,
+    SwSectionData aSection(SectionType::FileLink,
             m_aSectionNameGenerator.UniqueName());
     aSection.SetLinkFileName( aPara );
     aSection.SetProtectFlag(true);

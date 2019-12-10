@@ -1054,7 +1054,7 @@ const SwNode& SwCompareLine::GetEndNode() const
         {
             const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(rNode);
             const SwSection& rSect = rSNd.GetSection();
-            if( CONTENT_SECTION != rSect.GetType() || rSect.IsProtect() )
+            if( SectionType::Content != rSect.GetType() || rSect.IsProtect() )
                 pNd = rNode.EndOfSectionNode();
         }
         break;
@@ -1131,8 +1131,8 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
                         eDstSectType = rDstSect.GetType();
             switch( eSrcSectType )
             {
-            case CONTENT_SECTION:
-                bRet = CONTENT_SECTION == eDstSectType &&
+            case SectionType::Content:
+                bRet = SectionType::Content == eDstSectType &&
                         rSrcSect.IsProtect() == rDstSect.IsProtect();
                 if( bRet && rSrcSect.IsProtect() )
                 {
@@ -1142,10 +1142,10 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
                 }
                 break;
 
-            case TOX_HEADER_SECTION:
-            case TOX_CONTENT_SECTION:
-                if( TOX_HEADER_SECTION == eDstSectType ||
-                    TOX_CONTENT_SECTION == eDstSectType )
+            case SectionType::ToxHeader:
+            case SectionType::ToxContent:
+                if( SectionType::ToxHeader == eDstSectType ||
+                    SectionType::ToxContent == eDstSectType )
                 {
                     // the same type of TOX?
                     const SwTOXBase* pSrcTOX = rSrcSect.GetTOXBase();
@@ -1158,8 +1158,8 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
                 }
                 break;
 
-            case DDE_LINK_SECTION:
-            case FILE_LINK_SECTION:
+            case SectionType::DdeLink:
+            case SectionType::FileLink:
                 bRet = eSrcSectType == eDstSectType &&
                         rSrcSect.GetLinkFileName() ==
                         rDstSect.GetLinkFileName();
@@ -1209,14 +1209,14 @@ OUString SwCompareLine::GetText() const
             const SwSection& rSect = rSNd.GetSection();
             switch( rSect.GetType() )
             {
-            case CONTENT_SECTION:
+            case SectionType::Content:
                 if( rSect.IsProtect() )
                     sRet += OUString::number(
                             rSNd.EndOfSectionIndex() - rSNd.GetIndex() );
                 break;
 
-            case TOX_HEADER_SECTION:
-            case TOX_CONTENT_SECTION:
+            case SectionType::ToxHeader:
+            case SectionType::ToxContent:
                 {
                     const SwTOXBase* pTOX = rSect.GetTOXBase();
                     if( pTOX )
@@ -1225,8 +1225,8 @@ OUString SwCompareLine::GetText() const
                 }
                 break;
 
-            case DDE_LINK_SECTION:
-            case FILE_LINK_SECTION:
+            case SectionType::DdeLink:
+            case SectionType::FileLink:
                 sRet += rSect.GetLinkFileName();
                 break;
             }
@@ -1409,7 +1409,7 @@ sal_uLong CompareData::NextIdx( const SwNode* pNd )
         const SwSectionNode* pSNd;
         if( pNd->IsTableNode() ||
             ( nullptr != (pSNd = pNd->GetSectionNode() ) &&
-                ( CONTENT_SECTION != pSNd->GetSection().GetType() ||
+                ( SectionType::Content != pSNd->GetSection().GetType() ||
                     pSNd->GetSection().IsProtect() ) ) )
             pNd = pNd->EndOfSectionNode();
     }
@@ -1423,7 +1423,7 @@ sal_uLong CompareData::PrevIdx( const SwNode* pNd )
         const SwSectionNode* pSNd;
         if( pNd->StartOfSectionNode()->IsTableNode() ||
             ( nullptr != (pSNd = pNd->StartOfSectionNode()->GetSectionNode() ) &&
-                ( CONTENT_SECTION != pSNd->GetSection().GetType() ||
+                ( SectionType::Content != pSNd->GetSection().GetType() ||
                     pSNd->GetSection().IsProtect() ) ) )
             pNd = pNd->StartOfSectionNode();
     }

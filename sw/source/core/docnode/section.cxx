@@ -241,7 +241,7 @@ SwSection::~SwSection()
     {
         pFormat->Remove( this ); // remove
 
-        if (CONTENT_SECTION != m_Data.GetType())
+        if (SectionType::Content != m_Data.GetType())
         {
             pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink.get() );
         }
@@ -548,11 +548,11 @@ OUString const & SwSection::GetLinkFileName() const
         OUString sTmp;
         switch (m_Data.GetType())
         {
-        case DDE_LINK_SECTION:
+        case SectionType::DdeLink:
             sTmp = m_RefLink->GetLinkSourceName();
             break;
 
-        case FILE_LINK_SECTION:
+        case SectionType::FileLink:
             {
                 OUString sRange;
                 OUString sFilter;
@@ -602,7 +602,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
             pNd = pNd->StartOfSectionNode(); // If it's a SectionNode
             const SwSectionNode* pParent;
             while( nullptr != ( pParent = pNd->FindSectionNode() ) &&
-                    ( CONTENT_SECTION == pParent->GetSection().GetType()
+                    ( SectionType::Content == pParent->GetSection().GetType()
                         || pNd == &rSectNd ))
                     pNd = pParent->StartOfSectionNode();
 
@@ -616,7 +616,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 const SwTOXBase* SwSection::GetTOXBase() const
 {
     const SwTOXBase* pRet = nullptr;
-    if( TOX_CONTENT_SECTION == GetType() )
+    if( SectionType::ToxContent == GetType() )
         pRet = dynamic_cast<const SwTOXBaseSection*>(this);
     return pRet;
 }
@@ -1013,8 +1013,8 @@ const SwSection* SwSectionFormat::GetGlobalDocSection() const
 {
     const SwSectionNode* pNd = GetSectionNode();
     if( pNd &&
-        ( FILE_LINK_SECTION == pNd->GetSection().GetType() ||
-          TOX_CONTENT_SECTION == pNd->GetSection().GetType() ) &&
+        ( SectionType::FileLink == pNd->GetSection().GetType() ||
+          SectionType::ToxContent == pNd->GetSection().GetType() ) &&
         pNd->GetIndex() > pNd->GetNodes().GetEndOfExtras().GetIndex() &&
         !pNd->StartOfSectionNode()->IsSectionNode() &&
         !pNd->StartOfSectionNode()->FindSectionNode() )
@@ -1058,7 +1058,7 @@ SwSectionFormat::MakeUnoObject()
     if (pSection)
     {
         xMeta.set(  SwXTextSection::CreateXTextSection(this,
-                        TOX_HEADER_SECTION == pSection->GetType()),
+                        SectionType::ToxHeader == pSection->GetType()),
                     uno::UNO_QUERY );
     }
     return xMeta;
@@ -1461,7 +1461,7 @@ void SwIntrnlSectRefLink::Closed()
                     pSh->StartAction();
 
                 SwSectionData aSectionData(*rSectFormat.GetSection());
-                aSectionData.SetType( CONTENT_SECTION );
+                aSectionData.SetType( SectionType::Content );
                 aSectionData.SetLinkFileName( OUString() );
                 aSectionData.SetProtectFlag( false );
                 // edit in readonly sections
@@ -1490,7 +1490,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
 {
     SwSectionFormat* pFormat = GetFormat();
     OSL_ENSURE(pFormat, "SwSection::CreateLink: no format?");
-    if (!pFormat || (CONTENT_SECTION == m_Data.GetType()))
+    if (!pFormat || (SectionType::Content == m_Data.GetType()))
         return ;
 
     SfxLinkUpdateMode nUpdateType = SfxLinkUpdateMode::ALWAYS;
@@ -1514,11 +1514,11 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
 
     switch (m_Data.GetType())
     {
-    case DDE_LINK_SECTION:
+    case SectionType::DdeLink:
         pLnk->SetLinkSourceName( sCmd );
         pFormat->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( pLnk );
         break;
-    case FILE_LINK_SECTION:
+    case SectionType::FileLink:
         {
             pLnk->SetContentType( SotClipboardFormatId::SIMPLE_FILE );
             sal_Int32 nIndex = 0;
@@ -1552,9 +1552,9 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
 void SwSection::BreakLink()
 {
     const SectionType eCurrentType( GetType() );
-    if ( eCurrentType == CONTENT_SECTION ||
-         eCurrentType == TOX_HEADER_SECTION ||
-         eCurrentType == TOX_CONTENT_SECTION )
+    if ( eCurrentType == SectionType::Content ||
+         eCurrentType == SectionType::ToxHeader ||
+         eCurrentType == SectionType::ToxContent )
     {
         // nothing to do
         return;
@@ -1572,7 +1572,7 @@ void SwSection::BreakLink()
         m_RefLink.clear();
     }
     // change type
-    SetType( CONTENT_SECTION );
+    SetType( SectionType::Content );
     // reset linked file data
     SetLinkFileName( OUString() );
     SetLinkFilePassword( OUString() );

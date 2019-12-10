@@ -1329,7 +1329,7 @@ void SwUiWriterTest::testCp1000071()
 
     // Change the document layout to be 2 columns, and then undo.
     pWrtShell->SelAll();
-    SwSectionData section(CONTENT_SECTION, pWrtShell->GetUniqueSectionName());
+    SwSectionData section(SectionType::Content, pWrtShell->GetUniqueSectionName());
     SfxItemSet set( pDoc->GetDocShell()->GetPool(), svl::Items<RES_COL, RES_COL>{} );
     SwFormatCol col;
     col.Init( 2, 0, 10000 );

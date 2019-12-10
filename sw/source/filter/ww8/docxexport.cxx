@@ -562,7 +562,7 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
         // could have some code common with SectionNode()...
 
         const SwSection& rSect = rEndNode.StartOfSectionNode()->GetSectionNode()->GetSection();
-        if ( m_bStartTOX && TOX_CONTENT_SECTION == rSect.GetType() )
+        if ( m_bStartTOX && SectionType::ToxContent == rSect.GetType() )
             m_bStartTOX = false;
 
         SwNodeIndex aIdx( rEndNode, 1 );

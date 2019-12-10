@@ -1011,7 +1011,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             {
                 const SwSection* pSection =
                         static_cast<const SwSectionFrame*>(pFrame)->GetSection();
-                if ( TOX_CONTENT_SECTION == pSection->GetType() )
+                if ( SectionType::ToxContent == pSection->GetType() )
                 {
                     const SwTOXBase* pTOXBase = pSection->GetTOXBase();
                     if ( pTOXBase )
@@ -1028,7 +1028,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         }
                     }
                 }
-                else if ( CONTENT_SECTION == pSection->GetType() )
+                else if ( SectionType::Content == pSection->GetType() )
                 {
                     nPDFType = vcl::PDFWriter::Section;
                     aPDFType = aSectString;
@@ -1133,7 +1133,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     const SwSectionFrame* pSctFrame = pFrame->FindSctFrame();
                     const SwSection* pSection = pSctFrame->GetSection();
 
-                    if ( TOX_CONTENT_SECTION == pSection->GetType() )
+                    if ( SectionType::ToxContent == pSection->GetType() )
                     {
                         const SwTOXBase* pTOXBase = pSection->GetTOXBase();
                         if ( pTOXBase && TOX_INDEX != pTOXBase->GetType() )
