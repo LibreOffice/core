@@ -663,7 +663,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
         if ( pCondSet->GetItemState( ATTR_HYPHENATE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_HYPHENATE );
-        bHyphenate = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        bHyphenate = static_cast<const ScHyphenateCell*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_WRITINGDIR, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_WRITINGDIR );

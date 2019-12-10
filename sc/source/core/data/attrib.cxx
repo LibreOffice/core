@@ -808,4 +808,24 @@ bool ScLineBreakCell::GetPresentation(SfxItemPresentation,
     return true;
 }
 
+ScHyphenateCell::ScHyphenateCell(bool bHyphenate)
+    : SfxBoolItem(ATTR_HYPHENATE, bHyphenate)
+{
+}
+
+ScHyphenateCell* ScHyphenateCell::Clone(SfxItemPool*) const
+{
+    return new ScHyphenateCell(GetValue());
+}
+
+bool ScHyphenateCell::GetPresentation(SfxItemPresentation,
+                                      MapUnit, MapUnit,
+                                      OUString& rText,
+                                      const IntlWrapper&) const
+{
+    const char* pId = GetValue() ? STR_HYPHENATECELL_ON : STR_HYPHENATECELL_OFF;
+    rText = ScResId(pId);
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
