@@ -2071,7 +2071,8 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
             return;
         // Inplace-Editing?
     }
-    if ( m_aSelEng.GetSelectionMode() != SelectionMode::NONE )
+    if ( m_aSelEng.GetSelectionMode() != SelectionMode::NONE
+         && !rMEvt.IsRight() ) // tdf#128824
         m_aSelEng.SelMouseButtonDown( rMEvt );
 }
 
