@@ -39,28 +39,16 @@
 long g_DllRefCnt = 0;
 static HINSTANCE g_hModule = nullptr;
 
-namespace {
-
-// Map of property keys to the locations of their value(s) in the .??? XML schema
-struct PROPERTYMAP
+const PROPERTYKEY g_rgPROPERTIES[] =
 {
-    PROPERTYKEY key;
-    PCWSTR pszXPathParent;
-    PCWSTR pszValueNodeName;
+    PKEY_Title,
+    PKEY_Author,
+    PKEY_Subject,
+    PKEY_Keywords,
+    PKEY_Comment
 };
 
-}
-
-const PROPERTYMAP g_rgPROPERTYMAP[] =
-{
-    { PKEY_Title,          L"LibreOffice",          L"Title" },
-    { PKEY_Author,         L"LibreOffice",          L"Author" },
-    { PKEY_Subject,        L"LibreOffice",          L"Subject" },
-    { PKEY_Keywords,       L"LibreOffice",          L"Keyword" },
-    { PKEY_Comment,        L"LibreOffice",          L"Comments" },
-};
-
-size_t const gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
+size_t const gPropertyTableSize = SAL_N_ELEMENTS(g_rgPROPERTIES);
 
 
 CPropertyHdl::CPropertyHdl( long nRefCnt ) :
@@ -289,18 +277,18 @@ void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
     OutputDebugStringFormatW( L"CPropertyHdl: LoadProperties\n" );
     PROPVARIANT propvarValues;
 
-    for ( UINT i = 0; i < UINT(gPropertyMapTableSize); ++i )
+    for ( UINT i = 0; i < UINT(gPropertyTableSize); ++i )
     {
         PropVariantClear( &propvarValues );
         HRESULT hr = GetItemData( pMetaInfoReader, i, &propvarValues);
         if (hr == S_OK)
         {
             // coerce the value(s) to the appropriate type for the property key
-            hr = PSCoerceToCanonicalValue( g_rgPROPERTYMAP[i].key, &propvarValues );
+            hr = PSCoerceToCanonicalValue( g_rgPROPERTIES[i], &propvarValues );
             if (SUCCEEDED(hr))
             {
                 // cache the value(s) loaded
-                hr = m_pCache->SetValueAndState( g_rgPROPERTYMAP[i].key, &propvarValues, PSC_NORMAL );
+                hr = m_pCache->SetValueAndState( g_rgPROPERTIES[i], &propvarValues, PSC_NORMAL );
             }
         }
     }
