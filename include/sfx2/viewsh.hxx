@@ -219,7 +219,6 @@ public:
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
 
     // ILibreOfficeKitNotifier
-    virtual void                sendUnoStatus(const SfxItemSet* pSet) const override;
     virtual void                notifyWindow(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;
 
     // Focus, KeyInput, Cursor

@@ -732,10 +732,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 rSet.DisableItem( nWhich );
             }
             nWhich = aNewIter.NextWhich();
-
-            SfxViewShell* pViewShell = GetDrawView()->GetSfxViewShell();
-            if (pViewShell && comphelper::LibreOfficeKit::isActive())
-                pViewShell->sendUnoStatus( &rSet );
         }
     }
 
