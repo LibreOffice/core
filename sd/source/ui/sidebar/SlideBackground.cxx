@@ -52,6 +52,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <EventMultiplexer.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <editeng/sizeitem.hxx>
@@ -190,15 +191,25 @@ void SlideBackground::SetMarginsFieldUnit()
     auto nSelected = mpMarginSelectBox->GetSelectedEntryPos();
     mpMarginSelectBox->Clear();
 
+    const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+
     if (IsInch(meFUnit))
     {
+        OUString sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::INCH);
         for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
-            mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i]));
+        {
+            OUString sMeasurement = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_INCH[i].second, 2, true, false) + sSuffix;
+            mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i].first).replaceFirst("%1", sMeasurement));
+        }
     }
     else
     {
+        OUString sSuffix = " " + weld::MetricSpinButton::MetricToString(FieldUnit::CM);
         for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
-            mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_CM[i]));
+        {
+            OUString sMeasurement = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_CM[i].second, 2, true, false) + sSuffix;
+            mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_CM[i].first).replaceFirst("%1", sMeasurement));
+        }
     }
 
     mpMarginSelectBox->SelectEntryPos(nSelected);
