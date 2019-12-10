@@ -676,12 +676,12 @@ private:
     // Adjust the size of the Fly-Frames to requirements and conditions
     // (not for graphics, therefore htmlplug.cxx)
     static void SetFixSize( const Size& rPixSize, const Size& rTwipDfltSize,
-                     bool bPrcWidth, bool bPrcHeight,
+                     bool bPercentWidth, bool bPercentHeight,
                      SvxCSS1PropertyInfo const &rPropInfo,
                      SfxItemSet& rFlyItemSet );
     static void SetVarSize( SvxCSS1PropertyInfo const &rPropInfo,
                      SfxItemSet& rFlyItemSet, SwTwips nDfltWidth=MINLAY,
-                     sal_uInt8 nDltPrcWidth=0 );
+                     sal_uInt8 nDefaultPercentWidth=0 );
     static void SetSpace( const Size& rPixSpace, SfxItemSet &rItemSet,
                    SvxCSS1PropertyInfo &rPropInfo, SfxItemSet& rFlyItemSet );
 

@@ -91,11 +91,11 @@ const SwStartNode *SwHTMLTableLayoutCnts::GetStartNode() const
 
 SwHTMLTableLayoutCell::SwHTMLTableLayoutCell(std::shared_ptr<SwHTMLTableLayoutCnts> const& rCnts,
                                           sal_uInt16 nRSpan, sal_uInt16 nCSpan,
-                                          sal_uInt16 nWidth, bool bPrcWidth,
+                                          sal_uInt16 nWidth, bool bPercentWidth,
                                           bool bNWrapOpt ) :
     xContents(rCnts),
     nRowSpan( nRSpan ), nColSpan( nCSpan ),
-    nWidthOption( nWidth ), bPrcWidthOption( bPrcWidth ),
+    nWidthOption( nWidth ), bPercentWidthOption( bPercentWidth ),
     bNoWrapOption( bNWrapOpt )
 {}
 
@@ -147,7 +147,7 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
 SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
                                       sal_uInt16 nRws, sal_uInt16 nCls,
                                       bool bColsOpt, bool bColTgs,
-                                      sal_uInt16 nWdth, bool bPrcWdth,
+                                      sal_uInt16 nWdth, bool bPercentWdth,
                                       sal_uInt16 nBorderOpt, sal_uInt16 nCellPad,
                                       sal_uInt16 nCellSp, SvxAdjust eAdjust,
                                       sal_uInt16 nLMargin, sal_uInt16 nRMargin,
@@ -183,7 +183,7 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
     , m_eTableAdjust( eAdjust )
     , m_bColsOption( bColsOpt )
     , m_bColTags( bColTgs )
-    , m_bPrcWidthOption( bPrcWdth )
+    , m_bPercentWidthOption( bPercentWdth )
     , m_bUseRelWidth( false )
     , m_bMustResize( true )
     , m_bExportable( true )
@@ -518,7 +518,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
 
                                         // A fixed table width is taken over as minimum and
                                         // maximum at the same time
-                                        if( !pChild->m_bPrcWidthOption && pChild->m_nWidthOption )
+                                        if( !pChild->m_bPercentWidthOption && pChild->m_nWidthOption )
                                         {
                                             sal_uLong nTabWidth = pChild->m_nWidthOption;
                                             if( nTabWidth >= nAbsMinTableCnts  )
@@ -552,7 +552,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
 
                         // A fixed table width is taken over as minimum and
                         // maximum at the same time
-                        if( !pChild->m_bPrcWidthOption && pChild->m_nWidthOption )
+                        if( !pChild->m_bPercentWidthOption && pChild->m_nWidthOption )
                         {
                             sal_uLong nTabWidth = pChild->m_nWidthOption;
                             if( nTabWidth >= nAbsMinTableCnts  )
@@ -590,7 +590,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                 }
 // This code previously came after AddBorderWidth
 
-                bool bRelWidth = pCell->IsPrcWidthOption();
+                bool bRelWidth = pCell->IsPercentWidthOption();
                 sal_uInt16 nWidth = pCell->GetWidthOption();
 
                 // A NOWRAP option applies to text and tables, but is
@@ -1121,7 +1121,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
     m_bUseRelWidth = false;
     if( m_nWidthOption )
     {
-        if( m_bPrcWidthOption )
+        if( m_bPercentWidthOption )
         {
             OSL_ENSURE( m_nWidthOption<=100, "Percentage value too high" );
             if( m_nWidthOption > 100 )
@@ -1734,7 +1734,7 @@ bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, bool bRecalc,
     if( !bRecalc && ( !m_bMustResize ||
                       (m_nLastResizeAbsAvail==nAbsAvail) ||
                       (nAbsAvail<=m_nMin && m_nRelTabWidth==m_nMin) ||
-                      (!m_bPrcWidthOption && nAbsAvail>=m_nMax && m_nRelTabWidth==m_nMax) ) )
+                      (!m_bPercentWidthOption && nAbsAvail>=m_nMax && m_nRelTabWidth==m_nMax) ) )
         return false;
 
     if( nDelay==HTMLTABLE_RESIZE_NOW )

@@ -2687,7 +2687,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
     const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(rHt);
 
     sal_uInt16 nHeight = 0;
-    sal_uInt16 nPrcHeight = 0;
+    sal_uInt16 nPercentHeight = 0;
     SvxLineSpaceRule eLineSpace = rLSItem.GetLineSpaceRule();
     switch( rLSItem.GetInterLineSpaceRule() )
     {
@@ -2701,7 +2701,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
                 nHeight = rLSItem.GetLineHeight();
                 break;
             case SvxLineSpaceRule::Auto:
-                nPrcHeight = 100;
+                nPercentHeight = 100;
                 break;
             default:
                 ;
@@ -2709,7 +2709,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
         }
         break;
     case SvxInterLineSpaceRule::Prop:
-        nPrcHeight = rLSItem.GetPropLineSpace();
+        nPercentHeight = rLSItem.GetPropLineSpace();
         break;
 
     default:
@@ -2718,10 +2718,10 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( nHeight )
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_line_height, static_cast<long>(nHeight) );
-    else if( nPrcHeight &&
-        !(nPrcHeight < 115 && rHTMLWrt.m_bParaDotLeaders )) // avoid HTML scrollbars and missing descenders
+    else if( nPercentHeight &&
+        !(nPercentHeight < 115 && rHTMLWrt.m_bParaDotLeaders )) // avoid HTML scrollbars and missing descenders
     {
-        OString sHeight(OString::number(nPrcHeight) + "%");
+        OString sHeight(OString::number(nPercentHeight) + "%");
         rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_line_height, sHeight);
     }
 
@@ -2858,10 +2858,10 @@ static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
 
     if( nMode & Css1FrameSize::Width )
     {
-        sal_uInt8 nPrcWidth = rFSItem.GetWidthPercent();
-        if( nPrcWidth )
+        sal_uInt8 nPercentWidth = rFSItem.GetWidthPercent();
+        if( nPercentWidth )
         {
-            OString sOut(OString::number(nPrcWidth) + "%");
+            OString sOut(OString::number(nPercentWidth) + "%");
             rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_width, sOut);
         }
         else if( nMode & Css1FrameSize::Pixel )
@@ -2894,10 +2894,10 @@ static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
 
         if( bOutHeight )
         {
-            sal_uInt8 nPrcHeight = rFSItem.GetHeightPercent();
-            if( nPrcHeight )
+            sal_uInt8 nPercentHeight = rFSItem.GetHeightPercent();
+            if( nPercentHeight )
             {
-                OString sOut(OString::number(nPrcHeight) + "%");
+                OString sOut(OString::number(nPercentHeight) + "%");
                 rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_height, sOut);
             }
             else if( nMode & Css1FrameSize::Pixel )

@@ -4826,8 +4826,8 @@ void SwHTMLParser::InsertSpacer()
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     Size aSize( 0, 0);
     long nSize = 0;
-    bool bPrcWidth = false;
-    bool bPrcHeight = false;
+    bool bPercentWidth = false;
+    bool bPercentHeight = false;
     sal_uInt16 nType = HTML_SPTYPE_HORI;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -4849,12 +4849,12 @@ void SwHTMLParser::InsertSpacer()
             break;
         case HtmlOptionId::WIDTH:
             // First only save as pixel value!
-            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
+            bPercentWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
             // First only save as pixel value!
-            bPrcHeight = (rOption.GetString().indexOf('%') != -1);
+            bPercentHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::SIZE:
@@ -4887,7 +4887,7 @@ void SwHTMLParser::InsertSpacer()
                                  m_pCSS1Parser->GetWhichMap() );
             SvxCSS1PropertyInfo aDummyPropInfo;
 
-            SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight,
+            SetFixSize( aSize, aDfltSz, bPercentWidth, bPercentHeight,
                         aDummyPropInfo, aFrameSet );
             SetSpace( aSpace, aDummyItemSet, aDummyPropInfo, aFrameSet );
 
@@ -5203,7 +5203,7 @@ void SwHTMLParser::InsertHorzRule()
 
     SvxAdjust eAdjust = SvxAdjust::End;
 
-    bool bPrcWidth = false;
+    bool bPercentWidth = false;
     bool bNoShade = false;
     bool bColor = false;
 
@@ -5224,13 +5224,13 @@ void SwHTMLParser::InsertHorzRule()
             nSize = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::WIDTH:
-            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
+            bPercentWidth = (rOption.GetString().indexOf('%') != -1);
             nWidth = static_cast<sal_uInt16>(rOption.GetNumber());
-            if( bPrcWidth && nWidth>=100 )
+            if( bPercentWidth && nWidth>=100 )
             {
                 // the default case are 100% lines (no attributes necessary)
                 nWidth = 0;
-                bPrcWidth = false;
+                bPercentWidth = false;
             }
             break;
         case HtmlOptionId::ALIGN:
@@ -5309,7 +5309,7 @@ void SwHTMLParser::InsertHorzRule()
         {
             // fake length and alignment of line above paragraph indents
             long nBrowseWidth = GetCurrentBrowseWidth();
-            nWidth = bPrcWidth ? static_cast<sal_uInt16>((nWidth*nBrowseWidth) / 100)
+            nWidth = bPercentWidth ? static_cast<sal_uInt16>((nWidth*nBrowseWidth) / 100)
                                : ToTwips( static_cast<sal_uInt16>(nBrowseWidth) );
             if( nWidth < MINLAY )
                 nWidth = MINLAY;

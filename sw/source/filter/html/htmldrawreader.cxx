@@ -257,7 +257,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     OUString aId, aStyle, aClass;
 
     long nWidth=0, nHeight=0;
-    bool bPrcWidth = false, bDirection = false, bBGColor = false;
+    bool bPercentWidth = false, bDirection = false, bBGColor = false;
     Size aSpace( 0, 0 );
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
@@ -320,8 +320,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
             case HtmlOptionId::WIDTH:
                 // first only save as pixel value!
                 nWidth = rOption.GetNumber();
-                bPrcWidth = rOption.GetString().indexOf('%') != -1;
-                if( bPrcWidth && nWidth>100 )
+                bPercentWidth = rOption.GetString().indexOf('%') != -1;
+                if( bPercentWidth && nWidth>100 )
                     nWidth = 100;
                 break;
 
@@ -461,7 +461,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     }
 
     // now set the size
-    Size aTwipSz( bPrcWidth ? 0 : nWidth, nHeight );
+    Size aTwipSz( bPercentWidth ? 0 : nWidth, nHeight );
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
     {
         aTwipSz = Application::GetDefaultDevice()
@@ -472,13 +472,13 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     {
         aTwipSz.setWidth( aPropInfo.m_nWidth );
         nWidth = 1; // != 0;
-        bPrcWidth = false;
+        bPercentWidth = false;
     }
     if( SVX_CSS1_LTYPE_TWIP== aPropInfo.m_eHeightType )
         aTwipSz.setHeight( aPropInfo.m_nHeight );
 
     m_bFixMarqueeWidth = false;
-    if( !nWidth || bPrcWidth )
+    if( !nWidth || bPercentWidth )
     {
         if( m_xTable )
         {
@@ -495,7 +495,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 // adjust the width. No width specification is treated as
                 // 100 percent.
                 nWidth = 100;
-                bPrcWidth = true;
+                bPercentWidth = true;
             }
             aTwipSz.setWidth( MINLAY );
         }
@@ -527,7 +527,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // otherwise the table would have to be public and that also isn't pretty.
     // The global pTable also can't be used, because the marquee can also be
     // in a sub-table.
-    if( pCurTable && bPrcWidth)
+    if( pCurTable && bPercentWidth)
         RegisterDrawObjectToTable( pCurTable, m_pMarquee, static_cast<sal_uInt8>(nWidth) );
 }
 

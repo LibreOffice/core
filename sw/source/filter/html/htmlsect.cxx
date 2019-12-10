@@ -545,7 +545,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     OUString aStyle, aClass, aLang, aDir;
     long nWidth = 100;
     sal_uInt16 nCols = columnsFromCss, nGutter = 10;
-    bool bPrcWidth = true;
+    bool bPercentWidth = true;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -573,8 +573,8 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             break;
         case HtmlOptionId::WIDTH:
             nWidth = rOption.GetNumber();
-            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            if( bPrcWidth && nWidth>100 )
+            bPercentWidth = (rOption.GetString().indexOf('%') != -1);
+            if( bPercentWidth && nWidth>100 )
                 nWidth = 100;
             break;
         case HtmlOptionId::GUTTER:
@@ -602,16 +602,16 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
                                           aItemSet, aPropInfo, &aLang, &aDir );
 
     // Calculate width.
-    sal_uInt8 nPrcWidth = bPrcWidth ? static_cast<sal_uInt8>(nWidth) : 0;
+    sal_uInt8 nPercentWidth = bPercentWidth ? static_cast<sal_uInt8>(nWidth) : 0;
     SwTwips nTwipWidth = 0;
-    if( !bPrcWidth && nWidth && Application::GetDefaultDevice() )
+    if( !bPercentWidth && nWidth && Application::GetDefaultDevice() )
     {
         nTwipWidth = Application::GetDefaultDevice()
                              ->PixelToLogic( Size(nWidth, 0),
                                              MapMode(MapUnit::MapTwip) ).Width();
     }
 
-    if( !nPrcWidth && nTwipWidth < MINFLY )
+    if( !nPercentWidth && nTwipWidth < MINFLY )
         nTwipWidth = MINFLY;
 
     // Do positioning.
@@ -628,7 +628,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
         // The width is either the WIDTH attribute's value or contained
         // in some style option.
-        SetVarSize( aPropInfo, aFrameItemSet, nTwipWidth, nPrcWidth );
+        SetVarSize( aPropInfo, aFrameItemSet, nTwipWidth, nPercentWidth );
 
         SetSpace( Size(0,0), aItemSet, aPropInfo, aFrameItemSet );
 
