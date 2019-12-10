@@ -1897,26 +1897,16 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
     {
         uno::Reference< chart2::XChartType > xChartType( DataSeriesHelper::getChartTypeOfSeries( xSeries, xDiagram ) );
 
-        bool bFormatFound = false;
-        if( ChartTypeHelper::shouldLabelNumberFormatKeyBeDetectedFromYAxis( xChartType ) )
-        {
-            uno::Reference< beans::XPropertySet > xAttachedAxisProps( DiagramHelper::getAttachedAxis( xSeries, xDiagram ), uno::UNO_QUERY );
-            if (xAttachedAxisProps.is() && (xAttachedAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormat))
-                bFormatFound = true;
-        }
-        if( !bFormatFound )
-        {
-            Reference< chart2::data::XDataSource > xSeriesSource( xSeries, uno::UNO_QUERY );
-            OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
+        Reference< chart2::data::XDataSource > xSeriesSource( xSeries, uno::UNO_QUERY );
+        OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
 
-            Reference< data::XLabeledDataSequence > xLabeledSequence(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, aRole ));
-            if( xLabeledSequence.is() )
-            {
-                Reference< data::XDataSequence > xValues( xLabeledSequence->getValues() );
-                if( xValues.is() )
-                    nFormat = xValues->getNumberFormatKeyByIndex( nPointIndex );
-            }
+        Reference< data::XLabeledDataSequence > xLabeledSequence(
+            DataSeriesHelper::getDataSequenceByRole( xSeriesSource, aRole ));
+        if( xLabeledSequence.is() )
+        {
+            Reference< data::XDataSequence > xValues( xLabeledSequence->getValues() );
+            if( xValues.is() )
+                nFormat = xValues->getNumberFormatKeyByIndex( nPointIndex );
         }
 
         if (nFormat >= 0 && nOldFormat != nFormat)
