@@ -69,6 +69,14 @@ namespace emfplushelper
         LineCapTypeCustom = 0x000000FF
     };
 
+    enum LineJoinType
+    {
+        LineJoinTypeMiter = 0x00000000,
+        LineJoinTypeBevel = 0x00000001,
+        LineJoinTypeRound = 0x00000002,
+        LineJoinTypeMiterClipped = 0x00000003
+    };
+
     struct EMFPCustomLineCap;
 
     struct EMFPPen : public EMFPBrush
