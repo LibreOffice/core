@@ -369,10 +369,6 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
             }
         }
-
-        SfxViewShell* pViewShell = GetDrawView()->GetSfxViewShell();
-        if (pViewShell && comphelper::LibreOfficeKit::isActive())
-            pViewShell->sendUnoStatus( &rSet );
     }
 }
 
