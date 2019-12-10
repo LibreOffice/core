@@ -2447,6 +2447,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124796)
         "15");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129173)
+{
+    SwDoc* pDoc = createDoc("testAreaChartNumberFormat.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Check the first data label of area chart.
+    assertXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[22]/text",
+        "56");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116925)
 {
     SwDoc* pDoc = createDoc("tdf116925.docx");
