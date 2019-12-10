@@ -100,7 +100,7 @@ struct HTMLTableOptions
     HTMLTableFrame eFrame;
     HTMLTableRules eRules;
 
-    bool bPrcWidth : 1;
+    bool bPercentWidth : 1;
     bool bTableAdjust : 1;
     bool bBGColor : 1;
 
@@ -392,7 +392,7 @@ class HTMLTable
     OUString m_aDir;
 
     std::unique_ptr<SdrObjects> m_pResizeDrawObjects;// SDR objects
-    std::unique_ptr<std::vector<sal_uInt16>> m_pDrawObjectPrcWidths;   // column of draw object and its rel. width
+    std::unique_ptr<std::vector<sal_uInt16>> m_pDrawObjectPercentWidths;   // column of draw object and its rel. width
 
     HTMLTableRows m_aRows;         ///< table rows
     HTMLTableColumns m_aColumns;   ///< table columns
@@ -450,7 +450,7 @@ private:
     bool const m_bHasToFly;
     bool const m_bFixedCols;
     bool m_bColSpec;                  // where there COL(GROUP)-elements?
-    bool const m_bPrcWidth;                 // width is declared in %
+    bool const m_bPercentWidth;                 // width is declared in %
 
     SwHTMLParser *m_pParser;          // the current parser
     std::unique_ptr<HTMLTableCnts> m_xParentContents;
@@ -624,7 +624,7 @@ public:
 
     sal_uInt16 IncGrfsThatResize() { return m_pSwTable ? const_cast<SwTable *>(m_pSwTable)->IncGrfsThatResize() : 0; }
 
-    void RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPrcWidth );
+    void RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPercentWidth );
 
     const SwTable *GetSwTable() const { return m_pSwTable; }
 
@@ -1045,7 +1045,7 @@ HTMLTable::HTMLTable(SwHTMLParser* pPars,
     m_bHasParentSection( bHasParentSec ),
     m_bHasToFly( bHasToFlw ),
     m_bFixedCols( rOptions.nCols>0 ),
-    m_bPrcWidth( rOptions.bPrcWidth ),
+    m_bPercentWidth( rOptions.bPercentWidth ),
     m_pParser( pPars ),
     m_nWidth( rOptions.nWidth ),
     m_nHeight( rOptions.nHeight ),
@@ -1082,7 +1082,7 @@ HTMLTable::~HTMLTable()
     m_pParser->DeregisterHTMLTable(this);
 
     m_pResizeDrawObjects.reset();
-    m_pDrawObjectPrcWidths.reset();
+    m_pDrawObjectPercentWidths.reset();
 
     m_pContext.reset();
 
@@ -1091,7 +1091,7 @@ HTMLTable::~HTMLTable()
 
 const std::shared_ptr<SwHTMLTableLayout>& HTMLTable::CreateLayoutInfo()
 {
-    sal_uInt16 nW = m_bPrcWidth ? m_nWidth : SwHTMLParser::ToTwips( m_nWidth );
+    sal_uInt16 nW = m_bPercentWidth ? m_nWidth : SwHTMLParser::ToTwips( m_nWidth );
 
     sal_uInt16 nBorderWidth = GetBorderWidth( m_aBorderLine, true );
     sal_uInt16 nLeftBorderWidth =
@@ -1102,7 +1102,7 @@ const std::shared_ptr<SwHTMLTableLayout>& HTMLTable::CreateLayoutInfo()
     m_xLayoutInfo.reset(new SwHTMLTableLayout(
                         m_pSwTable,
                         m_nRows, m_nCols, m_bFixedCols, m_bColSpec,
-                        nW, m_bPrcWidth, m_nBorder, m_nCellPadding,
+                        nW, m_bPercentWidth, m_nBorder, m_nCellPadding,
                         m_nCellSpacing, m_eTableAdjust,
                         m_nLeftMargin, m_nRightMargin,
                         nBorderWidth, nLeftBorderWidth, nRightBorderWidth));
@@ -2315,7 +2315,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     {
         // The table should go in a text frame and it's narrower than the
         // available space and not 100% wide. So it gets a border
-        eHoriOri = m_bPrcWidth ? text::HoriOrientation::FULL : text::HoriOrientation::LEFT;
+        eHoriOri = m_bPercentWidth ? text::HoriOrientation::FULL : text::HoriOrientation::LEFT;
     }
     else switch (m_eTableAdjust)
     {
@@ -2358,7 +2358,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         pFrameFormat->SetFormatAttr( aLRItem );
     }
 
-    if (m_bPrcWidth && text::HoriOrientation::FULL != eHoriOri)
+    if (m_bPercentWidth && text::HoriOrientation::FULL != eHoriOri)
     {
         pFrameFormat->LockModify();
         SwFormatFrameSize aFrameSize( pFrameFormat->GetFrameSize() );
@@ -2443,7 +2443,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     m_xLayoutInfo->SetMayBeInFlyFrame( bIsInFlyFrame );
 
     // Only tables with relative width or without width should be modified
-    m_xLayoutInfo->SetMustResize( m_bPrcWidth || !m_nWidth );
+    m_xLayoutInfo->SetMustResize( m_bPercentWidth || !m_nWidth );
 
     if (!pLine1->GetTabBoxes().empty())
         m_xLayoutInfo->SetWidths();
@@ -2458,9 +2458,9 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         for( sal_uInt16 i=0; i<nCount; i++ )
         {
             SdrObject *pObj = (*m_pResizeDrawObjects)[i];
-            sal_uInt16 nRow = (*m_pDrawObjectPrcWidths)[3*i];
-            sal_uInt16 nCol = (*m_pDrawObjectPrcWidths)[3*i+1];
-            sal_uInt8 nPrcWidth = static_cast<sal_uInt8>((*m_pDrawObjectPrcWidths)[3*i+2]);
+            sal_uInt16 nRow = (*m_pDrawObjectPercentWidths)[3*i];
+            sal_uInt16 nCol = (*m_pDrawObjectPercentWidths)[3*i+1];
+            sal_uInt8 nPercentWidth = static_cast<sal_uInt8>((*m_pDrawObjectPercentWidths)[3*i+2]);
 
             SwHTMLTableLayoutCell *pLayoutCell =
                 m_xLayoutInfo->GetCell( nRow, nCol );
@@ -2468,7 +2468,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
             sal_uInt16 nWidth2, nDummy;
             m_xLayoutInfo->GetAvail( nCol, nColSpan, nWidth2, nDummy );
-            nWidth2 = static_cast< sal_uInt16 >((static_cast<long>(m_nWidth) * nPrcWidth) / 100);
+            nWidth2 = static_cast< sal_uInt16 >((static_cast<long>(m_nWidth) * nPercentWidth) / 100);
 
             SwHTMLParser::ResizeDrawObject( pObj, nWidth2 );
         }
@@ -2490,17 +2490,17 @@ void HTMLTable::SetTable( const SwStartNode *pStNd, std::unique_ptr<HTMLTableCon
     m_bForceFrame = bFrcFrame;
 }
 
-void HTMLTable::RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPrcWidth )
+void HTMLTable::RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPercentWidth )
 {
     if( !m_pResizeDrawObjects )
         m_pResizeDrawObjects.reset(new SdrObjects);
     m_pResizeDrawObjects->push_back( pObj );
 
-    if( !m_pDrawObjectPrcWidths )
-        m_pDrawObjectPrcWidths.reset(new std::vector<sal_uInt16>);
-    m_pDrawObjectPrcWidths->push_back( m_nCurrentRow );
-    m_pDrawObjectPrcWidths->push_back( m_nCurrentColumn );
-    m_pDrawObjectPrcWidths->push_back( static_cast<sal_uInt16>(nPrcWidth) );
+    if( !m_pDrawObjectPercentWidths )
+        m_pDrawObjectPercentWidths.reset(new std::vector<sal_uInt16>);
+    m_pDrawObjectPercentWidths->push_back( m_nCurrentRow );
+    m_pDrawObjectPercentWidths->push_back( m_nCurrentColumn );
+    m_pDrawObjectPercentWidths->push_back( static_cast<sal_uInt16>(nPercentWidth) );
 }
 
 void HTMLTable::MakeParentContents()
@@ -2848,7 +2848,7 @@ class CellSaveStruct : public SectionSaveStruct
     sal_Int16 m_eVertOri;
 
     bool const m_bHead : 1;
-    bool m_bPrcWidth : 1;
+    bool m_bPercentWidth : 1;
     bool m_bHasNumFormat : 1;
     bool m_bHasValue : 1;
     bool m_bBGColor : 1;
@@ -2888,7 +2888,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
     m_nNoBreakEndContentPos( 0 ),
     m_eVertOri( pCurTable->GetInheritedVertOri() ),
     m_bHead( bHd ),
-    m_bPrcWidth( false ),
+    m_bPercentWidth( false ),
     m_bHasNumFormat( false ),
     m_bHasValue( false ),
     m_bBGColor( false ),
@@ -2933,8 +2933,8 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                 break;
             case HtmlOptionId::WIDTH:
                 m_nWidth = static_cast<sal_uInt16>(rOption.GetNumber());   // Just for Netscape
-                m_bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-                if( m_bPrcWidth && m_nWidth>100 )
+                m_bPercentWidth = (rOption.GetString().indexOf('%') != -1);
+                if( m_bPercentWidth && m_nWidth>100 )
                     m_nWidth = 100;
                 break;
             case HtmlOptionId::HEIGHT:
@@ -3080,7 +3080,7 @@ void CellSaveStruct::InsertCell( SwHTMLParser& rParser,
         rParser.CreateBrushItem(m_bBGColor ? &m_aBGColor : nullptr, m_aBGImage,
                                 m_aStyle, m_aId, m_aClass));
     pCurTable->InsertCell( m_xCnts, m_nRowSpan, m_nColSpan, m_nWidth,
-                           m_bPrcWidth, m_nHeight, m_eVertOri, xBrushItem, m_xBoxItem,
+                           m_bPercentWidth, m_nHeight, m_eVertOri, xBrushItem, m_xBoxItem,
                            m_bHasNumFormat, m_nNumFormat, m_bHasValue, m_nValue,
                            m_bNoWrap );
     Restore( rParser );
@@ -3188,9 +3188,9 @@ sal_uInt16 SwHTMLParser::IncGrfsThatResizeTable()
 }
 
 void SwHTMLParser::RegisterDrawObjectToTable( HTMLTable *pCurTable,
-                                        SdrObject *pObj, sal_uInt8 nPrcWidth )
+                                        SdrObject *pObj, sal_uInt8 nPercentWidth )
 {
-    pCurTable->RegisterDrawObject( pObj, nPrcWidth );
+    pCurTable->RegisterDrawObject( pObj, nPercentWidth );
 }
 
 void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
@@ -4756,7 +4756,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
     nHSpace( 0 ), nVSpace( 0 ),
     eAdjust( eParentAdjust ), eVertOri( text::VertOrientation::CENTER ),
     eFrame( HTMLTableFrame::Void ), eRules( HTMLTableRules::NONE ),
-    bPrcWidth( false ),
+    bPercentWidth( false ),
     bTableAdjust( false ),
     bBGColor( false ),
     aBorderColor( COL_GRAY )
@@ -4777,8 +4777,8 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             break;
         case HtmlOptionId::WIDTH:
             nWidth = static_cast<sal_uInt16>(rOption.GetNumber());
-            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            if( bPrcWidth && nWidth>100 )
+            bPercentWidth = (rOption.GetString().indexOf('%') != -1);
+            if( bPercentWidth && nWidth>100 )
                 nWidth = 100;
             break;
         case HtmlOptionId::HEIGHT:
@@ -4869,7 +4869,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
     if( nCols && !nWidth )
     {
         nWidth = 100;
-        bPrcWidth = true;
+        bPercentWidth = true;
     }
 
     // If BORDER=0 or no BORDER given, then there shouldn't be a border

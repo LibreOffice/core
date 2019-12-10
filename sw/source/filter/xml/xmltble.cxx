@@ -731,9 +731,9 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTableNd )
 
     sal_uInt32 nAbsWidth = rFrameSize.GetSize().Width();
     sal_uInt32 nBaseWidth = 0;
-    sal_Int8 nPrcWidth = rFrameSize.GetWidthPercent();
+    sal_Int8 nPercentWidth = rFrameSize.GetWidthPercent();
 
-    bool bFixAbsWidth = nPrcWidth != 0 || /*text::*/HoriOrientation::NONE == eTabHoriOri
+    bool bFixAbsWidth = nPercentWidth != 0 || /*text::*/HoriOrientation::NONE == eTabHoriOri
                                        || /*text::*/HoriOrientation::FULL == eTabHoriOri;
     if( bFixAbsWidth )
     {

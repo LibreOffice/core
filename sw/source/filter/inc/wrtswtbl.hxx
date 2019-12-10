@@ -58,7 +58,7 @@ class SW_DLLPUBLIC SwWriteTableCell
     sal_uInt16 const nRowSpan;            // spanned rows
     sal_uInt16 const nColSpan;            // spanned columns
 
-    bool bPrcWidthOpt;
+    bool bPercentWidthOpt;
 
 public:
 
@@ -66,7 +66,7 @@ public:
         sal_uInt16 nCSpan, long nHght, const SvxBrushItem *pBGround)
     : pBox( pB ), pBackground( pBGround ), nHeight( nHght ), nWidthOpt( 0 ),
     nRow( nR ), nCol( nC ), nRowSpan( nRSpan ), nColSpan( nCSpan ),
-    bPrcWidthOpt( false )
+    bPercentWidthOpt( false )
     {}
 
     const SwTableBox *GetBox() const { return pBox; }
@@ -82,13 +82,13 @@ public:
 
     const SvxBrushItem *GetBackground() const { return pBackground; }
 
-    void SetWidthOpt( sal_uInt16 nWidth, bool bPrc )
+    void SetWidthOpt( sal_uInt16 nWidth, bool bPercent )
     {
-        nWidthOpt = nWidth; bPrcWidthOpt = bPrc;
+        nWidthOpt = nWidth; bPercentWidthOpt = bPercent;
     }
 
     sal_uInt32 GetWidthOpt() const { return nWidthOpt; }
-    bool HasPrcWidthOpt() const { return bPrcWidthOpt; }
+    bool HasPercentWidthOpt() const { return bPercentWidthOpt; }
 };
 
 typedef std::vector<std::unique_ptr<SwWriteTableCell>> SwWriteTableCells;
@@ -278,7 +278,7 @@ public:
     sal_uInt32 GetRawWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
     sal_uInt16 GetAbsWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
     sal_uInt16 GetRelWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
-    sal_uInt16 GetPrcWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
+    sal_uInt16 GetPercentWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
 
     long GetAbsHeight(long nRawWidth, size_t nRow, sal_uInt16 nRowSpan) const;
 

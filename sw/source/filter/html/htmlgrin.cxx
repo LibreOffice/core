@@ -331,8 +331,8 @@ void SwHTMLParser::InsertImage()
 
     sal_uInt16 nBorder = (m_xAttrTab->pINetFormat ? 1 : 0);
     bool bIsMap = false;
-    bool bPrcWidth = false;
-    bool bPrcHeight = false;
+    bool bPercentWidth = false;
+    bool bPercentHeight = false;
     OUString sWidthAsString, sHeightAsString;
     SvxMacroItem aMacroItem(RES_FRMMACRO);
 
@@ -379,8 +379,8 @@ void SwHTMLParser::InsertImage()
                 // for now only store as pixel value!
                 nWidth = rOption.GetNumber();
                 sWidthAsString = rOption.GetString();
-                bPrcWidth = (sWidthAsString.indexOf('%') != -1);
-                if( bPrcWidth && nWidth>100 )
+                bPercentWidth = (sWidthAsString.indexOf('%') != -1);
+                if( bPercentWidth && nWidth>100 )
                     nWidth = 100;
                 // width|height = "auto" means viewing app decides the size
                 // i.e. proceed as if no particular size was provided
@@ -390,8 +390,8 @@ void SwHTMLParser::InsertImage()
                 // for now only store as pixel value!
                 nHeight = rOption.GetNumber();
                 sHeightAsString = rOption.GetString();
-                bPrcHeight = (sHeightAsString.indexOf('%') != -1);
-                if( bPrcHeight && nHeight>100 )
+                bPercentHeight = (sHeightAsString.indexOf('%') != -1);
+                if( bPercentHeight && nHeight>100 )
                     nHeight = 100;
                 // the same as above w/ HtmlOptionId::WIDTH
                 bHeightProvided = (sHeightAsString != "auto");
@@ -588,7 +588,7 @@ IMAGE_SETEVENT:
     // set other CSS1 attributes
     SetFrameFormatAttrs( aItemSet, HtmlFrameFormatFlags::Box, aFrameSet );
 
-    Size aTwipSz( bPrcWidth ? 0 : nWidth, bPrcHeight ? 0 : nHeight );
+    Size aTwipSz( bPercentWidth ? 0 : nWidth, bPercentHeight ? 0 : nHeight );
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
     {
         if (bWidthProvided || bHeightProvided || // attributes imply pixel!
@@ -611,12 +611,12 @@ IMAGE_SETEVENT:
         case SVX_CSS1_LTYPE_TWIP:
             aTwipSz.setWidth( aPropInfo.m_nWidth );
             nWidth = 1; // != 0
-            bPrcWidth = false;
+            bPercentWidth = false;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
             aTwipSz.setWidth( 0 );
             nWidth = aPropInfo.m_nWidth;
-            bPrcWidth = true;
+            bPercentWidth = true;
             break;
         default:
             ;
@@ -626,12 +626,12 @@ IMAGE_SETEVENT:
         case SVX_CSS1_LTYPE_TWIP:
             aTwipSz.setHeight( aPropInfo.m_nHeight );
             nHeight = 1;    // != 0
-            bPrcHeight = false;
+            bPercentHeight = false;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
             aTwipSz.setHeight( 0 );
             nHeight = aPropInfo.m_nHeight;
-            bPrcHeight = true;
+            bPercentHeight = true;
             break;
         default:
             ;
@@ -642,11 +642,11 @@ IMAGE_SETEVENT:
     bool bChangeFrameSize = false;    // Change frame format later?
     bool bRequestGrfNow = false;
     bool bSetScaleImageMap = false;
-    sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
+    sal_uInt8 nPercentWidth = 0, nPercentHeight = 0;
 
-    // bPrcWidth / bPrcHeight means we have a percent size.  If that's not the case and we have no
+    // bPercentWidth / bPercentHeight means we have a percent size.  If that's not the case and we have no
     // size from nWidth / nHeight either, then inspect the image header.
-    if ((!bPrcWidth && !nWidth) && (!bPrcHeight && !nHeight) && allowAccessLink(*m_xDoc))
+    if ((!bPercentWidth && !nWidth) && (!bPercentHeight && !nHeight) && allowAccessLink(*m_xDoc))
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(/*bExtendedInfo=*/true))
@@ -681,10 +681,10 @@ IMAGE_SETEVENT:
         else if( nWidth )
         {
             // a percentage value
-            if( bPrcWidth )
+            if( bPercentWidth )
             {
-                nPrcWidth = static_cast<sal_uInt8>(nWidth);
-                nPrcHeight = 255;
+                nPercentWidth = static_cast<sal_uInt8>(nWidth);
+                nPercentHeight = 255;
             }
             else
             {
@@ -693,10 +693,10 @@ IMAGE_SETEVENT:
         }
         else if( nHeight )
         {
-            if( bPrcHeight )
+            if( bPercentHeight )
             {
-                nPrcHeight = static_cast<sal_uInt8>(nHeight);
-                nPrcWidth = 255;
+                nPercentHeight = static_cast<sal_uInt8>(nHeight);
+                nPercentWidth = 255;
             }
             else
             {
@@ -709,11 +709,11 @@ IMAGE_SETEVENT:
         // Width and height were given and don't need to be set
         bSetTwipSize = false;
 
-        if( bPrcWidth )
-            nPrcWidth = static_cast<sal_uInt8>(nWidth);
+        if( bPercentWidth )
+            nPercentWidth = static_cast<sal_uInt8>(nWidth);
 
-        if( bPrcHeight )
-            nPrcHeight = static_cast<sal_uInt8>(nHeight);
+        if( bPercentHeight )
+            nPercentHeight = static_cast<sal_uInt8>(nHeight);
     }
 
     // set image map
@@ -734,7 +734,7 @@ IMAGE_SETEVENT:
         {
             SwFormatURL aURL; aURL.SetMap( pImgMap );// is copied
 
-            bSetScaleImageMap = !nPrcWidth || !nPrcHeight;
+            bSetScaleImageMap = !nPercentWidth || !nPercentHeight;
             aFrameSet.Put( aURL );
         }
         else
@@ -751,7 +751,7 @@ IMAGE_SETEVENT:
     }
 
     // observe minimum values !!
-    if( nPrcWidth )
+    if( nPercentWidth )
     {
         OSL_ENSURE( !aTwipSz.Width(),
                 "Why is a width set if we already have percentage value?" );
@@ -764,7 +764,7 @@ IMAGE_SETEVENT:
         if( aTwipSz.Width() < MINFLY )
             aTwipSz.setWidth( MINFLY );
     }
-    if( nPrcHeight )
+    if( nPercentHeight )
     {
         OSL_ENSURE( !aTwipSz.Height(),
                 "Why is a height set if we already have percentage value?" );
@@ -779,8 +779,8 @@ IMAGE_SETEVENT:
     }
 
     SwFormatFrameSize aFrameSize( SwFrameSize::Fixed, aTwipSz.Width(), aTwipSz.Height() );
-    aFrameSize.SetWidthPercent( nPrcWidth );
-    aFrameSize.SetHeightPercent( nPrcHeight );
+    aFrameSize.SetWidthPercent( nPercentWidth );
+    aFrameSize.SetHeightPercent( nPercentHeight );
     aFrameSet.Put( aFrameSize );
 
     const SwNodeType eNodeType = m_pPam->GetNode().GetNodeType();

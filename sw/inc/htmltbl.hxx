@@ -88,14 +88,14 @@ class SwHTMLTableLayoutCell
     sal_uInt16 nColSpan;               ///< COLSPAN of cell.
     sal_uInt16 const nWidthOption;           ///< Given width of cell in Twip or %.
 
-    bool const bPrcWidthOption : 1;      ///< nWidth is %-value.
+    bool const bPercentWidthOption : 1;  ///< nWidth is %-value.
     bool const bNoWrapOption : 1;        ///< NOWRAP-option.
 
 public:
 
     SwHTMLTableLayoutCell(std::shared_ptr<SwHTMLTableLayoutCnts> const& rCnts,
                          sal_uInt16 nRSpan, sal_uInt16 nCSpan,
-                         sal_uInt16 nWidthOpt, bool bPrcWdthOpt,
+                         sal_uInt16 nWidthOpt, bool bPercentWidthOpt,
                          bool bNWrapOpt );
 
     /// Set or get content of a cell.
@@ -110,7 +110,7 @@ public:
     sal_uInt16 GetColSpan() const { return nColSpan; }
 
     sal_uInt16 GetWidthOption() const { return nWidthOption; }
-    bool IsPrcWidthOption() const { return bPrcWidthOption; }
+    bool IsPercentWidthOption() const { return bPercentWidthOption; }
 
     bool HasNoWrapOption() const { return bNoWrapOption; }
 };
@@ -138,7 +138,7 @@ public:
     SwHTMLTableLayoutColumn( sal_uInt16 nColWidthOpt, bool bRelColWidthOpt,
                              bool bLBorder );
 
-    inline void MergeCellWidthOption( sal_uInt16 nWidth, bool bPrc );
+    inline void MergeCellWidthOption( sal_uInt16 nWidth, bool bPercent );
     inline void SetWidthOption( sal_uInt16 nWidth );
 
     sal_uInt16 GetWidthOption() const { return nWidthOption; }
@@ -198,11 +198,11 @@ class SwHTMLTableLayout
     sal_uInt16 const m_nBorder;                 /** Line strength of outer border, or rather the
                                         space needed for it as calculated by Netscape. */
 
-    sal_uInt16 const m_nLeftBorderWidth;
-    sal_uInt16 const m_nRightBorderWidth;
+    SwTwips const m_nLeftBorderWidth;
+    SwTwips const m_nRightBorderWidth;
     sal_uInt16 m_nInhLeftBorderWidth;
     sal_uInt16 m_nInhRightBorderWidth;
-    sal_uInt16 const m_nBorderWidth;
+    SwTwips const m_nBorderWidth;
 
     sal_uInt16 m_nDelayedResizeAbsAvail;  ///< Param for delayed Resize.
     sal_uInt16 m_nLastResizeAbsAvail;
@@ -214,7 +214,7 @@ class SwHTMLTableLayout
 
     bool const m_bColsOption : 1;           ///< Table has a COLS-option.
     bool const m_bColTags : 1;              ///< Table has COL/COLGRP tags.
-    bool const m_bPrcWidthOption : 1;       ///< Width is given in percent.
+    bool const m_bPercentWidthOption : 1;       ///< Width is given in percent.
     bool m_bUseRelWidth : 1;          ///< SwTable gets relative width.
 
     bool m_bMustResize : 1;           ///< Table width must be defined.
@@ -244,7 +244,7 @@ public:
 
     SwHTMLTableLayout( const SwTable *pSwTable,
                        sal_uInt16 nRows, sal_uInt16 nCols, bool bColsOpt, bool ColTgs,
-                       sal_uInt16 nWidth, bool bPrcWidth, sal_uInt16 nBorderOpt,
+                       sal_uInt16 nWidth, bool bPercentWidth, sal_uInt16 nBorderOpt,
                        sal_uInt16 nCellPad, sal_uInt16 nCellSp, SvxAdjust eAdjust,
                        sal_uInt16 nLMargin, sal_uInt16 nRMargin, sal_uInt16 nBWidth,
                        sal_uInt16 nLeftBWidth, sal_uInt16 nRightBWidth );
@@ -320,7 +320,7 @@ public:
 
     /// For Export.
     sal_uInt16 GetWidthOption() const { return m_nWidthOption; }
-    bool   HasPrcWidthOption() const { return m_bPrcWidthOption; }
+    bool   HasPercentWidthOption() const { return m_bPercentWidthOption; }
 
     sal_uInt16 GetCellPadding() const { return m_nCellPadding; }
     sal_uInt16 GetCellSpacing() const { return m_nCellSpacing; }
@@ -425,7 +425,7 @@ inline void SwHTMLTableLayout::SetCell( std::unique_ptr<SwHTMLTableLayoutCell> p
 
 inline long SwHTMLTableLayout::GetBrowseWidthMin() const
 {
-    return static_cast<long>( (!m_nWidthOption || m_bPrcWidthOption) ? m_nMin : m_nRelTabWidth );
+    return static_cast<long>( (!m_nWidthOption || m_bPercentWidthOption) ? m_nMin : m_nRelTabWidth );
 }
 
 void SwHTMLTableLayout::SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight )

@@ -163,14 +163,14 @@ OUString lcl_CalculateFileName(const OUString* pOrigFileName, const Graphic& rGr
 
 void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                const Size& rTwipDfltSize,
-                               bool bPrcWidth, bool bPrcHeight,
+                               bool bPercentWidth, bool bPercentHeight,
                                SvxCSS1PropertyInfo const & rCSS1PropInfo,
                                SfxItemSet& rFlyItemSet )
 {
     // convert absolute size values into Twip
-    sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
-    Size aTwipSz( bPrcWidth || USHRT_MAX==rPixSize.Width() ? 0 : rPixSize.Width(),
-                  bPrcHeight || USHRT_MAX==rPixSize.Height() ? 0 : rPixSize.Height() );
+    sal_uInt8 nPercentWidth = 0, nPercentHeight = 0;
+    Size aTwipSz( bPercentWidth || USHRT_MAX==rPixSize.Width() ? 0 : rPixSize.Width(),
+                  bPercentHeight || USHRT_MAX==rPixSize.Height() ? 0 : rPixSize.Height() );
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
     {
         aTwipSz =
@@ -181,18 +181,18 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     // process width
     if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.m_eWidthType )
     {
-        nPrcWidth = static_cast<sal_uInt8>(rCSS1PropInfo.m_nWidth);
+        nPercentWidth = static_cast<sal_uInt8>(rCSS1PropInfo.m_nWidth);
         aTwipSz.setWidth( rTwipDfltSize.Width() );
     }
     else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.m_eWidthType )
     {
         aTwipSz.setWidth( rCSS1PropInfo.m_nWidth );
     }
-    else if( bPrcWidth && rPixSize.Width() )
+    else if( bPercentWidth && rPixSize.Width() )
     {
-        nPrcWidth = static_cast<sal_uInt8>(rPixSize.Width());
-        if( nPrcWidth > 100 )
-            nPrcWidth = 100;
+        nPercentWidth = static_cast<sal_uInt8>(rPixSize.Width());
+        if( nPercentWidth > 100 )
+            nPercentWidth = 100;
 
         aTwipSz.setWidth( rTwipDfltSize.Width() );
     }
@@ -208,18 +208,18 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     // process height
     if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.m_eHeightType )
     {
-        nPrcHeight = static_cast<sal_uInt8>(rCSS1PropInfo.m_nHeight);
+        nPercentHeight = static_cast<sal_uInt8>(rCSS1PropInfo.m_nHeight);
         aTwipSz.setHeight( rTwipDfltSize.Height() );
     }
     else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.m_eHeightType )
     {
         aTwipSz.setHeight( rCSS1PropInfo.m_nHeight );
     }
-    else if( bPrcHeight && rPixSize.Height() )
+    else if( bPercentHeight && rPixSize.Height() )
     {
-        nPrcHeight = static_cast<sal_uInt8>(rPixSize.Height());
-        if( nPrcHeight > 100 )
-            nPrcHeight = 100;
+        nPercentHeight = static_cast<sal_uInt8>(rPixSize.Height());
+        if( nPercentHeight > 100 )
+            nPercentHeight = 100;
 
         aTwipSz.setHeight( rTwipDfltSize.Height() );
     }
@@ -234,8 +234,8 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
 
     // set size
     SwFormatFrameSize aFrameSize( SwFrameSize::Fixed, aTwipSz.Width(), aTwipSz.Height() );
-    aFrameSize.SetWidthPercent( nPrcWidth );
-    aFrameSize.SetHeightPercent( nPrcHeight );
+    aFrameSize.SetWidthPercent( nPercentWidth );
+    aFrameSize.SetHeightPercent( nPercentHeight );
     rFlyItemSet.Put( aFrameSize );
 }
 
@@ -351,7 +351,7 @@ bool SwHTMLParser::InsertEmbed()
     OUString aData;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( USHRT_MAX, USHRT_MAX );
-    bool bPrcWidth = false, bPrcHeight = false, bHidden = false;
+    bool bPercentWidth = false, bPercentHeight = false, bHidden = false;
     sal_Int16 eVertOri = text::VertOrientation::NONE;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     SvCommandList aCmdLst;
@@ -396,14 +396,14 @@ bool SwHTMLParser::InsertEmbed()
         case HtmlOptionId::WIDTH:
             if( USHRT_MAX==aSize.Width() )
             {
-                bPrcWidth = (rOption.GetString().indexOf('%') != -1);
+                bPercentWidth = (rOption.GetString().indexOf('%') != -1);
                 aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             }
             break;
         case HtmlOptionId::HEIGHT:
             if( USHRT_MAX==aSize.Height() )
             {
-                bPrcHeight = (rOption.GetString().indexOf('%') != -1);
+                bPercentHeight = (rOption.GetString().indexOf('%') != -1);
                 aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             }
             break;
@@ -455,7 +455,7 @@ bool SwHTMLParser::InsertEmbed()
         // Size (0,0) will be changed to (MINFLY, MINFLY) in SetFrameSize()
         aSize.setWidth( 0 ); aSize.setHeight( 0 );
         aSpace.setWidth( 0 ); aSpace.setHeight( 0 );
-        bPrcWidth = bPrcHeight = false;
+        bPercentWidth = bPercentHeight = false;
     }
 
     // prepare the URL
@@ -630,7 +630,7 @@ bool SwHTMLParser::InsertEmbed()
 
     // and the size of the frame
     Size aDfltSz( HTML_DFLT_EMBED_WIDTH, HTML_DFLT_EMBED_HEIGHT );
-    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aPropInfo, aFrameSet );
+    SetFixSize( aSize, aDfltSz, bPercentWidth, bPercentHeight, aPropInfo, aFrameSet );
     SetSpace( aSpace, aItemSet, aPropInfo, aFrameSet );
 
     // and insert into the document
@@ -697,7 +697,7 @@ void SwHTMLParser::NewObject()
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
-    bool bPrcWidth = false, bPrcHeight = false,
+    bool bPercentWidth = false, bPercentHeight = false,
              bDeclare = false;
     // create a new Command list
     m_pAppletImpl.reset(new SwApplet_Impl( m_xDoc->GetAttrPool() ));
@@ -738,11 +738,11 @@ void SwHTMLParser::NewObject()
             aStandBy = rOption.GetString();
             break;
         case HtmlOptionId::WIDTH:
-            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
+            bPercentWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
-            bPrcHeight = (rOption.GetString().indexOf('%') != -1);
+            bPercentHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::ALIGN:
@@ -817,7 +817,7 @@ void SwHTMLParser::NewObject()
 
     // and still the size of the frame
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
-    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aPropInfo, rFrameSet );
+    SetFixSize( aSize, aDfltSz, bPercentWidth, bPercentHeight, aPropInfo, rFrameSet );
     SetSpace( aSpace, aItemSet, aPropInfo, rFrameSet );
 }
 #endif
@@ -859,7 +859,7 @@ void SwHTMLParser::InsertApplet()
     OUString aCodeBase, aCode, aName, aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
-    bool bPrcWidth = false, bPrcHeight = false, bMayScript = false;
+    bool bPercentWidth = false, bPercentHeight = false, bMayScript = false;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
@@ -898,11 +898,11 @@ void SwHTMLParser::InsertApplet()
             eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HtmlOptionId::WIDTH:
-            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
+            bPercentWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
-            bPrcHeight = (rOption.GetString().indexOf('%') != -1);
+            bPercentHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HSPACE:
@@ -947,7 +947,7 @@ void SwHTMLParser::InsertApplet()
 
     // and still the size or the frame
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
-    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aPropInfo, rFrameSet );
+    SetFixSize( aSize, aDfltSz, bPercentWidth, bPercentHeight, aPropInfo, rFrameSet );
     SetSpace( aSpace, aItemSet, aPropInfo, rFrameSet );
 }
 #endif
@@ -1019,7 +1019,7 @@ void SwHTMLParser::InsertFloatingFrame()
     OUString aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
-    bool bPrcWidth = false, bPrcHeight = false;
+    bool bPercentWidth = false, bPercentHeight = false;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
@@ -1047,11 +1047,11 @@ void SwHTMLParser::InsertFloatingFrame()
             eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HtmlOptionId::WIDTH:
-            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
+            bPercentWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
-            bPrcHeight = (rOption.GetString().indexOf('%') != -1);
+            bPercentHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HSPACE:
@@ -1128,7 +1128,7 @@ void SwHTMLParser::InsertFloatingFrame()
 
     // and still the size of the frame
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
-    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aPropInfo, aFrameSet );
+    SetFixSize( aSize, aDfltSz, bPercentWidth, bPercentHeight, aPropInfo, aFrameSet );
     SetSpace( aSpace, aItemSet, aPropInfo, aFrameSet );
 
     // and insert into the document

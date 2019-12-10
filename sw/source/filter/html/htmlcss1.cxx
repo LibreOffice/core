@@ -2030,16 +2030,16 @@ void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo const &rPropInfo,
                                SwTwips nDfltWidth, sal_uInt8 nDfltPrcWidth )
 {
     SwTwips nWidth = nDfltWidth, nHeight = MINFLY;
-    sal_uInt8 nPrcWidth = nDfltPrcWidth, nPrcHeight = 0;
+    sal_uInt8 nPercentWidth = nDfltPrcWidth, nPercentHeight = 0;
     switch( rPropInfo.m_eWidthType )
     {
     case SVX_CSS1_LTYPE_PERCENTAGE:
-        nPrcWidth = rPropInfo.m_nWidth > 0 ? static_cast<sal_uInt8>(rPropInfo.m_nWidth) : 1;
+        nPercentWidth = rPropInfo.m_nWidth > 0 ? static_cast<sal_uInt8>(rPropInfo.m_nWidth) : 1;
         nWidth = MINFLY;
         break;
     case SVX_CSS1_LTYPE_TWIP:
         nWidth = std::max<long>(rPropInfo.m_nWidth, MINFLY);
-        nPrcWidth = 0;
+        nPercentWidth = 0;
         break;
     default:
         ;
@@ -2047,7 +2047,7 @@ void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo const &rPropInfo,
     switch( rPropInfo.m_eHeightType )
     {
     case SVX_CSS1_LTYPE_PERCENTAGE:
-        nPrcHeight = rPropInfo.m_nHeight > 0 ? static_cast<sal_uInt8>(rPropInfo.m_nHeight) : 1;
+        nPercentHeight = rPropInfo.m_nHeight > 0 ? static_cast<sal_uInt8>(rPropInfo.m_nHeight) : 1;
         break;
     case SVX_CSS1_LTYPE_TWIP:
         // Netscape and MS-IE interpreting the height incorrectly as minimum height,
@@ -2059,8 +2059,8 @@ void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo const &rPropInfo,
     }
 
     SwFormatFrameSize aFrameSize( SwFrameSize::Minimum, nWidth, nHeight );
-    aFrameSize.SetWidthPercent( nPrcWidth );
-    aFrameSize.SetHeightPercent( nPrcHeight );
+    aFrameSize.SetWidthPercent( nPercentWidth );
+    aFrameSize.SetHeightPercent( nPercentHeight );
     rFrameItemSet.Put( aFrameSize );
 }
 
