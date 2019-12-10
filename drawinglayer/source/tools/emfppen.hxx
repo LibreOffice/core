@@ -84,6 +84,15 @@ namespace emfplushelper
         DashedLineCapTypeTriangle = 0x00000003
     };
 
+    enum PenAlignment
+    {
+        PenAlignmentCenter = 0x00000000,
+        PenAlignmentInset = 0x00000001,
+        PenAlignmentLeft = 0x00000002,
+        PenAlignmentOutset = 0x00000003,
+        PenAlignmentRight = 0x00000004
+    };
+
     struct EMFPCustomLineCap;
 
     struct EMFPPen : public EMFPBrush
