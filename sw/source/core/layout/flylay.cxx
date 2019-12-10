@@ -458,7 +458,7 @@ bool SwFlyFreeFrame::HasEnvironmentAutoSize() const
              pToBeCheckedFrame->IsRowFrame() ||
              pToBeCheckedFrame->IsFlyFrame() )
         {
-            bRetVal = ATT_FIX_SIZE !=
+            bRetVal = SwFrameSize::Fixed !=
                       pToBeCheckedFrame->GetAttrSet()->GetFrameSize().GetHeightSizeType();
             break;
         }

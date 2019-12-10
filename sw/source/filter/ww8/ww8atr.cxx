@@ -3671,7 +3671,7 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
             return;                // Fly around graphic -> Auto-size
 
         //???? What about percentages ???
-        if ( rSize.GetWidth() && rSize.GetWidthSizeType() == ATT_FIX_SIZE)
+        if ( rSize.GetWidth() && rSize.GetWidthSizeType() == SwFrameSize::Fixed)
         {
             //"sprmPDxaWidth"
             m_rWW8Export.InsUInt16( NS_sprm::sprmPDxaWidth );
@@ -3686,8 +3686,8 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
             sal_uInt16 nH = 0;
             switch ( rSize.GetHeightSizeType() )
             {
-                case ATT_VAR_SIZE: break;
-                case ATT_FIX_SIZE: nH = static_cast<sal_uInt16>(rSize.GetHeight()) & 0x7fff; break;
+                case SwFrameSize::Variable: break;
+                case SwFrameSize::Fixed: nH = static_cast<sal_uInt16>(rSize.GetHeight()) & 0x7fff; break;
                 default:           nH = static_cast<sal_uInt16>(rSize.GetHeight()) | 0x8000; break;
             }
             m_rWW8Export.InsUInt16( nH );

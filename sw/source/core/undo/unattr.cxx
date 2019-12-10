@@ -347,7 +347,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( const SwFormat * pFormat, bool bSvDrwPt )
             Point aPt( static_cast<const SwFrameFormat*>(pFormat)->FindSdrObject()
                        ->GetRelativePos() );
             // store old value as attribute, to keep SwUndoFormatAttr small
-            m_pOldSet->Put( SwFormatFrameSize( ATT_VAR_SIZE, aPt.X(), aPt.Y() ) );
+            m_pOldSet->Put( SwFormatFrameSize( SwFrameSize::Variable, aPt.X(), aPt.Y() ) );
         }
     }
 
@@ -473,7 +473,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         // change of the Contact object by setting the anchor.
         pFrameFormat->CallSwClientNotify(sw::RestoreFlyAnchorHint(aDrawSavePt));
         // cache the old value again
-        m_pOldSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, aDrawOldPt.X(), aDrawOldPt.Y()));
+        m_pOldSet->Put(SwFormatFrameSize(SwFrameSize::Variable, aDrawOldPt.X(), aDrawOldPt.Y()));
     }
 
     if (RndStdIds::FLY_AS_CHAR == aNewAnchor.GetAnchorId()) {

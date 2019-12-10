@@ -112,7 +112,7 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
             rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
 
             long nWidth = aRect.Width();
-            aSet.Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
+            aSet.Put(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
             // Height = width for a more consistent preview (analogous to edit range)
             aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
             const SwTOXBase* pCurTOX = nullptr;

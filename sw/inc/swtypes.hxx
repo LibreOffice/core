@@ -111,7 +111,7 @@ extern SwPathFinder *pPathFinder;
 const short lBullIndent = 1440/4;
 const short lBullFirstLineOffset = -lBullIndent;
 const sal_uInt16 lNumIndent = 1440/4;
-const short lNumFirstLineOffset = -lNumIndent;
+const SwTwips lNumFirstLineOffset = -lNumIndent;
 const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 
 // Count of SystemField-types of SwDoc.

@@ -110,7 +110,7 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         nHeight = convertMm100ToTwip( nHeight );
         if( nHeight < MINFLY )
             nHeight = MINFLY;
-        rItemSet.Put( SwFormatFrameSize( ATT_FIX_SIZE, nWidth, nHeight ) );
+        rItemSet.Put( SwFormatFrameSize( SwFrameSize::Fixed, nWidth, nHeight ) );
     }
 
     SwFormatAnchor aAnchor( RndStdIds::FLY_AT_CHAR );

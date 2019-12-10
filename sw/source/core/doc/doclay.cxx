@@ -247,7 +247,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
 
     if( SfxItemState::SET != pFormat->GetAttrSet().GetItemState( RES_FRM_SIZE ))
     {
-        SwFormatFrameSize aFormatSize( ATT_VAR_SIZE, 0, DEF_FLY_WIDTH );
+        SwFormatFrameSize aFormatSize( SwFrameSize::Variable, 0, DEF_FLY_WIDTH );
         const SwNoTextNode* pNoTextNode = rNode.GetNoTextNode();
         if( pNoTextNode )
         {
@@ -259,7 +259,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
             if( aSize.Height() )
             {
                 aFormatSize.SetHeight( aSize.Height() );
-                aFormatSize.SetHeightSizeType( ATT_FIX_SIZE );
+                aFormatSize.SetHeightSizeType( SwFrameSize::Fixed );
             }
         }
         pFormat->SetFormatAttr( aFormatSize );
@@ -768,7 +768,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
 
                 // The new one should be changeable in its height.
                 std::unique_ptr<SwFormatFrameSize> aFrameSize(static_cast<SwFormatFrameSize*>(pOldFormat->GetFrameSize().Clone()));
-                aFrameSize->SetHeightSizeType( ATT_MIN_SIZE );
+                aFrameSize->SetHeightSizeType( SwFrameSize::Minimum );
                 pNewSet->Put( std::move(aFrameSize) );
 
                 SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection(
@@ -1076,7 +1076,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
 
     // The new one should be variable in its height!
     Size aSz( rSdrObj.GetCurrentBoundRect().GetSize() );
-    SwFormatFrameSize aFrameSize( ATT_MIN_SIZE, aSz.Width(), aSz.Height() );
+    SwFormatFrameSize aFrameSize( SwFrameSize::Minimum, aSz.Width(), aSz.Height() );
     pNewSet->Put( aFrameSize );
 
     // Apply the margin to the new Frame.

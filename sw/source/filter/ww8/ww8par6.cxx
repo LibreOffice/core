@@ -647,7 +647,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             SvxULSpaceItem aHdUL(pHdFormat->GetULSpace());
             if (!rSection.IsFixedHeightHeader())    //normal
             {
-                pHdFormat->SetFormatAttr(SwFormatFrameSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
+                pHdFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Minimum, 0, rData.nSwHLo));
                 // #i19922# - minimum page header height is now 1mm
                 // use new constant <cMinHdFtHeight>
                 aHdUL.SetLower( writer_cast<sal_uInt16>(rData.nSwHLo - cMinHdFtHeight) );
@@ -658,7 +658,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             {
                 // #i48832# - set correct spacing between header and body.
                 const sal_Int32 nHdLowerSpace( std::abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
-                pHdFormat->SetFormatAttr(SwFormatFrameSize(ATT_FIX_SIZE, 0, rData.nSwHLo + nHdLowerSpace));
+                pHdFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Fixed, 0, rData.nSwHLo + nHdLowerSpace));
                 aHdUL.SetLower( static_cast< sal_uInt16 >(nHdLowerSpace) );
                 pHdFormat->SetFormatAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
@@ -674,7 +674,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             SvxULSpaceItem aFtUL(pFtFormat->GetULSpace());
             if (!rSection.IsFixedHeightFooter())    //normal
             {
-                pFtFormat->SetFormatAttr(SwFormatFrameSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
+                pFtFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Minimum, 0, rData.nSwFUp));
                 // #i19922# - minimum page header height is now 1mm
                 // use new constant <cMinHdFtHeight>
                 aFtUL.SetUpper( writer_cast<sal_uInt16>(rData.nSwFUp - cMinHdFtHeight) );
@@ -685,7 +685,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             {
                 // #i48832# - set correct spacing between footer and body.
                 const SwTwips nFtUpperSpace( std::abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
-                pFtFormat->SetFormatAttr(SwFormatFrameSize(ATT_FIX_SIZE, 0, rData.nSwFUp + nFtUpperSpace));
+                pFtFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Fixed, 0, rData.nSwFUp + nFtUpperSpace));
                 aFtUL.SetUpper( static_cast< sal_uInt16 >(nFtUpperSpace) );
                 pFtFormat->SetFormatAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
@@ -1875,7 +1875,7 @@ nLoMgn(rWW.nLoMgn),
 nWidth(rWW.nSp28),
 nHeight(rWW.nSp45),
 nNetWidth(rWW.nSp28),
-eHeightFix(ATT_FIX_SIZE),
+eHeightFix(SwFrameSize::Fixed),
 eHRel(text::RelOrientation::PAGE_FRAME),
 eVRel(text::RelOrientation::FRAME),
 eVAlign(text::VertOrientation::NONE),
@@ -1902,12 +1902,12 @@ bToggelPos(false)
     if( nHeight & 0x8000 )
     {
         nHeight &= 0x7fff;
-        eHeightFix = ATT_MIN_SIZE;
+        eHeightFix = SwFrameSize::Minimum;
     }
 
     if( nHeight <= MINFLY )
     {                           // no data, or bad data
-        eHeightFix = ATT_MIN_SIZE;
+        eHeightFix = SwFrameSize::Minimum;
         nHeight = MINFLY;
     }
 
@@ -2205,7 +2205,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
         aSizeArray[WW8_BOT]*=2;
     }
 
-    Put( SwFormatFrameSize( ATT_FIX_SIZE, nWidth+aSizeArray[WW8_LEFT]+
+    Put( SwFormatFrameSize( SwFrameSize::Fixed, nWidth+aSizeArray[WW8_LEFT]+
         aSizeArray[WW8_RIGHT], nHeight+aSizeArray[WW8_TOP]
         + aSizeArray[WW8_BOT]) );
 }
@@ -2338,7 +2338,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrameFormat *pFlyFormat,
                             if (pTableFormat)
                             {
                                 SwFormatFrameSize aSize = pTableFormat->GetFrameSize();
-                                aSize.SetHeightSizeType(ATT_MIN_SIZE);
+                                aSize.SetHeightSizeType(SwFrameSize::Minimum);
                                 aSize.SetHeight(MINLAY);
                                 pFlyFormat->SetFormatAttr(aSize);
                                 SwFormatHoriOrient aHori = pTableFormat->GetHoriOrient();
@@ -2703,7 +2703,7 @@ void SwWW8ImplReader::StopApo()
             nNewWidth = ItemGet<SwFormatFrameSize>(aFlySet, RES_FRM_SIZE).GetWidth();
 
             aSize.SetWidth(nNewWidth);
-            aSize.SetWidthSizeType(ATT_VAR_SIZE);
+            aSize.SetWidthSizeType(SwFrameSize::Variable);
 
             m_xSFlyPara->pFlyFormat->SetFormatAttr(aSize);
         }

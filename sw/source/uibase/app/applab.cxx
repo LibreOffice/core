@@ -257,7 +257,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         long lPgWidth, lPgHeight;
         lPgWidth  = std::max<sal_Int32>(rItem.m_lPWidth, MINLAY);
         lPgHeight = std::max<sal_Int32>(rItem.m_lPHeight, MINLAY);
-        rFormat.SetFormatAttr( SwFormatFrameSize( ATT_FIX_SIZE, lPgWidth, lPgHeight ));
+        rFormat.SetFormatAttr( SwFormatFrameSize( SwFrameSize::Fixed, lPgWidth, lPgHeight ));
         // Numbering type
         SvxNumberType aType;
         aType.SetNumberingType(SVX_NUM_NUMBER_NONE);
@@ -287,7 +287,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         sal_Int32 iResultHeight = rItem.m_lUpper + (rItem.m_nRows - 1) * rItem.m_lVDist + rItem.m_lHeight - rItem.m_lPHeight;
         sal_Int32 iWidth = (iResultWidth > 0 ? rItem.m_lWidth - (iResultWidth / rItem.m_nCols) - 1 : rItem.m_lWidth);
         sal_Int32 iHeight = (iResultHeight > 0 ? rItem.m_lHeight - (iResultHeight / rItem.m_nRows) - 1 : rItem.m_lHeight);
-        SwFormatFrameSize aFrameSize(  ATT_FIX_SIZE, iWidth, iHeight );
+        SwFormatFrameSize aFrameSize(  SwFrameSize::Fixed, iWidth, iHeight );
         pFormat->SetFormatAttr( aFrameSize );
 
         //frame represents label itself, no border space

@@ -830,7 +830,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             bool bSetHeight = false;
             bool bSetWidth = false;
             bool bSetSizeType = false;
-            SwFrameSize eSizeType = ATT_VAR_SIZE;
+            SwFrameSize eSizeType = SwFrameSize::Variable;
             sal_Int32 nMin = MINLAY;
 
             switch( nMemberId )
@@ -854,19 +854,19 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     bSetWidth = true;
                     break;
                 case MID_FRMSIZE_MIN_HEIGHT:
-                    eSizeType = ATT_MIN_SIZE;
+                    eSizeType = SwFrameSize::Minimum;
                     bSetHeight = true;
                     nMin = 1;
                     bSetSizeType = true;
                     break;
                 case MID_FRMSIZE_FIX_HEIGHT:
-                    eSizeType = ATT_FIX_SIZE;
+                    eSizeType = SwFrameSize::Fixed;
                     bSetHeight = true;
                     nMin = 1;
                     bSetSizeType = true;
                     break;
                 case MID_FRMSIZE_COL_WIDTH:
-                    eSizeType = ATT_FIX_SIZE;
+                    eSizeType = SwFrameSize::Fixed;
                     bSetWidth = true;
                     bSetSizeType = true;
                     break;
@@ -882,7 +882,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                             nValue = SAL_MAX_UINT16;
 
                         rFrameSize.SetWidth( static_cast<sal_uInt16>(nValue) );
-                        rFrameSize.SetHeightSizeType( ATT_VAR_SIZE );
+                        rFrameSize.SetHeightSizeType( SwFrameSize::Variable );
                         bOk = true;
                     }
                 }

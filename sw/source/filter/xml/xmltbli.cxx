@@ -790,7 +790,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
         {
             const SwFormatFrameSize *pSize = static_cast<const SwFormatFrameSize *>(pItem);
             nWidth = pSize->GetWidth();
-            bRelWidth = ATT_VAR_SIZE == pSize->GetHeightSizeType();
+            bRelWidth = SwFrameSize::Variable == pSize->GetHeightSizeType();
         }
     }
 
@@ -1884,7 +1884,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
     pFrameFormat->ResetAllFormatAttr(); // #i73790# - method renamed
     pFrameFormat->SetFormatAttr( aFillOrder );
 
-    pFrameFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nColWidth ) );
+    pFrameFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nColWidth ) );
 
     SwTableLines& rLines = pBox->GetTabLines();
     bool bSplitted = false;
@@ -2132,7 +2132,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     if (! bModifyLocked)
         pBoxFormat2->UnlockModify();
 
-    pBoxFormat2->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nColWidth ) );
+    pBoxFormat2->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nColWidth ) );
 
     return pBox;
 }
@@ -2750,7 +2750,7 @@ void SwXMLTableContext::MakeTable()
     // This must be after the call to MakeTable_, because nWidth might be
     // changed there.
     pFrameFormat->LockModify();
-    SwFormatFrameSize aSize( ATT_VAR_SIZE, m_nWidth );
+    SwFormatFrameSize aSize( SwFrameSize::Variable, m_nWidth );
     aSize.SetWidthPercent( nPrcWidth );
     pFrameFormat->SetFormatAttr( aSize );
     pFrameFormat->UnlockModify();

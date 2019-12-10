@@ -233,7 +233,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     }
 
     // set size
-    SwFormatFrameSize aFrameSize( ATT_FIX_SIZE, aTwipSz.Width(), aTwipSz.Height() );
+    SwFormatFrameSize aFrameSize( SwFrameSize::Fixed, aTwipSz.Width(), aTwipSz.Height() );
     aFrameSize.SetWidthPercent( nPrcWidth );
     aFrameSize.SetHeightPercent( nPrcHeight );
     rFlyItemSet.Put( aFrameSize );
@@ -513,7 +513,7 @@ bool SwHTMLParser::InsertEmbed()
         SwAttrSet aAttrSet(pFormat->GetAttrSet());
         aAttrSet.ClearItem(RES_CNTNT);
         Size aTwipSize(pDevice->PixelToLogic(aSize, MapMode(MapUnit::MapTwip)));
-        SwFormatFrameSize aFrameSize(ATT_FIX_SIZE, aTwipSize.Width(), aTwipSize.Height());
+        SwFormatFrameSize aFrameSize(SwFrameSize::Fixed, aTwipSize.Width(), aTwipSize.Height());
         aAttrSet.Put(aFrameSize);
         pOLENode->GetDoc()->SetFlyFrameAttr(*pFormat, aAttrSet);
         return true;

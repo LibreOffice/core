@@ -82,7 +82,7 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
             default:    nId=0; break;
         }
         m_aSet.SetParent( &m_pOwnSh->GetFormatFromPool( nId )->GetAttrSet());
-        m_aSet.Put( SwFormatFrameSize( ATT_MIN_SIZE, DFLT_WIDTH, DFLT_HEIGHT ));
+        m_aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum, DFLT_WIDTH, DFLT_HEIGHT ));
         if ( 0 != ::GetHtmlMode(pSh->GetView().GetDocShell()) )
             m_aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::PRINT_AREA ) );
 

@@ -32,12 +32,12 @@ class IntlWrapper;
 
 //Frame size.
 
-enum SwFrameSize
+enum class SwFrameSize
 {
-    ATT_VAR_SIZE,       ///< Frame is variable in Var-direction.
-    ATT_FIX_SIZE,       ///< Frame cannot be moved in Var-direction.
-    ATT_MIN_SIZE        /**< Value in Var-direction gives minimum
-                         (can be exceeded but not be less). */
+    Variable,  ///< Frame is variable in Var-direction.
+    Fixed,     ///< Frame cannot be moved in Var-direction.
+    Minimum    /**< Value in Var-direction gives minimum
+                    (can be exceeded but not be less). */
 };
 
 class SW_DLLPUBLIC SwFormatFrameSize: public SvxSizeItem
@@ -64,7 +64,7 @@ class SW_DLLPUBLIC SwFormatFrameSize: public SvxSizeItem
     bool HasMetrics() const override;
 
 public:
-    SwFormatFrameSize( SwFrameSize eSize = ATT_VAR_SIZE,
+    SwFormatFrameSize( SwFrameSize eSize = SwFrameSize::Variable,
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;

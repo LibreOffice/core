@@ -1782,7 +1782,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
         const tools::Rectangle& rSnapRect = pSdrObj->GetSnapRect();
         // if necessary adapt width and position of the framework: The
         // recorded interior is to remain equally large despite thick edges.
-        rFlySet.Put( SwFormatFrameSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
+        rFlySet.Put( SwFormatFrameSize(bFixSize ? SwFrameSize::Fixed : SwFrameSize::Variable,
             rSnapRect.GetWidth()  + 2*nOutside,
             rSnapRect.GetHeight() + 2*nOutside) );
     }
@@ -1790,7 +1790,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     {
         SwFormatFrameSize aSize = rFlySet.Get(RES_FRM_SIZE);
 
-        SwFormatFrameSize aNewSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
+        SwFormatFrameSize aNewSize(bFixSize ? SwFrameSize::Fixed : SwFrameSize::Variable,
                                    aSize.GetWidth()  + 2*nOutside,
                                    aSize.GetHeight() + 2*nOutside);
         aNewSize.SetWidthSizeType(aSize.GetWidthSizeType());
@@ -2980,8 +2980,8 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         tools::Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
             pRecord->nDxTextRight, pRecord->nDyTextBottom);
 
-        SwFormatFrameSize aFrameSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop);
-        aFrameSize.SetWidthSizeType(pRecord->bAutoWidth ? ATT_VAR_SIZE : ATT_FIX_SIZE);
+        SwFormatFrameSize aFrameSize(SwFrameSize::Fixed, pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop);
+        aFrameSize.SetWidthSizeType(pRecord->bAutoWidth ? SwFrameSize::Variable : SwFrameSize::Fixed);
         rFlySet.Put(aFrameSize);
 
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
@@ -3096,7 +3096,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
 
     ProcessEscherAlign(pRecord, pF, rFlySet);
 
-    rFlySet.Put(SwFormatFrameSize(ATT_FIX_SIZE, nWidthTw, nHeightTw));
+    rFlySet.Put(SwFormatFrameSize(SwFrameSize::Fixed, nWidthTw, nHeightTw));
 
     SfxItemSet aGrSet(m_rDoc.GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END-1>{});
 

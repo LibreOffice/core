@@ -41,7 +41,7 @@ static SwTwips lcl_GetFrameMinHeight(const SwLayoutFrame & rFrame)
 
     switch (rSz.GetHeightSizeType())
     {
-    case ATT_MIN_SIZE:
+    case SwFrameSize::Minimum:
         nMinHeight = rSz.GetHeight();
 
         break;

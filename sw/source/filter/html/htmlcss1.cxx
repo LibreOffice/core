@@ -506,7 +506,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
     {
         if( rPropInfo.m_eSizeType == SVX_CSS1_STYPE_TWIP )
         {
-            rMaster.SetFormatAttr( SwFormatFrameSize( ATT_FIX_SIZE, rPropInfo.m_nWidth,
+            rMaster.SetFormatAttr( SwFormatFrameSize( SwFrameSize::Fixed, rPropInfo.m_nWidth,
                                            rPropInfo.m_nHeight ) );
             bChanged = true;
         }
@@ -2058,7 +2058,7 @@ void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo const &rPropInfo,
         ;
     }
 
-    SwFormatFrameSize aFrameSize( ATT_MIN_SIZE, nWidth, nHeight );
+    SwFormatFrameSize aFrameSize( SwFrameSize::Minimum, nWidth, nHeight );
     aFrameSize.SetWidthPercent( nPrcWidth );
     aFrameSize.SetHeightPercent( nPrcHeight );
     rFrameItemSet.Put( aFrameSize );

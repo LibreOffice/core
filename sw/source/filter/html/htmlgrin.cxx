@@ -778,7 +778,7 @@ IMAGE_SETEVENT:
             aTwipSz.setHeight( MINFLY );
     }
 
-    SwFormatFrameSize aFrameSize( ATT_FIX_SIZE, aTwipSz.Width(), aTwipSz.Height() );
+    SwFormatFrameSize aFrameSize( SwFrameSize::Fixed, aTwipSz.Width(), aTwipSz.Height() );
     aFrameSize.SetWidthPercent( nPrcWidth );
     aFrameSize.SetHeightPercent( nPrcHeight );
     aFrameSet.Put( aFrameSize );

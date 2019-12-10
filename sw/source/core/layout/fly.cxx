@@ -146,13 +146,13 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.Width( rFrameSize.GetWidth() );
-        aFrm.Height( rFrameSize.GetHeightSizeType() == ATT_VAR_SIZE ? MINFLY : rFrameSize.GetHeight() );
+        aFrm.Height( rFrameSize.GetHeightSizeType() == SwFrameSize::Variable ? MINFLY : rFrameSize.GetHeight() );
     }
 
     // Fixed or variable Height?
-    if ( rFrameSize.GetHeightSizeType() == ATT_MIN_SIZE )
+    if ( rFrameSize.GetHeightSizeType() == SwFrameSize::Minimum )
         m_bMinHeight = true;
-    else if ( rFrameSize.GetHeightSizeType() == ATT_FIX_SIZE )
+    else if ( rFrameSize.GetHeightSizeType() == SwFrameSize::Fixed )
         mbFixSize = true;
 
     // insert columns, if necessary
@@ -559,16 +559,16 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 {
     bool bRet = false;
     SwTwips nDiffHeight = getFrameArea().Height();
-    if ( rFrameSize.GetHeightSizeType() == ATT_VAR_SIZE )
+    if ( rFrameSize.GetHeightSizeType() == SwFrameSize::Variable )
         mbFixSize = m_bMinHeight = false;
     else
     {
-        if ( rFrameSize.GetHeightSizeType() == ATT_FIX_SIZE )
+        if ( rFrameSize.GetHeightSizeType() == SwFrameSize::Fixed )
         {
             mbFixSize = true;
             m_bMinHeight = false;
         }
-        else if ( rFrameSize.GetHeightSizeType() == ATT_MIN_SIZE )
+        else if ( rFrameSize.GetHeightSizeType() == SwFrameSize::Minimum )
         {
             mbFixSize = false;
             m_bMinHeight = true;
@@ -1309,13 +1309,13 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             OSL_ENSURE( aRelSize == CalcRel( rFrameSz ), "SwFlyFrame::Format CalcRel problem" );
             SwTwips nNewSize = aRectFnSet.IsVert() ? aRelSize.Height() : aRelSize.Width();
 
-            if ( rFrameSz.GetWidthSizeType() != ATT_FIX_SIZE )
+            if ( rFrameSz.GetWidthSizeType() != SwFrameSize::Fixed )
             {
                 // #i9046# Autowidth for fly frames
                 const SwTwips nAutoWidth = lcl_CalcAutoWidth( *this );
                 if ( nAutoWidth )
                 {
-                    if( ATT_MIN_SIZE == rFrameSz.GetWidthSizeType() )
+                    if( SwFrameSize::Minimum == rFrameSz.GetWidthSizeType() )
                         nNewSize = std::max( nNewSize - nLR, nAutoWidth );
                     else
                         nNewSize = nAutoWidth;
@@ -1922,7 +1922,7 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
                 // for the lower frame, which initiated this grow.
                 const bool bOldFormatHeightOnly = m_bFormatHeightOnly;
                 const SwFormatFrameSize& rFrameSz = GetFormat()->GetFrameSize();
-                if ( rFrameSz.GetWidthSizeType() != ATT_FIX_SIZE )
+                if ( rFrameSz.GetWidthSizeType() != SwFrameSize::Fixed )
                 {
                     m_bFormatHeightOnly = true;
                 }
@@ -1934,7 +1934,7 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
                     static_cast<SwFlyFreeFrame*>(this)->SetNoMoveOnCheckClip( false );
                 }
                 // #i55416#
-                if ( rFrameSz.GetWidthSizeType() != ATT_FIX_SIZE )
+                if ( rFrameSz.GetWidthSizeType() != SwFrameSize::Fixed )
                 {
                     m_bFormatHeightOnly = bOldFormatHeightOnly;
                 }
@@ -2033,7 +2033,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
                 // for the lower frame, which initiated this shrink.
                 const bool bOldFormatHeightOnly = m_bFormatHeightOnly;
                 const SwFormatFrameSize& rFrameSz = GetFormat()->GetFrameSize();
-                if ( rFrameSz.GetWidthSizeType() != ATT_FIX_SIZE )
+                if ( rFrameSz.GetWidthSizeType() != SwFrameSize::Fixed )
                 {
                     m_bFormatHeightOnly = true;
                 }
@@ -2041,7 +2041,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
                 static_cast<SwFlyFreeFrame*>(this)->SwFlyFreeFrame::MakeAll(getRootFrame()->GetCurrShell()->GetOut());
                 static_cast<SwFlyFreeFrame*>(this)->SetNoMoveOnCheckClip( false );
                 // #i55416#
-                if ( rFrameSz.GetWidthSizeType() != ATT_FIX_SIZE )
+                if ( rFrameSz.GetWidthSizeType() != SwFrameSize::Fixed )
                 {
                     m_bFormatHeightOnly = bOldFormatHeightOnly;
                 }

@@ -2205,9 +2205,9 @@ void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTab
     // output line height   sprmTDyaRowHeight
     long nHeight = 0;
     const SwFormatFrameSize& rLSz = pLineFormat->GetFrameSize();
-    if ( ATT_VAR_SIZE != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
+    if ( SwFrameSize::Variable != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
     {
-        if ( ATT_MIN_SIZE == rLSz.GetHeightSizeType() )
+        if ( SwFrameSize::Minimum == rLSz.GetHeightSizeType() )
             nHeight = rLSz.GetHeight();
         else
             nHeight = -rLSz.GetHeight();

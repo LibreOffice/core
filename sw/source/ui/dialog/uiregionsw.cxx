@@ -1048,7 +1048,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
     if (!nWidth)
         nWidth = USHRT_MAX;
 
-    aSet.Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
+    aSet.Put(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
     aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
 
     SwSectionPropertyTabDialog aTabDlg(m_xDialog.get(), aSet, rSh);

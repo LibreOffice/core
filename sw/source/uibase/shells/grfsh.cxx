@@ -316,7 +316,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
 
             const SwRect* pRect = &rSh.GetAnyCurRect(CurRectType::Page);
-            SwFormatFrameSize aFrameSize( ATT_VAR_SIZE, pRect->Width(), pRect->Height());
+            SwFormatFrameSize aFrameSize( SwFrameSize::Variable, pRect->Width(), pRect->Height());
             aFrameSize.SetWhich( GetPool().GetWhich( SID_ATTR_PAGE_SIZE ) );
             aSet.Put( aFrameSize );
 
