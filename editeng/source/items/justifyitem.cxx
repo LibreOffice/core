@@ -57,7 +57,7 @@ bool SvxHorJustifyItem::GetPresentation
     MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper&)    const
 {
-    rText = GetValueText( static_cast<sal_uInt16>(GetValue()) );
+    rText = GetValueText( GetValue() );
     return true;
 }
 
@@ -159,10 +159,33 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-OUString SvxHorJustifyItem::GetValueText( sal_uInt16 nVal )
+OUString SvxHorJustifyItem::GetValueText( SvxCellHorJustify nVal )
 {
-    DBG_ASSERT( nVal <= sal_uInt16(SvxCellHorJustify::Repeat), "enum overflow!" );
-    return EditResId(RID_SVXITEMS_HORJUST_STANDARD + nVal);
+    DBG_ASSERT( nVal <= SvxCellHorJustify::Repeat, "enum overflow!" );
+
+    OUString sRet;
+    switch (nVal)
+    {
+        case SvxCellHorJustify::Standard:
+            sRet = EditResId(RID_SVXITEMS_HORJUST_STANDARD);
+            break;
+        case SvxCellHorJustify::Left:
+            sRet = EditResId(RID_SVXITEMS_HORJUST_LEFT);
+            break;
+        case SvxCellHorJustify::Center:
+            sRet = EditResId(RID_SVXITEMS_HORJUST_CENTER);
+            break;
+        case SvxCellHorJustify::Right:
+            sRet = EditResId(RID_SVXITEMS_HORJUST_RIGHT);
+            break;
+        case SvxCellHorJustify::Block:
+            sRet = EditResId(RID_SVXITEMS_HORJUST_BLOCK);
+            break;
+        case SvxCellHorJustify::Repeat:
+            sRet = EditResId(RID_SVXITEMS_HORJUST_REPEAT);
+            break;
+    }
+    return sRet;
 }
 
 
@@ -289,7 +312,26 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 OUString SvxVerJustifyItem::GetValueText( SvxCellVerJustify nVal )
 {
     DBG_ASSERT( nVal <= SvxCellVerJustify::Bottom, "enum overflow!" );
-    return EditResId(RID_SVXITEMS_VERJUST_STANDARD + static_cast<int>(nVal));
+
+    OUString sRet;
+    switch (nVal)
+    {
+        case SvxCellVerJustify::Standard:
+            sRet = EditResId(RID_SVXITEMS_VERJUST_STANDARD);
+            break;
+        case SvxCellVerJustify::Top:
+            sRet = EditResId(RID_SVXITEMS_VERJUST_TOP);
+            break;
+        case SvxCellVerJustify::Center:
+            sRet = EditResId(RID_SVXITEMS_VERJUST_CENTER);
+            break;
+        case SvxCellVerJustify::Bottom:
+            sRet = EditResId(RID_SVXITEMS_VERJUST_BOTTOM);
+            break;
+        default:
+            break;
+    }
+    return sRet;
 }
 
 
@@ -362,7 +404,17 @@ bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
 
 OUString SvxJustifyMethodItem::GetValueText( SvxCellJustifyMethod nVal )
 {
-    return EditResId(RID_SVXITEMS_JUSTMETHOD_AUTO + static_cast<int>(nVal));
+    OUString sRet;
+    switch (nVal)
+    {
+        case SvxCellJustifyMethod::Auto:
+            sRet = EditResId(RID_SVXITEMS_JUSTMETHOD_AUTO);
+            break;
+        case SvxCellJustifyMethod::Distribute:
+            sRet = EditResId(RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE);
+            break;
+    }
+    return sRet;
 }
 
 

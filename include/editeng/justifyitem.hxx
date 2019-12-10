@@ -45,7 +45,7 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual sal_uInt16       GetValueCount() const override;
-    static OUString          GetValueText( sal_uInt16 nVal );
+    static OUString          GetValueText( SvxCellHorJustify nVal );
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
     SvxHorJustifyItem(SvxHorJustifyItem const &) = default; // SfxPoolItem copy function dichotomy
