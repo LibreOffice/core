@@ -207,7 +207,7 @@ long ScColumn::GetNeededSize(
     {
         if (pCondSet &&
                 pCondSet->GetItemState(ATTR_ROTATE_VALUE, true, &pCondItem) == SfxItemState::SET)
-            nRotate = static_cast<const SfxInt32Item*>(pCondItem)->GetValue();
+            nRotate = static_cast<const ScRotateValueItem*>(pCondItem)->GetValue();
         else
             nRotate = pPattern->GetItem(ATTR_ROTATE_VALUE).GetValue();
         if ( nRotate )

@@ -187,7 +187,7 @@ tools::Rectangle ScAccessibleCell::GetBoundingBox() const
             simply expand the cell size to the width of the unrotated text. */
         if (mpDoc)
         {
-            const SfxInt32Item* pItem = mpDoc->GetAttr( maCellAddress, ATTR_ROTATE_VALUE );
+            const ScRotateValueItem* pItem = mpDoc->GetAttr( maCellAddress, ATTR_ROTATE_VALUE );
             if( pItem && (pItem->GetValue() != 0) )
             {
                 tools::Rectangle aParaRect = GetParagraphBoundingBox();

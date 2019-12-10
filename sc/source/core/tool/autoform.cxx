@@ -56,6 +56,7 @@
 #include <tools/tenccvt.hxx>
 #include <osl/diagnose.h>
 
+#include <attrib.hxx>
 #include <globstr.hrc>
 #include <scitems.hxx>
 #include <scresid.hxx>
@@ -195,7 +196,7 @@ ScAutoFormatDataField::ScAutoFormatDataField()
     m_aStacked = std::make_unique<SfxBoolItem>();
     m_aMargin = std::make_unique<SvxMarginItem>(ATTR_MARGIN);
     m_aLinebreak = std::make_unique<SfxBoolItem>(ATTR_LINEBREAK);
-    m_aRotateAngle = std::make_unique<SfxInt32Item>(ATTR_ROTATE_VALUE);
+    m_aRotateAngle = std::make_unique<ScRotateValueItem>(0);
     m_aRotateMode = std::make_unique<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE);
 }
 
@@ -371,7 +372,7 @@ void ScAutoFormatData::PutItem( sal_uInt16 nIndex, const SfxPoolItem& rItem )
         case ATTR_STACKED:          rField.SetStacked( static_cast<const SfxBoolItem&>(rItem) );           break;
         case ATTR_MARGIN:           rField.SetMargin( static_cast<const SvxMarginItem&>(rItem) );          break;
         case ATTR_LINEBREAK:        rField.SetLinebreak( static_cast<const SfxBoolItem&>(rItem) );         break;
-        case ATTR_ROTATE_VALUE:     rField.SetRotateAngle( static_cast<const SfxInt32Item&>(rItem) );      break;
+        case ATTR_ROTATE_VALUE:     rField.SetRotateAngle( static_cast<const ScRotateValueItem&>(rItem) ); break;
         case ATTR_ROTATE_MODE:      rField.SetRotateMode( static_cast<const SvxRotateModeItem&>(rItem) );  break;
     }
 }

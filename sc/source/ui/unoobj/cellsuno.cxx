@@ -2112,7 +2112,7 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                 if ( nRotVal < 0 )
                     nRotVal += 36000;
 
-                rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, nRotVal ) );
+                rSet.Put( ScRotateValueItem( nRotVal ) );
 
             }
             break;
@@ -2128,12 +2128,12 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                         break;
                         case table::CellOrientation_TOPBOTTOM:
                             rSet.Put( SfxBoolItem( ATTR_STACKED, false ) );
-                            rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
+                            rSet.Put( ScRotateValueItem( 27000 ) );
                             rSecondItemId = ATTR_ROTATE_VALUE;
                         break;
                         case table::CellOrientation_BOTTOMTOP:
                             rSet.Put( SfxBoolItem( ATTR_STACKED, false ) );
-                            rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
+                            rSet.Put( ScRotateValueItem( 9000 ) );
                             rSecondItemId = ATTR_ROTATE_VALUE;
                         break;
                         case table::CellOrientation_STACKED:
