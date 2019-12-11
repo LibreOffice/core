@@ -488,12 +488,10 @@ sal_uInt16 SvxWeightItem::GetValueCount() const
     return WEIGHT_BLACK;    // WEIGHT_DONTKNOW does not belong
 }
 
-
-SfxPoolItem* SvxWeightItem::Clone( SfxItemPool * ) const
+SvxWeightItem* SvxWeightItem::Clone( SfxItemPool * ) const
 {
     return new SvxWeightItem( *this );
 }
-
 
 bool SvxWeightItem::GetPresentation
 (
@@ -1269,12 +1267,10 @@ SvxAutoKernItem::SvxAutoKernItem( const bool bAutoKern, const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxAutoKernItem::Clone( SfxItemPool * ) const
+SvxAutoKernItem* SvxAutoKernItem::Clone( SfxItemPool * ) const
 {
     return new SvxAutoKernItem( *this );
 }
-
 
 bool SvxAutoKernItem::GetPresentation
 (
@@ -1939,12 +1935,10 @@ SvxNoHyphenItem::SvxNoHyphenItem( const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxNoHyphenItem::Clone( SfxItemPool* ) const
+SvxNoHyphenItem* SvxNoHyphenItem::Clone( SfxItemPool* ) const
 {
     return new SvxNoHyphenItem( *this );
 }
-
 
 bool SvxNoHyphenItem::GetPresentation
 (
@@ -1972,12 +1966,10 @@ SvxBlinkItem::SvxBlinkItem( const bool bBlink, const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxBlinkItem::Clone( SfxItemPool * ) const
+SvxBlinkItem* SvxBlinkItem::Clone( SfxItemPool * ) const
 {
     return new SvxBlinkItem( *this );
 }
-
 
 bool SvxBlinkItem::GetPresentation
 (
@@ -2216,7 +2208,7 @@ SvxTextRotateItem::SvxTextRotateItem(sal_uInt16 nValue, const sal_uInt16 nW)
 {
 }
 
-SfxPoolItem* SvxTextRotateItem::Clone(SfxItemPool*) const
+SvxTextRotateItem* SvxTextRotateItem::Clone(SfxItemPool*) const
 {
     return new SvxTextRotateItem(*this);
 }
@@ -2295,7 +2287,7 @@ SvxCharRotateItem::SvxCharRotateItem( sal_uInt16 nValue,
 {
 }
 
-SfxPoolItem* SvxCharRotateItem::Clone( SfxItemPool* ) const
+SvxCharRotateItem* SvxCharRotateItem::Clone( SfxItemPool* ) const
 {
     return new SvxCharRotateItem( *this );
 }
@@ -2384,11 +2376,10 @@ SvxCharScaleWidthItem::SvxCharScaleWidthItem( sal_uInt16 nValue,
 {
 }
 
-SfxPoolItem* SvxCharScaleWidthItem::Clone( SfxItemPool* ) const
+SvxCharScaleWidthItem* SvxCharScaleWidthItem::Clone( SfxItemPool* ) const
 {
     return new SvxCharScaleWidthItem( *this );
 }
-
 
 bool SvxCharScaleWidthItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
@@ -2439,7 +2430,7 @@ SvxCharReliefItem::SvxCharReliefItem( FontRelief eValue,
 {
 }
 
-SfxPoolItem* SvxCharReliefItem::Clone( SfxItemPool * ) const
+SvxCharReliefItem* SvxCharReliefItem::Clone( SfxItemPool * ) const
 {
     return new SvxCharReliefItem( *this );
 }

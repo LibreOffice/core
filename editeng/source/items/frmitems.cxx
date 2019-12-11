@@ -1155,12 +1155,10 @@ bool SvxShadowItem::operator==( const SfxPoolItem& rAttr ) const
              ( eLocation == rItem.GetLocation() ) );
 }
 
-
-SfxPoolItem* SvxShadowItem::Clone( SfxItemPool* ) const
+SvxShadowItem* SvxShadowItem::Clone( SfxItemPool* ) const
 {
     return new SvxShadowItem( *this );
 }
-
 
 sal_uInt16 SvxShadowItem::CalcShadowSpace( SvxShadowItemSide nShadow ) const
 {
@@ -1737,12 +1735,10 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-
-SfxPoolItem* SvxBoxItem::Clone( SfxItemPool* ) const
+SvxBoxItem* SvxBoxItem::Clone( SfxItemPool* ) const
 {
     return new SvxBoxItem( *this );
 }
-
 
 bool SvxBoxItem::GetPresentation
 (
@@ -2143,12 +2139,10 @@ void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, SvxBoxInfoItemLine nLin
     }
 }
 
-
-SfxPoolItem* SvxBoxInfoItem::Clone( SfxItemPool* ) const
+SvxBoxInfoItem* SvxBoxInfoItem::Clone( SfxItemPool* ) const
 {
     return new SvxBoxInfoItem( *this );
 }
-
 
 bool SvxBoxInfoItem::GetPresentation
 (
@@ -3153,12 +3147,10 @@ bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
     return bEqual;
 }
 
-
-SfxPoolItem* SvxBrushItem::Clone( SfxItemPool* ) const
+SvxBrushItem* SvxBrushItem::Clone( SfxItemPool* ) const
 {
     return new SvxBrushItem( *this );
 }
-
 
 const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) const
 {

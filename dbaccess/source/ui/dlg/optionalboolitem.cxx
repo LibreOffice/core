@@ -35,7 +35,7 @@ namespace dbaui
             static_cast<const OptionalBoolItem&>( _rItem  ).m_aValue == m_aValue;
     }
 
-    SfxPoolItem* OptionalBoolItem::Clone( SfxItemPool* /*_pPool*/ ) const
+    OptionalBoolItem* OptionalBoolItem::Clone( SfxItemPool* /*_pPool*/ ) const
     {
         return new OptionalBoolItem( *this );
     }

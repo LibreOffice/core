@@ -53,7 +53,7 @@ bool OStringListItem::operator==(const SfxPoolItem& _rItem) const
     return true;
 }
 
-SfxPoolItem* OStringListItem::Clone(SfxItemPool* /* _pPool */) const
+OStringListItem* OStringListItem::Clone(SfxItemPool* /* _pPool */) const
 {
     return new OStringListItem(*this);
 }

@@ -408,12 +408,10 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-
-SfxPoolItem* SvxAdjustItem::Clone( SfxItemPool * ) const
+SvxAdjustItem* SvxAdjustItem::Clone( SfxItemPool * ) const
 {
     return new SvxAdjustItem( *this );
 }
-
 
 bool SvxAdjustItem::GetPresentation
 (
@@ -474,12 +472,10 @@ SvxWidowsItem::SvxWidowsItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxWidowsItem::Clone( SfxItemPool * ) const
+SvxWidowsItem* SvxWidowsItem::Clone( SfxItemPool * ) const
 {
     return new SvxWidowsItem( *this );
 }
-
 
 bool SvxWidowsItem::GetPresentation
 (
