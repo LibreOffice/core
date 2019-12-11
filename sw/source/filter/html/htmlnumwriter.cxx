@@ -94,7 +94,7 @@ void SwHTMLWriter::SetNextNumInfo( std::unique_ptr<SwHTMLNumRuleInfo> pNxt )
     m_pNextNumRuleInfo = std::move(pNxt);
 }
 
-Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
+Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
                                  const SwHTMLNumRuleInfo& rInfo )
 {
     SwHTMLNumRuleInfo& rPrevInfo = rWrt.GetNumInfo();
@@ -262,7 +262,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 }
                 else
                 {
-                    OSL_FAIL( "<OutHTML_NumBulListStart(..) - text node has no number." );
+                    OSL_FAIL( "<OutHTML_NumberBulletListStart(..) - text node has no number." );
                 }
             }
             if( nStartVal != 1 )
@@ -275,7 +275,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             rWrt.Strm().WriteOString( sOut );
 
         if( rWrt.m_bCfgOutStyles )
-            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), static_cast<sal_uInt8>(i) );
+            OutCSS1_NumberBulletListStyleOpt( rWrt, *rInfo.GetNumRule(), static_cast<sal_uInt8>(i) );
 
         rWrt.Strm().WriteChar( '>' );
 
@@ -285,7 +285,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
     return rWrt;
 }
 
-Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
+Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
                                const SwHTMLNumRuleInfo& rNextInfo )
 {
     SwHTMLNumRuleInfo& rInfo = rWrt.GetNumInfo();

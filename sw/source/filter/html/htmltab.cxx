@@ -3272,7 +3272,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             sal_uInt16 nLeftSpace = 0;
             sal_uInt16 nRightSpace = 0;
             short nIndent;
-            GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
+            GetMarginsFromContextWithNumberBullet( nLeftSpace, nRightSpace, nIndent );
 
             // save the current position we'll get back to some time
             SwPosition *pSavePos = nullptr;

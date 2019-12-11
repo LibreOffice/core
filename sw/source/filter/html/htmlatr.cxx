@@ -208,14 +208,14 @@ struct SwHTMLTextCollOutputInfo
     OString aToken;        // End token to be output
     std::unique_ptr<SfxItemSet> pItemSet;    // hard attribute
 
-    bool bInNumBulList;         // in an enumerated list;
+    bool bInNumberBulletList;         // in an enumerated list;
     bool bParaPossible;         // a </P> may be output additionally
     bool bOutPara;              // a </P> is supposed to be output
     bool bOutDiv;               // write a </DIV>
     bool bOutLi = false;        // write a </li>
 
     SwHTMLTextCollOutputInfo() :
-        bInNumBulList( false ),
+        bInNumberBulletList( false ),
         bParaPossible( false ),
         bOutPara( false ),
         bOutDiv( false )
@@ -436,7 +436,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     sal_uInt16 nNumStart = USHRT_MAX;
     bool bForceDL = false;
     bool bDT = false;
-    rInfo.bInNumBulList = false;    // Are we in a list?
+    rInfo.bInNumberBulletList = false;    // Are we in a list?
     bool bNumbered = false;         // The current paragraph is numbered
     bool bPara = false;             // the current token is <P>
     rInfo.bParaPossible = false;    // a <P> may be additionally output
@@ -461,7 +461,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
 
     if( aNumInfo.GetNumRule() )
     {
-        rInfo.bInNumBulList = true;
+        rInfo.bInNumberBulletList = true;
         nNewDefListLvl = 0;
 
         // is the current paragraph numbered?
@@ -635,7 +635,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     const SvxLRSpaceItem& rLRSpace =
         pNodeItemSet ? pNodeItemSet->Get(RES_LR_SPACE)
                      : rFormat.GetLRSpace();
-    if( (!rHWrt.m_bCfgOutStyles || bForceDL) && !rInfo.bInNumBulList )
+    if( (!rHWrt.m_bCfgOutStyles || bForceDL) && !rInfo.bInNumberBulletList )
     {
         sal_Int32 nLeftMargin;
         if( bForceDL )
@@ -687,10 +687,10 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         rHWrt.OutAndSetDefList( nNewDefListLvl );
 
     // if necessary, start a bulleted or numbered list
-    if( rInfo.bInNumBulList )
+    if( rInfo.bInNumberBulletList )
     {
         OSL_ENSURE( !rHWrt.m_nDefListLvl, "DL cannot be inside OL!" );
-        OutHTML_NumBulListStart( rHWrt, aNumInfo );
+        OutHTML_NumberBulletListStart( rHWrt, aNumInfo );
 
         if( bNumbered )
         {
@@ -707,16 +707,16 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     rHWrt.m_nDfltRightMargin = pFormatInfo->nRightMargin;
     rHWrt.m_nDfltFirstLineIndent = pFormatInfo->nFirstLineIndent;
 
-    if( rInfo.bInNumBulList )
+    if( rInfo.bInNumberBulletList )
     {
-        if( !rHWrt.IsHTMLMode( HTMLMODE_LSPACE_IN_NUMBUL ) )
+        if( !rHWrt.IsHTMLMode( HTMLMODE_LSPACE_IN_NUMBER_BULLET ) )
             rHWrt.m_nDfltLeftMargin = rLRSpace.GetTextLeft();
 
         // In numbered lists, don't output a first line indent.
         rHWrt.m_nFirstLineIndent = rLRSpace.GetTextFirstLineOfst();
     }
 
-    if( rInfo.bInNumBulList && bNumbered && bPara && !rHWrt.m_bCfgOutStyles )
+    if( rInfo.bInNumberBulletList && bNumbered && bPara && !rHWrt.m_bCfgOutStyles )
     {
         // a single LI doesn't have spacing
         rHWrt.m_nDfltTopMargin = 0;
@@ -757,7 +757,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     bool bHasParSpace = bUseParSpace && rULSpace.GetLower() > 0;
 
     // if necessary, start a new list item
-    if( rInfo.bInNumBulList && bNumbered )
+    if( rInfo.bInNumberBulletList && bNumbered )
     {
         HtmlWriter html(rWrt.Strm(), rHWrt.maNamespace);
         html.start(OOO_STRING_SVTOOLS_HTML_li);
@@ -852,8 +852,8 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     //      - a user format is exported, or
     //      - a paragraph attribute exists
     if( !bPara ||
-        (!rInfo.bInNumBulList && !rHWrt.m_nDefListLvl) ||
-        (rInfo.bInNumBulList && !bNumbered) ||
+        (!rInfo.bInNumberBulletList && !rHWrt.m_nDefListLvl) ||
+        (rInfo.bInNumberBulletList && !bNumbered) ||
         (!rHWrt.m_bCfgOutStyles &&
          (bHasParSpace || pAdjItem ||
           (eLang != LANGUAGE_DONTKNOW && eLang != rHWrt.m_eLang))) ||
@@ -978,7 +978,7 @@ static void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& r
         rHWrt.FillNextNumInfo();
         const SwHTMLNumRuleInfo& rNextInfo = *rHWrt.GetNextNumInfo();
         // a bulleted list must be closed in PRE as well
-        if( rInfo.bInNumBulList )
+        if( rInfo.bInNumberBulletList )
         {
 
             const SwHTMLNumRuleInfo& rNRInfo = rHWrt.GetNumInfo();
@@ -986,7 +986,7 @@ static void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& r
                 rNextInfo.GetDepth() != rNRInfo.GetDepth() ||
                 rNextInfo.IsNumbered() || rNextInfo.IsRestart() )
                 rHWrt.ChangeParaToken( HtmlTokenId::NONE );
-            OutHTML_NumBulListEnd( rHWrt, rNextInfo );
+            OutHTML_NumberBulletListEnd( rHWrt, rNextInfo );
         }
         else if( rNextInfo.GetNumRule() != nullptr )
             rHWrt.ChangeParaToken( HtmlTokenId::NONE );
@@ -1026,10 +1026,10 @@ static void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& r
                                    false);
 
     // if necessary, close a bulleted or numbered list
-    if( rInfo.bInNumBulList )
+    if( rInfo.bInNumberBulletList )
     {
         rHWrt.FillNextNumInfo();
-        OutHTML_NumBulListEnd( rHWrt, *rHWrt.GetNextNumInfo() );
+        OutHTML_NumberBulletListEnd( rHWrt, *rHWrt.GetNextNumInfo() );
     }
 }
 

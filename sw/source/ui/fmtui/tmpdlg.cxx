@@ -270,7 +270,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     // set style's and metric's names
     OUString sNumCharFormat, sBulletCharFormat;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFormat);
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFormat);
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_BULLET_LEVEL, sBulletCharFormat);
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
     if (rId == "font")

@@ -674,12 +674,12 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
         }
         if(sList != m_sShellList && (!m_bListDefault || !m_bSetListDefault ))
         {
-            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_NUMBUL_BASE, pPrinter, sList, nFontWhich);
+            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_NUMBER_BULLET_BASE, pPrinter, sList, nFontWhich);
             bMod = true;
         }
         if(bListHeightChanged)
         {
-            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_NUMBUL_BASE,
+            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_NUMBER_BULLET_BASE,
                 sal::static_int_cast< sal_uInt16, sal_Int64 >(m_xListHeightLB->get_value()), nFontHeightWhich);
             bMod = true;
         }
@@ -838,7 +838,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         const sal_uInt16 nFontWhich =
             m_nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
             FONT_GROUP_CJK == m_nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT;
-        pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_NUMBUL_BASE);
+        pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_NUMBER_BULLET_BASE);
         const SvxFontItem& rFontLS = !m_nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         m_bListDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);

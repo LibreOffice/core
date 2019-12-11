@@ -908,7 +908,7 @@ void SwSvxNumBulletTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rP
     // set styles' names and metric
     OUString sNumCharFormat, sBulletCharFormat;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFormat );
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFormat );
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_BULLET_LEVEL, sBulletCharFormat );
 
     if (rPageId == "singlenum")
     {

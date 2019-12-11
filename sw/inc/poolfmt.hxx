@@ -116,7 +116,7 @@ RES_POOLCHR_PAGENO,                                 ///< Pages/field.
 RES_POOLCHR_LABEL,                                  ///< Label.
 RES_POOLCHR_DROPCAPS,                               ///< Dropcaps.
 RES_POOLCHR_NUM_LEVEL,                              ///< Numbering symbols
-RES_POOLCHR_BUL_LEVEL,                              ///< Bullets.
+RES_POOLCHR_BULLET_LEVEL,                           ///< Bullets.
 
 RES_POOLCHR_INET_NORMAL,                            ///< Internet normal.
 RES_POOLCHR_INET_VISIT,                             ///< Internet visited.
@@ -275,7 +275,7 @@ RES_POOLCOLL_TEXT_END,
 /// Group lists.
 RES_POOLCOLL_LISTS_BEGIN = COLL_LISTS_BITS,
 
-RES_POOLCOLL_NUMBUL_BASE = RES_POOLCOLL_LISTS_BEGIN,    ///< Base list.
+RES_POOLCOLL_NUMBER_BULLET_BASE = RES_POOLCOLL_LISTS_BEGIN,    ///< Base list.
 
 /// Subgroup numberings.
 RES_POOLCOLL_NUM_LEVEL1S,                               ///< Start 1st level.
@@ -300,26 +300,26 @@ RES_POOLCOLL_NUM_LEVEL5E,                               ///< End 5th level.
 RES_POOLCOLL_NUM_NONUM5,                                ///< No numbering.
 
 ///Subgroup bullets.
-RES_POOLCOLL_BUL_LEVEL1S,                               ///< Start 1st level.
-RES_POOLCOLL_BUL_LEVEL1,                                ///< 1st level.
-RES_POOLCOLL_BUL_LEVEL1E,                               ///< End 1st level
-RES_POOLCOLL_BUL_NONUM1,                                ///< No numbering.
-RES_POOLCOLL_BUL_LEVEL2S,                               ///< Start 2nd level.
-RES_POOLCOLL_BUL_LEVEL2,                                ///< 2nd level.
-RES_POOLCOLL_BUL_LEVEL2E,                               ///< End 2nd level.
-RES_POOLCOLL_BUL_NONUM2,                                ///< No numbering.
-RES_POOLCOLL_BUL_LEVEL3S,                               ///< Start 3rd level.
-RES_POOLCOLL_BUL_LEVEL3,                                ///< 3rd Level.
-RES_POOLCOLL_BUL_LEVEL3E,                               ///< End 3rd level.
-RES_POOLCOLL_BUL_NONUM3,                                ///< No numbering.
-RES_POOLCOLL_BUL_LEVEL4S,                               ///< Start 4th level.
-RES_POOLCOLL_BUL_LEVEL4,                                ///< 4th level.
-RES_POOLCOLL_BUL_LEVEL4E,                               ///< End 4th level.
-RES_POOLCOLL_BUL_NONUM4,                                ///< No numbering.
-RES_POOLCOLL_BUL_LEVEL5S,                               ///< Start 5th level.
-RES_POOLCOLL_BUL_LEVEL5,                                ///< 5th level.
-RES_POOLCOLL_BUL_LEVEL5E,                               ///< End 5th Level.
-RES_POOLCOLL_BUL_NONUM5,                                ///< No numbering.
+RES_POOLCOLL_BULLET_LEVEL1S,                               ///< Start 1st level.
+RES_POOLCOLL_BULLET_LEVEL1,                                ///< 1st level.
+RES_POOLCOLL_BULLET_LEVEL1E,                               ///< End 1st level
+RES_POOLCOLL_BULLET_NONUM1,                                ///< No numbering.
+RES_POOLCOLL_BULLET_LEVEL2S,                               ///< Start 2nd level.
+RES_POOLCOLL_BULLET_LEVEL2,                                ///< 2nd level.
+RES_POOLCOLL_BULLET_LEVEL2E,                               ///< End 2nd level.
+RES_POOLCOLL_BULLET_NONUM2,                                ///< No numbering.
+RES_POOLCOLL_BULLET_LEVEL3S,                               ///< Start 3rd level.
+RES_POOLCOLL_BULLET_LEVEL3,                                ///< 3rd Level.
+RES_POOLCOLL_BULLET_LEVEL3E,                               ///< End 3rd level.
+RES_POOLCOLL_BULLET_NONUM3,                                ///< No numbering.
+RES_POOLCOLL_BULLET_LEVEL4S,                               ///< Start 4th level.
+RES_POOLCOLL_BULLET_LEVEL4,                                ///< 4th level.
+RES_POOLCOLL_BULLET_LEVEL4E,                               ///< End 4th level.
+RES_POOLCOLL_BULLET_NONUM4,                                ///< No numbering.
+RES_POOLCOLL_BULLET_LEVEL5S,                               ///< Start 5th level.
+RES_POOLCOLL_BULLET_LEVEL5,                                ///< 5th level.
+RES_POOLCOLL_BULLET_LEVEL5E,                               ///< End 5th Level.
+RES_POOLCOLL_BULLET_NONUM5,                                ///< No numbering.
 
 RES_POOLCOLL_LISTS_END,
 

@@ -236,15 +236,15 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         sal_uInt16 aFontIdPoolId[] =
         {
             FONT_OUTLINE,       RES_POOLCOLL_HEADLINE_BASE,
-            FONT_LIST,          RES_POOLCOLL_NUMBUL_BASE,
+            FONT_LIST,          RES_POOLCOLL_NUMBER_BULLET_BASE,
             FONT_CAPTION,       RES_POOLCOLL_LABEL,
             FONT_INDEX,         RES_POOLCOLL_REGISTER_BASE,
             FONT_OUTLINE_CJK,   RES_POOLCOLL_HEADLINE_BASE,
-            FONT_LIST_CJK,      RES_POOLCOLL_NUMBUL_BASE,
+            FONT_LIST_CJK,      RES_POOLCOLL_NUMBER_BULLET_BASE,
             FONT_CAPTION_CJK,   RES_POOLCOLL_LABEL,
             FONT_INDEX_CJK,     RES_POOLCOLL_REGISTER_BASE,
             FONT_OUTLINE_CTL,   RES_POOLCOLL_HEADLINE_BASE,
-            FONT_LIST_CTL,      RES_POOLCOLL_NUMBUL_BASE,
+            FONT_LIST_CTL,      RES_POOLCOLL_NUMBER_BULLET_BASE,
             FONT_CAPTION_CTL,   RES_POOLCOLL_LABEL,
             FONT_INDEX_CTL,     RES_POOLCOLL_REGISTER_BASE
         };

@@ -382,8 +382,8 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat = new SwNumFormat;
             pFormat->SetIncludeUpperLevels( 1 );
             pFormat->SetStart( 1 );
-            pFormat->SetAbsLSpace( lNumIndent + SwNumRule::GetNumIndent( n ) );
-            pFormat->SetFirstLineOffset( lNumFirstLineOffset );
+            pFormat->SetAbsLSpace( lNumberIndent + SwNumRule::GetNumIndent( n ) );
+            pFormat->SetFirstLineOffset( lNumberFirstLineOffset );
             pFormat->SetSuffix( "." );
             pFormat->SetBulletChar( numfunc::GetBulletChar(n));
             SwNumRule::maBaseFormats[ NUM_RULE ][ n ] = pFormat;

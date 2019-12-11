@@ -263,7 +263,7 @@ void SwAutoFormat::SetRedlineText_( sal_uInt16 nActionId )
         sText = SwViewShell::GetShellRes()->GetAutoFormatNameLst()[ nActionId ];
         switch( nActionId )
         {
-        case STR_AUTOFMTREDL_SET_NUMBULLET:
+        case STR_AUTOFMTREDL_SET_NUMBER_BULLET:
         case STR_AUTOFMTREDL_DEL_MORELINES:
 
         // AutoCorrect actions
@@ -1460,7 +1460,7 @@ void SwAutoFormat::BuildText()
 
 void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 {
-    SetRedlineText( STR_AUTOFMTREDL_SET_NUMBULLET );
+    SetRedlineText( STR_AUTOFMTREDL_SET_NUMBER_BULLET );
 
     bool bBreak = true;
 
@@ -1520,7 +1520,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             if( m_aFlags.bSetNumRule )
             {
                 SwCharFormat* pCFormat = m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
-                                            RES_POOLCHR_BUL_LEVEL );
+                                            RES_POOLCHR_BULLET_LEVEL );
                 bChgBullet = true;
                 // Was the format already somewhere adjusted?
                 if( !aRule.GetNumFormat( nLvl ) )
@@ -1546,10 +1546,10 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         }
                     }
 
-                    sal_Int32 nAbsPos = lBullIndent;
+                    sal_Int32 nAbsPos = lBulletIndent;
                     SwTwips nSpaceSteps = nLvl
                                             ? nLeftTextPos / nLvl
-                                            : lBullIndent;
+                                            : lBulletIndent;
                     for( sal_uInt8 n = 0; n < MAXLEVEL; ++n, nAbsPos = nAbsPos + nSpaceSteps )
                     {
                         SwNumFormat aFormat( aRule.Get( n ) );
@@ -1559,7 +1559,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         // #i93908# clear suffix for bullet lists
                         aFormat.SetPrefix(OUString());
                         aFormat.SetSuffix(OUString());
-                        aFormat.SetFirstLineOffset( lBullFirstLineOffset );
+                        aFormat.SetFirstLineOffset( lBulletFirstLineOffset );
                         aFormat.SetAbsLSpace( nAbsPos );
                         if( !aFormat.GetCharFormat() )
                             aFormat.SetCharFormat( pCFormat );
@@ -1579,7 +1579,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         else
         {
             bChgBullet = true;
-            SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_BUL_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 )) );
+            SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_BULLET_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 )) );
         }
     }
     else
@@ -1598,7 +1598,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
             // Level 0 and Indentation, determine level by left indentation and default NumIndent
             if( !nDigitLevel && nLeftTextPos )
-                nLvl = std::min( sal_uInt16( nLeftTextPos / lNumIndent ),
+                nLvl = std::min( sal_uInt16( nLeftTextPos / lNumberIndent ),
                             sal_uInt16( MAXLEVEL - 1 ) );
             else
                 nLvl = nDigitLevel;
@@ -1648,7 +1648,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                             aFormat.SetNumberingType(static_cast<SvxNumType>(aNumTypes[ n ] - '0'));
 
                         aFormat.SetAbsLSpace( nSpaceSteps * n
-                                            + lNumIndent );
+                                            + lNumberIndent );
 
                         if( !aFormat.GetCharFormat() )
                             aFormat.SetCharFormat( pCFormat );
@@ -1669,7 +1669,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                                 SwNumRule::GetNumIndent(static_cast<sal_uInt8>(n-nLvl)));
                         else
                             aFormat.SetAbsLSpace( nSpaceSteps * n
-                                                + lNumIndent );
+                                                + lNumberIndent );
                         aRule.Set( n, aFormat );
                     }
                 }

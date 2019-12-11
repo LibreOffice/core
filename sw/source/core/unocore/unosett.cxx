@@ -2061,7 +2061,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             && !SwXNumberingRules::isInvalidStyle(rCharStyleName))
         {
             OUString tmp;
-            SwStyleNameMapper::FillProgName(RES_POOLCHR_BUL_LEVEL, tmp);
+            SwStyleNameMapper::FillProgName(RES_POOLCHR_BULLET_LEVEL, tmp);
             rCharStyleName = tmp;
         }
     }

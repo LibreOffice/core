@@ -195,11 +195,11 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
         case COLL_LISTS_BITS:
             switch( nId )
             {
-            case RES_POOLCOLL_NUMBUL_BASE:
+            case RES_POOLCOLL_NUMBER_BULLET_BASE:
                     nRet = RES_POOLCOLL_TEXT;                   break;
 
             default:
-                nRet = RES_POOLCOLL_NUMBUL_BASE;                break;
+                nRet = RES_POOLCOLL_NUMBER_BULLET_BASE;                break;
             }
             break;
 

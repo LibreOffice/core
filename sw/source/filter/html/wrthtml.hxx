@@ -115,7 +115,7 @@ namespace o3tl {
 #define HTMLMODE_FLOAT_FRAME        0x00020000
 #define HTMLMODE_VERT_SPACER        0x00040000
 #define HTMLMODE_NBSP_IN_TABLES     0x00080000
-#define HTMLMODE_LSPACE_IN_NUMBUL   0x00100000
+#define HTMLMODE_LSPACE_IN_NUMBER_BULLET 0x00100000
 //was HTMLMODE_NO_BR_AT_PAREND    0x00200000
 #define HTMLMODE_PRINT_EXT          0x00400000
 #define HTMLMODE_ABS_POS_FLY        0x00800000
@@ -123,7 +123,7 @@ namespace o3tl {
 #define HTMLMODE_FLY_MARGINS        0x02000000
 #define HTMLMODE_BORDER_NONE        0x04000000
 #define HTMLMODE_FONT_GENERIC       0x08000000
-#define HTMLMODE_FRSTLINE_IN_NUMBUL 0x10000000
+#define HTMLMODE_FRSTLINE_IN_NUMBER_BULLET 0x10000000
 #define HTMLMODE_NO_CONTROL_CENTERING 0x20000000
 
 #define HTML_DLCOLL_DD 0x4000
@@ -683,12 +683,12 @@ Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt );
 
 Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt );
-Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
+Writer& OutCSS1_NumberBulletListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
                                     sal_uInt8 nLevel );
 
-Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
+Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
                                  const SwHTMLNumRuleInfo& rInfo );
-Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
+Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
                                const SwHTMLNumRuleInfo& rNextInfo );
 
 Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
