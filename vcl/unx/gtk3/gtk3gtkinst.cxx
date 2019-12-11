@@ -1627,6 +1627,10 @@ public:
         , m_nDragDropReceivedSignalId(0)
         , m_nDragLeaveSignalId(0)
     {
+        // tdf#128867 if localize decimal separator is active we will always
+        // need to be able to change the output of the decimal key press
+        if (Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
+            m_nKeyPressSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKey), this);
     }
 
     virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
