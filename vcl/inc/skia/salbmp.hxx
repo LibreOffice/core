@@ -24,7 +24,7 @@
 
 #include <SkImage.h>
 
-class VCL_PLUGIN_PUBLIC SkiaSalBitmap : public SalBitmap
+class VCL_PLUGIN_PUBLIC SkiaSalBitmap final : public SalBitmap
 {
 public:
     SkiaSalBitmap();

@@ -131,7 +131,7 @@ public:
 };
 
 
-class PropertyHelper_Thes :
+class PropertyHelper_Thes final :
     public PropertyChgHelper
 {
     PropertyHelper_Thes( const PropertyHelper_Thes & ) = delete;
@@ -167,7 +167,7 @@ public:
 };
 
 
-class LNG_DLLPUBLIC PropertyHelper_Spell :
+class LNG_DLLPUBLIC PropertyHelper_Spell final :
     public PropertyChgHelper
 {
     // default values
@@ -237,7 +237,7 @@ public:
 };
 
 
-class PropertyHelper_Hyphen :
+class PropertyHelper_Hyphen final :
     public PropertyChgHelper
 {
     // default values
