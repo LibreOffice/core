@@ -22,7 +22,7 @@
 
 #include <vcl/treelistbox.hxx>
 
-class IconView : public SvTreeListBox
+class IconView final : public SvTreeListBox
 {
 public:
     IconView( vcl::Window* pParent, WinBits nBits );
