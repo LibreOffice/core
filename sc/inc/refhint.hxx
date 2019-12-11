@@ -69,7 +69,7 @@ public:
     SCROW getEndRow() const;
 };
 
-class RefRowReorderHint : public RefHint
+class RefRowReorderHint final : public RefHint
 {
     const sc::ColRowReorderMapType& mrRowMap;
     SCTAB const mnTab;

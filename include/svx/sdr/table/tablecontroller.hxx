@@ -39,13 +39,13 @@ namespace sdr { namespace table {
 
 class TableModel;
 
-class SVX_DLLPUBLIC SvxTableController : public sdr::SelectionController
+class SVX_DLLPUBLIC SvxTableController final : public sdr::SelectionController
 {
 public:
     SVX_DLLPRIVATE SvxTableController(
         SdrView& rView,
         const SdrTableObj& rObj);
-    SVX_DLLPRIVATE virtual ~SvxTableController() override;
+    virtual ~SvxTableController() override;
 
     // from sdr::SelectionController
     SVX_DLLPRIVATE virtual bool onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;
