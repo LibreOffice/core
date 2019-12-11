@@ -776,8 +776,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         if (status < 0)
             return false;
 
-        OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
-        rtl::Bootstrap::expandMacros(url);
+        OUString url(OStringToOUString(getCacheFolder(), RTL_TEXTENCODING_UTF8));
         OUString path;
         osl::FileBase::getSystemPathFromFileURL(url,path);
         ds_device aSelectedDevice = getDeviceSelection(path, bForceEvaluation);
