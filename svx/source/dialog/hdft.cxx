@@ -149,6 +149,7 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     //swap header <-> footer in UI
     if (nId == SID_ATTR_PAGE_FOOTERSET)
     {
+        m_xContainer->set_help_id("svx/ui/headfootformatpage/FFormatPage");
         m_xPageLbl = m_xBuilder->weld_label("labelFooterFormat");
         m_xTurnOnBox = m_xBuilder->weld_check_button("checkFooterOn");
 
@@ -167,6 +168,7 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     }
     else //Header
     {
+        m_xContainer->set_help_id("svx/ui/headfootformatpage/HFormatPage");
         m_xPageLbl = m_xBuilder->weld_label("labelHeaderFormat");
         m_xTurnOnBox = m_xBuilder->weld_check_button("checkHeaderOn");
     }
