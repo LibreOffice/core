@@ -1390,7 +1390,7 @@ Public Function OpenDatabase ( _
 &apos;	Return a database object based on input arguments:
 &apos;	Call template:
 &apos;		Call OpenDatabase(&quot;... databaseURL ...&quot;[, &quot;&quot;, &quot;&quot;, True/False])
-&apos;	pvDatabaseURL maby be the name of a registered database or the URL of the targeted .odb file
+&apos;	pvDatabaseURL may be the name of a registered database or the URL of the targeted .odb file
 &apos;	Might be called from any AOO/LibO application, independently from OpenConnection
 
 Dim odbDatabase As Variant, oBaseContext As Object, sDbNames() As String, oBaseSource As Object
