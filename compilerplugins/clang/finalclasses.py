@@ -40,6 +40,24 @@ for clazz in sorted(definitionSet - inheritFromSet):
     # ignore test and external code
     if ("/qa/" in file): continue
     if (file.startswith("workdir/")): continue
+    # We are only realling interested in classes that are shared between linkage units, where the compiler
+    # is not able to figure out for itself that classes are final.
+    if not(file.startswith("include/") or file.startswith("sw/inc/") or file.startswith("sc/inc/") or file.startswith("vcl/inc/")): continue
+    # Exclude URE
+    if file.startswith("include/com/"): continue
+    if file.startswith("include/cppu/"): continue
+    if file.startswith("include/cppuhelper/"): continue
+    if file.startswith("include/osl/"): continue
+    if file.startswith("include/rtl/"): continue
+    if file.startswith("include/sal/"): continue
+    if file.startswith("include/salhelper/"): continue
+    if file.startswith("include/systools/"): continue
+    if file.startswith("include/typelib/"): continue
+    if file.startswith("include/uno/"): continue
+    # some kind of template noise
+    if file.startswith("include/unotest/"): continue
+    # no point optimising test code
+    if file.startswith("include/test/"): continue
     tmpset.add((clazz, file))
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
