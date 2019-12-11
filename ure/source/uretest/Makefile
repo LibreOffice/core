@@ -173,7 +173,7 @@ out.sdk/runner.jar: out.sdk/class/runner/test/java/runner/Runner.class \
 
 out.sdk/runner.mf: runner.mf.template | out.sdk
 	sed -e \
-            $(qt)s~^Class-Path:$$~& $(ure_java_url)/unoloader.jar~$(qt) \
+            $(qt)s~^Class-Path:$$~& $(ure_java_url)/ridl.jar~$(qt) \
             -e $(qt)s~^UNO-Type-Path:$$~& ~$(qt) $< > $@
 
 out.sdk/class/runner/test/java/runner/Runner.class: Runner.java | out.sdk/class

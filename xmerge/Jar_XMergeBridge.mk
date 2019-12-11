@@ -18,9 +18,7 @@ $(eval $(call gb_Jar_set_packageroot,XMergeBridge,*.class))
 
 $(eval $(call gb_Jar_use_jars,XMergeBridge,\
 	xmerge \
-	unoil \
 	ridl \
-	jurt \
 	juh \
 ))
 
