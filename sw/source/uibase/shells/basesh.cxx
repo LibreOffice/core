@@ -258,6 +258,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     sal_uInt16 nId = rReq.GetSlot();
     bool bIgnore = false;
+    bool bPasteNestedTable = false;
     switch( nId )
     {
         case SID_CUT:
@@ -280,6 +281,9 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             }
             return;
 
+        case FN_PASTE_NESTED_TABLE:
+            bPasteNestedTable = true;
+            [[fallthrough]];
         case SID_PASTE:
             {
                 TransferableDataHelper aDataHelper(
@@ -299,7 +303,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     const SfxBoolItem* pIgnoreComments = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
                     if (pIgnoreComments)
                         bIgnoreComments = pIgnoreComments->GetValue();
-                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments);
+                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, bPasteNestedTable);
 
                     if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
                         rSh.EnterSelFrameMode();
@@ -464,6 +468,17 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
         case SID_COPY:
             if( !bCopy || GetView().isContentExtractionLocked())
                 rSet.DisableItem( nWhich );
+            break;
+
+        case FN_PASTE_NESTED_TABLE:
+            if( !rSh.IsCursorInTable()
+                || !GetView().IsPasteSpecialAllowed()
+                || rSh.CursorInsideInputField()
+                // disable if not a native Writer table and not a spreadsheet format
+                || !GetView().IsPasteSpreadsheet(rSh.GetTableCopied()) )
+            {
+                rSet.DisableItem( nWhich );
+            }
             break;
 
         case SID_PASTE:
