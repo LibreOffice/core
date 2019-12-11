@@ -39,7 +39,7 @@ namespace sdr { namespace table {
 
 class TableModel;
 
-class SVX_DLLPUBLIC SvxTableController : public sdr::SelectionController
+class SVX_DLLPUBLIC SvxTableController final : public sdr::SelectionController
 {
 public:
     SVX_DLLPRIVATE SvxTableController(
@@ -59,7 +59,7 @@ public:
     SVX_DLLPRIVATE virtual void onSelectionHasChanged() override;
 
     SVX_DLLPRIVATE virtual void GetState( SfxItemSet& rSet ) override;
-    SVX_DLLPRIVATE virtual void Execute( SfxRequest& rReq ) override;
+    virtual void Execute( SfxRequest& rReq ) override;
 
     SVX_DLLPRIVATE virtual bool GetStyleSheet( SfxStyleSheet* &rpStyleSheet ) const override;
     SVX_DLLPRIVATE virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr ) override;

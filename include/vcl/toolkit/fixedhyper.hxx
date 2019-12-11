@@ -27,7 +27,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/fixed.hxx>
 
-class VCL_DLLPUBLIC FixedHyperlink : public FixedText
+class VCL_DLLPUBLIC FixedHyperlink final : public FixedText
 {
 private:
     long                m_nTextLen;
@@ -46,7 +46,6 @@ private:
 
     DECL_LINK(HandleClick, FixedHyperlink&, void);
 
-protected:
     /** overwrites Window::MouseMove().
 
         Changes the pointer only over the text.
