@@ -174,8 +174,11 @@ std::unique_ptr<SfxTabPage> AlignmentTabPage::Create(weld::Container* pPage, wel
 
 bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 {
+    const SfxItemSet& rOldSet = GetItemSet();
+
     bool bChanged = SfxTabPage::FillItemSet(rSet);
 
+    sal_uInt16 nWhich = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY);
     if (m_xLbHorAlign->get_value_changed_from_saved())
     {
         SvxCellHorJustify eJustify(SvxCellHorJustify::Standard);
@@ -201,10 +204,13 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
                 eJustify = SvxCellHorJustify::Repeat;
                 break;
         }
-        rSet->Put(SvxHorJustifyItem(eJustify, GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY)));
+        rSet->Put(SvxHorJustifyItem(eJustify, nWhich));
         bChanged = true;
     }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+        rSet->InvalidateItem(nWhich);
 
+    nWhich = GetWhich(SID_ATTR_ALIGN_INDENT);
     if (m_xEdIndent->get_value_changed_from_saved())
     {
         const SfxUInt16Item* pIndentItem = static_cast<const SfxUInt16Item*>(GetOldItem(
@@ -215,7 +221,10 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put(*pNewIndentItem);
         bChanged = true;
     }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+        rSet->InvalidateItem(nWhich);
 
+    nWhich = GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY);
     if (m_xLbVerAlign->get_value_changed_from_saved())
     {
         SvxCellVerJustify eJustify(SvxCellVerJustify::Standard);
@@ -238,10 +247,13 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
                 eJustify = SvxCellVerJustify::Block;
                 break;
         }
-        rSet->Put(SvxVerJustifyItem(eJustify, GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY)));
+        rSet->Put(SvxVerJustifyItem(eJustify, nWhich));
         bChanged = true;
     }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+        rSet->InvalidateItem(nWhich);
 
+    nWhich = GetWhich(SID_ATTR_ALIGN_DEGREES);
     if (m_xNfRotate->get_value_changed_from_saved())
     {
         const SdrAngleItem* pAngleItem = static_cast<const SdrAngleItem*>(GetOldItem(
@@ -252,19 +264,22 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put(*pNewAngleItem);
         bChanged = true;
     }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+        rSet->InvalidateItem(nWhich);
 
+    nWhich = GetWhich(SID_ATTR_ALIGN_LOCKPOS);
     if (m_aVsRefEdge.IsValueChangedFromSaved())
     {
         switch (m_aVsRefEdge.GetSelectedItemId())
         {
             case IID_CELLLOCK:
-                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_STANDARD, GetWhich(SID_ATTR_ALIGN_LOCKPOS)));
+                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_STANDARD, nWhich));
                 break;
             case IID_TOPLOCK:
-                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_TOP, GetWhich(SID_ATTR_ALIGN_LOCKPOS)));
+                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_TOP, nWhich));
                 break;
             case IID_BOTTOMLOCK:
-                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_BOTTOM, GetWhich(SID_ATTR_ALIGN_LOCKPOS)));
+                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_BOTTOM, nWhich));
                 break;
             default:
                 m_aVsRefEdge.SetNoSelection();
@@ -272,7 +287,10 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         }
         bChanged = true;
     }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+        rSet->InvalidateItem(nWhich);
 
+    nWhich = GetWhich(SID_ATTR_ALIGN_STACKED);
     if (m_xCbStacked->get_state_changed_from_saved())
     {
         const SfxBoolItem* pStackItem = static_cast<const SfxBoolItem*>(GetOldItem(
@@ -283,13 +301,19 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put(*pNewStackItem);
         bChanged = true;
     }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+        rSet->InvalidateItem(nWhich);
 
+    nWhich = GetWhich(SID_ATTR_ALIGN_ASIANVERTICAL);
     if (m_xCbAsianMode->get_state_changed_from_saved())
     {
-        rSet->Put(SfxBoolItem(GetWhich(SID_ATTR_ALIGN_ASIANVERTICAL), m_xCbAsianMode->get_active()));
+        rSet->Put(SfxBoolItem(nWhich, m_xCbAsianMode->get_active()));
         bChanged = true;
     }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+        rSet->InvalidateItem(nWhich);
 
+    nWhich = GetWhich(SID_ATTR_ALIGN_LINEBREAK);
     if (m_xBtnWrap->get_state_changed_from_saved())
     {
         const SfxBoolItem* pWrapItem = static_cast<const SfxBoolItem*>(GetOldItem(
@@ -300,7 +324,10 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put(*pNewWrapItem);
         bChanged = true;
     }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+        rSet->InvalidateItem(nWhich);
 
+    nWhich = GetWhich(SID_ATTR_ALIGN_HYPHENATION);
     if (m_xBtnHyphen->get_state_changed_from_saved())
     {
         const SfxBoolItem* pHyphItem = static_cast<const SfxBoolItem*>(GetOldItem(
@@ -311,7 +338,10 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put(*pNewHyphItem);
         bChanged = true;
     }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+        rSet->InvalidateItem(nWhich);
 
+    nWhich = GetWhich(SID_ATTR_ALIGN_SHRINKTOFIT);
     if (m_xBtnShrink->get_state_changed_from_saved())
     {
         const SfxBoolItem* pShrinkItem = static_cast<const SfxBoolItem*>(GetOldItem(
@@ -322,15 +352,20 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put(*pNewShrinkItem);
         bChanged = true;
     }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+        rSet->InvalidateItem(nWhich);
 
     if (m_xLbFrameDir->get_visible())
     {
+        nWhich = GetWhich(SID_ATTR_FRAMEDIRECTION);
         if (m_xLbFrameDir->get_value_changed_from_saved())
         {
             SvxFrameDirection eDir = m_xLbFrameDir->get_active_id();
-            rSet->Put(SvxFrameDirectionItem(eDir, GetWhich(SID_ATTR_FRAMEDIRECTION)));
+            rSet->Put(SvxFrameDirectionItem(eDir, nWhich));
             bChanged = true;
         }
+        else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
+            rSet->InvalidateItem(nWhich);
     }
 
     // Special treatment for distributed alignment; we need to set the justify
