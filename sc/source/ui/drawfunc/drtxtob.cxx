@@ -232,7 +232,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     }
                     else
                     {
-                        aNewItem.reset(static_cast<SvxFontItem*>(rItem.Clone()));
+                        aNewItem.reset(rItem.Clone());
                     }
                 }
                 else

@@ -44,7 +44,7 @@ public:
     virtual ~SvxNumberInfoItem() override;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxNumberInfoItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

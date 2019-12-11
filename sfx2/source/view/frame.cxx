@@ -421,7 +421,7 @@ bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
         static_cast<const SfxFrameItem&>(rItem).wFrame == wFrame;
 }
 
-SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
+SfxFrameItem* SfxFrameItem::Clone( SfxItemPool *) const
 {
     SfxFrameItem* pNew = new SfxFrameItem( wFrame);
     pNew->pFrame = pFrame;
@@ -478,7 +478,7 @@ bool SfxUnoAnyItem::operator==( const SfxPoolItem& rItem ) const
     return false;
 }
 
-SfxPoolItem* SfxUnoAnyItem::Clone( SfxItemPool *) const
+SfxUnoAnyItem* SfxUnoAnyItem::Clone( SfxItemPool *) const
 {
     return new SfxUnoAnyItem( *this );
 }
@@ -513,7 +513,7 @@ bool SfxUnoFrameItem::operator==( const SfxPoolItem& i_rItem ) const
         static_cast< const SfxUnoFrameItem& >( i_rItem ).m_xFrame == m_xFrame;
 }
 
-SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const
+SfxUnoFrameItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const
 {
     return new SfxUnoFrameItem( *this );
 }

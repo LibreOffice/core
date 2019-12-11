@@ -330,8 +330,7 @@ void ToxTextGenerator::GetAttributesForNode(
             sal_Int32 const nEnd(aConversionMap.ConvertToViewPosition(pHint->GetAnyEnd()));
             if (nStart != nEnd) // might be in delete redline, and useless anyway
             {
-                std::unique_ptr<SwFormatAutoFormat> pClone(
-                    static_cast<SwFormatAutoFormat*>(pHint->GetAutoFormat().Clone()));
+                std::unique_ptr<SwFormatAutoFormat> pClone(pHint->GetAutoFormat().Clone());
                 pClone->SetStyleHandle(attributesToClone);
                 rResult.autoFormats.push_back(std::move(pClone));
                 // note the rStripper is on the whole merged text, so need rOffset

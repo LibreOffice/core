@@ -35,7 +35,7 @@ public:
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SwFormatAutoFormat* Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

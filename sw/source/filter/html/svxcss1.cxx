@@ -599,7 +599,7 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
 
     std::shared_ptr<SvxBoxItem> aBoxItem(std::make_shared<SvxBoxItem>(aItemIds.nBox));
     if( pDfltItem )
-        aBoxItem.reset(static_cast<SvxBoxItem*>(pDfltItem->Clone()));
+        aBoxItem.reset(pDfltItem->Clone());
 
     SvxCSS1BorderInfo *pInfo = GetBorderInfo( SvxBoxItemLine::TOP, false );
     if( pInfo )

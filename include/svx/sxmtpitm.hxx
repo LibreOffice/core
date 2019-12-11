@@ -31,7 +31,7 @@ public:
         : SfxEnumItem(SDRATTR_MEASURETEXTHPOS, ePos)
     {
     }
-    virtual SfxPoolItem*   Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual SdrMeasureTextHPosItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16     GetValueCount() const override; // { return 4; }
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -47,7 +47,7 @@ public:
         : SfxEnumItem(SDRATTR_MEASURETEXTVPOS, ePos)
     {
     }
-    virtual SfxPoolItem*   Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual SdrMeasureTextVPosItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16     GetValueCount() const override; // { return 5; }
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

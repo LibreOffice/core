@@ -1071,7 +1071,7 @@ bool DbuTypeCollectionItem::operator==(const SfxPoolItem& _rItem) const
         static_cast<const DbuTypeCollectionItem&>( _rItem ).getCollection() == getCollection();
 }
 
-SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* /*_pPool*/) const
+DbuTypeCollectionItem* DbuTypeCollectionItem::Clone(SfxItemPool* /*_pPool*/) const
 {
     return new DbuTypeCollectionItem(*this);
 }

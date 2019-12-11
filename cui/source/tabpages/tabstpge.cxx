@@ -183,7 +183,7 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
             aNewTabs->Insert(aNull);
         }
 
-        std::unique_ptr<SvxTabStopItem> aTmp(static_cast<SvxTabStopItem*>(aNewTabs->Clone()));
+        std::unique_ptr<SvxTabStopItem> aTmp(aNewTabs->Clone());
         aTmp->Remove(0, aTmp->Count());
 
         for (sal_uInt16 i = 0; i < aNewTabs->Count(); ++i)

@@ -46,12 +46,10 @@ SvxZoomItem::SvxZoomItem
 {
 }
 
-
-SfxPoolItem* SvxZoomItem::Clone( SfxItemPool * /*pPool*/ ) const
+SvxZoomItem* SvxZoomItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxZoomItem( *this );
 }
-
 
 bool SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
 {

@@ -37,7 +37,7 @@ public:
     SvxWidowsItem( const sal_uInt8 nL /*= 0*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxWidowsItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

@@ -64,7 +64,7 @@ public:
     static OUString          GetValueTextByPos( sal_uInt16 nPos );
     virtual sal_uInt16       GetEnumValue() const override;
     virtual void             SetEnumValue( sal_uInt16 nNewVal ) override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxAdjustItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
 
     void SetOneWord( const SvxAdjust eType )
     {

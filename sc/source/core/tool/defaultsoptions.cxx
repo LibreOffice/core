@@ -60,7 +60,7 @@ bool ScTpDefaultsItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-SfxPoolItem* ScTpDefaultsItem::Clone( SfxItemPool * ) const
+ScTpDefaultsItem* ScTpDefaultsItem::Clone( SfxItemPool * ) const
 {
     return new ScTpDefaultsItem( *this );
 }

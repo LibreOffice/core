@@ -123,7 +123,7 @@ public:
     ScTpViewItem & operator =(ScTpViewItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual ScTpViewItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const ScViewOptions&    GetViewOptions() const { return theOptions; }
 

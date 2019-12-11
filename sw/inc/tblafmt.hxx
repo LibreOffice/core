@@ -81,8 +81,8 @@ public:
     const LanguageType& GetNumFormatLanguage() const { return m_eNumFormatLanguage; }
 
     // The set-methods.
-    void SetTextOrientation( const SvxFrameDirectionItem& rNew ) { m_aTextOrientation.reset(static_cast<SvxFrameDirectionItem*>(rNew.Clone())); }
-    void SetVerticalAlignment( const SwFormatVertOrient& rNew ) { m_aVerticalAlignment.reset(static_cast<SwFormatVertOrient*>(rNew.Clone())); }
+    void SetTextOrientation( const SvxFrameDirectionItem& rNew ) { m_aTextOrientation.reset(rNew.Clone()); }
+    void SetVerticalAlignment( const SwFormatVertOrient& rNew ) { m_aVerticalAlignment.reset(rNew.Clone()); }
 
     void SetValueFormat( const OUString& rFormat, LanguageType eLng, LanguageType eSys )
         { m_sNumFormatString = rFormat; m_eNumFormatLanguage = eLng; m_eSysLanguage = eSys; }
@@ -195,9 +195,9 @@ public:
     const SvxFormatKeepItem& GetKeepWithNextPara() const { return *m_aKeepWithNextPara; }
     const SvxShadowItem& GetShadow() const { return *m_aShadow; }
 
-    void SetBreak(const SvxFormatBreakItem& rNew) { m_aBreak.reset(static_cast<SvxFormatBreakItem*>(rNew.Clone())); }
-    void SetKeepWithNextPara(const SvxFormatKeepItem& rNew) { m_aKeepWithNextPara.reset(static_cast<SvxFormatKeepItem*>(rNew.Clone())); }
-    void SetShadow(const SvxShadowItem& rNew) { m_aShadow.reset(static_cast<SvxShadowItem*>(rNew.Clone())); }
+    void SetBreak(const SvxFormatBreakItem& rNew) { m_aBreak.reset(rNew.Clone()); }
+    void SetKeepWithNextPara(const SvxFormatKeepItem& rNew) { m_aKeepWithNextPara.reset(rNew.Clone()); }
+    void SetShadow(const SvxShadowItem& rNew) { m_aShadow.reset(rNew.Clone()); }
 
     void SetBoxFormat( const SwBoxAutoFormat& rNew, sal_uInt8 nPos );
     const SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos ) const;

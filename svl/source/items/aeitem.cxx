@@ -48,7 +48,7 @@ OUString const & SfxAllEnumItem::GetTextByPos( sal_uInt16 nPos ) const
     return m_Values[nPos];
 }
 
-SfxPoolItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
+SfxAllEnumItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
 {
     return new SfxAllEnumItem(*this);
 }

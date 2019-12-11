@@ -87,7 +87,7 @@ public:
     SfxLinkItem( sal_uInt16 nWhichId, const Link<SfxPoolItem const *, void>& rValue ) : SfxPoolItem( nWhichId )
     {   aLink = rValue; }
 
-    virtual SfxPoolItem*     Clone( SfxItemPool* = nullptr ) const override
+    virtual SfxLinkItem*     Clone( SfxItemPool* = nullptr ) const override
     {   return new SfxLinkItem( *this ); }
     virtual bool             operator==( const SfxPoolItem& rL) const override
     {   return static_cast<const SfxLinkItem&>(rL).aLink == aLink; }

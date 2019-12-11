@@ -31,7 +31,7 @@ bool SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
            && m_aMap == static_cast<const SfxGrabBagItem*>(&rItem)->m_aMap;
 }
 
-SfxPoolItem* SfxGrabBagItem::Clone(SfxItemPool* /*pPool*/) const
+SfxGrabBagItem* SfxGrabBagItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SfxGrabBagItem(*this);
 }

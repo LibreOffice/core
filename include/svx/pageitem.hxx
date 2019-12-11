@@ -65,7 +65,7 @@ public:
 
     virtual ~SvxPageItem() override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxPageItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -103,7 +103,7 @@ public:
     SvxSetItem( const SvxSetItem& rItem );
     SvxSetItem( const sal_uInt16 nId, std::unique_ptr<SfxItemSet>&& pSet );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxSetItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

@@ -59,7 +59,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxLineSpacingItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     // Methods to query and edit. InterlineSpace is added to the height.
     short GetInterLineSpace() const { return nInterLineSpace; }

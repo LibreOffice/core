@@ -47,7 +47,7 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual CntByteItem* Clone(SfxItemPool * = nullptr) const override;
 
     sal_uInt8 GetValue() const { return m_nValue; }
 
@@ -84,7 +84,7 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual CntUInt16Item* Clone(SfxItemPool * = nullptr) const override;
 
     sal_uInt16 GetValue() const { return m_nValue; }
 
@@ -121,7 +121,7 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual CntInt32Item* Clone(SfxItemPool * = nullptr) const override;
 
     sal_Int32 GetValue() const { return m_nValue; }
 
@@ -158,7 +158,7 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual CntUInt32Item* Clone(SfxItemPool * = nullptr) const override;
 
     sal_uInt32 GetValue() const { return m_nValue; }
 

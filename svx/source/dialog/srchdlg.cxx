@@ -1856,7 +1856,7 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
     //TODO: save pItem and process later if m_executingSubDialog?
     if ( pItem && !m_executingSubDialog )
     {
-        pSearchItem.reset(static_cast<SvxSearchItem*>(pItem->Clone()));
+        pSearchItem.reset(pItem->Clone());
         Init_Impl( pSearchItem->GetPattern() &&
                    ( !pSearchList || !pSearchList->Count() ) );
     }

@@ -3621,8 +3621,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
                 if (nLen >= 4)
                 {
                     const SwAttrSet& aSet = m_pCurrentColl->GetAttrSet();
-                    std::unique_ptr<SvxUnderlineItem> pUnderline(
-                            static_cast<SvxUnderlineItem *>(aSet.Get( RES_CHRATR_UNDERLINE, false ).Clone()));
+                    std::unique_ptr<SvxUnderlineItem> pUnderline(aSet.Get(RES_CHRATR_UNDERLINE, false).Clone());
                     pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
                     m_pCurrentColl->SetFormatAttr( *pUnderline );
                 }
@@ -3634,7 +3633,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
             {
                 if (nLen >= 4)
                 {
-                    std::unique_ptr<SvxUnderlineItem> pUnderline(static_cast<SvxUnderlineItem*>(m_xCurrentItemSet->Get(RES_CHRATR_UNDERLINE, false).Clone()));
+                    std::unique_ptr<SvxUnderlineItem> pUnderline(m_xCurrentItemSet->Get(RES_CHRATR_UNDERLINE, false).Clone());
                     pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
                     m_xCurrentItemSet->Put( std::move(pUnderline) );
                 }
@@ -5010,7 +5009,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
                     = static_cast<const SvxBoxItem*>(GetFormatAttr( RES_BOX ));
                 std::shared_ptr<SvxBoxItem> aBox(std::make_shared<SvxBoxItem>(RES_BOX));
                 if (pBox)
-                    aBox.reset(static_cast<SvxBoxItem*>(pBox->Clone()));
+                    aBox.reset(pBox->Clone());
                 short aSizeArray[5]={0};
 
                 SetBorder(*aBox, aBrcs, &aSizeArray[0], nBorder);
@@ -5057,7 +5056,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             = static_cast<const SvxBoxItem*>(GetFormatAttr( RES_CHRATR_BOX ));
         if( pBox )
         {
-            std::shared_ptr<SvxBoxItem> aBoxItem(static_cast<SvxBoxItem*>(pBox->Clone()));
+            std::shared_ptr<SvxBoxItem> aBoxItem(pBox->Clone());
             WW8_BRCVer9 aBrc;
             int nBrcVer = (nId == NS_sprm::sprmCBrc) ? 9 : (m_bVer67 ? 6 : 8);
 

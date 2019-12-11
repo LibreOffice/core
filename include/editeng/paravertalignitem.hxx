@@ -40,7 +40,7 @@ public:
     SvxParaVertAlignItem( Align nValue /*= 0*/,
                        const sal_uInt16 nId  );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxParaVertAlignItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

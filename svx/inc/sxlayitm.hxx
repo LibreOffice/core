@@ -28,14 +28,14 @@ class SdrLayerIdItem: public SfxUInt16Item {
 public:
     SdrLayerIdItem(SdrLayerID nId): SfxUInt16Item(SDRATTR_LAYERID,sal_uInt8(nId))  {}
     SdrLayerID GetValue() const { return SdrLayerID(SfxUInt16Item::GetValue()); }
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual SdrLayerIdItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 class SdrLayerNameItem: public SfxStringItem {
 public:
     SdrLayerNameItem()                   : SfxStringItem() { SetWhich(SDRATTR_LAYERNAME); }
     SdrLayerNameItem(const OUString& rStr) : SfxStringItem(SDRATTR_LAYERNAME,rStr) {}
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual SdrLayerNameItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 #endif

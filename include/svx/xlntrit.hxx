@@ -33,7 +33,7 @@ class SVX_DLLPUBLIC XLineTransparenceItem final : public SfxUInt16Item
 {
 public:
                             XLineTransparenceItem(sal_uInt16 nLineTransparence = 0);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual XLineTransparenceItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

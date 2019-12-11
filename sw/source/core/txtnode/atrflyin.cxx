@@ -49,7 +49,7 @@ bool SwFormatFlyCnt::operator==( const SfxPoolItem& rAttr ) const
             m_pFormat == static_cast<const SwFormatFlyCnt&>(rAttr).GetFrameFormat() );
 }
 
-SfxPoolItem* SwFormatFlyCnt::Clone( SfxItemPool* ) const
+SwFormatFlyCnt* SwFormatFlyCnt::Clone( SfxItemPool* ) const
 {
     return new SwFormatFlyCnt( m_pFormat );
 }

@@ -36,7 +36,7 @@ public:
                             static SfxPoolItem* CreateDefault();
 
                             XFormTextAdjustItem(XFormTextAdjust = XFormTextAdjust::Center);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual XFormTextAdjustItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual sal_uInt16      GetValueCount() const override;
     // #FontWork#
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

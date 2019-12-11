@@ -138,12 +138,10 @@ SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
     }
 }
 
-
-SfxPoolItem* SvxFontListItem::Clone( SfxItemPool* ) const
+SvxFontListItem* SvxFontListItem::Clone( SfxItemPool* ) const
 {
     return new SvxFontListItem( *this );
 }
-
 
 bool SvxFontListItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -310,12 +308,10 @@ bool SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
     return bRet;
 }
 
-
-SfxPoolItem* SvxFontItem::Clone( SfxItemPool * ) const
+SvxFontItem* SvxFontItem::Clone( SfxItemPool * ) const
 {
     return new SvxFontItem( *this );
 }
-
 
 bool SvxFontItem::GetPresentation
 (
@@ -349,12 +345,10 @@ SvxPostureItem::SvxPostureItem( const FontItalic ePosture, const sal_uInt16 nId 
 {
 }
 
-
-SfxPoolItem* SvxPostureItem::Clone( SfxItemPool * ) const
+SvxPostureItem* SvxPostureItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostureItem( *this );
 }
-
 
 sal_uInt16 SvxPostureItem::GetValueCount() const
 {
@@ -488,12 +482,10 @@ sal_uInt16 SvxWeightItem::GetValueCount() const
     return WEIGHT_BLACK;    // WEIGHT_DONTKNOW does not belong
 }
 
-
-SfxPoolItem* SvxWeightItem::Clone( SfxItemPool * ) const
+SvxWeightItem* SvxWeightItem::Clone( SfxItemPool * ) const
 {
     return new SvxWeightItem( *this );
 }
-
 
 bool SvxWeightItem::GetPresentation
 (
@@ -590,12 +582,10 @@ SvxFontHeightItem::SvxFontHeightItem( const sal_uLong nSz,
     SetHeight( nSz,nPrp );  // calculate in percentage
 }
 
-
-SfxPoolItem* SvxFontHeightItem::Clone( SfxItemPool * ) const
+SvxFontHeightItem* SvxFontHeightItem::Clone( SfxItemPool * ) const
 {
     return new SvxFontHeightItem( *this );
 }
-
 
 bool SvxFontHeightItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -942,12 +932,10 @@ void SvxTextLineItem::SetBoolValue( bool bVal )
     SetValue( bVal ? LINESTYLE_SINGLE : LINESTYLE_NONE );
 }
 
-
-SfxPoolItem* SvxTextLineItem::Clone( SfxItemPool * ) const
+SvxTextLineItem* SvxTextLineItem::Clone( SfxItemPool * ) const
 {
     return new SvxTextLineItem( *this );
 }
-
 
 sal_uInt16 SvxTextLineItem::GetValueCount() const
 {
@@ -1052,12 +1040,10 @@ SvxUnderlineItem::SvxUnderlineItem( const FontLineStyle eSt, const sal_uInt16 nI
 {
 }
 
-
-SfxPoolItem* SvxUnderlineItem::Clone( SfxItemPool * ) const
+SvxUnderlineItem* SvxUnderlineItem::Clone( SfxItemPool * ) const
 {
     return new SvxUnderlineItem( *this );
 }
-
 
 OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
@@ -1095,12 +1081,10 @@ SvxOverlineItem::SvxOverlineItem( const FontLineStyle eSt, const sal_uInt16 nId 
 {
 }
 
-
-SfxPoolItem* SvxOverlineItem::Clone( SfxItemPool * ) const
+SvxOverlineItem* SvxOverlineItem::Clone( SfxItemPool * ) const
 {
     return new SvxOverlineItem( *this );
 }
-
 
 OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
@@ -1162,12 +1146,10 @@ sal_uInt16 SvxCrossedOutItem::GetValueCount() const
     return STRIKEOUT_DOUBLE + 1;    // STRIKEOUT_NONE belongs also here
 }
 
-
-SfxPoolItem* SvxCrossedOutItem::Clone( SfxItemPool * ) const
+SvxCrossedOutItem* SvxCrossedOutItem::Clone( SfxItemPool * ) const
 {
     return new SvxCrossedOutItem( *this );
 }
-
 
 bool SvxCrossedOutItem::GetPresentation
 (
@@ -1239,12 +1221,10 @@ SvxShadowedItem::SvxShadowedItem( const bool bShadowed, const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxShadowedItem::Clone( SfxItemPool * ) const
+SvxShadowedItem* SvxShadowedItem::Clone( SfxItemPool * ) const
 {
     return new SvxShadowedItem( *this );
 }
-
 
 bool SvxShadowedItem::GetPresentation
 (
@@ -1269,12 +1249,10 @@ SvxAutoKernItem::SvxAutoKernItem( const bool bAutoKern, const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxAutoKernItem::Clone( SfxItemPool * ) const
+SvxAutoKernItem* SvxAutoKernItem::Clone( SfxItemPool * ) const
 {
     return new SvxAutoKernItem( *this );
 }
-
 
 bool SvxAutoKernItem::GetPresentation
 (
@@ -1300,12 +1278,10 @@ SvxWordLineModeItem::SvxWordLineModeItem( const bool bWordLineMode,
 {
 }
 
-
-SfxPoolItem* SvxWordLineModeItem::Clone( SfxItemPool * ) const
+SvxWordLineModeItem* SvxWordLineModeItem::Clone( SfxItemPool * ) const
 {
     return new SvxWordLineModeItem( *this );
 }
-
 
 bool SvxWordLineModeItem::GetPresentation
 (
@@ -1330,12 +1306,10 @@ SvxContourItem::SvxContourItem( const bool bContoured, const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxContourItem::Clone( SfxItemPool * ) const
+SvxContourItem* SvxContourItem::Clone( SfxItemPool * ) const
 {
     return new SvxContourItem( *this );
 }
-
 
 bool SvxContourItem::GetPresentation
 (
@@ -1367,7 +1341,7 @@ SvxBackgroundColorItem::SvxBackgroundColorItem( const Color& rCol,
 {
 }
 
-SfxPoolItem* SvxBackgroundColorItem::Clone( SfxItemPool * ) const
+SvxBackgroundColorItem* SvxBackgroundColorItem::Clone( SfxItemPool * ) const
 {
     return new SvxBackgroundColorItem(*this);
 }
@@ -1485,7 +1459,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     }
 }
 
-SfxPoolItem* SvxColorItem::Clone( SfxItemPool * ) const
+SvxColorItem* SvxColorItem::Clone( SfxItemPool * ) const
 {
     return new SvxColorItem( *this );
 }
@@ -1532,12 +1506,10 @@ SvxKerningItem::SvxKerningItem( const short nKern, const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxKerningItem::Clone( SfxItemPool * ) const
+SvxKerningItem* SvxKerningItem::Clone( SfxItemPool * ) const
 {
     return new SvxKerningItem( *this );
 }
-
 
 void SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
 {
@@ -1613,18 +1585,15 @@ SvxCaseMapItem::SvxCaseMapItem( const SvxCaseMap eMap, const sal_uInt16 nId ) :
 {
 }
 
-
 sal_uInt16 SvxCaseMapItem::GetValueCount() const
 {
     return sal_uInt16(SvxCaseMap::End); // SvxCaseMap::SmallCaps + 1
 }
 
-
-SfxPoolItem* SvxCaseMapItem::Clone( SfxItemPool * ) const
+SvxCaseMapItem* SvxCaseMapItem::Clone( SfxItemPool * ) const
 {
     return new SvxCaseMapItem( *this );
 }
-
 
 bool SvxCaseMapItem::GetPresentation
 (
@@ -1729,12 +1698,10 @@ bool SvxEscapementItem::operator==( const SfxPoolItem& rAttr ) const
             nProp == static_cast<const SvxEscapementItem&>(rAttr).nProp );
 }
 
-
-SfxPoolItem* SvxEscapementItem::Clone( SfxItemPool * ) const
+SvxEscapementItem* SvxEscapementItem::Clone( SfxItemPool * ) const
 {
     return new SvxEscapementItem( *this );
 }
-
 
 sal_uInt16 SvxEscapementItem::GetValueCount() const
 {
@@ -1870,12 +1837,10 @@ sal_uInt16 SvxLanguageItem::GetValueCount() const
     return 0;
 }
 
-
-SfxPoolItem* SvxLanguageItem::Clone( SfxItemPool * ) const
+SvxLanguageItem* SvxLanguageItem::Clone( SfxItemPool * ) const
 {
     return new SvxLanguageItem( *this );
 }
-
 
 bool SvxLanguageItem::GetPresentation
 (
@@ -1939,12 +1904,10 @@ SvxNoHyphenItem::SvxNoHyphenItem( const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxNoHyphenItem::Clone( SfxItemPool* ) const
+SvxNoHyphenItem* SvxNoHyphenItem::Clone( SfxItemPool* ) const
 {
     return new SvxNoHyphenItem( *this );
 }
-
 
 bool SvxNoHyphenItem::GetPresentation
 (
@@ -1972,12 +1935,10 @@ SvxBlinkItem::SvxBlinkItem( const bool bBlink, const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxBlinkItem::Clone( SfxItemPool * ) const
+SvxBlinkItem* SvxBlinkItem::Clone( SfxItemPool * ) const
 {
     return new SvxBlinkItem( *this );
 }
-
 
 bool SvxBlinkItem::GetPresentation
 (
@@ -2003,12 +1964,10 @@ SvxEmphasisMarkItem::SvxEmphasisMarkItem( const FontEmphasisMark nValue,
 {
 }
 
-
-SfxPoolItem* SvxEmphasisMarkItem::Clone( SfxItemPool * ) const
+SvxEmphasisMarkItem* SvxEmphasisMarkItem::Clone( SfxItemPool * ) const
 {
     return new SvxEmphasisMarkItem( *this );
 }
-
 
 bool SvxEmphasisMarkItem::GetPresentation
 (
@@ -2121,7 +2080,7 @@ bool SvxTwoLinesItem::operator==( const SfxPoolItem& rAttr ) const
            cEndBracket == static_cast<const SvxTwoLinesItem&>(rAttr).cEndBracket;
 }
 
-SfxPoolItem* SvxTwoLinesItem::Clone( SfxItemPool* ) const
+SvxTwoLinesItem* SvxTwoLinesItem::Clone( SfxItemPool* ) const
 {
     return new SvxTwoLinesItem( *this );
 }
@@ -2216,7 +2175,7 @@ SvxTextRotateItem::SvxTextRotateItem(sal_uInt16 nValue, const sal_uInt16 nW)
 {
 }
 
-SfxPoolItem* SvxTextRotateItem::Clone(SfxItemPool*) const
+SvxTextRotateItem* SvxTextRotateItem::Clone(SfxItemPool*) const
 {
     return new SvxTextRotateItem(*this);
 }
@@ -2295,7 +2254,7 @@ SvxCharRotateItem::SvxCharRotateItem( sal_uInt16 nValue,
 {
 }
 
-SfxPoolItem* SvxCharRotateItem::Clone( SfxItemPool* ) const
+SvxCharRotateItem* SvxCharRotateItem::Clone( SfxItemPool* ) const
 {
     return new SvxCharRotateItem( *this );
 }
@@ -2384,11 +2343,10 @@ SvxCharScaleWidthItem::SvxCharScaleWidthItem( sal_uInt16 nValue,
 {
 }
 
-SfxPoolItem* SvxCharScaleWidthItem::Clone( SfxItemPool* ) const
+SvxCharScaleWidthItem* SvxCharScaleWidthItem::Clone( SfxItemPool* ) const
 {
     return new SvxCharScaleWidthItem( *this );
 }
-
 
 bool SvxCharScaleWidthItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
@@ -2439,7 +2397,7 @@ SvxCharReliefItem::SvxCharReliefItem( FontRelief eValue,
 {
 }
 
-SfxPoolItem* SvxCharReliefItem::Clone( SfxItemPool * ) const
+SvxCharReliefItem* SvxCharReliefItem::Clone( SfxItemPool * ) const
 {
     return new SvxCharReliefItem( *this );
 }
@@ -2530,7 +2488,7 @@ SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
     GetItemSet().MergeRange( nComplex, nComplex );
 }
 
-SfxPoolItem* SvxScriptSetItem::Clone( SfxItemPool * ) const
+SvxScriptSetItem* SvxScriptSetItem::Clone( SfxItemPool * ) const
 {
     SvxScriptSetItem* p = new SvxScriptSetItem( Which(), *GetItemSet().GetPool() );
     p->GetItemSet().Put( GetItemSet(), false );
@@ -2731,7 +2689,7 @@ bool SvxRsidItem::PutValue( const uno::Any& rVal, sal_uInt8 )
     return true;
 }
 
-SfxPoolItem* SvxRsidItem::Clone( SfxItemPool * ) const
+SvxRsidItem* SvxRsidItem::Clone( SfxItemPool * ) const
 {
     return new SvxRsidItem( *this );
 }

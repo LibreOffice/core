@@ -483,7 +483,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bWriteCombChars)
     {
         if (const SfxGrabBagItem *pCharFmtGrabBag = aExportSet.GetItem<SfxGrabBagItem>(RES_CHRATR_GRABBAG, false))
         {
-            std::unique_ptr<SfxGrabBagItem> pNewCharFmtGrabBag(static_cast<SfxGrabBagItem*>(pCharFmtGrabBag->Clone()));
+            std::unique_ptr<SfxGrabBagItem> pNewCharFmtGrabBag(pCharFmtGrabBag->Clone());
             assert(pNewCharFmtGrabBag);
             auto & rNewFmtMap = pNewCharFmtGrabBag->GetGrabBag();
             for (auto const & item : pAutoFmtGrabBag->GetGrabBag())
@@ -1655,7 +1655,7 @@ std::shared_ptr<SvxBrushItem> WW8Export::TrueFrameBgBrush(const SwFrameFormat &r
 
     if (pRet && (pRet->GetGraphic() ||( pRet->GetColor() != COL_TRANSPARENT)))
     {
-        aRet.reset(static_cast<SvxBrushItem*>(pRet->Clone()));
+        aRet.reset(pRet->Clone());
     }
 
     return aRet;

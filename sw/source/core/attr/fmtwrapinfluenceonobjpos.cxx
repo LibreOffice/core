@@ -47,7 +47,7 @@ bool SwFormatWrapInfluenceOnObjPos::operator==( const SfxPoolItem& rAttr ) const
             && mnOverlapVertOffset == rAttribute.mnOverlapVertOffset);
 }
 
-SfxPoolItem* SwFormatWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
+SwFormatWrapInfluenceOnObjPos* SwFormatWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
 {
     return new SwFormatWrapInfluenceOnObjPos(*this);
 }

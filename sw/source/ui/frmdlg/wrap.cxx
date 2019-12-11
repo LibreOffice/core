@@ -269,7 +269,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
 
     if (!m_bDrawMode)
     {
-        aOp.reset(static_cast<SvxOpaqueItem*>(GetItemSet().Get(RES_OPAQUE).Clone()));
+        aOp.reset(GetItemSet().Get(RES_OPAQUE).Clone());
         aOp->SetValue(true);
     }
 

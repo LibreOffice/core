@@ -911,7 +911,7 @@ void SlideBackground::NotifyItemUpdate(
                 pPageItem = dynamic_cast<const SvxPageItem*>(pState);
             if (pPageItem)
             {
-                mpPageItem.reset(static_cast<SvxPageItem*>(pPageItem->Clone()));
+                mpPageItem.reset(pPageItem->Clone());
                 bool bIsLandscape = mpPageItem->IsLandscape();
                 mpPaperOrientation->SelectEntryPos( bIsLandscape ? 0 : 1 );
             }

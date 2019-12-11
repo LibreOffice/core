@@ -609,7 +609,7 @@ void SfxVoidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
+SfxVoidItem* SfxVoidItem::Clone(SfxItemPool *) const
 {
     return new SfxVoidItem(*this);
 }
@@ -623,12 +623,10 @@ void SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
 {
 }
 
-
 bool SfxPoolItem::HasMetrics() const
 {
     return false;
 }
-
 
 bool SfxPoolItem::QueryValue( css::uno::Any&, sal_uInt8 ) const
 {

@@ -59,12 +59,10 @@ SvxBulletItem::~SvxBulletItem()
 {
 }
 
-
-SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
+SvxBulletItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxBulletItem( *this );
 }
-
 
 void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
 {

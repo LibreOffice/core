@@ -40,7 +40,7 @@ public:
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SwTableBoxNumFormat* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     SwTableBoxNumFormat& operator=( const SwTableBoxNumFormat& rAttr )
     {
@@ -59,7 +59,7 @@ public:
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SwTableBoxFormula* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     const SwModify* GetDefinedIn() const { return m_pDefinedIn; }
     void ChgDefinedIn( const SwModify* pNew )
@@ -84,7 +84,7 @@ public:
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SwTableBoxValue* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     SwTableBoxValue& operator=( const SwTableBoxValue& rCmp )
     {

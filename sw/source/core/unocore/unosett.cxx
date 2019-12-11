@@ -1982,7 +1982,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     if(!pSetVOrient)
                     {
                         if(aFormat.GetGraphicOrientation())
-                            pSetVOrient.reset( static_cast<SwFormatVertOrient*>(aFormat.GetGraphicOrientation()->Clone()) );
+                            pSetVOrient.reset(aFormat.GetGraphicOrientation()->Clone());
                         else
                             pSetVOrient.reset(new SwFormatVertOrient);
                     }

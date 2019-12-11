@@ -27,7 +27,7 @@ class SdrTextAniCountItem final : public SfxUInt16Item {
 public:
     SdrTextAniCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,nVal) {}
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
+    virtual SdrTextAniCountItem* Clone(SfxItemPool * = nullptr) const override
     { return new SdrTextAniCountItem(*this); }
 };
 

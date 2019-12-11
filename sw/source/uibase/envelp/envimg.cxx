@@ -147,7 +147,7 @@ bool SwEnvItem::operator ==(const SfxPoolItem& rItem) const
            m_nShiftDown      == rEnv.m_nShiftDown;
 }
 
-SfxPoolItem* SwEnvItem::Clone(SfxItemPool*) const
+SwEnvItem* SwEnvItem::Clone(SfxItemPool*) const
 {
     return new SwEnvItem(*this);
 }

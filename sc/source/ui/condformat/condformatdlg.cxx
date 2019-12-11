@@ -415,7 +415,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
                         (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView())?OUString("modules/scalc/ui/conditionalformatdialogmobile.ui"):OUString("modules/scalc/ui/conditionalformatdialog.ui")),
                         "ConditionalFormatDialog")
     , mpViewData(pViewData)
-    , mpDlgItem(static_cast<ScCondFormatDlgItem*>(pItem->Clone()))
+    , mpDlgItem(pItem->Clone())
     , mpLastEdit(nullptr)
     , mxBtnOk(m_xBuilder->weld_button("ok"))
     , mxBtnAdd(m_xBuilder->weld_button("add"))

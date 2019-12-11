@@ -49,7 +49,7 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal,
                            sal_uInt8 nMemberId ) override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual SfxVisibilityItem* Clone(SfxItemPool * = nullptr) const override;
 
     bool GetValue() const { return m_nValue.bVisible; }
 };

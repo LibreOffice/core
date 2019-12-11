@@ -97,7 +97,7 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8) override;
 
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual SfxBoolItem* Clone(SfxItemPool * = nullptr) const override;
 
     virtual OUString GetValueTextByVal(bool bTheValue) const;
 };

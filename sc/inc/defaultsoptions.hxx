@@ -52,7 +52,7 @@ public:
     ScTpDefaultsItem & operator =(ScTpDefaultsItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual ScTpDefaultsItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const ScDefaultsOptions& GetDefaultsOptions() const { return theOptions; }
 

@@ -179,7 +179,7 @@ bool SwLabItem::operator ==(const SfxPoolItem& rItem) const
             m_sGlossaryBlockName ==    rLab.m_sGlossaryBlockName;
 }
 
-SfxPoolItem* SwLabItem::Clone(SfxItemPool*) const
+SwLabItem* SwLabItem::Clone(SfxItemPool*) const
 {
     return new SwLabItem(*this);
 }

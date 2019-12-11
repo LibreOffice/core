@@ -1038,7 +1038,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
 
     pGrabBagItem.reset();
     if (rObj.pGrabBagItem!=nullptr)
-        pGrabBagItem.reset(static_cast< SfxGrabBagItem* >( rObj.pGrabBagItem->Clone() ));
+        pGrabBagItem.reset(rObj.pGrabBagItem->Clone());
     return *this;
 }
 

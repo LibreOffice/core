@@ -94,7 +94,7 @@ public:
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SwTOXMark*      Clone( SfxItemPool* pPool = nullptr ) const override;
 
     void InvalidateTOXMark();
 

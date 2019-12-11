@@ -88,7 +88,7 @@ bool SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxSmartTagItem::Clone( SfxItemPool * ) const
+SvxSmartTagItem* SvxSmartTagItem::Clone( SfxItemPool * ) const
 {
     return new SvxSmartTagItem( *this );
 }

@@ -78,7 +78,7 @@ bool SwFormatCharFormat::operator==( const SfxPoolItem& rAttr ) const
     return GetCharFormat() == static_cast<const SwFormatCharFormat&>(rAttr).GetCharFormat();
 }
 
-SfxPoolItem* SwFormatCharFormat::Clone( SfxItemPool* ) const
+SwFormatCharFormat* SwFormatCharFormat::Clone( SfxItemPool* ) const
 {
     return new SwFormatCharFormat( *this );
 }
@@ -120,7 +120,7 @@ bool SwFormatAutoFormat::operator==( const SfxPoolItem& rAttr ) const
     return mpHandle == static_cast<const SwFormatAutoFormat&>(rAttr).mpHandle;
 }
 
-SfxPoolItem* SwFormatAutoFormat::Clone( SfxItemPool* ) const
+SwFormatAutoFormat* SwFormatAutoFormat::Clone( SfxItemPool* ) const
 {
     return new SwFormatAutoFormat( *this );
 }
@@ -220,7 +220,7 @@ bool SwFormatINetFormat::operator==( const SfxPoolItem& rAttr ) const
     return rOwn == rOther;
 }
 
-SfxPoolItem* SwFormatINetFormat::Clone( SfxItemPool* ) const
+SwFormatINetFormat* SwFormatINetFormat::Clone( SfxItemPool* ) const
 {
     return new SwFormatINetFormat( *this );
 }
@@ -430,7 +430,7 @@ bool SwFormatRuby::operator==( const SfxPoolItem& rAttr ) const
            m_eAdjustment == static_cast<const SwFormatRuby&>(rAttr).m_eAdjustment;
 }
 
-SfxPoolItem* SwFormatRuby::Clone( SfxItemPool* ) const
+SwFormatRuby* SwFormatRuby::Clone( SfxItemPool* ) const
 {
     return new SwFormatRuby( *this );
 }
@@ -561,7 +561,7 @@ bool SwFormatMeta::operator==( const SfxPoolItem & i_rOther ) const
         && m_pMeta == static_cast<SwFormatMeta const &>( i_rOther ).m_pMeta;
 }
 
-SfxPoolItem * SwFormatMeta::Clone( SfxItemPool * /*pPool*/ ) const
+SwFormatMeta* SwFormatMeta::Clone( SfxItemPool * /*pPool*/ ) const
 {
     // if this is indeed a copy, then DoCopy must be called later!
     return m_pMeta // #i105148# pool default may be cloned also!

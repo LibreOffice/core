@@ -72,7 +72,7 @@ bool CntUnencodedStringItem::PutValue(const css::uno::Any& rVal,
 }
 
 // virtual
-SfxPoolItem * CntUnencodedStringItem::Clone(SfxItemPool *) const
+CntUnencodedStringItem* CntUnencodedStringItem::Clone(SfxItemPool *) const
 {
     return new CntUnencodedStringItem(*this);
 }

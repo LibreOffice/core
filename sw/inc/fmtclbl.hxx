@@ -32,7 +32,7 @@ public:
         : SfxBoolItem( RES_COLUMNBALANCE, bFlag ) {}
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwFormatNoBalancedColumns* Clone( SfxItemPool *pPool = nullptr ) const override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 

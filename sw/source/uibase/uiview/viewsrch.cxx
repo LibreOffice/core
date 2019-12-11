@@ -160,7 +160,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
     case SID_SEARCH_ITEM:
     {
         delete s_pSrchItem;
-        s_pSrchItem = static_cast<SvxSearchItem*>( pArgs->Get(SID_SEARCH_ITEM).Clone() );
+        s_pSrchItem = pArgs->Get(SID_SEARCH_ITEM).Clone();
     }
     break;
 
@@ -174,7 +174,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
         {
             // Unregister dialog
             delete s_pSrchItem;
-            s_pSrchItem = static_cast<SvxSearchItem*>( pArgs->Get(SID_SEARCH_ITEM).Clone() );
+            s_pSrchItem = pArgs->Get(SID_SEARCH_ITEM).Clone();
 
             DELETEZ( s_pSearchList );
             DELETEZ( s_pReplaceList );
@@ -231,7 +231,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 if ( pArgs )
                 {
                     delete s_pSrchItem;
-                    s_pSrchItem = static_cast<SvxSearchItem*>( pArgs->Get(SID_SEARCH_ITEM).Clone() );
+                    s_pSrchItem = pArgs->Get(SID_SEARCH_ITEM).Clone();
                 }
             }
             SvxSearchCmd eCommand = s_pSrchItem->GetCommand();

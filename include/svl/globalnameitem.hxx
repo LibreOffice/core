@@ -40,7 +40,7 @@ public:
     SfxGlobalNameItem & operator =(SfxGlobalNameItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxGlobalNameItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     const SvGlobalName&     GetValue() const { return m_aName; }
 
     virtual bool            PutValue  ( const css::uno::Any& rVal,

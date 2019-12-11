@@ -53,7 +53,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
     static OUString          GetValueTextByPos( sal_uInt16 nPos );
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxFormatBreakItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16       GetValueCount() const override;
 
     SvxBreak                 GetBreak() const { return GetValue(); }

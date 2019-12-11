@@ -224,17 +224,14 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     EnableNotification( lcl_GetNotifyNames() );
 }
 
-
 SvxSearchItem::~SvxSearchItem()
 {
 }
 
-
-SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
+SvxSearchItem* SvxSearchItem::Clone( SfxItemPool *) const
 {
     return new SvxSearchItem(*this);
 }
-
 
 //! used below
 static bool equalsWithoutLocale( const i18nutil::SearchOptions2& rItem1, const i18nutil::SearchOptions2& rItem2 )

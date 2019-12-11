@@ -41,12 +41,10 @@ SvxChartTextOrderItem::SvxChartTextOrderItem(SvxChartTextOrder eOrder,
 {
 }
 
-
-SfxPoolItem* SvxChartTextOrderItem::Clone(SfxItemPool* /*pPool*/) const
+SvxChartTextOrderItem* SvxChartTextOrderItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartTextOrderItem(*this);
 }
-
 
 bool SvxChartTextOrderItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
@@ -133,7 +131,7 @@ bool SvxDoubleItem::operator == (const SfxPoolItem& rItem) const
     return static_cast<const SvxDoubleItem&>(rItem).fVal == fVal;
 }
 
-SfxPoolItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
+SvxDoubleItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxDoubleItem(*this);
 }
@@ -155,12 +153,10 @@ SvxChartKindErrorItem::SvxChartKindErrorItem(SvxChartKindError eOrient,
 {
 }
 
-
-SfxPoolItem* SvxChartKindErrorItem::Clone(SfxItemPool* /*pPool*/) const
+SvxChartKindErrorItem* SvxChartKindErrorItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartKindErrorItem(*this);
 }
-
 
 SvxChartIndicateItem::SvxChartIndicateItem(SvxChartIndicate eOrient,
                                                sal_uInt16 nId) :
@@ -168,12 +164,10 @@ SvxChartIndicateItem::SvxChartIndicateItem(SvxChartIndicate eOrient,
 {
 }
 
-
-SfxPoolItem* SvxChartIndicateItem::Clone(SfxItemPool* /*pPool*/) const
+SvxChartIndicateItem* SvxChartIndicateItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartIndicateItem(*this);
 }
-
 
 SvxChartRegressItem::SvxChartRegressItem(SvxChartRegress eOrient,
                                                sal_uInt16 nId) :
@@ -181,11 +175,9 @@ SvxChartRegressItem::SvxChartRegressItem(SvxChartRegress eOrient,
 {
 }
 
-
-SfxPoolItem* SvxChartRegressItem::Clone(SfxItemPool* /*pPool*/) const
+SvxChartRegressItem* SvxChartRegressItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartRegressItem(*this);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

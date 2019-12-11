@@ -152,7 +152,7 @@ public:
                             explicit SdOptionsLayoutItem();
                             SdOptionsLayoutItem( SdOptions const * pOpts, ::sd::FrameView const * pView );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SdOptionsLayoutItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     void                    SetOptions( SdOptions* pOpts ) const;
@@ -317,7 +317,7 @@ public:
                             explicit SdOptionsMiscItem();
                             SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView const * pView );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SdOptionsMiscItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     void                    SetOptions( SdOptions* pOpts ) const;
@@ -385,7 +385,7 @@ public:
                             explicit SdOptionsSnapItem();
                             SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView const * pView );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SdOptionsSnapItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     void                    SetOptions( SdOptions* pOpts ) const;
@@ -553,7 +553,7 @@ public:
                             explicit SdOptionsPrintItem();
     explicit                SdOptionsPrintItem( SdOptions const * pOpts );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SdOptionsPrintItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     void                    SetOptions( SdOptions* pOpts ) const;

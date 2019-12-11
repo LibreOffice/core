@@ -1602,7 +1602,7 @@ void SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
     std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(aTmpColor, RES_BACKGROUND));
     const SvxBrushItem* pRet = rWrt.GetCurrentPageBgBrush();
     if (pRet && (pRet->GetGraphic() ||( pRet->GetColor() != COL_TRANSPARENT)))
-        aBrush.reset(static_cast<SvxBrushItem*>(pRet->Clone()));
+        aBrush.reset(pRet->Clone());
     WriteBrushAttr(*aBrush, aPropOpt);
 
     aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0 );

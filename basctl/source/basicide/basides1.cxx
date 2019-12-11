@@ -83,7 +83,7 @@ void Shell::ExecuteSearch( SfxRequest& rReq )
         case SID_SEARCH_OPTIONS:
             break;
         case SID_SEARCH_ITEM:
-            mpSearchItem.reset( static_cast<SvxSearchItem*>( pArgs->Get(SID_SEARCH_ITEM).Clone() ));
+            mpSearchItem.reset(pArgs->Get(SID_SEARCH_ITEM).Clone());
             break;
         case FID_SEARCH_ON:
             mbJustOpened = true;
@@ -106,7 +106,7 @@ void Shell::ExecuteSearch( SfxRequest& rReq )
                 // Get SearchItem from request if it is the first searching
                 if ( pArgs )
                 {
-                    mpSearchItem.reset( static_cast<SvxSearchItem*>( pArgs->Get( SID_SEARCH_ITEM ).Clone() ));
+                    mpSearchItem.reset(pArgs->Get(SID_SEARCH_ITEM).Clone());
                 }
             }
 

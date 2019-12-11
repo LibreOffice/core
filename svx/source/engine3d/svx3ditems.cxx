@@ -35,7 +35,7 @@ Svx3DReducedLineGeometryItem::Svx3DReducedLineGeometryItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal)
 {}
 
-SfxPoolItem * Svx3DReducedLineGeometryItem::Clone(SfxItemPool *) const
+Svx3DReducedLineGeometryItem* Svx3DReducedLineGeometryItem::Clone(SfxItemPool *) const
 {
     return new Svx3DReducedLineGeometryItem(*this);
 }
@@ -73,47 +73,43 @@ Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal)
 {}
 
-SfxPoolItem * Svx3DSmoothNormalsItem::Clone(SfxItemPool *) const
+Svx3DSmoothNormalsItem* Svx3DSmoothNormalsItem::Clone(SfxItemPool *) const
 {
     return new Svx3DSmoothNormalsItem(*this);
 }
-
 
 Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal)
 {}
 
-SfxPoolItem * Svx3DSmoothLidsItem::Clone(SfxItemPool *) const
+Svx3DSmoothLidsItem* Svx3DSmoothLidsItem::Clone(SfxItemPool *) const
 {
     return new Svx3DSmoothLidsItem(*this);
 }
-
 
 Svx3DCharacterModeItem::Svx3DCharacterModeItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal)
 {}
 
-SfxPoolItem * Svx3DCharacterModeItem::Clone(SfxItemPool *) const
+Svx3DCharacterModeItem* Svx3DCharacterModeItem::Clone(SfxItemPool *) const
 {
     return new Svx3DCharacterModeItem(*this);
 }
-
 
 Svx3DCloseFrontItem::Svx3DCloseFrontItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal)
 {}
 
-SfxPoolItem * Svx3DCloseFrontItem::Clone(SfxItemPool *) const
+Svx3DCloseFrontItem* Svx3DCloseFrontItem::Clone(SfxItemPool *) const
 {
     return new Svx3DCloseFrontItem(*this);
 }
-
 
 Svx3DCloseBackItem::Svx3DCloseBackItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal)
 {}
 
-SfxPoolItem * Svx3DCloseBackItem::Clone(SfxItemPool *) const
+Svx3DCloseBackItem* Svx3DCloseBackItem::Clone(SfxItemPool *) const
 {
     return new Svx3DCloseBackItem(*this);
 }
@@ -134,7 +130,7 @@ bool Svx3DNormalsKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
     return true;
 }
 
-SfxPoolItem* Svx3DNormalsKindItem::Clone(SfxItemPool* /*pPool*/) const
+Svx3DNormalsKindItem* Svx3DNormalsKindItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DNormalsKindItem(*this);
 }
@@ -155,7 +151,7 @@ bool Svx3DTextureProjectionXItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nM
     return true;
 }
 
-SfxPoolItem* Svx3DTextureProjectionXItem::Clone(SfxItemPool* /*pPool*/) const
+Svx3DTextureProjectionXItem* Svx3DTextureProjectionXItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DTextureProjectionXItem(*this);
 }
@@ -176,7 +172,7 @@ bool Svx3DTextureProjectionYItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nM
     return true;
 }
 
-SfxPoolItem* Svx3DTextureProjectionYItem::Clone(SfxItemPool* /*pPool*/) const
+Svx3DTextureProjectionYItem* Svx3DTextureProjectionYItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DTextureProjectionYItem(*this);
 }
@@ -197,7 +193,7 @@ bool Svx3DTextureKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
     return true;
 }
 
-SfxPoolItem* Svx3DTextureKindItem::Clone(SfxItemPool* /*pPool*/) const
+Svx3DTextureKindItem* Svx3DTextureKindItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DTextureKindItem(*this);
 }
@@ -218,7 +214,7 @@ bool Svx3DTextureModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
     return true;
 }
 
-SfxPoolItem* Svx3DTextureModeItem::Clone(SfxItemPool* /*pPool*/) const
+Svx3DTextureModeItem* Svx3DTextureModeItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DTextureModeItem(*this);
 }
@@ -239,7 +235,7 @@ bool Svx3DPerspectiveItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
     return true;
 }
 
-SfxPoolItem* Svx3DPerspectiveItem::Clone(SfxItemPool* /*pPool*/) const
+Svx3DPerspectiveItem* Svx3DPerspectiveItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DPerspectiveItem(*this);
 }
@@ -260,7 +256,7 @@ bool Svx3DShadeModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     return true;
 }
 
-SfxPoolItem* Svx3DShadeModeItem::Clone(SfxItemPool* /*pPool*/) const
+Svx3DShadeModeItem* Svx3DShadeModeItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DShadeModeItem(*this);
 }
