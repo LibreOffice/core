@@ -95,7 +95,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix aObjectMatrix(
                 basegfx::utils::createShearXRotateTranslateB2DHomMatrix(0.0, fAngle, getStart()));
 
-            // preapare text, but do not add yet; it needs to be aligned to
+            // prepare text, but do not add yet; it needs to be aligned to
             // the line geometry
             if(!rTextAttribute.isDefault())
             {

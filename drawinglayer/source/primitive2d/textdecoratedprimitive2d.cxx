@@ -229,7 +229,7 @@ namespace drawinglayer
                         const double fTextShadowOffset(aDecTrans.getScale().getY() * fFactor);
                         static basegfx::BColor aShadowColor(0.3, 0.3, 0.3);
 
-                        // preapare shadow transform matrix
+                        // prepare shadow transform matrix
                         const basegfx::B2DHomMatrix aShadowTransform(basegfx::utils::createTranslateB2DHomMatrix(
                             fTextShadowOffset, fTextShadowOffset));
 

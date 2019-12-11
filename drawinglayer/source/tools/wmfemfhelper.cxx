@@ -1838,7 +1838,7 @@ namespace wmfemfhelper
 
                     if(nTextLength && rPropertyHolders.Current().getTextColorActive())
                     {
-                        // preapare DXArray (if used)
+                        // prepare DXArray (if used)
                         std::vector< double > aDXArray;
                         long* pDXArray = pA->GetDXArray();
 
