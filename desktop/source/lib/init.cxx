@@ -1085,8 +1085,7 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
       m_pDocument(pDocument),
       m_pCallback(pCallback),
       m_pData(pData),
-      m_nDisableCallbacks(0),
-      m_bEventLatch(false)
+      m_nDisableCallbacks(0)
 {
     SetPriority(TaskPriority::POST_PAINT);
 
@@ -1673,7 +1672,7 @@ void CallbackFlushHandler::Invoke()
 {
     comphelper::ProfileZone aZone("CallbackFlushHander::Invoke");
 
-    if (m_pCallback && !m_bEventLatch)
+    if (m_pCallback)
     {
         std::scoped_lock<std::mutex> lock(m_mutex);
 
