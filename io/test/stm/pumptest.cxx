@@ -317,7 +317,7 @@ void OPumpTest::testClose( const Reference< XInterface > &r )
     ERROR_ASSERT( ! t.m_pTestListener->m_bStarted , "started too early" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "termination unexpected" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
-    ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected clase" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected close" );
 
     t.m_rControl->start();
     mywait();
@@ -325,7 +325,7 @@ void OPumpTest::testClose( const Reference< XInterface > &r )
     ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "termination unexpected" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
-    ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected clase" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected close" );
 
     Reference< XStreamListener > rListener( new TestListener() );
     t.m_rControl->addListener( rListener );
