@@ -75,6 +75,7 @@ ChartWindow::~ChartWindow()
 
 void ChartWindow::dispose()
 {
+    m_pWindowController = nullptr;
     m_pViewShellWindow.clear();
     vcl::Window::dispose();
 }
