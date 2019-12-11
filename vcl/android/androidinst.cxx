@@ -58,10 +58,12 @@ AndroidSalInstance *AndroidSalInstance::getInstance()
 AndroidSalInstance::AndroidSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
     : SvpSalInstance( std::move(pMutex) )
 {
+    // FIXME: remove when uniPoll & runLoop is the only android entry poit.
     int res = (lo_get_javavm())->AttachCurrentThread(&m_pJNIEnv, NULL);
     LOGI("AttachCurrentThread res=%d env=%p", res, m_pJNIEnv);
 }
 
+// This is never called on Android until app exit.
 AndroidSalInstance::~AndroidSalInstance()
 {
     int res = (lo_get_javavm())->DetachCurrentThread();
@@ -77,6 +79,18 @@ bool AndroidSalInstance::AnyInput( VclInputFlags nType )
     // Unfortunately there is no way to check for a specific type of
     // input being queued. That information is too hidden, sigh.
     return SvpSalInstance::s_pDefaultInstance->HasUserEvents();
+}
+
+void AndroidSalInstance::updateMainThread() override
+{
+    int res = (lo_get_javavm())->AttachCurrentThread(&m_pJNIEnv, NULL);
+    LOGI("updateMainThread's AttachCurrentThread res=%d env=%p", res, m_pJNIEnv);
+}
+
+void AndroidSalInstance::releaseMainThread() override
+{
+    int res = (lo_get_javavm())->DetachCurrentThread();
+    LOGI("releaseMainThread's DetachCurrentThread res=%d", res);
 }
 
 class AndroidSalSystem : public SvpSalSystem {
