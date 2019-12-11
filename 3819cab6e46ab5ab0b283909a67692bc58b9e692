@@ -45,6 +45,29 @@
       "revId": "3819cab6e46ab5ab0b283909a67692bc58b9e692",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_4aa95fdd",
+        "filename": "cui/source/factory/dlgfact.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-11T07:56:16Z",
+      "side": 1,
+      "message": "I see now that this is still used in multiple places where ranges are needed. I suppose that SvxBkgTabPage needs own GetRanges, and should be called with own RID_SVXPAGE_BKG where needed; so that we could get rid of last remnants of SvxBackgroundTabPage class, and its RID.\n\nThe list where RID_SVXPAGE_BACKGROUND is still used is at https://opengrok.libreoffice.org/search?project\u003dcore\u0026full\u003dRID_SVXPAGE_BACKGROUND\u0026si\u003dfull ; see that there are also strings there, which IMO also need to be changed to RID_SVXPAGE_BKG for consistency.\n\nMost of that is for a later commit; but for this one, I believe that SvxBkgTabPage::GetRanges is needed, and RID_SW_TP_BACKGROUND case should use it in the AbstractDialogFactory_Impl::GetTabPageRangesFunc.",
+      "range": {
+        "startLine": 1537,
+        "startChar": 13,
+        "endLine": 1537,
+        "endChar": 35
+      },
+      "revId": "3819cab6e46ab5ab0b283909a67692bc58b9e692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
