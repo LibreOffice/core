@@ -1780,7 +1780,7 @@ bool SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
         static_cast<const SfxViewFrameItem&>(rItem).pFrame == pFrame;
 }
 
-SfxPoolItem* SfxViewFrameItem::Clone( SfxItemPool *) const
+SfxViewFrameItem* SfxViewFrameItem::Clone( SfxItemPool *) const
 {
     return new SfxViewFrameItem( *this );
 }

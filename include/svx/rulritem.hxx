@@ -38,7 +38,7 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem final : public SfxPoolItem
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxLongLRSpaceItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &) = delete;
 
@@ -67,7 +67,7 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem final : public SfxPoolItem
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxLongULSpaceItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &) = delete;
 
@@ -97,7 +97,7 @@ class SVX_DLLPUBLIC SvxPagePosSizeItem final : public SfxPoolItem
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxPagePosSizeItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
 private:
     const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &) = delete;
@@ -159,7 +159,7 @@ class SVX_DLLPUBLIC SvxColumnItem final : public SfxPoolItem
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxColumnItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -205,7 +205,7 @@ class SVX_DLLPUBLIC SvxObjectItem final : public SfxPoolItem
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxObjectItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 

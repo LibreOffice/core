@@ -884,11 +884,11 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
 
                 const_cast<SwTableBox*>(pCell->GetTabBox())->ClaimFrameFormat();
                 SwFrameFormat *pFormat = pCell->GetFormat();
-                std::shared_ptr<SvxBoxItem> aBox(static_cast<SvxBoxItem*>(pFormat->GetBox().Clone()));
+                std::shared_ptr<SvxBoxItem> aBox(pFormat->GetBox().Clone());
 
                 if ( !pBorderLine && bSetLine )
                 {
-                    aBox.reset(static_cast<SvxBoxItem*>(::GetDfltAttr(RES_BOX)->Clone()));
+                    aBox.reset(::GetDfltAttr(RES_BOX)->Clone());
                 }
                 else
                 {

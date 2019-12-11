@@ -46,7 +46,7 @@ class SFX2_DLLPUBLIC SfxTabDialogItem final : public SfxSetItem
 public:
                             SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet );
                             SfxTabDialogItem(const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pToPool = nullptr) const override;
+    virtual SfxTabDialogItem* Clone(SfxItemPool* pToPool = nullptr) const override;
 };
 
 class SFX2_DLLPUBLIC SfxTabDialogController : public SfxOkDialogController

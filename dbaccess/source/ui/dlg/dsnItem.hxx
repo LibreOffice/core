@@ -40,7 +40,7 @@ namespace dbaui
         DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSource);
 
         virtual bool             operator==(const SfxPoolItem& _rItem) const override;
-        virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = nullptr) const override;
+        virtual DbuTypeCollectionItem* Clone(SfxItemPool* _pPool = nullptr) const override;
 
         ::dbaccess::ODsnTypeCollection* getCollection() const { return m_pCollection; }
     };

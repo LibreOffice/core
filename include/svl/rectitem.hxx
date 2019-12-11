@@ -41,7 +41,7 @@ public:
                                   const IntlWrapper& ) const override;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxRectangleItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const tools::Rectangle&         GetValue() const { return aVal; }
     virtual bool             QueryValue( css::uno::Any& rVal,

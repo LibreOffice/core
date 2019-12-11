@@ -39,12 +39,10 @@ SvxZoomSliderItem::SvxZoomSliderItem( sal_uInt16 nCurrentZoom, sal_uInt16 nMinZo
 {
 }
 
-
-SfxPoolItem* SvxZoomSliderItem::Clone( SfxItemPool * /*pPool*/ ) const
+SvxZoomSliderItem* SvxZoomSliderItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxZoomSliderItem( *this );
 }
-
 
 bool SvxZoomSliderItem::operator==( const SfxPoolItem& rAttr ) const
 {

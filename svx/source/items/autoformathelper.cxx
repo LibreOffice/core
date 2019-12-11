@@ -141,36 +141,36 @@ void AutoFormatVersions::WriteBlockB(SvStream& rStream, sal_uInt16 fileVersion)
 
 //////////////////////////////////////////////////////////////////////////////
 
-void AutoFormatBase::SetFont( const SvxFontItem& rNew )             { m_aFont.reset(static_cast<SvxFontItem*>(rNew.Clone())); }
-void AutoFormatBase::SetHeight( const SvxFontHeightItem& rNew )     { m_aHeight.reset(static_cast<SvxFontHeightItem*>(rNew.Clone())); }
-void AutoFormatBase::SetWeight( const SvxWeightItem& rNew )         { m_aWeight.reset(static_cast<SvxWeightItem*>(rNew.Clone())); }
-void AutoFormatBase::SetPosture( const SvxPostureItem& rNew )       { m_aPosture.reset(static_cast<SvxPostureItem*>(rNew.Clone())); }
-void AutoFormatBase::SetCJKFont( const SvxFontItem& rNew )          { m_aCJKFont.reset(static_cast<SvxFontItem*>(rNew.Clone())); }
-void AutoFormatBase::SetCJKHeight( const SvxFontHeightItem& rNew )  { m_aCJKHeight.reset(static_cast<SvxFontHeightItem*>(rNew.Clone())); }
-void AutoFormatBase::SetCJKWeight( const SvxWeightItem& rNew )      { m_aCJKWeight.reset(static_cast<SvxWeightItem*>(rNew.Clone())); }
-void AutoFormatBase::SetCJKPosture( const SvxPostureItem& rNew )    { m_aCJKPosture.reset(static_cast<SvxPostureItem*>(rNew.Clone())); }
-void AutoFormatBase::SetCTLFont( const SvxFontItem& rNew )          { m_aCTLFont.reset(static_cast<SvxFontItem*>(rNew.Clone())); }
-void AutoFormatBase::SetCTLHeight( const SvxFontHeightItem& rNew )  { m_aCTLHeight.reset(static_cast<SvxFontHeightItem*>(rNew.Clone())); }
-void AutoFormatBase::SetCTLWeight( const SvxWeightItem& rNew )      { m_aCTLWeight.reset(static_cast<SvxWeightItem*>(rNew.Clone())); }
-void AutoFormatBase::SetCTLPosture( const SvxPostureItem& rNew )    { m_aCTLPosture.reset(static_cast<SvxPostureItem*>(rNew.Clone())); }
-void AutoFormatBase::SetUnderline( const SvxUnderlineItem& rNew )   { m_aUnderline.reset(static_cast<SvxUnderlineItem*>(rNew.Clone())); }
-void AutoFormatBase::SetOverline( const SvxOverlineItem& rNew )     { m_aOverline.reset(static_cast<SvxOverlineItem*>(rNew.Clone())); }
-void AutoFormatBase::SetCrossedOut( const SvxCrossedOutItem& rNew ) { m_aCrossedOut.reset(static_cast<SvxCrossedOutItem*>(rNew.Clone())); }
-void AutoFormatBase::SetContour( const SvxContourItem& rNew )       { m_aContour.reset(static_cast<SvxContourItem*>(rNew.Clone())); }
-void AutoFormatBase::SetShadowed( const SvxShadowedItem& rNew )     { m_aShadowed.reset(static_cast<SvxShadowedItem*>(rNew.Clone())); }
-void AutoFormatBase::SetColor( const SvxColorItem& rNew )           { m_aColor.reset(static_cast<SvxColorItem*>(rNew.Clone())); }
-void AutoFormatBase::SetBox( const SvxBoxItem& rNew )               { m_aBox.reset(static_cast<SvxBoxItem*>(rNew.Clone())); }
-void AutoFormatBase::SetTLBR( const SvxLineItem& rNew )             { m_aTLBR.reset(static_cast<SvxLineItem*>(rNew.Clone())); }
-void AutoFormatBase::SetBLTR( const SvxLineItem& rNew )             { m_aBLTR.reset(static_cast<SvxLineItem*>(rNew.Clone())); }
-void AutoFormatBase::SetBackground( const SvxBrushItem& rNew )      { m_aBackground.reset(static_cast<SvxBrushItem*>(rNew.Clone())); }
-void AutoFormatBase::SetAdjust( const SvxAdjustItem& rNew )         { m_aAdjust.reset(static_cast<SvxAdjustItem*>(rNew.Clone())); }
-void AutoFormatBase::SetHorJustify( const SvxHorJustifyItem& rNew ) { m_aHorJustify.reset(static_cast<SvxHorJustifyItem*>(rNew.Clone())); }
-void AutoFormatBase::SetVerJustify( const SvxVerJustifyItem& rNew ) { m_aVerJustify.reset(static_cast<SvxVerJustifyItem*>(rNew.Clone())); }
-void AutoFormatBase::SetStacked( const SfxBoolItem& rNew ) { m_aStacked.reset(static_cast<SfxBoolItem*>(rNew.Clone())); }
-void AutoFormatBase::SetMargin( const SvxMarginItem& rNew ) { m_aMargin.reset(static_cast<SvxMarginItem*>(rNew.Clone())); }
-void AutoFormatBase::SetLinebreak( const SfxBoolItem& rNew ) { m_aLinebreak.reset(static_cast<SfxBoolItem*>(rNew.Clone())); }
-void AutoFormatBase::SetRotateAngle( const SfxInt32Item& rNew ) { m_aRotateAngle.reset(static_cast<SfxInt32Item*>(rNew.Clone())); }
-void AutoFormatBase::SetRotateMode( const SvxRotateModeItem& rNew ) { m_aRotateMode.reset(static_cast<SvxRotateModeItem*>(rNew.Clone())); }
+void AutoFormatBase::SetFont( const SvxFontItem& rNew )             { m_aFont.reset(rNew.Clone()); }
+void AutoFormatBase::SetHeight( const SvxFontHeightItem& rNew )     { m_aHeight.reset(rNew.Clone()); }
+void AutoFormatBase::SetWeight( const SvxWeightItem& rNew )         { m_aWeight.reset(rNew.Clone()); }
+void AutoFormatBase::SetPosture( const SvxPostureItem& rNew )       { m_aPosture.reset(rNew.Clone()); }
+void AutoFormatBase::SetCJKFont( const SvxFontItem& rNew )          { m_aCJKFont.reset(rNew.Clone()); }
+void AutoFormatBase::SetCJKHeight( const SvxFontHeightItem& rNew )  { m_aCJKHeight.reset(rNew.Clone()); }
+void AutoFormatBase::SetCJKWeight( const SvxWeightItem& rNew )      { m_aCJKWeight.reset(rNew.Clone()); }
+void AutoFormatBase::SetCJKPosture( const SvxPostureItem& rNew )    { m_aCJKPosture.reset(rNew.Clone()); }
+void AutoFormatBase::SetCTLFont( const SvxFontItem& rNew )          { m_aCTLFont.reset(rNew.Clone()); }
+void AutoFormatBase::SetCTLHeight( const SvxFontHeightItem& rNew )  { m_aCTLHeight.reset(rNew.Clone()); }
+void AutoFormatBase::SetCTLWeight( const SvxWeightItem& rNew )      { m_aCTLWeight.reset(rNew.Clone()); }
+void AutoFormatBase::SetCTLPosture( const SvxPostureItem& rNew )    { m_aCTLPosture.reset(rNew.Clone()); }
+void AutoFormatBase::SetUnderline( const SvxUnderlineItem& rNew )   { m_aUnderline.reset(rNew.Clone()); }
+void AutoFormatBase::SetOverline( const SvxOverlineItem& rNew )     { m_aOverline.reset(rNew.Clone()); }
+void AutoFormatBase::SetCrossedOut( const SvxCrossedOutItem& rNew ) { m_aCrossedOut.reset(rNew.Clone()); }
+void AutoFormatBase::SetContour( const SvxContourItem& rNew )       { m_aContour.reset(rNew.Clone()); }
+void AutoFormatBase::SetShadowed( const SvxShadowedItem& rNew )     { m_aShadowed.reset(rNew.Clone()); }
+void AutoFormatBase::SetColor( const SvxColorItem& rNew )           { m_aColor.reset(rNew.Clone()); }
+void AutoFormatBase::SetBox( const SvxBoxItem& rNew )               { m_aBox.reset(rNew.Clone()); }
+void AutoFormatBase::SetTLBR( const SvxLineItem& rNew )             { m_aTLBR.reset(rNew.Clone()); }
+void AutoFormatBase::SetBLTR( const SvxLineItem& rNew )             { m_aBLTR.reset(rNew.Clone()); }
+void AutoFormatBase::SetBackground( const SvxBrushItem& rNew )      { m_aBackground.reset(rNew.Clone()); }
+void AutoFormatBase::SetAdjust( const SvxAdjustItem& rNew )         { m_aAdjust.reset(rNew.Clone()); }
+void AutoFormatBase::SetHorJustify( const SvxHorJustifyItem& rNew ) { m_aHorJustify.reset(rNew.Clone()); }
+void AutoFormatBase::SetVerJustify( const SvxVerJustifyItem& rNew ) { m_aVerJustify.reset(rNew.Clone()); }
+void AutoFormatBase::SetStacked( const SfxBoolItem& rNew ) { m_aStacked.reset(rNew.Clone()); }
+void AutoFormatBase::SetMargin( const SvxMarginItem& rNew ) { m_aMargin.reset(rNew.Clone()); }
+void AutoFormatBase::SetLinebreak( const SfxBoolItem& rNew ) { m_aLinebreak.reset(rNew.Clone()); }
+void AutoFormatBase::SetRotateAngle( const SfxInt32Item& rNew ) { m_aRotateAngle.reset(rNew.Clone()); }
+void AutoFormatBase::SetRotateMode( const SvxRotateModeItem& rNew ) { m_aRotateMode.reset(rNew.Clone()); }
 
 AutoFormatBase::AutoFormatBase()
 :   m_aFont(),
@@ -207,36 +207,36 @@ AutoFormatBase::AutoFormatBase()
 }
 
 AutoFormatBase::AutoFormatBase( const AutoFormatBase& rNew )
-:   m_aFont(static_cast<SvxFontItem*>(rNew.m_aFont->Clone())),
-    m_aHeight(static_cast<SvxFontHeightItem*>(rNew.m_aHeight->Clone())),
-    m_aWeight(static_cast<SvxWeightItem*>(rNew.m_aWeight->Clone())),
-    m_aPosture(static_cast<SvxPostureItem*>(rNew.m_aPosture->Clone())),
-    m_aCJKFont(static_cast<SvxFontItem*>(rNew.m_aCJKFont->Clone())),
-    m_aCJKHeight(static_cast<SvxFontHeightItem*>(rNew.m_aCJKHeight->Clone())),
-    m_aCJKWeight(static_cast<SvxWeightItem*>(rNew.m_aCJKWeight->Clone())),
-    m_aCJKPosture(static_cast<SvxPostureItem*>(rNew.m_aCJKPosture->Clone())),
-    m_aCTLFont(static_cast<SvxFontItem*>(rNew.m_aCTLFont->Clone())),
-    m_aCTLHeight(static_cast<SvxFontHeightItem*>(rNew.m_aCTLHeight->Clone())),
-    m_aCTLWeight(static_cast<SvxWeightItem*>(rNew.m_aCTLWeight->Clone())),
-    m_aCTLPosture(static_cast<SvxPostureItem*>(rNew.m_aCTLPosture->Clone())),
-    m_aUnderline(static_cast<SvxUnderlineItem*>(rNew.m_aUnderline->Clone())),
-    m_aOverline(static_cast<SvxOverlineItem*>(rNew.m_aOverline->Clone())),
-    m_aCrossedOut(static_cast<SvxCrossedOutItem*>(rNew.m_aCrossedOut->Clone())),
-    m_aContour(static_cast<SvxContourItem*>(rNew.m_aContour->Clone())),
-    m_aShadowed(static_cast<SvxShadowedItem*>(rNew.m_aShadowed->Clone())),
-    m_aColor(static_cast<SvxColorItem*>(rNew.m_aColor->Clone())),
-    m_aBox(static_cast<SvxBoxItem*>(rNew.m_aBox->Clone())),
-    m_aTLBR(static_cast<SvxLineItem*>(rNew.m_aTLBR->Clone())),
-    m_aBLTR(static_cast<SvxLineItem*>(rNew.m_aBLTR->Clone())),
-    m_aBackground(static_cast<SvxBrushItem*>(rNew.m_aBackground->Clone())),
-    m_aAdjust(static_cast<SvxAdjustItem*>(rNew.m_aAdjust->Clone())),
-    m_aHorJustify(static_cast<SvxHorJustifyItem*>(rNew.m_aHorJustify->Clone())),
-    m_aVerJustify(static_cast<SvxVerJustifyItem*>(rNew.m_aVerJustify->Clone())),
-    m_aStacked(static_cast<SfxBoolItem*>(rNew.m_aStacked->Clone())),
-    m_aMargin(static_cast<SvxMarginItem*>(rNew.m_aMargin->Clone())),
-    m_aLinebreak(static_cast<SfxBoolItem*>(rNew.m_aLinebreak->Clone())),
-    m_aRotateAngle(static_cast<SfxInt32Item*>(rNew.m_aRotateAngle->Clone())),
-    m_aRotateMode(static_cast<SvxRotateModeItem*>(rNew.m_aRotateMode->Clone()))
+:   m_aFont(rNew.m_aFont->Clone()),
+    m_aHeight(rNew.m_aHeight->Clone()),
+    m_aWeight(rNew.m_aWeight->Clone()),
+    m_aPosture(rNew.m_aPosture->Clone()),
+    m_aCJKFont(rNew.m_aCJKFont->Clone()),
+    m_aCJKHeight(rNew.m_aCJKHeight->Clone()),
+    m_aCJKWeight(rNew.m_aCJKWeight->Clone()),
+    m_aCJKPosture(rNew.m_aCJKPosture->Clone()),
+    m_aCTLFont(rNew.m_aCTLFont->Clone()),
+    m_aCTLHeight(rNew.m_aCTLHeight->Clone()),
+    m_aCTLWeight(rNew.m_aCTLWeight->Clone()),
+    m_aCTLPosture(rNew.m_aCTLPosture->Clone()),
+    m_aUnderline(rNew.m_aUnderline->Clone()),
+    m_aOverline(rNew.m_aOverline->Clone()),
+    m_aCrossedOut(rNew.m_aCrossedOut->Clone()),
+    m_aContour(rNew.m_aContour->Clone()),
+    m_aShadowed(rNew.m_aShadowed->Clone()),
+    m_aColor(rNew.m_aColor->Clone()),
+    m_aBox(rNew.m_aBox->Clone()),
+    m_aTLBR(rNew.m_aTLBR->Clone()),
+    m_aBLTR(rNew.m_aBLTR->Clone()),
+    m_aBackground(rNew.m_aBackground->Clone()),
+    m_aAdjust(rNew.m_aAdjust->Clone()),
+    m_aHorJustify(rNew.m_aHorJustify->Clone()),
+    m_aVerJustify(rNew.m_aVerJustify->Clone()),
+    m_aStacked(rNew.m_aStacked->Clone()),
+    m_aMargin(rNew.m_aMargin->Clone()),
+    m_aLinebreak(rNew.m_aLinebreak->Clone()),
+    m_aRotateAngle(rNew.m_aRotateAngle->Clone()),
+    m_aRotateMode(rNew.m_aRotateMode->Clone())
 {
 }
 

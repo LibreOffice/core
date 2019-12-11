@@ -129,7 +129,7 @@ bool ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
+ScTpCalcItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 {
     return new ScTpCalcItem( *this );
 }

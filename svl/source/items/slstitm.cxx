@@ -88,12 +88,10 @@ bool SfxStringListItem::GetPresentation
     return false;
 }
 
-
-SfxPoolItem* SfxStringListItem::Clone( SfxItemPool *) const
+SfxStringListItem* SfxStringListItem::Clone( SfxItemPool *) const
 {
     return new SfxStringListItem( *this );
 }
-
 
 void SfxStringListItem::SetString( const OUString& rStr )
 {

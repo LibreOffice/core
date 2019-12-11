@@ -1660,7 +1660,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropert
 {
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
     const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND, true, m_pDoc->IsInXMLImport()));
-    std::shared_ptr<SvxBrushItem> aChangedBrushItem(static_cast<SvxBrushItem*>(aOriginalBrushItem->Clone()));
+    std::shared_ptr<SvxBrushItem> aChangedBrushItem(aOriginalBrushItem->Clone());
 
     uno::Any aValue(rValue);
     const auto nMemberId(lcl_TranslateMetric(rEntry, m_pDoc, aValue));
@@ -2713,7 +2713,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
         }
         else
         {
-            aFrameSz.reset(static_cast<SwFormatFrameSize*>(pStdPgDsc->GetMaster().GetFrameSize().Clone()));
+            aFrameSz.reset(pStdPgDsc->GetMaster().GetFrameSize().Clone());
         }
 
         if(pStdPgDsc->GetLandscape())
@@ -2823,7 +2823,7 @@ SwXPageStyle::SwXPageStyle(SwDocShell* pDocSh)
 void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl)
 {
     // create a new SvxSetItem and get it's ItemSet as new target
-    const std::unique_ptr<SvxSetItem> pNewSetItem(static_cast<SvxSetItem*>(pSetItem->Clone()));
+    const std::unique_ptr<SvxSetItem> pNewSetItem(pSetItem->Clone());
     SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
 
     // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
@@ -2972,7 +2972,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     if(SfxItemState::SET == aBaseImpl.GetItemSet().GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
                     {
                         // create a new SvxSetItem and get it's ItemSet as new target
-                        std::unique_ptr<SvxSetItem> pNewSetItem(static_cast<SvxSetItem*>(pSetItem->Clone()));
+                        std::unique_ptr<SvxSetItem> pNewSetItem(pSetItem->Clone());
                         SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
 
                         // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
@@ -3653,7 +3653,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 case RES_BACKGROUND:
                 {
                     const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, m_pDocShell->GetDoc()->IsInXMLImport()));
-                    std::shared_ptr<SvxBrushItem> aChangedBrushItem(static_cast<SvxBrushItem*>(aOriginalBrushItem->Clone()));
+                    std::shared_ptr<SvxBrushItem> aChangedBrushItem(aOriginalBrushItem->Clone());
 
                     aChangedBrushItem->PutValue(aValue, nMemberId);
 

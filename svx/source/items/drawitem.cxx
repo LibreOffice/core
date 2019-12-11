@@ -68,11 +68,10 @@ bool SvxColorListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxColorListItem&>(rItem).pColorList == pColorList;
 }
 
-SfxPoolItem* SvxColorListItem::Clone( SfxItemPool * ) const
+SvxColorListItem* SvxColorListItem::Clone( SfxItemPool * ) const
 {
     return new SvxColorListItem( *this );
 }
-
 
 // Should be a template class but ...
 #define QUERY_PUT_IMPL(svtype, xtype) \
@@ -131,12 +130,10 @@ bool SvxGradientListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxGradientListItem&>(rItem).pGradientList == pGradientList;
 }
 
-
-SfxPoolItem* SvxGradientListItem::Clone( SfxItemPool * ) const
+SvxGradientListItem* SvxGradientListItem::Clone( SfxItemPool * ) const
 {
     return new SvxGradientListItem( *this );
 }
-
 
 QUERY_PUT_IMPL( SvxGradientListItem, GradientList )
 
@@ -178,8 +175,7 @@ bool SvxHatchListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxHatchListItem&>(rItem).pHatchList == pHatchList;
 }
 
-
-SfxPoolItem* SvxHatchListItem::Clone( SfxItemPool * ) const
+SvxHatchListItem* SvxHatchListItem::Clone( SfxItemPool * ) const
 {
     return new SvxHatchListItem( *this );
 }
@@ -220,7 +216,7 @@ bool SvxBitmapListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxBitmapListItem&>(rItem).pBitmapList == pBitmapList;
 }
 
-SfxPoolItem* SvxBitmapListItem::Clone( SfxItemPool * ) const
+SvxBitmapListItem* SvxBitmapListItem::Clone( SfxItemPool * ) const
 {
     return new SvxBitmapListItem( *this );
 }
@@ -261,7 +257,7 @@ bool SvxPatternListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxPatternListItem&>(rItem).pPatternList == pPatternList;
 }
 
-SfxPoolItem* SvxPatternListItem::Clone( SfxItemPool * ) const
+SvxPatternListItem* SvxPatternListItem::Clone( SfxItemPool * ) const
 {
     return new SvxPatternListItem( *this );
 }
@@ -302,7 +298,7 @@ bool SvxDashListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxDashListItem&>(rItem).pDashList == pDashList;
 }
 
-SfxPoolItem* SvxDashListItem::Clone( SfxItemPool * ) const
+SvxDashListItem* SvxDashListItem::Clone( SfxItemPool * ) const
 {
     return new SvxDashListItem( *this );
 }
@@ -343,7 +339,7 @@ bool SvxLineEndListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxLineEndListItem&>(rItem).pLineEndList == pLineEndList;
 }
 
-SfxPoolItem* SvxLineEndListItem::Clone( SfxItemPool * ) const
+SvxLineEndListItem* SvxLineEndListItem::Clone( SfxItemPool * ) const
 {
     return new SvxLineEndListItem( *this );
 }

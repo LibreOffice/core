@@ -65,12 +65,10 @@ bool SfxPointItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SfxPointItem&>(rItem).aVal == aVal;
 }
 
-
-SfxPoolItem* SfxPointItem::Clone(SfxItemPool *) const
+SfxPointItem* SfxPointItem::Clone(SfxItemPool *) const
 {
     return new SfxPointItem( *this );
 }
-
 
 bool SfxPointItem::QueryValue( uno::Any& rVal,
                                sal_uInt8 nMemberId ) const

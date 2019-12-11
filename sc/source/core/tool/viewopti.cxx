@@ -194,7 +194,7 @@ bool ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
+ScTpViewItem* ScTpViewItem::Clone( SfxItemPool * ) const
 {
     return new ScTpViewItem( *this );
 }

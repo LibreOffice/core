@@ -27,7 +27,7 @@
 class SdrMeasureOverhangItem: public SdrMetricItem {
 public:
     SdrMeasureOverhangItem(long nVal): SdrMetricItem(SDRATTR_MEASUREOVERHANG,nVal)  {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual SdrMeasureOverhangItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureOverhangItem(*this);
     }

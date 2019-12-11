@@ -56,12 +56,10 @@ SvxViewLayoutItem::~SvxViewLayoutItem()
 {
 }
 
-
-SfxPoolItem* SvxViewLayoutItem::Clone( SfxItemPool * /*pPool*/ ) const
+SvxViewLayoutItem* SvxViewLayoutItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxViewLayoutItem( *this );
 }
-
 
 bool SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
 {

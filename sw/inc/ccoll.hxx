@@ -52,7 +52,7 @@ public:
     SwCondCollItem & operator =(SwCondCollItem const &) = delete; // due to SfxPoolItem
     SwCondCollItem & operator =(SwCondCollItem &&) = delete; // due to SfxPoolItem
 
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwCondCollItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool                operator==( const SfxPoolItem& ) const override;
 
     static const CommandStruct* GetCmds() { return aCmds; }

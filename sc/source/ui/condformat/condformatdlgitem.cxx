@@ -33,7 +33,7 @@ bool ScCondFormatDlgItem::operator==(const SfxPoolItem& rItem) const
     return false;
 }
 
-SfxPoolItem* ScCondFormatDlgItem::Clone(SfxItemPool* /*pPool*/) const
+ScCondFormatDlgItem* ScCondFormatDlgItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new ScCondFormatDlgItem(*this);
 }

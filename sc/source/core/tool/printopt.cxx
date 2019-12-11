@@ -66,7 +66,7 @@ bool ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-SfxPoolItem* ScTpPrintItem::Clone( SfxItemPool * ) const
+ScTpPrintItem* ScTpPrintItem::Clone( SfxItemPool * ) const
 {
     return new ScTpPrintItem( *this );
 }

@@ -51,8 +51,7 @@ bool SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
     return nFrom==rT.nFrom && nTo==rT.nTo;
 }
 
-
-SfxPoolItem* SfxRangeItem::Clone(SfxItemPool *) const
+SfxRangeItem* SfxRangeItem::Clone(SfxItemPool *) const
 {
     return new SfxRangeItem( Which(), nFrom, nTo );
 }

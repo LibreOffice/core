@@ -22,14 +22,12 @@
 
 #include <svx/xcolit.hxx>
 
-
-
 class SVX_DLLPUBLIC XSecondaryFillColorItem final : public XColorItem
 {
 public:
     XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor);
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    SVX_DLLPRIVATE virtual XSecondaryFillColorItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                     MapUnit eCoreMetric,

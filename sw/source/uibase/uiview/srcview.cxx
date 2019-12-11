@@ -559,7 +559,7 @@ SvxSearchItem* SwSrcView::GetSearchItem()
 
 void SwSrcView::SetSearchItem( const SvxSearchItem& rItem )
 {
-    pSearchItem.reset(static_cast<SvxSearchItem*>(rItem.Clone()));
+    pSearchItem.reset(rItem.Clone());
 }
 
 void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,

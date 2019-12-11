@@ -150,7 +150,7 @@ XFillBitmapItem::XFillBitmapItem(const GraphicObject& rGraphicObject)
 {
 }
 
-SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
+XFillBitmapItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillBitmapItem(*this);
 }

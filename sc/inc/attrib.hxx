@@ -64,7 +64,7 @@ public:
                 virtual ~ScMergeAttr() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual ScMergeAttr*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
             SCCOL          GetColMerge() const {return nColMerge; }
             SCROW          GetRowMerge() const {return nRowMerge; }
@@ -93,7 +93,7 @@ public:
     ScMergeFlagAttr & operator =(ScMergeFlagAttr const &) = delete; // due to SfxInt16Item
     ScMergeFlagAttr & operator =(ScMergeFlagAttr &&) = delete; // due to SfxInt16Item
 
-    SfxPoolItem * Clone(SfxItemPool * pPool = nullptr) const override;
+    ScMergeFlagAttr* Clone(SfxItemPool * pPool = nullptr) const override;
 
     ScMF    GetValue() const { return static_cast<ScMF>(SfxInt16Item::GetValue()); }
 
@@ -136,7 +136,7 @@ public:
                                     const IntlWrapper& rIntl ) const override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual ScProtectionAttr* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -177,7 +177,7 @@ public:
                 virtual ~ScPageHFItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual ScPageHFItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -206,7 +206,7 @@ public:
     ScViewObjectModeItem & operator =(ScViewObjectModeItem &&) = delete; // due to SfxEnumItem<ScVObjMode>
 
     virtual sal_uInt16          GetValueCount() const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual ScViewObjectModeItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

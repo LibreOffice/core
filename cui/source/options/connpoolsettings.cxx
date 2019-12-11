@@ -70,8 +70,7 @@ namespace offapp
         return true;
     }
 
-
-    SfxPoolItem* DriverPoolingSettingsItem::Clone( SfxItemPool * ) const
+    DriverPoolingSettingsItem* DriverPoolingSettingsItem::Clone( SfxItemPool * ) const
     {
         return new DriverPoolingSettingsItem(*this);
     }

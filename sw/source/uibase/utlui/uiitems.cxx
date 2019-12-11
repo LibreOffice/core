@@ -40,11 +40,11 @@ SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( SwPageFootnoteInfo const & rInfo
 {
 }
 
- SwPageFootnoteInfoItem::~SwPageFootnoteInfoItem()
+SwPageFootnoteInfoItem::~SwPageFootnoteInfoItem()
 {
 }
 
-SfxPoolItem*  SwPageFootnoteInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
+SwPageFootnoteInfoItem* SwPageFootnoteInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwPageFootnoteInfoItem( *this );
 }
@@ -197,7 +197,7 @@ SwPtrItem::SwPtrItem( const sal_uInt16 nId, void* pPtr ) :
 
 // Cloning
 
-SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
+SwPtrItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwPtrItem( *this );
 }
@@ -225,7 +225,7 @@ SwUINumRuleItem::~SwUINumRuleItem()
 {
 }
 
-SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
+SwUINumRuleItem* SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwUINumRuleItem( *this );
 }
@@ -262,7 +262,7 @@ SwPaMItem::SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM ) :
 {
 }
 
-SfxPoolItem* SwPaMItem::Clone( SfxItemPool * /*pPool*/ ) const
+SwPaMItem* SwPaMItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwPaMItem( *this );
 }

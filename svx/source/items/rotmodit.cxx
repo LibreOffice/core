@@ -93,7 +93,7 @@ sal_uInt16 SvxRotateModeItem::GetValueCount() const
     return 4;       // STANDARD, TOP, CENTER, BOTTOM
 }
 
-SfxPoolItem* SvxRotateModeItem::Clone( SfxItemPool* ) const
+SvxRotateModeItem* SvxRotateModeItem::Clone( SfxItemPool* ) const
 {
     return new SvxRotateModeItem( *this );
 }

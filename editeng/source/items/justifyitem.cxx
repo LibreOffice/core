@@ -165,7 +165,7 @@ OUString SvxHorJustifyItem::GetValueText(SvxCellHorJustify nVal)
     return EditResId(RID_SVXITEMS_HORJUST[static_cast<size_t>(nVal)]);
 }
 
-SfxPoolItem* SvxHorJustifyItem::Clone( SfxItemPool* ) const
+SvxHorJustifyItem* SvxHorJustifyItem::Clone( SfxItemPool* ) const
 {
     return new SvxHorJustifyItem( *this );
 }
@@ -290,7 +290,7 @@ OUString SvxVerJustifyItem::GetValueText( SvxCellVerJustify nVal )
     return EditResId(RID_SVXITEMS_VERJUST[static_cast<size_t>(nVal)]);
 }
 
-SfxPoolItem* SvxVerJustifyItem::Clone( SfxItemPool* ) const
+SvxVerJustifyItem* SvxVerJustifyItem::Clone( SfxItemPool* ) const
 {
     return new SvxVerJustifyItem( *this );
 }
@@ -359,7 +359,7 @@ OUString SvxJustifyMethodItem::GetValueText( SvxCellJustifyMethod nVal )
     return EditResId(RID_SVXITEMS_JUSTMETHOD[static_cast<size_t>(nVal)]);
 }
 
-SfxPoolItem* SvxJustifyMethodItem::Clone( SfxItemPool* ) const
+SvxJustifyMethodItem* SvxJustifyMethodItem::Clone( SfxItemPool* ) const
 {
     return new SvxJustifyMethodItem( *this );
 }

@@ -5160,7 +5160,7 @@ void SwHTMLParser::InsertLineBreak()
         {
             if( m_pCSS1Parser->SetFormatBreak( aItemSet, aPropInfo ) )
             {
-                aBreakItem.reset(static_cast<SvxFormatBreakItem*>(aItemSet.Get(RES_BREAK).Clone()));
+                aBreakItem.reset(aItemSet.Get(RES_BREAK).Clone());
                 bBreakItem = true;
             }
             if( !aPropInfo.m_aId.isEmpty() )

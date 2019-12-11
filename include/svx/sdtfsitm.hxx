@@ -38,7 +38,7 @@ public:
     SdrTextFitToSizeTypeItem(
             css::drawing::TextFitToSizeType const eFit = css::drawing::TextFitToSizeType_NONE)
         : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE, eFit) {}
-    virtual SfxPoolItem*     Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual SdrTextFitToSizeTypeItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16       GetValueCount() const override;
 
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

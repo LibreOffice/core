@@ -28,12 +28,10 @@ enum class SdrEdgeKind
     OrthoLines, ThreeLines, OneLine, Bezier, Arc
 };
 
-
-
 class SVX_DLLPUBLIC SdrEdgeKindItem: public SfxEnumItem<SdrEdgeKind> {
 public:
     SdrEdgeKindItem(SdrEdgeKind eStyle=SdrEdgeKind::OrthoLines): SfxEnumItem(SDRATTR_EDGEKIND, eStyle) {}
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual SdrEdgeKindItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16   GetValueCount() const override; // { return 5; }
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

@@ -2728,7 +2728,7 @@ bool SwFrameURLPage::FillItemSet(SfxItemSet *rSet)
     const SwFormatURL* pOldURL = GetOldItem(*rSet, RES_URL);
     std::unique_ptr<SwFormatURL> pFormatURL;
     if(pOldURL)
-        pFormatURL.reset(static_cast<SwFormatURL*>(pOldURL->Clone()));
+        pFormatURL.reset(pOldURL->Clone());
     else
         pFormatURL.reset(new SwFormatURL());
 

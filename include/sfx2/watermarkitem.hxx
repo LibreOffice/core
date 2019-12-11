@@ -18,7 +18,7 @@ class SFX2_DLLPUBLIC SfxWatermarkItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
     SfxWatermarkItem();
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxWatermarkItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

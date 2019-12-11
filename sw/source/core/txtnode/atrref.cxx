@@ -50,7 +50,7 @@ bool SwFormatRefMark::operator==( const SfxPoolItem& rAttr ) const
     return m_aRefName == static_cast<const SwFormatRefMark&>(rAttr).m_aRefName;
 }
 
-SfxPoolItem* SwFormatRefMark::Clone( SfxItemPool* ) const
+SwFormatRefMark* SwFormatRefMark::Clone( SfxItemPool* ) const
 {
     return new SwFormatRefMark( *this );
 }

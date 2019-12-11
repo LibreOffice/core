@@ -266,8 +266,8 @@ SwBoxAutoFormat::SwBoxAutoFormat()
 
 SwBoxAutoFormat::SwBoxAutoFormat( const SwBoxAutoFormat& rNew )
 :   AutoFormatBase(rNew),
-    m_aTextOrientation(static_cast<SvxFrameDirectionItem*>(rNew.m_aTextOrientation->Clone())),
-    m_aVerticalAlignment(static_cast<SwFormatVertOrient*>(rNew.m_aVerticalAlignment->Clone())),
+    m_aTextOrientation(rNew.m_aTextOrientation->Clone()),
+    m_aVerticalAlignment(rNew.m_aVerticalAlignment->Clone()),
     m_sNumFormatString( rNew.m_sNumFormatString ),
     m_eSysLanguage( rNew.m_eSysLanguage ),
     m_eNumFormatLanguage( rNew.m_eNumFormatLanguage ),
@@ -421,14 +421,14 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
     m_bInclValueFormat = rNew.m_bInclValueFormat;
     m_bInclWidthHeight = rNew.m_bInclWidthHeight;
 
-    m_aBreak.reset(static_cast<SvxFormatBreakItem*>(rNew.m_aBreak->Clone()));
+    m_aBreak.reset(rNew.m_aBreak->Clone());
     m_aPageDesc = rNew.m_aPageDesc;
-    m_aKeepWithNextPara.reset(static_cast<SvxFormatKeepItem*>(rNew.m_aKeepWithNextPara->Clone()));
+    m_aKeepWithNextPara.reset(rNew.m_aKeepWithNextPara->Clone());
     m_aRepeatHeading = rNew.m_aRepeatHeading;
     m_bLayoutSplit = rNew.m_bLayoutSplit;
     m_bRowSplit = rNew.m_bRowSplit;
     m_bCollapsingBorders = rNew.m_bCollapsingBorders;
-    m_aShadow.reset(static_cast<SvxShadowItem*>(rNew.m_aShadow->Clone()));
+    m_aShadow.reset(rNew.m_aShadow->Clone());
     m_bHidden = rNew.m_bHidden;
     m_bUserDefined = rNew.m_bUserDefined;
 
@@ -716,15 +716,15 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
 
     const SfxItemSet &rSet = pFormat->GetAttrSet();
 
-    m_aBreak.reset(static_cast<SvxFormatBreakItem*>(rSet.Get(RES_BREAK).Clone()));
+    m_aBreak.reset(rSet.Get(RES_BREAK).Clone());
     m_aPageDesc = rSet.Get(RES_PAGEDESC);
     const SwFormatLayoutSplit &layoutSplit = rSet.Get(RES_LAYOUT_SPLIT);
     m_bLayoutSplit = layoutSplit.GetValue();
     m_bCollapsingBorders = rSet.Get(RES_COLLAPSING_BORDERS).GetValue();
 
-    m_aKeepWithNextPara.reset(static_cast<SvxFormatKeepItem*>(rSet.Get(RES_KEEP).Clone()));
+    m_aKeepWithNextPara.reset(rSet.Get(RES_KEEP).Clone());
     m_aRepeatHeading = table.GetRowsToRepeat();
-    m_aShadow.reset(static_cast<SvxShadowItem*>(rSet.Get(RES_SHADOW).Clone()));
+    m_aShadow.reset(rSet.Get(RES_SHADOW).Clone());
 }
 
 bool SwTableAutoFormat::FirstRowEndColumnIsRow()

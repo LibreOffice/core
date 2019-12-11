@@ -222,8 +222,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-
-SfxPoolItem* SvxLineSpacingItem::Clone( SfxItemPool * ) const
+SvxLineSpacingItem* SvxLineSpacingItem::Clone( SfxItemPool * ) const
 {
     return new SvxLineSpacingItem( *this );
 }
@@ -408,12 +407,10 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-
-SfxPoolItem* SvxAdjustItem::Clone( SfxItemPool * ) const
+SvxAdjustItem* SvxAdjustItem::Clone( SfxItemPool * ) const
 {
     return new SvxAdjustItem( *this );
 }
-
 
 bool SvxAdjustItem::GetPresentation
 (
@@ -474,12 +471,10 @@ SvxWidowsItem::SvxWidowsItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxWidowsItem::Clone( SfxItemPool * ) const
+SvxWidowsItem* SvxWidowsItem::Clone( SfxItemPool * ) const
 {
     return new SvxWidowsItem( *this );
 }
-
 
 bool SvxWidowsItem::GetPresentation
 (
@@ -520,12 +515,10 @@ SvxOrphansItem::SvxOrphansItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
 {
 }
 
-
-SfxPoolItem* SvxOrphansItem::Clone( SfxItemPool * ) const
+SvxOrphansItem* SvxOrphansItem::Clone( SfxItemPool * ) const
 {
     return new SvxOrphansItem( *this );
 }
-
 
 bool SvxOrphansItem::GetPresentation
 (
@@ -641,12 +634,10 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
             && rItem.nMaxHyphens == nMaxHyphens );
 }
 
-
-SfxPoolItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
+SvxHyphenZoneItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
 {
     return new SvxHyphenZoneItem( *this );
 }
-
 
 bool SvxHyphenZoneItem::GetPresentation
 (
@@ -936,12 +927,10 @@ bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
     return true;
 }
 
-
-SfxPoolItem* SvxTabStopItem::Clone( SfxItemPool * ) const
+SvxTabStopItem* SvxTabStopItem::Clone( SfxItemPool * ) const
 {
     return new SvxTabStopItem( *this );
 }
-
 
 bool SvxTabStopItem::GetPresentation
 (
@@ -1010,11 +999,10 @@ SvxFormatSplitItem::~SvxFormatSplitItem()
 {
 }
 
-SfxPoolItem* SvxFormatSplitItem::Clone( SfxItemPool * ) const
+SvxFormatSplitItem* SvxFormatSplitItem::Clone( SfxItemPool * ) const
 {
     return new SvxFormatSplitItem( *this );
 }
-
 
 bool SvxFormatSplitItem::GetPresentation
 (
@@ -1032,12 +1020,10 @@ bool SvxFormatSplitItem::GetPresentation
     return true;
 }
 
-
-SfxPoolItem* SvxPageModelItem::Clone( SfxItemPool* ) const
+SvxPageModelItem* SvxPageModelItem::Clone( SfxItemPool* ) const
 {
     return new SvxPageModelItem( *this );
 }
-
 
 bool SvxPageModelItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -1109,7 +1095,7 @@ SvxScriptSpaceItem::SvxScriptSpaceItem( bool bOn, const sal_uInt16 nId )
 {
 }
 
-SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool * ) const
+SvxScriptSpaceItem* SvxScriptSpaceItem::Clone( SfxItemPool * ) const
 {
     return new SvxScriptSpaceItem( *this );
 }
@@ -1132,7 +1118,7 @@ SvxHangingPunctuationItem::SvxHangingPunctuationItem(
 {
 }
 
-SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool * ) const
+SvxHangingPunctuationItem* SvxHangingPunctuationItem::Clone( SfxItemPool * ) const
 {
     return new SvxHangingPunctuationItem( *this );
 }
@@ -1155,7 +1141,7 @@ SvxForbiddenRuleItem::SvxForbiddenRuleItem(
 {
 }
 
-SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool * ) const
+SvxForbiddenRuleItem* SvxForbiddenRuleItem::Clone( SfxItemPool * ) const
 {
     return new SvxForbiddenRuleItem( *this );
 }
@@ -1181,7 +1167,7 @@ SvxParaVertAlignItem::SvxParaVertAlignItem( Align nValue,
 {
 }
 
-SfxPoolItem* SvxParaVertAlignItem::Clone( SfxItemPool* ) const
+SvxParaVertAlignItem* SvxParaVertAlignItem::Clone( SfxItemPool* ) const
 {
     return new SvxParaVertAlignItem( *this );
 }
@@ -1224,14 +1210,12 @@ bool SvxParaVertAlignItem::PutValue( const css::uno::Any& rVal,
         return false;
 }
 
-
-
 SvxParaGridItem::SvxParaGridItem( bool bOn, const sal_uInt16 nId )
     : SfxBoolItem( nId, bOn )
 {
 }
 
-SfxPoolItem* SvxParaGridItem::Clone( SfxItemPool * ) const
+SvxParaGridItem* SvxParaGridItem::Clone( SfxItemPool * ) const
 {
     return new SvxParaGridItem( *this );
 }

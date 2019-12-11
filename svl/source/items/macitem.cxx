@@ -185,7 +185,6 @@ void SvxMacroTableDtor::Erase(SvMacroItemId nEvent)
     }
 }
 
-
 bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
@@ -196,12 +195,10 @@ bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
     return rOwn == rOther;
 }
 
-
-SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
+SvxMacroItem* SvxMacroItem::Clone( SfxItemPool* ) const
 {
     return new SvxMacroItem( *this );
 }
-
 
 bool SvxMacroItem::GetPresentation
 (

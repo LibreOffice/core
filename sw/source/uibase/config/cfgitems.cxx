@@ -55,7 +55,7 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
     bManualBreak        = rVOpt.IsLineBreak(true);
 }
 
-SfxPoolItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
+SwDocDisplayItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
 {
     return new SwDocDisplayItem( *this );
 }
@@ -120,7 +120,7 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
     m_bShowHiddenPara  = rVOpt.IsShowHiddenPara();
 }
 
-SfxPoolItem* SwElemItem::Clone( SfxItemPool* ) const
+SwElemItem* SwElemItem::Clone( SfxItemPool* ) const
 {
     return new SwElemItem( *this );
 }
@@ -175,7 +175,7 @@ SwAddPrinterItem::SwAddPrinterItem( const SwPrintData& rPrtData ) :
     SwPrintData::operator=(rPrtData);
 }
 
-SfxPoolItem* SwAddPrinterItem::Clone( SfxItemPool* ) const
+SwAddPrinterItem* SwAddPrinterItem::Clone( SfxItemPool* ) const
 {
     return new SwAddPrinterItem( *this );
 }
@@ -205,7 +205,7 @@ SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt )
 {
 }
 
-SfxPoolItem* SwShadowCursorItem::Clone( SfxItemPool* ) const
+SwShadowCursorItem* SwShadowCursorItem::Clone( SfxItemPool* ) const
 {
     return new SwShadowCursorItem( *this );
 }
@@ -224,7 +224,7 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
 }
 
 #ifdef DBG_UTIL
-SfxPoolItem* SwTestItem::Clone( SfxItemPool* ) const
+SwTestItem* SwTestItem::Clone( SfxItemPool* ) const
 {
     return new SwTestItem( *this );
 }

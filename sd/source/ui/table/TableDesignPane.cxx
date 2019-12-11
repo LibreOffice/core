@@ -455,7 +455,7 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
     // get border
     const SvxBoxItem* pBoxItem = rSet.GetItem( SDRATTR_TABLE_BORDER );
     if( pBoxItem )
-        maBorder.reset(static_cast<SvxBoxItem*>(pBoxItem->Clone()));
+        maBorder.reset(pBoxItem->Clone());
 }
 
 typedef std::vector< std::shared_ptr< CellInfo > > CellInfoVector;

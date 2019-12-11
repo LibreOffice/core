@@ -27,7 +27,7 @@ SvxCharHiddenItem::SvxCharHiddenItem( const bool bHidden, const sal_uInt16 nId )
 {
 }
 
-SfxPoolItem* SvxCharHiddenItem::Clone( SfxItemPool * ) const
+SvxCharHiddenItem* SvxCharHiddenItem::Clone( SfxItemPool * ) const
 {
     return new SvxCharHiddenItem( *this );
 }

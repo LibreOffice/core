@@ -51,7 +51,7 @@ public:
 
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual CntUnencodedStringItem* Clone(SfxItemPool * = nullptr) const override;
 
     const OUString & GetValue() const { return m_aValue; }
 

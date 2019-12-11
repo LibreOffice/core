@@ -28,8 +28,7 @@
 
 using namespace ::com::sun::star;
 
-
-SfxPoolItem* SwMirrorGrf::Clone( SfxItemPool* ) const
+SwMirrorGrf* SwMirrorGrf::Clone( SfxItemPool* ) const
 {
     return new SwMirrorGrf( *this );
 }
@@ -141,7 +140,7 @@ SwCropGrf::SwCropGrf(sal_Int32 nL, sal_Int32 nR, sal_Int32 nT, sal_Int32 nB )
     : SvxGrfCrop( nL, nR, nT, nB, RES_GRFATR_CROPGRF )
 {}
 
-SfxPoolItem* SwCropGrf::Clone( SfxItemPool* ) const
+SwCropGrf* SwCropGrf::Clone( SfxItemPool* ) const
 {
     return new SwCropGrf( *this );
 }
@@ -171,7 +170,7 @@ SwRotationGrf::SwRotationGrf( sal_Int16 nVal, const Size& rSz )
 {
 }
 
-SfxPoolItem* SwRotationGrf::Clone( SfxItemPool * ) const
+SwRotationGrf* SwRotationGrf::Clone( SfxItemPool * ) const
 {
     return new SwRotationGrf( *this );
 }
@@ -209,32 +208,32 @@ bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 
 // Sw___Grf::Clone(..)
 
-SfxPoolItem* SwLuminanceGrf::Clone( SfxItemPool * ) const
+SwLuminanceGrf* SwLuminanceGrf::Clone( SfxItemPool * ) const
 {
     return new SwLuminanceGrf( *this );
 }
 
-SfxPoolItem* SwContrastGrf::Clone( SfxItemPool * ) const
+SwContrastGrf* SwContrastGrf::Clone( SfxItemPool * ) const
 {
     return new SwContrastGrf( *this );
 }
 
-SfxPoolItem* SwChannelRGrf::Clone( SfxItemPool * ) const
+SwChannelRGrf* SwChannelRGrf::Clone( SfxItemPool * ) const
 {
     return new SwChannelRGrf( *this );
 }
 
-SfxPoolItem* SwChannelGGrf::Clone( SfxItemPool * ) const
+SwChannelGGrf* SwChannelGGrf::Clone( SfxItemPool * ) const
 {
     return new SwChannelGGrf( *this );
 }
 
-SfxPoolItem* SwChannelBGrf::Clone( SfxItemPool * ) const
+SwChannelBGrf* SwChannelBGrf::Clone( SfxItemPool * ) const
 {
     return new SwChannelBGrf( *this );
 }
 
-SfxPoolItem* SwGammaGrf::Clone( SfxItemPool * ) const
+SwGammaGrf* SwGammaGrf::Clone( SfxItemPool * ) const
 {
     return new SwGammaGrf( *this );
 }
@@ -260,12 +259,12 @@ bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 
 // Sw___Grf::Clone(..) cont'd
 
-SfxPoolItem* SwInvertGrf::Clone( SfxItemPool * ) const
+SwInvertGrf* SwInvertGrf::Clone( SfxItemPool * ) const
 {
     return new SwInvertGrf( *this );
 }
 
-SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
+SwTransparencyGrf* SwTransparencyGrf::Clone( SfxItemPool * ) const
 {
     return new SwTransparencyGrf( *this );
 }
@@ -304,7 +303,7 @@ bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
 
 // Sw___Grf::Clone(..) cont'd
 
-SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
+SwDrawModeGrf* SwDrawModeGrf::Clone( SfxItemPool * ) const
 {
     return new SwDrawModeGrf( *this );
 }

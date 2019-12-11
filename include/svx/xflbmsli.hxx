@@ -28,7 +28,7 @@ class SVX_DLLPUBLIC XFillBmpSizeLogItem final : public SfxBoolItem
 public:
                             XFillBmpSizeLogItem( bool bLog = true );
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    SVX_DLLPRIVATE virtual XFillBmpSizeLogItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  MapUnit eCoreMetric,

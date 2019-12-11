@@ -59,7 +59,7 @@ bool SfxVisibilityItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * SfxVisibilityItem::Clone(SfxItemPool *) const
+SfxVisibilityItem* SfxVisibilityItem::Clone(SfxItemPool *) const
 {
     return new SfxVisibilityItem(*this);
 }

@@ -1762,7 +1762,7 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
     if (rStyleInf.m_bValid && rStyleInf.m_pFormat)
     {
         //Save old pre-list modified indent, which are the word indent values
-        rStyleInf.maWordLR.reset(static_cast<SvxLRSpaceItem*>(ItemGet<SvxLRSpaceItem>(*rStyleInf.m_pFormat, RES_LR_SPACE).Clone()));
+        rStyleInf.maWordLR.reset(ItemGet<SvxLRSpaceItem>(*rStyleInf.m_pFormat, RES_LR_SPACE).Clone());
 
         // Phase 2: refresh StyleDef after reading all Lists
         SwNumRule* pNmRule = nullptr;

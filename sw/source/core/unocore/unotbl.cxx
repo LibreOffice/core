@@ -1985,10 +1985,10 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
     }
 
     if(bPutBreak)
-        AddItemToSet<std::shared_ptr<SvxFormatBreakItem>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SvxFormatBreakItem>(static_cast<SvxFormatBreakItem*>(rFrameFormat.GetBreak().Clone())); }, RES_BREAK, {0});
-    AddItemToSet<std::shared_ptr<SvxShadowItem>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SvxShadowItem>(static_cast<SvxShadowItem*>(rFrameFormat.GetShadow().Clone())); }, RES_SHADOW, {0}, true);
-    AddItemToSet<std::shared_ptr<SvxFormatKeepItem>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SvxFormatKeepItem>(static_cast<SvxFormatKeepItem*>(rFrameFormat.GetKeep().Clone())); }, RES_KEEP, {0});
-    AddItemToSet<std::shared_ptr<SwFormatHoriOrient>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SwFormatHoriOrient>(static_cast<SwFormatHoriOrient*>(rFrameFormat.GetHoriOrient().Clone())); }, RES_HORI_ORIENT, {MID_HORIORIENT_ORIENT}, true);
+        AddItemToSet<std::shared_ptr<SvxFormatBreakItem>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SvxFormatBreakItem>(rFrameFormat.GetBreak().Clone()); }, RES_BREAK, {0});
+    AddItemToSet<std::shared_ptr<SvxShadowItem>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SvxShadowItem>(rFrameFormat.GetShadow().Clone()); }, RES_SHADOW, {0}, true);
+    AddItemToSet<std::shared_ptr<SvxFormatKeepItem>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SvxFormatKeepItem>(rFrameFormat.GetKeep().Clone()); }, RES_KEEP, {0});
+    AddItemToSet<std::shared_ptr<SwFormatHoriOrient>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SwFormatHoriOrient>(rFrameFormat.GetHoriOrient().Clone()); }, RES_HORI_ORIENT, {MID_HORIORIENT_ORIENT}, true);
 
     const uno::Any* pSzRel(nullptr);
     GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff, pSzRel);
@@ -2015,10 +2015,10 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
             aSz.SetWidth(MINLAY);
         aSet.Put(aSz);
     }
-    AddItemToSet<std::shared_ptr<SvxLRSpaceItem>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SvxLRSpaceItem>(static_cast<SvxLRSpaceItem*>(rFrameFormat.GetLRSpace().Clone())); }, RES_LR_SPACE, {
+    AddItemToSet<std::shared_ptr<SvxLRSpaceItem>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SvxLRSpaceItem>(rFrameFormat.GetLRSpace().Clone()); }, RES_LR_SPACE, {
         MID_L_MARGIN|CONVERT_TWIPS,
         MID_R_MARGIN|CONVERT_TWIPS });
-    AddItemToSet<std::shared_ptr<SvxULSpaceItem>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SvxULSpaceItem>(static_cast<SvxULSpaceItem*>(rFrameFormat.GetULSpace().Clone())); }, RES_UL_SPACE, {
+    AddItemToSet<std::shared_ptr<SvxULSpaceItem>>(aSet, [&rFrameFormat]() { return std::shared_ptr<SvxULSpaceItem>(rFrameFormat.GetULSpace().Clone()); }, RES_UL_SPACE, {
         MID_UP_MARGIN|CONVERT_TWIPS,
         MID_LO_MARGIN|CONVERT_TWIPS });
     const::uno::Any* pSplit(nullptr);

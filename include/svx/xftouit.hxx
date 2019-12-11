@@ -36,7 +36,7 @@ public:
                             static SfxPoolItem* CreateDefault();
 
                             XFormTextOutlineItem(bool bOutline = false);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual XFormTextOutlineItem*    Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 #endif

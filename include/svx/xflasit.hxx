@@ -36,7 +36,7 @@ public:
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr);
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr,
                                              SfxItemPool* pItemPool);
-    virtual SfxPoolItem*    Clone( SfxItemPool* pToPool = nullptr ) const override;
+    virtual XFillAttrSetItem* Clone( SfxItemPool* pToPool = nullptr ) const override;
 };
 
 #endif

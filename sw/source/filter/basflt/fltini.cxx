@@ -308,7 +308,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
     if( SfxItemState::SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
             MINFLY > static_cast<const SwFormatFrameSize*>(pItem)->GetWidth() )
     {
-        std::shared_ptr<SwFormatFrameSize> aSz(static_cast<SwFormatFrameSize*>(rFlySet.Get(RES_FRM_SIZE).Clone()));
+        std::shared_ptr<SwFormatFrameSize> aSz(rFlySet.Get(RES_FRM_SIZE).Clone());
         if (pItem)
             aSz.reset(static_cast<SwFormatFrameSize*>(pItem->Clone()));
 

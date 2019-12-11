@@ -286,18 +286,15 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     m_aCmisProperties = rItem.m_aCmisProperties;
 }
 
-
 SfxDocumentInfoItem::~SfxDocumentInfoItem()
 {
     ClearCustomProperties();
 }
 
-
-SfxPoolItem* SfxDocumentInfoItem::Clone( SfxItemPool * ) const
+SfxDocumentInfoItem* SfxDocumentInfoItem::Clone( SfxItemPool * ) const
 {
     return new SfxDocumentInfoItem( *this );
 }
-
 
 bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 {

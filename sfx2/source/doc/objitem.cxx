@@ -36,7 +36,7 @@ bool SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
         static_cast<const SfxObjectShellItem&>(rItem).pObjSh == pObjSh;
 }
 
-SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
+SfxObjectShellItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 {
     return new SfxObjectShellItem( *this );
 }
@@ -97,7 +97,7 @@ bool SfxObjectItem::operator==( const SfxPoolItem &rItem ) const
         static_cast<const SfxObjectItem&>(rItem)._pSh == _pSh;
 }
 
-SfxPoolItem* SfxObjectItem::Clone( SfxItemPool *) const
+SfxObjectItem* SfxObjectItem::Clone( SfxItemPool *) const
 {
     return new SfxObjectItem( *this );
 }

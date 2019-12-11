@@ -45,12 +45,10 @@ bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
              aStyle == static_cast<const SfxTemplateItem&>(rCmp).aStyle );
 }
 
-
-SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
+SfxTemplateItem* SfxTemplateItem::Clone( SfxItemPool *) const
 {
     return new SfxTemplateItem(*this);
 }
-
 
 bool SfxTemplateItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {

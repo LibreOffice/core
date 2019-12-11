@@ -53,7 +53,7 @@ SvxOptionsGrid::SvxOptionsGrid() :
 {
 }
 
-SfxPoolItem*  SvxGridItem::Clone( SfxItemPool* ) const
+SvxGridItem* SvxGridItem::Clone( SfxItemPool* ) const
 {
     return new SvxGridItem( *this );
 }
