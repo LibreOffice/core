@@ -2002,7 +2002,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SvxCSS1PropertyInfo &rPropInfo,
 
         sal_uInt16 nLeftSpace = 0, nRightSpace = 0;
         short nIndent = 0;
-        GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
+        GetMarginsFromContextWithNumberBullet( nLeftSpace, nRightSpace, nIndent );
 
         if( SvxAdjust::Right==rPropInfo.m_eFloat )
         {
@@ -2166,7 +2166,7 @@ void SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
     }
 }
 
-void SwHTMLParser::GetMarginsFromContextWithNumBul( sal_uInt16& nLeft,
+void SwHTMLParser::GetMarginsFromContextWithNumberBullet( sal_uInt16& nLeft,
                                                     sal_uInt16& nRight,
                                                     short& nIndent ) const
 {

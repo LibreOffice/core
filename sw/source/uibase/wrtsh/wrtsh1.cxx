@@ -1250,7 +1250,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         }
         else
         {
-            pChrFormat = GetCharFormatFromPool( RES_POOLCHR_BUL_LEVEL );
+            pChrFormat = GetCharFormatFromPool( RES_POOLCHR_BULLET_LEVEL );
         }
 
         const SwTextNode *const pTextNode = sw::GetParaPropsNode(*GetLayout(),

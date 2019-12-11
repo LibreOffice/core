@@ -108,10 +108,10 @@ extern SwPathFinder *pPathFinder;
 //  (For more levels the values have to be multiplied with the levels+1;
 //  levels 0 ..4!)
 
-const short lBullIndent = 1440/4;
-const short lBullFirstLineOffset = -lBullIndent;
-const sal_uInt16 lNumIndent = 1440/4;
-const short lNumFirstLineOffset = -lNumIndent;
+const short lBulletIndent = 1440/4;
+const short lBulletFirstLineOffset = -lBulletIndent;
+const sal_uInt16 lNumberIndent = 1440/4;
+const short lNumberFirstLineOffset = -lNumberIndent;
 const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 
 // Count of SystemField-types of SwDoc.

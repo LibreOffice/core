@@ -488,7 +488,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetListsProgNameArray()
 {
     static const std::vector<OUString> s_aListsProgNameArray = {
-        "List", // STR_POCO_PRGM_NUMBUL_BASE
+        "List", // STR_POCO_PRGM_NUMBER_BULLET_BASE
         "Numbering 1 Start", // STR_POCO_PRGM_NUM_LEVEL1S
         "Numbering 1",
         "Numbering 1 End",
@@ -528,7 +528,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetListsProgNameArray()
         "List 5 Start",
         "List 5",
         "List 5 End",
-        "List 5 Cont.", // STR_POCO_PRGM_BUL_NONUM5
+        "List 5 Cont.", // STR_POCO_PRGM_BULLET_NONUM5
     };
     return s_aListsProgNameArray;
 }

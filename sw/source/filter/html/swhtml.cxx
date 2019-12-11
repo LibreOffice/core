@@ -686,7 +686,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
 
             // close still open numbering
             while( GetNumInfo().GetNumRule() )
-                EndNumBulList();
+                EndNumberBulletList();
 
             OSL_ENSURE( !m_nContextStMin, "There are protected contexts" );
             // try this twice, first normally to let m_nContextStMin decrease
@@ -1763,7 +1763,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::UNORDERLIST_ON:
         if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        NewNumBulList( nToken );
+        NewNumberBulletList( nToken );
         break;
 
     case HtmlTokenId::DIRLIST_OFF:
@@ -1772,8 +1772,8 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::UNORDERLIST_OFF:
         if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        EndNumBulListItem( HtmlTokenId::NONE, true );
-        EndNumBulList( nToken );
+        EndNumberBulletListItem( HtmlTokenId::NONE, true );
+        EndNumberBulletList( nToken );
         break;
 
     case HtmlTokenId::LI_ON:
@@ -1786,13 +1786,13 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             EndPara();
         }
 
-        EndNumBulListItem( HtmlTokenId::NONE, false );// close <LI>/<LH> and don't set a template
-        NewNumBulListItem( nToken );
+        EndNumberBulletListItem( HtmlTokenId::NONE, false );// close <LI>/<LH> and don't set a template
+        NewNumberBulletListItem( nToken );
         break;
 
     case HtmlTokenId::LI_OFF:
     case HtmlTokenId::LISTHEADER_OFF:
-        EndNumBulListItem( nToken, false );
+        EndNumberBulletListItem( nToken, false );
         break;
 
     // Attribute :
@@ -4968,7 +4968,7 @@ void SwHTMLParser::InsertSpacer()
                 sal_uInt16 nLeft=0, nRight=0;
                 short nIndent = 0;
 
-                GetMarginsFromContextWithNumBul( nLeft, nRight, nIndent );
+                GetMarginsFromContextWithNumberBullet( nLeft, nRight, nIndent );
                 nIndent = nIndent + static_cast<short>(nSize);
 
                 SvxLRSpaceItem aLRItem( RES_LR_SPACE );

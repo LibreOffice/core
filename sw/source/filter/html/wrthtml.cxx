@@ -265,7 +265,7 @@ ErrCode SwHTMLWriter::WriteStream()
         m_nHTMLMode |= HTMLMODE_BLOCK_SPACER;
 
     if( HTML_CFG_WRITER == m_nExportMode || HTML_CFG_MSIE == m_nExportMode )
-        m_nHTMLMode |= (HTMLMODE_FLOAT_FRAME | HTMLMODE_LSPACE_IN_NUMBUL);
+        m_nHTMLMode |= (HTMLMODE_FLOAT_FRAME | HTMLMODE_LSPACE_IN_NUMBER_BULLET);
 
     if( HTML_CFG_MSIE == m_nExportMode )
         m_nHTMLMode |= HTMLMODE_NBSP_IN_TABLES;

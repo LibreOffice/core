@@ -1854,7 +1854,7 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
+Writer& OutCSS1_NumberBulletListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
                                     sal_uInt8 nLevel )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
@@ -1866,7 +1866,7 @@ Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
 
     long nLSpace = rNumFormat.GetAbsLSpace();
     long nFirstLineOffset = rNumFormat.GetFirstLineOffset();
-    long nDfltFirstLineOffset = HTML_NUMBUL_INDENT;
+    long nDfltFirstLineOffset = HTML_NUMBER_BULLET_INDENT;
     if( nLevel > 0 )
     {
         const SwNumFormat& rPrevNumFormat = rNumRule.Get( nLevel-1 );
@@ -1874,11 +1874,11 @@ Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
         nDfltFirstLineOffset = rPrevNumFormat.GetFirstLineOffset();
     }
 
-    if( rHTMLWrt.IsHTMLMode(HTMLMODE_LSPACE_IN_NUMBUL) &&
-        nLSpace != HTML_NUMBUL_MARGINLEFT )
+    if( rHTMLWrt.IsHTMLMode(HTMLMODE_LSPACE_IN_NUMBER_BULLET) &&
+        nLSpace != HTML_NUMBER_BULLET_MARGINLEFT )
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin_left, nLSpace );
 
-    if( rHTMLWrt.IsHTMLMode(HTMLMODE_FRSTLINE_IN_NUMBUL) &&
+    if( rHTMLWrt.IsHTMLMode(HTMLMODE_FRSTLINE_IN_NUMBER_BULLET) &&
         nFirstLineOffset != nDfltFirstLineOffset )
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_text_indent, nFirstLineOffset );
 

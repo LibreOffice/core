@@ -286,7 +286,7 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
 
                     OUString aNumCharFormat, aBulletCharFormat;
                     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, aNumCharFormat );
-                    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, aBulletCharFormat );
+                    SwStyleNameMapper::FillUIName( RES_POOLCHR_BULLET_LEVEL, aBulletCharFormat );
 
                     SfxAllItemSet aSet( GetPool() );
                     aSet.Put( SfxStringItem( SID_NUM_CHAR_FMT, aNumCharFormat ) );

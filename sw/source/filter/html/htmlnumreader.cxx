@@ -54,7 +54,7 @@ static HTMLOptionEnum<sal_Unicode> const aHTMLULTypeTable[] =
 };
 
 
-void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
+void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
 {
     SwHTMLNumRuleInfo& rInfo = GetNumInfo();
 
@@ -103,12 +103,12 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
             }
             aNumFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aNumFormat.SetBulletChar( cBulletChar );
-            nChrFormatPoolId = RES_POOLCHR_BUL_LEVEL;
+            nChrFormatPoolId = RES_POOLCHR_BULLET_LEVEL;
         }
 
-        sal_Int32 nAbsLSpace = HTML_NUMBUL_MARGINLEFT;
+        sal_Int32 nAbsLSpace = HTML_NUMBER_BULLET_MARGINLEFT;
 
-        sal_Int32 nFirstLineIndent  = HTML_NUMBUL_INDENT;
+        sal_Int32 nFirstLineIndent  = HTML_NUMBER_BULLET_INDENT;
         if( nLevel > 0 )
         {
             const SwNumFormat& rPrevNumFormat = rInfo.GetNumRule()->Get( nLevel-1 );
@@ -268,7 +268,7 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
                 {
                     // Default indent has already been added
                     long nAbsLSpace =
-                        aNumFormat.GetAbsLSpace() - HTML_NUMBUL_MARGINLEFT;
+                        aNumFormat.GetAbsLSpace() - HTML_NUMBER_BULLET_MARGINLEFT;
                     if( aPropInfo.m_nLeftMargin < 0 &&
                         nAbsLSpace < -aPropInfo.m_nLeftMargin )
                         nAbsLSpace = 0U;
@@ -331,7 +331,7 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
     SetTextCollAttrs(m_aContexts.back().get());
 }
 
-void SwHTMLParser::EndNumBulList( HtmlTokenId nToken )
+void SwHTMLParser::EndNumberBulletList( HtmlTokenId nToken )
 {
     SwHTMLNumRuleInfo& rInfo = GetNumInfo();
 
@@ -387,8 +387,8 @@ void SwHTMLParser::EndNumBulList( HtmlTokenId nToken )
                         }
                         aNumFormat.SetBulletChar( cBulletChar );
                     }
-                    aNumFormat.SetAbsLSpace( (i+1) * HTML_NUMBUL_MARGINLEFT );
-                    aNumFormat.SetFirstLineOffset( HTML_NUMBUL_INDENT );
+                    aNumFormat.SetAbsLSpace( (i+1) * HTML_NUMBER_BULLET_MARGINLEFT );
+                    aNumFormat.SetFirstLineOffset( HTML_NUMBER_BULLET_INDENT );
                     aNumFormat.SetCharFormat( pRefNumFormat->GetCharFormat() );
                     rInfo.GetNumRule()->Set( i, aNumFormat );
                     bChanged = true;
@@ -428,7 +428,7 @@ void SwHTMLParser::EndNumBulList( HtmlTokenId nToken )
 
 }
 
-void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
+void SwHTMLParser::NewNumberBulletListItem( HtmlTokenId nToken )
 {
     sal_uInt8 nLevel = GetNumInfo().GetLevel();
     OUString aId, aStyle, aClass, aLang, aDir;
@@ -500,8 +500,8 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
         }
         aNumFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         aNumFormat.SetBulletChar( cBulletChar );   // the bullet character !!
-        aNumFormat.SetCharFormat( m_pCSS1Parser->GetCharFormatFromPool(RES_POOLCHR_BUL_LEVEL) );
-        aNumFormat.SetFirstLineOffset( HTML_NUMBUL_INDENT );
+        aNumFormat.SetCharFormat( m_pCSS1Parser->GetCharFormatFromPool(RES_POOLCHR_BULLET_LEVEL) );
+        aNumFormat.SetFirstLineOffset( HTML_NUMBER_BULLET_INDENT );
         aNumRule.Set( 0, aNumFormat );
 
         m_xDoc->MakeNumRule( aNumRuleName, &aNumRule );
@@ -556,7 +556,7 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
     ShowStatline();
 }
 
-void SwHTMLParser::EndNumBulListItem( HtmlTokenId nToken, bool bSetColl )
+void SwHTMLParser::EndNumberBulletListItem( HtmlTokenId nToken, bool bSetColl )
 {
     // Create a new paragraph
     if( nToken == HtmlTokenId::NONE && m_pPam->GetPoint()->nContent.GetIndex() )

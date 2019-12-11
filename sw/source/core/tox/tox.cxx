@@ -295,7 +295,7 @@ static const char* STR_POOLCOLL_TOX_CITATION_ARY[] =
 // Edit forms
 SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     : m_eType( eTyp ), m_nFormMaxLevel( SwForm::GetFormMaxLevel( eTyp )),
-//  nFirstTabPos( lNumIndent ),
+//  nFirstTabPos( lNumberIndent ),
     m_bCommaSeparated(false)
 {
     //bHasFirstTabPos =

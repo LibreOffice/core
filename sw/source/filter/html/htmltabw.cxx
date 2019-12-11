@@ -1142,7 +1142,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         // to maybe close the Num list.
         rHTMLWrt.ClearNextNumInfo();
         rHTMLWrt.FillNextNumInfo();
-        OutHTML_NumBulListEnd( rHTMLWrt, *rHTMLWrt.GetNextNumInfo() );
+        OutHTML_NumberBulletListEnd( rHTMLWrt, *rHTMLWrt.GetNextNumInfo() );
     }
     return rWrt;
 }

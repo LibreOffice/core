@@ -558,7 +558,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
 
     void GetMarginsFromContext( sal_uInt16 &nLeft, sal_uInt16 &nRight, short& nIndent,
                                 bool bIgnoreCurrent=false ) const;
-    void GetMarginsFromContextWithNumBul( sal_uInt16 &nLeft, sal_uInt16 &nRight,
+    void GetMarginsFromContextWithNumberBullet( sal_uInt16 &nLeft, sal_uInt16 &nRight,
                                           short& nIndent ) const;
     void GetULSpaceFromContext( sal_uInt16 &rUpper, sal_uInt16 &rLower ) const;
 
@@ -602,10 +602,10 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     // Handling of lists
 
     // order list <OL> and unordered list <UL> with <LI>
-    void NewNumBulList( HtmlTokenId nToken );
-    void EndNumBulList( HtmlTokenId nToken = HtmlTokenId::NONE );
-    void NewNumBulListItem( HtmlTokenId nToken );
-    void EndNumBulListItem( HtmlTokenId nToken, bool bSetColl);
+    void NewNumberBulletList( HtmlTokenId nToken );
+    void EndNumberBulletList( HtmlTokenId nToken = HtmlTokenId::NONE );
+    void NewNumberBulletListItem( HtmlTokenId nToken );
+    void EndNumberBulletListItem( HtmlTokenId nToken, bool bSetColl);
 
     // definitions lists <DL> with <DD>, <DT>
     void NewDefList();

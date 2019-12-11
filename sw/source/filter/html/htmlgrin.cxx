@@ -191,7 +191,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         // determine paragraph indent
         sal_uInt16 nLeftSpace = 0, nRightSpace = 0;
         short nIndent = 0;
-        GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
+        GetMarginsFromContextWithNumberBullet( nLeftSpace, nRightSpace, nIndent );
 
         // determine horizontal alignment and wrapping
         sal_Int16 eHoriRel;
