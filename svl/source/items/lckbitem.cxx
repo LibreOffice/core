@@ -42,12 +42,10 @@ bool SfxLockBytesItem::operator==( const SfxPoolItem& rItem ) const
     return SfxPoolItem::operator==(rItem) && static_cast<const SfxLockBytesItem&>(rItem)._xVal == _xVal;
 }
 
-
-SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
+SfxLockBytesItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 {
     return new SfxLockBytesItem( *this );
 }
-
 
 // virtual
 bool SfxLockBytesItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )

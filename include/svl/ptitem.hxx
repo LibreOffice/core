@@ -43,7 +43,7 @@ public:
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxPointItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const Point&             GetValue() const { return aVal; }
             void             SetValue( const Point& rNewVal ) {

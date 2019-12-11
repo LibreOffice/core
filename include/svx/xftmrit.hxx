@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC XFormTextMirrorItem final : public SfxBoolItem
 public:
                             static SfxPoolItem* CreateDefault();
                             XFormTextMirrorItem(bool bMirror = false);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual XFormTextMirrorItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 #endif

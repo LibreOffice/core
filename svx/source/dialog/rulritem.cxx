@@ -128,7 +128,7 @@ bool SvxLongLRSpaceItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SvxLongLRSpaceItem::Clone(SfxItemPool *) const
+SvxLongLRSpaceItem* SvxLongLRSpaceItem::Clone(SfxItemPool *) const
 {
     return new SvxLongLRSpaceItem(*this);
 }
@@ -247,7 +247,7 @@ bool SvxLongULSpaceItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SvxLongULSpaceItem::Clone(SfxItemPool *) const
+SvxLongULSpaceItem* SvxLongULSpaceItem::Clone(SfxItemPool *) const
 {
     return new SvxLongULSpaceItem(*this);
 }
@@ -362,7 +362,7 @@ bool SvxPagePosSizeItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SvxPagePosSizeItem::Clone(SfxItemPool *) const
+SvxPagePosSizeItem* SvxPagePosSizeItem::Clone(SfxItemPool *) const
 {
     return new SvxPagePosSizeItem(*this);
 }
@@ -431,7 +431,7 @@ bool SvxColumnItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SvxColumnItem::Clone(SfxItemPool* /*pPool*/) const
+SvxColumnItem* SvxColumnItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxColumnItem(*this);
 }
@@ -637,7 +637,7 @@ bool SvxObjectItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SvxObjectItem::Clone(SfxItemPool *) const
+SvxObjectItem* SvxObjectItem::Clone(SfxItemPool *) const
 {
     return new SvxObjectItem(*this);
 }

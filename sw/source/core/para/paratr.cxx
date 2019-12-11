@@ -101,7 +101,7 @@ bool SwFormatDrop::operator==( const SfxPoolItem& rAttr ) const
              m_pDefinedIn == static_cast<const SwFormatDrop&>(rAttr).m_pDefinedIn );
 }
 
-SfxPoolItem* SwFormatDrop::Clone( SfxItemPool* ) const
+SwFormatDrop* SwFormatDrop::Clone( SfxItemPool* ) const
 {
     return new SwFormatDrop( *this );
 }
@@ -188,15 +188,16 @@ bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-SfxPoolItem* SwRegisterItem::Clone( SfxItemPool * ) const
+SwRegisterItem* SwRegisterItem::Clone( SfxItemPool * ) const
 {
     return new SwRegisterItem( *this );
 }
 
-SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
+SwNumRuleItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 {
     return new SwNumRuleItem( *this );
 }
+
 bool SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
@@ -227,7 +228,7 @@ void SwNumRuleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
+SwParaConnectBorderItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
 {
     return new SwParaConnectBorderItem( *this );
 }

@@ -100,7 +100,7 @@ ScPatternAttr::~ScPatternAttr()
 {
 }
 
-SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
+ScPatternAttr* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 {
     ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().Clone(true, pPool) );
 

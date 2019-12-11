@@ -47,7 +47,7 @@ public:
             NameOrIndex(const NameOrIndex& rNameOrIndex);
 
     virtual bool         operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual NameOrIndex* Clone(SfxItemPool* pPool = nullptr) const override;
 
             OUString const & GetName() const              { return GetValue();   }
             void         SetName(const OUString& rName) { SetValue(rName);     }

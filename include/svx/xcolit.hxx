@@ -46,7 +46,7 @@ public:
             XColorItem(const XColorItem& rItem);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual XColorItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     const Color&    GetColorValue() const;
     void            SetColorValue(const Color& rNew) { aColor = rNew; Detach(); }

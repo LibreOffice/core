@@ -134,7 +134,7 @@ bool SfxBoolItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * SfxBoolItem::Clone(SfxItemPool *) const
+SfxBoolItem* SfxBoolItem::Clone(SfxItemPool *) const
 {
     return new SfxBoolItem(*this);
 }

@@ -39,7 +39,7 @@ public:
     virtual bool PutValue(
         const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual SfxPoolItem* Clone( SfxItemPool* pOther = nullptr ) const override;
+    virtual SfxInt64Item* Clone( SfxItemPool* pOther = nullptr ) const override;
 
     sal_Int64 GetValue() const { return mnValue;}
 

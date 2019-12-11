@@ -61,11 +61,10 @@ bool CntByteItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntByteItem::Clone(SfxItemPool *) const
+CntByteItem* CntByteItem::Clone(SfxItemPool *) const
 {
     return new CntByteItem(*this);
 }
-
 
 // virtual
 bool CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
@@ -109,11 +108,10 @@ bool CntUInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntUInt16Item::Clone(SfxItemPool *) const
+CntUInt16Item* CntUInt16Item::Clone(SfxItemPool *) const
 {
     return new CntUInt16Item(*this);
 }
-
 
 // virtual
 bool CntInt32Item::operator ==(const SfxPoolItem & rItem) const
@@ -155,11 +153,10 @@ bool CntInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntInt32Item::Clone(SfxItemPool *) const
+CntInt32Item* CntInt32Item::Clone(SfxItemPool *) const
 {
     return new CntInt32Item(*this);
 }
-
 
 // virtual
 bool CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
@@ -204,7 +201,7 @@ bool CntUInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntUInt32Item::Clone(SfxItemPool *) const
+CntUInt32Item* CntUInt32Item::Clone(SfxItemPool *) const
 {
     return new CntUInt32Item(*this);
 }

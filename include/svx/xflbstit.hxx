@@ -28,7 +28,7 @@ class SVX_DLLPUBLIC XFillBmpStretchItem final : public SfxBoolItem
 public:
                             XFillBmpStretchItem( bool bStretch = true );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual XFillBmpStretchItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

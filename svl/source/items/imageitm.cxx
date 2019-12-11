@@ -52,12 +52,10 @@ SfxImageItem::~SfxImageItem()
 {
 }
 
-
-SfxPoolItem* SfxImageItem::Clone( SfxItemPool* ) const
+SfxImageItem* SfxImageItem::Clone( SfxItemPool* ) const
 {
     return new SfxImageItem( *this );
 }
-
 
 bool SfxImageItem::operator==( const SfxPoolItem& rItem ) const
 {

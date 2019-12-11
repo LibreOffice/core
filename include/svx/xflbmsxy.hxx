@@ -28,7 +28,7 @@ class SVX_DLLPUBLIC XFillBmpSizeXItem final : public SfxMetricItem
 public:
                             XFillBmpSizeXItem( long nSizeX = 0 );
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    SVX_DLLPRIVATE virtual XFillBmpSizeXItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  MapUnit eCoreMetric,
@@ -44,7 +44,7 @@ class SVX_DLLPUBLIC XFillBmpSizeYItem final : public SfxMetricItem
 public:
                             XFillBmpSizeYItem( long nSizeY = 0 );
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    SVX_DLLPRIVATE virtual XFillBmpSizeYItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  MapUnit eCoreMetric,

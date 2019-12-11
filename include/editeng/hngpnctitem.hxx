@@ -34,7 +34,7 @@ class EDITENG_DLLPUBLIC SvxHangingPunctuationItem final : public SfxBoolItem
 public:
     SvxHangingPunctuationItem( bool bOn /*= false*/, const sal_uInt16 nId  );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxHangingPunctuationItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

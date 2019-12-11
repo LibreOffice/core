@@ -108,7 +108,7 @@ bool ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
              && (nRowMerge == static_cast<const ScMergeAttr&>(rItem).nRowMerge);
 }
 
-SfxPoolItem* ScMergeAttr::Clone( SfxItemPool * ) const
+ScMergeAttr* ScMergeAttr::Clone( SfxItemPool * ) const
 {
     return new ScMergeAttr(*this);
 }
@@ -139,7 +139,7 @@ ScMergeFlagAttr::~ScMergeFlagAttr()
 {
 }
 
-SfxPoolItem * ScMergeFlagAttr::Clone(SfxItemPool *) const
+ScMergeFlagAttr* ScMergeFlagAttr::Clone(SfxItemPool *) const
 {
     return new ScMergeFlagAttr(*this);
 }
@@ -341,7 +341,7 @@ bool ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
              && (bHidePrint == static_cast<const ScProtectionAttr&>(rItem).bHidePrint);
 }
 
-SfxPoolItem* ScProtectionAttr::Clone( SfxItemPool * ) const
+ScProtectionAttr* ScProtectionAttr::Clone( SfxItemPool * ) const
 {
     return new ScProtectionAttr(*this);
 }
@@ -464,7 +464,7 @@ bool ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
            && ScGlobal::EETextObjEqual(pRightArea.get(),  r.pRightArea.get());
 }
 
-SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
+ScPageHFItem* ScPageHFItem::Clone( SfxItemPool* ) const
 {
     return new ScPageHFItem( *this );
 }
@@ -553,7 +553,7 @@ sal_uInt16 ScViewObjectModeItem::GetValueCount() const
     return 2;
 }
 
-SfxPoolItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
+ScViewObjectModeItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
 {
     return new ScViewObjectModeItem( *this );
 }

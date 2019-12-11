@@ -52,12 +52,10 @@ bool SfxMacroInfoItem::operator==( const SfxPoolItem& rCmp) const
             aCommentText == rItem.aCommentText;
 }
 
-
-SfxPoolItem *SfxMacroInfoItem::Clone( SfxItemPool *) const
+SfxMacroInfoItem* SfxMacroInfoItem::Clone( SfxItemPool *) const
 {
     return new SfxMacroInfoItem(*this);
 }
-
 
 OUString SfxMacroInfoItem::GetQualifiedName() const
 {

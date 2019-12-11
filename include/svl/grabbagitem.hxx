@@ -36,7 +36,7 @@ public:
     std::map<OUString, css::uno::Any>& GetGrabBag() { return m_aMap; }
 
     bool operator==(const SfxPoolItem& rItem) const override;
-    SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    SfxGrabBagItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
     bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;

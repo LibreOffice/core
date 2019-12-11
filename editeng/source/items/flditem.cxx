@@ -293,17 +293,14 @@ SvxFieldItem::SvxFieldItem( const SvxFieldItem& rItem ) :
 {
 }
 
-
 SvxFieldItem::~SvxFieldItem()
 {
 }
 
-
-SfxPoolItem* SvxFieldItem::Clone( SfxItemPool* ) const
+SvxFieldItem* SvxFieldItem::Clone( SfxItemPool* ) const
 {
     return new SvxFieldItem(*this);
 }
-
 
 bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 {

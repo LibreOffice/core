@@ -77,7 +77,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxEventNamesItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const SfxEventNamesList& GetEvents() const { return aEventsList;}
     void                    AddEvent( const OUString&, const OUString&, SvMacroItemId );

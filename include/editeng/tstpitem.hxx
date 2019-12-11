@@ -139,7 +139,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxTabStopItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

@@ -50,10 +50,9 @@ bool SfxInt64Item::PutValue(
     return false;
 }
 
-SfxPoolItem* SfxInt64Item::Clone( SfxItemPool* /*pOther*/ ) const
+SfxInt64Item* SfxInt64Item::Clone( SfxItemPool* /*pOther*/ ) const
 {
     return new SfxInt64Item(*this);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

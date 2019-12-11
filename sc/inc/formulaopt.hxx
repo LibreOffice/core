@@ -87,7 +87,7 @@ public:
     ScTpFormulaItem & operator =(ScTpFormulaItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual ScTpFormulaItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const ScFormulaOptions& GetFormulaOptions() const { return theOptions; }
 

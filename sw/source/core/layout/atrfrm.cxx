@@ -210,7 +210,7 @@ bool SwFormatFrameSize::operator==( const SfxPoolItem& rAttr ) const
             m_eHeightPercentRelation == static_cast<const SwFormatFrameSize&>(rAttr).GetHeightPercentRelation() );
 }
 
-SfxPoolItem*  SwFormatFrameSize::Clone( SfxItemPool* ) const
+SwFormatFrameSize* SwFormatFrameSize::Clone( SfxItemPool* ) const
 {
     return new SwFormatFrameSize( *this );
 }
@@ -433,7 +433,8 @@ void SwFormatFrameSize::dumpAsXml(xmlTextWriterPtr pWriter) const
 SwFormatFillOrder::SwFormatFillOrder( SwFillOrder nFO )
     : SfxEnumItem( RES_FILL_ORDER, nFO )
 {}
-SfxPoolItem*  SwFormatFillOrder::Clone( SfxItemPool* ) const
+
+SwFormatFillOrder* SwFormatFillOrder::Clone( SfxItemPool* ) const
 {
     return new SwFormatFillOrder( GetValue() );
 }
@@ -478,7 +479,7 @@ bool SwFormatHeader::operator==( const SfxPoolItem& rAttr ) const
              m_bActive == static_cast<const SwFormatHeader&>(rAttr).IsActive() );
 }
 
-SfxPoolItem*  SwFormatHeader::Clone( SfxItemPool* ) const
+SwFormatHeader* SwFormatHeader::Clone( SfxItemPool* ) const
 {
     return new SwFormatHeader( *this );
 }
@@ -528,7 +529,7 @@ bool SwFormatFooter::operator==( const SfxPoolItem& rAttr ) const
              m_bActive == static_cast<const SwFormatFooter&>(rAttr).IsActive() );
 }
 
-SfxPoolItem*  SwFormatFooter::Clone( SfxItemPool* ) const
+SwFormatFooter* SwFormatFooter::Clone( SfxItemPool* ) const
 {
     return new SwFormatFooter( *this );
 }
@@ -566,7 +567,7 @@ bool SwFormatContent::operator==( const SfxPoolItem& rAttr ) const
     return true;
 }
 
-SfxPoolItem*  SwFormatContent::Clone( SfxItemPool* ) const
+SwFormatContent* SwFormatContent::Clone( SfxItemPool* ) const
 {
     return new SwFormatContent( *this );
 }
@@ -623,7 +624,7 @@ bool SwFormatPageDesc::operator==( const SfxPoolItem& rAttr ) const
             ( GetPageDesc() == static_cast<const SwFormatPageDesc&>(rAttr).GetPageDesc() );
 }
 
-SfxPoolItem*  SwFormatPageDesc::Clone( SfxItemPool* ) const
+SwFormatPageDesc* SwFormatPageDesc::Clone( SfxItemPool* ) const
 {
     return new SwFormatPageDesc( *this );
 }
@@ -885,7 +886,7 @@ bool SwFormatCol::operator==( const SfxPoolItem& rAttr ) const
     return true;
 }
 
-SfxPoolItem*  SwFormatCol::Clone( SfxItemPool* ) const
+SwFormatCol* SwFormatCol::Clone( SfxItemPool* ) const
 {
     return new SwFormatCol( *this );
 }
@@ -1166,7 +1167,7 @@ bool SwFormatSurround::operator==( const SfxPoolItem& rAttr ) const
              m_bOutside== static_cast<const SwFormatSurround&>(rAttr).m_bOutside );
 }
 
-SfxPoolItem*  SwFormatSurround::Clone( SfxItemPool* ) const
+SwFormatSurround* SwFormatSurround::Clone( SfxItemPool* ) const
 {
     return new SwFormatSurround( *this );
 }
@@ -1272,7 +1273,7 @@ bool SwFormatVertOrient::operator==( const SfxPoolItem& rAttr ) const
              m_eRelation == static_cast<const SwFormatVertOrient&>(rAttr).m_eRelation );
 }
 
-SfxPoolItem*  SwFormatVertOrient::Clone( SfxItemPool* ) const
+SwFormatVertOrient* SwFormatVertOrient::Clone( SfxItemPool* ) const
 {
     return new SwFormatVertOrient( *this );
 }
@@ -1366,7 +1367,7 @@ bool SwFormatHoriOrient::operator==( const SfxPoolItem& rAttr ) const
              m_bPosToggle == static_cast<const SwFormatHoriOrient&>(rAttr).m_bPosToggle );
 }
 
-SfxPoolItem*  SwFormatHoriOrient::Clone( SfxItemPool* ) const
+SwFormatHoriOrient* SwFormatHoriOrient::Clone( SfxItemPool* ) const
 {
     return new SwFormatHoriOrient( *this );
 }
@@ -1521,7 +1522,7 @@ bool SwFormatAnchor::operator==( const SfxPoolItem& rAttr ) const
                (*m_pContentAnchor == *rFormatAnchor.GetContentAnchor()))));
 }
 
-SfxPoolItem*  SwFormatAnchor::Clone( SfxItemPool* ) const
+SwFormatAnchor* SwFormatAnchor::Clone( SfxItemPool* ) const
 {
     return new SwFormatAnchor( *this );
 }
@@ -1718,7 +1719,7 @@ bool SwFormatURL::operator==( const SfxPoolItem &rAttr ) const
     return bRet;
 }
 
-SfxPoolItem* SwFormatURL::Clone( SfxItemPool* ) const
+SwFormatURL* SwFormatURL::Clone( SfxItemPool* ) const
 {
     return new SwFormatURL( *this );
 }
@@ -1829,22 +1830,22 @@ bool SwFormatURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-SfxPoolItem* SwFormatEditInReadonly::Clone( SfxItemPool* ) const
+SwFormatEditInReadonly* SwFormatEditInReadonly::Clone( SfxItemPool* ) const
 {
     return new SwFormatEditInReadonly( *this );
 }
 
-SfxPoolItem* SwFormatLayoutSplit::Clone( SfxItemPool* ) const
+SwFormatLayoutSplit* SwFormatLayoutSplit::Clone( SfxItemPool* ) const
 {
     return new SwFormatLayoutSplit( *this );
 }
 
-SfxPoolItem* SwFormatRowSplit::Clone( SfxItemPool* ) const
+SwFormatRowSplit* SwFormatRowSplit::Clone( SfxItemPool* ) const
 {
     return new SwFormatRowSplit( *this );
 }
 
-SfxPoolItem* SwFormatNoBalancedColumns::Clone( SfxItemPool* ) const
+SwFormatNoBalancedColumns* SwFormatNoBalancedColumns::Clone( SfxItemPool* ) const
 {
     return new SwFormatNoBalancedColumns( *this );
 }
@@ -1983,14 +1984,14 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
 
 // class SwFormatFootnoteAtTextEnd
 
-SfxPoolItem* SwFormatFootnoteAtTextEnd::Clone( SfxItemPool* ) const
+SwFormatFootnoteAtTextEnd* SwFormatFootnoteAtTextEnd::Clone( SfxItemPool* ) const
 {
     return new SwFormatFootnoteAtTextEnd(*this);
 }
 
 // class SwFormatEndAtTextEnd
 
-SfxPoolItem* SwFormatEndAtTextEnd::Clone( SfxItemPool* ) const
+SwFormatEndAtTextEnd* SwFormatEndAtTextEnd::Clone( SfxItemPool* ) const
 {
     return new SwFormatEndAtTextEnd(*this);
 }
@@ -2012,7 +2013,7 @@ SwFormatChain::SwFormatChain( const SwFormatChain &rCpy ) :
     SetNext( rCpy.GetNext() );
 }
 
-SfxPoolItem* SwFormatChain::Clone( SfxItemPool* ) const
+SwFormatChain* SwFormatChain::Clone( SfxItemPool* ) const
 {
     SwFormatChain *pRet = new SwFormatChain;
     pRet->SetPrev( GetPrev() );
@@ -2079,7 +2080,7 @@ bool SwFormatLineNumber::operator==( const SfxPoolItem &rAttr ) const
            m_bCountLines  == static_cast<const SwFormatLineNumber&>(rAttr).IsCount();
 }
 
-SfxPoolItem* SwFormatLineNumber::Clone( SfxItemPool* ) const
+SwFormatLineNumber* SwFormatLineNumber::Clone( SfxItemPool* ) const
 {
     return new SwFormatLineNumber( *this );
 }
@@ -2159,7 +2160,7 @@ bool SwTextGridItem::operator==( const SfxPoolItem& rAttr ) const
         && m_bSquaredMode == rOther.GetSquaredMode();
 }
 
-SfxPoolItem* SwTextGridItem::Clone( SfxItemPool* ) const
+SwTextGridItem* SwTextGridItem::Clone( SfxItemPool* ) const
 {
     return new SwTextGridItem( *this );
 }
@@ -2399,11 +2400,10 @@ void SwTextGridItem::Init()
     }
 }
 
-SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
+SwHeaderAndFooterEatSpacingItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 {
     return new SwHeaderAndFooterEatSpacingItem( Which(), GetValue() );
 }
-
 
 SwFrameFormat::SwFrameFormat(
     SwAttrPool& rPool,

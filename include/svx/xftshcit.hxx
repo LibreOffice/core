@@ -36,7 +36,7 @@ public:
             XFormTextShadowColorItem() {}
             XFormTextShadowColorItem(const OUString& rName, const Color& rTheColor);
 
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual XFormTextShadowColorItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 #endif

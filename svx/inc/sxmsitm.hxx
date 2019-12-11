@@ -28,7 +28,7 @@
 class SdrMeasureScaleItem: public SdrScaleItem {
 public:
     SdrMeasureScaleItem()                   : SdrScaleItem(SDRATTR_MEASURESCALE,Fraction(1,1)) {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual SdrMeasureScaleItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureScaleItem(*this);
     }

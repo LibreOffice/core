@@ -39,7 +39,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxRangeItem*       Clone( SfxItemPool *pPool = nullptr ) const override;
     sal_uInt16&          From() { return nFrom; }
 };
 

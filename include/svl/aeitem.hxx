@@ -38,7 +38,7 @@ public:
     void                    SetTextByPos( sal_uInt16 nPos, const OUString &rText );
     OUString const &        GetTextByPos( sal_uInt16 nPos ) const;
     sal_Int32               GetTextCount() const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxAllEnumItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( SfxPoolItem const & ) const override;
 };
 

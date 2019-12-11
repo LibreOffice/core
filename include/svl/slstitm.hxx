@@ -60,7 +60,7 @@ public:
                                              MapUnit ePresMetric,
                                              OUString &rText,
                                              const IntlWrapper& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxStringListItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            PutValue  ( const css::uno::Any& rVal,
                                          sal_uInt8 nMemberId ) override;

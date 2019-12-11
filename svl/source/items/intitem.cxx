@@ -88,7 +88,7 @@ bool SfxInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8 )
     return false;
 }
 
-SfxPoolItem * SfxInt16Item::Clone(SfxItemPool *) const
+SfxInt16Item* SfxInt16Item::Clone(SfxItemPool *) const
 {
     return new SfxInt16Item(*this);
 }

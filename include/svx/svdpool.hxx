@@ -36,7 +36,7 @@ private:
     virtual ~SdrItemPool() override;
 public:
 
-    virtual SfxItemPool* Clone() const override;
+    virtual SdrItemPool* Clone() const override;
     virtual bool GetPresentation(const SfxPoolItem& rItem,
                                  MapUnit ePresentationMetric,
                                  OUString& rText,

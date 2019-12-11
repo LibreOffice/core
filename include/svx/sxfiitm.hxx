@@ -32,7 +32,7 @@ public:
     SdrFractionItem(sal_uInt16 nId, const Fraction& rVal): SfxPoolItem(nId), nValue(rVal) {}
     virtual bool             operator==(const SfxPoolItem&) const override;
     virtual bool GetPresentation(SfxItemPresentation ePresentation, MapUnit eCoreMetric, MapUnit ePresentationMetric, OUString &rText, const IntlWrapper&) const override;
-    virtual SfxPoolItem*     Clone(SfxItemPool *pPool=nullptr) const override;
+    virtual SdrFractionItem* Clone(SfxItemPool *pPool=nullptr) const override;
             const Fraction&  GetValue() const { return nValue; }
             void             SetValue(const Fraction& rVal) { nValue = rVal; }
 };

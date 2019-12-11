@@ -41,7 +41,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxTextLineItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16      GetValueCount() const override;
 
@@ -77,7 +77,7 @@ public:
     SvxUnderlineItem( const FontLineStyle eSt,
                       const sal_uInt16 nId );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxUnderlineItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
 };
 
@@ -93,7 +93,7 @@ public:
     SvxOverlineItem( const FontLineStyle eSt,
                      const sal_uInt16 nId );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxOverlineItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
 };
 

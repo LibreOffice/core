@@ -132,7 +132,7 @@ bool SvxGalleryItem::operator==( const SfxPoolItem& rAttr ) const
             m_xGraphic  == rItem.m_xGraphic;
 }
 
-SfxPoolItem* SvxGalleryItem::Clone( SfxItemPool * ) const
+SvxGalleryItem* SvxGalleryItem::Clone( SfxItemPool * ) const
 {
     return new SvxGalleryItem( *this );
 }

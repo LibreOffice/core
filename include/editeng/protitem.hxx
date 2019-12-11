@@ -51,7 +51,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxProtectItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     bool IsContentProtected() const { return bCntnt; }
     bool IsSizeProtected()  const { return bSize;  }
