@@ -88,14 +88,14 @@ const SCCOL SC_TABSTART_NONE  = SCCOL_MAX;
 
 const SCROW MAXROW_30         = 8191;
 
-[[nodiscard]] inline bool ValidCol( SCCOL nCol )
+[[nodiscard]] inline bool ValidCol( SCCOL nCol, SCCOL nMaxCol = MAXCOL )
 {
-    return nCol >= 0 && nCol <= MAXCOL;
+    return nCol >= 0 && nCol <= nMaxCol;
 }
 
-[[nodiscard]] inline bool ValidRow( SCROW nRow )
+[[nodiscard]] inline bool ValidRow( SCROW nRow, SCROW nMaxRow = MAXROW)
 {
-    return nRow >= 0 && nRow <= MAXROW;
+    return nRow >= 0 && nRow <= nMaxRow;
 }
 
 [[nodiscard]] inline bool ValidTab( SCTAB nTab )
@@ -108,24 +108,24 @@ const SCROW MAXROW_30         = 8191;
     return nTab >= 0 && nTab <= nMaxTab;
 }
 
-[[nodiscard]] inline bool ValidColRow( SCCOL nCol, SCROW nRow )
+[[nodiscard]] inline bool ValidColRow( SCCOL nCol, SCROW nRow, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
 {
-    return ValidCol( nCol) && ValidRow( nRow);
+    return ValidCol(nCol,nMaxCol) && ValidRow(nRow,nMaxRow);
 }
 
-[[nodiscard]] inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab )
+[[nodiscard]] inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
 {
-    return ValidCol( nCol) && ValidRow( nRow) && ValidTab( nTab);
+    return ValidCol(nCol,nMaxCol) && ValidRow(nRow,nMaxRow) && ValidTab( nTab);
 }
 
-[[nodiscard]] inline SCCOL SanitizeCol( SCCOL nCol )
+[[nodiscard]] inline SCCOL SanitizeCol( SCCOL nCol, SCCOL nMaxCol = MAXCOL )
 {
-    return nCol < 0 ? 0 : (nCol > MAXCOL ? MAXCOL : nCol);
+    return nCol < 0 ? 0 : (nCol > nMaxCol ? nMaxCol : nCol);
 }
 
-[[nodiscard]] inline SCROW SanitizeRow( SCROW nRow )
+[[nodiscard]] inline SCROW SanitizeRow( SCROW nRow, SCROW nMaxRow = MAXROW )
 {
-    return nRow < 0 ? 0 : (nRow > MAXROW ? MAXROW : nRow);
+    return nRow < 0 ? 0 : (nRow > nMaxRow ? nMaxRow : nRow);
 }
 
 [[nodiscard]] inline SCTAB SanitizeTab( SCTAB nTab )
@@ -480,9 +480,9 @@ struct ScAddressHashFunctor
     }
 };
 
-inline bool ValidAddress( const ScAddress& rAddress )
+inline bool ValidAddress( const ScAddress& rAddress, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
 {
-    return ValidCol(rAddress.Col()) && ValidRow(rAddress.Row()) && ValidTab(rAddress.Tab());
+    return ValidCol(rAddress.Col(), nMaxCol) && ValidRow(rAddress.Row(), nMaxRow) && ValidTab(rAddress.Tab());
 }
 
 //  ScRange
@@ -782,9 +782,9 @@ inline size_t ScRange::hashStartColumn() const
 #endif
 }
 
-inline bool ValidRange( const ScRange& rRange )
+inline bool ValidRange( const ScRange& rRange, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
 {
-    return ValidAddress(rRange.aStart) && ValidAddress(rRange.aEnd);
+    return ValidAddress(rRange.aStart, nMaxCol, nMaxRow) && ValidAddress(rRange.aEnd, nMaxCol, nMaxRow);
 }
 
 //  ScRangePair
