@@ -252,7 +252,7 @@ public:
 
     /// Copy and Paste methods for internal clipboard.
     void Copy( SwDoc* pClpDoc, const OUString* pNewClpText = nullptr );
-    bool Paste( SwDoc* pClpDoc );
+    bool Paste( SwDoc* pClpDoc, bool bNestedTable = false );
 
     /// Paste some pages into another doc - used in mailmerge.
     void PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
@@ -643,6 +643,10 @@ public:
     SwTable::SearchType m_eTableInsertMode;
     SwTable::SearchType GetTableInsertMode() const         { return m_eTableInsertMode; }
     void SetTableInsertMode( SwTable::SearchType eFlag )  { m_eTableInsertMode = eFlag; }
+    /// table copied to the clipboard by the last private copy
+    bool bTableCopied;
+    bool GetTableCopied()  { return bTableCopied; }
+    void SetTableCopied( bool bCopied )  { bTableCopied = bCopied; }
 
     bool DeleteTableSel();        ///< Current selection, may be whole table.
 
