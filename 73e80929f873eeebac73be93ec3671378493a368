@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_7e5f40e5",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-11T11:45:16Z",
+      "side": 1,
+      "message": "Still not a special image like tipoftheday_d.png?",
+      "range": {
+        "startLine": 83,
+        "startChar": 75,
+        "endLine": 83,
+        "endChar": 91
+      },
+      "revId": "73e80929f873eeebac73be93ec3671378493a368",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_9e649cbb",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-11T11:45:16Z",
+      "side": 1,
+      "message": "_the_ appearance? (I\u0027ll submit if you want to keep it)",
+      "range": {
+        "startLine": 83,
+        "startChar": 178,
+        "endLine": 83,
+        "endChar": 188
+      },
+      "revId": "73e80929f873eeebac73be93ec3671378493a368",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
