@@ -858,6 +858,14 @@ public:
     SC_DLLPUBLIC bool GetTable( const OUString& rName, SCTAB& rTab ) const;
     SC_DLLPUBLIC SCCOL MaxCol() const { return mnMaxCol; }
     SC_DLLPUBLIC SCROW MaxRow() const { return mnMaxRow; }
+    [[nodiscard]] bool ValidCol(SCCOL nCol) const { return ::ValidCol(nCol, mnMaxCol); }
+    [[nodiscard]] bool ValidRow(SCROW nRow) const { return ::ValidRow(nRow, mnMaxRow); }
+    [[nodiscard]] bool ValidColRow(SCCOL nCol, SCROW nRow) const { return ::ValidColRow(nCol, nRow, mnMaxCol, mnMaxRow); }
+    [[nodiscard]] bool ValidColRowTab(SCCOL nCol, SCROW nRow, SCTAB nTab) const { return ::ValidColRowTab(nCol, nRow, nTab, mnMaxCol, mnMaxRow); }
+    [[nodiscard]] bool ValidRange(const ScRange& rRange) const { return ::ValidRange(rRange, mnMaxCol, mnMaxRow); }
+    [[nodiscard]] bool ValidAddress(const ScAddress& rAddress) const { return ::ValidAddress(rAddress, mnMaxCol, mnMaxRow); }
+    [[nodiscard]] SCCOL SanitizeCol( SCCOL nCol ) const { return ::SanitizeCol(nCol, mnMaxCol); }
+    [[nodiscard]] SCROW SanitizeRow( SCROW nRow ) const { return ::SanitizeRow(nRow, mnMaxRow); }
 
     SC_DLLPUBLIC std::vector<OUString> GetAllTableNames() const;
 
