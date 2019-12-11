@@ -1561,6 +1561,9 @@
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
         </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:TableDialog</value>
+        </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
             WriterVariants, Table,  visible ;
