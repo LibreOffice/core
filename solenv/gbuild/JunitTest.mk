@@ -155,10 +155,8 @@ endef
 define gb_JunitTest_use_unoapi_jars
 $(eval $(call gb_JunitTest_use_jars,$(1),\
     OOoRunner \
-    jurt \
     ridl \
     test \
-    unoil \
 ))
 
 endef

@@ -36,9 +36,9 @@ c++)
     printf '%s' "$sd_prog"
     ;;
 java)
-    printf '0%s\0%s\0%s\0%s\0%s' \
-        "$sd_prog/classes/ridl.jar" "$sd_prog/classes/jurt.jar" \
-        "$sd_prog/classes/juh.jar" "$sd_prog/classes/unoil.jar" "$sd_prog"
+    printf '0%s\0%s\0%s' \
+        "$sd_prog/classes/ridl.jar" \
+        "$sd_prog/classes/juh.jar" "$sd_prog"
     ;;
 *)
     exit 1

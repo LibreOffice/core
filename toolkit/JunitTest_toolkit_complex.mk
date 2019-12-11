@@ -22,7 +22,6 @@ $(eval $(call gb_JunitTest_use_jars,toolkit_complex,\
     OOoRunner \
     ridl \
     test \
-    unoil \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,toolkit_complex,\

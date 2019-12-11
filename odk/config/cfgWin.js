@@ -953,10 +953,7 @@ function writeBatFile(fdir, file)
         "set OO_SDK_OFFICE_JAVA_DIR=%OFFICE_PROGRAM_PATH%\\classes\n" +
         "\n" +
         "REM Set classpath\n" +
-        "set CLASSPATH=%OO_SDK_URE_JAVA_DIR%\\juh.jar;%OO_SDK_URE_JAVA_DIR%\\jurt.jar;%OO_SDK_URE_JAVA_DIR%\\ridl.jar;%OO_SDK_URE_JAVA_DIR%\\unoloader.jar;%OO_SDK_OFFICE_JAVA_DIR%\\unoil.jar\n" +
-        "REM if defined OFFICE_HOME (\n" +
-        "REM     set CLASSPATH=%CLASSPATH%;%OO_SDK_OFFICE_JAVA_DIR%\\unoil.jar\n" +
-        "REM  )\n" +
+        "set CLASSPATH=%OO_SDK_URE_JAVA_DIR%\\juh.jar;%OO_SDK_URE_JAVA_DIR%\\ridl.jar;%OO_SDK_URE_JAVA_DIR%\\unoloader.jar\n" +
         "\n" +
         "REM Add directory of the SDK tools to the path.\n" +
         "set PATH=%OO_SDK_HOME%\\bin;%OO_SDK_URE_BIN_DIR%;%OO_SDK_OFFICE_BIN_DIR%;%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" +
