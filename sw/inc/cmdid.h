@@ -343,6 +343,7 @@
 #define FN_TABLE_SELECT_ALL         (FN_FORMAT + 115)  /* */
 #define FN_TABLE_INSERT_COL_AFTER   (FN_FORMAT + 116)  /* */
 #define FN_TABLE_SET_READ_ONLY_CELLS (FN_FORMAT + 117)  /* protect table cells */
+#define FN_TABLE_PASTE_IN_CELL      (FN_FORMAT + 118)  /* paste nested table */
 #define FN_TABLE_UNSET_READ_ONLY_CELLS  (FN_FORMAT + 119)  /* undo table cell protection */
 #define FN_TABLE_HEADLINE_REPEAT    (FN_FORMAT + 120)   /* also used in SwXTextTable*/
 #define FN_TABLE_ADJUST_CELLS       (FN_FORMAT + 121)  /* */

@@ -258,6 +258,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     sal_uInt16 nId = rReq.GetSlot();
     bool bIgnore = false;
+    bool bPasteInCell = false;
     switch( nId )
     {
         case SID_CUT:
@@ -280,6 +281,9 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             }
             return;
 
+        case FN_TABLE_PASTE_IN_CELL:
+            bPasteInCell = true;
+            [[fallthrough]];
         case SID_PASTE:
             {
                 TransferableDataHelper aDataHelper(
@@ -299,7 +303,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     const SfxBoolItem* pIgnoreComments = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
                     if (pIgnoreComments)
                         bIgnoreComments = pIgnoreComments->GetValue();
-                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments);
+                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, bPasteInCell);
 
                     if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
                         rSh.EnterSelFrameMode();

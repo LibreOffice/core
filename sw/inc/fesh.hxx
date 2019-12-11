@@ -252,7 +252,7 @@ public:
 
     /// Copy and Paste methods for internal clipboard.
     void Copy( SwDoc* pClpDoc, const OUString* pNewClpText = nullptr );
-    bool Paste( SwDoc* pClpDoc );
+    bool Paste( SwDoc* pClpDoc, bool bInCell = false );
 
     /// Paste some pages into another doc - used in mailmerge.
     void PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
