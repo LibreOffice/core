@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_be9158f4",
+        "filename": "sw/uiconfig/swriter/ui/sidebartableedit.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-12-11T14:29:44Z",
+      "side": 1,
+      "message": "the last error is a real problem and its because there is no \"context\" set for the translation here.",
+      "revId": "a228345723083d5384b057c3a403e44eeeda1796",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
