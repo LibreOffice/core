@@ -1,0 +1,37 @@
+Sealed: false
+
+Name: com/sun/star/comp/bridgefactory/
+Sealed: true
+
+Name: com/sun/star/comp/connections/
+Sealed: true
+
+Name: com/sun/star/comp/loader/
+Sealed: true
+
+Name: com/sun/star/comp/servicemanager/
+Sealed: true
+
+Name: com/sun/star/comp/urlresolver/
+Sealed: true
+
+Name: com/sun/star/lib/connections/pipe/
+Sealed: true
+
+Name: com/sun/star/lib/connections/socket/
+Sealed: true
+
+Name: com/sun/star/lib/uno/
+Sealed: true
+
+Name: com/sun/star/lib/uno/bridges/java_remote/
+Sealed: true
+
+Name: com/sun/star/lib/uno/environments/java/
+Sealed: true
+
+Name: com/sun/star/lib/uno/environments/remote/
+Sealed: true
+
+Name: com/sun/star/lib/uno/protocols/urp/
+Sealed: true
