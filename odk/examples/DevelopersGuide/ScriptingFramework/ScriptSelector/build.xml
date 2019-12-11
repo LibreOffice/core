@@ -41,9 +41,7 @@
   <!-- ==================== classpath setting ============================ -->
   <target name="init" depends="checksdk,initsdk,initnosdk">
     <path id="scriptclasspath">
-      <pathelement location="${opp}/classes/unoil.jar"/>
       <pathelement location="${opp}/classes/ridl.jar"/>
-      <pathelement location="${opp}/classes/jurt.jar"/>
       <pathelement location="${opp}/classes/juh.jar"/>
       <pathelement location="${opp}/classes/ScriptFramework.jar"/>
     </path>

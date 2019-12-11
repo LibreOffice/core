@@ -23,7 +23,6 @@ $(eval $(call gb_Jar_set_packageroot,smoketest,org))
 $(eval $(call gb_Jar_use_jars,smoketest, \
     juh \
     ridl \
-    unoil \
 ))
 
 # vim: set noet sw=4 ts=4:

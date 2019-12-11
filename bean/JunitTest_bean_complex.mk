@@ -14,7 +14,6 @@ $(eval $(call gb_JunitTest_use_jars,bean_complex,\
 	OOoRunner \
 	ridl \
 	test \
-	unoil \
 	officebean \
 ))
 
