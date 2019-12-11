@@ -424,8 +424,8 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                              const bool bCpyBrd )
 {
     // get node index of cursor position, SwDoc can do everything else itself
-    SwContentFrame *pCnt = LTYPE_DRAW==eType ? nullptr : GetCurrFrame( false );
-    if( LTYPE_DRAW!=eType && !pCnt )
+    SwContentFrame *pCnt = SwLabelType::Draw==eType ? nullptr : GetCurrFrame( false );
+    if( SwLabelType::Draw!=eType && !pCnt )
         return;
 
     StartAllAction();
@@ -437,8 +437,8 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
     SwFlyFrameFormat* pFlyFormat = nullptr;
     switch( eType )
     {
-    case LTYPE_OBJECT:
-    case LTYPE_FLY:
+    case SwLabelType::Object:
+    case SwLabelType::Fly:
         bInnerCntIsFly = pCnt->IsInFly();
         if (bInnerCntIsFly)
         {
@@ -447,7 +447,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                         GetFormat()->GetContent().GetContentIdx()->GetIndex();
         }
         break;
-    case LTYPE_TABLE:
+    case SwLabelType::Table:
         if( pCnt->IsInTab() )
         {
             // pass down index to the TableNode for tables
@@ -456,7 +456,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                         ->GetSttNd()->FindTableNode()->GetIndex();
         }
         break;
-    case LTYPE_DRAW:
+    case SwLabelType::Draw:
         if( Imp()->GetDrawView() )
         {
             SwDrawView *pDView = Imp()->GetDrawView();

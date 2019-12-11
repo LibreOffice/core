@@ -84,12 +84,12 @@ const SwTwips lMinBorder = 1134;
 // For inserting of captions (what and where to insert).
 // It's here because it is not big enough to justify its own hxx
 // and does not seem to fit somewhere else.
-enum SwLabelType
+enum class SwLabelType
 {
-    LTYPE_TABLE,    // Caption for a table.
-    LTYPE_OBJECT,   // Caption for a graphic or OLE.
-    LTYPE_FLY,      // Caption for a text frame.
-    LTYPE_DRAW      // Caption for a draw object.
+    Table,    // Caption for a table.
+    Object,   // Caption for a graphic or OLE.
+    Fly,      // Caption for a text frame.
+    Draw      // Caption for a draw object.
 };
 
 const sal_uInt8 MAXLEVEL = 10;

@@ -663,10 +663,10 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
 
     switch ( eType )
     {
-        case LTYPE_TABLE:
+        case SwLabelType::Table:
             bTable = true;
             [[fallthrough]];
-        case LTYPE_FLY:
+        case SwLabelType::Fly:
             // At the FlySection's Beginning/End insert the corresponding Node with its Field.
             // The Frame is created automatically.
             {
@@ -695,7 +695,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
             }
             break;
 
-        case LTYPE_OBJECT:
+        case SwLabelType::Object:
             {
                 // Destroy Frame,
                 // insert new Frame,
@@ -1249,7 +1249,7 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     {
         GetIDocumentUndoRedo().ClearRedo();
         pUndo.reset(new SwUndoInsertLabel(
-            LTYPE_DRAW, rText, rSeparator, rNumberSeparator, false,
+            SwLabelType::Draw, rText, rSeparator, rNumberSeparator, false,
             nId, rCharacterStyle, false, this ));
     }
 
