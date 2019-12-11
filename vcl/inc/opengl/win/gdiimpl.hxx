@@ -26,12 +26,12 @@ class OpenGLCompatibleDC : public CompatibleDC
 public:
     OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height);
 
-    virtual std::unique_ptr<Texture> getAsMaskTexture() override;
+    virtual std::unique_ptr<Texture> getAsMaskTexture() const override;
     // caller must delete
-    OpenGLTexture* getOpenGLTexture();
+    OpenGLTexture* getOpenGLTexture() const;
 
     /// Copy bitmap data to the texture. Texture must be initialized and the correct size to hold the bitmap.
-    bool copyToTexture(Texture& aTexture);
+    bool copyToTexture(Texture& aTexture) const;
 
     struct Texture;
 };

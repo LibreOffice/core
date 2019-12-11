@@ -769,7 +769,7 @@ OpenGLCompatibleDC::OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int
 {
 }
 
-OpenGLTexture* OpenGLCompatibleDC::getOpenGLTexture()
+OpenGLTexture* OpenGLCompatibleDC::getOpenGLTexture() const
 {
     if (!mpImpl)
         return nullptr;
@@ -778,14 +778,14 @@ OpenGLTexture* OpenGLCompatibleDC::getOpenGLTexture()
     return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, mpData);
 }
 
-std::unique_ptr<CompatibleDC::Texture> OpenGLCompatibleDC::getAsMaskTexture()
+std::unique_ptr<CompatibleDC::Texture> OpenGLCompatibleDC::getAsMaskTexture() const
 {
     auto ret = std::make_unique<OpenGLCompatibleDC::Texture>();
     ret->texture = OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, mpData);
     return ret;
 }
 
-bool OpenGLCompatibleDC::copyToTexture(CompatibleDC::Texture& aTexture)
+bool OpenGLCompatibleDC::copyToTexture(CompatibleDC::Texture& aTexture) const
 {
     if (!mpImpl)
         return false;
