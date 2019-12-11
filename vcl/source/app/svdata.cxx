@@ -381,7 +381,7 @@ void DestroySVHelpData(ImplSVHelpData* pSVHelpData)
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    // Change the SVData's help date if neccessary
+    // Change the SVData's help date if necessary
     if(ImplGetSVData()->mpHelpData == pSVHelpData)
     {
         ImplGetSVData()->mpHelpData = &private_aImplSVHelpData::get();

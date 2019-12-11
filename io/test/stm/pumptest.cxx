@@ -315,7 +315,7 @@ void OPumpTest::testClose( const Reference< XInterface > &r )
     TestCase t( m_rSmgr, r );
 
     ERROR_ASSERT( ! t.m_pTestListener->m_bStarted , "started too early" );
-    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "termination unexpected" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected clase" );
 
@@ -323,7 +323,7 @@ void OPumpTest::testClose( const Reference< XInterface > &r )
     mywait();
 
     ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
-    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "termination unexpected" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected clase" );
 
@@ -344,7 +344,7 @@ void OPumpTest::testTerminate( const Reference< XInterface > &r )
     TestCase t( m_rSmgr, r );
 
     ERROR_ASSERT( ! t.m_pTestListener->m_bStarted , "started too early" );
-    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "termination unexpected" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected clase" );
 
@@ -352,7 +352,7 @@ void OPumpTest::testTerminate( const Reference< XInterface > &r )
     mywait();
 
     ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
-    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "termination unexpected" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected clase" );
 
