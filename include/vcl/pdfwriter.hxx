@@ -1063,7 +1063,7 @@ The following structure describes the permissions used in PDF security
     /** set the current structure element
 
     For different purposes it may be useful to paint a structure element's
-    content discontinously. In that case an already existing structure element
+    content discontinuously. In that case an already existing structure element
     can be appended to by using SetCurrentStructureElement. The
     referenced structure element becomes the current structure element with
     all consequences: all following structure elements are appended as children
