@@ -1211,7 +1211,21 @@ void SidebarController::RequestCloseDeck()
     if (comphelper::LibreOfficeKit::isActive() && mpCurrentDeck.get())
     {
         const vcl::ILibreOfficeKitNotifier* pNotifier = mpCurrentDeck->GetLOKNotifier();
-        if (pNotifier)
+        auto pMobileNotifier = SfxViewShell::Current();
+        if (pMobileNotifier && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+        {
+            // Mobile.
+            std::stringstream aStream;
+            boost::property_tree::ptree aTree;
+            aTree.put("id", mpParentWindow->get_id()); // TODO could be missing - sort out
+            aTree.put("type", "dockingwindow");
+            aTree.put("text", mpParentWindow->GetText());
+            aTree.put("enabled", false);
+            boost::property_tree::write_json(aStream, aTree);
+            const std::string message = aStream.str();
+            pMobileNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+        }
+        else if (pNotifier)
             pNotifier->notifyWindow(mpCurrentDeck->GetLOKWindowId(), "close");
     }
 
