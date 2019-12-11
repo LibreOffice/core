@@ -72,7 +72,7 @@ SwPosNotify::~SwPosNotify() COVERITY_NOEXCEPT_FALSE
         if( maOldObjRect.HasArea() && mpOldPageFrame )
         {
             mpAnchoredDrawObj->NotifyBackground( mpOldPageFrame, maOldObjRect,
-                                                 PREP_FLY_LEAVE );
+                                                 PrepareHint::FlyFrameLeave );
         }
         SwRect aNewObjRect( mpAnchoredDrawObj->GetObjRect() );
         if( aNewObjRect.HasArea() )
@@ -81,7 +81,7 @@ SwPosNotify::~SwPosNotify() COVERITY_NOEXCEPT_FALSE
             SwPageFrame* pNewPageFrame = mpAnchoredDrawObj->GetPageFrame();
             if( pNewPageFrame )
                 mpAnchoredDrawObj->NotifyBackground( pNewPageFrame, aNewObjRect,
-                                                     PREP_FLY_ARRIVE );
+                                                     PrepareHint::FlyFrameArrive );
         }
 
         ::ClrContourCache( mpAnchoredDrawObj->GetDrawObj() );
@@ -94,7 +94,7 @@ SwPosNotify::~SwPosNotify() COVERITY_NOEXCEPT_FALSE
         if ( mpAnchoredDrawObj->GetAnchorFrame()->IsTextFrame() &&
              mpOldPageFrame == mpAnchoredDrawObj->GetAnchorFrame()->FindPageFrame() )
         {
-            mpAnchoredDrawObj->AnchorFrame()->Prepare( PREP_FLY_LEAVE );
+            mpAnchoredDrawObj->AnchorFrame()->Prepare( PrepareHint::FlyFrameLeave );
         }
 
         // indicate a restart of the layout process
@@ -113,7 +113,7 @@ SwPosNotify::~SwPosNotify() COVERITY_NOEXCEPT_FALSE
             // to wrap around it.
             mpAnchoredDrawObj->NotifyBackground( mpAnchoredDrawObj->GetPageFrame(),
                                     mpAnchoredDrawObj->GetObjRectWithSpaces(),
-                                    PREP_FLY_ARRIVE );
+                                    PrepareHint::FlyFrameArrive );
             // invalidate position of anchor frame in order to force
             // a re-format of the anchor frame, which also causes a
             // re-format of the invalid previous frames of the anchor frame.
@@ -573,7 +573,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
                 SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
                 if (pAnchorTextFrame->CalcFlyPos(&GetFrameFormat()) != TextFrameIndex(COMPLETE_STRING))
                 {
-                    AnchorFrame()->Prepare( PREP_FLY_ATTR_CHG, &GetFrameFormat() );
+                    AnchorFrame()->Prepare( PrepareHint::FlyFrameAttributesChanged, &GetFrameFormat() );
                 }
             }
 

@@ -1451,16 +1451,16 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             const SwTwips nOldH = aRectFnSet.GetHeight(getFrameArea());
             MakePrtArea( rAttrs );
             if ( nOldW != aRectFnSet.GetWidth(getFramePrintArea()) )
-                Prepare( PREP_FIXSIZE_CHG );
+                Prepare( PrepareHint::FixSizeChanged );
             // #i34730# - check, if frame height has changed.
-            // If yes, send a PREP_ADJUST_FRM and invalidate the size flag to
+            // If yes, send a PrepareHint::AdjustSizeWithoutFormatting and invalidate the size flag to
             // force a format. The format will check in its method
             // <SwTextFrame::CalcPreps()>, if the already formatted lines still
             // fit and if not, performs necessary actions.
             // #i40150# - no check, if frame is undersized.
             if ( isFrameAreaSizeValid() && !IsUndersized() && nOldH != aRectFnSet.GetHeight(getFrameArea()) )
             {
-                // #115759# - no PREP_ADJUST_FRM and size
+                // #115759# - no PrepareHint::AdjustSizeWithoutFormatting and size
                 // invalidation, if height decreases only by the additional
                 // lower space as last content of a table cell and an existing
                 // follow containing one line exists.
@@ -1472,7 +1472,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                     GetFollow()->CalcAddLowerSpaceAsLastInTableCell() == nHDiff;
                 if ( !bNoPrepAdjustFrame )
                 {
-                    Prepare( PREP_ADJUST_FRM );
+                    Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                     setFrameAreaSizeValid(false);
                 }
             }
@@ -1489,7 +1489,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             if( bMoveable && !bFormatted &&
                 ( GetFollow() || aRectFnSet.OverStep( getFrameArea(), nDeadLine ) ) )
             {
-                Prepare( PREP_WIDOWS_ORPHANS, nullptr, false );
+                Prepare( PrepareHint::WidowsOrphans, nullptr, false );
                 setFrameAreaSizeValid(false);
                 bWidow = false;
             }
@@ -1498,10 +1498,10 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             {
                 // In this Prepare, an InvalidateSize_() might happen.
                 // isFrameAreaSizeValid() becomes false and Format() gets called.
-                Prepare( PREP_POS_CHGD, static_cast<const void*>(&bFormatted), false );
+                Prepare( PrepareHint::FramePositionChanged, static_cast<const void*>(&bFormatted), false );
                 if ( bWidow && GetFollow() )
                 {
-                    Prepare( PREP_WIDOWS_ORPHANS, nullptr, false );
+                    Prepare( PrepareHint::WidowsOrphans, nullptr, false );
                     setFrameAreaSizeValid(false);
                 }
             }
@@ -1559,7 +1559,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 MakePos();
                 if( aOldPos != aRectFnSet.GetPos(getFrameArea()) )
                 {
-                    Prepare( PREP_POS_CHGD, static_cast<const void*>(&bFormatted), false );
+                    Prepare( PrepareHint::FramePositionChanged, static_cast<const void*>(&bFormatted), false );
                     if ( !isFrameAreaSizeValid() )
                     {
                         {
@@ -1572,11 +1572,11 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                             const long nOldW = aRectFnSet.GetWidth(getFramePrintArea());
                             MakePrtArea( rAttrs );
                             if( nOldW != aRectFnSet.GetWidth(getFramePrintArea()) )
-                                Prepare( PREP_FIXSIZE_CHG, nullptr, false );
+                                Prepare( PrepareHint::FixSizeChanged, nullptr, false );
                         }
                         if( GetFollow() )
                         {
-                            Prepare( PREP_WIDOWS_ORPHANS, nullptr, false );
+                            Prepare( PrepareHint::WidowsOrphans, nullptr, false );
                         }
 
                         setFrameAreaSizeValid(true);
@@ -1776,7 +1776,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 bool bSplit = !IsFwdMoveAllowed();
                 if ( nTmp > 0 && WouldFit( nTmp, bSplit, false ) )
                 {
-                    Prepare( PREP_WIDOWS_ORPHANS, nullptr, false );
+                    Prepare( PrepareHint::WidowsOrphans, nullptr, false );
                     setFrameAreaSizeValid(false);
                     bFitPromise = true;
                     continue;
@@ -1864,7 +1864,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             // FME 2007-08-30 #i81146# new loop control
             if ( nConsecutiveFormatsWithoutChange <= cnStopFormat )
             {
-                Prepare( PREP_MUST_FIT, nullptr, false );
+                Prepare( PrepareHint::MustFit, nullptr, false );
                 setFrameAreaSizeValid(false);
                 bMustFit = true;
                 continue;

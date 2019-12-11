@@ -366,7 +366,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
         return false;
 
     // If the first line of the Follow does not fit, the master
-    // probably is full of Dummies. In this case a PREP_WIDOWS would be fatal.
+    // probably is full of Dummies. In this case a PrepareHint::Widows would be fatal.
     if( pMaster->GetOfst() == pFrame->GetOfst() )
         return false;
 
@@ -407,7 +407,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
                 if ( nTmpRstHeight >=
                      SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
                 {
-                    pMaster->Prepare( PREP_ADJUST_FRM );
+                    pMaster->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                     pMaster->InvalidateSize_();
                     pMaster->InvalidatePage();
                 }
@@ -420,8 +420,8 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
 
     // Follow to Master II
     // If the Follow *shrinks*, maybe the Master can absorb the whole Orphan.
-    // (0W, 2O, 2M, 1F) - 1F = 3M, 0F     -> PREP_ADJUST_FRM
-    // (0W, 2O, 3M, 2F) - 1F = 2M, 2F     -> PREP_WIDOWS
+    // (0W, 2O, 2M, 1F) - 1F = 3M, 0F     -> PrepareHint::AdjustSizeWithoutFormatting
+    // (0W, 2O, 3M, 2F) - 1F = 2M, 2F     -> PrepareHint::Widows
 
     if( 0 > nChg && !pMaster->IsLocked() && pMaster->GetUpper() )
     {
@@ -429,7 +429,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             aRectFnSet.GetPrtBottom(*pMaster->GetUpper()) );
         if( nTmpRstHeight >= SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
         {
-            pMaster->Prepare( PREP_ADJUST_FRM );
+            pMaster->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
             pMaster->InvalidateSize_();
             pMaster->InvalidatePage();
             pFrame->SetJustWidow( false );
@@ -469,7 +469,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             return false;
     }
 
-    pMaster->Prepare( PREP_WIDOWS, static_cast<void*>(&nNeed) );
+    pMaster->Prepare( PrepareHint::Widows, static_cast<void*>(&nNeed) );
     return true;
 }
 

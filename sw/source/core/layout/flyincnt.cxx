@@ -46,7 +46,7 @@ void SwFlyInContentFrame::DestroyImpl()
     if ( !GetFormat()->GetDoc()->IsInDtor() && GetAnchorFrame() )
     {
         SwRect aTmp( GetObjRectWithSpaces() );
-        SwFlyInContentFrame::NotifyBackground( FindPageFrame(), aTmp, PREP_FLY_LEAVE );
+        SwFlyInContentFrame::NotifyBackground( FindPageFrame(), aTmp, PrepareHint::FlyFrameLeave );
     }
 
     SwFlyFrame::DestroyImpl();
@@ -128,7 +128,7 @@ void SwFlyInContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
     }
 
     if ( bCallPrepare && GetAnchorFrame() )
-        AnchorFrame()->Prepare( PREP_FLY_ATTR_CHG, GetFormat() );
+        AnchorFrame()->Prepare( PrepareHint::FlyFrameAttributesChanged, GetFormat() );
 }
 
 /// Here the content gets formatted initially.
@@ -178,14 +178,14 @@ void SwFlyInContentFrame::MakeObjPos()
 void SwFlyInContentFrame::ActionOnInvalidation( const InvalidationType _nInvalid )
 {
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )
-        AnchorFrame()->Prepare( PREP_FLY_ATTR_CHG, &GetFrameFormat() );
+        AnchorFrame()->Prepare( PrepareHint::FlyFrameAttributesChanged, &GetFrameFormat() );
 }
 
 void SwFlyInContentFrame::NotifyBackground( SwPageFrame *, const SwRect& rRect,
                                        PrepareHint eHint)
 {
-    if ( eHint == PREP_FLY_ATTR_CHG )
-        AnchorFrame()->Prepare( PREP_FLY_ATTR_CHG );
+    if ( eHint == PrepareHint::FlyFrameAttributesChanged )
+        AnchorFrame()->Prepare( PrepareHint::FlyFrameAttributesChanged );
     else
         AnchorFrame()->Prepare( eHint, static_cast<void const *>(&rRect) );
 }

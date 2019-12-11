@@ -201,46 +201,44 @@ SW_DLLPUBLIC const ::utl::TransliterationWrapper& GetAppCmpStrIgnore();
 
 // Official shortcut for Prepare() regarding notification of Content by the Layout.
 // Content provides for calculation of minimal requirements at the next call of ::Format().
-enum PrepareHint
+enum class PrepareHint
 {
-    PREP_BEGIN,             // BEGIN.
-    PREP_CLEAR = PREP_BEGIN,// Reformat completely.
-    PREP_WIDOWS_ORPHANS,    // Only check for widows and orphans and split in case of need.
-    PREP_FIXSIZE_CHG,       // FixSize has changed.
-    PREP_FOLLOW_FOLLOWS,    // Follow is now possibly adjacent.
-    PREP_ADJUST_FRM,        // Adjust size via grow/shrink without formatting.
-    PREP_FLY_CHGD,          // A FlyFrame has changed its size.
-    PREP_FLY_ATTR_CHG,      // A FlyFrame has changed its attributes
-                            // (e. g. wrap).
-    PREP_FLY_ARRIVE,        // A FlyFrame now overlaps range.
-    PREP_FLY_LEAVE,         // A FlyFrame has left range.
-    PREP_FTN,               // Invalidation of footnotes.
-    PREP_POS_CHGD,          // Position of Frame has changed.
-                            // (Check for Fly-break). In void* of Prepare()
-                            // a sal_Bool& is passed. If this is sal_True,
-                            // it indicates that a format has been executed.
-    PREP_UL_SPACE,          // UL-Space has changed, TextFrames have to
-                            // re-calculate line space.
-    PREP_MUST_FIT,          // Make frm fit (split) even if the attributes do
-                            // not allow that (e.g. "keep together").
-    PREP_WIDOWS,            // A follow realizes that the orphan rule will be applied
-                            // for it and sends a PREP_WIDOWS to its predecessor
-                            // (Master/Follow).
-    PREP_QUOVADIS,          // If a footnote has to be split between two paragraphs
-                            // the last on the page has to receive a QUOVADIS in
-                            // order to format the text into it.
-    PREP_BOSS_CHGD,         // If a Frame changes its column/page this additional
-                            // Prepare is sended to POS_CHGD in MoveFwd/Bwd
-                            // (join Footnote-numbers etc.)
-                            // Direction is communicated via pVoid:
-                            //     MoveFwd: pVoid == 0
-                            //     MoveBwd: pVoid == pOldPage
-    PREP_REGISTER,          // Invalidate frames with registers.
-    PREP_FTN_GONE,          // A Follow loses its footnote, possibly its first line can move up.
-    PREP_MOVEFTN,           // A footnote changes its page. Its contents receives at first a
-                            // height of zero in order to avoid too much noise. At formatting
-                            // it checks whether it fits and if necessary changes its page again.
-    PREP_ERGOSUM,           // Needed because of movement in FootnoteFrames. Check QuoVadis/ErgoSum.
+    Clear,                     // Reformat completely.
+    WidowsOrphans,             // Only check for widows and orphans and split in case of need.
+    FixSizeChanged,            // FixSize has changed.
+    FollowFollows,             // Follow is now possibly adjacent.
+    AdjustSizeWithoutFormatting,  // Adjust size via grow/shrink without formatting.
+    FlyFrameSizeChanged,       // A FlyFrame has changed its size.
+    FlyFrameAttributesChanged, // A FlyFrame has changed its attributes (e. g. wrap).
+    FlyFrameArrive,            // A FlyFrame now overlaps range.
+    FlyFrameLeave,             // A FlyFrame has left range.
+    FootnoteInvalidation,      // Invalidation of footnotes.
+    FramePositionChanged,      // Position of Frame has changed.
+                               // (Check for Fly-break). In void* of Prepare()
+                               // a sal_Bool& is passed. If this is sal_True,
+                               // it indicates that a format has been executed.
+    ULSpaceChanged,            // UL-Space has changed, TextFrames have to
+                               // re-calculate line space.
+    MustFit,                   // Make frm fit (split) even if the attributes do
+                               // not allow that (e.g. "keep together").
+    Widows,                    // A follow realizes that the orphan rule will be applied
+                               // for it and sends a Widows to its predecessor
+                               // (Master/Follow).
+    QuoVadis,                  // If a footnote has to be split between two paragraphs
+                               // the last on the page has to receive a QUOVADIS in
+                               // order to format the text into it.
+    BossChanged,               // If a Frame changes its column/page this additional
+                               // Prepare is sent to POS_CHGD in MoveFwd/Bwd
+                               // (join Footnote-numbers etc.)
+                               // Direction is communicated via pVoid:
+                               //     MoveFwd: pVoid == 0
+                               //     MoveBwd: pVoid == pOldPage
+    Register,                  // Invalidate frames with registers.
+    FootnoteInvalidationGone,  // A Follow loses its footnote, possibly its first line can move up.
+    FootnoteMove,              // A footnote changes its page. Its contents receives at first a
+                               // height of zero in order to avoid too much noise. At formatting
+                               // it checks whether it fits and if necessary changes its page again.
+    ErgoSum,                   // Needed because of movement in FootnoteFrames. Check QuoVadis/ErgoSum.
 };
 
 enum class FrameControlType

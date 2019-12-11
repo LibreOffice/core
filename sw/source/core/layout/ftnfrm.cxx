@@ -862,7 +862,7 @@ void sw_RemoveFootnotes( SwFootnoteBossFrame* pBoss, bool bPageOnly, bool bEndNo
                 if ( !pFootnote->GetAttr()->GetFootnote().IsEndNote() ||
                         bEndNotes )
                 {
-                    pFootnote->GetRef()->Prepare( PREP_FTN, static_cast<void*>(pFootnote->GetAttr()) );
+                    pFootnote->GetRef()->Prepare( PrepareHint::FootnoteInvalidation, static_cast<void*>(pFootnote->GetAttr()) );
                     if ( bPageOnly && !pNxt )
                         pNxt = pFootnote->GetFollow();
                     pFootnote->Cut();
@@ -1699,7 +1699,7 @@ bool SwFootnoteBossFrame::RemoveFootnote(
             OSL_ENSURE( pRef->IsTextFrame(), "NoTextFrame has Footnote?" );
             SwTextFrame* pMaster = pRef->FindMaster();
             if( !pMaster->IsLocked() )
-                pMaster->Prepare( PREP_FTN_GONE );
+                pMaster->Prepare( PrepareHint::FootnoteInvalidationGone );
         }
     }
     FindPageFrame()->UpdateFootnoteNum();
@@ -1966,7 +1966,7 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                     SwFrame* pTmp = static_cast<SwLayoutFrame*>(pCnt)->ContainsAny();
                     while( pTmp && static_cast<SwLayoutFrame*>(pCnt)->IsAnLower( pTmp ) )
                     {
-                        pTmp->Prepare( PREP_MOVEFTN );
+                        pTmp->Prepare( PrepareHint::FootnoteMove );
 
                         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pTmp);
                         aRectFnSet.SetHeight(aFrm, 0);
@@ -1979,7 +1979,7 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                 }
                 else
                 {
-                    pCnt->Prepare( PREP_MOVEFTN );
+                    pCnt->Prepare( PrepareHint::FootnoteMove );
                 }
 
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pCnt);
@@ -2224,7 +2224,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
             {
                 pCnt->InvalidatePos_();
                 pCnt->InvalidateSize_();
-                pCnt->Prepare( PREP_ADJUST_FRM );
+                pCnt->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                 SwFootnoteFrame* pFootnoteFrame = pCnt->FindFootnoteFrame();
                 // #i49383#
                 if ( pFootnoteFrame != pLastFootnoteFrame )
@@ -2846,7 +2846,7 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
         MoveSubTree( pNewUp, pNewUp->Lower() );
 
         if( !bSameBoss )
-            Prepare( PREP_BOSS_CHGD );
+            Prepare( PrepareHint::BossChanged );
     }
     return bSamePage;
 }

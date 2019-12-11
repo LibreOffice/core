@@ -726,7 +726,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             rInvFlags |= 0x41;
             // The background needs to be messaged and invalidated
             const SwRect aTmp( GetObjRectWithSpaces() );
-            NotifyBackground( FindPageFrame(), aTmp, PREP_FLY_ATTR_CHG );
+            NotifyBackground( FindPageFrame(), aTmp, PrepareHint::FlyFrameAttributesChanged );
 
             // By changing the flow of frame-bound Frames, a vertical alignment
             // can be activated/deactivated => MakeFlyPos
@@ -790,7 +790,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 aOld.Left  ( std::max( aOld.Left() - rLR.GetLeft(), 0L ) );
                 aOld.SSize().AdjustWidth(rLR.GetRight() );
                 aNew.Union( aOld );
-                NotifyBackground( FindPageFrame(), aNew, PREP_CLEAR );
+                NotifyBackground( FindPageFrame(), aNew, PrepareHint::Clear );
 
                 // Special case:
                 // When assigning a template we cannot rely on the old column
@@ -863,7 +863,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 {
                     SwFrame* pFrame = GetLastLower();
                     if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
-                        pFrame->Prepare( PREP_ADJUST_FRM );
+                        pFrame->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                 }
             }
 
@@ -897,7 +897,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 }
             }
             aNew.Union( aOld );
-            NotifyBackground( FindPageFrame(), aNew, PREP_CLEAR );
+            NotifyBackground( FindPageFrame(), aNew, PrepareHint::Clear );
         }
         break;
 
@@ -1424,7 +1424,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                 ( pFrame->GetUpper()->getFramePrintArea().Height() != pFrame->getFrameArea().Height() )
                 : ( pFrame->GetUpper()->getFramePrintArea().Width() != pFrame->getFrameArea().Width() ) )
             {
-                pFrame->Prepare( PREP_FIXSIZE_CHG );
+                pFrame->Prepare( PrepareHint::FixSizeChanged );
                 pFrame->InvalidateSize_();
             }
 

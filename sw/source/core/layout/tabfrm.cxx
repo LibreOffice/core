@@ -275,7 +275,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
                             == RndStdIds::FLY_AS_CHAR )
                     {
                         pAnchoredObj->AnchorFrame()
-                                ->Prepare( PREP_FLY_ATTR_CHG,
+                                ->Prepare( PrepareHint::FlyFrameAttributesChanged,
                                            &(pAnchoredObj->GetFrameFormat()) );
                     }
                     if ( pFly != nullptr )
@@ -1399,7 +1399,7 @@ static void SwInvalidatePositions( SwFrame *pFrame, long nBottom )
             }
         }
         else
-            pFrame->Prepare( PREP_ADJUST_FRM );
+            pFrame->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
         pFrame = pFrame->GetNext();
     } while ( pFrame &&
               ( bAll ||
@@ -3552,7 +3552,7 @@ void SwTabFrame::Cut()
         //Someone has to do the retouch: predecessor or upper
         if ( nullptr != (pFrame = GetPrev()) )
         {   pFrame->SetRetouche();
-            pFrame->Prepare( PREP_WIDOWS_ORPHANS );
+            pFrame->Prepare( PrepareHint::WidowsOrphans );
             pFrame->InvalidatePos_();
             if ( pFrame->IsContentFrame() )
                 pFrame->InvalidatePage( pPage );
@@ -3653,7 +3653,7 @@ void SwTabFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
         pParent->Grow( aRectFnSet.GetHeight(getFrameArea()) );
 
     if( aRectFnSet.GetWidth(getFrameArea()) != aRectFnSet.GetWidth(pParent->getFramePrintArea()) )
-        Prepare( PREP_FIXSIZE_CHG );
+        Prepare( PrepareHint::FixSizeChanged );
     if ( GetPrev() )
     {
         if ( !IsFollow() )
@@ -3687,7 +3687,7 @@ void SwTabFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
 
 bool SwTabFrame::Prepare( const PrepareHint eHint, const void *, bool )
 {
-    if( PREP_BOSS_CHGD == eHint )
+    if( PrepareHint::BossChanged == eHint )
         CheckDirChange();
     return false;
 }
@@ -4751,7 +4751,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva )
             if ( !pFrame->GetNext() )
                 pFrame->SetRetouche();
             if( bInva )
-                pFrame->Prepare( PREP_POS_CHGD );
+                pFrame->Prepare( PrepareHint::FramePositionChanged );
             if ( pFrame->IsLayoutFrame() && static_cast<SwLayoutFrame*>(pFrame)->Lower() )
                 lcl_ArrangeLowers( static_cast<SwLayoutFrame*>(pFrame),
                     aRectFnSet.GetTop(static_cast<SwLayoutFrame*>(pFrame)->Lower()->getFrameArea())
