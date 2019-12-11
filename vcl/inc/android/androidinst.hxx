@@ -38,6 +38,9 @@ public:
 
     // mainloop pieces
     virtual bool AnyInput( VclInputFlags nType );
+
+    virtual void updateMainThread();
+    virtual void releaseMainThread();
 };
 
 #endif // INCLUDED_VCL_INC_ANDROID_ANDROIDINST_HXX
