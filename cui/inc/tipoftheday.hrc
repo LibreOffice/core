@@ -69,12 +69,14 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Page/Slide > Properties > 'Fit object to paper format' in Draw/Impress to resize the objects so that they fit on your chosen paper format."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Fit the entire page in a Draw window, use * on the number pad."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "In a Draw page, use '-' to zoom out; '+' to zoom in."), "", "tipoftheday_d.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Want to show the contents of another document within your document?  Use Insert ▸ Section and select Link."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To automatically number your table rows in Writer, select the relevant column, then apply a numbering style from List Styles."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME allows you to use assistive tools, such as external screen readers, Braille devices or speech recognition input devices."), "https://www.libreoffice.org/get-help/accessibility/", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a series in %PRODUCTNAME Calc such as A1, A2, A3, A11, A15, not in alphabetical order but on the number? Enable natural sort in the Options tab."), "modules/scalc/ui/sortoptionspage/SortOptionsPage", "tipoftheday_c.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/12030200.html
      { NC_("RID_CUI_TIPOFTHEDAY", "You can change the default function in the status bar: right click on the area."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to add many of the same shapes in Draw/Impress? Double-click a tool in the drawing toolbar to use it for repeated tasks."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Ctrl+Shift+F9 recalculates all formulas in all spreadsheets."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Want to keep a part of an editable document as read-only? Insert ▸ Section. Add text to the section, then right-click ‘Edit Section’ and check ‘Protect’."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use the Backspace key instead of Delete in Calc. You can choose what to delete."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Best way to fix bad-looking MS Word table cells via Table > Size > Optimal Row Height / Column Width."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To repeat a table heading when a table spans over a page, use Table > Table Properties > Text Flow > Repeat heading."), "", "tipoftheday_w.png"},
@@ -85,7 +87,6 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Insert your metadata in your document with Insert > Fields > More Fields… > Document or DocInformation."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Get help from the community via the Ask portal."), "https://ask.libreoffice.org", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Shift+Space to select the current row and Ctrl+Space to select the current column."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Use Sections in %PRODUCTNAME Writer to protect part of a text, show/hide text, reuse parts from other documents, use different column layout."), "modules/swriter/ui/sectionpage/SectionPage", "tipoftheday_w.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/01/04020100.html
      { NC_("RID_CUI_TIPOFTHEDAY", "You can move an object to another layer by holding it until its edges flash, then drag it to the tab of the layer you want to move it to."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Data > Validity allows you to create drop-down lists where the user selects a value instead of typing."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/guide/validity.html", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Hold down Ctrl and turn the mouse wheel to change the zoom factor."), "", ""},
@@ -117,6 +118,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to precisely position? Alt+arrow Keys move objects (shapes, pictures, formulas) by one pixel."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Embedded help is available by pressing F1, if you've installed it. Otherwise check online at:"), "https://help.libreoffice.org", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Right-click in the status bar in %PRODUCTNAME Calc and select 'Selection count' to display the number of selected cells."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Want a different column layout for a part of a %PRODUCTNAME Writer page? Insert ▸ Section, set with Columns tab, and place text in that section."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Data > Statistics for sampling, descriptive statistics, analysis of variance, correlation, and much more in %PRODUCTNAME Calc."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can copy from one sheet to another without the clipboard. Select the area to copy, Ctrl+click the target sheet's tab and use Sheet > Fill Cells > Fill Sheets."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can change the look of %PRODUCTNAME via Tools > Options > View > User Interface."), "", ""},
@@ -148,6 +150,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Your Writer document didn’t reopen with the text cursor at the same editing position it was when you saved it? Check Tools > Options > %PRODUCTNAME > User Data > First/Last name is not empty."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Citation management? Use a 3rd party extension."), "https://wiki.documentfoundation.org/Referencing_Systems_in_LibreOffice", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to insert a value in the same place on several sheets? Select the sheets: hold down Ctrl key and click their tabs before entering."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Want to hide some text in a document? Select the text. Insert ▸ Section, and select ‘Hide’. To make text visible again, use Hide==1 in ‘With Condition’."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can customize the middle mouse button per Tools > Options > %PRODUCTNAME > View > Middle Mouse button."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to print two portrait pages on a landscape one (reducing A4 to A5)? File > Print and select 2 at ‘Pages per sheet’."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "For quick access to your document bookmarks, right-click on the page number of the status bar (lower-left corner of document window)."), "", "tipoftheday_w.png"},
@@ -239,7 +242,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Uncheck Slide Show > Settings > Presentation always on top if you need another program displays its window to the front of your presentation."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to find the words in bold in a Writer document? Edit > Find & Replace > Other options > Attributes > Font weight."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/finding.html", "tipoftheday_w.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "You can sort paragraphs or table rows alphabetically or numerically per Tools > Sort."), "modules/swriter/ui/sortdialog/SortDialog", "tipoftheday_w.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/01/06100000.html
-     { NC_("RID_CUI_TIPOFTHEDAY", "Click at the beginning (end) of a section and press Alt+Enter to insert a paragraph before (after) the section."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "To insert a paragraph before (after) a section, press Alt+Enter at the beginning (end) of the section."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME has a template center to create good looking documents - check it out."), "http://templates.libreoffice.org/template-center", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Calculate loan repayments with Calc: eg. PMT(2%/12;36;2500) interest rate per payment period 2%/12, 36 months, loan amount 2500."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/04060119.html?DbPAR=CALC#bm_id3149577", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Cannot find what you want with the VLOOKUP function in Calc? With INDEX and MATCH you can do everything!"), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/04060109.html", "tipoftheday_c.png"}, //local help missing
