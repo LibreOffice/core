@@ -233,7 +233,6 @@ SwSpellPopup::SwSpellPopup(
     , m_nRedlinePrevId(m_xPopupMenu->GetItemId("prev"))
     , m_pSh( pWrtSh )
     , m_xSpellAlt(xAlt)
-    , m_nGrammarError(0)
     , m_bGrammarResults(false)
 {
     OSL_ENSURE(m_xSpellAlt.is(), "no spelling alternatives available");
@@ -446,12 +445,10 @@ SwSpellPopup::SwSpellPopup(
     , m_nRedlineNextId(m_xPopupMenu->GetItemId("next"))
     , m_nRedlinePrevId(m_xPopupMenu->GetItemId("prev"))
     , m_pSh(pWrtSh)
-    , m_xGrammarResult(rResult)
     , m_sExplanationLink()
     , m_bGrammarResults(true)
 {
     m_nCheckedLanguage = LanguageTag::convertToLanguageType( rResult.aLocale );
-    m_nGrammarError = nErrorInResult;
     bool bUseImagesInMenus = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 
     sal_uInt16 nPos = 0;

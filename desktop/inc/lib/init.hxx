@@ -140,7 +140,6 @@ namespace desktop {
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
         int m_nDisableCallbacks;
-        bool m_bEventLatch;
         std::mutex m_mutex;
     };
 
