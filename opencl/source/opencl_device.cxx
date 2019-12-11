@@ -333,11 +333,11 @@ ds_status profileDevices(std::unique_ptr<ds_profile> const & pProfile, std::uniq
 }
 
 /* Pick best device */
-ds_status pickBestDevice(std::unique_ptr<ds_profile> const & profile, int& rBestDeviceIndex)
+int pickBestDevice(std::unique_ptr<ds_profile> const & profile)
 {
     double bestScore = DBL_MAX;
 
-    rBestDeviceIndex = -1;
+    int nBestDeviceIndex = -1;
 
     for (std::vector<ds_device>::size_type d = 0; d < profile->devices.size();
          d++)
@@ -390,18 +390,18 @@ ds_status pickBestDevice(std::unique_ptr<ds_profile> const & profile, int& rBest
         if (fScore < bestScore)
         {
             bestScore = fScore;
-            rBestDeviceIndex = d;
+            nBestDeviceIndex = d;
         }
     }
-    if (rBestDeviceIndex != -1 && profile->devices[rBestDeviceIndex].eType == DeviceType::OpenCLDevice)
+    if (nBestDeviceIndex != -1 && profile->devices[nBestDeviceIndex].eType == DeviceType::OpenCLDevice)
     {
-        SAL_INFO("opencl.device", "Selected Device[" << rBestDeviceIndex << "]: " << profile->devices[rBestDeviceIndex].sDeviceName << "(OpenCL).");
+        SAL_INFO("opencl.device", "Selected Device[" << nBestDeviceIndex << "]: " << profile->devices[nBestDeviceIndex].sDeviceName << "(OpenCL).");
     }
     else
     {
-        SAL_INFO("opencl.device", "Selected Device[" << rBestDeviceIndex << "]: CPU (Native).");
+        SAL_INFO("opencl.device", "Selected Device[" << nBestDeviceIndex << "]: CPU (Native).");
     }
-    return DS_SUCCESS;
+    return nBestDeviceIndex;
 }
 
 /* Return device ID for matching device name */
@@ -566,8 +566,7 @@ ds_device const & getDeviceSelection(
         }
 
         /* Pick best device */
-        int bestDeviceIdx;
-        pickBestDevice(aProfile, bestDeviceIdx);
+        int bestDeviceIdx = pickBestDevice(aProfile);
 
         /* Override if necessary */
         char* overrideDeviceStr = getenv("SC_OPENCL_DEVICE_OVERRIDE");
