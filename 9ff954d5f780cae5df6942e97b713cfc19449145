@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_9ed7bc24",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1957,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-11T12:02:48Z",
+      "side": 1,
+      "message": "* How are these bounds derived?  My Windows build fails because nY is 0.34070199122511.\n\n* These checks should probably use CPPUNIT_ASSERT_DOUBLES_EQUAL (or at least a combination of CPPUNIT_ASSERT_GREATER and CPPUNIT_ASSERT_LESS), so that actual values are printed for failing tests.",
+      "range": {
+        "startLine": 1957,
+        "startChar": 4,
+        "endLine": 1957,
+        "endChar": 51
+      },
+      "revId": "9ff954d5f780cae5df6942e97b713cfc19449145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
