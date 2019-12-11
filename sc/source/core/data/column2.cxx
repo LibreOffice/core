@@ -242,7 +242,7 @@ long ScColumn::GetNeededSize(
     {
         if (pCondSet &&
                 pCondSet->GetItemState(ATTR_INDENT, true, &pCondItem) == SfxItemState::SET)
-            nIndent = static_cast<const SfxUInt16Item*>(pCondItem)->GetValue();
+            nIndent = static_cast<const ScIndentItem*>(pCondItem)->GetValue();
         else
             nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
     }

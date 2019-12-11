@@ -117,7 +117,7 @@ class SvxSizeItem;
 #define ATTR_FORBIDDEN_RULES    TypedWhichId<SvxForbiddenRuleItem>(128)
 #define ATTR_HOR_JUSTIFY        TypedWhichId<SvxHorJustifyItem>(129)
 #define ATTR_HOR_JUSTIFY_METHOD TypedWhichId<SvxJustifyMethodItem>(130)
-#define ATTR_INDENT             TypedWhichId<SfxUInt16Item>(131)
+#define ATTR_INDENT             TypedWhichId<ScIndentItem>(131)
 #define ATTR_VER_JUSTIFY        TypedWhichId<SvxVerJustifyItem>(132)
 #define ATTR_VER_JUSTIFY_METHOD TypedWhichId<SvxJustifyMethodItem>(133)
 #define ATTR_STACKED            TypedWhichId<ScShrinkToFitCell>(134)

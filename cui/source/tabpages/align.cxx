@@ -207,7 +207,12 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_xEdIndent->get_value_changed_from_saved())
     {
-        rSet->Put(SfxUInt16Item(GetWhich(SID_ATTR_ALIGN_INDENT), m_xEdIndent->get_value(FieldUnit::TWIP)));
+        const SfxUInt16Item* pIndentItem = static_cast<const SfxUInt16Item*>(GetOldItem(
+                                                *rSet, SID_ATTR_ALIGN_INDENT));
+        assert(pIndentItem);
+        std::unique_ptr<SfxUInt16Item> pNewIndentItem(static_cast<SfxUInt16Item*>(pIndentItem->Clone()));
+        pNewIndentItem->SetValue(m_xEdIndent->get_value(FieldUnit::TWIP));
+        rSet->Put(*pNewIndentItem);
         bChanged = true;
     }
 

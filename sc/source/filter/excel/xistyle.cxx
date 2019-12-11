@@ -822,7 +822,7 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
 
     // indent
     sal_uInt16 nScIndent = mnIndent * 200; // 1 Excel unit == 10 pt == 200 twips
-    ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_INDENT, nScIndent ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, ScIndentItem( nScIndent ), bSkipPoolDefs );
 
     // shrink to fit
     ScfTools::PutItem( rItemSet, ScShrinkToFitCell( mbShrink ), bSkipPoolDefs );

@@ -1238,7 +1238,7 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( const OUString& aPropertyName )
                     aAny <<= sal_Int32( static_cast<const SfxUInt32Item&>(pItemSet->Get(nWhich)).GetValue() );
                     break;
                 case ATTR_INDENT:
-                    aAny <<= sal_Int16( TwipsToHMM(static_cast<const SfxUInt16Item&>(
+                    aAny <<= sal_Int16( TwipsToHMM(static_cast<const ScIndentItem&>(
                                     pItemSet->Get(nWhich)).GetValue()) );
                     break;
                 case ATTR_PAGE_SCALE:
@@ -1520,8 +1520,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                             {
                                 sal_Int16 nVal = 0;
                                 *pValue >>= nVal;
-                                rSet.Put(SfxUInt16Item(pEntry->nWID,
-                                                       static_cast<sal_uInt16>(HMMToTwips(nVal))));
+                                rSet.Put(ScIndentItem(static_cast<sal_uInt16>(HMMToTwips(nVal))));
                             }
                             break;
                         case ATTR_ROTATE_VALUE:
@@ -1789,7 +1788,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
                         }
                         break;
                     case ATTR_INDENT:
-                        aAny <<= sal_Int16( TwipsToHMM(static_cast<const SfxUInt16Item&>(
+                        aAny <<= sal_Int16( TwipsToHMM(static_cast<const ScIndentItem&>(
                                         pItemSet->Get(nWhich)).GetValue()) );
                         break;
                     case ATTR_STACKED:

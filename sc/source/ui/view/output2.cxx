@@ -2447,7 +2447,7 @@ void ScOutputData::DrawEditParam::calcMargins(long& rTopM, long& rLeftM, long& r
 
     sal_uInt16 nIndent = 0;
     if (meHorJustAttr == SvxCellHorJustify::Left || meHorJustAttr == SvxCellHorJustify::Right)
-        nIndent = lcl_GetValue<SfxUInt16Item, sal_uInt16>(*mpPattern, ATTR_INDENT, mpCondSet);
+        nIndent = lcl_GetValue<ScIndentItem, sal_uInt16>(*mpPattern, ATTR_INDENT, mpCondSet);
 
     rLeftM   = static_cast<long>(((rMargin.GetLeftMargin() + nIndent) * nPPTX));
     rTopM    = static_cast<long>((rMargin.GetTopMargin() * nPPTY));
