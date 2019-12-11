@@ -204,11 +204,11 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if (eType & SelectionType::Ole)
         eType = SelectionType::Graphic;
 
-    const SwLabelType eT = (eType & SelectionType::Table) ? LTYPE_TABLE :
-                      (eType & SelectionType::Frame) ? LTYPE_FLY :
-                      (eType == SelectionType::Text) ? LTYPE_FLY :
-                      (eType & SelectionType::DrawObject) ? LTYPE_DRAW :
-                                                    LTYPE_OBJECT;
+    const SwLabelType eT = (eType & SelectionType::Table) ? SwLabelType::Table :
+                      (eType & SelectionType::Frame) ? SwLabelType::Fly :
+                      (eType == SelectionType::Text) ? SwLabelType::Fly :
+                      (eType & SelectionType::DrawObject) ? SwLabelType::Draw :
+                                                    SwLabelType::Object;
 
     SwFieldMgr aMgr(&rSh);
     SwSetExpFieldType* pFieldType =

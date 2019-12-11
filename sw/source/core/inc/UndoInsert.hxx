@@ -211,7 +211,7 @@ public:
     static SwRewriter CreateRewriter(const OUString &rStr);
 
     void SetNodePos( sal_uLong nNd )
-        { if( LTYPE_OBJECT != m_eType ) NODE.nNode = nNd; }
+        { if( SwLabelType::Object != m_eType ) NODE.nNode = nNd; }
 
     void SetUndoKeep()  { m_bUndoKeep = true; }
     void SetFlys( SwFrameFormat& rOldFly, SfxItemSet const & rChgSet, SwFrameFormat& rNewFly );
