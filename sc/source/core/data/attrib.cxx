@@ -23,7 +23,9 @@
 
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/eerdll.hxx>
 #include <editeng/borderline.hxx>
+#include <editeng/itemtype.hxx>
 
 #include <libxml/xmlwriter.h>
 
@@ -826,6 +828,37 @@ bool ScHyphenateCell::GetPresentation(SfxItemPresentation,
     const char* pId = GetValue() ? STR_HYPHENATECELL_ON : STR_HYPHENATECELL_OFF;
     rText = ScResId(pId);
     return true;
+}
+
+ScIndentItem::ScIndentItem(sal_uInt16 nIndent)
+    : SfxUInt16Item(ATTR_INDENT, nIndent)
+{
+}
+
+ScIndentItem* ScIndentItem::Clone(SfxItemPool*) const
+{
+    return new ScIndentItem(GetValue());
+}
+
+bool ScIndentItem::GetPresentation(SfxItemPresentation ePres,
+                                   MapUnit eCoreUnit, MapUnit,
+                                   OUString& rText,
+                                   const IntlWrapper& rIntl) const
+{
+    auto nValue = GetValue();
+
+    switch (ePres)
+    {
+        case SfxItemPresentation::Complete:
+            rText = ScResId(STR_INDENTCELL);
+            [[fallthrough]];
+        case SfxItemPresentation::Nameless:
+            rText += GetMetricText( nValue, eCoreUnit, MapUnit::MapPoint, &rIntl ) +
+                  " " + EditResId(GetMetricId(MapUnit::MapPoint));
+            return true;
+        default: ; //prevent warning
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -500,7 +500,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         SvxCellHorJustify eHorJust = pHorJustifyItem ? pHorJustifyItem->GetValue() : SvxCellHorJustify::Standard;
         if ( eHorJust == SvxCellHorJustify::Left )
         {
-            const SfxUInt16Item* pIndentItem = rDoc.GetAttr( aCellPos, ATTR_INDENT );
+            const ScIndentItem* pIndentItem = rDoc.GetAttr( aCellPos, ATTR_INDENT );
             if ( pIndentItem )
             {
                 nIndent = static_cast< long >( pIndentItem->GetValue() );

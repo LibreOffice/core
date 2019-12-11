@@ -1959,7 +1959,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                             aAny <<= static_cast<sal_Int32>( static_cast<const SfxUInt32Item&>(rSet.Get(pEntry->nWID)).GetValue() );
                             break;
                         case ATTR_INDENT:
-                            aAny <<= static_cast<sal_Int16>( TwipsToHMM(static_cast<const SfxUInt16Item&>(
+                            aAny <<= static_cast<sal_Int16>( TwipsToHMM(static_cast<const ScIndentItem&>(
                                             rSet.Get(pEntry->nWID)).GetValue()) );
                             break;
                         default:
@@ -2097,7 +2097,7 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                 if ( !(rValue >>= nIntVal) )
                     throw lang::IllegalArgumentException();
 
-                rSet.Put( SfxUInt16Item( rEntry.nWID, static_cast<sal_uInt16>(HMMToTwips(nIntVal)) ) );
+                rSet.Put( ScIndentItem( static_cast<sal_uInt16>(HMMToTwips(nIntVal)) ) );
 
             }
             break;
@@ -2409,7 +2409,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         }
                         break;
                     case ATTR_INDENT:
-                        rAny <<= static_cast<sal_Int16>( TwipsToHMM(static_cast<const SfxUInt16Item&>(
+                        rAny <<= static_cast<sal_Int16>( TwipsToHMM(static_cast<const ScIndentItem&>(
                                         pDataSet->Get(pEntry->nWID)).GetValue()) );
                         break;
                     case ATTR_STACKED:

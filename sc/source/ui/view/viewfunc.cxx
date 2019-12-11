@@ -1015,7 +1015,7 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem, bool bAdjustBlockHeigh
     aNewAttrs.GetItemSet().Put( rAttrItem );
     //  if justify is set (with Buttons), always indentation 0
     if ( rAttrItem.Which() == ATTR_HOR_JUSTIFY )
-        aNewAttrs.GetItemSet().Put( SfxUInt16Item( ATTR_INDENT, 0 ) );
+        aNewAttrs.GetItemSet().Put( ScIndentItem( 0 ) );
     ApplySelectionPattern( aNewAttrs );
 
     // Prevent useless compute

@@ -523,6 +523,7 @@
 #define STR_LINEBREAKCELL_OFF                   NC_("STR_LINEBREAKCELL_OFF", "Wrap text automatically: Off")
 #define STR_HYPHENATECELL_ON                    NC_("STR_HYPHENATECELL_ON", "Hyphenate: On")
 #define STR_HYPHENATECELL_OFF                   NC_("STR_HYPHENATECELL_OFF", "Hyphenate: Off")
+#define STR_INDENTCELL                          NC_("STR_INDENTCELL", "Indent: ")
 
 #endif
 

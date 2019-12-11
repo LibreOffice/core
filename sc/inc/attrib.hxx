@@ -345,6 +345,18 @@ public:
                                  const IntlWrapper& rIntl) const override;
 };
 
+class SC_DLLPUBLIC ScIndentItem final : public SfxUInt16Item
+{
+public:
+    ScIndentItem(sal_uInt16 nIndent = 0);
+    virtual ScIndentItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    virtual bool GetPresentation( SfxItemPresentation ePresentation,
+                                  MapUnit, MapUnit,
+                                  OUString& rText,
+                                  const IntlWrapper& rIntl) const override;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

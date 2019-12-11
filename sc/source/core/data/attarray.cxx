@@ -1758,7 +1758,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
             SCROW nThisEnd = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nThisEnd, nEndRow );
             auto pNewPattern = std::make_unique<ScPatternAttr>(*pOldPattern);
-            pNewPattern->GetItemSet().Put( SfxUInt16Item( ATTR_INDENT, nNewValue ) );
+            pNewPattern->GetItemSet().Put( ScIndentItem( nNewValue ) );
             if ( bNeedJust )
                 pNewPattern->GetItemSet().Put(
                                 SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
