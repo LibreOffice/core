@@ -544,7 +544,6 @@ protected:
 
     virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    bool            IsCellFocusEnabled() const;
     bool            SetCurrentTabPos( sal_uInt16 _nNewPos );
     sal_uInt16      GetCurrentTabPos() const;
     void            CallImplEventListeners(VclEventId nEvent, void* pData);

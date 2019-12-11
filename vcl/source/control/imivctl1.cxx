@@ -64,7 +64,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pView(pCurView), nMaxVirtWidth(DEFAULT_MAX_VIRT_WIDTH), nMaxVirtHeight(DEFAULT_MAX_VIRT_HEIGHT),
     nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
     pCurHighlightFrame(nullptr), bHighlightFramePressed(false), pHead(nullptr), pCursor(nullptr),
-    pHdlEntry(nullptr), pDDDev(nullptr), pDDBufDev(nullptr), pDDTempDev(nullptr), pEntryPaintDev(nullptr),
+    pHdlEntry(nullptr), pDDBufDev(nullptr),
     pAnchor(nullptr), eTextMode(SvxIconChoiceCtrlTextMode::Short),
     eSelectionMode(SelectionMode::Multiple), ePositionMode(SvxIconChoiceCtrlPositionMode::Free),
     bUpdateMode(true)
@@ -110,10 +110,7 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
     CancelUserEvents();
     pImpCursor.reset();
     pGridMap.reset();
-    pDDDev.disposeAndClear();
     pDDBufDev.disposeAndClear();
-    pDDTempDev.disposeAndClear();
-    pEntryPaintDev.disposeAndClear();
     ClearSelectedRectList();
     ClearColumnList();
     aVerSBar.disposeAndClear();
@@ -186,10 +183,7 @@ IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar, v
 
 void SvxIconChoiceCtrl_Impl::FontModified()
 {
-    pDDDev.disposeAndClear();
     pDDBufDev.disposeAndClear();
-    pDDTempDev.disposeAndClear();
-    pEntryPaintDev.disposeAndClear();
     SetDefaultTextSize();
     ShowCursor( false );
     ShowCursor( true );
@@ -1866,14 +1860,7 @@ void SvxIconChoiceCtrl_Impl::ShowCursor( bool bShow )
 void SvxIconChoiceCtrl_Impl::HideDDIcon()
 {
     pView->Update();
-    if( pDDDev )
-    {
-        Size aSize( pDDDev->GetOutputSizePixel() );
-        // restore pView
-        pView->DrawOutDev( Point(), aSize, Point(), aSize, *pDDDev );
-    }
-    pDDBufDev = pDDDev;
-    pDDDev = nullptr;
+    pDDBufDev = nullptr;
 }
 
 bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )

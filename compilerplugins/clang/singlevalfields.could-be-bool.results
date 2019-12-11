@@ -16,16 +16,16 @@ desktop/source/app/main.c:29
 editeng/source/misc/hangulhanja.cxx:79
     editeng::HangulHanjaConversion_Impl m_eConvType
     class HangulHanjaConversion::ConversionType
-editeng/source/misc/svxacorr.cxx:234
+editeng/source/misc/svxacorr.cxx:239
     GetIgnoreTranslWrapper bIsInit
     int
-filter/source/graphicfilter/eps/eps.cxx:142
-    PSWriter nNextChrSetId
+filter/source/graphicfilter/eps/eps.cxx:144
+    (anonymous namespace)::PSWriter nNextChrSetId
     sal_uInt8
 include/opencl/openclwrapper.hxx:46
     openclwrapper::GPUEnv mnIsUserCreated
     int
-include/svtools/ruler.hxx:621
+include/svtools/ruler.hxx:622
     Ruler mnBorderWidth
     long
 include/tools/ref.hxx:126
@@ -49,8 +49,8 @@ jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:191
 libreofficekit/source/gtk/tilebuffer.hxx:229
     LOEvent m_nSetGraphicSelectionType
     int
-sal/rtl/cipher.cxx:110
-    Cipher_Impl m_algorithm
+sal/rtl/cipher.cxx:112
+    (anonymous namespace)::Cipher_Impl m_algorithm
     rtlCipherAlgorithm
 sc/source/filter/inc/stylesbuffer.hxx:290
     oox::xls::ApiAlignmentData mnHorJustifyMethod
@@ -58,35 +58,26 @@ sc/source/filter/inc/stylesbuffer.hxx:290
 sc/source/filter/inc/stylesbuffer.hxx:292
     oox::xls::ApiAlignmentData mnVerJustifyMethod
     sal_Int32
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1025
-    ScPagePreviewCountData nHeaders
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1067
+    (anonymous namespace)::ScPagePreviewCountData nHeaders
     long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1026
-    ScPagePreviewCountData nTables
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1068
+    (anonymous namespace)::ScPagePreviewCountData nTables
     long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1028
-    ScPagePreviewCountData nFooters
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1070
+    (anonymous namespace)::ScPagePreviewCountData nFooters
     long
 sc/source/ui/vba/vbahyperlink.hxx:83
     ScVbaHyperlink mnType
     long
-sd/qa/unit/tiledrendering/tiledrendering.cxx:956
-    ViewCallback m_nPart
+sd/qa/unit/tiledrendering/tiledrendering.cxx:958
+    (anonymous namespace)::ViewCallback m_nPart
     int
-soltools/cpp/_tokens.c:35
-    /media/disk2/libo4/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
-    int
-soltools/cpp/_tokens.c:36
-    /media/disk2/libo4/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
-    int
-soltools/cpp/cpp.h:121
-    includelist always
-    char
 svx/source/inc/cell.hxx:205
     sdr::table::Cell mnCellContentType
     css::table::CellContentType
-svx/source/table/tablertfimporter.cxx:55
-    sdr::table::RTFCellDefault mnRowSpan
+svx/source/table/tablertfimporter.cxx:57
+    sdr::table::(anonymous namespace)::RTFCellDefault mnRowSpan
     sal_Int32
 sw/source/filter/ww8/docxexport.hxx:98
     DocxExport m_nHeadersFootersInSection
@@ -112,8 +103,8 @@ vcl/unx/generic/app/saldata.cxx:502
 vcl/unx/generic/app/sm.cxx:184
     /media/disk2/libo4/vcl/unx/generic/app/sm.cxx nSmDel
     int
-vcl/workben/icontest.cxx:145
-    IconTestApp nRet
+vcl/workben/icontest.cxx:147
+    (anonymous namespace)::IconTestApp nRet
     int
 workdir/LexTarget/l10ntools/source/cfglex.cxx:2293
     /media/disk2/libo4/workdir/LexTarget/l10ntools/source/cfglex.cxx bText

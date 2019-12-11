@@ -335,7 +335,7 @@ OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
     if ( pEntry )
     {
         sal_uInt16 nCount = pEntry->ItemCount();
-        sal_uInt16 nCur = ( 0 == nCol && IsCellFocusEnabled() ) ? GetCurrentTabPos() : 0;
+        sal_uInt16 nCur = 0;
         while( nCur < nCount )
         {
             const SvLBoxItem& rBoxItem = pEntry->GetItem( nCur );
@@ -644,17 +644,9 @@ bool SvHeaderTabListBox::HasRowHeader() const
     return false;
 }
 
-bool SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
+bool SvHeaderTabListBox::GoToCell( sal_Int32 /*_nRow*/, sal_uInt16 /*_nColumn*/ )
 {
-    bool bRet = IsCellFocusEnabled();
-    if ( bRet )
-    {
-        // first set cursor to _nRow
-        SetCursor( GetEntry( _nRow ), true );
-        // then set the focus into _nColumn
-        bRet = SetCurrentTabPos( _nColumn );
-    }
-    return bRet;
+    return false;
 }
 
 void SvHeaderTabListBox::SetNoSelection()

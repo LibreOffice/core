@@ -3529,11 +3529,6 @@ void SvTreeListBox::InitSettings()
         pCheckButtonData->SetDefaultImages(this);
 }
 
-bool SvTreeListBox::IsCellFocusEnabled() const
-{
-    return pImpl->IsCellFocusEnabled();
-}
-
 bool SvTreeListBox::SetCurrentTabPos( sal_uInt16 _nNewPos )
 {
     return pImpl->SetCurrentTabPos( _nNewPos );

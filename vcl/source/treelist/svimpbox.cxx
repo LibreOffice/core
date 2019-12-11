@@ -107,7 +107,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     m_bInVScrollHdl = false;
     m_nFlags |= LBoxFlags::Filling;
 
-    m_bSubLstOpRet = m_bSubLstOpLR = m_bContextMenuHandling = m_bIsCellFocusEnabled = false;
+    m_bSubLstOpRet = m_bSubLstOpLR = m_bContextMenuHandling = false;
     m_bSubLstOpDblClick = true;
 }
 
@@ -212,11 +212,8 @@ void SvImpLBox::UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry )
     }
 }
 
-void SvImpLBox::CalcCellFocusRect( SvTreeListEntry const * pEntry, tools::Rectangle& rRect )
+void SvImpLBox::CalcCellFocusRect( tools::Rectangle& rRect )
 {
-    if ( !(pEntry && m_bIsCellFocusEnabled) )
-        return;
-
     if ( m_nCurTabPos > FIRST_ENTRY_TAB )
     {
         SvLBoxItem& rItem = m_pCursor->GetItem( m_nCurTabPos );
@@ -586,7 +583,7 @@ void SvImpLBox::RecalcFocusRect()
         m_pView->HideFocus();
         long nY = GetEntryLine( m_pCursor );
         tools::Rectangle aRect = m_pView->GetFocusRect( m_pCursor, nY );
-        CalcCellFocusRect( m_pCursor, aRect );
+        CalcCellFocusRect( aRect );
         vcl::Region aOldClip( m_pView->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
         m_pView->SetClipRegion( aClipRegion );
@@ -682,7 +679,7 @@ void SvImpLBox::ShowCursor( bool bShow )
     {
         long nY = GetEntryLine( m_pCursor );
         tools::Rectangle aRect = m_pView->GetFocusRect( m_pCursor, nY );
-        CalcCellFocusRect( m_pCursor, aRect );
+        CalcCellFocusRect( aRect );
         vcl::Region aOldClip( m_pView->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
         m_pView->SetClipRegion( aClipRegion );
@@ -2240,15 +2237,6 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 if( IsExpandable() && !m_pView->IsExpanded( m_pCursor ) )
                     m_pView->Expand( m_pCursor );
             }
-            else if (m_bIsCellFocusEnabled)
-            {
-                if ( m_nCurTabPos < ( m_pView->TabCount() - 1 /*!2*/ ) )
-                {
-                    ++m_nCurTabPos;
-                    ShowCursor( true );
-                    CallEventListeners( VclEventId::ListboxSelect, m_pCursor );
-                }
-            }
             else if (m_aHorSBar->IsVisible())
             {
                 long    nThumb = m_aHorSBar->GetThumbPos();
@@ -2271,16 +2259,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_LEFT:
         {
-            if (m_bIsCellFocusEnabled)
-            {
-                if ( m_nCurTabPos > FIRST_ENTRY_TAB )
-                {
-                    --m_nCurTabPos;
-                    ShowCursor( true );
-                    CallEventListeners( VclEventId::ListboxSelect, m_pCursor );
-                }
-            }
-            else if (m_aHorSBar->IsVisible())
+            if (m_aHorSBar->IsVisible())
             {
                 long    nThumb = m_aHorSBar->GetThumbPos();
                 nThumb -= m_aHorSBar->GetLineSize();
