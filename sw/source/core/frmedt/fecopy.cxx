@@ -680,7 +680,7 @@ namespace {
     }
 }
 
-bool SwFEShell::Paste( SwDoc* pClpDoc )
+bool SwFEShell::Paste( SwDoc* pClpDoc, bool bNestedTable )
 {
     SET_CURR_SHELL( this );
     OSL_ENSURE( pClpDoc, "no clipboard document"  );
@@ -826,6 +826,8 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
 
             SwTableNode *const pDestNd(GetDoc()->IsIdxInTable(rPaM.GetPoint()->nNode));
             if (pSrcNd && nullptr != pDestNd &&
+                // not a forced nested table insertion
+                !bNestedTable &&
                 // are we at the beginning of the cell? (if not, we will insert a nested table)
                 // first paragraph of the cell?
                 rPaM.GetNode().GetIndex() == rPaM.GetNode().FindTableBoxStartNode()->GetIndex()+1 &&

@@ -589,6 +589,7 @@ public:
     // Status changes now notified from the clipboard.
     bool IsPasteAllowed();
     bool IsPasteSpecialAllowed();
+    bool IsPasteSpreadsheet(bool bHasOwnTableCopied);
 
     // Enable mail merge - mail merge field dialog enabled
     void EnableMailMerge();
