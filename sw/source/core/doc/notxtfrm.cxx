@@ -706,7 +706,7 @@ void SwNoTextFrame::ClearCache()
     if( pFly && pFly->GetFormat()->GetSurround().IsContour() )
     {
         ClrContourCache( pFly->GetVirtDrawObj() );
-        pFly->NotifyBackground( FindPageFrame(), getFramePrintArea(), PREP_FLY_ATTR_CHG );
+        pFly->NotifyBackground( FindPageFrame(), getFramePrintArea(), PrepareHint::FlyFrameAttributesChanged );
     }
 }
 

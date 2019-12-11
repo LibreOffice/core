@@ -790,7 +790,7 @@ bool SwTextFrame::CalcPreps()
     bool bRet = false;
     if( bPrep && !pPara->GetReformat().Len() )
     {
-        // PREP_WIDOWS means that the orphans rule got activated in the Follow.
+        // PrepareHint::Widows means that the orphans rule got activated in the Follow.
         // In unfortunate cases we could also have a PrepAdjust!
         if( bPrepWidows )
         {
@@ -1872,7 +1872,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
             SwTextFrame *pMaster = FindMaster();
             OSL_ENSURE( pMaster, "SwTextFrame::Format: homeless follow" );
             if( pMaster )
-                pMaster->Prepare( PREP_FOLLOW_FOLLOWS );
+                pMaster->Prepare( PrepareHint::FollowFollows );
             SwTwips nMaxY = aRectFnSet.GetPrtBottom(*GetUpper());
 
             if( aRectFnSet.OverStep( getFrameArea(), nMaxY  ) )

@@ -184,7 +184,7 @@ void SwFlyAtContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
         //and *puff* it's attached...
         pContent->AppendFly( this );
         if ( pOldPage && pOldPage != FindPageFrame() )
-            NotifyBackground( pOldPage, aOld, PREP_FLY_LEAVE );
+            NotifyBackground( pOldPage, aOld, PrepareHint::FlyFrameLeave );
 
         //Fix(3495)
         InvalidatePos_();
@@ -1386,7 +1386,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
     GetFormat()->GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
 
     if ( pOldPage != FindPageFrame() )
-        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE, false );
+        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PrepareHint::FlyFrameLeave, false );
 }
 
 /** method to assure that anchored object is registered at the correct

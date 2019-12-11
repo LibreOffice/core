@@ -283,7 +283,7 @@ void SwSectionFrame::Cut_( bool bRemove )
         // Someone has to take over the retouching: predecessor or Upper
         if ( nullptr != (pFrame = GetPrev()) )
         {   pFrame->SetRetouche();
-            pFrame->Prepare( PREP_WIDOWS_ORPHANS );
+            pFrame->Prepare( PrepareHint::WidowsOrphans );
             if ( pFrame->IsContentFrame() )
                 pFrame->InvalidatePage( pPage );
         }
@@ -310,7 +310,7 @@ void SwSectionFrame::Cut_( bool bRemove )
         }
     }
     if( pPrepFrame )
-        pPrepFrame->Prepare( PREP_FTN );
+        pPrepFrame->Prepare( PrepareHint::FootnoteInvalidation );
     if ( pUp )
     {
         SwRectFnSet aRectFnSet(this);
@@ -1529,7 +1529,7 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
                 {
                     if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
                     {
-                        pFrame->Prepare( PREP_ADJUST_FRM );
+                        pFrame->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                         bUnderSz = true;
                     }
                     pFrame = pFrame->GetNext();

@@ -1439,7 +1439,7 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                 nullptr != ( pCFrame = pFootnote->GetRefFromAttr()) && pCFrame->IsFollow() )
             {
                 OSL_ENSURE( pCFrame->IsTextFrame(), "NoTextFrame has Footnote?" );
-                pCFrame->FindMaster()->Prepare( PREP_FTN_GONE );
+                pCFrame->FindMaster()->Prepare( PrepareHint::FootnoteInvalidationGone );
             }
         }
         pFrame->Cut();

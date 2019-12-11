@@ -941,7 +941,7 @@ void SwPageFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
 
 static void lcl_PrepFlyInCntRegister( SwContentFrame *pFrame )
 {
-    pFrame->Prepare( PREP_REGISTER );
+    pFrame->Prepare( PrepareHint::Register );
     if( pFrame->GetDrawObjs() )
     {
         for(SwAnchoredObject* pAnchoredObj : *pFrame->GetDrawObjs())

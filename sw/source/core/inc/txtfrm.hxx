@@ -461,7 +461,7 @@ public:
      * return true if the Portion associated with this SwTextFrame was
      * potentially destroyed and replaced by Prepare
      */
-    virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,
+    virtual bool Prepare( const PrepareHint ePrep = PrepareHint::Clear,
                           const void *pVoid = nullptr, bool bNotify = true ) override;
 
     /**

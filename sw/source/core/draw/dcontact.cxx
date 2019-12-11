@@ -223,7 +223,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
         if ( pAnchoredObj->GetPageFrame() )
         {
             ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrame(),
-                                 pAnchoredObj->GetObjRect(), PREP_FLY_ARRIVE, true );
+                                 pAnchoredObj->GetObjRect(), PrepareHint::FlyFrameArrive, true );
         }
 
         pAnchoredObj->InvalidateObjPos();
@@ -248,7 +248,7 @@ void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
         if (pAnchoredObj->GetPageFrame())
         {
             ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrame(),
-                                 pAnchoredObj->GetObjRect(), PREP_FLY_LEAVE, true );
+                                 pAnchoredObj->GetObjRect(), PrepareHint::FlyFrameLeave, true );
         }
     }
 }
@@ -889,7 +889,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs(const tools::Rectangle* pOldBound
                 aOldRect.Pos() += pDrawVirtObj->GetOffset();
                 if( aOldRect.HasArea() )
                     ::Notify_Background( pDrawVirtObj, pPage,
-                                         aOldRect, PREP_FLY_LEAVE,true);
+                                         aOldRect, PrepareHint::FlyFrameLeave,true);
             }
             // #i34640# - include spacing for wrapping
             SwRect aRect( pDrawVirtObj->GetAnchoredObj().GetObjRectWithSpaces() );
@@ -898,7 +898,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs(const tools::Rectangle* pOldBound
                 SwPageFrame* pPg = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(::FindPage( aRect, pPage )));
                 if ( pPg )
                     ::Notify_Background( pDrawVirtObj, pPg, aRect,
-                                         PREP_FLY_ARRIVE, true );
+                                         PrepareHint::FlyFrameArrive, true );
             }
             ::ClrContourCache( pDrawVirtObj );
         }
@@ -925,7 +925,7 @@ static void lcl_NotifyBackgroundOfObj( SwDrawContact const & _rDrawContact,
                 // #i34640# - determine correct page frame
                 SwPageFrame* pOldPageFrame = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(::FindPage( aOldRect, pPageFrame )));
                 ::Notify_Background( &_rObj, pOldPageFrame, aOldRect,
-                                     PREP_FLY_LEAVE, true);
+                                     PrepareHint::FlyFrameLeave, true);
             }
         }
         // #i34640# - include spacing for wrapping
@@ -934,7 +934,7 @@ static void lcl_NotifyBackgroundOfObj( SwDrawContact const & _rDrawContact,
         {
             pPageFrame = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(::FindPage( aNewRect, pPageFrame )));
             ::Notify_Background( &_rObj, pPageFrame, aNewRect,
-                                 PREP_FLY_ARRIVE, true );
+                                 PrepareHint::FlyFrameArrive, true );
         }
         ClrContourCache( &_rObj );
     }
@@ -1301,7 +1301,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                         SwFrame* pAnchorFrame = const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)->AnchorFrame();
                         if(pAnchorFrame)
                         {
-                            pAnchorFrame->Prepare( PREP_FLY_ATTR_CHG, GetFormat() );
+                            pAnchorFrame->Prepare( PrepareHint::FlyFrameAttributesChanged, GetFormat() );
                         }
                     }
 

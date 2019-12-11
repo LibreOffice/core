@@ -434,7 +434,7 @@ static void lcl_InvalidatePosOfLowers( SwLayoutFrame& _rLayoutFrame )
         pLowerFrame->InvalidatePos();
         if ( pLowerFrame->IsTextFrame() )
         {
-            static_cast<SwTextFrame*>(pLowerFrame)->Prepare( PREP_POS_CHGD );
+            static_cast<SwTextFrame*>(pLowerFrame)->Prepare( PrepareHint::FramePositionChanged );
         }
         else if ( pLowerFrame->IsTabFrame() )
         {
@@ -650,7 +650,7 @@ SwFlyNotify::~SwFlyNotify()
             if ( pFly->GetAnchorFrame()->IsTextFrame() &&
                  pFly->GetPageFrame() != pOldPage )
             {
-                pFly->AnchorFrame()->Prepare( PREP_FLY_LEAVE );
+                pFly->AnchorFrame()->Prepare( PrepareHint::FlyFrameLeave );
             }
         }
         pFly->ResetNotifyBack();
@@ -687,7 +687,7 @@ SwFlyNotify::~SwFlyNotify()
         // Needed for negative positioned Writer fly frames
         if ( pFly->GetAnchorFrame()->IsTextFrame() )
         {
-            pFly->AnchorFrame()->Prepare( PREP_FLY_LEAVE );
+            pFly->AnchorFrame()->Prepare( PrepareHint::FlyFrameLeave );
         }
     }
 
@@ -719,7 +719,7 @@ SwFlyNotify::~SwFlyNotify()
                 // to wrap around it.
                 pFly->NotifyBackground( pFly->GetPageFrame(),
                                         pFly->GetObjRectWithSpaces(),
-                                        PREP_FLY_ARRIVE );
+                                        PrepareHint::FlyFrameArrive );
                 // invalidate position of anchor frame in order to force
                 // a re-format of the anchor frame, which also causes a
                 // re-format of the invalid previous frames of the anchor frame.
@@ -1642,7 +1642,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                         if( pPrv->IsSctFrame() )
                             pPrv = static_cast<SwSectionFrame*>(pPrv)->ContainsContent();
                         if( pPrv && pPrv->IsTextFrame() )
-                            static_cast<SwTextFrame*>(pPrv)->Prepare( PREP_QUOVADIS, nullptr, false );
+                            static_cast<SwTextFrame*>(pPrv)->Prepare( PrepareHint::QuoVadis, nullptr, false );
                     }
                 }
                 // #i27138#
@@ -2820,7 +2820,7 @@ void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling )
         pSibling->InvalidatePage( pPage );
         SwFlowFrame *pFlowFrame = dynamic_cast<SwFlowFrame*>(pSibling);
         if (pFlowFrame && pFlowFrame->GetFollow())
-            pSibling->Prepare( PREP_CLEAR, nullptr, false );
+            pSibling->Prepare( PrepareHint::Clear, nullptr, false );
     }
     else
     {   pNxt = pParent->m_pLower;
@@ -3009,9 +3009,9 @@ void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
         if ( rOld.HasArea() &&
              rOld.Left()+pFly->GetFormat()->GetLRSpace().GetLeft() < FAR_AWAY )
         {
-            pFly->NotifyBackground( pOld, rOld, PREP_FLY_LEAVE );
+            pFly->NotifyBackground( pOld, rOld, PrepareHint::FlyFrameLeave );
         }
-        pFly->NotifyBackground( pFly->FindPageFrame(), aFrame, PREP_FLY_ARRIVE );
+        pFly->NotifyBackground( pFly->FindPageFrame(), aFrame, PrepareHint::FlyFrameArrive );
     }
     else if ( rOld.SSize() != aFrame.SSize() )
     {   // changed size, invalidate the area that was left or is now overlapped
@@ -3026,7 +3026,7 @@ void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
         SwPageFrame* pPageFrame = pFly->FindPageFrame();
         if ( pOld != pPageFrame )
         {
-            pFly->NotifyBackground( pPageFrame, aFrame, PREP_FLY_ARRIVE );
+            pFly->NotifyBackground( pPageFrame, aFrame, PrepareHint::FlyFrameArrive );
         }
 
         if ( rOld.Left() != aFrame.Left() )
@@ -3035,7 +3035,7 @@ void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
             aTmp.Union( aFrame );
             aTmp.Left(  std::min(aFrame.Left(), rOld.Left()) );
             aTmp.Right( std::max(aFrame.Left(), rOld.Left()) );
-            pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
+            pFly->NotifyBackground( pOld, aTmp, PrepareHint::FlyFrameSizeChanged );
         }
         SwTwips nOld = rOld.Right();
         SwTwips nNew = aFrame.Right();
@@ -3045,7 +3045,7 @@ void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
             aTmp.Union( aFrame );
             aTmp.Left(  std::min(nNew, nOld) );
             aTmp.Right( std::max(nNew, nOld) );
-            pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
+            pFly->NotifyBackground( pOld, aTmp, PrepareHint::FlyFrameSizeChanged );
         }
         if ( rOld.Top() != aFrame.Top() )
         {
@@ -3053,7 +3053,7 @@ void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
             aTmp.Union( aFrame );
             aTmp.Top(    std::min(aFrame.Top(), rOld.Top()) );
             aTmp.Bottom( std::max(aFrame.Top(), rOld.Top()) );
-            pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
+            pFly->NotifyBackground( pOld, aTmp, PrepareHint::FlyFrameSizeChanged );
         }
         nOld = rOld.Bottom();
         nNew = aFrame.Bottom();
@@ -3063,7 +3063,7 @@ void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
             aTmp.Union( aFrame );
             aTmp.Top(    std::min(nNew, nOld) );
             aTmp.Bottom( std::max(nNew, nOld) );
-            pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
+            pFly->NotifyBackground( pOld, aTmp, PrepareHint::FlyFrameSizeChanged );
         }
     }
     else if(pOldPrt && *pOldPrt != pFly->getFramePrintArea())
@@ -3081,7 +3081,7 @@ void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
         if(bNotifyBackground)
         {
             // #i24097#
-            pFly->NotifyBackground( pFly->FindPageFrame(), aFrame, PREP_FLY_ARRIVE );
+            pFly->NotifyBackground( pFly->FindPageFrame(), aFrame, PrepareHint::FlyFrameArrive );
         }
     }
 }
@@ -3114,12 +3114,12 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrame *pCnt,
     {
         SwRect aCntPrt( pCnt->getFramePrintArea() );
         aCntPrt.Pos() += pCnt->getFrameArea().Pos();
-        if ( eHint == PREP_FLY_ATTR_CHG )
+        if ( eHint == PrepareHint::FlyFrameAttributesChanged )
         {
             // #i35640# - use given rectangle <rRect> instead
             // of current bound rectangle
             if ( aCntPrt.IsOver( rRect ) )
-                pCnt->Prepare( PREP_FLY_ATTR_CHG );
+                pCnt->Prepare( PrepareHint::FlyFrameAttributesChanged );
         }
         // #i23129# - only invalidate, if the text frame
         // printing area overlaps with the given rectangle.
@@ -3155,7 +3155,7 @@ void Notify_Background( const SdrObject* pObj,
                         const bool bInva )
 {
     // If the frame was positioned correctly for the first time, do not inform the old area
-    if ( eHint == PREP_FLY_LEAVE && rRect.Top() == FAR_AWAY )
+    if ( eHint == PrepareHint::FlyFrameLeave && rRect.Top() == FAR_AWAY )
          return;
 
     SwLayoutFrame* pArea;
@@ -3172,14 +3172,14 @@ void Notify_Background( const SdrObject* pObj,
         pAnchor = const_cast<SwFrame*>(
                     GetUserCall(pObj)->GetAnchoredObj( pObj )->GetAnchorFrame() );
     }
-    if( PREP_FLY_LEAVE != eHint && pAnchor->IsInFly() )
+    if( PrepareHint::FlyFrameLeave != eHint && pAnchor->IsInFly() )
         pArea = pAnchor->FindFlyFrame();
     else
         pArea = pPage;
     SwContentFrame *pCnt = nullptr;
     if ( pArea )
     {
-        if( PREP_FLY_ARRIVE != eHint )
+        if( PrepareHint::FlyFrameArrive != eHint )
             lcl_CheckFlowBack( pArea, rRect );
 
         // Only the Flys following this anchor are reacting. Thus, those do not
@@ -3210,7 +3210,7 @@ void Notify_Background( const SdrObject* pObj,
             {
                 pLastTab = pTab;
                 isValidTableBeforeAnchor = false;
-                if (PREP_FLY_ARRIVE == eHint
+                if (PrepareHint::FlyFrameArrive == eHint
                     && pFlyFrame // TODO: do it for draw objects too?
                     && pTab->IsFollow() // table starts on previous page?
                     // "through" means they will actually overlap anyway

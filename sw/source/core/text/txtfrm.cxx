@@ -2309,7 +2309,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             else nPos = TextFrameIndex(42); // shut up MSVC 2017 spurious warning C4701
 #endif
             if (IsInFootnote() || IsIdxInside(nPos, TextFrameIndex(1)))
-                Prepare( PREP_FTN, static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote() );
+                Prepare( PrepareHint::FootnoteInvalidation, static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote() );
             break;
         }
 
@@ -2327,7 +2327,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 nPos = MapModelToView(&rNode,
                     static_cast<const SwFormatFootnote*>(pItem)->GetTextFootnote()->GetStart());
                 if (IsIdxInside(nPos, TextFrameIndex(1)))
-                    Prepare( PREP_FTN, pNew );
+                    Prepare( PrepareHint::FootnoteInvalidation, pNew );
                 nClear = 0x01;
                 --nCount;
             }
@@ -2359,7 +2359,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             {
                 if (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
                 {
-                    Prepare( bRegister ? PREP_REGISTER : PREP_ADJUST_FRM );
+                    Prepare( bRegister ? PrepareHint::Register : PrepareHint::AdjustSizeWithoutFormatting );
                     CalcLineSpace();
                     InvalidateSize();
                     InvalidatePrt_();
@@ -2682,7 +2682,7 @@ void SwTextFrame::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
 static bool lcl_ErgoVadis(SwTextFrame* pFrame, TextFrameIndex & rPos, const PrepareHint ePrep)
 {
     const SwFootnoteInfo &rFootnoteInfo = pFrame->GetDoc().GetFootnoteInfo();
-    if( ePrep == PREP_ERGOSUM )
+    if( ePrep == PrepareHint::ErgoSum )
     {
         if( rFootnoteInfo.aErgoSum.isEmpty() )
             return false;
@@ -2718,14 +2718,14 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
     {
         switch ( ePrep )
         {
-            case PREP_BOSS_CHGD:
+            case PrepareHint::BossChanged:
                 SetInvalidVert( true ); // Test
                 [[fallthrough]];
-            case PREP_WIDOWS_ORPHANS:
-            case PREP_WIDOWS:
-            case PREP_FTN_GONE :    return bParaPossiblyInvalid;
+            case PrepareHint::WidowsOrphans:
+            case PrepareHint::Widows:
+            case PrepareHint::FootnoteInvalidationGone :    return bParaPossiblyInvalid;
 
-            case PREP_POS_CHGD :
+            case PrepareHint::FramePositionChanged :
             {
                 // We also need an InvalidateSize for Areas (with and without columns),
                 // so that we format and bUndersized is set (if needed)
@@ -2762,7 +2762,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
         }
     }
 
-    if( !HasPara() && PREP_MUST_FIT != ePrep )
+    if( !HasPara() && PrepareHint::MustFit != ePrep )
     {
         SetInvalidVert( true ); // Test
         OSL_ENSURE( !IsLocked(), "SwTextFrame::Prepare: three of a perfect pair" );
@@ -2779,7 +2779,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     switch( ePrep )
     {
-        case PREP_MOVEFTN :
+        case PrepareHint::FootnoteMove :
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aFrm.Height(0);
@@ -2793,7 +2793,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             InvalidatePrt_();
             InvalidateSize_();
             [[fallthrough]];
-        case PREP_ADJUST_FRM :
+        case PrepareHint::AdjustSizeWithoutFormatting :
             pPara->SetPrepAdjust();
             if( IsFootnoteNumFrame() != pPara->IsFootnoteNum() ||
                 IsUndersized() )
@@ -2803,13 +2803,13 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                     SetOfst_(TextFrameIndex(0));
             }
             break;
-        case PREP_MUST_FIT :
+        case PrepareHint::MustFit :
             pPara->SetPrepMustFit(true);
             [[fallthrough]];
-        case PREP_WIDOWS_ORPHANS :
+        case PrepareHint::WidowsOrphans :
             pPara->SetPrepAdjust();
             break;
-        case PREP_WIDOWS :
+        case PrepareHint::Widows :
             // MustFit is stronger than anything else
             if( pPara->IsPrepMustFit() )
                 return bParaPossiblyInvalid;
@@ -2817,7 +2817,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             PrepWidows( *static_cast<const sal_uInt16 *>(pVoid), bNotify );
             break;
 
-        case PREP_FTN :
+        case PrepareHint::FootnoteInvalidation :
         {
             SwTextFootnote const *pFootnote = static_cast<SwTextFootnote const *>(pVoid);
             if( IsInFootnote() )
@@ -2851,7 +2851,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             }
             break;
         }
-        case PREP_BOSS_CHGD :
+        case PrepareHint::BossChanged :
         {
             // Test
             {
@@ -2872,9 +2872,9 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             if( IsInFootnote() )
             {
                 TextFrameIndex nPos;
-                if( lcl_ErgoVadis( this, nPos, PREP_QUOVADIS ) )
+                if( lcl_ErgoVadis( this, nPos, PrepareHint::QuoVadis ) )
                     InvalidateRange( SwCharRange( nPos, TextFrameIndex(1)) );
-                if( lcl_ErgoVadis( this, nPos, PREP_ERGOSUM ) )
+                if( lcl_ErgoVadis( this, nPos, PrepareHint::ErgoSum ) )
                     InvalidateRange( SwCharRange( nPos, TextFrameIndex(1)) );
             }
             // If we have a page number field, we must invalidate those spots
@@ -2909,7 +2909,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             break;
         }
 
-        case PREP_POS_CHGD :
+        case PrepareHint::FramePositionChanged :
         {
             if ( isFramePrintAreaValid() )
             {
@@ -2975,12 +2975,12 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             else
             {
                 if (GetTextNodeForParaProps()->GetSwAttrSet().GetRegister().GetValue())
-                    bParaPossiblyInvalid = Prepare( PREP_REGISTER, nullptr, bNotify );
+                    bParaPossiblyInvalid = Prepare( PrepareHint::Register, nullptr, bNotify );
                 // The Frames need to be readjusted, which caused by changes
                 // in position
                 else if( HasFootnote() )
                 {
-                    bParaPossiblyInvalid = Prepare( PREP_ADJUST_FRM, nullptr, bNotify );
+                    bParaPossiblyInvalid = Prepare( PrepareHint::AdjustSizeWithoutFormatting, nullptr, bNotify );
                     InvalidateSize_();
                 }
                 else
@@ -2995,7 +2995,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             }
             break;
         }
-        case PREP_REGISTER:
+        case PrepareHint::Register:
             if (GetTextNodeForParaProps()->GetSwAttrSet().GetRegister().GetValue())
             {
                 pPara->SetPrepAdjust();
@@ -3017,30 +3017,30 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 SetCompletePaint();
             }
             break;
-        case PREP_FTN_GONE :
+        case PrepareHint::FootnoteInvalidationGone :
             {
                 // If a Follow is calling us, because a footnote is being deleted, our last
                 // line has to be formatted, so that the first line of the Follow can flow up.
                 // Which had flowed to the next page to be together with the footnote (this is
                 // especially true for areas with columns)
-                OSL_ENSURE( GetFollow(), "PREP_FTN_GONE may only be called by Follow" );
+                OSL_ENSURE( GetFollow(), "PrepareHint::FootnoteInvalidationGone may only be called by Follow" );
                 TextFrameIndex nPos = GetFollow()->GetOfst();
                 if( IsFollow() && GetOfst() == nPos )       // If we don't have a mass of text, we call our
-                    FindMaster()->Prepare( PREP_FTN_GONE ); // Master's Prepare
+                    FindMaster()->Prepare( PrepareHint::FootnoteInvalidationGone ); // Master's Prepare
                 if( nPos )
                     --nPos; // The char preceding our Follow
                 InvalidateRange(SwCharRange(nPos, TextFrameIndex(1)));
                 return bParaPossiblyInvalid;
             }
-        case PREP_ERGOSUM:
-        case PREP_QUOVADIS:
+        case PrepareHint::ErgoSum:
+        case PrepareHint::QuoVadis:
             {
                 TextFrameIndex nPos;
                 if( lcl_ErgoVadis( this, nPos, ePrep ) )
                     InvalidateRange(SwCharRange(nPos, TextFrameIndex(1)));
             }
             break;
-        case PREP_FLY_ATTR_CHG:
+        case PrepareHint::FlyFrameAttributesChanged:
         {
             if( pVoid )
             {
@@ -3051,12 +3051,12 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             }
             [[fallthrough]]; // else: continue with default case block
         }
-        case PREP_CLEAR:
+        case PrepareHint::Clear:
         default:
         {
             if( IsLocked() )
             {
-                if( PREP_FLY_ARRIVE == ePrep || PREP_FLY_LEAVE == ePrep )
+                if( PrepareHint::FlyFrameArrive == ePrep || PrepareHint::FlyFrameLeave == ePrep )
                 {
                     TextFrameIndex const nLen = (GetFollow()
                                 ? GetFollow()->GetOfst()

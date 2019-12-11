@@ -887,7 +887,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
                     aTmpCalcPnt = pCnt->getFramePrintArea();
                     aTmpCalcPnt += pCnt->getFrameArea().Pos();
                     if ( aRect.IsOver( aTmpCalcPnt ) )
-                        static_cast<SwFrame*>(pCnt)->Prepare( PREP_FLY_ATTR_CHG );
+                        static_cast<SwFrame*>(pCnt)->Prepare( PrepareHint::FlyFrameAttributesChanged );
                     pCnt = pCnt->GetNextContentFrame();
                 }
             }

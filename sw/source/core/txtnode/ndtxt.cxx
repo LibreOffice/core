@@ -684,7 +684,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
                     // turns out it's empty - in this case, it was not
                     // invalidated because Cut didn't sent it any hints,
                     // so we have to invalidate it here!
-                    pFrame->Prepare(PREP_CLEAR, nullptr, false);
+                    pFrame->Prepare(PrepareHint::Clear, nullptr, false);
                 }
                 if (!pFrame->GetMergedPara() ||
                     !pFrame->GetMergedPara()->listener.IsListeningTo(this))
