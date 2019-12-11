@@ -60,7 +60,7 @@ void CGM::ImplDoClass1()
         {
             nUInteger = ImplGetUI16();
             nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
-            nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantisse
+            nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantissa
             switch( nUInteger )
             {
                 case 0 :

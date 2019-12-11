@@ -2629,7 +2629,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
 
     if ( nExPos >= 0 )
     {
-        // split into mantisse and exponent and get rid of "E+" or "E-"
+        // split into mantissa and exponent and get rid of "E+" or "E-"
         sal_Int32 nExpStart = nExPos + 1;
 
         switch ( sStr[ nExpStart ] )

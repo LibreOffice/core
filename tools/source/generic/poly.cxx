@@ -1730,7 +1730,7 @@ static void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nInd
             // it needs to be corrected to be able to detect the continuity in this points
             // correctly.
 
-            // We only have the integer data here (already in double precision form, but no mantisse
+            // We only have the integer data here (already in double precision form, but no mantissa
             // used), so the best correction is to use:
 
             // for C1: The longest vector since it potentially has best preserved the original vector.
