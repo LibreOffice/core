@@ -52,7 +52,7 @@ public:
                                  MapUnit ePresMetric,
                                  OUString &rText, const IntlWrapper&) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxLanguageItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16      GetValueCount() const override;
 
     SvxLanguageItem(SvxLanguageItem const &) = default; // SfxPoolItem copy function dichotomy

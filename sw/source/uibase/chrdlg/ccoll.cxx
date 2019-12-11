@@ -140,7 +140,7 @@ SwCondCollItem::~SwCondCollItem()
 {
 }
 
-SfxPoolItem*   SwCondCollItem::Clone( SfxItemPool * /*pPool*/ ) const
+SwCondCollItem* SwCondCollItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwCondCollItem(*this);
 }

@@ -34,7 +34,7 @@ public:
 
                             SdrGrafTransparenceItem( sal_uInt16 nTransparencePercent = 0 ) : SdrPercentItem( SDRATTR_GRAFTRANSPARENCE, nTransparencePercent ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SdrGrafTransparenceItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 
 #endif // INCLUDED_SVX_SDGTRITM_HXX

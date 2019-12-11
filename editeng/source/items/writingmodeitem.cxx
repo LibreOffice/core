@@ -38,7 +38,7 @@ SvxWritingModeItem::~SvxWritingModeItem()
 {
 }
 
-SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
+SvxWritingModeItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
 {
     return new SvxWritingModeItem( *this );
 }

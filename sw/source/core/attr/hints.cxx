@@ -143,7 +143,7 @@ bool SwMsgPoolItem::operator==( const SfxPoolItem& ) const
     return false;
 }
 
-SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
+SwMsgPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 {
     OSL_FAIL( "SwMsgPoolItem knows no Clone" );
     return nullptr;

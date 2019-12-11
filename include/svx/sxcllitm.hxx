@@ -32,7 +32,7 @@ class SVX_DLLPUBLIC SdrCaptionLineLenItem: public SdrMetricItem {
 public:
     SdrCaptionLineLenItem(long nLineLen=0): SdrMetricItem(SDRATTR_CAPTIONLINELEN,nLineLen) {}
     virtual ~SdrCaptionLineLenItem() override;
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual SdrCaptionLineLenItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
     SdrCaptionLineLenItem(SdrCaptionLineLenItem const &) = default;
     SdrCaptionLineLenItem(SdrCaptionLineLenItem &&) = default;
@@ -48,7 +48,7 @@ class SVX_DLLPUBLIC SdrCaptionFitLineLenItem: public SdrYesNoItem {
 public:
     SdrCaptionFitLineLenItem(bool bBestFit=true): SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,bBestFit) {}
     virtual ~SdrCaptionFitLineLenItem() override;
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual SdrCaptionFitLineLenItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
     SdrCaptionFitLineLenItem(SdrCaptionFitLineLenItem const &) = default;
     SdrCaptionFitLineLenItem(SdrCaptionFitLineLenItem &&) = default;

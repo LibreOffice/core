@@ -72,7 +72,7 @@ public:
     virtual                 ~MediaItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual MediaItem*      Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool            GetPresentation( SfxItemPresentation ePres,
                                                  MapUnit eCoreUnit,
                                                  MapUnit ePresUnit,

@@ -40,7 +40,7 @@ public:
     SvxKerningItem( const short nKern /*= 0*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxKerningItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual void            ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool            HasMetrics() const override;
 

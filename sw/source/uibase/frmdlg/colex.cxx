@@ -603,7 +603,7 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     pGridItem.reset();
     //get the grid information
     if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID))
-        pGridItem.reset(static_cast<SwTextGridItem*>(rSet.Get(RES_TEXTGRID).Clone()));
+        pGridItem.reset(rSet.Get(RES_TEXTGRID).Clone());
     SwPageExample::UpdateExample(rSet);
 }
 

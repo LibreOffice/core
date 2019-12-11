@@ -970,7 +970,7 @@ bool SwFltAnchor::operator==(const SfxPoolItem& rItem) const
         pFrameFormat == static_cast<const SwFltAnchor&>(rItem).pFrameFormat;
 }
 
-SfxPoolItem* SwFltAnchor::Clone(SfxItemPool*) const
+SwFltAnchor* SwFltAnchor::Clone(SfxItemPool*) const
 {
     return new SwFltAnchor(*this);
 }
@@ -999,7 +999,7 @@ bool SwFltRedline::operator==(const SfxPoolItem& rItem) const
         this == &rItem;
 }
 
-SfxPoolItem* SwFltRedline::Clone( SfxItemPool* ) const
+SwFltRedline* SwFltRedline::Clone( SfxItemPool* ) const
 {
     return new SwFltRedline(*this);
 }
@@ -1033,7 +1033,7 @@ bool SwFltBookmark::operator==(const SfxPoolItem& rItem) const
         && mnHandle == static_cast<const SwFltBookmark&>(rItem).mnHandle;
 }
 
-SfxPoolItem* SwFltBookmark::Clone(SfxItemPool*) const
+SwFltBookmark* SwFltBookmark::Clone(SfxItemPool*) const
 {
     return new SwFltBookmark(*this);
 }
@@ -1054,7 +1054,7 @@ bool SwFltRDFMark::operator==(const SfxPoolItem& rItem) const
     return m_nHandle == rMark.m_nHandle && m_aAttributes == rMark.m_aAttributes;
 }
 
-SfxPoolItem* SwFltRDFMark::Clone(SfxItemPool*) const
+SwFltRDFMark* SwFltRDFMark::Clone(SfxItemPool*) const
 {
     return new SwFltRDFMark(*this);
 }
@@ -1092,7 +1092,7 @@ bool SwFltTOX::operator==(const SfxPoolItem& rItem) const
         m_xTOXBase.get() == static_cast<const SwFltTOX&>(rItem).m_xTOXBase.get();
 }
 
-SfxPoolItem* SwFltTOX::Clone(SfxItemPool*) const
+SwFltTOX* SwFltTOX::Clone(SfxItemPool*) const
 {
     return new SwFltTOX(*this);
 }

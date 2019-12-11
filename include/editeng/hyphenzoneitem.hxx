@@ -55,7 +55,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxHyphenZoneItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     void SetHyphen( const bool bNew ) { bHyphen = bNew; }
     bool IsHyphen() const { return bHyphen; }

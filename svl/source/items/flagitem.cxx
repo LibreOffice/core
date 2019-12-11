@@ -29,7 +29,6 @@ SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
 {
 }
 
-
 bool SfxFlagItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
@@ -45,13 +44,11 @@ bool SfxFlagItem::GetPresentation
     return true;
 }
 
-
 sal_uInt8 SfxFlagItem::GetFlagCount() const
 {
     SAL_INFO("svl", "calling GetValueText(sal_uInt16) on SfxFlagItem -- override!");
     return 0;
 }
-
 
 bool SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -59,11 +56,9 @@ bool SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SfxFlagItem&>(rItem).nVal == nVal;
 }
 
-
-SfxPoolItem* SfxFlagItem::Clone(SfxItemPool *) const
+SfxFlagItem* SfxFlagItem::Clone(SfxItemPool *) const
 {
     return new SfxFlagItem( *this );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

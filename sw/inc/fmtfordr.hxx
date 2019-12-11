@@ -39,7 +39,7 @@ public:
     SwFormatFillOrder( SwFillOrder = ATT_TOP_DOWN );
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwFormatFillOrder* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16      GetValueCount() const override;
 };
 

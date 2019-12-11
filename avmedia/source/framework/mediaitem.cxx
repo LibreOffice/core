@@ -113,7 +113,7 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
         && m_pImpl->m_eZoom == rOther.m_pImpl->m_eZoom;
 }
 
-SfxPoolItem* MediaItem::Clone( SfxItemPool* ) const
+MediaItem* MediaItem::Clone( SfxItemPool* ) const
 {
     return new MediaItem( *this );
 }

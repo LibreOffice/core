@@ -146,7 +146,7 @@ public:
     ScTpCalcItem & operator =(ScTpCalcItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual ScTpCalcItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const ScDocOptions& GetDocOptions() const { return theOptions; }
 

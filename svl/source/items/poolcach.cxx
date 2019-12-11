@@ -77,7 +77,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     }
 
     // Insert the new attributes in a new Set
-    std::unique_ptr<SfxSetItem> pNewItem(static_cast<SfxSetItem *>(rOrigItem.Clone()));
+    std::unique_ptr<SfxSetItem> pNewItem(rOrigItem.Clone());
     if ( pItemToPut )
     {
         pNewItem->GetItemSet().PutDirect( *pItemToPut );

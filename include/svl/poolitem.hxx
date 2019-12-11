@@ -268,7 +268,7 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     // create a copy of itself
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxVoidItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     /** Always returns true as this is an SfxVoidItem. */
     virtual bool            IsVoidItem() const override;
@@ -295,7 +295,7 @@ public:
                                     const IntlWrapper& ) const override;
 
     // create a copy of itself
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override = 0;
+    virtual SfxSetItem*     Clone( SfxItemPool *pPool = nullptr ) const override = 0;
 
     const SfxItemSet&       GetItemSet() const
                             { return *pSet; }

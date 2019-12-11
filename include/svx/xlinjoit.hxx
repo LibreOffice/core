@@ -33,7 +33,7 @@ public:
                             static SfxPoolItem* CreateDefault();
                             XLineJointItem( css::drawing::LineJoint eLineJoint = css::drawing::LineJoint_ROUND );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual XLineJointItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

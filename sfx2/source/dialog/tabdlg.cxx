@@ -90,7 +90,7 @@ SfxTabDialogItem::SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet )
 {
 }
 
-SfxPoolItem* SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
+SfxTabDialogItem* SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
 {
     return new SfxTabDialogItem( *this, pToPool );
 }

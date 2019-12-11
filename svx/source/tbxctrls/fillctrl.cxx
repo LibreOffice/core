@@ -114,7 +114,7 @@ void SvxFillToolBoxControl::StateChanged(
 
                 if(pItem)
                 {
-                    mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
+                    mpStyleItem.reset(pItem->Clone());
                     mpLbFillType->Enable();
                     drawing::FillStyle eXFS = mpStyleItem->GetValue();
                     meLastXFS = eXFS;

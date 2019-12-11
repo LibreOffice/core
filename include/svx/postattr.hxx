@@ -38,7 +38,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxPostItAuthorItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 
@@ -58,7 +58,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxPostItDateItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 /** The text of a note
@@ -78,7 +78,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxPostItTextItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 
@@ -92,7 +92,7 @@ public:
 
     SvxPostItIdItem( sal_uInt16 nWhich );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxPostItIdItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 #endif

@@ -35,7 +35,7 @@ class SVX_DLLPUBLIC XFormTextStyleItem final : public SfxEnumItem<XFormTextStyle
 public:
                             static SfxPoolItem* CreateDefault();
                             XFormTextStyleItem(XFormTextStyle = XFormTextStyle::NONE);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual XFormTextStyleItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual sal_uInt16      GetValueCount() const override;
     // #FontWork#
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -53,7 +53,7 @@ class SVX_DLLPUBLIC XFormTextHideFormItem final : public SfxBoolItem
 public:
                             static SfxPoolItem* CreateDefault();
                             XFormTextHideFormItem(bool bHide = false);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual XFormTextHideFormItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 #endif

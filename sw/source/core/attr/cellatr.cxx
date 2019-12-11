@@ -49,7 +49,7 @@ bool SwTableBoxNumFormat::operator==( const SfxPoolItem& rAttr ) const
     return GetValue() == static_cast<const SwTableBoxNumFormat&>(rAttr).GetValue();
 }
 
-SfxPoolItem* SwTableBoxNumFormat::Clone( SfxItemPool* ) const
+SwTableBoxNumFormat* SwTableBoxNumFormat::Clone( SfxItemPool* ) const
 {
     return new SwTableBoxNumFormat( GetValue() );
 }
@@ -68,7 +68,7 @@ bool SwTableBoxFormula::operator==( const SfxPoolItem& rAttr ) const
            m_pDefinedIn == static_cast<const SwTableBoxFormula&>(rAttr).m_pDefinedIn;
 }
 
-SfxPoolItem* SwTableBoxFormula::Clone( SfxItemPool* ) const
+SwTableBoxFormula* SwTableBoxFormula::Clone( SfxItemPool* ) const
 {
     // switch to external rendering
     SwTableBoxFormula* pNew = new SwTableBoxFormula( GetFormula() );
@@ -218,7 +218,7 @@ bool SwTableBoxValue::operator==( const SfxPoolItem& rAttr ) const
         :   ( m_nValue == rOther.m_nValue );
 }
 
-SfxPoolItem* SwTableBoxValue::Clone( SfxItemPool* ) const
+SwTableBoxValue* SwTableBoxValue::Clone( SfxItemPool* ) const
 {
     return new SwTableBoxValue( m_nValue );
 }

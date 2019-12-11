@@ -39,7 +39,7 @@ public:
     SvxFrameDirectionItem & operator =(SvxFrameDirectionItem const &) = delete;
     SvxFrameDirectionItem & operator =(SvxFrameDirectionItem &&) = delete;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxFrameDirectionItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

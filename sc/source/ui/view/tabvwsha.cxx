@@ -505,8 +505,8 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     //Fix border incorrect for RTL fdo#62399
     if( pDoc->IsLayoutRTL( GetViewData().GetTabNo() ) )
     {
-        std::shared_ptr<SvxBoxItem> aNewFrame(static_cast<SvxBoxItem*>(aLineOuter->Clone()));
-        std::shared_ptr<SvxBoxInfoItem> aTempInfo(static_cast<SvxBoxInfoItem*>(aLineInner->Clone()));
+        std::shared_ptr<SvxBoxItem> aNewFrame(aLineOuter->Clone());
+        std::shared_ptr<SvxBoxInfoItem> aTempInfo(aLineInner->Clone());
 
         if ( aLineInner->IsValid(SvxBoxInfoItemValidFlags::LEFT) )
             aNewFrame->SetLine( aLineOuter->GetLeft(), SvxBoxItemLine::RIGHT );

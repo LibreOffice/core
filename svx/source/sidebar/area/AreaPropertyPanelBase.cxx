@@ -755,7 +755,7 @@ void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefault
         if (pState)
         {
             const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
-            mpTransparanceItem.reset(static_cast<SfxUInt16Item*>(pItem->Clone()));
+            mpTransparanceItem.reset(pItem->Clone());
         }
         else
         {
@@ -784,7 +784,7 @@ void AreaPropertyPanelBase::updateFillFloatTransparence(bool bDisabled, bool bDe
         if (pState)
         {
             const XFillFloatTransparenceItem* pItem = static_cast<const XFillFloatTransparenceItem*>(pState);
-            mpFloatTransparenceItem.reset(static_cast<XFillFloatTransparenceItem*>(pItem->Clone()));
+            mpFloatTransparenceItem.reset(pItem->Clone());
         }
         else
         {
@@ -817,7 +817,7 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefaultOrSet, 
     else if (bDefaultOrSet && pState)
     {
         const XFillStyleItem* pItem = static_cast<const XFillStyleItem*>(pState);
-        mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
+        mpStyleItem.reset(pItem->Clone());
         mpLbFillType->Enable();
         mpColorTextFT->Enable();
         drawing::FillStyle eXFS = mpStyleItem->GetValue();
@@ -877,7 +877,7 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSe
     if (bDefaultOrSet)
     {
         const XFillGradientItem* pItem = static_cast<const XFillGradientItem*>(pState);
-        mpFillGradientItem.reset(pItem ? static_cast<XFillGradientItem*>(pItem->Clone()) : nullptr);
+        mpFillGradientItem.reset(pItem ? pItem->Clone() : nullptr);
     }
 
     if(mpStyleItem && drawing::FillStyle_GRADIENT == mpStyleItem->GetValue())
@@ -918,7 +918,7 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefaultOrSet, 
     if (bDefaultOrSet)
     {
         const XFillHatchItem* pItem = static_cast<const XFillHatchItem*>(pState);
-        mpHatchItem.reset(pItem ? static_cast<XFillHatchItem*>(pItem->Clone()) : nullptr);
+        mpHatchItem.reset(pItem ? pItem->Clone() : nullptr);
     }
 
     if(mpStyleItem && drawing::FillStyle_HATCH == mpStyleItem->GetValue())
@@ -951,7 +951,7 @@ void AreaPropertyPanelBase::updateFillColor(bool bDefaultOrSet, const SfxPoolIte
     if (bDefaultOrSet)
     {
         const XFillColorItem* pItem = static_cast<const XFillColorItem*>(pState);
-        mpColorItem.reset(pItem ? static_cast<XFillColorItem*>(pItem->Clone()) : nullptr);
+        mpColorItem.reset(pItem ? pItem->Clone() : nullptr);
     }
 
     if(mpStyleItem && drawing::FillStyle_SOLID == mpStyleItem->GetValue())
@@ -970,7 +970,7 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet,
     if (bDefaultOrSet)
     {
         const XFillBitmapItem* pItem = static_cast<const XFillBitmapItem*>(pState);
-        mpBitmapItem.reset(pItem ? static_cast<XFillBitmapItem*>(pItem->Clone()) : nullptr);
+        mpBitmapItem.reset(pItem ? pItem->Clone() : nullptr);
     }
 
     if(mpStyleItem && drawing::FillStyle_BITMAP == mpStyleItem->GetValue())

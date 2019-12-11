@@ -42,7 +42,7 @@ public:
 
     // "Overhead" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SwMsgPoolItem*  Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 
 // SwPtrMsgPoolItem (old SwObjectDying!)

@@ -117,12 +117,10 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
            aStringVal == rOther.aStringVal;
 }
 
-
-SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
+SvxNumberInfoItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
 {
     return new SvxNumberInfoItem( *this );
 }
-
 
 void SvxNumberInfoItem::SetDelFormats( std::vector<sal_uInt32> const & aData )
 {

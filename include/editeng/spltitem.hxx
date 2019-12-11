@@ -44,7 +44,7 @@ public:
     SvxFormatSplitItem & operator =(SvxFormatSplitItem &&) = delete; // due to SfxBoolItem
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxFormatSplitItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

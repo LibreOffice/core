@@ -139,7 +139,7 @@ bool SwFormatFootnote::operator==( const SfxPoolItem& rAttr ) const
            m_bEndNote == static_cast<const SwFormatFootnote&>(rAttr).m_bEndNote;
 }
 
-SfxPoolItem* SwFormatFootnote::Clone( SfxItemPool* ) const
+SwFormatFootnote* SwFormatFootnote::Clone( SfxItemPool* ) const
 {
     SwFormatFootnote* pNew  = new SwFormatFootnote;
     pNew->m_aNumber = m_aNumber;

@@ -141,7 +141,7 @@ bool SwTOXMark::operator==( const SfxPoolItem& rAttr ) const
     return GetRegisteredIn() == static_cast<const SwTOXMark&>(rAttr).GetRegisteredIn();
 }
 
-SfxPoolItem* SwTOXMark::Clone( SfxItemPool* ) const
+SwTOXMark* SwTOXMark::Clone( SfxItemPool* ) const
 {
     return new SwTOXMark( *this );
 }

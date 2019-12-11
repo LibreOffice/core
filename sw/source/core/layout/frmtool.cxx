@@ -2043,7 +2043,7 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
     , m_rUL(m_rAttrSet.GetULSpace())
     // #i96772#
     // LRSpaceItem is copied due to the possibility that it is adjusted - see below
-    , m_rLR(static_cast<SvxLRSpaceItem*>(m_rAttrSet.GetLRSpace().Clone()))
+    , m_rLR(m_rAttrSet.GetLRSpace().Clone())
     , m_rBox(m_rAttrSet.GetBox())
     , m_rShadow(m_rAttrSet.GetShadow())
     , m_aFrameSize(m_rAttrSet.GetFrameSize().GetSize())

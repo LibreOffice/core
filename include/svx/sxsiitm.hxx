@@ -25,7 +25,7 @@ class SdrScaleItem: public SdrFractionItem {
 public:
     SdrScaleItem(sal_uInt16 nId, const Fraction& rVal): SdrFractionItem(nId,rVal) {}
     virtual bool GetPresentation(SfxItemPresentation ePresentation, MapUnit eCoreMetric, MapUnit ePresentationMetric, OUString &rText, const IntlWrapper&) const override;
-    virtual SfxPoolItem*     Clone(SfxItemPool *pPool=nullptr) const override;
+    virtual SdrScaleItem* Clone(SfxItemPool *pPool=nullptr) const override;
 };
 
 #endif

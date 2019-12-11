@@ -56,7 +56,7 @@ bool SfxIntegerListItem::operator==( const SfxPoolItem& rPoolItem ) const
     return rItem.m_aList == m_aList;
 }
 
-SfxPoolItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
+SfxIntegerListItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
 {
     return new SfxIntegerListItem( *this );
 }

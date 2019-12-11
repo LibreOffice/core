@@ -33,12 +33,10 @@ SfxScriptOrganizerItem::SfxScriptOrganizerItem() :
 {
 }
 
-
-SfxPoolItem* SfxScriptOrganizerItem::Clone( SfxItemPool * ) const
+SfxScriptOrganizerItem* SfxScriptOrganizerItem::Clone( SfxItemPool * ) const
 {
     return new SfxScriptOrganizerItem( *this );
 }
-
 
 bool SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 {

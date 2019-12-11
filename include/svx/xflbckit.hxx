@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC XFillBackgroundItem final : public SfxBoolItem
 public:
                             XFillBackgroundItem( bool bFill = false );
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    SVX_DLLPRIVATE virtual XFillBackgroundItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  MapUnit eCoreMetric,

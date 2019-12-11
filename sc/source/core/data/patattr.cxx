@@ -100,7 +100,7 @@ ScPatternAttr::~ScPatternAttr()
 {
 }
 
-SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
+ScPatternAttr* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 {
     ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().Clone(true, pPool) );
 
@@ -671,10 +671,10 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     }
     else        // Everything directly from Pattern
     {
-        aColorItem.reset(static_cast<SvxColorItem*>(rSrcSet.Get(ATTR_FONT_COLOR).Clone()));
-        aFontItem.reset(static_cast<SvxFontItem*>(rSrcSet.Get(ATTR_FONT).Clone()));
-        aCjkFontItem.reset(static_cast<SvxFontItem*>(rSrcSet.Get(ATTR_CJK_FONT).Clone()));
-        aCtlFontItem.reset(static_cast<SvxFontItem*>(rSrcSet.Get(ATTR_CTL_FONT).Clone()));
+        aColorItem.reset(rSrcSet.Get(ATTR_FONT_COLOR).Clone());
+        aFontItem.reset(rSrcSet.Get(ATTR_FONT).Clone());
+        aCjkFontItem.reset(rSrcSet.Get(ATTR_CJK_FONT).Clone());
+        aCtlFontItem.reset(rSrcSet.Get(ATTR_CTL_FONT).Clone());
         nTHeight = rSrcSet.Get( ATTR_FONT_HEIGHT ).GetHeight();
         nCjkTHeight = rSrcSet.Get( ATTR_CJK_FONT_HEIGHT ).GetHeight();
         nCtlTHeight = rSrcSet.Get( ATTR_CTL_FONT_HEIGHT ).GetHeight();
@@ -684,8 +684,8 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
         eItalic = rSrcSet.Get( ATTR_FONT_POSTURE ).GetValue();
         eCjkItalic = rSrcSet.Get( ATTR_CJK_FONT_POSTURE ).GetValue();
         eCtlItalic = rSrcSet.Get( ATTR_CTL_FONT_POSTURE ).GetValue();
-        aUnderlineItem.reset(static_cast<SvxUnderlineItem*>(rSrcSet.Get(ATTR_FONT_UNDERLINE).Clone()));
-        aOverlineItem.reset(static_cast<SvxOverlineItem*>(rSrcSet.Get(ATTR_FONT_OVERLINE).Clone()));
+        aUnderlineItem.reset(rSrcSet.Get(ATTR_FONT_UNDERLINE).Clone());
+        aOverlineItem.reset(rSrcSet.Get(ATTR_FONT_OVERLINE).Clone());
         bWordLine = rSrcSet.Get( ATTR_FONT_WORDLINE ).GetValue();
         eStrike = rSrcSet.Get( ATTR_FONT_CROSSEDOUT ).GetValue();
         bOutline = rSrcSet.Get( ATTR_FONT_CONTOUR ).GetValue();

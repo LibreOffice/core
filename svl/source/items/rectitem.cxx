@@ -65,12 +65,10 @@ bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SfxRectangleItem&>(rItem).aVal == aVal;
 }
 
-
-SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
+SfxRectangleItem* SfxRectangleItem::Clone(SfxItemPool *) const
 {
     return new SfxRectangleItem( *this );
 }
-
 
 bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
                                    sal_uInt8 nMemberId) const

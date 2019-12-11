@@ -90,7 +90,7 @@ bool SfxEventNamesItem::GetPresentation( SfxItemPresentation,
     return false;
 }
 
-SfxPoolItem* SfxEventNamesItem::Clone( SfxItemPool *) const
+SfxEventNamesItem* SfxEventNamesItem::Clone( SfxItemPool *) const
 {
     return new SfxEventNamesItem(*this);
 }

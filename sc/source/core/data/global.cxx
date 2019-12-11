@@ -229,7 +229,7 @@ void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
     assert(!bThreadedGroupCalcInProgress);
     // FIXME: An assignment operator would be nice here
     delete pSearchItem;
-    pSearchItem = static_cast<SvxSearchItem*>(rNew.Clone());
+    pSearchItem = rNew.Clone();
 
     pSearchItem->SetWhich( SID_SEARCH_ITEM );
     pSearchItem->SetAppFlag( SvxSearchApp::CALC );

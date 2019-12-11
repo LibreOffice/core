@@ -60,7 +60,7 @@ public:
     ScTpPrintItem & operator =(ScTpPrintItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual ScTpPrintItem*  Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const ScPrintOptions&   GetPrintOptions() const { return theOptions; }
 

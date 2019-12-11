@@ -34,7 +34,7 @@ class EDITENG_DLLPUBLIC SvxCharHiddenItem final : public SfxBoolItem
 public:
     SvxCharHiddenItem( const bool bHidden /*= false*/, const sal_uInt16 nId );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxCharHiddenItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

@@ -32,7 +32,7 @@ public:
                                      bool bPrt = false ) : SfxBoolItem( nId, bPrt ) {}
 
     // "pure virtual methods" of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwHeaderAndFooterEatSpacingItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

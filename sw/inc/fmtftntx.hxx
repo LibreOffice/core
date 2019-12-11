@@ -88,7 +88,7 @@ public:
         : SwFormatFootnoteEndAtTextEnd( RES_FTN_AT_TXTEND, ePos )
     {}
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwFormatFootnoteAtTextEnd* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 class SW_DLLPUBLIC SwFormatEndAtTextEnd : public SwFormatFootnoteEndAtTextEnd
@@ -100,7 +100,7 @@ public:
         SetNumType( SVX_NUM_ROMAN_LOWER );
     }
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwFormatEndAtTextEnd* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 inline const SwFormatFootnoteAtTextEnd &SwAttrSet::GetFootnoteAtTextEnd(bool bInP) const

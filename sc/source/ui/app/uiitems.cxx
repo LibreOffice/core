@@ -68,7 +68,7 @@ bool ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
              //TODO: Compare Edit data!
 }
 
-SfxPoolItem* ScInputStatusItem::Clone( SfxItemPool * ) const
+ScInputStatusItem* ScInputStatusItem::Clone( SfxItemPool * ) const
 {
     return new ScInputStatusItem( *this );
 }
@@ -147,7 +147,7 @@ bool ScSortItem::operator==( const SfxPoolItem& rItem ) const
             && (theSortData == rOther.theSortData) );
 }
 
-SfxPoolItem* ScSortItem::Clone( SfxItemPool * ) const
+ScSortItem* ScSortItem::Clone( SfxItemPool * ) const
 {
     return new ScSortItem( *this );
 }
@@ -234,7 +234,7 @@ bool ScQueryItem::operator==( const SfxPoolItem& rItem ) const
             && (*mpQueryData == *rQueryItem.mpQueryData) );
 }
 
-SfxPoolItem* ScQueryItem::Clone( SfxItemPool * ) const
+ScQueryItem* ScQueryItem::Clone( SfxItemPool * ) const
 {
     return new ScQueryItem( *this );
 }
@@ -269,7 +269,7 @@ bool ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
             && (theSubTotalData == rSTItem.theSubTotalData) );
 }
 
-SfxPoolItem* ScSubTotalItem::Clone( SfxItemPool * ) const
+ScSubTotalItem* ScSubTotalItem::Clone( SfxItemPool * ) const
 {
     return new ScSubTotalItem( *this );
 }
@@ -315,7 +315,7 @@ bool ScUserListItem::operator==( const SfxPoolItem& rItem ) const
     return bEqual;
 }
 
-SfxPoolItem* ScUserListItem::Clone( SfxItemPool * ) const
+ScUserListItem* ScUserListItem::Clone( SfxItemPool * ) const
 {
     return new ScUserListItem( *this );
 }
@@ -345,7 +345,7 @@ bool ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
     return ( theConsData == rCItem.theConsData);
 }
 
-SfxPoolItem* ScConsolidateItem::Clone( SfxItemPool * ) const
+ScConsolidateItem* ScConsolidateItem::Clone( SfxItemPool * ) const
 {
     return new ScConsolidateItem( *this );
 }
@@ -390,7 +390,7 @@ bool ScPivotItem::operator==( const SfxPoolItem& rItem ) const
              bNewSheet  == rPItem.bNewSheet );
 }
 
-SfxPoolItem* ScPivotItem::Clone( SfxItemPool * ) const
+ScPivotItem* ScPivotItem::Clone( SfxItemPool * ) const
 {
     return new ScPivotItem( *this );
 }
@@ -414,7 +414,7 @@ bool ScSolveItem::operator==( const SfxPoolItem& rItem ) const
     return ( theSolveData == rPItem.theSolveData );
 }
 
-SfxPoolItem* ScSolveItem::Clone( SfxItemPool * ) const
+ScSolveItem* ScSolveItem::Clone( SfxItemPool * ) const
 {
     return new ScSolveItem( *this );
 }
@@ -438,7 +438,7 @@ bool ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
     return ( theTabOpData == rPItem.theTabOpData );
 }
 
-SfxPoolItem* ScTabOpItem::Clone( SfxItemPool * ) const
+ScTabOpItem* ScTabOpItem::Clone( SfxItemPool * ) const
 {
     return new ScTabOpItem( *this );
 }

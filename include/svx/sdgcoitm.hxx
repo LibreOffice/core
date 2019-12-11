@@ -35,7 +35,7 @@ public:
 
                             SdrGrafRedItem( short nRedPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFRED, nRedPercent ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SdrGrafRedItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 
 
@@ -49,7 +49,7 @@ public:
 
                             SdrGrafGreenItem( short nGreenPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFGREEN, nGreenPercent ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SdrGrafGreenItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 
 
@@ -63,7 +63,7 @@ public:
 
                             SdrGrafBlueItem( short nBluePercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFBLUE, nBluePercent ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SdrGrafBlueItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 
 #endif // INCLUDED_SVX_SDGCOITM_HXX

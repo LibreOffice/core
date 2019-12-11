@@ -1748,7 +1748,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             {
                 const SwAttrSet& rSet = pFormat->GetAttrSet();
                 const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND, true, pDoc->IsInXMLImport()));
-                std::shared_ptr<SvxBrushItem> aChangedBrushItem(static_cast<SvxBrushItem*>(aOriginalBrushItem->Clone()));
+                std::shared_ptr<SvxBrushItem> aChangedBrushItem(aOriginalBrushItem->Clone());
 
                 aChangedBrushItem->PutValue(aValue, nMemberId);
 
@@ -2756,7 +2756,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
             // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
             if (eAnchorId != RndStdIds::FLY_AT_PAGE)
             {
-                pAnchorItem.reset(static_cast<SwFormatAnchor*>(aFrameSet.Get(RES_ANCHOR).Clone()));
+                pAnchorItem.reset(aFrameSet.Get(RES_ANCHOR).Clone());
                 aFrameSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE, 1 ));
             }
 

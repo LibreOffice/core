@@ -26,7 +26,7 @@
 class SVX_DLLPUBLIC SdrTextAniAmountItem final : public SfxInt16Item {
 public:
     SdrTextAniAmountItem(sal_Int16 nVal=0): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT,nVal) {}
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual SdrTextAniAmountItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual bool HasMetrics() const override;
     virtual void ScaleMetrics(long nMul, long nDiv) override;
 

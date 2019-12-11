@@ -83,7 +83,7 @@ public:
     SvxChartRegressItem(SvxChartRegress eRegress /*= SvxChartRegress::Linear*/,
                         sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual SvxChartRegressItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     sal_uInt16 GetValueCount() const override { return CHREGRESS_COUNT; }
 };
@@ -94,7 +94,7 @@ public:
     SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= SvxChartTextOrder::SideBySide*/,
                           sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual SvxChartTextOrderItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -108,7 +108,7 @@ public:
     SvxChartKindErrorItem(SvxChartKindError /*eOrient = SvxChartKindError::NONE*/,
                            sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual SvxChartKindErrorItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     sal_uInt16 GetValueCount() const override { return CHERROR_COUNT; }
 };
@@ -119,7 +119,7 @@ public:
     SvxChartIndicateItem(SvxChartIndicate eOrient /*= SvxChartIndicate::NONE*/,
                            sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual SvxChartIndicateItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     sal_uInt16 GetValueCount() const override { return CHINDICATE_COUNT; }
 };
@@ -142,7 +142,7 @@ public:
                                  OUString &rText, const IntlWrapper&) const override;
 
     virtual bool             operator == (const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool *pPool = nullptr) const override;
+    virtual SvxDoubleItem* Clone(SfxItemPool *pPool = nullptr) const override;
 
     double GetValue() const { return fVal; }
 };
