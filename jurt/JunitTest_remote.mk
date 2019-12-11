@@ -9,11 +9,13 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_remote))
 
-$(eval $(call gb_JunitTest_use_jars,jurt_remote,\
-    ridl \
+$(eval $(call gb_Jar_use_customtargets,jurt_remote, \
+    ridljar/javamaker \
 ))
 
-$(eval $(call gb_JunitTest_use_jar_classset,jurt_remote,jurt))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_remote,ridl))
+
+$(eval $(call gb_JunitTest_add_classpath,jurt_remote,$(call gb_CustomTarget_get_workdir,ridljar/javamaker)))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_remote,\
     jurt/test/com/sun/star/lib/uno/environments/remote/JavaThreadPoolFactory_Test \

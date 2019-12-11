@@ -11,13 +11,12 @@ $(eval $(call gb_JunitTest_JunitTest,jurt_urp))
 
 $(eval $(call gb_JunitTest_use_customtargets,jurt_urp,\
     jurt/test/com/sun/star/lib/uno/protocols/urp \
+    ridljar/javamaker \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,jurt_urp,\
-    ridl \
-))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_urp,ridl))
 
-$(eval $(call gb_JunitTest_use_jar_classset,jurt_urp,jurt))
+$(eval $(call gb_JunitTest_add_classpath,jurt_urp,$(call gb_CustomTarget_get_workdir,ridljar/javamaker)))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_urp,\
     jurt/test/com/sun/star/lib/uno/protocols/urp/Cache_Test \

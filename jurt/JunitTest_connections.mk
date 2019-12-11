@@ -9,11 +9,13 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_connections))
 
-$(eval $(call gb_JunitTest_use_jars,jurt_connections,\
-    ridl \
+$(eval $(call gb_Jar_use_customtargets,jurt_connections, \
+    ridljar/javamaker \
 ))
 
-$(eval $(call gb_JunitTest_use_jar_classset,jurt_connections,jurt))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_connections,ridl))
+
+$(eval $(call gb_JunitTest_add_classpath,jurt_connections,$(call gb_CustomTarget_get_workdir,ridljar/javamaker)))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_connections,\
     jurt/test/com/sun/star/comp/connections/PipedConnection_Test \
