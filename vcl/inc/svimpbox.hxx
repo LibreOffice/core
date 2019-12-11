@@ -139,7 +139,6 @@ private:
     bool                m_bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with false
     bool                m_bSubLstOpDblClick : 1; // open/close sublist with mouse double click, defaulted with true
     bool                m_bContextMenuHandling : 1;
-    bool                m_bIsCellFocusEnabled : 1;
     bool                mbForceMakeVisible;
 
     Point               m_aEditClickPos;
@@ -198,7 +197,7 @@ private:
     void                UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry );
     void                UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEntry );
 
-    void                CalcCellFocusRect( SvTreeListEntry const * pEntry, tools::Rectangle& rRect );
+    void                CalcCellFocusRect( tools::Rectangle& rRect );
 
     void ExpandAll();
     void CollapseTo(SvTreeListEntry* pParentToCollapse);
@@ -332,8 +331,6 @@ public:
     void                ShowFocusRect( const SvTreeListEntry* pEntry );
     void                CallEventListeners( VclEventId nEvent, void* pData = nullptr );
 
-    /** Enables, that one cell of a tablistbox entry can be focused */
-    bool                IsCellFocusEnabled() const { return m_bIsCellFocusEnabled; }
     bool                SetCurrentTabPos( sal_uInt16 _nNewPos );
     sal_uInt16          GetCurrentTabPos() const { return m_nCurTabPos; }
 
