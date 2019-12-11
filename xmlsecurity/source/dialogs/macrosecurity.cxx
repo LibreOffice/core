@@ -195,19 +195,28 @@ void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
     m_xRemoveLocPB->set_sensitive( bLocationSelected && !mbURLsReadonly);
 }
 
-
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl, weld::Button&, void)
 {
     int nEntry = m_xTrustCertLB->get_selected_index();
     if (nEntry != -1)
     {
-        sal_uInt16 nSelected = m_xTrustCertLB->get_id(nEntry).toUInt32();
+        const sal_uInt16 nSelected = m_xTrustCertLB->get_id(nEntry).toUInt32();
+        uno::Reference< css::security::XCertificate > xCert;
+        try
+        {
+            xCert = m_pDlg->m_xSecurityEnvironment->getCertificate(m_aTrustedAuthors[nSelected][0],
+                            xmlsecurity::numericStringToBigInteger(m_aTrustedAuthors[nSelected][1]));
+        }
+        catch (...) {}
 
-        uno::Reference< css::security::XCertificate > xCert = m_pDlg->m_xSecurityEnvironment->getCertificate( m_aTrustedAuthors[nSelected][0], xmlsecurity::numericStringToBigInteger( m_aTrustedAuthors[nSelected][1] ) );
-
-        // If we don't get it, create it from signature data:
-        if ( !xCert.is() )
-            xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii( m_aTrustedAuthors[nSelected][2] ) ;
+        if (!xCert.is())
+        {
+            try
+            {
+                xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(m_aTrustedAuthors[nSelected][2]);
+            }
+            catch (...) {}
+        }
 
         SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "*MacroSecurityTrustedSourcesTP::ViewCertPBHdl(): Certificate not found and can't be created!" );
 
@@ -309,12 +318,19 @@ void MacroSecurityTrustedSourcesTP::FillCertLB()
         {
             css::uno::Sequence< OUString >&              rEntry = m_aTrustedAuthors[ nEntry ];
 
-            // create from RawData
-            uno::Reference< css::security::XCertificate > xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
-
-            m_xTrustCertLB->append(OUString::number(nEntry), xmlsec::GetContentPart(xCert->getSubjectName()));
-            m_xTrustCertLB->set_text(nEntry, xmlsec::GetContentPart(xCert->getIssuerName()), 1);
-            m_xTrustCertLB->set_text(nEntry, utl::GetDateTimeString(xCert->getNotValidAfter()), 2);
+            try
+            {
+                // create from RawData
+                uno::Reference< css::security::XCertificate > xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(rEntry[2]);
+                m_xTrustCertLB->append(OUString::number(nEntry), xmlsec::GetContentPart(xCert->getSubjectName()));
+                m_xTrustCertLB->set_text(nEntry, xmlsec::GetContentPart(xCert->getIssuerName()), 1);
+                m_xTrustCertLB->set_text(nEntry, utl::GetDateTimeString(xCert->getNotValidAfter()), 2);
+            }
+            catch (...)
+            {
+                TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", __FUNCTION__ << ": couldn't create certificate from: " << rEntry[2]);
+                m_xTrustCertLB->append(OUString::number(nEntry), rEntry[0]);
+            }
         }
     }
 }
@@ -352,14 +368,12 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(weld::Container* pP
     m_aTrustedAuthors = m_pDlg->m_aSecOptions.GetTrustedAuthors();
     mbAuthorsReadonly = m_pDlg->m_aSecOptions.IsReadOnly( SvtSecurityOptions::EOption::MacroTrustedAuthors );
     m_xTrustCertROFI->set_visible(mbAuthorsReadonly);
-    m_xTrustCertLB->set_sensitive(!mbAuthorsReadonly);
 
     FillCertLB();
 
     const css::uno::Sequence< OUString > aSecureURLs = m_pDlg->m_aSecOptions.GetSecureURLs();
     mbURLsReadonly = m_pDlg->m_aSecOptions.IsReadOnly( SvtSecurityOptions::EOption::SecureUrls );
     m_xTrustFileROFI->set_visible(mbURLsReadonly);
-    m_xTrustFileLocLB->set_sensitive(!mbURLsReadonly);
     m_xAddLocPB->set_sensitive(!mbURLsReadonly);
 
     for (const auto& rSecureURL : aSecureURLs)
