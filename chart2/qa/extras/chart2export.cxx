@@ -2023,18 +2023,19 @@ void Chart2ExportTest::testAxisTitlePositionDOCX()
     // test X Axis title position
     OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:title/c:layout/c:manualLayout/c:x", "val");
     double nX = aXVal.toDouble();
-    CPPUNIT_ASSERT(nX > 0.698208 && nX < 0.698209);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.698208543867708, nX, 1e-7);
     OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:title/c:layout/c:manualLayout/c:y", "val");
     double nY = aYVal.toDouble();
-    CPPUNIT_ASSERT(nY > 0.805152 && nY < 0.805153);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.805152435594555, nY, 1e-7);
 
     // test Y Axis title position
     aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:title/c:layout/c:manualLayout/c:x", "val");
     nX = aXVal.toDouble();
-    CPPUNIT_ASSERT(nX > 0.025395 && nX < 0.025396);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0253953671500755, nX, 1e-7);
     aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:title/c:layout/c:manualLayout/c:y", "val");
     nY = aYVal.toDouble();
-    CPPUNIT_ASSERT(nY > 0.384407 && nY < 0.384408);
+    // just test the first two decimal digits because it is not perfect in docx yet.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.384070199122511, nY, 1e-2);
 }
 
 void Chart2ExportTest::testAxisCrossBetweenXSLX()
