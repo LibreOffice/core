@@ -25,7 +25,7 @@ TARGET  = options
 
 .INCLUDE : settings.mk
 
-JARFILES = ridl.jar jurt.jar unoil.jar juh.jar
+JARFILES = ridl.jar juh.jar
 
 
 JARTARGET = extensionoptions.jar

@@ -14,16 +14,12 @@ $(eval $(call gb_Jar_set_manifest,TestExtension,$(SRCDIR)/smoketest/com/sun/star
 
 $(eval $(call gb_Jar_add_manifest_classpath,TestExtension,\
 	juh.jar \
-	jurt.jar \
 	ridl.jar \
-	unoil.jar \
 ))
 
 $(eval $(call gb_Jar_use_jars,TestExtension,\
 	juh \
-	jurt \
 	ridl \
-	unoil \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,TestExtension,com))

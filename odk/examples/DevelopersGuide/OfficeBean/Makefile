@@ -2,7 +2,7 @@
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
-#  
+#
 #  Copyright 2000, 2010 Oracle and/or its affiliates.
 #  All rights reserved.
 #
@@ -29,7 +29,7 @@
 #  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 #  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 #  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#     
+#
 #**************************************************************************
 
 # Builds the OOoBean of the Developers Guide
@@ -50,10 +50,9 @@ JAVAFILES  = \
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(JAVAFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(URE_CLASSES_DIR)/jurt.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),\
 		$(PATH_SEPARATOR)$(URE_CLASSES_DIR)/ridl.jar\
 		$(PATH_SEPARATOR)$(URE_CLASSES_DIR)/juh.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
 		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/officebean.jar\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
@@ -69,7 +68,7 @@ endif
 
 include $(SETTINGS)/stdtarget.mk
 
-$(CLASSFILES) : $(JAVAFILES) 
+$(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES)
 

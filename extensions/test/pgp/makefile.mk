@@ -19,7 +19,7 @@
 PRJ=..$/..
 
 PRJNAME := extensions
-PACKAGE := 
+PACKAGE :=
 TARGET  := test_com_sun_star_pgp
 
 # --- Settings -----------------------------------------------------
@@ -31,7 +31,7 @@ TARGET  := test_com_sun_star_pgp
 APPLICATRDB := $(SOLARBINDIR)$/applicat.rdb
 RDB := $(APPLICATRDB)
 
-JARFILES= jurt.jar
+JARFILES= ridl.jar
 
 GENJAVACLASSFILES= \
     $(CLASSDIR)$/com$/sun$/star$/beans$/PropertyValue.class				\
@@ -44,12 +44,12 @@ JAVACLASSFILES= \
 
 TYPES={$(subst,.class, $(subst,$/,.  $(subst,$(CLASSDIR)$/,-T  $(GENJAVACLASSFILES))))}
 GENJAVAFILES = {$(subst,.class,.java $(subst,$/class, $(GENJAVACLASSFILES)))}
-JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) $(GENJAVAFILES) 
+JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) $(GENJAVAFILES)
 
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
-ALL : $(GENJAVAFILES) ALLTAR 
+ALL : $(GENJAVAFILES) ALLTAR
 .ELSE
 ALL: ALLDEP
 .ENDIF

@@ -30,6 +30,6 @@ IDLTESTFILES := \
     XTestService2.idl \
     XTestService3.idl \
     XTestService4.idl
-JARFILES := juh.jar jurt.jar ridl.jar
+JARFILES := juh.jar ridl.jar
 
 .INCLUDE: javaunittest.mk

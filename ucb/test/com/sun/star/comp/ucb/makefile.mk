@@ -29,9 +29,7 @@ CLASSDIR !:= $(CLASSDIR)$/test
 
 JARFILES = OOoRunner.jar \
            ridl.jar \
-           unoil.jar \
-           juh.jar \
-           jurt.jar
+           juh.jar
 
 JAVACLASSFILES = $(CLASSDIR)$/$(PACKAGE)$/GlobalTransfer_Test.class
 
