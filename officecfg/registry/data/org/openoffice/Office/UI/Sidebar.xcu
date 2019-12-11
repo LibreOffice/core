@@ -1563,7 +1563,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            WriterVariants, Table,  visible ;
+            WriterVariants, Table,  visible , .uno:TableDialog ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
