@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_8a7a1786",
+        "filename": "cui/source/factory/dlgfact.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-11T07:30:44Z",
+      "side": 1,
+      "message": "I see that there\u0027s this one ID left that still uses the old page after this patch? Do you know what\u0027s this?",
+      "range": {
+        "startLine": 1472,
+        "startChar": 13,
+        "endLine": 1472,
+        "endChar": 35
+      },
+      "revId": "3819cab6e46ab5ab0b283909a67692bc58b9e692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
