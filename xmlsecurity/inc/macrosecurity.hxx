@@ -128,7 +128,7 @@ private:
     DECL_LINK(    TrustCertLBSelectHdl, SvTreeListBox*, void );
     DECL_LINK(    TrustFileLocLBSelectHdl, ListBox&, void );
 
-    void                FillCertLB();
+    void FillCertLB(const bool bShowWarnings = false);
     void                ImplCheckButtons();
 
 public:

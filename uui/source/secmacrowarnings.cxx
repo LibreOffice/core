@@ -133,7 +133,7 @@ void MacroWarning::InitControls()
     if (mbShowSignatures)
     {
         mxViewSignsBtn->connect_clicked(LINK(this, MacroWarning, ViewSignsBtnHdl));
-        mxViewSignsBtn->set_sensitive(false);   // default
+        mxViewSignsBtn->set_sensitive(false);
         mxAlwaysTrustCB->connect_clicked(LINK(this, MacroWarning, AlwaysTrustCheckHdl));
 
         mnActSecLevel = SvtSecurityOptions().GetMacroSecurityLevel();

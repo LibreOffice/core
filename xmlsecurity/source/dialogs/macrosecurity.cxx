@@ -27,7 +27,6 @@
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 
-
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
@@ -207,20 +206,33 @@ void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
     m_pRemoveLocPB->Enable( bLocationSelected && !mbURLsReadonly);
 }
 
-
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl, Button*, void)
 {
     if( m_pTrustCertLB->FirstSelected() )
     {
-        sal_uInt16 nSelected = sal_uInt16( sal_uIntPtr( m_pTrustCertLB->FirstSelected()->GetUserData() ) );
+        const sal_uInt16 nSelected = sal_uInt16(sal_uIntPtr(m_pTrustCertLB->FirstSelected()->GetUserData()));
+        uno::Reference< css::security::XCertificate > xCert;
+        try
+        {
+            xCert = mpDlg->mxSecurityEnvironment->getCertificate(maTrustedAuthors[nSelected][0],
+                           xmlsecurity::numericStringToBigInteger(maTrustedAuthors[nSelected][1]));
+        }
+        catch (...)
+        {
+            SAL_WARN("xmlsecurity.dialogs", "matching certificate not found for: " << maTrustedAuthors[nSelected][0]);
+        }
 
-        uno::Reference< css::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], xmlsecurity::numericStringToBigInteger( maTrustedAuthors[nSelected][1] ) );
-
-        // If we don't get it, create it from signature data:
-        if ( !xCert.is() )
-            xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( maTrustedAuthors[nSelected][2] ) ;
-
-        SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "*MacroSecurityTrustedSourcesTP::ViewCertPBHdl(): Certificate not found and can't be created!" );
+        if (!xCert.is())
+        {
+            try
+            {
+                xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii(maTrustedAuthors[nSelected][2]);
+            }
+            catch (...)
+            {
+                SAL_WARN("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << maTrustedAuthors[nSelected][2]);
+            }
+        }
 
         if ( xCert.is() )
         {
@@ -309,7 +321,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl, ListBox&
     ImplCheckButtons();
 }
 
-void MacroSecurityTrustedSourcesTP::FillCertLB()
+void MacroSecurityTrustedSourcesTP::FillCertLB(const bool bShowWarnings)
 {
     m_pTrustCertLB->Clear();
 
@@ -322,13 +334,23 @@ void MacroSecurityTrustedSourcesTP::FillCertLB()
             css::uno::Sequence< OUString >&              rEntry = maTrustedAuthors[ nEntry ];
             uno::Reference< css::security::XCertificate >   xCert;
 
-            // create from RawData
-            xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
+            try
+            {
+                // create from RawData
+                xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
 
-            SvTreeListEntry*    pLBEntry = m_pTrustCertLB->InsertEntry( xmlsec::GetContentPart( xCert->getSubjectName() ) );
-            m_pTrustCertLB->SetEntryText( xmlsec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
-            m_pTrustCertLB->SetEntryText( utl::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
-            pLBEntry->SetUserData( reinterpret_cast<void*>(nEntry) );      // misuse user data as index
+                SvTreeListEntry*    pLBEntry = m_pTrustCertLB->InsertEntry( xmlsec::GetContentPart( xCert->getSubjectName() ) );
+                m_pTrustCertLB->SetEntryText( xmlsec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
+                m_pTrustCertLB->SetEntryText( utl::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
+                pLBEntry->SetUserData( reinterpret_cast<void*>(nEntry) );      // misuse user data as index
+            }
+            catch (...)
+            {
+                if (bShowWarnings)
+                {
+                    SAL_WARN("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << rEntry[2]);
+                }
+            }
         }
     }
 }
@@ -386,14 +408,12 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(vcl::Window* _pPare
     maTrustedAuthors = mpDlg->maSecOptions.GetTrustedAuthors();
     mbAuthorsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::EOption::MacroTrustedAuthors );
     m_pTrustCertROFI->Show( mbAuthorsReadonly );
-    mbAuthorsReadonly ? m_pTrustCertLB->DisableTable() : m_pTrustCertLB->EnableTable();
 
-    FillCertLB();
+    FillCertLB(true);
 
     css::uno::Sequence< OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
     mbURLsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::EOption::SecureUrls );
     m_pTrustFileROFI->Show( mbURLsReadonly );
-    m_pTrustFileLocLB->Enable( !mbURLsReadonly );
     m_pAddLocPB->Enable( !mbURLsReadonly );
 
     sal_Int32 nEntryCnt = aSecureURLs.getLength();

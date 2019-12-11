@@ -155,6 +155,8 @@
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="pixbuf">res/lock.png</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -299,6 +301,8 @@
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="pixbuf">res/lock.png</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
