@@ -104,12 +104,11 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
     assert(dynamic_cast<SkiaCompatibleDC*>(&rWhite));
     assert(dynamic_cast<SkiaCompatibleDC*>(&rBlack));
 
-    sk_sp<SkImage> image = static_cast<SkiaCompatibleDC&>(rWhite).getAsImage();
+    sk_sp<SkImage> image = static_cast<SkiaCompatibleDC&>(rWhite).getAsImageDiff(
+        static_cast<SkiaCompatibleDC&>(rBlack));
     preDraw();
     mSurface->getCanvas()->drawImage(image, nX, nY);
     postDraw();
-    // TODO what is the point of the second texture?
-    (void)rBlack;
 
     if (!aControlCacheKey.canCacheControl())
         return true;
@@ -159,14 +158,14 @@ SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int wid
 {
 }
 
-std::unique_ptr<CompatibleDC::Texture> SkiaCompatibleDC::getAsMaskTexture()
+std::unique_ptr<CompatibleDC::Texture> SkiaCompatibleDC::getAsMaskTexture() const
 {
     auto ret = std::make_unique<SkiaCompatibleDC::Texture>();
     ret->image = getAsMaskImage();
     return ret;
 }
 
-sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage()
+sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage() const
 {
     // mpData is in the BGRA format, with A unused (and set to 0), and RGB are grey,
     // so convert it to Skia format, then to 8bit and finally use as alpha mask
@@ -208,7 +207,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage()
     return surface->makeImageSnapshot();
 }
 
-sk_sp<SkImage> SkiaCompatibleDC::getAsImage()
+sk_sp<SkImage> SkiaCompatibleDC::getAsImage() const
 {
     SkBitmap tmpBitmap;
     if (!tmpBitmap.installPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
@@ -229,6 +228,50 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImage()
     canvas->drawBitmapRect(tmpBitmap,
                            SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
                            SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight), &paint);
+    canvas->restore();
+    return surface->makeImageSnapshot();
+}
+
+sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& other) const
+{
+    assert(maRects.mnSrcWidth == other.maRects.mnSrcWidth
+           || maRects.mnSrcHeight == other.maRects.mnSrcHeight);
+    SkBitmap tmpBitmap;
+    if (!tmpBitmap.tryAllocPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
+                                                    kBGRA_8888_SkColorType, kUnpremul_SkAlphaType),
+                                  maRects.mnSrcWidth * 4))
+        abort();
+    // Native widgets are drawn twice on black/white background to synthetize alpha
+    // (commit c6b66646870cb2bffaa73565affcf80bf74e0b5c).
+    // Alpha is computed as "alpha = 1.0 - abs(black.red - white.red)".
+    // TODO I doubt this can be done using Skia, so do it manually here. Fortunately
+    // the bitmaps should be fairly small and are cached.
+    uint32_t* dest = tmpBitmap.getAddr32(0, 0);
+    assert(dest == tmpBitmap.getPixels());
+    const sal_uInt32* src = mpData;
+    const sal_uInt32* otherSrc = other.mpData;
+    uint32_t* end = dest + tmpBitmap.width() * tmpBitmap.height();
+    while (dest < end)
+    {
+        uint32_t alpha = 255 - abs(int(*src >> 24) - int(*otherSrc >> 24));
+        *dest = (*src & 0x00ffffff) | (alpha << 24);
+        ++dest;
+        ++src;
+        ++otherSrc;
+    }
+    tmpBitmap.notifyPixelsChanged();
+    tmpBitmap.setImmutable();
+    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(tmpBitmap.width(), tmpBitmap.height());
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+    SkCanvas* canvas = surface->getCanvas();
+    canvas->save();
+    // The data we got is upside-down.
+    SkMatrix matrix;
+    matrix.preTranslate(0, tmpBitmap.height());
+    matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
+    canvas->concat(matrix);
+    canvas->drawBitmap(tmpBitmap, 0, 0, &paint);
     canvas->restore();
     return surface->makeImageSnapshot();
 }

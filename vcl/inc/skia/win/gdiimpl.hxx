@@ -27,12 +27,13 @@ class SkiaCompatibleDC : public CompatibleDC
 public:
     SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height);
 
-    virtual std::unique_ptr<Texture> getAsMaskTexture() override;
+    virtual std::unique_ptr<Texture> getAsMaskTexture() const override;
 
     virtual bool wantsTextColorWhite() const override { return true; }
 
-    sk_sp<SkImage> getAsImage();
-    sk_sp<SkImage> getAsMaskImage();
+    sk_sp<SkImage> getAsImage() const;
+    sk_sp<SkImage> getAsMaskImage() const;
+    sk_sp<SkImage> getAsImageDiff(const SkiaCompatibleDC& other) const;
 
     struct Texture;
 };

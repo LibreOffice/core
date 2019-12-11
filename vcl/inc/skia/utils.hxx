@@ -44,9 +44,9 @@ inline sk_sp<SkSurface> createSkSurface(const Size& size, SkColorType type = kN3
 
 #ifdef DBG_UTIL
 void prefillSurface(sk_sp<SkSurface>& surface);
-void dump(const SkBitmap& bitmap, const char* file);
-void dump(const sk_sp<SkImage>& image, const char* file);
-void dump(const sk_sp<SkSurface>& surface, const char* file);
+VCL_DLLPUBLIC void dump(const SkBitmap& bitmap, const char* file);
+VCL_DLLPUBLIC void dump(const sk_sp<SkImage>& image, const char* file);
+VCL_DLLPUBLIC void dump(const sk_sp<SkSurface>& surface, const char* file);
 #endif
 
 } // namespace
