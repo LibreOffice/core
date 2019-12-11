@@ -378,7 +378,7 @@ endef
 define gb_CppunitTest_use_java_ure
 $(call gb_CppunitTest_get_target,$(1)) : JAVA_URE := $(true)
 $(call gb_CppunitTest_get_target,$(1)) : \
-    $(foreach jar,java_uno juh jurt unoil unoloader,$(call gb_Jar_get_target,$(jar))) \
+    $(foreach jar,java_uno juh ridl unoloader,$(call gb_Jar_get_target,$(jar))) \
     $(call gb_Library_get_target,affine_uno_uno) \
     $(call gb_Library_get_target,java_uno) \
     $(call gb_Library_get_target,jpipe) \
