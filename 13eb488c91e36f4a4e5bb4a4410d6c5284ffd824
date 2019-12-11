@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_9e933c50",
+        "filename": "jurt/Jar_jurt.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-12-11T12:36:26Z",
+      "side": 0,
+      "message": "hmm no idea what that is for, do we need it ?",
+      "revId": "13eb488c91e36f4a4e5bb4a4410d6c5284ffd824",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

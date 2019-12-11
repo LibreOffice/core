@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_be76383e",
+        "filename": "ridljar/Jar_ridl.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-12-11T12:36:26Z",
+      "side": 1,
+      "message": "i think there\u0027s a dependency missing here on unoil",
+      "revId": "2a988bc5d90bc05e1b752a048f9b443944244f4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
