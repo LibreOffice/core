@@ -243,7 +243,7 @@ enum PrepareHint
     PREP_ERGOSUM,           // Needed because of movement in FootnoteFrames. Check QuoVadis/ErgoSum.
 };
 
-enum FrameControlType
+enum class FrameControlType
 {
     PageBreak,
     Header,

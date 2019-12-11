@@ -94,7 +94,7 @@ void SwViewShell::SetShowHeaderFooterSeparator( FrameControlType eControl, bool 
     if ( bShow )
         bShow = GetViewOptions()->IsUseHeaderFooterMenu();
 
-    if ( eControl == Header )
+    if ( eControl == FrameControlType::Header )
         mbShowHeaderSeparator = bShow;
     else
         mbShowFooterSeparator = bShow;
@@ -105,14 +105,14 @@ void SwViewShell::ToggleHeaderFooterEdit()
     mbHeaderFooterEdit = !mbHeaderFooterEdit;
     if ( !mbHeaderFooterEdit )
     {
-        SetShowHeaderFooterSeparator( Header, false );
-        SetShowHeaderFooterSeparator( Footer, false );
+        SetShowHeaderFooterSeparator( FrameControlType::Header, false );
+        SetShowHeaderFooterSeparator( FrameControlType::Footer, false );
     }
 
     // Avoid corner case
     if ( ( GetViewOptions()->IsUseHeaderFooterMenu() ) &&
-         ( !IsShowHeaderFooterSeparator( Header ) &&
-           !IsShowHeaderFooterSeparator( Footer ) ) )
+         ( !IsShowHeaderFooterSeparator( FrameControlType::Header ) &&
+           !IsShowHeaderFooterSeparator( FrameControlType::Footer ) ) )
     {
         mbHeaderFooterEdit = false;
     }

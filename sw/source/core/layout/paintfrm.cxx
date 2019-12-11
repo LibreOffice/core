@@ -3048,7 +3048,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         while ( pHiddenPage->GetPrev() != nullptr )
         {
             pHiddenPage = static_cast< const SwPageFrame* >( pHiddenPage->GetPrev() );
-            SwFrameControlPtr pControl = rMngr.GetControl( PageBreak, pHiddenPage );
+            SwFrameControlPtr pControl = rMngr.GetControl( FrameControlType::PageBreak, pHiddenPage );
             if ( pControl.get() )
                 pControl->ShowAll( false );
         }
@@ -3573,7 +3573,7 @@ void SwPageFrame::PaintBreak( ) const
                 if ( pFlowFrame && pFlowFrame->IsPageBreak( true ) )
                     rMngr.SetPageBreakControl( this );
                 else
-                    rMngr.RemoveControlsByType( PageBreak, this );
+                    rMngr.RemoveControlsByType( FrameControlType::PageBreak, this );
             }
         }
         SwLayoutFrame::PaintBreak( );
@@ -3601,8 +3601,8 @@ void SwColumnFrame::PaintBreak( ) const
                 //      header/footer marker
                 //    * Non-printing characters are shown, as this is more consistent
                 //      with other formatting marks
-                if ( !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Header ) &&
-                     !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Footer ) &&
+                if ( !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Header ) &&
+                     !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Footer ) &&
                       gProp.pSGlobalShell->GetViewOptions()->IsLineBreak() )
                 {
                     SwRect aRect( pCnt->getFramePrintArea() );
@@ -3694,8 +3694,8 @@ void SwPageFrame::PaintDecorators( ) const
                  !gProp.pSGlobalShell->IsPreview() &&
                  !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
                  !gProp.pSGlobalShell->GetViewOptions()->getBrowseMode() &&
-                 ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Header ) ||
-                   gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Footer ) ) )
+                 ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Header ) ||
+                   gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Footer ) ) )
             {
                 bool bRtl = AllSettings::GetLayoutRTL();
                 const SwRect& rVisArea = gProp.pSGlobalShell->VisArea();
@@ -3704,7 +3704,7 @@ void SwPageFrame::PaintDecorators( ) const
                     nXOff = std::max( aBodyRect.Left(), rVisArea.Left() );
 
                 // Header
-                if ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Header ) )
+                if ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Header ) )
                 {
                     const SwFrame* pHeaderFrame = Lower();
                     if ( !pHeaderFrame->IsHeaderFrame() )
@@ -3712,11 +3712,11 @@ void SwPageFrame::PaintDecorators( ) const
 
                     long nHeaderYOff = aBodyRect.Top();
                     Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff ) );
-                    rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, Header, nOutputOff );
+                    rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, FrameControlType::Header, nOutputOff );
                 }
 
                 // Footer
-                if ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Footer ) )
+                if ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Footer ) )
                 {
                     const SwFrame* pFootnoteContFrame = Lower();
                     while ( pFootnoteContFrame )
@@ -3728,7 +3728,7 @@ void SwPageFrame::PaintDecorators( ) const
 
                     long nFooterYOff = aBodyRect.Bottom();
                     Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff ) );
-                    rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, Footer, nOutputOff );
+                    rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, FrameControlType::Footer, nOutputOff );
                 }
             }
         }

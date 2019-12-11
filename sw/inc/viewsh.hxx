@@ -563,7 +563,7 @@ public:
     void ToggleHeaderFooterEdit();
     /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags
     bool IsHeaderFooterEdit() const { return mbHeaderFooterEdit; }
-    bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == Header)? mbShowHeaderSeparator: mbShowFooterSeparator; }
+    bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == FrameControlType::Header)? mbShowHeaderSeparator: mbShowFooterSeparator; }
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow );
     bool IsSelectAll() const { return mbSelectAll; }
 

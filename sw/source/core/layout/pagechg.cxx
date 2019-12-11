@@ -2461,7 +2461,7 @@ bool SwPageFrame::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rC
     {
         if (!bHideWhitespaceMode || static_cast<const SwFrameFormat*>(GetDep())->GetHeader().IsActive())
         {
-            rControl = Header;
+            rControl = FrameControlType::Header;
             return true;
         }
     }
@@ -2473,7 +2473,7 @@ bool SwPageFrame::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rC
         if ( aFooterArea.IsInside( rPt ) &&
              (!bHideWhitespaceMode || static_cast<const SwFrameFormat*>(GetDep())->GetFooter().IsActive()) )
         {
-            rControl = Footer;
+            rControl = FrameControlType::Footer;
             return true;
         }
     }

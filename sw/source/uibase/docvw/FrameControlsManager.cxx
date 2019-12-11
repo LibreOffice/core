@@ -77,11 +77,11 @@ void SwFrameControlsManager::SetReadonlyControls( bool bReadonly )
 
 void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrame* pPageFrame, FrameControlType eType, Point aOffset )
 {
-    assert( eType == Header || eType == Footer );
+    assert( eType == FrameControlType::Header || eType == FrameControlType::Footer );
 
     // Check if we already have the control
     SwFrameControlPtr pControl;
-    const bool bHeader = ( eType == Header );
+    const bool bHeader = ( eType == FrameControlType::Header );
 
     SwFrameControlPtrMap& rControls = m_aControls[eType];
 
@@ -115,7 +115,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame 
     // Check if we already have the control
     SwFrameControlPtr pControl;
 
-    SwFrameControlPtrMap& rControls = m_aControls[PageBreak];
+    SwFrameControlPtrMap& rControls = m_aControls[FrameControlType::PageBreak];
 
     SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pPageFrame);
     if (lb != rControls.end() && !(rControls.key_comp()(pPageFrame, lb->first)))
@@ -147,7 +147,7 @@ void SwFrameControlsManager::SetUnfloatTableButton( const SwFlyFrame* pFlyFrame,
     // Check if we already have the control
     SwFrameControlPtr pControl;
 
-    SwFrameControlPtrMap& rControls = m_aControls[FloatingTable];
+    SwFrameControlPtrMap& rControls = m_aControls[FrameControlType::FloatingTable];
 
     SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pFlyFrame);
     if (lb != rControls.end() && !(rControls.key_comp()(pFlyFrame, lb->first)))

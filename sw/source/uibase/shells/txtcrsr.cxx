@@ -445,13 +445,13 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
     {
         if ( !bInHeader )
         {
-            rSh.SetShowHeaderFooterSeparator( Footer, true );
-            rSh.SetShowHeaderFooterSeparator( Header, false );
+            rSh.SetShowHeaderFooterSeparator( FrameControlType::Footer, true );
+            rSh.SetShowHeaderFooterSeparator( FrameControlType::Header, false );
         }
         else
         {
-            rSh.SetShowHeaderFooterSeparator( Header, true );
-            rSh.SetShowHeaderFooterSeparator( Footer, false );
+            rSh.SetShowHeaderFooterSeparator( FrameControlType::Header, true );
+            rSh.SetShowHeaderFooterSeparator( FrameControlType::Footer, false );
         }
 
         // Force repaint

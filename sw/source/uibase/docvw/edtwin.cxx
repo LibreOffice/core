@@ -2813,7 +2813,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
         if ( pFormat )
         {
-            if ( eControl == Header )
+            if ( eControl == FrameControlType::Header )
                 bActive = pFormat->GetHeader().IsActive();
             else
                 bActive = pFormat->GetFooter().IsActive();
@@ -2834,8 +2834,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 // keep consistent behaviour due to header edit mode (and the same for the footer as well).
 
                 // Otherwise, we hide the header/footer control if a separator is shown, and vice versa.
-                if (!(bWasInHeader && eControl == Header) &&
-                    !(bWasInFooter && eControl == Footer))
+                if (!(bWasInHeader && eControl == FrameControlType::Header) &&
+                    !(bWasInFooter && eControl == FrameControlType::Footer))
                 {
                     const bool bSeparatorWasVisible = rSh.IsShowHeaderFooterSeparator(eControl);
                     rSh.SetShowHeaderFooterSeparator(eControl, !bSeparatorWasVisible);
@@ -2855,8 +2855,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         {
             // Make sure we have the proper Header/Footer separators shown
             // as these may be changed if clicking on an empty Header/Footer
-            rSh.SetShowHeaderFooterSeparator( Header, eControl == Header );
-            rSh.SetShowHeaderFooterSeparator( Footer, eControl == Footer );
+            rSh.SetShowHeaderFooterSeparator( FrameControlType::Header, eControl == FrameControlType::Header );
+            rSh.SetShowHeaderFooterSeparator( FrameControlType::Footer, eControl == FrameControlType::Footer );
 
             if ( !rSh.IsHeaderFooterEdit() )
             {
@@ -2874,8 +2874,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         else
         {
             // Make sure that the separators are hidden
-            rSh.SetShowHeaderFooterSeparator( Header, false );
-            rSh.SetShowHeaderFooterSeparator( Footer, false );
+            rSh.SetShowHeaderFooterSeparator( FrameControlType::Header, false );
+            rSh.SetShowHeaderFooterSeparator( FrameControlType::Footer, false );
 
             // Repaint everything
             // FIXME fdo#67358 for unknown reasons this causes painting
@@ -6199,27 +6199,27 @@ bool SwEditWin::IsInHeaderFooter( const Point &rDocPt, FrameControlType &rContro
     if ( pPageFrame && pPageFrame->IsOverHeaderFooterArea( rDocPt, rControl ) )
         return true;
 
-    if ( rSh.IsShowHeaderFooterSeparator( Header ) || rSh.IsShowHeaderFooterSeparator( Footer ) )
+    if ( rSh.IsShowHeaderFooterSeparator( FrameControlType::Header ) || rSh.IsShowHeaderFooterSeparator( FrameControlType::Footer ) )
     {
         SwFrameControlsManager &rMgr = rSh.GetView().GetEditWin().GetFrameControlsManager();
         Point aPoint( LogicToPixel( rDocPt ) );
 
-        if ( rSh.IsShowHeaderFooterSeparator( Header ) )
+        if ( rSh.IsShowHeaderFooterSeparator( FrameControlType::Header ) )
         {
-            SwFrameControlPtr pControl = rMgr.GetControl( Header, pPageFrame );
+            SwFrameControlPtr pControl = rMgr.GetControl( FrameControlType::Header, pPageFrame );
             if ( pControl.get() && pControl->Contains( aPoint ) )
             {
-                rControl = Header;
+                rControl = FrameControlType::Header;
                 return true;
             }
         }
 
-        if ( rSh.IsShowHeaderFooterSeparator( Footer ) )
+        if ( rSh.IsShowHeaderFooterSeparator( FrameControlType::Footer ) )
         {
-            SwFrameControlPtr pControl = rMgr.GetControl( Footer, pPageFrame );
+            SwFrameControlPtr pControl = rMgr.GetControl( FrameControlType::Footer, pPageFrame );
             if ( pControl.get() && pControl->Contains( aPoint ) )
             {
-                rControl = Footer;
+                rControl = FrameControlType::Footer;
                 return true;
             }
         }
@@ -6251,9 +6251,9 @@ bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& r
 
                 bRet = bInHeader || bInFooter;
                 if ( bInHeader )
-                    rControl = Header;
+                    rControl = FrameControlType::Header;
                 else if ( bInFooter )
-                    rControl = Footer;
+                    rControl = FrameControlType::Footer;
             }
             else
                 bPageAnchored = pFlyFormat->GetAnchor( ).GetAnchorId( ) == RndStdIds::FLY_AT_PAGE;
