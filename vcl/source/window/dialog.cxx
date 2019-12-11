@@ -740,17 +740,25 @@ void Dialog::StateChanged( StateChangedType nType )
         const bool bKitActive = comphelper::LibreOfficeKit::isActive();
         if (bKitActive)
         {
-            if (!GetLOKNotifier())
-                SetLOKNotifier(mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr));
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back("type", "dialog");
+            aItems.emplace_back("size", GetSizePixel().toString());
+            if (!GetText().isEmpty())
+                aItems.emplace_back("title", GetText().toUtf8());
 
             if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
             {
-                std::vector<vcl::LOKPayloadItem> aItems;
-                aItems.emplace_back("type", "dialog");
-                aItems.emplace_back("size", GetSizePixel().toString());
-                if (!GetText().isEmpty())
-                    aItems.emplace_back("title", GetText().toUtf8());
                 pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+                pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+            }
+            else
+            {
+                vcl::ILibreOfficeKitNotifier* pViewShell = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr);
+                if (pViewShell)
+                {
+                    SetLOKNotifier(pViewShell);
+                    pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+                }
             }
         }
 
