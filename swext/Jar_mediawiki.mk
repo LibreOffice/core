@@ -16,9 +16,7 @@ $(eval $(call gb_Jar_set_manifest,mediawiki,$(SRCDIR)/swext/mediawiki/src/com/su
 
 $(eval $(call gb_Jar_use_jars,mediawiki,\
 	juh \
-	jurt \
 	ridl \
-	unoil \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,mediawiki,\

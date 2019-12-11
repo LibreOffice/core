@@ -11,9 +11,7 @@ $(eval $(call gb_Jar_Jar,ScriptProviderForJava))
 
 $(eval $(call gb_Jar_use_jars,ScriptProviderForJava,\
 	juh \
-	jurt \
 	ridl \
-	unoil \
 	ScriptFramework \
 ))
 

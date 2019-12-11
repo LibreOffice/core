@@ -28,11 +28,8 @@ dependencies {
     implementation fileTree(dir: "${liboInstdir}/${liboUREJavaFolder}", include: [
             "java_uno.jar",
             "juh.jar",
-            "jurt.jar",
-            "ridl.jar",
-            "unoloader.jar"
+            "ridl.jar"
     ])
-    implementation files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
     implementation(name:'owncloud_android_lib', ext:'aar')
     implementation 'com.android.support:design:27.1.1' // also pulls-in corresponding support libraries
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'

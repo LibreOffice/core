@@ -17,7 +17,7 @@ Please note the semicolons!
 
 
  For the program to run make sure that the office has access
- to classes.zip, unoil.jar, jurt.jar, pgp.jar and swingall.jar.
+ to classes.zip, ridl.jar, pgp.jar and swingall.jar.
 
  Therefore do the necessary entries in
  Office/user/config/javarc
@@ -30,4 +30,4 @@ The TestPGP is called without ;iiop; :
 java TestPGP "socket,host=localhost,port=1111"
 
 
- 
+
