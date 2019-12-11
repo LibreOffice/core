@@ -12,7 +12,7 @@
 
 #include <unx/x11/x11cairotextrender.hxx>
 
-class SkiaX11CairoTextRender : public X11CairoTextRender
+class SkiaX11CairoTextRender final : public X11CairoTextRender
 {
 public:
     explicit SkiaX11CairoTextRender(X11SalGraphics& rParent);

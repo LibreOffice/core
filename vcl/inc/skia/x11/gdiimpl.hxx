@@ -16,7 +16,8 @@
 #include <unx/x11/x11gdiimpl.h>
 #include <skia/gdiimpl.hxx>
 
-class VCL_PLUGIN_PUBLIC X11SkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public X11GraphicsImpl
+class VCL_PLUGIN_PUBLIC X11SkiaSalGraphicsImpl final : public SkiaSalGraphicsImpl,
+                                                       public X11GraphicsImpl
 {
 private:
     X11SalGraphics& mX11Parent;
