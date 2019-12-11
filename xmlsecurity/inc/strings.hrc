@@ -53,6 +53,8 @@
 #define RID_XMLSECWB_NO_MOZILLA_PROFILE             NC_("RID_XMLSECWB_NO_MOZILLA_PROFILE", "Digital signatures functionality could not be used, because no Mozilla user profile was found. Please check the Mozilla installation.")
 
 
+#define STR_BROKEN_MACRO_CERTIFICATE_DATA           NC_("STR_BROKEN_MACRO_CERTIFICATE_DATA", "Macro security problem!\n\nBroken certificate data: %{data}")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
