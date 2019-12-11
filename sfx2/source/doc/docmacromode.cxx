@@ -166,6 +166,12 @@ namespace sfx2
             ||  ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
             )
         {
+            // check confirm first, as nMacroExecutionMode is always overwritten by the GetMacroSecurityLevel() switch
+            if (nMacroExecutionMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION)
+                eAutoConfirm = eAutoConfirmReject;
+            else if (nMacroExecutionMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION)
+                eAutoConfirm = eAutoConfirmApprove;
+
             SvtSecurityOptions aOpt;
             switch ( aOpt.GetMacroSecurityLevel() )
             {
@@ -185,11 +191,6 @@ namespace sfx2
                     OSL_FAIL( "DocumentMacroMode::adjustMacroMode: unexpected macro security level!" );
                     nMacroExecutionMode = MacroExecMode::NEVER_EXECUTE;
             }
-
-            if ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
-                eAutoConfirm = eAutoConfirmReject;
-            else if ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
-                eAutoConfirm = eAutoConfirmApprove;
         }
 
         if ( nMacroExecutionMode == MacroExecMode::NEVER_EXECUTE )
