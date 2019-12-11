@@ -57,7 +57,7 @@ typedef cppu::WeakImplHelper
     css::linguistic2::XLinguServiceEventBroadcaster
 > PropertyChgHelperBase;
 
-class PropertyChgHelper :
+class LNG_DLLPUBLIC PropertyChgHelper :
     public PropertyChgHelperBase
 {
     css::uno::Sequence< OUString >                      aPropNames;
@@ -118,8 +118,8 @@ public:
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override;
 
     // non-UNO functions
-    void    LNG_DLLPUBLIC AddAsPropListener();
-    void    LNG_DLLPUBLIC RemoveAsPropListener();
+    void    AddAsPropListener();
+    void    RemoveAsPropListener();
     void    LaunchEvent( const css::linguistic2::LinguServiceEvent& rEvt );
 
     const css::uno::Sequence< OUString > &
@@ -131,7 +131,7 @@ public:
 };
 
 
-class PropertyHelper_Thes :
+class PropertyHelper_Thes final :
     public PropertyChgHelper
 {
     PropertyHelper_Thes( const PropertyHelper_Thes & ) = delete;
@@ -167,7 +167,7 @@ public:
 };
 
 
-class LNG_DLLPUBLIC PropertyHelper_Spell :
+class LNG_DLLPUBLIC PropertyHelper_Spell final :
     public PropertyChgHelper
 {
     // default values
@@ -237,7 +237,7 @@ public:
 };
 
 
-class PropertyHelper_Hyphen :
+class PropertyHelper_Hyphen final :
     public PropertyChgHelper
 {
     // default values
