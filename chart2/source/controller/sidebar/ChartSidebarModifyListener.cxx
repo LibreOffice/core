@@ -27,12 +27,14 @@ ChartSidebarModifyListener::~ChartSidebarModifyListener()
 
 void ChartSidebarModifyListener::modified(const css::lang::EventObject& /*rEvent*/)
 {
-    mpParent->updateData();
+    if (mpParent)
+        mpParent->updateData();
 }
 
 void ChartSidebarModifyListener::disposing(const css::lang::EventObject& /*rEvent*/)
 {
     mpParent->modelInvalid();
+    mpParent = nullptr;
 }
 
 } }

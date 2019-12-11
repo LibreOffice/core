@@ -61,12 +61,14 @@ void ChartSidebarSelectionListener::selectionChanged(const css::lang::EventObjec
         }
     }
 
-    mpParent->selectionChanged(bCorrectObjectSelected);
+    if (mpParent)
+        mpParent->selectionChanged(bCorrectObjectSelected);
 }
 
 void ChartSidebarSelectionListener::disposing(const css::lang::EventObject& /*rEvent*/)
 {
     mpParent->SelectionInvalid();
+    mpParent = nullptr;
 }
 
 void ChartSidebarSelectionListener::setAcceptedTypes(const std::vector<ObjectType>& aTypes)
