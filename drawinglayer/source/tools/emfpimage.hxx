@@ -25,14 +25,6 @@
 
 namespace emfplushelper
 {
-
-    typedef enum
-    {
-        ImageDataTypeUnknown = 0x00000000,
-        ImageDataTypeBitmap = 0x00000001,
-        ImageDataTypeMetafile = 0x00000002
-    } ImageDataType;
-
     struct EMFPImage : public EMFPObject
     {
         sal_uInt32 type;
