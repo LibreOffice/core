@@ -138,7 +138,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     bool PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, bool bMove,
                         bool bIsXSelection );
-    bool PrivatePaste( SwWrtShell& rShell, SwPasteContext* pContext = nullptr );
+    bool PrivatePaste( SwWrtShell& rShell, SwPasteContext* pContext = nullptr, bool bNestedTable = false );
 
     void SetDataForDragAndDrop( const Point& rSttPos );
 
@@ -180,7 +180,7 @@ public:
 
     // paste - methods and helper methods for the paste
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
-    static bool Paste( SwWrtShell&, TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA, bool bIgnoreComments = false );
+    static bool Paste( SwWrtShell&, TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA, bool bIgnoreComments = false, bool bTableInCell = false );
     static bool PasteData( TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt8 nAction, SotExchangeActionFlags nActionFlags,
                           SotClipboardFormatId nFormat,
@@ -189,7 +189,8 @@ public:
                           const Point* pDDPos = nullptr, sal_Int8 nDropAction = 0,
                           bool bPasteSelection = false, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
                           bool bIgnoreComments = false,
-                          SwPasteContext* pContext = nullptr );
+                          SwPasteContext* pContext = nullptr,
+                          bool bNestedTable = false );
 
     static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );

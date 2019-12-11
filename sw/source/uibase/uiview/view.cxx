@@ -594,7 +594,7 @@ void SwView::CheckReadonlyState()
             SID_DELETE,                 FN_BACKSPACE,               FN_SHIFT_BACKSPACE,
             SID_UNDO,
             SID_REDO,                   SID_REPEAT,                 SID_PASTE,
-            SID_PASTE_UNFORMATTED,
+            SID_PASTE_UNFORMATTED,      FN_PASTE_NESTED_TABLE,
             SID_PASTE_SPECIAL,          SID_SBA_BRW_INSERT,
             SID_BACKGROUND_COLOR,       FN_INSERT_BOOKMARK,         SID_CHARMAP_CONTROL,
             SID_CHARMAP,                SID_EMOJI_CONTROL,          FN_INSERT_SOFT_HYPHEN,
@@ -1830,11 +1830,13 @@ bool SwView::IsPasteSpecialAllowed()
     SotExchangeDest nPasteDestination = SwTransferable::GetSotDestination( *m_pWrtShell );
     if( m_nLastPasteDestination != nPasteDestination )
     {
+
         TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
                                                         &GetEditWin()) );
         if( aDataHelper.GetXTransferable().is() )
         {
+
             m_bPasteState = SwTransferable::IsPaste( *m_pWrtShell, aDataHelper );
             m_bPasteSpecialState = SwTransferable::IsPasteSpecial(
                                                     *m_pWrtShell, aDataHelper );
@@ -1846,6 +1848,19 @@ bool SwView::IsPasteSpecialAllowed()
             m_pViewImpl->AddClipboardListener();
     }
     return m_bPasteSpecialState;
+}
+
+bool SwView::IsPasteSpreadsheet()
+{
+    TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard(
+                                                        &GetEditWin()) );
+    if( aDataHelper.GetXTransferable().is() )
+    {
+        return aDataHelper.HasFormat( SotClipboardFormatId::SYLK ) ||
+               aDataHelper.HasFormat( SotClipboardFormatId::SYLK_BIGCAPS );
+    }
+    return false;
 }
 
 void SwView::NotifyDBChanged()
