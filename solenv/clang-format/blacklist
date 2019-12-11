@@ -3857,6 +3857,8 @@ drawinglayer/source/processor3d/zbufferprocessor3d.cxx
 drawinglayer/source/texture/texture.cxx
 drawinglayer/source/texture/texture3d.cxx
 drawinglayer/source/tools/converters.cxx
+drawinglayer/source/tools/emfpenums.cxx
+drawinglayer/source/tools/emfpenums.hxx
 drawinglayer/source/tools/emfpbrush.cxx
 drawinglayer/source/tools/emfpbrush.hxx
 drawinglayer/source/tools/emfpcustomlinecap.cxx
