@@ -241,11 +241,7 @@ public:
         {
             return true;
         }
-        layout_.insert(expr->getTypeSourceInfo()
-                           ->getType()
-                           ->castAs<RecordType>()
-                           ->getDecl()
-                           ->getCanonicalDecl());
+        recordRecordDeclAndBases(expr->getTypeSourceInfo()->getType()->castAs<RecordType>());
         return true;
     }
 
@@ -281,7 +277,7 @@ public:
         }
         if (auto const t1 = t->getAs<RecordType>())
         {
-            layout_.insert(t1->getDecl()->getCanonicalDecl());
+            recordRecordDeclAndBases(t1);
         }
         return true;
     }
@@ -385,6 +381,24 @@ private:
         return t.isTrivialType(compiler.getASTContext()) || isWarnUnusedType(t);
     }
 
+    void recordRecordDeclAndBases(RecordType const* type)
+    {
+        auto const d1 = type->getDecl();
+        if (!layout_.insert(d1->getCanonicalDecl()).second)
+        {
+            return;
+        }
+        if (auto const d2 = dyn_cast_or_null<CXXRecordDecl>(d1->getDefinition()))
+        {
+            for (auto i = d2->bases_begin(); i != d2->bases_end(); ++i)
+            {
+                recordRecordDeclAndBases(i->getType()->castAs<RecordType>());
+            }
+            //TODO: doesn't iterate vbases, but presence of such would run counter to the layout
+            // heuristic anyway
+        }
+    }
+
     void recordCastedRecordDecl(QualType type)
     {
         for (auto t = type;;)
@@ -396,7 +410,7 @@ private:
             }
             if (auto const t1 = t->getAs<RecordType>())
             {
-                layout_.insert(t1->getDecl()->getCanonicalDecl());
+                recordRecordDeclAndBases(t1);
             }
             break;
         }

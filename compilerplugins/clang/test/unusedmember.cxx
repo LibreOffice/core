@@ -145,6 +145,25 @@ void f()
 }
 }
 
+namespace Bases
+{
+namespace
+{
+struct S1
+{
+    int i1;
+};
+struct S2 : S1
+{
+    int i2;
+};
+struct S3 : S2
+{
+};
+}
+void f() { (void)sizeof(S3); }
+}
+
 int main()
 {
     (void)&Enum::f;
@@ -153,6 +172,7 @@ int main()
     (void)&UnusedDataMember::f;
     (void)&Alignof::f;
     (void)&Aligned::f;
+    (void)&Bases::f;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
