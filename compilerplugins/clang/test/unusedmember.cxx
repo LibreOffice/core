@@ -164,6 +164,45 @@ struct S3 : S2
 void f() { (void)sizeof(S3); }
 }
 
+namespace Unnamed
+{
+namespace
+{
+struct S
+{
+    struct
+    {
+        struct
+        {
+            int i;
+        } s2;
+        struct // anonymous struct extension (widely supported)
+        {
+            int j;
+        };
+        int k;
+    } s1;
+#if false //TODO: see corresponding TODO in compilerplugins/clang/unusedmember.cxx
+    static constexpr struct
+    {
+        int l; // expected-error {{unused class member [loplugin:unusedmember]}}
+    } s = {};
+#endif
+    typedef struct
+    {
+        int m; // expected-error {{unused class member [loplugin:unusedmember]}}
+    } t; // expected-error {{unused class member [loplugin:unusedmember]}}
+};
+}
+void f()
+{
+    (void)sizeof(S);
+#if false //TODO: see corresponding TODO in compilerplugins/clang/unusedmember.cxx
+    (void)S::s; // avoid "unused variable 's'" (non-loplugin) warning
+#endif
+}
+}
+
 int main()
 {
     (void)&Enum::f;
@@ -173,6 +212,7 @@ int main()
     (void)&Alignof::f;
     (void)&Aligned::f;
     (void)&Bases::f;
+    (void)&Unnamed::f;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

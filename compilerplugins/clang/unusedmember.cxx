@@ -352,7 +352,33 @@ public:
         {
             if (auto const d1 = dyn_cast<FieldDecl>(d))
             {
-                if (layout_.find(d1->getParent()->getCanonicalDecl()) != layout_.end())
+                bool layout = false;
+                for (auto d2 = d1->getParent();;)
+                {
+                    if (layout_.find(d2->getCanonicalDecl()) != layout_.end())
+                    {
+                        layout = true;
+                        break;
+                    }
+                    // Heuristic to recursivley check parent RecordDecl if given RecordDecl is
+                    // unnamed and either an anonymous struct (or union, but which are already
+                    // filtered out anyway), or defined in a non-static data member declaration
+                    // (TODO: which is erroneously approximated here with getTypedefNameForAnonDecl
+                    // for now, which fails to filter out RecordDecls in static data member
+                    // declarations):
+                    if (!(d2->getDeclName().isEmpty()
+                          && (d2->isAnonymousStructOrUnion()
+                              || d2->getTypedefNameForAnonDecl() == nullptr)))
+                    {
+                        break;
+                    }
+                    d2 = dyn_cast<RecordDecl>(d2->getParent());
+                    if (d2 == nullptr)
+                    {
+                        break;
+                    }
+                }
+                if (layout)
                 {
                     continue;
                 }
