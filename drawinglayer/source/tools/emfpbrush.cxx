@@ -49,19 +49,6 @@ namespace emfplushelper
     {
     }
 
-    static OUString BrushTypeToString(sal_uInt32 type)
-    {
-        switch (type)
-        {
-            case BrushTypeSolidColor: return "BrushTypeSolidColor";
-            case BrushTypeHatchFill: return "BrushTypeHatchFill";
-            case BrushTypeTextureFill: return "BrushTypeTextureFill";
-            case BrushTypePathGradient: return "BrushTypePathGradient";
-            case BrushTypeLinearGradient: return "BrushTypeLinearGradient";
-        }
-        return "";
-    }
-
     void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
         sal_uInt32 header;

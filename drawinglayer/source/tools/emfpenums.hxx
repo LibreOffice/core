@@ -24,9 +24,192 @@
 
 namespace emfplushelper
 {
+    OUString EMFPlusTypeToString(sal_uInt16 type);
+    OUString ObjectTypeToString(sal_uInt16 type);
+    OUString PixelOffsetModeToString(sal_uInt16 nPixelOffset);
+    OUString SmoothingModeToString(sal_uInt16 nSmoothMode);
+    OUString TextRenderingHintToString(sal_uInt16 nHint);
+    OUString InterpolationModeToString(sal_uInt16 nMode);
+    OUString UnitTypeToString(sal_uInt16 type);
+    OUString BrushTypeToString(sal_uInt32 type);
+    bool IsBrush(sal_uInt16 flags);
+    OUString BrushIDToString(sal_uInt16 flags, sal_uInt32 brushid);
     OUString BrushDataFlagsToString(sal_uInt32 brush);
+    OUString HatchStyleToString(sal_uInt32 style);
     OUString WrapModeToString(sal_uInt32 mode);
     OUString ImageDataTypeToString(sal_uInt32 type);
+    OUString PixelFormatToString(sal_uInt32 format);
+    bool PixelFormatUsesPalette(sal_uInt32 format);
+    bool PixelFormatGDISupported(sal_uInt32 format);
+    bool PixelFormatIncludesAlpha(sal_uInt32 format);
+    bool PixelFormatIsPremultiplied(sal_uInt32 format);
+    bool PixelFormatSupportsExtendedColors(sal_uInt32 format);
+    bool PixelFormatIsCanonical(sal_uInt32 format);
+    sal_uInt32 PixelFormatBitsPerPixel(sal_uInt32 format);
+    sal_uInt32 PixelFormatEnumerationIndex(sal_uInt32 format);
+    OUString GraphicsVersionToString(sal_uInt32);
+    OUString BitmapDataTypeToString(sal_uInt32 type);
+
+    // EMF+ commands
+    #define EmfPlusRecordTypeHeader 0x4001
+    #define EmfPlusRecordTypeEndOfFile 0x4002
+    #define EmfPlusRecordTypeComment 0x4003
+    #define EmfPlusRecordTypeGetDC 0x4004
+    //TODO EmfPlusRecordTypeMultiFormatStart 0x4005
+    //TODO EmfPlusRecordTypeMultiFormatSection 0x4006
+    //TODO EmfPlusRecordTypeMultiFormatEnd 0x4007
+    #define EmfPlusRecordTypeObject 0x4008
+    //TODO EmfPlusRecordTypeClear 0x4009
+    #define EmfPlusRecordTypeFillRects 0x400A
+    #define EmfPlusRecordTypeDrawRects 0x400B
+    #define EmfPlusRecordTypeFillPolygon 0x400C
+    #define EmfPlusRecordTypeDrawLines 0x400D
+    #define EmfPlusRecordTypeFillEllipse 0x400E
+    #define EmfPlusRecordTypeDrawEllipse 0x400F
+    #define EmfPlusRecordTypeFillPie 0x4010
+    #define EmfPlusRecordTypeDrawPie 0x4011
+    #define EmfPlusRecordTypeDrawArc 0x4012
+    #define EmfPlusRecordTypeFillRegion 0x4013
+    #define EmfPlusRecordTypeFillPath 0x4014
+    #define EmfPlusRecordTypeDrawPath 0x4015
+    //TODO EmfPlusRecordTypeFillClosedCurve 0x4016
+    //TODO EmfPlusRecordTypeDrawClosedCurve 0x4017
+    //TODO EmfPlusRecordTypeDrawCurve 0x4018
+    #define EmfPlusRecordTypeDrawBeziers 0x4019
+    #define EmfPlusRecordTypeDrawImage 0x401A
+    #define EmfPlusRecordTypeDrawImagePoints 0x401B
+    #define EmfPlusRecordTypeDrawString 0x401C
+    #define EmfPlusRecordTypeSetRenderingOrigin 0x401D
+    #define EmfPlusRecordTypeSetAntiAliasMode 0x401E
+    #define EmfPlusRecordTypeSetTextRenderingHint 0x401F
+    #define EmfPlusRecordTypeSetTextContrast 0x4020
+    #define EmfPlusRecordTypeSetInterpolationMode 0x4021
+    #define EmfPlusRecordTypeSetPixelOffsetMode 0x4022
+    //TODO EmfPlusRecordTypeSetCompositingMode 0x4023
+    #define EmfPlusRecordTypeSetCompositingQuality 0x4024
+    #define EmfPlusRecordTypeSave 0x4025
+    #define EmfPlusRecordTypeRestore 0x4026
+    //TODO EmfPlusRecordTypeBeginContainer 0x4027
+    #define EmfPlusRecordTypeBeginContainerNoParams 0x4028
+    #define EmfPlusRecordTypeEndContainer 0x4029
+    #define EmfPlusRecordTypeSetWorldTransform 0x402A
+    #define EmfPlusRecordTypeResetWorldTransform 0x402B
+    #define EmfPlusRecordTypeMultiplyWorldTransform 0x402C
+    #define EmfPlusRecordTypeTranslateWorldTransform 0x402D
+    #define EmfPlusRecordTypeScaleWorldTransform 0x402E
+    #define EmfPlusRecordTypeRotateWorldTransform 0x402F
+    #define EmfPlusRecordTypeSetPageTransform 0x4030
+    #define EmfPlusRecordTypeResetClip 0x4031
+    #define EmfPlusRecordTypeSetClipRect 0x4032
+    #define EmfPlusRecordTypeSetClipPath 0x4033
+    #define EmfPlusRecordTypeSetClipRegion 0x4034
+    #define EmfPlusRecordTypeOffsetClip 0x4035
+    #define EmfPlusRecordTypeDrawDriverString 0x4036
+    //TODO EmfPlusRecordTypeStrokeFillPath 0x4037
+    //TODO EmfPlusRecordTypeSerializableObject 0x4038
+    //TODO EmfPlusRecordTypeSetTSGraphics 0x4039
+    //TODO EmfPlusRecordTypeSetTSClip 0x403A
+
+    enum ObjectType
+    {
+        ObjectTypeInvalid = 0x00000000,
+        ObjectTypeBrush = 0x00000001,
+        ObjectTypePen = 0x00000002,
+        ObjectTypePath = 0x00000003,
+        ObjectTypeRegion = 0x00000004,
+        ObjectTypeImage = 0x00000005,
+        ObjectTypeFont = 0x00000006,
+        ObjectTypeStringFormat = 0x00000007,
+        ObjectTypeImageAttributes = 0x00000008,
+        ObjectTypeCustomLineCap = 0x00000009
+    };
+
+    enum BitmapDataType
+    {
+        BitmapDataTypePixel = 0x00000000,
+        BitmapDataTypeCompressed = 0x00000001
+    };
+
+    enum PixelFormat
+    {
+        PixelFormatUndefined = 0x00000000,
+        PixelFormat1bppIndexed = 0x00030101,
+        PixelFormat4bppIndexed = 0x00030402,
+        PixelFormat8bppIndexed = 0x00030803,
+        PixelFormat16bppGrayScale = 0x00101004,
+        PixelFormat16bppRGB555 = 0x00021005,
+        PixelFormat16bppRGB565 = 0x00021006,
+        PixelFormat16bppARGB1555 = 0x00061007,
+        PixelFormat24bppRGB = 0x00021808,
+        PixelFormat32bppRGB = 0x00022009,
+        PixelFormat32bppARGB = 0x0026200A,
+        PixelFormat32bppPARGB = 0x000E200B,
+        PixelFormat48bppRGB = 0x0010300C,
+        PixelFormat64bppARGB = 0x0034400D,
+        PixelFormat64bppPARGB = 0x001A400E
+    };
+
+    enum PixelOffsetMode
+    {
+        PixelOffsetModeDefault = 0x00,
+        PixelOffsetModeHighSpeed = 0x01,
+        PixelOffsetModeHighQuality = 0x02,
+        PixelOffsetModeNone = 0x03,
+        PixelOffsetModeHalf = 0x04
+    };
+
+    enum SmoothingMode
+    {
+        SmoothingModeDefault = 0x00,
+        SmoothingModeHighSpeed = 0x01,
+        SmoothingModeHighQuality = 0x02,
+        SmoothingModeNone = 0x03,
+        SmoothingModeAntiAlias8x4 = 0x04,
+        SmoothingModeAntiAlias8x8 = 0x05
+    };
+
+    enum TextRenderingHint
+    {
+        TextRenderingHintSystemDefault = 0x00,
+        TextRenderingHintSingleBitPerPixelGridFit = 0x01,
+        TextRenderingHintSingleBitPerPixel = 0x02,
+        TextRenderingHintAntialiasGridFit = 0x03,
+        TextRenderingHintAntialias = 0x04,
+        TextRenderingHintClearTypeGridFit = 0x05
+    };
+
+    enum InterpolationMode
+    {
+        InterpolationModeDefault = 0x00,
+        InterpolationModeLowQuality = 0x01,
+        InterpolationModeHighQuality = 0x02,
+        InterpolationModeBilinear = 0x03,
+        InterpolationModeBicubic = 0x04,
+        InterpolationModeNearestNeighbor = 0x05,
+        InterpolationModeHighQualityBilinear = 0x06,
+        InterpolationModeHighQualityBicubic = 0x07
+    };
+
+    enum UnitType
+    {
+        UnitTypeWorld = 0x00,
+        UnitTypeDisplay = 0x01,
+        UnitTypePixel = 0x02,
+        UnitTypePoint = 0x03,
+        UnitTypeInch = 0x04,
+        UnitTypeDocument = 0x05,
+        UnitTypeMillimeter = 0x06
+    };
+
+    enum EmfPlusCombineMode
+    {
+        EmfPlusCombineModeReplace = 0x00000000,
+        EmfPlusCombineModeIntersect = 0x00000001,
+        EmfPlusCombineModeUnion = 0x00000002,
+        EmfPlusCombineModeXOR = 0x00000003,
+        EmfPlusCombineModeExclude = 0x00000004,
+        EmfPlusCombineModeComplement = 0x00000005
+    };
 
     enum EmfPlusHatchStyle
     {
