@@ -150,7 +150,7 @@ ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, const 
     pTempFile->EnableKillingFile();
     OUString sFileURL = pTempFile->GetURL();
     // Note: under Windows path path should be with "/" delimiters instead of "\\"
-    // due to usage of INetURLObject() that converts "\\" to hexdecimal notation.
+    // due to usage of INetURLObject() that converts "\\" to hexadecimal notation.
     ::osl::FileBase::getFileURLFromSystemPath(sFileURL, sFileURL);
 
     // get XSpreadsheet

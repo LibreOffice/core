@@ -778,8 +778,8 @@ bool SwNumberTreeNode::IsFirst() const
             }
 
             // If node isn't the first child, it is the second child and the
-            // first child is a phanton. In this case check, if the first phantom
-            // child have only phanton children
+            // first child is a phantom. In this case check, if the first phantom
+            // child have only phantom children
             if ( bResult &&
                  this != *(GetParent()->mChildren.begin()) &&
                  !(*(GetParent()->mChildren.begin()))->HasOnlyPhantoms() )
