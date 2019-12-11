@@ -186,8 +186,10 @@ functionality that these libraries offer, see the "C++ Reference" section of the
 SDK HTML documentation.  The corresponding C++ header files are not in the URE,
 but rather in the SDK.
 
-- unoloader.jar, juh.jar, jurt.jar, and ridl.jar are the public Java UNO runtime
-Java[tm] Archives (JARs) that client code can call.  For details on the
+- unoloader.jar, juh.jar, and ridl.jar are the public Java UNO runtime
+Java[tm] Archives (JARs) that client code can call (jurt.jar is still provided
+for backwards compatibility, but is basically empty and has been merged into
+ridl.jar).  For details on the
 functionality that these files offer, see the "Java UNO Runtime Reference"
 section of the SDK HTML documentation.
 

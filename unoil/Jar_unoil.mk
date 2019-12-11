@@ -9,12 +9,8 @@
 
 $(eval $(call gb_Jar_Jar,unoil))
 
-$(eval $(call gb_Jar_use_customtargets,unoil,\
-    unoil/javamaker \
-))
-
-$(eval $(call gb_Jar_add_packagedirs,unoil,\
-    $(call gb_CustomTarget_get_workdir,unoil/javamaker)/com \
+$(eval $(call gb_Jar_add_manifest_classpath,unoil, \
+    ridl.jar \
 ))
 
 # vim:set noet sw=4 ts=4:
