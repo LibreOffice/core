@@ -567,6 +567,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
     mxLbFormsFormat->set_active(static_cast<sal_uInt16>(pParent->mnFormsType));
     mxCbAllowDuplicateFieldNames->set_active( pParent->mbAllowDuplicateFieldNames );
+    mxFormsFrame->set_sensitive(pParent->mbExportFormFields);
 
     mxCbExportBookmarks->set_active( pParent->mbExportBookmarks );
 
@@ -670,6 +671,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
     else
         mbUseTaggedPDFUserSelection = pParent->mbUseTaggedPDF;
     pParent->mbUseTaggedPDFUserSelection = mbUseTaggedPDFUserSelection;
+    pParent->mbExportFormFields = mxCbExportFormFields->get_active();
 
     if( mxCbWatermark->get_active() )
         pParent->maWatermarkText = mxEdWatermark->get_text();
