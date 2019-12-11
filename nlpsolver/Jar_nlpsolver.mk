@@ -21,8 +21,6 @@ $(eval $(call gb_Jar_Jar,nlpsolver))
 
 $(eval $(call gb_Jar_use_jars,nlpsolver,\
 	ridl \
-	unoil \
-	jurt \
 	juh \
 	java_uno \
 	EvolutionarySolver \

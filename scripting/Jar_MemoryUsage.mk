@@ -11,9 +11,7 @@ $(eval $(call gb_Jar_Jar,MemoryUsage))
 
 $(eval $(call gb_Jar_use_jars,MemoryUsage,\
 	juh \
-	jurt \
 	ridl \
-	unoil \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,MemoryUsage,\

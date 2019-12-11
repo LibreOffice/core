@@ -36,11 +36,10 @@ c++)
     printf '%s' "$sd_prog/../Frameworks"
     ;;
 java)
-    printf '0%s\0%s\0%s\0%s\0%s' \
+    printf '0%s\0%s\0%s' \
         "$sd_prog/../Resources/java/ridl.jar" \
-        "$sd_prog/../Resources/java/jurt.jar" \
         "$sd_prog/../Resources/java/juh.jar" \
-        "$sd_prog/../Resources/java/unoil.jar" "$sd_prog"
+        "$sd_prog"
     ;;
 *)
     exit 1

@@ -89,7 +89,7 @@ $(call gb_Jar_get_target,$(1)) :
 endef
 
 # resets scoped variables (see explanations where they are set)
-# creates a class set and a dependency to it 
+# creates a class set and a dependency to it
 # registers target and clean target
 # adds jar files to DeliverLogTarget
 define gb_Jar_Jar
@@ -250,7 +250,7 @@ define gb_Jar_use_external_project
 $(call gb_JavaClassSet_use_external_project,$(call gb_Jar_get_classsetname,$(1)),$(2))
 endef
 
-# possible directories for jar files containing UNO services 
+# possible directories for jar files containing UNO services
 gb_Jar_COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dLO_JAVA_DIR/ \
     URE:vnd.sun.star.expand:\dURE_INTERNAL_JAVA_DIR/ \

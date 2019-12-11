@@ -12,8 +12,6 @@ $(eval $(call gb_Jar_Jar,ConnectivityTools))
 
 $(eval $(call gb_Jar_use_jars,ConnectivityTools,\
 	ridl \
-	unoil \
-	jurt \
 	juh \
 	java_uno \
 	OOoRunner \

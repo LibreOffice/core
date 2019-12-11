@@ -22,7 +22,6 @@ $(eval $(call gb_Jar_set_packageroot,active_java,com))
 $(eval $(call gb_Jar_use_jars,active_java, \
     juh \
     ridl \
-    unoil \
 ))
 
 # vim: set noet sw=4 ts=4:

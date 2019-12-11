@@ -10,14 +10,12 @@
 $(eval $(call gb_Jar_Jar,juh))
 
 $(eval $(call gb_Jar_use_jars,juh,\
-    jurt \
     ridl \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,juh,com))
 
 $(eval $(call gb_Jar_add_manifest_classpath,juh, \
-    jurt.jar \
     ridl.jar \
     $(if $(filter MACOSX,$(OS)),../../Frameworks/,../) \
 ))

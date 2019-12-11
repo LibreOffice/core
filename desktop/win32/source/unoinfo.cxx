@@ -77,11 +77,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         wchar_t * pathEnd = getBrandPath(path);
         writePath(path, pathEnd, MY_STRING(L"classes\\ridl.jar"));
         writeNull();
-        writePath(path, pathEnd, MY_STRING(L"classes\\jurt.jar"));
-        writeNull();
         writePath(path, pathEnd, MY_STRING(L"classes\\juh.jar"));
-        writeNull();
-        writePath(path, pathEnd, MY_STRING(L"classes\\unoil.jar"));
         writeNull();
         writePath(path, pathEnd, MY_STRING(L""));
     } else {

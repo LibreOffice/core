@@ -9,13 +9,6 @@
 
 $(eval $(call gb_Jar_Jar,unoloader))
 
-$(eval $(call gb_Jar_set_packageroot,unoloader,com))
-
 $(eval $(call gb_Jar_set_manifest,unoloader,$(SRCDIR)/ridljar/source/unoloader/com/sun/star/lib/unoloader/manifest))
-
-$(eval $(call gb_Jar_add_sourcefiles,unoloader,\
-    ridljar/source/unoloader/com/sun/star/lib/unoloader/UnoClassLoader \
-    ridljar/source/unoloader/com/sun/star/lib/unoloader/UnoLoader \
-))
 
 # vim:set noet sw=4 ts=4:

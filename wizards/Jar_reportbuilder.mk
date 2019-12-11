@@ -21,8 +21,6 @@ $(eval $(call gb_Jar_Jar,reportbuilderwizard))
 
 $(eval $(call gb_Jar_use_jars,reportbuilderwizard,\
 	ridl \
-	unoil \
-	jurt \
 	juh \
 	java_uno \
 	commonwizards \
