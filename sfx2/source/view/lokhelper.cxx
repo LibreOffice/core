@@ -191,14 +191,18 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
 namespace {
     OUString lcl_getNameForSlot(const SfxViewShell* pShell, sal_uInt16 nWhich)
     {
-        if (pShell->GetFrame())
+        if (pShell && pShell->GetFrame())
         {
             const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(pShell->GetFrame()).GetSlot(nWhich);
             if (pSlot)
             {
                 OUStringBuffer sUnoCommand(".uno:");
-                sUnoCommand.append(OStringToOUString(pSlot->GetUnoName(), RTL_TEXTENCODING_ASCII_US));
-                return sUnoCommand.makeStringAndClear();
+                const char* pName = pSlot->GetUnoName();
+                if (pName)
+                {
+                    sUnoCommand.append(OStringToOUString(pName, RTL_TEXTENCODING_ASCII_US));
+                    return sUnoCommand.makeStringAndClear();
+                }
             }
         }
 
@@ -208,7 +212,7 @@ namespace {
 
 void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem)
 {
-    if (!pShell || !pItem)
+    if (!pShell || !pItem || pItem == reinterpret_cast<const SfxPoolItem*>(-1))
         return;
 
     boost::property_tree::ptree aItem = pItem->dumpAsJSON();
