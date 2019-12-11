@@ -527,7 +527,7 @@ void SwFrame::UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     {
         case RES_BOX:
         case RES_SHADOW:
-            Prepare( PREP_FIXSIZE_CHG );
+            Prepare( PrepareHint::FixSizeChanged );
             [[fallthrough]];
         case RES_LR_SPACE:
         case RES_UL_SPACE:
@@ -1046,20 +1046,20 @@ void SwContentFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
         if( pNxt->IsSctFrame() )
             pNxt = static_cast<SwSectionFrame*>(pNxt)->ContainsContent();
         if( pNxt && pNxt->IsTextFrame() && pNxt->IsInFootnote() )
-            pNxt->Prepare( PREP_FTN, nullptr, false );
+            pNxt->Prepare( PrepareHint::FootnoteInvalidation, nullptr, false );
     }
 
     if ( getFrameArea().Height() )
         pParent->Grow( getFrameArea().Height() );
 
     if ( getFrameArea().Width() != pParent->getFramePrintArea().Width() )
-        Prepare( PREP_FIXSIZE_CHG );
+        Prepare( PrepareHint::FixSizeChanged );
 
     if ( GetPrev() )
     {
         if ( IsFollow() )
             //I'm a direct follower of my master now
-            static_cast<SwContentFrame*>(GetPrev())->Prepare( PREP_FOLLOW_FOLLOWS );
+            static_cast<SwContentFrame*>(GetPrev())->Prepare( PrepareHint::FollowFollows );
         else
         {
             if ( GetPrev()->getFrameArea().Height() !=
@@ -1086,7 +1086,7 @@ void SwContentFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
         if( pFrame && pFrame->IsSctFrame() )
             pFrame = static_cast<SwSectionFrame*>(pFrame)->ContainsAny();
         if( pFrame )
-            pFrame->Prepare( PREP_QUOVADIS, nullptr, false );
+            pFrame->Prepare( PrepareHint::QuoVadis, nullptr, false );
         if( !GetNext() )
         {
             pFrame = FindFootnoteFrame()->GetNext();
@@ -1128,7 +1128,7 @@ void SwContentFrame::Cut()
         {
             pFrame->InvalidatePrt_();
             if( IsInFootnote() )
-                pFrame->Prepare( PREP_QUOVADIS, nullptr, false );
+                pFrame->Prepare( PrepareHint::QuoVadis, nullptr, false );
         }
         // #i26250# - invalidate printing area of previous
         // table frame.
@@ -1172,7 +1172,7 @@ void SwContentFrame::Cut()
             }
         }
         if( pFrame && IsInFootnote() )
-            pFrame->Prepare( PREP_ERGOSUM, nullptr, false );
+            pFrame->Prepare( PrepareHint::ErgoSum, nullptr, false );
         if( IsInSct() && !GetPrev() )
         {
             SwSectionFrame* pSct = FindSctFrame();
@@ -1189,7 +1189,7 @@ void SwContentFrame::Cut()
         //Someone needs to do the retouching: predecessor or upper
         if ( nullptr != (pFrame = GetPrev()) )
         {   pFrame->SetRetouche();
-            pFrame->Prepare( PREP_WIDOWS_ORPHANS );
+            pFrame->Prepare( PrepareHint::WidowsOrphans );
             pFrame->InvalidatePos_();
             pFrame->InvalidatePage( pPage );
         }
@@ -1355,7 +1355,7 @@ void SwLayoutFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
                 if( pFrame->IsSctFrame() )
                     pFrame = static_cast<SwSectionFrame*>(pFrame)->ContainsAny();
                 if( pFrame )
-                    pFrame->Prepare( PREP_ERGOSUM, nullptr, false );
+                    pFrame->Prepare( PrepareHint::ErgoSum, nullptr, false );
             }
         }
         if ( IsInFootnote() && nullptr != ( pFrame = GetIndPrev() ) )
@@ -1363,7 +1363,7 @@ void SwLayoutFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
             if( pFrame->IsSctFrame() )
                 pFrame = static_cast<SwSectionFrame*>(pFrame)->ContainsAny();
             if( pFrame )
-                pFrame->Prepare( PREP_QUOVADIS, nullptr, false );
+                pFrame->Prepare( PrepareHint::QuoVadis, nullptr, false );
         }
     }
 
@@ -1997,7 +1997,7 @@ void SwFrame::ReinitializeFrameSizeAttrFlags()
                 pCnt->InvalidatePage();
                 do
                 {
-                    pCnt->Prepare( PREP_ADJUST_FRM );
+                    pCnt->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                     pCnt->InvalidateSize_();
                     pCnt = pCnt->GetNextContentFrame();
                 } while ( static_cast<SwLayoutFrame*>(this)->IsAnLower( pCnt ) );
@@ -2429,14 +2429,14 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                     // OD 2004-07-01 #i28701# - use new method <InvalidateObjs(..)>
                     GetIndNext()->InvalidateObjs();
                 }
-                Prepare( PREP_UL_SPACE );   //TextFrame has to correct line spacing.
+                Prepare( PrepareHint::ULSpaceChanged );   //TextFrame has to correct line spacing.
                 rInvFlags |= 0x80;
                 [[fallthrough]];
             }
         case RES_LR_SPACE:
         case RES_BOX:
         case RES_SHADOW:
-            Prepare( PREP_FIXSIZE_CHG );
+            Prepare( PrepareHint::FixSizeChanged );
             SwFrame::Modify( pOld, pNew );
             rInvFlags |= 0x30;
             break;
@@ -2935,7 +2935,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 // reference, we don't need to invalidate its master.
                 SwFrame *pTmp = pCnt->FindFootnoteBossFrame(true) == FindFootnoteBossFrame(true)
                               ?  &pCnt->FindMaster()->GetFrame() : pCnt;
-                pTmp->Prepare( PREP_ADJUST_FRM );
+                pTmp->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                 pTmp->InvalidateSize();
             }
             else
@@ -3039,7 +3039,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                     !SwFlowFrame::CastFlowFrame( pLowerFrame )->HasFollow() )
                     pLowerFrame->InvalidateNextPos( true );
                 if ( pLowerFrame->IsTextFrame() )
-                    static_cast<SwContentFrame*>(pLowerFrame)->Prepare( PREP_ADJUST_FRM );
+                    static_cast<SwContentFrame*>(pLowerFrame)->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
             }
             else
             {
@@ -3071,7 +3071,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                     pLowerFrame->InvalidateSize_();
                     pLowerFrame->InvalidatePage( pPage );
                     if ( pLowerFrame->IsTextFrame() )
-                        static_cast<SwContentFrame*>(pLowerFrame)->Prepare( PREP_ADJUST_FRM );
+                        static_cast<SwContentFrame*>(pLowerFrame)->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                 }
             }
             // #i41694# - improvement by removing duplicates
@@ -3133,9 +3133,9 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
         {
             // Text frames will only be invalidated - prepare invalidation
             if ( bFixChgd )
-                static_cast<SwContentFrame*>(pLowerFrame)->Prepare( PREP_FIXSIZE_CHG );
+                static_cast<SwContentFrame*>(pLowerFrame)->Prepare( PrepareHint::FixSizeChanged );
             if ( bVarChgd )
-                static_cast<SwContentFrame*>(pLowerFrame)->Prepare( PREP_ADJUST_FRM );
+                static_cast<SwContentFrame*>(pLowerFrame)->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
         }
         else
         {
@@ -4061,7 +4061,7 @@ static void lcl_InvalidateContent( SwContentFrame *pCnt, SwInvalidateFlags nInv 
         }
 
         if( nInv & SwInvalidateFlags::Size )
-            pCnt->Prepare( PREP_CLEAR, nullptr, false );
+            pCnt->Prepare( PrepareHint::Clear, nullptr, false );
         if( nInv & SwInvalidateFlags::Pos )
             pCnt->InvalidatePos_();
         if( nInv & SwInvalidateFlags::PrtArea )
@@ -4317,7 +4317,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                         if (pMerged)
                         {
                             // invalidate SwInvalidateFlags::Size
-                            pFrame->Prepare(PREP_CLEAR, nullptr, false);
+                            pFrame->Prepare(PrepareHint::Clear, nullptr, false);
                             pFrame->InvalidatePage();
                             if (auto const pObjs = pFrame->GetDrawObjs())
                             {   // also invalidate position of existing flys
@@ -4338,7 +4338,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                     if (auto const& pMergedPara = pFrame->GetMergedPara())
                     {
                         // invalidate SwInvalidateFlags::Size
-                        pFrame->Prepare(PREP_CLEAR, nullptr, false);
+                        pFrame->Prepare(PrepareHint::Clear, nullptr, false);
                         pFrame->InvalidatePage();
                         if (auto const pObjs = pFrame->GetDrawObjs())
                         {   // also invalidate position of existing flys

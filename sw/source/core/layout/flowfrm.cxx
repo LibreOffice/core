@@ -396,12 +396,12 @@ SwLayoutFrame *SwFlowFrame::CutTree( SwFrame *pStart )
         pLay = pLay->FindFootnoteFrame();
 
     // #i58846#
-    // <pPrepare( PREP_QUOVADIS )> only for frames in footnotes
+    // <pPrepare( PrepareHint::QuoVadis )> only for frames in footnotes
     if( pStart->IsInFootnote() )
     {
         SwFrame* pTmp = pStart->GetIndPrev();
         if( pTmp )
-            pTmp->Prepare( PREP_QUOVADIS );
+            pTmp->Prepare( PrepareHint::QuoVadis );
     }
 
     // Just cut quickly and take care that we don't cause problems with the
@@ -559,7 +559,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
             if( pSibling->IsSctFrame() )
                 pSibling = static_cast<SwSectionFrame*>(pSibling)->ContainsAny();
             if( pSibling )
-                pSibling->Prepare( PREP_ERGOSUM );
+                pSibling->Prepare( PrepareHint::ErgoSum );
         }
     }
     if ( nGrowVal )
@@ -1999,7 +1999,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 
             if( bBossChg )
             {
-                m_rThis.Prepare( PREP_BOSS_CHGD, nullptr, false );
+                m_rThis.Prepare( PrepareHint::BossChanged, nullptr, false );
                 if( !bSamePage )
                 {
                     SwViewShell *pSh = m_rThis.getRootFrame()->GetCurrShell();
@@ -2587,7 +2587,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         SwPageFrame *pNewPage = m_rThis.FindPageFrame();
         if( pNewPage != pOldPage )
         {
-            m_rThis.Prepare( PREP_BOSS_CHGD, static_cast<const void*>(pOldPage), false );
+            m_rThis.Prepare( PrepareHint::BossChanged, static_cast<const void*>(pOldPage), false );
             SwViewShell *pSh = m_rThis.getRootFrame()->GetCurrShell();
             if ( pSh && !pSh->Imp()->IsUpdateExpFields() )
                 pSh->GetDoc()->getIDocumentFieldsAccess().SetNewFieldLst(true);  // Will be done by CalcLayout() later on

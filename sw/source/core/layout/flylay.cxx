@@ -83,7 +83,7 @@ void SwFlyFreeFrame::DestroyImpl()
         else
         {
             SwRect aTmp( GetObjRectWithSpaces() );
-            SwFlyFreeFrame::NotifyBackground( GetPageFrame(), aTmp, PREP_FLY_LEAVE );
+            SwFlyFreeFrame::NotifyBackground( GetPageFrame(), aTmp, PrepareHint::FlyFrameLeave );
         }
     }
 
@@ -792,7 +792,7 @@ void SwFlyLayFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         }
         // #i28701# - use new method <GetPageFrame()>
         if ( pOldPage && pOldPage != GetPageFrame() )
-            NotifyBackground( pOldPage, aOld, PREP_FLY_LEAVE );
+            NotifyBackground( pOldPage, aOld, PrepareHint::FlyFrameLeave );
         SetCompletePaint();
         InvalidateAll();
         SetNotifyBack();

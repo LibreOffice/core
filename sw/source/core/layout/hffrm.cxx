@@ -345,7 +345,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                                     if (pTmpFrame->IsUndersized() )
                                     {
                                         pTmpFrame->InvalidateSize();
-                                        pTmpFrame->Prepare(PREP_ADJUST_FRM);
+                                        pTmpFrame->Prepare(PrepareHint::AdjustSizeWithoutFormatting);
                                     }
                                 }
                                 /* #i3568# Undersized sections need to be
@@ -357,7 +357,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                                     if (pTmpFrame->IsUndersized() )
                                     {
                                         pTmpFrame->InvalidateSize();
-                                        pTmpFrame->Prepare(PREP_ADJUST_FRM);
+                                        pTmpFrame->Prepare(PrepareHint::AdjustSizeWithoutFormatting);
                                     }
                                 }
                                 pFrame = pFrame->GetNext();

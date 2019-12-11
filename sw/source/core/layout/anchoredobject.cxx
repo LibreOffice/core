@@ -397,7 +397,7 @@ void SwAnchoredObject::InvalidateObjPosForConsiderWrapInfluence()
         // invalidate position
         InvalidateObjPos();
         // invalidate 'background'
-        NotifyBackground( GetPageFrame(), GetObjRectWithSpaces(), PREP_FLY_LEAVE );
+        NotifyBackground( GetPageFrame(), GetObjRectWithSpaces(), PrepareHint::FlyFrameLeave );
     }
 }
 

@@ -241,9 +241,9 @@ class SwParaPortion : public SwLineLayout
     // pLine) (compare with Orphans)
     bool m_bFlys          : 1; // Overlapping Flys?
     bool m_bPrep          : 1; // PREP_*
-    bool m_bPrepWidows    : 1; // PREP_WIDOWS
-    bool m_bPrepAdjust    : 1; // PREP_ADJUST_FRM
-    bool m_bPrepMustFit   : 1; // PREP_MUST_FIT
+    bool m_bPrepWidows    : 1; // PrepareHint::Widows
+    bool m_bPrepAdjust    : 1; // PrepareHint::AdjustSizeWithoutFormatting
+    bool m_bPrepMustFit   : 1; // PrepareHint::MustFit
     bool m_bFollowField   : 1; // We have a bit of field left for the Follow
 
     bool m_bFixLineHeight : 1; // Fixed line height
