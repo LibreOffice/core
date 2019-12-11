@@ -63,6 +63,8 @@
 #define STR_SELECTSIGN                              NC_("selectcertificatedialog|str_selectsign", "Select")
 #define STR_ENCRYPT                                 NC_("selectcertificatedialog|str_encrypt", "Encrypt")
 
+#define STR_BROKEN_MACRO_CERTIFICATE_DATA           NC_("STR_BROKEN_MACRO_CERTIFICATE_DATA", "Macro security problem!\n\nBroken certificate data: %{data}")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
