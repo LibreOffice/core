@@ -21,8 +21,6 @@ $(eval $(call gb_Jar_Jar,commonwizards))
 
 $(eval $(call gb_Jar_use_jars,commonwizards,\
 	ridl \
-	unoil \
-	jurt \
 	juh \
 	java_uno \
 ))

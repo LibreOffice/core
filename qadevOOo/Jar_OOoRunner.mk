@@ -15,15 +15,12 @@ $(eval $(call gb_Jar_Jar,OOoRunner))
 
 $(eval $(call gb_Jar_add_manifest_classpath,OOoRunner,\
 	ridl.jar \
-	unoil.jar \
 ))
 
 $(eval $(call gb_Jar_set_manifest,OOoRunner,$(SRCDIR)/qadevOOo/runner/manifest))
 
 $(eval $(call gb_Jar_use_jars,OOoRunner,\
 	ridl \
-	unoil \
-	jurt \
 	juh \
 	java_uno \
 ))
