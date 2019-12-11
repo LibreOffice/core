@@ -54,164 +54,6 @@
 
 namespace emfplushelper
 {
-    const char* emfTypeToName(sal_uInt16 type)
-    {
-        switch (type)
-        {
-            case EmfPlusRecordTypeHeader: return "EmfPlusRecordTypeHeader";
-            case EmfPlusRecordTypeEndOfFile: return "EmfPlusRecordTypeEndOfFile";
-            case EmfPlusRecordTypeComment: return "EmfPlusRecordTypeComment";
-            case EmfPlusRecordTypeGetDC: return "EmfPlusRecordTypeGetDC";
-            case EmfPlusRecordTypeObject: return "EmfPlusRecordTypeObject";
-            case EmfPlusRecordTypeFillRects: return "EmfPlusRecordTypeFillRects";
-            case EmfPlusRecordTypeDrawRects: return "EmfPlusRecordTypeDrawRects";
-            case EmfPlusRecordTypeFillPolygon: return "EmfPlusRecordTypeFillPolygon";
-            case EmfPlusRecordTypeDrawLines: return "EmfPlusRecordTypeDrawLines";
-            case EmfPlusRecordTypeFillEllipse: return "EmfPlusRecordTypeFillEllipse";
-            case EmfPlusRecordTypeDrawEllipse: return "EmfPlusRecordTypeDrawEllipse";
-            case EmfPlusRecordTypeFillPie: return "EmfPlusRecordTypeFillPie";
-            case EmfPlusRecordTypeDrawPie: return "EmfPlusRecordTypeDrawPie";
-            case EmfPlusRecordTypeDrawArc: return "EmfPlusRecordTypeDrawArc";
-            case EmfPlusRecordTypeFillRegion: return "EmfPlusRecordTypeFillRegion";
-            case EmfPlusRecordTypeFillPath: return "EmfPlusRecordTypeFillPath";
-            case EmfPlusRecordTypeDrawPath: return "EmfPlusRecordTypeDrawPath";
-            case EmfPlusRecordTypeDrawBeziers: return "EmfPlusRecordTypeDrawBeziers";
-            case EmfPlusRecordTypeDrawImage: return "EmfPlusRecordTypeDrawImage";
-            case EmfPlusRecordTypeDrawImagePoints: return "EmfPlusRecordTypeDrawImagePoints";
-            case EmfPlusRecordTypeDrawString: return "EmfPlusRecordTypeDrawString";
-            case EmfPlusRecordTypeSetRenderingOrigin: return "EmfPlusRecordTypeSetRenderingOrigin";
-            case EmfPlusRecordTypeSetAntiAliasMode: return "EmfPlusRecordTypeSetAntiAliasMode";
-            case EmfPlusRecordTypeSetTextRenderingHint: return "EmfPlusRecordTypeSetTextRenderingHint";
-            case EmfPlusRecordTypeSetTextContrast: return "EmfPlusRecordTypeSetTextContrast";
-            case EmfPlusRecordTypeSetInterpolationMode: return "EmfPlusRecordTypeSetInterpolationMode";
-            case EmfPlusRecordTypeSetPixelOffsetMode: return "EmfPlusRecordTypeSetPixelOffsetMode";
-            case EmfPlusRecordTypeSetCompositingQuality: return "EmfPlusRecordTypeSetCompositingQuality";
-            case EmfPlusRecordTypeSave: return "EmfPlusRecordTypeSave";
-            case EmfPlusRecordTypeRestore: return "EmfPlusRecordTypeRestore";
-            case EmfPlusRecordTypeBeginContainerNoParams: return "EmfPlusRecordTypeBeginContainerNoParams";
-            case EmfPlusRecordTypeEndContainer: return "EmfPlusRecordTypeEndContainer";
-            case EmfPlusRecordTypeSetWorldTransform: return "EmfPlusRecordTypeSetWorldTransform";
-            case EmfPlusRecordTypeResetWorldTransform: return "EmfPlusRecordTypeResetWorldTransform";
-            case EmfPlusRecordTypeMultiplyWorldTransform: return "EmfPlusRecordTypeMultiplyWorldTransform";
-            case EmfPlusRecordTypeTranslateWorldTransform: return "EmfPlusRecordTypeTranslateWorldTransform";
-            case EmfPlusRecordTypeScaleWorldTransform: return "EmfPlusRecordTypeScaleWorldTransform";
-            case EmfPlusRecordTypeSetPageTransform: return "EmfPlusRecordTypeSetPageTransform";
-            case EmfPlusRecordTypeResetClip: return "EmfPlusRecordTypeResetClip";
-            case EmfPlusRecordTypeSetClipRect: return "EmfPlusRecordTypeSetClipRect";
-            case EmfPlusRecordTypeSetClipPath: return "EmfPlusRecordTypeSetClipPath";
-            case EmfPlusRecordTypeSetClipRegion: return "EmfPlusRecordTypeSetClipRegion";
-            case EmfPlusRecordTypeOffsetClip: return "EmfPlusRecordTypeOffsetClip";
-            case EmfPlusRecordTypeDrawDriverString: return "EmfPlusRecordTypeDrawDriverString";
-        }
-        return "";
-    }
-
-    static OUString emfObjectToName(sal_uInt16 type)
-    {
-        switch (type)
-        {
-            case EmfPlusObjectTypeBrush: return "EmfPlusObjectTypeBrush";
-            case EmfPlusObjectTypePen: return "EmfPlusObjectTypePen";
-            case EmfPlusObjectTypePath: return "EmfPlusObjectTypePath";
-            case EmfPlusObjectTypeRegion: return "EmfPlusObjectTypeRegion";
-            case EmfPlusObjectTypeImage: return "EmfPlusObjectTypeImage";
-            case EmfPlusObjectTypeFont: return "EmfPlusObjectTypeFont";
-            case EmfPlusObjectTypeStringFormat: return "EmfPlusObjectTypeStringFormat";
-            case EmfPlusObjectTypeImageAttributes: return "EmfPlusObjectTypeImageAttributes";
-            case EmfPlusObjectTypeCustomLineCap: return "EmfPlusObjectTypeCustomLineCap";
-        }
-        return "";
-    }
-
-    static OUString PixelOffsetModeToString(sal_uInt16 nPixelOffset)
-    {
-        switch (nPixelOffset)
-        {
-            case PixelOffsetMode::PixelOffsetModeDefault: return "PixelOffsetModeDefault";
-            case PixelOffsetMode::PixelOffsetModeHighSpeed: return "PixelOffsetModeHighSpeed";
-            case PixelOffsetMode::PixelOffsetModeHighQuality: return "PixelOffsetModeHighQuality";
-            case PixelOffsetMode::PixelOffsetModeNone: return "PixelOffsetModeNone";
-            case PixelOffsetMode::PixelOffsetModeHalf: return "PixelOffsetModeHalf";
-        }
-        return "";
-    }
-
-    static OUString SmoothingModeToString(sal_uInt16 nSmoothMode)
-    {
-        switch (nSmoothMode)
-        {
-            case SmoothingMode::SmoothingModeDefault: return "SmoothingModeDefault";
-            case SmoothingMode::SmoothingModeHighSpeed: return "SmoothModeHighSpeed";
-            case SmoothingMode::SmoothingModeHighQuality: return "SmoothingModeHighQuality";
-            case SmoothingMode::SmoothingModeNone: return "SmoothingModeNone";
-            case SmoothingMode::SmoothingModeAntiAlias8x4: return "SmoothingModeAntiAlias8x4";
-            case SmoothingMode::SmoothingModeAntiAlias8x8: return "SmoothingModeAntiAlias8x8";
-        }
-        return "";
-    }
-
-    static OUString TextRenderingHintToString(sal_uInt16 nHint)
-    {
-        switch (nHint)
-        {
-            case TextRenderingHint::TextRenderingHintSystemDefault: return "TextRenderingHintSystemDefault";
-            case TextRenderingHint::TextRenderingHintSingleBitPerPixelGridFit: return "TextRenderingHintSingleBitPerPixelGridFit";
-            case TextRenderingHint::TextRenderingHintSingleBitPerPixel: return "TextRenderingHintSingleBitPerPixel";
-            case TextRenderingHint::TextRenderingHintAntialiasGridFit: return "TextRenderingHintAntialiasGridFit";
-            case TextRenderingHint::TextRenderingHintAntialias: return "TextRenderingHintAntialias";
-            case TextRenderingHint::TextRenderingHintClearTypeGridFit: return "TextRenderingHintClearTypeGridFit";
-        }
-        return "";
-    }
-
-    static OUString InterpolationModeToString(sal_uInt16 nMode)
-    {
-        switch (nMode)
-        {
-            case InterpolationMode::InterpolationModeDefault: return "InterpolationModeDefault";
-            case InterpolationMode::InterpolationModeLowQuality: return "InterpolationModeLowQuality";
-            case InterpolationMode::InterpolationModeHighQuality: return "InterpolationModeHighQuality";
-            case InterpolationMode::InterpolationModeBilinear: return "InterpolationModeBilinear";
-            case InterpolationMode::InterpolationModeBicubic: return "InterpolationModeBicubic";
-            case InterpolationMode::InterpolationModeNearestNeighbor: return "InterpolationModeNearestNeighbor";
-            case InterpolationMode::InterpolationModeHighQualityBilinear: return "InterpolationModeHighQualityBilinear";
-            case InterpolationMode::InterpolationModeHighQualityBicubic: return "InterpolationModeHighQualityBicubic";
-        }
-        return "";
-    }
-
-    OUString UnitTypeToString(sal_uInt16 nType)
-    {
-        switch (nType)
-        {
-            case UnitTypeWorld: return "UnitTypeWorld";
-            case UnitTypeDisplay: return "UnitTypeDisplay";
-            case UnitTypePixel: return "UnitTypePixel";
-            case UnitTypePoint: return "UnitTypePoint";
-            case UnitTypeInch: return "UnitTypeInch";
-            case UnitTypeDocument: return "UnitTypeDocument";
-            case UnitTypeMillimeter: return "UnitTypeMillimeter";
-        }
-        return "";
-    }
-
-    static bool IsBrush(sal_uInt16 flags)
-    {
-        return (!((flags >> 15) & 0x0001));
-    }
-
-    static OUString BrushIDToString(sal_uInt16 flags, sal_uInt32 brushid)
-    {
-        OUString sBrushId;
-
-        if (IsBrush(flags))
-            sBrushId = sBrushId.concat("EmfPlusBrush ID: ").concat(OUString::number(brushid));
-        else
-            sBrushId = sBrushId.concat("ARGB: 0x").concat(OUString::number(brushid, 16));
-
-        return sBrushId;
-    }
-
     EMFPObject::~EMFPObject()
     {
     }
@@ -250,27 +92,27 @@ namespace emfplushelper
     {
         sal_uInt16 objecttype = flags & 0x7f00;
         sal_uInt16 index = flags & 0xff;
-        SAL_INFO("drawinglayer", "EMF+ Object: " << emfObjectToName(objecttype) << " (0x" << objecttype << ")");
+        SAL_INFO("drawinglayer", "EMF+ Object: " << ObjectTypeToString(objecttype) << " (0x" << objecttype << ")");
         SAL_INFO("drawinglayer", "EMF+\tObject slot: " << index);
         SAL_INFO("drawinglayer", "EMF+\tFlags: " << (flags & 0xff00));
 
         switch (objecttype)
         {
-            case EmfPlusObjectTypeBrush:
+            case ObjectTypeBrush:
             {
                 EMFPBrush *brush = new EMFPBrush();
                 maEMFPObjects[index].reset(brush);
                 brush->Read(rObjectStream, *this);
                 break;
             }
-            case EmfPlusObjectTypePen:
+            case ObjectTypePen:
             {
                 EMFPPen *pen = new EMFPPen();
                 maEMFPObjects[index].reset(pen);
                 pen->Read(rObjectStream, *this);
                 break;
             }
-            case EmfPlusObjectTypePath:
+            case ObjectTypePath:
             {
                 sal_uInt32 header, pathFlags;
                 sal_Int32 points;
@@ -284,14 +126,14 @@ namespace emfplushelper
                 path->Read(rObjectStream, pathFlags);
                 break;
             }
-            case EmfPlusObjectTypeRegion:
+            case ObjectTypeRegion:
             {
                 EMFPRegion *region = new EMFPRegion();
                 maEMFPObjects[index].reset(region);
                 region->ReadRegion(rObjectStream, *this);
                 break;
             }
-            case EmfPlusObjectTypeImage:
+            case ObjectTypeImage:
             {
                 EMFPImage *image = new EMFPImage;
                 maEMFPObjects[index].reset(image);
@@ -303,7 +145,7 @@ namespace emfplushelper
                 image->Read(rObjectStream, dataSize, bUseWholeStream);
                 break;
             }
-            case EmfPlusObjectTypeFont:
+            case ObjectTypeFont:
             {
                 EMFPFont *font = new EMFPFont;
                 maEMFPObjects[index].reset(font);
@@ -313,21 +155,21 @@ namespace emfplushelper
                 font->Read(rObjectStream);
                 break;
             }
-            case EmfPlusObjectTypeStringFormat:
+            case ObjectTypeStringFormat:
             {
                 EMFPStringFormat *stringFormat = new EMFPStringFormat();
                 maEMFPObjects[index].reset(stringFormat);
                 stringFormat->Read(rObjectStream);
                 break;
             }
-            case EmfPlusObjectTypeImageAttributes:
+            case ObjectTypeImageAttributes:
             {
                 EMFPImageAttributes *imageAttributes = new EMFPImageAttributes();
                 maEMFPObjects[index].reset(imageAttributes);
                 imageAttributes->Read(rObjectStream);
                 break;
             }
-            case EmfPlusObjectTypeCustomLineCap:
+            case ObjectTypeCustomLineCap:
             {
                 SAL_WARN("drawinglayer", "EMF+\t TODO Object type 'custom line cap' not yet implemented");
                 break;
@@ -1041,7 +883,7 @@ namespace emfplushelper
                 break;
             }
 
-            SAL_INFO("drawinglayer", "EMF+ " << emfTypeToName(type) << " (0x" << std::hex << type << ")" << std::dec);
+            SAL_INFO("drawinglayer", "EMF+ " << EMFPlusTypeToString(type) << " (0x" << std::hex << type << ")" << std::dec);
             SAL_INFO("drawinglayer", "EMF+\t record size: " << size);
             SAL_INFO("drawinglayer", "EMF+\t flags: 0x" << std::hex << flags << std::dec);
             SAL_INFO("drawinglayer", "EMF+\t data size: " << dataSize);
