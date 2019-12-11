@@ -82,7 +82,7 @@ public:
     void SetLower(long lArgRight);
 };
 
-class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxPagePosSizeItem final : public SfxPoolItem
 {
     Point aPos;
     long lWidth;

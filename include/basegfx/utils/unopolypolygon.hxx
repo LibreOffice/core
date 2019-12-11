@@ -39,7 +39,7 @@ namespace unotools
             css::rendering::XBezierPolyPolygon2D,
             css::lang::XServiceInfo > UnoPolyPolygonBase;
 
-    class BASEGFX_DLLPUBLIC UnoPolyPolygon
+    class BASEGFX_DLLPUBLIC UnoPolyPolygon final
         : private cppu::BaseMutex
         , public UnoPolyPolygonBase
     {

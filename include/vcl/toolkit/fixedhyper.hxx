@@ -27,7 +27,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/fixed.hxx>
 
-class VCL_DLLPUBLIC FixedHyperlink : public FixedText
+class VCL_DLLPUBLIC FixedHyperlink final : public FixedText
 {
 private:
     long                m_nTextLen;
